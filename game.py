@@ -67,7 +67,7 @@ if __name__ == "__main__":
     max_decode_steps = 10
     top_k = 10
     top_p = 0.9
-    temperature = 0
+    temperature = 0.0000001
     print(
         f"Custom loop set to max_decode_steps: {max_decode_steps}, top_k: {top_k}, top_p: {top_p}, temperature: {temperature}..."
     )
