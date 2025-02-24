@@ -1,26 +1,36 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM
+# game.py
 import torch
 import random
+from transformers import AutoTokenizer  # Import for type hinting
+from utils import (
+    load_model_and_tokenizer,
+    apply_temperature,
+    generate_next_token,
+    get_top_k_tokens_and_probs,
+    prepare_inputs,
+    apply_top_k,
+    apply_top_p,
+)
+
 
 # ========================= Configuration =========================
-GUESS_NEXT_WORD = False  # Set to False to disable the guessing game
-NUM_CHOICES = 3  # Number of multiple-choice options
+num_choices = 3  # Number of multiple-choice options
 
 
-def guess_next_word(tokenizer, top_k_indices, num_choices):
+def guess_next_word(tokenizer: AutoTokenizer, top_k_indices, num_choices):
     """Presents a multiple-choice guessing game for the next word."""
 
     choices = []
     # Select top 'num_choices' from top_k_indices
-    for i in range(min(num_choices, len(top_k_indices[0]))):  # Prevent index error
+    for i in range(min(num_choices, len(top_k_indices[0]))):
         token_id = top_k_indices[0, i].item()
         word = tokenizer.decode([token_id]).strip()
-        if word:
+        if word:  # Ensure the word isn't empty
             choices.append((word, token_id))
 
     random.shuffle(choices)
 
-    # print("\nGuess the next word (enter the letter of your choice):")
+    print("\nGuess the next word (enter the letter of your choice):")
     for i, (word, _) in enumerate(choices):
         print(f"  {chr(ord('a') + i)}) {word}")
 
@@ -39,61 +49,92 @@ def guess_next_word(tokenizer, top_k_indices, num_choices):
     correct_token_id = top_k_indices[0, 0].item()
     correct_word = tokenizer.decode([correct_token_id]).strip()
 
-    # print(f"You chose: {chosen_word}")
+    print(f"You chose: {chosen_word}")
     is_correct = chosen_token_id == correct_token_id
     print(
-        f"Correct answer: {correct_word} --- ({'Correct!' if is_correct else 'Wrong!'})"
+        f"Correct answer: {correct_word} ({'Correct!' if is_correct else 'Incorrect!'})"
     )
 
     return correct_token_id, is_correct
 
 
+def visualize_probabilities(logits, tokenizer, top_k=None, top_p=None):
+    """Visualizes the top-k and top-p probabilities (adapted from viz.py)."""
+
+    if top_k is not None:
+        top_k_tokens, top_k_probs, _ = get_top_k_tokens_and_probs(
+            logits, tokenizer, top_k
+        )
+        print(f"\nTop-{top_k} Tokens and Probabilities:")
+        for token, prob in zip(top_k_tokens, top_k_probs):
+            print(f"  {token}: {prob:.4f}")
+
+    if top_p is not None:
+        filtered_logits = apply_top_p(logits, top_p)  # Apply top-p filtering
+        probabilities = torch.softmax(filtered_logits, dim=-1)
+        sorted_probs, sorted_indices = torch.sort(
+            probabilities, descending=True, dim=-1
+        )
+        cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
+        top_p_mask = cumulative_probs <= top_p
+        top_p_mask[..., :1] = True  # Ensure the first token is always included
+
+        top_p_indices_filtered = sorted_indices[0][top_p_mask[0]]
+        top_p_probs_filtered = sorted_probs[0][top_p_mask[0]]
+
+        print(f"\nTop-p ({top_p}) Tokens and Probabilities:")
+        for i in range(len(top_p_indices_filtered)):
+            token_id = top_p_indices_filtered[i].item()
+            probability = top_p_probs_filtered[i].item()
+            word = tokenizer.decode([token_id]).strip()
+            if word:  # Ensure the word isn't empty
+                print(f"  {word}: {probability:.4f}")
+
+
 # ========================= Main Script =========================
 
 if __name__ == "__main__":
-    model_name = "google/gemma-2b"  # Change this to test different models
+    model_name = "google/gemma-2b-it"  # Change this to test different models
     print(f"Loading model: {model_name} and tokenizer...")
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model, tokenizer = load_model_and_tokenizer(model_name)
 
-    # --- Conditional Quantization ---
-    if model_name == "google/gemma-7b":
-        model = AutoModelForCausalLM.from_pretrained(
-            model_name, device_map="auto", load_in_4bit=True
-        )
-    else:
-        model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
-    # --- End Conditional Quantization ---
-
-    max_decode_steps = 10
-    top_k = 10
-    top_p = 0.9
-    temperature = 0.0000001
+    max_decode_steps = 16
+    top_k = 5
+    top_p = 0.95
+    temperature = 0.7
     print(
         f"Custom loop set to max_decode_steps: {max_decode_steps}, top_k: {top_k}, top_p: {top_p}, temperature: {temperature}..."
     )
-    print(
-        f"Guessing game: {'Enabled' if GUESS_NEXT_WORD else 'Disabled'}, Number of choices: {NUM_CHOICES}"
-    )
+    print(f"Number of choices: {NUM_CHOICES}")
 
     input_text = input("Start a sentence... then press enter... ")
-    encoded_input = tokenizer.encode_plus(input_text, return_tensors="pt")
-    input_ids = encoded_input["input_ids"].to(model.device)
-    attention_mask = encoded_input["attention_mask"].to(model.device)
+    input_ids, attention_mask = prepare_inputs(input_text, tokenizer, model)
 
     generated_ids = input_ids
     score = 0
     for step in range(max_decode_steps):
-        # print(f"\n--- Decoding Step: {step + 1} ---")
+        print(f"\n--- Decoding Step: {step + 1} ---")
 
         outputs = model(generated_ids, attention_mask=attention_mask)
         next_token_logits = outputs.logits[:, -1, :]
-        next_token_logits = next_token_logits / temperature
+        next_token_logits = apply_temperature(next_token_logits, temperature)
 
-        if GUESS_NEXT_WORD:
-            top_k_values, top_k_indices = torch.topk(
-                torch.softmax(next_token_logits, dim=-1), top_k, dim=-1
+        top_k_values, top_k_indices = torch.topk(
+            torch.softmax(next_token_logits, dim=-1), top_k, dim=-1
+        )
+        # --- Get the correct next token ID *before* the guessing game ---
+        correct_token_id = top_k_indices[0, 0].item()
+        correct_word = tokenizer.decode([correct_token_id]).strip()
+
+        # --- Skip if the correct word is empty or just whitespace ---
+        if not correct_word:
+            print(f"Skipping empty/whitespace token: {repr(correct_word)}")
+            next_token_id = torch.tensor(
+                [[correct_token_id]], dtype=torch.long, device=model.device
             )
-            correct_token_id, is_correct = guess_next_word(
+        else:
+            # --- Proceed with the guessing game ---
+            chosen_token_id, is_correct = guess_next_word(
                 tokenizer, top_k_indices, NUM_CHOICES
             )
             next_token_id = torch.tensor(
@@ -103,36 +144,10 @@ if __name__ == "__main__":
             if is_correct:
                 score += 1
 
-        else:
-            if top_k is not None or top_p is not None:
-                if top_k is not None:
-                    top_k_values, top_k_indices = torch.topk(
-                        next_token_logits, top_k, dim=-1
-                    )
-                    next_token_logits = torch.full_like(
-                        next_token_logits, float("-inf")
-                    )
-                    next_token_logits.scatter_(-1, top_k_indices, top_k_values)
-
-                if top_p is not None:
-                    sorted_logits, sorted_indices = torch.sort(
-                        next_token_logits, descending=True, dim=-1
-                    )
-                    cumulative_probs = torch.cumsum(
-                        torch.softmax(sorted_logits, dim=-1), dim=-1
-                    )
-                    sorted_indices_to_remove = cumulative_probs > top_p
-                    sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[
-                        ..., :-1
-                    ].clone()
-                    sorted_indices_to_remove[..., 0] = 0
-                    indices_to_remove = sorted_indices_to_remove.scatter(
-                        1, sorted_indices, sorted_indices_to_remove
-                    )
-                    next_token_logits[indices_to_remove] = float("-inf")
-
-            next_token_probs = torch.softmax(next_token_logits, dim=-1)
-            next_token_id = torch.multinomial(next_token_probs, num_samples=1)
+            # --- Visualize probabilities *after* the guess ---
+            visualize_probabilities(
+                next_token_logits, tokenizer, top_k=top_k, top_p=top_p
+            )
 
         generated_ids = torch.cat([generated_ids, next_token_id], dim=-1)
         print(
@@ -153,5 +168,4 @@ if __name__ == "__main__":
 
     decoded_output = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
     print(f"\n--- Final Generated Text: ---\n{decoded_output}")
-    if GUESS_NEXT_WORD:
-        print(f"\n--- Final Score: {score} / {step + 1} ---")
+    print(f"\n--- Final Score: {score} / {step + 1} ---")
