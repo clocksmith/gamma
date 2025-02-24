@@ -105,7 +105,7 @@ if __name__ == "__main__":
     print(
         f"Custom loop set to max_decode_steps: {max_decode_steps}, top_k: {top_k}, top_p: {top_p}, temperature: {temperature}..."
     )
-    print(f"Number of choices: {NUM_CHOICES}")
+    print(f"Number of choices: {num_choices}")
 
     input_text = input("Start a sentence... then press enter... ")
     input_ids, attention_mask = prepare_inputs(input_text, tokenizer, model)
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         else:
             # --- Proceed with the guessing game ---
             chosen_token_id, is_correct = guess_next_word(
-                tokenizer, top_k_indices, NUM_CHOICES
+                tokenizer, top_k_indices, num_choices
             )
             next_token_id = torch.tensor(
                 [[correct_token_id]], dtype=torch.long, device=model.device
