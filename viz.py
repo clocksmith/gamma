@@ -1,4 +1,3 @@
-# viz.py
 import torch
 from utils import (
     load_model_and_tokenizer,
@@ -15,17 +14,12 @@ def visualize_step(logits, tokenizer, top_k=None, top_p=None):
 
     print("\n--- Visualization ---")
 
-    if top_k is not None:
-        top_k_tokens, top_k_probs, _ = get_top_k_tokens_and_probs(
-            logits, tokenizer, top_k
-        )
-        print(f"\nTop-{top_k} Tokens and Probabilities:")
-        for token, prob in zip(top_k_tokens, top_k_probs):
-            print(f"  {token}: {prob:.4f}")
-
+    # Calculate top-k and top-p *before* any filtering
+    top_k_tokens, top_k_probs, _ = get_top_k_tokens_and_probs(logits, tokenizer, top_k)
+    top_p_tokens, top_p_probs = None, None  # Initialize
     if top_p is not None:
-        filtered_logits = apply_top_p(logits, top_p)
-        probabilities = torch.softmax(filtered_logits, dim=-1)
+        top_p_filtered_logits = apply_top_p(logits, top_p)  # Apply top-p *before* top-k
+        probabilities = torch.softmax(top_p_filtered_logits, dim=-1)
         sorted_probs, sorted_indices = torch.sort(
             probabilities, descending=True, dim=-1
         )
@@ -34,14 +28,21 @@ def visualize_step(logits, tokenizer, top_k=None, top_p=None):
         top_p_mask[..., :1] = True
         top_p_indices_filtered = sorted_indices[0][top_p_mask[0]]
         top_p_probs_filtered = sorted_probs[0][top_p_mask[0]]
+        top_p_tokens = [
+            tokenizer.decode([token_id.item()]).strip()
+            for token_id in top_p_indices_filtered
+        ]
+        top_p_probs = top_p_probs_filtered.tolist()
 
+    if top_k is not None:
+        print(f"\nTop-{top_k} Tokens and Probabilities:")
+        for token, prob in zip(top_k_tokens, top_k_probs):
+            print(f"  {token}: {prob:.4f}")
+
+    if top_p is not None:
         print(f"\nTop-p ({top_p}) Tokens and Probabilities:")
-
-        for i in range(len(top_p_indices_filtered)):
-            token_id = top_p_indices_filtered[i].item()
-            probability = top_p_probs_filtered[i].item()
-            word = tokenizer.decode([token_id]).strip()
-            print(f"  {word}: {probability:.4f}")
+        for token, prob in zip(top_p_tokens, top_p_probs):
+            print(f"  {token}: {prob:.4f}")
 
 
 if __name__ == "__main__":
