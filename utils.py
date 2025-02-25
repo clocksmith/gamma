@@ -49,11 +49,13 @@ def apply_top_p(logits, top_p):
     return logits
 
 
-def generate_next_token(logits, top_k=None, top_p=None):
-    """Filters logits using top-k and/or top-p, then samples the next token."""
-    filtered_logits = apply_top_k(logits, top_k)
-    filtered_logits = apply_top_p(filtered_logits, top_p)
-    next_token_probs = torch.softmax(filtered_logits, dim=-1)
+def generate_next_token_with_top_k_top_p(logits, top_k=None, top_p=None):
+    """Filters logits using top-k and/or top-p, then samples."""
+    if top_k is not None:
+        logits = apply_top_k(logits, top_k)
+    if top_p is not None:
+        logits = apply_top_p(logits, top_p)
+    next_token_probs = torch.softmax(logits, dim=-1)
     next_token_id = torch.multinomial(next_token_probs, num_samples=1)
     return next_token_id
 
