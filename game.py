@@ -3,7 +3,7 @@ import random
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
 
-# --- Configuration ---
+# Configuration
 model_name = "google/gemma-2b-it"
 max_decode_steps = 12
 top_k = 8  # Top-k for initial candidate selection
@@ -14,11 +14,11 @@ permutation_length = 3  # How many tokens to show in each choice
 show_attention = True  # Enable/disable attention visualization
 max_top_k_for_probs = 16  # Limit tokens for probability display
 
-# --- Colors (for terminal output) ---
-GREEN = "\033[92m"
+# Colors for terminal prints
 RED = "\033[91m"
-RESET = "\033[0m"
+GREEN = "\033[92m"
 BLUE = "\033[94m"
+RESET = "\033[0m"
 
 
 def load_model_and_tokenizer(model_name):
@@ -146,7 +146,7 @@ def guess_next_word_sequence(
 ):
     """Generates choices, gets user input, and THEN shows probabilities."""
 
-    # --- Prepare Choices (using tokens from Top-p) ---
+    # Prepare choices using tokens from after top_p
     top_p_tokens, top_p_probs, _ = get_top_tokens_and_probs(
         logits_top_p, tokenizer, k=max_top_k_for_probs
     )
@@ -169,7 +169,6 @@ def guess_next_word_sequence(
 
     random.shuffle(choices)
 
-    # --- Display Choices and Get User Input ---
     print(f"\nGuess the next {permutation_length} words, completing the sentence:")
     for i, choice_tokens in enumerate(choices):
         formatted_choice = f"[[ {', '.join(choice_tokens)} ]]"
@@ -184,18 +183,17 @@ def guess_next_word_sequence(
     chosen_index = ord(user_choice) - ord("a")
     chosen_tokens = choices[chosen_index]
 
-    # --- NOW Show Probabilities (After User Input) ---
     print("\n--- Probabilities (Before any filtering): ---")
     all_tokens, all_probs, _ = get_top_tokens_and_probs(
         logits_raw, tokenizer, k=max_tokens_for_probs
-    )  # Limit tokens
+    )
     for token, prob in zip(all_tokens, all_probs):
         print(f"    {token}: {prob:.6f}")
 
     print("\n--- Probabilities (After Temperature): ---")
     temp_tokens, temp_probs, _ = get_top_tokens_and_probs(
         logits_temp, tokenizer, k=max_tokens_for_probs
-    )  # Limit tokens
+    )
     for token, prob in zip(temp_tokens, temp_probs):
         print(f"    {token}: {prob:.6f}")
 
@@ -213,20 +211,15 @@ def guess_next_word_sequence(
     for token, prob in zip(top_p_tokens, top_p_probs):
         print(f"    {token}: {prob:.6f}")
 
-    # --- Correct Sequence, IDs, and Scoring ---
     correct_sequence = top_choice
     chosen_token_ids = [
         tokenizer.encode(token, add_special_tokens=False) for token in chosen_tokens
     ]
-    chosen_token_ids = [
-        item for sublist in chosen_token_ids for item in sublist
-    ]  # Flatten
+    chosen_token_ids = [item for sublist in chosen_token_ids for item in sublist]
     correct_token_ids = [
         tokenizer.encode(token, add_special_tokens=False) for token in correct_sequence
     ]
-    correct_token_ids = [
-        item for sublist in correct_token_ids for item in sublist
-    ]  # Flatten
+    correct_token_ids = [item for sublist in correct_token_ids for item in sublist]
 
     score = 0
     max_score = len(chosen_tokens)
@@ -261,7 +254,7 @@ if __name__ == "__main__":
     total_score = 0
     total_max_score = 0
     current_sentence = input_text
-    attention_history = []  # List to store attention heatmaps
+    attention_history = []
 
     for step in range(max_decode_steps):
         print(f"\n--- Decoding Step: {step + 1} ---")
@@ -276,7 +269,7 @@ if __name__ == "__main__":
 
         logits_raw = outputs.logits[:, -1, :]
 
-        # --- Apply Temperature, Top-k, and Top-p ---
+        # Apply temperature, top_k, and top_p filtering
         print(f"  Applying temperature : {time.time() - start_time:.4f}s")
         logits_temp = apply_temperature(logits_raw, temperature)
         print(f"  Finished applying temperature : {time.time() - start_time:.4f}s")
@@ -287,7 +280,7 @@ if __name__ == "__main__":
         logits_top_p = apply_top_p(logits_top_k, top_p)
         print(f"  Finished applying top-p : {time.time() - start_time:.4f}s")
 
-        # --- Attention Visualization ---
+        # Attention vizualization
         if show_attention:
             current_tokens, normalized_attention_scores = get_attention_heatmap(
                 outputs, input_ids, tokenizer
@@ -296,19 +289,19 @@ if __name__ == "__main__":
                 current_tokens, normalized_attention_scores
             )
 
-            attention_history.append(colored_sentence_part)  # add current step
+            attention_history.append(colored_sentence_part)
 
             print("\n--- Attention Heatmap (Current Step) ---")
             print(heatmap_scale)
             print(
                 f"Current sentence with attention (magenta highlights): {colored_sentence_part}"
-            )  # clarified print statement
+            )
 
             print("\n--- Attention Heatmap History: ---")
             for i, past_attention in enumerate(attention_history):
                 print(f"  Step {i + 1}: {past_attention}")
 
-        # --- Guessing Game Logic ---
+        # Game Logic
         step_score, step_max_score, chosen_token_ids, correct_token_ids, is_perfect = (
             guess_next_word_sequence(
                 tokenizer,
@@ -323,11 +316,10 @@ if __name__ == "__main__":
                 current_sentence,
                 max_top_k_for_probs,
             )
-        )  # Get score and chosen IDs
+        )
         total_score += step_score
         total_max_score += step_max_score
 
-        # --- Update Input for Next Step ---
         print(f"  Applying softmax : {time.time() - start_time:.4f}s")
         probabilities = torch.softmax(logits_top_p, dim=-1)
         print(f"  Finished applying softmax : {time.time() - start_time:.4f}s")

@@ -1,8 +1,11 @@
 # Jemma Jamma
 
 ## TODO(): move these to issue tracker
-    - Bugs
-    - Figure out major slow down at 50ish encode steps on 2b
+    - Bugs:
+       - Timers are all using same start time
+       - Figure out major slow down at 50ish encode steps on 2b
+       - spacing issues when printing sentence
+       - "," is confusing to separate choices, use vertical list or | ?
     - Some features requests:
         - Add more attention stats
         - after mac_encoding_steps for game, go to the end til <eos>
