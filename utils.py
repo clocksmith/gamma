@@ -10,7 +10,9 @@ def load_model_and_tokenizer(model_name):
             model_name, device_map="auto", load_in_4bit=True
         )
     else:
-        model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name, device_map="auto", attn_implementation="eager"
+        )
     return model, tokenizer
 
 
@@ -40,7 +42,8 @@ def apply_top_p(logits, top_p):
         indices_to_remove = sorted_indices_to_remove.scatter(
             1, sorted_indices, sorted_indices_to_remove
         )
-        filtered_logits = sorted_logits.clone()  # Create a copy before modifying
+        # Create a copy before modifying
+        filtered_logits = sorted_logits.clone()
         filtered_logits[indices_to_remove] = float("-inf")
         # Scatter back to original indices
         output_logits = torch.full_like(logits, float("-inf"))
@@ -67,7 +70,7 @@ def get_top_k_tokens_and_probs(logits, tokenizer, top_k):
     top_k_tokens = [
         tokenizer.decode([token_id.item()]).strip() for token_id in top_k_indices[0]
     ]
-    top_k_probs = top_k_values[0].tolist()  # Convert to list for easier handling
+    top_k_probs = top_k_values[0].tolist()
     return top_k_tokens, top_k_probs, top_k_indices
 
 

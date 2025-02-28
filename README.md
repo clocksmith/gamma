@@ -1,14 +1,26 @@
 # Interactive Language Models: Explore, Play, Visualize
 
+## TODO
+    - make "qqq" auto <eos>
+    - Figure out slow down at 50ish encode steps
+    - Features:
+        - Add highlighting for current setence of attention
+        - toggle print statements
+        - give more info in look ahead
+        - give more context into what part of forward feed attention step it is on within the transformer
+        - Add visuals for encoding steps happening in parallel
+        - Use commutative property of  multiplication as exxamples as oppose to RNN
+
+
 This project provides an interactive environment for exploring the behavior of large language models (LLMs). It allows you to experiment with different generation parameters, play a word-guessing game, and visualize the inner workings of top-k and top-p sampling. While currently focused on Google's Gemma models, the core concepts apply broadly to many other LLMs.
 
 ## Features
 
 *   **Interactive Guessing Game:** Test your intuition against the language model! The script presents you with multiple-choice options for the next word, drawn from the model's top-k predictions.  Your score is tracked, providing a fun and engaging way to understand how LLMs predict text.
 
-*   **Model Selection:** Easily switch between different Gemma models (`google/gemma-2b`, `google/gemma-2b-it`, and `google/gemma-7b`).
+*   **Model Selection:** Easily switch between different Gemma models (`google/gemma-2b`, `google/gemma-2b-it`, `google/gemma-7b`, `google/gemma-9b`, and `google/gemma-9b-it`).
 
-*   **Automatic Quantization (for 7b):**  The script automatically uses 4-bit quantization when loading the `google/gemma-7b` model to prevent out-of-memory errors, making it accessible on a wider range of hardware. This requires the `bitsandbytes` library.
+*   **Automatic Quantization (for 7b+):**  The script can use 4-bit quantization when loading models larger than `gemma-2b` models, such as `google/gemma-7b`, which need at least 32gb of ram, to prevent out-of-memory errors and performance degredation from memory/disk swapping, making it accessible on a wider range of hardware. This requires the `bitsandbytes` library.
 
 ## Prerequisites
 
