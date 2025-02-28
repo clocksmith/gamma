@@ -1,38 +1,80 @@
-# --- game.py ---
 import torch
 import random
-from transformers import AutoTokenizer
-from utils import (
-    load_model_and_tokenizer,
-    apply_temperature,
-    get_top_k_tokens_and_probs,
-    prepare_inputs,
-    apply_top_k,
-    apply_top_p,
-    generate_next_token_with_top_k_top_p,
-)
+import itertools
+from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
-import numpy as np
 
-# Game config.
-num_choices = 3
-use_top_k_sampling = True
-use_top_p_sampling = True
-max_lookahead_steps = 5
-show_attention = True
-
-# Model config.
+# --- Configuration ---
 model_name = "google/gemma-2b-it"
 max_decode_steps = 12
-top_k = 7
-top_p = 0.95
-temperature = 0.7
+top_k = 8  # Top-k for initial candidate selection
+top_p = 0.95  # Top-p for actual sampling
+temperature = 0.7  # Temparature for model
+num_choices = 3  # Number of choices presented to the user
+permutation_length = 3  # How many tokens to show in each choice
+show_attention = True  # Enable/disable attention visualization
+max_top_k_for_probs = 16  # Limit tokens for probability display
 
-# ANSI escape codes for colors
+# --- Colors (for terminal output) ---
 GREEN = "\033[92m"
 RED = "\033[91m"
 RESET = "\033[0m"
 BLUE = "\033[94m"
+
+
+def load_model_and_tokenizer(model_name):
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name, device_map="auto", attn_implementation="eager"
+    )
+    return model, tokenizer
+
+
+def apply_temperature(logits, temperature):
+    return logits / temperature
+
+
+def apply_top_k(logits, top_k):
+    top_k_values, top_k_indices = torch.topk(logits, top_k, dim=-1)
+    filtered_logits = torch.full_like(logits, float("-inf"))
+    filtered_logits.scatter_(-1, top_k_indices, top_k_values)
+    return filtered_logits
+
+
+def apply_top_p(logits, top_p):
+    sorted_logits, sorted_indices = torch.sort(logits, descending=True, dim=-1)
+    cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
+    sorted_indices_to_remove = cumulative_probs > top_p
+    sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+    sorted_indices_to_remove[..., 0] = 0
+    filtered_logits = sorted_logits.clone()
+    filtered_logits[sorted_indices_to_remove] = float("-inf")
+
+    # Convert back to original indices
+    unsorted_filtered_logits = torch.full_like(logits, float("-inf"))
+    unsorted_filtered_logits.scatter_(-1, sorted_indices, filtered_logits)
+    return unsorted_filtered_logits
+
+
+def get_top_tokens_and_probs(logits, tokenizer, k=None):
+    probabilities = torch.softmax(logits, dim=-1)
+    if k is not None:
+        top_k_values, top_k_indices = torch.topk(probabilities, k, dim=-1)
+    else:
+        top_k_values, top_k_indices = torch.sort(probabilities, descending=True, dim=-1)
+
+    top_k_tokens = [
+        tokenizer.decode([token_id.item()]).strip() for token_id in top_k_indices[0]
+    ]
+    top_k_probs = top_k_values[0].tolist()
+    return top_k_tokens, top_k_probs, top_k_indices
+
+
+def prepare_inputs(input_text, tokenizer, model):
+    encoded_input = tokenizer.encode_plus(input_text, return_tensors="pt")
+    input_ids = encoded_input["input_ids"].to(model.device)
+    attention_mask = encoded_input["attention_mask"].to(model.device)
+    return input_ids, attention_mask
 
 
 def color_print(text, color):
@@ -40,491 +82,285 @@ def color_print(text, color):
 
 
 def get_attention_heatmap(outputs, input_ids, tokenizer):
-    """
-    Extracts and processes attention weights to create a heatmap.
-    Returns a list of tuples: (token_text, attention_score).
-    """
     if not hasattr(outputs, "attentions") or outputs.attentions is None:
         return None
 
-    # Assuming attentions is a tuple of layers, each layer is (batch_size, num_heads, seq_len, seq_len)
-    # We are interested in the attention weights from the last layer, last head, for the last token
-    # Shape: (batch_size, num_heads, seq_len, seq_len)
     last_layer_attentions = outputs.attentions[-1]
+    attention_weights = last_layer_attentions[0, :, -1, :-1].mean(dim=0)
 
-    # Take attention of last generated token to previous tokens.
-    # Remove the last token's self-attention.
-    # Shape: (num_heads, seq_len-1).
-    attention_weights = last_layer_attentions[0, :, -1, :-1]
+    if not isinstance(attention_weights, torch.Tensor):
+        return None
 
-    # Average attention weights across all heads
-    # Shape: (seq_len-1)
-    averaged_attention = attention_weights.mean(dim=0)
-
-    # Exclude last token which is the one being predicted, and convert ids to tokens
+    averaged_attention = attention_weights
     input_tokens = tokenizer.convert_ids_to_tokens(input_ids[0][:-1])
     attention_scores = averaged_attention.tolist()
-
-    # Normalize attention scores to 0-1 for heatmap intensity
     max_attention = max(attention_scores) if attention_scores else 1.0
-    # Avoid division by zero if sequence is just starting...
-    normalized_attention = [(score / max_attention) for score in attention_scores]
+    normalized_attention = [
+        (score / max_attention) for score in attention_scores
+    ]  # Normalized to 0-1 scale
 
-    # list of tuples (token, attention_score)
-    heatmap = list(zip(input_tokens, normalized_attention))
-    return heatmap
-
-
-def color_attention_text(sentence, heatmap, base_color=BLUE, max_intensity=97):
-    """
-    Applies color highlighting to tokens based on attention scores.
-    Uses a base color and varies intensity based on attention.
-    """
-    colored_sentence = []
-    # re-tokenize to align with heatmap if needed. simpler to assume tokenization is aligned for now.
-    tokens = tokenizer.tokenize(sentence)
-    # if no attention, just return blue sentence
-    if heatmap is None:
-        return base_color + sentence + RESET
-
-    heatmap_dict = (
-        dict(heatmap) if heatmap else {}
-    )  # Ensure heatmap is a dict for lookup
-
-    token_index = 0
-    for token_text in tokens:
-        # Check if heatmap is available for this token
-        attention_score = heatmap_dict.get(token_text)  # Use .get() to avoid KeyError
-        if token_index < len(heatmap) and attention_score is not None:
-            intensity = int(max_intensity * attention_score)
-            color_code = f"\033[{intensity}m"  # Intensity from 90-97 are bright colors
-            # Apply intensity color, then base color for hue
-            colored_token = color_code + token_text + base_color
-        else:
-            # Default base color if no attention score
-            colored_token = base_color + token_text
-
-        colored_sentence.append(colored_token)
-        token_index += 1
-
-    # Join tokens and reset/clear color at the for next print().
-    return "".join(colored_sentence) + RESET
+    return (
+        input_tokens,
+        normalized_attention,
+    )  # Return tokens and normalized attention scores
 
 
-def visualize_probabilities(
-    logits,
+def color_attention_text(
+    tokens,
+    normalized_attention,
+    reset_color=RESET,
+):
+    if tokens is None or normalized_attention is None:
+        return "Sentence without attention visualization.", ""
+
+    colored_tokens_output = []
+    heatmap_scale_output = "Heatmap scale: 0 (low attention) to 1 (high attention)\n"
+
+    # heatmap_scores = (  # Removed unused variable
+    #     dict(zip(tokens, normalized_attention))
+    #     if tokens and normalized_attention
+    #     else {}
+    # )
+
+    for token_text, attention_score in zip(tokens, normalized_attention):
+        token_text = token_text.replace(" ", "").replace("_", "").replace("-", "")
+        normalized_score = attention_score
+
+        # Linear interpolation for magenta: (255, 0, 255) at 1.0, (0, 0, 0) at 0.0
+        red = int(255 * normalized_score)
+        green = 0
+        blue = int(255 * normalized_score)
+
+        color_code_bg = f"\033[48;2;{red};{green};{blue}m"
+        colored_token = f"{color_code_bg}{token_text}{reset_color}"
+        colored_tokens_output.append(
+            f"{colored_token} ({normalized_score:.2f})"
+        )  # Show normalized score
+
+    return " ".join(colored_tokens_output).replace("  ", " "), heatmap_scale_output
+
+
+def guess_next_word_sequence(
     tokenizer,
-    top_k=None,
-    top_p=None,
-    top_k_tokens=None,
-    top_k_probs=None,
-    top_p_tokens=None,
-    top_p_probs=None,
-):
-    if top_k is not None and top_k_tokens is not None and top_k_probs is not None:
-        print(f"\n    --- Top-{top_k} Tokens and Probabilities (before Top-p): ---")
-        for token, prob in zip(top_k_tokens, top_k_probs):
-            print(f"      {token}: {prob:.4f}")
-
-    if top_p is not None and top_p_tokens is not None and top_p_probs is not None:
-        print(f"\n    --- Top-p ({top_p}) Tokens and Probabilities (before Top-k): ---")
-        for token, prob in zip(top_p_tokens, top_p_probs):
-            print(f"      {token}: {prob:.4f}")
-
-
-def guess_next_word(
-    tokenizer: AutoTokenizer,
-    model,
-    top_k_indices,
+    logits_raw,
+    logits_temp,
+    logits_top_k,
+    logits_top_p,
     num_choices,
+    top_n_tokens,
+    permutation_length,
     current_ids,
-    attention_mask,  # Pass attention mask
-    top_k_probs=None,
-    top_p_tokens=None,
-    top_p_probs=None,
+    current_sentence,
+    max_tokens_for_probs,
 ):
-    unique_choices = []
-    seen_words = set()
-    token_counts = []
-    eos_choice_index = -1
+    """Generates choices, gets user input, and THEN shows probabilities."""
 
-    for i in range(min(num_choices * 5, len(top_k_indices[0]))):
-        token_ids = [top_k_indices[0, i].item()]
-        word = tokenizer.decode(token_ids).strip()
-        num_tokens = 1
-        lookahead_steps = 0
+    # --- Prepare Choices (using tokens from Top-p) ---
+    top_p_tokens, top_p_probs, _ = get_top_tokens_and_probs(
+        logits_top_p, tokenizer, k=max_top_k_for_probs
+    )
+    top_n_tokens_decoded = top_p_tokens[:top_n_tokens]
+    top_n_probs_final = top_p_probs[:top_n_tokens]
 
-        if token_ids[0] == tokenizer.eos_token_id:
-            if tokenizer.eos_token not in seen_words:
-                eos_choice_index = len(unique_choices)
-                unique_choices.append((tokenizer.eos_token, token_ids))
-                seen_words.add(tokenizer.eos_token)
-                token_counts.append(num_tokens)
-            continue
+    choices = []
+    token_prob_tuples = sorted(
+        zip(top_n_tokens_decoded, top_n_probs_final), key=lambda x: x[1], reverse=True
+    )
+    top_tokens_sorted = [token for token, _ in token_prob_tuples]
+    top_choice = top_tokens_sorted[:permutation_length]
+    choices.append(top_choice)
 
-        current_word_choices = []  # list to hold word choices for current top_k index
-        current_word_token_counts = []
+    while len(choices) < num_choices:
+        shuffled_tokens = top_n_tokens_decoded[:permutation_length]
+        random.shuffle(shuffled_tokens)
+        if shuffled_tokens not in choices:
+            choices.append(shuffled_tokens)
 
-        while lookahead_steps < max_lookahead_steps:
-            next_ids = current_ids.clone().detach()
-            next_ids = torch.cat(
-                [
-                    next_ids,
-                    torch.tensor(
-                        [[token_ids[-1]]], dtype=torch.long, device=current_ids.device
-                    ),
-                ],
-                dim=-1,
-            )
-            # Extend attention mask for lookahead
-            next_attention_mask = torch.cat(
-                [
-                    attention_mask,
-                    torch.ones(
-                        (
-                            attention_mask.shape[0],
-                            next_ids.shape[1] - attention_mask.shape[1],
-                        ),  # Correctly extend based on diff in seq lengths
-                        device=current_ids.device,
-                        dtype=attention_mask.dtype,
-                    ),
-                ],
-                dim=-1,
-            )
-            start_time = time.time()
-            outputs = model(
-                next_ids,
-                attention_mask=next_attention_mask,  # Use extended attention mask
-                output_attentions=show_attention,
-            )  # Pass attention_mask and request attentions
-            # print(
-            #     f"    Model forward pass (for lookahead) took: {time.time() - start_time:.4f} seconds"
-            # )
-            next_token_logits = outputs.logits[:, -1, :]
-            start_time = time.time()
-            next_token_id = torch.argmax(next_token_logits, dim=-1)
-            # print(
-            #     f"    Argmax (for lookahead) took: {time.time() - start_time:.4f} seconds"
-            # )
+    random.shuffle(choices)
 
-            next_word = tokenizer.decode([next_token_id[0].item()]).strip()
-            combined_word = tokenizer.decode(
-                token_ids + [next_token_id[0].item()]
-            ).strip()
-
-            current_word_choices.append(
-                (combined_word, token_ids + [next_token_id[0].item()])
-            )  # Store current word and tokens
-            current_word_token_counts.append(num_tokens + 1)
-
-            if (
-                not next_word
-                or not combined_word.startswith(word)
-                or len(combined_word) <= len(word)
-                or next_word == ","  # Stop lookahead at commas
-                or next_word == "."  # Stop lookahead at periods
-                or next_word == "!"  # Stop lookahead at exclamation points
-                or next_word == "?"  # Stop lookahead at question marks
-                or next_word.startswith(" ")  # Stop lookahead at spaces (new words)
-            ):
-                break
-
-            word = combined_word
-            token_ids.append(next_token_id[0].item())
-            num_tokens += 1
-            lookahead_steps += 1
-
-        if current_word_choices:  # If lookahead generated any words
-            best_word, best_tokens = current_word_choices[
-                -1
-            ]  # Take the longest word from lookahead
-            if best_word and best_word not in seen_words:
-                unique_choices.append((best_word, best_tokens))
-                seen_words.add(best_word)
-                token_counts.append(len(best_tokens))
-                if len(unique_choices) >= num_choices:
-                    break
-        elif (
-            word and word not in seen_words
-        ):  # Fallback to initial word if lookahead failed to extend
-            unique_choices.append((word, token_ids))
-            seen_words.add(word)
-            token_counts.append(num_tokens)
-            if len(unique_choices) >= num_choices:
-                break
-
-    random.shuffle(unique_choices)
-    if eos_choice_index != -1 and len(unique_choices) > 1:
-        unique_choices.insert(0, unique_choices.pop(eos_choice_index))
-    choices_to_display = unique_choices[:num_choices]
-
-    print(f"\nGuess the next word (enter the letter of your choice):")
-    for i, (word, token_ids) in enumerate(choices_to_display):
-        display_word = word if word != tokenizer.eos_token else "<eos>"
-        token_display = tokenizer.decode(token_ids)
-        print(
-            f"  {chr(ord('a') + i)}) {display_word} ({token_counts[i]} token{'s' if token_counts[i] > 1 else ''}) Tokens: [{token_display}]"
-        )
+    # --- Display Choices and Get User Input ---
+    print(f"\nGuess the next {permutation_length} words, completing the sentence:")
+    for i, choice_tokens in enumerate(choices):
+        formatted_choice = f"[[ {', '.join(choice_tokens)} ]]"
+        print(f"  {chr(ord('a') + i)}) {current_sentence} {formatted_choice}")
 
     while True:
         user_choice = input("Your choice: ").strip().lower()
-        if "a" <= user_choice <= chr(ord("a") + len(choices_to_display) - 1):
+        if "a" <= user_choice <= chr(ord("a") + len(choices) - 1):
             break
         else:
-            print(
-                "Invalid input.  Please enter a letter corresponding to one of the choices."
-            )
-
+            print("Invalid input.  Choose a letter from the choices.")
     chosen_index = ord(user_choice) - ord("a")
-    chosen_word, chosen_token_ids = choices_to_display[chosen_index]
+    chosen_tokens = choices[chosen_index]
 
-    correct_token_ids = [top_k_indices[0, 0].item()]
-    correct_word = tokenizer.decode(correct_token_ids).strip()
-    num_tokens = 1
-    lookahead_steps = 0
+    # --- NOW Show Probabilities (After User Input) ---
+    print("\n--- Probabilities (Before any filtering): ---")
+    all_tokens, all_probs, _ = get_top_tokens_and_probs(
+        logits_raw, tokenizer, k=max_tokens_for_probs
+    )  # Limit tokens
+    for token, prob in zip(all_tokens, all_probs):
+        print(f"    {token}: {prob:.6f}")
 
-    while lookahead_steps < max_lookahead_steps:
-        next_ids = current_ids.clone().detach()
-        next_ids = torch.cat(
-            [
-                next_ids,
-                torch.tensor(
-                    [[correct_token_ids[-1]]],
-                    dtype=torch.long,
-                    device=current_ids.device,
-                ),
-            ],
-            dim=-1,
-        )
-        # Extend attention mask for lookahead for correct word
-        next_attention_mask = torch.cat(
-            [
-                attention_mask,
-                torch.ones(
-                    (
-                        attention_mask.shape[0],
-                        next_ids.shape[1] - attention_mask.shape[1],
-                    ),  # Correctly extend
-                    device=current_ids.device,
-                    dtype=attention_mask.dtype,
-                ),
-            ],
-            dim=-1,
-        )
-        start_time = time.time()
-        outputs = model(
-            next_ids,
-            attention_mask=next_attention_mask,  # Use extended attention mask
-            output_attentions=show_attention,
-        )  # Request attentions
-        print(
-            f"    Model forward pass (for lookahead) took: {time.time() - start_time:.4f} seconds"
-        )
+    print("\n--- Probabilities (After Temperature): ---")
+    temp_tokens, temp_probs, _ = get_top_tokens_and_probs(
+        logits_temp, tokenizer, k=max_tokens_for_probs
+    )  # Limit tokens
+    for token, prob in zip(temp_tokens, temp_probs):
+        print(f"    {token}: {prob:.6f}")
 
-        next_token_logits = outputs.logits[:, -1, :]
-        start_time = time.time()
-        next_token_id = torch.argmax(next_token_logits, dim=-1)
-        print(
-            f"    Argmax (for lookahead) took: {time.time() - start_time:.4f} seconds"
-        )
-        next_word = tokenizer.decode([next_token_id[0].item()]).strip()
-        combined_word = tokenizer.decode(
-            correct_token_ids + [next_token_id[0].item()]
-        ).strip()
+    print("\n--- Probabilities (After Top-k): ---")
+    top_k_tokens, top_k_probs, _ = get_top_tokens_and_probs(
+        logits_top_k, tokenizer, k=max_tokens_for_probs
+    )
+    for token, prob in zip(top_k_tokens, top_k_probs):
+        print(f"    {token}: {prob:.6f}")
 
-        if (
-            not next_word
-            or not combined_word.startswith(correct_word)
-            or len(combined_word) <= len(correct_word)
-        ):
-            break
+    print("\n--- Probabilities (After Top-p): ---")
+    top_p_tokens, top_p_probs, _ = get_top_tokens_and_probs(
+        logits_top_p, tokenizer, k=max_top_k_for_probs
+    )
+    for token, prob in zip(top_p_tokens, top_p_probs):
+        print(f"    {token}: {prob:.6f}")
 
-        correct_word = combined_word
-        correct_token_ids.append(next_token_id[0].item())
-        num_tokens += 1
-        lookahead_steps += 1
+    # --- Correct Sequence, IDs, and Scoring ---
+    correct_sequence = top_choice
+    chosen_token_ids = [
+        tokenizer.encode(token, add_special_tokens=False) for token in chosen_tokens
+    ]
+    chosen_token_ids = [
+        item for sublist in chosen_token_ids for item in sublist
+    ]  # Flatten
+    correct_token_ids = [
+        tokenizer.encode(token, add_special_tokens=False) for token in correct_sequence
+    ]
+    correct_token_ids = [
+        item for sublist in correct_token_ids for item in sublist
+    ]  # Flatten
 
-    is_correct_eos = correct_token_ids[0] == tokenizer.eos_token_id
-    is_chosen_eos = chosen_token_ids[0] == tokenizer.eos_token_id
-    is_correct = chosen_token_ids == chosen_token_ids
+    score = 0
+    max_score = len(chosen_tokens)
+    for i in range(max_score):
+        if chosen_tokens[i] == correct_sequence[i]:
+            score += 1
 
-    chosen_display_word = chosen_word if not is_chosen_eos else "<eos>"
-    correct_display_word = correct_word if not is_correct_eos else "<eos>"
+    is_perfect = score == max_score
 
     color_print(
-        f"You chose: {chosen_display_word} ({len(chosen_token_ids)} token{'s' if len(chosen_token_ids) > 1 else ''})",
-        RED if not is_correct else GREEN,
+        f"You chose: {current_sentence} [[ {', '.join(chosen_tokens)} ]]",
+        RED if not is_perfect else GREEN,
     )
     color_print(
-        f"Correct answer: {correct_display_word} ({len(correct_token_ids)} token{'s' if len(correct_token_ids) > 1 else ''}) ({'Correct!' if is_correct else 'Incorrect!'})",
-        GREEN if is_correct else RED,
+        f"Correct sequence: {current_sentence} [[ {' '.join(correct_sequence)} ]] ({'Perfect!' if is_perfect else f'Score: {score}/{max_score}'})",
+        GREEN if is_perfect else RED,
     )
 
-    return (
-        correct_token_ids,
-        is_correct or is_chosen_eos and is_correct_eos,
-        is_chosen_eos,
-    )
+    return score, max_score, chosen_token_ids, correct_token_ids, is_perfect
 
 
 if __name__ == "__main__":
-    print(f"Loading model: {model_name} and tokenizer...")
     model, tokenizer = load_model_and_tokenizer(model_name)
 
-    max_decode_steps = 256
-    top_k = 5
-    top_p = 0.95
-    temperature = 0.7
     print(
-        f"Custom loop set to max_decode_steps: {max_decode_steps}, top_k: {top_k}, top_p: {top_p}, temperature: {temperature}..."
+        f"Settings: max_steps={max_decode_steps}, top_k={top_k}, top_p={top_p}, temp={temperature}, choices={num_choices}, perm_len={permutation_length}, attention={show_attention}, max_top_k_for_probs={max_top_k_for_probs}"
     )
-    print(f"Number of choices: {num_choices}")
-    print(f"Using top-k sampling: {use_top_k_sampling}")
-    print(f"Using top-p sampling: {use_top_p_sampling}")
-    print(f"Showing attention heatmap: {show_attention}")
 
-    if not use_top_k_sampling and not use_top_p_sampling:
-        print("Error: At least one of top-k or top-p sampling must be enabled.")
-        exit()
-
-    input_text = input("Start a sentence... then press enter... ")
+    input_text = input("Start a sentence: ")
     input_ids, attention_mask = prepare_inputs(input_text, tokenizer, model)
 
-    generated_ids = input_ids
-    score = 0
-    previous_sentences_attention = []  # list to store attention-highlighted sentences
+    total_score = 0
+    total_max_score = 0
+    current_sentence = input_text
+    attention_history = []  # List to store attention heatmaps
+
     for step in range(max_decode_steps):
         print(f"\n--- Decoding Step: {step + 1} ---")
 
         start_time = time.time()
-        # Main model forward pass (LLM step)
         outputs = model(
-            generated_ids,
-            attention_mask=attention_mask,  # Use current attention mask
+            input_ids=input_ids,
+            attention_mask=attention_mask,
             output_attentions=show_attention,
-        )  # Request attentions
-        print(
-            f"  LLM Forward Pass took: {time.time() - start_time:.4f} seconds"
-        )  # Clearer print statement
-        next_token_logits = outputs.logits[:, -1, :]
+        )
+        print(f"  Model forward pass time : {time.time() - start_time:.4f}s")
 
+        logits_raw = outputs.logits[:, -1, :]
+
+        # --- Apply Temperature, Top-k, and Top-p ---
+        print(f"  Applying temperature : {time.time() - start_time:.4f}s")
+        logits_temp = apply_temperature(logits_raw, temperature)
+        print(f"  Finished applying temperature : {time.time() - start_time:.4f}s")
+        print(f"  Applying top-k : {time.time() - start_time:.4f}s")
+        logits_top_k = apply_top_k(logits_temp, top_k)
+        print(f"  Finished applying top-k : {time.time() - start_time:.4f}s")
+        print(f"  Applying top-p : {time.time() - start_time:.4f}s")
+        logits_top_p = apply_top_p(logits_top_k, top_p)
+        print(f"  Finished applying top-p : {time.time() - start_time:.4f}s")
+
+        # --- Attention Visualization ---
         if show_attention:
-            current_heatmap = get_attention_heatmap(outputs, generated_ids, tokenizer)
-        else:
-            current_heatmap = None
-
-        start_time = time.time()
-        next_token_logits = apply_temperature(next_token_logits, temperature)
-        print(f"  Temperature scaling took: {time.time() - start_time:.4f} seconds")
-
-        start_time = time.time()
-        top_k_tokens, top_k_probs, top_k_indices = get_top_k_tokens_and_probs(
-            next_token_logits, tokenizer, top_k
-        )
-        print(f"  Top-k calculation took: {time.time() - start_time:.4f} seconds")
-
-        top_p_tokens, top_p_probs = None, None
-        if use_top_p_sampling:
-            start_time = time.time()
-            top_p_filtered_logits = apply_top_p(next_token_logits, top_p)
-            print(f"  Top-p filtering took: {time.time() - start_time:.4f} seconds")
-
-            start_time = time.time()
-            probabilities = torch.softmax(top_p_filtered_logits, dim=-1)
-            print(f"  Softmax took: {time.time() - start_time:.4f} seconds")
-
-            sorted_probs, sorted_indices = torch.sort(
-                probabilities, descending=True, dim=-1
+            current_tokens, normalized_attention_scores = get_attention_heatmap(
+                outputs, input_ids, tokenizer
             )
-            cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
-            top_p_mask = cumulative_probs <= top_p
-            top_p_mask[..., :1] = True
-            top_p_indices_filtered = sorted_indices[0][top_p_mask[0]]
-            top_p_probs_filtered = sorted_probs[0][top_p_mask[0]]
-            top_p_tokens = [
-                tokenizer.decode([token_id.item()]).strip()
-                for token_id in top_p_indices_filtered
-            ]
-            top_p_probs = top_p_probs_filtered.tolist()
-
-        correct_token_ids, is_correct, is_chosen_eos = guess_next_word(
-            tokenizer,
-            model,
-            top_k_indices,
-            num_choices,
-            generated_ids,
-            attention_mask,  # Pass attention_mask
-            top_k_probs,
-            top_p_tokens,
-            top_p_probs,
-        )
-        next_token_id = torch.tensor(
-            correct_token_ids, dtype=torch.long, device=model.device
-        ).unsqueeze(0)
-
-        if is_correct and not is_chosen_eos:
-            score += 1
-
-        visualize_probabilities(
-            next_token_logits,
-            tokenizer,
-            top_k,
-            top_p,
-            top_k_tokens,
-            top_k_probs,
-            top_p_tokens,
-            top_p_probs,
-        )
-
-        start_time = time.time()
-        generated_ids = torch.cat([generated_ids, next_token_id], dim=-1)
-        print(f"  Tensor concatenation took: {time.time() - start_time:.4f} seconds")
-
-        current_sentence = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
-        if show_attention:
-            heatmap_dict = {
-                token: score for token, score in current_heatmap
-            }  # Ensure heatmap is a dict for lookup
-            colored_sentence = color_attention_text(current_sentence, heatmap_dict)
-            previous_sentences_attention.append(
-                colored_sentence
-            )  # Store colored sentence
-        else:
-            colored_sentence = BLUE + current_sentence + RESET
-            previous_sentences_attention.append(colored_sentence)  # Store blue sentence
-
-        # Print previous attention steps
-        print("\n--- Previous Attention Steps ---")
-        for prev_sentence in previous_sentences_attention[
-            :-1
-        ]:  # Exclude current sentence from previous
-            print(prev_sentence)
-
-        print(
-            f"\nCurrent sentence: {colored_sentence}"
-        )  # Print current sentence with attention
-
-        if attention_mask is not None:
-            start_time = time.time()
-            # Extend attention mask for main decoding loop - Corrected extension logic
-            attention_mask = torch.cat(
-                [
-                    attention_mask,
-                    torch.ones(
-                        (attention_mask.shape[0], 1),
-                        device=model.device,
-                        dtype=attention_mask.dtype,
-                    ),
-                ],
-                dim=-1,
+            colored_sentence_part, heatmap_scale = color_attention_text(
+                current_tokens, normalized_attention_scores
             )
+
+            attention_history.append(colored_sentence_part)  # add current step
+
+            print("\n--- Attention Heatmap (Current Step) ---")
+            print(heatmap_scale)
             print(
-                f"  Attention mask concatenation took: {time.time() - start_time:.4f} seconds"
-            )
+                f"Current sentence with attention (magenta highlights): {colored_sentence_part}"
+            )  # clarified print statement
 
-        if next_token_id[0, -1].item() == tokenizer.eos_token_id or is_chosen_eos:
+            print("\n--- Attention Heatmap History: ---")
+            for i, past_attention in enumerate(attention_history):
+                print(f"  Step {i + 1}: {past_attention}")
+
+        # --- Guessing Game Logic ---
+        step_score, step_max_score, chosen_token_ids, correct_token_ids, is_perfect = (
+            guess_next_word_sequence(
+                tokenizer,
+                logits_raw,
+                logits_temp,
+                logits_top_k,
+                logits_top_p,
+                num_choices,
+                top_k,
+                permutation_length,
+                input_ids,
+                current_sentence,
+                max_top_k_for_probs,
+            )
+        )  # Get score and chosen IDs
+        total_score += step_score
+        total_max_score += step_max_score
+
+        # --- Update Input for Next Step ---
+        print(f"  Applying softmax : {time.time() - start_time:.4f}s")
+        probabilities = torch.softmax(logits_top_p, dim=-1)
+        print(f"  Finished applying softmax : {time.time() - start_time:.4f}s")
+        _, best_token_indices = torch.topk(probabilities, 1, dim=-1)
+        next_token_id = [best_token_indices[0, 0].item()]
+        next_word = tokenizer.decode(next_token_id).strip()
+        current_sentence += " " + next_word
+
+        input_ids = torch.cat(
+            [input_ids, torch.tensor([next_token_id], device=model.device)], dim=-1
+        )
+        print(f"  Applying attention mask : {time.time() - start_time:.4f}s")
+        attention_mask = torch.cat(
+            [
+                attention_mask,
+                torch.ones((attention_mask.shape[0], 1), device=model.device),
+            ],
+            dim=-1,
+        )
+        print(f"  Finished applying attention mask : {time.time() - start_time:.4f}s")
+
+        if next_token_id[0] == tokenizer.eos_token_id:
             break
 
-    decoded_output = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
-    print(f"\n--- Final Generated Text: ---\n{decoded_output}")
-    print(f"\n--- Final Score: {score} / {step + 1} ---")
+    decoded_output = tokenizer.decode(input_ids[0], skip_special_tokens=True)
+    print(f"\n--- Generated Text: ---\n{decoded_output}")
+    print(f"\n--- Final Score: {total_score} / {total_max_score} ---")
