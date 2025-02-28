@@ -1,6 +1,5 @@
 import torch
 import random
-import itertools
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
 
@@ -95,14 +94,13 @@ def get_attention_heatmap(outputs, input_ids, tokenizer):
     input_tokens = tokenizer.convert_ids_to_tokens(input_ids[0][:-1])
     attention_scores = averaged_attention.tolist()
     max_attention = max(attention_scores) if attention_scores else 1.0
-    normalized_attention = [
-        (score / max_attention) for score in attention_scores
-    ]  # Normalized to 0-1 scale
+    # Normalized to 0-1
+    normalized_attention = [(score / max_attention) for score in attention_scores]
 
     return (
         input_tokens,
         normalized_attention,
-    )  # Return tokens and normalized attention scores
+    )
 
 
 def color_attention_text(
@@ -116,14 +114,8 @@ def color_attention_text(
     colored_tokens_output = []
     heatmap_scale_output = "Heatmap scale: 0 (low attention) to 1 (high attention)\n"
 
-    # heatmap_scores = (  # Removed unused variable
-    #     dict(zip(tokens, normalized_attention))
-    #     if tokens and normalized_attention
-    #     else {}
-    # )
-
     for token_text, attention_score in zip(tokens, normalized_attention):
-        token_text = token_text.replace(" ", "").replace("_", "").replace("-", "")
+        token_text = token_text.replace(" ", "").replace("_", "")
         normalized_score = attention_score
 
         # Linear interpolation for magenta: (255, 0, 255) at 1.0, (0, 0, 0) at 0.0
@@ -133,9 +125,8 @@ def color_attention_text(
 
         color_code_bg = f"\033[48;2;{red};{green};{blue}m"
         colored_token = f"{color_code_bg}{token_text}{reset_color}"
-        colored_tokens_output.append(
-            f"{colored_token} ({normalized_score:.2f})"
-        )  # Show normalized score
+        # Show normalized score
+        colored_tokens_output.append(f"{colored_token} ({normalized_score:.2f})")
 
     return " ".join(colored_tokens_output).replace("  ", " "), heatmap_scale_output
 
