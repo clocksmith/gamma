@@ -7,7 +7,6 @@ import os
 ###########################################
 # Model Configuration
 ###########################################
-# Model selection and parameters
 MODEL_NAME = "google/gemma-2b-it"
 TEMPERATURE = 0.7  # Temperature for softening logits distribution
 TOP_K = 8  # Number of highest probability tokens to keep for top-k filtering
@@ -17,7 +16,6 @@ MAX_TOP_K_FOR_PROBS = 16  # Maximum number of tokens to display in probability v
 ###########################################
 # Game Configuration
 ###########################################
-# Game mechanics and presentation
 MAX_DECODE_STEPS = 12  # Maximum number of tokens to predict
 NUM_CHOICES = 3  # Number of options presented to the player
 PERMUTATION_LENGTH = 3  # Number of tokens shown in each choice
@@ -26,7 +24,6 @@ SHOW_ATTENTION = True  # Whether to visualize attention patterns
 ###########################################
 # Terminal Colors Configuration
 ###########################################
-# ANSI color codes for terminal outputs
 RED = "\033[91m"
 GREEN = "\033[92m"
 BLUE = "\033[94m"
