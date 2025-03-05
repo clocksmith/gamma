@@ -1,177 +1,282 @@
-# Jemma Jamma
+# GGJJ (Gemma Gamma Jemma Jamma)
 
-## TODO(): move these to issue tracker
-    - Bugs:
-       - Timers are all using same start time
-       - Figure out major slow down at 50ish encode steps on 2b
-       - spacing issues when printing sentence
-       - "," is confusing to separate choices, use vertical list or | ?
-    - Some features requests:
-        - Add more attention stats
-        - after mac_encoding_steps for game, go to the end til <eos>
-        - make a keybaord shortcut "qqq" auto <eos>
-        - Add highlighting for current setence of attention
-        - toggle print statements
-        - Allow optoin to use the word that was guessed by user rather than LLM
-        - give more info in look ahead (tree of probabilities, etc)
-        - give more context into what part of forward feed attention step it is on within the transformer
-        - Add visuals for encoding steps happening in parallel
-        - Use commutative property of  multiplication as exxamples as oppose to RNN
-    - Bring it to the web!
+An interactive educational game that demystifies transformer-based language models through gameplay.
 
+## Overview
 
-This project provides an interactive environment for exploring the behavior of large language models (LLMs). It allows you to experiment with different generation parameters, play a word-guessing game, and visualize the inner workings of top-k and top-p sampling. While currently focused on Google's Gemma models, the core concepts apply broadly to many other LLMs.
+GGJJ is a hands-on tool that lets you peer inside Google's Gemma language model to see how it thinks and predicts text. By turning complex AI concepts into a guessing game, GGJJ makes advanced machine learning techniques accessible and fun to explore.
 
-## Features
+## Transformer Steps Visualized in the Game
 
-*   **Interactive Guessing Game:** Test your intuition against the language model! The script presents you with multiple-choice options for ranking the next word, drawn from the model's transformer predictions. Your score is tracked, providing a fun and engaging way to understand how LLMs predict text.
+The game captures many steps in the transformer architecture. Here's how each highlighted step is represented in GGJJ:
 
-*   **Model Selection:** Easily switch between different Gemma models (`google/gemma-2b`, `google/gemma-2b-it`, `google/gemma-7b`, `google/gemma-9b`, and `google/gemma-9b-it`).
+1. Tokenization: ✨ *Input text is tokenized when you enter your prompt, with token IDs shown in debug mode*
 
-        model_name = "google/gemma-2b"
-        max_decode_steps = 25
-        top_k = 50
-        top_p = 0.9
-        temperature = 1.0
-    ```
-## Notes
+2. Embedding Lookup: *Not directly visualized*
 
-### More steps to consider visualizing
+3. Positional Encoding: *Not directly visualized*
 
-Tokenization (Software): Input text -> tokens (integer IDs). CPU, string manipulation, lookup tables. Numerical representation of text.
+4. **Query/Key/Value Matrix Multiplications**: ✨ *Visualized through the attention heatmap display that shows which tokens influence others*
+   - The game shows which input tokens receive most attention when predicting the next token
+   - Attention scores represent the result of Q-K dot products after softmax normalization
 
-Embedding Lookup (Software & Hardware): Token IDs -> embedding vectors (from HBM on TPU). CPU initiates, TPU HBM provides access. Dense vector representation of tokens.
+5. **Attention Mechanism**: ✨ *Explicitly visualized as color-coded heatmaps*
+   - Darker colors indicate higher attention weights between tokens
+   - Normalized scores (0-1) show relative importance of each input token
+   - The visualization shows attention from the final layer, averaged across all heads
 
-Positional Encoding Generation (Software/Hardware): Create/retrieve positional encoding vectors (CPU or TPU). Provides word order information.
+6. **Raw Logits Generation**: ✨ *Displayed as the first set of token probabilities*
+   - Shows the unfiltered probability distribution over the entire vocabulary
+   - Demonstrates what the model initially predicts before any sampling techniques
 
-Positional Encoding Addition (Hardware): Add encodings to embeddings (element-wise on TPU). Combines semantic and positional information.
+7. **Temperature Scaling**: ✨ *Explicitly shown in second probability display*
+   - Demonstrates how adjusting temperature changes the probability distribution
+   - Higher temperatures flatten the distribution, lower ones make it more peaked
+   - The game uses temperature = 0.7 by default
 
-Encoder Query Weight Matrix Multiplication (Hardware): Input × Wᵠ (TPU MXUs). (sequence_length, embedding_dim) × (embedding_dim, dₖ). Projects input to "query" space.
+8. **Top-K Filtering**: ✨ *Visualized in third probability display*
+   - Shows how only the K most probable tokens are kept
+   - The game uses top-k = 8 by default
+   - Illustrates how this narrows the distribution to only likely candidates
 
-Encoder Key Weight Matrix Multiplication (Hardware): Input × Wᵏ (TPU MXUs). (sequence_length, embedding_dim) × (embedding_dim, dₖ). Projects input to "key" space.
+9. **Top-P (Nucleus) Sampling**: ✨ *Visualized in fourth probability display*
+   - Shows tokens remaining after filtering to the top p% of probability mass
+   - The game uses top-p = 0.95 by default
+   - Demonstrates how this creates a dynamic cutoff based on probability distribution
 
-Encoder Value Weight Matrix Multiplication (Hardware): Input × Wᵛ (TPU MXUs). (sequence_length, embedding_dim) × (embedding_dim, dᵥ). Creates "value" representation.
+10. **Token Selection/Sampling**: ✨ *Central to the game's guessing mechanic*
+    - Players try to predict which tokens will be selected
+    - The game shows the top-ranked tokens after all filtering steps
+    - Players see how sampling strategies affect final token selection
 
-Query-Key Matrix Multiplication (Hardware): QKᵀ (TPU MXUs). (sequence_length, dₖ) × (dₖ, sequence_length). Computes raw attention scores.
+11. **Autoregressive Generation**: ✨ *Experienced throughout gameplay*
+    - Each newly predicted token becomes part of the input for the next step
+    - The game shows how the context grows with each prediction
+    - Demonstrates how the model builds coherent text one token at a time
 
-Scaling (Hardware): QKᵀ / √dₖ (element-wise on TPU). Prevents large dot products.
+## Background
 
-Padding Mask Creation (Encoder) (Software): Create padding mask (CPU). Identifies padding tokens.
+Modern language models use transformer architectures to process and generate text. These models work by predicting the next token in a sequence based on all previous tokens. The prediction process involves several key steps:
 
-Padding Mask Application (Encoder) (Hardware): Add mask to scaled QKᵀ (element-wise on TPU). Disables attention to padding.
+1. Tokenizing input text into numerical representations
+2. Computing attention scores between tokens (which tokens "attend" to which others)
+3. Generating a probability distribution over possible next tokens
+4. Applying sampling techniques (temperature, top-k, top-p) to select the final token
 
-Softmax (Encoder Self-Attention) (Hardware): Softmax(masked, scaled QKᵀ) (row-wise on TPU). Attention weights (probabilities).
+GGJJ makes these abstract processes tangible by letting you compete against the model's predictions and visualizing the attention patterns that drive token selection.
 
-Attention-Value Matrix Multiplication (Hardware): Softmax output × V (TPU MXUs). (sequence_length, sequence_length) × (sequence_length, dᵥ). Weighted sum of value vectors.
+## How to Play
 
-Multi-Head Concatenation (Hardware): Concatenate attention head outputs (TPU). Combines multiple attention perspectives.
+1. Start the game and enter a beginning sentence or phrase
+2. The model will show you several possible continuations
+3. Try to guess which sequence of tokens the model will rank highest
+4. After guessing, see how the model arrived at its decision through:
+   - Attention visualizations (which words influenced predictions most)
+   - Probability distributions at various stages of filtering
+   - Step-by-step explanations of the model's reasoning
+5. The game continues with the model's chosen tokens added to the sequence
+6. Repeat until you complete all rounds or the model generates an end-of-sequence token
 
-Multi-Head Output Projection (Hardware): Concatenated output × Wᴼ (TPU MXUs). (sequence_length, h*dᵥ) × (h*dᵥ, embedding_dim). Projects back to embedding dimension.
+Your score is based on how often your predictions match the model's choices.
 
-Residual Addition (Encoder) (Hardware): Original input + attention output (element-wise on TPU). Aids gradient flow.
+## Setup and Installation
 
-Layer Normalization (Encoder) (Hardware): Normalize the result (TPU). Stabilizes training.
+### Requirements
 
-Feed-Forward Layer 1 (Encoder) (Hardware): Normalized output × weight matrix (TPU MXUs). Non-linear transformation.
+- Python 3.8+
+- PyTorch
+- Transformers library
+- (Optional) colorama for better Windows terminal support
 
-Add Bias 1 (Encoder FFN)(Hardware): Adds the first bias vector. Affine transformation
+### Basic Installation
 
-Activation (Encoder) (Hardware): Apply activation (e.g., GeLU) (element-wise on TPU). Introduces non-linearity.
+```bash
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows, use: venv\Scripts\activate
 
-Feed-Forward Layer 2 (Encoder) (Hardware): Activated output × weight matrix (TPU MXUs). Further processing.
+# Install required packages
+pip install torch transformers
+pip install colorama  # Recommended for Windows users
+```
 
-Add Bias 2 (Encoder FFN)(Hardware): Adds the second bias term. Increases flexibility
+### Running the Game
 
-Residual Addition (Encoder) (Hardware): Feed-forward input + output (element-wise on TPU). Aids gradient flow.
+```bash
+# Run the game with default settings
+python ggjj.py
+```
 
-Layer Normalization (Encoder) (Hardware): Normalize (TPU). Final encoder layer normalization.
+### Accessing Gemma Models
 
-Decoder Input Embedding (Software & Hardware): Start token or previous tokens -> embeddings (CPU, TPU HBM). Initializes decoder input.
+You'll need access to Google's Gemma models to run this game. There are several options:
 
-Decoder Query Weight Matrix Multiplication (Hardware): Similar to Step 5, but for decoder (TPU MXUs). Decoder "query" space.
+1. **Hugging Face (Recommended)**: 
+   - Visit [Hugging Face's Gemma page](https://huggingface.co/google/gemma-2b)
+   - Accept the terms and conditions
+   - Generate a Hugging Face token and set it in your environment:
+     ```bash
+     export HUGGING_FACE_HUB_TOKEN=your_token_here
+     ```
 
-Decoder Key Weight Matrix Multiplication (Hardware): Similar to Step 6, but for decoder (TPU MXUs). Decoder "key" space.
+2. **Google AI Studio**:
+   - Access the models through [Google AI Studio](https://ai.google.dev/)
+   - Use Google's Python SDK to download and use the models locally
 
-Decoder Value Weight Matrix Multiplication (Hardware): Similar to Step 7, but for decoder (TPU MXUs). Decoder "value" representation.
+3. **Kaggle**:
+   - Gemma models are available on Kaggle for use in notebooks
 
-Query-Key Matrix Multiplication (Decoder) (Hardware): Similar to Step 8, but for decoder (TPU MXUs). Decoder raw attention scores.
+## Complete Transformer Architecture Steps
 
-Scaling (Decoder) (Hardware): Similar to Step 9, but for decoder (TPU). Prevents large dot products (decoder).
+Here is a comprehensive list of all transformer steps, with the ones visualized in the game highlighted:
 
-Attention Mask Creation (Decoder) (Software): Create attention mask (CPU) for autoregressive masking. Blocks future tokens.
+1. **Tokenization (Software)**: ✨ *Input text → tokens (integer IDs)*
 
-Padding Mask Creation (Decoder) (Software): Create padding mask (CPU) if needed. Handles padding in decoder.
+2. Embedding Lookup (Software & Hardware): Token IDs → embedding vectors.
 
-Mask Application (Decoder) (Hardware): Add attention + padding masks to scaled QKᵀ (element-wise on TPU). Applies masks.
+3. Positional Encoding Generation (Software/Hardware): Create positional encoding vectors.
 
-Softmax (Decoder Self-Attention) (Hardware): Softmax(masked, scaled QKᵀ) (row-wise on TPU). Decoder self-attention probabilities.
+4. Positional Encoding Addition (Hardware): Add encodings to embeddings.
 
-Attention-Value Matrix Multiplication (Decoder) (Hardware): Softmax output × Value matrix (decoder) (TPU MXUs). Weighted sum (decoder values).
+5. **Encoder Query Weight Matrix Multiplication (Hardware)**: ✨ *Input × W^Q. Visible in attention visualization*
 
-Multi-Head Concatenation (Decoder) (Hardware): Similar to Step 14, but for decoder (TPU). Combines decoder attention heads.
+6. **Encoder Key Weight Matrix Multiplication (Hardware)**: ✨ *Input × W^K. Visible in attention visualization*
 
-Multi-Head Output Projection (Decoder) (Hardware): Similar to Step 15, but for decoder (TPU MXUs). Projects decoder output.
+7. **Encoder Value Weight Matrix Multiplication (Hardware)**: ✨ *Input × W^V. Visible in attention visualization*
 
-Residual Addition (Decoder Self-Attention) (Hardware): Decoder input + attention output (element-wise on TPU). Decoder residual connection.
+8. **Query-Key Matrix Multiplication (Hardware)**: ✨ *QK^T. Raw attention scores shown in heatmap*
 
-Layer Normalization (Decoder Self-Attention) (Hardware): Normalize (TPU). Decoder self-attention normalization.
+9. **Scaling (Hardware)**: ✨ *QK^T / √d_k. Normalized attention scores shown in visualization*
 
-Encoder Output Key Multiplication (Hardware): Final encoder output × Key weight matrix (Encoder-Decoder attention) (TPU MXUs). Encoder "key" for cross-attention.
+10. Padding Mask Creation (Encoder) (Software): Create padding mask.
 
-Encoder Output Value Multiplication (Hardware): Final encoder output × Value weight matrix (Encoder-Decoder attention) (TPU MXUs). Encoder "value" for cross-attention.
+11. Padding Mask Application (Encoder) (Hardware): Add mask to scaled QK^T.
 
-Decoder Query - Encoder Key Multiplication (Hardware): Q (decoder) × K (encoder) (TPU MXUs). Cross-attention scores.
+12. **Softmax (Encoder Self-Attention) (Hardware)**: ✨ *Softmax(masked, scaled QK^T). Visualized in attention heatmap*
 
-Scaling (Encoder-Decoder Attention)(Hardware): Divide by √dₖ (TPU). Prevents large dot products (cross-attention).
+13. **Attention-Value Matrix Multiplication (Hardware)**: ✨ *Softmax output × V. Final effect visible in token predictions*
 
-Padding Mask Application (Encoder-Decoder Attention) (Hardware): Add encoder padding mask (element-wise on TPU). Handles encoder padding in cross-attention.
+14. Multi-Head Concatenation (Hardware): Concatenate attention head outputs.
 
-Softmax (Encoder-Decoder Attention) (Hardware): Apply softmax (TPU). Cross-attention probabilities.
+15. Multi-Head Output Projection (Hardware): Concatenated output × W^O.
 
-Attention-Value Multiplication (Encoder-Decoder Attention) (Hardware): Softmax output × Value matrix (encoder) (TPU MXUs). Weighted sum (encoder values).
+16. Residual Addition (Encoder) (Hardware): Original input + attention output.
 
-Multi-Head Concatenation (Encoder-Decoder Attention) (Hardware): Concatenate heads (TPU). Combines cross-attention heads.
+17. Layer Normalization (Encoder) (Hardware): Normalize the result.
 
-Multi-Head Output Projection (Encoder-Decoder Attention) (Hardware): Project output (TPU MXUs). Projects cross-attention output.
+18. Feed-Forward Layer 1 (Encoder) (Hardware): Normalized output × weight matrix.
 
-Residual Addition (Encoder-Decoder Attention) (Hardware): Input + cross-attention output (element-wise on TPU). Cross-attention residual connection.
+19. Add Bias 1 (Encoder FFN)(Hardware): Adds the first bias vector.
 
-Layer Normalization (Encoder-Decoder Attention) (Hardware): Normalize (TPU). Cross-attention normalization.
+20. Activation (Encoder) (Hardware): Apply activation (e.g., GeLU).
 
-Feed-Forward Layer 1 (Decoder) (Hardware): Similar to Step 18, but for decoder (TPU MXUs). Decoder feed-forward (1).
+21. Feed-Forward Layer 2 (Encoder) (Hardware): Activated output × weight matrix.
 
-Add Bias 1 (Decoder FFN)(Hardware): Adds first bias. Decoder bias 1
+22. Add Bias 2 (Encoder FFN)(Hardware): Adds the second bias term.
 
-Activation (Decoder) (Hardware): Similar to Step 20, but for decoder (TPU). Decoder non-linearity.
+23. Residual Addition (Encoder) (Hardware): Feed-forward input + output.
 
-Feed-Forward Layer 2 (Decoder) (Hardware): Similar to Step 21, but for decoder (TPU MXUs). Decoder feed-forward (2).
+24. Layer Normalization (Encoder) (Hardware): Normalize.
 
-Add Bias 2 (Decoder FFN)(Hardware): Add second bias. Decoder bias 2
+25. Decoder Input Embedding (Software & Hardware): Start token or previous tokens → embeddings.
 
-Residual Addition (Decoder) (Hardware): Similar to Step 23, but for decoder (TPU). Decoder feed-forward residual.
+26. **Decoder Query Weight Matrix Multiplication (Hardware)**: ✨ *Similar to Step 5, but for decoder. Captured in logits generation*
 
-Layer Normalization (Decoder) (Hardware): Similar to Step 24, but for decoder (TPU). Final decoder normalization.
+27. **Decoder Key Weight Matrix Multiplication (Hardware)**: ✨ *Similar to Step 6, but for decoder. Captured in logits generation*
 
-Final Linear Transformation (Hardware): Decoder output × final weight matrix (TPU MXUs). Projects to vocabulary size (logits).
+28. **Decoder Value Weight Matrix Multiplication (Hardware)**: ✨ *Similar to Step 7, but for decoder. Captured in logits generation*
 
-Add final Bias(Hardware). Adds the final bias.
+29. **Query-Key Matrix Multiplication (Decoder) (Hardware)**: ✨ *Similar to Step 8, but for decoder. Captured in logits generation*
 
-Repetition Penalty (Software/Hardware): Before softmax, we modify the logits based on previous tokens, by multiplying by a penalty factor < 1 if it was generated or > 1.
+30. **Scaling (Decoder) (Hardware)**: ✨ *Similar to Step 9, but for decoder. Captured in logits generation*
 
-Temperature Scaling (Software/Hardware): Divide logits by temperature (TPU or CPU). Controls output randomness.
+31. **Attention Mask Creation (Decoder) (Software)**: ✨ *Create attention mask for autoregressive masking. Implicitly used in autoregressive generation*
 
-Softmax (Final Output) (Hardware): Apply softmax to logits (TPU). Creates probability distribution.
+32. Padding Mask Creation (Decoder) (Software): Create padding mask if needed.
 
-Top-k Filtering (Software): Select top k probabilities, set others to 0. (CPU, sorting, masking). Limits to k most likely.
+33. **Mask Application (Decoder) (Hardware)**: ✨ *Add attention + padding masks to scaled QK^T. Implicitly used in autoregressive generation*
 
-Probability Masking for Top-k (Software): Sets to zero the probability of the non-top-k tokens.
+34. **Softmax (Decoder Self-Attention) (Hardware)**: ✨ *Softmax(masked, scaled QK^T). Raw logits shown in probability display*
 
-Top-p Filtering (Software): Sum probabilities until threshold p is reached, set others to 0. (CPU, sorting, accumulation, masking). Dynamically selects tokens.
+35. **Attention-Value Matrix Multiplication (Decoder) (Hardware)**: ✨ *Softmax output × Value matrix. Affects final token probabilities*
 
-Probability Masking for Top-p (Software): Sets to zero the probability of the non-top-p tokens.
+36. Multi-Head Concatenation (Decoder) (Hardware): Similar to Step 14, but for decoder.
 
-Renormalization (Software/Hardware): Renormalize the probabilities after Top-k/Top-p filtering to ensure they sum to 1 (CPU or TPU). Ensures a valid probability distribution.
+37. Multi-Head Output Projection (Decoder) (Hardware): Similar to Step 15, but for decoder.
 
-Sampling (Software/Hardware): Sample a token ID based on the (modified) probabilities (CPU and/or TPU). Selects the next token.
+38. Residual Addition (Decoder Self-Attention) (Hardware): Decoder input + attention output.
 
-Token-to-Text Conversion (Software): Token ID -> text (CPU, vocabulary lookup). Converts to human-readable text.
+39. Layer Normalization (Decoder Self-Attention) (Hardware): Normalize.
+
+40. Encoder Output Key Multiplication (Hardware): Final encoder output × Key weight matrix (Encoder-Decoder attention).
+
+41. Encoder Output Value Multiplication (Hardware): Final encoder output × Value weight matrix (Encoder-Decoder attention).
+
+42. Decoder Query - Encoder Key Multiplication (Hardware): Q (decoder) × K (encoder).
+
+43. Scaling (Encoder-Decoder Attention)(Hardware): Divide by √d_k.
+
+44. Padding Mask Application (Encoder-Decoder Attention) (Hardware): Add encoder padding mask.
+
+45. Softmax (Encoder-Decoder Attention) (Hardware): Apply softmax.
+
+46. Attention-Value Multiplication (Encoder-Decoder Attention) (Hardware): Softmax output × Value matrix (encoder).
+
+47. Multi-Head Concatenation (Encoder-Decoder Attention) (Hardware): Concatenate heads.
+
+48. Multi-Head Output Projection (Encoder-Decoder Attention) (Hardware): Project output.
+
+49. Residual Addition (Encoder-Decoder Attention) (Hardware): Add to input.
+
+50. Layer Normalization (Encoder-Decoder Attention) (Hardware): Normalize.
+
+51. Feed-Forward Layer 1 (Decoder) (Hardware): FFN first layer.
+
+52. Add Bias 1 (Decoder FFN)(Hardware): Add first bias.
+
+53. Activation (Decoder) (Hardware): Apply activation.
+
+54. Feed-Forward Layer 2 (Decoder) (Hardware): FFN second layer.
+
+55. Add Bias 2 (Decoder FFN)(Hardware): Add second bias.
+
+56. Residual Addition (Decoder FFN) (Hardware): Add to input.
+
+57. Layer Normalization (Decoder FFN) (Hardware): Normalize.
+
+58. **Final Logits Projection**: ✨ *Projecting hidden states to vocabulary. Raw logits displayed in game*
+
+59. **Temperature Scaling**: ✨ *Adjusting probability distribution sharpness. Explicitly visualized in separate probability display*
+
+60. **Top-K Filtering**: ✨ *Keeping only K most probable tokens. Explicitly visualized in separate probability display*
+
+61. **Top-P (Nucleus) Sampling**: ✨ *Filtering based on cumulative probability. Explicitly visualized in separate probability display*
+
+62. **Final Token Selection**: ✨ *Selecting the next token based on filtered distribution. Central to the guessing game mechanic*
+
+## TODO: Future Enhancements
+
+These items will be moved to the issue tracker:
+
+### Bugs
+- [ ] Fix timers that are all using same start time
+- [ ] Investigate major slowdown at ~50 encoding steps on 2b model
+- [ ] Fix spacing issues when printing sentence
+- [ ] Replace confusing comma-separated choices with vertical list or pipe separator
+
+### Feature Requests
+- [ ] Add more detailed attention statistics and visualizations
+- [ ] Continue generation to EOS token after max_encoding_steps for game
+- [ ] Add keyboard shortcut "qqq" to auto-insert EOS token
+- [ ] Add highlighting for current sentence in attention visualization
+- [ ] Add toggle for verbose/minimal print statements
+- [ ] Allow option to use player-guessed word rather than LLM's choice
+- [ ] Provide more information in look-ahead (tree of probabilities)
+- [ ] Give more context about which part of forward feed attention step is active
+- [ ] Add visuals for encoding steps happening in parallel
+- [ ] Use commutative property of multiplication examples instead of RNN examples
+- [ ] Create web-based version with interactive visualizations
+- [ ] Support more model architectures beyond Gemma
+- [ ] Add comparative analysis between different models
+- [ ] Implement multi-step lookahead to show branching probabilities
+- [ ] Add user-adjustable parameters for sampling techniques
