@@ -6,6 +6,16 @@ An interactive educational game that demystifies transformer-based language mode
 
 GGJJ is a hands-on tool that lets you peer inside Google's Gemma language model to see how it thinks and predicts text. By turning complex AI concepts into a guessing game, GGJJ makes advanced machine learning techniques accessible and fun to explore.
 
+### Demo
+
+Playing locally wih gemma-2b-it on a Macbook air.
+
+<img width="1076" alt="1" src="https://github.com/user-attachments/assets/ee54cda4-772f-4d99-b6f3-1bc5d9c3b2de" />
+<img width="1080" alt="2" src="https://github.com/user-attachments/assets/3d6c98f9-2373-495e-895d-417b1929ccf3" />
+<img width="1078" alt="3" src="https://github.com/user-attachments/assets/8852b962-7c68-4fcc-baa3-1ed0a45955b3" />
+<img width="1079" alt="4" src="https://github.com/user-attachments/assets/9441ebef-ff37-47e4-81ca-6da89a4400fb" />
+<img width="1084" alt="5" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
+
 ## Transformer Steps Visualized in the Game
 
 The game captures many steps in the transformer architecture. Here's how each highlighted step is represented in GGJJ:
