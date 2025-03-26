@@ -3,11 +3,12 @@ import random
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
 import os
+import argparse
 
 ###########################################
 # Model Configuration
 ###########################################
-MODEL_NAME = "google/gemma-3-4b-it"
+MODEL_NAME = "google/gemma-3-1b-it"  # Default model
 TEMPERATURE = 0.7  # Temperature for softening logits distribution
 TOP_K = 8  # Number of highest probability tokens to keep for top-k filtering
 TOP_P = 0.95  # Cumulative probability threshold for top-p (nucleus) sampling
@@ -18,9 +19,9 @@ MAX_TOP_K_FOR_PROBS = (
 ###########################################
 # Game Configuration
 ###########################################
-MAX_DECODE_STEPS = 12  # Maximum number of tokens to predict
-NUM_CHOICES = 3  # Number of options presented to the player
-PERMUTATION_LENGTH = 3  # Number of tokens shown in each choice
+MAX_DECODE_STEPS = 8  # Maximum number of tokens to predict
+NUM_CHOICES = 4  # Number of options presented to the player
+PERMUTATION_LENGTH = 4  # Number of tokens shown in each choice
 SHOW_ATTENTION = True  # Whether to visualize attention patterns
 
 ###########################################
@@ -425,12 +426,17 @@ def process_player_guess(
 
     # Get player's choice
     while True:
-        user_choice = input("\nYour choice (enter A, B, or C): ").strip().upper()
-        if "A" <= user_choice <= chr(ord("A") + len(choices) - 1):
+        valid_choices_str = "".join([chr(ord("A") + i) for i in range(len(choices))])
+        user_choice = (
+            input(f"\nYour choice (enter {', '.join(valid_choices_str)}): ")
+            .strip()
+            .upper()
+        )
+        if user_choice and user_choice in valid_choices_str:
             break
         else:
             print(
-                f"Invalid input. Please choose a letter from A to {chr(ord('A') + len(choices) - 1)}."
+                f"Invalid input. Please choose a letter from {', '.join(valid_choices_str)}."
             )
 
     chosen_index = ord(user_choice) - ord("A")
@@ -481,6 +487,108 @@ def process_player_guess(
     return score, max_score, is_perfect
 
 
+def explain_transformer_steps():
+    """
+    Provides a more detailed explanation of Transformer architecture steps.
+    """
+    print("\n--- Deep Dive into Transformer Steps ---")
+    print(
+        "Let's break down what happens inside Gemma when it predicts the next token:\n"
+    )
+
+    print("1. **Tokenization & Embedding:**")
+    print(
+        "   - First, your input text is converted into tokens, which are just numbers the model understands."
+    )
+    print(
+        "   - Then, each token is transformed into an 'embedding' - a vector that represents its meaning."
+    )
+    print("   - Think of embeddings as rich numerical representations of words.\n")
+
+    print("2. **Positional Encoding:**")
+    print(
+        "   - Since Transformers don't inherently know word order (unlike reading left-to-right),"
+    )
+    print(
+        "   - 'Positional encodings' are added to the embeddings. These are special vectors"
+    )
+    print("   - that tell the model the position of each word in the sentence.\n")
+
+    print("3. **Attention Mechanism (Multi-Head):**")
+    print(
+        "   - This is the core of the Transformer!  The model uses 'attention' to focus on"
+    )
+    print(
+        "   - the most relevant parts of the input sentence when predicting the next word."
+    )
+    print(
+        "   - 'Multi-Head' means this attention process happens in parallel multiple times ('heads'),"
+    )
+    print(
+        "   - allowing the model to capture different kinds of relationships between words.\n"
+    )
+    print("   - In each attention head, the model calculates:")
+    print(
+        "     - **Query, Key, Value matrices:** These are transformations of the input embeddings."
+    )
+    print(
+        "     - **Attention Scores:** By comparing Queries and Keys, the model figures out"
+    )
+    print("       how much each word should 'attend' to other words.")
+    print(
+        "     - **Weighted Values:** These attention scores are used to weight the 'Value' vectors,"
+    )
+    print("       emphasizing the important words.\n")
+
+    print("4. **Feed-Forward Networks:**")
+    print(
+        "   - After the attention layers, the processed information goes through 'Feed-Forward Networks'."
+    )
+    print(
+        "   - These are like standard neural network layers that further analyze the information"
+    )
+    print(
+        "   - learned by the attention mechanism, refining the model's understanding.\n"
+    )
+
+    print("5. **Residual Connections & Layer Normalization:**")
+    print(
+        "   - Throughout the Transformer, there are 'residual connections' that add the original input"
+    )
+    print("   - to the output of each layer. This helps with training deeper networks.")
+    print(
+        "   - 'Layer Normalization' is used to stabilize the activations within the network,"
+    )
+    print("   - making training more efficient and effective.\n")
+
+    print("6. **Logits and Probabilities:**")
+    print(
+        "   - Finally, the Transformer outputs 'logits'. These are raw scores for each word in the vocabulary."
+    )
+    print(
+        "   - A 'softmax' function is applied to these logits to convert them into probabilities,"
+    )
+    print("   - indicating how likely each word is to be the next token.\n")
+
+    print("7. **Sampling (Temperature, Top-K, Top-P):**")
+    print("   - To generate the next token, we use 'sampling techniques'.")
+    print("   - 'Temperature' adjusts how random the generation is.")
+    print(
+        "   - 'Top-K' and 'Top-P' (Nucleus sampling) are methods to focus on the most probable tokens"
+    )
+    print(
+        "     and make the generation more coherent and less likely to go off-topic.\n"
+    )
+
+    print(
+        "In essence, the Transformer uses attention to understand the context of the input text,"
+    )
+    print(
+        "processes this context through feed-forward networks, and then predicts the next word"
+    )
+    print("by choosing from a probability distribution over the vocabulary.\n")
+
+
 def explain_attention_mechanism():
     """
     Provides an explanation of the attention mechanism for the player.
@@ -523,19 +631,65 @@ def explain_attention_mechanism():
         "This visualization helps you understand which parts of your input most strongly"
     )
     print("influenced Gemma's token predictions.")
+    print(
+        "\nFor a more detailed explanation of the Transformer architecture, choose 'Explain Transformer Steps' from the main menu."
+    )
 
 
-def run_game():
+def run_game(cli_model_name=None):
     """
     Main game function that coordinates the token prediction game.
     """
+
+    gemma_models = [
+        "google/gemma-3-1b-it",
+        "google/gemma-3-4b-it",
+        "google/gemma-3-12b-it",
+        "google/gemma-3-27b-it",
+        "google/gemma-3-1b",
+        "google/gemma-3-4b",
+        "google/gemma-3-12b",
+        "google/gemma-3-27b",
+        "google/gemma-2-2b-it",
+        "google/gemma-2-7b-it",
+        "google/gemma-2-9b-it",
+        "google/gemma-2-2b",
+        "google/gemma-2-7b",
+        "google/gemma-2-9b",
+    ]
+
     print("\n" + "=" * 70)
     print("🤖 Welcome to the LLM Next Token Prediction Game! 🎮")
     print("=" * 70)
     print("\nTest your ability to predict what Gemma will generate next!")
     print("You'll see a sentence and need to guess which tokens Gemma would choose.")
+
+    print("\nAvailable Gemma Models:")
+    for i, model_name in enumerate(gemma_models):
+        print(f"  {i+1}) {model_name}")
+
+    while True:
+        model_choice_str = input(
+            f"\nChoose a Gemma model (1-{len(gemma_models)}, default is 1): "
+        ).strip()
+        if not model_choice_str:
+            model_index = 0  # Default to the first model in the list
+            break
+        try:
+            model_index = int(model_choice_str) - 1
+            if 0 <= model_index < len(gemma_models):
+                break
+            else:
+                print(
+                    f"Invalid choice. Please enter a number between 1 and {len(gemma_models)}."
+                )
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    selected_model_name = gemma_models[model_index]
+
     print("\nConfiguration:")
-    print(f"• Model: {MODEL_NAME}")
+    print(f"• Model: {selected_model_name}")
     print(
         f"• Temperature: {TEMPERATURE} (higher = more random, lower = more deterministic)"
     )
@@ -547,7 +701,7 @@ def run_game():
     print("\nLet's get started!")
 
     # Load model and tokenizer
-    model, tokenizer = load_model_and_tokenizer(MODEL_NAME)
+    model, tokenizer = load_model_and_tokenizer(selected_model_name)
 
     # Get starting sentence from player
     input_text = input("\nStart a sentence (or press Enter for default): ").strip()
@@ -695,4 +849,26 @@ def run_game():
 
 
 if __name__ == "__main__":
-    run_game()
+    parser = argparse.ArgumentParser(description="LLM Next Token Prediction Game")
+    parser.add_argument(
+        "-m",
+        "--model",
+        type=str,
+        default=None,  # Model selection is now interactive, remove default from here
+        help="Model name to use (e.g., google/gemma-3-4b-it, google/gemma-2-7b-it)",
+    )
+    parser.add_argument(
+        "-e",
+        "--explain",
+        action="store_true",
+        help="Explain Transformer architecture steps before starting the game",
+    )
+
+    args = parser.parse_args()
+
+    if args.explain:
+        explain_transformer_steps()
+        input("\nPress Enter to start the game...")
+
+    run_game(args.model)
+    print(open(__file__).read())
