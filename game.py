@@ -7,11 +7,13 @@ import os
 ###########################################
 # Model Configuration
 ###########################################
-MODEL_NAME = "google/gemma-2b-it"
+MODEL_NAME = "google/gemma-3-4b-it"
 TEMPERATURE = 0.7  # Temperature for softening logits distribution
 TOP_K = 8  # Number of highest probability tokens to keep for top-k filtering
 TOP_P = 0.95  # Cumulative probability threshold for top-p (nucleus) sampling
-MAX_TOP_K_FOR_PROBS = 16  # Maximum number of tokens to display in probability visualization
+MAX_TOP_K_FOR_PROBS = (
+    16  # Maximum number of tokens to display in probability visualization
+)
 
 ###########################################
 # Game Configuration
@@ -33,23 +35,24 @@ RESET = "\033[0m"
 # Check if running in a terminal that supports ANSI color codes
 # This helps with compatibility across different terminal environments
 USE_COLORS = True
-if os.name == 'nt':  # Windows
+if os.name == "nt":  # Windows
     try:
         import colorama
+
         colorama.init()
     except ImportError:
         # Fallback for Windows without colorama
-        if os.environ.get('TERM') != 'xterm':
+        if os.environ.get("TERM") != "xterm":
             USE_COLORS = False
 
 
 def load_model_and_tokenizer(model_name):
     """
     Loads the language model and tokenizer from Hugging Face.
-    
+
     Args:
         model_name: Name of the model to load from Hugging Face
-        
+
     Returns:
         Tuple of (model, tokenizer)
     """
@@ -63,12 +66,12 @@ def load_model_and_tokenizer(model_name):
 def prepare_inputs(input_text, tokenizer, model):
     """
     Tokenizes the input text and prepares it for the model.
-    
+
     Args:
         input_text: The text to tokenize
         tokenizer: The tokenizer to use
         model: The model to prepare inputs for
-        
+
     Returns:
         Tuple of (input_ids, attention_mask)
     """
@@ -81,11 +84,11 @@ def prepare_inputs(input_text, tokenizer, model):
 def apply_temperature(logits, temperature):
     """
     Applies temperature scaling to logits.
-    
+
     Args:
         logits: Raw logits from the model
         temperature: Temperature value (higher = more random, lower = more deterministic)
-        
+
     Returns:
         Temperature-scaled logits
     """
@@ -95,11 +98,11 @@ def apply_temperature(logits, temperature):
 def apply_top_k(logits, top_k):
     """
     Applies top-k filtering to logits.
-    
+
     Args:
         logits: Logits to filter
         top_k: Number of highest probability tokens to keep
-        
+
     Returns:
         Filtered logits with only top-k values preserved
     """
@@ -112,24 +115,24 @@ def apply_top_k(logits, top_k):
 def apply_top_p(logits, top_p):
     """
     Applies top-p (nucleus) filtering to logits.
-    
+
     Args:
         logits: Logits to filter
         top_p: Cumulative probability threshold
-        
+
     Returns:
         Filtered logits with tokens above cumulative probability threshold
     """
     sorted_logits, sorted_indices = torch.sort(logits, descending=True, dim=-1)
     cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
-    
+
     # Remove tokens with cumulative probability above threshold
     sorted_indices_to_remove = cumulative_probs > top_p
-    
+
     # Shift indices to keep first token above threshold
     sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
     sorted_indices_to_remove[..., 0] = 0
-    
+
     # Apply filtering
     filtered_logits = sorted_logits.clone()
     filtered_logits[sorted_indices_to_remove] = float("-inf")
@@ -143,12 +146,12 @@ def apply_top_p(logits, top_p):
 def get_top_tokens_and_probs(logits, tokenizer, k=None):
     """
     Gets the top tokens and their probabilities from logits.
-    
+
     Args:
         logits: Logits to extract tokens from
         tokenizer: Tokenizer to decode token IDs
         k: Number of top tokens to return (optional)
-        
+
     Returns:
         Tuple of (tokens, probabilities, token_indices)
     """
@@ -161,7 +164,7 @@ def get_top_tokens_and_probs(logits, tokenizer, k=None):
     top_k_tokens = []
     for token_id in top_k_indices[0]:
         token_text = tokenizer.decode([token_id.item()]).strip()
-        
+
         # Handle special tokens
         if token_text == "":
             if token_id.item() == tokenizer.pad_token_id:
@@ -174,9 +177,9 @@ def get_top_tokens_and_probs(logits, tokenizer, k=None):
                 token_text = "<mask> (masked token placeholder)"
             else:
                 token_text = f"<special_{token_id.item()}>"
-        
+
         top_k_tokens.append(token_text)
-    
+
     top_k_probs = top_k_values[0].tolist()
     return top_k_tokens, top_k_probs, top_k_indices
 
@@ -184,7 +187,7 @@ def get_top_tokens_and_probs(logits, tokenizer, k=None):
 def color_print(text, color):
     """
     Prints text with specified color if terminal supports it.
-    
+
     Args:
         text: Text to print
         color: ANSI color code to use
@@ -205,12 +208,12 @@ def wait_for_player():
 def get_attention_heatmap(outputs, input_ids, tokenizer):
     """
     Extracts attention weights from model outputs.
-    
+
     Args:
         outputs: Model outputs containing attention weights
         input_ids: Input token IDs
         tokenizer: Tokenizer to decode token IDs
-        
+
     Returns:
         Tuple of (input_tokens, normalized_attention_scores) or None if not available
     """
@@ -220,7 +223,7 @@ def get_attention_heatmap(outputs, input_ids, tokenizer):
 
     # Get the last layer attention weights
     last_layer_attentions = outputs.attentions[-1]
-    
+
     # Average attention from all heads to the last token (next token prediction)
     attention_weights = last_layer_attentions[0, :, -1, :-1].mean(dim=0)
 
@@ -230,7 +233,7 @@ def get_attention_heatmap(outputs, input_ids, tokenizer):
     # Convert input IDs to tokens (excluding the last token)
     input_tokens = tokenizer.convert_ids_to_tokens(input_ids[0][:-1])
     attention_scores = attention_weights.tolist()
-    
+
     # Normalize attention scores to 0-1 range for visualization
     max_attention = max(attention_scores) if attention_scores else 1.0
     normalized_attention = [(score / max_attention) for score in attention_scores]
@@ -241,12 +244,12 @@ def get_attention_heatmap(outputs, input_ids, tokenizer):
 def color_attention_text(tokens, normalized_attention, reset_color=RESET):
     """
     Creates a colored text representation of attention weights.
-    
+
     Args:
         tokens: Token texts
         normalized_attention: Normalized attention scores (0-1)
         reset_color: ANSI reset color code
-        
+
     Returns:
         Tuple of (colored_text_output, heatmap_scale_description)
     """
@@ -259,7 +262,7 @@ def color_attention_text(tokens, normalized_attention, reset_color=RESET):
     # Terminal-agnostic approach for attention visualization
     for token_text, attention_score in zip(tokens, normalized_attention):
         token_text = token_text.replace(" ", "").replace("_", "")
-        
+
         if USE_COLORS:
             # Use different intensities of magenta for visualization
             if attention_score < 0.2:
@@ -272,13 +275,13 @@ def color_attention_text(tokens, normalized_attention, reset_color=RESET):
                 color_code = f"\033[38;5;164m"  # Bright magenta
             else:
                 color_code = f"\033[38;5;201m"  # Intense magenta
-                
+
             colored_token = f"{color_code}{token_text}{reset_color}"
         else:
             # Fallback for terminals without color support
             stars = "*" * int(attention_score * 5)
             colored_token = f"{token_text}{stars}"
-            
+
         # Show normalized score
         colored_tokens_output.append(f"{colored_token} ({attention_score:.2f})")
 
@@ -288,56 +291,58 @@ def color_attention_text(tokens, normalized_attention, reset_color=RESET):
 def generate_player_choices(tokenizer, logits, num_choices, permutation_length):
     """
     Generates multiple choices for the player to select from.
-    
+
     Args:
         tokenizer: Tokenizer to decode token IDs
         logits: Filtered logits after all sampling steps
         num_choices: Number of choices to generate
         permutation_length: Number of tokens in each choice
-        
+
     Returns:
         List of choice options (each containing token sequences)
     """
     # Get top tokens after all filtering steps
-    top_tokens, top_probs, _ = get_top_tokens_and_probs(
-        logits, tokenizer, k=TOP_K
-    )
-    
+    top_tokens, top_probs, _ = get_top_tokens_and_probs(logits, tokenizer, k=TOP_K)
+
     # Sort tokens by probability
     token_prob_tuples = sorted(
         zip(top_tokens, top_probs), key=lambda x: x[1], reverse=True
     )
     top_tokens_sorted = [token for token, _ in token_prob_tuples]
-    
+
     # The model's actual top choice (correct answer)
     top_choice = top_tokens_sorted[:permutation_length]
     choices = [top_choice]
-    
+
     # Generate alternative choices by shuffling top tokens
-    available_tokens = top_tokens[:permutation_length * 2]  # Use more tokens for variety
+    available_tokens = top_tokens[
+        : permutation_length * 2
+    ]  # Use more tokens for variety
     attempt_count = 0
     max_attempts = 100  # Prevent infinite loops
-    
+
     while len(choices) < num_choices and attempt_count < max_attempts:
         # Create alternative choice by sampling from available tokens
         shuffled_tokens = random.sample(available_tokens, permutation_length)
-        
+
         # Only add if this is a unique choice
         if shuffled_tokens not in choices:
             choices.append(shuffled_tokens)
-        
+
         attempt_count += 1
-    
+
     # Random shuffle choices so correct one isn't always first
     random.shuffle(choices)
-    
+
     return choices, top_choice
 
 
-def display_probabilities(tokenizer, logits_raw, logits_temp, logits_top_k, logits_top_p):
+def display_probabilities(
+    tokenizer, logits_raw, logits_temp, logits_top_k, logits_top_p
+):
     """
     Displays token probabilities at each filtering stage.
-    
+
     Args:
         tokenizer: Tokenizer to decode token IDs
         logits_raw: Raw logits from model
@@ -386,11 +391,11 @@ def process_player_guess(
     logits_top_p,
     num_choices,
     permutation_length,
-    current_sentence
+    current_sentence,
 ):
     """
     Handles the player's next token guess, including choice presentation and feedback.
-    
+
     Args:
         tokenizer: Tokenizer to decode token IDs
         logits_raw: Raw logits from model
@@ -400,7 +405,7 @@ def process_player_guess(
         num_choices: Number of choices to present
         permutation_length: Number of tokens in each choice
         current_sentence: Current generated text
-        
+
     Returns:
         Tuple of (score, max_score, is_perfect)
     """
@@ -411,9 +416,9 @@ def process_player_guess(
 
     # Present choices to the player
     print(f"\n🎮 Predict what Gemma will choose next to complete this sentence:")
-    print(f"\n\"{current_sentence}...\"")
+    print(f'\n"{current_sentence}..."')
     print(f"\nGuess which sequence Gemma ranked highest after all filtering steps:")
-    
+
     for i, choice_tokens in enumerate(choices):
         formatted_choice = " ".join(choice_tokens)
         print(f"  {chr(ord('A') + i)}) {formatted_choice}")
@@ -424,8 +429,10 @@ def process_player_guess(
         if "A" <= user_choice <= chr(ord("A") + len(choices) - 1):
             break
         else:
-            print(f"Invalid input. Please choose a letter from A to {chr(ord('A') + len(choices) - 1)}.")
-    
+            print(
+                f"Invalid input. Please choose a letter from A to {chr(ord('A') + len(choices) - 1)}."
+            )
+
     chosen_index = ord(user_choice) - ord("A")
     chosen_tokens = choices[chosen_index]
 
@@ -433,7 +440,11 @@ def process_player_guess(
     score = 0
     max_score = permutation_length
     for i in range(max_score):
-        if i < len(chosen_tokens) and i < len(correct_sequence) and chosen_tokens[i] == correct_sequence[i]:
+        if (
+            i < len(chosen_tokens)
+            and i < len(correct_sequence)
+            and chosen_tokens[i] == correct_sequence[i]
+        ):
             score += 1
 
     is_perfect = score == max_score
@@ -441,31 +452,31 @@ def process_player_guess(
     # Show results with pauses for better player experience
     print("\n🎲 Checking your answer...")
     time.sleep(1)
-    
+
     color_print(
-        f"\nYou chose: {' '.join(chosen_tokens)}",
-        GREEN if is_perfect else BLUE
+        f"\nYou chose: {' '.join(chosen_tokens)}", GREEN if is_perfect else BLUE
     )
-    
+
     time.sleep(0.5)
-    
-    color_print(
-        f"Gemma's choice: {' '.join(correct_sequence)}",
-        GREEN
-    )
-    
+
+    color_print(f"Gemma's choice: {' '.join(correct_sequence)}", GREEN)
+
     time.sleep(0.5)
-    
+
     if is_perfect:
         color_print("✅ Perfect! You matched Gemma's prediction exactly!", GREEN)
     else:
-        color_print(f"⚠️ Close! You matched {score} out of {max_score} tokens correctly.", YELLOW)
-    
+        color_print(
+            f"⚠️ Close! You matched {score} out of {max_score} tokens correctly.", YELLOW
+        )
+
     # Wait for player to acknowledge before showing detailed probabilities
     wait_for_player()
-    
+
     # Show detailed token probabilities at each stage
-    display_probabilities(tokenizer, logits_raw, logits_temp, logits_top_k, logits_top_p)
+    display_probabilities(
+        tokenizer, logits_raw, logits_temp, logits_top_k, logits_top_p
+    )
 
     return score, max_score, is_perfect
 
@@ -475,22 +486,42 @@ def explain_attention_mechanism():
     Provides an explanation of the attention mechanism for the player.
     """
     print("\n--- About Attention in Language Models ---")
-    print("Attention is a key mechanism in transformer-based language models like Gemma.")
-    print("It determines how much focus each input token gets when predicting the next token.")
+    print(
+        "Attention is a key mechanism in transformer-based language models like Gemma."
+    )
+    print(
+        "It determines how much focus each input token gets when predicting the next token."
+    )
     print("")
     print("In the visualization:")
-    print("1. Higher attention (darker magenta) indicates tokens the model focused on more")
-    print("2. Lower attention (lighter magenta) indicates tokens the model considered less relevant")
-    print("3. The values show normalized attention (0-1 scale), where 1 means maximum focus")
+    print(
+        "1. Higher attention (darker magenta) indicates tokens the model focused on more"
+    )
+    print(
+        "2. Lower attention (lighter magenta) indicates tokens the model considered less relevant"
+    )
+    print(
+        "3. The values show normalized attention (0-1 scale), where 1 means maximum focus"
+    )
     print("")
-    print("Attention works by calculating relationships between all tokens in the sequence.")
-    print("During the forward pass, the model computes query, key, and value vectors for each token,")
+    print(
+        "Attention works by calculating relationships between all tokens in the sequence."
+    )
+    print(
+        "During the forward pass, the model computes query, key, and value vectors for each token,"
+    )
     print("then calculates compatibility scores between them to determine importance.")
     print("")
-    print("The normalized attention shown here is averaged across all attention heads in the")
-    print("final layer, focused specifically on what influenced the next token prediction.")
+    print(
+        "The normalized attention shown here is averaged across all attention heads in the"
+    )
+    print(
+        "final layer, focused specifically on what influenced the next token prediction."
+    )
     print("")
-    print("This visualization helps you understand which parts of your input most strongly")
+    print(
+        "This visualization helps you understand which parts of your input most strongly"
+    )
     print("influenced Gemma's token predictions.")
 
 
@@ -498,46 +529,50 @@ def run_game():
     """
     Main game function that coordinates the token prediction game.
     """
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🤖 Welcome to the LLM Next Token Prediction Game! 🎮")
-    print("="*70)
+    print("=" * 70)
     print("\nTest your ability to predict what Gemma will generate next!")
     print("You'll see a sentence and need to guess which tokens Gemma would choose.")
     print("\nConfiguration:")
     print(f"• Model: {MODEL_NAME}")
-    print(f"• Temperature: {TEMPERATURE} (higher = more random, lower = more deterministic)")
+    print(
+        f"• Temperature: {TEMPERATURE} (higher = more random, lower = more deterministic)"
+    )
     print(f"• Top-k: {TOP_K} (restricts to top k most probable tokens)")
-    print(f"• Top-p: {TOP_P} (restricts to tokens comprising top p% of probability mass)")
+    print(
+        f"• Top-p: {TOP_P} (restricts to tokens comprising top p% of probability mass)"
+    )
     print(f"• Decode Steps: {MAX_DECODE_STEPS} (how many rounds we'll play)")
     print("\nLet's get started!")
-    
+
     # Load model and tokenizer
     model, tokenizer = load_model_and_tokenizer(MODEL_NAME)
-    
+
     # Get starting sentence from player
     input_text = input("\nStart a sentence (or press Enter for default): ").strip()
     if not input_text:
         input_text = "In the distant future, humanity had finally"
-        print(f"Using default: \"{input_text}\"")
-    
+        print(f'Using default: "{input_text}"')
+
     # Prepare model inputs
     input_ids, attention_mask = prepare_inputs(input_text, tokenizer, model)
-    
+
     # Initialize game state
     total_score = 0
     total_max_score = 0
     current_sentence = input_text
     attention_history = []
-    
+
     # Explain attention mechanism if enabled
     if SHOW_ATTENTION:
         explain_attention_mechanism()
         wait_for_player()
-    
+
     # Main game loop
     for step in range(MAX_DECODE_STEPS):
         print(f"\n{'='*30} Round {step + 1} {'='*30}")
-        
+
         # Forward pass through the model
         start_time = time.time()
         outputs = model(
@@ -547,15 +582,15 @@ def run_game():
         )
         forward_time = time.time() - start_time
         print(f"  ⚙️ Model forward pass: {forward_time:.4f}s")
-        
+
         # Get logits for next token prediction
         logits_raw = outputs.logits[:, -1, :]
-        
+
         # Apply temperature, top-k, and top-p filtering
         logits_temp = apply_temperature(logits_raw, TEMPERATURE)
         logits_top_k = apply_top_k(logits_temp, TOP_K)
         logits_top_p = apply_top_p(logits_top_k, TOP_P)
-        
+
         # Visualize attention if enabled
         if SHOW_ATTENTION:
             current_tokens, normalized_attention_scores = get_attention_heatmap(
@@ -564,19 +599,19 @@ def run_game():
             colored_sentence_part, heatmap_scale = color_attention_text(
                 current_tokens, normalized_attention_scores
             )
-            
+
             if colored_sentence_part:
                 attention_history.append(colored_sentence_part)
-                
+
                 print("\n--- Attention Heatmap (Current Step) ---")
                 print(heatmap_scale)
                 print(f"Current sentence with attention: {colored_sentence_part}")
-                
+
                 if len(attention_history) > 1:
                     print("\n--- Previous Attention Patterns: ---")
                     for i, past_attention in enumerate(attention_history[:-1]):
                         print(f"  Step {i + 1}: {past_attention}")
-        
+
         # Process player's guess
         step_score, step_max_score, is_perfect = process_player_guess(
             tokenizer,
@@ -586,19 +621,19 @@ def run_game():
             logits_top_p,
             NUM_CHOICES,
             PERMUTATION_LENGTH,
-            current_sentence
+            current_sentence,
         )
-        
+
         # Update score
         total_score += step_score
         total_max_score += step_max_score
-        
+
         # Select the next token based on model prediction
         probabilities = torch.softmax(logits_top_p, dim=-1)
         _, best_token_indices = torch.topk(probabilities, 1, dim=-1)
         next_token_id = best_token_indices[0, 0].item()
         next_word = tokenizer.decode([next_token_id]).strip()
-        
+
         # Check for special tokens
         special_token = ""
         if next_token_id == tokenizer.eos_token_id:
@@ -610,11 +645,11 @@ def run_game():
             special_token = " (<pad> Padding token)"
         elif next_word == "":
             special_token = f" (Special token ID: {next_token_id})"
-        
+
         # Continue the sentence with the generated token
         current_sentence += " " + next_word
-        print(f"\n📝 Continuing sentence: \"{current_sentence}\"{special_token}")
-        
+        print(f'\n📝 Continuing sentence: "{current_sentence}"{special_token}')
+
         # Update model inputs for next step
         input_ids = torch.cat(
             [input_ids, torch.tensor([[next_token_id]], device=model.device)], dim=-1
@@ -626,25 +661,33 @@ def run_game():
             ],
             dim=-1,
         )
-        
+
         # Optional pause between rounds
         if step < MAX_DECODE_STEPS - 1:
             wait_for_player()
-    
+
     # Game summary
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🎮 Game Complete! 🎮")
-    print("="*70)
-    print(f"\n📝 Final generated text:\n\"{tokenizer.decode(input_ids[0], skip_special_tokens=True)}\"")
-    
+    print("=" * 70)
+    print(
+        f'\n📝 Final generated text:\n"{tokenizer.decode(input_ids[0], skip_special_tokens=True)}"'
+    )
+
     # Calculate and display final score
-    score_percentage = (total_score / total_max_score) * 100 if total_max_score > 0 else 0
-    print(f"\n🏆 Final Score: {total_score} / {total_max_score} ({score_percentage:.1f}%)")
-    
+    score_percentage = (
+        (total_score / total_max_score) * 100 if total_max_score > 0 else 0
+    )
+    print(
+        f"\n🏆 Final Score: {total_score} / {total_max_score} ({score_percentage:.1f}%)"
+    )
+
     if score_percentage >= 80:
         print("🌟 Excellent! You think very much like Gemma!")
     elif score_percentage >= 60:
-        print("✨ Great job! You have a good understanding of how language models work!")
+        print(
+            "✨ Great job! You have a good understanding of how language models work!"
+        )
     elif score_percentage >= 40:
         print("👍 Not bad! You're getting the hang of predicting language models!")
     else:
