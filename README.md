@@ -82,30 +82,37 @@ https://github.com/user-attachments/assets/96aa4b78-8899-4b22-8b59-435b21c21ba0
 ### Requirements
 
 -   Python 3.8+
--   PyTorch (`pip install torch`)
--   Transformers library (`pip install transformers`)
--   (Optional, Recommended for Windows) colorama (`pip install colorama`) for better terminal color support.
+-   Dependencies listed in `requirements.txt` (includes PyTorch, Transformers, etc.)
+-   (Optional, included in `requirements.txt`) `colorama` for better Windows terminal color support.
 
-### Basic Installation
+### Installation
 
 ```bash
 # Create and activate a virtual environment (recommended)
 python -m venv venv
+```
+```bash
+# Activate the environment:
 # On Linux/macOS:
 source venv/bin/activate
-# On Windows:
-# venv\Scripts\activate
-
-# Install required packages
-pip install torch transformers
-# Optional for Windows color support
-pip install colorama
 ```
+```
+# On Windows (cmd):
+# venv\Scripts\activate
+# On Windows (PowerShell):
+# .\venv\Scripts\Activate.ps1
+```
+
+# Install required packages from the requirements file
+```
+pip install -r requirements.txt
+```
+
 
 ### Running the Game
 
 ```bash
-# Run the game with default settings (uses gemma-2b-it)
+# Run the game with default settings (uses gemma-3-1b-it unless another selection is made)
 python game.py
 ```
 
@@ -137,9 +144,9 @@ You can modify these constants at the top of `game.py`:
 -   `TEMPERATURE`: `0.7` (Controls randomness; lower is more focused)
 -   `TOP_K`: `8` (Considers only the top 8 tokens)
 -   `TOP_P`: `0.95` (Considers tokens comprising 95% probability mass)
--   `MAX_DECODE_STEPS`: `12` (Number of game rounds/tokens to generate)
--   `NUM_CHOICES`: `3` (Number of sequence options presented to the player)
--   `PERMUTATION_LENGTH`: `3` (Number of tokens in each guessable sequence)
+-   `MAX_DECODE_STEPS`: `8` (Number of game rounds/tokens to generate)
+-   `NUM_CHOICES`: `4` (Number of sequence options presented to the player)
+-   `PERMUTATION_LENGTH`: `4` (Number of tokens in each guessable sequence)
 -   `SHOW_ATTENTION`: `True` (Whether to display the attention heatmap)
 -   `MAX_TOP_K_FOR_PROBS`: `16` (How many top tokens to show in probability lists)
 
