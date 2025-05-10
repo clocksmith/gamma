@@ -1,9 +1,10 @@
 # IMPORTANT!
 
-** GGJJ is DEPRECATED see [/v2] **
+**GGJJ** is **DEPRECATED**
 
+    - see [/v2](https://github.com/clocksmith/gamma/tree/main/v2)
     - This `game.py` still works, but [/v2] is more polished robust.
-    - [/v2], also known simply as GAMMA will replace this version in the near future,
+    - [/v2](https://github.com/clocksmith/gamma/tree/main/v2), also known simply as GAMMA will replace this version in the near future,
 
 once all model and engines have been tested.
 
