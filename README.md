@@ -1,205 +1,149 @@
-# GGJJ (Guessing Game) (J J)
+# GAMMA
 
-An interactive educational terminal game that demystifies transformer-based language models through gameplay, supporting multiple backend engines.
+**G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
+**G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
+**G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
 
-## Overview
+GAMMA is an interactive command-line guessing game that helps you understand how transformer-based language models predict text. Explore LLM internals by playing, with support for multiple model engines and optimized incremental decoding.
 
-GGJJ is a hands-on tool that lets you peer inside large language models (LLMs) like Google's Gemma, Mistral, Llama, and others to see how they predict text. By turning complex AI concepts into a guessing game, GGJJ makes advanced machine learning techniques accessible and fun to explore, right in your terminal.
+## Why?
 
-It now supports multiple inference engines (PyTorch, TensorFlow, JAX, llama.cpp, ONNX Runtime, MLX), allowing you to experiment with different backends and model formats.
+GAMMA was created to demystify the complex decision-making process of Large Language Models. By turning text generation into an interactive game, it aims to provide an intuitive and hands-on learning experience for anyone curious about AI, from students to seasoned developers. It can be played single-player, collaboratively multi-player,
+or competiviely with your own house rules!
 
-_(Placeholder for updated screenshot/gif showing multi-engine selection or gameplay)_
+## Features
 
-## Transformer Steps Visualized in the Game
+- Interactive CLI Gameplay
+- Multi-Engine Support (PyTorch, TF, JAX, llama.cpp, ONNX, MLX)
+- Visualization of Tokenization, Attention (where supported), Logits, and Probabilities
+- Exploration of Sampling Parameters (Temperature, Top-K, Top-P)
+- Efficient Incremental Generation (utilizing KV Caching where applicable)
+- Experimental Player Choice Mode
 
-The game visually demonstrates key steps involved in how a transformer LLM generates the next token:
+## Gameplay Highlights
 
-1.  **Tokenization**: ✨ Input text is tokenized when you enter your prompt. (Token IDs viewable with `--verbose`).
-2.  **Attention Mechanism**: ✨ Visualized as color-coded heatmaps showing which previous tokens the model focused on most when predicting the next token. (Requires engine support: Available in PyTorch, TensorFlow, JAX; potentially ONNX depending on export; typically unavailable in llama.cpp, MLX).
-3.  **Raw Logits Generation**: ✨ The model's initial, unfiltered probability distribution over the entire vocabulary for the next token.
-4.  **Sampling Filters**: ✨ See how the probabilities change after applying:
-    - **Temperature Scaling**: Adjusts randomness/determinism.
-    - **Top-K Filtering**: Keeps only the `K` most likely tokens.
-    - **Top-P (Nucleus) Sampling**: Keeps the smallest set of tokens whose probabilities sum to `P`.
-5.  **Token Selection**: ✨ The core guessing mechanic involves predicting the token sequence the model ranks highest after all filtering steps.
-6.  **Autoregressive Generation**: ✨ Experience how the model builds text step-by-step, feeding its own output back as input for the next prediction.
+The game visualizes key steps in LLM text generation:
 
-## How to Play
+1.  **Tokenization**: Observe how input text is broken down.
+2.  **Attention Mechanism**: See (via heatmaps, where supported) which prior tokens the model emphasizes for the current prediction.
+3.  **Logits & Probabilities**: View the model's raw predictions for the next token.
+4.  **Sampling Filters**: Understand how Temperature, Top-K, and Top-P shape the final token choice.
+5.  **Guess the Next Tokens**: Predict the sequence the model ranks highest.
+6.  **Autoregressive Generation**: Witness text built step-by-step, now more efficiently.
+7.  **(Experimental) Player Choice Mode**: Optionally, if your guess is a perfect match, that sequence is appended to the context, and the game continues from there. Otherwise, the model's own top prediction is used.
 
-1.  Start the game (you'll select an engine and model).
-2.  Enter a starting sentence or phrase.
-3.  The game shows the current sentence and asks you to guess the sequence of tokens the LLM will rank highest to continue the text.
-4.  Multiple choices (potential token sequences) are presented. Select the one you think the model prefers (A, B, C...).
-5.  See if your guess matched the model's top pick!
-6.  Explore visualizations showing:
-    - Attention heatmap (if supported by the engine).
-    - Token probabilities at each filtering stage (Raw -> Temp -> Top-K -> Top-P).
-7.  The model appends its chosen token(s), the context grows, and the next round begins.
-8.  Repeat until the maximum number of steps is reached or the model generates an end-of-sequence token.
-
-Your score reflects how accurately you predicted the model's top-ranked choices after sampling.
+Challenge your intuition and learn how LLMs "think"!
 
 ## Architecture
 
-The GGJJ game employs a modular architecture to separate core game logic from specific model inference backends (engines).
+GAMMA uses a modular design: core game logic is separate from model inference backends. Each engine now aims for better incremental state handling (KV caching).
 
 ```
-
-ggjj/
-├── game.py # Main entry point, argument parsing, game setup & loop
+.
+├── game.py # Main game script
 ├── core/
-│ ├── **init**.py
-│ ├── config.py # Default game/engine configurations, constants
-│ ├── engine_interface.py # Abstract base class (LLMEngine) defining engine behavior
-│ ├── game_logic.py # Turn management, choice generation, scoring
-│ ├── ui.py # Terminal UI rendering (text, prompts, colors, viz)
-│ └── explanations.py # Static text for explaining concepts
+│ ├── config.py # Configurations, constants
+│ ├── engine_interface.py # LLMEngine abstract base class (manages KV cache for incremental steps)
+│ ├── game_logic.py # Game mechanics, scoring
+│ ├── ui.py # Terminal UI
+│ └── explanations.py # In-game concept explanations
 └── engines/
-├── **init**.py
-├── engine_factory.py # Creates specific engine instances based on name
-├── pytorch_engine.py # PyTorch + Transformers implementation
-├── tensorflow_engine.py # TensorFlow + Transformers implementation
-├── jax_engine.py # JAX/Flax + Transformers implementation
-├── llama_cpp_engine.py # llama-cpp-python (GGUF models) implementation
-├── onnx_engine.py # ONNX Runtime implementation
-└── mlx_engine.py # Apple MLX (Apple Silicon) implementation
+├── engine_factory.py # Creates engine instances
+├── pytorch_engine.py # PyTorch engine (with KV cache)
+├── tensorflow_engine.py # TensorFlow engine (with KV cache if supported by model)
+├── jax_engine.py # JAX/Flax engine (with KV cache)
+├── llama_cpp_engine.py # llama.cpp engine (natively supports KV cache)
+├── onnx_engine.py # ONNX Runtime engine (with KV cache if model exported correctly)
+└── mlx_engine.py # Apple MLX engine (natively supports KV cache)
 
 ```
 
-**High-Level Operation:**
+**Operation:** `game.py` handles arguments or interactive setup. It uses `engines/engine_factory.py` to get an engine instance conforming to `core/engine_interface.py`. For the initial prompt, the full sequence is passed to the engine. For subsequent game turns, only the newly generated token(s) are passed as input to the engine's `predict_next` method. Each engine implementation is responsible for managing its internal state (like KV caches) to efficiently process these incremental inputs and continue generation.
 
-1.  `game.py` parses command-line arguments or prompts the user interactively via `core/ui.py` to select an `engine` (e.g., "pytorch", "llamacpp") and a `model_identifier` (e.g., a Hugging Face name or a local file path).
-2.  It requests an engine instance from `engines/engine_factory.py`, passing the chosen engine name, model identifier, and any engine-specific configurations derived from arguments or defaults (`core/config.py`).
-3.  The factory imports and instantiates the appropriate engine class (e.g., `PyTorchEngine`, `LlamaCppEngine`) from the `engines/` directory.
-4.  The main game loop in `game.py` interacts with the loaded engine _only_ through the methods defined in the abstract `core/engine_interface.py` (`LLMEngine`). This includes `load()`, `encode()`, `predict_next()`, `decode()`, `get_attention_for_visualization()`, `get_probabilities_at_step()`, etc.
-5.  `core/game_logic.py` uses data returned by the engine (via the interface) to manage turns and scoring.
-6.  `core/ui.py` uses data returned by the engine (via the interface, ensuring standard Python types for display) to render game state, probabilities, and visualizations.
+## Setup
 
-**Low-Level Engine Operation:**
+**Prerequisites:** Python 3.8+, pip, venv (recommended), Git.
 
-- Each specific engine class in `engines/` (e.g., `PyTorchEngine`) implements the `LLMEngine` methods using its corresponding library (PyTorch, TensorFlow, JAX, llama-cpp-python, ONNX Runtime, MLX).
-- It handles loading the model in the correct format (Hugging Face checkpoint, GGUF, ONNX file, etc.).
-- It performs tokenization using a compatible tokenizer (usually from Hugging Face `transformers`).
-- The `predict_next` method runs the actual model inference using the backend's API, applies the standard sampling logic (Temperature, Top-K, Top-P) using backend-specific functions (e.g., `torch.topk`, `tf.math.top_k`, `jax.lax.top_k`, `numpy.argpartition`), and extracts the required outputs (next token ID, logits, probabilities).
-- Methods like `get_attention_for_visualization` attempt to extract and format attention data if the backend makes it available; otherwise, they return `None`.
-- Methods like `get_probabilities_at_step` ensure that probability data requested by the UI is returned as standard Python lists/floats, regardless of the internal tensor/array type.
-
-This architecture allows adding new backend engines without modifying the core game logic, simply by implementing a new class that adheres to the `LLMEngine` interface and updating the factory.
-
-## Setup and Installation
-
-### Prerequisites
-
-- **Python**: Version 3.8 or higher.
-- **pip**: For installing Python packages.
-- **venv**: Recommended for creating isolated environments.
-- **Git**: For cloning the repository.
-
-### Installation Steps
-
-1.  **Clone the Repository:**
-
+1.  **Clone:**
     ```bash
-    git clone <repository_url> # Replace with actual URL (e.g., from GitHub)
-    cd ggjj # Navigate into the project directory
+    git clone git@github.com:clocksmith/gamma.git
+    cd gamma
     ```
-
-2.  **Create a Virtual Environment (Recommended):**
-
+2.  **Virtual Environment (Recommended):**
     ```bash
     python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    source venv/bin/activate  # Windows: venv\Scripts\activate
     ```
-
-3.  **Install Base Dependencies:**
-    Install the common requirements needed regardless of the engine:
-
+3.  **Base Dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
+4.  **Engine-Specific Dependencies:** (Install only for engines you plan to use. Refer to `requirements-*.txt` for specific versions and notes.)
+    - PyTorch: `pip install -r requirements-pytorch.txt`
+    - TensorFlow: `pip install -r requirements-tensorflow.txt`
+    - JAX: `pip install -r requirements-jax.txt`
+    - llama.cpp: `pip install -r requirements-llamacpp.txt` (may need build tools/CMAKE_ARGS)
+    - ONNX Runtime: `pip install -r requirements-onnx.txt`
+    - MLX (Apple Silicon): `pip install -r requirements-mlx.txt`
 
-4.  **Install Engine-Specific Dependencies:**
-    Install the requirements _only_ for the engine(s) you intend to use:
+## Running GAMMA
 
-    - **PyTorch:** `pip install -r requirements-pytorch.txt`
-    - **TensorFlow:** `pip install -r requirements-tensorflow.txt` _(See notes inside file regarding GPU versions)_
-    - **JAX:** `pip install -r requirements-jax.txt` _(See notes inside file regarding JAX installation for your platform/accelerator)_
-    - **llama.cpp:** `pip install -r requirements-llamacpp.txt` _(May require build tools and specific `CMAKE_ARGS` during install for hardware acceleration - see llama-cpp-python docs)_
-    - **ONNX Runtime:** `pip install -r requirements-onnx.txt` _(Edit file to choose `onnxruntime` or `onnxruntime-gpu`)_
-    - **MLX (Apple Silicon Only):** `pip install -r requirements-mlx.txt`
-
-5.  **(Optional) Install Colorama for Windows:**
-    If you installed the base `requirements.txt`, this is already included.
-
-## Running the Game
-
-Execute the main script from the `ggjj` directory:
+From the project's root directory:
 
 ```bash
 python game.py [OPTIONS]
 ```
 
-**Key Options:**
+### Key Options
 
-- `--engine <name>`: Specify the engine (e.g., `pytorch`, `llamacpp`, `tensorflow`, `jax`, `onnx`, `mlx`). If omitted, you'll be prompted interactively.
-- `--model <identifier>`: Specify the model identifier.
-  - For `pytorch`, `tensorflow`, `jax`: Usually a Hugging Face model name (e.g., `google/gemma-2-2b-it`).
-  - For `llamacpp`: Path to a local `.gguf` model file.
-  - For `onnx`: Path to a local `.onnx` model file (requires `--onnx-tokenizer`).
-  - For `mlx`: Hugging Face name (e.g., `mlx-community/Mistral-7B-v0.1-4bit`) or local path to MLX format model.
-  - If omitted (and engine is specified), you'll be prompted interactively.
-- `--steps <N>`: Set the maximum number of game rounds (default: 8).
-- `--temperature <T>`: Set sampling temperature (default: 0.7).
-- `--top-k <K>`: Set Top-K filtering value (default: 8).
-- `--top-p <P>`: Set Top-P filtering value (default: 0.95).
-- `--no-attention`: Disable attention visualization.
-- `--minimal`: Reduce explanatory text output.
-- `--no-color`: Disable terminal colors.
-- `--help`: Show all available options, including engine-specific ones like:
-  - `--load-in-4bit` / `--load-in-8bit` (PyTorch)
-  - `--llama-cpp-n-gpu-layers <N>` (llama.cpp)
-  - `--onnx-providers <list>` (ONNX)
-  - `--onnx-tokenizer <name_or_path>` (ONNX - **Required**)
-  - `--jax-dtype <type>` (JAX)
+--engine <name>: (pytorch, llamacpp, etc.) Selects engine. Interactive if omitted.
+--model <id>: Model identifier (HF name or local path). Interactive if omitted with engine.
+--steps <N>: Max game rounds (default in core/config.py).
+--temperature <T>, --top-k <K>, --top-p <P>: Sampling parameters.
+--focus-words: Prioritize guessing sequences of common words.
+--player-choice-mode: (Experimental) Player's full correct guess drives generation.
+--allow-eos-continue: Offer to continue generation after max_steps if EOS not hit.
+--no-attention: Disable attention visualization (if supported by engine).
+--minimal: Reduce explanatory text output.
+--no-color: Disable terminal colors.
+--seed <N>: Random seed for engines that support it (e.g., JAX, Llama.cpp).
+--hf-token <TOKEN>: Your Hugging Face Hub token for accessing gated models.
+--trust-remote-code: Allow execution of custom code from Hugging Face model repositories (use with caution).
+--help: Show all options, including engine-specific ones (e.g., quantization, GPU layers).
 
-**Example:**
+Examples:
 
-```bash
-# Run interactively (will prompt for engine and model)
+### Interactive setup
+
 python game.py
 
-# Run with PyTorch Gemma 2b-it, 10 steps
-python game.py --engine pytorch --model google/gemma-2-2b-it --steps 10
+#### PyTorch Gemma, 10 steps, player choice mode
 
-# Run with llama.cpp using a local GGUF, offloading all layers to GPU
-python game.py --engine llamacpp --model ./models/llama-3-8b-instruct.Q4_K_M.gguf --llama-cpp-n-gpu-layers -1
+python game.py --engine pytorch --model google/gemma-2-2b-it --steps 10 --player-choice-mode
 
-# Run with ONNX model, specifying tokenizer
-python game.py --engine onnx --model ./models/my_model.onnx --onnx-tokenizer google/gemma-2-2b-it
-```
+#### llama.cpp local GGUF, all layers to GPU
 
-## Accessing Models
+python game.py --engine llamacpp --model ./models/llama-3-8b.Q4_K_M.gguf --llama-cpp-n-gpu-layers -1
 
-- **Hugging Face Hub:** The primary source for PyTorch, TensorFlow, JAX, and MLX models. Search for desired models (e.g., Gemma, Mistral, Llama variants). You might need to accept terms and potentially use a Hugging Face access token (set `HUGGING_FACE_HUB_TOKEN` environment variable). Look for compatibility with your chosen engine (e.g., models with 'flax' in their name for JAX).
-- **GGUF Files (for llama.cpp):** Download pre-quantized GGUF files (e.g., from Hugging Face model repos like TheBloke). Provide the local file path to `--model`.
-- **ONNX Files:** You typically need to _export_ a model from its original framework (PyTorch, TF) to the ONNX format yourself or find pre-converted models. Provide the local `.onnx` file path to `--model`.
-- **MLX Files:** Find models converted for MLX on the Hugging Face Hub (e.g., under `mlx-community`) or convert them yourself using `mlx-lm` tools.
+Before starting, you'll be asked to confirm or adjust the game configuration.
 
-## Future Enhancements / TODO
+### Accessing Models
 
-- [ ] Improve attention visualization (e.g., highlighting tokens, more statistics where available).
-- [ ] Implement incremental state updates for engines instead of full re-encoding each step (performance).
-- [ ] Add more robust error handling and reporting for model loading/inference across different engines.
-- [ ] Enhance engine-specific configuration options via args/config file (e.g., ONNX provider options, llama.cpp tuning parameters).
-- [ ] Improve model identifier handling/validation based on selected engine.
-- [ ] Test and refine feature parity across engines where possible (esp. attention viz).
-- [ ] Fix timers potentially using same start time if game logic involves complex async ops (Needs verification).
-- [ ] Investigate potential slowdowns on specific models/engines after many steps.
-- [ ] Fix any remaining minor sentence spacing issues during decoding/display.
-- [ ] Allow continuing generation to EOS token after max steps are hit (as an option).
-- [ ] Implement player-choice mode (use player's guess to continue generation).
-- [ ] Add probability tree lookahead visualization (more complex).
-- [ ] Add support for more quantization libraries directly (e.g., AutoGPTQ, AWQ engines).
-- [ ] Create a web-based version with interactive visualizations (long-term goal).
-- [ ] Add comparative analysis features between different models/engines.
-- [ ] Add more detailed pedagogical explanations linking game steps to transformer theory.
+Hugging Face Hub: For PyTorch, TensorFlow, JAX, MLX models. (May need HUGGING_FACE_HUB_TOKEN).
+GGUF Files (llama.cpp): Download (e.g., from TheBloke on HF). Use local path.
+ONNX Files: Export from original framework or find pre-converted. Use local path. Ensure --onnx-tokenizer is provided.
+MLX Files: From HF (e.g., mlx-community) or convert using mlx-lm.
+
+## Active Development (Contributions welcome!) & Future Ideas
+
+- **Advanced Attention Visualization**: More detailed stats, layer/head selection.
+- **Configuration Files**: For complex engine setups beyond CLI args.
+- **Feature Parity Refinement**: Continue ensuring all engines provide consistent experiences (e.g. attention availability).
+- **Performance Profiling**: Deeper investigation of any slowdowns over very long sessions.
+- **Probability Tree Visualization**: Advanced lookahead for model predictions.
+- **Expanded Quantization Support**: Direct integration for more libraries (e.g., AutoGPTQ, AWQ via PyTorch).
+- **Web Version**: A long-term goal to bring GAMMA to the browser.
+- **Comparative Analysis Tools**: Features to directly compare different models or engine behaviors.
+- **Enhanced Pedagogy**: More in-depth explanations linking game events to LLM theory and research papers.
+- **Robust Error Reporting**: Further improvements to error messages for model/engine issues.
+- **Sophisticated Model ID Validation**: Better checks based on selected engine capabilities.

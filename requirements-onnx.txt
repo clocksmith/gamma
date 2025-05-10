@@ -1,7 +1,15 @@
 # Requirements for the ONNX Runtime engine
-# For CPU:
-onnxruntime>=1.16.0
-# For NVIDIA GPU (replace onnxruntime):
-# onnxruntime-gpu>=1.16.0
-# Ensure transformers is installed (from base requirements.txt)
-onnx>=1.14.0 # Often useful for inspecting ONNX files
+
+# For CPU-only inference:
+onnxruntime>=1.16.3
+
+# For NVIDIA GPU inference (REPLACE onnxruntime with this):
+# onnxruntime-gpu>=1.16.3
+# (Ensure CUDA and cuDNN are set up correctly for your GPU driver version)
+
+# For other Execution Providers (e.g. DirectML, TensorRT), see ONNX Runtime docs.
+
+# ONNX format utilities (often useful for model inspection/conversion)
+onnx>=1.15.0
+
+# `transformers` (for tokenizers) and `numpy` are in the base requirements.txt
