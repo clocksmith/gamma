@@ -1,8 +1,9 @@
 # Requirements for the PyTorch engine
-# Includes user-provided versions and dependencies
 torch>=2.1.0
-bitsandbytes>=0.41.1   # For 4/8bit quantization
-accelerate>=0.27.2     # Often needed for device placement/quantization
-optimum>=1.16.0        # May be used for optimizations/export
-auto-gptq>=0.6.0       # If using GPTQ quantized models via transformers
-# transformers is in the base requirements.txt
+# For quantization and advanced device mapping:
+bitsandbytes>=0.41.3
+accelerate>=0.27.0
+# For Flash Attention 2 (optional, if selected via --pytorch-attn and supported by hardware/model)
+# optimum>=1.16.0
+# flash-attn # Installation can be complex, platform-dependent.
+# `transformers` is in the base requirements.txt
