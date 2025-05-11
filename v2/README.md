@@ -1,4 +1,4 @@
-# GAMMA
+# GAMMA v2
 
 **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
 **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically

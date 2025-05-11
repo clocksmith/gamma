@@ -1,26 +1,25 @@
-# IMPORTANT!
+# GAMMA v1
 
-**GGJJ** is **DEPRECATED**
-
-    - see [/v2](https://github.com/clocksmith/gamma/tree/main/v2)
-    - This `game.py` still works, but [/v2] is more polished robust.
-    - [/v2](https://github.com/clocksmith/gamma/tree/main/v2), also known simply as GAMMA will replace this version in the near future,
-
-once all model and engines have been tested.
-
-# GGJJ (Gemma Gamma Jemma Jamma)
-
-An interactive educational game that demystifies transformer-based language models through gameplay.
+**G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
+**G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
+**G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
 
 ## Overview
 
-GGJJ is a hands-on tool that lets you peer inside Google's Gemma language model to see how it thinks and predicts text. By turning complex AI concepts into a guessing game, GGJJ makes advanced machine learning techniques accessible and fun to explore. You compete against the model, trying to predict its next token choices while visualizing its internal state.
+Gamma v1 is a hands-on tool that lets you peer inside Google's Gemma language model to see how it thinks and predicts text. By turning complex AI concepts into a guessing game, Gamma makes advanced machine learning techniques accessible and fun to explore. You compete against the model, trying to predict its next token choices while visualizing its internal state.
 
-<img width="1084" alt="GGJJ Gameplay Screenshot" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
+Note: [Gamma v2](https://github.com/clocksmith/gamma/tree/main/v2), will replace
+GAMMA v1 (this version in `game.py`).
+
+Gamma v2 supports models other than Google Gemma, and engines other than Pytorch.
+It is experimental and will be the default once enough combinations of models
+and engines have been tested and debugged.
+
+<img width="1084" alt="Gamma Gameplay Screenshot" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
 
 ## Key Concepts Visualized in the Game
 
-The game captures many steps in the transformer architecture, focusing on the text generation process. Here's how key concepts are represented in GGJJ:
+The game captures many steps in the transformer architecture, focusing on the text generation process. Here's how key concepts are represented in Gamma v1:
 
 1.  **Tokenization**: ✨ _Input text is tokenized internally. While raw IDs aren't shown by default, the game decodes tokens back to text, including handling special tokens like `<eos>`._
 2.  Embedding Lookup: _Not directly visualized._
@@ -57,7 +56,7 @@ Modern language models like Gemma use transformer architectures (specifically, d
 3.  Generating a probability distribution (logits) over all possible next tokens.
 4.  Applying sampling techniques (temperature, top-k, top-p) to refine the distribution and select the final token.
 
-GGJJ makes these steps tangible by letting you guess the outcome and visualizing the intermediate stages.
+Gamma makes these steps tangible by letting you guess the outcome and visualizing the intermediate stages.
 
 ## How to Play
 
