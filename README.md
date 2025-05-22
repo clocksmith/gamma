@@ -1,5 +1,7 @@
 # GAMMA v1
 
+\* _**updated 2025-05-22**_
+
 **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
 **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
 **G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
