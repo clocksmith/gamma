@@ -191,6 +191,40 @@ def select_engine_interactively(current_default_engine: str) -> Optional[str]:
 
 def select_model_interactively(selected_engine: str, current_default_model: Optional[str] = None) -> Optional[str]:
     print_header(f"Model Selection ({selected_engine.capitalize()} Engine)")
+    
+    # For PyTorch engine, show Gemma model options
+    if selected_engine == "pytorch" and hasattr(cfg, 'GEMMA_MODEL_INFO'):
+        print("Available Gemma Models:")
+        print("-" * 70)
+        for idx, (model_name, info) in enumerate(cfg.GEMMA_MODEL_INFO.items(), 1):
+            print(f"{idx}. {model_name}")
+            print(f"   {info['desc']} | ~{info['params_b']}B params | RAM: {info['rec_ram_gb']}")
+        print("-" * 70)
+        print("\nYou can select a number (1-9) or enter a custom model name.")
+        
+        user_choice = get_user_input(
+            "Select model",
+            valid_choices=None,
+            allow_quit=True,
+            allow_empty=True,
+            default_val_on_empty="1"  # Default to first Gemma model
+        )
+        
+        if user_choice == cfg.SHORTCUT_QUIT:
+            return None
+        
+        # Check if user entered a number
+        try:
+            choice_num = int(user_choice)
+            if 1 <= choice_num <= len(cfg.GEMMA_MODEL_INFO):
+                return list(cfg.GEMMA_MODEL_INFO.keys())[choice_num - 1]
+        except ValueError:
+            pass
+        
+        # If not a number or out of range, treat as custom model name
+        return user_choice if user_choice else cfg.DEFAULT_MODEL_NAME
+    
+    # Original behavior for other engines
     model_prompt = f"Enter model identifier for '{selected_engine}'"
     placeholders = {
         "pytorch": cfg.DEFAULT_MODEL_NAME, "tensorflow": cfg.DEFAULT_MODEL_NAME, "jax": cfg.DEFAULT_MODEL_NAME,
@@ -235,38 +269,93 @@ def display_probability_stage(stage_name: str, tokens: List[str], probs: List[fl
             if k_map in stage_name: wrap_print(desc, indent="   "); break
         if "[Final" in stage_name: wrap_print("Final distribution for selection.", indent="   ")
     if not tokens or not probs: print(color_text("   (No valid tokens at this stage or all filtered out)", cfg.COLOR_YELLOW)); return
-    num_to_show = min(len(tokens), max_to_show); total_prob_shown = sum(probs[:num_to_show])
+    
+    # Clean up tokens for display
+    cleaned_tokens = []
+    for token in tokens:
+        if token.startswith("▁") or token.startswith("_"):
+            token = token[1:] if len(token) > 1 else " "
+        cleaned_tokens.append(token)
+    
+    num_to_show = min(len(cleaned_tokens), max_to_show); total_prob_shown = sum(probs[:num_to_show])
     print(f"   Showing Top {num_to_show} token probabilities:")
-    max_tl = max(len(t) for t in tokens[:num_to_show]) if num_to_show > 0 else 5
-    for i in range(num_to_show): print(f"   {'*' if i == 0 else ' '} {tokens[i]:<{max_tl}} : {probs[i]:.4f}")
+    max_tl = max(len(t) for t in cleaned_tokens[:num_to_show]) if num_to_show > 0 else 5
+    for i in range(num_to_show): 
+        print(f"   {'*' if i == 0 else ' '} {cleaned_tokens[i]:<{max_tl}} : {probs[i]:.4f}")
     if len(tokens) > num_to_show: print(f"   ... ({len(tokens) - num_to_show} more not shown)")
     if verbose: print(f"   (Cumulative probability of top {num_to_show}: {total_prob_shown:.3f})")
 
 def display_player_choices(choices_texts: List[List[str]], current_sentence: str, permutation_length: int, focus_words: bool):
-    print(f"\n🤔 {color_text('Your Turn!', cfg.COLOR_YELLOW)} Guess the next {permutation_length} tokens the LLM prefers.")
+    if permutation_length == 1:
+        print(f"\n🤔 {color_text('Your Turn!', cfg.COLOR_YELLOW)} Guess the next token the LLM prefers.")
+    else:
+        print(f"\n🤔 {color_text('Your Turn!', cfg.COLOR_YELLOW)} Guess the next {permutation_length} tokens the LLM prefers.")
     if focus_words: print(color_text("   (Focus Words Mode: Choices favor common word tokens)", cfg.COLOR_CYAN))
     print(f'   Based on: "{current_sentence}..."')
     print("\nWhich sequence below is ranked highest by the model (after all filtering)?")
     valid_options_letters = []
+    
     for i, choice_token_texts_list in enumerate(choices_texts):
-        option_letter = chr(ord("A") + i); valid_options_letters.append(option_letter); formatted_sequence = ""
-        for idx, token_str in enumerate(choice_token_texts_list):
-            if idx > 0 and not token_str.startswith(" ") and formatted_sequence and not formatted_sequence.endswith(" ") and \
-               (formatted_sequence[-1].isalnum() or token_str[0].isalnum() if token_str else False):
-                formatted_sequence += " "
-            formatted_sequence += token_str
-        print(f"  {option_letter}) {formatted_sequence.strip()}")
+        option_letter = chr(ord("A") + i)
+        valid_options_letters.append(option_letter)
+        
+        # Clean and format tokens for display
+        cleaned_tokens = []
+        for token_str in choice_token_texts_list:
+            # Skip special tokens
+            if (token_str.startswith('[') and token_str.endswith(']')) or \
+               (token_str.startswith('<') and token_str.endswith('>')):
+                cleaned_tokens.append(token_str)  # Keep the actual special token
+            # Remove underscores
+            elif token_str.startswith("▁") or token_str.startswith("_"):
+                cleaned = token_str[1:] if len(token_str) > 1 else ""
+                if not cleaned or cleaned.isspace():
+                    cleaned_tokens.append("<space>")  # Make space visible
+                else:
+                    cleaned_tokens.append(cleaned)
+            # Handle pure whitespace or empty tokens
+            elif not token_str or token_str.isspace():
+                if token_str == "\n":
+                    cleaned_tokens.append("<newline>")
+                elif token_str == "\t":
+                    cleaned_tokens.append("<tab>")
+                else:
+                    cleaned_tokens.append("<space>")
+            else:
+                cleaned_tokens.append(token_str)
+        
+        # Ensure we always have exactly permutation_length tokens
+        while len(cleaned_tokens) < permutation_length:
+            cleaned_tokens.append("<pad>")
+        cleaned_tokens = cleaned_tokens[:permutation_length]
+        
+        # Format with consistent spacing - always space-separated
+        formatted_sequence = " ".join(cleaned_tokens)
+        
+        print(f"  {option_letter}) {formatted_sequence}")
+    
     return valid_options_letters
 
 def display_guess_result(chosen_tokens_texts: List[str], correct_tokens_texts: List[str], score: int, max_score: int, is_perfect: bool):
     print("\n--- Guess Result ---")
-    def smart_join(tokens: List[str]) -> str:
-        res = ""
-        for i, token in enumerate(tokens):
-            if i > 0 and res and not res.endswith(" ") and not token.startswith(" ") and (res[-1].isalnum() or (token and token[0].isalnum())): res += " "
-            res += token
-        return res.strip()
-    chosen_str = smart_join(chosen_tokens_texts); correct_str = smart_join(correct_tokens_texts)
+    def format_tokens(tokens: List[str]) -> str:
+        # Clean and format tokens consistently
+        cleaned_tokens = []
+        for token in tokens:
+            # Skip special tokens
+            if (token.startswith('[') and token.endswith(']')) or \
+               (token.startswith('<') and token.endswith('>')):
+                cleaned_tokens.append("<pad>")
+            # Remove underscores
+            elif token.startswith("▁") or token.startswith("_"):
+                cleaned = token[1:] if len(token) > 1 else ""
+                cleaned_tokens.append(cleaned if cleaned else "<sp>")
+            else:
+                cleaned_tokens.append(token)
+        # Always show tokens space-separated for clarity
+        return " ".join(cleaned_tokens)
+    chosen_str = format_tokens(chosen_tokens_texts)
+    correct_str = format_tokens(correct_tokens_texts)
     print(f"Your Guess:        {color_text(chosen_str, cfg.COLOR_BLUE)}")
     print(f"Model's Actual Top: {color_text(correct_str, cfg.COLOR_GREEN)}")
     if is_perfect: print(color_text("✅ Perfect Match!", cfg.COLOR_GREEN))

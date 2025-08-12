@@ -2,19 +2,79 @@ import os
 import sys
 
 DEFAULT_ENGINE = "pytorch"
-DEFAULT_MODEL_NAME = "google/gemma-2-2b-it"
+DEFAULT_MODEL_NAME = "google/gemma-3-1b-it"
+
+# Gemma Model Information
+GEMMA_MODEL_INFO = {
+    "google/gemma-3-1b-it": {
+        "desc": "1B, Instruct, versatile.",
+        "params_b": 1.0,
+        "raw_model_gb": 2.0,
+        "rec_ram_gb": "4-6GB",
+    },
+    "google/gemma-3-4b-it": {
+        "desc": "4B, Instruct, good balance.",
+        "params_b": 4.0,
+        "raw_model_gb": 8.0,
+        "rec_ram_gb": "12-16GB",
+    },
+    "google/gemma-3-12b-it": {
+        "desc": "12B, Instruct, powerful.",
+        "params_b": 12.0,
+        "raw_model_gb": 24.0,
+        "rec_ram_gb": "32-48GB",
+    },
+    "google/gemma-3-27b-it": {
+        "desc": "27B, Instruct, very strong.",
+        "params_b": 27.0,
+        "raw_model_gb": 54.0,
+        "rec_ram_gb": "64-96GB",
+    },
+    "google/gemma-3-1b": {
+        "desc": "1B, Base, for fine-tuning.",
+        "params_b": 1.0,
+        "raw_model_gb": 2.0,
+        "rec_ram_gb": "4-6GB",
+    },
+    "google/gemma-3-4b": {
+        "desc": "4B, Base.",
+        "params_b": 4.0,
+        "raw_model_gb": 8.0,
+        "rec_ram_gb": "12-16GB",
+    },
+    "google/gemma-3-12b": {
+        "desc": "12B, Base.",
+        "params_b": 12.0,
+        "raw_model_gb": 24.0,
+        "rec_ram_gb": "32-48GB",
+    },
+    "google/gemma-3-27b": {
+        "desc": "27B, Base, very large.",
+        "params_b": 27.0,
+        "raw_model_gb": 54.0,
+        "rec_ram_gb": "64-96GB",
+    },
+    "google/gemma-3n-e4b-it": {
+        "desc": "New 4B, Instruct, efficient.",
+        "params_b": 4.0,
+        "raw_model_gb": 8.0,
+        "rec_ram_gb": "12-16GB",
+    },
+}
+
+GEMMA_MODELS = list(GEMMA_MODEL_INFO.keys())
 
 DEFAULT_GGUF_MODEL_PLACEHOLDER = "path/to/your/model.gguf"
 DEFAULT_ONNX_MODEL_PLACEHOLDER = "path/to/your/model.onnx"
 DEFAULT_MLX_MODEL_PLACEHOLDER = "mlx-community/Mistral-7B-Instruct-v0.2"
 
-DEFAULT_TEMPERATURE = 0.7
-DEFAULT_TOP_K = 8
+DEFAULT_TEMPERATURE = 1.0
+DEFAULT_TOP_K = 16
 DEFAULT_TOP_P = 0.95
 
 DEFAULT_MAX_DECODE_STEPS = 8
 DEFAULT_NUM_CHOICES = 4
-DEFAULT_PERMUTATION_LENGTH = 3
+DEFAULT_PERMUTATION_LENGTH = 1  # Number of tokens per choice (was 3, now 1)
 DEFAULT_SHOW_ATTENTION = True
 DEFAULT_VERBOSE = True
 DEFAULT_FOCUS_WORDS = False
@@ -25,7 +85,7 @@ USE_COLORS = True
 
 PYTORCH_DEVICE_MAP = "auto"
 PYTORCH_ATTN_IMPLEMENTATION = "eager"
-PYTORCH_USE_KV_CACHE = True
+PYTORCH_USE_KV_CACHE = False  # Disabled by default to avoid attention mask issues
 
 LLAMA_CPP_N_GPU_LAYERS = 0
 LLAMA_CPP_N_CTX = 2048

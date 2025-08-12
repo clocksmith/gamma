@@ -10,12 +10,17 @@
 
 Gamma v1 is a hands-on tool that lets you peer inside Google's Gemma language model to see how it thinks and predicts text. By turning complex AI concepts into a guessing game, Gamma makes advanced machine learning techniques accessible and fun to explore. You compete against the model, trying to predict its next token choices while visualizing its internal state.
 
-Note: [Gamma v2](https://github.com/clocksmith/gamma/tree/main/v2), will replace
-GAMMA v1 (this version in `game.py`).
+## Architecture
 
-Gamma v2 supports models other than Google Gemma, and engines other than Pytorch.
-It is experimental and will be the default once enough combinations of models
-and engines have been tested and debugged.
+GAMMA now uses a modular v2 engine architecture that supports multiple ML frameworks:
+- **PyTorch** (default, recommended for Gemma models)
+- **TensorFlow** 
+- **JAX**
+- **ONNX Runtime**
+- **llama.cpp** (for GGUF models)
+- **MLX** (for Apple Silicon)
+
+The game runs from `game.py` which imports the v2 engine modules for flexibility and extensibility.
 
 <img width="1084" alt="Gamma Gameplay Screenshot" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
 
@@ -119,15 +124,35 @@ source venv/bin/activate
 
 # Install required packages from the requirements file
 
-```
-pip install -r requirements.txt
+```bash
+# Install base requirements
+pip install -r v2/requirements.txt
+
+# Install PyTorch engine requirements (recommended)
+pip install -r v2/requirements-pytorch.txt
+
+# Optional: Install requirements for other engines
+# pip install -r v2/requirements-tensorflow.txt
+# pip install -r v2/requirements-jax.txt
+# pip install -r v2/requirements-onnx.txt
+# pip install -r v2/requirements-llamacpp.txt
+# pip install -r v2/requirements-mlx.txt  # Apple Silicon only
 ```
 
 ### Running the Game
 
 ```bash
-# Run the game with default settings (uses gemma-3-1b-it unless another selection is made)
+# Run the game with default settings (uses gemma-3-1b-it with PyTorch engine)
 python game.py
+
+# Or specify engine and model explicitly
+python game.py --engine pytorch --model google/gemma-3-1b-it
+
+# Use 4-bit quantization to reduce memory usage
+python game.py --load-in-4bit
+
+# Run with a different engine (after installing its requirements)
+python game.py --engine jax --model google/gemma-3-1b-it
 ```
 
 ### Accessing Gemma Models
@@ -150,19 +175,45 @@ You need access to Google's Gemma models. The easiest way is via Hugging Face:
 
 _(Other options like Google AI Studio/Kaggle remain valid but require different setup)_
 
-## Configuration Defaults
+## Project Structure
 
-You can modify these constants at the top of `game.py`:
+```
+gamma/
+├── game.py              # Main entry point
+├── v2/                  # Modular engine architecture
+│   ├── core/           # Core game logic
+│   │   ├── config.py   # Configuration and model definitions
+│   │   ├── engine_interface.py  # Base engine interface
+│   │   ├── game_logic.py       # Game mechanics
+│   │   ├── ui.py              # User interface
+│   │   └── explanations.py    # Token explanations
+│   └── engines/        # ML framework implementations
+│       ├── engine_factory.py   # Engine initialization
+│       ├── pytorch_engine.py   # PyTorch/Transformers (Gemma)
+│       ├── tensorflow_engine.py
+│       ├── jax_engine.py
+│       ├── onnx_engine.py
+│       ├── llama_cpp_engine.py
+│       └── mlx_engine.py
+└── README.md
+```
 
-- `MODEL_NAME`: `"google/gemma-2b-it"` (Which Gemma model to use)
-- `TEMPERATURE`: `0.7` (Controls randomness; lower is more focused)
-- `TOP_K`: `8` (Considers only the top 8 tokens)
-- `TOP_P`: `0.95` (Considers tokens comprising 95% probability mass)
-- `MAX_DECODE_STEPS`: `8` (Number of game rounds/tokens to generate)
-- `NUM_CHOICES`: `4` (Number of sequence options presented to the player)
-- `PERMUTATION_LENGTH`: `4` (Number of tokens in each guessable sequence)
-- `SHOW_ATTENTION`: `True` (Whether to display the attention heatmap)
-- `MAX_TOP_K_FOR_PROBS`: `16` (How many top tokens to show in probability lists)
+## Configuration
+
+You can modify defaults in `v2/core/config.py` or use command-line arguments:
+
+- `--model`: Model to use (default: `google/gemma-3-1b-it`)
+- `--temperature`: Controls randomness (default: `0.7`)
+- `--top-k`: Limits vocabulary (default: `8`)
+- `--top-p`: Nucleus sampling (default: `0.95`)
+- `--steps`: Number of game rounds (default: `8`)
+- `--num-choices`: Choices per round (default: `4`)
+- `--permutation-length`: Tokens per choice (default: `1`)
+- `--show-attention`: Display attention heatmap (default: `True`)
+- `--load-in-4bit`: Use 4-bit quantization for lower memory usage
+- `--verbose`: Show detailed explanations
+
+Run `python game.py --help` for all options.
 
 ## Complete Transformer Architecture Steps (Decoder-Focused)
 

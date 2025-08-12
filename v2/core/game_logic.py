@@ -36,7 +36,7 @@ def generate_choices(
     permutation_length: int,
     focus_words: bool,
 ) -> Tuple[List[List[Tuple[str, int]]], List[Tuple[str, int]]]:
-    k_for_pool = max(num_choices * permutation_length * (4 if focus_words else 2), cfg.MAX_TOKENS_FOR_PROB_DISPLAY * 2, 25)
+    k_for_pool = max(num_choices * permutation_length * (4 if focus_words else 2), cfg.MAX_TOKENS_FOR_PROB_DISPLAY * 2, 50)
     top_tokens_texts, _, top_tokens_ids = engine.get_probabilities_at_step(processed_logits, "final_for_choices", k=k_for_pool)
 
     if not top_tokens_texts:
@@ -44,17 +44,52 @@ def generate_choices(
         unk_token_info = (unk_token_text, getattr(engine.tokenizer, "unk_token_id", -1))
         return [[unk_token_info] * permutation_length] * num_choices, [unk_token_info] * permutation_length
 
+    # Filter out special tokens from the pool
+    filtered_pool = []
+    special_token_patterns = ['<unused', '<pad>', '<eos>', '<bos>', '<unk>', '<mask>', '<cls>', '<sep>', '<ID:', '<DecodeErr:']
+    
+    for text, token_id in zip(top_tokens_texts, top_tokens_ids):
+        # Skip special tokens
+        is_special = any(text.startswith(pattern) for pattern in special_token_patterns)
+        
+        # Also skip tokens that look like special tokens with brackets
+        if not is_special:
+            # Check for [something] pattern which indicates special tokens
+            if text.startswith('[') and text.endswith(']'):
+                is_special = True
+            # Check for tokens that are just punctuation or whitespace
+            elif text.strip() in ['', '\n', '\t', '\r'] or text == '▁':
+                is_special = True
+        
+        if not is_special:
+            filtered_pool.append((text, token_id))
+    
+    # If we filtered out too much, try to get some reasonable tokens
+    if len(filtered_pool) < num_choices * permutation_length:
+        # Add back some tokens, but still skip the worst special tokens
+        for text, token_id in zip(top_tokens_texts, top_tokens_ids):
+            if text not in ['[multimodal]', '<unused', '<pad>', '<eos>', '<bos>']:
+                if (text, token_id) not in filtered_pool:
+                    filtered_pool.append((text, token_id))
+                if len(filtered_pool) >= num_choices * permutation_length * 2:
+                    break
+    
+    # If we still don't have enough, use what we have
+    if not filtered_pool:
+        # Last resort: use some simple tokens
+        filtered_pool = [(" ", 0), (".", 1), (",", 2)]
+    
+    # Build the model's actual top sequence from filtered tokens
     model_actual_top_sequence_info: List[Tuple[str, int]] = []
     for i in range(permutation_length):
-        if i < len(top_tokens_texts):
-            model_actual_top_sequence_info.append((top_tokens_texts[i], top_tokens_ids[i]))
+        if i < len(filtered_pool):
+            model_actual_top_sequence_info.append(filtered_pool[i])
         else:
-            pad_token_text = engine.get_token_text(getattr(engine.tokenizer, "pad_token_id", -2))
-            pad_token_id = getattr(engine.tokenizer, "pad_token_id", -2)
-            model_actual_top_sequence_info.append((pad_token_text, pad_token_id))
+            # Use the first filtered token as padding if we run out
+            model_actual_top_sequence_info.append(filtered_pool[0] if filtered_pool else (" ", 0))
 
     choices_list_info: List[List[Tuple[str, int]]] = [model_actual_top_sequence_info]
-    full_token_pool_info: List[Tuple[str, int]] = list(zip(top_tokens_texts, top_tokens_ids))
+    full_token_pool_info: List[Tuple[str, int]] = filtered_pool
     distractor_candidate_pool_info: List[Tuple[str, int]]
 
     if focus_words:

@@ -30,11 +30,32 @@ class PyTorchEngine(LLMEngine):
         elif self.engine_config.get("load_in_8bit", False): quant_cfg_dict = {"load_in_8bit": True}; print("PyTorchEngine: Applying 8-bit quantization.")
         quantization_config_obj = BitsAndBytesConfig(**quant_cfg_dict) if quant_cfg_dict else None
         if quant_cfg_dict and not quantization_config_obj: print(f"PyTorchEngine Warning: BitsAndBytesConfig failed with {quant_cfg_dict}")
+        # Determine torch dtype for model loading (important for Gemma models)
+        torch_dtype = None
+        if not quantization_config_obj:  # Only set dtype when not using quantization
+            dtype_str = self.engine_config.get("torch_dtype", "bfloat16")
+            try:
+                torch_dtype = getattr(torch, dtype_str)
+            except AttributeError:
+                torch_dtype = torch.bfloat16 if hasattr(torch, "bfloat16") else torch.float16
+        
         model_kwargs: Dict[str, Any] = {"device_map": self.engine_config.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP),
                                         "attn_implementation": self.engine_config.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
                                         "trust_remote_code": trust_remote, "low_cpu_mem_usage": (self.engine_config.get("low_cpu_mem_usage", True) if not quantization_config_obj else False), "token": token}
+        if torch_dtype is not None:
+            model_kwargs["torch_dtype"] = torch_dtype
         if quantization_config_obj: model_kwargs["quantization_config"] = quantization_config_obj
-        print(f"PyTorchEngine: Loading model '{self.model_name}'...")
+        
+        # Display model info for Gemma models
+        if "gemma" in self.model_name.lower() and hasattr(game_config, 'GEMMA_MODEL_INFO'):
+            model_info = game_config.GEMMA_MODEL_INFO.get(self.model_name, {})
+            if model_info:
+                print(f"PyTorchEngine: Loading '{self.model_name}' ({model_info.get('desc', 'N/A')})")
+                print(f"  Parameters: ~{model_info.get('params_b', 'N/A')}B | Model Size: ~{model_info.get('raw_model_gb', 'N/A')}GB | Recommended RAM: {model_info.get('rec_ram_gb', 'N/A')}")
+            else:
+                print(f"PyTorchEngine: Loading model '{self.model_name}'...")
+        else:
+            print(f"PyTorchEngine: Loading model '{self.model_name}'...")
         try: self.model = AutoModelForCausalLM.from_pretrained(self.model_name, **model_kwargs)
         except ImportError as e_imp:
             if "bitsandbytes" in str(e_imp).lower(): raise ImportError("BitsAndBytes needed. `pip install bitsandbytes`") from e_imp
@@ -47,7 +68,27 @@ class PyTorchEngine(LLMEngine):
                 err_msg += "\nHint: GPU may not support bfloat16. Try --bnb-4bit-compute-dtype float16."
             raise RuntimeError(err_msg) from e
         self._device = self.model.device if hasattr(self.model, "device") else next(self.model.parameters()).device
-        print(f"PyTorchEngine: Model '{self.model_name}' loaded on device: {self._device}"); self._populate_special_token_map(); self.reset_kv_cache()
+        print(f"PyTorchEngine: Model '{self.model_name}' loaded on device: {self._device}")
+        
+        # Check if KV cache is enabled and warn if using Gemma models
+        if self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE):
+            if hasattr(self.model.config, 'model_type') and 'gemma' in self.model.config.model_type:
+                print("Note: KV cache enabled with Gemma model. May require attention mask adjustments.")
+        
+        self._populate_special_token_map()
+        
+        # Add additional special tokens that might not be in the standard map
+        # Check for any tokens that contain brackets or special patterns
+        if hasattr(self.tokenizer, 'get_vocab'):
+            vocab = self.tokenizer.get_vocab()
+            for token_str, token_id in vocab.items():
+                # Mark tokens with brackets as special
+                if (token_str.startswith('[') and token_str.endswith(']')) or \
+                   (token_str.startswith('<') and token_str.endswith('>') and len(token_str) > 2):
+                    if token_id not in self._special_token_id_to_game_repr:
+                        self._special_token_id_to_game_repr[token_id] = token_str
+        
+        self.reset_kv_cache()
 
     def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
         if not self.tokenizer or not self._device: raise RuntimeError("PyTorchEngine: Not fully loaded.")
@@ -65,7 +106,16 @@ class PyTorchEngine(LLMEngine):
         else:
             try: ids_list = [int(token_ids)]
             except (ValueError, TypeError): raise TypeError(f"Unsupported token_ids type for decode: {type(token_ids)}")
-        return self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
+        
+        decoded_text = self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
+        
+        # Clean up the decoded text by removing leading underscores
+        if decoded_text.startswith("▁"):  # Sentencepiece underscore
+            decoded_text = decoded_text[1:]
+        elif decoded_text.startswith("_"):
+            decoded_text = decoded_text[1:]
+        
+        return decoded_text
 
     def _s(self, l: torch.Tensor) -> torch.Tensor: return torch.softmax(l, dim=-1)
     def _t(self, l: torch.Tensor, temp: float) -> torch.Tensor: return l / max(temp, 1e-6) if temp > 0 else l
@@ -80,9 +130,14 @@ class PyTorchEngine(LLMEngine):
         s_indices_to_remove = c_probs > p_val; s_indices_to_remove[..., 1:] = s_indices_to_remove[..., :-1].clone(); s_indices_to_remove[..., 0] = False
         indices_to_remove_orig = torch.zeros_like(l, dtype=torch.bool).scatter_(dim=-1, index=s_indices, src=s_indices_to_remove)
         return l.masked_fill(indices_to_remove_orig, float("-inf"))
-    def _top(self, l: torch.Tensor, k_show: int) -> Tuple[List[str], List[float], List[int]]:
+    def _top(self, l: torch.Tensor, k_show: int, is_probs: bool = False) -> Tuple[List[str], List[float], List[int]]:
         if l.numel() == 0 or l.isinf().all(): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs = self._s(l); eff_k = min(k_show if k_show > 0 else probs.shape[-1], probs.shape[-1])
+        # Only apply softmax if input is not already probabilities
+        if is_probs:
+            probs = l
+        else:
+            probs = self._s(l)
+        eff_k = min(k_show if k_show > 0 else probs.shape[-1], probs.shape[-1])
         top_p_vals, top_i_vals = torch.topk(probs, eff_k, dim=-1)
         if top_p_vals.dim() > 1: top_p_vals = top_p_vals.squeeze(0); top_i_vals = top_i_vals.squeeze(0)
         top_i_list = top_i_vals.cpu().tolist()
@@ -92,15 +147,50 @@ class PyTorchEngine(LLMEngine):
         if not self.model or not self._device: raise RuntimeError("PyTorchEngine: Not fully loaded.")
         st = time.time(); self.model.eval()
         with torch.no_grad():
-            current_past_key_values = (self._kv_cache if self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE) and input_ids.shape[-1] == 1 else None)
+            # Check if we should use KV cache
+            use_kv_cache = self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE)
+            current_past_key_values = None
+            
+            # Only use cached values if we're processing a single new token
+            if use_kv_cache and self._kv_cache is not None and input_ids.shape[-1] == 1:
+                current_past_key_values = self._kv_cache
+                # For models that need it, we might need to adjust attention_mask
+                # Some models expect None for attention_mask when using cache with single token
+                if hasattr(self.model.config, 'model_type') and 'gemma' in self.model.config.model_type:
+                    # For Gemma models with KV cache, set attention_mask to None for single token inference
+                    attention_mask = None
+            
             outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=current_past_key_values,
                                  output_attentions=output_attentions, output_hidden_states=output_hidden_states,
-                                 use_cache=self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE))
-        if self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE) and hasattr(outputs, "past_key_values"): self._kv_cache = outputs.past_key_values
-        l_raw = outputs.logits[:, -1, :]; l_temp = self._t(l_raw.clone(), temperature); l_k = self._k(l_temp.clone(), top_k); l_proc = self._p(l_k.clone(), top_p)
-        p_proc = self._s(l_proc); next_id_val = torch.argmax(p_proc, dim=-1).item()
+                                 use_cache=use_kv_cache)
+        if use_kv_cache and hasattr(outputs, "past_key_values"): 
+            self._kv_cache = outputs.past_key_values
+        
+        # Get raw logits and ensure they're valid
+        l_raw = outputs.logits[:, -1, :]
+        
+        # Check for invalid values and handle them
+        if torch.isnan(l_raw).any() or torch.isinf(l_raw).any():
+            print("Warning: Invalid logits detected, resetting to zeros")
+            l_raw = torch.zeros_like(l_raw)
+            l_raw[0] = 1.0  # Give some probability to first token
+        
+        # Apply transformations
+        l_temp = self._t(l_raw.clone(), temperature)
+        l_k = self._k(l_temp.clone(), top_k)
+        l_proc = self._p(l_k.clone(), top_p)
+        
+        # Get probabilities
+        p_proc = self._s(l_proc)
+        
+        # Ensure we have valid probabilities
+        if torch.isnan(p_proc).any() or p_proc.sum() == 0:
+            print("Warning: Invalid probabilities detected, using uniform distribution")
+            p_proc = torch.ones_like(p_proc) / p_proc.shape[-1]
+        
+        next_id_val = torch.argmax(p_proc, dim=-1).item()
         max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_txts, top_p_list, _ = self._top(l_proc, k_show=max_dk)
+        top_txts, top_p_list, _ = self._top(l_proc, k_show=max_dk, is_probs=False)  # l_proc is logits, not probs
         return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, "probabilities_raw": self._s(l_raw),
                 "probabilities_temp": self._s(l_temp), "probabilities_top_k": self._s(l_k), "probabilities_processed": p_proc,
                 "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
@@ -119,10 +209,34 @@ class PyTorchEngine(LLMEngine):
         try:
             token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
             if isinstance(token_text_str, bytes): token_text_str = token_text_str.decode("utf-8", errors="replace")
-            if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "): token_text_str = token_text_str[1:]
-            if not token_text_str: decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False); token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else f"<ID:{token_id}>"
-        except Exception: token_text_str = f"<DecodeErr:{token_id}>"
-        self._token_cache[token_id] = token_text_str; return token_text_str
+            
+            # Check if this is a special token (enclosed in brackets or angle brackets)
+            if (token_text_str.startswith('[') and token_text_str.endswith(']')) or \
+               (token_text_str.startswith('<') and token_text_str.endswith('>')):
+                # This is a special token, keep it marked as such
+                self._token_cache[token_id] = token_text_str
+                return token_text_str
+            
+            # Remove leading underscore (used by sentencepiece to indicate start of word)
+            if token_text_str.startswith("▁"):
+                token_text_str = token_text_str[1:]
+                # If it becomes empty after removing underscore, add a space
+                if not token_text_str:
+                    token_text_str = " "
+            
+            # Also handle regular underscore at the start
+            elif token_text_str.startswith("_"):
+                token_text_str = token_text_str[1:]
+                if not token_text_str:
+                    token_text_str = " "
+            
+            if not token_text_str: 
+                decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
+                token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else f"<ID:{token_id}>"
+        except Exception: 
+            token_text_str = f"<DecodeErr:{token_id}>"
+        self._token_cache[token_id] = token_text_str
+        return token_text_str
 
     def get_attention_for_visualization(self, attention_output: Any, input_ids_for_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
         if not (attention_output and isinstance(attention_output, tuple) and len(attention_output) > 0 and isinstance(attention_output[-1], torch.Tensor)): return None
@@ -139,10 +253,40 @@ class PyTorchEngine(LLMEngine):
         except Exception as e: print(f"PyTorchEngine: Error processing attention - {e}"); return None
 
     def get_probabilities_at_step(self, data: Any, step_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
-        if not isinstance(data, torch.Tensor): raise TypeError(f"Expected torch.Tensor for probabilities, got {type(data)}")
-        is_probs_heuristic = (data.ge(0.0).all() and data.le(1.0).all() and torch.isclose(data.sum(dim=-1), torch.tensor(1.0, device=data.device, dtype=data.dtype), atol=1e-3).all())
-        probs_tensor = data if is_probs_heuristic else self._s(data)
-        return self._top(probs_tensor, k_show=k)
+        if not isinstance(data, torch.Tensor): 
+            raise TypeError(f"Expected torch.Tensor for probabilities, got {type(data)}")
+        
+        # Check if data contains valid values
+        if torch.isnan(data).any() or torch.isinf(data).all():
+            # Return empty results for invalid data
+            return [], [], []
+        
+        # Check if this is already probabilities or needs softmax
+        is_probs_heuristic = (
+            data.ge(0.0).all() and 
+            data.le(1.0).all() and 
+            torch.isclose(data.sum(dim=-1), torch.tensor(1.0, device=data.device, dtype=data.dtype), atol=1e-3).all()
+        )
+        
+        if is_probs_heuristic:
+            probs_tensor = data
+        else:
+            # Apply softmax to get probabilities
+            probs_tensor = self._s(data)
+            
+            # Check if softmax resulted in valid probabilities
+            if torch.isnan(probs_tensor).any() or probs_tensor.sum() == 0:
+                # Try to recover by using a subset of logits
+                finite_mask = torch.isfinite(data)
+                if finite_mask.any():
+                    data_clean = data.clone()
+                    data_clean[~finite_mask] = float('-inf')
+                    probs_tensor = self._s(data_clean)
+                else:
+                    # Fallback to uniform distribution
+                    probs_tensor = torch.ones_like(data) / data.numel()
+        
+        return self._top(probs_tensor, k_show=k, is_probs=True)  # Pass is_probs=True since we already have probabilities
 
     def get_config_summary(self) -> Dict[str, Any]:
         cfg_args = self.engine_config; summary = {"Quantization": "None", "Attn Impl": cfg_args.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),

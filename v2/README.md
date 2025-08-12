@@ -1,4 +1,6 @@
-# GAMMA v2
+# GAMMA v2 Engine Architecture
+
+**NOTE: The v2 engine architecture is now integrated into the main game.py. Use `python game.py` from the root directory instead of running v2/game.py directly.**
 
 **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
 **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
@@ -7,7 +9,7 @@
 <!-- Screenshot Placeholder 1: Main Banner Image -->
 <!-- Description: A dynamic collage showcasing Gamma's core appeal: a split view with a player intently looking at a terminal displaying a vibrant attention heatmap on one side, and on the other, an abstract representation of neural network connections leading to readable text output. Overlay text: "GAMMA: Unravel LLM Predictions - Interactively!" -->
 
-Gamma is an interactive command-line guessing game. It helps you understand how transformer-based language models predict text. You can explore LLM internals by playing. Gamma supports multiple model engines and optimized incremental decoding.
+The v2 directory contains the modular engine architecture that powers GAMMA. This architecture supports multiple ML frameworks and models while maintaining a consistent interface for the game logic.
 
 ## What and why?
 
