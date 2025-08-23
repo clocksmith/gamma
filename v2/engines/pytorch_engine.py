@@ -15,7 +15,11 @@ class PyTorchEngine(LLMEngine):
         self._device: Optional[torch.device] = None
 
     def load(self):
-        trust_remote = self.engine_config.get("trust_remote_code", False); token = self.engine_config.get("hf_token", None)
+        # Gemma-3 models require trust_remote_code=True
+        trust_remote = self.engine_config.get("trust_remote_code", False)
+        if "gemma-3" in self.model_name.lower() or "gemma3" in self.model_name.lower():
+            trust_remote = True
+        token = self.engine_config.get("hf_token", None)
         try: self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=trust_remote, token=token)
         except Exception as e: raise RuntimeError(f"PyTorchEngine: Tokenizer loading failed for '{self.model_name}': {e}") from e
         quant_cfg_dict = {}; compute_dtype_str = self.engine_config.get("bnb_4bit_compute_dtype", "bfloat16")
@@ -39,9 +43,17 @@ class PyTorchEngine(LLMEngine):
             except AttributeError:
                 torch_dtype = torch.bfloat16 if hasattr(torch, "bfloat16") else torch.float16
         
-        model_kwargs: Dict[str, Any] = {"device_map": self.engine_config.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP),
+        # When using device_map, low_cpu_mem_usage must be True
+        device_map = self.engine_config.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP)
+        low_cpu_mem = self.engine_config.get("low_cpu_mem_usage", True)
+        
+        # If we have a device_map, we must use low_cpu_mem_usage=True
+        if device_map and device_map != "cpu":
+            low_cpu_mem = True
+        
+        model_kwargs: Dict[str, Any] = {"device_map": device_map,
                                         "attn_implementation": self.engine_config.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
-                                        "trust_remote_code": trust_remote, "low_cpu_mem_usage": (self.engine_config.get("low_cpu_mem_usage", True) if not quantization_config_obj else False), "token": token}
+                                        "trust_remote_code": trust_remote, "low_cpu_mem_usage": low_cpu_mem, "token": token}
         if torch_dtype is not None:
             model_kwargs["torch_dtype"] = torch_dtype
         if quantization_config_obj: model_kwargs["quantization_config"] = quantization_config_obj
@@ -56,7 +68,25 @@ class PyTorchEngine(LLMEngine):
                 print(f"PyTorchEngine: Loading model '{self.model_name}'...")
         else:
             print(f"PyTorchEngine: Loading model '{self.model_name}'...")
-        try: self.model = AutoModelForCausalLM.from_pretrained(self.model_name, **model_kwargs)
+        try: 
+            # For Gemma-3 models, we need special handling
+            if "gemma-3" in self.model_name.lower() or "gemma3" in self.model_name.lower():
+                # Gemma-3 models have a completely different config structure
+                # Just load them normally with trust_remote_code
+                print("Note: Gemma-3 models are experimental and may have compatibility issues")
+                
+                # Remove trust_remote_code from model_kwargs if it exists (we already set it)
+                model_kwargs_gemma3 = model_kwargs.copy()
+                model_kwargs_gemma3.pop('trust_remote_code', None)  # Remove if exists
+                
+                # Now add it back with the correct value
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    self.model_name, 
+                    trust_remote_code=True,
+                    **model_kwargs_gemma3
+                )
+            else:
+                self.model = AutoModelForCausalLM.from_pretrained(self.model_name, **model_kwargs)
         except ImportError as e_imp:
             if "bitsandbytes" in str(e_imp).lower(): raise ImportError("BitsAndBytes needed. `pip install bitsandbytes`") from e_imp
             if "accelerate" in str(e_imp).lower(): raise ImportError("Accelerate needed. `pip install accelerate`") from e_imp
@@ -198,8 +228,20 @@ class PyTorchEngine(LLMEngine):
                 "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
-        if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded."); return -1
-        return self.tokenizer.vocab_size
+        if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded.")
+        # Handle different ways vocab_size might be stored
+        if hasattr(self.tokenizer, 'vocab_size'):
+            return self.tokenizer.vocab_size
+        elif hasattr(self.tokenizer, 'get_vocab_size'):
+            return self.tokenizer.get_vocab_size()
+        elif hasattr(self.model, 'config') and hasattr(self.model.config, 'vocab_size'):
+            return self.model.config.vocab_size
+        else:
+            # Try to get from vocabulary
+            try:
+                return len(self.tokenizer.get_vocab())
+            except:
+                return -1
 
     def get_token_text(self, token_id: int) -> str:
         if token_id in self._token_cache: return self._token_cache[token_id]

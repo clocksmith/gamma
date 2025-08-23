@@ -20,6 +20,9 @@ from v2.core import game_logic
 from v2.core import explanations
 from v2.engines.engine_factory import get_engine, SUPPORTED_ENGINES
 from v2.core.engine_interface import LLMEngine
+from v2.core.tutorial_mode import TutorialMode
+from v2.core.comparison_mode import ComparisonMode
+from v2.core.interactive_menu import InteractiveMenu
 
 # Global for tracking explained tokens in focus mode
 PREVIOUSLY_EXPLAINED_TOKENS_IN_FOCUS_MODE: Set[Union[int, str]] = set()
@@ -49,8 +52,9 @@ def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1) -> Optional[
 def parse_arguments() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="GAMMA: Interactive LLM Guessing Game - Test your intuition against language models!",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        description="GAMMA: Interactive LLM Guessing Game - Test your intuition against language models!\n\nRun without arguments for interactive configuration.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        add_help=True
     )
     
     # Core arguments
@@ -80,6 +84,12 @@ def parse_arguments() -> argparse.Namespace:
                         help="EXPERIMENTAL: Player's correct full guess drives generation")
     parser.add_argument("--allow-eos-continue", action="store_true", default=False,
                         help="Offer to continue generating after max_steps if EOS not hit")
+    parser.add_argument("--tutorial", action="store_true", default=False,
+                        help="Run interactive tutorial mode to learn LLM concepts")
+    parser.add_argument("--comparison", action="store_true", default=False,
+                        help="Compare predictions from multiple models side-by-side")
+    parser.add_argument("--comparison-models", type=str, nargs="+", default=None,
+                        help="Models to compare (format: engine:model_name)")
     
     # Display options
     parser.add_argument("--show-attention", action=argparse.BooleanOptionalAction, 
@@ -227,6 +237,112 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
     except Exception as e:
         print(ui.color_text(f"\n✗ Failed to initialize engine: {e}", cfg.COLOR_RED))
         return None
+
+
+def run_tutorial_mode(args: argparse.Namespace) -> None:
+    """Run the interactive tutorial mode."""
+    print(ui.color_text("\n🎓 Starting Tutorial Mode...", cfg.COLOR_CYAN))
+    
+    # Initialize a default engine for demonstrations
+    if not args.model:
+        args.model = cfg.DEFAULT_MODEL_NAME
+    
+    engine = initialize_game_engine(args)
+    if engine is None:
+        print(ui.color_text("\nFailed to initialize engine for tutorial. Exiting.", cfg.COLOR_RED))
+        return
+    
+    try:
+        tutorial = TutorialMode(engine, args.verbose)
+        tutorial.run_tutorial()
+    except KeyboardInterrupt:
+        print(ui.color_text("\n\nTutorial interrupted by user.", cfg.COLOR_YELLOW))
+    except Exception as e:
+        print(ui.color_text(f"\n\nError in tutorial: {e}", cfg.COLOR_RED))
+        if args.verbose:
+            import traceback
+            traceback.print_exc()
+    finally:
+        print(ui.color_text("\n\nThanks for learning with GAMMA! 📚", cfg.COLOR_CYAN))
+
+
+def run_comparison_mode(args: argparse.Namespace) -> None:
+    """Run the model comparison mode."""
+    print(ui.color_text("\n🔬 Starting Model Comparison Mode...", cfg.COLOR_CYAN))
+    
+    # Parse comparison models
+    models_to_compare = []
+    
+    if args.comparison_models:
+        # Parse provided models
+        for model_spec in args.comparison_models:
+            if ":" in model_spec:
+                engine_type, model_name = model_spec.split(":", 1)
+            else:
+                # Default to pytorch engine
+                engine_type = "pytorch"
+                model_name = model_spec
+            
+            if engine_type not in SUPPORTED_ENGINES:
+                print(ui.color_text(f"Unsupported engine: {engine_type}", cfg.COLOR_RED))
+                return
+            
+            models_to_compare.append((engine_type, model_name))
+    else:
+        # Interactive selection
+        print("\nSelect models to compare (at least 2):")
+        print("Available options:")
+        print("  1. google/gemma-2b-it (PyTorch)")
+        print("  2. google/gemma-2-2b-it (PyTorch)")
+        print("  3. google/gemma-2-9b-it (PyTorch)")
+        print("  4. Custom model...")
+        
+        selected_models = []
+        while len(selected_models) < 2:
+            choice = ui.get_user_input(
+                f"Select model {len(selected_models) + 1} (1-4 or 'done' if finished)",
+                allow_quit=True
+            )
+            
+            if choice == cfg.SHORTCUT_QUIT or choice.lower() == "done":
+                if len(selected_models) >= 2:
+                    break
+                else:
+                    print("Need at least 2 models for comparison.")
+                    continue
+            
+            if choice == "1":
+                selected_models.append(("pytorch", "google/gemma-2b-it"))
+            elif choice == "2":
+                selected_models.append(("pytorch", "google/gemma-2-2b-it"))
+            elif choice == "3":
+                selected_models.append(("pytorch", "google/gemma-2-9b-it"))
+            elif choice == "4":
+                engine = ui.get_user_input("Enter engine type (pytorch/tensorflow/jax/etc)")
+                model = ui.get_user_input("Enter model name/path")
+                selected_models.append((engine, model))
+        
+        models_to_compare = selected_models
+    
+    if len(models_to_compare) < 2:
+        print(ui.color_text("Need at least 2 models for comparison mode.", cfg.COLOR_RED))
+        return
+    
+    try:
+        comparison = ComparisonMode(models_to_compare, args)
+        if comparison.load_models():
+            comparison.run_comparison()
+        else:
+            print(ui.color_text("\nFailed to load models for comparison.", cfg.COLOR_RED))
+    except KeyboardInterrupt:
+        print(ui.color_text("\n\nComparison interrupted by user.", cfg.COLOR_YELLOW))
+    except Exception as e:
+        print(ui.color_text(f"\n\nError in comparison: {e}", cfg.COLOR_RED))
+        if args.verbose:
+            import traceback
+            traceback.print_exc()
+    finally:
+        print(ui.color_text("\n\nThanks for comparing models with GAMMA! 📊", cfg.COLOR_CYAN))
 
 
 def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
@@ -435,10 +551,40 @@ def main():
     # Parse arguments
     args = parse_arguments()
     
-    # Confirm configuration
-    if not ui.confirm_or_modify_config(args):
-        print(ui.color_text("\nGame cancelled by user.", cfg.COLOR_YELLOW))
+    # Check if user provided minimal arguments (just running 'python game.py')
+    # If so, use interactive menu
+    if len(sys.argv) == 1 or (len(sys.argv) == 2 and sys.argv[1] in ['--help', '-h']):
+        if len(sys.argv) == 2:  # User asked for help
+            return  # Help was already printed by argparse
+        
+        # No arguments provided - use interactive menu
+        menu = InteractiveMenu()
+        config = menu.show_main_menu()
+        
+        if config is None:
+            print(ui.color_text("\nExiting GAMMA.", cfg.COLOR_YELLOW))
+            return
+        
+        # Apply interactive config to args
+        menu.apply_config_to_args(args, config)
+    
+    # Check for special modes (from either command line or interactive)
+    if args.tutorial:
+        # Run tutorial mode
+        run_tutorial_mode(args)
         return
+    elif args.comparison:
+        # Run comparison mode
+        run_comparison_mode(args)
+        return
+    
+    # Normal game mode
+    # Skip confirmation if came from interactive menu (already configured)
+    if len(sys.argv) > 1:  # Command-line mode
+        # Confirm configuration
+        if not ui.confirm_or_modify_config(args):
+            print(ui.color_text("\nGame cancelled by user.", cfg.COLOR_YELLOW))
+            return
     
     # Initialize engine
     engine = initialize_game_engine(args)

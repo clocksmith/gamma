@@ -2,7 +2,7 @@ from core.engine_interface import LLMEngine
 from typing import Dict, Any, Optional
 import platform
 
-SUPPORTED_ENGINES = ["pytorch", "tensorflow", "jax", "llamacpp", "onnx", "mlx"]
+SUPPORTED_ENGINES = ["pytorch", "pytorch_cuda", "tensorflow", "jax", "llamacpp", "onnx", "mlx", "mlx_gpu"]
 
 
 def get_engine(
@@ -18,6 +18,17 @@ def get_engine(
         try: from .pytorch_engine import PyTorchEngine
         except ImportError as e: raise RuntimeError(f"PyTorch dependencies missing. Install with `pip install -r requirements-pytorch.txt`. Original error: {e}")
         return PyTorchEngine(model_identifier, effective_engine_config)
+    elif engine_name_lower == "pytorch_cuda":
+        try: 
+            import torch
+            if not torch.cuda.is_available():
+                print("EngineFactory WARNING: CUDA not available. Falling back to standard PyTorch engine.")
+                from .pytorch_engine import PyTorchEngine
+                return PyTorchEngine(model_identifier, effective_engine_config)
+            from .pytorch_cuda_engine import PyTorchCUDAEngine
+        except ImportError as e: 
+            raise RuntimeError(f"PyTorch CUDA dependencies missing. Install with `pip install torch transformers bitsandbytes accelerate`. Original error: {e}")
+        return PyTorchCUDAEngine(model_identifier, effective_engine_config)
     elif engine_name_lower == "tensorflow":
         try: from .tensorflow_engine import TensorFlowEngine
         except ImportError as e: raise RuntimeError(f"TensorFlow dependencies missing. Install with `pip install -r requirements-tensorflow.txt`. Original error: {e}")
@@ -40,4 +51,10 @@ def get_engine(
         try: from .mlx_engine import MLXEngine
         except ImportError as e: raise RuntimeError(f"MLX dependencies missing. Install with `pip install -r requirements-mlx.txt`. Original error: {e}")
         return MLXEngine(model_identifier, effective_engine_config)
+    elif engine_name_lower == "mlx_gpu":
+        if not (platform.system() == "Darwin" and platform.machine().startswith("arm")): 
+            print("EngineFactory WARNING: MLX GPU engine is optimized for Apple Silicon. May fail on other platforms.")
+        try: from .mlx_gpu_engine import MLXGPUEngine
+        except ImportError as e: raise RuntimeError(f"MLX dependencies missing. Install with `pip install mlx mlx-lm`. Original error: {e}")
+        return MLXGPUEngine(model_identifier, effective_engine_config)
     else: raise ValueError(f"Unsupported engine: '{engine_name}'. Choose from: {', '.join(SUPPORTED_ENGINES)}")

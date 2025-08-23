@@ -65,7 +65,10 @@ Modern language models like Gemma use transformer architectures (specifically, d
 
 Gamma makes these steps tangible by letting you guess the outcome and visualizing the intermediate stages.
 
-## How to Play
+## Game Modes
+
+### Classic Game Mode
+The original GAMMA experience where you predict what the model will generate next.
 
 1.  Start the game (`python game.py`).
 2.  Enter a starting sentence or use the default.
@@ -78,6 +81,47 @@ Gamma makes these steps tangible by letting you guess the outcome and visualizin
 9.  Repeat for a set number of steps (`MAX_DECODE_STEPS`) or until the model generates an end-of-sequence (`<eos>`) token.
 
 Your score reflects how well your guessed sequences matched the model's top-ranked sequences.
+
+### Tutorial Mode (NEW)
+An interactive learning experience that teaches you how LLMs work through guided lessons.
+
+Run with: `python game.py --tutorial`
+
+Features four comprehensive lessons:
+- **Tokenization**: Learn how text becomes numbers the model can process
+- **Attention Mechanism**: Understand how models focus on relevant context
+- **Sampling Strategies**: Master Temperature, Top-K, and Top-P filtering
+- **Autoregressive Generation**: See how models build text token by token
+
+Each lesson includes:
+- Step-by-step explanations with visual demonstrations
+- Interactive examples using your input
+- Key insights and takeaways
+- Progress tracking across lessons
+
+### Model Comparison Mode (NEW)
+Compare predictions from multiple models side-by-side to understand their different behaviors.
+
+Run with: `python game.py --comparison`
+
+Features:
+- **Side-by-side predictions**: See what different models predict for the same input
+- **Confidence analysis**: Compare how certain each model is about its predictions
+- **Agreement metrics**: Track when models agree or disagree
+- **Performance stats**: Compare prediction speed and accuracy
+- **Interactive selection**: Choose which model's prediction to use for generation
+
+Example usage:
+```bash
+# Interactive model selection
+python game.py --comparison
+
+# Specify models directly
+python game.py --comparison --comparison-models pytorch:google/gemma-2b-it pytorch:google/gemma-2-2b-it
+
+# Compare different engine implementations
+python game.py --comparison --comparison-models pytorch:google/gemma-2b-it jax:google/gemma-2b-it
+```
 
 ## Demo Gameplay
 
@@ -141,19 +185,51 @@ pip install -r v2/requirements-pytorch.txt
 
 ### Running the Game
 
-```bash
-# Run the game with default settings (uses gemma-3-1b-it with PyTorch engine)
-python game.py
+GAMMA supports two ways to configure and run the game:
 
-# Or specify engine and model explicitly
+#### Interactive Mode (Recommended for beginners)
+```bash
+# Run without arguments for interactive configuration menu
+python game.py
+```
+This will present an interactive menu where you can:
+- **Quick Start Options** (NEW):
+  - "Just Play!" - Jump straight into the game with optimal defaults
+  - "Quick Tutorial" - Start learning immediately
+  - "Quick Compare" - Instantly compare 2 popular models
+- **Full Configuration**:
+  - Choose between Classic, Tutorial, or Comparison modes
+  - Browse available models with detailed information:
+    - Page through model catalogs for each engine
+    - See model sizes, memory requirements, and descriptions
+    - Search/filter models by name or size
+    - Quick access to recommended models
+    - Select by number or enter custom paths
+  - Configure all game parameters through prompts
+  - No need to remember command-line arguments!
+
+#### Command-Line Mode (For power users)
+```bash
+# Run the game with specific settings
 python game.py --engine pytorch --model google/gemma-3-1b-it
 
 # Use 4-bit quantization to reduce memory usage
 python game.py --load-in-4bit
 
-# Run with a different engine (after installing its requirements)
+# Run with a different engine
 python game.py --engine jax --model google/gemma-3-1b-it
+
+# Run tutorial mode directly
+python game.py --tutorial
+
+# Run comparison mode with specific models
+python game.py --comparison --comparison-models pytorch:google/gemma-2b-it pytorch:google/gemma-2-2b-it
+
+# Customize game parameters
+python game.py --temperature 0.9 --top-k 10 --steps 15 --num-choices 5
 ```
+
+Both methods provide access to all features - choose what works best for you!
 
 ### Accessing Gemma Models
 
@@ -200,7 +276,13 @@ gamma/
 
 ## Configuration
 
-You can modify defaults in `v2/core/config.py` or use command-line arguments:
+You can configure GAMMA in three ways:
+
+### 1. Interactive Configuration (Easiest)
+Simply run `python game.py` without arguments and follow the interactive prompts to configure all settings.
+
+### 2. Command-Line Arguments
+Use specific arguments to configure the game:
 
 - `--model`: Model to use (default: `google/gemma-3-1b-it`)
 - `--temperature`: Controls randomness (default: `0.7`)
@@ -212,8 +294,14 @@ You can modify defaults in `v2/core/config.py` or use command-line arguments:
 - `--show-attention`: Display attention heatmap (default: `True`)
 - `--load-in-4bit`: Use 4-bit quantization for lower memory usage
 - `--verbose`: Show detailed explanations
+- `--tutorial`: Run tutorial mode
+- `--comparison`: Run comparison mode
+- `--comparison-models`: Models to compare (format: `engine:model_name`)
 
 Run `python game.py --help` for all options.
+
+### 3. Modify Defaults
+Edit `v2/core/config.py` to change default values permanently.
 
 ## Complete Transformer Architecture Steps (Decoder-Focused)
 
