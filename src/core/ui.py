@@ -42,8 +42,9 @@ def get_user_input(
             full_prompt_parts.append(f" ({'/'.join(valid_choices)})")
         if default_val_on_empty is not None and allow_empty:
             full_prompt_parts.append(f" [Enter for '{default_val_on_empty}']")
-        if allow_quit:
-            full_prompt_parts.append(f" or '{cfg.SHORTCUT_QUIT}' to quit")
+        # Removed "or 'q' to quit" prompts for cleaner UI
+        # if allow_quit:
+        #     full_prompt_parts.append(f" or '{cfg.SHORTCUT_QUIT}' to quit")
         full_prompt_parts.append(": ")
         full_prompt_str = "".join(full_prompt_parts)
 
@@ -261,7 +262,84 @@ def display_attention_heatmap(token_texts: List[str], normalized_scores: List[fl
         else: print(f"   {' '.join(line_buffer)}"); line_buffer = [item]; current_line_len = visible_len
     if line_buffer: print(f"   {' '.join(line_buffer)}")
 
+def format_probability_stage(stage_name: str, tokens: List[str], probs: List[float], max_to_show: int, verbose: bool) -> List[str]:
+    """Format a probability stage as a list of strings for display."""
+    lines = []
+    lines.append(f"📊 {color_text(f'{stage_name}:', cfg.COLOR_CYAN)}")
+    
+    if not tokens or not probs: 
+        lines.append(color_text("(No valid tokens)", cfg.COLOR_YELLOW))
+        return lines
+    
+    # Clean up tokens for display
+    cleaned_tokens = []
+    for token in tokens:
+        if token.startswith("▁") or token.startswith("_"):
+            token = token[1:] if len(token) > 1 else " "
+        cleaned_tokens.append(token)
+    
+    num_to_show = min(len(cleaned_tokens), max_to_show)
+    max_tl = max(len(t) for t in cleaned_tokens[:num_to_show]) if num_to_show > 0 else 5
+    
+    for i in range(num_to_show): 
+        lines.append(f"{'*' if i == 0 else ' '} {cleaned_tokens[i]:<{max_tl}} : {probs[i]:.4f}")
+    
+    if len(tokens) > num_to_show: 
+        lines.append(f"... ({len(tokens) - num_to_show} more)")
+    
+    return lines
+
+def display_probability_stages_grid(stages_data: List[Tuple[str, List[str], List[float]]], max_to_show: int, verbose: bool):
+    """Display 4 probability stages in a 2x2 grid format."""
+    if not stages_data:
+        return
+    
+    # Format all stages
+    formatted_stages = []
+    for stage_name, tokens, probs in stages_data:
+        formatted_stages.append(format_probability_stage(stage_name, tokens, probs, max_to_show, verbose))
+    
+    # Ensure we have exactly 4 stages (pad with empty if needed)
+    while len(formatted_stages) < 4:
+        formatted_stages.append([])
+    
+    print("\n" + "="*80)
+    print("📊 PROBABILITY DISTRIBUTIONS (2x2 Grid)")
+    print("="*80)
+    
+    # Display in 2x2 grid
+    # Top row: Raw and Temperature
+    # Bottom row: Top-K and Top-P
+    
+    col_width = 38  # Width for each column
+    
+    # Process two rows
+    for row_idx in range(2):
+        left_stage = formatted_stages[row_idx * 2]
+        right_stage = formatted_stages[row_idx * 2 + 1]
+        
+        # Pad stages to same length
+        max_lines = max(len(left_stage), len(right_stage))
+        while len(left_stage) < max_lines:
+            left_stage.append("")
+        while len(right_stage) < max_lines:
+            right_stage.append("")
+        
+        # Print side by side
+        for i in range(max_lines):
+            # Remove ANSI codes for proper length calculation
+            left_clean = re.sub(r"\x1b\[[0-9;]*m", "", left_stage[i])
+            left_padding = col_width - len(left_clean)
+            print(f"{left_stage[i]}{' ' * max(0, left_padding)} │ {right_stage[i]}")
+        
+        # Add separator between rows (but not after last row)
+        if row_idx < 1:
+            print("─" * 38 + "┼" + "─" * 41)
+    
+    print("="*80)
+
 def display_probability_stage(stage_name: str, tokens: List[str], probs: List[float], max_to_show: int, verbose: bool):
+    """Legacy function for backward compatibility - displays single stage."""
     print(f"\n📊 {color_text(f'Probabilities ({stage_name}):', cfg.COLOR_CYAN)}")
     if verbose:
         stage_map = {"Raw": "Initial guess.", "Temperature": "Adjusted by Temp.", "Top-K": "Top-K likely.", "Top-P": "Smallest set summing to Top-P."}

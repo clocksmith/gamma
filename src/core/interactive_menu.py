@@ -18,15 +18,15 @@ class InteractiveMenu:
         """Show the main menu and return configuration."""
         ui.print_separator()
         print(ui.color_text("🎮 GAMMA - Interactive Configuration", cfg.COLOR_CYAN))
-        print("\nSelect Game Mode:")
-        print("  1. Classic Game - Predict the model's next token")
-        print("  2. Tutorial Mode - Learn how LLMs work")
-        print("  3. Comparison Mode - Compare multiple models")
-        print("  4. Exit")
         print("\n⚡ Quick Start Options:")
-        print("  5. Just Play! (Classic with defaults)")
-        print("  6. Quick Tutorial (Start learning immediately)")
-        print("  7. Quick Compare (2 small models)")
+        print("  1. Just Play! (Classic with defaults)")
+        print("  2. Quick Tutorial (Start learning immediately)")
+        print("  3. Quick Compare (2 small models)")
+        print("\n🔧 Advanced Options:")
+        print("  4. Classic Game - Configure & predict the model's next token")
+        print("  5. Tutorial Mode - Configure & learn how LLMs work")
+        print("  6. Comparison Mode - Configure & compare multiple models")
+        print("  7. Exit")
         
         choice = ui.get_user_input(
             "\nSelect mode (1-7)",
@@ -34,24 +34,24 @@ class InteractiveMenu:
             allow_quit=True
         )
         
-        if choice == cfg.SHORTCUT_QUIT or choice == "4":
+        if choice == cfg.SHORTCUT_QUIT or choice == "7":
             return None
             
         if choice == "1":
-            return self._configure_classic_mode()
-        elif choice == "2":
-            return self._configure_tutorial_mode()
-        elif choice == "3":
-            return self._configure_comparison_mode()
-        elif choice == "5":
             # Quick play classic with defaults
             return self._quick_play_classic()
-        elif choice == "6":
+        elif choice == "2":
             # Quick tutorial with defaults
             return self._quick_play_tutorial()
-        elif choice == "7":
+        elif choice == "3":
             # Quick comparison with 2 small models
             return self._quick_play_comparison()
+        elif choice == "4":
+            return self._configure_classic_mode()
+        elif choice == "5":
+            return self._configure_tutorial_mode()
+        elif choice == "6":
+            return self._configure_comparison_mode()
             
         return None
     

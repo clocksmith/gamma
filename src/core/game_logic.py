@@ -191,19 +191,25 @@ def process_player_guess(
         "Raw (Unfiltered)": prediction_result.get("probabilities_raw"),
         f"After Temperature ({game_args.temperature:.2f})": prediction_result.get("probabilities_temp"),
         f"After Top-K ({game_args.top_k})": prediction_result.get("probabilities_top_k"),
-        f"After Top-P ({game_args.top_p:.2f}) [Final Distribution]": prediction_result.get("probabilities_processed"),
+        f"After Top-P ({game_args.top_p:.2f}) [Final]": prediction_result.get("probabilities_processed"),
     }
 
+    # Collect all stages data for grid display
+    stages_data = []
     for stage_name, prob_source_data in prob_data_map.items():
         if prob_source_data is not None:
             token_texts_for_stage, prob_values_for_stage, _ = engine.get_probabilities_at_step(prob_source_data, stage_name, cfg.MAX_TOKENS_FOR_PROB_DISPLAY)
             # Check if probabilities are all zero, which indicates a problem.
             if not any(p > 1e-9 for p in prob_values_for_stage): # Check if effectively all zero
                  print(ui.color_text(f"  Warning: Probabilities for stage '{stage_name}' are all (near) zero. Model output may be compromised.", cfg.COLOR_YELLOW))
-
-            ui.display_probability_stage(stage_name, token_texts_for_stage, prob_values_for_stage, cfg.MAX_TOKENS_FOR_PROB_DISPLAY, game_args.verbose)
-        elif game_args.verbose:
-            print(ui.color_text(f"  Note: Probability data for stage '{stage_name}' is not available from the engine.", cfg.COLOR_YELLOW))
+            stages_data.append((stage_name, token_texts_for_stage, prob_values_for_stage))
+        else:
+            stages_data.append((stage_name, [], []))
+            if game_args.verbose:
+                print(ui.color_text(f"  Note: Probability data for stage '{stage_name}' is not available from the engine.", cfg.COLOR_YELLOW))
+    
+    # Display all 4 stages in a 2x2 grid
+    ui.display_probability_stages_grid(stages_data, cfg.MAX_TOKENS_FOR_PROB_DISPLAY, game_args.verbose)
 
 
     return score, max_possible_score, chosen_sequence_info, correct_sequence_info

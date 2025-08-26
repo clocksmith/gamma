@@ -38,7 +38,7 @@ class TutorialMode:
         
         while True:
             choice = ui.get_user_input(
-                "\nSelect a lesson (1-4) or 'q' to quit tutorial",
+                "\nSelect a lesson (1-4)",
                 valid_choices=["1", "2", "3", "4", "q"],
                 allow_quit=True
             )
