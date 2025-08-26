@@ -2,7 +2,7 @@
 """
 GAMMA - Game Analyzing Model Methods Attentively
 Main entry point for the interactive LLM guessing game.
-Uses the v2 engine architecture for improved modularity and multi-engine support.
+Main entry point for the interactive LLM guessing game.
 """
 
 import argparse
@@ -11,18 +11,18 @@ import time
 import random
 from typing import Optional, List, Tuple, Set, Dict, Any, Union
 
-# Add v2 directory to path for imports
-sys.path.insert(0, 'v2')
+sys.path.insert(0, 'src')
 
-from v2.core import config as cfg
-from v2.core import ui
-from v2.core import game_logic
-from v2.core import explanations
-from v2.engines.engine_factory import get_engine, SUPPORTED_ENGINES
-from v2.core.engine_interface import LLMEngine
-from v2.core.tutorial_mode import TutorialMode
-from v2.core.comparison_mode import ComparisonMode
-from v2.core.interactive_menu import InteractiveMenu
+from core import config as cfg
+from core import ui
+from core import game_logic
+from core import explanations
+from engines.engine_factory import get_engine, SUPPORTED_ENGINES
+from core.engine_interface import LLMEngine
+from core.tutorial_mode import TutorialMode
+from core.comparison_mode import ComparisonMode
+from core.interactive_menu import InteractiveMenu
+
 
 # Global for tracking explained tokens in focus mode
 PREVIOUSLY_EXPLAINED_TOKENS_IN_FOCUS_MODE: Set[Union[int, str]] = set()
@@ -343,6 +343,44 @@ def run_comparison_mode(args: argparse.Namespace) -> None:
             traceback.print_exc()
     finally:
         print(ui.color_text("\n\nThanks for comparing models with GAMMA! 📊", cfg.COLOR_CYAN))
+
+def run_meld_mode(args: argparse.Namespace) -> None:
+    """Run the Mind Meld mode."""
+    print(ui.color_text("\n🧠 Starting Mind Meld Mode...", cfg.COLOR_CYAN))
+    
+    models_to_meld = []
+    if not args.meld_models or len(args.meld_models) < 2:
+        print(ui.color_text("Mind Meld mode requires at least two models specified with --meld-models", cfg.COLOR_RED))
+        return
+
+    for model_spec in args.meld_models:
+        if ":" in model_spec:
+            engine_type, model_name = model_spec.split(":", 1)
+        else:
+            engine_type = "pytorch"
+            model_name = model_spec
+        
+        if engine_type not in SUPPORTED_ENGINES:
+            print(ui.color_text(f"Unsupported engine: {engine_type}", cfg.COLOR_RED))
+            return
+        models_to_meld.append((engine_type, model_name))
+
+    loaded_engines = []
+    for engine_type, model_name in models_to_meld:
+        print(ui.color_text(f"\nLoading model {model_name} with {engine_type} engine...", cfg.COLOR_CYAN))
+        engine_args = argparse.Namespace(**vars(args))
+        engine_args.engine = engine_type
+        engine_args.model = model_name
+        engine = initialize_game_engine(engine_args)
+        if engine:
+            loaded_engines.append(engine)
+        else:
+            print(ui.color_text(f"Failed to load model {model_name}. Aborting Mind Meld mode.", cfg.COLOR_RED))
+            return
+
+    meld_mode = MindMeldMode(loaded_engines, args)
+    meld_mode.run()
+
 
 
 def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:

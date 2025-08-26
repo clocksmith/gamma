@@ -1,6 +1,6 @@
 from typing import Any
-from . import ui
-from . import config as cfg
+from src.core import ui
+from src.core import config as cfg
 
 
 def explain_game_concepts(args: Any):

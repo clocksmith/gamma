@@ -8,6 +8,7 @@ except ImportError: raise ImportError("PyTorch-related libraries (transformers, 
 
 from core.engine_interface import LLMEngine
 from core import config as game_config
+from core import sampling
 
 class PyTorchEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
@@ -147,26 +148,17 @@ class PyTorchEngine(LLMEngine):
         
         return decoded_text
 
-    def _s(self, l: torch.Tensor) -> torch.Tensor: return torch.softmax(l, dim=-1)
-    def _t(self, l: torch.Tensor, temp: float) -> torch.Tensor: return l / max(temp, 1e-6) if temp > 0 else l
-    def _k(self, l: torch.Tensor, k_val: int) -> torch.Tensor:
-        if k_val <= 0 or k_val >= l.shape[-1]: return l
-        eff_k = min(k_val, l.size(-1))
-        indices_to_remove = l < torch.topk(l, eff_k, dim=-1)[0][..., -1, None]
-        return l.masked_fill(indices_to_remove, float("-inf"))
-    def _p(self, l: torch.Tensor, p_val: float) -> torch.Tensor:
-        if p_val <= 0.0 or p_val >= 1.0: return l
-        s_logits, s_indices = torch.sort(l, descending=True, dim=-1); c_probs = torch.cumsum(torch.softmax(s_logits, dim=-1), dim=-1)
-        s_indices_to_remove = c_probs > p_val; s_indices_to_remove[..., 1:] = s_indices_to_remove[..., :-1].clone(); s_indices_to_remove[..., 0] = False
-        indices_to_remove_orig = torch.zeros_like(l, dtype=torch.bool).scatter_(dim=-1, index=s_indices, src=s_indices_to_remove)
-        return l.masked_fill(indices_to_remove_orig, float("-inf"))
+    def _softmax_torch(self, logits: torch.Tensor) -> torch.Tensor:
+        """Apply softmax to torch tensors."""
+        return torch.softmax(logits, dim=-1)
+    
     def _top(self, l: torch.Tensor, k_show: int, is_probs: bool = False) -> Tuple[List[str], List[float], List[int]]:
         if l.numel() == 0 or l.isinf().all(): return ["<No Valid Tokens>"], [1.0], [-1]
         # Only apply softmax if input is not already probabilities
         if is_probs:
             probs = l
         else:
-            probs = self._s(l)
+            probs = self._softmax_torch(l)
         eff_k = min(k_show if k_show > 0 else probs.shape[-1], probs.shape[-1])
         top_p_vals, top_i_vals = torch.topk(probs, eff_k, dim=-1)
         if top_p_vals.dim() > 1: top_p_vals = top_p_vals.squeeze(0); top_i_vals = top_i_vals.squeeze(0)
@@ -205,13 +197,26 @@ class PyTorchEngine(LLMEngine):
             l_raw = torch.zeros_like(l_raw)
             l_raw[0] = 1.0  # Give some probability to first token
         
-        # Apply transformations
-        l_temp = self._t(l_raw.clone(), temperature)
-        l_k = self._k(l_temp.clone(), top_k)
-        l_proc = self._p(l_k.clone(), top_p)
+        # Convert to NumPy for sampling functions
+        # Convert to float32 first if bfloat16 to avoid numpy compatibility issues
+        if l_raw.dtype == torch.bfloat16:
+            logits_np = l_raw.float().cpu().numpy()
+        else:
+            logits_np = l_raw.cpu().numpy()
         
-        # Get probabilities
-        p_proc = self._s(l_proc)
+        # Apply transformations using the sampling module
+        l_temp_np = sampling.temperature_scale(logits_np, temperature)
+        l_k_np = sampling.top_k_filter(l_temp_np, top_k)
+        l_proc_np = sampling.top_p_filter(l_k_np, top_p)
+        
+        # Convert back to torch tensors (preserving original dtype)
+        original_dtype = l_raw.dtype
+        l_temp = torch.from_numpy(l_temp_np).to(self._device).to(original_dtype)
+        l_k = torch.from_numpy(l_k_np).to(self._device).to(original_dtype)
+        l_proc = torch.from_numpy(l_proc_np).to(self._device).to(original_dtype)
+        
+        # Get probabilities using torch softmax
+        p_proc = self._softmax_torch(l_proc)
         
         # Ensure we have valid probabilities
         if torch.isnan(p_proc).any() or p_proc.sum() == 0:
@@ -221,8 +226,8 @@ class PyTorchEngine(LLMEngine):
         next_id_val = torch.argmax(p_proc, dim=-1).item()
         max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
         top_txts, top_p_list, _ = self._top(l_proc, k_show=max_dk, is_probs=False)  # l_proc is logits, not probs
-        return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, "probabilities_raw": self._s(l_raw),
-                "probabilities_temp": self._s(l_temp), "probabilities_top_k": self._s(l_k), "probabilities_processed": p_proc,
+        return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, "probabilities_raw": self._softmax_torch(l_raw),
+                "probabilities_temp": self._softmax_torch(l_temp), "probabilities_top_k": self._softmax_torch(l_k), "probabilities_processed": p_proc,
                 "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
                 "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
                 "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), "forward_time": time.time() - st}
@@ -314,7 +319,7 @@ class PyTorchEngine(LLMEngine):
             probs_tensor = data
         else:
             # Apply softmax to get probabilities
-            probs_tensor = self._s(data)
+            probs_tensor = self._softmax_torch(data)
             
             # Check if softmax resulted in valid probabilities
             if torch.isnan(probs_tensor).any() or probs_tensor.sum() == 0:
@@ -323,7 +328,7 @@ class PyTorchEngine(LLMEngine):
                 if finite_mask.any():
                     data_clean = data.clone()
                     data_clean[~finite_mask] = float('-inf')
-                    probs_tensor = self._s(data_clean)
+                    probs_tensor = self._softmax_torch(data_clean)
                 else:
                     # Fallback to uniform distribution
                     probs_tensor = torch.ones_like(data) / data.numel()

@@ -5,8 +5,8 @@ from typing import List, Tuple, Optional, Dict, Any, Union
 import argparse
 import re
 
-from . import config as cfg
-from .engine_interface import LLMEngine
+from src.core import config as cfg
+from src.core.engine_interface import LLMEngine
 
 SUPPORTED_ENGINES_UI_LIST = ["pytorch", "llamacpp", "tensorflow", "jax", "onnx", "mlx"]
 

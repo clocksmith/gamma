@@ -56,30 +56,23 @@ class TensorFlowEngine(LLMEngine):
             except (ValueError, TypeError): raise TypeError(f"Unsupported token_ids type for TF decode: {type(token_ids)}")
         return self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
 
-    def _s(self, l: tf.Tensor) -> tf.Tensor: return tf.nn.softmax(l, axis=-1)
-    def _t(self, l: tf.Tensor, temp: float) -> tf.Tensor: return l / tf.cast(max(temp, 1e-6), dtype=l.dtype) if temp > 0 else l
-    def _k(self, l: tf.Tensor, k_val: int) -> tf.Tensor:
-        vocab_s = tf.shape(l)[-1]; k_eff = tf.minimum(tf.cast(k_val, tf.int32), vocab_s)
-        if k_eff <= 0 or k_eff >= vocab_s: return l
-        top_k_vals, _ = tf.math.top_k(l, k=k_eff); threshold = tf.reduce_min(top_k_vals, axis=-1, keepdims=True)
-        return tf.where(l < threshold, tf.constant(-np.inf, dtype=l.dtype), l)
-    def _p(self, l: tf.Tensor, p_val: float) -> tf.Tensor:
-        if p_val <= 0.0 or p_val >= 1.0: return l
-        sorted_indices = tf.argsort(l, direction="DESCENDING", axis=-1); sorted_logits = tf.gather(l, sorted_indices, batch_dims=tf.rank(l) - 1)
-        cumulative_probs = tf.cumsum(self._s(sorted_logits), axis=-1); indices_to_remove_sorted = cumulative_probs > p_val
-        pad_shape = [[0, 0]] * (tf.rank(indices_to_remove_sorted).numpy() - 1) + [[1, 0]]
-        indices_to_remove_sorted_shifted = tf.pad(indices_to_remove_sorted[..., :-1], pad_shape)
-        final_remove_mask_sorted = tf.logical_and(indices_to_remove_sorted, indices_to_remove_sorted_shifted)
-        logits_after_top_p_sorted = tf.where(final_remove_mask_sorted, tf.constant(-np.inf, dtype=l.dtype), sorted_logits)
-        scatter_back_indices = tf.argsort(sorted_indices, axis=-1)
-        return tf.gather(logits_after_top_p_sorted, scatter_back_indices, batch_dims=tf.rank(l) - 1)
-    def _top(self, l: tf.Tensor, k_s: int) -> Tuple[List[str], List[float], List[int]]:
-        if tf.size(l) == 0 or tf.reduce_all(tf.math.is_inf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs = self._s(l); vocab_s = tf.shape(probs)[-1]; eff_k = tf.minimum(tf.cast(k_s if k_s > 0 else vocab_s, tf.int32), vocab_s)
-        top_p_vals, top_i_vals = tf.math.top_k(probs, k=eff_k, sorted=True)
-        if tf.rank(top_p_vals) > 1: top_p_vals = tf.squeeze(top_p_vals, axis=0); top_i_vals = tf.squeeze(top_i_vals, axis=0)
-        top_i_list = top_i_vals.numpy().tolist()
-        return ([self.get_token_text(idx) for idx in top_i_list], top_p_vals.numpy().tolist(), top_i_list)
+    
+
+    @tf.function
+    def _run_model_inference_tf(self, input_ids_tf, attention_mask_tf, past_key_values_tf, output_attentions_tf, output_hidden_states_tf, use_cache_tf):
+        return self.model(input_ids=input_ids_tf, attention_mask=attention_mask_tf, past_key_values=past_key_values_tf,
+                          output_attentions=output_attentions_tf, output_hidden_states=output_hidden_states_tf, use_cache=use_cache_tf, return_dict=True)
+
+    def _top(self, l: np.ndarray, k_s: int) -> Tuple[List[str], List[float], List[int]]:
+        if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
+        probs = sampling.softmax(l); vocab_s = probs.shape[-1]; eff_k = min(k_s if k_s > 0 else vocab_s, vocab_s)
+        top_indices_unsorted = np.argpartition(probs, -eff_k)[-eff_k:]
+        top_probs_unsorted = probs[top_indices_unsorted]
+        sort_order = np.argsort(top_probs_unsorted)[::-1]
+        final_indices = top_indices_unsorted[sort_order]
+        final_probs = top_probs_unsorted[sort_order]
+        final_indices_list = final_indices.tolist()
+        return ([self.get_token_text(idx) for idx in final_indices_list], final_probs.tolist(), final_indices_list)
 
     @tf.function
     def _run_model_inference_tf(self, input_ids_tf, attention_mask_tf, past_key_values_tf, output_attentions_tf, output_hidden_states_tf, use_cache_tf):
@@ -94,13 +87,27 @@ class TensorFlowEngine(LLMEngine):
         outputs = self._run_model_inference_tf(tf.cast(input_ids, tf.int32), (tf.cast(attention_mask, tf.int32) if attention_mask is not None else None),
                                                current_past_key_values_to_pass, tf.constant(output_attentions), tf.constant(output_hidden_states), tf.constant(use_kv_caching))
         if use_kv_caching and hasattr(outputs, "past_key_values"): self._kv_cache = outputs.past_key_values
-        logits_raw = outputs.logits[:, -1, :]; logits_temp = self._t(tf.identity(logits_raw), temperature); logits_k = self._k(tf.identity(logits_temp), top_k); logits_proc = self._p(tf.identity(logits_k), top_p)
-        probs_proc = self._s(logits_proc); next_t_id_tensor = tf.argmax(probs_proc, axis=-1)
-        next_t_id_val = next_t_id_tensor.numpy()[0].item() if tf.rank(next_t_id_tensor) > 0 else next_t_id_tensor.numpy().item()
+        
+        logits_raw = outputs.logits[:, -1, :]
+        logits_raw_np = logits_raw.numpy()
+
+        logits_temp_np = sampling.temperature_scale(logits_raw_np, temperature)
+        logits_k_np = sampling.top_k_filter(logits_temp_np, top_k)
+        logits_proc_np = sampling.top_p_filter(logits_k_np, top_p)
+
+        logits_proc = tf.convert_to_tensor(logits_proc_np)
+        probs_proc = tf.nn.softmax(logits_proc, axis=-1)
+        next_t_id_tensor = tf.argmax(probs_proc, axis=-1)
+        next_t_id_val = next_t_id_tensor.numpy().item() if tf.rank(next_t_id_tensor) == 0 else next_t_id_tensor.numpy()[0].item()
+        
         max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_txts, top_p_list, _ = self._top(logits_proc, k_s=max_dk)
-        return {"next_token_id": next_t_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, "probabilities_raw": self._s(logits_raw),
-                "probabilities_temp": self._s(logits_temp), "probabilities_top_k": self._s(logits_k), "probabilities_processed": probs_proc,
+        top_txts, top_p_list, _ = self._top(logits_proc_np, k_s=max_dk)
+        
+        return {"next_token_id": next_t_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
+                "probabilities_raw": tf.nn.softmax(logits_raw, axis=-1),
+                "probabilities_temp": tf.nn.softmax(tf.convert_to_tensor(logits_temp_np), axis=-1),
+                "probabilities_top_k": tf.nn.softmax(tf.convert_to_tensor(logits_k_np), axis=-1),
+                "probabilities_processed": probs_proc,
                 "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
                 "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
                 "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), "forward_time": time.time() - start_time}

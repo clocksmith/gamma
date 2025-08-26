@@ -4,9 +4,9 @@ Tutorial Mode for GAMMA - Interactive learning experience for understanding LLMs
 
 import time
 from typing import Optional, Dict, Any, List, Tuple
-from . import config as cfg
-from . import ui
-from .engine_interface import LLMEngine
+from src.core import config as cfg
+from src.core import ui
+from src.core.engine_interface import LLMEngine
 
 
 class TutorialMode:

@@ -3,9 +3,9 @@ Interactive Menu System for GAMMA - Provides full CLI configuration
 """
 
 from typing import Optional, Dict, Any, List, Tuple
-from . import config as cfg
-from . import ui
-from .model_catalog import ModelSelector, get_model_info
+from src.core import config as cfg
+from src.core import ui
+from src.core.model_catalog import ModelSelector, get_model_info
 
 
 class InteractiveMenu:

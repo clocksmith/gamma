@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple, Optional, Dict, Any
 
-from . import config as cfg
+from src.core import config as cfg
 
 
 class LLMEngine(ABC):

@@ -1,6 +1,4 @@
-# GAMMA v1
-
-\* _**updated 2025-05-22**_
+# GAMMA
 
 **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
 **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
@@ -8,333 +6,172 @@
 
 ## Overview
 
-Gamma v1 is a hands-on tool that lets you peer inside Google's Gemma language model to see how it thinks and predicts text. By turning complex AI concepts into a guessing game, Gamma makes advanced machine learning techniques accessible and fun to explore. You compete against the model, trying to predict its next token choices while visualizing its internal state.
+Gamma is a hands-on tool that lets you peer inside open source language models to see how they thinks and predicts text. By turning complex AI concepts into a guessing game, Gamma makes advanced machine learning techniques accessible and fun to explore. You compete against the model, trying to predict its next token choices while visualizing its internal state.
 
 ## Architecture
 
-GAMMA now uses a modular v2 engine architecture that supports multiple ML frameworks:
+GAMMA uses a modular engine architecture that supports multiple ML frameworks:
+
 - **PyTorch** (default, recommended for Gemma models)
-- **TensorFlow** 
+- **TensorFlow**
 - **JAX**
 - **ONNX Runtime**
 - **llama.cpp** (for GGUF models)
 - **MLX** (for Apple Silicon)
 
-The game runs from `game.py` which imports the v2 engine modules for flexibility and extensibility.
+The game runs from `game.py` which imports the engine modules for flexibility and extensibility.
 
 <img width="1084" alt="Gamma Gameplay Screenshot" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
-
-## Key Concepts Visualized in the Game
-
-The game captures many steps in the transformer architecture, focusing on the text generation process. Here's how key concepts are represented in Gamma v1:
-
-1.  **Tokenization**: ✨ _Input text is tokenized internally. While raw IDs aren't shown by default, the game decodes tokens back to text, including handling special tokens like `<eos>`._
-2.  Embedding Lookup: _Not directly visualized._
-3.  Positional Encoding: _Not directly visualized._
-4.  **Query/Key/Value & Attention Scores**: ✨ _Represented through the attention heatmap display. This visualization shows the result of the model calculating which previous tokens were most influential (attended to) when predicting the next token._
-    - The game shows which input tokens received the most attention for the _current prediction step_.
-    - Attention scores shown are the result of Q-K interactions after scaling and softmax normalization, averaged across heads in the final layer.
-5.  **Attention Mechanism (Decoder Self-Attention)**: ✨ _Explicitly visualized as a color-coded heatmap in the terminal._
-    - Uses shades of magenta (or `*` characters in basic terminals) - darker/more stars indicate higher attention weights.
-    - Normalized scores (0-1) show the relative importance of each input token for the _next token prediction_.
-    - Shows attention from the **final decoder layer**, averaged across **all attention heads**.
-6.  **Raw Logits Generation**: ✨ _Displayed as the first set of token probabilities ("Probabilities (Before any filtering)")._
-    - Shows the model's initial, unfiltered probability distribution over its entire vocabulary for the next token.
-7.  **Temperature Scaling**: ✨ _Explicitly shown in the second probability display ("Probabilities (After Temperature)")._
-    - Demonstrates how adjusting temperature (default: **0.7**) changes the probability distribution (softens it). Higher values flatten the distribution (more randomness), lower values sharpen it (more deterministic).
-8.  **Top-K Filtering**: ✨ _Visualized in the third probability display ("Probabilities (After Top-k)")._
-    - Shows how only the K most probable tokens are kept (default: **K=8**). Illustrates how this narrows the potential choices.
-9.  **Top-P (Nucleus) Sampling**: ✨ _Visualized in the fourth probability display ("Probabilities (After Top-p)")._
-    - Shows tokens remaining after cumulative probability filtering (default: **p=0.95**). Demonstrates a dynamic cutoff based on the probability mass.
-10. **Token Selection/Sampling**: ✨ _Central to the game's guessing mechanic._
-    - Players guess which **sequence** (length controlled by `PERMUTATION_LENGTH`, default: **3**) the model ranks highest after all filtering.
-    - The game reveals the model's top-ranked sequence and the player's score based on the match.
-    - The game proceeds by adding the _single highest-probability token_ from the final filtered distribution to the context.
-11. **Autoregressive Generation**: ✨ _Experienced throughout gameplay over multiple rounds (`MAX_DECODE_STEPS`, default: **12**)._
-    - Each predicted token becomes part of the input context for the _next_ prediction step.
-    - Demonstrates how the model builds text sequentially, one token at a time.
-
-## Background
-
-Modern language models like Gemma use transformer architectures (specifically, decoder-only transformers) to process and generate text. They work by predicting the next token in a sequence based on the preceding tokens. This prediction involves:
-
-1.  Tokenizing input text.
-2.  Calculating attention scores to weigh the influence of previous tokens.
-3.  Generating a probability distribution (logits) over all possible next tokens.
-4.  Applying sampling techniques (temperature, top-k, top-p) to refine the distribution and select the final token.
-
-Gamma makes these steps tangible by letting you guess the outcome and visualizing the intermediate stages.
 
 ## Game Modes
 
 ### Classic Game Mode
+
 The original GAMMA experience where you predict what the model will generate next.
 
-1.  Start the game (`python game.py`).
-2.  Enter a starting sentence or use the default.
-3.  In each round, the game performs a forward pass to get predictions.
-4.  If enabled (`SHOW_ATTENTION=True`), an **attention heatmap** is displayed, showing which parts of the current sequence influenced the prediction.
-5.  The game presents several possible **token sequences** (default: 3 choices, 3 tokens each) as continuations.
-6.  **Guess** which sequence the model ranked highest after applying Temperature, Top-K, and Top-P filtering.
-7.  See if your guess was correct and view the detailed **probability distributions** at each filtering stage (Raw, Temp, Top-K, Top-P).
-8.  The game adds the **single highest-probability token** (from the model's final choice) to the sequence.
-9.  Repeat for a set number of steps (`MAX_DECODE_STEPS`) or until the model generates an end-of-sequence (`<eos>`) token.
+### Tutorial Mode
 
-Your score reflects how well your guessed sequences matched the model's top-ranked sequences.
-
-### Tutorial Mode (NEW)
 An interactive learning experience that teaches you how LLMs work through guided lessons.
 
 Run with: `python game.py --tutorial`
 
-Features four comprehensive lessons:
-- **Tokenization**: Learn how text becomes numbers the model can process
-- **Attention Mechanism**: Understand how models focus on relevant context
-- **Sampling Strategies**: Master Temperature, Top-K, and Top-P filtering
-- **Autoregressive Generation**: See how models build text token by token
+### Model Comparison Mode
 
-Each lesson includes:
-- Step-by-step explanations with visual demonstrations
-- Interactive examples using your input
-- Key insights and takeaways
-- Progress tracking across lessons
-
-### Model Comparison Mode (NEW)
 Compare predictions from multiple models side-by-side to understand their different behaviors.
 
 Run with: `python game.py --comparison`
 
-Features:
-- **Side-by-side predictions**: See what different models predict for the same input
-- **Confidence analysis**: Compare how certain each model is about its predictions
-- **Agreement metrics**: Track when models agree or disagree
-- **Performance stats**: Compare prediction speed and accuracy
-- **Interactive selection**: Choose which model's prediction to use for generation
+### Mind Meld Mode (EXPERIMENTAL)
 
-Example usage:
+Dynamically switch between two different models during a single generation to combine their strengths. The swap is triggered by punctuation.
+
+Run with: `python game.py --meld --meld-models <engine1:model1> <engine2:model2>`
+
+Example:
 ```bash
-# Interactive model selection
-python game.py --comparison
-
-# Specify models directly
-python game.py --comparison --comparison-models pytorch:google/gemma-2b-it pytorch:google/gemma-2-2b-it
-
-# Compare different engine implementations
-python game.py --comparison --comparison-models pytorch:google/gemma-2b-it jax:google/gemma-2b-it
+# Meld a base model with an instruction-tuned model
+python game.py --meld --meld-models pytorch:google/gemma-2b pytorch:google/gemma-2b-it
 ```
 
-## Demo Gameplay
+## A Detailed Look at the Transformer's Forward Pass
 
-Playing locally with `gemma-2b-it` on a Macbook Air.
+This section breaks down the journey from input text to a predicted token, explaining what a real transformer model does and how GAMMA visualizes each part of that process.
 
-### Screenshots
+---
 
-_(Screenshots remain the same, conceptually showing the UI)_
-<img width="1076" alt="1" src="https://github.com/user-attachments/assets/ee54cda4-772f-4d99-b6f3-1bc5d9c3b2de" />
-... _(other screenshots)_
+#### **A. Input & Context Preparation**
 
-### Video
+##### **1. Text Tokenization**
 
-_(Video link remains the same)_
-https://github.com/user-attachments/assets/96aa4b78-8899-4b22-8b59-435b21c21ba0
+- **What Happens:** The input text is broken down into a sequence of "tokens" by the tokenizer. Each token is then mapped to a unique integer ID.
+- **In the Game (Fully Visualized):** This is the first thing you see. The game shows you the current text and, in the probability tables, the string representation of each potential next token.
+
+##### **2. Embedding & Positional Encoding**
+
+- **What Happens:** This is a crucial first step inside the model. The list of token IDs is transformed into a series of rich numerical vectors.
+  1.  **Token Embedding:** Each token ID is converted into a vector that represents its learned meaning and context.
+  2.  **Positional Encoding:** A second vector is added to encode the token's position in the sequence, which is vital for the model to understand word order.
+- **In the Game (Abstracted - Not Visualized):** This step is fundamental to the transformer but happens entirely in the background. The game's visualizations begin _after_ these initial vectors have been prepared and fed into the main body of the model.
+
+---
+
+#### **B. The Transformer's "Thinking" Process (The Decoder Blocks)**
+
+##### **3. The Decoder Block Loop**
+
+- **What Happens:** The sequence of vectors passes through a stack of identical "decoder blocks" (e.g., 18 layers for Gemma 2B). The output of one layer becomes the input for the next, allowing the model to build progressively more complex and abstract representations of the text.
+- **In the Game (Abstracted - Not Visualized):** You don't see the layer-by-layer progression. The game treats the entire stack of decoder blocks as a single computational step and only provides visualizations based on the output of the _final_ layer.
+
+##### **4. Multi-Head Self-Attention**
+
+- **What Happens:** This is the most important part of each decoder block. To decide what to say next, the model "looks back" at all previous tokens. It does this multiple times in parallel through different "attention heads," each focusing on different aspects of the text (e.g., grammar, semantics, references). The results are then combined into a single context-rich vector.
+- **In the Game (Condensed/Simplified):** This is the primary simplification in the game. Instead of showing you 12+ individual attention heatmaps for each head, the game visualizes the **averaged attention scores from all heads in only the final decoder layer**. This gives you a powerful, high-level summary of what the model ultimately focused on to make its prediction, without the overwhelming complexity of the full mechanism.
+
+##### **5. Feed-Forward Networks & Residual Connections**
+
+- **What Happens:** Within each decoder block, the output from the attention mechanism is processed by a Feed-Forward Network (FFN). These networks are where much of the model's learned "knowledge" is applied. Residual connections (adding a layer's input to its output) are also used throughout to help the model train effectively.
+- **In the Game (Abstracted - Not Visualized):** These internal computations are a core part of the transformer's processing but are not represented in the UI. They are executed by the backend library as part of the `self.model(...)` call.
+
+##### **6. Final Projection to Logits**
+
+- **What Happens:** After the final decoder block, the single vector representing the next token prediction is passed through a final linear layer. This layer projects it into a very large vector of raw, unnormalized scores—one for every single token in the model's vocabulary. These scores are called "logits".
+- **In the Game (Fully Visualized):** This is the **"Probabilities (Before any filtering)"** table. The game takes the raw logits, applies a softmax function to convert them into a probability distribution (0.0 to 1.0), and displays the most likely tokens and their probabilities. This shows you the model's raw, unfiltered opinion.
+
+---
+
+#### **C. Sampling & Player Interaction**
+
+##### **7. The Sampling Pipeline (Temperature, Top-K, Top-P)**
+
+- **What Happens:** The raw logits are filtered to make the model's output less random and more coherent. The logits are scaled by **temperature**, then the vocabulary is pruned by **Top-K** filtering, and then pruned again by **Top-P** (nucleus) sampling.
+- **In the Game (Fully Visualized):** This is the core of the game's educational value. The UI has dedicated tables to show you the list of top tokens and their probabilities **after each individual filtering stage**. This makes the effect of each sampling parameter crystal clear.
+
+##### **8. Token Selection**
+
+- **What Happens:** A standard language model would sample a single token from the final, filtered probability distribution.
+- **In the Game (Interactive Layer):** Instead of just picking the top token, this is where the "game" begins. The tool generates several plausible multi-token sequences based on the final probabilities and presents them to you as a multiple-choice question. Your challenge is to guess which one the model ranked highest.
+
+---
+
+#### **D. The Autoregressive Loop**
+
+##### **9. Appending the New Token**
+
+- **What Happens:** The newly selected token is appended to the input sequence. The new, longer sequence becomes the input for the next prediction step.
+- **In the Game (Experienced, Not Visualized):** You directly experience the result of this step as you see the "Current Context" string grow with each round. The game implicitly handles the process of feeding this new, longer sequence back to the start of the pipeline for the next turn.
 
 ## Setup and Installation
 
 ### Requirements
 
 - Python 3.8+
-- Dependencies listed in `requirements.txt` (includes PyTorch, Transformers, etc.)
-- (Optional, included in `requirements.txt`) `colorama` for better Windows terminal color support.
+- Dependencies listed in `requirements.txt` and engine-specific requirements files.
 
 ### Installation
 
 ```bash
 # Create and activate a virtual environment (recommended)
 python -m venv venv
-```
-
-```bash
-# Activate the environment:
-# On Linux/macOS:
 source venv/bin/activate
-```
 
-```
-# On Windows (cmd):
-# venv\Scripts\activate
-# On Windows (PowerShell):
-# .\venv\Scripts\Activate.ps1
-```
-
-# Install required packages from the requirements file
-
-```bash
 # Install base requirements
-pip install -r v2/requirements.txt
+pip install -r requirements.txt
 
 # Install PyTorch engine requirements (recommended)
-pip install -r v2/requirements-pytorch.txt
+pip install -r requirements-pytorch.txt
 
 # Optional: Install requirements for other engines
-# pip install -r v2/requirements-tensorflow.txt
-# pip install -r v2/requirements-jax.txt
-# pip install -r v2/requirements-onnx.txt
-# pip install -r v2/requirements-llamacpp.txt
-# pip install -r v2/requirements-mlx.txt  # Apple Silicon only
+# pip install -r requirements-tensorflow.txt
+# pip install -r requirements-jax.txt
+# pip install -r requirements-onnx.txt
+# pip install -r requirements-llamacpp.txt
+# pip install -r requirements-mlx.txt  # Apple Silicon only
 ```
 
 ### Running the Game
 
-GAMMA supports two ways to configure and run the game:
+Run the game from the project root directory:
 
-#### Interactive Mode (Recommended for beginners)
 ```bash
-# Run without arguments for interactive configuration menu
-python game.py
-```
-This will present an interactive menu where you can:
-- **Quick Start Options** (NEW):
-  - "Just Play!" - Jump straight into the game with optimal defaults
-  - "Quick Tutorial" - Start learning immediately
-  - "Quick Compare" - Instantly compare 2 popular models
-- **Full Configuration**:
-  - Choose between Classic, Tutorial, or Comparison modes
-  - Browse available models with detailed information:
-    - Page through model catalogs for each engine
-    - See model sizes, memory requirements, and descriptions
-    - Search/filter models by name or size
-    - Quick access to recommended models
-    - Select by number or enter custom paths
-  - Configure all game parameters through prompts
-  - No need to remember command-line arguments!
-
-#### Command-Line Mode (For power users)
-```bash
-# Run the game with specific settings
-python game.py --engine pytorch --model google/gemma-3-1b-it
-
-# Use 4-bit quantization to reduce memory usage
-python game.py --load-in-4bit
-
-# Run with a different engine
-python game.py --engine jax --model google/gemma-3-1b-it
-
-# Run tutorial mode directly
-python game.py --tutorial
-
-# Run comparison mode with specific models
-python game.py --comparison --comparison-models pytorch:google/gemma-2b-it pytorch:google/gemma-2-2b-it
-
-# Customize game parameters
-python game.py --temperature 0.9 --top-k 10 --steps 15 --num-choices 5
+python game.py [OPTIONS]
 ```
 
-Both methods provide access to all features - choose what works best for you!
-
-### Accessing Gemma Models
-
-You need access to Google's Gemma models. The easiest way is via Hugging Face:
-
-1.  **Hugging Face (Recommended)**:
-    - Visit a Gemma model page, e.g., [google/gemma-2b-it](https://huggingface.co/google/gemma-2b-it).
-    - Accept the terms and conditions on the Hugging Face website.
-    - Log in to Hugging Face locally using `huggingface-cli login` or set your token as an environment variable:
-      ```bash
-      # Replace your_token_here with your actual Hugging Face access token
-      export HUGGING_FACE_HUB_TOKEN=your_token_here
-      # On Windows (cmd):
-      # set HUGGING_FACE_HUB_TOKEN=your_token_here
-      # On Windows (PowerShell):
-      # $env:HUGGING_FACE_HUB_TOKEN="your_token_here"
-      ```
-    - The script will then download and cache the model on first run.
-
-_(Other options like Google AI Studio/Kaggle remain valid but require different setup)_
+Use `python game.py --help` for a full list of options.
 
 ## Project Structure
 
 ```
 gamma/
-├── game.py              # Main entry point
-├── v2/                  # Modular engine architecture
-│   ├── core/           # Core game logic
-│   │   ├── config.py   # Configuration and model definitions
-│   │   ├── engine_interface.py  # Base engine interface
-│   │   ├── game_logic.py       # Game mechanics
-│   │   ├── ui.py              # User interface
-│   │   └── explanations.py    # Token explanations
-│   └── engines/        # ML framework implementations
-│       ├── engine_factory.py   # Engine initialization
-│       ├── pytorch_engine.py   # PyTorch/Transformers (Gemma)
-│       ├── tensorflow_engine.py
-│       ├── jax_engine.py
-│       ├── onnx_engine.py
-│       ├── llama_cpp_engine.py
-│       └── mlx_engine.py
-└── README.md
+├── src/
+│   ├── core/                 # [Core game logic, UI, and interfaces](./src/core/README.md)
+│   ├── engines/              # [ML framework implementations](./src/engines/README.md)
+│   └── mind_meld/            # [Experimental model melding feature](./src/mind_meld/README.md)
+├── _archive/             # Deprecated code and experiments
+├── game.py               # Main entry point
+├── README.md
+└── requirements-*.txt    # Engine-specific requirements
 ```
 
-## Configuration
+## Project History
 
-You can configure GAMMA in three ways:
-
-### 1. Interactive Configuration (Easiest)
-Simply run `python game.py` without arguments and follow the interactive prompts to configure all settings.
-
-### 2. Command-Line Arguments
-Use specific arguments to configure the game:
-
-- `--model`: Model to use (default: `google/gemma-3-1b-it`)
-- `--temperature`: Controls randomness (default: `0.7`)
-- `--top-k`: Limits vocabulary (default: `8`)
-- `--top-p`: Nucleus sampling (default: `0.95`)
-- `--steps`: Number of game rounds (default: `8`)
-- `--num-choices`: Choices per round (default: `4`)
-- `--permutation-length`: Tokens per choice (default: `1`)
-- `--show-attention`: Display attention heatmap (default: `True`)
-- `--load-in-4bit`: Use 4-bit quantization for lower memory usage
-- `--verbose`: Show detailed explanations
-- `--tutorial`: Run tutorial mode
-- `--comparison`: Run comparison mode
-- `--comparison-models`: Models to compare (format: `engine:model_name`)
-
-Run `python game.py --help` for all options.
-
-### 3. Modify Defaults
-Edit `v2/core/config.py` to change default values permanently.
-
-## Complete Transformer Architecture Steps (Decoder-Focused)
-
-Gemma is a decoder-only model. Here's a list focusing on decoder steps, highlighting those visualized or core to the game:
-
-1.  **Tokenization (Software)**: ✨ _Input text → tokens. Implicitly used, text decoded._
-2.  Embedding Lookup: Token IDs → embedding vectors.
-3.  Positional Encoding Generation: Create positional encoding vectors.
-4.  Positional Encoding Addition: Add encodings to embeddings.
-5.  **Decoder Query Weight Matrix Multiplication**: ✨ _Input × W^Q. Affects attention._
-6.  **Decoder Key Weight Matrix Multiplication**: ✨ _Input × W^K. Affects attention._
-7.  **Decoder Value Weight Matrix Multiplication**: ✨ _Input × W^V. Affects attention._
-8.  **Query-Key Matrix Multiplication (Decoder Self-Attention)**: ✨ _QK^T. Raw attention scores._
-9.  **Scaling (Decoder Self-Attention)**: ✨ _QK^T / √d_k. Scaled scores._
-10. **Attention Mask Creation (Causal Mask)**: ✨ _Ensures tokens only attend to previous tokens. Handled by `transformers`._
-11. Padding Mask Creation (Decoder): Create padding mask if needed.
-12. **Mask Application (Decoder Self-Attention)**: ✨ _Apply causal (+ padding) mask. Handled by `transformers`._
-13. **Softmax (Decoder Self-Attention)**: ✨ _Softmax(masked, scaled QK^T). Final attention weights, visualized in heatmap (averaged)._
-14. **Attention-Value Matrix Multiplication (Decoder Self-Attention)**: ✨ _Softmax output × V. Contextualized vectors._
-15. Multi-Head Concatenation (Decoder): Concatenate attention head outputs.
-16. Multi-Head Output Projection (Decoder): Concatenated output × W^O.
-17. Residual Addition (Decoder Self-Attention): Input + attention output.
-18. Layer Normalization (Decoder Self-Attention): Normalize.
-19. Feed-Forward Layer 1 (Decoder): FFN layer 1.
-20. Add Bias 1 (Decoder FFN): Add bias.
-21. Activation (Decoder): Apply activation (e.g., GeLU).
-22. Feed-Forward Layer 2 (Decoder): FFN layer 2.
-23. Add Bias 2 (Decoder FFN): Add bias.
-24. Residual Addition (Decoder FFN): Input + FFN output.
-25. Layer Normalization (Decoder FFN): Normalize.
-    - _(Steps 5-25 repeat for each decoder layer)_
-26. **Final Logits Projection**: ✨ _Final hidden state projected to vocabulary size. Raw logits displayed._
-27. **Temperature Scaling**: ✨ _Adjusting logits. Explicitly applied and visualized._
-28. **Top-K Filtering**: ✨ _Keeping K most probable tokens. Explicitly applied and visualized._
-29. **Top-P (Nucleus) Sampling**: ✨ _Filtering by cumulative probability. Explicitly applied and visualized._
-30. **Final Token Selection**: ✨ _Selecting the single next token. Core game mechanic involves guessing sequences derived from this step._
+The `_archive` directory contains code from a previous version of this project. The `mind_meld` directory contains a restored, experimental feature for dynamically swapping and merging the states of different language models during a single generation process.

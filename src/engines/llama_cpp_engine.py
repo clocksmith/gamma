@@ -8,6 +8,7 @@ except ImportError: raise ImportError("'llama-cpp-python' library not found. Ins
 
 from core.engine_interface import LLMEngine
 from core import config as game_config
+from core import sampling
 
 def _decode_llama_token_piece(piece: bytes) -> str:
     try: return piece.decode("utf-8", errors="replace")
@@ -63,22 +64,9 @@ class LlamaCppEngine(LLMEngine):
         if logits_np.shape[0] != self.get_vocabulary_size(): raise ValueError(f"Logits dim mismatch. Expected {self.get_vocabulary_size()}, got {logits_np.shape[0]}")
         return logits_np
 
-    def _s(self, l: np.ndarray) -> np.ndarray: e_x = np.exp(l - np.max(l)); return e_x / np.sum(e_x)
-    def _t(self, l: np.ndarray, temp: float) -> np.ndarray: return l / max(temp, 1e-6) if temp > 0 else l
-    def _k(self, l: np.ndarray, k_val: int) -> np.ndarray:
-        k = min(k_val, l.size)
-        if k <= 0 or k >= l.size: return l
-        indices_to_remove = np.argpartition(l, -k)[:-k]; filtered_logits = l.copy(); filtered_logits[indices_to_remove] = -np.inf
-        return filtered_logits
-    def _p(self, l: np.ndarray, p_val: float) -> np.ndarray:
-        if p_val <= 0.0 or p_val >= 1.0: return l
-        sorted_indices = np.argsort(l)[::-1]; sorted_logits = l[sorted_indices]; cumulative_probs = np.cumsum(self._s(sorted_logits))
-        indices_to_remove_sorted = cumulative_probs > p_val; indices_to_remove_sorted[1:] = indices_to_remove_sorted[:-1].copy(); indices_to_remove_sorted[0] = False
-        final_indices_to_remove = sorted_indices[indices_to_remove_sorted]; filtered_logits = l.copy(); filtered_logits[final_indices_to_remove] = -np.inf
-        return filtered_logits
     def _top(self, l: np.ndarray, k_show: int) -> Tuple[List[str], List[float], List[int]]:
         if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs_np = self._s(l); effective_k = min(k_show if k_show > 0 else probs_np.size, probs_np.size)
+        probs_np = sampling.softmax(l); effective_k = min(k_show if k_show > 0 else probs_np.size, probs_np.size)
         top_indices_unsorted = np.argpartition(probs_np, -effective_k)[-effective_k:]; top_probs_unsorted = probs_np[top_indices_unsorted]
         sort_order = np.argsort(top_probs_unsorted)[::-1]; final_indices = top_indices_unsorted[sort_order]; final_probs = top_probs_unsorted[sort_order]
         final_indices_list = final_indices.tolist()
@@ -93,16 +81,28 @@ class LlamaCppEngine(LLMEngine):
             unk_token_id_val = getattr(self.tokenizer, "token_unk", -1)(); unk_token_id = unk_token_id_val if isinstance(unk_token_id_val, int) else -1
             default_logits = np.full(self.get_vocabulary_size(), -np.inf, dtype=np.float32)
             if unk_token_id != -1 and 0 <= unk_token_id < len(default_logits): default_logits[unk_token_id] = 0.0
-            return {"next_token_id": unk_token_id, "logits_raw": default_logits, "logits_processed": default_logits, "probabilities_raw": self._s(default_logits),
-                    "probabilities_temp": self._s(default_logits), "probabilities_top_k": self._s(default_logits), "probabilities_processed": self._s(default_logits),
+            probs_default = sampling.softmax(default_logits)
+            return {"next_token_id": unk_token_id, "logits_raw": default_logits, "logits_processed": default_logits, "probabilities_raw": probs_default,
+                    "probabilities_temp": probs_default, "probabilities_top_k": probs_default, "probabilities_processed": probs_default,
                     "top_tokens_processed": [self.get_token_text(unk_token_id)], "top_probs_processed": [1.0], "attention": None, "hidden_states": None, "forward_time": time.time() - st}
-        logits_temp = self._t(logits_raw.copy(), temperature); logits_k = self._k(logits_temp.copy(), top_k); logits_proc = self._p(logits_k.copy(), top_p)
-        probs_proc = self._s(logits_proc); next_token_id_val = int(np.argmax(probs_proc))
+        
+        logits_temp = sampling.temperature_scale(logits_raw.copy(), temperature)
+        logits_k = sampling.top_k_filter(logits_temp.copy(), top_k)
+        logits_proc = sampling.top_p_filter(logits_k.copy(), top_p)
+        
+        probs_proc = sampling.softmax(logits_proc)
+        next_token_id_val = int(np.argmax(probs_proc))
+        
         max_display_k = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
         top_texts_list, top_probs_list, _ = self._top(logits_proc, k_sh=max_display_k)
-        return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, "probabilities_raw": self._s(logits_raw),
-                "probabilities_temp": self._s(logits_temp), "probabilities_top_k": self._s(logits_k), "probabilities_processed": probs_proc,
-                "top_tokens_processed": top_texts_list, "top_probs_processed": top_probs_list, "attention": None, "hidden_states": None, "forward_time": time.time() - st}
+        
+        return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
+                "probabilities_raw": sampling.softmax(logits_raw),
+                "probabilities_temp": sampling.softmax(logits_temp), 
+                "probabilities_top_k": sampling.softmax(logits_k), 
+                "probabilities_processed": probs_proc,
+                "top_tokens_processed": top_texts_list, "top_probs_processed": top_probs_list, 
+                "attention": None, "hidden_states": None, "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
         if not self.model: raise RuntimeError("LlamaCppEngine: Model not loaded."); return -1
@@ -125,7 +125,7 @@ class LlamaCppEngine(LLMEngine):
     def get_probabilities_at_step(self, data: Any, s_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, np.ndarray): raise TypeError(f"Expected np.ndarray for LlamaCpp probabilities, got {type(data)}")
         is_probs_heuristic = (np.all(data >= -1e-6) and np.all(data <= 1.0 + 1e-6) and np.allclose(np.sum(data, axis=-1), 1.0, atol=1e-3))
-        probs_tensor = data if is_probs_heuristic else self._s(data)
+        probs_tensor = data if is_probs_heuristic else sampling.softmax(data)
         return self._top(probs_tensor, k_sh=k)
 
     def get_config_summary(self) -> Dict[str, Any]:

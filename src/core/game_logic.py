@@ -1,9 +1,9 @@
 import random
 from typing import List, Tuple, Dict, Any, Optional
 
-from .engine_interface import LLMEngine
-from . import config as cfg
-from . import ui
+from src.core.engine_interface import LLMEngine
+from src.core import config as cfg
+from src.core import ui
 
 
 def _is_code_like_or_url(token_text: str) -> bool:
