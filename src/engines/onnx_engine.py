@@ -7,9 +7,9 @@ try:
     from transformers import AutoTokenizer
 except ImportError: raise ImportError("ONNX Runtime or Transformers library not found. Install with `pip install -r requirements-onnx.txt`")
 
-from core.engine_interface import LLMEngine
-from core import config as game_config
-from core import sampling
+from src.core.engine_interface import LLMEngine
+from src.core import config as game_config
+from src.core import sampling
 
 class ONNXEngine(LLMEngine):
     def __init__(self, model_path: str, engine_specific_config: Optional[Dict[str, Any]] = None):

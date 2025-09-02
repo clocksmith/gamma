@@ -333,17 +333,16 @@ class TutorialMode:
             
             print(f"   Output: '{current_text}'")
             
-            # Update input_ids for next iteration
-            if "torch" in str(type(input_ids)):
-                import torch
-                device = input_ids.device
-                next_token_tensor = torch.tensor([[next_token_id]], device=device)
-                input_ids = torch.cat([input_ids, next_token_tensor], dim=-1)
-                if attention_mask is not None:
-                    attention_mask = torch.cat([attention_mask, torch.ones((1, 1), device=device)], dim=-1)
-            else:
-                # Handle other tensor types
-                input_ids = self._concatenate_ids(input_ids, [[next_token_id]])
+            # Update input_ids for next iteration using engine's method
+            input_ids = self.engine.append_to_input(input_ids, next_token_id)
+            
+            # Update attention mask if present
+            if attention_mask is not None:
+                # Create a ones tensor of appropriate shape
+                import numpy as np
+                ones_array = np.ones((1, 1) if len(attention_mask.shape) > 1 else (1,))
+                ones_tensor = self.engine.convert_from_numpy(ones_array)
+                attention_mask = self.engine.concatenate_tensors(attention_mask, ones_tensor, dim=-1)
             
             time.sleep(1)
         
@@ -367,10 +366,16 @@ class TutorialMode:
         return []
     
     def _concatenate_ids(self, ids1, ids2):
-        """Concatenate token IDs based on type."""
-        if hasattr(ids1, 'cat'):
-            import torch
-            return torch.cat([ids1, torch.tensor(ids2, device=ids1.device)], dim=-1)
-        elif isinstance(ids1, list):
-            return ids1 + ids2
-        return ids1
+        """Concatenate token IDs using engine abstraction."""
+        # Convert ids2 to appropriate tensor type if needed
+        import numpy as np
+        if isinstance(ids2, (list, tuple)):
+            # Flatten if nested list
+            if ids2 and isinstance(ids2[0], (list, tuple)):
+                ids2 = [item for sublist in ids2 for item in sublist]
+            ids2_array = np.array(ids2)
+            ids2_tensor = self.engine.convert_from_numpy(ids2_array)
+        else:
+            ids2_tensor = ids2
+        
+        return self.engine.concatenate_tensors(ids1, ids2_tensor, dim=-1)

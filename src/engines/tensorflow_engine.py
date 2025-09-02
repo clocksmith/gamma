@@ -7,8 +7,9 @@ try:
     import numpy as np
 except ImportError: raise ImportError("TensorFlow or Transformers library not found. Install with `pip install -r requirements-tensorflow.txt`")
 
-from core.engine_interface import LLMEngine
-from core import config as game_config
+from src.core.engine_interface import LLMEngine, TokenCategory
+from src.core import config as game_config
+from src.core import sampling
 
 class TensorFlowEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
@@ -150,8 +151,135 @@ class TensorFlowEngine(LLMEngine):
         probs_tensor = data if is_probs_heuristic else self._s(data)
         return self._top(probs_tensor, k_s=k)
 
-    def get_config_summary(self) -> Dict[str, Any]:
-        cfg_from_args = self.engine_config; summary = {"TensorFlow Version": tf.__version__, "Loaded From PyTorch Checkpoint": cfg_from_args.get("from_pt", False)}
-        gpus_list = tf.config.list_physical_devices("GPU"); summary["GPUs Detected"] = len(gpus_list) if gpus_list else "None"
-        if self.model and hasattr(self.model.config, "use_cache"): summary["Model Use Cache Config"] = self.model.config.use_cache
+    def get_engine_specific_config(self) -> Dict[str, Any]:
+        """Provide TensorFlow-specific configuration."""
+        cfg_from_args = self.engine_config
+        summary = {
+            "TensorFlow Version": tf.__version__,
+            "Loaded From PyTorch Checkpoint": cfg_from_args.get("from_pt", False)
+        }
+        gpus_list = tf.config.list_physical_devices("GPU")
+        summary["GPUs Detected"] = len(gpus_list) if gpus_list else "None"
+        if self.model and hasattr(self.model.config, "use_cache"):
+            summary["Model Use Cache Config"] = self.model.config.use_cache
         return summary
+    
+    # Implement new abstract methods
+    def convert_to_numpy(self, tensor: Any) -> np.ndarray:
+        """Convert TensorFlow tensor to numpy array."""
+        if isinstance(tensor, tf.Tensor):
+            return tensor.numpy()
+        elif isinstance(tensor, np.ndarray):
+            return tensor
+        else:
+            return np.array(tensor)
+    
+    def convert_from_numpy(self, array: np.ndarray) -> tf.Tensor:
+        """Convert numpy array to TensorFlow tensor."""
+        return tf.convert_to_tensor(array)
+    
+    def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> tf.Tensor:
+        """Concatenate TensorFlow tensors."""
+        if tensor1 is None:
+            return tensor2
+        if tensor2 is None:
+            return tensor1
+        
+        # Ensure both are tensors
+        if not isinstance(tensor1, tf.Tensor):
+            tensor1 = tf.convert_to_tensor(tensor1)
+        if not isinstance(tensor2, tf.Tensor):
+            tensor2 = tf.convert_to_tensor(tensor2)
+        
+        return tf.concat([tensor1, tensor2], axis=dim)
+    
+    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
+        """Get KV cache shape if available."""
+        if self._kv_cache is None:
+            return None
+        
+        if isinstance(self._kv_cache, tuple) and len(self._kv_cache) > 0:
+            first_layer = self._kv_cache[0]
+            if isinstance(first_layer, tuple) and len(first_layer) >= 2:
+                k_cache = first_layer[0]
+                if isinstance(k_cache, tf.Tensor):
+                    return tuple(k_cache.shape.as_list())
+        return None
+    
+    def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
+        """Attempt to bridge KV cache to another engine."""
+        if not self.has_kv_cache():
+            return False
+        
+        cache_state = self.export_kv_cache_state()
+        if cache_state is None:
+            return False
+        
+        return target_engine.import_kv_cache_state(cache_state)
+    
+    def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
+        """Export KV cache state for bridging."""
+        if self._kv_cache is None:
+            return None
+        
+        try:
+            cache_as_numpy = []
+            if isinstance(self._kv_cache, tuple):
+                for layer_cache in self._kv_cache:
+                    if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
+                        k_cache, v_cache = layer_cache[0], layer_cache[1]
+                        cache_as_numpy.append((
+                            self.convert_to_numpy(k_cache),
+                            self.convert_to_numpy(v_cache)
+                        ))
+            
+            return {
+                'cache_data': cache_as_numpy,
+                'shape': self.get_kv_cache_shape(),
+                'engine_type': 'tensorflow'
+            }
+        except Exception as e:
+            print(f"TensorFlowEngine: Failed to export KV cache: {e}")
+            return None
+    
+    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
+        """Import KV cache state from another engine."""
+        try:
+            cache_data = state.get('cache_data')
+            if not cache_data:
+                return False
+            
+            new_cache = []
+            for layer_data in cache_data:
+                if isinstance(layer_data, tuple) and len(layer_data) >= 2:
+                    k_np, v_np = layer_data
+                    k_tensor = self.convert_from_numpy(k_np)
+                    v_tensor = self.convert_from_numpy(v_np)
+                    new_cache.append((k_tensor, v_tensor))
+            
+            self._kv_cache = tuple(new_cache) if new_cache else None
+            return True
+        except Exception as e:
+            print(f"TensorFlowEngine: Failed to import KV cache: {e}")
+            return False
+    
+    def append_to_input(self, input_ids: Any, new_token_id: int) -> tf.Tensor:
+        """Append a new token to input_ids tensor."""
+        if not isinstance(input_ids, tf.Tensor):
+            input_ids = tf.convert_to_tensor(input_ids)
+        
+        # Create new token tensor
+        new_token = tf.constant([[new_token_id]], dtype=input_ids.dtype)
+        
+        # Handle different dimensions
+        if tf.rank(input_ids) == 1:
+            new_token = tf.squeeze(new_token)
+        
+        return tf.concat([input_ids, new_token], axis=-1)
+    
+    def get_device(self) -> str:
+        """Get device type."""
+        gpus = tf.config.list_physical_devices("GPU")
+        if gpus:
+            return "gpu"
+        return "cpu"

@@ -28,24 +28,23 @@ from core.interactive_menu import InteractiveMenu
 PREVIOUSLY_EXPLAINED_TOKENS_IN_FOCUS_MODE: Set[Union[int, str]] = set()
 
 
-def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1) -> Optional[Any]:
-    """Concatenate tensors/arrays based on their type."""
+def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1, engine: Optional[LLMEngine] = None) -> Optional[Any]:
+    """Concatenate tensors/arrays using engine abstraction when available."""
     if tensor1 is None: return tensor2
     if tensor2 is None: return tensor1
 
-    try:
-        if "torch" in sys.modules and isinstance(tensor1, sys.modules["torch"].Tensor) and isinstance(tensor2, sys.modules["torch"].Tensor):
-            return sys.modules["torch"].cat((tensor1, tensor2), dim=dim)
-        elif "tensorflow" in sys.modules and isinstance(tensor1, sys.modules["tensorflow"].Tensor) and isinstance(tensor2, sys.modules["tensorflow"].Tensor):
-            return sys.modules["tensorflow"].concat([tensor1, tensor2], axis=dim if dim == -1 else dim)
-        elif "jax" in sys.modules and hasattr(tensor1, "device_buffer") and hasattr(tensor2, "device_buffer"):
-            return sys.modules["jax"].numpy.concatenate((tensor1, tensor2), axis=dim if dim == -1 else dim)
-        elif "numpy" in sys.modules and isinstance(tensor1, sys.modules["numpy"].ndarray) and isinstance(tensor2, sys.modules["numpy"].ndarray):
-            return sys.modules["numpy"].concatenate((tensor1, tensor2), axis=dim if dim == -1 else dim)
-        elif isinstance(tensor1, list) and isinstance(tensor2, list):
-            return tensor1 + tensor2
-    except Exception as e:
-        print(f"Warning: Failed to concatenate tensors/lists ({type(tensor1)}, {type(tensor2)}): {e}")
+    # If engine is provided, use its abstraction
+    if engine is not None:
+        try:
+            return engine.concatenate_tensors(tensor1, tensor2, dim=dim)
+        except Exception as e:
+            print(f"Warning: Failed to concatenate using engine abstraction: {e}")
+    
+    # Fallback for lists
+    if isinstance(tensor1, list) and isinstance(tensor2, list):
+        return tensor1 + tensor2
+    
+    print(f"Warning: Could not concatenate tensors of types ({type(tensor1)}, {type(tensor2)})")
     return None
 
 
@@ -495,57 +494,36 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
             print(f"\n[Debug] Added token: '{next_token_text}' (ID: {next_token_id}) -> Decoded: '{decoded_token}'")
             print(f"[Debug] Full text now: '{current_full_text}'")
         
-        # Update tensor tracking - create tensor directly from token ID
-        if "torch" in sys.modules:
-            torch = sys.modules["torch"]
-            device = full_history_input_ids.device if hasattr(full_history_input_ids, 'device') else 'cpu'
-            next_token_tensor = torch.tensor([[next_token_id]], device=device)
-        elif "tensorflow" in sys.modules:
-            tf = sys.modules["tensorflow"]
-            next_token_tensor = tf.constant([[next_token_id]], dtype=full_history_input_ids.dtype if hasattr(full_history_input_ids, 'dtype') else tf.int32)
-        elif "jax" in sys.modules:
-            jnp = sys.modules["jax"].numpy
-            next_token_tensor = jnp.array([[next_token_id]])
-        else:
-            # Fallback for other engines
-            next_token_tensor = [[next_token_id]]
+        # Update tensor tracking using engine abstraction
+        import numpy as np
+        next_token_array = np.array([[next_token_id]])
+        next_token_tensor = engine.convert_from_numpy(next_token_array)
         
         # Ensure proper dimensions for concatenation
-        full_history_input_ids = _concatenate_tensors(full_history_input_ids, next_token_tensor, dim=-1)
+        full_history_input_ids = _concatenate_tensors(full_history_input_ids, next_token_tensor, dim=-1, engine=engine)
         
         # Debug output to verify accumulation
         if args.verbose and hasattr(full_history_input_ids, 'shape'):
             print(f"[Debug] Input IDs shape: {full_history_input_ids.shape}")
         
         if full_history_attention_mask is not None:
-            ones_tensor = None
-            if "torch" in sys.modules and hasattr(full_history_attention_mask, "new_ones"):
-                # Get the correct shape for the new attention mask element
-                batch_size = full_history_attention_mask.shape[0] if full_history_attention_mask.dim() > 1 else 1
-                ones_tensor = full_history_attention_mask.new_ones((batch_size, 1))
-            elif "tensorflow" in sys.modules:
-                batch_size = full_history_attention_mask.shape[0] if len(full_history_attention_mask.shape) > 1 else 1
-                ones_tensor = sys.modules["tensorflow"].ones(
-                    [batch_size, 1],
-                    dtype=full_history_attention_mask.dtype
-                )
-            elif "jax" in sys.modules:
-                batch_size = full_history_attention_mask.shape[0] if len(full_history_attention_mask.shape) > 1 else 1
-                ones_tensor = sys.modules["jax"].numpy.ones(
-                    (batch_size, 1),
-                    dtype=full_history_attention_mask.dtype
-                )
+            # Create ones tensor using engine abstraction
+            import numpy as np
+            batch_size = 1
+            if hasattr(full_history_attention_mask, 'shape'):
+                if len(full_history_attention_mask.shape) > 1:
+                    batch_size = full_history_attention_mask.shape[0]
+            
+            ones_array = np.ones((batch_size, 1))
+            ones_tensor = engine.convert_from_numpy(ones_array)
             
             if ones_tensor is not None:
-                # Ensure dimensions match before concatenation
-                if full_history_attention_mask.dim() == 1:
-                    full_history_attention_mask = full_history_attention_mask.unsqueeze(0)
-                if ones_tensor.dim() == full_history_attention_mask.dim():
-                    full_history_attention_mask = _concatenate_tensors(
-                        full_history_attention_mask,
-                        ones_tensor,
-                        dim=-1
-                    )
+                full_history_attention_mask = _concatenate_tensors(
+                    full_history_attention_mask,
+                    ones_tensor,
+                    dim=-1,
+                    engine=engine
+                )
         
         incremental_input_ids_for_next_pred = next_token_tensor
     

@@ -9,9 +9,9 @@ try:
     import numpy as np
 except ImportError: raise ImportError("JAX related libraries (jax, jaxlib, flax, transformers) not found. Install with `pip install -r requirements-jax.txt`")
 
-from core.engine_interface import LLMEngine
-from core import config as game_config
-from core import sampling
+from src.core.engine_interface import LLMEngine
+from src.core import config as game_config
+from src.core import sampling
 
 
 class JaxEngine(LLMEngine):

@@ -3,22 +3,25 @@ Vocabulary translation and alignment strategies for Mind Meld.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Set, Tuple
+from typing import Any, Dict, Set, Tuple, TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from src.core.engine_interface import LLMEngine
 
 class VocabularyTranslator(ABC):
     """Abstract base class for translating logits between different vocabularies."""
 
     @abstractmethod
-    def translate_logits(self, source_logits: np.ndarray, source_tokenizer: Any, target_tokenizer: Any) -> np.ndarray:
+    def translate_logits(self, source_logits: np.ndarray, source_engine: 'LLMEngine', target_engine: 'LLMEngine') -> np.ndarray:
         """
         Translates logits from the source model's vocabulary space to the target's.
 
         Args:
             source_logits: A NumPy array of logits from the source model.
-            source_tokenizer: The tokenizer of the source model.
-            target_tokenizer: The tokenizer of the target model.
+            source_engine: The source LLM engine.
+            target_engine: The target LLM engine.
 
         Returns:
             A NumPy array of logits aligned with the target model's vocabulary.
@@ -54,12 +57,16 @@ class VocabularyIntersectionTranslator(VocabularyTranslator):
         print(f"Found {len(intersection_ids)} tokens in common.")
         return intersection_ids
 
-    def translate_logits(self, source_logits: np.ndarray, source_tokenizer: Any, target_tokenizer: Any) -> np.ndarray:
+    def translate_logits(self, source_logits: np.ndarray, source_engine: 'LLMEngine', target_engine: 'LLMEngine') -> np.ndarray:
         """
         Filters logits, keeping only those for tokens present in both vocabularies.
         This implementation assumes the target logits will be the same size as the source,
         but with non-intersection tokens masked.
         """
+        # Access tokenizers through engines (temporary until full abstraction)
+        source_tokenizer = source_engine.tokenizer
+        target_tokenizer = target_engine.tokenizer
+        
         if source_tokenizer.vocab_size != target_tokenizer.vocab_size or source_tokenizer.get_vocab() != target_tokenizer.get_vocab():
             # This is the complex case: different tokenizers
             # We will create a mask for the source logits

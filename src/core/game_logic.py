@@ -40,8 +40,11 @@ def generate_choices(
     top_tokens_texts, _, top_tokens_ids = engine.get_probabilities_at_step(processed_logits, "final_for_choices", k=k_for_pool)
 
     if not top_tokens_texts:
-        unk_token_text = engine.get_token_text(getattr(engine.tokenizer, "unk_token_id", -1))
-        unk_token_info = (unk_token_text, getattr(engine.tokenizer, "unk_token_id", -1))
+        unk_token_id = engine.get_unk_token_id()
+        if unk_token_id is None:
+            unk_token_id = -1
+        unk_token_text = engine.get_token_text(unk_token_id)
+        unk_token_info = (unk_token_text, unk_token_id)
         return [[unk_token_info] * permutation_length] * num_choices, [unk_token_info] * permutation_length
 
     # Filter out special tokens from the pool
@@ -104,13 +107,17 @@ def generate_choices(
         if len(word_like_pool) < num_choices * permutation_length:
             distractor_candidate_pool_info.extend(other_pool)
         if not distractor_candidate_pool_info:
-            unk_id = getattr(engine.tokenizer, "unk_token_id", -1)
+            unk_id = engine.get_unk_token_id()
+            if unk_id is None:
+                unk_id = -1
             distractor_candidate_pool_info = [(engine.get_token_text(unk_id), unk_id)]
     else:
         distractor_candidate_pool_info = full_token_pool_info
 
     if not distractor_candidate_pool_info:
-        unk_id = getattr(engine.tokenizer, "unk_token_id", -1)
+        unk_id = engine.get_unk_token_id()
+        if unk_id is None:
+            unk_id = -1
         distractor_candidate_pool_info = [(engine.get_token_text(unk_id), unk_id)]
 
     random.shuffle(distractor_candidate_pool_info)
@@ -124,7 +131,9 @@ def generate_choices(
         temp_pool_for_this_choice = list(distractor_candidate_pool_info)
         for _ in range(permutation_length):
             if not temp_pool_for_this_choice:
-                unk_id = getattr(engine.tokenizer, "unk_token_id", -1)
+                unk_id = engine.get_unk_token_id()
+                if unk_id is None:
+                    unk_id = -1
                 current_distractor_info.append((engine.get_token_text(unk_id), unk_id))
                 continue
             sampled_token_info_tuple = random.choice(temp_pool_for_this_choice)

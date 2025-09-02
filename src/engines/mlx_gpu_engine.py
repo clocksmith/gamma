@@ -13,8 +13,8 @@ try:
 except ImportError:
     raise ImportError("MLX libraries (mlx, mlx-lm) not found. Install with `pip install mlx mlx-lm` (Apple Silicon recommended).")
 
-from core.engine_interface import LLMEngine
-from core import config as game_config
+from src.core.engine_interface import LLMEngine
+from src.core import config as game_config
 
 class MLXGPUEngine(LLMEngine):
     """High-performance MLX engine optimized for Apple Silicon GPU/Neural Engine"""

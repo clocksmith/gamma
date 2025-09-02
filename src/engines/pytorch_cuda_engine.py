@@ -12,8 +12,8 @@ try:
 except ImportError:
     raise ImportError("GPU engine requires PyTorch and transformers. Install with: pip install torch transformers bitsandbytes accelerate")
 
-from core.engine_interface import LLMEngine
-from core import config as game_config
+from src.core.engine_interface import LLMEngine
+from src.core import config as game_config
 
 class PyTorchCUDAEngine(LLMEngine):
     """High-performance CUDA-accelerated PyTorch engine with optimizations for speed"""
@@ -276,8 +276,8 @@ class PyTorchCUDAEngine(LLMEngine):
         if hasattr(outputs, "past_key_values"):
             self._kv_cache = outputs.past_key_values
         
-        # Process logits
-        logits = outputs.logits[:, -1, :].float()  # Convert to float32 for processing
+        # Process logits - ensure float32 for MPS compatibility
+        logits = outputs.logits[:, -1, :].to(torch.float32)  # Convert to float32 for processing
         
         # Apply temperature
         if temperature > 0:

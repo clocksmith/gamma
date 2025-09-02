@@ -1,19 +1,36 @@
 import time
 from typing import List, Tuple, Optional, Dict, Any
+import numpy as np
 
 try:
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 except ImportError: raise ImportError("PyTorch-related libraries (transformers, torch, bitsandbytes, accelerate) not found. `pip install -r requirements-pytorch.txt`")
 
-from core.engine_interface import LLMEngine
-from core import config as game_config
-from core import sampling
+from src.core.engine_interface import LLMEngine, TokenCategory
+from src.core import config as game_config
+from src.core import sampling
 
 class PyTorchEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
         super().__init__(model_name, engine_specific_config)
         self._device: Optional[torch.device] = None
+    
+    def _safe_to_float32(self, tensor: torch.Tensor) -> torch.Tensor:
+        """Safely convert tensor to float32, handling MPS and bfloat16 compatibility."""
+        # Always explicitly convert to float32 to avoid float64 issues
+        return tensor.to(torch.float32)
+    
+    def _safe_dtype_conversion(self, tensor: torch.Tensor, target_dtype: torch.dtype) -> torch.Tensor:
+        """Safely convert tensor dtype, handling MPS limitations."""
+        # MPS doesn't support float64, always use float32 instead
+        if hasattr(tensor.device, 'type') and tensor.device.type == 'mps':
+            if target_dtype == torch.float64 or target_dtype == torch.double:
+                target_dtype = torch.float32
+            # Also check if the target dtype is unsupported half types on MPS
+            if target_dtype == torch.bfloat16:
+                target_dtype = torch.float32
+        return tensor.to(target_dtype)
 
     def load(self):
         # Gemma-3 models require trust_remote_code=True
@@ -198,22 +215,35 @@ class PyTorchEngine(LLMEngine):
             l_raw[0] = 1.0  # Give some probability to first token
         
         # Convert to NumPy for sampling functions
-        # Convert to float32 first if bfloat16 to avoid numpy compatibility issues
-        if l_raw.dtype == torch.bfloat16:
-            logits_np = l_raw.float().cpu().numpy()
-        else:
-            logits_np = l_raw.cpu().numpy()
+        # Use safe conversion to handle MPS and bfloat16
+        logits_np = self._safe_to_float32(l_raw).cpu().numpy()
         
         # Apply transformations using the sampling module
         l_temp_np = sampling.temperature_scale(logits_np, temperature)
         l_k_np = sampling.top_k_filter(l_temp_np, top_k)
         l_proc_np = sampling.top_p_filter(l_k_np, top_p)
         
-        # Convert back to torch tensors (preserving original dtype)
+        # Convert back to torch tensors (preserving original dtype, but respecting MPS limitations)
         original_dtype = l_raw.dtype
-        l_temp = torch.from_numpy(l_temp_np).to(self._device).to(original_dtype)
-        l_k = torch.from_numpy(l_k_np).to(self._device).to(original_dtype)
-        l_proc = torch.from_numpy(l_proc_np).to(self._device).to(original_dtype)
+        
+        # Ensure numpy arrays are float32 before converting to torch
+        l_temp_np = l_temp_np.astype(np.float32)
+        l_k_np = l_k_np.astype(np.float32)
+        l_proc_np = l_proc_np.astype(np.float32)
+        
+        # For MPS, we should keep everything as float32
+        if hasattr(self._device, 'type') and self._device.type == 'mps':
+            l_temp = torch.from_numpy(l_temp_np).to(self._device).to(torch.float32)
+            l_k = torch.from_numpy(l_k_np).to(self._device).to(torch.float32)
+            l_proc = torch.from_numpy(l_proc_np).to(self._device).to(torch.float32)
+            # MPS doesn't support bfloat16 or float64, keep as float32
+        else:
+            l_temp = torch.from_numpy(l_temp_np).to(self._device)
+            l_temp = self._safe_dtype_conversion(l_temp, original_dtype)
+            l_k = torch.from_numpy(l_k_np).to(self._device)
+            l_k = self._safe_dtype_conversion(l_k, original_dtype)
+            l_proc = torch.from_numpy(l_proc_np).to(self._device)
+            l_proc = self._safe_dtype_conversion(l_proc, original_dtype)
         
         # Get probabilities using torch softmax
         p_proc = self._softmax_torch(l_proc)
@@ -226,11 +256,29 @@ class PyTorchEngine(LLMEngine):
         next_id_val = torch.argmax(p_proc, dim=-1).item()
         max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
         top_txts, top_p_list, _ = self._top(l_proc, k_show=max_dk, is_probs=False)  # l_proc is logits, not probs
-        return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, "probabilities_raw": self._softmax_torch(l_raw),
-                "probabilities_temp": self._softmax_torch(l_temp), "probabilities_top_k": self._softmax_torch(l_k), "probabilities_processed": p_proc,
-                "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
-                "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
-                "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), "forward_time": time.time() - st}
+        
+        # For MPS, ensure all tensors used for softmax are float32
+        if hasattr(self._device, 'type') and self._device.type == 'mps':
+            l_raw_f32 = l_raw.to(torch.float32)
+            return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, 
+                    "probabilities_raw": self._softmax_torch(l_raw_f32),
+                    "probabilities_temp": self._softmax_torch(l_temp), 
+                    "probabilities_top_k": self._softmax_torch(l_k), 
+                    "probabilities_processed": p_proc,
+                    "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
+                    "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
+                    "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), 
+                    "forward_time": time.time() - st}
+        else:
+            return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, 
+                    "probabilities_raw": self._softmax_torch(l_raw),
+                    "probabilities_temp": self._softmax_torch(l_temp), 
+                    "probabilities_top_k": self._softmax_torch(l_k), 
+                    "probabilities_processed": p_proc,
+                    "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
+                    "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
+                    "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), 
+                    "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
         if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded.")
@@ -303,6 +351,11 @@ class PyTorchEngine(LLMEngine):
         if not isinstance(data, torch.Tensor): 
             raise TypeError(f"Expected torch.Tensor for probabilities, got {type(data)}")
         
+        # For MPS, ensure we're working with float32
+        if hasattr(data.device, 'type') and data.device.type == 'mps':
+            if data.dtype in [torch.bfloat16, torch.float64, torch.double]:
+                data = data.to(torch.float32)
+        
         # Check if data contains valid values
         if torch.isnan(data).any() or torch.isinf(data).all():
             # Return empty results for invalid data
@@ -312,7 +365,7 @@ class PyTorchEngine(LLMEngine):
         is_probs_heuristic = (
             data.ge(0.0).all() and 
             data.le(1.0).all() and 
-            torch.isclose(data.sum(dim=-1), torch.tensor(1.0, device=data.device, dtype=data.dtype), atol=1e-3).all()
+            torch.isclose(data.sum(dim=-1), torch.tensor(1.0, device=data.device, dtype=torch.float32), atol=1e-3).all()
         )
         
         if is_probs_heuristic:
@@ -335,11 +388,159 @@ class PyTorchEngine(LLMEngine):
         
         return self._top(probs_tensor, k_show=k, is_probs=True)  # Pass is_probs=True since we already have probabilities
 
-    def get_config_summary(self) -> Dict[str, Any]:
-        cfg_args = self.engine_config; summary = {"Quantization": "None", "Attn Impl": cfg_args.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
-                                                "Device Map": cfg_args.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP),
-                                                "KV Cache Used": cfg_args.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE)}
-        if cfg_args.get("load_in_4bit"): summary["Quantization"] = f"4-bit ({cfg_args.get('bnb_4bit_compute_dtype', 'bfloat16')})"
-        elif cfg_args.get("load_in_8bit"): summary["Quantization"] = "8-bit"
-        if self._device: summary["Effective Device"] = str(self._device)
+    def get_engine_specific_config(self) -> Dict[str, Any]:
+        """Provide PyTorch-specific configuration."""
+        cfg_args = self.engine_config
+        summary = {
+            "Quantization": "None",
+            "PyTorch Attn Impl": cfg_args.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
+            "Device Map": cfg_args.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP),
+            "KV Cache Used": cfg_args.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE)
+        }
+        if cfg_args.get("load_in_4bit"): 
+            summary["Quantization"] = f"4-bit ({cfg_args.get('bnb_4bit_compute_dtype', 'bfloat16')})"
+        elif cfg_args.get("load_in_8bit"): 
+            summary["Quantization"] = "8-bit"
+        if self._device: 
+            summary["Effective Device"] = str(self._device)
         return summary
+    
+    # Implement new abstract methods
+    def convert_to_numpy(self, tensor: Any) -> np.ndarray:
+        """Convert PyTorch tensor to numpy array."""
+        if isinstance(tensor, torch.Tensor):
+            # Use safe conversion for MPS and bfloat16 compatibility
+            return self._safe_to_float32(tensor).cpu().numpy()
+        elif isinstance(tensor, np.ndarray):
+            return tensor
+        else:
+            return np.array(tensor)
+    
+    def convert_from_numpy(self, array: np.ndarray) -> torch.Tensor:
+        """Convert numpy array to PyTorch tensor."""
+        if not self._device:
+            self._device = torch.device('cpu')
+        
+        # Convert numpy array to tensor
+        tensor = torch.from_numpy(array)
+        
+        # For MPS, ensure we don't use float64
+        if hasattr(self._device, 'type') and self._device.type == 'mps':
+            if tensor.dtype == torch.float64:
+                tensor = tensor.to(torch.float32)
+        
+        return tensor.to(self._device)
+    
+    def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> torch.Tensor:
+        """Concatenate PyTorch tensors."""
+        if tensor1 is None:
+            return tensor2
+        if tensor2 is None:
+            return tensor1
+        
+        # Ensure both are tensors
+        if not isinstance(tensor1, torch.Tensor):
+            tensor1 = torch.tensor(tensor1, device=self._device)
+        if not isinstance(tensor2, torch.Tensor):
+            tensor2 = torch.tensor(tensor2, device=self._device)
+        
+        # Ensure same device
+        if tensor1.device != tensor2.device:
+            tensor2 = tensor2.to(tensor1.device)
+        
+        return torch.cat((tensor1, tensor2), dim=dim)
+    
+    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
+        """Get KV cache shape if available."""
+        if self._kv_cache is None:
+            return None
+        
+        if isinstance(self._kv_cache, tuple) and len(self._kv_cache) > 0:
+            # Typically (num_layers, 2, batch_size, num_heads, seq_len, head_dim)
+            first_layer = self._kv_cache[0]
+            if isinstance(first_layer, tuple) and len(first_layer) >= 2:
+                k_cache = first_layer[0]
+                if isinstance(k_cache, torch.Tensor):
+                    return tuple(k_cache.shape)
+        return None
+    
+    def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
+        """Attempt to bridge KV cache to another engine."""
+        if not self.has_kv_cache():
+            return False
+        
+        # Export our cache state
+        cache_state = self.export_kv_cache_state()
+        if cache_state is None:
+            return False
+        
+        # Import into target
+        return target_engine.import_kv_cache_state(cache_state)
+    
+    def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
+        """Export KV cache state for bridging."""
+        if self._kv_cache is None:
+            return None
+        
+        try:
+            # Convert cache to numpy for portability
+            cache_as_numpy = []
+            if isinstance(self._kv_cache, tuple):
+                for layer_cache in self._kv_cache:
+                    if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
+                        k_cache, v_cache = layer_cache[0], layer_cache[1]
+                        cache_as_numpy.append((
+                            self.convert_to_numpy(k_cache),
+                            self.convert_to_numpy(v_cache)
+                        ))
+            
+            return {
+                'cache_data': cache_as_numpy,
+                'shape': self.get_kv_cache_shape(),
+                'engine_type': 'pytorch'
+            }
+        except Exception as e:
+            print(f"PyTorchEngine: Failed to export KV cache: {e}")
+            return None
+    
+    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
+        """Import KV cache state from another engine."""
+        try:
+            cache_data = state.get('cache_data')
+            if not cache_data:
+                return False
+            
+            # Convert numpy arrays back to PyTorch tensors
+            new_cache = []
+            for layer_data in cache_data:
+                if isinstance(layer_data, tuple) and len(layer_data) >= 2:
+                    k_np, v_np = layer_data
+                    k_tensor = self.convert_from_numpy(k_np)
+                    v_tensor = self.convert_from_numpy(v_np)
+                    new_cache.append((k_tensor, v_tensor))
+            
+            self._kv_cache = tuple(new_cache) if new_cache else None
+            return True
+        except Exception as e:
+            print(f"PyTorchEngine: Failed to import KV cache: {e}")
+            return False
+    
+    def append_to_input(self, input_ids: Any, new_token_id: int) -> torch.Tensor:
+        """Append a new token to input_ids tensor."""
+        if not isinstance(input_ids, torch.Tensor):
+            input_ids = torch.tensor(input_ids, device=self._device)
+        
+        # Create new token tensor
+        new_token = torch.tensor([[new_token_id]], device=input_ids.device)
+        
+        # Handle different dimensions
+        if input_ids.dim() == 1:
+            new_token = new_token.squeeze(0)
+        
+        return torch.cat([input_ids, new_token], dim=-1)
+    
+    def get_device(self) -> str:
+        """Get device type."""
+        if self._device:
+            return str(self._device.type)
+        return "cpu"

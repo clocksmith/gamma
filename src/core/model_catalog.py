@@ -22,6 +22,70 @@ class ModelInfo:
 MODEL_CATALOG = {
     "pytorch": [
         ModelInfo(
+            "google/gemma-3-1b-it",
+            "pytorch",
+            "1B",
+            "1B, Instruct, versatile.",
+            "4-6GB",
+            recommended=True
+        ),
+        ModelInfo(
+            "google/gemma-3-4b-it",
+            "pytorch",
+            "4B",
+            "4B, Instruct, good balance.",
+            "12-16GB"
+        ),
+        ModelInfo(
+            "google/gemma-3-12b-it",
+            "pytorch",
+            "12B",
+            "12B, Instruct, powerful.",
+            "32-48GB"
+        ),
+        ModelInfo(
+            "google/gemma-3-27b-it",
+            "pytorch",
+            "27B",
+            "27B, Instruct, very strong.",
+            "64-96GB"
+        ),
+        ModelInfo(
+            "google/gemma-3-1b",
+            "pytorch",
+            "1B",
+            "1B, Base, for fine-tuning.",
+            "4-6GB"
+        ),
+        ModelInfo(
+            "google/gemma-3-4b",
+            "pytorch",
+            "4B",
+            "4B, Base.",
+            "12-16GB"
+        ),
+        ModelInfo(
+            "google/gemma-3-12b",
+            "pytorch",
+            "12B",
+            "12B, Base.",
+            "32-48GB"
+        ),
+        ModelInfo(
+            "google/gemma-3-27b",
+            "pytorch",
+            "27B",
+            "27B, Base, very large.",
+            "64-96GB"
+        ),
+        ModelInfo(
+            "google/gemma-3n-e4b-it",
+            "pytorch",
+            "4B",
+            "New 4B, Instruct, efficient.",
+            "12-16GB"
+        ),
+        ModelInfo(
             "google/gemma-2b-it",
             "pytorch",
             "2B",

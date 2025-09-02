@@ -71,23 +71,14 @@ def display_intro():
     wrap_print("Explore how context (via attention) and sampling parameters (Temperature, Top-K, Top-P) influence the LLM's choices.")
 
 def _get_engine_specific_display_config(args: argparse.Namespace) -> Dict[str, Any]:
-    engine_cfg_display = {}
-    engine_name = args.engine
-    if engine_name == "pytorch":
-        engine_cfg_display["PyTorch Attn Impl"] = getattr(args, "pytorch_attn", cfg.PYTORCH_ATTN_IMPLEMENTATION)
-        if getattr(args, "load_in_4bit", False): engine_cfg_display["Quantization"] = f"4-bit ({getattr(args, 'bnb_4bit_compute_dtype', 'bfloat16')})"
-        elif getattr(args, "load_in_8bit", False): engine_cfg_display["Quantization"] = "8-bit"
-        engine_cfg_display["KV Cache Used"] = getattr(args, "use_kv_cache", cfg.PYTORCH_USE_KV_CACHE)
-    elif engine_name == "llamacpp":
-        engine_cfg_display["GPU Layers"] = getattr(args, "llama_cpp_n_gpu_layers", cfg.LLAMA_CPP_N_GPU_LAYERS)
-        engine_cfg_display["Context Size"] = getattr(args, "llama_cpp_n_ctx", cfg.LLAMA_CPP_N_CTX)
-    elif engine_name == "onnx":
-        engine_cfg_display["ONNX Providers"] = getattr(args, "onnx_providers", cfg.ONNX_PROVIDERS)
-        engine_cfg_display["ONNX Tokenizer"] = getattr(args, "onnx_tokenizer", "Not Set (CRITICAL!)")
-    elif engine_name == "jax": engine_cfg_display["JAX DType"] = getattr(args, "jax_dtype", cfg.JAX_DTYPE)
-    elif engine_name == "mlx":
-        if getattr(args, "mlx_adapter_path", None): engine_cfg_display["MLX Adapter"] = args.mlx_adapter_path
-    return engine_cfg_display
+    """Get engine-specific configuration for display.
+    
+    This should be delegated to the engine itself once loaded,
+    but for pre-load CLI configuration, we maintain minimal mappings.
+    """
+    # Pass all engine-specific args as-is to the engine
+    # The engine will handle its own configuration display
+    return {"Engine": args.engine}
 
 def display_current_config(args: argparse.Namespace, title: str = "Current Game Configuration"):
     print_header(title)
@@ -107,16 +98,13 @@ def display_current_config(args: argparse.Namespace, title: str = "Current Game 
     print_separator("-")
 
 def _get_engine_cli_params(engine_name: str, current_args: argparse.Namespace) -> List[Tuple[str, str, str, Any, Optional[str]]]:
-    params = []
-    if engine_name == "pytorch":
-        params.extend([("q4", "load_in_4bit", "Load in 4-bit (PT)", lambda v: v.lower() in ["true", "yes", "y", "1"], "yes/no"),
-                       ("q8", "load_in_8bit", "Load in 8-bit (PT)", lambda v: v.lower() in ["true", "yes", "y", "1"], "yes/no"),
-                       ("kv", "use_kv_cache", "Use KV Cache (PT)", lambda v: v.lower() in ["true", "yes", "y", "1"], "yes/no")])
-    elif engine_name == "llamacpp":
-        params.extend([("gpul", "llama_cpp_n_gpu_layers", "GPU Layers (Llama.cpp)", lambda v: int(v), "integer"),
-                       ("ctx", "llama_cpp_n_ctx", "Context Size (Llama.cpp)", lambda v: int(v), "integer")])
-    elif engine_name == "onnx": params.append(("otok", "onnx_tokenizer", "ONNX Tokenizer Path/Name", lambda v: str(v), "string"))
-    return params
+    """Get engine-specific CLI parameters.
+    
+    Minimal configuration needed for pre-load setup.
+    Engines should handle their own parameter validation.
+    """
+    # Return empty list - engines handle their own parameters
+    return []
 
 def confirm_or_modify_config(args: argparse.Namespace) -> bool:
     param_details_core = {

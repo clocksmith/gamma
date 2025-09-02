@@ -6,9 +6,9 @@ try:
     from llama_cpp import Llama
 except ImportError: raise ImportError("'llama-cpp-python' library not found. Install with `pip install -r requirements-llamacpp.txt`")
 
-from core.engine_interface import LLMEngine
-from core import config as game_config
-from core import sampling
+from src.core.engine_interface import LLMEngine
+from src.core import config as game_config
+from src.core import sampling
 
 def _decode_llama_token_piece(piece: bytes) -> str:
     try: return piece.decode("utf-8", errors="replace")
