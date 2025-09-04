@@ -1,24 +1,28 @@
 # GAMMA
 
 **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
+
 **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
+
 **G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
 
 ## Overview
 
 Gamma is a hands-on tool that lets you peer inside open source language models to see how they thinks and predicts text. By turning complex AI concepts into a guessing game, Gamma makes advanced machine learning techniques accessible and fun to explore. You compete against the model, trying to predict its next token choices while visualizing its internal state.
 
+<img width="1042" height="895" alt="Gamma Gameplay Screenshot 1" src="https://github.com/user-attachments/assets/8f593f3c-fb2b-46ea-b1ce-09c17a165dc4" />
+
 ## Architecture
 
 GAMMA uses a modular architecture with a pluggable engine system, allowing the core application to run models from a variety of machine learning frameworks. This makes it easy to compare different models and to extend the tool to support new backends. [Learn more about the engine framework...](./src/engines/README.md)
-
-<img width="1084" alt="Gamma Gameplay Screenshot" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
 
 ## Game Modes
 
 ### Classic Game Mode
 
 The original GAMMA experience where you predict what the model will generate next.
+
+<img width="1042" height="892" alt="Gemma Gameplay Screenshot 2" src="https://github.com/user-attachments/assets/cac10a62-3706-496f-93f0-a812d813b832" />
 
 ### Tutorial Mode
 
