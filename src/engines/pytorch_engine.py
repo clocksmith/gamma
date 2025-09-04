@@ -13,6 +13,7 @@ from src.core import sampling
 
 class PyTorchEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
+        print("PyTorchEngine INITIALIZED WITH NEW CODE")
         super().__init__(model_name, engine_specific_config)
         self._device: Optional[torch.device] = None
     
@@ -281,6 +282,7 @@ class PyTorchEngine(LLMEngine):
                     "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
+        print("GET_VOCAB_SIZE CALLED")
         if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded.")
         # Handle different ways vocab_size might be stored
         if hasattr(self.tokenizer, 'vocab_size'):
@@ -404,6 +406,17 @@ class PyTorchEngine(LLMEngine):
         if self._device: 
             summary["Effective Device"] = str(self._device)
         return summary
+
+    def get_num_layers(self) -> int:
+        """Get the number of layers in the model."""
+        if hasattr(self.model, 'config') and hasattr(self.model.config, 'num_hidden_layers'):
+            return self.model.config.num_hidden_layers
+        return 0
+
+    def get_vocab(self) -> Dict[str, int]:
+        """Get the model's vocabulary."""
+        if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded.")
+        return self.tokenizer.get_vocab()
     
     # Implement new abstract methods
     def convert_to_numpy(self, tensor: Any) -> np.ndarray:

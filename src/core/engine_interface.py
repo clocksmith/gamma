@@ -283,6 +283,16 @@ class LLMEngine(ABC):
         pass
     
     @abstractmethod
+    def get_num_layers(self) -> int:
+        """Get the number of layers in the model."""
+        pass
+
+    @abstractmethod
+    def get_vocab(self) -> Dict[str, int]:
+        """Get the model's vocabulary."""
+        pass
+
+    @abstractmethod
     def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
         """Attempt to bridge KV cache to another engine."""
         pass

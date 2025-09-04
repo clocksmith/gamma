@@ -1,16 +1,16 @@
-# Engine Implementations
+# Engine Framework
 
-This directory contains the concrete implementations of the `LLMEngine` interface defined in `core/engine_interface.py`.
+GAMMA uses a modular engine architecture that allows the core game logic to interact with models running on different machine learning frameworks. This makes the tool highly extensible and allows users to select the backend that best suits their hardware and the models they wish to explore.
 
-Each file in this directory is a self-contained engine for a specific machine learning framework (e.g., PyTorch, TensorFlow, JAX). The purpose of each engine is to act as an **adapter** between its specific framework and the common interface expected by the main application.
+Each engine is an implementation of the `LLMEngine` interface defined in `src/core/engine_interface.py`.
 
-## Responsibilities of an Engine:
+## Supported Frameworks
 
-- **Model Loading**: Loading the model and tokenizer for its specific framework.
-- **Prediction**: Implementing the `predict_next` method, which runs the model's forward pass to get logits and other outputs.
-- **Data Type Conversion**: Converting data types between the framework's native tensors (e.g., `torch.Tensor`, `tf.Tensor`) and standard Python/NumPy types where necessary.
-- **State Management**: Managing the Key-Value (KV) cache for its model.
+The following engines are supported:
 
-## Engine Factory:
-
-- **`engine_factory.py`**: This module is responsible for instantiating the correct engine based on the user's command-line arguments (e.g., `--engine pytorch`).
+- **PyTorch** (`pytorch_engine.py`): The default and most feature-rich engine, recommended for Gemma and other Hugging Face models.
+- **TensorFlow** (`tensorflow_engine.py`): For models available in the TensorFlow/Keras ecosystem.
+- **JAX** (`jax_engine.py`): For models implemented in JAX, often used for research and high-performance computing.
+- **ONNX Runtime** (`onnx_engine.py`): For models that have been converted to the Open Neural Network Exchange (ONNX) format, which can offer performance benefits.
+- **llama.cpp** (`llama_cpp_engine.py`): A highly optimized engine for running GGUF-formatted models (like Llama) efficiently on a CPU.
+- **MLX** (`mlx_engine.py`): An engine for running models on Apple Silicon, leveraging Apple's MLX framework for unified memory and optimized performance.
