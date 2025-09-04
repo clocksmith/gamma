@@ -22,8 +22,6 @@ GAMMA uses a modular architecture with a pluggable engine system, allowing the c
 
 The original GAMMA experience where you predict what the model will generate next.
 
-<img width="1042" height="892" alt="Gemma Gameplay Screenshot 2" src="https://github.com/user-attachments/assets/cac10a62-3706-496f-93f0-a812d813b832" />
-
 ### Tutorial Mode
 
 An interactive learning experience that teaches you how LLMs work through guided lessons.
