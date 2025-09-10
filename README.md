@@ -1,10 +1,10 @@
 # GAMMA
 
-**G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
+- **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
 
-**G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
+- **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
 
-**G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
+- **G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
 
 ## Overview
 
@@ -14,7 +14,7 @@ Gamma is a hands-on tool that lets you peer inside open source language models t
 
 ## Architecture
 
-GAMMA uses a modular architecture with a pluggable engine system, allowing the core application to run models from a variety of machine learning frameworks. This makes it easy to compare different models and to extend the tool to support new backends. [Learn more about the engine framework...](./src/engines/README.md)
+Gamma uses a modular architecture with a pluggable engine system, allowing the core application to run models from a variety of machine learning frameworks. This makes it easy to compare different models and to extend the tool to support new backends. [Learn more about the engine framework...](./src/engines/README.md)
 
 ```mermaid
 graph TD;
@@ -68,15 +68,13 @@ pip install -r requirements-pytorch.txt
 Run the main program without any arguments to get an interactive configuration menu.
 
 ```bash
+# Run the interactive LLM guessing game with default settings
 python game.py
 ```
 
 Or, use command-line flags for direct access to different modes:
 
 ```bash
-# Run the interactive LLM guessing game with default settings
-python game.py
-
 # Start a simple, direct chat session with the default model
 python game.py --chat
 
@@ -87,7 +85,7 @@ python game.py --prompt "The first person on Mars was"
 python game.py --tutorial
 
 # Compare two models side-by-side
-python game.py --comparison --comparison-models pytorch:google/gemma-2b-it pytorch:google/gemma-2-2b-it
+python game.py --comparison --comparison-models pytorch:Qwen/Qwen2-1.5B-Instruct:featherless-ai pytorch:google/gemma-2-2b-it
 ```
 
 Use `python game.py --help` for a full list of all options.
@@ -99,7 +97,10 @@ Use `python game.py --help` for a full list of all options.
 - **Single-Shot Inference**: Provide a prompt on the command line, get a single response, and see detailed performance metrics.
 - **Tutorial Mode**: An interactive learning experience that teaches you how LLMs work through guided lessons.
 - **Model Comparison Mode**: Compare predictions from multiple models side-by-side to understand their different behaviors.
-- **Mind Meld Mode (EXPERIMENTAL)**: Allows multiple language models to collaborate during a single text generation session by dynamically swapping their neural states. [Learn more...](./src/mind_meld/README.md)
+
+## EXPERIMENTAL
+
+- **Mind Meld Mode**: Allows multiple language models to collaborate during a single text generation session by dynamically swapping their neural states. [Learn more...](./src/mind_meld/README.md)
 
 ## Tools
 
@@ -117,18 +118,4 @@ A simple FastAPI server is included to expose any loaded model via a REST API.
 
 ```bash
 python tools/run_api_server.py --model <MODEL_FILENAME> [OPTIONS]
-```
-
-## Project Structure
-
-```
-gamma/
-├── src/
-│   ├── core/                 # [Core game logic, UI, and interfaces](./src/core/README.md)
-│   ├── engines/              # [ML framework implementations](./src/engines/README.md)
-│   └── mind_meld/            # [Experimental model melding feature](./src/mind_meld/README.md)
-├── tools/                # Standalone scripts (API server, downloader)
-├── game.py               # Main entry point
-├── README.md
-└── requirements-*.txt    # Engine-specific requirements
 ```

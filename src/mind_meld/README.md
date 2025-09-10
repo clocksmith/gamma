@@ -25,6 +25,11 @@ python tools/run_mind_meld_cli.py --enhanced --blend
 python game.py
 ```
 
+For more information about:
+- **Available Engines**: See [Engines README](../engines/README.md) for supported backends
+- **Core Architecture**: See [Core README](../core/README.md) for UI and game logic
+- **Main Game**: See [Project README](../../README.md) for full setup instructions
+
 #### How Mind Meld Works
 
 **Core Concept:** Mind Meld enables real-time collaboration between multiple LLMs by:
