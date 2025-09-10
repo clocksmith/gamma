@@ -43,8 +43,6 @@ graph TD;
     D --> E4;
 ```
 
-<img width="1084" alt="Gamma Gameplay Screenshot" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
-
 ## Setup
 
 ```bash
