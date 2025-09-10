@@ -10,8 +10,7 @@ try:
 except ImportError: raise ImportError("MLX libraries (mlx, mlx-lm) not found. Install with `pip install -r requirements-mlx.txt` (Apple Silicon recommended).")
 
 from src.core.engine_interface import LLMEngine
-from src.core import config as game_config
-from src.core import sampling
+from src.engines import sampling_utils
 
 class MLXEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
@@ -21,7 +20,7 @@ class MLXEngine(LLMEngine):
 
     def load(self):
         model_id = self.model_name; print(f"MLXEngine: Loading model '{model_id}'...")
-        load_cfg_args = self.engine_config.get("mlx_load_config", game_config.MLX_LOAD_CONFIG)
+        load_cfg_args = self.engine_config.get("mlx_load_config", {})
         adapter_path_arg = self.engine_config.get("mlx_adapter_path", None)
         try:
             self._mlx_model, self.tokenizer, self._model_args = mlx_load_model(model_id, config=load_cfg_args, adapter_path=adapter_path_arg)
@@ -53,7 +52,7 @@ class MLXEngine(LLMEngine):
 
     def _top(self, l: np.ndarray, k_show: int) -> Tuple[List[str], List[float], List[int]]: # type: ignore
         if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs_mx = sampling.softmax(l); vocab_size = probs_mx.shape[-1]; effective_k = min(k_show if k_show > 0 else vocab_size, vocab_size)
+        probs_mx = sampling_utils.softmax(l); vocab_size = probs_mx.shape[-1]; effective_k = min(k_show if k_show > 0 else vocab_size, vocab_size)
         top_indices_unsorted = np.argpartition(probs_mx, -effective_k)[-effective_k:]
         top_probs_unsorted = probs_mx[top_indices_unsorted]
         sort_order = np.argsort(top_probs_unsorted)[::-1]
@@ -73,14 +72,14 @@ class MLXEngine(LLMEngine):
         logits_raw = logits_all_steps[:, -1, :]
         logits_raw_np = np.array(logits_raw)
 
-        logits_temp_np = sampling.temperature_scale(logits_raw_np, temperature)
-        logits_k_np = sampling.top_k_filter(logits_temp_np, top_k)
-        logits_proc_np = sampling.top_p_filter(logits_k_np, top_p)
+        logits_temp_np = sampling_utils.temperature_scale(logits_raw_np, temperature)
+        logits_k_np = sampling_utils.top_k_filter(logits_temp_np, top_k)
+        logits_proc_np = sampling_utils.top_p_filter(logits_k_np, top_p)
 
-        probs_proc_np = sampling.softmax(logits_proc_np)
+        probs_proc_np = sampling_utils.softmax(logits_proc_np)
         next_token_id_val = int(np.argmax(probs_proc_np, axis=-1))
 
-        max_display_k = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
+        max_display_k = max(top_k if top_k > 0 else 1, self.engine_config.get("max_tokens_for_prob_display", 10), 1)
         top_texts_list, top_probs_list, _ = self._top(logits_proc_np, k_sh=max_display_k)
         
         return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": mx.array(logits_proc_np),
@@ -109,7 +108,7 @@ class MLXEngine(LLMEngine):
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
-        if game_config.DEFAULT_VERBOSE or self.engine_config.get("verbose", False): print("(MLXEngine: Attention heatmap not generally available.)")
+        if self.engine_config.get("verbose", False): print("(MLXEngine: Attention heatmap not generally available.)")
         return None
     def get_probabilities_at_step(self, data: Any, s_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, mx.array): raise TypeError(f"Expected mx.array for MLX probabilities, got {type(data)}") # type: ignore

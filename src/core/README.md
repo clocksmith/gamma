@@ -2,6 +2,28 @@
 
 This document breaks down the journey from input text to a predicted token, explaining what a real transformer model does and how GAMMA visualizes each part of that process.
 
+```mermaid
+graph TD;
+    A[Input Text] --> B(Tokenization);
+    B --> C(Embedding & Positional Encoding);
+    C --> D{Decoder Block Loop};
+    subgraph Decoder Block
+        D --> E[Multi-Head Self-Attention];
+        E --> F[Feed-Forward Network];
+        F --> D;
+    end
+    D -- After N Loops --> G(Final Projection to Logits);
+    G --> H{Sampling Pipeline};
+    subgraph "GAMMA Visualization"
+      H --> I(Temperature Scaling);
+      I --> J(Top-K Filtering);
+      J --> K(Top-P Filtering);
+      K --> L[Final Token Selection];
+    end
+    L --> M{Append to Sequence};
+    M --> A;
+```
+
 ---
 
 #### **A. Input & Context Preparation**
@@ -64,3 +86,13 @@ This document breaks down the journey from input text to a predicted token, expl
 
 - **What Happens:** The newly selected token is appended to the input sequence. The new, longer sequence becomes the input for the next prediction step.
 - **In the Game (Experienced, Not Visualized):** You directly experience the result of this step as you see the "Current Context" string grow with each round. The game implicitly handles the process of feeding this new, longer sequence back to the start of the pipeline for the next turn.
+
+---
+
+### Key Terminology
+
+- **Token**: A piece of text, which can be a word, a part of a word (e.g., "ing"), or punctuation. Models have a fixed vocabulary of tokens.
+- **Logits**: The raw, unnormalized scores produced by the model for each token in its vocabulary. Higher scores mean a token is more likely.
+- **Softmax**: A mathematical function that converts a vector of logits into a probability distribution (where all values are between 0 and 1 and sum to 1).
+- **Attention**: A mechanism that allows the model to weigh the importance of different input tokens when making a prediction.
+- **KV Cache**: An optimization technique that stores intermediate attention calculations (keys and values) from previous steps to speed up the generation of subsequent tokens.

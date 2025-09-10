@@ -8,6 +8,7 @@ This server loads a GGUF model once on startup and serves a basic frontend.
 import argparse
 import os
 import time
+import sys
 from contextlib import asynccontextmanager
 from typing import Dict, Any
 
@@ -16,7 +17,10 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from llama_cpp import Llama
-import llm_utils
+
+# Add project root to path to import llm_utils from the new location
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.r import llm_utils
 
 
 class GenerationRequest(BaseModel):
@@ -103,13 +107,15 @@ async def generate_text(request: GenerationRequest) -> GenerationResponse:
     )
 
 
-app.mount("/static", StaticFiles(directory="web_ui"), name="static")
+# Mount the static UI files from the new location
+ui_path = os.path.join(os.path.dirname(__file__), "web_router_ui")
+app.mount("/", StaticFiles(directory=ui_path, html=True), name="static")
 
 
 @app.get("/", include_in_schema=False)
 async def read_index() -> FileResponse:
     """Serves the main index.html file for the root path."""
-    return FileResponse("web_ui/index.html")
+    return FileResponse(os.path.join(ui_path, "index.html"))
 
 
 if __name__ == "__main__":

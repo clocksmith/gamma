@@ -16,41 +16,36 @@ Gamma is a hands-on tool that lets you peer inside open source language models t
 
 GAMMA uses a modular architecture with a pluggable engine system, allowing the core application to run models from a variety of machine learning frameworks. This makes it easy to compare different models and to extend the tool to support new backends. [Learn more about the engine framework...](./src/engines/README.md)
 
-## Game Modes
+```mermaid
+graph TD;
+    subgraph Application Layer
+        A["game.py (CLI)"]
+        B["tools/"]
+    end
 
-### Classic Game Mode
+    subgraph Core Logic
+        C["src/core"] --> D{LLMEngine Interface}
+        C --> F["src/mind_meld"]
+    end
 
-The original GAMMA experience where you predict what the model will generate next.
+    subgraph Engines
+        E1[PyTorchEngine]
+        E2[LlamaCppEngine]
+        E3[JaxEngine]
+        E4["...etc"]
+    end
 
-### Tutorial Mode
+    A --> C;
+    B --> C;
+    D --> E1;
+    D --> E2;
+    D --> E3;
+    D --> E4;
+```
 
-An interactive learning experience that teaches you how LLMs work through guided lessons.
+<img width="1084" alt="Gamma Gameplay Screenshot" src="https://github.com/user-attachments/assets/39d518b2-3f6b-4484-87b6-f03dea4e3be9" />
 
-Run with: `python game.py --tutorial`
-
-### Model Comparison Mode
-
-Compare predictions from multiple models side-by-side to understand their different behaviors.
-
-Run with: `python game.py --comparison`
-
-### Mind Meld Mode (EXPERIMENTAL)
-
-This experimental mode allows multiple language models to collaborate during a single text generation session. It works by dynamically swapping the models at the token level and translating their internal neural states (like the KV cache) to ensure a coherent output. This allows for unique use cases like combining the strengths of creative and analytical models. [Learn more about Mind Meld...](./src/mind_meld/README.md)
-
-
-## Core Logic
-
-The core of GAMMA's functionality lies in its visualization of the transformer model's forward pass. It translates the complex internal mechanics—from tokenization and embedding to attention, logit projection, and sampling—into an interactive game. This makes abstract concepts like temperature sampling, Top-K/Top-P filtering, and attention scores tangible and easy to understand. [See a detailed breakdown of the process...](./src/core/README.md)
-
-## Setup and Installation
-
-### Requirements
-
-- Python 3.8+
-- Dependencies listed in `requirements.txt` and engine-specific requirements files.
-
-### Installation
+## Setup
 
 ```bash
 # Create and activate a virtual environment (recommended)
@@ -60,26 +55,69 @@ source venv/bin/activate
 # Install base requirements
 pip install -r requirements.txt
 
-# Install PyTorch engine requirements (recommended)
+# Install PyTorch engine requirements (recommended for default models)
 pip install -r requirements-pytorch.txt
 
 # Optional: Install requirements for other engines
-# pip install -r requirements-tensorflow.txt
-# pip install -r requirements-jax.txt
-# pip install -r requirements-onnx.txt
 # pip install -r requirements-llamacpp.txt
-# pip install -r requirements-mlx.txt  # Apple Silicon only
+# pip install -r requirements-mlx.txt
 ```
 
-### Running the Game
+## Quick Start & Common Usage
 
-Run the game from the project root directory:
+Run the main program without any arguments to get an interactive configuration menu.
 
 ```bash
-python game.py [OPTIONS]
+python game.py
 ```
 
-Use `python game.py --help` for a full list of options.
+Or, use command-line flags for direct access to different modes:
+
+```bash
+# Run the interactive LLM guessing game with default settings
+python game.py
+
+# Start a simple, direct chat session with the default model
+python game.py --chat
+
+# Get a single response for a given prompt and see performance stats
+python game.py --prompt "The first person on Mars was"
+
+# Run the interactive tutorial to learn about LLMs
+python game.py --tutorial
+
+# Compare two models side-by-side
+python game.py --comparison --comparison-models pytorch:google/gemma-2b-it pytorch:google/gemma-2-2b-it
+```
+
+Use `python game.py --help` for a full list of all options.
+
+## Game Modes
+
+- **Classic Game Mode**: The original GAMMA experience where you predict what the model will generate next.
+- **Chat Mode**: A simple, direct, and interactive chat session with the loaded model.
+- **Single-Shot Inference**: Provide a prompt on the command line, get a single response, and see detailed performance metrics.
+- **Tutorial Mode**: An interactive learning experience that teaches you how LLMs work through guided lessons.
+- **Model Comparison Mode**: Compare predictions from multiple models side-by-side to understand their different behaviors.
+- **Mind Meld Mode (EXPERIMENTAL)**: Allows multiple language models to collaborate during a single text generation session by dynamically swapping their neural states. [Learn more...](./src/mind_meld/README.md)
+
+## Tools
+
+### Model Downloader
+
+A script is provided to download GGUF and other models from the Hugging Face Hub.
+
+```bash
+python tools/download_model.py --repo-id <REPO_ID> --filename <FILENAME>
+```
+
+### API Server
+
+A simple FastAPI server is included to expose any loaded model via a REST API.
+
+```bash
+python tools/run_api_server.py --model <MODEL_FILENAME> [OPTIONS]
+```
 
 ## Project Structure
 
@@ -89,12 +127,8 @@ gamma/
 │   ├── core/                 # [Core game logic, UI, and interfaces](./src/core/README.md)
 │   ├── engines/              # [ML framework implementations](./src/engines/README.md)
 │   └── mind_meld/            # [Experimental model melding feature](./src/mind_meld/README.md)
-├── _archive/             # Deprecated code and experiments
+├── tools/                # Standalone scripts (API server, downloader)
 ├── game.py               # Main entry point
 ├── README.md
 └── requirements-*.txt    # Engine-specific requirements
 ```
-
-## Project History
-
-The `_archive` directory contains code from a previous version of this project. The `mind_meld` directory contains a restored, experimental feature for dynamically swapping and merging the states of different language models during a single generation process.

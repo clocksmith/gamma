@@ -8,20 +8,20 @@ from typing import Any, Dict, Set, Tuple, List, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from src.core.engine_interface import LLMEngine
+    from transformers import PreTrainedTokenizerBase
 
 class VocabularyTranslator(ABC):
     """Abstract base class for translating logits between different vocabularies."""
 
     @abstractmethod
-    def translate_logits(self, source_logits: np.ndarray, source_engine: 'LLMEngine', target_engine: 'LLMEngine') -> np.ndarray:
+    def translate_logits(self, source_logits: np.ndarray, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """
         Translates logits from the source model's vocabulary space to the target's.
 
         Args:
             source_logits: A NumPy array of logits from the source model.
-            source_engine: The source LLM engine.
-            target_engine: The target LLM engine.
+            source_tokenizer: The source tokenizer instance.
+            target_tokenizer: The target tokenizer instance.
 
         Returns:
             A NumPy array of logits aligned with the target model's vocabulary.
@@ -37,15 +37,15 @@ class VocabularyIntersectionTranslator(VocabularyTranslator):
     def __init__(self):
         self._intersection_cache: Dict[str, Set[int]] = {}
 
-    def _get_intersection_mask(self, source_engine: 'LLMEngine', target_engine: 'LLMEngine') -> np.ndarray:
+    def _get_intersection_mask(self, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """Calculates and caches a mask for the intersection of two vocabularies."""
-        cache_key = f"{source_engine.model_name}-{target_engine.model_name}"
+        cache_key = f"{source_tokenizer.name_or_path}-{target_tokenizer.name_or_path}"
         if cache_key in self._intersection_cache:
             return self._intersection_cache[cache_key]
 
         print("Calculating vocabulary intersection mask...")
-        source_vocab = source_engine.tokenizer.get_vocab()
-        target_vocab = target_engine.tokenizer.get_vocab()
+        source_vocab = source_tokenizer.get_vocab()
+        target_vocab = target_tokenizer.get_vocab()
 
         common_tokens = set(source_vocab.keys()).intersection(set(target_vocab.keys()))
 
@@ -59,14 +59,14 @@ class VocabularyIntersectionTranslator(VocabularyTranslator):
         print(f"Found {len(common_tokens)} tokens in common.")
         return mask
 
-    def translate_logits(self, source_logits: np.ndarray, source_engine: 'LLMEngine', target_engine: 'LLMEngine') -> np.ndarray:
+    def translate_logits(self, source_logits: np.ndarray, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """
         Filters logits by applying a mask, keeping only those for tokens present in both vocabularies.
         """
-        if len(source_engine.tokenizer.get_vocab()) == len(target_engine.tokenizer.get_vocab()):
+        if len(source_tokenizer.get_vocab()) == len(target_tokenizer.get_vocab()):
             return source_logits
 
-        mask = self._get_intersection_mask(source_engine, target_engine)
+        mask = self._get_intersection_mask(source_tokenizer, target_tokenizer)
         return source_logits + mask
 
 
@@ -78,16 +78,14 @@ class AligningVocabularyTranslator(VocabularyTranslator):
     def __init__(self):
         self._alignment_cache: Dict[str, Dict[int, List[int]]] = {}
 
-    def _build_alignment_map(self, source_engine: 'LLMEngine', target_engine: 'LLMEngine') -> Dict[int, List[int]]:
+    def _build_alignment_map(self, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> Dict[int, List[int]]:
         """Builds a map from source token IDs to a list of target token IDs."""
-        cache_key = f"{source_engine.model_name}-to-{target_engine.model_name}"
+        cache_key = f"{source_tokenizer.name_or_path}-to-{target_tokenizer.name_or_path}"
         if cache_key in self._alignment_cache:
             return self._alignment_cache[cache_key]
 
-        print(f"Building alignment map from {source_engine.model_name} to {target_engine.model_name}...")
+        print(f"Building alignment map from {source_tokenizer.name_or_path} to {target_tokenizer.name_or_path}...")
         
-        source_tokenizer = source_engine.tokenizer
-        target_tokenizer = target_engine.tokenizer
         source_vocab_size = len(source_tokenizer.get_vocab())
 
         alignment_map = {}
@@ -109,19 +107,25 @@ class AligningVocabularyTranslator(VocabularyTranslator):
         print(f"Alignment map built. Mapped {len(alignment_map)} of {source_vocab_size} tokens.")
         return alignment_map
 
-    def translate_logits(self, source_logits: np.ndarray, source_engine: 'LLMEngine', target_engine: 'LLMEngine') -> np.ndarray:
+    def translate_logits(self, source_logits: np.ndarray, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """
         Translates logits by projecting them from the source to the target vocabulary space.
         """
-        if len(source_engine.tokenizer.get_vocab()) == len(target_engine.tokenizer.get_vocab()):
+        # Flatten source_logits if needed (handle both 1D and 2D arrays)
+        if source_logits.ndim > 1:
+            source_logits = source_logits.flatten()
+            
+        if len(source_tokenizer.get_vocab()) == len(target_tokenizer.get_vocab()):
             return source_logits
 
-        alignment_map = self._build_alignment_map(source_engine, target_engine)
+        alignment_map = self._build_alignment_map(source_tokenizer, target_tokenizer)
         
-        target_vocab_size = len(target_engine.tokenizer.get_vocab())
-        target_logits = np.full(target_vocab_size, -np.inf, dtype=np.float32)
+        target_vocab_size = len(target_tokenizer.get_vocab())
+        # Start with small negative values instead of -inf to avoid all zeros after softmax
+        target_logits = np.full(target_vocab_size, -10.0, dtype=np.float32)
 
         # Iterate through the source logits and distribute them to the target logits
+        mapped_count = 0
         for source_id, logit_value in enumerate(source_logits):
             if source_id in alignment_map:
                 target_ids = alignment_map[source_id]
@@ -130,5 +134,13 @@ class AligningVocabularyTranslator(VocabularyTranslator):
                 for target_id in target_ids:
                     if target_id < target_vocab_size:
                         target_logits[target_id] = max(target_logits[target_id], logit_value)
+                        mapped_count += 1
+        
+        # If very few tokens were mapped, fall back to returning original logits
+        if mapped_count < 10:
+            print(f"Warning: Only {mapped_count} tokens mapped. Using fallback.")
+            # Return truncated/padded version of source logits
+            min_size = min(len(source_logits), target_vocab_size)
+            target_logits[:min_size] = source_logits[:min_size]
 
         return target_logits

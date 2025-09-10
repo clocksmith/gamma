@@ -9,7 +9,7 @@ except ImportError: raise ImportError("TensorFlow or Transformers library not fo
 
 from src.core.engine_interface import LLMEngine, TokenCategory
 from src.core import config as game_config
-from src.core import sampling
+from src.engines import sampling_utils as sampling
 
 class TensorFlowEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):

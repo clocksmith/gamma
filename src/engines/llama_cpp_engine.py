@@ -3,12 +3,11 @@ from typing import List, Tuple, Optional, Dict, Any
 
 try:
     import numpy as np
-    from llama_cpp import Llama
+    from llama_cpp import Llama, llama_supports_gpu_offload
 except ImportError: raise ImportError("'llama-cpp-python' library not found. Install with `pip install -r requirements-llamacpp.txt`")
 
 from src.core.engine_interface import LLMEngine
-from src.core import config as game_config
-from src.core import sampling
+from src.engines import sampling_utils
 
 def _decode_llama_token_piece(piece: bytes) -> str:
     try: return piece.decode("utf-8", errors="replace")
@@ -19,12 +18,13 @@ class LlamaCppEngine(LLMEngine):
         super().__init__(model_name=model_path, engine_specific_config=engine_specific_config)
 
     def load(self):
+        self._verify_and_report_gpu_support()
         model_p = self.model_name; cfg_args = self.engine_config
         print(f"LlamaCppEngine: Loading GGUF '{model_p}'...")
         try:
-            self.model = Llama(model_path=model_p, n_ctx=cfg_args.get("llama_cpp_n_ctx", game_config.LLAMA_CPP_N_CTX),
-                               n_gpu_layers=cfg_args.get("llama_cpp_n_gpu_layers", game_config.LLAMA_CPP_N_GPU_LAYERS),
-                               seed=cfg_args.get("seed", 1337), verbose=cfg_args.get("llama_cpp_lib_verbose", game_config.LLAMA_CPP_LIB_VERBOSE), logits_all=True)
+            self.model = Llama(model_path=model_p, n_ctx=cfg_args.get("llama_cpp_n_ctx", 2048),
+                               n_gpu_layers=cfg_args.get("llama_cpp_n_gpu_layers", 0),
+                               seed=cfg_args.get("seed", 1337), verbose=cfg_args.get("llama_cpp_lib_verbose", False), logits_all=True)
             self.tokenizer = self.model.tokenizer()
             print(f"LlamaCppEngine: Model loaded. Vocab type: {self.model.vocab_type().name if hasattr(self.model.vocab_type(), 'name') else self.model.vocab_type()}")
         except Exception as e:
@@ -32,6 +32,16 @@ class LlamaCppEngine(LLMEngine):
             if "Can't pass Command" in str(e) and cfg_args.get("llama_cpp_n_gpu_layers", 0) == -1: err += "\nHint: n_gpu_layers=-1 might not work with your BLAS build. Try 0 or a positive value."
             raise RuntimeError(err) from e
         self._populate_special_token_map(); self.model.reset()
+
+    def _verify_and_report_gpu_support(self) -> None:
+        """Checks for and reports GPU offload capability."""
+        print("--- Llama.cpp Hardware Acceleration Status ---")
+        if llama_supports_gpu_offload():
+            print("\033[92m[✔] SUCCESS: llama-cpp-python reports GPU support is available.\033[0m")
+        else:
+            print("\033[91m[✖] WARNING: GPU offload NOT SUPPORTED by this build.\033[0m")
+            print("\033[93m    Model will run on CPU only. Performance will be slow.\033[0m")
+        print("------------------------------------------\n")
 
     def reset_kv_cache(self):
         if self.model: self.model.reset()
@@ -66,7 +76,7 @@ class LlamaCppEngine(LLMEngine):
 
     def _top(self, l: np.ndarray, k_show: int) -> Tuple[List[str], List[float], List[int]]:
         if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs_np = sampling.softmax(l); effective_k = min(k_show if k_show > 0 else probs_np.size, probs_np.size)
+        probs_np = sampling_utils.softmax(l); effective_k = min(k_show if k_show > 0 else probs_np.size, probs_np.size)
         top_indices_unsorted = np.argpartition(probs_np, -effective_k)[-effective_k:]; top_probs_unsorted = probs_np[top_indices_unsorted]
         sort_order = np.argsort(top_probs_unsorted)[::-1]; final_indices = top_indices_unsorted[sort_order]; final_probs = top_probs_unsorted[sort_order]
         final_indices_list = final_indices.tolist()
@@ -81,25 +91,25 @@ class LlamaCppEngine(LLMEngine):
             unk_token_id_val = getattr(self.tokenizer, "token_unk", -1)(); unk_token_id = unk_token_id_val if isinstance(unk_token_id_val, int) else -1
             default_logits = np.full(self.get_vocabulary_size(), -np.inf, dtype=np.float32)
             if unk_token_id != -1 and 0 <= unk_token_id < len(default_logits): default_logits[unk_token_id] = 0.0
-            probs_default = sampling.softmax(default_logits)
+            probs_default = sampling_utils.softmax(default_logits)
             return {"next_token_id": unk_token_id, "logits_raw": default_logits, "logits_processed": default_logits, "probabilities_raw": probs_default,
                     "probabilities_temp": probs_default, "probabilities_top_k": probs_default, "probabilities_processed": probs_default,
                     "top_tokens_processed": [self.get_token_text(unk_token_id)], "top_probs_processed": [1.0], "attention": None, "hidden_states": None, "forward_time": time.time() - st}
         
-        logits_temp = sampling.temperature_scale(logits_raw.copy(), temperature)
-        logits_k = sampling.top_k_filter(logits_temp.copy(), top_k)
-        logits_proc = sampling.top_p_filter(logits_k.copy(), top_p)
+        logits_temp = sampling_utils.temperature_scale(logits_raw.copy(), temperature)
+        logits_k = sampling_utils.top_k_filter(logits_temp.copy(), top_k)
+        logits_proc = sampling_utils.top_p_filter(logits_k.copy(), top_p)
         
-        probs_proc = sampling.softmax(logits_proc)
+        probs_proc = sampling_utils.softmax(logits_proc)
         next_token_id_val = int(np.argmax(probs_proc))
         
-        max_display_k = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
+        max_display_k = max(top_k if top_k > 0 else 1, self.engine_config.get("max_tokens_for_prob_display", 10), 1)
         top_texts_list, top_probs_list, _ = self._top(logits_proc, k_sh=max_display_k)
         
         return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
-                "probabilities_raw": sampling.softmax(logits_raw),
-                "probabilities_temp": sampling.softmax(logits_temp), 
-                "probabilities_top_k": sampling.softmax(logits_k), 
+                "probabilities_raw": sampling_utils.softmax(logits_raw),
+                "probabilities_temp": sampling_utils.softmax(logits_temp), 
+                "probabilities_top_k": sampling_utils.softmax(logits_k), 
                 "probabilities_processed": probs_proc,
                 "top_tokens_processed": top_texts_list, "top_probs_processed": top_probs_list, 
                 "attention": None, "hidden_states": None, "forward_time": time.time() - st}
@@ -120,16 +130,17 @@ class LlamaCppEngine(LLMEngine):
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
-        if game_config.DEFAULT_VERBOSE or self.engine_config.get("verbose", False): print("(LlamaCppEngine: Attention heatmap not supported.)")
+        if self.engine_config.get("verbose", False): print("(LlamaCppEngine: Attention heatmap not supported.)")
         return None
     def get_probabilities_at_step(self, data: Any, s_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, np.ndarray): raise TypeError(f"Expected np.ndarray for LlamaCpp probabilities, got {type(data)}")
         is_probs_heuristic = (np.all(data >= -1e-6) and np.all(data <= 1.0 + 1e-6) and np.allclose(np.sum(data, axis=-1), 1.0, atol=1e-3))
-        probs_tensor = data if is_probs_heuristic else sampling.softmax(data)
+        probs_tensor = data if is_probs_heuristic else sampling_utils.softmax(data)
         return self._top(probs_tensor, k_sh=k)
 
     def get_config_summary(self) -> Dict[str, Any]:
         if not self.model: return {"Error": "Model not loaded"}
         return {"GGUF Path": self.model_name, "Context Size": self.model.n_ctx(),
-                "GPU Layers": self.engine_config.get("llama_cpp_n_gpu_layers", game_config.LLAMA_CPP_N_GPU_LAYERS),
+                "GPU Layers": self.engine_config.get("llama_cpp_n_gpu_layers", 0),
                 "Vocab Type": (self.model.vocab_type().name if hasattr(self.model.vocab_type(), 'name') else str(self.model.vocab_type()))}
+

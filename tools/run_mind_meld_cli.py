@@ -10,8 +10,8 @@ import os
 from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass, field
 
-# Add src to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add project root to the path to allow importing from src
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.core.engine_interface import LLMEngine
 from src.core import ui, config as cfg
@@ -42,6 +42,15 @@ class MindMeldConfig:
     verbose: bool = False
     show_attention: bool = True
     initial_prompt: str = "In a world where two minds are better than one,"
+    
+    # Enhanced features
+    use_enhanced: bool = False
+    use_blending: bool = False
+    use_weighted_average: bool = False
+    use_abe: bool = False  # Agreement-Based Ensembling
+    blend_strategy: str = "weighted"
+    alignment_strategy: str = "semantic"
+    stats_file: Optional[str] = None
 
 
 class MindMeldCLI:
@@ -311,6 +320,24 @@ class MindMeldCLI:
         # Verbose mode
         verbose = input("\nEnable verbose mode? (y/n) [n]: ").strip().lower()
         self.config.verbose = verbose == 'y'
+        
+        # Ensemble method selection
+        print("\nEnsemble method:")
+        print("  1. None (models take turns)")
+        print("  2. Weighted averaging (blend all model probabilities)")
+        print("  3. ABE (Agreement-Based Ensembling)")
+        
+        ensemble = input("Select ensemble method (1-3) [1]: ").strip() or "1"
+        
+        if ensemble == "2":
+            self.config.use_weighted_average = True
+            print("✓ Weighted averaging enabled - all models will contribute to each token")
+        elif ensemble == "3":
+            self.config.use_abe = True
+            print("✓ ABE enabled - models must agree on token choices")
+        else:
+            self.config.use_weighted_average = False
+            self.config.use_abe = False
     
     def load_models(self, config: MindMeldConfig) -> List[LLMEngine]:
         """Load the specified models"""
@@ -382,6 +409,8 @@ class MindMeldCLI:
             # Enhanced features
             use_enhanced=config.use_enhanced,
             use_blending=config.use_blending,
+            use_weighted_average=config.use_weighted_average,
+            use_abe=config.use_abe,
             blend_strategy=config.blend_strategy,
             alignment_strategy=config.alignment_strategy,
             stats_file=config.stats_file,
@@ -398,114 +427,6 @@ class MindMeldCLI:
             if config.verbose:
                 import traceback
                 traceback.print_exc()
-    
-    def parse_cli_args(self) -> argparse.Namespace:
-        """Parse command-line arguments"""
-        parser = argparse.ArgumentParser(
-            description="Mind Meld CLI - Meld multiple LLM models during generation",
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        
-        parser.add_argument(
-            "--models",
-            nargs="+",
-            help="Models to meld (format: engine:model_name or just model_name for pytorch)"
-        )
-        
-        parser.add_argument(
-            "--strategy",
-            choices=["pattern", "fixed", "roundrobin", "confidence", "random", "attention"],
-            default="pattern",
-            help="Swap strategy to use"
-        )
-        
-        parser.add_argument("--temperature", type=float, default=0.7, help="Temperature for generation")
-        parser.add_argument("--top-k", type=int, default=8, help="Top-K for generation")
-        parser.add_argument("--top-p", type=float, default=0.95, help="Top-P for generation")
-        parser.add_argument("--steps", type=int, default=20, help="Number of generation steps")
-        
-        parser.add_argument("--interval", type=int, default=5, help="Swap interval for fixed strategy")
-        parser.add_argument("--threshold", type=float, default=0.5, help="Confidence threshold")
-        
-        # Enhanced features
-        parser.add_argument("--enhanced", action="store_true", help="Enable enhanced features")
-        parser.add_argument("--blend", action="store_true", help="Use logit blending")
-        parser.add_argument(
-            "--blend-strategy",
-            choices=["weighted_average", "confidence_weighted", "dynamic_weighted", "ensemble_voting"],
-            default="weighted_average",
-            help="Blending strategy"
-        )
-        parser.add_argument(
-            "--alignment",
-            choices=["hybrid", "intersection", "fuzzy", "subword", "semantic"],
-            default="hybrid",
-            help="Vocabulary alignment strategy"
-        )
-        parser.add_argument("--stats-file", type=str, help="Save statistics to file")
-        
-        parser.add_argument("--prompt", type=str, help="Initial prompt for generation")
-        parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
-        parser.add_argument("--no-attention", action="store_true", help="Disable attention visualization")
-        
-        return parser.parse_args()
-    
-    def run_from_cli(self, args: argparse.Namespace):
-        """Run Mind Meld from CLI arguments"""
-        config = MindMeldConfig()
-        
-        # Parse models
-        if args.models:
-            config.models = []
-            for model_spec in args.models:
-                if ":" in model_spec:
-                    engine, model = model_spec.split(":", 1)
-                else:
-                    engine = "pytorch"
-                    model = model_spec
-                config.models.append((engine, model))
-        else:
-            # Use default if no models specified
-            config.models = self.PRESETS["gemma_small"]
-        
-        # Set strategy
-        strategy_map = {
-            "pattern": SwapStrategy.PATTERN_BASED,
-            "fixed": SwapStrategy.FIXED_INTERVAL,
-            "roundrobin": SwapStrategy.ROUND_ROBIN,
-            "confidence": SwapStrategy.CONFIDENCE_BASED,
-            "random": SwapStrategy.RANDOM,
-            "attention": SwapStrategy.ATTENTION_GUIDED,
-        }
-        config.swap_strategy = strategy_map.get(args.strategy, SwapStrategy.PATTERN_BASED)
-        
-        # Set generation parameters
-        config.temperature = args.temperature
-        config.top_k = args.top_k
-        config.top_p = args.top_p
-        config.steps = args.steps
-        config.fixed_interval = args.interval
-        config.confidence_threshold = args.threshold
-        
-        # Enhanced features
-        config.use_enhanced = args.enhanced
-        config.use_blending = args.blend
-        config.blend_strategy = args.blend_strategy
-        config.alignment_strategy = args.alignment
-        config.stats_file = args.stats_file
-        
-        if args.prompt:
-            config.initial_prompt = args.prompt
-        
-        config.verbose = args.verbose
-        config.show_attention = not args.no_attention
-        
-        # Load models and run
-        engines = self.load_models(config)
-        if engines and len(engines) >= 2:
-            self.run_mind_meld(config, engines)
-        else:
-            print(ui.color_text("Failed to load sufficient models for Mind Meld", cfg.COLOR_RED))
 
 
 def main():

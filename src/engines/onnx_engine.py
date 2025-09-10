@@ -8,8 +8,7 @@ try:
 except ImportError: raise ImportError("ONNX Runtime or Transformers library not found. Install with `pip install -r requirements-onnx.txt`")
 
 from src.core.engine_interface import LLMEngine
-from src.core import config as game_config
-from src.core import sampling
+from src.engines import sampling_utils
 
 class ONNXEngine(LLMEngine):
     def __init__(self, model_path: str, engine_specific_config: Optional[Dict[str, Any]] = None):
@@ -24,8 +23,8 @@ class ONNXEngine(LLMEngine):
         trust_remote = self.engine_config.get("trust_remote_code", False); token = self.engine_config.get("hf_token", None)
         try: self.tokenizer = AutoTokenizer.from_pretrained(self._tokenizer_name, trust_remote_code=trust_remote, token=token)
         except Exception as e: raise RuntimeError(f"ONNXEngine: Tokenizer load failed for '{self._tokenizer_name}': {e}") from e
-        providers_list = self.engine_config.get("onnx_providers", game_config.ONNX_PROVIDERS)
-        provider_options_list = self.engine_config.get("onnx_provider_options", game_config.ONNX_PROVIDER_OPTIONS)
+        providers_list = self.engine_config.get("onnx_providers", ["CPUExecutionProvider"])
+        provider_options_list = self.engine_config.get("onnx_provider_options", None)
         print(f"ONNXEngine: Loading model '{self.model_name}' with providers {providers_list}...")
         sess_opts_obj = ort.SessionOptions()
         try:
@@ -67,7 +66,7 @@ class ONNXEngine(LLMEngine):
 
     def _top(self, l: np.ndarray, k_show: int) -> Tuple[List[str], List[float], List[int]]:
         if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs_np = sampling.softmax(l)
+        probs_np = sampling_utils.softmax(l)
         if probs_np.ndim > 1 and probs_np.shape[0] == 1: probs_np = np.squeeze(probs_np, axis=0)
         effective_k = min(k_show if k_show > 0 else probs_np.shape[-1], probs_np.shape[-1])
         top_indices_unsorted = np.argpartition(probs_np, -effective_k)[-effective_k:]; top_probs_unsorted = probs_np[top_indices_unsorted]
@@ -82,7 +81,7 @@ class ONNXEngine(LLMEngine):
         if self._kv_cache and isinstance(self._kv_cache, tuple) and input_ids.shape[-1] == 1 and self._past_key_value_input_names:
             if len(self._kv_cache) == len(self._past_key_value_input_names):
                 for i, name in enumerate(self._past_key_value_input_names): ort_inputs[name] = self._kv_cache[i]
-                if game_config.DEFAULT_VERBOSE: print(f"  ONNX: Passed {len(self._kv_cache)} KV cache tensors.")
+                if self.engine_config.get("verbose", False): print(f"  ONNX: Passed {len(self._kv_cache)} KV cache tensors.")
             else: print("ONNXEngine Warning: Mismatch in KV cache and model inputs. Disabling KV cache."); self.reset_kv_cache()
         outputs_to_fetch = ["logits"]
         if output_attentions and "attentions" in self._output_names: outputs_to_fetch.append("attentions")
@@ -101,20 +100,20 @@ class ONNXEngine(LLMEngine):
         elif input_ids.shape[-1] > 1: self.reset_kv_cache()
         attention_data = output_map.get("attentions") if output_attentions else None
         
-        logits_temp = sampling.temperature_scale(logits_raw.copy(), temperature)
-        logits_k = sampling.top_k_filter(logits_temp.copy(), top_k)
-        logits_proc = sampling.top_p_filter(logits_k.copy(), top_p)
+        logits_temp = sampling_utils.temperature_scale(logits_raw.copy(), temperature)
+        logits_k = sampling_utils.top_k_filter(logits_temp.copy(), top_k)
+        logits_proc = sampling_utils.top_p_filter(logits_k.copy(), top_p)
 
-        probs_proc = sampling.softmax(logits_proc)
+        probs_proc = sampling_utils.softmax(logits_proc)
         next_token_id_val = int(np.argmax(probs_proc, axis=-1).item())
         
-        max_display_k = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
+        max_display_k = max(top_k if top_k > 0 else 1, self.engine_config.get("max_tokens_for_prob_display", 10), 1)
         top_texts_list, top_probs_list, _ = self._top(logits_proc, k_sh=max_display_k)
         
         return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
-                "probabilities_raw": sampling.softmax(logits_raw),
-                "probabilities_temp": sampling.softmax(logits_temp), 
-                "probabilities_top_k": sampling.softmax(logits_k), 
+                "probabilities_raw": sampling_utils.softmax(logits_raw),
+                "probabilities_temp": sampling_utils.softmax(logits_temp), 
+                "probabilities_top_k": sampling_utils.softmax(logits_k), 
                 "probabilities_processed": probs_proc,
                 "top_tokens_processed": top_texts_list, "top_probs_processed": top_probs_list, 
                 "attention": attention_data, "hidden_states": None, "forward_time": time.time() - st}
@@ -142,7 +141,7 @@ class ONNXEngine(LLMEngine):
         if not isinstance(i_ids_viz, np.ndarray): return None
         last_attention_layer_output = att_out[-1]
         if not isinstance(last_attention_layer_output, np.ndarray) or last_attention_layer_output.ndim != 4:
-            if game_config.DEFAULT_VERBOSE: print(f"ONNXEngine: Attention output unexpected shape/type: {last_attention_layer_output.shape if hasattr(last_attention_layer_output, 'shape') else type(last_attention_layer_output)}")
+            if self.engine_config.get("verbose", False): print(f"ONNXEngine: Attention output unexpected shape/type: {last_attention_layer_output.shape if hasattr(last_attention_layer_output, 'shape') else type(last_attention_layer_output)}")
             return None
         try:
             attention_to_inputs = last_attention_layer_output[0, :, -1, :]; avg_attention_scores_over_heads = np.mean(attention_to_inputs, axis=0)
@@ -156,7 +155,7 @@ class ONNXEngine(LLMEngine):
     def get_probabilities_at_step(self, data: Any, s_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, np.ndarray): raise TypeError(f"Expected np.ndarray for ONNX probabilities, got {type(data)}")
         is_probs_heuristic = (np.all(data >= -1e-6) and np.all(data <= 1.0 + 1e-6) and np.allclose(np.sum(data, axis=-1), 1.0, atol=1e-3))
-        probs_tensor = data if is_probs_heuristic else sampling.softmax(data)
+        probs_tensor = data if is_probs_heuristic else sampling_utils.softmax(data)
         return self._top(probs_tensor, k_sh=k)
 
     def get_config_summary(self) -> Dict[str, Any]:

@@ -89,6 +89,10 @@ def parse_arguments() -> argparse.Namespace:
                         help="Compare predictions from multiple models side-by-side")
     parser.add_argument("--comparison-models", type=str, nargs="+", default=None,
                         help="Models to compare (format: engine:model_name)")
+    parser.add_argument("--chat", action="store_true", default=False,
+                        help="Enable simple, direct chat mode.")
+    parser.add_argument("--prompt", type=str, default=None,
+                        help="Run single-shot inference with the given prompt.")
     
     # Display options
     parser.add_argument("--show-attention", action=argparse.BooleanOptionalAction, 
@@ -381,7 +385,6 @@ def run_meld_mode(args: argparse.Namespace) -> None:
     meld_mode.run()
 
 
-
 def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
     """Main game loop."""
     # Get initial prompt
@@ -543,7 +546,7 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
         else:
             print(ui.color_text("💡 Keep learning! LLMs can be unpredictable.", cfg.COLOR_MAGENTA_LIGHT))
     
-    print(f"\nFinal text: \"{current_full_text}\"")
+    print(f"\nFinal text: \"{current_full_text}\"\n")
     
     # Offer to continue if not at EOS
     if args.allow_eos_continue and round_counter >= args.steps:
@@ -558,6 +561,91 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
                 args.steps += cfg.DEFAULT_MAX_DECODE_STEPS
                 run_game_loop(engine, args)  # Recursive call to continue
 
+
+def run_chat_mode(engine: LLMEngine, args: argparse.Namespace) -> None:
+    """Runs a simple interactive chat session."""
+    ui.print_header("Direct Chat Mode")
+    print("Type 'exit' or 'quit' to end the session.")
+    history = []
+
+    while True:
+        try:
+            prompt = input(ui.color_text("> User: ", cfg.COLOR_YELLOW))
+        except (EOFError, KeyboardInterrupt):
+            break
+        if prompt.lower() in ["exit", "quit"]:
+            break
+
+        history.append({"role": "user", "content": prompt})
+        
+        # Use a simple text accumulation for chat history
+        full_prompt = "\n".join([f"{msg['role']}: {msg['content']}" for msg in history])
+        
+        sys.stdout.write(ui.color_text("> Assistant: ", cfg.COLOR_CYAN))
+        sys.stdout.flush()
+
+        response_text = ""
+        input_ids, attention_mask = engine.encode(full_prompt, add_special_tokens=True)
+        
+        for _ in range(args.steps): # Max tokens for response
+            pred = engine.predict_next(input_ids, attention_mask, args.temperature, args.top_k, args.top_p)
+            next_id = pred['next_token_id']
+
+            if next_id == engine.get_eos_token_id():
+                break
+
+            next_token_text = engine.decode([next_id])
+            response_text += next_token_text
+            sys.stdout.write(next_token_text)
+            sys.stdout.flush()
+
+            # Update for next iteration
+            input_ids, attention_mask = engine.encode(response_text, add_special_tokens=False)
+
+        history.append({"role": "assistant", "content": response_text})
+        print() # Newline after response
+
+    print("\nChat session ended.")
+
+def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> None:
+    """Runs a single inference and prints performance stats."""
+    ui.print_header("Single-Shot Inference")
+    prompt = args.prompt
+    print(f"Prompt: '{prompt}'")
+
+    start_time = time.time()
+    input_ids, attention_mask = engine.encode(prompt, add_special_tokens=True)
+    prompt_tokens = input_ids.shape[-1]
+    response_text = ""
+    completion_tokens = 0
+
+    for _ in range(args.steps):
+        pred = engine.predict_next(input_ids, attention_mask, args.temperature, args.top_k, args.top_p)
+        next_id = pred['next_token_id']
+
+        if next_id == engine.get_eos_token_id():
+            break
+
+        completion_tokens += 1
+        decoded_text = engine.decode([next_id])
+        response_text += decoded_text
+
+        # Update for next iteration
+        input_ids, attention_mask = engine.encode(response_text, add_special_tokens=False)
+
+    end_time = time.time()
+    wall_time = end_time - start_time
+
+    print(f"\nResponse: {ui.color_text(response_text, cfg.COLOR_GREEN)}")
+    ui.print_separator('-')
+    print("Performance Statistics:")
+    print(f"  Prompt Tokens:     {prompt_tokens}")
+    print(f"  Completion Tokens: {completion_tokens}")
+    print(f"  Total Wall Time:   {wall_time:.2f} seconds")
+    if completion_tokens > 0 and wall_time > 0:
+        tps = completion_tokens / wall_time
+        print(f"  Tokens per Second: {tps:.2f} TPS")
+    print("-" * 25)
 
 def main():
     """Main entry point for GAMMA."""
@@ -586,34 +674,32 @@ def main():
     
     # Check for special modes (from either command line or interactive)
     if args.tutorial:
-        # Run tutorial mode
         run_tutorial_mode(args)
         return
     elif args.comparison:
-        # Run comparison mode
         run_comparison_mode(args)
         return
-    
-    # Normal game mode
-    # Skip confirmation if came from interactive menu (already configured)
-    if len(sys.argv) > 1:  # Command-line mode
-        # Confirm configuration
-        if not ui.confirm_or_modify_config(args):
-            print(ui.color_text("\nGame cancelled by user.", cfg.COLOR_YELLOW))
-            return
-    
+
     # Initialize engine
     engine = initialize_game_engine(args)
     if engine is None:
         print(ui.color_text("\nFailed to initialize game engine. Exiting.", cfg.COLOR_RED))
         return
-    
+
     # Set random seed if specified
     if args.seed != 0:
         random.seed(args.seed)
         print(f"Random seed set to: {args.seed}")
+
+    # Mode dispatcher
+    if args.prompt:
+        run_single_shot_inference(engine, args)
+        return
+    elif args.chat:
+        run_chat_mode(engine, args)
+        return
     
-    # Run the game
+    # Default to game loop
     try:
         run_game_loop(engine, args)
     except KeyboardInterrupt:

@@ -89,9 +89,44 @@ class HeuristicKVCacheBridge(KVCacheBridge):
             print("  Warning: Unknown model architecture. Falling back to direct transfer.")
             return source_cache
 
-        # If architectures are the same, direct transfer is probably fine.
+        # If architectures are the same, validate and transfer
         if source_arch == target_arch:
-            print("  Architectures are the same. Performing direct transfer.")
+            print("  Architectures are the same. Validating cache format...")
+            
+            # Check if cache is None or empty
+            if source_cache is None:
+                print("  Source cache is None")
+                return None
+                
+            # Validate cache structure
+            if not isinstance(source_cache, tuple):
+                # Check if it's a HybridCache or DynamicCache object from transformers
+                if hasattr(source_cache, '__class__') and 'Cache' in source_cache.__class__.__name__:
+                    print(f"  Cache is a {source_cache.__class__.__name__} object")
+                    # For now, we can't bridge these complex cache objects
+                    # They need special handling based on the specific cache type
+                    print("  Complex cache objects are not yet supported for bridging")
+                    return None
+                print(f"  Warning: Cache is not a tuple, it's {type(source_cache)}")
+                return None
+            
+            # Check layer count
+            source_layers = len(source_cache)
+            target_layers = target_engine.get_num_layers()
+            
+            if source_layers != target_layers:
+                print(f"  Layer count mismatch: source has {source_layers}, target expects {target_layers}")
+                # Try to adapt the cache
+                if source_layers > target_layers:
+                    # Truncate extra layers
+                    print(f"  Truncating cache from {source_layers} to {target_layers} layers")
+                    return source_cache[:target_layers]
+                else:
+                    # We can't add layers, so fail
+                    print("  Cannot add missing layers, bridge failed")
+                    return None
+            
+            print(f"  Cache validated: {source_layers} layers")
             return source_cache
 
         # --- Specific Heuristic: Llama (Full Cache) to Gemma (Hybrid Cache) ---

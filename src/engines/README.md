@@ -4,6 +4,36 @@ GAMMA uses a modular engine architecture that allows the core game logic to inte
 
 Each engine is an implementation of the `LLMEngine` interface defined in `src/core/engine_interface.py`.
 
+```mermaid
+classDiagram
+    class LLMEngine {
+        <<Interface>>
+        +load()
+        +predict_next()
+        +encode()
+        +decode()
+    }
+    class PyTorchEngine
+    class LlamaCppEngine
+    class JaxEngine
+    class MLXEngine
+
+    LLMEngine <|-- PyTorchEngine
+    LLMEngine <|-- LlamaCppEngine
+    LLMEngine <|-- JaxEngine
+    LLMEngine <|-- MLXEngine
+    note "...and other engines implement the same interface."
+```
+
+## Usage
+
+You can select which engine to use with the `--engine` command-line flag. Each engine may have its own specific options.
+
+**Example:** Running the game with the `Llama.cpp` engine.
+```bash
+python game.py --engine llamacpp --model "path/to/your/model.gguf"
+```
+
 ## Supported Frameworks
 
 The following engines are supported:

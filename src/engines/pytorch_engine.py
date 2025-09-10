@@ -9,7 +9,7 @@ except ImportError: raise ImportError("PyTorch-related libraries (transformers, 
 
 from src.core.engine_interface import LLMEngine, TokenCategory
 from src.core import config as game_config
-from src.core import sampling
+from src.engines import sampling_utils as sampling
 
 class PyTorchEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
@@ -132,8 +132,9 @@ class PyTorchEngine(LLMEngine):
             vocab = self.tokenizer.get_vocab()
             for token_str, token_id in vocab.items():
                 # Mark tokens with brackets as special
-                if (token_str.startswith('[') and token_str.endswith(']')) or \
-                   (token_str.startswith('<') and token_str.endswith('>') and len(token_str) > 2):
+                if ((token_str.startswith('[') and token_str.endswith(']')) or 
+                   (token_str.startswith('<') and token_str.endswith('>'))):
+
                     if token_id not in self._special_token_id_to_game_repr:
                         self._special_token_id_to_game_repr[token_id] = token_str
         
