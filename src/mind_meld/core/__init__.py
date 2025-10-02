@@ -4,6 +4,8 @@ from src.mind_meld.core.config import MeldConfig, SwapStrategy, TranslationMode
 from src.mind_meld.core.model_state import ModelState, StateSnapshot
 from src.mind_meld.core.meld_engine import MeldEngine
 
+MindMeldEngine = MeldEngine
+
 __all__ = [
     "MeldConfig",
     "SwapStrategy",

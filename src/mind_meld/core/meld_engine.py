@@ -3,17 +3,22 @@
 
 
 import time
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
+from src.core import config as cfg, ui
 from src.core.engine_interface import LLMEngine
-from src.core import ui, game_logic, config as cfg
-from src.mind_meld.translators.vocabulary_translator import AligningVocabularyTranslator
-from src.mind_meld.bridges.kv_cache_bridge import HeuristicKVCacheBridge
-from src.mind_meld.core.statistics import StatisticsTracker
-from src.mind_meld.core.blending import LogitBlender, BlendingConfig, BlendingStrategy
-from src.mind_meld.core.config import MeldConfig, SwapStrategy
+from src.mind_meld.bridges.kv_cache_handler import (
+    KVCacheTranslator,
+    PyTorchKVCache,
+    get_model_architecture,
+)
 from src.mind_meld.core.abe_ensemble import ABEEnsemble
+from src.mind_meld.core.blending import BlendingConfig, BlendingStrategy, LogitBlender
+from src.mind_meld.core.config import MeldConfig, SwapStrategy
+from src.mind_meld.core.statistics import StatisticsTracker
+from src.mind_meld.translators.vocabulary_translator import AligningVocabularyTranslator
 
 class MeldEngine:
     """Orchestrates the Mind Meld generation process."""
@@ -26,6 +31,7 @@ class MeldEngine:
         self.args = args
         self.config = config or MeldConfig()
         self.active_model_idx = 0
+        self.verbose = getattr(args, "verbose", False)
         
         # Strategy configuration
         self.swap_strategy = getattr(args, 'swap_strategy', 'PATTERN_BASED')
@@ -38,9 +44,9 @@ class MeldEngine:
         print("Initializing Mind Meld with enhanced bridging components...")
         # Use the new, more sophisticated vocabulary translator by default.
         self.vocab_translator = AligningVocabularyTranslator()
-        
-        # Use the new, heuristic-based KV cache bridge by default.
-        self.kv_bridge = HeuristicKVCacheBridge()
+
+        # Translator used by the KV cache fallback bridge.
+        self.kv_translator = KVCacheTranslator(verbose=self.verbose)
 
         # --- Optional Advanced Features (can be enabled via args) ---
         self.use_blending = getattr(args, 'use_blending', False)
@@ -68,10 +74,10 @@ class MeldEngine:
         self.use_abe = getattr(args, 'use_abe', False)
         self.abe_ensemble = None
         if self.use_abe:
-            self.abe_ensemble = ABEEnsemble(models, verbose=args.verbose)
+            self.abe_ensemble = ABEEnsemble(models, verbose=self.verbose)
 
         print(f"MeldEngine initialized with {self.swap_strategy} strategy.")
-        print(f"  KV Cache Bridge: {self.kv_bridge.__class__.__name__}")
+        print(f"  KV Cache Translator: {self.kv_translator.__class__.__name__}")
         print(f"  Vocabulary Translator: {self.vocab_translator.__class__.__name__}")
         print(f"  Blending: {'ON - ' + self.blend_strategy if self.use_blending else 'OFF'}")
 
@@ -263,36 +269,85 @@ class MeldEngine:
         return fake_logits, base_engine
     
     def _perform_swap(self):
-        """Swaps to the next model and attempts to bridge the KV cache using the configured bridge."""
+        """Swap engines and attempt to bridge their KV caches."""
+
         source_idx = self.active_model_idx
         target_idx = (self.active_model_idx + 1) % len(self.models)
-        
+
         source_engine = self.models[source_idx]
         target_engine = self.models[target_idx]
 
-        print(f"\n🔄 Swapping from {source_engine.model_name} to {target_engine.model_name}...", end="")
-
-        source_cache = source_engine.get_kv_cache()
-        
-        # Use the configured KV cache bridge.
-        bridged_cache = self.kv_bridge.bridge_kv_cache(
-            source_cache,
-            source_engine,
-            target_engine
+        print(
+            f"\n🔄 Swapping from {source_engine.model_name} to {target_engine.model_name}...",
+            end="",
         )
-        
-        if bridged_cache is not None:
-            success = target_engine.set_kv_cache(bridged_cache)
-            if success:
-                print(" KV cache bridged successfully.")
-            else:
-                target_engine.reset_kv_cache()
-                print(" KV cache reset after failed bridge attempt.")
+
+        if self._transfer_kv_cache(source_engine, target_engine):
+            print(" KV cache bridged successfully.")
         else:
             target_engine.reset_kv_cache()
-            print(" KV cache reset as bridge returned None.")
+            print(" KV cache reset (bridge unavailable).")
 
         self.active_model_idx = target_idx
+
+    def _transfer_kv_cache(self, source_engine: LLMEngine, target_engine: LLMEngine) -> bool:
+        """Attempt to copy KV cache state from ``source_engine`` to ``target_engine``."""
+
+        source_cache = source_engine.get_kv_cache()
+        if source_cache is None:
+            return False
+
+        # Preferred path: let the originating engine perform the transfer if it knows how.
+        try:
+            if source_engine.bridge_kv_cache_to(target_engine):
+                return True
+        except NotImplementedError:
+            pass
+        except Exception as exc:  # pragma: no cover - backend specific
+            if self.verbose:
+                print(f" (direct bridge failed: {exc})", end="")
+
+        # Secondary path: use the standardized export/import hooks when available.
+        try:
+            export_state = None
+            if hasattr(source_engine, 'export_kv_cache_state'):
+                export_state = source_engine.export_kv_cache_state()
+
+            if export_state and hasattr(target_engine, 'import_kv_cache_state'):
+                if target_engine.import_kv_cache_state(export_state):
+                    return True
+        except Exception as exc:  # pragma: no cover - backend specific
+            if self.verbose:
+                print(f" (state bridge failed: {exc})", end="")
+
+        # Fallback path: attempt shape-compatible translation using the shared translator.
+        try:
+            source_config = getattr(getattr(source_engine, "model", None), "config", None)
+            target_config = getattr(getattr(target_engine, "model", None), "config", None)
+            if source_config is None or target_config is None:
+                return False
+
+            wrapped_cache = (
+                source_cache
+                if isinstance(source_cache, PyTorchKVCache)
+                else PyTorchKVCache(source_cache, source_config)
+            )
+
+            target_arch = get_model_architecture(target_config)
+            translated_cache = self.kv_translator.translate(
+                wrapped_cache,
+                target_arch,
+                target_config,
+            )
+
+            if translated_cache is None:
+                return False
+
+            return bool(target_engine.set_kv_cache(translated_cache.to_model_format()))
+        except Exception as exc:  # pragma: no cover - backend specific
+            if self.verbose:
+                print(f" (kv translation failed: {exc})", end="")
+            return False
 
     def run_game_loop(self):
         """Main game loop for Mind Meld mode."""
@@ -456,4 +511,3 @@ class MeldEngine:
         
         if self.stats_tracker:
             self.stats_tracker.finish()
-

@@ -21,6 +21,7 @@ from engines.engine_factory import get_engine, SUPPORTED_ENGINES
 from core.engine_interface import LLMEngine
 from core.tutorial_mode import TutorialMode
 from core.comparison_mode import ComparisonMode
+from core.mind_meld_mode import MindMeldMode
 from core.interactive_menu import InteractiveMenu
 
 
@@ -158,10 +159,48 @@ def parse_arguments() -> argparse.Namespace:
                            choices=["float32", "bfloat16", "float16"],
                            help="JAX: Model data type")
     
+    mind_group = parser.add_argument_group("Mind Meld Options")
+    mind_group.add_argument("--mind-meld", action="store_true", default=False,
+                            help="Run Mind Meld mode to meld multiple models during generation")
+    mind_group.add_argument("--meld-models", type=str, nargs="+", default=None,
+                            help="Models to use for Mind Meld (format: engine:model or model to default to PyTorch)")
+    mind_group.add_argument("--swap-strategy", type=str, default="pattern",
+                            choices=["pattern", "fixed", "fixed_interval", "round_robin", "random"],
+                            help="Strategy for deciding when to swap active models")
+    mind_group.add_argument("--fixed-interval", type=int, default=5,
+                            help="Token interval for the fixed swap strategy")
+    mind_group.add_argument("--use-blending", action="store_true", default=False,
+                            help="Blend logits from all models instead of hard swapping")
+    mind_group.add_argument("--use-weighted-average", action="store_true", default=False,
+                            help="Use weighted averaging of model probabilities each step")
+    mind_group.add_argument("--use-abe", action="store_true", default=False,
+                            help="Enable Agreement-Based Ensembling (ABE)")
+    mind_group.add_argument("--use-enhanced", action="store_true", default=False,
+                            help="Enable enhanced Mind Meld features such as vocabulary alignment tweaks")
+    mind_group.add_argument("--blend-strategy", type=str, default="weighted_average",
+                            choices=[
+                                "weighted_average",
+                                "confidence_weighted",
+                                "dynamic_weighted",
+                                "attention_weighted",
+                                "learned",
+                                "hierarchical",
+                                "ensemble_voting"
+                            ],
+                            help="Logit blending strategy when blending is enabled")
+    mind_group.add_argument("--alignment-strategy", type=str, default="semantic",
+                            help="Vocabulary alignment strategy to use when translating logits between models")
+    mind_group.add_argument("--use-stats-tracker", action="store_true", default=False,
+                            help="Track Mind Meld statistics and optionally write them to a file")
+    mind_group.add_argument("--stats-file", type=str, default=None,
+                            help="Path to save Mind Meld statistics (requires --use-stats-tracker)")
+    mind_group.add_argument("--initial-prompt", type=str, default=None,
+                            help="Initial prompt to seed Mind Meld generation")
+    
     mlx_group = parser.add_argument_group("MLX Engine Options")
     mlx_group.add_argument("--mlx-adapter-path", type=str, default=None,
                            help="MLX: Path to LoRA adapter")
-    
+
     parsed_args = parser.parse_args()
     
     # Handle color settings
@@ -678,6 +717,9 @@ def main():
         return
     elif args.comparison:
         run_comparison_mode(args)
+        return
+    elif getattr(args, "mind_meld", False):
+        run_meld_mode(args)
         return
 
     # Initialize engine

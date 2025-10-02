@@ -48,7 +48,8 @@ class MindMeldConfig:
     use_blending: bool = False
     use_weighted_average: bool = False
     use_abe: bool = False  # Agreement-Based Ensembling
-    blend_strategy: str = "weighted"
+    use_stats_tracker: bool = False
+    blend_strategy: str = "weighted_average"
     alignment_strategy: str = "semantic"
     stats_file: Optional[str] = None
 
@@ -80,6 +81,182 @@ class MindMeldCLI:
     def __init__(self):
         self.config = MindMeldConfig()
         
+    def parse_cli_args(self) -> argparse.Namespace:
+        """Parse command-line arguments for direct CLI usage."""
+        parser = argparse.ArgumentParser(
+            description="Mind Meld CLI - meld multiple LLMs together"
+        )
+
+        parser.add_argument(
+            "--models",
+            type=str,
+            nargs="+",
+            help="Models to meld (format: engine:model or model to default to PyTorch)",
+        )
+        parser.add_argument(
+            "--strategy",
+            type=str,
+            default="pattern",
+            choices=["pattern", "fixed", "fixed_interval", "round_robin", "random"],
+            help="Swap strategy to control when models take over"
+        )
+        parser.add_argument(
+            "--interval",
+            type=int,
+            default=5,
+            help="Token interval for fixed swap strategy"
+        )
+        parser.add_argument(
+            "--temperature",
+            type=float,
+            default=0.7,
+            help="Generation temperature"
+        )
+        parser.add_argument(
+            "--top-k",
+            type=int,
+            default=8,
+            help="Top-K sampling limit"
+        )
+        parser.add_argument(
+            "--top-p",
+            type=float,
+            default=0.95,
+            help="Top-P (nucleus) sampling threshold"
+        )
+        parser.add_argument(
+            "--steps",
+            type=int,
+            default=20,
+            help="Number of generation steps"
+        )
+        parser.add_argument(
+            "--prompt",
+            type=str,
+            default=None,
+            help="Initial prompt to start the meld"
+        )
+        parser.add_argument(
+            "--use-weighted-average",
+            action="store_true",
+            help="Use weighted average ensemble across models"
+        )
+        parser.add_argument(
+            "--use-abe",
+            action="store_true",
+            help="Enable Agreement-Based Ensembling"
+        )
+        parser.add_argument(
+            "--use-blending",
+            action="store_true",
+            help="Blend logits from all models instead of single-source swaps"
+        )
+        parser.add_argument(
+            "--blend-strategy",
+            type=str,
+            default="weighted_average",
+            choices=[
+                "weighted_average",
+                "confidence_weighted",
+                "dynamic_weighted",
+                "attention_weighted",
+                "learned",
+                "hierarchical",
+                "ensemble_voting"
+            ],
+            help="Blending strategy to use when --use-blending is enabled"
+        )
+        parser.add_argument(
+            "--alignment",
+            type=str,
+            default="semantic",
+            help="Vocabulary alignment strategy"
+        )
+        parser.add_argument(
+            "--use-enhanced",
+            action="store_true",
+            help="Enable enhanced Mind Meld features"
+        )
+        parser.add_argument(
+            "--use-stats-tracker",
+            action="store_true",
+            help="Track statistics for each model during the session"
+        )
+        parser.add_argument(
+            "--stats-file",
+            type=str,
+            default=None,
+            help="Optional path to write statistics JSON"
+        )
+        parser.add_argument(
+            "--verbose",
+            action="store_true",
+            help="Enable verbose output"
+        )
+        parser.add_argument(
+            "--show-attention",
+            action=argparse.BooleanOptionalAction,
+            default=True,
+            help="Toggle attention heatmap display"
+        )
+
+        return parser.parse_args()
+
+    def _strategy_from_string(self, value: str) -> SwapStrategy:
+        """Convert string input to SwapStrategy enum."""
+        value_normalized = (value or "pattern").lower()
+        mapping = {
+            "pattern": SwapStrategy.PATTERN_BASED,
+            "pattern_based": SwapStrategy.PATTERN_BASED,
+            "fixed": SwapStrategy.FIXED_INTERVAL,
+            "fixed_interval": SwapStrategy.FIXED_INTERVAL,
+            "round_robin": SwapStrategy.ROUND_ROBIN,
+            "random": SwapStrategy.RANDOM,
+        }
+        return mapping.get(value_normalized, SwapStrategy.PATTERN_BASED)
+
+    def run_from_cli(self, args: argparse.Namespace) -> None:
+        """Run Mind Meld session using parsed CLI arguments."""
+        config = MindMeldConfig()
+
+        if not args.models or len(args.models) < 2:
+            print(ui.color_text("Mind Meld CLI requires at least two models specified with --models", cfg.COLOR_RED))
+            return
+
+        config.models = []
+        for spec in args.models:
+            if ":" in spec:
+                engine, model_name = spec.split(":", 1)
+            else:
+                engine = "pytorch"
+                model_name = spec
+            config.models.append((engine, model_name))
+
+        config.swap_strategy = self._strategy_from_string(args.strategy)
+        config.fixed_interval = args.interval
+        config.temperature = args.temperature
+        config.top_k = args.top_k
+        config.top_p = args.top_p
+        config.steps = args.steps
+        config.initial_prompt = args.prompt or self.config.initial_prompt
+        config.verbose = args.verbose
+        config.show_attention = args.show_attention
+        config.use_weighted_average = args.use_weighted_average
+        config.use_abe = args.use_abe
+        config.use_blending = args.use_blending
+        config.blend_strategy = args.blend_strategy
+        config.alignment_strategy = args.alignment
+        config.use_enhanced = args.use_enhanced
+        config.use_stats_tracker = args.use_stats_tracker
+        config.stats_file = args.stats_file
+
+        engines = self.load_models(config)
+        if not engines or len(engines) < 2:
+            print(ui.color_text("Failed to load sufficient models for Mind Meld", cfg.COLOR_RED))
+            return
+
+        self.run_mind_meld(config, engines)
+
     def print_header(self):
         """Print the Mind Meld CLI header"""
         print("=" * 70)
@@ -413,6 +590,7 @@ class MindMeldCLI:
             use_abe=config.use_abe,
             blend_strategy=config.blend_strategy,
             alignment_strategy=config.alignment_strategy,
+            use_stats_tracker=config.use_stats_tracker,
             stats_file=config.stats_file,
         )
         
