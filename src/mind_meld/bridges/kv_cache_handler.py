@@ -43,6 +43,103 @@ class KVCache(ABC):
         self.head_dim = model_config.hidden_size // model_config.num_attention_heads
         self._cache_metadata: Dict[str, Any] = {}
         self.key, self.value = self._to_numpy(cache)
+        self.sequence_length = self.key.shape[2] if len(self.key.shape) > 2 else 0
+
+    def can_resume(self, target_config: Any, required_length: int) -> bool:
+        """
+        Check if this cache can be reused for a target model.
+
+        Similar to Ollama's CanResume - checks if cache is compatible.
+
+        Args:
+            target_config: Configuration of target model
+            required_length: Required sequence length
+
+        Returns:
+            True if cache can be reused
+        """
+        target_arch = get_model_architecture(target_config)
+
+        # Check architecture compatibility
+        if target_arch != self.model_arch and target_arch != 'unknown' and self.model_arch != 'unknown':
+            return False
+
+        # Check dimensions
+        if target_config.num_hidden_layers != self.num_layers:
+            return False
+
+        if target_config.num_attention_heads != self.num_heads:
+            return False
+
+        target_head_dim = target_config.hidden_size // target_config.num_attention_heads
+        if target_head_dim != self.head_dim:
+            return False
+
+        # Check sequence length
+        if self.sequence_length < required_length:
+            return False
+
+        return True
+
+    def copy_prefix(self, prefix_length: int) -> 'KVCache':
+        """
+        Copy only the first N tokens from the cache.
+
+        Similar to Ollama's CopyPrefix - useful for sharing prompt context.
+
+        Args:
+            prefix_length: Number of tokens to copy from start
+
+        Returns:
+            New KVCache with only prefix
+        """
+        if prefix_length <= 0 or prefix_length > self.sequence_length:
+            raise ValueError(f"Invalid prefix_length: {prefix_length}")
+
+        # Create new cache with truncated sequence
+        new_cache = type(self).__new__(type(self))
+        new_cache.model_arch = self.model_arch
+        new_cache.num_layers = self.num_layers
+        new_cache.num_heads = self.num_heads
+        new_cache.head_dim = self.head_dim
+        new_cache._cache_metadata = self._cache_metadata.copy()
+
+        # Truncate key and value to prefix length
+        # Assumes shape: (num_layers, batch_size, seq_len, num_heads, head_dim) or similar
+        new_cache.key = self.key[:, :, :prefix_length, ...] if len(self.key.shape) > 2 else self.key
+        new_cache.value = self.value[:, :, :prefix_length, ...] if len(self.value.shape) > 2 else self.value
+        new_cache.sequence_length = prefix_length
+
+        return new_cache
+
+    def selective_transfer(self, layer_indices: List[int]) -> 'KVCache':
+        """
+        Transfer only specific layers of the cache.
+
+        Useful for partial architecture matches where some layers are compatible.
+
+        Args:
+            layer_indices: Indices of layers to transfer
+
+        Returns:
+            New KVCache with only selected layers
+        """
+        if not layer_indices or max(layer_indices) >= self.num_layers:
+            raise ValueError(f"Invalid layer_indices: {layer_indices}")
+
+        new_cache = type(self).__new__(type(self))
+        new_cache.model_arch = self.model_arch
+        new_cache.num_layers = len(layer_indices)
+        new_cache.num_heads = self.num_heads
+        new_cache.head_dim = self.head_dim
+        new_cache._cache_metadata = self._cache_metadata.copy()
+
+        # Select only specified layers
+        new_cache.key = self.key[layer_indices, ...]
+        new_cache.value = self.value[layer_indices, ...]
+        new_cache.sequence_length = self.sequence_length
+
+        return new_cache
 
     @abstractmethod
     def _to_numpy(self, cache: Any) -> Tuple[np.ndarray, np.ndarray]:

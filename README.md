@@ -14,7 +14,7 @@ Gamma is a hands-on tool that lets you peer inside open source language models t
 
 ## Architecture
 
-Gamma uses a modular architecture with a pluggable engine system, allowing the core application to run models from a variety of machine learning frameworks. This makes it easy to compare different models and to extend the tool to support new backends. [Learn more about the engine framework...](./src/engines/README.md)
+Gamma uses a modular architecture with a pluggable engine system, allowing the core application to run models from a variety of machine learning frameworks. The system includes GPU discovery, memory estimation, and model validation to ensure efficient resource usage. [Learn more about the engine framework...](./src/engines/README.md)
 
 ```mermaid
 graph TD;
@@ -61,14 +61,38 @@ pip install -r requirements-pytorch.txt
 # pip install -r requirements-mlx.txt
 ```
 
+### Model Setup
+
+Gamma can use models from multiple sources:
+- **HuggingFace models**: Downloaded automatically (e.g., `google/gemma-3-1b-it`)
+- **Local GGUF files**: For llama.cpp engine
+- **Ollama models**: Reuse models you already have via symlinks
+
+**Quick setup for Ollama integration:**
+```bash
+# Create symlink to an Ollama model
+ln -s /usr/share/ollama/.ollama/models/blobs/sha256-abc123... models/my-model.gguf
+
+# Use it with llamacpp engine
+python game.py --engine llamacpp --model my-model.gguf
+```
+
+See [docs/MODEL_SETUP.md](docs/MODEL_SETUP.md) for detailed instructions on model management, Ollama integration, and download utilities.
+
 ## Quick Start & Common Usage
 
-Run the main program without any arguments to get an interactive configuration menu.
+Run the main program without any arguments to get an interactive configuration menu with hardware detection and model recommendations.
 
 ```bash
 # Run the interactive LLM guessing game with default settings
 python game.py
 ```
+
+The interactive menu displays:
+- Available GPUs and VRAM
+- Memory requirements for models before loading
+- Local models vs downloadable options
+- Warnings if a model won't fit in available VRAM
 
 Or, use command-line flags for direct access to different modes:
 
@@ -98,7 +122,7 @@ Use `python game.py --help` for a full list of all options.
 
 ## EXPERIMENTAL
 
-- **Mind Meld Mode**: Allows multiple language models to collaborate during a single text generation session by dynamically swapping their neural states. [Learn more...](./src/mind_meld/README.md)
+- **Mind Meld Mode**: Allows multiple language models to collaborate during a single text generation session by dynamically swapping their neural states. Includes KV cache management with prefix caching for efficient context sharing between models. [Learn more...](./src/mind_meld/README.md)
 
 ## Tools
 
@@ -117,3 +141,22 @@ A simple FastAPI server is included to expose any loaded model via a REST API.
 ```bash
 python tools/run_api_server.py --model <MODEL_FILENAME> [OPTIONS]
 ```
+
+## Features
+
+### Hardware Management
+- **GPU Discovery**: Automatic detection of CUDA, ROCm, Metal, and CPU backends
+- **Memory Estimation**: Calculates VRAM requirements before loading models
+- **GGUF Parsing**: Extracts metadata from GGUF files for validation and optimization
+- **Resource Monitoring**: Shows available VRAM and warns about insufficient memory
+
+### Model Management
+- **Interactive Model Picker**: Browse local and downloadable models with status indicators
+- **Local Model Detection**: Automatically finds models in `models/`, Ollama directories, and HuggingFace cache
+- **Memory Pre-checks**: Validates model fits in available VRAM before loading
+- **Path Resolution**: Unified model loading from multiple sources
+
+### KV Cache Management
+- **Prefix Caching**: Share prompt context between models in Mind Meld mode
+- **Selective Transfer**: Copy specific layers for partial architecture matches
+- **Resume Capability**: Check cache compatibility before reuse

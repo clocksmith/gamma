@@ -4,6 +4,10 @@ Model Catalog for GAMMA - Predefined models with metadata
 
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
+import os
+from src.core.model_paths import list_available_models, get_project_root, resolve_model_path
+from src.core.memory_estimator import check_model_fits, format_memory_estimate
+from src.core.gpu_discovery import get_total_available_vram_mb
 
 
 @dataclass
@@ -16,6 +20,8 @@ class ModelInfo:
     memory_estimate: str  # Rough memory requirement
     recommended: bool = False
     requires_auth: bool = True  # Most Gemma models need HF auth
+    available_locally: bool = False  # Whether model exists on disk
+    location: Optional[str] = None  # Path to local model if available
 
 
 # Predefined model catalogs for each engine
@@ -329,14 +335,79 @@ MODEL_CATALOG = {
 
 class ModelSelector:
     """Interactive model selection with paging and search."""
-    
+
     def __init__(self, engine: str):
         self.engine = engine
         self.models = MODEL_CATALOG.get(engine, [])
         self.page_size = 5
         self.current_page = 0
         self.filtered_models = self.models.copy()
-        
+        self.local_models = []
+        self._discover_local_models()
+
+    def _discover_local_models(self) -> None:
+        """Discover locally available models (GGUF, ONNX, etc.)."""
+        try:
+            available = list_available_models()
+
+            for location, models in available.items():
+                for model in models:
+                    # Only show models relevant to this engine
+                    filename = model['filename']
+
+                    if self.engine == 'llamacpp' and filename.endswith('.gguf'):
+                        # Check if this model is already in catalog
+                        existing = any(m.name == filename for m in self.models)
+                        if not existing:
+                            # Add new local GGUF model
+                            size_mb = model['size_mb']
+                            size_str = f"{size_mb / 1024:.1f}GB" if size_mb > 1024 else f"{size_mb:.0f}MB"
+
+                            self.local_models.append(ModelInfo(
+                                name=filename,
+                                engine=self.engine,
+                                size="?",
+                                description=f"Local GGUF - {location}",
+                                memory_estimate=size_str,
+                                recommended=False,
+                                requires_auth=False,
+                                available_locally=True,
+                                location=model['full_path']
+                            ))
+                        else:
+                            # Mark existing catalog model as available
+                            for m in self.models:
+                                if m.name == filename:
+                                    m.available_locally = True
+                                    m.location = model['full_path']
+
+                    elif self.engine == 'onnx' and filename.endswith('.onnx'):
+                        existing = any(m.name == filename for m in self.models)
+                        if not existing:
+                            size_mb = model['size_mb']
+                            size_str = f"{size_mb / 1024:.1f}GB" if size_mb > 1024 else f"{size_mb:.0f}MB"
+
+                            self.local_models.append(ModelInfo(
+                                name=filename,
+                                engine=self.engine,
+                                size="?",
+                                description=f"Local ONNX - {location}",
+                                memory_estimate=size_str,
+                                recommended=False,
+                                requires_auth=False,
+                                available_locally=True,
+                                location=model['full_path']
+                            ))
+
+            # Add local models to the beginning of the list
+            if self.local_models:
+                self.models = self.local_models + self.models
+                self.filtered_models = self.models.copy()
+
+        except Exception as e:
+            # If discovery fails, just continue with catalog models
+            pass
+
     def display_page(self) -> None:
         """Display current page of models."""
         start_idx = self.current_page * self.page_size
@@ -345,25 +416,39 @@ class ModelSelector:
         if not self.filtered_models:
             print("No models found for this engine.")
             return
-            
+
         print(f"\n📦 Available Models (Page {self.current_page + 1}/{self.total_pages()}):")
-        print("-" * 70)
-        
+        print("-" * 80)
+
         for i in range(start_idx, end_idx):
             model = self.filtered_models[i]
             num = i + 1
-            
+
             # Format the display
             rec = "⭐" if model.recommended else "  "
-            auth = "🔐" if model.requires_auth else "  "
-            
-            print(f"{rec} {num:2}. {model.name:<35} [{model.size:>4}] {model.memory_estimate:>6}")
-            print(f"       {model.description}")
-            if model.requires_auth:
-                print(f"       {auth} Requires Hugging Face authentication")
+            local = "💾" if model.available_locally else "☁️ "
+            auth = "🔐" if model.requires_auth and not model.available_locally else "  "
+
+            print(f"{local} {rec} {num:2}. {model.name:<40} [{model.size:>4}] {model.memory_estimate:>6}")
+            print(f"          {model.description}")
+
+            if model.available_locally:
+                # Show abbreviated path
+                if model.location:
+                    short_location = model.location
+                    if "ollama" in short_location.lower():
+                        short_location = "...ollama/models/blobs/..."
+                    elif str(get_project_root()) in short_location:
+                        short_location = short_location.replace(str(get_project_root()), ".")
+                    print(f"          ✓ Local: {short_location}")
+            elif model.requires_auth:
+                print(f"          {auth} Download: HuggingFace (requires auth)")
+            else:
+                print(f"          ☁️  Download: HuggingFace (auto-download)")
+
             print()
-        
-        print("-" * 70)
+
+        print("-" * 80)
         
     def total_pages(self) -> int:
         """Calculate total number of pages."""
@@ -371,6 +456,11 @@ class ModelSelector:
     
     def show_navigation_help(self) -> None:
         """Show navigation options."""
+        local_count = sum(1 for m in self.filtered_models if m.available_locally)
+        cloud_count = len(self.filtered_models) - local_count
+
+        print("\nLegend: 💾=Local  ☁️=Download  ⭐=Recommended  🔐=Auth Required")
+        print(f"Status: {local_count} local, {cloud_count} downloadable")
         print("\nOptions:")
         print("  • Enter model number (1-{})".format(len(self.filtered_models)))
         print("  • 'n' - Next page")
@@ -378,6 +468,7 @@ class ModelSelector:
         print("  • 's' - Search/filter models")
         print("  • 'c' - Enter custom model path")
         print("  • 'r' - Show only recommended models")
+        print("  • 'l' - Show only local models")
         print("  • 'a' - Show all models")
         print("  • 'q' - Cancel selection")
     
@@ -396,7 +487,12 @@ class ModelSelector:
         """Show only recommended models."""
         self.filtered_models = [m for m in self.models if m.recommended]
         self.current_page = 0
-    
+
+    def show_local_only(self) -> None:
+        """Show only locally available models."""
+        self.filtered_models = [m for m in self.models if m.available_locally]
+        self.current_page = 0
+
     def reset_filter(self) -> None:
         """Reset to show all models."""
         self.filtered_models = self.models.copy()
@@ -434,6 +530,12 @@ class ModelSelector:
             elif choice == 'r':
                 self.show_recommended_only()
                 print(f"Showing {len(self.filtered_models)} recommended models.")
+            elif choice == 'l':
+                self.show_local_only()
+                if len(self.filtered_models) == 0:
+                    print("No local models found. Models will be auto-downloaded on first use.")
+                else:
+                    print(f"Showing {len(self.filtered_models)} local models.")
             elif choice == 'a':
                 self.reset_filter()
                 print(f"Showing all {len(self.filtered_models)} models.")
@@ -446,12 +548,48 @@ class ModelSelector:
                     model_num = int(choice)
                     if 1 <= model_num <= len(self.filtered_models):
                         selected = self.filtered_models[model_num - 1]
+
+                        # Check memory requirements
+                        self._check_memory_before_selection(selected)
+
                         print(f"\n✓ Selected: {selected.name}")
                         return selected.name
                     else:
                         print(f"Please enter a number between 1 and {len(self.filtered_models)}")
                 except ValueError:
                     print("Invalid choice. Please try again.")
+
+    def _check_memory_before_selection(self, model: ModelInfo) -> None:
+        """Check if model fits in available VRAM and warn user."""
+        try:
+            # Resolve model path
+            model_path = resolve_model_path(model.name)
+
+            # Get available VRAM
+            available_vram_mb = get_total_available_vram_mb()
+
+            # If no GPU, skip check
+            if available_vram_mb == 0:
+                print("\n⚠️  No GPU detected - model will run on CPU (slow)")
+                return
+
+            # Check if model fits
+            fits, message, estimate = check_model_fits(model_path, available_vram_mb)
+
+            print(f"\n📊 Memory Estimate:")
+            print(format_memory_estimate(estimate))
+            print(f"\n{message}")
+
+            if not fits:
+                confirm = input("\nContinue anyway? (y/n): ").strip().lower()
+                if confirm != 'y':
+                    print("Selection cancelled.")
+                    return
+
+        except Exception as e:
+            # If estimation fails, just warn and continue
+            print(f"\n⚠️  Could not estimate memory requirements: {e}")
+            pass
 
 
 def get_model_info(engine: str, model_name: str) -> Optional[ModelInfo]:

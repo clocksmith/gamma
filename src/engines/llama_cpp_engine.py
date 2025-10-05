@@ -7,6 +7,7 @@ try:
 except ImportError: raise ImportError("'llama-cpp-python' library not found. Install with `pip install -r requirements-llamacpp.txt`")
 
 from src.core.engine_interface import LLMEngine
+from src.core.model_paths import resolve_model_path
 from src.engines import sampling_utils
 
 def _decode_llama_token_piece(piece: bytes) -> str:
@@ -19,7 +20,8 @@ class LlamaCppEngine(LLMEngine):
 
     def load(self):
         self._verify_and_report_gpu_support()
-        model_p = self.model_name; cfg_args = self.engine_config
+        model_p = resolve_model_path(self.model_name)
+        cfg_args = self.engine_config
         print(f"LlamaCppEngine: Loading GGUF '{model_p}'...")
         try:
             self.model = Llama(model_path=model_p, n_ctx=cfg_args.get("llama_cpp_n_ctx", 2048),

@@ -8,6 +8,7 @@ try:
 except ImportError: raise ImportError("ONNX Runtime or Transformers library not found. Install with `pip install -r requirements-onnx.txt`")
 
 from src.core.engine_interface import LLMEngine
+from src.core.model_paths import resolve_model_path
 from src.engines import sampling_utils
 
 class ONNXEngine(LLMEngine):
@@ -25,10 +26,11 @@ class ONNXEngine(LLMEngine):
         except Exception as e: raise RuntimeError(f"ONNXEngine: Tokenizer load failed for '{self._tokenizer_name}': {e}") from e
         providers_list = self.engine_config.get("onnx_providers", ["CPUExecutionProvider"])
         provider_options_list = self.engine_config.get("onnx_provider_options", None)
-        print(f"ONNXEngine: Loading model '{self.model_name}' with providers {providers_list}...")
+        resolved_model_path = resolve_model_path(self.model_name)
+        print(f"ONNXEngine: Loading model '{resolved_model_path}' with providers {providers_list}...")
         sess_opts_obj = ort.SessionOptions()
         try:
-            self._session = ort.InferenceSession(self.model_name, sess_options=sess_opts_obj, providers=providers_list, provider_options=provider_options_list)
+            self._session = ort.InferenceSession(resolved_model_path, sess_options=sess_opts_obj, providers=providers_list, provider_options=provider_options_list)
             self._input_names = [i.name for i in self._session.get_inputs()]; self._output_names = [o.name for o in self._session.get_outputs()]
             print(f"  Model Inputs: {self._input_names}\n  Model Outputs: {self._output_names}")
             if not ("input_ids" in self._input_names and "logits" in self._output_names): print("ONNXEngine Warning: 'input_ids' or 'logits' not found. Functionality may be affected.")

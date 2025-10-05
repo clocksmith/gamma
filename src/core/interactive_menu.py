@@ -7,6 +7,7 @@ from src.core import config as cfg
 from src.core import ui_components as uic
 from src.core import interactive_prompts as prompts
 from src.core.model_catalog import ModelSelector, get_model_info
+from src.core.gpu_discovery import get_gpu_info, format_gpu_info
 
 
 class InteractiveMenu:
@@ -19,6 +20,10 @@ class InteractiveMenu:
         """Show the main menu and return configuration."""
         uic.print_separator()
         print(uic.color_text("🎮 GAMMA - Interactive Configuration", cfg.COLOR_CYAN))
+
+        # Show GPU info
+        print(format_gpu_info(get_gpu_info()))
+
         print("\n⚡ Quick Start Options:")
         print("  1. Just Play! (Classic with defaults)")
         print("  2. Quick Tutorial (Start learning immediately)")
