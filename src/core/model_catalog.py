@@ -26,6 +26,83 @@ class ModelInfo:
 
 # Predefined model catalogs for each engine
 MODEL_CATALOG = {
+    "ollama": [
+        ModelInfo(
+            "gemma3:270m",
+            "ollama",
+            "270M",
+            "Tiny Gemma - Very fast, minimal memory",
+            "~500MB",
+            recommended=True,
+            requires_auth=False
+        ),
+        ModelInfo(
+            "gemma3:1b-it-qat",
+            "ollama",
+            "1B",
+            "Gemma 1B Instruct - Quantized, fast",
+            "~1GB",
+            recommended=True,
+            requires_auth=False
+        ),
+        ModelInfo(
+            "gemma3:4b-it-qat",
+            "ollama",
+            "4B",
+            "Gemma 4B Instruct - Good balance",
+            "~4GB",
+            recommended=True,
+            requires_auth=False
+        ),
+        ModelInfo(
+            "gemma3:27b-it-qat",
+            "ollama",
+            "27B",
+            "Gemma 27B Instruct - Large, high quality",
+            "~18GB",
+            requires_auth=False
+        ),
+        ModelInfo(
+            "qwen3-coder:30b",
+            "ollama",
+            "30B",
+            "Qwen 30B - Code specialist",
+            "~18GB",
+            requires_auth=False
+        ),
+        ModelInfo(
+            "qwen3:30b",
+            "ollama",
+            "30B",
+            "Qwen 30B - General purpose",
+            "~18GB",
+            requires_auth=False
+        ),
+        ModelInfo(
+            "deepseek-r1:32b",
+            "ollama",
+            "32B",
+            "DeepSeek R1 32B - Reasoning model",
+            "~19GB",
+            requires_auth=False
+        ),
+        ModelInfo(
+            "gpt-oss:20b",
+            "ollama",
+            "20B",
+            "GPT-OSS 20B - Open source",
+            "~13GB",
+            requires_auth=False
+        ),
+        ModelInfo(
+            "gpt-oss:120b",
+            "ollama",
+            "120B",
+            "GPT-OSS 120B - Very large, powerful",
+            "~65GB",
+            requires_auth=False
+        ),
+    ],
     "pytorch": [
         ModelInfo(
             "google/gemma-3-1b-it",
@@ -346,7 +423,45 @@ class ModelSelector:
         self._discover_local_models()
 
     def _discover_local_models(self) -> None:
-        """Discover locally available models (GGUF, ONNX, etc.)."""
+        """Discover locally available models (GGUF, ONNX, Ollama, etc.)."""
+        # Special handling for Ollama - query available models
+        if self.engine == 'ollama':
+            try:
+                import subprocess
+                result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, check=True)
+                lines = result.stdout.strip().split('\n')[1:]  # Skip header
+
+                for line in lines:
+                    if not line.strip():
+                        continue
+                    parts = line.split()
+                    if len(parts) >= 1:
+                        model_name = parts[0]
+                        size = parts[2] if len(parts) > 2 else "?"
+
+                        # Check if already in catalog
+                        existing = any(m.name == model_name for m in self.models)
+                        if not existing:
+                            self.local_models.append(ModelInfo(
+                                name=model_name,
+                                engine='ollama',
+                                size=size,
+                                description=f"Local Ollama model",
+                                memory_estimate=size,
+                                recommended=False,
+                                requires_auth=False,
+                                available_locally=True,
+                                location="ollama"
+                            ))
+                        else:
+                            # Mark existing catalog model as available
+                            for m in self.models:
+                                if m.name == model_name:
+                                    m.available_locally = True
+                                    m.location = "ollama"
+            except (FileNotFoundError, subprocess.CalledProcessError):
+                pass  # Ollama not available
+
         try:
             available = list_available_models()
 

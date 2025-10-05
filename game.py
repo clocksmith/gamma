@@ -277,7 +277,25 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
         
         return engine
     except Exception as e:
-        print(ui.color_text(f"\n✗ Failed to initialize engine: {e}", cfg.COLOR_RED))
+        error_msg = str(e)
+        print(ui.color_text(f"\n✗ Failed to initialize engine: {error_msg}", cfg.COLOR_RED))
+
+        # Provide helpful suggestions for common errors
+        if "gated repo" in error_msg or "Access to model" in error_msg or "401 Client Error" in error_msg:
+            print(ui.color_text("\n💡 This model requires authentication with Hugging Face.", cfg.COLOR_YELLOW))
+            print("\nTo fix this, you can:")
+            print("  1. Log in with: huggingface-cli login")
+            print("  2. Or set your token: export HF_TOKEN=your_token_here")
+            print("  3. Or use Ollama with local models (easiest option)")
+            print("     • Install: https://ollama.ai")
+            print("     • Pull a model: ollama pull gemma3:4b-it-qat")
+            print("     • Select 'Ollama' engine when running GAMMA")
+            print(f"\nGet your HF token at: https://huggingface.co/settings/tokens")
+        elif "No module named" in error_msg:
+            module_name = error_msg.split("'")[1] if "'" in error_msg else "unknown"
+            print(ui.color_text(f"\n💡 Missing Python package: {module_name}", cfg.COLOR_YELLOW))
+            print(f"\nTo fix this, run: pip install {module_name}")
+
         return None
 
 

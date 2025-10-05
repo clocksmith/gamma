@@ -2,7 +2,7 @@ from src.core.engine_interface import LLMEngine
 from typing import Dict, Any, Optional
 import platform
 
-SUPPORTED_ENGINES = ["pytorch", "pytorch_cuda", "tensorflow", "jax", "llamacpp", "onnx", "mlx", "mlx_gpu"]
+SUPPORTED_ENGINES = ["ollama", "pytorch", "pytorch_cuda", "tensorflow", "jax", "llamacpp", "onnx", "mlx", "mlx_gpu"]
 
 
 def get_engine(
@@ -15,7 +15,11 @@ def get_engine(
     print(f"""
 EngineFactory: Initializing engine '{engine_name_lower}' with model '{model_identifier}'...""")
 
-    if engine_name_lower == "pytorch":
+    if engine_name_lower == "ollama":
+        try: from src.engines.ollama_engine import OllamaEngine
+        except ImportError as e: raise RuntimeError(f"Ollama engine dependencies missing. Install with `pip install requests`. Original error: {e}")
+        return OllamaEngine(model_identifier, effective_engine_config)
+    elif engine_name_lower == "pytorch":
         try: from src.engines.pytorch_engine import PyTorchEngine
         except ImportError as e: raise RuntimeError(f"PyTorch dependencies missing. Install with `pip install -r requirements-pytorch.txt`. Original error: {e}")
         return PyTorchEngine(model_identifier, effective_engine_config)

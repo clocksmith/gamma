@@ -581,34 +581,36 @@ class InteractiveMenu:
         
         # Engine selection
         print("\n🚀 Select Engine:")
-        print("  1. PyTorch (recommended for Gemma)")
-        print("  2. TensorFlow")
-        print("  3. JAX")
-        print("  4. ONNX Runtime")
-        print("  5. llama.cpp (GGUF models)")
-        print("  6. MLX (Apple Silicon)")
-        print("  7. Custom engine")
-        
+        print("  1. Ollama (use local models, easiest)")
+        print("  2. PyTorch (recommended for Gemma)")
+        print("  3. TensorFlow")
+        print("  4. JAX")
+        print("  5. ONNX Runtime")
+        print("  6. llama.cpp (GGUF models)")
+        print("  7. MLX (Apple Silicon)")
+        print("  8. Custom engine")
+
         engine_choice = prompts.get_user_input(
-            "Select engine (1-7, default: 1)",
-            valid_choices=["1", "2", "3", "4", "5", "6", "7", ""],
+            "Select engine (1-8, default: 1)",
+            valid_choices=["1", "2", "3", "4", "5", "6", "7", "8", ""],
             allow_empty=True
         )
-        
+
         engine_map = {
-            "1": "pytorch",
-            "2": "tensorflow",
-            "3": "jax",
-            "4": "onnx",
-            "5": "llamacpp",
-            "6": "mlx",
-            "": "pytorch"
+            "1": "ollama",
+            "2": "pytorch",
+            "3": "tensorflow",
+            "4": "jax",
+            "5": "onnx",
+            "6": "llamacpp",
+            "7": "mlx",
+            "": "ollama"
         }
-        
-        if engine_choice == "7":
+
+        if engine_choice == "8":
             config['engine'] = prompts.get_user_input("Enter engine name", allow_empty=False)
         else:
-            config['engine'] = engine_map.get(engine_choice, "pytorch")
+            config['engine'] = engine_map.get(engine_choice, "ollama")
         
         # Model selection using the new catalog
         print(f"\n📚 Select Model for {config['engine'].upper()} engine:")
