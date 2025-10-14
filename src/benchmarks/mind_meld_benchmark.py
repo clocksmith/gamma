@@ -1,0 +1,388 @@
+"""
+Comprehensive benchmarking suite for Mind Meld strategies.
+
+Tests different configurations across multiple dimensions:
+- Speed (tokens/sec)
+- Quality (perplexity, coherence)
+- Memory usage (VRAM)
+- Strategy effectiveness
+"""
+
+import time
+import json
+from typing import List, Dict, Tuple, Optional, Any
+from dataclasses import dataclass, asdict
+import numpy as np
+from collections import defaultdict
+
+from src.core.engine_interface import LLMEngine
+from src.mind_meld.core.meld_engine import MeldEngine
+from src.mind_meld.strategies.base_strategy import SwapStrategyBase
+
+
+@dataclass
+class BenchmarkConfig:
+    """Configuration for a benchmark run."""
+    strategy_name: str
+    models: List[str]
+    prompt: str
+    max_tokens: int = 100
+    temperature: float = 0.7
+    top_k: int = 50
+    top_p: float = 0.95
+
+
+@dataclass
+class BenchmarkResult:
+    """Results from a single benchmark run."""
+    config: BenchmarkConfig
+    generated_text: str
+
+    # Performance metrics
+    total_time: float
+    tokens_per_second: float
+    avg_token_latency: float
+
+    # Memory metrics
+    peak_vram_mb: int
+    avg_vram_mb: float
+
+    # Quality metrics
+    avg_perplexity: float
+    coherence_score: float
+    diversity_score: float
+
+    # Strategy metrics
+    swap_count: int
+    swap_overhead_ms: float
+
+    # Token-level data
+    token_latencies: List[float]
+    vram_samples: List[int]
+
+    # Metadata
+    timestamp: float
+    success: bool
+    error: Optional[str] = None
+
+
+class MindMeldBenchmark:
+    """Comprehensive benchmarking for Mind Meld."""
+
+    def __init__(self, verbose: bool = True):
+        self.verbose = verbose
+        self.results: List[BenchmarkResult] = []
+
+    def _log(self, message: str):
+        """Log if verbose."""
+        if self.verbose:
+            print(f"[Benchmark] {message}")
+
+    def _measure_vram(self) -> int:
+        """Measure current VRAM usage in MB."""
+        try:
+            import torch
+            if torch.cuda.is_available():
+                return torch.cuda.memory_allocated() // (1024 ** 2)
+        except:
+            pass
+        return 0
+
+    def _calculate_perplexity(self, logits: np.ndarray) -> float:
+        """Calculate perplexity from logits."""
+        probs = np.exp(logits) / np.sum(np.exp(logits))
+        max_prob = np.max(probs)
+        return 1.0 / max(max_prob, 1e-10)
+
+    def _calculate_coherence(self, text: str) -> float:
+        """
+        Calculate coherence score (simplified).
+
+        Measures: sentence length variance, transition words, etc.
+        """
+        sentences = [s.strip() for s in text.split('.') if s.strip()]
+        if not sentences:
+            return 0.0
+
+        # Sentence length variance (lower is more coherent)
+        lengths = [len(s.split()) for s in sentences]
+        length_variance = np.var(lengths) if len(lengths) > 1 else 0
+
+        # Transition words
+        transitions = ['however', 'therefore', 'moreover', 'furthermore', 'additionally']
+        transition_count = sum(1 for t in transitions if t in text.lower())
+
+        # Combine metrics (0-1 scale)
+        coherence = 0.5  # Base score
+        coherence += 0.2 * min(transition_count / len(sentences), 1.0)
+        coherence -= 0.1 * min(length_variance / 100, 1.0)
+
+        return np.clip(coherence, 0.0, 1.0)
+
+    def _calculate_diversity(self, text: str) -> float:
+        """Calculate lexical diversity (unique words / total words)."""
+        words = text.lower().split()
+        if not words:
+            return 0.0
+        return len(set(words)) / len(words)
+
+    def run_single_benchmark(
+        self,
+        config: BenchmarkConfig,
+        meld_engine: MeldEngine
+    ) -> BenchmarkResult:
+        """Run a single benchmark configuration."""
+        self._log(f"Running benchmark: {config.strategy_name} with {len(config.models)} models")
+
+        # Warmup
+        try:
+            input_ids, mask = meld_engine.get_active_engine().encode("warmup", add_special_tokens=True)
+            meld_engine.get_active_engine().predict_next(input_ids, mask, 0.7, 50, 0.95)
+        except:
+            pass
+
+        # Reset caches
+        try:
+            import torch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                torch.cuda.reset_peak_memory_stats()
+        except:
+            pass
+
+        # Start benchmark
+        start_time = time.time()
+        start_vram = self._measure_vram()
+
+        token_latencies = []
+        vram_samples = []
+        perplexities = []
+
+        generated = config.prompt
+        success = True
+        error = None
+
+        try:
+            for i in range(config.max_tokens):
+                token_start = time.time()
+
+                # Generate token
+                active_engine = meld_engine.get_active_engine()
+                input_ids, attention_mask = active_engine.encode(generated, add_special_tokens=True)
+
+                result = active_engine.predict_next(
+                    input_ids,
+                    attention_mask,
+                    temperature=config.temperature,
+                    top_k=config.top_k,
+                    top_p=config.top_p
+                )
+
+                token_id = result['next_token_id']
+                token_text = active_engine.get_token_text(token_id)
+                generated += token_text
+
+                # Measurements
+                token_latency = time.time() - token_start
+                token_latencies.append(token_latency)
+                vram_samples.append(self._measure_vram())
+
+                # Calculate perplexity
+                logits = active_engine.convert_to_numpy(result['logits_raw'])
+                if logits.ndim > 1:
+                    logits = logits.flatten()
+                perplexities.append(self._calculate_perplexity(logits))
+
+                # Check EOS
+                if token_id == active_engine.get_eos_token_id():
+                    break
+
+        except Exception as e:
+            success = False
+            error = str(e)
+            self._log(f"Error during benchmark: {e}")
+
+        # Calculate metrics
+        end_time = time.time()
+        total_time = end_time - start_time
+        tokens_generated = len(token_latencies)
+
+        tokens_per_second = tokens_generated / total_time if total_time > 0 else 0
+        avg_token_latency = np.mean(token_latencies) if token_latencies else 0
+
+        peak_vram = max(vram_samples) if vram_samples else 0
+        avg_vram = np.mean(vram_samples) if vram_samples else 0
+
+        avg_perplexity = np.mean(perplexities) if perplexities else 0
+        coherence = self._calculate_coherence(generated)
+        diversity = self._calculate_diversity(generated)
+
+        # Strategy-specific metrics
+        swap_count = getattr(meld_engine, 'swap_count', 0)
+        # Estimate swap overhead (rough)
+        swap_overhead = (swap_count * 5.0) if swap_count > 0 else 0  # ~5ms per swap estimate
+
+        result = BenchmarkResult(
+            config=config,
+            generated_text=generated,
+            total_time=total_time,
+            tokens_per_second=tokens_per_second,
+            avg_token_latency=avg_token_latency,
+            peak_vram_mb=peak_vram,
+            avg_vram_mb=avg_vram,
+            avg_perplexity=avg_perplexity,
+            coherence_score=coherence,
+            diversity_score=diversity,
+            swap_count=swap_count,
+            swap_overhead_ms=swap_overhead,
+            token_latencies=token_latencies,
+            vram_samples=vram_samples,
+            timestamp=time.time(),
+            success=success,
+            error=error
+        )
+
+        self.results.append(result)
+        return result
+
+    def run_benchmark_suite(
+        self,
+        configs: List[BenchmarkConfig],
+        engines_factory: Any  # Function that creates engines for each config
+    ) -> List[BenchmarkResult]:
+        """
+        Run complete benchmark suite.
+
+        Args:
+            configs: List of benchmark configurations
+            engines_factory: Function that creates engines: (config) -> MeldEngine
+
+        Returns:
+            List of benchmark results
+        """
+        results = []
+
+        for config in configs:
+            self._log(f"\n{'='*70}")
+            self._log(f"Benchmark: {config.strategy_name}")
+            self._log(f"{'='*70}")
+
+            try:
+                # Create engines for this config
+                meld_engine = engines_factory(config)
+
+                # Run benchmark
+                result = self.run_single_benchmark(config, meld_engine)
+                results.append(result)
+
+                # Print summary
+                self._print_result_summary(result)
+
+            except Exception as e:
+                self._log(f"Failed to run benchmark {config.strategy_name}: {e}")
+
+        return results
+
+    def _print_result_summary(self, result: BenchmarkResult):
+        """Print summary of benchmark result."""
+        print(f"\n📊 Results:")
+        print(f"  Total Time: {result.total_time:.2f}s")
+        print(f"  Speed: {result.tokens_per_second:.2f} tokens/sec")
+        print(f"  Avg Latency: {result.avg_token_latency*1000:.2f}ms/token")
+        print(f"  Peak VRAM: {result.peak_vram_mb}MB")
+        print(f"  Avg Perplexity: {result.avg_perplexity:.2f}")
+        print(f"  Coherence: {result.coherence_score:.3f}")
+        print(f"  Diversity: {result.diversity_score:.3f}")
+        print(f"  Swaps: {result.swap_count}")
+
+    def generate_report(
+        self,
+        output_path: str = "benchmark_report.html"
+    ):
+        """
+        Generate HTML benchmark report.
+
+        Args:
+            output_path: Path to save HTML report
+        """
+        if not self.results:
+            self._log("No results to report")
+            return
+
+        html = self._build_html_report()
+
+        with open(output_path, 'w') as f:
+            f.write(html)
+
+        self._log(f"Report saved to: {output_path}")
+
+    def _build_html_report(self) -> str:
+        """Build HTML report from results."""
+        # Sort by tokens/sec
+        sorted_results = sorted(self.results, key=lambda r: r.tokens_per_second, reverse=True)
+
+        html_parts = [
+            "<!DOCTYPE html>",
+            "<html><head><title>Mind Meld Benchmark Report</title>",
+            "<style>",
+            "body { font-family: Arial, sans-serif; margin: 20px; }",
+            "table { border-collapse: collapse; width: 100%; margin: 20px 0; }",
+            "th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }",
+            "th { background-color: #4CAF50; color: white; }",
+            "tr:nth-child(even) { background-color: #f2f2f2; }",
+            ".best { background-color: #d4edda !important; }",
+            "</style>",
+            "</head><body>",
+            "<h1>Mind Meld Benchmark Report</h1>",
+            f"<p>Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}</p>",
+            "<h2>Performance Comparison</h2>",
+            "<table>",
+            "<tr><th>Strategy</th><th>Speed (tok/s)</th><th>Latency (ms)</th><th>VRAM (MB)</th><th>Perplexity</th><th>Coherence</th><th>Swaps</th></tr>"
+        ]
+
+        for result in sorted_results:
+            row_class = "best" if result == sorted_results[0] else ""
+            html_parts.append(f"<tr class='{row_class}'>")
+            html_parts.append(f"<td>{result.config.strategy_name}</td>")
+            html_parts.append(f"<td>{result.tokens_per_second:.2f}</td>")
+            html_parts.append(f"<td>{result.avg_token_latency*1000:.2f}</td>")
+            html_parts.append(f"<td>{result.peak_vram_mb}</td>")
+            html_parts.append(f"<td>{result.avg_perplexity:.2f}</td>")
+            html_parts.append(f"<td>{result.coherence_score:.3f}</td>")
+            html_parts.append(f"<td>{result.swap_count}</td>")
+            html_parts.append("</tr>")
+
+        html_parts.extend([
+            "</table>",
+            "</body></html>"
+        ])
+
+        return "\n".join(html_parts)
+
+    def save_results_json(self, output_path: str = "benchmark_results.json"):
+        """Save results to JSON file."""
+        # Convert results to serializable format
+        data = []
+        for result in self.results:
+            result_dict = {
+                'config': asdict(result.config),
+                'total_time': result.total_time,
+                'tokens_per_second': result.tokens_per_second,
+                'avg_token_latency': result.avg_token_latency,
+                'peak_vram_mb': result.peak_vram_mb,
+                'avg_vram_mb': result.avg_vram_mb,
+                'avg_perplexity': result.avg_perplexity,
+                'coherence_score': result.coherence_score,
+                'diversity_score': result.diversity_score,
+                'swap_count': result.swap_count,
+                'swap_overhead_ms': result.swap_overhead_ms,
+                'timestamp': result.timestamp,
+                'success': result.success,
+                'error': result.error
+            }
+            data.append(result_dict)
+
+        with open(output_path, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        self._log(f"Results saved to: {output_path}")
