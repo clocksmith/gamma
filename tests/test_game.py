@@ -2,14 +2,21 @@ import unittest
 from unittest.mock import patch, MagicMock
 import argparse
 import sys
+import os
 
-sys.path.insert(0, '.')
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
-    import game
+    # Import game module from file path to avoid circular import
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("game", "game.py")
+    game = importlib.util.module_from_spec(spec)
+    sys.modules['game'] = game
+    spec.loader.exec_module(game)
+
     from src.core import config as cfg
     _GAME_IMPORT_ERROR = None
-except ModuleNotFoundError as exc:
+except Exception as exc:
     game = None
     cfg = None
     _GAME_IMPORT_ERROR = exc

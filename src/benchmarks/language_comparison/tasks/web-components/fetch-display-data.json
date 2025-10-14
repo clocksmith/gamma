@@ -1,0 +1,22 @@
+{
+  "name": "fetch-display-data",
+  "description": "Fetch data from an API and display it with loading/error states",
+  "category": "web-components",
+  "difficulty": "medium",
+  "variants": {
+    "typescript": "Write a TypeScript class that fetches user data and manages loading/error states. Include proper interfaces.",
+    "javascript": "Write a JavaScript class that fetches user data and manages loading/error states.",
+    "javascript-jsdoc": "Write a JavaScript class with JSDoc that fetches user data and manages loading/error states.",
+    "javascript-vanilla-web": "Create a user list that fetches and displays data from JSONPlaceholder API. Include:\n\n**Features:**\n- Fetch users from https://jsonplaceholder.typicode.com/users\n- Show loading spinner while fetching\n- Display users in cards (name, email, company)\n- Show error message if fetch fails\n- Retry button on error\n- Search/filter users by name\n\n**HTML:**\n- Container for user cards\n- Loading spinner element\n- Error message container\n- Search input\n\n**CSS:**\n- Grid layout for user cards\n- Card styling with shadow/hover\n- Spinner animation\n- Error styling\n- Responsive grid\n\n**JavaScript:**\n- Async fetch with try/catch\n- State management (loading, error, data)\n- Render functions for different states\n- Filter/search functionality\n\nReturn as single HTML file with working demo.",
+    "javascript-vanilla-web-jsdoc": "Same as javascript-vanilla-web with complete JSDoc:\n- @typedef User\n- @typedef AppState\n- Document all functions\n- Include examples in JSDoc\n\nReturn as single HTML file.",
+    "typescript-vanilla-web": "Create a data fetching component using TypeScript and vanilla Web APIs. Include:\n\n**TypeScript:**\n- Interface for User type\n- Type-safe fetch function\n- State management with types\n- Proper error typing\n\n**Features:**\n- Generic data fetching utility\n- Loading/error/success states\n- Retry logic\n- Search/filter\n\n**Architecture:**\n- Separate modules (api, state, render)\n- Type-safe throughout\n\nProvide TypeScript source and HTML structure.",
+    "typescript-react": "Create a user list component using TypeScript React. Include:\n\n**Component:**\n- UserList component\n- UserCard component\n- LoadingSpinner component\n- ErrorMessage component\n\n**Custom Hook:**\n- useFetch<T> hook with TypeScript\n- Returns: { data, loading, error, refetch }\n\n**TypeScript:**\n- Interface for User\n- Generic useFetch hook\n- Proper component prop types\n\n**Features:**\n- Fetch from JSONPlaceholder\n- Loading state\n- Error handling with retry\n- Search/filter\n- Suspense-ready (optional)\n\n**Example:**\n```tsx\nconst { data, loading, error, refetch } = useFetch<User[]>(\n  'https://jsonplaceholder.typicode.com/users'\n);\n```\n\nNo external data fetching libraries (no React Query, SWR, etc.)."
+  },
+  "requirements": [
+    "fetch",
+    "loading state",
+    "error handling",
+    "display data",
+    "retry"
+  ]
+}

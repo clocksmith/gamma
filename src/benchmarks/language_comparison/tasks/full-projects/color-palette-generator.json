@@ -1,0 +1,44 @@
+{
+  "name": "color-palette-generator",
+  "description": "Build a color palette generator using the dream.js color library - tests real-world library integration",
+  "category": "full-projects",
+  "difficulty": "hard",
+  "variants": {
+    "typescript": "Create a TypeScript module that uses the dream.js color library (located at ../dream.js) to generate Material Design color palettes. Requirements:\n\n1. Import necessary functions from dream.js:\n   - Hct (color space)\n   - themeFromSourceColor\n   - Any other utilities needed\n\n2. Create a PaletteGenerator class with:\n   - generateFromColor(hexColor: string): ColorScheme\n   - generateFromImage(imageData: ImageData): ColorScheme[]\n   - exportAsCss(scheme: ColorScheme): string\n   - exportAsJson(scheme: ColorScheme): object\n\n3. Proper TypeScript interfaces:\n   - ColorScheme interface\n   - PaletteOptions interface\n   - Export types\n\n4. Error handling for invalid colors\n\n5. Export the class and all types\n\nNote: The dream.js library provides Material Design 3 color utilities based on HCT color space.",
+
+    "javascript": "Create a JavaScript module that uses the dream.js color library to generate Material Design color palettes. Requirements:\n\n1. Import from dream.js (Hct, themeFromSourceColor, etc.)\n\n2. Create a PaletteGenerator class with:\n   - generateFromColor(hexColor)\n   - generateFromImage(imageData)\n   - exportAsCss(scheme)\n   - exportAsJson(scheme)\n\n3. Error handling for invalid colors\n\n4. Export the class\n\nSame functionality as TypeScript version.",
+
+    "javascript-jsdoc": "Create a JavaScript module with JSDoc that uses the dream.js color library. Requirements:\n\n1. Complete JSDoc type definitions:\n   - @typedef ColorScheme\n   - @typedef PaletteOptions\n   - @typedef HctColor\n\n2. PaletteGenerator class with full JSDoc:\n   - Document all methods with @param and @return\n   - Use @template where appropriate\n\n3. Same functionality as other variants\n\n4. Export with JSDoc @exports",
+
+    "javascript-vanilla-web": "Create a color palette generator web application using dream.js. Include:\n\n**HTML:**\n- Color input field\n- Image upload button\n- Generated palette display (color swatches)\n- Export buttons (CSS, JSON)\n- Preview section showing colors\n\n**CSS:**\n- Modern, clean design\n- Color swatches in a grid\n- Hover effects on swatches\n- Copy-to-clipboard visual feedback\n\n**JavaScript:**\n- Import and use dream.js library\n- Generate palette from hex color input\n- Extract colors from uploaded image\n- Display color swatches with hex values\n- Click to copy color values\n- Export as CSS variables\n- Export as JSON\n\n**Features:**\n- Real-time palette generation\n- Visual color preview\n- Material Design 3 compliant colors\n- Accessible color combinations\n\nReturn as single HTML file or clear structure. Must actually use the dream.js library functions.",
+
+    "javascript-vanilla-web-jsdoc": "Same as javascript-vanilla-web but with:\n- Complete JSDoc for all functions\n- @typedef for all data structures\n- Document the dream.js integration\n- Type-safe callback functions",
+
+    "typescript-vanilla-web": "Create a color palette generator using TypeScript and dream.js with vanilla Web APIs:\n\n**TypeScript:**\n- Import dream.js types\n- Type-safe color handling\n- Proper DOM typing\n- Interface for app state\n\n**Features:**\n- Type-safe event handlers\n- Generic color utilities\n- Strongly-typed palette generation\n- Type-safe exports (CSS, JSON)\n\n**HTML/CSS:**\n- Modern UI design\n- Responsive layout\n- Color accessibility indicators\n\nProvide TypeScript source and HTML structure.",
+
+    "typescript-react": "Create a color palette generator using TypeScript React and dream.js:\n\n**Components:**\n- App (main container)\n- ColorInput (hex input with validation)\n- ImageUploader (upload and extract colors)\n- PaletteDisplay (show generated colors)\n- ColorSwatch (individual color with copy)\n- ExportPanel (CSS/JSON export buttons)\n\n**Custom Hooks:**\n- usePalette (manages palette state)\n- useColorExtractor (extract from images)\n- useClipboard (copy to clipboard)\n\n**TypeScript:**\n- Interface for ColorScheme from dream.js\n- Props types for all components\n- Type-safe dream.js integration\n\n**Features:**\n- Real-time palette generation\n- Image color extraction\n- Copy colors to clipboard\n- Export functionality\n- Material Design 3 compliant\n\nMinimal deps (React + dream.js only)."
+  },
+  "requirements": [
+    "dream.js",
+    "color palette",
+    "Material Design",
+    "HCT",
+    "generate",
+    "export",
+    "integration"
+  ],
+  "testCases": [
+    {
+      "name": "Class instantiation",
+      "test": "const generator = new PaletteGenerator(); console.assert(typeof generator === 'object', 'Generator should be an object');"
+    },
+    {
+      "name": "Generate from color",
+      "test": "const generator = new PaletteGenerator(); const scheme = generator.generateFromColor('#FF0000'); console.assert(scheme && typeof scheme.primary === 'number', 'Scheme should have a numeric primary color');"
+    },
+    {
+      "name": "Export to CSS",
+      "test": "const generator = new PaletteGenerator(); const scheme = generator.generateFromColor('#0000FF'); const css = generator.exportAsCss(scheme); console.assert(typeof css === 'string' && css.includes('--md-sys-color-primary'), 'CSS export should be a string with CSS variables');"
+    }
+  ]
+}

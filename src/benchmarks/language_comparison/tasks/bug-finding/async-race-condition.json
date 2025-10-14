@@ -1,0 +1,12 @@
+{
+  "name": "async-race-condition",
+  "description": "Identify and fix a race condition in async code",
+  "category": "bug-finding",
+  "difficulty": "hard",
+  "bugLocation": "useState update in handleSubmit",
+  "variants": {
+    "typescript": "Identify the bug in this code and explain how to fix it:\n\n```typescript\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nclass UserManager {\n  private users: User[] = [];\n  private isLoading: boolean = false;\n\n  async fetchUsers(): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users');\n      const data = await response.json();\n      this.users = data;\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  async addUser(user: Omit<User, 'id'>): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users', {\n        method: 'POST',\n        body: JSON.stringify(user)\n      });\n      const newUser = await response.json();\n      // BUG: Race condition - if fetchUsers() is called while this is running,\n      // the new user might not be in the final list\n      this.users.push(newUser);\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  getUsers(): User[] {\n    return this.users;\n  }\n}\n```\n\nWhat's the bug and how would you fix it?",
+    "javascript": "Identify the bug in this code and explain how to fix it:\n\n```javascript\nclass UserManager {\n  constructor() {\n    this.users = [];\n    this.isLoading = false;\n  }\n\n  async fetchUsers() {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users');\n      const data = await response.json();\n      this.users = data;\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  async addUser(user) {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users', {\n        method: 'POST',\n        body: JSON.stringify(user)\n      });\n      const newUser = await response.json();\n      // BUG: Race condition\n      this.users.push(newUser);\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  getUsers() {\n    return this.users;\n  }\n}\n```\n\nWhat's the bug and how would you fix it?",
+    "javascript-jsdoc": "Identify the bug in this code with JSDoc annotations and explain how to fix it:\n\n[Same as JavaScript with JSDoc]"
+  }
+}

@@ -1,98 +1,193 @@
-# Core Logic: A Detailed Look at the Transformer's Forward Pass
+# Core Module
 
-This document breaks down the journey from input text to a predicted token, explaining what a real transformer model does and how GAMMA visualizes each part of that process.
+Core utilities and infrastructure for GAMMA.
 
-```mermaid
-graph TD;
-    A[Input Text] --> B(Tokenization);
-    B --> C(Embedding & Positional Encoding);
-    C --> D{Decoder Block Loop};
-    subgraph Decoder Block
-        D --> E[Multi-Head Self-Attention];
-        E --> F[Feed-Forward Network];
-        F --> D;
-    end
-    D -- After N Loops --> G(Final Projection to Logits);
-    G --> H{Sampling Pipeline};
-    subgraph "GAMMA Visualization"
-      H --> I(Temperature Scaling);
-      I --> J(Top-K Filtering);
-      J --> K(Top-P Filtering);
-      K --> L[Final Token Selection];
-    end
-    L --> M{Append to Sequence};
-    M --> A;
+## What's Here
+
+- **engine_interface.py** - Abstract LLM engine interface
+- **config.py** - Configuration constants
+- **ui.py** - Terminal UI utilities
+- **mind_meld_mode.py** - Mind Meld mode wrapper
+- **backends/** - Backend implementations
+  - **ollama_engine.py** - Ollama integration
+  - **openai_engine.py** - OpenAI API integration
+  - **anthropic_engine.py** - Anthropic API integration
+  - **google_engine.py** - Google Gemini integration
+
+## Engine Interface
+
+The `LLMEngine` abstract class defines the interface all backends must implement:
+
+```python
+from src.core.engine_interface import LLMEngine
+
+class MyEngine(LLMEngine):
+    def encode(self, text: str) -> Tuple[Any, Any]:
+        """Tokenize text into input_ids and attention_mask."""
+        pass
+
+    def predict_next(self, input_ids, attention_mask, temperature, top_k, top_p):
+        """Predict next token probabilities."""
+        pass
+
+    def decode(self, token_ids: List[int]) -> str:
+        """Convert token IDs back to text."""
+        pass
+
+    def get_kv_cache(self):
+        """Get current KV cache state."""
+        pass
+
+    def set_kv_cache(self, cache):
+        """Set KV cache state."""
+        pass
 ```
 
----
+## Configuration
 
-#### **A. Input & Context Preparation**
+Constants in `config.py`:
 
-##### **1. Text Tokenization**
+```python
+from src.core import config as cfg
 
-- **What Happens:** The input text is broken down into a sequence of "tokens" by the tokenizer. Each token is then mapped to a unique integer ID.
-- **In the Game (Fully Visualized):** This is the first thing you see. The game shows you the current text and, in the probability tables, the string representation of each potential next token.
+# UI colors
+cfg.COLOR_CYAN = '\033[96m'
+cfg.COLOR_GREEN = '\033[92m'
 
-##### **2. Embedding & Positional Encoding**
+# Shortcuts
+cfg.SHORTCUT_QUIT = 'q'
 
-- **What Happens:** This is a crucial first step inside the model. The list of token IDs is transformed into a series of rich numerical vectors.
-  1.  **Token Embedding:** Each token ID is converted into a vector that represents its learned meaning and context.
-  2.  **Positional Encoding:** A second vector is added to encode the token's position in the sequence, which is vital for the model to understand word order.
-- **In the Game (Abstracted - Not Visualized):** This step is fundamental to the transformer but happens entirely in the background. The game's visualizations begin _after_ these initial vectors have been prepared and fed into the main body of the model.
+# Game settings
+cfg.MAX_TOKENS_FOR_PROB_DISPLAY = 10
+```
 
----
+## UI Utilities
 
-#### **B. The Transformer's "Thinking" Process (The Decoder Blocks)**
+Helper functions for terminal display:
 
-##### **3. The Decoder Block Loop**
+```python
+from src.core import ui
 
-- **What Happens:** The sequence of vectors passes through a stack of identical "decoder blocks" (e.g., 18 layers for Gemma 2B). The output of one layer becomes the input for the next, allowing the model to build progressively more complex and abstract representations of the text.
-- **In the Game (Abstracted - Not Visualized):** You don't see the layer-by-layer progression. The game treats the entire stack of decoder blocks as a single computational step and only provides visualizations based on the output of the _final_ layer.
+# Print with colors
+ui.print_header("Game Started")
+ui.color_text("Important", cfg.COLOR_CYAN)
 
-##### **4. Multi-Head Self-Attention**
+# Get user input
+response = ui.get_user_input("Enter choice:", allow_empty=False)
 
-- **What Happens:** This is the most important part of each decoder block. To decide what to say next, the model "looks back" at all previous tokens. It does this multiple times in parallel through different "attention heads," each focusing on different aspects of the text (e.g., grammar, semantics, references). The results are then combined into a single context-rich vector.
-- **In the Game (Condensed/Simplified):** This is the primary simplification in the game. Instead of showing you 12+ individual attention heatmaps for each head, the game visualizes the **averaged attention scores from all heads in only the final decoder layer**. This gives you a powerful, high-level summary of what the model ultimately focused on to make its prediction, without the overwhelming complexity of the full mechanism.
+# Display info
+ui.display_round_header(round_num=1, total_rounds=10)
+ui.display_current_sentence("The quick brown fox...")
+```
 
-##### **5. Feed-Forward Networks & Residual Connections**
+## Backend Integration
 
-- **What Happens:** Within each decoder block, the output from the attention mechanism is processed by a Feed-Forward Network (FFN). These networks are where much of the model's learned "knowledge" is applied. Residual connections (adding a layer's input to its output) are also used throughout to help the model train effectively.
-- **In the Game (Abstracted - Not Visualized):** These internal computations are a core part of the transformer's processing but are not represented in the UI. They are executed by the backend library as part of the `self.model(...)` call.
+### Adding a New Backend
 
-##### **6. Final Projection to Logits**
+1. Create `src/core/backends/my_backend_engine.py`
+2. Inherit from `LLMEngine`
+3. Implement all abstract methods
+4. Add to backend registry
 
-- **What Happens:** After the final decoder block, the single vector representing the next token prediction is passed through a final linear layer. This layer projects it into a very large vector of raw, unnormalized scores—one for every single token in the model's vocabulary. These scores are called "logits".
-- **In the Game (Fully Visualized):** This is the **"Probabilities (Before any filtering)"** table. The game takes the raw logits, applies a softmax function to convert them into a probability distribution (0.0 to 1.0), and displays the most likely tokens and their probabilities. This shows you the model's raw, unfiltered opinion.
+Example:
 
----
+```python
+from src.core.engine_interface import LLMEngine
 
-#### **C. Sampling & Player Interaction**
+class MyBackendEngine(LLMEngine):
+    def __init__(self, model_name: str):
+        super().__init__(model_name)
+        # Initialize your backend
+        self.client = MyBackendClient(model_name)
 
-##### **7. The Sampling Pipeline (Temperature, Top-K, Top-P)**
+    def encode(self, text: str):
+        return self.client.tokenize(text)
 
-- **What Happens:** The raw logits are filtered to make the model's output less random and more coherent. The logits are scaled by **temperature**, then the vocabulary is pruned by **Top-K** filtering, and then pruned again by **Top-P** (nucleus) sampling.
-- **In the Game (Fully Visualized):** This is the core of the game's educational value. The UI has dedicated tables to show you the list of top tokens and their probabilities **after each individual filtering stage**. This makes the effect of each sampling parameter crystal clear.
+    def predict_next(self, input_ids, attention_mask, temperature, top_k, top_p):
+        return self.client.generate(
+            input_ids,
+            temperature=temperature,
+            top_k=top_k,
+            top_p=top_p
+        )
 
-##### **8. Token Selection**
+    # ... implement other methods
+```
 
-- **What Happens:** A standard language model would sample a single token from the final, filtered probability distribution.
-- **In the Game (Interactive Layer):** Instead of just picking the top token, this is where the "game" begins. The tool generates several plausible multi-token sequences based on the final probabilities and presents them to you as a multiple-choice question. Your challenge is to guess which one the model ranked highest.
+### Supported Backends
 
----
+- **Ollama** - Local models via Ollama
+- **OpenAI** - GPT-3.5, GPT-4 via API
+- **Anthropic** - Claude via API
+- **Google** - Gemini via API
 
-#### **D. The Autoregressive Loop**
+## KV Cache Protocol
 
-##### **9. Appending the New Token**
+Engines that support KV cache can implement:
 
-- **What Happens:** The newly selected token is appended to the input sequence. The new, longer sequence becomes the input for the next prediction step.
-- **In the Game (Experienced, Not Visualized):** You directly experience the result of this step as you see the "Current Context" string grow with each round. The game implicitly handles the process of feeding this new, longer sequence back to the start of the pipeline for the next turn.
+```python
+def get_kv_cache(self):
+    """Return current cache state (backend-specific format)."""
+    return self.model.get_cache()
 
----
+def set_kv_cache(self, cache):
+    """Set cache state."""
+    self.model.set_cache(cache)
 
-### Key Terminology
+def reset_kv_cache(self):
+    """Clear the cache."""
+    self.model.clear_cache()
 
-- **Token**: A piece of text, which can be a word, a part of a word (e.g., "ing"), or punctuation. Models have a fixed vocabulary of tokens.
-- **Logits**: The raw, unnormalized scores produced by the model for each token in its vocabulary. Higher scores mean a token is more likely.
-- **Softmax**: A mathematical function that converts a vector of logits into a probability distribution (where all values are between 0 and 1 and sum to 1).
-- **Attention**: A mechanism that allows the model to weigh the importance of different input tokens when making a prediction.
-- **KV Cache**: An optimization technique that stores intermediate attention calculations (keys and values) from previous steps to speed up the generation of subsequent tokens.
+def bridge_kv_cache_to(self, target_engine: LLMEngine) -> bool:
+    """Try to transfer cache to another engine."""
+    # Implementation depends on backend compatibility
+    pass
+```
+
+## Error Handling
+
+Common patterns:
+
+```python
+try:
+    result = engine.predict_next(...)
+except NotImplementedError:
+    # Feature not supported by this backend
+    print("This backend doesn't support this feature")
+except Exception as e:
+    # Backend-specific error
+    print(f"Error: {e}")
+```
+
+## Testing
+
+Test engine implementations:
+
+```python
+import sys
+sys.path.insert(0, 'src')
+
+from core.backends.ollama_engine import OllamaEngine
+
+# Create engine
+engine = OllamaEngine("llama2")
+
+# Test encode
+input_ids, mask = engine.encode("Hello world")
+print(f"Tokens: {input_ids}")
+
+# Test predict
+result = engine.predict_next(input_ids, mask, 0.7, 10, 0.9)
+print(f"Logits shape: {result['logits_raw'].shape}")
+
+# Test decode
+text = engine.decode([1, 2, 3])
+print(f"Decoded: {text}")
+```
+
+## See Also
+
+- **[Main README](../../README.md)** - GAMMA overview
+- **[Mind Meld](../mind_meld/README.md)** - Multi-model collaboration
+- **[Game Module](../game/README.md)** - Interactive game
+- **[Comparison](../comparison/README.md)** - Model comparison

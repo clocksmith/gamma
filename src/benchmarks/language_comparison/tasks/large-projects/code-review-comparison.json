@@ -1,0 +1,32 @@
+{
+  "name": "code-review-comparison",
+  "description": "Review and compare three implementations of the same feature",
+  "category": "large-projects",
+  "difficulty": "hard",
+  "variants": {
+    "typescript": "Review the following three implementations of a shopping cart system. Implementation A is in TypeScript, Implementation B is in JavaScript, and Implementation C is in JavaScript with JSDoc. Compare them in terms of:\n1. Type safety\n2. Code maintainability\n3. Potential bugs\n4. Developer experience\n5. Performance considerations\n\nProvide a detailed analysis with specific examples.\n\nImplementation A (TypeScript):\n```typescript\ninterface Product {\n  id: number;\n  name: string;\n  price: number;\n}\n\ninterface CartItem extends Product {\n  quantity: number;\n}\n\nclass ShoppingCart {\n  private items: Map<number, CartItem> = new Map();\n\n  addItem(product: Product, quantity: number = 1): void {\n    const existing = this.items.get(product.id);\n    if (existing) {\n      existing.quantity += quantity;\n    } else {\n      this.items.set(product.id, { ...product, quantity });\n    }\n  }\n\n  removeItem(productId: number): boolean {\n    return this.items.delete(productId);\n  }\n\n  getTotal(): number {\n    let total = 0;\n    this.items.forEach(item => {\n      total += item.price * item.quantity;\n    });\n    return total;\n  }\n\n  getItems(): CartItem[] {\n    return Array.from(this.items.values());\n  }\n}\n```\n\nImplementation B (JavaScript):\n```javascript\nclass ShoppingCart {\n  constructor() {\n    this.items = new Map();\n  }\n\n  addItem(product, quantity = 1) {\n    const existing = this.items.get(product.id);\n    if (existing) {\n      existing.quantity += quantity;\n    } else {\n      this.items.set(product.id, { ...product, quantity });\n    }\n  }\n\n  removeItem(productId) {\n    return this.items.delete(productId);\n  }\n\n  getTotal() {\n    let total = 0;\n    this.items.forEach(item => {\n      total += item.price * item.quantity;\n    });\n    return total;\n  }\n\n  getItems() {\n    return Array.from(this.items.values());\n  }\n}\n```\n\nImplementation C (JavaScript with JSDoc):\n```javascript\n/**\n * @typedef {Object} Product\n * @property {number} id\n * @property {string} name\n * @property {number} price\n */\n\n/**\n * @typedef {Product & {quantity: number}} CartItem\n */\n\nclass ShoppingCart {\n  constructor() {\n    /** @type {Map<number, CartItem>} */\n    this.items = new Map();\n  }\n\n  /**\n   * @param {Product} product\n   * @param {number} [quantity=1]\n   * @returns {void}\n   */\n  addItem(product, quantity = 1) {\n    const existing = this.items.get(product.id);\n    if (existing) {\n      existing.quantity += quantity;\n    } else {\n      this.items.set(product.id, { ...product, quantity });\n    }\n  }\n\n  /**\n   * @param {number} productId\n   * @returns {boolean}\n   */\n  removeItem(productId) {\n    return this.items.delete(productId);\n  }\n\n  /**\n   * @returns {number}\n   */\n  getTotal() {\n    let total = 0;\n    this.items.forEach(item => {\n      total += item.price * item.quantity;\n    });\n    return total;\n  }\n\n  /**\n   * @returns {CartItem[]}\n   */\n  getItems() {\n    return Array.from(this.items.values());\n  }\n}\n```",
+    "javascript": "This task requires analyzing TypeScript code. Please review Implementation B from the TypeScript variant.",
+    "javascript-jsdoc": "This task requires analyzing TypeScript code. Please review Implementation C from the TypeScript variant."
+  },
+  "requirements": [
+    "type safety",
+    "maintainability",
+    "bugs",
+    "comparison",
+    "analysis",
+    "typescript",
+    "javascript",
+    "jsdoc"
+  ],
+  "expectedAnalysis": [
+    "type safety",
+    "runtime error",
+    "maintainability",
+    "developer experience",
+    "readability",
+    "explicit types",
+    "implicit any",
+    "JSDoc",
+    "IntelliSense"
+  ]
+}

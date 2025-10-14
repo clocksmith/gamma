@@ -1,0 +1,32 @@
+{
+  "name": "milchick-color-assistant",
+  "description": "Implement a MILCHICK-style LLM-powered color assistant - tests agentic AI integration with color generation",
+  "category": "full-projects",
+  "difficulty": "hard",
+  "variants": {
+    "typescript": "Implement a TypeScript module that integrates dream.js with an LLM API to create an intelligent color assistant (like MILCHICK). Requirements:\n\n1. ColorAssistant class with:\n   - suggestColorsFromPrompt(prompt: string): Promise<ColorSuggestion[]>\n   - refineColorScheme(current: ColorScheme, feedback: string): Promise<ColorScheme>\n   - explainColorChoice(color: string): Promise<string>\n\n2. LLM Integration:\n   - Deterministic prompts for reproducible results\n   - Parse LLM responses into hex colors\n   - Validate colors using dream.js\n   - Generate Material Design themes\n\n3. Interfaces:\n   - ColorSuggestion (color, reasoning, confidence)\n   - AssistantConfig (API keys, model, temperature)\n   - ConversationState (track context)\n\n4. Features:\n   - Context-aware color suggestions\n   - Iterative refinement\n   - Fallback for invalid suggestions\n   - Deterministic mode (temperature=0)\n\n5. Use themeFromSourceColor from dream.js for final palette\n\nExport all types and the ColorAssistant class.",
+
+    "javascript": "Implement a JavaScript module for an LLM-powered color assistant using dream.js. Same functionality as TypeScript but without type annotations.",
+
+    "javascript-jsdoc": "Implement with complete JSDoc:\n- @typedef ColorSuggestion\n- @typedef AssistantConfig\n- @typedef ConversationState\n- Document the agentic workflow\n- Include usage examples in JSDoc",
+
+    "javascript-vanilla-web": "Create a complete MILCHICK-style color assistant web application:\n\n**HTML:**\n- Text input for color prompts (e.g., 'sunset vibes', 'corporate professional')\n- Chat-like interface showing AI responses\n- Color swatches display\n- Refinement input ('make it warmer', 'more vibrant')\n- Export palette button\n\n**CSS:**\n- Chat interface styling\n- Loading indicators for AI responses\n- Color swatches with smooth transitions\n- Professional, clean design\n\n**JavaScript:**\n- LLM API integration (OpenAI or Anthropic)\n- Parse AI responses for color suggestions\n- Validate colors with dream.js\n- Generate Material Design themes\n- Display reasoning for color choices\n- Handle conversation context\n- Deterministic mode toggle (for testing)\n\n**Agentic Workflow:**\n1. User describes desired mood/theme\n2. LLM suggests colors with reasoning\n3. Validate and generate palette with dream.js\n4. User can refine with natural language\n5. AI iteratively improves based on feedback\n\n**Key Features:**\n- Deterministic results when needed\n- Context preservation\n- Error handling for invalid colors\n- Fallback to sensible defaults\n\nInclude mock API mode for testing without keys.",
+
+    "javascript-vanilla-web-jsdoc": "Same as javascript-vanilla-web with complete JSDoc documenting:\n- The agentic AI workflow\n- Message types and structures\n- State management\n- All functions and their purposes",
+
+    "typescript-vanilla-web": "Create MILCHICK-style assistant using TypeScript:\n\n**TypeScript:**\n- Type-safe LLM API client\n- Strict typing for messages and state\n- Generic conversation handler\n- Type guards for color validation\n\n**Architecture:**\n- Separate modules:\n  - llm-client.ts (API calls)\n  - color-parser.ts (extract colors from text)\n  - conversation.ts (manage context)\n  - theme-generator.ts (dream.js integration)\n  - main.ts (app logic)\n\n**Features:**\n- Full type safety throughout\n- Deterministic prompts\n- Context-aware suggestions\n- Error recovery",
+
+    "typescript-react": "Create MILCHICK color assistant using TypeScript React:\n\n**Components:**\n- ColorAssistant (main app)\n- ChatInterface (conversation UI)\n- Message (individual message)\n- ColorSuggestionCard (show color with reasoning)\n- PalettePreview (display generated palette)\n- RefinementInput (natural language refinement)\n- ExportPanel (save palette)\n\n**Custom Hooks:**\n- useColorAssistant (manage conversation state)\n- useLLM<T> (generic LLM hook with types)\n- useColorValidation (validate with dream.js)\n- useDeterministicMode (toggle for testing)\n\n**Context:**\n- ConversationContext (message history, state)\n- ColorContext (current palette, variants)\n\n**TypeScript:**\n- Interface for Message, ColorSuggestion\n- Type-safe API client\n- Strict conversation types\n\n**Agentic Features:**\n- Streaming responses\n- Context preservation\n- Iterative refinement\n- Deterministic mode for reproducibility\n- Error boundaries\n\n**Testing Focus:**\n- Same prompt = same colors (deterministic)\n- Conversation context maintained\n- Graceful degradation\n\nMinimal deps (React + dream.js)."
+  },
+  "requirements": [
+    "LLM integration",
+    "agentic AI",
+    "deterministic",
+    "color suggestions",
+    "natural language",
+    "dream.js",
+    "conversation",
+    "context",
+    "refinement"
+  ]
+}

@@ -1,11 +1,14 @@
 """Unit tests for core Mind Meld orchestration utilities."""
 
 import sys
+import os
 import types
 import unittest
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Provide a minimal numpy stub if the real package is unavailable. The
 # production Mind Meld pipeline expects numpy, but these tests only exercise

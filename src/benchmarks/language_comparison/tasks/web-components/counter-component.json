@@ -1,0 +1,55 @@
+{
+  "name": "counter-component",
+  "description": "Create a counter component with increment/decrement buttons",
+  "category": "web-components",
+  "difficulty": "easy",
+  "variants": {
+    "typescript": "Write a TypeScript module that exports a Counter class with methods to get the current count and increment/decrement it. Include proper type annotations.",
+    "javascript": "Write a JavaScript module that exports a Counter class with methods to get the current count and increment/decrement it.",
+    "javascript-jsdoc": "Write a JavaScript module with JSDoc annotations that exports a Counter class with methods to get the current count and increment/decrement it. Include proper JSDoc types.",
+    "javascript-vanilla-web": "Create a complete vanilla JavaScript counter component with HTML and CSS. Include:\n- An HTML structure with a count display and two buttons (+ and -)\n- CSS for basic styling (centered layout, styled buttons)\n- JavaScript to handle clicks and update the display\n- No frameworks, just vanilla DOM APIs\n- Return the complete implementation as a single HTML file with inline CSS and JS",
+    "javascript-vanilla-web-jsdoc": "Create a complete vanilla JavaScript counter component with JSDoc type annotations. Include:\n- An HTML structure with a count display and two buttons (+ and -)\n- CSS for basic styling (centered layout, styled buttons)\n- JavaScript with complete JSDoc type annotations\n- No frameworks, just vanilla DOM APIs\n- Document all functions with @param, @return, etc.\n- Return the complete implementation as a single HTML file",
+    "typescript-vanilla-web": "Create a counter component using TypeScript with vanilla Web APIs. Include:\n- TypeScript code with proper type annotations\n- DOM manipulation using standard Web APIs\n- Event handling with proper types\n- No frameworks or libraries\n- Provide both the TypeScript source and the HTML structure needed",
+    "typescript-react": "Create a Counter component in TypeScript React. Include:\n- A functional component with TypeScript types\n- useState hook for state management\n- Props interface if needed\n- Proper TypeScript annotations\n- Clean, modern React patterns\n- Minimal dependencies (just React)"
+  },
+  "requirements": [
+    "counter",
+    "increment",
+    "decrement",
+    "display",
+    "buttons"
+  ],
+  "expectedElements": [
+    "#count",
+    "#increment-btn",
+    "#decrement-btn"
+  ],
+  "interactions": [
+    {
+      "name": "Initial state check",
+      "type": "verify",
+      "expected": {
+        "selector": "#count",
+        "text": "0"
+      }
+    },
+    {
+      "name": "Increment click",
+      "type": "click",
+      "selector": "#increment-btn",
+      "expected": {
+        "selector": "#count",
+        "text": "1"
+      }
+    },
+    {
+      "name": "Decrement click",
+      "type": "click",
+      "selector": "#decrement-btn",
+      "expected": {
+        "selector": "#count",
+        "text": "0"
+      }
+    }
+  ]
+}

@@ -4,27 +4,41 @@
 **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically
 **G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
 
+```
+╭─────────────────────────────────────────────────────────╮
+│                                                         │
+│       ☇  GAMMA - LLM Learning & Experimentation  ☇   │
+│                                                         │
+╰─────────────────────────────────────────────────────────╯
+```
+
+---
+
 ## Overview
 
-GAMMA is a comprehensive toolkit for exploring, comparing, and experimenting with Large Language Models (LLMs). It transforms complex AI concepts into interactive experiences through multiple modes:
+GAMMA is a comprehensive toolkit for exploring, comparing, and experimenting with Large Language Models (LLMs). It transforms complex AI concepts into interactive experiences.
 
-- **🎮 Interactive Game**: Predict what the model will generate next and compete against AI
-- **💬 Chat Interface**: Simple, direct conversations with any supported model
-- **📊 Model Comparison**: Side-by-side analysis of different models
-- **🎓 Tutorial Mode**: Learn how LLMs work through guided lessons
-- **🧪 Mind Meld**: Experimental multi-model collaboration system
-- **⚡ Quick Inference**: Single-shot generation with performance metrics
+### Interactive Tools
+- **☇ Interactive Game**: Predict what the model will generate next and compete against AI
+- **☛ Chat Interface**: Simple, direct conversations with any supported model
+- **☰ Tutorial Mode**: Learn how LLMs work through guided lessons
+- **☄ Quick Inference**: Single-shot generation with performance metrics
 
-<img width="1042" height="895" alt="Gamma Gameplay Screenshot" src="https://github.com/user-attachments/assets/8f593f3c-fb2b-46ea-b1ce-09c17a165dc4" />
+### Comparison & Analysis Tools
+- **☲ Model Comparison**: Side-by-side analysis of different models
+- **⚗ Mind Meld**: Experimental multi-model collaboration system
+- **⚗ Language Comparison**: TypeScript vs JavaScript LLM code generation benchmarks
+
+### Utilities
+- **⚘ Color Library**: dream.js - Material Design 3 color utilities with HCT color space
+
+---
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Clone and navigate to the project
-cd gamma
-
 # Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -37,46 +51,51 @@ pip install -r requirements-pytorch.txt     # PyTorch (recommended)
 pip install -r requirements-llamacpp.txt    # llama.cpp for GGUF models
 pip install -r requirements-onnx.txt        # ONNX Runtime
 pip install -r requirements-mlx.txt         # Apple Silicon
+
+# For language comparison benchmarks (optional)
+cd src/benchmarks/language_comparison
+npm install
+cd ../../..
 ```
 
 ### First Run
 
 ```bash
-# Interactive mode - auto-detects models and hardware
-python game.py
+# Unified CLI
+python gamma.py game                        # Interactive game
+python gamma.py comparison                  # Model comparison
+python gamma.py mind-meld                   # Mind meld experiments
+python gamma.py language-comparison         # Benchmarks
 
-# Chat with a model
-python game.py --chat
-
-# Quick inference
-python game.py --prompt "Explain quantum computing in simple terms"
-
-# Tutorial mode
-python game.py --tutorial
+# Direct entry points
+python game.py                              # Interactive mode
+python game.py --chat                       # Chat mode
+python game.py --tutorial                   # Tutorial mode
+python game.py --prompt "Explain quantum computing"  # Quick inference
 ```
+
+---
 
 ## Model Sources
 
-GAMMA supports models from multiple sources with automatic detection and smart defaults:
+GAMMA supports models from multiple sources with automatic detection:
 
 ### 1. Ollama Models (Recommended - Local & Fast)
 
-If you have Ollama installed, GAMMA automatically detects and uses your models:
-
 ```bash
-# GAMMA auto-detects these
+# GAMMA auto-detects Ollama models
 ollama list
 
-# Use directly - no configuration needed!
+# Use directly - no configuration needed
 python game.py  # Interactive menu shows your Ollama models
 ```
 
-**Automatic Features:**
-- ✅ Auto-detection of all Ollama models
-- ✅ No downloads required
-- ✅ Works with llamacpp or ollama engine
-- ✅ Deduplicates models found in multiple locations
-- ✅ Shows model source (Ollama, HuggingFace, local files)
+**Features:**
+- ☑ Auto-detection of all Ollama models
+- ☑ No downloads required
+- ☑ Works with llamacpp or ollama engine
+- ☑ Deduplicates models found in multiple locations
+- ☑ Shows model source (Ollama, HuggingFace, local files)
 
 ### 2. HuggingFace Models
 
@@ -98,25 +117,25 @@ python game.py --engine llamacpp --model models/my-model.gguf
 ln -s ~/.ollama/models/blobs/sha256-abc123... models/qwen-coder.gguf
 ```
 
-## Supported Engines
+---
 
-GAMMA's modular architecture supports multiple ML frameworks:
+## Supported Engines
 
 | Engine | Best For | Hardware | Status | When to Use |
 |--------|----------|----------|--------|-------------|
-| **llamacpp** | GGUF models (Ollama, HF, local) | CPU, GPU (ROCm/CUDA) | ✅ Fully Supported | **Default choice** - Quantized models, efficient CPU/GPU inference |
-| **pytorch** | HuggingFace Transformers models | CUDA, ROCm, MPS | ✅ Fully Supported | Full-precision models, latest HF models, GPU-only |
-| **tensorflow** | TensorFlow/Keras models | CUDA, CPU | ⚠️ Experimental | You have TF-specific models or existing TF pipelines |
-| **jax** | JAX/Flax models | TPU, CUDA | ⚠️ Experimental | You need TPU support or have JAX models |
-| **onnx** | ONNX Runtime models | CPU, CUDA, DirectML | ⚠️ Experimental | Cross-platform deployment, DirectML on Windows |
-| **mlx** | MLX-optimized models | Apple M1/M2/M3 | ⚠️ Experimental | You're on Apple Silicon and want MLX optimizations |
+| **llamacpp** | GGUF models | CPU, GPU (ROCm/CUDA) | ☑ Fully Supported | Default - Quantized models, efficient inference |
+| **pytorch** | HF Transformers | CUDA, ROCm, MPS | ☑ Fully Supported | Full-precision models, latest HF models |
+| **tensorflow** | TF/Keras models | CUDA, CPU | ⚠ Experimental | TF-specific models or pipelines |
+| **jax** | JAX/Flax models | TPU, CUDA | ⚠ Experimental | TPU support or JAX models |
+| **onnx** | ONNX Runtime | CPU, CUDA, DirectML | ⚠ Experimental | Cross-platform, DirectML on Windows |
+| **mlx** | MLX-optimized | Apple M1/M2/M3 | ⚠ Experimental | Apple Silicon MLX optimizations |
 
 **Quick Guide:**
-- 🏠 **Local models (Ollama)** → Use `llamacpp`
-- ☁️ **HuggingFace models** → Use `pytorch` (or `llamacpp` for GGUF versions)
-- 🍎 **Apple Silicon** → Use `llamacpp` (or `mlx` if you have MLX models)
-- 🪟 **Windows without CUDA** → Use `llamacpp` or `onnx`
-- 🔬 **TPU/specialized** → Use matching engine (`jax` for TPU, `tensorflow` for TF Serving)
+- ☐ **Local models (Ollama)** → Use `llamacpp`
+- ☁ **HuggingFace models** → Use `pytorch` (or `llamacpp` for GGUF)
+- ♁ **Apple Silicon** → Use `llamacpp` (or `mlx` if you have MLX models)
+- ☐ **Windows without CUDA** → Use `llamacpp` or `onnx`
+- ⚗ **TPU/specialized** → Use matching engine (`jax` for TPU, `tensorflow` for TF Serving)
 
 **Engine Selection Logic:**
 1. Interactive menu auto-detects Ollama models → recommends **llamacpp**
@@ -124,7 +143,9 @@ GAMMA's modular architecture supports multiple ML frameworks:
 3. Shows warnings for gated models without authentication
 4. Displays available VRAM and memory requirements
 
-**Important:** Ollama is a **model provider** (like HuggingFace), not an engine. GAMMA uses the `llamacpp` engine to run Ollama's GGUF files directly.
+**Note:** Ollama is a model provider (like HuggingFace), not an engine. GAMMA uses the `llamacpp` engine to run Ollama's GGUF files directly.
+
+---
 
 ## Usage Modes
 
@@ -142,7 +163,7 @@ python game.py
 - Local vs. downloadable model indicators
 
 **Menu Options:**
-1. **Just Play!** - Classic game with smart defaults
+1. **Just Play** - Classic game with smart defaults
 2. **Quick Tutorial** - Start learning immediately
 3. **Quick Compare** - Compare 2 small models
 4. **Classic Game** - Full configuration options
@@ -212,9 +233,11 @@ python game.py \
 --load-in-8bit                # 8-bit quantization (PyTorch)
 ```
 
+---
+
 ## Features
 
-### 🎯 Intelligent Model Selection
+### ☇ Intelligent Model Selection
 
 - **Auto-Detection**: Finds models in Ollama, HuggingFace cache, and local directories
 - **Memory Estimation**: Calculates VRAM requirements before loading
@@ -222,7 +245,7 @@ python game.py \
 - **Deduplication**: Detects same model in multiple locations
 - **Source Indicators**: Shows where each model comes from
 
-### 🚀 Performance
+### ☄ Performance
 
 - **Hardware Detection**: CUDA, ROCm, Metal, CPU backends
 - **GPU Offloading**: Configurable layer distribution
@@ -230,7 +253,7 @@ python game.py \
 - **Quantization**: 4-bit and 8-bit support (PyTorch)
 - **Memory Mapping**: Efficient model loading
 
-### 🎮 Game Modes Explained
+### ☇ Game Modes Explained
 
 #### Classic Game Mode
 Predict the model's next token choice. Learn about:
@@ -267,7 +290,7 @@ Multi-model collaboration featuring:
 - Agreement-based ensembling
 - Custom swap strategies
 
-### 🛠️ Tools
+### ⚙ Tools
 
 #### Model Downloader
 ```bash
@@ -279,34 +302,52 @@ python tools/download_model.py --repo-id <REPO_ID> --filename <FILENAME>
 python tools/run_api_server.py --model <MODEL> --engine <ENGINE>
 ```
 
+---
+
 ## Architecture
 
 ```
 gamma/
-├── game.py                 # Main entry point (unified)
+├── gamma.py                        # Unified CLI entry point
+├── game.py                         # Game entry point
 ├── src/
-│   ├── core/              # Core game logic
-│   │   ├── engine_interface.py      # Abstract engine interface
-│   │   ├── interactive_menu.py      # Interactive configuration
-│   │   ├── model_catalog.py         # Model registry & detection
-│   │   ├── gpu_discovery.py         # Hardware detection
-│   │   ├── memory_estimator.py      # VRAM calculations
+│   ├── game/                       # ☇ Game-specific code
+│   │   ├── game_logic.py
+│   │   ├── game_displays.py
+│   │   └── tutorial_mode.py
+│   ├── comparison/                 # ☲ Model comparison tools
+│   │   └── comparison_mode.py
+│   ├── mind_meld/                  # ⚗ Multi-model collaboration
+│   │   ├── strategies/
+│   │   └── advanced/
+│   ├── benchmarks/                 # ⚗ Benchmarking suite
+│   │   ├── mind_meld_benchmark.py
+│   │   └── language_comparison/    # TypeScript vs JavaScript
+│   │       ├── index.js
+│   │       ├── tasks/              # 20+ coding tasks
+│   │       ├── runner/
+│   │       └── evaluator/
+│   ├── color_utils/                # ⚘ Color utilities
+│   │   ├── dream.js                # Material Design 3 colors
+│   │   ├── demo/                   # MILCHICK demo
+│   │   └── test/
+│   ├── core/                       # Core shared utilities
+│   │   ├── engine_interface.py
+│   │   ├── interactive_menu.py
+│   │   ├── model_catalog.py
 │   │   └── ...
-│   ├── engines/           # Model execution engines
-│   │   ├── pytorch_engine.py        # ✅ Fully implemented
-│   │   ├── llamacpp_engine.py       # ✅ Fully implemented
-│   │   ├── ollama_engine.py         # ✅ Fully implemented
-│   │   ├── tensorflow_engine.py     # ⚠️ Basic
-│   │   ├── jax_engine.py            # ⚠️ Basic
-│   │   └── ...
-│   └── mind_meld/         # Multi-model collaboration
-│       ├── strategies/              # Swap strategies
-│       ├── advanced/                # Advanced features
+│   └── engines/                    # Model execution engines
+│       ├── pytorch_engine.py       # ☑ Fully implemented
+│       ├── llamacpp_engine.py      # ☑ Fully implemented
+│       ├── ollama_engine.py        # ☑ Fully implemented
 │       └── ...
-├── models/                # Local model storage
-├── requirements*.txt      # Dependencies by engine
-└── docs/                  # Additional documentation
+├── tools/                          # Standalone CLI tools
+├── models/                         # Local model storage
+├── requirements*.txt               # Dependencies
+└── docs/                           # Documentation
 ```
+
+---
 
 ## Examples
 
@@ -316,9 +357,9 @@ gamma/
 # GAMMA auto-detects your Ollama models
 python game.py
 
-# Select Ollama from the menu (option 1)
+# Select Ollama from the menu
 # Choose your model from the list
-# Models are marked with 💾 (local) and show size
+# Models are marked with ☐ (local) and show size
 ```
 
 ### Example 2: Chat with Code Model
@@ -363,6 +404,8 @@ python game.py --tutorial \
   --engine ollama \
   --model gemma3:1b-it-qat
 ```
+
+---
 
 ## Troubleshooting
 
@@ -409,6 +452,8 @@ CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python
 CMAKE_ARGS="-DLLAMA_HIPBLAS=on" pip install llama-cpp-python
 ```
 
+---
+
 ## Advanced Topics
 
 ### Mind Meld Mode
@@ -453,13 +498,55 @@ engine_config = {
 engine = get_engine('llamacpp', 'models/model.gguf', engine_config)
 ```
 
+---
+
+## Relationship to PAWS/REPLOID
+
+GAMMA and PAWS/REPLOID are complementary tools serving different purposes:
+
+**GAMMA:**
+- ☇ Educational focus - Learn how LLMs work
+- ☲ Model comparison - Understand differences between models
+- ⚗ Experimentation - Test sampling strategies, attention mechanisms
+- ☐ Local operation - All models run locally
+
+**PAWS/REPLOID:**
+- ☇ Development focus - AI-assisted code generation
+- ☲ Multi-agent competition - 3-5 LLMs compete with test-driven consensus
+- ⚗ Production workflows - Git-backed reproducibility
+- ☥ Visual review - Browser interface with diff viewer
+
+**Use GAMMA when:** Learning about LLMs, testing models, exploring AI concepts
+**Use PAWS/REPLOID when:** Developing software, refactoring code, production changes
+
+Both projects share:
+- Philosophy of transparency and human oversight
+- Support for local models (Ollama, HuggingFace)
+- Educational value through clear explanations
+- Open-source MIT license
+
+---
+
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for development guidelines.
+Contributions welcome! Areas for help:
+
+- ☇ Bug fixes and improvements
+- ☐ Documentation
+- ⚗ Tests
+- ⚛ New game modes
+- ⚙ Engine implementations
+- ⛶ Benchmarking tools
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+---
 
 ## License
 
 MIT License - See [LICENSE](./LICENSE) for details.
+
+---
 
 ## Credits
 
@@ -470,7 +557,14 @@ Built with:
 
 ---
 
-**Need Help?**
-- 📖 Full docs: [docs/](./docs/)
-- 🐛 Report issues: [GitHub Issues](https://github.com/your-repo/gamma/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/your-repo/gamma/discussions)
+## Support
+
+- ☰ Full docs: [docs/](./docs/)
+- ⚠ Report issues: [GitHub Issues](https://github.com/your-repo/gamma/issues)
+- ☛ Discussions: [GitHub Discussions](https://github.com/your-repo/gamma/discussions)
+
+---
+
+**Made by developers who believe understanding AI is the first step to using it wisely.**
+
+☇ Interactive Learning × ☲ Model Comparison × ⚗ Experimentation = **GAMMA**

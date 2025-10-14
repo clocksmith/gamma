@@ -386,3 +386,230 @@ class MindMeldBenchmark:
             json.dump(data, f, indent=2)
 
         self._log(f"Results saved to: {output_path}")
+
+    def compare_strategies(
+        self,
+        strategies: List[str],
+        models: List[str],
+        prompt: str,
+        max_tokens: int = 100,
+        temperature: float = 0.7
+    ) -> List[BenchmarkResult]:
+        """
+        Compare multiple strategies on the same prompt.
+
+        Args:
+            strategies: List of strategy names (e.g., ['fixed_interval', 'confidence', 'perplexity'])
+            models: List of model names to use
+            prompt: Text prompt to generate from
+            max_tokens: Max tokens to generate
+            temperature: Sampling temperature
+
+        Returns:
+            List of benchmark results for each strategy
+        """
+        from src.mind_meld.core.config import MeldConfig, SwapConfig, SwapStrategy
+        from src.core.model_loader import ModelLoader
+
+        self._log(f"Comparing {len(strategies)} strategies")
+        self._log(f"Models: {models}")
+        self._log(f"Prompt: {prompt[:50]}...")
+
+        configs = []
+        for strategy_name in strategies:
+            config = BenchmarkConfig(
+                strategy_name=strategy_name,
+                models=models,
+                prompt=prompt,
+                max_tokens=max_tokens,
+                temperature=temperature
+            )
+            configs.append(config)
+
+        # Engine factory
+        def create_meld_engine(config: BenchmarkConfig) -> MeldEngine:
+            # Map strategy name to SwapStrategy enum
+            strategy_map = {
+                'fixed_interval': SwapStrategy.FIXED_INTERVAL,
+                'pattern': SwapStrategy.PATTERN_BASED,
+                'confidence': SwapStrategy.CONFIDENCE_BASED,
+                'round_robin': SwapStrategy.ROUND_ROBIN,
+                'random': SwapStrategy.RANDOM,
+                'perplexity': SwapStrategy.PERPLEXITY_BASED,
+                'semantic': SwapStrategy.SEMANTIC_SIMILARITY,
+            }
+
+            strategy = strategy_map.get(config.strategy_name, SwapStrategy.FIXED_INTERVAL)
+
+            meld_config = MeldConfig(
+                swap_config=SwapConfig(strategy=strategy),
+                max_tokens=config.max_tokens,
+                temperature=config.temperature
+            )
+
+            # Load models
+            loader = ModelLoader()
+            engines = []
+            for model_name in config.models:
+                try:
+                    engine = loader.load_model(model_name)
+                    engines.append(engine)
+                except Exception as e:
+                    self._log(f"Failed to load model {model_name}: {e}")
+                    raise
+
+            # Create meld engine
+            class SimpleArgs:
+                def __init__(self):
+                    self.strategy = config.strategy_name
+                    self.max_length = config.max_tokens
+                    self.temperature = config.temperature
+                    self.top_k = config.top_k
+                    self.top_p = config.top_p
+
+            meld = MeldEngine(engines, SimpleArgs())
+            return meld
+
+        # Run benchmarks
+        results = self.run_benchmark_suite(configs, create_meld_engine)
+
+        # Print comparison summary
+        print("\n" + "=" * 80)
+        print("Strategy Comparison Summary")
+        print("=" * 80)
+        print(f"{'Strategy':<20} {'Speed (t/s)':<15} {'Coherence':<12} {'Swaps':<10}")
+        print("-" * 80)
+
+        for result in results:
+            print(f"{result.config.strategy_name:<20} {result.tokens_per_second:<15.2f} "
+                  f"{result.coherence_score:<12.3f} {result.swap_count:<10}")
+
+        return results
+
+
+# CLI Interface
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Mind Meld Strategy Benchmark CLI',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Compare three strategies
+  python3 src/benchmarks/mind_meld_benchmark.py \\
+    --strategies fixed_interval confidence perplexity \\
+    --prompt "Once upon a time" \\
+    --models gpt2 gpt2-medium \\
+    --output comparison.html
+
+  # Quick test
+  python3 src/benchmarks/mind_meld_benchmark.py \\
+    --strategies confidence \\
+    --prompt "Hello world" \\
+    --max-tokens 50
+
+Available strategies:
+  - fixed_interval: Swap every N tokens
+  - pattern: Swap at punctuation
+  - confidence: Swap when confidence drops
+  - round_robin: Rotate through models
+  - random: Random swaps
+  - perplexity: Swap based on perplexity
+  - semantic: Swap based on semantic similarity
+        """
+    )
+
+    parser.add_argument(
+        '--strategies',
+        nargs='+',
+        required=True,
+        help='Strategy names to compare (e.g., fixed_interval confidence perplexity)'
+    )
+
+    parser.add_argument(
+        '--prompt',
+        type=str,
+        default='Once upon a time in a land far away',
+        help='Text prompt to generate from'
+    )
+
+    parser.add_argument(
+        '--models',
+        nargs='+',
+        default=['gpt2', 'gpt2-medium'],
+        help='Model names to use (default: gpt2 gpt2-medium)'
+    )
+
+    parser.add_argument(
+        '--max-tokens',
+        type=int,
+        default=100,
+        help='Maximum tokens to generate (default: 100)'
+    )
+
+    parser.add_argument(
+        '--temperature',
+        type=float,
+        default=0.7,
+        help='Sampling temperature (default: 0.7)'
+    )
+
+    parser.add_argument(
+        '--output',
+        type=str,
+        default='benchmark_report.html',
+        help='Output HTML report path (default: benchmark_report.html)'
+    )
+
+    parser.add_argument(
+        '--json',
+        type=str,
+        help='Also save results as JSON to this path'
+    )
+
+    parser.add_argument(
+        '--quiet',
+        action='store_true',
+        help='Suppress verbose output'
+    )
+
+    args = parser.parse_args()
+
+    # Create benchmark
+    benchmark = MindMeldBenchmark(verbose=not args.quiet)
+
+    print("=" * 80)
+    print("Mind Meld Strategy Benchmark")
+    print("=" * 80)
+    print(f"Strategies: {', '.join(args.strategies)}")
+    print(f"Models: {', '.join(args.models)}")
+    print(f"Prompt: {args.prompt[:50]}...")
+    print(f"Max tokens: {args.max_tokens}")
+    print("=" * 80)
+
+    # Run comparison
+    try:
+        results = benchmark.compare_strategies(
+            strategies=args.strategies,
+            models=args.models,
+            prompt=args.prompt,
+            max_tokens=args.max_tokens,
+            temperature=args.temperature
+        )
+
+        # Generate reports
+        print(f"\nGenerating HTML report: {args.output}")
+        benchmark.generate_report(args.output)
+
+        if args.json:
+            print(f"Saving JSON results: {args.json}")
+            benchmark.save_results_json(args.json)
+
+        print("\n✅ Benchmark complete!")
+
+    except Exception as e:
+        print(f"\n❌ Benchmark failed: {e}")
+        import traceback
+        traceback.print_exc()
+        exit(1)

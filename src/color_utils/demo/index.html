@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      MILCHICK: Material Integration Leveraging Creative Human-LLM Intelligence
+      Colors Kit
+    </title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <button id="theme-toggle" title="Toggle Light/Dark Mode">
+      <span class="material-icons"></span>
+    </button>
+
+    <div class="container">
+      <!-- API Key Input Modal -->
+      <div id="apiKeyModal" class="modal-overlay" style="display: none">
+        <div class="modal-content">
+          <h2>Enter Gemini API Key</h2>
+          <p>
+            Please paste your Gemini API key below. It will only be stored for
+            this browser session.
+          </p>
+          <input
+            type="text"
+            id="apiKeyInput"
+            placeholder="Paste your API key here"
+            style="width: 90%; margin-bottom: 10px; padding: 8px"
+          />
+          <div
+            id="apiKeyError"
+            style="color: red; margin-bottom: 10px; min-height: 1em"
+          ></div>
+          <div>
+            <button id="saveApiKeyBtn">Save Key</button>
+            <button id="cancelApiKeyBtn">Cancel (Uses simulation)</button>
+          </div>
+        </div>
+      </div>
+
+      <h1>
+        MILCHICK: Material Integration Leveraging Creative Human-LLM
+        Intelligence Colors Kit
+      </h1>
+      <p>
+        Generate Material Design 3 color palettes from colors, images, or text
+        prompts. Uses a pure js fork of
+        <a
+          href="https://github.com/material-foundation/material-color-utilities/tree/main/typescript"
+          target="_blank"
+          rel="noopener"
+          >material-color-utilities</a
+        >
+        via <code>dream.js</code>.
+      </p>
+
+      <div class="main-content-grid">
+        <div class="phases-container">
+          <div
+            class="phase-card input-section phase-human-decision"
+            id="phase-1-card"
+          >
+            <div class="back-button-area hidden">
+              <button id="back-button" type="button">Back</button>
+            </div>
+            <h2>Phase 1: Input & Configuration</h2>
+
+            <fieldset>
+              <legend>Input Source</legend>
+              <div
+                class="chip-selection-group"
+                id="input-source-selection"
+                data-name="inputSource"
+              >
+                <div>
+                  <input
+                    type="radio"
+                    id="sourceText"
+                    name="inputSource"
+                    value="text"
+                    checked
+                  />
+                  <label for="sourceText" title="Use a text prompt"
+                    >Text Prompt</label
+                  >
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="sourceColor"
+                    name="inputSource"
+                    value="color"
+                  />
+                  <label for="sourceColor" title="Use color pickers"
+                    >Color Picker</label
+                  >
+                </div>
+                <div id="sourceImage-container">
+                  <input
+                    type="radio"
+                    id="sourceImage"
+                    name="inputSource"
+                    value="image"
+                  />
+                  <label for="sourceImage" title="Use an image"
+                    >Image Upload</label
+                  >
+                </div>
+              </div>
+            </fieldset>
+
+            <div id="text-options-group" class="input-group">
+              <fieldset>
+                <legend>Text Prompt Options</legend>
+                <div class="input-group">
+                  <label for="text-prompt-input">Describe your theme:</label>
+                  <textarea
+                    id="text-prompt-input"
+                    rows="3"
+                    placeholder="e.g., calm ocean sunset, vibrant forest floor..."
+                  ></textarea>
+                </div>
+                <div class="input-group">
+                  <span class="selection-group-label"
+                    >Seed Count:
+                    <span class="info-tooltip" tabindex="0">
+                      <span class="material-icons">info_outline</span>
+                      <span class="tooltip-text"
+                        >Choose whether to generate one seed color or three
+                        distinct seed colors from your text prompt.</span
+                      >
+                    </span>
+                  </span>
+                  <div
+                    class="chip-selection-group"
+                    id="text-seed-count-selection"
+                    data-name="textSeedCount"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="textSeedCountSingle"
+                        name="textSeedCount"
+                        value="single"
+                        checked
+                      />
+                      <label for="textSeedCountSingle">Single Seed</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="textSeedCountMulti"
+                        name="textSeedCount"
+                        value="multi"
+                      />
+                      <label for="textSeedCountMulti">Multiple Seeds (3)</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <span class="selection-group-label"
+                    >Selection Method:
+                    <span class="info-tooltip" tabindex="0">
+                      <span class="material-icons">info_outline</span>
+                      <span class="tooltip-text">
+                        <b>Gemini Suggests, User Selects:</b> Gemini proposes
+                        color sets, you choose one. Requires clicking 'Process
+                        Prompt'.<br />
+                        <b>Gemini Suggests, Gemini Selects:</b> Gemini proposes
+                        and automatically chooses the best set. Requires
+                        clicking 'Generate'.<br />
+                        <b>Gemini Selects & Dream.js (MCP):</b> Gemini proposes,
+                        selects, and triggers Dream.js generation automatically
+                        via MCP. Requires clicking 'Generate'.
+                      </span>
+                    </span>
+                  </span>
+                  <div
+                    class="chip-selection-group"
+                    id="text-selection-method-selection"
+                    data-name="textSelectionMethod"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="textSelectUser"
+                        name="textSelectionMethod"
+                        value="user"
+                        checked
+                      />
+                      <label for="textSelectUser"
+                        >Gemini Suggests, User Selects</label
+                      >
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="textSelectGemini"
+                        name="textSelectionMethod"
+                        value="gemini"
+                      />
+                      <label for="textSelectGemini"
+                        >Gemini Suggests, Gemini Selects</label
+                      >
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="textSelectGeminiMCP"
+                        name="textSelectionMethod"
+                        value="gemini_mcp"
+                      />
+                      <label for="textSelectGeminiMCP"
+                        >Gemini Selects & Dream.js (MCP)</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div id="text-prompt-suggestions" class="hidden sub-options">
+                  <span class="selection-group-label"
+                    >Select a suggested color set:</span
+                  >
+                  <p
+                    style="
+                      font-size: 0.8em;
+                      color: var(--md-sys-color-outline-light);
+                      margin-top: -5px;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    Suggestions appear after clicking "Process Prompt".
+                  </p>
+                  <div id="suggestions-list"></div>
+                  <div id="suggestion-loading-indicator" class="hidden">
+                    Getting suggestions...
+                  </div>
+                </div>
+                <div id="text-prompt-actions">
+                  <button type="button" id="process-text-button" class="hidden">
+                    Process Prompt
+                  </button>
+                  <div
+                    id="text-prompt-sim-option"
+                    style="margin-top: 10px; display: inline-flex"
+                  >
+                    <input
+                      type="checkbox"
+                      id="use-gemini-simulation"
+                      class="custom-styled"
+                    />
+                    <label for="use-gemini-simulation" class="checkbox-label"
+                      >Use Simulation (Offline)</label
+                    >
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+            <div id="color-options-group" class="input-group hidden">
+              <fieldset>
+                <legend>Color Picker Options</legend>
+                <div class="input-group">
+                  <span class="selection-group-label"
+                    >Seed Count:
+                    <span class="info-tooltip" tabindex="0">
+                      <span class="material-icons">info_outline</span>
+                      <span class="tooltip-text"
+                        >Choose whether to use one source color or multiple
+                        colors for generation.</span
+                      >
+                    </span>
+                  </span>
+                  <div
+                    class="chip-selection-group"
+                    id="color-seed-count-selection"
+                    data-name="colorSeedCount"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="colorSeedCountSingle"
+                        name="colorSeedCount"
+                        value="single"
+                        checked
+                      />
+                      <label for="colorSeedCountSingle"
+                        >Single Source Color</label
+                      >
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="colorSeedCountMulti"
+                        name="colorSeedCount"
+                        value="multi"
+                      />
+                      <label for="colorSeedCountMulti"
+                        >Multiple Source Colors (Max 3)</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div id="source-color-area" class="input-group">
+                  <label id="source-color-label">Source Color:</label>
+                  <div id="source-color-inputs"></div>
+                </div>
+                <div id="multi-source-options" class="input-group hidden">
+                  <label for="harmonyStrategy"
+                    >Multi-Color Strategy (Dream.js):
+                    <span class="info-tooltip" tabindex="0">
+                      <span class="material-icons">info_outline</span>
+                      <span class="tooltip-text">
+                        <b>Direct:</b> Uses the selected colors directly as
+                        Primary/Secondary/Tertiary seeds.<br />
+                        <b>Harmonized:</b> Adjusts the secondary/tertiary colors
+                        to harmonize better with the primary seed.
+                      </span>
+                    </span>
+                  </label>
+                  <select id="harmonyStrategy">
+                    <option value="direct" selected>Direct</option>
+                    <option value="harmonized">Harmonized</option>
+                  </select>
+                </div>
+              </fieldset>
+            </div>
+
+            <div id="image-options-group" class="input-group hidden">
+              <fieldset>
+                <legend>Image Upload Options</legend>
+                <div class="input-group">
+                  <label>Upload or Drop Image:</label>
+                  <div id="drop-area">
+                    <p>Drag & Drop or click</p>
+                    <input
+                      type="file"
+                      id="image-input"
+                      accept="image/*"
+                      hidden
+                    />
+                    <img
+                      id="image-preview"
+                      src="#"
+                      alt="Preview"
+                      class="hidden"
+                    />
+                  </div>
+                </div>
+                <div class="input-group">
+                  <span class="selection-group-label"
+                    >Extraction Method:
+                    <span class="info-tooltip" tabindex="0">
+                      <span class="material-icons">info_outline</span>
+                      <span class="tooltip-text">
+                        <b>Dream.js Extraction:</b> Uses the local library to
+                        extract prominent colors from the image.<br />
+                        <b>Gemini Extraction:</b> Uses the Gemini API to analyze
+                        the image and suggest colors.
+                      </span>
+                    </span>
+                  </span>
+                  <div
+                    class="chip-selection-group"
+                    id="image-extraction-method-selection"
+                    data-name="imageExtractionMethod"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="imageExtractDream"
+                        name="imageExtractionMethod"
+                        value="dream"
+                        checked
+                      />
+                      <label for="imageExtractDream">Dream.js Extraction</label>
+                    </div>
+                    <div id="imageExtractGemini-container">
+                      <input
+                        type="radio"
+                        id="imageExtractGemini"
+                        name="imageExtractionMethod"
+                        value="gemini"
+                      />
+                      <label for="imageExtractGemini">Gemini Extraction</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <span class="selection-group-label"
+                    >Seed Count:
+                    <span class="info-tooltip" tabindex="0">
+                      <span class="material-icons">info_outline</span>
+                      <span class="tooltip-text"
+                        >Choose whether to extract/suggest one seed color or
+                        multiple seed colors from the image.</span
+                      >
+                    </span>
+                  </span>
+                  <div
+                    class="chip-selection-group"
+                    id="image-seed-count-selection"
+                    data-name="imageSeedCount"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="imageSeedCountSingle"
+                        name="imageSeedCount"
+                        value="single"
+                        checked
+                      />
+                      <label for="imageSeedCountSingle">Single Seed</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="imageSeedCountMulti"
+                        name="imageSeedCount"
+                        value="multi"
+                      />
+                      <label for="imageSeedCountMulti"
+                        >Multiple Seeds (Max 3)</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div id="image-dream-options" class="sub-options">
+                  <label for="numSources">Max Colors (Dream.js):</label>
+                  <input
+                    type="number"
+                    id="numSources"
+                    value="3"
+                    min="1"
+                    max="5"
+                    style="max-width: 70px"
+                  />
+                  <label for="extractQuality" style="margin-left: 10px"
+                    >Quality (1=Best, Dream.js):</label
+                  >
+                  <input
+                    type="number"
+                    id="extractQuality"
+                    value="10"
+                    min="1"
+                    max="50"
+                    style="max-width: 70px"
+                  />
+                </div>
+                <div id="image-gemini-options" class="sub-options hidden">
+                  <span class="selection-group-label"
+                    >Selection Method (Gemini):
+                    <span class="info-tooltip" tabindex="0">
+                      <span class="material-icons">info_outline</span>
+                      <span class="tooltip-text">
+                        <b>Gemini Suggests, User Selects:</b> Gemini proposes
+                        color sets, you choose one. Requires clicking 'Process
+                        Image'.<br />
+                        <b>Gemini Suggests, Gemini Selects:</b> Gemini proposes
+                        and automatically chooses the best set. Requires
+                        clicking 'Generate'.<br />
+                        <b>Gemini Selects & Dream.js (MCP):</b> Gemini proposes,
+                        selects, and triggers Dream.js generation automatically
+                        via MCP. Requires clicking 'Generate'.
+                      </span>
+                    </span>
+                  </span>
+                  <div
+                    class="chip-selection-group"
+                    id="image-selection-method-selection"
+                    data-name="imageSelectionMethod"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="imageSelectUser"
+                        name="imageSelectionMethod"
+                        value="user"
+                        checked
+                      />
+                      <label for="imageSelectUser"
+                        >Gemini Suggests, User Selects</label
+                      >
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="imageSelectGemini"
+                        name="imageSelectionMethod"
+                        value="gemini"
+                      />
+                      <label for="imageSelectGemini"
+                        >Gemini Suggests, Gemini Selects</label
+                      >
+                    </div>
+                    <div id="imageSelectGeminiMCP-container">
+                      <input
+                        type="radio"
+                        id="imageSelectGeminiMCP"
+                        name="imageSelectionMethod"
+                        value="gemini_mcp"
+                      />
+                      <label for="imageSelectGeminiMCP"
+                        >Gemini Selects & Dream.js (MCP)</label
+                      >
+                    </div>
+                  </div>
+                  <div id="image-prompt-suggestions" class="hidden sub-options">
+                    <span class="selection-group-label"
+                      >Select a suggested color set:</span
+                    >
+                    <p
+                      style="
+                        font-size: 0.8em;
+                        color: var(--md-sys-color-outline-light);
+                        margin-top: -5px;
+                        margin-bottom: 10px;
+                      "
+                    >
+                      Suggestions appear after processing image with Gemini.
+                    </p>
+                    <div id="image-suggestions-list"></div>
+                    <div id="image-suggestion-loading-indicator" class="hidden">
+                      Getting suggestions...
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    id="process-image-gemini-button"
+                    style="margin-top: 10px"
+                    class="hidden"
+                  >
+                    Process Image with Gemini
+                  </button>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="input-group">
+              <span class="selection-group-label"
+                >Palette Generation Method:
+                <span class="info-tooltip" tabindex="0">
+                  <span class="material-icons">info_outline</span>
+                  <span class="tooltip-text">
+                    <b>Invoke Dream.js:</b> Generate the palette using the local
+                    Dream.js library based on the selected/input seeds. (Human
+                    triggers tool)<br />
+                    <b>Gemini Invoke Dream.js (MCP):</b> Gemini selects seeds
+                    (if applicable) and instructs the system (via MCP) to use
+                    Dream.js for generation. (LLM triggers tool)<br />
+                    <b>Manual MCP (Simulate Fail):</b> Simulate the MCP flow
+                    triggering Dream.js, but introduce a chance of simulated
+                    failure. Useful for testing error handling.<br />
+                    <b>Gemini Only (No Dream.js):</b> Request Gemini to generate
+                    the entire color palette JSON directly based on
+                    seeds/context, bypassing Dream.js. (LLM generates result
+                    directly)
+                  </span>
+                </span>
+              </span>
+              <div
+                class="chip-selection-group"
+                id="palette-generation-method-selection"
+                data-name="paletteGenerationMethod"
+              >
+                <div>
+                  <input
+                    type="radio"
+                    id="genMethodDreamJS"
+                    name="paletteGenerationMethod"
+                    value="dreamjs"
+                    checked
+                  />
+                  <label for="genMethodDreamJS">Invoke Dream.js</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="genMethodGeminiMCP"
+                    name="paletteGenerationMethod"
+                    value="gemini_mcp"
+                  />
+                  <label for="genMethodGeminiMCP"
+                    >Gemini Invoke Dream.js (MCP)</label
+                  >
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="genMethodManualMCP"
+                    name="paletteGenerationMethod"
+                    value="manual_mcp"
+                  />
+                  <label for="genMethodManualMCP"
+                    >Manual MCP (Simulate Fail)</label
+                  >
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="genMethodGeminiOnly"
+                    name="paletteGenerationMethod"
+                    value="gemini_only"
+                  />
+                  <label for="genMethodGeminiOnly"
+                    >Gemini Only (No Dream.js)</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div id="generate-button-container" class="action-button-container">
+              <button type="button" id="generate-button">Generate Theme</button>
+              <span class="status-indicator">
+                <span class="material-icons" title="Action performed by Gemini"
+                  >smart_toy</span
+                >
+                <span>Auto</span>
+              </span>
+            </div>
+            <div id="loading-indicator" class="hidden">Generating theme...</div>
+            <div id="error-message" class="error hidden"></div>
+          </div>
+
+          <div
+            class="phase-card output-section phase-local-tool"
+            id="phase-2-card"
+          >
+            <h2>Generated Theme</h2>
+            <div id="seed-colors-display" class="color-group">
+              <h3>Seed Color(s) Used</h3>
+              <div class="swatch-container">
+                <p class="placeholder">Seeds appear here.</p>
+              </div>
+            </div>
+            <hr
+              style="
+                border: none;
+                border-top: 1px solid var(--md-sys-color-outline-variant-light);
+                margin: 25px 0;
+              "
+              class="theme-divider"
+            />
+            <div id="palette-display">
+              <p class="placeholder">
+                Configure inputs and click Generate/Process.
+              </p>
+            </div>
+
+            <div id="component-examples" class="hidden">
+              <hr
+                style="
+                  border: none;
+                  border-top: 1px solid
+                    var(--md-sys-color-outline-variant-light);
+                  margin: 25px 0;
+                "
+                class="theme-divider"
+              />
+              <h3>Component Examples</h3>
+              <span class="selection-group-label"
+                >Component Generation Options:
+                <span class="info-tooltip" tabindex="0">
+                  <span class="material-icons">info_outline</span>
+                  <span class="tooltip-text">
+                    <b>Generate Deterministic:</b> Renders standard Material Web
+                    Components using the generated theme.<br />
+                    <b>Generate Gemini Created:</b> Asks Gemini to generate
+                    styled HTML components based on the theme and an optional
+                    style prompt. Uses local colors, can incorporate M3
+                    Guidance.
+                  </span>
+                </span>
+              </span>
+              <div class="component-generation-options">
+                <div class="input-group">
+                  <label for="component-style-prompt"
+                    >Optional Gemini Style Prompt:</label
+                  >
+                  <input
+                    type="text"
+                    id="component-style-prompt"
+                    placeholder="e.g., modern and clean, playful, brutalist..."
+                  />
+                </div>
+                <div class="component-buttons-container">
+                  <button
+                    type="button"
+                    id="generate-mwc-components-button"
+                    title="Apply theme to standard Material Web Components"
+                  >
+                    Generate deterministic component set
+                  </button>
+                  <button
+                    type="button"
+                    id="generate-gemini-components-button"
+                    title="Use Gemini to generate styled HTML based on the theme and your style prompt"
+                  >
+                    Generate gemini created component set
+                  </button>
+                  <div id="m3-guidance-option-container">
+                    <input
+                      type="checkbox"
+                      id="use-m3-guidance-checkbox"
+                      class="custom-styled"
+                      checked
+                    />
+                    <label
+                      for="use-m3-guidance-checkbox"
+                      class="checkbox-label"
+                    >
+                      Use M3 Guidance for Gemini Components
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div id="gemini-component-loading" class="hidden">
+                Generating Gemini components...
+              </div>
+
+              <div class="component-preview-grid">
+                <div class="component-preview-area" id="mwc-component-preview">
+                  <h4>MWC Preview</h4>
+                  <p class="placeholder">
+                    Click "Gen Deterministic" to preview.
+                  </p>
+                </div>
+                <div
+                  class="component-preview-area"
+                  id="gemini-component-preview"
+                >
+                  <h4>Gemini Preview</h4>
+                  <p class="placeholder">Click "Gen Gemini Comp" to preview.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phase-card phase-card-placeholder">
+            Phase 3: Generate mini app placeholder
+          </div>
+          <div class="phase-card phase-card-placeholder">
+            Phase 4: Adapt mini app as to laser / hologram / projection
+            placeholder
+          </div>
+        </div>
+
+        <div id="workflow-minimap">
+          <div id="minimap-title">Workflow Path</div>
+          <div id="minimap-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <style id="dynamic-theme-styles"></style>
+    <script src="../config.js" defer></script>
+    <script src="../dream.js" defer></script>
+    <script
+      type="module"
+      src="https://cdn.skypack.dev/@material/web/all.js"
+      defer
+    ></script>
+    <script type="module" src="app.js" defer></script>
+  </body>
+</html>

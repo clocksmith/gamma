@@ -1,0 +1,20 @@
+{
+  "name": "async-fetch",
+  "description": "Implement async data fetching with error handling",
+  "category": "simple",
+  "difficulty": "medium",
+  "variants": {
+    "typescript": "Write a TypeScript async function called `fetchUserData` that takes a userId (number) and returns a Promise. The function should simulate an API call using setTimeout (300ms delay) and return an object with id, name, and email. Include proper type annotations and error handling for invalid userId (< 1). Export the function and the return type.",
+    "javascript": "Write a JavaScript async function called `fetchUserData` that takes a userId and returns a Promise. The function should simulate an API call using setTimeout (300ms delay) and return an object with id, name, and email. Include error handling for invalid userId (< 1). Export the function.",
+    "javascript-jsdoc": "Write a JavaScript async function called `fetchUserData` that takes a userId and returns a Promise. The function should simulate an API call using setTimeout (300ms delay) and return an object with id, name, and email. Include error handling for invalid userId (< 1). Add JSDoc type annotations with @typedef for UserData, @param, @return, and @throws tags. Export the function."
+  },
+  "testCases": [
+    {
+      "test": "fetchUserData(1).then(data => console.assert(data.id === 1, 'Should return user with id'));"
+    },
+    {
+      "test": "fetchUserData(0).catch(err => console.assert(err instanceof Error, 'Should throw for invalid id'));"
+    }
+  ],
+  "requirements": ["async", "function", "fetchUserData", "Promise", "error handling", "export"]
+}

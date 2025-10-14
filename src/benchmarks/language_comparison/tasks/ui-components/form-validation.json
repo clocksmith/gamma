@@ -1,0 +1,22 @@
+{
+  "name": "form-validation",
+  "description": "Create a form with comprehensive validation",
+  "category": "ui-components",
+  "difficulty": "medium",
+  "variants": {
+    "typescript": "Write a TypeScript FormValidator class that validates form data against rules. Include interfaces for validation rules and results.",
+    "javascript": "Write a JavaScript FormValidator class that validates form data against rules.",
+    "javascript-jsdoc": "Write a JavaScript FormValidator class with JSDoc that validates form data against rules.",
+    "javascript-vanilla-web": "Create a registration form with client-side validation in vanilla JavaScript. Include:\n\n**Form Fields:**\n- Username (required, 3-20 chars, alphanumeric)\n- Email (required, valid email format)\n- Password (required, min 8 chars, 1 uppercase, 1 number)\n- Confirm Password (required, must match password)\n- Age (required, 18-120)\n- Terms checkbox (required)\n\n**Validation:**\n- Real-time validation on blur\n- Show error messages below each field\n- Disable submit button until form is valid\n- Show all errors on submit attempt\n- Visual indicators (red border for errors, green for valid)\n\n**HTML:**\n- Semantic form structure\n- Label for each input\n- Error message containers\n- Submit button\n\n**CSS:**\n- Clean form design\n- Error styling (red)\n- Success styling (green)\n- Focus states\n\n**JavaScript:**\n- Validation functions for each field type\n- Real-time validation handlers\n- Form submission handler\n- Display/clear error messages\n\nReturn as single HTML file with working validation.",
+    "javascript-vanilla-web-jsdoc": "Same as javascript-vanilla-web, plus complete JSDoc:\n\n- @typedef for ValidationRule\n- @typedef for ValidationResult\n- @typedef for FormField\n- Document all validation functions\n- @param and @return for all functions\n\nReturn as single HTML file.",
+    "typescript-vanilla-web": "Create a form validation system using TypeScript and vanilla Web APIs. Include:\n\n**TypeScript:**\n- Interface for ValidationRule<T>\n- Interface for FieldConfig\n- Type-safe validator functions\n- Generic FormValidator<T> class\n- Proper typing for form data\n\n**Validation Rules:**\n- Required\n- MinLength/MaxLength\n- Pattern (regex)\n- Custom validators\n- Async validators (e.g., check username availability)\n\n**Features:**\n- Real-time validation\n- Field-level and form-level validation\n- Error message handling\n- Type-safe form data\n\nProvide TypeScript source and HTML structure.",
+    "typescript-react": "Create a form with validation using TypeScript React. Include:\n\n**Components:**\n- Form (main container)\n- FormField (reusable field with validation)\n- FormError (error display)\n\n**Custom Hook:**\n- useForm<T> hook with TypeScript\n- Generic form state management\n- Validation logic\n- Submit handling\n\n**TypeScript:**\n- Interface for form data\n- Type-safe validation rules\n- Proper hook typing\n- Generic FormField component\n\n**Features:**\n- Real-time validation\n- Touched/dirty state tracking\n- Custom validation rules\n- Async validation support\n- TypeScript strict mode\n\n**Example:**\n```tsx\ninterface FormData {\n  username: string;\n  email: string;\n  password: string;\n}\n\nconst { values, errors, handleChange, handleSubmit } = useForm<FormData>({\n  initialValues: { username: '', email: '', password: '' },\n  validationRules: { ... }\n});\n```\n\nNo form libraries (e.g., no Formik, react-hook-form). Build from scratch."
+  },
+  "requirements": [
+    "form",
+    "validation",
+    "error handling",
+    "real-time",
+    "user feedback"
+  ]
+}

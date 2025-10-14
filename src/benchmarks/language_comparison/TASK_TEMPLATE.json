@@ -1,0 +1,77 @@
+{
+  "_comment": "Template for creating new benchmark tasks. Copy this file and fill in your task details.",
+
+  "name": "your-task-name",
+  "description": "Brief description of what this task tests",
+  "category": "simple|large-projects|needle-in-haystack|bug-finding|full-projects|web-components|ui-components",
+  "difficulty": "easy|medium|hard",
+
+  "variants": {
+    "typescript": "Prompt for TypeScript implementation. Be specific about:\n- Interfaces and types to define\n- Classes or functions to create\n- Type safety requirements\n- Export requirements",
+
+    "javascript": "Prompt for plain JavaScript. Should have identical functionality to TypeScript but without type annotations.",
+
+    "javascript-jsdoc": "Prompt for JavaScript with JSDoc. Include requirements for:\n- @typedef type definitions\n- @param and @return tags\n- @template for generics if needed\n- Complete documentation",
+
+    "javascript-vanilla-web": "Prompt for complete web implementation including:\n- HTML structure needed\n- CSS styling requirements\n- JavaScript functionality\n- No frameworks or libraries\n- Return as single HTML file or clear structure",
+
+    "javascript-vanilla-web-jsdoc": "Same as javascript-vanilla-web but require:\n- Complete JSDoc type annotations\n- Documented functions and modules\n- Type definitions for data structures",
+
+    "typescript-vanilla-web": "Prompt for TypeScript with vanilla Web APIs:\n- TypeScript interfaces and types\n- DOM manipulation with proper typing\n- Event handlers with types\n- HTML structure needed\n- No frameworks",
+
+    "typescript-react": "Prompt for TypeScript React implementation:\n- Component structure\n- Props interfaces\n- State management approach\n- Hooks to use\n- Minimal dependencies (React only)\n- TypeScript strict mode compatible"
+  },
+
+  "testCases": [
+    {
+      "_comment": "Test cases for automated evaluation (optional)",
+      "test": "console.assert(yourFunction(input) === expectedOutput, 'Description of test');"
+    },
+    {
+      "test": "// Add more test cases as needed"
+    }
+  ],
+
+  "requirements": [
+    "_comment: Keywords that should appear in the response",
+    "keyword1",
+    "keyword2",
+    "function name",
+    "class name"
+  ],
+
+  "_optionalFields": {
+    "expectedOutput": "Exact output expected (for simple tasks)",
+    "bugLocation": "Where the bug is (for bug-finding tasks)",
+    "needleText": "What to find (for needle-in-haystack tasks)",
+    "needleLocation": "Where it should be found"
+  },
+
+  "_instructions": {
+    "step1": "Copy this file to the appropriate category folder in benchmark/tasks/",
+    "step2": "Rename it to your-task-name.json",
+    "step3": "Fill in all fields (remove _comment and _instructions fields)",
+    "step4": "Ensure all variants test the SAME functionality",
+    "step5": "Keep prompts as similar as possible across variants",
+    "step6": "Test your task: node benchmark/index.js --task your-task-name",
+    "step7": "Review the results and adjust as needed"
+  },
+
+  "_tips": {
+    "fairness": "Make sure all variants are testing the exact same thing",
+    "clarity": "Be specific about requirements in each prompt",
+    "consistency": "Use similar wording across variant prompts",
+    "testability": "Include test cases or clear expected outputs",
+    "realism": "Test real-world scenarios, not contrived examples",
+    "difficulty": "Match difficulty to category (simple should be simple)",
+    "documentation": "Clearly document what you're testing and why"
+  },
+
+  "_examples": {
+    "simple_task": "See benchmark/tasks/simple/fibonacci.json",
+    "web_component": "See benchmark/tasks/web-components/counter-component.json",
+    "ui_component": "See benchmark/tasks/ui-components/modal-dialog.json",
+    "full_project": "See benchmark/tasks/full-projects/todo-app.json",
+    "bug_finding": "See benchmark/tasks/bug-finding/type-coercion.json"
+  }
+}

@@ -2,27 +2,41 @@
 """
 GAMMA - Game Analyzing Model Methods Attentively
 Main entry point for the interactive LLM guessing game.
-Main entry point for the interactive LLM guessing game.
+
+Now with Penteract-inspired improvements:
+- Progressive difficulty levels
+- Achievement system
+- Session management
 """
 
 import argparse
 import sys
 import time
 import random
+import uuid
+from datetime import datetime
 from typing import Optional, List, Tuple, Set, Dict, Any, Union
 
 sys.path.insert(0, 'src')
 
 from core import config as cfg
 from core import ui
-from core import game_logic
 from core import explanations
+from game import game_logic
 from engines.engine_factory import get_engine, SUPPORTED_ENGINES
 from core.engine_interface import LLMEngine
-from core.tutorial_mode import TutorialMode
-from core.comparison_mode import ComparisonMode
+from game.tutorial_mode import TutorialMode
+from comparison.comparison_mode import ComparisonMode
 from core.mind_meld_mode import MindMeldMode
 from core.interactive_menu import InteractiveMenu
+
+# New: Difficulty system
+from game.difficulty_levels import (
+    DifficultyLevel,
+    GameSession,
+    RoundStats,
+    DifficultyManager
+)
 
 
 # Global for tracking explained tokens in focus mode
@@ -433,18 +447,31 @@ def run_meld_mode(args: argparse.Namespace) -> None:
 
 
 def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
-    """Main game loop."""
-    # Get initial prompt
+    """Main game loop with difficulty levels and session tracking."""
+
+    # Initialize session
+    session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+    session = GameSession(
+        session_id=session_id,
+        current_level=DifficultyLevel.SIMPLE
+    )
+
+    # Welcome message with difficulty info
     ui.print_separator()
+    print(f"\n{cfg.COLOR_CYAN}🎮 Welcome to GAMMA!{cfg.COLOR_RESET}")
+    print(f"\nCurrent Level: {session.current_level.get_display_name()}")
+    print(f"{session.current_level.get_description()}\n")
+
+    # Get initial prompt
     initial_text = ui.get_user_input(
         "Enter a starting sentence (or press Enter for default)",
         allow_empty=True,
         default_val_on_empty="Mars attacks"
     )
-    
+
     if initial_text == cfg.SHORTCUT_QUIT:
         return
-    
+
     current_full_text = initial_text
     total_score = 0
     total_max_score = 0
@@ -500,6 +527,9 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
             elif args.verbose:
                 print(ui.color_text("(Attention data unavailable/unprocessed this step)", cfg.COLOR_YELLOW))
         
+        # Track round start time
+        round_start_time = time.time()
+
         # Process player guess
         score, max_s, chosen_sequence_info, correct_sequence_info = game_logic.process_player_guess(
             engine,
@@ -508,12 +538,49 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
             current_full_text,
             PREVIOUSLY_EXPLAINED_TOKENS_IN_FOCUS_MODE
         )
-        
+
         if score == -1:
             break
-        
+
         total_score += score
         total_max_score += max_s
+
+        # Track round stats
+        correct_token_prob = pred_result["probabilities"][pred_result["next_token_id"]]
+        round_stats = RoundStats(
+            round_number=round_counter,
+            correct=(score == max_s),
+            probability_of_correct=correct_token_prob,
+            time_taken_seconds=time.time() - round_start_time,
+            difficulty_level=session.current_level,
+            temperature=args.temperature,
+            top_k=args.top_k
+        )
+        session.add_round(round_stats)
+
+        # Show personalized tip if available
+        tip = session.get_personalized_tip()
+        if tip and round_counter % 5 == 0:  # Every 5 rounds
+            print(f"\n{cfg.COLOR_CYAN}{tip}{cfg.COLOR_RESET}\n")
+
+        # Check for level changes
+        if round_counter % 10 == 0:  # Check every 10 rounds
+            recommended_level = DifficultyManager.recommend_level(session)
+            if recommended_level != session.current_level:
+                message = DifficultyManager.get_level_transition_message(
+                    session.current_level,
+                    recommended_level
+                )
+                print(f"\n{cfg.COLOR_YELLOW}{message}{cfg.COLOR_RESET}\n")
+
+                response = ui.get_user_input(
+                    "Accept level change? (y/n)",
+                    allow_empty=False
+                )
+                if response.lower() == 'y':
+                    session.current_level = recommended_level
+                    print(f"\n{cfg.COLOR_GREEN}Level changed!{cfg.COLOR_RESET}")
+                    print(f"New features: {', '.join(recommended_level.get_features()[-2:])}\n")
         
         # Determine next token based on game mode
         if args.player_choice_mode and chosen_sequence_info and score == max_s:
@@ -577,7 +644,33 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
         incremental_input_ids_for_next_pred = next_token_tensor
     
     display_final_score_and_message(total_score, total_max_score, current_full_text)
-    
+
+    # Save session and show stats
+    import os
+    os.makedirs("sessions", exist_ok=True)
+    session_file = f"sessions/{session_id}.json"
+    session.save_to_file(session_file)
+
+    print(f"\n{cfg.COLOR_CYAN}{'='*60}{cfg.COLOR_RESET}")
+    print(f"{cfg.COLOR_BOLD}📊 Session Summary{cfg.COLOR_RESET}")
+    print(f"{cfg.COLOR_CYAN}{'='*60}{cfg.COLOR_RESET}\n")
+
+    stats = session.export_stats()
+    print(f"  Session ID: {session_id}")
+    print(f"  Final Level: {session.current_level.get_display_name()}")
+    print(f"  Total Rounds: {stats['total_rounds']}")
+    print(f"  Overall Accuracy: {stats['overall_accuracy']:.1%}")
+    print(f"  Playtime: {stats['total_playtime_seconds']:.1f} seconds\n")
+
+    if session.achievements:
+        print(f"{cfg.COLOR_GREEN}🏆 Achievements Unlocked:{cfg.COLOR_RESET}")
+        for achievement in session.achievements:
+            desc = session.get_achievement_description(achievement)
+            print(f"  {desc}")
+        print()
+
+    print(f"{cfg.COLOR_CYAN}Session saved to: {session_file}{cfg.COLOR_RESET}\n")
+
     # Offer to continue if not at EOS
     if args.allow_eos_continue and round_counter >= args.steps:
         if not (hasattr(engine.tokenizer, 'eos_token_id') and 

@@ -1,0 +1,23 @@
+{
+  "name": "data-table",
+  "description": "Create a sortable, filterable data table component",
+  "category": "ui-components",
+  "difficulty": "hard",
+  "variants": {
+    "typescript": "Write a TypeScript DataTable generic class that can display, sort, and filter data. Include proper interfaces and generic types.",
+    "javascript": "Write a JavaScript DataTable class that can display, sort, and filter data.",
+    "javascript-jsdoc": "Write a JavaScript DataTable class with JSDoc that can display, sort, and filter data. Include generic type annotations.",
+    "javascript-vanilla-web": "Create a data table component with sorting and filtering in vanilla JavaScript. Include:\n\n**Features:**\n- Display data in a table\n- Column headers with sort indicators (↑↓)\n- Click header to sort (ascending/descending/no sort)\n- Search/filter input (filters all columns)\n- Pagination (rows per page: 10, 25, 50)\n- Row selection (checkbox)\n- Responsive design\n\n**HTML Structure:**\n- Search input\n- Table with thead and tbody\n- Pagination controls\n- Rows per page selector\n\n**CSS:**\n- Clean table design\n- Striped rows\n- Hover effects\n- Sort indicators\n- Mobile responsive (horizontal scroll on small screens)\n\n**JavaScript:**\n- DataTable class\n- Methods: setData(), sort(), filter(), paginate()\n- Event handlers for interactions\n- Efficient re-rendering\n\n**Sample Data:** Use user data (id, name, email, role, status)\n\nReturn as single HTML file with demo data.",
+    "javascript-vanilla-web-jsdoc": "Same as javascript-vanilla-web, plus complete JSDoc:\n\n- @typedef for Column definition\n- @typedef for TableConfig\n- @typedef for DataRow (generic)\n- Document all methods\n- Include usage examples in JSDoc\n\nReturn as single HTML file.",
+    "typescript-vanilla-web": "Create a data table using TypeScript and vanilla Web APIs. Include:\n\n**TypeScript:**\n- Generic DataTable<T> class\n- Interface for Column<T> (key, header, sortable, formatter)\n- Interface for TableConfig\n- Type-safe sorting and filtering\n- Proper event typing\n\n**Features:**\n- Generic data type support\n- Column configuration (sortable, formatter function)\n- Multi-column sorting\n- Global and per-column filtering\n- Pagination\n- Row selection\n- Custom cell rendering\n\n**Code Structure:**\n- Separate TypeScript modules\n- Clean separation of concerns\n- No frameworks\n\nProvide TypeScript source, HTML structure, and usage example.",
+    "typescript-react": "Create a data table component using TypeScript React. Include:\n\n**Components:**\n- DataTable<T> (generic component)\n- TableHeader\n- TableBody\n- TableRow\n- TablePagination\n- TableFilters\n\n**TypeScript:**\n- Generic component: DataTable<T>\n- Column<T> interface (key, header, sortable, render?)\n- TableProps<T> interface\n- Type-safe sorting and filtering\n\n**Features:**\n- Generic data type support\n- Sortable columns (multi-sort with shift-click)\n- Global search\n- Per-column filters\n- Pagination\n- Row selection (controlled/uncontrolled)\n- Custom cell renderers\n- Loading state\n- Empty state\n\n**Example:**\n```tsx\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst columns: Column<User>[] = [\n  { key: 'name', header: 'Name', sortable: true },\n  { key: 'email', header: 'Email', sortable: true }\n];\n\n<DataTable<User> data={users} columns={columns} />\n```\n\nUse React hooks, no external table libraries."
+  },
+  "requirements": [
+    "table",
+    "sort",
+    "filter",
+    "pagination",
+    "generic",
+    "reusable"
+  ]
+}

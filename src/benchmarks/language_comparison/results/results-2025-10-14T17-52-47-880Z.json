@@ -1,0 +1,55 @@
+[
+  {
+    "taskName": "array-filter",
+    "category": "simple",
+    "provider": "ollama-gemma3-27b",
+    "variant": "javascript",
+    "duration": 28269,
+    "evaluation": {
+      "scores": {
+        "accuracy": 0,
+        "performance": 1,
+        "codeQuality": 0.6,
+        "completeness": 1
+      },
+      "totalScore": 0,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 17,
+          "nonEmptyLines": 16,
+          "codeLines": 9,
+          "commentLines": 7,
+          "totalCharacters": 477,
+          "codeCharacters": 140
+        },
+        "tokenMetrics": {
+          "inputTokens": 75,
+          "outputTokens": 133,
+          "totalTokens": 208,
+          "tokensPerSecond": 4.7,
+          "charactersPerToken": "3.59"
+        },
+        "efficiency": {
+          "timeMs": 28269,
+          "timeSeconds": "28.27",
+          "linesPerSecond": "0.32"
+        }
+      },
+      "details": {
+        "code": "/**\n * Filters an array based on a provided predicate function.\n *\n * @param {Array} arr The array to filter.\n * @param {Function} predicate The function to test each element.  Should return a boolean.\n * @returns {Array} A new array containing only elements that satisfy the predicate.\n */\nexport function customFilter(arr, predicate) {\n  const result = [];\n  for (const element of arr) {\n    if (predicate(element)) {\n      result.push(element);\n    }\n  }\n  return result;\n}\n",
+        "variant": "javascript"
+      }
+    },
+    "response": {
+      "content": "```javascript\n/**\n * Filters an array based on a provided predicate function.\n *\n * @param {Array} arr The array to filter.\n * @param {Function} predicate The function to test each element.  Should return a boolean.\n * @returns {Array} A new array containing only elements that satisfy the predicate.\n */\nexport function customFilter(arr, predicate) {\n  const result = [];\n  for (const element of arr) {\n    if (predicate(element)) {\n      result.push(element);\n    }\n  }\n  return result;\n}\n```\n",
+      "model": "gemma3:27b-it-qat",
+      "usage": {
+        "prompt_tokens": 75,
+        "completion_tokens": 133,
+        "total_tokens": 208
+      }
+    },
+    "timestamp": "2025-10-14T17:52:47.878Z",
+    "success": true
+  }
+]

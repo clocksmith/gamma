@@ -2,6 +2,7 @@
 """Main Mind Meld Engine - Now with enhanced bridging by default."""
 
 
+import os
 import time
 from typing import Any, Dict, List, Optional
 
@@ -19,6 +20,7 @@ from src.mind_meld.core.blending import BlendingConfig, BlendingStrategy, LogitB
 from src.mind_meld.core.config import MeldConfig, SwapStrategy
 from src.mind_meld.core.statistics import StatisticsTracker
 from src.mind_meld.translators.vocabulary_translator import AligningVocabularyTranslator
+from src.mind_meld.visualization import SwapVisualizer, SwapEvent
 
 class MeldEngine:
     """Orchestrates the Mind Meld generation process."""
@@ -76,10 +78,15 @@ class MeldEngine:
         if self.use_abe:
             self.abe_ensemble = ABEEnsemble(models, verbose=self.verbose)
 
+        # Initialize visualizer for tracking model swaps and contributions
+        model_names = [m.model_name for m in models]
+        self.visualizer = SwapVisualizer(model_names=model_names, enable_color=True)
+
         print(f"MeldEngine initialized with {self.swap_strategy} strategy.")
         print(f"  KV Cache Translator: {self.kv_translator.__class__.__name__}")
         print(f"  Vocabulary Translator: {self.vocab_translator.__class__.__name__}")
         print(f"  Blending: {'ON - ' + self.blend_strategy if self.use_blending else 'OFF'}")
+        print(f"  Visualization: Enabled")
 
     def get_active_engine(self) -> LLMEngine:
         """Returns the currently active engine."""
@@ -481,12 +488,20 @@ class MeldEngine:
 
             print(f"\nModel '{active_engine.model_name}' predicted towards: '{ui.color_text(next_token_text, cfg.COLOR_GREEN)}'")
 
+            # Record token for visualization
+            token_prob = float(melded_probs[next_token_id_in_target_vocab])
+            self.visualizer.record_token(
+                model_name=active_engine.model_name,
+                probability=token_prob,
+                time_seconds=0.0
+            )
+
             if self.stats_tracker:
                 self.stats_tracker.start_round()
                 self.stats_tracker.record_token(
                     active_engine.model_name,
                     next_token_text,
-                    confidence=float(melded_probs[next_token_id_in_target_vocab]),
+                    confidence=token_prob,
                     time_taken=0.0
                 )
 
@@ -495,8 +510,21 @@ class MeldEngine:
 
             if not self.use_blending:
                 if self._should_swap(next_token_text):
+                    next_model = self.models[(self.active_model_idx + 1) % len(self.models)]
+
+                    # Record swap event for visualization
+                    swap_event = SwapEvent(
+                        position=round_counter,
+                        from_model=active_engine.model_name,
+                        to_model=next_model.model_name,
+                        reason=f"Strategy: {self.swap_strategy}",
+                        timestamp=time.time(),
+                        confidence_before=token_prob,
+                        coherence_score=None  # Could be calculated if needed
+                    )
+                    self.visualizer.add_swap(swap_event)
+
                     if self.stats_tracker:
-                        next_model = self.models[(self.active_model_idx + 1) % len(self.models)]
                         self.stats_tracker.record_swap(
                             active_engine.model_name,
                             next_model.model_name,
@@ -508,6 +536,21 @@ class MeldEngine:
             time.sleep(1) # Pause for readability
 
         print("\nMind Meld session finished.")
-        
+
+        # Display visualization
+        print("\n" + "=" * 80)
+        print("Mind Meld Visualization")
+        print("=" * 80)
+        print(self.visualizer.render_contribution_timeline())
+        print(self.visualizer.render_swap_log(max_events=20))
+        print(self.visualizer.show_coherence_analysis(current_full_text))
+
+        # Export visualization data
+        os.makedirs("mind_meld_results", exist_ok=True)
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        export_path = f"mind_meld_results/{timestamp}_viz.json"
+        self.visualizer.export_to_json(export_path)
+        print(f"\n✓ Visualization data exported to: {export_path}")
+
         if self.stats_tracker:
             self.stats_tracker.finish()

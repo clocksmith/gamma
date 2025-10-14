@@ -1,0 +1,23 @@
+{
+  "name": "modal-dialog",
+  "description": "Create a reusable modal dialog component",
+  "category": "ui-components",
+  "difficulty": "medium",
+  "variants": {
+    "typescript": "Write a TypeScript Modal class that can show/hide and handle callbacks. Include proper interfaces for options.",
+    "javascript": "Write a JavaScript Modal class that can show/hide and handle callbacks.",
+    "javascript-jsdoc": "Write a JavaScript Modal class with JSDoc annotations that can show/hide and handle callbacks.",
+    "javascript-vanilla-web": "Create a reusable modal dialog component in vanilla JavaScript. Include:\n\n**HTML Structure:**\n- Modal overlay (semi-transparent background)\n- Modal container (centered box)\n- Header with title and close button (X)\n- Content area\n- Footer with action buttons\n\n**CSS:**\n- Overlay covers full screen\n- Modal is centered (vertically and horizontally)\n- Smooth fade-in/fade-out animation\n- Close button styled\n- Backdrop click closes modal\n- Responsive design\n\n**JavaScript:**\n- Modal class or factory function\n- Methods: open(), close(), setContent()\n- Click outside to close\n- ESC key to close\n- Event listeners for buttons\n- Clean up on close\n\n**Example Usage:**\n```javascript\nconst modal = new Modal({\n  title: 'Confirm Action',\n  content: 'Are you sure?',\n  onConfirm: () => console.log('confirmed')\n});\nmodal.open();\n```\n\nReturn as a single HTML file demonstrating the modal.",
+    "javascript-vanilla-web-jsdoc": "Create a reusable modal dialog with complete JSDoc documentation. Same requirements as javascript-vanilla-web, plus:\n\n- @typedef for ModalOptions\n- @typedef for ModalConfig\n- Complete @param and @return documentation\n- @class documentation for the Modal class\n- Document all public methods\n\nReturn as a single HTML file.",
+    "typescript-vanilla-web": "Create a reusable modal dialog using TypeScript and vanilla Web APIs. Include:\n\n**TypeScript:**\n- Interface for ModalOptions (title, content, buttons, callbacks)\n- Modal class with proper typing\n- Type-safe event handlers\n- Generic content type support\n\n**Features:**\n- Open/close methods\n- Keyboard support (ESC to close)\n- Click outside to close\n- Customizable buttons\n- Callbacks for actions\n- Animation support\n\n**HTML/CSS:**\n- Clean, modern design\n- Proper overlay and centering\n- Animations\n\nProvide TypeScript source and HTML structure.",
+    "typescript-react": "Create a reusable Modal component using TypeScript React. Include:\n\n**Component:**\n- Modal component with TypeScript\n- Props interface:\n  - isOpen: boolean\n  - onClose: () => void\n  - title?: string\n  - children: ReactNode\n  - footer?: ReactNode\n\n**Features:**\n- Portal rendering (use ReactDOM.createPortal)\n- ESC key to close\n- Click outside to close\n- Smooth animations (CSS transitions)\n- Accessible (focus trap, ARIA attributes)\n- TypeScript strict mode compatible\n\n**Example:**\n```tsx\n<Modal isOpen={isOpen} onClose={handleClose} title=\"My Modal\">\n  <p>Modal content</p>\n</Modal>\n```\n\nMinimal deps (React, ReactDOM only). Include example usage."
+  },
+  "requirements": [
+    "modal",
+    "dialog",
+    "open",
+    "close",
+    "overlay",
+    "reusable"
+  ]
+}

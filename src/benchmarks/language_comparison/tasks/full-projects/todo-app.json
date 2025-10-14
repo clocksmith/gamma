@@ -1,0 +1,35 @@
+{
+  "name": "todo-app",
+  "description": "Build a complete todo application with the same functionality in all three variants",
+  "category": "full-projects",
+  "difficulty": "hard",
+  "variants": {
+    "typescript": "Create a complete TypeScript todo application with the following requirements:\n\n1. A Todo interface with: id (number), text (string), completed (boolean), createdAt (Date)\n2. A TodoManager class with methods:\n   - addTodo(text: string): Todo\n   - removeTodo(id: number): boolean\n   - toggleTodo(id: number): boolean\n   - getTodos(): Todo[]\n   - getCompletedTodos(): Todo[]\n   - getPendingTodos(): Todo[]\n   - clearCompleted(): number (returns count of deleted todos)\n3. Proper type safety with interfaces\n4. Error handling for invalid operations\n5. Export all types and the class\n\nThe implementation should be production-ready with proper validation.",
+    "javascript": "Create a complete JavaScript todo application with the following requirements:\n\n1. A todo object structure with: id, text, completed, createdAt\n2. A TodoManager class with methods:\n   - addTodo(text)\n   - removeTodo(id)\n   - toggleTodo(id)\n   - getTodos()\n   - getCompletedTodos()\n   - getPendingTodos()\n   - clearCompleted() (returns count of deleted todos)\n3. Error handling for invalid operations\n4. Export the class\n\nThe implementation should be production-ready with proper validation.",
+    "javascript-jsdoc": "Create a complete JavaScript todo application with JSDoc annotations with the following requirements:\n\n1. A @typedef Todo with: id (number), text (string), completed (boolean), createdAt (Date)\n2. A TodoManager class with methods (all properly documented with JSDoc):\n   - addTodo(text)\n   - removeTodo(id)\n   - toggleTodo(id)\n   - getTodos()\n   - getCompletedTodos()\n   - getPendingTodos()\n   - clearCompleted() (returns count of deleted todos)\n3. Complete JSDoc type annotations for all methods\n4. Error handling for invalid operations\n5. Export the class\n\nThe implementation should be production-ready with proper validation."
+  },
+  "requirements": [
+    "Todo",
+    "TodoManager",
+    "addTodo",
+    "removeTodo",
+    "toggleTodo",
+    "getTodos",
+    "getCompletedTodos",
+    "getPendingTodos",
+    "clearCompleted",
+    "validation",
+    "export"
+  ],
+  "testCases": [
+    {
+      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); console.assert(todo.text === 'Test', 'Should add todo');"
+    },
+    {
+      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); manager.toggleTodo(todo.id); console.assert(manager.getCompletedTodos().length === 1, 'Should toggle todo');"
+    },
+    {
+      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); manager.removeTodo(todo.id); console.assert(manager.getTodos().length === 0, 'Should remove todo');"
+    }
+  ]
+}
