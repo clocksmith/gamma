@@ -578,39 +578,59 @@ class InteractiveMenu:
     def _select_model_interactively(self, for_comparison: bool = False) -> Dict[str, Any]:
         """Interactive model selection with enhanced catalog."""
         config = {}
-        
-        # Engine selection
+
+        # Check if Ollama models are available
+        ollama_available = self._check_ollama_availability()
+        hf_authenticated = self._check_huggingface_auth()
+
+        # Engine selection with smart defaults
         print("\n🚀 Select Engine:")
-        print("  1. Ollama (use local models, easiest)")
-        print("  2. PyTorch (recommended for Gemma)")
-        print("  3. TensorFlow")
-        print("  4. JAX")
-        print("  5. ONNX Runtime")
-        print("  6. llama.cpp (GGUF models)")
-        print("  7. MLX (Apple Silicon)")
-        print("  8. Custom engine")
+        print("  1. llama.cpp (GGUF models - local Ollama, HuggingFace, files)")
+        if ollama_available:
+            print("     ✓ Ollama models detected - will use llama.cpp")
+        print("  2. PyTorch (HuggingFace Transformers)")
+        if not hf_authenticated:
+            print("     ⚠️  May require HuggingFace authentication for some models")
+        print("  3. TensorFlow (experimental)")
+        print("  4. JAX (experimental)")
+        print("  5. ONNX Runtime (experimental)")
+        print("  6. MLX (Apple Silicon, experimental)")
+        print("  7. Custom engine")
+
+        # Suggest best default based on availability
+        if ollama_available:
+            default_choice = "1"
+            suggestion = " (llama.cpp recommended - local GGUF models detected)"
+        elif hf_authenticated:
+            default_choice = "2"
+            suggestion = " (PyTorch recommended)"
+        else:
+            default_choice = "1"
+            suggestion = " (llama.cpp recommended)"
 
         engine_choice = prompts.get_user_input(
-            "Select engine (1-8, default: 1)",
-            valid_choices=["1", "2", "3", "4", "5", "6", "7", "8", ""],
+            f"Select engine (1-7, default: {default_choice}){suggestion}",
+            valid_choices=["1", "2", "3", "4", "5", "6", "7", ""],
             allow_empty=True
         )
 
         engine_map = {
-            "1": "ollama",
+            "1": "llamacpp",
             "2": "pytorch",
             "3": "tensorflow",
             "4": "jax",
             "5": "onnx",
-            "6": "llamacpp",
-            "7": "mlx",
-            "": "ollama"
+            "6": "mlx"
         }
 
-        if engine_choice == "8":
+        # Set smart default
+        default_engine = engine_map.get(default_choice, "llamacpp")
+        engine_map[""] = default_engine
+
+        if engine_choice == "7":
             config['engine'] = prompts.get_user_input("Enter engine name", allow_empty=False)
         else:
-            config['engine'] = engine_map.get(engine_choice, "ollama")
+            config['engine'] = engine_map.get(engine_choice, default_engine)
         
         # Model selection using the new catalog
         print(f"\n📚 Select Model for {config['engine'].upper()} engine:")
@@ -747,3 +767,37 @@ class InteractiveMenu:
                 setattr(args, key, value)
             else:
                 setattr(args, key, value)
+
+    def _check_ollama_availability(self) -> bool:
+        """Check if Ollama is available and has models."""
+        try:
+            import subprocess
+            result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, check=True, timeout=5)
+            lines = result.stdout.strip().split('\n')[1:]  # Skip header
+            return len([l for l in lines if l.strip()]) > 0
+        except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            return False
+
+    def _check_huggingface_auth(self) -> bool:
+        """Check if HuggingFace authentication is available."""
+        try:
+            import os
+            from pathlib import Path
+
+            # Check for token in environment variable
+            if os.environ.get('HF_TOKEN') or os.environ.get('HUGGING_FACE_HUB_TOKEN'):
+                return True
+
+            # Check for token in HF cache
+            hf_token_path = Path.home() / '.cache' / 'huggingface' / 'token'
+            if hf_token_path.exists():
+                return True
+
+            # Check for token in new location
+            hf_token_path_new = Path.home() / '.huggingface' / 'token'
+            if hf_token_path_new.exists():
+                return True
+
+            return False
+        except Exception:
+            return False

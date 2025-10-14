@@ -424,11 +424,13 @@ class ModelSelector:
 
     def _discover_local_models(self) -> None:
         """Discover locally available models (GGUF, ONNX, Ollama, etc.)."""
+        gguf_models_by_size = {}  # Track GGUF models by file size to detect duplicates
+
         # Special handling for Ollama - query available models
-        if self.engine == 'ollama':
+        if self.engine == 'ollama' or self.engine == 'llamacpp':
             try:
                 import subprocess
-                result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, check=True)
+                result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, check=True, timeout=5)
                 lines = result.stdout.strip().split('\n')[1:]  # Skip header
 
                 for line in lines:
@@ -439,27 +441,63 @@ class ModelSelector:
                         model_name = parts[0]
                         size = parts[2] if len(parts) > 2 else "?"
 
-                        # Check if already in catalog
-                        existing = any(m.name == model_name for m in self.models)
-                        if not existing:
-                            self.local_models.append(ModelInfo(
-                                name=model_name,
-                                engine='ollama',
-                                size=size,
-                                description=f"Local Ollama model",
-                                memory_estimate=size,
-                                recommended=False,
-                                requires_auth=False,
-                                available_locally=True,
-                                location="ollama"
-                            ))
-                        else:
-                            # Mark existing catalog model as available
-                            for m in self.models:
-                                if m.name == model_name:
-                                    m.available_locally = True
-                                    m.location = "ollama"
-            except (FileNotFoundError, subprocess.CalledProcessError):
+                        # For llamacpp engine, try to find the actual GGUF blob
+                        if self.engine == 'llamacpp':
+                            try:
+                                # Get the model file path from Ollama
+                                show_result = subprocess.run(
+                                    ['ollama', 'show', model_name, '--modelfile'],
+                                    capture_output=True, text=True, check=True, timeout=5
+                                )
+                                for show_line in show_result.stdout.split('\n'):
+                                    if show_line.startswith('FROM '):
+                                        blob_path = show_line.split('FROM ')[1].strip()
+
+                                        # Check if already in catalog by name
+                                        existing = any(m.name == model_name for m in self.models)
+                                        if not existing:
+                                            # Add as GGUF model from Ollama
+                                            model_info = ModelInfo(
+                                                name=f"{model_name}.gguf",
+                                                engine='llamacpp',
+                                                size=size,
+                                                description=f"Ollama model - {model_name}",
+                                                memory_estimate=size,
+                                                recommended=False,
+                                                requires_auth=False,
+                                                available_locally=True,
+                                                location=blob_path
+                                            )
+                                            self.local_models.append(model_info)
+
+                                            # Track by path for duplicate detection
+                                            gguf_models_by_size[blob_path] = model_info
+                                        break
+                            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+                                pass
+
+                        elif self.engine == 'ollama':
+                            # Check if already in catalog
+                            existing = any(m.name == model_name for m in self.models)
+                            if not existing:
+                                self.local_models.append(ModelInfo(
+                                    name=model_name,
+                                    engine='ollama',
+                                    size=size,
+                                    description=f"Local Ollama model",
+                                    memory_estimate=size,
+                                    recommended=False,
+                                    requires_auth=False,
+                                    available_locally=True,
+                                    location="ollama"
+                                ))
+                            else:
+                                # Mark existing catalog model as available
+                                for m in self.models:
+                                    if m.name == model_name:
+                                        m.available_locally = True
+                                        m.location = "ollama"
+            except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
                 pass  # Ollama not available
 
         try:
@@ -469,16 +507,25 @@ class ModelSelector:
                 for model in models:
                     # Only show models relevant to this engine
                     filename = model['filename']
+                    full_path = model['full_path']
 
                     if self.engine == 'llamacpp' and filename.endswith('.gguf'):
-                        # Check if this model is already in catalog
+                        # Check if this is a duplicate of an Ollama model (by path)
+                        if full_path in gguf_models_by_size:
+                            # This is the same file from Ollama, update the existing entry
+                            existing_model = gguf_models_by_size[full_path]
+                            existing_model.description = f"Available via Ollama & {location}"
+                            print(f"⚠️  Note: Model '{filename}' found in both Ollama and {location} (same file)")
+                            continue
+
+                        # Check if this model is already in catalog by name
                         existing = any(m.name == filename for m in self.models)
                         if not existing:
                             # Add new local GGUF model
                             size_mb = model['size_mb']
                             size_str = f"{size_mb / 1024:.1f}GB" if size_mb > 1024 else f"{size_mb:.0f}MB"
 
-                            self.local_models.append(ModelInfo(
+                            model_info = ModelInfo(
                                 name=filename,
                                 engine=self.engine,
                                 size="?",
@@ -487,14 +534,16 @@ class ModelSelector:
                                 recommended=False,
                                 requires_auth=False,
                                 available_locally=True,
-                                location=model['full_path']
-                            ))
+                                location=full_path
+                            )
+                            self.local_models.append(model_info)
+                            gguf_models_by_size[full_path] = model_info
                         else:
                             # Mark existing catalog model as available
                             for m in self.models:
                                 if m.name == filename:
                                     m.available_locally = True
-                                    m.location = model['full_path']
+                                    m.location = full_path
 
                     elif self.engine == 'onnx' and filename.endswith('.onnx'):
                         existing = any(m.name == filename for m in self.models)
@@ -511,7 +560,7 @@ class ModelSelector:
                                 recommended=False,
                                 requires_auth=False,
                                 available_locally=True,
-                                location=model['full_path']
+                                location=full_path
                             ))
 
             # Add local models to the beginning of the list

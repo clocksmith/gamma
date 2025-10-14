@@ -159,7 +159,7 @@ class TutorialMode:
             temperature=0.7,
             top_k=8,
             top_p=0.95,
-            return_attention=True
+            output_attentions=True
         )
         
         if pred_result.get("attention"):
@@ -209,7 +209,7 @@ class TutorialMode:
                 temperature=temp,
                 top_k=50,
                 top_p=1.0,
-                return_attention=False
+                output_attentions=False
             )
             
             tokens, probs, _ = self.engine.get_probabilities_at_step(
@@ -232,7 +232,7 @@ class TutorialMode:
             temperature=0.7,
             top_k=5,
             top_p=1.0,
-            return_attention=False
+            output_attentions=False
         )
         
         tokens_before, _, _ = self.engine.get_probabilities_at_step(
@@ -262,7 +262,7 @@ class TutorialMode:
             temperature=0.7,
             top_k=50,
             top_p=0.9,
-            return_attention=False
+            output_attentions=False
         )
         
         tokens_p, probs_p, _ = self.engine.get_probabilities_at_step(
@@ -307,7 +307,7 @@ class TutorialMode:
                 temperature=0.7,
                 top_k=8,
                 top_p=0.95,
-                return_attention=False
+                output_attentions=False
             )
             
             next_token_id = pred_result["next_token_id"]

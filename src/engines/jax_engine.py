@@ -39,8 +39,7 @@ class JaxEngine(LLMEngine):
         except Exception as e:
             err = f"JaxEngine: Model load failed for '{self.model_name}': {e}"
             if "is not a valid JAX type" in str(e): err += "\nHint: Check JAX/Flax install & dtype '{dtype_str}'."
-            if "revision" in str(e).lower(): err += "
-Hint: Try specifying a 'flax' model revision if available."
+            if "revision" in str(e).lower(): err += "\nHint: Try specifying a 'flax' model revision if available."
             raise RuntimeError(err) from e
         print("JaxEngine: Model loaded."); self._populate_special_token_map()
 

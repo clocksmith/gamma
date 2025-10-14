@@ -59,7 +59,7 @@ def parse_arguments() -> argparse.Namespace:
     
     # Core arguments
     parser.add_argument("--engine", type=str, choices=SUPPORTED_ENGINES, default="pytorch",
-                        help="LLM engine to use (pytorch recommended for Gemma models)")
+                        help="LLM engine: llamacpp (GGUF files), pytorch (HuggingFace), tensorflow/jax/onnx/mlx (experimental)")
     parser.add_argument("--model", type=str, default=None,
                         help="Model ID (HF name/local path). Interactive selection if omitted.")
     
@@ -672,7 +672,13 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
 
     start_time = time.time()
     input_ids, attention_mask = engine.encode(prompt, add_special_tokens=True)
-    prompt_tokens = input_ids.shape[-1]
+
+    # Handle both tensor and list types for input_ids
+    if hasattr(input_ids, 'shape'):
+        prompt_tokens = input_ids.shape[-1]
+    else:
+        prompt_tokens = len(input_ids) if isinstance(input_ids, (list, tuple)) else 1
+
     response_text = ""
     completion_tokens = 0
 

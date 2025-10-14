@@ -28,7 +28,17 @@ class LlamaCppEngine(LLMEngine):
                                n_gpu_layers=cfg_args.get("llama_cpp_n_gpu_layers", 0),
                                seed=cfg_args.get("seed", 1337), verbose=cfg_args.get("llama_cpp_lib_verbose", False), logits_all=True)
             self.tokenizer = self.model.tokenizer()
-            print(f"LlamaCppEngine: Model loaded. Vocab type: {self.model.vocab_type().name if hasattr(self.model.vocab_type(), 'name') else self.model.vocab_type()}")
+
+            # Try to get vocab type info if available
+            vocab_type_str = "unknown"
+            try:
+                if hasattr(self.model, 'vocab_type'):
+                    vocab_type = self.model.vocab_type()
+                    vocab_type_str = vocab_type.name if hasattr(vocab_type, 'name') else str(vocab_type)
+            except Exception:
+                pass
+
+            print(f"LlamaCppEngine: Model loaded. Vocab type: {vocab_type_str}")
         except Exception as e:
             err = f"LlamaCppEngine: Failed to load GGUF '{model_p}': {e}"
             if "Can't pass Command" in str(e) and cfg_args.get("llama_cpp_n_gpu_layers", 0) == -1: err += "\nHint: n_gpu_layers=-1 might not work with your BLAS build. Try 0 or a positive value."
@@ -50,7 +60,12 @@ class LlamaCppEngine(LLMEngine):
 
     def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[List[int], None]:
         if not self.tokenizer: raise RuntimeError("LlamaCppEngine: Tokenizer not loaded.")
-        return (self.tokenizer.encode(text, add_bos=add_special_tokens, add_eos=False), None)
+        # Note: newer llama-cpp-python versions don't support add_eos
+        try:
+            return (self.tokenizer.encode(text, add_bos=add_special_tokens, add_eos=False), None)
+        except TypeError:
+            # Fallback for newer versions without add_eos parameter
+            return (self.tokenizer.encode(text, add_bos=add_special_tokens), None)
 
     def decode(self, token_ids: Any, skip_special_tokens: bool = False) -> str:
         if not self.tokenizer: raise RuntimeError("LlamaCppEngine: Tokenizer not loaded.")
@@ -71,9 +86,23 @@ class LlamaCppEngine(LLMEngine):
                 err_msg = f"LlamaCppEngine: Context limit (n_ctx={self.model.n_ctx()}) reached. Input: {len(current_ids)}, Context: {self.model.n_tokens}. Try --llama-cpp-n-ctx."
                 self.reset_kv_cache(); raise RuntimeError(err_msg) from e
             raise
+
+        # Get logits - scores contains logits for all positions
         logits_np = np.array(self.model.scores, dtype=np.float32)
-        if logits_np.ndim == 2 and logits_np.shape[0] == 1: logits_np = logits_np[0]
-        if logits_np.shape[0] != self.get_vocabulary_size(): raise ValueError(f"Logits dim mismatch. Expected {self.get_vocabulary_size()}, got {logits_np.shape[0]}")
+
+        # Handle different shapes: (seq_len, vocab_size) or (vocab_size,)
+        if logits_np.ndim == 2:
+            # Take the last position's logits
+            logits_np = logits_np[-1]
+        elif logits_np.ndim == 1:
+            # Already the right shape
+            pass
+        else:
+            raise ValueError(f"Unexpected logits shape: {logits_np.shape}")
+
+        if logits_np.shape[0] != self.get_vocabulary_size():
+            raise ValueError(f"Logits dim mismatch. Expected {self.get_vocabulary_size()}, got {logits_np.shape[0]}")
+
         return logits_np
 
     def _top(self, l: np.ndarray, k_show: int) -> Tuple[List[str], List[float], List[int]]:
@@ -106,7 +135,7 @@ class LlamaCppEngine(LLMEngine):
         next_token_id_val = int(np.argmax(probs_proc))
         
         max_display_k = max(top_k if top_k > 0 else 1, self.engine_config.get("max_tokens_for_prob_display", 10), 1)
-        top_texts_list, top_probs_list, _ = self._top(logits_proc, k_sh=max_display_k)
+        top_texts_list, top_probs_list, _ = self._top(logits_proc, k_show=max_display_k)
         
         return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
                 "probabilities_raw": sampling_utils.softmax(logits_raw),
@@ -138,11 +167,131 @@ class LlamaCppEngine(LLMEngine):
         if not isinstance(data, np.ndarray): raise TypeError(f"Expected np.ndarray for LlamaCpp probabilities, got {type(data)}")
         is_probs_heuristic = (np.all(data >= -1e-6) and np.all(data <= 1.0 + 1e-6) and np.allclose(np.sum(data, axis=-1), 1.0, atol=1e-3))
         probs_tensor = data if is_probs_heuristic else sampling_utils.softmax(data)
-        return self._top(probs_tensor, k_sh=k)
+        return self._top(probs_tensor, k_show=k)
 
     def get_config_summary(self) -> Dict[str, Any]:
         if not self.model: return {"Error": "Model not loaded"}
+
+        # Try to get vocab type safely
+        vocab_type_str = "unknown"
+        try:
+            if hasattr(self.model, 'vocab_type'):
+                vocab_type = self.model.vocab_type()
+                vocab_type_str = vocab_type.name if hasattr(vocab_type, 'name') else str(vocab_type)
+        except Exception:
+            pass
+
         return {"GGUF Path": self.model_name, "Context Size": self.model.n_ctx(),
                 "GPU Layers": self.engine_config.get("llama_cpp_n_gpu_layers", 0),
-                "Vocab Type": (self.model.vocab_type().name if hasattr(self.model.vocab_type(), 'name') else str(self.model.vocab_type()))}
+                "Vocab Type": vocab_type_str}
+
+    def convert_to_numpy(self, tensor: Any) -> np.ndarray:
+        """Convert engine-specific tensor to numpy array."""
+        if isinstance(tensor, np.ndarray):
+            return tensor
+        elif isinstance(tensor, list):
+            return np.array(tensor)
+        else:
+            raise TypeError(f"LlamaCppEngine: Cannot convert {type(tensor)} to numpy array")
+
+    def convert_from_numpy(self, array: np.ndarray) -> Any:
+        """Convert numpy array to engine-specific tensor (llama.cpp uses lists)."""
+        if isinstance(array, np.ndarray):
+            return array.tolist() if array.ndim == 1 else array
+        return array
+
+    def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> Any:
+        """Concatenate two tensors along specified dimension."""
+        if tensor1 is None:
+            return tensor2
+        if tensor2 is None:
+            return tensor1
+
+        # Convert to numpy if needed
+        arr1 = tensor1 if isinstance(tensor1, np.ndarray) else np.array(tensor1)
+        arr2 = tensor2 if isinstance(tensor2, np.ndarray) else np.array(tensor2)
+
+        # Concatenate
+        result = np.concatenate([arr1, arr2], axis=dim)
+
+        # Return as list for llama.cpp compatibility
+        return result.tolist() if result.ndim == 1 else result
+
+    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
+        """Get KV cache shape if available."""
+        # llama.cpp manages KV cache internally
+        if self.model:
+            return (self.model.n_tokens,)
+        return None
+
+    def get_num_layers(self) -> int:
+        """Get the number of layers in the model."""
+        if not self.model:
+            raise RuntimeError("LlamaCppEngine: Model not loaded.")
+        # Try to get layer count from model metadata
+        try:
+            return self.model.n_layer()
+        except AttributeError:
+            # Fallback: estimate from model size
+            return 32  # Default reasonable value
+
+    def get_vocab(self) -> Dict[str, int]:
+        """Get the model's vocabulary."""
+        if not self.tokenizer:
+            raise RuntimeError("LlamaCppEngine: Tokenizer not loaded.")
+
+        vocab = {}
+        vocab_size = self.get_vocabulary_size()
+        for token_id in range(vocab_size):
+            try:
+                token_text = _decode_llama_token_piece(self.tokenizer.decode([token_id]))
+                vocab[token_text] = token_id
+            except Exception:
+                continue
+        return vocab
+
+    def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
+        """Attempt to bridge KV cache to another engine."""
+        # llama.cpp has internal KV cache management that's not easily exported
+        print("LlamaCppEngine: KV cache bridging not supported for llama.cpp")
+        return False
+
+    def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
+        """Export KV cache state for bridging."""
+        # llama.cpp manages KV cache internally and doesn't expose it easily
+        if self.model:
+            return {
+                'n_tokens': self.model.n_tokens,
+                'engine_type': 'llamacpp',
+                'context_size': self.model.n_ctx()
+            }
+        return None
+
+    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
+        """Import KV cache state from another engine."""
+        # llama.cpp doesn't support importing external KV cache
+        print("LlamaCppEngine: KV cache import not supported")
+        return False
+
+    def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:
+        """Append a new token to input_ids tensor."""
+        if isinstance(input_ids, list):
+            return input_ids + [new_token_id]
+        elif isinstance(input_ids, np.ndarray):
+            return np.append(input_ids, new_token_id).tolist()
+        else:
+            return [new_token_id]
+
+    def get_device(self) -> str:
+        """Get device type (cpu, cuda, mps, etc)."""
+        if not self.model:
+            return "unknown"
+
+        gpu_layers = self.engine_config.get("llama_cpp_n_gpu_layers", 0)
+        if gpu_layers > 0:
+            # Try to detect GPU backend
+            if llama_supports_gpu_offload():
+                return "cuda/rocm/metal"  # Could be any supported backend
+            return "cpu"
+        return "cpu"
 

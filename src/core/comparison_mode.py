@@ -185,14 +185,24 @@ class ComparisonMode:
                 self.args.temperature,
                 self.args.top_k,
                 self.args.top_p,
-                return_attention=self.args.show_attention
+                output_attentions=self.args.show_attention
             )
             
             prediction_time = time.time() - start_time
             
             # Get top tokens and probabilities
+            # Try different key names for compatibility
+            logits_key = None
+            for key in ["logits_processed", "logits_after_top_p", "logits_raw"]:
+                if key in pred_result:
+                    logits_key = key
+                    break
+
+            if logits_key is None:
+                raise KeyError(f"Could not find logits in prediction result. Available keys: {pred_result.keys()}")
+
             tokens, probs, token_ids = engine.get_probabilities_at_step(
-                pred_result["logits_after_top_p"],
+                pred_result[logits_key],
                 "final",
                 k=5
             )

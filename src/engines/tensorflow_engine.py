@@ -165,6 +165,55 @@ class TensorFlowEngine(LLMEngine):
         return summary
     
     # Implement new abstract methods
+
+    def get_num_layers(self) -> int:
+        """Get the number of layers in the model."""
+        if not self.model:
+            raise RuntimeError("TensorFlowEngine: Model not loaded.")
+
+        # Try to get from model config
+        if hasattr(self.model, 'config'):
+            if hasattr(self.model.config, 'num_hidden_layers'):
+                return self.model.config.num_hidden_layers
+            elif hasattr(self.model.config, 'n_layer'):
+                return self.model.config.n_layer
+            elif hasattr(self.model.config, 'num_layers'):
+                return self.model.config.num_layers
+
+        # Fallback: try to count layers
+        try:
+            if hasattr(self.model, 'layers'):
+                return len([l for l in self.model.layers if 'layer' in l.name.lower()])
+        except Exception:
+            pass
+
+        # Default fallback
+        return 12  # Reasonable default for many models
+
+    def get_vocab(self) -> Dict[str, int]:
+        """Get the model's vocabulary as a dict mapping tokens to IDs."""
+        if not self.tokenizer:
+            raise RuntimeError("TensorFlowEngine: Tokenizer not loaded.")
+
+        # HuggingFace tokenizers have get_vocab() method
+        if hasattr(self.tokenizer, 'get_vocab'):
+            return self.tokenizer.get_vocab()
+
+        # Fallback: build from vocab_size
+        vocab = {}
+        try:
+            vocab_size = self.get_vocabulary_size()
+            for token_id in range(min(vocab_size, 10000)):  # Limit to avoid memory issues
+                try:
+                    token_text = self.get_token_text(token_id)
+                    if token_text and not token_text.startswith('<'):
+                        vocab[token_text] = token_id
+                except Exception:
+                    continue
+        except Exception as e:
+            print(f"Warning: Could not build full vocabulary: {e}")
+
+        return vocab
     def convert_to_numpy(self, tensor: Any) -> np.ndarray:
         """Convert TensorFlow tensor to numpy array."""
         if isinstance(tensor, tf.Tensor):
