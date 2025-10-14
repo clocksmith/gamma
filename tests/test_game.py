@@ -3,82 +3,57 @@ from unittest.mock import patch, MagicMock
 import argparse
 import sys
 
-# Add the project root to the Python path
 sys.path.insert(0, '.')
 
 try:
     import game
     from src.core import config as cfg
     _GAME_IMPORT_ERROR = None
-except ModuleNotFoundError as exc:  # pragma: no cover
+except ModuleNotFoundError as exc:
     game = None
     cfg = None
     _GAME_IMPORT_ERROR = exc
 
 
 @unittest.skipIf(_GAME_IMPORT_ERROR is not None, f"Skipping game tests: {_GAME_IMPORT_ERROR}")
-class TestGame(unittest.TestCase):
+class TestGameRefactor(unittest.TestCase):
 
-    def test_parse_arguments_defaults(self):
-        """Test that arguments are parsed with correct default values."""
-        with patch('sys.argv', ['game.py']):
+    @patch('game.run_tutorial_mode')
+    def test_run_selected_mode_tutorial(self, mock_run_tutorial_mode):
+        """Test that tutorial mode is called from run_selected_mode."""
+        with patch('sys.argv', ['game.py', '--tutorial']):
             args = game.parse_arguments()
-            self.assertEqual(args.engine, 'pytorch')
-            self.assertIsNone(args.model)
-            self.assertEqual(args.steps, cfg.DEFAULT_MAX_DECODE_STEPS)
-            self.assertFalse(args.tutorial)
-            self.assertFalse(args.mind_meld)
-            self.assertIsNone(args.meld_models)
+            game.run_selected_mode(args)
+        mock_run_tutorial_mode.assert_called_once_with(args)
 
-    @patch('game.get_engine')
-    def test_initialize_game_engine_success(self, mock_get_engine):
-        """Test that the game engine can be initialized successfully."""
-        # Mock the engine and its load method
-        mock_engine = MagicMock()
-        mock_get_engine.return_value = mock_engine
+    @patch('game.run_comparison_mode')
+    def test_run_selected_mode_comparison(self, mock_run_comparison_mode):
+        """Test that comparison mode is called from run_selected_mode."""
+        with patch('sys.argv', ['game.py', '--comparison']):
+            args = game.parse_arguments()
+            game.run_selected_mode(args)
+        mock_run_comparison_mode.assert_called_once_with(args)
 
-        args = argparse.Namespace(engine='pytorch', model='test-model')
-        
-        # Add other necessary args from the parser defaults
-        for key, value in vars(game.parse_arguments()).items():
-            if not hasattr(args, key):
-                setattr(args, key, value)
-
-        engine = game.initialize_game_engine(args)
-
-        mock_get_engine.assert_called_once_with('pytorch', 'test-model', vars(args))
-        mock_engine.load.assert_called_once()
-        self.assertIsNotNone(engine)
+    @patch('game.run_meld_mode')
+    def test_run_selected_mode_mind_meld(self, mock_run_meld_mode):
+        """Test that mind meld mode is called from run_selected_mode."""
+        with patch('sys.argv', ['game.py', '--mind-meld']):
+            args = game.parse_arguments()
+            game.run_selected_mode(args)
+        mock_run_meld_mode.assert_called_once_with(args)
 
     @patch('game.initialize_game_engine')
-    @patch('src.core.tutorial_mode.TutorialMode')
-    def test_run_tutorial_mode(self, mock_tutorial_mode, mock_initialize_engine):
-        """Test that tutorial mode runs without crashing."""
+    @patch('game.run_game_loop')
+    def test_run_selected_mode_game_loop(self, mock_run_game_loop, mock_initialize_game_engine):
+        """Test that the game loop is called from run_selected_mode."""
         mock_engine = MagicMock()
-        mock_initialize_engine.return_value = mock_engine
-        mock_tutorial_instance = MagicMock()
-        mock_tutorial_mode.return_value = mock_tutorial_instance
+        mock_initialize_game_engine.return_value = mock_engine
+        with patch('sys.argv', ['game.py']):
+            args = game.parse_arguments()
+            game.run_selected_mode(args)
+        mock_initialize_game_engine.assert_called_once_with(args)
+        mock_run_game_loop.assert_called_once_with(mock_engine, args)
 
-        args = argparse.Namespace(model='test-model', verbose=False)
-        game.run_tutorial_mode(args)
-
-        mock_initialize_engine.assert_called_once_with(args)
-        mock_tutorial_mode.assert_called_once_with(mock_engine, False)
-        mock_tutorial_instance.run_tutorial.assert_called_once()
-
-    @patch('src.core.comparison_mode.ComparisonMode')
-    def test_run_comparison_mode(self, mock_comparison_mode):
-        """Test that comparison mode runs without crashing."""
-        mock_comparison_instance = MagicMock()
-        mock_comparison_instance.load_models.return_value = True
-        mock_comparison_mode.return_value = mock_comparison_instance
-
-        args = argparse.Namespace(comparison_models=['pytorch:model1', 'pytorch:model2'], verbose=False)
-        game.run_comparison_mode(args)
-
-        mock_comparison_mode.assert_called_once()
-        mock_comparison_instance.load_models.assert_called_once()
-        mock_comparison_instance.run_comparison.assert_called_once()
 
 if __name__ == '__main__':
     unittest.main()

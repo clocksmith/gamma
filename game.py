@@ -351,36 +351,26 @@ def run_comparison_mode(args: argparse.Namespace) -> None:
     else:
         # Interactive selection
         print("\nSelect models to compare (at least 2):")
-        print("Available options:")
-        print("  1. google/gemma-2b-it (PyTorch)")
-        print("  2. google/gemma-2-2b-it (PyTorch)")
-        print("  3. google/gemma-2-9b-it (PyTorch)")
-        print("  4. Custom model...")
-        
         selected_models = []
-        while len(selected_models) < 2:
-            choice = ui.get_user_input(
-                f"Select model {len(selected_models) + 1} (1-4 or 'done' if finished)",
-                allow_quit=True
-            )
-            
-            if choice == cfg.SHORTCUT_QUIT or choice.lower() == "done":
-                if len(selected_models) >= 2:
+        while True:
+            engine = ui.select_engine_interactively(default_engine="pytorch")
+            if not engine:
+                break
+
+            model = ui.select_model_interactively(engine)
+            if not model:
+                continue
+
+            selected_models.append((engine, model))
+
+            if len(selected_models) >= 2:
+                add_another = ui.get_user_input(
+                    "Add another model? (y/n)",
+                    valid_choices=["y", "n"],
+                    allow_quit=False
+                )
+                if add_another.lower() == "n":
                     break
-                else:
-                    print("Need at least 2 models for comparison.")
-                    continue
-            
-            if choice == "1":
-                selected_models.append(("pytorch", "google/gemma-2b-it"))
-            elif choice == "2":
-                selected_models.append(("pytorch", "google/gemma-2-2b-it"))
-            elif choice == "3":
-                selected_models.append(("pytorch", "google/gemma-2-9b-it"))
-            elif choice == "4":
-                engine = ui.get_user_input("Enter engine type (pytorch/tensorflow/jax/etc)")
-                model = ui.get_user_input("Enter model name/path")
-                selected_models.append((engine, model))
         
         models_to_compare = selected_models
     
@@ -542,8 +532,7 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
             print(ui.color_text("\n<End of Sequence> token generated. Ending game.", cfg.COLOR_YELLOW))
             break
         
-        # Update context - decode the token and add to text
-        decoded_token = engine.decode([next_token_id], skip_special_tokens=True)
+        decoded_token = engine.decode([next_token_id])
         # If the decoded token is empty (e.g., special token), use the token text directly
         if not decoded_token:
             decoded_token = next_token_text
@@ -587,7 +576,24 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
         
         incremental_input_ids_for_next_pred = next_token_tensor
     
-    # Game over - show final score
+    display_final_score_and_message(total_score, total_max_score, current_full_text)
+    
+    # Offer to continue if not at EOS
+    if args.allow_eos_continue and round_counter >= args.steps:
+        if not (hasattr(engine.tokenizer, 'eos_token_id') and 
+                pred_result.get("next_token_id") == engine.tokenizer.eos_token_id):
+            continue_choice = ui.get_user_input(
+                "\nMax steps reached but no <EOS>. Continue for more rounds? (y/n)",
+                valid_choices=["y", "n"],
+                allow_quit=False
+            )
+            if continue_choice.lower() == "y":
+                args.steps += cfg.DEFAULT_MAX_DECODE_STEPS
+                run_game_loop(engine, args)  # Recursive call to continue
+
+
+def display_final_score_and_message(total_score: int, total_max_score: int, current_full_text: str) -> None:
+    """Displays the final score and a message to the user."""
     ui.print_separator()
     print(f"\n🎮 {ui.color_text('GAME OVER!', cfg.COLOR_CYAN)}")
     print(f"Final Score: {total_score}/{total_max_score}")
@@ -604,19 +610,6 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
             print(ui.color_text("💡 Keep learning! LLMs can be unpredictable.", cfg.COLOR_MAGENTA_LIGHT))
     
     print(f"\nFinal text: \"{current_full_text}\"\n")
-    
-    # Offer to continue if not at EOS
-    if args.allow_eos_continue and round_counter >= args.steps:
-        if not (hasattr(engine.tokenizer, 'eos_token_id') and 
-                pred_result.get("next_token_id") == engine.tokenizer.eos_token_id):
-            continue_choice = ui.get_user_input(
-                "\nMax steps reached but no <EOS>. Continue for more rounds? (y/n)",
-                valid_choices=["y", "n"],
-                allow_quit=False
-            )
-            if continue_choice.lower() == "y":
-                args.steps += cfg.DEFAULT_MAX_DECODE_STEPS
-                run_game_loop(engine, args)  # Recursive call to continue
 
 
 def run_chat_mode(engine: LLMEngine, args: argparse.Namespace) -> None:
@@ -635,8 +628,7 @@ def run_chat_mode(engine: LLMEngine, args: argparse.Namespace) -> None:
 
         history.append({"role": "user", "content": prompt})
         
-        # Use a simple text accumulation for chat history
-        full_prompt = "\n".join([f"{msg['role']}: {msg['content']}" for msg in history])
+        full_prompt = engine.decode(history)
         
         sys.stdout.write(ui.color_text("> Assistant: ", cfg.COLOR_CYAN))
         sys.stdout.flush()
@@ -679,22 +671,7 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
     else:
         prompt_tokens = len(input_ids) if isinstance(input_ids, (list, tuple)) else 1
 
-    response_text = ""
-    completion_tokens = 0
-
-    for _ in range(args.steps):
-        pred = engine.predict_next(input_ids, attention_mask, args.temperature, args.top_k, args.top_p)
-        next_id = pred['next_token_id']
-
-        if next_id == engine.get_eos_token_id():
-            break
-
-        completion_tokens += 1
-        decoded_text = engine.decode([next_id])
-        response_text += decoded_text
-
-        # Update for next iteration
-        input_ids, attention_mask = engine.encode(response_text, add_special_tokens=False)
+    response_text = engine.decode(completion_tokens)
 
     end_time = time.time()
     wall_time = end_time - start_time
@@ -712,19 +689,13 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
 
 def main():
     """Main entry point for GAMMA."""
-    # Display intro
     ui.display_intro()
-    
-    # Parse arguments
     args = parse_arguments()
-    
-    # Check if user provided minimal arguments (just running 'python game.py')
-    # If so, use interactive menu
+
     if len(sys.argv) == 1 or (len(sys.argv) == 2 and sys.argv[1] in ['--help', '-h']):
-        if len(sys.argv) == 2:  # User asked for help
-            return  # Help was already printed by argparse
+        if len(sys.argv) == 2:
+            return
         
-        # No arguments provided - use interactive menu
         menu = InteractiveMenu()
         config = menu.show_main_menu()
         
@@ -732,51 +703,48 @@ def main():
             print(ui.color_text("\nExiting GAMMA.", cfg.COLOR_YELLOW))
             return
         
-        # Apply interactive config to args
         menu.apply_config_to_args(args, config)
-    
-    # Check for special modes (from either command line or interactive)
+
+    run_selected_mode(args)
+
+
+def run_selected_mode(args: argparse.Namespace):
+    """Runs the selected game mode based on parsed arguments."""
     if args.tutorial:
         run_tutorial_mode(args)
         return
-    elif args.comparison:
+    if args.comparison:
         run_comparison_mode(args)
         return
-    elif getattr(args, "mind_meld", False):
+    if getattr(args, "mind_meld", False):
         run_meld_mode(args)
         return
 
-    # Initialize engine
     engine = initialize_game_engine(args)
     if engine is None:
         print(ui.color_text("\nFailed to initialize game engine. Exiting.", cfg.COLOR_RED))
         return
 
-    # Set random seed if specified
     if args.seed != 0:
         random.seed(args.seed)
         print(f"Random seed set to: {args.seed}")
 
-    # Mode dispatcher
     if args.prompt:
         run_single_shot_inference(engine, args)
-        return
     elif args.chat:
         run_chat_mode(engine, args)
-        return
-    
-    # Default to game loop
-    try:
-        run_game_loop(engine, args)
-    except KeyboardInterrupt:
-        print(ui.color_text("\n\nGame interrupted by user.", cfg.COLOR_YELLOW))
-    except Exception as e:
-        print(ui.color_text(f"\n\nAn error occurred: {e}", cfg.COLOR_RED))
-        if args.verbose:
-            import traceback
-            traceback.print_exc()
-    finally:
-        print(ui.color_text("\n\nThanks for playing GAMMA! 🎮", cfg.COLOR_CYAN))
+    else:
+        try:
+            run_game_loop(engine, args)
+        except KeyboardInterrupt:
+            print(ui.color_text("\n\nGame interrupted by user.", cfg.COLOR_YELLOW))
+        except Exception as e:
+            print(ui.color_text(f"\n\nAn error occurred: {e}", cfg.COLOR_RED))
+            if args.verbose:
+                import traceback
+                traceback.print_exc()
+        finally:
+            print(ui.color_text("\n\nThanks for playing GAMMA! 🎮", cfg.COLOR_CYAN))
 
 
 if __name__ == "__main__":
