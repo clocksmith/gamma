@@ -52,6 +52,8 @@ run_test "Mind Meld Engine" "python3 tests/test_mind_meld_engine.py > /dev/null 
 run_test "Mind Meld CLI" "python3 tests/test_mind_meld.py > /dev/null 2>&1"
 run_test "ABE Ensemble" "python3 tests/test_abe_ensemble.py > /dev/null 2>&1"
 run_test "Blending Strategies" "python3 tests/test_blending.py > /dev/null 2>&1"
+run_test "Transformer Pipeline" "python3 tests/test_transformer_pipeline.py > /dev/null 2>&1"
+run_test "Sampling Utils" "python3 tests/test_sampling_utils.py > /dev/null 2>&1"
 
 # New feature tests
 run_test "Swap Strategies" "python3 tests/test_strategies.py > /dev/null 2>&1"
