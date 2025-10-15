@@ -198,6 +198,51 @@ class TestMeldConfigSerialization(unittest.TestCase):
         self.assertEqual(config_dict['translation_config']['mode'], 'intersection')
 
 
+class TestConfigValidation(unittest.TestCase):
+    """Test configuration validation."""
+
+    def test_validate_returns_list(self):
+        """Validate should return a list."""
+        config = MeldConfig()
+        warnings = config.validate()
+        self.assertIsInstance(warnings, list)
+
+    def test_validate_low_vocab_overlap_warning(self):
+        """Should warn when vocabulary overlap is very low."""
+        config = MeldConfig()
+        config.translation_config.min_vocab_overlap = 0.2
+        warnings = config.validate()
+
+        self.assertTrue(any("vocabulary overlap" in w.lower() for w in warnings))
+
+    def test_validate_weighted_blend_without_weights(self):
+        """Should warn when weighted blend has no weights."""
+        config = MeldConfig()
+        config.swap_config.strategy = SwapStrategy.WEIGHTED_BLEND
+        config.swap_config.blend_weights = None
+        warnings = config.validate()
+
+        self.assertTrue(any("blend_weights" in w.lower() for w in warnings))
+
+    def test_validate_projection_without_dim(self):
+        """Should warn when projection mode has no projection_dim."""
+        config = MeldConfig()
+        config.translation_config.mode = TranslationMode.PROJECTION
+        config.translation_config.projection_dim = None
+        warnings = config.validate()
+
+        self.assertTrue(any("projection_dim" in w.lower() for w in warnings))
+
+    def test_validate_passes_for_good_config(self):
+        """Should not warn for properly configured setup."""
+        config = MeldConfig()
+        config.translation_config.min_vocab_overlap = 0.8
+        warnings = config.validate()
+
+        # Should have no warnings about vocab overlap
+        self.assertFalse(any("vocabulary overlap" in w.lower() for w in warnings))
+
+
 class TestConfigEdgeCases(unittest.TestCase):
     """Test edge cases and error handling."""
 

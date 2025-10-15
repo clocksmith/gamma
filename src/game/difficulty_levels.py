@@ -313,10 +313,10 @@ class GameSession:
             session_id=data["session_id"],
             current_level=DifficultyLevel[data["current_level"]],
             achievements=data.get("achievements", []),
-            total_playtime_seconds=data.get("total_playtime_seconds", 0.0)
+            total_playtime_seconds=0.0  # Will be recalculated by add_round()
         )
 
-        # Restore rounds
+        # Restore rounds - add_round() will recalculate total_playtime_seconds
         for r in data.get("rounds", []):
             stats = RoundStats(
                 round_number=r["round"],
