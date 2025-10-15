@@ -160,10 +160,10 @@ class TestEstimateModelSizeFromName(unittest.TestCase):
         self.assertEqual(size, 7 * 1024 * 4)
 
     def test_parse_13b_model(self):
-        """Should parse 13B model (note: '3b' substring matches first)."""
+        """Should parse 13B model correctly."""
         size = memory_estimator._estimate_model_size_from_name('llama-13b', None)
-        # Note: '13b' contains '3b', so it matches 3B first (source code issue)
-        self.assertEqual(size, 3 * 1024 * 4)
+        # 13B should be parsed as 12B (grouped with 12b)
+        self.assertEqual(size, 12 * 1024 * 4)
 
     def test_parse_70b_model(self):
         """Should parse 70B model correctly."""
@@ -224,16 +224,14 @@ class TestEstimateModelSizeFromName(unittest.TestCase):
         self.assertEqual(size, 8 * 1024 * 4)
 
     def test_parse_27b_model(self):
-        """Should parse 27B model (note: '7b' substring matches first)."""
+        """Should parse 27B model correctly."""
         size = memory_estimator._estimate_model_size_from_name('model-27b', None)
-        # Note: '27b' contains '7b', so it matches 7B first (source code issue)
-        self.assertEqual(size, 7 * 1024 * 4)
+        self.assertEqual(size, 27 * 1024 * 4)
 
     def test_parse_33b_model(self):
-        """Should parse 33B model (note: '3b' substring matches first)."""
+        """Should parse 33B model correctly."""
         size = memory_estimator._estimate_model_size_from_name('model-33b', None)
-        # Note: '33b' contains '3b', so it matches 3B first (source code issue)
-        self.assertEqual(size, 3 * 1024 * 4)
+        self.assertEqual(size, 33 * 1024 * 4)
 
     def test_quantization_bfloat16(self):
         """Should detect bfloat16 in name."""

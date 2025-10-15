@@ -283,10 +283,10 @@ class TestGGUFMetadata(unittest.TestCase):
             '4b': 4,
             '8b': 8,
             '9b': 9,
-            '12b': 2,  # '12b' contains '2b', matches 2B first (source code issue)
-            '13b': 3,  # '13b' contains '3b', matches 3B first (source code issue)
-            '27b': 7,  # '27b' contains '7b', matches 7B first (source code issue)
-            '33b': 3,  # '33b' contains '3b', matches 3B first (source code issue)
+            '12b': 12,
+            '13b': 12,  # '13b' grouped with 12b
+            '27b': 27,
+            '33b': 33,
             '70b': 70,
         }
 

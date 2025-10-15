@@ -100,30 +100,31 @@ def _estimate_model_size_from_name(model_name: str, quantization: Optional[str])
     name_lower = model_name.lower()
 
     # Extract parameter count
+    # Check from largest/most specific to smallest to avoid substring matches
     param_billions = 0
 
-    if '1b' in name_lower or '1.5b' in name_lower:
-        param_billions = 1
-    elif '2b' in name_lower or '2.5b' in name_lower:
-        param_billions = 2
-    elif '3b' in name_lower:
-        param_billions = 3
-    elif '4b' in name_lower:
-        param_billions = 4
-    elif '7b' in name_lower:
-        param_billions = 7
-    elif '8b' in name_lower:
-        param_billions = 8
-    elif '9b' in name_lower:
-        param_billions = 9
-    elif '12b' in name_lower or '13b' in name_lower:
-        param_billions = 12
-    elif '27b' in name_lower:
-        param_billions = 27
+    if '70b' in name_lower:
+        param_billions = 70
     elif '33b' in name_lower:
         param_billions = 33
-    elif '70b' in name_lower:
-        param_billions = 70
+    elif '27b' in name_lower:
+        param_billions = 27
+    elif '12b' in name_lower or '13b' in name_lower:
+        param_billions = 12
+    elif '9b' in name_lower:
+        param_billions = 9
+    elif '8b' in name_lower:
+        param_billions = 8
+    elif '7b' in name_lower:
+        param_billions = 7
+    elif '4b' in name_lower:
+        param_billions = 4
+    elif '3b' in name_lower:
+        param_billions = 3
+    elif '2b' in name_lower or '2.5b' in name_lower:
+        param_billions = 2
+    elif '1b' in name_lower or '1.5b' in name_lower:
+        param_billions = 1
     else:
         # Default guess
         param_billions = 7

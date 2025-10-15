@@ -124,6 +124,49 @@ class TestResolveModelPath(unittest.TestCase):
         # Won't find it, returns original
         self.assertEqual(result, "model.gguf")
 
+    def test_ollama_blobs_direct_match(self):
+        """Should find model in Ollama blobs directory with direct match."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create Ollama-like directory structure
+            ollama_dir = os.path.join(tmpdir, "ollama")
+            blobs_dir = os.path.join(ollama_dir, "blobs")
+            os.makedirs(blobs_dir)
+
+            # Create model file
+            model_identifier = "sha256-abc123"
+            model_file = os.path.join(blobs_dir, model_identifier)
+            with open(model_file, 'w') as f:
+                f.write("model")
+
+            result = model_paths.resolve_model_path(
+                model_identifier,
+                additional_paths=[ollama_dir]
+            )
+
+            self.assertEqual(result, os.path.abspath(model_file))
+
+    def test_ollama_blobs_partial_match(self):
+        """Should find model in Ollama blobs directory with partial match."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create Ollama-like directory structure
+            ollama_dir = os.path.join(tmpdir, "ollama")
+            blobs_dir = os.path.join(ollama_dir, "blobs")
+            os.makedirs(blobs_dir)
+
+            # Create model file with full sha256 name
+            full_name = "sha256-abc123def456"
+            model_file = os.path.join(blobs_dir, full_name)
+            with open(model_file, 'w') as f:
+                f.write("model")
+
+            # Search with partial identifier
+            result = model_paths.resolve_model_path(
+                "abc123",
+                additional_paths=[ollama_dir]
+            )
+
+            self.assertEqual(result, os.path.abspath(model_file))
+
 
 class TestListAvailableModels(unittest.TestCase):
     """Test list_available_models function."""

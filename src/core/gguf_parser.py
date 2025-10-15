@@ -97,28 +97,29 @@ class GGUFMetadata:
             self.metadata['quantization'] = 'unknown'
 
         # Parameter count
-        if '1b' in filename or '1.5b' in filename:
-            self.metadata['param_billions'] = 1
-        elif '2b' in filename or '2.5b' in filename:
-            self.metadata['param_billions'] = 2
-        elif '3b' in filename:
-            self.metadata['param_billions'] = 3
-        elif '4b' in filename:
-            self.metadata['param_billions'] = 4
-        elif '7b' in filename:
-            self.metadata['param_billions'] = 7
-        elif '8b' in filename:
-            self.metadata['param_billions'] = 8
-        elif '9b' in filename:
-            self.metadata['param_billions'] = 9
-        elif '12b' in filename or '13b' in filename:
-            self.metadata['param_billions'] = 12
-        elif '27b' in filename:
-            self.metadata['param_billions'] = 27
+        # Check from largest/most specific to smallest to avoid substring matches
+        if '70b' in filename:
+            self.metadata['param_billions'] = 70
         elif '33b' in filename:
             self.metadata['param_billions'] = 33
-        elif '70b' in filename:
-            self.metadata['param_billions'] = 70
+        elif '27b' in filename:
+            self.metadata['param_billions'] = 27
+        elif '12b' in filename or '13b' in filename:
+            self.metadata['param_billions'] = 12
+        elif '9b' in filename:
+            self.metadata['param_billions'] = 9
+        elif '8b' in filename:
+            self.metadata['param_billions'] = 8
+        elif '7b' in filename:
+            self.metadata['param_billions'] = 7
+        elif '4b' in filename:
+            self.metadata['param_billions'] = 4
+        elif '3b' in filename:
+            self.metadata['param_billions'] = 3
+        elif '2b' in filename or '2.5b' in filename:
+            self.metadata['param_billions'] = 2
+        elif '1b' in filename or '1.5b' in filename:
+            self.metadata['param_billions'] = 1
         else:
             self.metadata['param_billions'] = None
 
