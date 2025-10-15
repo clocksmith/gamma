@@ -40,10 +40,18 @@ run_test() {
 # Core test suites
 run_test "Core Config" "python3 tests/test_core_config.py > /dev/null 2>&1"
 run_test "UI Components" "python3 tests/test_ui_components.py > /dev/null 2>&1"
+run_test "Model Registry" "python3 tests/test_model_registry.py > /dev/null 2>&1"
+run_test "Explanations" "python3 tests/test_explanations.py > /dev/null 2>&1"
+run_test "Memory Estimator" "python3 tests/test_memory_estimator.py > /dev/null 2>&1"
+run_test "Interactive Prompts" "python3 tests/test_interactive_prompts.py > /dev/null 2>&1"
+run_test "GGUF Parser" "python3 tests/test_gguf_parser.py > /dev/null 2>&1"
+run_test "Model Paths" "python3 tests/test_model_paths.py > /dev/null 2>&1"
 run_test "Engine Interface" "python3 tests/test_engine_interface.py > /dev/null 2>&1"
 run_test "Difficulty System" "python3 tests/test_difficulty.py > /dev/null 2>&1"
 run_test "Mind Meld Engine" "python3 tests/test_mind_meld_engine.py > /dev/null 2>&1"
 run_test "Mind Meld CLI" "python3 tests/test_mind_meld.py > /dev/null 2>&1"
+run_test "ABE Ensemble" "python3 tests/test_abe_ensemble.py > /dev/null 2>&1"
+run_test "Blending Strategies" "python3 tests/test_blending.py > /dev/null 2>&1"
 
 # New feature tests
 run_test "Swap Strategies" "python3 tests/test_strategies.py > /dev/null 2>&1"
