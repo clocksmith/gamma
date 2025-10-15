@@ -3,7 +3,7 @@
 ## What's Here
 
 - **mind_meld_benchmark.py** - Python benchmarks for Mind Meld performance ✨ NEW CLI
-- **language_comparison/** - TypeScript vs JavaScript LLM benchmarking
+- **dream/** - DREAM: TypeScript vs JavaScript LLM benchmarking suite
 
 ---
 
@@ -88,7 +88,7 @@ The benchmark suite has been upgraded with the **DREAM** framework:
 ### Quick Start
 
 ```bash
-cd language_comparison
+cd dream
 npm install
 
 # Quick validation
@@ -145,9 +145,9 @@ node query_cli.js --help
 
 ### Configuration & Documentation
 
-- **DREAM Guide**: See [language_comparison/DREAM_GUIDE.md](language_comparison/DREAM_GUIDE.md) for complete documentation
-- **Improvements**: See [language_comparison/IMPROVEMENTS.md](language_comparison/IMPROVEMENTS.md) for what's new
-- **Original Docs**: [language_comparison/README.md](language_comparison/README.md)
+- **DREAM Guide**: See [dream/DREAM_GUIDE.md](dream/DREAM_GUIDE.md) for complete documentation
+- **Improvements**: See [dream/IMPROVEMENTS.md](dream/IMPROVEMENTS.md) for what's new
+- **Original Docs**: [dream/README.md](dream/README.md)
 
 ### Example Workflows
 
@@ -171,8 +171,8 @@ node dream-cli.js analyze
 
 ## See Also
 
-- [DREAM Guide](language_comparison/DREAM_GUIDE.md) - Complete guide to new features
-- [Improvements](language_comparison/IMPROVEMENTS.md) - What's new in DREAM
-- [Language Comparison Docs](language_comparison/README.md) - Original documentation
-- [Query Interface](language_comparison/query_interface.js) - Natural language queries
+- [DREAM Guide](dream/DREAM_GUIDE.md) - Complete guide to new features
+- [Improvements](dream/IMPROVEMENTS.md) - What's new in DREAM
+- [DREAM Benchmarks](dream/README.md) - Original documentation
+- [Query Interface](dream/query_interface.js) - Natural language queries
 - [Main README](../README.md) - Project overview

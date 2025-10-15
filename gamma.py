@@ -85,7 +85,7 @@ For more help on a specific tool:
 
     elif args.tool == 'language-comparison':
         # Run the Node.js benchmark suite
-        benchmark_dir = os.path.join(os.path.dirname(__file__), 'src', 'benchmarks', 'language_comparison')
+        benchmark_dir = os.path.join(os.path.dirname(__file__), 'src', 'benchmarks', 'dream')
         if not os.path.exists(benchmark_dir):
             print(f"Error: Language comparison benchmark not found at {benchmark_dir}")
             sys.exit(1)

@@ -56,18 +56,6 @@ class LLMEngine(ABC):
 
     def reset_kv_cache(self):
         self._kv_cache = None
-    
-    def get_kv_cache(self) -> Optional[Any]:
-        """Get the current KV cache."""
-        return self._kv_cache
-    
-    def set_kv_cache(self, cache: Any) -> bool:
-        """Set the KV cache. Returns True if successful."""
-        try:
-            self._kv_cache = cache
-            return True
-        except Exception:
-            return False
 
     @abstractmethod
     def get_vocabulary_size(self) -> int:

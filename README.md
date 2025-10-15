@@ -53,7 +53,7 @@ pip install -r requirements-onnx.txt        # ONNX Runtime
 pip install -r requirements-mlx.txt         # Apple Silicon
 
 # For language comparison benchmarks (optional)
-cd src/benchmarks/language_comparison
+cd src/benchmarks/dream
 npm install
 cd ../../..
 ```
@@ -322,7 +322,7 @@ gamma/
 │   │   └── advanced/
 │   ├── benchmarks/                 # ⚗ Benchmarking suite
 │   │   ├── mind_meld_benchmark.py
-│   │   └── language_comparison/    # TypeScript vs JavaScript
+│   │   └── dream/                  # DREAM: TypeScript vs JavaScript benchmarks
 │   │       ├── index.js
 │   │       ├── tasks/              # 20+ coding tasks
 │   │       ├── runner/

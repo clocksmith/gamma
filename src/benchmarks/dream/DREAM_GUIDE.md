@@ -260,7 +260,7 @@ node dream-cli.js analyze
 ```bash
 # Clone repository
 git clone <repo-url>
-cd src/benchmarks/language_comparison
+cd src/benchmarks/dream
 
 # Install dependencies
 npm install
@@ -558,7 +558,7 @@ chmod +x dream-cli.js
 ## Architecture
 
 ```
-language_comparison/
+dream/
 ├── utils/
 │   ├── statistical-analyzer.js    # Statistical analysis
 │   ├── advanced-metrics.js        # Code metrics

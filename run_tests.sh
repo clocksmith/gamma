@@ -39,16 +39,21 @@ run_test() {
 
 # Core test suites
 run_test "Core Config" "python3 tests/test_core_config.py > /dev/null 2>&1"
+run_test "UI Components" "python3 tests/test_ui_components.py > /dev/null 2>&1"
+run_test "Engine Interface" "python3 tests/test_engine_interface.py > /dev/null 2>&1"
 run_test "Difficulty System" "python3 tests/test_difficulty.py > /dev/null 2>&1"
 run_test "Mind Meld Engine" "python3 tests/test_mind_meld_engine.py > /dev/null 2>&1"
 run_test "Mind Meld CLI" "python3 tests/test_mind_meld.py > /dev/null 2>&1"
 
 # New feature tests
 run_test "Swap Strategies" "python3 tests/test_strategies.py > /dev/null 2>&1"
+run_test "Semantic Strategies" "python3 tests/test_semantic_strategy.py > /dev/null 2>&1"
+run_test "Perplexity Strategies" "python3 tests/test_perplexity_strategy.py > /dev/null 2>&1"
 run_test "MeldConfig Export/Import" "python3 tests/test_config.py > /dev/null 2>&1"
 run_test "Visualization Export/Import" "python3 tests/test_visualization.py > /dev/null 2>&1"
 run_test "Model State Management" "python3 tests/test_model_state.py > /dev/null 2>&1"
 run_test "Statistics Tracking" "python3 tests/test_statistics.py > /dev/null 2>&1"
+run_test "Mind Meld Presets" "python3 tests/test_presets.py > /dev/null 2>&1"
 
 # Import checks
 run_test "Game Module Imports" "python3 -c \"

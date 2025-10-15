@@ -58,15 +58,14 @@ class ConcreteEngine(LLMEngine):
 
     def get_token_text(self, token_id: int) -> str:
         """Get token text."""
-        # Call parent implementation first
-        if token_id in self._token_cache:
-            return self._token_cache[token_id]
-        game_repr = self._special_token_id_to_game_repr.get(token_id)
-        if game_repr:
-            self._token_cache[token_id] = game_repr
-            return game_repr
+        # Try parent implementation first (handles cache and special tokens)
+        try:
+            return super().get_token_text(token_id)
+        except NotImplementedError:
+            # Parent couldn't handle it, provide our own implementation
+            pass
 
-        # Mock implementation
+        # Mock implementation for non-cached, non-special tokens
         token_map = {
             100: "hello",
             101: "world",

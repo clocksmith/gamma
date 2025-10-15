@@ -26,8 +26,8 @@
 
 ## Advanced Topics
 
-- [Language Comparison](../src/benchmarks/language_comparison/README.md) - TypeScript vs JavaScript benchmarks
-- [Query Interface](../src/benchmarks/language_comparison/query_cli.js) - Natural language queries
+- [DREAM Benchmarks](../src/benchmarks/dream/README.md) - TypeScript vs JavaScript benchmarking suite
+- [Query Interface](../src/benchmarks/dream/query_cli.js) - Natural language queries
 - [Mind Meld Strategies](../src/mind_meld/strategies/README.md) - Swap strategies (if exists)
 
 ---
@@ -56,7 +56,7 @@ python gamma.py comparison
 python gamma.py mind-meld
 
 # Benchmarks
-cd src/benchmarks/language_comparison
+cd src/benchmarks/dream
 node query_cli.js "Which model for Python?"
 ```
 
