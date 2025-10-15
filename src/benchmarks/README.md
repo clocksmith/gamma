@@ -74,7 +74,16 @@ Generates HTML report with:
 
 ---
 
-## Language Comparison Benchmarks
+## Language Comparison Benchmarks (DREAM Suite)
+
+### 🎯 NEW: DREAM Enhancement
+
+The benchmark suite has been upgraded with the **DREAM** framework:
+- **D**ynamic - Adaptive and flexible configurations
+- **R**obust - Statistical rigor and error handling
+- **E**xtensive - Comprehensive metrics and analysis
+- **A**ccurate - Multi-run with confidence intervals
+- **M**etrics - Advanced code quality measurements
 
 ### Quick Start
 
@@ -82,20 +91,36 @@ Generates HTML report with:
 cd language_comparison
 npm install
 
-# Run benchmarks (requires API keys)
-node index.js --task fibonacci
+# Quick validation
+node dream-cli.js run --preset quick
 
-# Query results
-node query_cli.js "Which model for Python?"
+# Comprehensive with all features
+node dream-cli.js run --preset comprehensive --historical --compare --advanced-metrics
+
+# List available presets
+node dream-cli.js presets
+
+# Legacy interface still works
+node index.js --task fibonacci
 ```
 
-### Features
+### Key Features
 
+#### Core Features
 - 20+ coding tasks across 7 categories
 - 7 language variants (TS, JS, JS+JSDoc, React, etc.)
 - Natural language query interface
 - Cost/performance optimization
 - Model comparison
+
+#### NEW: DREAM Features
+- **Statistical Analysis**: Confidence intervals, significance testing, outlier detection
+- **Advanced Metrics**: Cyclomatic complexity, maintainability index, type safety scores
+- **Historical Tracking**: Regression detection, trend analysis over time
+- **Interactive Dashboards**: Rich HTML dashboards with filtering and drill-down
+- **Property-Based Testing**: Auto-generate comprehensive test suites
+- **Benchmark Presets**: 10+ pre-configured suites (quick, comprehensive, performance, etc.)
+- **Enhanced CLI**: Command-based interface with rich features
 
 ### Query Interface
 
@@ -118,14 +143,36 @@ node query_cli.js "Which model for Python coding?"
 node query_cli.js --help
 ```
 
-### Configuration
+### Configuration & Documentation
 
-See `language_comparison/README.md` for full documentation.
+- **DREAM Guide**: See [language_comparison/DREAM_GUIDE.md](language_comparison/DREAM_GUIDE.md) for complete documentation
+- **Improvements**: See [language_comparison/IMPROVEMENTS.md](language_comparison/IMPROVEMENTS.md) for what's new
+- **Original Docs**: [language_comparison/README.md](language_comparison/README.md)
+
+### Example Workflows
+
+```bash
+# Development: Quick validation
+node dream-cli.js run --preset quick
+
+# Testing: Comprehensive with history
+node dream-cli.js run --preset comprehensive --historical --compare
+
+# CI/CD: Fast regression test
+node dream-cli.js run --preset ci
+
+# Analysis: View trends
+node dream-cli.js history
+node dream-cli.js compare
+node dream-cli.js analyze
+```
 
 ---
 
 ## See Also
 
-- [Language Comparison Docs](language_comparison/README.md)
-- [Query Interface](language_comparison/query_interface.js)
-- [Main README](../README.md)
+- [DREAM Guide](language_comparison/DREAM_GUIDE.md) - Complete guide to new features
+- [Improvements](language_comparison/IMPROVEMENTS.md) - What's new in DREAM
+- [Language Comparison Docs](language_comparison/README.md) - Original documentation
+- [Query Interface](language_comparison/query_interface.js) - Natural language queries
+- [Main README](../README.md) - Project overview

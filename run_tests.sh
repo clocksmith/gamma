@@ -47,6 +47,8 @@ run_test "Mind Meld CLI" "python3 tests/test_mind_meld.py > /dev/null 2>&1"
 run_test "Swap Strategies" "python3 tests/test_strategies.py > /dev/null 2>&1"
 run_test "MeldConfig Export/Import" "python3 tests/test_config.py > /dev/null 2>&1"
 run_test "Visualization Export/Import" "python3 tests/test_visualization.py > /dev/null 2>&1"
+run_test "Model State Management" "python3 tests/test_model_state.py > /dev/null 2>&1"
+run_test "Statistics Tracking" "python3 tests/test_statistics.py > /dev/null 2>&1"
 
 # Import checks
 run_test "Game Module Imports" "python3 -c \"
@@ -122,9 +124,10 @@ if [ $TOTAL_FAILED -eq 0 ]; then
     echo "  - Mind Meld Engine: 4 tests"
     echo "  - Swap Strategies: 14 tests"
     echo "  - MeldConfig Export/Import: 16 tests"
-    echo "  - Visualization: 13 tests"
+    echo "  - Visualization: 29 tests"
+    echo "  - Model State Management: 20 tests"
     echo "  - Integration Tests: 6 tests"
-    echo "  Total: 91+ tests passing"
+    echo "  Total: 127+ tests passing"
     exit 0
 else
     echo -e "${RED}❌ Some tests failed! (Passed: $TOTAL_PASSED, Failed: $TOTAL_FAILED)${NC}"
