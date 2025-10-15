@@ -26,9 +26,10 @@ export class ReportGenerator {
     await this.ensureDirectories();
 
     const processedData = this._processResults(rawResults);
+    const passAtK = this._calculatePassAtK(rawResults);
 
     const resultsFilePath = await this.saveRawResults(rawResults);
-    await this.generateSummaryReport(processedData);
+    await this.generateSummaryReport(processedData, passAtK);
     await this.generateComparisonReport(processedData);
     await this.generateDetailedReport(processedData);
     await this.generateHTMLDashboard(processedData, rawResults);
@@ -54,6 +55,85 @@ export class ReportGenerator {
     const min = sorted[0];
     const max = sorted[count - 1];
     return { count, mean, median, stdev, min, max };
+  }
+
+  /**
+   * Calculate Pass@k metrics
+   * Pass@k = % of problems solved with at least 1 correct solution in k attempts
+   * Uses test accuracy > 0.9 as threshold for "correct"
+   */
+  _calculatePassAtK(rawResults) {
+    // Group by task/provider/variant
+    const taskGroups = {};
+    for (const result of rawResults.filter(r => r.success)) {
+      const key = `${result.provider}|${result.variant}|${result.taskName}`;
+      if (!taskGroups[key]) {
+        taskGroups[key] = [];
+      }
+      // Consider test passed if accuracy > 0.9
+      const passed = result.evaluation && result.evaluation.scores.accuracy > 0.9;
+      taskGroups[key].push(passed);
+    }
+
+    // Calculate Pass@k for different k values
+    const passAtK = {};
+    const kValues = [1, 3, 5, 10];
+
+    for (const k of kValues) {
+      let solvedCount = 0;
+      let totalProblems = 0;
+
+      for (const [key, results] of Object.entries(taskGroups)) {
+        totalProblems++;
+        // Check if at least one of first k attempts passed
+        const firstKResults = results.slice(0, Math.min(k, results.length));
+        if (firstKResults.some(passed => passed)) {
+          solvedCount++;
+        }
+      }
+
+      passAtK[`pass@${k}`] = totalProblems > 0 ? (solvedCount / totalProblems) * 100 : 0;
+    }
+
+    return passAtK;
+  }
+
+  /**
+   * Extract advanced metrics from results
+   */
+  _extractAdvancedMetrics(runs) {
+    const metrics = {
+      f1Scores: [],
+      precisionScores: [],
+      recallScores: [],
+      cyclomaticComplexity: [],
+      halsteadVolume: [],
+      maintainabilityIndex: []
+    };
+
+    for (const run of runs) {
+      if (run.evaluation.advancedMetrics) {
+        const adv = run.evaluation.advancedMetrics;
+        if (adv.f1Score !== undefined) metrics.f1Scores.push(adv.f1Score);
+        if (adv.precision !== undefined) metrics.precisionScores.push(adv.precision);
+        if (adv.recall !== undefined) metrics.recallScores.push(adv.recall);
+      }
+      if (run.evaluation.metrics && run.evaluation.metrics.complexity) {
+        const comp = run.evaluation.metrics.complexity;
+        if (comp.cyclomaticComplexity !== undefined) metrics.cyclomaticComplexity.push(comp.cyclomaticComplexity);
+        if (comp.halsteadVolume !== undefined) metrics.halsteadVolume.push(comp.halsteadVolume);
+        if (comp.maintainabilityIndex !== undefined) metrics.maintainabilityIndex.push(comp.maintainabilityIndex);
+      }
+    }
+
+    return {
+      f1: this._calculateStats(metrics.f1Scores),
+      precision: this._calculateStats(metrics.precisionScores),
+      recall: this._calculateStats(metrics.recallScores),
+      cyclomaticComplexity: this._calculateStats(metrics.cyclomaticComplexity),
+      halsteadVolume: this._calculateStats(metrics.halsteadVolume),
+      maintainabilityIndex: this._calculateStats(metrics.maintainabilityIndex)
+    };
   }
 
   /**
@@ -86,6 +166,9 @@ export class ReportGenerator {
       const qualityScores = group.runs.map(r => r.evaluation.scores.codeQuality);
       const completenessScores = group.runs.map(r => r.evaluation.scores.completeness);
 
+      // Extract advanced metrics
+      const advancedMetrics = this._extractAdvancedMetrics(group.runs);
+
       return {
         ...group,
         stats: {
@@ -96,6 +179,7 @@ export class ReportGenerator {
           codeQuality: this._calculateStats(qualityScores),
           completeness: this._calculateStats(completenessScores),
         },
+        advancedMetrics,
       };
     });
   }
@@ -117,7 +201,7 @@ export class ReportGenerator {
   /**
    * Generates a summary markdown report from processed data.
    */
-  async generateSummaryReport(processedData) {
+  async generateSummaryReport(processedData, passAtK) {
     let report = '# LLM Benchmark Summary (Statistically Analyzed)\n\n';
     report += `Generated: ${new Date().toISOString()}\n\n`;
 
@@ -127,6 +211,58 @@ export class ReportGenerator {
     report += `## Overall Performance\n\n`;
     report += `- Average Score (Mean of Means): ${overallScore.toFixed(2)}/100\n`;
     report += `- Average Duration (Mean of Means): ${(overallDuration / 1000).toFixed(2)}s\n\n`;
+
+    // Pass@k metrics
+    if (passAtK && Object.keys(passAtK).length > 0) {
+      report += `## Pass@k Metrics\n\n`;
+      report += `Percentage of problems solved with at least 1 correct solution in k attempts:\n\n`;
+      for (const [key, value] of Object.entries(passAtK)) {
+        report += `- ${key}: ${value.toFixed(1)}%\n`;
+      }
+      report += '\n';
+    }
+
+    // Advanced Metrics Summary
+    const allF1 = [];
+    const allPrecision = [];
+    const allRecall = [];
+    const allCyclomaticComplexity = [];
+    const allMaintainabilityIndex = [];
+
+    for (const result of processedData) {
+      if (result.advancedMetrics) {
+        if (result.advancedMetrics.f1.count > 0) allF1.push(result.advancedMetrics.f1.mean);
+        if (result.advancedMetrics.precision.count > 0) allPrecision.push(result.advancedMetrics.precision.mean);
+        if (result.advancedMetrics.recall.count > 0) allRecall.push(result.advancedMetrics.recall.mean);
+        if (result.advancedMetrics.cyclomaticComplexity.count > 0) allCyclomaticComplexity.push(result.advancedMetrics.cyclomaticComplexity.mean);
+        if (result.advancedMetrics.maintainabilityIndex.count > 0) allMaintainabilityIndex.push(result.advancedMetrics.maintainabilityIndex.mean);
+      }
+    }
+
+    if (allF1.length > 0) {
+      report += `## Advanced Metrics Summary\n\n`;
+      if (allF1.length > 0) {
+        const avgF1 = allF1.reduce((a, b) => a + b, 0) / allF1.length;
+        report += `- Average F1 Score: ${(avgF1 * 100).toFixed(1)}%\n`;
+      }
+      if (allPrecision.length > 0) {
+        const avgPrecision = allPrecision.reduce((a, b) => a + b, 0) / allPrecision.length;
+        report += `- Average Precision: ${(avgPrecision * 100).toFixed(1)}%\n`;
+      }
+      if (allRecall.length > 0) {
+        const avgRecall = allRecall.reduce((a, b) => a + b, 0) / allRecall.length;
+        report += `- Average Recall: ${(avgRecall * 100).toFixed(1)}%\n`;
+      }
+      if (allCyclomaticComplexity.length > 0) {
+        const avgCC = allCyclomaticComplexity.reduce((a, b) => a + b, 0) / allCyclomaticComplexity.length;
+        report += `- Average Cyclomatic Complexity: ${avgCC.toFixed(1)}\n`;
+      }
+      if (allMaintainabilityIndex.length > 0) {
+        const avgMI = allMaintainabilityIndex.reduce((a, b) => a + b, 0) / allMaintainabilityIndex.length;
+        report += `- Average Maintainability Index: ${avgMI.toFixed(0)}/171\n`;
+      }
+      report += '\n';
+    }
 
     // By Provider
     report += `## Performance by LLM Provider\n\n`;

@@ -20,6 +20,57 @@ export const BenchmarkConfig = {
       name: 'openai-gpt35',
       apiKey: process.env.OPENAI_API_KEY,
       model: 'gpt-3.5-turbo'
+    },
+    {
+      name: 'gemini-pro',
+      apiKey: process.env.GEMINI_API_KEY,
+      model: 'gemini-1.5-pro-latest'
+    },
+    {
+      name: 'gemini-flash',
+      apiKey: process.env.GEMINI_API_KEY,
+      model: 'gemini-1.5-flash-latest'
+    },
+    // Ollama models (local)
+    {
+      name: 'ollama-qwen3-coder-30b',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'qwen3-coder:30b'
+    },
+    {
+      name: 'ollama-qwen3-30b',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'qwen3:30b'
+    },
+    {
+      name: 'ollama-gpt-oss-120b',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'gpt-oss:120b'
+    },
+    {
+      name: 'ollama-gpt-oss-20b',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'gpt-oss:20b'
+    },
+    {
+      name: 'ollama-deepseek-r1-32b',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'deepseek-r1:32b'
+    },
+    {
+      name: 'ollama-gemma3-27b-it-qat',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'gemma3:27b-it-qat'
+    },
+    {
+      name: 'ollama-gemma3-4b-it-qat',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'gemma3:4b-it-qat'
+    },
+    {
+      name: 'ollama-gemma3-1b-it-qat',
+      baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+      model: 'gemma3:1b-it-qat'
     }
   ],
 
@@ -95,9 +146,16 @@ export const BenchmarkConfig = {
 
   // Output settings
   output: {
-    resultsDir: './benchmark/results',
-    reportsDir: './benchmark/reports',
+    resultsDir: './results',
+    reportsDir: './reports',
     verbose: true,
     saveResponses: true
-  }
+  },
+
+  // Directory paths for reports (aliases for compatibility)
+  resultsDirectory: './results',
+  reportsDirectory: './reports',
+
+  // Default number of runs per benchmark
+  runs: 1
 };

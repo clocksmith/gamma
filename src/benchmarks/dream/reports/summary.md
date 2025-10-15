@@ -1,40 +1,46 @@
-# LLM TypeScript/JavaScript Benchmark Summary
+# LLM Benchmark Summary (Statistically Analyzed)
 
-Generated: 2025-10-14T17:54:01.449Z
-
-## Overview
-
-- Total Runs: 1
-- Successful: 1
-- Failed: 0
+Generated: 2025-10-15T20:45:31.677Z
 
 ## Overall Performance
 
-- Average Score: 0.00/100
-- Average Duration: 24.63s
-- Average Tokens/Second: 5.64
-- Average Code Lines: 9.0
-- Average Output Tokens: 139
+- Average Score (Mean of Means): 88.13/100
+- Average Duration (Mean of Means): 14.65s
 
-## Performance by Language Variant
+## Pass@k Metrics
 
-### javascript
-- Score: 0.00/100
-- Avg Duration: 24.63s
-- Tasks: 1
+Percentage of problems solved with at least 1 correct solution in k attempts:
+
+- pass@1: 66.7%
+- pass@3: 100.0%
+- pass@5: 100.0%
+- pass@10: 100.0%
+
+## Advanced Metrics Summary
+
+- Average F1 Score: 86.7%
+- Average Precision: 86.7%
+- Average Recall: 86.7%
+- Average Cyclomatic Complexity: 4.9
+- Average Maintainability Index: 95/171
 
 ## Performance by LLM Provider
 
-### ollama-gemma3-27b
-- Score: 0.00/100
-- Avg Duration: 24.63s
-- Tasks: 1
-- Avg Tokens/Second: 5.64
-- Avg Code Lines: 9.0
+### ollama-gpt-oss-20b
+- Score: 88.13/100
+- Benchmarks: 3
 
-## Performance by Task Category
+## Performance by Language Variant
 
-### simple
-- Score: 0.00/100
-- Tasks: 1
+### typescript
+- Score: 97.60/100
+- Benchmarks: 1
+
+### javascript
+- Score: 76.80/100
+- Benchmarks: 1
+
+### javascript-jsdoc
+- Score: 90.00/100
+- Benchmarks: 1
 

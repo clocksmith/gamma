@@ -1,154 +1,56 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LLM TypeScript/JavaScript Benchmark Dashboard</title>
+  <title>Benchmark Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-    .container { max-width: 1400px; margin: 0 auto; }
-    h1 { color: #333; margin-bottom: 30px; }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    .stat-card {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .stat-card h3 { color: #666; font-size: 14px; margin-bottom: 10px; }
-    .stat-card .value { font-size: 32px; font-weight: bold; color: #2196F3; }
-    .charts {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-      gap: 20px;
-    }
-    .chart-container {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .chart-container h2 { margin-bottom: 20px; color: #333; font-size: 18px; }
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    .container { max-width: 1200px; margin: auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+    .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h1, h2 { color: #333; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>LLM TypeScript/JavaScript Benchmark Dashboard</h1>
-
-    <div class="stats">
-      <div class="stat-card">
-        <h3>Total Tests</h3>
-        <div class="value">1</div>
-      </div>
-      <div class="stat-card">
-        <h3>Success Rate</h3>
-        <div class="value">100.0%</div>
-      </div>
-      <div class="stat-card">
-        <h3>Average Score</h3>
-        <div class="value">0.0</div>
-      </div>
-      <div class="stat-card">
-        <h3>Avg Duration</h3>
-        <div class="value">24.63s</div>
-      </div>
-    </div>
-
-    <div class="charts">
-      <div class="chart-container">
-        <h2>Performance by Language Variant</h2>
-        <canvas id="variantChart"></canvas>
-      </div>
-      <div class="chart-container">
-        <h2>Performance by LLM Provider</h2>
+    <h1>Benchmark Dashboard</h1>
+    <div class="grid">
+      <div class="card">
+        <h2>Performance by Provider</h2>
         <canvas id="providerChart"></canvas>
       </div>
-      <div class="chart-container">
-        <h2>Performance by Task Category</h2>
-        <canvas id="categoryChart"></canvas>
-      </div>
-      <div class="chart-container">
-        <h2>Criteria Breakdown</h2>
-        <canvas id="criteriaChart"></canvas>
+      <div class="card">
+        <h2>Performance by Variant</h2>
+        <canvas id="variantChart"></canvas>
       </div>
     </div>
   </div>
-
   <script>
-    const variantData = {"labels":["javascript"],"scores":[0]};
-    const providerData = {"labels":["ollama-gemma3-27b"],"scores":[0]};
-    const categoryData = {"labels":["simple"],"scores":[0]};
-
-    // Variant Chart
-    new Chart(document.getElementById('variantChart'), {
-      type: 'bar',
-      data: {
-        labels: variantData.labels,
-        datasets: [{
-          label: 'Average Score',
-          data: variantData.scores,
-          backgroundColor: ['#2196F3', '#4CAF50', '#FF9800']
-        }]
-      },
-      options: {
-        scales: { y: { beginAtZero: true, max: 100 } }
-      }
-    });
-
-    // Provider Chart
     new Chart(document.getElementById('providerChart'), {
       type: 'bar',
       data: {
-        labels: providerData.labels,
+        labels: ["ollama-gpt-oss-20b"],
         datasets: [{
-          label: 'Average Score',
-          data: providerData.scores,
-          backgroundColor: '#9C27B0'
+          label: 'Mean Score',
+          data: [88.13333333333333],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)'
         }]
       },
-      options: {
-        scales: { y: { beginAtZero: true, max: 100 } }
-      }
+      options: { scales: { y: { beginAtZero: true, max: 100 } } }
     });
-
-    // Category Chart
-    new Chart(document.getElementById('categoryChart'), {
-      type: 'radar',
+    new Chart(document.getElementById('variantChart'), {
+      type: 'bar',
       data: {
-        labels: categoryData.labels,
+        labels: ["typescript","javascript","javascript-jsdoc"],
         datasets: [{
-          label: 'Average Score',
-          data: categoryData.scores,
-          borderColor: '#F44336',
-          backgroundColor: 'rgba(244, 67, 54, 0.2)'
+          label: 'Mean Score',
+          data: [97.6,76.8,90.00000000000001],
+          backgroundColor: 'rgba(75, 192, 192, 0.6)'
         }]
       },
-      options: {
-        scales: { r: { beginAtZero: true, max: 100 } }
-      }
-    });
-
-    // Criteria Chart
-    new Chart(document.getElementById('criteriaChart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Accuracy', 'Performance', 'Code Quality', 'Completeness'],
-        datasets: [{
-          data: [40, 20, 20, 20],
-          backgroundColor: ['#3F51B5', '#009688', '#CDDC39', '#FF5722']
-        }]
-      }
+      options: { scales: { y: { beginAtZero: true, max: 100 } } }
     });
   </script>
 </body>
