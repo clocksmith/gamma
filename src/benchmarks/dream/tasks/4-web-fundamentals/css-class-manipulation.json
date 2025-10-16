@@ -1,0 +1,18 @@
+{
+  "name": "css-class-manipulation",
+  "description": "A script that dynamically adds, removes, and toggles CSS classes on elements.",
+  "category": "4-web-fundamentals",
+  "difficulty": "easy",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that demonstrates CSS class manipulation. The script should create a `div` element with the text \"Click me\". When the div is clicked, it should toggle a `highlight` class on the div. The `highlight` class should change the background color of the div to yellow. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that demonstrates CSS class manipulation. The script should create a `div` element with the text \"Click me\". When the div is clicked, it should toggle a `highlight` class on the div. The `highlight` class should change the background color of the div to yellow. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that demonstrates CSS class manipulation. The script should create a `div` element with the text \"Click me\". When the div is clicked, it should toggle a `highlight` class on the div. The `highlight` class should change the background color of the div to yellow. The script should include JSDoc comments for the main function."
+  },
+  "testCases": [
+    {
+      "description": "Test the CSS class manipulation script",
+      "test": "async () => { await page.setContent('<style>.highlight { background-color: yellow; }</style><div id=\"myDiv\">Click me</div>'); await page.click('#myDiv'); let hasClass = await page.$eval('#myDiv', el => el.classList.contains('highlight')); console.assert(hasClass, 'div should have the highlight class after click'); await page.click('#myDiv'); hasClass = await page.$eval('#myDiv', el => el.classList.contains('highlight')); console.assert(!hasClass, 'div should not have the highlight class after second click'); }"
+    }
+  ],
+  "requirements": ["browser"]
+}

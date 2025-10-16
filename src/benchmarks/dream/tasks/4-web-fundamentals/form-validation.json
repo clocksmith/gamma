@@ -1,0 +1,18 @@
+{
+  "name": "form-validation",
+  "description": "A script that validates a form and provides feedback to the user.",
+  "category": "4-web-fundamentals",
+  "difficulty": "medium",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that validates a simple form. The form should have two fields: a username (must be at least 3 characters long) and an email (must be a valid email address). When the form is submitted, the script should validate the fields and display an error message next to any invalid fields. If the form is valid, it should display a success message. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that validates a simple form. The form should have two fields: a username (must be at least 3 characters long) and an email (must be a valid email address). When the form is submitted, the script should validate the fields and display an error message next to any invalid fields. If the form is valid, it should display a success message. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that validates a simple form. The form should have two fields: a username (must be at least 3 characters long) and an email (must be a valid email address). When the form is submitted, the script should validate the fields and display an error message next to any invalid fields. If the form is valid, it should display a success message. The script should include JSDoc comments for the main function."
+  },
+  "testCases": [
+    {
+      "description": "Test the form validation script",
+      "test": "async () => { await page.setContent('<form id=\"myForm\"><input type=\"text\" id=\"username\"><input type=\"text\" id=\"email\"><button type=\"submit\">Submit</button></form>'); await page.click('button[type=\"submit\"]'); let usernameError = await page.$('#username-error'); console.assert(usernameError, 'Username error message should be displayed'); let emailError = await page.$('#email-error'); console.assert(emailError, 'Email error message should be displayed'); await page.fill('#username', 'user'); await page.fill('#email', 'test@example.com'); await page.click('button[type=\"submit\"]'); usernameError = await page.$('#username-error'); console.assert(!usernameError, 'Username error message should not be displayed'); emailError = await page.$('#email-error'); console.assert(!emailError, 'Email error message should not be displayed'); const successMessage = await page.$('#success-message'); console.assert(successMessage, 'Success message should be displayed'); }"
+    }
+  ],
+  "requirements": ["browser"]
+}

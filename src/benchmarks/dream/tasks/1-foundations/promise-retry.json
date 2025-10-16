@@ -1,0 +1,17 @@
+{
+  "name": "promise-retry",
+  "description": "Implement a promise retry mechanism with exponential backoff",
+  "category": "1-foundations",
+  "difficulty": "medium",
+  "variants": {
+    "typescript": "Write a TypeScript function called `retryWithBackoff` that takes an async function, maximum retry attempts, and initial delay. It should retry the function with exponential backoff if it fails. Include proper type annotations with generics. The function signature should be: `async function retryWithBackoff<T>(fn: () => Promise<T>, maxRetries: number = 3, initialDelay: number = 1000): Promise<T>`. Export only this function and avoid adding usage examples or logging.",
+    "javascript": "Write a JavaScript function called `retryWithBackoff` that takes an async function, maximum retry attempts (default 3), and initial delay (default 1000ms). It should retry the function with exponential backoff if it fails. Export just the function implementation, with no extra helpers, console output, or sample usage.",
+    "javascript-jsdoc": "Write a JavaScript function called `retryWithBackoff` that takes an async function, maximum retry attempts, and initial delay. It should retry the function with exponential backoff if it fails. Include complete JSDoc type annotations with @template for generics, @param, @return, and @throws tags, and return only the function—do not append demo code."
+  },
+  "testCases": [
+    {
+      "test": "let attempts = 0; const fn = async () => { attempts++; if (attempts < 3) throw new Error('fail'); return 'success'; }; await retryWithBackoff(fn, 5, 10).then(result => console.assert(result === 'success' && attempts === 3, 'Should retry until success'));"
+    }
+  ],
+  "requirements": ["async", "function", "retryWithBackoff", "exponential backoff", "retry", "Promise", "export"]
+}

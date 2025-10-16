@@ -88,20 +88,19 @@ The benchmark suite has been upgraded with the **DREAM** framework:
 ### Quick Start
 
 ```bash
-cd dream
-npm install
+# Basic JS vs TS comparison (mock responses by default)
+node src/benchmarks/dream/index.js
 
-# Quick validation
-node dream-cli.js run --preset quick
+# Add scripting and backend tasks
+node src/benchmarks/dream/index.js --extended
 
-# Comprehensive with all features
-node dream-cli.js run --preset comprehensive --historical --compare --advanced-metrics
+# Include browser/React tasks (requires Playwright + --real)
+node src/benchmarks/dream/index.js --ui --include-browser --real
 
-# List available presets
-node dream-cli.js presets
-
-# Legacy interface still works
-node index.js --task fibonacci
+# Explore configuration
+node src/benchmarks/dream/index.js --help
+node src/benchmarks/dream/index.js --list-presets
+node src/benchmarks/dream/index.js --list-variants
 ```
 
 ### Key Features
@@ -114,13 +113,14 @@ node index.js --task fibonacci
 - Model comparison
 
 #### NEW: DREAM Features
+- **JS vs TS Scoring**: Automatic per-language summaries and provider deltas
 - **Statistical Analysis**: Confidence intervals, significance testing, outlier detection
 - **Advanced Metrics**: Cyclomatic complexity, maintainability index, type safety scores
 - **Historical Tracking**: Regression detection, trend analysis over time
 - **Interactive Dashboards**: Rich HTML dashboards with filtering and drill-down
 - **Property-Based Testing**: Auto-generate comprehensive test suites
-- **Benchmark Presets**: 10+ pre-configured suites (quick, comprehensive, performance, etc.)
-- **Enhanced CLI**: Command-based interface with rich features
+- **Benchmark Presets**: CLI shortcuts (`--basic`, `--extended`, `--ui`, `--all`)
+- **Enhanced CLI**: Human-friendly `--help`, `--list-*`, provider/variant groups, JS/TS presets
 
 ### Query Interface
 
@@ -152,19 +152,18 @@ node query_cli.js --help
 ### Example Workflows
 
 ```bash
-# Development: Quick validation
-node dream-cli.js run --preset quick
+# Development: fast language comparison (dry-run)
+node src/benchmarks/dream/index.js --basic
 
-# Testing: Comprehensive with history
-node dream-cli.js run --preset comprehensive --historical --compare
+# Backend/server evaluation with live models
+node src/benchmarks/dream/index.js --extended --provider openai-gpt4 --real
 
-# CI/CD: Fast regression test
-node dream-cli.js run --preset ci
+# UI/React coverage with Playwright
+node src/benchmarks/dream/index.js --ui --include-browser --real
 
-# Analysis: View trends
-node dream-cli.js history
-node dream-cli.js compare
-node dream-cli.js analyze
+# Inspect available knobs
+node src/benchmarks/dream/index.js --list-providers
+node src/benchmarks/dream/index.js --list-categories
 ```
 
 ---

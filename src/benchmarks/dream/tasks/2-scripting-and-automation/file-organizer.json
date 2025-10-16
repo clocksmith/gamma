@@ -1,0 +1,23 @@
+{
+  "name": "file-organizer",
+  "description": "A script that reads a directory and organizes files into subdirectories based on their file type.",
+  "category": "2-scripting-and-automation",
+  "difficulty": "medium",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should include JSDoc comments for the function and its parameters.",
+    "typescript-no-comments": "Write a TypeScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should not have any comments.",
+    "typescript-inline-comments": "Write a TypeScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should include inline comments to explain the logic.",
+    "typescript-tsdoc": "Write a TypeScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should include TSDoc comments for the function and its parameters."
+  },
+  "testCases": [
+    {
+      "description": "Test with a directory containing various file types",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const { v4: uuidv4 } = require('uuid'); const testDir = path.join(os.tmpdir(), uuidv4()); fs.mkdirSync(testDir); fs.writeFileSync(path.join(testDir, 'test1.txt'), 'test'); fs.writeFileSync(path.join(testDir, 'test2.txt'), 'test'); fs.writeFileSync(path.join(testDir, 'image1.jpg'), 'test'); fs.writeFileSync(path.join(testDir, 'image2.png'), 'test');",
+      "test": "const fileOrganizer = require('./file-organizer.js'); fileOrganizer(testDir); const txtDir = path.join(testDir, 'txt'); const jpgDir = path.join(testDir, 'jpg'); const pngDir = path.join(testDir, 'png'); console.assert(fs.existsSync(txtDir), 'txt directory should exist'); console.assert(fs.existsSync(jpgDir), 'jpg directory should exist'); console.assert(fs.existsSync(pngDir), 'png directory should exist'); console.assert(fs.existsSync(path.join(txtDir, 'test1.txt')), 'test1.txt should be in txt directory'); console.assert(fs.existsSync(path.join(txtDir, 'test2.txt')), 'test2.txt should be in txt directory'); console.assert(fs.existsSync(path.join(jpgDir, 'image1.jpg')), 'image1.jpg should be in jpg directory'); console.assert(fs.existsSync(path.join(pngDir, 'image2.png')), 'image2.png should be in png directory');",
+      "cleanup": "fs.rmSync(testDir, { recursive: true, force: true });"
+    }
+  ],
+  "requirements": ["fs", "path"]
+}

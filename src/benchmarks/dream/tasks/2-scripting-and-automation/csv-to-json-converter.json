@@ -1,0 +1,23 @@
+{
+  "name": "csv-to-json-converter",
+  "description": "A script that reads a CSV file and converts it to a JSON file.",
+  "category": "2-scripting-and-automation",
+  "difficulty": "medium",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should include JSDoc comments for the function and its parameters.",
+    "typescript-no-comments": "Write a TypeScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should not have any comments.",
+    "typescript-inline-comments": "Write a TypeScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should include inline comments to explain the logic.",
+    "typescript-tsdoc": "Write a TypeScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should include TSDoc comments for the function and its parameters."
+  },
+  "testCases": [
+    {
+      "description": "Test with a simple CSV file",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const { v4: uuidv4 } = require('uuid'); const testFile = path.join(os.tmpdir(), uuidv4() + '.csv'); const csvContent = 'name,age\njohn,30\njane,25'; fs.writeFileSync(testFile, csvContent);",
+      "test": "const csvToJsonConverter = require('./csv-to-json-converter.js'); csvToJsonConverter(testFile); const jsonFile = testFile.replace('.csv', '.json'); const jsonContent = fs.readFileSync(jsonFile, 'utf-8'); const expectedJson = JSON.stringify([{name: 'john', age: '30'}, {name: 'jane', age: '25'}]); console.assert(jsonContent === expectedJson, 'JSON content should match expected');",
+      "cleanup": "fs.unlinkSync(testFile); fs.unlinkSync(testFile.replace('.csv', '.json'));"
+    }
+  ],
+  "requirements": ["fs"]
+}

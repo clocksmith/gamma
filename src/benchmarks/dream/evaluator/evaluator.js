@@ -4,7 +4,7 @@
  */
 
 import { execSync } from 'child_process';
-import { writeFileSync, unlinkSync, mkdirSync, rmdirSync } from 'fs';
+import { writeFileSync, unlinkSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
@@ -17,6 +17,11 @@ export class Evaluator {
   constructor(evaluationConfig, playwrightEvaluator) {
     this.config = evaluationConfig;
     this.playwrightEvaluator = playwrightEvaluator;
+    this.dryRun = false;
+  }
+
+  setDryRun(value) {
+    this.dryRun = Boolean(value);
   }
 
   async evaluate(task, response, variant, duration) {
@@ -96,8 +101,9 @@ export class Evaluator {
     }
 
     const performanceResult = await this.evaluatePerformance(code, task, variant, response.usage);
-    scores.performance = performanceResult.score;
-    scores.codeQuality = await this.evaluateCodeQuality(code, variant);
+    scores.performance = performanceResult.overallScore;
+    const codeQualityScore = await this.evaluateCodeQuality(code, variant);
+    scores.codeQuality = codeQualityScore.score;
     scores.completeness = this.evaluateCompleteness(response.content, task);
 
     const totalScore = Object.entries(scores).reduce((total, [criterion, score]) => {
@@ -109,9 +115,18 @@ export class Evaluator {
     if (performanceResult.runtimeMetrics) {
       codeMetrics.runtimePerformance = performanceResult.runtimeMetrics;
     }
+    codeMetrics.performanceBreakdown = {
+      tokenEfficiency: performanceResult.tokenScore,
+      runtime: performanceResult.runtimeScore
+    };
+    codeMetrics.codeQualityDetails = codeQualityScore.details;
 
     return {
       scores,
+      performanceBreakdown: {
+        tokenEfficiency: performanceResult.tokenScore,
+        runtime: performanceResult.runtimeScore
+      },
       advancedMetrics,
       totalScore,
       metrics: codeMetrics,
@@ -188,6 +203,18 @@ export class Evaluator {
   }
 
   async evaluateTestCases(code, testCases, variant) {
+    if (this.dryRun) {
+      return {
+        accuracy: 1.0,
+        precision: 1.0,
+        recall: 1.0,
+        f1: 1.0,
+        passed: testCases.length,
+        failed: 0,
+        total: testCases.length
+      };
+    }
+
     const tempDir = join(tmpdir(), `benchmark-${Date.now()}`);
     mkdirSync(tempDir, { recursive: true });
 
@@ -230,7 +257,7 @@ export class Evaluator {
       console.warn(`One or more test cases failed to execute or pass.`);
       return { accuracy: 0, precision: 0, recall: 0, f1: 0, passed: 0, failed: testCases.length, total: testCases.length };
     } finally {
-      rmdirSync(tempDir, { recursive: true, force: true });
+      rmSync(tempDir, { recursive: true, force: true });
     }
   }
 
@@ -329,6 +356,10 @@ export class Evaluator {
    * Runs the generated code multiple times and measures execution metrics
    */
   async evaluateRuntimePerformance(code, task, variant) {
+    if (this.dryRun) {
+      return { score: 0.5, metrics: null };
+    }
+
     // Check if task has performance benchmarks defined
     if (!task.performanceBenchmarks || task.performanceBenchmarks.length === 0) {
       return { score: 0.5, metrics: null }; // Neutral score if no benchmarks defined
@@ -468,7 +499,7 @@ export class Evaluator {
       console.warn(`Runtime performance evaluation failed: ${error.message}`);
       return { score: 0.5, metrics: null };
     } finally {
-      rmdirSync(tempDir, { recursive: true, force: true });
+      rmSync(tempDir, { recursive: true, force: true });
     }
   }
 
@@ -490,51 +521,99 @@ export class Evaluator {
    * Evaluate performance - intelligently choose between runtime and token efficiency
    */
   async evaluatePerformance(code, task, variant, usage) {
-    // If task has performance benchmarks, measure actual runtime performance
+    const tokenScore = this.evaluateTokenEfficiency(usage);
+    let runtimeScore = null;
+    let runtimeMetrics = null;
+
     if (task.performanceBenchmarks && task.performanceBenchmarks.length > 0) {
       const runtimeResult = await this.evaluateRuntimePerformance(code, task, variant);
-      return { score: runtimeResult.score, runtimeMetrics: runtimeResult.metrics };
-    } else {
-      // Fall back to token efficiency for tasks without runtime benchmarks
-      return { score: this.evaluateTokenEfficiency(usage), runtimeMetrics: null };
+      runtimeScore = runtimeResult.score;
+      runtimeMetrics = runtimeResult.metrics;
     }
+
+    const overallScore = runtimeScore !== null
+      ? (tokenScore + runtimeScore) / 2
+      : tokenScore;
+
+    return {
+      overallScore,
+      tokenScore,
+      runtimeScore,
+      runtimeMetrics
+    };
   }
 
   async evaluateCodeQuality(code, variant) {
-    let score = 0.5;
+    const docRequired = /jsdoc|tsdoc/i.test(variant);
+    const naming = this.checkNaming(code);
+    const indentation = this.checkIndentation(code);
+    const lineLength = this.checkLineLength(code);
+
     const checks = {
-      hasComments: /\/\/|\/\*/.test(code),
-      hasProperIndentation: this.checkIndentation(code),
-      hasDescriptiveNames: this.checkNaming(code),
-      noConsoleLog: !/console\.log/.test(code),
-      hasErrorHandling: /try|catch|throw|Error/.test(code)
+      indentation: indentation.pass,
+      descriptiveNaming: naming.pass,
+      usesConstLet: !/\bvar\s+/.test(code),
+      noConsoleLogging: !/console\.(log|error|warn)/.test(code),
+      strictEquality: !(/[^=]==[^=]/.test(code) && !/===/.test(code)),
+      errorHandling: /try\s*\{|catch\s*\(|throw\s+|reject\(/.test(code),
+      documentation: docRequired ? /\/\*\*/.test(code) : true,
+      lineLength: lineLength.pass
     };
-    const passedChecks = Object.values(checks).filter(v => v).length;
-    score = passedChecks / Object.keys(checks).length;
-    return score;
+
+    const passedChecks = Object.values(checks).filter(Boolean).length;
+    const score = passedChecks / Object.keys(checks).length;
+
+    return {
+      score,
+      details: {
+        checks,
+        namingRatio: naming.ratio,
+        indentation: indentation.metadata,
+        lineLength: lineLength.metadata
+      }
+    };
   }
 
   checkIndentation(code) {
     const lines = code.split('\n').filter(line => line.trim());
-    if (lines.length < 3) return true;
+    if (lines.length < 3) {
+      return { pass: true, metadata: { commonIndent: null } };
+    }
     const indentPattern = /^(\s+)/;
     const indents = lines.map(line => line.match(indentPattern)?.[1].length || 0).filter(len => len > 0);
-    if (indents.length < 2) return true;
+    if (indents.length < 2) {
+      return { pass: true, metadata: { commonIndent: null } };
+    }
     const commonIndent = indents.reduce((a, b) => a < b ? a : b);
-    if (commonIndent === 0) return true;
-    return indents.every(indent => indent % commonIndent === 0);
+    if (commonIndent === 0) {
+      return { pass: true, metadata: { commonIndent: 0 } };
+    }
+    const aligned = indents.every(indent => indent % commonIndent === 0);
+    return { pass: aligned, metadata: { commonIndent } };
   }
 
   checkNaming(code) {
     const varPattern = /(?:const|let|var|function)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
     const matches = [...code.matchAll(varPattern)];
-    if (matches.length === 0) return true;
+    if (matches.length === 0) {
+      return { pass: true, ratio: 1 };
+    }
     const descriptiveNames = matches.filter(m => {
       const name = m[1];
       if (/^[ijkn]$/.test(name)) return true;
       return name.length > 2;
     });
-    return descriptiveNames.length / matches.length > 0.7;
+    const ratio = descriptiveNames.length / matches.length;
+    return { pass: ratio >= 0.7, ratio };
+  }
+
+  checkLineLength(code, max = 120) {
+    const lines = code.split('\n');
+    const longest = lines.reduce((acc, line) => Math.max(acc, line.length), 0);
+    return {
+      pass: longest <= max,
+      metadata: { maxAllowed: max, longest }
+    };
   }
 
   evaluateCompleteness(response, task) {

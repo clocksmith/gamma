@@ -18,7 +18,13 @@ export class MockLLMClient {
     // Generate response based on prompt content
     let content = '';
 
-    if (prompt.includes('fibonacci')) {
+    if (prompt.includes('AUTO_RATER_EVAL')) {
+      content = JSON.stringify({
+        score: 0.75,
+        reasoning: 'Mock auto-rating: code meets most expectations.',
+        issues: []
+      });
+    } else if (prompt.includes('fibonacci')) {
       content = this.generateFibonacci(prompt);
     } else if (prompt.includes('filter') || prompt.includes('array')) {
       content = this.generateArrayFilter(prompt);

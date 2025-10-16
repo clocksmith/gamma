@@ -1,0 +1,27 @@
+{
+  "name": "static-file-server",
+  "description": "A script that serves static files from a directory.",
+  "category": "3-server-side-development",
+  "difficulty": "medium",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should include JSDoc comments for the main function.",
+    "typescript-no-comments": "Write a TypeScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should not have any comments.",
+    "typescript-inline-comments": "Write a TypeScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should include inline comments to explain the logic.",
+    "typescript-tsdoc": "Write a TypeScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should include TSDoc comments for the main function."
+  },
+  "testCases": [
+    {
+      "description": "Test serving an existing file",
+      "setup": "const fs = require('fs'); const path = require('path'); const publicDir = path.join(__dirname, 'public'); fs.mkdirSync(publicDir, {recursive: true}); fs.writeFileSync(path.join(publicDir, 'test.txt'), 'hello');",
+      "test": "const http = require('http'); const server = require('./static-file-server.js'); const options = {hostname: 'localhost', port: 3000, path: '/test.txt', method: 'GET'}; const req = http.request(options, res => { let data = ''; res.on('data', d => { data += d; }); res.on('end', () => { console.assert(data === 'hello', 'Should serve the file content'); server.close(); }); }); req.end();",
+      "cleanup": "fs.rmSync(path.join(__dirname, 'public'), { recursive: true, force: true });"
+    },
+    {
+      "description": "Test a non-existing file",
+      "test": "const http = require('http'); const server = require('./static-file-server.js'); const options = {hostname: 'localhost', port: 3000, path: '/not-found.txt', method: 'GET'}; const req = http.request(options, res => { console.assert(res.statusCode === 404, 'Should return 404 for a non-existing file'); server.close(); }); req.end();"
+    }
+  ],
+  "requirements": ["http", "fs", "path"]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "local-storage",
+  "description": "A script that uses local storage to persist data across sessions.",
+  "category": "4-web-fundamentals",
+  "difficulty": "medium",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that demonstrates local storage. The script should create a text input and a button. When the button is clicked, the text from the input should be saved to local storage. When the page loads, the script should check if there is any text in local storage and, if so, display it in the input. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that demonstrates local storage. The script should create a text input and a button. When the button is clicked, the text from the input should be saved to local storage. When the page loads, the script should check if there is any text in local storage and, if so, display it in the input. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that demonstrates local storage. The script should create a text input and a button. When the button is clicked, the text from the input should be saved to local storage. When the page loads, the script should check if there is any text in local storage and, if so, display it in the input. The script should include JSDoc comments for the main function."
+  },
+  "testCases": [
+    {
+      "description": "Test the local storage script",
+      "test": "async () => { await page.setContent('<input type=\"text\" id=\"myInput\"><button id=\"myButton\">Save</button>'); await page.fill('#myInput', 'test value'); await page.click('#myButton'); await page.reload(); const value = await page.$eval('#myInput', el => el.value); console.assert(value === 'test value', 'Input should be populated from local storage on reload'); }"
+    }
+  ],
+  "requirements": ["browser"]
+}

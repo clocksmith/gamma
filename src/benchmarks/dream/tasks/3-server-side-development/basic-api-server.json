@@ -1,0 +1,25 @@
+{
+  "name": "basic-api-server",
+  "description": "A script that creates a basic HTTP server with a few API endpoints.",
+  "category": "3-server-side-development",
+  "difficulty": "easy",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should include JSDoc comments for the main function.",
+    "typescript-no-comments": "Write a TypeScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should not have any comments.",
+    "typescript-inline-comments": "Write a TypeScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should include inline comments to explain the logic.",
+    "typescript-tsdoc": "Write a TypeScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should include TSDoc comments for the main function."
+  },
+  "testCases": [
+    {
+      "description": "Test the / endpoint",
+      "test": "const http = require('http'); const server = require('./basic-api-server.js'); const options = {hostname: 'localhost', port: 3000, path: '/', method: 'GET'}; const req = http.request(options, res => { let data = ''; res.on('data', d => { data += d; }); res.on('end', () => { console.assert(data === 'Hello, World!', '/ should return Hello, World!'); server.close(); }); }); req.on('error', error => { console.error(error); server.close(); }); req.end();"
+    },
+    {
+      "description": "Test the /hello endpoint",
+      "test": "const http = require('http'); const server = require('./basic-api-server.js'); const options = {hostname: 'localhost', port: 3000, path: '/hello', method: 'GET'}; const req = http.request(options, res => { let data = ''; res.on('data', d => { data += d; }); res.on('end', () => { const expected = JSON.stringify({message: 'Hello, stranger!'}); console.assert(data === expected, '/hello should return {message: \"Hello, stranger!\"}'); server.close(); }); }); req.on('error', error => { console.error(error); server.close(); }); req.end();"
+    }
+  ],
+  "requirements": ["http"]
+}

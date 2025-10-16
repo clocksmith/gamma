@@ -1,0 +1,23 @@
+{
+  "name": "log-parser",
+  "description": "A script that parses a log file, extracts specific information, and generates a summary report.",
+  "category": "2-scripting-and-automation",
+  "difficulty": "medium",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should include JSDoc comments for the function and its parameters.",
+    "typescript-no-comments": "Write a TypeScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should not have any comments.",
+    "typescript-inline-comments": "Write a TypeScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should include inline comments to explain the logic.",
+    "typescript-tsdoc": "Write a TypeScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should include TSDoc comments for the function and its parameters."
+  },
+  "testCases": [
+    {
+      "description": "Test with a log file containing errors and warnings",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const { v4: uuidv4 } = require('uuid'); const testFile = path.join(os.tmpdir(), uuidv4() + '.log'); const logContent = '[INFO] Application started\n[WARNING] Deprecated API used\n[ERROR] Failed to connect to database\n[INFO] User logged in\n[ERROR] Null pointer exception\n[WARNING] Low memory'; fs.writeFileSync(testFile, logContent);",
+      "test": "const logParser = require('./log-parser.js'); const result = logParser(testFile); console.assert(result.errors === 2, 'Should find 2 errors'); console.assert(result.warnings === 2, 'Should find 2 warnings');",
+      "cleanup": "fs.unlinkSync(testFile);"
+    }
+  ],
+  "requirements": ["fs"]
+}

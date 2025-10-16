@@ -1,0 +1,21 @@
+{
+  "name": "todo-api",
+  "description": "A script that creates a full CRUD API for a todo list, storing the data in memory.",
+  "category": "3-server-side-development",
+  "difficulty": "hard",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should include JSDoc comments for the main functions.",
+    "typescript-no-comments": "Write a TypeScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should not have any comments.",
+    "typescript-inline-comments": "Write a TypeScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should include inline comments to explain the logic.",
+    "typescript-tsdoc": "Write a TypeScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should include TSDoc comments for the main functions."
+  },
+  "testCases": [
+    {
+      "description": "Test the full CRUD flow",
+      "test": "const http = require('http'); const server = require('./todo-api.js'); const postOptions = {hostname: 'localhost', port: 3000, path: '/todos', method: 'POST', headers: {'Content-Type': 'application/json'}}; const postData = JSON.stringify({title: 'Test todo', completed: false}); const postReq = http.request(postOptions, res => { let data = ''; res.on('data', d => { data += d; }); res.on('end', () => { const todo = JSON.parse(data); console.assert(todo.title === 'Test todo', 'POST /todos should return the created todo'); const getOptions = {hostname: 'localhost', port: 3000, path: '/todos/' + todo.id, method: 'GET'}; const getReq = http.request(getOptions, res => { let getData = ''; res.on('data', d => { getData += d; }); res.on('end', () => { const getTodo = JSON.parse(getData); console.assert(getTodo.title === 'Test todo', 'GET /todos/:id should return the todo'); const putOptions = {hostname: 'localhost', port: 3000, path: '/todos/' + todo.id, method: 'PUT', headers: {'Content-Type': 'application/json'}}; const putData = JSON.stringify({title: 'Test todo updated', completed: true}); const putReq = http.request(putOptions, res => { let putData = ''; res.on('data', d => { putData += d; }); res.on('end', () => { const updatedTodo = JSON.parse(putData); console.assert(updatedTodo.title === 'Test todo updated', 'PUT /todos/:id should return the updated todo'); const deleteOptions = {hostname: 'localhost', port: 3000, path: '/todos/' + todo.id, method: 'DELETE'}; const deleteReq = http.request(deleteOptions, res => { console.assert(res.statusCode === 204, 'DELETE /todos/:id should return 204'); server.close(); }); deleteReq.end(); }); }); putReq.write(putData); putReq.end(); }); }); getReq.end(); }); }); postReq.write(postData); postReq.end();"
+    }
+  ],
+  "requirements": ["http"]
+}

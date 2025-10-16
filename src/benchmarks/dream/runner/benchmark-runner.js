@@ -15,7 +15,7 @@ import { ReportGenerator } from '../reports/report-generator.js';
 
 // Playwright is optional - only needed for UI component testing
 // Don't import if playwright is not installed to avoid module parsing errors
-let PlaywrightEvaluator = null;
+import { PlaywrightEvaluator } from '../evaluator/playwright-evaluator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,19 +27,21 @@ export class BenchmarkRunner {
       ? new MockLLMClient(config.providers)
       : new LLMClient(config.providers);
 
-    // Create mock playwright evaluator with no-op methods
-    this.playwrightEvaluator = {
-      initialize: async () => {},
-      close: async () => {},
-      evaluateUIComponent: async () => ({ overallScore: 0.5 })
-    };
+    this.playwrightEvaluator = null;
+    this.playwrightReady = false;
+    this.playwrightUnavailable = false;
 
-    this.evaluator = new Evaluator(config.evaluation, null); // Pass null for playwright evaluator
+    this.evaluator = new Evaluator(config.evaluation, null);
+    this.evaluator.setDryRun(Boolean(config.dryRun));
     this.reportGenerator = new ReportGenerator({
       resultsDir: config.resultsDirectory,
       reportsDir: config.reportsDirectory
     });
     this.results = [];
+    this.tokenUsage = { prompt: 0, completion: 0, total: 0 };
+    this.runLabel = null;
+    this.runResultsDir = null;
+    this.runReportsDir = null;
   }
 
   /**
@@ -47,8 +49,8 @@ export class BenchmarkRunner {
    */
   async saveGeneratedCode(task, provider, variant, runNumber, code) {
     try {
-      // Create results/src directory
-      const srcDir = join(this.config.resultsDirectory || './results', 'src');
+      const baseDir = this.runResultsDir || (this.config.resultsDirectory || './results');
+      const srcDir = join(baseDir, 'src');
       await mkdir(srcDir, { recursive: true });
 
       // Determine file extension
@@ -75,7 +77,8 @@ export class BenchmarkRunner {
     console.log('\n🐍 Running Python visualizer...');
     try {
       const scriptPath = join(__dirname, '../analyze_results.py');
-      const command = `python3 \"${scriptPath}\" \"${resultsFilePath}\" --visualize --reports-dir ${this.config.reportsDirectory}`;
+      const reportsDir = this.runReportsDir || this.config.reportsDirectory;
+      const command = `python3 \"${scriptPath}\" \"${resultsFilePath}\" --visualize --reports-dir ${reportsDir}`;
       execSync(command, { stdio: 'inherit' });
       console.log('✓ Python visualization complete.');
     } catch (error) {
@@ -120,6 +123,198 @@ export class BenchmarkRunner {
     return tasks;
   }
 
+  _requiresBrowser(task) {
+    if (!task) return false;
+    if (Array.isArray(task.requirements) && task.requirements.includes('browser')) {
+      return true;
+    }
+    return false;
+  }
+
+  async _preparePlaywright(tasks, includeBrowser) {
+    const needsBrowser = includeBrowser && tasks.some(task => this._requiresBrowser(task));
+    if (!needsBrowser) {
+      this.evaluator.playwrightEvaluator = null;
+      return false;
+    }
+
+    if (this.playwrightUnavailable) {
+      if (this.config.output?.verbose) {
+        console.warn('⚠️  Playwright previously failed to launch; browser-based tasks will be skipped.');
+      }
+      this.evaluator.playwrightEvaluator = null;
+      return false;
+    }
+
+    if (this.playwrightReady && this.playwrightEvaluator) {
+      this.evaluator.playwrightEvaluator = this.playwrightEvaluator;
+      return true;
+    }
+
+    if (!this.playwrightEvaluator) {
+      this.playwrightEvaluator = new PlaywrightEvaluator();
+    }
+
+    try {
+      await this.playwrightEvaluator.initialize();
+      this.playwrightReady = true;
+      this.evaluator.playwrightEvaluator = this.playwrightEvaluator;
+      return true;
+    } catch (error) {
+      console.warn('⚠️  Playwright initialization failed. Browser-centric tasks will be skipped.');
+      if (this.config.output?.verbose) {
+        console.warn(`    ${error.message}`);
+      }
+      this.playwrightUnavailable = true;
+      this.playwrightReady = false;
+      this.evaluator.playwrightEvaluator = null;
+      return false;
+    }
+  }
+
+  async _cleanupPlaywright() {
+    if (this.playwrightReady && this.playwrightEvaluator) {
+      try {
+        await this.playwrightEvaluator.close();
+      } catch (error) {
+        if (this.config.output?.verbose) {
+          console.warn(`⚠️  Failed to close Playwright: ${error.message}`);
+        }
+      }
+    }
+    this.playwrightReady = false;
+    this.evaluator.playwrightEvaluator = null;
+  }
+
+  _resetTokenUsage() {
+    this.tokenUsage = { prompt: 0, completion: 0, total: 0 };
+  }
+
+  _updateTokenUsage(usage) {
+    if (!usage) return;
+
+    const prompt =
+      usage.prompt_tokens ??
+      usage.input_tokens ??
+      usage.prompt_eval_count ??
+      0;
+    const completion =
+      usage.completion_tokens ??
+      usage.output_tokens ??
+      usage.eval_count ??
+      0;
+
+    let total = usage.total_tokens;
+    if (total == null) {
+      if (
+        usage.prompt_eval_count != null &&
+        usage.eval_count != null
+      ) {
+        total = usage.prompt_eval_count + usage.eval_count;
+      } else {
+        total = prompt + completion;
+      }
+    }
+
+    if (Number.isFinite(prompt)) {
+      this.tokenUsage.prompt += Math.round(prompt);
+    }
+    if (Number.isFinite(completion)) {
+      this.tokenUsage.completion += Math.round(completion);
+    }
+    if (Number.isFinite(total)) {
+      this.tokenUsage.total += Math.round(total);
+    }
+  }
+
+  _formatTokenTotals() {
+    const { prompt, completion, total } = this.tokenUsage;
+    return `prompt ${prompt}, completion ${completion}, total ${total}`;
+  }
+
+  async generateAutoRating(provider, code, task, variant) {
+    if (!code || !provider) return null;
+    if (this.config.dryRun) {
+      return {
+        score: 0.5,
+        reasoning: 'Auto-rating skipped in dry-run mode.',
+        issues: [],
+        raw: null
+      };
+    }
+
+    const requirementList = Array.isArray(task.requirements) && task.requirements.length
+      ? task.requirements.join(', ')
+      : 'No explicit keywords';
+
+    const prompt = `
+AUTO_RATER_EVAL
+You are auditing code quality. Score strictly between 0.0 and 1.0.
+Return ONLY JSON with keys: "score" (number between 0 and 1), "reasoning" (short string), "issues" (array of strings).
+Penalize missing error handling, unclear naming, unnecessary complexity, or deviation from instructions.
+Task: ${task.name}
+Variant: ${variant}
+Requirements: ${requirementList}
+Code to evaluate:
+\`\`\`
+${code}
+\`\`\`
+JSON:`.trim();
+
+    try {
+      const response = await this.llmClient.complete(provider, prompt);
+      if (response.usage) {
+        this._updateTokenUsage(response.usage);
+      }
+      const parsed = this._parseAutoRating(response.content);
+      return {
+        ...parsed,
+        raw: response.content
+      };
+    } catch (error) {
+      console.warn(`Auto-rating failed: ${error.message}`);
+      return {
+        score: 0.5,
+        reasoning: 'Auto-rating failed; defaulting to neutral.',
+        issues: [error.message]
+      };
+    }
+  }
+
+  _parseAutoRating(content) {
+    if (!content) {
+      return { score: 0.5, reasoning: 'Empty response', issues: [] };
+    }
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return { score: 0.5, reasoning: 'No JSON found in response', issues: [content.trim().slice(0, 200)] };
+    }
+    try {
+      const data = JSON.parse(jsonMatch[0]);
+      const score = typeof data.score === 'number' ? Math.max(0, Math.min(1, data.score)) : 0.5;
+      const reasoning = typeof data.reasoning === 'string' ? data.reasoning : 'No reasoning provided';
+      const issues = Array.isArray(data.issues) ? data.issues : [];
+      return { score, reasoning, issues };
+    } catch (err) {
+      return { score: 0.5, reasoning: 'Malformed JSON in auto-rating response', issues: [err.message] };
+    }
+  }
+
+  async _prepareRunDirectory() {
+    const baseResults = this.config.resultsDirectory || './results';
+    const baseReports = this.config.reportsDirectory || './reports';
+    this.runLabel = new Date().toISOString().replace(/[:.]/g, '-');
+    this.runResultsDir = join(baseResults, this.runLabel);
+    this.runReportsDir = join(baseReports, this.runLabel);
+    await mkdir(join(this.runResultsDir, 'src'), { recursive: true });
+    await mkdir(this.runReportsDir, { recursive: true });
+    if (this.reportGenerator?.config) {
+      this.reportGenerator.config.resultsDir = this.runResultsDir;
+      this.reportGenerator.config.reportsDir = this.runReportsDir;
+      this.reportGenerator.config.runLabel = this.runLabel;
+    }
+  }
+
   /**
    * Run a single benchmark task multiple times as configured.
    */
@@ -140,6 +335,8 @@ export class BenchmarkRunner {
     const runIdentifier = this.config.runs > 1 ? ` [Run ${runNumber}/${this.config.runs}]` : '';
     console.log(`\n[${provider.name}] [${variant}]${runIdentifier} Running: ${task.name}`);
 
+    const language = variant.includes('typescript') ? 'typescript' : 'javascript';
+
     try {
       const prompt = task.variants[variant];
       if (!prompt) {
@@ -151,6 +348,7 @@ export class BenchmarkRunner {
           category: task.category,
           provider: provider.name,
           variant,
+          language,
           run: runNumber,
           duration: 0,
           error: `Variant not defined for this task`,
@@ -177,6 +375,8 @@ export class BenchmarkRunner {
         duration
       );
 
+      this._updateTokenUsage(response.usage);
+
       // Save generated code to file
       const codePath = await this.saveGeneratedCode(
         task,
@@ -186,11 +386,22 @@ export class BenchmarkRunner {
         evaluation.details.code
       );
 
+      const autoRating = await this.generateAutoRating(provider, evaluation.details.code, task, variant);
+      if (autoRating) {
+        evaluation.autoRating = autoRating;
+        if (!evaluation.scores) evaluation.scores = {};
+        evaluation.scores.autoRater = autoRating.score;
+        if (evaluation.metrics) {
+          evaluation.metrics.autoRating = autoRating;
+        }
+      }
+
       const result = {
         taskName: task.name,
         category: task.category,
         provider: provider.name,
         variant,
+        language,
         run: runNumber,
         duration,
         evaluation,
@@ -214,6 +425,7 @@ export class BenchmarkRunner {
         category: task.category,
         provider: provider.name,
         variant,
+        language,
         run: runNumber,
         duration,
         error: error.message,
@@ -231,26 +443,40 @@ export class BenchmarkRunner {
    */
   async runAll() {
     console.log('=== LLM TypeScript/JavaScript Benchmark Suite ===\n');
-    await this.playwrightEvaluator.initialize();
-    try {
-      console.log('Loading tasks...');
+    this.results = [];
+    this._resetTokenUsage();
+    await this._prepareRunDirectory();
+    console.log('Loading tasks...');
 
-      const tasks = await this.loadTasks();
+    const tasks = await this.loadTasks();
+    const includeBrowser = true;
+    const playwrightReady = await this._preparePlaywright(tasks, includeBrowser);
+    const runnableTasks = playwrightReady ? tasks : tasks.filter(task => !this._requiresBrowser(task));
+
+    if (!playwrightReady) {
+      const skippedCount = tasks.length - runnableTasks.length;
+      if (skippedCount > 0) {
+        console.warn(`⚠️  Skipping ${skippedCount} browser-based task(s) because Playwright is unavailable.`);
+      }
+    }
+
+    try {
       if (this.config.timeout) {
         console.log(`Applying custom global timeout: ${this.config.timeout}ms`);
-        tasks.forEach(task => task.timeout = this.config.timeout);
+        runnableTasks.forEach(task => task.timeout = this.config.timeout);
       }
-      console.log(`Loaded ${tasks.length} tasks across ${Object.keys(this.config.categories).length} categories\n`);
+      console.log(`Loaded ${runnableTasks.length} tasks across ${Object.keys(this.config.categories).length} categories\n`);
 
-      const totalRuns = tasks.length * this.config.providers.length * this.config.variants.length;
+      const totalRuns = runnableTasks.length * this.config.providers.length * this.config.variants.length;
       let completed = 0;
 
-      for (const task of tasks) {
+      for (const task of runnableTasks) {
         for (const provider of this.config.providers) {
           for (const variant of this.config.variants) {
             await this.runTask(task, provider, variant);
             completed++;
-            console.log(`Progress: ${completed}/${totalRuns} (${((completed/totalRuns)*100).toFixed(1)}%)`);
+            const tokenSummary = this._formatTokenTotals();
+            console.log(`Progress: ${completed}/${totalRuns} (${((completed / totalRuns) * 100).toFixed(1)}%) | Tokens ${tokenSummary}`);
           }
         }
       }
@@ -262,12 +488,18 @@ export class BenchmarkRunner {
       this.printSummary();
 
       if (resultsFilePath) {
-        this.runPythonVisualizer(resultsFilePath);
+        if (this.config.dryRun) {
+          if (this.config.output?.verbose) {
+            console.log('Skipping Python visualizer in dry-run mode.');
+          }
+        } else {
+          this.runPythonVisualizer(resultsFilePath);
+        }
       }
 
       return this.results;
     } finally {
-      await this.playwrightEvaluator.close();
+      await this._cleanupPlaywright();
     }
   }
 
@@ -275,35 +507,91 @@ export class BenchmarkRunner {
    * Run benchmarks for specific filters
    */
   async run(filters = {}) {
-    await this.playwrightEvaluator.initialize();
-    try {
-      const tasks = await this.loadTasks();
-      let filteredTasks = tasks;
+    this.results = [];
+    this._resetTokenUsage();
+    await this._prepareRunDirectory();
 
-      if (filters.category) {
-        filteredTasks = filteredTasks.filter(t => t.category === filters.category);
+    const tasks = await this.loadTasks();
+    let filteredTasks = tasks;
+
+    if (filters.categories && filters.categories.length > 0) {
+      filteredTasks = filteredTasks.filter(t => filters.categories.includes(t.category));
+    }
+
+    if (filters.category) {
+      filteredTasks = filteredTasks.filter(t => t.category === filters.category);
+    }
+
+    if (filters.taskName) {
+      filteredTasks = filteredTasks.filter(t => t.name === filters.taskName);
+    }
+
+    if (filters.tasks && filters.tasks.length > 0) {
+      const taskNames = new Set(filters.tasks);
+      filteredTasks = filteredTasks.filter(t => taskNames.has(t.name));
+    }
+
+    const includeBrowser = Boolean(filters.includeBrowser);
+    const playwrightReady = await this._preparePlaywright(filteredTasks, includeBrowser);
+    const runnableTasks = includeBrowser && playwrightReady
+      ? filteredTasks
+      : filteredTasks.filter(task => !this._requiresBrowser(task));
+
+    if ((!includeBrowser || !playwrightReady) && filteredTasks.length !== runnableTasks.length) {
+      const skippedCount = filteredTasks.length - runnableTasks.length;
+      if (skippedCount > 0) {
+        console.warn(`⚠️  Skipping ${skippedCount} browser-based task(s). Use --include-browser with a working Playwright setup to enable them.`);
       }
-          if (filters.taskName) {
-            filteredTasks = filteredTasks.filter(t => t.name === filters.taskName);
-          }
-      
-          // Apply timeout override if provided
-          if (filters.timeout) {
-            console.log(`\nApplying custom timeout: ${filters.timeout}ms`);
-            filteredTasks.forEach(task => task.timeout = filters.timeout);
-          }
-      const providers = (filters.providers && filters.providers.length > 0)
-        ? this.config.providers.filter(p => filters.providers.includes(p.name))
+    }
+
+    try {
+      if (filters.timeout) {
+        console.log(`\nApplying custom timeout: ${filters.timeout}ms`);
+        runnableTasks.forEach(task => task.timeout = filters.timeout);
+      }
+
+      const providerLookup = new Map(this.config.providers.map(p => [p.name, p]));
+      const requestedProviders = Array.isArray(filters.providers) ? filters.providers : [];
+      const missingProviders = [];
+
+      const providers = requestedProviders.length > 0
+        ? requestedProviders.map(name => {
+            const provider = providerLookup.get(name);
+            if (!provider) {
+              missingProviders.push(name);
+            }
+            return provider;
+          }).filter(Boolean)
         : this.config.providers;
+
+      if (missingProviders.length > 0) {
+        console.warn(`⚠️  Unknown provider(s): ${missingProviders.join(', ')} - skipping.`);
+      }
+
+      if (providers.length === 0) {
+        console.warn('⚠️  No providers selected. Nothing to run.');
+        return this.results;
+      }
 
       const variants = (filters.variants && filters.variants.length > 0)
         ? filters.variants
         : this.config.variants;
 
-      for (const task of filteredTasks) {
+      if (variants.length === 0) {
+        console.warn('⚠️  No variants selected. Nothing to run.');
+        return this.results;
+      }
+
+      const totalRuns = runnableTasks.length * providers.length * variants.length;
+      let completed = 0;
+
+      for (const task of runnableTasks) {
         for (const provider of providers) {
           for (const variant of variants) {
             await this.runTask(task, provider, variant);
+            completed++;
+            const tokenSummary = this._formatTokenTotals();
+            console.log(`Progress: ${completed}/${totalRuns} (${((completed / totalRuns) * 100).toFixed(1)}%) | Tokens ${tokenSummary}`);
           }
         }
       }
@@ -312,12 +600,18 @@ export class BenchmarkRunner {
       this.printSummary();
 
       if (resultsFilePath) {
-        this.runPythonVisualizer(resultsFilePath);
+        if (this.config.dryRun) {
+          if (this.config.output?.verbose) {
+            console.log('Skipping Python visualizer in dry-run mode.');
+          }
+        } else {
+          this.runPythonVisualizer(resultsFilePath);
+        }
       }
 
       return this.results;
     } finally {
-      await this.playwrightEvaluator.close();
+      await this._cleanupPlaywright();
     }
   }
 
@@ -363,27 +657,90 @@ export class BenchmarkRunner {
       console.log(`Average Score (Mean of Means): ${overallAvgScore.toFixed(2)}/100`);
       console.log(`Average Duration (Mean of Means): ${overallAvgDuration.toFixed(0)}ms`);
 
-      // Breakdown by variant
-      console.log('\n--- By Variant ---');
-      const variants = [...new Set(benchmarkStats.map(s => s.variant))];
-      for (const variant of variants) {
-        const variantStats = benchmarkStats.filter(s => s.variant === variant);
-        if (variantStats.length > 0) {
-          const variantAvg = variantStats.reduce((sum, s) => sum + s.meanScore, 0) / variantStats.length;
-          console.log(`${variant}: ${variantAvg.toFixed(2)}/100 (${variantStats.length} benchmarks)`);
+      const variantAverages = successful.reduce((acc, r) => {
+        if (!acc[r.variant]) acc[r.variant] = { totalScore: 0, totalRuns: 0 };
+        acc[r.variant].totalScore += r.evaluation.totalScore;
+        acc[r.variant].totalRuns += 1;
+        return acc;
+      }, {});
+
+      const sortedVariants = Object.entries(variantAverages)
+        .map(([variant, data]) => ({
+          variant,
+          meanScore: data.totalScore / data.totalRuns,
+          runs: data.totalRuns
+        }))
+        .sort((a, b) => b.meanScore - a.meanScore);
+
+      console.log('\nVariant Averages:');
+      sortedVariants.forEach(({ variant, meanScore, runs }) => {
+        console.log(`  ${variant}: ${meanScore.toFixed(2)} (${runs} run${runs === 1 ? '' : 's'})`);
+      });
+
+      const languageStats = successful.reduce((acc, r) => {
+        const lang = r.language || (r.variant.includes('typescript') ? 'typescript' : 'javascript');
+        if (!acc[lang]) {
+          acc[lang] = {
+            totalScore: 0,
+            totalRuns: 0,
+            byProvider: {}
+          };
         }
+        acc[lang].totalScore += r.evaluation.totalScore;
+        acc[lang].totalRuns += 1;
+        if (!acc[lang].byProvider[r.provider]) {
+          acc[lang].byProvider[r.provider] = { totalScore: 0, totalRuns: 0 };
+        }
+        acc[lang].byProvider[r.provider].totalScore += r.evaluation.totalScore;
+        acc[lang].byProvider[r.provider].totalRuns += 1;
+        return acc;
+      }, {});
+
+      const jsStats = languageStats.javascript || { totalScore: 0, totalRuns: 0, byProvider: {} };
+      const tsStats = languageStats.typescript || { totalScore: 0, totalRuns: 0, byProvider: {} };
+      const jsMean = jsStats.totalRuns ? (jsStats.totalScore / jsStats.totalRuns) : null;
+      const tsMean = tsStats.totalRuns ? (tsStats.totalScore / tsStats.totalRuns) : null;
+
+      console.log('\n--- JS vs TS Comparison ---');
+      if (jsMean !== null && tsMean !== null) {
+        const delta = tsMean - jsMean;
+        console.log(`Overall: TS ${tsMean.toFixed(2)} vs JS ${jsMean.toFixed(2)} (Δ ${delta >= 0 ? '+' : ''}${delta.toFixed(2)})`);
+      } else if (jsMean !== null) {
+        console.log(`Only JavaScript variants ran. Avg: ${jsMean.toFixed(2)}`);
+      } else if (tsMean !== null) {
+        console.log(`Only TypeScript variants ran. Avg: ${tsMean.toFixed(2)}`);
+      } else {
+        console.log('No comparable JavaScript/TypeScript runs recorded.');
       }
 
-      // Breakdown by provider
-      console.log('\n--- By Provider ---');
-      const providers = [...new Set(benchmarkStats.map(s => s.provider))];
-      for (const provider of providers) {
-        const providerStats = benchmarkStats.filter(s => s.provider === provider);
-        if (providerStats.length > 0) {
-          const providerAvg = providerStats.reduce((sum, s) => sum + s.meanScore, 0) / providerStats.length;
-          console.log(`${provider}: ${providerAvg.toFixed(2)}/100 (${providerStats.length} benchmarks)`);
+      const providerNames = new Set([
+        ...Object.keys(jsStats.byProvider || {}),
+        ...Object.keys(tsStats.byProvider || {})
+      ]);
+
+      if (providerNames.size > 0) {
+        console.log('By provider:');
+        for (const provider of providerNames) {
+          const jsProvider = jsStats.byProvider?.[provider];
+          const tsProvider = tsStats.byProvider?.[provider];
+          const jsProviderMean = jsProvider?.totalRuns ? (jsProvider.totalScore / jsProvider.totalRuns) : null;
+          const tsProviderMean = tsProvider?.totalRuns ? (tsProvider.totalScore / tsProvider.totalRuns) : null;
+          if (jsProviderMean === null && tsProviderMean === null) continue;
+          if (jsProviderMean !== null && tsProviderMean !== null) {
+            const delta = tsProviderMean - jsProviderMean;
+            console.log(`  ${provider}: TS ${tsProviderMean.toFixed(2)} vs JS ${jsProviderMean.toFixed(2)} (Δ ${delta >= 0 ? '+' : ''}${delta.toFixed(2)})`);
+          } else if (jsProviderMean !== null) {
+            console.log(`  ${provider}: JS only (${jsProviderMean.toFixed(2)})`);
+          } else if (tsProviderMean !== null) {
+            console.log(`  ${provider}: TS only (${tsProviderMean.toFixed(2)})`);
+          }
         }
       }
+    }
+
+    const { prompt, completion, total } = this.tokenUsage;
+    if (prompt || completion || total) {
+      console.log(`Tokens used: prompt ${prompt}, completion ${completion}, total ${total}`);
     }
   }
 }

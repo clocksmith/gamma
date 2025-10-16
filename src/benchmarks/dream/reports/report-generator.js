@@ -190,7 +190,7 @@ export class ReportGenerator {
   }
 
   async saveRawResults(results) {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-') ;
+    const timestamp = (this.config.runLabel || new Date().toISOString()).replace(/[:.]/g, '-');
     const filename = `results-${timestamp}.json`;
     const filepath = join(this.config.resultsDir, filename);
     await writeFile(filepath, JSON.stringify(results, null, 2));

@@ -76,51 +76,64 @@ export const BenchmarkConfig = {
 
   // Language variants to test
   variants: [
-    'typescript',
     'javascript',
+    'typescript',
+    'javascript-no-comments',
+    'javascript-inline-comments',
     'javascript-jsdoc',
-    'javascript-vanilla-web',      // JavaScript with vanilla Web APIs, HTML, CSS
-    'javascript-vanilla-web-jsdoc', // Same as above with JSDoc
-    'typescript-vanilla-web',      // TypeScript vanilla as possible with Web APIs
-    'typescript-react'             // TypeScript React without too many deps
+    'javascript-vanilla-web',
+    'javascript-vanilla-web-jsdoc',
+    'typescript-no-comments',
+    'typescript-inline-comments',
+    'typescript-tsdoc',
+    'typescript-vanilla-web',
+    'typescript-react',
+    'typescript-react-no-comments',
+    'typescript-react-tsdoc',
+    'javascript-untested',
+    'javascript-tested',
+    'typescript-untested',
+    'typescript-tested',
+    'react-typescript-untested',
+    'react-typescript-tested',
   ],
 
   // Task categories
   categories: {
-    simple: {
+    '1-foundations': {
       enabled: true,
       weight: 1.0,
-      timeout: 30000 // 30 seconds
+      timeout: 60000 // 60 seconds
     },
-    'large-projects': {
-      enabled: true,
-      weight: 2.0,
-      timeout: 120000 // 2 minutes
-    },
-    'needle-in-haystack': {
+    '2-scripting-and-automation': {
       enabled: true,
       weight: 1.5,
       timeout: 60000 // 1 minute
     },
-    'bug-finding': {
+    '3-server-side-development': {
       enabled: true,
       weight: 2.0,
-      timeout: 90000 // 1.5 minutes
+      timeout: 120000 // 2 minutes
     },
-    'full-projects': {
+    '4-web-fundamentals': {
+      enabled: true,
+      weight: 2.5,
+      timeout: 180000 // 3 minutes
+    },
+    '5-react-component-library': {
+      enabled: true,
+      weight: 2.5,
+      timeout: 180000 // 3 minutes
+    },
+    '6-full-stack-applications': {
       enabled: true,
       weight: 3.0,
       timeout: 300000 // 5 minutes
     },
-    'web-components': {
+    '7-debugging-and-maintenance': {
       enabled: true,
-      weight: 2.5,
-      timeout: 180000 // 3 minutes
-    },
-    'ui-components': {
-      enabled: true,
-      weight: 2.5,
-      timeout: 180000 // 3 minutes
+      weight: 2.0,
+      timeout: 90000 // 1.5 minutes
     }
   },
 

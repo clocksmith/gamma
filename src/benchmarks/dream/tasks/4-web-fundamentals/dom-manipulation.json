@@ -1,0 +1,21 @@
+{
+  "name": "dom-manipulation",
+  "description": "A script that manipulates the DOM in various ways.",
+  "category": "4-web-fundamentals",
+  "difficulty": "easy",
+  "variants": {
+    "javascript-no-comments": "Write a JavaScript script that demonstrates DOM manipulation. The script should be enclosed in a function. It should create a new `div` element with the text \"Hello, World!\", add it to the body of the page, and then update its text to \"Hello, DOM!\" after 2 seconds. The script should not have any comments.",
+    "javascript-inline-comments": "Write a JavaScript script that demonstrates DOM manipulation. The script should be enclosed in a function. It should create a new `div` element with the text \"Hello, World!\", add it to the body of the page, and then update its text to \"Hello, DOM!\" after 2 seconds. The script should include inline comments to explain the logic.",
+    "javascript-jsdoc": "Write a JavaScript script that demonstrates DOM manipulation. The script should be enclosed in a function. It should create a new `div` element with the text \"Hello, World!\", add it to the body of the page, and then update its text to \"Hello, DOM!\" after 2 seconds. The script should include JSDoc comments for the main function.",
+    "javascript-vanilla-web-jsdoc": "Write a vanilla JavaScript script that demonstrates DOM manipulation. The script should be enclosed in a function. It should create a new `div` element with the text \"Hello, World!\", add it to the body of the page, and then update its text to \"Hello, DOM!\" after 2 seconds. The script should include JSDoc comments for the main function.",
+    "typescript-react-no-comments": "Write a TypeScript React component that demonstrates DOM manipulation. The component should render a `div` element with the text \"Hello, World!\". After 2 seconds, the text should be updated to \"Hello, DOM!\". The component should not have any comments.",
+    "typescript-react-tsdoc": "Write a TypeScript React component that demonstrates DOM manipulation. The component should render a `div` element with the text \"Hello, World!\". After 2 seconds, the text should be updated to \"Hello, DOM!\". The component should include TSDoc comments for the component and its props."
+  },
+  "testCases": [
+    {
+      "description": "Test the DOM manipulation script",
+      "test": "async () => { await page.waitForSelector('div'); const div = await page.$('div'); const initialText = await div.textContent(); console.assert(initialText === 'Hello, World!', 'Initial text should be Hello, World!'); await page.waitForTimeout(2000); const updatedText = await div.textContent(); console.assert(updatedText === 'Hello, DOM!', 'Text should be updated to Hello, DOM!'); }"
+    }
+  ],
+  "requirements": ["browser"]
+}

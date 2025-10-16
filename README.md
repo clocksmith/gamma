@@ -128,7 +128,7 @@ ln -s ~/.ollama/models/blobs/sha256-abc123... models/qwen-coder.gguf
 | **tensorflow** | TF/Keras models | CUDA, CPU | ⚠ Experimental | TF-specific models or pipelines |
 | **jax** | JAX/Flax models | TPU, CUDA | ⚠ Experimental | TPU support or JAX models |
 | **onnx** | ONNX Runtime | CPU, CUDA, DirectML | ⚠ Experimental | Cross-platform, DirectML on Windows |
-| **mlx** | MLX-optimized | Apple M1/M2/M3 | ⚠ Experimental | Apple Silicon MLX optimizations |
+| **mlx** | MLX-optimized | Apple M1/M2/M3/M4 | ⚠ Experimental | Apple Silicon MLX optimizations |
 
 **Quick Guide:**
 - ☐ **Local models (Ollama)** → Use `llamacpp`

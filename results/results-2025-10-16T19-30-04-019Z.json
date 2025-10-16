@@ -1,0 +1,726 @@
+[
+  {
+    "taskName": "array-filter",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 30022,
+    "error": "Timeout",
+    "timestamp": "2025-10-16T19:26:47.750Z",
+    "success": false
+  },
+  {
+    "taskName": "array-filter",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 30002,
+    "error": "Timeout",
+    "timestamp": "2025-10-16T19:27:17.753Z",
+    "success": false
+  },
+  {
+    "taskName": "async-fetch",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 26746,
+    "evaluation": {
+      "scores": {
+        "accuracy": 0,
+        "performance": 0.9,
+        "codeQuality": 0.8,
+        "completeness": 0.8333333333333334
+      },
+      "advancedMetrics": {
+        "f1Score": 0,
+        "precision": 0,
+        "recall": 0,
+        "exactMatch": 0
+      },
+      "totalScore": 50.666666666666686,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 42,
+          "nonEmptyLines": 37,
+          "codeLines": 25,
+          "commentLines": 12,
+          "totalCharacters": 1148,
+          "codeCharacters": 449
+        },
+        "tokenMetrics": {
+          "inputTokens": 144,
+          "outputTokens": 469,
+          "totalTokens": 613,
+          "tokensPerSecond": 17.54,
+          "charactersPerToken": "2.45"
+        },
+        "efficiency": {
+          "timeMs": 26746,
+          "timeSeconds": "26.75",
+          "linesPerSecond": "0.93"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 4,
+          "halsteadDifficulty": 15.49,
+          "halsteadVolume": 1585.29,
+          "halsteadEffort": 24559.87,
+          "maintainabilityIndex": 80,
+          "maxNestingDepth": 7,
+          "avgLineLength": 22,
+          "linesOfCode": 25
+        },
+        "testResults": {
+          "passed": 0,
+          "failed": 2,
+          "total": 2
+        }
+      },
+      "details": {
+        "code": "// fetchUserData.js\n/**\n * Simulates fetching a user record from an API.\n *\n * @param {number} userId - The ID of the user to fetch (must be >= 1).\n * @returns {Promise<{id:number, name:string, email:string}>}\n *          Resolves with the user data after ~300 ms,\n *          or rejects with an Error for an invalid ID.\n */\nexport async function fetchUserData(userId) {\n  return new Promise((resolve, reject) => {\n    // Validate input immediately\n    if (typeof userId !== 'number' || userId < 1) {\n      reject(new Error('Invalid userId – must be a number >= 1'));\n      return;\n    }\n\n    // Simulate network latency\n    setTimeout(() => {\n      // Mocked user data – in a real scenario this would come from a server\n      const user = {\n        id: userId,\n        name: `User ${userId}`,\n        email: `user${userId}@example.com`,\n      };\n      resolve(user);\n    }, 300);\n  });\n}\n\n\nimport { fetchUserData } from './fetchUserData.js';\n\n(async () => {\n  try {\n    const data = await fetchUserData(5);\n    console.log(data); // { id: 5, name: 'User 5', email: 'user5@example.com' }\n  } catch (err) {\n    console.error(err.message);\n  }\n})();\n",
+        "variant": "javascript"
+      }
+    },
+    "codePath": "results/src/async-fetch_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T19:27:44.603Z",
+    "success": true
+  },
+  {
+    "taskName": "async-fetch",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 29364,
+    "evaluation": {
+      "scores": {
+        "accuracy": 0,
+        "performance": 0.9,
+        "codeQuality": 0.8,
+        "completeness": 1
+      },
+      "advancedMetrics": {
+        "f1Score": 0,
+        "precision": 0,
+        "recall": 0,
+        "exactMatch": 0
+      },
+      "totalScore": 54,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 47,
+          "nonEmptyLines": 40,
+          "codeLines": 30,
+          "commentLines": 10,
+          "totalCharacters": 1141,
+          "codeCharacters": 519
+        },
+        "tokenMetrics": {
+          "inputTokens": 155,
+          "outputTokens": 552,
+          "totalTokens": 707,
+          "tokensPerSecond": 18.8,
+          "charactersPerToken": "2.07"
+        },
+        "efficiency": {
+          "timeMs": 29364,
+          "timeSeconds": "29.36",
+          "linesPerSecond": "1.02"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 3,
+          "halsteadDifficulty": 13.75,
+          "halsteadVolume": 1570.3,
+          "halsteadEffort": 21591.64,
+          "maintainabilityIndex": 77,
+          "maxNestingDepth": 8,
+          "avgLineLength": 21,
+          "linesOfCode": 30
+        },
+        "testResults": {
+          "passed": 0,
+          "failed": 2,
+          "total": 2
+        }
+      },
+      "details": {
+        "code": "// fetchUserData.ts\n/** User data returned from the simulated API */\nexport interface UserData {\n  id: number;\n  name: string;\n  email: string;\n}\n\n/**\n * Simulates fetching a user record from a remote API.\n *\n * @param userId - The numeric identifier of the user (must be >= 1)\n * @returns A promise that resolves with the user data after ~300 ms.\n * @throws If `userId` is less than 1 the promise is rejected with an Error.\n */\nexport async function fetchUserData(userId: number): Promise<UserData> {\n  return new Promise<UserData>((resolve, reject) => {\n    if (userId < 1) {\n      reject(new Error('Invalid userId: must be >= 1'));\n      return;\n    }\n\n    // Simulate network latency\n    setTimeout(() => {\n      resolve({\n        id: userId,\n        name: `User ${userId}`,\n        email: `user${userId}@example.com`,\n      });\n    }, 300);\n  });\n}\n\n\nimport { fetchUserData } from './fetchUserData';\n\nasync function demo() {\n  try {\n    const user = await fetchUserData(5);\n    console.log(user); // { id: 5, name: 'User 5', email: 'user5@example.com' }\n  } catch (err) {\n    console.error('Failed to fetch user:', err);\n  }\n}\n\ndemo();\n",
+        "variant": "typescript"
+      }
+    },
+    "codePath": "results/src/async-fetch_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T19:28:14.821Z",
+    "success": true
+  },
+  {
+    "taskName": "class-person",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 12785,
+    "evaluation": {
+      "scores": {
+        "accuracy": 0,
+        "performance": 1,
+        "codeQuality": 0.4,
+        "completeness": 1
+      },
+      "advancedMetrics": {
+        "f1Score": 0,
+        "precision": 0,
+        "recall": 0,
+        "exactMatch": 0
+      },
+      "totalScore": 48.00000000000001,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 26,
+          "nonEmptyLines": 21,
+          "codeLines": 13,
+          "commentLines": 8,
+          "totalCharacters": 637,
+          "codeCharacters": 282
+        },
+        "tokenMetrics": {
+          "inputTokens": 119,
+          "outputTokens": 238,
+          "totalTokens": 357,
+          "tokensPerSecond": 18.62,
+          "charactersPerToken": "2.68"
+        },
+        "efficiency": {
+          "timeMs": 12785,
+          "timeSeconds": "12.79",
+          "linesPerSecond": "1.02"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 1,
+          "halsteadDifficulty": 8.67,
+          "halsteadVolume": 590.15,
+          "halsteadEffort": 5114.6,
+          "maintainabilityIndex": 96,
+          "maxNestingDepth": 4,
+          "avgLineLength": 28,
+          "linesOfCode": 13
+        },
+        "testResults": {
+          "passed": 0,
+          "failed": 3,
+          "total": 3
+        }
+      },
+      "details": {
+        "code": "// Person.js\nexport default class Person {\n  /**\n   * @param {string} name  - Person's full name\n   * @param {number} age   - Age in years\n   * @param {string} email - Email address\n   */\n  constructor(name, age, email) {\n    this.name = name;\n    this.age = age;\n    this.email = email;\n  }\n\n  /** Returns a formatted string with the person's details */\n  getInfo() {\n    return `${this.name} (age ${this.age}) <${this.email}>`;\n  }\n}\n\n\n// anotherFile.js\nimport Person from './Person.js';\n\nconst alice = new Person('Alice Johnson', 28, 'alice@example.com');\nconsole.log(alice.getInfo()); // \"Alice Johnson (age 28) <alice@example.com>\"\n",
+        "variant": "javascript"
+      }
+    },
+    "codePath": "results/src/class-person_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T19:28:27.699Z",
+    "success": true
+  },
+  {
+    "taskName": "class-person",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 9113,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 0.8,
+        "completeness": 1
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 96.00000000000001,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 20,
+          "nonEmptyLines": 17,
+          "codeLines": 16,
+          "commentLines": 1,
+          "totalCharacters": 356,
+          "codeCharacters": 264
+        },
+        "tokenMetrics": {
+          "inputTokens": 136,
+          "outputTokens": 165,
+          "totalTokens": 301,
+          "tokensPerSecond": 18.11,
+          "charactersPerToken": "2.16"
+        },
+        "efficiency": {
+          "timeMs": 9113,
+          "timeSeconds": "9.11",
+          "linesPerSecond": "1.76"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 1,
+          "halsteadDifficulty": 9,
+          "halsteadVolume": 325.7,
+          "halsteadEffort": 2931.27,
+          "maintainabilityIndex": 96,
+          "maxNestingDepth": 4,
+          "avgLineLength": 18,
+          "linesOfCode": 16
+        },
+        "testResults": {
+          "passed": 3,
+          "failed": 0,
+          "total": 3
+        }
+      },
+      "details": {
+        "code": "// Person.ts\nexport interface IPerson {\n  name: string;\n  age: number;\n  email: string;\n  getInfo(): string;\n}\n\nexport class Person implements IPerson {\n  constructor(\n    public name: string,\n    public age: number,\n    public email: string\n  ) {}\n\n  getInfo(): string {\n    return `${this.name} (age ${this.age}) can be reached at ${this.email}.`;\n  }\n}\n",
+        "variant": "typescript"
+      }
+    },
+    "codePath": "results/src/class-person_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T19:28:37.641Z",
+    "success": true
+  },
+  {
+    "taskName": "fibonacci",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 15093,
+    "evaluation": {
+      "scores": {
+        "accuracy": 0,
+        "performance": 0,
+        "codeQuality": 0.6,
+        "completeness": 1
+      },
+      "advancedMetrics": {
+        "f1Score": 0,
+        "precision": 0,
+        "recall": 0,
+        "exactMatch": 0
+      },
+      "totalScore": 32,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 23,
+          "nonEmptyLines": 17,
+          "codeLines": 11,
+          "commentLines": 6,
+          "totalCharacters": 477,
+          "codeCharacters": 209
+        },
+        "tokenMetrics": {
+          "inputTokens": 108,
+          "outputTokens": 284,
+          "totalTokens": 392,
+          "tokensPerSecond": 18.82,
+          "charactersPerToken": "1.68"
+        },
+        "efficiency": {
+          "timeMs": 15093,
+          "timeSeconds": "15.09",
+          "linesPerSecond": "0.73"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 3,
+          "halsteadDifficulty": 11.79,
+          "halsteadVolume": 688.55,
+          "halsteadEffort": 8115.06,
+          "maintainabilityIndex": 97,
+          "maxNestingDepth": 2,
+          "avgLineLength": 23,
+          "linesOfCode": 11
+        },
+        "testResults": {
+          "passed": 0,
+          "failed": 4,
+          "total": 4
+        },
+        "runtimePerformance": [
+          {
+            "name": "fibonacci-20",
+            "meanTimeMs": null,
+            "meanMemoryMB": null,
+            "error": "Command failed: node --expose-gc /tmp/benchmark-perf-1760642932836/perf.mjs\nfile:///tmp/benchmark-perf-1760642932836/module.mjs:20\nimport { fibonacci } from './fibonacci.js';\n         ^^^^^^^^^\n\nSyntaxError: Identifier 'fibonacci' has already been declared\n    at compileSourceTextModule (node:internal/modules/esm/utils:339:16)\n    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:168:18)\n    at callTranslator (node:internal/modules/esm/loader:428:14)\n    at ModuleLoader.moduleProvider (node:internal/modules/esm/loader:434:30)\n\nNode.js v20.18.1\n"
+          },
+          {
+            "name": "fibonacci-30",
+            "meanTimeMs": null,
+            "meanMemoryMB": null,
+            "error": "Command failed: node --expose-gc /tmp/benchmark-perf-1760642932836/perf.mjs\nfile:///tmp/benchmark-perf-1760642932836/module.mjs:20\nimport { fibonacci } from './fibonacci.js';\n         ^^^^^^^^^\n\nSyntaxError: Identifier 'fibonacci' has already been declared\n    at compileSourceTextModule (node:internal/modules/esm/utils:339:16)\n    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:168:18)\n    at callTranslator (node:internal/modules/esm/loader:428:14)\n    at ModuleLoader.moduleProvider (node:internal/modules/esm/loader:434:30)\n\nNode.js v20.18.1\n"
+          }
+        ]
+      },
+      "details": {
+        "code": "/**\n * Returns the nth Fibonacci number (0‑based).\n * @param {number} n – non‑negative integer\n * @returns {bigint} nth Fibonacci number\n */\nexport function fibonacci(n) {\n  if (n < 0) throw new RangeError('n must be non‑negative');\n\n  // Use BigInt to safely handle large indices\n  let a = 0n,\n      b = 1n;\n\n  for (let i = 0; i < n; i++) {\n    [a, b] = [b, a + b];\n  }\n  return a;\n}\n\n\nimport { fibonacci } from './fibonacci.js';\n\nconsole.log(fibonacci(10).toString()); // 55\n",
+        "variant": "javascript"
+      }
+    },
+    "codePath": "results/src/fibonacci_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T19:28:52.963Z",
+    "success": true
+  },
+  {
+    "taskName": "fibonacci",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 8552,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 1,
+        "completeness": 1
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 100,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 16,
+          "nonEmptyLines": 14,
+          "codeLines": 13,
+          "commentLines": 1,
+          "totalCharacters": 301,
+          "codeCharacters": 191
+        },
+        "tokenMetrics": {
+          "inputTokens": 113,
+          "outputTokens": 157,
+          "totalTokens": 270,
+          "tokensPerSecond": 18.36,
+          "charactersPerToken": "1.92"
+        },
+        "efficiency": {
+          "timeMs": 8552,
+          "timeSeconds": "8.55",
+          "linesPerSecond": "1.52"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 5,
+          "halsteadDifficulty": 19.04,
+          "halsteadVolume": 379.78,
+          "halsteadEffort": 7230.45,
+          "maintainabilityIndex": 97,
+          "maxNestingDepth": 2,
+          "avgLineLength": 18,
+          "linesOfCode": 13
+        },
+        "testResults": {
+          "passed": 4,
+          "failed": 0,
+          "total": 4
+        },
+        "runtimePerformance": [
+          {
+            "name": "fibonacci-20",
+            "meanTimeMs": 0.00060512,
+            "meanMemoryMB": 0.0002887725830078125,
+            "rawData": {
+              "meanTimeNs": 605.12,
+              "meanMemoryBytes": 302.8,
+              "timings": [
+                18705,
+                2354,
+                561,
+                501,
+                2044,
+                501,
+                381,
+                370,
+                381,
+                371,
+                370,
+                401,
+                371,
+                391,
+                361,
+                361,
+                371,
+                360,
+                361,
+                371,
+                380,
+                411,
+                381,
+                361,
+                411,
+                1472,
+                371,
+                201,
+                151,
+                160,
+                150,
+                151,
+                150,
+                161,
+                160,
+                150,
+                150,
+                150,
+                150,
+                151,
+                150,
+                150,
+                150,
+                150,
+                150,
+                151,
+                180,
+                150,
+                151,
+                150,
+                151,
+                150,
+                160,
+                151,
+                150,
+                161,
+                2455,
+                792,
+                511,
+                461,
+                451,
+                461,
+                461,
+                451,
+                461,
+                451,
+                460,
+                451,
+                461,
+                441,
+                450,
+                461,
+                460,
+                451,
+                450,
+                441,
+                461,
+                451,
+                450,
+                461,
+                461,
+                451,
+                441,
+                451,
+                451,
+                451,
+                450,
+                460,
+                451,
+                461,
+                451,
+                441,
+                451,
+                450,
+                461,
+                450,
+                451,
+                461,
+                450,
+                450
+              ],
+              "memoryUsages": [
+                1752,
+                272,
+                272,
+                272,
+                272,
+                368,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288
+              ]
+            }
+          },
+          {
+            "name": "fibonacci-30",
+            "meanTimeMs": 0.0028001999999999997,
+            "meanMemoryMB": 0.000415802001953125,
+            "rawData": {
+              "meanTimeNs": 2800.2,
+              "meanMemoryBytes": 436,
+              "timings": [
+                21290,
+                691,
+                672,
+                511,
+                2284,
+                681,
+                450,
+                461,
+                521,
+                441
+              ],
+              "memoryUsages": [
+                1752,
+                272,
+                272,
+                272,
+                272,
+                368,
+                288,
+                288,
+                288,
+                288
+              ]
+            }
+          }
+        ]
+      },
+      "details": {
+        "code": "// fibonacci.ts\nexport function fibonacci(n: number): number {\n  if (n < 0) throw new RangeError('n must be non‑negative');\n  if (n === 0) return 0;\n  if (n === 1) return 1;\n\n  let a = 0,\n      b = 1;\n  for (let i = 2; i <= n; i++) {\n    const next = a + b;\n    a = b;\n    b = next;\n  }\n  return b;\n}\n",
+        "variant": "typescript"
+      }
+    },
+    "codePath": "results/src/fibonacci_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T19:29:04.009Z",
+    "success": true
+  },
+  {
+    "taskName": "promise-retry",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 30001,
+    "error": "Timeout",
+    "timestamp": "2025-10-16T19:29:34.010Z",
+    "success": false
+  },
+  {
+    "taskName": "promise-retry",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 30002,
+    "error": "Timeout",
+    "timestamp": "2025-10-16T19:30:04.013Z",
+    "success": false
+  }
+]
