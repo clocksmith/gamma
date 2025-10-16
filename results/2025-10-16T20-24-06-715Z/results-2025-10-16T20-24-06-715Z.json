@@ -1,0 +1,1682 @@
+[
+  {
+    "taskName": "array-filter",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 14938,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 1,
+        "completeness": 1,
+        "performance_token": 1,
+        "performance_runtime": null,
+        "autoRater": 0.9
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 1,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 100,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 8,
+          "nonEmptyLines": 7,
+          "codeLines": 7,
+          "commentLines": 0,
+          "totalCharacters": 198,
+          "codeCharacters": 158
+        },
+        "tokenMetrics": {
+          "inputTokens": 132,
+          "outputTokens": 146,
+          "totalTokens": 278,
+          "tokensPerSecond": 9.77,
+          "charactersPerToken": "1.36"
+        },
+        "efficiency": {
+          "timeMs": 14938,
+          "timeSeconds": "14.94",
+          "linesPerSecond": "0.47"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 3,
+          "halsteadDifficulty": 15,
+          "halsteadVolume": 233.38,
+          "halsteadEffort": 3500.76,
+          "maintainabilityIndex": 110,
+          "maxNestingDepth": 4,
+          "avgLineLength": 26,
+          "linesOfCode": 7
+        },
+        "testResults": {
+          "passed": 2,
+          "failed": 0,
+          "total": 2
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 1,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 61
+          }
+        },
+        "autoRating": {
+          "score": 0.9,
+          "reasoning": "The implementation meets all functional requirements with clear naming and concise logic, but lacks input validation and error handling.",
+          "issues": [
+            "No checks for `array` being an actual array (e.g., handling null, undefined, or non‑array inputs).",
+            "No verification that `predicate` is a function, which could cause runtime errors."
+          ],
+          "raw": "{\n  \"score\": 0.9,\n  \"reasoning\": \"The implementation meets all functional requirements with clear naming and concise logic, but lacks input validation and error handling.\",\n  \"issues\": [\n    \"No checks for `array` being an actual array (e.g., handling null, undefined, or non‑array inputs).\",\n    \"No verification that `predicate` is a function, which could cause runtime errors.\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export function customFilter(array, predicate) {\n  const result = [];\n  for (let i = 0; i < array.length; i++) {\n    if (predicate(array[i], i, array)) result.push(array[i]);\n  }\n  return result;\n}\n",
+        "variant": "javascript"
+      },
+      "autoRating": {
+        "score": 0.9,
+        "reasoning": "The implementation meets all functional requirements with clear naming and concise logic, but lacks input validation and error handling.",
+        "issues": [
+          "No checks for `array` being an actual array (e.g., handling null, undefined, or non‑array inputs).",
+          "No verification that `predicate` is a function, which could cause runtime errors."
+        ],
+        "raw": "{\n  \"score\": 0.9,\n  \"reasoning\": \"The implementation meets all functional requirements with clear naming and concise logic, but lacks input validation and error handling.\",\n  \"issues\": [\n    \"No checks for `array` being an actual array (e.g., handling null, undefined, or non‑array inputs).\",\n    \"No verification that `predicate` is a function, which could cause runtime errors.\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/array-filter_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T20:24:35.694Z",
+    "success": true
+  },
+  {
+    "taskName": "array-filter",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 10748,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 1,
+        "completeness": 1,
+        "performance_token": 1,
+        "performance_runtime": null,
+        "autoRater": 0.95
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 1,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 100,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 10,
+          "nonEmptyLines": 9,
+          "codeLines": 9,
+          "commentLines": 0,
+          "totalCharacters": 243,
+          "codeCharacters": 168
+        },
+        "tokenMetrics": {
+          "inputTokens": 147,
+          "outputTokens": 193,
+          "totalTokens": 340,
+          "tokensPerSecond": 17.96,
+          "charactersPerToken": "1.26"
+        },
+        "efficiency": {
+          "timeMs": 10748,
+          "timeSeconds": "10.75",
+          "linesPerSecond": "0.84"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 3,
+          "halsteadDifficulty": 16.63,
+          "halsteadVolume": 263.11,
+          "halsteadEffort": 4374.14,
+          "maintainabilityIndex": 106,
+          "maxNestingDepth": 4,
+          "avgLineLength": 21,
+          "linesOfCode": 9
+        },
+        "testResults": {
+          "passed": 2,
+          "failed": 0,
+          "total": 2
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 1,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 4
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 83
+          }
+        },
+        "autoRating": {
+          "score": 0.95,
+          "reasoning": "The implementation meets all requirements, uses clear generic naming, and is concise. Minor omission of input validation.",
+          "issues": [
+            "No explicit checks for null/undefined array or predicate, though typical usage assumes valid inputs."
+          ],
+          "raw": "{\n  \"score\": 0.95,\n  \"reasoning\": \"The implementation meets all requirements, uses clear generic naming, and is concise. Minor omission of input validation.\",\n  \"issues\": [\n    \"No explicit checks for null/undefined array or predicate, though typical usage assumes valid inputs.\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export function customFilter<T>(array: T[], predicate: (item: T) => boolean): T[] {\n    const result: T[] = [];\n    for (const item of array) {\n        if (predicate(item)) {\n            result.push(item);\n        }\n    }\n    return result;\n}\n",
+        "variant": "typescript"
+      },
+      "autoRating": {
+        "score": 0.95,
+        "reasoning": "The implementation meets all requirements, uses clear generic naming, and is concise. Minor omission of input validation.",
+        "issues": [
+          "No explicit checks for null/undefined array or predicate, though typical usage assumes valid inputs."
+        ],
+        "raw": "{\n  \"score\": 0.95,\n  \"reasoning\": \"The implementation meets all requirements, uses clear generic naming, and is concise. Minor omission of input validation.\",\n  \"issues\": [\n    \"No explicit checks for null/undefined array or predicate, though typical usage assumes valid inputs.\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/array-filter_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T20:24:58.566Z",
+    "success": true
+  },
+  {
+    "taskName": "async-fetch",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 27513,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 0.9,
+        "codeQuality": 0.7777777777777778,
+        "completeness": 0.8333333333333334,
+        "performance_token": 0.9,
+        "performance_runtime": null,
+        "autoRater": 0.85
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 0.9,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 90.22222222222223,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 16,
+          "nonEmptyLines": 14,
+          "codeLines": 14,
+          "commentLines": 0,
+          "totalCharacters": 342,
+          "codeCharacters": 244
+        },
+        "tokenMetrics": {
+          "inputTokens": 157,
+          "outputTokens": 524,
+          "totalTokens": 681,
+          "tokensPerSecond": 19.05,
+          "charactersPerToken": "0.65"
+        },
+        "efficiency": {
+          "timeMs": 27513,
+          "timeSeconds": "27.51",
+          "linesPerSecond": "0.51"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 2,
+          "halsteadDifficulty": 8.23,
+          "halsteadVolume": 322.09,
+          "halsteadEffort": 2651.9,
+          "maintainabilityIndex": 98,
+          "maxNestingDepth": 8,
+          "avgLineLength": 19,
+          "linesOfCode": 14
+        },
+        "testResults": {
+          "passed": 2,
+          "failed": 0,
+          "total": 2
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 0.9,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": false,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": false
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 49
+          }
+        },
+        "autoRating": {
+          "score": 0.85,
+          "reasoning": "The function meets the async, export, and error‑handling requirements with clear naming, but wrapping the result in a new Promise inside an async function is unnecessary complexity.",
+          "issues": [
+            "Redundant Promise creation inside an async function; could use await with a delay instead.",
+            "No explicit handling for unexpected runtime errors beyond the input validation."
+          ],
+          "raw": "{\n  \"score\": 0.85,\n  \"reasoning\": \"The function meets the async, export, and error‑handling requirements with clear naming, but wrapping the result in a new Promise inside an async function is unnecessary complexity.\",\n  \"issues\": [\n    \"Redundant Promise creation inside an async function; could use await with a delay instead.\",\n    \"No explicit handling for unexpected runtime errors beyond the input validation.\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export async function fetchUserData(userId) {\n  if (typeof userId !== 'number' || userId < 1) {\n    throw new Error('Invalid userId');\n  }\n\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve({\n        id: userId,\n        name: `User ${userId}`,\n        email: `user${userId}@example.com`,\n      });\n    }, 300);\n  });\n}\n",
+        "variant": "javascript"
+      },
+      "autoRating": {
+        "score": 0.85,
+        "reasoning": "The function meets the async, export, and error‑handling requirements with clear naming, but wrapping the result in a new Promise inside an async function is unnecessary complexity.",
+        "issues": [
+          "Redundant Promise creation inside an async function; could use await with a delay instead.",
+          "No explicit handling for unexpected runtime errors beyond the input validation."
+        ],
+        "raw": "{\n  \"score\": 0.85,\n  \"reasoning\": \"The function meets the async, export, and error‑handling requirements with clear naming, but wrapping the result in a new Promise inside an async function is unnecessary complexity.\",\n  \"issues\": [\n    \"Redundant Promise creation inside an async function; could use await with a delay instead.\",\n    \"No explicit handling for unexpected runtime errors beyond the input validation.\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/async-fetch_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T20:25:40.717Z",
+    "success": true
+  },
+  {
+    "taskName": "async-fetch",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 16050,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 0.8888888888888888,
+        "completeness": 0.8333333333333334,
+        "performance_token": 1,
+        "performance_runtime": null,
+        "autoRater": 0.85
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 1,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 94.44444444444446,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 22,
+          "nonEmptyLines": 19,
+          "codeLines": 19,
+          "commentLines": 0,
+          "totalCharacters": 456,
+          "codeCharacters": 338
+        },
+        "tokenMetrics": {
+          "inputTokens": 171,
+          "outputTokens": 295,
+          "totalTokens": 466,
+          "tokensPerSecond": 18.38,
+          "charactersPerToken": "1.55"
+        },
+        "efficiency": {
+          "timeMs": 16050,
+          "timeSeconds": "16.05",
+          "linesPerSecond": "1.18"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 2,
+          "halsteadDifficulty": 10.61,
+          "halsteadVolume": 485,
+          "halsteadEffort": 5143.55,
+          "maintainabilityIndex": 91,
+          "maxNestingDepth": 8,
+          "avgLineLength": 20,
+          "linesOfCode": 19
+        },
+        "testResults": {
+          "passed": 2,
+          "failed": 0,
+          "total": 2
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 1,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": false
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 72
+          }
+        },
+        "autoRating": {
+          "score": 0.85,
+          "reasoning": "Meets all functional requirements and includes basic error handling, but wraps a Promise inside an async function unnecessarily, adding avoidable complexity.",
+          "issues": [
+            "Redundant Promise creation inside an async function; could be simplified with await."
+          ],
+          "raw": "{\n  \"score\": 0.85,\n  \"reasoning\": \"Meets all functional requirements and includes basic error handling, but wraps a Promise inside an async function unnecessarily, adding avoidable complexity.\",\n  \"issues\": [\n    \"Redundant Promise creation inside an async function; could be simplified with await.\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export type UserData = {\n  id: number;\n  name: string;\n  email: string;\n};\n\nexport async function fetchUserData(userId: number): Promise<UserData> {\n  if (userId < 1) {\n    return Promise.reject(new Error('Invalid userId: must be >= 1'));\n  }\n\n  return new Promise<UserData>((resolve) => {\n    setTimeout(() => {\n      resolve({\n        id: userId,\n        name: `User ${userId}`,\n        email: `user${userId}@example.com`,\n      });\n    }, 300);\n  });\n}\n",
+        "variant": "typescript"
+      },
+      "autoRating": {
+        "score": 0.85,
+        "reasoning": "Meets all functional requirements and includes basic error handling, but wraps a Promise inside an async function unnecessarily, adding avoidable complexity.",
+        "issues": [
+          "Redundant Promise creation inside an async function; could be simplified with await."
+        ],
+        "raw": "{\n  \"score\": 0.85,\n  \"reasoning\": \"Meets all functional requirements and includes basic error handling, but wraps a Promise inside an async function unnecessarily, adding avoidable complexity.\",\n  \"issues\": [\n    \"Redundant Promise creation inside an async function; could be simplified with await.\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/async-fetch_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T20:26:14.118Z",
+    "success": true
+  },
+  {
+    "taskName": "class-person",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 9960,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 0.8888888888888888,
+        "completeness": 1,
+        "performance_token": 1,
+        "performance_runtime": null,
+        "autoRater": 0.85
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 1,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 97.77777777777779,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 21,
+          "nonEmptyLines": 19,
+          "codeLines": 10,
+          "commentLines": 9,
+          "totalCharacters": 393,
+          "codeCharacters": 156
+        },
+        "tokenMetrics": {
+          "inputTokens": 133,
+          "outputTokens": 181,
+          "totalTokens": 314,
+          "tokensPerSecond": 18.17,
+          "charactersPerToken": "2.17"
+        },
+        "efficiency": {
+          "timeMs": 9960,
+          "timeSeconds": "9.96",
+          "linesPerSecond": "1.00"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 1,
+          "halsteadDifficulty": 10.42,
+          "halsteadVolume": 455.79,
+          "halsteadEffort": 4749.77,
+          "maintainabilityIndex": 102,
+          "maxNestingDepth": 4,
+          "avgLineLength": 17,
+          "linesOfCode": 10
+        },
+        "testResults": {
+          "passed": 3,
+          "failed": 0,
+          "total": 3
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 1,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": false,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 61
+          }
+        },
+        "autoRating": {
+          "score": 0.85,
+          "reasoning": "Meets all functional requirements with clear naming, but lacks input validation/error handling for constructor parameters.",
+          "issues": [
+            "No validation of name, age, or email values in the constructor (missing error handling)."
+          ],
+          "raw": "{\n  \"score\": 0.85,\n  \"reasoning\": \"Meets all functional requirements with clear naming, but lacks input validation/error handling for constructor parameters.\",\n  \"issues\": [\n    \"No validation of name, age, or email values in the constructor (missing error handling).\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export class Person {\n  /**\n   * @param {string} name\n   * @param {number} age\n   * @param {string} email\n   */\n  constructor(name, age, email) {\n    this.name = name;\n    this.age = age;\n    this.email = email;\n  }\n\n  /**\n   * Returns a formatted string with the person's details.\n   * @returns {string}\n   */\n  getInfo() {\n    return `${this.name} (Age: ${this.age}) - ${this.email}`;\n  }\n}\n",
+        "variant": "javascript"
+      },
+      "autoRating": {
+        "score": 0.85,
+        "reasoning": "Meets all functional requirements with clear naming, but lacks input validation/error handling for constructor parameters.",
+        "issues": [
+          "No validation of name, age, or email values in the constructor (missing error handling)."
+        ],
+        "raw": "{\n  \"score\": 0.85,\n  \"reasoning\": \"Meets all functional requirements with clear naming, but lacks input validation/error handling for constructor parameters.\",\n  \"issues\": [\n    \"No validation of name, age, or email values in the constructor (missing error handling).\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/class-person_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T20:26:36.855Z",
+    "success": true
+  },
+  {
+    "taskName": "class-person",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 12987,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 1,
+        "completeness": 1,
+        "performance_token": 1,
+        "performance_runtime": null,
+        "autoRater": 0.95
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 1,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 100,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 19,
+          "nonEmptyLines": 16,
+          "codeLines": 16,
+          "commentLines": 0,
+          "totalCharacters": 322,
+          "codeCharacters": 247
+        },
+        "tokenMetrics": {
+          "inputTokens": 153,
+          "outputTokens": 239,
+          "totalTokens": 392,
+          "tokensPerSecond": 18.4,
+          "charactersPerToken": "1.35"
+        },
+        "efficiency": {
+          "timeMs": 12987,
+          "timeSeconds": "12.99",
+          "linesPerSecond": "1.23"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 1,
+          "halsteadDifficulty": 8,
+          "halsteadVolume": 289.89,
+          "halsteadEffort": 2319.14,
+          "maintainabilityIndex": 96,
+          "maxNestingDepth": 4,
+          "avgLineLength": 17,
+          "linesOfCode": 16
+        },
+        "testResults": {
+          "passed": 3,
+          "failed": 0,
+          "total": 3
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 1,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 56
+          }
+        },
+        "autoRating": {
+          "score": 0.95,
+          "reasoning": "Meets all required specifications with clear naming and simple implementation; minor lack of input validation and documentation.",
+          "issues": [
+            "No validation for age (e.g., non-negative) or email format",
+            "Missing JSDoc/comments for public API"
+          ],
+          "raw": "{\n  \"score\": 0.95,\n  \"reasoning\": \"Meets all required specifications with clear naming and simple implementation; minor lack of input validation and documentation.\",\n  \"issues\": [\n    \"No validation for age (e.g., non-negative) or email format\",\n    \"Missing JSDoc/comments for public API\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export interface IPerson {\n  name: string;\n  age: number;\n  email: string;\n  getInfo(): string;\n}\n\nexport class Person implements IPerson {\n  constructor(\n    public name: string,\n    public age: number,\n    public email: string\n  ) {}\n\n  getInfo(): string {\n    return `${this.name} (${this.age}) – ${this.email}`;\n  }\n}\n",
+        "variant": "typescript"
+      },
+      "autoRating": {
+        "score": 0.95,
+        "reasoning": "Meets all required specifications with clear naming and simple implementation; minor lack of input validation and documentation.",
+        "issues": [
+          "No validation for age (e.g., non-negative) or email format",
+          "Missing JSDoc/comments for public API"
+        ],
+        "raw": "{\n  \"score\": 0.95,\n  \"reasoning\": \"Meets all required specifications with clear naming and simple implementation; minor lack of input validation and documentation.\",\n  \"issues\": [\n    \"No validation for age (e.g., non-negative) or email format\",\n    \"Missing JSDoc/comments for public API\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/class-person_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T20:27:02.688Z",
+    "success": true
+  },
+  {
+    "taskName": "fibonacci",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 10364,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 0.8888888888888888,
+        "completeness": 1,
+        "performance_token": 1,
+        "performance_runtime": 1,
+        "autoRater": 0.93
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 1,
+        "runtime": 1
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 97.77777777777779,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 9,
+          "nonEmptyLines": 8,
+          "codeLines": 8,
+          "commentLines": 0,
+          "totalCharacters": 187,
+          "codeCharacters": 131
+        },
+        "tokenMetrics": {
+          "inputTokens": 129,
+          "outputTokens": 191,
+          "totalTokens": 320,
+          "tokensPerSecond": 18.43,
+          "charactersPerToken": "0.98"
+        },
+        "efficiency": {
+          "timeMs": 10364,
+          "timeSeconds": "10.36",
+          "linesPerSecond": "0.77"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 3,
+          "halsteadDifficulty": 14,
+          "halsteadVolume": 237.19,
+          "halsteadEffort": 3320.59,
+          "maintainabilityIndex": 108,
+          "maxNestingDepth": 2,
+          "avgLineLength": 21,
+          "linesOfCode": 8
+        },
+        "testResults": {
+          "passed": 4,
+          "failed": 0,
+          "total": 4
+        },
+        "runtimePerformance": [
+          {
+            "name": "fibonacci-20",
+            "meanTimeMs": 0.0040774,
+            "meanMemoryMB": 0.00431671142578125,
+            "rawData": {
+              "meanTimeNs": 4077.4,
+              "meanMemoryBytes": 4526.4,
+              "timings": [
+                59682,
+                13796,
+                3667,
+                2445,
+                4439,
+                2435,
+                4318,
+                11893,
+                3026,
+                4319,
+                2675,
+                2334,
+                2224,
+                2314,
+                2044,
+                2074,
+                2064,
+                2064,
+                2024,
+                1924,
+                1984,
+                3366,
+                1553,
+                3596,
+                1272,
+                2415,
+                1302,
+                1212,
+                1272,
+                1213,
+                1152,
+                1192,
+                1273,
+                1152,
+                1132,
+                1212,
+                1233,
+                1202,
+                1123,
+                1132,
+                1112,
+                1112,
+                1193,
+                1122,
+                1122,
+                3276,
+                1242,
+                1243,
+                1203,
+                1222,
+                1152,
+                1182,
+                1163,
+                1183,
+                1082,
+                2615,
+                1333,
+                1302,
+                1252,
+                1162,
+                1152,
+                1142,
+                1212,
+                1273,
+                1162,
+                1112,
+                1232,
+                1193,
+                3887,
+                1212,
+                1132,
+                1102,
+                1123,
+                1212,
+                1132,
+                1192,
+                1232,
+                1102,
+                1132,
+                1142,
+                1092,
+                2554,
+                1373,
+                1343,
+                1353,
+                1223,
+                1222,
+                1233,
+                1202,
+                1122,
+                1102,
+                4138,
+                162225,
+                1392,
+                2635,
+                1293,
+                1382,
+                1322,
+                1212,
+                1222
+              ],
+              "memoryUsages": [
+                5736,
+                4432,
+                4432,
+                4432,
+                8544,
+                6952,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448,
+                4448
+              ]
+            }
+          },
+          {
+            "name": "fibonacci-30",
+            "meanTimeMs": 0.0080001,
+            "meanMemoryMB": 0.0072784423828125,
+            "rawData": {
+              "meanTimeNs": 8000.1,
+              "meanMemoryBytes": 7632,
+              "timings": [
+                50505,
+                3477,
+                3286,
+                2856,
+                4699,
+                3396,
+                3176,
+                2845,
+                3036,
+                2725
+              ],
+              "memoryUsages": [
+                7816,
+                6512,
+                6512,
+                6512,
+                13424,
+                9432,
+                6528,
+                6528,
+                6528,
+                6528
+              ]
+            }
+          }
+        ],
+        "performanceBreakdown": {
+          "tokenEfficiency": 1,
+          "runtime": 1
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": false,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 0.6666666666666666,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 60
+          }
+        },
+        "autoRating": {
+          "score": 0.93,
+          "reasoning": "Clear, efficient implementation with proper export and basic error handling; minor missing validation for non‑numeric or non‑integer inputs.",
+          "issues": [
+            "Does not validate that n is a number or an integer",
+            "No documentation/comments describing behavior or edge cases"
+          ],
+          "raw": "{\n  \"score\": 0.93,\n  \"reasoning\": \"Clear, efficient implementation with proper export and basic error handling; minor missing validation for non‑numeric or non‑integer inputs.\",\n  \"issues\": [\n    \"Does not validate that n is a number or an integer\",\n    \"No documentation/comments describing behavior or edge cases\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export function fibonacci(n) {\n  if (n < 0) throw new RangeError('n must be non‑negative');\n  let a = 0, b = 1;\n  for (let i = 0; i < n; i++) {\n    [a, b] = [b, a + b];\n  }\n  return a;\n}\n",
+        "variant": "javascript"
+      },
+      "autoRating": {
+        "score": 0.93,
+        "reasoning": "Clear, efficient implementation with proper export and basic error handling; minor missing validation for non‑numeric or non‑integer inputs.",
+        "issues": [
+          "Does not validate that n is a number or an integer",
+          "No documentation/comments describing behavior or edge cases"
+        ],
+        "raw": "{\n  \"score\": 0.93,\n  \"reasoning\": \"Clear, efficient implementation with proper export and basic error handling; minor missing validation for non‑numeric or non‑integer inputs.\",\n  \"issues\": [\n    \"Does not validate that n is a number or an integer\",\n    \"No documentation/comments describing behavior or edge cases\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/fibonacci_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T20:27:24.304Z",
+    "success": true
+  },
+  {
+    "taskName": "fibonacci",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 12239,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 1,
+        "codeQuality": 1,
+        "completeness": 1,
+        "performance_token": 1,
+        "performance_runtime": 1,
+        "autoRater": 0.95
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 1,
+        "runtime": 1
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 100,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 11,
+          "nonEmptyLines": 10,
+          "codeLines": 10,
+          "commentLines": 0,
+          "totalCharacters": 212,
+          "codeCharacters": 123
+        },
+        "tokenMetrics": {
+          "inputTokens": 135,
+          "outputTokens": 226,
+          "totalTokens": 361,
+          "tokensPerSecond": 18.47,
+          "charactersPerToken": "0.94"
+        },
+        "efficiency": {
+          "timeMs": 12239,
+          "timeSeconds": "12.24",
+          "linesPerSecond": "0.82"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 3,
+          "halsteadDifficulty": 16,
+          "halsteadVolume": 241.58,
+          "halsteadEffort": 3865.24,
+          "maintainabilityIndex": 104,
+          "maxNestingDepth": 2,
+          "avgLineLength": 16,
+          "linesOfCode": 10
+        },
+        "testResults": {
+          "passed": 4,
+          "failed": 0,
+          "total": 4
+        },
+        "runtimePerformance": [
+          {
+            "name": "fibonacci-20",
+            "meanTimeMs": 0.00041576,
+            "meanMemoryMB": 0.0002890777587890625,
+            "rawData": {
+              "meanTimeNs": 415.76,
+              "meanMemoryBytes": 303.12,
+              "timings": [
+                16100,
+                652,
+                611,
+                421,
+                2405,
+                531,
+                401,
+                400,
+                381,
+                411,
+                371,
+                351,
+                351,
+                370,
+                361,
+                350,
+                351,
+                391,
+                351,
+                351,
+                350,
+                350,
+                351,
+                361,
+                441,
+                1964,
+                291,
+                160,
+                150,
+                151,
+                150,
+                150,
+                150,
+                150,
+                221,
+                160,
+                150,
+                210,
+                160,
+                151,
+                150,
+                150,
+                221,
+                151,
+                150,
+                230,
+                150,
+                151,
+                150,
+                151,
+                150,
+                160,
+                150,
+                221,
+                160,
+                150,
+                150,
+                160,
+                150,
+                150,
+                160,
+                150,
+                150,
+                150,
+                211,
+                150,
+                230,
+                150,
+                151,
+                150,
+                151,
+                150,
+                150,
+                160,
+                150,
+                150,
+                151,
+                150,
+                150,
+                151,
+                150,
+                151,
+                150,
+                161,
+                150,
+                150,
+                151,
+                150,
+                150,
+                150,
+                150,
+                150,
+                150,
+                150,
+                151,
+                150,
+                150,
+                160,
+                150,
+                150
+              ],
+              "memoryUsages": [
+                1784,
+                272,
+                272,
+                272,
+                272,
+                368,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288,
+                288
+              ]
+            }
+          },
+          {
+            "name": "fibonacci-30",
+            "meanTimeMs": 0.0021471,
+            "meanMemoryMB": 0.000415802001953125,
+            "rawData": {
+              "meanTimeNs": 2147.1,
+              "meanMemoryBytes": 436,
+              "timings": [
+                15149,
+                721,
+                531,
+                491,
+                2204,
+                551,
+                451,
+                471,
+                461,
+                441
+              ],
+              "memoryUsages": [
+                1752,
+                272,
+                272,
+                272,
+                272,
+                368,
+                288,
+                288,
+                288,
+                288
+              ]
+            }
+          }
+        ],
+        "performanceBreakdown": {
+          "tokenEfficiency": 1,
+          "runtime": 1
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 0.75,
+          "indentation": {
+            "commonIndent": 4
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 46
+          }
+        },
+        "autoRating": {
+          "score": 0.95,
+          "reasoning": "Correct implementation, clear naming, proper export, minimal complexity; minor lack of input validation/documentation.",
+          "issues": [
+            "No handling for non-integer inputs",
+            "Missing JSDoc/comments describing function behavior"
+          ],
+          "raw": "{\n  \"score\": 0.95,\n  \"reasoning\": \"Correct implementation, clear naming, proper export, minimal complexity; minor lack of input validation/documentation.\",\n  \"issues\": [\n    \"No handling for non-integer inputs\",\n    \"Missing JSDoc/comments describing function behavior\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export function fibonacci(n: number): number {\n    if (n <= 0) return 0;\n    let a = 0, b = 1;\n    for (let i = 1; i < n; i++) {\n        const temp = a + b;\n        a = b;\n        b = temp;\n    }\n    return b;\n}\n",
+        "variant": "typescript"
+      },
+      "autoRating": {
+        "score": 0.95,
+        "reasoning": "Correct implementation, clear naming, proper export, minimal complexity; minor lack of input validation/documentation.",
+        "issues": [
+          "No handling for non-integer inputs",
+          "Missing JSDoc/comments describing function behavior"
+        ],
+        "raw": "{\n  \"score\": 0.95,\n  \"reasoning\": \"Correct implementation, clear naming, proper export, minimal complexity; minor lack of input validation/documentation.\",\n  \"issues\": [\n    \"No handling for non-integer inputs\",\n    \"Missing JSDoc/comments describing function behavior\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/fibonacci_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T20:27:57.425Z",
+    "success": true
+  },
+  {
+    "taskName": "promise-retry",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "javascript",
+    "language": "javascript",
+    "run": 1,
+    "duration": 20350,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 0.9,
+        "codeQuality": 1,
+        "completeness": 1,
+        "performance_token": 0.9,
+        "performance_runtime": null,
+        "autoRater": 0.93
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 0.9,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 98,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 16,
+          "nonEmptyLines": 14,
+          "codeLines": 14,
+          "commentLines": 0,
+          "totalCharacters": 374,
+          "codeCharacters": 250
+        },
+        "tokenMetrics": {
+          "inputTokens": 147,
+          "outputTokens": 382,
+          "totalTokens": 529,
+          "tokensPerSecond": 18.77,
+          "charactersPerToken": "0.98"
+        },
+        "efficiency": {
+          "timeMs": 20350,
+          "timeSeconds": "20.35",
+          "linesPerSecond": "0.69"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 4,
+          "halsteadDifficulty": 9.38,
+          "halsteadVolume": 322.09,
+          "halsteadEffort": 3019.62,
+          "maintainabilityIndex": 97,
+          "maxNestingDepth": 5,
+          "avgLineLength": 22,
+          "linesOfCode": 14
+        },
+        "testResults": {
+          "passed": 1,
+          "failed": 0,
+          "total": 1
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 0.9,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 82
+          }
+        },
+        "autoRating": {
+          "score": 0.93,
+          "reasoning": "Meets all functional requirements with clear naming and proper error handling; minor lack of input validation and could use a more explicit loop condition.",
+          "issues": [
+            "No validation for fn being a function or for numeric parameters",
+            "Infinite while(true) loop relies on internal break; a while(attempt < maxAttempts) would be clearer"
+          ],
+          "raw": "{\n  \"score\": 0.93,\n  \"reasoning\": \"Meets all functional requirements with clear naming and proper error handling; minor lack of input validation and could use a more explicit loop condition.\",\n  \"issues\": [\n    \"No validation for fn being a function or for numeric parameters\",\n    \"Infinite while(true) loop relies on internal break; a while(attempt < maxAttempts) would be clearer\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export async function retryWithBackoff(fn, maxAttempts = 3, initialDelay = 1000) {\n  let attempt = 0;\n  let delay = initialDelay;\n\n  while (true) {\n    try {\n      return await fn();\n    } catch (err) {\n      attempt++;\n      if (attempt >= maxAttempts) throw err;\n      await new Promise(res => setTimeout(res, delay));\n      delay *= 2; // exponential backoff\n    }\n  }\n}\n",
+        "variant": "javascript"
+      },
+      "autoRating": {
+        "score": 0.93,
+        "reasoning": "Meets all functional requirements with clear naming and proper error handling; minor lack of input validation and could use a more explicit loop condition.",
+        "issues": [
+          "No validation for fn being a function or for numeric parameters",
+          "Infinite while(true) loop relies on internal break; a while(attempt < maxAttempts) would be clearer"
+        ],
+        "raw": "{\n  \"score\": 0.93,\n  \"reasoning\": \"Meets all functional requirements with clear naming and proper error handling; minor lack of input validation and could use a more explicit loop condition.\",\n  \"issues\": [\n    \"No validation for fn being a function or for numeric parameters\",\n    \"Infinite while(true) loop relies on internal break; a while(attempt < maxAttempts) would be clearer\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/promise-retry_ollama-gpt-oss-120b_javascript_run1.js",
+    "response": null,
+    "timestamp": "2025-10-16T20:28:29.680Z",
+    "success": true
+  },
+  {
+    "taskName": "promise-retry",
+    "category": "1-foundations",
+    "provider": "ollama-gpt-oss-120b",
+    "variant": "typescript",
+    "language": "typescript",
+    "run": 1,
+    "duration": 23924,
+    "evaluation": {
+      "scores": {
+        "accuracy": 1,
+        "performance": 0.9,
+        "codeQuality": 1,
+        "completeness": 1,
+        "performance_token": 0.9,
+        "performance_runtime": null,
+        "autoRater": 0.93
+      },
+      "performanceBreakdown": {
+        "tokenEfficiency": 0.9,
+        "runtime": null
+      },
+      "advancedMetrics": {
+        "f1Score": 1,
+        "precision": 1,
+        "recall": 1,
+        "exactMatch": 0
+      },
+      "totalScore": 98,
+      "metrics": {
+        "codeLength": {
+          "totalLines": 24,
+          "nonEmptyLines": 21,
+          "codeLines": 21,
+          "commentLines": 0,
+          "totalCharacters": 510,
+          "codeCharacters": 354
+        },
+        "tokenMetrics": {
+          "inputTokens": 182,
+          "outputTokens": 448,
+          "totalTokens": 630,
+          "tokensPerSecond": 18.73,
+          "charactersPerToken": "1.14"
+        },
+        "efficiency": {
+          "timeMs": 23924,
+          "timeSeconds": "23.92",
+          "linesPerSecond": "0.88"
+        },
+        "complexity": {
+          "cyclomaticComplexity": 4,
+          "halsteadDifficulty": 15.2,
+          "halsteadVolume": 516.99,
+          "halsteadEffort": 7858.29,
+          "maintainabilityIndex": 88,
+          "maxNestingDepth": 5,
+          "avgLineLength": 20,
+          "linesOfCode": 21
+        },
+        "testResults": {
+          "passed": 1,
+          "failed": 0,
+          "total": 1
+        },
+        "performanceBreakdown": {
+          "tokenEfficiency": 0.9,
+          "runtime": null
+        },
+        "codeQualityDetails": {
+          "checks": {
+            "indentation": true,
+            "descriptiveNaming": true,
+            "usesConstLet": true,
+            "noConsoleLogging": true,
+            "strictEquality": true,
+            "errorHandling": true,
+            "documentation": true,
+            "lineLength": true,
+            "awaitUsage": true
+          },
+          "namingRatio": 1,
+          "indentation": {
+            "commonIndent": 2
+          },
+          "lineLength": {
+            "maxAllowed": 120,
+            "longest": 55
+          }
+        },
+        "autoRating": {
+          "score": 0.93,
+          "reasoning": "Meets all functional requirements with clear naming and proper async handling; minor improvements possible for input validation and off‑by‑one clarity.",
+          "issues": [
+            "No validation for negative maxRetries or initialDelay values.",
+            "Potential off‑by‑one confusion: maxRetries leads to maxRetries+1 total attempts."
+          ],
+          "raw": "{\n  \"score\": 0.93,\n  \"reasoning\": \"Meets all functional requirements with clear naming and proper async handling; minor improvements possible for input validation and off‑by‑one clarity.\",\n  \"issues\": [\n    \"No validation for negative maxRetries or initialDelay values.\",\n    \"Potential off‑by‑one confusion: maxRetries leads to maxRetries+1 total attempts.\"\n  ]\n}"
+        }
+      },
+      "details": {
+        "code": "export async function retryWithBackoff<T>(\n  fn: () => Promise<T>,\n  maxRetries: number = 3,\n  initialDelay: number = 1000\n): Promise<T> {\n  let attempt = 0;\n  let delay = initialDelay;\n  let lastError: unknown;\n\n  while (attempt <= maxRetries) {\n    try {\n      return await fn();\n    } catch (err) {\n      lastError = err;\n      if (attempt === maxRetries) break;\n      await new Promise(res => setTimeout(res, delay));\n      delay *= 2; // exponential backoff\n    }\n    attempt++;\n  }\n\n  throw lastError;\n}\n",
+        "variant": "typescript"
+      },
+      "autoRating": {
+        "score": 0.93,
+        "reasoning": "Meets all functional requirements with clear naming and proper async handling; minor improvements possible for input validation and off‑by‑one clarity.",
+        "issues": [
+          "No validation for negative maxRetries or initialDelay values.",
+          "Potential off‑by‑one confusion: maxRetries leads to maxRetries+1 total attempts."
+        ],
+        "raw": "{\n  \"score\": 0.93,\n  \"reasoning\": \"Meets all functional requirements with clear naming and proper async handling; minor improvements possible for input validation and off‑by‑one clarity.\",\n  \"issues\": [\n    \"No validation for negative maxRetries or initialDelay values.\",\n    \"Potential off‑by‑one confusion: maxRetries leads to maxRetries+1 total attempts.\"\n  ]\n}"
+      }
+    },
+    "codePath": "results/2025-10-16T20-24-06-715Z/src/promise-retry_ollama-gpt-oss-120b_typescript_run1.ts",
+    "response": null,
+    "timestamp": "2025-10-16T20:29:11.394Z",
+    "success": true
+  }
+]
