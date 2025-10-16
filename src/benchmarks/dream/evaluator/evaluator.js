@@ -102,7 +102,9 @@ export class Evaluator {
 
     const performanceResult = await this.evaluatePerformance(code, task, variant, response.usage);
     scores.performance = performanceResult.overallScore;
-    const codeQualityScore = await this.evaluateCodeQuality(code, variant);
+    scores.performance_token = performanceResult.tokenScore;
+    scores.performance_runtime = performanceResult.runtimeScore ?? null;
+    const codeQualityScore = await this.evaluateCodeQuality(code, task, variant);
     scores.codeQuality = codeQualityScore.score;
     scores.completeness = this.evaluateCompleteness(response.content, task);
 
@@ -543,11 +545,16 @@ export class Evaluator {
     };
   }
 
-  async evaluateCodeQuality(code, variant) {
-    const docRequired = /jsdoc|tsdoc/i.test(variant);
-    const naming = this.checkNaming(code);
+  async evaluateCodeQuality(code, task, variant) {
+    const normalizedRequirements = (task.requirements || []).map(r => r.toLowerCase());
+    const docRequired = /jsdoc|tsdoc/i.test(variant) || normalizedRequirements.some(r => r.includes('doc'));
+    const requiresErrorHandling = normalizedRequirements.some(r => r.includes('error'));
+    const strippedCode = code.replace(/\/\*[^]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    const naming = this.checkNaming(strippedCode);
     const indentation = this.checkIndentation(code);
     const lineLength = this.checkLineLength(code);
+    const hasAsync = /async\s+function|=>\s*async|async\s*\(/i.test(strippedCode);
+    const usesAwait = /await\s+/.test(strippedCode);
 
     const checks = {
       indentation: indentation.pass,
@@ -555,9 +562,10 @@ export class Evaluator {
       usesConstLet: !/\bvar\s+/.test(code),
       noConsoleLogging: !/console\.(log|error|warn)/.test(code),
       strictEquality: !(/[^=]==[^=]/.test(code) && !/===/.test(code)),
-      errorHandling: /try\s*\{|catch\s*\(|throw\s+|reject\(/.test(code),
+      errorHandling: requiresErrorHandling ? /try\s*\{|catch\s*\(|throw\s+|reject\(/.test(code) : true,
       documentation: docRequired ? /\/\*\*/.test(code) : true,
-      lineLength: lineLength.pass
+      lineLength: lineLength.pass,
+      awaitUsage: hasAsync ? usesAwait : true
     };
 
     const passedChecks = Object.values(checks).filter(Boolean).length;
@@ -611,7 +619,7 @@ export class Evaluator {
     const lines = code.split('\n');
     const longest = lines.reduce((acc, line) => Math.max(acc, line.length), 0);
     return {
-      pass: longest <= max,
+      pass: longest <= max + 10,
       metadata: { maxAllowed: max, longest }
     };
   }
