@@ -3,6 +3,18 @@
   "description": "Create a sortable, filterable data table component",
   "category": "ui-components",
   "difficulty": "hard",
+  "promptLevels": {
+    "novice": "table that sorts when you click headers",
+    "beginner": "make a data table class that can sort and filter rows",
+    "intermediate": "create a DataTable class that stores an array of data, can sort by any column, and can filter rows based on a search term",
+    "advanced": "write a generic DataTable class that takes an array of objects, allows sorting by clicking column names (ascending/descending), and can filter the data to show only rows matching a search string",
+    "expert": "Write a DataTable class that manages tabular data with sorting and filtering capabilities. The class should: 1) Accept an array of data objects (generic type) where each object represents a row. 2) Store the original data and maintain a separate filtered/sorted view. 3) Provide a sort(column, direction) method that sorts the data by the specified column in 'asc' or 'desc' order. Sorting should work with strings (case-insensitive), numbers, and dates. 4) Provide a filter(searchTerm) method that filters rows to only include those where any column value contains the search term (case-insensitive). 5) Provide a getData() method that returns the currently filtered and sorted data. 6) Handle edge cases like sorting null/undefined values and filtering on various data types. The class should be generic and work with any object structure. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with generics: `class DataTable<T extends Record<string, any>>`. Define types for sort direction ('asc' | 'desc'), column keys (keyof T), and method parameters. The class should properly type the internal data arrays and sort/filter logic. Export the class.",
+    "javascript": "Create a DataTable class with constructor accepting initial data array. Use array methods like sort(), filter(), and includes() for implementation. Store both original data and current view. Handle type coercion for sorting different data types. Export the class as default.",
+    "javascript-jsdoc": "Use JSDoc with @template T for the generic data type, @typedef for SortDirection ('asc'|'desc'), @class for DataTable, @param with type information for all methods, and @returns with detailed return type descriptions. Document the sorting algorithm and filtering behavior. Export the class."
+  },
   "variants": {
     "typescript": "Write a TypeScript DataTable generic class that can display, sort, and filter data. Include proper interfaces and generic types.",
     "javascript": "Write a JavaScript DataTable class that can display, sort, and filter data.",
@@ -19,5 +31,19 @@
     "pagination",
     "generic",
     "reusable"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "process-small-dataset",
+      "code": "const data = Array.from({length: 10}, (_, i) => ({id: i, name: \"User\" + i, age: 20 + i})); const columns = [{key: \"name\", header: \"Name\"}, {key: \"age\", header: \"Age\"}]; for (let i = 0; i < 1000; i++) { const filtered = data.filter(d => d.age > 20); }",
+      "iterations": 100,
+      "baselineTimeMs": 5.0
+    },
+    {
+      "name": "process-large-dataset",
+      "code": "const data = Array.from({length: 1000}, (_, i) => ({id: i, name: \"User\" + i, age: 20 + i})); const sorted = data.sort((a, b) => a.name.localeCompare(b.name)); const filtered = sorted.filter(d => d.age > 25);",
+      "iterations": 50,
+      "baselineTimeMs": 10.0
+    }
   ]
 }

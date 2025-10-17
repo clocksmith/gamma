@@ -1,0 +1,265 @@
+================================================================================
+GAMMA TEST COVERAGE - QUICK REFERENCE CARD
+================================================================================
+
+CURRENT STATE
+─────────────────────────────────────────────────────────────────────────────
+Coverage:              68.3% (43 of 63 modules have tests)
+Test Files:            28
+Test Lines of Code:    11,008
+Estimated Line Cov:    ~55%
+
+Untested Modules:      20 (31.7%)
+Untested LOC:          ~5,500
+
+================================================================================
+CRITICAL MODULES NEEDING TESTS (by priority)
+================================================================================
+
+PRIORITY 1 - CRITICAL (Start here!)
+────────────────────────────────────────────────────────────────────────────
+ Module                    | LOC  | Why                      | Effort
+────────────────────────────────────────────────────────────────────────────
+ pytorch_engine.py         | 560  | Core engine, completely  | 40-60h
+                           |      | untested for 90% of users |
+────────────────────────────────────────────────────────────────────────────
+ pytorch_cuda_engine.py    | 478  | GPU acceleration, CUDA   | 35-50h
+                           |      | features untested        |
+────────────────────────────────────────────────────────────────────────────
+ gpu_discovery.py          | 150  | Hardware detection,      | 20-30h
+                           |      | affects all GPU ops      |
+────────────────────────────────────────────────────────────────────────────
+
+PRIORITY 2 - HIGH (Next)
+────────────────────────────────────────────────────────────────────────────
+ Module                    | LOC  | Why                      | Effort
+────────────────────────────────────────────────────────────────────────────
+ cache_manager.py          | 469  | Memory optimization,     | 35-50h
+                           |      | compression/eviction     |
+────────────────────────────────────────────────────────────────────────────
+ model_catalog.py          | 765  | User-facing interface    | 40-50h
+                           |      | for model selection      |
+────────────────────────────────────────────────────────────────────────────
+ routing_logic.py          | 150  | R-Eval routing system    | 25-35h
+                           |      | response selection       |
+────────────────────────────────────────────────────────────────────────────
+
+PRIORITY 3 - MEDIUM (After P1 & P2)
+────────────────────────────────────────────────────────────────────────────
+ tensorflow_engine.py      | 400  | Alternative engine       | 40-50h
+ jax_engine.py             | 350  | Alternative engine       | 40-50h
+ llama_cpp_engine.py       | 300  | Quantized inference      | 35-45h
+ kv_cache_translator.py    | 200  | Cross-model compat       | 25-35h
+ vocabulary_aligner.py     | 434  | Vocab alignment          | 25-35h
+
+PRIORITY 4 - LOWER (Advanced features)
+────────────────────────────────────────────────────────────────────────────
+ speculative_decoding.py   | 150  | Speedup testing
+ contrastive_decoding.py   | 150  | Logit manipulation
+ moe_router.py             | 200  | Content routing
+ Other advanced modules    |      | (6 modules total)
+
+================================================================================
+WELL-TESTED MODULES (Don't need urgent attention)
+================================================================================
+✓ Perplexity Strategy (508 LOC test coverage)
+✓ Semantic Strategy (614 LOC test coverage)
+✓ Model State (526 LOC test coverage)
+✓ Transformer Pipeline (566 LOC test coverage)
+✓ Blending (545 LOC test coverage)
+✓ Statistics (555 LOC test coverage)
+✓ Visualization (601 LOC test coverage)
+✓ Model Registry (501 LOC test coverage)
+✓ Presets (503 LOC test coverage)
+✓ Engine Interface (644 LOC test coverage)
+✓ Difficulty Levels (587 LOC test coverage)
+
+================================================================================
+IMPLEMENTATION ROADMAP
+================================================================================
+
+WEEK 1:
+  - Create tests/conftest.py
+  - Create tests/mocks.py
+  - Start PyTorch engine tests
+
+WEEKS 2-3:
+  - Finish PyTorch engine
+  - Start CUDA engine tests
+  - Start GPU discovery tests
+
+WEEKS 4-5:
+  - Finish CUDA + GPU discovery
+  - Cache manager tests
+  - Model catalog tests
+
+WEEKS 6-7:
+  - TensorFlow/JAX engines
+  - Translator tests
+  - Advanced features
+
+WEEK 8:
+  - Test reorganization
+  - CI/CD setup
+  - Coverage tracking
+
+================================================================================
+EFFORT ESTIMATE
+================================================================================
+
+Priority 1 (P1):      95-140 hours  (3 critical modules)
+Priority 2 (P2):      105-135 hours (3 high modules)
+Priority 3 (P3):      165-190 hours (5 medium modules)
+Priority 4 (P4):      50-75 hours   (advanced features)
+Infrastructure:       20-30 hours   (conftest, mocks)
+Reorganization:       10-20 hours   (CI/CD, structure)
+────────────────────────────────────────────────────────
+TOTAL:               335-470 hours
+
+Timeline:
+  1 Engineer:     8-12 weeks
+  2 Engineers:    4-6 weeks
+
+================================================================================
+QUICK START CHECKLIST
+================================================================================
+
+Immediate Actions:
+  [ ] Read TEST_ANALYSIS_INDEX.md (15 min)
+  [ ] Read TEST_COVERAGE_SUMMARY.txt (5 min)
+  [ ] Create tests/conftest.py (2 hours)
+  [ ] Create tests/mocks.py (2 hours)
+
+Short-term:
+  [ ] Start PyTorch engine tests
+  [ ] Setup codecov integration
+  [ ] Create test tickets in issue tracker
+
+Getting Help:
+  - Architecture questions? → TEST_COVERAGE_ANALYSIS.md section 8
+  - Specific test scenarios? → TEST_PRIORITY_MATRIX.md
+  - Module details? → TEST_COVERAGE_ANALYSIS.md section 2-3
+  - Team planning? → TEST_COVERAGE_SUMMARY.txt
+
+================================================================================
+TESTING BEST PRACTICES
+================================================================================
+
+Each test should:
+  ✓ Test exactly ONE behavior
+  ✓ Be independent (no ordering dependency)
+  ✓ Run in <100ms (unit tests)
+  ✓ Have a descriptive name
+  ✓ Include comments for complex logic
+  ✓ Have no flaky/random behavior
+
+Coverage targets:
+  Engine modules:       80%+ line coverage
+  Infrastructure:       75%+ line coverage
+  Core logic:           90%+ line coverage
+  All public APIs:      Must have tests
+  All error paths:      Must be tested
+
+================================================================================
+FILE LOCATIONS
+================================================================================
+
+All analysis documents:
+  /Users/xyz/deco/gamma/TEST_ANALYSIS_INDEX.md           (START HERE!)
+  /Users/xyz/deco/gamma/TEST_COVERAGE_ANALYSIS.md        (Deep analysis)
+  /Users/xyz/deco/gamma/TEST_COVERAGE_SUMMARY.txt        (Quick overview)
+  /Users/xyz/deco/gamma/TEST_PRIORITY_MATRIX.md          (Implementation)
+  /Users/xyz/deco/gamma/README_TEST_ANALYSIS.md          (Navigation)
+
+Current tests:
+  /Users/xyz/deco/gamma/tests/                           (28 test files)
+
+Source code:
+  /Users/xyz/deco/gamma/src/                             (63 modules)
+
+================================================================================
+ROLE-SPECIFIC GUIDANCE
+================================================================================
+
+Project Manager:
+  → TEST_COVERAGE_SUMMARY.txt (metrics and timeline)
+  → Use effort estimates for sprint planning
+
+Engineering Lead:
+  → TEST_COVERAGE_ANALYSIS.md section 8 (5-phase plan)
+  → TEST_PRIORITY_MATRIX.md (specific requirements)
+  → Create test tickets and assign to team
+
+QA/Test Engineer:
+  → TEST_PRIORITY_MATRIX.md (all sections)
+  → Follow specific test scenarios
+  → Use recommended tools (pytest, pytest-cov)
+
+Software Developer:
+  → TEST_PRIORITY_MATRIX.md (find your module)
+  → Read specific test requirements
+  → Check effort estimate
+  → Follow testing best practices
+
+CI/CD Engineer:
+  → TEST_PRIORITY_MATRIX.md "Testing Strategy & Tools"
+  → Setup pytest and coverage
+  → Configure GitHub Actions
+  → Setup codecov integration
+
+================================================================================
+REFERENCE: MODULES BY CATEGORY
+================================================================================
+
+ENGINES (Need tests):
+  pytorch_engine.py, pytorch_cuda_engine.py, tensorflow_engine.py,
+  jax_engine.py, llama_cpp_engine.py, mlx_engine.py, mlx_gpu_engine.py,
+  onnx_engine.py, ollama_engine.py
+
+INFRASTRUCTURE (Need tests):
+  gpu_discovery.py, routing_logic.py, model_catalog.py, cache_manager.py
+
+TRANSLATORS/BRIDGES (Partial):
+  kv_cache_translator.py, vocabulary_aligner.py, vocabulary_aligner_enhanced.py,
+  vocabulary_translator.py, state_bridge.py, kv_cache_handler.py
+
+STRATEGIES (Well-tested):
+  perplexity_strategy.py, semantic_strategy.py, strategies.py
+
+CORE (Well-tested):
+  model_state.py, transformer_pipeline.py, blending.py, statistics.py
+
+================================================================================
+QUESTIONS?
+================================================================================
+
+Q: What's the biggest gap?
+A: 9 engines with ZERO tests (2,638 LOC untested)
+
+Q: Where do I start?
+A: PyTorch engine (560 LOC, most used, completely untested)
+
+Q: How long will it take?
+A: 7-9 weeks (1 engineer) or 4-6 weeks (2 engineers)
+
+Q: What tools do I need?
+A: pytest, pytest-mock, pytest-cov, responses, hypothesis
+
+Q: Can I read just one document?
+A: Yes - TEST_COVERAGE_SUMMARY.txt for quick overview
+
+Q: Where's the full details?
+A: TEST_COVERAGE_ANALYSIS.md (556 lines, comprehensive)
+
+Q: I need specific test ideas?
+A: TEST_PRIORITY_MATRIX.md (has exact test scenarios per module)
+
+================================================================================
+STATUS: READY FOR IMPLEMENTATION
+
+Generated:    October 17, 2025
+Analysis:     5 documents, 1,649 lines total
+Coverage:     68.3% (target: 95%+)
+Next Step:    Read TEST_ANALYSIS_INDEX.md
+
+================================================================================

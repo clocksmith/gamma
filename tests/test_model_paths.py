@@ -19,7 +19,7 @@ from pathlib import Path
 import tempfile
 import shutil
 
-from src.core import model_paths
+from src.core.models import model_paths
 
 
 class TestGetProjectRoot(unittest.TestCase):

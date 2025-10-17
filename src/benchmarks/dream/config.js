@@ -75,12 +75,41 @@ export const BenchmarkConfig = {
   ],
 
   // Language variants to test
+  //
+  // PROMPT QUALITY LEVELS:
+  // Tasks now support prompt quality levels to test LLM performance with varying instruction clarity.
+  // Use format: {language}-{level}, e.g., 'typescript-expert', 'javascript-novice'
+  //
+  // Available levels:
+  //   - novice: Minimal instruction (e.g., "make fibonacci")
+  //   - beginner: Basic instruction (e.g., "create a fibonacci function")
+  //   - intermediate: More detailed (e.g., "write a function to calculate fibonacci numbers")
+  //   - advanced: Specific with function name and parameters
+  //   - expert: Complete detailed instructions with language-specific requirements
+  //
+  // Supported languages: typescript, javascript, javascript-jsdoc
+  //
+  // Legacy variants (code style variations) are still supported for backward compatibility
   variants: [
+    // Default variants (use 'expert' level prompts)
     'javascript',
     'typescript',
+    'javascript-jsdoc',
+
+    // Prompt quality level variants (examples)
+    // Uncomment to test specific prompt quality levels:
+    // 'typescript-novice',
+    // 'typescript-beginner',
+    // 'typescript-intermediate',
+    // 'typescript-advanced',
+    // 'typescript-expert',
+    // 'javascript-novice',
+    // 'javascript-expert',
+    // 'javascript-jsdoc-expert',
+
+    // Legacy code style variants (backward compatibility)
     'javascript-no-comments',
     'javascript-inline-comments',
-    'javascript-jsdoc',
     'javascript-vanilla-web',
     'javascript-vanilla-web-jsdoc',
     'typescript-no-comments',
@@ -98,64 +127,122 @@ export const BenchmarkConfig = {
     'react-typescript-tested',
   ],
 
-  // Task categories
+  // Task categories with bias levels and proper mappings
+  // biasLevel: 'deterministic' = fully deterministic tests with no bias
+  //            'low-bias' = non-deterministic with minimal bias
+  //            'medium-bias' = non-deterministic with moderate bias
+  //            'high-bias' = subjective evaluation with higher bias
   categories: {
     '1-foundations': {
       enabled: true,
       weight: 1.0,
-      timeout: 60000 // 60 seconds
+      timeout: 60000, // 60 seconds
+      biasLevel: 'deterministic',
+      description: 'Basic algorithms and data structures'
     },
     '2-scripting-and-automation': {
       enabled: true,
       weight: 1.5,
-      timeout: 60000 // 1 minute
+      timeout: 60000, // 1 minute
+      biasLevel: 'deterministic',
+      description: 'CLI tools and file operations'
     },
     '3-server-side-development': {
       enabled: true,
       weight: 2.0,
-      timeout: 120000 // 2 minutes
+      timeout: 120000, // 2 minutes
+      biasLevel: 'low-bias',
+      description: 'API and backend services'
     },
     '4-web-fundamentals': {
       enabled: true,
       weight: 2.5,
-      timeout: 180000 // 3 minutes
+      timeout: 180000, // 3 minutes
+      biasLevel: 'low-bias',
+      description: 'DOM manipulation and web APIs'
     },
     '5-react-component-library': {
       enabled: true,
       weight: 2.5,
-      timeout: 180000 // 3 minutes
+      timeout: 180000, // 3 minutes
+      biasLevel: 'medium-bias',
+      description: 'React UI components',
+      aliases: ['ui-components']
     },
     '6-full-stack-applications': {
       enabled: true,
       weight: 3.0,
-      timeout: 300000 // 5 minutes
+      timeout: 300000, // 5 minutes
+      biasLevel: 'medium-bias',
+      description: 'Complete applications',
+      aliases: ['full-projects']
     },
     '7-debugging-and-maintenance': {
       enabled: true,
       weight: 2.0,
-      timeout: 90000 // 1.5 minutes
+      timeout: 90000, // 1.5 minutes
+      biasLevel: 'high-bias',
+      description: 'Bug finding and code analysis',
+      aliases: ['bug-finding', 'needle-in-haystack', 'large-projects']
     }
   },
 
-  // Evaluation criteria
+  // Evaluation criteria with all metrics (camelCase naming)
   evaluation: {
+    // Core metrics (weights must sum to 1.0)
     accuracy: {
-      weight: 0.4,
-      description: 'Correctness of the solution'
+      weight: 0.30,
+      description: 'Correctness of the solution',
+      includeF1: true,
+      includePrecisionRecall: true
     },
     performance: {
-      weight: 0.2,
-      description: 'Time taken and efficiency'
+      weight: 0.20,
+      description: 'Time taken and efficiency',
+      includeTokenEfficiency: true,
+      includeRuntimeMetrics: true
     },
     codeQuality: {
-      weight: 0.2,
-      description: 'Code style, readability, best practices'
+      weight: 0.25,
+      description: 'Code style, readability, best practices',
+      includeComplexityMetrics: true,
+      includeMaintainability: true
     },
     completeness: {
-      weight: 0.2,
+      weight: 0.15,
       description: 'How complete the solution is'
+    },
+    complexity: {
+      weight: 0.10,
+      description: 'Code complexity and maintainability',
+      includeCyclomaticComplexity: true,
+      includeHalsteadMetrics: true,
+      includeMaintainabilityIndex: true
     }
   },
+
+  // All available metrics that should be tracked and reported independently
+  availableMetrics: [
+    'accuracy',
+    'f1Score',
+    'precision',
+    'recall',
+    'performance',
+    'tokenEfficiency',
+    'runtimePerformance',
+    'codeQuality',
+    'completeness',
+    'cyclomaticComplexity',
+    'halsteadDifficulty',
+    'halsteadVolume',
+    'halsteadEffort',
+    'maintainabilityIndex',
+    'maxNestingDepth',
+    'avgLineLength',
+    'linesOfCode',
+    'editSimilarity',
+    'astSimilarity'
+  ],
 
   // Output settings
   output: {
@@ -170,5 +257,69 @@ export const BenchmarkConfig = {
   reportsDirectory: './reports',
 
   // Default number of runs per benchmark
-  runs: 1
+  runs: 1,
+
+  // Helper function to resolve category aliases
+  resolveCategory(categoryName) {
+    // Direct match
+    if (this.categories[categoryName]) {
+      return categoryName;
+    }
+    // Check aliases
+    for (const [key, config] of Object.entries(this.categories)) {
+      if (config.aliases && config.aliases.includes(categoryName)) {
+        return key;
+      }
+    }
+    return categoryName; // Return original if no match found
+  },
+
+  // Get all categories grouped by bias level
+  getCategoriesByBiasLevel() {
+    const grouped = {
+      deterministic: [],
+      'low-bias': [],
+      'medium-bias': [],
+      'high-bias': []
+    };
+    for (const [key, config] of Object.entries(this.categories)) {
+      if (config.biasLevel && grouped[config.biasLevel]) {
+        grouped[config.biasLevel].push({ name: key, ...config });
+      }
+    }
+    return grouped;
+  },
+
+  // Helper function to generate prompt level variants
+  // Returns all combinations of languages and prompt levels
+  getPromptLevelVariants(options = {}) {
+    const {
+      languages = ['typescript', 'javascript', 'javascript-jsdoc'],
+      levels = ['novice', 'beginner', 'intermediate', 'advanced', 'expert']
+    } = options;
+
+    const variants = [];
+
+    for (const language of languages) {
+      for (const level of levels) {
+        variants.push(`${language}-${level}`);
+      }
+    }
+
+    return variants;
+  },
+
+  // Helper function to get all prompt level variants for a specific level
+  // Useful for testing a specific prompt quality across all languages
+  getVariantsForLevel(level) {
+    const languages = ['typescript', 'javascript', 'javascript-jsdoc'];
+    return languages.map(lang => `${lang}-${level}`);
+  },
+
+  // Helper function to get all prompt level variants for a specific language
+  // Useful for testing all prompt qualities for a specific language
+  getVariantsForLanguage(language) {
+    const levels = ['novice', 'beginner', 'intermediate', 'advanced', 'expert'];
+    return levels.map(level => `${language}-${level}`);
+  }
 };

@@ -35,12 +35,10 @@ class PyTorchEngine(LLMEngine):
 
     def load(self):
         # Gemma-3 models require trust_remote_code=True
-        trust_remote = self.engine_config.get("trust_remote_code", False)
+        # Special handling for Gemma-3 which requires trust_remote_code
         if "gemma-3" in self.model_name.lower() or "gemma3" in self.model_name.lower():
-            trust_remote = True
-        token = self.engine_config.get("hf_token", None)
-        try: self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=trust_remote, token=token)
-        except Exception as e: raise RuntimeError(f"PyTorchEngine: Tokenizer loading failed for '{self.model_name}': {e}") from e
+            self.engine_config["trust_remote_code"] = True
+        self._load_hf_tokenizer()
         quant_cfg_dict = {}; compute_dtype_str = self.engine_config.get("bnb_4bit_compute_dtype", "bfloat16")
         try: bnb_compute_dtype = getattr(torch, compute_dtype_str)
         except AttributeError:
@@ -171,18 +169,6 @@ class PyTorchEngine(LLMEngine):
         """Apply softmax to torch tensors."""
         return torch.softmax(logits, dim=-1)
     
-    def _top(self, l: torch.Tensor, k_show: int, is_probs: bool = False) -> Tuple[List[str], List[float], List[int]]:
-        if l.numel() == 0 or l.isinf().all(): return ["<No Valid Tokens>"], [1.0], [-1]
-        # Only apply softmax if input is not already probabilities
-        if is_probs:
-            probs = l
-        else:
-            probs = self._softmax_torch(l)
-        eff_k = min(k_show if k_show > 0 else probs.shape[-1], probs.shape[-1])
-        top_p_vals, top_i_vals = torch.topk(probs, eff_k, dim=-1)
-        if top_p_vals.dim() > 1: top_p_vals = top_p_vals.squeeze(0); top_i_vals = top_i_vals.squeeze(0)
-        top_i_list = top_i_vals.cpu().tolist()
-        return ([self.get_token_text(idx) for idx in top_i_list], top_p_vals.cpu().tolist(), top_i_list)
 
     def predict_next(self, input_ids: torch.Tensor, attention_mask: Optional[torch.Tensor], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]:
         if not self.model or not self._device: raise RuntimeError("PyTorchEngine: Not fully loaded.")
@@ -221,13 +207,11 @@ class PyTorchEngine(LLMEngine):
         logits_np = self._safe_to_float32(l_raw).cpu().numpy()
         
         # Apply transformations using the sampling module
-        l_temp_np = sampling.temperature_scale(logits_np, temperature)
-        l_k_np = sampling.top_k_filter(l_temp_np, top_k)
-        l_proc_np = sampling.top_p_filter(l_k_np, top_p)
-        
+        l_proc_np, l_temp_np, l_k_np = sampling.process_logits_pipeline(logits_np, temperature, top_k, top_p, return_intermediates=True)
+
         # Convert back to torch tensors (preserving original dtype, but respecting MPS limitations)
         original_dtype = l_raw.dtype
-        
+
         # Ensure numpy arrays are float32 before converting to torch
         l_temp_np = l_temp_np.astype(np.float32)
         l_k_np = l_k_np.astype(np.float32)
@@ -257,7 +241,9 @@ class PyTorchEngine(LLMEngine):
         
         next_id_val = torch.argmax(p_proc, dim=-1).item()
         max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_txts, top_p_list, _ = self._top(l_proc, k_show=max_dk, is_probs=False)  # l_proc is logits, not probs
+        # Convert to numpy for sampling_utils
+        l_proc_np = l_proc.cpu().numpy() if isinstance(l_proc, torch.Tensor) else l_proc
+        top_txts, top_p_list, _ = sampling_utils.get_top_k_tokens(l_proc_np, max_dk, self.get_token_text, is_probs=False)
         
         # For MPS, ensure all tensors used for softmax are float32
         if hasattr(self._device, 'type') and self._device.type == 'mps':
@@ -299,41 +285,33 @@ class PyTorchEngine(LLMEngine):
             except:
                 return -1
 
-    def get_token_text(self, token_id: int) -> str:
-        if token_id in self._token_cache: return self._token_cache[token_id]
-        game_repr = self._special_token_id_to_game_repr.get(token_id)
-        if game_repr: self._token_cache[token_id] = game_repr; return game_repr
-        if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded.")
-        try:
-            token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-            if isinstance(token_text_str, bytes): token_text_str = token_text_str.decode("utf-8", errors="replace")
-            
-            # Check if this is a special token (enclosed in brackets or angle brackets)
-            if (token_text_str.startswith('[') and token_text_str.endswith(']')) or \
-               (token_text_str.startswith('<') and token_text_str.endswith('>')):
-                # This is a special token, keep it marked as such
-                self._token_cache[token_id] = token_text_str
-                return token_text_str
-            
-            # Remove leading underscore (used by sentencepiece to indicate start of word)
-            if token_text_str.startswith("▁"):
-                token_text_str = token_text_str[1:]
-                # If it becomes empty after removing underscore, add a space
-                if not token_text_str:
-                    token_text_str = " "
-            
-            # Also handle regular underscore at the start
-            elif token_text_str.startswith("_"):
-                token_text_str = token_text_str[1:]
-                if not token_text_str:
-                    token_text_str = " "
-            
-            if not token_text_str: 
-                decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
-                token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else f"<ID:{token_id}>"
-        except Exception: 
-            token_text_str = f"<DecodeErr:{token_id}>"
-        self._token_cache[token_id] = token_text_str
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID using PyTorch/HuggingFace tokenizer."""
+        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
+        if isinstance(token_text_str, bytes):
+            token_text_str = token_text_str.decode("utf-8", errors="replace")
+
+        # Check if this is a special token (enclosed in brackets or angle brackets)
+        if (token_text_str.startswith('[') and token_text_str.endswith(']')) or \
+           (token_text_str.startswith('<') and token_text_str.endswith('>')):
+            return token_text_str
+
+        # Remove leading underscore (used by sentencepiece to indicate start of word)
+        if token_text_str.startswith("▁"):
+            token_text_str = token_text_str[1:]
+            if not token_text_str:
+                token_text_str = " "
+        # Also handle regular underscore at the start
+        elif token_text_str.startswith("_"):
+            token_text_str = token_text_str[1:]
+            if not token_text_str:
+                token_text_str = " "
+
+        # Fallback for empty strings
+        if not token_text_str:
+            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
+            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
+
         return token_text_str
 
     def get_attention_for_visualization(self, attention_output: Any, input_ids_for_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
@@ -389,7 +367,9 @@ class PyTorchEngine(LLMEngine):
                     # Fallback to uniform distribution
                     probs_tensor = torch.ones_like(data) / data.numel()
         
-        return self._top(probs_tensor, k_show=k, is_probs=True)  # Pass is_probs=True since we already have probabilities
+        # Convert to numpy for sampling_utils
+        probs_np = probs_tensor.cpu().numpy() if isinstance(probs_tensor, torch.Tensor) else probs_tensor
+        return sampling_utils.get_top_k_tokens(probs_np, k, self.get_token_text, is_probs=True)
 
     def get_engine_specific_config(self) -> Dict[str, Any]:
         """Provide PyTorch-specific configuration."""

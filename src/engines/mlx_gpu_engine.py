@@ -318,34 +318,17 @@ class MLXGPUEngine(LLMEngine):
             raise RuntimeError("MLXGPUEngine: Tokenizer not loaded.")
         return self.tokenizer.vocab_size
     
-    def get_token_text(self, token_id: int) -> str:
-        """Get text representation of a token"""
-        if token_id in self._token_cache:
-            return self._token_cache[token_id]
-        
-        game_repr = self._special_token_id_to_game_repr.get(token_id)
-        if game_repr:
-            self._token_cache[token_id] = game_repr
-            return game_repr
-        
-        if not self.tokenizer:
-            raise RuntimeError("MLXGPUEngine: Tokenizer not loaded.")
-        
-        try:
-            token_text = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-            if isinstance(token_text, bytes):
-                token_text = token_text.decode("utf-8", errors="replace")
-            
-            # Handle sentencepiece tokens
-            if hasattr(self.tokenizer, "sp_model") and token_text.startswith("▁"):
-                token_text = token_text[1:] or " "
-            
-            self._token_cache[token_id] = token_text
-            return token_text
-        except Exception:
-            token_text = f"<ID:{token_id}>"
-            self._token_cache[token_id] = token_text
-            return token_text
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID using MLX GPU/HuggingFace tokenizer."""
+        token_text = self.tokenizer.convert_ids_to_tokens([token_id])[0]
+        if isinstance(token_text, bytes):
+            token_text = token_text.decode("utf-8", errors="replace")
+
+        # Handle sentencepiece tokens
+        if hasattr(self.tokenizer, "sp_model") and token_text.startswith("▁"):
+            token_text = token_text[1:] or " "
+
+        return token_text
     
     def get_attention_for_visualization(
         self, attention_output: Any, input_ids_for_viz: Any

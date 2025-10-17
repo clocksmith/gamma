@@ -3,6 +3,18 @@
   "description": "A script that manipulates the DOM in various ways.",
   "category": "4-web-fundamentals",
   "difficulty": "easy",
+  "promptLevels": {
+    "novice": "add div to page",
+    "beginner": "make a function that adds a div with text to the page",
+    "intermediate": "create a function that adds a div element with \"Hello, World!\" text to the page, then changes it after a delay",
+    "advanced": "write a function that creates a div with textContent \"Hello, World!\", appends it to document.body, then uses setTimeout to change the text to \"Hello, DOM!\" after 2 seconds",
+    "expert": "Write a function that demonstrates DOM manipulation. The function should: 1) Use document.createElement('div') to create a new div element. 2) Set its textContent to \"Hello, World!\". 3) Append the div to document.body using appendChild(). 4) Use setTimeout with a 2000ms delay to update the div's textContent to \"Hello, DOM!\" after 2 seconds. The function should execute these steps sequentially and handle the DOM operations properly. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Create a function with no parameters. Use proper TypeScript types for DOM elements (HTMLDivElement). Include type annotations for the return type (void or the div element). Export the function.",
+    "javascript": "Create a function that performs the DOM operations. Export the function as default export. Use modern JavaScript (ES6+).",
+    "javascript-jsdoc": "Include JSDoc with @function, @description explaining the DOM manipulation steps, and @returns documenting what the function returns (if anything). Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that demonstrates DOM manipulation. The script should be enclosed in a function. It should create a new `div` element with the text \"Hello, World!\", add it to the body of the page, and then update its text to \"Hello, DOM!\" after 2 seconds. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that demonstrates DOM manipulation. The script should be enclosed in a function. It should create a new `div` element with the text \"Hello, World!\", add it to the body of the page, and then update its text to \"Hello, DOM!\" after 2 seconds. The script should include inline comments to explain the logic.",
@@ -17,5 +29,21 @@
       "test": "async () => { await page.waitForSelector('div'); const div = await page.$('div'); const initialText = await div.textContent(); console.assert(initialText === 'Hello, World!', 'Initial text should be Hello, World!'); await page.waitForTimeout(2000); const updatedText = await div.textContent(); console.assert(updatedText === 'Hello, DOM!', 'Text should be updated to Hello, DOM!'); }"
     }
   ],
-  "requirements": ["browser"]
+  "requirements": [
+    "browser"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "execute-dom-function-small",
+      "code": "for (let i = 0; i < 10; i++) { domManipulation(); }",
+      "iterations": 100,
+      "baselineTimeMs": 25.0
+    },
+    {
+      "name": "create-many-elements",
+      "code": "for (let i = 0; i < 100; i++) { const div = document.createElement('div'); div.textContent = 'Test'; document.body.appendChild(div); }",
+      "iterations": 50,
+      "baselineTimeMs": 10.0
+    }
+  ]
 }

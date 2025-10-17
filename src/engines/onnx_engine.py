@@ -8,7 +8,7 @@ try:
 except ImportError: raise ImportError("ONNX Runtime or Transformers library not found. Install with `pip install -r requirements-onnx.txt`")
 
 from src.core.engine_interface import LLMEngine
-from src.core.model_paths import resolve_model_path
+from src.core.models.model_paths import resolve_model_path
 from src.engines import sampling_utils
 
 class ONNXEngine(LLMEngine):
@@ -21,9 +21,7 @@ class ONNXEngine(LLMEngine):
         self._past_key_value_input_names: List[str] = []; self._past_key_value_output_names: List[str] = []
 
     def load(self):
-        trust_remote = self.engine_config.get("trust_remote_code", False); token = self.engine_config.get("hf_token", None)
-        try: self.tokenizer = AutoTokenizer.from_pretrained(self._tokenizer_name, trust_remote_code=trust_remote, token=token)
-        except Exception as e: raise RuntimeError(f"ONNXEngine: Tokenizer load failed for '{self._tokenizer_name}': {e}") from e
+        self._load_hf_tokenizer(model_name=self._tokenizer_name)
         providers_list = self.engine_config.get("onnx_providers", ["CPUExecutionProvider"])
         provider_options_list = self.engine_config.get("onnx_provider_options", None)
         resolved_model_path = resolve_model_path(self.model_name)
@@ -66,15 +64,6 @@ class ONNXEngine(LLMEngine):
             except (ValueError, TypeError): raise TypeError(f"Unsupported token_ids type for ONNX decode: {type(ids)}")
         return self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
 
-    def _top(self, l: np.ndarray, k_show: int) -> Tuple[List[str], List[float], List[int]]:
-        if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs_np = sampling_utils.softmax(l)
-        if probs_np.ndim > 1 and probs_np.shape[0] == 1: probs_np = np.squeeze(probs_np, axis=0)
-        effective_k = min(k_show if k_show > 0 else probs_np.shape[-1], probs_np.shape[-1])
-        top_indices_unsorted = np.argpartition(probs_np, -effective_k)[-effective_k:]; top_probs_unsorted = probs_np[top_indices_unsorted]
-        sort_order = np.argsort(top_probs_unsorted)[::-1]; final_indices = top_indices_unsorted[sort_order]; final_probs = top_probs_unsorted[sort_order]
-        final_indices_list = final_indices.tolist()
-        return ([self.get_token_text(idx) for idx in final_indices_list], final_probs.tolist(), final_indices_list)
 
     def predict_next(self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]:
         if not self._session: raise RuntimeError("ONNXEngine: Session not loaded.")
@@ -83,7 +72,7 @@ class ONNXEngine(LLMEngine):
         if self._kv_cache and isinstance(self._kv_cache, tuple) and input_ids.shape[-1] == 1 and self._past_key_value_input_names:
             if len(self._kv_cache) == len(self._past_key_value_input_names):
                 for i, name in enumerate(self._past_key_value_input_names): ort_inputs[name] = self._kv_cache[i]
-                if self.engine_config.get("verbose", False): print(f"  ONNX: Passed {len(self._kv_cache)} KV cache tensors.")
+                if self.get_verbose(): print(f"  ONNX: Passed {len(self._kv_cache)} KV cache tensors.")
             else: print("ONNXEngine Warning: Mismatch in KV cache and model inputs. Disabling KV cache."); self.reset_kv_cache()
         outputs_to_fetch = ["logits"]
         if output_attentions and "attentions" in self._output_names: outputs_to_fetch.append("attentions")
@@ -102,15 +91,13 @@ class ONNXEngine(LLMEngine):
         elif input_ids.shape[-1] > 1: self.reset_kv_cache()
         attention_data = output_map.get("attentions") if output_attentions else None
         
-        logits_temp = sampling_utils.temperature_scale(logits_raw.copy(), temperature)
-        logits_k = sampling_utils.top_k_filter(logits_temp.copy(), top_k)
-        logits_proc = sampling_utils.top_p_filter(logits_k.copy(), top_p)
+        logits_proc, logits_temp, logits_k = sampling_utils.process_logits_pipeline(logits_raw.copy(), temperature, top_k, top_p, return_intermediates=True)
 
         probs_proc = sampling_utils.softmax(logits_proc)
         next_token_id_val = int(np.argmax(probs_proc, axis=-1).item())
         
-        max_display_k = max(top_k if top_k > 0 else 1, self.engine_config.get("max_tokens_for_prob_display", 10), 1)
-        top_texts_list, top_probs_list, _ = self._top(logits_proc, k_sh=max_display_k)
+        max_display_k = max(top_k if top_k > 0 else 1, self.get_max_tokens_for_display(), 1)
+        top_texts_list, top_probs_list, _ = sampling_utils.get_top_k_tokens(logits_proc, max_display_k, self.get_token_text)
         
         return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
                 "probabilities_raw": sampling_utils.softmax(logits_raw),
@@ -124,18 +111,17 @@ class ONNXEngine(LLMEngine):
         if not self.tokenizer: raise RuntimeError("ONNXEngine: Tokenizer not loaded."); return -1
         return self.tokenizer.vocab_size
 
-    def get_token_text(self, token_id: int) -> str:
-        if token_id in self._token_cache: return self._token_cache[token_id]
-        game_repr = self._special_token_id_to_game_repr.get(token_id)
-        if game_repr: self._token_cache[token_id] = game_repr; return game_repr
-        if not self.tokenizer: raise RuntimeError("ONNXEngine: Tokenizer not loaded.")
-        try:
-            token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-            if isinstance(token_text_str, bytes): token_text_str = token_text_str.decode("utf-8", errors="replace")
-            if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "): token_text_str = token_text_str[1:]
-            if not token_text_str: decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False); token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else f"<ID:{token_id}>"
-        except Exception: token_text_str = f"<DecodeErr:{token_id}>"
-        self._token_cache[token_id] = token_text_str; return token_text_str
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID using ONNX/HuggingFace tokenizer."""
+        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
+        if isinstance(token_text_str, bytes):
+            token_text_str = token_text_str.decode("utf-8", errors="replace")
+        if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "):
+            token_text_str = token_text_str[1:]
+        if not token_text_str:
+            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
+            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
+        return token_text_str
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
@@ -143,7 +129,7 @@ class ONNXEngine(LLMEngine):
         if not isinstance(i_ids_viz, np.ndarray): return None
         last_attention_layer_output = att_out[-1]
         if not isinstance(last_attention_layer_output, np.ndarray) or last_attention_layer_output.ndim != 4:
-            if self.engine_config.get("verbose", False): print(f"ONNXEngine: Attention output unexpected shape/type: {last_attention_layer_output.shape if hasattr(last_attention_layer_output, 'shape') else type(last_attention_layer_output)}")
+            if self.get_verbose(): print(f"ONNXEngine: Attention output unexpected shape/type: {last_attention_layer_output.shape if hasattr(last_attention_layer_output, 'shape') else type(last_attention_layer_output)}")
             return None
         try:
             attention_to_inputs = last_attention_layer_output[0, :, -1, :]; avg_attention_scores_over_heads = np.mean(attention_to_inputs, axis=0)
@@ -158,7 +144,7 @@ class ONNXEngine(LLMEngine):
         if not isinstance(data, np.ndarray): raise TypeError(f"Expected np.ndarray for ONNX probabilities, got {type(data)}")
         is_probs_heuristic = (np.all(data >= -1e-6) and np.all(data <= 1.0 + 1e-6) and np.allclose(np.sum(data, axis=-1), 1.0, atol=1e-3))
         probs_tensor = data if is_probs_heuristic else sampling_utils.softmax(data)
-        return self._top(probs_tensor, k_sh=k)
+        return sampling_utils.get_top_k_tokens(probs_tensor, k, self.get_token_text, is_probs=True)
 
     def get_config_summary(self) -> Dict[str, Any]:
         if not self._session: return {"Error": "ONNX Session not loaded"}

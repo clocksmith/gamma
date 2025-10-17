@@ -8,7 +8,8 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from src.core import config as cfg, ui
+from src.core import config as cfg
+from src.ui import displays as ui
 from src.core.engine_interface import LLMEngine
 from src.mind_meld.bridges.kv_cache_handler import (
     KVCacheTranslator,

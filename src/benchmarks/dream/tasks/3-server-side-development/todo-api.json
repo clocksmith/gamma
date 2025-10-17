@@ -3,6 +3,18 @@
   "description": "A script that creates a full CRUD API for a todo list, storing the data in memory.",
   "category": "3-server-side-development",
   "difficulty": "hard",
+  "promptLevels": {
+    "novice": "todo API",
+    "beginner": "make a REST API for managing a todo list",
+    "intermediate": "create an HTTP server with endpoints to create, read, update, and delete todos stored in memory",
+    "advanced": "write a CRUD API server on port 3000 with five endpoints (GET all, GET by id, POST create, PUT update, DELETE remove) for managing todos with id, title, and completed properties",
+    "expert": "Write a REST API server that listens on port 3000 for managing a todo list. Store todos in an in-memory array. Each todo should have: id (unique number), title (string), and completed (boolean). Implement these five endpoints: 1) GET /todos - return all todos as JSON array. 2) GET /todos/:id - return a single todo by id, or 404 if not found. 3) POST /todos - accept JSON body with title and completed, generate a new id, add to array, return the created todo. 4) PUT /todos/:id - accept JSON body, update the todo with matching id, return updated todo or 404. 5) DELETE /todos/:id - remove todo with matching id, return 204 status or 404. Parse JSON request bodies manually. Export the server instance. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use Node.js http module. Define a Todo interface with id, title, and completed properties. Include proper TypeScript types for request/response handling. Parse request bodies by accumulating data chunks. Export the server.",
+    "javascript": "Use Node.js http module. Maintain a todos array in memory and a counter for generating ids. Parse request body by listening to 'data' events. Route based on request method and URL. Export the server.",
+    "javascript-jsdoc": "Use Node.js http module. Include JSDoc with @typedef for Todo type, @description for each endpoint's behavior, and document the request/response formats. Use @param and @returns for helper functions if you create any."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that creates a CRUD API for a todo list. The server should listen on port 3000. The API should have the following endpoints: GET /todos, GET /todos/:id, POST /todos, PUT /todos/:id, DELETE /todos/:id. The todos should be stored in memory. The script should include inline comments to explain the logic.",
@@ -17,5 +29,23 @@
       "test": "const http = require('http'); const server = require('./todo-api.js'); const postOptions = {hostname: 'localhost', port: 3000, path: '/todos', method: 'POST', headers: {'Content-Type': 'application/json'}}; const postData = JSON.stringify({title: 'Test todo', completed: false}); const postReq = http.request(postOptions, res => { let data = ''; res.on('data', d => { data += d; }); res.on('end', () => { const todo = JSON.parse(data); console.assert(todo.title === 'Test todo', 'POST /todos should return the created todo'); const getOptions = {hostname: 'localhost', port: 3000, path: '/todos/' + todo.id, method: 'GET'}; const getReq = http.request(getOptions, res => { let getData = ''; res.on('data', d => { getData += d; }); res.on('end', () => { const getTodo = JSON.parse(getData); console.assert(getTodo.title === 'Test todo', 'GET /todos/:id should return the todo'); const putOptions = {hostname: 'localhost', port: 3000, path: '/todos/' + todo.id, method: 'PUT', headers: {'Content-Type': 'application/json'}}; const putData = JSON.stringify({title: 'Test todo updated', completed: true}); const putReq = http.request(putOptions, res => { let putData = ''; res.on('data', d => { putData += d; }); res.on('end', () => { const updatedTodo = JSON.parse(putData); console.assert(updatedTodo.title === 'Test todo updated', 'PUT /todos/:id should return the updated todo'); const deleteOptions = {hostname: 'localhost', port: 3000, path: '/todos/' + todo.id, method: 'DELETE'}; const deleteReq = http.request(deleteOptions, res => { console.assert(res.statusCode === 204, 'DELETE /todos/:id should return 204'); server.close(); }); deleteReq.end(); }); }); putReq.write(putData); putReq.end(); }); }); getReq.end(); }); }); postReq.write(postData); postReq.end();"
     }
   ],
-  "requirements": ["http"]
+  "performanceBenchmarks": [
+    {
+      "name": "crud-single-todo",
+      "setup": "const http = require('http'); const server = require('./module.js');",
+      "code": "await new Promise((resolve) => { const postReq = http.request({hostname: 'localhost', port: 3000, path: '/todos', method: 'POST', headers: {'Content-Type': 'application/json'}}, postRes => { let data = ''; postRes.on('data', d => { data += d; }); postRes.on('end', () => { const todo = JSON.parse(data); const getReq = http.request({hostname: 'localhost', port: 3000, path: `/todos/${todo.id}`, method: 'GET'}, getRes => { getRes.on('data', () => {}); getRes.on('end', () => { const delReq = http.request({hostname: 'localhost', port: 3000, path: `/todos/${todo.id}`, method: 'DELETE'}, delRes => { delRes.on('end', resolve); }); delReq.end(); }); }); getReq.end(); }); }); postReq.write(JSON.stringify({title: 'Test', completed: false})); postReq.end(); });",
+      "iterations": 50,
+      "baselineTimeMs": 15.0
+    },
+    {
+      "name": "bulk-create-todos",
+      "setup": "const http = require('http'); const server = require('./module.js');",
+      "code": "await Promise.all(Array.from({length: 10}, (_, i) => new Promise((resolve) => { const req = http.request({hostname: 'localhost', port: 3000, path: '/todos', method: 'POST', headers: {'Content-Type': 'application/json'}}, res => { res.on('data', () => {}); res.on('end', resolve); }); req.write(JSON.stringify({title: `Todo ${i}`, completed: false})); req.end(); })));",
+      "iterations": 20,
+      "baselineTimeMs": 25.0
+    }
+  ],
+  "requirements": [
+    "http"
+  ]
 }

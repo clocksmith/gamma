@@ -27,6 +27,27 @@ class LLMEngine(ABC):
         self._token_cache: Dict[int, str] = {}
         self._kv_cache: Any = None
 
+    # Configuration helper methods (reduces duplication across engines)
+    def get_trust_remote_code(self) -> bool:
+        """Get trust_remote_code setting."""
+        return self.engine_config.get("trust_remote_code", False)
+
+    def get_hf_token(self) -> Optional[str]:
+        """Get HuggingFace token."""
+        return self.engine_config.get("hf_token", None)
+
+    def get_verbose(self) -> bool:
+        """Get verbose logging setting."""
+        return self.engine_config.get("verbose", False)
+
+    def get_max_tokens_for_display(self) -> int:
+        """Get max tokens to display in probability output."""
+        return self.engine_config.get("max_tokens_for_prob_display", 10)
+
+    def get_use_kv_cache(self) -> bool:
+        """Get KV cache usage setting."""
+        return self.engine_config.get("use_kv_cache", True)
+
     @abstractmethod
     def load(self):
         pass
@@ -57,19 +78,84 @@ class LLMEngine(ABC):
     def reset_kv_cache(self):
         self._kv_cache = None
 
+    def _load_hf_tokenizer(self, model_name: Optional[str] = None, **kwargs):
+        """
+        Load HuggingFace tokenizer with common configuration.
+
+        Consolidates duplicate tokenizer loading code across engines.
+
+        Args:
+            model_name: Model name/path for tokenizer. If None, uses self.model_name
+            **kwargs: Additional keyword arguments to pass to AutoTokenizer.from_pretrained()
+                      (e.g., use_fast=True, padding_side="left", etc.)
+
+        Raises:
+            RuntimeError: If tokenizer loading fails
+        """
+        from transformers import AutoTokenizer
+
+        model_name = model_name or self.model_name
+        trust_remote = self.get_trust_remote_code()
+        token = self.get_hf_token()
+        engine_name = self.__class__.__name__
+
+        try:
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                model_name, trust_remote_code=trust_remote, token=token, **kwargs
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"{engine_name}: Tokenizer load failed for '{model_name}': {e}"
+            ) from e
+
     @abstractmethod
     def get_vocabulary_size(self) -> int:
         pass
 
-    @abstractmethod
     def get_token_text(self, token_id: int) -> str:
+        """Get text representation of a token ID.
+
+        This method handles caching and special tokens, delegating to
+        _decode_token_raw() for engine-specific decoding logic.
+        """
+        # Check cache first
         if token_id in self._token_cache:
             return self._token_cache[token_id]
+
+        # Check if it's a special token
         game_repr = self._special_token_id_to_game_repr.get(token_id)
         if game_repr:
             self._token_cache[token_id] = game_repr
             return game_repr
-        raise NotImplementedError("Subclass must implement raw token-to-text decoding.")
+
+        # Check tokenizer is loaded
+        if not self.tokenizer:
+            engine_name = self.__class__.__name__
+            raise RuntimeError(f"{engine_name}: Tokenizer not loaded.")
+
+        # Decode using engine-specific logic
+        try:
+            token_text = self._decode_token_raw(token_id)
+            if not token_text:
+                token_text = f"<ID:{token_id}>"
+        except Exception:
+            token_text = f"<DecodeErr:{token_id}>"
+
+        # Cache and return
+        self._token_cache[token_id] = token_text
+        return token_text
+
+    @abstractmethod
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID to its text representation.
+
+        Engine-specific implementation. Should return the raw token text
+        without caching or special token handling.
+
+        Raises:
+            Exception: If decoding fails
+        """
+        pass
 
     def is_word_like_token(
         self, token_id: int, token_text: Optional[str] = None

@@ -5,9 +5,9 @@ Model Catalog for GAMMA - Predefined models with metadata
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 import os
-from src.core.model_paths import list_available_models, get_project_root, resolve_model_path
-from src.core.memory_estimator import check_model_fits, format_memory_estimate
-from src.core.gpu_discovery import get_total_available_vram_mb
+from src.core.models.model_paths import list_available_models, get_project_root, resolve_model_path
+from src.core.hardware.memory_estimator import check_model_fits, format_memory_estimate
+from src.core.hardware.gpu_discovery import get_total_available_vram_mb
 
 
 @dataclass

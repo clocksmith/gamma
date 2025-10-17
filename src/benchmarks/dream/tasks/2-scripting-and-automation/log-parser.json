@@ -3,6 +3,18 @@
   "description": "A script that parses a log file, extracts specific information, and generates a summary report.",
   "category": "2-scripting-and-automation",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "parse log file",
+    "beginner": "make a script that counts errors and warnings in a log file",
+    "intermediate": "create a function that reads a log file and returns how many ERROR and WARNING lines it contains",
+    "advanced": "write a function that takes a log file path, reads the file line by line, counts lines containing the text \"ERROR\" and lines containing \"WARNING\", and returns an object with these counts",
+    "expert": "Write a function that accepts a file path to a log file as a parameter. Read the entire log file from disk. Search through all lines to count how many lines contain the word \"ERROR\" (case-sensitive) and how many contain the word \"WARNING\" (case-sensitive). Return an object with two properties: errors (number of lines with \"ERROR\") and warnings (number of lines with \"WARNING\"). A single line may contain both ERROR and WARNING - count it for both if so. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use Node.js fs module for file reading. Define a return type interface or type alias with errors and warnings properties (both numbers). Include proper TypeScript type annotations. Export the function and the return type.",
+    "javascript": "Use Node.js fs module for file reading. Return an object with errors and warnings properties. Use synchronous or async file operations. Export the function as default export.",
+    "javascript-jsdoc": "Use Node.js fs module. Include JSDoc with @typedef for the return object type (with errors and warnings properties), @param for the file path, @returns describing the return object, and @description. Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that parses a log file and generates a summary of errors and warnings. The script should be a function that takes a file path to a log file as input. It should read the file, count the number of lines containing \"ERROR\" and \"WARNING\", and return an object with the counts. The script should include inline comments to explain the logic.",
@@ -19,5 +31,23 @@
       "cleanup": "fs.unlinkSync(testFile);"
     }
   ],
-  "requirements": ["fs"]
+  "performanceBenchmarks": [
+    {
+      "name": "parse-small-log",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const testFile = path.join(os.tmpdir(), 'perf-small.log'); const lines = []; for (let i = 0; i < 100; i++) { lines.push(`[INFO] Log entry ${i}`); if (i % 10 === 0) lines.push(`[ERROR] Error ${i}`); if (i % 15 === 0) lines.push(`[WARNING] Warning ${i}`); } fs.writeFileSync(testFile, lines.join('\\n'));",
+      "code": "logParser(testFile);",
+      "iterations": 100,
+      "baselineTimeMs": 2.0
+    },
+    {
+      "name": "parse-large-log",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const testFile = path.join(os.tmpdir(), 'perf-large.log'); const lines = []; for (let i = 0; i < 10000; i++) { lines.push(`[INFO] Log entry ${i}`); if (i % 10 === 0) lines.push(`[ERROR] Error ${i}`); if (i % 15 === 0) lines.push(`[WARNING] Warning ${i}`); } fs.writeFileSync(testFile, lines.join('\\n'));",
+      "code": "logParser(testFile);",
+      "iterations": 10,
+      "baselineTimeMs": 50.0
+    }
+  ],
+  "requirements": [
+    "fs"
+  ]
 }

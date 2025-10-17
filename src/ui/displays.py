@@ -4,19 +4,19 @@ Unified UI module for the GAMMA application.
 This module re-exports functions from the new, more modular UI components.
 """
 
-from src.core.ui_components import (
+from src.ui.components import (
     color_text,
     print_separator,
     print_header,
     wrap_print,
 )
-from src.core.interactive_prompts import (
+from src.core.menu.interactive_prompts import (
     get_user_input,
     confirm_or_modify_config,
     select_engine_interactively,
     select_model_interactively,
 )
-from src.core.game_displays import (
+from src.game.game_displays import (
     display_intro,
     display_round_header,
     display_current_sentence,

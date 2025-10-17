@@ -3,6 +3,18 @@
   "description": "Create a form with comprehensive validation",
   "category": "ui-components",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "check if form fields are valid",
+    "beginner": "make a form validator that checks if username and email are filled out correctly",
+    "intermediate": "create a FormValidator class that takes form data and validation rules, then returns which fields have errors",
+    "advanced": "write a FormValidator class that accepts form data (object) and validation rules (object defining requirements per field), validates each field, and returns an errors object listing all validation failures",
+    "expert": "Write a FormValidator class that validates form data against configurable rules. The class should: 1) Accept form data as an object (e.g., {username: 'john', email: 'john@example.com'}). 2) Accept validation rules as an object where each key corresponds to a form field and contains validation requirements. Rules should support: required (boolean), minLength (number), maxLength (number), pattern (regex), and custom validator functions. 3) Have a validate() method that checks all fields against their rules and returns an errors object. The errors object should have keys for each invalid field with values being error message strings or arrays of messages. 4) Return an empty errors object {} if all validations pass. Example rule: {username: {required: true, minLength: 3}, email: {required: true, pattern: /^[^@]+@[^@]+$/}}. The validator should generate appropriate error messages for each failed rule. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with generics for form data type. Define interfaces: ValidationRule (with optional properties for required, minLength, maxLength, pattern, custom), ValidationRules<T> (mapping field names to rules), ValidationErrors (mapping field names to string or string[]). The validate() method should return ValidationErrors. Export the class and interfaces.",
+    "javascript": "Create a FormValidator class with constructor accepting formData and rules objects. Implement validation logic that checks each rule type and builds error messages. Use Object.keys() to iterate through fields. Export the class as default.",
+    "javascript-jsdoc": "Use JSDoc with @typedef for ValidationRule object (with optional required, minLength, maxLength, pattern, custom properties), @typedef for ValidationRules (object mapping field names to ValidationRule), @typedef for ValidationErrors (object mapping field names to strings or string arrays), @class, @param, and @returns. Export the class."
+  },
   "variants": {
     "typescript": "Write a TypeScript FormValidator class that validates form data against rules. Include interfaces for validation rules and results.",
     "javascript": "Write a JavaScript FormValidator class that validates form data against rules.",
@@ -18,5 +30,19 @@
     "error handling",
     "real-time",
     "user feedback"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "validate-email-formats",
+      "code": "const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/; const emails = Array.from({length: 100}, (_, i) => `test${i}@example.com`); for (let i = 0; i < 100; i++) { emails.forEach(email => emailRegex.test(email)); }",
+      "iterations": 50,
+      "baselineTimeMs": 10.0
+    },
+    {
+      "name": "validate-form-fields",
+      "code": "const validateField = (value, required, minLength) => { if (required && !value) return false; if (minLength && value.length < minLength) return false; return true; }; for (let i = 0; i < 1000; i++) { validateField(\"test\", true, 3); validateField(\"\", false, 0); validateField(\"ab\", true, 3); }",
+      "iterations": 100,
+      "baselineTimeMs": 5.0
+    }
   ]
 }

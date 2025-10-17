@@ -6,8 +6,8 @@ import time
 from typing import Optional, Dict, Any, List, Tuple
 from dataclasses import dataclass
 from src.core import config as cfg
-from src.core import ui
-from src.core import game_logic
+from src.ui import displays as ui
+from src.game import game_logic
 from src.core.engine_interface import LLMEngine
 from src.engines.engine_factory import get_engine
 

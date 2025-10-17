@@ -6,7 +6,7 @@ import re
 from typing import List, Tuple, Dict, Any
 
 from src.core import config as cfg
-from src.core import ui_components as uic
+from src.ui import components as uic
 from src.core.engine_interface import LLMEngine
 
 def display_intro():

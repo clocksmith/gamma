@@ -3,6 +3,18 @@
   "description": "A script that demonstrates various event handling techniques.",
   "category": "4-web-fundamentals",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "button with click",
+    "beginner": "make a button that changes when clicked and hovered",
+    "intermediate": "create a button with click and hover event handlers that change its text and color",
+    "advanced": "write a function that creates a button saying \"Click me\", adds a click listener to change text to \"Clicked!\", and hover/mouseleave listeners to change background color to red and back",
+    "expert": "Write a function that demonstrates event handling with a button. The function should: 1) Create a button element with textContent \"Click me\". 2) Add a click event listener that changes the button's textContent to \"Clicked!\". 3) Add a mouseenter (or mouseover) event listener that sets the button's background color to red. 4) Add a mouseleave event listener that resets the background color to its default/transparent state. 5) Append the button to document.body. The function should properly attach all three event listeners using addEventListener. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Create a function with proper TypeScript types for the button (HTMLButtonElement) and event objects (MouseEvent, Event). Include type annotations. Export the function.",
+    "javascript": "Create a function using document.createElement and addEventListener for attaching event handlers. Export the function as default export.",
+    "javascript-jsdoc": "Include JSDoc with @function, @description explaining the three event types being demonstrated, and document how each event modifies the button. Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that demonstrates event handling. The script should create a button with the text \"Click me\". When the button is clicked, it should change its text to \"Clicked!\". When the mouse hovers over the button, it should change its background color to red. When the mouse leaves the button, it should change its background color back to normal. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that demonstrates event handling. The script should create a button with the text \"Click me\". When the button is clicked, it should change its text to \"Clicked!\". When the mouse hovers over the button, it should change its background color to red. When the mouse leaves the button, it should change its background color back to normal. The script should include inline comments to explain the logic.",
@@ -14,5 +26,21 @@
       "test": "async () => { await page.waitForSelector('button'); const button = await page.$('button'); await button.hover(); const bgColor = await button.evaluate(el => window.getComputedStyle(el).backgroundColor); console.assert(bgColor === 'rgb(255, 0, 0)', 'Background color should be red on hover'); await page.mouse.move(0, 0); const normalBgColor = await button.evaluate(el => window.getComputedStyle(el).backgroundColor); console.assert(normalBgColor !== 'rgb(255, 0, 0)', 'Background color should not be red after mouse leaves'); await button.click(); const text = await button.textContent(); console.assert(text === 'Clicked!', 'Button text should change to Clicked! after click'); }"
     }
   ],
-  "requirements": ["browser"]
+  "requirements": [
+    "browser"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "attach-event-listeners",
+      "code": "document.body.innerHTML = \"\"; for (let i = 0; i < 100; i++) { const btn = document.createElement(\"button\"); btn.textContent = \"Button \" + i; btn.addEventListener(\"click\", () => {}); document.body.appendChild(btn); }",
+      "iterations": 50,
+      "baselineTimeMs": 10.0
+    },
+    {
+      "name": "trigger-events",
+      "code": "document.body.innerHTML = \"\"; const btns = []; for (let i = 0; i < 100; i++) { const btn = document.createElement(\"button\"); btn.addEventListener(\"click\", () => {}); document.body.appendChild(btn); btns.push(btn); } btns.forEach(btn => btn.click());",
+      "iterations": 50,
+      "baselineTimeMs": 15.0
+    }
+  ]
 }

@@ -4,10 +4,10 @@ Interactive Menu System for GAMMA - Provides full CLI configuration
 
 from typing import Optional, Dict, Any, List, Tuple
 from src.core import config as cfg
-from src.core import ui_components as uic
-from src.core import interactive_prompts as prompts
-from src.core.model_catalog import ModelSelector, get_model_info
-from src.core.gpu_discovery import get_gpu_info, format_gpu_info
+from src.ui import components as uic
+from src.core.menu import interactive_prompts as prompts
+from src.core.models.model_catalog import ModelSelector, get_model_info
+from src.core.hardware.gpu_discovery import get_gpu_info, format_gpu_info
 
 
 class InteractiveMenu:

@@ -1,5 +1,5 @@
 from typing import Any
-from src.core import ui
+from src.ui import displays as ui
 from src.core import config as cfg
 
 

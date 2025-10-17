@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import unittest
 from typing import List
 
-from src.core.model_registry import (
+from src.core.models.model_registry import (
     ModelSpecialization,
     ModelProfile,
     MODEL_ZOO,

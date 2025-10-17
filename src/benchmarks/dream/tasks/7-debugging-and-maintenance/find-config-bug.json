@@ -3,11 +3,35 @@
   "description": "Find a subtle configuration bug in a large codebase",
   "category": "needle-in-haystack",
   "difficulty": "hard",
-  "needleText": "timeout: 300",
-  "needleLocation": "line 47 in config.js",
+  "promptLevels": {
+    "novice": "find wrong timeout value",
+    "beginner": "find the configuration bug where a timeout is set incorrectly",
+    "intermediate": "locate the bug in UserService where the timeout value is in the wrong units (milliseconds vs seconds)",
+    "advanced": "Find the configuration bug in the codebase below where a timeout value is incorrectly set, causing API calls to fail prematurely. The bug is on line 47 of user-service.ts:\n\nFind the configuration bug in the following codebase",
+    "expert": "Find the configuration bug in the following codebase. There's a timeout value that's incorrectly set to milliseconds instead of seconds, causing API calls to fail prematurely.\n\n```typescript\n// config.ts\nexport interface Config {\n  apiUrl: string;\n  timeout: number;\n  retries: number;\n  debug: boolean;\n}\n\nexport const config: Config = {\n  apiUrl: 'https://api.example.com',\n  timeout: 30000, // 30 seconds\n  retries: 3,\n  debug: false\n};\n\n// api-client.ts\nimport { config } from './config';\n\nexport class ApiClient {\n  private baseUrl: string;\n  private timeout: number;\n\n  constructor() {\n    this.baseUrl = config.apiUrl;\n    this.timeout = config.timeout;\n  }\n\n  async get(endpoint: string): Promise<any> {\n    const controller = new AbortController();\n    const timeoutId = setTimeout(() => controller.abort(), this.timeout);\n\n    try {\n      const response = await fetch(`${this.baseUrl}${endpoint}`, {\n        signal: controller.signal\n      });\n      clearTimeout(timeoutId);\n      return await response.json();\n    } catch (error) {\n      clearTimeout(timeoutId);\n      throw error;\n    }\n  }\n}\n\n// services/user-service.ts (LINE 47 HAS THE BUG)\nimport { ApiClient } from '../api-client';\n\nexport class UserService {\n  private client: ApiClient;\n  private timeout: number = 300; // BUG: Should be 30000 (30 seconds), not 300 (0.3 seconds)\n\n  constructor() {\n    this.client = new ApiClient();\n  }\n\n  async getUser(id: number): Promise<any> {\n    const controller = new AbortController();\n    const timeoutId = setTimeout(() => controller.abort(), this.timeout);\n\n    try {\n      const response = await fetch(`https://api.example.com/users/${id}`, {\n        signal: controller.signal\n      });\n      clearTimeout(timeoutId);\n      return await response.json();\n    } catch (error) {\n      clearTimeout(timeoutId);\n      throw error;\n    }\n  }\n}\n```\n\nFind the configuration bug in the provided codebase. There's a timeout misconfiguration where UserService sets timeout to 300 (milliseconds) instead of 30000 (milliseconds/30 seconds), causing API calls to abort after only 0.3 seconds. Identify: 1) The exact location (file and line number). 2) What the value is vs what it should be. 3) Why this is easy to miss (inconsistent units, bypassing centralized config, no type safety for units). 4) How to prevent this type of bug (centralized configuration, type safety with branded types, unit validation). 5) How to detect similar bugs in the codebase (linting rules, code review checklist, grep for timeout patterns). {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Provide detailed analysis with the bug location highlighted (services/user-service.ts line 47). Suggest TypeScript solutions like branded types for time values (Milliseconds vs Seconds types), centralized config with validation, const assertions, and configuration schemas with runtime checking.",
+    "javascript": "Provide analysis identifying the bug location and value. Suggest JavaScript prevention strategies like configuration validation functions, centralized constants files, JSDoc comments documenting units, and helper functions like `seconds(30)` that convert to milliseconds.",
+    "javascript-jsdoc": "Provide analysis with JSDoc-based solutions like @typedef with explicit unit documentation (e.g., @property {number} timeout - Timeout in milliseconds), validation helper functions with proper JSDoc, configuration object schemas, and unit conversion utilities."
+  },
   "variants": {
     "typescript": "Find the configuration bug in the following codebase. There's a timeout value that's incorrectly set to milliseconds instead of seconds, causing API calls to fail prematurely.\n\n```typescript\n// config.ts\nexport interface Config {\n  apiUrl: string;\n  timeout: number;\n  retries: number;\n  debug: boolean;\n}\n\nexport const config: Config = {\n  apiUrl: 'https://api.example.com',\n  timeout: 30000, // 30 seconds\n  retries: 3,\n  debug: false\n};\n\n// api-client.ts\nimport { config } from './config';\n\nexport class ApiClient {\n  private baseUrl: string;\n  private timeout: number;\n\n  constructor() {\n    this.baseUrl = config.apiUrl;\n    this.timeout = config.timeout;\n  }\n\n  async get(endpoint: string): Promise<any> {\n    const controller = new AbortController();\n    const timeoutId = setTimeout(() => controller.abort(), this.timeout);\n\n    try {\n      const response = await fetch(`${this.baseUrl}${endpoint}`, {\n        signal: controller.signal\n      });\n      clearTimeout(timeoutId);\n      return await response.json();\n    } catch (error) {\n      clearTimeout(timeoutId);\n      throw error;\n    }\n  }\n}\n\n// services/user-service.ts (LINE 47 HAS THE BUG)\nimport { ApiClient } from '../api-client';\n\nexport class UserService {\n  private client: ApiClient;\n  private timeout: number = 300; // BUG: Should be 30000 (30 seconds), not 300 (0.3 seconds)\n\n  constructor() {\n    this.client = new ApiClient();\n  }\n\n  async getUser(id: number): Promise<any> {\n    const controller = new AbortController();\n    const timeoutId = setTimeout(() => controller.abort(), this.timeout);\n\n    try {\n      const response = await fetch(`https://api.example.com/users/${id}`, {\n        signal: controller.signal\n      });\n      clearTimeout(timeoutId);\n      return await response.json();\n    } catch (error) {\n      clearTimeout(timeoutId);\n      throw error;\n    }\n  }\n}\n```\n\nIdentify the exact location and nature of the bug.",
     "javascript": "Find the configuration bug in the following codebase. There's a timeout value that's incorrectly set to milliseconds instead of seconds, causing API calls to fail prematurely.\n\n[Same code as TypeScript but in JavaScript format]",
     "javascript-jsdoc": "Find the configuration bug in the following codebase with JSDoc annotations. There's a timeout value that's incorrectly set.\n\n[Same code as TypeScript but with JSDoc]"
-  }
+  },
+  "performanceBenchmarks": [
+    {
+      "name": "scan-for-patterns",
+      "code": "const code = \"const timeout = 300;\\nconst delay = 30000;\\nconst interval = 1000;\".repeat(100); for (let i = 0; i < 100; i++) { const matches = code.match(/timeout\\s*[=:]\\s*(\\d+)/g); }",
+      "iterations": 100,
+      "baselineTimeMs": 10.0
+    },
+    {
+      "name": "validate-config-values",
+      "code": "const configs = Array.from({length: 1000}, (_, i) => ({timeout: i * 100, retries: i % 10})); configs.forEach(cfg => { const valid = cfg.timeout > 0 && cfg.timeout < 60000 && cfg.retries > 0; });",
+      "iterations": 100,
+      "baselineTimeMs": 5.0
+    }
+  ]
 }

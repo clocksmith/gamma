@@ -20,7 +20,7 @@ from unittest.mock import MagicMock, Mock
 sys.path.insert(0, 'src')
 
 # Import all new components
-from src.core.model_registry import ModelSelector, ModelProfile, ModelSpecialization, get_recommended_ensemble, MODEL_ZOO
+from src.core.models.model_registry import ModelSelector, ModelProfile, ModelSpecialization, get_recommended_ensemble, MODEL_ZOO
 from src.mind_meld.strategies.base_strategy import (
     SwapStrategyBase, SwapDecision,
     FixedIntervalStrategy, PatternBasedStrategy, RoundRobinStrategy, RandomStrategy

@@ -3,7 +3,7 @@
 import os
 from typing import Dict, Tuple, Optional
 from pathlib import Path
-from src.core.gguf_parser import parse_gguf_file
+from src.core.hardware.gguf_parser import parse_gguf_file
 
 
 def estimate_gguf_memory(file_path: str, context_length: int = 2048) -> Dict[str, int]:

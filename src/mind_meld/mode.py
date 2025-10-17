@@ -5,7 +5,7 @@ Mind Meld Mode for GAMMA - Dynamically switch between models during generation.
 from typing import List, Any
 
 from src.core.engine_interface import LLMEngine
-from src.core import ui
+from src.ui import displays as ui
 from src.mind_meld.core.meld_engine import MeldEngine
 from src.mind_meld.visualization import SwapVisualizer
 

@@ -3,6 +3,18 @@
   "description": "Build a complete weather app that works identically across all variants",
   "category": "full-projects",
   "difficulty": "hard",
+  "promptLevels": {
+    "novice": "get weather for a city",
+    "beginner": "make a Weather class that can fetch and store weather data for cities",
+    "intermediate": "create a Weather class that fetches weather data from an API, stores current city and weather info, and manages favorites",
+    "advanced": "write a Weather class that manages weather app state including current city, weather data (temp, conditions, humidity), loading/error states, and a list of favorite cities with persistence",
+    "expert": "Write a Weather class for managing a weather application's state and data. The class should: 1) Have properties for: currentCity (string), weatherData (object with temperature, description, humidity, windSpeed, etc.), isLoading (boolean), error (string or null), and favoriteCities (array of city names). 2) Have a fetchWeather(cityName) async method that sets isLoading=true, fetches weather data (simulated or real API), updates weatherData and currentCity on success, sets error message on failure, and sets isLoading=false when done. 3) Have addFavorite(cityName) method that adds a city to favorites if not already present. 4) Have removeFavorite(cityName) method that removes a city from favorites. 5) Have getFavorites() method that returns the favorites array. The class should properly manage async state transitions and handle errors gracefully. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with interfaces for WeatherData (temperature number, description string, humidity number, windSpeed number, etc.), properties properly typed (currentCity: string | null, weatherData: WeatherData | null, isLoading: boolean, error: string | null, favoriteCities: string[]). The fetchWeather method should return Promise<void>. Export both interfaces and the Weather class.",
+    "javascript": "Create a Weather class with constructor initializing all properties to appropriate defaults. Use async/await for fetchWeather. Use array methods for favorites management (includes, push, filter). Export the class as default.",
+    "javascript-jsdoc": "Use JSDoc with @typedef for WeatherData object, @class for Weather, @property for all class properties with types, @async for fetchWeather, @param with types, @returns Promise<void> for async methods and appropriate types for others. Export the class."
+  },
   "variants": {
     "typescript": "Build a Weather class that fetches weather data and manages app state. Include interfaces for weather data, city, and app state.",
     "javascript": "Build a Weather class that fetches weather data and manages app state.",
@@ -21,5 +33,19 @@
     "API integration",
     "loading states",
     "error handling"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "fetch-weather-data",
+      "code": "const mockFetch = () => Promise.resolve({json: () => Promise.resolve({temp: 72, condition: \"sunny\"})}); for (let i = 0; i < 50; i++) { await mockFetch(); }",
+      "iterations": 20,
+      "baselineTimeMs": 10.0
+    },
+    {
+      "name": "parse-weather-response",
+      "code": "const data = {main: {temp: 72}, weather: [{description: \"sunny\"}]}; for (let i = 0; i < 1000; i++) { const result = {temp: data.main.temp, condition: data.weather[0].description}; }",
+      "iterations": 100,
+      "baselineTimeMs": 2.0
+    }
   ]
 }

@@ -27,9 +27,9 @@ class TensorFlowEngine(LLMEngine):
         else: print("TensorFlowEngine: No GPU detected, TensorFlow will run on CPU.")
 
     def load(self):
-        trust_remote = self.engine_config.get("trust_remote_code", False); token = self.engine_config.get("hf_token", None)
-        try: self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=trust_remote, token=token)
-        except Exception as e: raise RuntimeError(f"TensorFlowEngine: Tokenizer load failed for '{self.model_name}': {e}") from e
+        self._load_hf_tokenizer()
+        trust_remote = self.get_trust_remote_code()
+        token = self.get_hf_token()
         from_pt_arg = self.engine_config.get("from_pt", False)
         print(f"TensorFlowEngine: Loading model '{self.model_name}' (from_pt={from_pt_arg})...")
         try: self.model = TFAutoModelForCausalLM.from_pretrained(self.model_name, trust_remote_code=trust_remote, from_pt=from_pt_arg, token=token)
@@ -64,16 +64,6 @@ class TensorFlowEngine(LLMEngine):
         return self.model(input_ids=input_ids_tf, attention_mask=attention_mask_tf, past_key_values=past_key_values_tf,
                           output_attentions=output_attentions_tf, output_hidden_states=output_hidden_states_tf, use_cache=use_cache_tf, return_dict=True)
 
-    def _top(self, l: np.ndarray, k_s: int) -> Tuple[List[str], List[float], List[int]]:
-        if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs = sampling.softmax(l); vocab_s = probs.shape[-1]; eff_k = min(k_s if k_s > 0 else vocab_s, vocab_s)
-        top_indices_unsorted = np.argpartition(probs, -eff_k)[-eff_k:]
-        top_probs_unsorted = probs[top_indices_unsorted]
-        sort_order = np.argsort(top_probs_unsorted)[::-1]
-        final_indices = top_indices_unsorted[sort_order]
-        final_probs = top_probs_unsorted[sort_order]
-        final_indices_list = final_indices.tolist()
-        return ([self.get_token_text(idx) for idx in final_indices_list], final_probs.tolist(), final_indices_list)
 
     @tf.function
     def _run_model_inference_tf(self, input_ids_tf, attention_mask_tf, past_key_values_tf, output_attentions_tf, output_hidden_states_tf, use_cache_tf):
@@ -92,9 +82,7 @@ class TensorFlowEngine(LLMEngine):
         logits_raw = outputs.logits[:, -1, :]
         logits_raw_np = logits_raw.numpy()
 
-        logits_temp_np = sampling.temperature_scale(logits_raw_np, temperature)
-        logits_k_np = sampling.top_k_filter(logits_temp_np, top_k)
-        logits_proc_np = sampling.top_p_filter(logits_k_np, top_p)
+        logits_proc_np, logits_temp_np, logits_k_np = sampling.process_logits_pipeline(logits_raw_np, temperature, top_k, top_p, return_intermediates=True)
 
         logits_proc = tf.convert_to_tensor(logits_proc_np)
         probs_proc = tf.nn.softmax(logits_proc, axis=-1)
@@ -102,7 +90,7 @@ class TensorFlowEngine(LLMEngine):
         next_t_id_val = next_t_id_tensor.numpy().item() if tf.rank(next_t_id_tensor) == 0 else next_t_id_tensor.numpy()[0].item()
         
         max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_txts, top_p_list, _ = self._top(logits_proc_np, k_s=max_dk)
+        top_txts, top_p_list, _ = sampling.get_top_k_tokens(logits_proc_np, max_dk, self.get_token_text)
         
         return {"next_token_id": next_t_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
                 "probabilities_raw": tf.nn.softmax(logits_raw, axis=-1),
@@ -117,18 +105,17 @@ class TensorFlowEngine(LLMEngine):
         if not self.tokenizer: raise RuntimeError("TensorFlowEngine: Tokenizer not loaded."); return -1
         return self.tokenizer.vocab_size
 
-    def get_token_text(self, token_id: int) -> str:
-        if token_id in self._token_cache: return self._token_cache[token_id]
-        game_repr = self._special_token_id_to_game_repr.get(token_id)
-        if game_repr: self._token_cache[token_id] = game_repr; return game_repr
-        if not self.tokenizer: raise RuntimeError("TensorFlowEngine: Tokenizer not loaded.")
-        try:
-            token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-            if isinstance(token_text_str, bytes): token_text_str = token_text_str.decode("utf-8", errors="replace")
-            if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "): token_text_str = token_text_str[1:]
-            if not token_text_str: decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False); token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else f"<ID:{token_id}>"
-        except Exception: token_text_str = f"<DecodeErr:{token_id}>"
-        self._token_cache[token_id] = token_text_str; return token_text_str
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID using TensorFlow/HuggingFace tokenizer."""
+        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
+        if isinstance(token_text_str, bytes):
+            token_text_str = token_text_str.decode("utf-8", errors="replace")
+        if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "):
+            token_text_str = token_text_str[1:]
+        if not token_text_str:
+            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
+            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
+        return token_text_str
 
     def is_word_like_token(self, token_id: int, token_text: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, token_text)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
@@ -149,7 +136,7 @@ class TensorFlowEngine(LLMEngine):
         if not isinstance(data, tf.Tensor): raise TypeError(f"Expected tf.Tensor for TF probabilities, got {type(data)}")
         is_probs_heuristic = (tf.reduce_all(data >= 0.0) and tf.reduce_all(data <= 1.0) and tf.reduce_all(tf.abs(tf.reduce_sum(data, axis=-1) - 1.0) < 1e-3))
         probs_tensor = data if is_probs_heuristic else self._s(data)
-        return self._top(probs_tensor, k_s=k)
+        return sampling.get_top_k_tokens(probs_tensor, k, self.get_token_text, is_probs=True)
 
     def get_engine_specific_config(self) -> Dict[str, Any]:
         """Provide TensorFlow-specific configuration."""

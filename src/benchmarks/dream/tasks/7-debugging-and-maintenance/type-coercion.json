@@ -3,10 +3,35 @@
   "description": "Find type coercion bugs in calculations",
   "category": "bug-finding",
   "difficulty": "medium",
-  "bugLocation": "string concatenation instead of addition",
+  "promptLevels": {
+    "novice": "find bugs in code",
+    "beginner": "find the type coercion bugs in the calculateTotal and applyDiscount functions",
+    "intermediate": "analyze the code and identify where strings are being used in place of numbers, causing type coercion bugs in mathematical operations",
+    "advanced": "review the code below for type coercion issues where string values (like '2' and '5') are used in arithmetic operations, identify each bug's location and impact, and explain how the bugs manifest at runtime:\n\nFind all the bugs in this code:\n\n```typescript\ninterface Product {\n  name: string;\n  price: number;\n  quantity: number;\n}\n\nfunction calculateTotal(products: Product[]): number {\n  let total = 0;\n  \n  for (const product of products) {\n    // BUG: If quantity comes from user input, it might be a string\n    total += product.price * product.quantity;\n  }\n  \n  return total;\n}\n\nfunction applyDiscount(total: number, discount: string): number {\n  // BUG: discount is a string, will concatenate instead of subtract\n  return total - discount;\n}\n\nfunction formatPrice(price: number): string {\n  return '$' + price.toFixed(2);\n}\n\n// Usage\nconst products: Product[] = [\n  { name: 'Item 1', price: 10, quantity: '2' as any },  // quantity is actually a string!\n  { name: 'Item 2', price: 20, quantity: 1 }\n];\n\nconst total = calculateTotal(products);\nconst discounted = applyDiscount(total, '5');  // BUG: passing string\nconsole.log(formatPrice(discounted));\n```\n\nIdentify all bugs and explain how TypeScript could help catch them.",
+    "expert": "Perform a comprehensive bug analysis of the provided code. Identify all instances of type coercion bugs where string values are used in arithmetic operations. For each bug, provide: the exact line/location, what the bug does, why it happens (type coercion rules), how to fix it, and how TypeScript's type system could prevent it. List all bugs systematically.\n\nFind all the bugs in this code:\n\n```typescript\ninterface Product {\n  name: string;\n  price: number;\n  quantity: number;\n}\n\nfunction calculateTotal(products: Product[]): number {\n  let total = 0;\n  \n  for (const product of products) {\n    // BUG: If quantity comes from user input, it might be a string\n    total += product.price * product.quantity;\n  }\n  \n  return total;\n}\n\nfunction applyDiscount(total: number, discount: string): number {\n  // BUG: discount is a string, will concatenate instead of subtract\n  return total - discount;\n}\n\nfunction formatPrice(price: number): string {\n  return '$' + price.toFixed(2);\n}\n\n// Usage\nconst products: Product[] = [\n  { name: 'Item 1', price: 10, quantity: '2' as any },  // quantity is actually a string!\n  { name: 'Item 2', price: 20, quantity: 1 }\n];\n\nconst total = calculateTotal(products);\nconst discounted = applyDiscount(total, '5');  // BUG: passing string\nconsole.log(formatPrice(discounted));\n```\n\nIdentify all bugs and explain how TypeScript could help catch them. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Provide a detailed bug analysis as a markdown document or structured response. Explain how TypeScript's strict mode, proper type annotations without 'as any', and compile-time checks would catch these bugs. Include corrected code examples with proper types and validation.",
+    "javascript": "Provide a detailed analysis explaining each bug and how it manifests in JavaScript's loose typing system. Include corrected code with proper type checking (using typeof, Number(), parseInt(), etc.) and validation before arithmetic operations.",
+    "javascript-jsdoc": "Provide analysis explaining how JSDoc type annotations could help catch these bugs during development (with IDE support) even though they don't provide runtime safety. Include corrected code with both JSDoc annotations and runtime validation."
+  },
   "variants": {
     "typescript": "Find all the bugs in this code:\n\n```typescript\ninterface Product {\n  name: string;\n  price: number;\n  quantity: number;\n}\n\nfunction calculateTotal(products: Product[]): number {\n  let total = 0;\n  \n  for (const product of products) {\n    // BUG: If quantity comes from user input, it might be a string\n    total += product.price * product.quantity;\n  }\n  \n  return total;\n}\n\nfunction applyDiscount(total: number, discount: string): number {\n  // BUG: discount is a string, will concatenate instead of subtract\n  return total - discount;\n}\n\nfunction formatPrice(price: number): string {\n  return '$' + price.toFixed(2);\n}\n\n// Usage\nconst products: Product[] = [\n  { name: 'Item 1', price: 10, quantity: '2' as any },  // quantity is actually a string!\n  { name: 'Item 2', price: 20, quantity: 1 }\n];\n\nconst total = calculateTotal(products);\nconst discounted = applyDiscount(total, '5');  // BUG: passing string\nconsole.log(formatPrice(discounted));\n```\n\nIdentify all bugs and explain how TypeScript could help catch them.",
     "javascript": "Find all the bugs in this code:\n\n```javascript\nfunction calculateTotal(products) {\n  let total = 0;\n  \n  for (const product of products) {\n    total += product.price * product.quantity;\n  }\n  \n  return total;\n}\n\nfunction applyDiscount(total, discount) {\n  return total - discount;\n}\n\nfunction formatPrice(price) {\n  return '$' + price.toFixed(2);\n}\n\n// Usage\nconst products = [\n  { name: 'Item 1', price: 10, quantity: '2' },\n  { name: 'Item 2', price: 20, quantity: 1 }\n];\n\nconst total = calculateTotal(products);\nconst discounted = applyDiscount(total, '5');\nconsole.log(formatPrice(discounted));\n```\n\nWhat bugs exist and how would you fix them?",
     "javascript-jsdoc": "Find all the bugs in this code with JSDoc:\n\n```javascript\n/**\n * @typedef {Object} Product\n * @property {string} name\n * @property {number} price\n * @property {number} quantity\n */\n\n/**\n * @param {Product[]} products\n * @returns {number}\n */\nfunction calculateTotal(products) {\n  let total = 0;\n  \n  for (const product of products) {\n    total += product.price * product.quantity;\n  }\n  \n  return total;\n}\n\n/**\n * @param {number} total\n * @param {number} discount\n * @returns {number}\n */\nfunction applyDiscount(total, discount) {\n  return total - discount;\n}\n\n/**\n * @param {number} price\n * @returns {string}\n */\nfunction formatPrice(price) {\n  return '$' + price.toFixed(2);\n}\n\n// Usage\nconst products = [\n  { name: 'Item 1', price: 10, quantity: '2' },\n  { name: 'Item 2', price: 20, quantity: 1 }\n];\n\nconst total = calculateTotal(products);\nconst discounted = applyDiscount(total, '5');\nconsole.log(formatPrice(discounted));\n```\n\nWhat bugs exist and how could JSDoc have helped catch them?"
-  }
+  },
+  "performanceBenchmarks": [
+    {
+      "name": "type-checking-operations",
+      "code": "const values = [\"1\", 1, \"2\", 2, \"3\", 3]; for (let i = 0; i < 10000; i++) { values.forEach(v => typeof v === \"number\"); }",
+      "iterations": 50,
+      "baselineTimeMs": 20.0
+    },
+    {
+      "name": "type-conversion",
+      "code": "const strings = Array.from({length: 1000}, (_, i) => String(i)); for (let i = 0; i < 100; i++) { strings.map(s => Number(s)); }",
+      "iterations": 50,
+      "baselineTimeMs": 15.0
+    }
+  ]
 }

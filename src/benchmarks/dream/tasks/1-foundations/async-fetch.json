@@ -3,6 +3,18 @@
   "description": "Implement async data fetching with error handling",
   "category": "1-foundations",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "fetch user data",
+    "beginner": "make an async function to get user data",
+    "intermediate": "create a function called fetchUserData that asynchronously fetches user information by id",
+    "advanced": "write an async function called fetchUserData that takes a userId number as input, simulates an API call with a delay, and returns user data with id, name, and email",
+    "expert": "Write an async function called `fetchUserData` that accepts a userId (number) as a parameter. The function should simulate an API call by using setTimeout with a 300ms delay. After the delay, it should return a Promise that resolves to an object containing three properties: id (the userId), name (string), and email (string). Include error handling that throws an error if the userId is less than 1. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with proper type annotations. Define a type or interface for the returned user data object. The function signature should specify the return type as Promise<UserData>. Export both the function and the type/interface.",
+    "javascript": "Use async/await syntax. Export only the function. Do not include example usage or console logging.",
+    "javascript-jsdoc": "Use JSDoc annotations including @typedef for the UserData return type, @async, @param with type information, @returns with Promise type, and @throws for error cases. Export only the function."
+  },
   "variants": {
     "typescript": "Write a TypeScript async function called `fetchUserData` that takes a userId (number) and returns a Promise. The function should simulate an API call using setTimeout (300ms delay) and return an object with id, name, and email. Include proper type annotations and error handling for invalid userId (< 1). Export the function and the return type, and output only those declarations—do not include demo invocations or console logging.",
     "javascript": "Write a JavaScript async function called `fetchUserData` that takes a userId and returns a Promise. The function should simulate an API call using setTimeout (300ms delay) and return an object with id, name, and email. Include error handling for invalid userId (< 1). Export only the function; do not append usage examples, logging, or additional helpers.",
@@ -16,5 +28,26 @@
       "test": "fetchUserData(0).catch(err => console.assert(err instanceof Error, 'Should throw for invalid id'));"
     }
   ],
-  "requirements": ["async", "function", "fetchUserData", "Promise", "error handling", "export"]
+  "performanceBenchmarks": [
+    {
+      "name": "single-fetch",
+      "code": "await fetchUserData(1);",
+      "iterations": 10,
+      "baselineTimeMs": 310.0
+    },
+    {
+      "name": "parallel-fetches",
+      "code": "await Promise.all([fetchUserData(1), fetchUserData(2), fetchUserData(3)]);",
+      "iterations": 5,
+      "baselineTimeMs": 320.0
+    }
+  ],
+  "requirements": [
+    "async",
+    "function",
+    "fetchUserData",
+    "Promise",
+    "error handling",
+    "export"
+  ]
 }

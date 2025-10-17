@@ -59,8 +59,9 @@ node index.js --category simple
 ## Features
 
 - **Multi-Variant Testing**: Compare TypeScript, JavaScript, and JavaScript+JSDoc
+- **Prompt Quality Levels**: Test with 5 instruction clarity levels (novice → expert)
 - **Multiple Providers**: OpenAI, Anthropic, Gemini, and local Ollama models
-- **Comprehensive Tasks**: Simple algorithms, bug finding, full projects, UI components
+- **Comprehensive Tasks**: 31 tasks across 7 categories
 - **Detailed Evaluation**: Accuracy, performance, code quality, completeness metrics
 - **Rich Reports**: Markdown summaries and interactive HTML dashboards
 
@@ -98,6 +99,39 @@ node index.js --variant typescript
 node index.js --variant javascript
 node index.js --variant javascript-jsdoc
 ```
+
+### Prompt Quality Levels (NEW!)
+
+Test how LLM performance varies with different instruction clarity levels:
+
+```bash
+# Test with minimal instruction (novice level)
+node index.js --variant typescript-novice --task fibonacci
+
+# Test with complete detailed instruction (expert level)
+node index.js --variant typescript-expert --task fibonacci
+
+# Compare all quality levels for TypeScript
+node index.js --task fibonacci --variant typescript-novice --variant typescript-beginner --variant typescript-intermediate --variant typescript-advanced --variant typescript-expert
+```
+
+**Available Quality Levels:**
+
+- `novice`: Minimal instruction (e.g., "make fibonacci")
+- `beginner`: Basic instruction (e.g., "create a fibonacci function")
+- `intermediate`: More detailed (e.g., "write a function to calculate fibonacci numbers")
+- `advanced`: Specific with function name and parameters
+- `expert`: Complete detailed instructions with language-specific requirements
+
+**Format**: `{language}-{level}`
+
+**Examples**: `typescript-expert`, `javascript-novice`, `javascript-jsdoc-advanced`
+
+**Use Cases:**
+- Compare how instruction clarity affects code quality
+- Find the minimum instruction level needed for good results
+- Test prompt engineering effectiveness
+- Evaluate LLM instruction-following capabilities
 
 ### Run Specific Task
 ```bash
@@ -197,19 +231,35 @@ open reports/dashboard.html
 
 ## Creating Custom Tasks
 
-Tasks are JSON files in the `tasks/` directory:
+Tasks are JSON files in the `tasks/` directory with support for prompt quality levels:
 
 ```json
 {
   "name": "my-task",
   "description": "Brief description",
-  "category": "simple",
+  "category": "1-foundations",
   "difficulty": "easy",
-  "variants": {
-    "typescript": "TypeScript-specific prompt...",
-    "javascript": "JavaScript-specific prompt...",
-    "javascript-jsdoc": "JavaScript with JSDoc prompt..."
+
+  "promptLevels": {
+    "novice": "make myFunction",
+    "beginner": "create a function",
+    "intermediate": "write a function that does X",
+    "advanced": "write a function called myFunction that takes parameter Y",
+    "expert": "Write a function called `myFunction` with detailed specs. {languageSpecific}"
   },
+
+  "languageInstructions": {
+    "typescript": "Use TypeScript with proper type annotations. Export only the function.",
+    "javascript": "Use JavaScript. Export the function implementation.",
+    "javascript-jsdoc": "Use JavaScript with JSDoc type annotations including @param and @return tags."
+  },
+
+  "variants": {
+    "typescript": "Complete TypeScript prompt (legacy format, kept for compatibility)",
+    "javascript": "Complete JavaScript prompt (legacy format)",
+    "javascript-jsdoc": "Complete JS+JSDoc prompt (legacy format)"
+  },
+
   "testCases": [
     { "test": "console.assert(myFunction(5) === 10);" }
   ],
@@ -217,13 +267,21 @@ Tasks are JSON files in the `tasks/` directory:
 }
 ```
 
+**Key Points:**
+
+- **`promptLevels`**: Define 5 instruction clarity levels (novice → expert)
+- **`languageInstructions`**: Language-specific requirements for each language
+- **`{languageSpecific}`**: Placeholder in expert level that gets replaced with language instructions
+- **`variants`**: Legacy format, kept for backward compatibility
+
 Place in appropriate category folder:
-- `tasks/simple/`
-- `tasks/bug-finding/`
-- `tasks/needle-in-haystack/`
-- `tasks/full-projects/`
-- `tasks/web-components/`
-- `tasks/large-projects/`
+- `tasks/1-foundations/`
+- `tasks/2-scripting-and-automation/`
+- `tasks/3-server-side-development/`
+- `tasks/4-web-fundamentals/`
+- `tasks/5-react-component-library/`
+- `tasks/6-full-stack-applications/`
+- `tasks/7-debugging-and-maintenance/`
 
 ## Configuration
 
@@ -242,9 +300,11 @@ This benchmark helps answer:
 
 1. **Type Safety Impact**: Does TypeScript help LLMs produce better code?
 2. **JSDoc Effectiveness**: Can JSDoc provide similar benefits to TypeScript?
-3. **Provider Comparison**: Which LLMs excel at JavaScript/TypeScript?
-4. **Task Complexity**: How do LLMs handle simple vs complex tasks?
-5. **Code Quality**: Do types improve LLM-generated code quality?
+3. **Prompt Engineering**: How does instruction clarity affect code quality?
+4. **Instruction Following**: What's the minimum instruction level needed for good results?
+5. **Provider Comparison**: Which LLMs excel at JavaScript/TypeScript?
+6. **Task Complexity**: How do LLMs handle simple vs complex tasks?
+7. **Code Quality**: Do types and clear prompts improve LLM-generated code quality?
 
 ## Best Practices
 

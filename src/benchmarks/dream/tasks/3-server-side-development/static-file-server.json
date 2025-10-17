@@ -3,6 +3,18 @@
   "description": "A script that serves static files from a directory.",
   "category": "3-server-side-development",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "file server",
+    "beginner": "make a server that serves files from a folder",
+    "intermediate": "create a web server that reads and serves files from a public directory",
+    "advanced": "write a static file server that listens on port 3000, serves files from a 'public' folder, and returns 404 for missing files",
+    "expert": "Write a static file server that listens on port 3000. When a request comes in, construct the file path by joining a 'public' directory (in the same folder as the script) with the requested URL path. Attempt to read the file from disk. If the file exists, read its contents and send it back with a 200 status code. If the file doesn't exist or there's an error reading it, respond with a 404 status code and the message \"File not found\". Set appropriate content-type headers based on file extensions (e.g., .html, .css, .js, .txt). Export the server instance. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use Node.js http, fs, and path modules. Include TypeScript type annotations. Use fs.readFile or fs.readFileSync. Handle MIME types for common extensions. Export the server.",
+    "javascript": "Use Node.js http, fs, and path modules. Use __dirname to get the script directory. Use path.join() to construct file paths safely. Read files with fs.readFile or readFileSync. Export the server.",
+    "javascript-jsdoc": "Use Node.js http, fs, and path modules. Include JSDoc with @description explaining the server functionality, @param if you create helper functions, and document the MIME type handling approach."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that creates a static file server. The server should listen on port 3000. It should serve files from a `public` directory in the same folder as the script. If a file is not found, it should return a 404 error. The script should include inline comments to explain the logic.",
@@ -23,5 +35,25 @@
       "test": "const http = require('http'); const server = require('./static-file-server.js'); const options = {hostname: 'localhost', port: 3000, path: '/not-found.txt', method: 'GET'}; const req = http.request(options, res => { console.assert(res.statusCode === 404, 'Should return 404 for a non-existing file'); server.close(); }); req.end();"
     }
   ],
-  "requirements": ["http", "fs", "path"]
+  "performanceBenchmarks": [
+    {
+      "name": "serve-small-file",
+      "setup": "const http = require('http'); const fs = require('fs'); const path = require('path'); const server = require('./module.js'); const publicDir = path.join(process.cwd(), 'public'); fs.mkdirSync(publicDir, {recursive: true}); fs.writeFileSync(path.join(publicDir, 'small.txt'), 'Hello World');",
+      "code": "await new Promise((resolve) => { const req = http.request({hostname: 'localhost', port: 3000, path: '/small.txt', method: 'GET'}, res => { res.on('data', () => {}); res.on('end', resolve); }); req.end(); });",
+      "iterations": 100,
+      "baselineTimeMs": 10.0
+    },
+    {
+      "name": "serve-large-file",
+      "setup": "const http = require('http'); const fs = require('fs'); const path = require('path'); const server = require('./module.js'); const publicDir = path.join(process.cwd(), 'public'); fs.mkdirSync(publicDir, {recursive: true}); fs.writeFileSync(path.join(publicDir, 'large.txt'), 'X'.repeat(100000));",
+      "code": "await new Promise((resolve) => { const req = http.request({hostname: 'localhost', port: 3000, path: '/large.txt', method: 'GET'}, res => { res.on('data', () => {}); res.on('end', resolve); }); req.end(); });",
+      "iterations": 50,
+      "baselineTimeMs": 15.0
+    }
+  ],
+  "requirements": [
+    "http",
+    "fs",
+    "path"
+  ]
 }

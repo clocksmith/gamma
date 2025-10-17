@@ -3,6 +3,18 @@
   "description": "A script that reads a CSV file and converts it to a JSON file.",
   "category": "2-scripting-and-automation",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "convert CSV to JSON",
+    "beginner": "make a script that converts a CSV file to JSON",
+    "intermediate": "create a function that reads a CSV file and writes out a JSON file with the same data",
+    "advanced": "write a function that takes a CSV file path as input, parses the CSV (using the first line as headers), and writes a JSON file with the same base name but .json extension",
+    "expert": "Write a function that accepts a file path to a CSV file as its parameter. Read the CSV file from disk - the first line contains column headers (comma-separated), and subsequent lines contain data rows. Parse this into an array of objects where each object represents a row, with keys from the headers. Write the resulting JSON array to a new file in the same directory with the same name but a .json extension instead of .csv. For example, if input is \"/path/to/data.csv\", output should be \"/path/to/data.json\". {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use Node.js file system APIs (fs module). Include proper TypeScript type annotations for the function parameter and return type. Handle errors appropriately. Export the function.",
+    "javascript": "Use Node.js file system APIs (fs module). Export the function as the default export. Handle file reading/writing synchronously or with async/await.",
+    "javascript-jsdoc": "Use Node.js file system APIs (fs module). Include comprehensive JSDoc comments: @param for the file path parameter, @returns for what the function returns (if anything), and @description explaining what the function does. Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that converts a CSV file to a JSON file. The script should be a function that takes a path to a CSV file as input and writes a JSON file with the same name (but a .json extension) in the same directory. The first line of the CSV should be the headers. The script should include inline comments to explain the logic.",
@@ -19,5 +31,23 @@
       "cleanup": "fs.unlinkSync(testFile); fs.unlinkSync(testFile.replace('.csv', '.json'));"
     }
   ],
-  "requirements": ["fs"]
+  "performanceBenchmarks": [
+    {
+      "name": "parse-small-csv",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const testFile = path.join(os.tmpdir(), 'perf-small.csv'); const rows = ['name,age,email']; for (let i = 0; i < 10; i++) { rows.push(`user${i},${20+i},user${i}@test.com`); } fs.writeFileSync(testFile, rows.join('\\n'));",
+      "code": "csvToJsonConverter(testFile);",
+      "iterations": 100,
+      "baselineTimeMs": 5.0
+    },
+    {
+      "name": "parse-large-csv",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const testFile = path.join(os.tmpdir(), 'perf-large.csv'); const rows = ['name,age,email']; for (let i = 0; i < 1000; i++) { rows.push(`user${i},${20+i},user${i}@test.com`); } fs.writeFileSync(testFile, rows.join('\\n'));",
+      "code": "csvToJsonConverter(testFile);",
+      "iterations": 10,
+      "baselineTimeMs": 50.0
+    }
+  ],
+  "requirements": [
+    "fs"
+  ]
 }

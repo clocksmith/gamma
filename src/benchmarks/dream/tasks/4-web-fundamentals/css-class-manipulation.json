@@ -3,6 +3,18 @@
   "description": "A script that dynamically adds, removes, and toggles CSS classes on elements.",
   "category": "4-web-fundamentals",
   "difficulty": "easy",
+  "promptLevels": {
+    "novice": "toggle class on click",
+    "beginner": "make a div that changes its CSS class when clicked",
+    "intermediate": "create a div with text that toggles a 'highlight' CSS class when clicked",
+    "advanced": "write a function that creates a clickable div which toggles a 'highlight' class on click, where the highlight class adds yellow background",
+    "expert": "Write a function that demonstrates CSS class manipulation. The function should: 1) Create a div element with textContent \"Click me\". 2) Add a click event listener to the div that toggles a class named \"highlight\" using classList.toggle(). 3) Add a <style> element to the document that defines the .highlight class with background-color: yellow. 4) Append both the style and div elements to the document (head for style, body for div). When clicked, the div should alternate between having and not having the yellow background. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Create a function with proper TypeScript types for the div (HTMLDivElement) and style (HTMLStyleElement). Include type annotations. Export the function.",
+    "javascript": "Create a function using document.createElement for both style and div elements. Use element.classList.toggle() for the class manipulation. Export the function.",
+    "javascript-jsdoc": "Include JSDoc with @function, @description explaining classList.toggle(), and document the CSS rule being added. Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that demonstrates CSS class manipulation. The script should create a `div` element with the text \"Click me\". When the div is clicked, it should toggle a `highlight` class on the div. The `highlight` class should change the background color of the div to yellow. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that demonstrates CSS class manipulation. The script should create a `div` element with the text \"Click me\". When the div is clicked, it should toggle a `highlight` class on the div. The `highlight` class should change the background color of the div to yellow. The script should include inline comments to explain the logic.",
@@ -14,5 +26,15 @@
       "test": "async () => { await page.setContent('<style>.highlight { background-color: yellow; }</style><div id=\"myDiv\">Click me</div>'); await page.click('#myDiv'); let hasClass = await page.$eval('#myDiv', el => el.classList.contains('highlight')); console.assert(hasClass, 'div should have the highlight class after click'); await page.click('#myDiv'); hasClass = await page.$eval('#myDiv', el => el.classList.contains('highlight')); console.assert(!hasClass, 'div should not have the highlight class after second click'); }"
     }
   ],
-  "requirements": ["browser"]
+  "requirements": [
+    "browser"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "basic-operation",
+      "code": "document.body.innerHTML = \"\"; for (let i = 0; i < 100; i++) { const div = document.createElement(\"div\"); div.textContent = \"Test\"; document.body.appendChild(div); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
+  ]
 }

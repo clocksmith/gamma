@@ -18,7 +18,7 @@ from unittest.mock import patch, mock_open, MagicMock
 import struct
 import tempfile
 
-from src.core import gguf_parser
+from src.core.hardware import gguf_parser
 
 
 class TestGGUFMetadata(unittest.TestCase):

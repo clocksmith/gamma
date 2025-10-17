@@ -3,11 +3,34 @@
   "description": "Build a complete todo application with the same functionality in all three variants",
   "category": "full-projects",
   "difficulty": "hard",
+  "promptLevels": {
+    "novice": "todo manager with add and remove",
+    "beginner": "make a TodoManager class that can add, remove, and list todos",
+    "intermediate": "create a TodoManager class that manages an array of todo objects with methods to add, remove, toggle completion, and get different filtered lists",
+    "advanced": "write a TodoManager class that manages todos (id, text, completed, createdAt), with methods to add new todos, remove by id, toggle completion status, get all todos, get only completed todos, get only pending todos, and clear all completed todos",
+    "expert": "Write a TodoManager class for managing a todo list application. The class should manage todos where each todo is an object with: id (unique number), text (string description), completed (boolean status), and createdAt (Date timestamp). Implement these methods: 1) addTodo(text) - validates text is non-empty, creates a new todo with unique id and current timestamp, adds to internal array, returns the created todo. 2) removeTodo(id) - finds and removes todo with matching id, returns true if found and removed, false otherwise. 3) toggleTodo(id) - finds todo by id and flips its completed status, returns true if found and toggled, false otherwise. 4) getTodos() - returns array of all todos. 5) getCompletedTodos() - returns array of todos where completed=true. 6) getPendingTodos() - returns array of todos where completed=false. 7) clearCompleted() - removes all completed todos, returns the count of todos removed. Handle id generation to ensure uniqueness. Validate inputs and handle edge cases appropriately. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with a Todo interface defining id (number), text (string), completed (boolean), createdAt (Date). The TodoManager class should properly type all methods with return types like Todo, Todo[], boolean, number. Use private properties for internal state (todos array, id counter). Export both the Todo interface and TodoManager class.",
+    "javascript": "Create a TodoManager class with constructor initializing an empty todos array and idCounter at 1. Use array methods like push, filter, find, splice. Validate text input (check for empty/whitespace). Return appropriate values for each method. Export the class as default.",
+    "javascript-jsdoc": "Use JSDoc with @typedef for Todo object (id number, text string, completed boolean, createdAt Date), @class for TodoManager, @property for todos array and nextId, @param with types for all method parameters, @returns with detailed return type descriptions (Todo, Todo[], boolean, number). Export the class."
+  },
   "variants": {
     "typescript": "Create a complete TypeScript todo application with the following requirements:\n\n1. A Todo interface with: id (number), text (string), completed (boolean), createdAt (Date)\n2. A TodoManager class with methods:\n   - addTodo(text: string): Todo\n   - removeTodo(id: number): boolean\n   - toggleTodo(id: number): boolean\n   - getTodos(): Todo[]\n   - getCompletedTodos(): Todo[]\n   - getPendingTodos(): Todo[]\n   - clearCompleted(): number (returns count of deleted todos)\n3. Proper type safety with interfaces\n4. Error handling for invalid operations\n5. Export all types and the class\n\nThe implementation should be production-ready with proper validation.",
     "javascript": "Create a complete JavaScript todo application with the following requirements:\n\n1. A todo object structure with: id, text, completed, createdAt\n2. A TodoManager class with methods:\n   - addTodo(text)\n   - removeTodo(id)\n   - toggleTodo(id)\n   - getTodos()\n   - getCompletedTodos()\n   - getPendingTodos()\n   - clearCompleted() (returns count of deleted todos)\n3. Error handling for invalid operations\n4. Export the class\n\nThe implementation should be production-ready with proper validation.",
     "javascript-jsdoc": "Create a complete JavaScript todo application with JSDoc annotations with the following requirements:\n\n1. A @typedef Todo with: id (number), text (string), completed (boolean), createdAt (Date)\n2. A TodoManager class with methods (all properly documented with JSDoc):\n   - addTodo(text)\n   - removeTodo(id)\n   - toggleTodo(id)\n   - getTodos()\n   - getCompletedTodos()\n   - getPendingTodos()\n   - clearCompleted() (returns count of deleted todos)\n3. Complete JSDoc type annotations for all methods\n4. Error handling for invalid operations\n5. Export the class\n\nThe implementation should be production-ready with proper validation."
   },
+  "testCases": [
+    {
+      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); console.assert(todo.text === 'Test', 'Should add todo');"
+    },
+    {
+      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); manager.toggleTodo(todo.id); console.assert(manager.getCompletedTodos().length === 1, 'Should toggle todo');"
+    },
+    {
+      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); manager.removeTodo(todo.id); console.assert(manager.getTodos().length === 0, 'Should remove todo');"
+    }
+  ],
   "requirements": [
     "Todo",
     "TodoManager",
@@ -21,15 +44,18 @@
     "validation",
     "export"
   ],
-  "testCases": [
+  "performanceBenchmarks": [
     {
-      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); console.assert(todo.text === 'Test', 'Should add todo');"
+      "name": "create-multiple-todos",
+      "code": "const todos = []; for (let i = 0; i < 100; i++) { todos.push({id: i, title: \"Todo \" + i, completed: false}); }",
+      "iterations": 100,
+      "baselineTimeMs": 1.0
     },
     {
-      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); manager.toggleTodo(todo.id); console.assert(manager.getCompletedTodos().length === 1, 'Should toggle todo');"
-    },
-    {
-      "test": "const manager = new TodoManager(); const todo = manager.addTodo('Test'); manager.removeTodo(todo.id); console.assert(manager.getTodos().length === 0, 'Should remove todo');"
+      "name": "filter-todos",
+      "code": "const todos = Array.from({length: 1000}, (_, i) => ({id: i, title: \"Todo \" + i, completed: i % 2 === 0})); for (let i = 0; i < 100; i++) { todos.filter(t => t.completed); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
     }
   ]
 }

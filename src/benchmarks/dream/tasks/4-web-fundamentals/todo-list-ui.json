@@ -3,6 +3,18 @@
   "description": "Create a todo list UI component with add, remove, and toggle functionality",
   "category": "web-components",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "todo list with add button",
+    "beginner": "make a todo list where you can add and remove items",
+    "intermediate": "create a TodoList class that stores todo items and has methods to add, remove, and mark items as complete",
+    "advanced": "write a TodoList class that manages an array of todo objects (each with id, text, completed), with methods to add new todos, remove by id, toggle completion status by id, and get filtered lists (all/active/completed)",
+    "expert": "Write a TodoList class that manages a collection of todo items. Each todo should be an object with: id (unique number), text (string), and completed (boolean). The class should maintain an internal array of todos and provide these methods: 1) add(text) - creates a new todo with a unique id and completed=false, adds it to the array. 2) remove(id) - removes the todo with matching id from the array. 3) toggle(id) - flips the completed status of the todo with matching id. 4) getAll() - returns all todos. 5) getActive() - returns only todos where completed=false. 6) getCompleted() - returns only todos where completed=true. The class should handle id generation (incrementing counter or similar) to ensure each todo has a unique id. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with a Todo interface defining id (number), text (string), and completed (boolean). The class should have proper type annotations for all methods and the internal todos array. Export both the Todo interface and the TodoList class.",
+    "javascript": "Create a TodoList class with a constructor that initializes an empty todos array and an idCounter starting at 1. Implement all methods using array methods like push, filter, find, and map. Export the class as default export.",
+    "javascript-jsdoc": "Use JSDoc with @typedef for the Todo object structure (id, text, completed), @class for TodoList, @property for the todos array, @param for method parameters, and @returns for method return types (Todo[], Todo, void, etc.). Export the class."
+  },
   "variants": {
     "typescript": "Write a TypeScript TodoList class that manages todo items with add, remove, toggle, and filter methods. Include proper interfaces and type annotations.",
     "javascript": "Write a JavaScript TodoList class that manages todo items with add, remove, toggle, and filter methods.",
@@ -19,5 +31,13 @@
     "toggle",
     "filter",
     "persist"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "basic-operation",
+      "code": "document.body.innerHTML = \"\"; for (let i = 0; i < 100; i++) { const div = document.createElement(\"div\"); div.textContent = \"Test\"; document.body.appendChild(div); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
   ]
 }

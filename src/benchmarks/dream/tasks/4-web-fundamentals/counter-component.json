@@ -3,6 +3,18 @@
   "description": "Create a counter component with increment/decrement buttons",
   "category": "web-components",
   "difficulty": "easy",
+  "promptLevels": {
+    "novice": "counter with buttons",
+    "beginner": "make a counter that can go up and down",
+    "intermediate": "create a counter component with a number display and two buttons to increase and decrease the count",
+    "advanced": "write a Counter class or component with a count value starting at 0, an increment method/button to add 1, a decrement method/button to subtract 1, and a way to display the current count",
+    "expert": "Write a Counter component/class that maintains a numeric count state (initial value: 0). Provide three pieces of functionality: 1) A method or mechanism to increment the count by 1. 2) A method or mechanism to decrement the count by 1. 3) A method or UI element to display/retrieve the current count value. The component should update the display whenever the count changes. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Create a Counter class with private count property (number, starts at 0), and public methods: increment(), decrement(), getCount(). Include proper TypeScript type annotations. Export the class.",
+    "javascript": "Create a Counter class with a count property (starts at 0) and methods: increment(), decrement(), getCount(). Export the class as default export.",
+    "javascript-jsdoc": "Create a Counter class with JSDoc annotations. Include @class, @property for count, and method documentation with @returns. Export the class."
+  },
   "variants": {
     "typescript": "Write a TypeScript module that exports a Counter class with methods to get the current count and increment/decrement it. Include proper type annotations.",
     "javascript": "Write a JavaScript module that exports a Counter class with methods to get the current count and increment/decrement it.",
@@ -19,37 +31,18 @@
     "display",
     "buttons"
   ],
-  "expectedElements": [
-    "#count",
-    "#increment-btn",
-    "#decrement-btn"
-  ],
-  "interactions": [
+  "performanceBenchmarks": [
     {
-      "name": "Initial state check",
-      "type": "verify",
-      "expected": {
-        "selector": "#count",
-        "text": "0"
-      }
+      "name": "create-counter-instances",
+      "code": "for (let i = 0; i < 100; i++) { const counter = new Counter(); counter.increment(); counter.getCount(); }",
+      "iterations": 50,
+      "baselineTimeMs": 1.0
     },
     {
-      "name": "Increment click",
-      "type": "click",
-      "selector": "#increment-btn",
-      "expected": {
-        "selector": "#count",
-        "text": "1"
-      }
-    },
-    {
-      "name": "Decrement click",
-      "type": "click",
-      "selector": "#decrement-btn",
-      "expected": {
-        "selector": "#count",
-        "text": "0"
-      }
+      "name": "many-operations",
+      "code": "const counter = new Counter(); for (let i = 0; i < 1000; i++) { counter.increment(); counter.decrement(); counter.getCount(); }",
+      "iterations": 50,
+      "baselineTimeMs": 2.0
     }
   ]
 }

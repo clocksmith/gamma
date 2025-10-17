@@ -91,6 +91,7 @@ export class BenchmarkRunner {
 
   /**
    * Load all benchmark tasks from the tasks directory
+   * Normalizes category names using the resolver and adds bias level metadata
    */
   async loadTasks() {
     const tasks = [];
@@ -107,11 +108,19 @@ export class BenchmarkRunner {
           if (file.endsWith('.json')) {
             const taskPath = join(categoryPath, file);
             const taskData = JSON.parse(await readFile(taskPath, 'utf-8'));
+
+            // Resolve category name (handles aliases like 'ui-components' -> '5-react-component-library')
+            const taskCategory = taskData.category || category;
+            const resolvedCategory = this.config.resolveCategory(taskCategory);
+            const resolvedConfig = this.config.categories[resolvedCategory] || categoryConfig;
+
             tasks.push({
               ...taskData,
-              category,
-              weight: categoryConfig.weight,
-              timeout: categoryConfig.timeout
+              category: resolvedCategory,
+              originalCategory: taskCategory, // Preserve original for reference
+              biasLevel: resolvedConfig.biasLevel || 'unknown',
+              weight: resolvedConfig.weight,
+              timeout: resolvedConfig.timeout
             });
           }
         }
@@ -316,6 +325,57 @@ JSON:`.trim();
   }
 
   /**
+   * Build a prompt from task definition based on variant.
+   * Supports both new promptLevels structure and legacy variants structure.
+   *
+   * @param {Object} task - The task object
+   * @param {string} variant - Variant name (e.g., "typescript-expert", "javascript-jsdoc-beginner")
+   * @returns {string|null} - The built prompt or null if not found
+   */
+  buildPrompt(task, variant) {
+    // Check if task has new promptLevels structure
+    if (task.promptLevels && typeof task.promptLevels === 'object') {
+      // Parse variant into language and level
+      // Variants can be: "typescript-expert", "javascript-jsdoc-novice", etc.
+      const parts = variant.split('-');
+
+      // The last part is the prompt level (novice, beginner, intermediate, advanced, expert)
+      const level = parts[parts.length - 1];
+
+      // Everything before is the language (typescript, javascript, javascript-jsdoc, etc.)
+      const language = parts.slice(0, -1).join('-');
+
+      // Check if this level exists in promptLevels
+      if (task.promptLevels[level]) {
+        const basePrompt = task.promptLevels[level];
+
+        // Get language-specific instructions if available
+        const langInstructions = task.languageInstructions?.[language] || '';
+
+        // Perform template substitution
+        // Replace {languageSpecific} placeholder with language instructions
+        const finalPrompt = basePrompt.replace('{languageSpecific}', langInstructions);
+
+        return finalPrompt;
+      }
+
+      // If level not found, try falling back to variants (maybe it's not a level-based variant)
+      if (task.variants && task.variants[variant]) {
+        return task.variants[variant];
+      }
+
+      return null;
+    }
+
+    // Fallback to legacy variants structure for backward compatibility
+    if (task.variants && task.variants[variant]) {
+      return task.variants[variant];
+    }
+
+    return null;
+  }
+
+  /**
    * Run a single benchmark task multiple times as configured.
    */
   async runTask(task, provider, variant) {
@@ -338,7 +398,7 @@ JSON:`.trim();
     const language = variant.includes('typescript') ? 'typescript' : 'javascript';
 
     try {
-      const prompt = task.variants[variant];
+      const prompt = this.buildPrompt(task, variant);
       if (!prompt) {
         if (this.config.output.verbose) {
           console.log(`  → Skipping ${variant} (not defined for this task)`);
@@ -346,6 +406,7 @@ JSON:`.trim();
         return {
           taskName: task.name,
           category: task.category,
+          biasLevel: task.biasLevel,
           provider: provider.name,
           variant,
           language,
@@ -399,6 +460,7 @@ JSON:`.trim();
       const result = {
         taskName: task.name,
         category: task.category,
+        biasLevel: task.biasLevel,
         provider: provider.name,
         variant,
         language,
@@ -423,6 +485,7 @@ JSON:`.trim();
       const result = {
         taskName: task.name,
         category: task.category,
+        biasLevel: task.biasLevel,
         provider: provider.name,
         variant,
         language,

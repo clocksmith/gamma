@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import patch, MagicMock, Mock
 import argparse
 
-from src.core import interactive_prompts
+from src.core.menu import interactive_prompts
 
 
 class TestGetUserInput(unittest.TestCase):

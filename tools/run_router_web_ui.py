@@ -15,7 +15,7 @@ from pydantic import BaseModel
 # Add project root to the path to allow importing from src
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.core.routing_logic import get_responses, route_responses
+from src.core.menu.routing_logic import get_responses, route_responses
 
 app = FastAPI()
 

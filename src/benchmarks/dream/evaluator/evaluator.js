@@ -29,15 +29,18 @@ export class Evaluator {
       accuracy: 0,
       performance: 0,
       codeQuality: 0,
-      completeness: 0
+      completeness: 0,
+      complexity: 0
     };
 
-    // Additional LLM benchmark metrics
+    // Additional LLM benchmark metrics (all camelCase)
     const advancedMetrics = {
       f1Score: 0,
       precision: 0,
       recall: 0,
-      exactMatch: 0
+      exactMatch: 0,
+      editSimilarity: 0,
+      astSimilarity: 0
     };
 
     const code = this.extractCode(response.content, variant);
@@ -102,16 +105,22 @@ export class Evaluator {
 
     const performanceResult = await this.evaluatePerformance(code, task, variant, response.usage);
     scores.performance = performanceResult.overallScore;
-    scores.performance_token = performanceResult.tokenScore;
-    scores.performance_runtime = performanceResult.runtimeScore ?? null;
+    scores.performanceToken = performanceResult.tokenScore;
+    scores.performanceRuntime = performanceResult.runtimeScore ?? null;
     const codeQualityScore = await this.evaluateCodeQuality(code, task, variant);
     scores.codeQuality = codeQualityScore.score;
     scores.completeness = this.evaluateCompleteness(response.content, task);
 
-    const totalScore = Object.entries(scores).reduce((total, [criterion, score]) => {
-      const weight = this.config?.[criterion]?.weight || 0;
-      return total + (score * weight);
-    }, 0) * 100;
+    // Calculate complexity score (normalized from metrics)
+    scores.complexity = this.calculateComplexityScore(complexityMetrics);
+
+    // Calculate total score using all metrics with proper weights
+    const totalScore = Object.entries(scores)
+      .filter(([key]) => !key.startsWith('performance')) // Skip sub-scores
+      .reduce((total, [criterion, score]) => {
+        const weight = this.config?.[criterion]?.weight || 0;
+        return total + (score * weight);
+      }, 0) * 100;
 
     // Add runtime performance metrics if available
     if (performanceResult.runtimeMetrics) {
@@ -813,5 +822,21 @@ export class Evaluator {
       promises: (code.match(/\b(then|catch|Promise)\b/g) || []).length,
       returns: (code.match(/\breturn\b/g) || []).length,
     };
+  }
+
+  /**
+   * Calculate a normalized complexity score from complexity metrics
+   * Lower complexity = higher score (inverted)
+   * Returns score between 0 and 1
+   */
+  calculateComplexityScore(complexityMetrics) {
+    // Normalize each metric to 0-1 scale (inverted - lower is better)
+    const cyclomaticScore = Math.max(0, 1 - (complexityMetrics.cyclomaticComplexity / 50));
+    const halsteadDifficultyScore = Math.max(0, 1 - (complexityMetrics.halsteadDifficulty / 100));
+    const nestingScore = Math.max(0, 1 - (complexityMetrics.maxNestingDepth / 20));
+    const maintainabilityScore = Math.max(0, complexityMetrics.maintainabilityIndex / 171);
+
+    // Average the scores
+    return (cyclomaticScore + halsteadDifficultyScore + nestingScore + maintainabilityScore) / 4;
   }
 }

@@ -9,6 +9,7 @@ except ImportError:
     raise ImportError("'numpy' library not found. Install with `pip install numpy`")
 
 from src.core.engine_interface import LLMEngine
+from src.core import ollama_utils
 from src.engines import sampling_utils
 
 
@@ -17,34 +18,64 @@ class OllamaEngine(LLMEngine):
 
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
         super().__init__(model_name=model_name, engine_specific_config=engine_specific_config)
-        self.base_url = engine_specific_config.get("ollama_url", "http://localhost:11434") if engine_specific_config else "http://localhost:11434"
+        # Try to auto-detect if no URL specified
+        config_url = engine_specific_config.get("ollama_url") if engine_specific_config else None
+        if config_url:
+            self.base_url = config_url
+        else:
+            # Auto-detect Ollama server
+            self.base_url = ollama_utils.detect_ollama_server()
         self._vocab_cache = {}
         self._vocab_size = None
+        self._model_info = None
 
     def load(self):
-        """Load/verify the Ollama model."""
+        """Load/verify the Ollama model with enhanced detection."""
         print(f"OllamaEngine: Checking availability of model '{self.model_name}'...")
 
-        # Check if ollama is installed
+        # Check if Ollama CLI is installed
+        if not ollama_utils.is_ollama_installed():
+            print("Warning: Ollama CLI not found in PATH")
+            print("Install from: https://ollama.ai")
+
+        # Auto-detect server if not already set
+        if self.base_url is None:
+            self.base_url = ollama_utils.detect_ollama_server()
+            if self.base_url is None:
+                raise RuntimeError(
+                    "Ollama server not found. Is it running?\n"
+                    "Start with: ollama serve"
+                )
+            print(f"✓ Detected Ollama server at {self.base_url}")
+
+        # Check model availability
+        is_available, message = ollama_utils.check_model_availability(
+            self.model_name, self.base_url
+        )
+
+        if not is_available:
+            print(f"\n{message}")
+            print(f"\nTo download this model, run:")
+            print(f"  ollama pull {self.model_name}")
+            raise RuntimeError(f"Model '{self.model_name}' not available")
+
+        print(f"✓ {message}")
+
+        # Get model metadata
         try:
-            result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, check=True)
-            available_models = result.stdout
+            self._model_info = ollama_utils.get_model_info(self.model_name, self.base_url)
+            details = ollama_utils.parse_model_details(self._model_info)
 
-            # Check if our model is in the list
-            if self.model_name not in available_models:
-                print(f"\nAvailable Ollama models:")
-                print(available_models)
-                raise RuntimeError(f"Model '{self.model_name}' not found in Ollama. Run: ollama pull {self.model_name}")
+            print(f"  Family: {details['family']}")
+            print(f"  Size: {details['parameter_size']}")
+            print(f"  Quantization: {details['quantization_level']}")
 
-            print(f"✓ Model '{self.model_name}' is available via Ollama")
-
-            # Get model info to extract vocabulary size
+            # Initialize vocabulary
             self._initialize_vocabulary()
 
-        except FileNotFoundError:
-            raise RuntimeError("Ollama not found. Install from https://ollama.ai")
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Failed to list Ollama models: {e}")
+        except Exception as e:
+            print(f"Warning: Could not fetch model details: {e}")
+            self._initialize_vocabulary()
 
     def _initialize_vocabulary(self):
         """Initialize vocabulary information by making a test inference."""
@@ -176,8 +207,8 @@ class OllamaEngine(LLMEngine):
         except Exception as e:
             raise RuntimeError(f"Ollama API call failed: {e}")
 
-    def get_token_text(self, token_id: int) -> str:
-        """Get the text representation of a token ID."""
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID using Ollama vocabulary cache."""
         return self._vocab_cache.get(token_id, f"<token_{token_id}>")
 
     def reset_kv_cache(self):

@@ -3,6 +3,18 @@
   "description": "Implement a custom array filter function",
   "category": "1-foundations",
   "difficulty": "easy",
+  "promptLevels": {
+    "novice": "filter array",
+    "beginner": "make a function that filters an array",
+    "intermediate": "create a function called customFilter that filters an array based on a condition",
+    "advanced": "write a function called customFilter that takes an array and a predicate function, then returns a new array with only the elements that pass the predicate test",
+    "expert": "Write a function called `customFilter` that takes an array and a predicate function as parameters. The function should iterate through the array and return a new array containing only the elements for which the predicate function returns true. The predicate function takes an element as input and returns a boolean. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with generic type annotations for the array element type T. The function signature should be: `function customFilter<T>(array: T[], predicate: (element: T) => boolean): T[]`. Export as a named export.",
+    "javascript": "Export the function as a named export. Do not include example usage or test code.",
+    "javascript-jsdoc": "Use JSDoc with @template for generics, @param for parameters, and @return for the return type. Export as a named export. Do not include example usage."
+  },
   "variants": {
     "typescript": "Write a TypeScript generic function called `customFilter` that takes an array of type T and a predicate function, and returns a new array containing only elements that satisfy the predicate. Include proper generic type annotations. Export the function as a named export and return only the function implementation—no example usage, console output, or extra helpers.",
     "javascript": "Write a JavaScript function called `customFilter` that takes an array and a predicate function, and returns a new array containing only elements that satisfy the predicate. Export the function as a named export and output only the function implementation without example usage or additional code.",
@@ -16,5 +28,25 @@
       "test": "const result = customFilter(['a', 'ab', 'abc'], x => x.length > 1); console.assert(result.length === 2, 'Filter should work with strings');"
     }
   ],
-  "requirements": ["function", "customFilter", "array", "predicate", "export"]
+  "performanceBenchmarks": [
+    {
+      "name": "filter-small-array",
+      "code": "customFilter(Array.from({length: 100}, (_, i) => i), x => x % 2 === 0);",
+      "iterations": 1000,
+      "baselineTimeMs": 0.1
+    },
+    {
+      "name": "filter-large-array",
+      "code": "customFilter(Array.from({length: 10000}, (_, i) => i), x => x % 2 === 0);",
+      "iterations": 100,
+      "baselineTimeMs": 5.0
+    }
+  ],
+  "requirements": [
+    "function",
+    "customFilter",
+    "array",
+    "predicate",
+    "export"
+  ]
 }

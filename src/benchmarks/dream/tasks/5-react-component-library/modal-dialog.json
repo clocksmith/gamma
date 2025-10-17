@@ -3,6 +3,18 @@
   "description": "Create a reusable modal dialog component",
   "category": "ui-components",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "popup dialog box",
+    "beginner": "make a Modal class that can show and hide a dialog box",
+    "intermediate": "create a Modal class with open and close methods, plus optional callback functions",
+    "advanced": "write a Modal class that can be instantiated with options (title, content, callback functions), has open() and close() methods, and calls the appropriate callback when buttons are clicked",
+    "expert": "Write a Modal class for creating reusable dialog boxes. The class should: 1) Accept an options object in the constructor with properties: title (string, optional), content (string or HTML, optional), onConfirm (callback function, optional), onCancel (callback function, optional). 2) Have an open() method that displays the modal. 3) Have a close() method that hides the modal. 4) Store whether the modal is currently open/closed as internal state. 5) Support calling onConfirm when a confirm action occurs and onCancel when a cancel action occurs. The class should allow multiple modal instances to be created with different configurations. The modal should maintain its own state and handle showing/hiding properly. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with an interface for ModalOptions defining the optional properties (title, content, onConfirm, onCancel). The class should have proper type annotations for all methods and properties. The callback types should be () => void. Store isOpen as a private boolean property. Export both the interface and the class.",
+    "javascript": "Create a Modal class with a constructor that accepts and stores the options object. Initialize isOpen to false. Implement open() and close() methods that update isOpen and call the appropriate callbacks. Export the class as default.",
+    "javascript-jsdoc": "Use JSDoc with @typedef for ModalOptions object (with optional title, content, onConfirm, onCancel properties), @class for Modal, @property for isOpen, @param for the constructor options, and @returns void for methods. Document when callbacks are invoked. Export the class."
+  },
   "variants": {
     "typescript": "Write a TypeScript Modal class that can show/hide and handle callbacks. Include proper interfaces for options.",
     "javascript": "Write a JavaScript Modal class that can show/hide and handle callbacks.",
@@ -19,5 +31,19 @@
     "close",
     "overlay",
     "reusable"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "toggle-state",
+      "code": "let isOpen = false; for (let i = 0; i < 10000; i++) { isOpen = !isOpen; const state = {isOpen, content: \"Modal content\"}; }",
+      "iterations": 100,
+      "baselineTimeMs": 2.0
+    },
+    {
+      "name": "process-modal-content",
+      "code": "const content = \"X\".repeat(1000); for (let i = 0; i < 100; i++) { const processed = content.substring(0, 100); const lines = content.split(\"\\n\"); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
   ]
 }

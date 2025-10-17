@@ -321,20 +321,25 @@ gamma/
 │   │   ├── strategies/
 │   │   └── advanced/
 │   ├── benchmarks/                 # ⚗ Benchmarking suite
+│   │   ├── framework/              # Base benchmarking framework
 │   │   ├── mind_meld_benchmark.py
 │   │   └── dream/                  # DREAM: TypeScript vs JavaScript benchmarks
 │   │       ├── index.js
 │   │       ├── tasks/              # 20+ coding tasks
 │   │       ├── runner/
 │   │       └── evaluator/
-│   ├── color_utils/                # ⚘ Color utilities
-│   │   ├── dream.js                # Material Design 3 colors
-│   │   ├── demo/                   # MILCHICK demo
-│   │   └── test/
+│   ├── integrations/               # ⚙ Framework integrations
+│   │   ├── openai_compat.py        # OpenAI API compatibility
+│   │   ├── langchain_compat.py     # LangChain wrappers
+│   │   └── ecosystem_utils.py      # Framework recommendations
+│   ├── utils/                      # ⚡ Performance utilities
+│   │   ├── profiling.py            # Performance profiling
+│   │   ├── caching.py              # Smart caching
+│   │   └── memory.py               # Memory optimization
 │   ├── core/                       # Core shared utilities
 │   │   ├── engine_interface.py
-│   │   ├── interactive_menu.py
-│   │   ├── model_catalog.py
+│   │   ├── sampling_strategies.py  # Pre-configured sampling
+│   │   ├── model_discovery.py      # Model discovery
 │   │   └── ...
 │   └── engines/                    # Model execution engines
 │       ├── pytorch_engine.py       # ☑ Fully implemented
@@ -451,6 +456,28 @@ CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python
 # Or for ROCm (AMD)
 CMAKE_ARGS="-DLLAMA_HIPBLAS=on" pip install llama-cpp-python
 ```
+
+---
+
+## Documentation
+
+### User Guides
+
+- **[Integration Guide](./docs/integration-guide.md)** - Use GAMMA with OpenAI API, LangChain, and other frameworks
+- **[Optimization Guide](./docs/optimization-guide.md)** - Performance profiling, caching, and memory optimization
+
+### Module Documentation
+
+- **[Integrations](./src/integrations/README.md)** - OpenAI API compatibility, LangChain wrappers, ecosystem utilities
+- **[Utilities](./src/utils/README.md)** - Profiling, caching, and memory optimization tools
+- **[Benchmarks](./src/benchmarks/README.md)** - Benchmarking framework and tools
+- **[Tests](./tests/engines/README.md)** - Testing infrastructure and patterns
+
+### Additional Resources
+
+- **[Mind Meld Documentation](./docs/MIND_MELD.md)** - Multi-model collaboration system
+- **[Project Structure Analysis](./refactor-analysis/PROJECT_STRUCTURE_ANALYSIS.md)** - Codebase organization
+- **[Refactor Progress](./refactor-analysis/PROGRESS.md)** - Development history and improvements
 
 ---
 

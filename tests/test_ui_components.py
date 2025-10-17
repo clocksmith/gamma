@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from io import StringIO
 
-from src.core import ui_components
+from src.ui import components as ui_components
 from src.core import config as cfg
 
 

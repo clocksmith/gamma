@@ -3,10 +3,35 @@
   "description": "Identify and fix a race condition in async code",
   "category": "bug-finding",
   "difficulty": "hard",
-  "bugLocation": "useState update in handleSubmit",
+  "promptLevels": {
+    "novice": "find bug in async code",
+    "beginner": "identify the race condition bug in the UserManager class",
+    "intermediate": "analyze the UserManager code and explain the race condition that occurs when fetchUsers and addUser are called simultaneously",
+    "advanced": "identify the race condition bug in the code below where calling addUser() and fetchUsers() concurrently can cause data loss, explain the specific scenario where it fails, and propose a solution:\n\nIdentify the bug in this code and explain how to fix it:\n\n```typescript\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nclass UserManager {\n  private users: User[] = [];\n  private isLoading: boolean = false;\n\n  async fetchUsers(): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users');\n      const data = await response.json();\n      this.users = data;\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  async addUser(user: Omit<User, 'id'>): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users', {\n        method: 'POST',\n        body: JSON.stringify(user)\n      });\n      const newUser = await response.json();\n      // BUG: Race condition - if fetchUsers() is called while this is running,\n      // the new user might not be in the final list\n      this.users.push(newUser);\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  getUsers(): User[] {\n    return this.users;\n  }\n}\n```\n\nWhat's the bug and how would you fix it?",
+    "expert": "Identify the bug in this code and explain how to fix it:\n\n```typescript\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nclass UserManager {\n  private users: User[] = [];\n  private isLoading: boolean = false;\n\n  async fetchUsers(): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users');\n      const data = await response.json();\n      this.users = data;\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  async addUser(user: Omit<User, 'id'>): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users', {\n        method: 'POST',\n        body: JSON.stringify(user)\n      });\n      const newUser = await response.json();\n      // BUG: Race condition - if fetchUsers() is called while this is running,\n      // the new user might not be in the final list\n      this.users.push(newUser);\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  getUsers(): User[] {\n    return this.users;\n  }\n}\n```\n\nPerform a comprehensive race condition analysis. Explain: 1) The exact sequence of events that causes the bug (e.g., addUser pushes newUser to array, then fetchUsers replaces entire array, losing the newly added user). 2) Why the isLoading flag doesn't prevent this. 3) Multiple solution approaches: request queuing, optimistic updates, refetching after mutations, or using a proper state management pattern. 4) Provide corrected code with proper concurrency handling. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Provide detailed analysis as markdown or structured response. Include corrected TypeScript code using techniques like Promise queuing, operation IDs to track requests, or mutex/lock patterns. Explain trade-offs of each solution.",
+    "javascript": "Provide analysis and corrected JavaScript code. Show solutions like maintaining a pending operations queue, adding request identifiers, or implementing a simple mutex pattern using Promises.",
+    "javascript-jsdoc": "Provide analysis with JSDoc-annotated corrected code. Document the concurrency strategy used, include @async tags, and explain how the solution prevents race conditions."
+  },
   "variants": {
     "typescript": "Identify the bug in this code and explain how to fix it:\n\n```typescript\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nclass UserManager {\n  private users: User[] = [];\n  private isLoading: boolean = false;\n\n  async fetchUsers(): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users');\n      const data = await response.json();\n      this.users = data;\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  async addUser(user: Omit<User, 'id'>): Promise<void> {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users', {\n        method: 'POST',\n        body: JSON.stringify(user)\n      });\n      const newUser = await response.json();\n      // BUG: Race condition - if fetchUsers() is called while this is running,\n      // the new user might not be in the final list\n      this.users.push(newUser);\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  getUsers(): User[] {\n    return this.users;\n  }\n}\n```\n\nWhat's the bug and how would you fix it?",
     "javascript": "Identify the bug in this code and explain how to fix it:\n\n```javascript\nclass UserManager {\n  constructor() {\n    this.users = [];\n    this.isLoading = false;\n  }\n\n  async fetchUsers() {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users');\n      const data = await response.json();\n      this.users = data;\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  async addUser(user) {\n    this.isLoading = true;\n    try {\n      const response = await fetch('/api/users', {\n        method: 'POST',\n        body: JSON.stringify(user)\n      });\n      const newUser = await response.json();\n      // BUG: Race condition\n      this.users.push(newUser);\n    } finally {\n      this.isLoading = false;\n    }\n  }\n\n  getUsers() {\n    return this.users;\n  }\n}\n```\n\nWhat's the bug and how would you fix it?",
     "javascript-jsdoc": "Identify the bug in this code with JSDoc annotations and explain how to fix it:\n\n[Same as JavaScript with JSDoc]"
-  }
+  },
+  "performanceBenchmarks": [
+    {
+      "name": "sequential-operations",
+      "code": "for (let i = 0; i < 100; i++) { await Promise.resolve(i); }",
+      "iterations": 50,
+      "baselineTimeMs": 10.0
+    },
+    {
+      "name": "concurrent-operations",
+      "code": "await Promise.all(Array.from({length: 100}, (_, i) => Promise.resolve(i)));",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
+  ]
 }

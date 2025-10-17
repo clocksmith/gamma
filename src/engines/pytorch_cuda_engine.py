@@ -43,20 +43,11 @@ class PyTorchCUDAEngine(LLMEngine):
         
         # Load tokenizer
         # Gemma-3 models require trust_remote_code=True
-        trust_remote = self.engine_config.get("trust_remote_code", False)
         if "gemma-3" in self.model_name.lower() or "gemma3" in self.model_name.lower():
-            trust_remote = True
-        token = self.engine_config.get("hf_token", None)
-        
-        try:
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.model_name,
-                trust_remote_code=trust_remote,
-                token=token,
-                use_fast=True  # Use fast tokenizer for better performance
-            )
-        except Exception as e:
-            raise RuntimeError(f"PyTorchCUDAEngine: Tokenizer loading failed: {e}")
+            self.engine_config["trust_remote_code"] = True
+        self._load_hf_tokenizer(use_fast=True)  # Use fast tokenizer for better performance
+        trust_remote = self.get_trust_remote_code()
+        token = self.get_hf_token()
         
         # Configure model loading options
         model_kwargs = self._prepare_model_kwargs(trust_remote, token)
@@ -354,34 +345,17 @@ class PyTorchCUDAEngine(LLMEngine):
             except:
                 return -1
     
-    def get_token_text(self, token_id: int) -> str:
-        """Get text representation of a token"""
-        if token_id in self._token_cache:
-            return self._token_cache[token_id]
-        
-        game_repr = self._special_token_id_to_game_repr.get(token_id)
-        if game_repr:
-            self._token_cache[token_id] = game_repr
-            return game_repr
-        
-        if not self.tokenizer:
-            raise RuntimeError("PyTorchCUDAEngine: Tokenizer not loaded.")
-        
-        try:
-            token_text = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-            if isinstance(token_text, bytes):
-                token_text = token_text.decode("utf-8", errors="replace")
-            
-            # Handle sentencepiece tokens
-            if token_text.startswith("▁"):
-                token_text = token_text[1:] or " "
-            
-            self._token_cache[token_id] = token_text
-            return token_text
-        except Exception:
-            token_text = f"<ID:{token_id}>"
-            self._token_cache[token_id] = token_text
-            return token_text
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID using PyTorch CUDA/HuggingFace tokenizer."""
+        token_text = self.tokenizer.convert_ids_to_tokens([token_id])[0]
+        if isinstance(token_text, bytes):
+            token_text = token_text.decode("utf-8", errors="replace")
+
+        # Handle sentencepiece tokens
+        if token_text.startswith("▁"):
+            token_text = token_text[1:] or " "
+
+        return token_text
     
     def get_attention_for_visualization(
         self, attention_output: Any, input_ids_for_viz: Any

@@ -15,7 +15,7 @@ import unittest
 from unittest.mock import Mock, MagicMock, patch
 import argparse
 
-from src.core.mind_meld_mode import MindMeldMode
+from src.mind_meld.mode import MindMeldMode
 
 
 class TestMindMeldMode(unittest.TestCase):

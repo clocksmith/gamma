@@ -3,6 +3,18 @@
   "description": "A script that creates a basic HTTP server with a few API endpoints.",
   "category": "3-server-side-development",
   "difficulty": "easy",
+  "promptLevels": {
+    "novice": "web server",
+    "beginner": "make a simple web server that responds to requests",
+    "intermediate": "create an HTTP server on port 3000 with two endpoints that return different responses",
+    "advanced": "write an HTTP server that listens on port 3000 with a root endpoint returning \"Hello, World!\" and a /hello endpoint returning a JSON response",
+    "expert": "Write an HTTP server that listens on port 3000. Implement two endpoints: 1) The root path \"/\" should respond with the plain text \"Hello, World!\" (content-type: text/plain). 2) The path \"/hello\" should respond with a JSON object containing a message property with value \"Hello, stranger!\" (content-type: application/json). The server should handle GET requests to these paths. Export the server instance so it can be closed after testing. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use Node.js built-in http module. Include TypeScript type annotations for request and response objects. Use proper types from @types/node. Export the server instance.",
+    "javascript": "Use Node.js built-in http module. Create a server using http.createServer(). Handle routing by checking the request URL. Export the server instance.",
+    "javascript-jsdoc": "Use Node.js http module. Include JSDoc comments with @description for the main server creation, document the two endpoints, and use @returns to document what the module exports."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that creates a basic HTTP server that listens on port 3000. The server should have two endpoints: `/` which returns \"Hello, World!\", and `/hello` which returns a JSON object `{\"message\": \"Hello, stranger!\"}`. The script should include inline comments to explain the logic.",
@@ -21,5 +33,23 @@
       "test": "const http = require('http'); const server = require('./basic-api-server.js'); const options = {hostname: 'localhost', port: 3000, path: '/hello', method: 'GET'}; const req = http.request(options, res => { let data = ''; res.on('data', d => { data += d; }); res.on('end', () => { const expected = JSON.stringify({message: 'Hello, stranger!'}); console.assert(data === expected, '/hello should return {message: \"Hello, stranger!\"}'); server.close(); }); }); req.on('error', error => { console.error(error); server.close(); }); req.end();"
     }
   ],
-  "requirements": ["http"]
+  "performanceBenchmarks": [
+    {
+      "name": "single-request",
+      "setup": "const http = require('http'); const server = require('./module.js');",
+      "code": "await new Promise((resolve) => { const req = http.request({hostname: 'localhost', port: 3000, path: '/', method: 'GET'}, res => { res.on('data', () => {}); res.on('end', resolve); }); req.end(); });",
+      "iterations": 100,
+      "baselineTimeMs": 5.0
+    },
+    {
+      "name": "concurrent-requests",
+      "setup": "const http = require('http'); const server = require('./module.js');",
+      "code": "await Promise.all(Array.from({length: 10}, () => new Promise((resolve) => { const req = http.request({hostname: 'localhost', port: 3000, path: '/hello', method: 'GET'}, res => { res.on('data', () => {}); res.on('end', resolve); }); req.end(); })));",
+      "iterations": 20,
+      "baselineTimeMs": 20.0
+    }
+  ],
+  "requirements": [
+    "http"
+  ]
 }

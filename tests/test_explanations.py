@@ -17,7 +17,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from io import StringIO
 
-from src.core import explanations
+from src.ui import explanations
 
 
 class MockArgs:

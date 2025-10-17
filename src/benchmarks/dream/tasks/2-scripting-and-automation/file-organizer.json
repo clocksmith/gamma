@@ -3,6 +3,18 @@
   "description": "A script that reads a directory and organizes files into subdirectories based on their file type.",
   "category": "2-scripting-and-automation",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "organize files by type",
+    "beginner": "make a script that organizes files in a folder by their file extensions",
+    "intermediate": "create a function that reads all files in a directory and moves them into subdirectories based on their file extensions",
+    "advanced": "write a function that takes a directory path, finds all files with different extensions (like .txt, .jpg, .pdf), creates a subfolder for each extension type, and moves the files into their corresponding folders",
+    "expert": "Write a function that accepts a directory path as a parameter. Scan the directory to find all files (not subdirectories). For each unique file extension found (e.g., .txt, .jpg, .pdf), create a subdirectory named after that extension (without the dot). Move each file into its corresponding extension subdirectory. For example, all .txt files go into a \"txt\" folder, all .jpg files go into a \"jpg\" folder, etc. If a file has no extension, place it in an \"other\" folder. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use Node.js fs and path modules. Include TypeScript types for parameters. Use synchronous or async file operations. Export the function.",
+    "javascript": "Use Node.js fs and path modules. Handle file reading, directory creation, and file moving. Export the function as default export.",
+    "javascript-jsdoc": "Use Node.js fs and path modules. Include JSDoc with @param describing the directory path parameter, @description explaining the organization logic, and @returns if the function returns anything. Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that organizes files in a given directory by their extension. The script should be a function that takes a directory path as input. It should create subdirectories for each file extension found in the directory and move the files into their respective subdirectories. The script should include inline comments to explain the logic.",
@@ -19,5 +31,24 @@
       "cleanup": "fs.rmSync(testDir, { recursive: true, force: true });"
     }
   ],
-  "requirements": ["fs", "path"]
+  "performanceBenchmarks": [
+    {
+      "name": "organize-small-directory",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const testDir = path.join(os.tmpdir(), 'perf-small'); if (fs.existsSync(testDir)) fs.rmSync(testDir, {recursive: true}); fs.mkdirSync(testDir); for (let i = 0; i < 10; i++) { fs.writeFileSync(path.join(testDir, `file${i}.txt`), 'test'); fs.writeFileSync(path.join(testDir, `image${i}.jpg`), 'test'); }",
+      "code": "fileOrganizer(testDir);",
+      "iterations": 50,
+      "baselineTimeMs": 10.0
+    },
+    {
+      "name": "organize-large-directory",
+      "setup": "const fs = require('fs'); const path = require('path'); const os = require('os'); const testDir = path.join(os.tmpdir(), 'perf-large'); if (fs.existsSync(testDir)) fs.rmSync(testDir, {recursive: true}); fs.mkdirSync(testDir); for (let i = 0; i < 100; i++) { fs.writeFileSync(path.join(testDir, `file${i}.txt`), 'test'); fs.writeFileSync(path.join(testDir, `image${i}.jpg`), 'test'); fs.writeFileSync(path.join(testDir, `doc${i}.pdf`), 'test'); }",
+      "code": "fileOrganizer(testDir);",
+      "iterations": 10,
+      "baselineTimeMs": 100.0
+    }
+  ],
+  "requirements": [
+    "fs",
+    "path"
+  ]
 }

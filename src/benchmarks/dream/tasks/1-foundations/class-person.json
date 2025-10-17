@@ -3,6 +3,18 @@
   "description": "Create a Person class with methods",
   "category": "1-foundations",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "person class",
+    "beginner": "make a Person class with name and age",
+    "intermediate": "create a Person class that stores name, age, and email, and has a method to get person info",
+    "advanced": "write a class called Person with three properties (name, age, email) and a getInfo method that returns a formatted string with all the person's details",
+    "expert": "Write a class called `Person` that has three properties: name (string), age (number), and email (string). The constructor should accept these three parameters and assign them to the instance. Add a method called `getInfo()` that returns a formatted string containing all three pieces of information (e.g., \"Name: John, Age: 30, Email: john@example.com\"). {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with type annotations for all properties and method return types. Define an interface called `IPerson` that describes the structure of the Person class. The constructor parameters should be typed. Export both the interface and the class.",
+    "javascript": "Use ES6 class syntax with a constructor. Export only the class definition. Do not include example usage or console logging.",
+    "javascript-jsdoc": "Use JSDoc annotations including @class for the class itself, @typedef or @interface for describing the Person structure, @param for constructor parameters with types, and @returns for the getInfo method. Export only the class."
+  },
   "variants": {
     "typescript": "Write a TypeScript class called `Person` with properties: name (string), age (number), and email (string). Add a method `getInfo()` that returns a string with the person's details. Include an interface `IPerson` and proper type annotations. Export only the interface and class definitions—do not include example usage, logging, or additional helpers.",
     "javascript": "Write a JavaScript class called `Person` with properties: name, age, and email. Add a method `getInfo()` that returns a string with the person's details. Export only the class definition and avoid adding demo code, console logs, or extra exports.",
@@ -19,5 +31,27 @@
       "test": "const p = new Person('John', 30, 'john@test.com'); console.assert(p.getInfo().includes('John'), 'getInfo should include name');"
     }
   ],
-  "requirements": ["class", "Person", "name", "age", "email", "getInfo", "export"]
+  "performanceBenchmarks": [
+    {
+      "name": "create-instances",
+      "code": "for (let i = 0; i < 100; i++) { new Person('John', 30, 'john@test.com'); }",
+      "iterations": 100,
+      "baselineTimeMs": 0.5
+    },
+    {
+      "name": "call-getInfo",
+      "code": "const p = new Person('John', 30, 'john@test.com'); for (let i = 0; i < 1000; i++) { p.getInfo(); }",
+      "iterations": 100,
+      "baselineTimeMs": 1.0
+    }
+  ],
+  "requirements": [
+    "class",
+    "Person",
+    "name",
+    "age",
+    "email",
+    "getInfo",
+    "export"
+  ]
 }

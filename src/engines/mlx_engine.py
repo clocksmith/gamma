@@ -50,16 +50,6 @@ class MLXEngine(LLMEngine):
             except (ValueError, TypeError): raise TypeError(f"Unsupported token_ids type for MLX decode: {type(ids)}")
         return self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
 
-    def _top(self, l: np.ndarray, k_show: int) -> Tuple[List[str], List[float], List[int]]: # type: ignore
-        if l.size == 0 or np.all(np.isinf(l)): return ["<No Valid Tokens>"], [1.0], [-1]
-        probs_mx = sampling_utils.softmax(l); vocab_size = probs_mx.shape[-1]; effective_k = min(k_show if k_show > 0 else vocab_size, vocab_size)
-        top_indices_unsorted = np.argpartition(probs_mx, -effective_k)[-effective_k:]
-        top_probs_unsorted = probs_mx[top_indices_unsorted]
-        sort_order = np.argsort(top_probs_unsorted)[::-1]
-        final_indices = top_indices_unsorted[sort_order]
-        final_probs = top_probs_unsorted[sort_order]
-        top_indices_list = final_indices.tolist()
-        return ([self.get_token_text(idx) for idx in top_indices_list], final_probs.tolist(), top_indices_list)
 
     def predict_next(self, input_ids: mx.array, attention_mask: Optional[mx.array], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]: # type: ignore
         if not self._mlx_model: raise RuntimeError("MLXEngine: Model not loaded.")
@@ -72,15 +62,13 @@ class MLXEngine(LLMEngine):
         logits_raw = logits_all_steps[:, -1, :]
         logits_raw_np = np.array(logits_raw)
 
-        logits_temp_np = sampling_utils.temperature_scale(logits_raw_np, temperature)
-        logits_k_np = sampling_utils.top_k_filter(logits_temp_np, top_k)
-        logits_proc_np = sampling_utils.top_p_filter(logits_k_np, top_p)
+        logits_proc_np, logits_temp_np, logits_k_np = sampling_utils.process_logits_pipeline(logits_raw_np, temperature, top_k, top_p, return_intermediates=True)
 
         probs_proc_np = sampling_utils.softmax(logits_proc_np)
         next_token_id_val = int(np.argmax(probs_proc_np, axis=-1))
 
-        max_display_k = max(top_k if top_k > 0 else 1, self.engine_config.get("max_tokens_for_prob_display", 10), 1)
-        top_texts_list, top_probs_list, _ = self._top(logits_proc_np, k_sh=max_display_k)
+        max_display_k = max(top_k if top_k > 0 else 1, self.get_max_tokens_for_display(), 1)
+        top_texts_list, top_probs_list, _ = sampling_utils.get_top_k_tokens(logits_proc_np, max_display_k, self.get_token_text)
         
         return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": mx.array(logits_proc_np),
                 "probabilities_raw": mx.softmax(logits_raw, axis=-1),
@@ -93,28 +81,27 @@ class MLXEngine(LLMEngine):
         if not self.tokenizer: raise RuntimeError("MLXEngine: Tokenizer not loaded."); return -1
         return self.tokenizer.vocab_size
 
-    def get_token_text(self, token_id: int) -> str:
-        if token_id in self._token_cache: return self._token_cache[token_id]
-        game_repr = self._special_token_id_to_game_repr.get(token_id)
-        if game_repr: self._token_cache[token_id] = game_repr; return game_repr
-        if not self.tokenizer: raise RuntimeError("MLXEngine: Tokenizer not loaded.")
-        try:
-            token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-            if isinstance(token_text_str, bytes): token_text_str = token_text_str.decode("utf-8", errors="replace")
-            if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "): token_text_str = token_text_str[1:]
-            if not token_text_str: decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False); token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else f"<ID:{token_id}>"
-        except Exception: token_text_str = f"<DecodeErr:{token_id}>"
-        self._token_cache[token_id] = token_text_str; return token_text_str
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID using MLX/HuggingFace tokenizer."""
+        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
+        if isinstance(token_text_str, bytes):
+            token_text_str = token_text_str.decode("utf-8", errors="replace")
+        if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "):
+            token_text_str = token_text_str[1:]
+        if not token_text_str:
+            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
+            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
+        return token_text_str
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
-        if self.engine_config.get("verbose", False): print("(MLXEngine: Attention heatmap not generally available.)")
+        if self.get_verbose(): print("(MLXEngine: Attention heatmap not generally available.)")
         return None
     def get_probabilities_at_step(self, data: Any, s_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, mx.array): raise TypeError(f"Expected mx.array for MLX probabilities, got {type(data)}") # type: ignore
         is_probs_heuristic = mx.all(data >= 0.0) & mx.all(data <= 1.0) & mx.all(mx.abs(mx.sum(data, axis=-1) - 1.0) < 1e-3) # type: ignore
         probs_tensor = data if is_probs_heuristic else mx.softmax(data, axis=-1)
-        return self._top(np.array(probs_tensor), k_sh=k)
+        return sampling_utils.get_top_k_tokens(np.array(probs_tensor), k, self.get_token_text, is_probs=True)
 
     def get_config_summary(self) -> Dict[str, Any]:
         cfg_args = self.engine_config; summary = {"MLX Model Path/ID": self.model_name, "Model Type (from mlx-lm)": (self._model_args.get("model_type", "N/A") if self._model_args else "N/A")}

@@ -3,6 +3,18 @@
   "description": "A script that uses local storage to persist data across sessions.",
   "category": "4-web-fundamentals",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "save text to browser",
+    "beginner": "make an input and button that saves text to localStorage",
+    "intermediate": "create a function with an input field and save button that stores the input value in localStorage and loads it on page load",
+    "advanced": "write a function that creates a text input and button, saves the input value to localStorage when clicked, and loads the saved value from localStorage into the input when the page loads",
+    "expert": "Write a function that demonstrates localStorage persistence. The function should: 1) Create a text input element and a button with text \"Save\". 2) Add a click event listener to the button that saves the input's current value to localStorage using localStorage.setItem() with a key like \"savedText\". 3) When the function runs (on page load), check localStorage for the saved value using localStorage.getItem(). If a value exists, set the input's value to that saved text. 4) Append both elements to document.body. This demonstrates data persistence across page reloads. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Create a function with proper TypeScript types for the input (HTMLInputElement) and button (HTMLButtonElement). Include type annotations and handle the possibility of null from localStorage.getItem(). Export the function.",
+    "javascript": "Create a function using document.createElement, addEventListener, localStorage.setItem, and localStorage.getItem. Export the function as default export.",
+    "javascript-jsdoc": "Include JSDoc with @function, @description explaining the localStorage persistence mechanism, and document the key used for storage. Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that demonstrates local storage. The script should create a text input and a button. When the button is clicked, the text from the input should be saved to local storage. When the page loads, the script should check if there is any text in local storage and, if so, display it in the input. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that demonstrates local storage. The script should create a text input and a button. When the button is clicked, the text from the input should be saved to local storage. When the page loads, the script should check if there is any text in local storage and, if so, display it in the input. The script should include inline comments to explain the logic.",
@@ -14,5 +26,15 @@
       "test": "async () => { await page.setContent('<input type=\"text\" id=\"myInput\"><button id=\"myButton\">Save</button>'); await page.fill('#myInput', 'test value'); await page.click('#myButton'); await page.reload(); const value = await page.$eval('#myInput', el => el.value); console.assert(value === 'test value', 'Input should be populated from local storage on reload'); }"
     }
   ],
-  "requirements": ["browser"]
+  "requirements": [
+    "browser"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "basic-operation",
+      "code": "document.body.innerHTML = \"\"; for (let i = 0; i < 100; i++) { const div = document.createElement(\"div\"); div.textContent = \"Test\"; document.body.appendChild(div); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
+  ]
 }

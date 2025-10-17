@@ -3,6 +3,18 @@
   "description": "A script that validates a form and provides feedback to the user.",
   "category": "4-web-fundamentals",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "check form fields",
+    "beginner": "make a form validator that checks username and email",
+    "intermediate": "create a form with username and email fields that shows error messages when invalid",
+    "advanced": "write a form validation function with username (min 3 chars) and email (valid format) that displays errors and prevents submission if invalid",
+    "expert": "Write a form validation function that creates and validates a form with two fields. The form should have: 1) A username input (must be at least 3 characters long). 2) An email input (must match a basic email pattern like user@domain.com). 3) A submit button. When the form is submitted, prevent default submission and validate both fields. For each invalid field, display an error message element next to it (e.g., a div or span with an id like \"username-error\" or \"email-error\"). If both fields are valid, display a success message (e.g., div with id \"success-message\"). Remove previous error/success messages before showing new ones. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Create a function with proper TypeScript types for form elements (HTMLFormElement, HTMLInputElement). Use RegExp for email validation. Include type annotations for validation functions. Export the main function.",
+    "javascript": "Create a function using document.createElement, form.addEventListener('submit'), and preventDefault(). Use a regex like `/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/` for basic email validation. Export the function.",
+    "javascript-jsdoc": "Include JSDoc with @function, @description explaining the validation rules, document the error message creation, and the email regex pattern used. Export the function."
+  },
   "variants": {
     "javascript-no-comments": "Write a JavaScript script that validates a simple form. The form should have two fields: a username (must be at least 3 characters long) and an email (must be a valid email address). When the form is submitted, the script should validate the fields and display an error message next to any invalid fields. If the form is valid, it should display a success message. The script should not have any comments.",
     "javascript-inline-comments": "Write a JavaScript script that validates a simple form. The form should have two fields: a username (must be at least 3 characters long) and an email (must be a valid email address). When the form is submitted, the script should validate the fields and display an error message next to any invalid fields. If the form is valid, it should display a success message. The script should include inline comments to explain the logic.",
@@ -14,5 +26,15 @@
       "test": "async () => { await page.setContent('<form id=\"myForm\"><input type=\"text\" id=\"username\"><input type=\"text\" id=\"email\"><button type=\"submit\">Submit</button></form>'); await page.click('button[type=\"submit\"]'); let usernameError = await page.$('#username-error'); console.assert(usernameError, 'Username error message should be displayed'); let emailError = await page.$('#email-error'); console.assert(emailError, 'Email error message should be displayed'); await page.fill('#username', 'user'); await page.fill('#email', 'test@example.com'); await page.click('button[type=\"submit\"]'); usernameError = await page.$('#username-error'); console.assert(!usernameError, 'Username error message should not be displayed'); emailError = await page.$('#email-error'); console.assert(!emailError, 'Email error message should not be displayed'); const successMessage = await page.$('#success-message'); console.assert(successMessage, 'Success message should be displayed'); }"
     }
   ],
-  "requirements": ["browser"]
+  "requirements": [
+    "browser"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "basic-operation",
+      "code": "document.body.innerHTML = \"\"; for (let i = 0; i < 100; i++) { const div = document.createElement(\"div\"); div.textContent = \"Test\"; document.body.appendChild(div); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
+  ]
 }

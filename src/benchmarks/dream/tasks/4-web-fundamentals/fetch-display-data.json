@@ -3,6 +3,18 @@
   "description": "Fetch data from an API and display it with loading/error states",
   "category": "web-components",
   "difficulty": "medium",
+  "promptLevels": {
+    "novice": "fetch and show data",
+    "beginner": "make a class that fetches data from an API and tracks if it's loading or has an error",
+    "intermediate": "create a DataFetcher class with methods to fetch data, and properties to track loading state, error state, and the fetched data",
+    "advanced": "write a class called DataFetcher that can fetch data from a URL, with properties for isLoading (boolean), error (string or null), and data (the fetched result), plus a fetch method that updates these properties",
+    "expert": "Write a DataFetcher class for managing API requests with state tracking. The class should have: 1) Properties: isLoading (boolean, starts false), error (string or null, starts null), data (any type, starts null). 2) A fetch(url) method that: sets isLoading=true and error=null before fetching, uses the Fetch API to get data from the URL, on success sets data to the result and isLoading=false, on error sets error to the error message and isLoading=false. The class should properly handle async operations and update state at each step. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with a generic type parameter for the data (class DataFetcher<T>). Define proper types for all properties and method parameters. The fetch method should be async and return Promise<void>. Export the class.",
+    "javascript": "Create a class with async fetch method. Use try/catch for error handling. Update the instance properties (this.isLoading, this.error, this.data) throughout the fetch lifecycle. Export the class.",
+    "javascript-jsdoc": "Include JSDoc with @class, @template T for generic data type, @property for isLoading/error/data, @param for the URL parameter, @returns for the fetch method, and @async. Export the class."
+  },
   "variants": {
     "typescript": "Write a TypeScript class that fetches user data and manages loading/error states. Include proper interfaces.",
     "javascript": "Write a JavaScript class that fetches user data and manages loading/error states.",
@@ -18,5 +30,13 @@
     "error handling",
     "display data",
     "retry"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "basic-operation",
+      "code": "document.body.innerHTML = \"\"; for (let i = 0; i < 100; i++) { const div = document.createElement(\"div\"); div.textContent = \"Test\"; document.body.appendChild(div); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
   ]
 }

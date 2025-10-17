@@ -3,17 +3,35 @@ Centralized sampling logic for all engines.
 These functions operate on NumPy arrays. Engines are responsible for
 converting their native tensor types to NumPy and back.
 """
+from typing import Tuple, List, Callable, Union
 import numpy as np
+from numpy.typing import NDArray
 
-def temperature_scale(logits: np.ndarray, temperature: float) -> np.ndarray:
-    """Scales logits by temperature."""
+def temperature_scale(logits: NDArray[np.float32], temperature: float) -> NDArray[np.float32]:
+    """
+    Scale logits by temperature for sampling diversity.
+
+    Args:
+        logits: Raw logits from model output
+        temperature: Temperature scaling factor (higher = more random)
+
+    Returns:
+        Temperature-scaled logits
+    """
     if temperature <= 0:
         return logits
     return logits / max(temperature, 1e-6)
 
-def top_k_filter(logits: np.ndarray, k: int) -> np.ndarray:
+def top_k_filter(logits: NDArray[np.float32], k: int) -> NDArray[np.float32]:
     """
-    Filters logits to the top k most likely tokens.
+    Filter logits to the top-k most likely tokens.
+
+    Args:
+        logits: Input logits array
+        k: Number of top tokens to keep (k <= 0 means no filtering)
+
+    Returns:
+        Filtered logits with non-top-k tokens set to -inf
     """
     if k <= 0 or k >= logits.shape[-1]:
         return logits
@@ -34,9 +52,17 @@ def top_k_filter(logits: np.ndarray, k: int) -> np.ndarray:
     
     return filtered_logits
 
-def top_p_filter(logits: np.ndarray, p: float, min_tokens: int = 1) -> np.ndarray:
+def top_p_filter(logits: NDArray[np.float32], p: float, min_tokens: int = 1) -> NDArray[np.float32]:
     """
-    Filters logits using nucleus sampling (top-p).
+    Filter logits using nucleus sampling (top-p).
+
+    Args:
+        logits: Input logits array
+        p: Cumulative probability threshold (0.0 to 1.0)
+        min_tokens: Minimum number of tokens to keep
+
+    Returns:
+        Filtered logits with tokens outside nucleus set to -inf
     """
     if p <= 0.0 or p >= 1.0:
         return logits
@@ -72,7 +98,107 @@ def top_p_filter(logits: np.ndarray, p: float, min_tokens: int = 1) -> np.ndarra
     
     return filtered_logits
 
-def softmax(x: np.ndarray) -> np.ndarray:
-    """Compute softmax of a numpy array."""
+def process_logits_pipeline(
+    logits: NDArray[np.float32],
+    temperature: float,
+    top_k: int,
+    top_p: float,
+    return_intermediates: bool = False
+) -> Union[NDArray[np.float32], Tuple[NDArray[np.float32], NDArray[np.float32], NDArray[np.float32]]]:
+    """
+    Process logits through the standard pipeline: temperature → top-k → top-p.
+
+    Consolidated function to replace duplicate logits processing code across engines.
+
+    Args:
+        logits: Raw logits from model (numpy array)
+        temperature: Temperature scaling factor
+        top_k: Top-k filtering parameter
+        top_p: Top-p (nucleus) filtering parameter
+        return_intermediates: If True, return (logits_proc, logits_temp, logits_k) tuple
+                             If False, return only logits_proc
+
+    Returns:
+        If return_intermediates=False: processed logits (numpy array)
+        If return_intermediates=True: tuple of (logits_processed, logits_temp, logits_top_k)
+    """
+    logits_temp = temperature_scale(logits, temperature)
+    logits_k = top_k_filter(logits_temp, top_k)
+    logits_proc = top_p_filter(logits_k, top_p)
+
+    if return_intermediates:
+        return logits_proc, logits_temp, logits_k
+    return logits_proc
+
+def softmax(x: NDArray[np.float32]) -> NDArray[np.float32]:
+    """
+    Compute softmax of a numpy array.
+
+    Args:
+        x: Input array (logits)
+
+    Returns:
+        Softmax probabilities
+    """
     e_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
     return e_x / np.sum(e_x, axis=-1, keepdims=True)
+
+def get_top_k_tokens(
+    logits: NDArray[np.float32],
+    k: int,
+    token_text_fn: Callable[[int], str],
+    is_probs: bool = False
+) -> Tuple[List[str], List[float], List[int]]:
+    """
+    Get top-k tokens from logits or probabilities.
+
+    Consolidated function to replace duplicate _top() methods across engines.
+
+    Args:
+        logits: Numpy array of logits or probabilities
+        k: Number of top tokens to return
+        token_text_fn: Callback function that takes token_id (int) and returns token text (str)
+        is_probs: If True, input is already probabilities (skip softmax)
+
+    Returns:
+        Tuple of (token_texts, probabilities, token_ids) where:
+            - token_texts: List of token strings
+            - probabilities: List of probability values
+            - token_ids: List of token IDs
+    """
+
+    # Handle empty or invalid arrays
+    if logits.size == 0 or np.all(np.isinf(logits)):
+        return ["<No Valid Tokens>"], [1.0], [-1]
+
+    # Apply softmax if input is logits (not probabilities)
+    if is_probs:
+        probs = logits
+    else:
+        probs = softmax(logits)
+
+    # Squeeze out batch dimension if present
+    if probs.ndim > 1 and probs.shape[0] == 1:
+        probs = np.squeeze(probs, axis=0)
+
+    # Calculate effective k
+    vocab_size = probs.shape[-1]
+    effective_k = min(k if k > 0 else vocab_size, vocab_size)
+
+    # Get top-k indices using argpartition (faster than full sort)
+    top_indices_unsorted = np.argpartition(probs, -effective_k)[-effective_k:]
+    top_probs_unsorted = probs[top_indices_unsorted]
+
+    # Sort the top-k by probability (descending)
+    sort_order = np.argsort(top_probs_unsorted)[::-1]
+    final_indices = top_indices_unsorted[sort_order]
+    final_probs = top_probs_unsorted[sort_order]
+
+    # Convert to lists
+    final_indices_list = final_indices.tolist()
+    final_probs_list = final_probs.tolist()
+
+    # Get token texts using the provided callback
+    token_texts = [token_text_fn(idx) for idx in final_indices_list]
+
+    return token_texts, final_probs_list, final_indices_list

@@ -3,7 +3,7 @@ from typing import List, Tuple, Dict, Any, Optional
 
 from src.core.engine_interface import LLMEngine
 from src.core import config as cfg
-from src.core import ui
+from src.ui import displays as ui
 
 
 def _is_code_like_or_url(token_text: str) -> bool:

@@ -3,19 +3,25 @@
   "description": "Implement a MILCHICK-style LLM-powered color assistant - tests agentic AI integration with color generation",
   "category": "full-projects",
   "difficulty": "hard",
+  "promptLevels": {
+    "novice": "AI that suggests colors",
+    "beginner": "make a ColorAssistant class that uses an LLM API to suggest colors based on descriptions",
+    "intermediate": "create a ColorAssistant class that sends prompts to an LLM to get color suggestions, parses the hex colors from responses, and validates them using dream.js",
+    "advanced": "write a ColorAssistant class that integrates an LLM API (like OpenAI or Anthropic) with dream.js to suggest colors based on natural language prompts, extract hex colors from LLM responses, validate them, and generate Material Design color schemes",
+    "expert": "Write a ColorAssistant class that creates an intelligent, AI-powered color suggestion system by combining LLM capabilities with the dream.js color library. The class should: 1) Have a suggestColorsFromPrompt(prompt) async method that takes a natural language description (e.g., 'sunset vibes' or 'professional corporate colors'), sends a carefully crafted prompt to an LLM API requesting color suggestions with reasoning, parses the LLM's response to extract hex color codes, validates each color, and returns an array of ColorSuggestion objects (each with color hex, reasoning string, confidence score). 2) Have a refineColorScheme(currentScheme, feedback) method that takes an existing color scheme and user feedback (e.g., 'make it warmer'), uses the LLM to suggest refinements, and returns an updated scheme. 3) Use temperature=0 for deterministic results when needed. 4) Validate all suggested colors and have fallback logic for invalid suggestions. 5) Integrate with dream.js themeFromSourceColor to generate complete Material Design palettes from the LLM-suggested colors. The system should maintain conversation context and provide explainable color choices. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with interfaces for ColorSuggestion (color: string, reasoning: string, confidence: number), AssistantConfig (apiKey, model, temperature, etc.), ConversationState (messages array, context). The class should properly type all async methods returning Promises. Include error handling types and export all interfaces and the class.",
+    "javascript": "Create a ColorAssistant class with constructor accepting config (API key, model, temperature). Implement async methods using fetch or an LLM SDK. Parse LLM JSON/text responses to extract hex colors using regex. Use dream.js for validation and theme generation. Maintain conversation history as an array. Export the class as default.",
+    "javascript-jsdoc": "Use JSDoc with @typedef for ColorSuggestion, AssistantConfig, ConversationState, LLMMessage, @class for ColorAssistant, @async for all async methods, @param with detailed types, @returns Promise types, @throws for error cases. Document the LLM integration pattern, prompt engineering strategy, and dream.js usage. Export the class."
+  },
   "variants": {
     "typescript": "Implement a TypeScript module that integrates dream.js with an LLM API to create an intelligent color assistant (like MILCHICK). Requirements:\n\n1. ColorAssistant class with:\n   - suggestColorsFromPrompt(prompt: string): Promise<ColorSuggestion[]>\n   - refineColorScheme(current: ColorScheme, feedback: string): Promise<ColorScheme>\n   - explainColorChoice(color: string): Promise<string>\n\n2. LLM Integration:\n   - Deterministic prompts for reproducible results\n   - Parse LLM responses into hex colors\n   - Validate colors using dream.js\n   - Generate Material Design themes\n\n3. Interfaces:\n   - ColorSuggestion (color, reasoning, confidence)\n   - AssistantConfig (API keys, model, temperature)\n   - ConversationState (track context)\n\n4. Features:\n   - Context-aware color suggestions\n   - Iterative refinement\n   - Fallback for invalid suggestions\n   - Deterministic mode (temperature=0)\n\n5. Use themeFromSourceColor from dream.js for final palette\n\nExport all types and the ColorAssistant class.",
-
     "javascript": "Implement a JavaScript module for an LLM-powered color assistant using dream.js. Same functionality as TypeScript but without type annotations.",
-
     "javascript-jsdoc": "Implement with complete JSDoc:\n- @typedef ColorSuggestion\n- @typedef AssistantConfig\n- @typedef ConversationState\n- Document the agentic workflow\n- Include usage examples in JSDoc",
-
     "javascript-vanilla-web": "Create a complete MILCHICK-style color assistant web application:\n\n**HTML:**\n- Text input for color prompts (e.g., 'sunset vibes', 'corporate professional')\n- Chat-like interface showing AI responses\n- Color swatches display\n- Refinement input ('make it warmer', 'more vibrant')\n- Export palette button\n\n**CSS:**\n- Chat interface styling\n- Loading indicators for AI responses\n- Color swatches with smooth transitions\n- Professional, clean design\n\n**JavaScript:**\n- LLM API integration (OpenAI or Anthropic)\n- Parse AI responses for color suggestions\n- Validate colors with dream.js\n- Generate Material Design themes\n- Display reasoning for color choices\n- Handle conversation context\n- Deterministic mode toggle (for testing)\n\n**Agentic Workflow:**\n1. User describes desired mood/theme\n2. LLM suggests colors with reasoning\n3. Validate and generate palette with dream.js\n4. User can refine with natural language\n5. AI iteratively improves based on feedback\n\n**Key Features:**\n- Deterministic results when needed\n- Context preservation\n- Error handling for invalid colors\n- Fallback to sensible defaults\n\nInclude mock API mode for testing without keys.",
-
     "javascript-vanilla-web-jsdoc": "Same as javascript-vanilla-web with complete JSDoc documenting:\n- The agentic AI workflow\n- Message types and structures\n- State management\n- All functions and their purposes",
-
     "typescript-vanilla-web": "Create MILCHICK-style assistant using TypeScript:\n\n**TypeScript:**\n- Type-safe LLM API client\n- Strict typing for messages and state\n- Generic conversation handler\n- Type guards for color validation\n\n**Architecture:**\n- Separate modules:\n  - llm-client.ts (API calls)\n  - color-parser.ts (extract colors from text)\n  - conversation.ts (manage context)\n  - theme-generator.ts (dream.js integration)\n  - main.ts (app logic)\n\n**Features:**\n- Full type safety throughout\n- Deterministic prompts\n- Context-aware suggestions\n- Error recovery",
-
     "typescript-react": "Create MILCHICK color assistant using TypeScript React:\n\n**Components:**\n- ColorAssistant (main app)\n- ChatInterface (conversation UI)\n- Message (individual message)\n- ColorSuggestionCard (show color with reasoning)\n- PalettePreview (display generated palette)\n- RefinementInput (natural language refinement)\n- ExportPanel (save palette)\n\n**Custom Hooks:**\n- useColorAssistant (manage conversation state)\n- useLLM<T> (generic LLM hook with types)\n- useColorValidation (validate with dream.js)\n- useDeterministicMode (toggle for testing)\n\n**Context:**\n- ConversationContext (message history, state)\n- ColorContext (current palette, variants)\n\n**TypeScript:**\n- Interface for Message, ColorSuggestion\n- Type-safe API client\n- Strict conversation types\n\n**Agentic Features:**\n- Streaming responses\n- Context preservation\n- Iterative refinement\n- Deterministic mode for reproducibility\n- Error boundaries\n\n**Testing Focus:**\n- Same prompt = same colors (deterministic)\n- Conversation context maintained\n- Graceful degradation\n\nMinimal deps (React + dream.js)."
   },
   "requirements": [
@@ -28,5 +34,19 @@
     "conversation",
     "context",
     "refinement"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "process-color-request",
+      "code": "const mockLLM = () => Promise.resolve({content: \"#FF5733\"}); for (let i = 0; i < 20; i++) { await mockLLM(); }",
+      "iterations": 10,
+      "baselineTimeMs": 20.0
+    },
+    {
+      "name": "validate-hex-colors",
+      "code": "const validateHex = hex => /^#[0-9A-F]{6}$/i.test(hex); const colors = Array.from({length: 1000}, () => \"#\" + Math.floor(Math.random()*16777215).toString(16).padStart(6, \"0\")); colors.forEach(c => validateHex(c));",
+      "iterations": 100,
+      "baselineTimeMs": 5.0
+    }
   ]
 }

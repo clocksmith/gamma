@@ -6,8 +6,8 @@ from typing import List, Optional, Dict, Any
 import argparse
 
 from src.core import config as cfg
-from src.core import ui_components as uic
-from src.core.model_catalog import ModelSelector
+from src.ui import components as uic
+from src.core.models.model_catalog import ModelSelector
 
 SUPPORTED_ENGINES_UI_LIST = ["pytorch", "llamacpp", "tensorflow", "jax", "onnx", "mlx"]
 
@@ -56,7 +56,7 @@ def confirm_or_modify_config(args: argparse.Namespace) -> bool:
     # This function is highly coupled with the main script's argument parsing.
     # For now, we'll keep it here, but a more robust solution would be to
     # create a dedicated configuration object.
-    from src.core.ui import display_current_config # Avoid circular import
+    from src.ui.displays import display_current_config # Avoid circular import
 
     param_details_core = {
         "e": ("engine", "Engine", lambda current_val: select_engine_interactively(current_val), f"from {SUPPORTED_ENGINES_UI_LIST}"),

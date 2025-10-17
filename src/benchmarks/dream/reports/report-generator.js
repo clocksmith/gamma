@@ -150,6 +150,7 @@ export class ReportGenerator {
           variant: r.variant,
           taskName: r.taskName,
           category: r.category,
+          biasLevel: r.biasLevel,
           runs: [],
         };
       }
@@ -160,11 +161,15 @@ export class ReportGenerator {
     return Object.values(grouped).map(group => {
       const scores = group.runs.map(r => r.evaluation.totalScore);
       const durations = group.runs.map(r => r.duration);
-      // Add other metrics if they exist
+      // Add other metrics if they exist (all camelCase)
       const accuracyScores = group.runs.map(r => r.evaluation.scores.accuracy);
       const performanceScores = group.runs.map(r => r.evaluation.scores.performance);
       const qualityScores = group.runs.map(r => r.evaluation.scores.codeQuality);
       const completenessScores = group.runs.map(r => r.evaluation.scores.completeness);
+      const complexityScores = group.runs.map(r => r.evaluation.scores.complexity || 0);
+      const tokenEfficiencyScores = group.runs.map(r => r.evaluation.scores.performanceToken || 0);
+      const runtimeScores = group.runs.filter(r => r.evaluation.scores.performanceRuntime !== null)
+        .map(r => r.evaluation.scores.performanceRuntime);
 
       // Extract advanced metrics
       const advancedMetrics = this._extractAdvancedMetrics(group.runs);
@@ -172,12 +177,15 @@ export class ReportGenerator {
       return {
         ...group,
         stats: {
-          score: this._calculateStats(scores),
+          totalScore: this._calculateStats(scores),
           duration: this._calculateStats(durations),
           accuracy: this._calculateStats(accuracyScores),
           performance: this._calculateStats(performanceScores),
           codeQuality: this._calculateStats(qualityScores),
           completeness: this._calculateStats(completenessScores),
+          complexity: this._calculateStats(complexityScores),
+          tokenEfficiency: this._calculateStats(tokenEfficiencyScores),
+          runtimePerformance: runtimeScores.length > 0 ? this._calculateStats(runtimeScores) : null,
         },
         advancedMetrics,
       };
@@ -202,15 +210,33 @@ export class ReportGenerator {
    * Generates a summary markdown report from processed data.
    */
   async generateSummaryReport(processedData, passAtK) {
-    let report = '# LLM Benchmark Summary (Statistically Analyzed)\n\n';
+    let report = '# LLM Benchmark Summary Report\n\n';
     report += `Generated: ${new Date().toISOString()}\n\n`;
+    report += 'All metrics are reported independently and can be viewed separately from the weighted total score.\n\n';
 
     // Overall stats
-    const overallScore = processedData.reduce((sum, r) => sum + r.stats.score.mean, 0) / processedData.length;
+    const overallScore = processedData.reduce((sum, r) => sum + r.stats.totalScore.mean, 0) / processedData.length;
     const overallDuration = processedData.reduce((sum, r) => sum + r.stats.duration.mean, 0) / processedData.length;
     report += `## Overall Performance\n\n`;
-    report += `- Average Score (Mean of Means): ${overallScore.toFixed(2)}/100\n`;
-    report += `- Average Duration (Mean of Means): ${(overallDuration / 1000).toFixed(2)}s\n\n`;
+    report += `- **Total Score (Weighted Average)**: ${overallScore.toFixed(2)}/100\n`;
+    report += `- **Average Duration**: ${(overallDuration / 1000).toFixed(2)}s\n\n`;
+
+    // Individual metric averages
+    report += `## Independent Metric Scores\n\n`;
+    report += 'These metrics are reported independently and contribute to the total score based on configured weights.\n\n';
+    const avgAccuracy = processedData.reduce((sum, r) => sum + r.stats.accuracy.mean, 0) / processedData.length;
+    const avgPerformance = processedData.reduce((sum, r) => sum + r.stats.performance.mean, 0) / processedData.length;
+    const avgCodeQuality = processedData.reduce((sum, r) => sum + r.stats.codeQuality.mean, 0) / processedData.length;
+    const avgCompleteness = processedData.reduce((sum, r) => sum + r.stats.completeness.mean, 0) / processedData.length;
+    const avgComplexity = processedData.reduce((sum, r) => sum + r.stats.complexity.mean, 0) / processedData.length;
+    const avgTokenEfficiency = processedData.reduce((sum, r) => sum + r.stats.tokenEfficiency.mean, 0) / processedData.length;
+
+    report += `- **Accuracy**: ${(avgAccuracy * 100).toFixed(1)}%\n`;
+    report += `- **Performance**: ${(avgPerformance * 100).toFixed(1)}%\n`;
+    report += `- **Code Quality**: ${(avgCodeQuality * 100).toFixed(1)}%\n`;
+    report += `- **Completeness**: ${(avgCompleteness * 100).toFixed(1)}%\n`;
+    report += `- **Complexity Score**: ${(avgComplexity * 100).toFixed(1)}% (lower complexity = higher score)\n`;
+    report += `- **Token Efficiency**: ${(avgTokenEfficiency * 100).toFixed(1)}%\n\n`;
 
     // Pass@k metrics
     if (passAtK && Object.keys(passAtK).length > 0) {
@@ -264,14 +290,42 @@ export class ReportGenerator {
       report += '\n';
     }
 
+    // By Bias Level - group tests by deterministic vs non-deterministic
+    report += `## Performance by Test Bias Level\n\n`;
+    report += 'Tests are grouped by their determinism and potential for bias:\n\n';
+
+    const biasLevels = ['deterministic', 'low-bias', 'medium-bias', 'high-bias'];
+    const biasDescriptions = {
+      'deterministic': 'Fully deterministic tests with no bias (algorithms, data structures)',
+      'low-bias': 'Non-deterministic with minimal bias (APIs, web fundamentals)',
+      'medium-bias': 'Non-deterministic with moderate bias (UI components, full applications)',
+      'high-bias': 'Subjective evaluation with higher bias (bug finding, code analysis)'
+    };
+
+    for (const biasLevel of biasLevels) {
+      const biasResults = processedData.filter(r => r.biasLevel === biasLevel);
+      if (biasResults.length === 0) continue;
+
+      const biasAvgScore = biasResults.reduce((sum, r) => sum + r.stats.totalScore.mean, 0) / biasResults.length;
+      const biasAvgAccuracy = biasResults.reduce((sum, r) => sum + r.stats.accuracy.mean, 0) / biasResults.length;
+      const biasAvgComplexity = biasResults.reduce((sum, r) => sum + r.stats.complexity.mean, 0) / biasResults.length;
+
+      report += `### ${biasLevel.charAt(0).toUpperCase() + biasLevel.slice(1)}\n`;
+      report += `${biasDescriptions[biasLevel]}\n\n`;
+      report += `- **Total Score**: ${biasAvgScore.toFixed(2)}/100\n`;
+      report += `- **Accuracy**: ${(biasAvgAccuracy * 100).toFixed(1)}%\n`;
+      report += `- **Complexity**: ${(biasAvgComplexity * 100).toFixed(1)}%\n`;
+      report += `- **Test Count**: ${biasResults.length}\n\n`;
+    }
+
     // By Provider
     report += `## Performance by LLM Provider\n\n`;
     const providers = [...new Set(processedData.map(r => r.provider))];
     for (const provider of providers) {
       const providerResults = processedData.filter(r => r.provider === provider);
-      const providerAvg = providerResults.reduce((sum, r) => sum + r.stats.score.mean, 0) / providerResults.length;
+      const providerAvg = providerResults.reduce((sum, r) => sum + r.stats.totalScore.mean, 0) / providerResults.length;
       report += `### ${provider}\n`;
-      report += `- Score: ${providerAvg.toFixed(2)}/100\n`;
+      report += `- Total Score: ${providerAvg.toFixed(2)}/100\n`;
       report += `- Benchmarks: ${providerResults.length}\n\n`;
     }
 
@@ -280,9 +334,13 @@ export class ReportGenerator {
     const variants = [...new Set(processedData.map(r => r.variant))];
     for (const variant of variants) {
       const variantResults = processedData.filter(r => r.variant === variant);
-      const variantAvg = variantResults.reduce((sum, r) => sum + r.stats.score.mean, 0) / variantResults.length;
+      const variantAvg = variantResults.reduce((sum, r) => sum + r.stats.totalScore.mean, 0) / variantResults.length;
+      const variantAccuracy = variantResults.reduce((sum, r) => sum + r.stats.accuracy.mean, 0) / variantResults.length;
+      const variantComplexity = variantResults.reduce((sum, r) => sum + r.stats.complexity.mean, 0) / variantResults.length;
       report += `### ${variant}\n`;
-      report += `- Score: ${variantAvg.toFixed(2)}/100\n`;
+      report += `- Total Score: ${variantAvg.toFixed(2)}/100\n`;
+      report += `- Accuracy: ${(variantAccuracy * 100).toFixed(1)}%\n`;
+      report += `- Complexity: ${(variantComplexity * 100).toFixed(1)}%\n`;
       report += `- Benchmarks: ${variantResults.length}\n\n`;
     }
 
@@ -295,11 +353,12 @@ export class ReportGenerator {
    * Generates a comparison markdown report from processed data.
    */
   async generateComparisonReport(processedData) {
-    let report = '# LLM Comparison Report (Statistically Analyzed)\n\n';
+    let report = '# LLM Comparison Report - All Metrics\n\n';
+    report += 'All metrics are reported independently for direct comparison.\n\n';
     const providers = [...new Set(processedData.map(r => r.provider))];
     const variants = [...new Set(processedData.map(r => r.variant))];
 
-    report += `## Score Comparison (Mean ± StDev)\n\n`;
+    report += `## Total Score Comparison (Mean ± StDev)\n\n`;
     report += '| Provider | ' + variants.join(' | ') + ' |\n';
     report += '|' + Array(variants.length + 1).fill('---').join('|') + '|\n';
 
@@ -311,18 +370,20 @@ export class ReportGenerator {
           row += ' N/A |';
           continue;
         }
-        const avgScore = results.reduce((sum, r) => sum + r.stats.score.mean, 0) / results.length;
-        const avgStdev = results.reduce((sum, r) => sum + r.stats.score.stdev, 0) / results.length;
+        const avgScore = results.reduce((sum, r) => sum + r.stats.totalScore.mean, 0) / results.length;
+        const avgStdev = results.reduce((sum, r) => sum + r.stats.totalScore.stdev, 0) / results.length;
         row += ` ${avgScore.toFixed(1)} ± ${avgStdev.toFixed(1)} |`;
       }
       report += row + '\n';
     }
 
-    report += '\n## Detailed Criteria Comparison (Mean Score)\n\n';
+    report += '\n## Independent Metric Comparison\n\n';
+    report += 'Each metric is shown independently (not weighted). Values are mean percentages.\n\n';
+
     for (const variant of variants) {
         report += `### ${variant}\n\n`;
-        report += '| Provider | Accuracy | Performance | Code Quality | Completeness | Total Score |\n';
-        report += '|---|---|---|---|---|---|\n';
+        report += '| Provider | Accuracy | Performance | Code Quality | Completeness | Complexity | Token Eff | Total Score |\n';
+        report += '|---|---|---|---|---|---|---|---|\n';
         for (const provider of providers) {
             const results = processedData.filter(r => r.provider === provider && r.variant === variant);
             if (results.length === 0) continue;
@@ -330,8 +391,10 @@ export class ReportGenerator {
             const performance = results.reduce((s, r) => s + r.stats.performance.mean, 0) / results.length;
             const codeQuality = results.reduce((s, r) => s + r.stats.codeQuality.mean, 0) / results.length;
             const completeness = results.reduce((s, r) => s + r.stats.completeness.mean, 0) / results.length;
-            const total = results.reduce((s, r) => s + r.stats.score.mean, 0) / results.length;
-            report += `| ${provider} | ${(accuracy * 100).toFixed(1)} | ${(performance * 100).toFixed(1)} | ${(codeQuality * 100).toFixed(1)} | ${(completeness * 100).toFixed(1)} | ${total.toFixed(1)} |\n`;
+            const complexity = results.reduce((s, r) => s + r.stats.complexity.mean, 0) / results.length;
+            const tokenEff = results.reduce((s, r) => s + r.stats.tokenEfficiency.mean, 0) / results.length;
+            const total = results.reduce((s, r) => s + r.stats.totalScore.mean, 0) / results.length;
+            report += `| ${provider} | ${(accuracy * 100).toFixed(1)} | ${(performance * 100).toFixed(1)} | ${(codeQuality * 100).toFixed(1)} | ${(completeness * 100).toFixed(1)} | ${(complexity * 100).toFixed(1)} | ${(tokenEff * 100).toFixed(1)} | ${total.toFixed(1)} |\n`;
         }
         report += '\n';
     }
@@ -342,23 +405,50 @@ export class ReportGenerator {
   }
 
   /**
-   * Generates a detailed markdown report from processed data.
+   * Generates a detailed markdown report from processed data with all metrics.
    */
   async generateDetailedReport(processedData) {
-    let report = '# Detailed Benchmark Results (Statistically Analyzed)\n\n';
+    let report = '# Detailed Benchmark Results - All Metrics Per Test\n\n';
+    report += 'Complete breakdown of every metric for each test, provider, and variant combination.\n\n';
     const tasks = [...new Set(processedData.map(r => r.taskName))];
 
     for (const task of tasks) {
       report += `## ${task}\n\n`;
-      report += '| Provider | Variant | Runs | Mean Score | Median | StDev | Mean Duration (ms) |\n';
-      report += '|---|---|---|---|---|---|---|\n';
+      report += '### Overall Scores\n\n';
+      report += '| Provider | Variant | Runs | Total Score | Accuracy | Performance | Quality | Complete | Complex |\n';
+      report += '|---|---|---|---|---|---|---|---|---|\n';
 
       const taskResults = processedData.filter(r => r.taskName === task);
       for (const result of taskResults) {
-        const { score, duration } = result.stats;
-        report += `| ${result.provider} | ${result.variant} | ${score.count} | ${score.mean.toFixed(1)} | ${score.median.toFixed(1)} | ${score.stdev.toFixed(2)} | ${duration.mean.toFixed(0)} |\n`;
+        const { totalScore, accuracy, performance, codeQuality, completeness, complexity } = result.stats;
+        report += `| ${result.provider} | ${result.variant} | ${totalScore.count} | ${totalScore.mean.toFixed(1)} | ${(accuracy.mean * 100).toFixed(1)} | ${(performance.mean * 100).toFixed(1)} | ${(codeQuality.mean * 100).toFixed(1)} | ${(completeness.mean * 100).toFixed(1)} | ${(complexity.mean * 100).toFixed(1)} |\n`;
       }
-      report += '\n';
+
+      report += '\n### Advanced Metrics\n\n';
+      report += '| Provider | Variant | F1 Score | Precision | Recall | Cyclomatic | Halstead Vol | Maintainability |\n';
+      report += '|---|---|---|---|---|---|---|---|\n';
+
+      for (const result of taskResults) {
+        const adv = result.advancedMetrics;
+        const f1 = adv.f1.count > 0 ? (adv.f1.mean * 100).toFixed(1) : 'N/A';
+        const prec = adv.precision.count > 0 ? (adv.precision.mean * 100).toFixed(1) : 'N/A';
+        const rec = adv.recall.count > 0 ? (adv.recall.mean * 100).toFixed(1) : 'N/A';
+        const cc = adv.cyclomaticComplexity.count > 0 ? adv.cyclomaticComplexity.mean.toFixed(1) : 'N/A';
+        const hv = adv.halsteadVolume.count > 0 ? adv.halsteadVolume.mean.toFixed(0) : 'N/A';
+        const mi = adv.maintainabilityIndex.count > 0 ? adv.maintainabilityIndex.mean.toFixed(0) : 'N/A';
+        report += `| ${result.provider} | ${result.variant} | ${f1} | ${prec} | ${rec} | ${cc} | ${hv} | ${mi} |\n`;
+      }
+
+      report += '\n### Performance Metrics\n\n';
+      report += '| Provider | Variant | Token Efficiency | Duration (ms) |\n';
+      report += '|---|---|---|---|\n';
+
+      for (const result of taskResults) {
+        const tokenEff = (result.stats.tokenEfficiency.mean * 100).toFixed(1);
+        const dur = result.stats.duration.mean.toFixed(0);
+        report += `| ${result.provider} | ${result.variant} | ${tokenEff} | ${dur} |\n`;
+      }
+      report += '\n---\n\n';
     }
 
     const filepath = join(this.config.reportsDir, 'detailed.md');

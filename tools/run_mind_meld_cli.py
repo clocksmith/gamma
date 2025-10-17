@@ -14,8 +14,9 @@ from dataclasses import dataclass, field
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.core.engine_interface import LLMEngine
-from src.core import ui, config as cfg
-from src.core.mind_meld_mode import MindMeldMode
+from src.ui import displays as ui
+from src.core import config as cfg
+from src.mind_meld.mode import MindMeldMode
 from src.mind_meld.core.config import SwapStrategy, TranslationMode, VocabularyStrategy
 from src.engines.engine_factory import get_engine, SUPPORTED_ENGINES
 
