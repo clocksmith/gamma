@@ -3,23 +3,21 @@ export async function retryWithBackoff<T>(
   maxRetries: number = 3,
   initialDelay: number = 1000
 ): Promise<T> {
-  const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
+  const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   let attempt = 0;
   let delay = initialDelay;
-  let lastError: unknown;
 
-  while (attempt <= maxRetries) {
+  while (true) {
     try {
       return await fn();
     } catch (err) {
-      lastError = err;
-      if (attempt === maxRetries) break;
-      await sleep(delay);
+      if (attempt >= maxRetries) {
+        throw err;
+      }
+      await wait(delay);
       delay *= 2; // exponential backoff
+      attempt++;
     }
-    attempt++;
   }
-
-  throw lastError;
 }

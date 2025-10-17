@@ -5,11 +5,12 @@ export interface UserData {
 }
 
 export async function fetchUserData(userId: number): Promise<UserData> {
-  if (userId < 1) {
-    return Promise.reject(new Error('Invalid userId: must be >= 1'));
-  }
+  return new Promise<UserData>((resolve, reject) => {
+    if (userId < 1) {
+      reject(new Error('Invalid userId: must be >= 1'));
+      return;
+    }
 
-  return new Promise<UserData>((resolve) => {
     setTimeout(() => {
       resolve({
         id: userId,

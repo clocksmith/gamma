@@ -1,11 +1,10 @@
 export function fibonacci(n: number): number {
     if (n < 0) throw new RangeError('n must be non‑negative');
-    if (n === 0) return 0;
     let a = 0, b = 1;
-    for (let i = 1; i < n; i++) {
-        const temp = a + b;
+    for (let i = 0; i < n; i++) {
+        const tmp = a + b;
         a = b;
-        b = temp;
+        b = tmp;
     }
-    return b;
+    return a;
 }

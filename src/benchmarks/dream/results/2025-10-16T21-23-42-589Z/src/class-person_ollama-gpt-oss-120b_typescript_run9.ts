@@ -2,6 +2,7 @@ export interface IPerson {
   name: string;
   age: number;
   email: string;
+  getInfo(): string;
 }
 
 export class Person implements IPerson {
@@ -12,6 +13,6 @@ export class Person implements IPerson {
   ) {}
 
   getInfo(): string {
-    return `${this.name} (${this.age}) – ${this.email}`;
+    return `${this.name} (Age: ${this.age}) can be contacted at ${this.email}.`;
   }
 }
