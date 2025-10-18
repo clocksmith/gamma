@@ -5,11 +5,11 @@
 **G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly
 
 ```
-╭─────────────────────────────────────────────────────────╮
-│                                                         │
-│       ☇  GAMMA - LLM Learning & Experimentation  ☇   │
-│                                                         │
-╰─────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────╮
+│                                                           │
+│       ☇  GAMMA - LLM Learning & Experimentation  ☇.       │
+│                                                           │
+╰──────────────────────────────────────────────────╯
 ```
 
 ---
@@ -28,9 +28,6 @@ GAMMA is a comprehensive toolkit for exploring, comparing, and experimenting wit
 - **☲ Model Comparison**: Side-by-side analysis of different models
 - **⚗ Mind Meld**: Experimental multi-model collaboration system
 - **⚗ Language Comparison**: TypeScript vs JavaScript LLM code generation benchmarks
-
-### Utilities
-- **⚘ Color Library**: dream.js - Material Design 3 color utilities with HCT color space
 
 ---
 
@@ -80,7 +77,7 @@ python gamma.py game --prompt "Explain quantum computing"  # Quick inference
 
 GAMMA supports models from multiple sources with automatic detection:
 
-### 1. Ollama Models (Recommended - Local & Fast)
+### 1. Ollama Models
 
 ```bash
 # GAMMA auto-detects Ollama models
@@ -93,7 +90,7 @@ python gamma.py game  # Interactive menu shows your Ollama models
 **Features:**
 - ☑ Auto-detection of all Ollama models
 - ☑ No downloads required
-- ☑ Works with llamacpp or ollama engine
+- ☑ Works with llama.cpp or ollama engine
 - ☑ Deduplicates models found in multiple locations
 - ☑ Shows model source (Ollama, HuggingFace, local files)
 
@@ -101,7 +98,7 @@ python gamma.py game  # Interactive menu shows your Ollama models
 
 ```bash
 # Auto-downloaded on first use
-python gamma.py game --engine pytorch --model google/gemma-2-2b-it
+python gamma.py game --engine pytorch --model google/gemma-3-1b-it
 
 # For gated models (like Gemma), login first:
 huggingface-cli login
@@ -245,15 +242,7 @@ python gamma.py game \
 - **Deduplication**: Detects same model in multiple locations
 - **Source Indicators**: Shows where each model comes from
 
-### ☄ Performance
-
-- **Hardware Detection**: CUDA, ROCm, Metal, CPU backends
-- **GPU Offloading**: Configurable layer distribution
-- **KV Cache**: Efficient context management
-- **Quantization**: 4-bit and 8-bit support (PyTorch)
-- **Memory Mapping**: Efficient model loading
-
-### ☇ Game Modes Explained
+### ☇ Game Modes
 
 #### Classic Game Mode
 Predict the model's next token choice. Learn about:
@@ -301,58 +290,6 @@ python tools/download_model.py --repo-id <REPO_ID> --filename <FILENAME>
 ```bash
 python tools/run_api_server.py --model <MODEL> --engine <ENGINE>
 ```
-
----
-
-## Architecture
-
-```
-gamma/
-├── gamma.py                        # Unified CLI entry point
-├── src/game/cli.py                # Game entry point
-├── src/
-│   ├── game/                       # ☇ Game-specific code
-│   │   ├── game_logic.py
-│   │   ├── game_displays.py
-│   │   └── tutorial_mode.py
-│   ├── comparison/                 # ☲ Model comparison tools
-│   │   └── comparison_mode.py
-│   ├── mind_meld/                  # ⚗ Multi-model collaboration
-│   │   ├── strategies/
-│   │   └── advanced/
-│   ├── benchmarks/                 # ⚗ Benchmarking suite
-│   │   ├── framework/              # Base benchmarking framework
-│   │   ├── mind_meld_benchmark.py
-│   │   └── dream/                  # DREAM: TypeScript vs JavaScript benchmarks
-│   │       ├── index.js
-│   │       ├── tasks/              # 20+ coding tasks
-│   │       ├── runner/
-│   │       └── evaluator/
-│   ├── integrations/               # ⚙ Framework integrations
-│   │   ├── openai_compat.py        # OpenAI API compatibility
-│   │   ├── langchain_compat.py     # LangChain wrappers
-│   │   └── ecosystem_utils.py      # Framework recommendations
-│   ├── utils/                      # ⚡ Performance utilities
-│   │   ├── profiling.py            # Performance profiling
-│   │   ├── caching.py              # Smart caching
-│   │   └── memory.py               # Memory optimization
-│   ├── core/                       # Core shared utilities
-│   │   ├── engine_interface.py
-│   │   ├── sampling_strategies.py  # Pre-configured sampling
-│   │   ├── model_discovery.py      # Model discovery
-│   │   └── ...
-│   └── engines/                    # Model execution engines
-│       ├── pytorch_engine.py       # ☑ Fully implemented
-│       ├── llamacpp_engine.py      # ☑ Fully implemented
-│       ├── ollama_engine.py        # ☑ Fully implemented
-│       └── ...
-├── tools/                          # Standalone CLI tools
-├── models/                         # Local model storage
-├── requirements*.txt               # Dependencies
-└── docs/                           # Documentation
-```
-
----
 
 ## Examples
 
@@ -524,34 +461,6 @@ engine_config = {
 
 engine = get_engine('llamacpp', 'models/model.gguf', engine_config)
 ```
-
----
-
-## Relationship to PAWS/REPLOID
-
-GAMMA and PAWS/REPLOID are complementary tools serving different purposes:
-
-**GAMMA:**
-- ☇ Educational focus - Learn how LLMs work
-- ☲ Model comparison - Understand differences between models
-- ⚗ Experimentation - Test sampling strategies, attention mechanisms
-- ☐ Local operation - All models run locally
-
-**PAWS/REPLOID:**
-- ☇ Development focus - AI-assisted code generation
-- ☲ Multi-agent competition - 3-5 LLMs compete with test-driven consensus
-- ⚗ Production workflows - Git-backed reproducibility
-- ☥ Visual review - Browser interface with diff viewer
-
-**Use GAMMA when:** Learning about LLMs, testing models, exploring AI concepts
-**Use PAWS/REPLOID when:** Developing software, refactoring code, production changes
-
-Both projects share:
-- Philosophy of transparency and human oversight
-- Support for local models (Ollama, HuggingFace)
-- Educational value through clear explanations
-- Open-source MIT license
-
 ---
 
 ## Contributing
