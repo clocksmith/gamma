@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any, List, Tuple
 from src.core import config as cfg
 from src.ui import components as uic
 from src.core.menu import interactive_prompts as prompts
-from src.core.models.model_catalog import ModelSelector, get_model_info
+from src.core.models.model_catalog import ModelSelector, get_model_info, get_smallest_model
 from src.core.hardware.gpu_discovery import get_gpu_info, format_gpu_info
 
 
@@ -684,30 +684,37 @@ class InteractiveMenu:
     
     def _quick_play_classic(self) -> Dict[str, Any]:
         """Quick play classic mode with sensible defaults."""
-        print(uic.color_text("\n⚡ Quick Play Mode - Starting with defaults!", cfg.COLOR_GREEN))
-        print("Using: google/gemma-2b-it (PyTorch)")
-        print("Settings: 8 rounds, temperature 0.7, top-k 8, top-p 0.95")
+        print(uic.color_text("\n⚡ Quick Play Mode - Finding best model...", cfg.COLOR_GREEN))
         
-        return {
-            'mode': 'classic',
-            'tutorial': False,
-            'comparison': False,
-            'engine': 'pytorch',
-            'model': 'google/gemma-2b-it',
-            'steps': 8,
-            'temperature': 0.7,
-            'top_k': 8,
-            'top_p': 0.95,
-            'show_attention': True,
-            'num_choices': 4,
-            'permutation_length': 1,
-            'focus_words': False,
-            'player_choice_mode': False,
-            'verbose': False,
-            'load_in_4bit': False,
-            'load_in_8bit': False,
-            'use_kv_cache': True
-        }
+        smallest_model = get_smallest_model()
+        
+        if smallest_model:
+            print(f"Using: {smallest_model.name} ({smallest_model.engine})")
+            print("Settings: 8 rounds, temperature 0.7, top-k 8, top-p 0.95")
+            
+            return {
+                'mode': 'classic',
+                'tutorial': False,
+                'comparison': False,
+                'engine': smallest_model.engine,
+                'model': smallest_model.name,
+                'steps': 8,
+                'temperature': 0.7,
+                'top_k': 8,
+                'top_p': 0.95,
+                'show_attention': True,
+                'num_choices': 4,
+                'permutation_length': 1,
+                'focus_words': False,
+                'player_choice_mode': False,
+                'verbose': False,
+                'load_in_4bit': False,
+                'load_in_8bit': False,
+                'use_kv_cache': True
+            }
+        else:
+            print(uic.color_text("Could not automatically find a model. Please select one:", cfg.COLOR_YELLOW))
+            return self._configure_classic_mode()
     
     def _quick_play_tutorial(self) -> Dict[str, Any]:
         """Quick tutorial mode with defaults."""

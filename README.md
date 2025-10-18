@@ -68,10 +68,10 @@ python gamma.py mind-meld                   # Mind meld experiments
 python gamma.py language-comparison         # Benchmarks
 
 # Direct entry points
-python game.py                              # Interactive mode
-python game.py --chat                       # Chat mode
-python game.py --tutorial                   # Tutorial mode
-python game.py --prompt "Explain quantum computing"  # Quick inference
+python gamma.py game                              # Interactive mode
+python gamma.py game --chat                       # Chat mode
+python gamma.py game --tutorial                   # Tutorial mode
+python gamma.py game --prompt "Explain quantum computing"  # Quick inference
 ```
 
 ---
@@ -87,7 +87,7 @@ GAMMA supports models from multiple sources with automatic detection:
 ollama list
 
 # Use directly - no configuration needed
-python game.py  # Interactive menu shows your Ollama models
+python gamma.py game  # Interactive menu shows your Ollama models
 ```
 
 **Features:**
@@ -101,7 +101,7 @@ python game.py  # Interactive menu shows your Ollama models
 
 ```bash
 # Auto-downloaded on first use
-python game.py --engine pytorch --model google/gemma-2-2b-it
+python gamma.py game --engine pytorch --model google/gemma-2-2b-it
 
 # For gated models (like Gemma), login first:
 huggingface-cli login
@@ -111,7 +111,7 @@ huggingface-cli login
 
 ```bash
 # Place GGUF files in models/ directory
-python game.py --engine llamacpp --model models/my-model.gguf
+python gamma.py game --engine llamacpp --model models/my-model.gguf
 
 # Or create symlinks to Ollama models:
 ln -s ~/.ollama/models/blobs/sha256-abc123... models/qwen-coder.gguf
@@ -152,7 +152,7 @@ ln -s ~/.ollama/models/blobs/sha256-abc123... models/qwen-coder.gguf
 ### Interactive Menu (Recommended)
 
 ```bash
-python game.py
+python gamma.py game
 ```
 
 **Features:**
@@ -175,25 +175,25 @@ python game.py
 
 ```bash
 # Classic game with specific model
-python game.py --engine llamacpp --model models/qwen3-coder-30b.gguf
+python gamma.py game --engine llamacpp --model models/qwen3-coder-30b.gguf
 
 # Chat mode
-python game.py --engine ollama --model qwen3-coder:30b --chat
+python gamma.py game --engine ollama --model qwen3-coder:30b --chat
 
 # Single-shot inference with performance stats
-python game.py --prompt "Write a Python hello world" --steps 20
+python gamma.py game --prompt "Write a Python hello world" --steps 20
 
 # Compare two models
-python game.py --comparison \
+python gamma.py game --comparison \
   --comparison-models \
     llamacpp:models/model1.gguf \
     ollama:qwen3:30b
 
 # Tutorial with specific model
-python game.py --tutorial --engine pytorch --model google/gemma-2-2b-it
+python gamma.py game --tutorial --engine pytorch --model google/gemma-2-2b-it
 
 # Advanced options
-python game.py \
+python gamma.py game \
   --engine llamacpp \
   --model models/my-model.gguf \
   --temperature 0.7 \
@@ -309,7 +309,7 @@ python tools/run_api_server.py --model <MODEL> --engine <ENGINE>
 ```
 gamma/
 ├── gamma.py                        # Unified CLI entry point
-├── game.py                         # Game entry point
+├── src/game/cli.py                # Game entry point
 ├── src/
 │   ├── game/                       # ☇ Game-specific code
 │   │   ├── game_logic.py
@@ -360,7 +360,7 @@ gamma/
 
 ```bash
 # GAMMA auto-detects your Ollama models
-python game.py
+python gamma.py game
 
 # Select Ollama from the menu
 # Choose your model from the list
@@ -370,7 +370,7 @@ python game.py
 ### Example 2: Chat with Code Model
 
 ```bash
-python game.py \
+python gamma.py game \
   --engine llamacpp \
   --model models/qwen3-coder-30b.gguf \
   --chat
@@ -379,7 +379,7 @@ python game.py \
 ### Example 3: Compare Models
 
 ```bash
-python game.py \
+python gamma.py game \
   --comparison \
   --comparison-models \
     ollama:qwen3-coder:30b \
@@ -391,7 +391,7 @@ python game.py \
 
 ```bash
 # Use quantization for large models
-python game.py \
+python gamma.py game \
   --engine pytorch \
   --model google/gemma-2-9b-it \
   --load-in-4bit \
@@ -402,10 +402,10 @@ python game.py \
 
 ```bash
 # Learn about LLMs interactively
-python game.py --tutorial
+python gamma.py game --tutorial
 
 # Or with a specific model
-python game.py --tutorial \
+python gamma.py game --tutorial \
   --engine ollama \
   --model gemma3:1b-it-qat
 ```
@@ -420,22 +420,22 @@ python game.py --tutorial \
 ollama list
 
 # Restart GAMMA
-python game.py
+python gamma.py game
 ```
 
 ### Out of memory errors
 ```bash
 # Use smaller model
-python game.py --model google/gemma-2-2b-it
+python gamma.py game --model google/gemma-2-2b-it
 
 # Use quantization
-python game.py --load-in-4bit
+python gamma.py game --load-in-4bit
 
 # Reduce context size
-python game.py --llama-cpp-n-ctx 1024
+python gamma.py game --llama-cpp-n-ctx 1024
 
 # Use CPU layers
-python game.py --llama-cpp-n-gpu-layers 0
+python gamma.py game --llama-cpp-n-gpu-layers 0
 ```
 
 ### HuggingFace authentication
@@ -488,7 +488,7 @@ CMAKE_ARGS="-DLLAMA_HIPBLAS=on" pip install llama-cpp-python
 Multi-model collaboration system (experimental):
 
 ```bash
-python game.py \
+python gamma.py game \
   --mind-meld \
   --meld-models \
     pytorch:google/gemma-2-2b-it \
@@ -514,7 +514,7 @@ See [Mind Meld Documentation](./docs/MIND_MELD.md) for details.
 ### Custom Engine Configuration
 
 ```python
-# In game.py or custom script
+# In src/game/cli.py or custom script
 engine_config = {
     'llama_cpp_n_ctx': 4096,
     'llama_cpp_n_gpu_layers': -1,

@@ -141,17 +141,17 @@ def example_5_model_zoo():
 
 
 def example_6_integration_with_game():
-    """Example 6: How to integrate with game.py."""
+    """Example 6: How to integrate with the game CLI."""
     print("\n" + "="*70)
     print("Example 6: Integration with GAMMA Game")
     print("="*70)
 
     print("""
-To use new features with game.py:
+To use new features with the game CLI:
 
 1. Using presets in Mind Meld mode:
 
-   python game.py --mind-meld \\
+   python gamma.py game --mind-meld \\
        --meld-models "TinyLlama/TinyLlama-1.1B-Chat-v1.0" "Qwen/Qwen2-1.5B-Instruct" \\
        --swap-strategy perplexity \\
        --use-abe \\
@@ -245,7 +245,7 @@ def main():
         print("✅ All examples completed successfully!")
         print("="*70)
         print("\nNext steps:")
-        print("  1. Run actual models: python game.py --mind-meld --meld-models ...")
+        print("  1. Run actual models: python gamma.py game --mind-meld --meld-models ...")
         print("  2. Test benchmarks: See MIND_MELD_GUIDE.md")
         print("  3. Customize presets: See src/mind_meld/presets.py")
         print()

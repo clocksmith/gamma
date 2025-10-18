@@ -48,7 +48,7 @@ pip install -r requirements-pytorch.txt  # or another engine
 ### Running
 ```bash
 # Interactive game
-python game.py
+python gamma.py game
 
 # Unified CLI
 python gamma.py game

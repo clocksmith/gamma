@@ -2,6 +2,36 @@ import time
 import json
 from typing import List, Tuple, Optional, Dict, Any
 import subprocess
+import gguf
+from transformers import PreTrainedTokenizer
+
+class GGUFTokenizer(PreTrainedTokenizer):
+    def __init__(self, vocab, **kwargs):
+        super().__init__(**kwargs)
+        self.vocab = vocab
+        self.id_to_token = {i: token for i, token in enumerate(self.vocab)}
+
+    @property
+    def vocab_size(self):
+        return len(self.vocab)
+
+    def _tokenize(self, text):
+        # This is a very simple tokenizer, it splits by space.
+        # A more sophisticated implementation would use the sentencepiece model from the GGUF file.
+        return text.split(' ')
+
+    def _convert_token_to_id(self, token):
+        return self.vocab.index(token) if token in self.vocab else self.unk_token_id
+
+    def _convert_id_to_token(self, index):
+        return self.id_to_token.get(index, self.unk_token)
+
+    def get_vocab(self):
+        return {token: i for i, token in enumerate(self.vocab)}
+
+    def save_vocabulary(self, save_directory, filename_prefix=None):
+        # This is required by the PreTrainedTokenizer interface
+        return (os.path.join(save_directory, 'vocab.txt'),)
 
 try:
     import numpy as np
@@ -30,91 +60,102 @@ class OllamaEngine(LLMEngine):
         self._model_info = None
 
     def load(self):
-        """Load/verify the Ollama model with enhanced detection."""
+        """Load/verify the Ollama model and load its tokenizer from the GGUF file."""
         print(f"OllamaEngine: Checking availability of model '{self.model_name}'...")
 
-        # Check if Ollama CLI is installed
         if not ollama_utils.is_ollama_installed():
-            print("Warning: Ollama CLI not found in PATH")
-            print("Install from: https://ollama.ai")
+            raise RuntimeError("Ollama CLI not found in PATH. Install from: https://ollama.ai")
 
-        # Auto-detect server if not already set
         if self.base_url is None:
             self.base_url = ollama_utils.detect_ollama_server()
             if self.base_url is None:
-                raise RuntimeError(
-                    "Ollama server not found. Is it running?\n"
-                    "Start with: ollama serve"
-                )
+                raise RuntimeError("Ollama server not found. Is it running? Start with: ollama serve")
             print(f"✓ Detected Ollama server at {self.base_url}")
 
-        # Check model availability
-        is_available, message = ollama_utils.check_model_availability(
-            self.model_name, self.base_url
-        )
+        is_available, message = ollama_utils.check_model_availability(self.model_name, self.base_url)
 
         if not is_available:
             print(f"\n{message}")
-            print(f"\nTo download this model, run:")
-            print(f"  ollama pull {self.model_name}")
-            raise RuntimeError(f"Model '{self.model_name}' not available")
+            print(f"Model '{self.model_name}' not found locally. Attempting to download...")
+            try:
+                subprocess.run(['ollama', 'pull', self.model_name], check=True, text=True)
+                print(f"\n✓ Model '{self.model_name}' downloaded successfully.")
+            except subprocess.CalledProcessError as e:
+                raise RuntimeError(f"Failed to download model '{self.model_name}'. Error: {e}")
+            except FileNotFoundError:
+                raise RuntimeError("'ollama' command not found. Please make sure Ollama is installed and in your PATH.")
 
-        print(f"✓ {message}")
+        print("✓ Model is available.")
 
-        # Get model metadata
+        # Get GGUF file path and load tokenizer
         try:
-            self._model_info = ollama_utils.get_model_info(self.model_name, self.base_url)
-            details = ollama_utils.parse_model_details(self._model_info)
+            model_info = ollama_utils.get_model_info(self.model_name, self.base_url)
+            modelfile_content = model_info.get('modelfile', '')
+            from_line = next((line for line in modelfile_content.split('\n') if line.startswith('FROM ')), None)
+            if not from_line:
+                raise RuntimeError("Could not find 'FROM' line in modelfile to locate GGUF file.")
+            
+            gguf_path = from_line.split(' ', 1)[1]
+            if not os.path.exists(gguf_path):
+                raise RuntimeError(f"GGUF file not found at path: {gguf_path}")
 
-            print(f"  Family: {details['family']}")
-            print(f"  Size: {details['parameter_size']}")
-            print(f"  Quantization: {details['quantization_level']}")
-
-            # Initialize vocabulary
-            self._initialize_vocabulary()
+            reader = gguf.GGUFReader(gguf_path, 'r')
+            
+            # Find the vocabulary
+            vocab = None
+            for field in reader.fields.values():
+                if field.name == 'tokenizer.ggml.tokens':
+                    vocab = field.parts[field.part_count -1]
+                    break
+            
+            if vocab:
+                self.tokenizer = GGUFTokenizer(vocab)
+                self._vocab_size = self.tokenizer.vocab_size
+                print(f"✓ Tokenizer loaded from GGUF file. Vocab size: {self._vocab_size}")
+            else:
+                raise RuntimeError("Could not find vocabulary in GGUF file.")
 
         except Exception as e:
-            print(f"Warning: Could not fetch model details: {e}")
+            print(f"Warning: Could not load tokenizer from GGUF file: {e}")
+            # Fallback to pseudo-tokenization if GGUF parsing fails
             self._initialize_vocabulary()
 
     def _initialize_vocabulary(self):
-        """Initialize vocabulary information by making a test inference."""
-        try:
-            # Make a simple API call to get tokenization info
-            result = subprocess.run(
-                ['ollama', 'run', self.model_name, '--verbose', 'test'],
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-            # Set a reasonable default vocab size
-            self._vocab_size = 32000  # Common for many models
-            print(f"OllamaEngine: Using vocabulary size {self._vocab_size}")
-        except Exception as e:
-            print(f"Warning: Could not determine vocabulary size: {e}")
-            self._vocab_size = 32000
+        """Fallback for pseudo-tokenization if GGUF parsing fails."""
+        print("Warning: GGUF parsing failed. Falling back to pseudo-tokenization.")
+        self._vocab_size = 32000
+        self.tokenizer = None
 
     def get_vocabulary_size(self) -> int:
         """Return the vocabulary size."""
+        if self.tokenizer:
+            return self.tokenizer.vocab_size
         return self._vocab_size or 32000
 
-    def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[List[int], None]:
-        """
-        Encode text to token IDs.
-        Note: Ollama doesn't expose tokenization directly, so we approximate.
-        """
-        # This is a limitation - Ollama doesn't expose tokenization
-        # For game purposes, we'll create pseudo-tokens based on words
+    def get_token_text(self, token_id: int) -> str:
+        """Get text representation of a token ID."""
+        if self.tokenizer:
+            return self.tokenizer.decode([token_id])
+        return self._vocab_cache.get(token_id, f"<token_{token_id}>")
+
+    def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[List[List[int]], None]:
+        """Encode text to token IDs."""
+        if self.tokenizer:
+            return self.tokenizer.encode(text, add_special_tokens=add_special_tokens), None
+        # Fallback to pseudo-tokenization
         tokens = text.split()
         token_ids = [hash(token) % self._vocab_size for token in tokens]
-        return (token_ids, None)
+        return ([token_ids], None)
 
     def decode(self, token_ids: Any, skip_special_tokens: bool = False) -> str:
-        """
-        Decode token IDs to text.
-        Note: Limited functionality with Ollama's API.
-        """
-        # Reverse lookup from cache if available
+        """Decode token IDs to text."""
+        if self.tokenizer:
+            return self.tokenizer.decode(token_ids, skip_special_tokens=skip_special_tokens)
+        
+        # Fallback to pseudo-tokenization
+        if isinstance(token_ids, list) and len(token_ids) > 0 and isinstance(token_ids[0], list):
+            token_ids = token_ids[0]
+
         if isinstance(token_ids, (list, tuple)):
             tokens = [self._vocab_cache.get(tid, f"<token_{tid}>") for tid in token_ids]
             return " ".join(tokens)
@@ -162,21 +203,22 @@ class OllamaEngine(LLMEngine):
             result = response.json()
             generated_text = result.get("response", "")
 
-            # Extract the next token (approximate)
-            next_token_text = generated_text.strip().split()[0] if generated_text.strip() else ""
-            next_token_id = hash(next_token_text) % self._vocab_size
-
-            # Cache the token
-            self._vocab_cache[next_token_id] = next_token_text
+            if self.tokenizer:
+                next_token_id = self.tokenizer.encode(generated_text)[0]
+            else: # Fallback
+                next_token_text = generated_text.strip().split()[0] if generated_text.strip() else ""
+                next_token_id = hash(next_token_text) % self._vocab_size
+                self._vocab_cache[next_token_id] = next_token_text
 
             # Create synthetic logits (since Ollama doesn't expose them)
-            logits_raw = np.full(self._vocab_size, -10.0, dtype=np.float32)
+            vocab_size = self.get_vocabulary_size()
+            logits_raw = np.full(vocab_size, -10.0, dtype=np.float32)
             logits_raw[next_token_id] = 1.0  # High score for predicted token
 
             # Add some noise to other tokens
             num_alternatives = min(top_k - 1, 10)
             for i in range(num_alternatives):
-                alt_id = (next_token_id + i + 1) % self._vocab_size
+                alt_id = (next_token_id + i + 1) % vocab_size
                 logits_raw[alt_id] = -1.0 - (i * 0.5)
 
             probs_raw = sampling_utils.softmax(logits_raw)
@@ -190,6 +232,7 @@ class OllamaEngine(LLMEngine):
                 "next_token_id": next_token_id,
                 "logits_raw": logits_raw,
                 "logits_processed": logits_raw,
+                "probabilities": probs_raw,
                 "probabilities_raw": probs_raw,
                 "probabilities_temp": probs_raw,
                 "probabilities_top_k": probs_raw,

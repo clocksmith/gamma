@@ -757,9 +757,205 @@ class ModelSelector:
 
 
 def get_model_info(engine: str, model_name: str) -> Optional[ModelInfo]:
+
+
     """Get information about a specific model."""
+
+
     models = MODEL_CATALOG.get(engine, [])
+
+
     for model in models:
+
+
         if model.name == model_name:
+
+
             return model
+
+
     return None
+
+
+
+
+
+def parse_model_size(size_str: str) -> float:
+
+
+    """Parse model size string (e.g., '7B', '270M') into a numerical value in billions."""
+
+
+    size_str = size_str.upper().strip()
+
+
+    if 'B' in size_str:
+
+
+        return float(size_str.replace('B', ''))
+
+
+    if 'M' in size_str:
+
+
+        return float(size_str.replace('M', '')) / 1000.0
+
+
+    return float('inf')
+
+
+
+
+
+def get_all_models() -> List[ModelInfo]:
+
+
+    """Get all models from all catalogs and local discovery."""
+
+
+    all_models = []
+
+
+    for engine, models in MODEL_CATALOG.items():
+
+
+        all_models.extend(models)
+
+
+
+
+
+    # Discover local ollama models
+
+
+    try:
+
+
+        import subprocess
+
+
+        result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, check=True, timeout=5)
+
+
+        lines = result.stdout.strip().split('\n')[1:]  # Skip header
+
+
+
+
+
+        for line in lines:
+
+
+            if not line.strip():
+
+
+                continue
+
+
+            parts = line.split()
+
+
+            if len(parts) >= 1:
+
+
+                model_name = parts[0]
+
+
+                size = parts[2] if len(parts) > 2 else "?"
+
+
+                existing = any(m.name == model_name for m in all_models)
+
+
+                if not existing:
+
+
+                    all_models.append(ModelInfo(
+
+
+                        name=model_name,
+
+
+                        engine='ollama',
+
+
+                        size=size,
+
+
+                        description=f"Local Ollama model",
+
+
+                        memory_estimate=size,
+
+
+                        recommended=False,
+
+
+                        requires_auth=False,
+
+
+                        available_locally=True,
+
+
+                        location="ollama"
+
+
+                    ))
+
+
+    except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+
+
+        pass  # Ollama not available
+
+
+
+
+
+    return all_models
+
+
+
+
+
+def get_smallest_model() -> Optional[ModelInfo]:
+
+
+    """Get the smallest model from all available models."""
+
+
+    all_models = get_all_models()
+
+
+    if not all_models:
+
+
+        return None
+
+
+
+
+
+    # Filter out models with unknown size
+
+
+    valid_models = [m for m in all_models if m.size != '?']
+
+
+    if not valid_models:
+
+
+        return all_models[0] if all_models else None
+
+
+
+
+
+    smallest_model = min(valid_models, key=lambda m: parse_model_size(m.size))
+
+
+    return smallest_model
+
+
+
+

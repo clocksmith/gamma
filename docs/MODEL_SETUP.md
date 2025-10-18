@@ -51,7 +51,7 @@ When you specify a model file (e.g., `model.gguf`), Gamma searches in this order
 
 ```bash
 # Models are downloaded automatically
-python game.py --engine pytorch --model google/gemma-3-1b-it
+python gamma.py game --engine pytorch --model google/gemma-3-1b-it
 ```
 
 ### Option 2: Use Local GGUF Files
@@ -63,7 +63,7 @@ python tools/download_model.py \
   --filename gemma-3-27b-it-Q4_0.gguf
 
 # Use it (file is saved to gamma/models/)
-python game.py --engine llamacpp --model gemma-3-27b-it-Q4_0.gguf
+python gamma.py game --engine llamacpp --model gemma-3-27b-it-Q4_0.gguf
 ```
 
 ### Option 3: Link Ollama Models
@@ -74,7 +74,7 @@ ln -s /usr/share/ollama/.ollama/models/blobs/sha256-abc123... \
       models/my-model.gguf
 
 # Use it
-python game.py --engine llamacpp --model my-model.gguf
+python gamma.py game --engine llamacpp --model my-model.gguf
 ```
 
 ---
@@ -135,7 +135,7 @@ create_model_symlink(
 
 ```bash
 # Single model usage
-python game.py --engine llamacpp --model llama3-8b.gguf
+python gamma.py game --engine llamacpp --model llama3-8b.gguf
 
 # Mind Meld with multiple models
 python tools/run_mind_meld_cli.py \
@@ -186,7 +186,7 @@ No manual download needed:
 
 ```bash
 # First run will download and cache
-python game.py --engine pytorch --model google/gemma-3-1b-it
+python gamma.py game --engine pytorch --model google/gemma-3-1b-it
 ```
 
 Models are cached in `~/.cache/huggingface/hub/`.
@@ -200,7 +200,7 @@ For gated models (require HuggingFace approval):
 huggingface-cli login
 
 # Or use token directly
-python game.py --engine pytorch --model google/gemma-3-1b-it --hf-token YOUR_TOKEN
+python gamma.py game --engine pytorch --model google/gemma-3-1b-it --hf-token YOUR_TOKEN
 ```
 
 ---
@@ -325,7 +325,7 @@ rm -rf ~/.cache/huggingface/hub/*
 export HF_HOME=/mnt/large-drive/huggingface
 
 # Then re-download
-python game.py --engine pytorch --model google/gemma-3-1b-it
+python gamma.py game --engine pytorch --model google/gemma-3-1b-it
 ```
 
 ### Out of Disk Space
@@ -363,7 +363,7 @@ gamma/models/
 Reference models with subdirectories:
 
 ```bash
-python game.py --engine llamacpp --model gemma/gemma-3-27b.gguf
+python gamma.py game --engine llamacpp --model gemma/gemma-3-27b.gguf
 ```
 
 ### Batch Symlink Creation

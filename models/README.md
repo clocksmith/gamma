@@ -105,16 +105,16 @@ models/
 
 ```bash
 # By filename (searches all paths)
-python game.py --engine llamacpp --model gemma-3-27b.gguf
+python gamma.py game --engine llamacpp --model gemma-3-27b.gguf
 
 # By full path (if not in search paths)
-python game.py --engine llamacpp --model /path/to/model.gguf
+python gamma.py game --engine llamacpp --model /path/to/model.gguf
 ```
 
 ### With ONNX Engine
 
 ```bash
-python game.py --engine onnx --model my-model.onnx --onnx-tokenizer google/gemma-3-1b-it
+python gamma.py game --engine onnx --model my-model.onnx --onnx-tokenizer google/gemma-3-1b-it
 ```
 
 ### With Mind Meld

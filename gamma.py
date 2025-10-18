@@ -15,13 +15,16 @@ Usage:
     gamma.py comparison [options]        # Model comparison
     gamma.py benchmark [options]         # Python benchmarks
     gamma.py language-comparison [opts]  # JS/TS benchmarks (Node.js)
-
-For backward compatibility, game.py still exists and works as before.
 """
 
 import argparse
 import sys
 import os
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.join(ROOT_DIR, 'src')
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -61,8 +64,8 @@ For more help on a specific tool:
     # Route to the appropriate tool
     if args.tool == 'game':
         # Import and run the game
-        from game import main as game_main
-        sys.argv = ['game.py'] + remaining_args
+        from src.game.cli import main as game_main
+        sys.argv = ['gamma.py'] + remaining_args
         game_main()
 
     elif args.tool == 'mind-meld':
@@ -72,9 +75,9 @@ For more help on a specific tool:
         mind_meld_main()
 
     elif args.tool == 'comparison':
-        # Run comparison mode via game.py with --comparison flag
-        from game import main as game_main
-        sys.argv = ['game.py', '--comparison'] + remaining_args
+        # Run comparison mode via the game CLI with --comparison flag
+        from src.game.cli import main as game_main
+        sys.argv = ['gamma.py', '--comparison'] + remaining_args
         game_main()
 
     elif args.tool == 'benchmark':

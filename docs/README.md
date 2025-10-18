@@ -22,8 +22,8 @@ Legacy documentation moved to [archive/](archive/):
 ## Getting Help
 
 1. Check the [main README](../README.md) for common usage patterns
-2. Run `python game.py --help` for all command-line options
-3. Use the interactive menu for guided setup: `python game.py`
+2. Run `python gamma.py game --help` for all command-line options
+3. Use the interactive menu for guided setup: `python gamma.py game`
 4. Review examples in `docs/examples/`
 5. Report issues on GitHub
 
@@ -31,7 +31,7 @@ Legacy documentation moved to [archive/](archive/):
 
 ```
 gamma/
-├── game.py                 # ⭐ Main entry point - all features unified
+├── src/game/cli.py         # ⭐ Game entry point - all features unified
 ├── README.md               # ⭐ Comprehensive guide - start here
 ├── requirements*.txt       # Dependencies by engine
 ├── src/                    # Source code
@@ -49,7 +49,7 @@ gamma/
 ## Key Features
 
 ### Unified Entry Point
-**Everything runs through `game.py`:**
+**Everything runs through `gamma.py game`:**
 - Interactive menu (no args)
 - Classic game mode (default)
 - Chat mode (`--chat`)
@@ -78,22 +78,22 @@ gamma/
 
 ```bash
 # Interactive menu (recommended)
-python game.py
+python gamma.py game
 
 # Chat with Ollama model
-python game.py --engine ollama --model qwen3-coder:30b --chat
+python gamma.py game --engine ollama --model qwen3-coder:30b --chat
 
 # Chat with local GGUF
-python game.py --engine llamacpp --model models/model.gguf --chat
+python gamma.py game --engine llamacpp --model models/model.gguf --chat
 
 # Compare models
-python game.py --comparison --comparison-models ollama:model1 ollama:model2
+python gamma.py game --comparison --comparison-models ollama:model1 ollama:model2
 
 # Tutorial
-python game.py --tutorial
+python gamma.py game --tutorial
 
 # Single inference
-python game.py --prompt "Explain quantum computing"
+python gamma.py game --prompt "Explain quantum computing"
 ```
 
 ## Configuration Files

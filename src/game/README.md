@@ -40,7 +40,7 @@ Every game session is saved automatically:
 
 ```bash
 # Play the game (auto-saves sessions)
-python game.py
+python gamma.py game
 
 # View your sessions
 python tools/view_sessions.py

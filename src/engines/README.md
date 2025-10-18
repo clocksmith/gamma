@@ -31,7 +31,7 @@ You can select which engine to use with the `--engine` command-line flag. Each e
 
 **Example:** Running the game with the `Llama.cpp` engine.
 ```bash
-python game.py --engine llamacpp --model "path/to/your/model.gguf"
+python gamma.py game --engine llamacpp --model "path/to/your/model.gguf"
 ```
 
 ## Supported Frameworks
