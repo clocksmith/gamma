@@ -61,8 +61,8 @@ class ConcreteEngine(LLMEngine):
         # Try parent implementation first (handles cache and special tokens)
         try:
             return super().get_token_text(token_id)
-        except NotImplementedError:
-            # Parent couldn't handle it, provide our own implementation
+        except (NotImplementedError, RuntimeError):
+            # Parent couldn't handle it (no tokenizer or not implemented), provide our own implementation
             pass
 
         # Mock implementation for non-cached, non-special tokens
@@ -100,38 +100,57 @@ class ConcreteEngine(LLMEngine):
         """Convert from numpy."""
         return array.tolist()
 
+    def _decode_token_raw(self, token_id: int) -> str:
+        """Decode a single token ID to its text representation."""
+        token_map = {
+            100: "hello",
+            101: "world",
+            102: " ",
+            103: ".",
+            104: "123",
+            105: cfg.TOKEN_BOS,
+            106: cfg.TOKEN_EOS,
+            107: cfg.TOKEN_NL,
+        }
+        return token_map.get(token_id, f"token_{token_id}")
+
     def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> Any:
-        """Concatenate tensors."""
+        """Concatenate two tensors along specified dimension."""
         return np.concatenate([tensor1, tensor2], axis=dim)
 
     def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
-        """Get KV cache shape."""
-        if self._kv_cache is not None:
-            return (2, 4, 8, 16)
+        """Get KV cache shape if available."""
         return None
 
     def get_num_layers(self) -> int:
-        """Get number of layers."""
+        """Get the number of layers in the model."""
         return 12
 
     def get_vocab(self) -> Dict[str, int]:
-        """Get vocabulary."""
+        """Get the model's vocabulary."""
         return {"hello": 100, "world": 101}
 
     def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
-        """Bridge KV cache."""
-        return True
+        """Attempt to bridge KV cache to another engine."""
+        return False
 
     def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
-        """Export KV cache state."""
-        if self._kv_cache is not None:
-            return {"cache": "state"}
+        """Export KV cache state for bridging."""
         return None
 
     def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
-        """Import KV cache state."""
-        self._kv_cache = state
-        return True
+        """Import KV cache state from another engine."""
+        return False
+
+    def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:
+        """Append a new token to input_ids tensor."""
+        if isinstance(input_ids, list):
+            return input_ids + [new_token_id]
+        return np.append(input_ids, new_token_id)
+
+    def get_device(self) -> str:
+        """Get device type (cpu, cuda, mps, etc)."""
+        return "cpu"
 
     def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:
         """Append to input."""

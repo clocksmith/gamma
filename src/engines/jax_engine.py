@@ -51,56 +51,56 @@ class JaxEngine(LLMEngine):
         return self._jit_model_call_cache
 
     def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[jnp.ndarray, jnp.ndarray]: # type: ignore
-        if not self.tokenizer: raise RuntimeError("JaxEngine: Tokenizer not loaded.")
+        self._ensure_tokenizer_loaded()
         enc = self.tokenizer(text, return_tensors="jax", add_special_tokens=add_special_tokens)
         return enc["input_ids"].astype(jnp.int32), enc["attention_mask"].astype(jnp.int32) # type: ignore
 
     def decode(self, ids: Any, skip_special_tokens: bool = False) -> str:
-        if not self.tokenizer: raise RuntimeError("JaxEngine: Tokenizer not loaded.")
+        self._ensure_tokenizer_loaded()
         ids_np = np.array(jnp.squeeze(ids, axis=0) if hasattr(ids, "ndim") and ids.ndim > 1 and ids.shape[0] == 1 else ids) # type: ignore
         return self.tokenizer.decode(ids_np.tolist(), skip_special_tokens=skip_special_tokens)
 
 
     def predict_next(self, input_ids: jnp.ndarray, attention_mask: Optional[jnp.ndarray], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]: # type: ignore
-        if not self.model: raise RuntimeError("JaxEngine: Model not loaded.")
+        self._ensure_model_loaded()
         st = time.time(); model_call_fn = self._get_jitted_model_call()
         current_past_key_values = self._kv_cache if input_ids.shape[-1] == 1 else None
         outputs = model_call_fn(self._model_params, input_ids, attention_mask, current_past_key_values, output_attentions, output_hidden_states)
         self._kv_cache = outputs.past_key_values
-        
+
+        # Get raw logits and convert to numpy
         l_raw = outputs.logits[:, -1, :]
         l_raw_np = np.array(l_raw)
 
-        l_proc_np, l_temp_np, l_k_np = sampling.process_logits_pipeline(l_raw_np, temperature, top_k, top_p, return_intermediates=True)
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(l_raw_np, temperature, top_k, top_p)
 
-        p_proc_np = sampling.softmax(l_proc_np)
-        next_id = int(np.argmax(p_proc_np, axis=-1))
+        # Convert numpy results back to JAX arrays and compute probabilities
+        l_proc_np = pipeline_results["logits_processed_np"]
+        l_temp_np = pipeline_results["logits_temp_np"]
+        l_k_np = pipeline_results["logits_topk_np"]
+        p_proc_np = pipeline_results["probs_processed_np"]
 
-        max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_txts, top_p_vals, _ = sampling.get_top_k_tokens(l_proc_np, max_dk, self.get_token_text)
-        
-        return {"next_token_id": next_id, "logits_raw": l_raw, "logits_processed": jnp.array(l_proc_np), 
+        return {"next_token_id": pipeline_results["next_token_id"],
+                "logits_raw": l_raw,
+                "logits_processed": jnp.array(l_proc_np),
                 "probabilities_raw": jax.nn.softmax(l_raw, axis=-1),
                 "probabilities_temp": jax.nn.softmax(jnp.array(l_temp_np), axis=-1),
                 "probabilities_top_k": jax.nn.softmax(jnp.array(l_k_np), axis=-1),
-                "probabilities_processed": jnp.array(p_proc_np), "top_tokens_processed": top_txts, "top_probs_processed": top_p_vals,
-                "attention": outputs.attentions if output_attentions else None, "hidden_states": outputs.hidden_states if output_hidden_states else None, "forward_time": time.time() - st}
+                "probabilities_processed": jnp.array(p_proc_np),
+                "top_tokens_processed": pipeline_results["top_tokens"],
+                "top_probs_processed": pipeline_results["top_probs"],
+                "attention": outputs.attentions if output_attentions else None,
+                "hidden_states": outputs.hidden_states if output_hidden_states else None,
+                "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
-        if not self.tokenizer: raise RuntimeError("JaxEngine: Tokenizer not loaded."); return -1
+        self._ensure_tokenizer_loaded()
         return self.tokenizer.vocab_size
 
     def _decode_token_raw(self, token_id: int) -> str:
         """Decode a single token ID using JAX/HuggingFace tokenizer."""
-        txt = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-        if isinstance(txt, bytes):
-            txt = txt.decode("utf-8", errors="replace")
-        if hasattr(self.tokenizer, "sp_model") and txt.startswith(" "):
-            txt = txt[1:]
-        if not txt:
-            raw_decoded = self.tokenizer.decode([token_id], skip_special_tokens=False)
-            txt = raw_decoded.strip() if raw_decoded and raw_decoded != self.tokenizer.unk_token else ""
-        return txt
+        return self._decode_token_hf_common(token_id)
 
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
         if not (att_out and isinstance(att_out, tuple) and len(att_out) > 0 and isinstance(att_out[-1], jax.Array)): return None # type: ignore

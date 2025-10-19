@@ -687,11 +687,15 @@ JSON:`.trim();
     const skipped = this.results.filter(r => r.skipped);
     const failed = this.results.filter(r => !r.success && !r.skipped);
 
-    console.log('\n--- Summary ---');
-    console.log(`Total Runs (all iterations): ${this.results.length}`);
-    console.log(`Successful: ${successful.length}`);
-    console.log(`Skipped: ${skipped.length}`);
-    console.log(`Failed: ${failed.length}`);
+    console.log('\n═══════════════════════════════════════════════════════════');
+    console.log('                    BENCHMARK SUMMARY                      ');
+    console.log('═══════════════════════════════════════════════════════════\n');
+
+    console.log('📊 Test Results:');
+    console.log(`   Total Runs: ${this.results.length}`);
+    console.log(`   ✅ Successful: ${successful.length}`);
+    console.log(`   ⏭️  Skipped: ${skipped.length}`);
+    console.log(`   ❌ Failed: ${failed.length}`);
 
     if (successful.length > 0) {
       // Group results to calculate stats per benchmark permutation
@@ -717,8 +721,40 @@ JSON:`.trim();
       const overallAvgScore = benchmarkStats.reduce((sum, s) => sum + s.meanScore, 0) / benchmarkStats.length;
       const overallAvgDuration = benchmarkStats.reduce((sum, s) => sum + s.meanDuration, 0) / benchmarkStats.length;
 
-      console.log(`Average Score (Mean of Means): ${overallAvgScore.toFixed(2)}/100`);
-      console.log(`Average Duration (Mean of Means): ${overallAvgDuration.toFixed(0)}ms`);
+      console.log('\n📈 Overall Performance:');
+      console.log(`   Average Score: ${overallAvgScore.toFixed(2)}/100`);
+      console.log(`   Average Duration: ${overallAvgDuration.toFixed(0)}ms`);
+
+      // Calculate detailed score breakdowns
+      const scoreComponents = successful.reduce((acc, r) => {
+        const evaluation = r.evaluation;
+        if (!evaluation || !evaluation.scores) return acc;
+
+        acc.accuracy.push(evaluation.scores.accuracy || 0);
+        acc.codeQuality.push(evaluation.scores.codeQuality || 0);
+        acc.completeness.push(evaluation.scores.completeness || 0);
+        if (evaluation.scores.autoRater !== undefined) {
+          acc.autoRater.push(evaluation.scores.autoRater || 0);
+        }
+
+        return acc;
+      }, { accuracy: [], codeQuality: [], completeness: [], autoRater: [] });
+
+      if (scoreComponents.accuracy.length > 0) {
+        console.log('\n📝 Score Components (Mean):');
+        const avgAccuracy = scoreComponents.accuracy.reduce((a, b) => a + b, 0) / scoreComponents.accuracy.length;
+        const avgQuality = scoreComponents.codeQuality.reduce((a, b) => a + b, 0) / scoreComponents.codeQuality.length;
+        const avgCompleteness = scoreComponents.completeness.reduce((a, b) => a + b, 0) / scoreComponents.completeness.length;
+
+        console.log(`   Accuracy:     ${(avgAccuracy * 100).toFixed(1)}%`);
+        console.log(`   Code Quality: ${(avgQuality * 100).toFixed(1)}%`);
+        console.log(`   Completeness: ${(avgCompleteness * 100).toFixed(1)}%`);
+
+        if (scoreComponents.autoRater.length > 0) {
+          const avgAutoRater = scoreComponents.autoRater.reduce((a, b) => a + b, 0) / scoreComponents.autoRater.length;
+          console.log(`   Auto-Rater:   ${(avgAutoRater * 100).toFixed(1)}%`);
+        }
+      }
 
       const variantAverages = successful.reduce((acc, r) => {
         if (!acc[r.variant]) acc[r.variant] = { totalScore: 0, totalRuns: 0 };
@@ -735,9 +771,11 @@ JSON:`.trim();
         }))
         .sort((a, b) => b.meanScore - a.meanScore);
 
-      console.log('\nVariant Averages:');
+      console.log('\n🔬 Variant Performance:');
       sortedVariants.forEach(({ variant, meanScore, runs }) => {
-        console.log(`  ${variant}: ${meanScore.toFixed(2)} (${runs} run${runs === 1 ? '' : 's'})`);
+        const bar = '█'.repeat(Math.floor(meanScore / 5));
+        const scoreClass = meanScore >= 80 ? '🟢' : meanScore >= 60 ? '🟡' : '🟠';
+        console.log(`   ${scoreClass} ${variant.padEnd(30)} ${meanScore.toFixed(1).padStart(5)}/100 ${bar} (${runs} run${runs === 1 ? '' : 's'})`);
       });
 
       const languageStats = successful.reduce((acc, r) => {
@@ -764,16 +802,20 @@ JSON:`.trim();
       const jsMean = jsStats.totalRuns ? (jsStats.totalScore / jsStats.totalRuns) : null;
       const tsMean = tsStats.totalRuns ? (tsStats.totalScore / tsStats.totalRuns) : null;
 
-      console.log('\n--- JS vs TS Comparison ---');
+      console.log('\n🆚 JavaScript vs TypeScript:');
       if (jsMean !== null && tsMean !== null) {
         const delta = tsMean - jsMean;
-        console.log(`Overall: TS ${tsMean.toFixed(2)} vs JS ${jsMean.toFixed(2)} (Δ ${delta >= 0 ? '+' : ''}${delta.toFixed(2)})`);
+        const winner = delta >= 0 ? 'TypeScript' : 'JavaScript';
+        const deltaSymbol = delta >= 0 ? '📈' : '📉';
+        console.log(`   TypeScript: ${tsMean.toFixed(2)}/100 (${tsStats.totalRuns} runs)`);
+        console.log(`   JavaScript: ${jsMean.toFixed(2)}/100 (${jsStats.totalRuns} runs)`);
+        console.log(`   ${deltaSymbol} Winner: ${winner} (Δ ${delta >= 0 ? '+' : ''}${delta.toFixed(2)} points)`);
       } else if (jsMean !== null) {
-        console.log(`Only JavaScript variants ran. Avg: ${jsMean.toFixed(2)}`);
+        console.log(`   JavaScript only: ${jsMean.toFixed(2)}/100 (${jsStats.totalRuns} runs)`);
       } else if (tsMean !== null) {
-        console.log(`Only TypeScript variants ran. Avg: ${tsMean.toFixed(2)}`);
+        console.log(`   TypeScript only: ${tsMean.toFixed(2)}/100 (${tsStats.totalRuns} runs)`);
       } else {
-        console.log('No comparable JavaScript/TypeScript runs recorded.');
+        console.log('   No comparable runs recorded.');
       }
 
       const providerNames = new Set([
@@ -782,7 +824,7 @@ JSON:`.trim();
       ]);
 
       if (providerNames.size > 0) {
-        console.log('By provider:');
+        console.log('\n   📊 By Provider:');
         for (const provider of providerNames) {
           const jsProvider = jsStats.byProvider?.[provider];
           const tsProvider = tsStats.byProvider?.[provider];
@@ -791,11 +833,12 @@ JSON:`.trim();
           if (jsProviderMean === null && tsProviderMean === null) continue;
           if (jsProviderMean !== null && tsProviderMean !== null) {
             const delta = tsProviderMean - jsProviderMean;
-            console.log(`  ${provider}: TS ${tsProviderMean.toFixed(2)} vs JS ${jsProviderMean.toFixed(2)} (Δ ${delta >= 0 ? '+' : ''}${delta.toFixed(2)})`);
+            const icon = delta >= 0 ? '↑' : '↓';
+            console.log(`      ${provider.padEnd(20)} TS: ${tsProviderMean.toFixed(2)} | JS: ${jsProviderMean.toFixed(2)} ${icon} Δ${delta >= 0 ? '+' : ''}${delta.toFixed(2)}`);
           } else if (jsProviderMean !== null) {
-            console.log(`  ${provider}: JS only (${jsProviderMean.toFixed(2)})`);
+            console.log(`      ${provider.padEnd(20)} JS only: ${jsProviderMean.toFixed(2)}`);
           } else if (tsProviderMean !== null) {
-            console.log(`  ${provider}: TS only (${tsProviderMean.toFixed(2)})`);
+            console.log(`      ${provider.padEnd(20)} TS only: ${tsProviderMean.toFixed(2)}`);
           }
         }
       }
@@ -803,7 +846,16 @@ JSON:`.trim();
 
     const { prompt, completion, total } = this.tokenUsage;
     if (prompt || completion || total) {
-      console.log(`Tokens used: prompt ${prompt}, completion ${completion}, total ${total}`);
+      console.log('\n🔢 Token Usage:');
+      console.log(`   Prompt tokens:     ${prompt.toLocaleString().padStart(10)}`);
+      console.log(`   Completion tokens: ${completion.toLocaleString().padStart(10)}`);
+      console.log(`   Total tokens:      ${total.toLocaleString().padStart(10)}`);
+
+      // Estimate cost (approximate, varies by provider)
+      const estimatedCost = (prompt * 0.000003 + completion * 0.000015).toFixed(4);
+      console.log(`   Estimated cost:    ~$${estimatedCost} (GPT-4 rates)`);
     }
+
+    console.log('\n═══════════════════════════════════════════════════════════');
   }
 }

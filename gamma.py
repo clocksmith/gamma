@@ -27,9 +27,40 @@ if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
 
 def main():
+    # Check if --help is requested without a tool, show main help
+    if len(sys.argv) == 1 or (len(sys.argv) == 2 and sys.argv[1] in ['-h', '--help']):
+        print("""GAMMA - LLM Exploration and Comparison Toolkit
+
+Usage:
+  gamma.py [tool] [options]
+
+Tools:
+  game                Interactive LLM prediction game (default)
+  mind-meld           Multi-model collaboration experiments
+  comparison          Side-by-side model comparison
+  benchmark           Performance testing (Python)
+  language-comparison TypeScript vs JavaScript benchmarking (Node.js)
+
+Options:
+  -h, --help          Show this help message
+
+Examples:
+  gamma.py game --chat
+  gamma.py comparison --models ollama:qwen3:30b pytorch:google/gemma-2-2b-it
+  gamma.py mind-meld --strategy round_robin
+  gamma.py language-comparison --task fibonacci
+
+For more help on a specific tool:
+  gamma.py game --help
+  gamma.py mind-meld --help
+  gamma.py comparison --help
+        """)
+        sys.exit(0)
+
     parser = argparse.ArgumentParser(
         description='GAMMA - LLM Exploration and Comparison Toolkit',
         formatter_class=argparse.RawDescriptionHelpFormatter,
+        add_help=False,  # Don't intercept --help, let subcommands handle it
         epilog="""
 Tools:
   game                Interactive LLM prediction game

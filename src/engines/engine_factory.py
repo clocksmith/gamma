@@ -2,7 +2,7 @@ from src.core.engine_interface import LLMEngine
 from typing import Dict, Any, Optional
 import platform
 
-SUPPORTED_ENGINES = ["ollama", "pytorch", "pytorch_cuda", "tensorflow", "jax", "llamacpp", "onnx", "mlx", "mlx_gpu"]
+SUPPORTED_ENGINES = ["ollama", "pytorch", "pytorch_cuda", "tensorflow", "jax", "llamacpp", "onnx", "mlx", "mlx_gpu", "vllm"]
 
 
 def get_engine(
@@ -57,9 +57,18 @@ EngineFactory: Initializing engine '{engine_name_lower}' with model '{model_iden
         except ImportError as e: raise RuntimeError(f"MLX dependencies missing. Install with `pip install -r requirements-mlx.txt`. Original error: {e}")
         return MLXEngine(model_identifier, effective_engine_config)
     elif engine_name_lower == "mlx_gpu":
-        if not (platform.system() == "Darwin" and platform.machine().startswith("arm")): 
+        if not (platform.system() == "Darwin" and platform.machine().startswith("arm")):
             print("EngineFactory WARNING: MLX GPU engine is optimized for Apple Silicon. May fail on other platforms.")
         try: from src.engines.mlx_gpu_engine import MLXGPUEngine
         except ImportError as e: raise RuntimeError(f"MLX dependencies missing. Install with `pip install mlx mlx-lm`. Original error: {e}")
         return MLXGPUEngine(model_identifier, effective_engine_config)
+    elif engine_name_lower == "vllm":
+        try:
+            import torch
+            if not torch.cuda.is_available():
+                print("EngineFactory WARNING: vLLM requires CUDA/GPU. Performance will be degraded or may fail.")
+            from src.engines.vllm_engine import VLLMEngine
+        except ImportError as e:
+            raise RuntimeError(f"vLLM dependencies missing. Install with `pip install -r requirements-vllm.txt`. Original error: {e}")
+        return VLLMEngine(model_identifier, effective_engine_config)
     else: raise ValueError(f"Unsupported engine: '{engine_name}'. Choose from: {', '.join(SUPPORTED_ENGINES)}")

@@ -119,22 +119,22 @@ class LlamaCppEngine(LLMEngine):
             return {"next_token_id": unk_token_id, "logits_raw": default_logits, "logits_processed": default_logits, "probabilities_raw": probs_default,
                     "probabilities_temp": probs_default, "probabilities_top_k": probs_default, "probabilities_processed": probs_default,
                     "top_tokens_processed": [self.get_token_text(unk_token_id)], "top_probs_processed": [1.0], "attention": None, "hidden_states": None, "forward_time": time.time() - st}
-        
-        logits_proc, logits_temp, logits_k = sampling_utils.process_logits_pipeline(logits_raw.copy(), temperature, top_k, top_p, return_intermediates=True)
 
-        probs_proc = sampling_utils.softmax(logits_proc)
-        next_token_id_val = int(np.argmax(probs_proc))
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(logits_raw.copy(), temperature, top_k, top_p)
 
-        max_display_k = max(top_k if top_k > 0 else 1, self.get_max_tokens_for_display(), 1)
-        top_texts_list, top_probs_list, _ = sampling_utils.get_top_k_tokens(logits_proc, max_display_k, self.get_token_text)
-
-        return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc,
+        return {"next_token_id": pipeline_results["next_token_id"],
+                "logits_raw": logits_raw,
+                "logits_processed": pipeline_results["logits_processed_np"],
                 "probabilities_raw": sampling_utils.softmax(logits_raw),
-                "probabilities_temp": sampling_utils.softmax(logits_temp),
-                "probabilities_top_k": sampling_utils.softmax(logits_k), 
-                "probabilities_processed": probs_proc,
-                "top_tokens_processed": top_texts_list, "top_probs_processed": top_probs_list, 
-                "attention": None, "hidden_states": None, "forward_time": time.time() - st}
+                "probabilities_temp": sampling_utils.softmax(pipeline_results["logits_temp_np"]),
+                "probabilities_top_k": sampling_utils.softmax(pipeline_results["logits_topk_np"]),
+                "probabilities_processed": pipeline_results["probs_processed_np"],
+                "top_tokens_processed": pipeline_results["top_tokens"],
+                "top_probs_processed": pipeline_results["top_probs"],
+                "attention": None,
+                "hidden_states": None,
+                "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
         if not self.model: raise RuntimeError("LlamaCppEngine: Model not loaded."); return -1
@@ -236,28 +236,22 @@ class LlamaCppEngine(LLMEngine):
                 continue
         return vocab
 
-    def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
-        """Attempt to bridge KV cache to another engine."""
-        # llama.cpp has internal KV cache management that's not easily exported
-        print("LlamaCppEngine: KV cache bridging not supported for llama.cpp")
-        return False
-
     def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
         """Export KV cache state for bridging."""
         # llama.cpp manages KV cache internally and doesn't expose it easily
+        # Provide more detailed metadata than default implementation
         if self.model:
             return {
                 'n_tokens': self.model.n_tokens,
                 'engine_type': 'llamacpp',
-                'context_size': self.model.n_ctx()
+                'context_size': self.model.n_ctx(),
+                'model_name': self.model_name,
+                'has_cache': True,
+                'cache_supported': False
             }
-        return None
+        return super().export_kv_cache_state()
 
-    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
-        """Import KV cache state from another engine."""
-        # llama.cpp doesn't support importing external KV cache
-        print("LlamaCppEngine: KV cache import not supported")
-        return False
+    # KV cache bridge/import: Using default "not supported" implementations from base class
 
     def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:
         """Append a new token to input_ids tensor."""

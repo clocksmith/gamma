@@ -205,24 +205,21 @@ class PyTorchEngine(LLMEngine):
         # Convert to NumPy for sampling functions
         # Use safe conversion to handle MPS and bfloat16
         logits_np = self._safe_to_float32(l_raw).cpu().numpy()
-        
-        # Apply transformations using the sampling module
-        l_proc_np, l_temp_np, l_k_np = sampling.process_logits_pipeline(logits_np, temperature, top_k, top_p, return_intermediates=True)
 
-        # Convert back to torch tensors (preserving original dtype, but respecting MPS limitations)
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(logits_np, temperature, top_k, top_p)
+
+        # Convert numpy results back to torch tensors with proper dtype/device handling
         original_dtype = l_raw.dtype
+        l_proc_np = pipeline_results["logits_processed_np"].astype(np.float32)
+        l_temp_np = pipeline_results["logits_temp_np"].astype(np.float32)
+        l_k_np = pipeline_results["logits_topk_np"].astype(np.float32)
 
-        # Ensure numpy arrays are float32 before converting to torch
-        l_temp_np = l_temp_np.astype(np.float32)
-        l_k_np = l_k_np.astype(np.float32)
-        l_proc_np = l_proc_np.astype(np.float32)
-        
-        # For MPS, we should keep everything as float32
+        # For MPS, keep everything as float32
         if hasattr(self._device, 'type') and self._device.type == 'mps':
             l_temp = torch.from_numpy(l_temp_np).to(self._device).to(torch.float32)
             l_k = torch.from_numpy(l_k_np).to(self._device).to(torch.float32)
             l_proc = torch.from_numpy(l_proc_np).to(self._device).to(torch.float32)
-            # MPS doesn't support bfloat16 or float64, keep as float32
         else:
             l_temp = torch.from_numpy(l_temp_np).to(self._device)
             l_temp = self._safe_dtype_conversion(l_temp, original_dtype)
@@ -230,20 +227,18 @@ class PyTorchEngine(LLMEngine):
             l_k = self._safe_dtype_conversion(l_k, original_dtype)
             l_proc = torch.from_numpy(l_proc_np).to(self._device)
             l_proc = self._safe_dtype_conversion(l_proc, original_dtype)
-        
+
         # Get probabilities using torch softmax
         p_proc = self._softmax_torch(l_proc)
-        
+
         # Ensure we have valid probabilities
         if torch.isnan(p_proc).any() or p_proc.sum() == 0:
             print("Warning: Invalid probabilities detected, using uniform distribution")
             p_proc = torch.ones_like(p_proc) / p_proc.shape[-1]
-        
-        next_id_val = torch.argmax(p_proc, dim=-1).item()
-        max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        # Convert to numpy for sampling_utils
-        l_proc_np = l_proc.cpu().numpy() if isinstance(l_proc, torch.Tensor) else l_proc
-        top_txts, top_p_list, _ = sampling_utils.get_top_k_tokens(l_proc_np, max_dk, self.get_token_text, is_probs=False)
+
+        next_id_val = pipeline_results["next_token_id"]
+        top_txts = pipeline_results["top_tokens"]
+        top_p_list = pipeline_results["top_probs"]
         
         # For MPS, ensure all tensors used for softmax are float32
         if hasattr(self._device, 'type') and self._device.type == 'mps':

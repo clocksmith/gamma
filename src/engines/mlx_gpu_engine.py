@@ -163,42 +163,6 @@ class MLXGPUEngine(LLMEngine):
         
         return self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
     
-    def _apply_sampling(self, logits: mx.array, temperature: float, top_k: int, top_p: float) -> mx.array:
-        """Apply temperature, top-k, and top-p sampling with optimizations"""
-        # Temperature scaling
-        if temperature > 0:
-            logits = logits / mx.maximum(mx.array(temperature, dtype=logits.dtype), 1e-6)
-        
-        # Top-k filtering
-        if 0 < top_k < logits.shape[-1]:
-            # Efficient top-k implementation
-            top_k_vals = mx.partition(logits, kth=logits.shape[-1] - top_k, axis=-1)
-            threshold = top_k_vals[..., -top_k:][..., 0:1]
-            logits = mx.where(logits < threshold, -mx.inf, logits)
-        
-        # Top-p (nucleus) filtering
-        if 0 < top_p < 1.0:
-            sorted_indices = mx.argsort(logits, axis=-1)[..., ::-1]
-            sorted_logits = mx.take_along_axis(logits, sorted_indices, axis=-1)
-            
-            # Compute cumulative probabilities
-            sorted_probs = mx.softmax(sorted_logits, axis=-1)
-            cumulative_probs = mx.cumsum(sorted_probs, axis=-1)
-            
-            # Find cutoff
-            cutoff_mask = cumulative_probs > top_p
-            cutoff_mask[..., 1:] = cutoff_mask[..., :-1]
-            cutoff_mask[..., 0] = False
-            
-            # Apply cutoff
-            sorted_logits = mx.where(cutoff_mask, -mx.inf, sorted_logits)
-            
-            # Unsort
-            unsort_indices = mx.argsort(sorted_indices, axis=-1)
-            logits = mx.take_along_axis(sorted_logits, unsort_indices, axis=-1)
-        
-        return logits
-    
     def predict_next(
         self,
         input_ids: mx.array,
@@ -237,38 +201,25 @@ class MLXGPUEngine(LLMEngine):
         
         # Get last token logits
         logits_last = logits[:, -1, :]
-        
-        # Apply sampling
-        logits_processed = self._apply_sampling(
-            logits_last.copy(),
-            temperature,
-            top_k,
-            top_p
-        )
-        
-        # Get probabilities
-        probs = mx.softmax(logits_processed, axis=-1)
-        
-        # Sample next token
-        next_token_id = mx.argmax(probs, axis=-1)
-        next_token_id_val = np.array(next_token_id).item()
-        
-        # Get top tokens for display
-        k_display = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_k_display = min(k_display, probs.shape[-1])
-        
-        # Get top-k tokens and probabilities
-        top_probs = mx.partition(probs, kth=probs.shape[-1] - top_k_display, axis=-1)[..., -top_k_display:]
-        top_indices = mx.argpartition(probs, kth=probs.shape[-1] - top_k_display, axis=-1)[..., -top_k_display:]
-        
-        # Sort top-k
-        sort_idx = mx.argsort(top_probs, axis=-1)[..., ::-1]
-        top_probs = mx.take_along_axis(top_probs, sort_idx, axis=-1)
-        top_indices = mx.take_along_axis(top_indices, sort_idx, axis=-1)
-        
-        # Convert to lists
-        top_tokens = [self.get_token_text(idx) for idx in np.array(top_indices).flatten().tolist()]
-        top_probs_list = np.array(top_probs).flatten().tolist()
+
+        # Convert to numpy for common pipeline
+        logits_np = np.array(logits_last)
+
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(logits_np, temperature, top_k, top_p)
+
+        # Convert results back to MLX arrays
+        next_token_id_val = pipeline_results["next_token_id"]
+        logits_processed_np = pipeline_results["logits_processed_np"]
+        probs_processed_np = pipeline_results["probs_processed_np"]
+
+        # Convert back to MLX arrays for return
+        logits_processed = mx.array(logits_processed_np)
+        probs = mx.array(probs_processed_np)
+
+        # Top tokens/probs come directly from pipeline
+        top_tokens = pipeline_results["top_tokens"]
+        top_probs_list = pipeline_results["top_probs"]
         
         inference_time = time.time() - start_time
         
@@ -277,6 +228,8 @@ class MLXGPUEngine(LLMEngine):
             "logits_raw": logits_last,
             "logits_processed": logits_processed,
             "probabilities_raw": mx.softmax(logits_last, axis=-1),
+            "probabilities_temp": mx.array(pipeline_results["logits_temp_np"]).softmax(axis=-1),
+            "probabilities_top_k": mx.array(pipeline_results["logits_topk_np"]).softmax(axis=-1),
             "probabilities_processed": probs,
             "top_tokens_processed": top_tokens,
             "top_probs_processed": top_probs_list,
@@ -320,15 +273,7 @@ class MLXGPUEngine(LLMEngine):
     
     def _decode_token_raw(self, token_id: int) -> str:
         """Decode a single token ID using MLX GPU/HuggingFace tokenizer."""
-        token_text = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-        if isinstance(token_text, bytes):
-            token_text = token_text.decode("utf-8", errors="replace")
-
-        # Handle sentencepiece tokens
-        if hasattr(self.tokenizer, "sp_model") and token_text.startswith("▁"):
-            token_text = token_text[1:] or " "
-
-        return token_text
+        return self._decode_token_hf_common(token_id)
     
     def get_attention_for_visualization(
         self, attention_output: Any, input_ids_for_viz: Any

@@ -270,7 +270,10 @@ class DreamCLI {
       return;
     }
 
-    console.log(`\nAnalyzing ${successfulResults.length} results...\n`);
+    console.log('\n╔══════════════════════════════════════════════════════════════════════════════╗');
+    console.log('║                      ADVANCED METRICS ANALYSIS                                ║');
+    console.log('╚══════════════════════════════════════════════════════════════════════════════╝\n');
+    console.log(`Analyzing ${successfulResults.length} successful results...\n`);
 
     // Analyze by variant
     const byVariant = {};
@@ -289,30 +292,75 @@ class DreamCLI {
 
     // Print summary for each variant
     for (const [variant, metricsArray] of Object.entries(byVariant)) {
-      console.log(`\n--- ${variant} ---`);
+      console.log(`\n🔍 ${variant}`);
+      console.log('─'.repeat(78));
 
-      // Average complexity
-      const avgComplexity = metricsArray.reduce((sum, m) =>
-        sum + m.complexity.complexity, 0) / metricsArray.length;
-      console.log(`Avg Cyclomatic Complexity: ${avgComplexity.toFixed(1)}`);
-
-      // Average maintainability
-      const avgMaintainability = metricsArray.reduce((sum, m) =>
-        sum + m.maintainability.index, 0) / metricsArray.length;
-      console.log(`Avg Maintainability Index: ${avgMaintainability.toFixed(1)}/100`);
-
-      // Type safety score
-      if (metricsArray.length > 0) {
-        const avgTypeSafety = metricsArray.reduce((sum, m) =>
-          sum + m.typeSafety.score, 0) / metricsArray.length;
-        console.log(`Avg Type Safety Score: ${avgTypeSafety.toFixed(1)}/100`);
+      if (metricsArray.length === 0) {
+        console.log('   No code samples to analyze');
+        continue;
       }
 
+      // Complexity metrics
+      const avgComplexity = metricsArray.reduce((sum, m) => sum + m.complexity.complexity, 0) / metricsArray.length;
+      const complexityRating = metricsArray[0].complexity.rating;
+      console.log(`\n   Cyclomatic Complexity:`);
+      console.log(`      Average:  ${avgComplexity.toFixed(1)} (${complexityRating})`);
+      console.log(`      Range:    ${Math.min(...metricsArray.map(m => m.complexity.complexity))} - ${Math.max(...metricsArray.map(m => m.complexity.complexity))}`);
+
+      // Maintainability
+      const avgMaintainability = metricsArray.reduce((sum, m) => sum + m.maintainability.index, 0) / metricsArray.length;
+      const maintRating = metricsArray[0].maintainability.rating;
+      console.log(`\n   Maintainability Index:`);
+      console.log(`      Score:    ${avgMaintainability.toFixed(1)}/100 (${maintRating})`);
+      console.log(`      LOC:      ${Math.round(metricsArray.reduce((sum, m) => sum + m.maintainability.components.linesOfCode, 0) / metricsArray.length)} avg lines`);
+
+      // Type safety
+      const avgTypeSafety = metricsArray.reduce((sum, m) => sum + m.typeSafety.score, 0) / metricsArray.length;
+      console.log(`\n   Type Safety:`);
+      console.log(`      Score:    ${avgTypeSafety.toFixed(1)}/100`);
+      if (variant.includes('typescript')) {
+        const avgTypeAnnotations = metricsArray.reduce((sum, m) => sum + m.typeSafety.details.typeAnnotationCoverage, 0) / metricsArray.length;
+        console.log(`      Coverage: ${avgTypeAnnotations.toFixed(1)} type annotations avg`);
+      }
+
+      // Readability
+      const avgReadability = metricsArray.reduce((sum, m) => sum + m.readability.score, 0) / metricsArray.length;
+      const readRating = metricsArray[0].readability.rating;
+      console.log(`\n   Readability:`);
+      console.log(`      Score:    ${avgReadability.toFixed(1)}/100 (${readRating})`);
+      const avgLineLength = metricsArray.reduce((sum, m) => sum + parseFloat(m.readability.metrics.avgLineLength), 0) / metricsArray.length;
+      console.log(`      Avg Line: ${avgLineLength.toFixed(1)} chars`);
+
       // Bug risk
-      const avgBugRisk = metricsArray.reduce((sum, m) =>
-        sum + m.bugRisk.riskScore, 0) / metricsArray.length;
-      console.log(`Avg Bug Risk Score: ${avgBugRisk.toFixed(1)}`);
+      const avgBugRisk = metricsArray.reduce((sum, m) => sum + m.bugRisk.riskScore, 0) / metricsArray.length;
+      const riskLevel = metricsArray[0].bugRisk.riskLevel;
+      const totalIssues = metricsArray.reduce((sum, m) => sum + m.bugRisk.issueCount, 0);
+      console.log(`\n   Bug Risk:`);
+      console.log(`      Score:    ${avgBugRisk.toFixed(1)} (${riskLevel} risk)`);
+      console.log(`      Issues:   ${totalIssues} total across all samples`);
+
+      // Test coverage
+      const avgTestCoverage = metricsArray.reduce((sum, m) => sum + m.testCoverage.estimatedCoverage, 0) / metricsArray.length;
+      const testRating = metricsArray[0].testCoverage.rating;
+      console.log(`\n   Test Coverage (estimated):`);
+      console.log(`      Score:    ${avgTestCoverage.toFixed(1)}% (${testRating})`);
+      console.log(`      Has Tests: ${metricsArray.filter(m => m.testCoverage.hasTests).length}/${metricsArray.length} samples`);
+
+      // Code duplication
+      const avgDuplication = metricsArray.reduce((sum, m) =>
+        sum + parseFloat(m.duplication.duplicationRatio), 0) / metricsArray.length;
+      const dupRating = metricsArray[0].duplication.rating;
+      console.log(`\n   Code Duplication:`);
+      console.log(`      Ratio:    ${avgDuplication.toFixed(2)}% (${dupRating})`);
+
+      // Dependencies
+      const avgDeps = metricsArray.reduce((sum, m) => sum + m.dependencies.total, 0) / metricsArray.length;
+      const depComplexity = metricsArray[0].dependencies.complexity;
+      console.log(`\n   Dependencies:`);
+      console.log(`      Average:  ${avgDeps.toFixed(1)} imports (${depComplexity})`);
     }
+
+    console.log('\n' + '═'.repeat(78) + '\n');
   }
 
   listPresets() {
@@ -417,7 +465,10 @@ class DreamCLI {
 
   showHelp() {
     console.log(`
-DREAM Benchmark CLI - Dynamic, Robust, Extensive, Accurate Metrics
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         DREAM Benchmark CLI                                   ║
+║            Dynamic, Robust, Extensive, Accurate Metrics                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
 
 USAGE:
   dream-cli.js <command> [options]
@@ -432,54 +483,102 @@ COMMANDS:
 
 OPTIONS:
   --preset, -p <name>        Use a benchmark preset
-  --provider <name>          Run only specified provider(s)
-  --variant, -v <name>       Run only specified variant(s)
-  --category, -c <name>      Run only specified category(s)
+  --provider <name>          Run only specified provider(s) (multiple allowed)
+  --variant, -v <name>       Run only specified variant(s) (multiple allowed)
+  --category, -c <name>      Run only specified category(s) (multiple allowed)
   --task, -t <name>          Run only specified task
-  --runs, -r <n>             Number of runs per test
-  --timeout <ms>             Timeout per test in milliseconds
+  --runs, -r <n>             Number of runs per test (default: 1)
+  --timeout <ms>             Timeout per test in milliseconds (default: 30000)
   --compare                  Compare with historical baseline
-  --historical               Save results to history
-  --advanced-metrics, -am    Compute advanced code metrics
+  --historical               Save results to history database
+  --advanced-metrics, -am    Compute advanced code metrics (see below)
   --no-dashboard             Skip dashboard generation
-  --output, -o <path>        Output path for dashboard
-  --dry-run, --mock          Use mock LLM responses
+  --output, -o <path>        Output path for dashboard (default: ./reports/dream-dashboard.html)
+  --dry-run, --mock          Use mock LLM responses (no API calls)
   --quiet, -q                Suppress verbose output
   --help, -h                 Show this help
 
+METRICS CALCULATED:
+
+  📊 Core Scores:
+     • Total Score (0-100)      - Weighted combination of all metrics
+     • Accuracy (0-1)           - Correctness of generated code
+     • Code Quality (0-1)       - Overall code quality assessment
+     • Completeness (0-1)       - How complete the solution is
+     • Auto-Rater (0-1)         - AI-based quality assessment
+
+  🔬 Advanced Metrics (--advanced-metrics flag):
+     • Cyclomatic Complexity    - Code path complexity (1-50+)
+     • Maintainability Index    - Ease of maintenance (0-100)
+     • Halstead Volume          - Code complexity measure
+     • Type Safety Score        - TypeScript/JSDoc type coverage (0-100)
+     • Readability Score        - Code readability (0-100)
+     • Bug Risk Score           - Potential bug indicators (0-100)
+     • Test Coverage            - Estimated test coverage (0-100)
+     • Code Duplication         - Duplicate code percentage
+     • Dependency Complexity    - Import/require complexity
+
+  ⏱️  Performance Metrics:
+     • Duration (ms)            - Time to generate code
+     • Token Usage              - Prompt, completion, and total tokens
+     • Estimated Cost           - Approximate API cost
+
+  📈 Statistical Analysis:
+     • Mean, Median, Std Dev    - Score distributions
+     • 95% Confidence Intervals - Statistical confidence
+     • Provider Comparison      - Model performance comparison
+     • Variant Comparison       - Language variant comparison
+     • Historical Trends        - Performance over time
+
 EXAMPLES:
-  # Quick test with preset
+  # Quick test with default settings
   dream-cli.js run --preset quick
 
-  # Comprehensive test with history tracking
-  dream-cli.js run --preset comprehensive --historical --compare
+  # Comprehensive test with history tracking and advanced metrics
+  dream-cli.js run --preset comprehensive --historical --compare --advanced-metrics
 
-  # Custom configuration
-  dream-cli.js run --variant typescript --provider openai-gpt4 --runs 5
+  # Custom configuration (TypeScript only, specific provider)
+  dream-cli.js run --variant typescript-expert --provider openai-gpt4 --runs 5
 
-  # Advanced analysis
-  dream-cli.js run --preset quality --advanced-metrics
+  # Advanced analysis with all metrics
+  dream-cli.js run --preset quality --advanced-metrics --output ./my-results.html
 
   # Compare historical results
   dream-cli.js compare
 
-  # Analyze trends
+  # Analyze trends over time
   dream-cli.js analyze
 
-AVAILABLE PRESETS:
-  quick              Fast smoke test
-  comprehensive      Full test suite
-  performance        Speed-focused tests
-  quality            Quality-focused tests
-  typeSafety         TypeScript vs JavaScript comparison
-  providerComparison Compare LLM providers
-  stress             Large, complex tasks
-  regression         Regression testing
-  costOptimized      Balance cost and performance
-  webComponents      Web component testing
-  ci                 CI/CD pipeline tests
+  # Run specific category with multiple variants
+  dream-cli.js run --category algorithms --variant typescript-expert --variant javascript-beginner
 
-For more information, visit: https://github.com/yourusername/dream-benchmark
+AVAILABLE PRESETS:
+  quick              Fast smoke test (2-3 min, ~$0.10)
+  comprehensive      Full test suite (15-20 min, ~$1.50)
+  performance        Speed-focused tests (5 min, ~$0.30)
+  quality            Quality-focused tests (10 min, ~$0.80)
+  typeSafety         TypeScript vs JavaScript comparison (8 min, ~$0.50)
+  providerComparison Compare LLM providers (12 min, ~$1.00)
+  stress             Large, complex tasks (20 min, ~$2.00)
+  regression         Regression testing (10 min, ~$0.60)
+  costOptimized      Balance cost and performance (6 min, ~$0.25)
+  webComponents      Web component testing (8 min, ~$0.40)
+  ci                 CI/CD pipeline tests (5 min, ~$0.20)
+
+DEFAULTS:
+  • Dashboard:     Enabled (disable with --no-dashboard)
+  • Verbose:       Enabled (disable with --quiet)
+  • Runs:          1 per test (increase with --runs)
+  • Timeout:       30000ms per test (adjust with --timeout)
+  • Output:        ./benchmark/reports/dream-dashboard.html
+
+OUTPUT FILES:
+  • Dashboard:     Interactive HTML report with charts
+  • Results JSON:  Raw benchmark data (./results/<timestamp>/results.json)
+  • Generated Code: ./results/<timestamp>/src/*.js|ts
+  • History DB:    ./benchmark/history/benchmark_history.json (if --historical)
+
+For more information: https://github.com/yourusername/dream-benchmark
 `);
   }
 }

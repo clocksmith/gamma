@@ -267,45 +267,25 @@ class PyTorchCUDAEngine(LLMEngine):
         if hasattr(outputs, "past_key_values"):
             self._kv_cache = outputs.past_key_values
         
-        # Process logits - ensure float32 for MPS compatibility
-        logits = outputs.logits[:, -1, :].to(torch.float32)  # Convert to float32 for processing
-        
-        # Apply temperature
-        if temperature > 0:
-            logits = logits / temperature
-        
-        # Apply top-k filtering
-        if top_k > 0 and top_k < logits.shape[-1]:
-            indices_to_remove = logits < torch.topk(logits, top_k)[0][..., -1, None]
-            logits[indices_to_remove] = float('-inf')
-        
-        # Apply top-p (nucleus) filtering
-        if 0 < top_p < 1.0:
-            sorted_logits, sorted_indices = torch.sort(logits, descending=True)
-            cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
-            
-            # Remove tokens with cumulative probability above the threshold
-            sorted_indices_to_remove = cumulative_probs > top_p
-            sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
-            sorted_indices_to_remove[..., 0] = False
-            
-            indices_to_remove = sorted_indices_to_remove.scatter(
-                -1, sorted_indices, sorted_indices_to_remove
-            )
-            logits[indices_to_remove] = float('-inf')
-        
-        # Get probabilities
-        probs = torch.softmax(logits, dim=-1)
-        
-        # Sample next token
-        next_token_id = torch.argmax(probs, dim=-1).item()
-        
-        # Get top tokens for display
-        top_k_display = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_probs, top_indices = torch.topk(probs, min(top_k_display, probs.shape[-1]))
-        
-        top_tokens = [self.get_token_text(idx.item()) for idx in top_indices[0]]
-        top_probs_list = top_probs[0].cpu().tolist()
+        # Process logits - convert to numpy for common pipeline
+        logits_raw = outputs.logits[:, -1, :].to(torch.float32)
+        logits_np = logits_raw.cpu().numpy()
+
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(logits_np, temperature, top_k, top_p)
+
+        # Convert results back to PyTorch tensors
+        next_token_id = pipeline_results["next_token_id"]
+        logits_processed_np = pipeline_results["logits_processed_np"]
+        probs_processed_np = pipeline_results["probs_processed_np"]
+
+        # Convert to tensors with proper device placement
+        logits_processed = torch.from_numpy(logits_processed_np).to(self._device)
+        probs_processed = torch.from_numpy(probs_processed_np).to(self._device)
+
+        # Top tokens/probs come directly from pipeline
+        top_tokens = pipeline_results["top_tokens"]
+        top_probs_list = pipeline_results["top_probs"]
         
         inference_time = time.time() - start_time
         
@@ -315,10 +295,12 @@ class PyTorchCUDAEngine(LLMEngine):
         
         return {
             "next_token_id": next_token_id,
-            "logits_raw": outputs.logits[:, -1, :],
-            "logits_processed": logits,
-            "probabilities_raw": torch.softmax(outputs.logits[:, -1, :], dim=-1),
-            "probabilities_processed": probs,
+            "logits_raw": logits_raw,
+            "logits_processed": logits_processed,
+            "probabilities_raw": torch.softmax(logits_raw, dim=-1),
+            "probabilities_temp": torch.from_numpy(pipeline_results["logits_temp_np"]).softmax(dim=-1).to(self._device),
+            "probabilities_top_k": torch.from_numpy(pipeline_results["logits_topk_np"]).softmax(dim=-1).to(self._device),
+            "probabilities_processed": probs_processed,
             "top_tokens_processed": top_tokens,
             "top_probs_processed": top_probs_list,
             "attention": outputs.attentions if output_attentions else None,

@@ -90,22 +90,22 @@ class ONNXEngine(LLMEngine):
             else: print("ONNXEngine Warning: Not all KV cache outputs found. Cache might be stale."); self.reset_kv_cache()
         elif input_ids.shape[-1] > 1: self.reset_kv_cache()
         attention_data = output_map.get("attentions") if output_attentions else None
-        
-        logits_proc, logits_temp, logits_k = sampling_utils.process_logits_pipeline(logits_raw.copy(), temperature, top_k, top_p, return_intermediates=True)
 
-        probs_proc = sampling_utils.softmax(logits_proc)
-        next_token_id_val = int(np.argmax(probs_proc, axis=-1).item())
-        
-        max_display_k = max(top_k if top_k > 0 else 1, self.get_max_tokens_for_display(), 1)
-        top_texts_list, top_probs_list, _ = sampling_utils.get_top_k_tokens(logits_proc, max_display_k, self.get_token_text)
-        
-        return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(logits_raw.copy(), temperature, top_k, top_p)
+
+        return {"next_token_id": pipeline_results["next_token_id"],
+                "logits_raw": logits_raw,
+                "logits_processed": pipeline_results["logits_processed_np"],
                 "probabilities_raw": sampling_utils.softmax(logits_raw),
-                "probabilities_temp": sampling_utils.softmax(logits_temp), 
-                "probabilities_top_k": sampling_utils.softmax(logits_k), 
-                "probabilities_processed": probs_proc,
-                "top_tokens_processed": top_texts_list, "top_probs_processed": top_probs_list, 
-                "attention": attention_data, "hidden_states": None, "forward_time": time.time() - st}
+                "probabilities_temp": sampling_utils.softmax(pipeline_results["logits_temp_np"]),
+                "probabilities_top_k": sampling_utils.softmax(pipeline_results["logits_topk_np"]),
+                "probabilities_processed": pipeline_results["probs_processed_np"],
+                "top_tokens_processed": pipeline_results["top_tokens"],
+                "top_probs_processed": pipeline_results["top_probs"],
+                "attention": attention_data,
+                "hidden_states": None,
+                "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
         if not self.tokenizer: raise RuntimeError("ONNXEngine: Tokenizer not loaded."); return -1
@@ -113,15 +113,7 @@ class ONNXEngine(LLMEngine):
 
     def _decode_token_raw(self, token_id: int) -> str:
         """Decode a single token ID using ONNX/HuggingFace tokenizer."""
-        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-        if isinstance(token_text_str, bytes):
-            token_text_str = token_text_str.decode("utf-8", errors="replace")
-        if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "):
-            token_text_str = token_text_str[1:]
-        if not token_text_str:
-            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
-            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
-        return token_text_str
+        return self._decode_token_hf_common(token_id)
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:

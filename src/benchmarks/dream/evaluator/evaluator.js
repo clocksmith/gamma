@@ -557,24 +557,38 @@ export class Evaluator {
   async evaluateCodeQuality(code, task, variant) {
     const normalizedRequirements = (task.requirements || []).map(r => r.toLowerCase());
     const docRequired = /jsdoc|tsdoc/i.test(variant) || normalizedRequirements.some(r => r.includes('doc'));
-    const requiresErrorHandling = normalizedRequirements.some(r => r.includes('error'));
+    const requiresErrorHandling = normalizedRequirements.some(r => r.includes('error') || r.includes('robust') || r.includes('handle'));
     const strippedCode = code.replace(/\/\*[^]*?\*\//g, '').replace(/\/\/.*$/gm, '');
-    const naming = this.checkNaming(strippedCode);
-    const indentation = this.checkIndentation(code);
-    const lineLength = this.checkLineLength(code);
+
+    // Determine if this is a CLI/demo/example tool (console.log is expected)
+    const isCliOrDemo = normalizedRequirements.some(r =>
+      r.includes('cli') || r.includes('console') || r.includes('output') ||
+      r.includes('print') || r.includes('log') || r.includes('demo') || r.includes('example')
+    ) || task.id?.includes('cli') || task.category?.includes('cli');
+
     const hasAsync = /async\s+function|=>\s*async|async\s*\(/i.test(strippedCode);
     const usesAwait = /await\s+/.test(strippedCode);
+    const hasPromises = /\.then\(|\.catch\(|new\s+Promise/.test(strippedCode);
 
+    // Focus on actual quality issues, not style preferences
     const checks = {
-      indentation: indentation.pass,
-      descriptiveNaming: naming.pass,
-      usesConstLet: !/\bvar\s+/.test(code),
-      noConsoleLogging: !/console\.(log|error|warn)/.test(code),
-      strictEquality: !(/[^=]==[^=]/.test(code) && !/===/.test(code)),
-      errorHandling: requiresErrorHandling ? /try\s*\{|catch\s*\(|throw\s+|reject\(/.test(code) : true,
+      // Only penalize missing await if async function has no await AND no promises
+      asyncAwaitConsistency: hasAsync ? (usesAwait || hasPromises) : true,
+
+      // Error handling only if explicitly required
+      errorHandling: requiresErrorHandling ? /try\s*\{|catch\s*\(|throw\s+|reject\(|\.catch\(/.test(code) : true,
+
+      // Documentation only if explicitly required
       documentation: docRequired ? /\/\*\*/.test(code) : true,
-      lineLength: lineLength.pass,
-      awaitUsage: hasAsync ? usesAwait : true
+
+      // Check for empty catch blocks (actual bug risk)
+      noEmptyCatch: !/catch\s*\([^)]*\)\s*\{\s*\}/.test(code),
+
+      // Check for unreachable code after return
+      noUnreachableCode: !this.hasUnreachableCode(code),
+
+      // Check for proper function/class structure (syntax-related quality)
+      properStructure: this.checkProperStructure(code)
     };
 
     const passedChecks = Object.values(checks).filter(Boolean).length;
@@ -584,9 +598,7 @@ export class Evaluator {
       score,
       details: {
         checks,
-        namingRatio: naming.ratio,
-        indentation: indentation.metadata,
-        lineLength: lineLength.metadata
+        note: 'Quality checks focus on actual issues, not style preferences'
       }
     };
   }
@@ -631,6 +643,55 @@ export class Evaluator {
       pass: longest <= max + 10,
       metadata: { maxAllowed: max, longest }
     };
+  }
+
+  /**
+   * Check for unreachable code after return statements (actual bug)
+   */
+  hasUnreachableCode(code) {
+    const lines = code.split('\n');
+    for (let i = 0; i < lines.length - 1; i++) {
+      const line = lines[i].trim();
+      // Check if line has a return statement (not in a comment)
+      if (/^return\b/.test(line) && !line.startsWith('//') && !line.startsWith('/*')) {
+        const nextLine = lines[i + 1].trim();
+        // Check if next line has actual code (not just closing braces, comments, or empty)
+        if (nextLine &&
+            !nextLine.startsWith('}') &&
+            !nextLine.startsWith('//') &&
+            !nextLine.startsWith('/*') &&
+            !/^\s*$/.test(nextLine)) {
+          return true; // Found unreachable code
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check for proper function/class structure (balanced braces, etc.)
+   */
+  checkProperStructure(code) {
+    let braceCount = 0;
+    let parenCount = 0;
+    let bracketCount = 0;
+
+    for (const char of code) {
+      if (char === '{') braceCount++;
+      else if (char === '}') braceCount--;
+      else if (char === '(') parenCount++;
+      else if (char === ')') parenCount--;
+      else if (char === '[') bracketCount++;
+      else if (char === ']') bracketCount--;
+
+      // If counts go negative, structure is malformed
+      if (braceCount < 0 || parenCount < 0 || bracketCount < 0) {
+        return false;
+      }
+    }
+
+    // All should be balanced at the end
+    return braceCount === 0 && parenCount === 0 && bracketCount === 0;
   }
 
   evaluateCompleteness(response, task) {

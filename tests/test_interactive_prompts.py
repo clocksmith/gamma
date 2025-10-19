@@ -173,7 +173,7 @@ class TestConfirmOrModifyConfig(unittest.TestCase):
 class TestSelectEngineInteractively(unittest.TestCase):
     """Test select_engine_interactively function."""
 
-    @patch('src.core.interactive_prompts.get_user_input')
+    @patch('src.core.menu.interactive_prompts.get_user_input')
     def test_select_first_engine(self, mock_input):
         """Should return first engine."""
         mock_input.return_value = "1"
@@ -182,7 +182,7 @@ class TestSelectEngineInteractively(unittest.TestCase):
 
         self.assertEqual(result, "pytorch")
 
-    @patch('src.core.interactive_prompts.get_user_input')
+    @patch('src.core.menu.interactive_prompts.get_user_input')
     def test_select_second_engine(self, mock_input):
         """Should return second engine."""
         mock_input.return_value = "2"
@@ -191,7 +191,7 @@ class TestSelectEngineInteractively(unittest.TestCase):
 
         self.assertEqual(result, "llamacpp")
 
-    @patch('src.core.interactive_prompts.get_user_input')
+    @patch('src.core.menu.interactive_prompts.get_user_input')
     def test_quit_selection(self, mock_input):
         """Should return None on quit."""
         mock_input.return_value = "q"
@@ -200,7 +200,7 @@ class TestSelectEngineInteractively(unittest.TestCase):
 
         self.assertIsNone(result)
 
-    @patch('src.core.interactive_prompts.get_user_input')
+    @patch('src.core.menu.interactive_prompts.get_user_input')
     def test_default_engine_shown(self, mock_input):
         """Should show default engine in list."""
         mock_input.return_value = "1"
@@ -214,7 +214,7 @@ class TestSelectEngineInteractively(unittest.TestCase):
 class TestSelectModelInteractively(unittest.TestCase):
     """Test select_model_interactively function."""
 
-    @patch('src.core.model_catalog.ModelSelector.select_model')
+    @patch('src.core.models.model_catalog.ModelSelector.select_model')
     def test_select_model(self, mock_select):
         """Should delegate to ModelSelector."""
         mock_select.return_value = "model-name"
@@ -224,7 +224,7 @@ class TestSelectModelInteractively(unittest.TestCase):
         self.assertEqual(result, "model-name")
         mock_select.assert_called_once()
 
-    @patch('src.core.model_catalog.ModelSelector.select_model')
+    @patch('src.core.models.model_catalog.ModelSelector.select_model')
     def test_select_model_with_default(self, mock_select):
         """Should pass through default model."""
         mock_select.return_value = "new-model"

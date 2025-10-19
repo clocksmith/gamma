@@ -48,6 +48,39 @@ class LLMEngine(ABC):
         """Get KV cache usage setting."""
         return self.engine_config.get("use_kv_cache", True)
 
+    def get_seed(self) -> Optional[int]:
+        """Get random seed for reproducibility."""
+        return self.engine_config.get("seed", None)
+
+    def get_device_map(self, default: str = "auto") -> str:
+        """Get device map configuration (for HF transformers)."""
+        return self.engine_config.get("device_map", default)
+
+    def get_low_cpu_mem_usage(self) -> bool:
+        """Get low CPU memory usage setting."""
+        return self.engine_config.get("low_cpu_mem_usage", True)
+
+    # Error handling helpers (Phase 2.2 - reduces duplication)
+    def _error_model_not_loaded(self) -> RuntimeError:
+        """Create standardized 'model not loaded' error."""
+        engine_name = self.__class__.__name__
+        return RuntimeError(f"{engine_name}: Model not loaded. Call load() first.")
+
+    def _error_tokenizer_not_loaded(self) -> RuntimeError:
+        """Create standardized 'tokenizer not loaded' error."""
+        engine_name = self.__class__.__name__
+        return RuntimeError(f"{engine_name}: Tokenizer not loaded.")
+
+    def _ensure_model_loaded(self):
+        """Ensure model is loaded, raise error if not."""
+        if not self.model:
+            raise self._error_model_not_loaded()
+
+    def _ensure_tokenizer_loaded(self):
+        """Ensure tokenizer is loaded, raise error if not."""
+        if not self.tokenizer:
+            raise self._error_tokenizer_not_loaded()
+
     @abstractmethod
     def load(self):
         pass
@@ -77,6 +110,76 @@ class LLMEngine(ABC):
 
     def reset_kv_cache(self):
         self._kv_cache = None
+
+    def _process_logits_common_pipeline(
+        self,
+        logits_np: np.ndarray,
+        temperature: float,
+        top_k: int,
+        top_p: float
+    ) -> Dict[str, Any]:
+        """
+        Common sampling pipeline logic shared across all engines.
+
+        This consolidates the repeated pattern of:
+        1. Processing logits through temperature/top-k/top-p
+        2. Computing probabilities
+        3. Selecting next token
+        4. Getting top-k tokens for display
+
+        Reduces ~50 lines of duplicate code per engine.
+
+        Args:
+            logits_np: Raw logits as numpy array (shape: [vocab_size] or [1, vocab_size])
+            temperature: Sampling temperature
+            top_k: Top-K filtering
+            top_p: Top-P (nucleus) filtering
+
+        Returns:
+            Dictionary containing:
+                - next_token_id: Selected next token ID
+                - logits_processed_np: Processed logits (numpy)
+                - logits_temp_np: After temperature (numpy)
+                - logits_topk_np: After top-k filtering (numpy)
+                - probs_processed_np: Final probabilities (numpy)
+                - top_tokens: List of top token texts
+                - top_probs: List of top token probabilities
+        """
+        from src.engines import sampling_utils
+
+        # Process logits through sampling pipeline
+        logits_proc_np, logits_temp_np, logits_k_np = sampling_utils.process_logits_pipeline(
+            logits_np, temperature, top_k, top_p, return_intermediates=True
+        )
+
+        # Compute probabilities
+        probs_proc_np = sampling_utils.softmax(logits_proc_np)
+
+        # Select next token
+        next_token_id = int(np.argmax(probs_proc_np, axis=-1))
+
+        # Get top-k tokens for display
+        max_display_k = max(
+            top_k if top_k > 0 else 1,
+            cfg.MAX_TOKENS_FOR_PROB_DISPLAY,
+            1
+        )
+        top_tokens, top_probs, _ = sampling_utils.get_top_k_tokens(
+            logits_proc_np,
+            max_display_k,
+            self.get_token_text,
+            is_probs=False
+        )
+
+        return {
+            "next_token_id": next_token_id,
+            "logits_processed_np": logits_proc_np,
+            "logits_temp_np": logits_temp_np,
+            "logits_topk_np": logits_k_np,
+            "probs_processed_np": probs_proc_np,
+            "top_tokens": top_tokens,
+            "top_probs": top_probs
+        }
 
     def _load_hf_tokenizer(self, model_name: Optional[str] = None, **kwargs):
         """
@@ -145,12 +248,53 @@ class LLMEngine(ABC):
         self._token_cache[token_id] = token_text
         return token_text
 
+    def _decode_token_hf_common(self, token_id: int) -> str:
+        """
+        Common HuggingFace tokenizer decoding logic.
+
+        Handles common patterns across HF-based engines:
+        - convert_ids_to_tokens() with bytes decoding
+        - SentencePiece underscore/space handling
+        - Fallback to full decode for empty tokens
+
+        Engines using HF tokenizers can call this to reduce duplication.
+        """
+        if not self.tokenizer:
+            return f"<token_{token_id}>"
+
+        try:
+            # Get token text from tokenizer
+            token_text = self.tokenizer.convert_ids_to_tokens([token_id])[0]
+
+            # Handle bytes encoding
+            if isinstance(token_text, bytes):
+                token_text = token_text.decode("utf-8", errors="replace")
+
+            # Handle SentencePiece prefix (space or underscore)
+            if hasattr(self.tokenizer, "sp_model"):
+                if token_text.startswith("▁"):
+                    token_text = token_text[1:] or " "
+                elif token_text.startswith(" "):
+                    token_text = token_text[1:]
+
+            # Fallback for empty tokens
+            if not token_text:
+                decoded_raw = self.tokenizer.decode([token_id], skip_special_tokens=False)
+                token_text = decoded_raw.strip() if decoded_raw and decoded_raw != getattr(self.tokenizer, 'unk_token', None) else ""
+
+            return token_text
+        except Exception:
+            return f"<token_{token_id}>"
+
     @abstractmethod
     def _decode_token_raw(self, token_id: int) -> str:
         """Decode a single token ID to its text representation.
 
         Engine-specific implementation. Should return the raw token text
         without caching or special token handling.
+
+        Engines using HuggingFace tokenizers can call self._decode_token_hf_common()
+        to use the standard HF decoding logic.
 
         Raises:
             Exception: If decoding fails
@@ -366,20 +510,43 @@ class LLMEngine(ABC):
         """Get the model's vocabulary."""
         pass
 
-    @abstractmethod
     def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
-        """Attempt to bridge KV cache to another engine."""
-        pass
-    
-    @abstractmethod
+        """
+        Attempt to bridge KV cache to another engine.
+
+        Default implementation: KV cache bridging not supported.
+        Engines that support bridging should override this method.
+        """
+        engine_name = self.__class__.__name__
+        if self.get_verbose():
+            print(f"{engine_name}: KV cache bridging not supported")
+        return False
+
     def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
-        """Export KV cache state for bridging."""
-        pass
-    
-    @abstractmethod
+        """
+        Export KV cache state for bridging.
+
+        Default implementation: Returns minimal metadata only.
+        Engines that support full KV cache export should override this method.
+        """
+        return {
+            'engine_type': self.__class__.__name__.replace('Engine', '').lower(),
+            'model_name': self.model_name,
+            'has_cache': self.has_kv_cache(),
+            'cache_supported': False
+        }
+
     def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
-        """Import KV cache state from another engine."""
-        pass
+        """
+        Import KV cache state from another engine.
+
+        Default implementation: KV cache import not supported.
+        Engines that support importing should override this method.
+        """
+        engine_name = self.__class__.__name__
+        if self.get_verbose():
+            print(f"{engine_name}: KV cache import not supported")
+        return False
     
     @abstractmethod
     def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:

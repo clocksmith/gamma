@@ -78,28 +78,31 @@ class TensorFlowEngine(LLMEngine):
         outputs = self._run_model_inference_tf(tf.cast(input_ids, tf.int32), (tf.cast(attention_mask, tf.int32) if attention_mask is not None else None),
                                                current_past_key_values_to_pass, tf.constant(output_attentions), tf.constant(output_hidden_states), tf.constant(use_kv_caching))
         if use_kv_caching and hasattr(outputs, "past_key_values"): self._kv_cache = outputs.past_key_values
-        
+
+        # Get raw logits and convert to numpy
         logits_raw = outputs.logits[:, -1, :]
         logits_raw_np = logits_raw.numpy()
 
-        logits_proc_np, logits_temp_np, logits_k_np = sampling.process_logits_pipeline(logits_raw_np, temperature, top_k, top_p, return_intermediates=True)
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(logits_raw_np, temperature, top_k, top_p)
 
-        logits_proc = tf.convert_to_tensor(logits_proc_np)
-        probs_proc = tf.nn.softmax(logits_proc, axis=-1)
-        next_t_id_tensor = tf.argmax(probs_proc, axis=-1)
-        next_t_id_val = next_t_id_tensor.numpy().item() if tf.rank(next_t_id_tensor) == 0 else next_t_id_tensor.numpy()[0].item()
-        
-        max_dk = max(top_k if top_k > 0 else 1, game_config.MAX_TOKENS_FOR_PROB_DISPLAY, 1)
-        top_txts, top_p_list, _ = sampling.get_top_k_tokens(logits_proc_np, max_dk, self.get_token_text)
-        
-        return {"next_token_id": next_t_id_val, "logits_raw": logits_raw, "logits_processed": logits_proc, 
+        # Convert numpy results back to TensorFlow tensors
+        logits_proc_np = pipeline_results["logits_processed_np"]
+        logits_temp_np = pipeline_results["logits_temp_np"]
+        logits_k_np = pipeline_results["logits_topk_np"]
+
+        return {"next_token_id": pipeline_results["next_token_id"],
+                "logits_raw": logits_raw,
+                "logits_processed": tf.convert_to_tensor(logits_proc_np),
                 "probabilities_raw": tf.nn.softmax(logits_raw, axis=-1),
                 "probabilities_temp": tf.nn.softmax(tf.convert_to_tensor(logits_temp_np), axis=-1),
                 "probabilities_top_k": tf.nn.softmax(tf.convert_to_tensor(logits_k_np), axis=-1),
-                "probabilities_processed": probs_proc,
-                "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
+                "probabilities_processed": tf.convert_to_tensor(pipeline_results["probs_processed_np"]),
+                "top_tokens_processed": pipeline_results["top_tokens"],
+                "top_probs_processed": pipeline_results["top_probs"],
                 "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
-                "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), "forward_time": time.time() - start_time}
+                "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None),
+                "forward_time": time.time() - start_time}
 
     def get_vocabulary_size(self) -> int:
         if not self.tokenizer: raise RuntimeError("TensorFlowEngine: Tokenizer not loaded."); return -1
@@ -107,15 +110,7 @@ class TensorFlowEngine(LLMEngine):
 
     def _decode_token_raw(self, token_id: int) -> str:
         """Decode a single token ID using TensorFlow/HuggingFace tokenizer."""
-        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-        if isinstance(token_text_str, bytes):
-            token_text_str = token_text_str.decode("utf-8", errors="replace")
-        if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "):
-            token_text_str = token_text_str[1:]
-        if not token_text_str:
-            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
-            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
-        return token_text_str
+        return self._decode_token_hf_common(token_id)
 
     def is_word_like_token(self, token_id: int, token_text: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, token_text)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:

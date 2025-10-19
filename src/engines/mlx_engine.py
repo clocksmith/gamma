@@ -33,14 +33,14 @@ class MLXEngine(LLMEngine):
         print("MLXEngine: Model loaded."); self._populate_special_token_map()
 
     def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[mx.array, Optional[mx.array]]: # type: ignore
-        if not self.tokenizer: raise RuntimeError("MLXEngine: Tokenizer not loaded.")
+        self._ensure_tokenizer_loaded()
         encoded_np = self.tokenizer(text, return_tensors="np", add_special_tokens=add_special_tokens)
         input_ids_mx = mx.array(encoded_np["input_ids"].astype(np.int32)) # type: ignore
         attention_mask_mx = mx.array(encoded_np["attention_mask"].astype(np.int32)) if "attention_mask" in encoded_np else None # type: ignore
         return input_ids_mx, attention_mask_mx
 
     def decode(self, ids: Any, skip_special_tokens: bool = False) -> str:
-        if not self.tokenizer: raise RuntimeError("MLXEngine: Tokenizer not loaded.")
+        self._ensure_tokenizer_loaded()
         if isinstance(ids, mx.array): # type: ignore
             ids_np = np.array(mx.squeeze(ids, axis=0) if ids.ndim > 1 and ids.shape[0] == 1 else ids) # type: ignore
             ids_list = ids_np.tolist()
@@ -52,46 +52,46 @@ class MLXEngine(LLMEngine):
 
 
     def predict_next(self, input_ids: mx.array, attention_mask: Optional[mx.array], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]: # type: ignore
-        if not self._mlx_model: raise RuntimeError("MLXEngine: Model not loaded.")
+        self._ensure_model_loaded()
         st = time.time()
         current_cache_to_pass = self._kv_cache if input_ids.shape[-1] == 1 else None
         try: model_outputs_tuple = self._mlx_model(input_ids, cache=current_cache_to_pass); mx.eval(model_outputs_tuple)
         except Exception as e: raise RuntimeError(f"MLX model execution failed for input shape {input_ids.shape}: {e}") from e
         logits_all_steps, updated_kv_cache = model_outputs_tuple; self._kv_cache = updated_kv_cache
-        
+
+        # Get raw logits and convert to numpy
         logits_raw = logits_all_steps[:, -1, :]
         logits_raw_np = np.array(logits_raw)
 
-        logits_proc_np, logits_temp_np, logits_k_np = sampling_utils.process_logits_pipeline(logits_raw_np, temperature, top_k, top_p, return_intermediates=True)
+        # Use common sampling pipeline (consolidates duplicate code)
+        pipeline_results = self._process_logits_common_pipeline(logits_raw_np, temperature, top_k, top_p)
 
-        probs_proc_np = sampling_utils.softmax(logits_proc_np)
-        next_token_id_val = int(np.argmax(probs_proc_np, axis=-1))
+        # Convert numpy results back to MLX arrays and compute probabilities
+        logits_proc_np = pipeline_results["logits_processed_np"]
+        logits_temp_np = pipeline_results["logits_temp_np"]
+        logits_k_np = pipeline_results["logits_topk_np"]
+        probs_proc_np = pipeline_results["probs_processed_np"]
 
-        max_display_k = max(top_k if top_k > 0 else 1, self.get_max_tokens_for_display(), 1)
-        top_texts_list, top_probs_list, _ = sampling_utils.get_top_k_tokens(logits_proc_np, max_display_k, self.get_token_text)
-        
-        return {"next_token_id": next_token_id_val, "logits_raw": logits_raw, "logits_processed": mx.array(logits_proc_np),
+        return {"next_token_id": pipeline_results["next_token_id"],
+                "logits_raw": logits_raw,
+                "logits_processed": mx.array(logits_proc_np),
                 "probabilities_raw": mx.softmax(logits_raw, axis=-1),
                 "probabilities_temp": mx.softmax(mx.array(logits_temp_np), axis=-1),
                 "probabilities_top_k": mx.softmax(mx.array(logits_k_np), axis=-1),
                 "probabilities_processed": mx.array(probs_proc_np),
-                "top_tokens_processed": top_texts_list, "top_probs_processed": top_probs_list, "attention": None, "hidden_states": None, "forward_time": time.time() - st}
+                "top_tokens_processed": pipeline_results["top_tokens"],
+                "top_probs_processed": pipeline_results["top_probs"],
+                "attention": None,
+                "hidden_states": None,
+                "forward_time": time.time() - st}
 
     def get_vocabulary_size(self) -> int:
-        if not self.tokenizer: raise RuntimeError("MLXEngine: Tokenizer not loaded."); return -1
+        self._ensure_tokenizer_loaded()
         return self.tokenizer.vocab_size
 
     def _decode_token_raw(self, token_id: int) -> str:
         """Decode a single token ID using MLX/HuggingFace tokenizer."""
-        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-        if isinstance(token_text_str, bytes):
-            token_text_str = token_text_str.decode("utf-8", errors="replace")
-        if hasattr(self.tokenizer, "sp_model") and token_text_str.startswith(" "):
-            token_text_str = token_text_str[1:]
-        if not token_text_str:
-            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
-            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
-        return token_text_str
+        return self._decode_token_hf_common(token_id)
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
     def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:

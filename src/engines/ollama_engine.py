@@ -334,25 +334,7 @@ class OllamaEngine(LLMEngine):
         # Return the cached vocabulary
         return {v: k for k, v in self._vocab_cache.items()}
 
-    def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
-        """Attempt to bridge KV cache to another engine."""
-        # Ollama doesn't expose KV cache
-        print("OllamaEngine: KV cache bridging not supported")
-        return False
-
-    def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
-        """Export KV cache state for bridging."""
-        # Ollama manages KV cache internally
-        return {
-            'engine_type': 'ollama',
-            'model_name': self.model_name
-        }
-
-    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
-        """Import KV cache state from another engine."""
-        # Ollama doesn't support importing external KV cache
-        print("OllamaEngine: KV cache import not supported")
-        return False
+    # KV cache bridging: Using default "not supported" implementations from base class
 
     def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:
         """Append a new token to input_ids tensor."""

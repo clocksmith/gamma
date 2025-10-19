@@ -260,44 +260,49 @@ export class AdvancedMetrics {
 
   /**
    * Analyze code for potential bugs and code smells
+   * Focus on actual risks, not style preferences
    */
   static analyzeBugRisk(code) {
     const issues = [];
     let riskScore = 0;
 
-    // Check for common issues
+    // Check for actual security/correctness issues only
     const checks = [
-      { pattern: /==(?!=)/g, issue: 'Loose equality (==) used instead of strict (===)', risk: 2 },
-      { pattern: /var\s+/g, issue: 'var keyword used instead of let/const', risk: 1 },
-      { pattern: /eval\(/g, issue: 'eval() usage detected (security risk)', risk: 5 },
-      { pattern: /console\.log/g, issue: 'console.log() left in code', risk: 1 },
-      { pattern: /TODO|FIXME|HACK/gi, issue: 'TODO/FIXME comments found', risk: 2 },
-      { pattern: /\bcatch\s*\(\s*\w*\s*\)\s*\{\s*\}/g, issue: 'Empty catch blocks', risk: 3 },
-      { pattern: /parseInt\([^,)]+\)/g, issue: 'parseInt without radix', risk: 2 },
-      { pattern: /\+\+|\-\-/g, issue: 'Increment/decrement operators (potential confusion)', risk: 1 },
-      { pattern: /with\s*\(/g, issue: 'with statement (deprecated)', risk: 4 },
-      { pattern: /arguments\.callee/g, issue: 'arguments.callee usage (deprecated)', risk: 3 }
+      { pattern: /eval\(/g, issue: 'eval() usage (security risk)', risk: 5 },
+      { pattern: /\bcatch\s*\(\s*\w*\s*\)\s*\{\s*\}/g, issue: 'Empty catch blocks (swallows errors)', risk: 4 },
+      { pattern: /with\s*\(/g, issue: 'with statement (deprecated, scope issues)', risk: 4 },
+      { pattern: /arguments\.callee/g, issue: 'arguments.callee (deprecated, optimization issues)', risk: 3 },
+      { pattern: /delete\s+\w+\[/g, issue: 'delete operator on arrays (performance)', risk: 2 },
+      { pattern: /new\s+Function\(/g, issue: 'Function constructor (security risk)', risk: 4 },
+      { pattern: /innerHTML\s*=/g, issue: 'innerHTML assignment (XSS risk if user input)', risk: 3 },
+      { pattern: /document\.write\(/g, issue: 'document.write (blocks parsing)', risk: 2 },
+      { pattern: /async\s+function[^{]*\{[^}]*\}/g, issue: 'Async function without await or promise', risk: 2, check: (match) => !/await|\.then|Promise/.test(match) }
     ];
 
     for (const check of checks) {
       const matches = code.match(check.pattern);
       if (matches) {
-        issues.push({
-          issue: check.issue,
-          count: matches.length,
-          risk: check.risk
-        });
-        riskScore += matches.length * check.risk;
+        // Additional validation if check function exists
+        const validMatches = check.check ? matches.filter(check.check) : matches;
+        if (validMatches.length > 0) {
+          issues.push({
+            issue: check.issue,
+            count: validMatches.length,
+            risk: check.risk
+          });
+          riskScore += validMatches.length * check.risk;
+        }
       }
     }
 
     return {
       riskScore,
       riskLevel: riskScore === 0 ? 'low' :
-                 riskScore < 10 ? 'moderate' :
-                 riskScore < 20 ? 'high' : 'critical',
+                 riskScore < 8 ? 'moderate' :
+                 riskScore < 15 ? 'high' : 'critical',
       issues,
-      issueCount: issues.length
+      issueCount: issues.length,
+      note: 'Focuses on actual security/correctness issues, not style'
     };
   }
 

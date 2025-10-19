@@ -6,6 +6,7 @@ from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 import os
 from src.core.models.model_paths import list_available_models, get_project_root, resolve_model_path
+from src.core.models.gguf_sources import GGUFSourceManager
 from src.core.hardware.memory_estimator import check_model_fits, format_memory_estimate
 from src.core.hardware.gpu_discovery import get_total_available_vram_mb
 
@@ -423,154 +424,86 @@ class ModelSelector:
         self._discover_local_models()
 
     def _discover_local_models(self) -> None:
-        """Discover locally available models (GGUF, ONNX, Ollama, etc.)."""
-        gguf_models_by_size = {}  # Track GGUF models by file size to detect duplicates
+        """Discover locally available models using unified GGUF manager."""
+        # For GGUF-based engines (llamacpp, ollama), use the streamlined manager
+        if self.engine in ('llamacpp', 'ollama'):
+            gguf_manager = GGUFSourceManager()
+            gguf_manager.discover_all()
 
-        # Special handling for Ollama - query available models
-        if self.engine == 'ollama' or self.engine == 'llamacpp':
+            # Convert GGUFModel objects to ModelInfo objects
+            for gguf_model in gguf_manager.models:
+                # Check if already in catalog by name
+                existing = any(m.name == gguf_model.name for m in self.models)
+
+                if not existing:
+                    # Determine display name and description based on source
+                    if gguf_model.source == 'ollama':
+                        display_name = gguf_model.name if self.engine == 'ollama' else f"{gguf_model.name}.gguf"
+                        description = f"Ollama model ({gguf_model.source})"
+                    elif gguf_model.source == 'huggingface':
+                        display_name = gguf_model.name
+                        description = f"HuggingFace GGUF"
+                    else:
+                        display_name = gguf_model.name
+                        description = f"Local GGUF ({gguf_model.source})"
+
+                    # Extract parameter size from metadata
+                    param_size = "?"
+                    if gguf_model.param_size:
+                        param_size = f"{gguf_model.param_size}B"
+
+                    model_info = ModelInfo(
+                        name=display_name,
+                        engine=self.engine,
+                        size=param_size,
+                        description=description,
+                        memory_estimate=gguf_model.size_display,
+                        recommended=False,
+                        requires_auth=False,
+                        available_locally=True,
+                        location=gguf_model.path
+                    )
+                    self.local_models.append(model_info)
+                else:
+                    # Mark existing catalog model as available
+                    for m in self.models:
+                        if m.name == gguf_model.name:
+                            m.available_locally = True
+                            m.location = gguf_model.path
+
+        # For ONNX engine, keep existing discovery (not GGUF-based)
+        elif self.engine == 'onnx':
             try:
-                import subprocess
-                result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, check=True, timeout=5)
-                lines = result.stdout.strip().split('\n')[1:]  # Skip header
+                available = list_available_models(['.onnx'])
+                for location, models in available.items():
+                    for model in models:
+                        filename = model['filename']
+                        full_path = model['full_path']
 
-                for line in lines:
-                    if not line.strip():
-                        continue
-                    parts = line.split()
-                    if len(parts) >= 1:
-                        model_name = parts[0]
-                        size = parts[2] if len(parts) > 2 else "?"
-
-                        # For llamacpp engine, try to find the actual GGUF blob
-                        if self.engine == 'llamacpp':
-                            try:
-                                # Get the model file path from Ollama
-                                show_result = subprocess.run(
-                                    ['ollama', 'show', model_name, '--modelfile'],
-                                    capture_output=True, text=True, check=True, timeout=5
-                                )
-                                for show_line in show_result.stdout.split('\n'):
-                                    if show_line.startswith('FROM '):
-                                        blob_path = show_line.split('FROM ')[1].strip()
-
-                                        # Check if already in catalog by name
-                                        existing = any(m.name == model_name for m in self.models)
-                                        if not existing:
-                                            # Add as GGUF model from Ollama
-                                            model_info = ModelInfo(
-                                                name=f"{model_name}.gguf",
-                                                engine='llamacpp',
-                                                size=size,
-                                                description=f"Ollama model - {model_name}",
-                                                memory_estimate=size,
-                                                recommended=False,
-                                                requires_auth=False,
-                                                available_locally=True,
-                                                location=blob_path
-                                            )
-                                            self.local_models.append(model_info)
-
-                                            # Track by path for duplicate detection
-                                            gguf_models_by_size[blob_path] = model_info
-                                        break
-                            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
-                                pass
-
-                        elif self.engine == 'ollama':
-                            # Check if already in catalog
-                            existing = any(m.name == model_name for m in self.models)
+                        if filename.endswith('.onnx'):
+                            existing = any(m.name == filename for m in self.models)
                             if not existing:
+                                size_mb = model['size_mb']
+                                size_str = f"{size_mb / 1024:.1f}GB" if size_mb > 1024 else f"{size_mb:.0f}MB"
+
                                 self.local_models.append(ModelInfo(
-                                    name=model_name,
-                                    engine='ollama',
-                                    size=size,
-                                    description=f"Local Ollama model",
-                                    memory_estimate=size,
+                                    name=filename,
+                                    engine=self.engine,
+                                    size="?",
+                                    description=f"Local ONNX - {location}",
+                                    memory_estimate=size_str,
                                     recommended=False,
                                     requires_auth=False,
                                     available_locally=True,
-                                    location="ollama"
+                                    location=full_path
                                 ))
-                            else:
-                                # Mark existing catalog model as available
-                                for m in self.models:
-                                    if m.name == model_name:
-                                        m.available_locally = True
-                                        m.location = "ollama"
-            except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
-                pass  # Ollama not available
+            except Exception:
+                pass
 
-        try:
-            available = list_available_models()
-
-            for location, models in available.items():
-                for model in models:
-                    # Only show models relevant to this engine
-                    filename = model['filename']
-                    full_path = model['full_path']
-
-                    if self.engine == 'llamacpp' and filename.endswith('.gguf'):
-                        # Check if this is a duplicate of an Ollama model (by path)
-                        if full_path in gguf_models_by_size:
-                            # This is the same file from Ollama, update the existing entry
-                            existing_model = gguf_models_by_size[full_path]
-                            existing_model.description = f"Available via Ollama & {location}"
-                            print(f"⚠️  Note: Model '{filename}' found in both Ollama and {location} (same file)")
-                            continue
-
-                        # Check if this model is already in catalog by name
-                        existing = any(m.name == filename for m in self.models)
-                        if not existing:
-                            # Add new local GGUF model
-                            size_mb = model['size_mb']
-                            size_str = f"{size_mb / 1024:.1f}GB" if size_mb > 1024 else f"{size_mb:.0f}MB"
-
-                            model_info = ModelInfo(
-                                name=filename,
-                                engine=self.engine,
-                                size="?",
-                                description=f"Local GGUF - {location}",
-                                memory_estimate=size_str,
-                                recommended=False,
-                                requires_auth=False,
-                                available_locally=True,
-                                location=full_path
-                            )
-                            self.local_models.append(model_info)
-                            gguf_models_by_size[full_path] = model_info
-                        else:
-                            # Mark existing catalog model as available
-                            for m in self.models:
-                                if m.name == filename:
-                                    m.available_locally = True
-                                    m.location = full_path
-
-                    elif self.engine == 'onnx' and filename.endswith('.onnx'):
-                        existing = any(m.name == filename for m in self.models)
-                        if not existing:
-                            size_mb = model['size_mb']
-                            size_str = f"{size_mb / 1024:.1f}GB" if size_mb > 1024 else f"{size_mb:.0f}MB"
-
-                            self.local_models.append(ModelInfo(
-                                name=filename,
-                                engine=self.engine,
-                                size="?",
-                                description=f"Local ONNX - {location}",
-                                memory_estimate=size_str,
-                                recommended=False,
-                                requires_auth=False,
-                                available_locally=True,
-                                location=full_path
-                            ))
-
-            # Add local models to the beginning of the list
-            if self.local_models:
-                self.models = self.local_models + self.models
-                self.filtered_models = self.models.copy()
-
-        except Exception as e:
-            # If discovery fails, just continue with catalog models
-            pass
+        # Add local models to the beginning of the list
+        if self.local_models:
+            self.models = self.local_models + self.models
+            self.filtered_models = self.models.copy()
 
     def display_page(self) -> None:
         """Display current page of models."""
