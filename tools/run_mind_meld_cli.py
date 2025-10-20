@@ -19,6 +19,7 @@ from src.core import config as cfg
 from src.mind_meld.mode import MindMeldMode
 from src.mind_meld.core.config import SwapStrategy, TranslationMode, VocabularyStrategy
 from src.engines.engine_factory import get_engine, SUPPORTED_ENGINES
+from src.core.model_validator import ModelValidator, print_validation_result
 
 
 @dataclass
@@ -81,18 +82,112 @@ class MindMeldCLI:
     
     def __init__(self):
         self.config = MindMeldConfig()
+
+    def _list_available_models(self):
+        """List available models for mind meld."""
+        print("="*70)
+        print("Available Models for Mind Meld")
+        print("="*70)
+
+        # List Ollama models
+        print("\n📦 Ollama models (from 'ollama list'):")
+        try:
+            import subprocess
+            result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, timeout=5)
+            if result.returncode == 0:
+                lines = result.stdout.strip().split('\n')[1:]  # Skip header
+                for line in lines:
+                    parts = line.split()
+                    if parts:
+                        model_name = parts[0]
+                        size = parts[2] if len(parts) > 2 else 'N/A'
+                        print(f"  ollama:{model_name:<30} ({size})")
+            else:
+                print("  (Ollama not available)")
+        except Exception as e:
+            print(f"  (Error: {e})")
+
+        # List HuggingFace cache
+        print("\n🤗 HuggingFace cached models:")
+        hf_cache = os.path.expanduser("~/.cache/huggingface/hub")
+        if os.path.exists(hf_cache):
+            cached = [d for d in os.listdir(hf_cache) if d.startswith('models--')]
+            if cached:
+                for model_dir in sorted(cached)[:10]:  # Show first 10
+                    model_name = model_dir.replace('models--', '').replace('__', '/')
+                    print(f"  pytorch:{model_name}")
+                if len(cached) > 10:
+                    print(f"  ... and {len(cached) - 10} more")
+            else:
+                print("  (No cached models found)")
+        else:
+            print("  (Cache directory not found)")
+
+        print("\n" + "="*70)
+        print("Usage Examples:")
+        print("="*70)
+        print("\n# Meld two Ollama models with pattern-based swapping:")
+        print("  python tools/run_mind_meld_cli.py \\")
+        print("    --models ollama:gemma2:2b ollama:qwen2:7b \\")
+        print("    --strategy pattern --steps 30")
+
+        print("\n# Mix Ollama and PyTorch with weighted averaging:")
+        print("  python tools/run_mind_meld_cli.py \\")
+        print("    --models ollama:gemma2:2b pytorch:google/gemma-2-2b-it \\")
+        print("    --use-weighted-average --steps 40")
+
+        print("\n# Three models with round-robin swapping:")
+        print("  python tools/run_mind_meld_cli.py \\")
+        print("    --models ollama:gemma2:2b ollama:qwen2:7b ollama:gemma3:4b-it-qat \\")
+        print("    --strategy round_robin --steps 50")
+        print()
         
     def parse_cli_args(self) -> argparse.Namespace:
         """Parse command-line arguments for direct CLI usage."""
         parser = argparse.ArgumentParser(
-            description="Mind Meld CLI - meld multiple LLMs together"
+            description="Mind Meld CLI - meld multiple LLMs together",
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            epilog="""
+Examples:
+  # Meld Ollama models (use names from 'ollama list')
+  %(prog)s --models ollama:gemma2:2b ollama:qwen2:7b --strategy pattern --steps 30
+
+  # Mix Ollama and PyTorch/HuggingFace
+  %(prog)s --models ollama:gemma2:2b pytorch:google/gemma-2-2b-it --strategy round_robin
+
+  # Use weighted averaging for probability blending
+  %(prog)s --models ollama:gemma3:4b-it-qat ollama:qwen2:7b --use-weighted-average --steps 40
+
+  # Perplexity-based swapping with statistics tracking
+  %(prog)s --models ollama:gemma2:2b ollama:qwen2:7b --strategy perplexity --use-stats-tracker
+
+Supported engines:
+  ollama       - Use models from 'ollama list' (e.g., ollama:gemma2:2b)
+  pytorch      - HuggingFace models (e.g., pytorch:google/gemma-2-2b-it)
+  vllm         - Fast inference with vLLM (e.g., vllm:google/gemma-2-2b-it)
+  pytorch_cuda - PyTorch with CUDA
+  mlx          - Apple Silicon (e.g., mlx:mlx-community/Llama-3.2-1B-Instruct-4bit)
+
+Swap strategies:
+  pattern      - Swap at punctuation marks (., !, ?)
+  fixed        - Swap every N tokens (use --interval)
+  round_robin  - Alternate models each token
+  random       - Random swapping
+  perplexity   - Swap when model is uncertain
+  confidence   - Swap when confidence drops
+
+Model name formats:
+  Ollama:      Use exact name from 'ollama list' → ollama:gemma2:2b
+  HuggingFace: Use repo format org/model-name → pytorch:google/gemma-2-2b-it
+            """
         )
 
         parser.add_argument(
             "--models",
             type=str,
             nargs="+",
-            help="Models to meld (format: engine:model or model to default to PyTorch)",
+            metavar="ENGINE:MODEL",
+            help="Models to meld in format engine:model (see examples below)",
         )
         parser.add_argument(
             "--strategy",
@@ -200,8 +295,21 @@ class MindMeldCLI:
             default=True,
             help="Toggle attention heatmap display"
         )
+        parser.add_argument(
+            "--list-models",
+            action="store_true",
+            help="List available models and exit"
+        )
 
-        return parser.parse_args()
+        args = parser.parse_args()
+
+        # Handle --list-models
+        if args.list_models:
+            self._list_available_models()
+            import sys
+            sys.exit(0)
+
+        return args
 
     def _strategy_from_string(self, value: str) -> SwapStrategy:
         """Convert string input to SwapStrategy enum."""
@@ -224,14 +332,47 @@ class MindMeldCLI:
             print(ui.color_text("Mind Meld CLI requires at least two models specified with --models", cfg.COLOR_RED))
             return
 
-        config.models = []
+        # Validate all model specifications first
+        print("\n" + "="*70)
+        print("Validating model specifications for Mind Meld...")
+        print("="*70)
+
+        valid_models = []
         for spec in args.models:
-            if ":" in spec:
-                engine, model_name = spec.split(":", 1)
-            else:
-                engine = "pytorch"
-                model_name = spec
-            config.models.append((engine, model_name))
+            # Add default engine if not specified
+            if ":" not in spec:
+                spec = f"pytorch:{spec}"
+
+            # Validate the specification (REQUIRE logits for mind melding!)
+            validation_result = ModelValidator.validate_model_spec(
+                spec,
+                require_logits=True  # Mind melding requires real logits!
+            )
+
+            if not print_validation_result(validation_result, spec):
+                print(f"❌ Skipping invalid model: {spec}")
+                print("   Mind melding requires engines with logits access.\n")
+                continue
+
+            # If validation passed, add to valid models
+            engine, model_name = spec.split(":", 1)
+            valid_models.append((engine, model_name))
+
+        if not valid_models:
+            print(ui.color_text("\n❌ No valid models for mind melding. Exiting.", cfg.COLOR_RED))
+            print(ui.color_text("\n💡 Tip: Use engines with logits access:", cfg.COLOR_YELLOW))
+            print("   ✓ pytorch, pytorch_cuda, vllm, llamacpp, mlx, mlx_gpu, jax, tensorflow")
+            print("   ✗ ollama (HTTP API only, no logits)")
+            print("\n   See docs/ENGINE_ARCHITECTURE.md for details.")
+            return
+
+        if len(valid_models) < 2:
+            print(ui.color_text(f"\n❌ Mind melding requires at least 2 models, only {len(valid_models)} valid.", cfg.COLOR_RED))
+            return
+
+        print(f"\n✓ Validated {len(valid_models)} model(s) for mind melding\n")
+
+        config.models = valid_models
 
         config.swap_strategy = self._strategy_from_string(args.strategy)
         config.fixed_interval = args.interval

@@ -101,6 +101,8 @@ def parse_arguments() -> argparse.Namespace:
                         help="Compare predictions from multiple models side-by-side")
     parser.add_argument("--comparison-models", type=str, nargs="+", default=None,
                         help="Models to compare (format: engine:model_name)")
+    parser.add_argument("--models", type=str, nargs="+", default=None, dest="comparison_models_alias",
+                        help="Alias for --comparison-models (for consistency with other commands)")
     parser.add_argument("--chat", action="store_true", default=False,
                         help="Enable simple, direct chat mode.")
     parser.add_argument("--prompt", type=str, default=None,
@@ -340,13 +342,16 @@ def run_tutorial_mode(args: argparse.Namespace) -> None:
 def run_comparison_mode(args: argparse.Namespace) -> None:
     """Run the model comparison mode."""
     print(ui.color_text("\n🔬 Starting Model Comparison Mode...", cfg.COLOR_CYAN))
-    
-    # Parse comparison models
+
+    # Parse comparison models - accept both --comparison-models and --models
     models_to_compare = []
-    
-    if args.comparison_models:
+
+    # Use --models if provided, otherwise fall back to --comparison-models
+    models_list = args.comparison_models_alias if args.comparison_models_alias else args.comparison_models
+
+    if models_list:
         # Parse provided models
-        for model_spec in args.comparison_models:
+        for model_spec in models_list:
             if ":" in model_spec:
                 engine_type, model_name = model_spec.split(":", 1)
             else:

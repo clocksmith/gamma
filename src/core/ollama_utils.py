@@ -158,10 +158,19 @@ def check_model_availability(model_name: str, base_url: str = None) -> Tuple[boo
 
     try:
         models = list_ollama_models(base_url)
-        model_names = [m.get("name", "").split(":")[0] for m in models]
+        # Keep full model names with tags (e.g., "gpt-oss:20b")
+        model_names = [m.get("name", "") for m in models]
 
+        # Also check without tags for partial matches
+        model_names_no_tags = [m.split(":")[0] for m in model_names]
+
+        # Check exact match first, then check without tag
         if model_name in model_names:
             return True, f"Model '{model_name}' is available"
+        elif model_name.split(":")[0] in model_names_no_tags:
+            # Partial match - model family exists
+            matching = [m for m in model_names if m.startswith(model_name.split(":")[0])]
+            return False, f"Model '{model_name}' not found, but similar: {', '.join(matching)}"
         else:
             available = ", ".join(model_names) if model_names else "none"
             return False, f"Model '{model_name}' not found. Available: {available}"

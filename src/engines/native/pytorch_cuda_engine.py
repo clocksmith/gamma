@@ -8,7 +8,12 @@ try:
     import torch.nn as nn
     import torch.cuda.amp as amp
     from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-    from transformers.models.gemma2.modeling_gemma2 import Gemma2Attention, Gemma2FlashAttention2
+    # Optional Gemma2 imports - not all transformers versions have these
+    try:
+        from transformers.models.gemma2.modeling_gemma2 import Gemma2Attention, Gemma2FlashAttention2
+    except ImportError:
+        Gemma2Attention = None
+        Gemma2FlashAttention2 = None
 except ImportError:
     raise ImportError("GPU engine requires PyTorch and transformers. Install with: pip install torch transformers bitsandbytes accelerate")
 

@@ -118,14 +118,20 @@ ln -s ~/.ollama/models/blobs/sha256-abc123... models/qwen-coder.gguf
 
 ## Supported Engines
 
-| Engine | Best For | Hardware | Status | When to Use |
-|--------|----------|----------|--------|-------------|
-| **llamacpp** | GGUF models | CPU, GPU (ROCm/CUDA) | ☑ Fully Supported | Default - Quantized models, efficient inference |
-| **pytorch** | HF Transformers | CUDA, ROCm, MPS | ☑ Fully Supported | Full-precision models, latest HF models |
-| **tensorflow** | TF/Keras models | CUDA, CPU | ⚠ Experimental | TF-specific models or pipelines |
-| **jax** | JAX/Flax models | TPU, CUDA | ⚠ Experimental | TPU support or JAX models |
-| **onnx** | ONNX Runtime | CPU, CUDA, DirectML | ⚠ Experimental | Cross-platform, DirectML on Windows |
-| **mlx** | MLX-optimized | Apple M1/M2/M3/M4 | ⚠ Experimental | Apple Silicon MLX optimizations |
+| Engine | Type | Best For | Logits | Mind Meld | Hardware | Status |
+|--------|------|----------|--------|-----------|----------|--------|
+| **pytorch** | Native | HF Transformers | ✅ Full | ✅ | CUDA, ROCm, MPS | ☑ Fully Supported |
+| **llamacpp** | Native | GGUF models | ✅ Full | ✅ | CPU, GPU (ROCm/CUDA) | ☑ Fully Supported |
+| **vllm** | Native | Fast inference | ✅ Full | ✅ | CUDA | ☑ Fully Supported |
+| **ollama** | Wrapper | HTTP API | ⚠️ Synthetic | ⚠️ Limited | Any | ☑ Fully Supported |
+| **mlx/mlx_gpu** | Native | MLX-optimized | ✅ Full | ✅ | Apple M1/M2/M3/M4 | ⚠ Experimental |
+| **tensorflow** | Native | TF/Keras models | ✅ Full | ✅ | CUDA, CPU | ⚠ Experimental |
+| **jax** | Native | JAX/Flax models | ✅ Full | ✅ | TPU, CUDA | ⚠ Experimental |
+| **onnx** | Native | ONNX Runtime | ✅ Full | ✅ | CPU, CUDA, DirectML | ⚠ Experimental |
+
+**Engine Types:**
+- **Native** (`src/engines/native/`): Load models directly, full logits access, complete Mind Meld support
+- **Wrapper** (`src/engines/wrappers/`): HTTP/API wrappers, synthetic logits, limited Mind Meld support
 
 **Quick Guide:**
 - ☐ **Local models (Ollama)** → Use `llamacpp`
@@ -396,7 +402,103 @@ CMAKE_ARGS="-DLLAMA_HIPBLAS=on" pip install llama-cpp-python
 
 ---
 
+## 🤖 LLM-Optimized Command Generation
+
+GAMMA's documentation is designed to be **LLM-parseable** - you can describe what you want in natural language to an LLM, and it can generate the exact command!
+
+### 📚 FOR LLMs: START HERE
+
+**Primary Reference:** [docs/CLI_REFERENCE_COMPLETE.md](./docs/CLI_REFERENCE_COMPLETE.md)
+
+This is the **single source of truth** for generating GAMMA commands from natural language. It contains:
+- ✅ Complete syntax for all 8 commands (game, comparison, mind-meld, benchmark, dream, list, select, help)
+- ✅ All valid parameter values and ranges
+- ✅ Engine + model compatibility matrix
+- ✅ Constraint rules (what works with what)
+- ✅ 10 natural language → command examples
+- ✅ Step-by-step command generation rules
+- ✅ Validation checklist
+
+**Read this file first before attempting to generate any GAMMA commands.**
+
+### Example: Natural Language to Command
+
+**You say:**
+> "I want to benchmark PyTorch and vLLM engines running Google's Gemma 2B model, generate 100 tokens each run, do 5 iterations, and save the results"
+
+**LLM generates:**
+```bash
+gamma.py benchmark \
+  --models \
+    pytorch:google/gemma-2-2b-it \
+    vllm:google/gemma-2-2b-it \
+  --tokens 100 \
+  --iterations 5 \
+  --save
+```
+
+**You say:**
+> "I want to meld Gemma 2B and Qwen 7B using PyTorch, swapping every 10 tokens, running for 50 steps with temperature 0.9"
+
+**LLM generates:**
+```bash
+gamma.py mind-meld \
+  --models \
+    pytorch:google/gemma-2-2b-it \
+    pytorch:Qwen/Qwen2-7B-Instruct \
+  --strategy fixed \
+  --interval 10 \
+  --steps 50 \
+  --temperature 0.9
+```
+
+**You say:**
+> "Which models do I have downloaded in HuggingFace and which do I have in Ollama?"
+
+**LLM generates:**
+```bash
+gamma.py list
+```
+
+### Quick Command Reference
+
+```bash
+# Get help
+gamma.py                         # Main help
+gamma.py help [command]          # Command-specific help
+
+# Interactive modes
+gamma.py game                    # Interactive game
+gamma.py comparison              # Side-by-side comparison
+gamma.py mind-meld               # Multi-model collaboration
+
+# Benchmarking
+gamma.py benchmark               # Speed benchmarking
+gamma.py dream [type]            # DREAM benchmark suite
+
+# Utilities
+gamma.py list                    # List all available models
+gamma.py select                  # Interactive engine selector
+```
+
+---
+
 ## Documentation
+
+### 🤖 For LLMs - Essential Reading
+
+- **[CLI Reference Complete](./docs/CLI_REFERENCE_COMPLETE.md)** - ⭐ **START HERE** - Complete LLM-optimized reference for command generation
+  - All 8 commands with syntax, parameters, constraints
+  - 10 natural language → command examples
+  - Engine compatibility matrix
+  - Step-by-step generation rules
+
+### Essential Guides
+
+- **[Unified Workflow](./docs/UNIFIED_WORKFLOW.md)** - Complete workflow guide
+- **[Engine Architecture](./docs/ENGINE_ARCHITECTURE.md)** - Engine capabilities and limitations
+- **[Benchmarking Guide](./docs/BENCHMARKING.md)** - Performance testing guide
+- **[Quick Start Engines](./docs/QUICK_START_ENGINES.md)** - Engine selection guide
 
 ### User Guides
 

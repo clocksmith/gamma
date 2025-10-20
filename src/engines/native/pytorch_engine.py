@@ -63,11 +63,15 @@ class PyTorchEngine(LLMEngine):
         # When using device_map, low_cpu_mem_usage must be True
         device_map = self.engine_config.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP)
         low_cpu_mem = self.engine_config.get("low_cpu_mem_usage", True)
-        
+
         # If we have a device_map, we must use low_cpu_mem_usage=True
         if device_map and device_map != "cpu":
             low_cpu_mem = True
-        
+
+        # Get trust_remote_code and token settings
+        trust_remote = self.get_trust_remote_code()
+        token = self.engine_config.get("hf_token", None)  # HuggingFace API token if needed
+
         model_kwargs: Dict[str, Any] = {"device_map": device_map,
                                         "attn_implementation": self.engine_config.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
                                         "trust_remote_code": trust_remote, "low_cpu_mem_usage": low_cpu_mem, "token": token}

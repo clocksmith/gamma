@@ -1,19 +1,38 @@
 import time
 import json
+import os
 from typing import List, Tuple, Optional, Dict, Any
 import subprocess
 import gguf
 from transformers import PreTrainedTokenizer
 
 class GGUFTokenizer(PreTrainedTokenizer):
-    def __init__(self, vocab, **kwargs):
+    def __init__(self, vocab_data, **kwargs):
         super().__init__(**kwargs)
-        self.vocab = vocab
-        self.id_to_token = {i: token for i, token in enumerate(self.vocab)}
+        # Handle different vocab data formats
+        if isinstance(vocab_data, (list, tuple)):
+            self._vocab = list(vocab_data)
+        elif hasattr(vocab_data, 'tolist'):
+            # numpy array
+            self._vocab = vocab_data.tolist()
+        else:
+            # Try to convert to list
+            try:
+                self._vocab = list(vocab_data)
+            except:
+                raise ValueError(f"Cannot convert vocab_data of type {type(vocab_data)} to list")
+
+        # Decode bytes to strings if needed
+        self._vocab = [
+            token.decode('utf-8') if isinstance(token, bytes) else str(token)
+            for token in self._vocab
+        ]
+
+        self.id_to_token = {i: token for i, token in enumerate(self._vocab)}
 
     @property
     def vocab_size(self):
-        return len(self.vocab)
+        return len(self._vocab)
 
     def _tokenize(self, text):
         # This is a very simple tokenizer, it splits by space.
@@ -21,17 +40,56 @@ class GGUFTokenizer(PreTrainedTokenizer):
         return text.split(' ')
 
     def _convert_token_to_id(self, token):
-        return self.vocab.index(token) if token in self.vocab else self.unk_token_id
+        return self._vocab.index(token) if token in self._vocab else self.unk_token_id
 
     def _convert_id_to_token(self, index):
         return self.id_to_token.get(index, self.unk_token)
 
     def get_vocab(self):
-        return {token: i for i, token in enumerate(self.vocab)}
+        return {token: i for i, token in enumerate(self._vocab)}
 
     def save_vocabulary(self, save_directory, filename_prefix=None):
         # This is required by the PreTrainedTokenizer interface
         return (os.path.join(save_directory, 'vocab.txt'),)
+
+
+class PseudoTokenizer:
+    """Minimal fallback tokenizer for when GGUF parsing fails."""
+    def __init__(self, vocab_size=32000, model_name="ollama-pseudo"):
+        self._vocab_size = vocab_size
+        self._token_cache = {}
+        self.name_or_path = model_name
+        self.model_max_length = 2048
+        self.eos_token_id = 2
+        self.bos_token_id = 1
+        self.pad_token_id = 0
+        self.unk_token_id = 0
+
+    @property
+    def vocab_size(self):
+        return self._vocab_size
+
+    def encode(self, text, add_special_tokens=True):
+        """Simple hash-based encoding."""
+        tokens = text.split()
+        return [hash(token) % self._vocab_size for token in tokens]
+
+    def decode(self, token_ids, skip_special_tokens=False):
+        """Decode from cached tokens."""
+        if isinstance(token_ids, (list, tuple)):
+            return " ".join(self._token_cache.get(tid, f"<{tid}>") for tid in token_ids)
+        return self._token_cache.get(token_ids, f"<{token_ids}>")
+
+    def get_vocab(self):
+        """Return pseudo-vocabulary."""
+        # Return a dictionary with at least some common tokens
+        vocab = {f"<token_{i}>": i for i in range(min(1000, self._vocab_size))}
+        vocab.update(self._token_cache)
+        return vocab
+
+    def cache_token(self, token_id, text):
+        """Cache a token for later decoding."""
+        self._token_cache[token_id] = text
 
 try:
     import numpy as np
@@ -100,18 +158,25 @@ class OllamaEngine(LLMEngine):
                 raise RuntimeError(f"GGUF file not found at path: {gguf_path}")
 
             reader = gguf.GGUFReader(gguf_path, 'r')
-            
-            # Find the vocabulary
-            vocab = None
-            for field in reader.fields.values():
-                if field.name == 'tokenizer.ggml.tokens':
-                    vocab = field.parts[field.part_count -1]
-                    break
-            
-            if vocab:
+
+            # Find the vocabulary using the updated GGUF API
+            field = reader.get_field('tokenizer.ggml.tokens')
+
+            if field and hasattr(field, 'data'):
+                # New API: data attribute contains the vocabulary
+                vocab = field.data
                 self.tokenizer = GGUFTokenizer(vocab)
                 self._vocab_size = self.tokenizer.vocab_size
                 print(f"✓ Tokenizer loaded from GGUF file. Vocab size: {self._vocab_size}")
+            elif field and hasattr(field, 'parts'):
+                # Old API fallback: try parts
+                vocab = field.parts[-1] if field.parts else None
+                if vocab:
+                    self.tokenizer = GGUFTokenizer(vocab)
+                    self._vocab_size = self.tokenizer.vocab_size
+                    print(f"✓ Tokenizer loaded from GGUF file. Vocab size: {self._vocab_size}")
+                else:
+                    raise RuntimeError("Could not extract vocabulary from GGUF field.")
             else:
                 raise RuntimeError("Could not find vocabulary in GGUF file.")
 
@@ -124,7 +189,7 @@ class OllamaEngine(LLMEngine):
         """Fallback for pseudo-tokenization if GGUF parsing fails."""
         print("Warning: GGUF parsing failed. Falling back to pseudo-tokenization.")
         self._vocab_size = 32000
-        self.tokenizer = None
+        self.tokenizer = PseudoTokenizer(self._vocab_size)
 
     def get_vocabulary_size(self) -> int:
         """Return the vocabulary size."""
@@ -203,12 +268,23 @@ class OllamaEngine(LLMEngine):
             result = response.json()
             generated_text = result.get("response", "")
 
+            # Extract the next token from generated text
+            next_token_text = generated_text.strip().split()[0] if generated_text.strip() else ""
+
+            if not next_token_text:
+                # Fallback to a default token if generation is empty
+                next_token_text = " "
+
             if self.tokenizer:
-                next_token_id = self.tokenizer.encode(generated_text)[0]
-            else: # Fallback
-                next_token_text = generated_text.strip().split()[0] if generated_text.strip() else ""
+                encoded = self.tokenizer.encode(next_token_text)
+                next_token_id = encoded[0] if encoded else hash(next_token_text) % self._vocab_size
+            else:
                 next_token_id = hash(next_token_text) % self._vocab_size
-                self._vocab_cache[next_token_id] = next_token_text
+
+            # Cache the token
+            self._vocab_cache[next_token_id] = next_token_text
+            if isinstance(self.tokenizer, PseudoTokenizer):
+                self.tokenizer.cache_token(next_token_id, next_token_text)
 
             # Create synthetic logits (since Ollama doesn't expose them)
             vocab_size = self.get_vocabulary_size()
@@ -331,8 +407,13 @@ class OllamaEngine(LLMEngine):
 
     def get_vocab(self) -> Dict[str, int]:
         """Get the model's vocabulary."""
-        # Return the cached vocabulary
-        return {v: k for k, v in self._vocab_cache.items()}
+        if self.tokenizer and hasattr(self.tokenizer, 'get_vocab'):
+            return self.tokenizer.get_vocab()
+        # Return the cached vocabulary or a pseudo-vocab for fallback
+        if self._vocab_cache:
+            return {v: k for k, v in self._vocab_cache.items()}
+        # Return a minimal pseudo-vocabulary for compatibility
+        return {f"<token_{i}>": i for i in range(min(1000, self._vocab_size or 32000))}
 
     # KV cache bridging: Using default "not supported" implementations from base class
 
