@@ -70,5 +70,7 @@ EngineFactory: Initializing engine '{engine_name_lower}' with model '{model_iden
             from src.engines.vllm_engine import VLLMEngine
         except ImportError as e:
             raise RuntimeError(f"vLLM dependencies missing. Install with `pip install -r requirements-vllm.txt`. Original error: {e}")
+        try: from src.engines.vllm_engine import VLLMEngine
+        except ImportError as e: raise RuntimeError(f"vLLM engine dependencies missing. Install with `pip install vllm`. Original error: {e}")
         return VLLMEngine(model_identifier, effective_engine_config)
     else: raise ValueError(f"Unsupported engine: '{engine_name}'. Choose from: {', '.join(SUPPORTED_ENGINES)}")

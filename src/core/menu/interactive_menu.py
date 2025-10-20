@@ -6,7 +6,9 @@ from typing import Optional, Dict, Any, List, Tuple
 from src.core import config as cfg
 from src.ui import components as uic
 from src.core.menu import interactive_prompts as prompts
-from src.core.models.model_catalog import ModelSelector, get_model_info, get_smallest_model
+from src.core.menu.unified_model_selector import UnifiedModelSelector
+from src.core.models.model_catalog import get_smallest_model
+
 from src.core.hardware.gpu_discovery import get_gpu_info, format_gpu_info
 
 
@@ -576,111 +578,15 @@ class InteractiveMenu:
         return config
 
     def _select_model_interactively(self, for_comparison: bool = False) -> Dict[str, Any]:
-        """Interactive model selection with enhanced catalog."""
-        config = {}
+        """Interactive model selection using the unified selector."""
+        selector = UnifiedModelSelector()
+        selected_config = selector.select_model()
 
-        # Check if Ollama models are available
-        ollama_available = self._check_ollama_availability()
-        hf_authenticated = self._check_huggingface_auth()
-
-        # Engine selection with smart defaults
-        print("\n🚀 Select Engine:")
-        print("  1. llama.cpp (GGUF models - local Ollama, HuggingFace, files)")
-        if ollama_available:
-            print("     ✓ Ollama models detected - will use llama.cpp")
-        print("  2. PyTorch (HuggingFace Transformers)")
-        if not hf_authenticated:
-            print("     ⚠️  May require HuggingFace authentication for some models")
-        print("  3. TensorFlow (experimental)")
-        print("  4. JAX (experimental)")
-        print("  5. ONNX Runtime (experimental)")
-        print("  6. MLX (Apple Silicon, experimental)")
-        print("  7. Custom engine")
-
-        # Suggest best default based on availability
-        if ollama_available:
-            default_choice = "1"
-            suggestion = " (llama.cpp recommended - local GGUF models detected)"
-        elif hf_authenticated:
-            default_choice = "2"
-            suggestion = " (PyTorch recommended)"
-        else:
-            default_choice = "1"
-            suggestion = " (llama.cpp recommended)"
-
-        engine_choice = prompts.get_user_input(
-            f"Select engine (1-7, default: {default_choice}){suggestion}",
-            valid_choices=["1", "2", "3", "4", "5", "6", "7", ""],
-            allow_empty=True
-        )
-
-        engine_map = {
-            "1": "llamacpp",
-            "2": "pytorch",
-            "3": "tensorflow",
-            "4": "jax",
-            "5": "onnx",
-            "6": "mlx"
-        }
-
-        # Set smart default
-        default_engine = engine_map.get(default_choice, "llamacpp")
-        engine_map[""] = default_engine
-
-        if engine_choice == "7":
-            config['engine'] = prompts.get_user_input("Enter engine name", allow_empty=False)
-        else:
-            config['engine'] = engine_map.get(engine_choice, default_engine)
+        if selected_config:
+            return selected_config
         
-        # Model selection using the new catalog
-        print(f"\n📚 Select Model for {config['engine'].upper()} engine:")
-        
-        selector = ModelSelector(config['engine'])
-        selected_model = selector.select_model()
-        
-        if selected_model is None:
-            # User cancelled
-            return {}
-        
-        config['model'] = selected_model
-        
-        # Show model info if available
-        model_info = get_model_info(config['engine'], selected_model)
-        if model_info:
-            print(f"\n📋 Model Details:")
-            print(f"   Size: {model_info.size}")
-            print(f"   Memory: ~{model_info.memory_estimate}")
-            print(f"   Description: {model_info.description}")
-            if model_info.requires_auth:
-                print(f"   ⚠️  Note: Requires Hugging Face authentication")
-        
-        # Engine-specific configurations
-        if config['engine'] == 'onnx':
-            config['onnx_tokenizer'] = prompts.get_user_input(
-                "\nEnter tokenizer name/path (required for ONNX)",
-                allow_empty=False
-            )
-        elif config['engine'] == 'llamacpp':
-            gpu_layers = prompts.get_user_input(
-                "\nGPU layers to offload (-1 for all, default: -1)",
-                allow_empty=True
-            )
-            if gpu_layers:
-                try:
-                    config['llama_cpp_n_gpu_layers'] = int(gpu_layers)
-                except ValueError:
-                    config['llama_cpp_n_gpu_layers'] = -1
-            else:
-                config['llama_cpp_n_gpu_layers'] = -1
-        elif config['engine'] == 'mlx':
-            adapter = prompts.get_user_input(
-                "\nLoRA adapter path (optional, press Enter to skip)",
-                allow_empty=True
-            )
-            if adapter and adapter != "":
-                config['mlx_adapter_path'] = adapter
-        
-        return config
+        # Fallback or cancellation
+        return {}
     
     def _quick_play_classic(self) -> Dict[str, Any]:
         """Quick play classic mode with sensible defaults."""

@@ -123,6 +123,63 @@ class VLLMEngine(LLMEngine):
     def predict_next(
         self,
         input_ids: Any,
+import json
+import subprocess
+import os
+from typing import List, Tuple, Optional, Dict, Any
+
+import requests
+import numpy as np
+from transformers import AutoTokenizer
+
+from src.core.engine_interface import LLMEngine
+from src.engines import sampling_utils
+
+class VLLMEngine(LLMEngine):
+    """Engine for running models via vLLM."""
+
+    def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
+        super().__init__(model_name=model_name, engine_specific_config=engine_specific_config)
+        self.api_url = "http://localhost:8000"  # Default vLLM API server URL
+        self.server_process = None
+        self.tokenizer = None
+
+    def load(self):
+        """Start the vLLM server and load the model."""
+        print(f"VLLMEngine: Starting vLLM server for model '{self.model_name}'...")
+
+        # Start the vLLM server as a background process
+        vllm_command = [
+            "python", "-m", "vllm.entrypoints.api_server",
+            "--model", self.model_name,
+            "--host", "localhost",
+            "--port", "8000"
+        ]
+        self.server_process = subprocess.Popen(vllm_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Wait for the server to be ready
+        self._wait_for_server()
+
+        # Load the tokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        print("✓ Tokenizer loaded.")
+
+    def _wait_for_server(self, timeout=60):
+        """Wait for the vLLM server to be ready."""
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            try:
+                response = requests.get(f"{self.api_url}/health")
+                if response.status_code == 200:
+                    print("✓ vLLM server is ready.")
+                    return
+            except requests.ConnectionError:
+                time.sleep(1)
+        raise RuntimeError("vLLM server did not start within the timeout period.")
+
+    def predict_next(
+        self,
+        input_ids: List[int],
         attention_mask: Any,
         temperature: float,
         top_k: int,
@@ -130,6 +187,7 @@ class VLLMEngine(LLMEngine):
         output_attentions: bool = False,
         output_hidden_states: bool = False
     ) -> Dict[str, Any]:
+<<<<<<< HEAD
         """
         Predict next token using vLLM.
 
@@ -241,10 +299,36 @@ class VLLMEngine(LLMEngine):
             pipeline_results["top_probs"] = top_probs_vllm
 
         inference_time = time.time() - start_time
+=======
+        """Predict next token using the vLLM server."""
+        prompt = self.tokenizer.decode(input_ids[0])
+        
+        payload = {
+            "prompt": prompt,
+            "n": 1,
+            "temperature": temperature,
+            "top_k": top_k,
+            "top_p": top_p,
+            "max_tokens": 1,
+        }
+
+        response = requests.post(f"{self.api_url}/generate", json=payload)
+        response.raise_for_status()
+        
+        generated_text = response.json()["text"][0]
+        next_token_id = self.tokenizer.encode(generated_text)[0]
+
+        # Synthetic logits for compatibility
+        vocab_size = self.tokenizer.vocab_size
+        logits_raw = np.full(vocab_size, -10.0, dtype=np.float32)
+        logits_raw[next_token_id] = 1.0
+        probs_raw = sampling_utils.softmax(logits_raw)
+>>>>>>> 0e7269d (.)
 
         return {
             "next_token_id": next_token_id,
             "logits_raw": logits_raw,
+<<<<<<< HEAD
             "logits_processed": pipeline_results["logits_processed_np"],
             "probabilities_raw": sampling_utils.softmax(logits_raw),
             "probabilities_temp": sampling_utils.softmax(pipeline_results["logits_temp_np"]),
@@ -424,3 +508,40 @@ class VLLMEngine(LLMEngine):
         if torch.cuda.is_available():
             return "cuda"
         return "cpu"
+=======
+            "logits_processed": logits_raw,
+            "probabilities": probs_raw,
+            "probabilities_raw": probs_raw,
+            "probabilities_temp": probs_raw,
+            "probabilities_top_k": probs_raw,
+            "probabilities_processed": probs_raw,
+            "top_tokens_processed": [self.tokenizer.decode([next_token_id])],
+            "top_probs_processed": [1.0],
+            "top_token_ids_processed": [next_token_id],
+            "attention": None,
+            "hidden_states": None,
+            "forward_time": 0,
+        }
+
+    def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[List[List[int]], None]:
+        """Encode text to token IDs."""
+        return self.tokenizer.encode(text, add_special_tokens=add_special_tokens), None
+
+    def decode(self, token_ids: Any, skip_special_tokens: bool = False) -> str:
+        """Decode token IDs to text."""
+        return self.tokenizer.decode(token_ids, skip_special_tokens=skip_special_tokens)
+
+    def get_vocabulary_size(self) -> int:
+        """Return the vocabulary size."""
+        return self.tokenizer.vocab_size
+
+    def get_token_text(self, token_id: int) -> str:
+        """Get text representation of a token ID."""
+        return self.tokenizer.decode([token_id])
+    
+    def __del__(self):
+        """Cleanup the server process."""
+        if self.server_process:
+            self.server_process.terminate()
+            self.server_process.wait()
+>>>>>>> 0e7269d (.)
