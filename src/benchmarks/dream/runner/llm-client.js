@@ -4,22 +4,30 @@
  */
 
 export class LLMClient {
-  constructor(providers) {
+  constructor(providers, options = {}) {
     this.providers = providers;
+    // Default temperature for variation across runs (1.0)
+    // Use 0.0 for fully deterministic outputs
+    this.temperature = options.temperature ?? 1.0;
   }
 
   /**
    * Complete a prompt using the specified provider
+   * @param {Object} provider - Provider configuration
+   * @param {string} prompt - The prompt to complete
+   * @param {Object} options - Optional overrides (e.g., temperature)
    */
-  async complete(provider, prompt) {
+  async complete(provider, prompt, options = {}) {
+    const temperature = options.temperature ?? this.temperature;
+
     if (provider.name.startsWith('openai')) {
-      return await this.completeOpenAI(provider, prompt);
+      return await this.completeOpenAI(provider, prompt, temperature);
     } else if (provider.name.startsWith('anthropic')) {
-      return await this.completeAnthropic(provider, prompt);
+      return await this.completeAnthropic(provider, prompt, temperature);
     } else if (provider.name.startsWith('google') || provider.name.startsWith('gemini')) {
-      return await this.completeGemini(provider, prompt);
+      return await this.completeGemini(provider, prompt, temperature);
     } else if (provider.name.startsWith('ollama')) {
-      return await this.completeOllama(provider, prompt);
+      return await this.completeOllama(provider, prompt, temperature);
     } else {
       throw new Error(`Unknown provider: ${provider.name}`);
     }
@@ -28,7 +36,7 @@ export class LLMClient {
   /**
    * Call OpenAI API
    */
-  async completeOpenAI(provider, prompt) {
+  async completeOpenAI(provider, prompt, temperature) {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -47,7 +55,7 @@ export class LLMClient {
             content: prompt
           }
         ],
-        temperature: 0.2,
+        temperature,
         max_tokens: 4000
       })
     });
@@ -67,7 +75,7 @@ export class LLMClient {
   /**
    * Call Anthropic API
    */
-  async completeAnthropic(provider, prompt) {
+  async completeAnthropic(provider, prompt, temperature) {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -84,7 +92,7 @@ export class LLMClient {
             content: prompt
           }
         ],
-        temperature: 0.2
+        temperature
       })
     });
 
@@ -103,7 +111,7 @@ export class LLMClient {
   /**
    * Call Google Gemini API
    */
-  async completeGemini(provider, prompt) {
+  async completeGemini(provider, prompt, temperature) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${provider.model}:generateContent?key=${provider.apiKey}`;
 
     const response = await fetch(url, {
@@ -122,7 +130,7 @@ export class LLMClient {
           }
         ],
         generationConfig: {
-          temperature: 0.2,
+          temperature,
           maxOutputTokens: 4000
         }
       })
@@ -149,7 +157,7 @@ export class LLMClient {
   /**
    * Call Ollama local API
    */
-  async completeOllama(provider, prompt) {
+  async completeOllama(provider, prompt, temperature) {
     const url = `${provider.baseUrl}/api/generate`;
 
     const response = await fetch(url, {
@@ -162,7 +170,7 @@ export class LLMClient {
         prompt: `You are an expert programmer. Provide concise, accurate code solutions.\n\n${prompt}`,
         stream: false,
         options: {
-          temperature: 0.2,
+          temperature,
           num_predict: 4000
         }
       })

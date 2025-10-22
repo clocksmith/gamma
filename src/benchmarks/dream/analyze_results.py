@@ -26,6 +26,7 @@ class BenchmarkAnalyzer:
         if not self.results_file.exists():
             print(f"Error: Results file not found at {self.results_file}")
             sys.exit(1)
+        self.raw_data = None  # Store raw JSON for code variation analysis
         self.df = self._load_and_process_results()
 
     def _load_and_process_results(self) -> pd.DataFrame:
@@ -33,16 +34,37 @@ class BenchmarkAnalyzer:
         with open(self.results_file) as f:
             data = json.load(f)
 
+        self.raw_data = data  # Store for code variation analysis
+
         processed_records = []
         for record in data:
             if not record.get('success'):
                 continue
 
-            eval_data = record.get('evaluation', {})
-            scores = eval_data.get('scores', {})
-            metrics = eval_data.get('metrics', {})
-            advanced_metrics = eval_data.get('advancedMetrics', {})
-            complexity = metrics.get('complexity', {})
+            # New structure: benchmarks at top level
+            benchmarks = record.get('benchmarks', {})
+            code_size = benchmarks.get('codeSizeMetrics', {})
+            complexity = benchmarks.get('complexity', {})
+            auto_rater = benchmarks.get('autoRater', {})
+            completeness = benchmarks.get('completeness', {})
+            ref_comparison = benchmarks.get('referenceComparison', {})
+
+            # Calculate runtime performance average if available
+            runtime_perf = benchmarks.get('runtimePerformance')
+            avg_runtime_ms = 0
+            if runtime_perf and isinstance(runtime_perf, list) and len(runtime_perf) > 0:
+                # Filter out None values and calculate mean
+                valid_times = [p.get('meanTimeMs', 0) for p in runtime_perf if p.get('meanTimeMs') is not None]
+                if valid_times:
+                    avg_runtime_ms = np.mean(valid_times)
+
+            # Calculate aggregate score from available metrics
+            accuracy_score = benchmarks.get('accuracyScore', 0)
+            auto_rater_score = auto_rater.get('score', 0) if isinstance(auto_rater, dict) else 0
+            completeness_score = completeness.get('score', 0) if isinstance(completeness, dict) else 0
+
+            # Weighted total score: accuracy (50%), auto-rater (30%), completeness (20%)
+            total_score = (accuracy_score * 0.5) + (auto_rater_score * 0.3) + (completeness_score * 0.2)
 
             flat_record = {
                 'provider': record.get('provider'),
@@ -51,26 +73,26 @@ class BenchmarkAnalyzer:
                 'category': record.get('category'),
                 'run': record.get('run', 1),
                 'duration_ms': record.get('duration'),
-                'score': eval_data.get('totalScore', 0),
-                'accuracy': scores.get('accuracy', 0),
-                'performance': scores.get('performance', 0),
-                'code_quality': scores.get('codeQuality', 0),
-                'completeness': scores.get('completeness', 0),
+                'score': total_score,
+                'accuracy': accuracy_score,
+                'performance': 1.0 - min(avg_runtime_ms / 1000.0, 1.0) if avg_runtime_ms > 0 else 0.5,  # Normalize runtime to 0-1
+                'code_quality': auto_rater_score,
+                'completeness': completeness_score,
                 # Advanced LLM metrics
-                'f1_score': advanced_metrics.get('f1Score', np.nan),
-                'precision': advanced_metrics.get('precision', np.nan),
-                'recall': advanced_metrics.get('recall', np.nan),
-                'edit_similarity': advanced_metrics.get('editSimilarity', np.nan),
-                'ast_similarity': advanced_metrics.get('astSimilarity', np.nan),
+                'f1_score': np.nan,  # Not currently calculated
+                'precision': np.nan,  # Not currently calculated
+                'recall': np.nan,  # Not currently calculated
+                'edit_similarity': ref_comparison.get('editSimilarity', np.nan),
+                'ast_similarity': ref_comparison.get('astSimilarity', np.nan),
                 # Token metrics
-                'input_tokens': metrics.get('tokenMetrics', {}).get('inputTokens', 0),
-                'output_tokens': metrics.get('tokenMetrics', {}).get('outputTokens', 0),
-                'total_tokens': metrics.get('tokenMetrics', {}).get('totalTokens', 0),
-                'tokens_per_sec': metrics.get('tokenMetrics', {}).get('tokensPerSecond', 0),
+                'input_tokens': code_size.get('inputTokens', 0),
+                'output_tokens': code_size.get('outputTokens', 0),
+                'total_tokens': code_size.get('tokensUsed', 0),
+                'tokens_per_sec': 0,  # Not currently calculated
                 # Code metrics
-                'code_lines': metrics.get('codeLength', {}).get('codeLines', 0),
-                'total_lines': metrics.get('codeLength', {}).get('totalLines', 0),
-                'comment_lines': metrics.get('codeLength', {}).get('commentLines', 0),
+                'code_lines': code_size.get('codeLines', 0),
+                'total_lines': code_size.get('totalLines', 0),
+                'comment_lines': code_size.get('commentLines', 0),
                 # Complexity metrics
                 'cyclomatic_complexity': complexity.get('cyclomaticComplexity', np.nan),
                 'halstead_difficulty': complexity.get('halsteadDifficulty', np.nan),
@@ -78,6 +100,8 @@ class BenchmarkAnalyzer:
                 'halstead_effort': complexity.get('halsteadEffort', np.nan),
                 'maintainability_index': complexity.get('maintainabilityIndex', np.nan),
                 'max_nesting_depth': complexity.get('maxNestingDepth', np.nan),
+                # Runtime performance
+                'avg_runtime_ms': avg_runtime_ms,
             }
             processed_records.append(flat_record)
 
@@ -200,6 +224,7 @@ class BenchmarkAnalyzer:
         self._plot_f1_precision_recall(viz_path)
         self._plot_complexity_metrics(viz_path)
         self._plot_pass_at_k(viz_path)
+        self._plot_code_variation(viz_path)
 
         print(f"\n✓ All visualizations saved to {viz_path}/")
 
@@ -666,6 +691,151 @@ class BenchmarkAnalyzer:
         plt.savefig(output_dir / 'pass_at_k.png', dpi=300, bbox_inches='tight')
         plt.close()
         print("  ✓ pass_at_k.png")
+
+    def _plot_code_variation(self, output_dir: Path):
+        """Plot code variation metrics for multi-run benchmarks."""
+        if not self.raw_data:
+            print("  ⚠ Skipping code variation plot (no raw data)")
+            return
+
+        # Extract code variation data from raw JSON
+        variation_data = []
+        for record in self.raw_data:
+            if not record.get('success'):
+                continue
+
+            code_var = record.get('codeVariation')
+            if code_var and isinstance(code_var, dict):
+                variation_data.append({
+                    'task': record.get('taskName'),
+                    'provider': record.get('provider'),
+                    'variant': record.get('variant'),
+                    'total_samples': code_var.get('totalSamples', 0),
+                    'unique_outputs': code_var.get('uniqueOutputs', 0),
+                    'duplicate_rate': code_var.get('duplicateRate', 0),
+                    'avg_similarity': code_var.get('avgSimilarity', 0)
+                })
+
+        if not variation_data:
+            print("  ⚠ Skipping code variation plot (no multi-run data)")
+            return
+
+        df_var = pd.DataFrame(variation_data)
+
+        # Create 2x2 grid of plots
+        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+        # 1. Duplicate Rate by Task/Variant
+        pivot_dup = df_var.pivot_table(
+            values='duplicate_rate',
+            index='task',
+            columns='variant',
+            aggfunc='mean'
+        )
+
+        if not pivot_dup.empty:
+            sns.heatmap(
+                pivot_dup * 100,
+                annot=True,
+                fmt='.1f',
+                cmap='YlOrRd',
+                ax=axes[0, 0],
+                cbar_kws={'label': 'Duplicate Rate (%)'},
+                vmin=0,
+                vmax=100
+            )
+            axes[0, 0].set_title('Duplicate Rate: % Identical Code Across Runs', fontsize=14, weight='bold')
+            axes[0, 0].set_xlabel('Variant')
+            axes[0, 0].set_ylabel('Task')
+        else:
+            axes[0, 0].text(0.5, 0.5, 'No data', ha='center', va='center', transform=axes[0, 0].transAxes)
+
+        # 2. Code Similarity Heatmap
+        pivot_sim = df_var.pivot_table(
+            values='avg_similarity',
+            index='task',
+            columns='variant',
+            aggfunc='mean'
+        )
+
+        if not pivot_sim.empty:
+            sns.heatmap(
+                pivot_sim * 100,
+                annot=True,
+                fmt='.1f',
+                cmap='viridis',
+                ax=axes[0, 1],
+                cbar_kws={'label': 'Avg Similarity (%)'},
+                vmin=0,
+                vmax=100
+            )
+            axes[0, 1].set_title('Average Code Similarity Between Runs', fontsize=14, weight='bold')
+            axes[0, 1].set_xlabel('Variant')
+            axes[0, 1].set_ylabel('Task')
+        else:
+            axes[0, 1].text(0.5, 0.5, 'No data', ha='center', va='center', transform=axes[0, 1].transAxes)
+
+        # 3. Unique Outputs Distribution
+        if len(df_var) > 0:
+            df_var['diversity_rate'] = (df_var['unique_outputs'] / df_var['total_samples']) * 100
+
+            for variant in df_var['variant'].unique():
+                data = df_var[df_var['variant'] == variant]['diversity_rate']
+                axes[1, 0].hist(data, alpha=0.6, label=variant, bins=10, edgecolor='black')
+
+            axes[1, 0].set_xlabel('Diversity Rate (% Unique Outputs)', fontsize=12)
+            axes[1, 0].set_ylabel('Frequency', fontsize=12)
+            axes[1, 0].set_title('Distribution of Code Diversity Across Tasks', fontsize=14, weight='bold')
+            axes[1, 0].legend()
+            axes[1, 0].grid(True, alpha=0.3, axis='y')
+            axes[1, 0].set_xlim([0, 105])
+
+        # 4. Variation Summary by Variant
+        if len(df_var) > 0:
+            summary = df_var.groupby('variant').agg({
+                'duplicate_rate': 'mean',
+                'avg_similarity': 'mean',
+                'unique_outputs': 'mean'
+            }).reset_index()
+
+            x = np.arange(len(summary))
+            width = 0.25
+
+            bars1 = axes[1, 1].bar(
+                x - width,
+                summary['duplicate_rate'] * 100,
+                width,
+                label='Duplicate Rate',
+                color='coral'
+            )
+            bars2 = axes[1, 1].bar(
+                x,
+                summary['avg_similarity'] * 100,
+                width,
+                label='Avg Similarity',
+                color='skyblue'
+            )
+            bars3 = axes[1, 1].bar(
+                x + width,
+                (summary['unique_outputs'] / df_var['total_samples'].max()) * 100,
+                width,
+                label='Diversity (normalized)',
+                color='lightgreen'
+            )
+
+            axes[1, 1].set_xlabel('Variant', fontsize=12)
+            axes[1, 1].set_ylabel('Percentage (%)', fontsize=12)
+            axes[1, 1].set_title('Code Variation Metrics by Variant', fontsize=14, weight='bold')
+            axes[1, 1].set_xticks(x)
+            axes[1, 1].set_xticklabels(summary['variant'], rotation=45, ha='right')
+            axes[1, 1].legend()
+            axes[1, 1].grid(True, alpha=0.3, axis='y')
+            axes[1, 1].set_ylim([0, 105])
+
+        plt.tight_layout()
+        plt.savefig(output_dir / 'code_variation.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        print("  ✓ code_variation.png")
 
 def main():
     args = sys.argv[1:]

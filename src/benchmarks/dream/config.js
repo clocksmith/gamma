@@ -74,38 +74,32 @@ export const BenchmarkConfig = {
     }
   ],
 
-  // Language variants to test
-  //
-  // PROMPT QUALITY LEVELS:
-  // Tasks now support prompt quality levels to test LLM performance with varying instruction clarity.
-  // Use format: {language}-{level}, e.g., 'typescript-expert', 'javascript-novice'
-  //
-  // Available levels:
-  //   - novice: Minimal instruction (e.g., "make fibonacci")
-  //   - beginner: Basic instruction (e.g., "create a fibonacci function")
-  //   - intermediate: More detailed (e.g., "write a function to calculate fibonacci numbers")
-  //   - advanced: Specific with function name and parameters
-  //   - expert: Complete detailed instructions with language-specific requirements
-  //
-  // Supported languages: typescript, javascript, javascript-jsdoc
-  //
-  // Legacy variants (code style variations) are still supported for backward compatibility
+  // DECOUPLED DIMENSIONS FOR FLEXIBLE BENCHMARKING
+  // Language, prompt level, framework, and code style are now separate
+  // This allows independent control and better analysis
+
+  // Core languages to test
+  languages: ['javascript', 'typescript', 'javascript-jsdoc'],
+
+  // Prompt quality levels (instruction clarity)
+  promptLevels: ['novice', 'beginner', 'intermediate', 'advanced', 'expert'],
+
+  // Frameworks (optional, task-specific)
+  frameworks: ['vanilla', 'react', 'node'],
+
+  // Code style preferences (optional)
+  codeStyles: ['default', 'no-comments', 'documented', 'inline-comments'],
+
+  // Default temperature for LLM sampling (1.0 for good variation, 0.0 for deterministic)
+  temperature: 1.0,
+
+  // Legacy variants array (backward compatibility)
+  // These are auto-generated from combinations or can be specified manually
   variants: [
     // Default variants (use 'expert' level prompts)
     'javascript',
     'typescript',
     'javascript-jsdoc',
-
-    // Prompt quality level variants (examples)
-    // Uncomment to test specific prompt quality levels:
-    // 'typescript-novice',
-    // 'typescript-beginner',
-    // 'typescript-intermediate',
-    // 'typescript-advanced',
-    // 'typescript-expert',
-    // 'javascript-novice',
-    // 'javascript-expert',
-    // 'javascript-jsdoc-expert',
 
     // Legacy code style variants (backward compatibility)
     'javascript-no-comments',
@@ -321,5 +315,120 @@ export const BenchmarkConfig = {
   getVariantsForLanguage(language) {
     const levels = ['novice', 'beginner', 'intermediate', 'advanced', 'expert'];
     return levels.map(level => `${language}-${level}`);
+  },
+
+  /**
+   * Generate variant combinations from separate dimensions
+   * @param {Object} options - Options for generating combinations
+   * @returns {Array} Array of variant configuration objects
+   */
+  generateCombinations(options = {}) {
+    const {
+      languages = this.languages,
+      promptLevels = ['expert'], // Default to expert only
+      frameworks = [],
+      codeStyles = []
+    } = options;
+
+    const combinations = [];
+
+    for (const language of languages) {
+      for (const promptLevel of promptLevels) {
+        // Base combination
+        const base = {
+          language,
+          promptLevel,
+          variantString: `${language}-${promptLevel}`
+        };
+
+        if (frameworks.length === 0 && codeStyles.length === 0) {
+          combinations.push(base);
+        } else {
+          // Add framework variations
+          for (const framework of (frameworks.length > 0 ? frameworks : [''])) {
+            for (const codeStyle of (codeStyles.length > 0 ? codeStyles : [''])) {
+              const variant = { ...base };
+              if (framework) variant.framework = framework;
+              if (codeStyle) variant.codeStyle = codeStyle;
+
+              // Update variant string
+              const parts = [language, promptLevel];
+              if (framework) parts.push(framework);
+              if (codeStyle) parts.push(codeStyle);
+              variant.variantString = parts.join('-');
+
+              combinations.push(variant);
+            }
+          }
+        }
+      }
+    }
+
+    return combinations;
+  },
+
+  /**
+   * Parse a legacy variant string into separate dimensions
+   * E.g., "typescript-expert" → {language: 'typescript', promptLevel: 'expert'}
+   * E.g., "javascript-react-novice" → {language: 'javascript', framework: 'react', promptLevel: 'novice'}
+   */
+  parseVariantString(variantString) {
+    if (!variantString) return null;
+
+    const parts = variantString.split('-');
+    const result = {
+      variantString,
+      language: null,
+      promptLevel: null,
+      framework: null,
+      codeStyle: null
+    };
+
+    // Identify prompt level (always last if present)
+    const lastPart = parts[parts.length - 1];
+    if (this.promptLevels.includes(lastPart)) {
+      result.promptLevel = lastPart;
+      parts.pop();
+    } else {
+      // Default to expert if no level specified
+      result.promptLevel = 'expert';
+    }
+
+    // Identify language (first part or combination)
+    if (parts[0] === 'javascript' && parts[1] === 'jsdoc') {
+      result.language = 'javascript-jsdoc';
+      parts.splice(0, 2);
+    } else if (this.languages.includes(parts[0])) {
+      result.language = parts[0];
+      parts.shift();
+    } else if (parts[0] === 'react' && this.languages.includes('typescript')) {
+      // Special case: react-typescript-...
+      result.language = 'typescript';
+      result.framework = 'react';
+      parts.shift();
+    }
+
+    // Remaining parts could be framework or code style
+    for (const part of parts) {
+      if (this.frameworks.includes(part)) {
+        result.framework = part;
+      } else if (this.codeStyles.includes(part) || ['no-comments', 'inline-comments', 'tsdoc', 'jsdoc', 'untested', 'tested', 'vanilla-web'].includes(part)) {
+        result.codeStyle = part;
+      }
+    }
+
+    return result;
+  },
+
+  /**
+   * Convert dimension object back to variant string
+   */
+  toVariantString(dimensions) {
+    const parts = [];
+    if (dimensions.language) parts.push(dimensions.language);
+    if (dimensions.framework) parts.push(dimensions.framework);
+    if (dimensions.promptLevel) parts.push(dimensions.promptLevel);
+    if (dimensions.codeStyle) parts.push(dimensions.codeStyle);
+    return parts.join('-');
   }
 };

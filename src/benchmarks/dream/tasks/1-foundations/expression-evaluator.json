@@ -1,0 +1,120 @@
+{
+  "name": "expression-evaluator",
+  "description": "Parse and evaluate mathematical expressions with operator precedence",
+  "category": "1-foundations",
+  "difficulty": "hard",
+  "promptLevels": {
+    "novice": "calculate math expressions",
+    "beginner": "make a function that evaluates math expressions like \"2 + 3 * 4\"",
+    "intermediate": "create a function that parses and evaluates mathematical expressions with correct operator precedence",
+    "advanced": "write a function that takes a mathematical expression string and returns the computed result, handling addition, subtraction, multiplication, division, parentheses, and proper operator precedence",
+    "expert": "Write a function called `evaluate` that accepts a mathematical expression as a string and returns the numeric result. The function must support: 1) Binary operators: + (addition), - (subtraction), * (multiplication), / (division). 2) Parentheses for grouping: ( ). 3) Correct operator precedence: * and / have higher precedence than + and -. 4) Evaluation should be left-to-right for operators of the same precedence. 5) Negative numbers (e.g., \"-5 + 3\"). 6) Whitespace should be ignored. Example: evaluate(\"2 + 3 * (4 - 1)\") should return 11. The expression will be well-formed (no syntax errors to handle). {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with proper type annotations. Write a single-file implementation with NO imports from other files. The function signature should be: function evaluate(expression: string): number. Implement all tokenization, parsing, and evaluation logic in this one file. You may use recursive descent parsing, operator precedence parsing, or the shunting yard algorithm. Export only the evaluate function.",
+    "javascript": "Use JavaScript. Write a single-file implementation with NO imports from other files. The function should be named evaluate and take a string parameter, returning a number. Implement all tokenization, parsing, and evaluation logic in this one file. Export the function as a named export. IMPORTANT: Do NOT include any import statements, console.log() examples, or usage demonstrations. Return ONLY the export function definition and nothing else.",
+    "javascript-jsdoc": "Use JavaScript with comprehensive JSDoc annotations. Write a single-file implementation with NO imports from other files. Include @param {string} expression, @returns {number}, and document the supported operators and precedence rules in the function description. Implement all logic in this one file. Export only the function."
+  },
+  "variants": {
+    "typescript": "Write a single-file TypeScript implementation with NO imports. Create a function called evaluate that parses and evaluates mathematical expressions. Support +, -, *, /, parentheses, and proper operator precedence. Include type annotations. Implement all parsing logic in this one file. Export only the evaluate function.",
+    "javascript": "Write a single-file JavaScript implementation with NO imports. Create a function called evaluate that parses and evaluates mathematical expressions. Support +, -, *, /, parentheses, and proper operator precedence. Implement all parsing logic in this one file. Export only the function with no usage examples. IMPORTANT: Do NOT add import statements or console.log() demonstrations.",
+    "javascript-jsdoc": "Write a single-file JavaScript implementation with NO imports. Create a function called evaluate with complete JSDoc type annotations. Parse and evaluate mathematical expressions supporting +, -, *, /, parentheses, and proper operator precedence. Implement all parsing logic in this one file. Document all parameters and return types. Export only the function. IMPORTANT: Do NOT add import statements or console.log() demonstrations."
+  },
+  "testCases": [
+    {
+      "test": "const result = evaluate('2 + 3'); console.assert(result === 5, 'simple addition should work');"
+    },
+    {
+      "test": "const result = evaluate('10 - 4'); console.assert(result === 6, 'simple subtraction should work');"
+    },
+    {
+      "test": "const result = evaluate('3 * 4'); console.assert(result === 12, 'simple multiplication should work');"
+    },
+    {
+      "test": "const result = evaluate('15 / 3'); console.assert(result === 5, 'simple division should work');"
+    },
+    {
+      "test": "const result = evaluate('2 + 3 * 4'); console.assert(result === 14, 'should respect operator precedence (* before +)');"
+    },
+    {
+      "test": "const result = evaluate('10 - 2 * 3'); console.assert(result === 4, 'should respect operator precedence (* before -)');"
+    },
+    {
+      "test": "const result = evaluate('(2 + 3) * 4'); console.assert(result === 20, 'parentheses should override precedence');"
+    },
+    {
+      "test": "const result = evaluate('2 + 3 * (4 - 1)'); console.assert(result === 11, 'complex expression with parentheses should work');"
+    },
+    {
+      "test": "const result = evaluate('((2 + 3) * 4) / 2'); console.assert(result === 10, 'nested parentheses should work');"
+    },
+    {
+      "test": "const result = evaluate('  5  +  3  '); console.assert(result === 8, 'should handle whitespace');"
+    },
+    {
+      "test": "const result = evaluate('-5 + 3'); console.assert(result === -2, 'should handle negative numbers');"
+    },
+    {
+      "test": "const result = evaluate('10 / 2 / 5'); console.assert(result === 1, 'should evaluate left-to-right for same precedence');"
+    },
+    {
+      "test": "const result = evaluate('100 - 50 - 20'); console.assert(result === 30, 'multiple subtractions should be left-to-right');"
+    },
+    {
+      "test": "const result = evaluate('2 * 3 + 4 * 5'); console.assert(result === 26, 'multiple high-precedence operators');"
+    }
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "simple-expression",
+      "code": "evaluate('2 + 3');",
+      "iterations": 10000,
+      "baselineTimeMs": 0.5,
+      "comment": "Tests parsing and evaluation overhead for simplest expressions"
+    },
+    {
+      "name": "precedence-expression",
+      "code": "evaluate('2 + 3 * 4 - 5');",
+      "iterations": 5000,
+      "baselineTimeMs": 0.8,
+      "comment": "Tests operator precedence handling efficiency"
+    },
+    {
+      "name": "parentheses-expression",
+      "code": "evaluate('(2 + 3) * (4 - 1)');",
+      "iterations": 5000,
+      "baselineTimeMs": 1.0,
+      "comment": "Tests parentheses parsing and evaluation"
+    },
+    {
+      "name": "complex-expression",
+      "code": "evaluate('((10 + 5) * 2 - 3) / (4 + 1)');",
+      "iterations": 3000,
+      "baselineTimeMs": 1.5,
+      "comment": "Tests complex nested expressions with multiple operators"
+    },
+    {
+      "name": "long-expression",
+      "code": "evaluate('1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10');",
+      "iterations": 3000,
+      "baselineTimeMs": 1.5,
+      "comment": "Tests efficiency with many sequential operations"
+    },
+    {
+      "name": "deeply-nested",
+      "code": "evaluate('((((1 + 2) * 3) - 4) / 5)');",
+      "iterations": 3000,
+      "baselineTimeMs": 1.2,
+      "comment": "Tests deeply nested parentheses parsing"
+    }
+  ],
+  "requirements": [
+    "function",
+    "evaluate",
+    "expression",
+    "operators",
+    "precedence",
+    "parentheses",
+    "export"
+  ]
+}

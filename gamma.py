@@ -329,17 +329,84 @@ MIND MELD BENCHMARKS:
     --output results.json
 
 LANGUAGE BENCHMARKS:
-  gamma.py dream language \\
-    --task fibonacci \\
-    --iterations 1000
+  gamma.py dream language [options]
+
+  KEY OPTIONS (Dimension-based API):
+    -c, --category <name>       Category or group (foundations, backend, ui, ...)
+    -t, --task <name>           Specific task name
+    -p, --provider <name>       Provider (ollama-gpt-oss-20b, openai-gpt4, ...)
+    -l, --language <lang>       Languages to test (js, ts, jsdoc, all, or comma-separated)
+    --prompt-level <level>      Prompt quality levels (novice, beginner, intermediate,
+                                 advanced, expert, all, or comma-separated)
+    --all-prompt-levels         All 5 prompt levels (novice through expert)
+    --temperature <n>           LLM sampling temperature (0.0-2.0, default 1.0)
+                                 Use 0.0 for deterministic, higher for variation
+    --runs <n>                  Number of runs per variant (default: 1)
+    --help                      Show full language benchmark help
+
+  PROMPT QUALITY LEVELS:
+    Each task can be tested with 5 instruction clarity levels:
+    • novice       - Minimal instruction ("make fibonacci")
+    • beginner     - Basic instruction ("create a fibonacci function")
+    • intermediate - Moderate detail ("write a function to calculate fibonacci")
+    • advanced     - Specific with function names and parameters
+    • expert       - Complete detailed instructions with language-specific requirements
+
+  TEMPERATURE CONTROL:
+    • 0.0  = Deterministic (identical outputs across runs)
+    • 1.0  = Default (good variation for testing code diversity)
+    • 1.5+ = Maximum creativity (more unpredictable outputs)
 
 EXAMPLES:
   # Run mind meld benchmarks
   gamma.py dream mind-meld \\
     --models pytorch:google/gemma-2-2b-it pytorch:Qwen/Qwen2-7B-Instruct
 
-  # Language comparison benchmarks
-  gamma.py dream language --task all
+  # Test JS vs TS, all prompt levels, 5 runs each
+  gamma.py dream language \\
+    --category foundations \\
+    --language js,ts \\
+    --all-prompt-levels \\
+    --provider ollama-qwen3-30b \\
+    --runs 5
+
+  # Test prompt effectiveness: novice vs expert comparison
+  gamma.py dream language \\
+    --category foundations \\
+    --language js \\
+    --prompt-level novice,expert \\
+    --provider ollama-gpt-oss-20b \\
+    --runs 3
+
+  # High temperature for code variation analysis
+  gamma.py dream language \\
+    --category foundations \\
+    --language ts \\
+    --temperature 1.0 \\
+    --provider ollama-qwen3-30b \\
+    --runs 5
+
+  # Deterministic testing (zero temperature, reproducible results)
+  gamma.py dream language \\
+    --category foundations \\
+    --language js,ts \\
+    --prompt-level expert \\
+    --temperature 0.0 \\
+    --provider ollama-gpt-oss-120b \\
+    --runs 3
+
+  # Use mock responses for testing (dry mode)
+  gamma.py dream language \\
+    --task fibonacci \\
+    --language js,ts \\
+    --dry
+
+  # Legacy API still works (variant strings)
+  gamma.py dream language \\
+    --task fibonacci \\
+    --variant javascript-expert,typescript-expert \\
+    --provider ollama-qwen3-30b \\
+    --runs 5
 
   # Full DREAM suite
   gamma.py dream all --output results/

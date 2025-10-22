@@ -4,14 +4,18 @@
  */
 
 export class MockLLMClient {
-  constructor(providers) {
+  constructor(providers, options = {}) {
     this.providers = providers;
+    this.temperature = options.temperature ?? 1.0;
   }
 
   /**
    * Generate a mock response based on the task
+   * @param {Object} provider - Provider configuration
+   * @param {string} prompt - The prompt to complete
+   * @param {Object} options - Optional overrides (temperature is ignored in mock)
    */
-  async complete(provider, prompt) {
+  async complete(provider, prompt, options = {}) {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
 

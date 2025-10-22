@@ -213,29 +213,35 @@ async function main() {
     config.timeout = state.timeout;
   }
 
+  // Determine which temperatures to test
+  let temperatures = [];
+  if (plan.temperatures.length > 0) {
+    temperatures = plan.temperatures;
+  } else if (plan.temperature != null) {
+    temperatures = [plan.temperature];
+  } else {
+    temperatures = [1.0]; // Default temperature
+  }
+
   const providerLookup = new Map(config.providers.map(provider => [provider.name, provider]));
   const selectedProviderObjects = plan.providers
     .map(name => providerLookup.get(name))
     .filter(Boolean);
 
-  let dryRun = state.dryRun;
-  if (dryRun === null) {
-    dryRun = true;
-  }
+  // Use state.dryRun directly (defaults to false = live mode)
+  const dryRun = state.dryRun;
 
+  // Only warn if trying to use live mode without credentials
   if (!dryRun) {
     const hasCredentials = selectedProviderObjects.some(provider => provider.apiKey || provider.baseUrl);
     if (!hasCredentials) {
-      console.warn('⚠️  No API keys or Ollama base URL detected for selected providers. Using mock responses.');
-      dryRun = true;
+      console.warn('⚠️  Warning: No API keys or Ollama base URL detected for selected providers.');
+      console.warn('    Live mode will fail without proper configuration. Use --dry for mock responses.');
     }
-  } else if (state.dryRun === null) {
-    console.log('ℹ️  Defaulting to dry-run mode. Use --real to call live models.');
   }
 
   config.dryRun = Boolean(dryRun);
 
-  const runner = new BenchmarkRunner(config);
   const filters = {
     providers: plan.providers,
     variants: plan.variants,
@@ -275,15 +281,36 @@ async function main() {
   if (state.timeout) {
     console.log(`  Timeout override: ${state.timeout} ms`);
   }
+  if (temperatures.length > 1) {
+    console.log(`  Temperatures:     ${temperatures.join(', ')}`);
+  } else if (temperatures[0] !== undefined) {
+    console.log(`  Temperature:      ${temperatures[0]}`);
+  }
   console.log(`  Browser tasks:    ${state.includeBrowser ? 'enabled' : 'skipped (use --include-browser to enable)'}`);
-  console.log(`  Mode:             ${config.dryRun ? 'dry-run (mock responses)' : 'live model calls'}`);
+  console.log(`  Mode:             ${config.dryRun ? 'mock (use --dry flag to enable)' : 'live'}`);
   console.log('');
 
   try {
     if (config.dryRun) {
-      console.log('🔬 DRY RUN MODE - Using mock LLM responses\n');
+      console.log('🔬 MOCK MODE - Using simulated LLM responses\n');
     }
-    await runner.run(filters);
+
+    // Run benchmark for each temperature value
+    for (let tempIndex = 0; tempIndex < temperatures.length; tempIndex++) {
+      const temp = temperatures[tempIndex];
+
+      if (temperatures.length > 1) {
+        console.log(`\n${'='.repeat(80)}`);
+        console.log(`🌡️  Running with temperature: ${temp} (${tempIndex + 1}/${temperatures.length})`);
+        console.log('='.repeat(80) + '\n');
+      }
+
+      // Set temperature for this run
+      config.temperature = temp;
+      const runner = new BenchmarkRunner(config);
+
+      await runner.run(filters);
+    }
   } catch (error) {
     console.error('Benchmark failed:', error.message || error);
     if (error.stack) {
@@ -425,6 +452,10 @@ function createInitialState() {
     variants: new Set(),
     providers: new Set(),
     tasks: new Set(),
+    languages: new Set(),        // NEW: separate language tracking
+    promptLevels: new Set(),     // NEW: separate prompt level tracking
+    frameworks: new Set(),        // NEW: framework tracking
+    codeStyles: new Set(),        // NEW: code style tracking
     presetSelections: [],
     appliedPresetKeys: new Set(),
     preferredProviders: [],
@@ -436,9 +467,11 @@ function createInitialState() {
     autoPreset: true,
     includeBrowser: false,
     explicitIncludeBrowser: false,
-    dryRun: null,
+    dryRun: false,  // Default to live mode
     runs: null,
     timeout: null,
+    temperature: null,            // Single temperature value
+    temperatures: [],             // Multiple temperature values
     help: false,
     listPresets: false,
     listProviders: false,
@@ -533,6 +566,41 @@ function parseArgs(args, state) {
         addVariant('ts', state);
         state.autoPreset = false;
         break;
+      case '--language':
+      case '--lang':
+      case '-l':
+        i += 1;
+        addLanguageArg(args, i, arg, state);
+        state.autoPreset = false;
+        break;
+      case '--prompt-level':
+      case '--level':
+        i += 1;
+        addPromptLevelArg(args, i, arg, state);
+        state.autoPreset = false;
+        break;
+      case '--all-prompt-levels':
+        addAllPromptLevels(state);
+        state.autoPreset = false;
+        break;
+      case '--temperature':
+      case '--temp':
+        i += 1;
+        state.temperature = parseFloat(getArgValue(args, i, arg));
+        if (isNaN(state.temperature) || state.temperature < 0 || state.temperature > 2) {
+          throw new Error('--temperature must be a number between 0 and 2');
+        }
+        break;
+      case '--temperatures':
+      case '--temps':
+        i += 1;
+        addTemperaturesArg(args, i, arg, state);
+        break;
+      case '--temperature-range':
+      case '--temp-range':
+        i += 1;
+        addTemperatureRangeArg(args, i, arg, state);
+        break;
       case '--runs':
       case '-r':
         i += 1;
@@ -542,12 +610,10 @@ function parseArgs(args, state) {
         i += 1;
         state.timeout = parsePositiveInteger(getArgValue(args, i, arg), '--timeout');
         break;
+      case '--dry':
       case '--dry-run':
       case '--mock':
         state.dryRun = true;
-        break;
-      case '--real':
-        state.dryRun = false;
         break;
       case '--include-browser':
         state.includeBrowser = true;
@@ -712,6 +778,96 @@ function addProvider(value, state) {
   state.unknownProviders.push(value);
 }
 
+function addLanguageArg(args, index, flag, state) {
+  const value = getArgValue(args, index, flag);
+  const languages = value.split(',').map(lang => lang.trim().toLowerCase());
+
+  for (const lang of languages) {
+    if (lang === 'javascript' || lang === 'js') {
+      state.languages.add('javascript');
+    } else if (lang === 'typescript' || lang === 'ts') {
+      state.languages.add('typescript');
+    } else if (lang === 'javascript-jsdoc' || lang === 'jsdoc') {
+      state.languages.add('javascript-jsdoc');
+    } else if (lang === 'all') {
+      state.languages.add('javascript');
+      state.languages.add('typescript');
+      state.languages.add('javascript-jsdoc');
+      break;
+    } else {
+      throw new Error(`Unknown language: ${lang}. Use: js, ts, jsdoc, or all`);
+    }
+  }
+}
+
+function addPromptLevelArg(args, index, flag, state) {
+  const value = getArgValue(args, index, flag);
+  const levels = value.split(',').map(level => level.trim().toLowerCase());
+
+  const validLevels = ['novice', 'beginner', 'intermediate', 'advanced', 'expert'];
+
+  for (const level of levels) {
+    if (validLevels.includes(level)) {
+      state.promptLevels.add(level);
+    } else if (level === 'all') {
+      validLevels.forEach(l => state.promptLevels.add(l));
+      break;
+    } else {
+      throw new Error(`Unknown prompt level: ${level}. Use: novice, beginner, intermediate, advanced, expert, or all`);
+    }
+  }
+}
+
+function addAllPromptLevels(state) {
+  const levels = ['novice', 'beginner', 'intermediate', 'advanced', 'expert'];
+  levels.forEach(level => state.promptLevels.add(level));
+}
+
+function addTemperaturesArg(args, index, flag, state) {
+  const value = getArgValue(args, index, flag);
+  const temps = value.split(',').map(t => t.trim());
+
+  for (const temp of temps) {
+    const parsed = parseFloat(temp);
+    if (isNaN(parsed) || parsed < 0 || parsed > 2) {
+      throw new Error(`--temperatures values must be numbers between 0 and 2 (got: ${temp})`);
+    }
+    state.temperatures.push(parsed);
+  }
+}
+
+function addTemperatureRangeArg(args, index, flag, state) {
+  const value = getArgValue(args, index, flag);
+  const parts = value.split(',').map(p => p.trim());
+
+  if (parts.length !== 3) {
+    throw new Error(`--temperature-range requires start,end,step format (e.g., 0.0,1.5,0.5)`);
+  }
+
+  const [start, end, step] = parts.map(parseFloat);
+
+  if (isNaN(start) || isNaN(end) || isNaN(step)) {
+    throw new Error(`--temperature-range values must be numbers (got: ${value})`);
+  }
+
+  if (start < 0 || start > 2 || end < 0 || end > 2) {
+    throw new Error(`--temperature-range start and end must be between 0 and 2`);
+  }
+
+  if (step <= 0) {
+    throw new Error(`--temperature-range step must be > 0`);
+  }
+
+  if (start > end) {
+    throw new Error(`--temperature-range start must be <= end`);
+  }
+
+  // Generate temperature values
+  for (let temp = start; temp <= end; temp += step) {
+    state.temperatures.push(Math.round(temp * 100) / 100); // Round to 2 decimal places
+  }
+}
+
 function finalizePlan(state) {
   if (state.autoPreset) {
     applyCliPreset('basic', state, { source: 'auto' });
@@ -721,8 +877,35 @@ function finalizePlan(state) {
     state.categories.add('1-foundations');
   }
 
-  if (state.variants.size === 0) {
-    DEFAULT_VARIANT_PAIR.forEach(variant => state.variants.add(variant));
+  // Generate variant combinations from languages and prompt levels
+  let finalVariants = Array.from(state.variants);
+
+  // If user specified languages or prompt levels, generate combinations
+  if (state.languages.size > 0 || state.promptLevels.size > 0) {
+    const languages = state.languages.size > 0
+      ? Array.from(state.languages)
+      : ['javascript', 'typescript']; // Default languages
+
+    const promptLevels = state.promptLevels.size > 0
+      ? Array.from(state.promptLevels)
+      : ['expert']; // Default to expert level
+
+    // Generate combinations using BenchmarkConfig helper
+    const combinations = BenchmarkConfig.generateCombinations({
+      languages,
+      promptLevels,
+      frameworks: Array.from(state.frameworks),
+      codeStyles: Array.from(state.codeStyles)
+    });
+
+    // Add variant strings from combinations
+    const generatedVariants = combinations.map(c => c.variantString);
+    finalVariants = [...new Set([...finalVariants, ...generatedVariants])];
+  }
+
+  // If no variants at all, use defaults
+  if (finalVariants.length === 0) {
+    finalVariants = DEFAULT_VARIANT_PAIR;
   }
 
   const categories = Array.from(state.categories);
@@ -730,12 +913,11 @@ function finalizePlan(state) {
     state.includeBrowser = categories.some(category => BROWSER_CATEGORIES.has(category));
   }
 
-  const variants = Array.from(state.variants);
   const providers = resolveProviders(state);
   const tasks = Array.from(state.tasks);
 
   if (providers.length === 0) {
-    throw new Error('No providers available. Use --provider to select at least one known provider.');
+    throw new Error('Provider is required. Use --provider to specify a model (e.g., --provider ollama-qwen3-30b).\nAvailable providers: ' + PROVIDER_NAMES.join(', '));
   }
 
   const warnings = [];
@@ -752,7 +934,15 @@ function finalizePlan(state) {
     warnings.push(`Unknown provider alias(es): ${state.unknownProviders.join(', ')}`);
   }
 
-  return { categories, variants, providers, tasks, warnings };
+  return {
+    categories,
+    variants: finalVariants,
+    providers,
+    tasks,
+    warnings,
+    temperature: state.temperature, // Single temperature value
+    temperatures: state.temperatures // Multiple temperature values
+  };
 }
 
 function resolveProviders(state) {
@@ -765,18 +955,12 @@ function resolveProviders(state) {
     ordered.push(name);
   };
 
+  // Only use explicitly specified providers
   Array.from(state.providers).forEach(push);
-  if (ordered.length === 0) {
+
+  // If no providers specified, use preferred providers from presets (if any)
+  if (ordered.length === 0 && state.preferredProviders.length > 0) {
     state.preferredProviders.forEach(push);
-  }
-  if (ordered.length === 0) {
-    (PROVIDER_LOOKUP.recommended || []).forEach(push);
-  }
-  if (ordered.length === 0) {
-    (PROVIDER_LOOKUP.local || []).forEach(push);
-  }
-  if (ordered.length === 0) {
-    PROVIDER_NAMES.forEach(push);
   }
 
   return ordered;
@@ -926,19 +1110,53 @@ Key options:
   -v, --variant <name>                 Add variant or group (js, ts, docs, react, ...)
   -c, --category <name>                Add category or group (foundations, backend, ui, ...)
   -t, --task <name>                    Focus on specific task (repeatable)
-  --js-only | --ts-only               Restrict language family
+  --js-only | --ts-only               Restrict language family (legacy)
+
+Dimension-based API (NEW):
+  --language <lang>, -l <lang>        Languages to test (js, ts, jsdoc, all, or comma-separated)
+  --prompt-level <level>              Prompt quality levels (novice, beginner, intermediate,
+                                       advanced, expert, all, or comma-separated)
+  --all-prompt-levels                 All 5 prompt levels (novice through expert)
+  --temperature <n>, --temp <n>       LLM sampling temperature (0.0-2.0, default 1.0)
+                                       Use 0.0 for deterministic, higher for variation
+  --temperatures <list>, --temps <list>
+                                       Test multiple temperatures (comma-separated, e.g., 0.0,0.5,1.0)
+                                       Multiplies test runs by number of temperatures
+  --temperature-range <start,end,step>
+                                       Test temperature range (e.g., 0.0,1.5,0.5 tests 0.0, 0.5, 1.0, 1.5)
+
+Other options:
   --runs <n>                          Override run count (default 1)
   --timeout <ms>                      Override per task timeout
   --include-browser | --skip-browser  Control browser-based tasks
-  --dry-run | --mock                  Use mock LLM responses
-  --real                              Force live LLM calls
+  --dry, --dry-run, --mock            Use mock LLM responses (default: live mode)
   --list-presets | --list-providers | --list-variants | --list-categories | --list-tasks
   -h, --help                          Show this help message
 
 Examples:
-  node src/benchmarks/dream/index.js --extended --provider openai-gpt4 --runs 3
-  node src/benchmarks/dream/index.js --ui --include-browser --provider local --variant react
-  node src/benchmarks/dream/index.js --task fibonacci --provider ollama-gpt-oss-120b
+  # Test JS vs TS, all prompt levels, 5 runs each
+  node src/benchmarks/dream/index.js --category foundations --language js,ts --all-prompt-levels --provider ollama-qwen3-30b --runs 5
+
+  # Test prompt effectiveness: novice vs expert
+  node src/benchmarks/dream/index.js --category foundations --language js --prompt-level novice,expert --provider ollama-gpt-oss-20b --runs 3
+
+  # High temperature for code variation analysis
+  node src/benchmarks/dream/index.js --category foundations --language ts --temperature 1.0 --provider ollama-qwen3-30b --runs 5
+
+  # Deterministic testing (zero temperature)
+  node src/benchmarks/dream/index.js --category foundations --language js --temperature 0.0 --provider ollama-gpt-oss-120b
+
+  # Test multiple temperatures (multiplies test runs)
+  node src/benchmarks/dream/index.js --task fibonacci --language js --temperatures 0.0,0.5,1.0,1.5 --provider ollama-qwen3-30b --runs 3
+
+  # Temperature range testing
+  node src/benchmarks/dream/index.js --task expression-evaluator --language js,ts --temperature-range 0.0,2.0,0.5 --provider ollama-gpt-oss-20b
+
+  # Use mock responses for testing (dry mode)
+  node src/benchmarks/dream/index.js --task fibonacci --language js,ts --dry
+
+  # Legacy variant-based API still works
+  node src/benchmarks/dream/index.js --task fibonacci --variant javascript-expert,typescript-expert --provider ollama-qwen3-30b
 `);
 }
 

@@ -3,7 +3,47 @@
  * Generates reports from benchmark results
  */
 
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
+
 export class ReportGenerator {
+  constructor(config = {}) {
+    this.config = {
+      resultsDir: config.resultsDir || './results',
+      reportsDir: config.reportsDir || './reports',
+      runLabel: config.runLabel || null
+    };
+  }
+
+  /**
+   * Generate and save JSON report from results
+   */
+  async generate(results) {
+    if (!results || results.length === 0) {
+      console.log('No results to save');
+      return null;
+    }
+
+    try {
+      // Ensure reports directory exists
+      await mkdir(this.config.reportsDir, { recursive: true });
+
+      // Create filename with timestamp
+      const timestamp = this.config.runLabel || new Date().toISOString().replace(/[:.]/g, '-');
+      const filename = `benchmark-results-${timestamp}.json`;
+      const filePath = join(this.config.reportsDir, filename);
+
+      // Write results to file
+      await writeFile(filePath, JSON.stringify(results, null, 2), 'utf-8');
+
+      console.log(`\n📄 Results saved to: ${filePath}`);
+      return filePath;
+    } catch (error) {
+      console.warn(`Failed to save results: ${error.message}`);
+      return null;
+    }
+  }
+
   /**
    * Generate a basic text report from results
    */

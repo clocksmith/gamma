@@ -1,0 +1,88 @@
+{
+  "name": "lru-cache",
+  "description": "Implement a Least Recently Used (LRU) cache with O(1) operations",
+  "category": "1-foundations",
+  "difficulty": "hard",
+  "promptLevels": {
+    "novice": "make a cache that removes old items",
+    "beginner": "create a cache class that stores items and removes the least recently used one when full",
+    "intermediate": "implement an LRU cache with get and put methods that automatically evicts the least recently used item when capacity is reached",
+    "advanced": "write an LRUCache class with a capacity limit that supports get(key) and put(key, value) operations, where accessing or adding an item marks it as recently used, and when capacity is exceeded, the least recently used item is removed",
+    "expert": "Write an LRUCache class that implements a Least Recently Used cache with the following requirements: 1) Constructor accepts a capacity (number) parameter that sets the maximum number of items the cache can hold. 2) Method get(key) returns the value associated with the key if it exists, otherwise returns -1 or undefined. Accessing an item marks it as most recently used. 3) Method put(key, value) adds or updates a key-value pair. If the cache is at capacity when adding a new key, evict the least recently used item first. Both get() and put() operations must run in O(1) average time complexity. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with proper type annotations. The constructor should accept capacity as a number. Use generic types for keys and values (e.g., LRUCache<K, V>). The get method should return V | undefined. Export the class.",
+    "javascript": "Use JavaScript with ES6 classes. Implement using a Map for storage and maintain access order. Export the class as a named export.",
+    "javascript-jsdoc": "Use JavaScript with comprehensive JSDoc annotations including @template for generics, @class, @constructor, @param, @returns, and describe the O(1) complexity requirement in comments. Export the class."
+  },
+  "variants": {
+    "typescript": "Write a TypeScript LRUCache class with generic types for key and value. Include proper type annotations for all methods and properties. Both get() and put() must be O(1) time complexity. Use a combination of Map and doubly-linked list, or leverage Map's insertion order. Export only the class.",
+    "javascript": "Write a JavaScript LRUCache class that supports get() and put() operations in O(1) time. Use a Map to maintain insertion order or implement a doubly-linked list. Export only the class implementation with no usage examples.",
+    "javascript-jsdoc": "Write a JavaScript LRUCache class with complete JSDoc type annotations. Include @template for generic key/value types, document the O(1) complexity requirement, and provide @param and @returns for all methods. Export only the class."
+  },
+  "testCases": [
+    {
+      "test": "const cache = new LRUCache(2); cache.put(1, 'a'); cache.put(2, 'b'); const val = cache.get(1); console.assert(val === 'a', 'get should return correct value');"
+    },
+    {
+      "test": "const cache = new LRUCache(2); cache.put(1, 'a'); cache.put(2, 'b'); const val = cache.get(3); console.assert(val === undefined || val === -1, 'get should return undefined/-1 for non-existent key');"
+    },
+    {
+      "test": "const cache = new LRUCache(2); cache.put(1, 'a'); cache.put(2, 'b'); cache.put(3, 'c'); const val1 = cache.get(1); const val3 = cache.get(3); console.assert((val1 === undefined || val1 === -1) && val3 === 'c', 'should evict LRU item when at capacity');"
+    },
+    {
+      "test": "const cache = new LRUCache(2); cache.put(1, 'a'); cache.put(2, 'b'); cache.get(1); cache.put(3, 'c'); const val1 = cache.get(1); const val2 = cache.get(2); console.assert(val1 === 'a' && (val2 === undefined || val2 === -1), 'accessing item should mark it as recently used');"
+    },
+    {
+      "test": "const cache = new LRUCache(1); cache.put(1, 'a'); cache.put(1, 'b'); const val = cache.get(1); console.assert(val === 'b', 'put should update existing key');"
+    },
+    {
+      "test": "const cache = new LRUCache(3); cache.put('x', 10); cache.put('y', 20); cache.put('z', 30); cache.get('x'); cache.get('y'); cache.put('w', 40); const valZ = cache.get('z'); const valW = cache.get('w'); console.assert((valZ === undefined || valZ === -1) && valW === 40, 'should evict least recently used when all slots used');"
+    }
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "sequential-puts",
+      "code": "const cache = new LRUCache(100); for (let i = 0; i < 100; i++) { cache.put(i, `value${i}`); }",
+      "iterations": 1000,
+      "baselineTimeMs": 0.5,
+      "comment": "Tests put() operation efficiency when filling cache to capacity"
+    },
+    {
+      "name": "sequential-gets",
+      "code": "const cache = new LRUCache(100); for (let i = 0; i < 100; i++) { cache.put(i, `value${i}`); } for (let i = 0; i < 100; i++) { cache.get(i); }",
+      "iterations": 1000,
+      "baselineTimeMs": 0.8,
+      "comment": "Tests get() operation efficiency with full cache"
+    },
+    {
+      "name": "eviction-scenario",
+      "code": "const cache = new LRUCache(50); for (let i = 0; i < 100; i++) { cache.put(i, `value${i}`); }",
+      "iterations": 500,
+      "baselineTimeMs": 1.0,
+      "comment": "Tests eviction performance when exceeding capacity"
+    },
+    {
+      "name": "mixed-operations",
+      "code": "const cache = new LRUCache(100); for (let i = 0; i < 200; i++) { if (i % 3 === 0) { cache.get(i % 100); } else { cache.put(i, `value${i}`); } }",
+      "iterations": 500,
+      "baselineTimeMs": 1.5,
+      "comment": "Tests realistic mix of get/put operations with evictions"
+    },
+    {
+      "name": "update-existing",
+      "code": "const cache = new LRUCache(100); for (let i = 0; i < 100; i++) { cache.put(i, `value${i}`); } for (let i = 0; i < 100; i++) { cache.put(i, `updated${i}`); }",
+      "iterations": 500,
+      "baselineTimeMs": 1.0,
+      "comment": "Tests performance when updating existing keys"
+    }
+  ],
+  "requirements": [
+    "class",
+    "LRUCache",
+    "get",
+    "put",
+    "capacity",
+    "export"
+  ]
+}

@@ -25,30 +25,50 @@ export class Evaluator {
   }
 
   async evaluate(task, response, variant, duration) {
-    const scores = {
-      accuracy: 0,
-      performance: 0,
-      codeQuality: 0,
-      completeness: 0,
-      complexity: 0
-    };
-
-    // Additional LLM benchmark metrics (all camelCase)
-    const advancedMetrics = {
-      f1Score: 0,
-      precision: 0,
-      recall: 0,
-      exactMatch: 0,
-      editSimilarity: 0,
-      astSimilarity: 0
-    };
-
     const code = this.extractCode(response.content, variant);
     const codeMetrics = this.calculateCodeMetrics(code, response, duration);
 
     // Calculate code complexity metrics
     const complexityMetrics = this.calculateComplexityMetrics(code);
-    codeMetrics.complexity = complexityMetrics;
+
+    // Individual benchmark results (no aggregation)
+    const benchmarks = {
+      // Functional correctness
+      testsPassed: 0,
+      testsFailed: 0,
+      testsTotal: 0,
+      accuracyScore: 0,
+
+      // Runtime performance (actual code execution)
+      runtimePerformance: null, // Will contain actual execution metrics
+
+      // Code size and cost metrics
+      codeSizeMetrics: {
+        totalCharacters: codeMetrics.codeLength.totalCharacters,
+        codeCharacters: codeMetrics.codeLength.codeCharacters,
+        commentCharacters: codeMetrics.codeLength.totalCharacters - codeMetrics.codeLength.codeCharacters,
+        totalLines: codeMetrics.codeLength.totalLines,
+        codeLines: codeMetrics.codeLength.codeLines,
+        commentLines: codeMetrics.codeLength.commentLines,
+        tokensUsed: codeMetrics.tokenMetrics.totalTokens,
+        inputTokens: codeMetrics.tokenMetrics.inputTokens,
+        outputTokens: codeMetrics.tokenMetrics.outputTokens,
+        charactersPerToken: codeMetrics.tokenMetrics.charactersPerToken,
+        estimatedCostUSD: this.estimateCost(codeMetrics.tokenMetrics)
+      },
+
+      // LLM-based code quality auto-rater
+      autoRater: null, // Will contain score, reasoning, and issues from LLM evaluation
+
+      // Completeness checks
+      completeness: null, // Will contain requirement verification results
+
+      // Complexity metrics
+      complexity: complexityMetrics,
+
+      // Reference comparison (if available)
+      referenceComparison: null
+    };
 
     // Calculate edit distance and AST similarity if reference code exists
     if (task.referenceCode && task.referenceCode[variant]) {
@@ -57,91 +77,54 @@ export class Evaluator {
       const maxLen = Math.max(code.length, refCode.length);
       const astSimilarity = this.calculateASTSimilarity(code, refCode);
 
-      codeMetrics.editDistance = editDistance;
-      codeMetrics.editSimilarity = 1 - (editDistance / maxLen);
-      codeMetrics.astSimilarity = astSimilarity;
-
-      // Store in advanced metrics for reporting
-      advancedMetrics.editSimilarity = codeMetrics.editSimilarity;
-      advancedMetrics.astSimilarity = astSimilarity;
+      benchmarks.referenceComparison = {
+        editDistance,
+        editSimilarity: 1 - (editDistance / maxLen),
+        astSimilarity
+      };
     }
 
+    // Evaluate test accuracy
     if (task.interactions || task.expectedElements) {
       if (this.playwrightEvaluator) {
         const playwrightResult = await this.playwrightEvaluator.evaluateUIComponent(code, task, variant);
-        scores.accuracy = playwrightResult.overallScore;
+        benchmarks.accuracyScore = playwrightResult.overallScore;
       } else {
         console.warn('⚠️  Playwright not installed - skipping UI component evaluation');
-        scores.accuracy = 0.5; // Neutral score
+        benchmarks.accuracyScore = null;
       }
     } else {
       if (task.testCases) {
         const testResult = await this.evaluateTestCases(code, task.testCases, variant);
-        if (typeof testResult === 'object') {
-          // New detailed format with F1/Precision/Recall
-          scores.accuracy = testResult.accuracy;
-          advancedMetrics.f1Score = testResult.f1;
-          advancedMetrics.precision = testResult.precision;
-          advancedMetrics.recall = testResult.recall;
-          codeMetrics.testResults = {
-            passed: testResult.passed,
-            failed: testResult.failed,
-            total: testResult.total
-          };
-        } else {
-          // Legacy format
-          scores.accuracy = testResult;
-        }
+        benchmarks.testsPassed = testResult.passed;
+        benchmarks.testsFailed = testResult.failed;
+        benchmarks.testsTotal = testResult.total;
+        benchmarks.accuracyScore = testResult.accuracy;
       } else if (task.expectedOutput) {
-        scores.accuracy = await this.evaluateAccuracy(code, task, variant);
+        benchmarks.accuracyScore = await this.evaluateAccuracy(code, task, variant);
       } else if (task.bugLocation) {
-        scores.accuracy = await this.evaluateBugFinding(response.content, task.bugLocation);
+        benchmarks.accuracyScore = await this.evaluateBugFinding(response.content, task.bugLocation);
       } else if (task.needleText) {
-        scores.accuracy = await this.evaluateNeedleInHaystack(response.content, task.needleText, task.needleLocation);
+        benchmarks.accuracyScore = await this.evaluateNeedleInHaystack(response.content, task.needleText, task.needleLocation);
       } else if (task.expectedAnalysis) {
-        scores.accuracy = this.evaluateAnalysis(response.content, task.expectedAnalysis);
+        benchmarks.accuracyScore = this.evaluateAnalysis(response.content, task.expectedAnalysis);
       }
     }
 
+    // Evaluate runtime performance (actual execution)
     const performanceResult = await this.evaluatePerformance(code, task, variant, response.usage);
-    scores.performance = performanceResult.overallScore;
-    scores.performanceToken = performanceResult.tokenScore;
-    scores.performanceRuntime = performanceResult.runtimeScore ?? null;
-    const codeQualityScore = await this.evaluateCodeQuality(code, task, variant);
-    scores.codeQuality = codeQualityScore.score;
-    scores.completeness = this.evaluateCompleteness(response.content, task);
+    benchmarks.runtimePerformance = performanceResult.runtimeMetrics;
 
-    // Calculate complexity score (normalized from metrics)
-    scores.complexity = this.calculateComplexityScore(complexityMetrics);
+    // Evaluate completeness
+    benchmarks.completeness = this.evaluateCompleteness(code, task, variant);
 
-    // Calculate total score using all metrics with proper weights
-    const totalScore = Object.entries(scores)
-      .filter(([key]) => !key.startsWith('performance')) // Skip sub-scores
-      .reduce((total, [criterion, score]) => {
-        const weight = this.config?.[criterion]?.weight || 0;
-        return total + (score * weight);
-      }, 0) * 100;
-
-    // Add runtime performance metrics if available
-    if (performanceResult.runtimeMetrics) {
-      codeMetrics.runtimePerformance = performanceResult.runtimeMetrics;
-    }
-    codeMetrics.performanceBreakdown = {
-      tokenEfficiency: performanceResult.tokenScore,
-      runtime: performanceResult.runtimeScore
-    };
-    codeMetrics.codeQualityDetails = codeQualityScore.details;
+    // Auto-rater will be populated by benchmark runner (requires LLM call)
 
     return {
-      scores,
-      performanceBreakdown: {
-        tokenEfficiency: performanceResult.tokenScore,
-        runtime: performanceResult.runtimeScore
-      },
-      advancedMetrics,
-      totalScore,
-      metrics: codeMetrics,
-      details: { code, variant }
+      benchmarks,
+      code,
+      variant,
+      executionTimeMs: duration
     };
   }
 
@@ -194,108 +177,6 @@ export class Evaluator {
 
       async function runTests() {
         let passedCount = 0;
-        for (let i = 0; i < testCases.length; i++) {
-          try {
-            await testCases[i]();
-            passedCount++;
-          } catch (e) {
-            console.error(\`Test case \${i + 1} failed: \${e.message}\`);
-          }
-        }
-        if (passedCount !== testCases.length) {
-          console.error(\`\${testCases.length - passedCount} test(s) failed.\`);
-          process.exit(1);
-        }
-        console.log(\`\${passedCount}/\${testCases.length} tests passed.\`);
-      }
-
-      runTests();
-    `;
-  }
-
-  async evaluateTestCases(code, testCases, variant) {
-    if (this.dryRun) {
-      return {
-        accuracy: 1.0,
-        precision: 1.0,
-        recall: 1.0,
-        f1: 1.0,
-        passed: testCases.length,
-        failed: 0,
-        total: testCases.length
-      };
-    }
-
-    const tempDir = join(tmpdir(), `benchmark-${Date.now()}`);
-    mkdirSync(tempDir, { recursive: true });
-
-    try {
-      const isTs = variant === 'typescript';
-      const codeExt = isTs ? '.ts' : '.mjs';
-      const runnerExt = isTs ? '.ts' : '.mjs';
-
-      const codeFile = join(tempDir, `module${codeExt}`);
-      writeFileSync(codeFile, code);
-
-      const runnerFile = join(tempDir, `runner${runnerExt}`);
-      const runnerCode = this._createTestRunnerCodeWithDetails(testCases, codeExt);
-      writeFileSync(runnerFile, runnerCode);
-
-      const command = isTs ? `npx tsx ${runnerFile}` : `node ${runnerFile}`;
-      const output = execSync(command, { cwd: tempDir, stdio: 'pipe', encoding: 'utf-8' });
-
-      // Parse detailed results for F1/Precision/Recall calculation
-      try {
-        const resultLine = output.split('\n').find(line => line.startsWith('RESULTS:'));
-        if (resultLine) {
-          const results = JSON.parse(resultLine.replace('RESULTS:', ''));
-          return {
-            accuracy: results.passedCount / results.totalCount,
-            precision: results.passedCount / Math.max(1, results.passedCount + results.falsePositives),
-            recall: results.passedCount / results.totalCount,
-            f1: this._calculateF1(results.passedCount, results.totalCount, results.falsePositives),
-            passed: results.passedCount,
-            failed: results.failedCount,
-            total: results.totalCount
-          };
-        }
-      } catch (parseError) {
-        // Fallback to simple accuracy
-      }
-
-      return { accuracy: 1.0, precision: 1.0, recall: 1.0, f1: 1.0, passed: testCases.length, failed: 0, total: testCases.length };
-    } catch (error) {
-      console.warn(`One or more test cases failed to execute or pass.`);
-      return { accuracy: 0, precision: 0, recall: 0, f1: 0, passed: 0, failed: testCases.length, total: testCases.length };
-    } finally {
-      rmSync(tempDir, { recursive: true, force: true });
-    }
-  }
-
-  _calculateF1(truePositives, totalPositives, falsePositives) {
-    const precision = truePositives / Math.max(1, truePositives + falsePositives);
-    const recall = truePositives / Math.max(1, totalPositives);
-    if (precision + recall === 0) return 0;
-    return (2 * precision * recall) / (precision + recall);
-  }
-
-  _createTestRunnerCodeWithDetails(testCases, codeExt) {
-    const testFns = testCases.map(tc => `async () => { ${tc.test} }`).join(',\n');
-    return `
-      import * as mod from './module${codeExt}';
-
-      for (const key in mod) {
-        global[key] = mod[key];
-      }
-      if (mod.default) {
-        const name = mod.default.name || 'defaultExport';
-        global[name] = mod.default;
-      }
-
-      const testCases = [${testFns}];
-
-      async function runTests() {
-        let passedCount = 0;
         let failedCount = 0;
         for (let i = 0; i < testCases.length; i++) {
           try {
@@ -306,12 +187,11 @@ export class Evaluator {
           }
         }
 
-        // Output detailed results
+        // Output results as JSON
         console.log('RESULTS:' + JSON.stringify({
           passedCount,
           failedCount,
-          totalCount: testCases.length,
-          falsePositives: 0 // Can be enhanced if we have negative test cases
+          totalCount: testCases.length
         }));
 
         if (passedCount !== testCases.length) {
@@ -322,6 +202,57 @@ export class Evaluator {
       runTests();
     `;
   }
+
+  async evaluateTestCases(code, testCases, variant) {
+    if (this.dryRun) {
+      return {
+        accuracy: 1.0,
+        passed: testCases.length,
+        failed: 0,
+        total: testCases.length
+      };
+    }
+
+    const tempDir = join(tmpdir(), `benchmark-${Date.now()}`);
+    mkdirSync(tempDir, { recursive: true });
+
+    try {
+      const isTs = variant.includes('typescript');
+      const codeExt = isTs ? '.ts' : '.mjs';
+      const runnerExt = isTs ? '.ts' : '.mjs';
+
+      const codeFile = join(tempDir, `module${codeExt}`);
+      writeFileSync(codeFile, code);
+
+      const runnerFile = join(tempDir, `runner${runnerExt}`);
+      const runnerCode = this._createTestRunnerCode(testCases, codeExt);
+      writeFileSync(runnerFile, runnerCode);
+
+      const command = isTs ? `npx tsx ${runnerFile}` : `node ${runnerFile}`;
+      const output = execSync(command, { cwd: tempDir, stdio: 'pipe', encoding: 'utf-8', timeout: 30000 });
+
+      // Parse results
+      const resultLine = output.split('\n').find(line => line.startsWith('RESULTS:'));
+      if (resultLine) {
+        const results = JSON.parse(resultLine.replace('RESULTS:', ''));
+        return {
+          accuracy: results.passedCount / results.totalCount,
+          passed: results.passedCount,
+          failed: results.failedCount,
+          total: results.totalCount
+        };
+      }
+
+      // Fallback if parsing failed but command succeeded
+      return { accuracy: 1.0, passed: testCases.length, failed: 0, total: testCases.length };
+    } catch (error) {
+      console.warn(`Test execution failed: ${error.message}`);
+      return { accuracy: 0, passed: 0, failed: testCases.length, total: testCases.length };
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  }
+
 
   async evaluateAccuracy(code, task, variant) {
     // This is a simpler evaluator, you might want to deprecate or merge with evaluateTestCases
@@ -515,192 +446,96 @@ export class Evaluator {
   }
 
   /**
-   * Evaluate token efficiency (code conciseness)
-   * This is what the old "performance" metric measured
-   */
-  evaluateTokenEfficiency(usage) {
-    if (!usage) return 0.5;
-    const totalTokens = usage.total_tokens || (usage.input_tokens + usage.output_tokens);
-    if (totalTokens < 500) return 1.0;
-    if (totalTokens < 1000) return 0.9;
-    if (totalTokens < 2000) return 0.7;
-    if (totalTokens < 3000) return 0.5;
-    return 0.3;
-  }
-
-  /**
-   * Evaluate performance - intelligently choose between runtime and token efficiency
+   * Evaluate performance - runtime metrics only
    */
   async evaluatePerformance(code, task, variant, usage) {
-    const tokenScore = this.evaluateTokenEfficiency(usage);
-    let runtimeScore = null;
     let runtimeMetrics = null;
 
     if (task.performanceBenchmarks && task.performanceBenchmarks.length > 0) {
       const runtimeResult = await this.evaluateRuntimePerformance(code, task, variant);
-      runtimeScore = runtimeResult.score;
       runtimeMetrics = runtimeResult.metrics;
     }
 
-    const overallScore = runtimeScore !== null
-      ? (tokenScore + runtimeScore) / 2
-      : tokenScore;
-
     return {
-      overallScore,
-      tokenScore,
-      runtimeScore,
       runtimeMetrics
     };
   }
 
-  async evaluateCodeQuality(code, task, variant) {
-    const normalizedRequirements = (task.requirements || []).map(r => r.toLowerCase());
-    const docRequired = /jsdoc|tsdoc/i.test(variant) || normalizedRequirements.some(r => r.includes('doc'));
-    const requiresErrorHandling = normalizedRequirements.some(r => r.includes('error') || r.includes('robust') || r.includes('handle'));
-    const strippedCode = code.replace(/\/\*[^]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+  evaluateCompleteness(code, task, variant) {
+    if (!task.requirements || task.requirements.length === 0) {
+      return {
+        score: null,
+        note: 'No requirements specified for this task'
+      };
+    }
 
-    // Determine if this is a CLI/demo/example tool (console.log is expected)
-    const isCliOrDemo = normalizedRequirements.some(r =>
-      r.includes('cli') || r.includes('console') || r.includes('output') ||
-      r.includes('print') || r.includes('log') || r.includes('demo') || r.includes('example')
-    ) || task.id?.includes('cli') || task.category?.includes('cli');
+    const requirementChecks = {};
+    const normalizedCode = code.toLowerCase();
 
-    const hasAsync = /async\s+function|=>\s*async|async\s*\(/i.test(strippedCode);
-    const usesAwait = /await\s+/.test(strippedCode);
-    const hasPromises = /\.then\(|\.catch\(|new\s+Promise/.test(strippedCode);
+    for (const requirement of task.requirements) {
+      const req = requirement.toLowerCase();
+      let passed = false;
+      let method = 'keyword-match';
 
-    // Focus on actual quality issues, not style preferences
-    const checks = {
-      // Only penalize missing await if async function has no await AND no promises
-      asyncAwaitConsistency: hasAsync ? (usesAwait || hasPromises) : true,
-
-      // Error handling only if explicitly required
-      errorHandling: requiresErrorHandling ? /try\s*\{|catch\s*\(|throw\s+|reject\(|\.catch\(/.test(code) : true,
-
-      // Documentation only if explicitly required
-      documentation: docRequired ? /\/\*\*/.test(code) : true,
-
-      // Check for empty catch blocks (actual bug risk)
-      noEmptyCatch: !/catch\s*\([^)]*\)\s*\{\s*\}/.test(code),
-
-      // Check for unreachable code after return
-      noUnreachableCode: !this.hasUnreachableCode(code),
-
-      // Check for proper function/class structure (syntax-related quality)
-      properStructure: this.checkProperStructure(code)
-    };
-
-    const passedChecks = Object.values(checks).filter(Boolean).length;
-    const score = passedChecks / Object.keys(checks).length;
-
-    return {
-      score,
-      details: {
-        checks,
-        note: 'Quality checks focus on actual issues, not style preferences'
+      // Check for specific requirement patterns
+      if (req === 'function') {
+        // Check for function declaration
+        passed = /\bfunction\s+\w+/.test(code) || /const\s+\w+\s*=\s*(?:async\s+)?(?:function|\([^)]*\)\s*=>)/.test(code);
+        method = 'ast-pattern';
+      } else if (req === 'class') {
+        passed = /\bclass\s+\w+/.test(code);
+        method = 'ast-pattern';
+      } else if (req === 'export') {
+        passed = /\bexport\s+(?:default\s+)?(?:function|class|const|let|var|\{)/.test(code);
+        method = 'ast-pattern';
+      } else if (req === 'async') {
+        passed = /\basync\s+function|\basync\s*\(/.test(code);
+        method = 'ast-pattern';
+      } else if (req === 'promise') {
+        passed = /\bPromise\b|\.then\(|\.catch\(/.test(code);
+        method = 'ast-pattern';
+      } else if (req === 'error handling') {
+        passed = /\btry\s*\{|\bcatch\s*\(|\bthrow\b/.test(code);
+        method = 'ast-pattern';
+      } else {
+        // For specific names (e.g., "fibonacci", "customFilter"), check if they exist as identifiers
+        passed = normalizedCode.includes(req);
+        method = 'identifier-search';
       }
-    };
-  }
 
-  checkIndentation(code) {
-    const lines = code.split('\n').filter(line => line.trim());
-    if (lines.length < 3) {
-      return { pass: true, metadata: { commonIndent: null } };
+      requirementChecks[requirement] = { passed, method };
     }
-    const indentPattern = /^(\s+)/;
-    const indents = lines.map(line => line.match(indentPattern)?.[1].length || 0).filter(len => len > 0);
-    if (indents.length < 2) {
-      return { pass: true, metadata: { commonIndent: null } };
-    }
-    const commonIndent = indents.reduce((a, b) => a < b ? a : b);
-    if (commonIndent === 0) {
-      return { pass: true, metadata: { commonIndent: 0 } };
-    }
-    const aligned = indents.every(indent => indent % commonIndent === 0);
-    return { pass: aligned, metadata: { commonIndent } };
-  }
 
-  checkNaming(code) {
-    const varPattern = /(?:const|let|var|function)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
-    const matches = [...code.matchAll(varPattern)];
-    if (matches.length === 0) {
-      return { pass: true, ratio: 1 };
-    }
-    const descriptiveNames = matches.filter(m => {
-      const name = m[1];
-      if (/^[ijkn]$/.test(name)) return true;
-      return name.length > 2;
-    });
-    const ratio = descriptiveNames.length / matches.length;
-    return { pass: ratio >= 0.7, ratio };
-  }
+    const passedCount = Object.values(requirementChecks).filter(r => r.passed).length;
+    const totalCount = task.requirements.length;
 
-  checkLineLength(code, max = 120) {
-    const lines = code.split('\n');
-    const longest = lines.reduce((acc, line) => Math.max(acc, line.length), 0);
     return {
-      pass: longest <= max + 10,
-      metadata: { maxAllowed: max, longest }
+      score: passedCount / totalCount,
+      passedCount,
+      totalCount,
+      checks: requirementChecks,
+      note: 'Completeness based on requirement verification'
     };
   }
 
   /**
-   * Check for unreachable code after return statements (actual bug)
+   * Estimate cost based on token usage
+   * Uses GPT-4 pricing as baseline (can be adjusted per provider)
    */
-  hasUnreachableCode(code) {
-    const lines = code.split('\n');
-    for (let i = 0; i < lines.length - 1; i++) {
-      const line = lines[i].trim();
-      // Check if line has a return statement (not in a comment)
-      if (/^return\b/.test(line) && !line.startsWith('//') && !line.startsWith('/*')) {
-        const nextLine = lines[i + 1].trim();
-        // Check if next line has actual code (not just closing braces, comments, or empty)
-        if (nextLine &&
-            !nextLine.startsWith('}') &&
-            !nextLine.startsWith('//') &&
-            !nextLine.startsWith('/*') &&
-            !/^\s*$/.test(nextLine)) {
-          return true; // Found unreachable code
-        }
-      }
-    }
-    return false;
-  }
+  estimateCost(tokenMetrics) {
+    // GPT-4 Turbo pricing: $10/1M input tokens, $30/1M output tokens
+    const inputCostPer1M = 10.0;
+    const outputCostPer1M = 30.0;
 
-  /**
-   * Check for proper function/class structure (balanced braces, etc.)
-   */
-  checkProperStructure(code) {
-    let braceCount = 0;
-    let parenCount = 0;
-    let bracketCount = 0;
+    const inputCost = (tokenMetrics.inputTokens / 1_000_000) * inputCostPer1M;
+    const outputCost = (tokenMetrics.outputTokens / 1_000_000) * outputCostPer1M;
 
-    for (const char of code) {
-      if (char === '{') braceCount++;
-      else if (char === '}') braceCount--;
-      else if (char === '(') parenCount++;
-      else if (char === ')') parenCount--;
-      else if (char === '[') bracketCount++;
-      else if (char === ']') bracketCount--;
-
-      // If counts go negative, structure is malformed
-      if (braceCount < 0 || parenCount < 0 || bracketCount < 0) {
-        return false;
-      }
-    }
-
-    // All should be balanced at the end
-    return braceCount === 0 && parenCount === 0 && bracketCount === 0;
-  }
-
-  evaluateCompleteness(response, task) {
-    const content = response.toLowerCase();
-    if (!task.requirements || task.requirements.length === 0) return 0.5;
-    const met = task.requirements.filter(req => content.includes(req.toLowerCase()));
-    let score = met.length / task.requirements.length;
-    if (response.length < 100) score *= 0.5;
-    return Math.min(score, 1.0);
+    return {
+      inputCostUSD: parseFloat(inputCost.toFixed(6)),
+      outputCostUSD: parseFloat(outputCost.toFixed(6)),
+      totalCostUSD: parseFloat((inputCost + outputCost).toFixed(6)),
+      basedOn: 'GPT-4 Turbo pricing'
+    };
   }
 
   /**

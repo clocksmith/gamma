@@ -30,16 +30,18 @@
   ],
   "performanceBenchmarks": [
     {
-      "name": "single-fetch",
-      "code": "await fetchUserData(1);",
-      "iterations": 10,
-      "baselineTimeMs": 310.0
+      "name": "error-validation-overhead",
+      "code": "try { await fetchUserData(0); } catch (e) { /* expected */ }",
+      "iterations": 1000,
+      "baselineTimeMs": 0.05,
+      "comment": "Tests validation and error throwing efficiency (no setTimeout in error path)"
     },
     {
-      "name": "parallel-fetches",
-      "code": "await Promise.all([fetchUserData(1), fetchUserData(2), fetchUserData(3)]);",
-      "iterations": 5,
-      "baselineTimeMs": 320.0
+      "name": "promise-creation-overhead",
+      "code": "const promises = []; for (let i = 0; i < 10; i++) { promises.push(fetchUserData(i + 1)); } await Promise.all(promises);",
+      "iterations": 10,
+      "baselineTimeMs": 310.0,
+      "comment": "Tests promise creation efficiency when creating multiple promises that run in parallel"
     }
   ],
   "requirements": [

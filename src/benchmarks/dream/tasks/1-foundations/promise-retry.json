@@ -29,14 +29,23 @@
     {
       "name": "immediate-success",
       "code": "await retryWithBackoff(async () => 'success', 3, 100);",
-      "iterations": 100,
-      "baselineTimeMs": 0.5
+      "iterations": 1000,
+      "baselineTimeMs": 0.05,
+      "comment": "Tests function call overhead when no retries are needed"
     },
     {
-      "name": "retry-once",
-      "code": "let count = 0; await retryWithBackoff(async () => { if (count++ < 1) throw new Error('fail'); return 'success'; }, 3, 50);",
-      "iterations": 10,
-      "baselineTimeMs": 55.0
+      "name": "retry-logic-overhead",
+      "code": "let count = 0; await retryWithBackoff(async () => { if (count++ < 2) throw new Error('fail'); return 'success'; }, 5, 1);",
+      "iterations": 100,
+      "baselineTimeMs": 10.0,
+      "comment": "Tests retry logic efficiency with minimal delay (1ms) - 2 retries with 1ms + 2ms delays"
+    },
+    {
+      "name": "max-retries-exhausted",
+      "code": "try { await retryWithBackoff(async () => { throw new Error('always fail'); }, 3, 1); } catch (e) { /* expected */ }",
+      "iterations": 100,
+      "baselineTimeMs": 15.0,
+      "comment": "Tests error propagation efficiency when all retries fail (1ms + 2ms + 4ms delays)"
     }
   ],
   "requirements": [
