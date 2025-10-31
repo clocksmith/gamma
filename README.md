@@ -70,73 +70,21 @@ GAMMA auto-detects your Ollama models and HuggingFace cache. Just run it.
 
 ## Game Modes
 
-### Interactive Game
-Predict the next token. See probability distributions. Learn about:
-- Temperature effects on randomness
-- Top-K and Top-P filtering
-- Attention patterns
-- How models "think"
+- **Interactive Game**: Predict the next token and see probability distributions
+- **Chat Mode**: Simple conversations with context preservation
+- **Tutorial Mode**: Guided lessons on tokenization, sampling, and attention
+- **Comparison Mode**: Run prompts through multiple models side-by-side
+- **Mind Meld Mode**: Multi-model collaboration with dynamic swapping
 
-### Chat Mode
-Simple conversations with context preservation:
-```bash
-python gamma.py game --chat --model qwen3-coder:30b
-```
-
-### Tutorial Mode
-Guided lessons on tokenization, sampling, and attention:
-```bash
-python gamma.py game --tutorial
-```
-
-### Comparison Mode
-Run the same prompt through multiple models side-by-side:
-```bash
-python gamma.py game --comparison \
-  --comparison-models llamacpp:models/model1.gguf ollama:qwen3:30b
-```
-
-### Mind Meld Mode
-Multiple models collaborate on one response, using:
-- **Fixed interval swapping**: Switch every N tokens
-- **Confidence-based**: Hand off when uncertain
-- **Pattern-based**: Swap on specific triggers
-- **Agreement ensembling**: Weighted averaging of predictions
-- **KV cache bridging**: Transfer context between models
-
-```bash
-python gamma.py game --mind-meld \
-  --meld-models \
-    pytorch:google/gemma-2-2b-it \
-    pytorch:Qwen/Qwen2-1.5B-Instruct \
-  --meld-strategy round_robin
-```
-
-**Strategies:**
-- `fixed_interval`: Swap every N tokens
-- `round_robin`: Rotate through models
-- `confidence`: Swap when model is uncertain (uses entropy)
-- `pattern`: Swap on punctuation, keywords, etc.
-- `random`: Random model selection
-
-**Features:**
-- Weighted averaging of logits across models
-- Agreement-based ensembling (ABE)
-- Vocabulary translation between different tokenizers
-- KV cache bridging (experimental, limited support)
+See [Game Documentation](./src/game/README.md) for details.
 
 ---
 
-## Supported Engines
+## Engines & Models
 
-| Engine | Best For | Hardware |
-|--------|----------|----------|
-| **llamacpp** | GGUF models (Ollama) | CPU, CUDA, ROCm, Metal |
-| **pytorch** | HuggingFace models | CUDA, ROCm, MPS, CPU |
-| **vllm** | Fast inference | CUDA |
-| **ollama** | HTTP API (limited logits) | Any |
+GAMMA supports multiple engines (llamacpp, pytorch, vllm, ollama) and auto-detects models from Ollama, HuggingFace, and local GGUF files.
 
-**Why it matters:** Native engines (`llamacpp`, `pytorch`, `vllm`) give you real logits for the game. `ollama` uses synthetic probabilities, so prefer `llamacpp` for GGUF files if you want accurate predictions.
+See [Engine Documentation](./src/engines/README.md) and [Core Documentation](./src/core/README.md) for details.
 
 ---
 
@@ -173,36 +121,13 @@ python gamma.py mind-meld \
 
 ---
 
-## Model Sources
+## Additional Features
 
-GAMMA auto-detects:
-- **Ollama models**: `~/.ollama/models/`
-- **HuggingFace cache**: Automatically downloads on first use
-- **Local GGUF files**: `models/` directory
-
-```bash
-# Ollama (auto-detected)
-python gamma.py game  # Shows your Ollama models in menu
-
-# HuggingFace
-python gamma.py game --engine pytorch --model google/gemma-2-2b-it
-huggingface-cli login  # For gated models
-
-# Local GGUF
-python gamma.py game --engine llamacpp --model models/my-model.gguf
-```
-
----
-
-## Commands
-
-```bash
-python gamma.py game           # Interactive game
-python gamma.py comparison     # Model comparison
-python gamma.py mind-meld      # Multi-model collaboration
-python gamma.py benchmark      # Performance testing
-python gamma.py list           # Show available models
-```
+- **[Mind Meld](./src/mind_meld/README.md)**: Multi-model collaboration system
+- **[Benchmarks](./src/benchmarks/README.md)**: Performance testing and DREAM suite
+- **[Comparison](./src/comparison/README.md)**: Model comparison tools
+- **[Utilities](./src/utils/README.md)**: Profiling, caching, optimization
+- **[Integrations](./src/integrations/README.md)**: OpenAI API, LangChain compatibility
 
 ---
 
