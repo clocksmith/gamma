@@ -1,9 +1,15 @@
 # Requirements for the PyTorch engine
-torch>=2.1.0
-# For quantization and advanced device mapping:
-bitsandbytes>=0.41.3
-accelerate>=0.27.0
-# For Flash Attention 2 (optional, if selected via --pytorch-attn and supported by hardware/model)
+# Note: This file only lists PyTorch-specific extras
+# Install base requirements first with: pip install -r requirements-base.txt
+
+# PyTorch (install via requirements-rocm.txt or requirements-cuda.txt for GPU support)
+# torch>=2.1.0  # Managed by hardware-specific files
+
+# PyTorch ecosystem extras
+accelerate>=0.27.0  # For advanced device mapping and optimization
+bitsandbytes>=0.41.3  # For quantization (int8/int4)
+
+# Optional: Flash Attention 2 (uncomment if supported by your hardware/model)
+# Installation can be complex and platform-dependent
 # optimum>=1.16.0
-# flash-attn # Installation can be complex, platform-dependent.
-# `transformers` is in the base requirements.txt
+# flash-attn

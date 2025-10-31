@@ -1,0 +1,18 @@
+### AMD/ROCm GPU Requirements ###
+# For systems with AMD GPUs and ROCm installed
+
+# Step 1: Install base requirements first
+-r requirements-base.txt
+
+# Step 2: Install PyTorch with ROCm support
+# IMPORTANT: Don't install these directly! Use the command below instead:
+#
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.1
+#
+# This installs PyTorch built for ROCm 6.1 (compatible with ROCm 6.x)
+# For other ROCm versions, see: https://pytorch.org/get-started/locally/
+
+# Step 3: (Optional) Install PyTorch-specific extras
+# Uncomment if you want quantization support:
+# accelerate>=0.27.0
+# bitsandbytes>=0.41.3  # May need ROCm-compatible build

@@ -178,6 +178,20 @@ class InteractiveMenu:
             allow_empty=True
         )
         config['focus_words'] = focus_words == "y"
+
+        word_mode = prompts.get_user_input(
+            "Enable word-mode (auto group tokens into word-level chunks)? (y/n, default: n)",
+            valid_choices=["y", "n", ""],
+            allow_empty=True
+        )
+        config['word_mode'] = word_mode == "y"
+
+        token_details = prompts.get_user_input(
+            "Show token details (IDs and raw pieces)? (y/n, default: n)",
+            valid_choices=["y", "n", ""],
+            allow_empty=True
+        )
+        config['show_token_details'] = token_details == "y"
         
         # Player choice mode
         player_mode = prompts.get_user_input(
@@ -596,8 +610,11 @@ class InteractiveMenu:
         
         if smallest_model:
             print(f"Using: {smallest_model.name} ({smallest_model.engine})")
-            print("Settings: 8 rounds, temperature 0.7, top-k 8, top-p 0.95")
-            
+            print(
+                f"Settings: 8 rounds, temperature {cfg.DEFAULT_TEMPERATURE}, "
+                f"top-k {cfg.DEFAULT_TOP_K}, top-p {cfg.DEFAULT_TOP_P}"
+            )
+
             return {
                 'mode': 'classic',
                 'tutorial': False,
@@ -605,13 +622,15 @@ class InteractiveMenu:
                 'engine': smallest_model.engine,
                 'model': smallest_model.name,
                 'steps': 8,
-                'temperature': 0.7,
-                'top_k': 8,
-                'top_p': 0.95,
+                'temperature': cfg.DEFAULT_TEMPERATURE,
+                'top_k': cfg.DEFAULT_TOP_K,
+                'top_p': cfg.DEFAULT_TOP_P,
                 'show_attention': True,
-                'num_choices': 4,
+                'num_choices': cfg.DEFAULT_NUM_CHOICES,
                 'permutation_length': 1,
                 'focus_words': False,
+                'word_mode': False,
+                'show_token_details': False,
                 'player_choice_mode': False,
                 'verbose': False,
                 'load_in_4bit': False,
@@ -633,9 +652,9 @@ class InteractiveMenu:
             'comparison': False,
             'engine': 'pytorch',
             'model': 'google/gemma-2b-it',
-            'temperature': 0.7,
-            'top_k': 8,
-            'top_p': 0.95,
+            'temperature': cfg.DEFAULT_TEMPERATURE,
+            'top_k': cfg.DEFAULT_TOP_K,
+            'top_p': cfg.DEFAULT_TOP_P,
             'steps': 5,
             'verbose': True,
             'show_attention': True,
@@ -659,9 +678,9 @@ class InteractiveMenu:
                 'pytorch:google/gemma-2-2b-it'
             ],
             'steps': 8,
-            'temperature': 0.7,
-            'top_k': 8,
-            'top_p': 0.95,
+            'temperature': cfg.DEFAULT_TEMPERATURE,
+            'top_k': cfg.DEFAULT_TOP_K,
+            'top_p': cfg.DEFAULT_TOP_P,
             'show_attention': True,
             'player_choice_mode': False,
             'verbose': False,

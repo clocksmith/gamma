@@ -29,6 +29,19 @@ def _is_code_like_or_url(token_text: str) -> bool:
     return False
 
 
+def _is_non_english_token(token_text: str) -> bool:
+    """Check if a token contains non-English characters (excluding common punctuation)."""
+    stripped_text = token_text.strip()
+    if not stripped_text:
+        return False
+
+    # Check for non-ASCII alphabetic characters
+    for char in stripped_text:
+        if char.isalpha() and ord(char) > 127:
+            return True
+    return False
+
+
 def generate_choices(
     engine: LLMEngine,
     processed_logits: Any,
@@ -36,7 +49,11 @@ def generate_choices(
     permutation_length: int,
     focus_words: bool,
 ) -> Tuple[List[List[Tuple[str, int]]], List[Tuple[str, int]]]:
-    k_for_pool = max(num_choices * permutation_length * (4 if focus_words else 2), cfg.MAX_TOKENS_FOR_PROB_DISPLAY * 2, 50)
+    # Pull only the top tokens we'll actually show
+    # num_choices = number of choices to show (default 4)
+    # permutation_length = tokens per choice (default 1 for simple mode)
+    # We pull 2x for filtering buffer (removes special tokens, non-English, etc.)
+    k_for_pool = num_choices * permutation_length * 2  # With 4 choices, pulls top 8 tokens
     top_tokens_texts, _, top_tokens_ids = engine.get_probabilities_at_step(processed_logits, "final_for_choices", k=k_for_pool)
 
     if not top_tokens_texts:
@@ -47,14 +64,14 @@ def generate_choices(
         unk_token_info = (unk_token_text, unk_token_id)
         return [[unk_token_info] * permutation_length] * num_choices, [unk_token_info] * permutation_length
 
-    # Filter out special tokens from the pool
+    # Filter out special tokens and non-English tokens from the pool
     filtered_pool = []
     special_token_patterns = ['<unused', '<pad>', '<eos>', '<bos>', '<unk>', '<mask>', '<cls>', '<sep>', '<ID:', '<DecodeErr:']
-    
+
     for text, token_id in zip(top_tokens_texts, top_tokens_ids):
         # Skip special tokens
         is_special = any(text.startswith(pattern) for pattern in special_token_patterns)
-        
+
         # Also skip tokens that look like special tokens with brackets
         if not is_special:
             # Check for [something] pattern which indicates special tokens
@@ -63,7 +80,10 @@ def generate_choices(
             # Check for tokens that are just punctuation or whitespace
             elif text.strip() in ['', '\n', '\t', '\r'] or text == '▁':
                 is_special = True
-        
+            # Filter out non-English tokens
+            elif _is_non_english_token(text):
+                is_special = True
+
         if not is_special:
             filtered_pool.append((text, token_id))
     
@@ -168,15 +188,33 @@ def process_player_guess(
     previously_explained_tokens: set,
 ) -> Tuple[int, int, List[Tuple[str, int]], List[Tuple[str, int]]]:
     processed_logits = prediction_result["logits_processed"]
-    choices_info, correct_sequence_info = generate_choices(engine, processed_logits, game_args.num_choices, game_args.permutation_length, game_args.focus_words)
-    choices_texts_for_display = [[token_info[0] for token_info in choice_seq] for choice_seq in choices_info]
+    choices_info, correct_sequence_info = generate_choices(
+        engine,
+        processed_logits,
+        game_args.num_choices,
+        game_args.permutation_length,
+        game_args.focus_words,
+    )
+
+    ui.reset_special_token_notes()
 
     if game_args.focus_words:
         for choice_seq_info in choices_info:
             for token_text, token_id in choice_seq_info:
                 ui.display_token_explanation_if_needed(engine, token_id, token_text, previously_explained_tokens, is_part_of_player_choice=True)
 
-    valid_options_letters = ui.display_player_choices(choices_texts_for_display, current_sentence_text, game_args.permutation_length, game_args.focus_words)
+    ui.flush_special_token_notes()
+
+    choices_texts_for_display = [[token_info[0] for token_info in choice_seq] for choice_seq in choices_info]
+    show_details = getattr(game_args, "show_token_details", False)
+    valid_options_letters = ui.display_player_choices(
+        engine,
+        choices_info,
+        current_sentence_text,
+        game_args.permutation_length,
+        game_args.focus_words,
+        show_details,
+    )
     user_choice_letter = ui.get_user_input("Your choice (A, B, C...)", valid_options_letters, allow_quit=True)
 
     if user_choice_letter == cfg.SHORTCUT_QUIT:
@@ -196,6 +234,9 @@ def process_player_guess(
     if ui.get_user_input(f"Press Enter to see probability breakdown, or '{cfg.SHORTCUT_QUIT}' to skip to next round", allow_empty=True, allow_quit=True) == cfg.SHORTCUT_QUIT:
         return score, max_possible_score, chosen_sequence_info, correct_sequence_info
 
+    # Build probability stages map - always show all 4 stages
+    # When temperature=1.0, Raw and After Temperature will be identical
+    # This teaches users that temperature=1.0 has no effect
     prob_data_map = {
         "Raw (Unfiltered)": prediction_result.get("probabilities_raw"),
         f"After Temperature ({game_args.temperature:.2f})": prediction_result.get("probabilities_temp"),

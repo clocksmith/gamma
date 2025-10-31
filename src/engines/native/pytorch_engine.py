@@ -39,6 +39,26 @@ class PyTorchEngine(LLMEngine):
         if "gemma-3" in self.model_name.lower() or "gemma3" in self.model_name.lower():
             self.engine_config["trust_remote_code"] = True
         self._load_hf_tokenizer()
+
+        # Check for unsupported GPU architectures (gfx1151, etc.)
+        force_cpu = False
+        if torch.cuda.is_available():
+            try:
+                gpu_props = torch.cuda.get_device_properties(0)
+                if hasattr(gpu_props, 'gcnArchName'):
+                    arch_name = gpu_props.gcnArchName
+                    # Check if GPU architecture is supported by PyTorch
+                    supported_archs = torch.cuda.get_arch_list()
+                    # gfx1151 is not in the supported list for pre-built PyTorch ROCm wheels
+                    if arch_name not in supported_archs and arch_name.startswith('gfx'):
+                        print(f"⚠️  WARNING: GPU architecture '{arch_name}' is not supported by this PyTorch build")
+                        print(f"   Supported architectures: {', '.join(supported_archs)}")
+                        print(f"   Forcing CPU-only execution to avoid 'invalid device function' errors")
+                        print(f"   For GPU support, rebuild PyTorch from source with: PYTORCH_ROCM_ARCH={arch_name}")
+                        force_cpu = True
+            except Exception as e:
+                print(f"PyTorchEngine: Could not check GPU compatibility: {e}")
+
         quant_cfg_dict = {}; compute_dtype_str = self.engine_config.get("bnb_4bit_compute_dtype", "bfloat16")
         try: bnb_compute_dtype = getattr(torch, compute_dtype_str)
         except AttributeError:
@@ -59,9 +79,24 @@ class PyTorchEngine(LLMEngine):
                 torch_dtype = getattr(torch, dtype_str)
             except AttributeError:
                 torch_dtype = torch.bfloat16 if hasattr(torch, "bfloat16") else torch.float16
-        
+
         # When using device_map, low_cpu_mem_usage must be True
         device_map = self.engine_config.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP)
+
+        # Override device_map to CPU if GPU is unsupported
+        if force_cpu:
+            device_map = "cpu"
+            # Disable quantization on CPU (not supported properly)
+            if quantization_config_obj:
+                print(f"PyTorchEngine: Disabling quantization (not supported on CPU)")
+                quantization_config_obj = None
+                quant_cfg_dict = {}
+            # CPU doesn't support bfloat16 well, force float32
+            if torch_dtype == torch.bfloat16:
+                torch_dtype = torch.float32
+                print(f"PyTorchEngine: Using device_map='cpu' with float32 (CPU doesn't support bfloat16)")
+            else:
+                print(f"PyTorchEngine: Using device_map='cpu' due to unsupported GPU architecture")
         low_cpu_mem = self.engine_config.get("low_cpu_mem_usage", True)
 
         # If we have a device_map, we must use low_cpu_mem_usage=True
@@ -77,7 +112,18 @@ class PyTorchEngine(LLMEngine):
                                         "trust_remote_code": trust_remote, "low_cpu_mem_usage": low_cpu_mem, "token": token}
         if torch_dtype is not None:
             model_kwargs["torch_dtype"] = torch_dtype
-        if quantization_config_obj: model_kwargs["quantization_config"] = quantization_config_obj
+        if quantization_config_obj:
+            model_kwargs["quantization_config"] = quantization_config_obj
+
+        # If forcing CPU, warn about models that may not work
+        if force_cpu:
+            # Some large models have built-in quantization/optimizations that require GPU
+            print(f"PyTorchEngine: Note - loading on CPU (large models may fail or use excessive RAM)")
+            # Known problematic models on unsupported GPUs
+            problematic_models = ['gpt-oss', 'llama-3', 'mixtral']
+            if any(name in self.model_name.lower() for name in problematic_models):
+                print(f"⚠️  WARNING: '{self.model_name}' is a large model that may not work on CPU")
+                print(f"   Consider using a smaller model like 'google/gemma-3-1b-it' or 'google/gemma-2-2b-it'")
         
         # Display model info for Gemma models
         if "gemma" in self.model_name.lower() and hasattr(game_config, 'GEMMA_MODEL_INFO'):
@@ -368,7 +414,7 @@ class PyTorchEngine(LLMEngine):
         
         # Convert to numpy for sampling_utils
         probs_np = probs_tensor.cpu().numpy() if isinstance(probs_tensor, torch.Tensor) else probs_tensor
-        return sampling_utils.get_top_k_tokens(probs_np, k, self.get_token_text, is_probs=True)
+        return sampling.get_top_k_tokens(probs_np, k, self.get_token_text, is_probs=True)
 
     def get_engine_specific_config(self) -> Dict[str, Any]:
         """Provide PyTorch-specific configuration."""

@@ -9,6 +9,27 @@ from src.core import config as cfg
 from src.ui import components as uic
 from src.core.engine_interface import LLMEngine
 
+_SPECIAL_TOKEN_NOTE_LIMIT = 6
+_special_token_notes_logged = 0
+_special_token_notes_suppressed = 0
+
+
+def reset_special_token_notes():
+    global _special_token_notes_logged, _special_token_notes_suppressed
+    _special_token_notes_logged = 0
+    _special_token_notes_suppressed = 0
+
+
+def flush_special_token_notes():
+    global _special_token_notes_logged, _special_token_notes_suppressed
+    if _special_token_notes_suppressed > 0:
+        plural = "s" if _special_token_notes_suppressed != 1 else ""
+        print(uic.color_text(
+            f"  …suppressed {_special_token_notes_suppressed} additional special token{plural}.",
+            cfg.COLOR_YELLOW
+        ))
+    _special_token_notes_suppressed = 0
+
 def display_intro():
     """Displays the GAMMA intro/welcome message."""
     uic.print_header("GAMMA - The LLM Guessing Game")
@@ -68,8 +89,17 @@ def format_probability_stage(stage_name: str, tokens: List[str], probs: List[flo
         return lines
     cleaned_tokens = []
     for token in tokens:
-        if token.startswith(" ") or token.startswith("_"):
-            token = token[1:] if len(token) > 1 else " "
+        # Handle whitespace tokens specially
+        if token == '\n':
+            token = '<newline>'
+        elif token == '\t':
+            token = '<tab>'
+        elif token == '\r':
+            token = '<return>'
+        elif token.strip() == '':
+            token = '<space>'
+        elif token.startswith(" ") or token.startswith("_"):
+            token = token[1:] if len(token) > 1 else token
         cleaned_tokens.append(token)
     num_to_show = min(len(cleaned_tokens), max_to_show)
     max_tl = max(len(t) for t in cleaned_tokens[:num_to_show]) if num_to_show > 0 else 5
@@ -80,70 +110,181 @@ def format_probability_stage(stage_name: str, tokens: List[str], probs: List[flo
     return lines
 
 def display_probability_stages_grid(stages_data: List[Tuple[str, List[str], List[float]]], max_to_show: int, verbose: bool):
-    """Displays probability stages in a 2x2 grid."""
+    """Displays probability stages in a smart grid layout based on terminal width."""
     if not stages_data:
         return
+
+    # Get terminal width
+    import shutil
+    try:
+        terminal_width = shutil.get_terminal_size().columns
+    except:
+        terminal_width = 80  # Default fallback
+
     formatted_stages = []
     for stage_name, tokens, probs in stages_data:
         formatted_stages.append(format_probability_stage(stage_name, tokens, probs, max_to_show, verbose))
-    while len(formatted_stages) < 4:
+
+    num_stages = len(formatted_stages)
+
+    # Pad to minimum of 2 for grid layouts
+    while len(formatted_stages) < 2:
         formatted_stages.append([])
-    uic.print_header("PROBABILITY DISTRIBUTIONS (2x2 Grid)")
-    col_width = 38
-    for row_idx in range(2):
-        left_stage = formatted_stages[row_idx * 2]
-        right_stage = formatted_stages[row_idx * 2 + 1]
-        max_lines = max(len(left_stage), len(right_stage))
-        while len(left_stage) < max_lines:
-            left_stage.append("")
-        while len(right_stage) < max_lines:
-            right_stage.append("")
+
+    # Determine layout based on terminal width and number of stages
+    # - Very narrow (<70): Vertical stack
+    # - Narrow (70-139): 2x2 grid (or 3x0 if 3 stages)
+    # - Wide (≥140): Single row layout
+    if terminal_width >= 140 and num_stages >= 3:
+        layout = "single_row"
+    elif terminal_width >= 70 and num_stages >= 2:
+        layout = "grid"
+    else:
+        layout = "vertical"  # Vertical stack
+
+    uic.print_header("PROBABILITY DISTRIBUTIONS")
+
+    if layout == "single_row":
+        # Single row layout with N columns
+        col_width = (terminal_width - (num_stages * 3)) // num_stages
+        max_lines = max(len(stage) for stage in formatted_stages)
+
+        # Pad all stages to same height
+        for stage in formatted_stages:
+            while len(stage) < max_lines:
+                stage.append("")
+
+        # Print each line across all 4 columns
         for i in range(max_lines):
-            left_clean = re.sub(r"\x1b\[[0-9;]*m", "", left_stage[i])
-            left_padding = col_width - len(left_clean)
-            print(f"{left_stage[i]}{' ' * max(0, left_padding)} │ {right_stage[i]}")
-        if row_idx < 1:
-            print("─" * 38 + "┼" + "─" * 41)
+            line_parts = []
+            for stage_idx, stage in enumerate(formatted_stages):
+                line_text = stage[i] if i < len(stage) else ""
+                line_clean = re.sub(r"\x1b\[[0-9;]*m", "", line_text)
+                padding = col_width - len(line_clean)
+                line_parts.append(f"{line_text}{' ' * max(0, padding)}")
+
+            # Join with separators
+            separator = " │ "
+            print(separator.join(line_parts))
+    elif layout == "grid":
+        # Grid layout - automatically handles 2, 3, or 4 stages
+        col_width = 38
+        cols_per_row = 2  # Standard 2 columns
+        num_rows = (num_stages + 1) // 2  # Ceiling division
+
+        for row_idx in range(num_rows):
+            left_idx = row_idx * cols_per_row
+            right_idx = left_idx + 1
+
+            left_stage = formatted_stages[left_idx] if left_idx < num_stages else []
+            right_stage = formatted_stages[right_idx] if right_idx < num_stages else []
+
+            max_lines = max(len(left_stage), len(right_stage))
+            while len(left_stage) < max_lines:
+                left_stage.append("")
+            while len(right_stage) < max_lines:
+                right_stage.append("")
+
+            for i in range(max_lines):
+                left_clean = re.sub(r"\x1b\[[0-9;]*m", "", left_stage[i])
+                left_padding = col_width - len(left_clean)
+                print(f"{left_stage[i]}{' ' * max(0, left_padding)} │ {right_stage[i]}")
+
+            # Add separator between rows (but not after last row)
+            if row_idx < num_rows - 1:
+                print("─" * 38 + "┼" + "─" * 41)
+    else:
+        # Vertical layout (stack for very narrow terminals)
+        for stage_idx, stage in enumerate(formatted_stages[:num_stages]):
+            for line in stage:
+                print(line)
+            if stage_idx < num_stages - 1:  # Add separator between stages
+                print()
+
     uic.print_separator()
 
-def display_player_choices(choices_texts: List[List[str]], current_sentence: str, permutation_length: int, focus_words: bool) -> List[str]:
+def display_player_choices(
+    engine: LLMEngine,
+    choices_info: List[List[Tuple[str, int]]],
+    current_sentence: str,
+    permutation_length: int,
+    focus_words: bool,
+    show_token_details: bool = False
+) -> List[str]:
     """Displays the player's choices for the current round."""
+
+    def _clean_token_text(token_str: str) -> str:
+        if (token_str.startswith('[') and token_str.endswith(']')) or (token_str.startswith('<') and token_str.endswith('>')):
+            return token_str
+        if token_str.startswith(" ") or token_str.startswith("_"):
+            cleaned = token_str[1:] if len(token_str) > 1 else ""
+            if not cleaned or cleaned.isspace():
+                return "<space>"
+            return cleaned
+        if not token_str or token_str.isspace():
+            if token_str == "\n":
+                return "<newline>"
+            if token_str == "\t":
+                return "<tab>"
+            return "<space>"
+        return token_str
+
     if permutation_length == 1:
         print(f"\n🤔 {uic.color_text('Your Turn!', cfg.COLOR_YELLOW)} Guess the next token the LLM prefers.")
     else:
         print(f"\n🤔 {uic.color_text('Your Turn!', cfg.COLOR_YELLOW)} Guess the next {permutation_length} tokens the LLM prefers.")
     if focus_words:
         print(uic.color_text("   (Focus Words Mode: Choices favor common word tokens)", cfg.COLOR_CYAN))
+    if show_token_details:
+        print(uic.color_text("   (Token details enabled — showing raw pieces, IDs, and categories)", cfg.COLOR_MAGENTA_LIGHT))
     print(f'   Based on: "{current_sentence}..."')
     print("\nWhich sequence below is ranked highest by the model (after all filtering)?")
-    valid_options_letters = []
-    for i, choice_token_texts_list in enumerate(choices_texts):
-        option_letter = chr(ord("A") + i)
+
+    valid_options_letters: List[str] = []
+
+    for idx, choice in enumerate(choices_info):
+        option_letter = chr(ord("A") + idx)
         valid_options_letters.append(option_letter)
-        cleaned_tokens = []
-        for token_str in choice_token_texts_list:
-            if (token_str.startswith('[') and token_str.endswith(']')) or (token_str.startswith('<') and token_str.endswith('>')):
-                cleaned_tokens.append(token_str)
-            elif token_str.startswith(" ") or token_str.startswith("_"):
-                cleaned = token_str[1:] if len(token_str) > 1 else ""
-                if not cleaned or cleaned.isspace():
-                    cleaned_tokens.append("<space>")
-                else:
-                    cleaned_tokens.append(cleaned)
-            elif not token_str or token_str.isspace():
-                if token_str == "\n":
-                    cleaned_tokens.append("<newline>")
-                elif token_str == "\t":
-                    cleaned_tokens.append("<tab>")
-                else:
-                    cleaned_tokens.append("<space>")
-            else:
-                cleaned_tokens.append(token_str)
+
+        cleaned_tokens: List[str] = []
+        for token_text, _ in choice[:permutation_length]:
+            cleaned_tokens.append(_clean_token_text(token_text))
+
         while len(cleaned_tokens) < permutation_length:
             cleaned_tokens.append("<pad>")
         cleaned_tokens = cleaned_tokens[:permutation_length]
+
+        decoded_preview = ""
+        token_ids_for_preview = [token_id for _, token_id in choice[:permutation_length] if token_id is not None]
+        if token_ids_for_preview:
+            try:
+                decoded_preview = engine.decode(token_ids_for_preview, skip_special_tokens=False)
+            except Exception:
+                decoded_preview = ""
+        if decoded_preview:
+            decoded_preview = decoded_preview.replace("\n", "\\n").replace("\t", "\\t")
+
         formatted_sequence = " ".join(cleaned_tokens)
-        print(f"  {option_letter}) {formatted_sequence}")
+        display_line = f"  {option_letter}) {formatted_sequence}"
+        if decoded_preview:
+            display_line += f"   → \"{decoded_preview}\""
+        print(display_line)
+
+        if show_token_details:
+            for pos, (token_text, token_id) in enumerate(choice[:permutation_length], start=1):
+                raw_piece = None
+                if hasattr(engine, "tokenizer") and engine.tokenizer:
+                    try:
+                        raw_piece = engine.tokenizer.convert_ids_to_tokens([token_id])[0]
+                    except Exception:
+                        raw_piece = None
+                if raw_piece is None:
+                    raw_piece = token_text
+                try:
+                    category = engine.get_token_category(token_id).name.lower()
+                except Exception:
+                    category = "unknown"
+                print(f"     • [{pos}] id={token_id} piece='{raw_piece}' ({category})")
     return valid_options_letters
 
 def display_guess_result(chosen_tokens_texts: List[str], correct_tokens_texts: List[str], score: int, max_score: int, is_perfect: bool):
@@ -214,22 +355,27 @@ def display_token_explanation_if_needed(engine: LLMEngine, token_id: Any, token_
         hashable_token_id = int(token_id.item() if hasattr(token_id, "item") else token_id)
     except:
         hashable_token_id = str(token_id)
+    global _special_token_notes_logged, _special_token_notes_suppressed
     if is_special_or_punct and hashable_token_id not in previously_explained_tokens:
-        prefix = "  Player Choice Note: " if is_part_of_player_choice else "  Model Note: "
-        explanation = f"{prefix}Token '{uic.color_text(token_text, cfg.COLOR_CYAN)}' (ID: {str(token_id)[:20]}) "
-        if token_text == cfg.TOKEN_EOS:
-            explanation += "signals end of sequence."
-        elif token_text == cfg.TOKEN_BOS:
-            explanation += "signals beginning of sequence."
-        elif token_text == cfg.TOKEN_PAD:
-            explanation += "is a padding token."
-        elif token_text == cfg.TOKEN_UNK:
-            explanation += "represents an unknown word."
-        elif token_text == cfg.TOKEN_NL:
-            explanation += "is a newline character."
-        elif not any(c.isalnum() for c in token_text):
-            explanation += "is a punctuation or symbol."
-        else:
-            explanation += "is a special/control token."
-        print(uic.color_text(explanation, cfg.COLOR_YELLOW))
         previously_explained_tokens.add(hashable_token_id)
+        if _special_token_notes_logged < _SPECIAL_TOKEN_NOTE_LIMIT:
+            prefix = "  Player Choice Note: " if is_part_of_player_choice else "  Model Note: "
+            explanation = f"{prefix}Token '{uic.color_text(token_text, cfg.COLOR_CYAN)}' (ID: {str(token_id)[:20]}) "
+            if token_text == cfg.TOKEN_EOS:
+                explanation += "signals end of sequence."
+            elif token_text == cfg.TOKEN_BOS:
+                explanation += "signals beginning of sequence."
+            elif token_text == cfg.TOKEN_PAD:
+                explanation += "is a padding token."
+            elif token_text == cfg.TOKEN_UNK:
+                explanation += "represents an unknown word."
+            elif token_text == cfg.TOKEN_NL:
+                explanation += "is a newline character."
+            elif not any(c.isalnum() for c in token_text):
+                explanation += "is a punctuation or symbol."
+            else:
+                explanation += "is a special/control token."
+            print(uic.color_text(explanation, cfg.COLOR_YELLOW))
+            _special_token_notes_logged += 1
+        else:
+            _special_token_notes_suppressed += 1

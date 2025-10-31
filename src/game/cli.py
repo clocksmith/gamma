@@ -14,6 +14,7 @@ import sys
 import time
 import random
 import uuid
+import numpy as np
 from datetime import datetime
 from typing import Optional, List, Tuple, Set, Dict, Any, Union
 
@@ -60,6 +61,56 @@ def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1, engine: Opti
     return None
 
 
+def apply_word_mode_presets(args: argparse.Namespace) -> None:
+    """Apply convenience adjustments when word-mode is enabled."""
+    if not getattr(args, "word_mode", False):
+        return
+    # If user kept default permutation length, expand to cover typical word-piece span
+    if getattr(args, "permutation_length", cfg.DEFAULT_PERMUTATION_LENGTH) == cfg.DEFAULT_PERMUTATION_LENGTH:
+        args.permutation_length = 4
+    args.focus_words = True
+
+
+def _flag_was_provided(flag: str) -> bool:
+    """Check whether a CLI flag (e.g., '--engine') was explicitly provided."""
+    flag_variants = [flag, f"{flag}="]
+    negative_flag = None
+    if flag.startswith("--"):
+        negative_flag = "--no-" + flag[2:]
+    candidate_prefixes = list(flag_variants)
+    if negative_flag:
+        candidate_prefixes.extend([negative_flag, f"{negative_flag}="])
+    for arg in sys.argv[1:]:
+        if arg == flag:
+            return True
+        if negative_flag and arg == negative_flag:
+            return True
+        if arg.startswith(flag_variants[1]):
+            return True
+        if negative_flag and arg.startswith(f"{negative_flag}="):
+            return True
+    return False
+
+
+CLI_OVERRIDE_FLAGS = {
+    "--engine": "engine",
+    "--model": "model",
+    "--steps": "steps",
+    "--temperature": "temperature",
+    "--top-k": "top_k",
+    "--top-p": "top_p",
+    "--num-choices": "num_choices",
+    "--permutation-length": "permutation_length",
+    "--focus-words": "focus_words",
+    "--player-choice-mode": "player_choice_mode",
+    "--show-attention": "show_attention",
+    "--verbose": "verbose",
+    "--show-token-details": "show_token_details",
+    "--word-mode": "word_mode",
+    "--prompt": "prompt",
+}
+
+
 def parse_arguments() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -73,6 +124,10 @@ def parse_arguments() -> argparse.Namespace:
                         help="LLM engine: llamacpp (GGUF files), pytorch (HuggingFace), tensorflow/jax/onnx/mlx (experimental)")
     parser.add_argument("--model", type=str, default=None,
                         help="Model ID (HF name/local path). Interactive selection if omitted.")
+    parser.add_argument("--quickstart", action="store_true", default=False,
+                        help="Skip the interactive menu and launch using quick-play defaults.")
+    parser.add_argument("--quick-model", type=str, default=None,
+                        help="Override the quickstart model (accepts ENGINE:MODEL or a model name).")
     
     # Game parameters
     parser.add_argument("--steps", type=int, default=cfg.DEFAULT_MAX_DECODE_STEPS,
@@ -107,6 +162,10 @@ def parse_arguments() -> argparse.Namespace:
                         help="Enable simple, direct chat mode.")
     parser.add_argument("--prompt", type=str, default=None,
                         help="Run single-shot inference with the given prompt.")
+    parser.add_argument("--show-token-details", action="store_true", default=False,
+                        help="Display token IDs, raw pieces, and decoded previews for each choice.")
+    parser.add_argument("--word-mode", action="store_true", default=False,
+                        help="Convenience toggle that favors word-level play (enables focus words and expands token sequences).")
     
     # Display options
     parser.add_argument("--show-attention", action=argparse.BooleanOptionalAction, 
@@ -221,6 +280,9 @@ def parse_arguments() -> argparse.Namespace:
         cfg.USE_COLORS = False
         for color_attr in [attr for attr in dir(cfg) if attr.startswith("COLOR_")]:
             setattr(cfg, color_attr, "")
+
+    # Apply word-mode presets if requested
+    apply_word_mode_presets(parsed_args)
     
     return parsed_args
 
@@ -280,14 +342,42 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
         print(ui.color_text("\nLoading model... This may take a moment.", cfg.COLOR_CYAN))
         engine.load()
         print(ui.color_text("✓ Model loaded successfully!", cfg.COLOR_GREEN))
-        
+
+        # Validate engine is suitable for game mode (needs real logits/probabilities)
+        # Engines that use HTTP APIs don't expose full probability distributions
+        incompatible_engines = ["ollama", "openai", "huggingface_inference"]
+        if args.engine in incompatible_engines:
+            print(ui.color_text(
+                f"\n⚠️  WARNING: The '{args.engine}' engine cannot be used for game mode!",
+                cfg.COLOR_RED
+            ))
+            print(ui.color_text(
+                f"   The game requires access to full token probability distributions (logits),",
+                cfg.COLOR_YELLOW
+            ))
+            print(ui.color_text(
+                f"   which are not exposed by {args.engine}'s HTTP API.",
+                cfg.COLOR_YELLOW
+            ))
+            print("\n💡 Solution: Use a local engine with the same model:")
+
+            if args.engine == "ollama":
+                print("   • Use 'llamacpp' engine with Ollama's GGUF file:")
+                print(f"     1. Find the GGUF: ollama show {args.model} --modelfile | grep FROM")
+                print("     2. Run GAMMA: gamma.py game --engine llamacpp --model /path/to/model.gguf")
+            else:
+                print("   • Supported engines: pytorch, pytorch_cuda, llamacpp, vllm, mlx, jax, tensorflow")
+                print("   • Example: gamma.py game --engine pytorch --model google/gemma-2-2b-it")
+
+            return None
+
         # Display engine configuration summary
         engine_summary = engine.get_config_summary()
         if engine_summary:
             print("\nEngine Configuration:")
             for key, value in engine_summary.items():
                 print(f"  {key}: {value}")
-        
+
         return engine
     except Exception as e:
         error_msg = str(e)
@@ -419,16 +509,36 @@ def run_meld_mode(args: argparse.Namespace) -> None:
         print(ui.color_text("Mind Meld mode requires at least two models specified with --meld-models", cfg.COLOR_RED))
         return
 
+    # Validate engine types before loading
+    incompatible_engines = ["ollama", "openai", "huggingface_inference"]
+
     for model_spec in args.meld_models:
         if ":" in model_spec:
             engine_type, model_name = model_spec.split(":", 1)
         else:
             engine_type = "pytorch"
             model_name = model_spec
-        
+
         if engine_type not in SUPPORTED_ENGINES:
             print(ui.color_text(f"Unsupported engine: {engine_type}", cfg.COLOR_RED))
             return
+
+        if engine_type in incompatible_engines:
+            print(ui.color_text(
+                f"\n⚠️  ERROR: The '{engine_type}' engine cannot be used for Mind Meld mode!",
+                cfg.COLOR_RED
+            ))
+            print(ui.color_text(
+                "Mind Meld requires full token probability distributions (logits),",
+                cfg.COLOR_YELLOW
+            ))
+            print(ui.color_text(
+                f"which are not exposed by {engine_type}'s HTTP API.",
+                cfg.COLOR_YELLOW
+            ))
+            print("\n💡 Use a local engine instead: pytorch, pytorch_cuda, llamacpp, vllm, mlx")
+            return
+
         models_to_meld.append((engine_type, model_name))
 
     loaded_engines = []
@@ -548,7 +658,41 @@ def run_game_loop(engine: LLMEngine, args: argparse.Namespace) -> None:
         total_max_score += max_s
 
         # Track round stats
-        correct_token_prob = pred_result["probabilities"][pred_result["next_token_id"]]
+        def _extract_probability_for_token(prediction: Dict[str, Any], token_id: int) -> Optional[float]:
+            """Best-effort extraction of probability for a token from engine outputs."""
+            probability_keys = [
+                "probabilities_processed",
+                "probabilities",
+                "probabilities_top_k",
+                "probabilities_temp",
+                "probabilities_raw",
+            ]
+            for key in probability_keys:
+                probs_source = prediction.get(key)
+                if probs_source is None:
+                    continue
+                try:
+                    # Dictionaries (e.g., Ollama wrapper)
+                    if isinstance(probs_source, dict):
+                        value = probs_source.get(token_id)
+                        if value is not None:
+                            return float(value)
+                        continue
+                    # Torch / MX / JAX tensors
+                    if hasattr(probs_source, "detach") and callable(getattr(probs_source, "detach")):
+                        array = probs_source.detach().cpu().numpy()
+                    elif hasattr(probs_source, "cpu") and callable(getattr(probs_source, "cpu")) and hasattr(probs_source, "numpy"):
+                        array = probs_source.cpu().numpy()
+                    else:
+                        array = np.asarray(probs_source)
+                    array = np.asarray(array).reshape(-1)
+                    if 0 <= token_id < array.size:
+                        return float(array[token_id])
+                except Exception:
+                    continue
+            return None
+
+        correct_token_prob = _extract_probability_for_token(pred_result, pred_result["next_token_id"]) or 0.0
         round_stats = RoundStats(
             round_number=round_counter,
             correct=(score == max_s),
@@ -758,27 +902,86 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
     print(f"Prompt: '{prompt}'")
 
     start_time = time.time()
-    input_ids, attention_mask = engine.encode(prompt, add_special_tokens=True)
+    full_input_ids, full_attention_mask = engine.encode(prompt, add_special_tokens=True)
 
-    # Handle both tensor and list types for input_ids
-    if hasattr(input_ids, 'shape'):
-        prompt_tokens = input_ids.shape[-1]
+    # Determine prompt token count
+    if hasattr(full_input_ids, "shape"):
+        prompt_tokens = int(full_input_ids.shape[-1])
+    elif isinstance(full_input_ids, (list, tuple)):
+        prompt_tokens = len(full_input_ids)
     else:
-        prompt_tokens = len(input_ids) if isinstance(input_ids, (list, tuple)) else 1
+        prompt_tokens = 1
 
-    response_text = engine.decode(completion_tokens)
+    use_kv_cache = getattr(engine, "engine_config", {}).get("use_kv_cache", cfg.PYTORCH_USE_KV_CACHE)
+    incremental_input_ids = full_input_ids
+    generated_token_ids: List[int] = []
+
+    generation_start = time.time()
+
+    for step in range(args.steps):
+        # Determine inputs based on KV-cache availability
+        if step == 0 or not use_kv_cache:
+            ids_for_prediction = full_input_ids
+        else:
+            ids_for_prediction = incremental_input_ids
+
+        attention_for_prediction = full_attention_mask if step == 0 or not use_kv_cache else full_attention_mask
+
+        prediction = engine.predict_next(
+            ids_for_prediction,
+            attention_for_prediction,
+            args.temperature,
+            args.top_k,
+            args.top_p,
+            args.show_attention
+        )
+
+        next_token_id = prediction["next_token_id"]
+
+        if args.verbose:
+            token_text = engine.get_token_text(next_token_id)
+            print(f"[Generation {step + 1}] token_id={next_token_id} → '{token_text}'")
+
+        eos_id = engine.get_eos_token_id()
+        if eos_id is not None and next_token_id == eos_id:
+            if args.verbose:
+                print("Encountered EOS token. Stopping generation.")
+            break
+
+        generated_token_ids.append(int(next_token_id))
+
+        # Prepare tensors for next iteration
+        next_token_array = np.array([[next_token_id]])
+        next_token_tensor = engine.convert_from_numpy(next_token_array)
+        full_input_ids = _concatenate_tensors(full_input_ids, next_token_tensor, dim=-1, engine=engine)
+
+        if full_attention_mask is not None:
+            if hasattr(full_attention_mask, "shape"):
+                batch_size = full_attention_mask.shape[0] if len(full_attention_mask.shape) > 0 else 1
+            else:
+                batch_size = 1
+            ones_tensor = engine.convert_from_numpy(np.ones((batch_size, 1)))
+            full_attention_mask = _concatenate_tensors(full_attention_mask, ones_tensor, dim=-1, engine=engine)
+
+        incremental_input_ids = next_token_tensor if use_kv_cache else full_input_ids
+
+    generation_end = time.time()
+    completion_tokens = len(generated_token_ids)
+    response_text = engine.decode(generated_token_ids, skip_special_tokens=True) if generated_token_ids else ""
 
     end_time = time.time()
     wall_time = end_time - start_time
+    generation_time = generation_end - generation_start
 
-    print(f"\nResponse: {ui.color_text(response_text, cfg.COLOR_GREEN)}")
+    print(f"\nResponse: {ui.color_text(response_text or '[No tokens generated]', cfg.COLOR_GREEN)}")
     ui.print_separator('-')
     print("Performance Statistics:")
     print(f"  Prompt Tokens:     {prompt_tokens}")
     print(f"  Completion Tokens: {completion_tokens}")
     print(f"  Total Wall Time:   {wall_time:.2f} seconds")
-    if completion_tokens > 0 and wall_time > 0:
-        tps = completion_tokens / wall_time
+    print(f"  Generation Time:   {generation_time:.2f} seconds")
+    if completion_tokens > 0 and generation_time > 0:
+        tps = completion_tokens / max(generation_time, 1e-8)
         print(f"  Tokens per Second: {tps:.2f} TPS")
     print("-" * 25)
 
@@ -786,6 +989,40 @@ def main():
     """Main entry point for GAMMA."""
     ui.display_intro()
     args = parse_arguments()
+
+    if args.quickstart:
+        print(ui.color_text("\n⚡ Quickstart mode: using quick-play defaults.", cfg.COLOR_GREEN))
+        menu = InteractiveMenu()
+        quick_config = menu._quick_play_classic()
+
+        # Track CLI overrides so they persist after applying quick config
+        user_overrides: Dict[str, Any] = {}
+        for flag, attr in CLI_OVERRIDE_FLAGS.items():
+            if _flag_was_provided(flag):
+                user_overrides[attr] = getattr(args, attr)
+
+        quick_model_spec = args.quick_model.strip() if args.quick_model else None
+        if quick_model_spec:
+            if ":" in quick_model_spec:
+                quick_engine, quick_model_name = quick_model_spec.split(":", 1)
+                quick_config['engine'] = quick_engine or quick_config.get('engine', args.engine)
+                quick_config['model'] = quick_model_name
+                user_overrides['engine'] = quick_config['engine']
+                user_overrides['model'] = quick_model_name
+            else:
+                quick_config['model'] = quick_model_spec
+                user_overrides.setdefault('engine', quick_config.get('engine', args.engine))
+                user_overrides['model'] = quick_model_spec
+
+        menu.apply_config_to_args(args, quick_config)
+
+        # Re-apply explicit CLI overrides after quick config
+        for attr, value in user_overrides.items():
+            setattr(args, attr, value)
+
+        apply_word_mode_presets(args)
+        run_selected_mode(args)
+        return
 
     if len(sys.argv) == 1 or (len(sys.argv) == 2 and sys.argv[1] in ['--help', '-h']):
         if len(sys.argv) == 2:
@@ -799,6 +1036,7 @@ def main():
             return
         
         menu.apply_config_to_args(args, config)
+        apply_word_mode_presets(args)
 
     run_selected_mode(args)
 

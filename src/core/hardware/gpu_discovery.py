@@ -58,6 +58,12 @@ def _get_cuda_gpus() -> List[GPUInfo]:
         if not torch.cuda.is_available():
             return []
 
+        # Skip if this build is ROCm (torch.version.cuda is None while hip is set)
+        cuda_version = getattr(torch.version, "cuda", None)
+        hip_version = getattr(torch.version, "hip", None)
+        if cuda_version in (None, "", "0.0") and hip_version not in (None, ""):
+            return []
+
         gpus = []
         for i in range(torch.cuda.device_count()):
             props = torch.cuda.get_device_properties(i)
@@ -92,7 +98,8 @@ def _get_rocm_gpus() -> List[GPUInfo]:
             return []
 
         # Check if this is actually ROCm
-        if 'rocm' not in torch.version.hip:
+        hip_version = getattr(torch.version, "hip", None)
+        if hip_version in (None, ""):
             return []
 
         gpus = []

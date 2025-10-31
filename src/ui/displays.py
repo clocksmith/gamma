@@ -29,6 +29,8 @@ from src.game.game_displays import (
     display_loading_error,
     display_engine_error,
     display_token_explanation_if_needed,
+    reset_special_token_notes,
+    flush_special_token_notes,
 )
 
 __all__ = [
@@ -52,4 +54,6 @@ __all__ = [
     "display_loading_error",
     "display_engine_error",
     "display_token_explanation_if_needed",
+    "reset_special_token_notes",
+    "flush_special_token_notes",
 ]

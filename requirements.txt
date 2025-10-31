@@ -1,28 +1,23 @@
-accelerate
-huggingface_hub
-numpy
-psutil
-PyYAML
-regex
-numpy
-requests
-gguf
-transformers
-vllm
-safetensors
-tokenizers
-tqdm
-transformers
-filelock
-Jinja2
-MarkupSafe
-networkx
-pip
-setuptools
-sympy
+# GAMMA Requirements
+#
+# IMPORTANT: Choose the right requirements file for your hardware!
+#
+# For AMD GPUs with ROCm:
+#   pip install -r requirements-rocm.txt
+#
+# For NVIDIA GPUs with CUDA:
+#   pip install -r requirements-cuda.txt
+#
+# For CPU-only or if unsure:
+#   pip install -r requirements-base.txt
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+#
+# This file provides CPU-only installation for compatibility:
+
+-r requirements-base.txt
+
+# PyTorch CPU-only (will be slow, use hardware-specific files above for GPU support)
+--index-url https://download.pytorch.org/whl/cpu
 torch
-torchgen
-typing_extensions
-urllib3
-fastapi
-uvicorn
+torchvision
+torchaudio

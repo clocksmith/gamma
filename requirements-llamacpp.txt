@@ -1,6 +1,35 @@
 # Requirements for the llama.cpp engine
 llama-cpp-python>=0.2.57
-# Note: Installation might require build tools (CMake, C++ Compiler)
-# and specific CMAKE_ARGS for hardware acceleration (e.g., CUDA, Metal, OpenBLAS).
-# Refer to: https://github.com/abetlen/llama-cpp-python
+
+# IMPORTANT: The default wheel is CPU-only. For GPU acceleration, rebuild with specific flags:
+#
+# AMD/ROCm GPUs (find your GPU architecture with: rocminfo | grep gfx):
+#   pip uninstall -y llama-cpp-python
+#   ROCM_PATH=/opt/rocm \
+#   CMAKE_ARGS="-DLLAMA_HIPBLAS=ON -DLLAMA_CUBLAS=OFF -DAMDGPU_TARGETS=gfx1100" \
+#   HIPBLASLT_DIR=/opt/rocm \
+#   pip install --no-binary llama-cpp-python llama-cpp-python
+#
+#   Common AMDGPU_TARGETS:
+#     - gfx1151: Strix Halo (Radeon 8000 series mobile)
+#     - gfx1100: Radeon RX 7000 series (RDNA 3)
+#     - gfx1030: Radeon RX 6000 series (RDNA 2)
+#     - gfx90a: MI200 series
+#     - gfx908: MI100 series
+#
+#   NOTE: ROCm builds are challenging with llama-cpp-python 0.3.16. The CMAKE flags
+#   may not be recognized correctly. For now, PyTorch with ROCm is recommended for GPU.
+#
+# NVIDIA/CUDA GPUs:
+#   pip uninstall -y llama-cpp-python
+#   CMAKE_ARGS="-DLLAMA_CUBLAS=ON" pip install --no-binary llama-cpp-python llama-cpp-python
+#
+# Apple Metal (macOS):
+#   pip uninstall -y llama-cpp-python
+#   CMAKE_ARGS="-DLLAMA_METAL=ON" pip install --no-binary llama-cpp-python llama-cpp-python
+#
+# Verify GPU support after installation:
+#   python -c "from llama_cpp import llama_supports_gpu_offload; print('GPU:', llama_supports_gpu_offload())"
+#
+# Note: Requires build tools (CMake, C++ Compiler)
 # `numpy` is in the base requirements.txt
