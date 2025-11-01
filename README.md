@@ -57,7 +57,7 @@ python gamma.py mind-meld \
 
 ---
 
-## Quick Start
+## Get Started
 
 ```bash
 # Install
@@ -84,7 +84,7 @@ See [Engine Documentation](./src/engines/README.md) and [Core Documentation](./s
 
 ---
 
-## Usage
+## More Example Usage
 
 ```bash
 # Interactive menu (recommended)
