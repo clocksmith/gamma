@@ -2,19 +2,15 @@
 
 **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
 
-```
-╭──────────────────────────────────────────────────╮
-│                                                  │
-│       ☇  GAMMA - LLM Learning & Experimentation  ☇       │
-│                                                  │
-╰──────────────────────────────────────────────────╯
-```
-
 An interactive game that teaches you how LLMs work by letting you predict what they'll say next.
+
+The project has evolved providing tools to experiment with, and benchmark, local models in a variety of ways.
 
 ---
 
-## What It Does
+## Main features
+
+<img width="1470" height="881" alt="Screenshot 2025-10-31 at 8 04 34 PM" src="https://github.com/user-attachments/assets/eab402c5-3478-4f6f-a632-7b7a03f5de51" />
 
 **The Game:** Try to guess which word the AI will choose next. See the probabilities in real-time. Learn how temperature, top-k, and sampling actually work by playing with them.
 
@@ -64,19 +60,9 @@ pip install -r requirements-pytorch.txt  # or requirements-llamacpp.txt
 python gamma.py game
 ```
 
-GAMMA auto-detects your Ollama models and HuggingFace cache. Just run it.
+GAMMA also auto-detects your Ollama models and HuggingFace cache.
 
----
-
-## Game Modes
-
-- **Interactive Game**: Predict the next token and see probability distributions
-- **Chat Mode**: Simple conversations with context preservation
-- **Tutorial Mode**: Guided lessons on tokenization, sampling, and attention
-- **Comparison Mode**: Run prompts through multiple models side-by-side
-- **Mind Meld Mode**: Multi-model collaboration with dynamic swapping
-
-See [Game Documentation](./src/game/README.md) for details.
+See [Game Documentation](./src/game/README.md) for more details.
 
 ---
 
@@ -110,7 +96,8 @@ python gamma.py mind-meld \
   --strategy confidence \
   --steps 50
 
-# Common options
+# Other common options
+--help                     # Detailed explanation of commands
 --temperature 0.7          # Sampling randomness (0.1-2.0)
 --top-k 40                 # Top-K filtering
 --top-p 0.95               # Nucleus sampling
