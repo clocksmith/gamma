@@ -16,6 +16,9 @@ The project has evolved providing tools to experiment with, and benchmark, local
 
 **Mind Meld (Experimental):** Watch multiple models collaborate on the same response, swapping control dynamically based on confidence, patterns, or strategy.
 
+<img width="1099" height="871" alt="Screenshot 2025-10-31 at 8 21 05 PM" src="https://github.com/user-attachments/assets/1280518e-26b8-425b-a00d-07db5a098a4d" />
+
+
 **Natural Language Commands:** Describe what you want to do, and GAMMA generates the command:
 
 > "I want to play with Gemma 2B using temperature 0.9"
