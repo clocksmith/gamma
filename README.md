@@ -10,16 +10,23 @@ The project has evolved providing tools to experiment with, and benchmark, local
 
 ## Main features
 
+### **The Game:** 
+
 <img width="1470" height="881" alt="Screenshot 2025-10-31 at 8 04 34 PM" src="https://github.com/user-attachments/assets/eab402c5-3478-4f6f-a632-7b7a03f5de51" />
 
-**The Game:** Try to guess which word the AI will choose next. See the probabilities in real-time. Learn how temperature, top-k, and sampling actually work by playing with them.
+Try to guess which word the AI will choose next. See the probabilities in real-time. Learn how temperature, top-k, and sampling actually work by playing with them.
 
-**Mind Meld (Experimental):** Watch multiple models collaborate on the same response, swapping control dynamically based on confidence, patterns, or strategy.
+### **Mind Meld (Experimental):** 
 
 <img width="1099" height="871" alt="Screenshot 2025-10-31 at 8 21 05 PM" src="https://github.com/user-attachments/assets/1280518e-26b8-425b-a00d-07db5a098a4d" />
 
+Watch multiple models collaborate on the same response, swapping control dynamically based on confidence, patterns, or strategy.
 
-**Natural Language Commands:** Describe what you want to do, and GAMMA generates the command:
+### **Natural Language Commands:** 
+
+<img width="1433" height="296" alt="Screenshot 2025-10-31 at 8 32 19 PM" src="https://github.com/user-attachments/assets/1811a6b9-525e-49da-ac7f-95b804bebab2" />
+
+Describe what you want to do, and GAMMA generates the command (either with a local model or an agentic CLI, such as Claude Code)
 
 > "I want to play with Gemma 2B using temperature 0.9"
 
