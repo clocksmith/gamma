@@ -4,6 +4,8 @@
 
 An interactive game that teaches you how LLMs work by letting you predict what they'll say next.
 
+See [AGENTS.md](AGENTS.md) for the active code-writing agent profile.
+
 The project has evolved providing tools to experiment with, and benchmark, local models in a variety of ways.
 
 ---
