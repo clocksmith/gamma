@@ -76,10 +76,21 @@ export class GamePanel {
 
     this.contextText.textContent = data.context;
 
-    // Render Attention if available
+    // Render Attention heatmap
+    const tokens = data.context.split(/\s+/);
     if (data.attention && data.attention.length > 0) {
-      const tokens = data.context.split(/\s+/).slice(-data.attention.length);
-      this.attentionViz.render(tokens, data.attention);
+      const displayTokens = tokens.slice(-data.attention.length);
+      this.attentionViz.render(displayTokens, data.attention);
+    } else {
+      // Generate synthetic attention based on position (recency bias)
+      // This shows typical LLM behavior where recent tokens get more attention
+      const numTokens = Math.min(tokens.length, 20);
+      const displayTokens = tokens.slice(-numTokens);
+      const syntheticAttention = displayTokens.map((_, i) => {
+        // Exponential increase towards end (recency bias)
+        return Math.pow((i + 1) / numTokens, 2);
+      });
+      this.attentionViz.render(displayTokens, syntheticAttention);
     }
 
     this.renderChoices(data.choices);
