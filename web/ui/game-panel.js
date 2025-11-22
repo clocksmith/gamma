@@ -94,7 +94,10 @@ export class GamePanel {
     }
 
     this.renderChoices(data.choices);
-    this.renderProbabilities(data.probStages, data.topTokens);
+    // Hide probabilities until after guess
+    this.probStagesGrid.innerHTML = '';
+    // Store for later reveal
+    this.pendingTopTokens = data.topTokens;
   }
 
   renderChoices(choices) {
@@ -142,11 +145,11 @@ export class GamePanel {
   showResult(data) {
     this.resultDisplay.classList.remove('hidden');
     this.resultDisplay.className = `result-display ${data.isCorrect ? 'correct' : 'incorrect'}`;
-    this.resultDisplay.querySelector('.result-text').textContent = 
+    this.resultDisplay.querySelector('.result-text').textContent =
       data.isCorrect ? 'Correct!' : `Missed it. The answer was: ${data.correctToken.text}`;
-    
+
     this.continueBtn.classList.remove('hidden');
-    
+
     // Highlight choices
     const buttons = this.choicesGrid.querySelectorAll('.choice-btn');
     buttons.forEach((btn, i) => {
@@ -154,5 +157,8 @@ export class GamePanel {
       if (i === data.correctChoice) btn.classList.add('correct');
       else if (i === data.playerChoice && !data.isCorrect) btn.classList.add('incorrect');
     });
+
+    // Reveal top tokens after guess
+    this.renderProbabilities(null, this.pendingTopTokens);
   }
 }
