@@ -1,9 +1,11 @@
 import { MODEL_CATALOG, PROVIDER_COLORS, MODEL_SIZE_CATEGORIES } from '../core/model-registry.js';
 import { EventBus } from '../utils/event-bus.js';
+import { STARTING_PROMPTS, getRandomPrompt } from '../core/prompts.js';
 
 export class ModelSelector {
   constructor(container) {
     this.container = container;
+    this.selectedPrompt = getRandomPrompt();
   }
 
   renderModelCard(id, info) {
@@ -32,6 +34,18 @@ export class ModelSelector {
 
     this.container.innerHTML = `
       <div class="model-selector">
+        <div class="prompt-section">
+          <h4 class="section-title">Starting Text</h4>
+          <div class="prompt-controls">
+            <input type="text" class="prompt-input" value="${this.escapeHtml(this.selectedPrompt)}" placeholder="Enter starting text...">
+            <button class="btn random-prompt-btn">Random</button>
+            <select class="prompt-select">
+              <option value="">Pick from list...</option>
+              ${STARTING_PROMPTS.map(p => `<option value="${this.escapeHtml(p)}">${this.escapeHtml(p.length > 40 ? p.slice(0, 40) + '...' : p)}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
         <h3>Select Model</h3>
 
         <div class="model-section">
@@ -57,11 +71,39 @@ export class ModelSelector {
       </div>
     `;
 
+    // Prompt controls
+    const promptInput = this.container.querySelector('.prompt-input');
+    const randomBtn = this.container.querySelector('.random-prompt-btn');
+    const promptSelect = this.container.querySelector('.prompt-select');
+
+    promptInput.addEventListener('input', () => {
+      this.selectedPrompt = promptInput.value;
+    });
+
+    randomBtn.addEventListener('click', () => {
+      this.selectedPrompt = getRandomPrompt();
+      promptInput.value = this.selectedPrompt;
+      promptSelect.value = '';
+    });
+
+    promptSelect.addEventListener('change', () => {
+      if (promptSelect.value) {
+        this.selectedPrompt = promptSelect.value;
+        promptInput.value = this.selectedPrompt;
+      }
+    });
+
     this.container.querySelectorAll('.model-card').forEach(card => {
       card.addEventListener('click', () => {
-        EventBus.emit('model:selected', card.dataset.modelId);
+        EventBus.emit('model:selected', { modelId: card.dataset.modelId, prompt: this.selectedPrompt });
       });
     });
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML.replace(/"/g, '&quot;');
   }
 
   updateProgress(modelId, percent) {

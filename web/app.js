@@ -26,8 +26,9 @@ export class GammaApp {
     this.modelSelector = new ModelSelector(this.container);
     this.modelSelector.render();
 
-    EventBus.on('model:selected', (modelId) => {
-      this.startGame(modelId, savedConfig);
+    EventBus.on('model:selected', (data) => {
+      const config = { ...savedConfig, initialPrompt: data.prompt };
+      this.startGame(data.modelId, config);
     });
     
     EventBus.on('achievement', (ach) => Toast.show(ach));
