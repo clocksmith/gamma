@@ -75,7 +75,8 @@ export class TransformersEngine extends EngineInterface {
     const output = await this.model({
       input_ids: inputTensor,
       attention_mask: attentionMask,
-      position_ids: positionIds
+      position_ids: positionIds,
+      output_attentions: true
     });
 
     // Get logits from the last position
@@ -86,7 +87,9 @@ export class TransformersEngine extends EngineInterface {
     // Extract logits for the last token position
     const startIdx = (seqLen - 1) * vocabSize;
     const logitsRaw = logits.data.slice(startIdx, startIdx + vocabSize);
-    const attentionData = null;
+
+    // Process attention weights if available
+    const attentionData = this._processAttention(output.attentions, seqLen);
 
     const pipelineResult = SamplingUtils.processLogitsPipeline(logitsRaw, {
       temperature, topK, topP
@@ -103,27 +106,31 @@ export class TransformersEngine extends EngineInterface {
     };
   }
 
-  _processAttention(attentions) {
-    if (!attentions || !attentions[0] || attentions[0].length === 0) return null;
-    const lastLayer = attentions[0][attentions[0].length - 1];
+  _processAttention(attentions, seqLen) {
+    if (!attentions || attentions.length === 0) return null;
+
+    // Get the last layer's attention
+    const lastLayer = attentions[attentions.length - 1];
     if (!lastLayer || !lastLayer.dims) return null;
 
+    // Attention shape: [batch, num_heads, seq_len, seq_len]
     const numHeads = lastLayer.dims[1];
-    const seqLen = lastLayer.dims[2];
     const data = lastLayer.data;
-    
+
     const averagedAttention = new Float32Array(seqLen);
-    
+
+    // Average attention across all heads for the last token position
     for (let s = 0; s < seqLen; s++) {
       let sum = 0;
       for (let h = 0; h < numHeads; h++) {
+        // Index into [batch=0, head=h, query=last, key=s]
         const idx = (h * seqLen * seqLen) + ((seqLen - 1) * seqLen) + s;
         sum += data[idx];
       }
       averagedAttention[s] = sum / numHeads;
     }
 
-    return averagedAttention;
+    return Array.from(averagedAttention);
   }
 
   _getTopTokens(probs, k) {
