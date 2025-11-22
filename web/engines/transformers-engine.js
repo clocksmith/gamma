@@ -1,4 +1,4 @@
-import { AutoTokenizer, AutoModelForCausalLM, env } from '@huggingface/transformers';
+import { AutoTokenizer, AutoModelForCausalLM, env, Tensor } from '@huggingface/transformers';
 import { EngineInterface } from '../core/engine-interface.js';
 import { SamplingUtils } from '../core/sampling-utils.js';
 import { EventBus } from '../utils/event-bus.js';
@@ -57,16 +57,28 @@ export class TransformersEngine extends EngineInterface {
   async predictNext(inputIds, { temperature, topK, topP }) {
     if (!this.model) throw new Error('Model not loaded');
 
-    const output = await this.model.generate(inputIds, {
-      max_new_tokens: 1,
-      return_dict_in_generate: true,
-      output_scores: true,
-      do_sample: false
-    });
+    // Use forward pass to get logits directly instead of generate()
+    // This avoids issues with output_scores in some model configurations
 
-    const lastTokenScores = output.scores[0];
-    const logitsRaw = lastTokenScores.data;
-    const attentionData = null; // Attention not supported in generate()
+    // Convert inputIds to tensor if needed
+    let inputTensor;
+    if (Array.isArray(inputIds)) {
+      inputTensor = new Tensor('int64', BigInt64Array.from(inputIds.map(BigInt)), [1, inputIds.length]);
+    } else {
+      inputTensor = inputIds;
+    }
+
+    const output = await this.model({ input_ids: inputTensor });
+
+    // Get logits from the last position
+    const logits = output.logits;
+    const vocabSize = logits.dims[logits.dims.length - 1];
+    const seqLen = logits.dims[1];
+
+    // Extract logits for the last token position
+    const startIdx = (seqLen - 1) * vocabSize;
+    const logitsRaw = logits.data.slice(startIdx, startIdx + vocabSize);
+    const attentionData = null;
 
     const pipelineResult = SamplingUtils.processLogitsPipeline(logitsRaw, {
       temperature, topK, topP
