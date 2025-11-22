@@ -35,6 +35,10 @@ export class ModelSelector {
 
     this.container.innerHTML = `
       <div class="model-selector">
+        <div class="start-section top">
+          <button class="btn start-game-btn">Start Game</button>
+        </div>
+
         <div class="prompt-section">
           <h4 class="section-title">Starting Text</h4>
           <div class="prompt-controls">
@@ -66,10 +70,6 @@ export class ModelSelector {
           <div class="model-grid">
             ${experimentalModels.map(([id, info]) => this.renderModelCard(id, info)).join('')}
           </div>
-        </div>
-
-        <div class="start-section">
-          <button class="btn start-game-btn">Start Game</button>
         </div>
       </div>
     `;
