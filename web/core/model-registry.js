@@ -7,7 +7,7 @@ export const MODEL_CATALOG = {
     vram: '1.2GB',
     capabilities: ['balanced'],
     provider: 'google',
-    released: 'Mar 2025',
+    released: 'Mar 25',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16'
@@ -20,7 +20,7 @@ export const MODEL_CATALOG = {
     vram: '2GB',
     capabilities: ['quality', 'smart'],
     provider: 'huggingface',
-    released: 'Nov 2024',
+    released: 'Nov 24',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4'
@@ -32,7 +32,7 @@ export const MODEL_CATALOG = {
     vram: '400MB',
     capabilities: ['balanced', 'fast'],
     provider: 'huggingface',
-    released: 'Nov 2024',
+    released: 'Nov 24',
     recommended: true,
     engine: 'transformers',
     dtype: 'fp16'
@@ -44,7 +44,7 @@ export const MODEL_CATALOG = {
     vram: '200MB',
     capabilities: ['ultra-fast', 'lightweight'],
     provider: 'huggingface',
-    released: 'Nov 2024',
+    released: 'Nov 24',
     recommended: true,
     engine: 'transformers',
     dtype: 'fp16'
@@ -57,7 +57,7 @@ export const MODEL_CATALOG = {
     vram: '3.5GB',
     capabilities: ['quality', 'coding'],
     provider: 'alibaba',
-    released: 'Sep 2024',
+    released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16'
@@ -69,7 +69,7 @@ export const MODEL_CATALOG = {
     vram: '1.8GB',
     capabilities: ['quality', 'multilingual'],
     provider: 'alibaba',
-    released: 'Sep 2024',
+    released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16'
@@ -82,7 +82,7 @@ export const MODEL_CATALOG = {
     vram: '3.5GB',
     capabilities: ['quality'],
     provider: 'meta',
-    released: 'Sep 2024',
+    released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16'
@@ -94,7 +94,7 @@ export const MODEL_CATALOG = {
     vram: '1.2GB',
     capabilities: ['balanced'],
     provider: 'meta',
-    released: 'Sep 2024',
+    released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16'
@@ -107,7 +107,7 @@ export const MODEL_CATALOG = {
     vram: '2.5GB',
     capabilities: ['quality'],
     provider: 'google',
-    released: 'Jun 2024',
+    released: 'Jun 24',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16'
@@ -120,7 +120,7 @@ export const MODEL_CATALOG = {
     vram: '4GB',
     capabilities: ['quality', 'reasoning'],
     provider: 'microsoft',
-    released: 'Apr 2024',
+    released: 'Apr 24',
     recommended: false,
     engine: 'transformers',
     dtype: 'q4'
