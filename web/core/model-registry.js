@@ -12,7 +12,7 @@ export const MODEL_CATALOG = {
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16',
-    warning: 'May fail on some devices'
+    experimental: true
   },
   // SmolLM2 - Nov 2024
   'HuggingFaceTB/SmolLM2-1.7B-Instruct': {
@@ -67,7 +67,7 @@ export const MODEL_CATALOG = {
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16',
-    warning: 'Large model - may fail'
+    experimental: true
   },
   'onnx-community/Qwen2.5-1.5B-Instruct': {
     id: 'onnx-community/Qwen2.5-1.5B-Instruct',
@@ -95,7 +95,7 @@ export const MODEL_CATALOG = {
     recommended: false,
     engine: 'transformers',
     dtype: 'q4f16',
-    warning: 'Large model - may fail'
+    experimental: true
   },
   'onnx-community/Llama-3.2-1B-Instruct': {
     id: 'onnx-community/Llama-3.2-1B-Instruct',
@@ -137,15 +137,15 @@ export const MODEL_CATALOG = {
     recommended: false,
     engine: 'transformers',
     dtype: 'q4',
-    warning: 'Large model - may fail'
+    experimental: true
   }
 };
 
 // Helper to categorize models by size
 export const MODEL_SIZE_CATEGORIES = {
   small: ['HuggingFaceTB/SmolLM2-135M-Instruct', 'HuggingFaceTB/SmolLM2-360M-Instruct'],
-  medium: ['onnx-community/gemma-3-1b-it-ONNX', 'onnx-community/Llama-3.2-1B-Instruct', 'onnx-community/Qwen2.5-1.5B-Instruct', 'HuggingFaceTB/SmolLM2-1.7B-Instruct'],
-  large: ['onnx-community/Qwen2.5-3B-Instruct', 'onnx-community/Llama-3.2-3B-Instruct', 'Xenova/Phi-3-mini-4k-instruct']
+  medium: ['onnx-community/Llama-3.2-1B-Instruct', 'onnx-community/Qwen2.5-1.5B-Instruct', 'HuggingFaceTB/SmolLM2-1.7B-Instruct'],
+  experimental: ['onnx-community/gemma-3-1b-it-ONNX', 'onnx-community/Qwen2.5-3B-Instruct', 'onnx-community/Llama-3.2-3B-Instruct', 'Xenova/Phi-3-mini-4k-instruct']
 };
 
 export const DEFAULT_MODEL = 'HuggingFaceTB/SmolLM2-360M-Instruct';

@@ -181,9 +181,9 @@ export class GamePanel {
       return `<span class="attn-token" style="background:rgb(${r},${g},${b});color:${textColor}">${this.escapeHtml(token)}</span>`;
     }).join(' ');
 
-    // Render aligned numbers
+    // Render aligned numbers (show normalized 0.0-1.0)
     const numbersHtml = displayTokens.map((token, i) => {
-      const value = (normalized[i] * 100).toFixed(0);
+      const value = normalized[i].toFixed(2);
       return `<span class="attn-number">${value}</span>`;
     }).join('');
 

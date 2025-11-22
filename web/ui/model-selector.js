@@ -14,7 +14,6 @@ export class ModelSelector {
           <span class="provider-badge" style="color: ${PROVIDER_COLORS[info.provider] || '#888'}">${info.provider}</span>
         </div>
         <div class="model-specs">${info.size} • ${info.downloadSize || info.vram} • ${info.released}</div>
-        ${info.warning ? `<div class="model-warning">${info.warning}</div>` : ''}
         <div class="model-caps">
           ${info.capabilities.map(c => `<span class="cap-badge">${c}</span>`).join('')}
         </div>
@@ -29,7 +28,7 @@ export class ModelSelector {
   render() {
     const smallModels = MODEL_SIZE_CATEGORIES.small.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
     const mediumModels = MODEL_SIZE_CATEGORIES.medium.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
-    const largeModels = MODEL_SIZE_CATEGORIES.large.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
+    const experimentalModels = MODEL_SIZE_CATEGORIES.experimental.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
 
     this.container.innerHTML = `
       <div class="model-selector">
@@ -50,9 +49,9 @@ export class ModelSelector {
         </div>
 
         <div class="model-section">
-          <h4 class="section-title">Large (Experimental)</h4>
+          <h4 class="section-title">Experimental (May fail on some devices)</h4>
           <div class="model-grid">
-            ${largeModels.map(([id, info]) => this.renderModelCard(id, info)).join('')}
+            ${experimentalModels.map(([id, info]) => this.renderModelCard(id, info)).join('')}
           </div>
         </div>
       </div>
