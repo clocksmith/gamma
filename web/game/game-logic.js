@@ -10,7 +10,12 @@ export function generateChoices(topTokens, engine, numChoices = 4) {
   });
 
   if (filtered.length < numChoices) {
-    return topTokens.slice(0, numChoices);
+    const choices = topTokens.slice(0, numChoices);
+    return {
+      choices,
+      correctIndex: 0,
+      correctToken: choices[0]
+    };
   }
 
   const correct = filtered[0];
