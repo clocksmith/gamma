@@ -105,8 +105,10 @@ export class GamePanel {
     this.choicesGrid.innerHTML = choices.map((choice, i) => `
       <button class="choice-btn" data-index="${i}">
         <span class="choice-label">${labels[i]}</span>
-        <span class="choice-text">${choice.text}</span>
-        <span class="choice-prob">${(choice.prob * 100).toFixed(1)}%</span>
+        <div class="choice-content">
+          <span class="choice-text">${choice.text}</span>
+          <span class="choice-prob">${(choice.prob * 100).toFixed(1)}%</span>
+        </div>
       </button>
     `).join('');
 
