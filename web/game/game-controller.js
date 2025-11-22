@@ -33,6 +33,7 @@ export class GameController {
       context: this.context,
       choices,
       attention: prediction.attention,
+      topTokens: prediction.topTokens,
       probStages: {
         raw: prediction.logitsRaw,
         temperature: prediction.stages.temperature,

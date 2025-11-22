@@ -8,7 +8,7 @@ export class ModelSelector {
 
   renderModelCard(id, info) {
     return `
-      <div class="model-card ${info.recommended ? 'recommended' : ''} ${info.warning ? 'has-warning' : ''}" data-model-id="${id}">
+      <div class="model-card ${info.recommended ? 'recommended' : ''}" data-model-id="${id}">
         <div class="model-header">
           <div class="model-name">${info.name}</div>
           <span class="provider-badge" style="color: ${PROVIDER_COLORS[info.provider] || '#888'}">${info.provider}</span>

@@ -83,7 +83,7 @@ export class GamePanel {
     }
 
     this.renderChoices(data.choices);
-    this.renderProbabilities(data.probStages);
+    this.renderProbabilities(data.probStages, data.topTokens);
   }
 
   renderChoices(choices) {
@@ -103,28 +103,29 @@ export class GamePanel {
     });
   }
 
-  renderProbabilities(stages) {
-    this.probStagesGrid.innerHTML = '';
-    ['raw', 'temperature', 'topK', 'topP'].forEach(stage => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'prob-stage';
-      const canvas = document.createElement('canvas');
-      canvas.style.width = '100%';
-      canvas.style.height = '150px';
-      wrapper.appendChild(canvas);
-      this.probStagesGrid.appendChild(wrapper);
-      
-      // Convert Float32Array to viz format if needed
-      // We need top tokens for each stage.
-      // Simplified: We visualize the top tokens of final prob for all stages to show drift?
-      // Or we need full data. Assuming stage passed in is full logits, we need to find top K locally.
-      // For this implementation, let's assume 'stages' contains processed top-token lists for simplicity
-      // OR we parse the raw arrays. Parsing raw arrays is expensive here.
-      // Ideally game-controller passes pre-calculated top lists for viz.
-      // Fallback: Just show final for now in one block if data complex.
-    });
-    // Note: To fully implement 4-stage viz, logic would extract top-k from each Float32Array.
-    // Skipping heavy compute in UI thread for brevity of this snippet.
+  renderProbabilities(stages, topTokens) {
+    if (!topTokens || topTokens.length === 0) {
+      this.probStagesGrid.innerHTML = '';
+      return;
+    }
+
+    this.probStagesGrid.innerHTML = `
+      <div class="prob-label">Top Predictions</div>
+      <div class="top-tokens-list">
+        ${topTokens.slice(0, 10).map(token => `
+          <div class="top-token-item">
+            <span class="top-token-text">${this.escapeHtml(token.text)}</span>
+            <span class="top-token-prob">${(token.prob * 100).toFixed(1)}%</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   showResult(data) {
