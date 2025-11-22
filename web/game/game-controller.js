@@ -57,6 +57,7 @@ export class GameController {
     EventBus.emit('round:result', {
       isCorrect,
       correctToken,
+      correctChoice: correctIndex,
       playerChoice,
       probabilities: prediction.topTokens
     });
