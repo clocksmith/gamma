@@ -16,9 +16,9 @@ export class ModelSelector {
             <div class="model-card ${info.recommended ? 'recommended' : ''}" data-model-id="${id}">
               <div class="model-header">
                 <div class="model-name">${info.name}</div>
-                <span class="provider-badge" style="background: ${PROVIDER_COLORS[info.provider] || '#888'}">${info.provider}</span>
+                <span class="provider-badge" style="color: ${PROVIDER_COLORS[info.provider] || '#888'}">${info.provider}</span>
               </div>
-              <div class="model-specs">${info.size} • ${info.vram} • ${info.released}</div>
+              <div class="model-specs">${info.size} • ${info.downloadSize || info.vram} • ${info.released}</div>
               <div class="model-caps">
                 ${info.capabilities.map(c => `<span class="cap-badge">${c}</span>`).join('')}
               </div>

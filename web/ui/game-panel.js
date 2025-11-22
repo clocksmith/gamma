@@ -75,13 +75,12 @@ export class GamePanel {
     this.continueBtn.classList.add('hidden');
 
     this.contextText.textContent = data.context;
-    
-    // Render Attention
-    // Need tokenized context approx for viz, usually engine provides specific tokens
-    // Simplification: data.attention corresponds to last tokens
-    // For now, visualize attention on a dummy token split if simple text
-    const tokens = data.context.split(/\s+/).slice(-data.attention.length);
-    this.attentionViz.render(tokens, data.attention);
+
+    // Render Attention if available
+    if (data.attention && data.attention.length > 0) {
+      const tokens = data.context.split(/\s+/).slice(-data.attention.length);
+      this.attentionViz.render(tokens, data.attention);
+    }
 
     this.renderChoices(data.choices);
     this.renderProbabilities(data.probStages);
