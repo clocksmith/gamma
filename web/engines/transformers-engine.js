@@ -85,9 +85,10 @@ export class TransformersEngine extends EngineInterface {
   }
 
   _processAttention(attentions) {
-    if (!attentions) return null;
+    if (!attentions || !attentions[0] || attentions[0].length === 0) return null;
     const lastLayer = attentions[0][attentions[0].length - 1];
-    
+    if (!lastLayer || !lastLayer.dims) return null;
+
     const numHeads = lastLayer.dims[1];
     const seqLen = lastLayer.dims[2];
     const data = lastLayer.data;
