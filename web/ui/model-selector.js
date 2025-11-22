@@ -6,6 +6,7 @@ export class ModelSelector {
   constructor(container) {
     this.container = container;
     this.selectedPrompt = getRandomPrompt();
+    this.selectedModelId = 'HuggingFaceTB/SmolLM2-360M-Instruct'; // default to second small model
   }
 
   renderModelCard(id, info) {
@@ -46,8 +47,6 @@ export class ModelSelector {
           </div>
         </div>
 
-        <h3>Select Model</h3>
-
         <div class="model-section">
           <h4 class="section-title">Small (Fast)</h4>
           <div class="model-grid">
@@ -67,6 +66,10 @@ export class ModelSelector {
           <div class="model-grid">
             ${experimentalModels.map(([id, info]) => this.renderModelCard(id, info)).join('')}
           </div>
+        </div>
+
+        <div class="start-section">
+          <button class="btn start-game-btn">Start Game</button>
         </div>
       </div>
     `;
@@ -93,10 +96,25 @@ export class ModelSelector {
       }
     });
 
+    // Model selection
     this.container.querySelectorAll('.model-card').forEach(card => {
       card.addEventListener('click', () => {
-        EventBus.emit('model:selected', { modelId: card.dataset.modelId, prompt: this.selectedPrompt });
+        this.container.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        this.selectedModelId = card.dataset.modelId;
       });
+    });
+
+    // Mark default as selected
+    const defaultCard = this.container.querySelector(`[data-model-id="${this.selectedModelId}"]`);
+    if (defaultCard) defaultCard.classList.add('selected');
+
+    // Start game button
+    const startBtn = this.container.querySelector('.start-game-btn');
+    startBtn.addEventListener('click', () => {
+      if (this.selectedModelId) {
+        EventBus.emit('model:selected', { modelId: this.selectedModelId, prompt: this.selectedPrompt });
+      }
     });
   }
 

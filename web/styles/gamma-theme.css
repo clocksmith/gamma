@@ -193,16 +193,20 @@ body {
   border: 1px solid var(--primary);
   overflow-x: auto;
   justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .top-token-item {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 6px 10px;
   background: var(--bg-panel);
   border: 1px solid var(--border-default);
   font-size: 14px;
+  flex: 1;
 }
 
 .top-token-text {
@@ -312,13 +316,25 @@ body {
 
 .section-title {
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0 0 var(--space-md) 0;
   padding-bottom: var(--space-sm);
   border-bottom: 1px solid var(--border-subtle);
+}
+
+.start-section {
+  text-align: center;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.start-game-btn {
+  padding: 12px 32px;
+  font-size: 16px;
 }
 
 .model-grid {
@@ -365,6 +381,12 @@ body {
 
 .model-card:hover {
   border-color: var(--primary);
+}
+
+.model-card.selected {
+  border-color: var(--primary);
+  background: rgba(0, 255, 255, 0.15);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
 }
 
 .model-card.recommended::before {
