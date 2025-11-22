@@ -173,24 +173,21 @@ export class GamePanel {
     const maxWeight = Math.max(...weights, 0.0001);
     const normalized = weights.map(w => w / maxWeight);
 
-    // Render highlighted text
-    const textHtml = displayTokens.map((token, i) => {
+    // Render tokens with colors and aligned numbers underneath
+    const tokensHtml = displayTokens.map((token, i) => {
       const intensity = normalized[i];
       const [r, g, b] = this.getHeatmapColor(intensity);
       const textColor = intensity > 0.7 ? '#000' : '#fff';
-      return `<span class="attn-token" style="background:rgb(${r},${g},${b});color:${textColor}">${this.escapeHtml(token)}</span>`;
-    }).join(' ');
-
-    // Render aligned numbers (show normalized 0.0-1.0)
-    const numbersHtml = displayTokens.map((token, i) => {
       const value = normalized[i].toFixed(2);
-      return `<span class="attn-number">${value}</span>`;
+      return `
+        <div class="attn-item">
+          <span class="attn-token" style="background:rgb(${r},${g},${b});color:${textColor}">${this.escapeHtml(token)}</span>
+          <span class="attn-number" style="color:rgb(${r},${g},${b})">${value}</span>
+        </div>
+      `;
     }).join('');
 
-    this.contextText.innerHTML = `
-      <div class="attn-text-row">${textHtml}</div>
-      <div class="attn-numbers-row">${numbersHtml}</div>
-    `;
+    this.contextText.innerHTML = `<div class="attn-row">${tokensHtml}</div>`;
   }
 
   showResult(data) {
