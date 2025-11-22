@@ -110,20 +110,20 @@ export const MODEL_CATALOG = {
     engine: 'transformers',
     dtype: 'q4f16'
   },
-  // Gemma 2 - Jun 2024
-  'onnx-community/gemma-2-2b-it-ONNX': {
-    id: 'onnx-community/gemma-2-2b-it-ONNX',
-    name: 'Gemma 2 2B',
-    size: '2B',
-    downloadSize: '1.4GB',
-    vram: '2.5GB',
-    capabilities: ['quality'],
-    provider: 'google',
-    released: 'Jun 24',
-    recommended: false,
-    engine: 'transformers',
-    dtype: 'q4f16'
-  },
+  // Gemma 2 - Jun 2024 (requires HF auth - disabled)
+  // 'onnx-community/gemma-2-2b-it-ONNX': {
+  //   id: 'onnx-community/gemma-2-2b-it-ONNX',
+  //   name: 'Gemma 2 2B',
+  //   size: '2B',
+  //   downloadSize: '1.4GB',
+  //   vram: '2.5GB',
+  //   capabilities: ['quality'],
+  //   provider: 'google',
+  //   released: 'Jun 24',
+  //   recommended: false,
+  //   engine: 'transformers',
+  //   dtype: 'q4f16'
+  // },
   // Phi-3 - Apr 2024
   'Xenova/Phi-3-mini-4k-instruct': {
     id: 'Xenova/Phi-3-mini-4k-instruct',
@@ -144,7 +144,7 @@ export const MODEL_CATALOG = {
 // Helper to categorize models by size
 export const MODEL_SIZE_CATEGORIES = {
   small: ['HuggingFaceTB/SmolLM2-135M-Instruct', 'HuggingFaceTB/SmolLM2-360M-Instruct'],
-  medium: ['onnx-community/gemma-3-1b-it-ONNX', 'onnx-community/Llama-3.2-1B-Instruct', 'onnx-community/Qwen2.5-1.5B-Instruct', 'HuggingFaceTB/SmolLM2-1.7B-Instruct', 'onnx-community/gemma-2-2b-it-ONNX'],
+  medium: ['onnx-community/gemma-3-1b-it-ONNX', 'onnx-community/Llama-3.2-1B-Instruct', 'onnx-community/Qwen2.5-1.5B-Instruct', 'HuggingFaceTB/SmolLM2-1.7B-Instruct'],
   large: ['onnx-community/Qwen2.5-3B-Instruct', 'onnx-community/Llama-3.2-3B-Instruct', 'Xenova/Phi-3-mini-4k-instruct']
 };
 
