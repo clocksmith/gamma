@@ -1,6 +1,8 @@
 # Web GAMMA
 
-A browser-based port of the GAMMA token prediction game with reploid's cyberpunk aesthetic.
+**[Play Now](https://gamma-web-game.web.app)**
+
+A browser-based port of the GAMMA token prediction game.
 
 ## Overview
 
