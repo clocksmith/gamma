@@ -74,24 +74,21 @@ export class GamePanel {
     this.resultDisplay.classList.add('hidden');
     this.continueBtn.classList.add('hidden');
 
-    this.contextText.textContent = data.context;
-
-    // Render Attention heatmap
+    // Render context with attention highlighting
     const tokens = data.context.split(/\s+/);
+    let attentionWeights;
+
     if (data.attention && data.attention.length > 0) {
-      const displayTokens = tokens.slice(-data.attention.length);
-      this.attentionViz.render(displayTokens, data.attention);
+      attentionWeights = data.attention;
     } else {
       // Generate synthetic attention based on position (recency bias)
-      // This shows typical LLM behavior where recent tokens get more attention
       const numTokens = Math.min(tokens.length, 20);
-      const displayTokens = tokens.slice(-numTokens);
-      const syntheticAttention = displayTokens.map((_, i) => {
-        // Exponential increase towards end (recency bias)
+      attentionWeights = tokens.slice(-numTokens).map((_, i) => {
         return Math.pow((i + 1) / numTokens, 2);
       });
-      this.attentionViz.render(displayTokens, syntheticAttention);
     }
+
+    this.renderAttentionText(tokens, attentionWeights);
 
     this.renderChoices(data.choices);
     // Hide probabilities until after guess
@@ -103,11 +100,11 @@ export class GamePanel {
   renderChoices(choices) {
     const labels = ['A', 'B', 'C', 'D'];
     this.choicesGrid.innerHTML = choices.map((choice, i) => `
-      <button class="choice-btn" data-index="${i}">
+      <button class="choice-btn" data-index="${i}" data-prob="${(choice.prob * 100).toFixed(1)}">
         <span class="choice-label">${labels[i]}</span>
         <div class="choice-content">
           <span class="choice-text">${choice.text}</span>
-          <span class="choice-prob">${(choice.prob * 100).toFixed(1)}%</span>
+          <span class="choice-prob hidden"></span>
         </div>
       </button>
     `).join('');
@@ -144,6 +141,58 @@ export class GamePanel {
     return div.innerHTML;
   }
 
+  // Viridis-like colorblind-friendly palette
+  getHeatmapColor(t) {
+    const colors = [
+      [68, 1, 84],     // dark purple
+      [59, 82, 139],   // blue-purple
+      [33, 144, 140],  // teal
+      [93, 201, 99],   // green
+      [253, 231, 37]   // yellow
+    ];
+
+    const idx = t * (colors.length - 1);
+    const i = Math.floor(idx);
+    const f = idx - i;
+
+    if (i >= colors.length - 1) return colors[colors.length - 1];
+
+    const c1 = colors[i];
+    const c2 = colors[i + 1];
+
+    return [
+      Math.round(c1[0] + f * (c2[0] - c1[0])),
+      Math.round(c1[1] + f * (c2[1] - c1[1])),
+      Math.round(c1[2] + f * (c2[2] - c1[2]))
+    ];
+  }
+
+  renderAttentionText(tokens, weights) {
+    const numWeights = weights.length;
+    const displayTokens = tokens.slice(-numWeights);
+    const maxWeight = Math.max(...weights, 0.0001);
+    const normalized = weights.map(w => w / maxWeight);
+
+    // Render highlighted text
+    const textHtml = displayTokens.map((token, i) => {
+      const intensity = normalized[i];
+      const [r, g, b] = this.getHeatmapColor(intensity);
+      const textColor = intensity > 0.7 ? '#000' : '#fff';
+      return `<span class="attn-token" style="background:rgb(${r},${g},${b});color:${textColor}">${this.escapeHtml(token)}</span>`;
+    }).join(' ');
+
+    // Render aligned numbers
+    const numbersHtml = displayTokens.map((token, i) => {
+      const value = (normalized[i] * 100).toFixed(0);
+      return `<span class="attn-number">${value}</span>`;
+    }).join('');
+
+    this.contextText.innerHTML = `
+      <div class="attn-text-row">${textHtml}</div>
+      <div class="attn-numbers-row">${numbersHtml}</div>
+    `;
+  }
+
   showResult(data) {
     this.resultDisplay.classList.remove('hidden');
     this.resultDisplay.className = `result-display ${data.isCorrect ? 'correct' : 'incorrect'}`;
@@ -152,12 +201,17 @@ export class GamePanel {
 
     this.continueBtn.classList.remove('hidden');
 
-    // Highlight choices
+    // Highlight choices and reveal probabilities
     const buttons = this.choicesGrid.querySelectorAll('.choice-btn');
     buttons.forEach((btn, i) => {
       btn.disabled = true;
       if (i === data.correctChoice) btn.classList.add('correct');
       else if (i === data.playerChoice && !data.isCorrect) btn.classList.add('incorrect');
+
+      // Reveal probability
+      const probEl = btn.querySelector('.choice-prob');
+      probEl.textContent = btn.dataset.prob + '%';
+      probEl.classList.remove('hidden');
     });
 
     // Reveal top tokens after guess
