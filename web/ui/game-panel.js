@@ -25,7 +25,6 @@ export class GamePanel {
         </div>
         
         <div class="context-display">
-          <div class="context-label">Context:</div>
           <div class="context-text"></div>
         </div>
         
