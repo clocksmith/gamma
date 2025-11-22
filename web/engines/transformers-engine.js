@@ -61,14 +61,22 @@ export class TransformersEngine extends EngineInterface {
     // This avoids issues with output_scores in some model configurations
 
     // Convert inputIds to tensor if needed
-    let inputTensor;
-    if (Array.isArray(inputIds)) {
-      inputTensor = new Tensor('int64', BigInt64Array.from(inputIds.map(BigInt)), [1, inputIds.length]);
-    } else {
-      inputTensor = inputIds;
-    }
+    let inputArray = Array.isArray(inputIds) ? inputIds : Array.from(inputIds);
+    const seqLength = inputArray.length;
 
-    const output = await this.model({ input_ids: inputTensor });
+    const inputTensor = new Tensor('int64', BigInt64Array.from(inputArray.map(BigInt)), [1, seqLength]);
+
+    // Create attention mask (all 1s for unmasked)
+    const attentionMask = new Tensor('int64', BigInt64Array.from(Array(seqLength).fill(1n)), [1, seqLength]);
+
+    // Create position ids (0, 1, 2, ...)
+    const positionIds = new Tensor('int64', BigInt64Array.from(Array.from({length: seqLength}, (_, i) => BigInt(i))), [1, seqLength]);
+
+    const output = await this.model({
+      input_ids: inputTensor,
+      attention_mask: attentionMask,
+      position_ids: positionIds
+    });
 
     // Get logits from the last position
     const logits = output.logits;

@@ -1,17 +1,17 @@
 export const MODEL_CATALOG = {
-  // Gemma 3 - Mar 2025
-  'onnx-community/gemma-3-1b-it-ONNX': {
-    id: 'onnx-community/gemma-3-1b-it-ONNX',
-    name: 'Gemma 3 1B',
-    size: '1B',
-    vram: '1.2GB',
-    capabilities: ['balanced'],
-    provider: 'google',
-    released: 'Mar 25',
-    recommended: false,
-    engine: 'transformers',
-    dtype: 'q4f16'
-  },
+  // Gemma 3 - Mar 2025 (disabled - incompatible with browser ONNX runtime)
+  // 'onnx-community/gemma-3-1b-it-ONNX': {
+  //   id: 'onnx-community/gemma-3-1b-it-ONNX',
+  //   name: 'Gemma 3 1B',
+  //   size: '1B',
+  //   vram: '1.2GB',
+  //   capabilities: ['balanced'],
+  //   provider: 'google',
+  //   released: 'Mar 25',
+  //   recommended: false,
+  //   engine: 'transformers',
+  //   dtype: 'q4f16'
+  // },
   // SmolLM2 - Nov 2024
   'HuggingFaceTB/SmolLM2-1.7B-Instruct': {
     id: 'HuggingFaceTB/SmolLM2-1.7B-Instruct',

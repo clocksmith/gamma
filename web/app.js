@@ -15,7 +15,7 @@ export class GammaApp {
     await Storage.init();
     Toast.init();
 
-    const savedModel = await Storage.getSetting('selectedModel', 'Qwen/Qwen2.5-0.5B-Instruct');
+    const savedModel = await Storage.getSetting('selectedModel', 'HuggingFaceTB/SmolLM2-360M-Instruct');
     const savedConfig = await Storage.getSetting('gameConfig', {
       temperature: 0.9,
       topK: 64,
