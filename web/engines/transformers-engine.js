@@ -61,13 +61,12 @@ export class TransformersEngine extends EngineInterface {
       max_new_tokens: 1,
       return_dict_in_generate: true,
       output_scores: true,
-      output_attentions: true,
       do_sample: false
     });
 
-    const lastTokenScores = output.scores[0]; 
+    const lastTokenScores = output.scores[0];
     const logitsRaw = lastTokenScores.data;
-    const attentionData = this._processAttention(output.attentions);
+    const attentionData = null; // Attention not supported in generate()
 
     const pipelineResult = SamplingUtils.processLogitsPipeline(logitsRaw, {
       temperature, topK, topP
