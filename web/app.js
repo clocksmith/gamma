@@ -20,7 +20,7 @@ export class GammaApp {
       temperature: 0.9,
       topK: 64,
       topP: 0.95,
-      maxRounds: 8
+      maxRounds: 16
     });
 
     this.modelSelector = new ModelSelector(this.container);
