@@ -89,7 +89,9 @@ export class TransformersEngine extends EngineInterface {
     const logitsRaw = logits.data.slice(startIdx, startIdx + vocabSize);
 
     // Process attention weights if available
+    console.log('output.attentions:', output.attentions);
     const attentionData = this._processAttention(output.attentions, seqLen);
+    console.log('attentionData:', attentionData);
 
     const pipelineResult = SamplingUtils.processLogitsPipeline(logitsRaw, {
       temperature, topK, topP
