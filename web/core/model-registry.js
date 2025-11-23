@@ -145,7 +145,7 @@ export const MODEL_CATALOG = {
 export const MODEL_SIZE_CATEGORIES = {
   small: ['HuggingFaceTB/SmolLM2-135M-Instruct', 'HuggingFaceTB/SmolLM2-360M-Instruct'],
   medium: ['onnx-community/Llama-3.2-1B-Instruct', 'onnx-community/Qwen2.5-1.5B-Instruct', 'HuggingFaceTB/SmolLM2-1.7B-Instruct'],
-  experimental: ['onnx-community/gemma-3-1b-it-ONNX', 'onnx-community/Qwen2.5-3B-Instruct', 'onnx-community/Llama-3.2-3B-Instruct', 'Xenova/Phi-3-mini-4k-instruct']
+  experimental: []
 };
 
 export const DEFAULT_MODEL = 'HuggingFaceTB/SmolLM2-360M-Instruct';
