@@ -122,7 +122,6 @@ export class GamePanel {
     }
 
     this.probStagesGrid.innerHTML = `
-      <div class="prob-label">Top Predictions</div>
       <div class="top-tokens-list">
         ${topTokens.slice(0, 8).map(token => `
           <div class="top-token-item">
