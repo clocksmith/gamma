@@ -31,7 +31,6 @@ export class ModelSelector {
   render() {
     const smallModels = MODEL_SIZE_CATEGORIES.small.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
     const mediumModels = MODEL_SIZE_CATEGORIES.medium.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
-    const experimentalModels = MODEL_SIZE_CATEGORIES.experimental.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
 
     this.container.innerHTML = `
       <div class="model-selector">
@@ -62,13 +61,6 @@ export class ModelSelector {
           <h4 class="section-title">Medium</h4>
           <div class="model-grid">
             ${mediumModels.map(([id, info]) => this.renderModelCard(id, info)).join('')}
-          </div>
-        </div>
-
-        <div class="model-section">
-          <h4 class="section-title">Experimental (May fail on some devices)</h4>
-          <div class="model-grid">
-            ${experimentalModels.map(([id, info]) => this.renderModelCard(id, info)).join('')}
           </div>
         </div>
       </div>

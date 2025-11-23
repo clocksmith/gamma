@@ -1,19 +1,4 @@
 export const MODEL_CATALOG = {
-  // Gemma 3 - Mar 2025
-  'onnx-community/gemma-3-1b-it-ONNX': {
-    id: 'onnx-community/gemma-3-1b-it-ONNX',
-    name: 'Gemma 3 1B',
-    size: '1B',
-    downloadSize: '700MB',
-    vram: '1.2GB',
-    capabilities: ['balanced'],
-    provider: 'google',
-    released: 'Mar 25',
-    recommended: false,
-    engine: 'transformers',
-    dtype: 'q4f16',
-    experimental: true
-  },
   // SmolLM2 - Nov 2024
   'HuggingFaceTB/SmolLM2-1.7B-Instruct': {
     id: 'HuggingFaceTB/SmolLM2-1.7B-Instruct',
@@ -55,20 +40,6 @@ export const MODEL_CATALOG = {
     dtype: 'fp16'
   },
   // Qwen 2.5 - Sep 2024
-  'onnx-community/Qwen2.5-3B-Instruct': {
-    id: 'onnx-community/Qwen2.5-3B-Instruct',
-    name: 'Qwen 2.5 3B',
-    size: '3B',
-    downloadSize: '1.9GB',
-    vram: '3.5GB',
-    capabilities: ['quality', 'coding'],
-    provider: 'alibaba',
-    released: 'Sep 24',
-    recommended: false,
-    engine: 'transformers',
-    dtype: 'q4f16',
-    experimental: true
-  },
   'onnx-community/Qwen2.5-1.5B-Instruct': {
     id: 'onnx-community/Qwen2.5-1.5B-Instruct',
     name: 'Qwen 2.5 1.5B',
@@ -82,21 +53,20 @@ export const MODEL_CATALOG = {
     engine: 'transformers',
     dtype: 'q4f16'
   },
-  // Llama 3.2 - Sep 2024
-  'onnx-community/Llama-3.2-3B-Instruct': {
-    id: 'onnx-community/Llama-3.2-3B-Instruct',
-    name: 'Llama 3.2 3B',
-    size: '3B',
-    downloadSize: '1.8GB',
-    vram: '3.5GB',
-    capabilities: ['quality'],
-    provider: 'meta',
+  'onnx-community/Qwen2.5-0.5B-Instruct': {
+    id: 'onnx-community/Qwen2.5-0.5B-Instruct',
+    name: 'Qwen 2.5 0.5B',
+    size: '0.5B',
+    downloadSize: '350MB',
+    vram: '600MB',
+    capabilities: ['fast', 'multilingual'],
+    provider: 'alibaba',
     released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
-    dtype: 'q4f16',
-    experimental: true
+    dtype: 'q4f16'
   },
+  // Llama 3.2 - Sep 2024
   'onnx-community/Llama-3.2-1B-Instruct': {
     id: 'onnx-community/Llama-3.2-1B-Instruct',
     name: 'Llama 3.2 1B',
@@ -110,41 +80,26 @@ export const MODEL_CATALOG = {
     engine: 'transformers',
     dtype: 'q4f16'
   },
-  // Gemma 2 - Jun 2024 (requires HF auth - disabled)
-  // 'onnx-community/gemma-2-2b-it-ONNX': {
-  //   id: 'onnx-community/gemma-2-2b-it-ONNX',
-  //   name: 'Gemma 2 2B',
-  //   size: '2B',
-  //   downloadSize: '1.4GB',
-  //   vram: '2.5GB',
-  //   capabilities: ['quality'],
-  //   provider: 'google',
-  //   released: 'Jun 24',
-  //   recommended: false,
-  //   engine: 'transformers',
-  //   dtype: 'q4f16'
-  // },
-  // Phi-3 - Apr 2024
-  'Xenova/Phi-3-mini-4k-instruct': {
-    id: 'Xenova/Phi-3-mini-4k-instruct',
-    name: 'Phi-3 Mini',
-    size: '3.8B',
-    downloadSize: '2.3GB',
-    vram: '4GB',
-    capabilities: ['quality', 'reasoning'],
-    provider: 'microsoft',
-    released: 'Apr 24',
+  // TinyLlama - Jan 2024
+  'onnx-community/TinyLlama-1.1B-Chat-v1.0': {
+    id: 'onnx-community/TinyLlama-1.1B-Chat-v1.0',
+    name: 'TinyLlama 1.1B',
+    size: '1.1B',
+    downloadSize: '600MB',
+    vram: '1.2GB',
+    capabilities: ['balanced', 'fast'],
+    provider: 'tinyllama',
+    released: 'Jan 24',
     recommended: false,
     engine: 'transformers',
-    dtype: 'q4',
-    experimental: true
+    dtype: 'q4f16'
   }
 };
 
 // Helper to categorize models by size
 export const MODEL_SIZE_CATEGORIES = {
-  small: ['HuggingFaceTB/SmolLM2-135M-Instruct', 'HuggingFaceTB/SmolLM2-360M-Instruct'],
-  medium: ['onnx-community/Llama-3.2-1B-Instruct', 'onnx-community/Qwen2.5-1.5B-Instruct', 'HuggingFaceTB/SmolLM2-1.7B-Instruct'],
+  small: ['HuggingFaceTB/SmolLM2-135M-Instruct', 'HuggingFaceTB/SmolLM2-360M-Instruct', 'onnx-community/Qwen2.5-0.5B-Instruct'],
+  medium: ['onnx-community/TinyLlama-1.1B-Chat-v1.0', 'onnx-community/Llama-3.2-1B-Instruct', 'onnx-community/Qwen2.5-1.5B-Instruct', 'HuggingFaceTB/SmolLM2-1.7B-Instruct'],
   experimental: []
 };
 
@@ -156,5 +111,6 @@ export const PROVIDER_COLORS = {
   meta: '#0668e1',        // Blue
   alibaba: '#ff6a00',     // Orange
   microsoft: '#00bcf2',   // Light blue
-  huggingface: '#ffcc00'  // Yellow
+  huggingface: '#ffcc00', // Yellow
+  tinyllama: '#9b59b6'    // Purple
 };
