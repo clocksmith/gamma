@@ -51,6 +51,7 @@ export class GammaApp {
       await engine.load();
 
       this.gamePanel = new GamePanel(this.container);
+      this.gamePanel.setModelName(modelId);
       this.gameController = new GameController(engine, config);
 
       // Bind input events

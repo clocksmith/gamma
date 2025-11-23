@@ -9,6 +9,7 @@ export class GamePanel {
     this.bindEvents();
     this.attentionViz = new AttentionViz(this.container.querySelector('.attention-canvas'));
     this.probVizRefs = {};
+    this.attentionHistory = []; // Store attention weights for each round
   }
 
   setupDOM() {
@@ -40,7 +41,11 @@ export class GamePanel {
         <div class="probability-container">
           <div class="prob-stages-grid"></div>
         </div>
-        
+
+        <div class="attention-heatmap-container">
+          <div class="attention-heatmap"></div>
+        </div>
+
         <div class="result-display hidden">
           <div class="result-text"></div>
         </div>
@@ -54,6 +59,7 @@ export class GamePanel {
     this.contextText = this.container.querySelector('.context-text');
     this.choicesGrid = this.container.querySelector('.choices-grid');
     this.probStagesGrid = this.container.querySelector('.prob-stages-grid');
+    this.attentionHeatmap = this.container.querySelector('.attention-heatmap');
     this.continueBtn = this.container.querySelector('.continue-btn');
     this.resultDisplay = this.container.querySelector('.result-display');
 
@@ -65,6 +71,12 @@ export class GamePanel {
   bindEvents() {
     EventBus.on('round:start', (data) => this.showRound(data));
     EventBus.on('round:result', (data) => this.showResult(data));
+  }
+
+  setModelName(modelId) {
+    const shortName = modelId.split('/').pop();
+    const titleEl = this.container.querySelector('.game-title');
+    titleEl.innerHTML = `GAMMA <span class="model-name-subtitle">${shortName}</span>`;
   }
 
   showRound(data) {
@@ -89,11 +101,46 @@ export class GamePanel {
 
     this.renderAttentionText(tokens, attentionWeights);
 
+    // Store attention for heatmap
+    this.attentionHistory.push({
+      weights: attentionWeights,
+      tokens: tokens.slice(-attentionWeights.length)
+    });
+    this.renderAttentionHeatmap();
+
     this.renderChoices(data.choices);
     // Hide probabilities until after guess
     this.probStagesGrid.innerHTML = '';
     // Store for later reveal
     this.pendingTopTokens = data.topTokens;
+  }
+
+  renderAttentionHeatmap() {
+    if (this.attentionHistory.length === 0) {
+      this.attentionHeatmap.innerHTML = '';
+      return;
+    }
+
+    let html = '<div class="heatmap-grid">';
+
+    // Each row represents one round's attention
+    this.attentionHistory.forEach((round, rowIdx) => {
+      html += '<div class="heatmap-row">';
+
+      // Normalize weights for this row
+      const maxWeight = Math.max(...round.weights, 0.0001);
+
+      round.weights.forEach((weight, colIdx) => {
+        const normalized = weight / maxWeight;
+        const [r, g, b] = this.getHeatmapColor(normalized);
+        html += `<div class="heatmap-cell" style="background:rgb(${r},${g},${b})" title="Round ${rowIdx + 1}, Token ${colIdx + 1}: ${normalized.toFixed(2)}"></div>`;
+      });
+
+      html += '</div>';
+    });
+
+    html += '</div>';
+    this.attentionHeatmap.innerHTML = html;
   }
 
   renderChoices(choices) {
@@ -122,6 +169,7 @@ export class GamePanel {
     }
 
     this.probStagesGrid.innerHTML = `
+      <div class="prob-label">Final Probabilities (after temperature, top-k, top-p)</div>
       <div class="top-tokens-list">
         ${topTokens.slice(0, 8).map(token => `
           <div class="top-token-item">
