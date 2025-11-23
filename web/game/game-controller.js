@@ -55,12 +55,17 @@ export class GameController {
       probabilities: prediction.probabilities
     });
 
+    const isLastRound = this.session.currentRound >= this.config.maxRounds;
+
     EventBus.emit('round:result', {
       isCorrect,
       correctToken,
       correctChoice: correctIndex,
       playerChoice,
-      probabilities: prediction.topTokens
+      probabilities: prediction.topTokens,
+      isLastRound,
+      finalScore: isLastRound ? this.session.score : null,
+      maxRounds: this.config.maxRounds
     });
 
     this.context += correctToken.text;

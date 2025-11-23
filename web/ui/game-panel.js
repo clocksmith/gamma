@@ -191,10 +191,22 @@ export class GamePanel {
   showResult(data) {
     this.resultDisplay.classList.remove('hidden');
     this.resultDisplay.className = `result-display ${data.isCorrect ? 'correct' : 'incorrect'}`;
-    this.resultDisplay.querySelector('.result-text').textContent =
-      data.isCorrect ? 'Correct!' : `Missed it. The answer was: ${data.correctToken.text}`;
 
-    this.continueBtn.classList.remove('hidden');
+    if (data.isLastRound) {
+      const percentage = Math.round((data.finalScore / data.maxRounds) * 100);
+      this.resultDisplay.querySelector('.result-text').innerHTML =
+        `${data.isCorrect ? 'Correct!' : `Missed it. The answer was: ${data.correctToken.text}`}<br><br>` +
+        `<strong>Game Over!</strong><br>` +
+        `Final Score: ${data.finalScore}/${data.maxRounds} (${percentage}%)`;
+      this.continueBtn.textContent = 'Play Again';
+      this.continueBtn.classList.remove('hidden');
+      this.continueBtn.onclick = () => window.location.reload();
+    } else {
+      this.resultDisplay.querySelector('.result-text').textContent =
+        data.isCorrect ? 'Correct!' : `Missed it. The answer was: ${data.correctToken.text}`;
+      this.continueBtn.textContent = 'Continue';
+      this.continueBtn.classList.remove('hidden');
+    }
 
     // Highlight choices and reveal probabilities
     const buttons = this.choicesGrid.querySelectorAll('.choice-btn');
