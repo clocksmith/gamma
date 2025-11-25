@@ -41,7 +41,40 @@ export class TransformersEngine extends EngineInterface {
   }
 
   _emitProgress(type, data) {
-    EventBus.emit('model:progress', { type, ...data });
+    // Enhanced progress reporting with stages
+    const stage = this._getLoadingStage(type, data);
+    EventBus.emit('model:progress', {
+      type,
+      stage,
+      stageLabel: this._getStageLabel(stage),
+      ...data
+    });
+  }
+
+  _getLoadingStage(type, data) {
+    if (type === 'tokenizer') {
+      if (data.status === 'initiate') return 'tokenizer_download';
+      if (data.status === 'progress') return 'tokenizer_download';
+      if (data.status === 'done') return 'tokenizer_ready';
+    }
+    if (type === 'model') {
+      if (data.status === 'initiate') return 'model_download';
+      if (data.status === 'progress') return 'model_download';
+      if (data.status === 'done') return 'model_compile';
+    }
+    return 'unknown';
+  }
+
+  _getStageLabel(stage) {
+    const labels = {
+      'tokenizer_download': 'Downloading tokenizer...',
+      'tokenizer_ready': 'Tokenizer ready',
+      'model_download': 'Downloading model weights...',
+      'model_compile': 'Compiling model for WebGPU/WASM...',
+      'ready': 'Model ready!',
+      'unknown': 'Loading...'
+    };
+    return labels[stage] || labels['unknown'];
   }
 
   encode(text) {

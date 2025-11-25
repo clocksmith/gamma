@@ -1,0 +1,55 @@
+{
+  "name": "binary-search-tree",
+  "description": "Implement a binary search tree with insert, search, and traversal methods",
+  "category": "1-foundations",
+  "difficulty": "hard",
+  "promptLevels": {
+    "novice": "make a binary tree",
+    "beginner": "create a binary search tree class",
+    "intermediate": "implement a binary search tree with insert and search operations",
+    "advanced": "create a BinarySearchTree class with insert, search, and inorder traversal methods that work with numbers",
+    "expert": "Implement a `BinarySearchTree` class with the following methods: `insert(value: number): void` to add a value, `search(value: number): boolean` to check if a value exists, and `inorderTraversal(): number[]` to return values in sorted order. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with proper type annotations for the TreeNode and BinarySearchTree classes. Export only the BinarySearchTree class.",
+    "javascript": "Use JavaScript with a TreeNode class for nodes. Export only the BinarySearchTree class.",
+    "javascript-jsdoc": "Use JavaScript with JSDoc annotations for all methods and classes. Include @param and @return tags. Export only the BinarySearchTree class."
+  },
+  "variants": {
+    "typescript": "Implement a `BinarySearchTree` class in TypeScript with proper type annotations. Include: `insert(value: number): void`, `search(value: number): boolean`, and `inorderTraversal(): number[]`. Use a private TreeNode class or interface. Export only the BinarySearchTree class.",
+    "javascript": "Implement a `BinarySearchTree` class in JavaScript. Include: `insert(value)`, `search(value)`, and `inorderTraversal()`. Use a TreeNode class for nodes. Export only the BinarySearchTree class.",
+    "javascript-jsdoc": "Implement a `BinarySearchTree` class in JavaScript with full JSDoc annotations. Include @param and @return tags for: `insert(value)`, `search(value)`, and `inorderTraversal()`. Export only the BinarySearchTree class."
+  },
+  "testCases": [
+    {
+      "test": "const bst = new BinarySearchTree(); bst.insert(5); console.assert(bst.search(5) === true, 'Should find inserted value');"
+    },
+    {
+      "test": "const bst = new BinarySearchTree(); bst.insert(5); console.assert(bst.search(10) === false, 'Should not find non-existent value');"
+    },
+    {
+      "test": "const bst = new BinarySearchTree(); [5,3,7,1,4,6,8].forEach(v => bst.insert(v)); const result = bst.inorderTraversal(); console.assert(JSON.stringify(result) === '[1,3,4,5,6,7,8]', 'Inorder traversal should return sorted array');"
+    },
+    {
+      "test": "const bst = new BinarySearchTree(); bst.insert(10); bst.insert(5); bst.insert(15); console.assert(bst.search(5) === true && bst.search(15) === true, 'Should find all inserted values');"
+    },
+    {
+      "test": "const bst = new BinarySearchTree(); const result = bst.inorderTraversal(); console.assert(Array.isArray(result) && result.length === 0, 'Empty tree should return empty array');"
+    }
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "insert-1000",
+      "code": "const bst = new BinarySearchTree(); for(let i=0; i<1000; i++) bst.insert(Math.floor(Math.random()*10000));",
+      "iterations": 10,
+      "baselineTimeMs": 50
+    },
+    {
+      "name": "search-balanced",
+      "code": "const bst = new BinarySearchTree(); [50,25,75,12,37,62,87].forEach(v => bst.insert(v)); for(let i=0; i<1000; i++) bst.search(37);",
+      "iterations": 100,
+      "baselineTimeMs": 5
+    }
+  ],
+  "requirements": ["class", "BinarySearchTree", "insert", "search", "inorderTraversal", "export"]
+}

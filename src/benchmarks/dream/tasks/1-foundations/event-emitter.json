@@ -1,0 +1,55 @@
+{
+  "name": "event-emitter",
+  "description": "Implement a custom event emitter with on, off, emit, and once methods",
+  "category": "1-foundations",
+  "difficulty": "medium",
+  "promptLevels": {
+    "novice": "make an event system",
+    "beginner": "create an event emitter class",
+    "intermediate": "implement an EventEmitter class with on, off, and emit methods",
+    "advanced": "create an EventEmitter class with on(event, callback), off(event, callback), emit(event, ...args), and once(event, callback) methods",
+    "expert": "Implement an `EventEmitter` class with: `on(event: string, callback: Function): void` to subscribe, `off(event: string, callback: Function): void` to unsubscribe, `emit(event: string, ...args: any[]): void` to trigger callbacks, and `once(event: string, callback: Function): void` for single-fire subscriptions. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with proper type annotations. Consider using generics or a callback type. Export only the EventEmitter class.",
+    "javascript": "Use JavaScript. Store listeners in a Map or object. Export only the EventEmitter class.",
+    "javascript-jsdoc": "Use JavaScript with JSDoc annotations for all methods. Document parameter types and return values. Export only the EventEmitter class."
+  },
+  "variants": {
+    "typescript": "Implement an `EventEmitter` class in TypeScript with proper type annotations. Methods: `on(event: string, callback: Function): void`, `off(event: string, callback: Function): void`, `emit(event: string, ...args: any[]): void`, `once(event: string, callback: Function): void`. Export only the EventEmitter class.",
+    "javascript": "Implement an `EventEmitter` class in JavaScript. Methods: `on(event, callback)`, `off(event, callback)`, `emit(event, ...args)`, `once(event, callback)`. Export only the EventEmitter class.",
+    "javascript-jsdoc": "Implement an `EventEmitter` class in JavaScript with full JSDoc annotations. Document all methods with @param and @return tags. Export only the EventEmitter class."
+  },
+  "testCases": [
+    {
+      "test": "const ee = new EventEmitter(); let called = false; ee.on('test', () => { called = true; }); ee.emit('test'); console.assert(called === true, 'Callback should be called on emit');"
+    },
+    {
+      "test": "const ee = new EventEmitter(); let value = 0; ee.on('add', (n) => { value += n; }); ee.emit('add', 5); ee.emit('add', 3); console.assert(value === 8, 'Should pass arguments to callback');"
+    },
+    {
+      "test": "const ee = new EventEmitter(); let count = 0; const cb = () => { count++; }; ee.on('test', cb); ee.emit('test'); ee.off('test', cb); ee.emit('test'); console.assert(count === 1, 'off should remove listener');"
+    },
+    {
+      "test": "const ee = new EventEmitter(); let count = 0; ee.once('test', () => { count++; }); ee.emit('test'); ee.emit('test'); console.assert(count === 1, 'once should only fire once');"
+    },
+    {
+      "test": "const ee = new EventEmitter(); let results = []; ee.on('test', (a, b) => { results.push(a + b); }); ee.emit('test', 1, 2); ee.emit('test', 3, 4); console.assert(results[0] === 3 && results[1] === 7, 'Should handle multiple args');"
+    }
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "emit-10000",
+      "code": "const ee = new EventEmitter(); let sum = 0; ee.on('add', (n) => { sum += n; }); for(let i=0; i<10000; i++) ee.emit('add', 1);",
+      "iterations": 10,
+      "baselineTimeMs": 20
+    },
+    {
+      "name": "many-listeners",
+      "code": "const ee = new EventEmitter(); for(let i=0; i<100; i++) ee.on('test', () => {}); for(let i=0; i<1000; i++) ee.emit('test');",
+      "iterations": 10,
+      "baselineTimeMs": 50
+    }
+  ],
+  "requirements": ["class", "EventEmitter", "on", "off", "emit", "once", "export"]
+}

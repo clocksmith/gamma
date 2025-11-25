@@ -84,19 +84,22 @@ class ModelState:
             if hasattr(self.engine, 'model') and self.engine.model:
                 model = self.engine.model
                 config = getattr(model, 'config', None)
-                
+
                 if config:
                     self.hidden_size = getattr(config, 'hidden_size', None)
-                    self.num_layers = getattr(config, 'num_layers', 
+                    self.num_layers = getattr(config, 'num_layers',
                                             getattr(config, 'n_layers', None))
                     self.num_heads = getattr(config, 'num_attention_heads',
                                            getattr(config, 'n_heads', None))
-                    if self.hidden_size and self.num_heads:
+                    # Safely calculate head_dim only if both values are present
+                    if self.hidden_size is not None and self.num_heads is not None and self.num_heads > 0:
                         self.head_dim = self.hidden_size // self.num_heads
                     self.context_length = getattr(config, 'max_position_embeddings',
                                                  getattr(config, 'n_positions', None))
-        except Exception:
-            pass  # Silently ignore if metadata extraction fails
+        except (AttributeError, TypeError) as e:
+            # Log extraction failure for debugging but don't fail
+            import logging
+            logging.debug(f"Model metadata extraction failed: {e}")
     
     def save_snapshot(self, include_cache: bool = True, include_hidden: bool = True):
         """Save current state as a snapshot"""

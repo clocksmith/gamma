@@ -1,0 +1,52 @@
+{
+  "name": "debounce-throttle",
+  "description": "Implement debounce and throttle utility functions for rate limiting",
+  "category": "1-foundations",
+  "difficulty": "medium",
+  "promptLevels": {
+    "novice": "limit how often a function runs",
+    "beginner": "create debounce and throttle functions",
+    "intermediate": "implement debounce and throttle functions that limit function execution rate",
+    "advanced": "create debounce(fn, delay) that delays execution until idle, and throttle(fn, limit) that limits execution rate",
+    "expert": "Implement `debounce<T extends (...args: any[]) => any>(fn: T, delay: number): T` that delays execution until `delay`ms of inactivity, and `throttle<T extends (...args: any[]) => any>(fn: T, limit: number): T` that ensures at most one execution per `limit`ms. Both should preserve `this` context and arguments. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with generics to preserve function types. Export both debounce and throttle functions.",
+    "javascript": "Use JavaScript with closure for timer management. Export both debounce and throttle functions.",
+    "javascript-jsdoc": "Use JavaScript with JSDoc including @template for function types. Export both functions."
+  },
+  "variants": {
+    "typescript": "Implement `debounce<T extends (...args: any[]) => any>(fn: T, delay: number): T` and `throttle<T extends (...args: any[]) => any>(fn: T, limit: number): T` in TypeScript. Preserve this context and arguments. Export both functions.",
+    "javascript": "Implement `debounce(fn, delay)` and `throttle(fn, limit)` in JavaScript. Use closures. Preserve this context and arguments. Export both functions.",
+    "javascript-jsdoc": "Implement `debounce(fn, delay)` and `throttle(fn, limit)` in JavaScript with full JSDoc annotations. Export both functions."
+  },
+  "testCases": [
+    {
+      "test": "let count = 0; const fn = debounce(() => count++, 50); fn(); fn(); fn(); await new Promise(r => setTimeout(r, 100)); console.assert(count === 1, 'Debounce should call once after delay');"
+    },
+    {
+      "test": "let count = 0; const fn = throttle(() => count++, 50); fn(); fn(); fn(); console.assert(count === 1, 'Throttle should call once immediately');"
+    },
+    {
+      "test": "let count = 0; const fn = throttle(() => count++, 50); fn(); await new Promise(r => setTimeout(r, 60)); fn(); console.assert(count === 2, 'Throttle should allow call after limit');"
+    },
+    {
+      "test": "let result = null; const fn = debounce((x) => { result = x; }, 50); fn(1); fn(2); fn(3); await new Promise(r => setTimeout(r, 100)); console.assert(result === 3, 'Debounce should use latest args');"
+    }
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "debounce-rapid-calls",
+      "code": "let count = 0; const fn = debounce(() => count++, 10); for(let i=0; i<1000; i++) fn();",
+      "iterations": 100,
+      "baselineTimeMs": 5
+    },
+    {
+      "name": "throttle-rapid-calls",
+      "code": "let count = 0; const fn = throttle(() => count++, 10); for(let i=0; i<1000; i++) fn();",
+      "iterations": 100,
+      "baselineTimeMs": 5
+    }
+  ],
+  "requirements": ["function", "debounce", "throttle", "export"]
+}

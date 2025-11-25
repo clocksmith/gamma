@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import List, Tuple, Optional, Dict, Any
 
@@ -6,6 +7,8 @@ try:
     from transformers import TFAutoModelForCausalLM, AutoTokenizer
     import numpy as np
 except ImportError: raise ImportError("TensorFlow or Transformers library not found. Install with `pip install -r requirements-tensorflow.txt`")
+
+logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine, TokenCategory
 from src.core import config as game_config
@@ -166,8 +169,8 @@ class TensorFlowEngine(LLMEngine):
         try:
             if hasattr(self.model, 'layers'):
                 return len([l for l in self.model.layers if 'layer' in l.name.lower()])
-        except Exception:
-            pass
+        except (AttributeError, TypeError) as e:
+            logger.debug(f"Could not count layers: {e}")
 
         # Default fallback
         return 12  # Reasonable default for many models
@@ -190,10 +193,10 @@ class TensorFlowEngine(LLMEngine):
                     token_text = self.get_token_text(token_id)
                     if token_text and not token_text.startswith('<'):
                         vocab[token_text] = token_id
-                except Exception:
+                except (KeyError, IndexError, ValueError):
                     continue
-        except Exception as e:
-            print(f"Warning: Could not build full vocabulary: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.warning(f"Could not build full vocabulary: {e}")
 
         return vocab
     def convert_to_numpy(self, tensor: Any) -> np.ndarray:

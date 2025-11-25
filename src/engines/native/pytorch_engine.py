@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import List, Tuple, Optional, Dict, Any
 import numpy as np
@@ -6,6 +7,8 @@ try:
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 except ImportError: raise ImportError("PyTorch-related libraries (transformers, torch, bitsandbytes, accelerate) not found. `pip install -r requirements-pytorch.txt`")
+
+logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine, TokenCategory
 from src.core import config as game_config
@@ -327,7 +330,8 @@ class PyTorchEngine(LLMEngine):
             # Try to get from vocabulary
             try:
                 return len(self.tokenizer.get_vocab())
-            except:
+            except (AttributeError, TypeError) as e:
+                logger.warning(f"Could not determine vocab size: {e}")
                 return -1
 
     def _decode_token_raw(self, token_id: int) -> str:
@@ -583,3 +587,28 @@ class PyTorchEngine(LLMEngine):
         if self._device:
             return str(self._device.type)
         return "cpu"
+
+    def _supports_cache_bridging(self) -> bool:
+        """PyTorch engine supports KV cache bridging."""
+        return True
+
+    def truncate_kv_cache(self, max_len: int) -> bool:
+        """Truncate KV cache to specified sequence length."""
+        if not self.has_kv_cache() or not isinstance(self._kv_cache, tuple):
+            return False
+
+        try:
+            truncated = []
+            for layer_cache in self._kv_cache:
+                if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
+                    k_cache, v_cache = layer_cache[0], layer_cache[1]
+                    # Shape: (batch, num_heads, seq_len, head_dim)
+                    k_trunc = k_cache[:, :, :max_len, :]
+                    v_trunc = v_cache[:, :, :max_len, :]
+                    truncated.append((k_trunc, v_trunc))
+
+            self._kv_cache = tuple(truncated) if truncated else None
+            return True
+        except (IndexError, RuntimeError) as e:
+            logger.warning(f"Failed to truncate KV cache: {e}")
+            return False

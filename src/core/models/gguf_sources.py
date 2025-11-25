@@ -11,6 +11,7 @@ and model_paths.py into a single, maintainable interface.
 """
 
 import os
+import struct
 import subprocess
 from typing import List, Dict, Optional, Set
 from dataclasses import dataclass
@@ -141,8 +142,8 @@ class GGUFSourceManager:
                                 gguf_meta = GGUFMetadata(blob_path)
                                 if gguf_meta.valid:
                                     metadata = gguf_meta.metadata
-                            except Exception:
-                                pass
+                            except (IOError, ValueError, struct.error):
+                                pass  # Invalid or unreadable GGUF file
 
                             # Get file size
                             size_bytes = os.path.getsize(blob_path)
@@ -208,8 +209,8 @@ class GGUFSourceManager:
                         gguf_meta = GGUFMetadata(file_path)
                         if gguf_meta.valid:
                             metadata = gguf_meta.metadata
-                    except Exception:
-                        pass
+                    except (IOError, ValueError, struct.error):
+                        pass  # Invalid or unreadable GGUF file
 
                     # Get file size
                     size_bytes = gguf_file.stat().st_size
@@ -226,7 +227,7 @@ class GGUFSourceManager:
                     self.models.append(model)
                     self._discovered_paths.add(real_path)
 
-            except Exception:
+            except (PermissionError, OSError):
                 # Skip directories that can't be accessed
                 continue
 
@@ -281,8 +282,8 @@ class GGUFSourceManager:
                         gguf_meta = GGUFMetadata(file_path)
                         if gguf_meta.valid:
                             metadata = gguf_meta.metadata
-                    except Exception:
-                        pass
+                    except (IOError, ValueError, struct.error):
+                        pass  # Invalid or unreadable GGUF file
 
                     # Get file size
                     size_bytes = gguf_file.stat().st_size
@@ -301,7 +302,7 @@ class GGUFSourceManager:
                     self.models.append(model)
                     self._discovered_paths.add(real_path)
 
-        except Exception:
+        except (PermissionError, OSError):
             # Failed to scan HF cache
             pass
 

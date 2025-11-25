@@ -112,7 +112,7 @@ class ABEEnsemble:
                             
                             candidates.append(ABECandidate(
                                 model_tokens=model_tokens,
-                                combined_score=total_score / len(self.models),
+                                combined_score=total_score / len(self.models) if len(self.models) > 0 else 0,
                                 agreed_text=agreed_text,
                                 is_complete=is_complete
                             ))

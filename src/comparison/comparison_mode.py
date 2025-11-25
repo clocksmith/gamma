@@ -46,33 +46,39 @@ class ComparisonMode:
     def load_models(self) -> bool:
         """Load all models for comparison."""
         print(ui.color_text("\n📊 Loading models for comparison...", cfg.COLOR_CYAN))
-        
+
+        failed_models = []
+
         for engine_type, model_name in self.models:
             try:
                 print(f"\nLoading {model_name} with {engine_type} engine...")
-                
+
                 # Create config for this model
                 model_config = vars(self.args).copy()
                 model_config['engine'] = engine_type
                 model_config['model'] = model_name
-                
+
                 engine = get_engine(engine_type, model_name, model_config)
                 engine.load()
-                
+
                 self.engines.append(engine)
                 self.model_names.append(f"{model_name.split('/')[-1]}")
                 self.total_scores[model_name] = 0
-                
+
                 print(ui.color_text(f"✓ {model_name} loaded", cfg.COLOR_GREEN))
-                
+
             except Exception as e:
                 print(ui.color_text(f"✗ Failed to load {model_name}: {e}", cfg.COLOR_RED))
-                return False
-        
+                failed_models.append(model_name)
+
+        # Report all failures
+        if failed_models:
+            print(ui.color_text(f"\n⚠️  Failed to load {len(failed_models)} model(s): {', '.join(failed_models)}", cfg.COLOR_YELLOW))
+
         if len(self.engines) < 2:
             print(ui.color_text("\n⚠️  Need at least 2 models for comparison mode", cfg.COLOR_YELLOW))
             return False
-            
+
         return True
     
     def run_comparison(self) -> None:

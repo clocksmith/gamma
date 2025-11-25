@@ -1,7 +1,7 @@
 """GPU discovery and hardware information utilities."""
 
 import os
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
 
 
@@ -72,7 +72,7 @@ def _get_cuda_gpus() -> List[GPUInfo]:
             try:
                 vram_total = props.total_memory // (1024 * 1024)  # MB
                 vram_free = (props.total_memory - torch.cuda.memory_allocated(i)) // (1024 * 1024)
-            except:
+            except (RuntimeError, AttributeError):
                 vram_total = props.total_memory // (1024 * 1024)
                 vram_free = vram_total
 
@@ -145,7 +145,7 @@ def _get_metal_gpus() -> List[GPUInfo]:
                 compute_capability="Metal",
                 library='metal'
             )]
-        except:
+        except (ImportError, AttributeError, RuntimeError):
             pass
 
         # Fallback: assume Apple Silicon
@@ -243,7 +243,7 @@ def get_best_gpu() -> Optional[GPUInfo]:
     return max(gpu_devices, key=lambda g: g.vram_free_mb)
 
 
-def can_fit_model(model_size_mb: int, context_length: int = 2048) -> tuple[bool, str]:
+def can_fit_model(model_size_mb: int, context_length: int = 2048) -> Tuple[bool, str]:
     """
     Check if a model can fit in available VRAM.
 

@@ -1,9 +1,62 @@
+"""
+GAMMA Engine Interface
+
+This module defines the abstract base class for all LLM inference engines.
+All engines must implement this interface to work with GAMMA.
+"""
+
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Optional, Dict, Any, Union
+import logging
+from typing import (
+    List,
+    Tuple,
+    Optional,
+    Dict,
+    Any,
+    Union,
+    Callable,
+    TypeVar,
+    Protocol,
+    runtime_checkable,
+)
 from enum import Enum
+
 import numpy as np
+import numpy.typing as npt
 
 from src.core import config as cfg
+
+logger = logging.getLogger(__name__)
+
+# Type aliases for clarity
+TokenId = int
+TokenIds = Union[List[TokenId], npt.NDArray[np.int64], Any]  # Any for tensor types
+AttentionMask = Optional[Union[List[int], npt.NDArray[np.int64], Any]]
+Logits = Union[npt.NDArray[np.float32], Any]
+Probabilities = Union[npt.NDArray[np.float32], Any]
+KVCache = Any  # KV cache can be various types depending on engine
+
+
+@runtime_checkable
+class TokenizerProtocol(Protocol):
+    """Protocol for tokenizer interface."""
+
+    def encode(self, text: str, add_special_tokens: bool = True) -> List[int]: ...
+    def decode(self, token_ids: List[int], skip_special_tokens: bool = False) -> str: ...
+    def get_vocab(self) -> Dict[str, int]: ...
+
+    @property
+    def eos_token_id(self) -> Optional[int]: ...
+    @property
+    def bos_token_id(self) -> Optional[int]: ...
+    @property
+    def pad_token_id(self) -> Optional[int]: ...
+    @property
+    def unk_token_id(self) -> Optional[int]: ...
+
+
+# Type variable for tensor types
+TensorT = TypeVar('TensorT')
 
 
 class TokenCategory(Enum):
@@ -82,33 +135,73 @@ class LLMEngine(ABC):
             raise self._error_tokenizer_not_loaded()
 
     @abstractmethod
-    def load(self):
+    def load(self) -> None:
+        """Load the model and tokenizer into memory."""
         pass
 
     @abstractmethod
     def encode(
         self, text: str, add_special_tokens: bool = True
-    ) -> Tuple[Any, Optional[Any]]:
+    ) -> Tuple[TokenIds, AttentionMask]:
+        """
+        Encode text to token IDs.
+
+        Args:
+            text: Input text to encode
+            add_special_tokens: Whether to add special tokens (BOS, EOS, etc.)
+
+        Returns:
+            Tuple of (input_ids, attention_mask)
+        """
         pass
 
     @abstractmethod
-    def decode(self, token_ids: Any, skip_special_tokens: bool = False) -> str:
+    def decode(self, token_ids: TokenIds, skip_special_tokens: bool = False) -> str:
+        """
+        Decode token IDs back to text.
+
+        Args:
+            token_ids: Token IDs to decode
+            skip_special_tokens: Whether to skip special tokens in output
+
+        Returns:
+            Decoded text string
+        """
         pass
 
     @abstractmethod
     def predict_next(
         self,
-        input_ids: Any,
-        attention_mask: Optional[Any],
+        input_ids: TokenIds,
+        attention_mask: AttentionMask,
         temperature: float,
         top_k: int,
         top_p: float,
         output_attentions: bool = False,
         output_hidden_states: bool = False,
     ) -> Dict[str, Any]:
+        """
+        Predict the next token given input IDs.
+
+        Args:
+            input_ids: Input token IDs
+            attention_mask: Attention mask for the input
+            temperature: Sampling temperature (higher = more random)
+            top_k: Limit to top-k tokens (0 = disabled)
+            top_p: Nucleus sampling threshold (1.0 = disabled)
+            output_attentions: Whether to return attention weights
+            output_hidden_states: Whether to return hidden states
+
+        Returns:
+            Dictionary containing at minimum:
+                - next_token_id: ID of the predicted next token
+                - logits_raw: Raw logits from the model
+                - probabilities: Processed probability distribution
+        """
         pass
 
-    def reset_kv_cache(self):
+    def reset_kv_cache(self) -> None:
+        """Reset the KV cache to force full recomputation."""
         self._kv_cache = None
 
     def _process_logits_common_pipeline(
@@ -343,8 +436,8 @@ class LLMEngine(ABC):
 
     def _populate_special_token_map(self):
         if not self.tokenizer:
-            print(
-                f"{self.__class__.__name__} Warning: Tokenizer not loaded, cannot populate special token map."
+            logger.warning(
+                f"{self.__class__.__name__}: Tokenizer not loaded, cannot populate special token map."
             )
             return
 
@@ -364,8 +457,8 @@ class LLMEngine(ABC):
                     token_id_int = int(token_id_val)
                     self._special_token_id_to_game_repr[token_id_int] = game_repr_str
                 except (ValueError, TypeError, AttributeError) as e:
-                    print(
-                        f"{self.__class__.__name__} Warning: Could not convert/use token ID for '{game_key}': {token_id_val} (Error: {e})"
+                    logger.warning(
+                        f"{self.__class__.__name__}: Could not convert/use token ID for '{game_key}': {token_id_val} (Error: {e})"
                     )
 
         nl_attrs = ["newline_token_id", "nl_token_id", "line_break_token_id"]
@@ -379,8 +472,8 @@ class LLMEngine(ABC):
                     self._special_token_id_to_game_repr[newline_id_int] = cfg.TOKEN_NL
                     break
                 except (ValueError, TypeError, AttributeError) as e:
-                    print(
-                        f"{self.__class__.__name__} Warning: Could not convert/use newline token ID from '{nl_attr}': {newline_id_val} (Error: {e})"
+                    logger.warning(
+                        f"{self.__class__.__name__}: Could not convert/use newline token ID from '{nl_attr}': {newline_id_val} (Error: {e})"
                     )
 
         if hasattr(self.tokenizer, "token_bos") and callable(self.tokenizer.token_bos):
@@ -518,8 +611,7 @@ class LLMEngine(ABC):
         Engines that support bridging should override this method.
         """
         engine_name = self.__class__.__name__
-        if self.get_verbose():
-            print(f"{engine_name}: KV cache bridging not supported")
+        logger.debug(f"{engine_name}: KV cache bridging not supported")
         return False
 
     def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
@@ -544,8 +636,7 @@ class LLMEngine(ABC):
         Engines that support importing should override this method.
         """
         engine_name = self.__class__.__name__
-        if self.get_verbose():
-            print(f"{engine_name}: KV cache import not supported")
+        logger.debug(f"{engine_name}: KV cache import not supported")
         return False
     
     @abstractmethod
@@ -557,3 +648,179 @@ class LLMEngine(ABC):
     def get_device(self) -> str:
         """Get device type (cpu, cuda, mps, etc)."""
         pass
+
+    # ========================================================================
+    # KV Cache Validation & Metadata (standardized across engines)
+    # ========================================================================
+
+    def get_kv_cache_metadata(self) -> Optional[Dict[str, Any]]:
+        """Get structured metadata about the current KV cache.
+
+        Returns standardized metadata that can be used for validation
+        and compatibility checking across different engine types.
+
+        Returns:
+            Dictionary with:
+                - has_cache: bool - Whether cache exists
+                - seq_len: int - Sequence length in cache
+                - num_layers: int - Number of layers
+                - shape: tuple - Cache shape if available
+                - dtype: str - Data type
+                - device: str - Device location
+                - engine_type: str - Engine class name
+                - supports_bridging: bool - Whether cache can be bridged
+        """
+        if not self.has_kv_cache():
+            return {
+                'has_cache': False,
+                'seq_len': 0,
+                'num_layers': 0,
+                'shape': None,
+                'dtype': None,
+                'device': None,
+                'engine_type': self.__class__.__name__,
+                'supports_bridging': False
+            }
+
+        cache = self._kv_cache
+        shape = self.get_kv_cache_shape()
+        seq_len = self._infer_cache_seq_len(cache)
+        dtype = self._infer_cache_dtype(cache)
+
+        return {
+            'has_cache': True,
+            'seq_len': seq_len,
+            'num_layers': self._infer_cache_layers(cache),
+            'shape': shape,
+            'dtype': dtype,
+            'device': self._infer_cache_device(cache),
+            'engine_type': self.__class__.__name__,
+            'supports_bridging': self._supports_cache_bridging()
+        }
+
+    def _infer_cache_seq_len(self, cache: Any) -> int:
+        """Infer sequence length from cache object."""
+        if cache is None:
+            return 0
+
+        # Handle tuple of layer caches (HuggingFace format)
+        if isinstance(cache, (list, tuple)) and len(cache) > 0:
+            first_layer = cache[0]
+            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
+                key_tensor = first_layer[0]
+                if hasattr(key_tensor, 'shape'):
+                    # Typical shape: (batch, num_heads, seq_len, head_dim)
+                    return key_tensor.shape[-2] if len(key_tensor.shape) >= 2 else 0
+
+        return 0
+
+    def _infer_cache_layers(self, cache: Any) -> int:
+        """Infer number of layers from cache object."""
+        if cache is None:
+            return 0
+
+        if isinstance(cache, (list, tuple)):
+            return len(cache)
+
+        return 0
+
+    def _infer_cache_dtype(self, cache: Any) -> Optional[str]:
+        """Infer data type from cache object."""
+        if cache is None:
+            return None
+
+        if isinstance(cache, (list, tuple)) and len(cache) > 0:
+            first_layer = cache[0]
+            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
+                key_tensor = first_layer[0]
+                if hasattr(key_tensor, 'dtype'):
+                    return str(key_tensor.dtype)
+
+        return None
+
+    def _infer_cache_device(self, cache: Any) -> Optional[str]:
+        """Infer device from cache object."""
+        if cache is None:
+            return None
+
+        if isinstance(cache, (list, tuple)) and len(cache) > 0:
+            first_layer = cache[0]
+            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
+                key_tensor = first_layer[0]
+                if hasattr(key_tensor, 'device'):
+                    return str(key_tensor.device)
+
+        return self.get_device()
+
+    def _supports_cache_bridging(self) -> bool:
+        """Check if this engine supports KV cache bridging."""
+        # Override in subclasses that support bridging
+        return False
+
+    def validate_cache_compatibility(
+        self,
+        target_engine: 'LLMEngine',
+        required_seq_len: int = 0
+    ) -> Tuple[bool, str]:
+        """Validate if current cache is compatible with target engine.
+
+        Args:
+            target_engine: Engine to check compatibility with
+            required_seq_len: Minimum sequence length required
+
+        Returns:
+            Tuple of (is_compatible, reason_if_not)
+        """
+        source_meta = self.get_kv_cache_metadata()
+        if not source_meta or not source_meta.get('has_cache'):
+            return False, "Source has no KV cache"
+
+        if not self._supports_cache_bridging():
+            return False, f"{self.__class__.__name__} does not support cache bridging"
+
+        if not target_engine._supports_cache_bridging():
+            return False, f"{target_engine.__class__.__name__} does not support cache import"
+
+        # Check sequence length
+        if source_meta['seq_len'] < required_seq_len:
+            return False, f"Cache seq_len {source_meta['seq_len']} < required {required_seq_len}"
+
+        # Check layer count compatibility
+        source_layers = source_meta.get('num_layers', 0)
+        try:
+            target_layers = target_engine.get_num_layers()
+        except (RuntimeError, AttributeError):
+            target_layers = 0
+
+        if source_layers != target_layers and source_layers > 0 and target_layers > 0:
+            return False, f"Layer count mismatch: source={source_layers}, target={target_layers}"
+
+        return True, "Compatible"
+
+    def truncate_kv_cache(self, max_len: int) -> bool:
+        """Truncate KV cache to specified sequence length.
+
+        Default implementation does nothing (returns False).
+        Override in engines that support cache truncation.
+
+        Args:
+            max_len: Maximum sequence length to keep
+
+        Returns:
+            True if truncation was successful
+        """
+        return False
+
+    def extend_kv_cache(self, extension: Any) -> bool:
+        """Extend KV cache with additional key-value pairs.
+
+        Default implementation does nothing (returns False).
+        Override in engines that support cache extension.
+
+        Args:
+            extension: Cache extension to append
+
+        Returns:
+            True if extension was successful
+        """
+        return False

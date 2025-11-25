@@ -32,7 +32,7 @@ class GAMMALangChainLLM(LLM):
     LangChain-compatible wrapper for GAMMA engines.
 
     Example:
-        from src.engines.pytorch_engine import PyTorchEngine
+        from src.engines.native.pytorch_engine import PyTorchEngine
         from src.integrations.langchain_compat import GAMMALangChainLLM
 
         engine = PyTorchEngine("gpt2")
@@ -288,7 +288,7 @@ class GAMMAEmbeddings:
     that can extract hidden states (typically transformer models).
 
     Example:
-        from src.engines.pytorch_engine import PyTorchEngine
+        from src.engines.native.pytorch_engine import PyTorchEngine
         from src.integrations.langchain_compat import GAMMAEmbeddings
 
         engine = PyTorchEngine("sentence-transformers/all-MiniLM-L6-v2")

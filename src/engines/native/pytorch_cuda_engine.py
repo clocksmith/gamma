@@ -1,3 +1,4 @@
+import logging
 import time
 import os
 from typing import List, Tuple, Optional, Dict, Any
@@ -16,6 +17,8 @@ try:
         Gemma2FlashAttention2 = None
 except ImportError:
     raise ImportError("GPU engine requires PyTorch and transformers. Install with: pip install torch transformers bitsandbytes accelerate")
+
+logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine
 from src.core import config as game_config
@@ -329,7 +332,8 @@ class PyTorchCUDAEngine(LLMEngine):
             # Try to get from vocabulary
             try:
                 return len(self.tokenizer.get_vocab())
-            except:
+            except (AttributeError, TypeError) as e:
+                logger.warning(f"Could not determine vocab size: {e}")
                 return -1
     
     def _decode_token_raw(self, token_id: int) -> str:
@@ -437,3 +441,83 @@ class PyTorchCUDAEngine(LLMEngine):
             torch.cuda.empty_cache()
         self._persistent_cache.clear()
         print("PyTorchCUDAEngine: GPU cache cleared")
+
+    def _supports_cache_bridging(self) -> bool:
+        """PyTorch CUDA engine supports KV cache bridging."""
+        return True
+
+    def truncate_kv_cache(self, max_len: int) -> bool:
+        """Truncate KV cache to specified sequence length."""
+        if not self.has_kv_cache() or not isinstance(self._kv_cache, tuple):
+            return False
+
+        try:
+            truncated = []
+            for layer_cache in self._kv_cache:
+                if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
+                    k_cache, v_cache = layer_cache[0], layer_cache[1]
+                    # Shape: (batch, num_heads, seq_len, head_dim)
+                    k_trunc = k_cache[:, :, :max_len, :]
+                    v_trunc = v_cache[:, :, :max_len, :]
+                    truncated.append((k_trunc, v_trunc))
+
+            self._kv_cache = tuple(truncated) if truncated else None
+            return True
+        except (IndexError, RuntimeError) as e:
+            logger.warning(f"Failed to truncate KV cache: {e}")
+            return False
+
+    def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
+        """Export KV cache state for bridging."""
+        if not self.has_kv_cache():
+            return super().export_kv_cache_state()
+
+        try:
+            cache_as_numpy = []
+            if isinstance(self._kv_cache, tuple):
+                for layer_cache in self._kv_cache:
+                    if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
+                        k_cache, v_cache = layer_cache[0], layer_cache[1]
+                        cache_as_numpy.append((
+                            k_cache.detach().cpu().float().numpy(),
+                            v_cache.detach().cpu().float().numpy()
+                        ))
+
+            return {
+                'cache_data': cache_as_numpy,
+                'shape': self.get_kv_cache_shape(),
+                'engine_type': 'pytorch_cuda',
+                'has_cache': True,
+                'cache_supported': True
+            }
+        except (RuntimeError, ValueError) as e:
+            logger.warning(f"Failed to export KV cache: {e}")
+            return None
+
+    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
+        """Import KV cache state from another engine."""
+        try:
+            cache_data = state.get('cache_data')
+            if not cache_data:
+                return False
+
+            # Convert numpy arrays back to PyTorch tensors on CUDA
+            new_cache = []
+            for layer_data in cache_data:
+                if isinstance(layer_data, tuple) and len(layer_data) >= 2:
+                    k_np, v_np = layer_data
+                    k_tensor = torch.from_numpy(k_np).to(
+                        device=self._device,
+                        dtype=self._autocast_dtype
+                    )
+                    v_tensor = torch.from_numpy(v_np).to(
+                        device=self._device,
+                        dtype=self._autocast_dtype
+                    )
+                    new_cache.append((k_tensor, v_tensor))
+
+            self._kv_cache = tuple(new_cache) if new_cache else None
+            return True
+        except (RuntimeError, ValueError) as e:
+            logger.warning(f"Failed to import KV cache: {e}")
+            return False

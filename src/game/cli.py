@@ -268,6 +268,8 @@ def parse_arguments() -> argparse.Namespace:
                             help="Path to save Mind Meld statistics (requires --use-stats-tracker)")
     mind_group.add_argument("--initial-prompt", type=str, default=None,
                             help="Initial prompt to seed Mind Meld generation")
+    mind_group.add_argument("--use-model-offloading", action="store_true", default=False,
+                            help="Offload inactive models to CPU to save GPU memory (useful for large models)")
     
     mlx_group = parser.add_argument_group("MLX Engine Options")
     mlx_group.add_argument("--mlx-adapter-path", type=str, default=None,

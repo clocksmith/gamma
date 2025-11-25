@@ -1,7 +1,7 @@
 
 """Main Mind Meld Engine - Now with enhanced bridging by default."""
 
-
+import logging
 import os
 import time
 from typing import Any, Dict, List, Optional
@@ -11,17 +11,109 @@ import numpy as np
 from src.core import config as cfg
 from src.ui import displays as ui
 from src.core.engine_interface import LLMEngine
+
+logger = logging.getLogger(__name__)
 from src.mind_meld.bridges.kv_cache_handler import (
     KVCacheTranslator,
     PyTorchKVCache,
     get_model_architecture,
 )
 from src.mind_meld.core.abe_ensemble import ABEEnsemble
+from src.mind_meld.core.compatibility import (
+    ModelCompatibilityValidator,
+    CompatibilityLevel,
+    CompatibilityReport,
+)
 from src.mind_meld.core.blending import BlendingConfig, BlendingStrategy, LogitBlender
 from src.mind_meld.core.config import MeldConfig, SwapStrategy
 from src.mind_meld.core.statistics import StatisticsTracker
 from src.mind_meld.translators.vocabulary_translator import AligningVocabularyTranslator
 from src.mind_meld.visualization import SwapVisualizer, SwapEvent
+
+class ModelOffloader:
+    """Manages model offloading between GPU and CPU for memory-constrained systems.
+
+    This allows Mind Meld to work with larger models by only keeping the active
+    model on GPU while offloading inactive models to CPU RAM.
+    """
+
+    def __init__(self, enabled: bool = False, verbose: bool = False):
+        self.enabled = enabled
+        self.verbose = verbose
+        self._model_locations: Dict[int, str] = {}  # model_idx -> 'gpu' | 'cpu'
+
+    def _get_device_for_model(self, engine: LLMEngine) -> str:
+        """Get the current device location of a model."""
+        try:
+            if hasattr(engine, 'get_device'):
+                return engine.get_device()
+            if hasattr(engine, 'model') and hasattr(engine.model, 'device'):
+                return str(engine.model.device)
+        except Exception:
+            pass
+        return 'unknown'
+
+    def offload_to_cpu(self, engine: LLMEngine, model_idx: int) -> bool:
+        """Move a model from GPU to CPU memory."""
+        if not self.enabled:
+            return False
+
+        try:
+            if hasattr(engine, 'model') and engine.model is not None:
+                # Check if using PyTorch
+                if hasattr(engine.model, 'to'):
+                    engine.model.to('cpu')
+                    self._model_locations[model_idx] = 'cpu'
+                    logger.debug(f"Offloaded model {model_idx} ({engine.model_name}) to CPU")
+                    return True
+        except Exception as e:
+            logger.warning(f"Failed to offload model {model_idx} to CPU: {e}")
+        return False
+
+    def load_to_gpu(self, engine: LLMEngine, model_idx: int, device: str = 'cuda') -> bool:
+        """Move a model from CPU to GPU memory."""
+        if not self.enabled:
+            return False
+
+        try:
+            if hasattr(engine, 'model') and engine.model is not None:
+                # Check if using PyTorch
+                if hasattr(engine.model, 'to'):
+                    # Try to use CUDA, fall back to MPS for Apple Silicon
+                    try:
+                        import torch
+                        if device == 'cuda' and not torch.cuda.is_available():
+                            if torch.backends.mps.is_available():
+                                device = 'mps'
+                            else:
+                                device = 'cpu'
+                    except ImportError:
+                        pass
+
+                    engine.model.to(device)
+                    self._model_locations[model_idx] = 'gpu'
+                    logger.debug(f"Loaded model {model_idx} ({engine.model_name}) to {device}")
+                    return True
+        except Exception as e:
+            logger.warning(f"Failed to load model {model_idx} to GPU: {e}")
+        return False
+
+    def swap_active_model(
+        self,
+        models: List[LLMEngine],
+        current_idx: int,
+        next_idx: int
+    ) -> None:
+        """Swap active model: offload current, load next."""
+        if not self.enabled:
+            return
+
+        # Offload current model to CPU
+        if current_idx != next_idx:
+            self.offload_to_cpu(models[current_idx], current_idx)
+            self.load_to_gpu(models[next_idx], next_idx)
+            logger.info(f"Swapped active model: {current_idx} -> {next_idx}")
+
 
 class MeldEngine:
     """Orchestrates the Mind Meld generation process."""
@@ -29,39 +121,113 @@ class MeldEngine:
     def __init__(self, models: List[LLMEngine], args: Any, config: Optional[MeldConfig] = None):
         if len(models) < 2:
             raise ValueError("MindMeldEngine requires at least two models.")
-        
+
         self.models = models
         self.args = args
         self.config = config or MeldConfig()
         self.active_model_idx = 0
-        self.verbose = getattr(args, "verbose", False)
-        
-        # Strategy configuration
-        self.swap_strategy = getattr(args, 'swap_strategy', 'PATTERN_BASED')
-        self.fixed_interval = getattr(args, 'fixed_interval', 5)
-        
+        self.verbose = self.config.verbose or getattr(args, "verbose", False)
+
+        # Validate configuration
+        config_warnings = self.config.validate()
+        for warning in config_warnings:
+            logger.warning(f"Config warning: {warning}")
+
+        # --- Strategy configuration from config ---
+        # Prefer config over args, fall back to args for backwards compatibility
+        self.swap_strategy = self.config.swap_config.strategy.value
+        if hasattr(args, 'swap_strategy') and args.swap_strategy:
+            self.swap_strategy = args.swap_strategy
+
+        self.fixed_interval = self.config.swap_config.interval
+        if hasattr(args, 'fixed_interval') and args.fixed_interval:
+            self.fixed_interval = args.fixed_interval
+
         # Token counter for fixed interval strategy
         self.token_counter = 0
-        
-        # --- Enhanced Bridging Components by Default ---
-        print("Initializing Mind Meld with enhanced bridging components...")
-        # Use the new, more sophisticated vocabulary translator by default.
-        self.vocab_translator = AligningVocabularyTranslator()
 
-        # Translator used by the KV cache fallback bridge.
+        # --- Translation configuration ---
+        self.translation_mode = self.config.translation_config.mode
+        self.vocab_strategy = self.config.translation_config.vocabulary_strategy
+        self.min_vocab_overlap = self.config.translation_config.min_vocab_overlap
+        self.pre_filter_top_k = self.config.translation_config.pre_filter_top_k
+        self.post_filter_top_k = self.config.translation_config.post_filter_top_k
+        self.temperature_adjustment = self.config.translation_config.temperature_adjustment
+
+        # --- Bridge configuration ---
+        self.context_alignment = self.config.bridge_config.context_window_alignment
+        self.max_context_length = self.config.bridge_config.max_context_length
+        self.kv_projection_method = self.config.bridge_config.kv_projection_method
+
+        # Model offloading for memory-constrained systems
+        use_offloading = getattr(args, 'use_model_offloading', False)
+        self.offloader = ModelOffloader(enabled=use_offloading, verbose=self.verbose)
+        if use_offloading:
+            logger.info("Model offloading enabled - inactive models will be moved to CPU")
+            # Initially offload all models except the first one
+            for idx in range(1, len(models)):
+                self.offloader.offload_to_cpu(models[idx], idx)
+
+        # --- Model Compatibility Validation ---
+        self.compatibility_validator = ModelCompatibilityValidator(verbose=self.verbose)
+        self.compatibility_reports: List[CompatibilityReport] = []
+
+        # Validate model compatibility before proceeding
+        skip_validation = getattr(args, 'skip_compatibility_check', False)
+        if not skip_validation:
+            all_compatible, reports = self.compatibility_validator.validate_ensemble(models)
+            self.compatibility_reports = reports
+
+            # Check against minimum vocabulary overlap from config
+            for report in reports:
+                if report.vocab_overlap_ratio < self.min_vocab_overlap:
+                    logger.warning(
+                        f"Vocabulary overlap ({report.vocab_overlap_ratio:.1%}) below threshold "
+                        f"({self.min_vocab_overlap:.1%}) for {report.source_model} <-> {report.target_model}"
+                    )
+
+            # Log compatibility summary
+            for report in reports:
+                if report.level in (CompatibilityLevel.INCOMPATIBLE, CompatibilityLevel.POOR):
+                    logger.warning(f"Model compatibility issue: {report.source_model} <-> {report.target_model}")
+                    logger.warning(f"  Level: {report.level.value}, Score: {report.overall_score:.2f}")
+                    for warning in report.warnings:
+                        logger.warning(f"  - {warning}")
+                elif self.verbose:
+                    logger.info(f"Model compatibility: {report.source_model} <-> {report.target_model}")
+                    logger.info(f"  Level: {report.level.value}, Score: {report.overall_score:.2f}")
+
+            if not all_compatible:
+                logger.warning("Some models have compatibility issues. Generation may be suboptimal.")
+
+        # --- Enhanced Bridging Components by Default ---
+        logger.info("Initializing Mind Meld with enhanced bridging components...")
+
+        # Configure vocabulary translator based on config
+        self.vocab_translator = AligningVocabularyTranslator(
+            use_cache=self.config.translation_config.use_vocabulary_cache,
+            verbose=self.verbose
+        )
+
+        # Configure KV cache translator
         self.kv_translator = KVCacheTranslator(verbose=self.verbose)
 
-        # --- Optional Advanced Features (can be enabled via args) ---
+        # --- Optional Advanced Features ---
+        # Use blending from config or args
         self.use_blending = getattr(args, 'use_blending', False)
-        self.blend_strategy = getattr(args, 'blend_strategy', 'weighted_average')
-        self.use_stats_tracker = getattr(args, 'use_stats_tracker', False)
+        self.blend_strategy = self.config.swap_config.blend_method
+        if hasattr(args, 'blend_strategy') and args.blend_strategy:
+            self.blend_strategy = args.blend_strategy
+
+        # Stats tracking from config
+        self.use_stats_tracker = self.config.track_metrics or getattr(args, 'use_stats_tracker', False)
 
         self.stats_tracker = None
         if self.use_stats_tracker:
             model_names = [m.model_name for m in models]
             self.stats_tracker = StatisticsTracker(
                 models=model_names,
-                show_live=self.config.verbose,
+                show_live=self.verbose,
                 save_file=getattr(args, 'stats_file', None)
             )
 
@@ -71,8 +237,8 @@ class MeldEngine:
                 strategy=BlendingStrategy(self.blend_strategy),
                 temperature=self.config.temperature
             )
-            self.blender = LogitBlender(blend_config, verbose=self.config.verbose)
-        
+            self.blender = LogitBlender(blend_config, verbose=self.verbose)
+
         # ABE ensemble (optional)
         self.use_abe = getattr(args, 'use_abe', False)
         self.abe_ensemble = None
@@ -83,11 +249,23 @@ class MeldEngine:
         model_names = [m.model_name for m in models]
         self.visualizer = SwapVisualizer(model_names=model_names, enable_color=True)
 
-        print(f"MeldEngine initialized with {self.swap_strategy} strategy.")
-        print(f"  KV Cache Translator: {self.kv_translator.__class__.__name__}")
-        print(f"  Vocabulary Translator: {self.vocab_translator.__class__.__name__}")
-        print(f"  Blending: {'ON - ' + self.blend_strategy if self.use_blending else 'OFF'}")
-        print(f"  Visualization: Enabled")
+        # Generation parameters from config
+        self.max_tokens = self.config.max_tokens
+        self.temperature = self.config.temperature
+        self.top_k = self.config.top_k
+        self.top_p = self.config.top_p
+        self.repetition_penalty = self.config.repetition_penalty
+        self.max_retries = self.config.max_retries
+        self.fallback_on_error = self.config.fallback_on_error
+
+        logger.info(f"MeldEngine initialized with {self.swap_strategy} strategy.")
+        logger.info(f"  Translation mode: {self.translation_mode.value}")
+        logger.info(f"  Vocabulary strategy: {self.vocab_strategy.value}")
+        logger.info(f"  KV Cache Translator: {self.kv_translator.__class__.__name__}")
+        logger.info(f"  Vocabulary Translator: {self.vocab_translator.__class__.__name__}")
+        logger.info(f"  Blending: {'ON - ' + self.blend_strategy if self.use_blending else 'OFF'}")
+        logger.info(f"  Stats tracking: {'ON' if self.use_stats_tracker else 'OFF'}")
+        logger.info(f"  Visualization: Enabled")
 
     def get_active_engine(self) -> LLMEngine:
         """Returns the currently active engine."""
@@ -104,26 +282,26 @@ class MeldEngine:
         if strategy in ['fixed_interval', 'fixed']:
             self.token_counter += 1
             if self.token_counter >= self.fixed_interval:
-                print(f"\n[Meld] Fixed interval ({self.fixed_interval} tokens) reached. Swapping models.")
+                logger.debug(f"Fixed interval ({self.fixed_interval} tokens) reached. Swapping models.")
                 self.token_counter = 0
                 return True
             return False
-        
+
         elif strategy in ['round_robin', 'roundrobin']:
-            print(f"\n[Meld] Round-robin swap.")
+            logger.debug("Round-robin swap.")
             return True
-        
+
         elif strategy in ['pattern', 'pattern_based']:
             punctuation = ".?!,;:\n"
             if any(p in last_token_text for p in punctuation):
-                print(f"\n[Meld] Punctuation '{last_token_text}' detected. Swapping models.")
+                logger.debug(f"Punctuation '{last_token_text}' detected. Swapping models.")
                 return True
             return False
-        
+
         elif strategy in ['random']:
             import random
             if random.random() < 0.3:  # 30% chance of swapping
-                print(f"\n[Meld] Random swap triggered.")
+                logger.debug("Random swap triggered.")
                 return True
             return False
         
@@ -139,7 +317,7 @@ class MeldEngine:
         base_engine = self.models[0]
         base_vocab_size = len(base_engine.tokenizer.get_vocab())
         
-        print("\n[Meld] Computing weighted average from all models...")
+        logger.info("Computing weighted average from all models...")
         
         for idx, engine in enumerate(self.models):
             # Get predictions from this model
@@ -175,8 +353,7 @@ class MeldEngine:
             confidence = 1.0 / (1.0 + entropy)  # Lower entropy = higher confidence
             weights.append(confidence)
             
-            if self.args.verbose:
-                print(f"  Model {idx} ({engine.model_name}): confidence={confidence:.3f}")
+            logger.debug(f"  Model {idx} ({engine.model_name}): confidence={confidence:.3f}")
         
         # Normalize weights
         weights = np.array(weights)
@@ -230,51 +407,79 @@ class MeldEngine:
     def _get_abe_predictions(self, text: str):
         """
         Get predictions using Agreement-Based Ensembling.
-        
+
+        Returns real blended logits from all models, weighted by agreement.
+
         Returns:
-            Tuple of (selected logits, decoding engine)
+            Tuple of (blended logits, decoding engine)
         """
+        all_logits = []
         all_probs = []
-        
-        # Get probability distributions from all models
+
+        # Get logits and probability distributions from all models
         for model in self.models:
             input_ids, mask = model.encode(text, add_special_tokens=True)
             result = model.predict_next(
                 input_ids, mask,
                 self.args.temperature, self.args.top_k, self.args.top_p
             )
-            
+
             logits = model.convert_to_numpy(result["logits_raw"])
-            
+
             # Flatten if needed
             if logits.ndim > 1:
                 logits = logits.flatten()
-            
-            # Convert to probabilities
-            logits = np.nan_to_num(logits, nan=-1e10, posinf=1e10, neginf=-1e10)
-            logits_shifted = logits - np.max(logits)
+
+            # Store original logits
+            logits_clean = np.nan_to_num(logits, nan=-1e10, posinf=1e10, neginf=-1e10)
+            all_logits.append(logits_clean)
+
+            # Convert to probabilities for ABE
+            logits_shifted = logits_clean - np.max(logits_clean)
             probs = np.exp(logits_shifted) / np.sum(np.exp(logits_shifted))
-            
             all_probs.append(probs)
-        
-        # Use ABE to find agreed-upon token
+
+        # Use ABE to find agreed-upon token and agreement weights
         agreed_text, token_ids = self.abe_ensemble.ensemble_step(
             all_probs,
             temperature=self.args.temperature,
             top_k=min(self.args.top_k, 20)  # Limit top-k for ABE efficiency
         )
-        
-        # For simplicity, use the first model as the decoding engine
-        # and return its token's logits (adjusted for agreement)
+
+        # Use the first model as decoding engine
         base_engine = self.models[0]
-        base_token_id = token_ids[0]
-        
-        # Create a logits array with high probability for the agreed token
-        vocab_size = len(base_engine.tokenizer.get_vocab())
-        fake_logits = np.full(vocab_size, -10.0)
-        fake_logits[base_token_id] = 10.0  # High logit for selected token
-        
-        return fake_logits, base_engine
+
+        # Blend logits from all models using agreement-based weighting
+        # Models that agree on top tokens get higher weight
+        if len(all_logits) > 1:
+            # Find the minimum vocab size to align all logits
+            min_vocab_size = min(len(l) for l in all_logits)
+
+            # Calculate agreement weights based on how similar top predictions are
+            agreement_weights = []
+            for i, probs in enumerate(all_probs):
+                # Weight based on probability of agreed token
+                agreed_token = token_ids[0] if token_ids else np.argmax(probs)
+                if agreed_token < len(probs):
+                    weight = probs[agreed_token]
+                else:
+                    weight = 0.1  # Fallback weight
+                agreement_weights.append(max(weight, 0.1))  # Ensure minimum weight
+
+            # Normalize weights
+            total_weight = sum(agreement_weights)
+            agreement_weights = [w / total_weight for w in agreement_weights]
+
+            # Weighted blend of logits
+            blended_logits = np.zeros(min_vocab_size)
+            for logits, weight in zip(all_logits, agreement_weights):
+                blended_logits += weight * logits[:min_vocab_size]
+
+            logger.debug(f"ABE agreement weights: {agreement_weights}")
+        else:
+            blended_logits = all_logits[0]
+
+        return blended_logits, base_engine
     
     def _perform_swap(self):
         """Swap engines and attempt to bridge their KV caches."""
@@ -289,6 +494,9 @@ class MeldEngine:
             f"\n🔄 Swapping from {source_engine.model_name} to {target_engine.model_name}...",
             end="",
         )
+
+        # Handle model offloading if enabled (swap GPU/CPU locations)
+        self.offloader.swap_active_model(self.models, source_idx, target_idx)
 
         if self._transfer_kv_cache(source_engine, target_engine):
             print(" KV cache bridged successfully.")
@@ -312,8 +520,7 @@ class MeldEngine:
         except NotImplementedError:
             pass
         except Exception as exc:  # pragma: no cover - backend specific
-            if self.verbose:
-                print(f" (direct bridge failed: {exc})", end="")
+            logger.warning(f"Direct KV cache bridge failed: {exc}")
 
         # Secondary path: use the standardized export/import hooks when available.
         try:
@@ -325,8 +532,7 @@ class MeldEngine:
                 if target_engine.import_kv_cache_state(export_state):
                     return True
         except Exception as exc:  # pragma: no cover - backend specific
-            if self.verbose:
-                print(f" (state bridge failed: {exc})", end="")
+            logger.warning(f"State-based KV cache bridge failed: {exc}")
 
         # Fallback path: attempt shape-compatible translation using the shared translator.
         try:
@@ -353,8 +559,7 @@ class MeldEngine:
 
             return bool(target_engine.set_kv_cache(translated_cache.to_model_format()))
         except Exception as exc:  # pragma: no cover - backend specific
-            if self.verbose:
-                print(f" (kv translation failed: {exc})", end="")
+            logger.warning(f"KV cache translation failed: {exc}")
             return False
 
     def run_game_loop(self):
@@ -465,9 +670,8 @@ class MeldEngine:
             
             next_token_id_in_target_vocab = np.argmax(melded_probs)
             
-            # Debug: print the token ID
-            if self.args.verbose:
-                print(f"DEBUG: Selected token ID in target vocab: {next_token_id_in_target_vocab}")
+            # Log the selected token ID for debugging
+            logger.debug(f"Selected token ID in target vocab: {next_token_id_in_target_vocab}")
             
             # Decode the token using the appropriate engine
             next_token_text = decoding_engine.decode([next_token_id_in_target_vocab], skip_special_tokens=False)
@@ -483,8 +687,7 @@ class MeldEngine:
                     if candidate_text and candidate_text.strip() and not candidate_text.startswith('<') and not candidate_text.startswith('['):
                         next_token_text = candidate_text
                         next_token_id_in_target_vocab = idx
-                        if self.args.verbose:
-                            print(f"DEBUG: Found valid token at index {idx}: '{candidate_text}'")
+                        logger.debug(f"Found valid token at index {idx}: '{candidate_text}'")
                         break
 
             print(f"\nModel '{active_engine.model_name}' predicted towards: '{ui.color_text(next_token_text, cfg.COLOR_GREEN)}'")

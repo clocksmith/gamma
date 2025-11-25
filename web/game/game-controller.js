@@ -10,6 +10,7 @@ export class GameController {
     this.context = config.initialPrompt || 'The artificial intelligence revolution began when';
     this.isRunning = false;
     this.resolveChoice = null;
+    this.resolveContinue = null;
   }
 
   async runRound() {
@@ -65,7 +66,9 @@ export class GameController {
       probabilities: prediction.topTokens,
       isLastRound,
       finalScore: isLastRound ? this.session.score : null,
-      maxRounds: this.config.maxRounds
+      maxRounds: this.config.maxRounds,
+      score: this.session.score,
+      streak: this.session.streak || 0
     });
 
     this.context += correctToken.text;

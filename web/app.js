@@ -11,26 +11,38 @@ export class GammaApp {
     this.container = container;
   }
 
+  _buildProgressBar(percent) {
+    const filled = Math.round(percent / 5);
+    const empty = 20 - filled;
+    return '[' + '='.repeat(filled) + ' '.repeat(empty) + ']';
+  }
+
+  _formatBytes(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  }
+
   async init() {
     await Storage.init();
     Toast.init();
 
     const savedModel = await Storage.getSetting('selectedModel', 'HuggingFaceTB/SmolLM2-360M-Instruct');
-    const savedConfig = await Storage.getSetting('gameConfig', {
-      temperature: 0.9,
-      topK: 64,
-      topP: 0.95,
-      maxRounds: 16
-    });
 
     this.modelSelector = new ModelSelector(this.container);
-    this.modelSelector.render();
+    await this.modelSelector.render();
 
     EventBus.on('model:selected', (data) => {
-      const config = { ...savedConfig, initialPrompt: data.prompt };
+      // Merge config from settings panel with prompt
+      const config = {
+        ...data.config,
+        initialPrompt: data.prompt
+      };
       this.startGame(data.modelId, config);
     });
-    
+
     EventBus.on('achievement', (ach) => Toast.show(ach));
   }
 
@@ -40,12 +52,46 @@ export class GammaApp {
     try {
       const engine = EngineFactory.getEngine(modelId);
 
+      // Track loading state for detailed progress
+      let loadingState = {
+        tokenizerDone: false,
+        modelPercent: 0,
+        stage: 'initializing'
+      };
+
       EventBus.on('model:progress', (p) => {
-        if (p.status === 'progress') {
-          const percent = (p.loaded / p.total) * 100;
-          this.container.querySelector('.loading-screen div').textContent = 
-            `LOADING MODEL: ${Math.round(percent)}%`;
+        const loadingEl = this.container.querySelector('.loading-screen');
+        if (!loadingEl) return;
+
+        // Update loading state
+        if (p.type === 'tokenizer' && p.status === 'done') {
+          loadingState.tokenizerDone = true;
         }
+        if (p.status === 'progress' && p.total > 0) {
+          loadingState.modelPercent = Math.round((p.loaded / p.total) * 100) || 0;
+        }
+        if (p.stage) {
+          loadingState.stage = p.stage;
+        }
+
+        // Build detailed progress display
+        const stageLabel = p.stageLabel || 'Loading...';
+        const progressBar = this._buildProgressBar(loadingState.modelPercent);
+        const sizeInfo = p.total ? this._formatBytes(p.loaded) + ' / ' + this._formatBytes(p.total) : '';
+
+        loadingEl.innerHTML = `
+          <div class="loading-content">
+            <div class="loading-stage">${stageLabel}</div>
+            <div class="loading-progress-bar">${progressBar}</div>
+            <div class="loading-percent">${loadingState.modelPercent}%</div>
+            <div class="loading-size">${sizeInfo}</div>
+            <div class="loading-steps">
+              <span class="${loadingState.tokenizerDone ? 'done' : 'pending'}">Tokenizer</span>
+              <span class="${loadingState.modelPercent > 0 ? (loadingState.modelPercent >= 100 ? 'done' : 'active') : 'pending'}">Model</span>
+              <span class="${p.stage === 'model_compile' ? 'active' : 'pending'}">Compile</span>
+            </div>
+          </div>
+        `;
       });
 
       await engine.load();

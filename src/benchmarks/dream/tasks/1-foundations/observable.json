@@ -1,0 +1,46 @@
+{
+  "name": "observable",
+  "description": "Implement a reactive Observable pattern with subscribe, map, and filter operators",
+  "category": "1-foundations",
+  "difficulty": "hard",
+  "promptLevels": {
+    "novice": "make a stream of values",
+    "beginner": "create an observable class",
+    "intermediate": "implement an Observable with subscribe that can emit values over time",
+    "advanced": "create an Observable class with subscribe, map, filter operators and proper unsubscribe handling",
+    "expert": "Implement an `Observable<T>` class with: a constructor taking a subscriber function `(observer: Observer<T>) => Unsubscribe`, `subscribe(observer: Observer<T>): Unsubscribe` method, `map<U>(fn: (value: T) => U): Observable<U>` operator, and `filter(predicate: (value: T) => boolean): Observable<T>` operator. Observer has next, error, and complete callbacks. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with generics for type safety. Define Observer and Unsubscribe types. Export the Observable class.",
+    "javascript": "Use JavaScript. Observer is an object with next, error, complete methods. Export the Observable class.",
+    "javascript-jsdoc": "Use JavaScript with JSDoc @template annotations. Export the Observable class."
+  },
+  "variants": {
+    "typescript": "Implement an `Observable<T>` class in TypeScript. Constructor takes `(observer: {next: (v: T) => void, error?: (e: Error) => void, complete?: () => void}) => (() => void)`. Include: `subscribe(observer): () => void`, `map<U>(fn: (v: T) => U): Observable<U>`, `filter(pred: (v: T) => boolean): Observable<T>`. Export Observable.",
+    "javascript": "Implement an `Observable` class in JavaScript. Constructor takes a subscriber function. Include subscribe, map, and filter methods. Export Observable.",
+    "javascript-jsdoc": "Implement an `Observable` class in JavaScript with full JSDoc. Use @template T for generics. Include subscribe, map, filter. Export Observable."
+  },
+  "testCases": [
+    {
+      "test": "let received = []; const obs = new Observable(o => { o.next(1); o.next(2); o.next(3); }); obs.subscribe({next: v => received.push(v)}); console.assert(JSON.stringify(received) === '[1,2,3]', 'Should receive all values');"
+    },
+    {
+      "test": "let received = []; const obs = new Observable(o => { o.next(1); o.next(2); }); obs.map(x => x * 2).subscribe({next: v => received.push(v)}); console.assert(JSON.stringify(received) === '[2,4]', 'Map should transform values');"
+    },
+    {
+      "test": "let received = []; const obs = new Observable(o => { o.next(1); o.next(2); o.next(3); o.next(4); }); obs.filter(x => x % 2 === 0).subscribe({next: v => received.push(v)}); console.assert(JSON.stringify(received) === '[2,4]', 'Filter should filter values');"
+    },
+    {
+      "test": "let count = 0; const obs = new Observable(o => { const id = setInterval(() => o.next(++count), 10); return () => clearInterval(id); }); const unsub = obs.subscribe({next: () => {}}); unsub(); await new Promise(r => setTimeout(r, 50)); const final = count; await new Promise(r => setTimeout(r, 50)); console.assert(count === final, 'Unsubscribe should stop emissions');"
+    }
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "chain-operators",
+      "code": "let sum = 0; const obs = new Observable(o => { for(let i=0; i<1000; i++) o.next(i); }); obs.filter(x => x % 2 === 0).map(x => x * 2).subscribe({next: v => sum += v});",
+      "iterations": 100,
+      "baselineTimeMs": 10
+    }
+  ],
+  "requirements": ["class", "Observable", "subscribe", "map", "filter", "export"]
+}

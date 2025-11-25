@@ -1,0 +1,58 @@
+{
+  "name": "deep-clone",
+  "description": "Implement a deep clone function that handles nested objects, arrays, dates, and circular references",
+  "category": "1-foundations",
+  "difficulty": "hard",
+  "promptLevels": {
+    "novice": "copy an object deeply",
+    "beginner": "create a function to deep clone objects",
+    "intermediate": "implement a deepClone function that copies nested objects and arrays",
+    "advanced": "create a deepClone function that handles objects, arrays, Date objects, and avoids infinite loops with circular references",
+    "expert": "Implement a `deepClone<T>(obj: T): T` function that creates a deep copy of any value. Handle: primitive values, plain objects, arrays, Date objects, Map, Set, and circular references (objects referencing themselves). {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with generics for type preservation. Export only the deepClone function.",
+    "javascript": "Use JavaScript. Use a WeakMap to track circular references. Export only the deepClone function.",
+    "javascript-jsdoc": "Use JavaScript with JSDoc annotations including @template for generics. Export only the deepClone function."
+  },
+  "variants": {
+    "typescript": "Implement a `deepClone<T>(obj: T): T` function in TypeScript. Handle: primitives, plain objects, arrays, Date, Map, Set, and circular references using a WeakMap. Export only the deepClone function.",
+    "javascript": "Implement a `deepClone(obj)` function in JavaScript. Handle: primitives, plain objects, arrays, Date, Map, Set, and circular references using a WeakMap. Export only the deepClone function.",
+    "javascript-jsdoc": "Implement a `deepClone(obj)` function in JavaScript with full JSDoc including @template T annotation. Handle all cases mentioned. Export only the deepClone function."
+  },
+  "testCases": [
+    {
+      "test": "const obj = {a: 1, b: {c: 2}}; const clone = deepClone(obj); clone.b.c = 99; console.assert(obj.b.c === 2, 'Original should be unchanged');"
+    },
+    {
+      "test": "const arr = [1, [2, [3]]]; const clone = deepClone(arr); clone[1][1][0] = 99; console.assert(arr[1][1][0] === 3, 'Nested arrays should be cloned');"
+    },
+    {
+      "test": "const date = new Date('2023-01-01'); const clone = deepClone({d: date}); console.assert(clone.d instanceof Date && clone.d.getTime() === date.getTime(), 'Dates should be cloned');"
+    },
+    {
+      "test": "const obj = {a: 1}; obj.self = obj; const clone = deepClone(obj); console.assert(clone.self === clone && clone !== obj, 'Circular refs should work');"
+    },
+    {
+      "test": "console.assert(deepClone(42) === 42, 'Primitives should return as-is');"
+    },
+    {
+      "test": "console.assert(deepClone(null) === null, 'Null should return null');"
+    }
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "deep-nested-object",
+      "code": "const obj = {a: {b: {c: {d: {e: {f: 1}}}}}}; for(let i=0; i<10000; i++) deepClone(obj);",
+      "iterations": 10,
+      "baselineTimeMs": 100
+    },
+    {
+      "name": "large-array",
+      "code": "const arr = Array(1000).fill(null).map((_, i) => ({id: i, data: {value: i * 2}})); deepClone(arr);",
+      "iterations": 100,
+      "baselineTimeMs": 50
+    }
+  ],
+  "requirements": ["function", "deepClone", "export"]
+}

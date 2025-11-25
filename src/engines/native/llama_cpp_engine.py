@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import List, Tuple, Optional, Dict, Any
 
@@ -6,13 +7,15 @@ try:
     from llama_cpp import Llama, llama_supports_gpu_offload
 except ImportError: raise ImportError("'llama-cpp-python' library not found. Install with `pip install -r requirements-llamacpp.txt`")
 
+logger = logging.getLogger(__name__)
+
 from src.core.engine_interface import LLMEngine
 from src.core.models.model_paths import resolve_model_path
 from src.engines import sampling_utils
 
 def _decode_llama_token_piece(piece: bytes) -> str:
     try: return piece.decode("utf-8", errors="replace")
-    except Exception: return str(piece)
+    except (UnicodeDecodeError, AttributeError): return str(piece)
 
 class LlamaCppEngine(LLMEngine):
     def __init__(self, model_path: str, engine_specific_config: Optional[Dict[str, Any]] = None):
@@ -35,8 +38,8 @@ class LlamaCppEngine(LLMEngine):
                 if hasattr(self.model, 'vocab_type'):
                     vocab_type = self.model.vocab_type()
                     vocab_type_str = vocab_type.name if hasattr(vocab_type, 'name') else str(vocab_type)
-            except Exception:
-                pass
+            except (AttributeError, RuntimeError) as e:
+                logger.debug(f"Could not get vocab type: {e}")
 
             print(f"LlamaCppEngine: Model loaded. Vocab type: {vocab_type_str}")
         except Exception as e:
@@ -164,8 +167,8 @@ class LlamaCppEngine(LLMEngine):
             if hasattr(self.model, 'vocab_type'):
                 vocab_type = self.model.vocab_type()
                 vocab_type_str = vocab_type.name if hasattr(vocab_type, 'name') else str(vocab_type)
-        except Exception:
-            pass
+        except (AttributeError, RuntimeError) as e:
+            logger.debug(f"Could not get vocab type for config summary: {e}")
 
         return {"GGUF Path": self.model_name, "Context Size": self.model.n_ctx(),
                 "GPU Layers": self.engine_config.get("llama_cpp_n_gpu_layers", 0),
@@ -232,7 +235,7 @@ class LlamaCppEngine(LLMEngine):
             try:
                 token_text = _decode_llama_token_piece(self.tokenizer.decode([token_id]))
                 vocab[token_text] = token_id
-            except Exception:
+            except (KeyError, IndexError, ValueError):
                 continue
         return vocab
 

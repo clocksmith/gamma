@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import List, Tuple, Optional, Dict, Any
 import numpy as np
@@ -10,6 +11,8 @@ except ImportError:
     raise ImportError(
         "vLLM library not found. Install with `pip install -r requirements-vllm.txt`"
     )
+
+logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine
 from src.core import config as game_config
@@ -282,7 +285,8 @@ class VLLMEngine(LLMEngine):
             else:
                 # Fallback to decode
                 return self.tokenizer.decode([token_id], skip_special_tokens=False)
-        except Exception:
+        except (KeyError, IndexError, ValueError) as e:
+            logger.debug(f"Could not decode token {token_id}: {e}")
             return f"<token_{token_id}>"
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool:
@@ -384,8 +388,8 @@ class VLLMEngine(LLMEngine):
                 return config.n_layer
             elif hasattr(config, 'num_layers'):
                 return config.num_layers
-        except Exception:
-            pass
+        except (AttributeError, RuntimeError) as e:
+            logger.debug(f"Could not get layer count from config: {e}")
 
         return 32  # Default reasonable value
 

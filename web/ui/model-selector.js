@@ -1,12 +1,14 @@
 import { MODEL_CATALOG, PROVIDER_COLORS, MODEL_SIZE_CATEGORIES } from '../core/model-registry.js';
 import { EventBus } from '../utils/event-bus.js';
 import { STARTING_PROMPTS, getRandomPrompt } from '../core/prompts.js';
+import { SettingsPanel } from './settings-panel.js';
 
 export class ModelSelector {
   constructor(container) {
     this.container = container;
     this.selectedPrompt = getRandomPrompt();
     this.selectedModelId = 'HuggingFaceTB/SmolLM2-360M-Instruct'; // default to second small model
+    this.settingsPanel = null;
   }
 
   renderModelCard(id, info) {
@@ -28,7 +30,7 @@ export class ModelSelector {
     `;
   }
 
-  render() {
+  async render() {
     const smallModels = MODEL_SIZE_CATEGORIES.small.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
     const mediumModels = MODEL_SIZE_CATEGORIES.medium.map(id => [id, MODEL_CATALOG[id]]).filter(([_, m]) => m);
 
@@ -50,6 +52,9 @@ export class ModelSelector {
           </div>
         </div>
 
+        <!-- Settings Panel (collapsible) -->
+        <div class="settings-container"></div>
+
         <div class="model-section">
           <h4 class="section-title">Small (Fast)</h4>
           <div class="model-grid">
@@ -65,6 +70,16 @@ export class ModelSelector {
         </div>
       </div>
     `;
+
+    // Initialize settings panel
+    const settingsContainer = this.container.querySelector('.settings-container');
+    if (settingsContainer) {
+      this.settingsPanel = new SettingsPanel(settingsContainer);
+      await this.settingsPanel.loadSavedConfig();
+      this.settingsPanel.render();
+    } else {
+      console.warn('Settings container not found in DOM');
+    }
 
     // Prompt controls
     const promptInput = this.container.querySelector('.prompt-input');
@@ -105,9 +120,18 @@ export class ModelSelector {
     const startBtn = this.container.querySelector('.start-game-btn');
     startBtn.addEventListener('click', () => {
       if (this.selectedModelId) {
-        EventBus.emit('model:selected', { modelId: this.selectedModelId, prompt: this.selectedPrompt });
+        const config = this.settingsPanel ? this.settingsPanel.getConfig() : {};
+        EventBus.emit('model:selected', {
+          modelId: this.selectedModelId,
+          prompt: this.selectedPrompt,
+          config: config
+        });
       }
     });
+  }
+
+  getConfig() {
+    return this.settingsPanel ? this.settingsPanel.getConfig() : {};
   }
 
   escapeHtml(text) {
