@@ -81,8 +81,15 @@ class LlamaCppEngine(LLMEngine):
             except (ValueError, TypeError): raise TypeError(f"Unsupported token_ids type for LlamaCpp decode: {type(token_ids)}")
         return _decode_llama_token_piece(self.tokenizer.decode(ids_l))
 
-    def _get_logits(self, current_ids: List[int]) -> np.ndarray:
+    def _get_logits(self, current_ids: Any) -> np.ndarray:
         if not self.model: raise RuntimeError("LlamaCppEngine: Model not loaded.")
+        # Convert numpy arrays to list of ints for llama-cpp
+        if isinstance(current_ids, np.ndarray):
+            current_ids = current_ids.flatten().tolist()
+        elif not isinstance(current_ids, list):
+            current_ids = list(current_ids)
+        # Ensure all elements are integers
+        current_ids = [int(x) for x in current_ids]
         try: self.model.eval(current_ids)
         except Exception as e:
             if "n_past >= n_ctx" in str(e):

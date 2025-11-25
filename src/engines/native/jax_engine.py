@@ -124,3 +124,137 @@ class JaxEngine(LLMEngine):
 
     def get_config_summary(self) -> Dict[str, Any]:
         return {"JAX Version": jax.__version__, "Model DType": str(self._model_dtype), "Devices Used": jax.local_device_count(), "Platforms": [d.platform for d in jax.local_devices()]}
+
+    # Implement required abstract methods
+    def convert_to_numpy(self, tensor: Any) -> np.ndarray:
+        """Convert JAX array to numpy array."""
+        if isinstance(tensor, jnp.ndarray):  # type: ignore
+            return np.array(tensor)
+        elif isinstance(tensor, np.ndarray):
+            return tensor
+        else:
+            return np.array(tensor)
+
+    def convert_from_numpy(self, array: np.ndarray) -> jnp.ndarray:  # type: ignore
+        """Convert numpy array to JAX array."""
+        return jnp.array(array)  # type: ignore
+
+    def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> jnp.ndarray:  # type: ignore
+        """Concatenate JAX arrays along specified dimension."""
+        if tensor1 is None:
+            return tensor2
+        if tensor2 is None:
+            return tensor1
+        # Ensure both are JAX arrays
+        if not isinstance(tensor1, jnp.ndarray):  # type: ignore
+            tensor1 = jnp.array(tensor1)  # type: ignore
+        if not isinstance(tensor2, jnp.ndarray):  # type: ignore
+            tensor2 = jnp.array(tensor2)  # type: ignore
+        return jnp.concatenate([tensor1, tensor2], axis=dim)  # type: ignore
+
+    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
+        """Get KV cache shape if available."""
+        if self._kv_cache is None:
+            return None
+        # JAX/Flax KV cache is typically a tuple of layer caches
+        if isinstance(self._kv_cache, (list, tuple)) and len(self._kv_cache) > 0:
+            first_layer = self._kv_cache[0]
+            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
+                key_cache = first_layer[0]
+                if hasattr(key_cache, 'shape'):
+                    return tuple(key_cache.shape)
+        return None
+
+    def get_num_layers(self) -> int:
+        """Get the number of layers in the model."""
+        self._ensure_model_loaded()
+        # Try to get from model config
+        if hasattr(self.model, 'config'):
+            if hasattr(self.model.config, 'num_hidden_layers'):
+                return self.model.config.num_hidden_layers
+            elif hasattr(self.model.config, 'n_layer'):
+                return self.model.config.n_layer
+            elif hasattr(self.model.config, 'num_layers'):
+                return self.model.config.num_layers
+        # Fallback to counting from params structure
+        if self._model_params and isinstance(self._model_params, dict):
+            # Look for transformer layers in params
+            for key in self._model_params:
+                if 'layers' in key.lower() or 'block' in key.lower():
+                    val = self._model_params[key]
+                    if isinstance(val, (list, tuple)):
+                        return len(val)
+        return 12  # Reasonable default
+
+    def get_vocab(self) -> Dict[str, int]:
+        """Get the model's vocabulary."""
+        self._ensure_tokenizer_loaded()
+        if hasattr(self.tokenizer, 'get_vocab'):
+            return self.tokenizer.get_vocab()
+        elif hasattr(self.tokenizer, 'vocab'):
+            return self.tokenizer.vocab
+        return {}
+
+    def append_to_input(self, input_ids: Any, new_token_id: int) -> jnp.ndarray:  # type: ignore
+        """Append a new token to input_ids tensor."""
+        if not isinstance(input_ids, jnp.ndarray):  # type: ignore
+            input_ids = jnp.array(input_ids)  # type: ignore
+        # Create new token array
+        new_token = jnp.array([[new_token_id]], dtype=input_ids.dtype)  # type: ignore
+        # Handle different dimensions
+        if input_ids.ndim == 1:
+            input_ids = jnp.expand_dims(input_ids, axis=0)  # type: ignore
+        return jnp.concatenate([input_ids, new_token], axis=-1)  # type: ignore
+
+    def get_device(self) -> str:
+        """Get device type - JAX uses various backends."""
+        devices = jax.local_devices()
+        if devices:
+            return devices[0].platform  # cpu, gpu, or tpu
+        return "cpu"
+
+    def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
+        """Export KV cache state for bridging."""
+        if self._kv_cache is None:
+            return None
+        try:
+            cache_as_numpy = []
+            if isinstance(self._kv_cache, (list, tuple)):
+                for layer_cache in self._kv_cache:
+                    if isinstance(layer_cache, (list, tuple)) and len(layer_cache) >= 2:
+                        k_cache, v_cache = layer_cache[0], layer_cache[1]
+                        cache_as_numpy.append((
+                            self.convert_to_numpy(k_cache),
+                            self.convert_to_numpy(v_cache)
+                        ))
+            return {
+                'cache_data': cache_as_numpy,
+                'shape': self.get_kv_cache_shape(),
+                'engine_type': 'jax'
+            }
+        except Exception as e:
+            print(f"JaxEngine: Failed to export KV cache: {e}")
+            return None
+
+    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
+        """Import KV cache state from another engine."""
+        try:
+            cache_data = state.get('cache_data')
+            if not cache_data:
+                return False
+            new_cache = []
+            for layer_data in cache_data:
+                if isinstance(layer_data, tuple) and len(layer_data) >= 2:
+                    k_np, v_np = layer_data
+                    k_tensor = self.convert_from_numpy(k_np)
+                    v_tensor = self.convert_from_numpy(v_np)
+                    new_cache.append((k_tensor, v_tensor))
+            self._kv_cache = tuple(new_cache) if new_cache else None
+            return True
+        except Exception as e:
+            print(f"JaxEngine: Failed to import KV cache: {e}")
+            return False
+
+    def _supports_cache_bridging(self) -> bool:
+        """JAX engine supports KV cache bridging."""
+        return True

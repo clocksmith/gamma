@@ -82,7 +82,49 @@ See [Game Documentation](./src/game/README.md) for more details.
 
 ## Engines & Models
 
-GAMMA supports multiple engines (llamacpp, pytorch, vllm, ollama) and auto-detects models from Ollama, HuggingFace, and local GGUF files.
+GAMMA supports multiple inference engines for running local LLMs. Engine status:
+
+### Production Ready
+
+| Engine | Backend | Models | Notes |
+|--------|---------|--------|-------|
+| **PyTorch** | MPS (Mac) / CUDA | HuggingFace models | Full feature support, recommended for HF models |
+| **MLX** | Metal (Apple Silicon) | MLX-optimized models | Fastest on M1/M2/M3 Macs, ~2x faster than PyTorch MPS |
+| **LlamaCpp** | Metal / CUDA / CPU | GGUF quantized models | Great for quantized models, low memory usage |
+| **Ollama** | llama.cpp | Ollama library | Easy setup, auto-detects installed models |
+
+### Experimental
+
+| Engine | Backend | Status |
+|--------|---------|--------|
+| **JAX/Flax** | CPU / TPU | JIT tracing issues with some models |
+| **vLLM** | CUDA | Requires NVIDIA GPU, not tested on Mac |
+| **ONNX Runtime** | CPU / CUDA / CoreML | Requires ONNX-exported models |
+| **TensorFlow** | CPU / GPU | Limited model support |
+
+### Quick Engine Selection
+
+```bash
+# Apple Silicon Mac (fastest)
+python gamma.py game --engine mlx --model mlx-community/gemma-2-2b-it-4bit
+
+# Any Mac/Linux with PyTorch
+python gamma.py game --engine pytorch --model google/gemma-2-2b-it
+
+# Quantized GGUF models (low memory)
+python gamma.py game --engine llamacpp --model models/model.gguf
+
+# Ollama (easiest setup)
+python gamma.py game --engine ollama --model llama3.2
+```
+
+### Benchmark Results (Apple M-series)
+
+| Engine | Model | Tokens/sec | Latency p50 |
+|--------|-------|------------|-------------|
+| MLX | gemma-2-2b-it-4bit | 10.8 | 92ms |
+| PyTorch | phi-2 (2.7B) | 5.8 | 146ms |
+| LlamaCpp | qwen2-0.5b-q4 | 4.4 | 174ms |
 
 See [Engine Documentation](./src/engines/README.md) and [Core Documentation](./src/core/README.md) for details.
 

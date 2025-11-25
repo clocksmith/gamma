@@ -409,7 +409,7 @@ class MindMeldBenchmark:
             List of benchmark results for each strategy
         """
         from src.mind_meld.core.config import MeldConfig, SwapConfig, SwapStrategy
-        from src.core.model_loader import ModelLoader
+        from src.engines.engine_factory import get_engine
 
         self._log(f"Comparing {len(strategies)} strategies")
         self._log(f"Models: {models}")
@@ -447,15 +447,21 @@ class MindMeldBenchmark:
                 temperature=config.temperature
             )
 
-            # Load models
-            loader = ModelLoader()
+            # Load models using engine factory
             engines = []
-            for model_name in config.models:
+            for model_spec in config.models:
                 try:
-                    engine = loader.load_model(model_name)
+                    # Parse model spec in format "engine:model" or just "model" (defaults to pytorch)
+                    if ':' in model_spec:
+                        engine_name, model_name = model_spec.split(':', 1)
+                    else:
+                        engine_name, model_name = 'pytorch', model_spec
+
+                    engine = get_engine(engine_name, model_name)
+                    engine.load()
                     engines.append(engine)
                 except Exception as e:
-                    self._log(f"Failed to load model {model_name}: {e}")
+                    self._log(f"Failed to load model {model_spec}: {e}")
                     raise
 
             # Create meld engine
@@ -488,8 +494,9 @@ class MindMeldBenchmark:
 
 
 # CLI Interface
-if __name__ == '__main__':
+def main():
     import argparse
+    import sys
 
     parser = argparse.ArgumentParser(
         description='Mind Meld Strategy Benchmark CLI',
@@ -612,4 +619,8 @@ Available strategies:
         print(f"\n❌ Benchmark failed: {e}")
         import traceback
         traceback.print_exc()
-        exit(1)
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()

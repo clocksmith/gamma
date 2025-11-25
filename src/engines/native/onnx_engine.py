@@ -143,3 +143,144 @@ class ONNXEngine(LLMEngine):
         return {"ONNX Model Path": self.model_name, "Tokenizer Used": self._tokenizer_name, "Execution Providers": self._session.get_providers(),
                 "Model Inputs Detected": self._input_names, "Model Outputs Detected": self._output_names,
                 "KV Cache Input Names": self._past_key_value_input_names or "Not Detected", "KV Cache Output Names": self._past_key_value_output_names or "Not Detected"}
+
+    # Implement required abstract methods
+    def convert_to_numpy(self, tensor: Any) -> np.ndarray:
+        """Convert tensor to numpy array (ONNX uses numpy natively)."""
+        if isinstance(tensor, np.ndarray):
+            return tensor
+        elif isinstance(tensor, (list, tuple)):
+            return np.array(tensor)
+        else:
+            return np.array(tensor)
+
+    def convert_from_numpy(self, array: np.ndarray) -> np.ndarray:
+        """Convert numpy array (ONNX uses numpy natively)."""
+        if isinstance(array, np.ndarray):
+            return array
+        return np.array(array)
+
+    def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> np.ndarray:
+        """Concatenate numpy arrays along specified dimension."""
+        if tensor1 is None:
+            return tensor2
+        if tensor2 is None:
+            return tensor1
+        # Ensure both are numpy arrays
+        if not isinstance(tensor1, np.ndarray):
+            tensor1 = np.array(tensor1)
+        if not isinstance(tensor2, np.ndarray):
+            tensor2 = np.array(tensor2)
+        return np.concatenate([tensor1, tensor2], axis=dim)
+
+    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
+        """Get KV cache shape if available."""
+        if self._kv_cache is None:
+            return None
+        # ONNX KV cache is stored as a tuple of numpy arrays
+        if isinstance(self._kv_cache, tuple) and len(self._kv_cache) > 0:
+            first_tensor = self._kv_cache[0]
+            if isinstance(first_tensor, np.ndarray):
+                return tuple(first_tensor.shape)
+        return None
+
+    def get_num_layers(self) -> int:
+        """Get the number of layers in the model."""
+        # Try to infer from KV cache I/O names
+        if self._past_key_value_input_names:
+            # Count unique layer indices in the KV cache names
+            layer_indices = set()
+            for name in self._past_key_value_input_names:
+                # Names often contain layer index like "past_key_values.0.key"
+                parts = name.split('.')
+                for part in parts:
+                    if part.isdigit():
+                        layer_indices.add(int(part))
+            if layer_indices:
+                return max(layer_indices) + 1
+        # Fallback to counting KV cache tensors divided by 2 (key+value per layer)
+        if self._past_key_value_input_names:
+            return len(self._past_key_value_input_names) // 2
+        return 12  # Reasonable default
+
+    def get_vocab(self) -> Dict[str, int]:
+        """Get the model's vocabulary."""
+        self._ensure_tokenizer_loaded()
+        if hasattr(self.tokenizer, 'get_vocab'):
+            return self.tokenizer.get_vocab()
+        elif hasattr(self.tokenizer, 'vocab'):
+            return self.tokenizer.vocab
+        return {}
+
+    def append_to_input(self, input_ids: Any, new_token_id: int) -> np.ndarray:
+        """Append a new token to input_ids tensor."""
+        if not isinstance(input_ids, np.ndarray):
+            input_ids = np.array(input_ids)
+        # Handle 2D array (batch, seq_len)
+        if input_ids.ndim == 2:
+            new_token = np.array([[new_token_id]], dtype=input_ids.dtype)
+            return np.concatenate([input_ids, new_token], axis=-1)
+        # Handle 1D array
+        else:
+            return np.append(input_ids, new_token_id)
+
+    def get_device(self) -> str:
+        """Get device type based on execution providers."""
+        if not self._session:
+            return "unknown"
+        providers = self._session.get_providers()
+        if "CUDAExecutionProvider" in providers:
+            return "cuda"
+        elif "CoreMLExecutionProvider" in providers:
+            return "coreml"
+        elif "DmlExecutionProvider" in providers:
+            return "directml"
+        elif "ROCMExecutionProvider" in providers:
+            return "rocm"
+        return "cpu"
+
+    def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
+        """Export KV cache state for bridging."""
+        if self._kv_cache is None:
+            return None
+        try:
+            cache_as_numpy = []
+            if isinstance(self._kv_cache, tuple):
+                for tensor in self._kv_cache:
+                    if isinstance(tensor, np.ndarray):
+                        cache_as_numpy.append(tensor.copy())
+            return {
+                'cache_data': cache_as_numpy,
+                'shape': self.get_kv_cache_shape(),
+                'engine_type': 'onnx',
+                'input_names': self._past_key_value_input_names,
+                'output_names': self._past_key_value_output_names
+            }
+        except Exception as e:
+            print(f"ONNXEngine: Failed to export KV cache: {e}")
+            return None
+
+    def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
+        """Import KV cache state from another engine."""
+        try:
+            cache_data = state.get('cache_data')
+            if not cache_data:
+                return False
+            # For ONNX, we expect a list of numpy arrays
+            new_cache = []
+            for tensor_data in cache_data:
+                if isinstance(tensor_data, np.ndarray):
+                    new_cache.append(tensor_data)
+                elif isinstance(tensor_data, tuple) and len(tensor_data) >= 2:
+                    # Handle (key, value) tuple format from other engines
+                    new_cache.append(tensor_data[0])  # key
+                    new_cache.append(tensor_data[1])  # value
+            self._kv_cache = tuple(new_cache) if new_cache else None
+            return True
+        except Exception as e:
+            print(f"ONNXEngine: Failed to import KV cache: {e}")
+            return False
+
+    def _supports_cache_bridging(self) -> bool:
+        """ONNX engine supports KV cache bridging if cache names are detected."""
+        return bool(self._past_key_value_input_names and self._past_key_value_output_names)

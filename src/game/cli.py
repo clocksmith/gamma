@@ -853,6 +853,38 @@ def display_final_score_and_message(total_score: int, total_max_score: int, curr
     print(f"\nFinal text: \"{current_full_text}\"\n")
 
 
+def _format_chat_history(history: list, engine: LLMEngine) -> str:
+    """Format chat history into a prompt string.
+
+    Uses the tokenizer's chat template if available, otherwise falls back
+    to a simple turn-based format.
+    """
+    # Try to use tokenizer's apply_chat_template if available
+    if hasattr(engine.tokenizer, 'apply_chat_template'):
+        try:
+            return engine.tokenizer.apply_chat_template(
+                history,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+        except Exception:
+            pass  # Fall back to simple format
+
+    # Simple turn-based format fallback
+    formatted_parts = []
+    for turn in history:
+        role = turn.get("role", "user")
+        content = turn.get("content", "")
+        if role == "user":
+            formatted_parts.append(f"User: {content}")
+        elif role == "assistant":
+            formatted_parts.append(f"Assistant: {content}")
+        elif role == "system":
+            formatted_parts.append(f"System: {content}")
+
+    return "\n".join(formatted_parts) + "\nAssistant:"
+
+
 def run_chat_mode(engine: LLMEngine, args: argparse.Namespace) -> None:
     """Runs a simple interactive chat session."""
     ui.print_header("Direct Chat Mode")
@@ -868,8 +900,9 @@ def run_chat_mode(engine: LLMEngine, args: argparse.Namespace) -> None:
             break
 
         history.append({"role": "user", "content": prompt})
-        
-        full_prompt = engine.decode(history)
+
+        # Format chat history into a prompt string
+        full_prompt = _format_chat_history(history, engine)
         
         sys.stdout.write(ui.color_text("> Assistant: ", cfg.COLOR_CYAN))
         sys.stdout.flush()

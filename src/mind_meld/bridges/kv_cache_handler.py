@@ -6,8 +6,68 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional, Tuple, List, Dict, Literal
 import numpy as np
 
-# A more robust way to define model architectures
-ModelArchitecture = Literal['gemma', 'llama', 'unknown']
+# Extended model architecture support
+ModelArchitecture = Literal[
+    'gemma', 'llama', 'mistral', 'qwen', 'phi', 'gpt2', 'falcon',
+    'mpt', 'bloom', 'opt', 'codellama', 'deepseek', 'unknown'
+]
+
+# Architecture groups for compatibility checking
+ARCHITECTURE_GROUPS = {
+    'llama_family': ['llama', 'codellama', 'mistral', 'qwen', 'deepseek'],
+    'gpt_family': ['gpt2', 'opt', 'bloom'],
+    'mha_standard': ['llama', 'gpt2', 'opt', 'bloom'],  # Multi-Head Attention
+    'gqa_models': ['llama', 'mistral', 'qwen', 'gemma'],  # Grouped Query Attention
+    'mqa_models': ['falcon', 'mpt'],  # Multi-Query Attention
+    'rope_models': ['llama', 'mistral', 'qwen', 'gemma', 'phi', 'falcon'],  # RoPE position encoding
+    'alibi_models': ['bloom', 'mpt'],  # ALiBi position encoding
+    'absolute_pos': ['gpt2', 'opt'],  # Absolute position embeddings
+}
+
+def get_architecture_group(arch: ModelArchitecture) -> List[str]:
+    """Get all compatibility groups for an architecture."""
+    groups = []
+    for group_name, members in ARCHITECTURE_GROUPS.items():
+        if arch in members:
+            groups.append(group_name)
+    return groups
+
+def architectures_compatible(source_arch: ModelArchitecture, target_arch: ModelArchitecture) -> Tuple[bool, str]:
+    """Check if two architectures are compatible for KV cache bridging."""
+    if source_arch == target_arch:
+        return True, "same_architecture"
+
+    # Check if in same family
+    for group_name, members in ARCHITECTURE_GROUPS.items():
+        if source_arch in members and target_arch in members:
+            if 'family' in group_name:
+                return True, f"same_family:{group_name}"
+
+    # Check attention type compatibility
+    source_groups = get_architecture_group(source_arch)
+    target_groups = get_architecture_group(target_arch)
+
+    # GQA -> MHA is possible (repeat KV heads)
+    if 'gqa_models' in source_groups and 'mha_standard' in target_groups:
+        return True, "gqa_to_mha"
+
+    # MQA -> MHA is possible (broadcast single KV head)
+    if 'mqa_models' in source_groups and 'mha_standard' in target_groups:
+        return True, "mqa_to_mha"
+
+    # Check position encoding compatibility
+    source_pos = None
+    target_pos = None
+    for pos_type in ['rope_models', 'alibi_models', 'absolute_pos']:
+        if pos_type in source_groups:
+            source_pos = pos_type
+        if pos_type in target_groups:
+            target_pos = pos_type
+
+    if source_pos and target_pos and source_pos != target_pos:
+        return False, f"incompatible_position_encoding:{source_pos}_to_{target_pos}"
+
+    return True, "general_compatible"
 
 def get_model_architecture(config: Any) -> ModelArchitecture:
     """Infers the model architecture from its configuration object."""
@@ -24,11 +84,108 @@ def get_model_architecture(config: Any) -> ModelArchitecture:
     elif hasattr(config, '__dict__'):
         config_dict = {key: getattr(config, key) for key in vars(config)}
 
+    # Check model_type attribute first (most reliable)
+    model_type = config_dict.get('model_type', '').lower()
+    if model_type:
+        if 'gemma' in model_type:
+            return 'gemma'
+        if 'llama' in model_type or 'codellama' in model_type:
+            return 'llama'
+        if 'mistral' in model_type:
+            return 'mistral'
+        if 'qwen' in model_type:
+            return 'qwen'
+        if 'phi' in model_type:
+            return 'phi'
+        if 'gpt2' in model_type or 'gpt-2' in model_type:
+            return 'gpt2'
+        if 'falcon' in model_type:
+            return 'falcon'
+        if 'mpt' in model_type:
+            return 'mpt'
+        if 'bloom' in model_type:
+            return 'bloom'
+        if 'opt' in model_type:
+            return 'opt'
+        if 'deepseek' in model_type:
+            return 'deepseek'
+
+    # Check architectures list
+    architectures = config_dict.get('architectures', [])
+    if architectures:
+        arch_str = str(architectures).lower()
+        if 'gemma' in arch_str:
+            return 'gemma'
+        if 'llama' in arch_str:
+            return 'llama'
+        if 'mistral' in arch_str:
+            return 'mistral'
+        if 'qwen' in arch_str:
+            return 'qwen'
+        if 'phi' in arch_str:
+            return 'phi'
+        if 'falcon' in arch_str:
+            return 'falcon'
+
+    # Fallback heuristics based on config attributes
     if 'sliding_window' in config_dict:
+        # Gemma and Mistral use sliding window attention
+        if config_dict.get('num_key_value_heads', 0) < config_dict.get('num_attention_heads', 0):
+            return 'mistral'  # GQA + sliding window
         return 'gemma'
-    if 'attention_bias' in config_dict and 'group_query_attention' in config_dict:
+
+    if 'num_key_value_heads' in config_dict:
+        # GQA models
+        num_kv = config_dict.get('num_key_value_heads', 0)
+        num_attn = config_dict.get('num_attention_heads', 0)
+        if num_kv == 1:
+            return 'falcon'  # MQA
+        if num_kv < num_attn:
+            return 'llama'  # GQA (Llama 2+)
+
+    if 'alibi' in str(config_dict).lower():
+        return 'bloom'
+
+    if 'attention_bias' in config_dict:
         return 'llama'
+
     return 'unknown'
+
+
+def get_attention_config(config: Any) -> Dict[str, Any]:
+    """Extract attention configuration from model config."""
+    config_dict = {}
+    if hasattr(config, 'to_dict') and callable(getattr(config, 'to_dict')):
+        try:
+            config_dict = config.to_dict() or {}
+        except Exception:
+            pass
+    elif hasattr(config, '__dict__'):
+        config_dict = {key: getattr(config, key) for key in vars(config)}
+
+    num_heads = config_dict.get('num_attention_heads', config_dict.get('n_head', 12))
+    num_kv_heads = config_dict.get('num_key_value_heads', num_heads)
+    head_dim = config_dict.get('head_dim', None)
+
+    if head_dim is None:
+        hidden_size = config_dict.get('hidden_size', config_dict.get('n_embd', 768))
+        head_dim = hidden_size // num_heads
+
+    # Determine attention type
+    if num_kv_heads == 1:
+        attn_type = 'mqa'  # Multi-Query Attention
+    elif num_kv_heads < num_heads:
+        attn_type = 'gqa'  # Grouped Query Attention
+    else:
+        attn_type = 'mha'  # Multi-Head Attention
+
+    return {
+        'num_heads': num_heads,
+        'num_kv_heads': num_kv_heads,
+        'head_dim': head_dim,
+        'attention_type': attn_type,
+        'kv_groups': num_heads // num_kv_heads if num_kv_heads > 0 else 1,
+    }
 
 class KVCache(ABC):
     """
@@ -225,9 +382,194 @@ class PyTorchKVCache(KVCache):
 
         return tuple(reconstructed)
 
+class MLXKVCache(KVCache):
+    """A KVCache implementation for MLX (Apple Silicon) models."""
+
+    def _to_numpy(self, cache: Any) -> Tuple[np.ndarray, np.ndarray]:
+        """Convert MLX cache to numpy arrays."""
+        try:
+            import mlx.core as mx
+        except ImportError as exc:
+            raise RuntimeError("MLXKVCache requires mlx to be installed") from exc
+
+        if cache is None:
+            return np.array([]), np.array([])
+
+        key_arrays: List[np.ndarray] = []
+        value_arrays: List[np.ndarray] = []
+
+        # MLX cache format varies by model, handle common formats
+        if isinstance(cache, (list, tuple)):
+            for layer_cache in cache:
+                if isinstance(layer_cache, (list, tuple)) and len(layer_cache) >= 2:
+                    key_tensor, value_tensor = layer_cache[0], layer_cache[1]
+
+                    # Convert MLX arrays to numpy
+                    if hasattr(key_tensor, 'tolist'):
+                        key_arrays.append(np.array(key_tensor))
+                        value_arrays.append(np.array(value_tensor))
+                    else:
+                        key_arrays.append(np.array(key_tensor))
+                        value_arrays.append(np.array(value_tensor))
+
+        if not key_arrays:
+            return np.array([]), np.array([])
+
+        # Store original dtype for reconstruction
+        self._cache_metadata['original_dtype'] = 'float16'  # MLX default
+        self._cache_metadata['framework'] = 'mlx'
+
+        return np.asarray(key_arrays), np.asarray(value_arrays)
+
+    def to_model_format(self) -> Any:
+        """Convert numpy arrays back to MLX cache format."""
+        try:
+            import mlx.core as mx
+        except ImportError as exc:
+            raise RuntimeError("MLXKVCache requires mlx to be installed") from exc
+
+        reconstructed = []
+        num_layers = len(self.key)
+
+        for idx in range(num_layers):
+            key_array = mx.array(self.key[idx])
+            value_array = mx.array(self.value[idx])
+            reconstructed.append((key_array, value_array))
+
+        return reconstructed
+
+
+class JAXKVCache(KVCache):
+    """A KVCache implementation for JAX/Flax models."""
+
+    def _to_numpy(self, cache: Any) -> Tuple[np.ndarray, np.ndarray]:
+        """Convert JAX cache to numpy arrays."""
+        try:
+            import jax.numpy as jnp
+        except ImportError as exc:
+            raise RuntimeError("JAXKVCache requires jax to be installed") from exc
+
+        if cache is None:
+            return np.array([]), np.array([])
+
+        key_arrays: List[np.ndarray] = []
+        value_arrays: List[np.ndarray] = []
+
+        # JAX/Flax cache is typically a tuple of (key, value) per layer
+        if isinstance(cache, (list, tuple)):
+            for layer_cache in cache:
+                if isinstance(layer_cache, (list, tuple)) and len(layer_cache) >= 2:
+                    key_tensor, value_tensor = layer_cache[0], layer_cache[1]
+                    key_arrays.append(np.array(key_tensor))
+                    value_arrays.append(np.array(value_tensor))
+
+        if not key_arrays:
+            return np.array([]), np.array([])
+
+        self._cache_metadata['framework'] = 'jax'
+
+        return np.asarray(key_arrays), np.asarray(value_arrays)
+
+    def to_model_format(self) -> Any:
+        """Convert numpy arrays back to JAX cache format."""
+        try:
+            import jax.numpy as jnp
+        except ImportError as exc:
+            raise RuntimeError("JAXKVCache requires jax to be installed") from exc
+
+        reconstructed = []
+        num_layers = len(self.key)
+
+        for idx in range(num_layers):
+            key_array = jnp.array(self.key[idx])
+            value_array = jnp.array(self.value[idx])
+            reconstructed.append((key_array, value_array))
+
+        return tuple(reconstructed)
+
+
+def convert_gqa_to_mha(kv_cache: np.ndarray, num_kv_heads: int, num_heads: int) -> np.ndarray:
+    """
+    Convert GQA (Grouped Query Attention) KV cache to MHA format.
+
+    In GQA, multiple query heads share the same KV head. To convert to MHA,
+    we repeat each KV head to match the number of query heads in its group.
+
+    Args:
+        kv_cache: Shape (batch, num_kv_heads, seq_len, head_dim) or similar
+        num_kv_heads: Number of KV heads in source
+        num_heads: Number of attention heads in target
+
+    Returns:
+        Expanded cache with shape (..., num_heads, seq_len, head_dim)
+    """
+    if num_kv_heads == num_heads:
+        return kv_cache
+
+    if num_heads % num_kv_heads != 0:
+        raise ValueError(f"num_heads ({num_heads}) must be divisible by num_kv_heads ({num_kv_heads})")
+
+    repeat_factor = num_heads // num_kv_heads
+
+    # Find the head dimension axis (usually -3 or 1)
+    # Typical shapes: (batch, num_heads, seq_len, head_dim) or (num_layers, batch, num_heads, seq_len, head_dim)
+    head_axis = -3  # Third from last is typically num_heads
+
+    # Use numpy repeat along head axis
+    return np.repeat(kv_cache, repeat_factor, axis=head_axis)
+
+
+def convert_mha_to_gqa(kv_cache: np.ndarray, num_heads: int, num_kv_heads: int) -> np.ndarray:
+    """
+    Convert MHA KV cache to GQA format by averaging grouped heads.
+
+    Args:
+        kv_cache: Shape (..., num_heads, seq_len, head_dim)
+        num_heads: Number of attention heads in source
+        num_kv_heads: Number of KV heads in target
+
+    Returns:
+        Reduced cache with shape (..., num_kv_heads, seq_len, head_dim)
+    """
+    if num_kv_heads == num_heads:
+        return kv_cache
+
+    if num_heads % num_kv_heads != 0:
+        raise ValueError(f"num_heads ({num_heads}) must be divisible by num_kv_heads ({num_kv_heads})")
+
+    group_size = num_heads // num_kv_heads
+    head_axis = -3
+
+    # Reshape to group heads, then average
+    shape = list(kv_cache.shape)
+    new_shape = shape[:head_axis] + [num_kv_heads, group_size] + shape[head_axis + 1:]
+    grouped = kv_cache.reshape(new_shape)
+
+    # Average over the group axis
+    return np.mean(grouped, axis=head_axis + 1)
+
+
+def convert_mqa_to_mha(kv_cache: np.ndarray, num_heads: int) -> np.ndarray:
+    """
+    Convert MQA (Multi-Query Attention) to MHA by broadcasting single KV head.
+
+    In MQA, there's only 1 KV head shared by all query heads.
+
+    Args:
+        kv_cache: Shape (..., 1, seq_len, head_dim)
+        num_heads: Target number of heads
+
+    Returns:
+        Broadcasted cache with shape (..., num_heads, seq_len, head_dim)
+    """
+    head_axis = -3
+    return np.repeat(kv_cache, num_heads, axis=head_axis)
+
+
 class KVCacheTranslator:
     """
     A unified KV cache translator with a strategy-based approach.
+    Supports GQA, MQA, and MHA attention format conversions.
     """
 
     def __init__(self, verbose: bool = True):
@@ -251,9 +593,33 @@ class KVCacheTranslator:
     def _get_translation_strategy(self, source_arch: ModelArchitecture, target_arch: ModelArchitecture) -> 'TranslationStrategy':
         if source_arch == target_arch:
             return DirectTranslation()
+
+        # Check architecture compatibility
+        compatible, reason = architectures_compatible(source_arch, target_arch)
+
+        if not compatible:
+            if self.verbose:
+                print(f"Warning: Incompatible architectures ({reason}). Using projection fallback.")
+            return ProjectionTranslation()
+
+        # Handle attention type conversions
+        if 'gqa_to_mha' in reason:
+            return GQATranslation()
+        if 'mqa_to_mha' in reason:
+            return MQATranslation()
+
+        # Same family - use direct or heuristic
+        if 'llama_family' in reason:
+            return DirectTranslation()  # Same attention patterns
+
         if source_arch == 'llama' and target_arch == 'gemma':
             return LlamaToGemmaHeuristicTranslation()
-        # Add more strategies here
+        if source_arch == 'gemma' and target_arch == 'llama':
+            return GemmaToLlamaTranslation()
+        if source_arch in ['mistral', 'qwen'] and target_arch == 'llama':
+            return DirectTranslation()  # Similar enough
+
+        # Fallback to projection
         return ProjectionTranslation()
 
 class TranslationStrategy(ABC):
@@ -275,13 +641,123 @@ class LlamaToGemmaHeuristicTranslation(TranslationStrategy):
     """A heuristic-based translation from Llama to Gemma."""
 
     def translate(self, source_cache: KVCache, target_config: Any) -> Optional[KVCache]:
-        # This is a simplified heuristic. A real implementation would be more complex.
-        sliding_window = getattr(target_config, 'sliding_window', 4096)
-        
-        # Truncate the sequence length of the key and value tensors
-        source_cache.key = source_cache.key[:, :, :, -sliding_window:]
-        source_cache.value = source_cache.value[:, :, :, -sliding_window:]
-        
+        # Apply sliding window if target uses it
+        sliding_window = getattr(target_config, 'sliding_window', None)
+
+        if sliding_window and source_cache.sequence_length > sliding_window:
+            # Truncate to sliding window size
+            source_cache.key = source_cache.key[..., -sliding_window:, :]
+            source_cache.value = source_cache.value[..., -sliding_window:, :]
+            source_cache.sequence_length = sliding_window
+
+        # Handle GQA conversion if needed
+        source_attn = get_attention_config(source_cache._cache_metadata.get('config', {}))
+        target_attn = get_attention_config(target_config)
+
+        if source_attn['num_kv_heads'] != target_attn['num_kv_heads']:
+            source_cache.key = convert_mha_to_gqa(
+                source_cache.key,
+                source_attn['num_heads'],
+                target_attn['num_kv_heads']
+            )
+            source_cache.value = convert_mha_to_gqa(
+                source_cache.value,
+                source_attn['num_heads'],
+                target_attn['num_kv_heads']
+            )
+
+        return source_cache
+
+
+class GemmaToLlamaTranslation(TranslationStrategy):
+    """Translation from Gemma to Llama architecture."""
+
+    def translate(self, source_cache: KVCache, target_config: Any) -> Optional[KVCache]:
+        # Gemma uses sliding window, Llama doesn't - no truncation needed
+        # Just handle attention head differences
+
+        source_attn = get_attention_config(source_cache._cache_metadata.get('config', {}))
+        target_attn = get_attention_config(target_config)
+
+        if source_attn['num_kv_heads'] != target_attn['num_kv_heads']:
+            if source_attn['num_kv_heads'] < target_attn['num_kv_heads']:
+                # Expand KV heads
+                source_cache.key = convert_gqa_to_mha(
+                    source_cache.key,
+                    source_attn['num_kv_heads'],
+                    target_attn['num_kv_heads']
+                )
+                source_cache.value = convert_gqa_to_mha(
+                    source_cache.value,
+                    source_attn['num_kv_heads'],
+                    target_attn['num_kv_heads']
+                )
+            else:
+                # Reduce KV heads
+                source_cache.key = convert_mha_to_gqa(
+                    source_cache.key,
+                    source_attn['num_kv_heads'],
+                    target_attn['num_kv_heads']
+                )
+                source_cache.value = convert_mha_to_gqa(
+                    source_cache.value,
+                    source_attn['num_kv_heads'],
+                    target_attn['num_kv_heads']
+                )
+
+        return source_cache
+
+
+class GQATranslation(TranslationStrategy):
+    """Translation strategy for GQA (Grouped Query Attention) models."""
+
+    def translate(self, source_cache: KVCache, target_config: Any) -> Optional[KVCache]:
+        """Convert GQA cache to target format (typically MHA)."""
+        source_attn = get_attention_config(source_cache._cache_metadata.get('config', {}))
+        target_attn = get_attention_config(target_config)
+
+        source_kv_heads = source_attn.get('num_kv_heads', source_cache.num_heads)
+        target_kv_heads = target_attn.get('num_kv_heads', target_attn['num_heads'])
+
+        if source_kv_heads == target_kv_heads:
+            return source_cache
+
+        # GQA to MHA: repeat KV heads
+        if source_kv_heads < target_kv_heads:
+            source_cache.key = convert_gqa_to_mha(
+                source_cache.key, source_kv_heads, target_kv_heads
+            )
+            source_cache.value = convert_gqa_to_mha(
+                source_cache.value, source_kv_heads, target_kv_heads
+            )
+            source_cache.num_heads = target_kv_heads
+        else:
+            # MHA to GQA: average heads in groups
+            source_cache.key = convert_mha_to_gqa(
+                source_cache.key, source_kv_heads, target_kv_heads
+            )
+            source_cache.value = convert_mha_to_gqa(
+                source_cache.value, source_kv_heads, target_kv_heads
+            )
+            source_cache.num_heads = target_kv_heads
+
+        return source_cache
+
+
+class MQATranslation(TranslationStrategy):
+    """Translation strategy for MQA (Multi-Query Attention) models."""
+
+    def translate(self, source_cache: KVCache, target_config: Any) -> Optional[KVCache]:
+        """Convert MQA cache (1 KV head) to target format."""
+        target_attn = get_attention_config(target_config)
+        target_heads = target_attn.get('num_kv_heads', target_attn['num_heads'])
+
+        # MQA has 1 KV head - broadcast to target head count
+        if source_cache.num_heads == 1 and target_heads > 1:
+            source_cache.key = convert_mqa_to_mha(source_cache.key, target_heads)
+            source_cache.value = convert_mqa_to_mha(source_cache.value, target_heads)
+            source_cache.num_heads = target_heads
+
         return source_cache
 
 class ProjectionTranslation(TranslationStrategy):
