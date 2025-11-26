@@ -35,7 +35,7 @@ export class GamePanel {
     this.bindEvents();
     this.bindKeyboardNavigation();
     this.attentionHistory = [];
-    this.selectedChoiceIndex = 0;
+    this.selectedChoiceIndex = -1;
     this.choicesEnabled = false;
     this.isRealAttention = false; // Track if attention is real or synthetic
   }
@@ -224,7 +224,13 @@ export class GamePanel {
     const buttons = this.choicesGrid.querySelectorAll('.choice-btn');
     const numChoices = buttons.length;
     if (numChoices === 0) return;
-    this.selectedChoiceIndex = (this.selectedChoiceIndex + delta + numChoices) % numChoices;
+
+    // If no selection yet, start at first (for down/right) or last (for up/left)
+    if (this.selectedChoiceIndex === -1) {
+      this.selectedChoiceIndex = delta > 0 ? 0 : numChoices - 1;
+    } else {
+      this.selectedChoiceIndex = (this.selectedChoiceIndex + delta + numChoices) % numChoices;
+    }
     this._updateChoiceHighlight();
   }
 
@@ -238,7 +244,7 @@ export class GamePanel {
   _clearSelection() {
     const buttons = this.choicesGrid.querySelectorAll('.choice-btn');
     buttons.forEach(btn => btn.classList.remove('keyboard-selected'));
-    this.selectedChoiceIndex = 0;
+    this.selectedChoiceIndex = -1;
   }
 
   setModelName(modelId) {
@@ -414,8 +420,7 @@ export class GamePanel {
     }).join('');
 
     this.choicesEnabled = true;
-    this.selectedChoiceIndex = 0;
-    this._updateChoiceHighlight();
+    this.selectedChoiceIndex = -1; // No selection until user navigates
 
     this.choicesGrid.querySelectorAll('.choice-btn').forEach(btn => {
       btn.addEventListener('click', () => {
