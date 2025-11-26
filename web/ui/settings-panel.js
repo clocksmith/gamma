@@ -52,7 +52,7 @@ export class SettingsPanel {
     this.container.innerHTML = `
       <div class="settings-panel ${this.isExpanded ? 'expanded' : 'collapsed'}">
         <button class="settings-toggle" aria-expanded="${this.isExpanded}" aria-controls="settings-content">
-          <span class="settings-icon">⚙️</span>
+          <span class="settings-icon">⎈</span>
           <span class="settings-label">Settings</span>
           <span class="settings-chevron">${this.isExpanded ? '▼' : '▶'}</span>
         </button>

@@ -13,7 +13,7 @@ export const Toast = {
     const el = document.createElement('div');
     el.className = `achievement-toast ${type}`;
     el.innerHTML = `
-      <div class="achievement-icon">🏆</div>
+      <div class="achievement-icon">★</div>
       <div>
         <div class="achievement-name">${message.name || 'Notification'}</div>
         <div class="achievement-desc">${message.desc || message}</div>

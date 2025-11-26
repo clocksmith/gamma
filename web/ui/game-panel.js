@@ -63,7 +63,7 @@ export class GamePanel {
               <span class="score">0</span>
             </div>
             <div class="streak-indicator hidden">
-              <span class="streak-fire">🔥</span>
+              <span class="streak-fire">★</span>
               <span class="streak-count">0</span>
             </div>
           </div>
@@ -530,10 +530,10 @@ export class GamePanel {
   }
 
   _getEndGameMessage(percentage) {
-    if (percentage >= 80) return '🏆 Amazing! You really understand this model!';
-    if (percentage >= 60) return '👍 Great job! You have solid LLM intuition.';
-    if (percentage >= 40) return '📚 Good effort! Keep practicing to improve.';
-    return '💡 LLMs can be unpredictable. Try again!';
+    if (percentage >= 80) return '★ Amazing! You really understand this model!';
+    if (percentage >= 60) return '★ Great job! You have solid LLM intuition.';
+    if (percentage >= 40) return '☛ Good effort! Keep practicing to improve.';
+    return '☛ LLMs can be unpredictable. Try again!';
   }
 
   escapeHtml(text) {

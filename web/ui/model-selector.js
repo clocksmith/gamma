@@ -44,7 +44,7 @@ export class ModelSelector {
           <h4 class="section-title">Starting Text</h4>
           <div class="prompt-controls">
             <input type="text" class="prompt-input" value="${this.escapeHtml(this.selectedPrompt)}" placeholder="Enter starting text...">
-            <button class="btn random-prompt-btn">Random</button>
+            <button class="random-prompt-btn">Random</button>
             <select class="prompt-select">
               <option value="">Pick from list...</option>
               ${STARTING_PROMPTS.map(p => `<option value="${this.escapeHtml(p)}">${this.escapeHtml(p.length > 40 ? p.slice(0, 40) + '...' : p)}</option>`).join('')}
