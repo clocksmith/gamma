@@ -19,17 +19,33 @@ def detect_hardware():
         'platform': platform.system(),
         'machine': platform.machine(),
         'cuda': False,
+        'rocm': False,
         'mps': False,
         'cpu_only': True
     }
 
-    # Check CUDA
+    # Check CUDA/ROCm
     try:
         import torch
         if torch.cuda.is_available():
-            hw_info['cuda'] = True
             hw_info['cpu_only'] = False
-            hw_info['cuda_device'] = torch.cuda.get_device_name(0)
+
+            # Check if ROCm or CUDA
+            hip_version = getattr(torch.version, "hip", None)
+            if hip_version:
+                hw_info['rocm'] = True
+                hw_info['rocm_version'] = hip_version
+                try:
+                    props = torch.cuda.get_device_properties(0)
+                    hw_info['gpu_name'] = props.name
+                    if hasattr(props, 'gcnArchName'):
+                        hw_info['gpu_arch'] = f"gfx{props.gcnArchName}"
+                except:
+                    pass
+            else:
+                hw_info['cuda'] = True
+                hw_info['cuda_device'] = torch.cuda.get_device_name(0)
+                hw_info['cuda_version'] = torch.version.cuda
     except ImportError:
         pass
 

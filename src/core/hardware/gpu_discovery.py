@@ -109,18 +109,54 @@ def _get_rocm_gpus() -> List[GPUInfo]:
             vram_total = props.total_memory // (1024 * 1024)
             vram_free = (props.total_memory - torch.cuda.memory_allocated(i)) // (1024 * 1024)
 
+            # Enhanced AMD GPU name detection
+            gpu_name = props.name
+            if "Strix Halo" in gpu_name or "gfx1151" in str(props.gcnArchName if hasattr(props, 'gcnArchName') else ''):
+                gpu_name = "AMD Radeon Graphics (Strix Halo / Radeon 8050S/8060S)"
+
+            # Get compute capability
+            compute_cap = "unknown"
+            if hasattr(props, 'gcnArchName'):
+                compute_cap = f"gfx{props.gcnArchName}"
+            elif hasattr(props, 'major') and hasattr(props, 'minor'):
+                compute_cap = f"{props.major}.{props.minor}"
+
             gpus.append(GPUInfo(
                 id=i,
-                name=props.name,
+                name=gpu_name,
                 vram_total_mb=vram_total,
                 vram_free_mb=vram_free,
-                compute_capability=f"gfx{props.gcnArchName}" if hasattr(props, 'gcnArchName') else "unknown",
+                compute_capability=compute_cap,
                 library='rocm'
             ))
 
         return gpus
+    except Exception as e:
+        # Try alternative AMD GPU detection via lspci
+        return _get_rocm_gpus_fallback()
+
+
+def _get_rocm_gpus_fallback() -> List[GPUInfo]:
+    """Fallback method to detect AMD GPUs via system commands."""
+    try:
+        import subprocess
+        result = subprocess.run(['lspci', '|', 'grep', '-i', 'vga'],
+                              capture_output=True, text=True, shell=True, timeout=5)
+
+        if result.returncode == 0 and 'AMD' in result.stdout:
+            # Detected AMD GPU via lspci
+            if 'Strix Halo' in result.stdout or '1151' in result.stdout:
+                return [GPUInfo(
+                    id=0,
+                    name="AMD Radeon Graphics (Strix Halo / Radeon 8050S/8060S)",
+                    vram_total_mb=8192,  # Estimated for integrated GPU
+                    vram_free_mb=6144,   # Estimated
+                    compute_capability="gfx1151",
+                    library='rocm'
+                )]
     except Exception:
-        return []
+        pass
+    return []
 
 
 def _get_metal_gpus() -> List[GPUInfo]:

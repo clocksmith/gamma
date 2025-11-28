@@ -16,6 +16,17 @@ export class TransformersEngine extends EngineInterface {
 
   async load() {
     try {
+      // Check WebGPU availability first
+      if (this.device === 'webgpu') {
+        const webgpuAvailable = await this._checkWebGPUAvailability();
+        if (!webgpuAvailable) {
+          console.warn('WebGPU not available, using WASM instead');
+          this.device = 'wasm';
+        } else {
+          console.log('WebGPU is available and will be used for acceleration');
+        }
+      }
+
       this.tokenizer = await AutoTokenizer.from_pretrained(this.modelId, {
         progress_callback: (data) => this._emitProgress('tokenizer', data)
       });
@@ -27,7 +38,7 @@ export class TransformersEngine extends EngineInterface {
       });
 
       this.ready = true;
-      console.log(`Engine loaded: ${this.modelId}`);
+      console.log(`Engine loaded: ${this.modelId} on ${this.device}`);
     } catch (err) {
       console.error('Failed to load model:', err);
       if (this.device === 'webgpu') {
@@ -37,6 +48,35 @@ export class TransformersEngine extends EngineInterface {
       } else {
         throw err;
       }
+    }
+  }
+
+  async _checkWebGPUAvailability() {
+    if (!navigator.gpu) {
+      console.log('WebGPU API not available in this browser');
+      return false;
+    }
+
+    try {
+      const adapter = await navigator.gpu.requestAdapter();
+      if (!adapter) {
+        console.log('No WebGPU adapter found');
+        return false;
+      }
+
+      // Log GPU info
+      const info = await adapter.requestAdapterInfo();
+      console.log('WebGPU Adapter:', {
+        vendor: info.vendor || 'unknown',
+        architecture: info.architecture || 'unknown',
+        device: info.device || 'unknown',
+        description: info.description || 'unknown'
+      });
+
+      return true;
+    } catch (err) {
+      console.error('WebGPU check failed:', err);
+      return false;
     }
   }
 
