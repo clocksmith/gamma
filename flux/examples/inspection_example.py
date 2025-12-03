@@ -6,7 +6,8 @@ the denoising process step-by-step.
 """
 
 import sys
-sys.path.insert(0, '/home/clocksmith/deco/gamma-core')
+sys.path.insert(0, '/home/clocksmith/deco/gamma/gamma-core/src')
+sys.path.insert(0, '..')
 
 from src.engines.base import DiffusionConfig
 from src.engines.diffusers_engine import DiffusersEngine

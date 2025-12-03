@@ -14,9 +14,9 @@ Learning objectives:
 from typing import List, Optional
 import sys
 
-sys.path.insert(0, '/home/clocksmith/deco/gamma-core')
-from gamma_core.ui import print_header, print_separator, color_text, UIConfig
-from gamma_core.game import GameSession, DifficultyLevel
+sys.path.insert(0, '/home/clocksmith/deco/gamma/gamma-core/src')
+from ui import print_header, print_separator, color_text, UIConfig
+from game import GameSession, DifficultyLevel
 
 from ..comparison.compare import ModelComparison
 

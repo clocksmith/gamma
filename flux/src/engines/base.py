@@ -11,8 +11,8 @@ from PIL import Image
 import numpy as np
 
 import sys
-sys.path.insert(0, '/home/clocksmith/deco/gamma-core')
-from gamma_core.engine import ModelEngine, EngineConfig
+sys.path.insert(0, '/home/clocksmith/deco/gamma/gamma-core/src')
+from engine import ModelEngine, EngineConfig
 
 
 @dataclass

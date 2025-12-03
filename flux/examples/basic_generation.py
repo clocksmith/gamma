@@ -5,7 +5,8 @@ Shows the simplest way to use Flux for text-to-image generation.
 """
 
 import sys
-sys.path.insert(0, '/home/clocksmith/deco/gamma-core')
+sys.path.insert(0, '/home/clocksmith/deco/gamma/gamma-core/src')
+sys.path.insert(0, '..')
 
 from src.engines.base import DiffusionConfig
 from src.engines.diffusers_engine import DiffusersEngine
@@ -16,7 +17,7 @@ def main():
 
     # Configure engine
     config = DiffusionConfig(
-        model_name="stabilityai/stable-diffusion-2-1-base",
+        model_name="runwayml/stable-diffusion-v1-5",
         num_inference_steps=50,
         guidance_scale=7.5,
     )

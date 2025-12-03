@@ -17,8 +17,8 @@ from PIL import Image
 import time
 import sys
 
-sys.path.insert(0, '/home/clocksmith/deco/gamma-core')
-from gamma_core.ui import print_header, print_separator, color_text, UIConfig
+sys.path.insert(0, '/home/clocksmith/deco/gamma/gamma-core/src')
+from ui import print_header, print_separator, color_text, UIConfig
 
 from ..engines.base import DiffusionEngine, DiffusionConfig, DiffusionOutput
 from ..engines.diffusers_engine import DiffusersEngine

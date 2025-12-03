@@ -9,9 +9,9 @@ import sys
 import argparse
 import logging
 
-sys.path.insert(0, '/home/clocksmith/deco/gamma-core')
-from gamma_core.ui import print_header, print_separator, color_text, UIConfig
-from gamma_core.game import GameSession, DifficultyLevel
+sys.path.insert(0, '/home/clocksmith/deco/gamma/gamma-core/src')
+from ui import print_header, print_separator, color_text, UIConfig
+from game import GameSession, DifficultyLevel
 
 from src.engines.base import DiffusionConfig
 from src.engines.diffusers_engine import DiffusersEngine

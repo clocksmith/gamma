@@ -9,7 +9,7 @@ class FluxConfig:
     """Global configuration for Flux."""
 
     # Model settings
-    default_model: str = "stabilityai/stable-diffusion-2-1-base"
+    default_model: str = "runwayml/stable-diffusion-v1-5"
     models_dir: str = "./models"
 
     # Generation defaults
