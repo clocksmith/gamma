@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flux Web - Interactive Diffusion Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        textarea,
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+        }
+
+        .slider-value {
+            min-width: 60px;
+            text-align: right;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-container {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .result-container.visible {
+            display: block;
+        }
+
+        .result-image {
+            width: 100%;
+            max-width: 512px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .error-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌊 Flux Web</h1>
+            <p class="tagline">Interactive Diffusion Model Learning Lab</p>
+        </header>
+
+        <main>
+            <div class="section">
+                <h2>Generate Image</h2>
+
+                <div class="control-group">
+                    <label for="prompt">Prompt</label>
+                    <textarea
+                        id="prompt"
+                        placeholder="A serene mountain landscape at sunset, highly detailed..."
+                    >A serene mountain landscape at sunset</textarea>
+                </div>
+
+                <div class="control-group">
+                    <label for="negative-prompt">Negative Prompt (Optional)</label>
+                    <input
+                        type="text"
+                        id="negative-prompt"
+                        placeholder="blurry, low quality..."
+                    >
+                </div>
+
+                <div class="control-group">
+                    <label>Guidance Scale: <span class="slider-value" id="guidance-value">7.5</span></label>
+                    <div class="slider-container">
+                        <input
+                            type="range"
+                            id="guidance"
+                            min="1"
+                            max="20"
+                            step="0.5"
+                            value="7.5"
+                        >
+                    </div>
+                    <small>Low (1-3): Creative | Medium (5-10): Balanced | High (15+): Strict</small>
+                </div>
+
+                <div class="control-group">
+                    <label>Steps: <span class="slider-value" id="steps-value">50</span></label>
+                    <div class="slider-container">
+                        <input
+                            type="range"
+                            id="steps"
+                            min="10"
+                            max="150"
+                            step="5"
+                            value="50"
+                        >
+                    </div>
+                    <small>Fewer (10-30): Fast | Medium (40-60): Balanced | More (80+): High Quality</small>
+                </div>
+
+                <div class="control-group">
+                    <label for="seed">Seed (Optional)</label>
+                    <input
+                        type="number"
+                        id="seed"
+                        placeholder="Random if empty"
+                    >
+                </div>
+
+                <button id="generate-btn" onclick="generate()">
+                    Generate Image
+                </button>
+
+                <div class="info-box">
+                    <strong>Note:</strong> This is a web interface demo. Full generation requires a backend server running the Flux Python CLI with API support. This frontend demonstrates the UI/UX design.
+                </div>
+            </div>
+
+            <div id="result" class="result-container">
+                <h2>Result</h2>
+                <div id="result-content"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Flux - Interactive Diffusion Model Learning Lab</p>
+            <p>Part of the Gamma educational ML ecosystem</p>
+        </footer>
+    </div>
+
+    <script>
+        // Update slider value displays
+        document.getElementById('guidance').addEventListener('input', (e) => {
+            document.getElementById('guidance-value').textContent = e.target.value;
+        });
+
+        document.getElementById('steps').addEventListener('input', (e) => {
+            document.getElementById('steps-value').textContent = e.target.value;
+        });
+
+        // Generate function (demo)
+        function generate() {
+            const resultContainer = document.getElementById('result');
+            const resultContent = document.getElementById('result-content');
+            const generateBtn = document.getElementById('generate-btn');
+
+            // Get values
+            const prompt = document.getElementById('prompt').value;
+            const negativePrompt = document.getElementById('negative-prompt').value;
+            const guidance = document.getElementById('guidance').value;
+            const steps = document.getElementById('steps').value;
+            const seed = document.getElementById('seed').value;
+
+            if (!prompt) {
+                alert('Please enter a prompt');
+                return;
+            }
+
+            // Show loading
+            generateBtn.disabled = true;
+            resultContainer.classList.add('visible');
+            resultContent.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Generating image...</p>
+                    <p>Prompt: "${prompt}"</p>
+                    <p>Steps: ${steps} | Guidance: ${guidance}</p>
+                </div>
+            `;
+
+            // Demo: Show placeholder after delay
+            setTimeout(() => {
+                resultContent.innerHTML = `
+                    <p><strong>Generation complete!</strong></p>
+                    <p>Prompt: "${prompt}"</p>
+                    <p>Parameters: ${steps} steps, guidance scale ${guidance}</p>
+
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>Backend Integration Required</strong><br>
+                        To see actual generated images, you need to:
+                        <ol style="margin-top: 10px; margin-left: 20px;">
+                            <li>Run Flux backend with API server</li>
+                            <li>Connect this frontend to the API</li>
+                            <li>See <code>web/README.md</code> for setup instructions</li>
+                        </ol>
+                    </div>
+
+                    <p style="margin-top: 20px; color: #666; font-style: italic;">
+                        This is a frontend demo showing the user interface design for Flux Web.
+                    </p>
+                `;
+                generateBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Enter key to generate
+        document.getElementById('prompt').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                generate();
+            }
+        });
+    </script>
+</body>
+</html>
