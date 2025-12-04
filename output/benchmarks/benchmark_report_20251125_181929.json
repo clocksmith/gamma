@@ -1,0 +1,203 @@
+{
+  "report": {
+    "title": "Comprehensive LLM Benchmark",
+    "timestamp": "2025-11-25T18:19:29.169383",
+    "summary": {
+      "models_tested": 2,
+      "total_errors": 0
+    },
+    "models": [
+      {
+        "name": "microsoft/phi-2",
+        "engine": "pytorch",
+        "metrics": {
+          "ram_used_mb": 57.171875,
+          "ram_used_gb": 0.0558319091796875,
+          "tokens_per_second_mean": 6.310660664707425,
+          "tokens_per_second_std": 1.3707317054520642,
+          "tokens_per_second_min": 4.727228054752526,
+          "tokens_per_second_max": 8.070836566052142,
+          "latency_ms_mean": 144.2309788295201,
+          "latency_ms_std": 30.227756445646072,
+          "latency_ms_p50": 150.7962942123413,
+          "latency_ms_p95": 177.55883932113645,
+          "latency_ms_p99": 226.14331483840914,
+          "total_tokens_generated": 170,
+          "success_rate": 1.0
+        },
+        "quality": {
+          "coherence_score": 0.48,
+          "diversity_score": 0.6060606060606061,
+          "repetition_ratio": 0.21875,
+          "unique_ngram_ratio": 0.75,
+          "latency_p50": 150.7962942123413,
+          "latency_p95": 177.55883932113645,
+          "latency_p99": 226.14331483840914,
+          "latency_mean": 144.2309788295201,
+          "latency_std": 30.227756445646072,
+          "output_consistency": 0.13681318681318683,
+          "token_agreement_rate": 0.0,
+          "avg_token_entropy": 0.2273562858078356,
+          "avg_confidence": 0.7715249235431353,
+          "eos_reached": false,
+          "tokens_generated": 82
+        }
+      },
+      {
+        "name": "mlx-community/gemma-2-2b-it-4bit",
+        "engine": "mlx",
+        "metrics": {
+          "ram_used_mb": 1586.140625,
+          "ram_used_gb": 1.5489654541015625,
+          "tokens_per_second_mean": 10.363753413394198,
+          "tokens_per_second_std": 0.5482074391848348,
+          "tokens_per_second_min": 9.588471989757492,
+          "tokens_per_second_max": 10.75245722881783,
+          "latency_ms_mean": 96.6126283009847,
+          "latency_ms_std": 23.1359340619323,
+          "latency_ms_p50": 92.78249740600586,
+          "latency_ms_p95": 98.67936372756955,
+          "latency_ms_p99": 195.98344802856406,
+          "total_tokens_generated": 110,
+          "success_rate": 1.0
+        },
+        "quality": {
+          "perplexity": 1.2412109375,
+          "coherence_score": 0.08,
+          "diversity_score": 0.05,
+          "repetition_ratio": 0.05555555555555555,
+          "unique_ngram_ratio": 0.05555555555555555,
+          "latency_p50": 92.78249740600586,
+          "latency_p95": 98.67936372756955,
+          "latency_p99": 195.98344802856406,
+          "latency_mean": 96.6126283009847,
+          "latency_std": 23.1359340619323,
+          "output_consistency": 0.6,
+          "token_agreement_rate": 0.0,
+          "avg_token_entropy": 0.03844323263501014,
+          "avg_confidence": 0.9564534505208333,
+          "eos_reached": false,
+          "tokens_generated": 100
+        }
+      }
+    ],
+    "comparison": {
+      "fastest": "mlx-community/gemma-2-2b-it-4bit",
+      "most_consistent": "mlx-community/gemma-2-2b-it-4bit",
+      "lowest_perplexity": null,
+      "rankings": {
+        "speed": [
+          "mlx-community/gemma-2-2b-it-4bit",
+          "microsoft/phi-2"
+        ],
+        "consistency": [
+          "mlx-community/gemma-2-2b-it-4bit",
+          "microsoft/phi-2"
+        ]
+      }
+    }
+  },
+  "raw_results": [
+    {
+      "model": "microsoft/phi-2",
+      "engine": "pytorch",
+      "config": {
+        "num_tokens": 20,
+        "iterations": 3,
+        "consistency_runs": 2,
+        "temperature": 0.7,
+        "top_k": 50,
+        "top_p": 0.9
+      },
+      "metrics": {
+        "ram_used_mb": 57.171875,
+        "ram_used_gb": 0.0558319091796875,
+        "tokens_per_second_mean": 6.310660664707425,
+        "tokens_per_second_std": 1.3707317054520642,
+        "tokens_per_second_min": 4.727228054752526,
+        "tokens_per_second_max": 8.070836566052142,
+        "latency_ms_mean": 144.2309788295201,
+        "latency_ms_std": 30.227756445646072,
+        "latency_ms_p50": 150.7962942123413,
+        "latency_ms_p95": 177.55883932113645,
+        "latency_ms_p99": 226.14331483840914,
+        "total_tokens_generated": 170,
+        "success_rate": 1.0
+      },
+      "quality": {
+        "coherence_score": 0.48,
+        "diversity_score": 0.6060606060606061,
+        "repetition_ratio": 0.21875,
+        "unique_ngram_ratio": 0.75,
+        "latency_p50": 150.7962942123413,
+        "latency_p95": 177.55883932113645,
+        "latency_p99": 226.14331483840914,
+        "latency_mean": 144.2309788295201,
+        "latency_std": 30.227756445646072,
+        "output_consistency": 0.13681318681318683,
+        "token_agreement_rate": 0.0,
+        "avg_token_entropy": 0.2273562858078356,
+        "avg_confidence": 0.7715249235431353,
+        "eos_reached": false,
+        "tokens_generated": 82
+      },
+      "outputs": [
+        "\n",
+        " The land was fertile, the air was clean, and the people were hopeful. But as time went",
+        " live and work, and its impact is only set to grow in the coming years. From self-"
+      ],
+      "errors": []
+    },
+    {
+      "model": "mlx-community/gemma-2-2b-it-4bit",
+      "engine": "mlx",
+      "config": {
+        "num_tokens": 20,
+        "iterations": 3,
+        "consistency_runs": 2,
+        "temperature": 0.7,
+        "top_k": 50,
+        "top_p": 0.9
+      },
+      "metrics": {
+        "ram_used_mb": 1586.140625,
+        "ram_used_gb": 1.5489654541015625,
+        "tokens_per_second_mean": 10.363753413394198,
+        "tokens_per_second_std": 0.5482074391848348,
+        "tokens_per_second_min": 9.588471989757492,
+        "tokens_per_second_max": 10.75245722881783,
+        "latency_ms_mean": 96.6126283009847,
+        "latency_ms_std": 23.1359340619323,
+        "latency_ms_p50": 92.78249740600586,
+        "latency_ms_p95": 98.67936372756955,
+        "latency_ms_p99": 195.98344802856406,
+        "total_tokens_generated": 110,
+        "success_rate": 1.0
+      },
+      "quality": {
+        "perplexity": 1.2412109375,
+        "coherence_score": 0.08,
+        "diversity_score": 0.05,
+        "repetition_ratio": 0.05555555555555555,
+        "unique_ngram_ratio": 0.05555555555555555,
+        "latency_p50": 92.78249740600586,
+        "latency_p95": 98.67936372756955,
+        "latency_p99": 195.98344802856406,
+        "latency_mean": 96.6126283009847,
+        "latency_std": 23.1359340619323,
+        "output_consistency": 0.6,
+        "token_agreement_rate": 0.0,
+        "avg_token_entropy": 0.03844323263501014,
+        "avg_confidence": 0.9564534505208333,
+        "eos_reached": false,
+        "tokens_generated": 100
+      },
+      "outputs": [
+        "\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.",
+        "\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.",
+        " we we we we we we we we we we we we we we we we we we we we"
+      ],
+      "errors": []
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+// Attention support: 'unknown' = not tested, 'real' = exports attention, 'synthetic' = no attention in ONNX
 export const MODEL_CATALOG = {
   // SmolLM2 - Nov 2024
   'HuggingFaceTB/SmolLM2-1.7B-Instruct': {
@@ -11,7 +12,8 @@ export const MODEL_CATALOG = {
     released: 'Nov 24',
     recommended: false,
     engine: 'transformers',
-    dtype: 'q4'
+    dtype: 'q4',
+    attention: 'unknown' // TODO: test
   },
   'HuggingFaceTB/SmolLM2-360M-Instruct': {
     id: 'HuggingFaceTB/SmolLM2-360M-Instruct',
@@ -24,7 +26,8 @@ export const MODEL_CATALOG = {
     released: 'Nov 24',
     recommended: true,
     engine: 'transformers',
-    dtype: 'fp16'
+    dtype: 'fp16',
+    attention: 'unknown' // TODO: test
   },
   'HuggingFaceTB/SmolLM2-135M-Instruct': {
     id: 'HuggingFaceTB/SmolLM2-135M-Instruct',
@@ -37,7 +40,8 @@ export const MODEL_CATALOG = {
     released: 'Nov 24',
     recommended: true,
     engine: 'transformers',
-    dtype: 'fp16'
+    dtype: 'fp16',
+    attention: 'unknown' // TODO: test
   },
   // Qwen 2.5 - Sep 2024
   'onnx-community/Qwen2.5-1.5B-Instruct': {
@@ -51,7 +55,8 @@ export const MODEL_CATALOG = {
     released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
-    dtype: 'q4f16'
+    dtype: 'q4f16',
+    attention: 'synthetic' // ONNX export doesn't include attention
   },
   'onnx-community/Qwen2.5-0.5B-Instruct': {
     id: 'onnx-community/Qwen2.5-0.5B-Instruct',
@@ -64,7 +69,8 @@ export const MODEL_CATALOG = {
     released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
-    dtype: 'q4f16'
+    dtype: 'q4f16',
+    attention: 'synthetic' // ONNX export doesn't include attention
   },
   // Llama 3.2 - Sep 2024
   'onnx-community/Llama-3.2-1B-Instruct': {
@@ -78,7 +84,8 @@ export const MODEL_CATALOG = {
     released: 'Sep 24',
     recommended: false,
     engine: 'transformers',
-    dtype: 'q4f16'
+    dtype: 'q4f16',
+    attention: 'synthetic' // ONNX export doesn't include attention
   },
   // TinyLlama - Jan 2024
   'onnx-community/TinyLlama-1.1B-Chat-v1.0': {
@@ -92,7 +99,8 @@ export const MODEL_CATALOG = {
     released: 'Jan 24',
     recommended: false,
     engine: 'transformers',
-    dtype: 'q4f16'
+    dtype: 'q4f16',
+    attention: 'synthetic' // ONNX export doesn't include attention
   }
 };
 

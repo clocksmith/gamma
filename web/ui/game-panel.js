@@ -76,7 +76,7 @@ export class GamePanel {
             <div class="section-header">
               <h2>Context</h2>
               <div class="attention-badge" title="Attention source">
-                <span class="attention-icon">👁</span>
+                <span class="attention-icon">◉</span>
                 <span class="attention-label">Real Attention</span>
               </div>
             </div>
@@ -307,12 +307,12 @@ export class GamePanel {
       this.attentionBadge.classList.remove('synthetic');
       this.attentionBadge.classList.add('real');
       label.textContent = 'Real Attention';
-      this.attentionBadge.title = 'Showing actual transformer attention weights';
+      this.attentionBadge.title = 'Actual attention weights from the transformer model';
     } else {
       this.attentionBadge.classList.remove('real');
       this.attentionBadge.classList.add('synthetic');
       label.textContent = 'Synthetic';
-      this.attentionBadge.title = 'Model does not support attention output - showing estimated attention';
+      this.attentionBadge.title = 'Estimated attention (model does not expose real weights). Uses recency bias: recent tokens get more weight.';
     }
   }
 
@@ -327,13 +327,16 @@ export class GamePanel {
       const [r, g, b] = getViridisColor(intensity);
       const textColor = intensity > 0.6 ? '#000' : '#fff';
       const size = 0.85 + (intensity * 0.3); // Scale font size slightly with attention
+      const percentage = (intensity * 100).toFixed(0);
 
       return `
-        <span class="attn-token"
-              style="background:rgb(${r},${g},${b}); color:${textColor}; font-size:${size}em"
-              data-attention="${intensity.toFixed(3)}"
-              title="Attention: ${(intensity * 100).toFixed(1)}%">
-          ${this.escapeHtml(token)}
+        <span class="attn-token-wrapper">
+          <span class="attn-token"
+                style="background:rgb(${r},${g},${b}); color:${textColor}; font-size:${size}em"
+                data-attention="${intensity.toFixed(3)}">
+            ${this.escapeHtml(token)}
+          </span>
+          <span class="attn-value" style="color:rgb(${r},${g},${b})">${percentage}</span>
         </span>
       `;
     }).join('');
