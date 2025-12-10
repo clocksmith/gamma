@@ -4,7 +4,7 @@
 
 An interactive game that teaches you how LLMs work by letting you predict what they'll say next.
 
-**[Play in your browser](https://gamma-web-game.web.app)** - No installation required!
+**[Play in your browser](https://simulatte.world)** - No installation required!
 
 See [AGENTS.md](AGENTS.md) for the active code-writing agent profile.
 

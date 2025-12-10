@@ -1,6 +1,8 @@
 # Web GAMMA
 
-**[Play Now](https://gamma-web-game.web.app)**
+**[Play Now](https://simulatte.world)**
+
+> **Note**: This web app is deployed from [github.com/clocksmith/simulatte](https://github.com/clocksmith/simulatte). The source in this directory is the development copy.
 
 A browser-based game where you guess the next token an LLM will generate.
 
