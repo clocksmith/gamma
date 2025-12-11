@@ -38,7 +38,7 @@ class TestMindMeldMode(unittest.TestCase):
             verbose=False
         )
 
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_initialization(self, mock_meld_engine):
         """Should initialize with models and args."""
         models = [self.model1, self.model2]
@@ -49,7 +49,7 @@ class TestMindMeldMode(unittest.TestCase):
         self.assertEqual(mode.args, self.args)
         mock_meld_engine.assert_called_once_with(models, self.args)
 
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_meld_engine_creation(self, mock_meld_engine):
         """Should create MeldEngine instance."""
         mock_instance = Mock()
@@ -60,9 +60,9 @@ class TestMindMeldMode(unittest.TestCase):
 
         self.assertEqual(mode.meld_engine, mock_instance)
 
-    @patch('src.core.mind_meld_mode.ui.print_header')
-    @patch('src.core.mind_meld_mode.ui.wrap_print')
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.ui.print_header')
+    @patch('src.mind_meld.mode.ui.wrap_print')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_run_with_two_models(self, mock_meld_engine, mock_wrap_print, mock_print_header):
         """Should run game loop with two models."""
         mock_instance = Mock()
@@ -75,9 +75,9 @@ class TestMindMeldMode(unittest.TestCase):
         mock_print_header.assert_called_once()
         mock_instance.run_game_loop.assert_called_once()
 
-    @patch('src.core.mind_meld_mode.ui.print_header')
-    @patch('src.core.mind_meld_mode.ui.wrap_print')
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.ui.print_header')
+    @patch('src.mind_meld.mode.ui.wrap_print')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_run_with_one_model(self, mock_meld_engine, mock_wrap_print, mock_print_header):
         """Should show error with only one model."""
         mock_instance = Mock()
@@ -92,9 +92,9 @@ class TestMindMeldMode(unittest.TestCase):
         # Should NOT run game loop
         mock_instance.run_game_loop.assert_not_called()
 
-    @patch('src.core.mind_meld_mode.ui.print_header')
-    @patch('src.core.mind_meld_mode.ui.wrap_print')
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.ui.print_header')
+    @patch('src.mind_meld.mode.ui.wrap_print')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_run_prints_model_info(self, mock_meld_engine, mock_wrap_print, mock_print_header):
         """Should print model information."""
         mock_instance = Mock()
@@ -107,9 +107,9 @@ class TestMindMeldMode(unittest.TestCase):
         # Should print models loaded and each model info
         self.assertGreater(mock_wrap_print.call_count, 2)
 
-    @patch('src.core.mind_meld_mode.ui.print_header')
-    @patch('src.core.mind_meld_mode.ui.wrap_print')
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.ui.print_header')
+    @patch('src.mind_meld.mode.ui.wrap_print')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_run_with_three_models(self, mock_meld_engine, mock_wrap_print, mock_print_header):
         """Should run with more than two models."""
         mock_instance = Mock()
@@ -124,7 +124,7 @@ class TestMindMeldMode(unittest.TestCase):
 
         mock_instance.run_game_loop.assert_called_once()
 
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_models_attribute(self, mock_meld_engine):
         """Should store models attribute."""
         models = [self.model1, self.model2]
@@ -134,7 +134,7 @@ class TestMindMeldMode(unittest.TestCase):
         self.assertIsInstance(mode.models, list)
         self.assertEqual(len(mode.models), 2)
 
-    @patch('src.core.mind_meld_mode.MeldEngine')
+    @patch('src.mind_meld.mode.MeldEngine')
     def test_args_attribute(self, mock_meld_engine):
         """Should store args attribute."""
         models = [self.model1, self.model2]

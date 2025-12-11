@@ -45,7 +45,7 @@ class TestGetEngine(unittest.TestCase):
 
         self.assertIn("Unsupported engine", str(ctx.exception))
 
-    @patch('src.engines.ollama_engine.OllamaEngine')
+    @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_ollama_engine(self, mock_ollama):
         """Should return Ollama engine."""
         mock_instance = Mock()
@@ -56,7 +56,7 @@ class TestGetEngine(unittest.TestCase):
         self.assertEqual(result, mock_instance)
         mock_ollama.assert_called_once_with("test-model", {})
 
-    @patch('src.engines.ollama_engine.OllamaEngine')
+    @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_ollama_engine_with_config(self, mock_ollama):
         """Should pass config to Ollama engine."""
         mock_instance = Mock()
@@ -73,7 +73,7 @@ class TestGetEngine(unittest.TestCase):
         # The factory will handle ImportError naturally
         pass  # Skip for now as it requires actual missing module
 
-    @patch('src.engines.pytorch_engine.PyTorchEngine')
+    @patch('src.engines.native.pytorch_engine.PyTorchEngine')
     def test_pytorch_engine(self, mock_pytorch):
         """Should return PyTorch engine."""
         mock_instance = Mock()
@@ -99,7 +99,7 @@ class TestGetEngine(unittest.TestCase):
         pass
 
     @patch.dict('sys.modules', {'tensorflow': MagicMock(), 'tensorflow.keras': MagicMock()})
-    @patch('src.engines.tensorflow_engine.TensorFlowEngine')
+    @patch('src.engines.native.tensorflow_engine.TensorFlowEngine')
     def test_tensorflow_engine(self, mock_tf):
         """Should return TensorFlow engine."""
         mock_instance = Mock()
@@ -113,7 +113,7 @@ class TestGetEngine(unittest.TestCase):
         """Should raise RuntimeError on TensorFlow import failure."""
         pass  # Skip - requires actual missing module
 
-    @patch('src.engines.jax_engine.JaxEngine')
+    @patch('src.engines.native.jax_engine.JaxEngine')
     def test_jax_engine(self, mock_jax):
         """Should return JAX engine."""
         mock_instance = Mock()
@@ -127,7 +127,7 @@ class TestGetEngine(unittest.TestCase):
         """Should raise RuntimeError on JAX import failure."""
         pass  # Skip - requires actual missing module
 
-    @patch('src.engines.llama_cpp_engine.LlamaCppEngine')
+    @patch('src.engines.native.llama_cpp_engine.LlamaCppEngine')
     def test_llamacpp_engine(self, mock_llamacpp):
         """Should return Llama.cpp engine."""
         mock_instance = Mock()
@@ -183,7 +183,7 @@ class TestGetEngine(unittest.TestCase):
         """Should raise RuntimeError on MLX GPU import failure."""
         pass  # Skip - requires actual missing module
 
-    @patch('src.engines.ollama_engine.OllamaEngine')
+    @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_engine_name_case_insensitive(self, mock_ollama):
         """Should handle engine name case insensitively."""
         mock_instance = Mock()
@@ -197,7 +197,7 @@ class TestGetEngine(unittest.TestCase):
         # All should succeed
         self.assertEqual(mock_ollama.call_count, 3)
 
-    @patch('src.engines.pytorch_engine.PyTorchEngine')
+    @patch('src.engines.native.pytorch_engine.PyTorchEngine')
     def test_none_config_treated_as_empty(self, mock_pytorch):
         """Should treat None config as empty dict."""
         mock_instance = Mock()

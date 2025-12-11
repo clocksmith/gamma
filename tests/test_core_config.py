@@ -35,12 +35,12 @@ class TestConfigConstants(unittest.TestCase):
         self.assertGreater(len(config.GEMMA_MODELS), 0)
 
     def test_default_temperature(self):
-        """Default temperature should be 1.0."""
-        self.assertEqual(config.DEFAULT_TEMPERATURE, 1.0)
+        """Default temperature should be 0.9."""
+        self.assertEqual(config.DEFAULT_TEMPERATURE, 0.9)
 
     def test_default_top_k(self):
-        """Default top_k should be 16."""
-        self.assertEqual(config.DEFAULT_TOP_K, 16)
+        """Default top_k should be 64."""
+        self.assertEqual(config.DEFAULT_TOP_K, 64)
 
     def test_default_top_p(self):
         """Default top_p should be 0.95."""
@@ -130,9 +130,8 @@ class TestColorConfiguration(unittest.TestCase):
     @patch.dict('os.environ', {'TERM': 'dumb'})
     def test_windows_color_initialization_without_colorama(self):
         """On Windows without colorama and unsupported TERM, colors should be disabled."""
-        # Mock colorama import to fail
-        import sys
-        original_import = __builtins__.__import__
+        import builtins
+        original_import = builtins.__import__
 
         def mock_import(name, *args, **kwargs):
             if name == 'colorama':

@@ -14,6 +14,7 @@ Tests all new features:
 import sys
 import time
 import numpy as np
+import pytest
 from typing import List, Dict, Any, Optional
 from unittest.mock import MagicMock, Mock
 
@@ -66,6 +67,12 @@ class TestResults:
             for name, error in self.errors:
                 print(f"  - {name}: {error}")
         print("="*70)
+
+
+@pytest.fixture
+def results():
+    """Pytest fixture providing TestResults instance."""
+    return TestResults()
 
 
 def create_mock_engine(name: str = "test_model") -> MagicMock:
