@@ -341,9 +341,9 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
             args.model,
             vars(args)  # Pass all args as config dict
         )
-        print(ui.color_text("\nLoading model... This may take a moment.", cfg.COLOR_CYAN))
+        print(ui.color_text("\n🧠 Loading model... This may take a moment.", cfg.COLOR_CYAN))
         engine.load()
-        print(ui.color_text("✓ Model loaded successfully!", cfg.COLOR_GREEN))
+        print(ui.color_text("✅ Model loaded successfully!", cfg.COLOR_GREEN))
 
         # Validate engine is suitable for game mode (needs real logits/probabilities)
         # Engines that use HTTP APIs don't expose full probability distributions
@@ -383,7 +383,7 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
         return engine
     except Exception as e:
         error_msg = str(e)
-        print(ui.color_text(f"\n✗ Failed to initialize engine: {error_msg}", cfg.COLOR_RED))
+        print(ui.color_text(f"\n❌ Failed to initialize engine: {error_msg}", cfg.COLOR_RED))
 
         # Provide helpful suggestions for common errors
         if "gated repo" in error_msg or "Access to model" in error_msg or "401 Client Error" in error_msg:
@@ -414,7 +414,7 @@ def run_tutorial_mode(args: argparse.Namespace) -> None:
     
     engine = initialize_game_engine(args)
     if engine is None:
-        print(ui.color_text("\nFailed to initialize engine for tutorial. Exiting.", cfg.COLOR_RED))
+        print(ui.color_text("\n❌ Failed to initialize engine for tutorial. Exiting.", cfg.COLOR_RED))
         return
     
     try:

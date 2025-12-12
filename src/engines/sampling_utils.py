@@ -7,6 +7,115 @@ from typing import Tuple, List, Callable, Union
 import numpy as np
 from numpy.typing import NDArray
 
+
+# ============================================================================
+# Constants
+# ============================================================================
+
+# Default values for NaN/Inf replacement
+DEFAULT_NAN_REPLACEMENT = -1e10
+DEFAULT_POSINF_REPLACEMENT = 1e10
+DEFAULT_NEGINF_REPLACEMENT = -1e10
+
+# Small epsilon values for numerical stability
+EPSILON = 1e-10          # For log operations, division safety
+EPSILON_PROB = 1e-8      # For probability clipping
+EPSILON_SOFTMAX = 1e-6   # For softmax normalization checks
+
+# Probability distribution thresholds
+PROB_SUM_TOLERANCE = 1e-3    # Tolerance for sum-to-1 check
+MIN_VALID_PROB = 0.0         # Minimum valid probability
+MAX_VALID_PROB = 1.0         # Maximum valid probability
+
+# Logit thresholds
+LOGIT_FLOOR = -1e10          # Floor for masked/invalid logits
+LOGIT_CEILING = 1e10         # Ceiling for extreme logits
+TRANSLATION_LOGIT_FLOOR = -10.0  # Less extreme floor for vocabulary translation init
+
+
+# ============================================================================
+# NaN/Inf Handling
+# ============================================================================
+
+def sanitize_logits(
+    logits: NDArray[np.float32],
+    nan_value: float = DEFAULT_NAN_REPLACEMENT,
+    posinf_value: float = DEFAULT_POSINF_REPLACEMENT,
+    neginf_value: float = DEFAULT_NEGINF_REPLACEMENT
+) -> NDArray[np.float32]:
+    """
+    Replace NaN and Inf values in logits with safe defaults.
+
+    This centralizes the np.nan_to_num pattern used across engines and
+    meld_engine to ensure consistent handling of invalid values.
+
+    Args:
+        logits: Input logits array (may contain NaN/Inf)
+        nan_value: Replacement value for NaN
+        posinf_value: Replacement value for positive infinity
+        neginf_value: Replacement value for negative infinity
+
+    Returns:
+        Sanitized logits array with no NaN/Inf values
+    """
+    return np.nan_to_num(logits, nan=nan_value, posinf=posinf_value, neginf=neginf_value)
+
+
+def sanitize_probs(
+    probs: NDArray[np.float32],
+    fallback_to_uniform: bool = True
+) -> NDArray[np.float32]:
+    """
+    Sanitize probability distribution, handling NaN and zero-sum cases.
+
+    Args:
+        probs: Input probability array
+        fallback_to_uniform: If True, return uniform distribution when
+                            probs sum to 0 or contain NaN
+
+    Returns:
+        Valid probability distribution
+    """
+    # Check for NaN
+    if np.isnan(probs).any():
+        if fallback_to_uniform:
+            return np.ones_like(probs) / len(probs)
+        probs = np.nan_to_num(probs, nan=0.0)
+
+    # Check for zero sum
+    total = float(np.sum(probs))
+    if total <= 0:
+        if fallback_to_uniform:
+            return np.ones_like(probs) / len(probs)
+        return probs
+
+    # Normalize if not already normalized
+    if abs(total - 1.0) > 1e-6:
+        probs = probs / total
+
+    return probs
+
+
+def is_valid_distribution(probs: NDArray[np.float32], tolerance: float = 1e-3) -> bool:
+    """
+    Check if array represents a valid probability distribution.
+
+    Args:
+        probs: Array to check
+        tolerance: Tolerance for sum-to-1 check
+
+    Returns:
+        True if valid probability distribution
+    """
+    if np.isnan(probs).any():
+        return False
+    if np.any(probs < 0) or np.any(probs > 1.0):
+        return False
+    if abs(float(np.sum(probs)) - 1.0) > tolerance:
+        return False
+    return True
+
+
 def temperature_scale(logits: NDArray[np.float32], temperature: float) -> NDArray[np.float32]:
     """
     Scale logits by temperature for sampling diversity.

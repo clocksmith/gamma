@@ -113,6 +113,61 @@ class LLMEngine(ABC):
         """Get low CPU memory usage setting."""
         return self.engine_config.get("low_cpu_mem_usage", True)
 
+    # ========================================================================
+    # Engine Capability Flags
+    # ========================================================================
+    # These properties declare what features an engine supports, allowing
+    # callers to check capabilities instead of hardcoding engine lists.
+
+    @property
+    def supports_logits(self) -> bool:
+        """Whether this engine provides raw logits for token prediction.
+
+        Required for Mind Meld, vocabulary translation, and ensemble methods.
+        Default True - override to False for API-only engines (e.g., Ollama HTTP).
+        """
+        return True
+
+    @property
+    def supports_attention(self) -> bool:
+        """Whether this engine can return attention weights for visualization.
+
+        Default False - only some engines (PyTorch, JAX) support this.
+        """
+        return False
+
+    @property
+    def supports_offload(self) -> bool:
+        """Whether this engine supports GPU/CPU memory offloading.
+
+        Checks if the engine has a model with a .to() method for device transfer.
+        """
+        return (
+            hasattr(self, 'model') and
+            self.model is not None and
+            hasattr(self.model, 'to')
+        )
+
+    @property
+    def supports_kv_cache(self) -> bool:
+        """Whether this engine supports KV cache for incremental generation."""
+        return True  # Most engines support this
+
+    @property
+    def supports_streaming(self) -> bool:
+        """Whether this engine supports streaming token generation."""
+        return False  # Override in engines that support streaming
+
+    def validate_for_mind_meld(self) -> Tuple[bool, str]:
+        """Check if this engine is suitable for Mind Meld operations.
+
+        Returns:
+            Tuple of (is_valid, error_message_if_not)
+        """
+        if not self.supports_logits:
+            return False, f"{self.__class__.__name__} does not provide logits access (required for Mind Meld)"
+        return True, ""
+
     # Error handling helpers (Phase 2.2 - reduces duplication)
     def _error_model_not_loaded(self) -> RuntimeError:
         """Create standardized 'model not loaded' error."""
@@ -304,9 +359,32 @@ class LLMEngine(ABC):
                 f"{engine_name}: Tokenizer load failed for '{model_name}': {e}"
             ) from e
 
-    @abstractmethod
     def get_vocabulary_size(self) -> int:
-        pass
+        """Get the vocabulary size from the tokenizer.
+
+        Default implementation with fallback chain that works for most HuggingFace
+        tokenizers. Engines can override if they need different behavior.
+        """
+        self._ensure_tokenizer_loaded()
+
+        # Try vocab_size attribute first (most common)
+        if hasattr(self.tokenizer, 'vocab_size'):
+            return self.tokenizer.vocab_size
+
+        # Try get_vocab_size method
+        if hasattr(self.tokenizer, 'get_vocab_size') and callable(self.tokenizer.get_vocab_size):
+            return self.tokenizer.get_vocab_size()
+
+        # Try model config
+        if self.model and hasattr(self.model, 'config') and hasattr(self.model.config, 'vocab_size'):
+            return self.model.config.vocab_size
+
+        # Fallback to vocabulary dict length
+        try:
+            return len(self.tokenizer.get_vocab())
+        except (AttributeError, TypeError) as e:
+            logger.warning(f"Could not determine vocab size: {e}")
+            return -1
 
     def get_token_text(self, token_id: int) -> str:
         """Get text representation of a token ID.
@@ -424,6 +502,62 @@ class LLMEngine(ABC):
     ) -> Tuple[List[str], List[float], List[int]]:
         pass
 
+    def _get_probabilities_common(
+        self,
+        data: np.ndarray,
+        k: int,
+        force_softmax: bool = False,
+        skip_softmax: bool = False
+    ) -> Tuple[List[str], List[float], List[int]]:
+        """Common implementation for get_probabilities_at_step.
+
+        Determines if input is logits or probabilities, converts to probabilities
+        if needed, then extracts top-k tokens using sampling_utils.
+
+        This method can be overridden by subclasses that need custom softmax
+        or NaN handling behavior.
+
+        Args:
+            data: Input numpy array (either logits or probabilities)
+            k: Number of top tokens to return
+            force_softmax: Always apply softmax even if input looks like probabilities
+            skip_softmax: Never apply softmax (use when engine already applied it)
+
+        Returns:
+            Tuple of (token_texts, probabilities, token_ids)
+        """
+        from src.engines import sampling_utils
+
+        # Flatten if needed
+        if data.ndim > 1:
+            data = data.flatten()
+
+        # Sanitize NaN/Inf values first
+        data = sampling_utils.sanitize_logits(data)
+
+        if skip_softmax:
+            # Caller guarantees input is already probabilities
+            probs = data
+        elif force_softmax:
+            # Always apply softmax regardless of input values
+            probs = sampling_utils.softmax(data)
+        else:
+            # Auto-detect: check if data is probabilities (values in [0,1] that sum to ~1)
+            is_probs = (
+                np.all(data >= 0) and
+                np.all(data <= 1.0) and
+                abs(float(np.sum(data)) - 1.0) < 1e-3
+            )
+
+            if is_probs:
+                probs = data
+            else:
+                probs = sampling_utils.softmax(data)
+
+        return sampling_utils.get_top_k_tokens(
+            probs, k, self.get_token_text, is_probs=True
+        )
+
     def get_config_summary(self) -> Dict[str, Any]:
         """Get engine configuration summary for display."""
         base_config = {"engine_class": self.__class__.__name__}
@@ -434,6 +568,43 @@ class LLMEngine(ABC):
         """Override in subclasses to provide engine-specific configuration."""
         return {}
 
+    def _extract_token_id(self, attr_name: str, source: Any = None) -> Optional[int]:
+        """Extract a token ID from an attribute, handling various tensor types.
+
+        This helper consolidates the repeated pattern of extracting token IDs from
+        tokenizer attributes that may be tensors, numpy arrays, or plain ints.
+
+        Args:
+            attr_name: Name of the attribute to extract from source
+            source: Object to extract from (defaults to self.tokenizer)
+
+        Returns:
+            The token ID as an int, or None if extraction failed
+        """
+        if source is None:
+            source = self.tokenizer
+
+        token_id_val = getattr(source, attr_name, None)
+        if token_id_val is None:
+            return None
+
+        try:
+            # Handle tensor types with .item() method
+            if hasattr(token_id_val, "item") and callable(token_id_val.item):
+                return int(token_id_val.item())
+            # Handle numpy array wrapper types
+            if hasattr(token_id_val, "numpy") and callable(token_id_val.numpy):
+                numpy_val = token_id_val.numpy()
+                if hasattr(numpy_val, "item"):
+                    return int(numpy_val.item())
+            # Direct int conversion
+            return int(token_id_val)
+        except (ValueError, TypeError, AttributeError) as e:
+            logger.warning(
+                f"{self.__class__.__name__}: Could not extract token ID from '{attr_name}': {token_id_val} ({e})"
+            )
+            return None
+
     def _populate_special_token_map(self):
         if not self.tokenizer:
             logger.warning(
@@ -441,41 +612,21 @@ class LLMEngine(ABC):
             )
             return
 
+        # Map standard special tokens using the helper
         for game_key, game_repr_str in cfg.SPECIAL_TOKEN_GAME_REPR.items():
-            token_id_attr = f"{game_key}_id"
-            token_id_val = getattr(self.tokenizer, token_id_attr, None)
-            if token_id_val is not None:
-                try:
-                    if hasattr(token_id_val, "item") and callable(token_id_val.item):
-                        token_id_val = token_id_val.item()
-                    elif (
-                        hasattr(token_id_val, "numpy")
-                        and callable(token_id_val.numpy)
-                        and hasattr(token_id_val.numpy(), "item")
-                    ):
-                        token_id_val = token_id_val.numpy().item()
-                    token_id_int = int(token_id_val)
-                    self._special_token_id_to_game_repr[token_id_int] = game_repr_str
-                except (ValueError, TypeError, AttributeError) as e:
-                    logger.warning(
-                        f"{self.__class__.__name__}: Could not convert/use token ID for '{game_key}': {token_id_val} (Error: {e})"
-                    )
+            token_id = self._extract_token_id(f"{game_key}_id")
+            if token_id is not None:
+                self._special_token_id_to_game_repr[token_id] = game_repr_str
 
+        # Try various newline token attributes
         nl_attrs = ["newline_token_id", "nl_token_id", "line_break_token_id"]
         for nl_attr in nl_attrs:
-            newline_id_val = getattr(self.tokenizer, nl_attr, None)
-            if newline_id_val is not None:
-                try:
-                    if hasattr(newline_id_val, "item") and callable(newline_id_val.item):
-                        newline_id_val = newline_id_val.item()
-                    newline_id_int = int(newline_id_val)
-                    self._special_token_id_to_game_repr[newline_id_int] = cfg.TOKEN_NL
-                    break
-                except (ValueError, TypeError, AttributeError) as e:
-                    logger.warning(
-                        f"{self.__class__.__name__}: Could not convert/use newline token ID from '{nl_attr}': {newline_id_val} (Error: {e})"
-                    )
+            nl_id = self._extract_token_id(nl_attr)
+            if nl_id is not None:
+                self._special_token_id_to_game_repr[nl_id] = cfg.TOKEN_NL
+                break
 
+        # Handle callable token methods (llama.cpp style)
         if hasattr(self.tokenizer, "token_bos") and callable(self.tokenizer.token_bos):
             bos_id = self.tokenizer.token_bos()
             if isinstance(bos_id, int) and bos_id not in self._special_token_id_to_game_repr:
@@ -698,58 +849,58 @@ class LLMEngine(ABC):
             'supports_bridging': self._supports_cache_bridging()
         }
 
-    def _infer_cache_seq_len(self, cache: Any) -> int:
-        """Infer sequence length from cache object."""
+    def _get_cache_key_tensor(self, cache: Any) -> Optional[Any]:
+        """Get the first key tensor from a KV cache for metadata extraction.
+
+        This helper consolidates the common pattern of traversing the cache
+        structure to find a key tensor, reducing duplication across metadata
+        inference methods.
+
+        Args:
+            cache: The KV cache object (typically a tuple/list of layer caches)
+
+        Returns:
+            The first key tensor if found, None otherwise
+        """
         if cache is None:
-            return 0
+            return None
 
         # Handle tuple of layer caches (HuggingFace format)
         if isinstance(cache, (list, tuple)) and len(cache) > 0:
             first_layer = cache[0]
             if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
-                key_tensor = first_layer[0]
-                if hasattr(key_tensor, 'shape'):
-                    # Typical shape: (batch, num_heads, seq_len, head_dim)
-                    return key_tensor.shape[-2] if len(key_tensor.shape) >= 2 else 0
+                return first_layer[0]  # Key tensor is first element
 
+        return None
+
+    def _infer_cache_seq_len(self, cache: Any) -> int:
+        """Infer sequence length from cache object."""
+        key_tensor = self._get_cache_key_tensor(cache)
+        if key_tensor is not None and hasattr(key_tensor, 'shape'):
+            # Typical shape: (batch, num_heads, seq_len, head_dim)
+            return key_tensor.shape[-2] if len(key_tensor.shape) >= 2 else 0
         return 0
 
     def _infer_cache_layers(self, cache: Any) -> int:
         """Infer number of layers from cache object."""
         if cache is None:
             return 0
-
         if isinstance(cache, (list, tuple)):
             return len(cache)
-
         return 0
 
     def _infer_cache_dtype(self, cache: Any) -> Optional[str]:
         """Infer data type from cache object."""
-        if cache is None:
-            return None
-
-        if isinstance(cache, (list, tuple)) and len(cache) > 0:
-            first_layer = cache[0]
-            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
-                key_tensor = first_layer[0]
-                if hasattr(key_tensor, 'dtype'):
-                    return str(key_tensor.dtype)
-
+        key_tensor = self._get_cache_key_tensor(cache)
+        if key_tensor is not None and hasattr(key_tensor, 'dtype'):
+            return str(key_tensor.dtype)
         return None
 
     def _infer_cache_device(self, cache: Any) -> Optional[str]:
         """Infer device from cache object."""
-        if cache is None:
-            return None
-
-        if isinstance(cache, (list, tuple)) and len(cache) > 0:
-            first_layer = cache[0]
-            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
-                key_tensor = first_layer[0]
-                if hasattr(key_tensor, 'device'):
-                    return str(key_tensor.device)
-
+        key_tensor = self._get_cache_key_tensor(cache)
+        if key_tensor is not None and hasattr(key_tensor, 'device'):
+            return str(key_tensor.device)
         return self.get_device()
 
     def _supports_cache_bridging(self) -> bool:

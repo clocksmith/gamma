@@ -5,9 +5,12 @@ ABE combines predictions from multiple LLMs by finding token combinations
 where the resulting text strings "agree" (one is a prefix of the other).
 """
 
+import logging
 import numpy as np
 from typing import List, Tuple, Dict, Any, Optional
 from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -120,7 +123,7 @@ class ABEEnsemble:
         # If no agreement found, use highest probability token from first model
         if not candidates:
             if self.verbose:
-                print("  [ABE] No agreement found, using highest probability token")
+                logger.debug("[ABE] No agreement found, using highest probability token")
             
             best_token = model_top_tokens[0][0]  # First model's best token
             model_tokens = [(best_token[0], best_token[1])]
@@ -145,9 +148,9 @@ class ABEEnsemble:
         
         if self.verbose and candidates:
             best = candidates[0]
-            print(f"  [ABE] Agreement found: '{best.agreed_text}' (score: {best.combined_score:.3f})")
+            logger.debug(f"[ABE] Agreement found: '{best.agreed_text}' (score: {best.combined_score:.3f})")
             for i, (token_id, token_text) in enumerate(best.model_tokens):
-                print(f"    Model {i}: '{token_text}' (id: {token_id})")
+                logger.debug(f"  Model {i}: '{token_text}' (id: {token_id})")
         
         return candidates[0]
     
@@ -210,7 +213,7 @@ class ABEEnsemble:
             if len(token_text) < max_length:
                 self.stalled_models.add(i)
                 if self.verbose:
-                    print(f"  [ABE] Model {i} stalled (generated shorter token)")
+                    logger.debug(f"[ABE] Model {i} stalled (generated shorter token)")
     
     def ensemble_step(
         self,

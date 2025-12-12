@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from src.core.engine_interface import LLMEngine
+from src.mind_meld.utils import VerboseLoggerMixin
 
 
 class FeedbackType(Enum):
@@ -44,7 +45,7 @@ class FeedbackResult:
     converged: bool
 
 
-class FeedbackLoop:
+class FeedbackLoop(VerboseLoggerMixin):
     """
     Self-critique and refinement system.
 
@@ -79,11 +80,6 @@ class FeedbackLoop:
         self.total_iterations = 0
         self.total_refinements = 0
         self.avg_improvement = 0.0
-
-    def _log(self, message: str):
-        """Log if verbose."""
-        if self.verbose:
-            print(f"[FeedbackLoop] {message}")
 
     def generate_initial(
         self,

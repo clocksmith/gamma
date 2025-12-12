@@ -114,7 +114,40 @@ Combine with `--use-blending` for “blend most of the time, but still give some
 
 ---
 
-## 8. Want to tweak the internals?
+## 8. Headless mode (testing & automation)
+
+For CI pipelines, scripting, or running without terminal interaction:
+
+```bash
+# Run headless with a prompt
+python gamma.py mind-meld \
+  --models model1 model2 \
+  --headless --prompt "Once upon a time" --steps 50
+
+# Quiet mode suppresses all output except errors
+python gamma.py mind-meld \
+  --models model1 model2 \
+  --headless --quiet --prompt "Test" --steps 10
+```
+
+Headless mode:
+- Skips all user prompts and interactive UI
+- Suppresses visualization exports
+- Returns generated text programmatically
+- Works with all blending/swap strategies
+
+For programmatic access, use `MeldEngine._run_headless()` directly:
+
+```python
+from src.mind_meld.core.meld_engine import MeldEngine
+
+meld = MeldEngine(engines, args)
+result_text = meld._run_headless()
+```
+
+---
+
+## 9. Want to tweak the internals?
 
 - **Blending & ABE:** `src/mind_meld/core/blending.py`, `core/abe_ensemble.py`
 - **MoE router:** `src/mind_meld/advanced/moe_router.py`

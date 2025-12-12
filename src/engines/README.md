@@ -46,6 +46,8 @@ These engines are fully tested and recommended for use:
 | **MLX** | `mlx_engine.py` | Stable | Apple Silicon Macs (fastest option) |
 | **LlamaCpp** | `llama_cpp_engine.py` | Stable | GGUF quantized models, low memory usage |
 | **Ollama** | `wrappers/ollama_wrapper.py` | Stable | Easy setup with Ollama service |
+| **HuggingFace Inference** | `wrappers/huggingface_inference_wrapper.py` | Stable | HF Inference API (cloud) |
+| **OpenAI** | `wrappers/openai_wrapper.py` | Stable | OpenAI-compatible APIs |
 
 ### Experimental
 
@@ -67,6 +69,10 @@ These engines are implemented but may have limitations:
 - **LlamaCpp** (`llama_cpp_engine.py`): Runs GGUF-format quantized models. Supports Metal (Mac), CUDA, and CPU. Great for memory-constrained systems.
 
 - **Ollama** (`wrappers/ollama_wrapper.py`): Wraps the Ollama service for easy model management. Auto-detects installed models.
+
+- **HuggingFace Inference** (`wrappers/huggingface_inference_wrapper.py`): Uses HuggingFace's cloud Inference API. Requires `HF_TOKEN` environment variable.
+
+- **OpenAI** (`wrappers/openai_wrapper.py`): Works with OpenAI API and compatible servers (LocalAI, vLLM, etc.). Set `OPENAI_API_KEY` and optionally `OPENAI_BASE_URL`.
 
 - **JAX** (`jax_engine.py`): For Flax models. Currently has JIT compilation issues with dynamic boolean parameters. Works with GPT-2, Gemma, Llama architectures.
 
@@ -91,9 +97,19 @@ LlamaCpp    qwen2-0.5b-q4             4.4 tok/s   174ms
 Each engine has its own requirements file:
 
 ```bash
+# Core (always install first)
+pip install -r requirements.txt           # Base dependencies
+
+# Native Engines
 pip install -r requirements-pytorch.txt   # PyTorch + transformers
 pip install -r requirements-mlx.txt       # MLX (Apple Silicon)
 pip install -r requirements-llamacpp.txt  # llama-cpp-python
 pip install -r requirements-jax.txt       # JAX/Flax
+pip install -r requirements-onnx.txt      # ONNX Runtime
+pip install -r requirements-tensorflow.txt # TensorFlow
 pip install -r requirements-vllm.txt      # vLLM (NVIDIA only)
+
+# GPU-specific
+pip install -r requirements-cuda.txt      # NVIDIA CUDA support
+pip install -r requirements-rocm.txt      # AMD ROCm support
 ```

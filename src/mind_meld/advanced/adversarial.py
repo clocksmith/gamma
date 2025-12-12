@@ -9,6 +9,7 @@ from typing import List, Dict, Optional, Tuple, Any
 from dataclasses import dataclass
 
 from src.core.engine_interface import LLMEngine
+from src.mind_meld.utils import VerboseLoggerMixin
 
 
 @dataclass
@@ -38,7 +39,7 @@ class DebateResult:
     rounds: int
 
 
-class AdversarialDebate:
+class AdversarialDebate(VerboseLoggerMixin):
     """
     Adversarial debate between red and blue teams.
 
@@ -65,11 +66,6 @@ class AdversarialDebate:
         self.blue_team = blue_team
         self.max_rounds = max_rounds
         self.verbose = verbose
-
-    def _log(self, message: str):
-        """Log if verbose."""
-        if self.verbose:
-            print(f"[AdversarialDebate] {message}")
 
     def generate_claim(self, topic: str, temperature: float = 0.7) -> Claim:
         """Generate initial claim from red team."""

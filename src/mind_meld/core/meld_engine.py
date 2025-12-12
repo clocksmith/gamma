@@ -4,15 +4,39 @@
 import logging
 import os
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
 from src.core import config as cfg
+from src.engines import sampling_utils
 from src.ui import displays as ui
 from src.core.engine_interface import LLMEngine
 
 logger = logging.getLogger(__name__)
+
+# =============================================================================
+# Constants
+# =============================================================================
+
+# Fallback top-k for token selection when primary selection produces invalid tokens
+FALLBACK_TOP_K = 100
+
+# Target model selection strategies for N-way model routing
+TARGET_SELECTION_ROUND_ROBIN = "round_robin"
+TARGET_SELECTION_NEXT = "next"
+
+# Random swap probability for random swap strategy
+RANDOM_SWAP_PROBABILITY = 0.3
+
+# Top-k limit for ABE efficiency (prevents expensive full-vocab operations)
+ABE_TOP_K_LIMIT = 20
+
+# Maximum events to show in swap log visualization
+SWAP_LOG_MAX_EVENTS = 20
+
+# Minimum weight for agreement in ABE (ensures all models have some influence)
+MIN_AGREEMENT_WEIGHT = 0.1
 from src.mind_meld.bridges.kv_cache_handler import (
     KVCacheTranslator,
     PyTorchKVCache,
@@ -59,13 +83,12 @@ class ModelOffloader:
             return False
 
         try:
-            if hasattr(engine, 'model') and engine.model is not None:
-                # Check if using PyTorch
-                if hasattr(engine.model, 'to'):
-                    engine.model.to('cpu')
-                    self._model_locations[model_idx] = 'cpu'
-                    logger.debug(f"Offloaded model {model_idx} ({engine.model_name}) to CPU")
-                    return True
+            if not hasattr(engine, 'model') or engine.model is None or not hasattr(engine.model, 'to'):
+                return False
+            engine.model.to('cpu')
+            self._model_locations[model_idx] = 'cpu'
+            logger.debug(f"Offloaded model {model_idx} ({engine.model_name}) to CPU")
+            return True
         except Exception as e:
             logger.warning(f"Failed to offload model {model_idx} to CPU: {e}")
         return False
@@ -76,24 +99,23 @@ class ModelOffloader:
             return False
 
         try:
-            if hasattr(engine, 'model') and engine.model is not None:
-                # Check if using PyTorch
-                if hasattr(engine.model, 'to'):
-                    # Try to use CUDA, fall back to MPS for Apple Silicon
-                    try:
-                        import torch
-                        if device == 'cuda' and not torch.cuda.is_available():
-                            if torch.backends.mps.is_available():
-                                device = 'mps'
-                            else:
-                                device = 'cpu'
-                    except ImportError:
-                        pass
+            if not hasattr(engine, 'model') or engine.model is None or not hasattr(engine.model, 'to'):
+                return False
+            # Try to use CUDA, fall back to MPS for Apple Silicon
+            try:
+                import torch
+                if device == 'cuda' and not torch.cuda.is_available():
+                    if torch.backends.mps.is_available():
+                        device = 'mps'
+                    else:
+                        device = 'cpu'
+            except ImportError:
+                pass
 
-                    engine.model.to(device)
-                    self._model_locations[model_idx] = 'gpu'
-                    logger.debug(f"Loaded model {model_idx} ({engine.model_name}) to {device}")
-                    return True
+            engine.model.to(device)
+            self._model_locations[model_idx] = 'gpu'
+            logger.debug(f"Loaded model {model_idx} ({engine.model_name}) to {device}")
+            return True
         except Exception as e:
             logger.warning(f"Failed to load model {model_idx} to GPU: {e}")
         return False
@@ -122,11 +144,20 @@ class MeldEngine:
         if len(models) < 2:
             raise ValueError("MindMeldEngine requires at least two models.")
 
+        # Validate all engines support logits (required for Mind Meld)
+        for model in models:
+            is_valid, error_msg = model.validate_for_mind_meld()
+            if not is_valid:
+                raise ValueError(error_msg)
+
         self.models = models
         self.args = args
         self.config = config or MeldConfig()
         self.active_model_idx = 0
         self.verbose = self.config.verbose or getattr(args, "verbose", False)
+        self.headless = getattr(args, "headless", False)
+        self._per_engine_primed = {idx: False for idx in range(len(models))}
+        self._last_token_text: Optional[str] = None
 
         # Validate configuration
         config_warnings = self.config.validate()
@@ -145,6 +176,8 @@ class MeldEngine:
 
         # Token counter for fixed interval strategy
         self.token_counter = 0
+        # Separate counter for round-robin target selection (increments each step)
+        self._round_robin_step = 0
 
         # --- Translation configuration ---
         self.translation_mode = self.config.translation_config.mode
@@ -228,7 +261,7 @@ class MeldEngine:
             self.stats_tracker = StatisticsTracker(
                 models=model_names,
                 show_live=self.verbose,
-                save_file=getattr(args, 'stats_file', None)
+                save_file=(None if self.headless else getattr(args, 'stats_file', None))
             )
 
         self.blender = None
@@ -244,6 +277,12 @@ class MeldEngine:
         self.abe_ensemble = None
         if self.use_abe:
             self.abe_ensemble = ABEEnsemble(models, verbose=self.verbose)
+
+        self.auto_multi_blend = False
+        if len(models) > 2 and not (self.use_blending or self.use_abe or getattr(args, 'use_weighted_average', False)):
+            # Auto-enable weighted averaging so that every model contributes
+            self.auto_multi_blend = True
+            logger.info("Auto-enabling weighted averaging for 3+ models (no blend/ABE configured).")
 
         # Initialize visualizer for tracking model swaps and contributions
         model_names = [m.model_name for m in models]
@@ -270,6 +309,33 @@ class MeldEngine:
     def get_active_engine(self) -> LLMEngine:
         """Returns the currently active engine."""
         return self.models[self.active_model_idx]
+
+    def _resolve_target_model(self, strategy: str = TARGET_SELECTION_NEXT) -> Tuple[int, LLMEngine]:
+        """
+        Resolve the target model for vocab translation or swapping.
+
+        Supports N-way model selection for 3+ model scenarios.
+
+        Args:
+            strategy: Selection strategy - "next" for simple next model,
+                     "round_robin" for cycling through all models.
+
+        Returns:
+            Tuple of (model_index, engine) for the target model.
+        """
+        num_models = len(self.models)
+
+        if strategy == TARGET_SELECTION_ROUND_ROBIN:
+            # Round-robin: cycle through all models excluding current
+            # Uses dedicated counter that increments each step
+            offset = (self._round_robin_step % (num_models - 1)) + 1
+            target_idx = (self.active_model_idx + offset) % num_models
+            self._round_robin_step += 1
+        else:
+            # Default: next model in sequence
+            target_idx = (self.active_model_idx + 1) % num_models
+
+        return target_idx, self.models[target_idx]
 
     def _should_swap(self, last_token_text: str) -> bool:
         """Determines if a model swap should occur based on the selected strategy."""
@@ -300,12 +366,17 @@ class MeldEngine:
 
         elif strategy in ['random']:
             import random
-            if random.random() < 0.3:  # 30% chance of swapping
+            if random.random() < RANDOM_SWAP_PROBABILITY:
                 logger.debug("Random swap triggered.")
                 return True
             return False
-        
+
         return False
+
+    def _should_check_swap(self) -> bool:
+        """Check if swap logic should be evaluated (disabled during blending/averaging)."""
+        use_weighted_average = getattr(self.args, 'use_weighted_average', False) or self.auto_multi_blend
+        return not (self.use_blending or use_weighted_average)
 
     def _get_weighted_average_predictions(self, text: str, attention_mask: Any):
         """
@@ -316,93 +387,180 @@ class MeldEngine:
         weights = []
         base_engine = self.models[0]
         base_vocab_size = len(base_engine.tokenizer.get_vocab())
-        
-        logger.info("Computing weighted average from all models...")
-        
+        logger.debug("Computing weighted average from all models...")
+
+        # Use _prepare_inputs_for_engine to leverage KV cache when available
         for idx, engine in enumerate(self.models):
-            # Get predictions from this model
-            input_ids, mask = engine.encode(text, add_special_tokens=True)
+            input_ids, mask = self._prepare_inputs_for_engine(engine, idx, text)
             result = engine.predict_next(
                 input_ids, mask,
                 self.args.temperature, self.args.top_k, self.args.top_p
             )
-            
+            self._per_engine_primed[idx] = True
+
             logits = engine.convert_to_numpy(result["logits_raw"])
-            
-            # Flatten if needed
-            if logits.ndim > 1:
-                logits = logits.flatten()
-            
-            # Convert to probabilities using softmax
-            logits = np.nan_to_num(logits, nan=-1e10, posinf=1e10, neginf=-1e10)
-            logits_shifted = logits - np.max(logits)
-            probs = np.exp(logits_shifted) / np.sum(np.exp(logits_shifted))
-            
-            # Translate probabilities to base vocabulary if needed
+            logits = sampling_utils.sanitize_logits(logits)
+
+            # Apply the same sampling controls the game exposes (temperature/top-k/top-p)
+            logits_proc, _, _ = sampling_utils.process_logits_pipeline(
+                logits.flatten(),
+                self.args.temperature,
+                self.args.top_k,
+                self.args.top_p,
+                return_intermediates=True
+            )
+            probs = sampling_utils.softmax(logits_proc)
+
             if idx > 0 and len(engine.tokenizer.get_vocab()) != base_vocab_size:
-                # Build alignment and translate
-                translated_probs = self._translate_probabilities(
+                probs = self.vocab_translator.translate_probabilities(
                     probs, engine.tokenizer, base_engine.tokenizer
                 )
-                probs = translated_probs
-            
+
             all_probs.append(probs)
-            
-            # Compute weight based on model confidence (entropy)
+
             entropy = -np.sum(probs * np.log(probs + 1e-10))
-            confidence = 1.0 / (1.0 + entropy)  # Lower entropy = higher confidence
+            confidence = 1.0 / (1.0 + entropy)
             weights.append(confidence)
-            
             logger.debug(f"  Model {idx} ({engine.model_name}): confidence={confidence:.3f}")
-        
-        # Normalize weights
+
         weights = np.array(weights)
         weights = weights / np.sum(weights)
-        
-        # Compute weighted average of probabilities
-        # Handle different vocabulary sizes by using the minimum
+
         min_vocab_size = min(len(p) for p in all_probs)
         avg_probs = np.zeros(min_vocab_size)
-        
         for prob, weight in zip(all_probs, weights):
-            # Truncate to common size
-            avg_probs += prob[:min_vocab_size] * weight
-        
-        # Convert back to logits
+            avg_probs[:min_vocab_size] += prob[:min_vocab_size] * weight
+
         avg_logits = np.log(avg_probs + 1e-10)
-        
         return avg_logits, base_engine
     
     def _translate_probabilities(self, probs: np.ndarray, source_tokenizer, target_tokenizer):
         """Translate probability distribution from source to target vocabulary."""
-        target_vocab_size = len(target_tokenizer.get_vocab())
-        target_probs = np.zeros(target_vocab_size)
-        
-        # Simple approach: map each source token to target tokens
-        for source_id in range(len(probs)):
-            prob = probs[source_id]
-            if prob < 1e-10:  # Skip very low probability tokens
-                continue
-                
-            # Decode and re-encode
-            token_str = source_tokenizer.decode([source_id], skip_special_tokens=False)
-            if token_str:
-                target_ids = target_tokenizer.encode(token_str, add_special_tokens=False)
-                if target_ids:
-                    # Distribute probability among target tokens
-                    for tid in target_ids[:1]:  # Just use first token for simplicity
-                        if tid < target_vocab_size:
-                            target_probs[tid] += prob
-        
-        # Renormalize if needed
-        total = np.sum(target_probs)
-        if total > 0:
-            target_probs = target_probs / total
+        return self.vocab_translator.translate_probabilities(
+            probs, source_tokenizer, target_tokenizer
+        )
+
+    def _fetch_other_model_logits(self, current_full_text: str) -> List[np.ndarray]:
+        """Fetch logits from all non-active models for blending.
+
+        Returns:
+            List of numpy arrays containing logits from each non-active model.
+        """
+        other_logits = []
+        for idx, engine in enumerate(self.models):
+            if idx != self.active_model_idx:
+                other_ids, other_mask = self._prepare_inputs_for_engine(
+                    engine, idx, current_full_text
+                )
+                other_result = engine.predict_next(
+                    other_ids, other_mask,
+                    self.args.temperature, self.args.top_k, self.args.top_p
+                )
+                logits = engine.convert_to_numpy(other_result["logits_raw"])
+                other_logits.append(logits)
+                self._per_engine_primed[idx] = True
+        return other_logits
+
+    def _generate_next_token(
+        self,
+        current_full_text: str,
+        active_engine: LLMEngine,
+        logits_numpy: np.ndarray,
+        attention_mask: Any
+    ) -> Tuple[str, float, int]:
+        """Generate the next token using the configured melding strategy.
+
+        This is the core generation logic shared between interactive and headless modes.
+
+        Args:
+            current_full_text: The current generated text context.
+            active_engine: The currently active engine.
+            logits_numpy: Raw logits from the active engine.
+            attention_mask: Attention mask for the input.
+
+        Returns:
+            Tuple of (token_text, token_probability, token_id_in_target_vocab)
+        """
+        # Resolve target model using round-robin for 3+ models
+        target_strategy = TARGET_SELECTION_ROUND_ROBIN if len(self.models) > 2 else TARGET_SELECTION_NEXT
+        _, target_engine = self._resolve_target_model(target_strategy)
+
+        use_abe = getattr(self.args, 'use_abe', False)
+        use_weighted_average = getattr(self.args, 'use_weighted_average', False) or self.auto_multi_blend
+
+        # Select melding strategy
+        if use_abe and self.abe_ensemble:
+            melded_logits, decoding_engine = self._get_abe_predictions(current_full_text)
+        elif use_weighted_average:
+            melded_logits, decoding_engine = self._get_weighted_average_predictions(
+                current_full_text, attention_mask
+            )
+        elif self.use_blending and self.blender:
+            all_logits = [logits_numpy] + self._fetch_other_model_logits(current_full_text)
+            melded_logits = self.blender.blend(all_logits, self.models)
+            decoding_engine = active_engine
         else:
-            # Fallback to uniform if translation failed
-            target_probs = np.ones(target_vocab_size) / target_vocab_size
-            
-        return target_probs
+            # Default: translate logits from active to target model's vocab space
+            melded_logits = self.vocab_translator.translate_logits(
+                logits_numpy,
+                active_engine.tokenizer,
+                target_engine.tokenizer
+            )
+            decoding_engine = target_engine
+
+        # Clean up NaN/inf values
+        melded_logits = sampling_utils.sanitize_logits(melded_logits)
+
+        # Process through sampling pipeline
+        processed_logits, _, _ = sampling_utils.process_logits_pipeline(
+            melded_logits,
+            self.args.temperature,
+            self.args.top_k,
+            self.args.top_p,
+            return_intermediates=True
+        )
+        melded_probs = sampling_utils.softmax(processed_logits)
+
+        # Handle invalid probability distributions
+        if np.isnan(melded_probs).any() or np.sum(melded_probs) == 0:
+            melded_probs = np.ones_like(melded_probs) / len(melded_probs)
+
+        next_token_id = int(np.argmax(melded_probs))
+        next_token_text = decoding_engine.decode([next_token_id], skip_special_tokens=False)
+
+        # Fallback for special/empty tokens
+        if not next_token_text or next_token_text.strip() == '' or next_token_text in ['<pad>', '<unk>', '<s>', '</s>']:
+            fallback_k = min(FALLBACK_TOP_K, len(melded_probs))
+            top_k_indices = np.argsort(melded_probs)[-fallback_k:][::-1]
+            for idx in top_k_indices:
+                if idx == 0:
+                    continue
+                candidate_text = decoding_engine.decode([idx], skip_special_tokens=False)
+                if candidate_text and candidate_text.strip() and not candidate_text.startswith('<') and not candidate_text.startswith('['):
+                    next_token_text = candidate_text
+                    next_token_id = idx
+                    logger.debug(f"Found valid token at index {idx}: '{candidate_text}'")
+                    break
+
+        token_prob = float(melded_probs[next_token_id])
+        return next_token_text, token_prob, next_token_id
+
+    def _prepare_inputs_for_engine(
+        self,
+        engine: LLMEngine,
+        engine_idx: int,
+        current_full_text: str
+    ):
+        """Prepare inputs for an engine, using incremental tokens when KV cache is primed."""
+        use_incremental = (
+            self._per_engine_primed.get(engine_idx, False)
+            and self._last_token_text
+            and hasattr(engine, "get_kv_cache")
+            and engine.get_kv_cache() is not None
+        )
+        if use_incremental:
+            return engine.encode(self._last_token_text, add_special_tokens=False)
+        return engine.encode(current_full_text, add_special_tokens=True)
     
     def _get_abe_predictions(self, text: str):
         """
@@ -416,13 +574,18 @@ class MeldEngine:
         all_logits = []
         all_probs = []
 
+        base_engine = self.models[0]
+        base_vocab_size = len(base_engine.tokenizer.get_vocab())
+
         # Get logits and probability distributions from all models
-        for model in self.models:
-            input_ids, mask = model.encode(text, add_special_tokens=True)
+        # Use _prepare_inputs_for_engine to leverage KV cache when available
+        for idx, model in enumerate(self.models):
+            input_ids, mask = self._prepare_inputs_for_engine(model, idx, text)
             result = model.predict_next(
                 input_ids, mask,
                 self.args.temperature, self.args.top_k, self.args.top_p
             )
+            self._per_engine_primed[idx] = True
 
             logits = model.convert_to_numpy(result["logits_raw"])
 
@@ -430,24 +593,36 @@ class MeldEngine:
             if logits.ndim > 1:
                 logits = logits.flatten()
 
-            # Store original logits
-            logits_clean = np.nan_to_num(logits, nan=-1e10, posinf=1e10, neginf=-1e10)
+            logits_clean = sampling_utils.sanitize_logits(logits)
+
+            # Align logits to the base vocabulary to keep dimensions consistent
+            if len(model.tokenizer.get_vocab()) != base_vocab_size:
+                logits_clean = self.vocab_translator.translate_logits(
+                    logits_clean, model.tokenizer, base_engine.tokenizer
+                )
+
             all_logits.append(logits_clean)
 
-            # Convert to probabilities for ABE
-            logits_shifted = logits_clean - np.max(logits_clean)
-            probs = np.exp(logits_shifted) / np.sum(np.exp(logits_shifted))
+            logits_proc, _, _ = sampling_utils.process_logits_pipeline(
+                logits_clean,
+                self.args.temperature,
+                self.args.top_k,
+                self.args.top_p,
+                return_intermediates=True
+            )
+            probs = sampling_utils.softmax(logits_proc)
+            if len(model.tokenizer.get_vocab()) != base_vocab_size:
+                probs = self.vocab_translator.translate_probabilities(
+                    probs, model.tokenizer, base_engine.tokenizer
+                )
             all_probs.append(probs)
 
         # Use ABE to find agreed-upon token and agreement weights
         agreed_text, token_ids = self.abe_ensemble.ensemble_step(
             all_probs,
             temperature=self.args.temperature,
-            top_k=min(self.args.top_k, 20)  # Limit top-k for ABE efficiency
+            top_k=min(self.args.top_k, ABE_TOP_K_LIMIT)
         )
-
-        # Use the first model as decoding engine
-        base_engine = self.models[0]
 
         # Blend logits from all models using agreement-based weighting
         # Models that agree on top tokens get higher weight
@@ -463,8 +638,8 @@ class MeldEngine:
                 if agreed_token < len(probs):
                     weight = probs[agreed_token]
                 else:
-                    weight = 0.1  # Fallback weight
-                agreement_weights.append(max(weight, 0.1))  # Ensure minimum weight
+                    weight = MIN_AGREEMENT_WEIGHT  # Fallback weight
+                agreement_weights.append(max(weight, MIN_AGREEMENT_WEIGHT))
 
             # Normalize weights
             total_weight = sum(agreement_weights)
@@ -485,24 +660,23 @@ class MeldEngine:
         """Swap engines and attempt to bridge their KV caches."""
 
         source_idx = self.active_model_idx
-        target_idx = (self.active_model_idx + 1) % len(self.models)
+        target_idx, target_engine = self._resolve_target_model(TARGET_SELECTION_NEXT)
 
         source_engine = self.models[source_idx]
-        target_engine = self.models[target_idx]
 
-        print(
-            f"\n🔄 Swapping from {source_engine.model_name} to {target_engine.model_name}...",
-            end="",
-        )
+        swap_msg = f"Swapping from {source_engine.model_name} to {target_engine.model_name}"
+        if not self.headless:
+            ui.print_swap_indicator(source_engine.model_name, target_engine.model_name)
+        logger.info(swap_msg)
 
         # Handle model offloading if enabled (swap GPU/CPU locations)
         self.offloader.swap_active_model(self.models, source_idx, target_idx)
 
         if self._transfer_kv_cache(source_engine, target_engine):
-            print(" KV cache bridged successfully.")
+            logger.info("KV cache bridged successfully.")
         else:
             target_engine.reset_kv_cache()
-            print(" KV cache reset (bridge unavailable).")
+            logger.info("KV cache reset (bridge unavailable).")
 
         self.active_model_idx = target_idx
 
@@ -564,12 +738,15 @@ class MeldEngine:
 
     def run_game_loop(self):
         """Main game loop for Mind Meld mode."""
+        if self.headless:
+            return self._run_headless()
+
         ui.print_separator()
 
         # Check for a non-interactive prompt first, otherwise ask user.
         if hasattr(self.args, 'initial_prompt') and self.args.initial_prompt:
             initial_text = self.args.initial_prompt
-            print(f"Starting with prompt: {initial_text}")
+            logger.info(f"Starting with prompt: {initial_text}")
         else:
             initial_text = ui.get_user_input(
                 "Enter a starting sentence for Mind Meld (or press Enter for default)",
@@ -582,19 +759,20 @@ class MeldEngine:
 
         current_full_text = initial_text
 
-        for engine in self.models:
-            engine.encode(current_full_text, add_special_tokens=True)
-
         round_counter = 0
         while round_counter < self.args.steps:
             round_counter += 1
             active_engine = self.get_active_engine()
             
             ui.display_round_header(round_counter, self.args.steps)
-            print(f"[Active Model: {ui.color_text(active_engine.model_name, cfg.COLOR_CYAN)}]")
+            ui.display_active_model(active_engine.model_name)
             ui.display_current_sentence(current_full_text)
 
-            input_ids, attention_mask = active_engine.encode(current_full_text, add_special_tokens=True)
+            input_ids, attention_mask = self._prepare_inputs_for_engine(
+                active_engine,
+                self.active_model_idx,
+                current_full_text
+            )
             pred_result = active_engine.predict_next(
                 input_ids,
                 attention_mask,
@@ -604,96 +782,15 @@ class MeldEngine:
             )
 
             logits_numpy = active_engine.convert_to_numpy(pred_result["logits_raw"])
-            
-            # --- Logit Translation / Blending ---
-            inactive_engine = self.models[(self.active_model_idx + 1) % len(self.models)]
-            
-            # Check if we should use ABE or weighted averaging
-            use_abe = getattr(self.args, 'use_abe', False)
-            use_weighted_average = getattr(self.args, 'use_blending', False) or getattr(self.args, 'use_weighted_average', False)
-            
-            if use_abe and self.abe_ensemble:
-                # Use Agreement-Based Ensembling
-                melded_logits, decoding_engine = self._get_abe_predictions(
-                    current_full_text
-                )
-            elif use_weighted_average:
-                # Get predictions from ALL models and blend them
-                melded_logits, decoding_engine = self._get_weighted_average_predictions(
-                    current_full_text, attention_mask
-                )
-            elif self.use_blending and self.blender:
-                # Use advanced blending if available
-                all_logits = [logits_numpy]
-                # Get logits from other models too
-                for idx, engine in enumerate(self.models):
-                    if idx != self.active_model_idx:
-                        other_ids, other_mask = engine.encode(current_full_text, add_special_tokens=True)
-                        other_result = engine.predict_next(
-                            other_ids, other_mask,
-                            self.args.temperature, self.args.top_k, self.args.top_p
-                        )
-                        other_logits = engine.convert_to_numpy(other_result["logits_raw"])
-                        all_logits.append(other_logits)
-                melded_logits = self.blender.blend(all_logits, self.models)
-                decoding_engine = active_engine
-            else:
-                # Default: Translate logits from active to inactive model's vocab space
-                use_translation = True
-                if use_translation:
-                    melded_logits = self.vocab_translator.translate_logits(
-                        logits_numpy,
-                        active_engine.tokenizer,
-                        inactive_engine.tokenizer
-                    )
-                    decoding_engine = inactive_engine
-                else:
-                    melded_logits = logits_numpy
-                    decoding_engine = active_engine
+            self._per_engine_primed[self.active_model_idx] = True
 
-            # In a full implementation, we would need to select the next token from the
-            # melded_logits, which are in the *target* vocabulary space. This requires
-            # decoding the chosen ID with the *target* tokenizer.
-            
-            # Simplified token selection for this demo:
-            # Handle potential NaN/inf values
-            melded_logits = np.nan_to_num(melded_logits, nan=-1e10, posinf=1e10, neginf=-1e10)
-            
-            # Use stable softmax to avoid overflow
-            melded_logits_shifted = melded_logits - np.max(melded_logits)
-            exp_logits = np.exp(melded_logits_shifted)
-            melded_probs = exp_logits / np.sum(exp_logits)
-            
-            # If still have NaN, use uniform distribution
-            if np.isnan(melded_probs).any():
-                melded_probs = np.ones_like(melded_probs) / len(melded_probs)
-            
-            next_token_id_in_target_vocab = np.argmax(melded_probs)
-            
-            # Log the selected token ID for debugging
+            # Generate next token using shared logic
+            next_token_text, token_prob, next_token_id_in_target_vocab = self._generate_next_token(
+                current_full_text, active_engine, logits_numpy, attention_mask
+            )
+
             logger.debug(f"Selected token ID in target vocab: {next_token_id_in_target_vocab}")
-            
-            # Decode the token using the appropriate engine
-            next_token_text = decoding_engine.decode([next_token_id_in_target_vocab], skip_special_tokens=False)
-            
-            # If token is special/empty, try to get actual content token
-            if not next_token_text or next_token_text.strip() == '' or next_token_text in ['<pad>', '<unk>', '<s>', '</s>']:
-                # Get top-k tokens instead
-                top_k_indices = np.argsort(melded_probs)[-100:][::-1]
-                for idx in top_k_indices:
-                    if idx == 0:  # Skip padding token
-                        continue
-                    candidate_text = decoding_engine.decode([idx], skip_special_tokens=False)
-                    if candidate_text and candidate_text.strip() and not candidate_text.startswith('<') and not candidate_text.startswith('['):
-                        next_token_text = candidate_text
-                        next_token_id_in_target_vocab = idx
-                        logger.debug(f"Found valid token at index {idx}: '{candidate_text}'")
-                        break
-
-            print(f"\nModel '{active_engine.model_name}' predicted towards: '{ui.color_text(next_token_text, cfg.COLOR_GREEN)}'")
-
-            # Record token for visualization
-            token_prob = float(melded_probs[next_token_id_in_target_vocab])
+            ui.display_prediction(active_engine.model_name, next_token_text)
             self.visualizer.record_token(
                 model_name=active_engine.model_name,
                 probability=token_prob,
@@ -711,50 +808,97 @@ class MeldEngine:
 
             # Update context with the decoded text from the target
             current_full_text += next_token_text
+            self._last_token_text = next_token_text
 
-            if not self.use_blending:
-                if self._should_swap(next_token_text):
-                    next_model = self.models[(self.active_model_idx + 1) % len(self.models)]
+            if self._should_check_swap() and self._should_swap(next_token_text):
+                _, next_model = self._resolve_target_model(TARGET_SELECTION_NEXT)
 
-                    # Record swap event for visualization
-                    swap_event = SwapEvent(
-                        position=round_counter,
-                        from_model=active_engine.model_name,
-                        to_model=next_model.model_name,
-                        reason=f"Strategy: {self.swap_strategy}",
-                        timestamp=time.time(),
-                        confidence_before=token_prob,
-                        coherence_score=None  # Could be calculated if needed
+                # Record swap event for visualization
+                swap_event = SwapEvent(
+                    position=round_counter,
+                    from_model=active_engine.model_name,
+                    to_model=next_model.model_name,
+                    reason=f"Strategy: {self.swap_strategy}",
+                    timestamp=time.time(),
+                    confidence_before=token_prob,
+                    coherence_score=None  # Could be calculated if needed
+                )
+                self.visualizer.add_swap(swap_event)
+
+                if self.stats_tracker:
+                    self.stats_tracker.record_swap(
+                        active_engine.model_name,
+                        next_model.model_name,
+                        f"Strategy: {self.swap_strategy}",
+                        next_token_text
                     )
-                    self.visualizer.add_swap(swap_event)
+                self._perform_swap()
+            if not self.headless:
+                time.sleep(1) # Pause for readability
 
-                    if self.stats_tracker:
-                        self.stats_tracker.record_swap(
-                            active_engine.model_name,
-                            next_model.model_name,
-                            f"Strategy: {self.swap_strategy}",
-                            next_token_text
-                        )
-                    self._perform_swap()
-            
-            time.sleep(1) # Pause for readability
-
-        print("\nMind Meld session finished.")
+        logger.info("Mind Meld session finished.")
+        ui.print_message("\nMind Meld session finished.")
 
         # Display visualization
-        print("\n" + "=" * 80)
-        print("Mind Meld Visualization")
-        print("=" * 80)
-        print(self.visualizer.render_contribution_timeline())
-        print(self.visualizer.render_swap_log(max_events=20))
-        print(self.visualizer.show_coherence_analysis(current_full_text))
+        ui.print_separator()
+        ui.print_message("Mind Meld Visualization")
+        ui.print_separator()
+        ui.print_message(self.visualizer.render_contribution_timeline())
+        ui.print_message(self.visualizer.render_swap_log(max_events=SWAP_LOG_MAX_EVENTS))
+        ui.print_message(self.visualizer.show_coherence_analysis(current_full_text))
 
         # Export visualization data
         os.makedirs("mind_meld_results", exist_ok=True)
         timestamp = time.strftime("%Y%m%d_%H%M%S")
         export_path = f"mind_meld_results/{timestamp}_viz.json"
         self.visualizer.export_to_json(export_path)
-        print(f"\n✓ Visualization data exported to: {export_path}")
+        logger.info(f"Visualization data exported to: {export_path}")
+        ui.print_message(f"\nVisualization data exported to: {export_path}")
 
         if self.stats_tracker:
             self.stats_tracker.finish()
+
+    def _run_headless(self):
+        """Lightweight generation loop for tests/automation (no prompts or file IO)."""
+        current_full_text = getattr(self.args, "initial_prompt", "") or ""
+        round_counter = 0
+
+        while round_counter < self.args.steps:
+            round_counter += 1
+            active_engine = self.get_active_engine()
+
+            input_ids, attention_mask = self._prepare_inputs_for_engine(
+                active_engine,
+                self.active_model_idx,
+                current_full_text
+            )
+            pred_result = active_engine.predict_next(
+                input_ids,
+                attention_mask,
+                self.args.temperature,
+                self.args.top_k,
+                self.args.top_p
+            )
+            logits_numpy = active_engine.convert_to_numpy(pred_result["logits_raw"])
+            self._per_engine_primed[self.active_model_idx] = True
+
+            # Generate next token using shared logic
+            next_token_text, token_prob, _ = self._generate_next_token(
+                current_full_text, active_engine, logits_numpy, attention_mask
+            )
+            if self.stats_tracker:
+                self.stats_tracker.start_round()
+                self.stats_tracker.record_token(
+                    active_engine.model_name,
+                    next_token_text,
+                    confidence=token_prob,
+                    time_taken=0.0
+                )
+
+            current_full_text += next_token_text
+            self._last_token_text = next_token_text
+
+            if self._should_check_swap() and self._should_swap(next_token_text):
+                self._perform_swap()
+
+        return current_full_text

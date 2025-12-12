@@ -483,10 +483,10 @@ class VocabularyAligner:
             intersection &= set(vocab.keys())
         
         self.intersection_cache[cache_key] = intersection
-        
+
         if self.verbose:
-            print(f"Vocabulary intersection across {len(tokenizers)} models: {len(intersection)} tokens")
-        
+            logger.info(f"Vocabulary intersection across {len(tokenizers)} models: {len(intersection)} tokens")
+
         return intersection
     
     def _extract_vocabulary(self, tokenizer: Any) -> Dict[str, int]:

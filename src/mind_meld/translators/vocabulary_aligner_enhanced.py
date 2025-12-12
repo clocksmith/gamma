@@ -1,5 +1,6 @@
 """Enhanced vocabulary alignment with multiple strategies for Mind Meld"""
 
+import logging
 import sys
 import re
 from typing import Dict, List, Set, Tuple, Optional, Any, Union
@@ -8,6 +9,8 @@ from enum import Enum
 import numpy as np
 from collections import defaultdict
 import difflib
+
+logger = logging.getLogger(__name__)
 
 
 class AlignmentStrategy(Enum):
@@ -92,11 +95,11 @@ class EnhancedVocabularyAligner:
         
         cache_key = (source_name, target_name)
         if self.config.use_cache and cache_key in self.alignment_cache:
-            print(f"Using cached alignment for {source_name} → {target_name}")
+            logger.debug(f"Using cached alignment for {source_name} -> {target_name}")
             return self.alignment_cache[cache_key]
-        
-        print(f"Aligning vocabularies: {source_name} → {target_name}")
-        print(f"Strategy: {self.config.strategy.value}")
+
+        logger.info(f"Aligning vocabularies: {source_name} -> {target_name}")
+        logger.debug(f"Strategy: {self.config.strategy.value}")
         
         # Extract vocabularies
         source_vocab = self._extract_vocabulary(source_tokenizer)
@@ -136,7 +139,7 @@ class EnhancedVocabularyAligner:
             elif hasattr(tokenizer, 'vocab'):
                 vocab = {v: k for k, v in tokenizer.vocab.items()}
         except Exception as e:
-            print(f"Warning: Could not extract vocabulary: {e}")
+            logger.warning(f"Could not extract vocabulary: {e}")
         return vocab
     
     def _align_intersection(
@@ -332,7 +335,7 @@ class EnhancedVocabularyAligner:
         """Semantic similarity-based alignment using embeddings"""
         # For now, fallback to fuzzy matching
         # In a full implementation, this would use embeddings
-        print("Note: Semantic alignment using fuzzy matching as fallback")
+        logger.info("Semantic alignment using fuzzy matching as fallback")
         return self._align_fuzzy(source_vocab, target_vocab)
     
     def _align_hybrid(

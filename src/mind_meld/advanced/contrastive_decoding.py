@@ -11,6 +11,8 @@ from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass
 
 from src.core.engine_interface import LLMEngine
+from src.engines import sampling_utils
+from src.mind_meld.utils import VerboseLoggerMixin
 
 
 @dataclass
@@ -22,7 +24,7 @@ class ContrastiveConfig:
     use_adaptive_alpha: bool = True  # Adapt alpha based on perplexity difference
 
 
-class ContrastiveDecoder:
+class ContrastiveDecoder(VerboseLoggerMixin):
     """
     Contrastive Decoding implementation.
 
@@ -58,11 +60,6 @@ class ContrastiveDecoder:
         self.avg_expert_confidence = 0.0
         self.avg_amateur_confidence = 0.0
         self.avg_alpha_used = 0.0
-
-    def _log(self, message: str):
-        """Log message if verbose."""
-        if self.verbose:
-            print(f"[ContrastiveDecoder] {message}")
 
     def calculate_adaptive_alpha(
         self,
@@ -102,7 +99,7 @@ class ContrastiveDecoder:
 
     def _softmax(self, logits: np.ndarray) -> np.ndarray:
         """Stable softmax computation."""
-        logits = np.nan_to_num(logits, nan=-1e10, posinf=1e10, neginf=-1e10)
+        logits = sampling_utils.sanitize_logits(logits)
         logits_shifted = logits - np.max(logits)
         exp_logits = np.exp(logits_shifted)
         return exp_logits / np.sum(exp_logits)

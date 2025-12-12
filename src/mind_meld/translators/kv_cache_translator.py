@@ -10,10 +10,13 @@ callers such as :mod:`state_bridge` continue to function without modification.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any, Optional
 
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 from src.mind_meld.bridges.kv_cache_handler import (
     KVCacheTranslator as _CoreKVCacheTranslator,
@@ -107,7 +110,7 @@ class KVCacheTranslator:
 
         if source_meta.config is None or target_meta.config is None:
             if self._verbose:
-                print("KVCacheTranslator: Missing model config, cannot translate cache.")
+                logger.warning("KVCacheTranslator: Missing model config, cannot translate cache.")
             return None
 
         try:
@@ -116,7 +119,7 @@ class KVCacheTranslator:
             )
         except Exception as exc:  # pragma: no cover - depends on backend availability
             if self._verbose:
-                print(f"KVCacheTranslator: Failed to wrap cache for translation: {exc}")
+                logger.warning(f"KVCacheTranslator: Failed to wrap cache for translation: {exc}")
             return None
 
         translated = self._delegate.translate(

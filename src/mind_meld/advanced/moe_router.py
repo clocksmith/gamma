@@ -11,6 +11,7 @@ from enum import Enum
 from collections import deque, Counter
 
 from src.core.engine_interface import LLMEngine
+from src.mind_meld.utils import VerboseLoggerMixin
 
 
 class ContentType(Enum):
@@ -25,7 +26,7 @@ class ContentType(Enum):
     UNKNOWN = "unknown"
 
 
-class ContentClassifier:
+class ContentClassifier(VerboseLoggerMixin):
     """
     Classify content type for routing decisions.
 
@@ -61,11 +62,6 @@ class ContentClassifier:
             'protagonist', 'adventure', 'journey', 'emotion', 'beautiful',
             'mysterious', 'dramatic', 'poetry', 'metaphor'
         }
-
-    def _log(self, message: str):
-        """Log if verbose."""
-        if self.verbose:
-            print(f"[ContentClassifier] {message}")
 
     def classify_context(self, context: str) -> ContentType:
         """
@@ -141,7 +137,7 @@ class ContentClassifier:
         return current_type
 
 
-class MoERouter:
+class MoERouter(VerboseLoggerMixin):
     """
     Mixture-of-Experts router for Mind Meld.
 
@@ -172,11 +168,6 @@ class MoERouter:
         # Statistics
         self.routing_stats = {ctype: 0 for ctype in ContentType}
         self.total_tokens = 0
-
-    def _log(self, message: str):
-        """Log if verbose."""
-        if self.verbose:
-            print(f"[MoERouter] {message}")
 
     def get_expert_for_content(self, content_type: ContentType) -> LLMEngine:
         """Get expert model for content type."""

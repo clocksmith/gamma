@@ -67,12 +67,19 @@ python gamma.py mind-meld \
 # Install
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
-pip install -r requirements-pytorch.txt  # or requirements-llamacpp.txt
+pip install -r requirements.txt          # Base dependencies
+
+# Install engine of your choice:
+pip install -r requirements-pytorch.txt  # HuggingFace/Transformers (recommended)
+pip install -r requirements-llamacpp.txt # GGUF models
+pip install -r requirements-mlx.txt      # Apple Silicon (fastest on Mac)
+pip install -r requirements-vllm.txt     # High-throughput (NVIDIA GPU)
 
 # Play
 python gamma.py game
 ```
+
+See [Engine Documentation](./src/engines/README.md) for all engine options including CUDA/ROCm.
 
 GAMMA also auto-detects your Ollama models and HuggingFace cache.
 
@@ -83,6 +90,8 @@ See [Game Documentation](./src/game/README.md) for more details.
 ## Engines & Models
 
 GAMMA supports multiple inference engines for running local LLMs. Engine status:
+
+See also: [Model Formats & Engines](./docs/MODEL_FORMATS.md)
 
 ### Production Ready
 

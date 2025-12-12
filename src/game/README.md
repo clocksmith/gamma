@@ -7,26 +7,26 @@ The interactive LLM prediction game with progressive difficulty levels.
 - **game_logic.py** - Core game mechanics
 - **game_displays.py** - Display and UI functions
 - **tutorial_mode.py** - Interactive tutorial
-- **difficulty_levels.py** - Progressive difficulty system ✨ NEW
+- **difficulty_levels.py** - Progressive difficulty system ★ NEW
 
 ## Features
 
-### Progressive Difficulty System ✨
+### Progressive Difficulty System ★
 
 Four-tier system that adapts to your skill:
 
-1. **🎮 Simple Mode** - Just predict the next word
-2. **📚 Learner Mode** - Shows probabilities and explanations
-3. **🔬 Explorer Mode** - Attention viz, parameter tuning
-4. **🧬 Researcher Mode** - Full debugging, exports
+1. **☛ Simple Mode** - Just predict the next word
+2. **☐ Learner Mode** - Shows probabilities and explanations
+3. **☨ Explorer Mode** - Attention viz, parameter tuning
+4. **★ Researcher Mode** - Full debugging, exports
 
 ### Achievement System
 
-- 🎯 First 10 Correct
-- ⭐ 50 Correct Predictions
-- 🔥 Perfect 5-Streak
-- 🌡️ Temperature Master
-- 🔬 Explorer Unlocked
+- ★ First 10 Correct
+- ★ 50 Correct Predictions
+- ☇ Perfect 5-Streak
+- ☡ Temperature Master
+- ☨ Explorer Unlocked
 
 ### Session Management
 
@@ -51,6 +51,25 @@ python tools/view_sessions.py session_20250114_120000
 # Overall statistics
 python tools/view_sessions.py --stats
 ```
+
+## CLI Flags
+
+| Flag | Description |
+|------|-------------|
+| `--model ENGINE:MODEL` | Model to use (e.g., `pytorch:gpt2`, `ollama:qwen2:7b`) |
+| `--steps N` | Number of prediction rounds (default: 20) |
+| `--temperature T` | Sampling temperature (default: 0.7) |
+| `--top-k K` | Top-K sampling (default: 8) |
+| `--chat` | Chat mode instead of prediction game |
+| `--tutorial` | Run interactive tutorial |
+| `--comparison` | Side-by-side model comparison |
+| `--mind-meld` | Multi-model collaboration mode |
+| `--word-mode` | Word-level play (enables focus words, expands token sequences) |
+| `--permutation-length N` | Tokens per choice (default: 1) |
+| `--player-choice-mode` | EXPERIMENTAL: Player's correct guess drives generation |
+| `--focus-words` | Focus on word boundaries during prediction |
+
+Run `python gamma.py game --help` for all options.
 
 ## Usage
 
@@ -153,5 +172,5 @@ class DifficultyLevel(Enum):
 ## See Also
 
 - **[Main README](../../README.md)** - GAMMA overview
-- **[Integration Guide](../../INTEGRATION_GUIDE.md)** - How to use the difficulty system
-- **[Improvements](../../IMPROVEMENTS_PENTERACT.md)** - Design rationale
+- **[Engine Documentation](../engines/README.md)** - Engine architecture
+- **[Mind Meld Guide](../mind_meld/README.md)** - Multi-model collaboration

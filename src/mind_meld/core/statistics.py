@@ -7,6 +7,16 @@ from dataclasses import dataclass, field, asdict
 from collections import defaultdict
 import numpy as np
 
+# =============================================================================
+# Constants
+# =============================================================================
+
+# Width of progress bar for model contribution display
+PROGRESS_BAR_WIDTH = 40
+
+# Maximum tokens to include in exported statistics (prevents huge files)
+STATS_TOKEN_HISTORY_LIMIT = 100
+
 
 @dataclass
 class ModelStatistics:
@@ -224,7 +234,7 @@ class MeldStatistics:
         self.calculate_contributions()
         
         # Create a simple progress bar for model contributions
-        bar_width = 40
+        bar_width = PROGRESS_BAR_WIDTH
         contributions = []
         
         for model_name, stats in self.model_stats.items():
@@ -264,9 +274,9 @@ class MeldStatistics:
                 "avg_confidence": stats.avg_confidence,
                 "avg_perplexity": stats.avg_perplexity,
                 "swap_count": stats.swap_count,
-                "token_texts": stats.token_texts[:100],  # Limit to first 100 tokens
-                "confidence_history": stats.confidence_history[:100],
-                "consecutive_tokens": stats.consecutive_tokens[:100]
+                "token_texts": stats.token_texts[:STATS_TOKEN_HISTORY_LIMIT],
+                "confidence_history": stats.confidence_history[:STATS_TOKEN_HISTORY_LIMIT],
+                "consecutive_tokens": stats.consecutive_tokens[:STATS_TOKEN_HISTORY_LIMIT]
             }
         
         with open(filepath, 'w') as f:

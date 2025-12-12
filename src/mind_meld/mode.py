@@ -2,9 +2,12 @@
 Mind Meld Mode for GAMMA - Dynamically switch between models during generation.
 """
 
+import logging
 from typing import List, Any
 
 from src.core.engine_interface import LLMEngine
+
+logger = logging.getLogger(__name__)
 from src.ui import displays as ui
 from src.mind_meld.core.meld_engine import MeldEngine
 from src.mind_meld.visualization import SwapVisualizer
@@ -16,11 +19,11 @@ class MindMeldMode:
         self.models = models
         self.args = args
         self.meld_engine = MeldEngine(models, args)
-        print("MindMeldMode initialized.")
+        logger.debug("MindMeldMode initialized.")
 
     def run(self):
         """Run the Mind Meld game loop."""
-        ui.print_header("🧠 Mind Meld Mode 🧠")
+        ui.print_header("★ Mind Meld Mode ★")
         
         if len(self.models) < 2:
             ui.wrap_print("Error: Mind Meld mode requires at least two models to be specified.", indent="  ")
@@ -31,4 +34,3 @@ class MindMeldMode:
             ui.wrap_print(f"    {i+1}. {model_engine.model_name} ({model_engine.__class__.__name__})", indent="  ")
         
         self.meld_engine.run_game_loop()
-

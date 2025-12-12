@@ -42,33 +42,14 @@ USAGE:
 
 COMMANDS:
 
-  🎮 Interactive Modes:
-    game              Interactive LLM prediction game (default)
-                      → Visualize model predictions, attention, probabilities
-
-    comparison        Side-by-side model comparison mode
-                      → Compare two models running the same prompt
-
-    mind-meld         Multi-model collaboration experiments
-                      → Merge multiple models with various swap strategies
-
-  ⚡ Benchmarking:
-    benchmark         Speed & performance benchmarking
-                      → Compare tokens/sec across engines and models
-
-    dream             DREAM benchmark suite
-                      → Mind meld benchmarks + language comparisons
-
-  🔧 Utilities:
-    list              List all available models
-                      → Shows Ollama, HuggingFace, and local GGUF models
-
-    select            Interactive engine & model selector
-                      → Get recommendations for your hardware and use case
-
-  📚 Help:
-    help              Show detailed help for a specific command
-                      → Example: gamma.py help mind-meld
+  game              Interactive LLM prediction game (default)
+  comparison        Side-by-side model comparison
+  mind-meld         Multi-model collaboration experiments
+  benchmark         Speed & performance benchmarking
+  dream             DREAM benchmark suite
+  list              List all available models
+  select            Interactive engine & model selector
+  help              Show detailed help for a specific command
 
 ═══════════════════════════════════════════════════════════════════════
 
@@ -100,10 +81,9 @@ QUICK START EXAMPLES:
 ═══════════════════════════════════════════════════════════════════════
 
 DOCUMENTATION:
-  • Engine capabilities:    docs/ENGINE_ARCHITECTURE.md
-  • Benchmarking guide:     docs/BENCHMARKING.md
-  • Quick start:            docs/QUICK_START_ENGINES.md
   • Project overview:       README.md
+  • Engine details:         src/engines/README.md
+  • Docs index:             docs/README.md
 
 NEED HELP?
   • Detailed help:          gamma.py help [command]
@@ -246,7 +226,7 @@ EXAMPLES:
       vllm:meta-llama/Llama-2-7b-chat-hf \\
     --strategy round_robin --steps 50
 
-⚠️  IMPORTANT: Mind melding requires engines with logits access!
+☡  IMPORTANT: Mind melding requires engines with logits access!
    ✓ Use: pytorch, pytorch_cuda, vllm, llamacpp, mlx, mlx_gpu
    ✗ DON'T use: ollama (no logits via HTTP API)
 

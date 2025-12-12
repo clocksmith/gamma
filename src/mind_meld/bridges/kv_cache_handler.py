@@ -2,9 +2,12 @@
 A unified and robust system for handling KV cache translations between different language models.
 """
 
+import logging
 from abc import ABC, abstractmethod
 from typing import Any, Optional, Tuple, List, Dict, Literal
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 # Extended model architecture support
 ModelArchitecture = Literal[
@@ -581,12 +584,12 @@ class KVCacheTranslator:
         """
         if source_cache.model_arch == 'unknown' or target_arch == 'unknown':
             if self.verbose:
-                print("Cannot translate KV cache for unknown architectures.")
+                logger.warning("Cannot translate KV cache for unknown architectures.")
             return None
 
         strategy = self._get_translation_strategy(source_cache.model_arch, target_arch)
         if self.verbose:
-            print(f"Using '{strategy.__class__.__name__}' for translation.")
+            logger.debug(f"Using '{strategy.__class__.__name__}' for translation.")
 
         return strategy.translate(source_cache, target_config)
 
@@ -599,7 +602,7 @@ class KVCacheTranslator:
 
         if not compatible:
             if self.verbose:
-                print(f"Warning: Incompatible architectures ({reason}). Using projection fallback.")
+                logger.warning(f"Incompatible architectures ({reason}). Using projection fallback.")
             return ProjectionTranslation()
 
         # Handle attention type conversions

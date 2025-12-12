@@ -3,21 +3,14 @@
 ## Quick Links
 
 - **[Main README](../README.md)** - Start here for installation and quick start
-- **[Model Setup Guide](MODEL_SETUP.md)** - Detailed model configuration
 - **[Engine Documentation](../src/engines/README.md)** - Engine architecture and implementation
+- **[Model Formats & Engines](MODEL_FORMATS.md)** - Which formats each engine supports
 - **[Mind Meld Guide](../src/mind_meld/README.md)** - Multi-model collaboration features
+- **[Benchmarks](../src/benchmarks/README.md)** - Performance benchmarking tools
 
 ## Examples
 
 - **[Integration Examples](examples/example_integration.py)** - Code examples for advanced features
-
-## Additional Documentation
-
-### Archived Documentation
-Legacy documentation moved to [archive/](archive/):
-- [TODO.md](archive/TODO.md) - Future feature roadmap
-- [MIND_MELD_GUIDE.md](archive/MIND_MELD_GUIDE.md) - Original Mind Meld documentation
-- [STYLE_GUIDE.md](archive/STYLE_GUIDE.md) - Code style guidelines
 
 ## Getting Help
 
@@ -31,32 +24,37 @@ Legacy documentation moved to [archive/](archive/):
 
 ```
 gamma/
-├── src/game/cli.py         # ⭐ Game entry point - all features unified
+├── gamma.py                # ⭐ Main entry point - all commands
 ├── README.md               # ⭐ Comprehensive guide - start here
 ├── requirements*.txt       # Dependencies by engine
 ├── src/                    # Source code
 │   ├── core/              # Core game logic & interfaces
 │   ├── engines/           # Engine implementations
-│   └── mind_meld/         # Multi-model features
+│   ├── mind_meld/         # Multi-model features
+│   └── benchmarks/        # Benchmarking tools
 ├── models/                # Local model storage
 ├── tools/                 # Utility scripts
 ├── tests/                 # Test files
 └── docs/                  # Documentation
-    ├── examples/          # Code examples
-    └── archive/           # Historical documentation
+    └── examples/          # Code examples
 ```
 
 ## Key Features
 
-### Unified Entry Point
-**Everything runs through `gamma.py game`:**
-- Interactive menu (no args)
-- Classic game mode (default)
-- Chat mode (`--chat`)
-- Tutorial mode (`--tutorial`)
-- Comparison mode (`--comparison`)
-- Single-shot inference (`--prompt`)
-- Mind Meld mode (`--mind-meld`)
+### CLI Commands
+**All commands run through `gamma.py`:**
+
+| Command | Description |
+|---------|-------------|
+| `gamma.py game` | Interactive prediction game (default) |
+| `gamma.py comparison` | Side-by-side model comparison |
+| `gamma.py mind-meld` | Multi-model collaboration |
+| `gamma.py benchmark` | Speed & performance testing |
+| `gamma.py dream` | DREAM benchmark suite |
+| `gamma.py list` | List available models |
+| `gamma.py select` | Interactive engine selector |
+
+**Game mode also supports flags:** `--chat`, `--tutorial`, `--comparison`, `--mind-meld`
 
 ### Intelligent Model Selection
 - Auto-detects Ollama models
@@ -66,13 +64,20 @@ gamma/
 - Recommends best engine for your hardware
 
 ### Multi-Engine Support
-- **ollama**: Direct Ollama integration ✅
-- **llamacpp**: GGUF models, CPU/GPU ✅
+
+**Native Engines:**
 - **pytorch**: HuggingFace Transformers ✅
+- **llamacpp**: GGUF models, CPU/GPU ✅
+- **mlx**: Apple Silicon optimized ✅
+- **vllm**: High-performance GPU inference ✅
+- **onnx**: ONNX Runtime ⚠️
 - **tensorflow**: TensorFlow models ⚠️
 - **jax**: JAX/Flax models ⚠️
-- **onnx**: ONNX Runtime ⚠️
-- **mlx**: Apple Silicon ⚠️
+
+**Wrapper Engines:**
+- **ollama**: Local Ollama server ✅
+- **huggingface_inference**: HF Inference API ✅
+- **openai**: OpenAI-compatible APIs ✅
 
 ## Quick Start Commands
 
@@ -81,19 +86,22 @@ gamma/
 python gamma.py game
 
 # Chat with Ollama model
-python gamma.py game --engine ollama --model qwen3-coder:30b --chat
+python gamma.py game --model ollama:qwen2:7b --chat
 
 # Chat with local GGUF
-python gamma.py game --engine llamacpp --model models/model.gguf --chat
+python gamma.py game --model llamacpp:models/model.gguf --chat
 
-# Compare models
-python gamma.py game --comparison --comparison-models ollama:model1 ollama:model2
+# Compare models side-by-side
+python gamma.py comparison --models pytorch:google/gemma-2-2b-it ollama:qwen2:7b
+
+# Mind meld two models
+python gamma.py mind-meld --models pytorch:gpt2 pytorch:distilgpt2 --strategy confidence
+
+# Benchmark model speed
+python gamma.py benchmark --models pytorch:google/gemma-2-2b-it --tokens 100
 
 # Tutorial
 python gamma.py game --tutorial
-
-# Single inference
-python gamma.py game --prompt "Explain quantum computing"
 ```
 
 ## Configuration Files

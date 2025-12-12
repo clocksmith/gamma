@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from src.core.engine_interface import LLMEngine
+from src.mind_meld.utils import VerboseLoggerMixin
 
 
 class PlanStep(Enum):
@@ -42,7 +43,7 @@ class ExecutionResult:
     metadata: Dict[str, Any]
 
 
-class HierarchicalController:
+class HierarchicalController(VerboseLoggerMixin):
     """
     Hierarchical control system for Mind Meld.
 
@@ -66,11 +67,6 @@ class HierarchicalController:
         self.meta_model = meta_model
         self.specialists = specialist_models
         self.verbose = verbose
-
-    def _log(self, message: str):
-        """Log if verbose."""
-        if self.verbose:
-            print(f"[HierarchicalController] {message}")
 
     def create_plan(self, objective: str, max_steps: int = 5) -> ExecutionPlan:
         """

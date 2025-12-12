@@ -13,6 +13,7 @@ from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass
 
 from src.core.engine_interface import LLMEngine
+from src.mind_meld.utils import VerboseLoggerMixin
 
 
 @dataclass
@@ -27,7 +28,7 @@ class SpeculativeResult:
     time_taken: float
 
 
-class SpeculativeDecoder:
+class SpeculativeDecoder(VerboseLoggerMixin):
     """
     Speculative Decoding implementation.
 
@@ -62,11 +63,6 @@ class SpeculativeDecoder:
         self.total_accepted = 0
         self.total_time_draft = 0.0
         self.total_time_target = 0.0
-
-    def _log(self, message: str):
-        """Log message if verbose."""
-        if self.verbose:
-            print(f"[SpeculativeDecoder] {message}")
 
     def propose_tokens(
         self,

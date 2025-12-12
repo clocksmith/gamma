@@ -2,16 +2,105 @@
 Vocabulary translation and alignment strategies for Mind Meld.
 """
 
+import logging
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Set, Tuple, List, TYPE_CHECKING
 
 import numpy as np
 
+from src.engines.sampling_utils import TRANSLATION_LOGIT_FLOOR
+
 if TYPE_CHECKING:
     from transformers import PreTrainedTokenizerBase
 
+logger = logging.getLogger(__name__)
+
 class VocabularyTranslator(ABC):
-    """Abstract base class for translating logits between different vocabularies."""
+    """Abstract base class for translating logits between different vocabularies.
+
+    Provides shared utility methods for caching, flattening, and normalization
+    to reduce code duplication across translator implementations.
+    """
+
+    # Default logit floor value (avoids -inf which causes softmax issues)
+    # Imported from sampling_utils for consistency
+    DEFAULT_LOGIT_FLOOR = TRANSLATION_LOGIT_FLOOR
+
+    # Minimum mapped tokens before fallback
+    MIN_MAPPED_TOKENS = 10
+
+    def __init__(self, use_cache: bool = True, verbose: bool = False):
+        """Initialize base translator with caching and verbosity settings."""
+        self._cache: Dict[str, Any] = {}
+        self.use_cache = use_cache
+        self.verbose = verbose
+
+    def _make_cache_key(
+        self,
+        source_tokenizer: 'PreTrainedTokenizerBase',
+        target_tokenizer: 'PreTrainedTokenizerBase',
+        suffix: str = ""
+    ) -> str:
+        """Generate a consistent cache key for tokenizer pairs."""
+        base = f"{source_tokenizer.name_or_path}-to-{target_tokenizer.name_or_path}"
+        return f"{base}-{suffix}" if suffix else base
+
+    def _get_cached(self, key: str) -> Any:
+        """Retrieve a value from cache if caching is enabled."""
+        if self.use_cache and key in self._cache:
+            return self._cache[key]
+        return None
+
+    def _set_cached(self, key: str, value: Any) -> None:
+        """Store a value in cache if caching is enabled."""
+        if self.use_cache:
+            self._cache[key] = value
+
+    def _flatten_if_needed(self, arr: np.ndarray) -> np.ndarray:
+        """Flatten array to 1D if it has more dimensions."""
+        if arr.ndim > 1:
+            return arr.flatten()
+        return arr
+
+    def _same_vocab_size(
+        self,
+        source_tokenizer: 'PreTrainedTokenizerBase',
+        target_tokenizer: 'PreTrainedTokenizerBase'
+    ) -> bool:
+        """Check if source and target have the same vocabulary size."""
+        return len(source_tokenizer.get_vocab()) == len(target_tokenizer.get_vocab())
+
+    def _init_target_logits(self, size: int, fill_value: float = None) -> np.ndarray:
+        """Initialize target logits array with a floor value."""
+        if fill_value is None:
+            fill_value = self.DEFAULT_LOGIT_FLOOR
+        return np.full(size, fill_value, dtype=np.float32)
+
+    def _init_target_probs(self, size: int) -> np.ndarray:
+        """Initialize target probability array with zeros."""
+        return np.zeros(size, dtype=np.float32)
+
+    def _normalize_probs(self, probs: np.ndarray) -> np.ndarray:
+        """Normalize probability array, with fallback to uniform if sum is zero."""
+        total = float(np.sum(probs))
+        if total > 0:
+            return probs / total
+        # Fallback to uniform distribution to avoid NaNs
+        return np.ones_like(probs) / len(probs)
+
+    def _log_build_start(self, source_name: str, target_name: str, map_type: str) -> None:
+        """Log the start of map building (respects verbosity setting)."""
+        if self.verbose:
+            logger.info(f"Building {map_type} map from {source_name} to {target_name}...")
+        else:
+            logger.debug(f"Building {map_type} map from {source_name} to {target_name}...")
+
+    def _log_build_complete(self, mapped: int, total: int, map_type: str) -> None:
+        """Log map building completion (respects verbosity setting)."""
+        if self.verbose:
+            logger.info(f"{map_type.capitalize()} map built. Mapped {mapped} of {total} tokens.")
+        else:
+            logger.debug(f"{map_type.capitalize()} map built. Mapped {mapped} of {total} tokens.")
 
     @abstractmethod
     def translate_logits(self, source_logits: np.ndarray, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
@@ -34,16 +123,17 @@ class VocabularyIntersectionTranslator(VocabularyTranslator):
     A simple vocabulary translator that only allows tokens that exist in both vocabularies.
     """
 
-    def __init__(self):
-        self._intersection_cache: Dict[str, Set[int]] = {}
+    def __init__(self, use_cache: bool = True, verbose: bool = False):
+        super().__init__(use_cache=use_cache, verbose=verbose)
 
     def _get_intersection_mask(self, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """Calculates and caches a mask for the intersection of two vocabularies."""
-        cache_key = f"{source_tokenizer.name_or_path}-{target_tokenizer.name_or_path}"
-        if cache_key in self._intersection_cache:
-            return self._intersection_cache[cache_key]
+        cache_key = self._make_cache_key(source_tokenizer, target_tokenizer, "intersection")
+        cached = self._get_cached(cache_key)
+        if cached is not None:
+            return cached
 
-        print("Calculating vocabulary intersection mask...")
+        self._log_build_start(source_tokenizer.name_or_path, target_tokenizer.name_or_path, "intersection")
         source_vocab = source_tokenizer.get_vocab()
         target_vocab = target_tokenizer.get_vocab()
 
@@ -54,16 +144,16 @@ class VocabularyIntersectionTranslator(VocabularyTranslator):
             source_id = source_vocab[token_str]
             if source_id < len(mask):
                 mask[source_id] = 0.0  # Use 0.0 for valid tokens, -inf for invalid
-        
-        self._intersection_cache[cache_key] = mask
-        print(f"Found {len(common_tokens)} tokens in common.")
+
+        self._set_cached(cache_key, mask)
+        self._log_build_complete(len(common_tokens), len(source_vocab), "intersection")
         return mask
 
     def translate_logits(self, source_logits: np.ndarray, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """
         Filters logits by applying a mask, keeping only those for tokens present in both vocabularies.
         """
-        if len(source_tokenizer.get_vocab()) == len(target_tokenizer.get_vocab()):
+        if self._same_vocab_size(source_tokenizer, target_tokenizer):
             return source_logits
 
         mask = self._get_intersection_mask(source_tokenizer, target_tokenizer)
@@ -75,56 +165,51 @@ class AligningVocabularyTranslator(VocabularyTranslator):
     A translator that aligns vocabularies using the surface-form mapping strategy
     from the blueprint. It handles the 'fragmentation problem' by re-tokenizing.
     """
+
     def __init__(self, use_cache: bool = True, verbose: bool = False):
-        self._alignment_cache: Dict[str, Dict[int, List[int]]] = {}
-        self.use_cache = use_cache
-        self.verbose = verbose
+        super().__init__(use_cache=use_cache, verbose=verbose)
 
     def _build_alignment_map(self, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> Dict[int, List[int]]:
         """Builds a map from source token IDs to a list of target token IDs."""
-        cache_key = f"{source_tokenizer.name_or_path}-to-{target_tokenizer.name_or_path}"
-        if cache_key in self._alignment_cache:
-            return self._alignment_cache[cache_key]
+        cache_key = self._make_cache_key(source_tokenizer, target_tokenizer, "alignment")
+        cached = self._get_cached(cache_key)
+        if cached is not None:
+            return cached
 
-        print(f"Building alignment map from {source_tokenizer.name_or_path} to {target_tokenizer.name_or_path}...")
-        
+        self._log_build_start(source_tokenizer.name_or_path, target_tokenizer.name_or_path, "alignment")
         source_vocab_size = len(source_tokenizer.get_vocab())
 
         alignment_map = {}
         for source_id in range(source_vocab_size):
             # Detokenize the source token ID to its string representation
             token_str = source_tokenizer.decode([source_id], skip_special_tokens=True)
-            
+
             # Skip empty strings which can result from special/control tokens
             if not token_str:
                 continue
 
             # Re-tokenize the string with the target tokenizer
             target_ids = target_tokenizer.encode(token_str, add_special_tokens=False)
-            
+
             if target_ids:
                 alignment_map[source_id] = target_ids
 
-        self._alignment_cache[cache_key] = alignment_map
-        print(f"Alignment map built. Mapped {len(alignment_map)} of {source_vocab_size} tokens.")
+        self._set_cached(cache_key, alignment_map)
+        self._log_build_complete(len(alignment_map), source_vocab_size, "alignment")
         return alignment_map
 
     def translate_logits(self, source_logits: np.ndarray, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """
         Translates logits by projecting them from the source to the target vocabulary space.
         """
-        # Flatten source_logits if needed (handle both 1D and 2D arrays)
-        if source_logits.ndim > 1:
-            source_logits = source_logits.flatten()
-            
-        if len(source_tokenizer.get_vocab()) == len(target_tokenizer.get_vocab()):
+        source_logits = self._flatten_if_needed(source_logits)
+
+        if self._same_vocab_size(source_tokenizer, target_tokenizer):
             return source_logits
 
         alignment_map = self._build_alignment_map(source_tokenizer, target_tokenizer)
-        
         target_vocab_size = len(target_tokenizer.get_vocab())
-        # Start with small negative values instead of -inf to avoid all zeros after softmax
-        target_logits = np.full(target_vocab_size, -10.0, dtype=np.float32)
+        target_logits = self._init_target_logits(target_vocab_size)
 
         # Iterate through the source logits and distribute them to the target logits
         mapped_count = 0
@@ -137,15 +222,48 @@ class AligningVocabularyTranslator(VocabularyTranslator):
                     if target_id < target_vocab_size:
                         target_logits[target_id] = max(target_logits[target_id], logit_value)
                         mapped_count += 1
-        
+
         # If very few tokens were mapped, fall back to returning original logits
-        if mapped_count < 10:
-            print(f"Warning: Only {mapped_count} tokens mapped. Using fallback.")
-            # Return truncated/padded version of source logits
+        if mapped_count < self.MIN_MAPPED_TOKENS:
+            logger.warning(f"Only {mapped_count} tokens mapped (min={self.MIN_MAPPED_TOKENS}). Using fallback.")
             min_size = min(len(source_logits), target_vocab_size)
             target_logits[:min_size] = source_logits[:min_size]
 
         return target_logits
+
+    def translate_probabilities(
+        self,
+        source_probs: np.ndarray,
+        source_tokenizer: 'PreTrainedTokenizerBase',
+        target_tokenizer: 'PreTrainedTokenizerBase'
+    ) -> np.ndarray:
+        """
+        Translate a probability distribution from the source vocabulary to the target vocabulary.
+
+        The alignment map is cached, so repeated translations are inexpensive. Probability
+        mass is preserved by summing mapped token probabilities.
+        """
+        source_probs = self._flatten_if_needed(source_probs)
+
+        if self._same_vocab_size(source_tokenizer, target_tokenizer):
+            return source_probs
+
+        alignment_map = self._build_alignment_map(source_tokenizer, target_tokenizer)
+        target_vocab_size = len(target_tokenizer.get_vocab())
+        target_probs = self._init_target_probs(target_vocab_size)
+
+        for source_id, prob in enumerate(source_probs):
+            if prob <= 0.0:
+                continue
+            target_ids = alignment_map.get(source_id)
+            if not target_ids:
+                continue
+            share = prob / len(target_ids)
+            for target_id in target_ids:
+                if target_id < target_vocab_size:
+                    target_probs[target_id] += share
+
+        return self._normalize_probs(target_probs)
 
 
 class SemanticMappingTranslator(VocabularyTranslator):
@@ -155,10 +273,8 @@ class SemanticMappingTranslator(VocabularyTranslator):
     based on embedding distance.
     """
 
-    def __init__(self, use_cache: bool = True, similarity_threshold: float = 0.5):
-        self._mapping_cache: Dict[str, Dict[int, int]] = {}
-        self._embedding_cache: Dict[str, np.ndarray] = {}
-        self.use_cache = use_cache
+    def __init__(self, use_cache: bool = True, verbose: bool = False, similarity_threshold: float = 0.5):
+        super().__init__(use_cache=use_cache, verbose=verbose)
         self.similarity_threshold = similarity_threshold
 
     def _get_token_embedding(self, token: str) -> np.ndarray:
@@ -192,11 +308,12 @@ class SemanticMappingTranslator(VocabularyTranslator):
         target_tokenizer: 'PreTrainedTokenizerBase'
     ) -> Dict[int, int]:
         """Builds a semantic mapping from source to target token IDs."""
-        cache_key = f"{source_tokenizer.name_or_path}-semantic-{target_tokenizer.name_or_path}"
-        if self.use_cache and cache_key in self._mapping_cache:
-            return self._mapping_cache[cache_key]
+        cache_key = self._make_cache_key(source_tokenizer, target_tokenizer, "semantic")
+        cached = self._get_cached(cache_key)
+        if cached is not None:
+            return cached
 
-        print(f"Building semantic mapping from {source_tokenizer.name_or_path} to {target_tokenizer.name_or_path}...")
+        self._log_build_start(source_tokenizer.name_or_path, target_tokenizer.name_or_path, "semantic")
 
         source_vocab = source_tokenizer.get_vocab()
         target_vocab = target_tokenizer.get_vocab()
@@ -227,10 +344,8 @@ class SemanticMappingTranslator(VocabularyTranslator):
                 semantic_map[source_id] = target_ids[best_idx]
                 mapped_count += 1
 
-        if self.use_cache:
-            self._mapping_cache[cache_key] = semantic_map
-
-        print(f"Semantic mapping built. Mapped {mapped_count} of {len(source_vocab)} tokens.")
+        self._set_cached(cache_key, semantic_map)
+        self._log_build_complete(mapped_count, len(source_vocab), "semantic")
         return semantic_map
 
     def translate_logits(
@@ -240,19 +355,14 @@ class SemanticMappingTranslator(VocabularyTranslator):
         target_tokenizer: 'PreTrainedTokenizerBase'
     ) -> np.ndarray:
         """Translates logits using semantic token mapping."""
-        if source_logits.ndim > 1:
-            source_logits = source_logits.flatten()
+        source_logits = self._flatten_if_needed(source_logits)
 
-        source_vocab_size = len(source_tokenizer.get_vocab())
-        target_vocab_size = len(target_tokenizer.get_vocab())
-
-        if source_vocab_size == target_vocab_size:
+        if self._same_vocab_size(source_tokenizer, target_tokenizer):
             return source_logits
 
         semantic_map = self._build_semantic_map(source_tokenizer, target_tokenizer)
-
-        # Initialize with small negative values
-        target_logits = np.full(target_vocab_size, -10.0, dtype=np.float32)
+        target_vocab_size = len(target_tokenizer.get_vocab())
+        target_logits = self._init_target_logits(target_vocab_size)
 
         for source_id, logit_value in enumerate(source_logits):
             if source_id in semantic_map:
@@ -271,13 +381,10 @@ class SubwordDecompositionTranslator(VocabularyTranslator):
     """
 
     def __init__(self, use_cache: bool = True, verbose: bool = False):
-        self._decomposition_cache: Dict[str, Dict[int, List[Tuple[int, float]]]] = {}
-        self.use_cache = use_cache
-        self.verbose = verbose
+        super().__init__(use_cache=use_cache, verbose=verbose)
 
     def _decompose_token(self, token: str, target_tokenizer: 'PreTrainedTokenizerBase') -> List[int]:
         """Decompose a token string into target tokenizer's subword IDs."""
-        # Use the target tokenizer to break down the token
         subword_ids = target_tokenizer.encode(token, add_special_tokens=False)
         return subword_ids
 
@@ -290,11 +397,12 @@ class SubwordDecompositionTranslator(VocabularyTranslator):
         Builds a map from source token IDs to weighted target subword IDs.
         Each target subword gets a weight based on its position and contribution.
         """
-        cache_key = f"{source_tokenizer.name_or_path}-subword-{target_tokenizer.name_or_path}"
-        if self.use_cache and cache_key in self._decomposition_cache:
-            return self._decomposition_cache[cache_key]
+        cache_key = self._make_cache_key(source_tokenizer, target_tokenizer, "subword")
+        cached = self._get_cached(cache_key)
+        if cached is not None:
+            return cached
 
-        print(f"Building subword decomposition map from {source_tokenizer.name_or_path} to {target_tokenizer.name_or_path}...")
+        self._log_build_start(source_tokenizer.name_or_path, target_tokenizer.name_or_path, "subword decomposition")
 
         source_vocab = source_tokenizer.get_vocab()
         decomposition_map: Dict[int, List[Tuple[int, float]]] = {}
@@ -311,7 +419,6 @@ class SubwordDecompositionTranslator(VocabularyTranslator):
 
             if target_subword_ids:
                 # Weight subwords: first subword gets highest weight, decreasing for continuations
-                num_subwords = len(target_subword_ids)
                 weighted_subwords = []
                 for i, subword_id in enumerate(target_subword_ids):
                     # Weight decreases for later subwords (continuation tokens)
@@ -320,10 +427,8 @@ class SubwordDecompositionTranslator(VocabularyTranslator):
 
                 decomposition_map[source_id] = weighted_subwords
 
-        if self.use_cache:
-            self._decomposition_cache[cache_key] = decomposition_map
-
-        print(f"Subword decomposition map built. Mapped {len(decomposition_map)} of {len(source_vocab)} tokens.")
+        self._set_cached(cache_key, decomposition_map)
+        self._log_build_complete(len(decomposition_map), len(source_vocab), "subword decomposition")
         return decomposition_map
 
     def translate_logits(
@@ -333,19 +438,14 @@ class SubwordDecompositionTranslator(VocabularyTranslator):
         target_tokenizer: 'PreTrainedTokenizerBase'
     ) -> np.ndarray:
         """Translates logits using subword decomposition."""
-        if source_logits.ndim > 1:
-            source_logits = source_logits.flatten()
+        source_logits = self._flatten_if_needed(source_logits)
 
-        source_vocab_size = len(source_tokenizer.get_vocab())
-        target_vocab_size = len(target_tokenizer.get_vocab())
-
-        if source_vocab_size == target_vocab_size:
+        if self._same_vocab_size(source_tokenizer, target_tokenizer):
             return source_logits
 
         decomposition_map = self._build_decomposition_map(source_tokenizer, target_tokenizer)
-
-        # Initialize with small negative values
-        target_logits = np.full(target_vocab_size, -10.0, dtype=np.float32)
+        target_vocab_size = len(target_tokenizer.get_vocab())
+        target_logits = self._init_target_logits(target_vocab_size)
 
         for source_id, logit_value in enumerate(source_logits):
             if source_id in decomposition_map:
@@ -366,12 +466,12 @@ class FallbackToUnkTranslator(VocabularyTranslator):
     are collapsed to the UNK token.
     """
 
-    def __init__(self, unk_token: str = "<unk>", use_cache: bool = True):
-        self._mapping_cache: Dict[str, Tuple[Dict[int, int], int]] = {}
+    # Common UNK token variants
+    UNK_VARIANTS = ["<unk>", "[UNK]", "<UNK>", "unk", "<|unk|>"]
+
+    def __init__(self, unk_token: str = "<unk>", use_cache: bool = True, verbose: bool = False):
+        super().__init__(use_cache=use_cache, verbose=verbose)
         self.unk_token = unk_token
-        self.use_cache = use_cache
-        # Common UNK token variants
-        self._unk_variants = ["<unk>", "[UNK]", "<UNK>", "unk", "<|unk|>"]
 
     def _find_unk_token_id(self, tokenizer: 'PreTrainedTokenizerBase') -> int:
         """Find the UNK token ID in the tokenizer's vocabulary."""
@@ -382,7 +482,7 @@ class FallbackToUnkTranslator(VocabularyTranslator):
             return vocab[self.unk_token]
 
         # Try common variants
-        for variant in self._unk_variants:
+        for variant in self.UNK_VARIANTS:
             if variant in vocab:
                 return vocab[variant]
 
@@ -403,11 +503,12 @@ class FallbackToUnkTranslator(VocabularyTranslator):
         Unknown tokens map to the UNK token ID.
         Returns (mapping dict, unk_token_id).
         """
-        cache_key = f"{source_tokenizer.name_or_path}-unk-{target_tokenizer.name_or_path}"
-        if self.use_cache and cache_key in self._mapping_cache:
-            return self._mapping_cache[cache_key]
+        cache_key = self._make_cache_key(source_tokenizer, target_tokenizer, "unk")
+        cached = self._get_cached(cache_key)
+        if cached is not None:
+            return cached
 
-        print(f"Building UNK fallback mapping from {source_tokenizer.name_or_path} to {target_tokenizer.name_or_path}...")
+        self._log_build_start(source_tokenizer.name_or_path, target_tokenizer.name_or_path, "UNK fallback")
 
         source_vocab = source_tokenizer.get_vocab()
         target_vocab = target_tokenizer.get_vocab()
@@ -425,10 +526,13 @@ class FallbackToUnkTranslator(VocabularyTranslator):
                 mapping[source_id] = unk_id
 
         result = (mapping, unk_id)
-        if self.use_cache:
-            self._mapping_cache[cache_key] = result
+        self._set_cached(cache_key, result)
 
-        print(f"UNK fallback mapping built. {direct_matches} direct matches, {len(source_vocab) - direct_matches} mapped to UNK.")
+        unk_count = len(source_vocab) - direct_matches
+        if self.verbose:
+            logger.info(f"UNK fallback map built. {direct_matches} direct, {unk_count} to UNK.")
+        else:
+            logger.debug(f"UNK fallback map built. {direct_matches} direct, {unk_count} to UNK.")
         return result
 
     def translate_logits(
@@ -438,19 +542,14 @@ class FallbackToUnkTranslator(VocabularyTranslator):
         target_tokenizer: 'PreTrainedTokenizerBase'
     ) -> np.ndarray:
         """Translates logits, mapping unknown tokens to UNK."""
-        if source_logits.ndim > 1:
-            source_logits = source_logits.flatten()
+        source_logits = self._flatten_if_needed(source_logits)
 
-        source_vocab_size = len(source_tokenizer.get_vocab())
-        target_vocab_size = len(target_tokenizer.get_vocab())
-
-        if source_vocab_size == target_vocab_size:
+        if self._same_vocab_size(source_tokenizer, target_tokenizer):
             return source_logits
 
         mapping, unk_id = self._build_mapping_with_unk(source_tokenizer, target_tokenizer)
-
-        # Initialize with small negative values
-        target_logits = np.full(target_vocab_size, -10.0, dtype=np.float32)
+        target_vocab_size = len(target_tokenizer.get_vocab())
+        target_logits = self._init_target_logits(target_vocab_size)
 
         # Accumulate UNK logits separately (use logsumexp for probability aggregation)
         unk_logits = []

@@ -1,9 +1,12 @@
 """Unified transformer pipeline for consistent processing across models"""
 
+import logging
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -221,7 +224,7 @@ class UnifiedTransformerPipeline:
         # Execute pipeline
         for step in self.steps:
             if self.verbose:
-                print(f"  Executing step: {step.name}")
+                logger.debug(f"Executing step: {step.name}")
             
             state = step.execute(state)
         

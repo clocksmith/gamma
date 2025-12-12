@@ -5,6 +5,8 @@ from typing import Any, Dict, Optional, List
 from dataclasses import dataclass
 import numpy as np
 
+from src.mind_meld.utils import VerboseLoggerMixin
+
 
 @dataclass
 class SwapDecision:
@@ -19,7 +21,7 @@ class SwapDecision:
             self.metadata = {}
 
 
-class SwapStrategyBase(ABC):
+class SwapStrategyBase(ABC, VerboseLoggerMixin):
     """Base class for all swap strategies."""
 
     def __init__(self, verbose: bool = False):
@@ -80,11 +82,6 @@ class SwapStrategyBase(ABC):
             'token_count': self.token_count,
             'swap_rate': self.swap_count / max(self.token_count, 1)
         }
-
-    def _log(self, message: str):
-        """Log message if verbose."""
-        if self.verbose:
-            print(f"[{self.__class__.__name__}] {message}")
 
 
 class FixedIntervalStrategy(SwapStrategyBase):

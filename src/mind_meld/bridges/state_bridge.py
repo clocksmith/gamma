@@ -1,9 +1,12 @@
 """State bridging between different models"""
 
+import logging
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass
 import numpy as np
+
+logger = logging.getLogger(__name__)
 from src.mind_meld.translators.kv_cache_translator import KVCacheTranslator, CacheMetadata
 from src.mind_meld.translators.vocabulary_aligner import VocabularyAligner, VocabularyMapping
 
@@ -131,8 +134,8 @@ class StateBridge:
             }
             
             if self.verbose:
-                print(f"  ✓ Bridged KV cache using {translation_mode} mode")
-            
+                logger.debug(f"Bridged KV cache using {translation_mode} mode")
+
         except Exception as e:
             bridge_state.warnings.append(f"KV cache bridge failed: {e}")
             bridge_state.success = False
@@ -184,8 +187,8 @@ class StateBridge:
             }
             
             if self.verbose:
-                print(f"  ✓ Bridged hidden states using {translation_mode} mode")
-            
+                logger.debug(f"Bridged hidden states using {translation_mode} mode")
+
         except Exception as e:
             bridge_state.warnings.append(f"Hidden states bridge failed: {e}")
     
@@ -229,8 +232,8 @@ class StateBridge:
             }
             
             if self.verbose:
-                print(f"  ✓ Bridged attention using {translation_mode} mode")
-            
+                logger.debug(f"Bridged attention using {translation_mode} mode")
+
         except Exception as e:
             bridge_state.warnings.append(f"Attention bridge failed: {e}")
     
@@ -286,8 +289,8 @@ class StateBridge:
                 )
             
             if self.verbose:
-                print(f"  ✓ Bridged context")
-            
+                logger.debug("Bridged context")
+
         except Exception as e:
             bridge_state.warnings.append(f"Context bridge failed: {e}")
     

@@ -4,6 +4,7 @@ import numpy as np
 from typing import Any, Dict, Optional
 from collections import deque
 
+from src.engines import sampling_utils
 from .base_strategy import SwapStrategyBase, SwapDecision
 
 
@@ -56,7 +57,7 @@ class PerplexitySwapStrategy(SwapStrategyBase):
             Perplexity value
         """
         # Handle NaN/inf in logits
-        logits = np.nan_to_num(logits, nan=-1e10, posinf=1e10, neginf=-1e10)
+        logits = sampling_utils.sanitize_logits(logits)
 
         # Convert to probabilities using stable softmax
         logits_shifted = logits - np.max(logits)
@@ -89,7 +90,7 @@ class PerplexitySwapStrategy(SwapStrategyBase):
             Entropy value
         """
         # Convert to probabilities
-        logits = np.nan_to_num(logits, nan=-1e10, posinf=1e10, neginf=-1e10)
+        logits = sampling_utils.sanitize_logits(logits)
         logits_shifted = logits - np.max(logits)
         exp_logits = np.exp(logits_shifted)
         probs = exp_logits / np.sum(exp_logits)

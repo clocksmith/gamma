@@ -16,10 +16,15 @@ from src.engines import sampling_utils as sampling
 
 class PyTorchEngine(LLMEngine):
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
-        print("PyTorchEngine INITIALIZED WITH NEW CODE")
+        logger.debug("PyTorchEngine initialized.")
         super().__init__(model_name, engine_specific_config)
         self._device: Optional[torch.device] = None
-    
+
+    @property
+    def supports_attention(self) -> bool:
+        """PyTorch engines support attention visualization."""
+        return True
+
     def _safe_to_float32(self, tensor: torch.Tensor) -> torch.Tensor:
         """Safely convert tensor to float32, handling MPS and bfloat16 compatibility."""
         # Always explicitly convert to float32 to avoid float64 issues
@@ -54,26 +59,29 @@ class PyTorchEngine(LLMEngine):
                     supported_archs = torch.cuda.get_arch_list()
                     # gfx1151 is not in the supported list for pre-built PyTorch ROCm wheels
                     if arch_name not in supported_archs and arch_name.startswith('gfx'):
-                        print(f"⚠️  WARNING: GPU architecture '{arch_name}' is not supported by this PyTorch build")
-                        print(f"   Supported architectures: {', '.join(supported_archs)}")
-                        print(f"   Forcing CPU-only execution to avoid 'invalid device function' errors")
-                        print(f"   For GPU support, rebuild PyTorch from source with: PYTORCH_ROCM_ARCH={arch_name}")
+                        logger.warning(f"GPU architecture '{arch_name}' is not supported by this PyTorch build")
+                        logger.warning(f"Supported architectures: {', '.join(supported_archs)}")
+                        logger.warning("Forcing CPU-only execution to avoid 'invalid device function' errors")
+                        logger.warning(f"For GPU support, rebuild PyTorch from source with: PYTORCH_ROCM_ARCH={arch_name}")
                         force_cpu = True
             except Exception as e:
-                print(f"PyTorchEngine: Could not check GPU compatibility: {e}")
+                logger.debug(f"PyTorchEngine: Could not check GPU compatibility: {e}")
 
         quant_cfg_dict = {}; compute_dtype_str = self.engine_config.get("bnb_4bit_compute_dtype", "bfloat16")
         try: bnb_compute_dtype = getattr(torch, compute_dtype_str)
         except AttributeError:
-            print(f"PyTorchEngine Warning: bnb_4bit_compute_dtype '{compute_dtype_str}' not found. Defaulting to bfloat16/float16.")
+            logger.warning(f"PyTorchEngine: bnb_4bit_compute_dtype '{compute_dtype_str}' not found. Defaulting to bfloat16/float16.")
             bnb_compute_dtype = torch.bfloat16 if hasattr(torch, "bfloat16") else torch.float16
         if self.engine_config.get("load_in_4bit", False):
             quant_cfg_dict = {"load_in_4bit": True, "bnb_4bit_quant_type": self.engine_config.get("bnb_4bit_quant_type", "nf4"),
                               "bnb_4bit_use_double_quant": self.engine_config.get("bnb_4bit_use_double_quant", False), "bnb_4bit_compute_dtype": bnb_compute_dtype}
-            print(f"PyTorchEngine: Applying 4-bit quantization: {quant_cfg_dict}")
-        elif self.engine_config.get("load_in_8bit", False): quant_cfg_dict = {"load_in_8bit": True}; print("PyTorchEngine: Applying 8-bit quantization.")
+            logger.info(f"PyTorchEngine: Applying 4-bit quantization: {quant_cfg_dict}")
+        elif self.engine_config.get("load_in_8bit", False):
+            quant_cfg_dict = {"load_in_8bit": True}
+            logger.info("PyTorchEngine: Applying 8-bit quantization.")
         quantization_config_obj = BitsAndBytesConfig(**quant_cfg_dict) if quant_cfg_dict else None
-        if quant_cfg_dict and not quantization_config_obj: print(f"PyTorchEngine Warning: BitsAndBytesConfig failed with {quant_cfg_dict}")
+        if quant_cfg_dict and not quantization_config_obj:
+            logger.warning(f"PyTorchEngine: BitsAndBytesConfig failed with {quant_cfg_dict}")
         # Determine torch dtype for model loading (important for Gemma models)
         torch_dtype = None
         if not quantization_config_obj:  # Only set dtype when not using quantization
@@ -91,15 +99,15 @@ class PyTorchEngine(LLMEngine):
             device_map = "cpu"
             # Disable quantization on CPU (not supported properly)
             if quantization_config_obj:
-                print(f"PyTorchEngine: Disabling quantization (not supported on CPU)")
+                logger.info("PyTorchEngine: Disabling quantization (not supported on CPU)")
                 quantization_config_obj = None
                 quant_cfg_dict = {}
             # CPU doesn't support bfloat16 well, force float32
             if torch_dtype == torch.bfloat16:
                 torch_dtype = torch.float32
-                print(f"PyTorchEngine: Using device_map='cpu' with float32 (CPU doesn't support bfloat16)")
+                logger.info("PyTorchEngine: Using device_map='cpu' with float32 (CPU doesn't support bfloat16)")
             else:
-                print(f"PyTorchEngine: Using device_map='cpu' due to unsupported GPU architecture")
+                logger.info("PyTorchEngine: Using device_map='cpu' due to unsupported GPU architecture")
         low_cpu_mem = self.engine_config.get("low_cpu_mem_usage", True)
 
         # If we have a device_map, we must use low_cpu_mem_usage=True
@@ -121,29 +129,29 @@ class PyTorchEngine(LLMEngine):
         # If forcing CPU, warn about models that may not work
         if force_cpu:
             # Some large models have built-in quantization/optimizations that require GPU
-            print(f"PyTorchEngine: Note - loading on CPU (large models may fail or use excessive RAM)")
+            logger.info("PyTorchEngine: loading on CPU (large models may fail or use excessive RAM)")
             # Known problematic models on unsupported GPUs
             problematic_models = ['gpt-oss', 'llama-3', 'mixtral']
             if any(name in self.model_name.lower() for name in problematic_models):
-                print(f"⚠️  WARNING: '{self.model_name}' is a large model that may not work on CPU")
-                print(f"   Consider using a smaller model like 'google/gemma-3-1b-it' or 'google/gemma-2-2b-it'")
+                logger.warning(f"'{self.model_name}' is a large model that may not work on CPU")
+                logger.warning("Consider using a smaller model like 'google/gemma-3-1b-it' or 'google/gemma-2-2b-it'")
         
         # Display model info for Gemma models
         if "gemma" in self.model_name.lower() and hasattr(game_config, 'GEMMA_MODEL_INFO'):
             model_info = game_config.GEMMA_MODEL_INFO.get(self.model_name, {})
             if model_info:
-                print(f"PyTorchEngine: Loading '{self.model_name}' ({model_info.get('desc', 'N/A')})")
-                print(f"  Parameters: ~{model_info.get('params_b', 'N/A')}B | Model Size: ~{model_info.get('raw_model_gb', 'N/A')}GB | Recommended RAM: {model_info.get('rec_ram_gb', 'N/A')}")
+                logger.info(f"PyTorchEngine: Loading '{self.model_name}' ({model_info.get('desc', 'N/A')})")
+                logger.info(f"Parameters: ~{model_info.get('params_b', 'N/A')}B | Model Size: ~{model_info.get('raw_model_gb', 'N/A')}GB | Recommended RAM: {model_info.get('rec_ram_gb', 'N/A')}")
             else:
-                print(f"PyTorchEngine: Loading model '{self.model_name}'...")
+                logger.info(f"PyTorchEngine: Loading model '{self.model_name}'...")
         else:
-            print(f"PyTorchEngine: Loading model '{self.model_name}'...")
+            logger.info(f"PyTorchEngine: Loading model '{self.model_name}'...")
         try: 
             # For Gemma-3 models, we need special handling
             if "gemma-3" in self.model_name.lower() or "gemma3" in self.model_name.lower():
                 # Gemma-3 models have a completely different config structure
                 # Just load them normally with trust_remote_code
-                print("Note: Gemma-3 models are experimental and may have compatibility issues")
+                logger.info("Note: Gemma-3 models are experimental and may have compatibility issues")
                 
                 # Remove trust_remote_code from model_kwargs if it exists (we already set it)
                 model_kwargs_gemma3 = model_kwargs.copy()
@@ -168,12 +176,12 @@ class PyTorchEngine(LLMEngine):
                 err_msg += "\nHint: GPU may not support bfloat16. Try --bnb-4bit-compute-dtype float16."
             raise RuntimeError(err_msg) from e
         self._device = self.model.device if hasattr(self.model, "device") else next(self.model.parameters()).device
-        print(f"PyTorchEngine: Model '{self.model_name}' loaded on device: {self._device}")
+        logger.info(f"PyTorchEngine: Model '{self.model_name}' loaded on device: {self._device}")
         
         # Check if KV cache is enabled and warn if using Gemma models
         if self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE):
             if hasattr(self.model.config, 'model_type') and 'gemma' in self.model.config.model_type:
-                print("Note: KV cache enabled with Gemma model. May require attention mask adjustments.")
+                logger.info("Note: KV cache enabled with Gemma model. May require attention mask adjustments.")
         
         self._populate_special_token_map()
         
@@ -251,7 +259,7 @@ class PyTorchEngine(LLMEngine):
         
         # Check for invalid values and handle them
         if torch.isnan(l_raw).any() or torch.isinf(l_raw).any():
-            print("Warning: Invalid logits detected, resetting to zeros")
+            logger.warning("Invalid logits detected, resetting to zeros")
             l_raw = torch.zeros_like(l_raw)
             l_raw[0] = 1.0  # Give some probability to first token
         
@@ -286,7 +294,7 @@ class PyTorchEngine(LLMEngine):
 
         # Ensure we have valid probabilities
         if torch.isnan(p_proc).any() or p_proc.sum() == 0:
-            print("Warning: Invalid probabilities detected, using uniform distribution")
+            logger.warning("Invalid probabilities detected, using uniform distribution")
             p_proc = torch.ones_like(p_proc) / p_proc.shape[-1]
 
         next_id_val = pipeline_results["next_token_id"]
@@ -316,52 +324,12 @@ class PyTorchEngine(LLMEngine):
                     "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), 
                     "forward_time": time.time() - st}
 
-    def get_vocabulary_size(self) -> int:
-        print("GET_VOCAB_SIZE CALLED")
-        if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded.")
-        # Handle different ways vocab_size might be stored
-        if hasattr(self.tokenizer, 'vocab_size'):
-            return self.tokenizer.vocab_size
-        elif hasattr(self.tokenizer, 'get_vocab_size'):
-            return self.tokenizer.get_vocab_size()
-        elif hasattr(self.model, 'config') and hasattr(self.model.config, 'vocab_size'):
-            return self.model.config.vocab_size
-        else:
-            # Try to get from vocabulary
-            try:
-                return len(self.tokenizer.get_vocab())
-            except (AttributeError, TypeError) as e:
-                logger.warning(f"Could not determine vocab size: {e}")
-                return -1
+    # get_vocabulary_size uses base class implementation
 
     def _decode_token_raw(self, token_id: int) -> str:
         """Decode a single token ID using PyTorch/HuggingFace tokenizer."""
-        token_text_str = self.tokenizer.convert_ids_to_tokens([token_id])[0]
-        if isinstance(token_text_str, bytes):
-            token_text_str = token_text_str.decode("utf-8", errors="replace")
-
-        # Check if this is a special token (enclosed in brackets or angle brackets)
-        if (token_text_str.startswith('[') and token_text_str.endswith(']')) or \
-           (token_text_str.startswith('<') and token_text_str.endswith('>')):
-            return token_text_str
-
-        # Remove leading underscore (used by sentencepiece to indicate start of word)
-        if token_text_str.startswith("▁"):
-            token_text_str = token_text_str[1:]
-            if not token_text_str:
-                token_text_str = " "
-        # Also handle regular underscore at the start
-        elif token_text_str.startswith("_"):
-            token_text_str = token_text_str[1:]
-            if not token_text_str:
-                token_text_str = " "
-
-        # Fallback for empty strings
-        if not token_text_str:
-            decoded_raw_str = self.tokenizer.decode([token_id], skip_special_tokens=False)
-            token_text_str = decoded_raw_str.strip() if decoded_raw_str and decoded_raw_str != self.tokenizer.unk_token else ""
-
-        return token_text_str
+        # Delegate to base class HuggingFace common implementation
+        return self._decode_token_hf_common(token_id)
 
     def get_attention_for_visualization(self, attention_output: Any, input_ids_for_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
         if not (attention_output and isinstance(attention_output, tuple) and len(attention_output) > 0 and isinstance(attention_output[-1], torch.Tensor)): return None
@@ -375,7 +343,9 @@ class PyTorchEngine(LLMEngine):
             ids_list_viz = (input_ids_for_viz.squeeze(0) if input_ids_for_viz.dim() > 1 else input_ids_for_viz).cpu().tolist()
             num_tokens = min(len(ids_list_viz), len(normalized_scores))
             return [self.get_token_text(tid) for tid in ids_list_viz[:num_tokens]], normalized_scores[:num_tokens].cpu().tolist()
-        except Exception as e: print(f"PyTorchEngine: Error processing attention - {e}"); return None
+        except Exception as e:
+            logger.debug(f"PyTorchEngine: Error processing attention - {e}")
+            return None
 
     def get_probabilities_at_step(self, data: Any, step_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, torch.Tensor): 
@@ -543,7 +513,7 @@ class PyTorchEngine(LLMEngine):
                 'engine_type': 'pytorch'
             }
         except Exception as e:
-            print(f"PyTorchEngine: Failed to export KV cache: {e}")
+            logger.warning(f"PyTorchEngine: Failed to export KV cache: {e}")
             return None
     
     def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
@@ -565,7 +535,7 @@ class PyTorchEngine(LLMEngine):
             self._kv_cache = tuple(new_cache) if new_cache else None
             return True
         except Exception as e:
-            print(f"PyTorchEngine: Failed to import KV cache: {e}")
+            logger.warning(f"PyTorchEngine: Failed to import KV cache: {e}")
             return False
     
     def append_to_input(self, input_ids: Any, new_token_id: int) -> torch.Tensor:
