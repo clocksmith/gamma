@@ -430,18 +430,30 @@ class PyTorchEngine(LLMEngine):
             return np.array(tensor)
     
     def convert_from_numpy(self, array: np.ndarray) -> torch.Tensor:
-        """Convert numpy array to PyTorch tensor."""
+        """Convert numpy array to PyTorch tensor, matching model dtype."""
         if not self._device:
             self._device = torch.device('cpu')
-        
+
         # Convert numpy array to tensor
         tensor = torch.from_numpy(array)
-        
+
         # For MPS, ensure we don't use float64
         if hasattr(self._device, 'type') and self._device.type == 'mps':
             if tensor.dtype == torch.float64:
                 tensor = tensor.to(torch.float32)
-        
+
+        # Ensure tensor dtype matches model dtype for KV cache compatibility
+        if self.model is not None:
+            try:
+                # Get the model's parameter dtype
+                model_dtype = next(self.model.parameters()).dtype
+                if tensor.dtype != model_dtype:
+                    tensor = tensor.to(model_dtype)
+            except (StopIteration, RuntimeError):
+                # Fallback: use float32 on MPS, otherwise keep original dtype
+                if hasattr(self._device, 'type') and self._device.type == 'mps':
+                    tensor = tensor.to(torch.float32)
+
         return tensor.to(self._device)
     
     def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> torch.Tensor:

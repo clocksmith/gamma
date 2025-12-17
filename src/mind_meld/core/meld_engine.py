@@ -82,8 +82,13 @@ class EngineTokenizerAdapter:
             input_ids = result[0]
             # Convert to list if needed
             if hasattr(input_ids, 'tolist'):
-                return input_ids.tolist()
-            return list(input_ids)
+                ids_list = input_ids.tolist()
+            else:
+                ids_list = list(input_ids)
+            # Flatten if nested (e.g., [[1, 2, 3]] -> [1, 2, 3])
+            if ids_list and isinstance(ids_list[0], list):
+                ids_list = ids_list[0]
+            return ids_list
         return result
 
     def decode(self, token_ids: List[int], skip_special_tokens: bool = False) -> str:
@@ -533,7 +538,8 @@ class MeldEngine:
             )
         elif self.use_blending and self.blender:
             all_logits = [logits_numpy] + self._fetch_other_model_logits(current_full_text)
-            melded_logits = self.blender.blend(all_logits, self.models)
+            model_names = [m.model_name for m in self.models]
+            melded_logits, _blend_stats = self.blender.blend(all_logits, model_names)
             decoding_engine = active_engine
         else:
             # Default: translate logits from active to target model's vocab space
