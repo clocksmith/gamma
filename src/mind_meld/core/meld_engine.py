@@ -54,6 +54,42 @@ from src.mind_meld.core.statistics import StatisticsTracker
 from src.mind_meld.translators.vocabulary_translator import AligningVocabularyTranslator
 from src.mind_meld.visualization import SwapVisualizer, SwapEvent
 
+
+class EngineTokenizerAdapter:
+    """Adapter that wraps an LLMEngine to provide a tokenizer-like interface.
+
+    This allows vocabulary translators to work with engines that implement
+    get_vocab() on the engine class rather than the tokenizer (e.g., LlamaCpp).
+    """
+
+    def __init__(self, engine: LLMEngine):
+        self._engine = engine
+
+    @property
+    def name_or_path(self) -> str:
+        """Return engine model name for cache key generation."""
+        return self._engine.model_name
+
+    def get_vocab(self) -> Dict[str, int]:
+        """Delegate to engine's get_vocab method."""
+        return self._engine.get_vocab()
+
+    def encode(self, text: str, add_special_tokens: bool = True) -> List[int]:
+        """Delegate to engine's encode method."""
+        result = self._engine.encode(text, add_special_tokens=add_special_tokens)
+        # encode() returns (input_ids, attention_mask) tuple
+        if isinstance(result, tuple):
+            input_ids = result[0]
+            # Convert to list if needed
+            if hasattr(input_ids, 'tolist'):
+                return input_ids.tolist()
+            return list(input_ids)
+        return result
+
+    def decode(self, token_ids: List[int], skip_special_tokens: bool = False) -> str:
+        """Delegate to engine's decode method."""
+        return self._engine.decode(token_ids, skip_special_tokens=skip_special_tokens)
+
 class ModelOffloader:
     """Manages model offloading between GPU and CPU for memory-constrained systems.
 
@@ -386,7 +422,7 @@ class MeldEngine:
         all_probs = []
         weights = []
         base_engine = self.models[0]
-        base_vocab_size = len(base_engine.tokenizer.get_vocab())
+        base_vocab_size = len(base_engine.get_vocab())
         logger.debug("Computing weighted average from all models...")
 
         # Use _prepare_inputs_for_engine to leverage KV cache when available
@@ -411,9 +447,9 @@ class MeldEngine:
             )
             probs = sampling_utils.softmax(logits_proc)
 
-            if idx > 0 and len(engine.tokenizer.get_vocab()) != base_vocab_size:
+            if idx > 0 and len(engine.get_vocab()) != base_vocab_size:
                 probs = self.vocab_translator.translate_probabilities(
-                    probs, engine.tokenizer, base_engine.tokenizer
+                    probs, EngineTokenizerAdapter(engine), EngineTokenizerAdapter(base_engine)
                 )
 
             all_probs.append(probs)
@@ -503,8 +539,8 @@ class MeldEngine:
             # Default: translate logits from active to target model's vocab space
             melded_logits = self.vocab_translator.translate_logits(
                 logits_numpy,
-                active_engine.tokenizer,
-                target_engine.tokenizer
+                EngineTokenizerAdapter(active_engine),
+                EngineTokenizerAdapter(target_engine)
             )
             decoding_engine = target_engine
 
@@ -575,7 +611,7 @@ class MeldEngine:
         all_probs = []
 
         base_engine = self.models[0]
-        base_vocab_size = len(base_engine.tokenizer.get_vocab())
+        base_vocab_size = len(base_engine.get_vocab())
 
         # Get logits and probability distributions from all models
         # Use _prepare_inputs_for_engine to leverage KV cache when available
@@ -596,9 +632,9 @@ class MeldEngine:
             logits_clean = sampling_utils.sanitize_logits(logits)
 
             # Align logits to the base vocabulary to keep dimensions consistent
-            if len(model.tokenizer.get_vocab()) != base_vocab_size:
+            if len(model.get_vocab()) != base_vocab_size:
                 logits_clean = self.vocab_translator.translate_logits(
-                    logits_clean, model.tokenizer, base_engine.tokenizer
+                    logits_clean, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )
 
             all_logits.append(logits_clean)
@@ -611,9 +647,9 @@ class MeldEngine:
                 return_intermediates=True
             )
             probs = sampling_utils.softmax(logits_proc)
-            if len(model.tokenizer.get_vocab()) != base_vocab_size:
+            if len(model.get_vocab()) != base_vocab_size:
                 probs = self.vocab_translator.translate_probabilities(
-                    probs, model.tokenizer, base_engine.tokenizer
+                    probs, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )
             all_probs.append(probs)
 
