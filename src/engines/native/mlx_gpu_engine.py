@@ -279,7 +279,7 @@ class MLXGPUEngine(LLMEngine):
         self, attention_output: Any, input_ids_for_viz: Any
     ) -> Optional[Tuple[List[str], List[float]]]:
         """MLX doesn't expose attention weights by default"""
-        if game_config.DEFAULT_VERBOSE or self.engine_config.get("verbose", False):
+        if self.get_verbose():
             print("(MLXGPUEngine: Attention visualization not available in MLX)")
         return None
     

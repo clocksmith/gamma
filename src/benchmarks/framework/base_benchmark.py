@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
+import numpy as np
 
 
 @dataclass
@@ -289,10 +290,27 @@ class SpeedBenchmark(BaseBenchmark):
         prompt = self.prompts[iteration % len(self.prompts)]
 
         # Encode prompt
+        engine.reset_kv_cache()
         input_ids, attention_mask = engine.encode(prompt)
 
         start_time = time.time()
         tokens_generated = 0
+        use_kv_cache = bool(getattr(engine, "supports_kv_cache", False) and engine.get_use_kv_cache())
+
+        def build_single_token_input(token_id: int):
+            token_np = np.array([[token_id]], dtype=np.int64)
+            return engine.convert_from_numpy(token_np)
+
+        def build_single_token_mask():
+            ones_array = np.ones((1, 1), dtype=np.int64)
+            return engine.convert_from_numpy(ones_array)
+
+        def append_attention_mask(mask):
+            if mask is None:
+                return None
+            ones_array = np.ones((1, 1) if len(mask.shape) > 1 else (1,), dtype=np.int64)
+            ones_tensor = engine.convert_from_numpy(ones_array)
+            return engine.concatenate_tensors(mask, ones_tensor, dim=-1)
 
         # Generate tokens
         for _ in range(self.config.max_tokens):
@@ -310,6 +328,14 @@ class SpeedBenchmark(BaseBenchmark):
             if hasattr(engine, 'tokenizer') and hasattr(engine.tokenizer, 'eos_token_id'):
                 if output["next_token_id"] == engine.tokenizer.eos_token_id:
                     break
+
+            if use_kv_cache and engine.has_kv_cache():
+                input_ids = build_single_token_input(output["next_token_id"])
+                if attention_mask is not None:
+                    attention_mask = build_single_token_mask()
+            else:
+                input_ids = engine.append_to_input(input_ids, output["next_token_id"])
+                attention_mask = append_attention_mask(attention_mask)
 
         total_time = time.time() - start_time
         tokens_per_second = tokens_generated / total_time if total_time > 0 else 0

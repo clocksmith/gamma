@@ -68,6 +68,11 @@ class TokenCategory(Enum):
     OTHER = "other"
 
 
+class EngineMode(Enum):
+    INTERACTIVE = "interactive"
+    BENCHMARK = "benchmark"
+
+
 class LLMEngine(ABC):
     def __init__(
         self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None
@@ -91,6 +96,8 @@ class LLMEngine(ABC):
 
     def get_verbose(self) -> bool:
         """Get verbose logging setting."""
+        if self.is_benchmark_mode():
+            return False
         return self.engine_config.get("verbose", False)
 
     def get_max_tokens_for_display(self) -> int:
@@ -100,6 +107,14 @@ class LLMEngine(ABC):
     def get_use_kv_cache(self) -> bool:
         """Get KV cache usage setting."""
         return self.engine_config.get("use_kv_cache", True)
+
+    def get_mode(self) -> str:
+        """Get engine mode (interactive or benchmark)."""
+        return str(self.engine_config.get("mode", EngineMode.INTERACTIVE.value)).lower()
+
+    def is_benchmark_mode(self) -> bool:
+        """Check if engine is in benchmark mode."""
+        return self.get_mode() == EngineMode.BENCHMARK.value
 
     def get_seed(self) -> Optional[int]:
         """Get random seed for reproducibility."""

@@ -1,4 +1,4 @@
-from src.core.engine_interface import LLMEngine
+from src.core.engine_interface import LLMEngine, EngineMode
 from typing import Dict, Any, Optional, List
 import platform
 
@@ -7,6 +7,21 @@ WRAPPER_ENGINES: List[str] = ["ollama", "huggingface_inference", "openai"]  # HT
 NATIVE_ENGINES: List[str] = ["pytorch", "pytorch_cuda", "tensorflow", "jax", "llamacpp", "onnx", "mlx", "mlx_gpu", "vllm"]  # Full logits access
 
 SUPPORTED_ENGINES = WRAPPER_ENGINES + NATIVE_ENGINES
+
+
+def _normalize_engine_config(cli_args_dict: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    config = dict(cli_args_dict) if cli_args_dict is not None else {}
+    mode = str(config.get("mode", EngineMode.INTERACTIVE.value)).lower()
+    if mode not in (EngineMode.INTERACTIVE.value, EngineMode.BENCHMARK.value):
+        mode = EngineMode.INTERACTIVE.value
+    config["mode"] = mode
+
+    if mode == EngineMode.BENCHMARK.value:
+        config["verbose"] = False
+        config["max_tokens_for_prob_display"] = 0
+        config.setdefault("use_kv_cache", True)
+
+    return config
 
 
 def is_wrapper_engine(engine_name: str) -> bool:
@@ -54,7 +69,7 @@ def get_engine(
     cli_args_dict: Optional[Dict[str, Any]] = None,
 ) -> LLMEngine:
     engine_name_lower = engine_name.lower()
-    effective_engine_config = cli_args_dict if cli_args_dict is not None else {}
+    effective_engine_config = _normalize_engine_config(cli_args_dict)
     print(f"""
 EngineFactory: Initializing engine '{engine_name_lower}' with model '{model_identifier}'...""")
 

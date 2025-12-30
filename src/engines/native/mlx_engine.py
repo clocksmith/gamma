@@ -52,7 +52,10 @@ class MLXEngine(LLMEngine):
         self._ensure_tokenizer_loaded()
         hf_tokenizer = self._get_hf_tokenizer()
         if isinstance(ids, mx.array): # type: ignore
-            ids_np = np.array(mx.squeeze(ids, axis=0) if ids.ndim > 1 and ids.shape[0] == 1 else ids) # type: ignore
+            ids_squeezed = mx.squeeze(ids, axis=0) if ids.ndim > 1 and ids.shape[0] == 1 else ids # type: ignore
+            # Cast to int32 to avoid buffer protocol issues with some dtypes
+            ids_int32 = ids_squeezed.astype(mx.int32) if ids_squeezed.dtype != mx.int32 else ids_squeezed
+            ids_np = np.array(ids_int32)
             ids_list = ids_np.tolist()
         elif isinstance(ids, (list, tuple, np.ndarray)): ids_list = list(ids)
         else:
@@ -79,8 +82,10 @@ class MLXEngine(LLMEngine):
             # No cache returned, reset it
 
         # Get raw logits and convert to numpy
+        # Cast to float32 first to avoid buffer protocol issues with bfloat16 (Gemma 3, etc.)
         logits_raw = logits_all_steps[:, -1, :]
-        logits_raw_np = np.array(logits_raw)
+        logits_raw_f32 = logits_raw.astype(mx.float32) if logits_raw.dtype != mx.float32 else logits_raw
+        logits_raw_np = np.array(logits_raw_f32)
 
         # Use common sampling pipeline (consolidates duplicate code)
         pipeline_results = self._process_logits_common_pipeline(logits_raw_np, temperature, top_k, top_p)
@@ -133,6 +138,9 @@ class MLXEngine(LLMEngine):
     def convert_to_numpy(self, tensor: Any) -> np.ndarray:
         """Convert MLX array to numpy array."""
         if isinstance(tensor, mx.array):  # type: ignore
+            # Cast to float32 first to avoid buffer protocol issues with bfloat16
+            if tensor.dtype == mx.bfloat16:  # type: ignore
+                tensor = tensor.astype(mx.float32)  # type: ignore
             return np.array(tensor)
         elif isinstance(tensor, np.ndarray):
             return tensor

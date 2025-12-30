@@ -457,7 +457,7 @@ class MindMeldBenchmark:
                     else:
                         engine_name, model_name = 'pytorch', model_spec
 
-                    engine = get_engine(engine_name, model_name)
+                    engine = get_engine(engine_name, model_name, {"mode": "benchmark"})
                     engine.load()
                     engines.append(engine)
                 except Exception as e:

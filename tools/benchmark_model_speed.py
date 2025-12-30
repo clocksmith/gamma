@@ -30,7 +30,7 @@ def benchmark_model(engine_name: str, model_name: str, num_tokens: int = 50, ite
 
     # Load engine
     try:
-        engine = get_engine(engine_name, model_name, {})
+        engine = get_engine(engine_name, model_name, {"mode": "benchmark"})
         print("Loading model...")
         engine.load()
         print("✓ Model loaded")

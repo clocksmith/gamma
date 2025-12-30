@@ -113,6 +113,7 @@ def run_comprehensive_benchmark(
             "top_k": top_k,
             "top_p": top_p,
             "use_kv_cache": False,  # Disable KV cache for more reliable benchmarking
+            "mode": "benchmark",
         }
         engine = get_engine(engine_name, model_name, engine_config)
         print("Loading model...")
