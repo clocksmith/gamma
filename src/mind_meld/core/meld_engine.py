@@ -325,6 +325,109 @@ class MeldEngine:
             self.auto_multi_blend = True
             logger.info("Auto-enabling weighted averaging for 3+ models (no blend/ABE configured).")
 
+        # --- Advanced Mind Meld Techniques ---
+        # Speculative decoding (draft model proposes, target verifies)
+        self.use_speculative = getattr(args, 'use_speculative', False)
+        self.speculative_k = getattr(args, 'speculative_k', 4)
+        self.speculative_decoder = None
+        if self.use_speculative and len(models) >= 2:
+            try:
+                from src.mind_meld.advanced.speculative_decoding import SpeculativeDecoder
+                self.speculative_decoder = SpeculativeDecoder(
+                    draft_engine=models[0],
+                    target_engine=models[1],
+                    k=self.speculative_k,
+                    verbose=self.verbose
+                )
+                logger.info(f"Speculative decoding enabled (k={self.speculative_k})")
+            except ImportError as e:
+                logger.warning(f"Could not enable speculative decoding: {e}")
+
+        # Contrastive decoding (amplify differences between models)
+        self.use_contrastive = getattr(args, 'use_contrastive', False)
+        self.contrastive_decoder = None
+        if self.use_contrastive and len(models) >= 2:
+            try:
+                from src.mind_meld.advanced.contrastive_decoding import ContrastiveDecoder
+                self.contrastive_decoder = ContrastiveDecoder(
+                    expert_engine=models[0],
+                    amateur_engine=models[1],
+                    verbose=self.verbose
+                )
+                logger.info("Contrastive decoding enabled")
+            except ImportError as e:
+                logger.warning(f"Could not enable contrastive decoding: {e}")
+
+        # MoE Router (content-aware routing)
+        self.use_moe_router = getattr(args, 'use_moe_router', False)
+        self.moe_router = None
+        if self.use_moe_router and len(models) >= 2:
+            try:
+                from src.mind_meld.advanced.moe_router import MoERouter
+                self.moe_router = MoERouter(
+                    models=models,
+                    verbose=self.verbose
+                )
+                logger.info("MoE content-aware routing enabled")
+            except ImportError as e:
+                logger.warning(f"Could not enable MoE router: {e}")
+
+        # Sparse OT Projection for cross-tokenizer blending
+        self.use_sparse_ot = getattr(args, 'use_sparse_ot', False)
+        self.sparse_ot_projector = None
+        if self.use_sparse_ot and len(models) >= 2:
+            try:
+                from src.mind_meld.translators.sparse_ot_projection import SparseOTProjector
+                self.sparse_ot_projector = SparseOTProjector(verbose=self.verbose)
+                logger.info("Sparse OT projection enabled for cross-tokenizer blending")
+            except ImportError as e:
+                logger.warning(f"Could not enable sparse OT projection: {e}")
+
+        # Feedback loop (iterative refinement)
+        self.use_feedback_loop = getattr(args, 'use_feedback_loop', False)
+        self.feedback_loop = None
+        if self.use_feedback_loop and len(models) >= 2:
+            try:
+                from src.mind_meld.advanced.feedback_loop import FeedbackLoop
+                self.feedback_loop = FeedbackLoop(
+                    generator=models[0],
+                    critic=models[1],
+                    verbose=self.verbose
+                )
+                logger.info("Feedback loop refinement enabled")
+            except ImportError as e:
+                logger.warning(f"Could not enable feedback loop: {e}")
+
+        # Adversarial debate
+        self.use_adversarial = getattr(args, 'use_adversarial', False)
+        self.adversarial_debate = None
+        if self.use_adversarial and len(models) >= 2:
+            try:
+                from src.mind_meld.advanced.adversarial import AdversarialDebate
+                self.adversarial_debate = AdversarialDebate(
+                    red_team=models[0],
+                    blue_team=models[1],
+                    verbose=self.verbose
+                )
+                logger.info("Adversarial debate mode enabled")
+            except ImportError as e:
+                logger.warning(f"Could not enable adversarial debate: {e}")
+
+        # Hierarchical control
+        self.use_hierarchical = getattr(args, 'use_hierarchical', False)
+        self.hierarchical_controller = None
+        if self.use_hierarchical and len(models) >= 2:
+            try:
+                from src.mind_meld.advanced.hierarchical_control import HierarchicalController
+                self.hierarchical_controller = HierarchicalController(
+                    meta_model=models[0],
+                    specialist_models=models[1:],
+                    verbose=self.verbose
+                )
+                logger.info("Hierarchical control enabled")
+            except ImportError as e:
+                logger.warning(f"Could not enable hierarchical control: {e}")
+
         # Initialize visualizer for tracking model swaps and contributions
         model_names = [m.model_name for m in models]
         self.visualizer = SwapVisualizer(model_names=model_names, enable_color=True)

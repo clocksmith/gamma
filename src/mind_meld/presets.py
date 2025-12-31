@@ -270,12 +270,12 @@ def apply_preset_to_args(preset: MeldPreset, args: Any):
     args.steps = preset.max_tokens
     args.swap_strategy = preset.strategy
 
-    # Advanced features
+    # Advanced features (match CLI flag names)
     args.use_speculative = preset.use_speculative
     args.use_contrastive = preset.use_contrastive
     args.use_abe = preset.use_abe
-    args.use_moe = preset.use_moe
-    args.use_feedback = preset.use_feedback
+    args.use_moe_router = preset.use_moe  # CLI uses --use-moe-router
+    args.use_feedback_loop = preset.use_feedback  # CLI uses --use-feedback-loop
     args.use_hierarchical = preset.use_hierarchical
     args.use_adversarial = preset.use_adversarial
 

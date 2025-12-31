@@ -270,7 +270,25 @@ def parse_arguments() -> argparse.Namespace:
                             help="Initial prompt to seed Mind Meld generation")
     mind_group.add_argument("--use-model-offloading", action="store_true", default=False,
                             help="Offload inactive models to CPU to save GPU memory (useful for large models)")
-    
+
+    # Advanced Mind Meld techniques
+    mind_group.add_argument("--use-speculative", action="store_true", default=False,
+                            help="Enable speculative decoding (2-3x speedup with draft+target model)")
+    mind_group.add_argument("--speculative-k", type=int, default=4,
+                            help="Number of tokens to propose in speculative decoding")
+    mind_group.add_argument("--use-contrastive", action="store_true", default=False,
+                            help="Enable contrastive decoding for divergent model guidance")
+    mind_group.add_argument("--use-moe-router", action="store_true", default=False,
+                            help="Enable content-aware MoE routing (code/math/creative/etc)")
+    mind_group.add_argument("--use-feedback-loop", action="store_true", default=False,
+                            help="Enable iterative self-critique refinement")
+    mind_group.add_argument("--use-adversarial", action="store_true", default=False,
+                            help="Enable adversarial debate between models")
+    mind_group.add_argument("--use-hierarchical", action="store_true", default=False,
+                            help="Enable hierarchical control (meta-model + specialists)")
+    mind_group.add_argument("--use-sparse-ot", action="store_true", default=False,
+                            help="Use Optimal Transport for cross-tokenizer blending")
+
     mlx_group = parser.add_argument_group("MLX Engine Options")
     mlx_group.add_argument("--mlx-adapter-path", type=str, default=None,
                            help="MLX: Path to LoRA adapter")

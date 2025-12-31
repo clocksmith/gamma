@@ -10,10 +10,12 @@ Mind Meld is GAMMA’s playground for running **multiple models at the same time
 |------|---------------|-------------|
 | **Token Ensemble** (`--use-blending`) | Every model stays active; logits are merged before sampling the next token. | Create a single voice from several models. |
 | **Token Handoff** (swap strategies) | Only one model writes at a time; the active model can change on punctuation, confidence drops, etc. | Give specialists turns (code vs story, large vs small). |
-| **MoE Router** (programmatic) | The prompt is classified each step (code, dialogue, math, etc.) and dispatched to the best model. | You have clearly specialised models. |
-| **Contrastive Decoding** (programmatic) | An expert model's logits are boosted while "generic" models are subtracted. | Let a big model steer, keep faster models around for safety. |
-
-**Note:** MoE Router and Contrastive Decoding are available via the Python API but not yet exposed via CLI flags.
+| **MoE Router** (`--use-moe-router`) | The prompt is classified each step (code, dialogue, math, etc.) and dispatched to the best model. | You have clearly specialised models. |
+| **Contrastive Decoding** (`--use-contrastive`) | An expert model's logits are boosted while "generic" models are subtracted. | Let a big model steer, keep faster models around for safety. |
+| **Speculative Decoding** (`--use-speculative`) | Draft model proposes tokens, target model verifies in parallel. 2-3x speedup. | Speed up generation with small+large model pairs. |
+| **Feedback Loop** (`--use-feedback-loop`) | Generator creates, critic refines iteratively. | Self-critique for higher quality output. |
+| **Adversarial Debate** (`--use-adversarial`) | Red team proposes, blue team challenges to reach consensus. | Fact-checking and reasoning tasks. |
+| **Hierarchical Control** (`--use-hierarchical`) | Meta-model plans, specialist models execute each step. | Complex multi-step generation. |
 
 You can mix these moves: e.g. blend two models most of the time but still swap to a third specialist when punctuation hits.
 
@@ -43,11 +45,36 @@ python gamma.py mind-meld \
 python gamma.py mind-meld \
   --models model1 model2 \
   --strategy perplexity
+
+# 5. Speculative decoding for 2-3x speed
+python gamma.py mind-meld \
+  --models pytorch:google/gemma-2-2b-it pytorch:google/gemma-3-1b-it \
+  --use-speculative --speculative-k 4
+
+# 6. Content-aware MoE routing
+python gamma.py mind-meld \
+  --models model1 model2 \
+  --use-moe-router
+
+# 7. Contrastive decoding (expert vs amateur)
+python gamma.py mind-meld \
+  --models pytorch:large-model pytorch:small-model \
+  --use-contrastive
+
+# 8. Feedback loop refinement
+python gamma.py mind-meld \
+  --models model1 model2 \
+  --use-feedback-loop
+
+# 9. Adversarial debate mode
+python gamma.py mind-meld \
+  --models model1 model2 \
+  --use-adversarial
 ```
 
 Tip: add `--prompt "Your starting text" --steps 200` to any command above.
 
-### Programmatic API (for MoE Router & Contrastive Decoding)
+### Programmatic API
 
 ```python
 from src.mind_meld.core.meld_engine import MeldEngine

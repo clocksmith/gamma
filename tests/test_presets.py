@@ -343,8 +343,8 @@ class TestApplyPresetToArgs(unittest.TestCase):
         self.assertEqual(args.use_speculative, preset.use_speculative)
         self.assertEqual(args.use_contrastive, preset.use_contrastive)
         self.assertEqual(args.use_abe, preset.use_abe)
-        self.assertEqual(args.use_moe, preset.use_moe)
-        self.assertEqual(args.use_feedback, preset.use_feedback)
+        self.assertEqual(args.use_moe_router, preset.use_moe)  # CLI flag is --use-moe-router
+        self.assertEqual(args.use_feedback_loop, preset.use_feedback)  # CLI flag is --use-feedback-loop
         self.assertEqual(args.use_hierarchical, preset.use_hierarchical)
         self.assertEqual(args.use_adversarial, preset.use_adversarial)
 
