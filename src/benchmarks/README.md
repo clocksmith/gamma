@@ -88,14 +88,14 @@ The benchmark suite has been upgraded with the **DREAM** framework:
 ### Quick Start
 
 ```bash
-# Basic JS vs TS comparison (mock responses by default)
+# Basic JS vs TS comparison (uses mock by default, or configure API keys)
 node src/benchmarks/dream/index.js
 
 # Add scripting and backend tasks
 node src/benchmarks/dream/index.js --extended
 
-# Include browser/React tasks (requires Playwright + --real)
-node src/benchmarks/dream/index.js --ui --include-browser --real
+# Include browser/React tasks (requires Playwright)
+node src/benchmarks/dream/index.js --ui --include-browser
 
 # Explore configuration
 node src/benchmarks/dream/index.js --help
@@ -145,21 +145,23 @@ node query_cli.js --help
 
 ### Configuration & Documentation
 
-- **DREAM Guide**: See [dream/DREAM_GUIDE.md](dream/DREAM_GUIDE.md) for complete documentation
-- **Improvements**: See [dream/IMPROVEMENTS.md](dream/IMPROVEMENTS.md) for what's new
-- **Original Docs**: [dream/README.md](dream/README.md)
+See [dream/README.md](dream/README.md) for complete documentation, including:
+- Available providers and variants
+- Creating custom tasks
+- Report generation
+- Troubleshooting
 
 ### Example Workflows
 
 ```bash
-# Development: fast language comparison (dry-run)
+# Development: fast language comparison (uses mock by default)
 node src/benchmarks/dream/index.js --basic
 
 # Backend/server evaluation with live models
-node src/benchmarks/dream/index.js --extended --provider openai-gpt4 --real
+node src/benchmarks/dream/index.js --extended --provider openai-gpt4
 
 # UI/React coverage with Playwright
-node src/benchmarks/dream/index.js --ui --include-browser --real
+node src/benchmarks/dream/index.js --ui --include-browser
 
 # Inspect available knobs
 node src/benchmarks/dream/index.js --list-providers
@@ -170,8 +172,7 @@ node src/benchmarks/dream/index.js --list-categories
 
 ## See Also
 
-- [DREAM Guide](dream/DREAM_GUIDE.md) - Complete guide to new features
-- [Improvements](dream/IMPROVEMENTS.md) - What's new in DREAM
-- [DREAM Benchmarks](dream/README.md) - Original documentation
-- [Query Interface](dream/query_interface.js) - Natural language queries
-- [Main README](../README.md) - Project overview
+- [DREAM Benchmarks](dream/README.md) - Complete benchmark suite documentation
+- [Mind Meld Benchmark](mind_meld_benchmark.py) - Strategy comparison benchmarks
+- [Main README](../../README.md) - Project overview
+- [Mind Meld](../mind_meld/README.md) - Multi-model collaboration

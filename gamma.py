@@ -182,7 +182,7 @@ REQUIRED:
 
 SWAP STRATEGIES:
   --strategy pattern         Swap at punctuation marks (., !, ?)
-  --strategy fixed           Swap every N tokens (use --interval)
+  --strategy fixed           Swap every N tokens (use --fixed-interval)
   --strategy round_robin     Alternate models each token
   --strategy perplexity      Swap when model is uncertain
   --strategy confidence      Swap when confidence drops
@@ -194,7 +194,7 @@ ENSEMBLE OPTIONS:
   --use-blending             Blend logits instead of swapping
 
 OTHER OPTIONS:
-  --interval INT             Token interval for fixed strategy
+  --fixed-interval INT       Token interval for fixed strategy (default: 3)
   --temperature FLOAT        Sampling temperature
   --top-k INT                Top-K sampling
   --top-p FLOAT              Top-P sampling

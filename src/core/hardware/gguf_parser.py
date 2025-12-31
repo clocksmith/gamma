@@ -114,11 +114,15 @@ class GGUFMetadata:
             self.metadata['param_billions'] = 7
         elif '4b' in filename:
             self.metadata['param_billions'] = 4
-        elif '3b' in filename:
+        elif '3b' in filename and '2.5b' not in filename:
             self.metadata['param_billions'] = 3
-        elif '2b' in filename or '2.5b' in filename:
+        elif '2.5b' in filename:
             self.metadata['param_billions'] = 2
-        elif '1b' in filename or '1.5b' in filename:
+        elif '2b' in filename:
+            self.metadata['param_billions'] = 2
+        elif '1.5b' in filename:
+            self.metadata['param_billions'] = 1
+        elif '1b' in filename:
             self.metadata['param_billions'] = 1
         else:
             self.metadata['param_billions'] = None

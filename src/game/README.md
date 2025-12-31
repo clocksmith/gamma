@@ -74,13 +74,12 @@ Run `python gamma.py game --help` for all options.
 ## Usage
 
 ```python
-from game.difficulty_levels import DifficultyLevel, GameSession
+from src.game.difficulty_levels import DifficultyLevel, GameSession, RoundStats
 
 # Create a session
 session = GameSession("my_session", current_level=DifficultyLevel.SIMPLE)
 
 # Track performance
-from game.difficulty_levels import RoundStats
 stats = RoundStats(
     round_number=1,
     correct=True,

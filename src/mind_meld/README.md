@@ -10,43 +10,58 @@ Mind Meld is GAMMA’s playground for running **multiple models at the same time
 |------|---------------|-------------|
 | **Token Ensemble** (`--use-blending`) | Every model stays active; logits are merged before sampling the next token. | Create a single voice from several models. |
 | **Token Handoff** (swap strategies) | Only one model writes at a time; the active model can change on punctuation, confidence drops, etc. | Give specialists turns (code vs story, large vs small). |
-| **MoE Router** (`--use-moe-router`) | The prompt is classified each step (code, dialogue, math, etc.) and dispatched to the best model. | You have clearly specialised models. |
-| **Contrastive Decoding** (`--use-contrastive-decoding`) | An expert model’s logits are boosted while “generic” models are subtracted. | Let a big model steer, keep faster models around for safety. |
+| **MoE Router** (programmatic) | The prompt is classified each step (code, dialogue, math, etc.) and dispatched to the best model. | You have clearly specialised models. |
+| **Contrastive Decoding** (programmatic) | An expert model's logits are boosted while "generic" models are subtracted. | Let a big model steer, keep faster models around for safety. |
+
+**Note:** MoE Router and Contrastive Decoding are available via the Python API but not yet exposed via CLI flags.
 
 You can mix these moves: e.g. blend two models most of the time but still swap to a third specialist when punctuation hits.
 
 ---
 
-## 2. Five quick recipes
+## 2. Quick recipes
+
+### CLI Commands
 
 ```bash
-# 1. Simple ensemble (equal weight)
+# 1. Simple ensemble with blending
 python gamma.py mind-meld \
   --models "llamacpp:modelA.gguf" "llamacpp:modelB.gguf" \
-  --use-blending --blend-strategy weighted_average
+  --use-blending
 
-# 2. Confidence voting (trust whichever model is certain)
-python gamma.py mind-meld \
-  --models "pytorch:google/gemma-3-4b-it" "pytorch:Qwen/Qwen2-7B-Instruct" \
-  --use-blending --blend-strategy confidence_weighted --confidence-power 1.5
-
-# 3. Agreement-first swap (ABE + punctuation handoff)
+# 2. Agreement-Based Ensembling with punctuation handoff
 python gamma.py mind-meld \
   --models model1 model2 \
-  --use-abe --swap-strategy pattern
+  --use-abe --strategy pattern
 
-# 4. MoE router (code vs story)
+# 3. Fixed interval swap (rotate every 3 tokens)
 python gamma.py mind-meld \
-  --models "codellama/CodeLlama-13b-hf" "mistralai/Mistral-7B-Instruct-v0.2" \
-  --use-moe-router --adaptive-routing
+  --models model1 model2 \
+  --strategy fixed --fixed-interval 3
 
-# 5. Expert amplification (contrastive decoding)
+# 4. Perplexity-based swap
 python gamma.py mind-meld \
-  --models "openai/gpt-oss-20b" "google/gemma-3-27b-it" \
-  --use-contrastive-decoding --expert-model 0 --amateur-models 1 --alpha 0.5
+  --models model1 model2 \
+  --strategy perplexity
 ```
 
-Tip: add `--prompt "Your starting text" --steps 200 --visualize` to any command above.
+Tip: add `--prompt "Your starting text" --steps 200` to any command above.
+
+### Programmatic API (for MoE Router & Contrastive Decoding)
+
+```python
+from src.mind_meld.core.meld_engine import MeldEngine
+from src.mind_meld.advanced.moe_router import MoERouter
+from src.mind_meld.advanced.contrastive_decoding import ContrastiveDecoder
+
+# MoE Router example
+moe_router = MoERouter(engines, adaptive=True)
+selected_engine = moe_router.route(prompt)
+
+# Contrastive Decoding example
+decoder = ContrastiveDecoder(expert_engine, amateur_engines, alpha=0.5)
+logits = decoder.decode(input_ids)
+```
 
 ---
 
@@ -83,17 +98,24 @@ Most of this “just works” out of the box. For incompatible architectures, th
 
 ## 5. Swap strategies (token handoff)
 
+### CLI-Supported Strategies
+
 | Flag | Behaviour |
 |------|-----------|
-| `--swap-strategy fixed_interval --fixed-interval 4` | Rotate every N tokens. |
-| `--swap-strategy pattern` | Swap on punctuation / newline (default). |
-| `--swap-strategy confidence --min-confidence 0.7` | Hand off when the active model becomes uncertain. |
-| `--swap-strategy perplexity` | Similar to confidence, driven by perplexity spikes. |
-| `--swap-strategy semantic` | Detect topic drift via embeddings. |
-| `--swap-strategy round_robin` | Strict turn taking. |
-| `--swap-strategy random --random-probability 0.3` | Occasional surprise swaps. |
+| `--strategy fixed --fixed-interval 4` | Rotate every N tokens (default: 3). |
+| `--strategy pattern` | Swap on punctuation / newline. |
+| `--strategy perplexity` | Hand off when perplexity spikes. |
+| `--strategy round_robin` | Strict turn taking. |
+| `--strategy random` | Occasional surprise swaps. |
 
-Combine with `--use-blending` for “blend most of the time, but still give someone else the mic occasionally”.
+### Programmatic-Only Strategies
+
+These strategies are available via `src/mind_meld/strategies/` but not yet CLI-exposed:
+
+- `confidence` - Hand off when the active model becomes uncertain
+- `semantic` - Detect topic drift via embeddings
+
+Combine with `--use-blending` for "blend most of the time, but still give someone else the mic occasionally".
 
 ---
 
@@ -157,4 +179,41 @@ result_text = meld._run_headless()
 
 The code is modular—feel free to add your own strategy or consensus module, hook it into `MeldEngine`, and document a new recipe at the top of this page.
 
-Enjoy blending brains! 🧠⚡
+---
+
+## 10. Translators (vocabulary alignment)
+
+When combining models with different tokenizers, Mind Meld uses translators to bridge the gap:
+
+| File | Purpose |
+|------|---------|
+| `translators/vocabulary_aligner.py` | Align tokens between different vocabularies |
+| `translators/vocabulary_aligner_enhanced.py` | Enhanced alignment with subword matching |
+| `translators/kv_cache_translator.py` | Project KV cache between model architectures |
+| `translators/sparse_ot_projection.py` | Optimal transport for embedding space alignment |
+| `translators/vocabulary_translator.py` | Token-level translation between models |
+
+These are automatically used when models have incompatible tokenizers.
+
+---
+
+## 11. Additional Advanced Features
+
+Beyond the core strategies, Mind Meld includes experimental features:
+
+| Feature | File | Description |
+|---------|------|-------------|
+| **Speculative Decoding** | `advanced/speculative_decoding.py` | Use small model to draft, large model to verify |
+| **Gemma Speculative** | `advanced/gemma_speculative.py` | Speculative decoding optimized for Gemma models |
+| **Adversarial Debate** | `advanced/adversarial.py` | Models argue to refine outputs |
+| **Multi-LoRA Routing** | `advanced/multi_lora_router.py` | Route to specialized LoRA adapters |
+| **Hierarchical Control** | `advanced/hierarchical_control.py` | Layered model orchestration |
+| **Homogeneous Ensemble** | `advanced/homogeneous_ensemble.py` | Ensemble of identical model instances |
+| **Feedback Loop** | `advanced/feedback_loop.py` | Iterative refinement with feedback |
+| **Syntactic Strategy** | `strategies/semantic_strategy.py` | Swap based on syntactic roles (SyntacticRoleStrategy) |
+
+These are experimental and may require additional configuration. See each file for usage details.
+
+---
+
+Enjoy blending brains!

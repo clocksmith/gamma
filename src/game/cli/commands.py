@@ -5,7 +5,6 @@ This module contains all argument parsing and CLI configuration.
 """
 
 import argparse
-import sys
 from typing import Dict, Any
 
 from src.core import config as cfg
@@ -29,27 +28,6 @@ CLI_OVERRIDE_FLAGS: Dict[str, str] = {
     "--word-mode": "word_mode",
     "--prompt": "prompt",
 }
-
-
-def _flag_was_provided(flag: str) -> bool:
-    """Check whether a CLI flag (e.g., '--engine') was explicitly provided."""
-    flag_variants = [flag, f"{flag}="]
-    negative_flag = None
-    if flag.startswith("--"):
-        negative_flag = "--no-" + flag[2:]
-    candidate_prefixes = list(flag_variants)
-    if negative_flag:
-        candidate_prefixes.extend([negative_flag, f"{negative_flag}="])
-    for arg in sys.argv[1:]:
-        if arg == flag:
-            return True
-        if negative_flag and arg == negative_flag:
-            return True
-        if arg.startswith(flag_variants[1]):
-            return True
-        if negative_flag and arg.startswith(f"{negative_flag}="):
-            return True
-    return False
 
 
 def apply_word_mode_presets(args: argparse.Namespace) -> None:

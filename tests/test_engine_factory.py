@@ -54,7 +54,8 @@ class TestGetEngine(unittest.TestCase):
         result = engine_factory.get_engine("ollama", "test-model")
 
         self.assertEqual(result, mock_instance)
-        mock_ollama.assert_called_once_with("test-model", {})
+        # Config is normalized to include mode
+        mock_ollama.assert_called_once_with("test-model", {"mode": "interactive"})
 
     @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_ollama_engine_with_config(self, mock_ollama):
@@ -65,7 +66,9 @@ class TestGetEngine(unittest.TestCase):
 
         result = engine_factory.get_engine("ollama", "test-model", config)
 
-        mock_ollama.assert_called_once_with("test-model", config)
+        # Config is normalized to include mode
+        expected_config = {"temperature": 0.8, "mode": "interactive"}
+        mock_ollama.assert_called_once_with("test-model", expected_config)
 
     def test_ollama_import_error(self):
         """Should raise RuntimeError on import failure."""
@@ -199,15 +202,15 @@ class TestGetEngine(unittest.TestCase):
 
     @patch('src.engines.native.pytorch_engine.PyTorchEngine')
     def test_none_config_treated_as_empty(self, mock_pytorch):
-        """Should treat None config as empty dict."""
+        """Should treat None config as empty dict with normalized mode."""
         mock_instance = Mock()
         mock_pytorch.return_value = mock_instance
 
         result = engine_factory.get_engine("pytorch", "model", None)
 
-        # Should be called with empty dict
+        # Should be called with normalized config (mode added)
         args, kwargs = mock_pytorch.call_args
-        self.assertIn({}, args)
+        self.assertIn({"mode": "interactive"}, args)
 
 
 def run_tests():

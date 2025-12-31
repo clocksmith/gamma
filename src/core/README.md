@@ -4,24 +4,41 @@ Core utilities and infrastructure for GAMMA.
 
 ## What's Here
 
-- **engine_interface.py** - Abstract LLM engine interface
-- **config.py** - Configuration constants
-- **ui.py** - Terminal UI utilities
-- **mind_meld_mode.py** - Mind Meld mode wrapper
-- **backends/** - Backend implementations
-  - **ollama_engine.py** - Ollama integration
-  - **openai_engine.py** - OpenAI API integration
-  - **anthropic_engine.py** - Anthropic API integration
-  - **google_engine.py** - Google Gemini integration
+### Main Modules
+
+| File | Description |
+|------|-------------|
+| `engine_interface.py` | Abstract LLM engine interface |
+| `config.py` | Configuration constants and defaults |
+| `cli_args.py` | CLI argument parsing utilities |
+| `types.py` | Type definitions and protocols |
+| `logging_config.py` | Logging configuration |
+| `sampling_strategies.py` | Pre-configured sampling strategies |
+| `tensor_utils.py` | Cross-framework tensor utilities |
+| `ollama_utils.py` | Ollama detection and utilities |
+| `model_validator.py` | Model/engine validation |
+| `gamma_core_adapter.py` | gamma-core library adapter |
+
+### Subpackages
+
+| Directory | Description |
+|-----------|-------------|
+| `menu/` | Interactive CLI menu system |
+| `models/` | Model discovery and catalog |
+| `hardware/` | GPU detection and memory estimation |
 
 ## Engine Interface
 
-The `LLMEngine` abstract class defines the interface all backends must implement:
+The `LLMEngine` abstract class in `engine_interface.py` defines the interface all engines must implement:
 
 ```python
 from src.core.engine_interface import LLMEngine
 
 class MyEngine(LLMEngine):
+    def load(self) -> None:
+        """Load model into memory."""
+        pass
+
     def encode(self, text: str) -> Tuple[Any, Any]:
         """Tokenize text into input_ids and attention_mask."""
         pass
@@ -33,15 +50,9 @@ class MyEngine(LLMEngine):
     def decode(self, token_ids: List[int]) -> str:
         """Convert token IDs back to text."""
         pass
-
-    def get_kv_cache(self):
-        """Get current KV cache state."""
-        pass
-
-    def set_kv_cache(self, cache):
-        """Set KV cache state."""
-        pass
 ```
+
+Engine implementations are in `src/engines/`, not in this directory.
 
 ## Configuration
 
@@ -59,135 +70,214 @@ cfg.SHORTCUT_QUIT = 'q'
 
 # Game settings
 cfg.MAX_TOKENS_FOR_PROB_DISPLAY = 10
+
+# Default model info
+cfg.GEMMA_MODEL_INFO  # Pre-configured model metadata
 ```
 
-## UI Utilities
+## CLI Arguments
 
-Helper functions for terminal display:
+The `cli_args.py` module provides reusable argument parsing:
 
 ```python
-from src.core import ui
+from src.core.cli_args import (
+    add_sampling_args,
+    add_generation_args,
+    add_model_args,
+    add_mind_meld_args,
+    normalize_args
+)
 
-# Print with colors
-ui.print_header("Game Started")
-ui.color_text("Important", cfg.COLOR_CYAN)
-
-# Get user input
-response = ui.get_user_input("Enter choice:", allow_empty=False)
-
-# Display info
-ui.display_round_header(round_num=1, total_rounds=10)
-ui.display_current_sentence("The quick brown fox...")
+parser = argparse.ArgumentParser()
+add_sampling_args(parser)    # --temperature, --top-k, --top-p
+add_generation_args(parser)  # --steps, --max-tokens
+add_model_args(parser)       # --model, --engine
+args = normalize_args(parser.parse_args())
 ```
 
-## Backend Integration
+## Sampling Strategies
 
-### Adding a New Backend
-
-1. Create `src/core/backends/my_backend_engine.py`
-2. Inherit from `LLMEngine`
-3. Implement all abstract methods
-4. Add to backend registry
-
-Example:
+Pre-configured strategies in `sampling_strategies.py`:
 
 ```python
-from src.core.engine_interface import LLMEngine
+from src.core.sampling_strategies import (
+    CREATIVE_WRITING,
+    PRECISE_FACTUAL,
+    CODE_GENERATION,
+    REASONING,
+    INSTRUCTION_FOLLOWING
+)
 
-class MyBackendEngine(LLMEngine):
-    def __init__(self, model_name: str):
-        super().__init__(model_name)
-        # Initialize your backend
-        self.client = MyBackendClient(model_name)
-
-    def encode(self, text: str):
-        return self.client.tokenize(text)
-
-    def predict_next(self, input_ids, attention_mask, temperature, top_k, top_p):
-        return self.client.generate(
-            input_ids,
-            temperature=temperature,
-            top_k=top_k,
-            top_p=top_p
-        )
-
-    # ... implement other methods
+# Use a strategy
+temperature = CODE_GENERATION.temperature  # 0.4
+top_k = CODE_GENERATION.top_k              # 40
 ```
 
-### Supported Backends
+| Strategy | Temperature | Top-K | Use Case |
+|----------|-------------|-------|----------|
+| CREATIVE_WRITING | 0.9 | 50 | Stories, poetry |
+| PRECISE_FACTUAL | 0.3 | 10 | Facts, Q&A |
+| CODE_GENERATION | 0.4 | 40 | Programming |
+| REASONING | 0.5 | 30 | Logic, math |
 
-- **Ollama** - Local models via Ollama
-- **OpenAI** - GPT-3.5, GPT-4 via API
-- **Anthropic** - Claude via API
-- **Google** - Gemini via API
+## Type Definitions
+
+Core types in `types.py`:
+
+```python
+from src.core.types import (
+    TokenId, TokenText, TokenIds,
+    AttentionMask, AttentionWeights,
+    Logits, Probabilities,
+    KVCache, EncodingResult, PredictionResult
+)
+```
+
+## Interactive Menu
+
+The `menu/` subpackage provides the interactive CLI:
+
+```python
+from src.core.menu import InteractiveMenu
+
+menu = InteractiveMenu()
+mode = menu.select_mode()  # game, comparison, mind-meld
+model = menu.select_model()
+```
+
+### Menu Components
+
+- `interactive_menu.py` - Main menu system
+- `interactive_prompts.py` - User input prompts
+- `routing_logic.py` - Mode routing
+- `unified_model_selector.py` - Model selection UI
+
+## Model Management
+
+The `models/` subpackage handles model discovery:
+
+```python
+from src.core.models import (
+    ModelCatalog,
+    discover_models,
+    get_model_info
+)
+
+# Discover available models
+models = discover_models()  # Finds Ollama, HF, local GGUF
+
+# Get model metadata
+info = get_model_info("google/gemma-2-2b-it")
+```
+
+### Model Components
+
+- `model_catalog.py` - Model metadata
+- `model_discovery.py` - Model detection
+- `model_registry.py` - Model registration
+- `gguf_sources.py` - GGUF file handling
+
+## Hardware Detection
+
+The `hardware/` subpackage detects system capabilities:
+
+```python
+from src.core.hardware import (
+    detect_gpus,
+    estimate_memory_requirements,
+    get_best_engine_for_hardware
+)
+
+# Detect GPUs
+gpus = detect_gpus()  # CUDA, MPS, or CPU
+
+# Estimate memory needs
+memory = estimate_memory_requirements("google/gemma-2-2b-it")
+```
+
+### Hardware Components
+
+- `gpu_discovery.py` - GPU detection (CUDA/MPS)
+- `memory_estimator.py` - VRAM/RAM estimation
+- `gguf_parser.py` - GGUF metadata parsing
+
+## Logging
+
+Configure logging via `logging_config.py`:
+
+```python
+from src.core.logging_config import setup_logging, get_logger
+
+setup_logging(level="INFO")
+logger = get_logger(__name__)
+logger.info("Message")
+```
+
+## Model Validation
+
+Validate engine/model compatibility:
+
+```python
+from src.core.model_validator import ModelValidator
+
+validator = ModelValidator()
+result = validator.validate("llamacpp", "model.gguf")
+if not result.valid:
+    print(result.error_message)
+```
+
+## Tensor Utilities
+
+Cross-framework tensor conversion:
+
+```python
+from src.core.tensor_utils import to_numpy
+
+# Works with PyTorch, TensorFlow, JAX, MLX
+numpy_array = to_numpy(tensor)
+```
+
+## Ollama Utilities
+
+Ollama server detection:
+
+```python
+from src.core.ollama_utils import (
+    is_ollama_installed,
+    detect_ollama_server,
+    list_ollama_models
+)
+
+if is_ollama_installed():
+    models = list_ollama_models()
+```
 
 ## KV Cache Protocol
 
-Engines that support KV cache can implement:
+Engines supporting KV cache implement:
 
 ```python
-def get_kv_cache(self):
-    """Return current cache state (backend-specific format)."""
-    return self.model.get_cache()
-
-def set_kv_cache(self, cache):
-    """Set cache state."""
-    self.model.set_cache(cache)
-
-def reset_kv_cache(self):
-    """Clear the cache."""
-    self.model.clear_cache()
-
-def bridge_kv_cache_to(self, target_engine: LLMEngine) -> bool:
-    """Try to transfer cache to another engine."""
-    # Implementation depends on backend compatibility
+def get_kv_cache(self) -> Any:
+    """Return current cache state."""
     pass
-```
 
-## Error Handling
+def set_kv_cache(self, cache: Any) -> None:
+    """Set cache state."""
+    pass
 
-Common patterns:
+def reset_kv_cache(self) -> None:
+    """Clear the cache."""
+    pass
 
-```python
-try:
-    result = engine.predict_next(...)
-except NotImplementedError:
-    # Feature not supported by this backend
-    print("This backend doesn't support this feature")
-except Exception as e:
-    # Backend-specific error
-    print(f"Error: {e}")
-```
-
-## Testing
-
-Test engine implementations:
-
-```python
-import sys
-sys.path.insert(0, 'src')
-
-from core.backends.ollama_engine import OllamaEngine
-
-# Create engine
-engine = OllamaEngine("llama2")
-
-# Test encode
-input_ids, mask = engine.encode("Hello world")
-print(f"Tokens: {input_ids}")
-
-# Test predict
-result = engine.predict_next(input_ids, mask, 0.7, 10, 0.9)
-print(f"Logits shape: {result['logits_raw'].shape}")
-
-# Test decode
-text = engine.decode([1, 2, 3])
-print(f"Decoded: {text}")
+def bridge_kv_cache_to(self, target: LLMEngine) -> bool:
+    """Transfer cache to another engine."""
+    pass
 ```
 
 ## See Also
 
 - **[Main README](../../README.md)** - GAMMA overview
+- **[Engines](../engines/README.md)** - Engine implementations
 - **[Mind Meld](../mind_meld/README.md)** - Multi-model collaboration
 - **[Game Module](../game/README.md)** - Interactive game
-- **[Comparison](../comparison/README.md)** - Model comparison
+- **[Engine Architecture](../../docs/ENGINE_ARCHITECTURE.md)** - Detailed architecture

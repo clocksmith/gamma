@@ -67,12 +67,6 @@ class TensorFlowEngine(LLMEngine):
         return self.model(input_ids=input_ids_tf, attention_mask=attention_mask_tf, past_key_values=past_key_values_tf,
                           output_attentions=output_attentions_tf, output_hidden_states=output_hidden_states_tf, use_cache=use_cache_tf, return_dict=True)
 
-
-    @tf.function
-    def _run_model_inference_tf(self, input_ids_tf, attention_mask_tf, past_key_values_tf, output_attentions_tf, output_hidden_states_tf, use_cache_tf):
-        return self.model(input_ids=input_ids_tf, attention_mask=attention_mask_tf, past_key_values=past_key_values_tf,
-                          output_attentions=output_attentions_tf, output_hidden_states=output_hidden_states_tf, use_cache=use_cache_tf, return_dict=True)
-
     def predict_next(self, input_ids: tf.Tensor, attention_mask: Optional[tf.Tensor], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]:
         if not self.model: raise RuntimeError("TensorFlowEngine: Model not loaded.")
         start_time = time.time()

@@ -64,6 +64,22 @@ python tools/benchmark_model_speed.py --models ollama:qwen2:7b --tokens 100 --it
 python tools/benchmark_model_speed.py --list-models
 ```
 
+#### `comprehensive_benchmark.py`
+Full benchmark suite with speed, quality metrics, and multi-engine comparison.
+```bash
+# Run comprehensive benchmark
+python tools/comprehensive_benchmark.py --model ollama:gemma2:2b
+
+# Compare engines with quality metrics
+python tools/comprehensive_benchmark.py --model google/gemma-2-2b-it \
+  --engines pytorch llamacpp --quality-metrics
+
+# Generate HTML report
+python tools/comprehensive_benchmark.py --model ollama:qwen2:7b \
+  --output report.html --format html
+```
+Features: speed benchmarking, perplexity, coherence, diversity metrics, consistency testing.
+
 ---
 
 ### 🎮 Mind Meld (Game Mode)

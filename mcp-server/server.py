@@ -39,18 +39,23 @@ mcp = FastMCP("gamma",
 def get_gamma_available_models() -> dict[str, Any]:
     """Get all available models detected by GAMMA."""
     try:
-        from src.game.model_discovery import discover_all_models
-        from src.utils.hardware import detect_hardware
+        from src.core.models.model_discovery import discover_all_models
+        from src.core.hardware.gpu_discovery import get_gpu_info
 
-        hardware_info = detect_hardware()
+        gpu_info = get_gpu_info()
         models = discover_all_models()
+
+        # Extract hardware info from GPU discovery
+        gpu_available = len(gpu_info) > 0
+        gpu_name = gpu_info[0].name if gpu_available else "N/A"
+        vram_gb = gpu_info[0].memory_total / (1024**3) if gpu_available and gpu_info[0].memory_total else 0
 
         return {
             "hardware": {
-                "gpu_available": hardware_info.get("gpu_available", False),
-                "gpu_name": hardware_info.get("gpu_name", "N/A"),
-                "total_ram_gb": hardware_info.get("total_ram_gb", 0),
-                "available_vram_gb": hardware_info.get("vram_gb", 0),
+                "gpu_available": gpu_available,
+                "gpu_name": gpu_name,
+                "total_ram_gb": 0,  # RAM detection not in gpu_discovery
+                "available_vram_gb": round(vram_gb, 1),
             },
             "models": models,
             "total_count": len(models)
@@ -252,8 +257,7 @@ async def run_inference(
     """
     try:
         # Import GAMMA's inference engine
-        from src.game.model_handler import ModelHandler
-        from src.game.cli import get_engine
+        from src.engines.engine_factory import get_engine
 
         logger.info(f"Running inference with model={model}, engine={engine}")
 

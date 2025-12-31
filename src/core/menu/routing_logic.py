@@ -7,6 +7,7 @@ and using a router model to select the best one.
 
 from typing import List, Dict, Any
 import argparse
+import numpy as np
 
 # Use the existing gamma engine infrastructure
 from src.engines.engine_factory import get_engine

@@ -4,20 +4,22 @@ Direct head-to-head comparison of multiple language models.
 
 ## What's Here
 
-- **comparison_mode.py** - Main comparison engine
-- **comparison_displays.py** - Display utilities for comparisons
+- **comparison_mode.py** - Main comparison engine with side-by-side model evaluation
 
 ## Quick Start
 
 ```python
 from src.comparison.comparison_mode import ComparisonMode
 
-# Load multiple models
-models = [model1, model2, model3]
+# Models as list of (engine, model_name) tuples
+models = [
+    ("pytorch", "google/gemma-2-2b-it"),
+    ("ollama", "qwen2:7b")
+]
 
 # Run comparison
 comparison = ComparisonMode(models, args)
-comparison.run()
+comparison.run_comparison()  # Note: method is run_comparison(), not run()
 ```
 
 ## Features
@@ -66,72 +68,59 @@ python3 gamma.py comparison --models gpt-4 claude-3 llama-2
 
 ### Arguments
 
-- `--models MODEL1 MODEL2 ...` - Models to compare (required)
-- `--prompt TEXT` - Starting prompt
-- `--steps N` - Number of tokens to generate
-- `--temperature T` - Sampling temperature
-- `--show-probabilities` - Show probability distributions
+| Argument | Description |
+|----------|-------------|
+| `--steps N` | Number of tokens to generate (rounds of comparison) |
+| `--temperature T` | Sampling temperature |
+| `--top-k K` | Top-k sampling parameter |
+| `--top-p P` | Top-p (nucleus) sampling parameter |
+| `--show-attention` | Display attention weights for each model |
+| `--player-choice-mode` | Let player vote on which model's prediction to use |
+| `--verbose` | Show detailed output |
 
-## Comparison Strategies
+## How It Works
 
-### Sequential
+The comparison mode runs a token-by-token comparison loop:
 
-Generate tokens one at a time, showing all model predictions:
+1. **Load Models** - All specified models are loaded into memory
+2. **Initialize Context** - Each model encodes the starting prompt
+3. **Prediction Round** - Each model predicts the next token
+4. **Display Comparison** - Shows top-5 predictions from each model side-by-side
+5. **Agreement Analysis** - Calculates consensus and confidence metrics
+6. **Token Selection** - Uses majority vote or highest-confidence model's prediction
+7. **Update Context** - All models update their context with the selected token
+8. **Repeat** - Continue for `--steps` rounds or until EOS
 
-```python
-args.comparison_strategy = 'sequential'
+### Player Choice Mode
+
+With `--player-choice-mode`, you can vote on which model's prediction to use:
+
+```
+Which model's prediction seems most appropriate?
+  1. gemma-2-2b-it: 'jumps' (85% confidence)
+  2. qwen2-7b: 'leaps' (72% confidence)
+Select model (1-2): _
 ```
 
-### Parallel
+## Final Statistics
 
-Generate complete sequences in parallel, then compare:
+After the comparison ends, you'll see:
 
-```python
-args.comparison_strategy = 'parallel'
-args.sequence_length = 20
-```
-
-### Interactive
-
-Let user choose which model continues at each step:
-
-```python
-args.comparison_strategy = 'interactive'
-```
-
-## Export Results
-
-Save comparison results for analysis:
-
-```python
-comparison.export_results("results/comparison.json")
-```
-
-**Format:**
-```json
-{
-  "prompt": "Once upon a time",
-  "models": ["gpt-4", "claude-3"],
-  "results": [
-    {
-      "model": "gpt-4",
-      "output": "Once upon a time, there was...",
-      "avg_confidence": 0.87,
-      "time_taken": 1.23
-    }
-  ]
-}
-```
+- **Agreement Rate** - How often all models predicted the same token
+- **Average Confidence** - Per-model confidence scores
+- **Prediction Speed** - Per-model inference times
+- **Player Selection Scores** - Vote counts (in player choice mode)
 
 ## Use Cases
 
 - **Model Selection** - Find the best model for your use case
-- **Quality Assessment** - Compare output quality
+- **Confidence Analysis** - See which models are most confident
+- **Speed Comparison** - Benchmark inference times
 - **Behavior Analysis** - Understand model differences
-- **A/B Testing** - Test prompts across models
 
 ## See Also
 
 - **[Main README](../../README.md)** - GAMMA overview
+- **[Engines](../engines/README.md)** - Supported engine backends
 - **[Mind Meld](../mind_meld/README.md)** - Multi-model collaboration
 - **[Game Module](../game/README.md)** - Interactive game
