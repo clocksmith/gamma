@@ -430,20 +430,30 @@ class PyTorchEngine(LLMEngine):
             return np.array(tensor)
     
     def convert_from_numpy(self, array: np.ndarray) -> torch.Tensor:
-        """Convert numpy array to PyTorch tensor, matching model dtype."""
+        """Convert numpy array to PyTorch tensor, matching model dtype for floats only.
+
+        Integer tensors (e.g., token IDs) are kept as integers since embedding
+        layers require Long/Int input types, not the model's float dtype.
+        """
         if not self._device:
             self._device = torch.device('cpu')
 
         # Convert numpy array to tensor
         tensor = torch.from_numpy(array)
 
-        # For MPS, ensure we don't use float64
-        if hasattr(self._device, 'type') and self._device.type == 'mps':
+        # Check if tensor is an integer type (e.g., token IDs for embeddings)
+        # These MUST remain as integers - embeddings require Long/Int dtype
+        is_integer_tensor = tensor.dtype in (torch.int32, torch.int64, torch.int16, torch.int8,
+                                              torch.uint8, torch.long, torch.int)
+
+        # For MPS, ensure we don't use float64 (only for float tensors)
+        if not is_integer_tensor and hasattr(self._device, 'type') and self._device.type == 'mps':
             if tensor.dtype == torch.float64:
                 tensor = tensor.to(torch.float32)
 
         # Ensure tensor dtype matches model dtype for KV cache compatibility
-        if self.model is not None:
+        # BUT only for float tensors - integer tensors (token IDs) must stay as integers
+        if not is_integer_tensor and self.model is not None:
             try:
                 # Get the model's parameter dtype
                 model_dtype = next(self.model.parameters()).dtype
