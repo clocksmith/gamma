@@ -109,7 +109,7 @@ class VLLMRunner(BaseRunner):
         except ImportError:
             pass
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float]:
+    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
         """Generate tokens using vLLM."""
         if self._model is None:
             raise RuntimeError("Model not loaded")
@@ -123,8 +123,9 @@ class VLLMRunner(BaseRunner):
         outputs = self._model.generate([prompt], sampling_params)
         elapsed = time.perf_counter() - start
 
-        # Count generated tokens
+        # Count generated tokens and get text
         output = outputs[0]
         num_tokens = len(output.outputs[0].token_ids)
+        generated_text = output.outputs[0].text
 
-        return num_tokens, elapsed
+        return num_tokens, elapsed, generated_text

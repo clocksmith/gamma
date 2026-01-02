@@ -22,6 +22,7 @@ class BenchResult:
     iterations: int = 0
     per_iteration: list[dict] = field(default_factory=list)
     error: str | None = None
+    sample_output: str | None = None  # Sample of generated text for validation
 
 
 class BaseRunner(ABC):
@@ -61,8 +62,8 @@ class BaseRunner(ABC):
         pass
 
     @abstractmethod
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float]:
-        """Generate tokens and return (token_count, elapsed_seconds)."""
+    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
+        """Generate tokens and return (token_count, elapsed_seconds, generated_text)."""
         pass
 
     def warmup(self, prompt: str = "Hello", max_tokens: int = 10) -> None:
@@ -142,12 +143,13 @@ class BaseRunner(ABC):
         total_tokens = 0
         total_time = 0.0
         per_iteration = []
+        sample_output = None
 
         for i in range(iterations):
             self.log(f"Iteration {i+1}/{iterations}...", end=" ", flush=True)
 
             try:
-                tokens, elapsed = self.generate(prompt, max_tokens)
+                tokens, elapsed, text = self.generate(prompt, max_tokens)
                 tps = tokens / elapsed if elapsed > 0 else 0
 
                 self.log(f"{tokens} tokens in {elapsed:.2f}s = {tps:.2f} tok/s")
@@ -158,7 +160,12 @@ class BaseRunner(ABC):
                     "tokens": tokens,
                     "elapsed": elapsed,
                     "tokens_per_sec": tps,
+                    "text": text[:200] if text else None,  # Store truncated text
                 })
+
+                # Keep first successful output as sample
+                if sample_output is None and text:
+                    sample_output = text
             except Exception as e:
                 self.log(f"error: {e}")
                 per_iteration.append({"error": str(e)})
@@ -182,4 +189,5 @@ class BaseRunner(ABC):
             vram_gb=info.get("vram_gb"),
             iterations=iterations,
             per_iteration=per_iteration,
+            sample_output=sample_output,
         )

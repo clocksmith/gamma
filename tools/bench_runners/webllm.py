@@ -263,7 +263,7 @@ class WebLLMRunner(BaseRunner):
                 pass
             self._temp_dir = None
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float]:
+    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
         """Generate tokens using WebLLM."""
         if not self._page:
             raise RuntimeError("Browser not initialized")
@@ -277,4 +277,5 @@ class WebLLMRunner(BaseRunner):
             state = self._page.evaluate("window.benchmarkState")
             raise RuntimeError(f"WebLLM generation failed: {state.get('error', 'unknown')}")
 
-        return result["tokens"], result["elapsed"]
+        generated_text = result.get("text", "")
+        return result["tokens"], result["elapsed"], generated_text

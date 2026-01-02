@@ -173,7 +173,7 @@ class TransformersRunner(BaseRunner):
             torch.cuda.empty_cache()
             torch.cuda.synchronize()
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float]:
+    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
         """Generate tokens and measure time."""
         if self._model is None or self._tokenizer is None:
             raise RuntimeError("Model not loaded")
@@ -203,4 +203,7 @@ class TransformersRunner(BaseRunner):
         elapsed = time.perf_counter() - start
         new_tokens = outputs.shape[1] - input_len
 
-        return new_tokens, elapsed
+        # Decode output
+        generated_text = self._tokenizer.decode(outputs[0][input_len:], skip_special_tokens=True)
+
+        return new_tokens, elapsed, generated_text

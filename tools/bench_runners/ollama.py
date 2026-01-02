@@ -150,7 +150,7 @@ class OllamaRunner(BaseRunner):
         """Ollama manages its own memory, nothing to unload."""
         pass
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float]:
+    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
         """Generate tokens using Ollama API."""
         response = requests.post(
             f"{self.host}/api/generate",
@@ -171,5 +171,6 @@ class OllamaRunner(BaseRunner):
         eval_count = data.get("eval_count", 0)
         eval_duration_ns = data.get("eval_duration", 1)
         eval_duration_sec = eval_duration_ns / 1e9
+        generated_text = data.get("response", "")
 
-        return eval_count, eval_duration_sec
+        return eval_count, eval_duration_sec, generated_text

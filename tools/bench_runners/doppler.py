@@ -95,7 +95,7 @@ class DopplerRunner(BaseRunner):
         """Nothing to unload - doppler CLI handles cleanup."""
         pass
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float]:
+    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
         """Run doppler benchmark and return token count and time."""
         # Create temp file for output
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
