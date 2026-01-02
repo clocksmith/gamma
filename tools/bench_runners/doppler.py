@@ -150,8 +150,9 @@ class DopplerRunner(BaseRunner):
             decode_time_ms = metrics.get("decode_ms_total", 0)
             decode_time_sec = decode_time_ms / 1000 if decode_time_ms > 0 else 1
 
-            # Get generated text if available
-            generated_text = data.get("output", "")
+            # Get generated text from raw.generated_text
+            raw = data.get("raw", {})
+            generated_text = raw.get("generated_text", "")
 
             return decode_tokens, decode_time_sec, generated_text
 
@@ -264,8 +265,9 @@ class DopplerRunner(BaseRunner):
             if vram_bytes:
                 info["vram_gb"] = vram_bytes / 1024 / 1024 / 1024
 
-            # Get generated text if available
-            sample_output = data.get("output", "")
+            # Get generated text from raw.generated_text
+            raw = data.get("raw", {})
+            sample_output = raw.get("generated_text", "")
 
             return BenchResult(
                 name=self.model_name,
