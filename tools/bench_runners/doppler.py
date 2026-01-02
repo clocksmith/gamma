@@ -150,7 +150,10 @@ class DopplerRunner(BaseRunner):
             decode_time_ms = metrics.get("decode_ms_total", 0)
             decode_time_sec = decode_time_ms / 1000 if decode_time_ms > 0 else 1
 
-            return decode_tokens, decode_time_sec
+            # Get generated text if available
+            generated_text = data.get("output", "")
+
+            return decode_tokens, decode_time_sec, generated_text
 
         finally:
             # Cleanup temp file
@@ -261,6 +264,9 @@ class DopplerRunner(BaseRunner):
             if vram_bytes:
                 info["vram_gb"] = vram_bytes / 1024 / 1024 / 1024
 
+            # Get generated text if available
+            sample_output = data.get("output", "")
+
             return BenchResult(
                 name=self.model_name,
                 engine=self.engine_name,
@@ -276,6 +282,7 @@ class DopplerRunner(BaseRunner):
                     "decode_tps": decode_tps,
                     "ttft_ms": ttft_ms,
                 }],
+                sample_output=sample_output,
             )
 
         finally:

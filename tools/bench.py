@@ -45,6 +45,15 @@ def print_result(result: BenchResult) -> None:
     if result.error:
         print(f"Error:        {result.error}")
 
+    # Show sample output for quality validation
+    if result.sample_output:
+        print(f"\n--- Sample Output (first 300 chars) ---")
+        sample = result.sample_output[:300]
+        if len(result.sample_output) > 300:
+            sample += "..."
+        print(sample)
+        print(f"--- End Sample ---")
+
     print(f"{'='*60}")
 
 
@@ -86,6 +95,21 @@ def print_comparison(results: list[BenchResult]) -> None:
             if r.tokens_per_sec > 0:
                 speedup = fastest.tokens_per_sec / r.tokens_per_sec
                 print(f"  {speedup:.2f}x faster than {r.engine} ({r.name})")
+
+    # Show sample outputs for quality validation
+    outputs_shown = False
+    for r in sorted_results:
+        if r.sample_output:
+            if not outputs_shown:
+                print(f"\n{'='*80}")
+                print("SAMPLE OUTPUTS (for quality validation)")
+                print(f"{'='*80}")
+                outputs_shown = True
+            print(f"\n[{r.engine}] {r.name}:")
+            sample = r.sample_output[:200]
+            if len(r.sample_output) > 200:
+                sample += "..."
+            print(f"  {sample}")
 
 
 def cmd_ollama(args) -> int:
