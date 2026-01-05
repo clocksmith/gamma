@@ -95,7 +95,12 @@ python gamma.py game --model llamacpp:models/model.gguf --chat
 python gamma.py comparison --models pytorch:google/gemma-2-2b-it ollama:qwen2:7b
 
 # Mind meld two models
-python gamma.py mind-meld --models pytorch:gpt2 pytorch:distilgpt2 --strategy confidence
+python gamma.py mind-meld --models pytorch:gpt2 pytorch:distilgpt2 --strategy confidence --no-step-delay
+
+# Single-shot inference with chat template formatting
+python gamma.py game --engine pytorch --model google/gemma-3-1b-it \
+  --prompt "which animal does not belong and why: horse, duck, dolphin, shark" \
+  --prompt-chat-template --steps 64
 
 # Benchmark model speed
 python gamma.py benchmark --models pytorch:google/gemma-2-2b-it --tokens 100

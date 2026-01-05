@@ -109,7 +109,7 @@ class VLLMRunner(BaseRunner):
         except ImportError:
             pass
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
+    def generate(self, prompt: str, max_tokens: int) -> dict:
         """Generate tokens using vLLM."""
         if self._model is None:
             raise RuntimeError("Model not loaded")
@@ -121,11 +121,41 @@ class VLLMRunner(BaseRunner):
 
         start = time.perf_counter()
         outputs = self._model.generate([prompt], sampling_params)
-        elapsed = time.perf_counter() - start
+        total_elapsed = time.perf_counter() - start
 
         # Count generated tokens and get text
         output = outputs[0]
         num_tokens = len(output.outputs[0].token_ids)
         generated_text = output.outputs[0].text
 
-        return num_tokens, elapsed, generated_text
+        result = {
+            "decode_tokens": num_tokens,
+            "decode_time_sec": total_elapsed,  # Will be refined if metrics available
+            "text": generated_text,
+        }
+
+        # Try to get detailed metrics from vLLM
+        try:
+            if hasattr(output, "metrics") and output.metrics is not None:
+                metrics = output.metrics
+
+                # Calculate TTFT from metrics
+                if hasattr(metrics, "first_token_time") and hasattr(metrics, "first_scheduled_time"):
+                    if metrics.first_token_time and metrics.first_scheduled_time:
+                        ttft = metrics.first_token_time - metrics.first_scheduled_time
+                        result["ttft_sec"] = ttft
+                        result["prefill_time_sec"] = ttft  # TTFT ≈ prefill time
+
+                        # Decode time is total minus prefill
+                        result["decode_time_sec"] = total_elapsed - ttft
+
+                # Get prompt token count if available
+                if hasattr(output, "prompt_token_ids"):
+                    result["prefill_tokens"] = len(output.prompt_token_ids)
+                elif hasattr(metrics, "num_prompt_tokens"):
+                    result["prefill_tokens"] = metrics.num_prompt_tokens
+        except Exception:
+            # Fall back to total elapsed time if metrics unavailable
+            pass
+
+        return result

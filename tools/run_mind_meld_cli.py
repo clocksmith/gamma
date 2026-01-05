@@ -44,6 +44,7 @@ class MindMeldConfig:
     verbose: bool = False
     show_attention: bool = True
     initial_prompt: str = "In a world where two minds are better than one,"
+    no_step_delay: bool = False
     
     # Enhanced features
     use_enhanced: bool = False
@@ -54,6 +55,8 @@ class MindMeldConfig:
     blend_strategy: str = "weighted_average"
     alignment_strategy: str = "semantic"
     stats_file: Optional[str] = None
+    meld_diagnostics: bool = False
+    allow_kv_cache_translation: bool = False
 
 
 class MindMeldCLI:
@@ -227,6 +230,12 @@ Model name formats:
             help="Number of generation steps"
         )
         parser.add_argument(
+            "--no-step-delay",
+            action="store_true",
+            default=False,
+            help="Disable the 1-second delay between steps"
+        )
+        parser.add_argument(
             "--prompt",
             type=str,
             default=None,
@@ -265,8 +274,13 @@ Model name formats:
         parser.add_argument(
             "--alignment",
             type=str,
-            default="semantic",
-            help="Vocabulary alignment strategy"
+            default="intersection",
+            help="Vocabulary alignment strategy: intersection, align, subword, semantic_map, unk, auto"
+        )
+        parser.add_argument(
+            "--allow-kv-cache-translation",
+            action="store_true",
+            help="Allow KV cache translation across mismatched models (experimental)"
         )
         parser.add_argument(
             "--use-enhanced",
@@ -277,6 +291,11 @@ Model name formats:
             "--use-stats-tracker",
             action="store_true",
             help="Track statistics for each model during the session"
+        )
+        parser.add_argument(
+            "--meld-diagnostics",
+            action="store_true",
+            help="Log Mind Meld diagnostics (KV cache bridging and vocab translation)"
         )
         parser.add_argument(
             "--stats-file",
@@ -380,6 +399,7 @@ Model name formats:
         config.top_k = args.top_k
         config.top_p = args.top_p
         config.steps = args.steps
+        config.no_step_delay = args.no_step_delay
         config.initial_prompt = args.prompt or self.config.initial_prompt
         config.verbose = args.verbose
         config.show_attention = args.show_attention
@@ -391,6 +411,8 @@ Model name formats:
         config.use_enhanced = args.use_enhanced
         config.use_stats_tracker = args.use_stats_tracker
         config.stats_file = args.stats_file
+        config.meld_diagnostics = args.meld_diagnostics
+        config.allow_kv_cache_translation = args.allow_kv_cache_translation
 
         engines = self.load_models(config)
         if not engines or len(engines) < 2:
@@ -725,6 +747,7 @@ Model name formats:
             fixed_interval=config.fixed_interval,
             confidence_threshold=config.confidence_threshold,
             initial_prompt=config.initial_prompt,
+            no_step_delay=config.no_step_delay,
             # Enhanced features
             use_enhanced=config.use_enhanced,
             use_blending=config.use_blending,
@@ -734,6 +757,8 @@ Model name formats:
             alignment_strategy=config.alignment_strategy,
             use_stats_tracker=config.use_stats_tracker,
             stats_file=config.stats_file,
+            meld_diagnostics=config.meld_diagnostics,
+            allow_kv_cache_translation=config.allow_kv_cache_translation,
         )
         
         # Initialize and run Mind Meld mode

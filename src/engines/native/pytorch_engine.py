@@ -11,6 +11,7 @@ except ImportError: raise ImportError("PyTorch-related libraries (transformers, 
 logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine, TokenCategory
+from src.core.types import PredictionResult
 from src.core import config as game_config
 from src.engines import sampling_utils as sampling
 
@@ -40,6 +41,100 @@ class PyTorchEngine(LLMEngine):
             if target_dtype == torch.bfloat16:
                 target_dtype = torch.float32
         return tensor.to(target_dtype)
+
+    def _supports_cache_class(self) -> bool:
+        """Return True when the underlying model expects a Cache object."""
+        return bool(getattr(self.model, "_supports_cache_class", False))
+
+    def _build_cache_class(self, legacy_cache: Any) -> Optional[Any]:
+        """Convert legacy tuple cache into a Cache object when required."""
+        if legacy_cache is None:
+            return None
+        if hasattr(legacy_cache, "get_seq_length"):
+            return legacy_cache
+        if not isinstance(legacy_cache, (list, tuple)):
+            return None
+        try:
+            from transformers.cache_utils import DynamicCache
+        except Exception as exc:
+            logger.warning(f"PyTorchEngine: Cache class unavailable: {exc}")
+            return None
+        try:
+            return DynamicCache.from_legacy_cache(tuple(legacy_cache))
+        except Exception as exc:
+            logger.warning(f"PyTorchEngine: Failed to build cache class: {exc}")
+            return None
+
+    def _extract_cache_key_tensor(self, cache: Any) -> Optional[torch.Tensor]:
+        """Best-effort extraction of a key tensor for cache validation."""
+        if cache is None:
+            return None
+        if hasattr(cache, "key_cache"):
+            try:
+                for entry in cache.key_cache:
+                    if isinstance(entry, torch.Tensor) and entry.numel() > 0:
+                        return entry
+            except Exception:
+                pass
+        if isinstance(cache, dict):
+            key_tensor = cache.get("key") or cache.get("k")
+            if isinstance(key_tensor, torch.Tensor):
+                return key_tensor
+        if isinstance(cache, (list, tuple)):
+            for layer in cache:
+                if isinstance(layer, (list, tuple)) and len(layer) >= 1:
+                    key_tensor = layer[0]
+                    if isinstance(key_tensor, torch.Tensor):
+                        return key_tensor
+                if isinstance(layer, torch.Tensor) and layer.ndim >= 1 and layer.shape[0] == 2:
+                    return layer[0]
+                if isinstance(layer, dict):
+                    key_tensor = layer.get("key") or layer.get("k")
+                    if isinstance(key_tensor, torch.Tensor):
+                        return key_tensor
+        return None
+
+    def _kv_cache_matches_model(self, cache: Any) -> bool:
+        """Check if a KV cache looks compatible with this model's attention shape."""
+        if self.model is None:
+            return True
+        config = getattr(self.model, "config", None)
+        if config is None:
+            return True
+        expected_heads = getattr(config, "num_key_value_heads", None) or getattr(config, "num_attention_heads", None)
+        expected_head_dim = getattr(config, "head_dim", None)
+        if expected_head_dim is None:
+            hidden_size = getattr(config, "hidden_size", None)
+            num_heads = getattr(config, "num_attention_heads", None)
+            if hidden_size and num_heads:
+                expected_head_dim = hidden_size // num_heads
+
+        key_tensor = self._extract_cache_key_tensor(cache)
+        if key_tensor is None:
+            return True
+
+        if key_tensor.ndim < 3:
+            return False
+
+        actual_head_dim = key_tensor.shape[-1]
+        head_candidates = [key_tensor.shape[-3], key_tensor.shape[-2]]
+
+        heads_match = True
+        if expected_heads:
+            heads_match = expected_heads in head_candidates
+
+        head_dim_match = True
+        if expected_head_dim:
+            head_dim_match = actual_head_dim == expected_head_dim
+
+        if not (heads_match and head_dim_match):
+            logger.debug(
+                "PyTorchEngine: KV cache shape mismatch. "
+                f"expected_heads={expected_heads} expected_head_dim={expected_head_dim} "
+                f"cache_shape={tuple(key_tensor.shape)}"
+            )
+            return False
+        return True
 
     def load(self):
         # Gemma-3 models require trust_remote_code=True
@@ -231,26 +326,51 @@ class PyTorchEngine(LLMEngine):
         return torch.softmax(logits, dim=-1)
     
 
-    def predict_next(self, input_ids: torch.Tensor, attention_mask: Optional[torch.Tensor], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]:
+    def predict_next(self, input_ids: torch.Tensor, attention_mask: Optional[torch.Tensor], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> PredictionResult:
         if not self.model or not self._device: raise RuntimeError("PyTorchEngine: Not fully loaded.")
         st = time.time(); self.model.eval()
         with torch.no_grad():
             # Check if we should use KV cache
             use_kv_cache = self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE)
+            allow_translation = bool(self.engine_config.get("allow_kv_cache_translation", False))
             current_past_key_values = None
             
             # Only use cached values if we're processing a single new token
             if use_kv_cache and self._kv_cache is not None and input_ids.shape[-1] == 1:
                 current_past_key_values = self._kv_cache
+                if self._supports_cache_class() and not hasattr(current_past_key_values, "get_seq_length"):
+                    current_past_key_values = self._build_cache_class(current_past_key_values)
+                    if current_past_key_values is None:
+                        current_past_key_values = None
+                        self._kv_cache = None
+                    else:
+                        self._kv_cache = current_past_key_values
+                if current_past_key_values is not None and not self._kv_cache_matches_model(current_past_key_values):
+                    if allow_translation:
+                        logger.warning("PyTorchEngine: KV cache incompatible; attempting due to translation flag.")
+                    else:
+                        logger.warning("PyTorchEngine: KV cache incompatible with model; resetting cache.")
+                        current_past_key_values = None
+                        self._kv_cache = None
                 # For models that need it, we might need to adjust attention_mask
                 # Some models expect None for attention_mask when using cache with single token
                 if hasattr(self.model.config, 'model_type') and 'gemma' in self.model.config.model_type:
                     # For Gemma models with KV cache, set attention_mask to None for single token inference
                     attention_mask = None
             
-            outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=current_past_key_values,
-                                 output_attentions=output_attentions, output_hidden_states=output_hidden_states,
-                                 use_cache=use_kv_cache)
+            try:
+                outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=current_past_key_values,
+                                     output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                     use_cache=use_kv_cache)
+            except Exception as exc:
+                if current_past_key_values is None:
+                    raise
+                logger.warning(f"PyTorchEngine: KV cache failed; retrying without cache: {exc}")
+                current_past_key_values = None
+                self._kv_cache = None
+                outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=None,
+                                     output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                     use_cache=use_kv_cache)
         if use_kv_cache and hasattr(outputs, "past_key_values"): 
             self._kv_cache = outputs.past_key_values
         
@@ -304,25 +424,41 @@ class PyTorchEngine(LLMEngine):
         # For MPS, ensure all tensors used for softmax are float32
         if hasattr(self._device, 'type') and self._device.type == 'mps':
             l_raw_f32 = l_raw.to(torch.float32)
-            return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, 
-                    "probabilities_raw": self._softmax_torch(l_raw_f32),
-                    "probabilities_temp": self._softmax_torch(l_temp), 
-                    "probabilities_top_k": self._softmax_torch(l_k), 
-                    "probabilities_processed": p_proc,
-                    "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
-                    "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
-                    "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), 
-                    "forward_time": time.time() - st}
+            return PredictionResult.from_dict({
+                "next_token_id": next_id_val,
+                "logits_raw": l_raw,
+                "logits_processed": l_proc,
+                "logits_after_temperature": l_temp,
+                "logits_after_top_k": l_k,
+                "logits_after_top_p": l_proc,
+                "probabilities_raw": self._softmax_torch(l_raw_f32),
+                "probabilities_temp": self._softmax_torch(l_temp),
+                "probabilities_top_k": self._softmax_torch(l_k),
+                "probabilities_processed": p_proc,
+                "top_tokens_processed": top_txts,
+                "top_probs_processed": top_p_list,
+                "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
+                "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None),
+                "forward_time": time.time() - st
+            })
         else:
-            return {"next_token_id": next_id_val, "logits_raw": l_raw, "logits_processed": l_proc, 
-                    "probabilities_raw": self._softmax_torch(l_raw),
-                    "probabilities_temp": self._softmax_torch(l_temp), 
-                    "probabilities_top_k": self._softmax_torch(l_k), 
-                    "probabilities_processed": p_proc,
-                    "top_tokens_processed": top_txts, "top_probs_processed": top_p_list,
-                    "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
-                    "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None), 
-                    "forward_time": time.time() - st}
+            return PredictionResult.from_dict({
+                "next_token_id": next_id_val,
+                "logits_raw": l_raw,
+                "logits_processed": l_proc,
+                "logits_after_temperature": l_temp,
+                "logits_after_top_k": l_k,
+                "logits_after_top_p": l_proc,
+                "probabilities_raw": self._softmax_torch(l_raw),
+                "probabilities_temp": self._softmax_torch(l_temp),
+                "probabilities_top_k": self._softmax_torch(l_k),
+                "probabilities_processed": p_proc,
+                "top_tokens_processed": top_txts,
+                "top_probs_processed": top_p_list,
+                "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
+                "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None),
+                "forward_time": time.time() - st
+            })
 
     # get_vocabulary_size uses base class implementation
 
@@ -465,6 +601,38 @@ class PyTorchEngine(LLMEngine):
                     tensor = tensor.to(torch.float32)
 
         return tensor.to(self._device)
+
+    def set_kv_cache(self, cache: Any):
+        """Set KV cache, converting to cache classes when required."""
+        if cache is None:
+            self._kv_cache = None
+            return
+        allow_translation = bool(self.engine_config.get("allow_kv_cache_translation", False))
+        if self._supports_cache_class() and not hasattr(cache, "get_seq_length"):
+            converted = self._build_cache_class(cache)
+            if converted is None:
+                logger.warning("PyTorchEngine: KV cache format unsupported for this model; cache disabled.")
+                self._kv_cache = None
+                return
+            if not self._kv_cache_matches_model(converted):
+                if allow_translation:
+                    logger.warning("PyTorchEngine: KV cache incompatible; allowing due to translation flag.")
+                    self._kv_cache = converted
+                    return
+                logger.warning("PyTorchEngine: KV cache incompatible with model; cache disabled.")
+                self._kv_cache = None
+                return
+            self._kv_cache = converted
+            return
+        if not self._kv_cache_matches_model(cache):
+            if allow_translation:
+                logger.warning("PyTorchEngine: KV cache incompatible; allowing due to translation flag.")
+                self._kv_cache = cache
+                return
+            logger.warning("PyTorchEngine: KV cache incompatible with model; cache disabled.")
+            self._kv_cache = None
+            return
+        self._kv_cache = cache
     
     def concatenate_tensors(self, tensor1: Any, tensor2: Any, dim: int = -1) -> torch.Tensor:
         """Concatenate PyTorch tensors."""
@@ -518,16 +686,76 @@ class PyTorchEngine(LLMEngine):
             return None
         
         try:
-            # Convert cache to numpy for portability
+            cache_obj = self._kv_cache
+            if hasattr(cache_obj, "to_legacy_cache") and callable(getattr(cache_obj, "to_legacy_cache")):
+                try:
+                    legacy_cache = cache_obj.to_legacy_cache()
+                    if legacy_cache is not None:
+                        cache_obj = legacy_cache
+                except Exception as e:
+                    # Best-effort: keep the original cache object and fall back to heuristics below.
+                    logger.warning(f"PyTorchEngine: Failed to convert cache to legacy format: {e}")
+
+            def _iter_kv_layers(obj):
+                if obj is None:
+                    return
+                if hasattr(obj, "key_cache") and hasattr(obj, "value_cache"):
+                    try:
+                        for k_cache, v_cache in zip(obj.key_cache, obj.value_cache):
+                            yield k_cache, v_cache
+                        return
+                    except Exception:
+                        pass
+                if hasattr(obj, "cache"):
+                    try:
+                        for entry in obj.cache:
+                            yield from _iter_kv_layers(entry)
+                        return
+                    except Exception:
+                        pass
+                if hasattr(obj, "layers"):
+                    try:
+                        for entry in obj.layers:
+                            yield from _iter_kv_layers(entry)
+                        return
+                    except Exception:
+                        pass
+                if isinstance(obj, (list, tuple)):
+                    for entry in obj:
+                        if isinstance(entry, (list, tuple)) and len(entry) >= 2:
+                            yield entry[0], entry[1]
+                            continue
+                        if isinstance(entry, dict) and ("key" in entry or "value" in entry):
+                            k_cache = entry.get("key") or entry.get("k")
+                            v_cache = entry.get("value") or entry.get("v")
+                            if k_cache is not None and v_cache is not None:
+                                yield k_cache, v_cache
+                            continue
+                        if isinstance(entry, torch.Tensor) and entry.ndim >= 1 and entry.shape[0] == 2:
+                            yield entry[0], entry[1]
+                            continue
+                        yield from _iter_kv_layers(entry)
+                elif isinstance(obj, dict) and ("key" in obj or "value" in obj):
+                    k_cache = obj.get("key") or obj.get("k")
+                    v_cache = obj.get("value") or obj.get("v")
+                    if k_cache is not None and v_cache is not None:
+                        yield k_cache, v_cache
+                elif hasattr(obj, "__iter__"):
+                    try:
+                        for entry in obj:
+                            yield from _iter_kv_layers(entry)
+                    except Exception:
+                        return
+
             cache_as_numpy = []
-            if isinstance(self._kv_cache, tuple):
-                for layer_cache in self._kv_cache:
-                    if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
-                        k_cache, v_cache = layer_cache[0], layer_cache[1]
-                        cache_as_numpy.append((
-                            self.convert_to_numpy(k_cache),
-                            self.convert_to_numpy(v_cache)
-                        ))
+            for k_cache, v_cache in _iter_kv_layers(cache_obj):
+                cache_as_numpy.append((
+                    self.convert_to_numpy(k_cache),
+                    self.convert_to_numpy(v_cache)
+                ))
+
+            if not cache_as_numpy:
+                return None
             
             return {
                 'cache_data': cache_as_numpy,
@@ -548,14 +776,17 @@ class PyTorchEngine(LLMEngine):
             # Convert numpy arrays back to PyTorch tensors
             new_cache = []
             for layer_data in cache_data:
-                if isinstance(layer_data, tuple) and len(layer_data) >= 2:
-                    k_np, v_np = layer_data
+                if isinstance(layer_data, (list, tuple)) and len(layer_data) >= 2:
+                    k_np, v_np = layer_data[0], layer_data[1]
                     k_tensor = self.convert_from_numpy(k_np)
                     v_tensor = self.convert_from_numpy(v_np)
                     new_cache.append((k_tensor, v_tensor))
             
-            self._kv_cache = tuple(new_cache) if new_cache else None
-            return True
+            if not new_cache:
+                return False
+            legacy_cache = tuple(new_cache)
+            self.set_kv_cache(legacy_cache)
+            return self._kv_cache is not None
         except Exception as e:
             logger.warning(f"PyTorchEngine: Failed to import KV cache: {e}")
             return False

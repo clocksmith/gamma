@@ -40,6 +40,7 @@ MIN_AGREEMENT_WEIGHT = 0.1
 from src.mind_meld.bridges.kv_cache_handler import (
     KVCacheTranslator,
     PyTorchKVCache,
+    get_attention_config,
     get_model_architecture,
 )
 from src.mind_meld.core.abe_ensemble import ABEEnsemble
@@ -51,7 +52,13 @@ from src.mind_meld.core.compatibility import (
 from src.mind_meld.core.blending import BlendingConfig, BlendingStrategy, LogitBlender
 from src.mind_meld.core.config import MeldConfig, SwapStrategy
 from src.mind_meld.core.statistics import StatisticsTracker
-from src.mind_meld.translators.vocabulary_translator import AligningVocabularyTranslator
+from src.mind_meld.translators.vocabulary_translator import (
+    AligningVocabularyTranslator,
+    VocabularyIntersectionTranslator,
+    SemanticMappingTranslator,
+    SubwordDecompositionTranslator,
+    FallbackToUnkTranslator,
+)
 from src.mind_meld.visualization import SwapVisualizer, SwapEvent
 
 
@@ -197,8 +204,26 @@ class MeldEngine:
         self.active_model_idx = 0
         self.verbose = self.config.verbose or getattr(args, "verbose", False)
         self.headless = getattr(args, "headless", False)
+        self.step_delay = 0.0 if getattr(args, "no_step_delay", False) else 1.0
         self._per_engine_primed = {idx: False for idx in range(len(models))}
         self._last_token_text: Optional[str] = None
+        self._diagnostics_enabled = bool(getattr(args, "meld_diagnostics", False))
+        self._allow_kv_cache_translation = bool(getattr(args, "allow_kv_cache_translation", False))
+        for engine in self.models:
+            if hasattr(engine, "engine_config"):
+                engine.engine_config["allow_kv_cache_translation"] = self._allow_kv_cache_translation
+        self._diag = {
+            "vocab_translate_logits": 0,
+            "vocab_translate_probs": 0,
+            "vocab_mismatch": 0,
+            "kv_cache_attempts": 0,
+            "kv_cache_success": 0,
+            "kv_cache_direct": 0,
+            "kv_cache_state": 0,
+            "kv_cache_translated": 0,
+            "kv_cache_unavailable": 0,
+            "kv_cache_reset": 0,
+        }
 
         # Validate configuration
         config_warnings = self.config.validate()
@@ -277,11 +302,8 @@ class MeldEngine:
         # --- Enhanced Bridging Components by Default ---
         logger.info("Initializing Mind Meld with enhanced bridging components...")
 
-        # Configure vocabulary translator based on config
-        self.vocab_translator = AligningVocabularyTranslator(
-            use_cache=self.config.translation_config.use_vocabulary_cache,
-            verbose=self.verbose
-        )
+        # Configure vocabulary translator based on config and args
+        self.vocab_translator = self._build_vocab_translator()
 
         # Configure KV cache translator
         self.kv_translator = KVCacheTranslator(verbose=self.verbose)
@@ -450,6 +472,34 @@ class MeldEngine:
         logger.info(f"  Stats tracking: {'ON' if self.use_stats_tracker else 'OFF'}")
         logger.info(f"  Visualization: Enabled")
 
+    def _build_vocab_translator(self):
+        """Select a vocabulary translator based on config and CLI overrides."""
+        strategy = getattr(self.args, "alignment_strategy", None)
+        normalized = (str(strategy).strip().lower() if strategy is not None else "")
+        if not normalized or normalized in {"auto", "default"}:
+            normalized = (
+                self.vocab_strategy.value
+                if hasattr(self.vocab_strategy, "value")
+                else str(self.vocab_strategy).lower()
+            )
+
+        use_cache = self.config.translation_config.use_vocabulary_cache
+        verbose = self.verbose or self._diagnostics_enabled
+
+        if normalized in {"intersection", "intersect", "common"}:
+            return VocabularyIntersectionTranslator(use_cache=use_cache, verbose=verbose)
+        if normalized in {"subword", "subword_decomposition", "decomposition"}:
+            return SubwordDecompositionTranslator(use_cache=use_cache, verbose=verbose)
+        if normalized in {"unk", "fallback", "fallback_unk"}:
+            return FallbackToUnkTranslator(use_cache=use_cache, verbose=verbose)
+        if normalized in {"semantic_map", "semantic_mapping", "embedding"}:
+            return SemanticMappingTranslator(use_cache=use_cache, verbose=verbose)
+        if normalized in {"align", "alignment", "surface", "semantic"}:
+            return AligningVocabularyTranslator(use_cache=use_cache, verbose=verbose)
+
+        logger.warning(f"Unknown alignment strategy '{normalized}', falling back to alignment.")
+        return AligningVocabularyTranslator(use_cache=use_cache, verbose=verbose)
+
     def get_active_engine(self) -> LLMEngine:
         """Returns the currently active engine."""
         return self.models[self.active_model_idx]
@@ -556,7 +606,7 @@ class MeldEngine:
             probs = sampling_utils.softmax(logits_proc)
 
             if idx > 0 and len(engine.get_vocab()) != base_vocab_size:
-                probs = self.vocab_translator.translate_probabilities(
+                probs = self._translate_probabilities(
                     probs, EngineTokenizerAdapter(engine), EngineTokenizerAdapter(base_engine)
                 )
 
@@ -580,9 +630,66 @@ class MeldEngine:
     
     def _translate_probabilities(self, probs: np.ndarray, source_tokenizer, target_tokenizer):
         """Translate probability distribution from source to target vocabulary."""
-        return self.vocab_translator.translate_probabilities(
+        if self._diagnostics_enabled:
+            self._diag["vocab_translate_probs"] += 1
+            try:
+                if len(source_tokenizer.get_vocab()) != len(target_tokenizer.get_vocab()):
+                    self._diag["vocab_mismatch"] += 1
+            except Exception:
+                pass
+        translated = self.vocab_translator.translate_probabilities(
             probs, source_tokenizer, target_tokenizer
         )
+        return self._squeeze_vocab_axis(translated)
+
+    def _translate_logits(self, logits: np.ndarray, source_tokenizer, target_tokenizer) -> np.ndarray:
+        """Translate logits from source to target vocabulary."""
+        if self._diagnostics_enabled:
+            self._diag["vocab_translate_logits"] += 1
+            try:
+                if len(source_tokenizer.get_vocab()) != len(target_tokenizer.get_vocab()):
+                    self._diag["vocab_mismatch"] += 1
+            except Exception:
+                pass
+        translated = self.vocab_translator.translate_logits(
+            logits, source_tokenizer, target_tokenizer
+        )
+        return self._squeeze_vocab_axis(translated)
+
+    @staticmethod
+    def _squeeze_vocab_axis(arr: np.ndarray) -> np.ndarray:
+        """Ensure logits/probabilities are 1D for single-batch decoding."""
+        if arr is None:
+            return arr
+        arr = np.asarray(arr)
+        if arr.ndim == 0:
+            return np.array([float(arr)])
+        if arr.ndim > 1:
+            if arr.shape[0] == 1:
+                return np.squeeze(arr, axis=0)
+            return arr.reshape(-1)
+        return arr
+
+    def _report_diagnostics(self) -> None:
+        if not self._diagnostics_enabled:
+            return
+        msg = (
+            "Mind Meld diagnostics: "
+            f"vocab_translate_logits={self._diag['vocab_translate_logits']}, "
+            f"vocab_translate_probs={self._diag['vocab_translate_probs']}, "
+            f"vocab_mismatch={self._diag['vocab_mismatch']}, "
+            f"kv_cache_attempts={self._diag['kv_cache_attempts']}, "
+            f"kv_cache_success={self._diag['kv_cache_success']}, "
+            f"kv_cache_direct={self._diag['kv_cache_direct']}, "
+            f"kv_cache_state={self._diag['kv_cache_state']}, "
+            f"kv_cache_translated={self._diag['kv_cache_translated']}, "
+            f"kv_cache_unavailable={self._diag['kv_cache_unavailable']}, "
+            f"kv_cache_reset={self._diag['kv_cache_reset']}"
+        )
+        if self.headless:
+            print(msg)
+        else:
+            ui.print_message(msg)
 
     def _fetch_other_model_logits(self, current_full_text: str) -> List[np.ndarray]:
         """Fetch logits from all non-active models for blending.
@@ -646,15 +753,16 @@ class MeldEngine:
             decoding_engine = active_engine
         else:
             # Default: translate logits from active to target model's vocab space
-            melded_logits = self.vocab_translator.translate_logits(
+            melded_logits = self._translate_logits(
                 logits_numpy,
                 EngineTokenizerAdapter(active_engine),
                 EngineTokenizerAdapter(target_engine)
             )
             decoding_engine = target_engine
 
-        # Clean up NaN/inf values
+        # Clean up NaN/inf values and ensure 1D logits for sampling
         melded_logits = sampling_utils.sanitize_logits(melded_logits)
+        melded_logits = self._squeeze_vocab_axis(melded_logits)
 
         # Process through sampling pipeline
         processed_logits, _, _ = sampling_utils.process_logits_pipeline(
@@ -665,6 +773,7 @@ class MeldEngine:
             return_intermediates=True
         )
         melded_probs = sampling_utils.softmax(processed_logits)
+        melded_probs = self._squeeze_vocab_axis(melded_probs)
 
         # Handle invalid probability distributions
         if np.isnan(melded_probs).any() or np.sum(melded_probs) == 0:
@@ -742,7 +851,7 @@ class MeldEngine:
 
             # Align logits to the base vocabulary to keep dimensions consistent
             if len(model.get_vocab()) != base_vocab_size:
-                logits_clean = self.vocab_translator.translate_logits(
+                logits_clean = self._translate_logits(
                     logits_clean, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )
 
@@ -757,7 +866,7 @@ class MeldEngine:
             )
             probs = sampling_utils.softmax(logits_proc)
             if len(model.get_vocab()) != base_vocab_size:
-                probs = self.vocab_translator.translate_probabilities(
+                probs = self._translate_probabilities(
                     probs, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )
             all_probs.append(probs)
@@ -818,9 +927,14 @@ class MeldEngine:
         self.offloader.swap_active_model(self.models, source_idx, target_idx)
 
         if self._transfer_kv_cache(source_engine, target_engine):
+            # Mark target engine as primed so we only send the next token with the cache.
+            self._per_engine_primed[target_idx] = True
             logger.info("KV cache bridged successfully.")
         else:
             target_engine.reset_kv_cache()
+            self._per_engine_primed[target_idx] = False
+            if self._diagnostics_enabled:
+                self._diag["kv_cache_reset"] += 1
             logger.info("KV cache reset (bridge unavailable).")
 
         self.active_model_idx = target_idx
@@ -830,12 +944,103 @@ class MeldEngine:
 
         source_cache = source_engine.get_kv_cache()
         if source_cache is None:
+            if self._diagnostics_enabled:
+                self._diag["kv_cache_unavailable"] += 1
             return False
+
+        source_config = getattr(getattr(source_engine, "model", None), "config", None)
+        target_config = getattr(getattr(target_engine, "model", None), "config", None)
+        requires_translation = False
+        if source_config is not None and target_config is not None:
+            source_arch = get_model_architecture(source_config)
+            target_arch = get_model_architecture(target_config)
+            arch_mismatch = (
+                source_arch != "unknown"
+                and target_arch != "unknown"
+                and source_arch != target_arch
+            )
+
+            source_attn = get_attention_config(source_config)
+            target_attn = get_attention_config(target_config)
+            attn_mismatch = (
+                source_attn.get("num_heads") != target_attn.get("num_heads")
+                or source_attn.get("num_kv_heads") != target_attn.get("num_kv_heads")
+                or source_attn.get("head_dim") != target_attn.get("head_dim")
+            )
+
+            requires_translation = arch_mismatch or attn_mismatch
+            if requires_translation and not self._allow_kv_cache_translation:
+                if arch_mismatch:
+                    logger.info(
+                        "KV cache bridge skipped: architecture mismatch "
+                        f"({source_arch} -> {target_arch})."
+                    )
+                if attn_mismatch:
+                    logger.info(
+                        "KV cache bridge skipped: attention config mismatch "
+                        f"(heads {source_attn.get('num_heads')}->{target_attn.get('num_heads')}, "
+                        f"kv_heads {source_attn.get('num_kv_heads')}->{target_attn.get('num_kv_heads')}, "
+                        f"head_dim {source_attn.get('head_dim')}->{target_attn.get('head_dim')})."
+                    )
+                return False
+
+            if requires_translation and self._allow_kv_cache_translation:
+                logger.info("KV cache translation enabled for mismatched models.")
+
+        if self._diagnostics_enabled:
+            self._diag["kv_cache_attempts"] += 1
+
+        def _attempt_translation() -> bool:
+            """Attempt KV cache translation for mismatched models."""
+            try:
+                if source_config is None or target_config is None:
+                    return False
+
+                wrapped_cache = (
+                    source_cache
+                    if isinstance(source_cache, PyTorchKVCache)
+                    else PyTorchKVCache(source_cache, source_config)
+                )
+
+                target_arch = get_model_architecture(target_config)
+                if self._diagnostics_enabled:
+                    self._diag["kv_cache_translated"] += 1
+                translated_cache = self.kv_translator.translate(
+                    wrapped_cache,
+                    target_arch,
+                    target_config,
+                )
+
+                if translated_cache is None:
+                    return False
+
+                new_cache = translated_cache.to_model_format()
+                if new_cache is None:
+                    return False
+                if isinstance(new_cache, tuple) and len(new_cache) == 0:
+                    return False
+                target_engine.set_kv_cache(new_cache)
+                if not target_engine.has_kv_cache():
+                    return False
+                if self._diagnostics_enabled:
+                    self._diag["kv_cache_success"] += 1
+                return True
+            except Exception as exc:  # pragma: no cover - backend specific
+                logger.warning(f"KV cache translation failed: {exc}")
+                return False
+
+        if requires_translation and self._allow_kv_cache_translation:
+            return _attempt_translation()
 
         # Preferred path: let the originating engine perform the transfer if it knows how.
         try:
             if source_engine.bridge_kv_cache_to(target_engine):
-                return True
+                if target_engine.has_kv_cache():
+                    if self._diagnostics_enabled:
+                        self._diag["kv_cache_direct"] += 1
+                        self._diag["kv_cache_success"] += 1
+                    return True
+                return False
         except NotImplementedError:
             pass
         except Exception as exc:  # pragma: no cover - backend specific
@@ -849,37 +1054,17 @@ class MeldEngine:
 
             if export_state and hasattr(target_engine, 'import_kv_cache_state'):
                 if target_engine.import_kv_cache_state(export_state):
-                    return True
+                    if target_engine.has_kv_cache():
+                        if self._diagnostics_enabled:
+                            self._diag["kv_cache_state"] += 1
+                            self._diag["kv_cache_success"] += 1
+                        return True
+                    return False
         except Exception as exc:  # pragma: no cover - backend specific
             logger.warning(f"State-based KV cache bridge failed: {exc}")
 
         # Fallback path: attempt shape-compatible translation using the shared translator.
-        try:
-            source_config = getattr(getattr(source_engine, "model", None), "config", None)
-            target_config = getattr(getattr(target_engine, "model", None), "config", None)
-            if source_config is None or target_config is None:
-                return False
-
-            wrapped_cache = (
-                source_cache
-                if isinstance(source_cache, PyTorchKVCache)
-                else PyTorchKVCache(source_cache, source_config)
-            )
-
-            target_arch = get_model_architecture(target_config)
-            translated_cache = self.kv_translator.translate(
-                wrapped_cache,
-                target_arch,
-                target_config,
-            )
-
-            if translated_cache is None:
-                return False
-
-            return bool(target_engine.set_kv_cache(translated_cache.to_model_format()))
-        except Exception as exc:  # pragma: no cover - backend specific
-            logger.warning(f"KV cache translation failed: {exc}")
-            return False
+        return _attempt_translation()
 
     def run_game_loop(self):
         """Main game loop for Mind Meld mode."""
@@ -978,8 +1163,8 @@ class MeldEngine:
                         next_token_text
                     )
                 self._perform_swap()
-            if not self.headless:
-                time.sleep(1) # Pause for readability
+            if not self.headless and self.step_delay > 0:
+                time.sleep(self.step_delay)
 
         logger.info("Mind Meld session finished.")
         ui.print_message("\nMind Meld session finished.")
@@ -1002,6 +1187,8 @@ class MeldEngine:
 
         if self.stats_tracker:
             self.stats_tracker.finish()
+
+        self._report_diagnostics()
 
     def _run_headless(self):
         """Lightweight generation loop for tests/automation (no prompts or file IO)."""
@@ -1046,4 +1233,5 @@ class MeldEngine:
             if self._should_check_swap() and self._should_swap(next_token_text):
                 self._perform_swap()
 
+        self._report_diagnostics()
         return current_full_text

@@ -25,6 +25,7 @@ import numpy as np
 import numpy.typing as npt
 
 from src.core import config as cfg
+from src.core.types import PredictionResult
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,8 @@ class LLMEngine(ABC):
         self._special_token_id_to_game_repr: Dict[int, str] = {}
         self._token_cache: Dict[int, str] = {}
         self._kv_cache: Any = None
+        seed = self.get_seed()
+        self._rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
 
     # Configuration helper methods (reduces duplication across engines)
     def get_trust_remote_code(self) -> bool:
@@ -118,7 +121,10 @@ class LLMEngine(ABC):
 
     def get_seed(self) -> Optional[int]:
         """Get random seed for reproducibility."""
-        return self.engine_config.get("seed", None)
+        seed = self.engine_config.get("seed", None)
+        if seed in (None, 0):
+            return None
+        return seed
 
     def get_device_map(self, default: str = "auto") -> str:
         """Get device map configuration (for HF transformers)."""
@@ -127,6 +133,15 @@ class LLMEngine(ABC):
     def get_low_cpu_mem_usage(self) -> bool:
         """Get low CPU memory usage setting."""
         return self.engine_config.get("low_cpu_mem_usage", True)
+
+    def get_sampling_strategy(self) -> str:
+        """Get sampling strategy (argmax or sample)."""
+        strategy = str(self.engine_config.get("sampling_strategy", "")).lower()
+        if strategy in ("argmax", "greedy"):
+            return "argmax"
+        if strategy in ("sample", "stochastic"):
+            return "sample"
+        return "argmax" if self.is_benchmark_mode() else "sample"
 
     # ========================================================================
     # Engine Capability Flags
@@ -249,7 +264,7 @@ class LLMEngine(ABC):
         top_p: float,
         output_attentions: bool = False,
         output_hidden_states: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> PredictionResult:
         """
         Predict the next token given input IDs.
 
@@ -319,7 +334,7 @@ class LLMEngine(ABC):
         probs_proc_np = sampling_utils.softmax(logits_proc_np)
 
         # Select next token
-        next_token_id = int(np.argmax(probs_proc_np, axis=-1))
+        next_token_id = self._select_next_token(probs_proc_np)
 
         # Get top-k tokens for display
         max_display_k = max(
@@ -343,6 +358,22 @@ class LLMEngine(ABC):
             "top_tokens": top_tokens,
             "top_probs": top_probs
         }
+
+    def _select_next_token(self, probs: np.ndarray) -> int:
+        """Select next token id from a probability distribution."""
+        from src.engines import sampling_utils
+
+        probs_flat = np.asarray(probs).reshape(-1)
+        probs_flat = sampling_utils.sanitize_probs(probs_flat)
+
+        strategy = self.get_sampling_strategy()
+        if strategy == "argmax":
+            return int(np.argmax(probs_flat))
+
+        try:
+            return int(self._rng.choice(len(probs_flat), p=probs_flat))
+        except (ValueError, IndexError):
+            return int(np.argmax(probs_flat))
 
     def _load_hf_tokenizer(self, model_name: Optional[str] = None, **kwargs):
         """

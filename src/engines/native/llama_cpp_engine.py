@@ -10,6 +10,7 @@ except ImportError: raise ImportError("'llama-cpp-python' library not found. Ins
 logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core.models.model_paths import resolve_model_path
 from src.engines import sampling_utils
 
@@ -52,9 +53,9 @@ class LlamaCppEngine(LLMEngine):
         """Checks for and reports GPU offload capability."""
         print("--- Llama.cpp Hardware Acceleration Status ---")
         if llama_supports_gpu_offload():
-            print("\033[92m[✔] SUCCESS: llama-cpp-python reports GPU support is available.\033[0m")
+            print("\033[92m[OK] SUCCESS: llama-cpp-python reports GPU support is available.\033[0m")
         else:
-            print("\033[91m[✖] WARNING: GPU offload NOT SUPPORTED by this build.\033[0m")
+            print("\033[91m[WARN] WARNING: GPU offload NOT SUPPORTED by this build.\033[0m")
             print("\033[93m    Model will run on CPU only. Performance will be slow.\033[0m")
         print("------------------------------------------\n")
 
@@ -116,7 +117,7 @@ class LlamaCppEngine(LLMEngine):
         return logits_np
 
 
-    def predict_next(self, input_ids: List[int], attention_mask: Any, temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]:
+    def predict_next(self, input_ids: List[int], attention_mask: Any, temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> PredictionResult:
         if not self.model: raise RuntimeError("LlamaCppEngine: Model not loaded.")
         st = time.time()
         try: logits_raw = self._get_logits(input_ids)
@@ -126,25 +127,34 @@ class LlamaCppEngine(LLMEngine):
             default_logits = np.full(self.get_vocabulary_size(), -np.inf, dtype=np.float32)
             if unk_token_id != -1 and 0 <= unk_token_id < len(default_logits): default_logits[unk_token_id] = 0.0
             probs_default = sampling_utils.softmax(default_logits)
-            return {"next_token_id": unk_token_id, "logits_raw": default_logits, "logits_processed": default_logits, "probabilities_raw": probs_default,
-                    "probabilities_temp": probs_default, "probabilities_top_k": probs_default, "probabilities_processed": probs_default,
-                    "top_tokens_processed": [self.get_token_text(unk_token_id)], "top_probs_processed": [1.0], "attention": None, "hidden_states": None, "forward_time": time.time() - st}
+            return PredictionResult.from_dict({"next_token_id": unk_token_id, "logits_raw": default_logits, "logits_processed": default_logits,
+                                               "logits_after_temperature": default_logits, "logits_after_top_k": default_logits, "logits_after_top_p": default_logits,
+                                               "probabilities_raw": probs_default, "probabilities_temp": probs_default, "probabilities_top_k": probs_default,
+                                               "probabilities_processed": probs_default, "top_tokens_processed": [self.get_token_text(unk_token_id)],
+                                               "top_probs_processed": [1.0], "attention": None, "hidden_states": None, "forward_time": time.time() - st})
 
         # Use common sampling pipeline (consolidates duplicate code)
         pipeline_results = self._process_logits_common_pipeline(logits_raw.copy(), temperature, top_k, top_p)
 
-        return {"next_token_id": pipeline_results["next_token_id"],
-                "logits_raw": logits_raw,
-                "logits_processed": pipeline_results["logits_processed_np"],
-                "probabilities_raw": sampling_utils.softmax(logits_raw),
-                "probabilities_temp": sampling_utils.softmax(pipeline_results["logits_temp_np"]),
-                "probabilities_top_k": sampling_utils.softmax(pipeline_results["logits_topk_np"]),
-                "probabilities_processed": pipeline_results["probs_processed_np"],
-                "top_tokens_processed": pipeline_results["top_tokens"],
-                "top_probs_processed": pipeline_results["top_probs"],
-                "attention": None,
-                "hidden_states": None,
-                "forward_time": time.time() - st}
+        logits_processed = pipeline_results["logits_processed_np"]
+        logits_after_temperature = pipeline_results["logits_temp_np"]
+        logits_after_top_k = pipeline_results["logits_topk_np"]
+
+        return PredictionResult.from_dict({"next_token_id": pipeline_results["next_token_id"],
+                                           "logits_raw": logits_raw,
+                                           "logits_processed": logits_processed,
+                                           "logits_after_temperature": logits_after_temperature,
+                                           "logits_after_top_k": logits_after_top_k,
+                                           "logits_after_top_p": logits_processed,
+                                           "probabilities_raw": sampling_utils.softmax(logits_raw),
+                                           "probabilities_temp": sampling_utils.softmax(logits_after_temperature),
+                                           "probabilities_top_k": sampling_utils.softmax(logits_after_top_k),
+                                           "probabilities_processed": pipeline_results["probs_processed_np"],
+                                           "top_tokens_processed": pipeline_results["top_tokens"],
+                                           "top_probs_processed": pipeline_results["top_probs"],
+                                           "attention": None,
+                                           "hidden_states": None,
+                                           "forward_time": time.time() - st})
 
     def get_vocabulary_size(self) -> int:
         if not self.model: raise RuntimeError("LlamaCppEngine: Model not loaded."); return -1
@@ -284,4 +294,3 @@ class LlamaCppEngine(LLMEngine):
                 return "cuda/rocm/metal"  # Could be any supported backend
             return "cpu"
         return "cpu"
-

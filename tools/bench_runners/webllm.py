@@ -65,15 +65,39 @@ WEBLLM_HTML = """
                 });
 
                 const endTime = performance.now();
-                const elapsedSec = (endTime - startTime) / 1000;
+                const totalElapsedSec = (endTime - startTime) / 1000;
 
-                // Get token count from usage
-                const outputTokens = response.usage?.completion_tokens || 0;
+                // Get token counts from usage
+                const usage = response.usage || {};
+                const outputTokens = usage.completion_tokens || 0;
+                const promptTokens = usage.prompt_tokens || 0;
+
+                // Get detailed performance metrics from usage.extra if available
+                // WebLLM provides prefill_tokens_per_s and decode_tokens_per_s
+                const extra = usage.extra || {};
+                const prefillTps = extra.prefill_tokens_per_s || null;
+                const decodeTps = extra.decode_tokens_per_s || null;
+                const ttftMs = extra.time_to_first_token_s ? extra.time_to_first_token_s * 1000 : null;
+
+                // Calculate times from speeds if available
+                let prefillTimeSec = null;
+                let decodeTimeSec = null;
+                if (prefillTps && promptTokens > 0) {
+                    prefillTimeSec = promptTokens / prefillTps;
+                }
+                if (decodeTps && outputTokens > 0) {
+                    decodeTimeSec = outputTokens / decodeTps;
+                }
 
                 window.benchmarkState.result = {
-                    tokens: outputTokens,
-                    elapsed: elapsedSec,
-                    tokensPerSec: outputTokens / elapsedSec,
+                    decodeTokens: outputTokens,
+                    prefillTokens: promptTokens,
+                    totalElapsedSec: totalElapsedSec,
+                    decodeTimeSec: decodeTimeSec || totalElapsedSec,
+                    prefillTimeSec: prefillTimeSec,
+                    prefillTps: prefillTps,
+                    decodeTps: decodeTps,
+                    ttftMs: ttftMs,
                     text: response.choices[0]?.message?.content || ""
                 };
 
@@ -123,6 +147,9 @@ class WebLLMRunner(BaseRunner):
 
     engine_name = "WebLLM"
 
+    # Default cache directory
+    DEFAULT_CACHE_DIR = Path.home() / ".cache" / "gamma" / "webllm"
+
     # WebLLM model mapping (common names to WebLLM model IDs)
     MODEL_MAP = {
         "llama-3-8b": "Llama-3-8B-Instruct-q4f16_1-MLC",
@@ -143,6 +170,8 @@ class WebLLMRunner(BaseRunner):
         model_name: str,
         headless: bool = True,
         verbose: bool = True,
+        cache_dir: Path | str | None = None,
+        clear_cache: bool = False,
     ):
         super().__init__(model_name, "webgpu", verbose)
         self.headless = headless
@@ -152,6 +181,16 @@ class WebLLMRunner(BaseRunner):
 
         # Resolve model name
         self._webllm_model = self.MODEL_MAP.get(model_name.lower(), model_name)
+
+        # Setup cache directory (per-model to allow selective clearing)
+        self._cache_dir = Path(cache_dir) if cache_dir else self.DEFAULT_CACHE_DIR
+        self._model_cache_dir = self._cache_dir / self._webllm_model.replace("/", "_")
+
+        # Clear cache if requested
+        if clear_cache and self._model_cache_dir.exists():
+            import shutil
+            self.log(f"Clearing cache for {self._webllm_model}...")
+            shutil.rmtree(self._model_cache_dir)
 
     def get_model_info(self) -> dict:
         """Get model info."""
@@ -163,20 +202,36 @@ class WebLLMRunner(BaseRunner):
 
     def _get_browser_args(self) -> list[str]:
         """Get Chromium args for WebGPU with real GPU."""
-        return [
+        import platform
+
+        args = [
             "--enable-unsafe-webgpu",
-            "--enable-features=Vulkan,UseSkiaRenderer",
-            "--use-vulkan",
             "--enable-gpu-rasterization",
             "--enable-zero-copy",
             "--ignore-gpu-blocklist",
             "--disable-gpu-sandbox",
-            "--use-angle=vulkan",
             "--enable-webgpu-developer-features",
+            # Enable shader-f16 for WebLLM models
+            "--enable-dawn-features=allow_unsafe_apis,use_dxc",
             # Storage/cache fixes
             "--disable-web-security",
             "--allow-file-access-from-files",
         ]
+
+        # Use Metal on macOS, Vulkan elsewhere
+        if platform.system() == "Darwin":
+            args.extend([
+                "--use-angle=metal",
+                "--enable-features=Vulkan,UseSkiaRenderer,SkiaGraphite",
+            ])
+        else:
+            args.extend([
+                "--use-angle=vulkan",
+                "--use-vulkan",
+                "--enable-features=Vulkan,UseSkiaRenderer",
+            ])
+
+        return args
 
     def load(self) -> None:
         """Launch browser and load WebLLM."""
@@ -187,14 +242,18 @@ class WebLLMRunner(BaseRunner):
 
         self.log("Launching browser with WebGPU...")
 
-        # Create temp dir for HTML and browser data
+        # Create temp dir for HTML file only
         self._temp_dir = tempfile.mkdtemp()
         html_path = Path(self._temp_dir) / "benchmark.html"
         html_path.write_text(WEBLLM_HTML)
 
-        # Create persistent user data dir for cache/storage
-        user_data_dir = Path(self._temp_dir) / "browser_data"
+        # Use persistent cache dir for browser data (preserves IndexedDB model cache)
+        self._model_cache_dir.mkdir(parents=True, exist_ok=True)
+        user_data_dir = self._model_cache_dir / "browser_data"
         user_data_dir.mkdir(exist_ok=True)
+
+        cache_status = "cached" if (user_data_dir / "Default" / "IndexedDB").exists() else "fresh"
+        self.log(f"Cache dir: {self._model_cache_dir} ({cache_status})")
 
         # Launch browser with persistent context for cache support
         self._playwright = sync_playwright().start()
@@ -234,7 +293,7 @@ class WebLLMRunner(BaseRunner):
         raise RuntimeError("Timeout waiting for WebLLM model to load")
 
     def unload(self) -> None:
-        """Close browser and cleanup."""
+        """Close browser and cleanup (preserves model cache)."""
         if self._page:
             try:
                 self._page.evaluate("window.cleanup()")
@@ -254,7 +313,7 @@ class WebLLMRunner(BaseRunner):
             self._playwright.stop()
             self._playwright = None
 
-        # Cleanup temp dir
+        # Only cleanup temp dir (HTML file), preserve cache dir
         if self._temp_dir:
             import shutil
             try:
@@ -263,7 +322,7 @@ class WebLLMRunner(BaseRunner):
                 pass
             self._temp_dir = None
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
+    def generate(self, prompt: str, max_tokens: int) -> dict:
         """Generate tokens using WebLLM."""
         if not self._page:
             raise RuntimeError("Browser not initialized")
@@ -277,5 +336,18 @@ class WebLLMRunner(BaseRunner):
             state = self._page.evaluate("window.benchmarkState")
             raise RuntimeError(f"WebLLM generation failed: {state.get('error', 'unknown')}")
 
-        generated_text = result.get("text", "")
-        return result["tokens"], result["elapsed"], generated_text
+        output = {
+            "decode_tokens": result.get("decodeTokens", 0),
+            "decode_time_sec": result.get("decodeTimeSec", result.get("totalElapsedSec", 0)),
+            "text": result.get("text", ""),
+        }
+
+        # Add prefill metrics if available
+        if result.get("prefillTokens"):
+            output["prefill_tokens"] = result["prefillTokens"]
+        if result.get("prefillTimeSec"):
+            output["prefill_time_sec"] = result["prefillTimeSec"]
+        if result.get("ttftMs"):
+            output["ttft_sec"] = result["ttftMs"] / 1000  # Convert ms to sec
+
+        return output

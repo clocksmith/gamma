@@ -14,6 +14,7 @@ except ImportError:
     raise ImportError("MLX libraries (mlx, mlx-lm) not found. Install with `pip install mlx mlx-lm` (Apple Silicon recommended).")
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core import config as game_config
 
 class MLXGPUEngine(LLMEngine):
@@ -172,7 +173,7 @@ class MLXGPUEngine(LLMEngine):
         top_p: float,
         output_attentions: bool = False,
         output_hidden_states: bool = False
-    ) -> Dict[str, Any]:
+    ) -> PredictionResult:
         """Predict next token with GPU optimizations"""
         if not self._mlx_model:
             raise RuntimeError("MLXGPUEngine: Model not loaded.")
@@ -223,13 +224,19 @@ class MLXGPUEngine(LLMEngine):
         
         inference_time = time.time() - start_time
         
-        return {
+        logits_after_temperature = mx.array(pipeline_results["logits_temp_np"])
+        logits_after_top_k = mx.array(pipeline_results["logits_topk_np"])
+
+        return PredictionResult.from_dict({
             "next_token_id": next_token_id_val,
             "logits_raw": logits_last,
             "logits_processed": logits_processed,
+            "logits_after_temperature": logits_after_temperature,
+            "logits_after_top_k": logits_after_top_k,
+            "logits_after_top_p": logits_processed,
             "probabilities_raw": mx.softmax(logits_last, axis=-1),
-            "probabilities_temp": mx.array(pipeline_results["logits_temp_np"]).softmax(axis=-1),
-            "probabilities_top_k": mx.array(pipeline_results["logits_topk_np"]).softmax(axis=-1),
+            "probabilities_temp": mx.softmax(logits_after_temperature, axis=-1),
+            "probabilities_top_k": mx.softmax(logits_after_top_k, axis=-1),
             "probabilities_processed": probs,
             "top_tokens_processed": top_tokens,
             "top_probs_processed": top_probs_list,
@@ -237,7 +244,7 @@ class MLXGPUEngine(LLMEngine):
             "hidden_states": None,  # MLX doesn't expose hidden states by default
             "forward_time": inference_time,
             "device": "Apple Silicon GPU"
-        }
+        })
     
     def _stream_forward(self, input_ids: mx.array, cache: Optional[Any]) -> Tuple[mx.array, Any]:
         """Stream processing for long sequences"""

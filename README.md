@@ -159,16 +159,20 @@ python gamma.py game --comparison \
 python gamma.py mind-meld \
   --models pytorch:gemma-2-2b-it pytorch:qwen2-1.5b \
   --strategy confidence \
-  --steps 50
+  --steps 50 \
+  --no-step-delay
 
 # Other common options
 --help                     # Detailed explanation of commands
 --temperature 0.7          # Sampling randomness (0.1-2.0)
 --top-k 40                 # Top-K filtering
 --top-p 0.95               # Nucleus sampling
+--sampling-strategy sample # sample or argmax/greedy
 --steps 50                 # Max generation steps
 --show-attention           # Show attention heatmaps
 --verbose                  # Detailed explanations
+--prompt-chat-template     # Use chat template for --prompt (single-shot)
+--no-step-delay            # Mind Meld: disable per-step delay
 ```
 
 ---

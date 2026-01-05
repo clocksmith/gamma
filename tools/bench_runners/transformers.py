@@ -3,9 +3,38 @@
 import time
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TextStreamer
 
 from .base import BaseRunner
+
+
+class TTFTStreamer(TextStreamer):
+    """Custom streamer that captures time to first token."""
+
+    def __init__(self, tokenizer, start_time: float):
+        super().__init__(tokenizer, skip_prompt=True, skip_special_tokens=True)
+        self.start_time = start_time
+        self.first_token_time: float | None = None
+        self.token_count = 0
+        self._text_chunks: list[str] = []
+
+    def on_finalized_text(self, text: str, stream_end: bool = False):
+        """Called when text is finalized."""
+        if self.first_token_time is None and text:
+            self.first_token_time = time.perf_counter()
+        if text:
+            self.token_count += 1
+            self._text_chunks.append(text)
+
+    def get_ttft(self) -> float | None:
+        """Get time to first token in seconds."""
+        if self.first_token_time is not None:
+            return self.first_token_time - self.start_time
+        return None
+
+    def get_text(self) -> str:
+        """Get all generated text."""
+        return "".join(self._text_chunks)
 
 
 class TransformersRunner(BaseRunner):
@@ -173,8 +202,8 @@ class TransformersRunner(BaseRunner):
             torch.cuda.empty_cache()
             torch.cuda.synchronize()
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
-        """Generate tokens and measure time."""
+    def generate(self, prompt: str, max_tokens: int) -> dict:
+        """Generate tokens and measure time with TTFT tracking."""
         if self._model is None or self._tokenizer is None:
             raise RuntimeError("Model not loaded")
 
@@ -188,22 +217,44 @@ class TransformersRunner(BaseRunner):
 
         start = time.perf_counter()
 
+        # Create streamer for TTFT measurement
+        streamer = TTFTStreamer(self._tokenizer, start)
+
         with torch.no_grad():
             outputs = self._model.generate(
                 **inputs,
                 max_new_tokens=max_tokens,
                 do_sample=False,
                 pad_token_id=self._tokenizer.pad_token_id,
+                streamer=streamer,
             )
 
         # Sync after generation
         if torch.cuda.is_available():
             torch.cuda.synchronize()
 
-        elapsed = time.perf_counter() - start
+        end = time.perf_counter()
+        total_elapsed = end - start
         new_tokens = outputs.shape[1] - input_len
 
-        # Decode output
-        generated_text = self._tokenizer.decode(outputs[0][input_len:], skip_special_tokens=True)
+        # Decode output (use streamer text or decode manually)
+        generated_text = streamer.get_text() or self._tokenizer.decode(
+            outputs[0][input_len:], skip_special_tokens=True
+        )
 
-        return new_tokens, elapsed, generated_text
+        result = {
+            "decode_tokens": new_tokens,
+            "decode_time_sec": total_elapsed,
+            "text": generated_text,
+            "prefill_tokens": input_len,
+        }
+
+        # Add TTFT if captured
+        ttft = streamer.get_ttft()
+        if ttft is not None:
+            result["ttft_sec"] = ttft
+            result["prefill_time_sec"] = ttft
+            # Refine decode time to exclude prefill
+            result["decode_time_sec"] = total_elapsed - ttft
+
+        return result

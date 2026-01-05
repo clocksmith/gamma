@@ -10,6 +10,7 @@ try:
 except ImportError: raise ImportError("JAX related libraries (jax, jaxlib, flax, transformers) not found. Install with `pip install -r requirements-jax.txt`")
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core import config as game_config
 from src.engines import sampling_utils as sampling
 
@@ -61,7 +62,7 @@ class JaxEngine(LLMEngine):
         return self.tokenizer.decode(ids_np.tolist(), skip_special_tokens=skip_special_tokens)
 
 
-    def predict_next(self, input_ids: jnp.ndarray, attention_mask: Optional[jnp.ndarray], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]: # type: ignore
+    def predict_next(self, input_ids: jnp.ndarray, attention_mask: Optional[jnp.ndarray], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> PredictionResult: # type: ignore
         self._ensure_model_loaded()
         st = time.time(); model_call_fn = self._get_jitted_model_call()
         current_past_key_values = self._kv_cache if input_ids.shape[-1] == 1 else None
@@ -81,18 +82,25 @@ class JaxEngine(LLMEngine):
         l_k_np = pipeline_results["logits_topk_np"]
         p_proc_np = pipeline_results["probs_processed_np"]
 
-        return {"next_token_id": pipeline_results["next_token_id"],
-                "logits_raw": l_raw,
-                "logits_processed": jnp.array(l_proc_np),
-                "probabilities_raw": jax.nn.softmax(l_raw, axis=-1),
-                "probabilities_temp": jax.nn.softmax(jnp.array(l_temp_np), axis=-1),
-                "probabilities_top_k": jax.nn.softmax(jnp.array(l_k_np), axis=-1),
-                "probabilities_processed": jnp.array(p_proc_np),
-                "top_tokens_processed": pipeline_results["top_tokens"],
-                "top_probs_processed": pipeline_results["top_probs"],
-                "attention": outputs.attentions if output_attentions else None,
-                "hidden_states": outputs.hidden_states if output_hidden_states else None,
-                "forward_time": time.time() - st}
+        logits_processed = jnp.array(l_proc_np)
+        logits_after_temperature = jnp.array(l_temp_np)
+        logits_after_top_k = jnp.array(l_k_np)
+
+        return PredictionResult.from_dict({"next_token_id": pipeline_results["next_token_id"],
+                                           "logits_raw": l_raw,
+                                           "logits_processed": logits_processed,
+                                           "logits_after_temperature": logits_after_temperature,
+                                           "logits_after_top_k": logits_after_top_k,
+                                           "logits_after_top_p": logits_processed,
+                                           "probabilities_raw": jax.nn.softmax(l_raw, axis=-1),
+                                           "probabilities_temp": jax.nn.softmax(logits_after_temperature, axis=-1),
+                                           "probabilities_top_k": jax.nn.softmax(logits_after_top_k, axis=-1),
+                                           "probabilities_processed": jnp.array(p_proc_np),
+                                           "top_tokens_processed": pipeline_results["top_tokens"],
+                                           "top_probs_processed": pipeline_results["top_probs"],
+                                           "attention": outputs.attentions if output_attentions else None,
+                                           "hidden_states": outputs.hidden_states if output_hidden_states else None,
+                                           "forward_time": time.time() - st})
 
     def get_vocabulary_size(self) -> int:
         self._ensure_tokenizer_loaded()

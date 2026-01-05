@@ -114,7 +114,7 @@ Mind Meld can transfer internal state when models take turns:
 
 | Component | Flag / behaviour | Why it’s cool |
 |-----------|------------------|---------------|
-| **KV cache** | On by default. Uses `KVCacheTranslator` to copy / project keys & values between models. | The next model starts with the full conversation memory instead of reprocessing the prompt. |
+| **KV cache** | On by default. Uses `KVCacheTranslator` to copy / project keys & values between models. | The next model starts with the full conversation memory instead of reprocessing the prompt. Bridging is skipped if architectures or attention shapes do not match unless `--allow-kv-cache-translation` is set. |
 | **Hidden states** | Auto-projected when dimensions differ. | Keeps feature representations aligned across architectures. |
 | **Attention maps** | Preserved when `swap_components` include `attention`. | Maintains focus even if tokenization changes. |
 | **Raw context** | Sliding/truncation (`BridgeConfig.context_window_alignment`). | Handles models with mismatched window sizes. |
@@ -157,8 +157,10 @@ Combine with `--use-blending` for "blend most of the time, but still give someon
 
 ## 7. Visuals & telemetry
 
-- `--visualize` launches the swap log and contribution bars in the terminal.  Great for demos.
+- Visualization (swap log and contribution bars) is shown by default in interactive runs.
 - `--use-stats-tracker --stats-file meld.json` writes per-token metrics (swap count, confidence, agreement rate).
+- `--meld-diagnostics` prints a summary of KV cache bridging and vocab-translation usage at the end of the run.
+- `--no-step-delay` disables the 1-second pause between steps in interactive runs.
 - `tools/verify_mind_meld.py` gives a quick sanity check of your configuration.
 
 ---
@@ -173,15 +175,11 @@ python gamma.py mind-meld \
   --models model1 model2 \
   --headless --prompt "Once upon a time" --steps 50
 
-# Quiet mode suppresses all output except errors
-python gamma.py mind-meld \
-  --models model1 model2 \
-  --headless --quiet --prompt "Test" --steps 10
 ```
 
 Headless mode:
 - Skips all user prompts and interactive UI
-- Suppresses visualization exports
+- Skips visualization exports
 - Returns generated text programmatically
 - Works with all blending/swap strategies
 
@@ -221,6 +219,16 @@ When combining models with different tokenizers, Mind Meld uses translators to b
 | `translators/vocabulary_translator.py` | Token-level translation between models |
 
 These are automatically used when models have incompatible tokenizers.
+
+You can choose the alignment strategy via `--alignment-strategy`:
+- `intersection`: fast, only shared tokens
+- `align`: decode/encode surface-form alignment
+- `subword`: subword decomposition mapping
+- `semantic_map`: lightweight semantic mapping
+- `unk`: map missing tokens to the target unknown token
+- `auto`: use the default strategy from config
+
+For large vocabularies, `align` and `semantic_map` may take a few minutes the first time they build a mapping.
 
 ---
 

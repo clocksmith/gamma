@@ -21,6 +21,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core import config as game_config
 
 class PyTorchCUDAEngine(LLMEngine):
@@ -245,7 +246,7 @@ class PyTorchCUDAEngine(LLMEngine):
         top_p: float,
         output_attentions: bool = False,
         output_hidden_states: bool = False
-    ) -> Dict[str, Any]:
+    ) -> PredictionResult:
         """Predict next token with GPU optimizations"""
         if not self.model or not self._device:
             raise RuntimeError("PyTorchCUDAEngine: Not fully loaded.")
@@ -301,10 +302,13 @@ class PyTorchCUDAEngine(LLMEngine):
         if torch.cuda.is_available():
             torch.cuda.synchronize()
         
-        return {
+        return PredictionResult.from_dict({
             "next_token_id": next_token_id,
             "logits_raw": logits_raw,
             "logits_processed": logits_processed,
+            "logits_after_temperature": torch.from_numpy(pipeline_results["logits_temp_np"]).to(self._device),
+            "logits_after_top_k": torch.from_numpy(pipeline_results["logits_topk_np"]).to(self._device),
+            "logits_after_top_p": logits_processed,
             "probabilities_raw": torch.softmax(logits_raw, dim=-1),
             "probabilities_temp": torch.from_numpy(pipeline_results["logits_temp_np"]).softmax(dim=-1).to(self._device),
             "probabilities_top_k": torch.from_numpy(pipeline_results["logits_topk_np"]).softmax(dim=-1).to(self._device),
@@ -315,7 +319,7 @@ class PyTorchCUDAEngine(LLMEngine):
             "hidden_states": outputs.hidden_states if output_hidden_states else None,
             "forward_time": inference_time,
             "gpu_memory_used_mb": torch.cuda.memory_allocated() / 1024 / 1024 if torch.cuda.is_available() else 0
-        }
+        })
     
     def get_vocabulary_size(self) -> int:
         """Get vocabulary size"""

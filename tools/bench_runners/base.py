@@ -12,7 +12,7 @@ class BenchResult:
 
     name: str
     engine: str
-    tokens_per_sec: float
+    tokens_per_sec: float  # Overall average (decode) tokens per second
     total_tokens: int
     elapsed_sec: float
     quantization: str
@@ -23,6 +23,12 @@ class BenchResult:
     per_iteration: list[dict] = field(default_factory=list)
     error: str | None = None
     sample_output: str | None = None  # Sample of generated text for validation
+    # Granular timing metrics
+    prefill_tokens_per_sec: float | None = None  # Prefill (prompt processing) speed
+    decode_tokens_per_sec: float | None = None   # Decode (generation) speed
+    ttft_ms: float | None = None                 # Time to first token in milliseconds
+    prefill_tokens: int | None = None            # Number of prefill (prompt) tokens
+    decode_tokens: int | None = None             # Number of decode (generated) tokens
 
 
 class BaseRunner(ABC):
@@ -62,8 +68,18 @@ class BaseRunner(ABC):
         pass
 
     @abstractmethod
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
-        """Generate tokens and return (token_count, elapsed_seconds, generated_text)."""
+    def generate(self, prompt: str, max_tokens: int) -> dict:
+        """Generate tokens and return metrics dict.
+
+        Returns:
+            dict with keys:
+                - decode_tokens: int - number of generated tokens
+                - decode_time_sec: float - time spent decoding
+                - text: str - generated text
+                - prefill_tokens: int (optional) - number of prompt tokens
+                - prefill_time_sec: float (optional) - time spent on prefill
+                - ttft_sec: float (optional) - time to first token
+        """
         pass
 
     def warmup(self, prompt: str = "Hello", max_tokens: int = 10) -> None:
@@ -140,8 +156,12 @@ class BaseRunner(ABC):
             self.warmup(prompt, max_tokens=10)
 
         # Run iterations
-        total_tokens = 0
-        total_time = 0.0
+        total_decode_tokens = 0
+        total_decode_time = 0.0
+        total_prefill_tokens = 0
+        total_prefill_time = 0.0
+        total_ttft = 0.0
+        ttft_count = 0
         per_iteration = []
         sample_output = None
 
@@ -149,19 +169,51 @@ class BaseRunner(ABC):
             self.log(f"Iteration {i+1}/{iterations}...", end=" ", flush=True)
 
             try:
-                tokens, elapsed, text = self.generate(prompt, max_tokens)
-                tps = tokens / elapsed if elapsed > 0 else 0
+                result = self.generate(prompt, max_tokens)
 
-                self.log(f"{tokens} tokens in {elapsed:.2f}s = {tps:.2f} tok/s")
+                decode_tokens = result.get("decode_tokens", 0)
+                decode_time = result.get("decode_time_sec", 0)
+                text = result.get("text", "")
+                prefill_tokens = result.get("prefill_tokens")
+                prefill_time = result.get("prefill_time_sec")
+                ttft = result.get("ttft_sec")
 
-                total_tokens += tokens
-                total_time += elapsed
-                per_iteration.append({
-                    "tokens": tokens,
-                    "elapsed": elapsed,
-                    "tokens_per_sec": tps,
-                    "text": text[:200] if text else None,  # Store truncated text
-                })
+                decode_tps = decode_tokens / decode_time if decode_time > 0 else 0
+                prefill_tps = prefill_tokens / prefill_time if prefill_time and prefill_time > 0 else None
+
+                # Log with prefill info if available
+                if prefill_tps is not None:
+                    self.log(f"{decode_tokens} tok in {decode_time:.2f}s = {decode_tps:.1f} tok/s (prefill: {prefill_tps:.1f} tok/s)")
+                else:
+                    self.log(f"{decode_tokens} tok in {decode_time:.2f}s = {decode_tps:.1f} tok/s")
+
+                total_decode_tokens += decode_tokens
+                total_decode_time += decode_time
+
+                if prefill_tokens is not None:
+                    total_prefill_tokens += prefill_tokens
+                if prefill_time is not None:
+                    total_prefill_time += prefill_time
+                if ttft is not None:
+                    total_ttft += ttft
+                    ttft_count += 1
+
+                iter_data = {
+                    "decode_tokens": decode_tokens,
+                    "decode_time_sec": decode_time,
+                    "decode_tokens_per_sec": decode_tps,
+                    "text": text[:200] if text else None,
+                }
+                if prefill_tokens is not None:
+                    iter_data["prefill_tokens"] = prefill_tokens
+                if prefill_time is not None:
+                    iter_data["prefill_time_sec"] = prefill_time
+                if prefill_tps is not None:
+                    iter_data["prefill_tokens_per_sec"] = prefill_tps
+                if ttft is not None:
+                    iter_data["ttft_sec"] = ttft
+
+                per_iteration.append(iter_data)
 
                 # Keep first successful output as sample
                 if sample_output is None and text:
@@ -171,7 +223,9 @@ class BaseRunner(ABC):
                 per_iteration.append({"error": str(e)})
 
         # Calculate averages
-        avg_tps = total_tokens / total_time if total_time > 0 else 0
+        avg_decode_tps = total_decode_tokens / total_decode_time if total_decode_time > 0 else 0
+        avg_prefill_tps = total_prefill_tokens / total_prefill_time if total_prefill_time > 0 else None
+        avg_ttft_ms = (total_ttft / ttft_count * 1000) if ttft_count > 0 else None
 
         # Unload and cleanup
         self.unload()
@@ -180,9 +234,9 @@ class BaseRunner(ABC):
         return BenchResult(
             name=self.model_name,
             engine=self.engine_name,
-            tokens_per_sec=avg_tps,
-            total_tokens=total_tokens,
-            elapsed_sec=total_time,
+            tokens_per_sec=avg_decode_tps,
+            total_tokens=total_decode_tokens,
+            elapsed_sec=total_decode_time,
             quantization=info.get("quantization", "unknown"),
             model_size_gb=info.get("size_gb"),
             ram_gb=info.get("ram_gb"),
@@ -190,4 +244,10 @@ class BaseRunner(ABC):
             iterations=iterations,
             per_iteration=per_iteration,
             sample_output=sample_output,
+            # New granular metrics
+            prefill_tokens_per_sec=avg_prefill_tps,
+            decode_tokens_per_sec=avg_decode_tps,
+            ttft_ms=avg_ttft_ms,
+            prefill_tokens=total_prefill_tokens if total_prefill_tokens > 0 else None,
+            decode_tokens=total_decode_tokens if total_decode_tokens > 0 else None,
         )

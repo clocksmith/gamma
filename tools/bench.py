@@ -32,7 +32,17 @@ def print_result(result: BenchResult) -> None:
     print(f"Results: {result.name} ({result.engine})")
     print(f"{'='*60}")
     print(f"Quantization: {result.quantization}")
-    print(f"Tokens/sec:   {result.tokens_per_sec:.2f}")
+
+    # Show granular metrics if available
+    if result.prefill_tokens_per_sec is not None:
+        print(f"Prefill:      {result.prefill_tokens_per_sec:.2f} tok/s")
+    if result.decode_tokens_per_sec is not None:
+        print(f"Decode:       {result.decode_tokens_per_sec:.2f} tok/s")
+    else:
+        print(f"Tokens/sec:   {result.tokens_per_sec:.2f}")
+    if result.ttft_ms is not None:
+        print(f"TTFT:         {result.ttft_ms:.1f} ms")
+
     print(f"Total tokens: {result.total_tokens}")
     print(f"Total time:   {result.elapsed_sec:.2f}s")
 
@@ -59,41 +69,62 @@ def print_result(result: BenchResult) -> None:
 
 def print_comparison(results: list[BenchResult]) -> None:
     """Print comparison table."""
-    print(f"\n{'='*80}")
+    print(f"\n{'='*110}")
     print("COMPARISON RESULTS")
-    print(f"{'='*80}\n")
+    print(f"{'='*110}\n")
 
-    # Header
-    print(f"{'Model':<35} {'Engine':<12} {'Quant':<15} {'Tok/s':>8} {'Mem (GB)':>10}")
-    print("-" * 85)
+    # Header - with granular metrics
+    print(f"{'Model':<30} {'Engine':<10} {'Quant':<12} {'Prefill':>10} {'Decode':>10} {'TTFT':>8} {'Mem':>8}")
+    print(f"{'':30} {'':10} {'':12} {'(tok/s)':>10} {'(tok/s)':>10} {'(ms)':>8} {'(GB)':>8}")
+    print("-" * 110)
 
-    # Sort by speed
-    sorted_results = sorted(results, key=lambda x: x.tokens_per_sec, reverse=True)
+    # Sort by decode speed (primary metric)
+    sorted_results = sorted(
+        results,
+        key=lambda x: x.decode_tokens_per_sec or x.tokens_per_sec,
+        reverse=True
+    )
 
     for r in sorted_results:
-        mem_str = "N/A"
+        # Memory display
+        mem_str = "-"
         if r.vram_gb:
-            mem_str = f"{r.vram_gb:.1f} VRAM"
+            mem_str = f"{r.vram_gb:.1f}V"
         elif r.model_size_gb:
             mem_str = f"{r.model_size_gb:.1f}"
         elif r.ram_gb:
-            mem_str = f"{r.ram_gb:.1f} RAM"
+            mem_str = f"{r.ram_gb:.1f}R"
 
-        name = r.name[:33] + ".." if len(r.name) > 35 else r.name
-        quant = r.quantization[:13] + ".." if len(r.quantization) > 15 else r.quantization
+        # Prefill speed
+        prefill_str = "-"
+        if r.prefill_tokens_per_sec is not None:
+            prefill_str = f"{r.prefill_tokens_per_sec:.1f}"
 
-        print(f"{name:<35} {r.engine:<12} {quant:<15} {r.tokens_per_sec:>8.2f} {mem_str:>10}")
+        # Decode speed
+        decode_str = f"{r.decode_tokens_per_sec:.1f}" if r.decode_tokens_per_sec else f"{r.tokens_per_sec:.1f}"
 
-    print("-" * 85)
+        # TTFT
+        ttft_str = "-"
+        if r.ttft_ms is not None:
+            ttft_str = f"{r.ttft_ms:.1f}"
 
-    # Speedup comparison
+        name = r.name[:28] + ".." if len(r.name) > 30 else r.name
+        quant = r.quantization[:10] + ".." if len(r.quantization) > 12 else r.quantization
+
+        print(f"{name:<30} {r.engine:<10} {quant:<12} {prefill_str:>10} {decode_str:>10} {ttft_str:>8} {mem_str:>8}")
+
+    print("-" * 110)
+
+    # Speedup comparison (based on decode speed)
     if len(sorted_results) >= 2:
         fastest = sorted_results[0]
-        print(f"\nFastest: {fastest.engine} ({fastest.name})")
+        fastest_speed = fastest.decode_tokens_per_sec or fastest.tokens_per_sec
+        print(f"\nFastest (decode): {fastest.engine} ({fastest.name})")
 
         for r in sorted_results[1:]:
-            if r.tokens_per_sec > 0:
-                speedup = fastest.tokens_per_sec / r.tokens_per_sec
+            r_speed = r.decode_tokens_per_sec or r.tokens_per_sec
+            if r_speed > 0:
+                speedup = fastest_speed / r_speed
                 print(f"  {speedup:.2f}x faster than {r.engine} ({r.name})")
 
     # Show sample outputs for quality validation
@@ -101,9 +132,9 @@ def print_comparison(results: list[BenchResult]) -> None:
     for r in sorted_results:
         if r.sample_output:
             if not outputs_shown:
-                print(f"\n{'='*80}")
+                print(f"\n{'='*110}")
                 print("SAMPLE OUTPUTS (for quality validation)")
-                print(f"{'='*80}")
+                print(f"{'='*110}")
                 outputs_shown = True
             print(f"\n[{r.engine}] {r.name}:")
             sample = r.sample_output[:200]
@@ -192,6 +223,7 @@ def cmd_webllm(args) -> int:
         model_name=args.model,
         headless=not args.head,
         verbose=not args.quiet,
+        clear_cache=args.clear_cache,
     )
 
     result = runner.run(
@@ -234,11 +266,77 @@ def cmd_doppler(args) -> int:
     return 0 if result.error is None else 1
 
 
+def _parse_hf_spec(spec: str) -> tuple[str, str | None]:
+    """Parse HuggingFace model:quant format."""
+    if ":" in spec and "/" not in spec.split(":")[0]:
+        # Format: quant:model (e.g., int4:openai/gpt-oss-20b)
+        quant, model = spec.split(":", 1)
+    elif spec.count(":") > 1:
+        # Format: model:quant (e.g., openai/gpt-oss-20b:int4)
+        parts = spec.rsplit(":", 1)
+        model, quant = parts[0], parts[1]
+    else:
+        model, quant = spec, None
+    return model, quant
+
+
+def _parse_vllm_spec(spec: str) -> tuple[str, str | None]:
+    """Parse vLLM model:quant format."""
+    if spec.count(":") > 1:
+        parts = spec.rsplit(":", 1)
+        model, quant = parts[0], parts[1]
+    else:
+        model, quant = spec, None
+    return model, quant
+
+
+def _create_runner(engine: str, model: str, kwargs: dict, args):
+    """Factory to create runner by engine type."""
+    if engine == "ollama":
+        return OllamaRunner(
+            model_name=model,
+            verbose=not args.quiet,
+        )
+    elif engine == "transformers":
+        return TransformersRunner(
+            model_name=model,
+            device=args.device,
+            quantize=kwargs.get("quant"),
+            torch_dtype=args.dtype,
+            verbose=not args.quiet,
+        )
+    elif engine == "vllm":
+        return VLLMRunner(
+            model_name=model,
+            quantization=kwargs.get("quant"),
+            tensor_parallel_size=args.tp,
+            gpu_memory_utilization=args.gpu_mem,
+            dtype=args.dtype,
+            verbose=not args.quiet,
+        )
+    elif engine == "webllm":
+        return WebLLMRunner(
+            model_name=model,
+            headless=True,
+            verbose=not args.quiet,
+            clear_cache=getattr(args, "clear_cache", False),
+        )
+    elif engine == "doppler":
+        return DopplerRunner(
+            model_name=model,
+            doppler_path=getattr(args, "doppler_path", None),
+            kernel_profile=getattr(args, "kernel_profile", "fast"),
+            headed=False,
+            verbose=not args.quiet,
+        )
+    else:
+        raise ValueError(f"Unknown engine: {engine}")
+
+
 def cmd_compare(args) -> int:
     """Compare multiple engines."""
+    import random
     import time as time_module
-
-    results = []
 
     prompt = args.prompt
     tokens = args.tokens
@@ -246,81 +344,57 @@ def cmd_compare(args) -> int:
     warmup = not args.no_warmup
     cooldown = args.cooldown
 
+    # Build list of benchmark tasks: (engine, model, display_name, kwargs)
+    tasks = []
+
+    for model in args.ollama or []:
+        tasks.append(("ollama", model, f"[Ollama] {model}", {}))
+
+    for spec in args.hf or []:
+        model, quant = _parse_hf_spec(spec)
+        display = f"[HF] {model}" + (f":{quant}" if quant else "")
+        tasks.append(("transformers", model, display, {"quant": quant}))
+
+    for spec in args.vllm or []:
+        model, quant = _parse_vllm_spec(spec)
+        display = f"[vLLM] {model}" + (f":{quant}" if quant else "")
+        tasks.append(("vllm", model, display, {"quant": quant}))
+
+    for model in args.webllm or []:
+        tasks.append(("webllm", model, f"[WebLLM] {model}", {}))
+
+    for model in args.doppler or []:
+        tasks.append(("doppler", model, f"[Doppler] {model}", {}))
+
+    if not tasks:
+        print("No benchmarks specified.")
+        return 1
+
+    # Randomize order unless --no-shuffle
+    if not args.no_shuffle:
+        random.shuffle(tasks)
+        print(f"\nRandomized benchmark order ({len(tasks)} tasks):")
+        for i, (engine, model, display, _) in enumerate(tasks, 1):
+            print(f"  {i}. {display}")
+        print()
+    else:
+        print(f"\nFixed benchmark order ({len(tasks)} tasks):")
+        for i, (engine, model, display, _) in enumerate(tasks, 1):
+            print(f"  {i}. {display}")
+        print()
+
+    # Execute benchmarks in order
+    results = []
+
     def do_cooldown(label: str = ""):
         """Wait for GPU to cool down between benchmarks."""
-        if cooldown > 0 and results:  # Skip before first benchmark
-            print(f"\nCooling down for {cooldown}s{' after ' + label if label else ''}...")
+        if cooldown > 0 and results:
+            print(f"\nCooling down for {cooldown}s after {label}...")
             time_module.sleep(cooldown)
 
-    # Run Ollama benchmarks
-    for model in args.ollama or []:
+    for engine, model, display, kwargs in tasks:
         do_cooldown(results[-1].name if results else "")
-        runner = OllamaRunner(model_name=model, verbose=not args.quiet)
-        result = runner.run(prompt=prompt, max_tokens=tokens, iterations=iterations, warmup=warmup)
-        results.append(result)
-
-    # Run Transformers benchmarks
-    for spec in args.hf or []:
-        do_cooldown(results[-1].name if results else "")
-        # Parse model:quant format
-        if ":" in spec and "/" not in spec.split(":")[0]:
-            # Format: quant:model (e.g., int4:openai/gpt-oss-20b)
-            quant, model = spec.split(":", 1)
-        elif spec.count(":") > 1:
-            # Format: model:quant (e.g., openai/gpt-oss-20b:int4)
-            parts = spec.rsplit(":", 1)
-            model, quant = parts[0], parts[1]
-        else:
-            model, quant = spec, None
-
-        runner = TransformersRunner(
-            model_name=model,
-            device=args.device,
-            quantize=quant,
-            torch_dtype=args.dtype,
-            verbose=not args.quiet,
-        )
-        result = runner.run(prompt=prompt, max_tokens=tokens, iterations=iterations, warmup=warmup)
-        results.append(result)
-
-    # Run vLLM benchmarks
-    for spec in args.vllm or []:
-        do_cooldown(results[-1].name if results else "")
-        # Parse model:quant format
-        if spec.count(":") > 1:
-            parts = spec.rsplit(":", 1)
-            model, quant = parts[0], parts[1]
-        else:
-            model, quant = spec, None
-
-        runner = VLLMRunner(
-            model_name=model,
-            quantization=quant,
-            tensor_parallel_size=args.tp,
-            gpu_memory_utilization=args.gpu_mem,
-            dtype=args.dtype,
-            verbose=not args.quiet,
-        )
-        result = runner.run(prompt=prompt, max_tokens=tokens, iterations=iterations, warmup=warmup)
-        results.append(result)
-
-    # Run WebLLM benchmarks
-    for model in args.webllm or []:
-        do_cooldown(results[-1].name if results else "")
-        runner = WebLLMRunner(model_name=model, headless=True, verbose=not args.quiet)
-        result = runner.run(prompt=prompt, max_tokens=tokens, iterations=iterations, warmup=warmup)
-        results.append(result)
-
-    # Run Doppler benchmarks
-    for model in args.doppler or []:
-        do_cooldown(results[-1].name if results else "")
-        runner = DopplerRunner(
-            model_name=model,
-            doppler_path=getattr(args, "doppler_path", None),
-            kernel_profile=getattr(args, "kernel_profile", "fast"),
-            headed=False,
-            verbose=not args.quiet,
-        )
+        runner = _create_runner(engine, model, kwargs, args)
         result = runner.run(prompt=prompt, max_tokens=tokens, iterations=iterations, warmup=warmup)
         results.append(result)
 
@@ -383,6 +457,7 @@ def main():
     p_webllm = subparsers.add_parser("webllm", parents=[common], help="Benchmark WebLLM model (browser WebGPU)")
     p_webllm.add_argument("model", help="Model name (e.g., llama-3.2-1b, gemma-2-2b, qwen2-1.5b)")
     p_webllm.add_argument("--head", action="store_true", help="Show browser window (default: headless)")
+    p_webllm.add_argument("--clear-cache", action="store_true", help="Clear cached model before downloading")
     p_webllm.set_defaults(func=cmd_webllm)
 
     # Doppler subcommand
@@ -416,6 +491,10 @@ def main():
     p_compare.add_argument("--gpu-mem", type=float, default=0.9, help="GPU memory utilization for vLLM")
     p_compare.add_argument("--cooldown", type=int, default=0,
                            help="Seconds to wait between benchmarks for GPU to cool (default: 0)")
+    p_compare.add_argument("--no-shuffle", action="store_true",
+                           help="Run benchmarks in fixed order (default: randomized)")
+    p_compare.add_argument("--clear-cache", action="store_true",
+                           help="Clear cached WebLLM models before downloading")
     p_compare.set_defaults(func=cmd_compare)
 
     args = parser.parse_args()

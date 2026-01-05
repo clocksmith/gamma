@@ -2,11 +2,20 @@ from src.core.engine_interface import LLMEngine, EngineMode
 from typing import Dict, Any, Optional, List
 import platform
 
-# Engine categorization
-WRAPPER_ENGINES: List[str] = ["ollama", "huggingface_inference", "openai"]  # HTTP/API wrappers with limited logits
-NATIVE_ENGINES: List[str] = ["pytorch", "pytorch_cuda", "tensorflow", "jax", "llamacpp", "onnx", "mlx", "mlx_gpu", "vllm"]  # Full logits access
+from src.engines.capability_registry import list_engines, get_engine_info
 
-SUPPORTED_ENGINES = WRAPPER_ENGINES + NATIVE_ENGINES
+
+def _engine_type(engine_name: str) -> str:
+    info = get_engine_info(engine_name)
+    if info is None:
+        return "unknown"
+    return info.capabilities.engine_type
+
+
+# Engine categorization (derived from capability registry)
+SUPPORTED_ENGINES: List[str] = list_engines()
+WRAPPER_ENGINES: List[str] = [name for name in SUPPORTED_ENGINES if _engine_type(name) == "wrapper"]
+NATIVE_ENGINES: List[str] = [name for name in SUPPORTED_ENGINES if _engine_type(name) == "native"]
 
 
 def _normalize_engine_config(cli_args_dict: Optional[Dict[str, Any]]) -> Dict[str, Any]:

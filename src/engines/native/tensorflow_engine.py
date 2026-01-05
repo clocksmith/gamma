@@ -10,7 +10,8 @@ except ImportError: raise ImportError("TensorFlow or Transformers library not fo
 
 logger = logging.getLogger(__name__)
 
-from src.core.engine_interface import LLMEngine, TokenCategory
+from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core import config as game_config
 from src.engines import sampling_utils as sampling
 
@@ -67,7 +68,7 @@ class TensorFlowEngine(LLMEngine):
         return self.model(input_ids=input_ids_tf, attention_mask=attention_mask_tf, past_key_values=past_key_values_tf,
                           output_attentions=output_attentions_tf, output_hidden_states=output_hidden_states_tf, use_cache=use_cache_tf, return_dict=True)
 
-    def predict_next(self, input_ids: tf.Tensor, attention_mask: Optional[tf.Tensor], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]:
+    def predict_next(self, input_ids: tf.Tensor, attention_mask: Optional[tf.Tensor], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> PredictionResult:
         if not self.model: raise RuntimeError("TensorFlowEngine: Model not loaded.")
         start_time = time.time()
         use_kv_caching = self.engine_config.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE)
@@ -88,18 +89,25 @@ class TensorFlowEngine(LLMEngine):
         logits_temp_np = pipeline_results["logits_temp_np"]
         logits_k_np = pipeline_results["logits_topk_np"]
 
-        return {"next_token_id": pipeline_results["next_token_id"],
-                "logits_raw": logits_raw,
-                "logits_processed": tf.convert_to_tensor(logits_proc_np),
-                "probabilities_raw": tf.nn.softmax(logits_raw, axis=-1),
-                "probabilities_temp": tf.nn.softmax(tf.convert_to_tensor(logits_temp_np), axis=-1),
-                "probabilities_top_k": tf.nn.softmax(tf.convert_to_tensor(logits_k_np), axis=-1),
-                "probabilities_processed": tf.convert_to_tensor(pipeline_results["probs_processed_np"]),
-                "top_tokens_processed": pipeline_results["top_tokens"],
-                "top_probs_processed": pipeline_results["top_probs"],
-                "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
-                "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None),
-                "forward_time": time.time() - start_time}
+        logits_processed = tf.convert_to_tensor(logits_proc_np)
+        logits_after_temperature = tf.convert_to_tensor(logits_temp_np)
+        logits_after_top_k = tf.convert_to_tensor(logits_k_np)
+
+        return PredictionResult.from_dict({"next_token_id": pipeline_results["next_token_id"],
+                                           "logits_raw": logits_raw,
+                                           "logits_processed": logits_processed,
+                                           "logits_after_temperature": logits_after_temperature,
+                                           "logits_after_top_k": logits_after_top_k,
+                                           "logits_after_top_p": logits_processed,
+                                           "probabilities_raw": tf.nn.softmax(logits_raw, axis=-1),
+                                           "probabilities_temp": tf.nn.softmax(logits_after_temperature, axis=-1),
+                                           "probabilities_top_k": tf.nn.softmax(logits_after_top_k, axis=-1),
+                                           "probabilities_processed": tf.convert_to_tensor(pipeline_results["probs_processed_np"]),
+                                           "top_tokens_processed": pipeline_results["top_tokens"],
+                                           "top_probs_processed": pipeline_results["top_probs"],
+                                           "attention": (outputs.attentions if output_attentions and hasattr(outputs, "attentions") else None),
+                                           "hidden_states": (outputs.hidden_states if output_hidden_states and hasattr(outputs, "hidden_states") else None),
+                                           "forward_time": time.time() - start_time})
 
     def get_vocabulary_size(self) -> int:
         if not self.tokenizer: raise RuntimeError("TensorFlowEngine: Tokenizer not loaded."); return -1

@@ -50,6 +50,7 @@ class EngineCapabilities:
     # Model formats
     model_format: str = "huggingface"      # Primary model format
     supported_formats: tuple = ()          # All supported formats
+    engine_type: str = "native"            # "native" or "wrapper"
 
 
 @dataclass
@@ -172,18 +173,61 @@ ENGINES: Dict[str, EngineInfo] = {
         display_name="Ollama",
         description="Local model serving via Ollama API",
         capabilities=EngineCapabilities(
-            supports_logits=True,
+            supports_logits=False,
+            supports_probabilities=True,
             supports_attention=False,
             supports_kv_cache=False,
             supports_streaming=True,
             supports_gpu=True,
-            supports_mind_meld=True,
+            supports_mind_meld=False,
+            supports_vocab_translation=False,
             supports_offload=False,
             model_format="ollama",
             supported_formats=("ollama", "gguf"),
+            engine_type="wrapper",
         ),
         requirements=["requests"],
         notes="Requires Ollama server running locally",
+    ),
+    "huggingface_inference": EngineInfo(
+        name="huggingface_inference",
+        display_name="HuggingFace Inference API",
+        description="Hosted inference via HuggingFace API",
+        capabilities=EngineCapabilities(
+            supports_logits=False,
+            supports_probabilities=True,
+            supports_attention=False,
+            supports_kv_cache=False,
+            supports_streaming=False,
+            supports_gpu=True,
+            supports_mind_meld=False,
+            supports_vocab_translation=False,
+            model_format="huggingface",
+            supported_formats=("huggingface",),
+            engine_type="wrapper",
+        ),
+        requirements=["requests"],
+        notes="Requires HF_TOKEN and access to the Inference API",
+    ),
+    "openai": EngineInfo(
+        name="openai",
+        display_name="OpenAI API",
+        description="OpenAI-compatible API inference",
+        capabilities=EngineCapabilities(
+            supports_logits=False,
+            supports_probabilities=True,
+            supports_attention=False,
+            supports_kv_cache=False,
+            supports_streaming=False,
+            supports_gpu=True,
+            supports_mind_meld=False,
+            supports_vocab_translation=False,
+            model_format="openai",
+            supported_formats=("openai",),
+            engine_type="wrapper",
+        ),
+        requirements=["requests"],
+        notes="Requires OPENAI_API_KEY",
     ),
 
     "mlx": EngineInfo(
@@ -203,6 +247,24 @@ ENGINES: Dict[str, EngineInfo] = {
         ),
         requirements=["mlx", "mlx-lm"],
         notes="macOS only, requires Apple Silicon",
+    ),
+    "mlx_gpu": EngineInfo(
+        name="mlx_gpu",
+        display_name="MLX GPU",
+        description="MLX engine with Neural Accelerator optimizations",
+        capabilities=EngineCapabilities(
+            supports_logits=True,
+            supports_attention=False,
+            supports_kv_cache=True,
+            supports_streaming=True,
+            supports_gpu=True,
+            supports_mind_meld=True,
+            default_device="mps",
+            model_format="mlx",
+            supported_formats=("mlx", "huggingface"),
+        ),
+        requirements=["mlx", "mlx-lm"],
+        notes="Apple Silicon only, optimized for Neural Accelerator",
     ),
 
     "jax": EngineInfo(

@@ -60,10 +60,17 @@ python tools/view_sessions.py --stats
 | `--steps N` | Number of prediction rounds (default: 20) |
 | `--temperature T` | Sampling temperature (default: 0.7) |
 | `--top-k K` | Top-K sampling (default: 8) |
+| `--sampling-strategy STR` | Sampling strategy: sample (stochastic) or argmax (greedy) |
 | `--chat` | Chat mode instead of prediction game |
+| `--prompt TEXT` | Run single-shot inference with the given prompt |
+| `--prompt-chat-template` | Format `--prompt` using the tokenizer's chat template (if available) |
 | `--tutorial` | Run interactive tutorial |
 | `--comparison` | Side-by-side model comparison |
 | `--mind-meld` | Multi-model collaboration mode |
+| `--meld-diagnostics` | Mind Meld only: log KV cache and vocab translation diagnostics |
+| `--alignment-strategy STR` | Mind Meld only: vocabulary alignment (intersection, align, subword, semantic_map, unk, auto) |
+| `--allow-kv-cache-translation` | Mind Meld only: attempt KV cache translation across mismatched models (experimental) |
+| `--no-step-delay` | Mind Meld only: disable the 1-second delay between steps |
 | `--word-mode` | Word-level play (enables focus words, expands token sequences) |
 | `--permutation-length N` | Tokens per choice (default: 1) |
 | `--player-choice-mode` | EXPERIMENTAL: Player's correct guess drives generation |

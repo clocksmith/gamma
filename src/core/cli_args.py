@@ -16,6 +16,8 @@ import argparse
 from dataclasses import dataclass
 from typing import Optional
 
+from src.core import config as cfg
+from src.engines.capability_registry import list_engines
 
 # ============================================================================
 # Default Values (single source of truth)
@@ -24,15 +26,15 @@ from typing import Optional
 @dataclass(frozen=True)
 class SamplingDefaults:
     """Default values for sampling parameters."""
-    temperature: float = 0.7
-    top_k: int = 8
-    top_p: float = 0.95
+    temperature: float = cfg.DEFAULT_TEMPERATURE
+    top_k: int = cfg.DEFAULT_TOP_K
+    top_p: float = cfg.DEFAULT_TOP_P
 
 
 @dataclass(frozen=True)
 class GenerationDefaults:
     """Default values for generation parameters."""
-    steps: int = 20
+    steps: int = cfg.DEFAULT_MAX_DECODE_STEPS
     max_tokens: int = 100
 
 
@@ -139,15 +141,15 @@ def add_model_args(
         group.add_argument(
             '--model', '-m',
             type=str,
-            default='pytorch:google/gemma-2-2b-it',
+            default=f'{cfg.DEFAULT_ENGINE}:{cfg.DEFAULT_MODEL_NAME}',
             metavar='ENGINE:MODEL',
-            help='Model to use (format: engine:model, default: pytorch:google/gemma-2-2b-it)'
+            help=f'Model to use (format: engine:model, default: {cfg.DEFAULT_ENGINE}:{cfg.DEFAULT_MODEL_NAME})'
         )
 
     group.add_argument(
         '--engine', '-e',
         type=str,
-        choices=['pytorch', 'pytorch_cuda', 'vllm', 'llamacpp', 'ollama', 'mlx', 'mlx_gpu', 'jax', 'onnx'],
+        choices=list_engines(),
         help='Override engine type (usually inferred from model spec)'
     )
 

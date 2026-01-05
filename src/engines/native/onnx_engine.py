@@ -8,6 +8,7 @@ try:
 except ImportError: raise ImportError("ONNX Runtime or Transformers library not found. Install with `pip install -r requirements-onnx.txt`")
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core.models.model_paths import resolve_model_path
 from src.engines import sampling_utils
 
@@ -65,7 +66,7 @@ class ONNXEngine(LLMEngine):
         return self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
 
 
-    def predict_next(self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> Dict[str, Any]:
+    def predict_next(self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray], temperature: float, top_k: int, top_p: float, output_attentions: bool = False, output_hidden_states: bool = False) -> PredictionResult:
         if not self._session: raise RuntimeError("ONNXEngine: Session not loaded.")
         st = time.time(); ort_inputs: Dict[str, np.ndarray] = {"input_ids": input_ids.astype(np.int64)}
         if "attention_mask" in self._input_names and attention_mask is not None: ort_inputs["attention_mask"] = attention_mask.astype(np.int64)
@@ -94,18 +95,25 @@ class ONNXEngine(LLMEngine):
         # Use common sampling pipeline (consolidates duplicate code)
         pipeline_results = self._process_logits_common_pipeline(logits_raw.copy(), temperature, top_k, top_p)
 
-        return {"next_token_id": pipeline_results["next_token_id"],
-                "logits_raw": logits_raw,
-                "logits_processed": pipeline_results["logits_processed_np"],
-                "probabilities_raw": sampling_utils.softmax(logits_raw),
-                "probabilities_temp": sampling_utils.softmax(pipeline_results["logits_temp_np"]),
-                "probabilities_top_k": sampling_utils.softmax(pipeline_results["logits_topk_np"]),
-                "probabilities_processed": pipeline_results["probs_processed_np"],
-                "top_tokens_processed": pipeline_results["top_tokens"],
-                "top_probs_processed": pipeline_results["top_probs"],
-                "attention": attention_data,
-                "hidden_states": None,
-                "forward_time": time.time() - st}
+        logits_processed = pipeline_results["logits_processed_np"]
+        logits_after_temperature = pipeline_results["logits_temp_np"]
+        logits_after_top_k = pipeline_results["logits_topk_np"]
+
+        return PredictionResult.from_dict({"next_token_id": pipeline_results["next_token_id"],
+                                           "logits_raw": logits_raw,
+                                           "logits_processed": logits_processed,
+                                           "logits_after_temperature": logits_after_temperature,
+                                           "logits_after_top_k": logits_after_top_k,
+                                           "logits_after_top_p": logits_processed,
+                                           "probabilities_raw": sampling_utils.softmax(logits_raw),
+                                           "probabilities_temp": sampling_utils.softmax(logits_after_temperature),
+                                           "probabilities_top_k": sampling_utils.softmax(logits_after_top_k),
+                                           "probabilities_processed": pipeline_results["probs_processed_np"],
+                                           "top_tokens_processed": pipeline_results["top_tokens"],
+                                           "top_probs_processed": pipeline_results["top_probs"],
+                                           "attention": attention_data,
+                                           "hidden_states": None,
+                                           "forward_time": time.time() - st})
 
     def get_vocabulary_size(self) -> int:
         if not self.tokenizer: raise RuntimeError("ONNXEngine: Tokenizer not loaded."); return -1

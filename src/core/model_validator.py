@@ -12,6 +12,7 @@ import re
 from typing import Tuple, Optional, List
 from dataclasses import dataclass
 
+from src.engines.capability_registry import ENGINES, list_engines
 
 @dataclass
 class ValidationResult:
@@ -31,19 +32,22 @@ class ModelValidator:
     HUGGINGFACE_PATTERN = re.compile(r'^[a-zA-Z0-9_-]+/[a-zA-Z0-9._-]+$')
     OLLAMA_PATTERN = re.compile(r'^[a-z0-9_-]+(?::[a-z0-9._-]+)?$', re.IGNORECASE)
 
-    # Engine categorization
-    # Native engines: Load models directly, full logits access (src/engines/native/)
+    # Engine categorization (derived from capability registry)
     NATIVE_ENGINES = {
-        'pytorch', 'pytorch_cuda', 'llamacpp', 'vllm',
-        'mlx', 'mlx_gpu', 'jax', 'tensorflow', 'onnx'
+        name for name, info in ENGINES.items()
+        if info.capabilities.engine_type == "native"
+    }
+    WRAPPER_ENGINES = {
+        name for name, info in ENGINES.items()
+        if info.capabilities.engine_type == "wrapper"
     }
 
-    # Wrapper engines: HTTP/API wrappers, limited logits (src/engines/wrappers/)
-    WRAPPER_ENGINES = {'ollama', 'huggingface_inference', 'openai'}
-
     # Legacy aliases for compatibility
-    ENGINES_WITH_LOGITS = NATIVE_ENGINES
-    ENGINES_WITHOUT_LOGITS = WRAPPER_ENGINES
+    ENGINES_WITH_LOGITS = {
+        name for name, info in ENGINES.items()
+        if info.capabilities.supports_logits
+    }
+    ENGINES_WITHOUT_LOGITS = set(ENGINES) - ENGINES_WITH_LOGITS
 
     CUDA_ONLY_ENGINES = {'vllm', 'pytorch_cuda'}
     APPLE_ONLY_ENGINES = {'mlx', 'mlx_gpu'}
@@ -167,8 +171,8 @@ class ModelValidator:
             # Warn about logits if required
             if require_logits:
                 return ValidationResult(
-                    is_valid=True,
-                    warning_message="⚠️  Ollama engine does NOT provide logits access (HTTP API only)",
+                    is_valid=False,
+                    error_message="Ollama engine does not provide logits access (HTTP API only)",
                     suggestion="For mind melding with real logits, use 'llamacpp' engine with GGUF file instead"
                 )
 
@@ -184,8 +188,8 @@ class ModelValidator:
             # Warn about logits if required
             if require_logits:
                 return ValidationResult(
-                    is_valid=True,
-                    warning_message="⚠️  HuggingFace Inference API does NOT provide logits access (HTTP API only)",
+                    is_valid=False,
+                    error_message="HuggingFace Inference API does not provide logits access (HTTP API only)",
                     suggestion="For mind melding with real logits, use 'pytorch' or 'vllm' engine instead"
                 )
 
@@ -196,17 +200,17 @@ class ModelValidator:
             # Warn about logits if required
             if require_logits:
                 return ValidationResult(
-                    is_valid=True,
-                    warning_message="⚠️  OpenAI API does NOT provide logits access (HTTP API only)",
+                    is_valid=False,
+                    error_message="OpenAI API does not provide logits access (HTTP API only)",
                     suggestion="For mind melding with real logits, use a native engine like 'pytorch' or 'vllm'"
                 )
 
         # Check logits requirement
         if require_logits and engine_lower in ModelValidator.ENGINES_WITHOUT_LOGITS:
             return ValidationResult(
-                is_valid=True,
-                warning_message=f"⚠️  Engine '{engine}' does not provide real logits access",
-                suggestion=f"Mind melding will use approximations. Consider switching to an engine with logits access."
+                is_valid=False,
+                error_message=f"Engine '{engine}' does not provide logits access",
+                suggestion="Mind melding requires engines with logits access."
             )
 
         return ValidationResult(is_valid=True)
@@ -286,12 +290,12 @@ class ModelValidator:
         engine, model = parts
 
         # Validate engine exists
-        from src.engines.engine_factory import SUPPORTED_ENGINES
-        if engine.lower() not in SUPPORTED_ENGINES:
+        supported_engines = list_engines()
+        if engine.lower() not in supported_engines:
             return ValidationResult(
                 is_valid=False,
                 error_message=f"Unknown engine '{engine}'",
-                suggestion=f"Supported engines: {', '.join(SUPPORTED_ENGINES)}"
+                suggestion=f"Supported engines: {', '.join(supported_engines)}"
             )
 
         # Validate engine + model combination

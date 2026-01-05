@@ -21,9 +21,9 @@ class DopplerRunner(BaseRunner):
     # Model aliases to doppler model names
     # Only include models that actually exist in doppler/models/
     MODEL_MAP = {
-        "gemma-2-2b": "gemma-2-2b-it-q4",
-        "gemma-2-2b-it": "gemma-2-2b-it-q4",
-        "gemma2-2b": "gemma-2-2b-it-q4",
+        "gemma-2-2b": "gemma-2-2b-it",
+        "gemma-2-2b-it": "gemma-2-2b-it",
+        "gemma2-2b": "gemma-2-2b-it",
     }
 
     def __init__(
@@ -95,8 +95,8 @@ class DopplerRunner(BaseRunner):
         """Nothing to unload - doppler CLI handles cleanup."""
         pass
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
-        """Run doppler benchmark and return token count and time."""
+    def generate(self, prompt: str, max_tokens: int) -> dict:
+        """Run doppler benchmark and return metrics dict."""
         # Create temp file for output
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             output_path = f.name
@@ -145,16 +145,36 @@ class DopplerRunner(BaseRunner):
             # Extract metrics
             metrics = data.get("metrics", {})
 
-            # Doppler reports decode tokens per second
+            # Doppler reports detailed timing
             decode_tokens = metrics.get("decode_tokens", max_tokens)
             decode_time_ms = metrics.get("decode_ms_total", 0)
             decode_time_sec = decode_time_ms / 1000 if decode_time_ms > 0 else 1
+
+            prefill_tokens = metrics.get("prefill_tokens", 0)
+            prefill_time_ms = metrics.get("prefill_ms_total", 0)
+            prefill_time_sec = prefill_time_ms / 1000 if prefill_time_ms > 0 else None
+
+            ttft_ms = metrics.get("ttft_ms", 0)
+            ttft_sec = ttft_ms / 1000 if ttft_ms > 0 else None
 
             # Get generated text from raw.generated_text
             raw = data.get("raw", {})
             generated_text = raw.get("generated_text", "")
 
-            return decode_tokens, decode_time_sec, generated_text
+            output = {
+                "decode_tokens": decode_tokens,
+                "decode_time_sec": decode_time_sec,
+                "text": generated_text,
+            }
+
+            if prefill_tokens > 0:
+                output["prefill_tokens"] = prefill_tokens
+            if prefill_time_sec is not None:
+                output["prefill_time_sec"] = prefill_time_sec
+            if ttft_sec is not None:
+                output["ttft_sec"] = ttft_sec
+
+            return output
 
         finally:
             # Cleanup temp file
@@ -248,7 +268,9 @@ class DopplerRunner(BaseRunner):
             decode_tps = metrics.get("decode_tokens_per_sec", 0)
             prefill_tps = metrics.get("prefill_tokens_per_sec", 0)
             decode_tokens = metrics.get("decode_tokens", 0)
+            prefill_tokens = metrics.get("prefill_tokens", 0)
             decode_ms = metrics.get("decode_ms_total", 0)
+            prefill_ms = metrics.get("prefill_ms_total", 0)
             ttft_ms = metrics.get("ttft_ms", 0)
             vram_bytes = metrics.get("estimated_vram_bytes_peak", 0)
 
@@ -262,8 +284,9 @@ class DopplerRunner(BaseRunner):
 
             # Update info with actual data
             info = self.get_model_info()
+            vram_gb = None
             if vram_bytes:
-                info["vram_gb"] = vram_bytes / 1024 / 1024 / 1024
+                vram_gb = vram_bytes / 1024 / 1024 / 1024
 
             # Get generated text from raw.generated_text
             raw = data.get("raw", {})
@@ -277,14 +300,20 @@ class DopplerRunner(BaseRunner):
                 elapsed_sec=decode_ms / 1000 if decode_ms else 0,
                 quantization=info.get("quantization", "Q4 (WebGPU)"),
                 model_size_gb=info.get("size_gb"),
-                vram_gb=info.get("vram_gb"),
+                vram_gb=vram_gb,
                 iterations=iterations,
                 per_iteration=[{
-                    "prefill_tps": prefill_tps,
-                    "decode_tps": decode_tps,
+                    "prefill_tokens_per_sec": prefill_tps,
+                    "decode_tokens_per_sec": decode_tps,
                     "ttft_ms": ttft_ms,
                 }],
                 sample_output=sample_output,
+                # New granular metrics
+                prefill_tokens_per_sec=prefill_tps if prefill_tps > 0 else None,
+                decode_tokens_per_sec=decode_tps if decode_tps > 0 else None,
+                ttft_ms=ttft_ms if ttft_ms > 0 else None,
+                prefill_tokens=prefill_tokens * iterations if prefill_tokens > 0 else None,
+                decode_tokens=decode_tokens * iterations if decode_tokens > 0 else None,
             )
 
         finally:

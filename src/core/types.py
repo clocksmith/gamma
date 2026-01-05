@@ -17,6 +17,7 @@ from typing import (
     Union,
     runtime_checkable,
 )
+from dataclasses import dataclass, field, fields
 
 import numpy as np
 import numpy.typing as npt
@@ -38,7 +39,86 @@ Probabilities = Union[npt.NDArray[np.float32], Any]
 KVCache = Any
 
 # Model output types
-PredictionResult = Dict[str, Any]
+@dataclass
+class PredictionResult:
+    """Typed prediction result returned by engines."""
+
+    next_token_id: int
+    logits_raw: Any = None
+    logits_processed: Any = None
+    logits_after_temperature: Any = None
+    logits_after_top_k: Any = None
+    logits_after_top_p: Any = None
+    probabilities_raw: Any = None
+    probabilities_temp: Any = None
+    probabilities_top_k: Any = None
+    probabilities_processed: Any = None
+    top_tokens_processed: Optional[List[str]] = None
+    top_probs_processed: Optional[List[float]] = None
+    top_token_ids_processed: Optional[List[int]] = None
+    attention: Any = None
+    hidden_states: Any = None
+    forward_time: Optional[float] = None
+    extra: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "PredictionResult":
+        """Create a PredictionResult from a legacy dict."""
+        known_fields = {f.name for f in fields(cls) if f.name != "extra"}
+        init = {k: data.get(k) for k in known_fields if k in data}
+        extra = {k: v for k, v in data.items() if k not in known_fields}
+        if "next_token_id" not in init:
+            raise KeyError("PredictionResult requires next_token_id")
+        init["extra"] = extra
+        return cls(**init)
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Dict-like getter for compatibility."""
+        if hasattr(self, key):
+            value = getattr(self, key)
+            return default if value is None else value
+        return self.extra.get(key, default)
+
+    def __getitem__(self, key: str) -> Any:
+        if hasattr(self, key):
+            value = getattr(self, key)
+            if value is None:
+                raise KeyError(key)
+            return value
+        if key in self.extra:
+            return self.extra[key]
+        raise KeyError(key)
+
+    def __contains__(self, key: str) -> bool:
+        if hasattr(self, key):
+            return getattr(self, key) is not None
+        return key in self.extra
+
+    def keys(self) -> List[str]:
+        keys = []
+        for f in fields(self):
+            if f.name == "extra":
+                continue
+            if getattr(self, f.name) is not None:
+                keys.append(f.name)
+        keys.extend(self.extra.keys())
+        return keys
+
+    def items(self):
+        return self.to_dict().items()
+
+    def to_dict(self) -> Dict[str, Any]:
+        data: Dict[str, Any] = {}
+        for f in fields(self):
+            if f.name == "extra":
+                continue
+            value = getattr(self, f.name)
+            if value is not None:
+                data[f.name] = value
+        data.update(self.extra)
+        return data
+
+
 EncodingResult = Tuple[TokenIds, AttentionMask]
 
 

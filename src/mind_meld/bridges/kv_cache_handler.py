@@ -198,10 +198,17 @@ class KVCache(ABC):
 
     def __init__(self, cache: Any, model_config: Any):
         self.model_arch = get_model_architecture(model_config)
-        self.num_layers = model_config.num_hidden_layers
-        self.num_heads = model_config.num_attention_heads
-        self.head_dim = model_config.hidden_size // model_config.num_attention_heads
-        self._cache_metadata: Dict[str, Any] = {}
+        self.num_layers = getattr(model_config, "num_hidden_layers", 0)
+        self.num_heads = getattr(model_config, "num_key_value_heads", None)
+        if self.num_heads is None:
+            self.num_heads = getattr(model_config, "num_attention_heads", 0)
+        self.head_dim = getattr(model_config, "head_dim", None)
+        if self.head_dim is None:
+            hidden_size = getattr(model_config, "hidden_size", 0)
+            attention_heads = getattr(model_config, "num_attention_heads", 0)
+            self.head_dim = hidden_size // attention_heads if attention_heads else 0
+        # Keep config for attention-shape translation heuristics.
+        self._cache_metadata: Dict[str, Any] = {"config": model_config}
         self.key, self.value = self._to_numpy(cache)
         self.sequence_length = self.key.shape[2] if len(self.key.shape) > 2 else 0
 
@@ -231,7 +238,9 @@ class KVCache(ABC):
         if target_config.num_attention_heads != self.num_heads:
             return False
 
-        target_head_dim = target_config.hidden_size // target_config.num_attention_heads
+        target_head_dim = getattr(target_config, "head_dim", None)
+        if target_head_dim is None:
+            target_head_dim = target_config.hidden_size // target_config.num_attention_heads
         if target_head_dim != self.head_dim:
             return False
 
@@ -315,8 +324,15 @@ class PyTorchKVCache(KVCache):
     """A KVCache implementation for PyTorch models."""
 
     def _to_numpy(self, cache: Any) -> Tuple[np.ndarray, np.ndarray]:
-        if not isinstance(cache, tuple) or not all(isinstance(layer, tuple) for layer in cache):
-            return np.array([]), np.array([])
+        cache_obj = cache
+        if hasattr(cache_obj, "to_legacy_cache") and callable(getattr(cache_obj, "to_legacy_cache")):
+            try:
+                legacy_cache = cache_obj.to_legacy_cache()
+                if legacy_cache is not None:
+                    cache_obj = legacy_cache
+            except Exception:
+                # Fall back to heuristic extraction for non-legacy cache types.
+                cache_obj = cache
 
         try:
             import torch
@@ -330,16 +346,75 @@ class PyTorchKVCache(KVCache):
         key_dtypes: List[torch.dtype] = []
         value_dtypes: List[torch.dtype] = []
 
-        for layer in cache:
-            if not isinstance(layer, tuple) or len(layer) < 2:
-                continue
+        def _iter_kv_layers(obj: Any):
+            if obj is None:
+                return
+            if hasattr(obj, "key_cache") and hasattr(obj, "value_cache"):
+                try:
+                    for k_cache, v_cache in zip(obj.key_cache, obj.value_cache):
+                        yield k_cache, v_cache
+                    return
+                except Exception:
+                    pass
+            if hasattr(obj, "cache"):
+                try:
+                    for entry in obj.cache:
+                        yield from _iter_kv_layers(entry)
+                    return
+                except Exception:
+                    pass
+            if hasattr(obj, "layers"):
+                try:
+                    for entry in obj.layers:
+                        yield from _iter_kv_layers(entry)
+                    return
+                except Exception:
+                    pass
+            if isinstance(obj, dict) and ("key" in obj or "value" in obj):
+                k_cache = obj.get("key") or obj.get("k")
+                v_cache = obj.get("value") or obj.get("v")
+                if k_cache is not None and v_cache is not None:
+                    yield k_cache, v_cache
+                return
+            if isinstance(obj, (list, tuple)):
+                for entry in obj:
+                    if isinstance(entry, (list, tuple)) and len(entry) >= 2:
+                        yield entry[0], entry[1]
+                        continue
+                    if isinstance(entry, dict) and ("key" in entry or "value" in entry):
+                        k_cache = entry.get("key") or entry.get("k")
+                        v_cache = entry.get("value") or entry.get("v")
+                        if k_cache is not None and v_cache is not None:
+                            yield k_cache, v_cache
+                        continue
+                    if isinstance(entry, torch.Tensor) and entry.ndim >= 1 and entry.shape[0] == 2:
+                        yield entry[0], entry[1]
+                        continue
+                    yield from _iter_kv_layers(entry)
+                return
+            if isinstance(obj, torch.Tensor) and obj.ndim >= 1 and obj.shape[0] == 2:
+                yield obj[0], obj[1]
+                return
+            if hasattr(obj, "__iter__"):
+                try:
+                    for entry in obj:
+                        yield from _iter_kv_layers(entry)
+                except Exception:
+                    return
 
-            key_tensor, value_tensor = layer[0], layer[1]
+        def _tensor_to_numpy(tensor: Any) -> np.ndarray:
+            if isinstance(tensor, torch.Tensor):
+                if tensor.dtype == torch.bfloat16:
+                    tensor = tensor.to(torch.float32)
+                return tensor.detach().cpu().numpy()
+            return np.array(tensor)
+
+        for key_tensor, value_tensor in _iter_kv_layers(cache_obj):
 
             if isinstance(key_tensor, torch.Tensor):
                 key_devices.append(str(key_tensor.device))
                 key_dtypes.append(key_tensor.dtype)
-                key_arrays.append(key_tensor.detach().cpu().numpy())
+                key_arrays.append(_tensor_to_numpy(key_tensor))
             else:
                 key_devices.append("cpu")
                 key_dtypes.append(torch.float32)
@@ -348,7 +423,7 @@ class PyTorchKVCache(KVCache):
             if isinstance(value_tensor, torch.Tensor):
                 value_devices.append(str(value_tensor.device))
                 value_dtypes.append(value_tensor.dtype)
-                value_arrays.append(value_tensor.detach().cpu().numpy())
+                value_arrays.append(_tensor_to_numpy(value_tensor))
             else:
                 value_devices.append("cpu")
                 value_dtypes.append(torch.float32)
@@ -587,6 +662,25 @@ class KVCacheTranslator:
                 logger.warning("Cannot translate KV cache for unknown architectures.")
             return None
 
+        source_config = source_cache._cache_metadata.get("config")
+        if source_config is not None and target_config is not None:
+            source_attn = get_attention_config(source_config)
+            target_attn = get_attention_config(target_config)
+            attn_mismatch = (
+                source_attn.get("num_kv_heads") != target_attn.get("num_kv_heads")
+                or source_attn.get("head_dim") != target_attn.get("head_dim")
+            )
+            if attn_mismatch:
+                if self.verbose:
+                    logger.info(
+                        "KV cache attention mismatch detected. "
+                        f"heads {source_attn.get('num_kv_heads')}->{target_attn.get('num_kv_heads')}, "
+                        f"head_dim {source_attn.get('head_dim')}->{target_attn.get('head_dim')}."
+                    )
+                if source_attn.get("head_dim") == target_attn.get("head_dim"):
+                    return GQATranslation().translate(source_cache, target_config)
+                return ProjectionTranslation().translate(source_cache, target_config)
+
         strategy = self._get_translation_strategy(source_cache.model_arch, target_arch)
         if self.verbose:
             logger.debug(f"Using '{strategy.__class__.__name__}' for translation.")
@@ -780,9 +874,14 @@ class ProjectionTranslation(TranslationStrategy):
         preserves information better than random projection.
         """
         source_head_dim = source_cache.head_dim
-        target_head_dim = target_config.hidden_size // target_config.num_attention_heads
         source_num_heads = source_cache.num_heads
-        target_num_heads = target_config.num_attention_heads
+        target_attn = get_attention_config(target_config)
+        target_head_dim = target_attn.get('head_dim')
+        if target_head_dim is None:
+            hidden_size = getattr(target_config, "hidden_size", 0)
+            num_heads = getattr(target_config, "num_attention_heads", 0)
+            target_head_dim = hidden_size // num_heads if num_heads else 0
+        target_num_heads = target_attn.get('num_kv_heads', target_attn['num_heads'])
         source_layers = source_cache.num_layers
         target_layers = target_config.num_hidden_layers
 
@@ -858,35 +957,48 @@ class ProjectionTranslation(TranslationStrategy):
         if source_heads == target_heads:
             return tensor
 
-        # Assume shape: (num_layers, batch, num_heads, seq_len, head_dim)
-        # or similar with num_heads in position 2
+        # Detect head axis by matching source_heads; fall back to axis 2.
         if tensor.ndim < 3:
             return tensor
 
-        head_axis = 2  # Typical position for num_heads
-        current_shape = list(tensor.shape)
+        head_axis = None
+        for axis in range(tensor.ndim - 1):
+            if tensor.shape[axis] == source_heads:
+                head_axis = axis
+                break
+        if head_axis is None:
+            head_axis = 2  # Typical position for num_heads
+
+        moved = tensor
+        if head_axis != 2:
+            moved = np.moveaxis(tensor, head_axis, 2)
 
         if source_heads > target_heads:
             # Reduce heads by averaging groups
             ratio = source_heads // target_heads
             remainder = source_heads % target_heads
 
-            new_shape = current_shape.copy()
-            new_shape[head_axis] = target_heads
+            new_shape = list(moved.shape)
+            new_shape[2] = target_heads
 
             result = np.zeros(new_shape, dtype=tensor.dtype)
             for i in range(target_heads):
                 start = i * ratio + min(i, remainder)
                 end = start + ratio + (1 if i < remainder else 0)
-                result[:, :, i, ...] = np.mean(tensor[:, :, start:end, ...], axis=head_axis)
+                result[:, :, i, ...] = np.mean(moved[:, :, start:end, ...], axis=2)
 
+            if head_axis != 2:
+                return np.moveaxis(result, 2, head_axis)
             return result
         else:
             # Expand heads by interpolation
             from scipy import ndimage
             zoom_factors = [1] * tensor.ndim
-            zoom_factors[head_axis] = target_heads / source_heads
-            return ndimage.zoom(tensor, zoom_factors, order=1)
+            zoom_factors[2] = target_heads / source_heads
+            result = ndimage.zoom(moved, zoom_factors, order=1)
+            if head_axis != 2:
+                return np.moveaxis(result, 2, head_axis)
+            return result
 
     def _handle_layer_mismatch(
         self, source_cache: KVCache, target_config: Any
@@ -894,22 +1006,16 @@ class ProjectionTranslation(TranslationStrategy):
         """Handle layer count mismatch between source and target.
 
         Strategy: Select evenly-spaced layers from source to match target count.
+        When expanding, repeat nearest layers to reach target depth.
         """
         source_layers = source_cache.num_layers
         target_layers = target_config.num_hidden_layers
 
-        if source_layers < target_layers:
-            # Cannot expand layers - return None to signal incompatibility
+        if source_layers == 0:
             return None
 
-        # Select evenly-spaced layers
-        indices = np.linspace(0, source_layers - 1, target_layers, dtype=int)
-        indices = list(set(indices))  # Remove duplicates
-        indices.sort()
-
-        if len(indices) != target_layers:
-            # Fallback: take first target_layers
-            indices = list(range(target_layers))
+        indices = np.linspace(0, source_layers - 1, target_layers)
+        indices = np.round(indices).astype(int)
 
         # Select layers
         source_cache.key = source_cache.key[indices, ...]

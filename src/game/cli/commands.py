@@ -18,6 +18,7 @@ CLI_OVERRIDE_FLAGS: Dict[str, str] = {
     "--temperature": "temperature",
     "--top-k": "top_k",
     "--top-p": "top_p",
+    "--sampling-strategy": "sampling_strategy",
     "--num-choices": "num_choices",
     "--permutation-length": "permutation_length",
     "--focus-words": "focus_words",
@@ -27,6 +28,8 @@ CLI_OVERRIDE_FLAGS: Dict[str, str] = {
     "--show-token-details": "show_token_details",
     "--word-mode": "word_mode",
     "--prompt": "prompt",
+    "--prompt-chat-template": "prompt_chat_template",
+    "--no-step-delay": "no_step_delay",
 }
 
 
@@ -67,6 +70,9 @@ def parse_arguments() -> argparse.Namespace:
                         help="Top-K filtering (limits vocabulary)")
     parser.add_argument("--top-p", type=float, default=cfg.DEFAULT_TOP_P,
                         help="Top-P (nucleus) filtering")
+    parser.add_argument("--sampling-strategy", type=str, default=None,
+                        choices=["sample", "argmax", "greedy", "stochastic"],
+                        help="Sampling strategy: sample (stochastic) or argmax (greedy). Defaults to sample for interactive, argmax for benchmark")
     parser.add_argument("--num-choices", type=int, default=cfg.DEFAULT_NUM_CHOICES,
                         help="Number of choices presented per round")
     parser.add_argument("--permutation-length", type=int, default=cfg.DEFAULT_PERMUTATION_LENGTH,
@@ -91,6 +97,8 @@ def parse_arguments() -> argparse.Namespace:
                         help="Enable simple, direct chat mode.")
     parser.add_argument("--prompt", type=str, default=None,
                         help="Run single-shot inference with the given prompt.")
+    parser.add_argument("--prompt-chat-template", action="store_true", default=False,
+                        help="Format --prompt using the tokenizer's chat template (if available).")
     parser.add_argument("--show-token-details", action="store_true", default=False,
                         help="Display token IDs, raw pieces, and decoded previews for each choice.")
     parser.add_argument("--word-mode", action="store_true", default=False,
@@ -220,6 +228,24 @@ def _add_mind_meld_args(parser: argparse.ArgumentParser) -> None:
                             help="Use weighted averaging of model probabilities each step")
     mind_group.add_argument("--use-abe", action="store_true", default=False,
                             help="Enable Agreement-Based Ensembling (ABE)")
+    mind_group.add_argument("--use-speculative", action="store_true", default=False,
+                            help="Enable speculative decoding (draft model proposes, target verifies)")
+    mind_group.add_argument("--speculative-k", type=int, default=4,
+                            help="Speculative decoding lookahead length (k)")
+    mind_group.add_argument("--use-contrastive", action="store_true", default=False,
+                            help="Enable contrastive decoding (expert vs amateur models)")
+    mind_group.add_argument("--use-moe-router", action="store_true", default=False,
+                            help="Enable content-aware MoE routing between models")
+    mind_group.add_argument("--use-feedback-loop", action="store_true", default=False,
+                            help="Enable feedback loop refinement (generator/critic)")
+    mind_group.add_argument("--use-adversarial", action="store_true", default=False,
+                            help="Enable adversarial debate mode (red team vs blue team)")
+    mind_group.add_argument("--use-hierarchical", action="store_true", default=False,
+                            help="Enable hierarchical control (planner/executor)")
+    mind_group.add_argument("--use-sparse-ot", action="store_true", default=False,
+                            help="Enable sparse OT projection for cross-tokenizer blending")
+    mind_group.add_argument("--skip-compatibility-check", action="store_true", default=False,
+                            help="Skip model compatibility validation (faster startup)")
     mind_group.add_argument("--use-enhanced", action="store_true", default=False,
                             help="Enable enhanced Mind Meld features such as vocabulary alignment tweaks")
     mind_group.add_argument("--blend-strategy", type=str, default="weighted_average",
@@ -233,8 +259,8 @@ def _add_mind_meld_args(parser: argparse.ArgumentParser) -> None:
                                 "ensemble_voting"
                             ],
                             help="Logit blending strategy when blending is enabled")
-    mind_group.add_argument("--alignment-strategy", type=str, default="semantic",
-                            help="Vocabulary alignment strategy to use when translating logits between models")
+    mind_group.add_argument("--alignment-strategy", type=str, default="intersection",
+                            help="Vocabulary alignment strategy: intersection, align, subword, semantic_map, unk, auto")
     mind_group.add_argument("--use-stats-tracker", action="store_true", default=False,
                             help="Track Mind Meld statistics and optionally write them to a file")
     mind_group.add_argument("--stats-file", type=str, default=None,
@@ -243,6 +269,14 @@ def _add_mind_meld_args(parser: argparse.ArgumentParser) -> None:
                             help="Initial prompt to seed Mind Meld generation")
     mind_group.add_argument("--use-model-offloading", action="store_true", default=False,
                             help="Offload inactive models to CPU to save GPU memory (useful for large models)")
+    mind_group.add_argument("--headless", action="store_true", default=False,
+                            help="Run Mind Meld without interactive prompts or visual output")
+    mind_group.add_argument("--meld-diagnostics", action="store_true", default=False,
+                            help="Log Mind Meld diagnostics (KV cache bridging and vocab translation)")
+    mind_group.add_argument("--allow-kv-cache-translation", action="store_true", default=False,
+                            help="Allow KV cache translation across mismatched models (experimental)")
+    mind_group.add_argument("--no-step-delay", action="store_true", default=False,
+                            help="Mind Meld only: disable the 1-second delay between steps")
 
 
 def _add_mlx_args(parser: argparse.ArgumentParser) -> None:

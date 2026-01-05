@@ -161,6 +161,21 @@ class KVCacheTranslator:
     def _infer_num_layers(self, cache: Any, config: Any) -> int:
         if isinstance(cache, (list, tuple)):
             return len(cache)
+        if hasattr(cache, "key_cache"):
+            try:
+                return len(cache.key_cache)
+            except Exception:
+                pass
+        if hasattr(cache, "cache"):
+            try:
+                return len(cache.cache)
+            except Exception:
+                pass
+        if hasattr(cache, "layers"):
+            try:
+                return len(cache.layers)
+            except Exception:
+                pass
         return getattr(config, "num_hidden_layers", 0)
 
     def _infer_num_heads(self, cache: Any, config: Any) -> int:
@@ -182,6 +197,28 @@ class KVCacheTranslator:
         return 0
 
     def _first_layer(self, cache: Any) -> Optional[Any]:
+        if hasattr(cache, "key_cache") and hasattr(cache, "value_cache"):
+            try:
+                if cache.key_cache and cache.value_cache:
+                    return (cache.key_cache[0], cache.value_cache[0])
+            except Exception:
+                pass
+        if hasattr(cache, "cache"):
+            try:
+                for entry in cache.cache:
+                    first = self._first_layer(entry)
+                    if first is not None:
+                        return first
+            except Exception:
+                pass
+        if hasattr(cache, "layers"):
+            try:
+                for entry in cache.layers:
+                    first = self._first_layer(entry)
+                    if first is not None:
+                        return first
+            except Exception:
+                pass
         if isinstance(cache, (list, tuple)) and cache:
             first = cache[0]
             if isinstance(first, (list, tuple)) and len(first) >= 2:

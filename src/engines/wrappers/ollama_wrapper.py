@@ -2,7 +2,6 @@ import time
 import json
 import os
 from typing import List, Tuple, Optional, Dict, Any, Union
-import subprocess
 import gguf
 
 from src.core import config as cfg
@@ -405,6 +404,7 @@ except ImportError:
     raise ImportError("'numpy' library not found. Install with `pip install numpy`")
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core import ollama_utils
 from src.engines import sampling_utils
 
@@ -413,6 +413,18 @@ class OllamaEngine(LLMEngine):
     """Engine for running models via Ollama."""
 
     _warned_missing_logprobs: bool = False
+
+    @property
+    def supports_logits(self) -> bool:
+        return False
+
+    @property
+    def supports_attention(self) -> bool:
+        return False
+
+    @property
+    def supports_kv_cache(self) -> bool:
+        return False
 
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
         super().__init__(model_name=model_name, engine_specific_config=engine_specific_config)
@@ -445,14 +457,10 @@ class OllamaEngine(LLMEngine):
 
         if not is_available:
             print(f"\n{message}")
-            print(f"Model '{self.model_name}' not found locally. Attempting to download...")
-            try:
-                subprocess.run(['ollama', 'pull', self.model_name], check=True, text=True)
-                print(f"\n✓ Model '{self.model_name}' downloaded successfully.")
-            except subprocess.CalledProcessError as e:
-                raise RuntimeError(f"Failed to download model '{self.model_name}'. Error: {e}")
-            except FileNotFoundError:
-                raise RuntimeError("'ollama' command not found. Please make sure Ollama is installed and in your PATH.")
+            raise RuntimeError(
+                f"Model '{self.model_name}' not found locally. "
+                f"Run: ollama pull {self.model_name}"
+            )
 
         print("✓ Model is available.")
 
@@ -587,7 +595,7 @@ class OllamaEngine(LLMEngine):
         top_p: float,
         output_attentions: bool = False,
         output_hidden_states: bool = False
-    ) -> Dict[str, Any]:
+    ) -> PredictionResult:
         """
         Predict next token using Ollama.
         Note: This is simplified as Ollama doesn't expose full logits.
@@ -748,10 +756,13 @@ class OllamaEngine(LLMEngine):
 
             top_indices_array = np.array(top_indices, dtype=int)
 
-            return {
+            return PredictionResult.from_dict({
                 "next_token_id": next_token_id,
                 "logits_raw": logits_raw,
                 "logits_processed": logits_raw,
+                "logits_after_temperature": logits_raw,
+                "logits_after_top_k": logits_raw,
+                "logits_after_top_p": logits_raw,
                 "probabilities": probs_raw,
                 "probabilities_raw": probs_raw,
                 "probabilities_temp": probs_raw,
@@ -763,7 +774,7 @@ class OllamaEngine(LLMEngine):
                 "attention": None,
                 "hidden_states": None,
                 "forward_time": time.time() - st
-            }
+            })
 
         except ImportError:
             raise RuntimeError("'requests' library required for Ollama. Install with: pip install requests")

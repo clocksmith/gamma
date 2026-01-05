@@ -8,8 +8,9 @@ import argparse
 from src.core import config as cfg
 from src.ui import components as uic
 from src.core.models.model_catalog import ModelSelector
+from src.engines.capability_registry import list_engines_with, get_engine_info
 
-SUPPORTED_ENGINES_UI_LIST = ["pytorch", "llamacpp", "tensorflow", "jax", "onnx", "mlx"]
+SUPPORTED_ENGINES_UI_LIST = list_engines_with(supports_logits=True)
 
 def get_user_input(
     prompt: str,
@@ -115,7 +116,10 @@ def select_engine_interactively(current_default_engine: str) -> Optional[str]:
     uic.print_header("Engine Selection")
     print("Choose the backend engine:")
     for i, name in enumerate(SUPPORTED_ENGINES_UI_LIST):
-        print(f"  {i+1}) {name.capitalize()}{'*' if name == current_default_engine else ''}")
+        info = get_engine_info(name)
+        label = info.display_name if info else name
+        suffix = "*" if name == current_default_engine else ""
+        print(f"  {i+1}) {label} ({name}){suffix}")
     prompt = f"Select engine number (1-{len(SUPPORTED_ENGINES_UI_LIST)})"
     default_idx_str = str(SUPPORTED_ENGINES_UI_LIST.index(current_default_engine) + 1) if current_default_engine in SUPPORTED_ENGINES_UI_LIST else "1"
     choice = get_user_input(prompt, [str(i + 1) for i in range(len(SUPPORTED_ENGINES_UI_LIST))], allow_empty=True, default_val_on_empty=default_idx_str)

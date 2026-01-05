@@ -91,14 +91,14 @@ class VocabularyTranslator(ABC):
     def _log_build_start(self, source_name: str, target_name: str, map_type: str) -> None:
         """Log the start of map building (respects verbosity setting)."""
         if self.verbose:
-            logger.info(f"Building {map_type} map from {source_name} to {target_name}...")
+            print(f"Building {map_type} map from {source_name} to {target_name}...")
         else:
             logger.debug(f"Building {map_type} map from {source_name} to {target_name}...")
 
     def _log_build_complete(self, mapped: int, total: int, map_type: str) -> None:
         """Log map building completion (respects verbosity setting)."""
         if self.verbose:
-            logger.info(f"{map_type.capitalize()} map built. Mapped {mapped} of {total} tokens.")
+            print(f"{map_type.capitalize()} map built. Mapped {mapped} of {total} tokens.")
         else:
             logger.debug(f"{map_type.capitalize()} map built. Mapped {mapped} of {total} tokens.")
 
@@ -126,9 +126,13 @@ class VocabularyIntersectionTranslator(VocabularyTranslator):
     def __init__(self, use_cache: bool = True, verbose: bool = False):
         super().__init__(use_cache=use_cache, verbose=verbose)
 
-    def _get_intersection_mask(self, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
-        """Calculates and caches a mask for the intersection of two vocabularies."""
-        cache_key = self._make_cache_key(source_tokenizer, target_tokenizer, "intersection")
+    def _get_intersection_map(
+        self,
+        source_tokenizer: 'PreTrainedTokenizerBase',
+        target_tokenizer: 'PreTrainedTokenizerBase'
+    ) -> Tuple[np.ndarray, np.ndarray, int]:
+        """Build and cache a source->target token id mapping for shared tokens."""
+        cache_key = self._make_cache_key(source_tokenizer, target_tokenizer, "intersection_map")
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -136,28 +140,87 @@ class VocabularyIntersectionTranslator(VocabularyTranslator):
         self._log_build_start(source_tokenizer.name_or_path, target_tokenizer.name_or_path, "intersection")
         source_vocab = source_tokenizer.get_vocab()
         target_vocab = target_tokenizer.get_vocab()
+        source_ids = []
+        target_ids = []
+        for token_str, source_id in source_vocab.items():
+            target_id = target_vocab.get(token_str)
+            if target_id is not None:
+                source_ids.append(source_id)
+                target_ids.append(target_id)
 
-        common_tokens = set(source_vocab.keys()).intersection(set(target_vocab.keys()))
+        source_ids_arr = np.asarray(source_ids, dtype=np.int64)
+        target_ids_arr = np.asarray(target_ids, dtype=np.int64)
+        target_vocab_size = len(target_vocab)
 
-        mask = np.full(len(source_vocab), -np.inf, dtype=np.float32)
-        for token_str in common_tokens:
-            source_id = source_vocab[token_str]
-            if source_id < len(mask):
-                mask[source_id] = 0.0  # Use 0.0 for valid tokens, -inf for invalid
-
-        self._set_cached(cache_key, mask)
-        self._log_build_complete(len(common_tokens), len(source_vocab), "intersection")
-        return mask
+        cached_value = (source_ids_arr, target_ids_arr, target_vocab_size)
+        self._set_cached(cache_key, cached_value)
+        self._log_build_complete(len(source_ids_arr), len(source_vocab), "intersection")
+        return cached_value
 
     def translate_logits(self, source_logits: np.ndarray, source_tokenizer: 'PreTrainedTokenizerBase', target_tokenizer: 'PreTrainedTokenizerBase') -> np.ndarray:
         """
         Filters logits by applying a mask, keeping only those for tokens present in both vocabularies.
         """
-        if self._same_vocab_size(source_tokenizer, target_tokenizer):
+        source_logits = self._flatten_if_needed(source_logits)
+
+        if (
+            self._same_vocab_size(source_tokenizer, target_tokenizer)
+            and source_tokenizer.name_or_path == target_tokenizer.name_or_path
+        ):
             return source_logits
 
-        mask = self._get_intersection_mask(source_tokenizer, target_tokenizer)
-        return source_logits + mask
+        source_ids, target_ids, target_vocab_size = self._get_intersection_map(
+            source_tokenizer, target_tokenizer
+        )
+        target_logits = self._init_target_logits(target_vocab_size)
+
+        if source_ids.size == 0:
+            return target_logits
+
+        valid_mask = source_ids < len(source_logits)
+        if not np.all(valid_mask):
+            source_ids = source_ids[valid_mask]
+            target_ids = target_ids[valid_mask]
+
+        if source_ids.size == 0:
+            return target_logits
+
+        np.maximum.at(target_logits, target_ids, source_logits[source_ids])
+        return target_logits
+
+    def translate_probabilities(
+        self,
+        source_probs: np.ndarray,
+        source_tokenizer: 'PreTrainedTokenizerBase',
+        target_tokenizer: 'PreTrainedTokenizerBase'
+    ) -> np.ndarray:
+        """Translate probabilities by summing mass over shared tokens."""
+        source_probs = self._flatten_if_needed(source_probs)
+
+        if (
+            self._same_vocab_size(source_tokenizer, target_tokenizer)
+            and source_tokenizer.name_or_path == target_tokenizer.name_or_path
+        ):
+            return source_probs
+
+        source_ids, target_ids, target_vocab_size = self._get_intersection_map(
+            source_tokenizer, target_tokenizer
+        )
+        target_probs = self._init_target_probs(target_vocab_size)
+
+        if source_ids.size == 0:
+            return target_probs
+
+        valid_mask = source_ids < len(source_probs)
+        if not np.all(valid_mask):
+            source_ids = source_ids[valid_mask]
+            target_ids = target_ids[valid_mask]
+
+        if source_ids.size == 0:
+            return target_probs
+
+        np.add.at(target_probs, target_ids, source_probs[source_ids])
+        return self._normalize_probs(target_probs)
 
 
 class AligningVocabularyTranslator(VocabularyTranslator):
@@ -178,9 +241,12 @@ class AligningVocabularyTranslator(VocabularyTranslator):
 
         self._log_build_start(source_tokenizer.name_or_path, target_tokenizer.name_or_path, "alignment")
         source_vocab_size = len(source_tokenizer.get_vocab())
+        progress_interval = 50000 if self.verbose and source_vocab_size >= 50000 else 0
 
         alignment_map = {}
         for source_id in range(source_vocab_size):
+            if progress_interval and source_id > 0 and source_id % progress_interval == 0:
+                print(f"Alignment progress: {source_id}/{source_vocab_size} tokens")
             # Detokenize the source token ID to its string representation
             token_str = source_tokenizer.decode([source_id], skip_special_tokens=True)
 

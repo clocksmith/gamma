@@ -24,11 +24,24 @@ except ImportError:
     raise ImportError("OpenAI API requires 'numpy' and 'requests'. Install with: pip install numpy requests")
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.engines import sampling_utils
 
 
 class OpenAIEngine(LLMEngine):
     """Engine for OpenAI API (GPT-3.5, GPT-4, etc.)."""
+
+    @property
+    def supports_logits(self) -> bool:
+        return False
+
+    @property
+    def supports_attention(self) -> bool:
+        return False
+
+    @property
+    def supports_kv_cache(self) -> bool:
+        return False
 
     def __init__(self, model_name: str, engine_specific_config: Optional[Dict[str, Any]] = None):
         """
@@ -110,10 +123,10 @@ class OpenAIEngine(LLMEngine):
                     f"Check available models at: https://platform.openai.com/docs/models"
                 )
             elif test_response.status_code == 429:
-                print(f"⚠️  Rate limit or quota exceeded (HTTP 429)")
+                print("Warning: Rate limit or quota exceeded (HTTP 429)")
                 print("Continuing anyway - API may work with different parameters")
             else:
-                print(f"⚠️  API returned status {test_response.status_code}: {test_response.text}")
+                print(f"Warning: API returned status {test_response.status_code}: {test_response.text}")
                 print("Continuing anyway - API may still work for generation")
 
         except requests.exceptions.Timeout:
@@ -121,7 +134,7 @@ class OpenAIEngine(LLMEngine):
         except requests.exceptions.ConnectionError:
             raise RuntimeError("Cannot connect to OpenAI API. Check your network connection.")
         except Exception as e:
-            print(f"⚠️  Warning during API check: {e}")
+            print(f"Warning: API check issue: {e}")
             print("Continuing anyway - API may still work for generation")
 
     def encode(self, text: str, add_special_tokens: bool = True) -> Tuple[List[int], None]:
@@ -151,7 +164,7 @@ class OpenAIEngine(LLMEngine):
         top_p: float,
         output_attentions: bool = False,
         output_hidden_states: bool = False
-    ) -> Dict[str, Any]:
+    ) -> PredictionResult:
         """
         Predict next token using OpenAI API.
 
@@ -221,20 +234,27 @@ class OpenAIEngine(LLMEngine):
 
             probs_raw = sampling_utils.softmax(logits_raw)
 
-            return {
+            logits_processed = pipeline_results["logits_processed_np"]
+            logits_after_temperature = pipeline_results["logits_temp_np"]
+            logits_after_top_k = pipeline_results["logits_topk_np"]
+
+            return PredictionResult.from_dict({
                 "next_token_id": next_token_id,
                 "logits_raw": logits_raw,
-                "logits_processed": pipeline_results["logits_processed_np"],
+                "logits_processed": logits_processed,
+                "logits_after_temperature": logits_after_temperature,
+                "logits_after_top_k": logits_after_top_k,
+                "logits_after_top_p": logits_processed,
                 "probabilities_raw": probs_raw,
-                "probabilities_temp": sampling_utils.softmax(pipeline_results["logits_temp_np"]),
-                "probabilities_top_k": sampling_utils.softmax(pipeline_results["logits_topk_np"]),
+                "probabilities_temp": sampling_utils.softmax(logits_after_temperature),
+                "probabilities_top_k": sampling_utils.softmax(logits_after_top_k),
                 "probabilities_processed": pipeline_results["probs_processed_np"],
                 "top_tokens_processed": pipeline_results["top_tokens"],
                 "top_probs_processed": pipeline_results["top_probs"],
                 "attention": None,
                 "hidden_states": None,
                 "forward_time": time.time() - st
-            }
+            })
 
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 429:

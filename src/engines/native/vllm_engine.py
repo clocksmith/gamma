@@ -15,6 +15,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine
+from src.core.types import PredictionResult
 from src.core import config as game_config
 from src.engines import sampling_utils
 
@@ -132,7 +133,7 @@ class VLLMEngine(LLMEngine):
         top_p: float,
         output_attentions: bool = False,
         output_hidden_states: bool = False
-    ) -> Dict[str, Any]:
+    ) -> PredictionResult:
         """
         Predict next token using vLLM.
 
@@ -245,13 +246,20 @@ class VLLMEngine(LLMEngine):
 
         inference_time = time.time() - start_time
 
-        return {
+        logits_processed = pipeline_results["logits_processed_np"]
+        logits_after_temperature = pipeline_results["logits_temp_np"]
+        logits_after_top_k = pipeline_results["logits_topk_np"]
+
+        return PredictionResult.from_dict({
             "next_token_id": next_token_id,
             "logits_raw": logits_raw,
-            "logits_processed": pipeline_results["logits_processed_np"],
+            "logits_processed": logits_processed,
+            "logits_after_temperature": logits_after_temperature,
+            "logits_after_top_k": logits_after_top_k,
+            "logits_after_top_p": logits_processed,
             "probabilities_raw": sampling_utils.softmax(logits_raw),
-            "probabilities_temp": sampling_utils.softmax(pipeline_results["logits_temp_np"]),
-            "probabilities_top_k": sampling_utils.softmax(pipeline_results["logits_topk_np"]),
+            "probabilities_temp": sampling_utils.softmax(logits_after_temperature),
+            "probabilities_top_k": sampling_utils.softmax(logits_after_top_k),
             "probabilities_processed": pipeline_results["probs_processed_np"],
             "top_tokens_processed": pipeline_results["top_tokens"],
             "top_probs_processed": pipeline_results["top_probs"],
@@ -262,7 +270,7 @@ class VLLMEngine(LLMEngine):
                 "finish_reason": completion.finish_reason,
                 "num_tokens_generated": len(completion.token_ids),
             }
-        }
+        })
 
     def get_vocabulary_size(self) -> int:
         """Get vocabulary size from tokenizer"""

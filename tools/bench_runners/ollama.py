@@ -150,7 +150,7 @@ class OllamaRunner(BaseRunner):
         """Ollama manages its own memory, nothing to unload."""
         pass
 
-    def generate(self, prompt: str, max_tokens: int) -> tuple[int, float, str]:
+    def generate(self, prompt: str, max_tokens: int) -> dict:
         """Generate tokens using Ollama API."""
         response = requests.post(
             f"{self.host}/api/generate",
@@ -168,9 +168,29 @@ class OllamaRunner(BaseRunner):
 
         data = response.json()
 
+        # Decode (generation) metrics
         eval_count = data.get("eval_count", 0)
         eval_duration_ns = data.get("eval_duration", 1)
         eval_duration_sec = eval_duration_ns / 1e9
+
+        # Prefill (prompt evaluation) metrics
+        prompt_eval_count = data.get("prompt_eval_count", 0)
+        prompt_eval_duration_ns = data.get("prompt_eval_duration", 0)
+        prompt_eval_duration_sec = prompt_eval_duration_ns / 1e9 if prompt_eval_duration_ns > 0 else None
+
         generated_text = data.get("response", "")
 
-        return eval_count, eval_duration_sec, generated_text
+        result = {
+            "decode_tokens": eval_count,
+            "decode_time_sec": eval_duration_sec,
+            "text": generated_text,
+        }
+
+        # Add prefill metrics if available
+        if prompt_eval_count > 0 and prompt_eval_duration_sec:
+            result["prefill_tokens"] = prompt_eval_count
+            result["prefill_time_sec"] = prompt_eval_duration_sec
+            # TTFT is approximately the prefill time (time to process prompt before first token)
+            result["ttft_sec"] = prompt_eval_duration_sec
+
+        return result

@@ -122,7 +122,8 @@ python gamma.py game --engine onnx --model my-model.onnx --onnx-tokenizer google
 ```bash
 python tools/run_mind_meld_cli.py \
   --models llamacpp:gemma-3-27b.gguf llamacpp:llama3-8b.gguf \
-  --strategy pattern
+  --strategy pattern \
+  --no-step-delay
 ```
 
 ## Listing Available Models
