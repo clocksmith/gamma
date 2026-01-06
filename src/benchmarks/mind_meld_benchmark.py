@@ -60,10 +60,43 @@ class BenchmarkResult:
     token_latencies: List[float]
     vram_samples: List[int]
 
+    # KV cache stability metrics
+    kv_cache_attempts: int = 0
+    kv_cache_successes: int = 0
+    kv_cache_replays: int = 0
+    kv_cache_translations: int = 0
+    guardrail_replays: int = 0
+
     # Metadata
     timestamp: float
     success: bool
     error: Optional[str] = None
+
+
+@dataclass
+class StabilityResult:
+    """Results from stability benchmarking across multiple runs."""
+    config: BenchmarkConfig
+    num_runs: int
+
+    # Output consistency
+    output_similarity_mean: float  # Average pairwise similarity
+    output_similarity_std: float   # Std dev of similarity
+    exact_match_rate: float        # Fraction of identical outputs
+
+    # Performance stability
+    speed_mean: float
+    speed_std: float
+    latency_mean: float
+    latency_std: float
+
+    # KV cache stability
+    kv_success_rate_mean: float
+    kv_replay_rate_mean: float
+    guardrail_trigger_rate: float
+
+    # Individual run results
+    individual_results: List[BenchmarkResult]
 
 
 class MindMeldBenchmark:
@@ -386,6 +419,216 @@ class MindMeldBenchmark:
             json.dump(data, f, indent=2)
 
         self._log(f"Results saved to: {output_path}")
+
+    def _extract_kv_cache_metrics(self, meld_engine: MeldEngine) -> Dict[str, int]:
+        """Extract KV cache diagnostics from meld engine."""
+        diag = getattr(meld_engine, '_diag', {})
+        return {
+            'kv_cache_attempts': diag.get('kv_cache_attempts', 0),
+            'kv_cache_successes': diag.get('kv_cache_success', 0),
+            'kv_cache_replays': diag.get('kv_cache_replay', 0),
+            'kv_cache_translations': diag.get('kv_cache_translated', 0),
+            'guardrail_replays': diag.get('guardrail_replay', 0),
+        }
+
+    def _calculate_text_similarity(self, text1: str, text2: str) -> float:
+        """Calculate similarity between two texts (Jaccard on words)."""
+        words1 = set(text1.lower().split())
+        words2 = set(text2.lower().split())
+        if not words1 or not words2:
+            return 0.0
+        intersection = len(words1 & words2)
+        union = len(words1 | words2)
+        return intersection / union if union > 0 else 0.0
+
+    def run_stability_benchmark(
+        self,
+        config: BenchmarkConfig,
+        meld_engine_factory: Any,
+        num_runs: int = 5
+    ) -> StabilityResult:
+        """
+        Run multiple iterations to measure output stability.
+
+        Args:
+            config: Benchmark configuration
+            meld_engine_factory: Function that creates fresh MeldEngine instances
+            num_runs: Number of runs to perform
+
+        Returns:
+            StabilityResult with aggregated metrics
+        """
+        self._log(f"Running stability benchmark with {num_runs} runs")
+        results = []
+
+        for i in range(num_runs):
+            self._log(f"  Run {i+1}/{num_runs}")
+            try:
+                meld_engine = meld_engine_factory(config)
+                result = self.run_single_benchmark(config, meld_engine)
+
+                # Extract KV cache metrics
+                kv_metrics = self._extract_kv_cache_metrics(meld_engine)
+                result.kv_cache_attempts = kv_metrics['kv_cache_attempts']
+                result.kv_cache_successes = kv_metrics['kv_cache_successes']
+                result.kv_cache_replays = kv_metrics['kv_cache_replays']
+                result.kv_cache_translations = kv_metrics['kv_cache_translations']
+                result.guardrail_replays = kv_metrics['guardrail_replays']
+
+                results.append(result)
+            except Exception as e:
+                self._log(f"  Run {i+1} failed: {e}")
+
+        if not results:
+            raise RuntimeError("All stability benchmark runs failed")
+
+        # Calculate output similarity matrix
+        similarities = []
+        for i in range(len(results)):
+            for j in range(i + 1, len(results)):
+                sim = self._calculate_text_similarity(
+                    results[i].generated_text,
+                    results[j].generated_text
+                )
+                similarities.append(sim)
+
+        # Calculate exact match rate
+        outputs = [r.generated_text for r in results]
+        unique_outputs = len(set(outputs))
+        exact_match_rate = 1.0 - (unique_outputs - 1) / max(len(outputs) - 1, 1)
+
+        # Aggregate metrics
+        speeds = [r.tokens_per_second for r in results]
+        latencies = [r.avg_token_latency for r in results]
+
+        kv_success_rates = [
+            r.kv_cache_successes / max(r.kv_cache_attempts, 1)
+            for r in results
+        ]
+        kv_replay_rates = [
+            r.kv_cache_replays / max(r.kv_cache_attempts, 1)
+            for r in results
+        ]
+        guardrail_rates = [
+            r.guardrail_replays / max(r.swap_count, 1)
+            for r in results
+        ]
+
+        return StabilityResult(
+            config=config,
+            num_runs=num_runs,
+            output_similarity_mean=np.mean(similarities) if similarities else 1.0,
+            output_similarity_std=np.std(similarities) if similarities else 0.0,
+            exact_match_rate=exact_match_rate,
+            speed_mean=np.mean(speeds),
+            speed_std=np.std(speeds),
+            latency_mean=np.mean(latencies),
+            latency_std=np.std(latencies),
+            kv_success_rate_mean=np.mean(kv_success_rates),
+            kv_replay_rate_mean=np.mean(kv_replay_rates),
+            guardrail_trigger_rate=np.mean(guardrail_rates),
+            individual_results=results
+        )
+
+    def benchmark_kv_cache_strategies(
+        self,
+        models: List[str],
+        prompt: str,
+        max_tokens: int = 50,
+        num_runs: int = 3
+    ) -> Dict[str, StabilityResult]:
+        """
+        Compare KV cache handling strategies: direct, translation, replay.
+
+        Args:
+            models: Model specs to use
+            prompt: Generation prompt
+            max_tokens: Tokens to generate
+            num_runs: Runs per strategy
+
+        Returns:
+            Dict mapping strategy name to StabilityResult
+        """
+        from src.mind_meld.core.config import MeldConfig, SwapConfig, SwapStrategy
+        from src.engines.engine_factory import get_engine
+
+        self._log("Benchmarking KV cache strategies")
+        results = {}
+
+        # Test configurations
+        kv_configs = [
+            ("kv_direct", False, False),      # No translation, no force
+            ("kv_translate", True, False),    # Allow translation
+            ("kv_force", True, True),         # Force translation
+            ("kv_replay_only", False, False), # Will use replay via guardrails
+        ]
+
+        base_config = BenchmarkConfig(
+            strategy_name="fixed_interval",
+            models=models,
+            prompt=prompt,
+            max_tokens=max_tokens,
+            temperature=0.7
+        )
+
+        for name, allow_translate, force_translate in kv_configs:
+            self._log(f"\nTesting KV strategy: {name}")
+            config = BenchmarkConfig(
+                strategy_name=name,
+                models=models,
+                prompt=prompt,
+                max_tokens=max_tokens,
+                temperature=0.7
+            )
+
+            def create_engine(cfg, allow_t=allow_translate, force_t=force_translate):
+                meld_config = MeldConfig(
+                    swap_config=SwapConfig(strategy=SwapStrategy.FIXED_INTERVAL),
+                    max_tokens=cfg.max_tokens,
+                    temperature=cfg.temperature
+                )
+
+                engines = []
+                for model_spec in cfg.models:
+                    if ':' in model_spec:
+                        engine_name, model_name = model_spec.split(':', 1)
+                    else:
+                        engine_name, model_name = 'pytorch', model_spec
+                    engine = get_engine(engine_name, model_name, {"mode": "benchmark"})
+                    engine.load()
+                    engines.append(engine)
+
+                class BenchArgs:
+                    def __init__(self):
+                        self.temperature = cfg.temperature
+                        self.top_k = cfg.top_k
+                        self.top_p = cfg.top_p
+                        self.allow_kv_cache_translation = allow_t
+                        self.force_kv_cache_translation = force_t
+                        self.meld_diagnostics = True
+                        self.verbose = False
+                        self.summary_only = True
+
+                return MeldEngine(engines, BenchArgs())
+
+            try:
+                stability = self.run_stability_benchmark(config, create_engine, num_runs)
+                results[name] = stability
+                self._print_stability_summary(name, stability)
+            except Exception as e:
+                self._log(f"Strategy {name} failed: {e}")
+
+        return results
+
+    def _print_stability_summary(self, name: str, result: StabilityResult):
+        """Print stability benchmark summary."""
+        print(f"\n📊 {name} Stability Results:")
+        print(f"  Output similarity: {result.output_similarity_mean:.3f} ± {result.output_similarity_std:.3f}")
+        print(f"  Exact match rate: {result.exact_match_rate:.1%}")
+        print(f"  Speed: {result.speed_mean:.2f} ± {result.speed_std:.2f} tok/s")
+        print(f"  KV success rate: {result.kv_success_rate_mean:.1%}")
+        print(f"  KV replay rate: {result.kv_replay_rate_mean:.1%}")
+        print(f"  Guardrail trigger rate: {result.guardrail_trigger_rate:.1%}")
 
     def compare_strategies(
         self,

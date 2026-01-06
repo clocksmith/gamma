@@ -35,21 +35,27 @@ class MindMeldConfig:
     top_k: int = 8
     top_p: float = 0.95
     steps: int = 20
+    repetition_penalty: float = 1.1
     
     # Swap strategy specific settings
-    fixed_interval: int = 5  # For FIXED_INTERVAL strategy
+    fixed_interval: int = 8  # For FIXED_INTERVAL strategy
     confidence_threshold: float = 0.5  # For CONFIDENCE_BASED strategy
+    perplexity_threshold: float = 50.0  # For PERPLEXITY_BASED strategy
     
     # Display options
     verbose: bool = False
     show_attention: bool = True
     initial_prompt: str = "In a world where two minds are better than one,"
     no_step_delay: bool = False
+    summary_only: bool = False
+    stop_text: List[str] = field(default_factory=list)
+    max_sentences: Optional[int] = None
     
     # Enhanced features
     use_enhanced: bool = False
     use_blending: bool = False
     use_weighted_average: bool = False
+    order_neutral: bool = False
     use_abe: bool = False  # Agreement-Based Ensembling
     use_stats_tracker: bool = False
     blend_strategy: str = "weighted_average"
@@ -57,6 +63,16 @@ class MindMeldConfig:
     stats_file: Optional[str] = None
     meld_diagnostics: bool = False
     allow_kv_cache_translation: bool = False
+    force_kv_cache_translation: bool = False
+    translate_logits: bool = False
+    soft_swap: bool = False
+    soft_swap_weight: float = 1.5
+    use_sparse_ot: bool = False
+    shared_chat_template: Optional[bool] = None
+    headless: bool = False
+    prompt_chat_template: Optional[bool] = None
+    prompt_system: Optional[str] = None
+    no_default_system: bool = False
 
 
 class MindMeldCLI:
@@ -176,8 +192,11 @@ Swap strategies:
   fixed        - Swap every N tokens (use --interval)
   round_robin  - Alternate models each token
   random       - Random swapping
-  perplexity   - Swap when model is uncertain
-  confidence   - Swap when confidence drops
+  confidence   - Swap when confidence drops below threshold
+  perplexity   - Swap when model perplexity exceeds threshold
+  attention    - Swap guided by attention pattern changes
+  weighted     - Blend all models with configurable weights
+  semantic     - Swap based on semantic similarity of outputs
 
 Model name formats:
   Ollama:      Use exact name from 'ollama list' → ollama:gemma2:2b
@@ -196,13 +215,14 @@ Model name formats:
             "--strategy",
             type=str,
             default="pattern",
-            choices=["pattern", "fixed", "fixed_interval", "round_robin", "random"],
+            choices=["pattern", "fixed", "fixed_interval", "round_robin", "random",
+                     "confidence", "perplexity", "attention", "weighted", "semantic"],
             help="Swap strategy to control when models take over"
         )
         parser.add_argument(
             "--interval",
             type=int,
-            default=5,
+            default=8,
             help="Token interval for fixed swap strategy"
         )
         parser.add_argument(
@@ -224,6 +244,12 @@ Model name formats:
             help="Top-P (nucleus) sampling threshold"
         )
         parser.add_argument(
+            "--repetition-penalty",
+            type=float,
+            default=None,
+            help="Repetition penalty (>1.0 reduces repeats)"
+        )
+        parser.add_argument(
             "--steps",
             type=int,
             default=20,
@@ -236,15 +262,56 @@ Model name formats:
             help="Disable the 1-second delay between steps"
         )
         parser.add_argument(
+            "--summary-only",
+            action="store_true",
+            default=False,
+            help="Show only the final output and brief stats"
+        )
+        parser.add_argument(
+            "--max-sentences",
+            type=int,
+            default=None,
+            help="Stop after N sentences in the generated output"
+        )
+        parser.add_argument(
+            "--stop-text",
+            action="append",
+            default=[],
+            help="Stop when generated output contains this text (repeatable)"
+        )
+        parser.add_argument(
             "--prompt",
             type=str,
             default=None,
             help="Initial prompt to start the meld"
         )
         parser.add_argument(
+            "--prompt-chat-template",
+            action=argparse.BooleanOptionalAction,
+            default=None,
+            help="Format --prompt using the tokenizer's chat template (auto when available)"
+        )
+        parser.add_argument(
+            "--prompt-system",
+            type=str,
+            default=None,
+            help="System prompt to apply when using chat templates"
+        )
+        parser.add_argument(
+            "--no-default-system",
+            action="store_true",
+            default=False,
+            help="Disable the default system prompt for chat templates"
+        )
+        parser.add_argument(
             "--use-weighted-average",
             action="store_true",
             help="Use weighted average ensemble across models"
+        )
+        parser.add_argument(
+            "--order-neutral",
+            action="store_true",
+            help="Alias for --use-weighted-average to reduce swap-order sensitivity"
         )
         parser.add_argument(
             "--use-abe",
@@ -272,10 +339,15 @@ Model name formats:
             help="Blending strategy to use when --use-blending is enabled"
         )
         parser.add_argument(
-            "--alignment",
+            "--alignment-strategy",
             type=str,
             default="intersection",
             help="Vocabulary alignment strategy: intersection, align, subword, semantic_map, unk, auto"
+        )
+        parser.add_argument(
+            "--translate-logits",
+            action="store_true",
+            help="Translate active model logits into the next model's vocabulary during swaps (experimental)"
         )
         parser.add_argument(
             "--allow-kv-cache-translation",
@@ -283,9 +355,41 @@ Model name formats:
             help="Allow KV cache translation across mismatched models (experimental)"
         )
         parser.add_argument(
+            "--force-kv-cache-translation",
+            action="store_true",
+            help="Force KV cache translation even when safety checks fail (unsafe)"
+        )
+        parser.add_argument(
+            "--soft-swap",
+            action="store_true",
+            help="Blend all models each step but boost the active model by --soft-swap-weight"
+        )
+        parser.add_argument(
+            "--soft-swap-weight",
+            type=float,
+            default=1.5,
+            help="Weight multiplier for the active model when --soft-swap is enabled"
+        )
+        parser.add_argument(
+            "--use-sparse-ot",
+            action="store_true",
+            help="Enable sparse OT projection for cross-tokenizer blending"
+        )
+        parser.add_argument(
+            "--shared-chat-template",
+            action=argparse.BooleanOptionalAction,
+            default=None,
+            help="Use a single chat template across models (reduces swap-order sensitivity)"
+        )
+        parser.add_argument(
+            "--headless",
+            action="store_true",
+            help="Run Mind Meld without interactive prompts or visual output"
+        )
+        parser.add_argument(
             "--use-enhanced",
             action="store_true",
-            help="Enable enhanced Mind Meld features"
+            help="Enable enhanced Mind Meld features (enables --translate-logits, --meld-diagnostics, --use-stats-tracker)"
         )
         parser.add_argument(
             "--use-stats-tracker",
@@ -340,6 +444,16 @@ Model name formats:
             "fixed_interval": SwapStrategy.FIXED_INTERVAL,
             "round_robin": SwapStrategy.ROUND_ROBIN,
             "random": SwapStrategy.RANDOM,
+            "confidence": SwapStrategy.CONFIDENCE_BASED,
+            "confidence_based": SwapStrategy.CONFIDENCE_BASED,
+            "perplexity": SwapStrategy.PERPLEXITY_BASED,
+            "perplexity_based": SwapStrategy.PERPLEXITY_BASED,
+            "attention": SwapStrategy.ATTENTION_GUIDED,
+            "attention_guided": SwapStrategy.ATTENTION_GUIDED,
+            "weighted": SwapStrategy.WEIGHTED_BLEND,
+            "weighted_blend": SwapStrategy.WEIGHTED_BLEND,
+            "semantic": SwapStrategy.SEMANTIC_SIMILARITY,
+            "semantic_similarity": SwapStrategy.SEMANTIC_SIMILARITY,
         }
         return mapping.get(value_normalized, SwapStrategy.PATTERN_BASED)
 
@@ -399,20 +513,46 @@ Model name formats:
         config.top_k = args.top_k
         config.top_p = args.top_p
         config.steps = args.steps
+        config.repetition_penalty = args.repetition_penalty or config.repetition_penalty
         config.no_step_delay = args.no_step_delay
+        config.summary_only = args.summary_only
+        config.stop_text = args.stop_text
+        config.max_sentences = args.max_sentences
         config.initial_prompt = args.prompt or self.config.initial_prompt
+        config.prompt_chat_template = args.prompt_chat_template
+        config.prompt_system = args.prompt_system
+        config.no_default_system = args.no_default_system
         config.verbose = args.verbose
         config.show_attention = args.show_attention
         config.use_weighted_average = args.use_weighted_average
+        config.order_neutral = args.order_neutral
+        if config.order_neutral:
+            config.use_weighted_average = True
         config.use_abe = args.use_abe
         config.use_blending = args.use_blending
         config.blend_strategy = args.blend_strategy
-        config.alignment_strategy = args.alignment
+        config.alignment_strategy = args.alignment_strategy
         config.use_enhanced = args.use_enhanced
         config.use_stats_tracker = args.use_stats_tracker
         config.stats_file = args.stats_file
         config.meld_diagnostics = args.meld_diagnostics
         config.allow_kv_cache_translation = args.allow_kv_cache_translation
+        config.force_kv_cache_translation = args.force_kv_cache_translation
+        config.translate_logits = args.translate_logits
+        config.soft_swap = args.soft_swap
+        config.soft_swap_weight = args.soft_swap_weight
+        config.use_sparse_ot = args.use_sparse_ot
+        config.shared_chat_template = args.shared_chat_template
+        config.headless = args.headless
+        # --use-enhanced is a convenience flag that enables multiple experimental features
+        # Applied after explicit flags so it only sets defaults for unset options
+        if config.use_enhanced:
+            if not args.translate_logits:
+                config.translate_logits = True
+            if not args.meld_diagnostics:
+                config.meld_diagnostics = True
+            if not args.use_stats_tracker:
+                config.use_stats_tracker = True
 
         engines = self.load_models(config)
         if not engines or len(engines) < 2:
@@ -581,21 +721,24 @@ Model name formats:
     def configure_swap_strategy(self):
         """Configure the model swap strategy"""
         print(ui.color_text("\n🔄 Swap Strategy Configuration", cfg.COLOR_CYAN))
-        
+
         strategies = [
             (SwapStrategy.PATTERN_BASED, "Pattern-based (swap on punctuation)"),
-            (SwapStrategy.FIXED_INTERVAL, f"Fixed interval (every N tokens)"),
+            (SwapStrategy.FIXED_INTERVAL, "Fixed interval (every N tokens)"),
             (SwapStrategy.ROUND_ROBIN, "Round-robin (rotate in order)"),
             (SwapStrategy.CONFIDENCE_BASED, "Confidence-based (swap on low confidence)"),
-            (SwapStrategy.RANDOM, "Random swapping"),
+            (SwapStrategy.PERPLEXITY_BASED, "Perplexity-based (swap on high uncertainty)"),
             (SwapStrategy.ATTENTION_GUIDED, "Attention-guided"),
+            (SwapStrategy.WEIGHTED_BLEND, "Weighted blend (all models contribute)"),
+            (SwapStrategy.SEMANTIC_SIMILARITY, "Semantic similarity-based"),
+            (SwapStrategy.RANDOM, "Random swapping"),
         ]
-        
+
         print("Available strategies:")
         for i, (_, desc) in enumerate(strategies, 1):
             print(f"  {i}. {desc}")
-        
-        choice = input("\nSelect strategy (1-6) [1]: ").strip() or "1"
+
+        choice = input(f"\nSelect strategy (1-{len(strategies)}) [1]: ").strip() or "1"
         
         try:
             idx = int(choice) - 1
@@ -604,11 +747,14 @@ Model name formats:
                 
                 # Additional configuration for specific strategies
                 if self.config.swap_strategy == SwapStrategy.FIXED_INTERVAL:
-                    interval = input("Swap interval (tokens) [5]: ").strip() or "5"
+                    interval = input("Swap interval (tokens) [8]: ").strip() or "8"
                     self.config.fixed_interval = int(interval)
                 elif self.config.swap_strategy == SwapStrategy.CONFIDENCE_BASED:
                     threshold = input("Confidence threshold (0-1) [0.5]: ").strip() or "0.5"
                     self.config.confidence_threshold = float(threshold)
+                elif self.config.swap_strategy == SwapStrategy.PERPLEXITY_BASED:
+                    threshold = input("Perplexity threshold [50.0]: ").strip() or "50.0"
+                    self.config.perplexity_threshold = float(threshold)
             else:
                 print("Invalid choice, using pattern-based")
                 self.config.swap_strategy = SwapStrategy.PATTERN_BASED
@@ -730,10 +876,11 @@ Model name formats:
     
     def run_mind_meld(self, config: MindMeldConfig, engines: List[LLMEngine]):
         """Run the Mind Meld session"""
-        print(ui.color_text("\n🚀 Starting Mind Meld Session", cfg.COLOR_GREEN))
-        if config.use_enhanced:
-            print(ui.color_text("🎆 Enhanced Mode Active", cfg.COLOR_YELLOW))
-        print("=" * 70)
+        if not config.summary_only and not config.headless:
+            print(ui.color_text("\n🚀 Starting Mind Meld Session", cfg.COLOR_GREEN))
+            if config.use_enhanced:
+                print(ui.color_text("🎆 Enhanced Mode Active", cfg.COLOR_YELLOW))
+            print("=" * 70)
         
         # Create args for MindMeldMode
         meld_args = argparse.Namespace(
@@ -741,17 +888,26 @@ Model name formats:
             top_k=config.top_k,
             top_p=config.top_p,
             steps=config.steps,
+            repetition_penalty=config.repetition_penalty,
             verbose=config.verbose,
             show_attention=config.show_attention,
             swap_strategy=config.swap_strategy,
             fixed_interval=config.fixed_interval,
             confidence_threshold=config.confidence_threshold,
+            perplexity_threshold=config.perplexity_threshold,
             initial_prompt=config.initial_prompt,
             no_step_delay=config.no_step_delay,
+            summary_only=config.summary_only,
+            stop_text=config.stop_text,
+            max_sentences=config.max_sentences,
+            prompt_chat_template=config.prompt_chat_template,
+            prompt_system=config.prompt_system,
+            no_default_system=config.no_default_system,
             # Enhanced features
             use_enhanced=config.use_enhanced,
             use_blending=config.use_blending,
             use_weighted_average=config.use_weighted_average,
+            order_neutral=config.order_neutral,
             use_abe=config.use_abe,
             blend_strategy=config.blend_strategy,
             alignment_strategy=config.alignment_strategy,
@@ -759,6 +915,13 @@ Model name formats:
             stats_file=config.stats_file,
             meld_diagnostics=config.meld_diagnostics,
             allow_kv_cache_translation=config.allow_kv_cache_translation,
+            force_kv_cache_translation=config.force_kv_cache_translation,
+            translate_logits=config.translate_logits,
+            soft_swap=config.soft_swap,
+            soft_swap_weight=config.soft_swap_weight,
+            use_sparse_ot=config.use_sparse_ot,
+            shared_chat_template=config.shared_chat_template,
+            headless=config.headless,
         )
         
         # Initialize and run Mind Meld mode

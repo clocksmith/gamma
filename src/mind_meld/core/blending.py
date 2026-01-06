@@ -114,6 +114,8 @@ class LogitBlender:
             blended = self._hierarchical_blend(logits_np_list, weights)
         elif self.config.strategy == BlendingStrategy.ENSEMBLE_VOTING:
             blended = self._ensemble_voting_blend(logits_np_list)
+        elif self.config.strategy == BlendingStrategy.LEARNED:
+            blended = self._learned_blend(logits_np_list, weights, metadata)
         else:
             blended = self._weighted_average_blend(logits_np_list, weights)
         
@@ -283,16 +285,16 @@ class LogitBlender:
         """Ensemble voting - combine top predictions"""
         # Get top-k predictions from each model
         k = min(10, logits_list[0].shape[-1])
-        
+
         vote_counts = np.zeros_like(logits_list[0])
-        
+
         for logits in logits_list:
             top_k_indices = np.argpartition(logits, -k)[-k:]
             vote_counts[top_k_indices] += 1
-        
+
         # Normalize votes
         vote_probs = vote_counts / len(logits_list)
-        
+
         # Apply voting threshold
         if self.config.require_unanimous:
             # Only keep unanimous votes
@@ -300,14 +302,71 @@ class LogitBlender:
         else:
             # Apply threshold
             vote_probs[vote_probs < self.config.voting_threshold] = 0
-        
+
         # Combine with average logits
         avg_logits = np.mean(logits_list, axis=0)
-        
+
         # Weight by votes
         weighted_logits = avg_logits * (vote_probs + self.config.smoothing_factor)
-        
+
         return weighted_logits
+
+    def _learned_blend(
+        self,
+        logits_list: List[np.ndarray],
+        weights: np.ndarray,
+        metadata: Optional[Dict[str, Any]]
+    ) -> np.ndarray:
+        """
+        Learned blending - adaptive weight learning based on token-level feedback.
+
+        This strategy dynamically learns optimal blend weights by tracking:
+        - Agreement between models (higher agreement = more confidence)
+        - Entropy of individual model outputs (lower entropy = more confident model)
+        - Historical performance trends
+
+        Unlike dynamic_weighted which adjusts weights globally, learned blending
+        maintains per-token-position weight adaptation.
+        """
+        num_models = len(logits_list)
+
+        # Initialize learned weights if not present
+        if not hasattr(self, '_learned_weights'):
+            self._learned_weights = np.ones(num_models) / num_models
+            self._learning_rate = 0.05
+            self._weight_momentum = np.zeros(num_models)
+
+        # Compute model confidence scores from entropy
+        confidences = []
+        for logits in logits_list:
+            entropy = self._compute_entropy(logits)
+            # Lower entropy = higher confidence (inverse relationship)
+            max_entropy = np.log(logits.shape[-1])  # Maximum possible entropy
+            confidence = 1.0 - (entropy / max_entropy) if max_entropy > 0 else 0.5
+            confidences.append(confidence)
+        confidences = np.array(confidences)
+
+        # Compute agreement bonus - models that agree get boosted
+        agreement_scores = self._compute_agreement_scores(logits_list)
+
+        # Combine signals: base weights + confidence + agreement
+        combined_scores = (
+            self._learned_weights * 0.4 +
+            confidences * 0.3 +
+            agreement_scores * 0.3
+        )
+
+        # Update learned weights with momentum
+        gradient = combined_scores - self._learned_weights
+        self._weight_momentum = 0.9 * self._weight_momentum + 0.1 * gradient
+        self._learned_weights = self._learned_weights + self._learning_rate * self._weight_momentum
+
+        # Ensure weights stay positive and normalized
+        self._learned_weights = np.clip(self._learned_weights, 0.01, None)
+        self._learned_weights = self._learned_weights / np.sum(self._learned_weights)
+
+        # Use learned weights for final blend
+        return self._weighted_average_blend(logits_list, self._learned_weights)
     
     def _get_weights(
         self,

@@ -63,20 +63,40 @@ python tools/view_sessions.py --stats
 | `--sampling-strategy STR` | Sampling strategy: sample (stochastic) or argmax (greedy) |
 | `--chat` | Chat mode instead of prediction game |
 | `--prompt TEXT` | Run single-shot inference with the given prompt |
-| `--prompt-chat-template` | Format `--prompt` using the tokenizer's chat template (if available) |
+| `--prompt-chat-template` | Format `--prompt` or `--initial-prompt` using the tokenizer's chat template (auto when available; disable with `--no-prompt-chat-template`) |
+| `--prompt-system TEXT` | System prompt applied when using chat templates |
+| `--no-default-system` | Disable the default system prompt for chat templates |
 | `--tutorial` | Run interactive tutorial |
 | `--comparison` | Side-by-side model comparison |
 | `--mind-meld` | Multi-model collaboration mode |
 | `--meld-diagnostics` | Mind Meld only: log KV cache and vocab translation diagnostics |
 | `--alignment-strategy STR` | Mind Meld only: vocabulary alignment (intersection, align, subword, semantic_map, unk, auto) |
-| `--allow-kv-cache-translation` | Mind Meld only: attempt KV cache translation across mismatched models (experimental) |
+| `--translate-logits` | Mind Meld only: translate active logits into the next model's vocab during swaps (experimental) |
+| `--allow-kv-cache-translation` | Mind Meld only: attempt KV cache translation across mismatched models (experimental; safety checks apply) |
+| `--force-kv-cache-translation` | Mind Meld only: force KV cache translation even when safety checks fail (unsafe) |
 | `--no-step-delay` | Mind Meld only: disable the 1-second delay between steps |
+| `--summary-only` | Mind Meld only: show only the final output and brief stats (no live per-round stats) |
+| `--max-sentences N` | Mind Meld only: stop after N sentences in the generated output |
+| `--stop-text TEXT` | Mind Meld only: stop when generated output contains TEXT (repeatable) |
+| `--order-neutral` | Mind Meld only: alias for `--use-weighted-average` to reduce swap-order sensitivity |
+| `--soft-swap` | Mind Meld only: keep swap cadence but blend all models each step, boosting the active model |
+| `--soft-swap-weight W` | Mind Meld only: active-model weight multiplier when using `--soft-swap` (default 1.5) |
+| `--shared-chat-template` | Mind Meld only: format the prompt once and reuse the same chat template across models (auto-enabled when templates differ; disable with `--no-shared-chat-template`) |
+| `--repetition-penalty` | Reduce repeated tokens during sampling (>1.0) |
 | `--word-mode` | Word-level play (enables focus words, expands token sequences) |
 | `--permutation-length N` | Tokens per choice (default: 1) |
 | `--player-choice-mode` | EXPERIMENTAL: Player's correct guess drives generation |
 | `--focus-words` | Focus on word boundaries during prediction |
 
 Run `python gamma.py game --help` for all options.
+
+Note: the game, comparison, and mind-meld modes require real logits. Wrapper
+engines (`openai`, `huggingface_inference`, `ollama`) do not expose logits, so
+the CLI will reject them for these modes.
+
+Mind Meld auto stops on common chat template end markers when chat templates are
+used. Use `--stop-text` to override or add markers. In `--summary-only` mode,
+`--max-sentences` trims any trailing incomplete sentence for cleaner output.
 
 ## Usage
 

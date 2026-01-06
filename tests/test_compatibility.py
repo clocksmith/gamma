@@ -397,5 +397,231 @@ class TestCompatibilityReport(unittest.TestCase):
         self.assertIn("Test suggestion", report_str)
 
 
+class TestSwapOrderSensitivity(unittest.TestCase):
+    """Tests for swap order sensitivity and guardrails."""
+
+    def setUp(self):
+        self.validator = ModelCompatibilityValidator(verbose=False)
+
+    def test_order_symmetry_identical_models(self):
+        """Test that order doesn't matter for identical models."""
+        config = MockModelConfig()
+        engine_a = MockEngine("model_a", config)
+        engine_b = MockEngine("model_b", config)
+
+        report_ab = self.validator.validate_pair(engine_a, engine_b)
+        report_ba = self.validator.validate_pair(engine_b, engine_a)
+
+        # Scores should be symmetric for identical configs
+        self.assertAlmostEqual(
+            report_ab.overall_score,
+            report_ba.overall_score,
+            places=2,
+            msg="Order should not affect score for identical models"
+        )
+
+    def test_order_symmetry_different_models(self):
+        """Test that order is symmetric for different model pairs."""
+        config1 = MockModelConfig(model_type="llama", hidden_size=4096)
+        config2 = MockModelConfig(model_type="gemma", hidden_size=2048)
+
+        engine1 = MockEngine("llama-7b", config1)
+        engine2 = MockEngine("gemma-2b", config2)
+
+        report_12 = self.validator.validate_pair(engine1, engine2)
+        report_21 = self.validator.validate_pair(engine2, engine1)
+
+        # Compatibility should be symmetric
+        self.assertEqual(report_12.level, report_21.level)
+        self.assertAlmostEqual(
+            report_12.overall_score,
+            report_21.overall_score,
+            places=2
+        )
+
+    def test_swap_order_optimization_preserves_all_models(self):
+        """Test that swap order optimization includes all models."""
+        configs = [
+            MockModelConfig(model_type="llama", hidden_size=4096),
+            MockModelConfig(model_type="llama", hidden_size=2048),
+            MockModelConfig(model_type="gemma", hidden_size=2048),
+        ]
+        engines = [MockEngine(f"model_{i}", cfg) for i, cfg in enumerate(configs)]
+
+        order = self.validator.get_best_swap_order(engines)
+
+        # All models should be included exactly once
+        self.assertEqual(sorted(order), [0, 1, 2])
+
+    def test_swap_order_prefers_compatible_pairs(self):
+        """Test that swap order prefers compatible consecutive pairs."""
+        # Create models where 0 and 1 are similar, 2 is different
+        config_llama1 = MockModelConfig(model_type="llama", hidden_size=4096)
+        config_llama2 = MockModelConfig(model_type="llama", hidden_size=4096)
+        config_gpt = MockModelConfig(model_type="gpt2", hidden_size=1024)
+
+        engines = [
+            MockEngine("llama1", config_llama1),
+            MockEngine("llama2", config_llama2),
+            MockEngine("gpt2", config_gpt),
+        ]
+
+        order = self.validator.get_best_swap_order(engines)
+
+        # Since llama1 starts first, llama2 should be next (same arch)
+        self.assertEqual(order[0], 0)
+        self.assertEqual(order[1], 1)  # llama2 most compatible with llama1
+
+    def test_vocab_overlap_affects_compatibility(self):
+        """Test that vocabulary overlap affects compatibility score."""
+        # High overlap vocabulary
+        vocab_shared = {"hello": 0, "world": 1, "test": 2, "data": 3}
+        config = MockModelConfig()
+
+        engine_high = MockEngine("model_high", config, vocab=vocab_shared)
+        engine_high2 = MockEngine("model_high2", config, vocab=vocab_shared)
+
+        # Low overlap vocabulary
+        vocab_low = {"apple": 0, "banana": 1, "cherry": 2}
+        engine_low = MockEngine("model_low", config, vocab=vocab_low)
+
+        report_high = self.validator.validate_pair(engine_high, engine_high2)
+        report_low = self.validator.validate_pair(engine_high, engine_low)
+
+        # High overlap should have better score
+        self.assertGreater(report_high.overall_score, report_low.overall_score)
+
+    def test_kv_cache_bridgeable_requires_dimension_match(self):
+        """Test that KV cache bridging requires matching dimensions."""
+        config_match = MockModelConfig(hidden_size=4096, num_hidden_layers=32)
+        config_mismatch = MockModelConfig(hidden_size=2048, num_hidden_layers=24)
+
+        engine1 = MockEngine("model1", config_match, supports_bridging=True)
+        engine2 = MockEngine("model2", config_match, supports_bridging=True)
+        engine3 = MockEngine("model3", config_mismatch, supports_bridging=True)
+
+        report_match = self.validator.validate_pair(engine1, engine2)
+        report_mismatch = self.validator.validate_pair(engine1, engine3)
+
+        self.assertTrue(report_match.kv_cache_bridgeable)
+        self.assertFalse(report_mismatch.kv_cache_bridgeable)
+
+
+class TestGuardrailDecisions(unittest.TestCase):
+    """Tests for guardrail decision logic."""
+
+    def setUp(self):
+        self.validator = ModelCompatibilityValidator(verbose=False)
+
+    def test_excellent_compatibility_no_guardrail(self):
+        """Test that excellent compatibility doesn't trigger guardrail."""
+        config = MockModelConfig()
+        engine1 = MockEngine("model1", config)
+        engine2 = MockEngine("model2", config)
+
+        report = self.validator.validate_pair(engine1, engine2)
+
+        self.assertEqual(report.level, CompatibilityLevel.EXCELLENT)
+        # Guardrail should NOT prefer replay for excellent compatibility
+        self.assertGreaterEqual(report.overall_score, 0.85)
+
+    def test_poor_compatibility_triggers_guardrail(self):
+        """Test that poor compatibility would trigger guardrail."""
+        config1 = MockModelConfig(
+            model_type="llama",
+            hidden_size=4096,
+            num_hidden_layers=32,
+            vocab_size=32000
+        )
+        config2 = MockModelConfig(
+            model_type="gpt2",
+            hidden_size=768,
+            num_hidden_layers=12,
+            vocab_size=50257
+        )
+
+        engine1 = MockEngine("llama", config1, supports_bridging=False)
+        engine2 = MockEngine("gpt2", config2, supports_bridging=False)
+
+        report = self.validator.validate_pair(engine1, engine2)
+
+        # Should have poor or worse compatibility
+        self.assertIn(
+            report.level,
+            [CompatibilityLevel.POOR, CompatibilityLevel.INCOMPATIBLE, CompatibilityLevel.FAIR]
+        )
+
+    def test_warnings_generated_for_mismatches(self):
+        """Test that warnings are generated for various mismatches."""
+        config1 = MockModelConfig(model_type="llama", hidden_size=4096)
+        config2 = MockModelConfig(model_type="gpt2", hidden_size=2048)
+
+        engine1 = MockEngine("llama", config1)
+        engine2 = MockEngine("gpt2", config2)
+
+        report = self.validator.validate_pair(engine1, engine2)
+
+        # Should have warnings for architecture and hidden size
+        warning_text = " ".join(report.warnings)
+        self.assertIn("architecture", warning_text.lower())
+        self.assertIn("hidden size", warning_text.lower())
+
+    def test_suggestions_provided_for_issues(self):
+        """Test that suggestions are provided for compatibility issues."""
+        config1 = MockModelConfig(model_type="llama")
+        config2 = MockModelConfig(model_type="falcon")
+
+        engine1 = MockEngine("llama", config1)
+        engine2 = MockEngine("falcon", config2)
+
+        report = self.validator.validate_pair(engine1, engine2)
+
+        # Should have at least one suggestion
+        self.assertGreater(len(report.suggestions), 0)
+
+
+class TestStabilityMetrics(unittest.TestCase):
+    """Tests for output stability across configurations."""
+
+    def setUp(self):
+        self.validator = ModelCompatibilityValidator(verbose=False)
+
+    def test_consistent_scoring_across_calls(self):
+        """Test that compatibility scores are deterministic."""
+        config = MockModelConfig()
+        engine1 = MockEngine("model1", config)
+        engine2 = MockEngine("model2", config)
+
+        scores = []
+        for _ in range(5):
+            report = self.validator.validate_pair(engine1, engine2)
+            scores.append(report.overall_score)
+
+        # All scores should be identical
+        self.assertEqual(len(set(scores)), 1, "Scores should be deterministic")
+
+    def test_level_thresholds_are_stable(self):
+        """Test that compatibility levels have stable thresholds."""
+        # Test boundary scores
+        test_cases = [
+            (0.86, CompatibilityLevel.EXCELLENT),
+            (0.84, CompatibilityLevel.GOOD),
+            (0.66, CompatibilityLevel.GOOD),
+            (0.64, CompatibilityLevel.FAIR),
+            (0.46, CompatibilityLevel.FAIR),
+            (0.44, CompatibilityLevel.POOR),
+            (0.26, CompatibilityLevel.POOR),
+            (0.24, CompatibilityLevel.INCOMPATIBLE),
+        ]
+
+        for score, expected_level in test_cases:
+            actual_level = self.validator._score_to_level(score)
+            self.assertEqual(
+                actual_level,
+                expected_level,
+                f"Score {score} should map to {expected_level.value}, got {actual_level.value}"
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -3,7 +3,9 @@
 
 import logging
 import os
+import re
 import time
+from collections import Counter
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -35,8 +37,20 @@ ABE_TOP_K_LIMIT = 20
 # Maximum events to show in swap log visualization
 SWAP_LOG_MAX_EVENTS = 20
 
+# Window for repetition penalty (token ids)
+REPETITION_WINDOW = 64
+
 # Minimum weight for agreement in ABE (ensures all models have some influence)
 MIN_AGREEMENT_WEIGHT = 0.1
+
+# Tokens that signal end-of-generation in chat templates.
+STOP_TEXT_MARKERS = (
+    "<end_of_turn>",
+    "<|eot_id|>",
+    "<|end_of_text|>",
+    "<eos>",
+    "</s>",
+)
 from src.mind_meld.bridges.kv_cache_handler import (
     KVCacheTranslator,
     PyTorchKVCache,
@@ -202,13 +216,100 @@ class MeldEngine:
         self.args = args
         self.config = config or MeldConfig()
         self.active_model_idx = 0
-        self.verbose = self.config.verbose or getattr(args, "verbose", False)
         self.headless = getattr(args, "headless", False)
-        self.step_delay = 0.0 if getattr(args, "no_step_delay", False) else 1.0
+        self.summary_only = bool(getattr(args, "summary_only", False))
+        self.verbose = self.config.verbose or getattr(args, "verbose", False)
+        if self.summary_only:
+            self.verbose = False
+        self.step_delay = 0.0 if (getattr(args, "no_step_delay", False) or self.summary_only) else 1.0
+        self._prompt_chat_template = getattr(args, "prompt_chat_template", None)
+        self._shared_chat_template = getattr(args, "shared_chat_template", None)
+        self._prompt_system = getattr(args, "prompt_system", None)
+        self._use_default_system = not bool(getattr(args, "no_default_system", False))
+        self._chat_template_engine = self._select_chat_template_engine()
+        self._raw_prompt = ""
+        self._prompt_prefix_cache: Dict[int, str] = {}
+        self._prompt_prefix_special: Dict[int, bool] = {}
+        self._shared_prompt_prefix: Optional[str] = None
+        self._shared_prompt_special = False
+        self._shared_template_warned = False
+        self._shared_chat_template_auto = False
+        if self._shared_chat_template is None and self._prompt_chat_template is not False:
+            chat_engines = self._iter_chat_template_engines()
+            if chat_engines and len(chat_engines) == len(self.models) and not self._chat_templates_match():
+                self._shared_chat_template = True
+                self._shared_chat_template_auto = True
+                if self.verbose:
+                    logger.info(
+                        "Chat templates differ across models; enabling --shared-chat-template "
+                        "automatically. Use --no-shared-chat-template to keep per-model templates."
+                    )
+            elif self._chat_template_engine is not None and self.verbose:
+                logger.info(
+                    "Chat templates differ across models; swaps may be order-sensitive. "
+                    "Use --shared-chat-template or --no-prompt-chat-template to align prompts."
+                )
         self._per_engine_primed = {idx: False for idx in range(len(models))}
+        self._engine_text_cache: Dict[int, str] = {}
+        self._engine_token_cache: Dict[int, List[int]] = {}
+        self._engine_kv_seq_len: Dict[int, int] = {}
+        self._last_input_len: Dict[int, int] = {}
+        self._last_input_incremental: Dict[int, bool] = {}
+        self._generated_text = ""
         self._last_token_text: Optional[str] = None
+        self._last_token_ids: Dict[int, Optional[int]] = {idx: None for idx in range(len(models))}
+        self._engine_vocab_cache: Dict[int, Dict[str, int]] = {}
         self._diagnostics_enabled = bool(getattr(args, "meld_diagnostics", False))
         self._allow_kv_cache_translation = bool(getattr(args, "allow_kv_cache_translation", False))
+        self._force_kv_cache_translation = bool(getattr(args, "force_kv_cache_translation", False))
+        self._order_neutral = bool(getattr(args, "order_neutral", False))
+        self._soft_swap = bool(getattr(args, "soft_swap", False))
+        try:
+            self._soft_swap_weight = float(getattr(args, "soft_swap_weight", 1.5))
+        except (TypeError, ValueError):
+            self._soft_swap_weight = 1.5
+        if self._soft_swap_weight <= 0:
+            self._soft_swap_weight = 1.0
+        if self._order_neutral:
+            if getattr(args, "use_blending", False):
+                logger.info("Order-neutral requested; disabling logit blending in favor of weighted average.")
+                setattr(args, "use_blending", False)
+            setattr(args, "use_weighted_average", True)
+        if self._soft_swap:
+            if getattr(args, "use_blending", False):
+                logger.info("Soft-swap requested; disabling logit blending in favor of weighted average.")
+                setattr(args, "use_blending", False)
+            setattr(args, "use_weighted_average", True)
+        self._translate_logits = bool(getattr(args, "translate_logits", False))
+        self._last_decoding_engine: Optional[LLMEngine] = None
+        self._base_vocab_engine: Optional[LLMEngine] = None
+        self._stop_texts = getattr(args, "stop_text", []) or []
+        if isinstance(self._stop_texts, str):
+            self._stop_texts = [self._stop_texts]
+        self._stop_texts = [text for text in self._stop_texts if text]
+        max_sentences = getattr(args, "max_sentences", None)
+        try:
+            max_sentences = int(max_sentences) if max_sentences is not None else None
+        except (TypeError, ValueError):
+            max_sentences = None
+        if max_sentences is not None and max_sentences <= 0:
+            max_sentences = None
+        self._max_sentences = max_sentences
+        seed = getattr(args, "seed", None)
+        if seed in (None, 0):
+            seed = None
+        self._rng = np.random.default_rng(seed)
+        self._engine_indices = {engine: idx for idx, engine in enumerate(self.models)}
+        self._recent_token_ids: Dict[int, List[int]] = {idx: [] for idx in range(len(self.models))}
+        self._repetition_window = REPETITION_WINDOW
+        repetition_penalty = getattr(args, "repetition_penalty", None)
+        if repetition_penalty is None:
+            repetition_penalty = self.config.repetition_penalty
+        try:
+            repetition_penalty = float(repetition_penalty)
+        except (TypeError, ValueError):
+            repetition_penalty = self.config.repetition_penalty
+        self.repetition_penalty = repetition_penalty if repetition_penalty >= 1.0 else 1.0
         for engine in self.models:
             if hasattr(engine, "engine_config"):
                 engine.engine_config["allow_kv_cache_translation"] = self._allow_kv_cache_translation
@@ -223,6 +324,8 @@ class MeldEngine:
             "kv_cache_translated": 0,
             "kv_cache_unavailable": 0,
             "kv_cache_reset": 0,
+            "kv_cache_replay": 0,
+            "kv_cache_replay_tokens": 0,
         }
 
         # Validate configuration
@@ -317,13 +420,19 @@ class MeldEngine:
 
         # Stats tracking from config
         self.use_stats_tracker = self.config.track_metrics or getattr(args, 'use_stats_tracker', False)
+        explicit_stats = bool(
+            getattr(args, "use_stats_tracker", False)
+            or getattr(args, "stats_file", None)
+        )
+        if self.summary_only and not explicit_stats:
+            self.use_stats_tracker = False
 
         self.stats_tracker = None
         if self.use_stats_tracker:
             model_names = [m.model_name for m in models]
             self.stats_tracker = StatisticsTracker(
                 models=model_names,
-                show_live=self.verbose,
+                show_live=(self.verbose and not self.summary_only and not self.headless),
                 save_file=(None if self.headless else getattr(args, 'stats_file', None))
             )
 
@@ -399,7 +508,19 @@ class MeldEngine:
         self.sparse_ot_projector = None
         if self.use_sparse_ot and len(models) >= 2:
             try:
-                from src.mind_meld.translators.sparse_ot_projection import SparseOTProjector
+                from src.mind_meld.translators.sparse_ot_projection import (
+                    SparseOTProjector,
+                    HAS_POT,
+                    HAS_SCIPY,
+                )
+                if not HAS_POT:
+                    logger.warning(
+                        "POT library not available - using greedy alignment instead of OT"
+                    )
+                if not HAS_SCIPY:
+                    logger.warning(
+                        "scipy not available - sparse matrices will use dense fallback"
+                    )
                 self.sparse_ot_projector = SparseOTProjector(verbose=self.verbose)
                 logger.info("Sparse OT projection enabled for cross-tokenizer blending")
             except ImportError as e:
@@ -500,6 +621,693 @@ class MeldEngine:
         logger.warning(f"Unknown alignment strategy '{normalized}', falling back to alignment.")
         return AligningVocabularyTranslator(use_cache=use_cache, verbose=verbose)
 
+    def _prompt_looks_formatted(self, prompt: str) -> bool:
+        """Return True if the prompt already looks like a chat template."""
+        if not prompt:
+            return False
+        markers = (
+            "<|im_start|>",
+            "<|assistant|>",
+            "[INST]",
+            "<<SYS>>",
+            "User:",
+            "Assistant:",
+            "System:",
+        )
+        return any(marker in prompt for marker in markers)
+
+    def _model_is_instruction_tuned(self, engine: LLMEngine) -> bool:
+        """Heuristic for detecting instruction-tuned models."""
+        model_name = (engine.model_name or "").lower()
+        tokenizer_name = getattr(engine.tokenizer, "name_or_path", "")
+        combined = f"{model_name} {tokenizer_name}".lower()
+        tags = ("-it", "instruct", "instruction", "chat", "assistant")
+        return any(tag in combined for tag in tags)
+
+    def _cache_prompt_prefix(
+        self,
+        engine_idx: Optional[int],
+        engine: LLMEngine,
+        prefix: str,
+        prefix_has_special: bool,
+    ) -> None:
+        if engine_idx is None:
+            return
+        self._prompt_prefix_cache[engine_idx] = prefix
+        self._prompt_prefix_special[engine_idx] = prefix_has_special
+        if engine_idx not in self._engine_text_cache:
+            self._engine_text_cache[engine_idx] = prefix
+        if engine_idx not in self._engine_token_cache:
+            add_special_tokens = not prefix_has_special
+            self._engine_token_cache[engine_idx] = self._encode_text_tokens(
+                engine,
+                prefix,
+                add_special_tokens=add_special_tokens,
+            )
+
+    def _format_prompt_with_engine(
+        self,
+        prompt: str,
+        engine: LLMEngine,
+    ) -> Tuple[str, bool]:
+        system_prompt = (
+            self._prompt_system
+            if self._prompt_system is not None
+            else (cfg.DEFAULT_SYSTEM_PROMPT if self._use_default_system else None)
+        )
+        if system_prompt is not None and not str(system_prompt).strip():
+            system_prompt = None
+        base_history = [{"role": "user", "content": prompt}]
+        history = base_history
+        if system_prompt:
+            history = [{"role": "system", "content": system_prompt}] + base_history
+        used_system = system_prompt is not None
+        try:
+            formatted = engine.tokenizer.apply_chat_template(
+                history,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+        except Exception as exc:
+            if system_prompt:
+                try:
+                    formatted = engine.tokenizer.apply_chat_template(
+                        base_history,
+                        tokenize=False,
+                        add_generation_prompt=True,
+                    )
+                    used_system = False
+                except Exception as retry_exc:
+                    if self.verbose:
+                        logger.info(
+                            "Chat template apply failed for %s: %s",
+                            engine.model_name,
+                            retry_exc,
+                        )
+                    formatted = prompt
+            else:
+                if self.verbose:
+                    logger.info(
+                        "Chat template apply failed for %s: %s",
+                        engine.model_name,
+                        exc,
+                    )
+                formatted = prompt
+        return formatted, used_system
+
+    def _iter_chat_template_engines(self) -> List[LLMEngine]:
+        """Yield engines with chat-template capable tokenizers."""
+        candidates = []
+        for engine in self.models:
+            tokenizer = getattr(engine, "tokenizer", None)
+            if tokenizer is None or not hasattr(tokenizer, "apply_chat_template"):
+                continue
+            candidates.append(engine)
+        return candidates
+
+    def _select_chat_template_engine(self) -> Optional[LLMEngine]:
+        """Select an engine with chat template support."""
+        candidates = []
+        for idx, engine in enumerate(self._iter_chat_template_engines()):
+            tokenizer = getattr(engine, "tokenizer", None)
+            if tokenizer is None:
+                continue
+            has_template = bool(getattr(tokenizer, "chat_template", None))
+            try:
+                vocab_size = len(engine.get_vocab())
+            except Exception:
+                vocab_size = 0
+            name = engine.model_name or ""
+            # Include idx to avoid comparing engine objects when other fields match
+            candidates.append((0 if has_template else 1, -vocab_size, name, idx, engine))
+        if not candidates:
+            return None
+        candidates.sort()
+        return candidates[0][4]
+
+    def _chat_templates_match(self) -> bool:
+        """Return True if all engines expose identical chat templates."""
+        engines = self._iter_chat_template_engines()
+        if len(engines) != len(self.models):
+            return False
+        templates: List[str] = []
+        for engine in engines:
+            template = getattr(engine.tokenizer, "chat_template", None)
+            if not template:
+                return False
+            templates.append(template)
+        first = templates[0]
+        return all(template == first for template in templates[1:])
+
+    def _should_use_shared_chat_template(self, prompt: str) -> bool:
+        if not prompt:
+            return False
+        if self._prompt_chat_template is False:
+            return False
+        if self._shared_chat_template is True:
+            if self._shared_chat_template_auto and self._prompt_looks_formatted(prompt):
+                return False
+            return True
+        if self._shared_chat_template is False:
+            return False
+        if self._prompt_looks_formatted(prompt):
+            return False
+        if self._chat_template_engine is None:
+            return False
+        return self._chat_templates_match()
+
+    def _should_apply_chat_template(self, prompt: str) -> bool:
+        """Decide whether to apply a chat template to the prompt."""
+        if self._prompt_chat_template is False:
+            return False
+        if self._chat_template_engine is None:
+            self._chat_template_engine = self._select_chat_template_engine()
+        engine = self._chat_template_engine
+        if engine is None:
+            return False
+        tokenizer = getattr(engine, "tokenizer", None)
+        if tokenizer is None or not hasattr(tokenizer, "apply_chat_template"):
+            return False
+        if self._prompt_chat_template is True:
+            return True
+        if self._prompt_looks_formatted(prompt):
+            return False
+        if getattr(tokenizer, "chat_template", None):
+            return True
+        return self._model_is_instruction_tuned(engine)
+
+    def _should_apply_chat_template_for_engine(self, prompt: str, engine: LLMEngine) -> bool:
+        """Decide whether to apply a chat template for a specific engine."""
+        if self._prompt_chat_template is False:
+            return False
+        if engine is None:
+            return False
+        tokenizer = getattr(engine, "tokenizer", None)
+        if tokenizer is None or not hasattr(tokenizer, "apply_chat_template"):
+            return False
+        if self._prompt_chat_template is True:
+            return True
+        if self._prompt_looks_formatted(prompt):
+            return False
+        if getattr(tokenizer, "chat_template", None):
+            return True
+        return self._model_is_instruction_tuned(engine)
+
+    def _set_raw_prompt(self, prompt: str) -> None:
+        """Store the base prompt and clear cached prefixes."""
+        self._raw_prompt = prompt or ""
+        self._prompt_prefix_cache = {}
+        self._prompt_prefix_special = {}
+        self._shared_prompt_prefix = None
+        self._shared_prompt_special = False
+        self._engine_text_cache = {}
+        self._engine_token_cache = {}
+        self._engine_kv_seq_len = {}
+        self._last_input_len = {}
+        self._last_input_incremental = {}
+        self._generated_text = ""
+
+    def _get_prompt_prefix(self, engine: LLMEngine) -> str:
+        """Return the prompt prefix for an engine (chat template + system/user)."""
+        prompt = self._raw_prompt
+        if not prompt:
+            return prompt
+        engine_idx = self._engine_indices.get(engine)
+        if engine_idx is not None:
+            cached = self._prompt_prefix_cache.get(engine_idx)
+            if cached is not None:
+                return cached
+        if self._should_use_shared_chat_template(prompt):
+            if self._shared_prompt_prefix is None:
+                template_engine = self._chat_template_engine or engine
+                formatted, used_system = self._format_prompt_with_engine(prompt, template_engine)
+                if self.verbose and formatted != prompt:
+                    logger.info(
+                        "Applying shared chat template to initial prompt using %s.",
+                        template_engine.model_name,
+                    )
+                    if used_system:
+                        logger.info("Applying system prompt for initial prompt.")
+                    else:
+                        logger.info("System prompt skipped for incompatible template.")
+                if formatted != prompt and not self._stop_texts:
+                    self._stop_texts = list(STOP_TEXT_MARKERS)
+                if (
+                    self._shared_chat_template is True
+                    and not self._chat_templates_match()
+                    and not self._shared_template_warned
+                ):
+                    if self.verbose and not self.summary_only:
+                        logger.info(
+                            "Shared chat template forced across mismatched tokenizers; "
+                            "prompt formatting may be suboptimal."
+                        )
+                    self._shared_template_warned = True
+                self._shared_prompt_prefix = formatted
+                self._shared_prompt_special = formatted != prompt
+            self._cache_prompt_prefix(
+                engine_idx,
+                engine,
+                self._shared_prompt_prefix,
+                self._shared_prompt_special,
+            )
+            return self._shared_prompt_prefix
+        if not self._should_apply_chat_template_for_engine(prompt, engine):
+            if engine_idx is not None:
+                self._prompt_prefix_special[engine_idx] = bool(self._prompt_looks_formatted(prompt))
+            self._cache_prompt_prefix(
+                engine_idx,
+                engine,
+                prompt,
+                bool(self._prompt_looks_formatted(prompt)),
+            )
+            return prompt
+        formatted, used_system = self._format_prompt_with_engine(prompt, engine)
+        if self.verbose and formatted != prompt:
+            logger.info(
+                "Applying chat template to initial prompt using %s.",
+                engine.model_name,
+            )
+            if used_system:
+                logger.info("Applying system prompt for initial prompt.")
+            else:
+                logger.info("System prompt skipped for incompatible template.")
+        if formatted != prompt and not self._stop_texts:
+            self._stop_texts = list(STOP_TEXT_MARKERS)
+        self._cache_prompt_prefix(
+            engine_idx,
+            engine,
+            formatted,
+            True,
+        )
+        return formatted
+
+    def _build_full_text(self, engine: LLMEngine, generated_text: str) -> str:
+        """Return full prompt text for an engine, including generated text."""
+        prefix = self._get_prompt_prefix(engine)
+        return f"{prefix}{generated_text}"
+
+    def _kv_cache_prompt_compatible(self, source_engine: LLMEngine, target_engine: LLMEngine) -> bool:
+        """Return True when prompt prefixes are identical across engines."""
+        return self._get_prompt_prefix(source_engine) == self._get_prompt_prefix(target_engine)
+
+    def _kv_cache_tokenizer_compatible(self, source_engine: LLMEngine, target_engine: LLMEngine) -> bool:
+        """Return True when tokenizers are compatible for KV cache sharing."""
+        source_tokenizer = getattr(source_engine, "tokenizer", None)
+        target_tokenizer = getattr(target_engine, "tokenizer", None)
+        if source_tokenizer is None or target_tokenizer is None:
+            return False
+        if type(source_tokenizer) is not type(target_tokenizer):
+            return False
+        try:
+            source_vocab = len(source_engine.get_vocab())
+            target_vocab = len(target_engine.get_vocab())
+        except Exception:
+            return False
+        return source_vocab == target_vocab
+
+    def _kv_cache_translation_safe(
+        self,
+        source_engine: LLMEngine,
+        target_engine: LLMEngine,
+        source_config: Any,
+        target_config: Any,
+    ) -> bool:
+        """Return True when KV cache translation is likely safe."""
+        if source_config is None or target_config is None:
+            return False
+        if not self._kv_cache_tokenizer_compatible(source_engine, target_engine):
+            return False
+        source_layers = getattr(source_config, "num_hidden_layers", None)
+        target_layers = getattr(target_config, "num_hidden_layers", None)
+        if source_layers is not None and target_layers is not None:
+            if int(source_layers) != int(target_layers):
+                return False
+        source_hidden = getattr(source_config, "hidden_size", None)
+        target_hidden = getattr(target_config, "hidden_size", None)
+        if source_hidden is not None and target_hidden is not None:
+            if int(source_hidden) != int(target_hidden):
+                return False
+        source_attn = get_attention_config(source_config)
+        target_attn = get_attention_config(target_config)
+        if source_attn.get("num_heads") != target_attn.get("num_heads"):
+            return False
+        if source_attn.get("num_kv_heads") != target_attn.get("num_kv_heads"):
+            return False
+        if source_attn.get("head_dim") != target_attn.get("head_dim"):
+            return False
+        if (
+            source_engine.model_name
+            and target_engine.model_name
+            and source_engine.model_name != target_engine.model_name
+        ):
+            return False
+        return True
+
+    def _should_prefer_replay(
+        self,
+        source_engine: LLMEngine,
+        target_engine: LLMEngine,
+    ) -> Tuple[bool, str]:
+        """
+        Guardrail: Determine if replay should be preferred over KV cache translation.
+
+        Uses compatibility analysis to automatically prefer the safer replay path
+        when model pairs have significant mismatches that could cause degraded output.
+
+        Returns:
+            Tuple of (should_prefer_replay, reason)
+        """
+        # Skip guardrail check if force flag is set
+        if self._force_kv_cache_translation:
+            return False, "force flag set"
+
+        # Use the compatibility validator for comprehensive checks
+        validator = ModelCompatibilityValidator(verbose=False)
+        try:
+            report = validator.validate_pair(source_engine, target_engine)
+        except Exception as exc:
+            logger.debug(f"Compatibility check failed: {exc}")
+            return True, "compatibility check failed"
+
+        # Guardrail 1: Incompatible or poor compatibility level
+        if report.level in (CompatibilityLevel.INCOMPATIBLE, CompatibilityLevel.POOR):
+            return True, f"compatibility level {report.level.value} (score: {report.overall_score:.2f})"
+
+        # Guardrail 2: Low vocabulary overlap (< 50%)
+        if report.vocab_overlap_ratio < 0.5:
+            return True, f"low vocab overlap ({report.vocab_overlap_ratio:.1%})"
+
+        # Guardrail 3: Different architectures with dimension mismatch
+        if not report.architecture_match and not report.hidden_size_match:
+            return True, f"architecture mismatch ({report.architecture_source} vs {report.architecture_target})"
+
+        # Guardrail 4: Layer count mismatch (KV cache has per-layer state)
+        if not report.num_layers_match:
+            return True, f"layer count mismatch ({report.num_layers_source} vs {report.num_layers_target})"
+
+        # Guardrail 5: KV cache explicitly not bridgeable
+        if not report.kv_cache_bridgeable and not self._allow_kv_cache_translation:
+            return True, "KV cache not bridgeable"
+
+        return False, "compatible"
+
+    def _append_engine_text_cache(self, engine_idx: int, token_text: str) -> None:
+        """Track the full text associated with each engine's KV cache."""
+        if engine_idx is None:
+            return
+        engine = self.models[engine_idx]
+        current = self._engine_text_cache.get(engine_idx)
+        if current is None:
+            current = self._get_prompt_prefix(engine)
+        self._engine_text_cache[engine_idx] = f"{current}{token_text}"
+
+    def _append_engine_token_cache(self, engine_idx: Optional[int], token_id: Optional[int]) -> None:
+        """Track token ids for engines when they emit tokens."""
+        if engine_idx is None or token_id is None:
+            return
+        token_list = self._engine_token_cache.setdefault(engine_idx, [])
+        token_list.append(int(token_id))
+
+    def _encode_text_tokens(self, engine: LLMEngine, text: str, add_special_tokens: bool) -> List[int]:
+        """Encode text into token ids using the engine's tokenizer."""
+        if not text:
+            return []
+        adapter = EngineTokenizerAdapter(engine)
+        return adapter.encode(text, add_special_tokens=add_special_tokens)
+
+    def _get_kv_cache_seq_len(self, engine: LLMEngine) -> int:
+        """Best-effort sequence length for an engine's KV cache."""
+        cache_obj = None
+        try:
+            cache_obj = engine.get_kv_cache()
+        except Exception:
+            cache_obj = None
+        if cache_obj is not None:
+            if hasattr(cache_obj, "get_seq_length"):
+                try:
+                    seq_len = cache_obj.get_seq_length()
+                except Exception:
+                    seq_len = None
+                if isinstance(seq_len, int):
+                    return seq_len
+            for attr in ("seq_len", "seqlen", "cache_len", "cache_length"):
+                seq_len = getattr(cache_obj, attr, None)
+                if isinstance(seq_len, int):
+                    return seq_len
+            extractor = getattr(engine, "_extract_cache_key_tensor", None)
+            if callable(extractor):
+                try:
+                    key_tensor = extractor(cache_obj)
+                except Exception:
+                    key_tensor = None
+                if key_tensor is not None and hasattr(key_tensor, "shape"):
+                    if len(key_tensor.shape) >= 2:
+                        return int(key_tensor.shape[-2])
+        try:
+            metadata = engine.get_kv_cache_metadata()
+        except Exception:
+            metadata = None
+        if isinstance(metadata, dict):
+            if metadata.get("has_cache"):
+                seq_len = metadata.get("seq_len")
+                if isinstance(seq_len, int):
+                    return seq_len
+        engine_idx = self._engine_indices.get(engine)
+        if engine_idx is not None:
+            cached_len = self._engine_kv_seq_len.get(engine_idx, 0)
+            if isinstance(cached_len, int) and cached_len > 0:
+                return cached_len
+        return 0
+
+    def _prime_kv_cache_tokens(self, engine: LLMEngine, token_ids: List[int]) -> bool:
+        """Replay tokens through the model to populate or extend its KV cache."""
+        if not token_ids:
+            return engine.has_kv_cache()
+        for token_id in token_ids:
+            token_array = np.array([[int(token_id)]], dtype=np.int64)
+            input_ids = engine.convert_from_numpy(token_array)
+            try:
+                engine.predict_next(
+                    input_ids,
+                    None,
+                    self.args.temperature,
+                    self.args.top_k,
+                    self.args.top_p
+                )
+            except Exception as exc:
+                logger.info("KV cache replay failed for %s: %s", engine.model_name, exc)
+                return False
+        return engine.has_kv_cache()
+
+    def _prime_prompt_caches(self, active_idx: int) -> None:
+        """Prime non-active engines with the prompt so swaps replay fewer tokens."""
+        if not getattr(self.args, "use_kv_cache", False):
+            return
+        if len(self.models) < 2:
+            return
+        for idx, engine in enumerate(self.models):
+            if idx == active_idx:
+                continue
+            if not getattr(engine, "supports_kv_cache", True):
+                continue
+            prefix = self._get_prompt_prefix(engine)
+            if not prefix:
+                continue
+            token_ids = self._engine_token_cache.get(idx)
+            if token_ids is None:
+                add_special_tokens = not self._prompt_prefix_special.get(idx, False)
+                token_ids = self._encode_text_tokens(engine, prefix, add_special_tokens)
+                self._engine_token_cache[idx] = list(token_ids)
+            if not token_ids:
+                continue
+            if engine.has_kv_cache():
+                continue
+            if self._prime_kv_cache_tokens(engine, list(token_ids)):
+                self._engine_kv_seq_len[idx] = len(token_ids)
+                self._per_engine_primed[idx] = True
+
+    def _replay_kv_cache(self, target_engine: LLMEngine, generated_text: str) -> bool:
+        """Rebuild the target cache by replaying the missing text suffix."""
+        if not getattr(self.args, "use_kv_cache", False):
+            return False
+        target_idx = self._engine_indices.get(target_engine)
+        if target_idx is None:
+            return False
+
+        current_full_text = self._build_full_text(target_engine, generated_text)
+        cached_text = self._engine_text_cache.get(target_idx) or ""
+        add_special_tokens = not self._prompt_prefix_special.get(target_idx, False)
+
+        cache_ready = target_engine.has_kv_cache()
+        cache_len = self._get_kv_cache_seq_len(target_engine) if cache_ready else 0
+
+        cached_token_ids = self._engine_token_cache.get(target_idx)
+        if cached_token_ids is None:
+            cached_token_ids = (
+                self._encode_text_tokens(target_engine, cached_text, add_special_tokens)
+                if cached_text
+                else []
+            )
+        full_token_ids = self._encode_text_tokens(
+            target_engine, current_full_text, add_special_tokens
+        )
+
+        prefix_len = 0
+        if cached_token_ids and full_token_ids:
+            for cached_id, full_id in zip(cached_token_ids, full_token_ids):
+                if cached_id != full_id:
+                    break
+                prefix_len += 1
+
+        if cache_ready and cache_len == 0 and cached_token_ids:
+            cache_len = len(cached_token_ids)
+            if target_idx is not None:
+                self._engine_kv_seq_len[target_idx] = cache_len
+
+        if cache_ready:
+            if cache_len > 0 and prefix_len < cache_len:
+                truncated = False
+                if prefix_len > 0:
+                    try:
+                        truncated = target_engine.truncate_kv_cache(prefix_len)
+                    except Exception:
+                        truncated = False
+                if truncated:
+                    cache_len = prefix_len
+                    cached_token_ids = cached_token_ids[:prefix_len]
+                    if target_idx is not None:
+                        self._engine_kv_seq_len[target_idx] = cache_len
+                else:
+                    target_engine.reset_kv_cache()
+                    cache_ready = False
+                    cache_len = 0
+                    if target_idx is not None:
+                        self._engine_kv_seq_len[target_idx] = 0
+        else:
+            cache_len = 0
+
+        if cache_len > len(full_token_ids):
+            target_engine.reset_kv_cache()
+            cache_ready = False
+            cache_len = 0
+            if target_idx is not None:
+                self._engine_kv_seq_len[target_idx] = 0
+
+        start_from = cache_len if cache_ready else 0
+        delta_ids = full_token_ids[start_from:]
+        if delta_ids and not self._prime_kv_cache_tokens(target_engine, delta_ids):
+            return False
+
+        self._engine_text_cache[target_idx] = current_full_text
+        if delta_ids:
+            self._last_token_ids[target_idx] = delta_ids[-1]
+        if target_idx is not None:
+            if cache_ready:
+                self._engine_token_cache[target_idx] = list(cached_token_ids) + list(delta_ids)
+            else:
+                self._engine_token_cache[target_idx] = list(full_token_ids)
+        if target_idx is not None:
+            self._engine_kv_seq_len[target_idx] = cache_len + len(delta_ids)
+        if self._diagnostics_enabled and delta_ids:
+            self._diag["kv_cache_replay"] += 1
+            self._diag["kv_cache_replay_tokens"] += len(delta_ids)
+        return target_engine.has_kv_cache() or not delta_ids
+
+    def _update_engine_kv_seq_len(self, engine_idx: int, engine: LLMEngine) -> None:
+        """Track estimated KV cache length for engines without reliable metadata."""
+        if not getattr(self.args, "use_kv_cache", False):
+            return
+        if engine_idx is None:
+            return
+        if not engine.has_kv_cache():
+            self._engine_kv_seq_len[engine_idx] = 0
+            return
+        input_len = self._last_input_len.get(engine_idx)
+        if input_len is None:
+            return
+        if self._last_input_incremental.get(engine_idx, False):
+            prev_len = self._engine_kv_seq_len.get(engine_idx, 0)
+            if prev_len == 0:
+                cached_text = self._engine_text_cache.get(engine_idx, "")
+                if cached_text:
+                    add_special_tokens = not self._prompt_prefix_special.get(engine_idx, False)
+                    prev_len = len(self._encode_text_tokens(engine, cached_text, add_special_tokens))
+            self._engine_kv_seq_len[engine_idx] = max(prev_len, 0) + 1
+            return
+        self._engine_kv_seq_len[engine_idx] = int(input_len)
+
+    def _format_prompt_if_needed(self, prompt: str) -> str:
+        """Apply a chat template to the prompt when configured."""
+        if not prompt or not self._should_apply_chat_template(prompt):
+            return prompt
+        system_prompt = (
+            self._prompt_system
+            if self._prompt_system is not None
+            else (cfg.DEFAULT_SYSTEM_PROMPT if self._use_default_system else None)
+        )
+        if system_prompt is not None and not str(system_prompt).strip():
+            system_prompt = None
+        base_history = [{"role": "user", "content": prompt}]
+        history = base_history
+        if system_prompt:
+            history = [{"role": "system", "content": system_prompt}] + base_history
+        candidates = []
+        if self._chat_template_engine is not None:
+            candidates.append(self._chat_template_engine)
+        for engine in self._iter_chat_template_engines():
+            if engine not in candidates:
+                candidates.append(engine)
+        for engine in candidates:
+            used_system = system_prompt is not None
+            try:
+                formatted = engine.tokenizer.apply_chat_template(
+                    history,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                )
+            except Exception as exc:
+                if system_prompt:
+                    try:
+                        formatted = engine.tokenizer.apply_chat_template(
+                            base_history,
+                            tokenize=False,
+                            add_generation_prompt=True,
+                        )
+                        used_system = False
+                    except Exception as retry_exc:
+                        if self.verbose:
+                            logger.info(
+                                "Chat template apply failed for %s: %s",
+                                engine.model_name,
+                                retry_exc,
+                            )
+                        continue
+                else:
+                    if self.verbose:
+                        logger.info(
+                            "Chat template apply failed for %s: %s",
+                            engine.model_name,
+                            exc,
+                        )
+                    continue
+            self._chat_template_engine = engine
+            if self.verbose:
+                logger.info(
+                    "Applying chat template to initial prompt using %s.",
+                    engine.model_name,
+                )
+                if used_system:
+                    logger.info("Applying system prompt for initial prompt.")
+                else:
+                    logger.info("System prompt skipped for incompatible template.")
+            if not self._stop_texts:
+                self._stop_texts = list(STOP_TEXT_MARKERS)
+            return formatted
+        if self.verbose:
+            logger.info("Chat template unavailable; using raw prompt.")
+        return prompt
+
     def get_active_engine(self) -> LLMEngine:
         """Returns the currently active engine."""
         return self.models[self.active_model_idx]
@@ -570,22 +1378,26 @@ class MeldEngine:
     def _should_check_swap(self) -> bool:
         """Check if swap logic should be evaluated (disabled during blending/averaging)."""
         use_weighted_average = getattr(self.args, 'use_weighted_average', False) or self.auto_multi_blend
-        return not (self.use_blending or use_weighted_average)
+        if self.use_blending:
+            return False
+        if use_weighted_average and not self._soft_swap:
+            return False
+        return True
 
-    def _get_weighted_average_predictions(self, text: str, attention_mask: Any):
+    def _get_weighted_average_predictions(self, generated_text: str, attention_mask: Any):
         """
         Get predictions from all models and compute weighted average of probabilities.
         Returns the averaged logits and the decoding engine to use.
         """
         all_probs = []
         weights = []
-        base_engine = self.models[0]
+        base_engine = self._get_base_vocab_engine()
         base_vocab_size = len(base_engine.get_vocab())
         logger.debug("Computing weighted average from all models...")
 
         # Use _prepare_inputs_for_engine to leverage KV cache when available
         for idx, engine in enumerate(self.models):
-            input_ids, mask = self._prepare_inputs_for_engine(engine, idx, text)
+            input_ids, mask = self._prepare_inputs_for_engine(engine, idx, generated_text)
             result = engine.predict_next(
                 input_ids, mask,
                 self.args.temperature, self.args.top_k, self.args.top_p
@@ -605,7 +1417,7 @@ class MeldEngine:
             )
             probs = sampling_utils.softmax(logits_proc)
 
-            if idx > 0 and len(engine.get_vocab()) != base_vocab_size:
+            if engine is not base_engine and len(engine.get_vocab()) != base_vocab_size:
                 probs = self._translate_probabilities(
                     probs, EngineTokenizerAdapter(engine), EngineTokenizerAdapter(base_engine)
                 )
@@ -618,6 +1430,10 @@ class MeldEngine:
             logger.debug(f"  Model {idx} ({engine.model_name}): confidence={confidence:.3f}")
 
         weights = np.array(weights)
+        if self._soft_swap:
+            active_idx = self.active_model_idx
+            if active_idx is not None and 0 <= active_idx < len(weights):
+                weights[active_idx] *= self._soft_swap_weight
         weights = weights / np.sum(weights)
 
         min_vocab_size = min(len(p) for p in all_probs)
@@ -670,6 +1486,131 @@ class MeldEngine:
             return arr.reshape(-1)
         return arr
 
+    def _apply_repetition_penalty(self, logits: np.ndarray, engine_idx: Optional[int]) -> np.ndarray:
+        """Apply repetition penalty to logits using recent token history."""
+        if self.repetition_penalty <= 1.0 or engine_idx is None:
+            return logits
+        history = self._recent_token_ids.get(engine_idx, [])
+        if not history:
+            return logits
+        recent_ids = history[-self._repetition_window:]
+        if not recent_ids:
+            return logits
+        logits = np.asarray(logits)
+        counts = Counter(recent_ids)
+        for token_id, count in counts.items():
+            if token_id < 0 or token_id >= logits.shape[0]:
+                continue
+            penalty = self.repetition_penalty ** count
+            if logits[token_id] < 0:
+                logits[token_id] *= penalty
+            else:
+                logits[token_id] /= penalty
+        return logits
+
+    @staticmethod
+    def _count_sentences(text: str) -> int:
+        """Count sentence-ending punctuation groups in text."""
+        if not text:
+            return 0
+        count = len(re.findall(r"[!?]+", text))
+        count += len(re.findall(r"(?<!\d)\.(?!\d)", text))
+        return count
+
+    @staticmethod
+    def _trim_to_sentences(text: str, max_sentences: int) -> str:
+        """Trim text to the last complete sentence within the max."""
+        if not text or max_sentences is None or max_sentences <= 0:
+            return text
+        endings = list(re.finditer(r"[!?]+|(?<!\d)\.(?!\d)", text))
+        if not endings:
+            return text
+        limit = min(max_sentences, len(endings))
+        cutoff = endings[limit - 1].end()
+        return text[:cutoff].strip()
+
+    def _should_stop_generation(self, generated_text: str) -> bool:
+        """Return True when stop conditions are met."""
+        if not generated_text:
+            return False
+        if self._stop_texts:
+            for stop_text in self._stop_texts:
+                if stop_text in generated_text:
+                    return True
+        if self._max_sentences is not None:
+            if self._count_sentences(generated_text) >= self._max_sentences:
+                return True
+        return False
+
+    def _should_stop_token(self, token_id: int, token_text: str) -> bool:
+        """Return True if the token indicates end-of-generation."""
+        engine = self._last_decoding_engine or self.get_active_engine()
+        eos_id = engine.get_eos_token_id() if engine is not None else None
+        if eos_id is not None and token_id == eos_id:
+            return True
+        if not token_text:
+            return False
+        text = token_text.strip().lower()
+        return any(marker in text for marker in STOP_TEXT_MARKERS)
+
+    def _get_base_vocab_engine(self) -> LLMEngine:
+        """Select a stable base engine for vocab-aligned blending."""
+        if self._base_vocab_engine is not None:
+            return self._base_vocab_engine
+        candidates = []
+        for engine in self.models:
+            try:
+                vocab_size = len(engine.get_vocab())
+            except Exception:
+                vocab_size = 0
+            name = engine.model_name or ""
+            candidates.append((vocab_size, name, engine))
+        if not candidates:
+            self._base_vocab_engine = self.models[0]
+            return self._base_vocab_engine
+        candidates.sort(key=lambda item: (-item[0], item[1]))
+        self._base_vocab_engine = candidates[0][2]
+        return self._base_vocab_engine
+
+    def _record_recent_token(self, engine_idx: Optional[int], token_id: int) -> None:
+        """Track recent token ids for repetition penalty."""
+        if engine_idx is None:
+            return
+        history = self._recent_token_ids.setdefault(engine_idx, [])
+        history.append(int(token_id))
+        if len(history) > self._repetition_window:
+            del history[:-self._repetition_window]
+
+    def _resolve_token_piece(self, engine: LLMEngine, token_id: int) -> Optional[str]:
+        """Return the raw tokenizer piece for a token id when available."""
+        tokenizer = getattr(engine, "tokenizer", None)
+        if tokenizer is None or not hasattr(tokenizer, "convert_ids_to_tokens"):
+            return None
+        try:
+            piece = tokenizer.convert_ids_to_tokens([int(token_id)])[0]
+        except Exception:
+            return None
+        if isinstance(piece, bytes):
+            return piece.decode("utf-8", errors="replace")
+        return piece
+
+    def _update_last_token_ids(self, decoding_engine: LLMEngine, token_id: int) -> None:
+        """Store last token ids per engine when token piece is shared."""
+        token_piece = self._resolve_token_piece(decoding_engine, token_id)
+        if not token_piece:
+            for idx in self._last_token_ids:
+                self._last_token_ids[idx] = None
+            return
+        for idx, engine in enumerate(self.models):
+            vocab = self._engine_vocab_cache.get(idx)
+            if vocab is None:
+                try:
+                    vocab = engine.get_vocab()
+                except Exception:
+                    vocab = {}
+                self._engine_vocab_cache[idx] = vocab
+            self._last_token_ids[idx] = vocab.get(token_piece)
+
     def _report_diagnostics(self) -> None:
         if not self._diagnostics_enabled:
             return
@@ -684,14 +1625,16 @@ class MeldEngine:
             f"kv_cache_state={self._diag['kv_cache_state']}, "
             f"kv_cache_translated={self._diag['kv_cache_translated']}, "
             f"kv_cache_unavailable={self._diag['kv_cache_unavailable']}, "
-            f"kv_cache_reset={self._diag['kv_cache_reset']}"
+            f"kv_cache_reset={self._diag['kv_cache_reset']}, "
+            f"kv_cache_replay={self._diag['kv_cache_replay']}, "
+            f"kv_cache_replay_tokens={self._diag['kv_cache_replay_tokens']}"
         )
         if self.headless:
             print(msg)
         else:
             ui.print_message(msg)
 
-    def _fetch_other_model_logits(self, current_full_text: str) -> List[np.ndarray]:
+    def _fetch_other_model_logits(self, generated_text: str) -> List[np.ndarray]:
         """Fetch logits from all non-active models for blending.
 
         Returns:
@@ -701,7 +1644,7 @@ class MeldEngine:
         for idx, engine in enumerate(self.models):
             if idx != self.active_model_idx:
                 other_ids, other_mask = self._prepare_inputs_for_engine(
-                    engine, idx, current_full_text
+                    engine, idx, generated_text
                 )
                 other_result = engine.predict_next(
                     other_ids, other_mask,
@@ -714,7 +1657,7 @@ class MeldEngine:
 
     def _generate_next_token(
         self,
-        current_full_text: str,
+        generated_text: str,
         active_engine: LLMEngine,
         logits_numpy: np.ndarray,
         attention_mask: Any
@@ -741,28 +1684,35 @@ class MeldEngine:
 
         # Select melding strategy
         if use_abe and self.abe_ensemble:
-            melded_logits, decoding_engine = self._get_abe_predictions(current_full_text)
+            melded_logits, decoding_engine = self._get_abe_predictions(generated_text)
         elif use_weighted_average:
             melded_logits, decoding_engine = self._get_weighted_average_predictions(
-                current_full_text, attention_mask
+                generated_text, attention_mask
             )
         elif self.use_blending and self.blender:
-            all_logits = [logits_numpy] + self._fetch_other_model_logits(current_full_text)
+            all_logits = [logits_numpy] + self._fetch_other_model_logits(generated_text)
             model_names = [m.model_name for m in self.models]
             melded_logits, _blend_stats = self.blender.blend(all_logits, model_names)
             decoding_engine = active_engine
         else:
-            # Default: translate logits from active to target model's vocab space
-            melded_logits = self._translate_logits(
-                logits_numpy,
-                EngineTokenizerAdapter(active_engine),
-                EngineTokenizerAdapter(target_engine)
-            )
-            decoding_engine = target_engine
+            if self._translate_logits:
+                # Optional: translate logits into the next model's vocab space.
+                melded_logits = self._translate_logits(
+                    logits_numpy,
+                    EngineTokenizerAdapter(active_engine),
+                    EngineTokenizerAdapter(target_engine)
+                )
+                decoding_engine = target_engine
+            else:
+                # Default swap behavior: decode using the active model's vocab.
+                melded_logits = logits_numpy
+                decoding_engine = active_engine
 
         # Clean up NaN/inf values and ensure 1D logits for sampling
         melded_logits = sampling_utils.sanitize_logits(melded_logits)
         melded_logits = self._squeeze_vocab_axis(melded_logits)
+        decoding_idx = self._engine_indices.get(decoding_engine)
+        melded_logits = self._apply_repetition_penalty(melded_logits, decoding_idx)
 
         # Process through sampling pipeline
         processed_logits, _, _ = sampling_utils.process_logits_pipeline(
@@ -776,10 +1726,18 @@ class MeldEngine:
         melded_probs = self._squeeze_vocab_axis(melded_probs)
 
         # Handle invalid probability distributions
-        if np.isnan(melded_probs).any() or np.sum(melded_probs) == 0:
-            melded_probs = np.ones_like(melded_probs) / len(melded_probs)
+        melded_probs = sampling_utils.sanitize_probs(melded_probs)
 
-        next_token_id = int(np.argmax(melded_probs))
+        sampling_strategy = str(getattr(self.args, "sampling_strategy", "") or "").lower()
+        if not sampling_strategy:
+            sampling_strategy = active_engine.get_sampling_strategy()
+        if sampling_strategy in ("argmax", "greedy"):
+            next_token_id = int(np.argmax(melded_probs))
+        else:
+            try:
+                next_token_id = int(self._rng.choice(len(melded_probs), p=melded_probs))
+            except (ValueError, IndexError):
+                next_token_id = int(np.argmax(melded_probs))
         next_token_text = decoding_engine.decode([next_token_id], skip_special_tokens=False)
 
         # Fallback for special/empty tokens
@@ -797,13 +1755,16 @@ class MeldEngine:
                     break
 
         token_prob = float(melded_probs[next_token_id])
+        self._record_recent_token(decoding_idx, next_token_id)
+        self._update_last_token_ids(decoding_engine, next_token_id)
+        self._last_decoding_engine = decoding_engine
         return next_token_text, token_prob, next_token_id
 
     def _prepare_inputs_for_engine(
         self,
         engine: LLMEngine,
         engine_idx: int,
-        current_full_text: str
+        generated_text: str
     ):
         """Prepare inputs for an engine, using incremental tokens when KV cache is primed."""
         use_incremental = (
@@ -813,10 +1774,38 @@ class MeldEngine:
             and engine.get_kv_cache() is not None
         )
         if use_incremental:
-            return engine.encode(self._last_token_text, add_special_tokens=False)
-        return engine.encode(current_full_text, add_special_tokens=True)
+            last_token_id = self._last_token_ids.get(engine_idx)
+            if last_token_id is not None:
+                token_array = np.array([[int(last_token_id)]], dtype=np.int64)
+                self._last_input_len[engine_idx] = 1
+                self._last_input_incremental[engine_idx] = True
+                return engine.convert_from_numpy(token_array), None
+            input_ids, mask = engine.encode(self._last_token_text, add_special_tokens=False)
+            token_len = None
+            if hasattr(input_ids, "shape"):
+                token_len = int(input_ids.shape[-1])
+            elif isinstance(input_ids, (list, tuple)):
+                token_len = len(input_ids)
+            if token_len == 1:
+                self._last_input_len[engine_idx] = 1
+                self._last_input_incremental[engine_idx] = True
+                return input_ids, mask
+        full_text = self._build_full_text(engine, generated_text)
+        add_special_tokens = True
+        if self._prompt_prefix_special.get(engine_idx, False):
+            add_special_tokens = False
+        input_ids, mask = engine.encode(full_text, add_special_tokens=add_special_tokens)
+        token_len = None
+        if hasattr(input_ids, "shape"):
+            token_len = int(input_ids.shape[-1])
+        elif isinstance(input_ids, (list, tuple)):
+            token_len = len(input_ids)
+        if token_len is not None:
+            self._last_input_len[engine_idx] = token_len
+            self._last_input_incremental[engine_idx] = False
+        return input_ids, mask
     
-    def _get_abe_predictions(self, text: str):
+    def _get_abe_predictions(self, generated_text: str):
         """
         Get predictions using Agreement-Based Ensembling.
 
@@ -828,13 +1817,13 @@ class MeldEngine:
         all_logits = []
         all_probs = []
 
-        base_engine = self.models[0]
+        base_engine = self._get_base_vocab_engine()
         base_vocab_size = len(base_engine.get_vocab())
 
         # Get logits and probability distributions from all models
         # Use _prepare_inputs_for_engine to leverage KV cache when available
         for idx, model in enumerate(self.models):
-            input_ids, mask = self._prepare_inputs_for_engine(model, idx, text)
+            input_ids, mask = self._prepare_inputs_for_engine(model, idx, generated_text)
             result = model.predict_next(
                 input_ids, mask,
                 self.args.temperature, self.args.top_k, self.args.top_p
@@ -850,7 +1839,7 @@ class MeldEngine:
             logits_clean = sampling_utils.sanitize_logits(logits)
 
             # Align logits to the base vocabulary to keep dimensions consistent
-            if len(model.get_vocab()) != base_vocab_size:
+            if model is not base_engine and len(model.get_vocab()) != base_vocab_size:
                 logits_clean = self._translate_logits(
                     logits_clean, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )
@@ -865,7 +1854,7 @@ class MeldEngine:
                 return_intermediates=True
             )
             probs = sampling_utils.softmax(logits_proc)
-            if len(model.get_vocab()) != base_vocab_size:
+            if model is not base_engine and len(model.get_vocab()) != base_vocab_size:
                 probs = self._translate_probabilities(
                     probs, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )
@@ -919,9 +1908,12 @@ class MeldEngine:
         source_engine = self.models[source_idx]
 
         swap_msg = f"Swapping from {source_engine.model_name} to {target_engine.model_name}"
-        if not self.headless:
+        if not self.headless and not self.summary_only:
             ui.print_swap_indicator(source_engine.model_name, target_engine.model_name)
-        logger.info(swap_msg)
+            if self.verbose:
+                logger.info(swap_msg)
+        elif self.verbose:
+            logger.debug(swap_msg)
 
         # Handle model offloading if enabled (swap GPU/CPU locations)
         self.offloader.swap_active_model(self.models, source_idx, target_idx)
@@ -929,24 +1921,55 @@ class MeldEngine:
         if self._transfer_kv_cache(source_engine, target_engine):
             # Mark target engine as primed so we only send the next token with the cache.
             self._per_engine_primed[target_idx] = True
-            logger.info("KV cache bridged successfully.")
+            if target_idx is not None:
+                current_text = self._build_full_text(target_engine, self._generated_text)
+                self._engine_text_cache[target_idx] = current_text
+            if self.verbose and not self.summary_only:
+                logger.info("KV cache bridged successfully.")
         else:
             target_engine.reset_kv_cache()
             self._per_engine_primed[target_idx] = False
             if self._diagnostics_enabled:
                 self._diag["kv_cache_reset"] += 1
-            logger.info("KV cache reset (bridge unavailable).")
+            if self.verbose and not self.summary_only:
+                logger.info("KV cache reset (bridge unavailable).")
 
         self.active_model_idx = target_idx
 
     def _transfer_kv_cache(self, source_engine: LLMEngine, target_engine: LLMEngine) -> bool:
         """Attempt to copy KV cache state from ``source_engine`` to ``target_engine``."""
 
+        generated_text = self._generated_text or ""
+
+        # Guardrail check: prefer replay when models are significantly incompatible
+        prefer_replay, reason = self._should_prefer_replay(source_engine, target_engine)
+        if prefer_replay:
+            if self._diagnostics_enabled:
+                self._diag["kv_cache_unavailable"] += 1
+                self._diag.setdefault("guardrail_replay", 0)
+                self._diag["guardrail_replay"] += 1
+            if self.verbose and not self.summary_only:
+                logger.info(f"Guardrail: preferring replay ({reason})")
+            return self._replay_kv_cache(target_engine, generated_text)
+
         source_cache = source_engine.get_kv_cache()
         if source_cache is None:
             if self._diagnostics_enabled:
                 self._diag["kv_cache_unavailable"] += 1
-            return False
+            return self._replay_kv_cache(target_engine, generated_text)
+
+        if not self._kv_cache_prompt_compatible(source_engine, target_engine):
+            logger.info("KV cache bridge skipped: prompt prefixes differ across models.")
+            if self._diagnostics_enabled:
+                self._diag["kv_cache_unavailable"] += 1
+            return self._replay_kv_cache(target_engine, generated_text)
+
+        tokenizer_compatible = self._kv_cache_tokenizer_compatible(source_engine, target_engine)
+        if not tokenizer_compatible and not self._allow_kv_cache_translation:
+            logger.info("KV cache bridge skipped: tokenizer vocab or type mismatch across models.")
+            if self._diagnostics_enabled:
+                self._diag["kv_cache_unavailable"] += 1
+            return self._replay_kv_cache(target_engine, generated_text)
 
         source_config = getattr(getattr(source_engine, "model", None), "config", None)
         target_config = getattr(getattr(target_engine, "model", None), "config", None)
@@ -982,10 +2005,30 @@ class MeldEngine:
                         f"kv_heads {source_attn.get('num_kv_heads')}->{target_attn.get('num_kv_heads')}, "
                         f"head_dim {source_attn.get('head_dim')}->{target_attn.get('head_dim')})."
                     )
-                return False
+                return self._replay_kv_cache(target_engine, generated_text)
 
             if requires_translation and self._allow_kv_cache_translation:
                 logger.info("KV cache translation enabled for mismatched models.")
+                if not self._force_kv_cache_translation:
+                    if not self._kv_cache_translation_safe(
+                        source_engine, target_engine, source_config, target_config
+                    ):
+                        logger.info(
+                            "KV cache translation skipped: safety checks failed. "
+                            "Use --force-kv-cache-translation to override."
+                        )
+                        if self._diagnostics_enabled:
+                            self._diag["kv_cache_unavailable"] += 1
+                        return self._replay_kv_cache(target_engine, generated_text)
+            elif not tokenizer_compatible and self._allow_kv_cache_translation:
+                if not self._force_kv_cache_translation:
+                    logger.info(
+                        "KV cache translation skipped: tokenizer mismatch requires "
+                        "--force-kv-cache-translation."
+                    )
+                    if self._diagnostics_enabled:
+                        self._diag["kv_cache_unavailable"] += 1
+                    return self._replay_kv_cache(target_engine, generated_text)
 
         if self._diagnostics_enabled:
             self._diag["kv_cache_attempts"] += 1
@@ -1064,10 +2107,15 @@ class MeldEngine:
             logger.warning(f"State-based KV cache bridge failed: {exc}")
 
         # Fallback path: attempt shape-compatible translation using the shared translator.
-        return _attempt_translation()
+        translated = _attempt_translation()
+        if translated:
+            return True
+        return self._replay_kv_cache(target_engine, generated_text)
 
     def run_game_loop(self):
         """Main game loop for Mind Meld mode."""
+        if self.summary_only:
+            return self._run_summary()
         if self.headless:
             return self._run_headless()
 
@@ -1087,7 +2135,10 @@ class MeldEngine:
         if initial_text == cfg.SHORTCUT_QUIT:
             return
 
+        self._set_raw_prompt(initial_text)
+        self._prime_prompt_caches(self.active_model_idx)
         current_full_text = initial_text
+        generated_text = ""
 
         round_counter = 0
         while round_counter < self.args.steps:
@@ -1101,7 +2152,7 @@ class MeldEngine:
             input_ids, attention_mask = self._prepare_inputs_for_engine(
                 active_engine,
                 self.active_model_idx,
-                current_full_text
+                generated_text
             )
             pred_result = active_engine.predict_next(
                 input_ids,
@@ -1113,13 +2164,16 @@ class MeldEngine:
 
             logits_numpy = active_engine.convert_to_numpy(pred_result["logits_raw"])
             self._per_engine_primed[self.active_model_idx] = True
+            self._update_engine_kv_seq_len(self.active_model_idx, active_engine)
 
             # Generate next token using shared logic
             next_token_text, token_prob, next_token_id_in_target_vocab = self._generate_next_token(
-                current_full_text, active_engine, logits_numpy, attention_mask
+                generated_text, active_engine, logits_numpy, attention_mask
             )
 
             logger.debug(f"Selected token ID in target vocab: {next_token_id_in_target_vocab}")
+            if self._should_stop_token(next_token_id_in_target_vocab, next_token_text):
+                break
             ui.display_prediction(active_engine.model_name, next_token_text)
             self.visualizer.record_token(
                 model_name=active_engine.model_name,
@@ -1138,7 +2192,15 @@ class MeldEngine:
 
             # Update context with the decoded text from the target
             current_full_text += next_token_text
+            generated_text += next_token_text
             self._last_token_text = next_token_text
+            self._generated_text = generated_text
+            self._append_engine_text_cache(self.active_model_idx, next_token_text)
+            decoding_idx = self._engine_indices.get(self._last_decoding_engine or active_engine)
+            self._append_engine_token_cache(decoding_idx, next_token_id_in_target_vocab)
+
+            if self._should_stop_generation(generated_text):
+                break
 
             if self._should_check_swap() and self._should_swap(next_token_text):
                 _, next_model = self._resolve_target_model(TARGET_SELECTION_NEXT)
@@ -1193,6 +2255,9 @@ class MeldEngine:
     def _run_headless(self):
         """Lightweight generation loop for tests/automation (no prompts or file IO)."""
         current_full_text = getattr(self.args, "initial_prompt", "") or ""
+        self._set_raw_prompt(current_full_text)
+        self._prime_prompt_caches(self.active_model_idx)
+        generated_text = ""
         round_counter = 0
 
         while round_counter < self.args.steps:
@@ -1202,7 +2267,7 @@ class MeldEngine:
             input_ids, attention_mask = self._prepare_inputs_for_engine(
                 active_engine,
                 self.active_model_idx,
-                current_full_text
+                generated_text
             )
             pred_result = active_engine.predict_next(
                 input_ids,
@@ -1213,11 +2278,14 @@ class MeldEngine:
             )
             logits_numpy = active_engine.convert_to_numpy(pred_result["logits_raw"])
             self._per_engine_primed[self.active_model_idx] = True
+            self._update_engine_kv_seq_len(self.active_model_idx, active_engine)
 
             # Generate next token using shared logic
-            next_token_text, token_prob, _ = self._generate_next_token(
-                current_full_text, active_engine, logits_numpy, attention_mask
+            next_token_text, token_prob, next_token_id = self._generate_next_token(
+                generated_text, active_engine, logits_numpy, attention_mask
             )
+            if self._should_stop_token(next_token_id, next_token_text):
+                break
             if self.stats_tracker:
                 self.stats_tracker.start_round()
                 self.stats_tracker.record_token(
@@ -1228,10 +2296,97 @@ class MeldEngine:
                 )
 
             current_full_text += next_token_text
+            generated_text += next_token_text
             self._last_token_text = next_token_text
+            self._generated_text = generated_text
+            self._append_engine_text_cache(self.active_model_idx, next_token_text)
+            decoding_idx = self._engine_indices.get(self._last_decoding_engine or active_engine)
+            self._append_engine_token_cache(decoding_idx, next_token_id)
+
+            if self._should_stop_generation(generated_text):
+                break
 
             if self._should_check_swap() and self._should_swap(next_token_text):
                 self._perform_swap()
 
         self._report_diagnostics()
         return current_full_text
+
+    def _run_summary(self):
+        """Minimal-output generation loop for automated runs."""
+        self.summary_only = True
+        self.verbose = False
+        if self.stats_tracker:
+            self.stats_tracker.show_live = False
+        current_full_text = getattr(self.args, "initial_prompt", "") or ""
+        self._set_raw_prompt(current_full_text)
+        self._prime_prompt_caches(self.active_model_idx)
+        generated_text = ""
+        round_counter = 0
+        swap_count = 0
+        start_time = time.time()
+
+        while round_counter < self.args.steps:
+            round_counter += 1
+            active_engine = self.get_active_engine()
+
+            input_ids, attention_mask = self._prepare_inputs_for_engine(
+                active_engine,
+                self.active_model_idx,
+                generated_text
+            )
+            pred_result = active_engine.predict_next(
+                input_ids,
+                attention_mask,
+                self.args.temperature,
+                self.args.top_k,
+                self.args.top_p
+            )
+            logits_numpy = active_engine.convert_to_numpy(pred_result["logits_raw"])
+            self._per_engine_primed[self.active_model_idx] = True
+            self._update_engine_kv_seq_len(self.active_model_idx, active_engine)
+
+            next_token_text, token_prob, next_token_id = self._generate_next_token(
+                generated_text, active_engine, logits_numpy, attention_mask
+            )
+            if self._should_stop_token(next_token_id, next_token_text):
+                break
+            if self.stats_tracker:
+                self.stats_tracker.start_round()
+                self.stats_tracker.record_token(
+                    active_engine.model_name,
+                    next_token_text,
+                    confidence=token_prob,
+                    time_taken=0.0
+                )
+
+            generated_text += next_token_text
+            current_full_text += next_token_text
+            self._last_token_text = next_token_text
+            self._generated_text = generated_text
+            self._append_engine_text_cache(self.active_model_idx, next_token_text)
+            decoding_idx = self._engine_indices.get(self._last_decoding_engine or active_engine)
+            self._append_engine_token_cache(decoding_idx, next_token_id)
+
+            if self._should_stop_generation(generated_text):
+                break
+
+            if self._should_check_swap() and self._should_swap(next_token_text):
+                self._perform_swap()
+                swap_count += 1
+
+        duration = time.time() - start_time
+        final_text = generated_text.strip()
+        if self._max_sentences is not None:
+            final_text = self._trim_to_sentences(final_text, self._max_sentences)
+        ui.print_message("Mind Meld output:")
+        ui.print_message((final_text or "(empty)"))
+        ui.print_message(
+            f"Tokens: {round_counter} | Swaps: {swap_count} | Duration: {duration:.2f}s"
+        )
+
+        if self.stats_tracker:
+            self.stats_tracker.finish(quiet=True)
+
+        self._report_diagnostics()
+        return final_text

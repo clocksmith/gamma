@@ -23,14 +23,20 @@ class MindMeldMode:
 
     def run(self):
         """Run the Mind Meld game loop."""
-        ui.print_header("★ Mind Meld Mode ★")
+        summary_only = bool(getattr(self.args, "summary_only", False))
+        if not summary_only:
+            ui.print_header("★ Mind Meld Mode ★")
         
         if len(self.models) < 2:
             ui.wrap_print("Error: Mind Meld mode requires at least two models to be specified.", indent="  ")
             return
 
-        ui.wrap_print("Models loaded:", indent="  ")
-        for i, model_engine in enumerate(self.models):
-            ui.wrap_print(f"    {i+1}. {model_engine.model_name} ({model_engine.__class__.__name__})", indent="  ")
+        if not summary_only:
+            ui.wrap_print("Models loaded:", indent="  ")
+            for i, model_engine in enumerate(self.models):
+                ui.wrap_print(
+                    f"    {i+1}. {model_engine.model_name} ({model_engine.__class__.__name__})",
+                    indent="  "
+                )
         
         self.meld_engine.run_game_loop()

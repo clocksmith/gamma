@@ -12,7 +12,12 @@ import re
 from typing import Tuple, Optional, List
 from dataclasses import dataclass
 
-from src.engines.capability_registry import ENGINES, list_engines
+from src.engines.capability_registry import (
+    ENGINES,
+    list_engines,
+    list_engines_with,
+    get_mind_meld_compatible_engines,
+)
 
 @dataclass
 class ValidationResult:
@@ -51,6 +56,32 @@ class ModelValidator:
 
     CUDA_ONLY_ENGINES = {'vllm', 'pytorch_cuda'}
     APPLE_ONLY_ENGINES = {'mlx', 'mlx_gpu'}
+
+    @staticmethod
+    def format_logits_requirement(engine: str, use_case: str, mind_meld: bool = False) -> Tuple[str, str]:
+        """
+        Format a standardized message for engines that do not expose logits.
+
+        Returns:
+            (error_message, detail_message). Empty strings when logits are supported.
+        """
+        engine_lower = engine.lower()
+        info = ENGINES.get(engine_lower)
+        if info and info.capabilities.supports_logits:
+            return "", ""
+
+        no_logits = sorted(list_engines_with(supports_logits=False))
+        if mind_meld:
+            suggestions = sorted(get_mind_meld_compatible_engines())
+        else:
+            suggestions = sorted(list_engines_with(supports_logits=True))
+
+        error = f"{use_case} requires real logits. Engine '{engine}' does not expose logits."
+        detail = (
+            f"Engines without logits: {', '.join(no_logits)}. "
+            f"Use a native engine with logits: {', '.join(suggestions)}."
+        )
+        return error, detail
 
     @staticmethod
     def is_wrapper_engine(engine: str) -> bool:

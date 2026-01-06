@@ -22,6 +22,24 @@ Usage:
 import argparse
 import sys
 import os
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    message=r".*torch_dtype.*deprecated.*",
+    category=UserWarning,
+)
+warnings.filterwarnings(
+    "ignore",
+    message=r".*torch_dtype.*deprecated.*",
+    category=FutureWarning,
+)
+warnings.filterwarnings(
+    "ignore",
+    message=r".*np\.object.*",
+    category=FutureWarning,
+    module=r"keras\.src\.export\.tf2onnx_lib",
+)
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(ROOT_DIR, 'src')

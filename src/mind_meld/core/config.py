@@ -66,7 +66,7 @@ class SwapConfig:
     strategy: SwapStrategy = SwapStrategy.FIXED_INTERVAL
     
     # Strategy-specific parameters
-    interval: int = 2  # For fixed interval
+    interval: int = 8  # For fixed interval
     min_confidence: float = 0.7  # For confidence-based
     perplexity_threshold: float = 50.0  # For perplexity-based
     attention_threshold: float = 0.8  # For attention-guided
@@ -122,7 +122,7 @@ class MeldConfig:
     temperature: float = 1.0
     top_k: int = 50
     top_p: float = 0.95
-    repetition_penalty: float = 1.0
+    repetition_penalty: float = 1.1
     
     # Performance settings
     use_gpu: bool = True

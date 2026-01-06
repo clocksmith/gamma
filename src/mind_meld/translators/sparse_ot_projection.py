@@ -32,14 +32,14 @@ try:
     HAS_SCIPY = True
 except ImportError:
     HAS_SCIPY = False
-    logger.warning("scipy not available - sparse matrices will use dense fallback")
+    logger.debug("scipy not available - sparse matrices will use dense fallback")
 
 try:
     import ot  # Python Optimal Transport library
     HAS_POT = True
 except ImportError:
     HAS_POT = False
-    logger.warning("POT library not available - using greedy alignment instead of OT")
+    logger.debug("POT library not available - using greedy alignment instead of OT")
 
 
 @dataclass

@@ -72,6 +72,11 @@ DEFAULT_TEMPERATURE = 0.9
 DEFAULT_TOP_K = 64
 DEFAULT_TOP_P = 0.95
 
+DEFAULT_SYSTEM_PROMPT = (
+    "You are a helpful assistant. Answer the user's question directly in 1-2 sentences. "
+    "Avoid repetition, avoid markdown, and use plain English."
+)
+
 DEFAULT_MAX_DECODE_STEPS = 8
 DEFAULT_NUM_CHOICES = 4  # Number of multiple choice options (A, B, C, D)
 DEFAULT_PERMUTATION_LENGTH = 1  # Number of tokens per choice (1 = single word/token)

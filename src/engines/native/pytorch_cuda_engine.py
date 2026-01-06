@@ -452,12 +452,23 @@ class PyTorchCUDAEngine(LLMEngine):
 
     def truncate_kv_cache(self, max_len: int) -> bool:
         """Truncate KV cache to specified sequence length."""
-        if not self.has_kv_cache() or not isinstance(self._kv_cache, tuple):
+        if not self.has_kv_cache():
+            return False
+
+        cache_obj = self._kv_cache
+        if hasattr(cache_obj, "crop") and callable(getattr(cache_obj, "crop")):
+            try:
+                cache_obj.crop(max_len)
+                return True
+            except Exception as exc:
+                logger.warning(f"Failed to crop KV cache: {exc}")
+
+        if not isinstance(cache_obj, tuple):
             return False
 
         try:
             truncated = []
-            for layer_cache in self._kv_cache:
+            for layer_cache in cache_obj:
                 if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
                     k_cache, v_cache = layer_cache[0], layer_cache[1]
                     # Shape: (batch, num_heads, seq_len, head_dim)

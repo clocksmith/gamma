@@ -82,7 +82,7 @@ These engines are implemented but may have limitations:
 
 - **LlamaCpp** (`native/llama_cpp_engine.py`): Runs GGUF-format quantized models via [llama.cpp](https://github.com/ggml-org/llama.cpp). Supports Metal (Mac), CUDA, and CPU. Great for memory-constrained systems. Supports Q2-Q8 quantization levels.
 
-- **vLLM** (`native/vllm_engine.py`): High-throughput serving engine using [vLLM](https://docs.vllm.ai/). Features PagedAttention for efficient memory, continuous batching, tensor parallelism, and speculative decoding. Requires NVIDIA GPU with CUDA.
+- **vLLM** (`native/vllm_engine.py`): High-throughput serving engine using [vLLM](https://docs.vllm.ai/). Features PagedAttention for efficient memory, continuous batching, tensor parallelism, and speculative decoding. Requires NVIDIA GPU with CUDA (no macOS/MPS support; ROCm not supported in GAMMA’s vLLM backend). Logits are reconstructed from vLLM logprobs, so the full distribution is approximate.
 
 #### Wrapper Engines
 
@@ -134,6 +134,25 @@ For Mind Meld multi-model collaboration, engines must support raw logits access:
 | Ollama | No | No logits via HTTP API |
 | OpenAI | No | No logits via API |
 | HuggingFace Inference | No | No logits via API |
+
+Note: wrapper engines do not expose logits, so the CLI game, comparison, and
+mind-meld modes require native engines. If you are using an OpenAI-compatible
+vLLM server, use the native `vllm` engine for logits access.
+
+KV cache sharing prefers direct transfer when tokenizer type/vocab and prompt
+prefixes match. When they differ, Mind Meld replays the missing suffix through
+the target model to rebuild its cache. Replay aligns full-token prefixes to
+avoid tokenizer boundary drift rather than copying incompatible entries.
+
+### Platform notes
+
+- vLLM requires an NVIDIA GPU with CUDA. It is not supported on macOS or ROCm
+  in GAMMA.
+- PyTorch ROCm is supported via `requirements-rocm.txt`. Prefer the `pytorch`
+  engine on AMD; `pytorch_cuda` is NVIDIA-specific.
+- MLX engines are Apple Silicon only.
+- LlamaCpp support depends on the build (CPU, Metal, CUDA); ROCm requires a
+  custom build outside the default wheels.
 
 ### Benchmark Comparison (Apple M-series)
 

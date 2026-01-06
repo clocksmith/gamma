@@ -153,6 +153,8 @@ High-throughput serving engine using [vLLM](https://github.com/vllm-project/vllm
 - Continuous batching
 - Tensor parallelism
 - Speculative decoding
+**Notes:**
+- Requires NVIDIA GPU with CUDA in GAMMA (not supported on macOS or ROCm here)
 
 ## Wrapper Engines
 
@@ -246,7 +248,7 @@ class MyCustomEngine(LLMEngine):
 
 - **llama.cpp**: C/C++ LLM inference engine with GGUF quantized model support (Q2-Q8). Supports Metal, CUDA, and CPU backends. See [GitHub - llama.cpp](https://github.com/ggml-org/llama.cpp) and [GGUF Quantization Guide](https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md).
 
-- **vLLM**: High-throughput inference engine featuring PagedAttention for efficient KV cache management. Supports NVIDIA GPUs, AMD, Intel, and TPU. Originally developed at UC Berkeley, now a community-driven project. See [vLLM GitHub](https://github.com/vllm-project/vllm) and [vLLM Documentation](https://docs.vllm.ai/).
+- **vLLM**: High-throughput inference engine featuring PagedAttention for efficient KV cache management. Upstream supports multiple accelerators, but GAMMA's vLLM engine targets NVIDIA CUDA only. See [vLLM GitHub](https://github.com/vllm-project/vllm) and [vLLM Documentation](https://docs.vllm.ai/).
 
 - **MLX**: Apple's array framework for machine learning on Apple Silicon, optimized for unified memory architecture. Supports Neural Accelerators on M5+ chips (up to 4x speedup). See [MLX GitHub](https://github.com/ml-explore/mlx) and [Apple MLX Research](https://machinelearning.apple.com/research/exploring-llms-mlx-m5).
 

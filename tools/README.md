@@ -89,6 +89,9 @@ Interactive Mind Meld CLI interface.
 ```bash
 python tools/run_mind_meld_cli.py
 ```
+Supports flags like `--prompt-chat-template`, `--no-step-delay`, `--summary-only`, `--max-sentences`, `--stop-text`, and `--repetition-penalty`.
+Use `--order-neutral` to reduce swap-order sensitivity (alias for `--use-weighted-average`).
+Use `--prompt-system` to add a system message or `--no-default-system` to disable the default system prompt.
 
 #### `quick_mind_meld_test.py`
 Quick test of Mind Meld functionality.

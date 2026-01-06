@@ -648,10 +648,88 @@ class KVCacheTranslator:
     """
     A unified KV cache translator with a strategy-based approach.
     Supports GQA, MQA, and MHA attention format conversions.
+    Also supports tokenizer-aware alignment for cross-vocabulary translation.
     """
 
     def __init__(self, verbose: bool = True):
         self.verbose = verbose
+        self._source_tokenizer = None
+        self._target_tokenizer = None
+        self._source_text = ""
+
+    def set_tokenizers(
+        self,
+        source_tokenizer: Any,
+        target_tokenizer: Any,
+        source_text: str = ""
+    ) -> None:
+        """
+        Set tokenizers for alignment-aware translation.
+
+        Args:
+            source_tokenizer: Tokenizer used for source cache
+            target_tokenizer: Tokenizer for target model
+            source_text: Text that was encoded in source cache
+        """
+        self._source_tokenizer = source_tokenizer
+        self._target_tokenizer = target_tokenizer
+        self._source_text = source_text
+
+    def translate_with_alignment(
+        self,
+        source_cache: KVCache,
+        target_arch: ModelArchitecture,
+        target_config: Any,
+        source_tokenizer: Any,
+        target_tokenizer: Any,
+        source_text: str
+    ) -> Optional[KVCache]:
+        """
+        Translate KV cache with tokenizer alignment for cross-vocabulary models.
+
+        This method is preferred when models have different tokenizers, as it
+        aligns KV positions based on character spans rather than assuming 1:1
+        token correspondence.
+
+        Args:
+            source_cache: Source KV cache to translate
+            target_arch: Target model architecture
+            target_config: Target model configuration
+            source_tokenizer: Source model's tokenizer
+            target_tokenizer: Target model's tokenizer
+            source_text: Text that was encoded in source cache
+
+        Returns:
+            Translated KV cache, or None if translation fails
+        """
+        # First apply standard architecture translation
+        arch_translated = self.translate(source_cache, target_arch, target_config)
+        if arch_translated is None:
+            return None
+
+        # Then apply tokenizer alignment if tokenizers differ
+        if source_tokenizer is not None and target_tokenizer is not None:
+            try:
+                # Check if tokenizers are different
+                source_vocab_size = len(source_tokenizer.get_vocab()) if hasattr(source_tokenizer, 'get_vocab') else 0
+                target_vocab_size = len(target_tokenizer.get_vocab()) if hasattr(target_tokenizer, 'get_vocab') else 0
+
+                if source_vocab_size != target_vocab_size:
+                    if self.verbose:
+                        logger.info(
+                            f"Applying tokenizer alignment (vocab: {source_vocab_size} -> {target_vocab_size})"
+                        )
+                    aligner = TokenizerAlignedTranslation(
+                        source_tokenizer=source_tokenizer,
+                        target_tokenizer=target_tokenizer,
+                        source_text=source_text
+                    )
+                    return aligner.translate(arch_translated, target_config)
+            except Exception as exc:
+                if self.verbose:
+                    logger.warning(f"Tokenizer alignment failed: {exc}")
+
+        return arch_translated
 
     def translate(self, source_cache: KVCache, target_arch: ModelArchitecture, target_config: Any) -> Optional[KVCache]:
         """
@@ -856,6 +934,198 @@ class MQATranslation(TranslationStrategy):
             source_cache.num_heads = target_heads
 
         return source_cache
+
+class TokenizerAlignedTranslation(TranslationStrategy):
+    """
+    Tokenizer-aware KV cache translation.
+
+    When source and target models use different tokenizers, token boundaries
+    may not align. This strategy attempts to align KV cache positions by:
+    1. Computing token mapping between source and target tokenizations
+    2. Reindexing or interpolating KV positions to match target tokens
+
+    This is more robust than shape-only translation when models have
+    different vocabularies but similar architectures.
+    """
+
+    def __init__(
+        self,
+        source_tokenizer: Any = None,
+        target_tokenizer: Any = None,
+        source_text: str = "",
+    ):
+        """
+        Args:
+            source_tokenizer: Source model's tokenizer
+            target_tokenizer: Target model's tokenizer
+            source_text: The text that was encoded in the source cache
+        """
+        self.source_tokenizer = source_tokenizer
+        self.target_tokenizer = target_tokenizer
+        self.source_text = source_text
+
+    def _compute_token_alignment(
+        self,
+        source_tokens: List[int],
+        target_tokens: List[int],
+    ) -> List[int]:
+        """
+        Compute mapping from target token positions to source token positions.
+
+        Uses character-level alignment: for each target token, find the source
+        token(s) that cover the same character span.
+
+        Returns:
+            List of source indices for each target position.
+            -1 indicates no corresponding source position.
+        """
+        if not self.source_tokenizer or not self.target_tokenizer:
+            # Fallback: assume 1:1 mapping with truncation/padding
+            return list(range(min(len(source_tokens), len(target_tokens))))
+
+        try:
+            # Decode tokens to get character spans
+            source_text = self.source_tokenizer.decode(source_tokens)
+            target_text = self.target_tokenizer.decode(target_tokens)
+
+            # Get character offsets for each token
+            source_offsets = self._get_token_offsets(
+                self.source_tokenizer, source_tokens, source_text
+            )
+            target_offsets = self._get_token_offsets(
+                self.target_tokenizer, target_tokens, target_text
+            )
+
+            # Map each target token to best matching source token
+            alignment = []
+            for t_start, t_end in target_offsets:
+                best_source_idx = -1
+                best_overlap = 0
+
+                for s_idx, (s_start, s_end) in enumerate(source_offsets):
+                    # Calculate overlap between source and target spans
+                    overlap_start = max(t_start, s_start)
+                    overlap_end = min(t_end, s_end)
+                    overlap = max(0, overlap_end - overlap_start)
+
+                    if overlap > best_overlap:
+                        best_overlap = overlap
+                        best_source_idx = s_idx
+
+                alignment.append(best_source_idx)
+
+            return alignment
+
+        except Exception as exc:
+            logger.debug(f"Token alignment failed: {exc}, using fallback")
+            return list(range(min(len(source_tokens), len(target_tokens))))
+
+    def _get_token_offsets(
+        self,
+        tokenizer: Any,
+        token_ids: List[int],
+        text: str
+    ) -> List[Tuple[int, int]]:
+        """Get character offsets for each token."""
+        offsets = []
+        pos = 0
+
+        for token_id in token_ids:
+            try:
+                token_text = tokenizer.decode([token_id])
+                token_len = len(token_text)
+                offsets.append((pos, pos + token_len))
+                pos += token_len
+            except Exception:
+                # Fallback for special tokens
+                offsets.append((pos, pos + 1))
+                pos += 1
+
+        return offsets
+
+    def translate(self, source_cache: KVCache, target_config: Any) -> Optional[KVCache]:
+        """Translate KV cache with tokenizer alignment."""
+        if source_cache.key is None or source_cache.value is None:
+            return None
+
+        source_seq_len = source_cache.sequence_length
+
+        # Get target tokenization length
+        target_seq_len = source_seq_len  # Default: same length
+        if self.target_tokenizer and self.source_text:
+            try:
+                target_tokens = self.target_tokenizer.encode(self.source_text)
+                target_seq_len = len(target_tokens)
+            except Exception:
+                pass
+
+        if target_seq_len == source_seq_len:
+            # No alignment needed
+            return source_cache
+
+        # Compute alignment mapping
+        source_tokens = list(range(source_seq_len))  # Placeholder
+        target_tokens = list(range(target_seq_len))
+
+        if self.source_tokenizer and self.source_text:
+            try:
+                source_tokens = self.source_tokenizer.encode(self.source_text)
+                target_tokens = self.target_tokenizer.encode(self.source_text)
+            except Exception:
+                pass
+
+        alignment = self._compute_token_alignment(source_tokens, target_tokens)
+
+        # Apply alignment to KV cache
+        # Key/Value shape: (..., num_heads, seq_len, head_dim) or (num_layers, ..., seq_len, head_dim)
+        aligned_key = self._apply_alignment(source_cache.key, alignment, target_seq_len)
+        aligned_value = self._apply_alignment(source_cache.value, alignment, target_seq_len)
+
+        if aligned_key is None or aligned_value is None:
+            return None
+
+        # Create aligned cache
+        source_cache.key = aligned_key
+        source_cache.value = aligned_value
+        source_cache.sequence_length = target_seq_len
+
+        return source_cache
+
+    def _apply_alignment(
+        self,
+        cache: np.ndarray,
+        alignment: List[int],
+        target_len: int
+    ) -> Optional[np.ndarray]:
+        """Apply token alignment to cache tensor."""
+        try:
+            # Find sequence dimension (usually -2)
+            seq_axis = -2
+            source_seq_len = cache.shape[seq_axis]
+
+            # Build output shape
+            out_shape = list(cache.shape)
+            out_shape[seq_axis] = target_len
+            aligned = np.zeros(out_shape, dtype=cache.dtype)
+
+            # Copy aligned positions
+            for t_idx, s_idx in enumerate(alignment):
+                if t_idx >= target_len:
+                    break
+                if 0 <= s_idx < source_seq_len:
+                    # Use numpy's advanced indexing to copy the slice
+                    src_slice = [slice(None)] * len(cache.shape)
+                    src_slice[seq_axis] = s_idx
+                    dst_slice = [slice(None)] * len(aligned.shape)
+                    dst_slice[seq_axis] = t_idx
+                    aligned[tuple(dst_slice)] = cache[tuple(src_slice)]
+
+            return aligned
+
+        except Exception as exc:
+            logger.warning(f"Failed to apply alignment: {exc}")
+            return None
+
 
 class ProjectionTranslation(TranslationStrategy):
     """A projection-based translation for incompatible architectures.

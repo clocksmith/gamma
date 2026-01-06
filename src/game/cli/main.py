@@ -13,14 +13,17 @@ import argparse
 import sys
 import time
 import random
+from collections import Counter
 import numpy as np
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 
 from src.core import config as cfg
 from src.ui import displays as ui
 from src.engines.engine_factory import get_engine, SUPPORTED_ENGINES
 from src.engines.capability_registry import get_engine_info
+from src.engines import sampling_utils
 from src.core.engine_interface import LLMEngine
+from src.core.model_validator import ModelValidator
 from src.game.tutorial_mode import TutorialMode
 from src.comparison.comparison_mode import ComparisonMode
 from src.mind_meld.mode import MindMeldMode
@@ -28,6 +31,14 @@ from src.core.menu.interactive_menu import InteractiveMenu
 from src.game.cli.controller import run_game_loop as controller_run_game_loop
 from src.game.cli.commands import parse_arguments, apply_word_mode_presets, CLI_OVERRIDE_FLAGS
 
+
+STOP_TEXT_MARKERS = (
+    "<end_of_turn>",
+    "<|eot_id|>",
+    "<|end_of_text|>",
+    "<eos>",
+    "</s>",
+)
 
 
 def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1, engine: Optional[LLMEngine] = None) -> Optional[Any]:
@@ -49,6 +60,73 @@ def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1, engine: Opti
     print(f"Warning: Could not concatenate tensors of types ({type(tensor1)}, {type(tensor2)})")
     return None
 
+def _apply_repetition_penalty(
+    logits: np.ndarray,
+    recent_tokens: List[int],
+    penalty: float
+) -> np.ndarray:
+    """Apply repetition penalty to logits based on recent token history."""
+    if penalty is None or penalty <= 1.0 or not recent_tokens:
+        return logits
+    logits = np.asarray(logits)
+    counts = Counter(recent_tokens)
+    for token_id, count in counts.items():
+        if token_id < 0 or token_id >= logits.shape[-1]:
+            continue
+        factor = penalty ** count
+        if logits[token_id] < 0:
+            logits[token_id] *= factor
+        else:
+            logits[token_id] /= factor
+    return logits
+
+def _select_next_token_from_logits(
+    logits: np.ndarray,
+    args: argparse.Namespace,
+    engine: LLMEngine,
+    rng: np.random.Generator,
+    recent_tokens: List[int],
+    repetition_penalty: float
+) -> int:
+    """Select a next token from raw logits, honoring sampling settings."""
+    logits = sampling_utils.sanitize_logits(np.asarray(logits))
+    if logits.ndim > 1:
+        logits = logits.flatten()
+    logits = _apply_repetition_penalty(logits, recent_tokens, repetition_penalty)
+    processed = sampling_utils.process_logits_pipeline(
+        logits,
+        args.temperature,
+        args.top_k,
+        args.top_p
+    )
+    probs = sampling_utils.softmax(processed)
+    probs = sampling_utils.sanitize_probs(probs)
+
+    sampling_strategy = str(getattr(args, "sampling_strategy", "") or "").lower()
+    if not sampling_strategy:
+        sampling_strategy = engine.get_sampling_strategy()
+    if sampling_strategy in ("argmax", "greedy"):
+        return int(np.argmax(probs))
+    try:
+        return int(rng.choice(len(probs), p=probs))
+    except (ValueError, IndexError):
+        return int(np.argmax(probs))
+
+
+def _should_stop_token(
+    token_id: int,
+    token_text: str,
+    eos_id: Optional[int],
+    stop_markers: Tuple[str, ...]
+) -> bool:
+    """Return True when the token should terminate generation."""
+    if eos_id is not None and token_id == eos_id:
+        return True
+    if not token_text:
+        return False
+    text = token_text.strip().lower()
+    return any(marker in text for marker in stop_markers)
+
 
 def _flag_was_provided(flag: str) -> bool:
     """Check whether a CLI flag (e.g., '--engine') was explicitly provided."""
@@ -69,6 +147,16 @@ def _flag_was_provided(flag: str) -> bool:
         if negative_flag and arg.startswith(f"{negative_flag}="):
             return True
     return False
+
+
+def _require_logits(engine_name: str, use_case: str, mind_meld: bool = False) -> bool:
+    """Return False after printing an error if the engine does not expose logits."""
+    error, detail = ModelValidator.format_logits_requirement(engine_name, use_case, mind_meld=mind_meld)
+    if error:
+        print(ui.color_text(f"\nError: {error}", cfg.COLOR_RED))
+        print(ui.color_text(detail, cfg.COLOR_YELLOW))
+        return False
+    return True
 
 
 
@@ -108,6 +196,9 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
             return None
         args.model = selected_model_from_ui
         s_model_id = args.model
+
+    if s_eng_name and not _require_logits(s_eng_name, "Game mode"):
+        return None
     
     # Validate ONNX requirements
     if args.engine == "onnx" and not args.onnx_tokenizer:
@@ -131,28 +222,9 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
         # Validate engine is suitable for game mode (needs real logits/probabilities)
         # Engines that use HTTP APIs don't expose full probability distributions
         if not engine.supports_logits:
-            print(ui.color_text(
-                f"\nWarning: The '{args.engine}' engine cannot be used for game mode.",
-                cfg.COLOR_RED
-            ))
-            print(ui.color_text(
-                "The game requires access to full token probability distributions (logits),",
-                cfg.COLOR_YELLOW
-            ))
-            print(ui.color_text(
-                f"which are not exposed by {args.engine}'s HTTP API.",
-                cfg.COLOR_YELLOW
-            ))
-            print("\nUse a local engine with the same model:")
-
-            if args.engine == "ollama":
-                print("   - Use 'llamacpp' engine with Ollama's GGUF file:")
-                print(f"     1. Find the GGUF: ollama show {args.model} --modelfile | grep FROM")
-                print("     2. Run GAMMA: gamma.py game --engine llamacpp --model /path/to/model.gguf")
-            else:
-                print("   - Supported engines: pytorch, pytorch_cuda, llamacpp, vllm, mlx, jax, tensorflow")
-                print("   - Example: gamma.py game --engine pytorch --model google/gemma-2-2b-it")
-
+            error, detail = ModelValidator.format_logits_requirement(args.engine, "Game mode")
+            print(ui.color_text(f"\nError: {error}", cfg.COLOR_RED))
+            print(ui.color_text(detail, cfg.COLOR_YELLOW))
             return None
 
         # Display engine configuration summary
@@ -286,7 +358,8 @@ def run_comparison_mode(args: argparse.Namespace) -> None:
 
 def run_meld_mode(args: argparse.Namespace) -> None:
     """Run the Mind Meld mode."""
-    print(ui.color_text("\nStarting Mind Meld Mode...", cfg.COLOR_CYAN))
+    if not getattr(args, "summary_only", False):
+        print(ui.color_text("\nStarting Mind Meld Mode...", cfg.COLOR_CYAN))
     
     models_to_meld = []
     if not args.meld_models or len(args.meld_models) < 2:
@@ -305,20 +378,8 @@ def run_meld_mode(args: argparse.Namespace) -> None:
             return
         info = get_engine_info(engine_type)
         if info and not info.supports_logits:
-            print(ui.color_text(
-                f"\nError: The '{engine_type}' engine cannot be used for Mind Meld mode.",
-                cfg.COLOR_RED
-            ))
-            print(ui.color_text(
-                "Mind Meld requires full token probability distributions (logits),",
-                cfg.COLOR_YELLOW
-            ))
-            print(ui.color_text(
-                f"which are not exposed by {engine_type}'s HTTP API.",
-                cfg.COLOR_YELLOW
-            ))
-            print("\nUse a local engine instead: pytorch, pytorch_cuda, llamacpp, vllm, mlx")
-            return
+            if not _require_logits(engine_type, "Mind Meld", mind_meld=True):
+                return
 
         models_to_meld.append((engine_type, model_name))
 
@@ -395,18 +456,109 @@ def _format_chat_history(history: list, engine: LLMEngine) -> str:
 
     return "\n".join(formatted_parts) + "\nAssistant:"
 
-def _format_single_prompt(prompt: str, engine: LLMEngine, use_chat_template: bool) -> str:
-    """Format a single prompt with a chat template when requested."""
-    if not use_chat_template:
-        return prompt
-    history = [{"role": "user", "content": prompt}]
-    return _format_chat_history(history, engine)
+def _prompt_looks_formatted(prompt: str) -> bool:
+    """Return True if the prompt already looks like a chat template."""
+    if not prompt:
+        return False
+    markers = (
+        "<|im_start|>",
+        "<|assistant|>",
+        "[INST]",
+        "<<SYS>>",
+        "User:",
+        "Assistant:",
+        "System:",
+    )
+    return any(marker in prompt for marker in markers)
+
+
+def _model_is_instruction_tuned(engine: LLMEngine) -> bool:
+    """Heuristic for detecting instruction-tuned models."""
+    model_name = (engine.model_name or "").lower()
+    tokenizer_name = getattr(engine.tokenizer, "name_or_path", "")
+    combined = f"{model_name} {tokenizer_name}".lower()
+    tags = ("-it", "instruct", "instruction", "chat", "assistant")
+    return any(tag in combined for tag in tags)
+
+
+def _should_apply_chat_template(
+    engine: LLMEngine,
+    prompt: str,
+    prompt_chat_template: Optional[bool],
+) -> bool:
+    """Decide whether to apply a chat template to a single prompt."""
+    if prompt_chat_template is False:
+        return False
+    tokenizer = getattr(engine, "tokenizer", None)
+    if tokenizer is None or not hasattr(tokenizer, "apply_chat_template"):
+        return False
+    if prompt_chat_template is True:
+        return True
+    if _prompt_looks_formatted(prompt):
+        return False
+    if getattr(tokenizer, "chat_template", None):
+        return True
+    return _model_is_instruction_tuned(engine)
+
+
+def _resolve_system_prompt(
+    prompt_system: Optional[str],
+    use_default_system: bool,
+) -> Optional[str]:
+    """Resolve the system prompt based on explicit and default settings."""
+    if prompt_system is None:
+        return cfg.DEFAULT_SYSTEM_PROMPT if use_default_system else None
+    if not prompt_system.strip():
+        return None
+    return prompt_system
+
+
+def _format_single_prompt(
+    prompt: str,
+    engine: LLMEngine,
+    prompt_chat_template: Optional[bool],
+    prompt_system: Optional[str],
+    use_default_system: bool,
+) -> Tuple[str, Optional[str], Optional[str]]:
+    """Format a single prompt with a chat template when requested or inferred."""
+    if not prompt:
+        return prompt, None, None
+    if not _should_apply_chat_template(engine, prompt, prompt_chat_template):
+        return prompt, None, None
+    system_prompt = _resolve_system_prompt(prompt_system, use_default_system)
+    try:
+        history = []
+        if system_prompt:
+            history.append({"role": "system", "content": system_prompt})
+        history.append({"role": "user", "content": prompt})
+        formatted = _format_chat_history(history, engine)
+    except Exception:
+        if system_prompt:
+            try:
+                formatted = _format_chat_history(
+                    [{"role": "user", "content": prompt}],
+                    engine,
+                )
+                system_prompt = None
+            except Exception:
+                return prompt, None, None
+        else:
+            return prompt, None, None
+    mode = "forced" if prompt_chat_template is True else "auto"
+    return formatted, mode, system_prompt
 
 
 def run_chat_mode(engine: LLMEngine, args: argparse.Namespace) -> None:
     """Runs a simple interactive chat session."""
     ui.print_header("Direct Chat Mode")
     print("Type 'exit' or 'quit' to end the session.")
+    repetition_penalty = getattr(args, "repetition_penalty", None)
+    if repetition_penalty is None or repetition_penalty < 1.0:
+        repetition_penalty = 1.0
+    seed = getattr(args, "seed", None)
+    if seed in (None, 0):
+        seed = None
+    rng = np.random.default_rng(seed)
     history = []
 
     while True:
@@ -427,18 +579,35 @@ def run_chat_mode(engine: LLMEngine, args: argparse.Namespace) -> None:
 
         response_text = ""
         input_ids, attention_mask = engine.encode(full_prompt, add_special_tokens=True)
+        recent_tokens: List[int] = []
+        repeat_window = 64
         
         for _ in range(args.steps): # Max tokens for response
             pred = engine.predict_next(input_ids, attention_mask, args.temperature, args.top_k, args.top_p)
             next_id = pred['next_token_id']
+            if repetition_penalty > 1.0 and "logits_raw" in pred:
+                logits_raw = engine.convert_to_numpy(pred["logits_raw"])
+                next_id = _select_next_token_from_logits(
+                    logits_raw,
+                    args,
+                    engine,
+                    rng,
+                    recent_tokens,
+                    repetition_penalty
+                )
 
-            if next_id == engine.get_eos_token_id():
+            token_text = engine.get_token_text(next_id)
+            if _should_stop_token(next_id, token_text, engine.get_eos_token_id(), STOP_TEXT_MARKERS):
                 break
 
             next_token_text = engine.decode([next_id])
             response_text += next_token_text
             sys.stdout.write(next_token_text)
             sys.stdout.flush()
+            if repetition_penalty > 1.0:
+                recent_tokens.append(int(next_id))
+                if len(recent_tokens) > repeat_window:
+                    del recent_tokens[:-repeat_window]
 
             # Update for next iteration
             input_ids, attention_mask = engine.encode(response_text, add_special_tokens=False)
@@ -452,14 +621,30 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
     """Runs a single inference and prints performance stats."""
     ui.print_header("Single-Shot Inference")
     prompt = args.prompt
-    prompt_use_chat_template = bool(getattr(args, "prompt_chat_template", False))
-    formatted_prompt = _format_single_prompt(prompt, engine, prompt_use_chat_template)
+    prompt_chat_template = getattr(args, "prompt_chat_template", None)
+    prompt_system = getattr(args, "prompt_system", None)
+    use_default_system = not getattr(args, "no_default_system", False)
+    formatted_prompt, template_mode, system_prompt = _format_single_prompt(
+        prompt,
+        engine,
+        prompt_chat_template,
+        prompt_system,
+        use_default_system,
+    )
     print(f"Prompt: '{prompt}'")
-    if formatted_prompt != prompt:
-        print("Prompt format: chat template")
+    if template_mode:
+        print(f"Prompt format: chat template ({template_mode})")
+        if system_prompt:
+            print("System prompt: enabled")
         if args.verbose:
             print("Formatted prompt:")
             print(formatted_prompt)
+            if system_prompt:
+                print("System prompt text:")
+                print(system_prompt)
+        if not _flag_was_provided("--sampling-strategy"):
+            resolved = engine.get_sampling_strategy()
+            print(f"Sampling strategy: {resolved} (default)")
 
     start_time = time.time()
     full_input_ids, full_attention_mask = engine.encode(formatted_prompt, add_special_tokens=True)
@@ -475,6 +660,15 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
     use_kv_cache = getattr(engine, "engine_config", {}).get("use_kv_cache", cfg.PYTORCH_USE_KV_CACHE)
     incremental_input_ids = full_input_ids
     generated_token_ids: List[int] = []
+    recent_tokens: List[int] = []
+    repeat_window = 64
+    repetition_penalty = getattr(args, "repetition_penalty", None)
+    if repetition_penalty is None or repetition_penalty < 1.0:
+        repetition_penalty = 1.0
+    seed = getattr(args, "seed", None)
+    if seed in (None, 0):
+        seed = None
+    rng = np.random.default_rng(seed)
 
     generation_start = time.time()
 
@@ -497,18 +691,32 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
         )
 
         next_token_id = prediction["next_token_id"]
+        if repetition_penalty > 1.0 and "logits_raw" in prediction:
+            logits_raw = engine.convert_to_numpy(prediction["logits_raw"])
+            next_token_id = _select_next_token_from_logits(
+                logits_raw,
+                args,
+                engine,
+                rng,
+                recent_tokens,
+                repetition_penalty
+            )
 
+        token_text = engine.get_token_text(next_token_id)
         if args.verbose:
-            token_text = engine.get_token_text(next_token_id)
             print(f"[Generation {step + 1}] token_id={next_token_id} -> '{token_text}'")
 
         eos_id = engine.get_eos_token_id()
-        if eos_id is not None and next_token_id == eos_id:
+        if _should_stop_token(next_token_id, token_text, eos_id, STOP_TEXT_MARKERS):
             if args.verbose:
-                print("Encountered EOS token. Stopping generation.")
+                print("Encountered stop token. Stopping generation.")
             break
 
         generated_token_ids.append(int(next_token_id))
+        if repetition_penalty > 1.0:
+            recent_tokens.append(int(next_token_id))
+            if len(recent_tokens) > repeat_window:
+                del recent_tokens[:-repeat_window]
 
         # Prepare tensors for next iteration
         next_token_array = np.array([[next_token_id]])
@@ -547,8 +755,9 @@ def run_single_shot_inference(engine: LLMEngine, args: argparse.Namespace) -> No
 
 def main():
     """Main entry point for GAMMA."""
-    ui.display_intro()
     args = parse_arguments()
+    if not getattr(args, "summary_only", False):
+        ui.display_intro()
 
     if args.quickstart:
         print(ui.color_text("\nQuickstart mode: using quick-play defaults.", cfg.COLOR_GREEN))

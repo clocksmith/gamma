@@ -107,7 +107,7 @@ See also: [Model Formats & Engines](./docs/MODEL_FORMATS.md)
 | Engine | Backend | Status |
 |--------|---------|--------|
 | **JAX/Flax** | CPU / TPU | JIT tracing issues with some models |
-| **vLLM** | CUDA | Requires NVIDIA GPU, not tested on Mac |
+| **vLLM** | CUDA | Requires NVIDIA GPU with CUDA; not supported on macOS or ROCm in GAMMA |
 | **ONNX Runtime** | CPU / CUDA / CoreML | Requires ONNX-exported models |
 | **TensorFlow** | CPU / GPU | Limited model support |
 
@@ -123,8 +123,8 @@ python gamma.py game --engine pytorch --model google/gemma-2-2b-it
 # Quantized GGUF models (low memory)
 python gamma.py game --engine llamacpp --model models/model.gguf
 
-# Ollama (easiest setup)
-python gamma.py game --engine ollama --model llama3.2
+# Ollama models (use GGUF with llama.cpp for logits)
+python gamma.py game --engine llamacpp --model /path/to/ollama-model.gguf
 ```
 
 ### Benchmark Results (Apple M-series)
@@ -136,6 +136,28 @@ python gamma.py game --engine ollama --model llama3.2
 | LlamaCpp | qwen2-0.5b-q4 | 4.4 | 174ms |
 
 See [Engine Documentation](./src/engines/README.md) and [Core Documentation](./src/core/README.md) for details.
+
+### Logits availability (game/comparison/mind-meld)
+
+The game, comparison, and mind-meld modes require real logits (full token
+probability distributions). Wrapper engines do not expose logits via HTTP APIs,
+so the CLI will refuse them.
+
+Engines without logits:
+- `openai`
+- `huggingface_inference`
+- `ollama`
+
+If you are using an OpenAI-compatible vLLM server, you still need the native
+`vllm` engine to access logits.
+
+KV cache sharing (Mind Meld) prefers direct transfer when prompt prefixes
+match; otherwise it replays the missing suffix through the target model to
+rebuild a correct cache. Replay aligns full-token prefixes to avoid tokenizer
+boundary drift. KV cache translation remains experimental and is only attempted
+when `--allow-kv-cache-translation` is set; safety checks will skip translation
+unless `--force-kv-cache-translation` is provided, and it still falls back to
+replay if translation is incompatible or fails.
 
 ---
 
@@ -171,9 +193,30 @@ python gamma.py mind-meld \
 --steps 50                 # Max generation steps
 --show-attention           # Show attention heatmaps
 --verbose                  # Detailed explanations
---prompt-chat-template     # Use chat template for --prompt (single-shot)
+--prompt-chat-template     # Use chat template for --prompt/--initial-prompt (auto for instruct models)
+--no-prompt-chat-template  # Force raw --prompt (skip chat template)
+--prompt-system "TEXT"     # System prompt for chat templates
+--no-default-system        # Disable the default system prompt
 --no-step-delay            # Mind Meld: disable per-step delay
+--summary-only             # Mind Meld: show only final output and brief stats (no live per-round stats)
+--max-sentences N          # Mind Meld: stop after N sentences in the generated output
+--shared-chat-template     # Mind Meld: reuse one chat template across models (auto-enabled when templates differ; disable with --no-shared-chat-template)
+--stop-text "TEXT"         # Mind Meld: stop when generated output contains TEXT (repeatable; common chat end markers are used automatically when templates are applied)
+--translate-logits         # Mind Meld: translate logits into the next model's vocab during swaps (experimental)
+--order-neutral            # Mind Meld: alias for --use-weighted-average to reduce swap-order sensitivity
+--soft-swap                # Mind Meld: blend all models each step but keep swap cadence by boosting the active model
+--soft-swap-weight W       # Mind Meld: weight multiplier for the active model in --soft-swap (default 1.5)
+--force-kv-cache-translation  # Mind Meld: force KV cache translation even when safety checks fail (unsafe)
+--repetition-penalty 1.1   # Reduce repeated tokens during sampling (>1.0)
 ```
+
+KV cache sharing prefers direct transfer when prompt prefixes match. When they
+differ, Mind Meld replays the missing suffix through the target model to rebuild
+its cache (lossless, but more compute) instead of copying KV entries across
+incompatible tokenizations. KV cache translation is only attempted when
+`--allow-kv-cache-translation` is set; safety checks will skip translation
+unless `--force-kv-cache-translation` is provided, and it still falls back to
+replay if it fails.
 
 ---
 

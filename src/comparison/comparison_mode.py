@@ -10,6 +10,7 @@ from src.ui import displays as ui
 from src.game import game_logic
 from src.core.engine_interface import LLMEngine
 from src.engines.engine_factory import get_engine
+from src.core.model_validator import ModelValidator
 
 
 @dataclass
@@ -57,6 +58,13 @@ class ComparisonMode:
                 model_config = vars(self.args).copy()
                 model_config['engine'] = engine_type
                 model_config['model'] = model_name
+
+                error, detail = ModelValidator.format_logits_requirement(engine_type, "Comparison mode")
+                if error:
+                    print(ui.color_text(f"\nError: {error}", cfg.COLOR_RED))
+                    print(ui.color_text(detail, cfg.COLOR_YELLOW))
+                    failed_models.append(model_name)
+                    continue
 
                 engine = get_engine(engine_type, model_name, model_config)
                 engine.load()

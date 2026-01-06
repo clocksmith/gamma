@@ -327,10 +327,11 @@ class StatisticsTracker:
         """Record a model swap"""
         self.stats.record_swap(self.round_counter, from_model, to_model, reason, token_before)
     
-    def finish(self):
-        """Finish tracking and show/save results"""
+    def finish(self, quiet: bool = False):
+        """Finish tracking and show/save results."""
         self.stats.end_time = time.time()
-        self.stats.print_summary()
-        
+        if not quiet:
+            self.stats.print_summary()
+
         if self.save_file:
             self.stats.save_to_file(self.save_file)

@@ -1,4 +1,5 @@
 import logging
+import warnings
 import time
 from typing import List, Tuple, Optional, Dict, Any
 import numpy as np
@@ -64,6 +65,10 @@ class PyTorchEngine(LLMEngine):
         except Exception as exc:
             logger.warning(f"PyTorchEngine: Failed to build cache class: {exc}")
             return None
+
+    def _is_cache_seq_length_error(self, exc: Exception) -> bool:
+        """Return True if the exception indicates a missing Cache API."""
+        return isinstance(exc, AttributeError) and "get_seq_length" in str(exc)
 
     def _extract_cache_key_tensor(self, cache: Any) -> Optional[torch.Tensor]:
         """Best-effort extraction of a key tensor for cache validation."""
@@ -141,6 +146,22 @@ class PyTorchEngine(LLMEngine):
         # Special handling for Gemma-3 which requires trust_remote_code
         if "gemma-3" in self.model_name.lower() or "gemma3" in self.model_name.lower():
             self.engine_config["trust_remote_code"] = True
+        warnings.filterwarnings(
+            "ignore",
+            message=".*torch_dtype.*deprecated.*",
+            category=UserWarning,
+        )
+        warnings.filterwarnings(
+            "ignore",
+            message=".*torch_dtype.*deprecated.*",
+            category=FutureWarning,
+        )
+        warnings.filterwarnings(
+            "ignore",
+            message=".*np\\.object.*",
+            category=FutureWarning,
+            module="keras\\.src\\.export\\.tf2onnx_lib",
+        )
         self._load_hf_tokenizer()
 
         # Check for unsupported GPU architectures (gfx1151, etc.)
@@ -216,8 +237,9 @@ class PyTorchEngine(LLMEngine):
         model_kwargs: Dict[str, Any] = {"device_map": device_map,
                                         "attn_implementation": self.engine_config.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
                                         "trust_remote_code": trust_remote, "low_cpu_mem_usage": low_cpu_mem, "token": token}
+        dtype_kwargs: Dict[str, Any] = {}
         if torch_dtype is not None:
-            model_kwargs["torch_dtype"] = torch_dtype
+            dtype_kwargs["dtype"] = torch_dtype
         if quantization_config_obj:
             model_kwargs["quantization_config"] = quantization_config_obj
 
@@ -253,13 +275,125 @@ class PyTorchEngine(LLMEngine):
                 model_kwargs_gemma3.pop('trust_remote_code', None)  # Remove if exists
                 
                 # Now add it back with the correct value
-                self.model = AutoModelForCausalLM.from_pretrained(
-                    self.model_name, 
-                    trust_remote_code=True,
-                    **model_kwargs_gemma3
-                )
+                try:
+                    with warnings.catch_warnings():
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*torch_dtype.*deprecated.*",
+                            category=UserWarning,
+                        )
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*torch_dtype.*deprecated.*",
+                            category=FutureWarning,
+                        )
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*`np.object`.*",
+                            category=FutureWarning,
+                        )
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*np\\.object.*",
+                            category=FutureWarning,
+                        )
+                        self.model = AutoModelForCausalLM.from_pretrained(
+                            self.model_name,
+                            trust_remote_code=True,
+                            **model_kwargs_gemma3,
+                            **dtype_kwargs
+                        )
+                except TypeError as exc:
+                    if "dtype" in str(exc) and torch_dtype is not None:
+                        dtype_kwargs = {"torch_dtype": torch_dtype}
+                        with warnings.catch_warnings():
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*torch_dtype.*deprecated.*",
+                                category=UserWarning,
+                            )
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*torch_dtype.*deprecated.*",
+                                category=FutureWarning,
+                            )
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*`np.object`.*",
+                                category=FutureWarning,
+                            )
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*np\\.object.*",
+                                category=FutureWarning,
+                            )
+                            self.model = AutoModelForCausalLM.from_pretrained(
+                                self.model_name,
+                                trust_remote_code=True,
+                                **model_kwargs_gemma3,
+                                **dtype_kwargs
+                            )
+                    else:
+                        raise
             else:
-                self.model = AutoModelForCausalLM.from_pretrained(self.model_name, **model_kwargs)
+                try:
+                    with warnings.catch_warnings():
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*torch_dtype.*deprecated.*",
+                            category=UserWarning,
+                        )
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*torch_dtype.*deprecated.*",
+                            category=FutureWarning,
+                        )
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*`np.object`.*",
+                            category=FutureWarning,
+                        )
+                        warnings.filterwarnings(
+                            "ignore",
+                            message=".*np\\.object.*",
+                            category=FutureWarning,
+                        )
+                        self.model = AutoModelForCausalLM.from_pretrained(
+                            self.model_name,
+                            **model_kwargs,
+                            **dtype_kwargs
+                        )
+                except TypeError as exc:
+                    if "dtype" in str(exc) and torch_dtype is not None:
+                        dtype_kwargs = {"torch_dtype": torch_dtype}
+                        with warnings.catch_warnings():
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*torch_dtype.*deprecated.*",
+                                category=UserWarning,
+                            )
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*torch_dtype.*deprecated.*",
+                                category=FutureWarning,
+                            )
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*`np.object`.*",
+                                category=FutureWarning,
+                            )
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*np\\.object.*",
+                                category=FutureWarning,
+                            )
+                            self.model = AutoModelForCausalLM.from_pretrained(
+                                self.model_name,
+                                **model_kwargs,
+                                **dtype_kwargs
+                            )
+                    else:
+                        raise
         except ImportError as e_imp:
             if "bitsandbytes" in str(e_imp).lower(): raise ImportError("BitsAndBytes needed. `pip install bitsandbytes`") from e_imp
             if "accelerate" in str(e_imp).lower(): raise ImportError("Accelerate needed. `pip install accelerate`") from e_imp
@@ -311,15 +445,7 @@ class PyTorchEngine(LLMEngine):
             try: ids_list = [int(token_ids)]
             except (ValueError, TypeError): raise TypeError(f"Unsupported token_ids type for decode: {type(token_ids)}")
         
-        decoded_text = self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
-        
-        # Clean up the decoded text by removing leading underscores
-        if decoded_text.startswith("▁"):  # Sentencepiece underscore
-            decoded_text = decoded_text[1:]
-        elif decoded_text.startswith("_"):
-            decoded_text = decoded_text[1:]
-        
-        return decoded_text
+        return self.tokenizer.decode(ids_list, skip_special_tokens=skip_special_tokens)
 
     def _softmax_torch(self, logits: torch.Tensor) -> torch.Tensor:
         """Apply softmax to torch tensors."""
@@ -365,12 +491,30 @@ class PyTorchEngine(LLMEngine):
             except Exception as exc:
                 if current_past_key_values is None:
                     raise
-                logger.warning(f"PyTorchEngine: KV cache failed; retrying without cache: {exc}")
-                current_past_key_values = None
-                self._kv_cache = None
-                outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=None,
-                                     output_attentions=output_attentions, output_hidden_states=output_hidden_states,
-                                     use_cache=use_kv_cache)
+                converted_cache = None
+                if self._is_cache_seq_length_error(exc) and not hasattr(current_past_key_values, "get_seq_length"):
+                    converted_cache = self._build_cache_class(current_past_key_values)
+                if converted_cache is not None:
+                    try:
+                        outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=converted_cache,
+                                             output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                             use_cache=use_kv_cache)
+                        current_past_key_values = converted_cache
+                        self._kv_cache = converted_cache
+                    except Exception as retry_exc:
+                        logger.warning(f"PyTorchEngine: KV cache failed; retrying without cache: {retry_exc}")
+                        current_past_key_values = None
+                        self._kv_cache = None
+                        outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=None,
+                                             output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                             use_cache=use_kv_cache)
+                else:
+                    logger.warning(f"PyTorchEngine: KV cache failed; retrying without cache: {exc}")
+                    current_past_key_values = None
+                    self._kv_cache = None
+                    outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=None,
+                                         output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                         use_cache=use_kv_cache)
         if use_kv_cache and hasattr(outputs, "past_key_values"): 
             self._kv_cache = outputs.past_key_values
         
@@ -817,12 +961,23 @@ class PyTorchEngine(LLMEngine):
 
     def truncate_kv_cache(self, max_len: int) -> bool:
         """Truncate KV cache to specified sequence length."""
-        if not self.has_kv_cache() or not isinstance(self._kv_cache, tuple):
+        if not self.has_kv_cache():
+            return False
+
+        cache_obj = self._kv_cache
+        if hasattr(cache_obj, "crop") and callable(getattr(cache_obj, "crop")):
+            try:
+                cache_obj.crop(max_len)
+                return True
+            except Exception as exc:
+                logger.warning(f"Failed to crop KV cache: {exc}")
+
+        if not isinstance(cache_obj, tuple):
             return False
 
         try:
             truncated = []
-            for layer_cache in self._kv_cache:
+            for layer_cache in cache_obj:
                 if isinstance(layer_cache, tuple) and len(layer_cache) >= 2:
                     k_cache, v_cache = layer_cache[0], layer_cache[1]
                     # Shape: (batch, num_heads, seq_len, head_dim)
