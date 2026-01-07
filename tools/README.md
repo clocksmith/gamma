@@ -85,13 +85,35 @@ Features: speed benchmarking, perplexity, coherence, diversity metrics, consiste
 ### 🎮 Mind Meld (Game Mode)
 
 #### `run_mind_meld_cli.py`
-Interactive Mind Meld CLI interface.
+Mind Meld CLI with YAML config support, presets, and model aliases.
+
 ```bash
-python tools/run_mind_meld_cli.py
+# Use presets
+python tools/run_mind_meld_cli.py --preset creative
+python tools/run_mind_meld_cli.py --preset debate --prompt "Is AI good?"
+
+# Model aliases (shorter than full paths)
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend dynamic
+
+# Persona binding
+python tools/run_mind_meld_cli.py gemma-1b@Optimist gemma-2b@Skeptic
+
+# Load YAML config
+python tools/run_mind_meld_cli.py configs/mind_meld/example-custom.yaml
+
+# Utility commands
+python tools/run_mind_meld_cli.py --list-presets
+python tools/run_mind_meld_cli.py --list-aliases
+python tools/run_mind_meld_cli.py --list-models
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --show-config
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --save-config my-setup.yaml
 ```
-Supports flags like `--prompt-chat-template`, `--no-step-delay`, `--summary-only`, `--max-sentences`, `--stop-text`, and `--repetition-penalty`.
-Use `--order-neutral` to reduce swap-order sensitivity (alias for `--use-weighted-average`).
-Use `--prompt-system` to add a system message or `--no-default-system` to disable the default system prompt.
+
+**Blend modes:** `hard`, `soft`, `dynamic`, `smooth`, or `0-100` (strength).
+
+**Presets:** `creative`, `analytical`, `debate`, `brainstorm`, `experimental`, `minimal`.
+
+See `configs/mind_meld/README.md` for config file documentation.
 
 #### `quick_mind_meld_test.py`
 Quick test of Mind Meld functionality.

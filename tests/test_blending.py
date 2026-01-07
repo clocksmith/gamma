@@ -520,6 +520,126 @@ class TestLogitBlender(unittest.TestCase):
             self.assertIsInstance(stats, dict)
 
 
+class TestVocabMismatchFix(unittest.TestCase):
+    """Tests for handling different vocabulary sizes between models."""
+
+    def setUp(self):
+        """Set up test blender with filtering disabled."""
+        config = BlendingConfig(top_k_blend=None, top_p_blend=None)
+        self.blender = LogitBlender(config=config, verbose=False)
+
+    def test_blend_different_vocab_sizes_1d(self):
+        """Should blend 1D arrays with different vocab sizes."""
+        logits1 = np.random.randn(32000)  # Smaller vocab
+        logits2 = np.random.randn(64000)  # Larger vocab
+
+        result, stats = self.blender.blend([logits1, logits2])
+
+        # Result should have the larger vocab size
+        self.assertEqual(result.shape[0], 64000)
+
+    def test_blend_different_vocab_sizes_2d(self):
+        """Should blend 2D arrays with different vocab sizes."""
+        logits1 = np.random.randn(1, 32000)  # batch=1, smaller vocab
+        logits2 = np.random.randn(1, 64000)  # batch=1, larger vocab
+
+        result, stats = self.blender.blend([logits1, logits2])
+
+        # Result should have the larger vocab size
+        self.assertEqual(result.shape, (1, 64000))
+
+    def test_ensemble_voting_2d_arrays(self):
+        """Ensemble voting should handle 2D arrays without index errors."""
+        # This was the original bug - 2D arrays caused index out of bounds
+        logits1 = np.random.randn(1, 32000)
+        logits2 = np.random.randn(1, 32000)
+
+        # Should not raise IndexError
+        result = self.blender._ensemble_voting_blend([logits1, logits2])
+
+        self.assertIsInstance(result, np.ndarray)
+        self.assertEqual(result.shape, (1, 32000))
+
+    def test_ensemble_voting_different_vocab_2d(self):
+        """Ensemble voting should handle 2D arrays with different vocab sizes."""
+        logits1 = np.random.randn(1, 32000)
+        logits2 = np.random.randn(1, 64000)
+
+        # Reshape to same vocab first
+        target_shape = self.blender._get_target_shape([logits1, logits2])
+        logits1_reshaped = self.blender._reshape_logits(logits1, target_shape)
+        logits2_reshaped = self.blender._reshape_logits(logits2, target_shape)
+
+        # Should not raise IndexError
+        result = self.blender._ensemble_voting_blend([logits1_reshaped, logits2_reshaped])
+
+        self.assertEqual(result.shape, (1, 64000))
+
+    def test_top_k_filtering_2d(self):
+        """Top-k filtering should handle 2D arrays."""
+        logits = np.random.randn(1, 1000)
+
+        result = self.blender._top_k_filtering(logits, k=10)
+
+        self.assertEqual(result.shape, (1, 1000))
+        # Should have exactly k non-filtered values
+        not_filtered = np.sum(result > -1e8)
+        self.assertEqual(not_filtered, 10)
+
+    def test_top_p_filtering_2d(self):
+        """Top-p filtering should handle 2D arrays."""
+        logits = np.random.randn(1, 1000)
+
+        result = self.blender._top_p_filtering(logits, p=0.9)
+
+        self.assertEqual(result.shape, (1, 1000))
+
+    def test_reshape_logits_padding(self):
+        """Should pad smaller logits to target shape."""
+        logits = np.array([1.0, 2.0, 3.0])
+        target_shape = (5,)
+
+        result = self.blender._reshape_logits(logits, target_shape)
+
+        self.assertEqual(result.shape, (5,))
+        # Padded values should be very low
+        self.assertLess(result[3], -1e8)
+        self.assertLess(result[4], -1e8)
+
+    def test_reshape_logits_truncation(self):
+        """Should truncate larger logits to target shape."""
+        logits = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+        target_shape = (3,)
+
+        result = self.blender._reshape_logits(logits, target_shape)
+
+        self.assertEqual(result.shape, (3,))
+        np.testing.assert_array_equal(result, [1.0, 2.0, 3.0])
+
+    def test_reshape_logits_2d_padding(self):
+        """Should pad 2D logits along vocab dimension."""
+        logits = np.array([[1.0, 2.0, 3.0]])
+        target_shape = (1, 5)
+
+        result = self.blender._reshape_logits(logits, target_shape)
+
+        self.assertEqual(result.shape, (1, 5))
+        # Original values preserved
+        np.testing.assert_array_equal(result[0, :3], [1.0, 2.0, 3.0])
+
+    def test_full_blend_pipeline_vocab_mismatch(self):
+        """Full blend should work end-to-end with vocab mismatch."""
+        # Simulate Gemma 1B (256k vocab) vs GPT-2 (50k vocab) scenario
+        logits_gemma = np.random.randn(1, 256000)
+        logits_gpt2 = np.random.randn(1, 50257)
+
+        # Should complete without errors
+        result, stats = self.blender.blend([logits_gemma, logits_gpt2])
+
+        self.assertEqual(result.shape, (1, 256000))
+        self.assertEqual(stats["num_models"], 2)
+
+
 def run_tests():
     """Run all blending tests."""
     print("=" * 80)

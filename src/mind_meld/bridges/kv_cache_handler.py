@@ -946,7 +946,16 @@ class TokenizerAlignedTranslation(TranslationStrategy):
 
     This is more robust than shape-only translation when models have
     different vocabularies but similar architectures.
+
+    Optimized for long sequences using:
+    - Batch token decoding
+    - Pre-computed source spans with binary search
+    - Cached offsets to avoid recomputation
     """
+
+    # Class-level cache for tokenizer offsets
+    _offset_cache: Dict[Tuple[int, ...], List[Tuple[int, int]]] = {}
+    _cache_max_size: int = 100
 
     def __init__(
         self,
@@ -972,8 +981,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
         """
         Compute mapping from target token positions to source token positions.
 
-        Uses character-level alignment: for each target token, find the source
-        token(s) that cover the same character span.
+        Uses character-level alignment with O(n log m) complexity via binary search
+        instead of O(n*m) brute force for long sequences.
 
         Returns:
             List of source indices for each target position.
@@ -984,41 +993,215 @@ class TokenizerAlignedTranslation(TranslationStrategy):
             return list(range(min(len(source_tokens), len(target_tokens))))
 
         try:
-            # Decode tokens to get character spans
-            source_text = self.source_tokenizer.decode(source_tokens)
-            target_text = self.target_tokenizer.decode(target_tokens)
-
-            # Get character offsets for each token
-            source_offsets = self._get_token_offsets(
-                self.source_tokenizer, source_tokens, source_text
+            # Get character offsets for each token (uses caching for efficiency)
+            source_offsets = self._get_token_offsets_optimized(
+                self.source_tokenizer, source_tokens
             )
-            target_offsets = self._get_token_offsets(
-                self.target_tokenizer, target_tokens, target_text
+            target_offsets = self._get_token_offsets_optimized(
+                self.target_tokenizer, target_tokens
             )
 
-            # Map each target token to best matching source token
-            alignment = []
-            for t_start, t_end in target_offsets:
-                best_source_idx = -1
-                best_overlap = 0
+            # For long sequences, use optimized binary search alignment
+            if len(source_tokens) > 100 or len(target_tokens) > 100:
+                return self._compute_alignment_binary_search(
+                    source_offsets, target_offsets
+                )
 
-                for s_idx, (s_start, s_end) in enumerate(source_offsets):
-                    # Calculate overlap between source and target spans
-                    overlap_start = max(t_start, s_start)
-                    overlap_end = min(t_end, s_end)
-                    overlap = max(0, overlap_end - overlap_start)
-
-                    if overlap > best_overlap:
-                        best_overlap = overlap
-                        best_source_idx = s_idx
-
-                alignment.append(best_source_idx)
-
-            return alignment
+            # For short sequences, use simple O(n*m) approach
+            return self._compute_alignment_simple(source_offsets, target_offsets)
 
         except Exception as exc:
             logger.debug(f"Token alignment failed: {exc}, using fallback")
             return list(range(min(len(source_tokens), len(target_tokens))))
+
+    def _get_token_offsets_optimized(
+        self,
+        tokenizer: Any,
+        token_ids: List[int],
+    ) -> List[Tuple[int, int]]:
+        """
+        Get character offsets for each token with caching and batch decoding.
+
+        Optimizations:
+        - Cache results by token sequence hash
+        - Use batch decoding when available
+        - Pre-allocate offset list
+        """
+        # Check cache first
+        cache_key = tuple(token_ids[:50])  # Use prefix as key to limit size
+        if cache_key in self._offset_cache:
+            cached = self._offset_cache[cache_key]
+            if len(cached) == len(token_ids):
+                return cached
+
+        # Try batch decoding first (much faster for long sequences)
+        offsets = self._batch_decode_offsets(tokenizer, token_ids)
+        if offsets is not None:
+            self._cache_offsets(cache_key, offsets)
+            return offsets
+
+        # Fallback to individual token decoding
+        offsets = []
+        pos = 0
+
+        # Pre-allocate for efficiency
+        offsets = [(0, 0)] * len(token_ids)
+
+        for idx, token_id in enumerate(token_ids):
+            try:
+                token_text = tokenizer.decode([token_id])
+                token_len = len(token_text)
+                offsets[idx] = (pos, pos + token_len)
+                pos += token_len
+            except Exception:
+                # Fallback for special tokens
+                offsets[idx] = (pos, pos + 1)
+                pos += 1
+
+        self._cache_offsets(cache_key, offsets)
+        return offsets
+
+    def _batch_decode_offsets(
+        self,
+        tokenizer: Any,
+        token_ids: List[int]
+    ) -> Optional[List[Tuple[int, int]]]:
+        """
+        Try to get offsets using batch decoding (tokenizer-specific).
+
+        Some tokenizers support offset_mapping or similar features that
+        provide character spans directly.
+        """
+        # Try HuggingFace tokenizer's offset_mapping
+        if hasattr(tokenizer, 'encode_plus'):
+            try:
+                # Decode all tokens to get full text
+                full_text = tokenizer.decode(token_ids)
+                # Re-encode with offset_mapping
+                encoding = tokenizer.encode_plus(
+                    full_text,
+                    return_offsets_mapping=True,
+                    add_special_tokens=False
+                )
+                offset_mapping = encoding.get('offset_mapping')
+                if offset_mapping and len(offset_mapping) == len(token_ids):
+                    return [(start, end) for start, end in offset_mapping]
+            except Exception:
+                pass
+
+        # Try batch decode and reconstruct offsets
+        if hasattr(tokenizer, 'batch_decode'):
+            try:
+                # Decode each token individually but in a batch
+                token_texts = tokenizer.batch_decode([[tid] for tid in token_ids])
+                offsets = []
+                pos = 0
+                for token_text in token_texts:
+                    token_len = len(token_text)
+                    offsets.append((pos, pos + token_len))
+                    pos += token_len
+                return offsets
+            except Exception:
+                pass
+
+        return None
+
+    def _cache_offsets(
+        self,
+        cache_key: Tuple[int, ...],
+        offsets: List[Tuple[int, int]]
+    ) -> None:
+        """Cache offsets with LRU-like eviction."""
+        if len(self._offset_cache) >= self._cache_max_size:
+            # Remove oldest entry (simple FIFO eviction)
+            try:
+                oldest_key = next(iter(self._offset_cache))
+                del self._offset_cache[oldest_key]
+            except StopIteration:
+                pass
+        self._offset_cache[cache_key] = offsets
+
+    def _compute_alignment_binary_search(
+        self,
+        source_offsets: List[Tuple[int, int]],
+        target_offsets: List[Tuple[int, int]]
+    ) -> List[int]:
+        """
+        Compute alignment using binary search for O(n log m) complexity.
+
+        For each target token, binary search to find overlapping source tokens.
+        """
+        import bisect
+
+        if not source_offsets:
+            return [-1] * len(target_offsets)
+
+        # Extract source start positions for binary search
+        source_starts = [s[0] for s in source_offsets]
+        source_ends = [s[1] for s in source_offsets]
+
+        alignment = []
+        for t_start, t_end in target_offsets:
+            if t_end <= t_start:
+                alignment.append(-1)
+                continue
+
+            # Binary search: find source tokens that might overlap
+            # A source token overlaps if source_start < t_end AND source_end > t_start
+
+            # Find rightmost source with start < t_end
+            right_bound = bisect.bisect_left(source_starts, t_end)
+
+            # Search backwards from right_bound to find best overlap
+            best_source_idx = -1
+            best_overlap = 0
+
+            # Only check a window of candidates (optimization for clustered tokens)
+            search_start = max(0, right_bound - 10)
+            search_end = min(len(source_offsets), right_bound + 1)
+
+            for s_idx in range(search_start, search_end):
+                s_start, s_end = source_offsets[s_idx]
+
+                # Check for overlap
+                if s_start >= t_end or s_end <= t_start:
+                    continue
+
+                overlap_start = max(t_start, s_start)
+                overlap_end = min(t_end, s_end)
+                overlap = overlap_end - overlap_start
+
+                if overlap > best_overlap:
+                    best_overlap = overlap
+                    best_source_idx = s_idx
+
+            alignment.append(best_source_idx)
+
+        return alignment
+
+    def _compute_alignment_simple(
+        self,
+        source_offsets: List[Tuple[int, int]],
+        target_offsets: List[Tuple[int, int]]
+    ) -> List[int]:
+        """Simple O(n*m) alignment for short sequences."""
+        alignment = []
+        for t_start, t_end in target_offsets:
+            best_source_idx = -1
+            best_overlap = 0
+
+            for s_idx, (s_start, s_end) in enumerate(source_offsets):
+                overlap_start = max(t_start, s_start)
+                overlap_end = min(t_end, s_end)
+                overlap = max(0, overlap_end - overlap_start)
+
+                if overlap > best_overlap:
+                    best_overlap = overlap
+                    best_source_idx = s_idx
+
+            alignment.append(best_source_idx)
+
+        return alignment
 
     def _get_token_offsets(
         self,
@@ -1026,22 +1209,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
         token_ids: List[int],
         text: str
     ) -> List[Tuple[int, int]]:
-        """Get character offsets for each token."""
-        offsets = []
-        pos = 0
-
-        for token_id in token_ids:
-            try:
-                token_text = tokenizer.decode([token_id])
-                token_len = len(token_text)
-                offsets.append((pos, pos + token_len))
-                pos += token_len
-            except Exception:
-                # Fallback for special tokens
-                offsets.append((pos, pos + 1))
-                pos += 1
-
-        return offsets
+        """Get character offsets for each token (legacy method for compatibility)."""
+        return self._get_token_offsets_optimized(tokenizer, token_ids)
 
     def translate(self, source_cache: KVCache, target_config: Any) -> Optional[KVCache]:
         """Translate KV cache with tokenizer alignment."""
@@ -1203,7 +1372,7 @@ class ProjectionTranslation(TranslationStrategy):
             # Dimensionality expansion: pad with orthogonal vectors
             random_matrix = np.random.randn(target_dim, target_dim).astype(np.float32)
             q, _ = np.linalg.qr(random_matrix)
-            projection = q[:source_dim, :].T  # Shape: (source_dim, target_dim)
+            projection = q[:, :source_dim].T  # Shape: (source_dim, target_dim)
 
         # Normalize to preserve scale
         projection = projection / np.sqrt(np.sum(projection ** 2, axis=0, keepdims=True) + 1e-8)

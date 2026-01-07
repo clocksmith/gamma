@@ -225,6 +225,7 @@ class MeldEngine:
         self._prompt_chat_template = getattr(args, "prompt_chat_template", None)
         self._shared_chat_template = getattr(args, "shared_chat_template", None)
         self._prompt_system = getattr(args, "prompt_system", None)
+        self._personas: Optional[List[str]] = getattr(args, "personas", None)
         self._use_default_system = not bool(getattr(args, "no_default_system", False))
         self._chat_template_engine = self._select_chat_template_engine()
         self._raw_prompt = ""
@@ -665,14 +666,29 @@ class MeldEngine:
                 add_special_tokens=add_special_tokens,
             )
 
+    def _get_persona_for_engine(self, engine: LLMEngine) -> Optional[str]:
+        """Get the persona/system prompt for a specific engine."""
+        # If per-model personas are defined, use them
+        if self._personas:
+            try:
+                engine_idx = self.models.index(engine)
+                if engine_idx < len(self._personas):
+                    return self._personas[engine_idx]
+            except (ValueError, IndexError):
+                pass
+        # Fall back to shared system prompt
+        return self._prompt_system
+
     def _format_prompt_with_engine(
         self,
         prompt: str,
         engine: LLMEngine,
     ) -> Tuple[str, bool]:
+        # Use per-model persona if available, else shared system prompt
+        persona = self._get_persona_for_engine(engine)
         system_prompt = (
-            self._prompt_system
-            if self._prompt_system is not None
+            persona
+            if persona is not None
             else (cfg.DEFAULT_SYSTEM_PROMPT if self._use_default_system else None)
         )
         if system_prompt is not None and not str(system_prompt).strip():
@@ -1241,9 +1257,11 @@ class MeldEngine:
         """Apply a chat template to the prompt when configured."""
         if not prompt or not self._should_apply_chat_template(prompt):
             return prompt
+        # Use first model's persona if per-model personas are defined
+        first_persona = self._personas[0] if self._personas else self._prompt_system
         system_prompt = (
-            self._prompt_system
-            if self._prompt_system is not None
+            first_persona
+            if first_persona is not None
             else (cfg.DEFAULT_SYSTEM_PROMPT if self._use_default_system else None)
         )
         if system_prompt is not None and not str(system_prompt).strip():

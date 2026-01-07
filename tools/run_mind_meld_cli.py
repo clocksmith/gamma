@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
 """
 Mind Meld CLI - Standalone interface for Mind Meld mode
-Allows melding multiple LLM models with various swap strategies and configurations.
+
+Supports multiple configuration methods:
+- YAML config files: mind-meld config.yaml
+- Presets: mind-meld --preset creative
+- Model aliases: mind-meld gemma-1b gemma-2b
+- Persona binding: mind-meld gemma-1b@Optimist gemma-2b@Skeptic
+- Simplified blend: mind-meld --blend dynamic
+- CLI flags that override config values
 """
 
 import argparse
+import json
 import sys
 import os
-from typing import List, Tuple, Optional, Dict, Any
-from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import List, Optional, Dict, Any
 
 # Add project root to the path to allow importing from src
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -17,962 +26,765 @@ from src.core.engine_interface import LLMEngine
 from src.ui import displays as ui
 from src.core import config as cfg
 from src.mind_meld.mode import MindMeldMode
-from src.mind_meld.core.config import SwapStrategy, TranslationMode, VocabularyStrategy
-from src.engines.engine_factory import get_engine, SUPPORTED_ENGINES
+from src.mind_meld.core.config import SwapStrategy
+from src.mind_meld.cli.config import (
+    MindMeldCLIConfig,
+    ModelSpec,
+    BlendConfig,
+    resolve_config,
+    PRESETS_DIR,
+)
+from src.engines.engine_factory import get_engine
 from src.core.model_validator import ModelValidator, print_validation_result
 
 
-@dataclass
-class MindMeldConfig:
-    """Configuration for Mind Meld session"""
-    models: List[Tuple[str, str]] = field(default_factory=list)  # [(engine, model_name), ...]
-    swap_strategy: SwapStrategy = SwapStrategy.PATTERN_BASED
-    translation_mode: TranslationMode = TranslationMode.INTERSECTION
-    vocabulary_strategy: VocabularyStrategy = VocabularyStrategy.RESTRICT_TO_INTERSECTION
-    
-    # Generation parameters
-    temperature: float = 0.7
-    top_k: int = 8
-    top_p: float = 0.95
-    steps: int = 20
-    repetition_penalty: float = 1.1
-    
-    # Swap strategy specific settings
-    fixed_interval: int = 8  # For FIXED_INTERVAL strategy
-    confidence_threshold: float = 0.5  # For CONFIDENCE_BASED strategy
-    perplexity_threshold: float = 50.0  # For PERPLEXITY_BASED strategy
-    
-    # Display options
-    verbose: bool = False
-    show_attention: bool = True
-    initial_prompt: str = "In a world where two minds are better than one,"
-    no_step_delay: bool = False
-    summary_only: bool = False
-    stop_text: List[str] = field(default_factory=list)
-    max_sentences: Optional[int] = None
-    
-    # Enhanced features
-    use_enhanced: bool = False
-    use_blending: bool = False
-    use_weighted_average: bool = False
-    order_neutral: bool = False
-    use_abe: bool = False  # Agreement-Based Ensembling
-    use_stats_tracker: bool = False
-    blend_strategy: str = "weighted_average"
-    alignment_strategy: str = "semantic"
-    stats_file: Optional[str] = None
-    meld_diagnostics: bool = False
-    allow_kv_cache_translation: bool = False
-    force_kv_cache_translation: bool = False
-    translate_logits: bool = False
-    soft_swap: bool = False
-    soft_swap_weight: float = 1.5
-    use_sparse_ot: bool = False
-    shared_chat_template: Optional[bool] = None
-    headless: bool = False
-    prompt_chat_template: Optional[bool] = None
-    prompt_system: Optional[str] = None
-    no_default_system: bool = False
-
-
 class MindMeldCLI:
-    """Interactive CLI for Mind Meld mode"""
-    
-    # Popular model combinations
-    PRESETS = {
-        "gemma_small": [
-            ("pytorch", "google/gemma-3-1b-it"),
-            ("pytorch", "google/gemma-2-2b-it")
-        ],
-        "gemma_mixed": [
-            ("pytorch", "google/gemma-3-1b-it"),
-            ("pytorch", "google/gemma-2-2b-it"),
-            ("pytorch", "google/gemma-2b-it")
-        ],
-        "gemma_2b_variants": [
-            ("pytorch", "google/gemma-2b"),
-            ("pytorch", "google/gemma-2b-it")
-        ],
-        "gemma3_family": [
-            ("pytorch", "google/gemma-3-1b"),
-            ("pytorch", "google/gemma-3-1b-it")
-        ]
+    """Mind Meld CLI with YAML config support."""
+
+    STRATEGY_MAP = {
+        "pattern": SwapStrategy.PATTERN_BASED,
+        "pattern_based": SwapStrategy.PATTERN_BASED,
+        "fixed": SwapStrategy.FIXED_INTERVAL,
+        "fixed_interval": SwapStrategy.FIXED_INTERVAL,
+        "round_robin": SwapStrategy.ROUND_ROBIN,
+        "random": SwapStrategy.RANDOM,
+        "confidence": SwapStrategy.CONFIDENCE_BASED,
+        "confidence_based": SwapStrategy.CONFIDENCE_BASED,
+        "perplexity": SwapStrategy.PERPLEXITY_BASED,
+        "perplexity_based": SwapStrategy.PERPLEXITY_BASED,
+        "attention": SwapStrategy.ATTENTION_GUIDED,
+        "attention_guided": SwapStrategy.ATTENTION_GUIDED,
+        "weighted": SwapStrategy.WEIGHTED_BLEND,
+        "weighted_blend": SwapStrategy.WEIGHTED_BLEND,
+        "semantic": SwapStrategy.SEMANTIC_SIMILARITY,
+        "semantic_similarity": SwapStrategy.SEMANTIC_SIMILARITY,
     }
-    
+
+    BLEND_MODES = ["hard", "soft", "dynamic", "smooth"]
+
     def __init__(self):
-        self.config = MindMeldConfig()
+        self.config: Optional[MindMeldCLIConfig] = None
 
-    def _list_available_models(self):
-        """List available models for mind meld."""
-        print("="*70)
+    def parse_args(self) -> argparse.Namespace:
+        """Parse command-line arguments."""
+        parser = argparse.ArgumentParser(
+            description="Mind Meld CLI - meld multiple LLMs together",
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            epilog=self._get_epilog(),
+        )
+
+        # Positional: either config file or model specs
+        parser.add_argument(
+            "models_or_config",
+            nargs="*",
+            metavar="MODEL_OR_CONFIG",
+            help="Model specs (engine:model or alias), or path to YAML config file",
+        )
+
+        # Config options
+        config_group = parser.add_argument_group("Configuration")
+        config_group.add_argument(
+            "--preset", "-p",
+            type=str,
+            choices=self._list_presets(),
+            help="Load a preset configuration",
+        )
+        config_group.add_argument(
+            "--config", "-c",
+            type=str,
+            metavar="FILE",
+            help="Load configuration from YAML file",
+        )
+        config_group.add_argument(
+            "--save-config",
+            type=str,
+            metavar="FILE",
+            help="Save final configuration to YAML file and exit",
+        )
+
+        # Model options
+        model_group = parser.add_argument_group("Models")
+        model_group.add_argument(
+            "--models", "-m",
+            type=str,
+            nargs="+",
+            metavar="SPEC",
+            help="Model specs: engine:model, alias, or model@persona",
+        )
+
+        # Blend options (simplified)
+        blend_group = parser.add_argument_group("Blending")
+        blend_group.add_argument(
+            "--blend", "-b",
+            type=str,
+            metavar="MODE_OR_STRENGTH",
+            help="Blend mode (hard/soft/dynamic/smooth) or strength (0-100)",
+        )
+        blend_group.add_argument(
+            "--blend-strategy",
+            type=str,
+            choices=[
+                "weighted_average", "confidence_weighted", "dynamic_weighted",
+                "attention_weighted", "learned", "hierarchical", "ensemble_voting"
+            ],
+            help="Detailed blending strategy",
+        )
+
+        # Strategy options
+        strategy_group = parser.add_argument_group("Swap Strategy")
+        strategy_group.add_argument(
+            "--strategy", "-s",
+            type=str,
+            choices=list(self.STRATEGY_MAP.keys()),
+            help="Model swap strategy",
+        )
+        strategy_group.add_argument(
+            "--interval", "-i",
+            type=int,
+            help="Token interval for fixed swap strategy",
+        )
+
+        # Generation options
+        gen_group = parser.add_argument_group("Generation")
+        gen_group.add_argument("--prompt", type=str, help="Initial prompt")
+        gen_group.add_argument("--steps", "-n", type=int, help="Number of generation steps")
+        gen_group.add_argument("--temperature", "-t", type=float, help="Generation temperature")
+        gen_group.add_argument("--top-k", type=int, help="Top-K sampling")
+        gen_group.add_argument("--top-p", type=float, help="Top-P (nucleus) sampling")
+        gen_group.add_argument("--repetition-penalty", type=float, help="Repetition penalty")
+        gen_group.add_argument("--max-sentences", type=int, help="Stop after N sentences")
+        gen_group.add_argument("--stop-text", action="append", default=[], help="Stop on text (repeatable)")
+
+        # Persona options
+        persona_group = parser.add_argument_group("Personas")
+        persona_group.add_argument(
+            "--persona",
+            action="append",
+            dest="personas",
+            metavar="TEXT",
+            help="Per-model persona/system prompt (repeat for each model)",
+        )
+        persona_group.add_argument(
+            "--prompt-system",
+            type=str,
+            help="Global system prompt",
+        )
+        persona_group.add_argument(
+            "--prompt-chat-template",
+            action=argparse.BooleanOptionalAction,
+            default=None,
+            help="Use chat template for prompt formatting",
+        )
+        persona_group.add_argument(
+            "--no-default-system",
+            action="store_true",
+            help="Disable default system prompt",
+        )
+
+        # Output options
+        output_group = parser.add_argument_group("Output")
+        output_group.add_argument(
+            "--output", "-o",
+            type=str,
+            choices=["terminal", "json", "markdown"],
+            help="Output format",
+        )
+        output_group.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+        output_group.add_argument("--summary-only", action="store_true", help="Show only final summary")
+        output_group.add_argument("--headless", action="store_true", help="Run without interactive output")
+        output_group.add_argument("--no-step-delay", action="store_true", help="Disable step delay")
+        output_group.add_argument(
+            "--show-attention",
+            action=argparse.BooleanOptionalAction,
+            default=None,
+            help="Toggle attention display",
+        )
+        output_group.add_argument("--stats-file", type=str, help="Save stats to JSON file")
+        output_group.add_argument("--meld-diagnostics", action="store_true", help="Show meld diagnostics")
+
+        # Advanced options
+        adv_group = parser.add_argument_group("Advanced")
+        adv_group.add_argument("--translate-logits", action="store_true", help="Enable logit translation")
+        adv_group.add_argument("--allow-kv-cache-translation", action="store_true", help="Allow KV cache translation")
+        adv_group.add_argument("--force-kv-cache-translation", action="store_true", help="Force KV cache translation")
+        adv_group.add_argument("--use-sparse-ot", action="store_true", help="Use sparse OT projection")
+        adv_group.add_argument(
+            "--shared-chat-template",
+            action=argparse.BooleanOptionalAction,
+            default=None,
+            help="Share chat template across models",
+        )
+        adv_group.add_argument("--alignment-strategy", type=str, help="Vocabulary alignment strategy")
+        adv_group.add_argument("--use-abe", action="store_true", help="Enable Agreement-Based Ensembling")
+        adv_group.add_argument("--use-stats-tracker", action="store_true", help="Track model statistics")
+        adv_group.add_argument("--use-enhanced", action="store_true", help="Enable all enhanced features")
+        adv_group.add_argument("--use-weighted-average", action="store_true", help="Use weighted average ensemble")
+        adv_group.add_argument("--order-neutral", action="store_true", help="Order-neutral blending")
+        adv_group.add_argument("--soft-swap", action="store_true", help="Enable soft swapping")
+        adv_group.add_argument("--soft-swap-weight", type=float, help="Soft swap weight multiplier")
+        adv_group.add_argument("--use-blending", action="store_true", help="Enable distribution blending")
+
+        # Utility options
+        util_group = parser.add_argument_group("Utilities")
+        util_group.add_argument("--list-models", action="store_true", help="List available models")
+        util_group.add_argument("--list-presets", action="store_true", help="List available presets")
+        util_group.add_argument("--list-aliases", action="store_true", help="List model aliases")
+        util_group.add_argument("--show-config", action="store_true", help="Show resolved config and exit")
+
+        return parser.parse_args()
+
+    def _list_presets(self) -> List[str]:
+        """Get list of available presets."""
+        return MindMeldCLIConfig.list_presets()
+
+    def _get_epilog(self) -> str:
+        """Generate help epilog with examples."""
+        return """
+Examples:
+  # Load a config file directly
+  %(prog)s my-config.yaml
+
+  # Use a preset
+  %(prog)s --preset creative --prompt "Once upon a time"
+
+  # Quick models with aliases
+  %(prog)s gemma-1b gemma-2b --blend dynamic
+
+  # Models with personas
+  %(prog)s gemma-1b@Optimist gemma-2b@Skeptic --preset debate
+
+  # Override preset options
+  %(prog)s --preset analytical --steps 100 --temperature 0.3
+
+  # Full model spec with blending
+  %(prog)s pytorch:google/gemma-3-1b-it pytorch:google/gemma-2-2b-it \\
+      --blend smooth --strategy confidence
+
+  # Save config for later
+  %(prog)s gemma-1b gemma-2b --blend dynamic --save-config my-setup.yaml
+
+Model Aliases (built-in):
+  gemma-1b    -> pytorch:google/gemma-3-1b-it
+  gemma-2b    -> pytorch:google/gemma-2-2b-it
+  gemma-4b    -> pytorch:google/gemma-3-4b-it
+  phi-mini    -> pytorch:microsoft/Phi-3.5-mini-instruct
+  mistral-7b  -> pytorch:mistralai/Mistral-7B-v0.1
+
+Blend Modes:
+  hard     No blending, pure model switching
+  soft     Gentle blending with soft swaps
+  dynamic  Adaptive blending based on confidence
+  smooth   Maximum interpolation between models
+  0-100    Numeric blend strength (0=switching, 100=full blend)
+
+Presets: """ + ", ".join(self._list_presets())
+
+    def resolve_configuration(self, args: argparse.Namespace) -> MindMeldCLIConfig:
+        """Resolve final configuration from all sources."""
+        config_path = None
+        preset = args.preset
+
+        # Check if first positional arg is a YAML file
+        if args.models_or_config and len(args.models_or_config) == 1:
+            potential_config = args.models_or_config[0]
+            if potential_config.endswith(('.yaml', '.yml')) and os.path.exists(potential_config):
+                config_path = potential_config
+                args.models_or_config = []
+
+        # Build CLI overrides dict
+        overrides = self._build_overrides(args)
+
+        # Resolve config
+        config = resolve_config(
+            config_path=config_path or args.config,
+            preset=preset,
+            cli_overrides=overrides,
+        )
+
+        # Parse models from positional args or --models flag
+        model_specs = args.models_or_config or args.models or []
+        if model_specs:
+            config.models = [
+                ModelSpec.parse(spec, config.aliases) for spec in model_specs
+            ]
+
+        # Apply --persona flags to models
+        if args.personas:
+            for i, persona in enumerate(args.personas):
+                if i < len(config.models):
+                    config.models[i].persona = persona
+
+        return config
+
+    def _build_overrides(self, args: argparse.Namespace) -> Dict[str, Any]:
+        """Build override dict from CLI args."""
+        overrides: Dict[str, Any] = {}
+
+        # Simple fields
+        if args.prompt:
+            overrides["prompt"] = args.prompt
+        if args.strategy:
+            overrides["strategy"] = args.strategy
+        if args.interval:
+            overrides["interval"] = args.interval
+        if args.prompt_system:
+            overrides["prompt_system"] = args.prompt_system
+        if args.prompt_chat_template is not None:
+            overrides["prompt_chat_template"] = args.prompt_chat_template
+        if args.no_default_system:
+            overrides["no_default_system"] = True
+        if args.stop_text:
+            overrides["stop_text"] = args.stop_text
+        if args.max_sentences:
+            overrides["max_sentences"] = args.max_sentences
+        if args.no_step_delay:
+            overrides["no_step_delay"] = True
+
+        # Blend options
+        blend = {}
+        if args.blend:
+            blend_val = args.blend.lower()
+            if blend_val in self.BLEND_MODES:
+                blend["mode"] = blend_val
+                blend["enabled"] = blend_val != "hard"
+            elif blend_val.isdigit():
+                strength = int(blend_val)
+                blend["strength"] = max(0, min(100, strength))
+                blend["enabled"] = strength > 0
+        if args.blend_strategy:
+            blend["strategy"] = args.blend_strategy
+        if args.soft_swap:
+            blend["soft_swap"] = True
+        if args.soft_swap_weight:
+            blend["soft_swap_weight"] = args.soft_swap_weight
+        if args.order_neutral:
+            blend["order_neutral"] = True
+        if args.use_blending:
+            blend["enabled"] = True
+        if args.use_weighted_average:
+            blend["enabled"] = True
+            blend["strategy"] = "weighted_average"
+        if blend:
+            overrides["blend"] = blend
+
+        # Generation options
+        generation = {}
+        if args.steps:
+            generation["steps"] = args.steps
+        if args.temperature:
+            generation["temperature"] = args.temperature
+        if args.top_k:
+            generation["top_k"] = args.top_k
+        if args.top_p:
+            generation["top_p"] = args.top_p
+        if args.repetition_penalty:
+            generation["repetition_penalty"] = args.repetition_penalty
+        if generation:
+            overrides["generation"] = generation
+
+        # Output options
+        output = {}
+        if args.output:
+            output["format"] = args.output
+        if args.verbose:
+            output["verbose"] = True
+        if args.summary_only:
+            output["summary_only"] = True
+        if args.headless:
+            output["headless"] = True
+        if args.show_attention is not None:
+            output["show_attention"] = args.show_attention
+        if args.stats_file:
+            output["stats_file"] = args.stats_file
+        if args.meld_diagnostics:
+            output["meld_diagnostics"] = True
+        if output:
+            overrides["output"] = output
+
+        # Advanced options
+        advanced = {}
+        if args.translate_logits:
+            advanced["translate_logits"] = True
+        if args.allow_kv_cache_translation:
+            advanced["allow_kv_cache_translation"] = True
+        if args.force_kv_cache_translation:
+            advanced["force_kv_cache_translation"] = True
+        if args.use_sparse_ot:
+            advanced["use_sparse_ot"] = True
+        if args.shared_chat_template is not None:
+            advanced["shared_chat_template"] = args.shared_chat_template
+        if args.alignment_strategy:
+            advanced["alignment_strategy"] = args.alignment_strategy
+        if args.use_abe:
+            advanced["use_abe"] = True
+        if args.use_stats_tracker:
+            advanced["use_stats_tracker"] = True
+        if args.use_enhanced:
+            advanced["use_enhanced"] = True
+        if advanced:
+            overrides["advanced"] = advanced
+
+        return overrides
+
+    def validate_models(self, config: MindMeldCLIConfig) -> List[ModelSpec]:
+        """Validate model specifications and return valid ones."""
+        print("\n" + "=" * 70)
+        print("Validating model specifications...")
+        print("=" * 70)
+
+        valid_models = []
+        for model in config.models:
+            spec = f"{model.engine}:{model.model}"
+            result = ModelValidator.validate_model_spec(spec, require_logits=True)
+
+            if not print_validation_result(result, spec):
+                print(f"[X] Skipping invalid model: {spec}")
+                print("   Mind melding requires engines with logits access.\n")
+                continue
+
+            valid_models.append(model)
+
+        return valid_models
+
+    def load_engines(self, models: List[ModelSpec], config: MindMeldCLIConfig) -> List[LLMEngine]:
+        """Load model engines."""
+        engines = []
+
+        for model in models:
+            print(ui.color_text(
+                f"\n[+] Loading {model.model} with {model.engine} engine...",
+                cfg.COLOR_CYAN
+            ))
+
+            try:
+                engine_args = {
+                    "engine": model.engine,
+                    "model": model.model,
+                    "temperature": config.generation.temperature,
+                    "top_k": config.generation.top_k,
+                    "top_p": config.generation.top_p,
+                    "steps": config.generation.steps,
+                    "verbose": config.output.verbose,
+                    "show_attention": config.output.show_attention,
+                    "pytorch_device_map": "auto",
+                    "use_kv_cache": True,
+                    "onnx_tokenizer": None,
+                }
+
+                engine = get_engine(model.engine, model.model, engine_args)
+                print("Loading model...")
+                engine.load()
+                print(ui.color_text("[OK] Model loaded successfully!", cfg.COLOR_GREEN))
+                engines.append(engine)
+
+            except Exception as e:
+                print(ui.color_text(f"[X] Failed to load {model.model}: {e}", cfg.COLOR_RED))
+                if engines:
+                    cont = input("Continue with loaded models? (y/n): ").strip().lower()
+                    if cont != 'y':
+                        return []
+
+        return engines
+
+    def run_meld(self, config: MindMeldCLIConfig, engines: List[LLMEngine]) -> Optional[Dict[str, Any]]:
+        """Run the Mind Meld session."""
+        if not config.output.summary_only and not config.output.headless:
+            print(ui.color_text("\n[>] Starting Mind Meld Session", cfg.COLOR_GREEN))
+            if config._preset_name:
+                print(ui.color_text(f"    Preset: {config._preset_name}", cfg.COLOR_YELLOW))
+            print("=" * 70)
+
+        # Build args namespace for MindMeldMode
+        meld_args = self._build_meld_args(config)
+
+        try:
+            meld_mode = MindMeldMode(engines, meld_args)
+            result = meld_mode.run()
+
+            # Format output based on config
+            if config.output.format == "json":
+                return self._format_json_output(config, result)
+            elif config.output.format == "markdown":
+                return self._format_markdown_output(config, result)
+
+            return result
+
+        except KeyboardInterrupt:
+            print(ui.color_text("\n\n[!] Mind Meld interrupted by user", cfg.COLOR_YELLOW))
+        except Exception as e:
+            print(ui.color_text(f"\n\n[X] Error during Mind Meld: {e}", cfg.COLOR_RED))
+            if config.output.verbose:
+                import traceback
+                traceback.print_exc()
+
+        return None
+
+    def _build_meld_args(self, config: MindMeldCLIConfig) -> argparse.Namespace:
+        """Build args namespace for MindMeldMode."""
+        # Apply blend mode settings
+        config.blend.apply_mode()
+
+        return argparse.Namespace(
+            temperature=config.generation.temperature,
+            top_k=config.generation.top_k,
+            top_p=config.generation.top_p,
+            steps=config.generation.steps,
+            repetition_penalty=config.generation.repetition_penalty,
+            verbose=config.output.verbose,
+            show_attention=config.output.show_attention,
+            swap_strategy=self.STRATEGY_MAP.get(config.strategy, SwapStrategy.PATTERN_BASED),
+            fixed_interval=config.interval,
+            confidence_threshold=0.5,
+            perplexity_threshold=50.0,
+            initial_prompt=config.prompt,
+            no_step_delay=config.no_step_delay,
+            summary_only=config.output.summary_only,
+            stop_text=config.stop_text,
+            max_sentences=config.max_sentences,
+            prompt_chat_template=config.prompt_chat_template,
+            prompt_system=config.prompt_system,
+            personas=config.get_personas(),
+            no_default_system=config.no_default_system,
+            # Blend settings
+            use_blending=config.blend.enabled,
+            use_weighted_average=config.blend.enabled and config.blend.strategy == "weighted_average",
+            order_neutral=config.blend.order_neutral,
+            blend_strategy=config.blend.strategy,
+            soft_swap=config.blend.soft_swap,
+            soft_swap_weight=config.blend.soft_swap_weight,
+            # Advanced settings
+            use_enhanced=config.advanced.use_enhanced,
+            use_abe=config.advanced.use_abe,
+            use_stats_tracker=config.advanced.use_stats_tracker,
+            stats_file=config.output.stats_file,
+            meld_diagnostics=config.output.meld_diagnostics,
+            allow_kv_cache_translation=config.advanced.allow_kv_cache_translation,
+            force_kv_cache_translation=config.advanced.force_kv_cache_translation,
+            translate_logits=config.advanced.translate_logits,
+            use_sparse_ot=config.advanced.use_sparse_ot,
+            shared_chat_template=config.advanced.shared_chat_template,
+            alignment_strategy=config.advanced.alignment_strategy,
+            headless=config.output.headless,
+        )
+
+    def _format_json_output(self, config: MindMeldCLIConfig, result: Any) -> Dict[str, Any]:
+        """Format output as JSON."""
+        output = {
+            "timestamp": datetime.now().isoformat(),
+            "config": {
+                "preset": config._preset_name,
+                "models": [str(m) for m in config.models],
+                "strategy": config.strategy,
+                "blend_mode": config.blend.mode,
+                "prompt": config.prompt,
+            },
+            "result": result if isinstance(result, dict) else {"output": str(result)},
+        }
+        print(json.dumps(output, indent=2))
+        return output
+
+    def _format_markdown_output(self, config: MindMeldCLIConfig, result: Any) -> Dict[str, Any]:
+        """Format output as Markdown."""
+        lines = [
+            "# Mind Meld Session",
+            "",
+            f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            "",
+            "## Configuration",
+            "",
+        ]
+
+        if config._preset_name:
+            lines.append(f"- **Preset:** {config._preset_name}")
+        lines.append(f"- **Strategy:** {config.strategy}")
+        lines.append(f"- **Blend Mode:** {config.blend.mode}")
+        lines.append("")
+        lines.append("### Models")
+        for i, m in enumerate(config.models, 1):
+            persona_str = f" ({m.persona})" if m.persona else ""
+            lines.append(f"{i}. `{m.engine}:{m.model}`{persona_str}")
+        lines.append("")
+        lines.append("## Prompt")
+        lines.append("")
+        lines.append(f"> {config.prompt}")
+        lines.append("")
+        lines.append("## Output")
+        lines.append("")
+        lines.append("```")
+        lines.append(str(result) if result else "(no output)")
+        lines.append("```")
+
+        print("\n".join(lines))
+        return {"markdown": "\n".join(lines), "result": result}
+
+    def list_models(self):
+        """List available models."""
+        print("=" * 70)
         print("Available Models for Mind Meld")
-        print("="*70)
+        print("=" * 70)
 
-        # List Ollama models
-        print("\n📦 Ollama models (from 'ollama list'):")
+        # Ollama models
+        print("\n[Ollama] Models (from 'ollama list'):")
         try:
             import subprocess
             result = subprocess.run(['ollama', 'list'], capture_output=True, text=True, timeout=5)
             if result.returncode == 0:
-                lines = result.stdout.strip().split('\n')[1:]  # Skip header
+                lines = result.stdout.strip().split('\n')[1:]
                 for line in lines:
                     parts = line.split()
                     if parts:
-                        model_name = parts[0]
-                        size = parts[2] if len(parts) > 2 else 'N/A'
-                        print(f"  ollama:{model_name:<30} ({size})")
+                        print(f"  ollama:{parts[0]}")
             else:
                 print("  (Ollama not available)")
         except Exception as e:
             print(f"  (Error: {e})")
 
-        # List HuggingFace cache
-        print("\n🤗 HuggingFace cached models:")
+        # HuggingFace cache
+        print("\n[HuggingFace] Cached models:")
         hf_cache = os.path.expanduser("~/.cache/huggingface/hub")
         if os.path.exists(hf_cache):
             cached = [d for d in os.listdir(hf_cache) if d.startswith('models--')]
-            if cached:
-                for model_dir in sorted(cached)[:10]:  # Show first 10
-                    model_name = model_dir.replace('models--', '').replace('__', '/')
-                    print(f"  pytorch:{model_name}")
-                if len(cached) > 10:
-                    print(f"  ... and {len(cached) - 10} more")
-            else:
-                print("  (No cached models found)")
+            for model_dir in sorted(cached)[:15]:
+                model_name = model_dir.replace('models--', '').replace('--', '/')
+                print(f"  pytorch:{model_name}")
+            if len(cached) > 15:
+                print(f"  ... and {len(cached) - 15} more")
         else:
-            print("  (Cache directory not found)")
+            print("  (No cached models)")
 
-        print("\n" + "="*70)
-        print("Usage Examples:")
-        print("="*70)
-        print("\n# Meld two Ollama models with pattern-based swapping:")
-        print("  python tools/run_mind_meld_cli.py \\")
-        print("    --models ollama:gemma2:2b ollama:qwen2:7b \\")
-        print("    --strategy pattern --steps 30")
+    def list_presets(self):
+        """List available presets with descriptions."""
+        print("=" * 70)
+        print("Available Mind Meld Presets")
+        print("=" * 70)
 
-        print("\n# Mix Ollama and PyTorch with weighted averaging:")
-        print("  python tools/run_mind_meld_cli.py \\")
-        print("    --models ollama:gemma2:2b pytorch:google/gemma-2-2b-it \\")
-        print("    --use-weighted-average --steps 40")
+        for name in sorted(MindMeldCLIConfig.list_presets()):
+            try:
+                config = MindMeldCLIConfig.load_preset(name)
+                models = ", ".join(m.model.split("/")[-1] for m in config.models)
+                blend = config.blend.mode if config.blend.enabled else "switching"
+                print(f"\n  {name}")
+                print(f"    Models: {models}")
+                print(f"    Strategy: {config.strategy}, Blend: {blend}")
+                if config.models and config.models[0].persona:
+                    print(f"    Personas: Yes")
+            except Exception as e:
+                print(f"\n  {name}")
+                print(f"    (Error loading: {e})")
 
-        print("\n# Three models with round-robin swapping:")
-        print("  python tools/run_mind_meld_cli.py \\")
-        print("    --models ollama:gemma2:2b ollama:qwen2:7b ollama:gemma3:4b-it-qat \\")
-        print("    --strategy round_robin --steps 50")
-        print()
-        
-    def parse_cli_args(self) -> argparse.Namespace:
-        """Parse command-line arguments for direct CLI usage."""
-        parser = argparse.ArgumentParser(
-            description="Mind Meld CLI - meld multiple LLMs together",
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            epilog="""
-Examples:
-  # Meld Ollama models (use names from 'ollama list')
-  %(prog)s --models ollama:gemma2:2b ollama:qwen2:7b --strategy pattern --steps 30
+        print("\n" + "=" * 70)
+        print("Usage: mind-meld --preset <name> [options]")
 
-  # Mix Ollama and PyTorch/HuggingFace
-  %(prog)s --models ollama:gemma2:2b pytorch:google/gemma-2-2b-it --strategy round_robin
+    def list_aliases(self):
+        """List model aliases."""
+        print("=" * 70)
+        print("Model Aliases")
+        print("=" * 70)
 
-  # Use weighted averaging for probability blending
-  %(prog)s --models ollama:gemma3:4b-it-qat ollama:qwen2:7b --use-weighted-average --steps 40
+        aliases = MindMeldCLIConfig.get_default_aliases()
 
-  # Perplexity-based swapping with statistics tracking
-  %(prog)s --models ollama:gemma2:2b ollama:qwen2:7b --strategy perplexity --use-stats-tracker
+        print("\n[Built-in Aliases]")
+        for alias, full in sorted(aliases.items()):
+            print(f"  {alias:15} -> {full}")
 
-Supported engines:
-  ollama       - Use models from 'ollama list' (e.g., ollama:gemma2:2b)
-  pytorch      - HuggingFace models (e.g., pytorch:google/gemma-2-2b-it)
-  vllm         - Fast inference with vLLM (e.g., vllm:google/gemma-2-2b-it)
-  pytorch_cuda - PyTorch with CUDA
-  mlx          - Apple Silicon (e.g., mlx:mlx-community/Llama-3.2-1B-Instruct-4bit)
+        # Check for user aliases
+        from src.mind_meld.cli.config import load_user_aliases, USER_CONFIG_PATH
+        user_aliases = load_user_aliases()
+        if user_aliases:
+            print(f"\n[User Aliases] (from {USER_CONFIG_PATH})")
+            for alias, full in sorted(user_aliases.items()):
+                print(f"  {alias:15} -> {full}")
 
-Swap strategies:
-  pattern      - Swap at punctuation marks (., !, ?)
-  fixed        - Swap every N tokens (use --interval)
-  round_robin  - Alternate models each token
-  random       - Random swapping
-  confidence   - Swap when confidence drops below threshold
-  perplexity   - Swap when model perplexity exceeds threshold
-  attention    - Swap guided by attention pattern changes
-  weighted     - Blend all models with configurable weights
-  semantic     - Swap based on semantic similarity of outputs
+        print("\n" + "=" * 70)
+        print("Usage: mind-meld <alias> <alias> [options]")
+        print("       mind-meld <alias>@<persona> <alias>@<persona>")
 
-Model name formats:
-  Ollama:      Use exact name from 'ollama list' → ollama:gemma2:2b
-  HuggingFace: Use repo format org/model-name → pytorch:google/gemma-2-2b-it
-            """
-        )
+    def show_config(self, config: MindMeldCLIConfig):
+        """Show resolved configuration."""
+        print("=" * 70)
+        print("Resolved Configuration")
+        print("=" * 70)
 
-        parser.add_argument(
-            "--models",
-            type=str,
-            nargs="+",
-            metavar="ENGINE:MODEL",
-            help="Models to meld in format engine:model (see examples below)",
-        )
-        parser.add_argument(
-            "--strategy",
-            type=str,
-            default="pattern",
-            choices=["pattern", "fixed", "fixed_interval", "round_robin", "random",
-                     "confidence", "perplexity", "attention", "weighted", "semantic"],
-            help="Swap strategy to control when models take over"
-        )
-        parser.add_argument(
-            "--interval",
-            type=int,
-            default=8,
-            help="Token interval for fixed swap strategy"
-        )
-        parser.add_argument(
-            "--temperature",
-            type=float,
-            default=0.7,
-            help="Generation temperature"
-        )
-        parser.add_argument(
-            "--top-k",
-            type=int,
-            default=8,
-            help="Top-K sampling limit"
-        )
-        parser.add_argument(
-            "--top-p",
-            type=float,
-            default=0.95,
-            help="Top-P (nucleus) sampling threshold"
-        )
-        parser.add_argument(
-            "--repetition-penalty",
-            type=float,
-            default=None,
-            help="Repetition penalty (>1.0 reduces repeats)"
-        )
-        parser.add_argument(
-            "--steps",
-            type=int,
-            default=20,
-            help="Number of generation steps"
-        )
-        parser.add_argument(
-            "--no-step-delay",
-            action="store_true",
-            default=False,
-            help="Disable the 1-second delay between steps"
-        )
-        parser.add_argument(
-            "--summary-only",
-            action="store_true",
-            default=False,
-            help="Show only the final output and brief stats"
-        )
-        parser.add_argument(
-            "--max-sentences",
-            type=int,
-            default=None,
-            help="Stop after N sentences in the generated output"
-        )
-        parser.add_argument(
-            "--stop-text",
-            action="append",
-            default=[],
-            help="Stop when generated output contains this text (repeatable)"
-        )
-        parser.add_argument(
-            "--prompt",
-            type=str,
-            default=None,
-            help="Initial prompt to start the meld"
-        )
-        parser.add_argument(
-            "--prompt-chat-template",
-            action=argparse.BooleanOptionalAction,
-            default=None,
-            help="Format --prompt using the tokenizer's chat template (auto when available)"
-        )
-        parser.add_argument(
-            "--prompt-system",
-            type=str,
-            default=None,
-            help="System prompt to apply when using chat templates"
-        )
-        parser.add_argument(
-            "--no-default-system",
-            action="store_true",
-            default=False,
-            help="Disable the default system prompt for chat templates"
-        )
-        parser.add_argument(
-            "--use-weighted-average",
-            action="store_true",
-            help="Use weighted average ensemble across models"
-        )
-        parser.add_argument(
-            "--order-neutral",
-            action="store_true",
-            help="Alias for --use-weighted-average to reduce swap-order sensitivity"
-        )
-        parser.add_argument(
-            "--use-abe",
-            action="store_true",
-            help="Enable Agreement-Based Ensembling"
-        )
-        parser.add_argument(
-            "--use-blending",
-            action="store_true",
-            help="Blend logits from all models instead of single-source swaps"
-        )
-        parser.add_argument(
-            "--blend-strategy",
-            type=str,
-            default="weighted_average",
-            choices=[
-                "weighted_average",
-                "confidence_weighted",
-                "dynamic_weighted",
-                "attention_weighted",
-                "learned",
-                "hierarchical",
-                "ensemble_voting"
-            ],
-            help="Blending strategy to use when --use-blending is enabled"
-        )
-        parser.add_argument(
-            "--alignment-strategy",
-            type=str,
-            default="intersection",
-            help="Vocabulary alignment strategy: intersection, align, subword, semantic_map, unk, auto"
-        )
-        parser.add_argument(
-            "--translate-logits",
-            action="store_true",
-            help="Translate active model logits into the next model's vocabulary during swaps (experimental)"
-        )
-        parser.add_argument(
-            "--allow-kv-cache-translation",
-            action="store_true",
-            help="Allow KV cache translation across mismatched models (experimental)"
-        )
-        parser.add_argument(
-            "--force-kv-cache-translation",
-            action="store_true",
-            help="Force KV cache translation even when safety checks fail (unsafe)"
-        )
-        parser.add_argument(
-            "--soft-swap",
-            action="store_true",
-            help="Blend all models each step but boost the active model by --soft-swap-weight"
-        )
-        parser.add_argument(
-            "--soft-swap-weight",
-            type=float,
-            default=1.5,
-            help="Weight multiplier for the active model when --soft-swap is enabled"
-        )
-        parser.add_argument(
-            "--use-sparse-ot",
-            action="store_true",
-            help="Enable sparse OT projection for cross-tokenizer blending"
-        )
-        parser.add_argument(
-            "--shared-chat-template",
-            action=argparse.BooleanOptionalAction,
-            default=None,
-            help="Use a single chat template across models (reduces swap-order sensitivity)"
-        )
-        parser.add_argument(
-            "--headless",
-            action="store_true",
-            help="Run Mind Meld without interactive prompts or visual output"
-        )
-        parser.add_argument(
-            "--use-enhanced",
-            action="store_true",
-            help="Enable enhanced Mind Meld features (enables --translate-logits, --meld-diagnostics, --use-stats-tracker)"
-        )
-        parser.add_argument(
-            "--use-stats-tracker",
-            action="store_true",
-            help="Track statistics for each model during the session"
-        )
-        parser.add_argument(
-            "--meld-diagnostics",
-            action="store_true",
-            help="Log Mind Meld diagnostics (KV cache bridging and vocab translation)"
-        )
-        parser.add_argument(
-            "--stats-file",
-            type=str,
-            default=None,
-            help="Optional path to write statistics JSON"
-        )
-        parser.add_argument(
-            "--verbose",
-            action="store_true",
-            help="Enable verbose output"
-        )
-        parser.add_argument(
-            "--show-attention",
-            action=argparse.BooleanOptionalAction,
-            default=True,
-            help="Toggle attention heatmap display"
-        )
-        parser.add_argument(
-            "--list-models",
-            action="store_true",
-            help="List available models and exit"
-        )
+        import yaml
+        print(yaml.dump(config.to_dict(), default_flow_style=False, sort_keys=False))
 
-        args = parser.parse_args()
+    def run(self):
+        """Main entry point."""
+        args = self.parse_args()
 
-        # Handle --list-models
+        # Handle utility commands
         if args.list_models:
-            self._list_available_models()
-            import sys
-            sys.exit(0)
-
-        return args
-
-    def _strategy_from_string(self, value: str) -> SwapStrategy:
-        """Convert string input to SwapStrategy enum."""
-        value_normalized = (value or "pattern").lower()
-        mapping = {
-            "pattern": SwapStrategy.PATTERN_BASED,
-            "pattern_based": SwapStrategy.PATTERN_BASED,
-            "fixed": SwapStrategy.FIXED_INTERVAL,
-            "fixed_interval": SwapStrategy.FIXED_INTERVAL,
-            "round_robin": SwapStrategy.ROUND_ROBIN,
-            "random": SwapStrategy.RANDOM,
-            "confidence": SwapStrategy.CONFIDENCE_BASED,
-            "confidence_based": SwapStrategy.CONFIDENCE_BASED,
-            "perplexity": SwapStrategy.PERPLEXITY_BASED,
-            "perplexity_based": SwapStrategy.PERPLEXITY_BASED,
-            "attention": SwapStrategy.ATTENTION_GUIDED,
-            "attention_guided": SwapStrategy.ATTENTION_GUIDED,
-            "weighted": SwapStrategy.WEIGHTED_BLEND,
-            "weighted_blend": SwapStrategy.WEIGHTED_BLEND,
-            "semantic": SwapStrategy.SEMANTIC_SIMILARITY,
-            "semantic_similarity": SwapStrategy.SEMANTIC_SIMILARITY,
-        }
-        return mapping.get(value_normalized, SwapStrategy.PATTERN_BASED)
-
-    def run_from_cli(self, args: argparse.Namespace) -> None:
-        """Run Mind Meld session using parsed CLI arguments."""
-        config = MindMeldConfig()
-
-        if not args.models or len(args.models) < 2:
-            print(ui.color_text("Mind Meld CLI requires at least two models specified with --models", cfg.COLOR_RED))
+            self.list_models()
             return
 
-        # Validate all model specifications first
-        print("\n" + "="*70)
-        print("Validating model specifications for Mind Meld...")
-        print("="*70)
-
-        valid_models = []
-        for spec in args.models:
-            # Add default engine if not specified
-            if ":" not in spec:
-                spec = f"pytorch:{spec}"
-
-            # Validate the specification (REQUIRE logits for mind melding!)
-            validation_result = ModelValidator.validate_model_spec(
-                spec,
-                require_logits=True  # Mind melding requires real logits!
-            )
-
-            if not print_validation_result(validation_result, spec):
-                print(f"❌ Skipping invalid model: {spec}")
-                print("   Mind melding requires engines with logits access.\n")
-                continue
-
-            # If validation passed, add to valid models
-            engine, model_name = spec.split(":", 1)
-            valid_models.append((engine, model_name))
-
-        if not valid_models:
-            print(ui.color_text("\n❌ No valid models for mind melding. Exiting.", cfg.COLOR_RED))
-            print(ui.color_text("\n💡 Tip: Use engines with logits access:", cfg.COLOR_YELLOW))
-            print("   ✓ pytorch, pytorch_cuda, vllm, llamacpp, mlx, mlx_gpu, jax, tensorflow")
-            print("   ✗ ollama (HTTP API only, no logits)")
-            print("\n   See docs/ENGINE_ARCHITECTURE.md for details.")
+        if args.list_presets:
+            self.list_presets()
             return
 
+        if args.list_aliases:
+            self.list_aliases()
+            return
+
+        # Resolve configuration
+        try:
+            config = self.resolve_configuration(args)
+        except Exception as e:
+            print(ui.color_text(f"[X] Configuration error: {e}", cfg.COLOR_RED))
+            return
+
+        # Handle --show-config
+        if args.show_config:
+            self.show_config(config)
+            return
+
+        # Handle --save-config
+        if args.save_config:
+            config.save_yaml(args.save_config)
+            print(f"Configuration saved to: {args.save_config}")
+            return
+
+        # Validate we have models
+        if not config.models:
+            print(ui.color_text(
+                "[X] No models specified. Use positional args, --models, --preset, or config file.",
+                cfg.COLOR_RED
+            ))
+            print("\nExamples:")
+            print("  mind-meld gemma-1b gemma-2b --prompt 'Hello'")
+            print("  mind-meld --preset creative")
+            print("  mind-meld my-config.yaml")
+            return
+
+        if len(config.models) < 2:
+            print(ui.color_text("[X] Mind Meld requires at least 2 models.", cfg.COLOR_RED))
+            return
+
+        # Validate models
+        valid_models = self.validate_models(config)
         if len(valid_models) < 2:
-            print(ui.color_text(f"\n❌ Mind melding requires at least 2 models, only {len(valid_models)} valid.", cfg.COLOR_RED))
+            print(ui.color_text(
+                f"\n[X] Need at least 2 valid models, only {len(valid_models)} passed validation.",
+                cfg.COLOR_RED
+            ))
             return
-
-        print(f"\n✓ Validated {len(valid_models)} model(s) for mind melding\n")
 
         config.models = valid_models
+        print(f"\n[OK] Validated {len(valid_models)} model(s) for mind melding\n")
 
-        config.swap_strategy = self._strategy_from_string(args.strategy)
-        config.fixed_interval = args.interval
-        config.temperature = args.temperature
-        config.top_k = args.top_k
-        config.top_p = args.top_p
-        config.steps = args.steps
-        config.repetition_penalty = args.repetition_penalty or config.repetition_penalty
-        config.no_step_delay = args.no_step_delay
-        config.summary_only = args.summary_only
-        config.stop_text = args.stop_text
-        config.max_sentences = args.max_sentences
-        config.initial_prompt = args.prompt or self.config.initial_prompt
-        config.prompt_chat_template = args.prompt_chat_template
-        config.prompt_system = args.prompt_system
-        config.no_default_system = args.no_default_system
-        config.verbose = args.verbose
-        config.show_attention = args.show_attention
-        config.use_weighted_average = args.use_weighted_average
-        config.order_neutral = args.order_neutral
-        if config.order_neutral:
-            config.use_weighted_average = True
-        config.use_abe = args.use_abe
-        config.use_blending = args.use_blending
-        config.blend_strategy = args.blend_strategy
-        config.alignment_strategy = args.alignment_strategy
-        config.use_enhanced = args.use_enhanced
-        config.use_stats_tracker = args.use_stats_tracker
-        config.stats_file = args.stats_file
-        config.meld_diagnostics = args.meld_diagnostics
-        config.allow_kv_cache_translation = args.allow_kv_cache_translation
-        config.force_kv_cache_translation = args.force_kv_cache_translation
-        config.translate_logits = args.translate_logits
-        config.soft_swap = args.soft_swap
-        config.soft_swap_weight = args.soft_swap_weight
-        config.use_sparse_ot = args.use_sparse_ot
-        config.shared_chat_template = args.shared_chat_template
-        config.headless = args.headless
-        # --use-enhanced is a convenience flag that enables multiple experimental features
-        # Applied after explicit flags so it only sets defaults for unset options
-        if config.use_enhanced:
-            if not args.translate_logits:
-                config.translate_logits = True
-            if not args.meld_diagnostics:
-                config.meld_diagnostics = True
-            if not args.use_stats_tracker:
-                config.use_stats_tracker = True
-
-        engines = self.load_models(config)
+        # Load engines
+        engines = self.load_engines(valid_models, config)
         if not engines or len(engines) < 2:
-            print(ui.color_text("Failed to load sufficient models for Mind Meld", cfg.COLOR_RED))
+            print(ui.color_text("[X] Failed to load sufficient models", cfg.COLOR_RED))
             return
 
-        self.run_mind_meld(config, engines)
-
-    def print_header(self):
-        """Print the Mind Meld CLI header"""
-        print("=" * 70)
-        print(ui.color_text("🧠 Mind Meld CLI - Multi-Model Neural State Transfer 🧠", cfg.COLOR_CYAN))
-        print("=" * 70)
-        print("Meld multiple LLM models together during text generation.")
-        print("Watch as models swap their internal states mid-sentence!\n")
-    
-    def show_main_menu(self) -> Optional[MindMeldConfig]:
-        """Show the main interactive menu"""
-        self.print_header()
-        
-        print("Select mode:")
-        print("  1. Quick Start (Gemma-3 1B + Gemma-2 2B)")
-        print("  2. Popular Combinations")
-        print("  3. Custom Model Selection")
-        print("  4. Load from Previous Config")
-        print("  5. Exit")
-        
-        choice = input("\nYour choice (1-5): ").strip()
-        
-        if choice == "1":
-            return self.quick_start()
-        elif choice == "2":
-            return self.select_preset()
-        elif choice == "3":
-            return self.custom_setup()
-        elif choice == "4":
-            print(ui.color_text("Config loading not yet implemented", cfg.COLOR_YELLOW))
-            return self.show_main_menu()
-        elif choice == "5":
-            return None
-        else:
-            print(ui.color_text("Invalid choice. Please try again.", cfg.COLOR_RED))
-            return self.show_main_menu()
-    
-    def quick_start(self) -> MindMeldConfig:
-        """Quick start with default Gemma models"""
-        print(ui.color_text("\n⚡ Quick Start Mode", cfg.COLOR_CYAN))
-        print("Using: Gemma-3 1B + Gemma-2 2B")
-        
-        self.config.models = self.PRESETS["gemma_small"]
-        self.configure_swap_strategy()
-        self.configure_generation_params()
-        
-        return self.config
-    
-    def select_preset(self) -> MindMeldConfig:
-        """Select from popular model combinations"""
-        print(ui.color_text("\n📚 Popular Combinations", cfg.COLOR_CYAN))
-        
-        presets_list = list(self.PRESETS.keys())
-        for i, preset_name in enumerate(presets_list, 1):
-            models = self.PRESETS[preset_name]
-            model_names = [m[1].split('/')[-1] for _, m in models]
-            print(f"  {i}. {preset_name}: {' + '.join(model_names)}")
-        
-        while True:
-            choice = input(f"\nSelect preset (1-{len(presets_list)}): ").strip()
-            try:
-                idx = int(choice) - 1
-                if 0 <= idx < len(presets_list):
-                    preset_name = presets_list[idx]
-                    self.config.models = self.PRESETS[preset_name]
-                    print(f"Selected: {preset_name}")
-                    break
-                else:
-                    print(ui.color_text("Invalid selection", cfg.COLOR_RED))
-            except ValueError:
-                print(ui.color_text("Please enter a number", cfg.COLOR_RED))
-        
-        self.configure_swap_strategy()
-        self.configure_generation_params()
-        
-        return self.config
-    
-    def custom_setup(self) -> MindMeldConfig:
-        """Custom model selection and configuration"""
-        print(ui.color_text("\n🔧 Custom Setup", cfg.COLOR_CYAN))
-        
-        # Select number of models
-        while True:
-            num_models = input("How many models to meld? (2-5): ").strip()
-            try:
-                n = int(num_models)
-                if 2 <= n <= 5:
-                    break
-                else:
-                    print(ui.color_text("Please enter a number between 2 and 5", cfg.COLOR_RED))
-            except ValueError:
-                print(ui.color_text("Please enter a valid number", cfg.COLOR_RED))
-        
-        # Select each model
-        self.config.models = []
-        for i in range(n):
-            print(f"\n--- Model {i+1} ---")
-            engine, model = self.select_single_model()
-            self.config.models.append((engine, model))
-        
-        self.configure_swap_strategy()
-        self.configure_generation_params()
-        
-        return self.config
-    
-    def select_single_model(self) -> Tuple[str, str]:
-        """Select a single model with engine type"""
-        # Select engine
-        print("Available engines:")
-        engines = list(SUPPORTED_ENGINES)
-        for i, engine in enumerate(engines, 1):
-            print(f"  {i}. {engine}")
-        
-        while True:
-            engine_choice = input(f"Select engine (1-{len(engines)}) [1]: ").strip() or "1"
-            try:
-                idx = int(engine_choice) - 1
-                if 0 <= idx < len(engines):
-                    engine = engines[idx]
-                    break
-                else:
-                    print(ui.color_text("Invalid selection", cfg.COLOR_RED))
-            except ValueError:
-                print(ui.color_text("Please enter a number", cfg.COLOR_RED))
-        
-        # Select model
-        if engine == "pytorch":
-            print("\nCommon PyTorch models:")
-            print("  1. google/gemma-3-1b-it")
-            print("  2. google/gemma-3-1b")
-            print("  3. google/gemma-2-2b-it")
-            print("  4. google/gemma-2b-it")
-            print("  5. google/gemma-2b")
-            print("  6. Custom (enter path)")
-            
-            model_choice = input("Select model (1-6): ").strip()
-            
-            model_map = {
-                "1": "google/gemma-3-1b-it",
-                "2": "google/gemma-3-1b",
-                "3": "google/gemma-2-2b-it",
-                "4": "google/gemma-2b-it",
-                "5": "google/gemma-2b",
-            }
-            
-            if model_choice in model_map:
-                model = model_map[model_choice]
-            elif model_choice == "6":
-                model = input("Enter model path/name: ").strip()
-            else:
-                print("Invalid choice, using default")
-                model = "google/gemma-3-1b-it"
-        else:
-            model = input(f"Enter {engine} model path: ").strip()
-        
-        print(f"Selected: {engine}:{model}")
-        return engine, model
-    
-    def configure_swap_strategy(self):
-        """Configure the model swap strategy"""
-        print(ui.color_text("\n🔄 Swap Strategy Configuration", cfg.COLOR_CYAN))
-
-        strategies = [
-            (SwapStrategy.PATTERN_BASED, "Pattern-based (swap on punctuation)"),
-            (SwapStrategy.FIXED_INTERVAL, "Fixed interval (every N tokens)"),
-            (SwapStrategy.ROUND_ROBIN, "Round-robin (rotate in order)"),
-            (SwapStrategy.CONFIDENCE_BASED, "Confidence-based (swap on low confidence)"),
-            (SwapStrategy.PERPLEXITY_BASED, "Perplexity-based (swap on high uncertainty)"),
-            (SwapStrategy.ATTENTION_GUIDED, "Attention-guided"),
-            (SwapStrategy.WEIGHTED_BLEND, "Weighted blend (all models contribute)"),
-            (SwapStrategy.SEMANTIC_SIMILARITY, "Semantic similarity-based"),
-            (SwapStrategy.RANDOM, "Random swapping"),
-        ]
-
-        print("Available strategies:")
-        for i, (_, desc) in enumerate(strategies, 1):
-            print(f"  {i}. {desc}")
-
-        choice = input(f"\nSelect strategy (1-{len(strategies)}) [1]: ").strip() or "1"
-        
-        try:
-            idx = int(choice) - 1
-            if 0 <= idx < len(strategies):
-                self.config.swap_strategy = strategies[idx][0]
-                
-                # Additional configuration for specific strategies
-                if self.config.swap_strategy == SwapStrategy.FIXED_INTERVAL:
-                    interval = input("Swap interval (tokens) [8]: ").strip() or "8"
-                    self.config.fixed_interval = int(interval)
-                elif self.config.swap_strategy == SwapStrategy.CONFIDENCE_BASED:
-                    threshold = input("Confidence threshold (0-1) [0.5]: ").strip() or "0.5"
-                    self.config.confidence_threshold = float(threshold)
-                elif self.config.swap_strategy == SwapStrategy.PERPLEXITY_BASED:
-                    threshold = input("Perplexity threshold [50.0]: ").strip() or "50.0"
-                    self.config.perplexity_threshold = float(threshold)
-            else:
-                print("Invalid choice, using pattern-based")
-                self.config.swap_strategy = SwapStrategy.PATTERN_BASED
-        except ValueError:
-            print("Invalid input, using pattern-based")
-            self.config.swap_strategy = SwapStrategy.PATTERN_BASED
-    
-    def configure_generation_params(self):
-        """Configure generation parameters"""
-        print(ui.color_text("\n⚙️ Generation Parameters", cfg.COLOR_CYAN))
-        
-        # Temperature
-        temp = input(f"Temperature (0.1-2.0) [{self.config.temperature}]: ").strip()
-        if temp:
-            try:
-                self.config.temperature = float(temp)
-            except ValueError:
-                print("Invalid temperature, using default")
-        
-        # Top-K
-        topk = input(f"Top-K (1-100) [{self.config.top_k}]: ").strip()
-        if topk:
-            try:
-                self.config.top_k = int(topk)
-            except ValueError:
-                print("Invalid top-k, using default")
-        
-        # Top-P
-        topp = input(f"Top-P (0.1-1.0) [{self.config.top_p}]: ").strip()
-        if topp:
-            try:
-                self.config.top_p = float(topp)
-            except ValueError:
-                print("Invalid top-p, using default")
-        
-        # Steps
-        steps = input(f"Number of generation steps [{self.config.steps}]: ").strip()
-        if steps:
-            try:
-                self.config.steps = int(steps)
-            except ValueError:
-                print("Invalid steps, using default")
-        
-        # Initial prompt
-        print(f"\nCurrent prompt: '{self.config.initial_prompt}'")
-        new_prompt = input("Enter new prompt (or press Enter to keep): ").strip()
-        if new_prompt:
-            self.config.initial_prompt = new_prompt
-        
-        # Verbose mode
-        verbose = input("\nEnable verbose mode? (y/n) [n]: ").strip().lower()
-        self.config.verbose = verbose == 'y'
-        
-        # Ensemble method selection
-        print("\nEnsemble method:")
-        print("  1. None (models take turns)")
-        print("  2. Weighted averaging (blend all model probabilities)")
-        print("  3. ABE (Agreement-Based Ensembling)")
-        
-        ensemble = input("Select ensemble method (1-3) [1]: ").strip() or "1"
-        
-        if ensemble == "2":
-            self.config.use_weighted_average = True
-            print("✓ Weighted averaging enabled - all models will contribute to each token")
-        elif ensemble == "3":
-            self.config.use_abe = True
-            print("✓ ABE enabled - models must agree on token choices")
-        else:
-            self.config.use_weighted_average = False
-            self.config.use_abe = False
-    
-    def load_models(self, config: MindMeldConfig) -> List[LLMEngine]:
-        """Load the specified models"""
-        loaded_engines = []
-        
-        for engine_type, model_name in config.models:
-            print(ui.color_text(f"\n📦 Loading {model_name} with {engine_type} engine...", cfg.COLOR_CYAN))
-            
-            try:
-                # Create args namespace for engine initialization
-                engine_args = argparse.Namespace(
-                    engine=engine_type,
-                    model=model_name,
-                    temperature=config.temperature,
-                    top_k=config.top_k,
-                    top_p=config.top_p,
-                    steps=config.steps,
-                    verbose=config.verbose,
-                    show_attention=config.show_attention,
-                    # Add other necessary args
-                    pytorch_device_map="auto",
-                    use_kv_cache=True,
-                    onnx_tokenizer=None,
-                )
-                
-                # Initialize engine
-                engine = get_engine(
-                    engine_type,
-                    model_name,
-                    vars(engine_args)
-                )
-                
-                print("Loading model...")
-                engine.load()
-                print(ui.color_text("✓ Model loaded successfully!", cfg.COLOR_GREEN))
-                
-                loaded_engines.append(engine)
-                
-            except Exception as e:
-                print(ui.color_text(f"✗ Failed to load {model_name}: {e}", cfg.COLOR_RED))
-                
-                # Ask whether to continue
-                if loaded_engines:
-                    cont = input("Continue with loaded models? (y/n): ").strip().lower()
-                    if cont != 'y':
-                        return []
-        
-        return loaded_engines
-    
-    def run_mind_meld(self, config: MindMeldConfig, engines: List[LLMEngine]):
-        """Run the Mind Meld session"""
-        if not config.summary_only and not config.headless:
-            print(ui.color_text("\n🚀 Starting Mind Meld Session", cfg.COLOR_GREEN))
-            if config.use_enhanced:
-                print(ui.color_text("🎆 Enhanced Mode Active", cfg.COLOR_YELLOW))
-            print("=" * 70)
-        
-        # Create args for MindMeldMode
-        meld_args = argparse.Namespace(
-            temperature=config.temperature,
-            top_k=config.top_k,
-            top_p=config.top_p,
-            steps=config.steps,
-            repetition_penalty=config.repetition_penalty,
-            verbose=config.verbose,
-            show_attention=config.show_attention,
-            swap_strategy=config.swap_strategy,
-            fixed_interval=config.fixed_interval,
-            confidence_threshold=config.confidence_threshold,
-            perplexity_threshold=config.perplexity_threshold,
-            initial_prompt=config.initial_prompt,
-            no_step_delay=config.no_step_delay,
-            summary_only=config.summary_only,
-            stop_text=config.stop_text,
-            max_sentences=config.max_sentences,
-            prompt_chat_template=config.prompt_chat_template,
-            prompt_system=config.prompt_system,
-            no_default_system=config.no_default_system,
-            # Enhanced features
-            use_enhanced=config.use_enhanced,
-            use_blending=config.use_blending,
-            use_weighted_average=config.use_weighted_average,
-            order_neutral=config.order_neutral,
-            use_abe=config.use_abe,
-            blend_strategy=config.blend_strategy,
-            alignment_strategy=config.alignment_strategy,
-            use_stats_tracker=config.use_stats_tracker,
-            stats_file=config.stats_file,
-            meld_diagnostics=config.meld_diagnostics,
-            allow_kv_cache_translation=config.allow_kv_cache_translation,
-            force_kv_cache_translation=config.force_kv_cache_translation,
-            translate_logits=config.translate_logits,
-            soft_swap=config.soft_swap,
-            soft_swap_weight=config.soft_swap_weight,
-            use_sparse_ot=config.use_sparse_ot,
-            shared_chat_template=config.shared_chat_template,
-            headless=config.headless,
-        )
-        
-        # Initialize and run Mind Meld mode
-        try:
-            meld_mode = MindMeldMode(engines, meld_args)
-            meld_mode.run()
-        except KeyboardInterrupt:
-            print(ui.color_text("\n\n🛑 Mind Meld interrupted by user", cfg.COLOR_YELLOW))
-        except Exception as e:
-            print(ui.color_text(f"\n\n❌ Error during Mind Meld: {e}", cfg.COLOR_RED))
-            if config.verbose:
-                import traceback
-                traceback.print_exc()
+        # Run meld
+        self.run_meld(config, engines)
 
 
 def main():
-    """Main entry point"""
+    """Main entry point."""
     cli = MindMeldCLI()
-    
-    # Check if CLI arguments were provided
-    if len(sys.argv) > 1:
-        # CLI mode
-        args = cli.parse_cli_args()
-        cli.run_from_cli(args)
-    else:
-        # Interactive mode
-        config = cli.show_main_menu()
-        
-        if config:
-            print(ui.color_text("\n📋 Configuration Summary:", cfg.COLOR_CYAN))
-            print(f"  Models: {len(config.models)}")
-            for i, (engine, model) in enumerate(config.models, 1):
-                print(f"    {i}. {model} ({engine})")
-            print(f"  Strategy: {config.swap_strategy.value}")
-            print(f"  Temperature: {config.temperature}")
-            print(f"  Top-K: {config.top_k}")
-            print(f"  Top-P: {config.top_p}")
-            print(f"  Steps: {config.steps}")
-            
-            confirm = input("\nProceed with this configuration? (y/n): ").strip().lower()
-            
-            if confirm == 'y':
-                engines = cli.load_models(config)
-                if engines and len(engines) >= 2:
-                    cli.run_mind_meld(config, engines)
-                else:
-                    print(ui.color_text("Failed to load sufficient models for Mind Meld", cfg.COLOR_RED))
-            else:
-                print(ui.color_text("Configuration cancelled", cfg.COLOR_YELLOW))
-        else:
-            print(ui.color_text("\nExiting Mind Meld CLI", cfg.COLOR_YELLOW))
+    cli.run()
 
 
 if __name__ == "__main__":

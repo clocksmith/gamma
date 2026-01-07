@@ -1,0 +1,91 @@
+# Example Custom Mind Meld Configuration
+# Copy this file and customize for your needs
+#
+# Usage:
+#   python tools/run_mind_meld_cli.py configs/mind_meld/example-custom.yaml
+#   python tools/run_mind_meld_cli.py example-custom.yaml --steps 100  # CLI overrides config
+
+# Custom model aliases (in addition to built-ins)
+aliases:
+  my-gemma: "pytorch:google/gemma-3-1b-it"
+  local-llama: "llamacpp:/path/to/model.gguf"
+
+# Models to meld
+# Formats:
+#   - Simple: "engine:model"
+#   - With persona: {engine: X, model: Y, persona: "..."}
+#   - Using alias: "my-gemma"
+#   - Alias with weight: {alias: "my-gemma", weight: 0.7}
+models:
+  - engine: pytorch
+    model: google/gemma-3-1b-it
+    persona: "You are curious and ask probing questions."
+    weight: 0.6
+  - engine: pytorch
+    model: google/gemma-2-2b-it
+    persona: "You provide detailed, thoughtful answers."
+    weight: 0.4
+
+# Swap strategy
+# Options: pattern, fixed, round_robin, random, confidence, perplexity, attention, weighted, semantic
+strategy: confidence
+interval: 10  # For fixed strategy
+
+# Starting prompt
+prompt: "Let's explore an interesting topic together:"
+
+# Optional system prompt (applied globally)
+# prompt_system: "You are a helpful assistant."
+
+# Blending configuration
+blend:
+  enabled: true
+  # Mode presets: hard (no blending), soft, dynamic, smooth
+  mode: dynamic
+  # Detailed strategy (when mode doesn't set it)
+  strategy: dynamic_weighted
+  # Soft swap settings
+  soft_swap: true
+  soft_swap_weight: 0.35
+  # Order-neutral blending
+  order_neutral: false
+  # Simple strength dial (0-100, alternative to mode)
+  strength: 60
+
+# Generation parameters
+generation:
+  steps: 40
+  temperature: 0.75
+  top_k: 10
+  top_p: 0.95
+  repetition_penalty: 1.1
+
+# Output configuration
+output:
+  # Format: terminal, json, markdown
+  format: terminal
+  verbose: false
+  show_attention: true
+  summary_only: false
+  headless: false
+  # stats_file: "meld-stats.json"
+  meld_diagnostics: false
+
+# Advanced/experimental options
+advanced:
+  translate_logits: false
+  allow_kv_cache_translation: false
+  force_kv_cache_translation: false
+  use_sparse_ot: false
+  # shared_chat_template: true
+  alignment_strategy: semantic
+  use_abe: false
+  use_stats_tracker: true
+  use_enhanced: false
+
+# Stop conditions
+# stop_text:
+#   - "\n\n"
+#   - "THE END"
+# max_sentences: 10
+no_step_delay: false

@@ -1,0 +1,43 @@
+# Creative Mind Meld Preset
+# Optimized for creative writing with high temperature and smooth blending
+
+models:
+  - engine: pytorch
+    model: google/gemma-3-1b-it
+    persona: "You are an imaginative storyteller who loves vivid metaphors and unexpected plot twists."
+    weight: 0.6
+  - engine: pytorch
+    model: google/gemma-2-2b-it
+    persona: "You are a lyrical poet who finds beauty in words and crafts elegant prose."
+    weight: 0.4
+
+strategy: confidence
+interval: 12
+
+prompt: "Once upon a time, in a realm where dreams took physical form,"
+
+blend:
+  enabled: true
+  mode: smooth
+  strategy: dynamic_weighted
+  soft_swap: true
+  soft_swap_weight: 0.4
+  order_neutral: true
+  strength: 70
+
+generation:
+  steps: 50
+  temperature: 0.9
+  top_k: 12
+  top_p: 0.95
+  repetition_penalty: 1.15
+
+output:
+  verbose: false
+  show_attention: true
+  summary_only: false
+  meld_diagnostics: false
+
+advanced:
+  use_stats_tracker: true
+  translate_logits: false

@@ -1,0 +1,43 @@
+# Debate Mind Meld Preset
+# Two models with opposing personas that take turns arguing
+
+models:
+  - engine: pytorch
+    model: google/gemma-3-1b-it
+    persona: "You are an optimist who sees opportunities and benefits in every situation. You argue for positive outcomes."
+    weight: 0.5
+  - engine: pytorch
+    model: google/gemma-2-2b-it
+    persona: "You are a skeptic who questions assumptions and identifies risks. You play devil's advocate."
+    weight: 0.5
+
+strategy: pattern
+interval: 8
+
+prompt: "The topic of debate is whether artificial intelligence will benefit humanity. Opening argument:"
+
+blend:
+  enabled: false
+  mode: hard
+  strategy: weighted_average
+  soft_swap: false
+  soft_swap_weight: 0.0
+  order_neutral: false
+  strength: 0
+
+generation:
+  steps: 60
+  temperature: 0.75
+  top_k: 10
+  top_p: 0.95
+  repetition_penalty: 1.1
+
+output:
+  verbose: false
+  show_attention: true
+  summary_only: false
+  meld_diagnostics: false
+
+advanced:
+  use_stats_tracker: true
+  translate_logits: false

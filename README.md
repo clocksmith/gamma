@@ -48,15 +48,16 @@ python gamma.py game --comparison \
   --prompt "Write a Python function to calculate fibonacci"
 ```
 
-> "Meld Gemma 2B and Qwen 7B, swapping every 10 tokens"
+> "Meld Gemma models with dynamic blending"
 
 ```bash
-python gamma.py mind-meld \
-  --models \
-    pytorch:google/gemma-2-2b-it \
-    pytorch:Qwen/Qwen2-7B-Instruct \
-  --strategy fixed \
-  --interval 10
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend dynamic
+```
+
+> "Run the creative preset with a custom prompt"
+
+```bash
+python tools/run_mind_meld_cli.py --preset creative --prompt "Once upon a time"
 ```
 
 ---
@@ -177,12 +178,10 @@ python gamma.py game --chat --model qwen3-coder:30b
 python gamma.py game --comparison \
   --comparison-models model1 model2
 
-# Mind meld
-python gamma.py mind-meld \
-  --models pytorch:gemma-2-2b-it pytorch:qwen2-1.5b \
-  --strategy confidence \
-  --steps 50 \
-  --no-step-delay
+# Mind meld (new CLI with presets and aliases)
+python tools/run_mind_meld_cli.py --preset creative
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend dynamic --steps 50
+python tools/run_mind_meld_cli.py gemma-1b@Optimist gemma-2b@Skeptic --preset debate
 
 # Other common options
 --help                     # Detailed explanation of commands

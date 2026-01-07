@@ -282,14 +282,32 @@ class LogitBlender:
         self,
         logits_list: List[np.ndarray]
     ) -> np.ndarray:
-        """Ensemble voting - combine top predictions"""
-        # Get top-k predictions from each model
-        k = min(10, logits_list[0].shape[-1])
+        """Ensemble voting - combine top predictions.
 
-        vote_counts = np.zeros_like(logits_list[0])
+        Handles both 1D (vocab_size,) and 2D (batch, vocab_size) logits arrays.
+        """
+        # Store original shape and work with flattened arrays for voting
+        original_shape = logits_list[0].shape
+        is_multidim = len(original_shape) > 1
 
-        for logits in logits_list:
-            top_k_indices = np.argpartition(logits, -k)[-k:]
+        # Flatten to 1D if needed for consistent voting behavior
+        if is_multidim:
+            working_logits = [l.flatten() for l in logits_list]
+        else:
+            working_logits = logits_list
+
+        vocab_size = working_logits[0].shape[-1]
+        k = min(10, vocab_size)
+
+        vote_counts = np.zeros(vocab_size, dtype=np.float32)
+
+        for logits in working_logits:
+            # Ensure we're working with 1D array
+            flat_logits = logits.flatten() if logits.ndim > 1 else logits
+            # Get indices of top-k values
+            top_k_indices = np.argpartition(flat_logits, -k)[-k:]
+            # Ensure indices are within bounds
+            top_k_indices = top_k_indices[top_k_indices < vocab_size]
             vote_counts[top_k_indices] += 1
 
         # Normalize votes
@@ -303,11 +321,15 @@ class LogitBlender:
             # Apply threshold
             vote_probs[vote_probs < self.config.voting_threshold] = 0
 
-        # Combine with average logits
-        avg_logits = np.mean(logits_list, axis=0)
+        # Combine with average logits (flatten for consistency)
+        avg_logits = np.mean([l.flatten() if l.ndim > 1 else l for l in working_logits], axis=0)
 
         # Weight by votes
         weighted_logits = avg_logits * (vote_probs + self.config.smoothing_factor)
+
+        # Reshape back to original shape
+        if is_multidim:
+            weighted_logits = weighted_logits.reshape(original_shape)
 
         return weighted_logits
 
@@ -581,35 +603,55 @@ class LogitBlender:
         return exp_x / np.sum(exp_x)
     
     def _top_k_filtering(self, logits: np.ndarray, k: int) -> np.ndarray:
-        """Apply top-k filtering"""
+        """Apply top-k filtering. Handles both 1D and 2D arrays."""
         if k <= 0:
             return logits
-        
-        top_k_indices = np.argpartition(logits, -k)[-k:]
-        filtered = np.full_like(logits, -1e9)
-        filtered[top_k_indices] = logits[top_k_indices]
-        
-        return filtered
+
+        # Handle multidimensional arrays by working on last axis
+        original_shape = logits.shape
+        if logits.ndim > 1:
+            # Flatten to 1D, apply filtering, reshape back
+            flat_logits = logits.flatten()
+            k = min(k, flat_logits.shape[0])
+            top_k_indices = np.argpartition(flat_logits, -k)[-k:]
+            filtered = np.full_like(flat_logits, -1e9)
+            filtered[top_k_indices] = flat_logits[top_k_indices]
+            return filtered.reshape(original_shape)
+        else:
+            k = min(k, logits.shape[0])
+            top_k_indices = np.argpartition(logits, -k)[-k:]
+            filtered = np.full_like(logits, -1e9)
+            filtered[top_k_indices] = logits[top_k_indices]
+            return filtered
     
     def _top_p_filtering(self, logits: np.ndarray, p: float) -> np.ndarray:
-        """Apply nucleus (top-p) filtering"""
+        """Apply nucleus (top-p) filtering. Handles both 1D and 2D arrays."""
         if p <= 0 or p >= 1:
             return logits
-        
-        sorted_indices = np.argsort(logits)[::-1]
-        sorted_logits = logits[sorted_indices]
-        
+
+        # Handle multidimensional arrays
+        original_shape = logits.shape
+        if logits.ndim > 1:
+            flat_logits = logits.flatten()
+        else:
+            flat_logits = logits
+
+        sorted_indices = np.argsort(flat_logits)[::-1]
+        sorted_logits = flat_logits[sorted_indices]
+
         probs = self._softmax(sorted_logits)
         cumsum = np.cumsum(probs)
-        
+
         cutoff_idx = np.searchsorted(cumsum, p)
         if cutoff_idx < len(cumsum):
             cutoff_idx += 1
-        
-        filtered = np.full_like(logits, -1e9)
+
+        filtered = np.full_like(flat_logits, -1e9)
         kept_indices = sorted_indices[:cutoff_idx]
-        filtered[kept_indices] = logits[kept_indices]
-        
+        filtered[kept_indices] = flat_logits[kept_indices]
+
+        if logits.ndim > 1:
+            return filtered.reshape(original_shape)
         return filtered
     
     def _to_numpy(self, tensor: Any) -> np.ndarray:

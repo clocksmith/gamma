@@ -23,7 +23,39 @@ You can mix these moves: e.g. blend two models most of the time but still swap t
 
 ## 2. Quick recipes
 
-### CLI Commands
+### New CLI (Recommended)
+
+The Mind Meld CLI now supports YAML configs, presets, model aliases, and simplified syntax:
+
+```bash
+# Use a preset (creative, analytical, debate, brainstorm, experimental, minimal)
+python tools/run_mind_meld_cli.py --preset creative
+python tools/run_mind_meld_cli.py --preset debate --prompt "Is AI beneficial?"
+
+# Model aliases (shorter than full paths)
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend dynamic
+python tools/run_mind_meld_cli.py gemma-1b@Optimist gemma-2b@Skeptic
+
+# Blend modes: hard, soft, dynamic, smooth, or 0-100 strength
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend smooth --steps 50
+
+# Load a YAML config file
+python tools/run_mind_meld_cli.py configs/mind_meld/example-custom.yaml
+
+# Override preset values with CLI flags
+python tools/run_mind_meld_cli.py --preset creative --temperature 0.5 --steps 100
+
+# Save your config for reuse
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend dynamic --save-config my-setup.yaml
+
+# Utility commands
+python tools/run_mind_meld_cli.py --list-presets
+python tools/run_mind_meld_cli.py --list-aliases
+python tools/run_mind_meld_cli.py --list-models
+python tools/run_mind_meld_cli.py gemma-1b gemma-2b --show-config
+```
+
+### Legacy CLI Commands
 
 ```bash
 # 1. Simple ensemble with blending

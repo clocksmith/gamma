@@ -1,0 +1,30 @@
+# Minimal Mind Meld Preset
+# Simple round-robin switching with sensible defaults
+
+models:
+  - engine: pytorch
+    model: google/gemma-3-1b-it
+  - engine: pytorch
+    model: google/gemma-2-2b-it
+
+strategy: round_robin
+interval: 8
+
+prompt: "Hello, let me tell you a story:"
+
+blend:
+  enabled: false
+  mode: hard
+  strength: 0
+
+generation:
+  steps: 20
+  temperature: 0.7
+  top_k: 8
+  top_p: 0.95
+  repetition_penalty: 1.1
+
+output:
+  verbose: false
+  show_attention: false
+  summary_only: false

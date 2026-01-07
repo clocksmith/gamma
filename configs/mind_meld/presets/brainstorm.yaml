@@ -1,0 +1,46 @@
+# Brainstorm Mind Meld Preset
+# Three models generating diverse ideas with high creativity
+
+models:
+  - engine: pytorch
+    model: google/gemma-3-1b-it
+    persona: "You generate wild, unconventional ideas without filtering."
+    weight: 0.4
+  - engine: pytorch
+    model: google/gemma-2-2b-it
+    persona: "You build on ideas and find practical applications."
+    weight: 0.35
+  - engine: pytorch
+    model: google/gemma-3-4b-it
+    persona: "You synthesize ideas and identify the most promising directions."
+    weight: 0.25
+
+strategy: random
+interval: 10
+
+prompt: "Brainstorming session - topic: innovative solutions for"
+
+blend:
+  enabled: true
+  mode: dynamic
+  strategy: attention_weighted
+  soft_swap: true
+  soft_swap_weight: 0.35
+  order_neutral: true
+  strength: 60
+
+generation:
+  steps: 80
+  temperature: 1.0
+  top_k: 15
+  top_p: 0.98
+  repetition_penalty: 1.05
+
+output:
+  verbose: false
+  show_attention: true
+  summary_only: false
+  meld_diagnostics: false
+
+advanced:
+  use_stats_tracker: true

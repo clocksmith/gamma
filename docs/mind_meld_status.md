@@ -29,6 +29,8 @@ Mind Meld can combine models via:
   `confidence_weighted`, `dynamic_weighted`, `attention_weighted`,
   `ensemble_voting`, and `learned`.
 - Agreement-Based Ensembling: `--use-abe` (token-surface agreement).
+- Per-model personas: `--persona` flag (repeat for each model) for different
+  system prompts per model.
 - Optional helpers: `--use-speculative`, `--use-contrastive`, `--use-moe-router`,
   `--use-feedback-loop`, `--use-adversarial`, `--use-hierarchical`.
 - Soft swaps: `--soft-swap` keeps cadence while blending every step.
@@ -122,6 +124,119 @@ python gamma.py mind-meld \
   --order-neutral
 ```
 
+**Per-model personas (identical models, different personalities)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:google/gemma-3-1b-it pytorch:google/gemma-3-1b-it \
+  --persona "You are an optimistic futurist." \
+  --persona "You are a cautious skeptic." \
+  --strategy fixed_interval --interval 8 \
+  --prompt "What is the future of AI?"
+```
+
+**Expert panel (3 personas with ABE)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:gemma-1b pytorch:gemma-1b pytorch:gemma-1b \
+  --persona "You are a scientist who uses data and evidence." \
+  --persona "You are a philosopher who asks deep questions." \
+  --persona "You are an artist who thinks in metaphors." \
+  --use-abe \
+  --prompt "What is consciousness?"
+```
+
+**Soft swap with blending (smooth transitions)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:gemma-1b pytorch:gemma-1b \
+  --soft-swap \
+  --use-blending --blend-strategy confidence_weighted \
+  --prompt "Explain quantum computing"
+```
+
+**Draft/refine (small model drafts, large validates)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:gemma-1b pytorch:gemma-2b \
+  --use-speculative \
+  --shared-chat-template \
+  --prompt "Write a short story"
+```
+
+**Semantic swapping (swap on topic change)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:llama-7b pytorch:codellama-7b \
+  --swap-strategy semantic --semantic-threshold 0.7 \
+  --prompt "Explain REST APIs with code examples"
+```
+
+**Round robin (alternating models)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:model-a pytorch:model-b \
+  --swap-strategy round_robin \
+  --meld-diagnostics \
+  --prompt "What are the pros and cons of remote work?"
+```
+
+**Confidence routing (swap on uncertainty)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:general-model pytorch:specialist-model \
+  --swap-strategy confidence --confidence-threshold 0.8 \
+  --prompt "Explain machine learning basics"
+```
+
+**Perplexity routing (swap on confusion)**:
+```bash
+python gamma.py mind-meld \
+  --models pytorch:model-a pytorch:model-b \
+  --swap-strategy perplexity --perplexity-threshold 50.0 \
+  --prompt "Describe the history of computing"
+```
+
+### Tactics Summary
+
+| Tactic | Best For | Model Setup | Key Flags |
+|--------|----------|-------------|-----------|
+| Expert Panel | Diverse perspectives | 3x identical | `--persona` x3, `--use-abe` |
+| Draft/Refine | Quality + speed | small + large | `--use-speculative` |
+| Confidence Routing | Uncertainty handling | general + specialist | `--strategy confidence` |
+| Perplexity Swap | Detecting confusion | 2+ any | `--strategy perplexity` |
+| Semantic Swap | Topic-based routing | general + domain | `--strategy semantic` |
+| Weighted Blend | Smooth mixing | 2-3 same family | `--use-blending --order-neutral` |
+| Soft Swap | Gradual transitions | 2 similar | `--soft-swap` |
+
+### What Works Best Today
+
+1. **Identical models + personas** - Full KV sharing, different perspectives, no translation overhead
+2. **Same family, similar sizes** - Minimal compatibility issues, fast KV transfer
+3. **ABE with 3+ models** - Consensus reduces hallucination, best with identical models
+4. **Draft/refine pattern** - Small model speed + large model quality
+
+### What Requires Caution
+
+1. **Cross-architecture** - Works but relies on replay (slower)
+2. **Different vocab sizes** - Blending mode has known index bug
+3. **Force KV translation** - Produces garbage without matching layer counts
+
+### Per-Model Personas
+
+The `--persona` flag allows different system prompts for each model. This is
+ideal for:
+
+- **Debate scenarios**: optimist vs pessimist, pro vs con
+- **Expert panels**: scientist + philosopher + artist
+- **Perspective blending**: technical + creative + ethical viewpoints
+- **Role-play**: different characters contributing to a story
+
+Key observations:
+- First persona tends to influence initial tone strongly
+- Identical models + different personas = ideal setup (KV cache shares directly)
+- ABE works well for finding consensus tokens across perspectives
+- Soft-swap can cause stuttering with very contrasting personas
+
 ### Debugging Swaps
 
 1. Enable `--meld-diagnostics` to see KV cache path decisions.
@@ -150,10 +265,10 @@ python gamma.py mind-meld \
 
 ### Remaining Work
 
-**Minor improvements:**
-- Further optimize tokenizer alignment for long sequences
-- Add regression test suite for KV replay latency
-- Fix blending mode vocab mismatch bug (index out of bounds with different vocab sizes)
+**Recently completed:**
+- ~~Further optimize tokenizer alignment for long sequences~~ (Binary search + caching added)
+- ~~Add regression test suite for KV replay latency~~ (tests/test_kv_cache_latency.py)
+- ~~Fix blending mode vocab mismatch bug~~ (2D array handling fixed in blending.py)
 
 **Unsolved Research Problems:**
 

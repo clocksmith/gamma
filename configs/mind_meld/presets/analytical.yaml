@@ -1,0 +1,43 @@
+# Analytical Mind Meld Preset
+# Optimized for logical reasoning with low temperature and confidence-based swapping
+
+models:
+  - engine: pytorch
+    model: google/gemma-2-2b-it
+    persona: "You are a logical analyst who breaks down problems systematically and values precision."
+    weight: 0.5
+  - engine: pytorch
+    model: google/gemma-3-1b-it
+    persona: "You are a fact-checker who verifies claims and identifies logical fallacies."
+    weight: 0.5
+
+strategy: confidence
+interval: 6
+
+prompt: "Let us analyze this problem step by step:"
+
+blend:
+  enabled: true
+  mode: dynamic
+  strategy: confidence_weighted
+  soft_swap: true
+  soft_swap_weight: 0.25
+  order_neutral: false
+  strength: 40
+
+generation:
+  steps: 40
+  temperature: 0.5
+  top_k: 6
+  top_p: 0.9
+  repetition_penalty: 1.2
+
+output:
+  verbose: false
+  show_attention: true
+  summary_only: false
+  meld_diagnostics: false
+
+advanced:
+  use_stats_tracker: true
+  translate_logits: false
