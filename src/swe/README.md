@@ -32,6 +32,7 @@ Tool Executors (grep, read_file, git_diff, run_tests, ...)
 - **Tools**: Simple Python scripts with `execute()` in `tools/scripts/`.
 - **Integrations**: Model backends (Ollama, Transformers, Anthropic).
 - **Runner**: SWE-bench runner and execution helpers.
+- **FunctionGemma training**: standalone utilities in `src/functiongemma_training/`.
 
 ## Directory Structure
 
