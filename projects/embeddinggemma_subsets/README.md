@@ -37,6 +37,14 @@ Then run this pipeline with `--model /path/to/embeddinggemma-300m`.
 ## Batch Run
 
 ```bash
+# 1) Generate large synthetic corpora + hard eval datasets (default hard mode)
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/data_tools/make_synthetic_hard_datasets.py \
+  --langs en,es,zh,ja,ar,fr,pt,hi \
+  --docs-target 2200 \
+  --queries-target 1500 \
+  --keywords-per-query 12
+
+# 2) Build vocab subsets from generated corpora
 gamma/.venv/bin/python gamma/tools/build_embeddinggemma_subsets.py \
   --config gamma/projects/embeddinggemma_subsets/config/subsets.json
 ```
@@ -70,6 +78,37 @@ gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/eval/run_eval.py \
   --subset-dir gamma/projects/embeddinggemma_subsets/output/google__embeddinggemma-300m-en-vocab50000 \
   --bench-iters 25 --bench-warmup 5 \
   --charts
+```
+
+`run_eval.py` now enforces hard datasets by default (`dataset.meta.difficulty == "hard"`).
+Use `--allow-non-hard` only for legacy runs.
+
+## Cross-Language Summary
+
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/eval/aggregate_eval.py \
+  --runs-root gamma/projects/embeddinggemma_subsets/eval_output/tier_run3 \
+  --out gamma/projects/embeddinggemma_subsets/eval_output/tier_run3/summary
+```
+
+This writes:
+- `summary.json` (full aggregate)
+- `leaderboard.csv` (sortable table)
+- charts under `summary/charts/`:
+  - `summary_recall1.png`
+  - `summary_quality_retention.png`
+  - `summary_oov_rate.png`
+  - `summary_agreement.png`
+  - `summary_speed.png`
+  - `summary_size_vs_quality.png`
+  - `summary_oov_vs_quality.png`
+
+## Tokenizer Coverage (Base Model)
+
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/data_tools/tokenizer_coverage_report.py \
+  --tokenizer /Users/xyz/.cache/huggingface/hub/models--google--embeddinggemma-300m/snapshots/57c266a740f537b4dc058e1b0cda161fd15afa75 \
+  --langs en,es,zh,ja,ar,fr,pt,hi
 ```
 
 ## Single Run (English)

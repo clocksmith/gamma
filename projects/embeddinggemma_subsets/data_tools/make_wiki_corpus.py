@@ -29,6 +29,8 @@ import re
 from pathlib import Path
 from typing import Iterable
 
+import regex as re_u
+
 
 _DOC_OPEN_RE = re.compile(r"^<doc\\b")
 _DOC_CLOSE_RE = re.compile(r"^</doc>")
@@ -161,6 +163,116 @@ def _build_retrieval_dataset(paragraphs: list[str], *, seed: int, max_docs: int,
     return {"queries": queries, "docs": docs, "relevant": relevant}
 
 
+_WORD_RE = re_u.compile(r"\\p{L}+(?:[\\p{Mn}\\p{Mc}]*)", re_u.UNICODE)
+
+
+def _tokenize_words(text: str) -> list[str]:
+    # Language-agnostic-ish tokenization using Unicode letter classes.
+    # Works reasonably across Latin/Cyrillic/Arabic/Devanagari; for CJK this yields long runs.
+    out: list[str] = []
+    for m in _WORD_RE.finditer(text):
+        w = m.group(0).strip()
+        if len(w) < 2:
+            continue
+        out.append(w.lower())
+    return out
+
+
+def _top_keywords_tfidf(words: list[str], df: dict[str, int], n_docs: int, *, k: int) -> list[str]:
+    # Simple TF-IDF; no stopwording.
+    tf: dict[str, int] = {}
+    for w in words:
+        tf[w] = tf.get(w, 0) + 1
+    scored = []
+    for w, c in tf.items():
+        d = df.get(w, 0)
+        if d <= 0:
+            continue
+        idf = (1.0 + (n_docs / float(d)))
+        score = float(c) * idf
+        scored.append((score, w))
+    scored.sort(reverse=True)
+    return [w for _, w in scored[:k]]
+
+
+def _build_retrieval_dataset_hard(
+    paragraphs: list[str],
+    *,
+    seed: int,
+    max_docs: int,
+    max_queries: int,
+    keywords_per_query: int,
+    distractors_per_query: int,
+) -> dict:
+    """
+    Harder dataset:
+    - docs: first `max_docs` paragraphs (shuffled)
+    - queries: keyword-style queries (TF-IDF keywords) derived from each relevant doc
+    - distractors: selected implicitly by making docs pool large + lexical-overlap sampling
+
+    This produces a dataset where the query is NOT a verbatim substring of the doc.
+    """
+    rnd = random.Random(seed)
+    paras = [p for p in paragraphs if len(p) >= 128]
+    rnd.shuffle(paras)
+    docs = paras[:max_docs]
+
+    # Pre-tokenize docs and compute document frequency.
+    doc_words: list[list[str]] = []
+    df: dict[str, int] = {}
+    for d in docs:
+        ws = _tokenize_words(d)
+        doc_words.append(ws)
+        for w in set(ws):
+            df[w] = df.get(w, 0) + 1
+
+    n_docs = len(docs)
+    # Inverted index to pull lexical-overlap distractors quickly.
+    inv: dict[str, list[int]] = {}
+    for i, ws in enumerate(doc_words):
+        for w in set(ws):
+            inv.setdefault(w, []).append(i)
+
+    queries: list[str] = []
+    relevant: list[list[int]] = []
+
+    # Build queries from the doc pool. We don't explicitly store distractors; retrieval sees the full doc pool.
+    for di in range(n_docs):
+        if len(queries) >= max_queries:
+            break
+        ws = doc_words[di]
+        if not ws:
+            continue
+
+        kw = _top_keywords_tfidf(ws, df, n_docs, k=keywords_per_query)
+        if len(kw) < max(3, keywords_per_query // 2):
+            continue
+
+        rnd.shuffle(kw)
+        # Keyword queries are intentionally "underspecified" to make retrieval harder.
+        q = " ".join(kw[: min(len(kw), keywords_per_query)])
+        if len(q) < 12:
+            continue
+
+        qi = len(queries)
+        queries.append(q)
+        relevant.append([qi, di])
+
+        # Touch distractors: ensure there exist other docs sharing keywords by mixing corpus.
+        # (This doesn't change the dataset structure; it just makes sure the query isn't trivial.)
+        if distractors_per_query > 0:
+            cand: dict[int, int] = {}
+            for w in kw[: min(len(kw), 12)]:
+                for j in inv.get(w, []):
+                    if j == di:
+                        continue
+                    cand[j] = cand.get(j, 0) + 1
+            # If no candidates, the dataset is still valid but less "hard".
+            _ = sorted(cand.items(), key=lambda x: (-x[1], x[0]))[:distractors_per_query]
+
+    return {"queries": queries, "docs": docs, "relevant": relevant}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--lang", required=True, help="Language tag (e.g., en, es, ja, ar).")
@@ -171,6 +283,9 @@ def main() -> int:
     ap.add_argument("--max-paragraphs", type=int, default=200000, help="Max paragraphs to write into corpus.")
     ap.add_argument("--max-docs", type=int, default=5000, help="Max docs in retrieval dataset.")
     ap.add_argument("--max-queries", type=int, default=5000, help="Max queries in retrieval dataset.")
+    ap.add_argument("--mode", choices=["easy", "hard"], default="hard", help="Dataset difficulty mode.")
+    ap.add_argument("--keywords-per-query", type=int, default=12, help="Hard mode: TF-IDF keywords per query.")
+    ap.add_argument("--distractors-per-query", type=int, default=25, help="Hard mode: target number of lexical-overlap distractors.")
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
 
@@ -192,17 +307,28 @@ def main() -> int:
     out_corpus = Path(args.out_corpus)
     n_written = _write_lines(out_corpus, paragraphs, limit=int(args.max_paragraphs))
 
-    ds = _build_retrieval_dataset(
-        paragraphs,
-        seed=int(args.seed),
-        max_docs=int(args.max_docs),
-        max_queries=int(args.max_queries),
-    )
+    if args.mode == "easy":
+        ds = _build_retrieval_dataset(
+            paragraphs,
+            seed=int(args.seed),
+            max_docs=int(args.max_docs),
+            max_queries=int(args.max_queries),
+        )
+    else:
+        ds = _build_retrieval_dataset_hard(
+            paragraphs,
+            seed=int(args.seed),
+            max_docs=int(args.max_docs),
+            max_queries=int(args.max_queries),
+            keywords_per_query=int(args.keywords_per_query),
+            distractors_per_query=int(args.distractors_per_query),
+        )
     out_dataset = Path(args.out_dataset)
     out_dataset.parent.mkdir(parents=True, exist_ok=True)
     out_dataset.write_text(json.dumps(ds, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(f"lang={args.lang} paragraphs={len(paragraphs)} corpus_written={n_written}")
+    print(f"dataset_mode={args.mode}")
     print(f"dataset docs={len(ds['docs'])} queries={len(ds['queries'])} pairs={len(ds['relevant'])}")
     print(f"wrote corpus: {out_corpus}")
     print(f"wrote dataset: {out_dataset}")
@@ -211,4 +337,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

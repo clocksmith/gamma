@@ -71,6 +71,26 @@ def _load_dataset(dataset_path: Path) -> dict[str, Any]:
     return obj
 
 
+def _validate_dataset_hardness(dataset: dict[str, Any], *, allow_non_hard: bool) -> None:
+    if allow_non_hard:
+        return
+    bad: list[str] = []
+    for lang, blob in dataset.items():
+        if not isinstance(blob, dict):
+            bad.append(str(lang))
+            continue
+        meta = blob.get("meta", {})
+        difficulty = meta.get("difficulty") if isinstance(meta, dict) else None
+        if str(difficulty).lower() != "hard":
+            bad.append(str(lang))
+    if bad:
+        langs = ", ".join(sorted(bad))
+        raise RuntimeError(
+            f"Non-hard datasets detected for: {langs}. "
+            "Regenerate with hard-mode generator or pass --allow-non-hard."
+        )
+
+
 def _softmax(x: np.ndarray) -> np.ndarray:
     x = x - np.max(x)
     ex = np.exp(x)
@@ -426,6 +446,7 @@ def main() -> int:
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--max-length", type=int, default=128)
     ap.add_argument("--k", default="1,5,10", help="Comma-separated K values for Recall/MRR/nDCG.")
+    ap.add_argument("--allow-non-hard", action="store_true", help="Allow datasets without meta.difficulty=hard.")
     ap.add_argument("--charts", action="store_true", help="Write PNG charts into out/charts/")
     ap.add_argument("--bench-iters", type=int, default=25, help="Forward-only benchmark iterations per batch.")
     ap.add_argument("--bench-warmup", type=int, default=5, help="Forward-only warmup iterations per batch.")
@@ -434,6 +455,7 @@ def main() -> int:
     _set_offline_env()
 
     dataset = _load_dataset(Path(args.dataset))
+    _validate_dataset_hardness(dataset, allow_non_hard=bool(args.allow_non_hard))
 
     if args.langs:
         langs = [x.strip() for x in args.langs.split(",") if x.strip()]
