@@ -1,146 +1,220 @@
-# EmbeddingGemma Subsets
+# EmbeddingGemma Subsets: Unified Pipeline
 
-Goal: build a repeatable pipeline to create smaller, language-targeted subsets of a large-vocab embedding model (starting with `google/embeddinggemma-300m`) by:
+This project now uses one resumable pipeline and one workspace layout for:
+- raw data collection (`Wikipedia` + `Gemini`)
+- merged corpus/dataset generation
+- distillation pair generation
+- subset distillation (single-language and mixed, e.g. `en-es`)
+- repeated benchmarking with confidence intervals and charts
 
-1. Selecting a keep-list of token IDs based on a language corpus.
-2. Pruning vocab-dependent weights (at minimum: input embeddings).
-3. Emitting an `old_id -> new_id` remap that must be applied at runtime.
+## Workspace Layout
 
-This is primarily about disk/RAM footprint. For embedding/pooling models, runtime speed typically does not scale with vocab size (gather cost depends on sequence length, not vocab size), but smaller checkpoints can still matter a lot for on-device distribution.
+Use one workspace root (example: `gamma/projects/embeddinggemma_subsets/workspaces/main`):
 
-## Layout
+- `raw/wiki/<lang>.jsonl`
+- `raw/gemini/<lang>.jsonl`
+- `raw/merged/<lang>.jsonl`
+- `corpora/<lang>.txt`
+- `datasets/<lang>/dataset.json`
+- `training/distill_pairs.jsonl`
+- `models/distilled/...`
+- `eval/benchmark/...`
 
-- `config/subsets.json`: batch config (model, output root, language subsets).
-- `data/`: put your corpora here (one or more text files per language).
-- `output/`: generated keep-lists, remaps, and pruned checkpoints.
+## Scripts You Should Use
 
-## Prereqs
+- `pipeline/run_pipeline.py`: orchestrates end-to-end steps and resume/skip logic.
+- `data_tools/fetch_wikipedia_jsonl.py`: fetches capped Wikipedia JSONL (API mode for strict network control).
+- `data_tools/generate_gemini_seed_jsonl.py`: generates multilingual seed text from Gemini, optionally seeded by wiki JSONL.
+- `data_tools/make_wiki_corpus.py`: builds corpus text + retrieval dataset from merged JSONL.
+- `training/make_distill_pairs.py`: creates distillation pairs from datasets.
+- `training/distill_subset.py`: trains one subset student (supports `--langs en,es` etc).
+- `eval/run_benchmark.py`: repeated eval/perf runs + CIs + charts.
 
-Use the repo venv:
+## Prerequisites
 
 ```bash
 source gamma/.venv/bin/activate
 ```
 
-You must have the base model + tokenizer available locally (HF cache or a local path). This environment currently cannot fetch from Hugging Face, so plan to pre-seed the cache or point `--model` at a local directory containing the model files.
+Set `GEMINI_API_KEY` in `~/.env` (or pass `--env-file` to Gemini script).
 
-If you do have network access on a machine, one workable approach is:
+Base model path used below:
 
 ```bash
-huggingface-cli download google/embeddinggemma-300m \
-  --local-dir /path/to/embeddinggemma-300m \
-  --local-dir-use-symlinks False
+export BASE_MODEL=/Users/xyz/.cache/huggingface/hub/models--google--embeddinggemma-300m/snapshots/57c266a740f537b4dc058e1b0cda161fd15afa75
 ```
 
-Then run this pipeline with `--model /path/to/embeddinggemma-300m`.
+## End-to-End Commands (Real, Copy/Paste)
 
-## Batch Run
+### 1) Initialize workspace
 
 ```bash
-# 1) Generate large synthetic corpora + hard eval datasets (default hard mode)
-gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/data_tools/make_synthetic_hard_datasets.py \
-  --langs en,es,zh,ja,ar,fr,pt,hi \
-  --docs-target 2200 \
-  --queries-target 1500 \
-  --keywords-per-query 12
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps init \
+  --from-scratch
+```
 
-# 2) Build vocab subsets from generated corpora
+### 2) Fetch small capped Wikipedia seed set
+
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps fetch \
+  --langs en,es,zh,ja,ar,fr,pt,hi \
+  --resume \
+  --wiki-max-output-mb 8 \
+  --wiki-max-rows 100 \
+  --wiki-max-requests 80 \
+  --wiki-batch-pages 20 \
+  --wiki-min-chars 80 \
+  --wiki-sleep-ms 80 \
+  --wiki-retry-429-base-s 2 \
+  --wiki-retry-429-max-s 30 \
+  --wiki-max-consecutive-errors 12
+```
+
+### 3) Generate Gemini data seeded by wiki
+
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps gemini \
+  --langs en,es,zh,ja,ar,fr,pt,hi \
+  --resume \
+  --gemini-model gemini-3-flash-preview \
+  --gemini-rows-per-lang 1000 \
+  --gemini-batch-size 50 \
+  --gemini-min-chars 300 \
+  --gemini-max-chars 1200 \
+  --gemini-temperature 1.0 \
+  --gemini-sleep-ms 250
+```
+
+### 4) Merge + build datasets + build distill pairs
+
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps merge,dataset,pairs \
+  --langs en,es,zh,ja,ar,fr,pt,hi \
+  --resume \
+  --merge-max-rows 20000 \
+  --merge-min-chars 120 \
+  --max-paragraphs 300000 \
+  --max-docs 5000 \
+  --max-queries 5000 \
+  --keywords-per-query 14 \
+  --distractors-per-query 30 \
+  --pairs-per-lang 10000
+```
+
+## Build Subset Checkpoints (Required Before Distill)
+
+### A) Standard single-language subsets (batch from config)
+
+```bash
 gamma/.venv/bin/python gamma/tools/build_embeddinggemma_subsets.py \
   --config gamma/projects/embeddinggemma_subsets/config/subsets.json
 ```
 
-This drives `gamma/tools/vocab_subset.py` for each subset and writes per-subset artifacts to `output/`.
-
-## Tests (Static Docs)
-
-These tests compare base-model retrieval behavior vs a subset model on a small static multilingual document set.
-
-```bash
-# Base-only sanity (subset tests will be skipped)
-gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/tests/test_subset_embeddings.py
-
-# Compare against a specific subset model dir (single-language subsets should pass subset_langs automatically)
-EMBEDDINGGEMMA_SUBSET_DIR=gamma/projects/embeddinggemma_subsets/output/google__embeddinggemma-300m-en-vocab50000 \
-  gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/tests/test_subset_embeddings.py
-```
-
-## Eval (Metrics + Charts)
-
-This generates:
-- retrieval metrics: Recall@K, MRR@K, nDCG@K
-- subset health metrics: OOV rate (token remap fallback-to-unk)
-- base-vs-subset consistency: cosine distributions for docs/queries
-- divergence: KL/JS over per-query similarity distributions (softmax over docs)
-- optional PNG charts
-
-```bash
-gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/eval/run_eval.py \
-  --subset-dir gamma/projects/embeddinggemma_subsets/output/google__embeddinggemma-300m-en-vocab50000 \
-  --bench-iters 25 --bench-warmup 5 \
-  --charts
-```
-
-`run_eval.py` now enforces hard datasets by default (`dataset.meta.difficulty == "hard"`).
-Use `--allow-non-hard` only for legacy runs.
-
-## Cross-Language Summary
-
-```bash
-gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/eval/aggregate_eval.py \
-  --runs-root gamma/projects/embeddinggemma_subsets/eval_output/tier_run3 \
-  --out gamma/projects/embeddinggemma_subsets/eval_output/tier_run3/summary
-```
-
-This writes:
-- `summary.json` (full aggregate)
-- `leaderboard.csv` (sortable table)
-- charts under `summary/charts/`:
-  - `summary_recall1.png`
-  - `summary_quality_retention.png`
-  - `summary_oov_rate.png`
-  - `summary_agreement.png`
-  - `summary_speed.png`
-  - `summary_size_vs_quality.png`
-  - `summary_oov_vs_quality.png`
-
-## Tokenizer Coverage (Base Model)
-
-```bash
-gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/data_tools/tokenizer_coverage_report.py \
-  --tokenizer /Users/xyz/.cache/huggingface/hub/models--google--embeddinggemma-300m/snapshots/57c266a740f537b4dc058e1b0cda161fd15afa75 \
-  --langs en,es,zh,ja,ar,fr,pt,hi
-```
-
-## Single Run (English)
+### B) Mixed subset example (`en-es`)
 
 ```bash
 gamma/.venv/bin/python gamma/tools/vocab_subset.py \
-  --model google/embeddinggemma-300m \
-  --text gamma/projects/embeddinggemma_subsets/data/en.txt \
+  --model "$BASE_MODEL" \
+  --text gamma/projects/embeddinggemma_subsets/workspaces/main/corpora/en.txt \
+  --text gamma/projects/embeddinggemma_subsets/workspaces/main/corpora/es.txt \
   --top-k 50000 \
-  --out gamma/projects/embeddinggemma_subsets/output/embeddinggemma-300m-en \
+  --min-count 2 \
+  --fill-to-top-k \
+  --fill-strategy spm_score \
+  --out gamma/projects/embeddinggemma_subsets/output/google__embeddinggemma-300m-en-es-vocab50000 \
   --write-checkpoint
 ```
 
-## Runtime Reminder (Critical)
+## Distill Students
 
-A pruned checkpoint is not directly compatible with the original tokenizer IDs.
+### Single-language distill targets
 
-You must remap token IDs:
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps distill \
+  --base-model "$BASE_MODEL" \
+  --langs en,es,zh,ja,ar,fr,pt,hi \
+  --subset-root gamma/projects/embeddinggemma_subsets/output \
+  --resume \
+  --distill-device cpu \
+  --distill-steps 600 \
+  --distill-batch-size 32 \
+  --distill-max-length 96 \
+  --distill-lr 2e-5
+```
 
-- If token id exists in `id_remap.json.old_to_new`: use it.
-- Else: map to `unk` (or another safe fallback).
+### Mixed distill target example (`en-es`)
 
-Artifacts are emitted into each output folder, including `README_SUBSET.txt` with a concrete reminder.
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps distill \
+  --base-model "$BASE_MODEL" \
+  --distill-targets en-es \
+  --subset-root gamma/projects/embeddinggemma_subsets/output \
+  --resume \
+  --distill-device cpu \
+  --distill-steps 600 \
+  --distill-batch-size 32 \
+  --distill-max-length 96 \
+  --distill-lr 2e-5
+```
 
-## Suggested Release Order
+## Benchmark + Visualize
 
-The pipeline supports single-language subsets and “regional bundles” (multiple corpora inputs; a union keep-list).
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps benchmark \
+  --base-model "$BASE_MODEL" \
+  --langs en,es,zh,ja,ar,fr,pt,hi \
+  --distill-out-root gamma/projects/embeddinggemma_subsets/workspaces/main/models/distilled \
+  --benchmark-device cpu \
+  --benchmark-repeats 5 \
+  --benchmark-max-length 96 \
+  --benchmark-batch-size 64 \
+  --benchmark-iters 3 \
+  --benchmark-warmup 1
+```
 
-Suggested order for shaking out edge cases:
+Outputs:
+- `workspaces/main/eval/benchmark/benchmark_summary.json`
+- `workspaces/main/eval/benchmark/charts/benchmark_recall1_retention_ci.png`
+- `workspaces/main/eval/benchmark/charts/benchmark_speedup_ci.png`
+- `workspaces/main/eval/benchmark/charts/benchmark_prefill_ci.png`
+- `workspaces/main/eval/benchmark/charts/benchmark_vram_ci.png`
 
-1. `en`
-2. `es`
-3. `ja`
-4. `ar`
-5. `en-es` (bundle)
+## Resume and Independent Steps
+
+- Re-run safely with `--resume`; completed outputs are skipped.
+- Run only what you need via `--steps`.
+- If wiki was already collected elsewhere, copy files into:
+  - `workspaces/main/raw/wiki/<lang>.jsonl`
+  then run from `gemini` onward.
+
+Example (skip fetch):
+
+```bash
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeline.py \
+  --workspace-dir gamma/projects/embeddinggemma_subsets/workspaces/main \
+  --steps gemini,merge,dataset,pairs \
+  --langs en,es,zh,ja,ar,fr,pt,hi \
+  --resume
+```
+
+## Notes
+
+- `raw` is JSONL source data for generation/merging.
+- `corpora` is line-based text used for vocab subsetting.
+- `datasets` is retrieval eval/training structure (`queries/docs/relevant`).
+- Distillation needs an existing subset checkpoint directory (`id_remap.json` + model files).
+- Mixed models (`en-es`, `fr-pt`, etc.) are supported by creating matching mixed subset dirs and using `--distill-targets`.

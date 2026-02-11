@@ -24,6 +24,9 @@
 - [ ] Check OOV rate for the target language (fraction of token ids mapped to fallback).
 - [ ] Track quality retention vs base (`recall@1_subset / recall@1_base`, `mrr@10_subset / mrr@10_base`).
 - [ ] Track speedup vs base (`subset_qps / base_qps`) and size-vs-quality frontier.
+- [ ] Run repeated benchmarks (`repeats >= 5`) and report 95% CI.
+- [ ] Record prefill latency and peak VRAM on target hardware.
+- [ ] Distill subset students with contrastive + teacher losses and re-benchmark against base.
 
 ## Release
 

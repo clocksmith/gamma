@@ -332,9 +332,12 @@ def _embed_texts(
     bench_warmup: int,
     bench_iters: int,
 ) -> tuple[np.ndarray, dict[str, float]]:
+    import torch
+
     if not texts:
         return np.zeros((0, 0), dtype=np.float32), {"texts": 0.0, "tokens": 0.0, "oov_rate": 0.0}
 
+    wall_t0 = time.perf_counter()
     n = len(texts)
     bs = max(1, int(batch_size))
     chunks = [texts[i : i + bs] for i in range(0, n, bs)]
@@ -346,6 +349,11 @@ def _embed_texts(
     oov_tokens = 0.0
     bench: dict[str, float] = {}
     forward_ms: list[float] = []
+    if device.startswith("cuda"):
+        try:
+            torch.cuda.reset_peak_memory_stats()
+        except Exception:
+            pass
 
     for ci, chunk in enumerate(chunks):
         input_ids, attention_mask, prep = _prepare_batch(loaded, chunk, device=device, max_length=max_length)
@@ -374,8 +382,22 @@ def _embed_texts(
         all_vecs.append(vec)
 
     vecs = np.concatenate(all_vecs, axis=0)
+    wall_t1 = time.perf_counter()
     fwd_p50 = float(np.quantile(np.array(forward_ms, dtype=np.float64), 0.5)) if forward_ms else 0.0
     texts_per_s = (float(bs) / (fwd_p50 / 1000.0)) if fwd_p50 > 0 else 0.0
+    prefill_ms = float(forward_ms[0]) if forward_ms else 0.0
+    steady_ms = float(np.quantile(np.array(forward_ms[1:], dtype=np.float64), 0.5)) if len(forward_ms) > 1 else prefill_ms
+    wall_ms = float((wall_t1 - wall_t0) * 1000.0)
+    texts_per_s_total = (float(n) / (wall_ms / 1000.0)) if wall_ms > 0 else 0.0
+    peak_alloc_mb = 0.0
+    peak_reserved_mb = 0.0
+    if device.startswith("cuda"):
+        try:
+            peak_alloc_mb = float(torch.cuda.max_memory_allocated() / (1024.0 * 1024.0))
+            peak_reserved_mb = float(torch.cuda.max_memory_reserved() / (1024.0 * 1024.0))
+        except Exception:
+            peak_alloc_mb = 0.0
+            peak_reserved_mb = 0.0
     stats = {
         "texts": float(n),
         "batch_size": float(bs),
@@ -384,8 +406,14 @@ def _embed_texts(
         "oov_rate": float(oov_tokens / max(1.0, tokens)),
         "encode_ms": float(encode_ms),
         "remap_ms": float(remap_ms),
+        "prefill_ms": prefill_ms,
+        "steady_ms_p50": steady_ms,
         "forward_ms_p50_batch": float(fwd_p50),
         "texts_per_s_p50": float(texts_per_s),
+        "wall_ms_total": wall_ms,
+        "texts_per_s_total": float(texts_per_s_total),
+        "peak_vram_allocated_mb": peak_alloc_mb,
+        "peak_vram_reserved_mb": peak_reserved_mb,
     } | bench
     return vecs, stats
 
@@ -664,6 +692,15 @@ def main() -> int:
             # Cosine consistency: base(text) vs subset(text). Do both docs and queries.
             cos_docs = np.sum(base_doc_vecs * subset_doc_vecs, axis=1).tolist()
             cos_q = np.sum(base_q_vecs * subset_q_vecs, axis=1).tolist()
+            rank_shift = (np.array(ranks_subset, dtype=np.float64) - np.array(ranks_base, dtype=np.float64)).tolist() if ranks_base and ranks_subset else []
+            rank_shift_abs = np.abs(np.array(rank_shift, dtype=np.float64)) if rank_shift else np.array([], dtype=np.float64)
+            score_delta = (np.array(scatter_subset, dtype=np.float64) - np.array(scatter_base, dtype=np.float64)).tolist() if scatter_base and scatter_subset else []
+            rs_hist_counts: list[int] = []
+            rs_hist_edges: list[float] = []
+            if rank_shift:
+                h_counts, h_edges = np.histogram(np.array(rank_shift, dtype=np.float64), bins=41, range=(-200.0, 200.0))
+                rs_hist_counts = [int(x) for x in h_counts.tolist()]
+                rs_hist_edges = [float(x) for x in h_edges.tolist()]
             per_lang["subset"] = {
                 "timing": {"docs": subset_doc_stats, "queries": subset_q_stats},
                 "retrieval": {
@@ -693,6 +730,24 @@ def main() -> int:
                     "top1_agreement": float(np.mean(top1_agree)) if top1_agree else 0.0,
                     "spearman_mean": float(np.mean(spearman_list)) if spearman_list else 0.0,
                     "topk_jaccard_mean": {f"@{k}": float(np.mean(v)) if v else 0.0 for k, v in topk_jaccard.items()},
+                },
+                "distribution": {
+                    "rank_shift_subset_minus_base": {
+                        "mean": float(np.mean(rank_shift)) if rank_shift else 0.0,
+                        "p50": float(np.quantile(rank_shift, 0.50)) if rank_shift else 0.0,
+                        "p90": float(np.quantile(rank_shift, 0.90)) if rank_shift else 0.0,
+                        "p99": float(np.quantile(rank_shift, 0.99)) if rank_shift else 0.0,
+                        "abs_p90": float(np.quantile(rank_shift_abs, 0.90)) if rank_shift else 0.0,
+                        "abs_p99": float(np.quantile(rank_shift_abs, 0.99)) if rank_shift else 0.0,
+                        "hist_edges": rs_hist_edges,
+                        "hist_counts": rs_hist_counts,
+                    },
+                    "relevant_score_delta_subset_minus_base": {
+                        "mean": float(np.mean(score_delta)) if score_delta else 0.0,
+                        "p05": float(np.quantile(score_delta, 0.05)) if score_delta else 0.0,
+                        "p50": float(np.quantile(score_delta, 0.50)) if score_delta else 0.0,
+                        "p95": float(np.quantile(score_delta, 0.95)) if score_delta else 0.0,
+                    },
                 },
             }
 

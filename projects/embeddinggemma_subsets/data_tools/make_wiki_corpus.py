@@ -32,7 +32,7 @@ from typing import Iterable
 import regex as re_u
 
 
-_DOC_OPEN_RE = re.compile(r"^<doc\\b")
+_DOC_OPEN_RE = re.compile(r"^<doc\b")
 _DOC_CLOSE_RE = re.compile(r"^</doc>")
 
 
@@ -120,7 +120,7 @@ def _write_lines(path: Path, lines: Iterable[str], *, limit: int | None) -> int:
 
 def _split_sentences(text: str) -> list[str]:
     # Heuristic, language-agnostic-ish. Good enough for eval bootstrapping.
-    parts = re.split(r"(?<=[\\.!?。！？])\\s+", text.strip())
+    parts = re.split(r"(?<=[.!?。！？])\s+", text.strip())
     out = []
     for p in parts:
         p = p.strip()
@@ -163,7 +163,7 @@ def _build_retrieval_dataset(paragraphs: list[str], *, seed: int, max_docs: int,
     return {"queries": queries, "docs": docs, "relevant": relevant}
 
 
-_WORD_RE = re_u.compile(r"\\p{L}+(?:[\\p{Mn}\\p{Mc}]*)", re_u.UNICODE)
+_WORD_RE = re_u.compile(r"\p{L}+(?:[\p{Mn}\p{Mc}]*)", re_u.UNICODE)
 
 
 def _tokenize_words(text: str) -> list[str]:
@@ -292,6 +292,55 @@ def main() -> int:
     if bool(args.wikiextractor_dir) == bool(args.jsonl):
         raise SystemExit("Provide exactly one of --wikiextractor-dir or --jsonl")
 
+    out_corpus = Path(args.out_corpus)
+    out_dataset = Path(args.out_dataset)
+    out_corpus.parent.mkdir(parents=True, exist_ok=True)
+    out_dataset.parent.mkdir(parents=True, exist_ok=True)
+
+    # Graceful handling for missing input paths: emit empty artifacts instead of crashing.
+    if args.wikiextractor_dir:
+        src = Path(args.wikiextractor_dir)
+        if not src.exists():
+            out_corpus.write_text("", encoding="utf-8")
+            empty = {
+                "meta": {
+                    "lang": args.lang,
+                    "difficulty": args.mode,
+                    "source": "wikiextractor",
+                    "source_path": str(src),
+                    "missing_input": True,
+                },
+                "queries": [],
+                "docs": [],
+                "relevant": [],
+            }
+            out_dataset.write_text(json.dumps(empty, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            print(f"warning: missing input path: {src}")
+            print(f"wrote empty corpus: {out_corpus}")
+            print(f"wrote empty dataset: {out_dataset}")
+            return 0
+    else:
+        src = Path(args.jsonl)
+        if not src.exists():
+            out_corpus.write_text("", encoding="utf-8")
+            empty = {
+                "meta": {
+                    "lang": args.lang,
+                    "difficulty": args.mode,
+                    "source": "jsonl",
+                    "source_path": str(src),
+                    "missing_input": True,
+                },
+                "queries": [],
+                "docs": [],
+                "relevant": [],
+            }
+            out_dataset.write_text(json.dumps(empty, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            print(f"warning: missing input path: {src}")
+            print(f"wrote empty corpus: {out_corpus}")
+            print(f"wrote empty dataset: {out_dataset}")
+            return 0
+
     if args.wikiextractor_dir:
         paragraphs_iter = _iter_wikiextractor_paragraphs(Path(args.wikiextractor_dir))
     else:
@@ -304,7 +353,6 @@ def main() -> int:
         if len(paragraphs) >= int(args.max_paragraphs):
             break
 
-    out_corpus = Path(args.out_corpus)
     n_written = _write_lines(out_corpus, paragraphs, limit=int(args.max_paragraphs))
 
     if args.mode == "easy":
@@ -323,8 +371,15 @@ def main() -> int:
             keywords_per_query=int(args.keywords_per_query),
             distractors_per_query=int(args.distractors_per_query),
         )
-    out_dataset = Path(args.out_dataset)
-    out_dataset.parent.mkdir(parents=True, exist_ok=True)
+    source_kind = "wikiextractor" if bool(args.wikiextractor_dir) else "jsonl"
+    source_path = str(Path(args.wikiextractor_dir) if bool(args.wikiextractor_dir) else Path(args.jsonl))
+    ds["meta"] = {
+        "lang": args.lang,
+        "difficulty": args.mode,
+        "source": source_kind,
+        "source_path": source_path,
+        "missing_input": False,
+    }
     out_dataset.write_text(json.dumps(ds, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(f"lang={args.lang} paragraphs={len(paragraphs)} corpus_written={n_written}")

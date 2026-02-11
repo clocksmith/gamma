@@ -170,6 +170,10 @@ def main() -> int:
     speedup = []
     size_mb = []
     size_ratio = []
+    rank_shift_abs_p90 = []
+    rank_shift_abs_p99 = []
+    score_delta_p05 = []
+    score_delta_p95 = []
 
     for l in langs:
         per = rows[l]
@@ -183,6 +187,10 @@ def main() -> int:
         t1 = _get(per, ["subset", "agreement", "top1_agreement"])
         sp = _get(per, ["subset", "agreement", "spearman_mean"])
         sbytes = int(subset_sizes.get(l, 0))
+        rs90 = _get(per, ["subset", "distribution", "rank_shift_subset_minus_base", "abs_p90"])
+        rs99 = _get(per, ["subset", "distribution", "rank_shift_subset_minus_base", "abs_p99"])
+        sd05 = _get(per, ["subset", "distribution", "relevant_score_delta_subset_minus_base", "p05"])
+        sd95 = _get(per, ["subset", "distribution", "relevant_score_delta_subset_minus_base", "p95"])
 
         rr1 = (s_r1 / b_r1) if b_r1 > 0 else 0.0
         rm = (s_m / b_m) if b_m > 0 else 0.0
@@ -203,6 +211,10 @@ def main() -> int:
         speedup.append(spdup)
         size_mb.append(sbytes / (1024.0 * 1024.0))
         size_ratio.append(sr)
+        rank_shift_abs_p90.append(rs90)
+        rank_shift_abs_p99.append(rs99)
+        score_delta_p05.append(sd05)
+        score_delta_p95.append(sd95)
 
         leaderboard.append(
             {
@@ -221,6 +233,10 @@ def main() -> int:
                 "oov_rate_queries": round(oov, 6),
                 "top1_agreement": round(t1, 6),
                 "spearman_mean": round(sp, 6),
+                "rank_shift_abs_p90": round(rs90, 6),
+                "rank_shift_abs_p99": round(rs99, 6),
+                "score_delta_p05": round(sd05, 6),
+                "score_delta_p95": round(sd95, 6),
             }
         )
 
@@ -301,6 +317,20 @@ def main() -> int:
         charts_dir / "summary_oov_vs_quality.png",
         xlabel="oov_rate_queries",
         ylabel="recall@1 retention",
+    )
+    _plot_bars(
+        langs,
+        {"rank_shift_abs_p90": rank_shift_abs_p90, "rank_shift_abs_p99": rank_shift_abs_p99},
+        "Rank-shift tails (absolute rank error)",
+        charts_dir / "summary_rank_shift_tails.png",
+        ylabel="absolute rank shift",
+    )
+    _plot_bars(
+        langs,
+        {"score_delta_p05": score_delta_p05, "score_delta_p95": score_delta_p95},
+        "Relevant-score delta tails (subset - base)",
+        charts_dir / "summary_score_delta_tails.png",
+        ylabel="cosine delta",
     )
 
     print(f"Wrote: {out_dir / 'summary.json'}")
