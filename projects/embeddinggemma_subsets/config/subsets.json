@@ -3,11 +3,13 @@
   "out_root": "gamma/projects/embeddinggemma_subsets/output",
   "defaults": {
     "top_k": 50000,
-    "min_count": 1,
+    "min_count": 2,
     "max_lines": null,
     "write_checkpoint": true,
     "also_prune_output": false,
-    "dtype": "auto"
+    "dtype": "auto",
+    "fill_to_top_k": true,
+    "fill_strategy": "spm_score"
   },
   "subsets": [
     {
@@ -19,13 +21,36 @@
       "texts": ["gamma/projects/embeddinggemma_subsets/data/es.txt"]
     },
     {
+      "tag": "zh",
+      "top_k": 80000,
+      "min_count": 2,
+      "texts": ["gamma/projects/embeddinggemma_subsets/data/zh.txt"]
+    },
+    {
       "tag": "ja",
+      "top_k": 80000,
+      "min_count": 2,
       "texts": ["gamma/projects/embeddinggemma_subsets/data/ja.txt"]
     },
     {
       "tag": "ar",
+      "top_k": 50000,
+      "min_count": 2,
       "texts": ["gamma/projects/embeddinggemma_subsets/data/ar.txt"]
+    },
+    {
+      "tag": "fr",
+      "texts": ["gamma/projects/embeddinggemma_subsets/data/fr.txt"]
+    },
+    {
+      "tag": "pt",
+      "texts": ["gamma/projects/embeddinggemma_subsets/data/pt.txt"]
+    },
+    {
+      "tag": "hi",
+      "top_k": 80000,
+      "min_count": 2,
+      "texts": ["gamma/projects/embeddinggemma_subsets/data/hi.txt"]
     }
   ]
 }
-

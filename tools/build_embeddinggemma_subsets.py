@@ -87,6 +87,8 @@ def main() -> int:
         write_checkpoint = bool(entry.get("write_checkpoint", defaults.get("write_checkpoint", True)))
         also_prune_output = bool(entry.get("also_prune_output", defaults.get("also_prune_output", False)))
         dtype = str(entry.get("dtype", defaults.get("dtype", "auto")))
+        fill_to_top_k = bool(entry.get("fill_to_top_k", defaults.get("fill_to_top_k", True)))
+        fill_strategy = str(entry.get("fill_strategy", defaults.get("fill_strategy", "spm_score")))
 
         out_dir = _resolve_out_dir(out_root_p, base_model, tag, top_k)
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -105,6 +107,8 @@ def main() -> int:
             "--dtype",
             dtype,
         ]
+        if fill_to_top_k:
+            cmd += ["--fill-to-top-k", "--fill-strategy", fill_strategy]
         for t in texts:
             cmd += ["--text", t]
         if max_lines is not None:
