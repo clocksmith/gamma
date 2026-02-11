@@ -328,30 +328,65 @@ def _embed_texts(
     *,
     device: str,
     max_length: int,
+    batch_size: int,
     bench_warmup: int,
     bench_iters: int,
 ) -> tuple[np.ndarray, dict[str, float]]:
-    input_ids, attention_mask, prep = _prepare_batch(loaded, texts, device=device, max_length=max_length)
+    if not texts:
+        return np.zeros((0, 0), dtype=np.float32), {"texts": 0.0, "tokens": 0.0, "oov_rate": 0.0}
 
-    bench = _bench_forward(
-        loaded,
-        input_ids,
-        attention_mask,
-        device=device,
-        warmup=bench_warmup,
-        iters=bench_iters,
-    )
+    n = len(texts)
+    bs = max(1, int(batch_size))
+    chunks = [texts[i : i + bs] for i in range(0, n, bs)]
 
-    _maybe_sync(device)
-    t0 = time.perf_counter()
-    vecs = _forward_once(loaded, input_ids, attention_mask)
-    _maybe_sync(device)
-    t1 = time.perf_counter()
+    all_vecs: list[np.ndarray] = []
+    encode_ms = 0.0
+    remap_ms = 0.0
+    tokens = 0.0
+    oov_tokens = 0.0
+    bench: dict[str, float] = {}
+    forward_ms: list[float] = []
 
-    forward_once = float((t1 - t0) * 1000.0)
-    t_ms = bench.get("forward_ms_p50", forward_once)
-    texts_per_s = (float(prep["texts"]) / (t_ms / 1000.0)) if t_ms > 0 else 0.0
-    stats = prep | {"forward_ms_once": forward_once, "texts_per_s_p50": float(texts_per_s)} | bench
+    for ci, chunk in enumerate(chunks):
+        input_ids, attention_mask, prep = _prepare_batch(loaded, chunk, device=device, max_length=max_length)
+        encode_ms += float(prep.get("encode_ms", 0.0))
+        remap_ms += float(prep.get("remap_ms", 0.0))
+        tok_n = float(prep.get("tokens", 0.0))
+        tokens += tok_n
+        oov_tokens += float(prep.get("oov_rate", 0.0)) * tok_n
+
+        if ci == 0:
+            bench = _bench_forward(
+                loaded,
+                input_ids,
+                attention_mask,
+                device=device,
+                warmup=bench_warmup,
+                iters=bench_iters,
+            )
+
+        _maybe_sync(device)
+        t0 = time.perf_counter()
+        vec = _forward_once(loaded, input_ids, attention_mask)
+        _maybe_sync(device)
+        t1 = time.perf_counter()
+        forward_ms.append(float((t1 - t0) * 1000.0))
+        all_vecs.append(vec)
+
+    vecs = np.concatenate(all_vecs, axis=0)
+    fwd_p50 = float(np.quantile(np.array(forward_ms, dtype=np.float64), 0.5)) if forward_ms else 0.0
+    texts_per_s = (float(bs) / (fwd_p50 / 1000.0)) if fwd_p50 > 0 else 0.0
+    stats = {
+        "texts": float(n),
+        "batch_size": float(bs),
+        "batches": float(len(chunks)),
+        "tokens": float(tokens),
+        "oov_rate": float(oov_tokens / max(1.0, tokens)),
+        "encode_ms": float(encode_ms),
+        "remap_ms": float(remap_ms),
+        "forward_ms_p50_batch": float(fwd_p50),
+        "texts_per_s_p50": float(texts_per_s),
+    } | bench
     return vecs, stats
 
 
@@ -446,6 +481,7 @@ def main() -> int:
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--max-length", type=int, default=128)
     ap.add_argument("--k", default="1,5,10", help="Comma-separated K values for Recall/MRR/nDCG.")
+    ap.add_argument("--batch-size", type=int, default=64, help="Embedding batch size for docs/queries.")
     ap.add_argument("--allow-non-hard", action="store_true", help="Allow datasets without meta.difficulty=hard.")
     ap.add_argument("--charts", action="store_true", help="Write PNG charts into out/charts/")
     ap.add_argument("--bench-iters", type=int, default=25, help="Forward-only benchmark iterations per batch.")
@@ -486,6 +522,7 @@ def main() -> int:
         ["warmup"],
         device=args.device,
         max_length=min(16, args.max_length),
+        batch_size=1,
         bench_warmup=0,
         bench_iters=0,
     )
@@ -495,6 +532,7 @@ def main() -> int:
             ["warmup"],
             device=args.device,
             max_length=min(16, args.max_length),
+            batch_size=1,
             bench_warmup=0,
             bench_iters=0,
         )
@@ -515,6 +553,7 @@ def main() -> int:
             docs,
             device=args.device,
             max_length=args.max_length,
+            batch_size=int(args.batch_size),
             bench_warmup=int(args.bench_warmup),
             bench_iters=int(args.bench_iters),
         )
@@ -523,6 +562,7 @@ def main() -> int:
             queries,
             device=args.device,
             max_length=args.max_length,
+            batch_size=int(args.batch_size),
             bench_warmup=int(args.bench_warmup),
             bench_iters=int(args.bench_iters),
         )
@@ -537,6 +577,7 @@ def main() -> int:
                 docs,
                 device=args.device,
                 max_length=args.max_length,
+                batch_size=int(args.batch_size),
                 bench_warmup=int(args.bench_warmup),
                 bench_iters=int(args.bench_iters),
             )
@@ -545,6 +586,7 @@ def main() -> int:
                 queries,
                 device=args.device,
                 max_length=args.max_length,
+                batch_size=int(args.batch_size),
                 bench_warmup=int(args.bench_warmup),
                 bench_iters=int(args.bench_iters),
             )
