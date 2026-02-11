@@ -47,6 +47,38 @@ Example:
 python tools/download_model.py --repo-id google/gemma-2-2b-it --filename model.gguf
 ```
 
+#### `vocab_subset.py`
+Build a token keep-list from an English corpus (and optionally write a pruned `safetensors` checkpoint).
+
+Notes:
+- This produces a keep-list + ID remap. A pruned checkpoint is not directly compatible with the original tokenizer
+  unless you remap `input_ids` using `id_remap.json` (see `README_SUBSET.txt` in the output dir).
+
+```bash
+# Scan an English text file and keep top 50k token IDs (plus specials)
+gamma/.venv/bin/python tools/vocab_subset.py \
+  --model google/embeddinggemma-300m \
+  --text data/english.txt \
+  --top-k 50000 \
+  --out output/embeddinggemma-english-vocab
+
+# Also write a pruned checkpoint (requires model weights cached locally unless --allow-download)
+gamma/.venv/bin/python tools/vocab_subset.py \
+  --model google/embeddinggemma-300m \
+  --text data/english.txt \
+  --top-k 50000 \
+  --out output/embeddinggemma-english-vocab \
+  --write-checkpoint
+```
+
+#### `build_embeddinggemma_subsets.py`
+Batch driver for `vocab_subset.py` using a JSON config file.
+
+```bash
+gamma/.venv/bin/python tools/build_embeddinggemma_subsets.py \
+  --config projects/embeddinggemma_subsets/config/subsets.json
+```
+
 ---
 
 ### 📊 Benchmarking & Testing
