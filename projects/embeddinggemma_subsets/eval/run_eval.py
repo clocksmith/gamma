@@ -158,15 +158,28 @@ class LoadedModel:
     remap_old_to_new: dict[str, int] | None
 
 
-def _load_models(base_model: str, subset_dir: str | None, device: str) -> tuple[LoadedModel, LoadedModel | None]:
+def _load_models(
+    base_model: str,
+    subset_dir: str | None,
+    device: str,
+    *,
+    base_tokenizer: str | None = None,
+) -> tuple[LoadedModel, LoadedModel | None]:
     import torch
     from transformers import AutoModel, AutoTokenizer
 
-    base_tok = AutoTokenizer.from_pretrained(base_model, local_files_only=True, use_fast=True)
+    tok_src = str(base_tokenizer) if base_tokenizer else str(base_model)
+    base_tok = AutoTokenizer.from_pretrained(tok_src, local_files_only=True, use_fast=True)
     base = AutoModel.from_pretrained(base_model, local_files_only=True, low_cpu_mem_usage=True).to(device)
     base.eval()
-
-    base_loaded = LoadedModel(model=base, tokenizer=base_tok, remap_old_to_new=None)
+    base_remap: dict[str, int] | None = None
+    base_path = Path(base_model)
+    base_remap_path = base_path / "id_remap.json"
+    if base_remap_path.exists():
+        remap = _load_json(base_remap_path).get("old_to_new", {})
+        if isinstance(remap, dict) and remap:
+            base_remap = remap
+    base_loaded = LoadedModel(model=base, tokenizer=base_tok, remap_old_to_new=base_remap)
 
     if not subset_dir:
         return base_loaded, None
@@ -502,6 +515,7 @@ def _plot_bars(categories: list[str], series: dict[str, list[float]], title: str
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--base-model", default="google/embeddinggemma-300m", help="HF id or local path (must be cached).")
+    ap.add_argument("--base-tokenizer", default=None, help="Optional tokenizer source for base/subset tokenization.")
     ap.add_argument("--subset-dir", default=None, help="Path to subset model dir (contains model.safetensors + id_remap.json).")
     ap.add_argument("--dataset", default=str(Path(__file__).resolve().parents[1] / "datasets"))
     ap.add_argument("--out", default=str(Path(__file__).resolve().parents[1] / "eval_output"))
@@ -530,10 +544,16 @@ def main() -> int:
     out_dir = Path(args.out)
     charts_dir = out_dir / "charts"
 
-    base_loaded, subset_loaded = _load_models(args.base_model, args.subset_dir, args.device)
+    base_loaded, subset_loaded = _load_models(
+        args.base_model,
+        args.subset_dir,
+        args.device,
+        base_tokenizer=args.base_tokenizer,
+    )
 
     results: dict[str, Any] = {
         "base_model": args.base_model,
+        "base_tokenizer": args.base_tokenizer,
         "subset_dir": args.subset_dir,
         "device": args.device,
         "max_length": int(args.max_length),

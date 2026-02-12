@@ -71,8 +71,21 @@ gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeli
   --wiki-sleep-ms 80 \
   --wiki-retry-429-base-s 2 \
   --wiki-retry-429-max-s 30 \
-  --wiki-max-consecutive-errors 12
+  --wiki-max-consecutive-errors 12 \
+  --wiki-api-source hybrid \
+  --wiki-topic-buckets news,science,culture,law,health,finance,informal \
+  --wiki-purity-mode basic \
+  --wiki-purity-threshold 0.55 \
+  --wiki-max-latin-ratio-nonlatin 0.35 \
+  --wiki-priority-langs hi,ar,pt \
+  --wiki-priority-multiplier 2.0
 ```
+
+`fetch` now automatically applies:
+- near-duplicate filtering
+- boilerplate/disambiguation rejection
+- topic-bucket balancing
+- language-script purity filtering
 
 ### 3) Generate Gemini data seeded by wiki
 

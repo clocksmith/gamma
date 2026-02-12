@@ -100,7 +100,10 @@ def _subset_dir(subset_root: Path, lang: str, k_map: dict[str, int], pattern: st
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base-model", required=True)
+    ap.add_argument("--base-model", default=None, help="Base model path/repo when comparing against a fixed teacher.")
+    ap.add_argument("--base-root", default=None, help="Base subset root for per-language base models.")
+    ap.add_argument("--base-pattern", default="google__embeddinggemma-300m-{lang}-vocab{k}", help="Base subset pattern when --base-root is set.")
+    ap.add_argument("--base-tokenizer", default=None, help="Optional tokenizer source path/repo for both models.")
     ap.add_argument("--dataset", required=True)
     ap.add_argument("--subset-root", default="gamma/projects/embeddinggemma_subsets/output")
     ap.add_argument("--subset-pattern", default="google__embeddinggemma-300m-{lang}-vocab{k}")
@@ -114,6 +117,11 @@ def main() -> int:
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
+    has_base_model = bool(args.base_model)
+    has_base_root = bool(args.base_root)
+    if has_base_model == has_base_root:
+        raise SystemExit("Exactly one of --base-model or --base-root must be set.")
+
     root = Path(args.out)
     runs_root = root / "runs"
     runs_root.mkdir(parents=True, exist_ok=True)
@@ -126,11 +134,15 @@ def main() -> int:
         for lang in langs:
             out = runs_root / f"repeat_{rep:02d}" / lang
             subset = _subset_dir(Path(args.subset_root), lang, k_map, str(args.subset_pattern))
+            if has_base_model:
+                base_arg = str(args.base_model)
+            else:
+                base_arg = str(_subset_dir(Path(args.base_root), lang, k_map, str(args.base_pattern)))
             cmd = [
                 sys.executable,
                 str(run_eval),
                 "--base-model",
-                str(args.base_model),
+                base_arg,
                 "--subset-dir",
                 str(subset),
                 "--dataset",
@@ -150,6 +162,8 @@ def main() -> int:
                 "--out",
                 str(out),
             ]
+            if args.base_tokenizer:
+                cmd.extend(["--base-tokenizer", str(args.base_tokenizer)])
             _run(cmd)
 
     per_lang: dict[str, Any] = {}
@@ -185,7 +199,10 @@ def main() -> int:
         per_lang[lang] = {"runs": rows, "aggregate": agg}
 
     summary = {
-        "base_model": str(args.base_model),
+        "base_model": str(args.base_model) if has_base_model else None,
+        "base_root": str(args.base_root) if has_base_root else None,
+        "base_pattern": str(args.base_pattern) if has_base_root else None,
+        "base_tokenizer": str(args.base_tokenizer) if args.base_tokenizer else None,
         "dataset": str(args.dataset),
         "device": str(args.device),
         "max_length": int(args.max_length),
