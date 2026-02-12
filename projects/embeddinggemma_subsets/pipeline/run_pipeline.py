@@ -31,6 +31,7 @@ import random
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 
@@ -48,8 +49,13 @@ K_MAP = {
 
 
 def _run(cmd: list[str]) -> None:
+    start = time.perf_counter()
     print("+", " ".join(cmd))
-    subprocess.run(cmd, check=True)
+    try:
+        subprocess.run(cmd, check=True)
+    finally:
+        elapsed = time.perf_counter() - start
+        print(f"[run] elapsed={elapsed:.2f}s")
 
 
 def _resolve_hf_snapshot_dir(model_ref: str) -> str:
@@ -436,6 +442,7 @@ def _target_k(target: str) -> int:
 
 
 def main() -> int:
+    pipeline_start = time.perf_counter()
     ap = argparse.ArgumentParser()
     ap.add_argument("--workspace-dir", default="gamma/projects/embeddinggemma_subsets/workspaces/main")
     ap.add_argument("--steps", default="init,fetch,gemini,merge,dataset,pairs")
@@ -808,6 +815,11 @@ def main() -> int:
             if not corpus.exists():
                 raise RuntimeError(f"[subsets] missing corpus for {lang}: {corpus} (run dataset step first)")
 
+            print(
+                f"[subsets] start lang={lang} k={k} "
+                f"write_checkpoint={bool(args.subset_write_checkpoint)} out={out_dir}"
+            )
+            t0 = time.perf_counter()
             cmd = [
                 py,
                 str(vocab_subset_script),
@@ -834,6 +846,7 @@ def main() -> int:
             if bool(args.subset_also_prune_output):
                 cmd += ["--also-prune-output"]
             _run(cmd)
+            print(f"[subsets] done lang={lang} elapsed={time.perf_counter() - t0:.2f}s out={out_dir}")
 
         _run_parallel(langs, _subset_one, max_workers=int(args.parallel_workers), label="subsets")
 
@@ -855,6 +868,11 @@ def main() -> int:
                 print(f"[distill] skip {target}: resume and output exists {out_dir}")
                 return
 
+            print(
+                f"[distill] start target={target} langs={','.join(target_langs)} "
+                f"device={args.distill_device} steps={int(args.distill_steps)} out={out_dir}"
+            )
+            t0 = time.perf_counter()
             _run([
                 py, str(distill_script),
                 "--teacher-model", str(args.base_model),
@@ -873,6 +891,7 @@ def main() -> int:
                 "--beta-distill", str(float(args.distill_beta_distill)),
                 "--seed", str(int(args.seed)),
             ])
+            print(f"[distill] done target={target} elapsed={time.perf_counter() - t0:.2f}s out={out_dir}")
         _run_parallel(distill_targets, _distill_target, max_workers=int(args.parallel_workers), label="distill")
 
     if "benchmark" in steps:
@@ -911,6 +930,11 @@ def main() -> int:
                 )
                 continue
 
+            print(
+                f"[benchmark] start track={track_name} langs={','.join(active_langs)} "
+                f"device={args.benchmark_device} repeats={int(args.benchmark_repeats)}"
+            )
+            t0 = time.perf_counter()
             cmd = [
                 py, str(benchmark_script),
                 "--dataset", str(benchmark_dataset_dir),
@@ -932,6 +956,10 @@ def main() -> int:
             if base_tokenizer:
                 cmd += ["--base-tokenizer", str(base_tokenizer)]
             _run(cmd)
+            print(
+                f"[benchmark] done track={track_name} elapsed={time.perf_counter() - t0:.2f}s "
+                f"summary={summary_file}"
+            )
 
         _summarize_benchmark_tracks(
             benchmark_out,
@@ -945,6 +973,7 @@ def main() -> int:
     print(f"datasets_eval={datasets_eval_dir}")
     print(f"pairs={pairs_path}")
     print(f"distilled_models={distill_root}")
+    print(f"elapsed_total_s={time.perf_counter() - pipeline_start:.2f}")
     return 0
 
 

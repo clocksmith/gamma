@@ -10,6 +10,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -164,7 +165,16 @@ def main() -> int:
             ]
             if args.base_tokenizer:
                 cmd.extend(["--base-tokenizer", str(args.base_tokenizer)])
+            t0 = time.perf_counter()
+            print(
+                f"[benchmark_run] start repeat={rep:02d} lang={lang} "
+                f"device={args.device} out={out}"
+            )
             _run(cmd)
+            print(
+                f"[benchmark_run] done repeat={rep:02d} lang={lang} "
+                f"elapsed={time.perf_counter() - t0:.2f}s out={out / 'metrics.json'}"
+            )
 
     per_lang: dict[str, Any] = {}
     for lang in langs:

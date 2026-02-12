@@ -9,6 +9,7 @@ import argparse
 import json
 import math
 import random
+import time
 from pathlib import Path
 from typing import Any
 
@@ -111,6 +112,18 @@ def main() -> int:
 
     random.seed(int(args.seed))
     torch.manual_seed(int(args.seed))
+    run_start = time.perf_counter()
+
+    if str(args.device).startswith("cuda"):
+        cuda_ok = torch.cuda.is_available()
+        if cuda_ok:
+            dev_idx = torch.cuda.current_device()
+            dev_name = torch.cuda.get_device_name(dev_idx)
+            print(f"[distill_subset] device={args.device} cuda_available=true gpu={dev_name} (index={dev_idx})")
+        else:
+            print(f"[distill_subset] device={args.device} cuda_available=false")
+    else:
+        print(f"[distill_subset] device={args.device}")
 
     teacher = AutoModel.from_pretrained(str(args.teacher_model), local_files_only=True, low_cpu_mem_usage=True).to(args.device)
     teacher.eval()
@@ -129,6 +142,7 @@ def main() -> int:
         rows = [r for r in rows if str(r.get("lang", "")).strip() in want]
     if not rows:
         raise RuntimeError("No distillation pairs loaded.")
+    print(f"[distill_subset] loaded_pairs={len(rows)} langs_filter={args.langs if args.langs else 'ALL'}")
     rnd = random.Random(int(args.seed))
     rnd.shuffle(rows)
 
@@ -138,6 +152,7 @@ def main() -> int:
     losses: list[float] = []
     loss_con_list: list[float] = []
     loss_dis_list: list[float] = []
+    step_start = time.perf_counter()
 
     for step in range(total_steps):
         batch = [rows[(step * bsz + i) % len(rows)] for i in range(bsz)]
@@ -171,11 +186,17 @@ def main() -> int:
         loss_con_list.append(float(loss_ctr.item()))
         loss_dis_list.append(float(loss_distill.item()))
         if (step + 1) % 10 == 0 or step == 0:
+            now = time.perf_counter()
+            elapsed = now - step_start
+            steps_done = step + 1
+            sps = steps_done / elapsed if elapsed > 0 else 0.0
             print(
                 f"step={step+1}/{total_steps} "
                 f"loss={losses[-1]:.4f} "
                 f"contrastive={loss_con_list[-1]:.4f} "
-                f"distill={loss_dis_list[-1]:.4f}"
+                f"distill={loss_dis_list[-1]:.4f} "
+                f"elapsed={elapsed:.1f}s "
+                f"steps_per_s={sps:.2f}"
             )
 
     out = Path(args.out)
@@ -196,12 +217,15 @@ def main() -> int:
         "beta_distill": float(args.beta_distill),
         "pairs": str(args.pairs),
         "pairs_count": len(rows),
+        "device": str(args.device),
+        "duration_s": float(time.perf_counter() - run_start),
         "loss_mean_last_20": float(sum(losses[-20:]) / max(1, len(losses[-20:]))),
         "contrastive_mean_last_20": float(sum(loss_con_list[-20:]) / max(1, len(loss_con_list[-20:]))),
         "distill_mean_last_20": float(sum(loss_dis_list[-20:]) / max(1, len(loss_dis_list[-20:]))),
     }
     (out / "train_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"wrote distilled student -> {out}")
+    print(f"[distill_subset] done elapsed={summary['duration_s']:.2f}s out={out}")
     return 0
 
 

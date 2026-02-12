@@ -26,10 +26,16 @@ import argparse
 import json
 import random
 import re
+import unicodedata
 from pathlib import Path
 from typing import Iterable
 
-import regex as re_u
+try:
+    import regex as re_u  # type: ignore
+except Exception:  # pragma: no cover
+    # Optional dependency: `regex` enables Unicode property regexes (\p{L}, \p{Mn}, ...).
+    # If unavailable, we fall back to a small Unicode-aware tokenizer.
+    re_u = None
 
 
 _DOC_OPEN_RE = re.compile(r"^<doc\b")
@@ -163,19 +169,52 @@ def _build_retrieval_dataset(paragraphs: list[str], *, seed: int, max_docs: int,
     return {"queries": queries, "docs": docs, "relevant": relevant}
 
 
-_WORD_RE = re_u.compile(r"\p{L}+(?:[\p{Mn}\p{Mc}]*)", re_u.UNICODE)
+_WORD_RE = None
+if re_u is not None:  # pragma: no cover
+    _WORD_RE = re_u.compile(r"\p{L}+(?:[\p{Mn}\p{Mc}]*)", re_u.UNICODE)
 
 
 def _tokenize_words(text: str) -> list[str]:
     # Language-agnostic-ish tokenization using Unicode letter classes.
     # Works reasonably across Latin/Cyrillic/Arabic/Devanagari; for CJK this yields long runs.
-    out: list[str] = []
-    for m in _WORD_RE.finditer(text):
-        w = m.group(0).strip()
-        if len(w) < 2:
+    if _WORD_RE is not None:  # pragma: no cover
+        out: list[str] = []
+        for m in _WORD_RE.finditer(text):
+            w = m.group(0).strip()
+            if len(w) < 2:
+                continue
+            out.append(w.casefold())
+        return out
+
+    # Fallback tokenizer (no external deps): gather runs of letters, allowing combining marks.
+    out2: list[str] = []
+    buf: list[str] = []
+    have_letter = False
+    for ch in text:
+        cat = unicodedata.category(ch)
+        is_letter = cat.startswith("L") or ch.isalpha()
+        is_mark = cat in ("Mn", "Mc")
+
+        if is_letter:
+            buf.append(ch)
+            have_letter = True
             continue
-        out.append(w.lower())
-    return out
+        if is_mark and have_letter:
+            buf.append(ch)
+            continue
+
+        if buf:
+            w = "".join(buf).strip()
+            if len(w) >= 2:
+                out2.append(w.casefold())
+            buf = []
+            have_letter = False
+
+    if buf:
+        w = "".join(buf).strip()
+        if len(w) >= 2:
+            out2.append(w.casefold())
+    return out2
 
 
 def _top_keywords_tfidf(words: list[str], df: dict[str, int], n_docs: int, *, k: int) -> list[str]:
