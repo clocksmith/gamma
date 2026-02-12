@@ -8,29 +8,66 @@ An interactive game that teaches you how LLMs work by letting you predict what t
 
 See [AGENTS.md](AGENTS.md) for the active code-writing agent profile.
 
-The project has evolved providing tools to experiment with, and benchmark, local models in a variety of ways.
-
 ---
 
-## Main features
+## Capabilities
 
 ### **The Game:** 
 
-<img width="1470" height="881" alt="Screenshot 2025-10-31 at 8 04 34 PM" src="https://github.com/user-attachments/assets/eab402c5-3478-4f6f-a632-7b7a03f5de51" />
+<img width="1470" height="881" alt="Screenshot 2025-10-31 at 8 04 34 PM" src="https://github.com/user-attachments/assets/eab402c5-3478-4f6f-a632-7b7a03f5de51" />
 
 Try to guess which word the AI will choose next. See the probabilities in real-time. Learn how temperature, top-k, and sampling actually work by playing with them.
 
 ### **Mind Meld (Experimental):** 
 
-<img width="1099" height="871" alt="Screenshot 2025-10-31 at 8 21 05 PM" src="https://github.com/user-attachments/assets/1280518e-26b8-425b-a00d-07db5a098a4d" />
+<img width="1099" height="871" alt="Screenshot 2025-10-31 at 8 21 05 PM" src="https://github.com/user-attachments/assets/1280518e-26b8-425b-a00d-07db5a098a4d" />
 
 Watch multiple models collaborate on the same response, swapping control dynamically based on confidence, patterns, or strategy.
 
-### **Natural Language Commands:** 
+### **Codegen Benchmarks (Research Evaluation Suite):**
 
-<img width="1433" height="296" alt="Screenshot 2025-10-31 at 8 32 19 PM" src="https://github.com/user-attachments/assets/1811a6b9-525e-49da-ac7f-95b804bebab2" />
+Run research-style code generation benchmarks (currently TypeScript vs JavaScript only) including mind meld benchmarking and a prompt-quality ladder.
 
-Describe what you want to do, and GAMMA generates the command (either with a local model or an agentic CLI, such as Claude Code)
+```bash
+python gamma.py help codegen
+python gamma.py codegen language --help
+python gamma.py codegen mind-meld --help
+```
+
+### **EmbeddingGemma Subsets (Multilingual Distillation Pipeline):**
+
+Build language-targeted vocab subsets, distill student embedding models, and benchmark quality retention and speedups.
+
+See: `projects/embeddinggemma_subsets/README.md`
+
+### **Performance Benchmarks (Tokens/sec + Latency):**
+
+Measure tokens/sec and latency, compare engines/models, and save repeatable results.
+
+See: `src/utils/README.md` (profiling/caching/memory) and `docs/optimization-guide.md`
+
+```bash
+python gamma.py help benchmark
+python gamma.py benchmark --list-models
+```
+
+### **Comparison Mode:**
+
+Compare multiple models side-by-side on the same prompt while keeping the game's logits/probability tooling.
+
+```bash
+python gamma.py game --comparison --help
+```
+
+### **Natural Language to Commands (Skill/Prompting Pattern):** 
+
+<img width="1433" height="296" alt="Screenshot 2025-10-31 at 8 32 19 PM" src="https://github.com/user-attachments/assets/1811a6b9-525e-49da-ac7f-95b804bebab2" />
+
+Describe what you want to do, and an LLM translates it into a GAMMA command.
+
+Note: GAMMA does not currently ship an in-app natural-language command generator. Instead, use a prompt/skill with your LLM (e.g. Codex skill `gamma-nl-cli`) and then run the generated CLI command.
+
+See: `docs/NATURAL_LANGUAGE_COMMANDS.md`
 
 > "I want to play with Gemma 2B using temperature 0.9"
 
@@ -60,9 +97,15 @@ python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend dynamic
 python tools/run_mind_meld_cli.py --preset creative --prompt "Once upon a time"
 ```
 
+### **Ecosystem Integrations (MCP, OpenAI, LangChain, FunctionGemma):**
+
+- **MCP server**: `mcp-server/README.md`
+- **OpenAI API compatibility and LangChain wrappers**: `src/integrations/README.md`
+- **FunctionGemma training utilities**: `src/functiongemma_training/README.md`
+
 ---
 
-## Get Started
+## Setup
 
 ```bash
 # Install
@@ -159,73 +202,6 @@ boundary drift. KV cache translation remains experimental and is only attempted
 when `--allow-kv-cache-translation` is set; safety checks will skip translation
 unless `--force-kv-cache-translation` is provided, and it still falls back to
 replay if translation is incompatible or fails.
-
----
-
-## More Example Usage
-
-```bash
-# Interactive menu (recommended)
-python gamma.py game
-
-# Quick game with defaults
-python gamma.py game --engine llamacpp --model models/model.gguf
-
-# Chat
-python gamma.py game --chat --model qwen3-coder:30b
-
-# Compare models
-python gamma.py game --comparison \
-  --comparison-models model1 model2
-
-# Mind meld (new CLI with presets and aliases)
-python tools/run_mind_meld_cli.py --preset creative
-python tools/run_mind_meld_cli.py gemma-1b gemma-2b --blend dynamic --steps 50
-python tools/run_mind_meld_cli.py gemma-1b@Optimist gemma-2b@Skeptic --preset debate
-
-# Other common options
---help                     # Detailed explanation of commands
---temperature 0.7          # Sampling randomness (0.1-2.0)
---top-k 40                 # Top-K filtering
---top-p 0.95               # Nucleus sampling
---sampling-strategy sample # sample or argmax/greedy
---steps 50                 # Max generation steps
---show-attention           # Show attention heatmaps
---verbose                  # Detailed explanations
---prompt-chat-template     # Use chat template for --prompt/--initial-prompt (auto for instruct models)
---no-prompt-chat-template  # Force raw --prompt (skip chat template)
---prompt-system "TEXT"     # System prompt for chat templates
---no-default-system        # Disable the default system prompt
---no-step-delay            # Mind Meld: disable per-step delay
---summary-only             # Mind Meld: show only final output and brief stats (no live per-round stats)
---max-sentences N          # Mind Meld: stop after N sentences in the generated output
---shared-chat-template     # Mind Meld: reuse one chat template across models (auto-enabled when templates differ; disable with --no-shared-chat-template)
---stop-text "TEXT"         # Mind Meld: stop when generated output contains TEXT (repeatable; common chat end markers are used automatically when templates are applied)
---translate-logits         # Mind Meld: translate logits into the next model's vocab during swaps (experimental)
---order-neutral            # Mind Meld: alias for --use-weighted-average to reduce swap-order sensitivity
---soft-swap                # Mind Meld: blend all models each step but keep swap cadence by boosting the active model
---soft-swap-weight W       # Mind Meld: weight multiplier for the active model in --soft-swap (default 1.5)
---force-kv-cache-translation  # Mind Meld: force KV cache translation even when safety checks fail (unsafe)
---repetition-penalty 1.1   # Reduce repeated tokens during sampling (>1.0)
-```
-
-KV cache sharing prefers direct transfer when prompt prefixes match. When they
-differ, Mind Meld replays the missing suffix through the target model to rebuild
-its cache (lossless, but more compute) instead of copying KV entries across
-incompatible tokenizations. KV cache translation is only attempted when
-`--allow-kv-cache-translation` is set; safety checks will skip translation
-unless `--force-kv-cache-translation` is provided, and it still falls back to
-replay if it fails.
-
----
-
-## Additional Features
-
-- **[Mind Meld](./src/mind_meld/README.md)**: Multi-model collaboration system
-- **[Benchmarks](./src/benchmarks/README.md)**: Performance testing and DREAM suite
-- **[Comparison](./src/comparison/README.md)**: Model comparison tools
-- **[Utilities](./src/utils/README.md)**: Profiling, caching, optimization
-- **[Integrations](./src/integrations/README.md)**: OpenAI API, LangChain compatibility
 
 ---
 

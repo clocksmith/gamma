@@ -29,14 +29,14 @@ export class DashboardGenerator {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benchmark Dashboard - DREAM Suite</title>
+    <title>Benchmark Dashboard - Codegen Suite</title>
     ${this.getStyles()}
 </head>
 <body>
     <div class="dashboard">
         <header class="dashboard-header">
-            <h1>📊 DREAM Benchmark Dashboard</h1>
-            <p class="subtitle">Dynamic, Robust, Extensive, Accurate Metrics</p>
+            <h1>📊 Codegen Benchmark Dashboard</h1>
+            <p class="subtitle">TS/JS Prompt Ladder Benchmarks</p>
             <div class="timestamp">Generated: ${new Date().toLocaleString()}</div>
         </header>
 

@@ -1,0 +1,44 @@
+{
+  "name": "color-picker-advanced",
+  "description": "Build an advanced color picker using HCT color space from material_color_utils.js - tests deterministic color manipulation",
+  "category": "web-components",
+  "difficulty": "hard",
+  "promptLevels": {
+    "novice": "color picker with HCT",
+    "beginner": "make a color picker that uses HCT color space from material_color_utils.js library",
+    "intermediate": "create a ColorPicker class that stores colors in HCT format and can convert to hex and RGB",
+    "advanced": "write a ColorPicker class using material_color_utils.js HCT (Hue Chroma Tone) color space with methods to set HCT values, get hex/RGB output, and adjust individual HCT components",
+    "expert": "Write a ColorPicker class that uses the material_color_utils.js library's Hct color space for perceptually uniform color manipulation. The class should: 1) Have a setHct(h, c, t) method to set the color using Hue (0-360), Chroma (0-100+), and Tone (0-100) values. 2) Have getHex() method returning the color as a hex string (e.g., \"#FF5733\"). 3) Have getRgb() method returning an object with r, g, b properties (0-255). 4) Have adjustHue(delta), adjustChroma(delta), and adjustTone(delta) methods to modify individual components by the given delta. 5) Use the material_color_utils.js Hct class internally for all color conversions to ensure deterministic, perceptually uniform results. {languageSpecific}"
+  },
+  "languageInstructions": {
+    "typescript": "Use TypeScript with type annotations. Import Hct from material_color_utils.js. Define interfaces: HctValues (h, c, t numbers), RgbValues (r, g, b numbers). The class should store an Hct instance internally. Export the class and interfaces.",
+    "javascript": "Import the Hct class from material_color_utils.js (e.g., const { Hct } = require('material_color_utils.js')). Store an Hct instance as a class property. Export the ColorPicker class as default export.",
+    "javascript-jsdoc": "Import Hct from material_color_utils.js. Use JSDoc with @typedef for HctValues and RgbValues objects, @class for ColorPicker, @param with types for all methods, and @returns describing return types. Export the class."
+  },
+  "variants": {
+    "typescript": "Create a TypeScript ColorPicker class using material_color_utils.js HCT color space. Requirements:\n\n1. ColorPicker class with:\n   - setHct(h: number, c: number, t: number): void\n   - getHex(): string\n   - getRgb(): {r: number, g: number, b: number}\n   - adjustHue(delta: number): void\n   - adjustChroma(delta: number): void\n   - adjustTone(delta: number): void\n\n2. Use material_color_utils.js Hct class for color manipulation\n\n3. Ensure deterministic conversions\n\n4. Interfaces:\n   - HctValues\n   - RgbValues\n   - ColorPickerConfig\n\n5. Export class and types",
+    "javascript": "Same functionality in plain JavaScript without types.",
+    "javascript-jsdoc": "Same with complete JSDoc type annotations.",
+    "javascript-vanilla-web": "Create an advanced color picker web component using material_color_utils.js HCT:\n\n**HTML:**\n- Hue slider (0-360)\n- Chroma slider (0-100)\n- Tone slider (0-100)\n- Color preview (large swatch)\n- Hex input (bidirectional)\n- RGB display\n- HCT values display\n\n**CSS:**\n- Smooth gradient sliders\n- Live preview updates\n- Professional design\n- Accessibility (WCAG contrast indicators)\n\n**JavaScript:**\n- Use material_color_utils.js Hct class\n- Deterministic color conversions\n- Real-time updates\n- Bidirectional sync (sliders ↔ hex input)\n- Copy to clipboard\n\n**Key Features:**\n- Perceptually uniform color adjustments\n- Always produces valid colors\n- Material Design color spaces\n- Deterministic results\n\nReturn as single HTML file.",
+    "javascript-vanilla-web-jsdoc": "Same with complete JSDoc.",
+    "typescript-vanilla-web": "TypeScript implementation with:\n- Type-safe HCT manipulation\n- Proper event typing\n- Strict color validation\n- Generic utility types",
+    "typescript-react": "React color picker using TypeScript:\n\n**Components:**\n- ColorPicker (main)\n- HctSlider (generic slider)\n- ColorPreview (swatch)\n- HexInput (with validation)\n- ColorInfo (show RGB/HCT)\n\n**Custom Hooks:**\n- useHctColor (manage HCT state)\n- useColorSync (bidirectional sync)\n\n**TypeScript:**\n- Strict HCT types from material_color_utils.js\n- Type-safe slider props\n\n**Features:**\n- Controlled components\n- Deterministic updates\n- Accessibility\n\nMinimal deps."
+  },
+  "requirements": [
+    "HCT color space",
+    "material_color_utils.js",
+    "deterministic",
+    "color picker",
+    "sliders",
+    "real-time",
+    "perceptually uniform"
+  ],
+  "performanceBenchmarks": [
+    {
+      "name": "basic-operation",
+      "code": "document.body.innerHTML = \"\"; for (let i = 0; i < 100; i++) { const div = document.createElement(\"div\"); div.textContent = \"Test\"; document.body.appendChild(div); }",
+      "iterations": 50,
+      "baselineTimeMs": 5.0
+    }
+  ]
+}

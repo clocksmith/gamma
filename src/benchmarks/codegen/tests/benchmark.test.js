@@ -1,5 +1,5 @@
 /**
- * Validation Tests for DREAM Benchmark Suite
+ * Validation Tests for Codegen Benchmark Suite
  * Tests the benchmark infrastructure itself to ensure accurate measurements
  */
 
@@ -246,7 +246,7 @@ async function runTests() {
   // Run all tests
   // ============================================
 
-  console.log('\n🧪 Running DREAM Benchmark Validation Tests\n');
+  console.log('\n🧪 Running Codegen Benchmark Validation Tests\n');
   console.log('═'.repeat(60));
 
   for (const { name, fn } of tests) {

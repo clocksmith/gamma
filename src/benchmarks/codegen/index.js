@@ -45,7 +45,7 @@ const CLI_PRESETS = {
     providers: ['ollama-gpt-oss-120b']
   },
   full: {
-    description: 'Full DREAM benchmark suite across all categories and variants',
+    description: 'Full codegen benchmark suite across all categories and variants',
     categories: Object.keys(BenchmarkConfig.categories),
     variants: [...BenchmarkConfig.variants],
     includeBrowser: true
@@ -1019,7 +1019,7 @@ function listPresets() {
     console.log(`  ${key.padEnd(12)} ${preset.description}`);
   }
 
-  console.log('\nLegacy DREAM presets:\n');
+  console.log('\nLegacy presets:\n');
   const legacy = PresetManager.listPresets();
   for (const preset of legacy) {
     console.log(`  ${preset.key.padEnd(16)} ${preset.description}`);
@@ -1097,12 +1097,12 @@ function printHelp() {
 LLM TypeScript/JavaScript Benchmark Suite
 
 Usage:
-  node src/benchmarks/dream/index.js [options]
+  node src/benchmarks/codegen/index.js [options]
 
 Quick start:
-  node src/benchmarks/dream/index.js              # Basic JS vs TS comparison (default)
-  node src/benchmarks/dream/index.js --extended   # Add scripting and backend tasks
-  node src/benchmarks/dream/index.js --ui --include-browser
+  node src/benchmarks/codegen/index.js              # Basic JS vs TS comparison (default)
+  node src/benchmarks/codegen/index.js --extended   # Add scripting and backend tasks
+  node src/benchmarks/codegen/index.js --ui --include-browser
 
 Key options:
   --basic | --extended | --ui | --all   Preset shortcuts
@@ -1135,28 +1135,28 @@ Other options:
 
 Examples:
   # Test JS vs TS, all prompt levels, 5 runs each
-  node src/benchmarks/dream/index.js --category foundations --language js,ts --all-prompt-levels --provider ollama-qwen3-30b --runs 5
+  node src/benchmarks/codegen/index.js --category foundations --language js,ts --all-prompt-levels --provider ollama-qwen3-30b --runs 5
 
   # Test prompt effectiveness: novice vs expert
-  node src/benchmarks/dream/index.js --category foundations --language js --prompt-level novice,expert --provider ollama-gpt-oss-20b --runs 3
+  node src/benchmarks/codegen/index.js --category foundations --language js --prompt-level novice,expert --provider ollama-gpt-oss-20b --runs 3
 
   # High temperature for code variation analysis
-  node src/benchmarks/dream/index.js --category foundations --language ts --temperature 1.0 --provider ollama-qwen3-30b --runs 5
+  node src/benchmarks/codegen/index.js --category foundations --language ts --temperature 1.0 --provider ollama-qwen3-30b --runs 5
 
   # Deterministic testing (zero temperature)
-  node src/benchmarks/dream/index.js --category foundations --language js --temperature 0.0 --provider ollama-gpt-oss-120b
+  node src/benchmarks/codegen/index.js --category foundations --language js --temperature 0.0 --provider ollama-gpt-oss-120b
 
   # Test multiple temperatures (multiplies test runs)
-  node src/benchmarks/dream/index.js --task fibonacci --language js --temperatures 0.0,0.5,1.0,1.5 --provider ollama-qwen3-30b --runs 3
+  node src/benchmarks/codegen/index.js --task fibonacci --language js --temperatures 0.0,0.5,1.0,1.5 --provider ollama-qwen3-30b --runs 3
 
   # Temperature range testing
-  node src/benchmarks/dream/index.js --task expression-evaluator --language js,ts --temperature-range 0.0,2.0,0.5 --provider ollama-gpt-oss-20b
+  node src/benchmarks/codegen/index.js --task expression-evaluator --language js,ts --temperature-range 0.0,2.0,0.5 --provider ollama-gpt-oss-20b
 
   # Use mock responses for testing (dry mode)
-  node src/benchmarks/dream/index.js --task fibonacci --language js,ts --dry
+  node src/benchmarks/codegen/index.js --task fibonacci --language js,ts --dry
 
   # Legacy variant-based API still works
-  node src/benchmarks/dream/index.js --task fibonacci --variant javascript-expert,typescript-expert --provider ollama-qwen3-30b
+  node src/benchmarks/codegen/index.js --task fibonacci --variant javascript-expert,typescript-expert --provider ollama-qwen3-30b
 `);
 }
 

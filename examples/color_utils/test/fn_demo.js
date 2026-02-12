@@ -1,7 +1,7 @@
 /**
  * @file fn_demo.js
  * @description Example usage of the dynamic color library functions.
- *              Imports functionality from the sibling 'dream.js' file.
+ *              Imports functionality from the sibling 'material_color_utils.js' file.
  */
 import {
     mathUtils,
@@ -18,7 +18,7 @@ import {
     dynamicSchemesFromSourceColor,
     extractColorsFromImage,
     applyTheme,
-} from './dream.js';
+} from './material_color_utils.js';
 
 // --- Demo Functions ---
 

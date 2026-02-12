@@ -1,8 +1,8 @@
-# Color Utilities (dream.js)
+# Color Utilities (material_color_utils.js)
 
-This module contains the **dream.js** color utility library, originally from the DREAM project.
+This module contains the **material_color_utils.js** color utility library (a fork of Google's material-color-utilities).
 
-## What is dream.js?
+## What is material_color_utils.js?
 
 A production-ready JavaScript library for dynamic color theming, forked from Google's material-color-utilities.
 
@@ -16,7 +16,7 @@ A production-ready JavaScript library for dynamic color theming, forked from Goo
 ## Usage
 
 ```javascript
-import { Hct, themeFromSourceColor } from './dream.js';
+import { Hct, themeFromSourceColor } from './material_color_utils.js';
 
 // Generate Material Design palette
 const theme = themeFromSourceColor(0x0000ff); // Blue
@@ -40,7 +40,7 @@ See `test/` directory for examples and unit tests.
 
 ## Integration with GAMMA
 
-dream.js is used in GAMMA's language comparison benchmarks to test:
+material_color_utils.js is used in GAMMA's language comparison benchmarks to test:
 - How well LLMs can integrate with real-world libraries
 - TypeScript vs JavaScript performance on complex color tasks
 - Agentic AI capabilities for creative color selection

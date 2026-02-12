@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * DREAM Benchmark CLI
+ * Codegen Benchmark CLI
  * Enhanced command-line interface with advanced features
  */
 
@@ -13,7 +13,7 @@ import { DashboardGenerator } from './utils/dashboard-generator.js';
 import { StatisticalAnalyzer } from './utils/statistical-analyzer.js';
 import { AdvancedMetrics } from './utils/advanced-metrics.js';
 
-class DreamCLI {
+class CodegenCLI {
   constructor() {
     this.args = process.argv.slice(2);
     this.options = this.parseArgs();
@@ -35,7 +35,7 @@ class DreamCLI {
       advancedMetrics: false,
       dryRun: false,
       verbose: true,
-      output: './benchmark/reports/dream-dashboard.html'
+      output: './benchmark/reports/codegen-dashboard.html'
     };
 
     for (let i = 0; i < this.args.length; i++) {
@@ -176,8 +176,8 @@ class DreamCLI {
   }
 
   async runBenchmarks() {
-    console.log('🚀 DREAM Benchmark Suite');
-    console.log('Dynamic, Robust, Extensive, Accurate Metrics\n');
+    console.log('🚀 Codegen Benchmark Suite');
+    console.log('TS/JS Prompt Ladder Benchmarks\n');
 
     // Apply preset if specified
     let config = { ...BenchmarkConfig };
@@ -380,7 +380,7 @@ class DreamCLI {
       console.log();
     }
 
-    console.log('Usage: dream-cli.js run --preset <preset-name>');
+    console.log('Usage: codegen-cli.js run --preset <preset-name>');
   }
 
   async showHistory() {
@@ -466,12 +466,12 @@ class DreamCLI {
   showHelp() {
     console.log(`
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                         DREAM Benchmark CLI                                   ║
-║            Dynamic, Robust, Extensive, Accurate Metrics                       ║
+║                        Codegen Benchmark CLI                                  ║
+║                    TS/JS Prompt Ladder Benchmarks                             ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
 USAGE:
-  dream-cli.js <command> [options]
+  codegen-cli.js <command> [options]
 
 COMMANDS:
   run              Run benchmarks (default)
@@ -493,7 +493,7 @@ OPTIONS:
   --historical               Save results to history database
   --advanced-metrics, -am    Compute advanced code metrics (see below)
   --no-dashboard             Skip dashboard generation
-  --output, -o <path>        Output path for dashboard (default: ./reports/dream-dashboard.html)
+  --output, -o <path>        Output path for dashboard (default: ./reports/codegen-dashboard.html)
   --dry-run, --mock          Use mock LLM responses (no API calls)
   --quiet, -q                Suppress verbose output
   --help, -h                 Show this help
@@ -532,25 +532,25 @@ METRICS CALCULATED:
 
 EXAMPLES:
   # Quick test with default settings
-  dream-cli.js run --preset quick
+  codegen-cli.js run --preset quick
 
   # Comprehensive test with history tracking and advanced metrics
-  dream-cli.js run --preset comprehensive --historical --compare --advanced-metrics
+  codegen-cli.js run --preset comprehensive --historical --compare --advanced-metrics
 
   # Custom configuration (TypeScript only, specific provider)
-  dream-cli.js run --variant typescript-expert --provider openai-gpt4 --runs 5
+  codegen-cli.js run --variant typescript-expert --provider openai-gpt4 --runs 5
 
   # Advanced analysis with all metrics
-  dream-cli.js run --preset quality --advanced-metrics --output ./my-results.html
+  codegen-cli.js run --preset quality --advanced-metrics --output ./my-results.html
 
   # Compare historical results
-  dream-cli.js compare
+  codegen-cli.js compare
 
   # Analyze trends over time
-  dream-cli.js analyze
+  codegen-cli.js analyze
 
   # Run specific category with multiple variants
-  dream-cli.js run --category algorithms --variant typescript-expert --variant javascript-beginner
+  codegen-cli.js run --category algorithms --variant typescript-expert --variant javascript-beginner
 
 AVAILABLE PRESETS:
   quick              Fast smoke test (2-3 min, ~$0.10)
@@ -570,7 +570,7 @@ DEFAULTS:
   • Verbose:       Enabled (disable with --quiet)
   • Runs:          1 per test (increase with --runs)
   • Timeout:       30000ms per test (adjust with --timeout)
-  • Output:        ./benchmark/reports/dream-dashboard.html
+  • Output:        ./benchmark/reports/codegen-dashboard.html
 
 OUTPUT FILES:
   • Dashboard:     Interactive HTML report with charts
@@ -578,18 +578,18 @@ OUTPUT FILES:
   • Generated Code: ./results/<timestamp>/src/*.js|ts
   • History DB:    ./benchmark/history/benchmark_history.json (if --historical)
 
-For more information: https://github.com/yourusername/dream-benchmark
+For more information: see the repo README.
 `);
   }
 }
 
 // Run CLI
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const cli = new DreamCLI();
+  const cli = new CodegenCLI();
   cli.run().catch(error => {
     console.error('Fatal error:', error);
     process.exit(1);
   });
 }
 
-export { DreamCLI };
+export { CodegenCLI };

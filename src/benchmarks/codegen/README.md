@@ -1,6 +1,4 @@
-# DREAM: LLM Code Generation Benchmark Suite
-
-**D**ynamic, **R**obust, **E**xtensive, **A**ccurate **M**etrics
+# Codegen: TS/JS Prompt Ladder Benchmarks
 
 A comprehensive benchmark suite for evaluating LLMs on TypeScript vs JavaScript code generation tasks.
 
@@ -359,7 +357,7 @@ ollama pull gemma3
 ## Architecture
 
 ```
-dream/
+codegen/
 ├── index.js                  # Main entry point
 ├── config.js                 # Configuration
 ├── runner/

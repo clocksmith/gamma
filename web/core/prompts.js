@@ -58,7 +58,7 @@ export const STARTING_PROMPTS = [
   "Cryptocurrency has changed how we think about",
 
   // Psychology & Mind
-  "Dreams may be the brain's way of",
+  "Sleep may be the brain's way of",
   "Memory works by storing information in",
   "People make decisions based on emotions rather",
   "The fear of public speaking comes from",

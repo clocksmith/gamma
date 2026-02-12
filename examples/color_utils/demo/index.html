@@ -57,7 +57,7 @@
           rel="noopener"
           >material-color-utilities</a
         >
-        via <code>dream.js</code>.
+        via <code>material_color_utils.js</code>.
       </p>
 
       <div class="main-content-grid">
@@ -175,8 +175,8 @@
                         <b>Gemini Suggests, Gemini Selects:</b> Gemini proposes
                         and automatically chooses the best set. Requires
                         clicking 'Generate'.<br />
-                        <b>Gemini Selects & Dream.js (MCP):</b> Gemini proposes,
-                        selects, and triggers Dream.js generation automatically
+                        <b>Gemini Selects & Material Color Utils (MCP):</b> Gemini proposes,
+                        selects, and triggers Material Color Utils generation automatically
                         via MCP. Requires clicking 'Generate'.
                       </span>
                     </span>
@@ -217,7 +217,7 @@
                         value="gemini_mcp"
                       />
                       <label for="textSelectGeminiMCP"
-                        >Gemini Selects & Dream.js (MCP)</label
+                        >Gemini Selects & Material Color Utils (MCP)</label
                       >
                     </div>
                   </div>
@@ -312,7 +312,7 @@
                 </div>
                 <div id="multi-source-options" class="input-group hidden">
                   <label for="harmonyStrategy"
-                    >Multi-Color Strategy (Dream.js):
+                    >Multi-Color Strategy (Material Color Utils):
                     <span class="info-tooltip" tabindex="0">
                       <span class="material-icons">info_outline</span>
                       <span class="tooltip-text">
@@ -358,7 +358,7 @@
                     <span class="info-tooltip" tabindex="0">
                       <span class="material-icons">info_outline</span>
                       <span class="tooltip-text">
-                        <b>Dream.js Extraction:</b> Uses the local library to
+                        <b>Material Color Utils Extraction:</b> Uses the local library to
                         extract prominent colors from the image.<br />
                         <b>Gemini Extraction:</b> Uses the Gemini API to analyze
                         the image and suggest colors.
@@ -373,12 +373,12 @@
                     <div>
                       <input
                         type="radio"
-                        id="imageExtractDream"
+                        id="imageExtractMaterial"
                         name="imageExtractionMethod"
-                        value="dream"
+                        value="material"
                         checked
                       />
-                      <label for="imageExtractDream">Dream.js Extraction</label>
+                      <label for="imageExtractMaterial">Material Color Utils Extraction</label>
                     </div>
                     <div id="imageExtractGemini-container">
                       <input
@@ -430,8 +430,8 @@
                     </div>
                   </div>
                 </div>
-                <div id="image-dream-options" class="sub-options">
-                  <label for="numSources">Max Colors (Dream.js):</label>
+                <div id="image-material-options" class="sub-options">
+                  <label for="numSources">Max Colors (Material Color Utils):</label>
                   <input
                     type="number"
                     id="numSources"
@@ -441,7 +441,7 @@
                     style="max-width: 70px"
                   />
                   <label for="extractQuality" style="margin-left: 10px"
-                    >Quality (1=Best, Dream.js):</label
+                    >Quality (1=Best, Material Color Utils):</label
                   >
                   <input
                     type="number"
@@ -464,8 +464,8 @@
                         <b>Gemini Suggests, Gemini Selects:</b> Gemini proposes
                         and automatically chooses the best set. Requires
                         clicking 'Generate'.<br />
-                        <b>Gemini Selects & Dream.js (MCP):</b> Gemini proposes,
-                        selects, and triggers Dream.js generation automatically
+                        <b>Gemini Selects & Material Color Utils (MCP):</b> Gemini proposes,
+                        selects, and triggers Material Color Utils generation automatically
                         via MCP. Requires clicking 'Generate'.
                       </span>
                     </span>
@@ -506,7 +506,7 @@
                         value="gemini_mcp"
                       />
                       <label for="imageSelectGeminiMCP"
-                        >Gemini Selects & Dream.js (MCP)</label
+                        >Gemini Selects & Material Color Utils (MCP)</label
                       >
                     </div>
                   </div>
@@ -547,18 +547,18 @@
                 <span class="info-tooltip" tabindex="0">
                   <span class="material-icons">info_outline</span>
                   <span class="tooltip-text">
-                    <b>Invoke Dream.js:</b> Generate the palette using the local
-                    Dream.js library based on the selected/input seeds. (Human
+                    <b>Invoke Material Color Utils:</b> Generate the palette using the local
+                    Material Color Utils library based on the selected/input seeds. (Human
                     triggers tool)<br />
-                    <b>Gemini Invoke Dream.js (MCP):</b> Gemini selects seeds
+                    <b>Gemini Invoke Material Color Utils (MCP):</b> Gemini selects seeds
                     (if applicable) and instructs the system (via MCP) to use
-                    Dream.js for generation. (LLM triggers tool)<br />
+                    Material Color Utils for generation. (LLM triggers tool)<br />
                     <b>Manual MCP (Simulate Fail):</b> Simulate the MCP flow
-                    triggering Dream.js, but introduce a chance of simulated
+                    triggering Material Color Utils, but introduce a chance of simulated
                     failure. Useful for testing error handling.<br />
-                    <b>Gemini Only (No Dream.js):</b> Request Gemini to generate
+                    <b>Gemini Only (No Material Color Utils):</b> Request Gemini to generate
                     the entire color palette JSON directly based on
-                    seeds/context, bypassing Dream.js. (LLM generates result
+                    seeds/context, bypassing Material Color Utils. (LLM generates result
                     directly)
                   </span>
                 </span>
@@ -571,12 +571,12 @@
                 <div>
                   <input
                     type="radio"
-                    id="genMethodDreamJS"
+                    id="genMethodMaterial"
                     name="paletteGenerationMethod"
-                    value="dreamjs"
+                    value="material"
                     checked
                   />
-                  <label for="genMethodDreamJS">Invoke Dream.js</label>
+                  <label for="genMethodMaterial">Invoke Material Color Utils</label>
                 </div>
                 <div>
                   <input
@@ -586,7 +586,7 @@
                     value="gemini_mcp"
                   />
                   <label for="genMethodGeminiMCP"
-                    >Gemini Invoke Dream.js (MCP)</label
+                    >Gemini Invoke Material Color Utils (MCP)</label
                   >
                 </div>
                 <div>
@@ -608,7 +608,7 @@
                     value="gemini_only"
                   />
                   <label for="genMethodGeminiOnly"
-                    >Gemini Only (No Dream.js)</label
+                    >Gemini Only (No Material Color Utils)</label
                   >
                 </div>
               </div>
@@ -759,7 +759,7 @@
 
     <style id="dynamic-theme-styles"></style>
     <script src="../config.js" defer></script>
-    <script src="../dream.js" defer></script>
+    <script src="../material_color_utils.js" defer></script>
     <script
       type="module"
       src="https://cdn.skypack.dev/@material/web/all.js"

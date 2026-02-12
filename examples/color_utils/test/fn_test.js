@@ -4,7 +4,7 @@
  *              Assumes it runs as an ES module (e.g., in Node.js with type="module" or a browser).
  */
 
-// --- Import necessary components from dream.js ---
+// --- Import necessary components from material_color_utils.js ---
 import {
     mathUtils, hexUtils, colorUtils,
     ViewingConditions, Cam16, Hct, HctSolver,
@@ -13,7 +13,7 @@ import {
     DynamicScheme, isMonochrome, isFidelity,
     QuantizerCelebi, QuantizerWsmeans, LabPointProvider, QuantizerMap, QuantizerWu,
     DynamicColor, MaterialDynamicColors, Blend, Score, themeFromSourceColor, dynamicSchemesFromSourceColor, themeFromColors, extractColorsFromImage, themeFromImage, applyTheme, processCustomColors
-} from './dream.js'; // Adjust path if necessary
+} from './material_color_utils.js'; // Adjust path if necessary
 
 // Create the 'lib' object structure expected by the tests
 const lib = {
@@ -255,4 +255,4 @@ function runAllIntegrationTests(libToTest, libName) {
 }
 
 // --- Run tests ---
-runAllIntegrationTests(lib, "dream.js Library");
+runAllIntegrationTests(lib, "material_color_utils.js Library");

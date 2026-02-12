@@ -92,9 +92,9 @@ python src/benchmarks/mind_meld_benchmark.py \
 - **JSON Data**: Raw metrics for analysis
 - **Text Summary**: Console-friendly results
 
-## DREAM Benchmarks
+## Codegen Benchmarks
 
-The DREAM (Dynamic Research for Evolving AI Models) suite provides comprehensive evaluation:
+TypeScript vs JavaScript code generation benchmarks with prompt-quality levels and repeatable reports.
 
 ### Language Comparison
 
@@ -102,10 +102,10 @@ Compare TypeScript vs JavaScript code generation:
 
 ```bash
 # Basic comparison
-python gamma.py dream language --category foundations --language js,ts
+python gamma.py codegen language --category foundations --language js,ts
 
 # With multiple prompt levels
-python gamma.py dream language \
+python gamma.py codegen language \
   --category foundations \
   --language js,ts \
   --all-prompt-levels \
@@ -113,7 +113,7 @@ python gamma.py dream language \
   --runs 5
 
 # Deterministic testing
-python gamma.py dream language \
+python gamma.py codegen language \
   --category foundations \
   --language js,ts \
   --temperature 0.0 \
@@ -229,4 +229,4 @@ Results include:
 
 - [Engine Architecture](ENGINE_ARCHITECTURE.md)
 - [Model Formats](MODEL_FORMATS.md)
-- [DREAM Benchmarks](../src/benchmarks/README.md)
+- [Codegen Benchmarks](../src/benchmarks/README.md)

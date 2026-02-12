@@ -224,7 +224,7 @@ Benchmark metrics include:
 - Tokens per second (throughput)
 - Time to first token (latency)
 - Memory usage (RAM/VRAM)
-- Code generation quality (DREAM suite)
+- Code generation quality (TS vs JS benchmark suite)
 - Reasoning accuracy
 """
 

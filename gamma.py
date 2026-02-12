@@ -7,7 +7,7 @@ Main entry point for all GAMMA experiments, benchmarks, and tools:
 - mind-meld: Multi-model collaboration experiments
 - comparison: Side-by-side model comparison
 - benchmark: Speed & performance benchmarking
-- dream: DREAM benchmark suite (mind meld + language benchmarks)
+- codegen: Code generation benchmarks (currently TypeScript vs JavaScript only)
 - select: Interactive engine/model selector
 
 Usage:
@@ -15,7 +15,7 @@ Usage:
     gamma.py mind-meld [options]      # Mind meld experiments
     gamma.py comparison [options]     # Model comparison
     gamma.py benchmark [options]      # Speed benchmarking
-    gamma.py dream [options]          # DREAM benchmarks
+    gamma.py codegen [options]        # Code generation benchmarks
     gamma.py select                   # Interactive engine selector
 """
 
@@ -64,7 +64,7 @@ COMMANDS:
   comparison        Side-by-side model comparison
   mind-meld         Multi-model collaboration experiments
   benchmark         Speed & performance benchmarking
-  dream             DREAM benchmark suite
+  codegen           Code generation benchmarks (TS vs JS)
   list              List all available models
   select            Interactive engine & model selector
   help              Show detailed help for a specific command
@@ -93,8 +93,8 @@ QUICK START EXAMPLES:
   # Interactive engine selector (get recommendations)
   gamma.py select
 
-  # DREAM mind meld benchmarks
-  gamma.py dream mind-meld --models MODEL1 MODEL2
+  # Codegen mind meld benchmarks
+  gamma.py codegen mind-meld --models MODEL1 MODEL2
 
 ═══════════════════════════════════════════════════════════════════════
 
@@ -248,7 +248,7 @@ EXAMPLES:
    ✓ Use: pytorch, pytorch_cuda, vllm, llamacpp, mlx, mlx_gpu
    ✗ DON'T use: ollama (no logits via HTTP API)
 
-See also: gamma.py benchmark, gamma.py dream
+See also: gamma.py benchmark, gamma.py codegen
         """,
 
         'benchmark': """
@@ -301,33 +301,33 @@ OUTPUT:
   • Success rate
   • Speedup comparisons
 
-See also: docs/BENCHMARKING.md, gamma.py dream
+See also: docs/BENCHMARKING.md, gamma.py codegen
         """,
 
-        'dream': """
-GAMMA DREAM Benchmarks - Comprehensive Evaluation Suite
+        'codegen': """
+GAMMA Codegen Benchmarks - TS/JS Prompt Ladder Benchmarks
 
-Run DREAM (Dynamic Research for Evolving AI Models) benchmarks including:
+Run code generation benchmarks (currently TypeScript vs JavaScript only), including:
 - Mind meld performance benchmarks
 - Language comparison (TypeScript vs JavaScript)
 - Model capability evaluations
 
 USAGE:
-  gamma.py dream [benchmark-type] [options]
+  gamma.py codegen [benchmark-type] [options]
 
 BENCHMARK TYPES:
   mind-meld             Mind meld benchmarking suite
   language              Language comparison (TS vs JS)
-  all                   Run all DREAM benchmarks
+  all                   Run all codegen benchmarks
 
 MIND MELD BENCHMARKS:
-  gamma.py dream mind-meld \\
+  gamma.py codegen mind-meld \\
     --models MODEL1 MODEL2 \\
     --strategies pattern fixed perplexity \\
     --output results.json
 
 LANGUAGE BENCHMARKS:
-  gamma.py dream language [options]
+  gamma.py codegen language [options]
 
   KEY OPTIONS (Dimension-based API):
     -c, --category <name>       Category or group (foundations, backend, ui, ...)
@@ -357,11 +357,11 @@ LANGUAGE BENCHMARKS:
 
 EXAMPLES:
   # Run mind meld benchmarks
-  gamma.py dream mind-meld \\
+  gamma.py codegen mind-meld \\
     --models pytorch:google/gemma-2-2b-it pytorch:Qwen/Qwen2-7B-Instruct
 
   # Test JS vs TS, all prompt levels, 5 runs each
-  gamma.py dream language \\
+  gamma.py codegen language \\
     --category foundations \\
     --language js,ts \\
     --all-prompt-levels \\
@@ -369,7 +369,7 @@ EXAMPLES:
     --runs 5
 
   # Test prompt effectiveness: novice vs expert comparison
-  gamma.py dream language \\
+  gamma.py codegen language \\
     --category foundations \\
     --language js \\
     --prompt-level novice,expert \\
@@ -377,7 +377,7 @@ EXAMPLES:
     --runs 3
 
   # High temperature for code variation analysis
-  gamma.py dream language \\
+  gamma.py codegen language \\
     --category foundations \\
     --language ts \\
     --temperature 1.0 \\
@@ -385,7 +385,7 @@ EXAMPLES:
     --runs 5
 
   # Deterministic testing (zero temperature, reproducible results)
-  gamma.py dream language \\
+  gamma.py codegen language \\
     --category foundations \\
     --language js,ts \\
     --prompt-level expert \\
@@ -394,22 +394,22 @@ EXAMPLES:
     --runs 3
 
   # Use mock responses for testing (dry mode)
-  gamma.py dream language \\
+  gamma.py codegen language \\
     --task fibonacci \\
     --language js,ts \\
     --dry
 
   # Legacy API still works (variant strings)
-  gamma.py dream language \\
+  gamma.py codegen language \\
     --task fibonacci \\
     --variant javascript-expert,typescript-expert \\
     --provider ollama-qwen3-30b \\
     --runs 5
 
-  # Full DREAM suite
-  gamma.py dream all --output results/
+  # Full suite
+  gamma.py codegen all --output results/
 
-See also: src/benchmarks/dream/README.md
+See also: src/benchmarks/codegen/README.md
         """,
 
         'list': """
@@ -509,7 +509,7 @@ def main():
         'command',
         nargs='?',
         default='game',
-        choices=['game', 'mind-meld', 'comparison', 'benchmark', 'dream', 'list', 'select', 'help'],
+        choices=['game', 'mind-meld', 'comparison', 'benchmark', 'codegen', 'list', 'select', 'help'],
         help='Command to run (default: game)'
     )
 
@@ -537,28 +537,28 @@ def main():
         sys.argv = ['benchmark_model_speed.py'] + remaining_args
         benchmark_main()
 
-    elif args.command == 'dream':
-        # Route to DREAM benchmarks
+    elif args.command == 'codegen':
+        # Route to code generation benchmarks
         if len(remaining_args) == 0 or remaining_args[0] in ['-h', '--help']:
-            print_command_help('dream')
+            print_command_help('codegen')
             sys.exit(0)
 
-        dream_type = remaining_args[0] if remaining_args else 'mind-meld'
+        suite_type = remaining_args[0] if remaining_args else 'mind-meld'
 
-        if dream_type == 'mind-meld':
+        if suite_type == 'mind-meld':
             # Run mind meld benchmarks
-            from src.benchmarks.mind_meld_benchmark import main as dream_mm_main
+            from src.benchmarks.mind_meld_benchmark import main as codegen_mm_main
             sys.argv = ['mind_meld_benchmark.py'] + remaining_args[1:]
-            dream_mm_main()
+            codegen_mm_main()
 
-        elif dream_type == 'language':
+        elif suite_type == 'language':
             # Run language comparison benchmarks (Node.js)
-            benchmark_dir = os.path.join(ROOT_DIR, 'src', 'benchmarks', 'dream')
+            benchmark_dir = os.path.join(ROOT_DIR, 'src', 'benchmarks', 'codegen')
             if not os.path.exists(benchmark_dir):
-                print(f"Error: DREAM benchmarks not found at {benchmark_dir}")
+                print(f"Error: codegen benchmarks not found at {benchmark_dir}")
                 sys.exit(1)
 
-            print("Running DREAM language comparison benchmarks (Node.js)...")
+            print("Running TypeScript vs JavaScript benchmarks (Node.js)...")
             print(f"  Working directory: {benchmark_dir}\n")
 
             import subprocess
@@ -573,26 +573,26 @@ def main():
                 print(f"Error running benchmark: {e}")
                 sys.exit(1)
 
-        elif dream_type == 'all':
-            print("Running all DREAM benchmarks...")
+        elif suite_type == 'all':
+            print("Running all codegen benchmarks...")
             print("\n" + "="*70)
             print("1/2 - Mind Meld Benchmarks")
             print("="*70)
-            from src.benchmarks.mind_meld_benchmark import main as dream_mm_main
+            from src.benchmarks.mind_meld_benchmark import main as codegen_mm_main
             sys.argv = ['mind_meld_benchmark.py'] + remaining_args[1:]
-            dream_mm_main()
+            codegen_mm_main()
 
             print("\n" + "="*70)
             print("2/2 - Language Comparison Benchmarks")
             print("="*70)
-            benchmark_dir = os.path.join(ROOT_DIR, 'src', 'benchmarks', 'dream')
+            benchmark_dir = os.path.join(ROOT_DIR, 'src', 'benchmarks', 'codegen')
             import subprocess
             subprocess.run(['node', 'index.js'] + remaining_args[1:], cwd=benchmark_dir)
 
         else:
-            print(f"Unknown DREAM benchmark type: {dream_type}")
+            print(f"Unknown codegen benchmark type: {suite_type}")
             print("Available types: mind-meld, language, all")
-            print_command_help('dream')
+            print_command_help('codegen')
             sys.exit(1)
 
     elif args.command == 'list':

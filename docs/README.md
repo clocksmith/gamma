@@ -51,7 +51,7 @@ gamma/
 | `gamma.py comparison` | Side-by-side model comparison |
 | `gamma.py mind-meld` | Multi-model collaboration |
 | `gamma.py benchmark` | Speed & performance testing |
-| `gamma.py dream` | DREAM benchmark suite |
+| `gamma.py codegen` | TypeScript vs JavaScript codegen benchmarks |
 | `gamma.py list` | List available models |
 | `gamma.py select` | Interactive engine selector |
 

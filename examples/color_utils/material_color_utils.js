@@ -3,9 +3,9 @@
  * @license
  * MIT License
  *
- * Copyright (c) 2025 dream
+ * Copyright (c) 2025 contributors
  *
- * This software, "dream", is a fork of Google's material-color-utilities
+ * This software, "material_color_utils", is a fork of Google's material-color-utilities
  * (https://github.com/material-foundation/material-color-utilities).
  * While based on and incorporating concepts and code from the original
  * material-color-utilities project, "hctjs" is maintained and distributed

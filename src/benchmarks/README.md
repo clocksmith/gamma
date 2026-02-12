@@ -3,7 +3,7 @@
 ## What's Here
 
 - **mind_meld_benchmark.py** - Python benchmarks for Mind Meld performance ✨ NEW CLI
-- **dream/** - DREAM: TypeScript vs JavaScript LLM benchmarking suite
+- **codegen/** - TypeScript vs JavaScript code generation benchmarks (prompt ladder + reports)
 
 ---
 
@@ -74,33 +74,27 @@ Generates HTML report with:
 
 ---
 
-## Language Comparison Benchmarks (DREAM Suite)
+## Language Comparison Benchmarks (Codegen Suite)
 
-### 🎯 NEW: DREAM Enhancement
-
-The benchmark suite has been upgraded with the **DREAM** framework:
-- **D**ynamic - Adaptive and flexible configurations
-- **R**obust - Statistical rigor and error handling
-- **E**xtensive - Comprehensive metrics and analysis
-- **A**ccurate - Multi-run with confidence intervals
-- **M**etrics - Advanced code quality measurements
+TypeScript vs JavaScript code generation benchmarks with prompt-quality levels, multi-provider runners,
+and rich reports/dashboards.
 
 ### Quick Start
 
 ```bash
 # Basic JS vs TS comparison (uses mock by default, or configure API keys)
-node src/benchmarks/dream/index.js
+node src/benchmarks/codegen/index.js
 
 # Add scripting and backend tasks
-node src/benchmarks/dream/index.js --extended
+node src/benchmarks/codegen/index.js --extended
 
 # Include browser/React tasks (requires Playwright)
-node src/benchmarks/dream/index.js --ui --include-browser
+node src/benchmarks/codegen/index.js --ui --include-browser
 
 # Explore configuration
-node src/benchmarks/dream/index.js --help
-node src/benchmarks/dream/index.js --list-presets
-node src/benchmarks/dream/index.js --list-variants
+node src/benchmarks/codegen/index.js --help
+node src/benchmarks/codegen/index.js --list-presets
+node src/benchmarks/codegen/index.js --list-variants
 ```
 
 ### Key Features
@@ -112,7 +106,7 @@ node src/benchmarks/dream/index.js --list-variants
 - Cost/performance optimization
 - Model comparison
 
-#### NEW: DREAM Features
+#### Additional Features
 - **JS vs TS Scoring**: Automatic per-language summaries and provider deltas
 - **Statistical Analysis**: Confidence intervals, significance testing, outlier detection
 - **Advanced Metrics**: Cyclomatic complexity, maintainability index, type safety scores
@@ -134,18 +128,18 @@ Ask questions in natural language:
 
 ```bash
 # Interactive mode
-node query_cli.js
+node src/benchmarks/codegen/query_cli.js
 
 # Single query
-node query_cli.js "Which model for Python coding?"
+node src/benchmarks/codegen/query_cli.js "Which model for Python coding?"
 
 # Help
-node query_cli.js --help
+node src/benchmarks/codegen/query_cli.js --help
 ```
 
 ### Configuration & Documentation
 
-See [dream/README.md](dream/README.md) for complete documentation, including:
+See [codegen/README.md](codegen/README.md) for complete documentation, including:
 - Available providers and variants
 - Creating custom tasks
 - Report generation
@@ -155,24 +149,24 @@ See [dream/README.md](dream/README.md) for complete documentation, including:
 
 ```bash
 # Development: fast language comparison (uses mock by default)
-node src/benchmarks/dream/index.js --basic
+node src/benchmarks/codegen/index.js --basic
 
 # Backend/server evaluation with live models
-node src/benchmarks/dream/index.js --extended --provider openai-gpt4
+node src/benchmarks/codegen/index.js --extended --provider openai-gpt4
 
 # UI/React coverage with Playwright
-node src/benchmarks/dream/index.js --ui --include-browser
+node src/benchmarks/codegen/index.js --ui --include-browser
 
 # Inspect available knobs
-node src/benchmarks/dream/index.js --list-providers
-node src/benchmarks/dream/index.js --list-categories
+node src/benchmarks/codegen/index.js --list-providers
+node src/benchmarks/codegen/index.js --list-categories
 ```
 
 ---
 
 ## See Also
 
-- [DREAM Benchmarks](dream/README.md) - Complete benchmark suite documentation
+- [Codegen Benchmarks](codegen/README.md) - Complete benchmark suite documentation
 - [Mind Meld Benchmark](mind_meld_benchmark.py) - Strategy comparison benchmarks
 - [Main README](../../README.md) - Project overview
 - [Mind Meld](../mind_meld/README.md) - Multi-model collaboration

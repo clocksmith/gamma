@@ -48,7 +48,7 @@
         isMinimapUpdating: false,
         lastSuggestions: { text: null, image: null },
         selectedSuggestion: { text: null, image: null },
-        generationMethod: "dreamjs",
+        generationMethod: "material",
         history: [],
         currentPhaseCardId: null,
       };
@@ -88,7 +88,7 @@
           "image-extraction-method-selection"
         ),
         imageSeedCountSelection: getEl("image-seed-count-selection"),
-        imageDreamOptions: getEl("image-dream-options"),
+        imageMaterialOptions: getEl("image-material-options"),
         imageGeminiOptions: getEl("image-gemini-options"),
         imageSelectGeminiMCPContainer: getEl("imageSelectGeminiMCP-container"),
         imagePromptSuggestions: getEl("image-prompt-suggestions"),
@@ -240,7 +240,7 @@
           id: "select_image_extractor",
           label: "Select Img Extractor",
           type: "human",
-          description: "User chooses Dream.js/Gemini for image.",
+          description: "User chooses Material Color Utils/Gemini for image.",
           code: "handleOptionChange()",
           stepNo: 4,
         },
@@ -342,8 +342,8 @@
           id: "mcp_invoke_tool",
           label: "MCP: Invoke Tool",
           type: "mcp",
-          description: "System (or LLM via MCP) invokes the Dream.js tool.",
-          code: "generateThemeInternal() or simulateDreamJSTheme()",
+          description: "System (or LLM via MCP) invokes the Material Color Utils tool.",
+          code: "generateThemeInternal() or simulateMaterialTheme()",
           stepNo: 9.2,
         },
         MCP_WRAP_GEN_COMP: {
@@ -395,11 +395,11 @@
           code: "fetch(geminiApiEndpointComponentGenerator, ...)",
           stepNo: 12.2,
         },
-        TOOL_IMAGE_PROC_DREAM: {
-          id: "tool_image_proc_dream",
-          label: "Tool: Img Proc (Dream)",
+        TOOL_IMAGE_PROC_MATERIAL: {
+          id: "tool_image_proc_material",
+          label: "Tool: Img Proc (Material)",
           type: "tool",
-          description: "Dream.js extracts color(s) from image data.",
+          description: "Material Color Utils extracts color(s) from image data.",
           code: "sourceColor(s)FromImage(img, ...)",
           stepNo: 7.3,
         },
@@ -407,7 +407,7 @@
           id: "tool_color_math",
           label: "Tool: Color Math",
           type: "tool",
-          description: "Dream.js calculates the full theme palette.",
+          description: "Material Color Utils calculates the full theme palette.",
           code: "themeFromSourceColor(s)(...)",
           stepNo: 9.4,
         },
@@ -1087,8 +1087,8 @@
           state.currentInputSource = $(
             `input[name="inputSource"]:checked`
           ).value;
-          setSelectedChip(dom.paletteGenerationMethodSelection, "dreamjs");
-          state.generationMethod = "dreamjs";
+          setSelectedChip(dom.paletteGenerationMethodSelection, "material");
+          state.generationMethod = "material";
         }
       }
       function applyFeatureVisibility() {
@@ -1311,7 +1311,7 @@
           const extractionMethod = getSelectedValue(
             dom.imageExtractionMethodSelection
           );
-          hideEl(dom.imageDreamOptions, extractionMethod === "gemini");
+          hideEl(dom.imageMaterialOptions, extractionMethod === "gemini");
           hideEl(dom.imageGeminiOptions, extractionMethod !== "gemini");
 
           if (extractionMethod === "gemini") {
@@ -2140,20 +2140,20 @@
         setHtml(dom.seedColorsDisplayContainer, "");
         hideError();
 
-        const dreamExists =
+        const materialLibExists =
           typeof themeFromSourceColor === "function" &&
           typeof themeFromSourceColors === "function" &&
           (!config.ENABLE_IMAGES ||
             (typeof sourceColorFromImage === "function" &&
               typeof sourceColorsFromImage === "function"));
         if (
-          !dreamExists &&
-          (generationMethod === "dreamjs" ||
+          !materialLibExists &&
+          (generationMethod === "material" ||
             generationMethod === "gemini_mcp" ||
             generationMethod === "manual_mcp")
         ) {
           showError(
-            "Core color generation library (dream.js) not found for selected method."
+            "Core color generation library (material_color_utils.js) not found for selected method."
           );
           setUILoading(false);
           return;
@@ -2288,7 +2288,7 @@
               themeOptions = {};
             } else {
               addStepToMinimapQueue(
-                workflowSteps.TOOL_IMAGE_PROC_DREAM,
+                workflowSteps.TOOL_IMAGE_PROC_MATERIAL,
                 "tool"
               );
               const img = await loadImageFromSrc(dom.imagePreview.src);
@@ -2296,7 +2296,7 @@
                 const srcColor = await sourceColorFromImage(img);
                 if (typeof srcColor !== "number")
                   throw new Error(
-                    "Failed to extract dominant color from image using Dream.js."
+                    "Failed to extract dominant color from image using Material Color Utils."
                   );
                 seeds = [srcColor];
               } else {
@@ -2305,7 +2305,7 @@
                 seeds = await sourceColorsFromImage(img, num, qual);
                 if (!seeds?.length)
                   throw new Error(
-                    "Failed to extract multiple colors from image using Dream.js."
+                    "Failed to extract multiple colors from image using Material Color Utils."
                   );
                 themeOptions.harmonyStrategy = "direct";
               }
@@ -2324,7 +2324,7 @@
           }
 
           let themeResult;
-          if (generationMethod === "dreamjs") {
+          if (generationMethod === "material") {
             themeResult = await generateThemeInternal(finalSeeds, themeOptions);
           } else if (
             generationMethod === "gemini_mcp" ||
@@ -2332,7 +2332,7 @@
           ) {
             addStepToMinimapQueue(workflowSteps.MCP_INVOKE_TOOL, "mcp");
             if (generationMethod === "manual_mcp") {
-              themeResult = await simulateDreamJSTheme(
+              themeResult = await simulateMaterialTheme(
                 finalSeeds,
                 themeOptions
               );
@@ -2344,7 +2344,7 @@
             }
           } else if (generationMethod === "manual_mcp") {
             addStepToMinimapQueue(workflowSteps.MCP_INVOKE_TOOL, "mcp");
-            themeResult = await simulateDreamJSTheme(finalSeeds, themeOptions);
+            themeResult = await simulateMaterialTheme(finalSeeds, themeOptions);
           } else if (generationMethod === "gemini_only") {
             addStepToMinimapQueue(workflowSteps.LLM_GEN_PALETTE, "llm");
             themeResult = await generateGeminiPalette(
@@ -2379,18 +2379,18 @@
           "phase-mcp-tool",
           "phase-llm-decision"
         );
-        if (method === "dreamjs") cardElement.classList.add("phase-local-tool");
+        if (method === "material") cardElement.classList.add("phase-local-tool");
         else if (method === "gemini_mcp" || method === "manual_mcp")
           cardElement.classList.add("phase-mcp-tool");
         else if (method === "gemini_only")
           cardElement.classList.add("phase-llm-decision");
       }
 
-      async function simulateDreamJSTheme(seeds, options) {
+      async function simulateMaterialTheme(seeds, options) {
         addStepToMinimapQueue(workflowSteps.TOOL_COLOR_MATH, "tool");
         await delay(500 + Math.random() * 300);
         if (Math.random() < 0.2)
-          throw new Error("Simulated Dream.js tool failure.");
+          throw new Error("Simulated Material Color Utils tool failure.");
         return generateThemeInternal(seeds, options);
       }
 
@@ -2402,12 +2402,12 @@
             typeof themeFromSourceColors === "function"
           ) {
             showError(
-              "Gemini API not available, falling back to Dream.js simulation for palette generation."
+              "Gemini API not available, falling back to Material Color Utils simulation for palette generation."
             );
-            return simulateDreamJSTheme(seeds, {});
+            return simulateMaterialTheme(seeds, {});
           } else {
             throw new Error(
-              "Gemini API not available and Dream.js fallback also failed."
+              "Gemini API not available and Material Color Utils fallback also failed."
             );
           }
         }
@@ -2508,9 +2508,9 @@
           return { theme: themeWithInts, seeds };
         } catch (apiError) {
           showError(
-            `Gemini Palette API Error: ${apiError.message}. Falling back to Dream.js simulation.`
+            `Gemini Palette API Error: ${apiError.message}. Falling back to Material Color Utils simulation.`
           );
-          return simulateDreamJSTheme(seeds, {});
+          return simulateMaterialTheme(seeds, {});
         }
       }
 

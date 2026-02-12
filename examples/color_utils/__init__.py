@@ -1,7 +1,7 @@
 """
 GAMMA Color Utilities Module
 
-Contains the dream.js color library (from DREAM project):
+Contains the material_color_utils.js color library (forked from Material Color Utilities):
 - Material Design 3 color schemes
 - HCT (Hue, Chroma, Tone) color space
 - Perceptually uniform color manipulation
