@@ -231,3 +231,36 @@ gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeli
 - `datasets` is retrieval eval/training structure (`queries/docs/relevant`).
 - Distillation needs an existing subset checkpoint directory (`id_remap.json` + model files).
 - Mixed models (`en-es`, `fr-pt`, etc.) are supported by creating matching mixed subset dirs and using `--distill-targets`.
+
+## Public Benchmarks (MTEB / BEIR)
+
+For publishable external comparisons, run MTEB (primary) and optionally BEIR.
+
+Install benchmark deps:
+
+```bash
+source gamma/.venv/bin/activate
+pip install -U mteb sentence-transformers beir
+```
+
+Minimal MTEB retrieval run (English first, then expand):
+
+```bash
+gamma/.venv/bin/python - <<'PY'
+from sentence_transformers import SentenceTransformer
+from mteb import MTEB
+
+model = SentenceTransformer(
+    "gamma/projects/embeddinggemma_subsets/data/models/distilled/google__embeddinggemma-300m-en-vocab50000-distilled"
+)
+evaluation = MTEB(task_types=["Retrieval"], task_langs=["eng"])
+evaluation.run(model, output_folder="gamma/projects/embeddinggemma_subsets/data/eval/mteb_en")
+PY
+```
+
+Then run multilingual retrieval tasks by changing `task_langs` (for example: `eng, spa, fra, por, ara, hin, jpn, zho`) and repeating per distilled checkpoint.
+
+References:
+- MTEB: https://github.com/embeddings-benchmark/mteb
+- MTEB Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
+- BEIR: https://github.com/beir-cellar/beir
