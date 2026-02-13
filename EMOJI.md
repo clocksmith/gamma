@@ -21,11 +21,11 @@ Notes:
 ### Status & System
 | Symbol | Usage |
 |--------|-------|
-| ★ | Success, completed |
+| ● | Ready, success, completed |
 | ☒ | Error, failure |
-| ☡ | Warning |
+| ▲ | Warning |
 | ☛ | Info, pointer |
-| ☍ | Sync, connection |
+| ○ | In progress, active |
 | ☖ | Build |
 | ☁ | Cloud/network |
 | ☨ | Debug |
