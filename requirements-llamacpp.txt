@@ -3,6 +3,15 @@ llama-cpp-python>=0.2.57
 
 # IMPORTANT: The default wheel is CPU-only. For GPU acceleration, rebuild with specific flags:
 #
+# Linux AMD via Vulkan (recommended first path on consumer Radeon/iGPU):
+#   pip uninstall -y llama-cpp-python
+#   CMAKE_ARGS="-DGGML_VULKAN=ON" \
+#   pip install --no-binary llama-cpp-python llama-cpp-python
+#
+#   Notes:
+#     - Requires Vulkan loader + drivers (e.g., mesa-vulkan-drivers, vulkan-tools).
+#     - Uses the Vulkan compute backend (separate from ROCm/HIP).
+#
 # AMD/ROCm GPUs (find your GPU architecture with: rocminfo | grep gfx):
 #   pip uninstall -y llama-cpp-python
 #   ROCM_PATH=/opt/rocm \

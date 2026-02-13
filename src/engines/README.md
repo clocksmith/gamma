@@ -80,7 +80,7 @@ These engines are implemented but may have limitations:
 
 - **MLX GPU** (`native/mlx_gpu_engine.py`): Enhanced MLX engine with Neural Accelerator support for M5+ chips, quantized KV cache, Metal device optimizations, and prefill optimization. Up to 4x faster than M4 for certain workloads.
 
-- **LlamaCpp** (`native/llama_cpp_engine.py`): Runs GGUF-format quantized models via [llama.cpp](https://github.com/ggml-org/llama.cpp). Supports Metal (Mac), CUDA, and CPU. Great for memory-constrained systems. Supports Q2-Q8 quantization levels.
+- **LlamaCpp** (`native/llama_cpp_engine.py`): Runs GGUF-format quantized models via [llama.cpp](https://github.com/ggml-org/llama.cpp). Supports Metal (Mac), CUDA, Vulkan, and CPU (depending on build flags). Great for memory-constrained systems. Supports Q2-Q8 quantization levels.
 
 - **vLLM** (`native/vllm_engine.py`): High-throughput serving engine using [vLLM](https://docs.vllm.ai/). Features PagedAttention for efficient memory, continuous batching, tensor parallelism, and speculative decoding. Requires NVIDIA GPU with CUDA (no macOS/MPS support; ROCm not supported in GAMMA’s vLLM backend). Logits are reconstructed from vLLM logprobs, so the full distribution is approximate.
 
@@ -150,6 +150,8 @@ avoid tokenizer boundary drift rather than copying incompatible entries.
   in GAMMA.
 - PyTorch ROCm is supported via `requirements-rocm.txt`. Prefer the `pytorch`
   engine on AMD; `pytorch_cuda` is NVIDIA-specific.
+- LlamaCpp Vulkan is available on Linux when `llama-cpp-python` is rebuilt with
+  `CMAKE_ARGS="-DGGML_VULKAN=ON"`.
 - MLX engines are Apple Silicon only.
 - LlamaCpp support depends on the build (CPU, Metal, CUDA); ROCm requires a
   custom build outside the default wheels.

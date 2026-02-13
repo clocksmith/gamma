@@ -150,6 +150,30 @@ def test_vllm():
         return False
 
 
+def test_llama_cpp():
+    """Test llama-cpp-python GPU offload support."""
+    print("\n" + "="*70)
+    print("llama.cpp Backend Detection")
+    print("="*70)
+
+    try:
+        from llama_cpp import llama_supports_gpu_offload
+        supports_gpu = bool(llama_supports_gpu_offload())
+        print(f"  GPU offload support: {supports_gpu}")
+        if supports_gpu:
+            print("  ✓ llama-cpp-python was built with a GPU backend")
+        else:
+            print("  ⚠ llama-cpp-python is CPU-only (or GPU backend unavailable)")
+            print("    Rebuild with Vulkan/CUDA/Metal backend flags if needed")
+        return supports_gpu
+    except ImportError:
+        print("✗ llama-cpp-python not installed")
+        return False
+    except Exception as e:
+        print(f"✗ Error testing llama-cpp-python: {e}")
+        return False
+
+
 def test_system_gpu():
     """Test system-level GPU detection."""
     print("\n" + "="*70)
@@ -257,6 +281,7 @@ def main():
         "System GPU Detection": test_system_gpu(),
         "GPU Discovery Module": test_gpu_discovery(),
         "PyTorch GPU Support": test_pytorch(),
+        "llama.cpp GPU Support": test_llama_cpp(),
         "Triton Support": test_triton(),
         "vLLM Support": test_vllm(),
     }

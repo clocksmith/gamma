@@ -35,6 +35,7 @@ CLI_OVERRIDE_FLAGS: Dict[str, str] = {
     "--summary-only": "summary_only",
     "--order-neutral": "order_neutral",
     "--repetition-penalty": "repetition_penalty",
+    "--llama-cpp-auto-gpu": "llama_cpp_auto_gpu",
 }
 
 
@@ -201,6 +202,12 @@ def _add_pytorch_args(parser: argparse.ArgumentParser) -> None:
 def _add_llamacpp_args(parser: argparse.ArgumentParser) -> None:
     """Add Llama.cpp-specific arguments."""
     lc_group = parser.add_argument_group("Llama.cpp Engine Options")
+    lc_group.add_argument(
+        "--llama-cpp-auto-gpu",
+        action=argparse.BooleanOptionalAction,
+        default=cfg.LLAMA_CPP_AUTO_GPU,
+        help="Llama.cpp: Auto-enable full GPU offload (-1 layers) when GPU backend is available",
+    )
     lc_group.add_argument("--llama-cpp-n-gpu-layers", type=int, default=cfg.LLAMA_CPP_N_GPU_LAYERS,
                           help="Llama.cpp: GPU layers (-1 for all)")
     lc_group.add_argument("--llama-cpp-n-ctx", type=int, default=cfg.LLAMA_CPP_N_CTX,

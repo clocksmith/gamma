@@ -143,7 +143,7 @@ See also: [Model Formats & Engines](./docs/MODEL_FORMATS.md)
 |--------|---------|--------|-------|
 | **PyTorch** | MPS (Mac) / CUDA | HuggingFace models | Full feature support, recommended for HF models |
 | **MLX** | Metal (Apple Silicon) | MLX-optimized models | Fastest on M1/M2/M3 Macs, ~2x faster than PyTorch MPS |
-| **LlamaCpp** | Metal / CUDA / CPU | GGUF quantized models | Great for quantized models, low memory usage |
+| **LlamaCpp** | Metal / CUDA / Vulkan / CPU | GGUF quantized models | Great for quantized models, low memory usage |
 | **Ollama** | llama.cpp | Ollama library | Easy setup, auto-detects installed models |
 
 ### Experimental
@@ -167,9 +167,14 @@ python gamma.py game --engine pytorch --model google/gemma-2-2b-it
 # Quantized GGUF models (low memory)
 python gamma.py game --engine llamacpp --model models/model.gguf
 
+# Linux AMD (Vulkan build of llama-cpp-python required)
+python gamma.py game --engine llamacpp --model models/model.gguf --llama-cpp-n-gpu-layers -1
+
 # Ollama models (use GGUF with llama.cpp for logits)
 python gamma.py game --engine llamacpp --model /path/to/ollama-model.gguf
 ```
+
+For Linux Vulkan setup, see `tools/install_llamacpp_vulkan.sh` and `requirements-llamacpp.txt`.
 
 ### Benchmark Results (Apple M-series)
 

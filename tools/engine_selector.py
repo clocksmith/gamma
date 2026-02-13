@@ -21,6 +21,7 @@ def detect_hardware():
         'cuda': False,
         'rocm': False,
         'mps': False,
+        'llamacpp_gpu_offload': False,
         'cpu_only': True
     }
 
@@ -58,6 +59,15 @@ def detect_hardware():
     except ImportError:
         pass
 
+    # Check llama.cpp backend support (can be CUDA/Metal/Vulkan/HIP depending on build)
+    try:
+        from llama_cpp import llama_supports_gpu_offload
+        hw_info['llamacpp_gpu_offload'] = bool(llama_supports_gpu_offload())
+        if hw_info['llamacpp_gpu_offload']:
+            hw_info['cpu_only'] = False
+    except Exception:
+        pass
+
     return hw_info
 
 
@@ -77,6 +87,11 @@ def print_hardware_info(hw_info):
         print("✓ Apple Metal (MPS) Available")
     else:
         print("✗ Apple Metal Not Available")
+
+    if hw_info.get('llamacpp_gpu_offload'):
+        print("✓ llama.cpp GPU offload build detected")
+    else:
+        print("✗ llama.cpp GPU offload build not detected")
 
     if hw_info['cpu_only']:
         print("\n⚠️  Running on CPU only")

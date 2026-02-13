@@ -165,7 +165,7 @@ ENGINES: Dict[str, EngineInfo] = {
             supported_formats=("gguf",),
         ),
         requirements=["llama-cpp-python"],
-        notes="Supports Metal (Mac) and CUDA acceleration",
+        notes="Supports Metal/CUDA/Vulkan acceleration depending on build",
     ),
 
     "ollama": EngineInfo(

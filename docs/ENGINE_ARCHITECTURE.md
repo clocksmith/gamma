@@ -246,7 +246,7 @@ class MyCustomEngine(LLMEngine):
 
 ### Native Engine Technologies
 
-- **llama.cpp**: C/C++ LLM inference engine with GGUF quantized model support (Q2-Q8). Supports Metal, CUDA, and CPU backends. See [GitHub - llama.cpp](https://github.com/ggml-org/llama.cpp) and [GGUF Quantization Guide](https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md).
+- **llama.cpp**: C/C++ LLM inference engine with GGUF quantized model support (Q2-Q8). Supports Metal, CUDA, Vulkan, and CPU backends (build-dependent). See [GitHub - llama.cpp](https://github.com/ggml-org/llama.cpp) and [GGUF Quantization Guide](https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md).
 
 - **vLLM**: High-throughput inference engine featuring PagedAttention for efficient KV cache management. Upstream supports multiple accelerators, but GAMMA's vLLM engine targets NVIDIA CUDA only. See [vLLM GitHub](https://github.com/vllm-project/vllm) and [vLLM Documentation](https://docs.vllm.ai/).
 

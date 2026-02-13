@@ -93,6 +93,7 @@ PYTORCH_ATTN_IMPLEMENTATION = "eager"
 PYTORCH_USE_KV_CACHE = False  # Disabled by default to avoid attention mask issues
 
 LLAMA_CPP_N_GPU_LAYERS = 0
+LLAMA_CPP_AUTO_GPU = True
 LLAMA_CPP_N_CTX = 2048
 LLAMA_CPP_LIB_VERBOSE = False
 

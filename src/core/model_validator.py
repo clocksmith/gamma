@@ -174,7 +174,11 @@ class ModelValidator:
                 return ValidationResult(
                     is_valid=False,
                     error_message=f"Engine 'llamacpp' cannot load HuggingFace models directly",
-                    suggestion=f"Download GGUF version or convert to GGUF first. See docs/ENGINE_ARCHITECTURE.md"
+                    suggestion=(
+                        "Download GGUF version or convert to GGUF first. "
+                        "On Linux AMD, you can use llama.cpp Vulkan after conversion. "
+                        "See requirements-llamacpp.txt and docs/ENGINE_ARCHITECTURE.md"
+                    )
                 )
             elif model_format != 'gguf' and model_format != 'path':
                 return ValidationResult(

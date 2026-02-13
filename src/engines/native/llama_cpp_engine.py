@@ -10,6 +10,7 @@ except ImportError: raise ImportError("'llama-cpp-python' library not found. Ins
 logger = logging.getLogger(__name__)
 
 from src.core.engine_interface import LLMEngine
+from src.core import config as game_config
 from src.core.types import PredictionResult
 from src.core.models.model_paths import resolve_model_path
 from src.engines import sampling_utils
@@ -21,15 +22,18 @@ def _decode_llama_token_piece(piece: bytes) -> str:
 class LlamaCppEngine(LLMEngine):
     def __init__(self, model_path: str, engine_specific_config: Optional[Dict[str, Any]] = None):
         super().__init__(model_name=model_path, engine_specific_config=engine_specific_config)
+        self._gpu_offload_supported: bool = False
+        self._resolved_n_gpu_layers: int = 0
 
     def load(self):
-        self._verify_and_report_gpu_support()
+        self._gpu_offload_supported = self._verify_and_report_gpu_support()
         model_p = resolve_model_path(self.model_name)
         cfg_args = self.engine_config
+        self._resolved_n_gpu_layers = self._resolve_n_gpu_layers()
         print(f"LlamaCppEngine: Loading GGUF '{model_p}'...")
         try:
             self.model = Llama(model_path=model_p, n_ctx=cfg_args.get("llama_cpp_n_ctx", 2048),
-                               n_gpu_layers=cfg_args.get("llama_cpp_n_gpu_layers", 0),
+                               n_gpu_layers=self._resolved_n_gpu_layers,
                                seed=cfg_args.get("seed", 1337), verbose=cfg_args.get("llama_cpp_lib_verbose", False), logits_all=True)
             self.tokenizer = self.model.tokenizer()
 
@@ -45,19 +49,51 @@ class LlamaCppEngine(LLMEngine):
             print(f"LlamaCppEngine: Model loaded. Vocab type: {vocab_type_str}")
         except Exception as e:
             err = f"LlamaCppEngine: Failed to load GGUF '{model_p}': {e}"
-            if "Can't pass Command" in str(e) and cfg_args.get("llama_cpp_n_gpu_layers", 0) == -1: err += "\nHint: n_gpu_layers=-1 might not work with your BLAS build. Try 0 or a positive value."
+            if "Can't pass Command" in str(e) and self._resolved_n_gpu_layers == -1: err += "\nHint: n_gpu_layers=-1 might not work with your backend build. Try --llama-cpp-n-gpu-layers 16 (or 0 for CPU)."
             raise RuntimeError(err) from e
         self._populate_special_token_map(); self.model.reset()
 
-    def _verify_and_report_gpu_support(self) -> None:
+    def _verify_and_report_gpu_support(self) -> bool:
         """Checks for and reports GPU offload capability."""
         print("--- Llama.cpp Hardware Acceleration Status ---")
-        if llama_supports_gpu_offload():
+        supports_gpu = False
+        try:
+            supports_gpu = bool(llama_supports_gpu_offload())
+        except Exception as e:
+            logger.debug(f"LlamaCppEngine: Could not query GPU offload support: {e}")
+            supports_gpu = False
+
+        if supports_gpu:
             print("\033[92m[OK] SUCCESS: llama-cpp-python reports GPU support is available.\033[0m")
         else:
             print("\033[91m[WARN] WARNING: GPU offload NOT SUPPORTED by this build.\033[0m")
             print("\033[93m    Model will run on CPU only. Performance will be slow.\033[0m")
         print("------------------------------------------\n")
+        return supports_gpu
+
+    def _resolve_n_gpu_layers(self) -> int:
+        """Resolve effective n_gpu_layers with optional auto-offload behavior."""
+        raw_layers = self.engine_config.get("llama_cpp_n_gpu_layers", game_config.LLAMA_CPP_N_GPU_LAYERS)
+        try:
+            configured_layers = int(raw_layers)
+        except (TypeError, ValueError):
+            configured_layers = int(game_config.LLAMA_CPP_N_GPU_LAYERS)
+
+        auto_gpu_raw = self.engine_config.get("llama_cpp_auto_gpu", getattr(game_config, "LLAMA_CPP_AUTO_GPU", True))
+        if isinstance(auto_gpu_raw, bool):
+            auto_gpu = auto_gpu_raw
+        else:
+            auto_gpu = str(auto_gpu_raw).strip().lower() in {"1", "true", "yes", "on"}
+
+        if configured_layers != 0:
+            return configured_layers
+        if not auto_gpu:
+            return 0
+        if not self._gpu_offload_supported:
+            return 0
+
+        print("LlamaCppEngine: Auto GPU offload enabled; using n_gpu_layers=-1")
+        return -1
 
     def reset_kv_cache(self):
         if self.model: self.model.reset()
@@ -188,7 +224,8 @@ class LlamaCppEngine(LLMEngine):
             logger.debug(f"Could not get vocab type for config summary: {e}")
 
         return {"GGUF Path": self.model_name, "Context Size": self.model.n_ctx(),
-                "GPU Layers": self.engine_config.get("llama_cpp_n_gpu_layers", 0),
+                "GPU Layers": self._resolved_n_gpu_layers,
+                "GPU Offload Supported": self._gpu_offload_supported,
                 "Vocab Type": vocab_type_str}
 
     def convert_to_numpy(self, tensor: Any) -> np.ndarray:
@@ -287,10 +324,10 @@ class LlamaCppEngine(LLMEngine):
         if not self.model:
             return "unknown"
 
-        gpu_layers = self.engine_config.get("llama_cpp_n_gpu_layers", 0)
-        if gpu_layers > 0:
+        gpu_layers = self._resolved_n_gpu_layers
+        if gpu_layers != 0:
             # Try to detect GPU backend
-            if llama_supports_gpu_offload():
-                return "cuda/rocm/metal"  # Could be any supported backend
+            if self._gpu_offload_supported:
+                return "gpu-offload"  # Backend depends on build (CUDA/Metal/Vulkan/HIP)
             return "cpu"
         return "cpu"
