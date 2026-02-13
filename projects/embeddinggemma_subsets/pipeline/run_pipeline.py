@@ -68,7 +68,10 @@ def _resolve_hf_snapshot_dir(model_ref: str) -> str:
     If `model_ref` already points at a snapshot (contains tokenizer/config/model files),
     it is returned unchanged. Non-path refs (HF ids) are returned unchanged.
     """
-    p = Path(str(model_ref))
+    s = str(model_ref).strip()
+    if not s:
+        return s
+    p = Path(s)
     if not p.exists() or not p.is_dir():
         return str(model_ref)
 
@@ -87,6 +90,26 @@ def _resolve_hf_snapshot_dir(model_ref: str) -> str:
     # Choose newest by mtime for robustness.
     cand.sort(key=lambda d: d.stat().st_mtime, reverse=True)
     return str(cand[0])
+
+
+def _validate_model_ref(model_ref: str, *, arg_name: str) -> None:
+    s = str(model_ref).strip()
+    if not s:
+        raise SystemExit(
+            f"{arg_name} is empty. If you passed --base-model \"$BASE_MODEL\", "
+            "export BASE_MODEL first or pass the full model path directly."
+        )
+    p = Path(s)
+    if p.exists() and p.is_dir():
+        if (p / "config.json").exists():
+            return
+        snaps = p / "snapshots"
+        if snaps.exists() and snaps.is_dir() and any(d.is_dir() for d in snaps.iterdir()):
+            return
+        raise SystemExit(
+            f"{arg_name} points to a directory that does not look like a HF model: {p}. "
+            "Expected config.json or snapshots/<hash>/."
+        )
 
 
 def _run_parallel(items: list[str], fn, *, max_workers: int, label: str) -> None:
@@ -545,6 +568,8 @@ def main() -> int:
 
     # pairs step
     ap.add_argument("--pairs-per-lang", type=int, default=10000)
+    ap.add_argument("--pairs-neg-strategy", choices=["random", "lexical_hard"], default="lexical_hard")
+    ap.add_argument("--pairs-hard-neg-pool", type=int, default=128)
     ap.add_argument(
         "--train-frac",
         type=float,
@@ -563,6 +588,9 @@ def main() -> int:
     ap.add_argument("--distill-temperature", type=float, default=0.05)
     ap.add_argument("--distill-alpha-contrastive", type=float, default=1.0)
     ap.add_argument("--distill-beta-distill", type=float, default=1.0)
+    ap.add_argument("--distill-alpha-triplet", type=float, default=0.25)
+    ap.add_argument("--distill-triplet-margin", type=float, default=0.05)
+    ap.add_argument("--distill-alpha-sim-distill", type=float, default=0.25)
 
     # benchmark step
     ap.add_argument("--benchmark-repeats", type=int, default=3)
@@ -589,6 +617,9 @@ def main() -> int:
     args.base_model = _resolve_hf_snapshot_dir(str(args.base_model))
     if args.subset_model is not None:
         args.subset_model = _resolve_hf_snapshot_dir(str(args.subset_model))
+    _validate_model_ref(str(args.base_model), arg_name="--base-model")
+    if args.subset_model is not None:
+        _validate_model_ref(str(args.subset_model), arg_name="--subset-model")
 
     ws = Path(args.workspace_dir)
     raw_root = ws / "raw"
@@ -793,6 +824,8 @@ def main() -> int:
                 "--datasets-dir", str(datasets_train_dir),
                 "--langs", ",".join(langs),
                 "--pairs-per-lang", str(int(args.pairs_per_lang)),
+                "--neg-strategy", str(args.pairs_neg_strategy),
+                "--hard-neg-pool", str(int(args.pairs_hard_neg_pool)),
                 "--out", str(pairs_path),
             ])
 
@@ -889,6 +922,9 @@ def main() -> int:
                 "--temperature", str(float(args.distill_temperature)),
                 "--alpha-contrastive", str(float(args.distill_alpha_contrastive)),
                 "--beta-distill", str(float(args.distill_beta_distill)),
+                "--alpha-triplet", str(float(args.distill_alpha_triplet)),
+                "--triplet-margin", str(float(args.distill_triplet_margin)),
+                "--alpha-sim-distill", str(float(args.distill_alpha_sim_distill)),
                 "--seed", str(int(args.seed)),
             ])
             print(f"[distill] done target={target} elapsed={time.perf_counter() - t0:.2f}s out={out_dir}")

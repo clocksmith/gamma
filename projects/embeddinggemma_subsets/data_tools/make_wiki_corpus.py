@@ -171,7 +171,9 @@ def _build_retrieval_dataset(paragraphs: list[str], *, seed: int, max_docs: int,
 
 _WORD_RE = None
 if re_u is not None:  # pragma: no cover
-    _WORD_RE = re_u.compile(r"\p{L}+(?:[\p{Mn}\p{Mc}]*)", re_u.UNICODE)
+    # Keep combining-mark scripts intact (e.g., Devanagari) by allowing
+    # letters and marks to interleave within one token.
+    _WORD_RE = re_u.compile(r"\p{L}[\p{L}\p{Mn}\p{Mc}\p{Me}]*", re_u.UNICODE)
 
 
 def _tokenize_words(text: str) -> list[str]:

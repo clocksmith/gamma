@@ -29,6 +29,7 @@ Use one workspace root (example: `gamma/projects/embeddinggemma_subsets/workspac
 - `training/make_distill_pairs.py`: creates distillation pairs from datasets.
 - `training/distill_subset.py`: trains one subset student (supports `--langs en,es` etc).
 - `eval/run_benchmark.py`: repeated eval/perf runs + CIs + charts.
+- `eval/run_mteb_remap.py`: runs MTEB on subset/distilled checkpoints with id remapping.
 
 ## Prerequisites
 
@@ -119,7 +120,9 @@ gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeli
   --max-queries 5000 \
   --keywords-per-query 14 \
   --distractors-per-query 30 \
-  --pairs-per-lang 10000
+  --pairs-per-lang 10000 \
+  --pairs-neg-strategy lexical_hard \
+  --pairs-hard-neg-pool 128
 ```
 
 ## Build Subset Checkpoints (Required Before Distill)
@@ -162,7 +165,10 @@ gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeli
   --distill-steps 600 \
   --distill-batch-size 32 \
   --distill-max-length 96 \
-  --distill-lr 2e-5
+  --distill-lr 2e-5 \
+  --distill-alpha-triplet 0.25 \
+  --distill-triplet-margin 0.05 \
+  --distill-alpha-sim-distill 0.25
 ```
 
 ### Mixed distill target example (`en-es`)
@@ -231,6 +237,7 @@ gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/pipeline/run_pipeli
 - `datasets` is retrieval eval/training structure (`queries/docs/relevant`).
 - Distillation needs an existing subset checkpoint directory (`id_remap.json` + model files).
 - Mixed models (`en-es`, `fr-pt`, etc.) are supported by creating matching mixed subset dirs and using `--distill-targets`.
+- For stronger EN quality, prefer `--pairs-neg-strategy lexical_hard` and keep triplet/sim-distill weights non-zero.
 
 ## Public Benchmarks (MTEB / BEIR)
 
@@ -246,19 +253,17 @@ pip install -U mteb sentence-transformers beir
 Minimal MTEB retrieval run (English first, then expand):
 
 ```bash
-gamma/.venv/bin/python - <<'PY'
-from sentence_transformers import SentenceTransformer
-from mteb import MTEB
-
-model = SentenceTransformer(
-    "gamma/projects/embeddinggemma_subsets/data/models/distilled/google__embeddinggemma-300m-en-vocab50000-distilled"
-)
-evaluation = MTEB(task_types=["Retrieval"], task_langs=["eng"])
-evaluation.run(model, output_folder="gamma/projects/embeddinggemma_subsets/data/eval/mteb_en")
-PY
+gamma/.venv/bin/python gamma/projects/embeddinggemma_subsets/eval/run_mteb_remap.py \
+  --base-tokenizer /Users/xyz/.cache/huggingface/hub/models--google--embeddinggemma-300m/snapshots/57c266a740f537b4dc058e1b0cda161fd15afa75 \
+  --subset-dir gamma/projects/embeddinggemma_subsets/data/models/distilled/google__embeddinggemma-300m-en-vocab50000-distilled \
+  --task-types Retrieval \
+  --task-langs eng \
+  --output-folder gamma/projects/embeddinggemma_subsets/data/eval/mteb_en
 ```
 
-Then run multilingual retrieval tasks by changing `task_langs` (for example: `eng, spa, fra, por, ara, hin, jpn, zho`) and repeating per distilled checkpoint.
+Then run multilingual retrieval tasks by changing `task_langs` (for example: `eng,spa,fra,por,ara,hin,jpn,zho`) and repeating per distilled checkpoint.
+
+Important: distilled/subset checkpoints are pruned-vocab models, so direct `SentenceTransformer(<subset_dir>)` loading is unsafe unless ids are remapped with `id_remap.json`.
 
 References:
 - MTEB: https://github.com/embeddings-benchmark/mteb

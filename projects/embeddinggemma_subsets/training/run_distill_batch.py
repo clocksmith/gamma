@@ -45,6 +45,9 @@ def main() -> int:
     ap.add_argument("--temperature", type=float, default=0.05)
     ap.add_argument("--alpha-contrastive", type=float, default=1.0)
     ap.add_argument("--beta-distill", type=float, default=1.0)
+    ap.add_argument("--alpha-triplet", type=float, default=0.25)
+    ap.add_argument("--triplet-margin", type=float, default=0.05)
+    ap.add_argument("--alpha-sim-distill", type=float, default=0.25)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--resume", action="store_true", help="Skip language if output dir already has train_summary.json")
     args = ap.parse_args()
@@ -99,6 +102,12 @@ def main() -> int:
             str(float(args.alpha_contrastive)),
             "--beta-distill",
             str(float(args.beta_distill)),
+            "--alpha-triplet",
+            str(float(args.alpha_triplet)),
+            "--triplet-margin",
+            str(float(args.triplet_margin)),
+            "--alpha-sim-distill",
+            str(float(args.alpha_sim_distill)),
             "--seed",
             str(int(args.seed)),
         ]

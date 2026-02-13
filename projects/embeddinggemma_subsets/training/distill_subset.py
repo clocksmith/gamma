@@ -91,6 +91,69 @@ def _encode_student(model, tok, remap: dict[str, int], texts: list[str], *, devi
     return F.normalize(pooled.float(), p=2, dim=-1)
 
 
+def _safe_text(x: Any) -> str:
+    if x is None:
+        return ""
+    return str(x)
+
+
+def _validate_model_ref(model_ref: str, *, arg_name: str) -> None:
+    s = str(model_ref).strip()
+    if not s:
+        raise RuntimeError(
+            f"{arg_name} is empty. If this came from $BASE_MODEL, export it first or pass an explicit path."
+        )
+    p = Path(s)
+    if p.exists() and p.is_dir() and not (p / "config.json").exists():
+        raise RuntimeError(
+            f"{arg_name} points to a directory without config.json: {p}. "
+            "Use a HF model id or a local snapshot directory."
+        )
+
+
+_TOKENIZER_ARTIFACT_FILES = (
+    "tokenizer.json",
+    "tokenizer_config.json",
+    "special_tokens_map.json",
+    "tokenizer.model",
+    "sentencepiece.bpe.model",
+    "spiece.model",
+    "vocab.json",
+    "merges.txt",
+    "added_tokens.json",
+)
+
+
+def _remove_tokenizer_artifacts(out_dir: Path) -> list[str]:
+    removed: list[str] = []
+    for name in _TOKENIZER_ARTIFACT_FILES:
+        p = out_dir / name
+        if p.exists() and p.is_file():
+            p.unlink()
+            removed.append(name)
+    return removed
+
+
+def _write_runtime_note(path: Path) -> None:
+    path.write_text(
+        "\n".join(
+            [
+                "This distilled checkpoint uses a pruned vocabulary.",
+                "",
+                "Important:",
+                "- Do NOT feed tokenizer ids directly unless they are remapped.",
+                "- Use the base tokenizer from the teacher/base model.",
+                "- Remap base-tokenizer ids with id_remap.json (old_to_new).",
+                "- Map missing ids to the remapped unk id.",
+                "",
+                "This avoids index errors and keeps runtime behavior aligned with training/eval.",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--teacher-model", required=True)
@@ -107,7 +170,18 @@ def main() -> int:
     ap.add_argument("--temperature", type=float, default=0.05)
     ap.add_argument("--alpha-contrastive", type=float, default=1.0)
     ap.add_argument("--beta-distill", type=float, default=1.0)
+    ap.add_argument("--alpha-triplet", type=float, default=0.25)
+    ap.add_argument("--triplet-margin", type=float, default=0.05)
+    ap.add_argument("--alpha-sim-distill", type=float, default=0.25)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument(
+        "--export-teacher-tokenizer",
+        action="store_true",
+        help=(
+            "Also export the full teacher tokenizer into --out. "
+            "Off by default because the distilled checkpoint expects id_remap.json at runtime."
+        ),
+    )
     args = ap.parse_args()
 
     random.seed(int(args.seed))
@@ -125,6 +199,7 @@ def main() -> int:
     else:
         print(f"[distill_subset] device={args.device}")
 
+    _validate_model_ref(str(args.teacher_model), arg_name="--teacher-model")
     teacher = AutoModel.from_pretrained(str(args.teacher_model), local_files_only=True, low_cpu_mem_usage=True).to(args.device)
     teacher.eval()
     tok = AutoTokenizer.from_pretrained(str(args.teacher_model), local_files_only=True, use_fast=True)
@@ -152,30 +227,60 @@ def main() -> int:
     losses: list[float] = []
     loss_con_list: list[float] = []
     loss_dis_list: list[float] = []
+    loss_triplet_list: list[float] = []
+    loss_simdist_list: list[float] = []
     step_start = time.perf_counter()
 
     for step in range(total_steps):
         batch = [rows[(step * bsz + i) % len(rows)] for i in range(bsz)]
-        q = [x["query"] for x in batch]
-        p = [x["pos"] for x in batch]
-        # hard negatives are in batch via cross-example mismatch; explicit neg kept for future extensions.
+        q = [_safe_text(x.get("query", "")) for x in batch]
+        p = [_safe_text(x.get("pos", "")) for x in batch]
+        n = [_safe_text(x.get("neg", "")) for x in batch]
+        use_explicit_neg = any(t.strip() for t in n)
 
         with torch.no_grad():
             tq = _encode_teacher(teacher, tok, q, device=args.device, max_length=int(args.max_length))
             tp = _encode_teacher(teacher, tok, p, device=args.device, max_length=int(args.max_length))
+            tn = _encode_teacher(teacher, tok, n, device=args.device, max_length=int(args.max_length)) if use_explicit_neg else None
 
         sq = _encode_student(student, tok, remap, q, device=args.device, max_length=int(args.max_length))
         sp = _encode_student(student, tok, remap, p, device=args.device, max_length=int(args.max_length))
+        sn = _encode_student(student, tok, remap, n, device=args.device, max_length=int(args.max_length)) if use_explicit_neg else None
 
         # Distill to teacher geometry.
         loss_distill = F.mse_loss(sq, tq) + F.mse_loss(sp, tp)
+        if use_explicit_neg and tn is not None and sn is not None:
+            loss_distill = loss_distill + F.mse_loss(sn, tn)
 
         # Contrastive objective with in-batch negatives.
         logits = (sq @ sp.T) / float(args.temperature)
         target = torch.arange(logits.size(0), device=logits.device)
         loss_ctr = 0.5 * (F.cross_entropy(logits, target) + F.cross_entropy(logits.T, target))
 
-        loss = float(args.alpha_contrastive) * loss_ctr + float(args.beta_distill) * loss_distill
+        # Explicit triplet with the per-row negative from pairs.
+        if use_explicit_neg and sn is not None:
+            sim_qp = (sq * sp).sum(dim=-1)
+            sim_qn = (sq * sn).sum(dim=-1)
+            loss_triplet = F.relu(float(args.triplet_margin) + sim_qn - sim_qp).mean()
+        else:
+            loss_triplet = torch.zeros((), device=sq.device)
+
+        # Distill similarity structure (teacher/student alignment on positive and negative similarities).
+        if use_explicit_neg and tn is not None and sn is not None:
+            t_qp = (tq * tp).sum(dim=-1)
+            t_qn = (tq * tn).sum(dim=-1)
+            s_qp = (sq * sp).sum(dim=-1)
+            s_qn = (sq * sn).sum(dim=-1)
+            loss_simdist = F.mse_loss(s_qp, t_qp) + F.mse_loss(s_qn, t_qn)
+        else:
+            loss_simdist = torch.zeros((), device=sq.device)
+
+        loss = (
+            float(args.alpha_contrastive) * loss_ctr
+            + float(args.beta_distill) * loss_distill
+            + float(args.alpha_triplet) * loss_triplet
+            + float(args.alpha_sim_distill) * loss_simdist
+        )
 
         optim.zero_grad(set_to_none=True)
         loss.backward()
@@ -185,6 +290,8 @@ def main() -> int:
         losses.append(float(loss.item()))
         loss_con_list.append(float(loss_ctr.item()))
         loss_dis_list.append(float(loss_distill.item()))
+        loss_triplet_list.append(float(loss_triplet.item()))
+        loss_simdist_list.append(float(loss_simdist.item()))
         if (step + 1) % 10 == 0 or step == 0:
             now = time.perf_counter()
             elapsed = now - step_start
@@ -195,16 +302,21 @@ def main() -> int:
                 f"loss={losses[-1]:.4f} "
                 f"contrastive={loss_con_list[-1]:.4f} "
                 f"distill={loss_dis_list[-1]:.4f} "
+                f"triplet={loss_triplet_list[-1]:.4f} "
+                f"simdist={loss_simdist_list[-1]:.4f} "
                 f"elapsed={elapsed:.1f}s "
                 f"steps_per_s={sps:.2f}"
             )
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
+    removed_tokenizer_files = _remove_tokenizer_artifacts(out)
     student.save_pretrained(str(out), safe_serialization=True)
-    tok.save_pretrained(str(out))
+    if bool(args.export_teacher_tokenizer):
+        tok.save_pretrained(str(out))
     # copy remap for runtime compatibility
     (out / "id_remap.json").write_text((student_dir / "id_remap.json").read_text(encoding="utf-8"), encoding="utf-8")
+    _write_runtime_note(out / "README_REMAP.txt")
     summary = {
         "teacher_model": str(args.teacher_model),
         "student_input_dir": str(student_dir),
@@ -215,6 +327,9 @@ def main() -> int:
         "temperature": float(args.temperature),
         "alpha_contrastive": float(args.alpha_contrastive),
         "beta_distill": float(args.beta_distill),
+        "alpha_triplet": float(args.alpha_triplet),
+        "triplet_margin": float(args.triplet_margin),
+        "alpha_sim_distill": float(args.alpha_sim_distill),
         "pairs": str(args.pairs),
         "pairs_count": len(rows),
         "device": str(args.device),
@@ -222,9 +337,17 @@ def main() -> int:
         "loss_mean_last_20": float(sum(losses[-20:]) / max(1, len(losses[-20:]))),
         "contrastive_mean_last_20": float(sum(loss_con_list[-20:]) / max(1, len(loss_con_list[-20:]))),
         "distill_mean_last_20": float(sum(loss_dis_list[-20:]) / max(1, len(loss_dis_list[-20:]))),
+        "triplet_mean_last_20": float(sum(loss_triplet_list[-20:]) / max(1, len(loss_triplet_list[-20:]))),
+        "simdist_mean_last_20": float(sum(loss_simdist_list[-20:]) / max(1, len(loss_simdist_list[-20:]))),
+        "export_teacher_tokenizer": bool(args.export_teacher_tokenizer),
+        "removed_stale_tokenizer_files": removed_tokenizer_files,
     }
     (out / "train_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"wrote distilled student -> {out}")
+    if removed_tokenizer_files:
+        print(f"[distill_subset] removed_stale_tokenizer_files={','.join(removed_tokenizer_files)}")
+    if not bool(args.export_teacher_tokenizer):
+        print("[distill_subset] note: tokenizer not exported; use base tokenizer + id_remap.json at runtime")
     print(f"[distill_subset] done elapsed={summary['duration_s']:.2f}s out={out}")
     return 0
 
