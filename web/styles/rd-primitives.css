@@ -1,0 +1,389 @@
+/* ============================================
+   RD Design System - Primitives
+   Reset, Typography, Borders, Shared Patterns, Utilities
+   ============================================ */
+
+/* === RESET === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-a);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* === LINKS === */
+a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: var(--border-sm) dotted var(--fg);
+}
+
+a:hover {
+  border-bottom-style: solid;
+}
+
+a.link-secondary {
+  text-decoration: none;
+  border-bottom: var(--border-sm) dotted var(--fg);
+  opacity: var(--opacity-secondary);
+  cursor: pointer;
+}
+
+a.link-secondary:hover {
+  opacity: 1;
+  border-bottom-style: solid;
+}
+
+/* === TYPOGRAPHY === */
+
+.type-display {
+  font: 300 28px/1.2 var(--font-a);
+  letter-spacing: 0.25em;
+}
+
+.type-h1 {
+  font: 500 18px/1.3 var(--font-a);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-md);
+}
+
+.type-h2 {
+  font: 500 15px/1.4 var(--font-a);
+  letter-spacing: 0.02em;
+}
+
+.type-body {
+  font: 400 15px/1.6 var(--font-b);
+  letter-spacing: 0;
+}
+
+.type-label {
+  font: 700 11px/1.2 var(--font-a);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.type-ui {
+  font: 500 13px/1.3 var(--font-a);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.type-caption {
+  font: 400 11px/1.4 var(--font-b);
+  letter-spacing: 0;
+}
+
+/* === BORDERS === */
+
+.border-default,
+.panel,
+.btn,
+input,
+textarea,
+select,
+.select-trigger,
+.select-options,
+.modal {
+  border: var(--border-md) solid var(--fg);
+}
+
+.border-subtle,
+.progress,
+.card,
+th,
+td,
+.badge,
+.tag,
+.toast,
+pre,
+code,
+.checkbox-label input[type="checkbox"] {
+  border: var(--border-sm) solid var(--fg);
+}
+
+.border-ghost {
+  border: var(--border-md) dotted var(--fg);
+}
+
+.border-info {
+  border: var(--border-sm) dotted var(--fg);
+}
+
+.border-warning {
+  border: var(--border-md) dashed var(--fg);
+}
+
+.border-error {
+  border: var(--border-lg) dashed var(--fg);
+}
+
+.border-elevated {
+  border: var(--border-lg) solid var(--fg);
+}
+
+.border-disabled {
+  border: var(--border-md) solid var(--fg);
+  opacity: var(--opacity-disabled);
+}
+
+.border-prism {
+  border: var(--border-lg) solid transparent;
+  background:
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    conic-gradient(#ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #8000ff, #ff0080, #ff0000) border-box;
+}
+
+/* === SHARED PATTERNS === */
+
+/* Inverted state (fg/bg swap) */
+.inverted,
+.btn:hover,
+.btn:active,
+.btn-primary,
+.select-trigger:hover,
+.select-option:hover,
+.select-option.selected,
+.list-item:hover,
+::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* Flex column layout */
+.flex-col,
+.toast-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Border bottom (sm) */
+.card-header,
+.list-item,
+.select-option {
+  border-bottom: var(--border-sm) solid var(--fg);
+}
+
+/* Border top (sm) */
+.card-footer,
+.modal-footer {
+  border-top: var(--border-sm) solid var(--fg);
+}
+
+/* Cursor pointer */
+.btn,
+.select-trigger,
+.select-option,
+select,
+.checkbox-label,
+.radio-label,
+.checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+}
+
+/* Disabled state */
+.btn:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* Opacity secondary */
+a.link-secondary {
+  opacity: var(--opacity-secondary);
+}
+
+/* Opacity ghost */
+.btn-ghost {
+  opacity: var(--opacity-ghost);
+}
+
+/* Uppercase text */
+.btn,
+.panel-header,
+th,
+.badge {
+  text-transform: uppercase;
+}
+
+/* Letter spacing 0.08em */
+.btn,
+.panel-header,
+th,
+.badge {
+  letter-spacing: 0.08em;
+}
+
+/* Padding md */
+.panel,
+.panel-body,
+.card-body,
+.modal-body,
+.modal-header,
+.modal-footer,
+pre,
+.toast {
+  padding: var(--space-md);
+}
+
+/* Padding sm */
+input,
+textarea,
+select,
+.select-trigger,
+.select-option,
+th,
+td {
+  padding: var(--space-sm);
+}
+
+/* Padding sm/md */
+.panel-header,
+.card-header,
+.card-footer,
+.list-item {
+  padding: var(--space-sm) var(--space-md);
+}
+
+/* Full width */
+.select-custom,
+.select-trigger,
+input,
+textarea,
+select,
+.progress,
+table,
+.modal {
+  width: 100%;
+}
+
+/* Font-b 15px (body text) */
+input,
+textarea,
+select,
+.select-trigger,
+.select-option {
+  font-family: var(--font-b);
+  font-size: 15px;
+}
+
+/* Font-a 13px (UI text) */
+.btn,
+table,
+pre,
+code {
+  font-family: var(--font-a);
+  font-size: 13px;
+}
+
+/* Font-a 11px (small labels) */
+.badge,
+.tag,
+th {
+  font-family: var(--font-a);
+  font-size: 11px;
+}
+
+/* Background bg (reset) */
+input,
+textarea,
+select,
+.select-trigger,
+.select-options,
+.btn,
+.toast,
+.modal,
+.progress,
+.checkbox-label input[type="checkbox"] {
+  background: var(--bg);
+}
+
+/* Color fg */
+input,
+textarea,
+select,
+.select-trigger,
+.btn {
+  color: var(--fg);
+}
+
+/* === UTILITIES === */
+
+.muted { opacity: var(--opacity-muted); }
+.hidden { display: none; }
+
+/* === SIZING === */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+
+/* === UTILITY STATES === */
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+.select-none { user-select: none; }
+.pointer-events-none { pointer-events: none; }
+
+/* Visibility */
+[hidden] { display: none !important; }
+
+/* === CODE BLOCKS === */
+pre, code {
+  letter-spacing: -0.02em;
+}
+
+pre {
+  overflow-x: auto;
+  white-space: pre;
+}
+
+code {
+  padding: 2px 4px;
+}
+
+pre code {
+  padding: 0;
+  border: none;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-left: var(--border-sm) solid var(--fg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fg);
+}

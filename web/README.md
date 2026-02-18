@@ -14,7 +14,7 @@ A browser-based game where you guess the next token an LLM will generate.
 ## Tech Stack
 
 - **Inference**: Transformers.js with WebGPU/WASM
-- **Build**: Vite
+- **Build**: None (static ES modules served directly)
 - **Hosting**: Firebase
 
 ## Models
@@ -31,7 +31,7 @@ npm run dev
 ## Deploy
 
 ```bash
-npm run build && firebase deploy
+firebase deploy
 ```
 
 ## License

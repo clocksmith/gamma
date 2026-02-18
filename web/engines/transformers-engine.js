@@ -1,4 +1,4 @@
-import { AutoTokenizer, AutoModelForCausalLM, env, Tensor } from '@huggingface/transformers';
+import { AutoTokenizer, AutoModelForCausalLM, env, Tensor } from 'https://esm.run/@huggingface/transformers@3.8.0';
 import { EngineInterface } from '../core/engine-interface.js';
 import { SamplingUtils } from '../core/sampling-utils.js';
 import { EventBus } from '../utils/event-bus.js';
