@@ -76,7 +76,7 @@ Batch driver for `vocab_subset.py` using a JSON config file.
 
 ```bash
 gamma/.venv/bin/python tools/build_embeddinggemma_subsets.py \
-  --config projects/embeddinggemma_subsets/config/subsets.json
+  --config projects/distillation/shared/config/subsets.json
 ```
 
 ---

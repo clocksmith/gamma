@@ -38,7 +38,7 @@ python gamma.py codegen mind-meld --help
 
 Build language-targeted vocab subsets, distill student embedding models, and benchmark quality retention and speedups.
 
-See: `projects/embeddinggemma_subsets/README.md`
+See: `projects/distillation/embedding/README.md`
 
 ### **Performance Benchmarks (Tokens/sec + Latency):**
 

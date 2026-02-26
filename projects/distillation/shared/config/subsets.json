@@ -1,0 +1,56 @@
+{
+  "base_model": "google/embeddinggemma-300m",
+  "out_root": "gamma/projects/distillation/embedding/output",
+  "defaults": {
+    "top_k": 50000,
+    "min_count": 2,
+    "max_lines": null,
+    "write_checkpoint": true,
+    "also_prune_output": false,
+    "dtype": "auto",
+    "fill_to_top_k": true,
+    "fill_strategy": "spm_score"
+  },
+  "subsets": [
+    {
+      "tag": "en",
+      "texts": ["gamma/projects/distillation/shared/data/en.txt"]
+    },
+    {
+      "tag": "es",
+      "texts": ["gamma/projects/distillation/shared/data/es.txt"]
+    },
+    {
+      "tag": "zh",
+      "top_k": 80000,
+      "min_count": 2,
+      "texts": ["gamma/projects/distillation/shared/data/zh.txt"]
+    },
+    {
+      "tag": "ja",
+      "top_k": 80000,
+      "min_count": 2,
+      "texts": ["gamma/projects/distillation/shared/data/ja.txt"]
+    },
+    {
+      "tag": "ar",
+      "top_k": 50000,
+      "min_count": 2,
+      "texts": ["gamma/projects/distillation/shared/data/ar.txt"]
+    },
+    {
+      "tag": "fr",
+      "texts": ["gamma/projects/distillation/shared/data/fr.txt"]
+    },
+    {
+      "tag": "pt",
+      "texts": ["gamma/projects/distillation/shared/data/pt.txt"]
+    },
+    {
+      "tag": "hi",
+      "top_k": 80000,
+      "min_count": 2,
+      "texts": ["gamma/projects/distillation/shared/data/hi.txt"]
+    }
+  ]
+}

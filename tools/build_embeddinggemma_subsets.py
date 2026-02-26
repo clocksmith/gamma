@@ -2,7 +2,8 @@
 """
 Batch driver for language-targeted vocab subsets.
 
-Reads a JSON config (see `gamma/projects/embeddinggemma_subsets/config/subsets.json`)
+Reads a JSON config (see `projects/distillation/shared/config/subsets.json`
+or legacy `projects/embeddinggemma_subsets/config/subsets.json`).
 and runs `gamma/tools/vocab_subset.py` for each subset.
 
 This script intentionally shells out to the single-subset tool so the pipeline
@@ -17,6 +18,10 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import Any
+
+
+LEGACY_DATA_ROOT = "gamma/projects/embeddinggemma_subsets"
+DISTILLATION_DATA_ROOT = "gamma/projects/distillation/shared"
 
 
 def _load_json(path: Path) -> Any:
@@ -38,6 +43,42 @@ def _resolve_out_dir(out_root: Path, base_model: str, tag: str, top_k: int) -> P
 def _run(cmd: list[str]) -> None:
     print(f"+ {' '.join(cmd)}")
     subprocess.run(cmd, check=True)
+
+
+def _resolve_compat_path(path_s: str, *, label: str) -> str:
+    s = str(path_s)
+    legacy_prefix = f"{LEGACY_DATA_ROOT}/"
+    distill_prefix = f"{DISTILLATION_DATA_ROOT}/"
+
+    if s.startswith(legacy_prefix):
+        rel = s[len(legacy_prefix) :]
+        new_s = f"{DISTILLATION_DATA_ROOT}/{rel}"
+        new_p = Path(new_s)
+        legacy_p = Path(s)
+        if new_p.exists():
+            print(f"[paths] {label}: using new path {new_p}")
+            return str(new_p)
+        if legacy_p.exists():
+            print(f"[paths] {label}: using legacy fallback {legacy_p}")
+            return str(legacy_p)
+        print(f"[paths] {label}: defaulting to new path {new_p} (not found yet)")
+        return str(new_p)
+
+    if s.startswith(distill_prefix):
+        rel = s[len(distill_prefix) :]
+        legacy_s = f"{LEGACY_DATA_ROOT}/{rel}"
+        new_p = Path(s)
+        legacy_p = Path(legacy_s)
+        if new_p.exists():
+            print(f"[paths] {label}: using new path {new_p}")
+            return str(new_p)
+        if legacy_p.exists():
+            print(f"[paths] {label}: using legacy fallback {legacy_p}")
+            return str(legacy_p)
+        print(f"[paths] {label}: defaulting to new path {new_p} (not found yet)")
+        return str(new_p)
+
+    return s
 
 
 def main() -> int:
@@ -80,6 +121,7 @@ def main() -> int:
 
         texts = entry.get("texts")
         texts = _ensure_list(texts, name=f"subset[{tag}].texts")
+        texts = [_resolve_compat_path(t, label=f"subset[{tag}].text[{i}]") for i, t in enumerate(texts)]
 
         top_k = int(entry.get("top_k", defaults.get("top_k", 50000)))
         min_count = int(entry.get("min_count", defaults.get("min_count", 1)))
