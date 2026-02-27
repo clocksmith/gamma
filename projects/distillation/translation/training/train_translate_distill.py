@@ -257,7 +257,7 @@ def _encode_chat_batch(
     max_prompt_length: int,
     device: str,
     target_key: str = "target_pos",
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor | None, torch.Tensor]:
     prompt_texts: list[str] = []
     full_texts: list[str] = []
 
@@ -291,6 +291,13 @@ def _encode_chat_batch(
 
     input_ids = full_enc["input_ids"].to(device)
     attention_mask = full_enc["attention_mask"].to(device)
+    token_type_ids = full_enc.get("token_type_ids")
+    if isinstance(token_type_ids, torch.Tensor):
+        token_type_ids = token_type_ids.to(device)
+    else:
+        # Gemma3 requires token_type_ids for training, even when not returned by tokenizer.
+        # Use a neutral all-zero tensor (one type segment) to satisfy model requirements.
+        token_type_ids = torch.zeros_like(input_ids)
     batch_labels = full_enc["input_ids"].clone()
     batch_labels[:, :] = -100
     for i in range(input_ids.size(0)):
@@ -303,7 +310,29 @@ def _encode_chat_batch(
         pad_mask = attention_mask[i].eq(0)
         if pad_mask.any():
             batch_labels[i, pad_mask] = -100
-    return input_ids, attention_mask, batch_labels.to(device)
+    return input_ids, attention_mask, token_type_ids, batch_labels.to(device)
+
+
+def _forward_model(model, input_ids, attention_mask, token_type_ids, labels=None):
+    kwargs = {
+        "input_ids": input_ids,
+        "attention_mask": attention_mask,
+    }
+    if token_type_ids is not None:
+        kwargs["token_type_ids"] = token_type_ids
+    if labels is not None:
+        kwargs["labels"] = labels
+    try:
+        return model(**kwargs)
+    except TypeError as exc:
+        if token_type_ids is None:
+            raise
+        # Some model implementations do not accept token_type_ids; retry without it.
+        kwargs.pop("token_type_ids", None)
+        try:
+            return model(**kwargs)
+        except TypeError:
+            raise exc
 
 
 def _shift_logits_and_labels(logits: torch.Tensor, labels: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
@@ -518,7 +547,7 @@ def _train_stage(
     for step in range(num_steps):
         batch_idx = [rng.randrange(len(rows)) for _ in range(int(args.batch_size))]
         batch = [rows[i] for i in batch_idx]
-        pos_ids, pos_mask, pos_labels = _encode_chat_batch(
+        pos_ids, pos_mask, pos_token_types, pos_labels = _encode_chat_batch(
             tokenizer,
             batch,
             max_seq_length=int(args.max_seq_length),
@@ -529,7 +558,7 @@ def _train_stage(
         has_neg = any(bool(_safe_text(ex.target_neg)) for ex in batch)
         batch_use_triplet = bool(use_triplet and has_neg)
         if has_neg:
-            neg_ids, neg_mask, neg_labels = _encode_chat_batch(
+            neg_ids, neg_mask, neg_token_types, neg_labels = _encode_chat_batch(
                 tokenizer,
                 batch,
                 max_seq_length=int(args.max_seq_length),
@@ -540,21 +569,21 @@ def _train_stage(
         else:
             neg_ids = neg_mask = neg_labels = None
 
-        student_out = student(input_ids=pos_ids, attention_mask=pos_mask, labels=None)
+        student_out = _forward_model(student, pos_ids, pos_mask, pos_token_types)
         student_logits = student_out.logits
         loss_pos = _ce_loss(student_logits, pos_labels)
 
         loss_kd = torch.tensor(0.0, device=student_logits.device)
         if use_kd and teacher is not None:
             with torch.no_grad():
-                teacher_out = teacher(input_ids=pos_ids, attention_mask=pos_mask)
+                teacher_out = _forward_model(teacher, pos_ids, pos_mask, pos_token_types)
             loss_kd = _kd_loss(student_logits, teacher_out.logits, pos_labels, float(args.kd_temperature))
 
         loss_triplet = torch.tensor(0.0, device=student_logits.device)
         if batch_use_triplet and neg_ids is not None:
             with torch.no_grad():
                 # Triplet always uses student logits; no gradient from neg through this term.
-                neg_out = student(input_ids=neg_ids, attention_mask=neg_mask, labels=None)
+                neg_out = _forward_model(student, neg_ids, neg_mask, neg_token_types)
             loss_triplet = _triplet_loss(
                 pos_logits=student_logits,
                 pos_labels=pos_labels,

@@ -31,6 +31,15 @@ try:
 except Exception:  # pragma: no cover - optional
     load_from_checkpoint = None
 
+try:
+    from huggingface_hub import snapshot_download
+except Exception:  # pragma: no cover - optional
+    snapshot_download = None
+
+
+_METRIC_CACHE: dict[str, Any] = {}
+_COMET_MODEL_CACHE: dict[str, Any] = {}
+
 
 @dataclass(frozen=True)
 class EvalRow:
@@ -274,6 +283,58 @@ def _safe_metric_error(msg: str) -> dict[str, Any]:
     return {"available": False, "score": None, "error": msg}
 
 
+def _normalize_metric_path(model_path: str) -> str | None:
+    p = Path(model_path)
+    if not p.exists():
+        return None
+    if p.is_file():
+        return str(p)
+    if not p.exists():
+        return None
+    if p.is_dir():
+        for ckpt in sorted((p / "checkpoints").glob("*.ckpt")):
+            if ckpt.is_file():
+                return str(ckpt)
+        if (p / "model.ckpt").is_file():
+            return str(p / "model.ckpt")
+        return str(p)
+    return None
+
+
+def _resolve_comet_checkpoint(path: str, allow_download: bool) -> tuple[str, str | None]:
+    cached = _COMET_MODEL_CACHE.get(path)
+    if isinstance(cached, str):
+        return cached, None
+
+    p = _normalize_metric_path(path)
+    if p is not None:
+        _COMET_MODEL_CACHE[path] = p
+        return p, None
+
+    # Remote Hugging Face style identifiers typically look like "org/repo".
+    # Local filesystem paths are usually absolute or relative but point to an
+    # existing file/dir, which we already handled above.
+    if "/" not in path and not path.startswith(".") and not Path(path).is_absolute():
+        return path, "comet model path does not exist and does not look like a Hugging Face repo id"
+
+    if snapshot_download is None:
+        return path, "huggingface_hub not installed for remote COMET id resolution"
+
+    if not allow_download:
+        return path, "comet model not found locally and --allow-download is disabled"
+
+    try:
+        local_snapshot = Path(snapshot_download(repo_id=path, local_files_only=False))
+    except Exception as e:
+        return path, f"failed to download COMET checkpoint {path}: {e}"
+
+    resolved = _normalize_metric_path(str(local_snapshot))
+    if resolved is None:
+        return path, f"no checkpoint found in downloaded COMET artifact: {local_snapshot}"
+
+    _COMET_MODEL_CACHE[path] = resolved
+    return resolved, None
+
 def _compute_metrics(predictions: list[str], references: list[str], do_bleu: bool, do_chrf: bool) -> dict[str, Any]:
     n = len(predictions)
     if not n:
@@ -294,7 +355,10 @@ def _compute_metrics(predictions: list[str], references: list[str], do_bleu: boo
             out["bleu"] = _safe_metric_error("evaluate package unavailable")
         else:
             try:
-                metric = evaluate.load("sacrebleu")
+                metric = _METRIC_CACHE.get("sacrebleu")
+                if metric is None:
+                    metric = evaluate.load("sacrebleu")
+                    _METRIC_CACHE["sacrebleu"] = metric
                 out["bleu"] = {
                     "available": True,
                     "score": float(metric.compute(predictions=predictions, references=[[r] for r in references])["score"]),
@@ -309,7 +373,10 @@ def _compute_metrics(predictions: list[str], references: list[str], do_bleu: boo
             out["chrf"] = _safe_metric_error("evaluate package unavailable")
         else:
             try:
-                metric = evaluate.load("chrf")
+                metric = _METRIC_CACHE.get("chrf")
+                if metric is None:
+                    metric = evaluate.load("chrf")
+                    _METRIC_CACHE["chrf"] = metric
                 out["chrf"] = {
                     "available": True,
                     "score": float(metric.compute(predictions=predictions, references=references)["score"]),
@@ -327,13 +394,24 @@ def _compute_comet(
     references: list[str],
     comet_model_path: str,
     batch_size: int,
+    allow_download: bool,
 ) -> dict[str, Any]:
     if not predictions:
         return _safe_metric_error("no data")
     if load_from_checkpoint is None:
         return _safe_metric_error("comet package unavailable")
     try:
-        comet_model = load_from_checkpoint(comet_model_path)
+        resolved_model_path, model_error = _resolve_comet_checkpoint(
+            comet_model_path,
+            allow_download=allow_download,
+        )
+        if model_error:
+            return _safe_metric_error(model_error)
+        if resolved_model_path in _COMET_MODEL_CACHE:
+            comet_model = _COMET_MODEL_CACHE[resolved_model_path]
+        else:
+            comet_model = load_from_checkpoint(resolved_model_path)
+            _COMET_MODEL_CACHE[resolved_model_path] = comet_model
     except Exception as e:
         return _safe_metric_error(f"failed to load comet model: {e}")
     data = []
@@ -344,7 +422,13 @@ def _compute_comet(
             "ref": ref,
         })
     try:
-        raw = comet_model.predict(data, batch_size=max(1, int(batch_size)), progress_bar=False)
+        raw = comet_model.predict(
+            data,
+            batch_size=max(1, int(batch_size)),
+            progress_bar=False,
+            accelerator="cpu",
+            gpus=0,
+        )
         scores = [float(x) for x in raw.get("scores", [])]
         if not scores:
             return _safe_metric_error("comet model returned no scores")
@@ -428,11 +512,19 @@ def _evaluate_model(
                 ref,
                 str(args.comet_model),
                 int(args.comet_batch_size),
+                allow_download=not bool(args.local_files_only),
             )
 
     overall = _compute_metrics(preds, refs, args.eval_bleu, args.eval_chrf)
     if args.eval_comet and args.comet_model:
-        overall["comet"] = _compute_comet(rng, preds, refs, str(args.comet_model), int(args.comet_batch_size))
+        overall["comet"] = _compute_comet(
+            rng,
+            preds,
+            refs,
+            str(args.comet_model),
+            int(args.comet_batch_size),
+            allow_download=not bool(args.local_files_only),
+        )
 
     summary = {
         "model": str(model_ref),
