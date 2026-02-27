@@ -179,6 +179,7 @@ SCHEDULE=A_then_B
 SOURCE_LANGS="fr,de,it,pt,ar,hi,ja,zh"
 TARGET_LANGS="en,es"
 PAIRS_PER_PAIR=2000
+RESUME=0
 TOTAL_STEPS=20000
 SFT_STEPS=10000
 BATCH_SIZE=1
@@ -209,6 +210,8 @@ The command writes:
 - eval split: `projects/distillation/translation/training_data/translate_distill_pairs.eval.jsonl`
 - checkpoints and training metrics: `projects/distillation/translation/runs/exp01/exp01`
 - benchmark outputs: `projects/distillation/translation/runs/exp01/exp01/eval`
+- resume behavior: set `RESUME=1` to continue from the latest checkpoint in `OUT_ROOT/RUN_NAME`.
+  Optionally set `RESUME_FROM` to a checkpoint dir, stage dir, or run root.
 
 ## Build Subset Checkpoints (Required Before Distill)
 

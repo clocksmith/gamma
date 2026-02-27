@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import random
 import statistics
 import time
@@ -107,6 +108,12 @@ def _parse_args() -> argparse.Namespace:
         dest="local_files_only",
         default=True,
         help="Allow fetching missing models from network (default uses local cache only).",
+    )
+    ap.add_argument("--resume", action="store_true", help="Resume from checkpoints in the current run output dir.")
+    ap.add_argument(
+        "--resume-from",
+        default="",
+        help="Optional resume source path (checkpoint dir, stage dir, or run root). Defaults to --out-root/--run-name.",
     )
 
     ap.add_argument("--grad-clip", type=float, default=1.0)
@@ -399,6 +406,127 @@ def _latest_checkpoint(dir_path: Path) -> Path | None:
     return candidates[-1] if candidates else None
 
 
+def _checkpoint_step_from_path(path: Path) -> int:
+    name = path.name if path else ""
+    m = re.fullmatch(r"checkpoint-(\d+)", name)
+    if not m:
+        return 0
+    try:
+        return int(m.group(1))
+    except Exception:
+        return 0
+
+
+def _checkpoint_step(path: Path) -> int:
+    state_path = Path(path) / "training_state.pt"
+    if state_path.exists():
+        try:
+            state = torch.load(state_path, map_location="cpu")
+            if isinstance(state, dict) and "step" in state:
+                step = state["step"]
+                if isinstance(step, torch.Tensor):
+                    if step.numel() == 1:
+                        return int(step.item())
+                elif isinstance(step, int | float):
+                    return int(step)
+        except Exception:
+            pass
+    return _checkpoint_step_from_path(path)
+
+
+def _latest_checkpoint_with_step(dir_path: Path) -> tuple[Path | None, int]:
+    ckpt = _latest_checkpoint(dir_path)
+    if ckpt is None:
+        return None, 0
+    return ckpt, _checkpoint_step(ckpt)
+
+
+def _resolve_explicit_checkpoint(
+    source: Path,
+    schedule: str,
+    sft_steps: int,
+    distill_steps: int,
+    total_steps: int,
+) -> tuple[Path | None, str | None, int]:
+    if not source.exists():
+        raise RuntimeError(f"resume source missing: {source}")
+    if source.is_dir() and source.name.startswith("checkpoint-"):
+        stage = source.parent.name
+        return source, stage if stage else None, _checkpoint_step(source)
+    if source.is_dir() and source.name in {"mixed", "stage_a", "stage_b"}:
+        ckpt, step = _latest_checkpoint_with_step(source)
+        if ckpt is not None:
+            return ckpt, source.name, step
+        return None, None, 0
+    return _resolve_auto_resume(source, schedule=schedule, sft_steps=sft_steps, distill_steps=distill_steps, total_steps=total_steps)
+
+
+def _resolve_auto_resume(
+    run_root: Path,
+    schedule: str,
+    sft_steps: int,
+    distill_steps: int,
+    total_steps: int,
+) -> tuple[Path | None, str | None, int]:
+    if schedule == "mixed_from_start":
+        mixed_ckpt, mixed_step = _latest_checkpoint_with_step(run_root / "mixed")
+        if mixed_ckpt is not None and mixed_step < int(total_steps):
+            return mixed_ckpt, "mixed", mixed_step
+        return None, None, 0
+
+    stage_a_ckpt, stage_a_step = _latest_checkpoint_with_step(run_root / "stage_a")
+    if stage_a_ckpt is not None and stage_a_step < int(sft_steps):
+        return stage_a_ckpt, "stage_a", stage_a_step
+
+    stage_b_ckpt, stage_b_step = _latest_checkpoint_with_step(run_root / "stage_b")
+    if stage_b_ckpt is not None and stage_b_step < int(distill_steps):
+        return stage_b_ckpt, "stage_b", stage_b_step
+
+    return None, None, 0
+
+
+def _load_checkpoint_state(path: Path) -> dict[str, Any]:
+    p = Path(path)
+    state_path = p / "training_state.pt"
+    if not state_path.exists():
+        return {}
+    try:
+        state = torch.load(state_path, map_location="cpu")
+    except Exception:
+        return {}
+    return state if isinstance(state, dict) else {}
+
+
+def _restore_rng_state(state: dict[str, Any], rng: random.Random, device: str) -> None:
+    random_state = state.get("random_state")
+    if random_state is not None:
+        try:
+            rng.setstate(random_state)
+        except Exception:
+            pass
+
+    torch_rng = state.get("torch_rng_state")
+    if isinstance(torch_rng, torch.Tensor):
+        try:
+            torch.set_rng_state(torch_rng)
+        except Exception:
+            pass
+
+    cuda_rng = state.get("torch_cuda_rng_state")
+    if isinstance(cuda_rng, list):
+        try:
+            if torch.cuda.is_available():
+                torch.cuda.set_rng_state_all(cuda_rng)
+        except Exception:
+            pass
+
+    if str(device).startswith("cuda") and isinstance(cuda_rng, torch.Tensor):
+        try:
+            torch.cuda.set_rng_state(cuda_rng)
+        except Exception:
+            pass
+
+
 def _load_model_and_tokenizer(model_ref: str, device: str, dtype: torch.dtype, local_files_only: bool):
     tok = AutoTokenizer.from_pretrained(model_ref, local_files_only=local_files_only)
     if tok.pad_token is None:
@@ -448,13 +576,46 @@ def _append_jsonl(path: Path, row: dict[str, Any]) -> None:
         f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
-def _save_checkpoint(model, tokenizer, stage_dir: Path, step: int) -> None:
+def _save_checkpoint(
+    model,
+    tokenizer,
+    stage_dir: Path,
+    step: int,
+    optimizer: torch.optim.Optimizer | None = None,
+    scheduler: Any | None = None,
+    rng: random.Random | None = None,
+) -> None:
     ckpt = stage_dir / f"checkpoint-{step:06d}"
     ckpt.mkdir(parents=True, exist_ok=True)
     model.save_pretrained(str(ckpt))
     tokenizer.save_pretrained(str(ckpt))
+    state = {
+        "step": int(step),
+        "timer": time.time(),
+    }
+    if optimizer is not None:
+        try:
+            state["optimizer_state_dict"] = optimizer.state_dict()
+        except Exception:
+            pass
+    if scheduler is not None:
+        try:
+            state["scheduler_state_dict"] = scheduler.state_dict()
+        except Exception:
+            pass
+    if rng is not None:
+        try:
+            state["random_state"] = rng.getstate()
+        except Exception:
+            pass
+    state["torch_rng_state"] = torch.get_rng_state()
+    if torch.cuda.is_available():
+        try:
+            state["torch_cuda_rng_state"] = torch.cuda.get_rng_state_all()
+        except Exception:
+            pass
     torch.save(
-        {"step": int(step)},
+        state,
         ckpt / "training_state.pt",
     )
 
@@ -543,8 +704,23 @@ def _train_stage(
     kd_hist: list[float] = []
     tri_hist: list[float] = []
     step_start = time.perf_counter()
+    start = max(0, int(start_step))
+    total = max(0, int(num_steps))
+    if start >= total:
+        pred_path = stage_dir / "predictions.jsonl"
+        return {
+            "stage": stage_name,
+            "steps": 0.0,
+            "loss_final": 0.0,
+            "loss_ce_final": 0.0,
+            "loss_kd_final": 0.0,
+            "loss_triplet_final": 0.0,
+            "predictions": str(pred_path),
+        }
 
-    for step in range(num_steps):
+    remaining_steps = max(0, total - start)
+    for local_step in range(remaining_steps):
+        step = start + local_step
         batch_idx = [rng.randrange(len(rows)) for _ in range(int(args.batch_size))]
         batch = [rows[i] for i in batch_idx]
         pos_ids, pos_mask, pos_token_types, pos_labels = _encode_chat_batch(
@@ -607,13 +783,13 @@ def _train_stage(
         kd_hist.append(float(loss_kd.item()))
         tri_hist.append(float(loss_triplet.item()))
 
-        global_step = start_step + step + 1
-        if (step + 1) % max(1, int(args.log_every)) == 0:
+        global_step = step + 1
+        if global_step % max(1, int(args.log_every)) == 0:
             lr = float(optimizer.param_groups[0]["lr"])
             rec = {
                 "stage": stage_name,
                 "global_step": int(global_step),
-                "stage_step": int(step + 1),
+                "stage_step": int(global_step),
                 "loss": statistics.fmean(losses[-min(len(losses), 20):]) if losses else 0.0,
                 "loss_ce": statistics.fmean(ce_hist[-min(len(ce_hist), 20):]) if ce_hist else 0.0,
                 "loss_kd": statistics.fmean(kd_hist[-min(len(kd_hist), 20):]) if kd_hist else 0.0,
@@ -627,10 +803,10 @@ def _train_stage(
                 f"kd={rec['loss_kd']:.4f} tri={rec['loss_triplet']:.4f} lr={lr:.2e}"
             )
 
-        if int(args.save_every) > 0 and (step + 1) % int(args.save_every) == 0:
-            _save_checkpoint(student, tokenizer, stage_dir, step=global_step)
-
-    _save_checkpoint(student, tokenizer, stage_dir, step=start_step + num_steps)
+        if int(args.save_every) > 0 and global_step % int(args.save_every) == 0:
+            _save_checkpoint(student, tokenizer, stage_dir, step=global_step, optimizer=optimizer, scheduler=scheduler, rng=rng)
+    if not losses or total > 0:
+        _save_checkpoint(student, tokenizer, stage_dir, step=total, optimizer=optimizer, scheduler=scheduler, rng=rng)
 
     pred_path = _save_predictions(student, tokenizer, rows, args, stage_dir, device=device)
     return {
@@ -696,14 +872,38 @@ def main() -> int:
         f"distill_steps={distill_steps} batch={args.batch_size}"
     )
 
+    stage_a_ckpt, stage_a_step = _latest_checkpoint_with_step(run_root / "stage_a")
+    stage_b_ckpt, stage_b_step = _latest_checkpoint_with_step(run_root / "stage_b")
+    mixed_ckpt, mixed_step = _latest_checkpoint_with_step(run_root / "mixed")
+
+    resume_checkpoint = None
+    resume_stage: str | None = None
+    resume_step = 0
+    if bool(args.resume):
+        resume_source = Path(args.resume_from).expanduser() if str(args.resume_from).strip() else run_root
+        resume_checkpoint, resume_stage, resume_step = _resolve_explicit_checkpoint(
+            resume_source,
+            schedule=str(args.schedule),
+            sft_steps=int(sft_steps),
+            distill_steps=int(distill_steps),
+            total_steps=int(max_steps),
+        )
+        if resume_checkpoint is not None:
+            print(f"[resume] checkpoint={resume_checkpoint} stage={resume_stage} step={resume_step}")
+        else:
+            print(f"[resume] no checkpoint found in {resume_source}; starting from scratch.")
+
     teacher, teacher_tok = _load_model_and_tokenizer(
         str(args.teacher_model),
         teacher_device,
         dtype=dtype,
         local_files_only=bool(args.local_files_only),
     )
+    student_model_ref = str(args.student_model)
+    if resume_checkpoint is not None:
+        student_model_ref = str(resume_checkpoint)
     student, tok = _load_model_and_tokenizer(
-        str(args.student_model),
+        student_model_ref,
         device,
         dtype=dtype,
         local_files_only=bool(args.local_files_only),
@@ -727,73 +927,139 @@ def main() -> int:
     scheduler = _build_scheduler(optimizer, args, max(1, total_updates))
 
     rng = random.Random(int(args.seed))
+    if resume_checkpoint is not None:
+        resume_state = _load_checkpoint_state(resume_checkpoint)
+        _restore_rng_state(resume_state, rng=rng, device=str(device))
+        if resume_state:
+            state_step = resume_state.get("step")
+            if isinstance(state_step, torch.Tensor):
+                if state_step.numel() == 1:
+                    resume_step = int(state_step.item())
+            elif isinstance(state_step, (int, float)):
+                resume_step = int(state_step)
+            optim_state = resume_state.get("optimizer_state_dict")
+            if isinstance(optim_state, dict):
+                try:
+                    optimizer.load_state_dict(optim_state)
+                except Exception:
+                    print("[resume] failed to restore optimizer state; continuing without it.")
+            sched_state = resume_state.get("scheduler_state_dict")
+            if isinstance(sched_state, dict):
+                try:
+                    scheduler.load_state_dict(sched_state)
+                except Exception:
+                    print("[resume] failed to restore scheduler state; continuing without it.")
+
+    stage_a_complete = int(stage_a_step) >= int(sft_steps)
+    stage_b_complete = int(stage_b_step) >= int(distill_steps)
+    mixed_complete = int(mixed_step) >= int(max_steps)
+
+    stage_a_start = 0
+    stage_b_start = 0
+    mixed_start = 0
+
+    if args.schedule == "A_then_B":
+        if resume_stage == "stage_a":
+            stage_a_start = max(0, min(int(resume_step), int(sft_steps)))
+        if resume_stage == "stage_b":
+            stage_b_start = max(0, min(int(resume_step), int(distill_steps)))
+    else:
+        if resume_stage == "mixed":
+            mixed_start = max(0, min(int(resume_step), int(max_steps)))
+
+    if resume_step > 0:
+        resume_step = max(0, int(resume_step))
+        if resume_stage == "stage_a":
+            stage_a_start = min(resume_step, int(sft_steps))
+        elif resume_stage == "stage_b":
+            stage_b_start = min(resume_step, int(distill_steps))
+        elif resume_stage == "mixed":
+            mixed_start = min(resume_step, int(max_steps))
+
     stage_results: list[dict[str, Any]] = []
 
     if args.schedule == "A_then_B":
+        run_stage_a = True
+        run_stage_b = True
+        if bool(args.resume):
+            run_stage_a = (resume_stage == "stage_a" and stage_a_start < int(sft_steps)) or (
+                resume_stage is None and not stage_a_complete
+            )
+            run_stage_b = (resume_stage == "stage_b" and stage_b_start < int(distill_steps)) or (
+                resume_stage is None and stage_a_complete and not stage_b_complete
+            )
         stage_a_dir = run_root / "stage_a"
-        stage_a = _train_stage(
-            stage_name="A_then_B_stage_a",
-            rows=pair_rows,
-            student=student,
-            tokenizer=tok,
-            teacher=None,
-            optimizer=optimizer,
-            scheduler=scheduler,
-            args=args,
-            stage_dir=stage_a_dir,
-            start_step=0,
-            num_steps=max(0, int(sft_steps)),
-            use_kd=False,
-            use_triplet=False,
-            seed=int(args.seed),
-            device=device,
-            rng=rng,
-        )
-        if stage_a:
+        stage_a: dict[str, float] = {}
+        if run_stage_a:
+            stage_a = _train_stage(
+                stage_name="A_then_B_stage_a",
+                rows=pair_rows,
+                student=student,
+                tokenizer=tok,
+                teacher=None,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                args=args,
+                stage_dir=stage_a_dir,
+                start_step=stage_a_start,
+                num_steps=max(0, int(sft_steps)),
+                use_kd=False,
+                use_triplet=False,
+                seed=int(args.seed),
+                device=device,
+                rng=rng,
+            )
             stage_results.append(stage_a)
 
         stage_b_dir = run_root / "stage_b"
-        stage_b = _train_stage(
-            stage_name="A_then_B_stage_b",
-            rows=pair_rows,
-            student=student,
-            tokenizer=tok,
-            teacher=teacher if not skip_kd else None,
-            optimizer=optimizer,
-            scheduler=scheduler,
-            args=args,
-            stage_dir=stage_b_dir,
-            start_step=0,
-            num_steps=max(0, int(distill_steps)),
-            use_kd=(not skip_kd),
-            use_triplet=not (args.mu_triplet <= 0),
-            seed=int(args.seed),
-            device=device,
-            rng=rng,
-        )
-        if stage_b:
+        stage_b: dict[str, float] = {}
+        if run_stage_b:
+            stage_b = _train_stage(
+                stage_name="A_then_B_stage_b",
+                rows=pair_rows,
+                student=student,
+                tokenizer=tok,
+                teacher=teacher if not skip_kd else None,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                args=args,
+                stage_dir=stage_b_dir,
+                start_step=stage_b_start,
+                num_steps=max(0, int(distill_steps)),
+                use_kd=(not skip_kd),
+                use_triplet=not (args.mu_triplet <= 0),
+                seed=int(args.seed),
+                device=device,
+                rng=rng,
+            )
             stage_results.append(stage_b)
     else:
+        run_stage_mixed = True
+        if bool(args.resume):
+            run_stage_mixed = (resume_stage == "mixed" and mixed_start < int(max_steps)) or (
+                resume_stage is None and not mixed_complete
+            )
         stage_mix_dir = run_root / "mixed"
-        stage_mix = _train_stage(
-            stage_name="mixed_from_start",
-            rows=pair_rows,
-            student=student,
-            tokenizer=tok,
-            teacher=teacher if not skip_kd else None,
-            optimizer=optimizer,
-            scheduler=scheduler,
-            args=args,
-            stage_dir=stage_mix_dir,
-            start_step=0,
-            num_steps=max(0, int(max_steps)),
-            use_kd=(not skip_kd),
-            use_triplet=not (args.mu_triplet <= 0),
-            seed=int(args.seed),
-            device=device,
-            rng=rng,
-        )
-        if stage_mix:
+        stage_mix: dict[str, float] = {}
+        if run_stage_mixed:
+            stage_mix = _train_stage(
+                stage_name="mixed_from_start",
+                rows=pair_rows,
+                student=student,
+                tokenizer=tok,
+                teacher=teacher if not skip_kd else None,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                args=args,
+                stage_dir=stage_mix_dir,
+                start_step=mixed_start,
+                num_steps=max(0, int(max_steps)),
+                use_kd=(not skip_kd),
+                use_triplet=not (args.mu_triplet <= 0),
+                seed=int(args.seed),
+                device=device,
+                rng=rng,
+            )
             stage_results.append(stage_mix)
 
     final_ckpt = run_root / "final"
@@ -803,7 +1069,7 @@ def main() -> int:
     summary = {
         "timestamp": time.time(),
         "teacher_model": str(args.teacher_model),
-        "student_model": str(args.student_model),
+        "student_model": student_model_ref,
         "schedule": str(args.schedule),
         "source_langs": sorted(source_langs),
         "target_langs": sorted(target_langs),
@@ -817,6 +1083,10 @@ def main() -> int:
         "mu_triplet": float(args.mu_triplet),
         "margin": float(args.margin),
         "kd_temperature": float(args.kd_temperature),
+        "resumed": bool(args.resume) and resume_checkpoint is not None,
+        "resume_from": str(resume_checkpoint) if resume_checkpoint is not None else "",
+        "resume_stage": resume_stage,
+        "resume_step": int(resume_step),
         "stages": stage_results,
         "final_out": str(final_ckpt),
     }

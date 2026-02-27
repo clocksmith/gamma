@@ -92,6 +92,8 @@ DRY_RUN="${DRY_RUN:-0}"
 DEVICE="${DEVICE:-cuda}"
 ALLOW_DOWNLOAD="${ALLOW_DOWNLOAD:-1}"
 SKIP_TRAIN="${SKIP_TRAIN:-0}"
+RESUME="${RESUME:-0}"
+RESUME_FROM="${RESUME_FROM:-}"
 
 if [[ "$MAKE_PAIRS" == "1" ]]; then
   src_csv="$SOURCE_LANGS"
@@ -193,6 +195,12 @@ if [[ "$SKIP_TRAIN" == "0" ]]; then
     --device "$DEVICE"
     --summary-out "$SUMMARY_OUT"
   )
+  if [[ "$RESUME" == "1" ]]; then
+    cmd+=(--resume)
+    if [[ -n "${RESUME_FROM}" ]]; then
+      cmd+=(--resume-from "$RESUME_FROM")
+    fi
+  fi
 
   if [[ "$SCHEDULE" == "A_then_B" ]]; then
     cmd+=(--sft-steps "$SFT_STEPS")
