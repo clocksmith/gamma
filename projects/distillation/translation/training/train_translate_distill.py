@@ -306,7 +306,6 @@ def _encode_chat_batch(
         # Use a neutral all-zero tensor (one type segment) to satisfy model requirements.
         token_type_ids = torch.zeros_like(input_ids)
     batch_labels = full_enc["input_ids"].clone()
-    batch_labels[:, :] = -100
     for i in range(input_ids.size(0)):
         plen = int(prompt_enc["attention_mask"][i].sum().item())
         if plen < input_ids.size(1):
@@ -350,6 +349,8 @@ def _shift_logits_and_labels(logits: torch.Tensor, labels: torch.Tensor) -> tupl
 
 def _ce_loss(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     shift_logits, shift_labels = _shift_logits_and_labels(logits, labels)
+    if shift_labels.numel() == 0 or not torch.any(shift_labels.ne(-100)):
+        return torch.tensor(0.0, device=logits.device)
     return F.cross_entropy(
         shift_logits.view(-1, shift_logits.size(-1)),
         shift_labels.view(-1),
@@ -769,6 +770,9 @@ def _train_stage(
             )
 
         loss = loss_pos + float(args.lambda_kd) * loss_kd + float(args.mu_triplet) * loss_triplet
+        if (not torch.isfinite(loss)) or (not loss.requires_grad):
+            continue
+
         loss.backward()
         if (step + 1) % int(args.accum_steps) == 0:
             if float(args.grad_clip) > 0:
