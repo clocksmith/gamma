@@ -1,0 +1,53 @@
+{
+  "distill_steps": 10,
+  "final_out": "projects/distillation/translation/runs/enes_gemma3_270m_pruned/exp_enes_gemma3_270m_auto_fb/final",
+  "kd_temperature": 1.0,
+  "lambda_kd": 0.5,
+  "lora_enabled": false,
+  "margin": 0.2,
+  "mu_triplet": 0.1,
+  "out_root": "projects/distillation/translation/runs/enes_gemma3_270m_pruned/exp_enes_gemma3_270m_auto_fb",
+  "pair_count": 1152,
+  "resume_from": "",
+  "resume_stage": null,
+  "resume_step": 0,
+  "resumed": false,
+  "schedule": "A_then_B",
+  "sft_steps": 10,
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "stages": [
+    {
+      "loss_ce_final": 10.875,
+      "loss_final": 10.875,
+      "loss_kd_final": 0.0,
+      "loss_triplet_final": 0.0,
+      "predictions": "projects/distillation/translation/runs/enes_gemma3_270m_pruned/exp_enes_gemma3_270m_auto_fb/stage_a/predictions.jsonl",
+      "stage": "A_then_B_stage_a",
+      "steps": 10.0
+    },
+    {
+      "loss_ce_final": 0.0,
+      "loss_final": 0.0,
+      "loss_kd_final": 0.0,
+      "loss_triplet_final": 0.0,
+      "predictions": "projects/distillation/translation/runs/enes_gemma3_270m_pruned/exp_enes_gemma3_270m_auto_fb/stage_b/predictions.jsonl",
+      "stage": "A_then_B_stage_b",
+      "steps": 10.0
+    }
+  ],
+  "student_model": "projects/distillation/translation/runs/enes_gemma3_270m_pruned/exp_enes_gemma3_270m_auto_fb/vocab_subset",
+  "student_subset_dir": "projects/distillation/translation/runs/enes_gemma3_270m_pruned/exp_enes_gemma3_270m_auto_fb/vocab_subset",
+  "student_tokenizer_model": "google/gemma-3-270m-it",
+  "student_vocab_size": 50000,
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher_model": "google/translategemma-4b-it",
+  "timestamp": 1772236596.4966626,
+  "total_steps": 20,
+  "vocab_subset_active": true
+}

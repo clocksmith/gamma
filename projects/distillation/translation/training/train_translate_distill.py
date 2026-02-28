@@ -42,10 +42,22 @@ class Example:
     pair: str
 
 
+@dataclass(frozen=True)
+class VocabRemap:
+    old_to_new: dict[int, int]
+    new_to_old: list[int]
+    unk_old: int
+    unk_new: int
+
+
 def _safe_text(x: Any) -> str:
     if x is None:
         return ""
     return str(x).strip()
+
+
+def _load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _parse_csv_set(value: str) -> set[str]:
@@ -57,6 +69,19 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--pairs", required=True, help="Input translation triplets JSONL from make_translate_distill_pairs.py.")
     ap.add_argument("--teacher-model", required=True, help="Teacher model id/path (HF model id or local snapshot).")
     ap.add_argument("--student-model", required=True, help="Student base model id/path.")
+    ap.add_argument(
+        "--vocab-subset-dir",
+        default="",
+        help="Optional pruned-student directory containing id_remap.json (from tools/vocab_subset.py).",
+    )
+    ap.add_argument(
+        "--tokenizer-model",
+        default="",
+        help=(
+            "Optional tokenizer/model reference for student tokenization when --vocab-subset-dir is set. "
+            "Defaults to --teacher-model."
+        ),
+    )
     ap.add_argument(
         "--source-langs",
         default="",
@@ -119,6 +144,143 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--grad-clip", type=float, default=1.0)
     ap.add_argument("--skip-kd-when-device-mismatch", action="store_true")
     return ap.parse_args()
+
+
+def _load_vocab_remap(path: str, tokenizer) -> VocabRemap | None:
+    if not str(path).strip():
+        return None
+    subset_dir = Path(path)
+    if not subset_dir.exists():
+        raise RuntimeError(f"vocab subset dir does not exist: {subset_dir}")
+    remap_path = subset_dir / "id_remap.json"
+    if not remap_path.exists():
+        raise RuntimeError(f"missing id_remap.json in vocab subset dir: {remap_path}")
+    remap_data = _load_json(remap_path)
+    raw = remap_data.get("old_to_new", {})
+    if not isinstance(raw, dict) or not raw:
+        raise RuntimeError(f"invalid id_remap.json (old_to_new missing/empty): {remap_path}")
+
+    old_to_new: dict[int, int] = {}
+    for k, v in raw.items():
+        try:
+            old = int(k)
+            new = int(v)
+        except Exception:
+            continue
+        old_to_new[old] = new
+    if not old_to_new:
+        raise RuntimeError(f"could not parse old_to_new ids from: {remap_path}")
+
+    new_to_old = remap_data.get("new_to_old")
+    parsed_new_to_old: list[int] | None = None
+    if isinstance(new_to_old, list):
+        parsed: list[int] = []
+        for x in new_to_old:
+            try:
+                parsed.append(int(x))
+            except Exception:
+                continue
+        if parsed:
+            parsed_new_to_old = parsed
+
+    if parsed_new_to_old is None:
+        if not old_to_new:
+            raise RuntimeError(f"invalid vocab remap in: {remap_path}")
+        size = max(old_to_new.values()) + 1
+        rev: list[int] = [-1] * int(size)
+        for old, new in old_to_new.items():
+            if 0 <= int(new) < int(size):
+                rev[int(new)] = int(old)
+        parsed_new_to_old = [int(x) for x in rev if int(x) >= 0]
+
+    if not parsed_new_to_old:
+        raise RuntimeError(f"could not parse new_to_old from: {remap_path}")
+
+    unk_old = tokenizer.unk_token_id
+    if unk_old is None:
+        raise RuntimeError(f"tokenizer has no unk_token_id; cannot load subset remap: {tokenizer}")
+    unk_old = int(unk_old)
+    unk_new = old_to_new.get(unk_old)
+    if unk_new is None:
+        raise RuntimeError(f"id_remap.json is missing unk mapping for token id {unk_old}: {remap_path}")
+    return VocabRemap(
+        old_to_new=old_to_new,
+        new_to_old=parsed_new_to_old,
+        unk_old=int(unk_old),
+        unk_new=int(unk_new),
+    )
+
+
+def _remap_ids(input_ids: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
+    if not remap.old_to_new:
+        return input_ids
+    ids = input_ids.cpu().tolist()
+    unk = int(remap.unk_new)
+    remapped: list[list[int]] = []
+    for row in ids:
+        out: list[int] = []
+        for value in row:
+            try:
+                token = int(value)
+            except Exception:
+                token = unk
+            if token < 0:
+                out.append(int(token))
+            else:
+                out.append(int(remap.old_to_new.get(token, unk)))
+        remapped.append(out)
+    return torch.tensor(remapped, dtype=torch.long, device=input_ids.device)
+
+
+def _remap_labels(labels: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
+    ids = labels.cpu().tolist()
+    unk = int(remap.unk_new)
+    remapped: list[list[int]] = []
+    for row in ids:
+        out: list[int] = []
+        for value in row:
+            try:
+                token = int(value)
+            except Exception:
+                token = -100
+            if token < 0:
+                out.append(-100)
+            else:
+                out.append(int(remap.old_to_new.get(token, unk)))
+        remapped.append(out)
+    return torch.tensor(remapped, dtype=torch.long, device=labels.device)
+
+
+def _project_teacher_logits_to_subset(teacher_logits: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
+    if int(teacher_logits.size(-1)) == len(remap.new_to_old):
+        return teacher_logits
+    idx = torch.as_tensor(remap.new_to_old, device=teacher_logits.device, dtype=torch.long)
+    if idx.numel() <= 0:
+        return teacher_logits
+    if idx.max().item() >= teacher_logits.size(-1):
+        raise RuntimeError(
+            f"subset remap contains old token id >= teacher vocab ({int(idx.max().item())} >= {teacher_logits.size(-1)})."
+        )
+    return teacher_logits.index_select(dim=-1, index=idx)
+
+
+def _restore_ids_to_old_vocab(token_ids: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
+    ids = token_ids.cpu().tolist()
+    unk_old = int(remap.unk_old)
+    restored: list[list[int]] = []
+    for row in ids:
+        out: list[int] = []
+        for value in row:
+            try:
+                token = int(value)
+            except Exception:
+                token = -1
+            if token < 0 or token >= len(remap.new_to_old):
+                out.append(int(unk_old))
+            else:
+                out.append(int(remap.new_to_old[token]))
+        restored.append(out)
+    return torch.tensor(restored, dtype=torch.long, device=token_ids.device)
 
 
 def _load_pairs(path: Path, source_langs: set[str], target_langs: set[str]) -> list[Example]:
@@ -296,15 +458,19 @@ def _encode_chat_batch(
         padding=True,
     )
 
-    input_ids = full_enc["input_ids"].to(device)
-    attention_mask = full_enc["attention_mask"].to(device)
+    input_ids = full_enc["input_ids"]
+    attention_mask = full_enc["attention_mask"]
     token_type_ids = full_enc.get("token_type_ids")
     if isinstance(token_type_ids, torch.Tensor):
-        token_type_ids = token_type_ids.to(device)
+        token_type_ids = token_type_ids.clone()
     else:
         # Gemma3 requires token_type_ids for training, even when not returned by tokenizer.
         # Use a neutral all-zero tensor (one type segment) to satisfy model requirements.
-        token_type_ids = torch.zeros_like(input_ids)
+        try:
+            token_type_ids = torch.zeros(input_ids.shape, dtype=input_ids.dtype)
+        except Exception:
+            # Some ROCm/AMD kernels may fail to allocate this op on-device; generate on CPU then move to device.
+            token_type_ids = torch.zeros(input_ids.shape, dtype=input_ids.dtype)
     batch_labels = full_enc["input_ids"].clone()
     for i in range(input_ids.size(0)):
         plen = int(prompt_enc["attention_mask"][i].sum().item())
@@ -316,7 +482,12 @@ def _encode_chat_batch(
         pad_mask = attention_mask[i].eq(0)
         if pad_mask.any():
             batch_labels[i, pad_mask] = -100
-    return input_ids, attention_mask, token_type_ids, batch_labels.to(device)
+    return (
+        input_ids.to(device),
+        attention_mask.to(device),
+        token_type_ids.to(device),
+        batch_labels.to(device),
+    )
 
 
 def _forward_model(model, input_ids, attention_mask, token_type_ids, labels=None):
@@ -621,7 +792,15 @@ def _save_checkpoint(
     )
 
 
-def _save_predictions(model, tokenizer, examples: list[Example], args: argparse.Namespace, stage_dir: Path, device: str) -> Path:
+def _save_predictions(
+    model,
+    tokenizer,
+    vocab_remap: VocabRemap | None,
+    examples: list[Example],
+    args: argparse.Namespace,
+    stage_dir: Path,
+    device: str,
+) -> Path:
     if args.predict_samples <= 0:
         return stage_dir / "predictions.jsonl"
     out_path = stage_dir / "predictions.jsonl"
@@ -637,13 +816,18 @@ def _save_predictions(model, tokenizer, examples: list[Example], args: argparse.
                 truncation=True,
                 max_length=int(args.max_prompt_length),
             ).to(device)
+            if vocab_remap is not None:
+                enc["input_ids"] = _remap_ids(enc["input_ids"], vocab_remap)
             prompt_len = int(enc["input_ids"].shape[1])
             gen = model.generate(
                 **enc,
                 max_new_tokens=int(args.max_new_tokens),
                 do_sample=False,
             )
-            gen_text = tokenizer.decode(gen[0][prompt_len:], skip_special_tokens=True)
+            pred_ids = gen[0][prompt_len:]
+            if vocab_remap is not None:
+                pred_ids = _restore_ids_to_old_vocab(pred_ids, vocab_remap)
+            gen_text = tokenizer.decode(pred_ids, skip_special_tokens=True)
             pred = _safe_text(gen_text)
             preds.append(
                 {
@@ -680,6 +864,7 @@ def _train_stage(
     seed: int,
     device: str,
     rng: random.Random,
+    vocab_remap: VocabRemap | None,
 ) -> dict[str, float]:
     if num_steps <= 0:
         return {}
@@ -732,6 +917,8 @@ def _train_stage(
             device=device,
             target_key="target_pos",
         )
+        pos_ids_student = _remap_ids(pos_ids, vocab_remap) if vocab_remap is not None else pos_ids
+        pos_labels_student = _remap_labels(pos_labels, vocab_remap) if vocab_remap is not None else pos_labels
         has_neg = any(bool(_safe_text(ex.target_neg)) for ex in batch)
         batch_use_triplet = bool(use_triplet and has_neg)
         if has_neg:
@@ -746,26 +933,41 @@ def _train_stage(
         else:
             neg_ids = neg_mask = neg_labels = None
 
-        student_out = _forward_model(student, pos_ids, pos_mask, pos_token_types)
+        student_out = _forward_model(student, pos_ids_student, pos_mask, pos_token_types)
         student_logits = student_out.logits
-        loss_pos = _ce_loss(student_logits, pos_labels)
+        student_logits_loss = (
+            _project_teacher_logits_to_subset(student_logits, vocab_remap)
+            if vocab_remap is not None
+            else student_logits
+        )
+        loss_pos = _ce_loss(student_logits_loss, pos_labels_student)
 
         loss_kd = torch.tensor(0.0, device=student_logits.device)
         if use_kd and teacher is not None:
             with torch.no_grad():
                 teacher_out = _forward_model(teacher, pos_ids, pos_mask, pos_token_types)
-            loss_kd = _kd_loss(student_logits, teacher_out.logits, pos_labels, float(args.kd_temperature))
+                teacher_logits = teacher_out.logits
+                if vocab_remap is not None:
+                    teacher_logits = _project_teacher_logits_to_subset(teacher_logits, vocab_remap)
+            loss_kd = _kd_loss(student_logits_loss, teacher_logits, pos_labels_student, float(args.kd_temperature))
 
         loss_triplet = torch.tensor(0.0, device=student_logits.device)
         if batch_use_triplet and neg_ids is not None:
             with torch.no_grad():
                 # Triplet always uses student logits; no gradient from neg through this term.
-                neg_out = _forward_model(student, neg_ids, neg_mask, neg_token_types)
+                neg_ids_student = _remap_ids(neg_ids, vocab_remap) if vocab_remap is not None else neg_ids
+                neg_labels_student = _remap_labels(neg_labels, vocab_remap) if vocab_remap is not None else neg_labels
+                neg_out = _forward_model(student, neg_ids_student, neg_mask, neg_token_types)
+                neg_logits = (
+                    _project_teacher_logits_to_subset(neg_out.logits, vocab_remap)
+                    if vocab_remap is not None
+                    else neg_out.logits
+                )
             loss_triplet = _triplet_loss(
-                pos_logits=student_logits,
-                pos_labels=pos_labels,
-                neg_logits=neg_out.logits,
-                neg_labels=neg_labels,
+                pos_logits=student_logits_loss,
+                pos_labels=pos_labels_student,
+                neg_logits=neg_logits,
+                neg_labels=neg_labels_student,
                 margin=float(args.margin),
             )
 
@@ -812,7 +1014,7 @@ def _train_stage(
     if not losses or total > 0:
         _save_checkpoint(student, tokenizer, stage_dir, step=total, optimizer=optimizer, scheduler=scheduler, rng=rng)
 
-    pred_path = _save_predictions(student, tokenizer, rows, args, stage_dir, device=device)
+    pred_path = _save_predictions(student, tokenizer, vocab_remap, rows, args, stage_dir, device=device)
     return {
         "stage": stage_name,
         "steps": float(num_steps),
@@ -906,12 +1108,34 @@ def main() -> int:
     student_model_ref = str(args.student_model)
     if resume_checkpoint is not None:
         student_model_ref = str(resume_checkpoint)
-    student, tok = _load_model_and_tokenizer(
-        student_model_ref,
-        device,
-        dtype=dtype,
-        local_files_only=bool(args.local_files_only),
-    )
+
+    vocab_remap = None
+    student_tokenizer_ref = str(args.tokenizer_model).strip()
+    if str(args.vocab_subset_dir).strip():
+        if not student_tokenizer_ref:
+            student_tokenizer_ref = str(args.teacher_model)
+        if not student_tokenizer_ref:
+            student_tokenizer_ref = str(student_model_ref)
+        if not student_tokenizer_ref:
+            raise RuntimeError("vocab subset remap requested but no tokenizer model available for student tokenization.")
+
+        tok = AutoTokenizer.from_pretrained(str(student_tokenizer_ref), local_files_only=bool(args.local_files_only))
+        if tok.pad_token is None:
+            tok.pad_token = tok.eos_token
+        vocab_remap = _load_vocab_remap(str(args.vocab_subset_dir), tokenizer=tok)
+        student = AutoModelForCausalLM.from_pretrained(
+            student_model_ref,
+            torch_dtype=dtype,
+            local_files_only=bool(args.local_files_only),
+        ).to(device)
+        student.eval()
+    else:
+        student, tok = _load_model_and_tokenizer(
+            student_model_ref,
+            device,
+            dtype=dtype,
+            local_files_only=bool(args.local_files_only),
+        )
 
     if str(teacher_tok.get_vocab()) != str(tok.get_vocab()) and args.skip_kd_when_device_mismatch:
         print("[warn] teacher/student tokenizers appear incompatible; KD disabled.")
@@ -1012,6 +1236,7 @@ def main() -> int:
                 seed=int(args.seed),
                 device=device,
                 rng=rng,
+                vocab_remap=vocab_remap,
             )
             stage_results.append(stage_a)
 
@@ -1035,6 +1260,7 @@ def main() -> int:
                 seed=int(args.seed),
                 device=device,
                 rng=rng,
+                vocab_remap=vocab_remap,
             )
             stage_results.append(stage_b)
     else:
@@ -1063,6 +1289,7 @@ def main() -> int:
                 seed=int(args.seed),
                 device=device,
                 rng=rng,
+                vocab_remap=vocab_remap,
             )
             stage_results.append(stage_mix)
 
@@ -1074,6 +1301,8 @@ def main() -> int:
         "timestamp": time.time(),
         "teacher_model": str(args.teacher_model),
         "student_model": student_model_ref,
+        "student_subset_dir": str(args.vocab_subset_dir).strip(),
+        "student_tokenizer_model": str(student_tokenizer_ref),
         "schedule": str(args.schedule),
         "source_langs": sorted(source_langs),
         "target_langs": sorted(target_langs),
@@ -1087,6 +1316,8 @@ def main() -> int:
         "mu_triplet": float(args.mu_triplet),
         "margin": float(args.margin),
         "kd_temperature": float(args.kd_temperature),
+        "vocab_subset_active": bool(vocab_remap is not None),
+        "student_vocab_size": int(len(vocab_remap.new_to_old)) if vocab_remap is not None else -1,
         "resumed": bool(args.resume) and resume_checkpoint is not None,
         "resume_from": str(resume_checkpoint) if resume_checkpoint is not None else "",
         "resume_stage": resume_stage,

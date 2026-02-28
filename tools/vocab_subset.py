@@ -335,6 +335,11 @@ def main() -> int:
     ap.add_argument("--write-checkpoint", action="store_true", help="Write a pruned safetensors checkpoint to --out.")
     ap.add_argument("--also-prune-output", action="store_true", help="Also prune output embeddings / lm_head if present.")
     ap.add_argument("--dtype", choices=["auto", "fp16", "bf16", "fp32"], default="auto", help="Load dtype for model pruning.")
+    ap.add_argument(
+        "--for-causal-lm",
+        action="store_true",
+        help="Build checkpoint for AutoModelForCausalLM-compatible models (keeps lm_head / output projection).",
+    )
 
     args = ap.parse_args()
 
@@ -465,7 +470,7 @@ def main() -> int:
     )
 
     if args.write_checkpoint:
-        from transformers import AutoConfig, AutoModel
+        from transformers import AutoConfig, AutoModel, AutoModelForCausalLM
 
         # Dtype controls memory use while pruning. We avoid changing saved dtype; safe_serialization
         # will write whatever tensor dtypes are currently in the model.
@@ -484,7 +489,8 @@ def main() -> int:
             local_files_only=local_files_only,
             trust_remote_code=bool(args.trust_remote_code),
         )
-        model = AutoModel.from_pretrained(
+        model_ctor = AutoModelForCausalLM if args.for_causal_lm else AutoModel
+        model = model_ctor.from_pretrained(
             args.model,
             config=cfg,
             local_files_only=local_files_only,

@@ -153,6 +153,7 @@ def _load_parallel_text_pairs(
     tgt_lang: str,
     src_path: Path,
     tgt_path: Path,
+    ignore_line_mismatch: bool,
     max_rows: int | None,
 ) -> list[PairRow]:
     rows: list[PairRow] = []
@@ -163,6 +164,8 @@ def _load_parallel_text_pairs(
                     break
                 src_line, tgt_line = pair
                 if src_line is None or tgt_line is None:
+                    if ignore_line_mismatch:
+                        break
                     raise RuntimeError(
                         f"Line mismatch between {src_path} and {tgt_path} at line {line_no}. "
                         "Files must be line-aligned."
@@ -263,6 +266,11 @@ def main() -> int:
         default=[],
         help="Line-aligned text files: source and target lines must match by line number. Repeatable.",
     )
+    ap.add_argument(
+        "--allow-mismatched-pair-lines",
+        action="store_true",
+        help="When set, truncate pair files to the shorter length instead of failing on line mismatch.",
+    )
     ap.add_argument("--jsonl-source-key", default="source", help="Explicit-source mode: source text field.")
     ap.add_argument("--jsonl-target-key", default="target", help="Explicit-source mode: target text field.")
     ap.add_argument("--jsonl-src-lang-key", default="src_lang", help="Explicit-source mode: source language field.")
@@ -328,6 +336,7 @@ def main() -> int:
             tgt_lang=str(tgt_lang),
             src_path=Path(src_text_path),
             tgt_path=Path(tgt_text_path),
+            ignore_line_mismatch=bool(args.allow_mismatched_pair_lines),
             max_rows=max_rows,
         )
         loaded.extend(rows)

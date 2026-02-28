@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
+VOCAB_SUBSET_SCRIPT = PROJECT_ROOT / "tools" / "vocab_subset.py"
+SUBSET_TEXT_BUILDER = Path(__file__).resolve().parent / "build_vocab_subset_text.py"
 MAKE_PAIRS_SCRIPT = Path(__file__).resolve().parents[4] / "projects" / "distillation" / "translation" / "training" / "make_translate_distill_pairs.py"
 SPLIT_PAIRS_SCRIPT = Path(__file__).resolve().parents[4] / "projects" / "distillation" / "translation" / "training" / "split_translate_distill_pairs.py"
 TRAINER_SCRIPT = Path(__file__).resolve().parents[4] / "projects" / "distillation" / "translation" / "training" / "train_translate_distill.py"
@@ -20,13 +22,27 @@ def _parse_csv(value: str) -> list[str]:
 
 
 def _parse_steps(value: str) -> list[str]:
-    valid = {"init", "pairs", "split", "train", "eval"}
+    valid = {"init", "pairs", "split", "subset", "train", "eval"}
     requested = []
     for token in _parse_csv(str(value)):
         if token not in valid:
             raise SystemExit(f"Invalid step: {token}. Valid: {sorted(valid)}")
         requested.append(token)
     return requested
+
+
+def _has_subset_model_artifacts(path: Path) -> bool:
+    if not path.exists() or not path.is_dir():
+        return False
+    if not (path / "config.json").exists():
+        return False
+    if (path / "model.safetensors").exists() or (path / "pytorch_model.bin").exists() or (path / "pytorch_model.bin.index.json").exists():
+        return True
+    for pat in ("*.safetensors", "*.bin"):
+        for match in path.glob(pat):
+            if match.is_file():
+                return True
+    return False
 
 
 def _resolve_path(base: Path, value: str) -> Path:
@@ -67,9 +83,9 @@ def _build_pair_args(src_langs: list[str], tgt_langs: list[str], seed_dir: Path,
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--workspace-dir", default="projects/distillation/translation")
-    ap.add_argument("--steps", default="pairs,split,train,eval")
+    ap.add_argument("--steps", default="pairs,split,subset,train,eval")
 
-    ap.add_argument("--source-langs", default="fr,de,it,pt,ar,hi,ja,zh")
+    ap.add_argument("--source-langs", default="en,es")
     ap.add_argument("--target-langs", default="en,es")
     ap.add_argument("--seed-dir", default="bitext")
     ap.add_argument("--allow-same-lang-pairs", action="store_true")
@@ -82,6 +98,11 @@ def main() -> int:
     ap.add_argument("--pairs-hard-neg-pool", type=int, default=128)
     ap.add_argument("--pairs-seed", type=int, default=42)
     ap.add_argument("--pairs-max-rows-per-input", type=int, default=0)
+    ap.add_argument(
+        "--pairs-allow-line-mismatch",
+        action="store_true",
+        help="If set, truncate parallel pair files to shortest length on line mismatch.",
+    )
 
     ap.add_argument("--split-train-out", default="training_data/translate_distill_pairs.train.jsonl")
     ap.add_argument("--split-eval-out", default="training_data/translate_distill_pairs.eval.jsonl")
@@ -91,6 +112,46 @@ def main() -> int:
 
     ap.add_argument("--teacher-model", default="google/translategemma-4b-it")
     ap.add_argument("--student-model", default="google/translategemma-4b-it")
+    ap.add_argument("--vocab-subset-dir", default="")
+    ap.add_argument(
+        "--tokenizer-model",
+        default="",
+        help="Tokenizer/model reference for student tokenization when --vocab-subset-dir is set.",
+    )
+    ap.add_argument("--subset-top-k", type=int, default=50000)
+    ap.add_argument("--subset-min-count", type=int, default=2)
+    ap.add_argument("--subset-max-lines", type=int, default=None)
+    ap.add_argument("--subset-model", default="")
+    ap.add_argument("--subset-min-text-chars", type=int, default=4)
+    ap.add_argument(
+        "--subset-for-causal-lm",
+        action="store_true",
+        help="Build subset checkpoints with CausalLM compatibility (keeps lm_head/output projection).",
+    )
+    ap.add_argument(
+        "--no-subset-for-causal-lm",
+        dest="subset_for_causal_lm",
+        action="store_false",
+        help="Disable CausalLM-compatible subset outputs.",
+    )
+    ap.set_defaults(subset_for_causal_lm=True)
+    ap.add_argument(
+        "--subset-text",
+        action="append",
+        default=[],
+        help="Optional extra text files to include in vocab subset construction (repeatable).",
+    )
+    ap.add_argument("--subset-write-checkpoint", action="store_true", help="Write pruned subset checkpoint files.")
+    ap.add_argument("--no-subset-write-checkpoint", dest="subset_write_checkpoint", action="store_false")
+    ap.set_defaults(subset_write_checkpoint=True)
+    ap.add_argument("--subset-fill-to-top-k", action="store_true")
+    ap.add_argument("--no-subset-fill-to-top-k", dest="subset_fill_to_top_k", action="store_false")
+    ap.set_defaults(subset_fill_to_top_k=True)
+    ap.add_argument("--subset-fill-strategy", default="spm_score", choices=["spm_score", "id"])
+    ap.add_argument("--subset-dtype", default="auto", choices=["auto", "fp16", "bf16", "fp32"])
+    ap.add_argument("--subset-also-prune-output", action="store_true")
+    ap.add_argument("--subset-allow-download", action="store_true", help="Allow HF downloads for subset stage.")
+    ap.add_argument("--subset-name", default="vocab_subset", help="Directory name under run root for generated subset.")
     ap.add_argument("--out-root", default="projects/distillation/translation/runs/exp01")
     ap.add_argument("--run-name", default="exp01")
     ap.add_argument("--schedule", default="A_then_B", choices=["A_then_B", "mixed_from_start"])
@@ -163,6 +224,19 @@ def main() -> int:
     out_root = _resolve_path(PROJECT_ROOT, args.out_root)
     run_root = out_root / args.run_name
     py = sys.executable
+    explicit_subset_dir = None
+    if str(args.vocab_subset_dir).strip():
+        explicit_subset_dir = _resolve_path(workspace, args.vocab_subset_dir)
+    subset_dir_fallback = run_root / str(args.subset_name)
+    subset_model = str(args.subset_model).strip() or str(args.student_model)
+    subset_text_path = run_root / "vocab_subset_text_source.txt"
+    extra_subset_texts: list[Path] = []
+    for item in args.subset_text:
+        p = Path(item)
+        extra_subset_texts.append(p if p.is_absolute() else workspace / p)
+        if not extra_subset_texts[-1].exists():
+            raise SystemExit(f"Missing --subset-text file: {extra_subset_texts[-1]}")
+    effective_subset_dir = explicit_subset_dir
 
     if "init" in steps:
         (workspace / "training_data").mkdir(parents=True, exist_ok=True)
@@ -198,6 +272,8 @@ def main() -> int:
             "--out", str(pairs_path),
             "--summary-out", str(pair_summary_out),
         ]
+        if bool(args.pairs_allow_line_mismatch):
+            pair_cmd.append("--allow-mismatched-pair-lines")
         if args.resume and _count_jsonl(pairs_path) > 0:
             print(f"[pairs] skip: existing non-empty {pairs_path}")
         else:
@@ -219,13 +295,109 @@ def main() -> int:
         else:
             _run(split_cmd, dry_run=bool(args.dry_run))
 
+    if "subset" in steps:
+        if not VOCAB_SUBSET_SCRIPT.exists():
+            raise SystemExit(f"Missing vocab subset tool: {VOCAB_SUBSET_SCRIPT}")
+        if not SUBSET_TEXT_BUILDER.exists():
+            raise SystemExit(f"Missing subset text builder: {SUBSET_TEXT_BUILDER}")
+
+        pair_paths: list[Path] = []
+        if split_train_path.exists():
+            pair_paths.append(split_train_path)
+        if split_eval_path.exists():
+            pair_paths.append(split_eval_path)
+        if not pair_paths and pairs_path.exists():
+            pair_paths.append(pairs_path)
+
+        text_inputs: list[Path] = []
+        for p in extra_subset_texts:
+            text_inputs.append(p)
+
+        # Ensure seed/parallel text coverage as a fallback/augmentation.
+        for lang in sorted(set(source_langs + target_langs)):
+            mono = source_seed_dir / f"{lang}.txt"
+            if mono.exists():
+                text_inputs.append(mono)
+            for src in source_langs:
+                for tgt in target_langs:
+                    if src == tgt and not args.allow_same_lang_pairs:
+                        continue
+                    pair_file = source_seed_dir / f"{src}_to_{tgt}.txt"
+                    if pair_file.exists():
+                        text_inputs.append(pair_file)
+
+        deduped_text_inputs: list[str] = []
+        seen_text_inputs: set[str] = set()
+        for p in text_inputs:
+            p_s = str(p)
+            if p_s not in seen_text_inputs:
+                seen_text_inputs.add(p_s)
+                deduped_text_inputs.append(p_s)
+
+        if not deduped_text_inputs and not pair_paths:
+            raise SystemExit(
+                "[subset] no usable text inputs found. Ensure --subset-text points to files "
+                "or run pairs/split with source/target seed files present."
+            )
+
+        subset_dir = effective_subset_dir or subset_dir_fallback
+        subset_dir.mkdir(parents=True, exist_ok=True)
+        subset_text_builder_cmd = [
+            py,
+            str(SUBSET_TEXT_BUILDER),
+            "--out", str(subset_text_path),
+            "--source-langs", ",".join(source_langs),
+            "--target-langs", ",".join(target_langs),
+            "--min-text-chars", str(int(args.subset_min_text_chars)),
+        ]
+        for path in pair_paths:
+            subset_text_builder_cmd.extend(["--pair-jsonl", str(path)])
+        for path in deduped_text_inputs:
+            subset_text_builder_cmd.extend(["--text", path])
+        _run(subset_text_builder_cmd, dry_run=bool(args.dry_run))
+
+        subset_cmd = [
+            py,
+            str(VOCAB_SUBSET_SCRIPT),
+            "--model", str(subset_model),
+            "--out", str(subset_dir),
+            "--text", str(subset_text_path),
+            "--top-k", str(int(args.subset_top_k)),
+            "--min-count", str(int(args.subset_min_count)),
+            "--dtype", str(args.subset_dtype),
+        ]
+        if bool(args.subset_fill_to_top_k):
+            subset_cmd.extend(["--fill-to-top-k", "--fill-strategy", str(args.subset_fill_strategy)])
+        if bool(args.subset_allow_download):
+            subset_cmd.append("--allow-download")
+        if args.subset_max_lines is not None and int(args.subset_max_lines) > 0:
+            subset_cmd.extend(["--max-lines", str(int(args.subset_max_lines))])
+        if args.subset_write_checkpoint:
+            subset_cmd.append("--write-checkpoint")
+        if args.subset_also_prune_output:
+            subset_cmd.append("--also-prune-output")
+        if bool(args.subset_for_causal_lm):
+            subset_cmd.append("--for-causal-lm")
+
+        if args.resume and (subset_dir / "id_remap.json").exists():
+            print(f"[subset] skip: existing subset dir {subset_dir}")
+        else:
+            _run(subset_cmd, dry_run=bool(args.dry_run))
+
+        effective_subset_dir = subset_dir
+
     if "train" in steps:
+        student_model_ref = str(args.student_model)
+        if effective_subset_dir is not None and _has_subset_model_artifacts(effective_subset_dir):
+            print(f"[train] using pruned subset model from {effective_subset_dir}")
+            student_model_ref = str(effective_subset_dir)
+
         train_cmd = [
             py,
             str(TRAINER_SCRIPT),
             "--pairs", str(split_train_path),
             "--teacher-model", str(args.teacher_model),
-            "--student-model", str(args.student_model),
+            "--student-model", student_model_ref,
             "--source-langs", ",".join(source_langs),
             "--target-langs", ",".join(target_langs),
             "--out-root", str(out_root),
@@ -263,6 +435,11 @@ def main() -> int:
             train_cmd.append("--enable-lora")
         if args.skip_kd_when_device_mismatch:
             train_cmd.append("--skip-kd-when-device-mismatch")
+        if effective_subset_dir is not None:
+            train_cmd.extend(["--vocab-subset-dir", str(effective_subset_dir)])
+            tokenizer_model = str(args.tokenizer_model).strip() or str(subset_model)
+            if tokenizer_model:
+                train_cmd.extend(["--tokenizer-model", tokenizer_model])
         if args.resume:
             train_cmd.append("--resume")
             if args.resume_from.strip():
@@ -313,6 +490,11 @@ def main() -> int:
             eval_cmd.append("--eval-chrf")
         if args.eval_comet:
             eval_cmd.extend(["--eval-comet", "--comet-model", str(args.eval_comet_model), "--comet-batch-size", str(int(args.eval_comet_batch_size))])
+        if effective_subset_dir is not None:
+            eval_cmd.extend(["--vocab-subset-dir", str(effective_subset_dir)])
+            tokenizer_model = str(args.tokenizer_model).strip() or str(subset_model)
+            if tokenizer_model:
+                eval_cmd.extend(["--tokenizer-model", tokenizer_model])
         if args.allow_download:
             eval_cmd.append("--allow-download")
 

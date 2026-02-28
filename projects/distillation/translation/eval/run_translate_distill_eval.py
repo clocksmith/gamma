@@ -50,6 +50,14 @@ class EvalRow:
     pair: str
 
 
+@dataclass(frozen=True)
+class VocabRemap:
+    old_to_new: dict[int, int]
+    new_to_old: list[int]
+    unk_old: int
+    unk_new: int
+
+
 def _safe_text(x: Any) -> str:
     if x is None:
         return ""
@@ -60,6 +68,111 @@ def _parse_csv_set(value: str) -> set[str]:
     return {x.strip() for x in str(value).split(",") if x.strip()}
 
 
+def _load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _load_vocab_remap(path: str, tokenizer) -> VocabRemap | None:
+    if not str(path).strip():
+        return None
+    subset_dir = Path(path)
+    if not subset_dir.exists():
+        raise RuntimeError(f"vocab subset dir does not exist: {subset_dir}")
+    remap_path = subset_dir / "id_remap.json"
+    if not remap_path.exists():
+        raise RuntimeError(f"missing id_remap.json in vocab subset dir: {remap_path}")
+    remap_data = _load_json(remap_path)
+    raw = remap_data.get("old_to_new", {})
+    if not isinstance(raw, dict) or not raw:
+        raise RuntimeError(f"invalid id_remap.json (old_to_new missing/empty): {remap_path}")
+
+    old_to_new: dict[int, int] = {}
+    for k, v in raw.items():
+        try:
+            old = int(k)
+            new = int(v)
+        except Exception:
+            continue
+        old_to_new[old] = new
+    if not old_to_new:
+        raise RuntimeError(f"could not parse old_to_new ids from: {remap_path}")
+
+    new_to_old = remap_data.get("new_to_old")
+    parsed_new_to_old: list[int] | None = None
+    if isinstance(new_to_old, list):
+        parsed: list[int] = []
+        for x in new_to_old:
+            try:
+                parsed.append(int(x))
+            except Exception:
+                continue
+        if parsed:
+            parsed_new_to_old = parsed
+
+    if parsed_new_to_old is None:
+        size = max(old_to_new.values()) + 1
+        rev: list[int] = [-1] * int(size)
+        for old, new in old_to_new.items():
+            if 0 <= int(new) < int(size):
+                rev[int(new)] = int(old)
+        parsed_new_to_old = [int(x) for x in rev if int(x) >= 0]
+
+    if not parsed_new_to_old:
+        raise RuntimeError(f"could not parse new_to_old from: {remap_path}")
+
+    unk_old = tokenizer.unk_token_id
+    if unk_old is None:
+        raise RuntimeError(f"tokenizer has no unk_token_id; cannot load subset remap: {tokenizer}")
+    unk_old = int(unk_old)
+    unk_new = old_to_new.get(unk_old)
+    if unk_new is None:
+        raise RuntimeError(f"id_remap.json is missing unk mapping for token id {unk_old}: {remap_path}")
+    return VocabRemap(
+        old_to_new=old_to_new,
+        new_to_old=parsed_new_to_old,
+        unk_old=int(unk_old),
+        unk_new=int(unk_new),
+    )
+
+
+def _remap_ids(input_ids: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
+    ids = input_ids.cpu().tolist()
+    unk = int(remap.unk_new)
+    remapped: list[list[int]] = []
+    for row in ids:
+        out: list[int] = []
+        for value in row:
+            try:
+                token = int(value)
+            except Exception:
+                token = unk
+            if token < 0:
+                out.append(int(token))
+            else:
+                out.append(int(remap.old_to_new.get(token, unk)))
+        remapped.append(out)
+    return torch.tensor(remapped, dtype=torch.long, device=input_ids.device)
+
+
+def _restore_ids_to_old_vocab(token_ids: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
+    ids = token_ids.cpu().tolist()
+    unk_old = int(remap.unk_old)
+    restored: list[list[int]] = []
+    for row in ids:
+        out: list[int] = []
+        for value in row:
+            try:
+                token = int(value)
+            except Exception:
+                token = -1
+            if token < 0 or token >= len(remap.new_to_old):
+                out.append(int(unk_old))
+            else:
+                out.append(int(remap.new_to_old[token]))
+        restored.append(out)
+    return torch.tensor(restored, dtype=torch.long, device=token_ids.device)
+
+
 def _parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pairs", required=True, help="Translation triplets JSONL for evaluation.")
@@ -68,6 +181,19 @@ def _parse_args() -> argparse.Namespace:
         "--teacher-model",
         default="",
         help="Optional teacher model for baseline comparison.",
+    )
+    ap.add_argument(
+        "--vocab-subset-dir",
+        default="",
+        help="Optional pruned-student directory containing id_remap.json (from tools/vocab_subset.py).",
+    )
+    ap.add_argument(
+        "--tokenizer-model",
+        default="",
+        help=(
+            "Optional tokenizer/model reference for subset-based student eval. "
+            "Defaults to --teacher-model."
+        ),
     )
     ap.add_argument(
         "--source-langs",
@@ -232,6 +358,7 @@ def _load_model_and_tokenizer(model_ref: str, device: str, dtype: torch.dtype, l
 def _generate_rows(
     model,
     tokenizer,
+    vocab_remap: VocabRemap | None,
     rows: list[EvalRow],
     device: str,
     batch_size: int,
@@ -255,6 +382,8 @@ def _generate_rows(
             max_length=max_prompt_length,
             padding=True,
         )
+        if vocab_remap is not None:
+            batch_enc["input_ids"] = _remap_ids(batch_enc["input_ids"], vocab_remap)
         batch_enc = {k: v.to(device) for k, v in batch_enc.items()}
         gen_kwargs: dict[str, Any] = {
             "max_new_tokens": int(max_new_tokens),
@@ -274,7 +403,10 @@ def _generate_rows(
         prompt_lens = batch_enc["attention_mask"].sum(dim=1).tolist()
         for i in range(len(chunk)):
             p = int(prompt_lens[i])
-            pred = tokenizer.decode(generated[i][p:], skip_special_tokens=True)
+            pred_ids = generated[i][p:]
+            if vocab_remap is not None:
+                pred_ids = _restore_ids_to_old_vocab(pred_ids, vocab_remap)
+            pred = tokenizer.decode(pred_ids, skip_special_tokens=True)
             out.append(_safe_text(pred))
     return out
 
@@ -449,13 +581,34 @@ def _evaluate_model(
     pred_path: Path,
     summary_path: Path,
     label: str,
+    vocab_subset_dir: str,
+    tokenizer_ref: str,
     source_langs: set[str],
     target_langs: set[str],
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     del source_langs, target_langs
     device = _resolve_device(str(args.device))
     dtype = _choose_torch_dtype(str(args.dtype))
-    model, tokenizer = _load_model_and_tokenizer(model_ref, device, dtype=dtype, local_files_only=bool(args.local_files_only))
+    vocab_remap = None
+    tokenizer = None
+    if str(vocab_subset_dir).strip():
+        base_tok_ref = str(tokenizer_ref).strip()
+        if not base_tok_ref:
+            base_tok_ref = model_ref
+        tokenizer = AutoTokenizer.from_pretrained(base_tok_ref, local_files_only=bool(args.local_files_only))
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token
+        vocab_remap = _load_vocab_remap(str(vocab_subset_dir), tokenizer)
+
+    if tokenizer is None:
+        model, tokenizer = _load_model_and_tokenizer(model_ref, device, dtype=dtype, local_files_only=bool(args.local_files_only))
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_ref,
+            torch_dtype=dtype,
+            local_files_only=bool(args.local_files_only),
+        ).to(device)
+        model.eval()
 
     rng = list(rows)
     if args.seed:
@@ -474,6 +627,7 @@ def _evaluate_model(
         temperature=float(args.temperature),
         top_p=float(args.top_p),
         top_k=int(args.top_k),
+        vocab_remap=vocab_remap,
     )
     refs = [r.target_pos for r in rng]
     preds = [p for p in pred_texts]
@@ -530,6 +684,8 @@ def _evaluate_model(
         "model": str(model_ref),
         "label": label,
         "count": int(len(rng)),
+        "vocab_subset_dir": str(vocab_subset_dir),
+        "vocab_subset_active": bool(vocab_remap is not None),
         "predictions": {
             "path": str(pred_path),
         },
@@ -579,6 +735,10 @@ def main() -> int:
     if not args.teacher_predictions:
         args.teacher_predictions = str(out_root / "teacher_predictions.jsonl")
 
+    student_tokenizer_ref = str(args.tokenizer_model).strip()
+    if not student_tokenizer_ref:
+        student_tokenizer_ref = str(args.teacher_model) if str(args.teacher_model).strip() else str(args.model)
+
     student_summary, student_preds = _evaluate_model(
         args=args,
         model_ref=str(args.model),
@@ -587,6 +747,8 @@ def main() -> int:
         pred_path=Path(args.student_predictions),
         summary_path=Path(args.student_summary),
         label="student",
+        vocab_subset_dir=str(args.vocab_subset_dir),
+        tokenizer_ref=student_tokenizer_ref,
         source_langs=source_langs,
         target_langs=target_langs,
     )
@@ -596,6 +758,7 @@ def main() -> int:
         "source_langs": sorted(source_langs),
         "target_langs": sorted(target_langs),
         "eval_samples": int(len(rows)),
+        "vocab_subset_dir": str(args.vocab_subset_dir),
         "student": student_summary,
         "teacher": None,
         "delta": None,
@@ -610,6 +773,8 @@ def main() -> int:
             pred_path=Path(args.teacher_predictions),
             summary_path=Path(args.teacher_summary),
             label="teacher",
+            vocab_subset_dir="",
+            tokenizer_ref=str(args.teacher_model),
             source_langs=source_langs,
             target_langs=target_langs,
         )
