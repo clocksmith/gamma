@@ -574,8 +574,34 @@ def _triplet_loss(pos_logits: torch.Tensor, pos_labels: torch.Tensor, neg_logits
 def _latest_checkpoint(dir_path: Path) -> Path | None:
     if not dir_path.exists():
         return None
-    candidates = sorted(dir_path.glob("checkpoint-*"), key=lambda p: p.name)
+    candidates = sorted(
+        [p for p in dir_path.glob("checkpoint-*") if _is_valid_checkpoint_dir(p)],
+        key=lambda p: p.name,
+    )
     return candidates[-1] if candidates else None
+
+
+def _is_valid_checkpoint_dir(path: Path) -> bool:
+    ckpt = Path(path)
+    if not ckpt.is_dir():
+        return False
+    if not re.fullmatch(r"checkpoint-(\d+)", ckpt.name):
+        return False
+
+    config_path = ckpt / "config.json"
+    if not config_path.is_file() or config_path.stat().st_size == 0:
+        return False
+    try:
+        json.loads(config_path.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+
+    has_model = (ckpt / "model.safetensors").is_file() or (ckpt / "pytorch_model.bin").is_file()
+    if not has_model:
+        # Allow index-based shards for older checkpoint layouts.
+        if not any(ckpt.glob("*.safetensors")) and not any(ckpt.glob("*.bin")):
+            return False
+    return True
 
 
 def _checkpoint_step_from_path(path: Path) -> int:
