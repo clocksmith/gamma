@@ -1,20 +1,18 @@
 ---
 name: gamma-distillation
-description: Run, resume, and troubleshoot GAMMA distillation pipelines (embedding subsets and translation distillation). Use when the user asks to distill models, continue from checkpoints, or debug distillation runs.
+description: Run, resume, and troubleshoot GAMMA distillation pipelines for translation and embedding tracks, including checkpoint recovery and ROCm-to-CPU fallback decisions. Use when the user asks to distill, resume interrupted runs, or recover from failed checkpoints.
 ---
 
-# GAMMA Distillation
+# GAMMA Distillation Skill
 
-## Goal
-
-Run distillation jobs reliably and recover cleanly from interruptions.
+Use this skill for resilient distillation operations, especially after crashes, reboots, or partial checkpoints.
 
 ## Tracks
 
-- Embedding distillation: `projects/distillation/embedding/`
 - Translation distillation: `projects/distillation/translation/`
+- Embedding subset/distill pipeline: `projects/distillation/embedding/`
 
-## Translation Distillation Workflow
+## Translation Run Contract
 
 Primary wrapper:
 
@@ -22,55 +20,89 @@ Primary wrapper:
 bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
 ```
 
-Typical env controls:
-
-- `OUT_ROOT`, `RUN_NAME`
-- `TOTAL_STEPS`, `SFT_STEPS`
-- `DEVICE`, `RESUME`, `RESUME_FROM`
-- `SOURCE_LANGS`, `TARGET_LANGS`
-
 Direct trainer entrypoint:
 
 ```bash
-.venv/bin/python projects/distillation/translation/training/train_translate_distill.py --help
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+$PY projects/distillation/translation/training/train_translate_distill.py --help
 ```
 
-## Resume and Checkpoint Recovery
+Key environment controls:
+- `OUT_ROOT`, `RUN_NAME`
+- `TOTAL_STEPS`, `SFT_STEPS`, `SAVE_EVERY`
+- `DEVICE`, `DTYPE`
+- `RESUME`, `RESUME_FROM`
+- `SOURCE_LANGS`, `TARGET_LANGS`
+- `TEACHER_MODEL`, `STUDENT_MODEL`
 
-1. Find latest valid checkpoint under `stage_a` or `stage_b`.
-2. Ignore/quarantine zero-byte or partial checkpoint directories.
-3. Resume with `--resume --resume-from <run-root|stage-dir|checkpoint-dir>`.
+## Resume and Corrupt Checkpoint Recovery
 
-Quick checkpoint listing:
+Audit checkpoints first:
+
+```bash
+bash skills/gamma-distillation/scripts/check_translation_checkpoints.sh \
+  projects/distillation/translation/runs/<exp>/<run>
+```
+
+Manual quick scan:
 
 ```bash
 find projects/distillation/translation/runs -type d -name 'checkpoint-*' | sort
+find projects/distillation/translation/runs -type f -size 0 | head
 ```
 
-## ROCm and CPU Fallback
+Recovery procedure:
+1. Identify latest valid checkpoint in `stage_a` or `stage_b`.
+2. Quarantine partial/zero-byte checkpoint dirs instead of deleting blindly.
+3. Resume with:
 
-If ROCm is unstable in long runs, follow:
+```bash
+RESUME=1 RESUME_FROM=<run-root|stage-dir|checkpoint-dir> \
+bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
+```
 
+## ROCm and CPU Fallback Policy
+
+Reference:
 - `projects/distillation/translation/training/TROUBLESHOOTING.md`
 
-Fallback order:
-
-1. ROCm with compatibility override (when needed):
+Operational guidance:
+- ROCm can pass smoke tests and still fail during long training.
+- If ROCm is unstable, try compatibility override:
 
 ```bash
 HSA_OVERRIDE_GFX_VERSION=11.0.0 \
 bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
 ```
 
-2. Full CPU for both teacher and student:
+- If failures persist, run full CPU for both teacher and student:
 
 ```bash
 DEVICE=cpu \
 bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
 ```
 
+- Avoid mixed `student=cuda` + `teacher=cpu` unless the training path is verified for device-safe tensor routing.
+
+## Embedding Pipeline Entry Points
+
+Use the orchestrator for resume/skip logic:
+
+```bash
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+$PY projects/distillation/embedding/pipeline/run_pipeline.py --help
+```
+
+Common sequence:
+1. `--steps init`
+2. `--steps fetch,gemini,merge,dataset,pairs`
+3. `--steps distill`
+4. `projects/distillation/embedding/eval/run_benchmark.py` for repeated evaluation
+
 ## Guardrails
 
-- Do not auto-install model weights.
-- Keep run metadata and logs under the run root for reproducibility.
-- Prefer resumable runs over restarting from scratch.
+- Do not auto-download weights unless explicitly allowed.
+- Preserve run logs and summaries inside the run root.
+- Prefer resume over restart to retain optimizer/scheduler/RNG continuity.

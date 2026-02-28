@@ -1,56 +1,65 @@
 ---
 name: gamma-benchmarking
-description: Run and interpret GAMMA benchmark workflows (runtime benchmark, mind meld strategy benchmark, codegen benchmark suite). Use when the user asks to benchmark models, compare performance, or generate benchmark reports.
+description: Run and interpret GAMMA benchmark workflows across runtime speed tests, codegen prompt-ladder benchmarks, and mind-meld experiments. Use when the user asks for model performance comparisons, benchmark automation, or reproducible benchmark reporting.
 ---
 
-# GAMMA Benchmarking
+# GAMMA Benchmarking Skill
 
-## Goal
+Use this skill for reproducible benchmarking, artifact capture, and comparison reporting.
 
-Run reproducible benchmark experiments and summarize results clearly.
+## Benchmark Planes
 
-## Benchmark Families
-
-- Runtime/token benchmarks via `gamma.py benchmark`
-- Mind Meld strategy benchmark via `src/benchmarks/mind_meld_benchmark.py`
-- Codegen benchmark suite via `src/benchmarks/codegen/`
+- Runtime throughput and latency: `gamma.py benchmark`
+- Codegen TS/JS ladder benchmarks: `gamma.py codegen language` and `src/benchmarks/codegen/`
+- Mind Meld benchmark workflows: `gamma.py codegen mind-meld` (or direct tools when stable)
 
 ## Workflow
 
-1. Identify benchmark family and constraints (engine, model, hardware, duration).
+1. Confirm which plane and constraints apply (model, engine, hardware, run budget).
 2. Verify current CLI options with `--help` before constructing commands.
 3. Run one short smoke benchmark first.
-4. Run full benchmark and save artifacts with clear naming.
-5. Summarize deltas (speed, latency, quality metrics) and caveats.
+4. Run full benchmark with explicit output path or `--save`.
+5. Summarize deltas and environment caveats.
 
-## Canonical Commands
+## Verified Command Patterns
 
-Inspect available options:
+Use venv python when present:
 
 ```bash
-python gamma.py help benchmark
-python gamma.py benchmark --list-models
-PYTHONPATH=. python3 src/benchmarks/mind_meld_benchmark.py --help
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+```
+
+Runtime benchmarks:
+
+```bash
+$PY gamma.py help benchmark
+$PY gamma.py benchmark --list-models
+$PY gamma.py benchmark --models pytorch:google/gemma-2-2b-it --tokens 32 --iterations 1
+$PY gamma.py benchmark --models pytorch:google/gemma-2-2b-it llamacpp:./models/model.gguf --tokens 100 --iterations 5 --save
+```
+
+Codegen ladder benchmarks:
+
+```bash
+$PY gamma.py help codegen
 node src/benchmarks/codegen/index.js --help
+node src/benchmarks/codegen/index.js --task fibonacci --language js,ts --prompt-level novice,expert --dry
+node src/benchmarks/codegen/index.js --category foundations --language js,ts --all-prompt-levels --provider ollama-gpt-oss-20b --runs 3 --temperature 0.0
+node src/benchmarks/codegen/index.js --task expression-evaluator --language js --temperatures 0.0,0.5,1.0 --provider ollama-qwen3-coder-30b --runs 2
 ```
 
-Mind Meld strategy benchmark examples:
+Mind Meld benchmark entrypoints:
 
 ```bash
-PYTHONPATH=. python3 src/benchmarks/mind_meld_benchmark.py \
-  --strategies confidence perplexity fixed_interval \
-  --prompt "Once upon a time" \
-  --models gpt2 gpt2-medium \
-  --output comparison.html
+$PY gamma.py codegen mind-meld --models pytorch:google/gemma-2-2b-it pytorch:google/gemma-3-1b-it
+$PY tools/run_mind_meld_cli.py --help
 ```
 
-Codegen benchmark examples:
+## Known Caveat
 
-```bash
-node src/benchmarks/codegen/index.js --basic
-node src/benchmarks/codegen/index.js --extended
-node src/benchmarks/codegen/index.js --ui --include-browser
-```
+- `PYTHONPATH=. $PY src/benchmarks/mind_meld_benchmark.py --help` currently fails in this repo due a `BenchmarkResult` dataclass field-order bug (`non-default argument ... follows default argument ...`).
+- Prefer `gamma.py codegen mind-meld` or `tools/run_mind_meld_cli.py` workflows until that script is fixed.
 
 ## Reporting Checklist
 
@@ -58,4 +67,5 @@ node src/benchmarks/codegen/index.js --ui --include-browser
 - Model/engine/device details
 - Runtime summary (tokens/sec, latency, memory where available)
 - Comparison baseline and percent change
+- Run count and variance notes
 - Known instability or environment limits
