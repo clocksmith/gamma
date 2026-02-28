@@ -15,6 +15,9 @@ set -euo pipefail
 # Override any default via environment variables, e.g.:
 #   TOTAL_STEPS=20000 SFT_STEPS=10000 DEVICE=cuda RUN_NAME=exp02 \
 #   bash .../run_translation_distill.sh A_then_B
+#
+# Troubleshooting (ROCm vs CPU fallback):
+#   projects/distillation/translation/training/TROUBLESHOOTING.md
 
 SCHEDULE="${1:-A_then_B}"
 if [[ "$SCHEDULE" != "A_then_B" && "$SCHEDULE" != "mixed_from_start" ]]; then
