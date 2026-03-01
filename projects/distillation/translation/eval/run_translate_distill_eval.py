@@ -154,8 +154,32 @@ def _remap_ids(input_ids: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
     return torch.tensor(remapped, dtype=torch.long, device=input_ids.device)
 
 
-def _restore_ids_to_old_vocab(token_ids: torch.Tensor, remap: VocabRemap) -> torch.Tensor:
-    ids = token_ids.cpu().tolist()
+def _restore_ids_to_old_vocab(token_ids: torch.Tensor | int | list[int] | list[list[int]], remap: VocabRemap) -> torch.Tensor:
+    if isinstance(token_ids, int):
+        ids = [[int(token_ids)]]
+    elif torch.is_tensor(token_ids):
+        if token_ids.ndim == 0:
+            ids = [[int(token_ids.item())]]
+        elif token_ids.ndim == 1:
+            ids = [token_ids.cpu().tolist()]
+        else:
+            ids = token_ids.cpu().tolist()
+    elif isinstance(token_ids, tuple):
+        if len(token_ids) == 0:
+            ids = [[]]
+        elif isinstance(token_ids[0], (list, tuple, torch.Tensor)):
+            ids = [list(row.cpu().tolist() if torch.is_tensor(row) else list(row)) for row in token_ids]
+        else:
+            ids = [list(token_ids)]
+    elif isinstance(token_ids, list):
+        if len(token_ids) == 0:
+            ids = [[]]
+        elif isinstance(token_ids[0], (list, tuple, torch.Tensor)):
+            ids = [list(row.cpu().tolist() if torch.is_tensor(row) else list(row)) for row in token_ids]
+        else:
+            ids = [list(token_ids)]
+    else:
+        ids = [[int(token_ids)]]
     unk_old = int(remap.unk_old)
     restored: list[list[int]] = []
     for row in ids:
@@ -170,7 +194,7 @@ def _restore_ids_to_old_vocab(token_ids: torch.Tensor, remap: VocabRemap) -> tor
             else:
                 out.append(int(remap.new_to_old[token]))
         restored.append(out)
-    return torch.tensor(restored, dtype=torch.long, device=token_ids.device)
+    return torch.tensor(restored, dtype=torch.long, device=token_ids.device if torch.is_tensor(token_ids) else "cpu")
 
 
 def _parse_args() -> argparse.Namespace:
@@ -406,6 +430,8 @@ def _generate_rows(
             pred_ids = generated[i][p:]
             if vocab_remap is not None:
                 pred_ids = _restore_ids_to_old_vocab(pred_ids, vocab_remap)
+            if torch.is_tensor(pred_ids) and pred_ids.ndim > 1:
+                pred_ids = pred_ids[0] if pred_ids.shape[0] > 0 else torch.tensor([], dtype=torch.long)
             pred = tokenizer.decode(pred_ids, skip_special_tokens=True)
             out.append(_safe_text(pred))
     return out
