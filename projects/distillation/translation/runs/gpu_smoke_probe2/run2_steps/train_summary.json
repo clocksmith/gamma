@@ -1,0 +1,61 @@
+{
+  "distill_steps": 1,
+  "final_out": "/home/x/deco/gamma/projects/distillation/translation/runs/gpu_smoke_probe2/run2_steps/final",
+  "kd_temperature": 1.0,
+  "lambda_kd": 0.5,
+  "lora_enabled": false,
+  "margin": 0.2,
+  "mu_triplet": 0.1,
+  "out_root": "/home/x/deco/gamma/projects/distillation/translation/runs/gpu_smoke_probe2/run2_steps",
+  "pair_count": 1152,
+  "pairs_input_files": [
+    "projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.train.jsonl"
+  ],
+  "pairs_input_spec": "projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.train.jsonl",
+  "resume_from": "",
+  "resume_stage": null,
+  "resume_step": 0,
+  "resumed": false,
+  "schedule": "A_then_B",
+  "select_best_checkpoint": true,
+  "selected_checkpoint": "/home/x/deco/gamma/projects/distillation/translation/runs/gpu_smoke_probe2/run2_steps/stage_b/checkpoint-000001",
+  "selected_checkpoint_loss": 3.4375,
+  "selected_checkpoint_stage": "stage_b",
+  "sft_steps": 1,
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "stages": [
+    {
+      "loss_ce_final": 4.34375,
+      "loss_final": 4.34375,
+      "loss_kd_final": 0.0,
+      "loss_triplet_final": 0.0,
+      "predictions": "/home/x/deco/gamma/projects/distillation/translation/runs/gpu_smoke_probe2/run2_steps/stage_a/predictions.jsonl",
+      "stage": "A_then_B_stage_a",
+      "steps": 1.0
+    },
+    {
+      "loss_ce_final": 3.4375,
+      "loss_final": 3.4375,
+      "loss_kd_final": -2.1338462829589844e-05,
+      "loss_triplet_final": 0.0,
+      "predictions": "/home/x/deco/gamma/projects/distillation/translation/runs/gpu_smoke_probe2/run2_steps/stage_b/predictions.jsonl",
+      "stage": "A_then_B_stage_b",
+      "steps": 1.0
+    }
+  ],
+  "student_model": "google/gemma-3-1b-it",
+  "student_subset_dir": "",
+  "student_tokenizer_model": "",
+  "student_vocab_size": -1,
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher_model": "google/gemma-3-1b-it",
+  "timestamp": 1772479651.0005512,
+  "total_steps": 2,
+  "vocab_subset_active": false
+}
