@@ -8,6 +8,26 @@ from typing import Any, Optional, Tuple, List, Dict, Literal
 import numpy as np
 
 logger = logging.getLogger(__name__)
+_KV_CACHE_FALLBACK_COUNTS: Dict[str, int] = {}
+
+
+def _record_kv_cache_fallback(
+    reason: str,
+    exc: BaseException,
+    *,
+    level: int = logging.DEBUG,
+) -> None:
+    """Track and log degraded-path fallbacks in KV translation."""
+    count = _KV_CACHE_FALLBACK_COUNTS.get(reason, 0) + 1
+    _KV_CACHE_FALLBACK_COUNTS[reason] = count
+    logger.log(
+        level,
+        "KV cache fallback '%s' (count=%d): %s: %s",
+        reason,
+        count,
+        type(exc).__name__,
+        exc,
+    )
 
 # Extended model architecture support
 ModelArchitecture = Literal[
@@ -82,7 +102,8 @@ def get_model_architecture(config: Any) -> ModelArchitecture:
     if hasattr(config, 'to_dict') and callable(getattr(config, 'to_dict')):
         try:
             config_dict = config.to_dict() or {}
-        except Exception:
+        except (AttributeError, TypeError, ValueError) as exc:
+            _record_kv_cache_fallback("config_to_dict_failed", exc)
             config_dict = {}
     elif hasattr(config, '__dict__'):
         config_dict = {key: getattr(config, key) for key in vars(config)}
@@ -161,8 +182,8 @@ def get_attention_config(config: Any) -> Dict[str, Any]:
     if hasattr(config, 'to_dict') and callable(getattr(config, 'to_dict')):
         try:
             config_dict = config.to_dict() or {}
-        except Exception:
-            pass
+        except (AttributeError, TypeError, ValueError) as exc:
+            _record_kv_cache_fallback("attention_config_to_dict_failed", exc)
     elif hasattr(config, '__dict__'):
         config_dict = {key: getattr(config, key) for key in vars(config)}
 
@@ -330,7 +351,8 @@ class PyTorchKVCache(KVCache):
                 legacy_cache = cache_obj.to_legacy_cache()
                 if legacy_cache is not None:
                     cache_obj = legacy_cache
-            except Exception:
+            except (AttributeError, TypeError, ValueError) as exc:
+                _record_kv_cache_fallback("legacy_cache_conversion_failed", exc)
                 # Fall back to heuristic extraction for non-legacy cache types.
                 cache_obj = cache
 
@@ -354,22 +376,22 @@ class PyTorchKVCache(KVCache):
                     for k_cache, v_cache in zip(obj.key_cache, obj.value_cache):
                         yield k_cache, v_cache
                     return
-                except Exception:
-                    pass
+                except (AttributeError, TypeError) as exc:
+                    _record_kv_cache_fallback("iter_key_value_cache_failed", exc)
             if hasattr(obj, "cache"):
                 try:
                     for entry in obj.cache:
                         yield from _iter_kv_layers(entry)
                     return
-                except Exception:
-                    pass
+                except (AttributeError, TypeError) as exc:
+                    _record_kv_cache_fallback("iter_cache_attr_failed", exc)
             if hasattr(obj, "layers"):
                 try:
                     for entry in obj.layers:
                         yield from _iter_kv_layers(entry)
                     return
-                except Exception:
-                    pass
+                except (AttributeError, TypeError) as exc:
+                    _record_kv_cache_fallback("iter_layers_attr_failed", exc)
             if isinstance(obj, dict) and ("key" in obj or "value" in obj):
                 k_cache = obj.get("key") or obj.get("k")
                 v_cache = obj.get("value") or obj.get("v")
@@ -399,7 +421,8 @@ class PyTorchKVCache(KVCache):
                 try:
                     for entry in obj:
                         yield from _iter_kv_layers(entry)
-                except Exception:
+                except TypeError as exc:
+                    _record_kv_cache_fallback("generic_iter_failed", exc)
                     return
 
         def _tensor_to_numpy(tensor: Any) -> np.ndarray:
@@ -725,7 +748,8 @@ class KVCacheTranslator:
                         source_text=source_text
                     )
                     return aligner.translate(arch_translated, target_config)
-            except Exception as exc:
+            except (AttributeError, TypeError, ValueError) as exc:
+                _record_kv_cache_fallback("tokenizer_alignment_failed", exc, level=logging.WARNING)
                 if self.verbose:
                     logger.warning(f"Tokenizer alignment failed: {exc}")
 
@@ -1010,7 +1034,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
             # For short sequences, use simple O(n*m) approach
             return self._compute_alignment_simple(source_offsets, target_offsets)
 
-        except Exception as exc:
+        except (AttributeError, TypeError, ValueError, IndexError) as exc:
+            _record_kv_cache_fallback("compute_token_alignment_failed", exc)
             logger.debug(f"Token alignment failed: {exc}, using fallback")
             return list(range(min(len(source_tokens), len(target_tokens))))
 
@@ -1053,7 +1078,11 @@ class TokenizerAlignedTranslation(TranslationStrategy):
                 token_len = len(token_text)
                 offsets[idx] = (pos, pos + token_len)
                 pos += token_len
-            except Exception:
+            except (AttributeError, TypeError, ValueError) as exc:
+                _record_kv_cache_fallback(
+                    "single_token_decode_failed",
+                    exc,
+                )
                 # Fallback for special tokens
                 offsets[idx] = (pos, pos + 1)
                 pos += 1
@@ -1086,8 +1115,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
                 offset_mapping = encoding.get('offset_mapping')
                 if offset_mapping and len(offset_mapping) == len(token_ids):
                     return [(start, end) for start, end in offset_mapping]
-            except Exception:
-                pass
+            except (AttributeError, TypeError, ValueError) as exc:
+                _record_kv_cache_fallback("encode_plus_offset_mapping_failed", exc)
 
         # Try batch decode and reconstruct offsets
         if hasattr(tokenizer, 'batch_decode'):
@@ -1101,8 +1130,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
                     offsets.append((pos, pos + token_len))
                     pos += token_len
                 return offsets
-            except Exception:
-                pass
+            except (AttributeError, TypeError, ValueError) as exc:
+                _record_kv_cache_fallback("batch_decode_offsets_failed", exc)
 
         return None
 
@@ -1225,8 +1254,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
             try:
                 target_tokens = self.target_tokenizer.encode(self.source_text)
                 target_seq_len = len(target_tokens)
-            except Exception:
-                pass
+            except (AttributeError, TypeError, ValueError) as exc:
+                _record_kv_cache_fallback("target_tokenizer_encode_failed", exc)
 
         if target_seq_len == source_seq_len:
             # No alignment needed
@@ -1240,8 +1269,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
             try:
                 source_tokens = self.source_tokenizer.encode(self.source_text)
                 target_tokens = self.target_tokenizer.encode(self.source_text)
-            except Exception:
-                pass
+            except (AttributeError, TypeError, ValueError) as exc:
+                _record_kv_cache_fallback("source_target_tokenizer_encode_failed", exc)
 
         alignment = self._compute_token_alignment(source_tokens, target_tokens)
 
@@ -1291,7 +1320,8 @@ class TokenizerAlignedTranslation(TranslationStrategy):
 
             return aligned
 
-        except Exception as exc:
+        except (IndexError, TypeError, ValueError) as exc:
+            _record_kv_cache_fallback("apply_alignment_failed", exc, level=logging.WARNING)
             logger.warning(f"Failed to apply alignment: {exc}")
             return None
 

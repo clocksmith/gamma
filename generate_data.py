@@ -1,6 +1,8 @@
 import json
+import glob
 import random
 import sys
+from pathlib import Path
 
 # Domains: travel, work, healthcare, education, tech, finance, legal/admin, everyday chat, news, arts
 
@@ -584,17 +586,18 @@ domains = [
 
 seen_sources = set()
 fixed_existing = []
+shard_dir = Path("projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.shards")
+shard_prefix = "translate_distill_pairs_en_es_2way.train"
+rows_per_shard = 5000
 
-try:
-    with open("projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.jsonl", "r") as f:
+for shard_path in sorted(glob.glob(str(shard_dir / f"{shard_prefix}.shard-*.jsonl"))):
+    with open(shard_path, "r", encoding="utf-8") as f:
         for line in f:
             data = json.loads(line)
             data["pos"] = data["target_pos"]
             data["neg"] = data["target_neg"]
             fixed_existing.append(data)
             seen_sources.add(data["source"])
-except FileNotFoundError:
-    pass
 
 target_new = 9220
 target_en_es = target_new // 2
@@ -625,11 +628,33 @@ while es_en_count < target_es_en:
 
 random.shuffle(new_rows)
 
-output_file = "projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.jsonl"
-with open(output_file, "w") as f:
-    for row in fixed_existing:
-        f.write(json.dumps(row, ensure_ascii=False) + "\n")
-    for row in new_rows:
-        f.write(json.dumps(row, ensure_ascii=False) + "\n")
+all_rows = fixed_existing + new_rows
+shard_dir.mkdir(parents=True, exist_ok=True)
+for old_path in sorted(glob.glob(str(shard_dir / f"{shard_prefix}.shard-*.jsonl"))):
+    Path(old_path).unlink()
 
-print(f"Total rows: {len(fixed_existing) + len(new_rows)}", flush=True)
+shards_meta = []
+for i in range(0, len(all_rows), rows_per_shard):
+    shard_rows = all_rows[i : i + rows_per_shard]
+    shard_idx = i // rows_per_shard + 1
+    shard_name = f"{shard_prefix}.shard-{shard_idx:05d}.jsonl"
+    shard_path = shard_dir / shard_name
+    with open(shard_path, "w", encoding="utf-8") as f:
+        for row in shard_rows:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    shards_meta.append({"path": str(shard_path), "rows": len(shard_rows)})
+
+manifest = {
+    "input": "[generated_from_existing_shards_and_new_rows]",
+    "out_dir": str(shard_dir),
+    "prefix": shard_prefix,
+    "rows_per_shard": rows_per_shard,
+    "shard_count": len(shards_meta),
+    "shards": shards_meta,
+    "total_rows": len(all_rows),
+    "source_of_truth": "shards_only",
+}
+manifest_path = shard_dir / f"{shard_prefix}.shards.json"
+manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+print(f"Total rows: {len(all_rows)}", flush=True)

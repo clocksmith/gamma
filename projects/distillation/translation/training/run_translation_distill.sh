@@ -105,6 +105,7 @@ BATCH_SIZE="${BATCH_SIZE:-1}"
 LR="${LR:-2e-5}"
 LOG_EVERY="${LOG_EVERY:-20}"
 SAVE_EVERY="${SAVE_EVERY:-200}"
+SELECT_BEST_CHECKPOINT="${SELECT_BEST_CHECKPOINT:-1}"
 LAMBDA_KD="${LAMBDA_KD:-0.5}"
 MU_TRIPLET="${MU_TRIPLET:-0.1}"
 MARGIN="${MARGIN:-0.2}"
@@ -121,6 +122,7 @@ AUTO_FALLBACK_TO_CPU="${AUTO_FALLBACK_TO_CPU:-0}"
 RESUME="${RESUME:-0}"
 RESUME_FROM="${RESUME_FROM:-}"
 EFFECTIVE_STUDENT_MODEL="${STUDENT_MODEL}"
+EFFECTIVE_DEVICE="${DEVICE}"
 
 has_subset_artifacts() {
   local model_dir="$1"
@@ -378,6 +380,11 @@ if [[ "$SKIP_TRAIN" == "0" ]]; then
     --dtype "$DTYPE"
     --summary-out "$SUMMARY_OUT"
   )
+  if [[ "$SELECT_BEST_CHECKPOINT" == "1" ]]; then
+    cmd+=(--select-best-checkpoint)
+  else
+    cmd+=(--no-select-best-checkpoint)
+  fi
   if [[ "$RESUME" == "1" ]]; then
     cmd+=(--resume)
     if [[ -n "${RESUME_FROM}" ]]; then
@@ -425,10 +432,12 @@ if [[ "$SKIP_TRAIN" == "0" ]]; then
         fi
       done
       run_training_cmd "${cmd_cpu[@]}"
+      EFFECTIVE_DEVICE="cpu"
     fi
   else
     run_training_cmd "${cmd[@]}"
   fi
+  echo "[train] effective_device=${EFFECTIVE_DEVICE}"
 else
   echo "SKIP_TRAIN=1: skipping trainer."
 fi
@@ -449,7 +458,7 @@ if [[ "$EVAL_ENABLED" == "1" ]]; then
     --batch-size "$EVAL_BATCH_SIZE"
     --max-prompt-length "$EVAL_MAX_PROMPT_LENGTH"
     --max-new-tokens "$EVAL_MAX_NEW_TOKENS"
-    --device "$DEVICE"
+    --device "$EFFECTIVE_DEVICE"
     --top-k "$EVAL_TOP_K"
     --top-p "$EVAL_TOP_P"
     --temperature "$EVAL_TEMPERATURE"

@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
@@ -61,6 +64,74 @@ def _run(cmd: list[str], *, dry_run: bool) -> None:
     print("+", " ".join(cmd))
     if not dry_run:
         subprocess.run(cmd, check=True)
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        while True:
+            chunk = f.read(1024 * 1024)
+            if not chunk:
+                break
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _config_hash(payload: dict) -> str:
+    blob = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def _write_done_manifest(path: Path, *, step: str, config_hash: str, outputs: list[Path]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "step": step,
+        "completed_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "config_hash": config_hash,
+        "outputs": [
+            {
+                "path": str(p),
+                "bytes": int(p.stat().st_size),
+                "sha256": _sha256_file(p),
+            }
+            for p in outputs
+            if p.exists() and p.is_file()
+        ],
+    }
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.replace(path)
+
+
+def _done_manifest_matches(path: Path, *, config_hash: str, outputs: list[Path]) -> bool:
+    if not path.exists():
+        return False
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    if str(obj.get("config_hash", "")) != str(config_hash):
+        return False
+    by_path = {
+        str(item.get("path", "")): item
+        for item in obj.get("outputs", [])
+        if isinstance(item, dict) and item.get("path")
+    }
+    for out in outputs:
+        if not out.exists() or not out.is_file():
+            return False
+        rec = by_path.get(str(out))
+        if not rec:
+            return False
+        try:
+            want_bytes = int(rec.get("bytes", -1))
+        except Exception:
+            return False
+        if int(out.stat().st_size) != want_bytes:
+            return False
+        if str(rec.get("sha256", "")) != _sha256_file(out):
+            return False
+    return True
 
 
 def _build_pair_args(src_langs: list[str], tgt_langs: list[str], seed_dir: Path, *, allow_same_lang: bool) -> list[str]:
@@ -161,6 +232,9 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=2e-5)
     ap.add_argument("--log-every", type=int, default=20)
     ap.add_argument("--save-every", type=int, default=200)
+    ap.add_argument("--select-best-checkpoint", action="store_true")
+    ap.add_argument("--no-select-best-checkpoint", dest="select_best_checkpoint", action="store_false")
+    ap.set_defaults(select_best_checkpoint=True)
     ap.add_argument("--lambda-kd", type=float, default=0.5)
     ap.add_argument("--mu-triplet", type=float, default=0.1)
     ap.add_argument("--margin", type=float, default=0.2)
@@ -223,6 +297,7 @@ def main() -> int:
     split_eval_path = _resolve_path(workspace, args.split_eval_out)
     out_root = _resolve_path(PROJECT_ROOT, args.out_root)
     run_root = out_root / args.run_name
+    state_dir = run_root / "pipeline_state"
     py = sys.executable
     explicit_subset_dir = None
     if str(args.vocab_subset_dir).strip():
@@ -257,6 +332,22 @@ def main() -> int:
         )
         if not pair_args:
             raise SystemExit("No source-target pair files could be assembled.")
+        pair_cfg_hash = _config_hash(
+            {
+                "source_langs": source_langs,
+                "target_langs": target_langs,
+                "allow_same_lang_pairs": bool(args.allow_same_lang_pairs),
+                "pairs_min_chars": int(args.pairs_min_chars),
+                "pairs_per_pair": int(args.pairs_per_pair),
+                "pairs_neg_strategy": str(args.pairs_neg_strategy),
+                "pairs_hard_neg_pool": int(args.pairs_hard_neg_pool),
+                "pairs_seed": int(args.pairs_seed),
+                "pairs_max_rows_per_input": int(args.pairs_max_rows_per_input),
+                "pairs_allow_line_mismatch": bool(args.pairs_allow_line_mismatch),
+                "seed_dir": str(source_seed_dir),
+            }
+        )
+        pair_done = state_dir / "pairs.done.json"
         pair_cmd = [
             py,
             str(MAKE_PAIRS_SCRIPT),
@@ -274,12 +365,24 @@ def main() -> int:
         ]
         if bool(args.pairs_allow_line_mismatch):
             pair_cmd.append("--allow-mismatched-pair-lines")
-        if args.resume and _count_jsonl(pairs_path) > 0:
-            print(f"[pairs] skip: existing non-empty {pairs_path}")
+        pair_outputs = [pairs_path, Path(pair_summary_out)]
+        if args.resume and _done_manifest_matches(pair_done, config_hash=pair_cfg_hash, outputs=pair_outputs):
+            print(f"[pairs] skip: done manifest verified at {pair_done}")
         else:
             _run(pair_cmd, dry_run=bool(args.dry_run))
+            if not args.dry_run:
+                _write_done_manifest(pair_done, step="pairs", config_hash=pair_cfg_hash, outputs=pair_outputs)
 
     if "split" in steps:
+        split_cfg_hash = _config_hash(
+            {
+                "eval_fraction": float(args.split_eval_fraction),
+                "eval_max_rows": int(args.split_eval_max_rows),
+                "min_eval_per_pair": int(args.split_min_eval_per_pair),
+                "pairs_path": str(pairs_path),
+            }
+        )
+        split_done = state_dir / "split.done.json"
         split_cmd = [
             py,
             str(SPLIT_PAIRS_SCRIPT),
@@ -290,10 +393,13 @@ def main() -> int:
             "--eval-max-rows", str(int(args.split_eval_max_rows)),
             "--min-eval-per-pair", str(int(args.split_min_eval_per_pair)),
         ]
-        if args.resume and _count_jsonl(split_train_path) > 0 and _count_jsonl(split_eval_path) > 0:
-            print(f"[split] skip: existing split outputs {split_train_path}, {split_eval_path}")
+        split_outputs = [split_train_path, split_eval_path]
+        if args.resume and _done_manifest_matches(split_done, config_hash=split_cfg_hash, outputs=split_outputs):
+            print(f"[split] skip: done manifest verified at {split_done}")
         else:
             _run(split_cmd, dry_run=bool(args.dry_run))
+            if not args.dry_run:
+                _write_done_manifest(split_done, step="split", config_hash=split_cfg_hash, outputs=split_outputs)
 
     if "subset" in steps:
         if not VOCAB_SUBSET_SCRIPT.exists():
@@ -409,6 +515,7 @@ def main() -> int:
             "--lr", str(float(args.lr)),
             "--log-every", str(int(args.log_every)),
             "--save-every", str(int(args.save_every)),
+            "--select-best-checkpoint" if bool(args.select_best_checkpoint) else "--no-select-best-checkpoint",
             "--lambda-kd", str(float(args.lambda_kd)),
             "--mu-triplet", str(float(args.mu_triplet)),
             "--margin", str(float(args.margin)),

@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import math
 import re
 import random
 import statistics
@@ -31,6 +32,21 @@ except Exception:  # pragma: no cover - optional dependency
     LoraConfig = None
     TaskType = None
     get_peft_model = None
+
+REQUIRED_TRANSLATE_PAIR_CANONICAL_KEYS = (
+    "src_lang",
+    "tgt_lang",
+    "pair",
+    "source",
+    "target_pos",
+    "target_neg",
+)
+REQUIRED_TRANSLATE_PAIR_COMPAT_KEYS = (
+    "lang",
+    "query",
+    "pos",
+    "neg",
+)
 
 
 @dataclass(frozen=True)
@@ -188,9 +204,22 @@ def _parse_args() -> argparse.Namespace:
         default="",
         help="Optional resume source path (checkpoint dir, stage dir, or run root). Defaults to --out-root/--run-name.",
     )
+    ap.add_argument("--select-best-checkpoint", action="store_true", help="Export best-loss checkpoint as final output.")
+    ap.add_argument("--no-select-best-checkpoint", dest="select_best_checkpoint", action="store_false")
+    ap.set_defaults(select_best_checkpoint=True)
 
     ap.add_argument("--grad-clip", type=float, default=1.0)
     ap.add_argument("--skip-kd-when-device-mismatch", action="store_true")
+    ap.add_argument(
+        "--allow-compat-mismatch",
+        action="store_true",
+        help="Allow source/query and target_pos/pos alias mismatches in input JSONL.",
+    )
+    ap.add_argument(
+        "--allow-partial-contract",
+        action="store_true",
+        help="Allow rows that omit compatibility alias keys (lang/query/pos/neg).",
+    )
     return ap.parse_args()
 
 
@@ -331,7 +360,61 @@ def _restore_ids_to_old_vocab(token_ids: torch.Tensor, remap: VocabRemap) -> tor
     return torch.tensor(restored, dtype=torch.long, device=token_ids.device)
 
 
-def _load_pairs(paths: Iterable[Path], source_langs: set[str], target_langs: set[str]) -> list[Example]:
+def _contract_text(value: Any) -> str:
+    return " ".join(_safe_text(value).split())
+
+
+def _validate_pair_contract(
+    obj: dict[str, Any],
+    *,
+    path: Path,
+    line_no: int,
+    allow_compat_mismatch: bool,
+    allow_partial_contract: bool,
+) -> None:
+    required = REQUIRED_TRANSLATE_PAIR_CANONICAL_KEYS
+    if not allow_partial_contract:
+        required = REQUIRED_TRANSLATE_PAIR_CANONICAL_KEYS + REQUIRED_TRANSLATE_PAIR_COMPAT_KEYS
+    missing = [k for k in required if k not in obj]
+    if missing:
+        raise RuntimeError(f"{path}:{line_no}: missing required keys: {missing}")
+
+    src_lang = _contract_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
+    tgt_lang = _contract_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
+    pair = _contract_text(obj.get("pair"))
+    source = _contract_text(obj.get("source"))
+    target_pos = _contract_text(obj.get("target_pos") or obj.get("pos"))
+    target_neg = _contract_text(obj.get("target_neg") or obj.get("neg"))
+    if not src_lang or not tgt_lang or not source or not target_pos or not pair:
+        raise RuntimeError(f"{path}:{line_no}: canonical translation fields contain empty values")
+    expected_pair = f"{src_lang}-{tgt_lang}"
+    if pair != expected_pair:
+        raise RuntimeError(f"{path}:{line_no}: pair='{pair}' does not match src/tgt '{expected_pair}'")
+
+    query = _contract_text(obj.get("query"))
+    pos = _contract_text(obj.get("pos"))
+    neg = _contract_text(obj.get("neg"))
+    lang = _contract_text(obj.get("lang"))
+    has_compat_alias = any(k in obj for k in REQUIRED_TRANSLATE_PAIR_COMPAT_KEYS)
+    if has_compat_alias and not allow_compat_mismatch:
+        if query and query != source:
+            raise RuntimeError(f"{path}:{line_no}: source/query mismatch")
+        if pos and pos != target_pos:
+            raise RuntimeError(f"{path}:{line_no}: target_pos/pos mismatch")
+        if target_neg and neg and neg != target_neg:
+            raise RuntimeError(f"{path}:{line_no}: target_neg/neg mismatch")
+        if lang and lang != tgt_lang:
+            raise RuntimeError(f"{path}:{line_no}: lang='{lang}' does not match tgt_lang='{tgt_lang}'")
+
+
+def _load_pairs(
+    paths: Iterable[Path],
+    source_langs: set[str],
+    target_langs: set[str],
+    *,
+    allow_compat_mismatch: bool,
+    allow_partial_contract: bool,
+) -> list[Example]:
     rows: list[Example] = []
     for path in paths:
         with path.open("r", encoding="utf-8") as f:
@@ -341,10 +424,17 @@ def _load_pairs(paths: Iterable[Path], source_langs: set[str], target_langs: set
                     continue
                 try:
                     obj = json.loads(line)
-                except Exception:
-                    continue
+                except Exception as exc:
+                    raise RuntimeError(f"{path}:{ln}: invalid JSON row: {exc}") from exc
                 if not isinstance(obj, dict):
-                    continue
+                    raise RuntimeError(f"{path}:{ln}: expected JSON object row")
+                _validate_pair_contract(
+                    obj,
+                    path=path,
+                    line_no=ln,
+                    allow_compat_mismatch=allow_compat_mismatch,
+                    allow_partial_contract=allow_partial_contract,
+                )
                 source_lang = _safe_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
                 target_lang = _safe_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
                 source = _safe_text(obj.get("source"))
@@ -828,6 +918,9 @@ def _save_checkpoint(
     optimizer: torch.optim.Optimizer | None = None,
     scheduler: Any | None = None,
     rng: random.Random | None = None,
+    loss_last: float | None = None,
+    loss_mean20: float | None = None,
+    stage_name: str = "",
 ) -> None:
     ckpt = stage_dir / f"checkpoint-{step:06d}"
     ckpt.mkdir(parents=True, exist_ok=True)
@@ -852,6 +945,12 @@ def _save_checkpoint(
             state["random_state"] = rng.getstate()
         except Exception:
             pass
+    if stage_name:
+        state["stage"] = str(stage_name)
+    if loss_last is not None:
+        state["loss_last"] = float(loss_last)
+    if loss_mean20 is not None:
+        state["loss_mean20"] = float(loss_mean20)
     state["torch_rng_state"] = torch.get_rng_state()
     if torch.cuda.is_available():
         try:
@@ -862,6 +961,44 @@ def _save_checkpoint(
         state,
         ckpt / "training_state.pt",
     )
+
+
+def _checkpoint_loss(path: Path) -> float | None:
+    state = _load_checkpoint_state(path)
+    raw = state.get("loss_mean20", state.get("loss_last"))
+    if isinstance(raw, torch.Tensor):
+        if raw.numel() == 1:
+            raw = float(raw.item())
+        else:
+            return None
+    if isinstance(raw, (int, float)):
+        val = float(raw)
+        if math.isfinite(val):
+            return val
+    return None
+
+
+def _select_best_checkpoint(dir_path: Path) -> Path | None:
+    if not dir_path.exists():
+        return None
+    candidates = sorted(
+        [p for p in dir_path.glob("checkpoint-*") if _is_valid_checkpoint_dir(p)],
+        key=_checkpoint_step,
+    )
+    if not candidates:
+        return None
+    best_path: Path | None = None
+    best_loss = math.inf
+    for ckpt in candidates:
+        loss = _checkpoint_loss(ckpt)
+        if loss is None:
+            continue
+        if loss < best_loss:
+            best_loss = loss
+            best_path = ckpt
+    if best_path is not None:
+        return best_path
+    return candidates[-1]
 
 
 def _save_predictions(
@@ -957,6 +1094,7 @@ def _train_stage(
     student.train()
     if teacher is not None:
         teacher.eval()
+    optimizer.zero_grad(set_to_none=True)
     losses = []
     ce_hist: list[float] = []
     kd_hist: list[float] = []
@@ -977,6 +1115,8 @@ def _train_stage(
         }
 
     remaining_steps = max(0, total - start)
+    accum_steps = max(1, int(args.accum_steps))
+    micro_since_update = 0
     for local_step in range(remaining_steps):
         step = start + local_step
         batch_idx = [rng.randrange(len(rows)) for _ in range(int(args.batch_size))]
@@ -1025,16 +1165,15 @@ def _train_stage(
 
         loss_triplet = torch.tensor(0.0, device=student_logits.device)
         if batch_use_triplet and neg_ids is not None:
-            with torch.no_grad():
-                # Triplet always uses student logits; no gradient from neg through this term.
-                neg_ids_student = _remap_ids(neg_ids, vocab_remap) if vocab_remap is not None else neg_ids
-                neg_labels_student = _remap_labels(neg_labels, vocab_remap) if vocab_remap is not None else neg_labels
-                neg_out = _forward_model(student, neg_ids_student, neg_mask, neg_token_types)
-                neg_logits = (
-                    _project_teacher_logits_to_subset(neg_out.logits, vocab_remap)
-                    if vocab_remap is not None
-                    else neg_out.logits
-                )
+            # Keep grad enabled so triplet updates both positive and negative branches.
+            neg_ids_student = _remap_ids(neg_ids, vocab_remap) if vocab_remap is not None else neg_ids
+            neg_labels_student = _remap_labels(neg_labels, vocab_remap) if vocab_remap is not None else neg_labels
+            neg_out = _forward_model(student, neg_ids_student, neg_mask, neg_token_types)
+            neg_logits = (
+                _project_teacher_logits_to_subset(neg_out.logits, vocab_remap)
+                if vocab_remap is not None
+                else neg_out.logits
+            )
             loss_triplet = _triplet_loss(
                 pos_logits=student_logits_loss,
                 pos_labels=pos_labels_student,
@@ -1048,12 +1187,15 @@ def _train_stage(
             continue
 
         loss.backward()
-        if (step + 1) % int(args.accum_steps) == 0:
+        micro_since_update += 1
+        is_last_micro = (local_step + 1) >= remaining_steps
+        if micro_since_update >= accum_steps or is_last_micro:
             if float(args.grad_clip) > 0:
                 torch.nn.utils.clip_grad_norm_(student.parameters(), float(args.grad_clip))
             optimizer.step()
             scheduler.step()
             optimizer.zero_grad(set_to_none=True)
+            micro_since_update = 0
 
         loss_val = float(loss.item())
         losses.append(loss_val)
@@ -1082,9 +1224,31 @@ def _train_stage(
             )
 
         if int(args.save_every) > 0 and global_step % int(args.save_every) == 0:
-            _save_checkpoint(student, tokenizer, stage_dir, step=global_step, optimizer=optimizer, scheduler=scheduler, rng=rng)
+            _save_checkpoint(
+                student,
+                tokenizer,
+                stage_dir,
+                step=global_step,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                rng=rng,
+                loss_last=(losses[-1] if losses else None),
+                loss_mean20=(statistics.fmean(losses[-min(len(losses), 20):]) if losses else None),
+                stage_name=stage_name,
+            )
     if not losses or total > 0:
-        _save_checkpoint(student, tokenizer, stage_dir, step=total, optimizer=optimizer, scheduler=scheduler, rng=rng)
+        _save_checkpoint(
+            student,
+            tokenizer,
+            stage_dir,
+            step=total,
+            optimizer=optimizer,
+            scheduler=scheduler,
+            rng=rng,
+            loss_last=(losses[-1] if losses else None),
+            loss_mean20=(statistics.fmean(losses[-min(len(losses), 20):]) if losses else None),
+            stage_name=stage_name,
+        )
 
     pred_path = _save_predictions(student, tokenizer, vocab_remap, rows, args, stage_dir, device=device)
     return {
@@ -1124,7 +1288,13 @@ def main() -> int:
     source_langs = _parse_csv_set(str(args.source_langs))
     target_langs = _parse_csv_set(str(args.target_langs))
     pair_inputs = _resolve_jsonl_inputs(str(args.pairs))
-    pair_rows = _load_pairs(pair_inputs, source_langs=source_langs, target_langs=target_langs)
+    pair_rows = _load_pairs(
+        pair_inputs,
+        source_langs=source_langs,
+        target_langs=target_langs,
+        allow_compat_mismatch=bool(args.allow_compat_mismatch),
+        allow_partial_contract=bool(args.allow_partial_contract),
+    )
     if args.max_steps_per_row > 0:
         pair_rows = pair_rows[: int(args.max_steps_per_row)]
     if not pair_rows:
@@ -1225,7 +1395,11 @@ def main() -> int:
 
     student.train()
     optimizer = _build_optimizer(student, args)
-    total_updates = sft_steps + (distill_steps if args.schedule == "A_then_B" else max_steps)
+    accum_steps = max(1, int(args.accum_steps))
+    if args.schedule == "A_then_B":
+        total_updates = ((int(sft_steps) + accum_steps - 1) // accum_steps) + ((int(distill_steps) + accum_steps - 1) // accum_steps)
+    else:
+        total_updates = (int(max_steps) + accum_steps - 1) // accum_steps
     scheduler = _build_scheduler(optimizer, args, max(1, total_updates))
 
     rng = random.Random(int(args.seed))
@@ -1279,6 +1453,9 @@ def main() -> int:
             mixed_start = min(resume_step, int(max_steps))
 
     stage_results: list[dict[str, Any]] = []
+
+    export_stage_dir: Path | None = None
+    export_stage_name = ""
 
     if args.schedule == "A_then_B":
         run_stage_a = True
@@ -1337,6 +1514,12 @@ def main() -> int:
                 vocab_remap=vocab_remap,
             )
             stage_results.append(stage_b)
+        if _latest_checkpoint(stage_b_dir) is not None:
+            export_stage_dir = stage_b_dir
+            export_stage_name = "stage_b"
+        elif _latest_checkpoint(stage_a_dir) is not None:
+            export_stage_dir = stage_a_dir
+            export_stage_name = "stage_a"
     else:
         run_stage_mixed = True
         if bool(args.resume):
@@ -1366,11 +1549,41 @@ def main() -> int:
                 vocab_remap=vocab_remap,
             )
             stage_results.append(stage_mix)
+        if _latest_checkpoint(stage_mix_dir) is not None:
+            export_stage_dir = stage_mix_dir
+            export_stage_name = "mixed"
+
+    selected_checkpoint: Path | None = None
+    selected_checkpoint_loss: float | None = None
+    if export_stage_dir is not None:
+        if bool(args.select_best_checkpoint):
+            selected_checkpoint = _select_best_checkpoint(export_stage_dir)
+        else:
+            selected_checkpoint = _latest_checkpoint(export_stage_dir)
+        if selected_checkpoint is not None:
+            selected_checkpoint_loss = _checkpoint_loss(selected_checkpoint)
+            print(
+                f"[checkpoint] selected stage={export_stage_name} ckpt={selected_checkpoint} "
+                f"loss={selected_checkpoint_loss if selected_checkpoint_loss is not None else 'n/a'}"
+            )
 
     final_ckpt = run_root / "final"
     final_ckpt.mkdir(parents=True, exist_ok=True)
-    student.save_pretrained(str(final_ckpt))
-    tok.save_pretrained(str(final_ckpt))
+    if selected_checkpoint is not None:
+        export_model = AutoModelForCausalLM.from_pretrained(
+            str(selected_checkpoint),
+            local_files_only=True,
+            low_cpu_mem_usage=True,
+            torch_dtype=dtype,
+        )
+        export_model.save_pretrained(str(final_ckpt))
+        export_tok = AutoTokenizer.from_pretrained(str(selected_checkpoint), local_files_only=True, use_fast=True)
+        if export_tok.pad_token is None:
+            export_tok.pad_token = export_tok.eos_token
+        export_tok.save_pretrained(str(final_ckpt))
+    else:
+        student.save_pretrained(str(final_ckpt))
+        tok.save_pretrained(str(final_ckpt))
     summary = {
         "timestamp": time.time(),
         "teacher_model": str(args.teacher_model),
@@ -1398,6 +1611,10 @@ def main() -> int:
         "resume_from": str(resume_checkpoint) if resume_checkpoint is not None else "",
         "resume_stage": resume_stage,
         "resume_step": int(resume_step),
+        "select_best_checkpoint": bool(args.select_best_checkpoint),
+        "selected_checkpoint": str(selected_checkpoint) if selected_checkpoint is not None else "",
+        "selected_checkpoint_stage": export_stage_name,
+        "selected_checkpoint_loss": float(selected_checkpoint_loss) if selected_checkpoint_loss is not None else None,
         "stages": stage_results,
         "final_out": str(final_ckpt),
     }

@@ -24,6 +24,8 @@ import sys
 import os
 import warnings
 
+from src.core.command_router import run_python_entrypoint, run_codegen_command
+
 warnings.filterwarnings(
     "ignore",
     message=r".*torch_dtype.*deprecated.*",
@@ -519,93 +521,32 @@ def main():
     # Route to the appropriate command
     if args.command == 'game':
         from src.game.cli import main as game_main
-        sys.argv = ['gamma.py'] + remaining_args
-        game_main()
+        run_python_entrypoint('gamma.py', game_main, remaining_args)
 
     elif args.command == 'mind-meld':
         from tools.run_mind_meld_cli import main as mind_meld_main
-        sys.argv = ['run_mind_meld_cli.py'] + remaining_args
-        mind_meld_main()
+        run_python_entrypoint('run_mind_meld_cli.py', mind_meld_main, remaining_args)
 
     elif args.command == 'comparison':
         from src.game.cli import main as game_main
-        sys.argv = ['gamma.py', '--comparison'] + remaining_args
-        game_main()
+        run_python_entrypoint('gamma.py', game_main, remaining_args, extra_args=['--comparison'])
 
     elif args.command == 'benchmark':
         from tools.benchmark_model_speed import main as benchmark_main
-        sys.argv = ['benchmark_model_speed.py'] + remaining_args
-        benchmark_main()
+        run_python_entrypoint('benchmark_model_speed.py', benchmark_main, remaining_args)
 
     elif args.command == 'codegen':
-        # Route to code generation benchmarks
-        if len(remaining_args) == 0 or remaining_args[0] in ['-h', '--help']:
-            print_command_help('codegen')
-            sys.exit(0)
-
-        suite_type = remaining_args[0] if remaining_args else 'mind-meld'
-
-        if suite_type == 'mind-meld':
-            # Run mind meld benchmarks
-            from src.benchmarks.mind_meld_benchmark import main as codegen_mm_main
-            sys.argv = ['mind_meld_benchmark.py'] + remaining_args[1:]
-            codegen_mm_main()
-
-        elif suite_type == 'language':
-            # Run language comparison benchmarks (Node.js)
-            benchmark_dir = os.path.join(ROOT_DIR, 'src', 'benchmarks', 'codegen')
-            if not os.path.exists(benchmark_dir):
-                print(f"Error: codegen benchmarks not found at {benchmark_dir}")
-                sys.exit(1)
-
-            print("Running TypeScript vs JavaScript benchmarks (Node.js)...")
-            print(f"  Working directory: {benchmark_dir}\n")
-
-            import subprocess
-            cmd = ['node', 'index.js'] + remaining_args[1:]
-            try:
-                result = subprocess.run(cmd, cwd=benchmark_dir)
-                sys.exit(result.returncode)
-            except FileNotFoundError:
-                print("Error: Node.js not found. Install from https://nodejs.org/")
-                sys.exit(1)
-            except Exception as e:
-                print(f"Error running benchmark: {e}")
-                sys.exit(1)
-
-        elif suite_type == 'all':
-            print("Running all codegen benchmarks...")
-            print("\n" + "="*70)
-            print("1/2 - Mind Meld Benchmarks")
-            print("="*70)
-            from src.benchmarks.mind_meld_benchmark import main as codegen_mm_main
-            sys.argv = ['mind_meld_benchmark.py'] + remaining_args[1:]
-            codegen_mm_main()
-
-            print("\n" + "="*70)
-            print("2/2 - Language Comparison Benchmarks")
-            print("="*70)
-            benchmark_dir = os.path.join(ROOT_DIR, 'src', 'benchmarks', 'codegen')
-            import subprocess
-            subprocess.run(['node', 'index.js'] + remaining_args[1:], cwd=benchmark_dir)
-
-        else:
-            print(f"Unknown codegen benchmark type: {suite_type}")
-            print("Available types: mind-meld, language, all")
-            print_command_help('codegen')
-            sys.exit(1)
+        run_codegen_command(remaining_args, ROOT_DIR, print_command_help)
 
     elif args.command == 'list':
         # List available models
         from tools.list_models import main as list_main
-        sys.argv = ['list_models.py'] + remaining_args
-        list_main()
+        run_python_entrypoint('list_models.py', list_main, remaining_args)
 
     elif args.command == 'select':
         # Run engine selector
         from tools.engine_selector import main as selector_main
-        sys.argv = ['engine_selector.py'] + remaining_args
-        selector_main()
+        run_python_entrypoint('engine_selector.py', selector_main, remaining_args)
 
     elif args.command == 'help':
         if remaining_args:

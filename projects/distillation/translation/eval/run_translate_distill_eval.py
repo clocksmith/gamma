@@ -58,6 +58,21 @@ class VocabRemap:
     unk_old: int
     unk_new: int
 
+REQUIRED_TRANSLATE_PAIR_CANONICAL_KEYS = (
+    "src_lang",
+    "tgt_lang",
+    "pair",
+    "source",
+    "target_pos",
+    "target_neg",
+)
+REQUIRED_TRANSLATE_PAIR_COMPAT_KEYS = (
+    "lang",
+    "query",
+    "pos",
+    "neg",
+)
+
 
 def _safe_text(x: Any) -> str:
     if x is None:
@@ -304,6 +319,16 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--eval-comet", action="store_true", help="Compute COMET if comet package is available.")
     ap.add_argument("--comet-model", default="Unbabel/wmt22-comet-da", help="COMET checkpoint id/path.")
     ap.add_argument("--comet-batch-size", type=int, default=8)
+    ap.add_argument(
+        "--allow-compat-mismatch",
+        action="store_true",
+        help="Allow source/query and target_pos/pos alias mismatches in eval JSONL.",
+    )
+    ap.add_argument(
+        "--allow-partial-contract",
+        action="store_true",
+        help="Allow eval rows that omit compatibility alias keys (lang/query/pos/neg).",
+    )
     return ap.parse_args()
 
 
@@ -327,7 +352,62 @@ def _resolve_device(device: str, fallback: str = "cpu") -> str:
     return fallback
 
 
-def _load_rows(paths: list[Path], source_langs: set[str], target_langs: set[str], max_rows: int) -> list[EvalRow]:
+def _contract_text(value: Any) -> str:
+    return " ".join(_safe_text(value).split())
+
+
+def _validate_pair_contract(
+    obj: dict[str, Any],
+    *,
+    path: Path,
+    line_no: int,
+    allow_compat_mismatch: bool,
+    allow_partial_contract: bool,
+) -> None:
+    required = REQUIRED_TRANSLATE_PAIR_CANONICAL_KEYS
+    if not allow_partial_contract:
+        required = REQUIRED_TRANSLATE_PAIR_CANONICAL_KEYS + REQUIRED_TRANSLATE_PAIR_COMPAT_KEYS
+    missing = [k for k in required if k not in obj]
+    if missing:
+        raise RuntimeError(f"{path}:{line_no}: missing required keys: {missing}")
+
+    src_lang = _contract_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
+    tgt_lang = _contract_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
+    pair = _contract_text(obj.get("pair"))
+    source = _contract_text(obj.get("source"))
+    target_pos = _contract_text(obj.get("target_pos") or obj.get("pos"))
+    target_neg = _contract_text(obj.get("target_neg") or obj.get("neg"))
+    if not src_lang or not tgt_lang or not source or not target_pos or not pair:
+        raise RuntimeError(f"{path}:{line_no}: canonical translation fields contain empty values")
+    expected_pair = f"{src_lang}-{tgt_lang}"
+    if pair != expected_pair:
+        raise RuntimeError(f"{path}:{line_no}: pair='{pair}' does not match src/tgt '{expected_pair}'")
+
+    query = _contract_text(obj.get("query"))
+    pos = _contract_text(obj.get("pos"))
+    neg = _contract_text(obj.get("neg"))
+    lang = _contract_text(obj.get("lang"))
+    has_compat_alias = any(k in obj for k in REQUIRED_TRANSLATE_PAIR_COMPAT_KEYS)
+    if has_compat_alias and not allow_compat_mismatch:
+        if query and query != source:
+            raise RuntimeError(f"{path}:{line_no}: source/query mismatch")
+        if pos and pos != target_pos:
+            raise RuntimeError(f"{path}:{line_no}: target_pos/pos mismatch")
+        if target_neg and neg and neg != target_neg:
+            raise RuntimeError(f"{path}:{line_no}: target_neg/neg mismatch")
+        if lang and lang != tgt_lang:
+            raise RuntimeError(f"{path}:{line_no}: lang='{lang}' does not match tgt_lang='{tgt_lang}'")
+
+
+def _load_rows(
+    paths: list[Path],
+    source_langs: set[str],
+    target_langs: set[str],
+    max_rows: int,
+    *,
+    allow_compat_mismatch: bool,
+    allow_partial_contract: bool,
+) -> list[EvalRow]:
     rows: list[EvalRow] = []
     for path in paths:
         with path.open("r", encoding="utf-8") as f:
@@ -337,10 +417,17 @@ def _load_rows(paths: list[Path], source_langs: set[str], target_langs: set[str]
                     continue
                 try:
                     obj = json.loads(line)
-                except Exception:
-                    continue
+                except Exception as exc:
+                    raise RuntimeError(f"{path}:{ln}: invalid JSON row: {exc}") from exc
                 if not isinstance(obj, dict):
-                    continue
+                    raise RuntimeError(f"{path}:{ln}: expected JSON object row")
+                _validate_pair_contract(
+                    obj,
+                    path=path,
+                    line_no=ln,
+                    allow_compat_mismatch=allow_compat_mismatch,
+                    allow_partial_contract=allow_partial_contract,
+                )
                 source_lang = _safe_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
                 target_lang = _safe_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
                 source = _safe_text(obj.get("source"))
@@ -793,7 +880,14 @@ def main() -> int:
     source_langs = _parse_csv_set(str(args.source_langs))
     target_langs = _parse_csv_set(str(args.target_langs))
     pair_inputs = _resolve_jsonl_inputs(str(args.pairs))
-    rows = _load_rows(pair_inputs, source_langs=source_langs, target_langs=target_langs, max_rows=int(args.eval_samples))
+    rows = _load_rows(
+        pair_inputs,
+        source_langs=source_langs,
+        target_langs=target_langs,
+        max_rows=int(args.eval_samples),
+        allow_compat_mismatch=bool(args.allow_compat_mismatch),
+        allow_partial_contract=bool(args.allow_partial_contract),
+    )
     if not rows:
         raise RuntimeError("No evaluation rows after loading/filters.")
 

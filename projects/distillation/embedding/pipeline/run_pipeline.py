@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures as cf
+import hashlib
 import json
 import os
 import random
@@ -56,6 +57,74 @@ def _run(cmd: list[str]) -> None:
     finally:
         elapsed = time.perf_counter() - start
         print(f"[run] elapsed={elapsed:.2f}s")
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        while True:
+            chunk = f.read(1024 * 1024)
+            if not chunk:
+                break
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _config_hash(payload: dict) -> str:
+    blob = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def _write_done_manifest(path: Path, *, step: str, config_hash: str, outputs: list[Path]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "step": step,
+        "completed_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "config_hash": config_hash,
+        "outputs": [
+            {
+                "path": str(p),
+                "bytes": int(p.stat().st_size),
+                "sha256": _sha256_file(p),
+            }
+            for p in outputs
+            if p.exists() and p.is_file()
+        ],
+    }
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.replace(path)
+
+
+def _done_manifest_matches(path: Path, *, config_hash: str, outputs: list[Path]) -> bool:
+    if not path.exists():
+        return False
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    if str(obj.get("config_hash", "")) != str(config_hash):
+        return False
+    by_path = {
+        str(item.get("path", "")): item
+        for item in obj.get("outputs", [])
+        if isinstance(item, dict) and item.get("path")
+    }
+    for out in outputs:
+        if not out.exists() or not out.is_file():
+            return False
+        rec = by_path.get(str(out))
+        if not rec:
+            return False
+        try:
+            want_bytes = int(rec.get("bytes", -1))
+        except Exception:
+            return False
+        if int(out.stat().st_size) != want_bytes:
+            return False
+        if str(rec.get("sha256", "")) != _sha256_file(out):
+            return False
+    return True
 
 
 def _resolve_hf_snapshot_dir(model_ref: str) -> str:
@@ -598,6 +667,10 @@ def main() -> int:
     ap.add_argument("--distill-alpha-triplet", type=float, default=0.25)
     ap.add_argument("--distill-triplet-margin", type=float, default=0.05)
     ap.add_argument("--distill-alpha-sim-distill", type=float, default=0.25)
+    ap.add_argument("--distill-save-every", type=int, default=100)
+    ap.add_argument("--distill-select-best-checkpoint", action="store_true")
+    ap.add_argument("--no-distill-select-best-checkpoint", dest="distill_select_best_checkpoint", action="store_false")
+    ap.set_defaults(distill_select_best_checkpoint=True)
 
     # benchmark step
     ap.add_argument("--benchmark-repeats", type=int, default=3)
@@ -659,6 +732,7 @@ def main() -> int:
     pairs_path = ws / "training" / "distill_pairs.jsonl"
     distill_root = Path(args.distill_out_root) if args.distill_out_root else (ws / "models" / "distilled")
     benchmark_out = ws / "eval" / "benchmark"
+    state_dir = ws / "pipeline_state"
 
     if not (0.0 < float(args.train_frac) < 1.0):
         raise SystemExit(f"--train-frac must be in (0,1), got {args.train_frac}")
@@ -838,8 +912,18 @@ def main() -> int:
         _run_parallel(langs, _dataset_one, max_workers=int(args.parallel_workers), label="dataset")
 
     if "pairs" in steps:
-        if args.resume and _count_jsonl(pairs_path) > 0:
-            print(f"[pairs] skip: existing non-empty {pairs_path}")
+        pairs_cfg_hash = _config_hash(
+            {
+                "datasets_train_dir": str(datasets_train_dir),
+                "langs": langs,
+                "pairs_per_lang": int(args.pairs_per_lang),
+                "neg_strategy": str(args.pairs_neg_strategy),
+                "hard_neg_pool": int(args.pairs_hard_neg_pool),
+            }
+        )
+        pairs_done = state_dir / "pairs.done.json"
+        if args.resume and _done_manifest_matches(pairs_done, config_hash=pairs_cfg_hash, outputs=[pairs_path]):
+            print(f"[pairs] skip: done manifest verified at {pairs_done}")
         else:
             _run([
                 py, str(pairs_script),
@@ -850,6 +934,7 @@ def main() -> int:
                 "--hard-neg-pool", str(int(args.pairs_hard_neg_pool)),
                 "--out", str(pairs_path),
             ])
+            _write_done_manifest(pairs_done, step="pairs", config_hash=pairs_cfg_hash, outputs=[pairs_path])
 
     if "subsets" in steps:
         subset_model_ref = str(args.subset_model) if args.subset_model else str(args.base_model)
@@ -919,8 +1004,33 @@ def main() -> int:
                 return
 
             out_dir = Path(distill_root) / f"{subset_dir.name}-distilled"
-            if args.resume and (out_dir / "train_summary.json").exists():
-                print(f"[distill] skip {target}: resume and output exists {out_dir}")
+            distill_cfg_hash = _config_hash(
+                {
+                    "target": target,
+                    "target_langs": target_langs,
+                    "base_model": str(args.base_model),
+                    "subset_dir": str(subset_dir),
+                    "pairs_path": str(pairs_path),
+                    "device": str(args.distill_device),
+                    "max_length": int(args.distill_max_length),
+                    "batch_size": int(args.distill_batch_size),
+                    "steps": int(args.distill_steps),
+                    "lr": float(args.distill_lr),
+                    "weight_decay": float(args.distill_weight_decay),
+                    "temperature": float(args.distill_temperature),
+                    "alpha_contrastive": float(args.distill_alpha_contrastive),
+                    "beta_distill": float(args.distill_beta_distill),
+                    "alpha_triplet": float(args.distill_alpha_triplet),
+                    "triplet_margin": float(args.distill_triplet_margin),
+                    "alpha_sim_distill": float(args.distill_alpha_sim_distill),
+                    "seed": int(args.seed),
+                }
+            )
+            safe_target = target.replace("/", "_")
+            distill_done = state_dir / f"distill.{safe_target}.done.json"
+            distill_outputs = [out_dir / "train_summary.json", out_dir / "id_remap.json"]
+            if args.resume and _done_manifest_matches(distill_done, config_hash=distill_cfg_hash, outputs=distill_outputs):
+                print(f"[distill] skip {target}: done manifest verified at {distill_done}")
                 return
 
             print(
@@ -947,8 +1057,12 @@ def main() -> int:
                 "--alpha-triplet", str(float(args.distill_alpha_triplet)),
                 "--triplet-margin", str(float(args.distill_triplet_margin)),
                 "--alpha-sim-distill", str(float(args.distill_alpha_sim_distill)),
+                "--save-every", str(int(args.distill_save_every)),
                 "--seed", str(int(args.seed)),
-            ])
+            ] + (["--select-best-checkpoint"] if bool(args.distill_select_best_checkpoint) else ["--no-select-best-checkpoint"]) + (
+                ["--resume", "--resume-from", str(out_dir)] if bool(args.resume) else []
+            ))
+            _write_done_manifest(distill_done, step=f"distill:{target}", config_hash=distill_cfg_hash, outputs=distill_outputs)
             print(f"[distill] done target={target} elapsed={time.perf_counter() - t0:.2f}s out={out_dir}")
         _run_parallel(distill_targets, _distill_target, max_workers=int(args.parallel_workers), label="distill")
 
