@@ -17,7 +17,7 @@ Tests the progressive difficulty system:
 
 **Run:**
 ```bash
-python3 tests/test_difficulty.py
+python3 -m pytest tests/test_difficulty.py
 ```
 
 **Expected output:**
@@ -46,22 +46,20 @@ Test Results: 9 passed, 0 failed
 ### All Tests
 
 ```bash
-# Run test runner script
+# Run the pytest wrapper (fail-fast, full errors)
 ./run_tests.sh
 
-# Or manually
-python3 tests/test_difficulty.py
+# Or run pytest directly
+python3 -m pytest tests
 ```
 
 ### Individual Tests
 
-```python
-python3 -c "
-import sys
-sys.path.insert(0, '.')
-from tests.test_difficulty import test_level_up
-test_level_up()
-"
+```bash
+python3 -m pytest tests/test_difficulty.py::test_level_up
+python3 -m pytest tests/test_docs_cli_parity.py -m docs
+python3 -m pytest tests/test_command_router.py -m regression
+python3 -m pytest tests/test_fallback_telemetry.py -m regression
 ```
 
 ## Test Coverage
@@ -69,6 +67,8 @@ test_level_up()
 Current coverage:
 
 - ✅ Difficulty system (9 tests)
+- ✅ Command routing regressions
+- ✅ Fallback telemetry regressions
 - ⏳ Mind Meld visualization (TODO)
 - ⏳ Game logic (TODO)
 - ⏳ Session management (TODO)
@@ -79,10 +79,6 @@ Current coverage:
 ### Structure
 
 ```python
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from src.module import Class
 
 def test_feature():
@@ -97,8 +93,7 @@ def test_feature():
     assert result == expected, f"Expected {expected}, got {result}"
     print("✓ Test passed")
 
-if __name__ == '__main__':
-    test_feature()
+# Use pytest collection; tests/conftest.py handles repo bootstrap.
 ```
 
 ### Best Practices
@@ -172,27 +167,78 @@ with open("sessions/test_session.json", "w") as f:
 
 ## Continuous Integration
 
-(TODO: Set up CI/CD)
+CI should run this test suite on every pull request and on pushes to `main`
+via `/.github/workflows/ci.yml` (see root automation docs).
 
 ```yaml
-# .github/workflows/test.yml
-name: Tests
+# .github/workflows/ci.yml
+name: CI
 
 on: [push, pull_request]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: python -m pip install ruff
+      - run: ruff check --select E9,F63,F7,F82 .
+
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run tests
-        run: ./run_tests.sh
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install pytest
+      - run: ./run_tests.sh
+
+  smoke_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: python -m pip install -r requirements-base.txt
+      - run: python gamma.py help
+      - run: python gamma.py help game
+      - run: python gamma.py help mind-meld
+      - run: python gamma.py help benchmark
+      - run: python gamma.py help codegen
+```
+
+Branch protection should require these checks before merge to keep CI blocking.
+
+## Regression Gates
+
+Focused regression suites now include:
+
+- `tests/test_command_router.py`
+- `tests/test_fallback_telemetry.py`
+
+Run them directly:
+
+```bash
+python3 -m pytest tests/test_command_router.py -m regression
+python3 -m pytest tests/test_fallback_telemetry.py -m regression
+```
+
+## Docs vs Runtime Drift Gate
+
+The docs parity check lives in:
+
+- `tests/test_docs_cli_parity.py`
+
+It validates:
+
+1. Required CLI snippets are still present in `README.md`.
+2. Top-level `gamma.py --help` still exposes documented commands.
+3. `gamma.py help <command>` still resolves for documented subcommands.
+
+Run it directly:
+
+```bash
+python3 -m pytest tests/test_docs_cli_parity.py -m docs
 ```
 
 ## Debugging Tests

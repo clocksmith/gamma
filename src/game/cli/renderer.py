@@ -4,12 +4,16 @@ GAMMA CLI Renderer
 This module handles all terminal output, formatting, and display functions.
 """
 
+import logging
 import shutil
 from typing import List, Optional, Tuple
 
 from src.core import config as cfg
+from src.core.fallback_telemetry import FallbackTelemetry
 from src.ui import displays as ui
 
+logger = logging.getLogger(__name__)
+_FALLBACKS = FallbackTelemetry("game_cli_renderer", logger)
 
 # ============================================================================
 # Attention History Tracking
@@ -48,7 +52,8 @@ class AttentionHistoryTracker:
         """Get maximum display width based on terminal."""
         try:
             return shutil.get_terminal_size().columns
-        except Exception:
+        except (AttributeError, OSError, ValueError) as exc:
+            _FALLBACKS.record("terminal_width_unavailable", exc)
             return 80
 
 
@@ -199,7 +204,8 @@ def display_game_header_enhanced(
     """Display enhanced game header with progress and streak."""
     try:
         term_width = shutil.get_terminal_size().columns
-    except Exception:
+    except (AttributeError, OSError, ValueError) as exc:
+        _FALLBACKS.record("header_terminal_width_unavailable", exc)
         term_width = 80
 
     # Build header components

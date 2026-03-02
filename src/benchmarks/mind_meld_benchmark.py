@@ -3,21 +3,42 @@ Comprehensive benchmarking suite for Mind Meld strategies.
 
 Tests different configurations across multiple dimensions:
 - Speed (tokens/sec)
-- Quality (perplexity, coherence)
+- Quality proxies (perplexity proxy, coherence proxy, lexical diversity)
 - Memory usage (VRAM)
 - Strategy effectiveness
 """
 
+import hashlib
+import logging
+import platform
+import random
 import time
 import json
+import sys
 from typing import List, Dict, Tuple, Optional, Any
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 import numpy as np
-from collections import defaultdict
 
+from src.core.fallback_telemetry import FallbackTelemetry
 from src.core.engine_interface import LLMEngine
 from src.mind_meld.core.meld_engine import MeldEngine
 from src.mind_meld.strategies.base_strategy import SwapStrategyBase
+
+logger = logging.getLogger(__name__)
+
+
+QUALITY_METRIC_CONTRACT: Dict[str, str] = {
+    "avg_perplexity_proxy": (
+        "Heuristic proxy computed as inverse max next-token probability from "
+        "single-step logits. Not corpus perplexity."
+    ),
+    "coherence_proxy_score": (
+        "Heuristic score derived from sentence-length variance and transition-word "
+        "counts. Not a reference-based coherence metric."
+    ),
+    "diversity_score": "Lexical diversity (unique words / total words).",
+    "swap_overhead_ms": "Estimated swap overhead (fixed ~5ms per swap), not measured latency.",
+}
 
 
 @dataclass
@@ -30,6 +51,7 @@ class BenchmarkConfig:
     temperature: float = 0.7
     top_k: int = 50
     top_p: float = 0.95
+    seed: int = 42
 
 
 @dataclass
@@ -47,9 +69,9 @@ class BenchmarkResult:
     peak_vram_mb: int
     avg_vram_mb: float
 
-    # Quality metrics
-    avg_perplexity: float
-    coherence_score: float
+    # Quality metrics (heuristic proxies; see QUALITY_METRIC_CONTRACT)
+    avg_perplexity_proxy: float
+    coherence_proxy_score: float
     diversity_score: float
 
     # Strategy metrics
@@ -68,9 +90,21 @@ class BenchmarkResult:
     guardrail_replays: int = 0
 
     # Metadata
-    timestamp: float
-    success: bool
+    timestamp: float = 0.0
+    success: bool = False
     error: Optional[str] = None
+    metric_contract: Dict[str, str] = field(default_factory=dict)
+    reproducibility: Dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def avg_perplexity(self) -> float:
+        """Backward-compatible alias for older consumers."""
+        return self.avg_perplexity_proxy
+
+    @property
+    def coherence_score(self) -> float:
+        """Backward-compatible alias for older consumers."""
+        return self.coherence_proxy_score
 
 
 @dataclass
@@ -105,11 +139,60 @@ class MindMeldBenchmark:
     def __init__(self, verbose: bool = True):
         self.verbose = verbose
         self.results: List[BenchmarkResult] = []
+        self._fallbacks = FallbackTelemetry("mind_meld_benchmark", logger)
 
     def _log(self, message: str):
         """Log if verbose."""
         if self.verbose:
             print(f"[Benchmark] {message}")
+
+    def _set_seed(self, seed: int) -> None:
+        """Set deterministic seeds for benchmark-side randomness."""
+        random.seed(int(seed))
+        np.random.seed(int(seed))
+        try:
+            import torch
+            torch.manual_seed(int(seed))
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(int(seed))
+        except (ImportError, AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            # Optional torch dependency for benchmark setup.
+            self._fallbacks.record("seed_torch_unavailable", exc)
+
+    def _collect_reproducibility_metadata(self, config: BenchmarkConfig, meld_engine: MeldEngine) -> Dict[str, Any]:
+        """Capture run metadata needed to reproduce benchmark behavior."""
+        model_fingerprints: List[Dict[str, Any]] = []
+        engines = getattr(meld_engine, "engines", [])
+        for idx, engine in enumerate(engines):
+            identity: Dict[str, Any] = {
+                "index": int(idx),
+                "class": engine.__class__.__name__,
+                "model_name": str(getattr(engine, "model_name", "")),
+                "model_path": str(getattr(engine, "model_path", "")),
+                "engine_name": str(getattr(engine, "engine_name", "")),
+                "device": str(getattr(engine, "device", "")),
+            }
+            blob = json.dumps(identity, sort_keys=True, default=str, separators=(",", ":"))
+            identity["fingerprint_sha256"] = hashlib.sha256(blob.encode("utf-8")).hexdigest()
+            model_fingerprints.append(identity)
+
+        metadata: Dict[str, Any] = {
+            "seed": int(config.seed),
+            "python_version": str(sys.version.split()[0]),
+            "platform": platform.platform(),
+            "numpy_version": str(np.__version__),
+            "model_fingerprints": model_fingerprints,
+        }
+        try:
+            import torch
+            metadata["torch_version"] = str(torch.__version__)
+            metadata["torch_cuda_available"] = bool(torch.cuda.is_available())
+        except (ImportError, AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            self._fallbacks.record("metadata_torch_unavailable", exc)
+            metadata["torch_version"] = ""
+            metadata["torch_cuda_available"] = False
+        metadata["fallback_counts"] = self._fallbacks.snapshot()
+        return metadata
 
     def _measure_vram(self) -> int:
         """Measure current VRAM usage in MB."""
@@ -117,12 +200,12 @@ class MindMeldBenchmark:
             import torch
             if torch.cuda.is_available():
                 return torch.cuda.memory_allocated() // (1024 ** 2)
-        except:
-            pass
+        except (ImportError, AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            self._fallbacks.record("measure_vram_failed", exc)
         return 0
 
     def _calculate_perplexity(self, logits: np.ndarray) -> float:
-        """Calculate perplexity from logits."""
+        """Calculate a next-token perplexity proxy from logits."""
         probs = np.exp(logits) / np.sum(np.exp(logits))
         max_prob = np.max(probs)
         return 1.0 / max(max_prob, 1e-10)
@@ -166,13 +249,14 @@ class MindMeldBenchmark:
     ) -> BenchmarkResult:
         """Run a single benchmark configuration."""
         self._log(f"Running benchmark: {config.strategy_name} with {len(config.models)} models")
+        self._set_seed(int(config.seed))
 
         # Warmup
         try:
             input_ids, mask = meld_engine.get_active_engine().encode("warmup", add_special_tokens=True)
             meld_engine.get_active_engine().predict_next(input_ids, mask, 0.7, 50, 0.95)
-        except:
-            pass
+        except (AttributeError, KeyError, RuntimeError, TypeError, ValueError) as exc:
+            self._fallbacks.record("warmup_failed", exc, level=logging.INFO)
 
         # Reset caches
         try:
@@ -180,8 +264,8 @@ class MindMeldBenchmark:
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
                 torch.cuda.reset_peak_memory_stats()
-        except:
-            pass
+        except (ImportError, AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            self._fallbacks.record("cache_reset_failed", exc)
 
         # Start benchmark
         start_time = time.time()
@@ -230,9 +314,10 @@ class MindMeldBenchmark:
                 if token_id == active_engine.get_eos_token_id():
                     break
 
-        except Exception as e:
+        except (AttributeError, KeyError, RuntimeError, TypeError, ValueError, IndexError) as e:
             success = False
             error = str(e)
+            self._fallbacks.record("benchmark_iteration_failed", e, level=logging.WARNING)
             self._log(f"Error during benchmark: {e}")
 
         # Calculate metrics
@@ -246,8 +331,8 @@ class MindMeldBenchmark:
         peak_vram = max(vram_samples) if vram_samples else 0
         avg_vram = np.mean(vram_samples) if vram_samples else 0
 
-        avg_perplexity = np.mean(perplexities) if perplexities else 0
-        coherence = self._calculate_coherence(generated)
+        avg_perplexity_proxy = np.mean(perplexities) if perplexities else 0
+        coherence_proxy = self._calculate_coherence(generated)
         diversity = self._calculate_diversity(generated)
 
         # Strategy-specific metrics
@@ -263,8 +348,8 @@ class MindMeldBenchmark:
             avg_token_latency=avg_token_latency,
             peak_vram_mb=peak_vram,
             avg_vram_mb=avg_vram,
-            avg_perplexity=avg_perplexity,
-            coherence_score=coherence,
+            avg_perplexity_proxy=avg_perplexity_proxy,
+            coherence_proxy_score=coherence_proxy,
             diversity_score=diversity,
             swap_count=swap_count,
             swap_overhead_ms=swap_overhead,
@@ -272,7 +357,9 @@ class MindMeldBenchmark:
             vram_samples=vram_samples,
             timestamp=time.time(),
             success=success,
-            error=error
+            error=error,
+            metric_contract=dict(QUALITY_METRIC_CONTRACT),
+            reproducibility=self._collect_reproducibility_metadata(config, meld_engine),
         )
 
         self.results.append(result)
@@ -311,7 +398,8 @@ class MindMeldBenchmark:
                 # Print summary
                 self._print_result_summary(result)
 
-            except Exception as e:
+            except (AttributeError, RuntimeError, TypeError, ValueError, OSError, ImportError) as e:
+                self._fallbacks.record("benchmark_suite_config_failed", e, level=logging.WARNING)
                 self._log(f"Failed to run benchmark {config.strategy_name}: {e}")
 
         return results
@@ -323,8 +411,8 @@ class MindMeldBenchmark:
         print(f"  Speed: {result.tokens_per_second:.2f} tokens/sec")
         print(f"  Avg Latency: {result.avg_token_latency*1000:.2f}ms/token")
         print(f"  Peak VRAM: {result.peak_vram_mb}MB")
-        print(f"  Avg Perplexity: {result.avg_perplexity:.2f}")
-        print(f"  Coherence: {result.coherence_score:.3f}")
+        print(f"  Avg Perplexity Proxy: {result.avg_perplexity_proxy:.2f}")
+        print(f"  Coherence Proxy: {result.coherence_proxy_score:.3f}")
         print(f"  Diversity: {result.diversity_score:.3f}")
         print(f"  Swaps: {result.swap_count}")
 
@@ -370,7 +458,7 @@ class MindMeldBenchmark:
             f"<p>Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}</p>",
             "<h2>Performance Comparison</h2>",
             "<table>",
-            "<tr><th>Strategy</th><th>Speed (tok/s)</th><th>Latency (ms)</th><th>VRAM (MB)</th><th>Perplexity</th><th>Coherence</th><th>Swaps</th></tr>"
+            "<tr><th>Strategy</th><th>Speed (tok/s)</th><th>Latency (ms)</th><th>VRAM (MB)</th><th>Perplexity Proxy</th><th>Coherence Proxy</th><th>Swaps</th></tr>"
         ]
 
         for result in sorted_results:
@@ -380,8 +468,8 @@ class MindMeldBenchmark:
             html_parts.append(f"<td>{result.tokens_per_second:.2f}</td>")
             html_parts.append(f"<td>{result.avg_token_latency*1000:.2f}</td>")
             html_parts.append(f"<td>{result.peak_vram_mb}</td>")
-            html_parts.append(f"<td>{result.avg_perplexity:.2f}</td>")
-            html_parts.append(f"<td>{result.coherence_score:.3f}</td>")
+            html_parts.append(f"<td>{result.avg_perplexity_proxy:.2f}</td>")
+            html_parts.append(f"<td>{result.coherence_proxy_score:.3f}</td>")
             html_parts.append(f"<td>{result.swap_count}</td>")
             html_parts.append("</tr>")
 
@@ -404,14 +492,19 @@ class MindMeldBenchmark:
                 'avg_token_latency': result.avg_token_latency,
                 'peak_vram_mb': result.peak_vram_mb,
                 'avg_vram_mb': result.avg_vram_mb,
-                'avg_perplexity': result.avg_perplexity,
-                'coherence_score': result.coherence_score,
+                'avg_perplexity_proxy': result.avg_perplexity_proxy,
+                'coherence_proxy_score': result.coherence_proxy_score,
                 'diversity_score': result.diversity_score,
                 'swap_count': result.swap_count,
                 'swap_overhead_ms': result.swap_overhead_ms,
                 'timestamp': result.timestamp,
                 'success': result.success,
-                'error': result.error
+                'error': result.error,
+                'metric_contract': result.metric_contract,
+                'reproducibility': result.reproducibility,
+                # Backward-compatible aliases
+                'avg_perplexity': result.avg_perplexity_proxy,
+                'coherence_score': result.coherence_proxy_score,
             }
             data.append(result_dict)
 
@@ -476,7 +569,8 @@ class MindMeldBenchmark:
                 result.guardrail_replays = kv_metrics['guardrail_replays']
 
                 results.append(result)
-            except Exception as e:
+            except (AttributeError, RuntimeError, TypeError, ValueError, OSError, ImportError) as e:
+                self._fallbacks.record("stability_run_failed", e, level=logging.WARNING)
                 self._log(f"  Run {i+1} failed: {e}")
 
         if not results:
@@ -615,7 +709,8 @@ class MindMeldBenchmark:
                 stability = self.run_stability_benchmark(config, create_engine, num_runs)
                 results[name] = stability
                 self._print_stability_summary(name, stability)
-            except Exception as e:
+            except (AttributeError, RuntimeError, TypeError, ValueError, OSError, ImportError) as e:
+                self._fallbacks.record("kv_strategy_failed", e, level=logging.WARNING)
                 self._log(f"Strategy {name} failed: {e}")
 
         return results
@@ -636,7 +731,8 @@ class MindMeldBenchmark:
         models: List[str],
         prompt: str,
         max_tokens: int = 100,
-        temperature: float = 0.7
+        temperature: float = 0.7,
+        seed: int = 42,
     ) -> List[BenchmarkResult]:
         """
         Compare multiple strategies on the same prompt.
@@ -665,7 +761,8 @@ class MindMeldBenchmark:
                 models=models,
                 prompt=prompt,
                 max_tokens=max_tokens,
-                temperature=temperature
+                temperature=temperature,
+                seed=int(seed),
             )
             configs.append(config)
 
@@ -703,7 +800,8 @@ class MindMeldBenchmark:
                     engine = get_engine(engine_name, model_name, {"mode": "benchmark"})
                     engine.load()
                     engines.append(engine)
-                except Exception as e:
+                except (AttributeError, RuntimeError, TypeError, ValueError, OSError, ImportError) as e:
+                    self._fallbacks.record("model_load_failed", e, level=logging.WARNING)
                     self._log(f"Failed to load model {model_spec}: {e}")
                     raise
 
@@ -726,12 +824,12 @@ class MindMeldBenchmark:
         print("\n" + "=" * 80)
         print("Strategy Comparison Summary")
         print("=" * 80)
-        print(f"{'Strategy':<20} {'Speed (t/s)':<15} {'Coherence':<12} {'Swaps':<10}")
+        print(f"{'Strategy':<20} {'Speed (t/s)':<15} {'Coherence*':<12} {'Swaps':<10}")
         print("-" * 80)
 
         for result in results:
             print(f"{result.config.strategy_name:<20} {result.tokens_per_second:<15.2f} "
-                  f"{result.coherence_score:<12.3f} {result.swap_count:<10}")
+                  f"{result.coherence_proxy_score:<12.3f} {result.swap_count:<10}")
 
         return results
 
@@ -806,6 +904,13 @@ Available strategies:
     )
 
     parser.add_argument(
+        '--seed',
+        type=int,
+        default=42,
+        help='Random seed used for benchmark-side reproducibility metadata (default: 42)'
+    )
+
+    parser.add_argument(
         '--output',
         type=str,
         default='benchmark_report.html',
@@ -836,6 +941,7 @@ Available strategies:
     print(f"Models: {', '.join(args.models)}")
     print(f"Prompt: {args.prompt[:50]}...")
     print(f"Max tokens: {args.max_tokens}")
+    print(f"Seed: {args.seed}")
     print("=" * 80)
 
     # Run comparison
@@ -845,7 +951,8 @@ Available strategies:
             models=args.models,
             prompt=args.prompt,
             max_tokens=args.max_tokens,
-            temperature=args.temperature
+            temperature=args.temperature,
+            seed=int(args.seed),
         )
 
         # Generate reports
@@ -858,7 +965,7 @@ Available strategies:
 
         print("\n✅ Benchmark complete!")
 
-    except Exception as e:
+    except (AttributeError, RuntimeError, TypeError, ValueError, OSError, ImportError) as e:
         print(f"\n❌ Benchmark failed: {e}")
         import traceback
         traceback.print_exc()

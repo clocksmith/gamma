@@ -6,10 +6,14 @@ Tests mind_meld with available Ollama models
 
 import subprocess
 import sys
-import os
 
 # Add project root to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ImportError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 
 def run_test(name, models, strategy, steps=20, extra_args=None):
     """Run a single mind_meld test"""

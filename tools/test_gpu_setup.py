@@ -5,10 +5,14 @@ Tests GPU detection, driver versions, and compute capabilities
 """
 
 import sys
-import os
 
 # Add project root to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ImportError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 
 from src.core.hardware.gpu_discovery import get_gpu_info, format_gpu_info
 

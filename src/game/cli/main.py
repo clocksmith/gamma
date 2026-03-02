@@ -10,6 +10,7 @@ Now with Penteract-inspired improvements:
 """
 
 import argparse
+import logging
 import sys
 import time
 import random
@@ -18,6 +19,7 @@ import numpy as np
 from typing import Optional, List, Dict, Any, Tuple
 
 from src.core import config as cfg
+from src.core.fallback_telemetry import FallbackTelemetry
 from src.ui import displays as ui
 from src.engines.engine_factory import get_engine, SUPPORTED_ENGINES
 from src.engines.capability_registry import get_engine_info
@@ -30,6 +32,9 @@ from src.mind_meld.mode import MindMeldMode
 from src.core.menu.interactive_menu import InteractiveMenu
 from src.game.cli.controller import run_game_loop as controller_run_game_loop
 from src.game.cli.commands import parse_arguments, apply_word_mode_presets, CLI_OVERRIDE_FLAGS
+
+logger = logging.getLogger(__name__)
+_FALLBACKS = FallbackTelemetry("game_cli", logger)
 
 
 STOP_TEXT_MARKERS = (
@@ -50,7 +55,8 @@ def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1, engine: Opti
     if engine is not None:
         try:
             return engine.concatenate_tensors(tensor1, tensor2, dim=dim)
-        except Exception as e:
+        except (AttributeError, RuntimeError, TypeError, ValueError) as e:
+            _FALLBACKS.record("concat_via_engine_failed", e)
             print(f"Warning: Failed to concatenate using engine abstraction: {e}")
     
     # Fallback for lists
@@ -235,7 +241,8 @@ def initialize_game_engine(args: argparse.Namespace) -> Optional[LLMEngine]:
                 print(f"  {key}: {value}")
 
         return engine
-    except Exception as e:
+    except (AttributeError, RuntimeError, TypeError, ValueError, OSError, ImportError) as e:
+        _FALLBACKS.record("engine_initialization_failed", e, level=logging.WARNING)
         error_msg = str(e)
         print(ui.color_text(f"\nFailed to initialize engine: {error_msg}", cfg.COLOR_RED))
 
@@ -276,7 +283,8 @@ def run_tutorial_mode(args: argparse.Namespace) -> None:
         tutorial.run_tutorial()
     except KeyboardInterrupt:
         print(ui.color_text("\n\nTutorial interrupted by user.", cfg.COLOR_YELLOW))
-    except Exception as e:
+    except (AttributeError, RuntimeError, TypeError, ValueError, OSError) as e:
+        _FALLBACKS.record("tutorial_mode_failed", e, level=logging.WARNING)
         print(ui.color_text(f"\n\nError in tutorial: {e}", cfg.COLOR_RED))
         if args.verbose:
             import traceback
@@ -348,7 +356,8 @@ def run_comparison_mode(args: argparse.Namespace) -> None:
             print(ui.color_text("\nFailed to load models for comparison.", cfg.COLOR_RED))
     except KeyboardInterrupt:
         print(ui.color_text("\n\nComparison interrupted by user.", cfg.COLOR_YELLOW))
-    except Exception as e:
+    except (AttributeError, RuntimeError, TypeError, ValueError, OSError) as e:
+        _FALLBACKS.record("comparison_mode_failed", e, level=logging.WARNING)
         print(ui.color_text(f"\n\nError in comparison: {e}", cfg.COLOR_RED))
         if args.verbose:
             import traceback
@@ -439,7 +448,8 @@ def _format_chat_history(history: list, engine: LLMEngine) -> str:
                 tokenize=False,
                 add_generation_prompt=True
             )
-        except Exception:
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            _FALLBACKS.record("chat_template_apply_failed", exc)
             pass  # Fall back to simple format
 
     # Simple turn-based format fallback
@@ -532,7 +542,8 @@ def _format_single_prompt(
             history.append({"role": "system", "content": system_prompt})
         history.append({"role": "user", "content": prompt})
         formatted = _format_chat_history(history, engine)
-    except Exception:
+    except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+        _FALLBACKS.record("format_prompt_with_system_failed", exc)
         if system_prompt:
             try:
                 formatted = _format_chat_history(
@@ -540,7 +551,8 @@ def _format_single_prompt(
                     engine,
                 )
                 system_prompt = None
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError, ValueError) as retry_exc:
+                _FALLBACKS.record("format_prompt_retry_failed", retry_exc)
                 return prompt, None, None
         else:
             return prompt, None, None
@@ -840,7 +852,8 @@ def run_selected_mode(args: argparse.Namespace):
             controller_run_game_loop(engine, args)
         except KeyboardInterrupt:
             print(ui.color_text("\n\nGame interrupted by user.", cfg.COLOR_YELLOW))
-        except Exception as e:
+        except (AttributeError, RuntimeError, TypeError, ValueError, OSError) as e:
+            _FALLBACKS.record("game_loop_failed", e, level=logging.WARNING)
             print(ui.color_text(f"\n\nAn error occurred: {e}", cfg.COLOR_RED))
             if args.verbose:
                 import traceback

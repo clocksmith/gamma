@@ -4,7 +4,6 @@ import argparse
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     # Import from cli.py file directly (cli/ package shadows it)

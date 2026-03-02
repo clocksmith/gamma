@@ -9,13 +9,16 @@ Usage:
 """
 
 import sys
-import os
 import json
 from pathlib import Path
 from datetime import datetime
 
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ModuleNotFoundError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 from src.game.difficulty_levels import GameSession
 
 

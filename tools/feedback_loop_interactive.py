@@ -20,7 +20,6 @@ Run this in a Claude Code session to get intelligent assistance.
 import argparse
 import subprocess
 import sys
-import os
 import json
 import time
 from datetime import datetime
@@ -28,13 +27,19 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 
-# Add src to path
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / 'src'
-sys.path.insert(0, str(SRC_DIR))
-sys.path.insert(0, str(ROOT_DIR / 'tools'))
+try:
+    from tools._path_setup import ensure_project_root_on_path, ensure_src_on_path, ensure_tools_on_path
+except ModuleNotFoundError:
+    from _path_setup import ensure_project_root_on_path, ensure_src_on_path, ensure_tools_on_path
 
-from log_analyzer import LogAnalyzer, TestFailure
+ROOT_DIR = Path(ensure_project_root_on_path())
+ensure_src_on_path()
+ensure_tools_on_path()
+
+try:
+    from tools.log_analyzer import LogAnalyzer, TestFailure
+except ModuleNotFoundError:
+    from log_analyzer import LogAnalyzer, TestFailure
 
 
 @dataclass

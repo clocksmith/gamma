@@ -8,7 +8,6 @@ This server loads a GGUF model once on startup and serves a basic frontend.
 import argparse
 import os
 import time
-import sys
 from contextlib import asynccontextmanager
 from typing import Dict, Any
 
@@ -19,7 +18,12 @@ from pydantic import BaseModel
 from llama_cpp import Llama
 
 # Add project root to path to import llm_utils from the new location
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ImportError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 from src.r import llm_utils
 
 

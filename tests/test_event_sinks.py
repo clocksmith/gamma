@@ -13,7 +13,6 @@ import unittest
 from io import StringIO
 from unittest.mock import patch
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.mind_meld.core.event_sinks import (
     TokenEvent,

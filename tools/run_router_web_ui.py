@@ -5,7 +5,6 @@ Provides a simple web interface to interact with the routing logic.
 """
 
 import argparse
-import sys
 import os
 import uvicorn
 from fastapi import FastAPI
@@ -13,7 +12,12 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 # Add project root to the path to allow importing from src
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ImportError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 
 from src.core.menu.routing_logic import get_responses, route_responses
 

@@ -2,16 +2,20 @@
 Functions for displaying game-specific information.
 """
 
+import logging
 import re
 from typing import List, Tuple, Dict, Any
 
 from src.core import config as cfg
+from src.core.fallback_telemetry import FallbackTelemetry
 from src.ui import components as uic
 from src.core.engine_interface import LLMEngine
 
 _SPECIAL_TOKEN_NOTE_LIMIT = 6
 _special_token_notes_logged = 0
 _special_token_notes_suppressed = 0
+logger = logging.getLogger(__name__)
+_FALLBACKS = FallbackTelemetry("game_displays", logger)
 
 
 def reset_special_token_notes():
@@ -118,7 +122,8 @@ def display_probability_stages_grid(stages_data: List[Tuple[str, List[str], List
     import shutil
     try:
         terminal_width = shutil.get_terminal_size().columns
-    except:
+    except (AttributeError, OSError, ValueError) as exc:
+        _FALLBACKS.record("terminal_width_unavailable", exc)
         terminal_width = 80  # Default fallback
 
     formatted_stages = []
@@ -259,7 +264,8 @@ def display_player_choices(
         if token_ids_for_preview:
             try:
                 decoded_preview = engine.decode(token_ids_for_preview, skip_special_tokens=False)
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                _FALLBACKS.record("decode_preview_failed", exc)
                 decoded_preview = ""
         if decoded_preview:
             decoded_preview = decoded_preview.replace("\n", "\\n").replace("\t", "\\t")
@@ -276,13 +282,15 @@ def display_player_choices(
                 if hasattr(engine, "tokenizer") and engine.tokenizer:
                     try:
                         raw_piece = engine.tokenizer.convert_ids_to_tokens([token_id])[0]
-                    except Exception:
+                    except (AttributeError, KeyError, RuntimeError, TypeError, ValueError) as exc:
+                        _FALLBACKS.record("token_piece_conversion_failed", exc)
                         raw_piece = None
                 if raw_piece is None:
                     raw_piece = token_text
                 try:
                     category = engine.get_token_category(token_id).name.lower()
-                except Exception:
+                except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                    _FALLBACKS.record("token_category_failed", exc)
                     category = "unknown"
                 print(f"     • [{pos}] id={token_id} piece='{raw_piece}' ({category})")
     return valid_options_letters
@@ -353,7 +361,8 @@ def display_token_explanation_if_needed(engine: LLMEngine, token_id: Any, token_
     is_special_or_punct = not engine.is_word_like_token(token_id, token_text)
     try:
         hashable_token_id = int(token_id.item() if hasattr(token_id, "item") else token_id)
-    except:
+    except (AttributeError, TypeError, ValueError) as exc:
+        _FALLBACKS.record("token_id_hashable_conversion_failed", exc)
         hashable_token_id = str(token_id)
     global _special_token_notes_logged, _special_token_notes_suppressed
     if is_special_or_punct and hashable_token_id not in previously_explained_tokens:

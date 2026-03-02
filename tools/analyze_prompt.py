@@ -11,24 +11,20 @@ Usage:
 """
 
 import sys
-import os
 import argparse
 import numpy as np
 import warnings
 import torch
 
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ModuleNotFoundError:
+    from _path_setup import ensure_project_root_on_path
+
 # Suppress warnings
 warnings.filterwarnings("ignore")
 
-# Add src to path
-current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.dirname(current_dir) # Go up one level from tools/
-src_dir = os.path.join(root_dir, 'src')
-
-if src_dir not in sys.path:
-    sys.path.insert(0, src_dir)
-if root_dir not in sys.path:
-    sys.path.insert(0, root_dir)
+ensure_project_root_on_path()
 
 from src.engines.engine_factory import get_engine
 from src.engines import sampling_utils

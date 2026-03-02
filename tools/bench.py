@@ -18,12 +18,18 @@ Usage:
 import argparse
 import json
 import sys
-from pathlib import Path
 
-# Add parent to path for imports
-sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ModuleNotFoundError:
+    from _path_setup import ensure_project_root_on_path
 
-from bench_runners import BenchResult, OllamaRunner, TransformersRunner, VLLMRunner, WebLLMRunner, DopplerRunner
+ensure_project_root_on_path()
+
+try:
+    from tools.bench_runners import BenchResult, OllamaRunner, TransformersRunner, VLLMRunner, WebLLMRunner, DopplerRunner
+except ModuleNotFoundError:
+    from bench_runners import BenchResult, OllamaRunner, TransformersRunner, VLLMRunner, WebLLMRunner, DopplerRunner
 
 
 def print_result(result: BenchResult) -> None:

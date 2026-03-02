@@ -4,11 +4,15 @@ Engine Selector - Interactive tool to help choose the right engine for your mode
 """
 
 import sys
-import os
 import platform
 
 # Add project root to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ImportError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 
 from src.core.model_validator import ModelValidator
 

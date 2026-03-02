@@ -6,14 +6,14 @@ Tests all Mind Meld components to ensure they work correctly.
 """
 
 import sys
-import os
 from time import time
 
-# Add src to path
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC_DIR = os.path.join(ROOT_DIR, 'src')
-if SRC_DIR not in sys.path:
-    sys.path.insert(0, SRC_DIR)
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ModuleNotFoundError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 
 print("=" * 80)
 print("MIND MELD VERIFICATION SCRIPT")

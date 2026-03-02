@@ -30,7 +30,12 @@ except ImportError:
     HAS_TORCH = False
 
 # Add project root to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from tools._path_setup import ensure_project_root_on_path
+except ImportError:
+    from _path_setup import ensure_project_root_on_path
+
+ensure_project_root_on_path()
 
 from src.engines.engine_factory import get_engine
 from src.core.model_validator import ModelValidator, print_validation_result

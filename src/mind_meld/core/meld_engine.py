@@ -11,11 +11,13 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 
 from src.core import config as cfg
+from src.core.fallback_telemetry import FallbackTelemetry
 from src.engines import sampling_utils
 from src.ui import displays as ui
 from src.core.engine_interface import LLMEngine
 
 logger = logging.getLogger(__name__)
+_FALLBACKS = FallbackTelemetry("mind_meld_engine", logger)
 
 # =============================================================================
 # Constants
@@ -135,8 +137,8 @@ class ModelOffloader:
                 return engine.get_device()
             if hasattr(engine, 'model') and hasattr(engine.model, 'device'):
                 return str(engine.model.device)
-        except Exception:
-            pass
+        except (AttributeError, TypeError, RuntimeError, ValueError) as exc:
+            _FALLBACKS.record("engine_device_probe_failed", exc)
         return 'unknown'
 
     def offload_to_cpu(self, engine: LLMEngine, model_idx: int) -> bool:
@@ -151,7 +153,8 @@ class ModelOffloader:
             self._model_locations[model_idx] = 'cpu'
             logger.debug(f"Offloaded model {model_idx} ({engine.model_name}) to CPU")
             return True
-        except Exception as e:
+        except (AttributeError, TypeError, RuntimeError, ValueError) as e:
+            _FALLBACKS.record("offload_to_cpu_failed", e, level=logging.WARNING)
             logger.warning(f"Failed to offload model {model_idx} to CPU: {e}")
         return False
 
@@ -171,14 +174,15 @@ class ModelOffloader:
                         device = 'mps'
                     else:
                         device = 'cpu'
-            except ImportError:
-                pass
+            except (ImportError, AttributeError, RuntimeError) as exc:
+                _FALLBACKS.record("device_detection_failed", exc)
 
             engine.model.to(device)
             self._model_locations[model_idx] = 'gpu'
             logger.debug(f"Loaded model {model_idx} ({engine.model_name}) to {device}")
             return True
-        except Exception as e:
+        except (AttributeError, TypeError, RuntimeError, ValueError) as e:
+            _FALLBACKS.record("load_to_gpu_failed", e, level=logging.WARNING)
             logger.warning(f"Failed to load model {model_idx} to GPU: {e}")
         return False
 
@@ -704,7 +708,8 @@ class MeldEngine:
                 tokenize=False,
                 add_generation_prompt=True,
             )
-        except Exception as exc:
+        except (AttributeError, TypeError, RuntimeError, ValueError) as exc:
+            _FALLBACKS.record("chat_template_apply_failed", exc)
             if system_prompt:
                 try:
                     formatted = engine.tokenizer.apply_chat_template(
@@ -713,7 +718,8 @@ class MeldEngine:
                         add_generation_prompt=True,
                     )
                     used_system = False
-                except Exception as retry_exc:
+                except (AttributeError, TypeError, RuntimeError, ValueError) as retry_exc:
+                    _FALLBACKS.record("chat_template_retry_failed", retry_exc)
                     if self.verbose:
                         logger.info(
                             "Chat template apply failed for %s: %s",
@@ -751,7 +757,8 @@ class MeldEngine:
             has_template = bool(getattr(tokenizer, "chat_template", None))
             try:
                 vocab_size = len(engine.get_vocab())
-            except Exception:
+            except (AttributeError, TypeError, RuntimeError, ValueError) as exc:
+                _FALLBACKS.record("chat_template_vocab_probe_failed", exc)
                 vocab_size = 0
             name = engine.model_name or ""
             # Include idx to avoid comparing engine objects when other fields match
@@ -938,7 +945,8 @@ class MeldEngine:
         try:
             source_vocab = len(source_engine.get_vocab())
             target_vocab = len(target_engine.get_vocab())
-        except Exception:
+        except (AttributeError, KeyError, RuntimeError, TypeError, ValueError) as exc:
+            _FALLBACKS.record("kv_tokenizer_vocab_probe_failed", exc)
             return False
         return source_vocab == target_vocab
 
@@ -1002,7 +1010,8 @@ class MeldEngine:
         validator = ModelCompatibilityValidator(verbose=False)
         try:
             report = validator.validate_pair(source_engine, target_engine)
-        except Exception as exc:
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            _FALLBACKS.record("compatibility_check_failed", exc)
             logger.debug(f"Compatibility check failed: {exc}")
             return True, "compatibility check failed"
 
@@ -1057,13 +1066,15 @@ class MeldEngine:
         cache_obj = None
         try:
             cache_obj = engine.get_kv_cache()
-        except Exception:
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            _FALLBACKS.record("kv_cache_get_failed", exc)
             cache_obj = None
         if cache_obj is not None:
             if hasattr(cache_obj, "get_seq_length"):
                 try:
                     seq_len = cache_obj.get_seq_length()
-                except Exception:
+                except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                    _FALLBACKS.record("kv_cache_seq_length_failed", exc)
                     seq_len = None
                 if isinstance(seq_len, int):
                     return seq_len
@@ -1075,14 +1086,16 @@ class MeldEngine:
             if callable(extractor):
                 try:
                     key_tensor = extractor(cache_obj)
-                except Exception:
+                except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                    _FALLBACKS.record("kv_cache_key_tensor_extract_failed", exc)
                     key_tensor = None
                 if key_tensor is not None and hasattr(key_tensor, "shape"):
                     if len(key_tensor.shape) >= 2:
                         return int(key_tensor.shape[-2])
         try:
             metadata = engine.get_kv_cache_metadata()
-        except Exception:
+        except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+            _FALLBACKS.record("kv_cache_metadata_failed", exc)
             metadata = None
         if isinstance(metadata, dict):
             if metadata.get("has_cache"):
@@ -1111,7 +1124,8 @@ class MeldEngine:
                     self.args.top_k,
                     self.args.top_p
                 )
-            except Exception as exc:
+            except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                _FALLBACKS.record("kv_cache_replay_failed", exc, level=logging.INFO)
                 logger.info("KV cache replay failed for %s: %s", engine.model_name, exc)
                 return False
         return engine.has_kv_cache()
@@ -1187,7 +1201,8 @@ class MeldEngine:
                 if prefix_len > 0:
                     try:
                         truncated = target_engine.truncate_kv_cache(prefix_len)
-                    except Exception:
+                    except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                        _FALLBACKS.record("truncate_kv_cache_failed", exc)
                         truncated = False
                 if truncated:
                     cache_len = prefix_len
@@ -1284,7 +1299,8 @@ class MeldEngine:
                     tokenize=False,
                     add_generation_prompt=True,
                 )
-            except Exception as exc:
+            except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                _FALLBACKS.record("chat_template_apply_failed", exc)
                 if system_prompt:
                     try:
                         formatted = engine.tokenizer.apply_chat_template(
@@ -1293,7 +1309,8 @@ class MeldEngine:
                             add_generation_prompt=True,
                         )
                         used_system = False
-                    except Exception as retry_exc:
+                    except (AttributeError, RuntimeError, TypeError, ValueError) as retry_exc:
+                        _FALLBACKS.record("chat_template_retry_failed", retry_exc)
                         if self.verbose:
                             logger.info(
                                 "Chat template apply failed for %s: %s",
@@ -1469,7 +1486,8 @@ class MeldEngine:
             try:
                 if len(source_tokenizer.get_vocab()) != len(target_tokenizer.get_vocab()):
                     self._diag["vocab_mismatch"] += 1
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                _FALLBACKS.record("vocab_probe_probs_failed", exc)
                 pass
         translated = self.vocab_translator.translate_probabilities(
             probs, source_tokenizer, target_tokenizer
@@ -1483,7 +1501,8 @@ class MeldEngine:
             try:
                 if len(source_tokenizer.get_vocab()) != len(target_tokenizer.get_vocab()):
                     self._diag["vocab_mismatch"] += 1
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                _FALLBACKS.record("vocab_probe_logits_failed", exc)
                 pass
         translated = self.vocab_translator.translate_logits(
             logits, source_tokenizer, target_tokenizer
@@ -1579,7 +1598,8 @@ class MeldEngine:
         for engine in self.models:
             try:
                 vocab_size = len(engine.get_vocab())
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                _FALLBACKS.record("base_vocab_probe_failed", exc)
                 vocab_size = 0
             name = engine.model_name or ""
             candidates.append((vocab_size, name, engine))
@@ -1606,7 +1626,8 @@ class MeldEngine:
             return None
         try:
             piece = tokenizer.convert_ids_to_tokens([int(token_id)])[0]
-        except Exception:
+        except (AttributeError, KeyError, RuntimeError, TypeError, ValueError, IndexError) as exc:
+            _FALLBACKS.record("resolve_token_piece_failed", exc)
             return None
         if isinstance(piece, bytes):
             return piece.decode("utf-8", errors="replace")
@@ -1624,7 +1645,8 @@ class MeldEngine:
             if vocab is None:
                 try:
                     vocab = engine.get_vocab()
-                except Exception:
+                except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
+                    _FALLBACKS.record("engine_vocab_cache_fetch_failed", exc)
                     vocab = {}
                 self._engine_vocab_cache[idx] = vocab
             self._last_token_ids[idx] = vocab.get(token_piece)
@@ -2087,6 +2109,7 @@ class MeldEngine:
                     self._diag["kv_cache_success"] += 1
                 return True
             except Exception as exc:  # pragma: no cover - backend specific
+                _FALLBACKS.record("kv_translation_failed", exc, level=logging.WARNING)
                 logger.warning(f"KV cache translation failed: {exc}")
                 return False
 
@@ -2105,6 +2128,7 @@ class MeldEngine:
         except NotImplementedError:
             pass
         except Exception as exc:  # pragma: no cover - backend specific
+            _FALLBACKS.record("kv_direct_bridge_failed", exc, level=logging.WARNING)
             logger.warning(f"Direct KV cache bridge failed: {exc}")
 
         # Secondary path: use the standardized export/import hooks when available.
@@ -2122,6 +2146,7 @@ class MeldEngine:
                         return True
                     return False
         except Exception as exc:  # pragma: no cover - backend specific
+            _FALLBACKS.record("kv_state_bridge_failed", exc, level=logging.WARNING)
             logger.warning(f"State-based KV cache bridge failed: {exc}")
 
         # Fallback path: attempt shape-compatible translation using the shared translator.

@@ -5,9 +5,6 @@ Tests the capability registry functions and validates that engine
 capabilities are properly defined. Also tests new helper constants.
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import unittest
 

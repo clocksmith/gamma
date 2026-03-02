@@ -9,15 +9,12 @@ Tests the various vocabulary translator implementations including:
 - FallbackToUnkTranslator
 """
 
-import sys
-import os
 import unittest
 from unittest.mock import MagicMock
 from types import SimpleNamespace
 
 import numpy as np
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.mind_meld.translators.vocabulary_translator import (
     VocabularyTranslator,

@@ -5,6 +5,7 @@ This module contains the game state machine and flow control logic.
 """
 
 import argparse
+import logging
 import os
 import time
 from datetime import datetime
@@ -13,6 +14,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import numpy as np
 
 from src.core import config as cfg
+from src.core.fallback_telemetry import FallbackTelemetry
 from src.core.engine_interface import LLMEngine
 from src.game import game_logic
 from src.game.difficulty_levels import (
@@ -42,6 +44,8 @@ from src.game.cli.renderer import (
 )
 from src.ui import displays as ui
 
+logger = logging.getLogger(__name__)
+_FALLBACKS = FallbackTelemetry("game_cli_controller", logger)
 
 # Global for tracking explained tokens in focus mode
 PREVIOUSLY_EXPLAINED_TOKENS_IN_FOCUS_MODE: Set[Union[int, str]] = set()
@@ -289,7 +293,8 @@ class GameController:
                 array = np.asarray(array).reshape(-1)
                 if 0 <= token_id < array.size:
                     return float(array[token_id])
-            except Exception:
+            except (AttributeError, RuntimeError, TypeError, ValueError, IndexError, KeyError) as exc:
+                _FALLBACKS.record("extract_probability_failed", exc)
                 continue
         return None
 
@@ -387,7 +392,8 @@ class GameController:
 
         try:
             return self.engine.concatenate_tensors(tensor1, tensor2, dim=dim)
-        except Exception as e:
+        except (AttributeError, RuntimeError, TypeError, ValueError) as e:
+            _FALLBACKS.record("concatenate_tensors_failed", e)
             print(f"Warning: Failed to concatenate using engine abstraction: {e}")
 
         if isinstance(tensor1, list) and isinstance(tensor2, list):
