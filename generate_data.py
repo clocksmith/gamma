@@ -1,5 +1,6 @@
 import json
 import random
+import sys
 
 # Domains: travel, work, healthcare, education, tech, finance, legal/admin, everyday chat, news, arts
 
@@ -542,10 +543,8 @@ def generate_row(src_lang, tgt_lang, domain_en, domain_es):
         source_text = en_tpl.format(**vals_en) if src_lang == "en" else es_tpl.format(**vals_es)
         pos_text = es_tpl.format(**vals_es) if tgt_lang == "es" else en_tpl.format(**vals_en)
     except KeyError as e:
-        # Fallback if a template has an unexpected key
         return None
     
-    # Generate negative: pick a random other template from the same domain
     neg_idx = idx
     while neg_idx == idx:
         neg_idx = random.randint(0, len(domain_en) - 1)
@@ -583,19 +582,25 @@ domains = [
     (arts_en, arts_es)
 ]
 
-new_rows = []
 seen_sources = set()
+fixed_existing = []
 
-# Load existing to avoid duplicates
-with open("existing_rows.jsonl", "r") as f:
-    for line in f:
-        data = json.loads(line)
-        seen_sources.add(data["source"])
+try:
+    with open("projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.jsonl", "r") as f:
+        for line in f:
+            data = json.loads(line)
+            data["pos"] = data["target_pos"]
+            data["neg"] = data["target_neg"]
+            fixed_existing.append(data)
+            seen_sources.add(data["source"])
+except FileNotFoundError:
+    pass
 
 target_new = 9220
 target_en_es = target_new // 2
 target_es_en = target_new - target_en_es
 
+new_rows = []
 en_es_count = 0
 while en_es_count < target_en_es:
     dom_en, dom_es = random.choice(domains)
@@ -604,8 +609,8 @@ while en_es_count < target_en_es:
         new_rows.append(row)
         seen_sources.add(row["source"])
         en_es_count += 1
-        if en_es_count % 500 == 0:
-            print(f"Generated {en_es_count} en-es rows...")
+        if en_es_count % 1000 == 0:
+            print(f"Generated {en_es_count} en-es rows...", flush=True)
 
 es_en_count = 0
 while es_en_count < target_es_en:
@@ -615,27 +620,16 @@ while es_en_count < target_es_en:
         new_rows.append(row)
         seen_sources.add(row["source"])
         es_en_count += 1
-        if es_en_count % 500 == 0:
-            print(f"Generated {es_en_count} es-en rows...")
+        if es_en_count % 1000 == 0:
+            print(f"Generated {es_en_count} es-en rows...", flush=True)
 
-# Mix them up
 random.shuffle(new_rows)
 
-# Read existing rows and fix them
-fixed_existing = []
-with open("existing_rows.jsonl", "r") as f:
-    for line in f:
-        data = json.loads(line)
-        # Enforce pos == target_pos, neg == target_neg
-        data["pos"] = data["target_pos"]
-        data["neg"] = data["target_neg"]
-        fixed_existing.append(data)
-
-# Write all back
-with open("projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.jsonl", "w") as f:
+output_file = "projects/distillation/translation/training_data/translate_distill_pairs_en_es_2way.train.jsonl"
+with open(output_file, "w") as f:
     for row in fixed_existing:
         f.write(json.dumps(row, ensure_ascii=False) + "\n")
     for row in new_rows:
         f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
-print(f"Total rows: {len(fixed_existing) + len(new_rows)}")
+print(f"Total rows: {len(fixed_existing) + len(new_rows)}", flush=True)
