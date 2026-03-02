@@ -11,6 +11,7 @@ Supports:
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import statistics
 from dataclasses import dataclass
@@ -70,6 +71,44 @@ def _parse_csv_set(value: str) -> set[str]:
 
 def _load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _resolve_jsonl_inputs(spec: str) -> list[Path]:
+    raw = _safe_text(spec)
+    if not raw:
+        return []
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    if not parts:
+        return []
+
+    out: list[Path] = []
+    seen: set[str] = set()
+    for part in parts:
+        matches: list[Path] = []
+        if any(ch in part for ch in "*?["):
+            matches = [Path(p) for p in sorted(glob.glob(part))]
+        else:
+            p = Path(part)
+            if p.is_dir():
+                matches = sorted(x for x in p.iterdir() if x.is_file() and x.suffix == ".jsonl")
+            elif p.is_file():
+                matches = [p]
+            elif p.exists():
+                raise RuntimeError(f"--pairs path is not a file or directory: {part}")
+            else:
+                raise RuntimeError(f"--pairs path does not exist: {part}")
+        for m in matches:
+            key = str(m.resolve())
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(m)
+    if not out:
+        raise RuntimeError(
+            f"--pairs resolved to zero JSONL files from: {spec}. "
+            "Provide a .jsonl file, a directory containing .jsonl shards, or a glob."
+        )
+    return out
 
 
 def _load_vocab_remap(path: str, tokenizer) -> VocabRemap | None:
@@ -199,7 +238,14 @@ def _restore_ids_to_old_vocab(token_ids: torch.Tensor | int | list[int] | list[l
 
 def _parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pairs", required=True, help="Translation triplets JSONL for evaluation.")
+    ap.add_argument(
+        "--pairs",
+        required=True,
+        help=(
+            "Translation triplets input: .jsonl file, directory of .jsonl shards, "
+            "glob pattern, or comma-separated list of those."
+        ),
+    )
     ap.add_argument("--model", required=True, help="Student candidate model (HF model id/path or checkpoint path).")
     ap.add_argument(
         "--teacher-model",
@@ -281,41 +327,42 @@ def _resolve_device(device: str, fallback: str = "cpu") -> str:
     return fallback
 
 
-def _load_rows(path: Path, source_langs: set[str], target_langs: set[str], max_rows: int) -> list[EvalRow]:
+def _load_rows(paths: list[Path], source_langs: set[str], target_langs: set[str], max_rows: int) -> list[EvalRow]:
     rows: list[EvalRow] = []
-    with path.open("r", encoding="utf-8") as f:
-        for ln, line in enumerate(f, start=1):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                obj = json.loads(line)
-            except Exception:
-                continue
-            if not isinstance(obj, dict):
-                continue
-            source_lang = _safe_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
-            target_lang = _safe_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
-            source = _safe_text(obj.get("source"))
-            target_pos = _safe_text(obj.get("target_pos") or obj.get("pos"))
-            if source_langs and source_lang not in source_langs:
-                continue
-            if target_langs and target_lang not in target_langs:
-                continue
-            if not source or not target_pos or not source_lang or not target_lang:
-                continue
-            pair = _safe_text(obj.get("pair")) or f"{source_lang}-{target_lang}"
-            rows.append(
-                EvalRow(
-                    source_lang=source_lang,
-                    target_lang=target_lang,
-                    source=source,
-                    target_pos=target_pos,
-                    pair=pair,
+    for path in paths:
+        with path.open("r", encoding="utf-8") as f:
+            for ln, line in enumerate(f, start=1):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    obj = json.loads(line)
+                except Exception:
+                    continue
+                if not isinstance(obj, dict):
+                    continue
+                source_lang = _safe_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
+                target_lang = _safe_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
+                source = _safe_text(obj.get("source"))
+                target_pos = _safe_text(obj.get("target_pos") or obj.get("pos"))
+                if source_langs and source_lang not in source_langs:
+                    continue
+                if target_langs and target_lang not in target_langs:
+                    continue
+                if not source or not target_pos or not source_lang or not target_lang:
+                    continue
+                pair = _safe_text(obj.get("pair")) or f"{source_lang}-{target_lang}"
+                rows.append(
+                    EvalRow(
+                        source_lang=source_lang,
+                        target_lang=target_lang,
+                        source=source,
+                        target_pos=target_pos,
+                        pair=pair,
+                    )
                 )
-            )
-            if max_rows > 0 and len(rows) >= max_rows:
-                break
+                if max_rows > 0 and len(rows) >= max_rows:
+                    return rows
     return rows
 
 
@@ -745,7 +792,8 @@ def main() -> int:
     torch.manual_seed(int(args.seed))
     source_langs = _parse_csv_set(str(args.source_langs))
     target_langs = _parse_csv_set(str(args.target_langs))
-    rows = _load_rows(Path(args.pairs), source_langs=source_langs, target_langs=target_langs, max_rows=int(args.eval_samples))
+    pair_inputs = _resolve_jsonl_inputs(str(args.pairs))
+    rows = _load_rows(pair_inputs, source_langs=source_langs, target_langs=target_langs, max_rows=int(args.eval_samples))
     if not rows:
         raise RuntimeError("No evaluation rows after loading/filters.")
 
@@ -781,6 +829,7 @@ def main() -> int:
 
     compare_out: dict[str, Any] = {
         "pairs": args.pairs,
+        "pair_files": [str(p) for p in pair_inputs],
         "source_langs": sorted(source_langs),
         "target_langs": sorted(target_langs),
         "eval_samples": int(len(rows)),

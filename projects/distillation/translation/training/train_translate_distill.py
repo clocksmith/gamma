@@ -11,6 +11,7 @@ Supported schedules:
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import re
 import random
@@ -60,13 +61,60 @@ def _load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _resolve_jsonl_inputs(spec: str) -> list[Path]:
+    raw = _safe_text(spec)
+    if not raw:
+        return []
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    if not parts:
+        return []
+
+    out: list[Path] = []
+    seen: set[str] = set()
+    for part in parts:
+        matches: list[Path] = []
+        if any(ch in part for ch in "*?["):
+            matches = [Path(p) for p in sorted(glob.glob(part))]
+        else:
+            p = Path(part)
+            if p.is_dir():
+                matches = sorted(x for x in p.iterdir() if x.is_file() and x.suffix == ".jsonl")
+            elif p.is_file():
+                matches = [p]
+            elif p.exists():
+                raise RuntimeError(f"--pairs path is not a file or directory: {part}")
+            else:
+                raise RuntimeError(f"--pairs path does not exist: {part}")
+
+        for m in matches:
+            key = str(m.resolve())
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(m)
+
+    if not out:
+        raise RuntimeError(
+            f"--pairs resolved to zero JSONL files from: {spec}. "
+            "Provide a .jsonl file, a directory containing .jsonl shards, or a glob."
+        )
+    return out
+
+
 def _parse_csv_set(value: str) -> set[str]:
     return {x.strip() for x in str(value).split(",") if x.strip()}
 
 
 def _parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pairs", required=True, help="Input translation triplets JSONL from make_translate_distill_pairs.py.")
+    ap.add_argument(
+        "--pairs",
+        required=True,
+        help=(
+            "Input translation triplets: .jsonl file, directory of .jsonl shards, "
+            "glob pattern, or comma-separated list of those."
+        ),
+    )
     ap.add_argument("--teacher-model", required=True, help="Teacher model id/path (HF model id or local snapshot).")
     ap.add_argument("--student-model", required=True, help="Student base model id/path.")
     ap.add_argument(
@@ -283,47 +331,45 @@ def _restore_ids_to_old_vocab(token_ids: torch.Tensor, remap: VocabRemap) -> tor
     return torch.tensor(restored, dtype=torch.long, device=token_ids.device)
 
 
-def _load_pairs(path: Path, source_langs: set[str], target_langs: set[str]) -> list[Example]:
-    path = Path(path)
-    if not path.exists():
-        raise RuntimeError(f"pairs file missing: {path}")
+def _load_pairs(paths: Iterable[Path], source_langs: set[str], target_langs: set[str]) -> list[Example]:
     rows: list[Example] = []
-    with path.open("r", encoding="utf-8") as f:
-        for ln, line in enumerate(f, start=1):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                obj = json.loads(line)
-            except Exception:
-                continue
-            if not isinstance(obj, dict):
-                continue
-            source_lang = _safe_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
-            target_lang = _safe_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
-            source = _safe_text(obj.get("source"))
-            target_pos = _safe_text(obj.get("target_pos") or obj.get("pos"))
-            target_neg = _safe_text(obj.get("target_neg") or obj.get("neg"))
-            pair = _safe_text(obj.get("pair"))
+    for path in paths:
+        with path.open("r", encoding="utf-8") as f:
+            for ln, line in enumerate(f, start=1):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    obj = json.loads(line)
+                except Exception:
+                    continue
+                if not isinstance(obj, dict):
+                    continue
+                source_lang = _safe_text(obj.get("src_lang") or obj.get("source_lang") or obj.get("src"))
+                target_lang = _safe_text(obj.get("tgt_lang") or obj.get("target_lang") or obj.get("tgt"))
+                source = _safe_text(obj.get("source"))
+                target_pos = _safe_text(obj.get("target_pos") or obj.get("pos"))
+                target_neg = _safe_text(obj.get("target_neg") or obj.get("neg"))
+                pair = _safe_text(obj.get("pair"))
 
-            if source_langs and source_lang not in source_langs:
-                continue
-            if target_langs and target_lang not in target_langs:
-                continue
-            if not source or not target_pos or not source_lang or not target_lang:
-                continue
-            if not pair:
-                pair = f"{source_lang}-{target_lang}"
-            rows.append(
-                Example(
-                    source_lang=source_lang,
-                    target_lang=target_lang,
-                    source=source,
-                    target_pos=target_pos,
-                    target_neg=target_neg,
-                    pair=pair,
+                if source_langs and source_lang not in source_langs:
+                    continue
+                if target_langs and target_lang not in target_langs:
+                    continue
+                if not source or not target_pos or not source_lang or not target_lang:
+                    continue
+                if not pair:
+                    pair = f"{source_lang}-{target_lang}"
+                rows.append(
+                    Example(
+                        source_lang=source_lang,
+                        target_lang=target_lang,
+                        source=source,
+                        target_pos=target_pos,
+                        target_neg=target_neg,
+                        pair=pair,
+                    )
                 )
-            )
     return rows
 
 
@@ -1077,7 +1123,8 @@ def main() -> int:
 
     source_langs = _parse_csv_set(str(args.source_langs))
     target_langs = _parse_csv_set(str(args.target_langs))
-    pair_rows = _load_pairs(Path(args.pairs), source_langs=source_langs, target_langs=target_langs)
+    pair_inputs = _resolve_jsonl_inputs(str(args.pairs))
+    pair_rows = _load_pairs(pair_inputs, source_langs=source_langs, target_langs=target_langs)
     if args.max_steps_per_row > 0:
         pair_rows = pair_rows[: int(args.max_steps_per_row)]
     if not pair_rows:
@@ -1099,6 +1146,7 @@ def main() -> int:
     run_root.mkdir(parents=True, exist_ok=True)
 
     print(f"[config] run_root={run_root}")
+    print(f"[config] pairs={len(pair_inputs)} files")
     print(
         f"[config] schedule={args.schedule} total_steps={max_steps} sft_steps={sft_steps} "
         f"distill_steps={distill_steps} batch={args.batch_size}"
@@ -1333,6 +1381,8 @@ def main() -> int:
         "source_langs": sorted(source_langs),
         "target_langs": sorted(target_langs),
         "out_root": str(run_root),
+        "pairs_input_spec": str(args.pairs),
+        "pairs_input_files": [str(p) for p in pair_inputs],
         "pair_count": int(len(pair_rows)),
         "total_steps": int(max_steps),
         "sft_steps": int(sft_steps),

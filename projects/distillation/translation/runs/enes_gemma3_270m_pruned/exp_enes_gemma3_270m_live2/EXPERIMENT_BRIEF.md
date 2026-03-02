@@ -26,8 +26,8 @@ Record the motivation, setup, training mechanics, hypotheses, evaluation plan, a
   - Stage A (`sft_steps`): `50000`
   - Stage B (`distill_steps`): `50000`
 - Train data:
-  - `translate_distill_pairs_en_es_2way.train.jsonl`
-  - Rows: `922` (`461 en-es`, `461 es-en`)
+  - `translate_distill_pairs_en_es_2way.train.shards/*.jsonl`
+  - Rows: `25000` (`12500 en-es`, `12500 es-en`)
 - Devices:
   - Current resume on CPU (`--device cpu --dtype float32`)
 - Resume source:

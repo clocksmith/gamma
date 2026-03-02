@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import random
 from pathlib import Path
@@ -21,21 +22,60 @@ def _pair_key(obj: dict[str, object]) -> str:
     return f"{src_lang}-{tgt_lang}"
 
 
-def _load_rows(path: Path) -> list[dict]:
+def _resolve_jsonl_inputs(spec: str) -> list[Path]:
+    raw = _safe_text(spec)
+    if not raw:
+        return []
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    if not parts:
+        return []
+
+    out: list[Path] = []
+    seen: set[str] = set()
+    for part in parts:
+        matches: list[Path] = []
+        if any(ch in part for ch in "*?["):
+            matches = [Path(p) for p in sorted(glob.glob(part))]
+        else:
+            p = Path(part)
+            if p.is_dir():
+                matches = sorted(x for x in p.iterdir() if x.is_file() and x.suffix == ".jsonl")
+            elif p.is_file():
+                matches = [p]
+            elif p.exists():
+                raise RuntimeError(f"--pairs path is not a file or directory: {part}")
+            else:
+                raise RuntimeError(f"--pairs path does not exist: {part}")
+        for m in matches:
+            key = str(m.resolve())
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(m)
+    if not out:
+        raise RuntimeError(
+            f"--pairs resolved to zero JSONL files from: {spec}. "
+            "Provide a .jsonl file, a directory containing .jsonl shards, or a glob."
+        )
+    return out
+
+
+def _load_rows(paths: list[Path]) -> list[dict]:
     rows: list[dict] = []
-    with path.open("r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                obj = json.loads(line)
-            except Exception:
-                continue
-            if not isinstance(obj, dict):
-                continue
-            if _safe_text(obj.get("source")) and _safe_text(obj.get("target_pos") or obj.get("pos")):
-                rows.append(obj)
+    for path in paths:
+        with path.open("r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    obj = json.loads(line)
+                except Exception:
+                    continue
+                if not isinstance(obj, dict):
+                    continue
+                if _safe_text(obj.get("source")) and _safe_text(obj.get("target_pos") or obj.get("pos")):
+                    rows.append(obj)
     return rows
 
 
@@ -48,7 +88,14 @@ def _write_rows(path: Path, rows: list[dict]) -> None:
 
 def _parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pairs", required=True, help="Input pair JSONL.")
+    ap.add_argument(
+        "--pairs",
+        required=True,
+        help=(
+            "Input pair data: .jsonl file, directory of .jsonl shards, "
+            "glob pattern, or comma-separated list of those."
+        ),
+    )
     ap.add_argument("--train-out", required=True, help="Output train JSONL.")
     ap.add_argument("--eval-out", required=True, help="Output eval JSONL.")
     ap.add_argument("--eval-fraction", type=float, default=0.1, help="Eval split fraction.")
@@ -60,7 +107,8 @@ def _parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = _parse_args()
-    pairs = _load_rows(Path(args.pairs))
+    pair_inputs = _resolve_jsonl_inputs(str(args.pairs))
+    pairs = _load_rows(pair_inputs)
     if not pairs:
         raise SystemExit(f"No usable rows in {args.pairs}")
 
@@ -117,7 +165,7 @@ def main() -> int:
     _write_rows(Path(args.train_out), train_rows)
     _write_rows(Path(args.eval_out), eval_rows)
 
-    print(f"[split] input={len(pairs)} train={len(train_rows)} eval={len(eval_rows)}")
+    print(f"[split] inputs={len(pair_inputs)} files input_rows={len(pairs)} train={len(train_rows)} eval={len(eval_rows)}")
     for pair, total, ev in pair_stats:
         print(f"[split] {pair}: total={total} eval={ev}")
     return 0
