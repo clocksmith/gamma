@@ -104,7 +104,8 @@ SFT_STEPS="${SFT_STEPS:-50000}"
 BATCH_SIZE="${BATCH_SIZE:-1}"
 LR="${LR:-2e-5}"
 LOG_EVERY="${LOG_EVERY:-20}"
-SAVE_EVERY="${SAVE_EVERY:-200}"
+SAVE_EVERY="${SAVE_EVERY:-8000}"
+KEEP_CHECKPOINTS="${KEEP_CHECKPOINTS:-5}"
 SELECT_BEST_CHECKPOINT="${SELECT_BEST_CHECKPOINT:-1}"
 LAMBDA_KD="${LAMBDA_KD:-0.5}"
 MU_TRIPLET="${MU_TRIPLET:-0.1}"
@@ -121,6 +122,7 @@ SKIP_TRAIN="${SKIP_TRAIN:-0}"
 AUTO_FALLBACK_TO_CPU="${AUTO_FALLBACK_TO_CPU:-0}"
 RESUME="${RESUME:-0}"
 RESUME_FROM="${RESUME_FROM:-}"
+RESUME_STAGE="${RESUME_STAGE:-auto}"
 EFFECTIVE_STUDENT_MODEL="${STUDENT_MODEL}"
 EFFECTIVE_DEVICE="${DEVICE}"
 
@@ -353,7 +355,7 @@ else
   fi
 fi
 
-if has_subset_artifacts "$VOCAB_SUBSET_DIR"; then
+if [[ "$SUBSET_ENABLED" == "1" ]] && has_subset_artifacts "$VOCAB_SUBSET_DIR"; then
   EFFECTIVE_STUDENT_MODEL="$VOCAB_SUBSET_DIR"
 fi
 
@@ -373,6 +375,7 @@ if [[ "$SKIP_TRAIN" == "0" ]]; then
     --lr "$LR"
     --log-every "$LOG_EVERY"
     --save-every "$SAVE_EVERY"
+    --keep-checkpoints "$KEEP_CHECKPOINTS"
     --lambda-kd "$LAMBDA_KD"
     --mu-triplet "$MU_TRIPLET"
     --margin "$MARGIN"
@@ -390,6 +393,7 @@ if [[ "$SKIP_TRAIN" == "0" ]]; then
     if [[ -n "${RESUME_FROM}" ]]; then
       cmd+=(--resume-from "$RESUME_FROM")
     fi
+    cmd+=(--resume-stage "$RESUME_STAGE")
   fi
 
   if [[ "$SCHEDULE" == "A_then_B" ]]; then
@@ -399,7 +403,7 @@ if [[ "$SKIP_TRAIN" == "0" ]]; then
   if [[ "$ENABLE_LORA" == "1" ]]; then
     cmd+=(--enable-lora --lora-rank "$LORA_RANK" --lora-alpha "$LORA_ALPHA" --lora-dropout "$LORA_DROPOUT")
   fi
-  if [[ -n "$VOCAB_SUBSET_DIR" ]]; then
+  if [[ "$SUBSET_ENABLED" == "1" && -n "$VOCAB_SUBSET_DIR" ]]; then
     cmd+=(--vocab-subset-dir "$VOCAB_SUBSET_DIR")
     if [[ -z "$TOKENIZER_MODEL" ]]; then
       cmd+=(--tokenizer-model "$SUBSET_MODEL")

@@ -231,7 +231,8 @@ def main() -> int:
     ap.add_argument("--batch-size", type=int, default=1)
     ap.add_argument("--lr", type=float, default=2e-5)
     ap.add_argument("--log-every", type=int, default=20)
-    ap.add_argument("--save-every", type=int, default=200)
+    ap.add_argument("--save-every", type=int, default=8000)
+    ap.add_argument("--keep-checkpoints", type=int, default=5)
     ap.add_argument("--select-best-checkpoint", action="store_true")
     ap.add_argument("--no-select-best-checkpoint", dest="select_best_checkpoint", action="store_false")
     ap.set_defaults(select_best_checkpoint=True)
@@ -283,6 +284,7 @@ def main() -> int:
 
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--resume-from", default="")
+    ap.add_argument("--resume-stage", default="auto", choices=["auto", "stage_a", "stage_b", "mixed"])
     ap.add_argument("--allow-download", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
@@ -515,6 +517,7 @@ def main() -> int:
             "--lr", str(float(args.lr)),
             "--log-every", str(int(args.log_every)),
             "--save-every", str(int(args.save_every)),
+            "--keep-checkpoints", str(int(args.keep_checkpoints)),
             "--select-best-checkpoint" if bool(args.select_best_checkpoint) else "--no-select-best-checkpoint",
             "--lambda-kd", str(float(args.lambda_kd)),
             "--mu-triplet", str(float(args.mu_triplet)),
@@ -547,10 +550,12 @@ def main() -> int:
             tokenizer_model = str(args.tokenizer_model).strip() or str(subset_model)
             if tokenizer_model:
                 train_cmd.extend(["--tokenizer-model", tokenizer_model])
-        if args.resume:
-            train_cmd.append("--resume")
-            if args.resume_from.strip():
-                train_cmd.extend(["--resume-from", str(_resolve_path(PROJECT_ROOT, args.resume_from))])
+    if args.resume:
+        train_cmd.append("--resume")
+        if args.resume_from.strip():
+            train_cmd.extend(["--resume-from", str(_resolve_path(PROJECT_ROOT, args.resume_from))])
+        if args.resume_stage != "auto":
+            train_cmd.extend(["--resume-stage", str(args.resume_stage)])
         if args.allow_download:
             train_cmd.append("--allow-download")
 

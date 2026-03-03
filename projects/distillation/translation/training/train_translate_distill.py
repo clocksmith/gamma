@@ -17,6 +17,7 @@ import math
 import re
 import random
 import statistics
+import shutil
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -163,6 +164,12 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--schedule", choices=["A_then_B", "mixed_from_start"], default="A_then_B")
     ap.add_argument("--total-steps", type=int, default=1000)
     ap.add_argument("--sft-steps", type=int, default=0, help="For A_then_B, step split for Stage A. 0 = half of total.")
+    ap.add_argument(
+        "--resume-stage",
+        default="auto",
+        choices=["auto", "stage_a", "stage_b", "mixed"],
+        help="When --resume is set, force which stage to resume into: auto, stage_a, stage_b, mixed.",
+    )
 
     ap.add_argument("--batch-size", type=int, default=1)
     ap.add_argument("--accum-steps", type=int, default=1, help="Gradient accumulation steps.")
@@ -175,7 +182,13 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--max-new-tokens", type=int, default=192)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--lr-warmup-steps", type=int, default=20)
-    ap.add_argument("--save-every", type=int, default=200)
+    ap.add_argument("--save-every", type=int, default=8000)
+    ap.add_argument(
+        "--keep-checkpoints",
+        type=int,
+        default=5,
+        help="Keep at most this many checkpoints per stage, always retaining first and last.",
+    )
     ap.add_argument("--log-every", type=int, default=20)
     ap.add_argument("--lambda-kd", type=float, default=0.5)
     ap.add_argument("--mu-triplet", type=float, default=0.1)
@@ -768,6 +781,44 @@ def _checkpoint_step(path: Path) -> int:
     return _checkpoint_step_from_path(path)
 
 
+def _ordered_checkpoints(stage_dir: Path) -> list[Path]:
+    if not stage_dir.exists():
+        return []
+    return sorted(
+        [p for p in stage_dir.glob("checkpoint-*") if _is_valid_checkpoint_dir(p)],
+        key=lambda p: _checkpoint_step(p),
+    )
+
+
+def _prune_checkpoint_spread(stage_dir: Path, keep_checkpoints: int) -> int:
+    keep = int(keep_checkpoints)
+    if keep <= 0:
+        return 0
+
+    checkpoints = _ordered_checkpoints(stage_dir)
+    if len(checkpoints) <= keep:
+        return 0
+
+    keep = max(2, keep)
+    total = len(checkpoints)
+    target = max(2, min(keep, total))
+    keep_indices = {0, total - 1}
+    if target > 2:
+        for i in range(1, target - 1):
+            idx = round(i * (total - 1) / (target - 1))
+            idx = max(0, min(total - 1, idx))
+            keep_indices.add(idx)
+    keep_indices = sorted(keep_indices)
+    keep_set = {checkpoints[i] for i in keep_indices}
+
+    removed = 0
+    for ckpt in checkpoints:
+        if ckpt not in keep_set:
+            shutil.rmtree(ckpt, ignore_errors=True)
+            removed += 1
+    return removed
+
+
 def _latest_checkpoint_with_step(dir_path: Path) -> tuple[Path | None, int]:
     ckpt = _latest_checkpoint(dir_path)
     if ckpt is None:
@@ -921,6 +972,7 @@ def _save_checkpoint(
     loss_last: float | None = None,
     loss_mean20: float | None = None,
     stage_name: str = "",
+    keep_checkpoints: int = 0,
 ) -> None:
     ckpt = stage_dir / f"checkpoint-{step:06d}"
     ckpt.mkdir(parents=True, exist_ok=True)
@@ -961,6 +1013,7 @@ def _save_checkpoint(
         state,
         ckpt / "training_state.pt",
     )
+    _prune_checkpoint_spread(stage_dir, keep_checkpoints=keep_checkpoints)
 
 
 def _checkpoint_loss(path: Path) -> float | None:
@@ -1078,6 +1131,7 @@ def _train_stage(
     if num_steps <= 0:
         return {}
     stage_dir.mkdir(parents=True, exist_ok=True)
+    _prune_checkpoint_spread(stage_dir, keep_checkpoints=int(args.keep_checkpoints))
     metrics_path = stage_dir / "metrics.jsonl"
     if not metrics_path.exists():
         _append_jsonl(
@@ -1235,6 +1289,7 @@ def _train_stage(
                 loss_last=(losses[-1] if losses else None),
                 loss_mean20=(statistics.fmean(losses[-min(len(losses), 20):]) if losses else None),
                 stage_name=stage_name,
+                keep_checkpoints=int(args.keep_checkpoints),
             )
     if not losses or total > 0:
         _save_checkpoint(
@@ -1248,6 +1303,7 @@ def _train_stage(
             loss_last=(losses[-1] if losses else None),
             loss_mean20=(statistics.fmean(losses[-min(len(losses), 20):]) if losses else None),
             stage_name=stage_name,
+            keep_checkpoints=int(args.keep_checkpoints),
         )
 
     pred_path = _save_predictions(student, tokenizer, vocab_remap, rows, args, stage_dir, device=device)
@@ -1338,6 +1394,25 @@ def main() -> int:
             distill_steps=int(distill_steps),
             total_steps=int(max_steps),
         )
+        forced_stage = str(args.resume_stage).strip().lower()
+        if forced_stage != "auto" and resume_checkpoint is not None:
+            if str(args.schedule) == "A_then_B":
+                if forced_stage in {"stage_a", "stage_b"}:
+                    source_parent = Path(resume_checkpoint).parent.name
+                    if source_parent != forced_stage:
+                        resume_step = 0
+                    resume_stage = forced_stage
+                else:
+                    print(
+                        f"[resume] forced --resume-stage={forced_stage} ignored for schedule {args.schedule}."
+                    )
+            elif str(args.schedule) == "mixed_from_start":
+                if forced_stage != "mixed":
+                    print(
+                        f"[resume] forced --resume-stage={forced_stage} ignored for schedule {args.schedule}; using mixed."
+                    )
+                resume_stage = "mixed"
+
         if resume_checkpoint is not None:
             print(f"[resume] checkpoint={resume_checkpoint} stage={resume_stage} step={resume_step}")
         else:
