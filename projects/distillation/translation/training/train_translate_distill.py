@@ -681,6 +681,14 @@ def _ce_loss(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
 def _kd_loss(student_logits: torch.Tensor, teacher_logits: torch.Tensor, labels: torch.Tensor, temperature: float) -> torch.Tensor:
     shift_s, shift_labels = _shift_logits_and_labels(student_logits, labels)
     shift_t, _ = _shift_logits_and_labels(teacher_logits, labels)
+    if shift_s.size(-1) != shift_t.size(-1):
+        min_vocab = int(min(shift_s.size(-1), shift_t.size(-1)))
+        if min_vocab <= 0:
+            raise RuntimeError(
+                f"invalid vocab size for KD: student={shift_s.size(-1)} teacher={shift_t.size(-1)}"
+            )
+        shift_s = shift_s[..., :min_vocab]
+        shift_t = shift_t[..., :min_vocab]
     if temperature <= 0:
         temperature = 1.0
     mask = shift_labels.ne(-100).view(-1)
@@ -1526,6 +1534,9 @@ def main() -> int:
             stage_b_start = min(resume_step, int(distill_steps))
         elif resume_stage == "mixed":
             mixed_start = min(resume_step, int(max_steps))
+        if resume_stage == "stage_a" and resume_step >= int(sft_steps) and not stage_b_complete:
+            resume_stage = "stage_b"
+            stage_b_start = 0
 
     stage_results: list[dict[str, Any]] = []
 
