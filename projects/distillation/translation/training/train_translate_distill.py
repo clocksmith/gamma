@@ -1487,23 +1487,31 @@ def main() -> int:
 
     rng = random.Random(int(args.seed))
     if resume_checkpoint is not None:
+        checkpoint_stage = Path(resume_checkpoint).parent.name
+        resume_state_stage_compatible = bool(resume_stage) and checkpoint_stage == str(resume_stage)
         resume_state = _load_checkpoint_state(resume_checkpoint)
         _restore_rng_state(resume_state, rng=rng, device=str(device))
         if resume_state:
             state_step = resume_state.get("step")
-            if isinstance(state_step, torch.Tensor):
-                if state_step.numel() == 1:
-                    resume_step = int(state_step.item())
-            elif isinstance(state_step, (int, float)):
-                resume_step = int(state_step)
+            if resume_state_stage_compatible:
+                if isinstance(state_step, torch.Tensor):
+                    if state_step.numel() == 1:
+                        resume_step = int(state_step.item())
+                elif isinstance(state_step, (int, float)):
+                    resume_step = int(state_step)
+            else:
+                print(
+                    "[resume] checkpoint stage does not match requested resume stage; "
+                    "keeping computed resume step and skipping optimizer/scheduler restore."
+                )
             optim_state = resume_state.get("optimizer_state_dict")
-            if isinstance(optim_state, dict):
+            if resume_state_stage_compatible and isinstance(optim_state, dict):
                 try:
                     optimizer.load_state_dict(optim_state)
                 except Exception:
                     print("[resume] failed to restore optimizer state; continuing without it.")
             sched_state = resume_state.get("scheduler_state_dict")
-            if isinstance(sched_state, dict):
+            if resume_state_stage_compatible and isinstance(sched_state, dict):
                 try:
                     scheduler.load_state_dict(sched_state)
                 except Exception:

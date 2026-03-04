@@ -12,22 +12,32 @@
     "projects/distillation/translation/training_data/translate_distill_pairs.jsonl"
   ],
   "pairs_input_spec": "projects/distillation/translation/training_data/translate_distill_pairs.jsonl",
-  "resume_from": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_a/checkpoint-032000",
+  "resume_from": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_b/checkpoint-000005",
   "resume_stage": "stage_b",
-  "resume_step": 32000,
+  "resume_step": 5,
   "resumed": true,
   "schedule": "A_then_B",
-  "select_best_checkpoint": true,
-  "selected_checkpoint": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_a/checkpoint-024000",
-  "selected_checkpoint_loss": 2.16667540371418e-05,
-  "selected_checkpoint_stage": "stage_a",
+  "select_best_checkpoint": false,
+  "selected_checkpoint": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_b/checkpoint-032000",
+  "selected_checkpoint_loss": 0.3275390625,
+  "selected_checkpoint_stage": "stage_b",
   "sft_steps": 32000,
   "source_langs": [
     "en",
     "es"
   ],
-  "stages": [],
-  "student_model": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_a/checkpoint-032000",
+  "stages": [
+    {
+      "loss_ce_final": 0.095703125,
+      "loss_final": 0.328125,
+      "loss_kd_final": 0.462890625,
+      "loss_triplet_final": 0.0,
+      "predictions": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_b/predictions.jsonl",
+      "stage": "A_then_B_stage_b",
+      "steps": 32000.0
+    }
+  ],
+  "student_model": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_b/checkpoint-000005",
   "student_subset_dir": "",
   "student_tokenizer_model": "",
   "student_vocab_size": -1,
@@ -36,7 +46,7 @@
     "es"
   ],
   "teacher_model": "google/translategemma-4b-it",
-  "timestamp": 1772570229.5089197,
+  "timestamp": 1772593904.6593096,
   "total_steps": 64000,
   "vocab_subset_active": false
 }
