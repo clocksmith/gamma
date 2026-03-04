@@ -1,0 +1,52 @@
+{
+  "distill_steps": 4000,
+  "final_out": "projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041/final",
+  "kd_temperature": 1.0,
+  "lambda_kd": 0.05,
+  "lora_enabled": false,
+  "margin": 0.2,
+  "mu_triplet": 0.0,
+  "out_root": "projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041",
+  "pair_count": 1152,
+  "pairs_input_files": [
+    "projects/distillation/translation/training_data/translate_distill_pairs.train.jsonl"
+  ],
+  "pairs_input_spec": "projects/distillation/translation/training_data/translate_distill_pairs.train.jsonl",
+  "resume_from": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_a/checkpoint-032000",
+  "resume_stage": "stage_b",
+  "resume_step": 0,
+  "resumed": true,
+  "schedule": "A_then_B",
+  "select_best_checkpoint": true,
+  "selected_checkpoint": "projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041/stage_b/checkpoint-004000",
+  "selected_checkpoint_loss": 0.10074462890625,
+  "selected_checkpoint_stage": "stage_b",
+  "sft_steps": 32000,
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "stages": [
+    {
+      "loss_ce_final": 0.013427734375,
+      "loss_final": 0.05029296875,
+      "loss_kd_final": 0.73828125,
+      "loss_triplet_final": 0.0,
+      "predictions": "projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041/stage_b/predictions.jsonl",
+      "stage": "A_then_B_stage_b",
+      "steps": 4000.0
+    }
+  ],
+  "student_model": "projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/stage_a/checkpoint-032000",
+  "student_subset_dir": "",
+  "student_tokenizer_model": "",
+  "student_vocab_size": -1,
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher_model": "/home/x/.cache/huggingface/hub/models--google--translategemma-4b-it/snapshots/10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+  "timestamp": 1772638841.6425018,
+  "total_steps": 36000,
+  "vocab_subset_active": false
+}

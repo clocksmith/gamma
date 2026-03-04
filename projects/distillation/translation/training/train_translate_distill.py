@@ -1369,7 +1369,7 @@ def main() -> int:
     if args.schedule == "A_then_B":
         if sft_steps <= 0:
             sft_steps = max(1, max_steps // 2)
-        distill_steps = max(1, max_steps - sft_steps)
+        distill_steps = max(0, max_steps - sft_steps)
     else:
         sft_steps = 0
         distill_steps = 0
@@ -1553,14 +1553,14 @@ def main() -> int:
 
     if args.schedule == "A_then_B":
         run_stage_a = True
-        run_stage_b = True
+        run_stage_b = int(distill_steps) > 0
         if bool(args.resume):
             run_stage_a = (resume_stage == "stage_a" and stage_a_start < int(sft_steps)) or (
                 resume_stage is None and not stage_a_complete
             )
-            run_stage_b = (resume_stage == "stage_b" and stage_b_start < int(distill_steps)) or (
+            run_stage_b = int(distill_steps) > 0 and ((resume_stage == "stage_b" and stage_b_start < int(distill_steps)) or (
                 resume_stage is None and stage_a_complete and not stage_b_complete
-            )
+            ))
         stage_a_dir = run_root / "stage_a"
         stage_a: dict[str, float] = {}
         if run_stage_a:
