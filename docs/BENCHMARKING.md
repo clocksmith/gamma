@@ -96,6 +96,8 @@ python src/benchmarks/mind_meld_benchmark.py \
 
 TypeScript vs JavaScript code generation benchmarks with prompt-quality levels and repeatable reports.
 
+Workspace: `tools/codegen-bench/` (Node.js tooling kept outside `src/`).
+
 ### Language Comparison
 
 Compare TypeScript vs JavaScript code generation:

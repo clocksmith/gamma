@@ -3,7 +3,7 @@
 ## What's Here
 
 - **mind_meld_benchmark.py** - Python benchmarks for Mind Meld performance ✨ NEW CLI
-- **codegen/** - TypeScript vs JavaScript code generation benchmarks (prompt ladder + reports)
+- **tools/codegen-bench/** - TypeScript vs JavaScript code generation benchmarks (prompt ladder + reports)
 
 ---
 
@@ -83,18 +83,18 @@ and rich reports/dashboards.
 
 ```bash
 # Basic JS vs TS comparison (uses mock by default, or configure API keys)
-node src/benchmarks/codegen/index.js
+node tools/codegen-bench/index.js
 
 # Add scripting and backend tasks
-node src/benchmarks/codegen/index.js --extended
+node tools/codegen-bench/index.js --extended
 
 # Include browser/React tasks (requires Playwright)
-node src/benchmarks/codegen/index.js --ui --include-browser
+node tools/codegen-bench/index.js --ui --include-browser
 
 # Explore configuration
-node src/benchmarks/codegen/index.js --help
-node src/benchmarks/codegen/index.js --list-presets
-node src/benchmarks/codegen/index.js --list-variants
+node tools/codegen-bench/index.js --help
+node tools/codegen-bench/index.js --list-presets
+node tools/codegen-bench/index.js --list-variants
 ```
 
 ### Key Features
@@ -128,18 +128,18 @@ Ask questions in natural language:
 
 ```bash
 # Interactive mode
-node src/benchmarks/codegen/query_cli.js
+node tools/codegen-bench/query_cli.js
 
 # Single query
-node src/benchmarks/codegen/query_cli.js "Which model for Python coding?"
+node tools/codegen-bench/query_cli.js "Which model for Python coding?"
 
 # Help
-node src/benchmarks/codegen/query_cli.js --help
+node tools/codegen-bench/query_cli.js --help
 ```
 
 ### Configuration & Documentation
 
-See [codegen/README.md](codegen/README.md) for complete documentation, including:
+See [tools/codegen-bench/README.md](../../tools/codegen-bench/README.md) for complete documentation, including:
 - Available providers and variants
 - Creating custom tasks
 - Report generation
@@ -149,24 +149,24 @@ See [codegen/README.md](codegen/README.md) for complete documentation, including
 
 ```bash
 # Development: fast language comparison (uses mock by default)
-node src/benchmarks/codegen/index.js --basic
+node tools/codegen-bench/index.js --basic
 
 # Backend/server evaluation with live models
-node src/benchmarks/codegen/index.js --extended --provider openai-gpt4
+node tools/codegen-bench/index.js --extended --provider openai-gpt4
 
 # UI/React coverage with Playwright
-node src/benchmarks/codegen/index.js --ui --include-browser
+node tools/codegen-bench/index.js --ui --include-browser
 
 # Inspect available knobs
-node src/benchmarks/codegen/index.js --list-providers
-node src/benchmarks/codegen/index.js --list-categories
+node tools/codegen-bench/index.js --list-providers
+node tools/codegen-bench/index.js --list-categories
 ```
 
 ---
 
 ## See Also
 
-- [Codegen Benchmarks](codegen/README.md) - Complete benchmark suite documentation
+- [Codegen Benchmarks](../../tools/codegen-bench/README.md) - Complete benchmark suite documentation
 - [Mind Meld Benchmark](mind_meld_benchmark.py) - Strategy comparison benchmarks
 - [Main README](../../README.md) - Project overview
 - [Mind Meld](../mind_meld/README.md) - Multi-model collaboration

@@ -184,6 +184,32 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--lr-warmup-steps", type=int, default=20)
     ap.add_argument("--save-every", type=int, default=8000)
     ap.add_argument(
+        "--save-tail-start",
+        type=int,
+        default=0,
+        help=(
+            "Switch to a tail checkpoint frequency at this global step (0 disables tail mode)."
+        ),
+    )
+    ap.add_argument(
+        "--save-every-tail",
+        type=int,
+        default=0,
+        help=(
+            "Checkpoint interval to use in tail mode (0 disables). "
+            "Example: save-every 8000 and save-every-tail 1000 with save-tail-start 30000."
+        ),
+    )
+    ap.add_argument(
+        "--save-tail-max-checkpoints",
+        type=int,
+        default=0,
+        help=(
+            "In tail mode, cap checkpoint count to this many saves (including tail start/end). "
+            "If set, takes precedence over --save-every-tail."
+        ),
+    )
+    ap.add_argument(
         "--keep-checkpoints",
         type=int,
         default=5,
@@ -789,6 +815,31 @@ def _checkpoint_step(path: Path) -> int:
     return _checkpoint_step_from_path(path)
 
 
+def _tail_checkpoint_targets(total_steps: int, tail_start: int, max_checkpoints: int) -> set[int]:
+    total = max(0, int(total_steps))
+    if total <= 0:
+        return set()
+    start = max(1, int(tail_start))
+    if start >= total or max_checkpoints <= 0:
+        return {total}
+    target_count = max(1, int(max_checkpoints))
+    if target_count == 1:
+        return {total}
+    if target_count == 2:
+        return {start, total}
+
+    targets = set()
+    span = float(total - start)
+    for idx in range(target_count):
+        frac = idx / (target_count - 1)
+        step = start + int(round(frac * span))
+        step = max(1, min(total, int(step)))
+        targets.add(step)
+    targets.add(start)
+    targets.add(total)
+    return targets
+
+
 def _ordered_checkpoints(stage_dir: Path) -> list[Path]:
     if not stage_dir.exists():
         return []
@@ -1161,9 +1212,19 @@ def _train_stage(
     ce_hist: list[float] = []
     kd_hist: list[float] = []
     tri_hist: list[float] = []
-    step_start = time.perf_counter()
     start = max(0, int(start_step))
     total = max(0, int(num_steps))
+    save_tail_start = max(0, int(args.save_tail_start))
+    save_tail_max_checkpoints = max(0, int(args.save_tail_max_checkpoints))
+    use_tail_budget = save_tail_start > 0 and save_tail_max_checkpoints > 0
+    tail_target_steps = set()
+    if use_tail_budget:
+        tail_target_steps = _tail_checkpoint_targets(
+            total_steps=total,
+            tail_start=save_tail_start,
+            max_checkpoints=save_tail_max_checkpoints,
+        )
+    step_start = time.perf_counter()
     if start >= total:
         pred_path = stage_dir / "predictions.jsonl"
         return {
@@ -1285,7 +1346,21 @@ def _train_stage(
                 f"kd={rec['loss_kd']:.4f} tri={rec['loss_triplet']:.4f} lr={lr:.2e}"
             )
 
-        if int(args.save_every) > 0 and global_step % int(args.save_every) == 0:
+        save_every = int(args.save_every)
+        save_every_tail = int(args.save_every_tail)
+        should_save = False
+        use_every = save_every
+        if use_tail_budget:
+            if global_step >= save_tail_start and global_step in tail_target_steps:
+                should_save = True
+        elif save_tail_start > 0 and save_every_tail > 0 and global_step >= save_tail_start:
+            use_every = save_every_tail
+            if use_every > 0 and global_step % use_every == 0:
+                should_save = True
+        elif use_every > 0 and global_step % use_every == 0:
+            should_save = True
+
+        if should_save:
             _save_checkpoint(
                 student,
                 tokenizer,

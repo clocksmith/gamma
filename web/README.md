@@ -17,15 +17,20 @@ A browser-based game where you guess the next token an LLM will generate.
 - **Build**: None (static ES modules served directly)
 - **Hosting**: Firebase
 
+## Source of Truth
+
+- Edit files directly in `web/`
+- Do not commit generated bundles under `web/dist/`
+
 ## Models
 
 Small models work on most devices. Experimental models may fail on some hardware.
 
-## Development
+## Development (static only)
 
 ```bash
-npm install
-npm run dev
+cd gamma/web
+python3 -m http.server 5173
 ```
 
 ## Deploy

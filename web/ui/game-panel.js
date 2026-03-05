@@ -42,12 +42,11 @@ export class GamePanel {
 
   setupDOM() {
     this.container.innerHTML = `
-      <div class="gamma-game-panel">
-        <!-- Header with game info -->
+        <div class="gamma-game-panel">
         <header class="game-header">
           <div class="header-left">
             <h1 class="game-title">GAMMA</h1>
-            <span class="model-badge"></span>
+            <span class="model-badge chip"></span>
           </div>
           <div class="header-center">
             <div class="round-pill">
@@ -71,11 +70,10 @@ export class GamePanel {
 
         <!-- Main game area -->
         <main class="game-main">
-          <!-- Context section with attention visualization -->
           <section class="context-section">
             <div class="section-header">
               <h2>Context</h2>
-              <div class="attention-badge" title="Attention source">
+              <div class="attention-badge" role="note" aria-label="Attention source">
                 <span class="attention-icon">◉</span>
                 <span class="attention-label">Real Attention</span>
               </div>
@@ -85,40 +83,36 @@ export class GamePanel {
             </div>
           </section>
 
-          <!-- Choices section -->
           <section class="choices-section">
             <div class="section-header">
               <h2>What comes next?</h2>
               <span class="keyboard-hint">Press 1-4 or A-D to select</span>
             </div>
-            <div class="choices-grid"></div>
+            <ol class="choices-grid" start="1"></ol>
           </section>
 
-          <!-- Result feedback -->
           <div class="result-display hidden">
             <div class="result-icon"></div>
             <div class="result-text"></div>
             <div class="result-explanation"></div>
           </div>
 
-          <!-- Probability distribution (shown after guess) -->
           <section class="probability-section hidden">
             <div class="section-header">
               <h2>Token Probabilities</h2>
               <span class="prob-hint">Top predictions from the model</span>
             </div>
-            <div class="probability-chart"></div>
+            <ol class="probability-chart" aria-label="Top predictions from the model"></ol>
           </section>
         </main>
 
-        <!-- Sidebar with attention heatmap history -->
         <aside class="game-sidebar">
           <div class="sidebar-header">
             <h3>Attention History</h3>
             <button class="sidebar-toggle" aria-label="Toggle sidebar">◀</button>
           </div>
           <div class="attention-heatmap-container">
-            <div class="attention-heatmap"></div>
+            <div class="attention-heatmap" aria-live="polite"></div>
           </div>
           <div class="heatmap-legend">
             <span class="legend-low">Low</span>
@@ -127,9 +121,8 @@ export class GamePanel {
           </div>
         </aside>
 
-        <!-- Action buttons -->
         <footer class="game-footer">
-          <button class="btn btn-primary hidden continue-btn">Continue</button>
+          <button class="btn btn-primary hidden continue-btn" type="button">Continue</button>
           <div class="footer-hint hidden">Press <kbd>Space</kbd> to continue</div>
         </footer>
       </div>
@@ -332,11 +325,11 @@ export class GamePanel {
       return `
         <span class="attn-token-wrapper">
           <span class="attn-token"
-                style="background:rgb(${r},${g},${b}); color:${textColor}; font-size:${size}em"
+                style="--attention-color: rgb(${r}, ${g}, ${b}); --attention-contrast: ${textColor}; --attention-scale: ${size};"
                 data-attention="${intensity.toFixed(3)}">
             ${this.escapeHtml(token)}
           </span>
-          <span class="attn-value" style="color:rgb(${r},${g},${b})">${percentage}</span>
+          <span class="attn-value" style="--attention-color: rgb(${r}, ${g}, ${b});">${percentage}</span>
         </span>
       `;
     }).join('');
@@ -372,7 +365,7 @@ export class GamePanel {
         const token = displayTokens[colIdx] || '?';
         html += `
           <div class="heatmap-cell"
-               style="background:rgb(${r},${g},${b})"
+               style="--heatmap-color: rgb(${r}, ${g}, ${b});"
                title="${this.escapeHtml(token)}: ${(normalized * 100).toFixed(0)}%">
           </div>
         `;
@@ -401,24 +394,28 @@ export class GamePanel {
 
     this.choicesGrid.innerHTML = choices.map((choice, i) => {
       const probPercent = (choice.prob * 100).toFixed(1);
+      const safeChoiceText = this.escapeHtml(choice.text);
       return `
-        <button class="choice-btn"
-                data-index="${i}"
+        <li class="choice-item">
+          <button class="choice-btn"
+                  type="button"
+                  data-index="${i}"
                 data-prob="${probPercent}"
-                aria-label="Choice ${labels[i]}: ${choice.text}"
+                aria-label="Choice ${labels[i]}: ${safeChoiceText}"
                 tabindex="0">
           <div class="choice-key">
             <span class="choice-number">${i + 1}</span>
             <span class="choice-letter">${labels[i]}</span>
           </div>
           <div class="choice-content">
-            <span class="choice-text">${this.escapeHtml(choice.text)}</span>
+            <span class="choice-text">${safeChoiceText}</span>
           </div>
           <div class="choice-prob-bar hidden">
-            <div class="prob-fill" style="width: ${Math.min(probPercent, 100)}%"></div>
+            <div class="prob-fill" style="--prob-width: ${Math.min(probPercent, 100)}%;"></div>
             <span class="prob-value">${probPercent}%</span>
           </div>
-        </button>
+          </button>
+        </li>
       `;
     }).join('');
 
@@ -451,14 +448,14 @@ export class GamePanel {
       const isChoice = this.pendingTopTokens?.some(t => t.text === token.text);
 
       return `
-        <div class="prob-bar-row ${isChoice ? 'was-choice' : ''}" style="--rank: ${i}">
+        <li class="prob-bar-row ${isChoice ? 'was-choice' : ''}" aria-posinset="${i + 1}" aria-setsize="10">
           <span class="prob-rank">#${i + 1}</span>
           <span class="prob-token">${this.escapeHtml(token.text)}</span>
           <div class="prob-bar">
-            <div class="prob-bar-fill" style="width: ${widthPercent}%"></div>
+            <div class="prob-bar-fill" style="--bar-width: ${widthPercent}%"></div>
           </div>
           <span class="prob-percent">${probPercent}%</span>
-        </div>
+        </li>
       `;
     }).join('');
 

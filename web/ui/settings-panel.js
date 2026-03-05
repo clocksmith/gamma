@@ -81,7 +81,7 @@ export class SettingsPanel {
                 <span class="setting-hint">Options per round (2-6)</span>
               </label>
               <div class="setting-control">
-                <select id="setting-num-choices">
+                <select id="setting-num-choices" class="border-default">
                   <option value="2" ${this.config.numChoices === 2 ? 'selected' : ''}>2 choices</option>
                   <option value="3" ${this.config.numChoices === 3 ? 'selected' : ''}>3 choices</option>
                   <option value="4" ${this.config.numChoices === 4 ? 'selected' : ''}>4 choices (default)</option>

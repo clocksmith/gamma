@@ -10,6 +10,8 @@
   padding: 0;
   color: inherit;
   background: transparent;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 button {
@@ -17,6 +19,15 @@ button {
   border: none;
   background: none;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input,
+textarea,
+select {
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 html {
@@ -25,6 +36,24 @@ html {
   -moz-osx-font-smoothing: grayscale;
   background: var(--bg);
   color: var(--fg);
+  color-scheme: light;
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--fg) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset !important;
+  box-shadow: 0 0 0 1000px var(--bg) inset !important;
+  transition: background-color 9999s ease-out 0s;
+}
+
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--fg) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset !important;
+  box-shadow: 0 0 0 1000px var(--bg) inset !important;
 }
 
 body {
@@ -125,6 +154,10 @@ pre,
 code,
 .checkbox-label input[type="checkbox"] {
   border: var(--border-sm) solid var(--fg);
+}
+
+.border-frame-dotted {
+  border: var(--border-md) dotted var(--fg);
 }
 
 .border-ghost {

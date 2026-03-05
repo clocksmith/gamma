@@ -61,7 +61,7 @@ def test_resolve_codegen_benchmark_dir_missing(tmp_path: Path) -> None:
 
 @pytest.mark.regression
 def test_run_codegen_language_handles_missing_node(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    benchmark_dir = tmp_path / "src" / "benchmarks" / "codegen"
+    benchmark_dir = tmp_path / "tools" / "codegen-bench"
     benchmark_dir.mkdir(parents=True, exist_ok=True)
 
     def _print_help(_: str) -> None:

@@ -87,8 +87,15 @@ def run_codegen_command(
 
 
 def _resolve_codegen_benchmark_dir(root_dir: str) -> str:
-    benchmark_dir = os.path.join(root_dir, "src", "benchmarks", "codegen")
-    if not os.path.exists(benchmark_dir):
-        print(f"Error: codegen benchmarks not found at {benchmark_dir}")
-        sys.exit(1)
-    return benchmark_dir
+    primary = os.path.join(root_dir, "tools", "codegen-bench")
+    legacy = os.path.join(root_dir, "src", "benchmarks", "codegen")
+
+    if os.path.exists(primary):
+        return primary
+    if os.path.exists(legacy):
+        return legacy
+
+    print("Error: codegen benchmarks not found.")
+    print(f"  Expected workspace: {primary}")
+    print(f"  Legacy fallback:    {legacy}")
+    sys.exit(1)

@@ -12,6 +12,9 @@
 Before any distillation run or checkpoint sweep:
 - Resolve `PYTHON_BIN` (prefer `.venv/bin/python`), and verify `torch` + `transformers` import.
 - Print runtime visibility: `torch.cuda.is_available()`, `torch.cuda.device_count()`, target `DEVICE`.
+- On ROCm, prove real GPU compute before launch (not just visibility) with a tiny CUDA matmul probe.
+  - If probe fails with `HIP error: invalid device function`, retry probe with `HSA_OVERRIDE_GFX_VERSION=11.0.0`.
+  - Do not launch until the compute probe succeeds in the same runtime mode you will train with.
 - Verify all train/eval pair files exist and match intended input spec.
 - If resuming, verify `resume_from` exists and is consistent with `resume_stage`.
 - If checkpoint loading can fail from vocab/tokenizer mismatch, stop and fix before launch.
@@ -26,6 +29,12 @@ For every run/sweep, log one contract line:
 ```text
 [run-contract] run_name=<name> pairs_input_spec=<path-or-spec> resume_from=<path|none> resume_stage=<stage|none> decode=<greedy|sampled> eval_dataset_paths=<comma-separated paths> device=<auto|cuda|cpu> schedule=<A_then_B|mixed_from_start> runtime_mode=<normal_rocm|rocm_gfx_override|cpu>
 ```
+
+After launch, verify the run is truly active before handoff:
+- `stage_a/metrics.jsonl` (or current stage metrics) exists and grows.
+- Training log shows step lines (example: `[A_then_B_stage_a] step=20 ...`).
+- `rocm-smi` shows elevated GPU use during active steps.
+- If detached `nohup` jobs die in your environment, relaunch in a persistent session (`tmux`/`screen`/interactive PTY).
 
 After each sweep or major eval batch, ensure these artifacts exist and are linked:
 - `manifest.jsonl`

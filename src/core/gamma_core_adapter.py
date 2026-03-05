@@ -1,10 +1,4 @@
-"""
-Gamma Core Adapter.
-
-Provides compatibility layer between Gamma and gamma-core,
-allowing Gamma to use shared infrastructure while maintaining
-backward compatibility with existing code.
-"""
+"""Adapter that imports shared gamma-core modules with a fixed contract."""
 
 from __future__ import annotations
 
@@ -13,95 +7,61 @@ import sys
 from pathlib import Path
 
 
-def _add_gamma_core_search_paths() -> None:
+def _resolve_gamma_core_src() -> Path:
     """
-    Add optional gamma-core search paths if the package is not already installed.
+    Resolve the gamma-core source directory.
 
-    Search order:
-    1) GAMMA_CORE_PATH env var (explicit override)
-    2) local repo sibling: <repo>/gamma-core
+    Contract:
+    - Default: <repo>/gamma-core/src (vendored checkout)
+    - Override: GAMMA_CORE_SRC_PATH (absolute or relative path to gamma-core/src)
     """
-    candidates: list[Path] = []
-    env_path = os.environ.get("GAMMA_CORE_PATH", "").strip()
-    if env_path:
-        candidates.append(Path(env_path).expanduser())
-    candidates.append(Path(__file__).resolve().parents[2] / "gamma-core")
+    override = os.environ.get("GAMMA_CORE_SRC_PATH", "").strip()
+    if override:
+        return Path(override).expanduser().resolve()
+    return (Path(__file__).resolve().parents[2] / "gamma-core" / "src").resolve()
 
-    expanded: list[Path] = []
-    for candidate in candidates:
-        expanded.append(candidate)
-        expanded.append(candidate / "src")
 
-    for candidate in expanded:
-        if not candidate.exists() or not candidate.is_dir():
-            continue
-        candidate_str = str(candidate)
-        if candidate_str not in sys.path:
-            sys.path.insert(0, candidate_str)
+def _ensure_gamma_core_path() -> Path:
+    src_path = _resolve_gamma_core_src()
+    if not src_path.exists() or not src_path.is_dir():
+        raise ModuleNotFoundError(
+            "gamma-core source directory is missing. Expected: "
+            f"{src_path}. Set GAMMA_CORE_SRC_PATH to a valid gamma-core/src path."
+        )
+    src_path_str = str(src_path)
+    if src_path_str not in sys.path:
+        sys.path.insert(0, src_path_str)
+    return src_path
 
 
 def _import_gamma_core():
-    def _from_gamma_core_package():
-        from gamma_core.engine import ModelEngine as CoreModelEngine, EngineConfig as CoreEngineConfig
-        from gamma_core.game import DifficultyLevel as CoreDifficultyLevel, GameSession as CoreGameSession
-        from gamma_core.ui import color_text, print_header, print_separator, wrap_print, UIConfig
-        return (
-            CoreModelEngine,
-            CoreEngineConfig,
-            CoreDifficultyLevel,
-            CoreGameSession,
-            color_text,
-            print_header,
-            print_separator,
-            wrap_print,
-            UIConfig,
-        )
+    """
+    Import gamma-core symbols from vendored src modules.
 
-    def _from_gamma_core_src_layout():
+    gamma-core currently exports top-level modules: engine, game, ui.
+    """
+    _ensure_gamma_core_path()
+    try:
         from engine import ModelEngine as CoreModelEngine, EngineConfig as CoreEngineConfig
         from game import DifficultyLevel as CoreDifficultyLevel, GameSession as CoreGameSession
         from ui import color_text, print_header, print_separator, wrap_print, UIConfig
-        return (
-            CoreModelEngine,
-            CoreEngineConfig,
-            CoreDifficultyLevel,
-            CoreGameSession,
-            color_text,
-            print_header,
-            print_separator,
-            wrap_print,
-            UIConfig,
-        )
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "gamma-core modules are not importable from the configured source path. "
+            "Ensure gamma-core/src contains engine/, game/, and ui/ packages."
+        ) from exc
 
-    try:
-        return _from_gamma_core_package()
-    except ModuleNotFoundError:
-        try:
-            return _from_gamma_core_src_layout()
-        except ModuleNotFoundError as first_exc:
-            _add_gamma_core_search_paths()
-            try:
-                return _from_gamma_core_package()
-            except ModuleNotFoundError:
-                try:
-                    return _from_gamma_core_src_layout()
-                except ModuleNotFoundError as exc:
-                    raise ModuleNotFoundError(
-                        "gamma_core is not importable. Install with `pip install -r requirements-core.txt` "
-                        "or set GAMMA_CORE_PATH to a local gamma-core checkout."
-                    ) from (exc or first_exc)
-    except Exception as first_exc:
-        _add_gamma_core_search_paths()
-        try:
-            return _from_gamma_core_package()
-        except Exception:
-            try:
-                return _from_gamma_core_src_layout()
-            except Exception as exc:
-                raise ModuleNotFoundError(
-                    "gamma_core is not importable. Install with `pip install -r requirements-core.txt` "
-                    "or set GAMMA_CORE_PATH to a local gamma-core checkout."
-                ) from (exc or first_exc)
+    return (
+        CoreModelEngine,
+        CoreEngineConfig,
+        CoreDifficultyLevel,
+        CoreGameSession,
+        color_text,
+        print_header,
+        print_separator,
+        wrap_print,
+        UIConfig,
+    )
 
 
 (

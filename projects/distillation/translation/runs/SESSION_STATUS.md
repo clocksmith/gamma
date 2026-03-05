@@ -19,7 +19,7 @@ Distill `google/translategemma-4b-it` into a Gemma 3 1B student for EN<->ES tran
 
 ## Key Run Timeline
 
-1. `translategmma4b_es_en_gemma3_1b_full_20260303_114100`
+1. `translategemma4b_es_en_gemma3_1b_full_20260303_114100`
    - Effective train input: `translate_distill_pairs.jsonl` (`pair_count=1280`).
    - Stage A checkpoint `stage_a/checkpoint-032000` performs strongly on eval2/eval3.
    - Stage B (as resumed then configured) collapsed relative to Stage A.
@@ -41,6 +41,40 @@ Distill `google/translategemma-4b-it` into a Gemma 3 1B student for EN<->ES tran
    - `translate_distill_pairs.jsonl`: 1280 rows.
    - `translate_distill_pairs.train.jsonl`: 1152 rows.
 5. Remaining question: is Stage B underperformance mainly due to schedule/objective, or due to using only the 1152 subset.
+
+## In-Progress Stage A Scale-Up (2026-03-04)
+
+Run:
+- `translategemma4b_es_en_gemma3_1b_stagea_only_train17532_sft32k_20260304_171311`
+
+Config:
+- Pairs: `translate_distill_pairs_en_es_2way.train.merged.jsonl` (`17532` rows).
+- Schedule: `A_then_B` with `total_steps=32000`, `sft_steps=32000` (effective Stage A-only).
+- Loss weights: `lambda_kd=0.0`, `mu_triplet=0.0`.
+- Runtime mode: `rocm_gfx_override` (`HSA_OVERRIDE_GFX_VERSION=11.0.0`).
+
+Live status (as of 2026-03-04 13:12 EST):
+- Step `10960/32000` (`34.25%`), process alive.
+- Saved checkpoints: `stage_a/checkpoint-004000`, `stage_a/checkpoint-008000`.
+
+### Preliminary Loss-Trajectory Comparison vs Stage A (1280 rows)
+
+Comparison target:
+- `translategemma4b_es_en_gemma3_1b_full_20260303_114100/stage_a/metrics.jsonl` (1280-row Stage A baseline).
+
+Observed from `metrics.jsonl` (training loss only):
+1. Faster early optimization on 17532-row run:
+   - step 1000: `0.1159` vs `0.3878` (better by `-0.2718`)
+   - step 2000: `0.0229` vs `0.2519` (better by `-0.2290`)
+2. Mean loss over overlapping range through ~10.6k steps:
+   - current: `0.0774`
+   - baseline: `0.1033`
+   - delta: `-0.0259`
+3. Baseline run reaches near-zero loss more aggressively in the late overlap window; current run remains less collapsed in tail averages.
+
+Interpretation:
+1. 17532-row Stage A run shows healthier/faster early-mid learning than 1280-row Stage A baseline.
+2. Train loss is not a selection metric by itself; final decision still requires eval2/eval3 BLEU/chrF from checkpoints.
 
 ## Immediate Next Experiments
 

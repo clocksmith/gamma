@@ -232,6 +232,9 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=2e-5)
     ap.add_argument("--log-every", type=int, default=20)
     ap.add_argument("--save-every", type=int, default=8000)
+    ap.add_argument("--save-tail-start", type=int, default=0)
+    ap.add_argument("--save-every-tail", type=int, default=0)
+    ap.add_argument("--save-tail-max-checkpoints", type=int, default=0)
     ap.add_argument("--keep-checkpoints", type=int, default=5)
     ap.add_argument("--select-best-checkpoint", action="store_true")
     ap.add_argument("--no-select-best-checkpoint", dest="select_best_checkpoint", action="store_false")
@@ -517,6 +520,9 @@ def main() -> int:
             "--lr", str(float(args.lr)),
             "--log-every", str(int(args.log_every)),
             "--save-every", str(int(args.save_every)),
+            "--save-tail-start", str(int(args.save_tail_start)),
+            "--save-every-tail", str(int(args.save_every_tail)),
+            "--save-tail-max-checkpoints", str(int(args.save_tail_max_checkpoints)),
             "--keep-checkpoints", str(int(args.keep_checkpoints)),
             "--select-best-checkpoint" if bool(args.select_best_checkpoint) else "--no-select-best-checkpoint",
             "--lambda-kd", str(float(args.lambda_kd)),

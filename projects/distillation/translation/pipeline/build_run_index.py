@@ -7,6 +7,7 @@ import argparse
 import csv
 import datetime as dt
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -50,6 +51,91 @@ def _safe_rel(path: Path, start: Path) -> str:
         return str(path)
 
 
+def _as_repo_path(path: str | Path, repo_root: Path) -> Path:
+    p = path if isinstance(path, Path) else Path(path)
+    if p.is_absolute():
+        return p
+    return repo_root / p
+
+
+def _fmt_bool(value: Any) -> str:
+    return str(bool(value)).lower()
+
+
+def _path_stem(path: str) -> str:
+    if not path:
+        return ""
+    try:
+        return Path(path).name
+    except Exception:
+        return str(path)
+
+
+def _timestamp_utc_from_file(path: Path) -> str:
+    try:
+        return dt.datetime.fromtimestamp(path.stat().st_mtime, tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    except Exception:
+        return ""
+
+
+def _parse_run_contract(path: Path) -> dict[str, str]:
+    """Parse a minimal [run-contract] key/value file.
+
+    The contract format is intentionally loose (single line, space separated key=value).
+    """
+    data: dict[str, str] = {}
+    if not path.is_file():
+        return data
+    try:
+        text = path.read_text(encoding="utf-8")
+    except Exception:
+        return data
+
+    for line in text.splitlines():
+        line = line.strip()
+        if not line.startswith("[run-contract]"):
+            continue
+        body = line[len("[run-contract]") :].strip()
+        for token in re.split(r"\s+", body):
+            if "=" not in token:
+                continue
+            key, value = token.split("=", 1)
+            data[key.strip()] = value.strip()
+        break
+    return data
+
+
+def _checkpoint_step(name: str) -> int:
+    m = re.fullmatch(r"checkpoint-(\d+)", name)
+    if not m:
+        return -1
+    try:
+        return int(m.group(1))
+    except Exception:
+        return -1
+
+
+def _latest_checkpoint(path: Path, repo_root: Path) -> str:
+    if not path.is_dir():
+        return ""
+    latest_step = -1
+    latest_path: Path | None = None
+    for child in path.iterdir():
+        if not child.is_dir():
+            continue
+        step = _checkpoint_step(child.name)
+        if step < 0:
+            continue
+        if step > latest_step:
+            latest_step = step
+            latest_path = child
+    return _safe_rel(latest_path, repo_root) if latest_path else ""
+
+
+def _mtime_utc(path: Path) -> str:
+    return _timestamp_utc_from_file(path)
+
+
 def _run_sort_key(row: dict[str, Any]) -> tuple[float, str]:
     ts = row.get("timestamp_epoch")
     try:
@@ -64,33 +150,126 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
         if not child.is_dir() or child.is_symlink():
             continue
         summary_path = child / "train_summary.json"
-        if not summary_path.is_file():
-            continue
-        summary = _read_json(summary_path)
-        if not summary:
-            continue
+        contract_path = child / "run_contract.txt"
+
+        summary: dict[str, Any] | None = _read_json(summary_path) if summary_path.is_file() else None
+        contract = _parse_run_contract(contract_path)
+
+        source_langs = ""
+        target_langs = ""
+
+        if summary:
+            source = "train_summary"
+            timestamp_epoch = float(summary.get("timestamp", -1.0) or -1.0)
+            timestamp_utc = _fmt_ts(summary.get("timestamp"))
+            pair_count = _fmt_int(summary.get("pair_count"))
+            pairs_input_spec = str(summary.get("pairs_input_spec", ""))
+            eval_dataset_paths = ",".join((summary.get("eval_dataset_paths") or [])) if isinstance(summary.get("eval_dataset_paths"), list) else ""
+            schedule = str(summary.get("schedule", ""))
+            sft_steps = _fmt_int(summary.get("sft_steps"))
+            distill_steps = _fmt_int(summary.get("distill_steps"))
+            lambda_kd = _fmt_float(summary.get("lambda_kd"))
+            mu_triplet = _fmt_float(summary.get("mu_triplet"))
+            resumed = _fmt_bool(summary.get("resumed", False))
+            resume_stage = str(summary.get("resume_stage", ""))
+            resume_from = str(summary.get("resume_from", ""))
+            selected_checkpoint = str(summary.get("selected_checkpoint", ""))
+            selected_checkpoint_stage = str(summary.get("selected_checkpoint_stage", ""))
+            selected_checkpoint_loss = _fmt_float(summary.get("selected_checkpoint_loss"))
+            run_status = "completed"
+            total_steps = _fmt_int(summary.get("total_steps"))
+            final_out = str(summary.get("final_out", ""))
+            source_langs = ",".join(summary.get("source_langs", []) or []) if isinstance(summary.get("source_langs"), list) else ""
+            target_langs = ",".join(summary.get("target_langs", []) or []) if isinstance(summary.get("target_langs"), list) else ""
+        elif contract:
+            source = "run_contract"
+            try:
+                # contract format currently does not include a timestamp field.
+                # keep deterministic fallback to file mtime for sorting.
+                timestamp_epoch = float(contract_path.stat().st_mtime)
+            except Exception:
+                timestamp_epoch = -1.0
+            timestamp_utc = _mtime_utc(contract_path)
+            pair_count = ""
+            pairs_input_spec = contract.get("pairs_input_spec", "")
+            eval_dataset_paths = contract.get("eval_dataset_paths", "")
+            schedule = contract.get("schedule", "")
+            sft_steps = ""
+            distill_steps = ""
+            lambda_kd = ""
+            mu_triplet = ""
+            resumed = _fmt_bool(contract.get("resume_stage") not in ("", "none", None))
+            resume_stage = contract.get("resume_stage", "none")
+            resume_from = contract.get("resume_from", "")
+            selected_checkpoint = ""
+            selected_checkpoint_stage = ""
+            selected_checkpoint_loss = ""
+            run_status = "contract_only"
+            total_steps = ""
+            final_out = ""
+        else:
+            source = "none"
+            try:
+                timestamp_epoch = float(child.stat().st_mtime)
+            except Exception:
+                timestamp_epoch = -1.0
+            timestamp_utc = _mtime_utc(child)
+            pair_count = ""
+            pairs_input_spec = ""
+            eval_dataset_paths = ""
+            schedule = ""
+            sft_steps = ""
+            distill_steps = ""
+            lambda_kd = ""
+            mu_triplet = ""
+            resumed = "false"
+            resume_stage = ""
+            resume_from = ""
+            selected_checkpoint = ""
+            selected_checkpoint_stage = ""
+            selected_checkpoint_loss = ""
+            run_status = "sparse"
+            total_steps = ""
+            final_out = ""
+
+        # Keep this lightweight to avoid crashes on sparse metadata.
+        if not final_out:
+            final_dir = child / "final"
+            if final_dir.exists():
+                final_out = _safe_rel(final_dir, repo_root)
+
         rows.append(
             {
                 "run_name": child.name,
-                "summary_path": _safe_rel(summary_path, repo_root),
-                "timestamp_epoch": float(summary.get("timestamp", -1.0) or -1.0),
-                "timestamp_utc": _fmt_ts(summary.get("timestamp")),
-                "schedule": str(summary.get("schedule", "")),
-                "pair_count": _fmt_int(summary.get("pair_count")),
-                "pairs_input_spec": str(summary.get("pairs_input_spec", "")),
-                "source_langs": ",".join(summary.get("source_langs", []) or []),
-                "target_langs": ",".join(summary.get("target_langs", []) or []),
-                "total_steps": _fmt_int(summary.get("total_steps")),
-                "sft_steps": _fmt_int(summary.get("sft_steps")),
-                "distill_steps": _fmt_int(summary.get("distill_steps")),
-                "lambda_kd": _fmt_float(summary.get("lambda_kd")),
-                "mu_triplet": _fmt_float(summary.get("mu_triplet")),
-                "resumed": str(bool(summary.get("resumed", False))).lower(),
-                "resume_stage": str(summary.get("resume_stage", "")),
-                "resume_from": str(summary.get("resume_from", "")),
-                "selected_checkpoint": str(summary.get("selected_checkpoint", "")),
-                "selected_checkpoint_stage": str(summary.get("selected_checkpoint_stage", "")),
-                "selected_checkpoint_loss": _fmt_float(summary.get("selected_checkpoint_loss")),
+                "run_root": _safe_rel(child, repo_root),
+                "run_status": run_status,
+                "summary_source": source,
+                "summary_path": _safe_rel(summary_path, repo_root) if summary_path.is_file() else (
+                    _safe_rel(contract_path, repo_root) if contract else ""
+                ),
+                "timestamp_epoch": float(timestamp_epoch),
+                "timestamp_utc": timestamp_utc,
+                "schedule": schedule,
+                "pair_count": pair_count,
+                "pairs_input_spec": pairs_input_spec,
+                "source_langs": source_langs,
+                "target_langs": target_langs,
+                "eval_dataset_paths": eval_dataset_paths,
+                "total_steps": total_steps,
+                "sft_steps": sft_steps,
+                "distill_steps": distill_steps,
+                "lambda_kd": lambda_kd,
+                "mu_triplet": mu_triplet,
+                "resumed": resumed,
+                "resume_stage": resume_stage,
+                "resume_from": resume_from,
+                "selected_checkpoint": selected_checkpoint,
+                "selected_checkpoint_stage": selected_checkpoint_stage,
+                "selected_checkpoint_loss": selected_checkpoint_loss,
+                "latest_stage_a_checkpoint": _latest_checkpoint(child / "stage_a", repo_root),
+                "latest_stage_b_checkpoint": _latest_checkpoint(child / "stage_b", repo_root),
+                "final_model": final_out,
+                "updated_utc": _mtime_utc(_as_repo_path(child, repo_root)),
             }
         )
     rows.sort(key=_run_sort_key, reverse=True)
@@ -98,12 +277,96 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
 
 
 def _decode_from_path(path: Path) -> str:
-    for part in path.parts:
-        if "__greedy" in part:
+    for part in reversed(path.parts):
+        if part.endswith("__greedy") or part == "greedy":
             return "greedy"
-        if "__sampled" in part:
+        if part.endswith("__sampled") or part == "sampled":
             return "sampled"
+    folder = path.name
+    if folder.endswith("__greedy"):
+        return "greedy"
+    if folder.endswith("__sampled"):
+        return "sampled"
     return ""
+
+
+def _find_eval_dataset(summary: dict[str, Any], eval_name: str) -> str:
+    pairs = str(summary.get("pairs") or "")
+    if not pairs:
+        pair_files = summary.get("pair_files")
+        if isinstance(pair_files, list) and pair_files:
+            first_pair = pair_files[0]
+            if isinstance(first_pair, str):
+                pairs = first_pair
+    if pairs:
+        return pairs
+    return eval_name
+
+
+def _infer_eval_components(eval_name: str) -> tuple[str, str, str]:
+    parts = eval_name.split("__")
+    if len(parts) == 1:
+        return eval_name, "", ""
+    eval_set = parts[0]
+    checkpoint = ""
+    variant_parts: list[str] = []
+    for part in parts[1:]:
+        if part.startswith("checkpoint-"):
+            checkpoint = part
+            continue
+        if part in {"greedy", "sampled"}:
+            continue
+        if part:
+            variant_parts.append(part)
+    return eval_set, "__".join(variant_parts), checkpoint
+
+
+def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> dict[str, str]:
+    eval_name = path.name
+    eval_set, eval_variant, eval_checkpoint = _infer_eval_components(eval_name)
+    student = summary.get("student") if isinstance(summary.get("student"), dict) else {}
+    model = str(student.get("model", "")) if isinstance(student, dict) else ""
+    pred_path = ""
+    if isinstance(student, dict):
+        pred = student.get("predictions")
+        if isinstance(pred, dict):
+            pred_path = str(pred.get("path", ""))
+        elif isinstance(pred, str):
+            pred_path = pred
+    return {
+        "run_name": str(path.parent.parent.name),
+        "eval_dir": eval_name,
+        "eval_set": eval_set,
+        "eval_variant": eval_variant,
+        "eval_checkpoint": eval_checkpoint,
+        "eval_dir_path": _safe_rel(path, repo_root),
+        "decode": _decode_from_path(path),
+        "eval_samples": _fmt_int(summary.get("eval_samples")),
+        "eval_timestamp_utc": _timestamp_utc_from_file(path),
+        "pairs": _find_eval_dataset(summary, eval_name),
+        "pairs_stem": _path_stem(_find_eval_dataset(summary, eval_name)),
+        "student_model": model,
+        "bleu": _fmt_float(((summary.get("student", {}) or {}).get("metrics_overall", {}).get("bleu", {}) or {}).get("score")),
+        "chrf": _fmt_float(((summary.get("student", {}) or {}).get("metrics_overall", {}).get("chrf", {}) or {}).get("score")),
+        "predictions_path": _safe_rel(Path(pred_path), repo_root) if pred_path else "",
+        "compare_summary_path": _safe_rel(path, repo_root),
+    }
+
+
+def _collect_eval_rows_for_path(compare_path: Path, runs_root: Path, repo_root: Path) -> dict[str, str] | None:
+    summary = _read_json(compare_path)
+    if not summary:
+        return None
+    summary_path = compare_path.resolve()
+    run_root = next((p for p in summary_path.parents if p.parent == runs_root), None)
+    if run_root is None:
+        run_root = summary_path.parent.parent
+    run_name = run_root.name if run_root else ""
+    if not run_name:
+        return None
+    row = _collect_eval_row(summary_path.parent, summary, repo_root)
+    row["run_name"] = run_name
+    return row
 
 
 def collect_eval_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str]]:
@@ -117,30 +380,10 @@ def collect_eval_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str]]:
         if resolved in seen:
             continue
         seen.add(resolved)
-        summary = _read_json(compare_path)
-        if not summary:
+        row = _collect_eval_rows_for_path(compare_path, runs_root, repo_root)
+        if not row:
             continue
-        rel = compare_path.relative_to(runs_root)
-        if len(rel.parts) < 2:
-            continue
-        run_name = rel.parts[0]
-        student = summary.get("student") or {}
-        overall = student.get("metrics_overall") or {}
-        bleu = (overall.get("bleu") or {}).get("score")
-        chrf = (overall.get("chrf") or {}).get("score")
-        rows.append(
-            {
-                "run_name": run_name,
-                "eval_dir": compare_path.parent.name,
-                "decode": _decode_from_path(compare_path),
-                "eval_samples": _fmt_int(summary.get("eval_samples")),
-                "pairs": str(summary.get("pairs", "")),
-                "student_model": str(student.get("model", "")),
-                "bleu": _fmt_float(bleu),
-                "chrf": _fmt_float(chrf),
-                "compare_summary_path": _safe_rel(compare_path, repo_root),
-            }
-        )
+        rows.append(row)
     rows.sort(key=lambda x: (x["run_name"], x["eval_dir"], x["decode"]))
     return rows
 
@@ -173,16 +416,27 @@ def write_markdown(
     run_view = [
         {
             "run_name": row["run_name"],
+            "run_status": row["run_status"],
+            "run_root": row["run_root"],
             "timestamp_utc": row["timestamp_utc"],
+            "updated_utc": row["updated_utc"],
+            "source_langs": row["source_langs"],
+            "target_langs": row["target_langs"],
+            "eval_dataset_paths": row["eval_dataset_paths"],
             "pair_count": row["pair_count"],
             "pairs_input_spec": row["pairs_input_spec"],
+            "total_steps": row["total_steps"],
             "schedule": row["schedule"],
-            "sft_steps": row["sft_steps"],
-            "distill_steps": row["distill_steps"],
+            "sft_steps": row["sft_steps"] if row["sft_steps"] != "" else "",
+            "distill_steps": row["distill_steps"] if row["distill_steps"] != "" else "",
             "lambda_kd": row["lambda_kd"],
             "mu_triplet": row["mu_triplet"],
             "resumed": row["resumed"],
             "summary_path": row["summary_path"],
+            "latest_stage_a_checkpoint": Path(row["latest_stage_a_checkpoint"]).name if row["latest_stage_a_checkpoint"] else "",
+            "latest_stage_b_checkpoint": Path(row["latest_stage_b_checkpoint"]).name if row["latest_stage_b_checkpoint"] else "",
+            "final_model": row["final_model"],
+            "summary_source": row["summary_source"],
         }
         for row in run_rows
     ]
@@ -190,11 +444,18 @@ def write_markdown(
         {
             "run_name": row["run_name"],
             "eval_dir": row["eval_dir"],
+            "eval_set": row["eval_set"],
+            "eval_variant": row["eval_variant"],
             "decode": row["decode"],
             "bleu": row["bleu"],
             "chrf": row["chrf"],
             "pairs": row["pairs"],
+            "eval_timestamp_utc": row["eval_timestamp_utc"],
+            "samples": row["eval_samples"],
+            "student_model": row["student_model"],
             "compare_summary_path": row["compare_summary_path"],
+            "predictions_path": row["predictions_path"],
+            "eval_dir_path": row["eval_dir_path"],
         }
         for row in eval_rows
     ]
@@ -212,21 +473,32 @@ def write_markdown(
                 run_view,
                 [
                     ("run_name", "run"),
+                    ("run_status", "status"),
+                    ("run_root", "run_path"),
                     ("timestamp_utc", "timestamp_utc"),
+                    ("updated_utc", "updated_utc"),
+                    ("source_langs", "source_langs"),
+                    ("target_langs", "target_langs"),
+                    ("eval_dataset_paths", "eval_datasets"),
                     ("pair_count", "pair_count"),
                     ("pairs_input_spec", "pairs_input"),
+                    ("total_steps", "total_steps"),
                     ("schedule", "schedule"),
                     ("sft_steps", "sft_steps"),
                     ("distill_steps", "distill_steps"),
                     ("lambda_kd", "lambda_kd"),
                     ("mu_triplet", "mu_triplet"),
                     ("resumed", "resumed"),
+                    ("summary_source", "summary_source"),
                     ("summary_path", "summary"),
+                    ("latest_stage_a_checkpoint", "latest_stage_a_ckpt"),
+                    ("latest_stage_b_checkpoint", "latest_stage_b_ckpt"),
+                    ("final_model", "final_model"),
                 ],
             )
         )
     else:
-        md.append("_No runs with train_summary.json found._")
+        md.append("_No run folders found._")
     md.append("")
     md.append("## Eval Results")
     md.append("")
@@ -237,11 +509,19 @@ def write_markdown(
                 [
                     ("run_name", "run"),
                     ("eval_dir", "eval"),
+                    ("eval_set", "eval_set"),
+                    ("eval_variant", "eval_variant"),
+                    ("eval_checkpoint", "eval_checkpoint"),
                     ("decode", "decode"),
                     ("bleu", "bleu"),
                     ("chrf", "chrf"),
                     ("pairs", "pairs"),
-                    ("compare_summary_path", "summary"),
+                    ("eval_timestamp_utc", "evaluated_utc"),
+                    ("samples", "samples"),
+                    ("student_model", "student_model"),
+                    ("predictions_path", "predictions"),
+                    ("compare_summary_path", "compare_summary"),
+                    ("eval_dir_path", "eval_dir_path"),
                 ],
             )
         )
@@ -299,10 +579,18 @@ def main() -> int:
         run_rows,
         [
             "run_name",
+            "run_root",
+            "run_status",
+            "summary_source",
             "timestamp_utc",
+            "updated_utc",
+            "source_langs",
+            "target_langs",
+            "eval_dataset_paths",
             "pair_count",
             "pairs_input_spec",
             "schedule",
+            "total_steps",
             "sft_steps",
             "distill_steps",
             "lambda_kd",
@@ -314,6 +602,9 @@ def main() -> int:
             "selected_checkpoint_stage",
             "selected_checkpoint_loss",
             "summary_path",
+            "latest_stage_a_checkpoint",
+            "latest_stage_b_checkpoint",
+            "final_model",
         ],
     )
     write_csv(
@@ -322,12 +613,19 @@ def main() -> int:
         [
             "run_name",
             "eval_dir",
+            "eval_set",
+            "eval_variant",
+            "eval_checkpoint",
             "decode",
+            "eval_dir_path",
+            "eval_timestamp_utc",
             "eval_samples",
+            "pairs_stem",
             "bleu",
             "chrf",
             "pairs",
             "student_model",
+            "predictions_path",
             "compare_summary_path",
         ],
     )

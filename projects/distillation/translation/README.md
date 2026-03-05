@@ -1,6 +1,6 @@
 # Translation Distillation (EN<->ES)
 
-This folder tracks translation distillation from `google/translategmma-4b-it` into a Gemma 3 1B student for English/Spanish.
+This folder tracks translation distillation from `google/translategemma-4b-it` into a Gemma 3 1B student for English/Spanish.
 
 This run uses an `A_then_B` schedule:
 - Stage A (supervised fine-tuning, SFT): warm up the student on paired translation data.
@@ -12,7 +12,7 @@ Terminology used in this document:
 
 ## Key proven result
 
-On the latest stored ablation run (`translategmma4b_es_en_gemma3_1b_full_20260303_114100`), the Stage A checkpoint at 32k steps (`stage_a/checkpoint-032000`) is close to the teacher on external BLEU:
+On the latest stored ablation run (`translategemma4b_es_en_gemma3_1b_full_20260303_114100`), the Stage A checkpoint at 32k steps (`stage_a/checkpoint-032000`) is close to the teacher on external BLEU:
 
 - `eval2_external` (WMT13 EN/ES 128):
   - Stage A (32k) student BLEU: `26.3488`
@@ -28,7 +28,7 @@ This is the main proof point for this distillation recipe: the 1B student is nea
 ## Current model selection status
 
 - Current best deploy candidate: `stage_a/checkpoint-032000` from:
-  - `projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100`
+  - `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_full_20260303_114100`
 - Distillation (Stage B) checkpoint sweep (fixed resume path) was completed for:
   - `translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041`
 - Best Stage B early-stop checkpoint in that run: `checkpoint-002000`
@@ -36,14 +36,21 @@ This is the main proof point for this distillation recipe: the 1B student is nea
   - eval3 BLEU: `44.9824`
 - Conclusion: this Stage B configuration still does not beat the Stage A (32k) checkpoint.
 
+## In-progress experiment (Stage A scale-up)
+
+- Active run: `translategemma4b_es_en_gemma3_1b_stagea_only_train17532_sft32k_20260304_171311`
+- Goal: test Stage A-only behavior on `17532` rows (`translate_distill_pairs_en_es_2way.train.merged.jsonl`) before additional Stage B tuning.
+- Preliminary signal: loss trajectory is better than the older 1280-row Stage A baseline in early/mid training, but final quality call is pending eval2/eval3 BLEU/chrF.
+- Source of truth for live status and comparison details: `projects/distillation/translation/runs/SESSION_STATUS.md`
+
 ## Source of truth files
 
 Read these first:
 
 1. `projects/distillation/translation/runs/SESSION_STATUS.md`
 2. `projects/distillation/translation/runs/RUN_INDEX.md`
-3. `projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_full_20260303_114100/ablation_stage_decode_20260304_094102/ablation_results.csv`
-4. `projects/distillation/translation/runs/translategmma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041/checkpoint_sweep_stagebfix02_greedy/scoreboard.md`
+3. `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_full_20260303_114100/ablation_stage_decode_20260304_094102/ablation_results.csv`
+4. `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041/checkpoint_sweep_stagebfix02_greedy/scoreboard.md`
 
 ## Deterministic sweep + scoreboard
 

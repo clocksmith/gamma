@@ -1,4 +1,4 @@
-import { MODEL_CATALOG, PROVIDER_COLORS, MODEL_SIZE_CATEGORIES } from '../core/model-registry.js';
+import { MODEL_CATALOG, MODEL_SIZE_CATEGORIES } from '../core/model-registry.js';
 import { EventBus } from '../utils/event-bus.js';
 import { STARTING_PROMPTS, getRandomPrompt } from '../core/prompts.js';
 import { SettingsPanel } from './settings-panel.js';
@@ -16,11 +16,15 @@ export class ModelSelector {
       <div class="model-card ${info.recommended ? 'recommended' : ''}" data-model-id="${id}">
         <div class="model-header">
           <div class="model-name">${info.name}</div>
-          <span class="provider-badge" style="color: ${PROVIDER_COLORS[info.provider] || '#888'}">${info.provider}</span>
+          <span class="provider-badge chip">${info.provider}</span>
         </div>
         <div class="model-specs">${info.size} • ${info.downloadSize || info.vram} • ${info.released}</div>
         <div class="model-caps">
-          ${info.capabilities.map(c => `<span class="cap-badge">${c}</span>`).join('')}
+          ${info.capabilities
+            .map(
+              c => `<span class="cap-badge chip">${c}</span>`
+            )
+            .join('')}
         </div>
         <div class="download-progress hidden">
           <div class="progress-bar"></div>
@@ -43,9 +47,9 @@ export class ModelSelector {
         <div class="prompt-section">
           <h4 class="section-title">Starting Text</h4>
           <div class="prompt-controls">
-            <input type="text" class="prompt-input" value="${this.escapeHtml(this.selectedPrompt)}" placeholder="Enter starting text...">
+            <input type="text" class="prompt-input border-default" value="${this.escapeHtml(this.selectedPrompt)}" placeholder="Enter starting text...">
             <button class="random-prompt-btn">Random</button>
-            <select class="prompt-select">
+            <select class="prompt-select border-default">
               <option value="">Pick from list...</option>
               ${STARTING_PROMPTS.map(p => `<option value="${this.escapeHtml(p)}">${this.escapeHtml(p.length > 40 ? p.slice(0, 40) + '...' : p)}</option>`).join('')}
             </select>

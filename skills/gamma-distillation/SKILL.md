@@ -34,6 +34,37 @@ fi
 "$PYTHON_BIN" -c "import torch; print(getattr(torch.version,'hip', 'no_hip'))"
 ```
 
+ROCm compute probe (required when `DEVICE=cuda` on AMD):
+
+```bash
+# Probe in normal ROCm mode first.
+"$PYTHON_BIN" - <<'PY'
+import torch
+print("cuda_available", torch.cuda.is_available())
+print("cuda_device_count", torch.cuda.device_count())
+if torch.cuda.is_available() and torch.cuda.device_count() > 0:
+    x = torch.randn(256, 256, device="cuda")
+    y = torch.randn(256, 256, device="cuda")
+    print("cuda_matmul_ok", float((x @ y).mean().item()))
+PY
+```
+
+If the probe throws `HIP error: invalid device function`, switch runtime mode and re-probe:
+
+```bash
+HSA_OVERRIDE_GFX_VERSION=11.0.0 "$PYTHON_BIN" - <<'PY'
+import torch
+print("cuda_available", torch.cuda.is_available())
+print("cuda_device_count", torch.cuda.device_count())
+if torch.cuda.is_available() and torch.cuda.device_count() > 0:
+    x = torch.randn(256, 256, device="cuda")
+    y = torch.randn(256, 256, device="cuda")
+    print("cuda_matmul_ok", float((x @ y).mean().item()))
+PY
+```
+
+Do not launch training until a compute probe succeeds in the same runtime mode.
+
 ## Translation launch points
 
 Primary wrapper (train + optional eval):
@@ -115,6 +146,10 @@ Strict fallback order (log chosen `runtime_mode`):
 2. `HSA_OVERRIDE_GFX_VERSION=11.0.0`.
 3. Full CPU fallback.
 
+Decision rule:
+- If ROCm is visible but compute probe fails with `invalid device function`, treat `normal_rocm` as blocked and move immediately to `rocm_gfx_override`.
+- If `rocm_gfx_override` probe also fails, block and fall back to CPU.
+
 Preferred commands:
 
 ```bash
@@ -129,6 +164,12 @@ bash projects/distillation/translation/training/run_translation_distill.sh A_the
 DEVICE=cpu \
 bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
 ```
+
+Post-launch liveness checks (required):
+1. Verify stage metrics file exists and grows (for example `stage_a/metrics.jsonl`).
+2. Verify logs emit step lines (for example `[A_then_B_stage_a] step=...`).
+3. Verify `rocm-smi --showuse --json` shows elevated GPU usage during active steps.
+4. If detached/background launch exits immediately, rerun in a persistent session (`tmux`, `screen`, or interactive PTY).
 
 ## Scoreboard and index workflow
 

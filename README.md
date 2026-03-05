@@ -6,6 +6,7 @@ Interactive LLM exploration for prediction games, runtime comparison, and model 
 
 - [Play in your browser](https://simulatte.world)
 - [Game codebase: `src/game/README.md`](./src/game/README.md)
+- [Architecture map: `docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)
 
 ## What is GAMMA
 
@@ -53,6 +54,7 @@ Available command families are implemented in [gamma.py](./gamma.py):
 ```bash
 python gamma.py help
 python gamma.py help codegen
+python gamma.py help benchmark
 python gamma.py game --help
 python gamma.py benchmark --help
 ```
@@ -126,6 +128,8 @@ python gamma.py codegen language --help
 python gamma.py codegen mind-meld --help
 ```
 
+Implementation workspace: [tools/codegen-bench/README.md](./tools/codegen-bench/README.md)
+
 ## Engines and hardware
 
 Model runtime support and compatibility is maintained in [src/engines/README.md](./src/engines/README.md).
@@ -144,6 +148,7 @@ Logits requirement: comparison and mind-meld modes require direct full-logits en
 ## Integrations and ecosystem
 
 - [docs/NATURAL_LANGUAGE_COMMANDS.md](./docs/NATURAL_LANGUAGE_COMMANDS.md) for command intent examples
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for runtime/module boundaries
 - [mcp-server/README.md](./mcp-server/README.md) for MCP integration
 - [src/integrations/README.md](./src/integrations/README.md) for OpenAI/LangChain wrappers
 - [src/functiongemma_training/README.md](./src/functiongemma_training/README.md) for tool calling SFT paths

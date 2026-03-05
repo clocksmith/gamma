@@ -19,6 +19,10 @@ Core utilities and infrastructure for GAMMA.
 | `model_validator.py` | Model/engine validation |
 | `gamma_core_adapter.py` | gamma-core library adapter |
 
+`gamma_core_adapter.py` contract:
+- Default path: `gamma-core/src` in this repo
+- Override path: `GAMMA_CORE_SRC_PATH=/abs/path/to/gamma-core/src`
+
 ### Subpackages
 
 | Directory | Description |

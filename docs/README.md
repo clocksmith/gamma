@@ -3,6 +3,7 @@
 ## Quick Links
 
 - **[Main README](../README.md)** - Start here for installation and quick start
+- **[Architecture Map](ARCHITECTURE.md)** - Canonical runtime/module boundaries
 - **[Engine Documentation](../src/engines/README.md)** - Engine architecture and implementation
 - **[Model Formats & Engines](MODEL_FORMATS.md)** - Which formats each engine supports
 - **[Mind Meld Guide](../src/mind_meld/README.md)** - Multi-model collaboration features
@@ -28,11 +29,15 @@ gamma/
 ├── gamma.py                # ⭐ Main entry point - all commands
 ├── README.md               # ⭐ Comprehensive guide - start here
 ├── requirements*.txt       # Dependencies by engine
-├── src/                    # Source code
-│   ├── core/              # Core game logic & interfaces
+├── src/                    # Python runtime source
+│   ├── core/              # Core interfaces + CLI routing helpers
 │   ├── engines/           # Engine implementations
 │   ├── mind_meld/         # Multi-model features
-│   └── benchmarks/        # Benchmarking tools
+│   └── benchmarks/        # Python benchmark runners
+├── web/                    # Browser runtime (static, no build output)
+├── tools/codegen-bench/    # Node benchmark workspace (TS/JS codegen)
+├── projects/               # Distillation/training pipelines
+├── gamma-core/             # Vendored shared infrastructure source
 ├── models/                # Local model storage
 ├── tools/                 # Utility scripts
 ├── tests/                 # Test files

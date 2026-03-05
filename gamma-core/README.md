@@ -40,9 +40,9 @@ Extensible benchmarking system for comparing models and strategies.
 ## Usage
 
 ```python
-from gamma_core.engine import ModelEngine
-from gamma_core.game import GameSession, DifficultyLevel
-from gamma_core.ui import color_text, print_header
+from engine import ModelEngine
+from game import GameSession, DifficultyLevel
+from ui import color_text, print_header
 
 # Your model-specific implementation
 class MyEngine(ModelEngine):
