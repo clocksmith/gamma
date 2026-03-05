@@ -201,4 +201,4 @@ To implement backend support:
 5. Update `index.html` to use real API
 6. Add error handling and validation
 
-See `/home/clocksmith/deco/FLUX_IMPLEMENTATION_SUMMARY.md` for architecture details.
+See `../README.md` for Flux architecture and CLI context.

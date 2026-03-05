@@ -127,9 +127,6 @@ class MLXEngine(LLMEngine):
         return self._decode_token_hf_common(token_id)
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
-    def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
-        if self.get_verbose(): print("(MLXEngine: Attention heatmap not generally available.)")
-        return None
     def get_probabilities_at_step(self, data: Any, s_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, mx.array): raise TypeError(f"Expected mx.array for MLX probabilities, got {type(data)}") # type: ignore
         is_probs_heuristic = mx.all(data >= 0.0) & mx.all(data <= 1.0) & mx.all(mx.abs(mx.sum(data, axis=-1) - 1.0) < 1e-3) # type: ignore
@@ -171,19 +168,6 @@ class MLXEngine(LLMEngine):
         if not isinstance(tensor2, mx.array):  # type: ignore
             tensor2 = mx.array(tensor2)  # type: ignore
         return mx.concatenate([tensor1, tensor2], axis=dim)  # type: ignore
-
-    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
-        """Get KV cache shape if available."""
-        if self._kv_cache is None:
-            return None
-        # MLX KV cache is typically a list of tuples
-        if isinstance(self._kv_cache, (list, tuple)) and len(self._kv_cache) > 0:
-            first_layer = self._kv_cache[0]
-            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
-                key_cache = first_layer[0]
-                if hasattr(key_cache, 'shape'):
-                    return tuple(key_cache.shape)
-        return None
 
     def get_num_layers(self) -> int:
         """Get the number of layers in the model."""

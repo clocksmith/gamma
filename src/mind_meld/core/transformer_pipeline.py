@@ -668,51 +668,14 @@ class UnifiedTransformerPipeline:
         }
     
     def _to_numpy(self, tensor: Any) -> np.ndarray:
-        """Convert tensor to numpy"""
-        if isinstance(tensor, np.ndarray):
-            return tensor
-        
-        if "torch" in sys.modules:
-            import torch
-            if isinstance(tensor, torch.Tensor):
-                return tensor.detach().cpu().numpy()
-        
-        if "mlx" in sys.modules:
-            if hasattr(tensor, "dtype"):
-                return np.array(tensor)
-        
-        if "tensorflow" in sys.modules:
-            import tensorflow as tf
-            if isinstance(tensor, tf.Tensor):
-                return tensor.numpy()
-        
-        return np.array(tensor)
+        """Convert tensor to numpy."""
+        from src.core.tensor_utils import to_numpy
+        return to_numpy(tensor)
     
     def _from_numpy(self, array: np.ndarray, reference: Any) -> Any:
-        """Convert numpy array to match reference tensor type"""
-        
-        if isinstance(reference, np.ndarray):
-            return array
-        
-        if "torch" in sys.modules:
-            import torch
-            if isinstance(reference, torch.Tensor):
-                return torch.from_numpy(array).to(
-                    device=reference.device,
-                    dtype=reference.dtype
-                )
-        
-        if "mlx" in sys.modules:
-            import mlx.core as mx
-            if hasattr(reference, "dtype"):
-                return mx.array(array)
-        
-        if "tensorflow" in sys.modules:
-            import tensorflow as tf
-            if isinstance(reference, tf.Tensor):
-                return tf.constant(array, dtype=reference.dtype)
-        
-        return array
+        """Convert numpy array to match reference tensor type."""
+        from src.core.tensor_utils import from_numpy
+        return from_numpy(array, reference)
     
     def create_model_specific_pipeline(self, model_type: str) -> 'UnifiedTransformerPipeline':
         """

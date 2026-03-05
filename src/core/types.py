@@ -7,7 +7,6 @@ Import from here for consistent typing throughout the codebase.
 
 from typing import (
     Any,
-    Callable,
     Dict,
     List,
     Optional,

@@ -1,234 +1,133 @@
 # Benchmarking Guide
 
-GAMMA provides comprehensive benchmarking tools for measuring model performance, comparing engines, and evaluating Mind Meld strategies.
+GAMMA benchmarking has four primary lanes:
 
-## Quick Start
+1. Runtime speed/latency benchmarking (`gamma.py benchmark`)
+2. Mind Meld strategy benchmarking (`src/benchmarks/mind_meld_benchmark.py`)
+3. Codegen benchmarking (`gamma.py codegen`, `tools/codegen-bench/`)
+4. Quality metric analysis (coherence/diversity/perplexity via benchmark tools)
+
+## 1) Runtime Speed Benchmarks
+
+### Quick Start
 
 ```bash
-# Benchmark a single model
 python gamma.py benchmark --models pytorch:google/gemma-2-2b-it --tokens 100
-
-# Compare multiple models
-python gamma.py benchmark \
-  --models pytorch:google/gemma-2-2b-it llamacpp:models/gemma-2b-q4.gguf \
-  --tokens 100 --iterations 5
-
-# List available models
 python gamma.py benchmark --list-models
 ```
 
-## Speed Benchmarking
-
-### Basic Usage
+### Compare Multiple Models
 
 ```bash
 python gamma.py benchmark \
-  --models ENGINE:MODEL [ENGINE:MODEL ...] \
-  --tokens N \
-  --iterations N \
-  --save
+  --models pytorch:google/gemma-2-2b-it llamacpp:models/gemma-2b-q4.gguf \
+  --tokens 100 \
+  --iterations 5
 ```
 
-### Options
+### Core Metrics
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--models` | Models to benchmark (required) | - |
-| `--tokens` | Tokens to generate per iteration | 50 |
-| `--iterations` | Number of test iterations | 3 |
-| `--save` | Save results to JSON | False |
+- Tokens/sec
+- Time to first token
+- Latency percentiles (p50/p95/p99)
+- Total wall-clock time
+- Memory usage (RAM/VRAM)
 
-### Output Metrics
+## 2) Mind Meld Strategy Benchmarks
 
-- **Tokens/sec**: Generation throughput
-- **Latency p50/p95/p99**: Percentile latencies
-- **Time to first token**: Initial response time
-- **Total time**: End-to-end duration
-- **Memory usage**: Peak VRAM/RAM
-
-### Example Output
-
-```
-Model: pytorch:google/gemma-2-2b-it
-  Tokens/sec:     5.8 tok/s
-  Latency p50:    146 ms
-  Latency p95:    182 ms
-  Memory:         4.2 GB VRAM
-
-Model: llamacpp:models/gemma-2b-q4.gguf
-  Tokens/sec:     4.4 tok/s
-  Latency p50:    174 ms
-  Latency p95:    201 ms
-  Memory:         2.1 GB RAM
-```
-
-## Mind Meld Benchmarking
-
-Compare different Mind Meld swap strategies:
+Run direct strategy comparisons using the dedicated benchmark runner:
 
 ```bash
-python src/benchmarks/mind_meld_benchmark.py \
+PYTHONPATH=. python3 src/benchmarks/mind_meld_benchmark.py \
   --strategies confidence perplexity fixed_interval \
   --prompt "Once upon a time" \
   --models gpt2 gpt2-medium \
-  --output comparison.html
+  --output results/mind_meld_comparison.html \
+  --json results/mind_meld_comparison.json
 ```
 
-### Available Strategies
+### Typical Strategies
 
-| Strategy | Description |
-|----------|-------------|
-| `fixed_interval` | Swap every N tokens |
-| `pattern` | Swap at punctuation |
-| `confidence` | Swap when probability drops |
-| `perplexity` | Swap based on model perplexity |
-| `round_robin` | Alternate between models |
-| `random` | Random swap probability |
-| `semantic` | Swap on topic changes |
+- `fixed_interval`
+- `pattern`
+- `confidence`
+- `perplexity`
+- `round_robin`
+- `random`
+- `semantic`
 
-### Output Reports
+## 3) Codegen Benchmarks
 
-- **HTML Report**: Visual comparison with charts
-- **JSON Data**: Raw metrics for analysis
-- **Text Summary**: Console-friendly results
+Codegen benchmarks are split between CLI entrypoints and the Node workspace.
 
-## Codegen Benchmarks
-
-TypeScript vs JavaScript code generation benchmarks with prompt-quality levels and repeatable reports.
-
-Workspace: `tools/codegen-bench/` (Node.js tooling kept outside `src/`).
-
-### Language Comparison
-
-Compare TypeScript vs JavaScript code generation:
+### CLI-Driven
 
 ```bash
-# Basic comparison
+python gamma.py help codegen
 python gamma.py codegen language --category foundations --language js,ts
-
-# With multiple prompt levels
-python gamma.py codegen language \
-  --category foundations \
-  --language js,ts \
-  --all-prompt-levels \
-  --provider ollama-qwen3-30b \
-  --runs 5
-
-# Deterministic testing
-python gamma.py codegen language \
-  --category foundations \
-  --language js,ts \
-  --temperature 0.0 \
-  --runs 3
+python gamma.py codegen language --category foundations --all-prompt-levels --runs 5
 ```
 
-### Prompt Quality Levels
-
-| Level | Description |
-|-------|-------------|
-| `novice` | Minimal instruction |
-| `beginner` | Basic instruction |
-| `intermediate` | Moderate detail |
-| `advanced` | Specific requirements |
-| `expert` | Complete specifications |
-
-### Categories
-
-- `foundations` - Core algorithms
-- `backend` - Server-side code
-- `ui` - Frontend/React
-- `scripting` - Automation tasks
-
-## Quality Metrics
-
-The benchmark framework measures:
-
-### Code Quality
-
-- **Perplexity**: Model uncertainty
-- **Coherence**: Output consistency
-- **Diversity**: Vocabulary variety
-- **Repetition**: Repeated phrase detection
-
-### Performance
-
-- **Throughput**: Tokens per second
-- **Latency**: Response time distribution
-- **Memory**: Resource consumption
-- **Success Rate**: Completion percentage
-
-## Benchmark Framework
-
-For custom benchmarks, use the framework API:
-
-```python
-from src.benchmarks.framework import BaseBenchmark, SpeedBenchmark
-from src.benchmarks.framework.quality_metrics import QualityAnalyzer
-
-# Speed benchmark
-benchmark = SpeedBenchmark(
-    models=["pytorch:gpt2", "llamacpp:models/gpt2.gguf"],
-    tokens_per_run=100,
-    num_iterations=5
-)
-results = benchmark.run()
-
-# Quality analysis
-analyzer = QualityAnalyzer()
-metrics = analyzer.analyze(generated_text)
-print(f"Perplexity: {metrics.perplexity}")
-print(f"Coherence: {metrics.coherence}")
-```
-
-## Hardware Considerations
-
-### Apple Silicon (M1/M2/M3/M4/M5)
-
-Best engines for Mac:
-1. **MLX** - Fastest, native Metal acceleration
-2. **LlamaCpp** - Good for GGUF models
-3. **PyTorch** - MPS acceleration
-
-### NVIDIA GPU
-
-Best engines for CUDA:
-1. **vLLM** - Highest throughput
-2. **PyTorchCUDA** - Flash Attention support
-3. **LlamaCpp** - CUDA acceleration
-
-### CPU Only
-
-Best engines for CPU:
-1. **LlamaCpp** - Optimized for CPU inference
-2. **ONNX** - Cross-platform optimization
-3. **PyTorch** - With proper threading
-
-## Saving Results
+### Workspace-Driven
 
 ```bash
-# Save to JSON
+node tools/codegen-bench/index.js --help
+node tools/codegen-bench/index.js --basic
+node tools/codegen-bench/index.js --extended
+node tools/codegen-bench/index.js --ui --include-browser
+```
+
+Canonical codegen reference: [../tools/codegen-bench/README.md](../tools/codegen-bench/README.md)
+
+## 4) Quality Metrics and Reports
+
+Benchmark tooling can report:
+
+- Perplexity
+- Coherence
+- Diversity
+- Repetition
+- Success rate
+
+Save machine-readable results:
+
+```bash
 python gamma.py benchmark \
   --models pytorch:gpt2 \
   --save \
   --output results/benchmark_$(date +%Y%m%d).json
 ```
 
-Results include:
-- Model configurations
-- Hardware information
-- All metrics with timestamps
-- Statistical summaries
+## Hardware Notes
+
+### Apple Silicon
+
+1. `mlx`
+2. `llamacpp`
+3. `pytorch` (MPS)
+
+### NVIDIA CUDA
+
+1. `vllm`
+2. `pytorch_cuda`
+3. `llamacpp`
+
+### CPU-only
+
+1. `llamacpp`
+2. `onnx`
+3. `pytorch`
 
 ## Best Practices
 
-1. **Warm-up**: Run a few iterations before measuring
-2. **Isolation**: Close other applications during benchmarks
-3. **Multiple runs**: Use `--iterations 5` or more for statistical significance
-4. **Consistent prompts**: Use the same prompts across comparisons
-5. **Monitor thermals**: GPU throttling affects results
+1. Warm up before recording metrics.
+2. Use consistent prompts and token budgets.
+3. Run enough iterations for stable distributions.
+4. Keep thermal and background-load conditions stable.
+5. Save JSON outputs so results can be compared later.
 
-## See Also
+## Related Docs
 
-- [Engine Architecture](ENGINE_ARCHITECTURE.md)
-- [Model Formats](MODEL_FORMATS.md)
-- [Codegen Benchmarks](../src/benchmarks/README.md)
+- [ENGINE_ARCHITECTURE.md](ENGINE_ARCHITECTURE.md)
+- [MODEL_FORMATS.md](MODEL_FORMATS.md)
+- [optimization-guide.md](optimization-guide.md)

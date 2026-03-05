@@ -6,13 +6,16 @@ PyTorch, TensorFlow, JAX, MLX, and plain numpy arrays. This eliminates the
 duplicated _to_numpy helper methods scattered across 10+ modules.
 
 Usage:
-    from src.core.tensor_utils import to_numpy, is_tensor_like
+    from src.core.tensor_utils import to_numpy, from_numpy, is_tensor_like
 
     # Convert any tensor type to numpy
     arr = to_numpy(pytorch_tensor)
     arr = to_numpy(tf_tensor)
     arr = to_numpy(jax_array)
     arr = to_numpy(numpy_array)  # passthrough
+
+    # Convert numpy back to match a reference tensor's framework
+    tensor = from_numpy(arr, reference=pytorch_tensor)  # returns torch.Tensor
 """
 
 from typing import Any, Optional
@@ -130,6 +133,43 @@ def is_tensor_like(obj: Any) -> bool:
         _is_mlx_array(obj) or
         hasattr(obj, 'numpy')
     )
+
+
+def from_numpy(array: np.ndarray, reference: Any) -> Any:
+    """
+    Convert a numpy array back to the same framework type as a reference tensor.
+
+    Handles PyTorch, TensorFlow, JAX, MLX, and numpy passthrough.
+
+    Args:
+        array: NumPy array to convert
+        reference: A tensor whose type/device/dtype we want to match
+
+    Returns:
+        Tensor matching the reference's framework type
+    """
+    if isinstance(reference, np.ndarray):
+        return array
+
+    if _is_pytorch_tensor(reference):
+        import torch
+        return torch.from_numpy(array.astype(np.float32)).to(
+            device=reference.device, dtype=reference.dtype
+        )
+
+    if _is_mlx_array(reference):
+        import mlx.core as mx
+        return mx.array(array)
+
+    if _is_tensorflow_tensor(reference):
+        import tensorflow as tf
+        return tf.constant(array, dtype=reference.dtype)
+
+    if _is_jax_array(reference):
+        import jax.numpy as jnp
+        return jnp.array(array)
+
+    return array
 
 
 def ensure_float32(tensor: Any) -> np.ndarray:

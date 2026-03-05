@@ -160,48 +160,20 @@ class JaxEngine(LLMEngine):
             tensor2 = jnp.array(tensor2)  # type: ignore
         return jnp.concatenate([tensor1, tensor2], axis=dim)  # type: ignore
 
-    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
-        """Get KV cache shape if available."""
-        if self._kv_cache is None:
-            return None
-        # JAX/Flax KV cache is typically a tuple of layer caches
-        if isinstance(self._kv_cache, (list, tuple)) and len(self._kv_cache) > 0:
-            first_layer = self._kv_cache[0]
-            if isinstance(first_layer, (list, tuple)) and len(first_layer) >= 2:
-                key_cache = first_layer[0]
-                if hasattr(key_cache, 'shape'):
-                    return tuple(key_cache.shape)
-        return None
-
     def get_num_layers(self) -> int:
         """Get the number of layers in the model."""
         self._ensure_model_loaded()
-        # Try to get from model config
-        if hasattr(self.model, 'config'):
-            if hasattr(self.model.config, 'num_hidden_layers'):
-                return self.model.config.num_hidden_layers
-            elif hasattr(self.model.config, 'n_layer'):
-                return self.model.config.n_layer
-            elif hasattr(self.model.config, 'num_layers'):
-                return self.model.config.num_layers
+        layers = super().get_num_layers()
+        if layers > 0:
+            return layers
         # Fallback to counting from params structure
         if self._model_params and isinstance(self._model_params, dict):
-            # Look for transformer layers in params
             for key in self._model_params:
                 if 'layers' in key.lower() or 'block' in key.lower():
                     val = self._model_params[key]
                     if isinstance(val, (list, tuple)):
                         return len(val)
-        return 12  # Reasonable default
-
-    def get_vocab(self) -> Dict[str, int]:
-        """Get the model's vocabulary."""
-        self._ensure_tokenizer_loaded()
-        if hasattr(self.tokenizer, 'get_vocab'):
-            return self.tokenizer.get_vocab()
-        elif hasattr(self.tokenizer, 'vocab'):
-            return self.tokenizer.vocab
-        return {}
+        return 12
 
     def append_to_input(self, input_ids: Any, new_token_id: int) -> jnp.ndarray:  # type: ignore
         """Append a new token to input_ids tensor."""

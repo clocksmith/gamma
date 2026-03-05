@@ -799,27 +799,6 @@ class OllamaEngine(LLMEngine):
             "Vocab Size": self._vocab_size
         }
 
-    def get_attention_for_visualization(self, attention_output: Any, input_ids_for_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
-        """Get attention weights for visualization."""
-        # Ollama doesn't expose attention weights
-        return None
-
-    def get_probabilities_at_step(self, logits_or_probs: Any, step_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
-        """Get top-k probabilities at a given step."""
-        if not isinstance(logits_or_probs, np.ndarray):
-            logits_or_probs = np.array(logits_or_probs)
-
-        # Check if it's already probabilities or logits
-        is_probs = np.all(logits_or_probs >= 0) and np.allclose(np.sum(logits_or_probs), 1.0, atol=1e-3)
-        probs = logits_or_probs if is_probs else sampling_utils.softmax(logits_or_probs)
-
-        # Get top k indices
-        top_k_indices = np.argsort(probs)[-k:][::-1]
-        top_k_probs = probs[top_k_indices]
-        top_k_tokens = [self.get_token_text(idx) for idx in top_k_indices]
-
-        return top_k_tokens, top_k_probs.tolist(), top_k_indices.tolist()
-
     def convert_to_numpy(self, tensor: Any) -> np.ndarray:
         """Convert engine-specific tensor to numpy array."""
         if isinstance(tensor, np.ndarray):
@@ -852,11 +831,6 @@ class OllamaEngine(LLMEngine):
         arr2 = arr2.reshape(-1)
         result = np.concatenate([arr1, arr2])
         return result.tolist()
-
-    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
-        """Get KV cache shape if available."""
-        # Ollama manages KV cache internally
-        return None
 
     def get_num_layers(self) -> int:
         """Get the number of layers in the model."""

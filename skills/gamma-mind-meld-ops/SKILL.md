@@ -1,96 +1,43 @@
 ---
 name: gamma-mind-meld-ops
-description: Operate, debug, and benchmark GAMMA Mind Meld sessions using CLI presets, swap and blend controls, and diagnostics for KV cache replay or translation behavior. Use when users ask to run mind meld, tune swap strategy, or troubleshoot cross-model output quality.
+description: Run practical, high-signal Mind Meld operation loops (preset/config selection, deterministic checks, diagnostics, and report capture) for quick quality/perf triage.
 ---
 
-# GAMMA Mind Meld Ops Skill
+# Gamma Mind Meld Ops
 
-Use this skill for repeatable Mind Meld execution and troubleshooting.
+Use this skill when users need to run or troubleshoot Mind Meld quickly with reproducible commands and concise diagnostics.
 
-## Entry Points
+## Canonical docs
 
-- Primary operator CLI: `tools/run_mind_meld_cli.py`
-- Core command path: `gamma.py mind-meld`
-- Diagnostics docs: `docs/mind_meld_status.md`, `src/mind_meld/README.md`
-
-## Hard Constraints
-
-- Mind Meld requires logits-capable engines.
-- Wrapper engines (`openai`, `huggingface_inference`, `ollama`) are not compatible for Mind Meld generation because they do not expose raw logits.
-- KV cache translation is experimental; replay fallback is expected and often safer.
+- Mind Meld usage + status: `src/mind_meld/README.md`
+- Benchmarking: `docs/BENCHMARKING.md`
+- Tools: `tools/README.md`
 
 ## Workflow
 
-1. Validate models and flags with `--help` and `--list-*`.
-2. Run a short headless smoke test.
-3. Run target strategy with diagnostics and optional stats file.
-4. Inspect `kv_cache_*` and guardrail counters.
-5. Adjust strategy, blending, and template settings, then re-run.
+1. Pick an execution surface:
+- New CLI path: `python tools/run_mind_meld_cli.py ...`
+- Main CLI path: `python gamma.py mind-meld ...`
 
-## Verified Command Patterns
+2. Start with deterministic settings for repro:
+- Add fixed prompt and `--steps`
+- Prefer `--summary-only` for quick iteration
+- Capture diagnostics with `--meld-diagnostics`
 
-Use venv python when present:
+3. If quality is unstable:
+- Toggle `--shared-chat-template`
+- Try `--order-neutral` or `--soft-swap`
+- Use same-family model pairs before cross-architecture experiments
 
-```bash
-PY=.venv/bin/python
-[ -x "$PY" ] || PY=python3
-```
+4. If performance is unstable:
+- Run focused benchmark runs via `src/benchmarks/mind_meld_benchmark.py`
+- Compare strategies with same prompt/token budget
 
-Discover options:
-
-```bash
-$PY tools/run_mind_meld_cli.py --help
-$PY tools/run_mind_meld_cli.py --list-presets
-$PY tools/run_mind_meld_cli.py --list-aliases
-$PY gamma.py help mind-meld
-```
-
-Quick smoke (headless + diagnostics):
+## Baseline command set
 
 ```bash
-bash skills/gamma-mind-meld-ops/scripts/mind_meld_smoke.sh
+python tools/run_mind_meld_cli.py --list-presets
+python tools/run_mind_meld_cli.py --preset creative --prompt "Explain transformers simply" --steps 64
+python gamma.py mind-meld --models pytorch:gpt2 pytorch:distilgpt2 --strategy pattern --summary-only --meld-diagnostics
+PYTHONPATH=. python3 src/benchmarks/mind_meld_benchmark.py --strategies confidence perplexity fixed_interval --prompt "Once upon a time" --models gpt2 gpt2-medium
 ```
-
-Stable baseline run:
-
-```bash
-$PY tools/run_mind_meld_cli.py gemma-1b gemma-2b \
-  --blend dynamic \
-  --strategy pattern \
-  --prompt "Explain why deterministic benchmarks matter." \
-  --steps 64 \
-  --summary-only \
-  --headless \
-  --no-step-delay \
-  --shared-chat-template \
-  --meld-diagnostics \
-  --stats-file mind_meld_stats.json
-```
-
-Experimental KV translation run:
-
-```bash
-$PY tools/run_mind_meld_cli.py gemma-1b gemma-2b \
-  --strategy fixed_interval \
-  --interval 8 \
-  --allow-kv-cache-translation \
-  --translate-logits \
-  --use-enhanced \
-  --summary-only \
-  --headless \
-  --meld-diagnostics
-```
-
-## Diagnostics Interpretation
-
-- `kv_cache_translated > 0`: translation path used.
-- `kv_cache_replay > 0`: replay fallback used.
-- `guardrail_replay > 0`: guardrails blocked risky translation and forced replay.
-- High replay counts with good output are acceptable; prioritize correctness over theoretical speed.
-
-## Tuning Heuristics
-
-- Start with `--shared-chat-template` for lower order sensitivity.
-- Use `--order-neutral` or `--use-weighted-average` when swap order causes drift.
-- Use `--soft-swap` to keep cadence while smoothing transitions.
-- Reserve `--force-kv-cache-translation` for controlled debugging only.

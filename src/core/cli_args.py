@@ -253,18 +253,3 @@ def add_common_args(
         add_verbosity_args(parser)
 
 
-def normalize_args(args: argparse.Namespace) -> argparse.Namespace:
-    """Normalize argument names for consistency.
-
-    Converts hyphenated args to underscored versions used internally.
-    E.g., args.top_k from --top-k
-
-    Args:
-        args: Parsed arguments namespace
-
-    Returns:
-        Same namespace with normalized attribute names
-    """
-    # Handle top-k -> top_k conversion (argparse does this automatically)
-    # This function exists for any additional normalization needed
-    return args

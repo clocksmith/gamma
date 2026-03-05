@@ -282,14 +282,6 @@ class MLXGPUEngine(LLMEngine):
         """Decode a single token ID using MLX GPU/HuggingFace tokenizer."""
         return self._decode_token_hf_common(token_id)
     
-    def get_attention_for_visualization(
-        self, attention_output: Any, input_ids_for_viz: Any
-    ) -> Optional[Tuple[List[str], List[float]]]:
-        """MLX doesn't expose attention weights by default"""
-        if self.get_verbose():
-            print("(MLXGPUEngine: Attention visualization not available in MLX)")
-        return None
-    
     def get_probabilities_at_step(
         self, data: Any, step_name: str, k: int
     ) -> Tuple[List[str], List[float], List[int]]:

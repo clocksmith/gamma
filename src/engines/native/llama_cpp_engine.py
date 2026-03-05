@@ -202,9 +202,6 @@ class LlamaCppEngine(LLMEngine):
         return token_text_str if token_text_str else ""
 
     def is_word_like_token(self, token_id: int, txt: Optional[str] = None) -> bool: return super().is_word_like_token(token_id, txt)
-    def get_attention_for_visualization(self, att_out: Any, i_ids_viz: Any) -> Optional[Tuple[List[str], List[float]]]:
-        if self.get_verbose(): print("(LlamaCppEngine: Attention heatmap not supported.)")
-        return None
     def get_probabilities_at_step(self, data: Any, s_name: str, k: int) -> Tuple[List[str], List[float], List[int]]:
         if not isinstance(data, np.ndarray): raise TypeError(f"Expected np.ndarray for LlamaCpp probabilities, got {type(data)}")
         is_probs_heuristic = (np.all(data >= -1e-6) and np.all(data <= 1.0 + 1e-6) and np.allclose(np.sum(data, axis=-1), 1.0, atol=1e-3))

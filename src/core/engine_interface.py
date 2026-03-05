@@ -511,17 +511,29 @@ class LLMEngine(ABC):
             return False
         return True
 
-    @abstractmethod
     def get_attention_for_visualization(
         self, attention_output: Any, input_ids_for_viz: Any
     ) -> Optional[Tuple[List[str], List[float]]]:
-        pass
+        """Extract attention weights for visualization.
 
-    @abstractmethod
+        Default returns None (attention not supported). Override in engines
+        that provide attention weights (e.g., PyTorch, JAX, TensorFlow).
+        """
+        return None
+
     def get_probabilities_at_step(
         self, logits_or_probs: Any, step_name: str, k: int
     ) -> Tuple[List[str], List[float], List[int]]:
-        pass
+        """Get top-k tokens at a processing step.
+
+        Default converts input to numpy and delegates to _get_probabilities_common.
+        Override only if the engine needs special tensor handling before conversion.
+        """
+        from src.core.tensor_utils import to_numpy
+        data_np = to_numpy(logits_or_probs)
+        if data_np.ndim > 1:
+            data_np = data_np.flatten()
+        return self._get_probabilities_common(data_np, k)
 
     def _get_probabilities_common(
         self,
@@ -679,35 +691,19 @@ class LLMEngine(ABC):
     
     def get_eos_token_id(self) -> Optional[int]:
         """Get EOS token ID if available."""
-        if hasattr(self.tokenizer, 'eos_token_id'):
-            eos_id = self.tokenizer.eos_token_id
-            if eos_id is not None:
-                return int(eos_id) if not isinstance(eos_id, int) else eos_id
-        return None
-    
+        return self._extract_token_id("eos_token_id")
+
     def get_unk_token_id(self) -> Optional[int]:
         """Get UNK token ID if available."""
-        if hasattr(self.tokenizer, 'unk_token_id'):
-            unk_id = self.tokenizer.unk_token_id
-            if unk_id is not None:
-                return int(unk_id) if not isinstance(unk_id, int) else unk_id
-        return None
-    
+        return self._extract_token_id("unk_token_id")
+
     def get_pad_token_id(self) -> Optional[int]:
         """Get PAD token ID if available."""
-        if hasattr(self.tokenizer, 'pad_token_id'):
-            pad_id = self.tokenizer.pad_token_id
-            if pad_id is not None:
-                return int(pad_id) if not isinstance(pad_id, int) else pad_id
-        return None
-    
+        return self._extract_token_id("pad_token_id")
+
     def get_bos_token_id(self) -> Optional[int]:
         """Get BOS token ID if available."""
-        if hasattr(self.tokenizer, 'bos_token_id'):
-            bos_id = self.tokenizer.bos_token_id
-            if bos_id is not None:
-                return int(bos_id) if not isinstance(bos_id, int) else bos_id
-        return None
+        return self._extract_token_id("bos_token_id")
     
     def get_special_tokens(self) -> Dict[str, Optional[int]]:
         """Get all special token IDs."""
@@ -760,20 +756,40 @@ class LLMEngine(ABC):
         """Check if KV cache exists."""
         return self._kv_cache is not None
     
-    @abstractmethod
     def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
-        """Get KV cache shape if available."""
-        pass
-    
-    @abstractmethod
-    def get_num_layers(self) -> int:
-        """Get the number of layers in the model."""
-        pass
+        """Get KV cache shape if available.
 
-    @abstractmethod
+        Default extracts shape from the first key tensor in a tuple-of-tuples
+        cache (standard HuggingFace format). Override for non-standard caches.
+        """
+        key_tensor = self._get_cache_key_tensor(self._kv_cache)
+        if key_tensor is not None and hasattr(key_tensor, 'shape'):
+            return tuple(key_tensor.shape)
+        return None
+
+    def get_num_layers(self) -> int:
+        """Get the number of layers in the model.
+
+        Default checks common model config attributes. Override for engines
+        that store layer count differently (e.g., llama.cpp, ONNX).
+        """
+        if self.model and hasattr(self.model, 'config'):
+            config = self.model.config
+            for attr in ('num_hidden_layers', 'n_layer', 'num_layers'):
+                if hasattr(config, attr):
+                    return getattr(config, attr)
+        return 0
+
     def get_vocab(self) -> Dict[str, int]:
-        """Get the model's vocabulary."""
-        pass
+        """Get the model's vocabulary.
+
+        Default delegates to tokenizer.get_vocab(). Override for engines
+        without a standard HuggingFace tokenizer.
+        """
+        self._ensure_tokenizer_loaded()
+        if hasattr(self.tokenizer, 'get_vocab'):
+            return self.tokenizer.get_vocab()
+        return {}
 
     def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
         """

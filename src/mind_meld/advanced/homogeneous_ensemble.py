@@ -525,13 +525,8 @@ class HomogeneousEnsemble:
 
     def _to_numpy(self, tensor: Any) -> np.ndarray:
         """Convert various tensor types to numpy."""
-        if isinstance(tensor, np.ndarray):
-            return tensor
-        if hasattr(tensor, 'numpy'):
-            return tensor.numpy()
-        if hasattr(tensor, 'detach'):
-            return tensor.detach().cpu().numpy()
-        return np.array(tensor)
+        from src.core.tensor_utils import to_numpy
+        return to_numpy(tensor)
 
     def generate(
         self,

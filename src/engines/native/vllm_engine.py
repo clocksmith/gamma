@@ -301,14 +301,6 @@ class VLLMEngine(LLMEngine):
         """Check if token is word-like (delegate to base class)"""
         return super().is_word_like_token(token_id, txt)
 
-    def get_attention_for_visualization(
-        self, att_out: Any, i_ids_viz: Any
-    ) -> Optional[Tuple[List[str], List[float]]]:
-        """vLLM doesn't expose attention weights"""
-        if self.get_verbose():
-            print("(VLLMEngine: Attention visualization not available)")
-        return None
-
     def get_probabilities_at_step(
         self, data: Any, s_name: str, k: int
     ) -> Tuple[List[str], List[float], List[int]]:
@@ -377,37 +369,18 @@ class VLLMEngine(LLMEngine):
 
         return torch.cat([tensor1, tensor2], dim=dim)
 
-    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
-        """Get KV cache shape (vLLM manages this internally)"""
-        # vLLM uses PagedAttention which manages KV cache differently
-        return None
-
     def get_num_layers(self) -> int:
-        """Get the number of layers in the model"""
+        """Get the number of layers in the model."""
         if not self._llm:
             raise RuntimeError("VLLMEngine: Model not loaded.")
-
-        # Try to get from model config
         try:
             config = self._llm.llm_engine.model_config
-            if hasattr(config, 'num_hidden_layers'):
-                return config.num_hidden_layers
-            elif hasattr(config, 'n_layer'):
-                return config.n_layer
-            elif hasattr(config, 'num_layers'):
-                return config.num_layers
+            for attr in ('num_hidden_layers', 'n_layer', 'num_layers'):
+                if hasattr(config, attr):
+                    return getattr(config, attr)
         except (AttributeError, RuntimeError) as e:
             logger.debug(f"Could not get layer count from config: {e}")
-
-        return 32  # Default reasonable value
-
-    def get_vocab(self) -> Dict[str, int]:
-        """Get the model's vocabulary"""
-        if not self.tokenizer:
-            raise RuntimeError("VLLMEngine: Tokenizer not loaded.")
-
-        # HuggingFace tokenizers have get_vocab()
-        return self.tokenizer.get_vocab()
+        return 32
 
     def export_kv_cache_state(self) -> Optional[Dict[str, Any]]:
         """Export KV cache state for bridging"""

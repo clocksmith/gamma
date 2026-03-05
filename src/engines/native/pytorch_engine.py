@@ -687,17 +687,6 @@ class PyTorchEngine(LLMEngine):
             summary["Effective Device"] = str(self._device)
         return summary
 
-    def get_num_layers(self) -> int:
-        """Get the number of layers in the model."""
-        if hasattr(self.model, 'config') and hasattr(self.model.config, 'num_hidden_layers'):
-            return self.model.config.num_hidden_layers
-        return 0
-
-    def get_vocab(self) -> Dict[str, int]:
-        """Get the model's vocabulary."""
-        if not self.tokenizer: raise RuntimeError("PyTorchEngine: Tokenizer not loaded.")
-        return self.tokenizer.get_vocab()
-    
     # Implement new abstract methods
     def convert_to_numpy(self, tensor: Any) -> np.ndarray:
         """Convert PyTorch tensor to numpy array."""
@@ -796,20 +785,6 @@ class PyTorchEngine(LLMEngine):
             tensor2 = tensor2.to(tensor1.device)
         
         return torch.cat((tensor1, tensor2), dim=dim)
-    
-    def get_kv_cache_shape(self) -> Optional[Tuple[int, ...]]:
-        """Get KV cache shape if available."""
-        if self._kv_cache is None:
-            return None
-        
-        if isinstance(self._kv_cache, tuple) and len(self._kv_cache) > 0:
-            # Typically (num_layers, 2, batch_size, num_heads, seq_len, head_dim)
-            first_layer = self._kv_cache[0]
-            if isinstance(first_layer, tuple) and len(first_layer) >= 2:
-                k_cache = first_layer[0]
-                if isinstance(k_cache, torch.Tensor):
-                    return tuple(k_cache.shape)
-        return None
     
     def bridge_kv_cache_to(self, target_engine: 'LLMEngine') -> bool:
         """Attempt to bridge KV cache to another engine."""

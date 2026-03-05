@@ -4,7 +4,6 @@ import hashlib
 import json
 import logging
 import os
-import sys
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional, Any
 from dataclasses import dataclass, asdict
@@ -688,46 +687,11 @@ class VocabularyAligner:
         return filtered
     
     def _to_numpy(self, tensor: Any) -> np.ndarray:
-        """Convert various tensor types to numpy"""
-        if isinstance(tensor, np.ndarray):
-            return tensor
-        
-        if "torch" in sys.modules:
-            import torch
-            if isinstance(tensor, torch.Tensor):
-                return tensor.detach().cpu().numpy()
-        
-        if "mlx" in sys.modules:
-            import mlx.core as mx
-            if hasattr(tensor, "dtype"):
-                return np.array(tensor)
-        
-        if "tensorflow" in sys.modules:
-            import tensorflow as tf
-            if isinstance(tensor, tf.Tensor):
-                return tensor.numpy()
-        
-        return np.array(tensor)
+        """Convert various tensor types to numpy."""
+        from src.core.tensor_utils import to_numpy
+        return to_numpy(tensor)
     
     def _from_numpy(self, array: np.ndarray, reference: Any) -> Any:
-        """Convert numpy array back to original tensor type"""
-        
-        if "torch" in sys.modules:
-            import torch
-            if isinstance(reference, torch.Tensor):
-                return torch.from_numpy(array).to(
-                    device=reference.device,
-                    dtype=reference.dtype
-                )
-        
-        if "mlx" in sys.modules:
-            import mlx.core as mx
-            if hasattr(reference, "dtype"):
-                return mx.array(array)
-        
-        if "tensorflow" in sys.modules:
-            import tensorflow as tf
-            if isinstance(reference, tf.Tensor):
-                return tf.constant(array, dtype=reference.dtype)
-        
-        return array
+        """Convert numpy array back to original tensor type."""
+        from src.core.tensor_utils import from_numpy
+        return from_numpy(array, reference)
