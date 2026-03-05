@@ -153,6 +153,11 @@ class TokenizerProtocol(Protocol):
         """Padding token ID."""
         ...
 
+    @property
+    def unk_token_id(self) -> Optional[int]:
+        """Unknown token ID."""
+        ...
+
 
 @runtime_checkable
 class ModelProtocol(Protocol):
@@ -177,31 +182,6 @@ SwapDecision = bool
 BlendWeights = npt.NDArray[np.float32]
 
 
-# Forward reference for LLMEngine (to avoid circular imports)
-class LLMEngine(Protocol):
-    """Protocol for LLM Engine interface."""
-
-    model_name: str
-    tokenizer: Any
-    model: Any
-
-    def load(self) -> None: ...
-    def encode(self, text: str, add_special_tokens: bool = True) -> EncodingResult: ...
-    def decode(self, token_ids: TokenIds, skip_special_tokens: bool = False) -> str: ...
-    def predict_next(
-        self,
-        input_ids: TokenIds,
-        attention_mask: AttentionMask,
-        temperature: float,
-        top_k: int,
-        top_p: float,
-        output_attentions: bool = False,
-        output_hidden_states: bool = False,
-    ) -> PredictionResult: ...
-    def reset_kv_cache(self) -> None: ...
-    def get_kv_cache(self) -> Optional[KVCache]: ...
-
-
 __all__ = [
     # Basic types
     'TokenId',
@@ -221,7 +201,6 @@ __all__ = [
     # Protocols
     'TokenizerProtocol',
     'ModelProtocol',
-    'LLMEngine',
     # Type variables
     'TensorT',
     'EngineT',

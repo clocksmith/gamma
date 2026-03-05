@@ -13,51 +13,26 @@ from typing import (
     Optional,
     Dict,
     Any,
-    Union,
     Callable,
-    TypeVar,
-    Protocol,
-    runtime_checkable,
 )
 from enum import Enum
 
 import numpy as np
-import numpy.typing as npt
 
 from src.core import config as cfg
-from src.core.types import PredictionResult
+from src.core.types import (
+    PredictionResult,
+    TokenId,
+    TokenIds,
+    AttentionMask,
+    Logits,
+    Probabilities,
+    KVCache,
+    TensorT,
+    TokenizerProtocol,
+)
 
 logger = logging.getLogger(__name__)
-
-# Type aliases for clarity
-TokenId = int
-TokenIds = Union[List[TokenId], npt.NDArray[np.int64], Any]  # Any for tensor types
-AttentionMask = Optional[Union[List[int], npt.NDArray[np.int64], Any]]
-Logits = Union[npt.NDArray[np.float32], Any]
-Probabilities = Union[npt.NDArray[np.float32], Any]
-KVCache = Any  # KV cache can be various types depending on engine
-
-
-@runtime_checkable
-class TokenizerProtocol(Protocol):
-    """Protocol for tokenizer interface."""
-
-    def encode(self, text: str, add_special_tokens: bool = True) -> List[int]: ...
-    def decode(self, token_ids: List[int], skip_special_tokens: bool = False) -> str: ...
-    def get_vocab(self) -> Dict[str, int]: ...
-
-    @property
-    def eos_token_id(self) -> Optional[int]: ...
-    @property
-    def bos_token_id(self) -> Optional[int]: ...
-    @property
-    def pad_token_id(self) -> Optional[int]: ...
-    @property
-    def unk_token_id(self) -> Optional[int]: ...
-
-
-# Type variable for tensor types
-TensorT = TypeVar('TensorT')
 
 
 class TokenCategory(Enum):
