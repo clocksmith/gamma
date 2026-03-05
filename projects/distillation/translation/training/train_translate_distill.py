@@ -182,7 +182,7 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--max-new-tokens", type=int, default=192)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--lr-warmup-steps", type=int, default=20)
-    ap.add_argument("--save-every", type=int, default=8000)
+    ap.add_argument("--save-every", type=int, default=2000)
     ap.add_argument(
         "--save-tail-start",
         type=int,
@@ -197,7 +197,7 @@ def _parse_args() -> argparse.Namespace:
         default=0,
         help=(
             "Checkpoint interval to use in tail mode (0 disables). "
-            "Example: save-every 8000 and save-every-tail 1000 with save-tail-start 30000."
+            "Example: save-every 2000 and save-every-tail 500 with save-tail-start 30000."
         ),
     )
     ap.add_argument(
@@ -212,7 +212,7 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument(
         "--keep-checkpoints",
         type=int,
-        default=5,
+        default=12,
         help="Keep at most this many checkpoints per stage, always retaining first and last.",
     )
     ap.add_argument("--log-every", type=int, default=20)
@@ -985,6 +985,13 @@ def _load_model_and_tokenizer(model_ref: str, device: str, dtype: torch.dtype, l
     return model, tok
 
 
+def _load_tokenizer_only(model_ref: str, local_files_only: bool):
+    tok = AutoTokenizer.from_pretrained(model_ref, local_files_only=local_files_only)
+    if tok.pad_token is None:
+        tok.pad_token = tok.eos_token
+    return tok
+
+
 def _apply_lora(model, args: argparse.Namespace):
     if not bool(args.enable_lora):
         return model, False
@@ -1501,12 +1508,6 @@ def main() -> int:
         else:
             print(f"[resume] no checkpoint found in {resume_source}; starting from scratch.")
 
-    teacher, teacher_tok = _load_model_and_tokenizer(
-        str(args.teacher_model),
-        teacher_device,
-        dtype=dtype,
-        local_files_only=bool(args.local_files_only),
-    )
     student_model_ref = str(args.student_model)
     if resume_checkpoint is not None:
         student_model_ref = str(resume_checkpoint)
@@ -1538,13 +1539,6 @@ def main() -> int:
             dtype=dtype,
             local_files_only=bool(args.local_files_only),
         )
-
-    if str(teacher_tok.get_vocab()) != str(tok.get_vocab()) and args.skip_kd_when_device_mismatch:
-        print("[warn] teacher/student tokenizers appear incompatible; KD disabled.")
-        # still keep teacher loaded, but we will not use it if incompatible.
-        skip_kd = True
-    else:
-        skip_kd = False
 
     student, lora_enabled = _apply_lora(student, args)
     if lora_enabled:
@@ -1626,6 +1620,9 @@ def main() -> int:
     export_stage_dir: Path | None = None
     export_stage_name = ""
 
+    run_stage_a = False
+    run_stage_b = False
+    run_stage_mixed = False
     if args.schedule == "A_then_B":
         run_stage_a = True
         run_stage_b = int(distill_steps) > 0
@@ -1636,6 +1633,43 @@ def main() -> int:
             run_stage_b = int(distill_steps) > 0 and ((resume_stage == "stage_b" and stage_b_start < int(distill_steps)) or (
                 resume_stage is None and stage_a_complete and not stage_b_complete
             ))
+    else:
+        run_stage_mixed = True
+        if bool(args.resume):
+            run_stage_mixed = (resume_stage == "mixed" and mixed_start < int(max_steps)) or (
+                resume_stage is None and not mixed_complete
+            )
+
+    teacher = None
+    skip_kd = False
+    teacher_prepared = False
+
+    def _prepare_teacher_for_kd() -> tuple[Any | None, bool]:
+        nonlocal teacher, skip_kd, teacher_prepared
+        if teacher_prepared:
+            return teacher, skip_kd
+
+        teacher_prepared = True
+        if bool(args.skip_kd_when_device_mismatch):
+            teacher_tok = _load_tokenizer_only(
+                str(args.teacher_model),
+                local_files_only=bool(args.local_files_only),
+            )
+            if str(teacher_tok.get_vocab()) != str(tok.get_vocab()):
+                print("[warn] teacher/student tokenizers appear incompatible; KD disabled.")
+                skip_kd = True
+                return None, skip_kd
+
+        print(f"[model] loading teacher on device={teacher_device}")
+        teacher, _ = _load_model_and_tokenizer(
+            str(args.teacher_model),
+            teacher_device,
+            dtype=dtype,
+            local_files_only=bool(args.local_files_only),
+        )
+        return teacher, skip_kd
+
+    if args.schedule == "A_then_B":
         stage_a_dir = run_root / "stage_a"
         stage_a: dict[str, float] = {}
         if run_stage_a:
@@ -1663,12 +1697,13 @@ def main() -> int:
         stage_b_dir = run_root / "stage_b"
         stage_b: dict[str, float] = {}
         if run_stage_b:
+            teacher, skip_kd = _prepare_teacher_for_kd()
             stage_b = _train_stage(
                 stage_name="A_then_B_stage_b",
                 rows=pair_rows,
                 student=student,
                 tokenizer=tok,
-                teacher=teacher if not skip_kd else None,
+                teacher=teacher,
                 optimizer=optimizer,
                 scheduler=scheduler,
                 args=args,
@@ -1690,20 +1725,16 @@ def main() -> int:
             export_stage_dir = stage_a_dir
             export_stage_name = "stage_a"
     else:
-        run_stage_mixed = True
-        if bool(args.resume):
-            run_stage_mixed = (resume_stage == "mixed" and mixed_start < int(max_steps)) or (
-                resume_stage is None and not mixed_complete
-            )
         stage_mix_dir = run_root / "mixed"
         stage_mix: dict[str, float] = {}
         if run_stage_mixed:
+            teacher, skip_kd = _prepare_teacher_for_kd()
             stage_mix = _train_stage(
                 stage_name="mixed_from_start",
                 rows=pair_rows,
                 student=student,
                 tokenizer=tok,
-                teacher=teacher if not skip_kd else None,
+                teacher=teacher,
                 optimizer=optimizer,
                 scheduler=scheduler,
                 args=args,
