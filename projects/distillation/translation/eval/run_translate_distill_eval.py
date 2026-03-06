@@ -28,6 +28,11 @@ except Exception:  # pragma: no cover - optional
     evaluate = None
 
 try:
+    import sacrebleu
+except Exception:  # pragma: no cover - optional
+    sacrebleu = None
+
+try:
     from comet import load_from_checkpoint
 except Exception:  # pragma: no cover - optional
     load_from_checkpoint = None
@@ -643,8 +648,16 @@ def _compute_metrics(predictions: list[str], references: list[str], do_bleu: boo
         },
     }
     if do_bleu:
-        if evaluate is None:
-            out["bleu"] = _safe_metric_error("evaluate package unavailable")
+        if sacrebleu is not None:
+            try:
+                out["bleu"] = {
+                    "available": True,
+                    "score": float(sacrebleu.corpus_bleu(predictions, [references]).score),
+                }
+            except Exception as e:
+                out["bleu"] = _safe_metric_error(str(e))
+        elif evaluate is None:
+            out["bleu"] = _safe_metric_error("evaluate and sacrebleu unavailable")
         else:
             try:
                 metric = _METRIC_CACHE.get("sacrebleu")
@@ -661,8 +674,20 @@ def _compute_metrics(predictions: list[str], references: list[str], do_bleu: boo
         out["bleu"] = _safe_metric_error("disabled")
 
     if do_chrf:
-        if evaluate is None:
-            out["chrf"] = _safe_metric_error("evaluate package unavailable")
+        if sacrebleu is not None:
+            try:
+                metric = _METRIC_CACHE.get("sacrebleu_chrf")
+                if metric is None:
+                    metric = sacrebleu.metrics.CHRF()
+                    _METRIC_CACHE["sacrebleu_chrf"] = metric
+                out["chrf"] = {
+                    "available": True,
+                    "score": float(metric.corpus_score(predictions, [references]).score),
+                }
+            except Exception as e:
+                out["chrf"] = _safe_metric_error(str(e))
+        elif evaluate is None:
+            out["chrf"] = _safe_metric_error("evaluate and sacrebleu unavailable")
         else:
             try:
                 metric = _METRIC_CACHE.get("chrf")

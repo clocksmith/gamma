@@ -12,6 +12,26 @@ from pathlib import Path
 from typing import Any
 
 
+DATASET_SPECS: tuple[dict[str, Any], ...] = (
+    {
+        "label": "external_wmt13_en_es_translation_benchmark_128",
+        "description": "External WMT13 EN-ES translation benchmark (128 rows)",
+        "aliases": (
+            "eval2_external",
+            "translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+        ),
+    },
+    {
+        "label": "indomain_clean_merged_en_es_translation_benchmark_128",
+        "description": "In-domain clean merged EN-ES translation benchmark (128 rows)",
+        "aliases": (
+            "eval3_indomain_clean",
+            "translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl",
+        ),
+    },
+)
+
+
 def _read_json(path: Path) -> dict[str, Any] | None:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -69,6 +89,67 @@ def _path_stem(path: str) -> str:
         return Path(path).name
     except Exception:
         return str(path)
+
+
+def _dataset_spec(value: str) -> dict[str, Any] | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    stem = _path_stem(text)
+    for spec in DATASET_SPECS:
+        aliases = tuple(str(x) for x in spec.get("aliases", ()))
+        if text == spec["label"] or stem == spec["label"]:
+            return spec
+        if text in aliases or stem in aliases:
+            return spec
+        for alias in aliases:
+            if alias and alias in text:
+                return spec
+    return None
+
+
+def _dataset_label(value: str) -> str:
+    spec = _dataset_spec(value)
+    if spec:
+        return str(spec["label"])
+    return str(value or "").strip()
+
+
+def _dataset_description(value: str) -> str:
+    spec = _dataset_spec(value)
+    if spec:
+        return str(spec["description"])
+    return str(value or "").strip()
+
+
+def _dataset_labels_csv(value: str) -> str:
+    parts = [x.strip() for x in str(value or "").split(",") if x.strip()]
+    labels: list[str] = []
+    seen: set[str] = set()
+    for part in parts:
+        label = _dataset_label(part)
+        if not label or label in seen:
+            continue
+        seen.add(label)
+        labels.append(label)
+    return ",".join(labels)
+
+
+def _eval_display_label(eval_set: str, eval_variant: str, eval_checkpoint: str, decode: str) -> str:
+    parts: list[str] = []
+    label = str(eval_set or "").strip()
+    variant = str(eval_variant or "").strip()
+    checkpoint = str(eval_checkpoint or "").strip()
+    decode_name = str(decode or "").strip()
+    if label:
+        parts.append(label)
+    if variant:
+        parts.append(variant)
+    if checkpoint:
+        parts.append(checkpoint)
+    if decode_name:
+        parts.append(decode_name)
+    return " / ".join(parts)
 
 
 def _timestamp_utc_from_file(path: Path) -> str:
@@ -267,6 +348,7 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
                 "source_langs": source_langs,
                 "target_langs": target_langs,
                 "eval_dataset_paths": eval_dataset_paths,
+                "eval_dataset_labels": _dataset_labels_csv(eval_dataset_paths),
                 "total_steps": total_steps,
                 "sft_steps": sft_steps,
                 "distill_steps": distill_steps,
@@ -339,9 +421,10 @@ def _infer_eval_components(eval_name: str) -> tuple[str, str, str]:
 
 def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> dict[str, str]:
     eval_name = path.name
-    eval_set, eval_variant, eval_checkpoint = _infer_eval_components(eval_name)
+    eval_set_alias, eval_variant, eval_checkpoint = _infer_eval_components(eval_name)
     student = summary.get("student") if isinstance(summary.get("student"), dict) else {}
     model = str(student.get("model", "")) if isinstance(student, dict) else ""
+    pairs = _find_eval_dataset(summary, eval_name)
     pred_path = ""
     if isinstance(student, dict):
         pred = student.get("predictions")
@@ -352,15 +435,18 @@ def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> d
     return {
         "run_name": str(path.parent.parent.name),
         "eval_dir": eval_name,
-        "eval_set": eval_set,
+        "eval_set": _dataset_label(eval_set_alias or pairs),
+        "eval_set_alias": eval_set_alias,
+        "eval_set_description": _dataset_description(eval_set_alias or pairs),
         "eval_variant": eval_variant,
         "eval_checkpoint": eval_checkpoint,
+        "eval_label": _eval_display_label(_dataset_label(eval_set_alias or pairs), eval_variant, eval_checkpoint, _decode_from_path(path)),
         "eval_dir_path": _safe_rel(path, repo_root),
         "decode": _decode_from_path(path),
         "eval_samples": _fmt_int(summary.get("eval_samples")),
         "eval_timestamp_utc": _timestamp_utc_from_file(path),
-        "pairs": _find_eval_dataset(summary, eval_name),
-        "pairs_stem": _path_stem(_find_eval_dataset(summary, eval_name)),
+        "pairs": pairs,
+        "pairs_stem": _path_stem(pairs),
         "student_model": model,
         "bleu": _fmt_float(((summary.get("student", {}) or {}).get("metrics_overall", {}).get("bleu", {}) or {}).get("score")),
         "chrf": _fmt_float(((summary.get("student", {}) or {}).get("metrics_overall", {}).get("chrf", {}) or {}).get("score")),
@@ -435,23 +521,28 @@ def _collect_eval_rows_from_manifest(manifest_path: Path, runs_root: Path, repo_
         out_dir = str(item.get("out_dir", "")).strip()
         eval_dir_name = Path(out_dir).name if out_dir else eval_name
 
-        eval_set, eval_variant, eval_checkpoint = _infer_eval_components(eval_dir_name)
+        eval_set_alias, eval_variant, eval_checkpoint = _infer_eval_components(eval_dir_name)
         if checkpoint_name and not eval_checkpoint:
             eval_checkpoint = checkpoint_name
+        pairs = str(item.get("pairs", ""))
+        eval_key = eval_set_alias or eval_name or pairs
 
         rows.append(
             {
                 "run_name": run_name,
                 "eval_dir": eval_dir_name,
-                "eval_set": eval_set or eval_name,
+                "eval_set": _dataset_label(eval_key),
+                "eval_set_alias": eval_set_alias,
+                "eval_set_description": _dataset_description(eval_key),
                 "eval_variant": eval_variant,
                 "eval_checkpoint": eval_checkpoint,
+                "eval_label": _eval_display_label(_dataset_label(eval_key), eval_variant, eval_checkpoint, decode),
                 "eval_dir_path": _safe_rel(_as_repo_path(out_dir, repo_root), repo_root) if out_dir else "",
                 "decode": decode,
                 "eval_samples": _fmt_int(item.get("samples")),
                 "eval_timestamp_utc": str(item.get("timestamp_utc", "")),
-                "pairs": str(item.get("pairs", "")),
-                "pairs_stem": _path_stem(str(item.get("pairs", ""))),
+                "pairs": pairs,
+                "pairs_stem": _path_stem(pairs),
                 "student_model": checkpoint_path,
                 "bleu": _fmt_float(item.get("bleu")),
                 "chrf": _fmt_float(item.get("chrf")),
@@ -529,6 +620,7 @@ def write_markdown(
             "updated_utc": row["updated_utc"],
             "source_langs": row["source_langs"],
             "target_langs": row["target_langs"],
+            "eval_dataset_labels": row["eval_dataset_labels"],
             "eval_dataset_paths": row["eval_dataset_paths"],
             "pair_count": row["pair_count"],
             "pairs_input_spec": row["pairs_input_spec"],
@@ -554,8 +646,11 @@ def write_markdown(
     eval_view = [
         {
             "run_name": row["run_name"],
+            "eval_label": row.get("eval_label", row["eval_dir"]),
             "eval_dir": row["eval_dir"],
             "eval_set": row["eval_set"],
+            "eval_set_alias": row.get("eval_set_alias", ""),
+            "eval_set_description": row.get("eval_set_description", ""),
             "eval_variant": row["eval_variant"],
             "eval_checkpoint": row["eval_checkpoint"],
             "decode": row["decode"],
@@ -591,7 +686,7 @@ def write_markdown(
                     ("updated_utc", "updated_utc"),
                     ("source_langs", "source_langs"),
                     ("target_langs", "target_langs"),
-                    ("eval_dataset_paths", "eval_datasets"),
+                    ("eval_dataset_labels", "eval_datasets"),
                     ("pair_count", "pair_count"),
                     ("pairs_input_spec", "pairs_input"),
                     ("total_steps", "total_steps"),
@@ -624,8 +719,9 @@ def write_markdown(
                 eval_view,
                 [
                     ("run_name", "run"),
-                    ("eval_dir", "eval"),
+                    ("eval_label", "eval"),
                     ("eval_set", "eval_set"),
+                    ("eval_set_description", "eval_set_description"),
                     ("eval_variant", "eval_variant"),
                     ("eval_checkpoint", "eval_checkpoint"),
                     ("decode", "decode"),
@@ -645,6 +741,11 @@ def write_markdown(
         md.append("_No compare_eval_summary.json files found._")
     md.append("")
     md.append("## Notes")
+    md.append("")
+    md.append("### Dataset Labels")
+    md.append("")
+    for spec in DATASET_SPECS:
+        md.append(f"- `{spec['label']}`: {spec['description']}")
     md.append("")
     md.append("- `pair_count` is the effective row count used by training.")
     md.append("- `pairs_input` is the exact training file/spec the run consumed.")
@@ -710,6 +811,10 @@ def _comparison_group_label(eval_variant: str, eval_checkpoint: str) -> str:
     return "default"
 
 
+EXTERNAL_WMT13_LABEL = "external_wmt13_en_es_translation_benchmark_128"
+INDOMAIN_CLEAN_LABEL = "indomain_clean_merged_en_es_translation_benchmark_128"
+
+
 def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
     run_map = {str(row.get("run_name", "")): row for row in run_rows}
     grouped: dict[tuple[str, str, str, str, str], dict[str, Any]] = {}
@@ -752,14 +857,14 @@ def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[s
                 "eval_checkpoint": eval_checkpoint,
                 "decode": decode,
                 "evaluated_model": eval_student_model,
-                "eval2_external_bleu": "",
-                "eval2_external_chrf": "",
-                "eval2_external_pairs": "",
-                "eval2_external_eval_dir": "",
-                "eval3_indomain_clean_bleu": "",
-                "eval3_indomain_clean_chrf": "",
-                "eval3_indomain_clean_pairs": "",
-                "eval3_indomain_clean_eval_dir": "",
+                f"{EXTERNAL_WMT13_LABEL}_bleu": "",
+                f"{EXTERNAL_WMT13_LABEL}_chrf": "",
+                f"{EXTERNAL_WMT13_LABEL}_pairs": "",
+                f"{EXTERNAL_WMT13_LABEL}_eval_dir": "",
+                f"{INDOMAIN_CLEAN_LABEL}_bleu": "",
+                f"{INDOMAIN_CLEAN_LABEL}_chrf": "",
+                f"{INDOMAIN_CLEAN_LABEL}_pairs": "",
+                f"{INDOMAIN_CLEAN_LABEL}_eval_dir": "",
                 "other_eval_sets": "",
                 "other_eval_count": 0,
                 "_other_eval_sets": set(),
@@ -768,16 +873,16 @@ def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[s
             grouped[key] = bucket
 
         eval_set = str(ev.get("eval_set", "")).strip()
-        if eval_set == "eval2_external":
-            bucket["eval2_external_bleu"] = str(ev.get("bleu", ""))
-            bucket["eval2_external_chrf"] = str(ev.get("chrf", ""))
-            bucket["eval2_external_pairs"] = str(ev.get("pairs", ""))
-            bucket["eval2_external_eval_dir"] = str(ev.get("eval_dir", ""))
-        elif eval_set == "eval3_indomain_clean":
-            bucket["eval3_indomain_clean_bleu"] = str(ev.get("bleu", ""))
-            bucket["eval3_indomain_clean_chrf"] = str(ev.get("chrf", ""))
-            bucket["eval3_indomain_clean_pairs"] = str(ev.get("pairs", ""))
-            bucket["eval3_indomain_clean_eval_dir"] = str(ev.get("eval_dir", ""))
+        if eval_set == EXTERNAL_WMT13_LABEL:
+            bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"] = str(ev.get("bleu", ""))
+            bucket[f"{EXTERNAL_WMT13_LABEL}_chrf"] = str(ev.get("chrf", ""))
+            bucket[f"{EXTERNAL_WMT13_LABEL}_pairs"] = str(ev.get("pairs", ""))
+            bucket[f"{EXTERNAL_WMT13_LABEL}_eval_dir"] = str(ev.get("eval_dir", ""))
+        elif eval_set == INDOMAIN_CLEAN_LABEL:
+            bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"] = str(ev.get("bleu", ""))
+            bucket[f"{INDOMAIN_CLEAN_LABEL}_chrf"] = str(ev.get("chrf", ""))
+            bucket[f"{INDOMAIN_CLEAN_LABEL}_pairs"] = str(ev.get("pairs", ""))
+            bucket[f"{INDOMAIN_CLEAN_LABEL}_eval_dir"] = str(ev.get("eval_dir", ""))
         else:
             bucket["_other_eval_sets"].add(eval_set or str(ev.get("eval_dir", "")))
 
@@ -786,16 +891,16 @@ def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[s
         other_sets = sorted(x for x in bucket.pop("_other_eval_sets") if x)
         bucket["other_eval_sets"] = ",".join(other_sets)
         bucket["other_eval_count"] = len(other_sets)
-        bucket["eval2_external_bleu"] = _fmt_float(bucket["eval2_external_bleu"])
-        bucket["eval2_external_chrf"] = _fmt_float(bucket["eval2_external_chrf"])
-        bucket["eval3_indomain_clean_bleu"] = _fmt_float(bucket["eval3_indomain_clean_bleu"])
-        bucket["eval3_indomain_clean_chrf"] = _fmt_float(bucket["eval3_indomain_clean_chrf"])
+        bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"] = _fmt_float(bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"])
+        bucket[f"{EXTERNAL_WMT13_LABEL}_chrf"] = _fmt_float(bucket[f"{EXTERNAL_WMT13_LABEL}_chrf"])
+        bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"] = _fmt_float(bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"])
+        bucket[f"{INDOMAIN_CLEAN_LABEL}_chrf"] = _fmt_float(bucket[f"{INDOMAIN_CLEAN_LABEL}_chrf"])
         # Optional convenience deltas (teacher-style rows get blanks).
-        eval2_bleu = _as_float_or_none(bucket["eval2_external_bleu"])
-        eval3_bleu = _as_float_or_none(bucket["eval3_indomain_clean_bleu"])
-        bucket["eval2_minus_eval3_bleu"] = _fmt_float(eval2_bleu - eval3_bleu) if eval2_bleu is not None and eval3_bleu is not None else ""
+        eval2_bleu = _as_float_or_none(bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"])
+        eval3_bleu = _as_float_or_none(bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"])
+        bucket["external_minus_indomain_bleu"] = _fmt_float(eval2_bleu - eval3_bleu) if eval2_bleu is not None and eval3_bleu is not None else ""
         # Keep merged comparison focused on comparable eval-set rows.
-        if not bucket["eval2_external_bleu"] and not bucket["eval3_indomain_clean_bleu"]:
+        if not bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"] and not bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"]:
             continue
         rows.append(bucket)
 
@@ -841,15 +946,20 @@ def write_comparison_markdown(path: Path, rows: list[dict[str, Any]], runs_root:
                     ("target_langs", "target_langs"),
                     ("lambda_kd", "lambda_kd"),
                     ("mu_triplet", "mu_triplet"),
-                    ("eval2_external_bleu", "eval2_bleu"),
-                    ("eval2_external_chrf", "eval2_chrf"),
-                    ("eval3_indomain_clean_bleu", "eval3_bleu"),
-                    ("eval3_indomain_clean_chrf", "eval3_chrf"),
+                    (f"{EXTERNAL_WMT13_LABEL}_bleu", f"{EXTERNAL_WMT13_LABEL}_bleu"),
+                    (f"{EXTERNAL_WMT13_LABEL}_chrf", f"{EXTERNAL_WMT13_LABEL}_chrf"),
+                    (f"{INDOMAIN_CLEAN_LABEL}_bleu", f"{INDOMAIN_CLEAN_LABEL}_bleu"),
+                    (f"{INDOMAIN_CLEAN_LABEL}_chrf", f"{INDOMAIN_CLEAN_LABEL}_chrf"),
                 ],
             )
         )
     else:
         md.append("_No merged comparison rows available._")
+    md.append("")
+    md.append("## Dataset Labels")
+    md.append("")
+    for spec in DATASET_SPECS:
+        md.append(f"- `{spec['label']}`: {spec['description']}")
     md.append("")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(md), encoding="utf-8")
@@ -880,6 +990,7 @@ def main() -> int:
             "updated_utc",
             "source_langs",
             "target_langs",
+            "eval_dataset_labels",
             "eval_dataset_paths",
             "pair_count",
             "pairs_input_spec",
@@ -911,7 +1022,10 @@ def main() -> int:
         [
             "run_name",
             "eval_dir",
+            "eval_label",
             "eval_set",
+            "eval_set_alias",
+            "eval_set_description",
             "eval_variant",
             "eval_checkpoint",
             "decode",
@@ -960,17 +1074,17 @@ def main() -> int:
             "eval_checkpoint",
             "decode",
             "evaluated_model",
-            "eval2_external_bleu",
-            "eval2_external_chrf",
-            "eval2_external_pairs",
-            "eval2_external_eval_dir",
-            "eval3_indomain_clean_bleu",
-            "eval3_indomain_clean_chrf",
-            "eval3_indomain_clean_pairs",
-            "eval3_indomain_clean_eval_dir",
+            f"{EXTERNAL_WMT13_LABEL}_bleu",
+            f"{EXTERNAL_WMT13_LABEL}_chrf",
+            f"{EXTERNAL_WMT13_LABEL}_pairs",
+            f"{EXTERNAL_WMT13_LABEL}_eval_dir",
+            f"{INDOMAIN_CLEAN_LABEL}_bleu",
+            f"{INDOMAIN_CLEAN_LABEL}_chrf",
+            f"{INDOMAIN_CLEAN_LABEL}_pairs",
+            f"{INDOMAIN_CLEAN_LABEL}_eval_dir",
             "other_eval_sets",
             "other_eval_count",
-            "eval2_minus_eval3_bleu",
+            "external_minus_indomain_bleu",
         ],
     )
     write_markdown(out_md, run_rows, eval_rows, runs_root)

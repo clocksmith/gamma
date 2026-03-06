@@ -17,6 +17,14 @@ from pathlib import Path
 from typing import Any
 
 
+DATASET_LABELS: dict[str, str] = {
+    "eval2_external": "external_wmt13_en_es_translation_benchmark_128",
+    "translate_distill_pairs.eval2_wmt13_enes_128.jsonl": "external_wmt13_en_es_translation_benchmark_128",
+    "eval3_indomain_clean": "indomain_clean_merged_en_es_translation_benchmark_128",
+    "translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl": "indomain_clean_merged_en_es_translation_benchmark_128",
+}
+
+
 def _now_utc() -> str:
     return dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
@@ -46,6 +54,24 @@ def _fmt_float(value: Any) -> str:
         return f"{float(value):.4f}"
     except Exception:
         return ""
+
+
+def _path_stem(path: str) -> str:
+    try:
+        return Path(path).name
+    except Exception:
+        return str(path)
+
+
+def _dataset_label(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    stem = _path_stem(text)
+    for key, label in DATASET_LABELS.items():
+        if text == key or stem == key or key in text:
+            return label
+    return text
 
 
 def _collect_checkpoints(stage_b_dir: Path, checkpoints_arg: str) -> list[Path]:
@@ -182,11 +208,12 @@ def _write_scoreboard(
             continue
         if int(row.get("status", 1)) != 0:
             continue
+        eval_name = str(row.get("eval_name", ""))
         eval_rows.append(
             {
                 "checkpoint_name": row.get("checkpoint_name", ""),
                 "checkpoint_step": row.get("checkpoint_step", ""),
-                "eval_name": row.get("eval_name", ""),
+                "eval_name": _dataset_label(eval_name),
                 "bleu": _fmt_float(row.get("bleu")),
                 "chrf": _fmt_float(row.get("chrf")),
                 "samples": row.get("samples", ""),
@@ -200,7 +227,7 @@ def _write_scoreboard(
 
     # Aggregate per checkpoint across eval sets.
     agg: dict[str, dict[str, Any]] = {}
-    expected_evals = [name for name, _ in eval_specs]
+    expected_evals = [_dataset_label(name) for name, _ in eval_specs]
     for row in manifest_rows:
         if str(row.get("decode", "")) != decode or int(row.get("status", 1)) != 0:
             continue
@@ -217,7 +244,7 @@ def _write_scoreboard(
             },
         )
         bucket["evals_done"] = int(bucket["evals_done"]) + 1
-        ev_name = str(row.get("eval_name", ""))
+        ev_name = _dataset_label(str(row.get("eval_name", "")))
         bleu = row.get("bleu")
         chrf = row.get("chrf")
         if isinstance(bleu, (float, int)):
@@ -441,7 +468,7 @@ def main() -> int:
     print(f"[sweep] stage_dir={_safe_rel(stage_dir, repo_root)}")
     print(f"[sweep] out_dir={_safe_rel(out_dir, repo_root)}")
     print(f"[sweep] checkpoints={','.join(p.name for p in checkpoints)}")
-    print(f"[sweep] evals={','.join(name for name, _ in eval_specs)}")
+    print(f"[sweep] evals={','.join(_dataset_label(name) for name, _ in eval_specs)}")
     print(f"[sweep] decode={args.decode}")
 
     _write_scoreboard(out_dir, manifest_rows, repo_root, run_root, args.decode, eval_specs)
