@@ -170,12 +170,16 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
             distill_steps = _fmt_int(summary.get("distill_steps"))
             lambda_kd = _fmt_float(summary.get("lambda_kd"))
             mu_triplet = _fmt_float(summary.get("mu_triplet"))
+            kd_temperature = _fmt_float(summary.get("kd_temperature"))
+            margin = _fmt_float(summary.get("margin"))
             resumed = _fmt_bool(summary.get("resumed", False))
             resume_stage = str(summary.get("resume_stage", ""))
             resume_from = str(summary.get("resume_from", ""))
             selected_checkpoint = str(summary.get("selected_checkpoint", ""))
             selected_checkpoint_stage = str(summary.get("selected_checkpoint_stage", ""))
             selected_checkpoint_loss = _fmt_float(summary.get("selected_checkpoint_loss"))
+            teacher_model = str(summary.get("teacher_model", ""))
+            student_model = str(summary.get("student_model", ""))
             run_status = "completed"
             total_steps = _fmt_int(summary.get("total_steps"))
             final_out = str(summary.get("final_out", ""))
@@ -198,12 +202,16 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
             distill_steps = ""
             lambda_kd = ""
             mu_triplet = ""
+            kd_temperature = ""
+            margin = ""
             resumed = _fmt_bool(contract.get("resume_stage") not in ("", "none", None))
             resume_stage = contract.get("resume_stage", "none")
             resume_from = contract.get("resume_from", "")
             selected_checkpoint = ""
             selected_checkpoint_stage = ""
             selected_checkpoint_loss = ""
+            teacher_model = ""
+            student_model = ""
             run_status = "contract_only"
             total_steps = ""
             final_out = ""
@@ -222,12 +230,16 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
             distill_steps = ""
             lambda_kd = ""
             mu_triplet = ""
+            kd_temperature = ""
+            margin = ""
             resumed = "false"
             resume_stage = ""
             resume_from = ""
             selected_checkpoint = ""
             selected_checkpoint_stage = ""
             selected_checkpoint_loss = ""
+            teacher_model = ""
+            student_model = ""
             run_status = "sparse"
             total_steps = ""
             final_out = ""
@@ -260,6 +272,10 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
                 "distill_steps": distill_steps,
                 "lambda_kd": lambda_kd,
                 "mu_triplet": mu_triplet,
+                "kd_temperature": kd_temperature,
+                "margin": margin,
+                "teacher_model": teacher_model,
+                "student_model": student_model,
                 "resumed": resumed,
                 "resume_stage": resume_stage,
                 "resume_from": resume_from,
@@ -369,9 +385,89 @@ def _collect_eval_rows_for_path(compare_path: Path, runs_root: Path, repo_root: 
     return row
 
 
+def _collect_eval_rows_from_manifest(manifest_path: Path, runs_root: Path, repo_root: Path) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    if not manifest_path.is_file():
+        return rows
+
+    manifest_rows: list[dict[str, Any]] = []
+    for line in manifest_path.read_text(encoding="utf-8").splitlines():
+        text = line.strip()
+        if not text:
+            continue
+        try:
+            obj = json.loads(text)
+        except Exception:
+            continue
+        if isinstance(obj, dict):
+            manifest_rows.append(obj)
+
+    for item in manifest_rows:
+        try:
+            status = int(item.get("status", 1))
+        except Exception:
+            status = 1
+        if status != 0:
+            continue
+
+        compare_summary = str(item.get("compare_summary", "")).strip()
+        if not compare_summary:
+            continue
+
+        compare_path = _as_repo_path(compare_summary, repo_root)
+        if compare_path.is_file():
+            # Prefer the richer compare-summary parser when the file exists.
+            continue
+
+        run_root_value = str(item.get("run_root", "")).strip()
+        if run_root_value:
+            run_root = _as_repo_path(run_root_value, repo_root)
+        else:
+            run_root = next((p for p in manifest_path.resolve().parents if p.parent == runs_root), None)
+        if not run_root:
+            continue
+
+        run_name = Path(run_root).name
+        eval_name = str(item.get("eval_name", "")).strip()
+        checkpoint_name = str(item.get("checkpoint_name", "")).strip()
+        checkpoint_path = str(item.get("checkpoint_path", "")).strip()
+        decode = str(item.get("decode", "")).strip()
+        out_dir = str(item.get("out_dir", "")).strip()
+        eval_dir_name = Path(out_dir).name if out_dir else eval_name
+
+        eval_set, eval_variant, eval_checkpoint = _infer_eval_components(eval_dir_name)
+        if checkpoint_name and not eval_checkpoint:
+            eval_checkpoint = checkpoint_name
+
+        rows.append(
+            {
+                "run_name": run_name,
+                "eval_dir": eval_dir_name,
+                "eval_set": eval_set or eval_name,
+                "eval_variant": eval_variant,
+                "eval_checkpoint": eval_checkpoint,
+                "eval_dir_path": _safe_rel(_as_repo_path(out_dir, repo_root), repo_root) if out_dir else "",
+                "decode": decode,
+                "eval_samples": _fmt_int(item.get("samples")),
+                "eval_timestamp_utc": str(item.get("timestamp_utc", "")),
+                "pairs": str(item.get("pairs", "")),
+                "pairs_stem": _path_stem(str(item.get("pairs", ""))),
+                "student_model": checkpoint_path,
+                "bleu": _fmt_float(item.get("bleu")),
+                "chrf": _fmt_float(item.get("chrf")),
+                "predictions_path": _safe_rel(_as_repo_path(str(item.get("student_predictions", "")), repo_root), repo_root)
+                if str(item.get("student_predictions", "")).strip()
+                else "",
+                "compare_summary_path": compare_summary,
+            }
+        )
+    return rows
+
+
 def collect_eval_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     seen: set[Path] = set()
+    seen_compare_paths: set[str] = set()
     for compare_path in runs_root.rglob("compare_eval_summary.json"):
         try:
             resolved = compare_path.resolve()
@@ -384,6 +480,17 @@ def collect_eval_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str]]:
         if not row:
             continue
         rows.append(row)
+        seen_compare_paths.add(str(row.get("compare_summary_path", "")))
+
+    for manifest_path in runs_root.rglob("manifest.jsonl"):
+        for row in _collect_eval_rows_from_manifest(manifest_path, runs_root, repo_root):
+            compare_key = str(row.get("compare_summary_path", ""))
+            if compare_key and compare_key in seen_compare_paths:
+                continue
+            rows.append(row)
+            if compare_key:
+                seen_compare_paths.add(compare_key)
+
     rows.sort(key=lambda x: (x["run_name"], x["eval_dir"], x["decode"]))
     return rows
 
@@ -431,6 +538,10 @@ def write_markdown(
             "distill_steps": row["distill_steps"] if row["distill_steps"] != "" else "",
             "lambda_kd": row["lambda_kd"],
             "mu_triplet": row["mu_triplet"],
+            "kd_temperature": row["kd_temperature"],
+            "margin": row["margin"],
+            "teacher_model": row["teacher_model"],
+            "student_model": row["student_model"],
             "resumed": row["resumed"],
             "summary_path": row["summary_path"],
             "latest_stage_a_checkpoint": Path(row["latest_stage_a_checkpoint"]).name if row["latest_stage_a_checkpoint"] else "",
@@ -446,6 +557,7 @@ def write_markdown(
             "eval_dir": row["eval_dir"],
             "eval_set": row["eval_set"],
             "eval_variant": row["eval_variant"],
+            "eval_checkpoint": row["eval_checkpoint"],
             "decode": row["decode"],
             "bleu": row["bleu"],
             "chrf": row["chrf"],
@@ -488,6 +600,10 @@ def write_markdown(
                     ("distill_steps", "distill_steps"),
                     ("lambda_kd", "lambda_kd"),
                     ("mu_triplet", "mu_triplet"),
+                    ("kd_temperature", "kd_temperature"),
+                    ("margin", "margin"),
+                    ("teacher_model", "teacher_model"),
+                    ("student_model", "student_model"),
                     ("resumed", "resumed"),
                     ("summary_source", "summary_source"),
                     ("summary_path", "summary"),
@@ -560,7 +676,183 @@ def parse_args() -> argparse.Namespace:
         default="projects/distillation/translation/runs/run_index_evals.csv",
         help="Output CSV for eval summaries.",
     )
+    ap.add_argument(
+        "--out-compare-csv",
+        default="projects/distillation/translation/runs/run_index_compare.csv",
+        help="Output merged comparison CSV (strict columns for run params + eval metrics).",
+    )
+    ap.add_argument(
+        "--out-compare-md",
+        default="projects/distillation/translation/runs/RUN_COMPARE.md",
+        help="Output merged comparison markdown table.",
+    )
     return ap.parse_args()
+
+
+def _as_float_or_none(value: Any) -> float | None:
+    try:
+        if value is None or str(value).strip() == "":
+            return None
+        return float(value)
+    except Exception:
+        return None
+
+
+def _comparison_group_label(eval_variant: str, eval_checkpoint: str) -> str:
+    variant = (eval_variant or "").strip()
+    ckpt = (eval_checkpoint or "").strip()
+    if variant and ckpt:
+        return f"{variant}__{ckpt}"
+    if variant:
+        return variant
+    if ckpt:
+        return ckpt
+    return "default"
+
+
+def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    run_map = {str(row.get("run_name", "")): row for row in run_rows}
+    grouped: dict[tuple[str, str, str, str, str], dict[str, Any]] = {}
+
+    for ev in eval_rows:
+        run_name = str(ev.get("run_name", ""))
+        eval_variant = str(ev.get("eval_variant", ""))
+        eval_checkpoint = str(ev.get("eval_checkpoint", ""))
+        decode = str(ev.get("decode", ""))
+        eval_student_model = str(ev.get("student_model", ""))
+        key = (run_name, eval_variant, eval_checkpoint, decode, eval_student_model)
+        run = run_map.get(run_name, {})
+        bucket = grouped.get(key)
+        if bucket is None:
+            bucket = {
+                "run_name": run_name,
+                "run_status": str(run.get("run_status", "")),
+                "summary_source": str(run.get("summary_source", "")),
+                "timestamp_utc": str(run.get("timestamp_utc", "")),
+                "updated_utc": str(run.get("updated_utc", "")),
+                "source_langs": str(run.get("source_langs", "")),
+                "target_langs": str(run.get("target_langs", "")),
+                "pair_count": str(run.get("pair_count", "")),
+                "pairs_input_spec": str(run.get("pairs_input_spec", "")),
+                "schedule": str(run.get("schedule", "")),
+                "total_steps": str(run.get("total_steps", "")),
+                "sft_steps": str(run.get("sft_steps", "")),
+                "distill_steps": str(run.get("distill_steps", "")),
+                "lambda_kd": str(run.get("lambda_kd", "")),
+                "mu_triplet": str(run.get("mu_triplet", "")),
+                "kd_temperature": str(run.get("kd_temperature", "")),
+                "margin": str(run.get("margin", "")),
+                "teacher_model_cfg": str(run.get("teacher_model", "")),
+                "student_model_cfg": str(run.get("student_model", "")),
+                "resumed": str(run.get("resumed", "")),
+                "resume_stage": str(run.get("resume_stage", "")),
+                "resume_from": str(run.get("resume_from", "")),
+                "group_label": _comparison_group_label(eval_variant, eval_checkpoint),
+                "eval_variant": eval_variant,
+                "eval_checkpoint": eval_checkpoint,
+                "decode": decode,
+                "evaluated_model": eval_student_model,
+                "eval2_external_bleu": "",
+                "eval2_external_chrf": "",
+                "eval2_external_pairs": "",
+                "eval2_external_eval_dir": "",
+                "eval3_indomain_clean_bleu": "",
+                "eval3_indomain_clean_chrf": "",
+                "eval3_indomain_clean_pairs": "",
+                "eval3_indomain_clean_eval_dir": "",
+                "other_eval_sets": "",
+                "other_eval_count": 0,
+                "_other_eval_sets": set(),
+                "_sort_ts": float(run.get("timestamp_epoch", -1.0) or -1.0),
+            }
+            grouped[key] = bucket
+
+        eval_set = str(ev.get("eval_set", "")).strip()
+        if eval_set == "eval2_external":
+            bucket["eval2_external_bleu"] = str(ev.get("bleu", ""))
+            bucket["eval2_external_chrf"] = str(ev.get("chrf", ""))
+            bucket["eval2_external_pairs"] = str(ev.get("pairs", ""))
+            bucket["eval2_external_eval_dir"] = str(ev.get("eval_dir", ""))
+        elif eval_set == "eval3_indomain_clean":
+            bucket["eval3_indomain_clean_bleu"] = str(ev.get("bleu", ""))
+            bucket["eval3_indomain_clean_chrf"] = str(ev.get("chrf", ""))
+            bucket["eval3_indomain_clean_pairs"] = str(ev.get("pairs", ""))
+            bucket["eval3_indomain_clean_eval_dir"] = str(ev.get("eval_dir", ""))
+        else:
+            bucket["_other_eval_sets"].add(eval_set or str(ev.get("eval_dir", "")))
+
+    rows: list[dict[str, Any]] = []
+    for bucket in grouped.values():
+        other_sets = sorted(x for x in bucket.pop("_other_eval_sets") if x)
+        bucket["other_eval_sets"] = ",".join(other_sets)
+        bucket["other_eval_count"] = len(other_sets)
+        bucket["eval2_external_bleu"] = _fmt_float(bucket["eval2_external_bleu"])
+        bucket["eval2_external_chrf"] = _fmt_float(bucket["eval2_external_chrf"])
+        bucket["eval3_indomain_clean_bleu"] = _fmt_float(bucket["eval3_indomain_clean_bleu"])
+        bucket["eval3_indomain_clean_chrf"] = _fmt_float(bucket["eval3_indomain_clean_chrf"])
+        # Optional convenience deltas (teacher-style rows get blanks).
+        eval2_bleu = _as_float_or_none(bucket["eval2_external_bleu"])
+        eval3_bleu = _as_float_or_none(bucket["eval3_indomain_clean_bleu"])
+        bucket["eval2_minus_eval3_bleu"] = _fmt_float(eval2_bleu - eval3_bleu) if eval2_bleu is not None and eval3_bleu is not None else ""
+        # Keep merged comparison focused on comparable eval-set rows.
+        if not bucket["eval2_external_bleu"] and not bucket["eval3_indomain_clean_bleu"]:
+            continue
+        rows.append(bucket)
+
+    rows.sort(
+        key=lambda r: (
+            float(r.get("_sort_ts", -1.0)),
+            str(r.get("run_name", "")),
+            str(r.get("group_label", "")),
+            str(r.get("decode", "")),
+        ),
+        reverse=True,
+    )
+    for r in rows:
+        r.pop("_sort_ts", None)
+    return rows
+
+
+def write_comparison_markdown(path: Path, rows: list[dict[str, Any]], runs_root: Path) -> None:
+    generated_utc = dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    md: list[str] = []
+    md.append("# Translation Distillation Merged Comparison")
+    md.append("")
+    md.append(f"Generated: {generated_utc}")
+    md.append(f"Runs root: `{runs_root}`")
+    md.append("")
+    md.append("One row = one comparable eval group (run + variant/checkpoint + decode), with strict run-parameter columns.")
+    md.append("")
+    if rows:
+        md.append(
+            _md_table(
+                rows,
+                [
+                    ("run_name", "run"),
+                    ("group_label", "group"),
+                    ("decode", "decode"),
+                    ("pair_count", "train_rows"),
+                    ("sft_steps", "stage_a_steps"),
+                    ("distill_steps", "stage_b_steps"),
+                    ("teacher_model_cfg", "teacher_model_cfg"),
+                    ("student_model_cfg", "student_model_cfg"),
+                    ("evaluated_model", "evaluated_model"),
+                    ("source_langs", "source_langs"),
+                    ("target_langs", "target_langs"),
+                    ("lambda_kd", "lambda_kd"),
+                    ("mu_triplet", "mu_triplet"),
+                    ("eval2_external_bleu", "eval2_bleu"),
+                    ("eval2_external_chrf", "eval2_chrf"),
+                    ("eval3_indomain_clean_bleu", "eval3_bleu"),
+                    ("eval3_indomain_clean_chrf", "eval3_chrf"),
+                ],
+            )
+        )
+    else:
+        md.append("_No merged comparison rows available._")
+    md.append("")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(md), encoding="utf-8")
 
 
 def main() -> int:
@@ -570,6 +862,8 @@ def main() -> int:
     out_md = Path(args.out_md).resolve()
     out_runs_csv = Path(args.out_runs_csv).resolve()
     out_evals_csv = Path(args.out_evals_csv).resolve()
+    out_compare_csv = Path(args.out_compare_csv).resolve()
+    out_compare_md = Path(args.out_compare_md).resolve()
 
     run_rows = collect_run_rows(runs_root, repo_root)
     eval_rows = collect_eval_rows(runs_root, repo_root)
@@ -595,6 +889,10 @@ def main() -> int:
             "distill_steps",
             "lambda_kd",
             "mu_triplet",
+            "kd_temperature",
+            "margin",
+            "teacher_model",
+            "student_model",
             "resumed",
             "resume_stage",
             "resume_from",
@@ -629,10 +927,59 @@ def main() -> int:
             "compare_summary_path",
         ],
     )
+
+    compare_rows = build_comparison_rows(run_rows, eval_rows)
+    write_csv(
+        out_compare_csv,
+        compare_rows,
+        [
+            "run_name",
+            "run_status",
+            "summary_source",
+            "timestamp_utc",
+            "updated_utc",
+            "source_langs",
+            "target_langs",
+            "pair_count",
+            "pairs_input_spec",
+            "schedule",
+            "total_steps",
+            "sft_steps",
+            "distill_steps",
+            "lambda_kd",
+            "mu_triplet",
+            "kd_temperature",
+            "margin",
+            "teacher_model_cfg",
+            "student_model_cfg",
+            "resumed",
+            "resume_stage",
+            "resume_from",
+            "group_label",
+            "eval_variant",
+            "eval_checkpoint",
+            "decode",
+            "evaluated_model",
+            "eval2_external_bleu",
+            "eval2_external_chrf",
+            "eval2_external_pairs",
+            "eval2_external_eval_dir",
+            "eval3_indomain_clean_bleu",
+            "eval3_indomain_clean_chrf",
+            "eval3_indomain_clean_pairs",
+            "eval3_indomain_clean_eval_dir",
+            "other_eval_sets",
+            "other_eval_count",
+            "eval2_minus_eval3_bleu",
+        ],
+    )
     write_markdown(out_md, run_rows, eval_rows, runs_root)
+    write_comparison_markdown(out_compare_md, compare_rows, runs_root)
     print(f"wrote: {out_md}")
     print(f"wrote: {out_runs_csv}")
     print(f"wrote: {out_evals_csv}")
+    print(f"wrote: {out_compare_csv}")
+    print(f"wrote: {out_compare_md}")
     return 0
 
 

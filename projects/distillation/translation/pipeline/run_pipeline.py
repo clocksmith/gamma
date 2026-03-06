@@ -182,7 +182,7 @@ def main() -> int:
     ap.add_argument("--split-min-eval-per-pair", type=int, default=1)
 
     ap.add_argument("--teacher-model", default="google/translategemma-4b-it")
-    ap.add_argument("--student-model", default="google/translategemma-4b-it")
+    ap.add_argument("--student-model", default="google/gemma-3-1b-it")
     ap.add_argument("--vocab-subset-dir", default="")
     ap.add_argument(
         "--tokenizer-model",
