@@ -31,6 +31,9 @@ DATASET_SPECS: tuple[dict[str, Any], ...] = (
     },
 )
 
+STAGE_TOKEN_RE = re.compile(r"^(stage[_-]?)(a|b)(\d+)(k)?$", re.IGNORECASE)
+MODEL_CHECKPOINT_RE = re.compile(r"/(stage_[ab])/checkpoint-(\d+)(?:/|$)")
+
 
 def _read_json(path: Path) -> dict[str, Any] | None:
     try:
@@ -186,6 +189,17 @@ def _parse_run_contract(path: Path) -> dict[str, str]:
     return data
 
 
+def _parse_run_contract_from_logs(run_root: Path) -> tuple[dict[str, str], Path | None]:
+    logs_dir = run_root / "logs"
+    if not logs_dir.is_dir():
+        return {}, None
+    for log_path in sorted(logs_dir.rglob("*.log")):
+        data = _parse_run_contract(log_path)
+        if data:
+            return data, log_path
+    return {}, None
+
+
 def _checkpoint_step(name: str) -> int:
     m = re.fullmatch(r"checkpoint-(\d+)", name)
     if not m:
@@ -194,6 +208,46 @@ def _checkpoint_step(name: str) -> int:
         return int(m.group(1))
     except Exception:
         return -1
+
+
+def _checkpoint_name_from_step_value(value: int) -> str:
+    if value < 0:
+        return ""
+    return f"checkpoint-{value:06d}"
+
+
+def _normalize_stage_token(token: str) -> tuple[str, str]:
+    text = str(token or "").strip()
+    if not text:
+        return "", ""
+    lower = text.lower()
+    if lower == "final":
+        return "final", ""
+    if lower.startswith("teacher"):
+        return text, ""
+    if lower.startswith("checkpoint-"):
+        return "", text
+
+    match = STAGE_TOKEN_RE.fullmatch(lower)
+    if not match:
+        return text, ""
+
+    stage_letter = match.group(2).lower()
+    raw_step = int(match.group(3))
+    has_k_suffix = bool(match.group(4))
+    if has_k_suffix or (stage_letter == "a" and raw_step < 1000):
+        raw_step *= 1000
+    return f"stage_{stage_letter}", _checkpoint_name_from_step_value(raw_step)
+
+
+def _normalize_model_variant(model_path: str) -> tuple[str, str]:
+    text = str(model_path or "").strip()
+    if not text:
+        return "", ""
+    match = MODEL_CHECKPOINT_RE.search(text)
+    if not match:
+        return "", ""
+    return match.group(1), _checkpoint_name_from_step_value(int(match.group(2)))
 
 
 def _latest_checkpoint(path: Path, repo_root: Path) -> str:
@@ -232,9 +286,12 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
             continue
         summary_path = child / "train_summary.json"
         contract_path = child / "run_contract.txt"
+        contract_source_path: Path | None = contract_path if contract_path.is_file() else None
 
         summary: dict[str, Any] | None = _read_json(summary_path) if summary_path.is_file() else None
         contract = _parse_run_contract(contract_path)
+        if not contract:
+            contract, contract_source_path = _parse_run_contract_from_logs(child)
 
         source_langs = ""
         target_langs = ""
@@ -271,10 +328,10 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
             try:
                 # contract format currently does not include a timestamp field.
                 # keep deterministic fallback to file mtime for sorting.
-                timestamp_epoch = float(contract_path.stat().st_mtime)
+                timestamp_epoch = float((contract_source_path or contract_path).stat().st_mtime)
             except Exception:
                 timestamp_epoch = -1.0
-            timestamp_utc = _mtime_utc(contract_path)
+            timestamp_utc = _mtime_utc(contract_source_path or contract_path)
             pair_count = ""
             pairs_input_spec = contract.get("pairs_input_spec", "")
             eval_dataset_paths = contract.get("eval_dataset_paths", "")
@@ -338,7 +395,7 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
                 "run_status": run_status,
                 "summary_source": source,
                 "summary_path": _safe_rel(summary_path, repo_root) if summary_path.is_file() else (
-                    _safe_rel(contract_path, repo_root) if contract else ""
+                    _safe_rel(contract_source_path or contract_path, repo_root) if contract else ""
                 ),
                 "timestamp_epoch": float(timestamp_epoch),
                 "timestamp_utc": timestamp_utc,
@@ -380,10 +437,18 @@ def _decode_from_path(path: Path) -> str:
             return "greedy"
         if part.endswith("__sampled") or part == "sampled":
             return "sampled"
+        if "_greedy_" in part or part.endswith("_greedy"):
+            return "greedy"
+        if "_sampled_" in part or part.endswith("_sampled"):
+            return "sampled"
     folder = path.name
     if folder.endswith("__greedy"):
         return "greedy"
     if folder.endswith("__sampled"):
+        return "sampled"
+    if "_greedy_" in folder or folder.endswith("_greedy"):
+        return "greedy"
+    if "_sampled_" in folder or folder.endswith("_sampled"):
         return "sampled"
     return ""
 
@@ -401,30 +466,55 @@ def _find_eval_dataset(summary: dict[str, Any], eval_name: str) -> str:
     return eval_name
 
 
-def _infer_eval_components(eval_name: str) -> tuple[str, str, str]:
-    parts = eval_name.split("__")
-    if len(parts) == 1:
-        return eval_name, "", ""
-    eval_set = parts[0]
+def _infer_eval_components(eval_name: str, pairs: str = "", model_path: str = "") -> tuple[str, str, str]:
+    if "__" in eval_name:
+        parts = eval_name.split("__")
+        eval_set = parts[0]
+        checkpoint = ""
+        variant = ""
+        for part in parts[1:]:
+            if part in {"greedy", "sampled"}:
+                continue
+            parsed_variant, parsed_checkpoint = _normalize_stage_token(part)
+            if parsed_variant and not variant:
+                variant = parsed_variant
+            if parsed_checkpoint and not checkpoint:
+                checkpoint = parsed_checkpoint
+        if (not variant or not checkpoint) and model_path:
+            model_variant, model_checkpoint = _normalize_model_variant(model_path)
+            if not variant and model_variant:
+                variant = model_variant
+            if not checkpoint and model_checkpoint:
+                checkpoint = model_checkpoint
+        return eval_set, variant, checkpoint
+
+    tokens = [token for token in eval_name.split("_") if token]
+    variant = ""
     checkpoint = ""
-    variant_parts: list[str] = []
-    for part in parts[1:]:
-        if part.startswith("checkpoint-"):
-            checkpoint = part
-            continue
-        if part in {"greedy", "sampled"}:
-            continue
-        if part:
-            variant_parts.append(part)
-    return eval_set, "__".join(variant_parts), checkpoint
+    if tokens and tokens[0] == "eval" and len(tokens) > 1:
+        variant, checkpoint = _normalize_stage_token(tokens[1])
+    if (not variant or not checkpoint) and model_path:
+        model_variant, model_checkpoint = _normalize_model_variant(model_path)
+        if not variant and model_variant:
+            variant = model_variant
+        if not checkpoint and model_checkpoint:
+            checkpoint = model_checkpoint
+    return pairs or eval_name, variant, checkpoint
+
+
+def _eval_timestamp_epoch(path: Path) -> str:
+    try:
+        return str(float(path.stat().st_mtime))
+    except Exception:
+        return ""
 
 
 def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> dict[str, str]:
     eval_name = path.name
-    eval_set_alias, eval_variant, eval_checkpoint = _infer_eval_components(eval_name)
     student = summary.get("student") if isinstance(summary.get("student"), dict) else {}
     model = str(student.get("model", "")) if isinstance(student, dict) else ""
     pairs = _find_eval_dataset(summary, eval_name)
+    eval_set_alias, eval_variant, eval_checkpoint = _infer_eval_components(eval_name, pairs, model)
     pred_path = ""
     if isinstance(student, dict):
         pred = student.get("predictions")
@@ -452,6 +542,7 @@ def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> d
         "chrf": _fmt_float(((summary.get("student", {}) or {}).get("metrics_overall", {}).get("chrf", {}) or {}).get("score")),
         "predictions_path": _safe_rel(Path(pred_path), repo_root) if pred_path else "",
         "compare_summary_path": _safe_rel(path, repo_root),
+        "_eval_timestamp_epoch": _eval_timestamp_epoch(path),
     }
 
 
@@ -521,10 +612,10 @@ def _collect_eval_rows_from_manifest(manifest_path: Path, runs_root: Path, repo_
         out_dir = str(item.get("out_dir", "")).strip()
         eval_dir_name = Path(out_dir).name if out_dir else eval_name
 
-        eval_set_alias, eval_variant, eval_checkpoint = _infer_eval_components(eval_dir_name)
+        pairs = str(item.get("pairs", ""))
+        eval_set_alias, eval_variant, eval_checkpoint = _infer_eval_components(eval_dir_name, pairs, checkpoint_path)
         if checkpoint_name and not eval_checkpoint:
             eval_checkpoint = checkpoint_name
-        pairs = str(item.get("pairs", ""))
         eval_key = eval_set_alias or eval_name or pairs
 
         rows.append(
@@ -550,6 +641,7 @@ def _collect_eval_rows_from_manifest(manifest_path: Path, runs_root: Path, repo_
                 if str(item.get("student_predictions", "")).strip()
                 else "",
                 "compare_summary_path": compare_summary,
+                "_eval_timestamp_epoch": "",
             }
         )
     return rows
@@ -582,8 +674,36 @@ def collect_eval_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str]]:
             if compare_key:
                 seen_compare_paths.add(compare_key)
 
-    rows.sort(key=lambda x: (x["run_name"], x["eval_dir"], x["decode"]))
-    return rows
+    deduped: dict[tuple[str, str, str, str, str, str], dict[str, str]] = {}
+    for row in rows:
+        key = (
+            str(row.get("run_name", "")),
+            str(row.get("eval_set", "")),
+            str(row.get("eval_variant", "")),
+            str(row.get("eval_checkpoint", "")),
+            str(row.get("decode", "")),
+            str(row.get("student_model", "")),
+        )
+        current = deduped.get(key)
+        if current is None:
+            deduped[key] = row
+            continue
+        current_ts = _as_float_or_none(current.get("_eval_timestamp_epoch"))
+        row_ts = _as_float_or_none(row.get("_eval_timestamp_epoch"))
+        if row_ts is not None and (current_ts is None or row_ts >= current_ts):
+            deduped[key] = row
+
+    final_rows = list(deduped.values())
+    final_rows.sort(
+        key=lambda x: (
+            x["run_name"],
+            x.get("eval_variant", ""),
+            x.get("eval_checkpoint", ""),
+            x["eval_set"],
+            x["decode"],
+        )
+    )
+    return final_rows
 
 
 def write_csv(path: Path, rows: list[dict[str, str | float]], fieldnames: list[str]) -> None:
@@ -901,6 +1021,14 @@ def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[s
         bucket["external_minus_indomain_bleu"] = _fmt_float(eval2_bleu - eval3_bleu) if eval2_bleu is not None and eval3_bleu is not None else ""
         # Keep merged comparison focused on comparable eval-set rows.
         if not bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"] and not bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"]:
+            continue
+        group_label = str(bucket.get("group_label", ""))
+        is_primary_group = (
+            group_label in {"final", "teacher4b"}
+            or group_label.startswith("stage_a__")
+            or group_label.startswith("stage_b__")
+        )
+        if not is_primary_group and (eval2_bleu is None or eval3_bleu is None):
             continue
         rows.append(bucket)
 

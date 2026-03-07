@@ -1,6 +1,6 @@
 # Translation Distillation Session Status
 
-Last updated: 2026-03-04 (America/New_York)
+Last updated: 2026-03-06 (America/New_York)
 
 ## Goal
 
@@ -10,89 +10,62 @@ Distill `google/translategemma-4b-it` into a Gemma 3 1B student for EN<->ES tran
 
 1. `RUN_INDEX.md`  
    Auto-generated index of runs and eval summaries.
-2. `<run>/train_summary.json`  
+2. `RUN_COMPARE.md`  
+   Normalized one-row-per-checkpoint comparison across eval2/eval3.
+3. `<run>/train_summary.json` or `<run>/logs/*.log`  
    Ground truth for what training inputs/settings a run actually used.
-3. `<run>/train.log`  
-   Exact launch command with all flags.
-4. `<run>/postrun_eval_*/<eval_name>/compare_eval_summary.json`  
+4. `<run>/<eval_dir>/compare_eval_summary.json`  
    BLEU/chrF on specific eval datasets.
 
 ## Key Run Timeline
 
-1. `translategemma4b_es_en_gemma3_1b_full_20260303_114100`
-   - Effective train input: `translate_distill_pairs.jsonl` (`pair_count=1280`).
-   - Stage A checkpoint `stage_a/checkpoint-032000` performs strongly on eval2/eval3.
-   - Stage B (as resumed then configured) collapsed relative to Stage A.
+1. `translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100`
+   - Effective train input: `translate_distill_pairs.jsonl` (`1280` rows).
+   - Historical proof point for this recipe.
+   - Stage A `checkpoint-032000` is near-teacher on external `eval2` and strong on indomain `eval3`.
 2. `translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041`
-   - Resume bug fix applied in trainer before this run.
-   - Start point: Stage A `checkpoint-032000`.
-   - Effective Stage B input: `translate_distill_pairs.train.jsonl` (`pair_count=1152`).
-   - Stage B steps: 4000 (`lambda_kd=0.05`, `mu_triplet=0.0`).
-   - Eval2 external: BLEU 21.2374, chrF 51.1064.
-   - Eval3 indomain clean: BLEU 43.2251, chrF 66.3185.
+   - Resume bug fix applied before this run.
+   - Stage B continuation from the older Stage A `checkpoint-032000`.
+   - Effective Stage B input: `translate_distill_pairs.train.jsonl` (`1152` rows).
+   - Best greedy early stop is `stage_b/checkpoint-002000`, but it still stays below the older Stage A baseline.
+3. `translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210`
+   - Effective train input: `translate_distill_pairs_en_es_2way.train.merged.jsonl` (`17532` rows).
+   - Canonical metadata now comes from `logs/train_cpu.log` plus normalized eval summaries in `RUN_INDEX.md` and `RUN_COMPARE.md`.
+   - Evaluated checkpoints so far: Stage A `checkpoint-{012000,022000,032000}` and Stage B `checkpoint-002000`.
+
+## Normalized Checkpoint View
+
+All rows below use greedy decode on the same two eval datasets:
+- `translate_distill_pairs.eval2_wmt13_enes_128.jsonl`
+- `translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl`
+
+| run | checkpoint | train rows | eval2 BLEU | eval2 chrF | eval3 BLEU | eval3 chrF | reading |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `full_train1280_20260303_114100` | `stage_a/checkpoint-032000` | `1280` | `26.3488` | `56.7732` | `46.9378` | `70.0786` | Near-teacher external baseline |
+| `stagebfix02_train1152_...` | `stage_b/checkpoint-002000` | `1152` | `23.1991` | `52.6160` | `44.9824` | `67.7587` | Best fixed-resume Stage B on old recipe, still below old Stage A |
+| `full_train17532_real1b_20260305_210210` | `stage_a/checkpoint-012000` | `17532` | `7.0652` | `34.9801` | `86.5173` | `96.6936` | Weak external, very strong indomain |
+| `full_train17532_real1b_20260305_210210` | `stage_a/checkpoint-022000` | `17532` | `5.6350` | `33.7260` | `87.1698` | `97.2928` | Worse external than 12k, better indomain |
+| `full_train17532_real1b_20260305_210210` | `stage_a/checkpoint-032000` | `17532` | `6.4642` | `33.9828` | `87.4218` | `97.4243` | Same split persists through 32k |
+| `full_train17532_real1b_20260305_210210` | `stage_b/checkpoint-002000` | `17532` | `7.9159` | `35.6396` | `87.3266` | `97.2802` | Slight external lift vs new Stage A, still far below old baseline |
 
 ## Current Conclusions
 
-1. Catastrophic Stage B behavior was largely due to resume methodology (bug), not purely dataset quality.
-2. With resume fixed, Stage B is much better than broken final checkpoints.
-3. In current configuration, Stage B still underperforms Stage A baseline on eval2/eval3.
-4. We have more data available than used in `stagebfix02`:
-   - `translate_distill_pairs_en_es_2way.train.merged.jsonl`: 17532 rows.
-   - `translate_distill_pairs.jsonl`: 1280 rows.
-   - `translate_distill_pairs.train.jsonl`: 1152 rows.
-5. Remaining question: is Stage B underperformance mainly due to schedule/objective, or due to using only the 1152 subset.
-
-## In-Progress Stage A Scale-Up (2026-03-04)
-
-Run:
-- `translategemma4b_es_en_gemma3_1b_stagea_only_train17532_sft32k_20260304_171311`
-
-Config:
-- Pairs: `translate_distill_pairs_en_es_2way.train.merged.jsonl` (`17532` rows).
-- Schedule: `A_then_B` with `total_steps=32000`, `sft_steps=32000` (effective Stage A-only).
-- Loss weights: `lambda_kd=0.0`, `mu_triplet=0.0`.
-- Runtime mode: `rocm_gfx_override` (`HSA_OVERRIDE_GFX_VERSION=11.0.0`).
-
-Live status (as of 2026-03-04 13:12 EST):
-- Step `10960/32000` (`34.25%`), process alive.
-- Saved checkpoints: `stage_a/checkpoint-004000`, `stage_a/checkpoint-008000`.
-
-### Preliminary Loss-Trajectory Comparison vs Stage A (1280 rows)
-
-Comparison target:
-- `translategemma4b_es_en_gemma3_1b_full_20260303_114100/stage_a/metrics.jsonl` (1280-row Stage A baseline).
-
-Observed from `metrics.jsonl` (training loss only):
-1. Faster early optimization on 17532-row run:
-   - step 1000: `0.1159` vs `0.3878` (better by `-0.2718`)
-   - step 2000: `0.0229` vs `0.2519` (better by `-0.2290`)
-2. Mean loss over overlapping range through ~10.6k steps:
-   - current: `0.0774`
-   - baseline: `0.1033`
-   - delta: `-0.0259`
-3. Baseline run reaches near-zero loss more aggressively in the late overlap window; current run remains less collapsed in tail averages.
-
-Interpretation:
-1. 17532-row Stage A run shows healthier/faster early-mid learning than 1280-row Stage A baseline.
-2. Train loss is not a selection metric by itself; final decision still requires eval2/eval3 BLEU/chrF from checkpoints.
+1. The good Stage A BLEU result is real, but it belongs to the older `1280`-row run, not the newer `17532_real1b` run.
+2. The newer `17532_real1b` recipe behaves very differently: all checked Stage A and Stage B checkpoints are excellent on indomain `eval3` and poor on external `eval2`.
+3. The best-known externally generalizing checkpoint is still the old Stage A `checkpoint-032000` from `full_train1280_20260303_114100`.
+4. On the newer `17532_real1b` run, Stage B `checkpoint-002000` slightly improves external BLEU over Stage A `checkpoint-032000` (`7.9159` vs `6.4642`), but the whole run family remains far below the old external baseline (`26.3488`).
+5. The main open question is now recipe shift, not mere checkpoint selection: why did the `17532`-row training path move toward very high indomain scores without preserving external generalization?
 
 ## Immediate Next Experiments
 
-### A) Stage B checkpoint sweep on `stagebfix02` (find best early stop)
-
-- Evaluate `stage_b/checkpoint-{001000,002000,003000,004000}` on:
-  - `translate_distill_pairs.eval2_wmt13_enes_128.jsonl`
-  - `translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl`
-- Keep decode mode fixed to greedy for primary comparison.
-
-### B) Data-size isolation test (method fixed, data varied)
-
-Run two Stage B continuations from the same Stage A checkpoint:
-
-1. `pairs=translate_distill_pairs.train.jsonl` (1152)
-2. `pairs=translate_distill_pairs_en_es_2way.train.merged.jsonl` (17532)
-
-Keep all else identical (`steps`, `lambda_kd`, `mu_triplet`, decode policy, eval sets).
+1. Reproduce the `17532_real1b` run with full saved metadata (`train_summary.json`) and verify whether any launch/config difference besides data size explains the shift.
+2. Compare tokenizer/prompt formatting and eval harness settings between:
+   - `full_train1280_20260303_114100`
+   - `full_train17532_real1b_20260305_210210`
+3. Run a controlled Stage A-only comparison with the same launch surface and both pair files:
+   - `translate_distill_pairs.jsonl` (`1280`)
+   - `translate_distill_pairs_en_es_2way.train.merged.jsonl` (`17532`)
+4. Keep `RUN_INDEX.md`, `RUN_COMPARE.md`, and CSV outputs as the normalized source of truth after every rerun.
 
 ## Latest Completed Sweep (2026-03-04)
 
