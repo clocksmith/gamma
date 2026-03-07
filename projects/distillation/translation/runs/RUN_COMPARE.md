@@ -1,6 +1,6 @@
 # Translation Distillation Merged Comparison
 
-Generated: 2026-03-07 22:48:57 UTC
+Generated: 2026-03-07 23:02:48 UTC
 Runs root: `/home/x/deco/gamma/projects/distillation/translation/runs`
 
 One row = one comparable eval group (run + variant/checkpoint + decode), with strict run-parameter columns.
