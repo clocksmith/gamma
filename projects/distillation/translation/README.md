@@ -68,6 +68,15 @@ Read these first:
 3. `projects/distillation/translation/runs/RUN_COMPARE.md`
 4. `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041/checkpoint_sweep_stagebfix02_greedy/scoreboard.md`
 
+## Operational Model
+
+Treat this translation distillation work as two separate continuous workflows:
+
+1. Run workflow: launch or resume training plus checkpoint evals. This appends raw artifacts under each run directory such as metrics, checkpoints, manifests, scoreboards, and eval outputs.
+2. Rebuild workflow: rerun the reporting rebuild over whatever artifacts currently exist. This backfills older manifest-backed eval dirs into the current artifact shape, refreshes the canonical index, and emits one cohesive results bundle plus visual dashboard.
+
+These workflows are intentionally decoupled. Training and eval may still be running while the rebuild step is rerun repeatedly; the rebuild step must stay safe, resumable, and idempotent against partial data.
+
 ## Deterministic sweep + scoreboard
 
 Use this script to evaluate Stage B distillation checkpoints and update scoreboard artifacts after each eval row:
@@ -88,6 +97,64 @@ Outputs:
 - `scoreboard.md`
 - `scoreboard_eval_rows.csv`
 - `scoreboard_checkpoints.csv`
+
+## Rebuild Cohesive Results Bundle
+
+Use this rerunnable rebuild step to backfill live-eval scoreboards from manifests,
+refresh the canonical run index, and emit one normalized results bundle plus an
+HTML dashboard from all discovered translation artifacts:
+
+```bash
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+$PY projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py
+```
+
+Outputs are written under:
+
+- `projects/distillation/translation/runs/results_bundle/`
+  - `runs.csv`
+  - `evals.csv`
+  - `compare.csv`
+  - `best_external_by_run.csv`
+  - `external_vs_indomain.csv`
+  - `grid_checkpoint_timeline.csv`
+  - `summary.md`
+  - `summary.json`
+  - `dashboard.html`
+
+## Dataset Quality Scoring
+
+Use this script to score candidate training pair files for alignment hygiene,
+duplication, diversity, and distribution drift against the restored gold legacy
+set plus the current external and indomain eval distributions:
+
+```bash
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+$PY projects/distillation/translation/pipeline/score_translation_pair_datasets.py \
+  projects/distillation/translation/training_data/gold/translate_distill_pairs.gold_legacy1280_20260303_b8f685a.jsonl \
+  projects/distillation/translation/training_data/subsets/translate_distill_pairs_en_es_2way.train.merged.subset_1280.seed42.jsonl \
+  projects/distillation/translation/training_data/subsets/translate_distill_pairs_en_es_2way.train.merged.subset_2560.seed42.jsonl
+```
+
+Outputs are written under:
+
+- `projects/distillation/translation/training_data/qa/`
+  - `dataset_quality.csv`
+  - `dataset_quality.md`
+  - `dataset_quality.json`
+
+The most important columns are:
+
+- `alignment_quality`
+- `duplication_hygiene`
+- `diversity`
+- `gold_similarity`
+- `external_match`
+- `indomain_match`
+- `gold_exact_overlap_pct`
+- `gold_loose_overlap_pct`
 
 ## Next controlled comparison
 

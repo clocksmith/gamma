@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import datetime as dt
 import json
 import shlex
@@ -13,11 +14,6 @@ import time
 from pathlib import Path
 from typing import Any
 
-try:
-    from huggingface_hub import try_to_load_from_cache
-except Exception:  # pragma: no cover - optional dependency in some envs
-    try_to_load_from_cache = None
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 TRAINER_SCRIPT = PROJECT_ROOT / "projects" / "distillation" / "translation" / "training" / "train_translate_distill.py"
@@ -26,19 +22,20 @@ DEFAULT_PYTHON_BIN = PROJECT_ROOT / ".venv" / "bin" / "python"
 DEFAULT_EVAL_PAIRS = (
     PROJECT_ROOT / "projects" / "distillation" / "translation" / "training_data" / "translate_distill_pairs.eval2_wmt13_enes_128.jsonl"
 )
-DEFAULT_TEACHER_MODEL = "google/translategemma-4b-it"
-DEFAULT_STUDENT_MODEL = "google/gemma-3-1b-it"
-MODEL_WEIGHT_FILES = (
-    "model.safetensors",
-    "pytorch_model.bin",
-    "pytorch_model.bin.index.json",
+DEFAULT_TEACHER_MODEL = (
+    "/home/x/.cache/huggingface/hub/models--google--translategemma-4b-it/"
+    "snapshots/10042cb0e6e7fdce748996a71dc3dc432a4e0c89"
 )
-TOKENIZER_FILES = (
-    "tokenizer.model",
-    "spiece.model",
-    "tokenizer.json",
-    "tokenizer_config.json",
+DEFAULT_STUDENT_MODEL = (
+    "/home/x/.cache/huggingface/hub/models--google--gemma-3-1b-it/"
+    "snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752"
 )
+DATASET_LABELS: dict[str, str] = {
+    "eval2_external": "external_wmt13_en_es_translation_benchmark_128",
+    "translate_distill_pairs.eval2_wmt13_enes_128.jsonl": "external_wmt13_en_es_translation_benchmark_128",
+    "eval3_indomain_clean": "indomain_clean_merged_en_es_translation_benchmark_128",
+    "translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl": "indomain_clean_merged_en_es_translation_benchmark_128",
+}
 
 
 def _parse_sizes(value: str) -> list[int]:
@@ -74,95 +71,53 @@ def _resolve_python_bin(value: str) -> Path:
     return py
 
 
-def _cached_snapshot_dir(model_id: str) -> Path | None:
-    if try_to_load_from_cache is None:
-        return None
-    try:
-        config_path = try_to_load_from_cache(str(model_id), "config.json")
-    except Exception:
-        return None
-    if not isinstance(config_path, str):
-        return None
-    path = Path(config_path)
-    if not path.is_file():
-        return None
-    return path.parent
-
-
-def _repo_id_from_cache_path(value: str) -> str | None:
-    try:
-        parts = Path(str(value)).expanduser().parts
-    except Exception:
-        return None
-    for part in parts:
-        token = str(part)
-        if not token.startswith("models--"):
-            continue
-        encoded = token[len("models--") :]
-        pieces = [x for x in encoded.split("--") if x]
-        if len(pieces) < 2:
-            return None
-        return f"{pieces[0]}/{'--'.join(pieces[1:])}"
-    return None
-
-
-def _has_model_artifacts(path: Path) -> bool:
-    if not path.is_dir():
-        return False
-    if not (path / "config.json").is_file():
-        return False
-    has_weights = any((path / name).is_file() for name in MODEL_WEIGHT_FILES)
-    if not has_weights:
-        has_weights = any(candidate.is_file() for candidate in path.glob("*.safetensors"))
-    if not has_weights:
-        has_weights = any(candidate.is_file() for candidate in path.glob("*.bin"))
-    has_tokenizer = any((path / name).is_file() for name in TOKENIZER_FILES)
-    return has_weights and has_tokenizer
-
-
-def _resolve_model_ref(raw_value: str) -> tuple[str, str]:
-    value = str(raw_value).strip()
-    if not value:
-        raise RuntimeError("model reference must not be empty")
-
-    path = Path(value).expanduser()
-    if path.is_file() and path.name == "config.json":
-        return str(path.parent), "config-parent"
-    if path.exists():
-        return str(path), "explicit-path"
-
-    repo_id_from_path = _repo_id_from_cache_path(value)
-    if repo_id_from_path:
-        cached = _cached_snapshot_dir(repo_id_from_path)
-        if cached is not None:
-            return str(cached), f"cache:{repo_id_from_path}"
-        return repo_id_from_path, f"repo-id:{repo_id_from_path}"
-
-    cached = _cached_snapshot_dir(value)
-    if cached is not None:
-        return str(cached), f"cache:{value}"
-    return value, "repo-id"
-
-
-def _validate_model_ref(raw_value: str, *, label: str, local_files_only: bool) -> tuple[str, str]:
-    resolved, source = _resolve_model_ref(raw_value)
-    path = Path(resolved).expanduser()
-    if path.exists():
-        if not _has_model_artifacts(path):
-            raise RuntimeError(
-                f"{label} model dir is missing required config/tokenizer/weight artifacts: {path}"
-            )
-        return str(path), source
-    if bool(local_files_only):
-        raise RuntimeError(
-            f"{label} model is not available locally: {resolved}. "
-            "Provide an existing local snapshot path or rerun with --allow-download."
-        )
-    return resolved, source
-
-
 def _runtime_mode(device: str) -> str:
     return "cpu" if str(device).strip().lower() == "cpu" else "normal_rocm"
+
+
+def _now_utc() -> str:
+    return dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+
+def _safe_rel(path: Path, root: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(root.resolve()))
+    except Exception:
+        return str(path)
+
+
+def _fmt_float(value: Any) -> str:
+    if value is None:
+        return ""
+    try:
+        return f"{float(value):.4f}"
+    except Exception:
+        return ""
+
+
+def _path_stem(path: str) -> str:
+    try:
+        return Path(path).name
+    except Exception:
+        return str(path)
+
+
+def _dataset_label(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    stem = _path_stem(text)
+    for key, label in DATASET_LABELS.items():
+        if text == key or stem == key or key in text:
+            return label
+    return text
+
+
+def _safe_rel_text(value: str, root: Path) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    return _safe_rel(Path(text), root)
 
 
 def _preflight(python_bin: Path, device: str) -> dict[str, object]:
@@ -212,18 +167,6 @@ def _checkpoint_token(step: int) -> str:
     return f"stagea{step}"
 
 
-def _checkpoint_matches_eval_cadence(step: int, *, total_steps: int, eval_every: int) -> bool:
-    step = int(step)
-    if step <= 0:
-        return False
-    every = int(eval_every)
-    if every <= 0:
-        return True
-    if step >= int(total_steps):
-        return True
-    return (step % every) == 0
-
-
 def _checkpoint_ready(path: Path) -> bool:
     return (
         path.is_dir()
@@ -233,20 +176,31 @@ def _checkpoint_ready(path: Path) -> bool:
     )
 
 
-def _extract_bleu(compare_summary_path: Path) -> float | None:
+def _extract_metrics(compare_summary_path: Path) -> tuple[float | None, float | None, int | None]:
     if not compare_summary_path.is_file():
-        return None
+        return None, None, None
     try:
         summary = json.loads(compare_summary_path.read_text(encoding="utf-8"))
     except Exception:
-        return None
+        return None, None, None
     student = summary.get("student") or {}
     overall = student.get("metrics_overall") or {}
     bleu = ((overall.get("bleu") or {}).get("score")) if isinstance(overall, dict) else None
+    chrf = ((overall.get("chrf") or {}).get("score")) if isinstance(overall, dict) else None
+    n = overall.get("n") if isinstance(overall, dict) else None
     try:
-        return float(bleu) if bleu is not None else None
+        bleu = float(bleu) if bleu is not None else None
     except Exception:
-        return None
+        bleu = None
+    try:
+        chrf = float(chrf) if chrf is not None else None
+    except Exception:
+        chrf = None
+    try:
+        n = int(n) if n is not None else None
+    except Exception:
+        n = None
+    return bleu, chrf, n
 
 
 def _read_manifest(path: Path) -> list[dict[str, Any]]:
@@ -270,57 +224,181 @@ def _append_manifest(path: Path, row: dict[str, Any]) -> None:
         fh.write(json.dumps(row, ensure_ascii=True) + "\n")
 
 
-def _write_scoreboard(path: Path, rows: list[dict[str, Any]]) -> None:
-    done_rows = [row for row in rows if int(row.get("status", 1)) == 0]
-    done_rows.sort(key=lambda row: int(row.get("checkpoint_step", -1)))
+def _write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({key: row.get(key, "") for key in fieldnames})
+
+
+def _md_table(rows: list[dict[str, Any]], columns: list[tuple[str, str]]) -> str:
+    header = "| " + " | ".join(label for _, label in columns) + " |"
+    sep = "| " + " | ".join("---" for _ in columns) + " |"
+    body = []
+    for row in rows:
+        body.append("| " + " | ".join(str(row.get(key, "")) for key, _ in columns) + " |")
+    return "\n".join([header, sep] + body)
+
+
+def _write_live_eval_artifacts(
+    out_dir: Path,
+    rows: list[dict[str, Any]],
+    *,
+    repo_root: Path,
+    run_root: Path,
+    eval_pairs: Path,
+) -> None:
+    eval_name = _dataset_label(str(eval_pairs))
+    eval_rows: list[dict[str, Any]] = []
+    for row in rows:
+        if int(row.get("status", 1)) != 0:
+            continue
+        eval_rows.append(
+            {
+                "checkpoint_name": row.get("checkpoint_name", ""),
+                "checkpoint_step": row.get("checkpoint_step", ""),
+                "eval_name": eval_name,
+                "bleu": _fmt_float(row.get("bleu")),
+                "chrf": _fmt_float(row.get("chrf")),
+                "samples": row.get("samples", ""),
+                "duration_s": _fmt_float(row.get("duration_s")),
+                "pairs": _safe_rel_text(str(row.get("pairs", "")), repo_root),
+                "compare_summary": _safe_rel_text(str(row.get("compare_summary", "")), repo_root),
+                "log_path": _safe_rel_text(str(row.get("log_path", "")), repo_root),
+            }
+        )
+    eval_rows.sort(key=lambda row: int(row.get("checkpoint_step", -1)))
+
+    checkpoint_rows: list[dict[str, Any]] = []
+    for row in eval_rows:
+        checkpoint_rows.append(
+            {
+                "checkpoint_name": row["checkpoint_name"],
+                "checkpoint_step": row["checkpoint_step"],
+                "evals_done": 1,
+                "evals_expected": 1,
+                "avg_bleu": row["bleu"],
+                "avg_chrf": row["chrf"],
+                f"{eval_name}_bleu": row["bleu"],
+                f"{eval_name}_chrf": row["chrf"],
+            }
+        )
+    checkpoint_rows.sort(
+        key=lambda row: (
+            float(row["avg_bleu"]) if str(row.get("avg_bleu", "")).strip() else -1e9,
+            int(row.get("checkpoint_step", -1)),
+        ),
+        reverse=True,
+    )
+
+    eval_csv = out_dir / "scoreboard_eval_rows.csv"
+    checkpoints_csv = out_dir / "scoreboard_checkpoints.csv"
+    _write_csv(
+        eval_csv,
+        eval_rows,
+        [
+            "checkpoint_name",
+            "checkpoint_step",
+            "eval_name",
+            "bleu",
+            "chrf",
+            "samples",
+            "duration_s",
+            "pairs",
+            "compare_summary",
+            "log_path",
+        ],
+    )
+    _write_csv(
+        checkpoints_csv,
+        checkpoint_rows,
+        [
+            "checkpoint_name",
+            "checkpoint_step",
+            "evals_done",
+            "evals_expected",
+            "avg_bleu",
+            "avg_chrf",
+            f"{eval_name}_bleu",
+            f"{eval_name}_chrf",
+        ],
+    )
+
     lines = [
-        "# Stage A External BLEU",
+        "# Stage A Live Eval Scoreboard",
         "",
-        f"Updated: {dt.datetime.now(tz=dt.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",
+        f"Updated: {_now_utc()}",
+        f"Run root: `{_safe_rel(run_root, repo_root)}`",
+        f"Eval set: `{eval_name}`",
+        "",
+        "## Checkpoint Ranking",
         "",
     ]
-    if not done_rows:
-        lines.append("_No successful eval rows yet._")
-    else:
-        lines.extend(
-            [
-                "| checkpoint | step | bleu | out_dir |",
-                "| --- | --- | --- | --- |",
-            ]
-        )
-        for row in done_rows:
-            bleu = row.get("bleu")
-            bleu_text = f"{float(bleu):.4f}" if isinstance(bleu, (float, int)) else ""
-            lines.append(
-                "| "
-                + " | ".join(
-                    [
-                        str(row.get("checkpoint_name", "")),
-                        str(row.get("checkpoint_step", "")),
-                        bleu_text,
-                        str(row.get("out_dir", "")),
-                    ]
-                )
-                + " |"
+    if checkpoint_rows:
+        lines.append(
+            _md_table(
+                checkpoint_rows,
+                [
+                    ("checkpoint_name", "checkpoint"),
+                    ("checkpoint_step", "step"),
+                    ("evals_done", "evals_done"),
+                    ("evals_expected", "evals_expected"),
+                    ("avg_bleu", "avg_bleu"),
+                    ("avg_chrf", "avg_chrf"),
+                ],
             )
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        )
+    else:
+        lines.append("_No successful eval rows yet._")
+
+    lines.extend(
+        [
+            "",
+            "## Eval Rows",
+            "",
+        ]
+    )
+    if eval_rows:
+        lines.append(
+            _md_table(
+                eval_rows,
+                [
+                    ("checkpoint_name", "checkpoint"),
+                    ("checkpoint_step", "step"),
+                    ("eval_name", "eval"),
+                    ("bleu", "bleu"),
+                    ("chrf", "chrf"),
+                    ("samples", "samples"),
+                    ("duration_s", "duration_s"),
+                ],
+            )
+        )
+    else:
+        lines.append("_No successful eval rows yet._")
+
+    lines.extend(
+        [
+            "",
+            "## Files",
+            "",
+            f"- Manifest: `{_safe_rel(out_dir / 'manifest.jsonl', repo_root)}`",
+            f"- Eval rows CSV: `{_safe_rel(eval_csv, repo_root)}`",
+            f"- Checkpoint ranking CSV: `{_safe_rel(checkpoints_csv, repo_root)}`",
+            "",
+        ]
+    )
+    (out_dir / "scoreboard.md").write_text("\n".join(lines), encoding="utf-8")
 
 
-def _run_contract_line(
-    *,
-    run_name: str,
-    subset_path: Path,
-    eval_pairs: Path,
-    args: argparse.Namespace,
-    resume_from: str = "none",
-    resume_stage: str = "none",
-) -> str:
+def _run_contract_line(*, run_name: str, subset_path: Path, eval_pairs: Path, args: argparse.Namespace) -> str:
     return (
         "[run-contract] "
         f"run_name={run_name} "
         f"pairs_input_spec={subset_path} "
-        f"resume_from={resume_from} "
-        f"resume_stage={resume_stage} "
+        "resume_from=none "
+        "resume_stage=none "
         "decode=greedy "
         f"eval_dataset_paths={eval_pairs} "
         f"device={args.device} "
@@ -338,7 +416,7 @@ def _build_train_cmd(
     out_root: Path,
 ) -> list[str]:
     summary_out = out_root / run_name / "train_summary.json"
-    cmd = [
+    return [
         str(python_bin),
         "-u",
         str(TRAINER_SCRIPT),
@@ -394,9 +472,6 @@ def _build_train_cmd(
         str(int(args.seed)),
         "--select-best-checkpoint",
     ]
-    if not bool(args.local_files_only):
-        cmd.append("--allow-download")
-    return cmd
 
 
 def _build_eval_cmd(
@@ -407,15 +482,13 @@ def _build_eval_cmd(
     checkpoint_path: Path,
     case_dir: Path,
 ) -> list[str]:
-    cmd = [
+    return [
         str(python_bin),
         str(EVAL_SCRIPT),
         "--pairs",
         str(eval_pairs),
         "--model",
         str(checkpoint_path),
-        "--teacher-model",
-        str(args.teacher_model),
         "--source-langs",
         str(args.source_langs),
         "--target-langs",
@@ -447,47 +520,14 @@ def _build_eval_cmd(
         "--top-k",
         "50",
         "--eval-bleu",
+        "--eval-chrf",
         "--allow-partial-contract",
     ]
-    if not bool(args.local_files_only):
-        cmd.append("--allow-download")
-    return cmd
 
 
 def _scan_checkpoints(stage_a_dir: Path) -> list[Path]:
     candidates = [child for child in stage_a_dir.glob("checkpoint-*") if _checkpoint_ready(child)]
     return sorted(candidates, key=_checkpoint_step)
-
-
-def _latest_checkpoint(stage_a_dir: Path) -> Path | None:
-    checkpoints = _scan_checkpoints(stage_a_dir)
-    if not checkpoints:
-        return None
-    return checkpoints[-1]
-
-
-def _run_has_progress(run_root: Path) -> bool:
-    if not run_root.exists():
-        return False
-    return any(run_root.iterdir())
-
-
-def _jsonl_row_count(path: Path) -> int:
-    if not path.is_file():
-        return 0
-    count = 0
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.strip():
-            count += 1
-    return count
-
-
-def _run_can_retry_without_checkpoint(run_root: Path) -> bool:
-    stage_a_dir = run_root / "stage_a"
-    if _latest_checkpoint(stage_a_dir) is not None:
-        return False
-    metrics_rows = _jsonl_row_count(stage_a_dir / "metrics.jsonl")
-    return metrics_rows <= 1
 
 
 def _log_line(path: Path, text: str) -> None:
@@ -503,7 +543,7 @@ def _maybe_eval_new_checkpoints(
     eval_pairs: Path,
     run_root: Path,
     manifest_path: Path,
-    scoreboard_path: Path,
+    scoreboard_dir: Path,
     supervisor_log: Path,
     evaluated: set[str],
 ) -> None:
@@ -517,15 +557,9 @@ def _maybe_eval_new_checkpoints(
             evaluated.add(checkpoint_name)
     for checkpoint_path in _scan_checkpoints(stage_a_dir):
         checkpoint_name = checkpoint_path.name
-        step = _checkpoint_step(checkpoint_path)
         if checkpoint_name in evaluated:
             continue
-        if not _checkpoint_matches_eval_cadence(
-            step,
-            total_steps=int(args.total_steps),
-            eval_every=int(args.eval_every),
-        ):
-            continue
+        step = _checkpoint_step(checkpoint_path)
         case_name = f"eval_{_checkpoint_token(step)}_eval2_greedy_live"
         case_dir = run_root / case_name
         case_dir.mkdir(parents=True, exist_ok=True)
@@ -553,24 +587,43 @@ def _maybe_eval_new_checkpoints(
         log_text.append("=== STDERR ===")
         log_text.append(proc.stderr or "")
         log_path.write_text("\n".join(log_text), encoding="utf-8")
-        bleu = _extract_bleu(compare_summary)
+        bleu, chrf, samples = _extract_metrics(compare_summary)
         row = {
-            "timestamp_utc": dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+            "timestamp_utc": _now_utc(),
+            "run_root": _safe_rel(run_root, PROJECT_ROOT),
             "checkpoint_name": checkpoint_name,
             "checkpoint_step": step,
+            "checkpoint_path": _safe_rel(checkpoint_path, PROJECT_ROOT),
+            "eval_name": _path_stem(str(eval_pairs)),
+            "decode": "greedy",
             "status": int(proc.returncode),
             "bleu": bleu,
+            "chrf": chrf,
             "out_dir": str(case_dir),
             "compare_summary": str(compare_summary),
             "log_path": str(log_path),
-            "pairs": str(eval_pairs),
+            "student_summary": str(case_dir / "student_eval_summary.json"),
+            "student_predictions": str(case_dir / "student_predictions.jsonl"),
+            "pairs": _safe_rel(eval_pairs, PROJECT_ROOT),
             "command": shlex.join(cmd),
             "duration_s": float(duration_s),
+            "samples": samples,
         }
+        row["out_dir"] = _safe_rel(case_dir, PROJECT_ROOT)
+        row["compare_summary"] = _safe_rel(compare_summary, PROJECT_ROOT)
+        row["student_summary"] = _safe_rel(case_dir / "student_eval_summary.json", PROJECT_ROOT)
+        row["student_predictions"] = _safe_rel(case_dir / "student_predictions.jsonl", PROJECT_ROOT)
+        row["log_path"] = _safe_rel(log_path, PROJECT_ROOT)
         _append_manifest(manifest_path, row)
         evaluated.add(checkpoint_name)
         manifest_rows.append(row)
-        _write_scoreboard(scoreboard_path, manifest_rows)
+        _write_live_eval_artifacts(
+            scoreboard_dir,
+            manifest_rows,
+            repo_root=PROJECT_ROOT,
+            run_root=run_root,
+            eval_pairs=eval_pairs,
+        )
         _log_line(
             supervisor_log,
             (
@@ -600,18 +653,7 @@ def parse_args() -> argparse.Namespace:
     )
     ap.add_argument("--total-steps", type=int, default=32000)
     ap.add_argument("--sft-steps", type=int, default=32000)
-    ap.add_argument(
-        "--save-every",
-        type=int,
-        default=2000,
-        help="Checkpoint cadence for resumability. Live eval cadence is controlled separately by --eval-every.",
-    )
-    ap.add_argument(
-        "--eval-every",
-        type=int,
-        default=4000,
-        help="Evaluate checkpoints at this step cadence. 0 evaluates every saved checkpoint.",
-    )
+    ap.add_argument("--save-every", type=int, default=4000)
     ap.add_argument("--keep-checkpoints", type=int, default=9)
     ap.add_argument("--batch-size", type=int, default=1)
     ap.add_argument("--lr", type=float, default=2e-5)
@@ -621,13 +663,6 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--dtype", default="float32", choices=["auto", "float16", "bfloat16", "float32"])
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--teacher-device", default="cpu")
-    ap.add_argument(
-        "--allow-download",
-        action="store_false",
-        dest="local_files_only",
-        default=True,
-        help="Allow fetching missing teacher/student weights instead of requiring a local cache only.",
-    )
     ap.add_argument("--source-langs", default="en,es")
     ap.add_argument("--target-langs", default="en,es")
     ap.add_argument(
@@ -641,11 +676,6 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--eval-device", default="cpu")
     ap.add_argument("--eval-dtype", default="float32", choices=["auto", "float16", "bfloat16", "float32"])
     ap.add_argument("--poll-seconds", type=float, default=30.0)
-    ap.add_argument(
-        "--resume",
-        action="store_true",
-        help="Resume an existing run root for the same size/tag if a valid Stage A checkpoint exists.",
-    )
     ap.add_argument("--launch", action="store_true", help="Run the matrix instead of only printing the plan.")
     return ap.parse_args()
 
@@ -678,26 +708,6 @@ def main() -> int:
         f"torch.cuda.device_count()={preflight['cuda_device_count']} "
         f"target_device={preflight['target_device']}"
     )
-    teacher_model, teacher_source = _validate_model_ref(
-        str(args.teacher_model),
-        label="teacher",
-        local_files_only=bool(args.local_files_only),
-    )
-    student_model, student_source = _validate_model_ref(
-        str(args.student_model),
-        label="student",
-        local_files_only=bool(args.local_files_only),
-    )
-    args.teacher_model = teacher_model
-    args.student_model = student_model
-    print(
-        "[models] "
-        f"teacher={args.teacher_model} "
-        f"teacher_source={teacher_source} "
-        f"student={args.student_model} "
-        f"student_source={student_source} "
-        f"local_files_only={bool(args.local_files_only)}"
-    )
 
     plans: list[tuple[str, Path, Path, str, list[str]]] = []
     for size in sizes:
@@ -715,47 +725,11 @@ def main() -> int:
         print(contract_line)
         print("[train-cmd]", shlex.join(train_cmd))
         print("[eval] pairs=", eval_pairs)
-        print("[cadence]", f"checkpoint_every={int(args.save_every)} eval_every={int(args.eval_every)}")
 
     if not args.launch:
         return 0
 
-    for run_name, subset_path, run_root, _, train_cmd in plans:
-        run_has_progress = _run_has_progress(run_root)
-        stage_a_dir = run_root / "stage_a"
-        latest_ckpt = _latest_checkpoint(stage_a_dir)
-        latest_step = _checkpoint_step(latest_ckpt) if latest_ckpt is not None else 0
-        resume_train = False
-        skip_train = False
-        retry_without_checkpoint = False
-
-        if bool(args.resume):
-            if latest_ckpt is not None and latest_step < int(args.total_steps):
-                resume_train = True
-                train_cmd = train_cmd + ["--resume", "--resume-from", str(run_root)]
-            elif latest_ckpt is not None and latest_step >= int(args.total_steps):
-                skip_train = True
-            elif _run_can_retry_without_checkpoint(run_root):
-                retry_without_checkpoint = True
-            elif run_has_progress:
-                raise RuntimeError(
-                    "cannot safely resume run without a saved checkpoint: "
-                    f"{run_root}. Use a new --tag to restart from scratch."
-                )
-        elif run_has_progress:
-            raise RuntimeError(
-                f"run root already exists: {run_root}. Use --resume or choose a new --tag."
-            )
-
-        contract_line = _run_contract_line(
-            run_name=run_name,
-            subset_path=subset_path,
-            eval_pairs=eval_pairs,
-            args=args,
-            resume_from=str(latest_ckpt or "none") if bool(args.resume) and latest_ckpt is not None else "none",
-            resume_stage="stage_a" if bool(args.resume) and latest_ckpt is not None else "none",
-        )
-
+    for run_name, _, run_root, contract_line, train_cmd in plans:
         logs_dir = run_root / "logs"
         logs_dir.mkdir(parents=True, exist_ok=True)
         contract_path = run_root / "run_contract.txt"
@@ -763,69 +737,55 @@ def main() -> int:
         train_log = logs_dir / "stage_a_cpu_matrix.log"
         supervisor_log = logs_dir / "stage_a_live_eval.log"
         manifest_path = run_root / "stage_a_live_eval" / "manifest.jsonl"
-        scoreboard_path = run_root / "stage_a_live_eval" / "scoreboard.md"
+        scoreboard_dir = run_root / "stage_a_live_eval"
+        scoreboard_path = scoreboard_dir / "scoreboard.md"
         evaluated: set[str] = set()
         _log_line(supervisor_log, contract_line)
-        if resume_train:
-            _log_line(
-                supervisor_log,
-                f"[resume-run] checkpoint={latest_ckpt} step={latest_step} cmd={shlex.join(train_cmd)}",
+        _log_line(supervisor_log, f"[train-run] cmd={shlex.join(train_cmd)}")
+        _write_live_eval_artifacts(
+            scoreboard_dir,
+            _read_manifest(manifest_path),
+            repo_root=PROJECT_ROOT,
+            run_root=run_root,
+            eval_pairs=eval_pairs,
+        )
+        with train_log.open("w", encoding="utf-8") as train_fh:
+            train_proc = subprocess.Popen(
+                train_cmd,
+                cwd=str(PROJECT_ROOT),
+                stdout=train_fh,
+                stderr=subprocess.STDOUT,
+                text=True,
             )
-        elif retry_without_checkpoint:
-            _log_line(
-                supervisor_log,
-                f"[resume-retry-no-checkpoint] run_name={run_name} cmd={shlex.join(train_cmd)}",
-            )
-        elif skip_train:
-            _log_line(
-                supervisor_log,
-                f"[resume-skip-train] run_name={run_name} latest_step={latest_step} total_steps={int(args.total_steps)}",
-            )
-        else:
-            _log_line(supervisor_log, f"[train-run] cmd={shlex.join(train_cmd)}")
-
-        train_returncode = 0
-        if not skip_train:
-            with train_log.open("a", encoding="utf-8") as train_fh:
-                train_fh.write(f"\n[wrapper] {dt.datetime.now(tz=dt.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}\n")
-                train_fh.write(f"[wrapper] cmd={shlex.join(train_cmd)}\n")
-                train_proc = subprocess.Popen(
-                    train_cmd,
-                    cwd=str(PROJECT_ROOT),
-                    stdout=train_fh,
-                    stderr=subprocess.STDOUT,
-                    text=True,
+            _log_line(supervisor_log, f"[train-pid] pid={train_proc.pid}")
+            while True:
+                _maybe_eval_new_checkpoints(
+                    args,
+                    python_bin=python_bin,
+                    eval_pairs=eval_pairs,
+                    run_root=run_root,
+                    manifest_path=manifest_path,
+                    scoreboard_dir=scoreboard_dir,
+                    supervisor_log=supervisor_log,
+                    evaluated=evaluated,
                 )
-                _log_line(supervisor_log, f"[train-pid] pid={train_proc.pid}")
-                while True:
-                    _maybe_eval_new_checkpoints(
-                        args,
-                        python_bin=python_bin,
-                        eval_pairs=eval_pairs,
-                        run_root=run_root,
-                        manifest_path=manifest_path,
-                        scoreboard_path=scoreboard_path,
-                        supervisor_log=supervisor_log,
-                        evaluated=evaluated,
-                    )
-                    rc = train_proc.poll()
-                    if rc is not None:
-                        train_returncode = int(rc)
-                        break
-                    time.sleep(max(1.0, float(args.poll_seconds)))
-                train_fh.flush()
+                rc = train_proc.poll()
+                if rc is not None:
+                    break
+                time.sleep(max(1.0, float(args.poll_seconds)))
+            train_fh.flush()
         _maybe_eval_new_checkpoints(
             args,
             python_bin=python_bin,
             eval_pairs=eval_pairs,
             run_root=run_root,
             manifest_path=manifest_path,
-            scoreboard_path=scoreboard_path,
+            scoreboard_dir=scoreboard_dir,
             supervisor_log=supervisor_log,
             evaluated=evaluated,
         )
-        _log_line(supervisor_log, f"[train-done] run_name={run_name} returncode={train_returncode}")
-        if train_returncode != 0:
+        _log_line(supervisor_log, f"[train-done] run_name={run_name} returncode={train_proc.returncode}")
+        if train_proc.returncode != 0:
             raise RuntimeError(f"training failed for {run_name}; see {train_log}")
         print(f"[done] run_name={run_name} scoreboard={scoreboard_path}")
     return 0

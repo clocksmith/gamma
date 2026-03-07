@@ -36,6 +36,11 @@ After launch, verify the run is truly active before handoff:
 - `rocm-smi` shows elevated GPU use during active steps.
 - If detached `nohup` jobs die in your environment, relaunch in a persistent session (`tmux`/`screen`/interactive PTY).
 
+Treat translation distillation as two separate continuous workflows:
+- Workflow 1: launch or resume training/checkpoint-eval jobs that append raw artifacts under each run directory.
+- Workflow 2: rebuild the normalized reporting view from whatever artifacts currently exist, including backfill or migration of older manifest-backed eval outputs into the current scoreboard shape.
+- Keep these workflows decoupled: reporting rebuilds must be rerunnable and safe against partial or still-running jobs.
+
 After each sweep or major eval batch, ensure these artifacts exist and are linked:
 - `manifest.jsonl`
 - `scoreboard.md`
@@ -44,6 +49,10 @@ After each sweep or major eval batch, ensure these artifacts exist and are linke
 - refreshed run index via:
 ```bash
 python3 projects/distillation/translation/pipeline/build_run_index.py
+```
+- cohesive translation results bundle via:
+```bash
+python3 projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py
 ```
 
 ### Key Paths
