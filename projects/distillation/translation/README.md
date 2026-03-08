@@ -25,6 +25,30 @@ On the stored `1280`-row ablation run (`translategemma4b_es_en_gemma3_1b_full_20
 
 This remains the main proof point for the recipe: the 1B student can be near-teacher on external BLEU.
 
+## Gold control confirmation
+
+The stronger current control is the restored gold-legacy run
+`translategemma4b_es_en_gemma3_1b_stagea_goldlegacy1280_bf16_20260307T231031Z`,
+trained on:
+
+- `projects/distillation/translation/training_data/gold/translate_distill_pairs.gold_legacy1280_20260303_b8f685a.jsonl`
+
+Its best checkpoint is earlier than `32k`:
+
+- `stage_a/checkpoint-008000`
+  - `eval2_external` BLEU: `26.4766`
+  - `eval3_indomain_clean` BLEU: `47.6425`
+- Later checkpoints remained strong but did not improve external BLEU:
+  - `016000`: `25.9958 / 47.4291`
+  - `024000`: `25.7862 / 47.4261`
+  - `032000`: `25.9377 / 47.3434`
+
+Interpretation:
+
+- The old strong Stage A behavior is reproducible on the restored gold dataset.
+- External model selection should be checkpoint-based, not loss-based.
+- Future Stage A searches should focus on early checkpoints; `32k` is not the default target anymore.
+
 ## Latest normalized view
 
 The newer run `translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210` does not reproduce that external behavior. The normalized greedy comparison in `runs/RUN_COMPARE.md` shows:
@@ -41,16 +65,16 @@ Interpretation:
 
 ## Current model selection status
 
-- Current best deploy candidate: `stage_a/checkpoint-032000` from:
-  - `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_full_20260303_114100`
+- Current best deploy candidate: `stage_a/checkpoint-008000` from:
+  - `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldlegacy1280_bf16_20260307T231031Z`
 - Reason:
-  - it is still the best-known external-generalizing checkpoint in the repo
+  - it is the best-known student checkpoint in the repo on the external benchmark so far
 - Distillation (Stage B) checkpoint sweep (fixed resume path) was completed for:
   - `translategemma4b_es_en_gemma3_1b_stagebfix02_train1152_kd0p05_trip0_steps4k_20260304_101041`
 - Best Stage B early-stop checkpoint in that run: `checkpoint-002000`
   - eval2 BLEU: `23.1991`
   - eval3 BLEU: `44.9824`
-- Conclusion: neither the old `1152` Stage B sweep nor the newer `17532_real1b` Stage B `checkpoint-002000` beats the old Stage A (32k) external baseline.
+- Conclusion: neither the old `1152` Stage B sweep nor the newer `17532_real1b` Stage B `checkpoint-002000` beats the restored gold Stage A `checkpoint-008000`.
 
 ## Current status of the scale-up line
 
@@ -155,6 +179,55 @@ The most important columns are:
 - `indomain_match`
 - `gold_exact_overlap_pct`
 - `gold_loose_overlap_pct`
+
+## Gold Expansion Builder
+
+Use this builder to create gold-aligned extension buckets from the larger merged
+training universe. It keeps exact mined rows, longer natural rows, and a
+separate rewrite queue with explicit provenance.
+
+```bash
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+$PY projects/distillation/translation/pipeline/build_gold_expansion_dataset.py
+```
+
+Outputs are written under:
+
+- `projects/distillation/translation/training_data/gold_expansion/`
+  - `gold_expansion.exact_mined.jsonl`
+  - `gold_expansion.hard_natural.jsonl`
+  - `gold_expansion.rewrite_queue.jsonl`
+  - `gold_expansion.candidate_exact_hard.jsonl`
+  - `gold_expansion.manifest.json`
+  - `gold_expansion.summary.md`
+
+Bucket intent:
+
+- `gold_exact_core`: immutable restored gold rows
+- `exact_mined`: high-confidence rows that already look gold-like
+- `hard_natural`: slightly longer natural rows that widen difficulty without adding template-heavy drift
+- `rewrite_queue`: semantically useful but stylistically bad rows to rewrite into a cleaner gold-like style
+- `candidate_exact_hard`: recommended first training file, made from gold core plus exact mined plus hard natural rows
+
+## Preferred Stage A Search Horizon
+
+For gold-like datasets, do not default to `32000` Stage A steps.
+
+Recommended search shape:
+
+- Stage A only
+- `total_steps=16000`
+- `sft_steps=16000`
+- checkpoint every `2000` or `4000`
+- evaluate every checkpoint on both `eval2_external` and `eval3_indomain_clean`
+- promote the best external checkpoint, not the final checkpoint and not the loss-selected export
+
+Reason:
+
+- The latest restored gold control peaked externally at `8000`.
+- No checkpoint after `8000` improved the external score.
+- This means the critical search space is earlier and denser than the old `32k` proof point suggested.
 
 ## Next controlled comparison
 
