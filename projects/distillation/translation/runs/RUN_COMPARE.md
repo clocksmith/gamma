@@ -1,12 +1,14 @@
 # Translation Distillation Merged Comparison
 
-Generated: 2026-03-10 11:12:29 UTC
+Generated: 2026-03-10 14:10:01 UTC
 Runs root: `/home/x/deco/gamma/projects/distillation/translation/runs`
 
 One row = one comparable eval group (run + variant/checkpoint + decode), with strict run-parameter columns.
 
 | run | group | display_name | is_baseline | decode | execution_mode | arch | train_rows | stage_a_steps | stage_b_steps | teacher_model_cfg | student_model_cfg | evaluated_model | lambda_kd | mu_triplet | external_wmt13_en_es_translation_benchmark_128_bleu | external_wmt13_en_es_translation_benchmark_128_chrf | external_wmt13_en_es_translation_benchmark_128_comet | indomain_clean_merged_en_es_translation_benchmark_128_bleu | indomain_clean_merged_en_es_translation_benchmark_128_chrf | indomain_clean_merged_en_es_translation_benchmark_128_comet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| baseline__google__gemma-3-1b-it__2026-03-10T135924Z | final | Gemma 3 1B IT | true | greedy | causal-chat | gemma_causal_lm |  |  |  |  | google/gemma-3-1b-it | google/gemma-3-1b-it |  |  | 0.0315 | 15.7204 |  | 0.9504 | 21.3408 |  |
+| baseline__google__translategemma-4b-it__2026-03-10T134941Z | final | TranslateGemma 4B IT | true | greedy | causal-chat | gemma_causal_lm |  |  |  |  | google/translategemma-4b-it | google/translategemma-4b-it |  |  | 34.0474 | 61.0088 |  | 45.5415 | 70.9157 |  |
 | baseline__facebook__m2m100_1.2b__2026-03-10T025214Z | final | M2M100 1.2B | true | greedy | seq2seq | m2m100_seq2seq |  |  |  |  | facebook/m2m100_1.2B | facebook/m2m100_1.2B |  |  | 36.8589 | 61.7235 |  | 60.3346 | 76.8958 |  |
 | baseline__facebook__nllb-200-distilled-1.3b__2026-03-10T023424Z | final | NLLB 200 Distilled 1.3B | true | greedy | seq2seq | nllb_seq2seq |  |  |  |  | facebook/nllb-200-distilled-1.3B | facebook/nllb-200-distilled-1.3B |  |  | 37.9870 | 62.9284 |  | 58.8747 | 76.8520 |  |
 | baseline__helsinki-nlp__opus-mt-es-en__2026-03-10T022943Z | final | OPUS MT ES-EN | true | greedy | seq2seq | marian_seq2seq |  |  |  |  | Helsinki-NLP/opus-mt-es-en | Helsinki-NLP/opus-mt-es-en |  |  | 37.2022 | 65.1621 |  | 58.5298 | 76.7342 |  |

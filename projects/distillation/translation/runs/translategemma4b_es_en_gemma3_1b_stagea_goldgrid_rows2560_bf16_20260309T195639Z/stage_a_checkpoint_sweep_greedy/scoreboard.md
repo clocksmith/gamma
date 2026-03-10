@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-03-10 11:12:29 UTC
+Updated: 2026-03-10 14:10:01 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows2560_bf16_20260309T195639Z`
 Decode: `greedy`
 

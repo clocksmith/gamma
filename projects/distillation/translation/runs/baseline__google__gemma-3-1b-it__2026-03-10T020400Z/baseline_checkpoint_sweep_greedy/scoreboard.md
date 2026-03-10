@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-03-10 11:12:29 UTC
+Updated: 2026-03-10 14:10:01 UTC
 Run root: `projects/distillation/translation/runs/baseline__google__gemma-3-1b-it__2026-03-10T020400Z`
 Decode: `greedy`
 

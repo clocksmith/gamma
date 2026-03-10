@@ -1,0 +1,132 @@
+{
+  "baseline_metadata": {
+    "directions": [
+      "en-es",
+      "es-en"
+    ],
+    "display_name": "Gemma 3 1B IT",
+    "is_baseline": true,
+    "license": "gemma",
+    "params": "1B",
+    "quality_tier": 0
+  },
+  "decode_metadata": {
+    "decode_mode": "greedy",
+    "temperature": 0.0,
+    "top_k": 50,
+    "top_p": 1.0
+  },
+  "delta": null,
+  "direction_metrics": {
+    "en_es_bleu": 0.04389642117717634,
+    "en_es_chrf": 16.457417384407005,
+    "en_es_comet": null,
+    "en_es_sample_count": 64,
+    "es_en_bleu": 0.04515697368862339,
+    "es_en_chrf": 14.912008979421307,
+    "es_en_comet": null,
+    "es_en_sample_count": 64,
+    "total_sample_count": 128
+  },
+  "eval_samples": 128,
+  "pair_files": [
+    "/home/x/deco/gamma/projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl"
+  ],
+  "pairs": "/home/x/deco/gamma/projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+  "provenance": {
+    "adapter_name": "translategemma",
+    "arch": "gemma_causal_lm",
+    "comet_available": false,
+    "dtype": "bfloat16",
+    "eval_dataset_label": "",
+    "eval_dataset_path": "/home/x/deco/gamma/projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+    "execution_mode": "causal-chat",
+    "model_id": "google/gemma-3-1b-it",
+    "model_revision": "main",
+    "runtime_device": "cuda",
+    "tokenizer_id": "google/gemma-3-1b-it",
+    "tokenizer_revision": "main"
+  },
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "student": {
+    "count": 128,
+    "label": "student",
+    "metrics_by_pair": {
+      "en-es": {
+        "bleu": {
+          "available": true,
+          "score": 0.04389642117717634
+        },
+        "chrf": {
+          "available": true,
+          "score": 16.457417384407005
+        },
+        "comet": {
+          "available": false,
+          "error": "not computed for baseline",
+          "score": null
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.0
+        },
+        "n": 64
+      },
+      "es-en": {
+        "bleu": {
+          "available": true,
+          "score": 0.04515697368862339
+        },
+        "chrf": {
+          "available": true,
+          "score": 14.912008979421307
+        },
+        "comet": {
+          "available": false,
+          "error": "not computed for baseline",
+          "score": null
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.0
+        },
+        "n": 64
+      }
+    },
+    "metrics_overall": {
+      "bleu": {
+        "available": true,
+        "score": 0.03147785262632743
+      },
+      "chrf": {
+        "available": true,
+        "score": 15.720366597604066
+      },
+      "comet": {
+        "available": false,
+        "error": "not computed for baseline",
+        "score": null
+      },
+      "exact_match": {
+        "available": true,
+        "score": 0.0
+      },
+      "n": 128
+    },
+    "model": "google/gemma-3-1b-it",
+    "predictions": {
+      "path": "/home/x/deco/gamma/projects/distillation/translation/runs/baseline__google__gemma-3-1b-it__2026-03-10T135924Z/baseline_checkpoint_sweep_greedy/eval2_external__final__greedy/student_predictions.jsonl"
+    },
+    "vocab_subset_active": false,
+    "vocab_subset_dir": ""
+  },
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher": null,
+  "vocab_subset_dir": ""
+}
