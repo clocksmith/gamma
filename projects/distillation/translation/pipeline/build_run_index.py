@@ -288,6 +288,9 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
         contract_path = child / "run_contract.txt"
         contract_source_path: Path | None = contract_path if contract_path.is_file() else None
 
+        baseline_path = child / "baseline_manifest.json"
+        baseline_manifest: dict[str, Any] | None = _read_json(baseline_path) if baseline_path.is_file() else None
+
         summary: dict[str, Any] | None = _read_json(summary_path) if summary_path.is_file() else None
         contract = _parse_run_contract(contract_path)
         if not contract:
@@ -296,7 +299,34 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
         source_langs = ""
         target_langs = ""
 
-        if summary:
+        if baseline_manifest:
+            source = "baseline_manifest"
+            timestamp_epoch = float(baseline_manifest.get("timestamp", -1.0) or -1.0)
+            timestamp_utc = _fmt_ts(baseline_manifest.get("timestamp"))
+            pair_count = ""
+            pairs_input_spec = "baseline"
+            eval_dataset_paths = ",".join(baseline_manifest.get("eval_dataset_paths") or []) if isinstance(baseline_manifest.get("eval_dataset_paths"), list) else ""
+            schedule = "baseline"
+            sft_steps = ""
+            distill_steps = ""
+            lambda_kd = ""
+            mu_triplet = ""
+            kd_temperature = ""
+            margin = ""
+            resumed = "false"
+            resume_stage = ""
+            resume_from = ""
+            selected_checkpoint = ""
+            selected_checkpoint_stage = ""
+            selected_checkpoint_loss = ""
+            teacher_model = ""
+            student_model = str(baseline_manifest.get("model_id", ""))
+            run_status = "baseline"
+            total_steps = ""
+            final_out = ""
+            source_langs = ",".join(baseline_manifest.get("source_langs", []) or []) if isinstance(baseline_manifest.get("source_langs"), list) else ""
+            target_langs = ",".join(baseline_manifest.get("target_langs", []) or []) if isinstance(baseline_manifest.get("target_langs"), list) else ""
+        elif summary:
             source = "train_summary"
             timestamp_epoch = float(summary.get("timestamp", -1.0) or -1.0)
             timestamp_utc = _fmt_ts(summary.get("timestamp"))
@@ -522,7 +552,7 @@ def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> d
             pred_path = str(pred.get("path", ""))
         elif isinstance(pred, str):
             pred_path = pred
-    return {
+    row = {
         "run_name": str(path.parent.parent.name),
         "eval_dir": eval_name,
         "eval_set": _dataset_label(eval_set_alias or pairs),
@@ -544,6 +574,8 @@ def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> d
         "compare_summary_path": _safe_rel(path, repo_root),
         "_eval_timestamp_epoch": _eval_timestamp_epoch(path),
     }
+    row.update(_normalize_compare_extra_fields(summary))
+    return row
 
 
 def _collect_eval_rows_for_path(compare_path: Path, runs_root: Path, repo_root: Path) -> dict[str, str] | None:
@@ -642,6 +674,11 @@ def _collect_eval_rows_from_manifest(manifest_path: Path, runs_root: Path, repo_
                 else "",
                 "compare_summary_path": compare_summary,
                 "_eval_timestamp_epoch": "",
+                "comet": "",
+                **{field: "" for field in DIRECTION_METRIC_FIELDS},
+                **{field: "" for field in PROVENANCE_FIELDS},
+                **{field: "" for field in BASELINE_METADATA_FIELDS},
+                **{field: "" for field in DECODE_METADATA_FIELDS},
             }
         )
     return rows
@@ -933,11 +970,106 @@ def _comparison_group_label(eval_variant: str, eval_checkpoint: str) -> str:
 
 EXTERNAL_WMT13_LABEL = "external_wmt13_en_es_translation_benchmark_128"
 INDOMAIN_CLEAN_LABEL = "indomain_clean_merged_en_es_translation_benchmark_128"
+PROVENANCE_FIELDS = (
+    "model_id",
+    "model_revision",
+    "tokenizer_id",
+    "tokenizer_revision",
+    "eval_dataset_path",
+    "eval_dataset_label",
+    "adapter_name",
+    "runtime_device",
+    "dtype",
+    "execution_mode",
+    "arch",
+    "comet_available",
+)
+BASELINE_METADATA_FIELDS = (
+    "is_baseline",
+    "display_name",
+    "quality_tier",
+    "params",
+    "license",
+)
+DECODE_METADATA_FIELDS = (
+    "decode_mode",
+    "temperature",
+    "top_p",
+    "top_k",
+)
+DIRECTION_METRIC_FIELDS = (
+    "en_es_bleu",
+    "en_es_chrf",
+    "en_es_comet",
+    "en_es_sample_count",
+    "es_en_bleu",
+    "es_en_chrf",
+    "es_en_comet",
+    "es_en_sample_count",
+    "total_sample_count",
+)
+
+
+def _normalize_compare_extra_fields(summary: dict[str, Any]) -> dict[str, str]:
+    student = summary.get("student") if isinstance(summary.get("student"), dict) else {}
+    metrics_overall = student.get("metrics_overall") if isinstance(student, dict) else {}
+    metrics_overall = metrics_overall if isinstance(metrics_overall, dict) else {}
+    direction_metrics = summary.get("direction_metrics") if isinstance(summary.get("direction_metrics"), dict) else {}
+    provenance = summary.get("provenance") if isinstance(summary.get("provenance"), dict) else {}
+    baseline_metadata = summary.get("baseline_metadata") if isinstance(summary.get("baseline_metadata"), dict) else {}
+    decode_metadata = summary.get("decode_metadata") if isinstance(summary.get("decode_metadata"), dict) else {}
+
+    row: dict[str, str] = {
+        "comet": _fmt_float(((metrics_overall.get("comet") or {}).get("score"))),
+    }
+    for field in DIRECTION_METRIC_FIELDS:
+        value = direction_metrics.get(field)
+        if field.endswith("_sample_count") or field == "total_sample_count":
+            row[field] = _fmt_int(value)
+        else:
+            row[field] = _fmt_float(value)
+    for field in PROVENANCE_FIELDS:
+        value = provenance.get(field)
+        if field == "comet_available":
+            row[field] = _fmt_bool(value)
+        else:
+            row[field] = str(value or "")
+    for field in BASELINE_METADATA_FIELDS:
+        value = baseline_metadata.get(field)
+        if field == "is_baseline":
+            row[field] = _fmt_bool(value)
+        else:
+            row[field] = str(value or "")
+    for field in DECODE_METADATA_FIELDS:
+        value = decode_metadata.get(field)
+        if field in {"temperature", "top_p"}:
+            row[field] = _fmt_float(value)
+        elif field == "top_k":
+            row[field] = _fmt_int(value)
+        else:
+            row[field] = str(value or "")
+    return row
 
 
 def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
     run_map = {str(row.get("run_name", "")): row for row in run_rows}
     grouped: dict[tuple[str, str, str, str, str], dict[str, Any]] = {}
+    per_eval_metric_suffixes = (
+        "bleu",
+        "chrf",
+        "comet",
+        "pairs",
+        "eval_dir",
+        "en_es_bleu",
+        "en_es_chrf",
+        "en_es_comet",
+        "en_es_sample_count",
+        "es_en_bleu",
+        "es_en_chrf",
+        "es_en_comet",
+        "es_en_sample_count",
+        "total_sample_count",
+    )
 
     for ev in eval_rows:
         run_name = str(ev.get("run_name", ""))
@@ -977,44 +1109,99 @@ def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[s
                 "eval_checkpoint": eval_checkpoint,
                 "decode": decode,
                 "evaluated_model": eval_student_model,
-                f"{EXTERNAL_WMT13_LABEL}_bleu": "",
-                f"{EXTERNAL_WMT13_LABEL}_chrf": "",
-                f"{EXTERNAL_WMT13_LABEL}_pairs": "",
-                f"{EXTERNAL_WMT13_LABEL}_eval_dir": "",
-                f"{INDOMAIN_CLEAN_LABEL}_bleu": "",
-                f"{INDOMAIN_CLEAN_LABEL}_chrf": "",
-                f"{INDOMAIN_CLEAN_LABEL}_pairs": "",
-                f"{INDOMAIN_CLEAN_LABEL}_eval_dir": "",
+                "comet_available": str(ev.get("comet_available", "")),
+                "execution_mode": str(ev.get("execution_mode", "")),
+                "arch": str(ev.get("arch", "")),
+                "adapter_name": str(ev.get("adapter_name", "")),
+                "runtime_device": str(ev.get("runtime_device", "")),
+                "dtype": str(ev.get("dtype", "")),
+                "decode_mode": str(ev.get("decode_mode", "")),
+                "temperature": str(ev.get("temperature", "")),
+                "top_p": str(ev.get("top_p", "")),
+                "top_k": str(ev.get("top_k", "")),
+                "model_id": str(ev.get("model_id", "")),
+                "model_revision": str(ev.get("model_revision", "")),
+                "tokenizer_id": str(ev.get("tokenizer_id", "")),
+                "tokenizer_revision": str(ev.get("tokenizer_revision", "")),
+                "is_baseline": str(ev.get("is_baseline", "")),
+                "display_name": str(ev.get("display_name", "")),
+                "quality_tier": str(ev.get("quality_tier", "")),
+                "params": str(ev.get("params", "")),
+                "license": str(ev.get("license", "")),
                 "other_eval_sets": "",
                 "other_eval_count": 0,
                 "_other_eval_sets": set(),
                 "_sort_ts": float(run.get("timestamp_epoch", -1.0) or -1.0),
             }
+            for eval_label in (EXTERNAL_WMT13_LABEL, INDOMAIN_CLEAN_LABEL):
+                for suffix in per_eval_metric_suffixes:
+                    bucket[f"{eval_label}_{suffix}"] = ""
             grouped[key] = bucket
+
+        for field in (
+            "comet_available",
+            "execution_mode",
+            "arch",
+            "adapter_name",
+            "runtime_device",
+            "dtype",
+            "decode_mode",
+            "temperature",
+            "top_p",
+            "top_k",
+            "model_id",
+            "model_revision",
+            "tokenizer_id",
+            "tokenizer_revision",
+            "is_baseline",
+            "display_name",
+            "quality_tier",
+            "params",
+            "license",
+        ):
+            if not str(bucket.get(field, "")).strip() and str(ev.get(field, "")).strip():
+                bucket[field] = str(ev.get(field, ""))
 
         eval_set = str(ev.get("eval_set", "")).strip()
         if eval_set == EXTERNAL_WMT13_LABEL:
-            bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"] = str(ev.get("bleu", ""))
-            bucket[f"{EXTERNAL_WMT13_LABEL}_chrf"] = str(ev.get("chrf", ""))
-            bucket[f"{EXTERNAL_WMT13_LABEL}_pairs"] = str(ev.get("pairs", ""))
-            bucket[f"{EXTERNAL_WMT13_LABEL}_eval_dir"] = str(ev.get("eval_dir", ""))
+            target_prefix = EXTERNAL_WMT13_LABEL
         elif eval_set == INDOMAIN_CLEAN_LABEL:
-            bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"] = str(ev.get("bleu", ""))
-            bucket[f"{INDOMAIN_CLEAN_LABEL}_chrf"] = str(ev.get("chrf", ""))
-            bucket[f"{INDOMAIN_CLEAN_LABEL}_pairs"] = str(ev.get("pairs", ""))
-            bucket[f"{INDOMAIN_CLEAN_LABEL}_eval_dir"] = str(ev.get("eval_dir", ""))
+            target_prefix = INDOMAIN_CLEAN_LABEL
         else:
             bucket["_other_eval_sets"].add(eval_set or str(ev.get("eval_dir", "")))
+            target_prefix = ""
+
+        if target_prefix:
+            bucket[f"{target_prefix}_bleu"] = str(ev.get("bleu", ""))
+            bucket[f"{target_prefix}_chrf"] = str(ev.get("chrf", ""))
+            bucket[f"{target_prefix}_comet"] = str(ev.get("comet", ""))
+            bucket[f"{target_prefix}_pairs"] = str(ev.get("pairs", ""))
+            bucket[f"{target_prefix}_eval_dir"] = str(ev.get("eval_dir", ""))
+            for field in (
+                "en_es_bleu",
+                "en_es_chrf",
+                "en_es_comet",
+                "en_es_sample_count",
+                "es_en_bleu",
+                "es_en_chrf",
+                "es_en_comet",
+                "es_en_sample_count",
+                "total_sample_count",
+            ):
+                bucket[f"{target_prefix}_{field}"] = str(ev.get(field, ""))
 
     rows: list[dict[str, Any]] = []
     for bucket in grouped.values():
         other_sets = sorted(x for x in bucket.pop("_other_eval_sets") if x)
         bucket["other_eval_sets"] = ",".join(other_sets)
         bucket["other_eval_count"] = len(other_sets)
-        bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"] = _fmt_float(bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"])
-        bucket[f"{EXTERNAL_WMT13_LABEL}_chrf"] = _fmt_float(bucket[f"{EXTERNAL_WMT13_LABEL}_chrf"])
-        bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"] = _fmt_float(bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"])
-        bucket[f"{INDOMAIN_CLEAN_LABEL}_chrf"] = _fmt_float(bucket[f"{INDOMAIN_CLEAN_LABEL}_chrf"])
+        for eval_label in (EXTERNAL_WMT13_LABEL, INDOMAIN_CLEAN_LABEL):
+            for suffix in ("bleu", "chrf", "comet", "en_es_bleu", "en_es_chrf", "en_es_comet", "es_en_bleu", "es_en_chrf", "es_en_comet"):
+                key_name = f"{eval_label}_{suffix}"
+                bucket[key_name] = _fmt_float(bucket.get(key_name))
+            for suffix in ("en_es_sample_count", "es_en_sample_count", "total_sample_count"):
+                key_name = f"{eval_label}_{suffix}"
+                bucket[key_name] = _fmt_int(bucket.get(key_name))
         # Optional convenience deltas (teacher-style rows get blanks).
         eval2_bleu = _as_float_or_none(bucket[f"{EXTERNAL_WMT13_LABEL}_bleu"])
         eval3_bleu = _as_float_or_none(bucket[f"{INDOMAIN_CLEAN_LABEL}_bleu"])
@@ -1063,21 +1250,25 @@ def write_comparison_markdown(path: Path, rows: list[dict[str, Any]], runs_root:
                 [
                     ("run_name", "run"),
                     ("group_label", "group"),
+                    ("display_name", "display_name"),
+                    ("is_baseline", "is_baseline"),
                     ("decode", "decode"),
+                    ("execution_mode", "execution_mode"),
+                    ("arch", "arch"),
                     ("pair_count", "train_rows"),
                     ("sft_steps", "stage_a_steps"),
                     ("distill_steps", "stage_b_steps"),
                     ("teacher_model_cfg", "teacher_model_cfg"),
                     ("student_model_cfg", "student_model_cfg"),
                     ("evaluated_model", "evaluated_model"),
-                    ("source_langs", "source_langs"),
-                    ("target_langs", "target_langs"),
                     ("lambda_kd", "lambda_kd"),
                     ("mu_triplet", "mu_triplet"),
                     (f"{EXTERNAL_WMT13_LABEL}_bleu", f"{EXTERNAL_WMT13_LABEL}_bleu"),
                     (f"{EXTERNAL_WMT13_LABEL}_chrf", f"{EXTERNAL_WMT13_LABEL}_chrf"),
+                    (f"{EXTERNAL_WMT13_LABEL}_comet", f"{EXTERNAL_WMT13_LABEL}_comet"),
                     (f"{INDOMAIN_CLEAN_LABEL}_bleu", f"{INDOMAIN_CLEAN_LABEL}_bleu"),
                     (f"{INDOMAIN_CLEAN_LABEL}_chrf", f"{INDOMAIN_CLEAN_LABEL}_chrf"),
+                    (f"{INDOMAIN_CLEAN_LABEL}_comet", f"{INDOMAIN_CLEAN_LABEL}_comet"),
                 ],
             )
         )
@@ -1163,8 +1354,37 @@ def main() -> int:
             "pairs_stem",
             "bleu",
             "chrf",
+            "comet",
             "pairs",
             "student_model",
+            "en_es_bleu",
+            "en_es_chrf",
+            "en_es_comet",
+            "en_es_sample_count",
+            "es_en_bleu",
+            "es_en_chrf",
+            "es_en_comet",
+            "es_en_sample_count",
+            "total_sample_count",
+            "decode_mode",
+            "temperature",
+            "top_p",
+            "top_k",
+            "execution_mode",
+            "arch",
+            "adapter_name",
+            "runtime_device",
+            "dtype",
+            "model_id",
+            "model_revision",
+            "tokenizer_id",
+            "tokenizer_revision",
+            "comet_available",
+            "is_baseline",
+            "display_name",
+            "quality_tier",
+            "params",
+            "license",
             "predictions_path",
             "compare_summary_path",
         ],
@@ -1201,15 +1421,54 @@ def main() -> int:
             "eval_variant",
             "eval_checkpoint",
             "decode",
+            "decode_mode",
+            "temperature",
+            "top_p",
+            "top_k",
             "evaluated_model",
+            "execution_mode",
+            "arch",
+            "adapter_name",
+            "runtime_device",
+            "dtype",
+            "model_id",
+            "model_revision",
+            "tokenizer_id",
+            "tokenizer_revision",
+            "comet_available",
+            "is_baseline",
+            "display_name",
+            "quality_tier",
+            "params",
+            "license",
             f"{EXTERNAL_WMT13_LABEL}_bleu",
             f"{EXTERNAL_WMT13_LABEL}_chrf",
+            f"{EXTERNAL_WMT13_LABEL}_comet",
             f"{EXTERNAL_WMT13_LABEL}_pairs",
             f"{EXTERNAL_WMT13_LABEL}_eval_dir",
+            f"{EXTERNAL_WMT13_LABEL}_en_es_bleu",
+            f"{EXTERNAL_WMT13_LABEL}_en_es_chrf",
+            f"{EXTERNAL_WMT13_LABEL}_en_es_comet",
+            f"{EXTERNAL_WMT13_LABEL}_en_es_sample_count",
+            f"{EXTERNAL_WMT13_LABEL}_es_en_bleu",
+            f"{EXTERNAL_WMT13_LABEL}_es_en_chrf",
+            f"{EXTERNAL_WMT13_LABEL}_es_en_comet",
+            f"{EXTERNAL_WMT13_LABEL}_es_en_sample_count",
+            f"{EXTERNAL_WMT13_LABEL}_total_sample_count",
             f"{INDOMAIN_CLEAN_LABEL}_bleu",
             f"{INDOMAIN_CLEAN_LABEL}_chrf",
+            f"{INDOMAIN_CLEAN_LABEL}_comet",
             f"{INDOMAIN_CLEAN_LABEL}_pairs",
             f"{INDOMAIN_CLEAN_LABEL}_eval_dir",
+            f"{INDOMAIN_CLEAN_LABEL}_en_es_bleu",
+            f"{INDOMAIN_CLEAN_LABEL}_en_es_chrf",
+            f"{INDOMAIN_CLEAN_LABEL}_en_es_comet",
+            f"{INDOMAIN_CLEAN_LABEL}_en_es_sample_count",
+            f"{INDOMAIN_CLEAN_LABEL}_es_en_bleu",
+            f"{INDOMAIN_CLEAN_LABEL}_es_en_chrf",
+            f"{INDOMAIN_CLEAN_LABEL}_es_en_comet",
+            f"{INDOMAIN_CLEAN_LABEL}_es_en_sample_count",
+            f"{INDOMAIN_CLEAN_LABEL}_total_sample_count",
             "other_eval_sets",
             "other_eval_count",
             "external_minus_indomain_bleu",

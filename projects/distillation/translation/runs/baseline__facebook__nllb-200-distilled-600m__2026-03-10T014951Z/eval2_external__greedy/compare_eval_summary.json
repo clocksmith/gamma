@@ -1,0 +1,132 @@
+{
+  "baseline_metadata": {
+    "directions": [
+      "en-es",
+      "es-en"
+    ],
+    "display_name": "NLLB 200 Distilled 600M",
+    "is_baseline": true,
+    "license": "cc-by-nc-4.0",
+    "params": "600M",
+    "quality_tier": 2
+  },
+  "decode_metadata": {
+    "decode_mode": "greedy",
+    "temperature": 0.0,
+    "top_k": 50,
+    "top_p": 1.0
+  },
+  "delta": null,
+  "direction_metrics": {
+    "en_es_bleu": 37.02280681971905,
+    "en_es_chrf": 61.6689594441892,
+    "en_es_comet": null,
+    "en_es_sample_count": 64,
+    "es_en_bleu": 38.09872545879708,
+    "es_en_chrf": 65.2003872430773,
+    "es_en_comet": null,
+    "es_en_sample_count": 64,
+    "total_sample_count": 128
+  },
+  "eval_samples": 128,
+  "pair_files": [
+    "/home/x/deco/gamma/projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl"
+  ],
+  "pairs": "/home/x/deco/gamma/projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+  "provenance": {
+    "adapter_name": "nllb",
+    "arch": "nllb_seq2seq",
+    "comet_available": false,
+    "dtype": "bfloat16",
+    "eval_dataset_label": "",
+    "eval_dataset_path": "/home/x/deco/gamma/projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+    "execution_mode": "seq2seq",
+    "model_id": "facebook/nllb-200-distilled-600M",
+    "model_revision": "main",
+    "runtime_device": "cuda",
+    "tokenizer_id": "facebook/nllb-200-distilled-600M",
+    "tokenizer_revision": "main"
+  },
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "student": {
+    "count": 128,
+    "label": "student",
+    "metrics_by_pair": {
+      "en-es": {
+        "bleu": {
+          "available": true,
+          "score": 37.02280681971905
+        },
+        "chrf": {
+          "available": true,
+          "score": 61.6689594441892
+        },
+        "comet": {
+          "available": false,
+          "error": "not computed for baseline",
+          "score": null
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.0
+        },
+        "n": 64
+      },
+      "es-en": {
+        "bleu": {
+          "available": true,
+          "score": 38.09872545879708
+        },
+        "chrf": {
+          "available": true,
+          "score": 65.2003872430773
+        },
+        "comet": {
+          "available": false,
+          "error": "not computed for baseline",
+          "score": null
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.0
+        },
+        "n": 64
+      }
+    },
+    "metrics_overall": {
+      "bleu": {
+        "available": true,
+        "score": 38.451926811763805
+      },
+      "chrf": {
+        "available": true,
+        "score": 63.2696105348826
+      },
+      "comet": {
+        "available": false,
+        "error": "not computed for baseline",
+        "score": null
+      },
+      "exact_match": {
+        "available": true,
+        "score": 0.0
+      },
+      "n": 128
+    },
+    "model": "facebook/nllb-200-distilled-600M",
+    "predictions": {
+      "path": "/home/x/deco/gamma/projects/distillation/translation/runs/baseline__facebook__nllb-200-distilled-600m__2026-03-10T014951Z/eval2_external__greedy/student_predictions.jsonl"
+    },
+    "vocab_subset_active": false,
+    "vocab_subset_dir": ""
+  },
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher": null,
+  "vocab_subset_dir": ""
+}

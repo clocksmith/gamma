@@ -10,9 +10,12 @@ import json
 import os
 import re
 import shlex
+import shutil
+import signal
 import subprocess
 import sys
 import time
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -147,6 +150,96 @@ def _is_done(manifest_rows: list[dict[str, Any]], checkpoint_name: str, eval_nam
         ):
             return True
     return False
+
+
+def _consecutive_failures(manifest_rows: list[dict[str, Any]], checkpoint_name: str, eval_name: str, decode: str) -> int:
+    failures = 0
+    for row in reversed(manifest_rows):
+        if (
+            str(row.get("checkpoint_name", "")) == checkpoint_name
+            and str(row.get("eval_name", "")) == eval_name
+            and str(row.get("decode", "")) == decode
+        ):
+            if int(row.get("status", 1)) == 0:
+                break
+            if str(row.get("runtime_device", "cuda")) == "cuda":
+                failures += 1
+    return failures
+
+
+def _gpu_hang_detected(text: str) -> bool:
+    return "GPU Hang" in text or "HW Exception by GPU" in text
+
+
+def _run_eval_attempt(
+    cmd: list[str],
+    *,
+    env: dict[str, str],
+    timeout_seconds: int,
+) -> tuple[int, float, str, str, bool, bool]:
+    start = time.monotonic()
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=env,
+        start_new_session=True,
+    )
+    timed_out = False
+    leaked_process = False
+
+    while True:
+        rc = proc.poll()
+        if rc is not None:
+            stdout, stderr = proc.communicate()
+            return rc, time.monotonic() - start, stdout or "", stderr or "", timed_out, leaked_process
+        if (time.monotonic() - start) >= timeout_seconds:
+            timed_out = True
+            break
+        time.sleep(1.0)
+
+    for sig in (signal.SIGTERM, signal.SIGKILL):
+        try:
+            os.killpg(proc.pid, sig)
+        except ProcessLookupError:
+            break
+        except Exception:
+            pass
+        deadline = time.monotonic() + 5.0
+        while time.monotonic() < deadline:
+            if proc.poll() is not None:
+                try:
+                    stdout, stderr = proc.communicate(timeout=1)
+                except Exception:
+                    stdout, stderr = "", ""
+                return proc.returncode, time.monotonic() - start, stdout or "", stderr or "", timed_out, leaked_process
+            time.sleep(0.2)
+
+    leaked_process = proc.poll() is None
+    stdout = ""
+    stderr = ""
+    if not leaked_process:
+        try:
+            stdout, stderr = proc.communicate(timeout=1)
+        except Exception:
+            stdout, stderr = "", ""
+    return 124, time.monotonic() - start, stdout or "", stderr or "", timed_out, leaked_process
+
+
+def _copy_success_outputs(attempt_dir: Path, case_dir: Path) -> None:
+    expected_names = [
+        "compare_eval_summary.json",
+        "student_eval_summary.json",
+        "student_predictions.jsonl",
+        "teacher_eval_summary.json",
+        "teacher_predictions.jsonl",
+    ]
+    for name in expected_names:
+        src = attempt_dir / name
+        dst = case_dir / name
+        if src.is_file():
+            shutil.copy2(src, dst)
 
 
 def _extract_metrics(compare_summary_path: Path) -> tuple[float | None, float | None, int | None]:
@@ -427,6 +520,30 @@ def _parse_args() -> argparse.Namespace:
         action="store_true",
         help="Skip already successful (checkpoint, eval, decode) entries from manifest.",
     )
+    ap.add_argument(
+        "--max-gpu-attempts",
+        type=int,
+        default=5,
+        help="Max consecutive GPU attempts for the same checkpoint/eval pair before CPU fallback.",
+    )
+    ap.add_argument(
+        "--retry-delay-seconds",
+        type=int,
+        default=60,
+        help="Delay between failed GPU eval attempts.",
+    )
+    ap.add_argument(
+        "--eval-timeout-seconds",
+        type=int,
+        default=1800,
+        help="Wall-clock timeout per eval attempt before it is treated as failed.",
+    )
+    ap.add_argument(
+        "--cpu-dtype",
+        default="float32",
+        choices=["auto", "float16", "bfloat16", "float32"],
+        help="Dtype to use if an eval falls back to CPU.",
+    )
     return ap.parse_args()
 
 
@@ -490,7 +607,7 @@ def main() -> int:
             teacher_summary = case_dir / "teacher_eval_summary.json"
             teacher_predictions = case_dir / "teacher_predictions.jsonl"
 
-            cmd = [
+            base_cmd = [
                 str(python_bin),
                 str(eval_script),
                 "--pairs",
@@ -519,10 +636,6 @@ def main() -> int:
                 str(int(args.max_new_tokens)),
                 "--batch-size",
                 str(int(args.batch_size)),
-                "--device",
-                str(args.device),
-                "--dtype",
-                str(args.dtype),
                 "--seed",
                 str(int(args.seed)),
                 "--temperature",
@@ -536,70 +649,141 @@ def main() -> int:
                 "--allow-partial-contract",
             ]
             if str(args.teacher_model).strip():
-                cmd.extend(["--teacher-model", str(args.teacher_model).strip()])
+                base_cmd.extend(["--teacher-model", str(args.teacher_model).strip()])
             if args.allow_download:
-                cmd.append("--allow-download")
+                base_cmd.append("--allow-download")
 
-            command_str = shlex.join(cmd)
-            print(f"[run] {ckpt.name} x {eval_name}")
-            print(f"[cmd] {command_str}")
-            start = time.monotonic()
-            started_utc = _now_utc()
-            child_env = os.environ.copy()
-            if str(args.hsa_override_gfx_version).strip():
-                child_env["HSA_OVERRIDE_GFX_VERSION"] = str(args.hsa_override_gfx_version).strip()
-            proc = subprocess.run(cmd, capture_output=True, text=True, env=child_env)
-            duration_s = time.monotonic() - start
-            ended_utc = _now_utc()
+            gpu_failures = _consecutive_failures(manifest_rows, ckpt.name, eval_name, args.decode)
+            attempt_logs: list[str] = []
+            attempt_index = 0
+            current_device = str(args.device)
+            current_dtype = str(args.dtype)
 
-            log_text = []
-            log_text.append(f"[started] {started_utc}")
-            log_text.append(f"[ended] {ended_utc}")
-            log_text.append(f"[duration_s] {duration_s:.2f}")
-            log_text.append(f"[returncode] {proc.returncode}")
-            log_text.append(f"[cmd] {command_str}")
-            log_text.append("")
-            log_text.append("=== STDOUT ===")
-            log_text.append(proc.stdout or "")
-            log_text.append("")
-            log_text.append("=== STDERR ===")
-            log_text.append(proc.stderr or "")
-            log_path.write_text("\n".join(log_text), encoding="utf-8")
+            while True:
+                attempt_index += 1
+                attempt_dir = case_dir / f"attempt_{attempt_index:02d}_{current_device}"
+                attempt_dir.mkdir(parents=True, exist_ok=True)
+                compare_summary_attempt = attempt_dir / "compare_eval_summary.json"
+                student_summary_attempt = attempt_dir / "student_eval_summary.json"
+                student_predictions_attempt = attempt_dir / "student_predictions.jsonl"
+                teacher_summary_attempt = attempt_dir / "teacher_eval_summary.json"
+                teacher_predictions_attempt = attempt_dir / "teacher_predictions.jsonl"
 
-            bleu, chrf, samples = _extract_metrics(compare_summary)
-            row = {
-                "timestamp_utc": ended_utc,
-                "run_root": _safe_rel(run_root, repo_root),
-                "checkpoint_name": ckpt.name,
-                "checkpoint_step": ckpt_step,
-                "checkpoint_path": _safe_rel(ckpt, repo_root),
-                "eval_name": eval_name,
-                "pairs": _safe_rel(eval_pairs, repo_root),
-                "decode": args.decode,
-                "status": int(proc.returncode),
-                "duration_s": float(duration_s),
-                "bleu": bleu,
-                "chrf": chrf,
-                "samples": samples,
-                "out_dir": _safe_rel(case_dir, repo_root),
-                "compare_summary": _safe_rel(compare_summary, repo_root),
-                "student_summary": _safe_rel(student_summary, repo_root),
-                "student_predictions": _safe_rel(student_predictions, repo_root),
-                "log_path": _safe_rel(log_path, repo_root),
-                "command": command_str,
-                "hsa_override_gfx_version": str(args.hsa_override_gfx_version).strip(),
-            }
-            _append_manifest(manifest_path, row)
-            manifest_rows.append(row)
-            _write_scoreboard(out_dir, manifest_rows, repo_root, run_root, args.decode, eval_specs)
+                cmd = deepcopy(base_cmd)
+                replace_map = {
+                    str(case_dir): str(attempt_dir),
+                    str(compare_summary): str(compare_summary_attempt),
+                    str(student_summary): str(student_summary_attempt),
+                    str(student_predictions): str(student_predictions_attempt),
+                    str(teacher_summary): str(teacher_summary_attempt),
+                    str(teacher_predictions): str(teacher_predictions_attempt),
+                }
+                for idx, token in enumerate(cmd):
+                    cmd[idx] = replace_map.get(token, token)
+                cmd.extend(["--device", current_device, "--dtype", current_dtype])
 
-            if proc.returncode == 0:
-                print(
-                    f"[ok] {ckpt.name} x {eval_name} "
-                    f"BLEU={_fmt_float(bleu)} chrF={_fmt_float(chrf)} duration_s={duration_s:.2f}"
+                command_str = shlex.join(cmd)
+                print(f"[run] {ckpt.name} x {eval_name} attempt={attempt_index} device={current_device}")
+                print(f"[cmd] {command_str}")
+                started_utc = _now_utc()
+                child_env = os.environ.copy()
+                if current_device == "cuda" and str(args.hsa_override_gfx_version).strip():
+                    child_env["HSA_OVERRIDE_GFX_VERSION"] = str(args.hsa_override_gfx_version).strip()
+                else:
+                    child_env.pop("HSA_OVERRIDE_GFX_VERSION", None)
+
+                rc, duration_s, stdout_text, stderr_text, timed_out, leaked_process = _run_eval_attempt(
+                    cmd,
+                    env=child_env,
+                    timeout_seconds=int(args.eval_timeout_seconds),
                 )
-            else:
-                print(f"[fail] {ckpt.name} x {eval_name} returncode={proc.returncode} (see {log_path})")
+                ended_utc = _now_utc()
+                combined_output = "\n".join(part for part in [stdout_text, stderr_text] if part)
+                gpu_hang = _gpu_hang_detected(combined_output)
+
+                attempt_logs.append(f"[attempt] {attempt_index}")
+                attempt_logs.append(f"[runtime_device] {current_device}")
+                attempt_logs.append(f"[runtime_dtype] {current_dtype}")
+                attempt_logs.append(f"[started] {started_utc}")
+                attempt_logs.append(f"[ended] {ended_utc}")
+                attempt_logs.append(f"[duration_s] {duration_s:.2f}")
+                attempt_logs.append(f"[returncode] {rc}")
+                attempt_logs.append(f"[timed_out] {str(timed_out).lower()}")
+                attempt_logs.append(f"[leaked_process] {str(leaked_process).lower()}")
+                attempt_logs.append(f"[gpu_hang_detected] {str(gpu_hang).lower()}")
+                attempt_logs.append(f"[cmd] {command_str}")
+                attempt_logs.append("")
+                attempt_logs.append("=== STDOUT ===")
+                attempt_logs.append(stdout_text or "")
+                attempt_logs.append("")
+                attempt_logs.append("=== STDERR ===")
+                attempt_logs.append(stderr_text or "")
+                attempt_logs.append("")
+                log_path.write_text("\n".join(attempt_logs), encoding="utf-8")
+
+                if rc == 0:
+                    _copy_success_outputs(attempt_dir, case_dir)
+                    bleu, chrf, samples = _extract_metrics(compare_summary_attempt)
+                else:
+                    bleu, chrf, samples = _extract_metrics(compare_summary_attempt)
+
+                row = {
+                    "timestamp_utc": ended_utc,
+                    "run_root": _safe_rel(run_root, repo_root),
+                    "checkpoint_name": ckpt.name,
+                    "checkpoint_step": ckpt_step,
+                    "checkpoint_path": _safe_rel(ckpt, repo_root),
+                    "eval_name": eval_name,
+                    "pairs": _safe_rel(eval_pairs, repo_root),
+                    "decode": args.decode,
+                    "status": int(rc),
+                    "duration_s": float(duration_s),
+                    "bleu": bleu,
+                    "chrf": chrf,
+                    "samples": samples,
+                    "out_dir": _safe_rel(attempt_dir, repo_root),
+                    "compare_summary": _safe_rel(compare_summary_attempt, repo_root),
+                    "student_summary": _safe_rel(student_summary_attempt, repo_root),
+                    "student_predictions": _safe_rel(student_predictions_attempt, repo_root),
+                    "log_path": _safe_rel(log_path, repo_root),
+                    "command": command_str,
+                    "hsa_override_gfx_version": str(args.hsa_override_gfx_version).strip() if current_device == "cuda" else "",
+                    "runtime_device": current_device,
+                    "runtime_dtype": current_dtype,
+                    "attempt_index": attempt_index,
+                    "timed_out": timed_out,
+                    "leaked_process": leaked_process,
+                    "gpu_hang_detected": gpu_hang,
+                }
+                _append_manifest(manifest_path, row)
+                manifest_rows.append(row)
+                _write_scoreboard(out_dir, manifest_rows, repo_root, run_root, args.decode, eval_specs)
+
+                if rc == 0:
+                    print(
+                        f"[ok] {ckpt.name} x {eval_name} attempt={attempt_index} device={current_device} "
+                        f"BLEU={_fmt_float(bleu)} chrF={_fmt_float(chrf)} duration_s={duration_s:.2f}"
+                    )
+                    break
+
+                if current_device == "cuda":
+                    gpu_failures += 1
+                    print(
+                        f"[fail] {ckpt.name} x {eval_name} attempt={attempt_index} "
+                        f"device=cuda returncode={rc} gpu_failures={gpu_failures}/{int(args.max_gpu_attempts)} "
+                        f"(see {log_path})"
+                    )
+                    if gpu_failures >= int(args.max_gpu_attempts):
+                        current_device = "cpu"
+                        current_dtype = str(args.cpu_dtype)
+                        print(f"[cpu-fallback] {ckpt.name} x {eval_name} after {gpu_failures} consecutive GPU failures")
+                        continue
+                    print(f"[retry] sleeping {int(args.retry_delay_seconds)}s before retrying {ckpt.name} x {eval_name} on GPU")
+                    time.sleep(int(args.retry_delay_seconds))
+                    continue
+
+                print(f"[fail] {ckpt.name} x {eval_name} attempt={attempt_index} device=cpu returncode={rc} (see {log_path})")
+                break
 
     print(f"[sweep] done: {_now_utc()}")
     print(f"[sweep] manifest={_safe_rel(manifest_path, repo_root)}")

@@ -357,6 +357,17 @@ def _resolve_device(device: str, fallback: str = "cpu") -> str:
     return fallback
 
 
+def _infer_causal_provenance(model_ref: str, tokenizer_ref: str) -> tuple[str, str]:
+    text = " ".join([_safe_text(model_ref).lower(), _safe_text(tokenizer_ref).lower()])
+    if "translategemma" in text:
+        return "gemma_causal_lm", "translategemma"
+    if "gemma" in text:
+        return "gemma_causal_lm", "gemma-chat"
+    if "llama" in text:
+        return "llama_causal_lm", "causal-chat"
+    return "", "causal-chat"
+
+
 def _contract_text(value: Any) -> str:
     return " ".join(_safe_text(value).split())
 
@@ -538,12 +549,14 @@ def _generate_rows(
     for start in range(0, len(rows), max(1, batch_size)):
         chunk = rows[start : start + batch_size]
         prompts = [_to_chat_text(tokenizer, r.source_lang, r.target_lang, r.source) for r in chunk]
+        # add_special_tokens=False: chat template already adds <bos>; avoid double-BOS.
         batch_enc = tokenizer(
             prompts,
             return_tensors="pt",
             truncation=True,
             max_length=max_prompt_length,
             padding=True,
+            add_special_tokens=False,
         )
         if vocab_remap is not None:
             batch_enc["input_ids"] = _remap_ids(batch_enc["input_ids"], vocab_remap)
@@ -563,10 +576,10 @@ def _generate_rows(
                 attention_mask=batch_enc["attention_mask"],
                 **gen_kwargs,
             )
-        prompt_lens = batch_enc["attention_mask"].sum(dim=1).tolist()
+        # Use padded input length, not attention_mask sum, for left-padded tokenizers.
+        input_len = batch_enc["input_ids"].shape[1]
         for i in range(len(chunk)):
-            p = int(prompt_lens[i])
-            pred_ids = generated[i][p:]
+            pred_ids = generated[i][input_len:]
             if vocab_remap is not None:
                 pred_ids = _restore_ids_to_old_vocab(pred_ids, vocab_remap)
             if torch.is_tensor(pred_ids) and pred_ids.ndim > 1:
@@ -946,6 +959,39 @@ def main() -> int:
         target_langs=target_langs,
     )
 
+    # Build direction metrics from student per-pair results.
+    student_by_pair = student_summary.get("metrics_by_pair", {})
+    direction_metrics: dict[str, Any] = {}
+    total_sample_count = 0
+    for pair_key, pair_data in sorted(student_by_pair.items()):
+        dir_key = pair_key.replace("-", "_")
+        bleu_data = pair_data.get("bleu", {}) if isinstance(pair_data, dict) else {}
+        chrf_data = pair_data.get("chrf", {}) if isinstance(pair_data, dict) else {}
+        comet_data = pair_data.get("comet", {}) if isinstance(pair_data, dict) else {}
+        pair_n = int(pair_data.get("n", 0)) if isinstance(pair_data, dict) else 0
+        direction_metrics[f"{dir_key}_bleu"] = bleu_data.get("score") if isinstance(bleu_data, dict) else None
+        direction_metrics[f"{dir_key}_chrf"] = chrf_data.get("score") if isinstance(chrf_data, dict) else None
+        direction_metrics[f"{dir_key}_comet"] = comet_data.get("score") if isinstance(comet_data, dict) else None
+        direction_metrics[f"{dir_key}_sample_count"] = pair_n
+        total_sample_count += pair_n
+    direction_metrics["total_sample_count"] = total_sample_count
+
+    # Determine COMET availability.
+    student_overall = student_summary.get("metrics_overall", {})
+    comet_overall = student_overall.get("comet", {})
+    comet_available = bool(isinstance(comet_overall, dict) and comet_overall.get("available", False))
+
+    # Resolve effective decode mode and device.
+    effective_decode = "greedy" if not args.do_sample else "sampled"
+    effective_device = _resolve_device(str(args.device))
+    effective_dtype = str(args.dtype) if args.dtype != "auto" else (
+        "bfloat16" if torch.cuda.is_available() else "float32"
+    )
+    inferred_arch, inferred_adapter = _infer_causal_provenance(
+        str(args.model),
+        str(args.tokenizer_model or args.teacher_model or args.model),
+    )
+
     compare_out: dict[str, Any] = {
         "pairs": args.pairs,
         "pair_files": [str(p) for p in pair_inputs],
@@ -956,6 +1002,27 @@ def main() -> int:
         "student": student_summary,
         "teacher": None,
         "delta": None,
+        "direction_metrics": direction_metrics,
+        "decode_metadata": {
+            "decode_mode": effective_decode,
+            "temperature": float(args.temperature),
+            "top_p": float(args.top_p),
+            "top_k": int(args.top_k),
+        },
+        "provenance": {
+            "model_id": str(args.model),
+            "model_revision": "",
+            "tokenizer_id": str(args.tokenizer_model or args.teacher_model or args.model),
+            "tokenizer_revision": "",
+            "eval_dataset_path": str(args.pairs),
+            "eval_dataset_label": "",
+            "adapter_name": inferred_adapter,
+            "runtime_device": effective_device,
+            "dtype": effective_dtype,
+            "execution_mode": "causal-chat",
+            "arch": inferred_arch,
+            "comet_available": comet_available,
+        },
     }
 
     if args.teacher_model:

@@ -62,6 +62,11 @@ RESULT_CATEGORY_LABELS = {
     "student_stage_b": "Student Stage B",
     "student_final": "Student Final",
     "student_other": "Student Other",
+    "external_baseline": "External Baseline",
+}
+LEADERBOARD_SLUGS = {
+    build_run_index.EXTERNAL_WMT13_LABEL: "external_wmt13_en_es_translation_benchmark_128",
+    build_run_index.INDOMAIN_CLEAN_LABEL: "indomain_clean_merged_en_es_translation_benchmark_128",
 }
 
 
@@ -177,6 +182,11 @@ def _short_run_name(run_name: str) -> str:
     text = str(run_name or "").strip()
     if not text:
         return ""
+    if text.startswith("baseline__"):
+        # Strip baseline__ prefix and timestamp suffix.
+        text = text[len("baseline__"):]
+        text = re.sub(r"__\d{4}-\d{2}-\d{2}T\d{6}Z$", "", text)
+        return text or str(run_name or "")
     if text.startswith(RUN_NAME_PREFIX):
         text = text[len(RUN_NAME_PREFIX) :]
     text = re.sub(r"_(?:\d{8}T\d{6}Z|\d{8}_\d{6})$", "", text)
@@ -236,16 +246,25 @@ def _compare_row_metadata(row: dict[str, Any]) -> dict[str, str]:
     group_label = str(row.get("group_label", "")).strip()
     checkpoint = str(row.get("eval_checkpoint", "")).strip()
     decode = str(row.get("decode", "")).strip()
-    model_role = "teacher" if eval_variant.lower().startswith("teacher") or group_label.lower().startswith("teacher") else "student"
-    if model_role == "teacher":
+    schedule = str(row.get("schedule", "")).strip()
+    is_baseline_run = run_name.startswith("baseline__") or schedule == "baseline"
+    if is_baseline_run:
+        model_role = "baseline"
+        result_category = "external_baseline"
+    elif eval_variant.lower().startswith("teacher") or group_label.lower().startswith("teacher"):
+        model_role = "teacher"
         result_category = "teacher_baseline"
     elif eval_variant == "stage_a":
+        model_role = "student"
         result_category = "student_stage_a"
     elif eval_variant == "stage_b":
+        model_role = "student"
         result_category = "student_stage_b"
     elif eval_variant == "final":
+        model_role = "student"
         result_category = "student_final"
     else:
+        model_role = "student"
         result_category = "student_other"
     display_category = RESULT_CATEGORY_LABELS.get(result_category, result_category.replace("_", " ").title())
     label_parts = [display_category]
@@ -347,6 +366,176 @@ def _backfill_generic_manifest(manifest_path: Path, repo_root: Path) -> dict[str
     }
 
 
+def _infer_baseline_entry_from_compare(compare_path: Path) -> dict[str, Any] | None:
+    try:
+        payload = json.loads(compare_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    provenance = payload.get("provenance") if isinstance(payload.get("provenance"), dict) else {}
+    baseline_metadata = payload.get("baseline_metadata") if isinstance(payload.get("baseline_metadata"), dict) else {}
+    source_langs = payload.get("source_langs") if isinstance(payload.get("source_langs"), list) else []
+    target_langs = payload.get("target_langs") if isinstance(payload.get("target_langs"), list) else []
+    pairs = str(payload.get("pairs", "")).strip()
+    model_id = str(provenance.get("model_id", "")).strip() or str(((payload.get("student") or {}).get("model", ""))).strip()
+    if not model_id:
+        return None
+    return {
+        "model_id": model_id,
+        "display_name": str(baseline_metadata.get("display_name", "")).strip(),
+        "arch": str(provenance.get("arch", "")).strip(),
+        "execution_mode": str(provenance.get("execution_mode", "")).strip(),
+        "prompt_adapter": str(provenance.get("adapter_name", "")).strip(),
+        "directions": [str(x) for x in (baseline_metadata.get("directions") or []) if str(x).strip()],
+        "params": str(baseline_metadata.get("params", "")).strip(),
+        "license": str(baseline_metadata.get("license", "")).strip(),
+        "revision": str(provenance.get("model_revision", "")).strip(),
+        "tokenizer_id": str(provenance.get("tokenizer_id", "")).strip(),
+        "tokenizer_revision": str(provenance.get("tokenizer_revision", "")).strip(),
+        "quality_tier": baseline_metadata.get("quality_tier", ""),
+        "runtime_device": str(provenance.get("runtime_device", "")).strip(),
+        "dtype": str(provenance.get("dtype", "")).strip(),
+        "source_langs": [str(x) for x in source_langs if str(x).strip()],
+        "target_langs": [str(x) for x in target_langs if str(x).strip()],
+        "pairs": pairs,
+    }
+
+
+def _write_missing_baseline_manifest(run_root: Path, compare_paths: list[Path]) -> Path | None:
+    manifest_path = run_root / "baseline_manifest.json"
+    if manifest_path.is_file() or not compare_paths:
+        return manifest_path if manifest_path.is_file() else None
+    inferred = _infer_baseline_entry_from_compare(compare_paths[0])
+    if inferred is None:
+        return None
+    eval_dataset_paths = []
+    for compare_path in compare_paths:
+        item = _infer_baseline_entry_from_compare(compare_path)
+        if item is None:
+            continue
+        pairs = str(item.get("pairs", "")).strip()
+        if pairs and pairs not in eval_dataset_paths:
+            eval_dataset_paths.append(pairs)
+    timestamp = 0.0
+    candidates = [run_root / "run_contract.txt", *compare_paths]
+    for path in candidates:
+        try:
+            timestamp = max(timestamp, float(path.stat().st_mtime))
+        except Exception:
+            continue
+    quality_tier = inferred.get("quality_tier", "")
+    try:
+        quality_tier = int(quality_tier)
+    except Exception:
+        quality_tier = ""
+    manifest = {
+        "baseline": True,
+        "model_id": inferred["model_id"],
+        "display_name": inferred["display_name"],
+        "arch": inferred["arch"],
+        "execution_mode": inferred["execution_mode"],
+        "prompt_adapter": inferred["prompt_adapter"],
+        "directions": list(inferred.get("directions", [])),
+        "params": inferred["params"],
+        "license": inferred["license"],
+        "revision": inferred["revision"],
+        "tokenizer_id": inferred["tokenizer_id"],
+        "tokenizer_revision": inferred["tokenizer_revision"],
+        "quality_tier": quality_tier,
+        "timestamp": timestamp,
+        "eval_dataset_paths": eval_dataset_paths,
+        "source_langs": inferred["source_langs"],
+        "target_langs": inferred["target_langs"],
+        "runtime_device": inferred["runtime_device"],
+        "dtype": inferred["dtype"],
+    }
+    if not manifest["directions"]:
+        for src in inferred["source_langs"]:
+            for tgt in inferred["target_langs"]:
+                if src and tgt and src != tgt:
+                    manifest["directions"].append(f"{src}-{tgt}")
+    manifest["directions"] = sorted(set(manifest["directions"]))
+    _write_json(manifest_path, manifest)
+    return manifest_path
+
+
+def _backfill_legacy_baseline_run(run_root: Path, repo_root: Path) -> dict[str, Any] | None:
+    if not run_root.is_dir() or not run_root.name.startswith("baseline__"):
+        return None
+    sweep_dir = run_root / "baseline_checkpoint_sweep_greedy"
+    manifest_path = sweep_dir / "manifest.jsonl"
+    if manifest_path.is_file():
+        return None
+    compare_paths = sorted(
+        path for path in run_root.glob("*__greedy/compare_eval_summary.json")
+        if path.is_file()
+    )
+    if not compare_paths:
+        return None
+    _write_missing_baseline_manifest(run_root, compare_paths)
+    manifest_rows: list[dict[str, Any]] = []
+    eval_specs: list[tuple[str, Path]] = []
+    for compare_path in compare_paths:
+        try:
+            payload = json.loads(compare_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        eval_dir = compare_path.parent
+        eval_name = eval_dir.name.split("__", 1)[0]
+        pairs = str(payload.get("pairs", "")).strip()
+        if not pairs:
+            continue
+        pairs_path = _resolve_repo_path(pairs, repo_root)
+        if pairs_path.is_file():
+            spec = (eval_name, pairs_path)
+            if spec not in eval_specs:
+                eval_specs.append(spec)
+        student = payload.get("student") if isinstance(payload.get("student"), dict) else {}
+        metrics = student.get("metrics_overall") if isinstance(student.get("metrics_overall"), dict) else {}
+        manifest_rows.append(
+            {
+                "checkpoint_name": "final",
+                "checkpoint_step": 0,
+                "checkpoint_path": "",
+                "compare_summary": str(compare_path),
+                "decode": str((payload.get("decode_metadata") or {}).get("decode_mode", "greedy") or "greedy"),
+                "duration_s": "",
+                "eval_name": eval_name,
+                "log_path": "",
+                "out_dir": str(eval_dir),
+                "pairs": pairs,
+                "run_root": str(run_root),
+                "runtime_device": str((payload.get("provenance") or {}).get("runtime_device", "")),
+                "samples": payload.get("eval_samples", metrics.get("n", "")),
+                "status": 0,
+                "student_predictions": str((((student.get("predictions") or {}).get("path", "")) if isinstance(student.get("predictions"), dict) else "")),
+                "timestamp_utc": _now_utc(),
+                "bleu": ((metrics.get("bleu") or {}).get("score")) if isinstance(metrics, dict) else "",
+                "chrf": ((metrics.get("chrf") or {}).get("score")) if isinstance(metrics, dict) else "",
+            }
+        )
+    if not manifest_rows or not eval_specs:
+        return None
+    sweep_dir.mkdir(parents=True, exist_ok=True)
+    with manifest_path.open("w", encoding="utf-8") as fh:
+        for row in manifest_rows:
+            fh.write(json.dumps(row, ensure_ascii=True) + "\n")
+    stage_b_sweep._write_scoreboard(
+        sweep_dir,
+        manifest_rows,
+        repo_root,
+        run_root,
+        "greedy",
+        eval_specs,
+    )
+    return {
+        "manifest_path": _safe_rel(manifest_path, repo_root),
+        "artifact_dir": _safe_rel(sweep_dir, repo_root),
+        "kind": "legacy_baseline_backfill",
+        "rows": len(manifest_rows),
+        "eval_count": len(eval_specs),
+    }
+
+
 def _rebuild_run_index(python_bin: Path, repo_root: Path) -> None:
     cmd = [
         str(python_bin),
@@ -431,6 +620,130 @@ def _paired_external_vs_indomain(compare_rows: list[dict[str, str]]) -> list[dic
         )
     out.sort(key=lambda row: ((_as_float(row.get("external_bleu")) or -1e9), row.get("run_name", "")), reverse=True)
     return out
+
+
+def _label_eval_set(pairs_text: str) -> str:
+    raw = str(pairs_text or "").strip()
+    if not raw:
+        return ""
+    stem = Path(raw).name
+    for spec in build_run_index.DATASET_SPECS:
+        aliases = tuple(str(alias) for alias in spec.get("aliases", ()))
+        if raw == spec.get("label") or stem == spec.get("label"):
+            return str(spec.get("label", ""))
+        for alias in aliases:
+            if raw == alias or stem == alias or alias in raw:
+                return str(spec.get("label", ""))
+    return stem or raw
+
+
+def _leaderboard_model_role(eval_dir: str, run_name: str = "") -> str:
+    text = str(eval_dir or "").lower()
+    rn = str(run_name or "").lower()
+    if rn.startswith("baseline__"):
+        return "baseline"
+    if "teacher4b" in text or "/teacher" in text or "__teacher" in text:
+        return "teacher_baseline"
+    return "student"
+
+
+def _canonical_compare_relpath(path: Path, runs_root: Path) -> str:
+    rel = path.relative_to(runs_root)
+    parts = list(rel.parts)
+    if len(parts) >= 2 and re.fullmatch(r"attempt_\d+_.+", parts[-2]):
+        parts.pop(-2)
+    return str(Path(*parts))
+
+
+def _raw_compare_leaderboard_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str]]:
+    rows_by_key: dict[tuple[str, ...], dict[str, str]] = {}
+    for compare_path in sorted(runs_root.rglob("compare_eval_summary.json")):
+        try:
+            payload = json.loads(compare_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        pairs = str(payload.get("pairs", "")).strip()
+        if not pairs:
+            continue
+        student_metrics = (payload.get("student") or {}).get("metrics_overall") or {}
+        teacher_metrics = (payload.get("teacher") or {}).get("metrics_overall") or {}
+        student_bleu = _as_float((student_metrics.get("bleu") or {}).get("score"))
+        student_chrf = _as_float((student_metrics.get("chrf") or {}).get("score"))
+        if student_bleu is None:
+            continue
+        canonical_rel = _canonical_compare_relpath(compare_path, runs_root)
+        canonical_path = runs_root / canonical_rel
+        rel_parts = Path(canonical_rel).parts
+        if len(rel_parts) < 2:
+            continue
+        run_name = rel_parts[0]
+        eval_dir = "/".join(rel_parts[1:-1])
+        row = {
+            "run_name": run_name,
+            "eval_set": _label_eval_set(pairs),
+            "pairs": _normalize_path_text(pairs, repo_root),
+            "eval_dir": eval_dir,
+            "model_role": _leaderboard_model_role(eval_dir, run_name),
+            "student_bleu": _fmt_float(student_bleu),
+            "student_chrf": _fmt_float(student_chrf),
+            "teacher_bleu": _fmt_float((teacher_metrics.get("bleu") or {}).get("score")),
+            "teacher_chrf": _fmt_float((teacher_metrics.get("chrf") or {}).get("score")),
+            "delta_bleu": _fmt_float(((payload.get("delta") or {}).get("bleu"))),
+            "delta_chrf": _fmt_float(((payload.get("delta") or {}).get("chrf"))),
+            "student_model": _normalize_path_text(str((payload.get("student") or {}).get("model", "")), repo_root),
+            "teacher_model": _normalize_path_text(str((payload.get("teacher") or {}).get("model", "")), repo_root),
+            "eval_samples": str(payload.get("eval_samples", "")),
+            "compare_summary_path": _safe_rel(canonical_path, repo_root),
+        }
+        # Add per-direction metrics and provenance if available.
+        direction_metrics = payload.get("direction_metrics") or {}
+        for dk in ("en_es_bleu", "en_es_chrf", "en_es_comet", "en_es_sample_count",
+                    "es_en_bleu", "es_en_chrf", "es_en_comet", "es_en_sample_count",
+                    "total_sample_count"):
+            val = direction_metrics.get(dk)
+            row[dk] = _fmt_float(val) if isinstance(val, (int, float)) else ""
+        provenance = payload.get("provenance") or {}
+        row["execution_mode"] = str(provenance.get("execution_mode", ""))
+        row["arch"] = str(provenance.get("arch", ""))
+        row["comet_available"] = str(provenance.get("comet_available", "")).lower()
+        baseline_meta = payload.get("baseline_metadata") or {}
+        row["is_baseline"] = str(baseline_meta.get("is_baseline", False)).lower()
+        row["display_name"] = str(baseline_meta.get("display_name", ""))
+        row["quality_tier"] = str(baseline_meta.get("quality_tier", ""))
+        row["params"] = str(baseline_meta.get("params", ""))
+        key = (
+            row["run_name"],
+            row["eval_set"],
+            row["eval_dir"],
+            row["student_model"],
+            row["student_bleu"],
+            row["student_chrf"],
+        )
+        rows_by_key[key] = row
+    rows = list(rows_by_key.values())
+    rows.sort(
+        key=lambda row: (
+            row.get("eval_set", ""),
+            -(_as_float(row.get("student_bleu")) or -1e9),
+            -(_as_float(row.get("student_chrf")) or -1e9),
+            row.get("run_name", ""),
+            row.get("eval_dir", ""),
+        )
+    )
+    return rows
+
+
+def _leaderboard_rows_for_eval(rows: list[dict[str, str]], eval_set: str) -> list[dict[str, str]]:
+    filtered = [row for row in rows if str(row.get("eval_set", "")) == eval_set]
+    filtered.sort(
+        key=lambda row: (
+            -(_as_float(row.get("student_bleu")) or -1e9),
+            -(_as_float(row.get("student_chrf")) or -1e9),
+            row.get("run_name", ""),
+            row.get("eval_dir", ""),
+        )
+    )
+    return filtered
 
 
 def _grid_checkpoint_rows(compare_rows: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -809,6 +1122,8 @@ def _render_dashboard(
         <code>best_external_by_run.csv</code>,
         <code>external_vs_indomain.csv</code>,
         <code>grid_checkpoint_timeline.csv</code>,
+        <code>leaderboard_all_compare_rows.csv</code>,
+        <code>leaderboard.md</code>,
         <code>summary.md</code>,
         <code>summary.json</code>
       </p>
@@ -826,6 +1141,7 @@ def _write_summary_md(
     summary: dict[str, Any],
     best_rows: list[dict[str, str]],
     backfilled: list[dict[str, Any]],
+    leaderboard_rows: list[dict[str, str]],
 ) -> None:
     lines = [
         "# Translation Results Bundle",
@@ -858,6 +1174,63 @@ def _write_summary_md(
                     _md_escape(row.get("indomain_bleu", "")),
                     _md_escape(row.get("eval_checkpoint", "")),
                     _md_escape(row.get("pair_count", "")),
+                ]
+            )
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Deduped Eval Leaderboards",
+            "",
+            "- `leaderboard_all_compare_rows.csv`",
+            "- `leaderboard_external_wmt13_en_es_translation_benchmark_128.csv`",
+            "- `leaderboard_indomain_clean_merged_en_es_translation_benchmark_128.csv`",
+            "- `leaderboard.md`",
+            "",
+            "### External WMT13 EN/ES 128",
+            "",
+            "| rank | student_bleu | student_chrf | role | run | eval_dir |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ]
+    )
+    external_rows = _leaderboard_rows_for_eval(leaderboard_rows, build_run_index.EXTERNAL_WMT13_LABEL)
+    for index, row in enumerate(external_rows[:15], start=1):
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    str(index),
+                    _md_escape(row.get("student_bleu", "")),
+                    _md_escape(row.get("student_chrf", "")),
+                    _md_escape(row.get("model_role", "")),
+                    _md_escape(row.get("run_name", "")),
+                    _md_escape(row.get("eval_dir", "")),
+                ]
+            )
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "### In-Domain Clean EN/ES 128",
+            "",
+            "| rank | student_bleu | student_chrf | role | run | eval_dir |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ]
+    )
+    indomain_rows = _leaderboard_rows_for_eval(leaderboard_rows, build_run_index.INDOMAIN_CLEAN_LABEL)
+    for index, row in enumerate(indomain_rows[:15], start=1):
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    str(index),
+                    _md_escape(row.get("student_bleu", "")),
+                    _md_escape(row.get("student_chrf", "")),
+                    _md_escape(row.get("model_role", "")),
+                    _md_escape(row.get("run_name", "")),
+                    _md_escape(row.get("eval_dir", "")),
                 ]
             )
             + " |"
@@ -915,6 +1288,11 @@ def main() -> int:
         raise RuntimeError(f"runs root not found: {runs_root}")
 
     backfilled: list[dict[str, Any]] = []
+    if not args.skip_backfill:
+        for run_root in sorted(runs_root.glob("baseline__*")):
+            item = _backfill_legacy_baseline_run(run_root, PROJECT_ROOT)
+            if item is not None:
+                backfilled.append(item)
     manifest_paths = sorted(runs_root.rglob("manifest.jsonl"))
     if not args.skip_backfill:
         for manifest_path in manifest_paths:
@@ -981,6 +1359,7 @@ def main() -> int:
     best_rows = _best_external_by_run(normalized_compare)
     scatter_rows = _paired_external_vs_indomain(normalized_compare)
     grid_rows = _grid_checkpoint_rows(normalized_compare)
+    leaderboard_rows = _raw_compare_leaderboard_rows(runs_root, PROJECT_ROOT)
     active_runs = [row for row in normalized_runs if str(row.get("run_status", "")) != "completed"]
     active_runs.sort(key=lambda row: row.get("run_name", ""))
 
@@ -1041,6 +1420,46 @@ def main() -> int:
             "external_bleu",
         ],
     )
+    leaderboard_fields = [
+        "run_name",
+        "eval_set",
+        "pairs",
+        "eval_dir",
+        "is_baseline",
+        "display_name",
+        "model_role",
+        "student_bleu",
+        "student_chrf",
+        "teacher_bleu",
+        "teacher_chrf",
+        "delta_bleu",
+        "delta_chrf",
+        "student_model",
+        "teacher_model",
+        "eval_samples",
+        "compare_summary_path",
+        "en_es_bleu",
+        "en_es_chrf",
+        "en_es_comet",
+        "en_es_sample_count",
+        "es_en_bleu",
+        "es_en_chrf",
+        "es_en_comet",
+        "es_en_sample_count",
+        "total_sample_count",
+        "execution_mode",
+        "arch",
+        "comet_available",
+        "quality_tier",
+        "params",
+    ]
+    _write_csv(out_dir / "leaderboard_all_compare_rows.csv", leaderboard_rows, leaderboard_fields)
+    for eval_set, slug in LEADERBOARD_SLUGS.items():
+        _write_csv(
+            out_dir / f"leaderboard_{slug}.csv",
+            _leaderboard_rows_for_eval(leaderboard_rows, eval_set),
+            leaderboard_fields,
+        )
 
     summary = {
         "generated_utc": _now_utc(),
@@ -1054,13 +1473,56 @@ def main() -> int:
         "best_external_rows": len(best_rows),
         "paired_external_indomain_rows": len(scatter_rows),
         "grid_checkpoint_rows": len(grid_rows),
+        "leaderboard_rows": len(leaderboard_rows),
         "active_run_rows": len(active_runs),
         "python_bin": str(python_bin),
         "skip_backfill": bool(args.skip_backfill),
         "skip_index": bool(args.skip_index),
     }
     _write_json(out_dir / "summary.json", {"summary": summary, "backfilled": backfilled})
-    _write_summary_md(out_dir / "summary.md", summary=summary, best_rows=best_rows, backfilled=backfilled)
+    leaderboard_md_lines = [
+        "# Eval Leaderboards",
+        "",
+        f"Generated: {summary['generated_utc']}",
+        "",
+    ]
+    for eval_set in sorted({row.get('eval_set', '') for row in leaderboard_rows if row.get('eval_set', '')}):
+        leaderboard_md_lines.extend(
+            [
+                f"## {eval_set}",
+                "",
+                "| rank | student_bleu | student_chrf | teacher_bleu | teacher_chrf | delta_bleu | delta_chrf | role | run | eval_dir |",
+                "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+            ]
+        )
+        for index, row in enumerate(_leaderboard_rows_for_eval(leaderboard_rows, eval_set), start=1):
+            leaderboard_md_lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        str(index),
+                        _md_escape(row.get("student_bleu", "")),
+                        _md_escape(row.get("student_chrf", "")),
+                        _md_escape(row.get("teacher_bleu", "")),
+                        _md_escape(row.get("teacher_chrf", "")),
+                        _md_escape(row.get("delta_bleu", "")),
+                        _md_escape(row.get("delta_chrf", "")),
+                        _md_escape(row.get("model_role", "")),
+                        _md_escape(row.get("run_name", "")),
+                        _md_escape(row.get("eval_dir", "")),
+                    ]
+                )
+                + " |"
+            )
+        leaderboard_md_lines.append("")
+    (out_dir / "leaderboard.md").write_text("\n".join(leaderboard_md_lines), encoding="utf-8")
+    _write_summary_md(
+        out_dir / "summary.md",
+        summary=summary,
+        best_rows=best_rows,
+        backfilled=backfilled,
+        leaderboard_rows=leaderboard_rows,
+    )
     _render_dashboard(
         out_dir / "dashboard.html",
         summary=summary,

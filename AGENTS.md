@@ -19,6 +19,9 @@ Before any distillation run or checkpoint sweep:
 - If resuming, verify `resume_from` exists and is consistent with `resume_stage`.
 - If checkpoint loading can fail from vocab/tokenizer mismatch, stop and fix before launch.
 
+Known-good translation runtime:
+- The EN/ES `TranslateGemma-4B -> Gemma-3-1B` line has been confirmed on GPU/ROCm with `device=cuda` and `runtime_mode=rocm_gfx_override`.
+
 Block immediately on these failure classes:
 - Environment drift (`/usr/bin/python3` vs `.venv/bin/python` / missing deps).
 - ROCm invalid-device errors (`HIP error: invalid device function`).
@@ -54,6 +57,12 @@ python3 projects/distillation/translation/pipeline/build_run_index.py
 ```bash
 python3 projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py
 ```
+- rerun the rebuild after new eval rows land; it is the canonical way to fold fresh `compare_eval_summary.json` outputs into the normalized reporting view and leaderboard files under `projects/distillation/translation/runs/results_bundle/`
+- expect the rebuild to refresh:
+  - `leaderboard_all_compare_rows.csv`
+  - `leaderboard_external_wmt13_en_es_translation_benchmark_128.csv`
+  - `leaderboard_indomain_clean_merged_en_es_translation_benchmark_128.csv`
+  - `leaderboard.md`
 
 ### Key Paths
 - `src/game/` - Game logic and UI

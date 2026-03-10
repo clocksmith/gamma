@@ -187,7 +187,21 @@ PYTHON_BIN=.venv/bin/python
 $PYTHON_BIN projects/distillation/translation/pipeline/build_run_index.py
 ```
 
-- Keep `RUN_INDEX.md`, `run_index_runs.csv`, and `run_index_evals.csv` linked in run notes.
+3. Rebuild the cohesive translation results bundle and leaderboard view:
+
+```bash
+PYTHON_BIN=.venv/bin/python
+[ -x "$PYTHON_BIN" ] || PYTHON_BIN=python3
+$PYTHON_BIN projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py
+```
+
+- Treat this rebuild as the canonical retrieval step for fresh eval results.
+- It rescans raw compare artifacts and refreshes normalized outputs under `projects/distillation/translation/runs/results_bundle/`, including:
+  - `leaderboard_all_compare_rows.csv`
+  - `leaderboard_external_wmt13_en_es_translation_benchmark_128.csv`
+  - `leaderboard_indomain_clean_merged_en_es_translation_benchmark_128.csv`
+  - `leaderboard.md`
+- Keep `RUN_INDEX.md`, `run_index_runs.csv`, `run_index_evals.csv`, and the rebuilt leaderboard artifacts linked in run notes.
 
 ## Embedding Pipeline Entry Points
 

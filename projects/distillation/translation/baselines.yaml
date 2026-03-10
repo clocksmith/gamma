@@ -1,0 +1,271 @@
+# Translation baseline registry.
+# Each entry defines a model to evaluate as a reference point for distillation comparison.
+# Architecture classification is registry-driven, not hardcoded in the runner.
+
+baselines:
+
+  # -- Tier 0: Reference lane (teacher + student base) --
+  - model_id: google/translategemma-4b-it
+    display_name: TranslateGemma 4B IT
+    arch: gemma_causal_lm
+    execution_mode: causal-chat
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 4B
+    revision: main
+    tokenizer_id: google/translategemma-4b-it
+    tokenizer_revision: main
+    notes: "Teacher model; Gemma causal translation via chat template"
+    quality_tier: 0
+    enabled: true
+
+  - model_id: google/gemma-3-1b-it
+    display_name: Gemma 3 1B IT
+    arch: gemma_causal_lm
+    execution_mode: causal-chat
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 1B
+    revision: main
+    tokenizer_id: google/gemma-3-1b-it
+    tokenizer_revision: main
+    notes: "Student base model; Gemma causal"
+    quality_tier: 0
+    enabled: true
+
+  # -- Tier 1: Strong external comparators --
+  - model_id: nvidia/Riva-Translate-4B-Instruct-v1.1
+    display_name: Riva Translate 4B v1.1
+    arch: pending_validation
+    execution_mode: pending_validation
+    prompt_adapter: pending_validation
+    directions: [en-es, es-en]
+    license: nvidia
+    params: 4B
+    revision: main
+    tokenizer_id: nvidia/Riva-Translate-4B-Instruct-v1.1
+    tokenizer_revision: main
+    notes: "Needs arch validation before enabling; likely causal-chat"
+    quality_tier: 1
+    enabled: false
+
+  - model_id: facebook/nllb-200-distilled-1.3B
+    display_name: NLLB 200 Distilled 1.3B
+    arch: nllb_seq2seq
+    execution_mode: seq2seq
+    prompt_adapter: nllb
+    directions: [en-es, es-en]
+    license: cc-by-nc-4.0
+    params: 1.3B
+    revision: main
+    tokenizer_id: facebook/nllb-200-distilled-1.3B
+    tokenizer_revision: main
+    notes: "Strong multilingual seq2seq baseline"
+    quality_tier: 1
+    enabled: true
+
+  # -- Tier 2: Smaller multilingual floor --
+  - model_id: facebook/nllb-200-distilled-600M
+    display_name: NLLB 200 Distilled 600M
+    arch: nllb_seq2seq
+    execution_mode: seq2seq
+    prompt_adapter: nllb
+    directions: [en-es, es-en]
+    license: cc-by-nc-4.0
+    params: 600M
+    revision: main
+    tokenizer_id: facebook/nllb-200-distilled-600M
+    tokenizer_revision: main
+    notes: "Smaller NLLB for floor comparison"
+    quality_tier: 2
+    enabled: true
+
+  - model_id: facebook/m2m100_1.2B
+    display_name: M2M100 1.2B
+    arch: m2m100_seq2seq
+    execution_mode: seq2seq
+    prompt_adapter: m2m100
+    directions: [en-es, es-en]
+    license: mit
+    params: 1.2B
+    revision: main
+    tokenizer_id: facebook/m2m100_1.2B
+    tokenizer_revision: main
+    notes: "Many-to-many multilingual translation"
+    quality_tier: 2
+    enabled: true
+
+  # -- Tier 3: Cheap bilingual floor --
+  - model_id: Helsinki-NLP/opus-mt-en-es
+    display_name: OPUS MT EN-ES
+    arch: marian_seq2seq
+    execution_mode: seq2seq
+    prompt_adapter: marian
+    directions: [en-es]
+    license: apache-2.0
+    params: 74M
+    revision: main
+    tokenizer_id: Helsinki-NLP/opus-mt-en-es
+    tokenizer_revision: main
+    notes: "Bilingual Marian EN->ES only"
+    quality_tier: 3
+    enabled: true
+
+  - model_id: Helsinki-NLP/opus-mt-es-en
+    display_name: OPUS MT ES-EN
+    arch: marian_seq2seq
+    execution_mode: seq2seq
+    prompt_adapter: marian
+    directions: [es-en]
+    license: apache-2.0
+    params: 74M
+    revision: main
+    tokenizer_id: Helsinki-NLP/opus-mt-es-en
+    tokenizer_revision: main
+    notes: "Bilingual Marian ES->EN only"
+    quality_tier: 3
+    enabled: true
+
+  # -- Phase 7: Secondary candidates (track after core lane is stable) --
+
+  # Scaling references
+  - model_id: google/translategemma-12b-it
+    display_name: TranslateGemma 12B IT
+    arch: gemma_causal_lm
+    execution_mode: causal-chat
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 12B
+    revision: main
+    tokenizer_id: google/translategemma-12b-it
+    tokenizer_revision: main
+    notes: "Scaling reference; requires ~24GB VRAM in bf16"
+    quality_tier: 7
+    enabled: false
+
+  - model_id: google/translategemma-27b-it
+    display_name: TranslateGemma 27B IT
+    arch: gemma_causal_lm
+    execution_mode: causal-chat
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 27B
+    revision: main
+    tokenizer_id: google/translategemma-27b-it
+    tokenizer_revision: main
+    notes: "Scaling reference; requires ~54GB VRAM in bf16"
+    quality_tier: 7
+    enabled: false
+
+  # Larger OPUS bilingual checks
+  - model_id: Helsinki-NLP/opus-mt-tc-big-en-es
+    display_name: OPUS MT TC Big EN-ES
+    arch: marian_seq2seq
+    execution_mode: seq2seq
+    prompt_adapter: marian
+    directions: [en-es]
+    license: apache-2.0
+    params: 231M
+    revision: main
+    tokenizer_id: Helsinki-NLP/opus-mt-tc-big-en-es
+    tokenizer_revision: main
+    notes: "Larger bilingual Marian EN->ES"
+    quality_tier: 7
+    enabled: false
+
+  - model_id: Helsinki-NLP/opus-mt-tc-big-es-en
+    display_name: OPUS MT TC Big ES-EN
+    arch: marian_seq2seq
+    execution_mode: seq2seq
+    prompt_adapter: marian
+    directions: [es-en]
+    license: apache-2.0
+    params: 231M
+    revision: main
+    tokenizer_id: Helsinki-NLP/opus-mt-tc-big-es-en
+    tokenizer_revision: main
+    notes: "Larger bilingual Marian ES->EN"
+    quality_tier: 7
+    enabled: false
+
+  # Deployment and portability variants (not primary quality baselines).
+  # These belong in a separate deployment/perf view for VRAM, latency,
+  # throughput, portability, and packaging comparisons.
+  - model_id: Infomaniak-AI/vllm-translategemma-4b-it
+    display_name: vLLM TranslateGemma 4B
+    arch: gemma_causal_lm
+    execution_mode: deployment_variant
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 4B
+    revision: main
+    tokenizer_id: google/translategemma-4b-it
+    tokenizer_revision: main
+    notes: "vLLM-optimized packaging; deployment/perf comparison only"
+    quality_tier: 8
+    enabled: false
+
+  - model_id: litert-community/TranslateGemma-4B-IT
+    display_name: LiteRT TranslateGemma 4B
+    arch: gemma_causal_lm
+    execution_mode: deployment_variant
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 4B
+    revision: main
+    tokenizer_id: google/translategemma-4b-it
+    tokenizer_revision: main
+    notes: "LiteRT packaging; deployment/perf comparison only"
+    quality_tier: 8
+    enabled: false
+
+  - model_id: mlx-community/translategemma-4b-it-4bit
+    display_name: MLX TranslateGemma 4B 4bit
+    arch: gemma_causal_lm
+    execution_mode: deployment_variant
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 4B
+    revision: main
+    tokenizer_id: google/translategemma-4b-it
+    tokenizer_revision: main
+    notes: "MLX 4-bit quantized; Apple Silicon deployment variant"
+    quality_tier: 8
+    enabled: false
+
+  - model_id: wredd/translategemma-4b-gguf
+    display_name: TranslateGemma 4B GGUF
+    arch: gemma_causal_lm
+    execution_mode: deployment_variant
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 4B
+    revision: main
+    tokenizer_id: google/translategemma-4b-it
+    tokenizer_revision: main
+    notes: "GGUF format; llama.cpp deployment variant"
+    quality_tier: 8
+    enabled: false
+
+  - model_id: wangjazz/translategemma-4b-mnn-q4
+    display_name: TranslateGemma 4B MNN Q4
+    arch: gemma_causal_lm
+    execution_mode: deployment_variant
+    prompt_adapter: translategemma
+    directions: [en-es, es-en]
+    license: gemma
+    params: 4B
+    revision: main
+    tokenizer_id: google/translategemma-4b-it
+    tokenizer_revision: main
+    notes: "MNN Q4 quantized; mobile deployment variant"
+    quality_tier: 8
+    enabled: false

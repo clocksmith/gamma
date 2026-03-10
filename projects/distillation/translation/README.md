@@ -2,6 +2,9 @@
 
 This folder tracks translation distillation from `google/translategemma-4b-it` into a Gemma 3 1B student for English/Spanish.
 
+Confirmed runtime note:
+- Investigation confirms the EN/ES `TranslateGemma-4B -> Gemma-3-1B` line succeeded on GPU/ROCm using `device=cuda` with `runtime_mode=rocm_gfx_override`.
+
 This run uses an `A_then_B` schedule:
 - Stage A (supervised fine-tuning, SFT): warm up the student on paired translation data.
 - Stage B (knowledge distillation): continue from a fixed Stage A checkpoint using teacher-student distillation.
@@ -143,6 +146,10 @@ Outputs are written under:
   - `best_external_by_run.csv`
   - `external_vs_indomain.csv`
   - `grid_checkpoint_timeline.csv`
+  - `leaderboard_all_compare_rows.csv`
+  - `leaderboard_external_wmt13_en_es_translation_benchmark_128.csv`
+  - `leaderboard_indomain_clean_merged_en_es_translation_benchmark_128.csv`
+  - `leaderboard.md`
   - `summary.md`
   - `summary.json`
   - `dashboard.html`
@@ -228,6 +235,59 @@ Reason:
 - The latest restored gold control peaked externally at `8000`.
 - No checkpoint after `8000` improved the external score.
 - This means the critical search space is earlier and denser than the old `32k` proof point suggested.
+
+## Leave-Two-Out Shard Analysis
+
+The `8 choose 6` gold sweep is a screening pass for shard quality, not the final answer.
+
+Operational shape:
+
+- Run all `28` leave-two-out subsets over the eight `320`-row packs.
+- Score each run on both `eval2_external` and `eval3_indomain_clean`.
+- Use external `BLEU` and `chrF` as the claimable ranking signal.
+- Treat indomain `BLEU` and `chrF` as auxiliary selection signal, not the main claim.
+
+Recommended post-analysis workflow:
+
+1. Fit per-shard effects from the `28` leave-two-out results.
+2. Rank shards by estimated contribution on external `BLEU` and `chrF`.
+3. Check residuals to see whether a simple additive model explains most of the spread.
+4. If the spread is roughly additive, build a small confirmation ladder around the cutoff.
+5. If the spread is not additive, test targeted interaction sets instead of only top-k sets.
+
+Interpretation rule:
+
+- If `BLEU` and `chrF` move together on the external set, treat that as stronger evidence.
+- If `BLEU` and `chrF` disagree, treat the result as near-parity or ambiguous unless the gap repeats across multiple confirmation runs.
+
+Concrete example with packs `A B C D E F G H`:
+
+Assume the leave-two-out analysis implies this external ranking:
+
+- `A > B > C > D > E > F > G > H`
+
+Then the confirmation order should be:
+
+1. `ABCDEF`
+   Reason: best inferred `6-of-8` set.
+2. `ABCDEG`
+   Reason: first cutoff swap; test whether `G` should replace `F`.
+3. Gate on step `2`.
+   - If `ABCDEG` beats `ABCDEF` on external `BLEU` and `chrF`, keep `ABCDEG` as the core set.
+   - Otherwise keep `ABCDEF` as the core set.
+4. `ABCDEFG`
+   Reason: test whether adding the seventh shard helps despite lower inferred shard quality.
+5. `ABCDE`
+   Reason: test whether removing the weakest shard from the chosen `6-pack` improves data purity enough to offset having fewer rows.
+6. Optional cutoff-disambiguation swap: `ABCDFG`
+   Reason: use this when the `E/F/G` boundary still looks noisy after the first swap test.
+
+Decision rule after the confirmation ladder:
+
+- If `best7` beats `best6` on external `BLEU` and `chrF`, prefer the `7-pack`.
+- If `best5` is effectively tied with `best6`, prefer the `5-pack` as the cleaner recipe.
+- If `best6` remains best, promote that as the optimized shard mix.
+- Validate the promoted mix with one final rerun before treating the shard conclusion as settled.
 
 ## Next controlled comparison
 
