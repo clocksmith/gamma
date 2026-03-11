@@ -1,14 +1,14 @@
 # Translation Results Bundle
 
-Generated: 2026-03-11 13:37:44 UTC
+Generated: 2026-03-11 18:58:52 UTC
 
 ## Counts
 
-- runs: 60
-- eval rows: 169
-- compare rows: 90
-- manifests scanned: 38
-- artifact dirs backfilled: 37
+- runs: 62
+- eval rows: 173
+- compare rows: 92
+- manifests scanned: 39
+- artifact dirs backfilled: 38
 
 ## Best External BLEU Rows by Run
 
@@ -20,12 +20,12 @@ Generated: 2026-03-11 13:37:44 UTC
 | baseline__facebook__m2m100_1.2b__2026-03-10T025214Z |  | External Baseline | External Baseline \| greedy | 36.8589 | 60.3346 |  |  |
 | baseline__helsinki-nlp__opus-mt-en-es__2026-03-10T020411Z |  | External Baseline | External Baseline \| greedy | 35.6963 | 61.2861 |  |  |
 | baseline__google__translategemma-4b-it__2026-03-10T134941Z |  | External Baseline | External Baseline \| greedy | 34.0474 | 45.5415 |  |  |
-| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T025326Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004001 \| greedy | 32.4485 | 53.0189 | checkpoint-004001 | 1920 |
-| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004001 \| greedy | 32.0130 | 55.3247 | checkpoint-004001 | 1920 |
-| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T212318Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004001 \| greedy | 31.9598 | 54.6568 | checkpoint-004001 | 1920 |
-| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004001 \| greedy | 31.8923 | 55.3129 | checkpoint-004001 | 1920 |
-| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T232655Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004001 \| greedy | 31.8746 | 54.1434 | checkpoint-004001 | 1920 |
-| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T004931Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-002000 \| greedy | 31.8592 | 50.7787 | checkpoint-002000 | 1920 |
+| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T025326Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004000 \| greedy | 32.4485 | 53.0189 | checkpoint-004000 | 1920 |
+| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T180127Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004000 \| greedy | 32.4032 | 53.2763 | checkpoint-004000 | 1920 |
+| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004000 \| greedy | 32.0130 | 55.3247 | checkpoint-004000 | 1920 |
+| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T212318Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004000 \| greedy | 31.9598 | 54.6568 | checkpoint-004000 | 1920 |
+| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004000 \| greedy | 31.8923 | 55.3129 | checkpoint-004000 | 1920 |
+| translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T232655Z | train_pairs.rows1920.merged.jsonl | Student Stage A | Student Stage A \| checkpoint-004000 \| greedy | 31.8746 | 54.1434 | checkpoint-004000 | 1920 |
 
 ## Deduped Eval Leaderboards
 
@@ -44,15 +44,15 @@ Generated: 2026-03-11 13:37:44 UTC
 | 4 | 36.8589 | 61.7235 | baseline | baseline__facebook__m2m100_1.2b__2026-03-10T025214Z | baseline_checkpoint_sweep_greedy/eval2_external__final__greedy |
 | 5 | 35.6963 | 61.7223 | baseline | baseline__helsinki-nlp__opus-mt-en-es__2026-03-10T020411Z | baseline_checkpoint_sweep_greedy/eval2_external__final__greedy |
 | 6 | 34.0474 | 61.0088 | baseline | baseline__google__translategemma-4b-it__2026-03-10T134941Z | baseline_checkpoint_sweep_greedy/eval2_external__final__greedy |
-| 7 | 32.4485 | 59.0578 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T025326Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004001__greedy |
-| 8 | 32.0130 | 58.8506 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004001__greedy |
-| 9 | 31.9598 | 59.3118 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T212318Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004001__greedy |
-| 10 | 31.8923 | 58.2847 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004001__greedy |
-| 11 | 31.8819 | 58.3776 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T025326Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-002000__greedy |
-| 12 | 31.8746 | 58.5722 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T232655Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004001__greedy |
-| 13 | 31.8592 | 58.3089 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T004931Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-002000__greedy |
-| 14 | 31.5806 | 57.6369 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-002000__greedy |
-| 15 | 31.5262 | 58.4166 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T070121Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004001__greedy |
+| 7 | 32.4485 | 59.0578 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T025326Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
+| 8 | 32.4032 | 59.4588 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T180127Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
+| 9 | 32.0130 | 58.8506 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
+| 10 | 31.9598 | 59.3118 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T212318Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
+| 11 | 31.8923 | 58.2847 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
+| 12 | 31.8819 | 58.3776 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T025326Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-002000__greedy |
+| 13 | 31.8746 | 58.5722 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T232655Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
+| 14 | 31.8592 | 58.3089 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T004931Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-002000__greedy |
+| 15 | 31.5806 | 57.6369 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-002000__greedy |
 
 ### In-Domain Clean EN/ES 128
 
@@ -69,10 +69,10 @@ Generated: 2026-03-11 13:37:44 UTC
 | 9 | 58.5298 | 76.7342 | baseline | baseline__helsinki-nlp__opus-mt-es-en__2026-03-10T022943Z | baseline_checkpoint_sweep_greedy/eval3_indomain_clean__final__greedy |
 | 10 | 56.2174 | 72.9556 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-002000__greedy |
 | 11 | 55.5242 | 73.7266 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T033442Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-002000__greedy |
-| 12 | 55.3885 | 73.1720 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T013050Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004001__greedy |
-| 13 | 55.3247 | 73.1952 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004001__greedy |
-| 14 | 55.3129 | 72.6945 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004001__greedy |
-| 15 | 55.0978 | 73.1663 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T021203Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004001__greedy |
+| 12 | 55.3885 | 73.1720 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T013050Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004000__greedy |
+| 13 | 55.3247 | 73.1952 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004000__greedy |
+| 14 | 55.3129 | 72.6945 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004000__greedy |
+| 15 | 55.0978 | 73.1663 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T021203Z | stage_a_checkpoint_sweep_greedy/eval3_indomain_clean__checkpoint-004000__greedy |
 
 ## Backfilled Artifact Dirs
 
@@ -96,7 +96,7 @@ Generated: 2026-03-11 13:37:44 UTC
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T005321Z/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T013436Z/stage_a_checkpoint_sweep_greedy | 22 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T192822Z/stage_a_checkpoint_sweep_greedy | 4 |
-| generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T203554Z_repair_drop_01_05/stage_a_checkpoint_sweep_greedy | 4 |
+| generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T203554Z/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T212318Z/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T220428Z/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z/stage_a_checkpoint_sweep_greedy | 4 |
@@ -112,6 +112,7 @@ Generated: 2026-03-11 13:37:44 UTC
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T053842Z/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T070121Z/stage_a_checkpoint_sweep_greedy | 15 |
+| generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T180127Z/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows2560_bf16_20260309T022454Z/stage_a_checkpoint_sweep_greedy | 26 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows2560_bf16_20260309T195639Z/stage_a_checkpoint_sweep_greedy | 6 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldlegacy1280_bf16_20260307T231031Z/stage_a_checkpoint_sweep_greedy | 8 |

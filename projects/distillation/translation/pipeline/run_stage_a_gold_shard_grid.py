@@ -124,6 +124,15 @@ def _runtime_mode(device: str, hsa_override: str) -> str:
     return "rocm_gfx_override" if str(hsa_override).strip() else "normal_rocm"
 
 
+def _normalize_stage_a_steps(total_steps: int, sft_steps: int) -> tuple[int, int]:
+    total = int(total_steps)
+    sft = int(sft_steps)
+    if total == 4001 and sft == 4001:
+        print("[normalize] stage_a total_steps=4001 and sft_steps=4001 -> 4000")
+        return 4000, 4000
+    return total, sft
+
+
 def _now_utc() -> str:
     return dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
@@ -576,6 +585,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    args.total_steps, args.sft_steps = _normalize_stage_a_steps(args.total_steps, args.sft_steps)
     sizes = _parse_sizes(args.sizes)
     dataset_map = _dataset_specs(args)
     out_root = _resolve_path(args.out_root)

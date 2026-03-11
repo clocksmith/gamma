@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-03-11 13:37:43 UTC
+Updated: 2026-03-11 18:58:52 UTC
 Run root: `projects/distillation/translation/runs/baseline__helsinki-nlp__opus-mt-en-es__2026-03-10T020411Z`
 Decode: `greedy`
 

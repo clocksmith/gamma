@@ -69,6 +69,15 @@ def _parse_csv_steps(value: str) -> list[int]:
     return steps
 
 
+def _normalize_stage_a_steps(total_steps: int, sft_steps: int) -> tuple[int, int]:
+    total = int(total_steps)
+    sft = int(sft_steps)
+    if total == 4001 and sft == 4001:
+        print("[normalize] stage_a total_steps=4001 and sft_steps=4001 -> 4000")
+        return 4000, 4000
+    return total, sft
+
+
 def _resolve_python_bin(explicit: str | None) -> Path:
     if explicit:
         path = Path(explicit)
@@ -286,6 +295,8 @@ def _make_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _make_parser()
     args = parser.parse_args(argv)
+    args.total_steps, args.sft_steps = _normalize_stage_a_steps(args.total_steps, args.sft_steps)
+    args.keep_steps = [4000 if int(step) == 4001 else int(step) for step in args.keep_steps]
 
     if args.total_steps != args.sft_steps:
         raise RuntimeError("this launcher expects Stage A only, so total_steps must equal sft_steps")

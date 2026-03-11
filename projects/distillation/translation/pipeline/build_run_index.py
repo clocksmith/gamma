@@ -85,6 +85,20 @@ def _fmt_bool(value: Any) -> str:
     return str(bool(value)).lower()
 
 
+def _looks_like_path(value: str) -> bool:
+    text = str(value or "").strip()
+    if not text:
+        return False
+    return text.startswith(("/", "projects/", "./", "../"))
+
+
+def _path_exists_text(value: str, repo_root: Path) -> str:
+    text = str(value or "").strip()
+    if not text or not _looks_like_path(text):
+        return ""
+    return _fmt_bool(_as_repo_path(text, repo_root).exists())
+
+
 def _path_stem(path: str) -> str:
     if not path:
         return ""
@@ -267,6 +281,50 @@ def _latest_checkpoint(path: Path, repo_root: Path) -> str:
     return _safe_rel(latest_path, repo_root) if latest_path else ""
 
 
+def _recommended_resume_from(
+    *,
+    explicit: str,
+    latest_stage_b_checkpoint: str,
+    selected_checkpoint: str,
+    latest_stage_a_checkpoint: str,
+    final_model: str,
+    repo_root: Path,
+) -> str:
+    for candidate in (
+        explicit,
+        latest_stage_b_checkpoint,
+        selected_checkpoint,
+        latest_stage_a_checkpoint,
+        final_model,
+    ):
+        text = str(candidate or "").strip()
+        if not text:
+            continue
+        if _path_exists_text(text, repo_root) == "true":
+            return text
+    return ""
+
+
+def _artifact_health(
+    *,
+    resumed: str,
+    resume_from: str,
+    resume_from_exists: str,
+    selected_checkpoint: str,
+    selected_checkpoint_exists: str,
+    student_model: str,
+    student_model_exists: str,
+) -> str:
+    problems: list[str] = []
+    if resumed == "true" and resume_from and resume_from_exists == "false":
+        problems.append("resume_from_missing")
+    if selected_checkpoint and selected_checkpoint_exists == "false":
+        problems.append("selected_checkpoint_missing")
+    if student_model and _looks_like_path(student_model) and student_model_exists == "false":
+        problems.append("student_model_missing")
+    return "ok" if not problems else ",".join(problems)
+
+
 def _mtime_utc(path: Path) -> str:
     return _timestamp_utc_from_file(path)
 
@@ -418,6 +476,38 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
             if final_dir.exists():
                 final_out = _safe_rel(final_dir, repo_root)
 
+        latest_stage_a_checkpoint = _latest_checkpoint(child / "stage_a", repo_root)
+        latest_stage_b_checkpoint = _latest_checkpoint(child / "stage_b", repo_root)
+        resume_from_exists = _path_exists_text(resume_from, repo_root)
+        selected_checkpoint_exists = _path_exists_text(selected_checkpoint, repo_root)
+        student_model_exists = _path_exists_text(student_model, repo_root)
+        latest_stage_a_checkpoint_exists = _path_exists_text(latest_stage_a_checkpoint, repo_root)
+        latest_stage_b_checkpoint_exists = _path_exists_text(latest_stage_b_checkpoint, repo_root)
+        final_model_exists = _path_exists_text(final_out, repo_root)
+        recommended_resume_from = ""
+        artifact_note = ""
+        if summary:
+            recommended_resume_from = str(summary.get("artifact_repair_recommended_resume_from", "")).strip()
+            artifact_note = str(summary.get("artifact_repair_note", "")).strip()
+        if not recommended_resume_from:
+            recommended_resume_from = _recommended_resume_from(
+                explicit="",
+                latest_stage_b_checkpoint=latest_stage_b_checkpoint,
+                selected_checkpoint=selected_checkpoint,
+                latest_stage_a_checkpoint=latest_stage_a_checkpoint,
+                final_model=final_out,
+                repo_root=repo_root,
+            )
+        artifact_health = _artifact_health(
+            resumed=resumed,
+            resume_from=resume_from,
+            resume_from_exists=resume_from_exists,
+            selected_checkpoint=selected_checkpoint,
+            selected_checkpoint_exists=selected_checkpoint_exists,
+            student_model=student_model,
+            student_model_exists=student_model_exists,
+        )
+
         rows.append(
             {
                 "run_name": child.name,
@@ -448,12 +538,21 @@ def collect_run_rows(runs_root: Path, repo_root: Path) -> list[dict[str, str | f
                 "resumed": resumed,
                 "resume_stage": resume_stage,
                 "resume_from": resume_from,
+                "resume_from_exists": resume_from_exists,
                 "selected_checkpoint": selected_checkpoint,
+                "selected_checkpoint_exists": selected_checkpoint_exists,
                 "selected_checkpoint_stage": selected_checkpoint_stage,
                 "selected_checkpoint_loss": selected_checkpoint_loss,
                 "latest_stage_a_checkpoint": _latest_checkpoint(child / "stage_a", repo_root),
+                "latest_stage_a_checkpoint_exists": latest_stage_a_checkpoint_exists,
                 "latest_stage_b_checkpoint": _latest_checkpoint(child / "stage_b", repo_root),
+                "latest_stage_b_checkpoint_exists": latest_stage_b_checkpoint_exists,
                 "final_model": final_out,
+                "final_model_exists": final_model_exists,
+                "student_model_exists": student_model_exists,
+                "recommended_resume_from": recommended_resume_from,
+                "artifact_health": artifact_health,
+                "artifact_note": artifact_note,
                 "updated_utc": _mtime_utc(_as_repo_path(child, repo_root)),
             }
         )
@@ -568,6 +667,7 @@ def _collect_eval_row(path: Path, summary: dict[str, Any], repo_root: Path) -> d
         "pairs": pairs,
         "pairs_stem": _path_stem(pairs),
         "student_model": model,
+        "student_model_exists": _path_exists_text(model, repo_root),
         "bleu": _fmt_float(((summary.get("student", {}) or {}).get("metrics_overall", {}).get("bleu", {}) or {}).get("score")),
         "chrf": _fmt_float(((summary.get("student", {}) or {}).get("metrics_overall", {}).get("chrf", {}) or {}).get("score")),
         "predictions_path": _safe_rel(Path(pred_path), repo_root) if pred_path else "",
@@ -667,6 +767,7 @@ def _collect_eval_rows_from_manifest(manifest_path: Path, runs_root: Path, repo_
                 "pairs": pairs,
                 "pairs_stem": _path_stem(pairs),
                 "student_model": checkpoint_path,
+                "student_model_exists": _path_exists_text(checkpoint_path, repo_root),
                 "bleu": _fmt_float(item.get("bleu")),
                 "chrf": _fmt_float(item.get("chrf")),
                 "predictions_path": _safe_rel(_as_repo_path(str(item.get("student_predictions", "")), repo_root), repo_root)
@@ -791,7 +892,11 @@ def write_markdown(
             "margin": row["margin"],
             "teacher_model": row["teacher_model"],
             "student_model": row["student_model"],
+            "student_model_exists": row.get("student_model_exists", ""),
             "resumed": row["resumed"],
+            "artifact_health": row.get("artifact_health", ""),
+            "recommended_resume_from": row.get("recommended_resume_from", ""),
+            "artifact_note": row.get("artifact_note", ""),
             "summary_path": row["summary_path"],
             "latest_stage_a_checkpoint": Path(row["latest_stage_a_checkpoint"]).name if row["latest_stage_a_checkpoint"] else "",
             "latest_stage_b_checkpoint": Path(row["latest_stage_b_checkpoint"]).name if row["latest_stage_b_checkpoint"] else "",
@@ -817,6 +922,7 @@ def write_markdown(
             "eval_timestamp_utc": row["eval_timestamp_utc"],
             "samples": row["eval_samples"],
             "student_model": row["student_model"],
+            "student_model_exists": row.get("student_model_exists", ""),
             "compare_summary_path": row["compare_summary_path"],
             "predictions_path": row["predictions_path"],
             "eval_dir_path": row["eval_dir_path"],
@@ -856,7 +962,10 @@ def write_markdown(
                     ("margin", "margin"),
                     ("teacher_model", "teacher_model"),
                     ("student_model", "student_model"),
+                    ("student_model_exists", "student_model_exists"),
                     ("resumed", "resumed"),
+                    ("artifact_health", "artifact_health"),
+                    ("recommended_resume_from", "recommended_resume_from"),
                     ("summary_source", "summary_source"),
                     ("summary_path", "summary"),
                     ("latest_stage_a_checkpoint", "latest_stage_a_ckpt"),
@@ -888,6 +997,7 @@ def write_markdown(
                     ("eval_timestamp_utc", "evaluated_utc"),
                     ("samples", "samples"),
                     ("student_model", "student_model"),
+                    ("student_model_exists", "model_exists"),
                     ("predictions_path", "predictions"),
                     ("compare_summary_path", "compare_summary"),
                     ("eval_dir_path", "eval_dir_path"),
@@ -906,6 +1016,8 @@ def write_markdown(
     md.append("")
     md.append("- `pair_count` is the effective row count used by training.")
     md.append("- `pairs_input` is the exact training file/spec the run consumed.")
+    md.append("- `artifact_health` flags missing on-disk training artifacts without rewriting the original launch provenance.")
+    md.append("- `recommended_resume_from` is the best existing checkpoint/model path to use for future load or resume.")
     md.append("- For conclusions and next actions, see `SESSION_STATUS.md` in the same folder.")
     md.append("")
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -1101,14 +1213,20 @@ def build_comparison_rows(run_rows: list[dict[str, Any]], eval_rows: list[dict[s
                 "margin": str(run.get("margin", "")),
                 "teacher_model_cfg": str(run.get("teacher_model", "")),
                 "student_model_cfg": str(run.get("student_model", "")),
+                "student_model_cfg_exists": str(run.get("student_model_exists", "")),
                 "resumed": str(run.get("resumed", "")),
                 "resume_stage": str(run.get("resume_stage", "")),
                 "resume_from": str(run.get("resume_from", "")),
+                "resume_from_exists": str(run.get("resume_from_exists", "")),
+                "selected_checkpoint_exists": str(run.get("selected_checkpoint_exists", "")),
+                "artifact_health": str(run.get("artifact_health", "")),
+                "recommended_resume_from": str(run.get("recommended_resume_from", "")),
                 "group_label": _comparison_group_label(eval_variant, eval_checkpoint),
                 "eval_variant": eval_variant,
                 "eval_checkpoint": eval_checkpoint,
                 "decode": decode,
                 "evaluated_model": eval_student_model,
+                "evaluated_model_exists": str(ev.get("student_model_exists", "")),
                 "comet_available": str(ev.get("comet_available", "")),
                 "execution_mode": str(ev.get("execution_mode", "")),
                 "arch": str(ev.get("arch", "")),
@@ -1326,13 +1444,22 @@ def main() -> int:
             "resumed",
             "resume_stage",
             "resume_from",
+            "resume_from_exists",
             "selected_checkpoint",
+            "selected_checkpoint_exists",
             "selected_checkpoint_stage",
             "selected_checkpoint_loss",
             "summary_path",
             "latest_stage_a_checkpoint",
+            "latest_stage_a_checkpoint_exists",
             "latest_stage_b_checkpoint",
+            "latest_stage_b_checkpoint_exists",
             "final_model",
+            "final_model_exists",
+            "student_model_exists",
+            "recommended_resume_from",
+            "artifact_health",
+            "artifact_note",
         ],
     )
     write_csv(
@@ -1357,6 +1484,7 @@ def main() -> int:
             "comet",
             "pairs",
             "student_model",
+            "student_model_exists",
             "en_es_bleu",
             "en_es_chrf",
             "en_es_comet",
@@ -1414,9 +1542,14 @@ def main() -> int:
             "margin",
             "teacher_model_cfg",
             "student_model_cfg",
+            "student_model_cfg_exists",
             "resumed",
             "resume_stage",
             "resume_from",
+            "resume_from_exists",
+            "selected_checkpoint_exists",
+            "artifact_health",
+            "recommended_resume_from",
             "group_label",
             "eval_variant",
             "eval_checkpoint",
@@ -1426,6 +1559,7 @@ def main() -> int:
             "top_p",
             "top_k",
             "evaluated_model",
+            "evaluated_model_exists",
             "execution_mode",
             "arch",
             "adapter_name",

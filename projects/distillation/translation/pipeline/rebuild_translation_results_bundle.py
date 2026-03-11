@@ -1322,6 +1322,7 @@ def main() -> int:
             "teacher_model",
             "student_model",
             "resume_from",
+            "recommended_resume_from",
             "selected_checkpoint",
             "summary_path",
             "latest_stage_a_checkpoint",
@@ -1346,6 +1347,7 @@ def main() -> int:
         compare_rows,
         {
             "pairs_input_spec",
+            "recommended_resume_from",
             "evaluated_model",
             f"{build_run_index.EXTERNAL_WMT13_LABEL}_pairs",
             f"{build_run_index.EXTERNAL_WMT13_LABEL}_eval_dir",
