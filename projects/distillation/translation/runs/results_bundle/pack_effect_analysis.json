@@ -1,0 +1,709 @@
+{
+  "generated_utc": "2026-03-12 00:09:33 UTC",
+  "matched_runs": 28,
+  "missing_runs": {},
+  "model_fit": {
+    "bleu": {
+      "intercept": 28.0826,
+      "r_squared": 0.5178,
+      "effects": {
+        "01": 2.1348,
+        "02": 0.781,
+        "03": 0.9247,
+        "04": 0.1762,
+        "05": 0.0145,
+        "06": 0.2273,
+        "07": -0.0224,
+        "08": 0.0
+      },
+      "ranking": [
+        "01",
+        "03",
+        "02",
+        "06",
+        "04",
+        "05",
+        "08",
+        "07"
+      ],
+      "max_residual": 1.7534
+    },
+    "chrf": {
+      "intercept": 57.7971,
+      "r_squared": 0.4083,
+      "effects": {
+        "01": 0.5906,
+        "02": 0.2085,
+        "03": 0.2668,
+        "04": -0.0343,
+        "05": -0.0035,
+        "06": 0.2488,
+        "07": -0.443,
+        "08": 0.0
+      },
+      "ranking": [
+        "01",
+        "03",
+        "06",
+        "02",
+        "08",
+        "05",
+        "04",
+        "07"
+      ],
+      "max_residual": 1.3463
+    }
+  },
+  "predictions": {
+    "1": {
+      "packs": [
+        "01"
+      ],
+      "rows": 320,
+      "predicted_bleu": 30.2174,
+      "predicted_chrf": 58.3877
+    },
+    "2": {
+      "packs": [
+        "01",
+        "03"
+      ],
+      "rows": 640,
+      "predicted_bleu": 31.1421,
+      "predicted_chrf": 58.6545
+    },
+    "3": {
+      "packs": [
+        "01",
+        "02",
+        "03"
+      ],
+      "rows": 960,
+      "predicted_bleu": 31.9231,
+      "predicted_chrf": 58.863
+    },
+    "4": {
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "06"
+      ],
+      "rows": 1280,
+      "predicted_bleu": 32.1504,
+      "predicted_chrf": 59.1118
+    },
+    "5": {
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "06"
+      ],
+      "rows": 1600,
+      "predicted_bleu": 32.3266,
+      "predicted_chrf": 59.0775
+    },
+    "6": {
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06"
+      ],
+      "rows": 1920,
+      "predicted_bleu": 32.3411,
+      "predicted_chrf": 59.074
+    },
+    "7": {
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "08"
+      ],
+      "rows": 2240,
+      "predicted_bleu": 32.3411,
+      "predicted_chrf": 59.074
+    },
+    "8": {
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "rows": 2560,
+      "predicted_bleu": 32.3187,
+      "predicted_chrf": 58.631
+    }
+  },
+  "confirmation_ladder": [
+    {
+      "label": "best-4",
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "06"
+      ],
+      "rows": 1280,
+      "purpose": "Can curated 1280 beat legacy 1280?"
+    },
+    {
+      "label": "best-5",
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "06"
+      ],
+      "rows": 1600,
+      "purpose": "Untested size class -- sweet spot?"
+    },
+    {
+      "label": "best-6",
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06"
+      ],
+      "rows": 1920,
+      "purpose": "Confirm predicted top-6 matches observed best"
+    },
+    {
+      "label": "best-7",
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "08"
+      ],
+      "rows": 2240,
+      "purpose": "Does adding the 7th pack help or dilute?"
+    },
+    {
+      "label": "swap-6",
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "06",
+        "08"
+      ],
+      "rows": 1920,
+      "purpose": "Swap test: 05 out, 08 in"
+    },
+    {
+      "label": "best-8 (anchor)",
+      "packs": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "rows": 2560,
+      "purpose": "Already tested -- all packs"
+    }
+  ],
+  "observations": [
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T212756Z",
+      "dropped": [
+        "05",
+        "08"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "06",
+        "07"
+      ],
+      "bleu": 32.7139,
+      "chrf": 59.0468
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T233133Z",
+      "dropped": [
+        "07",
+        "08"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06"
+      ],
+      "bleu": 32.4566,
+      "chrf": 59.102
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T025326Z",
+      "dropped": [
+        "03",
+        "04"
+      ],
+      "included": [
+        "01",
+        "02",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 32.4485,
+      "chrf": 59.0578
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T180127Z",
+      "dropped": [
+        "04",
+        "07"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "05",
+        "06",
+        "08"
+      ],
+      "bleu": 32.4032,
+      "chrf": 59.4588
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T200534Z",
+      "dropped": [
+        "05",
+        "06"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "07",
+        "08"
+      ],
+      "bleu": 32.2113,
+      "chrf": 58.5552
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T192425Z",
+      "dropped": [
+        "04",
+        "08"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "05",
+        "06",
+        "07"
+      ],
+      "bleu": 32.194,
+      "chrf": 58.7046
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T062002Z",
+      "dropped": [
+        "04",
+        "05"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 32.013,
+      "chrf": 58.8506
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T212318Z",
+      "dropped": [
+        "01",
+        "07"
+      ],
+      "included": [
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "08"
+      ],
+      "bleu": 31.9598,
+      "chrf": 59.3118
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T224540Z",
+      "dropped": [
+        "02",
+        "03"
+      ],
+      "included": [
+        "01",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 31.8923,
+      "chrf": 58.2847
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T232655Z",
+      "dropped": [
+        "02",
+        "04"
+      ],
+      "included": [
+        "01",
+        "03",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 31.8746,
+      "chrf": 58.5722
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T004931Z",
+      "dropped": [
+        "02",
+        "06"
+      ],
+      "included": [
+        "01",
+        "03",
+        "04",
+        "05",
+        "07",
+        "08"
+      ],
+      "bleu": 31.8592,
+      "chrf": 58.3089
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T225020Z",
+      "dropped": [
+        "06",
+        "08"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "07"
+      ],
+      "bleu": 31.5726,
+      "chrf": 58.176
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T070121Z",
+      "dropped": [
+        "04",
+        "06"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "05",
+        "07",
+        "08"
+      ],
+      "bleu": 31.5262,
+      "chrf": 58.4166
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T033442Z",
+      "dropped": [
+        "03",
+        "05"
+      ],
+      "included": [
+        "01",
+        "02",
+        "04",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 31.5088,
+      "chrf": 58.1516
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T013050Z",
+      "dropped": [
+        "02",
+        "07"
+      ],
+      "included": [
+        "01",
+        "03",
+        "04",
+        "05",
+        "06",
+        "08"
+      ],
+      "bleu": 31.4725,
+      "chrf": 59.0645
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T045717Z",
+      "dropped": [
+        "03",
+        "07"
+      ],
+      "included": [
+        "01",
+        "02",
+        "04",
+        "05",
+        "06",
+        "08"
+      ],
+      "bleu": 31.3818,
+      "chrf": 58.5778
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T220906Z",
+      "dropped": [
+        "06",
+        "07"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "08"
+      ],
+      "bleu": 31.3516,
+      "chrf": 58.6308
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T021203Z",
+      "dropped": [
+        "02",
+        "08"
+      ],
+      "included": [
+        "01",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07"
+      ],
+      "bleu": 31.2679,
+      "chrf": 58.0757
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T000816Z",
+      "dropped": [
+        "02",
+        "05"
+      ],
+      "included": [
+        "01",
+        "03",
+        "04",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 31.2658,
+      "chrf": 58.4989
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T220428Z",
+      "dropped": [
+        "01",
+        "08"
+      ],
+      "included": [
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07"
+      ],
+      "bleu": 31.1961,
+      "chrf": 58.627
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T192822Z",
+      "dropped": [
+        "01",
+        "06"
+      ],
+      "included": [
+        "02",
+        "03",
+        "04",
+        "05",
+        "07",
+        "08"
+      ],
+      "bleu": 31.1363,
+      "chrf": 57.6913
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T204640Z",
+      "dropped": [
+        "05",
+        "07"
+      ],
+      "included": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "06",
+        "08"
+      ],
+      "bleu": 31.104,
+      "chrf": 58.0953
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T203554Z",
+      "dropped": [
+        "01",
+        "05"
+      ],
+      "included": [
+        "02",
+        "03",
+        "04",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 31.091,
+      "chrf": 58.4055
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T041600Z",
+      "dropped": [
+        "03",
+        "06"
+      ],
+      "included": [
+        "01",
+        "02",
+        "04",
+        "05",
+        "07",
+        "08"
+      ],
+      "bleu": 30.9738,
+      "chrf": 58.3112
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T053842Z",
+      "dropped": [
+        "03",
+        "08"
+      ],
+      "included": [
+        "01",
+        "02",
+        "04",
+        "05",
+        "06",
+        "07"
+      ],
+      "bleu": 30.594,
+      "chrf": 57.8509
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T013436Z",
+      "dropped": [
+        "01",
+        "04"
+      ],
+      "included": [
+        "02",
+        "03",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 28.4786,
+      "chrf": 56.7284
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T001204Z",
+      "dropped": [
+        "01",
+        "02"
+      ],
+      "included": [
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 27.677,
+      "chrf": 57.5271
+    },
+    {
+      "run_name": "translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T005321Z",
+      "dropped": [
+        "01",
+        "03"
+      ],
+      "included": [
+        "02",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "bleu": 27.6477,
+      "chrf": 57.7483
+    }
+  ]
+}

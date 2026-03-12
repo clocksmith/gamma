@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-03-11 20:05:34 UTC
+Updated: 2026-03-12 00:13:26 UTC
 Run root: `projects/distillation/translation/runs/baseline__facebook__nllb-200-distilled-600m__2026-03-10T014951Z`
 Decode: `greedy`
 

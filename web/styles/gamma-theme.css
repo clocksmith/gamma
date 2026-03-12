@@ -1,6 +1,8 @@
 /* GAMMA Theme - RD-based black/white styling */
 @import './rd.css';
 
+/* NOTE: These semantic tokens map to --fg (black) and provide no visual differentiation.
+   They are placeholders for a future color system. Do not rely on them for semantic meaning. */
 :root {
   --primary: var(--fg);
   --primary-dim: rgba(0, 0, 0, 0.08);
@@ -17,6 +19,14 @@
   --text-muted: rgba(0, 0, 0, 0.55);
   --sidebar-width: 280px;
   --gamma-bg-glow: color-mix(in srgb, var(--fg) 8%, transparent);
+  --attention-gradient: linear-gradient(
+    to right,
+    rgb(68, 1, 84),
+    rgb(59, 82, 139),
+    rgb(33, 144, 140),
+    rgb(93, 201, 99),
+    rgb(253, 231, 37)
+  );
 }
 
 body {
@@ -134,12 +144,6 @@ body::after {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-}
-
-@property --prism-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: true;
 }
 
 @keyframes gamma-prism-spin {
@@ -364,6 +368,15 @@ body::after {
   color: var(--bg);
 }
 
+.choice-btn:focus-visible,
+.preset-btn:focus-visible,
+.sidebar-toggle:focus-visible,
+.random-prompt-btn:focus-visible,
+.start-game-btn:focus-visible {
+  outline: var(--border-md) solid var(--fg);
+  outline-offset: var(--border-sm);
+}
+
 .choice-btn.correct {
   border-width: var(--border-lg);
   border-style: solid;
@@ -375,6 +388,7 @@ body::after {
 }
 
 .choice-btn:disabled {
+  /* Intentional: disabled choices remain fully visible during game feedback phase */
   opacity: 1;
   cursor: default;
 }
@@ -487,9 +501,6 @@ body::after {
 
 .prob-bar-row {
   list-style: none;
-}
-
-.prob-bar-row {
   display: grid;
   grid-template-columns: 30px 1fr minmax(80px, 1.6fr) 52px;
   align-items: center;
@@ -653,14 +664,7 @@ body::after {
   width: 84px;
   height: 8px;
   border: var(--border-sm) solid var(--fg);
-  background: linear-gradient(
-    to right,
-    rgb(68, 1, 84),
-    rgb(59, 82, 139),
-    rgb(33, 144, 140),
-    rgb(93, 201, 99),
-    rgb(253, 231, 37)
-  );
+  background: var(--attention-gradient);
 }
 
 .game-footer {

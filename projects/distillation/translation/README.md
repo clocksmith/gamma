@@ -289,6 +289,84 @@ Decision rule after the confirmation ladder:
 - If `best6` remains best, promote that as the optimized shard mix.
 - Validate the promoted mix with one final rerun before treating the shard conclusion as settled.
 
+## Per-Pack Effect Analysis Results
+
+The `analyze_pack_effects.py` script fits an additive linear model to the
+leave-two-out grid results to estimate each pack's marginal contribution to
+external BLEU. Full output is in `runs/results_bundle/pack_effect_analysis.md`
+and `runs/results_bundle/pack_effect_analysis.json`.
+
+To rerun after new results land:
+
+```bash
+python3 projects/distillation/translation/pipeline/analyze_pack_effects.py
+```
+
+### Latest pack ranking (28 of 28 runs matched — sweep complete)
+
+| Rank | Pack | BLEU Effect | chrF Effect |
+| --- | --- | --- | --- |
+| 1 | pack_01 | +2.13 | +0.59 |
+| 2 | pack_03 | +0.92 | +0.27 |
+| 3 | pack_02 | +0.78 | +0.21 |
+| 4 | pack_06 | +0.23 | +0.25 |
+| 5 | pack_04 | +0.18 | -0.03 |
+| 6 | pack_05 | +0.01 | -0.00 |
+| 7 | pack_08 | +0.00 | +0.00 |
+| 8 | pack_07 | -0.02 | -0.44 |
+
+Model fit: R-squared 0.52 (moderate; some pack interactions exist).
+
+BLEU ranking: `01 > 03 > 02 > 06 > 04 > 05 > 08 > 07`
+chrF ranking: `01 > 03 > 06 > 02 > 08 > 05 > 04 > 07`
+
+Top-3 agree across both metrics. Top-4 sets agree. pack_01 is dominant
+(+2.13 BLEU, next closest is +0.92). pack_07 is consistently worst.
+
+### Predicted BLEU by top-K pack count
+
+| Packs | Rows | Predicted BLEU |
+| --- | --- | --- |
+| best-4 (01,02,03,06) | 1280 | 32.15 |
+| best-5 (01,02,03,04,06) | 1600 | 32.33 |
+| best-6 (01,02,03,04,05,06) | 1920 | 32.34 |
+| best-7 (01,02,03,04,05,06,08) | 2240 | 32.34 |
+| all-8 | 2560 | 32.32 |
+
+Key insight: best-4 at 1280 rows is predicted to score 32.15 BLEU, which would
+be +5.7 above legacy 1280 (26.48) and within 1.9 of the teacher (34.05). Adding
+packs beyond 5 shows zero or negative marginal return.
+
+Observed validation: drop_07_08 (packs 01-06, i.e. the best-6 composition)
+scored 32.46 BLEU — 2nd best of all 28 runs, confirming the ranking.
+
+### Concrete confirmation ladder
+
+The confirmation ladder from the README analysis section should now use these
+concrete pack IDs instead of abstract `A B C D ...`:
+
+1. `best-4`: packs 01, 02, 03, 06 (1280 rows)
+2. `best-5`: packs 01, 02, 03, 04, 06 (1600 rows)
+3. `best-6`: packs 01, 02, 03, 04, 05, 06 (1920 rows) — already observed at 32.46 BLEU
+4. `swap-6`: packs 01, 02, 03, 04, 06, 08 (swap 05 out, 08 in)
+5. `best-7`: packs 01, 02, 03, 04, 05, 06, 08 (2240 rows)
+
+Priority order: run `best-4` and `best-5` first since those are untested size
+classes. `best-6` is now directly observed (drop_07_08 = 32.46 BLEU). `best-7`
+tests the 2240-row regime which has never been tried.
+
+### Orchestrator generalization needed
+
+The current `run_stage_a_gold_leave_two_out_grid.py` is hardcoded to
+leave-two-out (6-of-8) combinations only. For the confirmation ladder, either:
+
+- Generalize the orchestrator to accept `--packs 01,02,03,05` directly
+- Or launch confirmation runs manually via `run_stage_a_gold_shard_grid.py`
+  with explicit `--dataset` args pointing to the desired pack files
+
+The training infrastructure already supports arbitrary pack compositions. Only
+the orchestration layer needs extension.
+
 ## Next controlled comparison
 
 Goal: test whether Stage B can become net positive with larger data, while keeping method fixed.
