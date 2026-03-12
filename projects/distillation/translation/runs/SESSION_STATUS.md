@@ -1,6 +1,6 @@
 # Translation Distillation Session Status
 
-Last updated: 2026-03-06 (America/New_York)
+Last updated: 2026-03-12 (America/New_York)
 
 ## Goal
 
@@ -56,16 +56,44 @@ All rows below use greedy decode on the same two eval datasets:
 4. On the newer `17532_real1b` run, Stage B `checkpoint-002000` slightly improves external BLEU over Stage A `checkpoint-032000` (`7.9159` vs `6.4642`), but the whole run family remains far below the old external baseline (`26.3488`).
 5. The main open question is now recipe shift, not mere checkpoint selection: why did the `17532`-row training path move toward very high indomain scores without preserving external generalization?
 
+## Current Shard-Mix Decision
+
+The pack search is now stable enough to freeze one Stage A mainline pack mix:
+
+- Frozen Stage A mainline packs: `01,02,03,04,06`
+- Run: `translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_confirm_best5`
+- Best external checkpoint: `stage_a/checkpoint-002000`
+  - `eval2_external`: BLEU `33.3780`, chrF `58.8324`
+  - `eval3_indomain_clean`: BLEU `53.0393`, chrF `72.3284`
+- Same run, later checkpoint:
+  - `stage_a/checkpoint-004000`
+  - `eval2_external`: BLEU `33.0257`, chrF `59.2763`
+  - `eval3_indomain_clean`: BLEU `54.0257`, chrF `72.2480`
+
+Supporting confirmations:
+
+- `best-6` anchor (`01,02,03,04,05,06`) peaked at external BLEU `32.4566`
+- `best-7` (`01,02,03,04,05,06,08`) peaked at external BLEU `32.8224`
+- Interpretation:
+  - the current best external BLEU came from the `5`-pack, not a `6`-pack or `7`-pack
+  - future work should improve inside `01,02,03,04,06` before revisiting pack count
+
+Operational rule:
+
+1. Treat `01,02,03,04,06` as the frozen Stage A data mix for the mainline.
+2. Use `checkpoint-002000` as the current external BLEU winner for this mix.
+3. Keep `checkpoint-004000` as a secondary reference because chrF and indomain metrics remain competitive there.
+
 ## Immediate Next Experiments
 
-1. Reproduce the `17532_real1b` run with full saved metadata (`train_summary.json`) and verify whether any launch/config difference besides data size explains the shift.
-2. Compare tokenizer/prompt formatting and eval harness settings between:
-   - `full_train1280_20260303_114100`
-   - `full_train17532_real1b_20260305_210210`
-3. Run a controlled Stage A-only comparison with the same launch surface and both pair files:
-   - `translate_distill_pairs.jsonl` (`1280`)
-   - `translate_distill_pairs_en_es_2way.train.merged.jsonl` (`17532`)
-4. Keep `RUN_INDEX.md`, `RUN_COMPARE.md`, and CSV outputs as the normalized source of truth after every rerun.
+1. Prune or refine rows inside the frozen `01,02,03,04,06` pack mix.
+2. Run one or more row-pruned variants of the same `5`-pack to test whether the current winner is still slightly diluted.
+3. Focus pruning attention first on packs `04` and `06`.
+   - `01,02,03` look like the high-value core.
+   - `04` and `06` help, but only modestly in the pack model, so they are the most likely source of removable weak rows.
+4. Keep Stage B as a separate, small branch from the frozen Stage A winner rather than the default continuation path.
+   - Preferred resume candidate: `translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_confirm_best5/stage_a/checkpoint-002000`
+5. Keep `RUN_INDEX.md`, `RUN_COMPARE.md`, and CSV outputs as the normalized source of truth after every rerun.
 
 ## Latest Completed Sweep (2026-03-04)
 

@@ -1,6 +1,6 @@
 # Stage A Live Eval Scoreboard
 
-Updated: 2026-03-12 00:13:26 UTC
+Updated: 2026-03-12 18:28:07 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z`
 Eval set: `external_wmt13_en_es_translation_benchmark_128`
 

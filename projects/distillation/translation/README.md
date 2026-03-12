@@ -79,6 +79,36 @@ Interpretation:
   - eval3 BLEU: `44.9824`
 - Conclusion: neither the old `1152` Stage B sweep nor the newer `17532_real1b` Stage B `checkpoint-002000` beats the restored gold Stage A `checkpoint-008000`.
 
+## Current shard-screening mainline
+
+The leave-two-out shard screen plus confirmation ladder now supports one frozen
+Stage A pack mix for the gold-grid line:
+
+- Frozen mainline packs: `01,02,03,04,06`
+- Mainline confirmation run:
+  - `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_confirm_best5`
+- Best external checkpoint in that run:
+  - `stage_a/checkpoint-002000`
+  - `eval2_external`: BLEU `33.3780`, chrF `58.8324`
+  - `eval3_indomain_clean`: BLEU `53.0393`, chrF `72.3284`
+- Same run, later checkpoint:
+  - `stage_a/checkpoint-004000`
+  - `eval2_external`: BLEU `33.0257`, chrF `59.2763`
+  - `eval3_indomain_clean`: BLEU `54.0257`, chrF `72.2480`
+
+Recent confirmation context:
+
+- `best-6` anchor (`01,02,03,04,05,06`) peaked at external BLEU `32.4566`
+- `best-7` (`01,02,03,04,05,06,08`) peaked at external BLEU `32.8224`
+
+Working interpretation:
+
+- The current best external BLEU in the shard-screening line came from the
+  `5`-pack, not the `6`-pack or `7`-pack confirmations.
+- The pack-count search should pause here.
+- The next likely gains are inside the frozen `01,02,03,04,06` data mix rather
+  than from adding more packs.
+
 ## Current status of the scale-up line
 
 - Evaluated run: `translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210`
@@ -235,6 +265,14 @@ Reason:
 - The latest restored gold control peaked externally at `8000`.
 - No checkpoint after `8000` improved the external score.
 - This means the critical search space is earlier and denser than the old `32k` proof point suggested.
+
+For the frozen `01,02,03,04,06` mainline, keep using early checkpoint
+selection as the default operating rule:
+
+- checkpoint `2000` remains the current external BLEU winner
+- checkpoint `4000` remains useful as a chrF and indomain cross-check
+- if a row-pruned variant looks promising, extend only after the `2k/4k`
+  comparison is in hand
 
 ## Leave-Two-Out Shard Analysis
 
