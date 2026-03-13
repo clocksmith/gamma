@@ -1,14 +1,14 @@
 # Translation Results Bundle
 
-Generated: 2026-03-12 18:28:07 UTC
+Generated: 2026-03-12 23:42:10 UTC
 
 ## Counts
 
-- runs: 74
-- eval rows: 213
-- compare rows: 112
-- manifests scanned: 49
-- artifact dirs backfilled: 48
+- runs: 80
+- eval rows: 215
+- compare rows: 113
+- manifests scanned: 51
+- artifact dirs backfilled: 50
 
 ## Best External BLEU Rows by Run
 
@@ -92,6 +92,8 @@ Generated: 2026-03-12 18:28:07 UTC
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1280_bf16_20260308T164813Z/stage_a_checkpoint_sweep_greedy | 8 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1280_bf16_20260309T185602Z/stage_a_checkpoint_sweep_greedy | 6 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1280_bf16_confirm_best4/stage_a_checkpoint_sweep_greedy | 14 |
+| generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1568_bf16_refine_pack04_prune10c/stage_a_checkpoint_sweep_greedy | 2 |
+| generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1568_bf16_refine_pack06_prune10c/stage_a_checkpoint_sweep_greedy | 2 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_confirm_best5/stage_a_checkpoint_sweep_greedy | 4 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260308T164813Z/stage_a_checkpoint_sweep_greedy | 8 |
 | generic_manifest | projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T001204Z/stage_a_checkpoint_sweep_greedy | 4 |
