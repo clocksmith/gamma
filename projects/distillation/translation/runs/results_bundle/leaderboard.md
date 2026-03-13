@@ -1,6 +1,6 @@
 # Eval Leaderboards
 
-Generated: 2026-03-12 23:42:10 UTC
+Generated: 2026-03-13 02:43:05 UTC
 
 ## external_wmt13_en_es_translation_benchmark_128
 
@@ -100,26 +100,27 @@ Generated: 2026-03-12 23:42:10 UTC
 | 92 | 25.1820 | 57.0220 | 27.5437 | 59.3547 | -2.3616 | -2.3326 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260308T164813Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-008000__greedy |
 | 93 | 24.8029 | 55.7317 | 27.5437 | 59.3547 | -2.7408 | -3.6230 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260310T013436Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-002000__greedy |
 | 94 | 24.7623 | 56.4720 | 27.5437 | 59.3547 | -2.7813 | -2.8827 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260308T164813Z | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
-| 95 | 22.6563 | 56.8741 |  |  |  |  | baseline | baseline__google__translategemma-4b-it__2026-03-10T014945Z | eval2_external__greedy |
-| 96 | 7.9262 | 33.4874 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100 | ablation_stage_decode_20260304_094102/eval2_external__final__sampled |
-| 97 | 7.9159 | 35.6396 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stageb002000_external_wmt13_greedy_20260306 |
-| 98 | 7.0652 | 34.9801 | 27.6332 | 59.3886 | -20.5681 | -24.4085 | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stagea12k_eval2_greedy_20260306_rerun_tmux |
-| 99 | 6.7827 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea4k_eval2_greedy_live |
-| 100 | 6.5945 | 31.4518 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100 | ablation_stage_decode_20260304_094102/eval2_external__final__greedy |
-| 101 | 6.5945 | 31.4518 | 27.5437 | 59.3547 | -20.9492 | -27.9029 | student | translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100 | eval_bleu_vs_teacher_enes_eval2_20260304_093211_gfxoverride |
-| 102 | 6.4642 | 33.9828 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stagea32_eval2_greedy_20260306 |
-| 103 | 6.4361 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea24k_eval2_greedy_live |
-| 104 | 6.1746 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset2560_seed42_20260307T013333Z | eval_stagea4k_eval2_greedy_live |
-| 105 | 5.7466 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea28k_eval2_greedy_live |
-| 106 | 5.7465 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea20k_eval2_greedy_live |
-| 107 | 5.6350 | 33.7260 | 27.6332 | 59.3886 | -21.9983 | -25.6626 | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stagea22k_eval2_greedy_20260306_rerun_tmux |
-| 108 | 4.9284 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea8k_eval2_greedy_live |
-| 109 | 4.6705 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea12k_eval2_greedy_live |
-| 110 | 4.5627 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset2560_seed42_20260307T013333Z | eval_stagea12k_eval2_greedy_live |
-| 111 | 3.9701 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset2560_seed42_20260307T013333Z | eval_stagea8k_eval2_greedy_live |
-| 112 | 3.3827 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea16k_eval2_greedy_live |
-| 113 | 0.0315 | 15.7204 |  |  |  |  | baseline | baseline__google__gemma-3-1b-it__2026-03-10T135924Z | baseline_checkpoint_sweep_greedy/eval2_external__final__greedy |
-| 114 | 0.0285 | 15.4027 |  |  |  |  | baseline | baseline__google__gemma-3-1b-it__2026-03-10T020400Z | baseline_checkpoint_sweep_greedy/eval2_external__final__greedy |
+| 95 | 22.8222 | 49.4490 | 34.1885 | 61.0467 | -11.3663 | -11.5976 | student | translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1568_bf16_refine_pack04_random10c | stage_a_checkpoint_sweep_greedy/eval2_external__checkpoint-004000__greedy |
+| 96 | 22.6563 | 56.8741 |  |  |  |  | baseline | baseline__google__translategemma-4b-it__2026-03-10T014945Z | eval2_external__greedy |
+| 97 | 7.9262 | 33.4874 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100 | ablation_stage_decode_20260304_094102/eval2_external__final__sampled |
+| 98 | 7.9159 | 35.6396 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stageb002000_external_wmt13_greedy_20260306 |
+| 99 | 7.0652 | 34.9801 | 27.6332 | 59.3886 | -20.5681 | -24.4085 | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stagea12k_eval2_greedy_20260306_rerun_tmux |
+| 100 | 6.7827 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea4k_eval2_greedy_live |
+| 101 | 6.5945 | 31.4518 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100 | ablation_stage_decode_20260304_094102/eval2_external__final__greedy |
+| 102 | 6.5945 | 31.4518 | 27.5437 | 59.3547 | -20.9492 | -27.9029 | student | translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100 | eval_bleu_vs_teacher_enes_eval2_20260304_093211_gfxoverride |
+| 103 | 6.4642 | 33.9828 |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stagea32_eval2_greedy_20260306 |
+| 104 | 6.4361 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea24k_eval2_greedy_live |
+| 105 | 6.1746 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset2560_seed42_20260307T013333Z | eval_stagea4k_eval2_greedy_live |
+| 106 | 5.7466 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea28k_eval2_greedy_live |
+| 107 | 5.7465 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea20k_eval2_greedy_live |
+| 108 | 5.6350 | 33.7260 | 27.6332 | 59.3886 | -21.9983 | -25.6626 | student | translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210 | eval_stagea22k_eval2_greedy_20260306_rerun_tmux |
+| 109 | 4.9284 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea8k_eval2_greedy_live |
+| 110 | 4.6705 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea12k_eval2_greedy_live |
+| 111 | 4.5627 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset2560_seed42_20260307T013333Z | eval_stagea12k_eval2_greedy_live |
+| 112 | 3.9701 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset2560_seed42_20260307T013333Z | eval_stagea8k_eval2_greedy_live |
+| 113 | 3.3827 |  |  |  |  |  | student | translategemma4b_es_en_gemma3_1b_stagea_cpu_subset1280_seed42_20260307T013333Z | eval_stagea16k_eval2_greedy_live |
+| 114 | 0.0315 | 15.7204 |  |  |  |  | baseline | baseline__google__gemma-3-1b-it__2026-03-10T135924Z | baseline_checkpoint_sweep_greedy/eval2_external__final__greedy |
+| 115 | 0.0285 | 15.4027 |  |  |  |  | baseline | baseline__google__gemma-3-1b-it__2026-03-10T020400Z | baseline_checkpoint_sweep_greedy/eval2_external__final__greedy |
 
 ## indomain_clean_merged_en_es_translation_benchmark_128
 
