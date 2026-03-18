@@ -1,23 +1,32 @@
 /* ============================================
    RD Design System - Components
    UI Component Styles
+
+   Each component is fully self-contained — it declares every property
+   it needs. No component relies on shared pattern groups in primitives.
+   Primitives provides only element defaults (input, table, pre, code)
+   and utility classes.
+
+   Projects may override or extend these with project-specific CSS.
    ============================================ */
 
 /* === PANELS === */
+
 .panel {
+  border: var(--border-md) solid var(--fg);
   padding: var(--space-md);
 }
 
-.panel-muted {
-  opacity: var(--opacity-muted);
+.panel-soft {
+  opacity: var(--opacity-soft);
 }
 
 .panel-header {
   padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-a);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  border-bottom: var(--border-sm) solid var(--fg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--font-set-tracking);
   text-transform: uppercase;
 }
 
@@ -29,7 +38,6 @@
 
 /*
  * Button component
- * - Uses: --fg, --bg, --border, --space-sm, --space-md, --font-a
  * - States: default, hover (inverted), active (inset border), disabled
  * - Variants: secondary (default), primary, ghost, prism
  */
@@ -40,15 +48,38 @@
   justify-content: center;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  font-weight: 500;
+  border: var(--border-md) solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-set-weight);
+  text-transform: uppercase;
+  letter-spacing: var(--font-set-tracking);
   text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover,
+.btn:active {
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .btn:active {
   box-shadow: inset 0 0 0 var(--border-md) var(--bg);
 }
 
-/* Primary variant - inherits inverted colors */
+.btn:focus-visible {
+  outline: var(--border-md) solid var(--fg);
+  outline-offset: var(--border-sm);
+}
+
+/* Primary variant — starts inverted */
+.btn-primary {
+  background: var(--fg);
+  color: var(--bg);
+}
+
 .btn-primary:hover {
   box-shadow: inset 0 0 0 var(--border-md) var(--bg);
 }
@@ -57,13 +88,9 @@
   box-shadow: inset 0 0 0 var(--border-lg) var(--bg);
 }
 
-/* Rainbow button (special - max 1 per page) */
-@property --prism-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: true;
-}
-
+/* Rainbow button (special — max 1 per page).
+   Uses layered pseudo-elements: ::before for prism border, ::after for bg mask.
+   z-index values are local stacking context, not global --z-* tokens. */
 .btn-prism {
   --prism-angle: 0deg;
   position: relative;
@@ -77,10 +104,7 @@
   content: '';
   position: absolute;
   inset: calc(-1 * var(--border-lg));
-  background: conic-gradient(
-    from var(--prism-angle),
-    #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #8000ff, #ff0080, #ff0000
-  );
+  background: var(--prism);
   z-index: -1;
 }
 
@@ -92,13 +116,16 @@
   z-index: -1;
 }
 
-/* Hover: border animates, text stays black */
+/* Hover: border animates, text stays black.
+   Animation durations are prism-specific, not transition tokens. */
 .btn-prism:hover {
   color: var(--fg);
   animation: prism-spin 1.6s linear infinite;
 }
 
-/* Active: background fills with prism */
+/* Active: background fills with prism.
+   text-shadow uses rgba — the only non-token color in the system,
+   needed for legibility over the moving gradient. */
 .btn-prism:active {
   color: var(--bg);
   text-shadow: 0 0 2px rgba(0,0,0,0.5);
@@ -106,19 +133,17 @@
 }
 
 .btn-prism:active::after {
-  background: conic-gradient(
-    from var(--prism-angle),
-    #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #8000ff, #ff0080, #ff0000
-  );
+  background: var(--prism);
 }
 
 @keyframes prism-spin {
   to { --prism-angle: 360deg; }
 }
 
-/* Ghost variant - inherits opacity-ghost */
+/* Ghost variant */
 .btn-ghost {
   border-style: dotted;
+  opacity: var(--opacity-soft);
 }
 
 .btn-ghost:hover {
@@ -130,8 +155,10 @@
   box-shadow: inset 0 0 0 var(--border-md) var(--bg);
 }
 
-/* Disabled state - inherits disabled opacity/cursor */
+/* Disabled state */
 .btn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
   border-style: solid;
 }
 
@@ -142,27 +169,28 @@
   box-shadow: none;
 }
 
-/* === CHIPS / TAGS === */
+/* === CHIPS === */
+
+/* --chip-bg and --chip-fg are consumer-set overrides (not in rd-tokens).
+   Defaults to inverted (fg on bg). Set per-element or via a parent scope. */
 .chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
   border: none;
-  border-radius: 0;
-  padding: 2px 5px;
+  padding: var(--space-xxs) var(--space-xs);
   background: var(--chip-bg, var(--fg));
-  color: var(--chip-fg, #fff);
-  font-family: var(--font-a);
-  line-height: 1.15;
+  color: var(--chip-fg, var(--bg));
+  line-height: var(--font-leading-tight);
 }
 
 /* === INPUTS === */
 
 /*
- * Input component
- * - Uses: --fg, --bg, --border, --space-sm, --font-b
- * - States: empty (dotted), filled (solid), focus, disabled, error
+ * Input component — extends element defaults from primitives.
+ * Primitives provides: border, padding, width, font-size, background, color.
+ * This section adds state overrides: empty, focus, disabled, error.
  */
 
 /* Empty state: dotted border */
@@ -179,7 +207,7 @@ select:focus {
   border-style: solid;
 }
 
-/* Disabled - inherits opacity/cursor from disabled group */
+/* Disabled — primitives handles opacity/cursor, this adds border style */
 input:disabled,
 textarea:disabled,
 select:disabled {
@@ -190,7 +218,7 @@ select:disabled {
 input.error,
 textarea.error,
 select.error {
-  border-style: dashed;
+  border-style: double;
 }
 
 /* Error with symbol (use wrapper) */
@@ -215,7 +243,7 @@ select.error {
 input::placeholder,
 textarea::placeholder {
   color: var(--fg);
-  opacity: var(--opacity-muted);
+  opacity: var(--opacity-soft);
 }
 
 textarea {
@@ -223,6 +251,8 @@ textarea {
   min-height: 80px;
 }
 
+/* Native select arrow — hardcoded black SVG fill.
+   For theme-safe dropdowns, use .select-custom instead. */
 select {
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -232,17 +262,40 @@ select {
 }
 
 /* === CUSTOM SELECT === */
+
+/* Theme-safe dropdown — arrow uses CSS currentColor, not an SVG. */
+
 .select-custom {
   position: relative;
   display: inline-block;
+  width: 100%;
 }
 
 .select-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: var(--border-md) solid var(--fg);
+  padding: var(--space-sm);
+  width: 100%;
+  font-size: var(--font-size-lg);
+  letter-spacing: var(--font-read-tracking);
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
 }
 
+.select-trigger:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.select-trigger:focus-visible {
+  outline: var(--border-md) solid var(--fg);
+  outline-offset: var(--border-sm);
+}
+
+/* Arrow indicator — CSS triangle via borders, inherits currentColor */
 .select-trigger::after {
   content: '';
   width: 0;
@@ -263,14 +316,30 @@ select {
   top: 100%;
   left: 0;
   right: 0;
+  border: var(--border-md) solid var(--fg);
   border-top: none;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: var(--z-dropdown);
+  background: var(--bg);
 }
 
 .select-custom.open .select-options {
   display: block;
+}
+
+.select-option {
+  padding: var(--space-sm);
+  font-size: var(--font-size-lg);
+  letter-spacing: var(--font-read-tracking);
+  border-bottom: var(--border-sm) solid var(--fg);
+  cursor: pointer;
+}
+
+.select-option:hover,
+.select-option.selected {
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .select-option:last-child {
@@ -278,10 +347,11 @@ select {
 }
 
 /* === CHECKBOX & RADIO === */
+
 input[type="checkbox"],
 input[type="radio"] {
-  width: 16px;
-  height: 16px;
+  width: var(--space-md);
+  height: var(--space-md);
   padding: 0;
   margin: 0;
   accent-color: var(--fg);
@@ -292,18 +362,29 @@ input[type="radio"] {
   display: flex;
   align-items: flex-start;
   gap: var(--space-sm);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  border: var(--border-sm) solid var(--fg);
+  background: var(--bg);
+  cursor: pointer;
 }
 
 /* === PROGRESS BAR === */
+
 .progress {
-  height: 8px;
+  border: var(--border-sm) solid var(--fg);
+  width: 100%;
+  height: var(--space-sm);
   overflow: hidden;
+  background: var(--bg);
 }
 
 .progress-fill {
   height: 100%;
   background: var(--fg);
-  transition: width 0.2s ease;
+  transition: width var(--transition-fast) ease;
 }
 
 .progress-indeterminate .progress-fill {
@@ -316,7 +397,7 @@ input[type="radio"] {
   100% { transform: translateX(400%); }
 }
 
-/* Progress phase rows - differentiate source types via border-left */
+/* Progress phase rows — differentiate source types via border-left */
 .progress-phase-row {
   padding-left: var(--space-sm);
 }
@@ -334,11 +415,39 @@ input[type="radio"] {
 }
 
 /* === CARDS === */
-/* Inherits padding/borders from shared patterns in primitives */
+
+.card {
+  border: var(--border-sm) solid var(--fg);
+}
+
+.card-header {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: var(--border-sm) solid var(--fg);
+}
+
+.card-body {
+  padding: var(--space-md);
+}
+
+.card-footer {
+  padding: var(--space-sm) var(--space-md);
+  border-top: var(--border-sm) solid var(--fg);
+}
 
 /* === LISTS === */
+
 .list {
   list-style: none;
+}
+
+.list-item {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: var(--border-sm) solid var(--fg);
+}
+
+.list-item:hover {
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .list-item:last-child {
@@ -346,6 +455,7 @@ input[type="radio"] {
 }
 
 /* === STATUS LIST === */
+
 .status-list {
   display: flex;
   flex-direction: column;
@@ -364,32 +474,30 @@ input[type="radio"] {
 .status-meta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-xxs);
   min-width: 0;
 }
 
-/* Extends .type-label; kept for semantic specificity */
 .status-label {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--font-tracking-label);
 }
 
 .status-detail {
-  font-size: 11px;
-  opacity: var(--opacity-secondary);
+  font-size: var(--font-size-sm);
+  opacity: var(--opacity-soft);
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 6px;
-  font-size: 10px;
-  font-family: var(--font-a);
+  padding: var(--space-xxs) var(--space-xs);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--font-set-tracking);
   border: var(--border-sm) solid var(--fg);
 }
 
@@ -414,24 +522,16 @@ input[type="radio"] {
   border-width: var(--border-lg);
 }
 
-/* === TABLES === */
-table {
-  border-collapse: collapse;
-}
-
-th, td {
-  text-align: left;
-}
-
-th {
-  font-weight: 700;
-}
-
 /* === BADGES === */
+
 .badge {
   display: inline-block;
-  padding: 2px var(--space-sm);
-  font-weight: 500;
+  padding: var(--space-xxs) var(--space-sm);
+  border: var(--border-sm) solid currentColor;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-set-weight);
+  text-transform: uppercase;
+  letter-spacing: var(--font-set-tracking);
 }
 
 .badge-filled {
@@ -440,12 +540,16 @@ th {
 }
 
 /* === TAGS === */
+
 .tag {
   display: inline-block;
-  padding: 2px 4px;
+  padding: var(--space-xxs) var(--space-xs);
+  border: var(--border-sm) solid currentColor;
+  font-size: var(--font-size-sm);
 }
 
 /* === CRITERIA LIST === */
+
 .criteria-list {
   list-style: none;
   display: flex;
@@ -459,7 +563,7 @@ th {
   gap: var(--space-sm);
   padding: var(--space-sm);
   border: var(--border-sm) solid var(--fg);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 .criteria-item.criteria-empty {
@@ -467,11 +571,10 @@ th {
 }
 
 .criteria-index {
-  min-width: 16px;
-  font-family: var(--font-a);
-  font-size: 10px;
+  min-width: var(--space-md);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
-  opacity: var(--opacity-secondary);
+  opacity: var(--opacity-soft);
 }
 
 .criteria-text {
@@ -479,6 +582,7 @@ th {
 }
 
 /* === DIVIDERS === */
+
 .divider {
   border: none;
   border-top: var(--border-sm) solid var(--fg);
@@ -494,6 +598,7 @@ th {
 }
 
 /* === MODAL === */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -501,33 +606,89 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: var(--z-modal);
 }
 
-.modal {
-  max-width: 500px;
-  max-height: 90vh;
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal,
+.modal-content {
+  background: var(--bg);
+  border: var(--border-md) solid var(--fg);
+  width: 100%;
+  min-width: 360px;
+  max-width: 560px;
+  max-height: 80vh;
   overflow: auto;
+}
+
+.modal-danger,
+.modal-content.modal-danger {
+  border-style: double;
+  border-width: var(--border-lg);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: var(--space-md);
+  border-bottom: var(--border-sm) solid var(--fg);
 }
 
-.modal-footer {
+.modal-title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--fg);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  opacity: var(--opacity-soft);
+}
+
+.modal-close:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  padding: var(--space-md);
+}
+
+.modal-message {
+  margin: 0;
+}
+
+.modal-details {
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--font-read-tracking);
+}
+
+.modal-footer,
+.modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: var(--space-sm);
+  padding: var(--space-md);
+  border-top: var(--border-sm) solid var(--fg);
 }
 
 /* === TOAST === */
+
 .toast-container {
   position: fixed;
   top: var(--space-md);
   right: var(--space-md);
-  z-index: 200;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
   gap: var(--space-sm);
   max-width: 400px;
 }
@@ -536,11 +697,14 @@ th {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  border: var(--border-sm) solid var(--fg);
+  padding: var(--space-md);
+  background: var(--bg);
   min-width: 280px;
   max-width: 400px;
   opacity: 0;
   transform: translateX(100%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity var(--transition-normal) ease, transform var(--transition-normal) ease;
   pointer-events: auto;
   cursor: pointer;
 }
@@ -551,8 +715,8 @@ th {
 }
 
 .toast-icon {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .toast-message {
@@ -560,8 +724,8 @@ th {
 }
 
 .toast-close {
-  font-size: 12px;
-  opacity: var(--opacity-secondary);
+  font-size: var(--font-size-sm);
+  opacity: var(--opacity-soft);
   cursor: pointer;
 }
 
@@ -583,9 +747,10 @@ th {
 }
 
 /* === ERROR UI (boot failure) === */
+
 .error-ui {
   max-width: 600px;
-  margin: 50px auto;
+  margin: var(--space-xl) auto;
   padding: var(--space-lg);
 }
 
@@ -594,8 +759,8 @@ th {
   align-items: center;
   gap: var(--space-sm);
   margin-bottom: var(--space-md);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .error-ui-header::before {
@@ -604,32 +769,31 @@ th {
 }
 
 .error-ui-description {
-  opacity: var(--opacity-secondary);
-  line-height: 1.6;
+  opacity: var(--opacity-soft);
+  line-height: var(--font-read-leading);
   margin-bottom: var(--space-md);
 }
 
 .error-ui-message {
   padding: var(--space-md);
   margin: var(--space-md) 0;
-  font-family: var(--font-a);
-  font-size: 13px;
+  font-size: var(--font-size-base);
   white-space: pre-wrap;
   word-break: break-all;
-  border: var(--border-lg) dashed var(--fg);
+  border: var(--border-lg) double var(--fg);
 }
 
 .error-ui-details summary {
   cursor: pointer;
-  opacity: var(--opacity-secondary);
+  opacity: var(--opacity-soft);
   padding: var(--space-sm) 0;
 }
 
 .error-ui-stack {
   padding: var(--space-md);
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   overflow-x: auto;
-  opacity: var(--opacity-muted);
+  opacity: var(--opacity-soft);
   border: var(--border-sm) dotted var(--fg);
 }
 
@@ -641,12 +805,13 @@ th {
 }
 
 .error-ui-hint {
-  font-size: 12px;
-  opacity: var(--opacity-muted);
+  font-size: var(--font-size-sm);
+  opacity: var(--opacity-soft);
   margin-top: var(--space-lg);
 }
 
 /* === ACCORDION === */
+
 .accordion {
   display: flex;
   flex-direction: column;
@@ -671,9 +836,9 @@ th {
   color: var(--fg);
   border: none;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--font-set-tracking);
   text-transform: uppercase;
   text-align: left;
 }
@@ -691,8 +856,8 @@ th {
 
 .accordion-header::after {
   content: '+';
-  font-size: 14px;
-  font-weight: 400;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-read-weight);
 }
 
 .accordion-header[aria-expanded="true"]::after {
@@ -719,4 +884,30 @@ th {
 
 .accordion-ghost .accordion-header[aria-expanded="true"] {
   border-bottom-style: dotted;
+}
+
+/* === SEGMENTED CONTROLS === */
+
+/*
+ * For single-select button groups (tabs/toggles).
+ * Mark the active item with `.is-active` or `aria-pressed="true"`.
+ */
+.segmented-control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.segmented-btn {
+  border-style: dotted;
+}
+
+.segmented-btn.is-active,
+.segmented-btn[aria-pressed="true"],
+.segmented-control [aria-pressed="true"] {
+  border-style: solid;
+  border-color: currentColor;
+  background: var(--fg);
+  color: var(--bg);
 }
