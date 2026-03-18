@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RD Design System — GAMMA subset</title>
+  <link rel="stylesheet" href="styles/rd.css">
+  <style>
+    .design-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-md);
+    }
+    .design-header {
+      margin-bottom: var(--space-xl);
+    }
+    .design-header h1 {
+      font-size: var(--font-size-display);
+      font-weight: var(--font-weight-light);
+      line-height: var(--font-leading-tight);
+      letter-spacing: var(--font-tracking-display);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .design-header p {
+      opacity: var(--opacity-soft);
+      margin: 0;
+    }
+    .design-section {
+      margin-bottom: var(--space-xl);
+    }
+    .design-section h2 {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+      letter-spacing: var(--font-tracking-label);
+      border-bottom: var(--border-sm) solid var(--fg);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .design-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+      align-items: center;
+    }
+    .design-label {
+      font-size: var(--font-size-sm);
+      opacity: var(--opacity-soft);
+      margin-bottom: var(--space-sm);
+    }
+    .design-group {
+      margin-bottom: var(--space-lg);
+    }
+    .token {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) 0;
+      font-size: var(--font-size-base);
+    }
+    .token-swatch {
+      width: var(--space-lg);
+      height: var(--space-lg);
+      border: var(--border-md) solid var(--fg);
+    }
+    .token-swatch.fg { background: var(--fg); }
+    .token-swatch.bg { background: var(--bg); }
+    .token-scale {
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-xs);
+    }
+    .token-scale-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xxs);
+      font-size: var(--font-size-xs);
+      opacity: var(--opacity-soft);
+    }
+    .token-scale-bar {
+      background: var(--fg);
+    }
+  </style>
+</head>
+<body>
+  <div class="design-page">
+    <header class="design-header">
+      <h1>RD &mdash; GAMMA</h1>
+      <p>Subset of the RD design system used by the GAMMA project</p>
+    </header>
+
+    <!-- ========== LAYER 1: TOKENS ========== -->
+
+    <section class="design-section">
+      <h2>Layer 1 &mdash; Tokens</h2>
+
+      <div class="design-group">
+        <div class="design-label">Colors</div>
+        <div class="design-row">
+          <div class="token"><div class="token-swatch fg"></div> --fg #000000</div>
+          <div class="token"><div class="token-swatch bg"></div> --bg #FFFFFF</div>
+        </div>
+      </div>
+
+      <div class="design-group">
+        <div class="design-label">Font</div>
+        <div class="token">--font: SF Mono / Menlo / Consolas / DejaVu Sans Mono</div>
+      </div>
+
+      <div class="design-group">
+        <div class="design-label">Opacity</div>
+        <div class="design-row">
+          <div class="token" style="opacity: var(--opacity-soft);">--opacity-soft: 0.777</div>
+          <div class="token" style="opacity: var(--opacity-disabled);">--opacity-disabled: 0.444</div>
+        </div>
+      </div>
+
+      <div class="design-group">
+        <div class="design-label">Font Sizes &mdash; 7-step ~1.2x scale</div>
+        <div class="token-scale">
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 20px; height: 10px;"></div>xs 10</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 20px; height: 12px;"></div>sm 12</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 20px; height: 15px;"></div>base 15</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 20px; height: 18px;"></div>lg 18</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 20px; height: 22px;"></div>xl 22</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 20px; height: 26px;"></div>2xl 26</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 20px; height: 32px;"></div>display 32</div>
+        </div>
+      </div>
+
+      <div class="design-group">
+        <div class="design-label">Spacing &mdash; base-8 scale</div>
+        <div class="token-scale">
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 2px; height: 16px;"></div>xxs 2</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 4px; height: 16px;"></div>xs 4</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 8px; height: 16px;"></div>sm 8</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 16px; height: 16px;"></div>md 16</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 24px; height: 16px;"></div>lg 24</div>
+          <div class="token-scale-step"><div class="token-scale-bar" style="width: 32px; height: 16px;"></div>xl 32</div>
+        </div>
+      </div>
+
+      <div class="design-group">
+        <div class="design-label">Border Widths</div>
+        <div class="design-row">
+          <div class="token" style="border-bottom: 0.5px solid var(--fg); padding-bottom: var(--space-xs);">--border-sm: 0.5px</div>
+          <div class="token" style="border-bottom: 1px solid var(--fg); padding-bottom: var(--space-xs);">--border-md: 1px</div>
+          <div class="token" style="border-bottom: 2px solid var(--fg); padding-bottom: var(--space-xs);">--border-lg: 2px</div>
+        </div>
+      </div>
+
+      <div class="design-group">
+        <div class="design-label">Voices</div>
+        <div class="design-row">
+          <div style="font-weight: var(--font-set-weight); letter-spacing: var(--font-set-tracking); line-height: var(--font-set-leading); text-transform: uppercase;">
+            <span class="design-label" style="display: block;">--font-set-* (UI chrome)</span>
+            Set voice sample
+          </div>
+          <div style="font-weight: var(--font-read-weight); letter-spacing: var(--font-read-tracking); line-height: var(--font-read-leading);">
+            <span class="design-label" style="display: block;">--font-read-* (content)</span>
+            Read voice sample &mdash; flowing, natural
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== LAYER 2: PRIMITIVES ========== -->
+
+    <section class="design-section">
+      <h2>Layer 2 &mdash; Primitives</h2>
+
+      <!-- Typography -->
+      <div class="design-group">
+        <div class="design-label">Typography classes</div>
+        <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+          <div><span class="design-label" style="display: inline;">.type-display</span><div class="type-display">Welcome to GAMMA</div></div>
+          <div><span class="design-label" style="display: inline;">.type-h1</span><div class="type-h1" style="margin-bottom: 0;">Primary Heading</div></div>
+          <div><span class="design-label" style="display: inline;">.type-h2</span><div class="type-h2">Secondary Heading</div></div>
+          <div><span class="design-label" style="display: inline;">.type-body</span><div class="type-body">The quick brown fox jumps over the lazy dog. Body text for paragraphs and readable content.</div></div>
+          <div><span class="design-label" style="display: inline;">.type-label</span><div class="type-label">Status</div></div>
+          <div><span class="design-label" style="display: inline;">.type-ui</span><div class="type-ui">Submit Form</div></div>
+          <div><span class="design-label" style="display: inline;">.type-caption</span><div class="type-caption">Last updated 2 hours ago</div></div>
+        </div>
+      </div>
+
+      <!-- Borders -->
+      <div class="design-group">
+        <div class="design-label">Border utilities</div>
+        <div class="design-row" style="flex-wrap: wrap;">
+          <div class="border-default" style="padding: var(--space-sm) var(--space-md);">.border-default</div>
+          <div class="border-subtle" style="padding: var(--space-sm) var(--space-md);">.border-subtle</div>
+          <div class="border-elevated" style="padding: var(--space-sm) var(--space-md);">.border-elevated</div>
+          <div class="border-ghost" style="padding: var(--space-sm) var(--space-md);">.border-ghost</div>
+          <div class="border-disabled" style="padding: var(--space-sm) var(--space-md);">.border-disabled</div>
+        </div>
+      </div>
+
+      <!-- States -->
+      <div class="design-group">
+        <div class="design-label">States</div>
+        <div class="design-row">
+          <span class="soft">.soft (0.777)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== LAYER 3: COMPONENTS ========== -->
+
+    <section class="design-section">
+      <h2>Layer 3 &mdash; Components</h2>
+      <p class="design-label" style="margin-bottom: var(--space-lg);">GAMMA component subset &mdash; each fully self-contained.</p>
+    </section>
+
+    <!-- BUTTONS -->
+    <section class="design-section">
+      <h2>Button</h2>
+      <p class="design-label">Variants: secondary (default), primary, ghost, prism | States: hover, active, disabled</p>
+      <div class="design-row">
+        <button class="btn">Secondary</button>
+        <button class="btn btn-primary">Primary</button>
+        <button class="btn btn-ghost">Ghost</button>
+        <button class="btn btn-prism">Prism</button>
+      </div>
+      <div class="design-row">
+        <button class="btn" disabled>Disabled Secondary</button>
+        <button class="btn btn-primary" disabled>Disabled Primary</button>
+        <button class="btn btn-ghost" disabled>Disabled Ghost</button>
+        <button class="btn btn-prism" disabled>Disabled Prism</button>
+      </div>
+    </section>
+
+    <!-- CHIPS -->
+    <section class="design-section">
+      <h2>Chip</h2>
+      <p class="design-label">Inverted by default. Consumer overrides: --chip-bg, --chip-fg</p>
+      <div class="design-row">
+        <span class="chip">Default chip</span>
+        <span class="chip" style="--chip-bg: transparent; --chip-fg: var(--fg); border: var(--border-sm) solid var(--fg);">Custom chip</span>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section class="design-section">
+      <h2>Progress</h2>
+      <div class="design-group">
+        <div class="design-label">Determinate (60%)</div>
+        <div class="progress" style="max-width: 300px;">
+          <div class="progress-fill" style="width: 60%;"></div>
+        </div>
+      </div>
+      <div class="design-group">
+        <div class="design-label">Indeterminate</div>
+        <div class="progress progress-indeterminate" style="max-width: 300px;">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKBOX -->
+    <section class="design-section">
+      <h2>Checkbox</h2>
+      <div class="design-group">
+        <label class="checkbox-label">
+          <input type="checkbox" checked>
+          <span>Checked</span>
+        </label>
+      </div>
+      <div class="design-group">
+        <label class="checkbox-label">
+          <input type="checkbox">
+          <span>Unchecked</span>
+        </label>
+      </div>
+      <div class="design-group">
+        <label class="checkbox-label">
+          <input type="checkbox" disabled>
+          <span>Disabled</span>
+        </label>
+      </div>
+    </section>
+
+    <footer style="margin-top: var(--space-xl); padding-top: var(--space-md); border-top: var(--border-sm) solid var(--fg); opacity: var(--opacity-soft); font-size: var(--font-size-sm);">
+      RD Design System &mdash; GAMMA subset
+    </footer>
+  </div>
+</body>
+</html>
