@@ -9,18 +9,19 @@ If the same shape appears >= MIN_FREQ times, admit a macro rule and replace
 all later occurrences with `(MAC, MAC_REF, rule_id, arg_count, arg_lengths,
 arg_bytes)`.
 
-Admission rule (compute true empirical savings):
-    saving = (count - 1) * (literal_template_size - reference_size)
-             - definition_size
-    admit iff saving > 0
+Current admission rule:
+    admit iff count >= MIN_FREQ
 
-Frequency floor f >= 3 is a prefilter only.
+This version does not compute a per-shape raw-stream savings gate before
+admission. Treat it as frequency-gated template macro substitution.
 
 Lessons applied from ast_macro_lzma_v1's failure:
   - Not byte spans; only parsed templates (filters out spurious matches).
   - Template arguments are kept literal in the reference; only the structural
     skeleton is replaced.
   - Streaming counter, not bounded dict; full-corpus capable.
+  - Frequency gate is explicit; true savings-gated admission is still a later
+    algorithm change.
   - lzma back-end (Phase 5 ablation; cmix migration is Phase 6 work).
 
 Determinism: integer-only byte ops; admission decisions are functions of

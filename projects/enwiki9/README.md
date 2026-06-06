@@ -2,11 +2,15 @@
 
 Lossless compression of `enwik9` — the first 10^9 bytes of the English Wikipedia XML dump (Matt Mahoney / Hutter Prize benchmark).
 
+For a mechanism-level guide to the custom algorithms and their measured status,
+see [ALGORITHMS.md](ALGORITHMS.md).
+
 ## Layout
 
 ```
 enwiki9/
 ├── README.md              this file
+├── ALGORITHMS.md          custom algorithm mechanisms + benchmark status
 ├── index.json             registry of programs + leaderboard
 ├── data/
 │   ├── enwik9.zip         downloaded archive (~322 MB)

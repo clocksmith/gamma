@@ -2,17 +2,17 @@
   "id": "blue_dolphin_tree_macro_v1",
   "phase": 5,
   "track": "T",
-  "description": "Parameterized tree macros over parsed templates (not byte spans); structural shape hash; RePair-class admission; lzma back-end",
+  "description": "Parameterized tree macros over parsed templates (not byte spans); structural shape hash; frequency-gated admission; lzma back-end",
   "added": "2026-05-09",
   "deps": [],
   "compares_against": ["baseline_lzma", "schema_lzma_v1"],
-  "min_freq_prefilter": 3,
+  "min_freq_gate": 3,
   "max_rules": 65536,
   "lessons_applied": [
     "not byte spans; only parsed templates",
     "structural skeleton replaced; arguments kept literal",
     "streaming counter (full-corpus capable)",
-    "MIN_FREQ as prefilter only; true empirical savings is the gate"
+    "MIN_FREQ is the current admission gate; true savings-gated admission is not implemented in v1"
   ],
   "kill_condition": "S >= baseline_lzma on full corpus, OR macro_coverage indicates rules don't amortize"
 }
