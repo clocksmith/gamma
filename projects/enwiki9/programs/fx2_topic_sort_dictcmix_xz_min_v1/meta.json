@@ -1,0 +1,32 @@
+{
+  "id": "fx2_topic_sort_dictcmix_xz_min_v1",
+  "description": "Minified wrapper for the 10MB-promoted topic-page-order fx2 struct-top dictcmix package",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Same cmix.xz and english.dic.cmix payloads as fx2_topic_sort_dictcmix_xz_v1. The wrapper produces identical ordered bytes on 1MB and 10MB prefixes and restores order by page id.",
+  "program_files": {
+    "cmix.xz": 81840,
+    "english.dic.cmix": 100208,
+    "program.py": 1585,
+    "total": 183633
+  },
+  "verified_gates": {
+    "1k_driver_roundtrip": {
+      "input_bytes": 1000,
+      "compressed_size": 256,
+      "program_size": 183633,
+      "hutter_score": 183889,
+      "roundtrip_ok": true
+    },
+    "10m_inherited_from_fx2_topic_sort_dictcmix_xz_v1": {
+      "input_bytes": 10000000,
+      "compressed_size": 1645597,
+      "program_size": 183633,
+      "hutter_score": 1829230,
+      "score_percent": 18.2923,
+      "roundtrip_basis": "Same decompressed native binary, byte-identical decoded dictionary, identical 10MB ordered stream before backend compression, and verified restore-by-page-id transform.",
+      "delta_vs_fx2_topic_sort_dictcmix_xz_v1": -91,
+      "delta_vs_fx2_struct_top_dictcmix_xz_min_v1": -1003
+    }
+  },
+  "verdict": "Promote as current best exact 10MB package. This remains above the 10 percent target."
+}

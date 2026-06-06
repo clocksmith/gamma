@@ -1,0 +1,539 @@
+{
+  "challenge": "enwik9",
+  "description": "Hutter Prize: lossless compression of the first 10^9 bytes of English Wikipedia",
+  "source": "http://mattmahoney.net/dc/enwik9.zip",
+  "references": [
+    "http://prize.hutter1.net/",
+    "http://mattmahoney.net/dc/text.html",
+    "http://mattmahoney.net/dc/textdata.html"
+  ],
+  "data": {
+    "path": "data/enwik9",
+    "expected_size": 1000000000,
+    "zip_md5": "3e773f8a1577fda2e27f871ca17f31fd"
+  },
+  "scoring": {
+    "formula": "S = compressed_size + program_size",
+    "current_record": 110793128,
+    "prize_threshold": 109685197,
+    "notes": "S1 (decompressor) + S2 (archive) per http://prize.hutter1.net/ ; we use program.py source as a stand-in for S1 in the in-repo bench"
+  },
+  "external_leaderboard": [
+    {
+      "date": "2024-09-03",
+      "author": "Kaido Orav & Byron Knoll",
+      "decompressor": "fx2-cmix",
+      "total_size": 110793128
+    },
+    {
+      "date": "2024-02-02",
+      "author": "Kaido Orav",
+      "decompressor": "fx-cmix",
+      "total_size": 112578322
+    },
+    {
+      "date": "2023-07-16",
+      "author": "Saurabh Kumar",
+      "decompressor": "fast cmix",
+      "total_size": 114156155
+    },
+    {
+      "date": "2021-05-31",
+      "author": "Artemiy Margaritov",
+      "decompressor": "starlit",
+      "total_size": 115352938
+    },
+    {
+      "date": "2019-07-04",
+      "author": "Alexander Rhatushnyak",
+      "decompressor": "phda9 v1.8",
+      "total_size": 116673681
+    }
+  ],
+  "agents": [
+    {
+      "id": "hutter_contender",
+      "path": "agents/hutter_contender.md"
+    },
+    {
+      "id": "skeptic_referee",
+      "path": "agents/skeptic_referee.md"
+    },
+    {
+      "id": "lm_explorer",
+      "path": "agents/lm_explorer.md"
+    },
+    {
+      "id": "empirical_reality",
+      "path": "agents/empirical_reality.md"
+    },
+    {
+      "id": "dac_crackpot",
+      "path": "agents/dac_crackpot.md"
+    }
+  ],
+  "programs": [
+    {
+      "id": "article_geometry_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_geometry_v2_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_sortfree_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "ast_macro_lzma_v1"
+    },
+    {
+      "id": "ast_opcode_lzma_v1"
+    },
+    {
+      "id": "ast_tuple_lzma_v1"
+    },
+    {
+      "id": "baseline_bz2"
+    },
+    {
+      "id": "baseline_gzip"
+    },
+    {
+      "id": "baseline_lzma"
+    },
+    {
+      "id": "baseline_zlib"
+    },
+    {
+      "id": "bayes_union_tree_v1"
+    },
+    {
+      "id": "bayes_union_tree_deflate_v1"
+    },
+    {
+      "id": "bayes_union_tree_gz_v1"
+    },
+    {
+      "id": "cmix_wrapped"
+    },
+    {
+      "id": "ctw_graph_prose_v1"
+    },
+    {
+      "id": "fx2_hutter_bridge_v1"
+    },
+    {
+      "id": "dedup_v1"
+    },
+    {
+      "id": "graph_fim_opcode_xz_selector_v3"
+    },
+    {
+      "id": "graph_fim_opcode_xz_selector_v4"
+    },
+    {
+      "id": "graph_fim_xz_selector_v1"
+    },
+    {
+      "id": "numeric_v1"
+    },
+    {
+      "id": "opcode_word_bz2_v1"
+    },
+    {
+      "id": "opcode_word_bz2_v2"
+    },
+    {
+      "id": "opcode_word_bz2_v3"
+    },
+    {
+      "id": "opcode_word_bz2_deflate_v1"
+    },
+    {
+      "id": "opcode_word_bz2_min_deflate_v1"
+    },
+    {
+      "id": "opcode_word_bz2_tiny_v1"
+    },
+    {
+      "id": "opcode_word_bz2_tiny_k_v1"
+    },
+    {
+      "id": "opcode_word_bz2_tiny_k4_v1"
+    },
+    {
+      "id": "purple_parrot_apex_v1"
+    },
+    {
+      "id": "purple_parrot_markup_opcode_cmix_v1"
+    },
+    {
+      "id": "purple_parrot_markup_opcode_lzma_v1"
+    },
+    {
+      "id": "purple_parrot_nncp_v1"
+    },
+    {
+      "id": "purple_parrot_numeric_cmix_v1"
+    },
+    {
+      "id": "purple_parrot_title_table_cmix_v1"
+    },
+    {
+      "id": "purple_parrot_ultimate_cmix_v1"
+    },
+    {
+      "id": "schema_cmix"
+    },
+    {
+      "id": "schema_lzma_v1"
+    },
+    {
+      "id": "sidecar_cmix_v1"
+    },
+    {
+      "id": "sidecar_mix_cmix_v1"
+    },
+    {
+      "id": "title_table_v1"
+    },
+    {
+      "id": "xml_skel_wc2tier_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jc_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jp_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jp_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpv_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvi_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvit_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvitm_lc4_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvitm_lc4r_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvitm_lc4rm_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvitm_lc4rmr_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvitm_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_jpvitm_z_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wc3tier_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wcmarkup_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wordcode_bz2_min_v1"
+    },
+    {
+      "id": "xml_skel_wordcode_bz2_min_z_v1"
+    },
+    {
+      "id": "xml_skel_wordcode_lzma2_1g_v1"
+    },
+    {
+      "id": "xml_skel_wordcode_lzma_v1"
+    },
+    {
+      "id": "xz_lzma2_1g"
+    },
+    {
+      "id": "yellow_tucan_markup_opcode_cmix_v1"
+    },
+    {
+      "id": "yellow_tucan_markup_opcode_lzma2_1g_v1"
+    },
+    {
+      "id": "yellow_tucan_markup_opcode_lzma_v1"
+    },
+    {
+      "id": "yellow_tucan_markup_opcode_lzma_v2"
+    },
+    {
+      "id": "yellow_tucan_numeric_cmix_v1"
+    },
+    {
+      "id": "yellow_tucan_range_order_v1"
+    },
+    {
+      "id": "yellow_tucan_schema_opcode_lzma_v1"
+    },
+    {
+      "id": "yellow_tucan_structural_range_v1"
+    },
+    {
+      "id": "yellow_tucan_structural_range_v2"
+    },
+    {
+      "id": "yellow_tucan_structural_range_v3"
+    },
+    {
+      "id": "yellow_tucan_structural_range_v4"
+    },
+    {
+      "id": "yellow_tucan_structural_range_v5"
+    },
+    {
+      "id": "yellow_tucan_title_table_cmix_v1"
+    },
+    {
+      "id": "yellow_tucan_ultimate_cmix_v1"
+    },
+    {
+      "id": "yellow_tucan_ultimate_lzma_v1"
+    },
+    {
+      "id": "zstd_ultra_long"
+    },
+    {
+      "id": "article_sortfree_min_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_sortfree_re_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_nocheck_sortfree_re_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_stripanno_nocheck_sortfree_re_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_geometry_v3_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_geometry_v4_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_geometry_v5_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_geometry_v5min_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_geometry_v5min_wc8k_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "article_geometry_v6_catprefix_wc8k_lc4rmrl_z_lzma2_1g_v1"
+    },
+    {
+      "id": "recursive_shape_lut_v1"
+    },
+    {
+      "id": "recursive_entity_lut_v1"
+    },
+    {
+      "id": "freq_entity_lut_v1"
+    },
+    {
+      "id": "title_ref_columnar_lzma_v1"
+    },
+    {
+      "id": "page_family_tree_lut_v1"
+    },
+    {
+      "id": "page_family_tree_lut_v2"
+    },
+    {
+      "id": "opcode_word_bz2_z_v1"
+    },
+    {
+      "id": "ppmc_o4_v1"
+    },
+    {
+      "id": "ppm_residual_shape_v1"
+    },
+    {
+      "id": "ppm_residual_shape_pack_v1"
+    },
+    {
+      "id": "hybrid_lz_ppmc_shared_v1"
+    },
+    {
+      "id": "hybrid_lz_ppmc_geom_v1"
+    },
+    {
+      "id": "chain_index_ppmc_shared_v1"
+    },
+    {
+      "id": "chain_index_ppmc_shared_v2"
+    },
+    {
+      "id": "chain_index_ppmc_shared_v3"
+    },
+    {
+      "id": "typed_anchor_chain_ppmc_v1"
+    },
+    {
+      "id": "typed_anchor_norm_chain_tpatch_v1"
+    },
+    {
+      "id": "typed_graph_recurse_v1"
+    },
+    {
+      "id": "graph_rehydration_codec_v1"
+    },
+    {
+      "id": "opcode_typed_anchor_ppm_o5_v1"
+    },
+    {
+      "id": "fx2cmix_wrapped_v1"
+    },
+    {
+      "id": "fx2cmix_wrapped_gz_v1"
+    },
+    {
+      "id": "fx2cmix_wrapped_xz_v1"
+    },
+    {
+      "id": "fx2cmix_wrapped_dictcmix_xz_v1"
+    },
+    {
+      "id": "fx2cmix_wrapped_dictcmix_xz_min_v1"
+    },
+    {
+      "id": "fx2cmix_topic_sort_dictcmix_xz_v1"
+    },
+    {
+      "id": "fx2cmix_geometry_sort_dictcmix_xz_v1"
+    },
+    {
+      "id": "fx2_geometry_sort_dictcmix_xz_v1"
+    },
+    {
+      "id": "fx2_geometry_sort_dictcmix_xz_min_v1"
+    },
+    {
+      "id": "fx2_geometry_title_sort_dictcmix_xz_v1"
+    },
+    {
+      "id": "fx2_e_payload_xz_v1"
+    },
+    {
+      "id": "fx2_structural_sidecar_v1"
+    },
+    {
+      "id": "fx2_struct_top_mixer_v1"
+    },
+    {
+      "id": "fx2_struct_top_nodict_v1"
+    },
+    {
+      "id": "fx2_struct_top_nodict_min_v1"
+    },
+    {
+      "id": "fx2_struct_top_nodict_xz_v1"
+    },
+    {
+      "id": "fx2_struct_top_dictcmix_xz_v1"
+    },
+    {
+      "id": "fx2_struct_top_dictcmix_xz_min_v1"
+    },
+    {
+      "id": "fx2_topic_sort_dictcmix_xz_v1"
+    },
+    {
+      "id": "fx2_topic_sort_dictcmix_xz_min_v1"
+    },
+    {
+      "id": "fx2_structural_match_v1"
+    },
+    {
+      "id": "opcode_typed_anchor_bitmix_v1"
+    },
+    {
+      "id": "typed_receipt_v1"
+    },
+    {
+      "id": "article_typed_receipt_v1"
+    },
+    {
+      "id": "article_typed_norm_receipt_v1"
+    },
+    {
+      "id": "article_receipt_family_tree_v1"
+    },
+    {
+      "id": "article_shape_diff_receipt_v1"
+    },
+    {
+      "id": "article_page_program_v1"
+    },
+    {
+      "id": "geometry_receipt_schema_selector_v1"
+    },
+    {
+      "id": "geometry_scaffold_receipt_v1"
+    },
+    {
+      "id": "geometry_scaffold_receipt_honly_v1"
+    },
+    {
+      "id": "semantic_mixer_range_v1"
+    },
+    {
+      "id": "opcode_semantic_mixer_range_v1"
+    },
+    {
+      "id": "schema_title_streams_lzma2_1g_v1"
+    },
+    {
+      "id": "fx2_sidecar_byte_v1"
+    },
+    {
+      "id": "fx2_sidecar_byte_split_v1"
+    },
+    {
+      "id": "fx2_sidecar_byte_split_direct_v1"
+    },
+    {
+      "id": "fx2_sidecar_byte_split_direct_extra_match_v1"
+    },
+    {
+      "id": "fx2_sidecar_byte_split_direct_extra_page_match_v1"
+    },
+    {
+      "id": "fx2_sidecar_byte_split_direct_page_match_v1"
+    },
+    {
+      "id": "cmix21_wrapped_v1"
+    },
+    {
+      "id": "cmix21_sidecar_direct_page_v1"
+    },
+    {
+      "id": "schema_title_streams_lzma2_1g_z_v1"
+    }
+  ],
+  "leaderboard": [
+    {
+      "program_id": "typed_anchor_chain_ppmc_v1",
+      "hutter_score": 23710046,
+      "compressed_size": 23706379,
+      "program_size": 3667,
+      "data_size": 100000000,
+      "compress_time_s": 5375.284,
+      "roundtrip_ok": true,
+      "timestamp": "2026-05-11T02:30:59"
+    }
+  ]
+}

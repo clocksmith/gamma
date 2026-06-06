@@ -1,0 +1,32 @@
+{
+  "id": "blue_dolphin_master_ultimate_v1",
+  "phase": "all",
+  "track": "T",
+  "description": "Headline integration: markup opcode + typed inline channels + parameterized tree macros + sidecar feature extraction (10 features) + cmix back-end + integer SSM stub. Targets S < 100,000,000 (10% of input) with the cmix C++ mixer integration completed.",
+  "added": "2026-05-09",
+  "deps": ["cmix_wrapped"],
+  "target_S": 100000000,
+  "target_b_per_byte": 0.80,
+  "compares_against": ["cmix_wrapped", "fx2-cmix (110.8 MB)", "Hutter threshold (109.7 MB)"],
+  "layers": {
+    "L1_markup_opcode": "38 hand-tuned MediaWiki tokens -> 2-byte opcodes (escape 0x02)",
+    "L2_typed_inline_channels": "6 structural states; inline marker bytes (escape 0x01); no stream split",
+    "L3_tree_macros": "structural shape hash; RePair-class admission; arguments stay literal (escape 0x03)",
+    "L4_sidecar_features": "10 features computed deterministically; exposed via compute_sidecar_features(); not yet consumed by cmix mixer",
+    "L5_cmix_backend": "via cmix_wrapped passthrough",
+    "L6_integer_ssm": "stub at integer_ssm_step(); int16 state, deterministic update, cross-host SHA256 contract"
+  },
+  "honest_gates_for_10_percent": [
+    "cmix C++ source modified to accept the 10 sidecar feature streams as additional context families",
+    "Layer 6 integer SSM wired as one cmix mixer family, with integer matmul + cross-host byte-equal contract",
+    "Phase 2 ablation confirms markup opcode helps cmix (not just xz)",
+    "Phase 5 ablation confirms tree macros over parsed templates net-positive on cmix"
+  ],
+  "kill_conditions": [
+    "roundtrip not byte-exact on full 10^9",
+    "cross-host SHA256 mismatch on any layer",
+    "S >= cmix_wrapped (no integration win)",
+    "patch_fraction or macro_coverage diagnostics indicate net-negative contribution"
+  ],
+  "score_accounting_note": "imports cmix_wrapped/program.py via sys.path; for contest submission the cmix binary must be inlined here too"
+}

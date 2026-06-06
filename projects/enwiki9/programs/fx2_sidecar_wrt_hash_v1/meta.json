@@ -1,0 +1,31 @@
+{
+  "id": "fx2_sidecar_wrt_hash_v1",
+  "description": "fx2-cmix fork with split sidecar byte models, direct sidecar inputs, extra/page sidecar match contexts, WRT-learned dictionary expansion, and decoded WRT word characters feeding title/link/template/ref semantic hashes.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH",
+    "SIDECAR_WRT_LEARN",
+    "SIDECAR_WRT_DECODED_HASH"
+  ],
+  "source_tree": "external/fx2-cmix",
+  "hypothesis": "The previous WRT-learn sidecar only expanded dictionary words into suffix checks; this variant also lets decoded word characters update semantic hashes so entity and template contexts can distinguish dictionary-coded titles, links, params, refs, and template names.",
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45260,
+      "program_size": 363724,
+      "hutter_score": 408984,
+      "roundtrip_ok": true,
+      "baseline_fx2_sidecar_wrt_learn_v1_compressed_size": 45260,
+      "baseline_fx2_sidecar_wrt_learn_v1_hutter_score": 408502
+    }
+  },
+  "verdict": "Pruned on the scored 250k gate. WRT decoded hashing tied the WRT-learn archive but increased counted package size."
+}

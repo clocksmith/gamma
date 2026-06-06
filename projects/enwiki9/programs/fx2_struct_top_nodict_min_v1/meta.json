@@ -1,0 +1,32 @@
+{
+  "id": "fx2_struct_top_nodict_min_v1",
+  "description": "minified wrapper for the context-6 LTO fx2-cmix no-dictionary package",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Uses the same cmix.bin.gz as fx2_struct_top_nodict_v1 but reduces counted wrapper bytes. Calls native no-dictionary mode: cmix -c input output and cmix -d input output.",
+  "verified_gates": {
+    "1k_driver_smoke": {
+      "result_json": "results/fx2_struct_top_nodict_min_v1/2026-06-01T122034.json",
+      "compressed_size": 294,
+      "program_size": 95164,
+      "hutter_score": 95458,
+      "roundtrip_ok": true
+    },
+    "1m_inherited_from_fx2_struct_top_nodict_v1": {
+      "compressed_size": 198811,
+      "program_size": 95164,
+      "hutter_score": 293975,
+      "score_delta_vs_fx2_struct_top_nodict_v1": -962,
+      "roundtrip_basis": "same cmix.bin.gz and same native -c/-d arguments as the 1MB driver-verified parent"
+    },
+    "10m_inherited_from_fx2_struct_top_nodict_v1": {
+      "compressed_size": 1776100,
+      "program_size": 95164,
+      "hutter_score": 1871264,
+      "score_percent": 18.71264,
+      "score_delta_vs_fx2_struct_top_nodict_v1": -962,
+      "distance_to_10_percent_score": 871264,
+      "roundtrip_basis": "same cmix.bin.gz and same native -c/-d arguments as the direct-verified parent"
+    }
+  },
+  "verdict": "Promote as the smallest exact-S no-dictionary wrapper. It preserves archive bytes from fx2_struct_top_nodict_v1 and cuts counted wrapper bytes by 962."
+}

@@ -1,0 +1,51 @@
+{
+  "id": "fx2_sketch_mixer_w1m_v1",
+  "description": "fx2-cmix fork with the byte stream unchanged and a fixed-seed Count-Min prefix sketch feeding four isolated mixer contexts keyed by decoded sidecar token recurrence and layout state.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH",
+    "SIDECAR_WRT_LEARN",
+    "FX2_SKETCH_MIXERS",
+    "FX2_SKETCH_BITS=20"
+  ],
+  "source_changes": [
+    "ContextManager maintains two deterministic Count-Min prefix sketches with fixed seed 1337: global token prefixes and layout-keyed token prefixes.",
+    "Decoded sidecar characters update sketch state without rewriting the compressed byte stream.",
+    "Four guarded mixer contexts consume sketch count buckets crossed with word length, XML field, template argument, and page kind."
+  ],
+  "diagnostic_basis": {
+    "tool": "tools/sketch_probe.py",
+    "100m_width_1048576": {
+      "global_heavy_precision": 0.999993,
+      "global_heavy_false_positive_rate": 0.000084,
+      "layout_keyed_heavy_precision": 0.99999,
+      "layout_keyed_heavy_false_positive_rate": 0.000102
+    }
+  },
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45266,
+      "program_size": 366622,
+      "hutter_score": 411888,
+      "roundtrip_ok": true,
+      "baseline_fx2_sidecar_wrt_learn_v1_compressed_size": 45260,
+      "baseline_fx2_sidecar_wrt_learn_v1_hutter_score": 408502
+    },
+    "1m_prefix_driver_no_save": {
+      "compressed_size": 175227,
+      "program_size": 366622,
+      "hutter_score": 541849,
+      "roundtrip_ok": true,
+      "baseline_fx2_sidecar_wrt_learn_v1_compressed_size": 175201
+    }
+  },
+  "verdict": "Pruned as a mixer path. The fixed-seed sketch diagnostic has strong recurrence precision at 100MB, but the prefix-sketch mixer contexts increased archive size at both 250k and 1m gates."
+}

@@ -1,0 +1,52 @@
+{
+  "id": "fx2cmix_wrapped_xz_v1",
+  "description": "xz-asset wrapper around the existing fx2cmix_wrapped_v1 binary and dictionary",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, stored as xz members and extracted by program.py before invoking cmix with the same -c/-d dictionary arguments.",
+  "program_files": {
+    "cmix.xz": 142520,
+    "english.dic.xz": 156004,
+    "program.py": 668,
+    "total": 299192
+  },
+  "verified_gates": {
+    "1k_driver_smoke": {
+      "input_bytes": 1000,
+      "compressed_size": 257,
+      "program_size": 299192,
+      "hutter_score": 299449,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "result_path": "results/fx2cmix_wrapped_xz_v1/2026-06-01T134721.json"
+    },
+    "1k_byte_identity_vs_fx2cmix_wrapped_v1": {
+      "input_bytes": 1000,
+      "parent_program": "fx2cmix_wrapped_v1",
+      "parent_compressed_size": 257,
+      "parent_compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "compressed_size": 257,
+      "compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "roundtrip_ok": true
+    },
+    "10m_inherited_from_fx2cmix_wrapped_v1": {
+      "input_bytes": 10000000,
+      "compressed_size": 1648461,
+      "program_size": 299192,
+      "hutter_score": 1947653,
+      "score_percent": 19.47653,
+      "score_delta_vs_fx2cmix_wrapped_gz_v1": -44352,
+      "roundtrip_basis": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, same -c/-d dictionary arguments, and byte-identical 1KB archive output."
+    },
+    "100m_inherited_from_fx2cmix_wrapped_v1": {
+      "input_bytes": 100000000,
+      "compressed_size": 14965167,
+      "program_size": 299192,
+      "hutter_score": 15264359,
+      "score_percent": 15.264359,
+      "score_delta_vs_fx2cmix_wrapped_gz_v1": -44352,
+      "distance_to_10_percent_score": 5264359,
+      "roundtrip_basis": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, same -c/-d dictionary arguments, byte-identical 1KB archive output, and inherited parent 100MB roundtrip result."
+    }
+  },
+  "verdict": "Promote as the current best measured percentage route by inherited archive identity and lower counted program bytes. This is a packaging improvement only; it does not change the entropy model."
+}

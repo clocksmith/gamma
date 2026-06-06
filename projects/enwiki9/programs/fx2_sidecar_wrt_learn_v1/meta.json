@@ -1,0 +1,37 @@
+{
+  "id": "fx2_sidecar_wrt_learn_v1",
+  "description": "fx2-cmix fork with split sidecar byte models, direct sidecar inputs, extra/page sidecar match contexts, and WRT-learned dictionary word expansion so sidecar title/link/template hashes see decoded dictionary words instead of anonymous WRT tokens.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH",
+    "SIDECAR_WRT_LEARN"
+  ],
+  "source_changes": [
+    "WRT sidecar learns dictionary words during pretraining and expands WRT tokens while building semantic contexts.",
+    "Dictionary transform now has a fourth-byte code path for future appended vocabulary experiments; stock dictionary output is unchanged."
+  ],
+  "verified_gates": {
+    "250k_prefix_direct": {
+      "compressed_size": 45260,
+      "program_size": 363242,
+      "hutter_score": 408502,
+      "baseline_fx2_sidecar_byte_split_direct_extra_page_match_v1_compressed_size": 45261,
+      "baseline_fx2_sidecar_byte_split_direct_extra_page_match_v1_hutter_score": 408810,
+      "roundtrip_ok": true
+    },
+    "1m_prefix_direct": {
+      "compressed_size": 175201,
+      "baseline_fx2_sidecar_byte_split_direct_extra_page_match_v1_compressed_size": 175203,
+      "roundtrip_ok": true
+    }
+  },
+  "verdict": "Measured archive win is real but tiny. Deterministic gzip packaging makes the 250k scored gate positive; still useful as predictor-side plumbing, not sufficient as the main route to 10%."
+}

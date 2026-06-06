@@ -1,0 +1,25 @@
+{
+  "id": "fx2_topic_sort_match_v1",
+  "description": "Structural fx2-cmix build with a reversible MediaWiki page-topic sort candidate selected against raw fx2 output",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Uses the SIDECAR_EXTRA_MATCH cmix.bin.gz and english.dic.gz payload from fx2_structural_match_v1. Complete pages may be topic-sorted before compression; decompression restores original enwik9 order by page id.",
+  "verified_gates": {
+    "250k_prefix": {
+      "compressed_size": 45281,
+      "program_size": 359531,
+      "hutter_score": 404812,
+      "baseline_fx2_structural_match_v1_compressed_size": 45280,
+      "baseline_fx2_structural_match_v1_hutter_score": 402456,
+      "roundtrip_ok": true
+    },
+    "1m_prefix_driver_no_save": {
+      "compressed_size": 175175,
+      "program_size": 359531,
+      "hutter_score": 534706,
+      "baseline_fx2_structural_match_v1_compressed_size": 175174,
+      "baseline_fx2_structural_match_v1_hutter_score": 532350,
+      "roundtrip_ok": true
+    }
+  },
+  "verdict": "Pruned. The selector chose raw at both 250k and 1MB, producing the raw structural-match archive plus a one-byte mode tag while paying a larger Python wrapper."
+}

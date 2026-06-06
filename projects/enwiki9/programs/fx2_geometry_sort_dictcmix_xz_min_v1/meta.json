@@ -1,0 +1,76 @@
+{
+  "id": "fx2_geometry_sort_dictcmix_xz_min_v1",
+  "description": "Minified wrapper for the same article-geometry page ordering and small dictcmix-xz backend used by fx2_geometry_sort_dictcmix_xz_v1",
+  "added": "2026-06-03",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
+  "notes": "Compression behavior is inherited from fx2_geometry_sort_dictcmix_xz_v1: cmix.xz and english.dic.cmix are byte-identical, the ordered byte stream is byte-identical on the 1K, 1M, 10M, and 100M prefixes, and the 1K packaged driver smoke produced the same archive SHA256.",
+  "program_files": {
+    "cmix.xz": 81840,
+    "english.dic.cmix": 100208,
+    "program.py": 1713,
+    "total": 183761
+  },
+  "verified_gates": {
+    "1k_driver_identity_vs_fx2_geometry_sort_dictcmix_xz_v1": {
+      "input_bytes": 1000,
+      "compressed_size": 256,
+      "program_size": 183761,
+      "hutter_score": 184017,
+      "compressed_md5": "cde3519eca89e0c6e142c13ced0724d5",
+      "compressed_sha256": "57ce4a6025ec441cb135cbf3ccbf353919e83b88fd2c16e9841d648791f78f8f",
+      "parent_compressed_sha256": "57ce4a6025ec441cb135cbf3ccbf353919e83b88fd2c16e9841d648791f78f8f",
+      "roundtrip_ok": true
+    },
+    "ordered_stream_identity": {
+      "method": "Loaded both wrappers and compared o(data) byte-for-byte, falling back to raw data when o(data) returned None; restored the minified ordered stream with e(data) and compared to the original.",
+      "prefixes": [
+        {
+          "input_bytes": 1000,
+          "ordered_sha256": "0f35cdeee80ba4c570885c34ee901aa579441fb8ba97351568a81bacdfc241fd",
+          "parent_equal": true,
+          "min_restore_ok": true
+        },
+        {
+          "input_bytes": 1000000,
+          "ordered_sha256": "bd6601ef473c341b665b3a101a57d96edb210f91825e02fb815297332f578166",
+          "parent_equal": true,
+          "min_restore_ok": true
+        },
+        {
+          "input_bytes": 10000000,
+          "ordered_sha256": "4f029e826cb826adecea94adfde8e548ba8376bca93dce9ae1080d7c1f0cc53b",
+          "parent_equal": true,
+          "min_restore_ok": true
+        },
+        {
+          "input_bytes": 100000000,
+          "ordered_sha256": "a3212f33af9a7516914fb567bbb2e97064f9d537bad01f63670024d52f265d11",
+          "parent_equal": true,
+          "min_restore_ok": true
+        }
+      ]
+    },
+    "10m_inherited_from_fx2_geometry_sort_dictcmix_xz_v1": {
+      "input_bytes": 10000000,
+      "compressed_size": 1642858,
+      "program_size": 183761,
+      "hutter_score": 1826619,
+      "score_percent": 18.26619,
+      "distance_to_10_percent_score": 826619,
+      "delta_vs_fx2_geometry_sort_dictcmix_xz_v1": -117,
+      "delta_vs_fx2_geometry_title_sort_dictcmix_xz_v1": -36
+    },
+    "100m_inherited_from_fx2_geometry_sort_dictcmix_xz_v1": {
+      "input_bytes": 100000000,
+      "compressed_size": 14857781,
+      "program_size": 183761,
+      "hutter_score": 15041542,
+      "score_percent": 15.041542,
+      "distance_to_10_percent_score": 5041542,
+      "delta_vs_fx2_geometry_sort_dictcmix_xz_v1": -117
+    }
+  },
+  "verdict": "Promote as a packaging-only improvement over fx2_geometry_sort_dictcmix_xz_v1 and the current measured 100MB frontier."
+}

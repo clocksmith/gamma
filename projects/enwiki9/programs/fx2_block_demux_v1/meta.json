@@ -1,0 +1,24 @@
+{
+  "id": "fx2_block_demux_v1",
+  "description": "Context-decoupled block demux using the counted fx2 structural backend independently on skeleton, prose, and numeric streams, with raw-fx2 fallback.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "backend": "fx2_structural_sidecar_v1 packaged cmix.bin.gz and english.dic.gz",
+  "hypothesis": "Asynchronous structural/prose/numeric streams may preserve specialized contexts better than one flat byte stream while staying lossless and decoder-reproducible.",
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45286,
+      "program_size": 361394,
+      "hutter_score": 406680,
+      "roundtrip_ok": true,
+      "selected_mode": "raw_fx2",
+      "candidate_archives": {
+        "raw_fx2": 45286,
+        "block_demux": 46688
+      },
+      "baseline_fx2_structural_sidecar_v1_compressed_size": 45281,
+      "baseline_fx2_structural_sidecar_v1_hutter_score": 401918
+    }
+  },
+  "verdict": "Pruned on the 250k exact gate. The fx2 backend rejected demux: independent skeleton/prose/numeric streams were 1402 archive bytes worse than raw fx2 before the larger wrapper was counted."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "fx2_sidecar_byte_split_v1",
+  "description": "fx2-cmix fork with the byte stream unchanged and three decoder-built MediaWiki sidecar byte probability models exposed as separate mixer inputs: template/title, link/entity, and field/page-shape.",
+  "added": "2026-05-30",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "verified_gates": {
+    "250k_order_phda9": {
+      "compressed_size": 48368,
+      "baseline_fx2_sidecar_byte_v1": 48368,
+      "baseline_fx2cmix_wrapped_v1": 48369
+    },
+    "1m_order_phda9": {
+      "compressed_size": 174616,
+      "baseline_fx2_sidecar_byte_v1": 174617,
+      "baseline_fx2cmix_wrapped_v1": 174633
+    },
+    "10m_order_phda9": {
+      "compressed_size": 1630792,
+      "baseline_fx2_sidecar_byte_v1": 1630810,
+      "baseline_fx2cmix_wrapped_v1": 1631730,
+      "roundtrip_ok": true
+    }
+  }
+}

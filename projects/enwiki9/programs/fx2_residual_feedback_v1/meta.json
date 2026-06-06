@@ -1,0 +1,25 @@
+{
+  "id": "fx2_residual_feedback_v1",
+  "description": "fx2-cmix fork with deterministic autoregressive residual-feedback mixer contexts derived from recent prediction miss buckets.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "FX2_RESIDUAL_MIXERS"
+  ],
+  "hypothesis": "Recent local prediction failures identify context breaks before the next arithmetic decision, improving mixer weight selection without rewriting bytes or emitting side information.",
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45268,
+      "program_size": 359011,
+      "hutter_score": 404279,
+      "roundtrip_ok": true,
+      "baseline_fx2_structural_sidecar_v1_compressed_size": 45281,
+      "baseline_fx2_structural_sidecar_v1_hutter_score": 401918,
+      "archive_delta_vs_fx2_structural_sidecar_v1": -13,
+      "score_delta_vs_fx2_structural_sidecar_v1": 2361
+    }
+  },
+  "verdict": "Pruned on the scored 250k gate. Residual feedback improved the archive by 13 bytes versus fx2_structural_sidecar_v1 but increased counted package size by 2374 bytes, losing exact S by 2361 bytes."
+}

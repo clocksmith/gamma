@@ -1,0 +1,33 @@
+{
+  "id": "fx2_fxcm_template_pos_v1",
+  "description": "fx2-cmix sidecar WRT-learn baseline plus a native fxcm context keyed by template-name hash, template argument position, prior byte, and stream class.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH",
+    "SIDECAR_WRT_LEARN",
+    "FXCM_TEMPLATE_POS_CONTEXT"
+  ],
+  "source_changes": [
+    "ColumnContext tracks template-name hash and template argument index in the fxcm model.",
+    "One fxcm byte context switches from word/bracket context to template position context while inside a template."
+  ],
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45260,
+      "program_size": 363684,
+      "hutter_score": 408944,
+      "roundtrip_ok": true,
+      "baseline_fx2_sidecar_wrt_learn_v1_compressed_size": 45260,
+      "baseline_fx2_sidecar_wrt_learn_v1_hutter_score": 408502
+    }
+  },
+  "verdict": "Pruned on the scored 250k gate. The native fxcm template-position context tied the WRT-learn archive but increased counted package size, losing exact S."
+}

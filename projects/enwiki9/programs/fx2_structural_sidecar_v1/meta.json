@@ -1,0 +1,29 @@
+{
+  "id": "fx2_structural_sidecar_v1",
+  "description": "fx2-cmix fork with deterministic MediaWiki structural sidecar contexts for schema fields, page kind, page/column buckets, word tails, entities, refs, links, templates, and slots",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Built from external/fx2-cmix with GCC using SEED=923 and UPDATE_LIMIT=3000. cmix.bin.gz and english.dic.gz are counted by the harness.",
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45281,
+      "program_size": 356637,
+      "hutter_score": 401918,
+      "roundtrip_ok": true
+    },
+    "1m_prefix_saved_result": {
+      "compressed_size": 175177,
+      "program_size": 356637,
+      "hutter_score": 531814,
+      "roundtrip_ok": true
+    },
+    "10m_prefix_driver_no_save": {
+      "compressed_size": 1647812,
+      "program_size": 356637,
+      "hutter_score": 2004449,
+      "roundtrip_ok": true,
+      "baseline_fx2cmix_wrapped_v1_hutter_score": 2406785,
+      "score_delta_vs_fx2cmix_wrapped_v1": -402336
+    }
+  },
+  "verdict": "Promote to 100MB gate. The 10MB scored result beats fx2cmix_wrapped_v1 by 402336 bytes: archive is 649 bytes smaller and counted program is 401687 bytes smaller."
+}

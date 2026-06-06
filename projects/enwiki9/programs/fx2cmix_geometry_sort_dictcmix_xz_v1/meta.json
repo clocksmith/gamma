@@ -1,0 +1,46 @@
+{
+  "id": "fx2cmix_geometry_sort_dictcmix_xz_v1",
+  "description": "Reversible article-geometry page ordering wrapper around the current 100MB frontier fx2cmix xz-packed binary and cmix-compressed dictionary package",
+  "added": "2026-06-02",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "basis": "Tests whether the article-geometry v6-style redirect/category/infobox/template/title key beats the simpler page-topic key on the same fx2cmix backend assets.",
+  "expected_use": "10MB exact archive-delta gate before any 100MB promotion",
+  "program_files": {
+    "cmix.xz": 142512,
+    "english.dic.cmix": 100130,
+    "program.py": 1831,
+    "total": 244473
+  },
+  "verified_gates": {
+    "1k_driver_smoke": {
+      "input_bytes": 1000,
+      "compressed_size": 258,
+      "program_size": 244473,
+      "hutter_score": 244731,
+      "roundtrip_ok": true
+    },
+    "10m_driver_geometry_order_backend_delta": {
+      "result_json": "results/fx2cmix_geometry_sort_dictcmix_xz_v1/2026-06-02T151520.json",
+      "input_bytes": 10000000,
+      "compressed_size": 1643341,
+      "program_size": 244473,
+      "hutter_score": 1887814,
+      "score_percent": 18.87814,
+      "roundtrip_ok": true,
+      "delta_vs_fx2cmix_topic_sort_dictcmix_xz_v1_10m": -2023,
+      "compressed_sha256": "edf48fa50fcf5f88876d06764bf1f972787aab7eb1fbe9d09d5eb3159f5a851c"
+    },
+    "100m_driver_new_frontier": {
+      "result_json": "results/fx2cmix_geometry_sort_dictcmix_xz_v1/2026-06-02T234549.json",
+      "input_bytes": 100000000,
+      "compressed_size": 14868238,
+      "program_size": 244473,
+      "hutter_score": 15112711,
+      "score_percent": 15.112711,
+      "roundtrip_ok": true,
+      "delta_vs_fx2cmix_topic_sort_dictcmix_xz_v1_100m": -11956,
+      "compressed_sha256": "2296dfaf976a31ce1362fbfa8449b9d856f65dfa951964312037dda53c27cb97"
+    }
+  },
+  "verdict": "New exact 100MB frontier for the fx2cmix_topic_sort_dictcmix_xz_v1 backend family; still above the 10 percent target."
+}

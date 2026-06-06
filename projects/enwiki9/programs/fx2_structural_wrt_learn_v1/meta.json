@@ -1,0 +1,35 @@
+{
+  "id": "fx2_structural_wrt_learn_v1",
+  "description": "fx2-cmix fork with the byte stream unchanged, structural sidecar direct/indirect/match/mixer contexts enabled, and WRT-learned dictionary word expansion for semantic sidecar hashes.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "SIDECAR_WRT_LEARN"
+  ],
+  "source_changes": [
+    "Uses existing structural sidecar dimensions as out-of-band predictor contexts.",
+    "Keeps sidecar mixers enabled instead of globally disabling them.",
+    "Adds WRT-learn expansion so template/title/link hashes see decoded dictionary words."
+  ],
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45270,
+      "program_size": 359506,
+      "hutter_score": 404776,
+      "roundtrip_ok": true,
+      "baseline_fx2_structural_sidecar_v1_compressed_size": 45281,
+      "baseline_fx2_structural_sidecar_v1_hutter_score": 401918
+    },
+    "1m_prefix_driver_no_save": {
+      "compressed_size": 175189,
+      "program_size": 359506,
+      "hutter_score": 534695,
+      "roundtrip_ok": true,
+      "baseline_fx2_structural_sidecar_v1_compressed_size": 175177,
+      "baseline_fx2_structural_sidecar_v1_hutter_score": 531814
+    }
+  },
+  "verdict": "Pruned. WRT-learn expansion did not produce enough archive savings to offset package growth, and it lost archive size at the 1m gate."
+}

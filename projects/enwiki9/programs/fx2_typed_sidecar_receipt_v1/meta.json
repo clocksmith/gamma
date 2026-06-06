@@ -1,0 +1,29 @@
+{
+  "id": "fx2_typed_sidecar_receipt_v1",
+  "description": "fx2-cmix fork with the byte stream unchanged, split sidecar byte probability models, extra/page sidecar match contexts, and typed receipt state for templates, categories, refs, params, sections, and page shape.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH",
+    "SIDECAR_TYPED_RECEIPT"
+  ],
+  "hypothesis": "Move typed receipt decisions into fx2's live probability contexts without rewriting the byte stream or concatenating a separate archive.",
+  "verified_gates": {
+    "250k_prefix_blended_contexts": {
+      "compressed_size": 45261,
+      "program_size": 365113,
+      "hutter_score": 410374,
+      "baseline_fx2_sidecar_byte_split_direct_extra_page_match_v1_compressed_size": 45261,
+      "baseline_fx2_sidecar_byte_split_direct_extra_page_match_v1_hutter_score": 408810,
+      "roundtrip_ok": true
+    }
+  },
+  "verdict": "Archive tie on 250k prefix, scored loss from larger packaged binary; do not promote over fx2_sidecar_byte_split_direct_extra_page_match_v1 without a larger-scope archive win."
+}

@@ -1,0 +1,23 @@
+{
+  "id": "blue_dolphin_apex_v1",
+  "phase": "T1+T2-best-shippable",
+  "track": "T",
+  "description": "best-damn pure-Python blue_dolphin: 38-token markup opcode + cmix substrate, code-golfed; ~750 bytes wrapper; targets ~110-113 MB full corpus (11%); 10% gated on cmix C++ surgery for sidecar features",
+  "added": "2026-05-09",
+  "deps": ["cmix_wrapped"],
+  "compares_against": ["cmix_wrapped", "yellow_tucan_markup_opcode_lzma2_1g_v1"],
+  "predicted_S_full_corpus": 112000000,
+  "predicted_b_per_byte": 0.896,
+  "honest_gate_to_10_percent": [
+    "modify cmix C++ source to accept sidecar feature streams as context families",
+    "add integer-quantized SSM context family (N=16 updates, 32-seg LUT softmax, fixed-PRNG weights, K=64 BPTT)",
+    "verify Phase 2 ablation: markup opcode helps cmix (not just xz)",
+    "cross-host SHA256 byte-equal on full 10^9"
+  ],
+  "score_accounting_note": "imports cmix_wrapped/program.py via sys.path; for contest-honest submission the cmix binary must be inlined here (~530 KB after base64+gzip)",
+  "kill_conditions": [
+    "S >= cmix_wrapped on identical scope (markup opcode hurts cmix)",
+    "roundtrip not byte-exact",
+    "single-host determinism diff fails"
+  ]
+}

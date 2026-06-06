@@ -1,0 +1,25 @@
+{
+  "id": "fx2_topic_sort_dictcmix_xz_v1",
+  "description": "Small score-honest topic-page-order wrapper around fx2_struct_top_dictcmix_xz_v1 assets",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Complete MediaWiki pages are sorted by category/template/title before compression and restored by page id after decompression. Uses the smaller xz-compressed context-6 binary and cmix-compressed dictionary payload from fx2_struct_top_dictcmix_xz_v1.",
+  "program_files": {
+    "cmix.xz": 81840,
+    "english.dic.cmix": 100208,
+    "program.py": 1676,
+    "total": 183724
+  },
+  "verified_gates": {
+    "10m_driver_roundtrip": {
+      "input_bytes": 10000000,
+      "compressed_size": 1645597,
+      "program_size": 183724,
+      "hutter_score": 1829321,
+      "score_percent": 18.29321,
+      "roundtrip_ok": true,
+      "result_path": "results/fx2_topic_sort_dictcmix_xz_v1/2026-06-02T044358.json",
+      "delta_vs_fx2_struct_top_dictcmix_xz_min_v1": -912
+    }
+  },
+  "verdict": "Promote as current best exact 10MB package. This is still far above the 10 percent target."
+}

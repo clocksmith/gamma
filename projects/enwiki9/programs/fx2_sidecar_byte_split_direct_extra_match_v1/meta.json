@@ -1,0 +1,42 @@
+{
+  "id": "fx2_sidecar_byte_split_direct_extra_match_v1",
+  "description": "fx2-cmix fork with the byte stream unchanged, three decoder-built MediaWiki sidecar byte probability models, four direct sidecar probability inputs, and extra sidecar match contexts; indirect sidecar models are disabled.",
+  "added": "2026-05-30",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH"
+  ],
+  "verified_gates": {
+    "250k_order_phda9": {
+      "compressed_size": 48356,
+      "baseline_fx2_sidecar_byte_split_direct_v1": 48358,
+      "baseline_fx2_sidecar_byte_split_v1": 48368,
+      "baseline_fx2cmix_wrapped_v1": 48369
+    },
+    "1m_order_phda9": {
+      "compressed_size": 174590,
+      "baseline_fx2_sidecar_byte_split_direct_v1": 174594,
+      "baseline_fx2_sidecar_byte_split_v1": 174616,
+      "baseline_fx2cmix_wrapped_v1": 174633
+    },
+    "10m_order_phda9": {
+      "compressed_size": 1630659,
+      "baseline_fx2_sidecar_byte_split_direct_v1": 1630710,
+      "baseline_fx2_sidecar_byte_split_v1": 1630792,
+      "baseline_fx2cmix_wrapped_v1": 1631730,
+      "roundtrip_ok": true
+    }
+  },
+  "tradeoff": {
+    "cmix_bin_gz_delta_vs_fx2_sidecar_byte_split_v1": 853,
+    "cmix_bin_gz_delta_vs_fx2_sidecar_byte_split_direct_v1": 637,
+    "archive_delta_vs_fx2_sidecar_byte_split_v1_10m": -133,
+    "archive_delta_vs_fx2_sidecar_byte_split_direct_v1_10m": -51
+  }
+}

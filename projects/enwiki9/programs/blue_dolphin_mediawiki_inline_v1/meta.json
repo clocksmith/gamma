@@ -1,0 +1,12 @@
+{
+  "id": "blue_dolphin_mediawiki_inline_v1",
+  "phase": 4,
+  "track": "T",
+  "description": "Reversible MediaWiki parser emitting typed inline channels (no stream split); 6 structural states; lzma back-end",
+  "added": "2026-05-09",
+  "deps": [],
+  "compares_against": ["baseline_lzma", "schema_lzma_v1"],
+  "states": ["OUTSIDE", "TEXT", "TEMPLATE", "WIKILINK", "REF", "TABLE"],
+  "kill_condition": "S >= baseline_lzma on full corpus, OR roundtrip fails, OR patch_fraction > joint break-even",
+  "score_accounting_note": "marker bytes (~2 bytes per state transition) inflate transformed size; backend compression of typed boundaries must overcome this"
+}

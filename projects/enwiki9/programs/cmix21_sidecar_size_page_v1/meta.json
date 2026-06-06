@@ -1,0 +1,73 @@
+{
+  "id": "cmix21_sidecar_size_page_v1",
+  "description": "Size-built cmix21 sidecar direct/page model. Same decoder-built MediaWiki sidecar contexts as cmix21_sidecar_direct_page_v1, rebuilt with section garbage collection and a stripped size-oriented binary so the decompressor payload is smaller.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "source_tree": "external/cmix21-sidecar",
+  "build_flags": [
+    "-std=c++14",
+    "-Wall",
+    "-Os",
+    "-march=native",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-Wl,--gc-sections",
+    "-s"
+  ],
+  "build_defines": [
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_PAGE_MATCH"
+  ],
+  "verified_gates": {
+    "250k_raw_driver_no_save": {
+      "compressed_size": 44903,
+      "program_size": 373960,
+      "hutter_score": 418863,
+      "baseline_fx2_sidecar_wrt_learn_v1_hutter_score": 408502,
+      "roundtrip_ok": true
+    },
+    "250k_raw_manual": {
+      "compressed_size": 44903,
+      "program_size_from_files": 373960,
+      "hutter_score_from_files": 418863,
+      "baseline_cmix21_wrapped_v1_compressed_size": 44907,
+      "baseline_cmix21_sidecar_direct_page_v1_packaged_compressed_size": 44908,
+      "baseline_cmix21_sidecar_direct_page_v1_rebuilt_compressed_size": 44905,
+      "baseline_fx2_sidecar_wrt_learn_v1_hutter_score": 408502,
+      "roundtrip_ok": true
+    }
+  },
+  "pruned_hypotheses": {
+    "SIDECAR_WRT_LEARN": {
+      "compressed_size": 44903,
+      "cmix_bin_gz_size": 196619,
+      "reason": "Archive tie versus size-page baseline, with larger packaged binary."
+    },
+    "SIDECAR_BYTE_MODEL_SIDECAR_BYTE_SPLIT": {
+      "compressed_size": 44963,
+      "cmix_bin_gz_size": 197751,
+      "reason": "Archive regression and larger packaged binary."
+    },
+    "O2_size_gc_strip": {
+      "compressed_size": 44900,
+      "cmix_bin_gz_size": 306348,
+      "reason": "Archive improves by 3 bytes but the packaged binary grows by 109829 bytes versus the promoted -Os build."
+    },
+    "O3_size_gc_strip": {
+      "compressed_size": 44907,
+      "cmix_bin_gz_size": 371893,
+      "reason": "Archive regression versus the promoted -Os build and much larger packaged binary."
+    },
+    "indirect_sidecar_models_enabled": {
+      "compressed_size": 44917,
+      "cmix_bin_gz_size": 196767,
+      "reason": "Archive regression versus SIDECAR_NO_INDIRECT baseline."
+    },
+    "SIDECAR_EXTRA_MATCH": {
+      "compressed_size": 44902,
+      "cmix_bin_gz_size": 196660,
+      "reason": "Archive improves by 1 byte but the packaged binary grows by 141 bytes versus the promoted -Os build."
+    }
+  },
+  "verdict": "Promote as the best cmix21-sidecar packaging and raw-prefix archive gate, but not as the 250k scored leader because fx2_sidecar_wrt_learn_v1 has a much smaller program payload."
+}

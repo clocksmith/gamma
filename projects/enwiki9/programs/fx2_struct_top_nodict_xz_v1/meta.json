@@ -1,0 +1,33 @@
+{
+  "id": "fx2_struct_top_nodict_xz_v1",
+  "description": "xz-packaged wrapper for the context-6 LTO fx2-cmix no-dictionary package",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Same native no-dictionary binary bytes as fx2_struct_top_nodict_min_v1 after gzip decompression, stored as xz and invoked with cmix -c input output / cmix -d input output.",
+  "program_files": {
+    "cmix.xz": 81848,
+    "program.py": 535,
+    "total": 82383
+  },
+  "verified_gates": {
+    "1k_driver_smoke": {
+      "input_bytes": 1000,
+      "compressed_size": 294,
+      "program_size": 82383,
+      "hutter_score": 82677,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "result_path": "results/fx2_struct_top_nodict_xz_v1/2026-06-01T142803.json"
+    },
+    "10m_inherited_from_fx2_struct_top_nodict_v1": {
+      "input_bytes": 10000000,
+      "compressed_size": 1776100,
+      "program_size": 82383,
+      "hutter_score": 1858483,
+      "score_percent": 18.58483,
+      "score_delta_vs_fx2_struct_top_nodict_min_v1": -12781,
+      "distance_to_10_percent_score": 858483,
+      "roundtrip_basis": "Same decompressed native binary and same -c/-d arguments as the direct-verified parent, plus local 1KB roundtrip and deterministic archive gate."
+    }
+  },
+  "verdict": "Promote as the current best measured 10MB exact-S package. This is a packaging improvement only; it does not change the entropy model."
+}

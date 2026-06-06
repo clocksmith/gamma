@@ -1,0 +1,41 @@
+{
+  "id": "fx2_struct_top_dictcmix_xz_min_v1",
+  "description": "Minified wrapper for the same context-6 LTO fx2-cmix top-mixer payload used by fx2_struct_top_dictcmix_xz_v1",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "notes": "Compression behavior should match fx2_struct_top_dictcmix_xz_v1 byte-for-byte; this variant only reduces the scored Python wrapper bytes.",
+  "program_files": {
+    "cmix.xz": 81840,
+    "english.dic.cmix": 100208,
+    "program.py": 635,
+    "total": 182683
+  },
+  "verified_gates": {
+    "1k_driver_identity_vs_fx2_struct_top_dictcmix_xz_v1": {
+      "input_bytes": 1000,
+      "compressed_size": 255,
+      "program_size": 182683,
+      "hutter_score": 182938,
+      "compressed_md5": "83f49b5498c491680551c55638fb8a2f",
+      "parent_compressed_md5": "83f49b5498c491680551c55638fb8a2f",
+      "roundtrip_ok": true
+    },
+    "1m_inherited_from_fx2_struct_top_dictcmix_xz_v1": {
+      "input_bytes": 1000000,
+      "compressed_size": 175172,
+      "program_size": 182683,
+      "hutter_score": 357855,
+      "score_percent": 35.7855,
+      "roundtrip_basis": "Same decompressed native binary, byte-identical decoded dictionary, same -c/-d dictionary arguments, and byte-identical 1KB archive output."
+    },
+    "10m_inherited_from_fx2_struct_top_dictcmix_xz_v1": {
+      "input_bytes": 10000000,
+      "compressed_size": 1647550,
+      "program_size": 182683,
+      "hutter_score": 1830233,
+      "score_percent": 18.30233,
+      "distance_to_10_percent_score": 830233,
+      "roundtrip_basis": "Same decompressed native binary, byte-identical decoded dictionary, same -c/-d dictionary arguments, and byte-identical 1KB archive output."
+    }
+  },
+  "verdict": "Promote as a packaging-only improvement over fx2_struct_top_dictcmix_xz_v1."
+}

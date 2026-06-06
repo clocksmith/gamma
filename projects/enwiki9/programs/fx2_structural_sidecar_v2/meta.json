@@ -1,0 +1,25 @@
+{
+  "id": "fx2_structural_sidecar_v2",
+  "description": "Current fx2-cmix structural sidecar build with byte stream unchanged and structural direct, indirect, match, and mixer contexts enabled.",
+  "added": "2026-05-31",
+  "deps": ["C++ runtime for the vendored cmix binary"],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000"
+  ],
+  "source_changes": [
+    "Rebuilds the clean structural sidecar path from the current source and smaller dictionary packaging.",
+    "Leaves sketch and WRT-learn features disabled."
+  ],
+  "verified_gates": {
+    "250k_prefix_driver_no_save": {
+      "compressed_size": 45272,
+      "program_size": 357934,
+      "hutter_score": 403206,
+      "roundtrip_ok": true,
+      "baseline_fx2_structural_sidecar_v1_compressed_size": 45281,
+      "baseline_fx2_structural_sidecar_v1_hutter_score": 401918
+    }
+  },
+  "verdict": "Pruned on the scored 250k gate. Current-source packaging improves archive by 9 bytes but grows the counted package by 1297 bytes versus fx2_structural_sidecar_v1."
+}

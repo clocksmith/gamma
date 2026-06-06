@@ -1,0 +1,52 @@
+{
+  "id": "structural_demux_lzma2_v1",
+  "description": "Context-decoupled structural demux baseline. A deterministic parser keeps tag syntax in a skeleton stream, moves non-tag alphabetic prose runs into a prose stream, moves digit runs into a numeric stream, compresses streams independently with LZMA2, and falls back to raw LZMA2 when demux loses.",
+  "added": "2026-05-31",
+  "deps": ["Python stdlib lzma"],
+  "hypothesis": "Separate syntax/prose/numeric distributions before backend coding so XML and MediaWiki structure do not shatter prose contexts.",
+  "score_rule": "S = compressed archive bytes + counted program bytes.",
+  "verified_gates": {
+    "10m_driver_no_save": {
+      "compressed_size": 2713417,
+      "program_size": 9747,
+      "hutter_score": 2723164,
+      "roundtrip_ok": true,
+      "baseline_xz_lzma2_1g_compressed_size": 2720252,
+      "baseline_xz_lzma2_1g_hutter_score": 2720760,
+      "baseline_lzma_hutter_score": 2720457,
+      "selected_mode": "block_demux",
+      "candidate_archives": {
+        "raw_lzma2": 2720261,
+        "block_demux": 2713417,
+        "word_demux_4": 3265743,
+        "word_demux_5": 3162531,
+        "word_demux_6": 3069299
+      },
+      "stream_byte_entropy": {
+        "syntax_skeleton": 4.33161,
+        "prose_blocks": 5.07024,
+        "numeric_values": 3.87517
+      }
+    },
+    "100m_driver_no_save": {
+      "compressed_size": 24702703,
+      "program_size": 9740,
+      "hutter_score": 24712443,
+      "roundtrip_ok": true,
+      "baseline_xz_lzma2_1g_hutter_score": 24767344,
+      "baseline_article_geometry_v6_catprefix_hutter_score": 22985812,
+      "baseline_fx2cmix_wrapped_v1_hutter_score": 15723491,
+      "selected_mode": "block_demux",
+      "candidate_archives": {
+        "raw_lzma2": 24766845,
+        "block_demux": 24702703
+      },
+      "stream_byte_entropy": {
+        "syntax_skeleton": 4.32171,
+        "prose_blocks": 5.05103,
+        "numeric_values": 3.85916
+      }
+    }
+  },
+  "verdict": "Block demux proves a real archive win on 10MB, but counted Python source makes it a scored loss versus tiny raw-LZMA wrappers. Word-level demux is pruned because marker overhead dominates."
+}
