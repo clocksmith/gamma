@@ -592,6 +592,9 @@ void ContextManager::UpdateSidecar() {
       ^ (side_template_arg_ << 12)
       ^ (side_slot_ << 8)
       ^ (side_word_hash_ & 255);
+  sidecar_schema_ctx_ = (side_template_hash_ << 16)
+      ^ ((side_template_arg_ & 15) << 8)
+      ^ (side_slot_ & 15);
   sidecar_ctx8_ = (side_page_kind_ << 20)
       ^ (side_page_bucket_ << 12)
       ^ (side_word_hash_ & 4095);
