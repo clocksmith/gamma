@@ -1,0 +1,126 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_byte_prior_wrt_blend20k_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "measured_negative",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "description": "Recovered fx2-cmix payload with the minwrap_v3 wrapper and a WRT-aware structural byte prior applied as a direct output-layer blend. The prior input path is disabled, existing context hashes and counters are not mutated, and the correction only applies while structural sidecar state is active.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_SIDECAR_WRT_AWARE=1",
+      "FX2_STRUCT_BYTE_PRIOR=1",
+      "FX2_STRUCT_BYTE_PRIOR_AS_INPUT=0",
+      "FX2_STRUCT_BYTE_PRIOR_STRENGTH=0.35f",
+      "FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM=20000"
+    ],
+    "flags": [
+      "-march=znver2",
+      "-O3",
+      "-Os",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "Reuses the minwrap_v3 wrapper and repacks cmix/english.dic as xz streams with --check=none."
+  },
+  "hypothesis": "The learned-mixer prior input changed probability hashes but did not reduce archive bytes. A small direct output blend should test the user's soft-constraint idea more directly while keeping the sidecar non-destructive.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_struct_byte_prior_direct_blend"
+          }
+        }
+      },
+      {
+        "id": "sidecar",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "wrt_aware_structural_byte_prior",
+            "mutation": "none",
+            "vocab_filter": "intersect",
+            "injection": "direct_output_blend"
+          },
+          "continuous": {
+            "prior_strength": 0.35,
+            "direct_blend": 0.02
+          }
+        }
+      },
+      {
+        "id": "wrapper",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "mode": "minimal_python_xz_unpack_no_pathlib"
+          }
+        }
+      },
+      {
+        "id": "container",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "format": "xz",
+            "check": "none"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar",
+        "to": "substrate",
+        "stream": "probability_prior"
+      },
+      {
+        "from": "container",
+        "to": "wrapper",
+        "stream": "payload"
+      },
+      {
+        "from": "wrapper",
+        "to": "substrate",
+        "stream": "exec"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 264,
+      "program_size": 285360,
+      "hutter_score": 285624,
+      "parent_compressed_size": 262,
+      "parent_hutter_score": 283890,
+      "archive_delta_vs_parent": 2,
+      "score_delta_vs_parent": 1734,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T16:09:27"
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13632,
+      "program_size": 285360,
+      "hutter_score": 298992,
+      "parent_compressed_size": 13585,
+      "parent_hutter_score": 297213,
+      "archive_delta_vs_parent": 47,
+      "score_delta_vs_parent": 1779,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T16:11:33"
+    }
+  },
+  "verdict": "Reject. The direct output-layer blend is deterministic, but it worsens archive size at both measured screens: +2 bytes at 1 KiB and +47 bytes at 64 KiB before the 1732-byte program-size penalty."
+}

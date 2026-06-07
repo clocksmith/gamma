@@ -1,0 +1,136 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_byte_prior_wrt_s035_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "measured_negative",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "description": "Recovered fx2-cmix payload with the minwrap_v3 wrapper and a WRT-aware non-destructive structural byte prior. The sidecar recognizes fx2's transformed structural bytes, intersects candidate bytes with the codec vocabulary, and contributes one softened probability input without mutating existing context hashes or counters.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_SIDECAR_WRT_AWARE=1",
+      "FX2_STRUCT_BYTE_PRIOR=1",
+      "FX2_STRUCT_BYTE_PRIOR_STRENGTH=0.35f"
+    ],
+    "flags": [
+      "-march=znver2",
+      "-O3",
+      "-Os",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "Reuses the minwrap_v3 wrapper and repacks cmix/english.dic as xz streams with --check=none."
+  },
+  "hypothesis": "The raw-byte prior was blind to WRT-remapped structure. Making the sidecar and byte filter WRT-aware should expose XML/wiki structural state to the mixer without fragmenting trained fx2 counters.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_struct_byte_prior_wrt"
+          }
+        }
+      },
+      {
+        "id": "sidecar",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "wrt_aware_structural_byte_prior",
+            "mutation": "none",
+            "vocab_filter": "intersect"
+          },
+          "continuous": {
+            "strength": 0.35
+          }
+        }
+      },
+      {
+        "id": "wrapper",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "mode": "minimal_python_xz_unpack_no_pathlib"
+          }
+        }
+      },
+      {
+        "id": "container",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "format": "xz",
+            "check": "none"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar",
+        "to": "substrate",
+        "stream": "probability_prior"
+      },
+      {
+        "from": "container",
+        "to": "wrapper",
+        "stream": "payload"
+      },
+      {
+        "from": "wrapper",
+        "to": "substrate",
+        "stream": "exec"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 262,
+      "program_size": 285440,
+      "hutter_score": 285702,
+      "parent_compressed_size": 262,
+      "parent_hutter_score": 283890,
+      "archive_delta_vs_parent": 0,
+      "score_delta_vs_parent": 1812,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T16:01:10"
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13585,
+      "program_size": 285440,
+      "hutter_score": 299025,
+      "parent_compressed_size": 13585,
+      "parent_hutter_score": 297213,
+      "archive_delta_vs_parent": 0,
+      "score_delta_vs_parent": 1812,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T16:03:14"
+    },
+    "1m_screen": {
+      "data_size": 1048576,
+      "compressed_size": 182394,
+      "program_size": 285440,
+      "hutter_score": 467834,
+      "parent_compressed_size": 182395,
+      "parent_program_size": 283628,
+      "parent_hutter_score": 466023,
+      "archive_delta_vs_parent": -1,
+      "score_delta_vs_parent": 1811,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T16:34:16"
+    }
+  },
+  "verdict": "Reject as a winner, but keep as useful evidence. The WRT-aware/vocab-aware prior is deterministic, ties archive size at 64 KiB, and improves 1 MiB archive by 1 byte versus recovered fx2, but it adds 1812 counted program bytes versus fx2cmix_recovered_gcc_o3_xz_minwrap_v3."
+}

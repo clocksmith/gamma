@@ -392,12 +392,18 @@ def update_candidate_meta(candidate_id: str, triage: dict[str, Any]) -> None:
     if not isinstance(measured, dict):
         measured = {}
         meta["measured"] = measured
-    measured["lane0_triage"] = {
+    run_record = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "gates": triage.get("gates", []),
         "proposed_status": triage.get("proposed_status"),
         "verdict": triage.get("verdict"),
     }
+    runs = measured.setdefault("lane0_triage_runs", [])
+    if not isinstance(runs, list):
+        runs = []
+        measured["lane0_triage_runs"] = runs
+    runs.append(run_record)
+    measured["lane0_triage"] = run_record
 
     proposed_status = triage.get("proposed_status")
     if proposed_status in {

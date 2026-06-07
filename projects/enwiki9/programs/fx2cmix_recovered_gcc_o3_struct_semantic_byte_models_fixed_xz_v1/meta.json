@@ -1,0 +1,68 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_semantic_byte_models_fixed_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "candidate",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "supersedes": [
+    "fx2cmix_recovered_gcc_o3_struct_semantic_byte_models_xz_v1"
+  ],
+  "description": "Recovered fx2-cmix payload with the corrected ByteMixer multi-input scale, dictionary-pretrain sidecar-byte sync, semantic MediaWiki direct/match contexts, and three learned semantic sidecar byte-distribution models.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_SIDECAR_WRT_AWARE=1",
+      "FX2_STRUCT_SIDECAR_BYTE_MODEL=1",
+      "FX2_STRUCT_SIDECAR_BYTE_ROWS=4096",
+      "FX2_STRUCT_SIDECAR_MODELS=1"
+    ],
+    "fixes": [
+      "ByteMixer multi-input scaling uses float division",
+      "Sidecar byte models advance during dictionary pretraining"
+    ],
+    "packaging": "Minified Python xz bootstrap with check-free cmix.xz and english.dic.xz payloads."
+  },
+  "hypothesis": "The archive-positive older byte-split family may become useful when its recomputable semantic state is compiled into recovered fx2-cmix rather than shipped as a large sidecar wrapper. This candidate evaluates the corrected combined native path after isolating byte-only and direct/match-only variants.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3_corrected_semantic_sidecar"
+          }
+        }
+      },
+      {
+        "id": "sidecar",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "semantic_mediawiki_native",
+            "byte_models": "split_3",
+            "direct_models": "enabled",
+            "match_models": "enabled",
+            "stream_mutation": "none"
+          },
+          "continuous": {
+            "byte_rows": 4096
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar",
+        "to": "substrate",
+        "stream": "native_models"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Pending measured gates."
+}

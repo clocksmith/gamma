@@ -62,6 +62,23 @@ after deciding that the parent repository should own every raw `fx2-cmix` file.
 | `track_source_before_evolution` | Source exists outside the safe Git boundary. | Track or document source boundary before scoring. |
 | `retired` | Contract fails, roundtrip fails, or measured value is absent after audit. | Keep only if documented as a negative result. |
 
+## Evidence Basis
+
+Do not mix exact measurements with inherited or forecast frontier claims.
+
+- `measured`: exact `lib/driver.py` or equivalent same-scope result. It must
+  include `data_size`, archive bytes, counted program bytes, total S, roundtrip
+  status, and determinism status when available.
+- `inferred_frontier`: inherited or forecast rows. These may use measured
+  archive identity, measured program-size deltas, or calibrated full-corpus
+  forecasts, but they are not driver results at that scope.
+- `requires_driver_confirmation`: true whenever an inferred row is still
+  waiting for an exact same-scope run.
+
+Packaging wins and model wins must be described separately. If archive bytes do
+not improve, the row is a container/program-size win, not an algorithmic
+compression improvement.
+
 ## Lane 0 Evidence Hygiene
 
 Lane 0 is the shared intake gate for the existing cleanup queue and every new
@@ -213,6 +230,41 @@ python3 projects/enwiki9/tools/candidate_triage.py --run --update-meta --candida
 
 Only `active` or `measured_negative` Lane B outputs should become named
 frontier points or parents for later search.
+
+### Projection Rule
+
+Treat enwik9 as structured data projected onto a flat byte stream. Do not split
+primary model history with hard context mutations unless the archive bytes prove
+the split is worth the lost continuity. Prefer transformations that preserve
+the original stream or derive state from bytes already visible to both encoder
+and decoder:
+
+- Static or learned residual streams must be reversible and byte-exact.
+- Page or layout reordering must carry explicit order cost in the archive.
+- Mixer side state should be additive or softly gated, not a destructive hash
+  replacement.
+- Every extra coordinate system must pay for its counted source bytes at the
+  same data scope.
+
+### Macro-Residual Token Search
+
+Static macro tables saturate quickly, so token additions must be measured
+instead of guessed. Use the locked helper against a parent program that exposes
+its byte macro list as `S`:
+
+```bash
+python3 projects/enwiki9/tools/macro_token_search.py \
+  --parent xml_scaffold__macro_residual__wiki_layout__lzma_extreme__min__v03 \
+  --limit 1000000 \
+  --greedy
+```
+
+The helper acquires `/tmp/enwiki9-heavy.lock` before running LZMA evaluations.
+Rows are sorted by estimated net score delta (`archive_delta +
+source_cost_hint`). Greedy mode re-evaluates remaining tokens after each
+accepted addition so interacting tokens are measured against the updated table.
+Only tokens whose archive savings exceed their added source bytes should become
+a new candidate table.
 
 ## Audit Command
 
