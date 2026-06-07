@@ -36,18 +36,26 @@ index 5eb75b2..a1b7b38 100644
  all: cmix remap
 -
 diff --git a/src/context-manager.cpp b/src/context-manager.cpp
-index f75b3ca..3770265 100644
+index f75b3ca..a90f6ba 100644
 --- a/src/context-manager.cpp
 +++ b/src/context-manager.cpp
-@@ -62,8 +62,84 @@ ContextManager::ContextManager() : history_(60000000, 0),
+@@ -1,4 +1,7 @@
+ #include "context-manager.h"
++#include <algorithm>
++#include <cstring>
++
+ extern unsigned long long wrtcxt;
+ 
+ extern const unsigned char wrt_2b[256];
+@@ -62,8 +65,347 @@ ContextManager::ContextManager() : history_(60000000, 0),
      hashes_ind3.resize(0x2000000, 0);
      hashes_ind4.resize(0x100, 0);
      hashes_ind5.resize(0x100, 0);
 +#if FX2_STRUCT_SIDECAR
 +    sidecar_pairs_.resize(1 << 20, 0);
 +#endif
- }
- 
++}
++
 +#if FX2_STRUCT_SIDECAR
 +static unsigned long long MixStructural64(unsigned long long x) {
 +  x ^= x >> 33;
@@ -58,8 +66,97 @@ index f75b3ca..3770265 100644
 +  return x;
 +}
 +
++static unsigned char SideNorm(unsigned char c) {
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++  if (c == LESSTHAN) return '<';
++  if (c == GREATERTHAN) return '>';
++  if (c == CURLYOPENING) return '{';
++  if (c == CURLYCLOSE) return '}';
++  if (c == VERTICALBAR) return '|';
++  if (c == COLON) return ':';
++  if (c == EQUALS) return '=';
++#endif
++  return c;
++}
++
++static unsigned char SideLower(unsigned char c) {
++  return (c >= 'A' && c <= 'Z') ? c + ('a' - 'A') : c;
++}
++
++static unsigned int SideBucket(unsigned int v) {
++  unsigned int b = 0;
++  while (v > 15 && b < 15) {
++    v >>= 1;
++    ++b;
++  }
++  return b;
++}
++
++static unsigned int SideClass(unsigned char c) {
++  if (c >= 'A' && c <= 'Z') return 1;
++  if (c >= 'a' && c <= 'z') return 2;
++  if (c >= '0' && c <= '9') return 3;
++  if (c == ' ' || c == '\n' || c == '\t' || c == '\r') return 4;
++  if (c == '<' || c == '>' || c == '/' || c == '=' || c == '"') return 5;
++  if (c == '[' || c == ']' || c == '{' || c == '}' || c == '|') return 6;
++  if (c >= 128) return 7;
++  return 0;
++}
++
++void ContextManager::SidecarPush(unsigned char c) {
++  c = SideNorm(c);
++  if (side_tail_len < side_tail_.size()) {
++    side_tail_[side_tail_len++] = c;
++  } else {
++    for (unsigned int i = 1; i < side_tail_.size(); ++i) {
++      side_tail_[i - 1] = side_tail_[i];
++    }
++    side_tail_[side_tail_.size() - 1] = c;
++  }
++}
++
++bool ContextManager::SidecarEndsWith(const char* s) const {
++  const unsigned int n = std::strlen(s);
++  if (n > side_tail_len) return false;
++  const unsigned int off = side_tail_len - n;
++  for (unsigned int i = 0; i < n; ++i) {
++    if (side_tail_[off + i] != static_cast<unsigned char>(s[i])) return false;
++  }
++  return true;
++}
++
++bool ContextManager::SidecarEndsWithFold(const char* s) const {
++  const unsigned int n = std::strlen(s);
++  if (n > side_tail_len) return false;
++  const unsigned int off = side_tail_len - n;
++  for (unsigned int i = 0; i < n; ++i) {
++    if (SideLower(side_tail_[off + i]) !=
++        SideLower(static_cast<unsigned char>(s[i]))) return false;
++  }
++  return true;
++}
++
++void ContextManager::SidecarRememberEntity(unsigned int h) {
++  if (h == 0) return;
++  unsigned int rank = 31;
++  for (unsigned int i = 0; i < side_recent_entities_.size(); ++i) {
++    if (side_recent_entities_[i] == h) {
++      rank = i;
++      for (unsigned int j = i; j > 0; --j) {
++        side_recent_entities_[j] = side_recent_entities_[j - 1];
++      }
++      break;
++    }
++  }
++  side_recent_entities_[0] = h;
++  side_entity_hash = h;
++  side_entity_recency = rank;
++}
++
 +void ContextManager::UpdateStructuralSidecar() {
-+  const unsigned int c = bit_context_;
++  const unsigned char c = SideNorm(static_cast<unsigned char>(bit_context_));
++  const unsigned char lc = SideLower(c);
++  SidecarPush(c);
 +
 +  if (sidecar_utf8_tail > 0) {
 +    --sidecar_utf8_tail;
@@ -72,27 +169,199 @@ index f75b3ca..3770265 100644
 +    sidecar_utf8_tail = 3;
 +  }
 +
-+  if (sidecar_lexer_state == 0) {
-+    if (c == '<') {
-+      sidecar_lexer_state = 1;
-+      if (sidecar_xml_depth < 63) ++sidecar_xml_depth;
-+    } else if (c == '[' || c == '{' || c == '|') {
-+      sidecar_lexer_state = 2;
-+    }
-+  } else if (sidecar_lexer_state == 1) {
-+    if (c == '/' && sidecar_prev_byte == '<' && sidecar_xml_depth > 0) {
-+      --sidecar_xml_depth;
-+    }
-+    if (c == '>') sidecar_lexer_state = 0;
-+  } else if (sidecar_lexer_state == 2) {
-+    if (c == ']' || c == '}' || c == '\n') sidecar_lexer_state = 0;
++  if (c == '\n') side_col = 0;
++  else if (side_col < 4095) ++side_col;
++  if (side_page_pos < 0x7fffffff) ++side_page_pos;
++  side_col_bucket = SideBucket(side_col);
++  side_page_bucket = SideBucket(side_page_pos >> 4);
++
++  if ((lc >= 'a' && lc <= 'z') || (c >= '0' && c <= '9')) {
++    side_word_hash = (side_word_hash * 131 + lc) & 65535;
++    if (side_word_len < 31) ++side_word_len;
++  } else {
++    side_word_hash = 0;
++    side_word_len = 0;
 +  }
 +
-+  if (c == '{' && sidecar_prev_byte == '{') {
-+    if (sidecar_template_depth < 63) ++sidecar_template_depth;
-+  } else if (c == '}' && sidecar_prev_byte == '}' && sidecar_template_depth > 0) {
-+    --sidecar_template_depth;
++  if (SidecarEndsWith("<page>")) {
++    side_page_pos = 0;
++    side_page_bucket = 0;
++    side_page_kind = 1;
++    side_field = 0;
++    side_slot = 0;
++    side_category_state = 0;
 +  }
++
++  if (SidecarEndsWith("<text")) {
++    side_text = 1;
++    side_field = 6;
++  }
++  if (SidecarEndsWith("</text>")) {
++    side_text = 0;
++    side_field = 0;
++    side_slot = 0;
++    side_category_state = 0;
++  }
++
++  if (SidecarEndsWith("<title>")) {
++    side_field = 1;
++    side_title_active = 1;
++    side_title_hash = 0;
++  } else if (SidecarEndsWith("</title>")) {
++    side_title_active = 0;
++    side_field = 0;
++    SidecarRememberEntity(side_title_hash);
++  } else if (side_title_active) {
++    side_title_hash = (side_title_hash * 131 + lc) & 65535;
++    if (SidecarEndsWithFold("category:")) side_page_kind = 5;
++    if (SidecarEndsWithFold("list of")) side_page_kind = 2;
++    if (SidecarEndsWithFold("disambiguation")) side_page_kind = 3;
++  }
++  if (SidecarEndsWith("<id>")) side_field = 2;
++  if (SidecarEndsWith("</id>")) side_field = 0;
++  if (SidecarEndsWith("<username>")) side_field = 4;
++  if (SidecarEndsWith("</username>")) side_field = 0;
++  if (SidecarEndsWith("<comment>")) side_field = 5;
++  if (SidecarEndsWith("</comment>")) side_field = 0;
++
++  if (c == '<') side_in_tag = 1;
++  if (c == '>') side_in_tag = 0;
++
++  if (SidecarEndsWith("{{")) {
++    if (side_template_depth < 15) ++side_template_depth;
++    side_template_hash = 0;
++    side_template_arg = 0;
++  } else if (SidecarEndsWith("}}")) {
++    if (side_template_depth > 0) --side_template_depth;
++    if (side_template_depth == 0) {
++      side_template_hash = 0;
++      side_template_arg = 0;
++    }
++  } else if (side_template_depth) {
++    if (c == '|') {
++      if (side_template_arg == 0) SidecarRememberEntity(side_template_hash);
++      side_template_arg = (side_template_arg + 1) & 15;
++    } else if (side_template_arg == 0 && c > 32 && c != '{' && c != '}') {
++      side_template_hash = (side_template_hash * 167 + lc) & 65535;
++    }
++  }
++
++  if (SidecarEndsWithFold("[[category:")) {
++    side_category_state = std::min(side_category_state + 1, 15u);
++    side_slot = 1;
++  }
++  if (SidecarEndsWithFold("[[image:") || SidecarEndsWithFold("[[file:")) {
++    side_slot = 2;
++  }
++  if (SidecarEndsWithFold("<ref")) side_slot = 5;
++  if (side_template_depth && SidecarEndsWithFold("url=")) side_slot = 7;
++  if (side_template_depth && SidecarEndsWithFold("title=")) side_slot = 8;
++  if (side_text && SidecarEndsWithFold("#redirect")) side_page_kind = 4;
++
++  if (SidecarEndsWith("[[")) {
++    side_link_active = 1;
++    side_link_hash = 0;
++  } else if (side_link_active && c == '|') {
++    SidecarRememberEntity(side_link_hash);
++    side_link_active = 0;
++  } else if (side_link_active && c != ']') {
++    side_link_hash = (side_link_hash * 131 + lc) & 65535;
++  }
++  if (side_link_active && SidecarEndsWith("]]")) {
++    unsigned int rank = 15;
++    for (unsigned int i = 0; i < side_recent_links_.size(); ++i) {
++      if (side_recent_links_[i] == side_link_hash) {
++        rank = i;
++        for (unsigned int j = i; j > 0; --j) {
++          side_recent_links_[j] = side_recent_links_[j - 1];
++        }
++        break;
++      }
++    }
++    side_recent_links_[0] = side_link_hash;
++    side_link_recency = rank;
++    SidecarRememberEntity(side_link_hash);
++    side_link_active = 0;
++  }
++
++  if (!side_ref_active && (SidecarEndsWithFold("name=\"") ||
++      SidecarEndsWithFold("name='"))) {
++    side_ref_active = 1;
++    side_ref_hash = 0;
++    side_slot = 6;
++  } else if (side_ref_active) {
++    if (c == '"' || c == '\'') {
++      SidecarRememberEntity(side_ref_hash);
++      side_ref_active = 0;
++    } else {
++      side_ref_hash = (side_ref_hash * 131 + lc) & 65535;
++    }
++  }
++
++  if (SidecarEndsWith("http://") || SidecarEndsWith("https://")) {
++    side_url_state = 1;
++  }
++  if (side_url_state && (c <= 32 || c == ']' || c == '|')) side_url_state = 0;
++
++  if (c >= '0' && c <= '9') {
++    if (side_numeric_len < 15) ++side_numeric_len;
++    side_numeric_class = side_numeric_len == 4 ? 2 :
++        (side_numeric_len > 4 ? 3 : 1);
++  } else {
++    side_numeric_len = 0;
++    side_numeric_class = 0;
++  }
++
++  sidecar_direct = ((side_text & 1) << 7) |
++      ((side_in_tag & 1) << 6) |
++      ((side_template_depth & 3) << 4) |
++      ((side_numeric_class & 7) << 1) |
++      (side_url_state & 1);
++  sidecar_direct2 = ((side_category_state & 15) << 4) |
++      (side_link_recency & 15);
++  sidecar_direct3 = ((side_field & 7) << 5) |
++      ((side_slot & 15) << 1) |
++      (side_text & 1);
++  sidecar_direct4 = ((side_page_kind & 7) << 5) |
++      ((SideClass(c) & 7) << 2) |
++      ((side_in_tag & 1) << 1) |
++      (side_url_state & 1);
++  sidecar_ctx1 = (side_template_hash << 16) ^
++      (side_template_arg << 12) ^
++      (side_title_hash << 4) ^
++      (side_text & 1);
++  sidecar_ctx2 = (side_link_hash << 8) ^
++      (side_category_state << 4) ^
++      (side_link_recency & 15);
++  sidecar_ctx3 = (sidecar_direct << 16) ^
++      (recent_bytes_[0] << 8) ^
++      (recent_bytes_[1] & 255);
++  sidecar_ctx4 = (side_title_hash << 16) ^
++      (side_template_hash << 8) ^
++      (side_numeric_class << 4) ^
++      (side_url_state & 1);
++  sidecar_ctx5 = (side_field << 24) ^
++      (side_slot << 20) ^
++      (side_page_kind << 16) ^
++      (side_col_bucket << 8) ^
++      SideClass(c);
++  sidecar_ctx6 = (side_entity_hash << 8) ^
++      (side_entity_recency << 3) ^
++      (side_field & 7);
++  sidecar_ctx7 = (side_template_hash << 16) ^
++      (side_template_arg << 12) ^
++      (side_slot << 8) ^
++      (side_word_hash & 255);
++  sidecar_ctx8 = (side_page_kind << 20) ^
++      (side_page_bucket << 12) ^
++      (side_word_hash & 4095);
++
++  sidecar_lexer_state = side_in_tag ? 1 :
++      ((side_template_depth || side_link_active) ? 2 : 0);
++  sidecar_xml_depth = side_field & 63;
++  sidecar_template_depth = side_template_depth;
++  sidecar_context = sidecar_ctx1 ^ (sidecar_ctx2 << 1) ^
++      (sidecar_ctx5 << 2) ^ (sidecar_ctx8 << 3);
 +
 +  const unsigned int pair = ((sidecar_prev_byte & 0xff) << 8) | (c & 0xff);
 +  const unsigned int slot = static_cast<unsigned int>(
@@ -110,9 +379,11 @@ index f75b3ca..3770265 100644
 +      ((sidecar_template_depth & 63) << 8) |
 +      ((sidecar_utf8_tail & 3) << 14) |
 +      ((sidecar_pair_sig & 0xffff) << 16);
++  sidecar_context ^= sidecar_ctx1 ^ (sidecar_ctx2 << 1) ^
++      (sidecar_ctx5 << 2) ^ (sidecar_ctx8 << 3);
 +  sidecar_prev_byte = c;
-+}
-+
+ }
+ 
 +unsigned long long ContextManager::StructuralContext(unsigned int salt) const {
 +  unsigned long long x = sidecar_context;
 +  x ^= (sidecar_pair_sig << 7);
@@ -124,7 +395,7 @@ index f75b3ca..3770265 100644
  void ContextManager::UpdateHistory() {
    history_[history_pos_] = bit_context_;
    ++history_pos_;
-@@ -185,6 +261,15 @@ void ContextManager::UpdateContexts(int bit) {
+@@ -185,6 +527,15 @@ void ContextManager::UpdateContexts(int bit) {
      UpdateWords();
      UpdateRecentBytes();
      UpdateWRTContext();
@@ -140,7 +411,7 @@ index f75b3ca..3770265 100644
  
      for (auto& context : context_hash_contexts_) {
        context.Update();
-@@ -212,10 +297,26 @@ void ContextManager::UpdateContexts(int bit) {
+@@ -212,10 +563,26 @@ void ContextManager::UpdateContexts(int bit) {
    mx17=(b3stream&0x3f)*256+long_bit_context_;// 7f or 3f
    
        if (bpos==0)  mxx=(stream2bR&63)*8 + (b3stream&7);
@@ -170,32 +441,44 @@ index f75b3ca..3770265 100644
  }
 -
 diff --git a/src/context-manager.h b/src/context-manager.h
-index d740327..f5dcf97 100644
+index d740327..2a0fe4e 100644
 --- a/src/context-manager.h
 +++ b/src/context-manager.h
-@@ -19,6 +19,10 @@
+@@ -17,8 +17,18 @@
+ #include <cmath>
+ #include "ds/SmallVector.h"
  
++#include <array>
++#include <string>
  #include <vector>
  
 +#ifndef FX2_STRUCT_SIDECAR
 +#define FX2_STRUCT_SIDECAR 0
 +#endif
 +
++#ifndef FX2_STRUCT_SIDECAR_WRT_AWARE
++#define FX2_STRUCT_SIDECAR_WRT_AWARE 1
++#endif
++
  struct ContextManager {
    ContextManager();
  
-@@ -58,6 +62,10 @@ struct ContextManager {
+@@ -58,6 +68,14 @@ struct ContextManager {
    void UpdateWords();
    void UpdateRecentBytes();
    void UpdateWRTContext();
 +#if FX2_STRUCT_SIDECAR
 +  void UpdateStructuralSidecar();
 +  unsigned long long StructuralContext(unsigned int salt) const;
++  void SidecarPush(unsigned char c);
++  bool SidecarEndsWith(const char* s) const;
++  bool SidecarEndsWithFold(const char* s) const;
++  void SidecarRememberEntity(unsigned int h);
 +#endif
  
    unsigned int bit_context_ = 1, wrt_state_ = 0, bpos=0;
    unsigned long long long_bit_context_ = 1, zero_context_ = 0, history_pos_ = 0,
-@@ -78,6 +86,11 @@ struct ContextManager {
+@@ -78,6 +96,14 @@ struct ContextManager {
        mx17=0,mx17cxt=0,
        mx18=0,mx18cxt=0,
        mxx=0,
@@ -203,21 +486,69 @@ index d740327..f5dcf97 100644
 +      sidecar_lexer_state=0, sidecar_xml_depth=0, sidecar_utf8_tail=0,
 +      sidecar_prev_byte=0, sidecar_pair_sig=0, sidecar_template_depth=0,
 +      sidecar_context=0,
++      sidecar_direct=0, sidecar_direct2=0, sidecar_direct3=0, sidecar_direct4=0,
++      sidecar_ctx1=0, sidecar_ctx2=0, sidecar_ctx3=0, sidecar_ctx4=0,
++      sidecar_ctx5=0, sidecar_ctx6=0, sidecar_ctx7=0, sidecar_ctx8=0,
 +#endif
        words=0,wordscxt=0,
        ind1=0,context1_ind=0,
        ind2=0,context1_ind2=0,
-@@ -87,6 +100,9 @@ struct ContextManager {
+@@ -87,6 +113,22 @@ struct ContextManager {
        mx19cxt=0;
    std::vector<unsigned char> history_, shared_map_;
    std::vector<unsigned long long> words_, recent_bytes_;
 +#if FX2_STRUCT_SIDECAR
 +  std::vector<unsigned int> sidecar_pairs_;
++  unsigned int side_text=0, side_in_tag=0, side_template_hash=0,
++      side_template_arg=0, side_template_depth=0, side_link_hash=0,
++      side_link_active=0,
++      side_link_recency=0, side_title_active=0, side_title_hash=0,
++      side_category_state=0, side_numeric_class=0, side_numeric_len=0,
++      side_url_state=0, side_tail_len=0, side_field=0, side_slot=0,
++      side_page_kind=0, side_col=0, side_col_bucket=0, side_page_pos=0,
++      side_page_bucket=0, side_word_hash=0, side_word_len=0,
++      side_entity_hash=0, side_entity_recency=31, side_ref_active=0,
++      side_ref_hash=0;
++  std::array<unsigned char, 32> side_tail_{};
++  std::array<unsigned int, 16> side_recent_links_{};
++  std::array<unsigned int, 32> side_recent_entities_{};
 +#endif
    llvm::SmallVector<ContextHash, 12> context_hash_contexts_;
    llvm::SmallVector<Sparse, 18> sparse_contexts_;
    llvm::SmallVector<BracketContext, 1> bracket_contexts_;
-@@ -96,4 +112,3 @@ struct ContextManager {
+@@ -96,4 +138,3 @@ struct ContextManager {
+ };
+ 
+ #endif
+-
+diff --git a/src/mixer/byte-mixer.cpp b/src/mixer/byte-mixer.cpp
+index f4df691..6c8b40f 100644
+--- a/src/mixer/byte-mixer.cpp
++++ b/src/mixer/byte-mixer.cpp
+@@ -20,7 +20,7 @@ void ByteMixer::SetInput(int index, float val) {
+ }
+ 
+ void ByteMixer::ByteUpdate() {
+-  inputs_ *= 2 / num_models_;
++  inputs_ *= 2.0f / num_models_;
+   lstm_->SetInput(inputs_);
+   inputs_ = 0;
+   const auto& output = lstm_->Perceive(byte_map_[byte_]);
+diff --git a/src/models/byte-model.h b/src/models/byte-model.h
+index 11af112..7df7c67 100644
+--- a/src/models/byte-model.h
++++ b/src/models/byte-model.h
+@@ -13,13 +13,12 @@ class ByteModel : public Model {
+   const std::valarray<float>& BytePredict();
+    std::valarray<float>& Predict() ;
+   void Perceive(int bit);
++  virtual void ByteUpdate();
+   int ex;
+  protected:
+-  void ByteUpdate();
+   int top_, mid_, bot_;
+   const std::vector<bool>& vocab_;
+   std::valarray<float> probs_;
  };
  
  #endif
@@ -249,7 +580,7 @@ index dcc832c..3d98ad0 100644
  } // namespace PPMD
 -
 diff --git a/src/predictor.cpp b/src/predictor.cpp
-index 503edfb..97fc476 100644
+index 503edfb..4520e75 100644
 --- a/src/predictor.cpp
 +++ b/src/predictor.cpp
 @@ -3,6 +3,7 @@
@@ -260,7 +591,90 @@ index 503edfb..97fc476 100644
  
  Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
      sigmoid_(100001), vocab_(vocab) {
-@@ -163,15 +164,46 @@ void Predictor::AddMixers() {
+@@ -11,6 +12,12 @@ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
+   AddWord();
+   AddMatch();
+   AddDoubleIndirect();
++#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_MODELS
++  AddStructuralSidecarModels();
++#endif
++#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_BYTE_MODEL
++  AddStructuralSidecarByteModels();
++#endif
+   AddMixers();
+   auxiliary_size_ = 2;
+ }
+@@ -27,6 +34,9 @@ unsigned long long Predictor::GetNumModels() {
+   num += indirect_r_models_.size();
+   num += byte_model_->NumOutputs();
+   num += byte_mixer_->NumOutputs();
++#if FX2_STRUCT_BYTE_PRIOR && FX2_STRUCT_BYTE_PRIOR_AS_INPUT
++  num += 1;
++#endif
+   return num;
+ }
+ 
+@@ -120,6 +130,50 @@ void Predictor::AddDoubleIndirect() {
+   indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind3,  manager_.bit_context_, delta, manager_.shared_map_);
+   indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind5,  manager_.bit_context_, delta, manager_.shared_map_);
+ }
++
++#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_MODELS
++void Predictor::AddStructuralSidecarModels() {
++  direct_models_.emplace_back(manager_.sidecar_direct, manager_.bit_context_,
++      40, 2.0, 256);
++  direct_models_.emplace_back(manager_.sidecar_direct2, manager_.bit_context_,
++      40, 2.0, 256);
++  direct_models_.emplace_back(manager_.sidecar_direct3, manager_.bit_context_,
++      45, 2.0, 256);
++  direct_models_.emplace_back(manager_.sidecar_direct4, manager_.bit_context_,
++      45, 2.0, 256);
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx2,
++      manager_.bit_context_, 160, 0.5, 2000000, &(manager_.longest_match_));
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx3,
++      manager_.bit_context_, 160, 0.5, 2000000, &(manager_.longest_match_));
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx1,
++      manager_.bit_context_, 120, 0.45, 2000000, &(manager_.longest_match_));
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx4,
++      manager_.bit_context_, 120, 0.45, 2000000, &(manager_.longest_match_));
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx6,
++      manager_.bit_context_, 180, 0.45, 2000000, &(manager_.longest_match_));
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx7,
++      manager_.bit_context_, 140, 0.45, 2000000, &(manager_.longest_match_));
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx5,
++      manager_.bit_context_, 120, 0.45, 2000000, &(manager_.longest_match_));
++  match_models_.emplace_back(manager_.history_, manager_.sidecar_ctx8,
++      manager_.bit_context_, 120, 0.45, 2000000, &(manager_.longest_match_));
++}
++#endif
++
++#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_BYTE_MODEL
++void Predictor::AddStructuralSidecarByteModels() {
++  sidecar_byte_models_.emplace_back(new SidecarByteModel(manager_.bit_context_,
++      vocab_, {&manager_.sidecar_ctx1, &manager_.sidecar_ctx7},
++      FX2_STRUCT_SIDECAR_BYTE_ROWS));
++  sidecar_byte_models_.emplace_back(new SidecarByteModel(manager_.bit_context_,
++      vocab_, {&manager_.sidecar_ctx2, &manager_.sidecar_ctx6},
++      FX2_STRUCT_SIDECAR_BYTE_ROWS));
++  sidecar_byte_models_.emplace_back(new SidecarByteModel(manager_.bit_context_,
++      vocab_, {&manager_.sidecar_ctx5, &manager_.sidecar_ctx8},
++      FX2_STRUCT_SIDECAR_BYTE_ROWS));
++}
++#endif
++
+ unsigned int Discretize(float p) {
+   return 1 + 4094 * p;
+ }
+@@ -128,7 +182,7 @@ void Predictor::AddMixers() {
+   for (unsigned int i = 0; i < vocab_.size(); ++i) {
+     if (vocab_[i]) ++vocab_size;
+   }
+-  byte_mixer_.emplace(1, manager_.bit_context_, vocab_,
++  byte_mixer_.emplace(1 + sidecar_byte_models_.size(), manager_.bit_context_, vocab_,
+       vocab_size, new Lstm(vocab_size, vocab_size, 200, 1, 128, 0.03, 10));
+ 
+   for (int i = 0; i < 2; ++i) {
+@@ -163,15 +217,171 @@ void Predictor::AddMixers() {
    AddMixer(0, manager_.mx16, 0.005);
    AddMixer(0, manager_.mx14, 0.005);
    AddMixer(0, manager_.mx15, 0.005);
@@ -304,23 +718,181 @@ index 503edfb..97fc476 100644
 +      ((manager_.longest_match_ & 0xffULL) << 24);
 +}
 +#endif
++
++#if FX2_STRUCT_BYTE_PRIOR
++static bool PriorXmlOpen(unsigned int c) {
++  return c == '<'
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'L'
++#endif
++      ;
++}
++
++static bool PriorXmlClose(unsigned int c) {
++  return c == '>'
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'N'
++#endif
++      ;
++}
++
++static bool PriorXmlEq(unsigned int c) {
++  return c == '='
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'M'
++#endif
++      ;
++}
++
++static bool PriorXmlQuestion(unsigned int c) {
++  return c == '?'
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'O'
++#endif
++      ;
++}
++
++static bool PriorXmlColon(unsigned int c) {
++  return c == ':'
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'J'
++#endif
++      ;
++}
++
++static bool PriorXmlSemicolon(unsigned int c) {
++  return c == ';'
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'K'
++#endif
++      ;
++}
++
++static bool PriorWikiOpen(unsigned int c) {
++  return c == '[' || c == '{' || c == '|'
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'P' || c == 'Q'
++#endif
++      ;
++}
++
++static bool PriorWikiClose(unsigned int c) {
++  return c == ']' || c == '}'
++#if FX2_STRUCT_SIDECAR_WRT_AWARE
++      || c == 'R'
++#endif
++      ;
++}
++
++static bool StructuralPriorAllowed(unsigned int c, unsigned long long state,
++    unsigned long long prev) {
++  if (state == 1) {
++    if (PriorXmlOpen(prev)) {
++      return c == '/' || PriorXmlQuestion(c) || c == '!' ||
++          (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
++    }
++    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
++        (c >= '0' && c <= '9') || c == '/' || PriorXmlOpen(c) ||
++        PriorXmlClose(c) || PriorXmlEq(c) || c == '"' || c == '\'' ||
++        c == ' ' || c == '-' || c == '_' || PriorXmlColon(c) ||
++        c == '.' || PriorXmlSemicolon(c) || PriorXmlQuestion(c) ||
++        c == '!' || c == '\n' || c == '\t';
++  }
++  if (state == 2) {
++    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
++        (c >= '0' && c <= '9') || PriorWikiOpen(c) ||
++        PriorWikiClose(c) || PriorXmlEq(c) || c == '_' || c == '-' ||
++        PriorXmlColon(c) || c == '/' || c == '#' || c == ' ' || c == '.' ||
++        c == ',' || c == '\'' || c == '(' || c == ')' || c == '\n';
++  }
++  return true;
++}
++
++float Predictor::StructuralBytePrior() const {
++  const unsigned long long state = manager_.sidecar_lexer_state;
++  if (state == 0) return 0.5f;
++
++  const unsigned int ctx = manager_.bit_context_;
++  unsigned int tmp = ctx;
++  unsigned int prefix_bits = 0;
++  while (tmp > 1) {
++    tmp >>= 1;
++    ++prefix_bits;
++  }
++  if (prefix_bits >= 8) return 0.5f;
++
++  const unsigned int prefix = ctx - (1U << prefix_bits);
++  const unsigned int prefix_shift = 8 - prefix_bits;
++  const unsigned int next_shift = 7 - prefix_bits;
++  unsigned int ones = 0;
++  unsigned int total = 0;
++
++  for (unsigned int c = 0; c < 256; ++c) {
++    if (!vocab_[c]) continue;
++    if (!StructuralPriorAllowed(c, state, manager_.sidecar_prev_byte)) continue;
++    if (prefix_bits > 0 && ((c >> prefix_shift) != prefix)) continue;
++    ++total;
++    ones += (c >> next_shift) & 1U;
++  }
++
++  if (total == 0) return 0.5f;
++  const float raw = static_cast<float>(ones + 1) /
++      static_cast<float>(total + 2);
++  return 0.5f + (raw - 0.5f) *
++      static_cast<float>(FX2_STRUCT_BYTE_PRIOR_STRENGTH);
++}
++#endif
++
  int lstmpr=0, lstmex=0;
  float byte_mixer_output=0.0f;
  float Predictor::Predict() {
-@@ -241,8 +273,11 @@ float Predictor::Predict() {
+@@ -219,6 +429,9 @@ float Predictor::Predict() {
+     }
+   }
+   layers_[0].SetInput(input_index++, byte_model_->Predict()[0]);
++#if FX2_STRUCT_BYTE_PRIOR && FX2_STRUCT_BYTE_PRIOR_AS_INPUT
++  layers_[0].SetInput(input_index++, StructuralBytePrior());
++#endif
+ 
+   float byte_mixer_override = -1;
+ 
+@@ -241,8 +454,19 @@ float Predictor::Predict() {
    float p = Sigmoid::Logistic(mixer_1_[0].Mix());
    p = sse_.Predict(p);
    if (byte_mixer_override >= 0) {
 -    return byte_mixer_override;
 +    p = byte_mixer_override;
++  }
++#if FX2_STRUCT_BYTE_PRIOR && FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM > 0
++  if (manager_.sidecar_lexer_state != 0 && byte_mixer_override < 0) {
++    const float prior = StructuralBytePrior();
++    p += (prior - p) *
++        (static_cast<float>(FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM) /
++            1000000.0f);
    }
++#endif
 +#if FX2_META_STREAK
 +  last_prediction_ = p;
 +#endif
    return p;
  }
  
-@@ -274,6 +309,9 @@ void Predictor::Perceive(int bit) {
+@@ -261,8 +485,14 @@ void Predictor::Perceive(int bit) {
+   for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+     indirect_r_models_[i].Perceive(bit);
+   }
++  for (auto& model : sidecar_byte_models_) {
++    model->Perceive(bit);
++  }
+ 
+   byte_model_->Perceive(bit);
++  for (auto& model : sidecar_byte_models_) {
++    model->Perceive(bit);
++  }
+ 
+   byte_mixer_->Perceive(bit);
+ 
+@@ -274,6 +504,9 @@ void Predictor::Perceive(int bit) {
    }
  
    sse_.Perceive(bit);
@@ -330,16 +902,44 @@ index 503edfb..97fc476 100644
  
    bool byte_update = false;
    if (manager_.bit_context_ >= 128) byte_update = true;
-@@ -369,4 +407,3 @@ void Predictor::Pretrain(int bit) {
+@@ -302,6 +535,13 @@ void Predictor::Perceive(int bit) {
+     for (unsigned int j = 0; j < 256; ++j) {
+       byte_mixer_->SetInput(j,p[j]);
+     }
++    for (auto& model : sidecar_byte_models_) {
++      model->ByteUpdate();
++      const std::valarray<float>& side_p = model->BytePredict();
++      for (unsigned int j = 0; j < 256; ++j) {
++        byte_mixer_->SetInput(j, side_p[j]);
++      }
++    }
+ 
+     byte_mixer_->ByteUpdate();
+    
+@@ -366,7 +606,9 @@ void Predictor::Pretrain(int bit) {
+     for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+       indirect_r_models_[i].ByteUpdate();
+     }
++    for (auto& model : sidecar_byte_models_) {
++      model->ByteUpdate();
++    }
      manager_.bit_context_ = 1;
    }
  }
 -
 diff --git a/src/predictor.h b/src/predictor.h
-index 5754d1e..e9de8ef 100644
+index 5754d1e..e0cbdbf 100644
 --- a/src/predictor.h
 +++ b/src/predictor.h
-@@ -34,6 +34,14 @@
+@@ -16,6 +16,7 @@
+ #include "models/ppmd.h"
+ #include "models/bracket.h"
+ #include "models/fxcmv1.h"
++#include "models/sidecar-byte.h"
+ #include "mixer/lstm.h"
+ #include "contexts/context-hash.h"
+ #include "contexts/bracket-context.h"
+@@ -34,6 +35,42 @@
  #include <memory>
  #include <optional>
  
@@ -351,21 +951,62 @@ index 5754d1e..e9de8ef 100644
 +#define FX2_STRUCT_SIDECAR_WEIGHT 0.0005
 +#endif
 +
++#ifndef FX2_STRUCT_BYTE_PRIOR
++#define FX2_STRUCT_BYTE_PRIOR 0
++#endif
++
++#ifndef FX2_STRUCT_BYTE_PRIOR_AS_INPUT
++#define FX2_STRUCT_BYTE_PRIOR_AS_INPUT 1
++#endif
++
++#ifndef FX2_STRUCT_BYTE_PRIOR_STRENGTH
++#define FX2_STRUCT_BYTE_PRIOR_STRENGTH 0.35f
++#endif
++
++#ifndef FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM
++#define FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM 0
++#endif
++
++#ifndef FX2_STRUCT_SIDECAR_BYTE_MODEL
++#define FX2_STRUCT_SIDECAR_BYTE_MODEL 0
++#endif
++
++#ifndef FX2_STRUCT_SIDECAR_BYTE_ROWS
++#define FX2_STRUCT_SIDECAR_BYTE_ROWS 4096
++#endif
++
++#ifndef FX2_STRUCT_SIDECAR_MODELS
++#define FX2_STRUCT_SIDECAR_MODELS 0
++#endif
++
  class Predictor {
   public:
    Predictor(const std::vector<bool>& vocab);
-@@ -53,6 +61,9 @@ class Predictor {
+@@ -52,7 +89,19 @@ class Predictor {
+   void AddDirect();
    void AddMatch();
    void AddDoubleIndirect();
++#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_MODELS
++  void AddStructuralSidecarModels();
++#endif
++#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_BYTE_MODEL
++  void AddStructuralSidecarByteModels();
++#endif
    void AddMixers();
++#if FX2_STRUCT_BYTE_PRIOR
++  float StructuralBytePrior() const;
++#endif
 +#if FX2_META_STREAK
 +  void UpdateMetaStreak(int bit);
 +#endif
  
    llvm::SmallVector<Indirect<Nonstationary>, 30-7> indirect_ns_models_; // non-stationary
    llvm::SmallVector<Indirect<RunMap>, 1> indirect_r_models_; // run map
-@@ -72,7 +83,12 @@ class Predictor {
+@@ -70,9 +119,15 @@ class Predictor {
+   Sigmoid sigmoid_;
+   std::optional<PPMD::PPMD> byte_model_;
    std::optional<ByteMixer> byte_mixer_;
++  std::vector<std::unique_ptr<SidecarByteModel>> sidecar_byte_models_;
    std::vector<bool> vocab_;
     FXCM fxcm_model_;
 +#if FX2_META_STREAK

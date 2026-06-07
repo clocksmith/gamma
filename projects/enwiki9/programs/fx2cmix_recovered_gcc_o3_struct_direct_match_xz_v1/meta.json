@@ -1,0 +1,59 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_direct_match_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "candidate",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "description": "Recovered fx2-cmix payload with semantic MediaWiki sidecar direct and match models enabled. Sidecar byte-distribution models are disabled to isolate direct/match signal.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_SIDECAR_WRT_AWARE=1",
+      "FX2_STRUCT_SIDECAR_MODELS=1"
+    ],
+    "fixes": [
+      "Semantic sidecar context port from measured byte-split family"
+    ],
+    "packaging": "Minified Python xz bootstrap with check-free cmix.xz and english.dic.xz payloads."
+  },
+  "hypothesis": "Semantic sidecar direct and match contexts may help existing fx2 bit models without using the corrected byte-mixer multi-input path.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3_semantic_direct_match"
+          }
+        }
+      },
+      {
+        "id": "sidecar_models",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "semantic_mediawiki_contexts",
+            "byte_models": "disabled",
+            "direct_models": "enabled",
+            "match_models": "enabled",
+            "stream_mutation": "none"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar_models",
+        "to": "substrate",
+        "stream": "bit_model_contexts"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Pending measured gates."
+}

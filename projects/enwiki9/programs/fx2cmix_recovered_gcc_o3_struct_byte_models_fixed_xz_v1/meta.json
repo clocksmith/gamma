@@ -1,0 +1,64 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_byte_models_fixed_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "candidate",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "description": "Recovered fx2-cmix payload with the corrected ByteMixer multi-input scale and three learned semantic sidecar byte-distribution models. Sidecar direct and match models are disabled to isolate byte-model signal.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_SIDECAR_WRT_AWARE=1",
+      "FX2_STRUCT_SIDECAR_BYTE_MODEL=1",
+      "FX2_STRUCT_SIDECAR_BYTE_ROWS=4096"
+    ],
+    "fixes": [
+      "ByteMixer multi-input scaling uses float division",
+      "Sidecar byte models advance during dictionary pretraining"
+    ],
+    "packaging": "Minified Python xz bootstrap with check-free cmix.xz and english.dic.xz payloads."
+  },
+  "hypothesis": "The previous native sidecar-byte build was invalid as a byte-model test because ByteMixer zeroed inputs when more than two byte models were present. This variant isolates corrected learned sidecar byte distributions without sidecar direct/match overhead.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3_corrected_byte_sidecar"
+          }
+        }
+      },
+      {
+        "id": "sidecar_byte_models",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "semantic_mediawiki_byte_distribution",
+            "byte_models": "split_3",
+            "direct_models": "disabled",
+            "match_models": "disabled",
+            "stream_mutation": "none"
+          },
+          "continuous": {
+            "byte_rows": 4096
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar_byte_models",
+        "to": "substrate",
+        "stream": "byte_distribution_inputs"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Pending measured gates."
+}

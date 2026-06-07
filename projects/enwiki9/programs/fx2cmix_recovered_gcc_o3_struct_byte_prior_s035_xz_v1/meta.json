@@ -1,0 +1,119 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_byte_prior_s035_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "measured_negative",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "description": "Recovered fx2-cmix payload with the minwrap_v3 wrapper and a compile-gated non-destructive structural byte prior. The prior reads deterministic lexer state and byte-prefix state, then contributes one softened probability input without mutating existing fx2 context hashes or counters.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_BYTE_PRIOR=1",
+      "FX2_STRUCT_BYTE_PRIOR_STRENGTH=0.35f"
+    ],
+    "flags": [
+      "-march=znver2",
+      "-Os",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "Reuses the minwrap_v3 wrapper and repacks cmix/english.dic as xz streams with --check=none."
+  },
+  "hypothesis": "A soft structural byte prior can suppress implausible XML/wiki byte continuations without fragmenting fx2's learned context tables, producing archive savings large enough to offset the larger counted executable.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_struct_byte_prior"
+          }
+        }
+      },
+      {
+        "id": "sidecar",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "structural_byte_prior",
+            "mutation": "none"
+          },
+          "continuous": {
+            "strength": 0.35
+          }
+        }
+      },
+      {
+        "id": "wrapper",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "mode": "minimal_python_xz_unpack_no_pathlib"
+          }
+        }
+      },
+      {
+        "id": "container",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "format": "xz",
+            "check": "none"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar",
+        "to": "substrate",
+        "stream": "probability_prior"
+      },
+      {
+        "from": "container",
+        "to": "wrapper",
+        "stream": "payload"
+      },
+      {
+        "from": "wrapper",
+        "to": "substrate",
+        "stream": "exec"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 262,
+      "program_size": 285460,
+      "hutter_score": 285722,
+      "parent_compressed_size": 262,
+      "parent_hutter_score": 283890,
+      "archive_delta_vs_parent": 0,
+      "score_delta_vs_parent": 1832,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:54:50"
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13585,
+      "program_size": 285460,
+      "hutter_score": 299045,
+      "parent_compressed_size": 13585,
+      "parent_hutter_score": 297213,
+      "archive_delta_vs_parent": 0,
+      "score_delta_vs_parent": 1832,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:57:05"
+    }
+  },
+  "verdict": "Reject as a winner. The non-destructive structural byte prior is deterministic and does not damage archive bytes at the 64 KiB screen, but it also does not improve archive size and adds 1832 counted program bytes versus fx2cmix_recovered_gcc_o3_xz_minwrap_v3."
+}

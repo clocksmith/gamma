@@ -1,0 +1,96 @@
+{
+  "aliases": [
+    "macro_residual_xml_lzma_min_v1"
+  ],
+  "backend": "lzma_extreme",
+  "deps": [],
+  "description": "Minified reversible XML/page scaffold macro-residual transform with stdlib lzma and raw fallback.",
+  "family": "lane_b_macro_residual",
+  "hypothesis": "The macro-residual transform has measured archive-byte savings versus lzma; reducing counted decoder bytes can turn the same mechanism into a score win at larger scopes.",
+  "id": "xml_scaffold__macro_residual__static_escape__lzma_extreme__min__v01",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "bits_per_byte": 2.164586,
+          "comparison": {
+            "archive_delta_vs_baseline": -14523,
+            "baseline": {
+              "bits_per_byte": 2.176205,
+              "compressed_size": 2720256,
+              "data_md5": "2d1946513a5e933b897180084549dfc0",
+              "data_size": 10000000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 2720457,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": -13002
+          },
+          "compressed_size": 2705733,
+          "data_md5": "2d1946513a5e933b897180084549dfc0",
+          "data_size": 10000000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 2707455,
+          "program_id": "xml_scaffold__macro_residual__static_escape__lzma_extreme__min__v01",
+          "program_size": 1722,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-06-07T19:48:43+00:00",
+      "proposed_status": "active",
+      "verdict": "Promote: same-scope Hutter score beats baseline."
+    }
+  },
+  "mechanism": "macro_residual",
+  "parent": "macro_residual_xml_lzma_v1",
+  "pgsg": {
+    "edges": [
+      {
+        "from": "macro_table",
+        "stream": "token_table",
+        "to": "escape_stream"
+      },
+      {
+        "from": "escape_stream",
+        "stream": "payload",
+        "to": "backend"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "macro_table",
+        "payload": {
+          "discrete": {
+            "mode": "static_xml_page_scaffold_tokens"
+          }
+        },
+        "type": "parser"
+      },
+      {
+        "id": "escape_stream",
+        "payload": {
+          "discrete": {
+            "mode": "zero_escape_macro_residual"
+          }
+        },
+        "type": "transform"
+      },
+      {
+        "id": "backend",
+        "payload": {
+          "discrete": {
+            "codec": "lzma_extreme_with_raw_fallback"
+          }
+        },
+        "type": "codec"
+      }
+    ]
+  },
+  "status": "active",
+  "verdict": "Promote: same-scope Hutter score beats baseline."
+}
