@@ -183,6 +183,15 @@ void Predictor::AddDoubleIndirect() {
 }
 
 void Predictor::AddSidecar() {
+#ifdef SIDECAR_SCHEMA_TEMPLATE_ONLY
+#ifndef SIDECAR_SCHEMA_TEMPLATE_SCALE
+#define SIDECAR_SCHEMA_TEMPLATE_SCALE 220
+#endif
+  AddModel(new Indirect(manager_.nonstationary_, manager_.sidecar_schema_ctx_,
+      manager_.bit_context_, SIDECAR_SCHEMA_TEMPLATE_SCALE,
+      manager_.shared_map_));
+  return;
+#endif
 #ifndef SIDECAR_NO_DIRECT
   AddModel(new Direct(manager_.sidecar_direct_, manager_.bit_context_,
       40, 2.0, 256));

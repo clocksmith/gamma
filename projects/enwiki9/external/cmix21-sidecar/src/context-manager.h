@@ -37,6 +37,7 @@ struct ContextManager {
       sidecar_direct3_=0, sidecar_direct4_=0,
       sidecar_ctx1_=0, sidecar_ctx2_=0, sidecar_ctx3_=0, sidecar_ctx4_=0,
       sidecar_ctx5_=0, sidecar_ctx6_=0, sidecar_ctx7_=0, sidecar_ctx8_=0,
+      sidecar_schema_ctx_=0,
       sidecar_mix1_=0, sidecar_mix2_=0, sidecar_mix3_=0, sidecar_mix4_=0,
       sidecar_mix5_=0, sidecar_mix6_=0, sidecar_mix7_=0, sidecar_mix8_=0,
       ph_direct1_=0, ph_direct2_=0, ph_ctx1_=0, ph_ctx2_=0, ph_ctx3_=0,
