@@ -1,0 +1,45 @@
+{
+  "id": "fx2_probe_v1",
+  "description": "Retired fx2-cmix sidecar WRT-learn probe wrapper with gzip-stored cmix binary and dictionary.",
+  "added": "2026-06-07",
+  "status": "retired",
+  "retired_reason": "Contract audit found no registry entry, no prior meta.json, and no result artifacts. Preserve source as a negative or repair target; do not include in active evolution.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
+  "family": "fx2_sidecar",
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "wrapper",
+        "type": "execution_wrapper",
+        "payload": {
+          "discrete": {
+            "binary_archive": "cmix.bin.gz",
+            "dictionary_archive": "english.dic.gz"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "wrapper",
+        "to": "backend",
+        "stream": "raw_bytes"
+      }
+    ]
+  }
+}

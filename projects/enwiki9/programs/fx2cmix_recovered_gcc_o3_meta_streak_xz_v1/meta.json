@@ -1,0 +1,42 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_meta_streak_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "experimental",
+  "description": "Recovered fx2-cmix GCC build with FX2_META_STREAK=1. Adds a bounded self-referential streak context to the final mixer layer, keyed by recent predictor correctness, streak bucket, bit context, line-break state, and longest match bucket.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_META_STREAK=1"
+    ],
+    "flags": [
+      "-O3",
+      "-march=znver2",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward the local driver program_size."
+  },
+  "notes": [
+    "Uses the recovered fx2-cmix source with the PPMD mmap remap fixed to preserve pointer stability.",
+    "Same wrapper path as fx2cmix_recovered_gcc_o3_xz_v1 so score deltas isolate the predictor experiment."
+  ],
+  "measured": {
+    "1m_driver": {
+      "data_size": 1048576,
+      "compressed_size": 185143,
+      "program_size": 284050,
+      "hutter_score": 469193,
+      "bits_per_byte": 1.412529,
+      "baseline_hutter_score": 466767,
+      "score_delta_vs_baseline": 2426,
+      "archive_delta_vs_baseline": 2748,
+      "program_delta_vs_baseline": -322,
+      "roundtrip_ok": true,
+      "timestamp": "2026-06-07T10:39:00"
+    }
+  },
+  "verdict": "Reject. Replacing the final-layer global context with the meta-streak context regressed the archive enough to overwhelm the small program-size reduction."
+}

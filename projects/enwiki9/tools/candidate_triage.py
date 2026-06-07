@@ -1,0 +1,551 @@
+"""Lane 0 triage for enwiki9 candidate measurement cleanup.
+
+The default mode is a dry-run inventory filter. Scoring runs require --run and
+are executed through a non-blocking flock around lib/driver.py, with a process
+preflight before every gate.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import pathlib
+import subprocess
+import sys
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from typing import Any
+
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+REPO_ROOT = ROOT.parent.parent
+PROGRAMS_DIR = ROOT / "programs"
+INVENTORY_JSON = ROOT / "candidate_inventory.json"
+DRIVER = ROOT / "lib" / "driver.py"
+DEFAULT_LOCK_PATH = pathlib.Path("/tmp/enwiki9-heavy.lock")
+DEFAULT_BASELINE = "baseline_lzma"
+DEFAULT_GATE_SIZES = (1024, 250000)
+HEAVY_PROCESS_PATTERN = "bench.py|lib/driver.py|cmix|qm_context|enwik9"
+FLOCK_BUSY_CODE = 75
+
+
+@dataclass
+class DriverRun:
+    program_id: str
+    limit: int
+    returncode: int
+    stdout: str
+    stderr: str
+    result: dict[str, Any] | None
+    blocked_reason: str | None = None
+
+
+def rel(path: pathlib.Path) -> str:
+    return path.relative_to(REPO_ROOT).as_posix()
+
+
+def load_json(path: pathlib.Path) -> Any:
+    return json.loads(path.read_text())
+
+
+def write_json(path: pathlib.Path, payload: Any) -> None:
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+
+
+def load_inventory() -> dict[str, Any]:
+    if not INVENTORY_JSON.exists():
+        raise SystemExit(
+            f"missing {rel(INVENTORY_JSON)}; run candidate_audit.py --write first"
+        )
+    inventory = load_json(INVENTORY_JSON)
+    if not isinstance(inventory, dict) or "candidates" not in inventory:
+        raise SystemExit(f"invalid inventory shape: {rel(INVENTORY_JSON)}")
+    return inventory
+
+
+def parse_gate_sizes(values: list[int] | None) -> list[int]:
+    sizes = list(DEFAULT_GATE_SIZES if values is None else values)
+    if not sizes:
+        raise SystemExit("at least one --gate-size is required")
+    if any(size <= 0 for size in sizes):
+        raise SystemExit("--gate-size values must be positive")
+    return sizes
+
+
+def selected_candidates(
+    inventory: dict[str, Any],
+    *,
+    statuses: set[str],
+    explicit_ids: list[str],
+    limit: int | None,
+) -> list[dict[str, Any]]:
+    candidates = inventory.get("candidates", [])
+    if not isinstance(candidates, list):
+        raise SystemExit("inventory candidates field is not a list")
+
+    if explicit_ids:
+        by_id = {candidate.get("id"): candidate for candidate in candidates}
+        missing = [candidate_id for candidate_id in explicit_ids if candidate_id not in by_id]
+        if missing:
+            raise SystemExit(f"unknown candidate id(s): {', '.join(missing)}")
+        selected = [by_id[candidate_id] for candidate_id in explicit_ids]
+    else:
+        selected = [
+            candidate
+            for candidate in candidates
+            if str(candidate.get("status")) in statuses
+        ]
+
+    selected = sorted(selected, key=lambda candidate: str(candidate.get("id")))
+    if limit is not None:
+        selected = selected[:limit]
+    return selected
+
+
+def active_heavy_processes() -> list[str]:
+    proc = subprocess.run(
+        ["pgrep", "-af", HEAVY_PROCESS_PATTERN],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if proc.returncode not in (0, 1):
+        raise SystemExit(proc.stderr.strip() or "pgrep failed")
+
+    current_pid = os.getpid()
+    active: list[str] = []
+    for line in proc.stdout.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        parts = stripped.split(maxsplit=1)
+        try:
+            pid = int(parts[0])
+        except ValueError:
+            pid = None
+        if pid == current_pid:
+            continue
+        if "pgrep -af" in stripped:
+            continue
+        if "candidate_triage.py" in stripped:
+            continue
+        active.append(stripped)
+    return active
+
+
+def parse_driver_stdout(stdout: str) -> dict[str, Any] | None:
+    text = stdout.strip()
+    if not text:
+        return None
+    try:
+        result = json.loads(text)
+    except json.JSONDecodeError:
+        return None
+    return result if isinstance(result, dict) else None
+
+
+def run_driver_locked(
+    program_id: str,
+    *,
+    limit: int,
+    lock_path: pathlib.Path,
+) -> DriverRun:
+    active = active_heavy_processes()
+    if active:
+        return DriverRun(
+            program_id=program_id,
+            limit=limit,
+            returncode=FLOCK_BUSY_CODE,
+            stdout="",
+            stderr="\n".join(active),
+            result=None,
+            blocked_reason="preflight_busy",
+        )
+
+    cmd = [
+        "flock",
+        "-n",
+        "-E",
+        str(FLOCK_BUSY_CODE),
+        str(lock_path),
+        sys.executable,
+        str(DRIVER),
+        program_id,
+        "--limit",
+        str(limit),
+        "--check-determinism",
+    ]
+    proc = subprocess.run(
+        cmd,
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    blocked_reason = "lock_busy" if proc.returncode == FLOCK_BUSY_CODE else None
+    return DriverRun(
+        program_id=program_id,
+        limit=limit,
+        returncode=proc.returncode,
+        stdout=proc.stdout,
+        stderr=proc.stderr,
+        result=parse_driver_stdout(proc.stdout),
+        blocked_reason=blocked_reason,
+    )
+
+
+def result_is_deterministic(result: dict[str, Any]) -> bool:
+    determinism = result.get("determinism")
+    if not isinstance(determinism, dict):
+        return False
+    return determinism.get("single_host_byte_equal") is True
+
+
+def dependency_error(text: str) -> bool:
+    needles = (
+        "ModuleNotFoundError",
+        "ImportError",
+        "FileNotFoundError",
+        "No such file or directory",
+        "cannot open shared object file",
+        "not found",
+    )
+    lowered = text.lower()
+    return any(needle.lower() in lowered for needle in needles)
+
+
+def classify_driver_failure(run: DriverRun) -> tuple[str, str]:
+    text = "\n".join(part for part in (run.stdout, run.stderr) if part)
+    if run.blocked_reason in ("preflight_busy", "lock_busy"):
+        return "blocked_by_lock", run.blocked_reason
+    if "missing callable" in text or "program not found" in text:
+        return "retired", "contract_failure"
+    if dependency_error(text):
+        return "blocked_dependency", "dependency_error"
+    return "retired", "driver_failure"
+
+
+def summarize_result(result: dict[str, Any]) -> dict[str, Any]:
+    determinism = result.get("determinism")
+    return {
+        "program_id": result.get("program_id"),
+        "data_size": result.get("data_size"),
+        "data_md5": result.get("data_md5"),
+        "compressed_size": result.get("compressed_size"),
+        "program_size": result.get("program_size"),
+        "hutter_score": result.get("hutter_score"),
+        "bits_per_byte": result.get("bits_per_byte"),
+        "roundtrip_ok": result.get("roundtrip_ok"),
+        "determinism_single_host_byte_equal": (
+            determinism.get("single_host_byte_equal")
+            if isinstance(determinism, dict)
+            else None
+        ),
+        "program_stats": result.get("program_stats"),
+    }
+
+
+def compare_against_baseline(
+    *,
+    candidate_result: dict[str, Any],
+    baseline_result: dict[str, Any],
+) -> dict[str, Any]:
+    comparison = {
+        "baseline": summarize_result(baseline_result),
+        "archive_delta_vs_baseline": None,
+        "score_delta_vs_baseline": None,
+        "same_scope": (
+            candidate_result.get("data_size") == baseline_result.get("data_size")
+            and candidate_result.get("data_md5") == baseline_result.get("data_md5")
+        ),
+    }
+    if isinstance(candidate_result.get("compressed_size"), int) and isinstance(
+        baseline_result.get("compressed_size"), int
+    ):
+        comparison["archive_delta_vs_baseline"] = (
+            candidate_result["compressed_size"] - baseline_result["compressed_size"]
+        )
+    if isinstance(candidate_result.get("hutter_score"), int) and isinstance(
+        baseline_result.get("hutter_score"), int
+    ):
+        comparison["score_delta_vs_baseline"] = (
+            candidate_result["hutter_score"] - baseline_result["hutter_score"]
+        )
+    return comparison
+
+
+def classify_success(gate_rows: list[dict[str, Any]]) -> tuple[str, str]:
+    final_gate = gate_rows[-1]
+    comparison = final_gate.get("comparison")
+    if not isinstance(comparison, dict):
+        return "blocked_dependency", "Missing same-scope baseline comparison."
+    if comparison.get("same_scope") is not True:
+        return "blocked_dependency", "Baseline and candidate data scope did not match."
+
+    score_delta = comparison.get("score_delta_vs_baseline")
+    archive_delta = comparison.get("archive_delta_vs_baseline")
+    if isinstance(score_delta, int) and score_delta < 0:
+        return "active", "Promote: same-scope Hutter score beats baseline."
+    if isinstance(archive_delta, int) and archive_delta < 0:
+        return (
+            "measured_negative",
+            "Keep as negative evidence: archive improves but counted program size loses.",
+        )
+    return "measured_negative", "Keep as negative evidence: valid deterministic loser."
+
+
+def triage_one(
+    candidate_id: str,
+    *,
+    gate_sizes: list[int],
+    baseline_id: str,
+    lock_path: pathlib.Path,
+    baseline_cache: dict[int, DriverRun],
+) -> dict[str, Any]:
+    gates: list[dict[str, Any]] = []
+    for gate_size in gate_sizes:
+        baseline_run = baseline_cache.get(gate_size)
+        if baseline_run is None:
+            baseline_run = run_driver_locked(
+                baseline_id,
+                limit=gate_size,
+                lock_path=lock_path,
+            )
+            baseline_cache[gate_size] = baseline_run
+        if baseline_run.result is None or baseline_run.returncode != 0:
+            status, reason = classify_driver_failure(baseline_run)
+            return {
+                "id": candidate_id,
+                "proposed_status": status,
+                "verdict": f"Blocked: baseline {baseline_id} failed at {gate_size}: {reason}.",
+                "gates": gates,
+                "blocked_reason": baseline_run.blocked_reason,
+            }
+        if (
+            baseline_run.result.get("roundtrip_ok") is not True
+            or not result_is_deterministic(baseline_run.result)
+        ):
+            return {
+                "id": candidate_id,
+                "proposed_status": "blocked_dependency",
+                "verdict": f"Blocked: baseline {baseline_id} is not deterministic at {gate_size}.",
+                "gates": gates,
+            }
+
+        candidate_run = run_driver_locked(
+            candidate_id,
+            limit=gate_size,
+            lock_path=lock_path,
+        )
+        if candidate_run.result is None:
+            status, reason = classify_driver_failure(candidate_run)
+            return {
+                "id": candidate_id,
+                "proposed_status": status,
+                "verdict": f"{status}: {reason} at {gate_size}.",
+                "gates": gates,
+                "blocked_reason": candidate_run.blocked_reason,
+            }
+
+        gate = summarize_result(candidate_run.result)
+        gate["comparison"] = compare_against_baseline(
+            candidate_result=candidate_run.result,
+            baseline_result=baseline_run.result,
+        )
+        gates.append(gate)
+
+        if candidate_run.result.get("roundtrip_ok") is not True:
+            return {
+                "id": candidate_id,
+                "proposed_status": "retired",
+                "verdict": f"Retire: roundtrip failed at {gate_size}.",
+                "gates": gates,
+            }
+        if not result_is_deterministic(candidate_run.result):
+            return {
+                "id": candidate_id,
+                "proposed_status": "retired",
+                "verdict": f"Retire: deterministic compression failed at {gate_size}.",
+                "gates": gates,
+            }
+
+    status, verdict = classify_success(gates)
+    return {
+        "id": candidate_id,
+        "proposed_status": status,
+        "verdict": verdict,
+        "gates": gates,
+    }
+
+
+def update_candidate_meta(candidate_id: str, triage: dict[str, Any]) -> None:
+    meta_path = PROGRAMS_DIR / candidate_id / "meta.json"
+    if not meta_path.exists():
+        return
+    meta = load_json(meta_path)
+    if not isinstance(meta, dict):
+        raise SystemExit(f"invalid meta shape: {rel(meta_path)}")
+
+    measured = meta.setdefault("measured", {})
+    if not isinstance(measured, dict):
+        measured = {}
+        meta["measured"] = measured
+    measured["lane0_triage"] = {
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "gates": triage.get("gates", []),
+        "proposed_status": triage.get("proposed_status"),
+        "verdict": triage.get("verdict"),
+    }
+
+    proposed_status = triage.get("proposed_status")
+    if proposed_status in {
+        "active",
+        "measured_negative",
+        "retired",
+        "blocked_dependency",
+        "track_source_before_evolution",
+    }:
+        meta["status"] = proposed_status
+    meta["verdict"] = triage.get("verdict", meta.get("verdict"))
+    write_json(meta_path, meta)
+
+
+def is_transient_lock_block(triage: dict[str, Any]) -> bool:
+    return triage.get("blocked_reason") in {"preflight_busy", "lock_busy"}
+
+
+def render_dry_run(
+    *,
+    selected: list[dict[str, Any]],
+    statuses: set[str],
+    selection_mode: str,
+    gate_sizes: list[int],
+    baseline_id: str,
+    lock_path: pathlib.Path,
+) -> dict[str, Any]:
+    return {
+        "mode": "dry_run",
+        "selection_mode": selection_mode,
+        "selected_count": len(selected),
+        "selected_statuses": sorted(statuses),
+        "planned_gates": gate_sizes,
+        "baseline": baseline_id,
+        "lock_path": str(lock_path),
+        "selected": [
+            {
+                "id": candidate.get("id"),
+                "status": candidate.get("status"),
+                "reasons": candidate.get("reasons", []),
+            }
+            for candidate in selected
+        ],
+        "run_command": (
+            "python3 projects/enwiki9/tools/candidate_triage.py "
+            "--run --limit-candidates N"
+        ),
+    }
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--status",
+        action="append",
+        default=None,
+        help="inventory status to select; repeatable; default benchmark_or_retire",
+    )
+    parser.add_argument(
+        "--candidate",
+        action="append",
+        default=[],
+        help="explicit candidate id to triage; repeatable",
+    )
+    parser.add_argument("--limit-candidates", type=int, default=None)
+    parser.add_argument("--gate-size", action="append", type=int, default=None)
+    parser.add_argument("--baseline", default=DEFAULT_BASELINE)
+    parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK_PATH)
+    parser.add_argument("--run", action="store_true", help="execute locked gates")
+    parser.add_argument("--update-meta", action="store_true", help="write triage status to meta.json")
+    parser.add_argument("--json", action="store_true", help="print machine-readable JSON only")
+    args = parser.parse_args(argv)
+
+    if args.limit_candidates is not None and args.limit_candidates <= 0:
+        raise SystemExit("--limit-candidates must be positive")
+    if args.run and not args.candidate and args.limit_candidates is None:
+        raise SystemExit("--run requires --candidate or --limit-candidates")
+    if args.update_meta and not args.run:
+        raise SystemExit("--update-meta requires --run")
+
+    inventory = load_inventory()
+    statuses = set(args.status or ["benchmark_or_retire"])
+    gate_sizes = parse_gate_sizes(args.gate_size)
+    selected = selected_candidates(
+        inventory,
+        statuses=statuses,
+        explicit_ids=args.candidate,
+        limit=args.limit_candidates,
+    )
+
+    if not args.run:
+        payload = render_dry_run(
+            selected=selected,
+            statuses=statuses,
+            selection_mode="explicit" if args.candidate else "status",
+            gate_sizes=gate_sizes,
+            baseline_id=args.baseline,
+            lock_path=args.lock_path,
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+
+    active = active_heavy_processes()
+    if active:
+        payload = {
+            "mode": "run",
+            "status": "blocked",
+            "blocked_reason": "preflight_busy",
+            "active_processes": active,
+            "selected_count": len(selected),
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 75
+
+    baseline_cache: dict[int, DriverRun] = {}
+    triage_rows: list[dict[str, Any]] = []
+    updated_meta_ids: list[str] = []
+    for candidate in selected:
+        candidate_id = str(candidate.get("id"))
+        row = triage_one(
+            candidate_id,
+            gate_sizes=gate_sizes,
+            baseline_id=args.baseline,
+            lock_path=args.lock_path,
+            baseline_cache=baseline_cache,
+        )
+        triage_rows.append(row)
+        if args.update_meta and not is_transient_lock_block(row):
+            update_candidate_meta(candidate_id, row)
+            updated_meta_ids.append(candidate_id)
+        if row.get("blocked_reason") in ("preflight_busy", "lock_busy"):
+            break
+
+    payload = {
+        "mode": "run",
+        "selected_count": len(selected),
+        "processed_count": len(triage_rows),
+        "update_meta_requested": args.update_meta,
+        "updated_meta_count": len(updated_meta_ids),
+        "updated_meta_ids": updated_meta_ids,
+        "baseline": args.baseline,
+        "gate_sizes": gate_sizes,
+        "lock_path": str(args.lock_path),
+        "triage": triage_rows,
+    }
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

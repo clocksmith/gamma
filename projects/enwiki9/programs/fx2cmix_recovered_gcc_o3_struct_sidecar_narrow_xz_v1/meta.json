@@ -1,0 +1,49 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_sidecar_narrow_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "experimental",
+  "description": "Recovered fx2-cmix GCC build with FX2_STRUCT_SIDECAR=3. Adds the same decoder-recomputable FSL/OGI sidecar as the broad candidate, but only injects narrow structural bits into wordscxt, mx17, and mxx mixer contexts.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=3"
+    ],
+    "flags": [
+      "-O3",
+      "-march=znver2",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward local driver program_size."
+  },
+  "notes": [
+    "Narrow ablation after broad FX2_STRUCT_SIDECAR=1 fragmented too many mixer contexts and lost at the 64 KiB screen.",
+    "Indirect byte contexts remain baseline."
+  ],
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 262,
+      "program_size": 285100,
+      "hutter_score": 285362,
+      "baseline_compressed_size": 262,
+      "roundtrip_ok": true
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13592,
+      "program_size": 285100,
+      "hutter_score": 298692,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "archive_delta_vs_baseline": 7,
+      "score_delta_vs_baseline": 735,
+      "roundtrip_ok": true,
+      "timestamp": "2026-06-07T13:45:07"
+    }
+  },
+  "verdict": "Reject. Narrow structural sidecar mutation reduced the damage versus broad mode but still lost archive bytes at the 64 KiB screen."
+}

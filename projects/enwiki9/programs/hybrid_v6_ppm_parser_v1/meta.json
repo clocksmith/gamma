@@ -1,0 +1,42 @@
+{
+  "id": "hybrid_v6_ppm_parser_v1",
+  "description": "Retired hybrid parser/PPM arithmetic-coding candidate.",
+  "added": "2026-06-07",
+  "status": "retired",
+  "retired_reason": "Contract audit found no registry entry, no prior meta.json, and no result artifacts. Preserve source as a negative or repair target; do not include in active evolution.",
+  "deps": [],
+  "family": "hybrid_ppm_parser",
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "parser",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "mediawiki_parser"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "entropy_model",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "adaptive_ppm_arithmetic"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "parser",
+        "to": "entropy_model",
+        "stream": "events"
+      }
+    ]
+  }
+}

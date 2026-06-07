@@ -1,0 +1,33 @@
+{
+  "id": "integer_online_context_arith_v2",
+  "family": "integer-online-context-arithmetic",
+  "status": "experimental",
+  "description": "Tuned C++17 integer online context arithmetic prototype. Builds qm_context_codec_v1.cpp with QM_TABLE_BITS=24 and QM_MIX_PROFILE=2 to expand the direct context table and reduce the untrained SSM path's influence.",
+  "source": "projects/enwiki9/tools/qm_context_codec_v1.cpp",
+  "build": "g++ -O3 -std=c++17 -DNDEBUG -DQM_TABLE_BITS=24 -DQM_MIX_PROFILE=2 projects/enwiki9/tools/qm_context_codec_v1.cpp -o /tmp/qm && xz -9 -c /tmp/qm > programs/integer_online_context_arith_v2/qm.xz",
+  "notes": [
+    "Same synchronized byte-canonical arithmetic stream as v1.",
+    "This tests whether the standalone integer architecture improves when the random fixed-point SSM is gated down and local collision pressure is reduced."
+  ],
+  "measured": {
+    "1k_determinism_smoke": {
+      "data_size": 1024,
+      "compressed_size": 1499,
+      "program_size": 16371,
+      "hutter_score": 17870,
+      "bits_per_byte": 11.710938,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 157350,
+      "program_size": 16371,
+      "hutter_score": 173721,
+      "bits_per_byte": 19.207764,
+      "baseline_lzma_hutter_score": 22805,
+      "roundtrip_ok": true
+    }
+  },
+  "verdict": "Reject. Larger local table plus weaker untrained SSM profile destabilized the adaptive mixer and regressed sharply versus v1."
+}

@@ -1,0 +1,44 @@
+{
+  "id": "paq_logistic_mixer_v1",
+  "description": "Retired PAQ-style logistic bit mixer candidate.",
+  "added": "2026-06-07",
+  "status": "retired",
+  "retired_reason": "Contract audit found no registry entry, no prior meta.json, and no result artifacts. Preserve source as a negative or repair target; do not include in active evolution.",
+  "deps": [],
+  "family": "paq_mixer",
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "feature_contexts",
+        "type": "context_model",
+        "payload": {
+          "discrete": {
+            "feature_family": "byte_class_repetition"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "mixer",
+        "type": "entropy_model",
+        "payload": {
+          "discrete": {
+            "codec": "logistic_bit_mixer"
+          },
+          "continuous": {
+            "total": 4096
+          },
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "feature_contexts",
+        "to": "mixer",
+        "stream": "bit_probability"
+      }
+    ]
+  }
+}

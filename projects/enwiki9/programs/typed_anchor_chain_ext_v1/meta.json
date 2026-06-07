@@ -1,0 +1,42 @@
+{
+  "id": "typed_anchor_chain_ext_v1",
+  "description": "Retired typed-anchor opcode and chained PPM candidate.",
+  "added": "2026-06-07",
+  "status": "retired",
+  "retired_reason": "Contract audit found no registry entry, no prior meta.json, and no result artifacts. Preserve source as a negative or repair target; do not include in active evolution.",
+  "deps": [],
+  "family": "typed_anchor_ppm",
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "typed_anchor_transform",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "opcode_table": "mediawiki_anchors"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "chain_model",
+        "type": "entropy_model",
+        "payload": {
+          "discrete": {
+            "codec": "chained_ppm_arithmetic"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "typed_anchor_transform",
+        "to": "chain_model",
+        "stream": "typed_events"
+      }
+    ]
+  }
+}

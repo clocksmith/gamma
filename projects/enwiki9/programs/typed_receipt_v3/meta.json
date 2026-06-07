@@ -1,0 +1,42 @@
+{
+  "id": "typed_receipt_v3",
+  "description": "Retired typed receipt PPM candidate.",
+  "added": "2026-06-07",
+  "status": "retired",
+  "retired_reason": "Contract audit found no registry entry, no prior meta.json, and no result artifacts. Preserve source as a negative or repair target; do not include in active evolution.",
+  "deps": [],
+  "family": "typed_receipt",
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "typed_receipt_transform",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "receipt_family": "mediawiki_typed"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "receipt_model",
+        "type": "entropy_model",
+        "payload": {
+          "discrete": {
+            "codec": "typed_receipt_ppm"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "typed_receipt_transform",
+        "to": "receipt_model",
+        "stream": "receipt_events"
+      }
+    ]
+  }
+}

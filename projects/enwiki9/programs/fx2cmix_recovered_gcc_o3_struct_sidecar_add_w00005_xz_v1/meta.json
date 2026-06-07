@@ -1,0 +1,86 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_sidecar_add_w00005_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "measured_negative",
+  "parent": "fx2cmix_recovered_gcc_o3_struct_sidecar_add_xz_v1",
+  "description": "Recovered fx2-cmix GCC build with FX2_STRUCT_SIDECAR=4 and a weaker additive sidecar mixer learning rate. Keeps baseline contexts unchanged and adds one decoder-recomputable structural sidecar as a first-layer mixer.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=4",
+      "FX2_STRUCT_SIDECAR_WEIGHT=0.00005"
+    ],
+    "flags": [
+      "-O3",
+      "-march=znver2",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward local driver program_size."
+  },
+  "hypothesis": "The prior additive sidecar lost only 1 archive byte at 64 KiB; reducing its learning rate may keep the signal available while reducing harmful adaptation.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3"
+          }
+        }
+      },
+      {
+        "id": "sidecar",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "fsl_ogi_structural_context",
+            "injection": "additive_first_layer_mixer"
+          },
+          "continuous": {
+            "learning_rate": 0.00005
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar",
+        "to": "substrate",
+        "stream": "context"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 262,
+      "program_size": 285498,
+      "hutter_score": 285760,
+      "baseline_compressed_size": 262,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:25:51"
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13586,
+      "program_size": 285498,
+      "hutter_score": 299084,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "archive_delta_vs_baseline": 1,
+      "score_delta_vs_baseline": 1127,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:28:28"
+    }
+  },
+  "verdict": "Reject. Reducing the additive sidecar learning rate did not recover archive bytes; it still lost 1 byte at the 64 KiB screen and increased counted package size versus the prior additive candidate."
+}

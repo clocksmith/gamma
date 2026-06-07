@@ -1,0 +1,29 @@
+{
+  "id": "fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1",
+  "description": "Lossless rate-ledger selector over raw bytes vs reversible article-geometry/title page ordering, using the strongest measured FX2-SC byte-split/direct/extra/page-match backend.",
+  "added": "2026-06-06",
+  "deps": ["C++ runtime for the bundled cmix/fx2 binary"],
+  "basis": "Combines the best measured raw-stream FX2-SC sidecar backend with a reversible geometry/title transform, but admits the transform only when its compressed archive is smaller than the raw-stream archive on the exact input.",
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH"
+  ],
+  "fx2_sc_concepts": [
+    "schema_template_ctx",
+    "soft_symbol_reduction",
+    "lexical_priming",
+    "namespace_page_kind",
+    "table_coordinates",
+    "role_copy_hints",
+    "citation_anchor_mtf",
+    "reversible_geometry_sort",
+    "rate_ledger"
+  ],
+  "expected_use": "Frontier candidate for exact 10MB and promoted 100MB measurements before any full-corpus claim. It cannot be worse than the selected raw/geometry backend path except for the one-byte mode tag."
+}

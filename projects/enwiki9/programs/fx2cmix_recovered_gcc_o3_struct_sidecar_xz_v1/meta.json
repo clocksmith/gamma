@@ -1,0 +1,49 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_sidecar_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "experimental",
+  "description": "Recovered fx2-cmix GCC build with FX2_STRUCT_SIDECAR=1. Adds a decoder-recomputable FSL/OGI sidecar in ContextManager and injects its bounded structural hash into selected existing mixer context IDs without changing the coded byte stream.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=1"
+    ],
+    "flags": [
+      "-O3",
+      "-march=znver2",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward local driver program_size."
+  },
+  "notes": [
+    "This is the high-potential sidecar injection path: structural state splits fx2's existing tuned mixer contexts instead of replacing fx2 with a standalone model.",
+    "Mode 1 mutates mixer contexts only; indirect byte contexts remain baseline."
+  ],
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 267,
+      "program_size": 285272,
+      "hutter_score": 285539,
+      "baseline_compressed_size": 262,
+      "roundtrip_ok": true
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13648,
+      "program_size": 285272,
+      "hutter_score": 298920,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "archive_delta_vs_baseline": 63,
+      "score_delta_vs_baseline": 963,
+      "roundtrip_ok": true,
+      "timestamp": "2026-06-07T13:41:48"
+    }
+  },
+  "verdict": "Reject. Broad structural sidecar mutation fragmented too many mixer contexts and lost archive bytes at the 64 KiB screen."
+}

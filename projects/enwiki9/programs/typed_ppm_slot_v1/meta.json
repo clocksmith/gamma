@@ -1,0 +1,42 @@
+{
+  "id": "typed_ppm_slot_v1",
+  "description": "Retired typed PPM candidate with slot-conditioned contexts.",
+  "added": "2026-06-07",
+  "status": "retired",
+  "retired_reason": "Contract audit found no registry entry, no prior meta.json, and no result artifacts. Preserve source as a negative or repair target; do not include in active evolution.",
+  "deps": [],
+  "family": "typed_anchor_ppm",
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "typed_opcode_transform",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "opcode_table": "mediawiki_anchors"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "slot_model",
+        "type": "entropy_model",
+        "payload": {
+          "discrete": {
+            "codec": "slot_conditioned_ppm"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "typed_opcode_transform",
+        "to": "slot_model",
+        "stream": "typed_events"
+      }
+    ]
+  }
+}

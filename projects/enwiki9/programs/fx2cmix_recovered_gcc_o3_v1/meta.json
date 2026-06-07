@@ -1,0 +1,9 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_v1",
+  "description": "Score-honest wrapper around a locally recovered fx2-cmix source build compiled with GCC using the repository makefile and -O3 lane. The cmix executable and english.dic pretraining dictionary are vendored in this directory and counted by lib/driver.py.",
+  "added": "2026-06-07",
+  "source": "projects/enwiki9/external/fx2-cmix",
+  "upstream": "https://github.com/kaitz/fx2-cmix",
+  "build": "make CC=g++ CFLAGS_DEFINES='-DSEED=923 -DUPDATE_LIMIT=3000' clean cmix",
+  "notes": "Baseline recovered-source backend candidate. It preserves the frozen outer preprocessing/search layer and measures the inner predictor substrate directly through the local driver contract."
+}

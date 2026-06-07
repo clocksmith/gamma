@@ -9,6 +9,10 @@ For the FX2-SC sidecar-context implementation roadmap, see
 [FX2_SC.md](FX2_SC.md). For the paper-style thesis version, see
 [FX2_SC_PAPER.md](FX2_SC_PAPER.md).
 
+Candidate source, metadata, audit, retirement, and PGSG-readiness rules are in
+[CANDIDATES.md](CANDIDATES.md). The current generated audit snapshot is
+[CANDIDATE_INVENTORY.md](CANDIDATE_INVENTORY.md).
+
 ## Layout
 
 ```
@@ -17,6 +21,8 @@ enwiki9/
 ├── ALGORITHMS.md          custom algorithm mechanisms + benchmark status
 ├── FX2_SC.md              sidecar-context thesis + rollout plan
 ├── FX2_SC_PAPER.md        paper-style FX2-SC design thesis
+├── CANDIDATES.md          candidate lifecycle + PGSG metadata policy
+├── CANDIDATE_INVENTORY.md generated candidate audit snapshot
 ├── index.json             registry of programs + leaderboard
 ├── data/
 │   ├── enwik9.zip         downloaded archive (~322 MB)
