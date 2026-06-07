@@ -117,6 +117,19 @@ static unsigned int SideHashMix(unsigned int h, unsigned int v) {
   return ((h * 16777619u) ^ (v + 0x9e3779b9u)) & 65535u;
 }
 
+static unsigned int SideTimestampExpected(unsigned int pos) {
+  if (pos <= 3 || (pos >= 5 && pos <= 6) || (pos >= 8 && pos <= 9) ||
+      (pos >= 11 && pos <= 12) || (pos >= 14 && pos <= 15) ||
+      (pos >= 17 && pos <= 18)) {
+    return 1;
+  }
+  if (pos == 4 || pos == 7) return 2;
+  if (pos == 10) return 3;
+  if (pos == 13 || pos == 16) return 4;
+  if (pos == 19) return 5;
+  return 0;
+}
+
 static unsigned int Phda9LineKind(unsigned char c) {
   if (c >= '0' && c <= '9') return 1;
   if (c == '-') return 2;
@@ -453,8 +466,21 @@ void ContextManager::UpdateSidecar() {
   }
   if (SidecarEndsWith("<id>")) side_field_ = 2;
   if (SidecarEndsWith("</id>")) side_field_ = 0;
-  if (SidecarEndsWith("<timestamp>")) side_field_ = 3;
-  if (SidecarEndsWith("</timestamp>")) side_field_ = 0;
+  if (SidecarEndsWith("<timestamp>")) {
+    side_field_ = 3;
+    side_timestamp_active_ = 1;
+    side_timestamp_pos_ = 0;
+  } else if (SidecarEndsWith("</timestamp>")) {
+    side_field_ = 0;
+    side_timestamp_active_ = 0;
+    side_timestamp_pos_ = 0;
+  } else if (side_timestamp_active_) {
+    if (c == '<') {
+      side_timestamp_active_ = 0;
+    } else if (side_timestamp_pos_ < 31) {
+      ++side_timestamp_pos_;
+    }
+  }
   if (SidecarEndsWith("<username>")) side_field_ = 4;
   if (SidecarEndsWith("</username>")) side_field_ = 0;
   if (SidecarEndsWith("<comment>")) side_field_ = 5;
@@ -598,6 +624,14 @@ void ContextManager::UpdateSidecar() {
   sidecar_ctx8_ = (side_page_kind_ << 20)
       ^ (side_page_bucket_ << 12)
       ^ (side_word_hash_ & 4095);
+  side_timestamp_expected_ = SideTimestampExpected(side_timestamp_pos_);
+  sidecar_timestamp_direct_ = ((side_timestamp_active_ & 1) << 8)
+      | ((side_timestamp_pos_ & 31) << 3)
+      | (side_timestamp_expected_ & 7);
+  sidecar_timestamp_ctx_ = ((side_title_hash_ & 65535) << 16)
+      ^ ((side_timestamp_pos_ & 31) << 8)
+      ^ ((side_timestamp_expected_ & 7) << 4)
+      ^ (side_page_kind_ & 7);
 #ifdef SIDECAR_PHDA9_CONTEXT
   sidecar_direct3_ ^= ph_direct1_;
   sidecar_direct4_ ^= ph_direct2_;

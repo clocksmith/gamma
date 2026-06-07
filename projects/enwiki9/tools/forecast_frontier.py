@@ -23,6 +23,14 @@ OUT_DEFAULT = ROOT / "results" / "forecast_frontier"
 TARGETS = (100_000_000, 1_000_000_000)
 SCREEN_SCOPES = (1_000_000, 10_000_000)
 
+# Local README reference for the fx2-cmix family. Prefix extrapolation is
+# conservative on enwik9 because the middle corpus compresses much better than
+# the head. Keep this as a separate calibrated diagnostic, not a replacement
+# for exact full-corpus measurement.
+FX2_CALIBRATION_100M_ARCHIVE = 14_965_167
+FX2_CALIBRATION_1G_ARCHIVE = 110_793_128
+FX2_CALIBRATION_FACTOR = FX2_CALIBRATION_1G_ARCHIVE / FX2_CALIBRATION_100M_ARCHIVE
+
 
 def counted_program_size(program_id: str) -> int | None:
     root = PROGRAMS / program_id
@@ -71,6 +79,9 @@ def row_from_driver(row: dict[str, Any], source: str) -> dict[str, Any] | None:
         "program_size": program_size if isinstance(program_size, int) else None,
         "hutter_score": row.get("hutter_score"),
         "roundtrip_ok": row.get("roundtrip_ok"),
+        "data_path": row.get("data_path"),
+        "data_md5": row.get("data_md5"),
+        "data_sha256": row.get("data_sha256"),
         "source": source,
     }
 
@@ -119,11 +130,15 @@ def iter_meta_rows(program_id: str, obj: Any, source: str, inherited_scope: int 
 def collect_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for path in RESULTS.rglob("*.jsonl"):
+        if path.is_relative_to(OUT_DEFAULT):
+            continue
         for row in iter_jsonl(path):
             parsed = row_from_driver(row, str(path.relative_to(ROOT)))
             if parsed:
                 rows.append(parsed)
     for path in RESULTS.rglob("*.json"):
+        if path.is_relative_to(OUT_DEFAULT):
+            continue
         obj = load_json(path)
         parsed = row_from_driver(obj, str(path.relative_to(ROOT))) if isinstance(obj, dict) else None
         if parsed:
@@ -137,26 +152,37 @@ def collect_rows() -> list[dict[str, Any]]:
 
 
 def dedupe_rows(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
-    best: dict[tuple[str, int, int], dict[str, Any]] = {}
+    best: dict[tuple[str, int], dict[str, Any]] = {}
     for row in rows:
+        if "order_phda9" in str(row.get("source") or ""):
+            continue
         if row.get("program_size") is None:
             row["program_size"] = counted_program_size(row["program_id"])
-        key = (row["program_id"], row["input_bytes"], row["compressed_size"])
+        key = (row["program_id"], row["input_bytes"])
         old = best.get(key)
         if old is None:
             best[key] = row
             continue
-        old_score = 0
-        row_score = 0
-        old_score += int(old.get("hutter_score") is not None)
-        row_score += int(row.get("hutter_score") is not None)
-        old_score += int(old.get("program_size") is not None)
-        row_score += int(row.get("program_size") is not None)
-        old_score += int(old.get("roundtrip_ok") is True)
-        row_score += int(row.get("roundtrip_ok") is True)
-        if row_score > old_score:
+        if row_preference(row) > row_preference(old):
             best[key] = row
     return list(best.values())
+
+
+def row_preference(row: dict[str, Any]) -> tuple[int, int, int, int, int]:
+    """Prefer actual corpus driver rows over metadata-only inherited rows.
+
+    Same program and scope should be deterministic. If two rows disagree,
+    keeping a lower metadata-only archive can silently mix protocols, as with
+    legacy order/preprocessed gates. A row with data hashes is therefore more
+    trustworthy than a metadata inheritance row even when its archive is larger.
+    """
+    source = str(row.get("source") or "")
+    has_hash = int(bool(row.get("data_sha256") or row.get("data_md5")))
+    is_driver_json = int(source.startswith("results/") and source.endswith(".json"))
+    has_roundtrip = int(row.get("roundtrip_ok") is True)
+    has_score = int(row.get("hutter_score") is not None)
+    archive_rank = -int(row.get("compressed_size") or 0)
+    return (has_hash, is_driver_json, has_roundtrip, has_score, archive_rank)
 
 
 def best_by_scope(rows: Iterable[dict[str, Any]]) -> dict[int, dict[str, Any]]:
@@ -210,6 +236,17 @@ def fit_forecast(points: list[dict[str, Any]], target: int) -> dict[str, Any] | 
     }
 
 
+def evidence_tier(points: list[dict[str, Any]]) -> tuple[int, str, int]:
+    max_scope = max((row["input_bytes"] for row in points), default=0)
+    if max_scope >= 100_000_000:
+        return (0, "100m+", max_scope)
+    if max_scope >= 10_000_000:
+        return (1, "10m", max_scope)
+    if max_scope >= 1_000_000:
+        return (2, "1m", max_scope)
+    return (3, "sub-1m", max_scope)
+
+
 def pareto(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     values = list(rows)
     out = []
@@ -232,6 +269,26 @@ def pareto(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
         if not dominated:
             out.append(row)
     return sorted(out, key=lambda row: (row["compressed_size"], row.get("program_size") or 0))
+
+
+def cmix_like(program_id: str) -> bool:
+    return program_id.startswith(("fx2", "fx2cmix", "cmix21", "cmix_wrapped"))
+
+
+def calibrated_fx2_forecast(program_id: str, forecast_100m: dict[str, Any]) -> dict[str, Any] | None:
+    archive_100m = forecast_100m.get("projected_archive")
+    if not cmix_like(program_id) or not isinstance(archive_100m, int):
+        return None
+    projected = int(round(archive_100m * FX2_CALIBRATION_FACTOR))
+    return {
+        "basis": "fx2-readme-100m-to-1g-calibration",
+        "reference_100m_archive": FX2_CALIBRATION_100M_ARCHIVE,
+        "reference_1g_archive": FX2_CALIBRATION_1G_ARCHIVE,
+        "factor": FX2_CALIBRATION_FACTOR,
+        "projected_archive": projected,
+        "projected_percent": projected / 1_000_000_000 * 100,
+        "distance_to_10_percent_archive": projected - 100_000_000,
+    }
 
 
 def summarize(rows: list[dict[str, Any]], out_dir: pathlib.Path, top: int) -> None:
@@ -259,12 +316,24 @@ def summarize(rows: list[dict[str, Any]], out_dir: pathlib.Path, top: int) -> No
             "points": sorted(best_points, key=lambda item: item["input_bytes"]),
             "forecast": {},
         }
+        tier_rank, tier_label, max_scope = evidence_tier(row["points"])
+        row["evidence_tier_rank"] = tier_rank
+        row["evidence_tier"] = tier_label
+        row["max_measured_scope"] = max_scope
         for target in TARGETS:
             projected = fit_forecast(best_points, target)
             if projected:
                 row["forecast"][target] = projected
+        calibrated = calibrated_fx2_forecast(
+            program_id, row["forecast"].get(100_000_000, {})
+        )
+        if calibrated:
+            row["fx2_calibrated_1g"] = calibrated
         forecasts.append(row)
-    forecasts.sort(key=lambda row: row["forecast"].get(100_000_000, {}).get("projected_archive", 10**30))
+    forecasts.sort(key=lambda row: (
+        row.get("evidence_tier_rank", 99),
+        row["forecast"].get(100_000_000, {}).get("projected_archive", 10**30),
+    ))
 
     lines = ["# Forecast Frontier", ""]
     lines.append("Measured archive-first leaders:")
@@ -291,18 +360,27 @@ def summarize(rows: list[dict[str, Any]], out_dir: pathlib.Path, top: int) -> No
     lines.append("")
     lines.append("## Forecasts")
     lines.append("")
-    lines.append("| rank | program | measured points | 100MB proj | 100MB % | 100MB gap to 10% | 1GB proj | 1GB % | alpha |")
-    lines.append("|---:|---|---|---:|---:|---:|---:|---:|---:|")
+    lines.append("Rows are sorted by evidence tier before projected size. `sub-1m` rows are exploratory screens, not promotion evidence.")
+    lines.append("")
+    lines.append("| rank | program | tier | max scope | measured points | 100MB proj | 100MB % | 100MB gap to 10% | 100MB basis | 100MB alpha | 1GB proj | 1GB % | 1GB gap to 10% | 1GB basis | 1GB alpha | fx2-cal 1GB | fx2-cal gap |")
+    lines.append("|---:|---|---|---:|---|---:|---:|---:|---|---:|---:|---:|---:|---|---:|---:|---:|")
     for rank, row in enumerate(forecasts[:top], 1):
         f100 = row["forecast"].get(100_000_000, {})
         f1g = row["forecast"].get(1_000_000_000, {})
+        fcal = row.get("fx2_calibrated_1g", {})
         points = ", ".join(f"{p['input_bytes']}:{p['compressed_size']}" for p in row["points"])
         lines.append(
-            f"| {rank} | `{row['program_id']}` | {points} | "
+            f"| {rank} | `{row['program_id']}` | "
+            f"{row.get('evidence_tier', '')} | {row.get('max_measured_scope', '')} | "
+            f"{points} | "
             f"{f100.get('projected_archive', '')} | {f100.get('projected_percent', 0):.3f} | "
             f"{f100.get('distance_to_10_percent_archive', '')} | "
+            f"{f100.get('basis', '')} | {f100.get('alpha', 0):.4f} | "
             f"{f1g.get('projected_archive', '')} | {f1g.get('projected_percent', 0):.3f} | "
-            f"{f100.get('alpha', 0):.4f} |"
+            f"{f1g.get('distance_to_10_percent_archive', '')} | "
+            f"{f1g.get('basis', '')} | {f1g.get('alpha', 0):.4f} | "
+            f"{fcal.get('projected_archive', '')} | "
+            f"{fcal.get('distance_to_10_percent_archive', '')} |"
         )
 
     out_dir.mkdir(parents=True, exist_ok=True)

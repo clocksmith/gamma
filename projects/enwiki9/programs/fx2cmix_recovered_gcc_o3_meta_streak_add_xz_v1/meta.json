@@ -1,0 +1,52 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_meta_streak_add_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "experimental",
+  "description": "Recovered fx2-cmix GCC build with FX2_META_STREAK=2. Preserves the baseline final zero-context mixer and adds a weak first-layer meta-streak expert keyed by recent predictor correctness, streak bucket, bit context, line-break state, and longest match bucket.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_META_STREAK=2"
+    ],
+    "flags": [
+      "-O3",
+      "-march=znver2",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward the local driver program_size."
+  },
+  "notes": [
+    "Designed after FX2_META_STREAK=1 lost on the 1 MiB ledger by replacing the final-layer global mixer context.",
+    "This candidate keeps the baseline final-layer context and tests whether a weak additive streak expert can learn without destabilizing calibration."
+  ],
+  "measured": {
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13585,
+      "program_size": 284065,
+      "hutter_score": 297650,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "score_delta_vs_baseline": -307,
+      "roundtrip_ok": true
+    },
+    "1m_driver": {
+      "data_size": 1048576,
+      "compressed_size": 182399,
+      "program_size": 284065,
+      "hutter_score": 466464,
+      "bits_per_byte": 1.391594,
+      "baseline_hutter_score": 466767,
+      "score_delta_vs_baseline": -303,
+      "archive_delta_vs_baseline": 4,
+      "program_delta_vs_baseline": -307,
+      "roundtrip_ok": true,
+      "timestamp": "2026-06-07T11:00:02"
+    }
+  },
+  "verdict": "Tiny 1 MiB ledger win only because the packed program is smaller; archive bytes regressed by 4. Keep as a reproducible package-size curiosity, not as a route toward the 10 percent target."
+}

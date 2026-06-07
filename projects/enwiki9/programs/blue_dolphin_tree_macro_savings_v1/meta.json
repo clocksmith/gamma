@@ -1,0 +1,35 @@
+{
+  "id": "blue_dolphin_tree_macro_savings_v1",
+  "phase": 5,
+  "track": "T",
+  "description": "Savings-gated parameterized tree macros over parsed templates with LZMA backend.",
+  "added": "2026-06-07",
+  "deps": [],
+  "compares_against": ["blue_dolphin_tree_macro_v1", "baseline_lzma"],
+  "min_freq_gate": 3,
+  "min_raw_saving": 24,
+  "max_rules": 65536,
+  "basis": "Same reversible archive format as blue_dolphin_tree_macro_v1, but a template shape is admitted only when estimated raw encoded bytes beat the literal template bytes by at least the safety margin.",
+  "verified_gates": {
+    "1m_driver": {
+      "input_bytes": 1000000,
+      "compressed_size": 292112,
+      "program_size": 12060,
+      "hutter_score": 304172,
+      "roundtrip_ok": true,
+      "baseline_lzma_compressed_size": 290732,
+      "baseline_lzma_hutter_score": 290933,
+      "delta_archive_vs_frequency_only": -232
+    },
+    "10m_driver": {
+      "input_bytes": 10000000,
+      "compressed_size": 2730124,
+      "program_size": 12060,
+      "hutter_score": 2742184,
+      "roundtrip_ok": true,
+      "baseline_lzma_compressed_size": 2720256,
+      "baseline_lzma_hutter_score": 2720457
+    }
+  },
+  "verdict": "Savings gate improves the frequency-only macro archive but still loses to raw baseline_lzma at 1MB and 10MB; parsed-template macro rewriting is retired for the LZMA-backed lane."
+}

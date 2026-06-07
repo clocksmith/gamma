@@ -1,0 +1,26 @@
+{
+  "id": "fx2_order_selector_sidecar_byte_split_direct_extra_page_match_v1",
+  "description": "Lossless one-byte rate-ledger selector over raw FX2-SC and several reversible page-order modes, backed by the byte-split/direct/extra/page-match FX2-SC binary.",
+  "added": "2026-06-07",
+  "deps": ["C++ runtime for the bundled cmix/fx2 binary"],
+  "basis": "Keeps the raw byte stream as an admissible mode and tests reversible page-order transforms that can be restored by sorting decoded page blocks back by their unique sorted page ids. No explicit permutation metadata is stored.",
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH"
+  ],
+  "fx2_sc_concepts": [
+    "schema_template_ctx",
+    "soft_symbol_reduction",
+    "lexical_priming",
+    "namespace_page_kind",
+    "reversible_geometry_sort",
+    "rate_ledger"
+  ],
+  "expected_use": "Screen at 1MB, then promote only if the selected page-order mode beats the raw FX2-SC archive by more than the mode tag and counted wrapper growth at the same scope."
+}

@@ -1,0 +1,42 @@
+{
+  "id": "typed_ppm_inherit_v1",
+  "description": "Retired typed PPM candidate with inherited context behavior.",
+  "added": "2026-06-07",
+  "status": "retired",
+  "retired_reason": "Contract audit found no registry entry, no prior meta.json, and no result artifacts. Preserve source as a negative or repair target; do not include in active evolution.",
+  "deps": [],
+  "family": "typed_anchor_ppm",
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "typed_opcode_transform",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "opcode_table": "mediawiki_anchors"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "ppm_inherit",
+        "type": "entropy_model",
+        "payload": {
+          "discrete": {
+            "codec": "ppm_inherit"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "typed_opcode_transform",
+        "to": "ppm_inherit",
+        "stream": "typed_events"
+      }
+    ]
+  }
+}

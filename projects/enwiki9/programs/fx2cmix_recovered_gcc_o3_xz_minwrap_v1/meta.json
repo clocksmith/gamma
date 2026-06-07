@@ -1,0 +1,82 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "active",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_v1",
+  "description": "Recovered fx2-cmix GCC baseline payload with a smaller Python wrapper. No predictor, dictionary, or archive-coding behavior is changed.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000"
+    ],
+    "flags": [
+      "-O3",
+      "-march=znver2",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "Reuses the xz-packed cmix and english.dic payloads from fx2cmix_recovered_gcc_o3_xz_v1; only program.py is minimized."
+  },
+  "hypothesis": "The recovered fx2 wrapper can reduce counted program size without changing compressed archives.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3"
+          }
+        }
+      },
+      {
+        "id": "wrapper",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "mode": "minimal_python_xz_unpack"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "wrapper",
+        "to": "substrate",
+        "stream": "exec"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 262,
+      "program_size": 283717,
+      "hutter_score": 283979,
+      "baseline_compressed_size": 262,
+      "baseline_hutter_score": 284634,
+      "score_delta_vs_baseline": -655,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:30:33"
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13585,
+      "program_size": 283717,
+      "hutter_score": 297302,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "archive_delta_vs_baseline": 0,
+      "score_delta_vs_baseline": -655,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:32:42"
+    }
+  },
+  "verdict": "Promote as a packaging-only improvement. It preserves recovered fx2 archive bytes at the 64 KiB screen and reduces counted program size by 655 bytes versus fx2cmix_recovered_gcc_o3_xz_v1."
+}

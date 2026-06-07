@@ -208,6 +208,15 @@ void Predictor::AddSidecar() {
   AddModel(new Direct(manager_.ph_direct2_, manager_.bit_context_,
       45, 2.0, 256));
 #endif
+#ifdef SIDECAR_TIMESTAMP_CONTEXT
+  AddModel(new Direct(manager_.sidecar_timestamp_direct_, manager_.bit_context_,
+      45, 2.0, 512));
+#ifndef SIDECAR_TIMESTAMP_DIRECT_ONLY
+  AddModel(new Indirect(manager_.nonstationary_,
+      manager_.sidecar_timestamp_ctx_, manager_.bit_context_, 180,
+      manager_.shared_map_));
+#endif
+#endif
 
 #ifndef SIDECAR_NO_INDIRECT
   AddModel(new Indirect(manager_.nonstationary_, manager_.sidecar_ctx1_,

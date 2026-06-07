@@ -1,0 +1,44 @@
+{
+  "id": "integer_online_context_arith_v1",
+  "family": "integer-online-context-arithmetic",
+  "status": "experimental",
+  "description": "Score-honest C++17 prototype of a fully deterministic integer-only streaming context model: byte-canonical arithmetic coding, decoder-recomputable lexer and grammar sidecar contexts, tiny fixed-point SSM, local nonstationary state tables, and adaptive integer log-odds mixer.",
+  "source": "projects/enwiki9/tools/qm_context_codec_v1.cpp",
+  "build": "g++ -O3 -std=c++17 -DNDEBUG projects/enwiki9/tools/qm_context_codec_v1.cpp -o /tmp/qm && xz -9 -c /tmp/qm > programs/integer_online_context_arith_v1/qm.xz",
+  "notes": [
+    "Corrects the blueprint alignment issue by never emitting grammar symbols as the coded stream. The coded stream remains raw bytes; grammar and lexer are sidecar contexts updated from completed decoded history.",
+    "No trained tensor payload is included. The fixed-point SSM uses deterministic LCG weights, so this tests synchronization and local adaptive modeling, not a trained neural predictor."
+  ],
+  "measured": {
+    "1k_determinism_smoke": {
+      "data_size": 1024,
+      "compressed_size": 942,
+      "program_size": 16372,
+      "hutter_score": 17314,
+      "bits_per_byte": 7.359375,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 49349,
+      "program_size": 16372,
+      "hutter_score": 65721,
+      "bits_per_byte": 6.024048,
+      "baseline_lzma_hutter_score": 22805,
+      "roundtrip_ok": true
+    },
+    "1m_driver": {
+      "data_size": 1048576,
+      "compressed_size": 547655,
+      "program_size": 16372,
+      "hutter_score": 564027,
+      "bits_per_byte": 4.178276,
+      "baseline_lzma_hutter_score": 290933,
+      "fx2cmix_recovered_gcc_o3_xz_v1_hutter_score": 466767,
+      "roundtrip_ok": true,
+      "timestamp": "2026-06-07T13:30:20"
+    }
+  },
+  "verdict": "Reject as a standalone compressor. The corrected deterministic pipeline is synchronized and score-honest, but the untrained integer model is far behind LZMA and recovered fx2 on the same prefix."
+}

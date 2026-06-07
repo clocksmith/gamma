@@ -1,0 +1,100 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "family": "fx2-cmix-recovered",
+  "status": "active",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v2",
+  "description": "Recovered fx2-cmix GCC baseline payload with the minwrap_v2 Python wrapper and check-free xz containers for the executable and dictionary. No predictor, dictionary bytes after decompression, or archive-coding behavior is changed.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000"
+    ],
+    "flags": [
+      "-O3",
+      "-march=znver2",
+      "-fno-strict-aliasing",
+      "-fno-exceptions",
+      "-fno-threadsafe-statics"
+    ],
+    "packaging": "Reuses the minwrap_v2 wrapper and repacks cmix/english.dic as xz streams with --check=none."
+  },
+  "hypothesis": "Removing xz integrity check bytes from counted payload files reduces S while preserving decompressed fx2 executable and dictionary bytes.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3"
+          }
+        }
+      },
+      {
+        "id": "wrapper",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "mode": "minimal_python_xz_unpack_no_pathlib"
+          }
+        }
+      },
+      {
+        "id": "container",
+        "type": "packaging",
+        "payload": {
+          "discrete": {
+            "format": "xz",
+            "check": "none"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "container",
+        "to": "wrapper",
+        "stream": "payload"
+      },
+      {
+        "from": "wrapper",
+        "to": "substrate",
+        "stream": "exec"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 262,
+      "program_size": 283628,
+      "hutter_score": 283890,
+      "parent_hutter_score": 283906,
+      "baseline_hutter_score": 284634,
+      "score_delta_vs_parent": -16,
+      "score_delta_vs_baseline": -744,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:40:01"
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13585,
+      "program_size": 283628,
+      "hutter_score": 297213,
+      "parent_hutter_score": 297229,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "archive_delta_vs_baseline": 0,
+      "score_delta_vs_parent": -16,
+      "score_delta_vs_baseline": -744,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "timestamp": "2026-06-07T15:42:11"
+    }
+  },
+  "verdict": "Promote as current recovered fx2 package winner. It preserves recovered fx2 archive bytes at the 64 KiB screen and reduces counted program size by 744 bytes versus fx2cmix_recovered_gcc_o3_xz_v1."
+}

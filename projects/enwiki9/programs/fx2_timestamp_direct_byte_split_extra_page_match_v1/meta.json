@@ -1,0 +1,31 @@
+{
+  "id": "fx2_timestamp_direct_byte_split_extra_page_match_v1",
+  "description": "FX2-SC raw-stream sidecar candidate adding a bounded XML timestamp position/class context to the current byte-split/direct/extra/page-match sidecar backend.",
+  "added": "2026-06-06",
+  "deps": ["C++ runtime for the bundled cmix/fx2 binary"],
+  "source_tree": "external/cmix21-sidecar",
+  "basis": "Tests whether decoder-recomputed timestamp position and expected character class reduce archive bytes enough to pay for the added predictor state and counted binary size. The primary byte stream is preserved exactly.",
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH",
+    "SIDECAR_TIMESTAMP_CONTEXT"
+  ],
+  "fx2_sc_concepts": [
+    "raw_stream_preserved",
+    "schema_template_ctx",
+    "soft_symbol_reduction",
+    "lexical_priming",
+    "namespace_page_kind",
+    "table_coordinates",
+    "role_copy_hints",
+    "citation_anchor_mtf",
+    "timestamp_model"
+  ],
+  "comparison_baseline": "fx2_sidecar_byte_split_direct_extra_page_match_v1"
+}

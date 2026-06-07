@@ -1,0 +1,380 @@
+diff --git a/makefile b/makefile
+index 5eb75b2..a1b7b38 100644
+--- a/makefile
++++ b/makefile
+@@ -1,8 +1,9 @@
+ CC = clang++-17
+ 
+ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
++FP_FAST_FLAG:=$(shell $(CC) --version 2>/dev/null | grep -qi clang && echo -ffp-model=fast || echo -ffast-math)
+ 
+-CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
++CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
+ 
+ ifdef COREI7
+ $(info COREI7 defined)
+@@ -22,6 +23,7 @@ CPPFLAGS_PART-THAT-CAN-BE-SLOW    += -Os -fdata-sections -ffunction-sections
+ CPPFLAGS_PART-THAT-SHOULD-BE-FAST += -O3 -fdata-sections -ffunction-sections
+ 
+ LFLAGS := -m64 -Wl,--gc-sections -std=c++17
++STRIP_FLAG := -s
+ 
+ 
+ prof_gen: CPPFLAGS_PART-THAT-CAN-BE-SLOW    += -fprofile-generate=$(ROOT_DIR)/pgo_data
+@@ -42,7 +44,7 @@ fast: src/coder/decoder.cpp src/coder/decoder.h src/coder/encoder.cpp src/coder/
+ 	$(CC) $(CPPFLAGS_PART-THAT-SHOULD-BE-FAST) src/coder/decoder.cpp src/coder/encoder.cpp src/context-manager.cpp src/contexts/bit-context.cpp src/contexts/bracket-context.cpp src/contexts/combined-context.cpp src/contexts/context-hash.cpp src/contexts/indirect-hash.cpp src/contexts/interval-hash.cpp src/contexts/interval.cpp src/contexts/sparse.cpp src/models/bracket.cpp src/models/byte-model.cpp src/models/direct-hash.cpp src/models/direct.cpp src/models/indirect.cpp src/models/match.cpp src/models/fxcmv1.cpp src/models/ppmd.cpp src/states/nonstationary.cpp src/states/run-map.cpp src/mixer/byte-mixer.cpp src/mixer/mixer-input.cpp src/mixer/mixer.cpp src/mixer/sigmoid.cpp src/mixer/sse.cpp -c src/predictor.cpp src/runner.cpp
+ 
+ cmix: fast slow
+-	$(CC) $(LFLAGS) bit-context.o bracket-context.o bracket.o byte-mixer.o byte-model.o combined-context.o context-hash.o context-manager.o decoder.o dictionary.o direct-hash.o direct.o encoder.o indirect-hash.o indirect.o interval-hash.o interval.o match.o mixer-input.o mixer.o nonstationary.o fxcmv1.o ppmd.o predictor.o preprocessor.o run-map.o runner.o sigmoid.o sparse.o sse.o -s -o cmix
++	$(CC) $(LFLAGS) bit-context.o bracket-context.o bracket.o byte-mixer.o byte-model.o combined-context.o context-hash.o context-manager.o decoder.o dictionary.o direct-hash.o direct.o encoder.o indirect-hash.o indirect.o interval-hash.o interval.o match.o mixer-input.o mixer.o nonstationary.o fxcmv1.o ppmd.o predictor.o preprocessor.o run-map.o runner.o sigmoid.o sparse.o sse.o $(STRIP_FLAG) -o cmix
+ 	rm -f *.o
+ 
+ remap: src/readalike_prepr/article_remap.cpp
+@@ -54,4 +56,3 @@ clean:
+ 	rm -f remap
+ 
+ all: cmix remap
+-
+diff --git a/src/context-manager.cpp b/src/context-manager.cpp
+index f75b3ca..3770265 100644
+--- a/src/context-manager.cpp
++++ b/src/context-manager.cpp
+@@ -62,8 +62,84 @@ ContextManager::ContextManager() : history_(60000000, 0),
+     hashes_ind3.resize(0x2000000, 0);
+     hashes_ind4.resize(0x100, 0);
+     hashes_ind5.resize(0x100, 0);
++#if FX2_STRUCT_SIDECAR
++    sidecar_pairs_.resize(1 << 20, 0);
++#endif
+ }
+ 
++#if FX2_STRUCT_SIDECAR
++static unsigned long long MixStructural64(unsigned long long x) {
++  x ^= x >> 33;
++  x *= 0xff51afd7ed558ccdULL;
++  x ^= x >> 33;
++  x *= 0xc4ceb9fe1a85ec53ULL;
++  x ^= x >> 33;
++  return x;
++}
++
++void ContextManager::UpdateStructuralSidecar() {
++  const unsigned int c = bit_context_;
++
++  if (sidecar_utf8_tail > 0) {
++    --sidecar_utf8_tail;
++  } else if ((c & 0x80) == 0) {
++  } else if ((c & 0xe0) == 0xc0) {
++    sidecar_utf8_tail = 1;
++  } else if ((c & 0xf0) == 0xe0) {
++    sidecar_utf8_tail = 2;
++  } else if ((c & 0xf8) == 0xf0) {
++    sidecar_utf8_tail = 3;
++  }
++
++  if (sidecar_lexer_state == 0) {
++    if (c == '<') {
++      sidecar_lexer_state = 1;
++      if (sidecar_xml_depth < 63) ++sidecar_xml_depth;
++    } else if (c == '[' || c == '{' || c == '|') {
++      sidecar_lexer_state = 2;
++    }
++  } else if (sidecar_lexer_state == 1) {
++    if (c == '/' && sidecar_prev_byte == '<' && sidecar_xml_depth > 0) {
++      --sidecar_xml_depth;
++    }
++    if (c == '>') sidecar_lexer_state = 0;
++  } else if (sidecar_lexer_state == 2) {
++    if (c == ']' || c == '}' || c == '\n') sidecar_lexer_state = 0;
++  }
++
++  if (c == '{' && sidecar_prev_byte == '{') {
++    if (sidecar_template_depth < 63) ++sidecar_template_depth;
++  } else if (c == '}' && sidecar_prev_byte == '}' && sidecar_template_depth > 0) {
++    --sidecar_template_depth;
++  }
++
++  const unsigned int pair = ((sidecar_prev_byte & 0xff) << 8) | (c & 0xff);
++  const unsigned int slot = static_cast<unsigned int>(
++      MixStructural64(pair ^ (sidecar_pair_sig << 1)) & ((1 << 20) - 1));
++  if (sidecar_pairs_[slot] == pair + 1) {
++    sidecar_pair_sig = MixStructural64(sidecar_pair_sig ^ pair ^ 0x9e3779b9ULL);
++  } else {
++    sidecar_pairs_[slot] = pair + 1;
++    sidecar_pair_sig = MixStructural64(sidecar_pair_sig + pair + 0x632be59bULL);
++  }
++
++  sidecar_context =
++      (sidecar_lexer_state & 3) |
++      ((sidecar_xml_depth & 63) << 2) |
++      ((sidecar_template_depth & 63) << 8) |
++      ((sidecar_utf8_tail & 3) << 14) |
++      ((sidecar_pair_sig & 0xffff) << 16);
++  sidecar_prev_byte = c;
++}
++
++unsigned long long ContextManager::StructuralContext(unsigned int salt) const {
++  unsigned long long x = sidecar_context;
++  x ^= (sidecar_pair_sig << 7);
++  x ^= static_cast<unsigned long long>(salt) * 0x9e3779b97f4a7c15ULL;
++  return MixStructural64(x);
++}
++#endif
++
+ void ContextManager::UpdateHistory() {
+   history_[history_pos_] = bit_context_;
+   ++history_pos_;
+@@ -185,6 +261,15 @@ void ContextManager::UpdateContexts(int bit) {
+     UpdateWords();
+     UpdateRecentBytes();
+     UpdateWRTContext();
++#if FX2_STRUCT_SIDECAR
++    UpdateStructuralSidecar();
++#if FX2_STRUCT_SIDECAR == 2
++    ind1 ^= StructuralContext(101) & 0xff;
++    ind2 ^= StructuralContext(102) & 0xffffffffULL;
++    ind3 ^= StructuralContext(103) & 0x1ffffffULL;
++    ind5 ^= StructuralContext(105) & 0x3fffffffULL;
++#endif
++#endif
+ 
+     for (auto& context : context_hash_contexts_) {
+       context.Update();
+@@ -212,10 +297,26 @@ void ContextManager::UpdateContexts(int bit) {
+   mx17=(b3stream&0x3f)*256+long_bit_context_;// 7f or 3f
+   
+       if (bpos==0)  mxx=(stream2bR&63)*8 + (b3stream&7);
+-    else if (bpos>3) {
++  else if (bpos>3) {
+         mxx=((b2stream<<2)&63)+wrt_2b[(long_bit_context_<<(8-bpos))&255]*8+(b3stream&7);
+     } else    
+         mxx=(stream2bR&63)*8 +(b3stream&7);
++
++#if FX2_STRUCT_SIDECAR == 1 || FX2_STRUCT_SIDECAR == 2
++  wordscxt ^= (StructuralContext(11) & 0xffff) << 8;
++  mx6 ^= (StructuralContext(12) & 0xffff) << 8;
++  mx9 ^= (StructuralContext(13) & 0xff) << 8;
++  mx10 ^= (StructuralContext(14) & 0xff) << 8;
++  mx11 ^= (StructuralContext(15) & 0xff) << 8;
++  mx12 ^= StructuralContext(16) & 0xffff;
++  mx13 ^= StructuralContext(17) & 0xffff;
++  mx16 ^= (StructuralContext(18) & 0xff) << 8;
++  mx17 ^= (StructuralContext(19) & 0xff) << 8;
++  mxx ^= StructuralContext(20) & 0xfff;
++#elif FX2_STRUCT_SIDECAR == 3
++  wordscxt ^= (StructuralContext(31) & 0x7f) << 8;
++  mx17 ^= (StructuralContext(32) & 0x3f) << 8;
++  mxx ^= StructuralContext(33) & 0x3f;
++#endif
+         
+ }
+-
+diff --git a/src/context-manager.h b/src/context-manager.h
+index d740327..f5dcf97 100644
+--- a/src/context-manager.h
++++ b/src/context-manager.h
+@@ -19,6 +19,10 @@
+ 
+ #include <vector>
+ 
++#ifndef FX2_STRUCT_SIDECAR
++#define FX2_STRUCT_SIDECAR 0
++#endif
++
+ struct ContextManager {
+   ContextManager();
+ 
+@@ -58,6 +62,10 @@ struct ContextManager {
+   void UpdateWords();
+   void UpdateRecentBytes();
+   void UpdateWRTContext();
++#if FX2_STRUCT_SIDECAR
++  void UpdateStructuralSidecar();
++  unsigned long long StructuralContext(unsigned int salt) const;
++#endif
+ 
+   unsigned int bit_context_ = 1, wrt_state_ = 0, bpos=0;
+   unsigned long long long_bit_context_ = 1, zero_context_ = 0, history_pos_ = 0,
+@@ -78,6 +86,11 @@ struct ContextManager {
+       mx17=0,mx17cxt=0,
+       mx18=0,mx18cxt=0,
+       mxx=0,
++#if FX2_STRUCT_SIDECAR
++      sidecar_lexer_state=0, sidecar_xml_depth=0, sidecar_utf8_tail=0,
++      sidecar_prev_byte=0, sidecar_pair_sig=0, sidecar_template_depth=0,
++      sidecar_context=0,
++#endif
+       words=0,wordscxt=0,
+       ind1=0,context1_ind=0,
+       ind2=0,context1_ind2=0,
+@@ -87,6 +100,9 @@ struct ContextManager {
+       mx19cxt=0;
+   std::vector<unsigned char> history_, shared_map_;
+   std::vector<unsigned long long> words_, recent_bytes_;
++#if FX2_STRUCT_SIDECAR
++  std::vector<unsigned int> sidecar_pairs_;
++#endif
+   llvm::SmallVector<ContextHash, 12> context_hash_contexts_;
+   llvm::SmallVector<Sparse, 18> sparse_contexts_;
+   llvm::SmallVector<BracketContext, 1> bracket_contexts_;
+@@ -96,4 +112,3 @@ struct ContextManager {
+ };
+ 
+ #endif
+-
+diff --git a/src/models/ppmd.cpp b/src/models/ppmd.cpp
+index dcc832c..3d98ad0 100644
+--- a/src/models/ppmd.cpp
++++ b/src/models/ppmd.cpp
+@@ -1389,12 +1389,14 @@ void PPMD::ByteUpdate() {
+   ByteModel::ByteUpdate();
+   probs_ /= probs_.sum();
+   if (mmap_to_disk && counter_ % 20000 == 0) {
+-    int err = munmap(ppmd_model_->HeapStart, mmap_size);
++    byte* heap_start = ppmd_model_->HeapStart;
++    int err = munmap(heap_start, mmap_size);
+     if(err != 0) {
+       exit(EXIT_FAILURE);
+     }
+     int fd = open(mmap_path, O_RDWR);
+-    ppmd_model_->HeapStart = (byte*) mmap(NULL, mmap_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
++    ppmd_model_->HeapStart = (byte*) mmap(
++        heap_start, mmap_size, PROT_READ|PROT_WRITE, MAP_SHARED | MAP_FIXED, fd, 0);
+     if(ppmd_model_->HeapStart == MAP_FAILED) {
+       exit(EXIT_FAILURE);
+     }
+@@ -1403,4 +1405,3 @@ void PPMD::ByteUpdate() {
+ }
+ 
+ } // namespace PPMD
+-
+diff --git a/src/predictor.cpp b/src/predictor.cpp
+index 503edfb..97fc476 100644
+--- a/src/predictor.cpp
++++ b/src/predictor.cpp
+@@ -3,6 +3,7 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <cstdlib>
++#include <cmath>
+ 
+ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
+     sigmoid_(100001), vocab_(vocab) {
+@@ -163,15 +164,46 @@ void Predictor::AddMixers() {
+   AddMixer(0, manager_.mx16, 0.005);
+   AddMixer(0, manager_.mx14, 0.005);
+   AddMixer(0, manager_.mx15, 0.005);
++#if FX2_META_STREAK == 2
++  AddMixer(0, meta_streak_context_, 0.00005);
++#endif
++#if FX2_STRUCT_SIDECAR == 4
++  AddMixer(0, manager_.sidecar_context, FX2_STRUCT_SIDECAR_WEIGHT);
++#endif
+ 
+   input_size = mixer_0_.size() + auxiliary_size_;
+   layers_[1].SetNumModels(input_size);
+ 
++#if FX2_META_STREAK == 1
++  AddMixer(1, meta_streak_context_, 0.0003);
++#else
+   AddMixer(1,manager_.zero_context_, 0.0003);
++#endif
+ 
+   layers_[0].SetExtraInputSize(mixer_0_.size());
+ 
+ }
++#if FX2_META_STREAK
++void Predictor::UpdateMetaStreak(int bit) {
++  const float error = std::fabs(last_prediction_ - static_cast<float>(bit));
++  const unsigned int state = error < 0.15f ? 1 : 0;
++  if (state == meta_streak_state_) {
++    if (meta_streak_len_ < 4095) ++meta_streak_len_;
++  } else {
++    meta_streak_state_ = state;
++    meta_streak_len_ = 0;
++  }
++  const unsigned long long bucket = meta_streak_len_ < 64
++      ? meta_streak_len_
++      : 64 + ((meta_streak_len_ - 64) >> 5);
++  meta_streak_context_ =
++      (manager_.long_bit_context_ & 0xffULL) |
++      ((bucket & 0xffULL) << 8) |
++      ((static_cast<unsigned long long>(meta_streak_state_) & 1ULL) << 16) |
++      ((manager_.line_break_ & 0x7fULL) << 17) |
++      ((manager_.longest_match_ & 0xffULL) << 24);
++}
++#endif
+ int lstmpr=0, lstmex=0;
+ float byte_mixer_output=0.0f;
+ float Predictor::Predict() {
+@@ -241,8 +273,11 @@ float Predictor::Predict() {
+   float p = Sigmoid::Logistic(mixer_1_[0].Mix());
+   p = sse_.Predict(p);
+   if (byte_mixer_override >= 0) {
+-    return byte_mixer_override;
++    p = byte_mixer_override;
+   }
++#if FX2_META_STREAK
++  last_prediction_ = p;
++#endif
+   return p;
+ }
+ 
+@@ -274,6 +309,9 @@ void Predictor::Perceive(int bit) {
+   }
+ 
+   sse_.Perceive(bit);
++#if FX2_META_STREAK
++  UpdateMetaStreak(bit);
++#endif
+ 
+   bool byte_update = false;
+   if (manager_.bit_context_ >= 128) byte_update = true;
+@@ -369,4 +407,3 @@ void Predictor::Pretrain(int bit) {
+     manager_.bit_context_ = 1;
+   }
+ }
+-
+diff --git a/src/predictor.h b/src/predictor.h
+index 5754d1e..e9de8ef 100644
+--- a/src/predictor.h
++++ b/src/predictor.h
+@@ -34,6 +34,14 @@
+ #include <memory>
+ #include <optional>
+ 
++#ifndef FX2_META_STREAK
++#define FX2_META_STREAK 0
++#endif
++
++#ifndef FX2_STRUCT_SIDECAR_WEIGHT
++#define FX2_STRUCT_SIDECAR_WEIGHT 0.0005
++#endif
++
+ class Predictor {
+  public:
+   Predictor(const std::vector<bool>& vocab);
+@@ -53,6 +61,9 @@ class Predictor {
+   void AddMatch();
+   void AddDoubleIndirect();
+   void AddMixers();
++#if FX2_META_STREAK
++  void UpdateMetaStreak(int bit);
++#endif
+ 
+   llvm::SmallVector<Indirect<Nonstationary>, 30-7> indirect_ns_models_; // non-stationary
+   llvm::SmallVector<Indirect<RunMap>, 1> indirect_r_models_; // run map
+@@ -72,7 +83,12 @@ class Predictor {
+   std::optional<ByteMixer> byte_mixer_;
+   std::vector<bool> vocab_;
+    FXCM fxcm_model_;
++#if FX2_META_STREAK
++  float last_prediction_ = 0.5f;
++  unsigned long long meta_streak_context_ = 0;
++  unsigned int meta_streak_len_ = 0;
++  unsigned int meta_streak_state_ = 0;
++#endif
+ };
+ 
+ #endif
+-

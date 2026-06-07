@@ -1,0 +1,62 @@
+{
+  "id": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1",
+  "description": "Packaging-only min wrapper for fx2_sidecar_byte_split_direct_extra_page_match_v1 using xz-packed cmix and cmix-compressed english.dic.",
+  "added": "2026-06-07",
+  "deps": ["C++ runtime for the bundled cmix/fx2 binary"],
+  "basis": "Same native binary and decoded dictionary as fx2_sidecar_byte_split_direct_extra_page_match_v1. Only counted packaging changes: cmix.bin.gz -> cmix.xz, english.dic.gz -> english.dic.cmix, and a minified wrapper.",
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH"
+  ],
+  "fx2_sc_concepts": [
+    "raw_stream_preserved",
+    "schema_template_ctx",
+    "soft_symbol_reduction",
+    "lexical_priming",
+    "namespace_page_kind",
+    "table_coordinates",
+    "role_copy_hints",
+    "citation_anchor_mtf"
+  ],
+  "packaging_probe": {
+    "raw_bin": 385448,
+    "cmix_xz": 155876,
+    "raw_dictionary": 411996,
+    "english_dic_cmix": 100065,
+    "dictionary_roundtrip": true
+  },
+  "verified_gates": {
+    "1k_repack_smoke": {
+      "input_bytes": 1000,
+      "compressed_size": 259,
+      "program_size": 256578,
+      "hutter_score": 256837,
+      "compressed_sha256": "51a1300341a06e6284e1e30a459cad3aa9220451ed0ba536b6ae3b99d8a93444",
+      "roundtrip_ok": true
+    },
+    "250k_inherited_from_current_raw_parent": {
+      "input_bytes": 250000,
+      "compressed_size": 45256,
+      "program_size": 256578,
+      "hutter_score": 301834,
+      "roundtrip_basis": "Same decompressed native binary, byte-identical decoded dictionary, and same -c/-d dictionary arguments as the current raw branch measured inside fx2_order_selector_sidecar_byte_split_direct_extra_page_match_v1.",
+      "parent_data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    "1m_inherited_from_current_raw_gzip_parent": {
+      "input_bytes": 1000000,
+      "compressed_size": 175210,
+      "program_size": 256578,
+      "hutter_score": 431788,
+      "roundtrip_basis": "Same decompressed native binary, byte-identical decoded dictionary, and same -c/-d dictionary arguments as the current raw-corpus fx2_sidecar_byte_split_direct_extra_page_match_v1 driver result.",
+      "parent_compressed_sha256": "2872b512e5b1ac417705be3504c3b36eebbdb99d6cbcb7f8abf3df620c97fd55",
+      "parent_data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad"
+    }
+  },
+  "expected_use": "Exact-score replacement candidate for the gzip-packaged raw FX2-SC archive leader if byte-identity smoke confirms matching compressed archives."
+}

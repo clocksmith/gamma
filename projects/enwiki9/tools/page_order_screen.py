@@ -67,9 +67,50 @@ def base_parts(page: bytes) -> tuple[bytes, bytes, list[bytes], bytes, bytes]:
     return t, redirect, cats, infobox, template
 
 
+def templates(page: bytes, limit: int = 4) -> bytes:
+    names = re.findall(rb"\{\{\s*([a-z0-9 _-]{1,48})(?:[|}\n])", page, re.I)
+    out: list[bytes] = []
+    seen: set[bytes] = set()
+    for name in names:
+        n = norm(name, 48)
+        if n and n not in seen:
+            out.append(n)
+            seen.add(n)
+            if len(out) >= limit:
+                break
+    return b" ".join(out)
+
+
+def param_names(page: bytes, limit: int = 6) -> bytes:
+    names = re.findall(rb"\|\s*([a-z0-9 _-]{1,36})\s*=", page, re.I)
+    out: list[bytes] = []
+    seen: set[bytes] = set()
+    for name in names:
+        n = norm(name, 36)
+        if n and n not in seen:
+            out.append(n)
+            seen.add(n)
+            if len(out) >= limit:
+                break
+    return b" ".join(out)
+
+
+def title_tail(t: bytes, count: int = 3) -> bytes:
+    parts = norm(t, 180).split()
+    return b" ".join(parts[-count:])
+
+
+def category_head(cats: list[bytes], limit: int = 5) -> bytes:
+    return norm(b" ".join(sorted(cats)[:limit]), 220)
+
+
 def key(mode: str, page: bytes, pid: int) -> tuple:
     t, redirect, cats, infobox, template = base_parts(page)
     nt = norm(t)
+    tmpls = templates(page)
+    params = param_names(page)
+    catkey = category_head(cats)
+    tail = title_tail(t)
     if mode == "original":
         return (pid,)
     if mode == "geometry":
@@ -155,6 +196,47 @@ def key(mode: str, page: bytes, pid: int) -> tuple:
         if infobox:
             return (b"i", norm(infobox), nt[:80], pid)
         return (b"x", norm(template or t), ns, nt[:80], pid)
+    if mode == "template_stack":
+        if redirect:
+            return (b"z", norm(redirect), pid)
+        return (tmpls or norm(template or infobox or t), catkey, tail, pid)
+    if mode == "template_params":
+        if redirect:
+            return (b"z", norm(redirect), pid)
+        return (tmpls or norm(template or infobox or t), params, catkey, tail, pid)
+    if mode == "cat_tail":
+        if redirect:
+            return (b"z", norm(redirect), pid)
+        if cats:
+            return (b"c", catkey, tail, pid)
+        return (b"x", norm(infobox or template or t), tail, pid)
+    if mode == "tail_cat":
+        if redirect:
+            return (b"z", norm(redirect), pid)
+        return (tail, catkey, norm(infobox or template or t), pid)
+    if mode == "revtitle_cat":
+        if redirect:
+            return (b"z", norm(redirect), pid)
+        return (revnorm(t, 180), catkey, norm(infobox or template), pid)
+    if mode == "size_template":
+        if redirect:
+            return (b"z", bucket(len(page)), norm(redirect), pid)
+        role = b"c" if cats else b"i" if infobox else b"t" if tmpls else b"x"
+        return (role, bucket(len(page)), tmpls or norm(template or infobox or t), catkey, tail, pid)
+    if mode == "taxon_tail":
+        tax = field(page, rb"\{\{\s*((?:(?:automatic|species|subspecies|virus|single)[ _-]+)?taxobox|speciesbox|chembox|drugbox)")
+        if redirect:
+            return (b"z", norm(redirect), pid)
+        if tax:
+            return (b"t", norm(tax), tail, catkey, pid)
+        if infobox:
+            return (b"i", norm(infobox), tail, catkey, pid)
+        return (b"x", tmpls or norm(template or t), tail, catkey, pid)
+    if mode == "schema_dense":
+        if redirect:
+            return (b"z", norm(redirect), pid)
+        role = b"c" if cats else b"i" if infobox else b"t" if tmpls else b"x"
+        return (role, tmpls or norm(infobox or template or t), params, catkey, tail, bucket(len(page)), pid)
     raise ValueError(mode)
 
 
@@ -200,6 +282,14 @@ def main() -> int:
             "geometry_title_bucket",
             "geometry_size",
             "geometry_ns",
+            "template_stack",
+            "template_params",
+            "cat_tail",
+            "tail_cat",
+            "revtitle_cat",
+            "size_template",
+            "taxon_tail",
+            "schema_dense",
         ],
     )
     args = ap.parse_args()
