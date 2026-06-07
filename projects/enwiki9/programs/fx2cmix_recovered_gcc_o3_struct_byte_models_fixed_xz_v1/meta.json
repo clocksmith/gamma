@@ -1,7 +1,7 @@
 {
   "id": "fx2cmix_recovered_gcc_o3_struct_byte_models_fixed_xz_v1",
   "family": "fx2-cmix-recovered",
-  "status": "candidate",
+  "status": "measured_negative",
   "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
   "description": "Recovered fx2-cmix payload with the corrected ByteMixer multi-input scale and three learned semantic sidecar byte-distribution models. Sidecar direct and match models are disabled to isolate byte-model signal.",
   "build": {
@@ -59,6 +59,20 @@
       }
     ]
   },
-  "measured": {},
-  "verdict": "Pending measured gates."
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 262,
+      "program_size": 293376,
+      "hutter_score": 293638,
+      "parent_compressed_size": 262,
+      "parent_program_size": 283628,
+      "parent_hutter_score": 283890,
+      "archive_delta_vs_parent": 0,
+      "score_delta_vs_parent": 9748,
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    }
+  },
+  "verdict": "Reject at 1K gate. The corrected sidecar byte-distribution path is deterministic but archive-neutral against the parent while adding payload bytes."
 }
