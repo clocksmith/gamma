@@ -1,6 +1,36 @@
 {
-  "id": "title_ref_columnar_lzma_v1",
-  "description": "article_geometry_v6 columnar/page-shape stack with a decoder-visible self-referential title lookup table. The title channel already carries page titles; the encoder optionally substitutes repeated title strings in the scaffold/text stream with compact title-index references and selects the smaller stdlib raw LZMA1 archive.",
   "added": "2026-05-25",
-  "deps": []
+  "deps": [],
+  "description": "article_geometry_v6 columnar/page-shape stack with a decoder-visible self-referential title lookup table. The title channel already carries page titles; the encoder optionally substitutes repeated title strings in the scaffold/text stream with compact title-index references and selects the smaller stdlib raw LZMA1 archive.",
+  "id": "title_ref_columnar_lzma_v1",
+  "measured": {
+    "lane0_contract": {
+      "contract_status": "ok",
+      "generated_at": "2026-06-08T07:42:00+00:00",
+      "proposed_status": "benchmark_or_retire",
+      "reasons": [],
+      "verdict": "program.py imports and exposes compress/decompress."
+    },
+    "lane0_contract_checks": [
+      {
+        "contract_status": "missing_callable",
+        "generated_at": "2026-06-08T07:39:33+00:00",
+        "proposed_status": "retired",
+        "reasons": [
+          "missing_compress",
+          "missing_decompress"
+        ],
+        "verdict": "Retire: missing callable(s): compress, decompress."
+      },
+      {
+        "contract_status": "ok",
+        "generated_at": "2026-06-08T07:42:00+00:00",
+        "proposed_status": "benchmark_or_retire",
+        "reasons": [],
+        "verdict": "program.py imports and exposes compress/decompress."
+      }
+    ]
+  },
+  "status": "benchmark_or_retire",
+  "verdict": "program.py imports and exposes compress/decompress."
 }

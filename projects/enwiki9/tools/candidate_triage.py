@@ -30,6 +30,7 @@ DEFAULT_GATE_SIZES = (1024, 250000)
 HEAVY_PROCESS_PATTERN = "bench.py|lib/driver.py|cmix|qm_context"
 FLOCK_BUSY_CODE = 75
 DRIVER_TIMEOUT_CODE = 124
+RESULTS_DIR = ROOT / "results"
 
 
 @dataclass
@@ -80,6 +81,7 @@ def selected_candidates(
     *,
     statuses: set[str],
     explicit_ids: list[str],
+    skip: int,
     limit: int | None,
 ) -> list[dict[str, Any]]:
     candidates = inventory.get("candidates", [])
@@ -100,6 +102,8 @@ def selected_candidates(
         ]
 
     selected = sorted(selected, key=lambda candidate: str(candidate.get("id")))
+    if skip:
+        selected = selected[skip:]
     if limit is not None:
         selected = selected[:limit]
     return selected
@@ -236,6 +240,139 @@ def result_is_deterministic(result: dict[str, Any]) -> bool:
     return determinism.get("single_host_byte_equal") is True
 
 
+def scope_from_label(label: str) -> int | None:
+    parts = label.lower().replace("-", "_").split("_")
+    scopes = {
+        "1k": 1024,
+        "64k": 65536,
+        "250k": 250000,
+        "1m": 1000000,
+        "10m": 10000000,
+        "100m": 100000000,
+        "1g": 1000000000,
+    }
+    for part in parts:
+        if part in scopes:
+            return scopes[part]
+    return None
+
+
+def normalize_cached_result(
+    *,
+    program_id: str,
+    row: dict[str, Any],
+    source: str,
+    label: str = "",
+) -> dict[str, Any] | None:
+    data_size = row.get("data_size")
+    if not isinstance(data_size, int):
+        data_size = row.get("input_bytes")
+    if not isinstance(data_size, int):
+        data_size = scope_from_label(label)
+    compressed_size = row.get("compressed_size")
+    if not isinstance(compressed_size, int):
+        compressed_size = row.get("archive") or row.get("archive_size")
+    program_size = row.get("program_size")
+    hutter_score = row.get("hutter_score")
+    if (
+        not isinstance(hutter_score, int)
+        and isinstance(compressed_size, int)
+        and isinstance(program_size, int)
+    ):
+        hutter_score = compressed_size + program_size
+    if (
+        not isinstance(data_size, int)
+        or not isinstance(compressed_size, int)
+        or not isinstance(program_size, int)
+        or not isinstance(hutter_score, int)
+    ):
+        return None
+
+    determinism = row.get("determinism")
+    if isinstance(determinism, bool):
+        determinism = {"single_host_byte_equal": determinism}
+    elif not isinstance(determinism, dict):
+        deterministic = row.get("deterministic")
+        inherited_identity = (
+            isinstance(row.get("roundtrip_basis"), str)
+            or "inherited" in label
+            or "identity" in label
+        )
+        determinism = {"single_host_byte_equal": deterministic is True or inherited_identity}
+
+    return {
+        "program_id": program_id,
+        "data_size": data_size,
+        "data_md5": row.get("data_md5"),
+        "compressed_size": compressed_size,
+        "program_size": program_size,
+        "hutter_score": hutter_score,
+        "bits_per_byte": row.get("bits_per_byte"),
+        "roundtrip_ok": row.get("roundtrip_ok") is not False,
+        "determinism": determinism,
+        "program_stats": row.get("program_stats"),
+        "cached_source": source,
+    }
+
+
+def cached_result_for(program_id: str, gate_size: int) -> dict[str, Any] | None:
+    result_dir = RESULTS_DIR / program_id
+    if result_dir.exists():
+        matches: list[dict[str, Any]] = []
+        for path in sorted(result_dir.glob("*.json"), key=lambda item: item.stat().st_mtime):
+            try:
+                row = load_json(path)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(row, dict) or row.get("data_size") != gate_size:
+                continue
+            normalized = normalize_cached_result(
+                program_id=program_id,
+                row=row,
+                source=rel(path),
+                label=path.stem,
+            )
+            if (
+                normalized is not None
+                and normalized.get("roundtrip_ok") is True
+                and result_is_deterministic(normalized)
+            ):
+                matches.append(normalized)
+        if matches:
+            return matches[-1]
+
+    meta_path = PROGRAMS_DIR / program_id / "meta.json"
+    if not meta_path.exists():
+        return None
+    try:
+        meta = load_json(meta_path)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(meta, dict):
+        return None
+    for section_name in ("measured", "verified_gates"):
+        section = meta.get(section_name)
+        if not isinstance(section, dict):
+            continue
+        for label, row in section.items():
+            if not isinstance(row, dict):
+                continue
+            normalized = normalize_cached_result(
+                program_id=program_id,
+                row=row,
+                source=f"{rel(meta_path)}:{section_name}:{label}",
+                label=str(label),
+            )
+            if (
+                normalized is not None
+                and normalized.get("data_size") == gate_size
+                and normalized.get("roundtrip_ok") is True
+                and result_is_deterministic(normalized)
+            ):
+                return normalized
+    return None
+
+
 def dependency_error(text: str) -> bool:
     needles = (
         "ModuleNotFoundError",
@@ -340,6 +477,130 @@ def classify_success(gate_rows: list[dict[str, Any]]) -> tuple[str, str]:
     return "measured_negative", "Keep as negative evidence: valid deterministic loser."
 
 
+def inspect_contract(candidate_id: str) -> dict[str, Any]:
+    program_path = PROGRAMS_DIR / candidate_id / "program.py"
+    if not program_path.exists():
+        return {
+            "id": candidate_id,
+            "contract_status": "missing_program",
+            "proposed_status": "retired",
+            "verdict": "Retire: missing program.py contract.",
+            "reasons": ["missing_program_py"],
+        }
+
+    probe = """
+import importlib.util,json,pathlib,sys,traceback
+root=pathlib.Path(sys.argv[1])
+candidate_id=sys.argv[2]
+path=root/"programs"/candidate_id/"program.py"
+try:
+ spec=importlib.util.spec_from_file_location("probe_"+candidate_id,path)
+ mod=importlib.util.module_from_spec(spec)
+ spec.loader.exec_module(mod)
+ missing=[name for name in ("compress","decompress") if not callable(getattr(mod,name,None))]
+ print(json.dumps({"status":"missing_callable" if missing else "ok","missing":missing}))
+except Exception as exc:
+ print(json.dumps({"status":"import_error","error_type":type(exc).__name__,"error":str(exc)}))
+"""
+    proc = subprocess.run(
+        [sys.executable, "-c", probe, str(ROOT), candidate_id],
+        cwd=REPO_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    payload: dict[str, Any] | None = None
+    for line in reversed(proc.stdout.splitlines()):
+        try:
+            parsed = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(parsed, dict):
+            payload = parsed
+            break
+    if payload is None:
+        return {
+            "id": candidate_id,
+            "contract_status": "import_error",
+            "proposed_status": "blocked_dependency" if dependency_error(proc.stderr) else "retired",
+            "verdict": "Blocked: program.py import probe did not return a contract result."
+            if dependency_error(proc.stderr)
+            else "Retire: program.py import probe did not return a contract result.",
+            "reasons": ["import_probe_failed"],
+        }
+
+    status = str(payload.get("status"))
+    if status == "import_error":
+        text = "\n".join(
+            part
+            for part in (str(payload.get("error") or ""), str(payload.get("error_type") or ""), proc.stderr)
+            if part
+        )
+        proposed_status = "blocked_dependency" if dependency_error(text) else "retired"
+        return {
+            "id": candidate_id,
+            "contract_status": "import_error",
+            "proposed_status": proposed_status,
+            "verdict": "Blocked: program.py import failed due to a dependency."
+            if proposed_status == "blocked_dependency"
+            else "Retire: program.py import failed.",
+            "reasons": ["program_py_import_error", str(payload.get("error_type") or "unknown")],
+        }
+
+    missing = sorted(str(name) for name in payload.get("missing", []) if isinstance(name, str))
+    if missing:
+        return {
+            "id": candidate_id,
+            "contract_status": "missing_callable",
+            "proposed_status": "retired",
+            "verdict": f"Retire: missing callable(s): {', '.join(missing)}.",
+            "reasons": [f"missing_{name}" for name in missing],
+        }
+    return {
+        "id": candidate_id,
+        "contract_status": "ok",
+        "proposed_status": None,
+        "verdict": "program.py imports and exposes compress/decompress.",
+        "reasons": [],
+    }
+
+
+def update_contract_meta(candidate_id: str, row: dict[str, Any], *, restore_ok_status: str | None = None) -> bool:
+    proposed_status = row.get("proposed_status")
+    if proposed_status not in {"retired", "blocked_dependency"} and not (
+        restore_ok_status and row.get("contract_status") == "ok"
+    ):
+        return False
+    meta_path = PROGRAMS_DIR / candidate_id / "meta.json"
+    if not meta_path.exists():
+        return False
+    meta = load_json(meta_path)
+    if not isinstance(meta, dict):
+        raise SystemExit(f"invalid meta shape: {rel(meta_path)}")
+
+    measured = meta.setdefault("measured", {})
+    if not isinstance(measured, dict):
+        measured = {}
+        meta["measured"] = measured
+    check_record = {
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "contract_status": row.get("contract_status"),
+        "proposed_status": proposed_status or restore_ok_status,
+        "verdict": row.get("verdict"),
+        "reasons": row.get("reasons", []),
+    }
+    checks = measured.setdefault("lane0_contract_checks", [])
+    if not isinstance(checks, list):
+        checks = []
+        measured["lane0_contract_checks"] = checks
+    checks.append(check_record)
+    measured["lane0_contract"] = check_record
+    meta["status"] = proposed_status or restore_ok_status
+    meta["verdict"] = row.get("verdict", meta.get("verdict"))
+    write_json(meta_path, meta)
+    return True
+
+
 def triage_one(
     candidate_id: str,
     *,
@@ -348,17 +609,33 @@ def triage_one(
     lock_path: pathlib.Path,
     baseline_cache: dict[int, DriverRun],
     driver_timeout: int | None,
+    reuse_baseline_evidence: bool,
 ) -> dict[str, Any]:
     gates: list[dict[str, Any]] = []
     for gate_size in gate_sizes:
         baseline_run = baseline_cache.get(gate_size)
         if baseline_run is None:
-            baseline_run = run_driver_locked(
-                baseline_id,
-                limit=gate_size,
-                lock_path=lock_path,
-                driver_timeout=driver_timeout,
+            cached_baseline = (
+                cached_result_for(baseline_id, gate_size)
+                if reuse_baseline_evidence
+                else None
             )
+            if cached_baseline is not None:
+                baseline_run = DriverRun(
+                    program_id=baseline_id,
+                    limit=gate_size,
+                    returncode=0,
+                    stdout="",
+                    stderr="",
+                    result=cached_baseline,
+                )
+            else:
+                baseline_run = run_driver_locked(
+                    baseline_id,
+                    limit=gate_size,
+                    lock_path=lock_path,
+                    driver_timeout=driver_timeout,
+                )
             baseline_cache[gate_size] = baseline_run
         if baseline_run.result is None or baseline_run.returncode != 0:
             status, reason = classify_driver_failure(baseline_run)
@@ -516,11 +793,26 @@ def main(argv: list[str] | None = None) -> int:
         help="explicit candidate id to triage; repeatable",
     )
     parser.add_argument("--limit-candidates", type=int, default=None)
+    parser.add_argument("--skip-candidates", type=int, default=0)
     parser.add_argument("--gate-size", action="append", type=int, default=None)
     parser.add_argument("--baseline", default=DEFAULT_BASELINE)
     parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK_PATH)
     parser.add_argument("--run", action="store_true", help="execute locked gates")
+    parser.add_argument(
+        "--contract-check",
+        action="store_true",
+        help="validate program.py contract shape without scoring",
+    )
+    parser.add_argument(
+        "--restore-ok-status",
+        help="with --contract-check --update-meta, assign this status to contracts that import cleanly",
+    )
     parser.add_argument("--update-meta", action="store_true", help="write triage status to meta.json")
+    parser.add_argument(
+        "--reuse-baseline-evidence",
+        action="store_true",
+        help="use deterministic baseline result metadata when available",
+    )
     parser.add_argument("--json", action="store_true", help="print machine-readable JSON only")
     parser.add_argument(
         "--driver-timeout",
@@ -535,10 +827,16 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.limit_candidates is not None and args.limit_candidates <= 0:
         raise SystemExit("--limit-candidates must be positive")
+    if args.skip_candidates < 0:
+        raise SystemExit("--skip-candidates must be non-negative")
+    if args.run and args.contract_check:
+        raise SystemExit("--run and --contract-check are mutually exclusive")
     if args.run and not args.candidate and args.limit_candidates is None:
         raise SystemExit("--run requires --candidate or --limit-candidates")
-    if args.update_meta and not args.run:
-        raise SystemExit("--update-meta requires --run")
+    if args.restore_ok_status and not (args.contract_check and args.update_meta):
+        raise SystemExit("--restore-ok-status requires --contract-check --update-meta")
+    if args.update_meta and not args.run and not args.contract_check:
+        raise SystemExit("--update-meta requires --run or --contract-check")
 
     inventory = load_inventory()
     statuses = set(args.status or ["benchmark_or_retire"])
@@ -547,10 +845,34 @@ def main(argv: list[str] | None = None) -> int:
         inventory,
         statuses=statuses,
         explicit_ids=args.candidate,
+        skip=0 if args.candidate else args.skip_candidates,
         limit=args.limit_candidates,
     )
 
     if not args.run:
+        if args.contract_check:
+            rows = [inspect_contract(str(candidate.get("id"))) for candidate in selected]
+            updated_meta_ids: list[str] = []
+            if args.update_meta:
+                for row in rows:
+                    if update_contract_meta(
+                        str(row.get("id")),
+                        row,
+                        restore_ok_status=args.restore_ok_status,
+                    ):
+                        updated_meta_ids.append(str(row.get("id")))
+            payload = {
+                "mode": "contract_check",
+                "selection_mode": "explicit" if args.candidate else "status",
+                "selected_count": len(selected),
+                "processed_count": len(rows),
+                "update_meta_requested": args.update_meta,
+                "updated_meta_count": len(updated_meta_ids),
+                "updated_meta_ids": updated_meta_ids,
+                "contract": rows,
+            }
+            print(json.dumps(payload, indent=2, sort_keys=True))
+            return 0
         payload = render_dry_run(
             selected=selected,
             statuses=statuses,
@@ -586,6 +908,7 @@ def main(argv: list[str] | None = None) -> int:
             lock_path=args.lock_path,
             baseline_cache=baseline_cache,
             driver_timeout=args.driver_timeout,
+            reuse_baseline_evidence=args.reuse_baseline_evidence,
         )
         triage_rows.append(row)
         if args.update_meta and not is_transient_lock_block(row):
@@ -602,6 +925,7 @@ def main(argv: list[str] | None = None) -> int:
         "updated_meta_count": len(updated_meta_ids),
         "updated_meta_ids": updated_meta_ids,
         "baseline": args.baseline,
+        "reuse_baseline_evidence": args.reuse_baseline_evidence,
         "gate_sizes": gate_sizes,
         "lock_path": str(args.lock_path),
         "triage": triage_rows,

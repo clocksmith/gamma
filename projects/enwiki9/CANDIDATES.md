@@ -79,6 +79,12 @@ Packaging wins and model wins must be described separately. If archive bytes do
 not improve, the row is a container/program-size win, not an algorithmic
 compression improvement.
 
+`candidate_audit.py` accepts both saved result JSON files and structured
+metadata evidence in `meta.json`. A metadata-backed gate must include a concrete
+scope, archive bytes, counted program bytes or total S, and either direct
+roundtrip/determinism fields or an inherited identity basis. Unstructured notes
+do not count as valid evidence.
+
 For target accounting, run:
 
 ```bash
@@ -110,6 +116,28 @@ The dry-run reads `candidate_inventory.json`, selects `benchmark_or_retire`
 candidates by default, and prints the locked gate plan. It does not score or
 write metadata.
 
+Before spending the scorer lock, contract-only cleanup can validate the
+`program.py` API without compression:
+
+```bash
+python3 projects/enwiki9/tools/candidate_triage.py \
+  --contract-check \
+  --status benchmark_or_retire
+```
+
+This check imports `program.py` in an isolated subprocess, matching
+`lib/driver.py` loader semantics. Do not replace this with AST-only inspection:
+many compact wrappers expose `compress` and `decompress` by unpacking a payload
+at import. To repair a false retired status after a loader change:
+
+```bash
+python3 projects/enwiki9/tools/candidate_triage.py \
+  --contract-check \
+  --update-meta \
+  --restore-ok-status benchmark_or_retire \
+  --candidate <candidate_id>
+```
+
 Scoring requires an explicit bounded run:
 
 ```bash
@@ -121,6 +149,18 @@ measurements and a proposed lifecycle status:
 
 ```bash
 python3 projects/enwiki9/tools/candidate_triage.py --run --update-meta --limit-candidates 1
+```
+
+When comparing against a baseline that already has deterministic same-scope
+evidence in result JSON or `meta.json`, add:
+
+```bash
+python3 projects/enwiki9/tools/candidate_triage.py \
+  --run \
+  --update-meta \
+  --reuse-baseline-evidence \
+  --baseline fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1 \
+  --candidate <candidate_id>
 ```
 
 Do not wrap `candidate_triage.py` in another `flock`. The script runs each
@@ -154,6 +194,16 @@ This is the pruning path for the `benchmark_or_retire` queue. It should run
 before any naming cleanup. Renaming should only touch candidates that Lane 0 has
 classified as `active`, `measured_negative`, or explicitly useful controls.
 
+Exact gates launched manually with `lib/driver.py` can be folded into a
+candidate contract without another benchmark run:
+
+```bash
+python3 projects/enwiki9/tools/record_driver_result.py <candidate_id> \
+  --label 1m_driver_gate \
+  --status active \
+  --verdict "Archive-positive exact 1M gate; promote to larger-scope screen."
+```
+
 ## Lane B Core Tuning
 
 Core tuning candidates mutate the rebuilt `fx2-cmix` predictor rather than the
@@ -174,7 +224,8 @@ python3 projects/enwiki9/tools/fx2_core_tune_package.py \
   --mixer-context-limit 20000 \
   --mixer0-lr-scale 0.95 \
   --mixer1-lr-scale 1.05 \
-  --sse-wr-scale-ppm 950
+  --sse-wr-scale-ppm 950 \
+  --compiler g++
 ```
 
 The helper packages the tuned binary into the title-order wrapper template. It
@@ -227,7 +278,8 @@ Retire or repair a candidate when any of these are true:
 - `meta.json` is missing or its `id` does not match the directory name.
 - The candidate is absent from `index.json`.
 - Source files are untracked.
-- No valid `roundtrip_ok == true` result exists after an explicit benchmark.
+- No valid roundtrip evidence exists after an explicit benchmark or structured
+  inherited-identity proof.
 - It duplicates another candidate without a measured improvement or a distinct mechanism.
 
 Deletion is not the first step. First classify the candidate, preserve useful

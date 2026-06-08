@@ -1,4 +1,34 @@
 {
+  "description": "Score-packed source variant of schema_title_streams_lzma2_1g_v1. The compression algorithm and archive format are unchanged; the counted decompressor is stored behind the existing stdlib-lzma loader pattern to remove plain-source program overhead from the full-corpus winner.",
   "id": "schema_title_streams_lzma2_1g_z_v1",
-  "description": "Score-packed source variant of schema_title_streams_lzma2_1g_v1. The compression algorithm and archive format are unchanged; the counted decompressor is stored behind the existing stdlib-lzma loader pattern to remove plain-source program overhead from the full-corpus winner."
+  "measured": {
+    "lane0_contract": {
+      "contract_status": "ok",
+      "generated_at": "2026-06-08T07:42:00+00:00",
+      "proposed_status": "benchmark_or_retire",
+      "reasons": [],
+      "verdict": "program.py imports and exposes compress/decompress."
+    },
+    "lane0_contract_checks": [
+      {
+        "contract_status": "missing_callable",
+        "generated_at": "2026-06-08T07:39:33+00:00",
+        "proposed_status": "retired",
+        "reasons": [
+          "missing_compress",
+          "missing_decompress"
+        ],
+        "verdict": "Retire: missing callable(s): compress, decompress."
+      },
+      {
+        "contract_status": "ok",
+        "generated_at": "2026-06-08T07:42:00+00:00",
+        "proposed_status": "benchmark_or_retire",
+        "reasons": [],
+        "verdict": "program.py imports and exposes compress/decompress."
+      }
+    ]
+  },
+  "status": "benchmark_or_retire",
+  "verdict": "program.py imports and exposes compress/decompress."
 }

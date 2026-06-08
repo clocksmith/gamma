@@ -74,6 +74,7 @@ def write_title_wrapper_candidate(
     candidate_id: str,
     build_dir: pathlib.Path,
     out_dir: pathlib.Path,
+    compiler: str,
     defines: list[str],
     knobs: dict[str, Any],
 ) -> None:
@@ -116,8 +117,9 @@ def write_title_wrapper_candidate(
         ),
         "build": {
             "source": "projects/enwiki9/external/fx2-cmix",
-            "command": "make CC=g++ CFLAGS_DEFINES='<defines>' clean cmix",
+            "command": f"make CC={compiler} CFLAGS_DEFINES='<defines>' clean cmix",
             "defines": defines,
+            "compiler": compiler,
             "wrapper_template": TITLE_TEMPLATE.name,
             "payload_files": files,
             "program_size": sum(files.values()),
@@ -149,7 +151,7 @@ def write_title_wrapper_candidate(
                     "payload": {
                         "discrete": {
                             "substrate": "fx2-cmix",
-                            "compiler": "g++",
+                            "compiler": compiler,
                         },
                         "continuous": knobs,
                         "structural": {},
@@ -189,6 +191,7 @@ def main() -> int:
     parser.add_argument("--mixer1-lr-scale", type=float, default=1.0)
     parser.add_argument("--lstm-lr-scale", type=float, default=1.0)
     parser.add_argument("--sse-wr-scale-ppm", type=int, default=1000)
+    parser.add_argument("--compiler", default="g++")
     parser.add_argument("--no-build", action="store_true")
     args = parser.parse_args()
 
@@ -225,7 +228,7 @@ def main() -> int:
         run(
             [
                 "make",
-                "CC=g++",
+                f"CC={args.compiler}",
                 "CFLAGS_DEFINES=" + " ".join(defines),
                 "clean",
                 "cmix",
@@ -236,6 +239,7 @@ def main() -> int:
             candidate_id=args.id,
             build_dir=build_dir,
             out_dir=out_dir,
+            compiler=args.compiler,
             defines=defines,
             knobs=knobs,
         )

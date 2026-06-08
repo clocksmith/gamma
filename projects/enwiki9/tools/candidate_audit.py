@@ -141,6 +141,105 @@ def collect_results(program_id: str) -> dict[str, Any]:
     }
 
 
+def gate_int(row: dict[str, Any], *names: str) -> int | None:
+    for name in names:
+        value = row.get(name)
+        if isinstance(value, int):
+            return value
+    return None
+
+
+def gate_roundtrip_backed(label: str, row: dict[str, Any]) -> bool:
+    if row.get("roundtrip_ok") is True or row.get("deterministic") is True:
+        return True
+    determinism = row.get("determinism")
+    if isinstance(determinism, dict) and determinism.get("single_host_byte_equal") is True:
+        return True
+    if isinstance(determinism, bool) and determinism:
+        return True
+    if isinstance(row.get("roundtrip_basis"), str):
+        return True
+    return "inherited" in label or "identity" in label
+
+
+def scope_from_label(label: str) -> int | None:
+    parts = label.lower().replace("-", "_").split("_")
+    scopes = {
+        "1k": 1024,
+        "64k": 65536,
+        "250k": 250000,
+        "1m": 1000000,
+        "10m": 10000000,
+        "100m": 100000000,
+        "1g": 1000000000,
+    }
+    for part in parts:
+        if part in scopes:
+            return scopes[part]
+    return None
+
+
+def collect_meta_evidence(
+    meta: dict[str, Any] | None,
+    *,
+    default_program_size: int | None,
+) -> dict[str, Any]:
+    if not isinstance(meta, dict):
+        return {"valid_meta_evidence": 0, "best_valid_meta_evidence": None}
+
+    rows: list[dict[str, Any]] = []
+    for section_name in ("measured", "verified_gates"):
+        section = meta.get(section_name)
+        if not isinstance(section, dict):
+            continue
+        for label, row in section.items():
+            if not isinstance(row, dict):
+                continue
+            data_size = gate_int(row, "data_size", "input_bytes")
+            if data_size is None:
+                data_size = scope_from_label(str(label))
+            compressed_size = gate_int(row, "compressed_size", "archive", "archive_size")
+            program_size = gate_int(row, "program_size")
+            if program_size is None:
+                program_size = default_program_size
+            hutter_score = gate_int(row, "hutter_score")
+            if (
+                hutter_score is None
+                and compressed_size is not None
+                and program_size is not None
+            ):
+                hutter_score = compressed_size + program_size
+            if (
+                data_size is None
+                or compressed_size is None
+                or hutter_score is None
+                or not gate_roundtrip_backed(str(label), row)
+            ):
+                continue
+            rows.append(
+                {
+                    "section": section_name,
+                    "label": str(label),
+                    "data_size": data_size,
+                    "hutter_score": hutter_score,
+                    "compressed_size": compressed_size,
+                    "program_size": program_size,
+                    "bits_per_byte": row.get("bits_per_byte"),
+                    "data_md5": row.get("data_md5"),
+                    "source": "meta.json",
+                }
+            )
+
+    best = None
+    if rows:
+        best = min(rows, key=lambda row: (-row["data_size"], row["hutter_score"]))
+
+    return {
+        "valid_meta_evidence": len(rows),
+        "best_valid_meta_evidence": best,
+    }
+
+
 def classify_candidate(
     *,
     has_program: bool,
@@ -150,7 +249,7 @@ def classify_candidate(
     untracked_source_files: list[str],
     meta_error: str | None,
     meta_id_matches: bool | None,
-    valid_result_files: int,
+    valid_evidence_count: int,
 ) -> tuple[str, list[str]]:
     reasons: list[str] = []
     if meta_status == "retired":
@@ -183,19 +282,19 @@ def classify_candidate(
     if untracked_source_files:
         return "track_source_before_evolution", reasons
     if meta_status == "candidate":
-        if valid_result_files == 0:
+        if valid_evidence_count == 0:
             return "candidate", ["awaiting_lane0_measurement"]
         return "candidate", ["awaiting_lane0_promotion_decision"]
     if meta_status == "measured_negative":
-        if valid_result_files == 0:
-            return "benchmark_or_retire", ["measured_negative_without_valid_result"]
+        if valid_evidence_count == 0:
+            return "benchmark_or_retire", ["measured_negative_without_valid_evidence"]
         return "measured_negative", reasons
     if meta_status == "active":
-        if valid_result_files == 0:
-            return "benchmark_or_retire", ["active_without_valid_result"]
+        if valid_evidence_count == 0:
+            return "benchmark_or_retire", ["active_without_valid_evidence"]
         return "active", reasons
-    if valid_result_files == 0:
-        return "benchmark_or_retire", ["no_valid_roundtrip_result"]
+    if valid_evidence_count == 0:
+        return "benchmark_or_retire", ["no_valid_roundtrip_evidence"]
     return "active", reasons
 
 
@@ -232,6 +331,14 @@ def audit() -> dict[str, Any]:
         meta_id = meta.get("id") if isinstance(meta, dict) else None
         meta_id_matches = None if meta_id is None else meta_id == program_id
         results = collect_results(program_id)
+        program_size = driver_program_size(program_dir)
+        meta_evidence = collect_meta_evidence(
+            meta if isinstance(meta, dict) else None,
+            default_program_size=program_size,
+        )
+        total_valid_evidence = (
+            results["valid_result_files"] + meta_evidence["valid_meta_evidence"]
+        )
         status, reasons = classify_candidate(
             has_program=(program_dir / "program.py").exists(),
             has_meta=(program_dir / "meta.json").exists(),
@@ -240,8 +347,10 @@ def audit() -> dict[str, Any]:
             untracked_source_files=untracked_source_files,
             meta_error=meta_error,
             meta_id_matches=meta_id_matches,
-            valid_result_files=results["valid_result_files"],
+            valid_evidence_count=total_valid_evidence,
         )
+        results.update(meta_evidence)
+        results["total_valid_evidence"] = total_valid_evidence
 
         candidates.append(
             {
@@ -256,7 +365,7 @@ def audit() -> dict[str, Any]:
                 "meta_id_matches_directory": meta_id_matches,
                 "description": meta.get("description") if isinstance(meta, dict) else None,
                 "deps": meta.get("deps") if isinstance(meta, dict) else None,
-                "driver_program_size": driver_program_size(program_dir),
+                "driver_program_size": program_size,
                 "source_file_entries": len(source_files),
                 "tracked_source_file_entries": len(tracked_source_files),
                 "untracked_source_files": untracked_source_files,
