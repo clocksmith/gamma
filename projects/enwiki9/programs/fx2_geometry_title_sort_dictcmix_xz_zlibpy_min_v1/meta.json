@@ -1,0 +1,89 @@
+{
+  "id": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "family": "fx2-geometry-order",
+  "status": "measured_negative",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_min_v3",
+  "description": "Raw-deflate Python payload wrapper for the title-tie geometry ordering candidate.",
+  "build": {
+    "packaging": "71-byte zlib loader plus raw-deflate Python transform payload.",
+    "payload_files": {
+      "c": 81840,
+      "d": 100208,
+      "p": 894,
+      "program.py": 71
+    },
+    "payload_delta_vs_parent": -638
+  },
+  "basis": "The decompressed Python body is byte-for-byte the parent program.py; backend and dictionary payloads are unchanged.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "payload_identity": {
+      "backend_payload_sha256": "d4ce2b06ca1d6ed816b5cc91927102f75bafb68e8c055879670319966be48795",
+      "dictionary_payload_sha256": "a5565e75710dcdd758f852e4492a26d3306f886bb2f1facd7b7edf02130665fa",
+      "python_payload_sha256": "80f546d01590d568e73d6e5b4d6bdaf26aed45784dee0589bf7bd3451ec617f8",
+      "program_py_sha256": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    },
+    "ordered_stream_identity": {
+      "parent": "fx2_geometry_title_sort_dictcmix_xz_min_v3",
+      "prefixes": [
+        {
+          "input_bytes": 10000000,
+          "ordered_sha256": "fa8ec8a64e0e623796af5a6a11e789529680a6b1c4c43c87a97f726c3fbd87cf",
+          "parent_equal": true,
+          "restore_ok": true
+        }
+      ]
+    },
+    "1k_driver_smoke": {
+      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1/2026-06-07T202847.json",
+      "input_bytes": 1024,
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 288,
+      "program_size": 183013,
+      "hutter_score": 183301,
+      "bits_per_byte": 2.25,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "f23a87f9299b71f33a8b8af67243517222bdc123ed1a32566d4893b5d4ac1f73"
+    },
+    "250k_driver_gate": {
+      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1/2026-06-07T204614.json",
+      "input_bytes": 250000,
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 52132,
+      "program_size": 183013,
+      "hutter_score": 235145,
+      "bits_per_byte": 1.668224,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "2a5d280da46b778ce5a09f6158f2d42e7dbbe93163f301ec26ec9520ddc09639"
+    },
+    "1m_driver_gate": {
+      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1/2026-06-07T214103.json",
+      "input_bytes": 1000000,
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 191697,
+      "program_size": 183013,
+      "hutter_score": 374710,
+      "bits_per_byte": 1.533576,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "3500df12a54a6b412d1400edd2fea054ad3080029b9ceeff5155190ad057ae30",
+      "archive_budget_for_10_95_percent_1g": 109316987,
+      "archive_1g_estimate_from_250k_to_1m_alpha": 126036195,
+      "archive_1g_estimate_from_1m_to_10m_alpha": 120639670,
+      "scale_verdict": "scale_negative_for_10_95_target"
+    },
+    "10m_inherited_from_title_parent": {
+      "input_bytes": 10000000,
+      "compressed_size": 1642758,
+      "program_size": 183013,
+      "hutter_score": 1825771,
+      "roundtrip_basis": "Decompressed Python body, backend payload, dictionary payload, and ordered stream match the verified title-tie parent package."
+    }
+  },
+  "verdict": "Reject as a target-path winner. Exact 1K, 250K, and 1M driver gates are deterministic, but the 1M archive lands in the same scale-negative region as suffix order and projects above the 10.95 percent archive budget."
+}

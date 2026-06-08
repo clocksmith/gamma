@@ -1,0 +1,90 @@
+{
+  "id": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v2",
+  "family": "fx2-geometry-order",
+  "status": "candidate",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "description": "Title-tie geometry ordering variant with a shorter raw-deflate Python payload and a word-character normalization key.",
+  "build": {
+    "packaging": "71-byte zlib loader plus raw-deflate Python transform payload.",
+    "payload_files": {
+      "c": 81840,
+      "d": 100208,
+      "p": 889,
+      "program.py": 71
+    },
+    "program_size": 183008,
+    "payload_delta_vs_parent": -5,
+    "key_delta_vs_parent": "Uses rb\"\\W+\" normalization in the page-order key instead of rb\"[^a-z0-9]+\"."
+  },
+  "basis": "Backend and dictionary payloads are unchanged from the title-tie parent; page ordering intentionally differs and requires exact driver confirmation.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "geometry_title",
+            "normalization": "word_character_runs"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "binary_package": "xz",
+            "python_package": "raw_deflate_loader"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      }
+    ]
+  },
+  "measured": {
+    "1k_driver_smoke": {
+      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v2/2026-06-07T190252.json",
+      "input_bytes": 1024,
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 288,
+      "program_size": 183008,
+      "hutter_score": 183296,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "f23a87f9299b71f33a8b8af67243517222bdc123ed1a32566d4893b5d4ac1f73"
+    },
+    "payload_identity": {
+      "backend_payload_sha256": "d4ce2b06ca1d6ed816b5cc91927102f75bafb68e8c055879670319966be48795",
+      "dictionary_payload_sha256": "a5565e75710dcdd758f852e4492a26d3306f886bb2f1facd7b7edf02130665fa",
+      "python_payload_sha256": "8911cd2c04ba66f7fa769dbc74c36c9062c867b2044bd5acf0f51c228419a199",
+      "program_py_sha256": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    },
+    "10m_lzma_proxy": {
+      "input_bytes": 10000000,
+      "xz_bytes": 2707748,
+      "delta_vs_title_parent": -32,
+      "delta_vs_suffix_v2": 60,
+      "pages": 1325,
+      "roundtrip": true,
+      "ordered_sha256": "f502460a4c9f4d054f6f8f42f7cec9f21752fdc31e4c85f48975118c70db266f",
+      "basis": "No-lock Python lzma FORMAT_XZ preset=9|PRESET_EXTREME over reordered raw XML, not a Hutter score."
+    }
+  },
+  "verdict": "Exact scorer candidate behind suffix v2. Proxy evidence improved over the title parent, but exact fx2 archive bytes are unknown."
+}

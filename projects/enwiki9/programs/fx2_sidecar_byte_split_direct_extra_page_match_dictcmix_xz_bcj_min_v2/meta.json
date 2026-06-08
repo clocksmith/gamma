@@ -1,0 +1,54 @@
+{
+  "id": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_bcj_min_v2",
+  "family": "fx2-sidecar-byte-split",
+  "status": "candidate",
+  "parent": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1",
+  "description": "Package-only variant of the score-leading fx2 sidecar byte-split direct/extra/page-match candidate. The decoded cmix binary and english.dic.cmix payload are preserved; cmix.xz is recompressed with xz x86 BCJ filtering.",
+  "build": {
+    "packaging": "Minified Python wrapper with BCJ-filtered cmix.xz and cmix-compressed english.dic.",
+    "payload_files": {
+      "cmix.xz": 150048,
+      "english.dic.cmix": 100065,
+      "program.py": 637
+    },
+    "payload_delta_vs_parent": -5828
+  },
+  "basis": "The x86 BCJ filter reduces the counted executable payload without changing the decompressed sidecar cmix binary or compression algorithm.",
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "decoded_payload_identity": {
+      "parent_decoded_cmix_sha256": "ded3ad0ad81df406a14ab0b5e08cc60907bc92fb33bde783e402ee9e587ad1fb",
+      "decoded_cmix_sha256": "ded3ad0ad81df406a14ab0b5e08cc60907bc92fb33bde783e402ee9e587ad1fb",
+      "english_dic_cmix_sha256": "ef62bdf002523de2039ed57acb4b51c6a54a7368199a44b8fac6188fd39abc8b",
+      "program_py_sha256": "9f7777d0120daf914d67381a49afeb6c6398e8e3f3e9d7df6182b0e9c9e8315e"
+    },
+    "1k_current_driver": {
+      "input_bytes": 1024,
+      "compressed_size": 260,
+      "program_size": 250750,
+      "hutter_score": 251010,
+      "compressed_sha256": "689d8d4941f5755004e910f11725ec52f0d1b4ba47650d5be736016447ac57cb",
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    },
+    "64k_inherited_from_parent": {
+      "input_bytes": 65536,
+      "compressed_size": 13573,
+      "program_size": 250750,
+      "hutter_score": 264323,
+      "compressed_sha256": "c73f8da834dde2bd65b425f94f472c1f2b85a01b1d6fa011c48ae1c85da49271",
+      "roundtrip_basis": "Decoded cmix binary, dictionary payload, and wrapper are byte-identical to the current-driver verified parent package."
+    },
+    "1m_inherited_from_parent": {
+      "input_bytes": 1048576,
+      "compressed_size": 182361,
+      "program_size": 250750,
+      "hutter_score": 433111,
+      "compressed_sha256": "ffaa0354961bd12ecae6dff9cd43fef3c59b632c8ddd92ee12481bdb19d73f93",
+      "roundtrip_basis": "Decoded cmix binary, dictionary payload, and wrapper are byte-identical to the current-driver verified parent package."
+    }
+  },
+  "verdict": "Promote as a package-only improvement over the current old-sidecar min package. It preserves archive behavior and lowers the counted payload by 5828 bytes."
+}

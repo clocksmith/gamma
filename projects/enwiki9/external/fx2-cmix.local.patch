@@ -4,10 +4,10 @@ index 5eb75b2..a1b7b38 100644
 +++ b/makefile
 @@ -1,8 +1,9 @@
  CC = clang++-17
- 
+
  ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 +FP_FAST_FLAG:=$(shell $(CC) --version 2>/dev/null | grep -qi clang && echo -ffp-model=fast || echo -ffast-math)
- 
++
 -CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
 +CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
  
@@ -36,7 +36,7 @@ index 5eb75b2..a1b7b38 100644
  all: cmix remap
 -
 diff --git a/src/context-manager.cpp b/src/context-manager.cpp
-index f75b3ca..a90f6ba 100644
+index f75b3ca..7429e2e 100644
 --- a/src/context-manager.cpp
 +++ b/src/context-manager.cpp
 @@ -1,4 +1,7 @@
@@ -90,7 +90,7 @@ index f75b3ca..a90f6ba 100644
 +    ++b;
 +  }
 +  return b;
-+}
+ }
 +
 +static unsigned int SideClass(unsigned char c) {
 +  if (c >= 'A' && c <= 'Z') return 1;
@@ -382,8 +382,8 @@ index f75b3ca..a90f6ba 100644
 +  sidecar_context ^= sidecar_ctx1 ^ (sidecar_ctx2 << 1) ^
 +      (sidecar_ctx5 << 2) ^ (sidecar_ctx8 << 3);
 +  sidecar_prev_byte = c;
- }
- 
++}
++
 +unsigned long long ContextManager::StructuralContext(unsigned int salt) const {
 +  unsigned long long x = sidecar_context;
 +  x ^= (sidecar_pair_sig << 7);
@@ -411,7 +411,7 @@ index f75b3ca..a90f6ba 100644
  
      for (auto& context : context_hash_contexts_) {
        context.Update();
-@@ -212,10 +563,26 @@ void ContextManager::UpdateContexts(int bit) {
+@@ -212,10 +563,43 @@ void ContextManager::UpdateContexts(int bit) {
    mx17=(b3stream&0x3f)*256+long_bit_context_;// 7f or 3f
    
        if (bpos==0)  mxx=(stream2bR&63)*8 + (b3stream&7);
@@ -437,11 +437,28 @@ index f75b3ca..a90f6ba 100644
 +  mx17 ^= (StructuralContext(32) & 0x3f) << 8;
 +  mxx ^= StructuralContext(33) & 0x3f;
 +#endif
++
++#if FX2_STRUCT_SIDECAR
++  sidecar_mix1 = sidecar_direct * 256 + long_bit_context_;
++  sidecar_mix2 = sidecar_direct2 * 256 + long_bit_context_;
++  sidecar_mix3 = (side_template_hash ^ (side_title_hash << 1)) * 256
++      + long_bit_context_;
++  sidecar_mix4 = ((side_link_recency & 15) * 32 + (side_category_state & 15))
++      * 256 + long_bit_context_;
++  sidecar_mix5 = ((side_field & 15) * 16 + (side_slot & 15))
++      * 256 + long_bit_context_;
++  sidecar_mix6 = ((side_page_kind & 15) * 32 + (side_page_bucket & 31))
++      * 256 + long_bit_context_;
++  sidecar_mix7 = ((side_entity_recency & 31) * 16 + (side_template_arg & 15))
++      * 256 + long_bit_context_;
++  sidecar_mix8 = ((side_col_bucket & 15) * 8 + (side_numeric_class & 7))
++      * 256 + long_bit_context_;
++#endif
          
  }
 -
 diff --git a/src/context-manager.h b/src/context-manager.h
-index d740327..2a0fe4e 100644
+index d740327..a7e8aff 100644
 --- a/src/context-manager.h
 +++ b/src/context-manager.h
 @@ -17,8 +17,18 @@
@@ -478,7 +495,7 @@ index d740327..2a0fe4e 100644
  
    unsigned int bit_context_ = 1, wrt_state_ = 0, bpos=0;
    unsigned long long long_bit_context_ = 1, zero_context_ = 0, history_pos_ = 0,
-@@ -78,6 +96,14 @@ struct ContextManager {
+@@ -78,6 +96,16 @@ struct ContextManager {
        mx17=0,mx17cxt=0,
        mx18=0,mx18cxt=0,
        mxx=0,
@@ -489,11 +506,13 @@ index d740327..2a0fe4e 100644
 +      sidecar_direct=0, sidecar_direct2=0, sidecar_direct3=0, sidecar_direct4=0,
 +      sidecar_ctx1=0, sidecar_ctx2=0, sidecar_ctx3=0, sidecar_ctx4=0,
 +      sidecar_ctx5=0, sidecar_ctx6=0, sidecar_ctx7=0, sidecar_ctx8=0,
++      sidecar_mix1=0, sidecar_mix2=0, sidecar_mix3=0, sidecar_mix4=0,
++      sidecar_mix5=0, sidecar_mix6=0, sidecar_mix7=0, sidecar_mix8=0,
 +#endif
        words=0,wordscxt=0,
        ind1=0,context1_ind=0,
        ind2=0,context1_ind2=0,
-@@ -87,6 +113,22 @@ struct ContextManager {
+@@ -87,6 +115,22 @@ struct ContextManager {
        mx19cxt=0;
    std::vector<unsigned char> history_, shared_map_;
    std::vector<unsigned long long> words_, recent_bytes_;
@@ -516,7 +535,7 @@ index d740327..2a0fe4e 100644
    llvm::SmallVector<ContextHash, 12> context_hash_contexts_;
    llvm::SmallVector<Sparse, 18> sparse_contexts_;
    llvm::SmallVector<BracketContext, 1> bracket_contexts_;
-@@ -96,4 +138,3 @@ struct ContextManager {
+@@ -96,4 +140,3 @@ struct ContextManager {
  };
  
  #endif
@@ -580,7 +599,7 @@ index dcc832c..3d98ad0 100644
  } // namespace PPMD
 -
 diff --git a/src/predictor.cpp b/src/predictor.cpp
-index 503edfb..4520e75 100644
+index 503edfb..7915071 100644
 --- a/src/predictor.cpp
 +++ b/src/predictor.cpp
 @@ -3,6 +3,7 @@
@@ -674,7 +693,7 @@ index 503edfb..4520e75 100644
        vocab_size, new Lstm(vocab_size, vocab_size, 200, 1, 128, 0.03, 10));
  
    for (int i = 0; i < 2; ++i) {
-@@ -163,15 +217,171 @@ void Predictor::AddMixers() {
+@@ -163,15 +217,181 @@ void Predictor::AddMixers() {
    AddMixer(0, manager_.mx16, 0.005);
    AddMixer(0, manager_.mx14, 0.005);
    AddMixer(0, manager_.mx15, 0.005);
@@ -683,6 +702,16 @@ index 503edfb..4520e75 100644
 +#endif
 +#if FX2_STRUCT_SIDECAR == 4
 +  AddMixer(0, manager_.sidecar_context, FX2_STRUCT_SIDECAR_WEIGHT);
++#endif
++#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_MIXERS
++  AddMixer(0, manager_.sidecar_mix1, 0.001);
++  AddMixer(0, manager_.sidecar_mix2, 0.001);
++  AddMixer(0, manager_.sidecar_mix3, 0.001);
++  AddMixer(0, manager_.sidecar_mix4, 0.001);
++  AddMixer(0, manager_.sidecar_mix5, 0.001);
++  AddMixer(0, manager_.sidecar_mix6, 0.001);
++  AddMixer(0, manager_.sidecar_mix7, 0.001);
++  AddMixer(0, manager_.sidecar_mix8, 0.001);
 +#endif
  
    input_size = mixer_0_.size() + auxiliary_size_;
@@ -846,7 +875,7 @@ index 503edfb..4520e75 100644
  int lstmpr=0, lstmex=0;
  float byte_mixer_output=0.0f;
  float Predictor::Predict() {
-@@ -219,6 +429,9 @@ float Predictor::Predict() {
+@@ -219,6 +439,9 @@ float Predictor::Predict() {
      }
    }
    layers_[0].SetInput(input_index++, byte_model_->Predict()[0]);
@@ -856,7 +885,7 @@ index 503edfb..4520e75 100644
  
    float byte_mixer_override = -1;
  
-@@ -241,8 +454,19 @@ float Predictor::Predict() {
+@@ -241,8 +464,19 @@ float Predictor::Predict() {
    float p = Sigmoid::Logistic(mixer_1_[0].Mix());
    p = sse_.Predict(p);
    if (byte_mixer_override >= 0) {
@@ -877,7 +906,7 @@ index 503edfb..4520e75 100644
    return p;
  }
  
-@@ -261,8 +485,14 @@ void Predictor::Perceive(int bit) {
+@@ -261,8 +495,14 @@ void Predictor::Perceive(int bit) {
    for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
      indirect_r_models_[i].Perceive(bit);
    }
@@ -892,7 +921,7 @@ index 503edfb..4520e75 100644
  
    byte_mixer_->Perceive(bit);
  
-@@ -274,6 +504,9 @@ void Predictor::Perceive(int bit) {
+@@ -274,6 +514,9 @@ void Predictor::Perceive(int bit) {
    }
  
    sse_.Perceive(bit);
@@ -902,7 +931,7 @@ index 503edfb..4520e75 100644
  
    bool byte_update = false;
    if (manager_.bit_context_ >= 128) byte_update = true;
-@@ -302,6 +535,13 @@ void Predictor::Perceive(int bit) {
+@@ -302,6 +545,13 @@ void Predictor::Perceive(int bit) {
      for (unsigned int j = 0; j < 256; ++j) {
        byte_mixer_->SetInput(j,p[j]);
      }
@@ -916,7 +945,7 @@ index 503edfb..4520e75 100644
  
      byte_mixer_->ByteUpdate();
     
-@@ -366,7 +606,9 @@ void Predictor::Pretrain(int bit) {
+@@ -366,7 +616,9 @@ void Predictor::Pretrain(int bit) {
      for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
        indirect_r_models_[i].ByteUpdate();
      }
@@ -928,7 +957,7 @@ index 503edfb..4520e75 100644
  }
 -
 diff --git a/src/predictor.h b/src/predictor.h
-index 5754d1e..e0cbdbf 100644
+index 5754d1e..1002e17 100644
 --- a/src/predictor.h
 +++ b/src/predictor.h
 @@ -16,6 +16,7 @@
@@ -939,7 +968,7 @@ index 5754d1e..e0cbdbf 100644
  #include "mixer/lstm.h"
  #include "contexts/context-hash.h"
  #include "contexts/bracket-context.h"
-@@ -34,6 +35,42 @@
+@@ -34,6 +35,46 @@
  #include <memory>
  #include <optional>
  
@@ -979,10 +1008,14 @@ index 5754d1e..e0cbdbf 100644
 +#define FX2_STRUCT_SIDECAR_MODELS 0
 +#endif
 +
++#ifndef FX2_STRUCT_SIDECAR_MIXERS
++#define FX2_STRUCT_SIDECAR_MIXERS 0
++#endif
++
  class Predictor {
   public:
    Predictor(const std::vector<bool>& vocab);
-@@ -52,7 +89,19 @@ class Predictor {
+@@ -52,7 +93,19 @@ class Predictor {
    void AddDirect();
    void AddMatch();
    void AddDoubleIndirect();
@@ -1002,7 +1035,7 @@ index 5754d1e..e0cbdbf 100644
  
    llvm::SmallVector<Indirect<Nonstationary>, 30-7> indirect_ns_models_; // non-stationary
    llvm::SmallVector<Indirect<RunMap>, 1> indirect_r_models_; // run map
-@@ -70,9 +119,15 @@ class Predictor {
+@@ -70,9 +123,15 @@ class Predictor {
    Sigmoid sigmoid_;
    std::optional<PPMD::PPMD> byte_model_;
    std::optional<ByteMixer> byte_mixer_;

@@ -1,0 +1,49 @@
+{
+  "id": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_zlibpy_min_v1",
+  "family": "fx2-geometry-order",
+  "status": "candidate",
+  "parent": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_min_v3",
+  "description": "Raw-deflate Python payload wrapper for the geometry-suffix ordering package. Keeps the same backend, dictionary, and transform code as the parent while reducing counted source bytes.",
+  "build": {
+    "packaging": "71-byte zlib loader plus raw-deflate Python transform payload.",
+    "payload_files": {
+      "c": 77552,
+      "e": 100208,
+      "p": 892,
+      "program.py": 71
+    },
+    "payload_delta_vs_parent": -639
+  },
+  "basis": "The decompressed Python body is byte-for-byte the parent program.py; backend and dictionary payloads are unchanged.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "payload_identity": {
+      "backend_payload_sha256": "3878901b54bf59fada14410ef78860112597cad435cc1a99b7b0c73df4de2619",
+      "dictionary_payload_sha256": "a5565e75710dcdd758f852e4492a26d3306f886bb2f1facd7b7edf02130665fa",
+      "python_payload_sha256": "7160fe657d3ed10421b2375cc2cfcafd28885271912f2c6c7f627fd9e8c26563",
+      "program_py_sha256": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    },
+    "ordered_stream_identity": {
+      "parent": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_min_v3",
+      "prefixes": [
+        {
+          "input_bytes": 10000000,
+          "ordered_sha256": "ecc57c2ba6564d879ea759ecfee72c04a2cce58af8a2624a1c65ad6e5fbb760c",
+          "parent_equal": true,
+          "restore_ok": true
+        }
+      ]
+    },
+    "10m_lzma_proxy": {
+      "input_bytes": 10000000,
+      "xz_bytes": 2707732,
+      "delta_vs_geometry": -144,
+      "delta_vs_title_tie": -48,
+      "basis": "No-lock page_order_screen.py proxy over reordered raw XML, not a Hutter score."
+    }
+  },
+  "verdict": "High-priority exact scorer candidate. This is the smallest suffix package and has the best 10M no-lock ordering proxy, but no exact cmix backend gate is recorded yet."
+}

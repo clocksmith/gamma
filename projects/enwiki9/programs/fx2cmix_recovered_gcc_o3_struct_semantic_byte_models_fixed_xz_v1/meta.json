@@ -1,7 +1,7 @@
 {
   "id": "fx2cmix_recovered_gcc_o3_struct_semantic_byte_models_fixed_xz_v1",
   "family": "fx2-cmix-recovered",
-  "status": "candidate",
+  "status": "measured_negative",
   "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
   "supersedes": [
     "fx2cmix_recovered_gcc_o3_struct_semantic_byte_models_xz_v1"
@@ -63,6 +63,50 @@
       }
     ]
   },
-  "measured": {},
-  "verdict": "Pending measured gates."
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 259,
+      "program_size": 303348,
+      "hutter_score": 303607,
+      "parent_compressed_size": 262,
+      "parent_program_size": 283628,
+      "parent_hutter_score": 283890,
+      "archive_delta_vs_parent": -3,
+      "score_delta_vs_parent": 19717,
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13584,
+      "program_size": 303348,
+      "hutter_score": 316932,
+      "parent_compressed_size": 13585,
+      "parent_program_size": 283628,
+      "parent_hutter_score": 297213,
+      "archive_delta_vs_parent": -1,
+      "score_delta_vs_parent": 19719,
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    },
+    "250k_driver_gate": {
+      "result_json": "results/fx2cmix_recovered_gcc_o3_struct_semantic_byte_models_fixed_xz_v1/2026-06-07T202012.json",
+      "data_size": 250000,
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45319,
+      "program_size": 303348,
+      "hutter_score": 348667,
+      "bits_per_byte": 1.450208,
+      "parent_compressed_size": 45266,
+      "parent_program_size": 283628,
+      "parent_hutter_score": 328894,
+      "archive_delta_vs_parent": 53,
+      "score_delta_vs_parent": 19773,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "compressed_sha256": "241fb1f438fdb8a36947102d1853bea3c7930a2bfa896f53c164e50af74287df"
+    }
+  },
+  "verdict": "Reject as a winner. The corrected combined native sidecar is deterministic, but the 250K gate loses archive bytes against the direct/match-only parent while carrying a larger static payload."
 }

@@ -1,0 +1,54 @@
+{
+  "id": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_bcj_um_v4",
+  "family": "fx2-sidecar-byte-split",
+  "status": "candidate",
+  "parent": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_bcj_um_v3",
+  "description": "Wrapper-only minimization of the ultra-min BCJ package. The one-character payload files are preserved and the Python wrapper aliases repeated calls.",
+  "build": {
+    "packaging": "Ultra-min Python wrapper with one-character payload files.",
+    "payload_files": {
+      "c": 150048,
+      "d": 100065,
+      "program.py": 558
+    },
+    "payload_delta_vs_parent": -46
+  },
+  "basis": "Same BCJ-filtered executable payload and same cmix-compressed dictionary as the parent package; only wrapper source changed.",
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "decoded_payload_identity": {
+      "parent_decoded_cmix_sha256": "ded3ad0ad81df406a14ab0b5e08cc60907bc92fb33bde783e402ee9e587ad1fb",
+      "decoded_cmix_sha256": "ded3ad0ad81df406a14ab0b5e08cc60907bc92fb33bde783e402ee9e587ad1fb",
+      "dictionary_sha256": "ef62bdf002523de2039ed57acb4b51c6a54a7368199a44b8fac6188fd39abc8b",
+      "program_py_sha256": "fc74a2ee7f41131279b53f467ebd8c3b1b804ceaa6160d07244cc5a52cf54423"
+    },
+    "1k_current_driver": {
+      "input_bytes": 1024,
+      "compressed_size": 260,
+      "program_size": 250671,
+      "hutter_score": 250931,
+      "compressed_sha256": "689d8d4941f5755004e910f11725ec52f0d1b4ba47650d5be736016447ac57cb",
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    },
+    "64k_inherited_from_bcj_parent": {
+      "input_bytes": 65536,
+      "compressed_size": 13573,
+      "program_size": 250671,
+      "hutter_score": 264244,
+      "compressed_sha256": "c73f8da834dde2bd65b425f94f472c1f2b85a01b1d6fa011c48ae1c85da49271",
+      "roundtrip_basis": "Decoded cmix binary and dictionary payload are byte-identical to the current-driver verified BCJ parent package."
+    },
+    "1m_inherited_from_bcj_parent": {
+      "input_bytes": 1048576,
+      "compressed_size": 182361,
+      "program_size": 250671,
+      "hutter_score": 433032,
+      "compressed_sha256": "ffaa0354961bd12ecae6dff9cd43fef3c59b632c8ddd92ee12481bdb19d73f93",
+      "roundtrip_basis": "Decoded cmix binary and dictionary payload are byte-identical to the current-driver verified BCJ parent package."
+    }
+  },
+  "verdict": "Promote as the current package-score leader for the old sidecar byte-split line. It preserves archive behavior and lowers counted payload versus v3 and the BCJ min parent."
+}

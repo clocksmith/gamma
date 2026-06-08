@@ -21,6 +21,10 @@ def norm(v: bytes, limit: int = 240) -> bytes:
     return re.sub(rb"[^a-z0-9]+", b" ", v.lower()).strip()[:limit]
 
 
+def wordnorm(v: bytes, limit: int = 240) -> bytes:
+    return re.sub(rb"\W+", b" ", v.lower()).strip()[:limit]
+
+
 def revnorm(v: bytes, limit: int = 120) -> bytes:
     parts = norm(v, limit).split()
     return b" ".join(reversed(parts))
@@ -121,6 +125,14 @@ def key(mode: str, page: bytes, pid: int) -> tuple:
         if infobox:
             return (norm(b"i " + infobox), pid)
         return (norm(b"x " + (template or t)), pid)
+    if mode == "geometry_wordnorm":
+        if redirect:
+            return (wordnorm(b"z " + redirect), pid)
+        if cats:
+            return (wordnorm(b"c " + b" ".join(sorted(cats)) + b" t " + t[:40]), pid)
+        if infobox:
+            return (wordnorm(b"i " + infobox), pid)
+        return (wordnorm(b"x " + (template or t)), pid)
     if mode == "geometry_title":
         if redirect:
             return (norm(b"z " + redirect), pid)
@@ -129,6 +141,14 @@ def key(mode: str, page: bytes, pid: int) -> tuple:
         if infobox:
             return (norm(b"i " + infobox + b" t " + t), pid)
         return (norm(b"x " + (template or t) + b" t " + t), pid)
+    if mode == "geometry_title_wordnorm":
+        if redirect:
+            return (wordnorm(b"z " + redirect), pid)
+        if cats:
+            return (wordnorm(b"c " + b" ".join(sorted(cats)) + b" t " + t[:80]), pid)
+        if infobox:
+            return (wordnorm(b"i " + infobox + b" t " + t), pid)
+        return (wordnorm(b"x " + (template or t) + b" t " + t), pid)
     if mode == "geometry_suffix":
         if redirect:
             return (norm(b"z " + redirect), pid)
@@ -137,6 +157,14 @@ def key(mode: str, page: bytes, pid: int) -> tuple:
         if infobox:
             return (norm(b"i " + infobox + b" s " + t[-30:]), pid)
         return (norm(b"x " + (template or t) + b" s " + t[-30:]), pid)
+    if mode == "geometry_suffix_wordnorm":
+        if redirect:
+            return (wordnorm(b"z " + redirect), pid)
+        if cats:
+            return (wordnorm(b"c " + b" ".join(sorted(cats)) + b" s " + t[-30:]), pid)
+        if infobox:
+            return (wordnorm(b"i " + infobox + b" s " + t[-30:]), pid)
+        return (wordnorm(b"x " + (template or t) + b" s " + t[-30:]), pid)
     if mode == "geometry_catonly":
         if redirect:
             return (norm(b"z " + redirect), pid)
@@ -274,8 +302,11 @@ def main() -> int:
         default=[
             "original",
             "geometry",
+            "geometry_wordnorm",
             "geometry_title",
+            "geometry_title_wordnorm",
             "geometry_suffix",
+            "geometry_suffix_wordnorm",
             "geometry_catonly",
             "geometry_cat_title_suffix",
             "geometry_revtitle",
@@ -304,11 +335,13 @@ def main() -> int:
             args.raw_out_dir.mkdir(parents=True, exist_ok=True)
             (args.raw_out_dir / f"{args.limit}_{mode}.raw").write_bytes(ordered)
         rows.append({"mode": mode, "xz_bytes": xz_size(ordered), **stats})
-    base = next((row for row in rows if row["mode"] == "geometry"), rows[0])
+    geometry = next((row for row in rows if row["mode"] == "geometry"), None)
     original = next((row for row in rows if row["mode"] == "original"), None)
     original_xz = original["xz_bytes"] if original else xz_size(data)
     for row in rows:
-        row["delta_vs_geometry"] = row["xz_bytes"] - base["xz_bytes"]
+        row["delta_vs_geometry"] = (
+            row["xz_bytes"] - geometry["xz_bytes"] if geometry else None
+        )
         row["delta_vs_original"] = row["xz_bytes"] - original_xz
     result = {
         "input_bytes": len(data),

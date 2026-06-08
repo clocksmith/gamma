@@ -1,0 +1,71 @@
+{
+  "id": "fx2_geometry_sort_dictcmix_xz_min_v2",
+  "family": "fx2-geometry-order",
+  "status": "candidate",
+  "parent": "fx2_geometry_sort_dictcmix_xz_min_v1",
+  "description": "Wrapper-only minimization of the measured 10MB/100MB geometry-order frontier. The backend payloads are renamed to one-character files and the subprocess bootstrap is reduced while keeping clean output.",
+  "build": {
+    "packaging": "Minified geometry-order Python wrapper with one-character payload files.",
+    "payload_files": {
+      "c": 81840,
+      "d": 100208,
+      "program.py": 1653
+    },
+    "payload_delta_vs_parent": -60
+  },
+  "basis": "Same decoded backend, same cmix-compressed dictionary, and same geometry ordering key as the parent package; only wrapper source and asset filenames changed.",
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "payload_identity": {
+      "backend_payload_sha256": "d4ce2b06ca1d6ed816b5cc91927102f75bafb68e8c055879670319966be48795",
+      "dictionary_payload_sha256": "a5565e75710dcdd758f852e4492a26d3306f886bb2f1facd7b7edf02130665fa",
+      "program_py_sha256": "ebe607be6dcd8210b195c481e3714038c61da38bdb13461a83e619c56646caed"
+    },
+    "ordered_stream_identity": {
+      "parent": "fx2_geometry_sort_dictcmix_xz_min_v1",
+      "prefixes": [
+        {
+          "input_bytes": 1000,
+          "ordered_sha256": "0f35cdeee80ba4c570885c34ee901aa579441fb8ba97351568a81bacdfc241fd",
+          "parent_equal": true,
+          "restore_ok": true
+        },
+        {
+          "input_bytes": 1024,
+          "ordered_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+          "parent_equal": true,
+          "restore_ok": true
+        },
+        {
+          "input_bytes": 1000000,
+          "ordered_sha256": "bd6601ef473c341b665b3a101a57d96edb210f91825e02fb815297332f578166",
+          "parent_equal": true,
+          "restore_ok": true
+        },
+        {
+          "input_bytes": 10000000,
+          "ordered_sha256": "4f029e826cb826adecea94adfde8e548ba8376bca93dce9ae1080d7c1f0cc53b",
+          "parent_equal": true,
+          "restore_ok": true
+        }
+      ]
+    },
+    "10m_inherited_from_parent": {
+      "input_bytes": 10000000,
+      "compressed_size": 1642858,
+      "program_size": 183701,
+      "hutter_score": 1826559,
+      "roundtrip_basis": "Backend payload, dictionary payload, and ordered stream match the verified parent package."
+    },
+    "100m_inherited_from_parent": {
+      "input_bytes": 100000000,
+      "compressed_size": 14857781,
+      "program_size": 183701,
+      "hutter_score": 15041482,
+      "roundtrip_basis": "Backend payload and dictionary payload match the verified parent package; transform source is equivalent on checked prefixes."
+    }
+  },
+  "verdict": "Promote after current-driver smoke. Inherited evidence makes this the package-smaller form of the measured 100MB geometry frontier."
+}
