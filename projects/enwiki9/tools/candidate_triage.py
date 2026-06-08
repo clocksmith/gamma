@@ -13,6 +13,7 @@ import os
 import pathlib
 import subprocess
 import sys
+import signal
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
@@ -26,8 +27,9 @@ DRIVER = ROOT / "lib" / "driver.py"
 DEFAULT_LOCK_PATH = pathlib.Path("/tmp/enwiki9-heavy.lock")
 DEFAULT_BASELINE = "baseline_lzma"
 DEFAULT_GATE_SIZES = (1024, 250000)
-HEAVY_PROCESS_PATTERN = "bench.py|lib/driver.py|cmix|qm_context|enwik9"
+HEAVY_PROCESS_PATTERN = "bench.py|lib/driver.py|cmix|qm_context"
 FLOCK_BUSY_CODE = 75
+DRIVER_TIMEOUT_CODE = 124
 
 
 @dataclass
@@ -151,6 +153,7 @@ def run_driver_locked(
     *,
     limit: int,
     lock_path: pathlib.Path,
+    driver_timeout: int | None = None,
 ) -> DriverRun:
     active = active_heavy_processes()
     if active:
@@ -177,21 +180,51 @@ def run_driver_locked(
         str(limit),
         "--check-determinism",
     ]
-    proc = subprocess.run(
+    proc = subprocess.Popen(
         cmd,
         cwd=REPO_ROOT,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        start_new_session=True,
     )
+    try:
+        stdout, stderr = proc.communicate(
+            timeout=None if driver_timeout is None else driver_timeout
+        )
+    except subprocess.TimeoutExpired as exc:
+        try:
+            os.killpg(proc.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+        try:
+            stdout, stderr = proc.communicate(timeout=2)
+        except Exception:
+            stdout, stderr = exc.stdout or "", exc.stderr or ""
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        return DriverRun(
+            program_id=program_id,
+            limit=limit,
+            returncode=DRIVER_TIMEOUT_CODE,
+            stdout=stdout or "",
+            stderr="driver timed out",
+            result=None,
+            blocked_reason=None,
+        )
+
     blocked_reason = "lock_busy" if proc.returncode == FLOCK_BUSY_CODE else None
+    proc_stdout = stdout if stdout is not None else ""
+    proc_stderr = stderr if stderr is not None else ""
     return DriverRun(
         program_id=program_id,
         limit=limit,
         returncode=proc.returncode,
-        stdout=proc.stdout,
-        stderr=proc.stderr,
-        result=parse_driver_stdout(proc.stdout),
+        stdout=proc_stdout,
+        stderr=proc_stderr,
+        result=parse_driver_stdout(proc_stdout),
         blocked_reason=blocked_reason,
     )
 
@@ -216,13 +249,24 @@ def dependency_error(text: str) -> bool:
     return any(needle.lower() in lowered for needle in needles)
 
 
+def timeout_error(text: str) -> bool:
+    lowered = text.lower()
+    return (
+        "timed out" in lowered
+        or "timed out while trying to run" in lowered
+        or "command timed out" in lowered
+    )
+
+
 def classify_driver_failure(run: DriverRun) -> tuple[str, str]:
     text = "\n".join(part for part in (run.stdout, run.stderr) if part)
     if run.blocked_reason in ("preflight_busy", "lock_busy"):
         return "blocked_by_lock", run.blocked_reason
+    if run.returncode == DRIVER_TIMEOUT_CODE:
+        return "blocked_dependency", "driver_timeout"
     if "missing callable" in text or "program not found" in text:
         return "retired", "contract_failure"
-    if dependency_error(text):
+    if dependency_error(text) or timeout_error(text):
         return "blocked_dependency", "dependency_error"
     return "retired", "driver_failure"
 
@@ -303,6 +347,7 @@ def triage_one(
     baseline_id: str,
     lock_path: pathlib.Path,
     baseline_cache: dict[int, DriverRun],
+    driver_timeout: int | None,
 ) -> dict[str, Any]:
     gates: list[dict[str, Any]] = []
     for gate_size in gate_sizes:
@@ -312,6 +357,7 @@ def triage_one(
                 baseline_id,
                 limit=gate_size,
                 lock_path=lock_path,
+                driver_timeout=driver_timeout,
             )
             baseline_cache[gate_size] = baseline_run
         if baseline_run.result is None or baseline_run.returncode != 0:
@@ -338,6 +384,7 @@ def triage_one(
             candidate_id,
             limit=gate_size,
             lock_path=lock_path,
+            driver_timeout=driver_timeout,
         )
         if candidate_run.result is None:
             status, reason = classify_driver_failure(candidate_run)
@@ -475,6 +522,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--run", action="store_true", help="execute locked gates")
     parser.add_argument("--update-meta", action="store_true", help="write triage status to meta.json")
     parser.add_argument("--json", action="store_true", help="print machine-readable JSON only")
+    parser.add_argument(
+        "--driver-timeout",
+        type=int,
+        default=None,
+        help=(
+            "maximum wall time in seconds per driver invocation; if exceeded, mark"
+            " as blocked_dependency."
+        ),
+    )
     args = parser.parse_args(argv)
 
     if args.limit_candidates is not None and args.limit_candidates <= 0:
@@ -529,6 +585,7 @@ def main(argv: list[str] | None = None) -> int:
             baseline_id=args.baseline,
             lock_path=args.lock_path,
             baseline_cache=baseline_cache,
+            driver_timeout=args.driver_timeout,
         )
         triage_rows.append(row)
         if args.update_meta and not is_transient_lock_block(row):

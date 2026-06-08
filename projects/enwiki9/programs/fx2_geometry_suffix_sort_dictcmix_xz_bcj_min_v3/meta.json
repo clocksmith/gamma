@@ -1,0 +1,52 @@
+{
+  "id": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_min_v3",
+  "family": "fx2-geometry-order",
+  "status": "candidate",
+  "parent": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_min_v2",
+  "description": "Wrapper-only minimization of the geometry-suffix ordering package using fixed pid-scoped temp files.",
+  "build": {
+    "packaging": "Minified geometry-suffix Python wrapper with fixed pid-scoped temp files.",
+    "payload_files": {
+      "c": 77552,
+      "e": 100208,
+      "program.py": 1602
+    },
+    "payload_delta_vs_parent": -108
+  },
+  "basis": "Same decoded backend, same cmix-compressed dictionary, and same suffix geometry ordering key as the parent package; only wrapper source changed.",
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "payload_identity": {
+      "backend_payload_sha256": "3878901b54bf59fada14410ef78860112597cad435cc1a99b7b0c73df4de2619",
+      "dictionary_payload_sha256": "a5565e75710dcdd758f852e4492a26d3306f886bb2f1facd7b7edf02130665fa",
+      "program_py_sha256": "3a75ea5ae50434951047084f225bc93bc70ce128452ebfb482cd61d59569b3c4"
+    },
+    "ordered_stream_identity": {
+      "parent": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_min_v2",
+      "prefixes": [
+        {
+          "input_bytes": 10000000,
+          "ordered_sha256": "ecc57c2ba6564d879ea759ecfee72c04a2cce58af8a2624a1c65ad6e5fbb760c",
+          "parent_equal": true,
+          "restore_ok": true
+        },
+        {
+          "input_bytes": 100000000,
+          "ordered_sha256": "59e08ae50f8d42e8a38e3eb1aabfa300309dbcf8d436793f2328c1947f9358b2",
+          "parent_equal": true,
+          "restore_ok": true
+        }
+      ]
+    },
+    "10m_lzma_proxy": {
+      "input_bytes": 10000000,
+      "xz_bytes": 2707732,
+      "delta_vs_geometry": -144,
+      "delta_vs_title_tie": -48,
+      "basis": "No-lock page_order_screen.py proxy over reordered raw XML, not a Hutter score."
+    }
+  },
+  "verdict": "High-priority exact scorer candidate. The package is smaller than geometry/title packages and the suffix order wins the 10M no-lock LZMA proxy, but no exact cmix backend gate is recorded yet."
+}

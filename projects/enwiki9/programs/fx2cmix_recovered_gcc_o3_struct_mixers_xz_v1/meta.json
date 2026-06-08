@@ -1,0 +1,84 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_mixers_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "measured_negative",
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "description": "Recovered fx2-cmix payload with semantic MediaWiki sidecar mixer-conditioning contexts only. Direct, match, and sidecar byte-distribution models are disabled.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_SIDECAR_WRT_AWARE=1",
+      "FX2_STRUCT_SIDECAR_MIXERS=1"
+    ],
+    "packaging": "Minified Python xz bootstrap with check-free cmix.xz and english.dic.xz payloads."
+  },
+  "hypothesis": "If the old sidecar branch's missing signal came from mixer conditioning rather than direct/match models, this narrower build should show archive wins with less static payload than the direct/match-plus-mixers ablation.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3_semantic_mixers"
+          }
+        }
+      },
+      {
+        "id": "sidecar_mixers",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "semantic_mediawiki_mixer_contexts",
+            "mixer_contexts": "enabled",
+            "direct_models": "disabled",
+            "match_models": "disabled",
+            "byte_models": "disabled",
+            "stream_mutation": "none"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar_mixers",
+        "to": "substrate",
+        "stream": "mixer_contexts"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 258,
+      "program_size": 300664,
+      "hutter_score": 300922,
+      "parent_compressed_size": 262,
+      "parent_program_size": 283628,
+      "parent_hutter_score": 283890,
+      "archive_delta_vs_parent": -4,
+      "score_delta_vs_parent": 17032,
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13588,
+      "program_size": 300664,
+      "hutter_score": 314252,
+      "parent_compressed_size": 13585,
+      "parent_program_size": 283628,
+      "parent_hutter_score": 297213,
+      "archive_delta_vs_parent": 3,
+      "score_delta_vs_parent": 17039,
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    }
+  },
+  "verdict": "Reject as a winner. Mixer-only sidecar conditioning improves the 1K smoke but loses archive bytes at the 64K screen."
+}

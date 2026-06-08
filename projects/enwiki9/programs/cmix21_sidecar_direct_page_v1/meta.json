@@ -1,18 +1,38 @@
 {
-  "id": "cmix21_sidecar_direct_page_v1",
-  "description": "cmix version 21 with decoder-built MediaWiki sidecar state, four direct sidecar probability models, and page/shape sidecar match contexts; split byte sidecar and indirect sidecar models are disabled.",
   "added": "2026-05-30",
-  "deps": ["C++ runtime for the vendored cmix binary"],
-  "source_tree": "external/cmix21-sidecar",
   "build_defines": [
     "SIDECAR_NO_INDIRECT",
     "SIDECAR_PAGE_MATCH"
   ],
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
+  "description": "cmix version 21 with decoder-built MediaWiki sidecar state, four direct sidecar probability models, and page/shape sidecar match contexts; split byte sidecar and indirect sidecar models are disabled.",
+  "id": "cmix21_sidecar_direct_page_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-06-07T22:42:49+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-06-07T22:42:49+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
+  "source_tree": "external/cmix21-sidecar",
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024.",
   "verified_gates": {
     "250k_order_phda9": {
-      "compressed_size": 47946,
-      "baseline_cmix21_wrapped_v1": 47950,
       "baseline_cmix21_sidecar_split_byte_direct_page": 48001,
+      "baseline_cmix21_wrapped_v1": 47950,
+      "compressed_size": 47946,
       "roundtrip_ok": true
     }
   }

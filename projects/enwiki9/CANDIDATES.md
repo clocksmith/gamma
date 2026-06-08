@@ -79,6 +79,20 @@ Packaging wins and model wins must be described separately. If archive bytes do
 not improve, the row is a container/program-size win, not an algorithmic
 compression improvement.
 
+For target accounting, run:
+
+```bash
+python3 projects/enwiki9/tools/frontier_target_report.py --target-percent 10.95
+```
+
+The report ranks total projected `S = archive + program_size` and separates
+evidence quality: exact 1G, fx2-calibrated from exact 100M, fx2-calibrated from
+10M, generic forecasts, and speculative sub-10M extrapolations. A target hit is
+not a submission claim until an exact same-scope driver result confirms it.
+Treat any 10M-calibrated target hit as a screening lead, especially when small
+sub-1M gates are mixed with inherited 10M metadata. Those rows choose the next
+locked experiment; they do not prove full-corpus performance.
+
 ## Lane 0 Evidence Hygiene
 
 Lane 0 is the shared intake gate for the existing cleanup queue and every new
@@ -139,6 +153,71 @@ Outcomes:
 This is the pruning path for the `benchmark_or_retire` queue. It should run
 before any naming cleanup. Renaming should only touch candidates that Lane 0 has
 classified as `active`, `measured_negative`, or explicitly useful controls.
+
+## Lane B Core Tuning
+
+Core tuning candidates mutate the rebuilt `fx2-cmix` predictor rather than the
+outer wrapper. The current compile-time knobs are:
+
+- `FX2_MIXER_CONTEXT_LIMIT`: maximum learned contexts per mixer before falling
+  back to the shared base context.
+- `FX2_MIXER0_LR_SCALE`: layer-0 mixer learning-rate multiplier.
+- `FX2_MIXER1_LR_SCALE`: layer-1 mixer learning-rate multiplier.
+- `FX2_LSTM_LR_SCALE`: byte-mixer LSTM learning-rate multiplier.
+- `FX2_SSE_WR_SCALE_PPM`: integer parts-per-thousand scale for SSE write rates.
+
+Use the package helper to build a normal candidate directory from those knobs:
+
+```bash
+python3 projects/enwiki9/tools/fx2_core_tune_package.py \
+  --id fx2_core_tune_title_mctx20k_m0p95_m1p105_sse950_v1 \
+  --mixer-context-limit 20000 \
+  --mixer0-lr-scale 0.95 \
+  --mixer1-lr-scale 1.05 \
+  --sse-wr-scale-ppm 950
+```
+
+The helper packages the tuned binary into the title-order wrapper template. It
+does not benchmark or promote the candidate. After creation, register and gate
+it through Lane 0 under `/tmp/enwiki9-heavy.lock`.
+
+Core-tuning promotion is archive-first:
+
+- Same-scope archive bytes must improve against the parent/control.
+- Any program-size increase must be counted in `S`.
+- Gains must hold when moving from the small gate to the next larger gate.
+- Deterministic roundtrip is mandatory.
+
+## Lane B Hybrid GEPA Ordering
+
+GEPA page-order work is a selector pipeline, not a score by itself. The hybrid
+screen combines deterministic feature enumeration with random mutation,
+crossover, and diversity selection over reversible order keys:
+
+```bash
+python3 projects/enwiki9/tools/page_order_gepa_hybrid.py \
+  --limit 10000000 \
+  --max-candidates 8000 \
+  --top 60
+```
+
+The screen does not run `cmix`, `xz`, `lzma`, `bench.py`, or `lib/driver.py`.
+It ranks page-order genotypes using model-free adjacency continuity, so this
+work is safe while `/tmp/enwiki9-heavy.lock` is held by another scorer.
+
+Promising genotypes become self-contained candidates through:
+
+```bash
+python3 projects/enwiki9/tools/fx2_gepa_order_package.py \
+  --id fx2_gepa_template_topic_mh4_shape_dictcmix_zlibpy_v1 \
+  --fields kind,template,topic,mh4,shape \
+  --screen-json projects/enwiki9/results/page_order_gepa/hybrid_limit10000000_seed271828.json
+```
+
+The package helper copies the counted backend assets and writes the reversible
+order key into the candidate payload. Register and gate the candidate through
+Lane 0 before promotion. GEPA screen rank is only admission evidence for exact
+measurement; it is never a Hutter score.
 
 ## Retire Criteria
 

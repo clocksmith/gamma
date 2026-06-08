@@ -21,7 +21,7 @@ void ByteMixer::SetInput(int index, float val) {
 }
 
 void ByteMixer::ByteUpdate() {
-  inputs_ *= 2 / num_models_;
+  inputs_ *= 2.0f / num_models_;
   lstm_->SetInput(inputs_);
   inputs_ = 0;
   const auto& output = lstm_->Perceive(byte_map_[byte_]);

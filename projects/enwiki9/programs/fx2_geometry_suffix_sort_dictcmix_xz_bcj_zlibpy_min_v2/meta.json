@@ -1,0 +1,122 @@
+{
+  "id": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_zlibpy_min_v2",
+  "family": "fx2-geometry-order",
+  "status": "measured_negative",
+  "parent": "fx2_geometry_suffix_sort_dictcmix_xz_bcj_zlibpy_min_v1",
+  "description": "Suffix-title geometry ordering variant with a shorter raw-deflate Python payload and a word-character normalization key.",
+  "build": {
+    "packaging": "71-byte zlib loader plus raw-deflate Python transform payload.",
+    "payload_files": {
+      "c": 77552,
+      "e": 100208,
+      "p": 887,
+      "program.py": 71
+    },
+    "program_size": 178718,
+    "payload_delta_vs_parent": -5,
+    "key_delta_vs_parent": "Uses rb\"\\W+\" normalization in the page-order key instead of rb\"[^a-z0-9]+\"."
+  },
+  "basis": "Backend and dictionary payloads are unchanged from the suffix parent; page ordering intentionally differs and requires exact driver confirmation.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "geometry_suffix",
+            "normalization": "word_character_runs"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "binary_package": "bcj_xz",
+            "python_package": "raw_deflate_loader"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      }
+    ]
+  },
+  "measured": {
+    "1k_driver_smoke": {
+      "result_json": "results/fx2_geometry_suffix_sort_dictcmix_xz_bcj_zlibpy_min_v2/2026-06-07T185718.json",
+      "input_bytes": 1024,
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 288,
+      "program_size": 178718,
+      "hutter_score": 179006,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "f23a87f9299b71f33a8b8af67243517222bdc123ed1a32566d4893b5d4ac1f73"
+    },
+    "250k_driver_gate": {
+      "result_json": "results/fx2_geometry_suffix_sort_dictcmix_xz_bcj_zlibpy_min_v2/2026-06-07T192026.json",
+      "input_bytes": 250000,
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 52132,
+      "program_size": 178718,
+      "hutter_score": 230850,
+      "bits_per_byte": 1.668224,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "2a5d280da46b778ce5a09f6158f2d42e7dbbe93163f301ec26ec9520ddc09639"
+    },
+    "1m_driver_gate": {
+      "result_json": "results/fx2_geometry_suffix_sort_dictcmix_xz_bcj_zlibpy_min_v2/2026-06-07T201409.json",
+      "input_bytes": 1000000,
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 191697,
+      "program_size": 178718,
+      "hutter_score": 370415,
+      "bits_per_byte": 1.533576,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "3500df12a54a6b412d1400edd2fea054ad3080029b9ceeff5155190ad057ae30"
+    },
+    "payload_identity": {
+      "backend_payload_sha256": "3878901b54bf59fada14410ef78860112597cad435cc1a99b7b0c73df4de2619",
+      "dictionary_payload_sha256": "a5565e75710dcdd758f852e4492a26d3306f886bb2f1facd7b7edf02130665fa",
+      "python_payload_sha256": "e12094fee4bdf2df266a38ee5028583544e72e62665d34d4aba5892fa10eaa50",
+      "program_py_sha256": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    },
+    "10m_lzma_proxy": {
+      "input_bytes": 10000000,
+      "xz_bytes": 2707688,
+      "delta_vs_suffix_parent": -44,
+      "delta_vs_geometry": -188,
+      "delta_vs_title_tie": -92,
+      "pages": 1325,
+      "roundtrip": true,
+      "ordered_sha256": "7221ac22750814984a0ed65e80a5b7ff05b358c1aa77f216e8822ca09f69c4fa",
+      "basis": "No-lock Python lzma FORMAT_XZ preset=9|PRESET_EXTREME over reordered raw XML, not a Hutter score."
+    },
+    "scale_assessment": {
+      "target": "10.95_percent_full_corpus",
+      "exact_1m_archive_rate_bytes": 191697,
+      "linear_1g_archive_projection": 191697000,
+      "verdict": "reject_for_10_95_path",
+      "basis": "The package-size ledger is useful at 1M, but the exact fx2 archive rate is too high. The 10M LZMA proxy improvement did not transfer to a target-relevant fx2 gate."
+    }
+  },
+  "verdict": "Exact 1M gate is deterministic but negative for the full-corpus target: compressed_size=191697, program_size=178718, S=370415. Keep as proxy-transfer negative evidence; do not promote on the 10.95 path."
+}

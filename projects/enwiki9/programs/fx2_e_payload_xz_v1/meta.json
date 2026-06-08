@@ -1,35 +1,54 @@
 {
-  "id": "fx2_e_payload_xz_v1",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
   "description": "Payload-only wrapper for the repaired fx2-cmix -e PHDA9/readalike path",
-  "deps": ["C++ runtime for the vendored cmix binary"],
+  "id": "fx2_e_payload_xz_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-06-07T22:50:01+00:00",
+      "proposed_status": "blocked_dependency",
+      "verdict": "blocked_dependency: driver_timeout at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-06-07T22:50:01+00:00",
+        "proposed_status": "blocked_dependency",
+        "verdict": "blocked_dependency: driver_timeout at 1024."
+      }
+    ]
+  },
   "notes": "compress() runs the bundled fx2 self-extracting cmix with -e but returns only probe.comp. decompress() reconstructs archive9 internally from the bundled binary, bundled compressed dictionary, the payload, and a local header, then executes it to restore the raw prefix.",
   "program_files": {
     "cmix.xz": 456064,
     "program.py": 927,
     "total": 456991
   },
+  "status": "blocked_dependency",
+  "verdict": "blocked_dependency: driver_timeout at 1024.",
   "verified_gates": {
-    "250k_driver_roundtrip": {
-      "input_bytes": 250000,
-      "compressed_size": 44962,
-      "program_size": 456991,
-      "hutter_score": 501953,
-      "score_percent": 200.7812,
-      "roundtrip_ok": true,
-      "result_path": "results/fx2_e_payload_xz_v1/2026-06-01T142638.json"
-    },
     "10m_external_probe": {
       "input_bytes": 10000000,
-      "payload_stream_bytes": 1621921,
-      "selfextracting_archive9_bytes": 2099348,
-      "ready4cmix_bytes": 9486548,
       "payload_delta_vs_fx2cmix_wrapped_v1_10m_stream": -26540,
       "payload_plus_program_projection": 2078912,
-      "score_percent_projection": 20.78912,
+      "payload_stream_bytes": 1621921,
+      "ready4cmix_bytes": 9486548,
+      "roundtrip_md5": "2d1946513a5e933b897180084549dfc0",
       "roundtrip_ok": true,
       "roundtrip_result_path": "results/fx2_e_probe/10m_prefix_e_roundtrip.json",
-      "roundtrip_md5": "2d1946513a5e933b897180084549dfc0"
+      "score_percent_projection": 20.78912,
+      "selfextracting_archive9_bytes": 2099348
+    },
+    "250k_driver_roundtrip": {
+      "compressed_size": 44962,
+      "hutter_score": 501953,
+      "input_bytes": 250000,
+      "program_size": 456991,
+      "result_path": "results/fx2_e_payload_xz_v1/2026-06-01T142638.json",
+      "roundtrip_ok": true,
+      "score_percent": 200.7812
     }
-  },
-  "verdict": "Diagnostic candidate. The -e transform improves the 10MB backend payload, but the larger bundled decoder payload makes it worse than the direct xz-packaged fx2 wrapper at 10MB."
+  }
 }

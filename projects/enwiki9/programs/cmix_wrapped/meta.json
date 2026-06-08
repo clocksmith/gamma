@@ -1,7 +1,87 @@
 {
-  "id": "cmix_wrapped",
-  "description": "subprocess wrapper around the cmix binary on PATH; back-end-only measurement, binary not inlined",
   "added": "2026-05-09",
-  "deps": ["cmix on PATH (https://github.com/byronknoll/cmix)"],
-  "notes": "for score-honest submission, inline the cmix binary into program.py or ship C++ source compiled at decode time"
+  "deps": [
+    "cmix on PATH (https://github.com/byronknoll/cmix)"
+  ],
+  "description": "subprocess wrapper around the cmix binary on PATH; back-end-only measurement, binary not inlined",
+  "id": "cmix_wrapped",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "bits_per_byte": 2.078125,
+          "comparison": {
+            "archive_delta_vs_baseline": -146,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 536780
+          },
+          "compressed_size": 266,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 537393,
+          "program_id": "cmix_wrapped",
+          "program_size": 537127,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-06-07T22:47:09+00:00",
+      "proposed_status": "blocked_dependency",
+      "verdict": "blocked_dependency: driver_timeout at 250000."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "bits_per_byte": 2.078125,
+            "comparison": {
+              "archive_delta_vs_baseline": -146,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 536780
+            },
+            "compressed_size": 266,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 537393,
+            "program_id": "cmix_wrapped",
+            "program_size": 537127,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-06-07T22:47:09+00:00",
+        "proposed_status": "blocked_dependency",
+        "verdict": "blocked_dependency: driver_timeout at 250000."
+      }
+    ]
+  },
+  "notes": "for score-honest submission, inline the cmix binary into program.py or ship C++ source compiled at decode time",
+  "status": "blocked_dependency",
+  "verdict": "blocked_dependency: driver_timeout at 250000."
 }

@@ -1,0 +1,55 @@
+{
+  "id": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_bcj_um_v5",
+  "family": "fx2-sidecar-byte-split",
+  "status": "active",
+  "parent": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_bcj_um_v4",
+  "description": "Wrapper-only minimization of the ultra-min BCJ package. This variant removes explicit subprocess check/stderr options and relies on missing output files to surface failures.",
+  "build": {
+    "packaging": "Ultra-min Python wrapper with one-character payload files.",
+    "payload_files": {
+      "c": 150048,
+      "d": 100065,
+      "program.py": 524
+    },
+    "payload_delta_vs_parent": -34
+  },
+  "basis": "Same BCJ-filtered executable payload and same cmix-compressed dictionary as the parent package; only wrapper source changed.",
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "decoded_payload_identity": {
+      "decoded_cmix_sha256": "ded3ad0ad81df406a14ab0b5e08cc60907bc92fb33bde783e402ee9e587ad1fb",
+      "bcj_payload_sha256": "3c95b0b159296eae53c636bd22c0d87697e590d6cf88872672dca4a24150e0b1",
+      "dictionary_sha256": "ef62bdf002523de2039ed57acb4b51c6a54a7368199a44b8fac6188fd39abc8b",
+      "program_py_sha256": "fdb2b1f95b6c23d2aecb90c538393f3e2d05a09ad69ec20d1f66504829a4c1dc"
+    },
+    "1k_current_driver": {
+      "input_bytes": 1024,
+      "compressed_size": 260,
+      "program_size": 250637,
+      "hutter_score": 250897,
+      "compressed_sha256": "689d8d4941f5755004e910f11725ec52f0d1b4ba47650d5be736016447ac57cb",
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "output_behavior": "Bundled cmix stderr is inherited by the driver, so progress text is visible during scoring."
+    },
+    "64k_inherited_from_bcj_parent": {
+      "input_bytes": 65536,
+      "compressed_size": 13573,
+      "program_size": 250637,
+      "hutter_score": 264210,
+      "compressed_sha256": "c73f8da834dde2bd65b425f94f472c1f2b85a01b1d6fa011c48ae1c85da49271",
+      "roundtrip_basis": "Decoded cmix binary and dictionary payload are byte-identical to the current-driver verified BCJ parent package."
+    },
+    "1m_inherited_from_bcj_parent": {
+      "input_bytes": 1048576,
+      "compressed_size": 182361,
+      "program_size": 250637,
+      "hutter_score": 432998,
+      "compressed_sha256": "ffaa0354961bd12ecae6dff9cd43fef3c59b632c8ddd92ee12481bdb19d73f93",
+      "roundtrip_basis": "Decoded cmix binary and dictionary payload are byte-identical to the current-driver verified BCJ parent package."
+    }
+  },
+  "verdict": "Promote as the raw package-score leader for the old sidecar byte-split line. It wins by removing wrapper bytes, but its inherited subprocess stderr makes scorer logs noisy."
+}

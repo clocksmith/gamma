@@ -1,0 +1,95 @@
+{
+  "id": "fx2cmix_recovered_gcc_o3_struct_direct_match_mixers_xz_v1",
+  "family": "fx2-cmix-recovered",
+  "status": "measured_negative",
+  "parent": "fx2cmix_recovered_gcc_o3_struct_direct_match_xz_v1",
+  "description": "Recovered fx2-cmix payload with semantic MediaWiki sidecar direct/match contexts plus the old measured branch's sidecar mixer-conditioning contexts. Sidecar byte-distribution models are disabled.",
+  "build": {
+    "compiler": "g++",
+    "defines": [
+      "SEED=923",
+      "UPDATE_LIMIT=3000",
+      "FX2_STRUCT_SIDECAR=5",
+      "FX2_STRUCT_SIDECAR_WRT_AWARE=1",
+      "FX2_STRUCT_SIDECAR_MODELS=1",
+      "FX2_STRUCT_SIDECAR_MIXERS=1"
+    ],
+    "packaging": "Minified Python xz bootstrap with check-free cmix.xz and english.dic.xz payloads."
+  },
+  "hypothesis": "The recovered native sidecar port underperformed the older measured byte-split branch because it omitted sidecar mixer-conditioning contexts. This candidate restores those mixer contexts without enabling sidecar byte models.",
+  "deps": [],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "substrate",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "build": "recovered_gcc_o3_semantic_direct_match_mixers"
+          }
+        }
+      },
+      {
+        "id": "sidecar_models",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "semantic_mediawiki_contexts",
+            "direct_models": "enabled",
+            "match_models": "enabled",
+            "mixer_contexts": "enabled",
+            "byte_models": "disabled",
+            "stream_mutation": "none"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "sidecar_models",
+        "to": "substrate",
+        "stream": "bit_model_and_mixer_contexts"
+      }
+    ]
+  },
+  "measured": {
+    "1k_smoke": {
+      "data_size": 1024,
+      "compressed_size": 257,
+      "program_size": 301840,
+      "hutter_score": 302097,
+      "root_parent_compressed_size": 262,
+      "root_parent_program_size": 283628,
+      "root_parent_hutter_score": 283890,
+      "archive_delta_vs_root_parent": -5,
+      "score_delta_vs_root_parent": 18207,
+      "direct_parent_compressed_size": 260,
+      "direct_parent_program_size": 293264,
+      "direct_parent_hutter_score": 293524,
+      "archive_delta_vs_direct_parent": -3,
+      "score_delta_vs_direct_parent": 8573,
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    },
+    "64k_screen": {
+      "data_size": 65536,
+      "compressed_size": 13580,
+      "program_size": 301840,
+      "hutter_score": 315420,
+      "root_parent_compressed_size": 13585,
+      "root_parent_program_size": 283628,
+      "root_parent_hutter_score": 297213,
+      "archive_delta_vs_root_parent": -5,
+      "score_delta_vs_root_parent": 18207,
+      "direct_parent_compressed_size": 13577,
+      "direct_parent_program_size": 293264,
+      "direct_parent_hutter_score": 306841,
+      "archive_delta_vs_direct_parent": 3,
+      "score_delta_vs_direct_parent": 8579,
+      "roundtrip_ok": true,
+      "determinism_ok": true
+    }
+  },
+  "verdict": "Reject as a winner. Mixer conditioning improves the 1K smoke, but the 64K screen loses archive bytes against the direct/match-only branch while adding static payload."
+}

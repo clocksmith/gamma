@@ -1,7 +1,209 @@
 {
-  "id": "ast_macro_lzma_v1",
-  "description": "ast_opcode_lzma_v1 plus a bounded two-pass fixed-span macro layer, then external xz LZMA2 preset=9e with 1024MiB dictionary",
   "added": "2026-05-09",
-  "deps": ["xz CLI"],
-  "notes": "Track B prototype 2: fixed-size acyclic macro rules over the reversible opcode stream; definitions are serialized inline and counted"
+  "deps": [
+    "xz CLI"
+  ],
+  "description": "ast_opcode_lzma_v1 plus a bounded two-pass fixed-span macro layer, then external xz LZMA2 preset=9e with 1024MiB dictionary",
+  "id": "ast_macro_lzma_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "bits_per_byte": 3.4375,
+          "comparison": {
+            "archive_delta_vs_baseline": 28,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 10739
+          },
+          "compressed_size": 440,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 11352,
+          "program_id": "ast_macro_lzma_v1",
+          "program_size": 10912,
+          "program_stats": {
+            "admissible_rule_count": 44,
+            "candidate_count": 697,
+            "macro_definition_encoded_bytes": 171,
+            "macro_definition_source_bytes": 144,
+            "macro_definitions": 9,
+            "macro_encoded_len": 740,
+            "macro_literal_encoded_bytes": 503,
+            "macro_literal_source_bytes": 503,
+            "macro_reference_coverage_ppm": 352352,
+            "macro_reference_encoded_bytes": 66,
+            "macro_reference_source_bytes": 352,
+            "macro_references": 22,
+            "rule_count": 44,
+            "source_len": 999,
+            "total_spans": 984
+          },
+          "roundtrip_ok": true
+        },
+        {
+          "bits_per_byte": 2.474752,
+          "comparison": {
+            "archive_delta_vs_baseline": 1788,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 12499
+          },
+          "compressed_size": 77336,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 88248,
+          "program_id": "ast_macro_lzma_v1",
+          "program_size": 10912,
+          "program_stats": {
+            "admissible_rule_count": 2017,
+            "candidate_count": 65536,
+            "macro_definition_encoded_bytes": 10507,
+            "macro_definition_source_bytes": 8848,
+            "macro_definitions": 553,
+            "macro_encoded_len": 213745,
+            "macro_literal_encoded_bytes": 197864,
+            "macro_literal_source_bytes": 197864,
+            "macro_reference_coverage_ppm": 105018,
+            "macro_reference_encoded_bytes": 5374,
+            "macro_reference_source_bytes": 24256,
+            "macro_references": 1516,
+            "rule_count": 2017,
+            "source_len": 230968,
+            "total_spans": 230953
+          },
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-06-07T22:40:23+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: valid deterministic loser."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "bits_per_byte": 3.4375,
+            "comparison": {
+              "archive_delta_vs_baseline": 28,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 10739
+            },
+            "compressed_size": 440,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 11352,
+            "program_id": "ast_macro_lzma_v1",
+            "program_size": 10912,
+            "program_stats": {
+              "admissible_rule_count": 44,
+              "candidate_count": 697,
+              "macro_definition_encoded_bytes": 171,
+              "macro_definition_source_bytes": 144,
+              "macro_definitions": 9,
+              "macro_encoded_len": 740,
+              "macro_literal_encoded_bytes": 503,
+              "macro_literal_source_bytes": 503,
+              "macro_reference_coverage_ppm": 352352,
+              "macro_reference_encoded_bytes": 66,
+              "macro_reference_source_bytes": 352,
+              "macro_references": 22,
+              "rule_count": 44,
+              "source_len": 999,
+              "total_spans": 984
+            },
+            "roundtrip_ok": true
+          },
+          {
+            "bits_per_byte": 2.474752,
+            "comparison": {
+              "archive_delta_vs_baseline": 1788,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 12499
+            },
+            "compressed_size": 77336,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 88248,
+            "program_id": "ast_macro_lzma_v1",
+            "program_size": 10912,
+            "program_stats": {
+              "admissible_rule_count": 2017,
+              "candidate_count": 65536,
+              "macro_definition_encoded_bytes": 10507,
+              "macro_definition_source_bytes": 8848,
+              "macro_definitions": 553,
+              "macro_encoded_len": 213745,
+              "macro_literal_encoded_bytes": 197864,
+              "macro_literal_source_bytes": 197864,
+              "macro_reference_coverage_ppm": 105018,
+              "macro_reference_encoded_bytes": 5374,
+              "macro_reference_source_bytes": 24256,
+              "macro_references": 1516,
+              "rule_count": 2017,
+              "source_len": 230968,
+              "total_spans": 230953
+            },
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-06-07T22:40:23+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      }
+    ]
+  },
+  "notes": "Track B prototype 2: fixed-size acyclic macro rules over the reversible opcode stream; definitions are serialized inline and counted",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: valid deterministic loser."
 }

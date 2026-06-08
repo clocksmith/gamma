@@ -38,7 +38,9 @@ def counted_program_size(program_id: str) -> int | None:
         return None
     total = 0
     found = False
-    for path in root.rglob("*"):
+    for path in sorted(root.iterdir()):
+        if path.name in ("meta.json", "__pycache__") or path.name.startswith("."):
+            continue
         if path.is_file():
             total += path.stat().st_size
             found = True
@@ -127,6 +129,32 @@ def iter_meta_rows(program_id: str, obj: Any, source: str, inherited_scope: int 
             yield from iter_meta_rows(program_id, value, f"{source}[{index}]", inherited_scope)
 
 
+def iter_meta_proxy_rows(
+    program_id: str,
+    obj: Any,
+    source: str,
+    inherited_scope: int | None = None,
+) -> Iterable[dict[str, Any]]:
+    if isinstance(obj, dict):
+        scope = obj.get("input_bytes") or obj.get("data_size") or inherited_scope
+        archive = obj.get("xz_bytes")
+        if isinstance(scope, int) and isinstance(archive, int):
+            if obj.get("roundtrip") is not False and obj.get("roundtrip_ok") is not False:
+                yield {
+                    "program_id": program_id,
+                    "input_bytes": scope,
+                    "xz_bytes": archive,
+                    "roundtrip": obj.get("roundtrip"),
+                    "source": source,
+                }
+        for key, value in obj.items():
+            child_scope = detect_scope_key(str(key)) or scope if isinstance(scope, int) else detect_scope_key(str(key))
+            yield from iter_meta_proxy_rows(program_id, value, f"{source}:{key}", child_scope)
+    elif isinstance(obj, list):
+        for index, value in enumerate(obj):
+            yield from iter_meta_proxy_rows(program_id, value, f"{source}[{index}]", inherited_scope)
+
+
 def collect_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for path in RESULTS.rglob("*.jsonl"):
@@ -151,6 +179,16 @@ def collect_rows() -> list[dict[str, Any]]:
     return dedupe_rows(rows)
 
 
+def collect_proxy_rows() -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for path in PROGRAMS.glob("*/meta.json"):
+        obj = load_json(path)
+        if obj is None:
+            continue
+        rows.extend(iter_meta_proxy_rows(path.parent.name, obj, str(path.relative_to(ROOT))))
+    return dedupe_proxy_rows(rows)
+
+
 def dedupe_rows(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     best: dict[tuple[str, int], dict[str, Any]] = {}
     for row in rows:
@@ -164,6 +202,16 @@ def dedupe_rows(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
             best[key] = row
             continue
         if row_preference(row) > row_preference(old):
+            best[key] = row
+    return list(best.values())
+
+
+def dedupe_proxy_rows(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+    best: dict[tuple[str, int], dict[str, Any]] = {}
+    for row in rows:
+        key = (row["program_id"], row["input_bytes"])
+        old = best.get(key)
+        if old is None or row["xz_bytes"] < old["xz_bytes"]:
             best[key] = row
     return list(best.values())
 
@@ -291,7 +339,12 @@ def calibrated_fx2_forecast(program_id: str, forecast_100m: dict[str, Any]) -> d
     }
 
 
-def summarize(rows: list[dict[str, Any]], out_dir: pathlib.Path, top: int) -> None:
+def summarize(
+    rows: list[dict[str, Any]],
+    proxy_rows: list[dict[str, Any]],
+    out_dir: pathlib.Path,
+    top: int,
+) -> None:
     by_program: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         by_program[row["program_id"]].append(row)
@@ -357,6 +410,26 @@ def summarize(rows: list[dict[str, Any]], out_dir: pathlib.Path, top: int) -> No
         for row in frontier[:top]:
             lines.append(f"- `{row['program_id']}` archive={row['compressed_size']} program={row.get('program_size') or ''}")
 
+    if proxy_rows:
+        lines.append("")
+        lines.append("## Proxy Screens")
+        lines.append("")
+        lines.append("These rows are LZMA screens over transformed raw XML. They are not Hutter scores and require exact driver confirmation before promotion.")
+        proxy_by_scope: dict[int, list[dict[str, Any]]] = defaultdict(list)
+        for row in proxy_rows:
+            proxy_by_scope[row["input_bytes"]].append(row)
+        for scope in sorted(proxy_by_scope):
+            scoped = sorted(proxy_by_scope[scope], key=lambda row: row["xz_bytes"])
+            lines.append("")
+            lines.append(f"### scope={scope}")
+            lines.append("")
+            lines.append("| rank | program | xz_bytes | source |")
+            lines.append("|---:|---|---:|---|")
+            for rank, row in enumerate(scoped[:top], 1):
+                lines.append(
+                    f"| {rank} | `{row['program_id']}` | {row['xz_bytes']} | {row['source']} |"
+                )
+
     lines.append("")
     lines.append("## Forecasts")
     lines.append("")
@@ -388,6 +461,9 @@ def summarize(rows: list[dict[str, Any]], out_dir: pathlib.Path, top: int) -> No
     with (out_dir / "rows.jsonl").open("w") as fh:
         for row in sorted(rows, key=lambda item: (item["input_bytes"], item["compressed_size"], item["program_id"])):
             fh.write(json.dumps(row, sort_keys=True) + "\n")
+    with (out_dir / "proxy_rows.jsonl").open("w") as fh:
+        for row in sorted(proxy_rows, key=lambda item: (item["input_bytes"], item["xz_bytes"], item["program_id"])):
+            fh.write(json.dumps(row, sort_keys=True) + "\n")
     with (out_dir / "forecasts.jsonl").open("w") as fh:
         for row in forecasts:
             fh.write(json.dumps(row, sort_keys=True) + "\n")
@@ -399,8 +475,12 @@ def main() -> int:
     parser.add_argument("--top", type=int, default=25)
     args = parser.parse_args()
     rows = collect_rows()
-    summarize(rows, args.out_dir, args.top)
-    print(f"[forecast] rows={len(rows)} summary={args.out_dir / 'summary.md'}")
+    proxy_rows = collect_proxy_rows()
+    summarize(rows, proxy_rows, args.out_dir, args.top)
+    print(
+        f"[forecast] rows={len(rows)} proxy_rows={len(proxy_rows)} "
+        f"summary={args.out_dir / 'summary.md'}"
+    )
     return 0
 
 

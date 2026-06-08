@@ -1,7 +1,143 @@
 {
-  "id": "dedup_v1",
-  "description": "fixed 256-byte chunk dedup then lzma -9e; targets long-range cross-article duplicates outside lzma's match window",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "expected to win marginally on enwik9 (boilerplate sections); compete with schema preprocessor for the same redundancy"
+  "description": "fixed 256-byte chunk dedup then lzma -9e; targets long-range cross-article duplicates outside lzma's match window",
+  "id": "dedup_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "bits_per_byte": 3.3125,
+          "comparison": {
+            "archive_delta_vs_baseline": 12,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 2468
+          },
+          "compressed_size": 424,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 3081,
+          "program_id": "dedup_v1",
+          "program_size": 2657,
+          "program_stats": null,
+          "roundtrip_ok": true
+        },
+        {
+          "bits_per_byte": 2.496,
+          "comparison": {
+            "archive_delta_vs_baseline": 2452,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 4908
+          },
+          "compressed_size": 78000,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 80657,
+          "program_id": "dedup_v1",
+          "program_size": 2657,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-06-07T22:47:55+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: valid deterministic loser."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "bits_per_byte": 3.3125,
+            "comparison": {
+              "archive_delta_vs_baseline": 12,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 2468
+            },
+            "compressed_size": 424,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 3081,
+            "program_id": "dedup_v1",
+            "program_size": 2657,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "bits_per_byte": 2.496,
+            "comparison": {
+              "archive_delta_vs_baseline": 2452,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 4908
+            },
+            "compressed_size": 78000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 80657,
+            "program_id": "dedup_v1",
+            "program_size": 2657,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-06-07T22:47:55+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      }
+    ]
+  },
+  "notes": "expected to win marginally on enwik9 (boilerplate sections); compete with schema preprocessor for the same redundancy",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: valid deterministic loser."
 }

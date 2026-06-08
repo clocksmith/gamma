@@ -1,0 +1,56 @@
+{
+  "id": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+  "family": "fx2-geometry-order",
+  "status": "candidate",
+  "parent": "fx2_geometry_sort_dictcmix_xz_min_v3",
+  "description": "Raw-deflate Python payload wrapper for the measured 100MB geometry-order frontier.",
+  "build": {
+    "packaging": "71-byte zlib loader plus raw-deflate Python transform payload.",
+    "payload_files": {
+      "c": 81840,
+      "d": 100208,
+      "p": 889,
+      "program.py": 71
+    },
+    "payload_delta_vs_parent": -625
+  },
+  "basis": "The decompressed Python body is byte-for-byte the parent program.py; backend and dictionary payloads are unchanged.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "measured": {
+    "payload_identity": {
+      "backend_payload_sha256": "d4ce2b06ca1d6ed816b5cc91927102f75bafb68e8c055879670319966be48795",
+      "dictionary_payload_sha256": "a5565e75710dcdd758f852e4492a26d3306f886bb2f1facd7b7edf02130665fa",
+      "python_payload_sha256": "1edc8c568fff0fdce42762b2283157d48cc28aa9f8011f21474bd533a58f95aa",
+      "program_py_sha256": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    },
+    "ordered_stream_identity": {
+      "parent": "fx2_geometry_sort_dictcmix_xz_min_v3",
+      "prefixes": [
+        {
+          "input_bytes": 10000000,
+          "ordered_sha256": "4f029e826cb826adecea94adfde8e548ba8376bca93dce9ae1080d7c1f0cc53b",
+          "parent_equal": true,
+          "restore_ok": true
+        }
+      ]
+    },
+    "10m_inherited_from_parent": {
+      "input_bytes": 10000000,
+      "compressed_size": 1642858,
+      "program_size": 183008,
+      "hutter_score": 1825866,
+      "roundtrip_basis": "Decompressed Python body, backend payload, dictionary payload, and ordered stream match the verified geometry parent package."
+    },
+    "100m_inherited_from_parent": {
+      "input_bytes": 100000000,
+      "compressed_size": 14857781,
+      "program_size": 183008,
+      "hutter_score": 15040789,
+      "roundtrip_basis": "Decompressed Python body, backend payload, dictionary payload, and ordered stream match the verified geometry parent package."
+    }
+  },
+  "verdict": "Promote after current-driver smoke. Inherited evidence makes this the smallest package form of the measured 100MB geometry frontier."
+}
