@@ -4,10 +4,10 @@ index 5eb75b2..a1b7b38 100644
 +++ b/makefile
 @@ -1,8 +1,9 @@
  CC = clang++-17
-
+ 
  ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 +FP_FAST_FLAG:=$(shell $(CC) --version 2>/dev/null | grep -qi clang && echo -ffp-model=fast || echo -ffast-math)
-+
+ 
 -CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
 +CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
  
@@ -91,7 +91,7 @@ index f75b3ca..7429e2e 100644
 +  }
 +  return b;
  }
-+
+ 
 +static unsigned int SideClass(unsigned char c) {
 +  if (c >= 'A' && c <= 'Z') return 1;
 +  if (c >= 'a' && c <= 'z') return 2;
@@ -553,6 +553,80 @@ index f4df691..6c8b40f 100644
    lstm_->SetInput(inputs_);
    inputs_ = 0;
    const auto& output = lstm_->Perceive(byte_map_[byte_]);
+diff --git a/src/mixer/mixer.cpp b/src/mixer/mixer.cpp
+index ecd752d..603c3b4 100644
+--- a/src/mixer/mixer.cpp
++++ b/src/mixer/mixer.cpp
+@@ -6,6 +6,11 @@
+ #include <utility>
+ #include <math.h>
+ #include <sys/resource.h>
++
++#ifndef FX2_MIXER_CONTEXT_LIMIT
++#define FX2_MIXER_CONTEXT_LIMIT 10000ULL
++#endif
++
+ Mixer::Mixer(const std::valarray<float>& inputs,
+     const std::valarray<float>& extra_inputs,
+     const unsigned long long& context, float learning_rate,
+@@ -17,7 +22,7 @@ Mixer::Mixer(const std::valarray<float>& inputs,
+ 
+ ContextData* Mixer::GetContextData() {
+   ContextData* data;
+-  unsigned long long limit = 10000;
++  unsigned long long limit = FX2_MIXER_CONTEXT_LIMIT;
+   auto it = context_map_.find(context_); 
+   if (context_map_.size() >= limit && it == context_map_.end()) {
+     data = &context_base_;
+@@ -87,4 +92,3 @@ void Mixer::Perceive(int bit) {
+   }*/
+ 
+ }
+-
+diff --git a/src/mixer/sse.cpp b/src/mixer/sse.cpp
+index 78f701b..3e18e65 100644
+--- a/src/mixer/sse.cpp
++++ b/src/mixer/sse.cpp
+@@ -5,6 +5,10 @@
+ 
+ #include <math.h>
+ 
++#ifndef FX2_SSE_WR_SCALE_PPM
++#define FX2_SSE_WR_SCALE_PPM 1000
++#endif
++
+ namespace SSE_sh {
+ 
+ typedef unsigned short word;
+@@ -79,6 +83,13 @@ double log2( double a ) { return M_LOG2E*log(a); }
+ 
+ double exp2( double a ) { return exp( a/M_LOG2E ); }
+ 
++int ScaledWriteRate(int wr) {
++  int scaled = (wr * FX2_SSE_WR_SCALE_PPM + 500) / 1000;
++  if (scaled < 1) return 1;
++  if (scaled > SCALE-1) return SCALE-1;
++  return scaled;
++}
++
+ double st( double p ) { return log2((1-p)/p); }
+ 
+ double sq( double p ) { return 1.0/(1.0+exp2(p)); }
+@@ -289,10 +300,12 @@ uint M_Estimate( uint p ) {
+ }
+ 
+ void M_Update( uint bit ) {
+-  s6[sm6x].SSE_Update( bit, M_sm6wrA*128+M_sm6wrB, su6 );
++  s6[sm6x].SSE_Update(
++      bit, ScaledWriteRate(M_sm6wrA*128+M_sm6wrB), su6 );
+   x1[mix1].Update( bit, mix1_s0,mix1_s1, M_x1wr, mix1_p );
+ 
+-  s7[sm7x].SSE_Update( bit, M_sm6wrA*128+M_sm7wrB, su7 );
++  s7[sm7x].SSE_Update(
++      bit, ScaledWriteRate(M_sm6wrA*128+M_sm7wrB), su7 );
+   x2[mix2].Update( bit, mix2_s0,mix2_s1, M_x2wr, mix2_p );
+ 
+   M_j += M_j+bit;
 diff --git a/src/models/byte-model.h b/src/models/byte-model.h
 index 11af112..7df7c67 100644
 --- a/src/models/byte-model.h
@@ -599,18 +673,30 @@ index dcc832c..3d98ad0 100644
  } // namespace PPMD
 -
 diff --git a/src/predictor.cpp b/src/predictor.cpp
-index 503edfb..7915071 100644
+index 503edfb..1380933 100644
 --- a/src/predictor.cpp
 +++ b/src/predictor.cpp
-@@ -3,6 +3,7 @@
+@@ -3,6 +3,19 @@
  #include <stdlib.h>
  #include <stdio.h>
  #include <cstdlib>
 +#include <cmath>
++
++#ifndef FX2_MIXER0_LR_SCALE
++#define FX2_MIXER0_LR_SCALE 1.0f
++#endif
++
++#ifndef FX2_MIXER1_LR_SCALE
++#define FX2_MIXER1_LR_SCALE 1.0f
++#endif
++
++#ifndef FX2_LSTM_LR_SCALE
++#define FX2_LSTM_LR_SCALE 1.0f
++#endif
  
  Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
      sigmoid_(100001), vocab_(vocab) {
-@@ -11,6 +12,12 @@ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
+@@ -11,6 +24,12 @@ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
    AddWord();
    AddMatch();
    AddDoubleIndirect();
@@ -623,7 +709,7 @@ index 503edfb..7915071 100644
    AddMixers();
    auxiliary_size_ = 2;
  }
-@@ -27,6 +34,9 @@ unsigned long long Predictor::GetNumModels() {
+@@ -27,19 +46,24 @@ unsigned long long Predictor::GetNumModels() {
    num += indirect_r_models_.size();
    num += byte_model_->NumOutputs();
    num += byte_mixer_->NumOutputs();
@@ -633,7 +719,24 @@ index 503edfb..7915071 100644
    return num;
  }
  
-@@ -120,6 +130,50 @@ void Predictor::AddDoubleIndirect() {
+ void Predictor::AddMixer(int layer, const unsigned long long& context,
+     float learning_rate) {
++  const float tuned_learning_rate =
++      learning_rate * (layer == 0 ? FX2_MIXER0_LR_SCALE : FX2_MIXER1_LR_SCALE);
+   if (layer == 0) {
+     mixer_0_.emplace_back(
+         layers_[layer].Inputs(), layers_[layer].ExtraInputs(), context,
+-      learning_rate, mixer_0_.size());
++      tuned_learning_rate, mixer_0_.size());
+   } else {
+     mixer_1_.emplace_back(
+         layers_[layer].Inputs(), layers_[layer].ExtraInputs(), context,
+-      learning_rate, mixer_1_.size());
++      tuned_learning_rate, mixer_1_.size());
+   }
+ }
+ 
+@@ -120,6 +144,50 @@ void Predictor::AddDoubleIndirect() {
    indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind3,  manager_.bit_context_, delta, manager_.shared_map_);
    indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind5,  manager_.bit_context_, delta, manager_.shared_map_);
  }
@@ -684,16 +787,19 @@ index 503edfb..7915071 100644
  unsigned int Discretize(float p) {
    return 1 + 4094 * p;
  }
-@@ -128,7 +182,7 @@ void Predictor::AddMixers() {
+@@ -128,8 +196,9 @@ void Predictor::AddMixers() {
    for (unsigned int i = 0; i < vocab_.size(); ++i) {
      if (vocab_[i]) ++vocab_size;
    }
 -  byte_mixer_.emplace(1, manager_.bit_context_, vocab_,
+-      vocab_size, new Lstm(vocab_size, vocab_size, 200, 1, 128, 0.03, 10));
 +  byte_mixer_.emplace(1 + sidecar_byte_models_.size(), manager_.bit_context_, vocab_,
-       vocab_size, new Lstm(vocab_size, vocab_size, 200, 1, 128, 0.03, 10));
++      vocab_size, new Lstm(
++          vocab_size, vocab_size, 200, 1, 128, 0.03 * FX2_LSTM_LR_SCALE, 10));
  
    for (int i = 0; i < 2; ++i) {
-@@ -163,15 +217,181 @@ void Predictor::AddMixers() {
+     layers_.emplace_back(sigmoid_,
+@@ -163,15 +232,181 @@ void Predictor::AddMixers() {
    AddMixer(0, manager_.mx16, 0.005);
    AddMixer(0, manager_.mx14, 0.005);
    AddMixer(0, manager_.mx15, 0.005);
@@ -875,7 +981,7 @@ index 503edfb..7915071 100644
  int lstmpr=0, lstmex=0;
  float byte_mixer_output=0.0f;
  float Predictor::Predict() {
-@@ -219,6 +439,9 @@ float Predictor::Predict() {
+@@ -219,6 +454,9 @@ float Predictor::Predict() {
      }
    }
    layers_[0].SetInput(input_index++, byte_model_->Predict()[0]);
@@ -885,7 +991,7 @@ index 503edfb..7915071 100644
  
    float byte_mixer_override = -1;
  
-@@ -241,8 +464,19 @@ float Predictor::Predict() {
+@@ -241,8 +479,19 @@ float Predictor::Predict() {
    float p = Sigmoid::Logistic(mixer_1_[0].Mix());
    p = sse_.Predict(p);
    if (byte_mixer_override >= 0) {
@@ -906,7 +1012,7 @@ index 503edfb..7915071 100644
    return p;
  }
  
-@@ -261,8 +495,14 @@ void Predictor::Perceive(int bit) {
+@@ -261,8 +510,14 @@ void Predictor::Perceive(int bit) {
    for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
      indirect_r_models_[i].Perceive(bit);
    }
@@ -921,7 +1027,7 @@ index 503edfb..7915071 100644
  
    byte_mixer_->Perceive(bit);
  
-@@ -274,6 +514,9 @@ void Predictor::Perceive(int bit) {
+@@ -274,6 +529,9 @@ void Predictor::Perceive(int bit) {
    }
  
    sse_.Perceive(bit);
@@ -931,7 +1037,7 @@ index 503edfb..7915071 100644
  
    bool byte_update = false;
    if (manager_.bit_context_ >= 128) byte_update = true;
-@@ -302,6 +545,13 @@ void Predictor::Perceive(int bit) {
+@@ -302,6 +560,13 @@ void Predictor::Perceive(int bit) {
      for (unsigned int j = 0; j < 256; ++j) {
        byte_mixer_->SetInput(j,p[j]);
      }
@@ -945,7 +1051,7 @@ index 503edfb..7915071 100644
  
      byte_mixer_->ByteUpdate();
     
-@@ -366,7 +616,9 @@ void Predictor::Pretrain(int bit) {
+@@ -366,7 +631,9 @@ void Predictor::Pretrain(int bit) {
      for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
        indirect_r_models_[i].ByteUpdate();
      }

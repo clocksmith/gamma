@@ -1,10 +1,10 @@
 {
   "id": "fx2_gepa_template_link_cat_suffix_size_dictcmix_zlibpy_v1",
   "family": "fx2-gepa-order",
-  "status": "candidate",
+  "status": "measured_negative",
   "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
   "description": "Self-contained fx2 candidate using a GEPA-derived reversible page-order key.",
-  "hypothesis": "Template/topic/minhash/shape page adjacency can lower archive bytes without storing an order table.",
+  "hypothesis": "Template/link/category/title-suffix page adjacency can lower archive bytes without storing an order table.",
   "deps": [],
   "order_fields": [
     "kind",
@@ -98,8 +98,36 @@
       "roundtrip_ok": true,
       "determinism": true,
       "compressed_sha256": "f23a87f9299b71f33a8b8af67243517222bdc123ed1a32566d4893b5d4ac1f73"
+    },
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_gepa_template_link_cat_suffix_size_dictcmix_zlibpy_v1/2026-06-07T223352.json",
+      "data_size": 250000,
+      "compressed_size": 52020,
+      "program_size": 183968,
+      "hutter_score": 235988,
+      "bits_per_byte": 1.66464,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "310615ccf5c17d6f80bb0319d7bf857fd8a01340f7a24ef934bfd38db278e080",
+      "archive_delta_vs_title_order_250k": -112,
+      "score_delta_vs_title_order_250k": 843,
+      "scale_verdict": "archive_positive_score_negative_at_250k"
+    },
+    "1m_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_gepa_template_link_cat_suffix_size_dictcmix_zlibpy_v1/2026-06-07T232752.json",
+      "data_size": 1000000,
+      "compressed_size": 191856,
+      "program_size": 183968,
+      "hutter_score": 375824,
+      "bits_per_byte": 1.534848,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "8745c5e4e2b1a53d659b954901227055977eadda63f7b8c7f530a614c23cfa50",
+      "archive_delta_vs_title_order_1m": 159,
+      "score_delta_vs_title_order_1m": 1114,
+      "scale_verdict": "scale_negative_at_1m"
     }
   },
-  "latest_result": "projects/enwiki9/results/fx2_gepa_template_link_cat_suffix_size_dictcmix_zlibpy_v1/2026-06-07T221623.json",
-  "verdict": "Exact 1K driver gate passed roundtrip and determinism. Keep as a candidate for the next gate; no scale verdict yet."
+  "latest_result": "projects/enwiki9/results/fx2_gepa_template_link_cat_suffix_size_dictcmix_zlibpy_v1/2026-06-07T232752.json",
+  "verdict": "Measured negative. The GEPA link/category order saved 112 archive bytes at 250K, but leaked at 1M, landing 159 archive bytes and 1114 score bytes worse than the title-order control."
 }

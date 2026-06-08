@@ -1,6 +1,36 @@
 {
-  "id": "opcode_typed_anchor_bitmix_v1",
-  "description": "opcode_typed_anchor architecture with the PPMC-order-5 literal edge replaced by a bitwise mixer over 10 typed/graph context families (bit-prefix + byte orders 0-3, word tails, slot/field/char-class, slot+last-byte, column bucket) with stretch/squash log-odds averaging and a 16-bucket SSE correction. GCOPY (raw 4-byte hash match) and SCOPY (typed-anchor chain match) edges retained. Single arithmetic ledger. Target: beat opcode_typed_anchor_ppm_o5_v1 S=2,436,233 at 10MB.",
   "added": "2026-05-13",
-  "deps": []
+  "deps": [],
+  "description": "opcode_typed_anchor architecture with the PPMC-order-5 literal edge replaced by a bitwise mixer over 10 typed/graph context families (bit-prefix + byte orders 0-3, word tails, slot/field/char-class, slot+last-byte, column bucket) with stretch/squash log-odds averaging and a 16-bucket SSE correction. GCOPY (raw 4-byte hash match) and SCOPY (typed-anchor chain match) edges retained. Single arithmetic ledger. Target: beat opcode_typed_anchor_ppm_o5_v1 S=2,436,233 at 10MB.",
+  "id": "opcode_typed_anchor_bitmix_v1",
+  "measured": {
+    "lane0_contract": {
+      "contract_status": "ok",
+      "generated_at": "2026-06-08T07:42:00+00:00",
+      "proposed_status": "benchmark_or_retire",
+      "reasons": [],
+      "verdict": "program.py imports and exposes compress/decompress."
+    },
+    "lane0_contract_checks": [
+      {
+        "contract_status": "missing_callable",
+        "generated_at": "2026-06-08T07:39:05+00:00",
+        "proposed_status": "retired",
+        "reasons": [
+          "missing_compress",
+          "missing_decompress"
+        ],
+        "verdict": "Retire: missing callable(s): compress, decompress."
+      },
+      {
+        "contract_status": "ok",
+        "generated_at": "2026-06-08T07:42:00+00:00",
+        "proposed_status": "benchmark_or_retire",
+        "reasons": [],
+        "verdict": "program.py imports and exposes compress/decompress."
+      }
+    ]
+  },
+  "status": "benchmark_or_retire",
+  "verdict": "program.py imports and exposes compress/decompress."
 }

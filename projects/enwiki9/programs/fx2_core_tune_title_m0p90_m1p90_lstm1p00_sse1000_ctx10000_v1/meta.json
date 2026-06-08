@@ -1,0 +1,131 @@
+{
+  "id": "fx2_core_tune_title_m0p90_m1p90_lstm1p00_sse1000_ctx10000_v1",
+  "family": "fx2-core-tuning",
+  "status": "measured_negative",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "description": "Title-order fx2 package with compile-time core predictor tuning knobs applied to the rebuilt local fx2-cmix substrate.",
+  "build": {
+    "source": "projects/enwiki9/external/fx2-cmix",
+    "command": "make CC=g++ CFLAGS_DEFINES='<defines>' clean cmix",
+    "defines": [
+      "-DSEED=923",
+      "-DUPDATE_LIMIT=3000",
+      "-DFX2_MIXER_CONTEXT_LIMIT=10000",
+      "-DFX2_MIXER0_LR_SCALE=0.9f",
+      "-DFX2_MIXER1_LR_SCALE=0.9f",
+      "-DFX2_LSTM_LR_SCALE=1.0f",
+      "-DFX2_SSE_WR_SCALE_PPM=1000"
+    ],
+    "wrapper_template": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+    "payload_files": {
+      "c": 138248,
+      "d": 100097,
+      "p": 894,
+      "program.py": 71
+    },
+    "program_size": 239310,
+    "payload_sha256": {
+      "c": "993e440a6bbbc37b67a3baad30c43fe83a3789d3b5904ab5a792e88a7ea87de7",
+      "d": "87885037b1d8281caa9e2e0e3b222f1974ffd3574ae8291f62a061414834a640",
+      "p": "80f546d01590d568e73d6e5b4d6bdaf26aed45784dee0589bf7bd3451ec617f8",
+      "program.py": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    }
+  },
+  "hypothesis": "Changing mixer adaptation, context-map capacity, LSTM rate, and SSE update rate can reduce archive bytes directly without storing new side information.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "geometry_title"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "core_tuning",
+        "type": "parameter_controller",
+        "payload": {
+          "discrete": {
+            "substrate": "fx2-cmix",
+            "compiler": "g++"
+          },
+          "continuous": {
+            "mixer_context_limit": 10000,
+            "mixer0_lr_scale": 0.9,
+            "mixer1_lr_scale": 0.9,
+            "lstm_lr_scale": 1.0,
+            "sse_wr_scale_ppm": 1000
+          },
+          "structural": {}
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "dictionary_codec": "cmix_self_compressed",
+            "binary_codec": "xz_extreme_check_none"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      },
+      {
+        "from": "core_tuning",
+        "to": "backend",
+        "stream": "compiled_constants"
+      }
+    ]
+  },
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p90_m1p90_lstm1p00_sse1000_ctx10000_v1/2026-06-08T001610.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45368,
+      "program_size": 239310,
+      "hutter_score": 284678,
+      "bits_per_byte": 1.451776,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "7e0f0bf812dcfea69898a1b47e36ec21977e03ce61d2edaa48be262c5fb5f37d",
+      "compress_time_s": 201.7524,
+      "decompress_time_s": 88.0552
+    },
+    "1k_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p90_m1p90_lstm1p00_sse1000_ctx10000_v1/2026-06-08T000946.json",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 267,
+      "program_size": 239310,
+      "hutter_score": 239577,
+      "bits_per_byte": 2.085938,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "af3836fc47469937d36732c40295401aa1f6066366ed7cdec3fe0adc13781c76",
+      "compress_time_s": 127.9883,
+      "decompress_time_s": 14.0758
+    }
+  },
+  "verdict": "Reject this coordinate before 1M: exact 1K and 250K gates are deterministic but both lose archive bytes versus the m0.95/m1p95 seed.",
+  "latest_result": "projects/enwiki9/results/fx2_core_tune_title_m0p90_m1p90_lstm1p00_sse1000_ctx10000_v1/2026-06-08T001610.json"
+}

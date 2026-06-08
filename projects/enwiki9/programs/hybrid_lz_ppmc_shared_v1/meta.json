@@ -1,6 +1,36 @@
 {
-  "id": "hybrid_lz_ppmc_shared_v1",
-  "description": "Shared-state LZ + PPMC arithmetic hybrid. PPMC walks every byte of the reconstructed stream; only literal events emit PPMC arithmetic bits. Parser uses precomputed PPMC literal costs to decide match vs literal. Match coder: range-coded len/dist with log2 bucket + bit residuals. Single arithmetic coder for all events. Roundtrip-safe.",
   "added": "2026-05-10",
-  "deps": []
+  "deps": [],
+  "description": "Shared-state LZ + PPMC arithmetic hybrid. PPMC walks every byte of the reconstructed stream; only literal events emit PPMC arithmetic bits. Parser uses precomputed PPMC literal costs to decide match vs literal. Match coder: range-coded len/dist with log2 bucket + bit residuals. Single arithmetic coder for all events. Roundtrip-safe.",
+  "id": "hybrid_lz_ppmc_shared_v1",
+  "measured": {
+    "lane0_contract": {
+      "contract_status": "ok",
+      "generated_at": "2026-06-08T07:42:00+00:00",
+      "proposed_status": "benchmark_or_retire",
+      "reasons": [],
+      "verdict": "program.py imports and exposes compress/decompress."
+    },
+    "lane0_contract_checks": [
+      {
+        "contract_status": "missing_callable",
+        "generated_at": "2026-06-08T07:39:05+00:00",
+        "proposed_status": "retired",
+        "reasons": [
+          "missing_compress",
+          "missing_decompress"
+        ],
+        "verdict": "Retire: missing callable(s): compress, decompress."
+      },
+      {
+        "contract_status": "ok",
+        "generated_at": "2026-06-08T07:42:00+00:00",
+        "proposed_status": "benchmark_or_retire",
+        "reasons": [],
+        "verdict": "program.py imports and exposes compress/decompress."
+      }
+    ]
+  },
+  "status": "benchmark_or_retire",
+  "verdict": "program.py imports and exposes compress/decompress."
 }

@@ -1,6 +1,36 @@
 {
-  "id": "typed_receipt_v1",
-  "description": "opcode_typed_anchor_ppm_o5 architecture extended with a fourth edge: ERCPT receipt — decoder-learned entity table (link targets captured from [[X]] / [[X|...]], plus titles) referenced by recency rank. Recipient pushed at structural boundaries during st.up; encoder finds longest entity prefix-match at position i and chooses ERCPT vs LIT/raw/chain by the unified -log2 P(edge) ledger. Targets cross-page entity recurrence beyond the order-5 PPMC window.",
   "added": "2026-05-13",
-  "deps": []
+  "deps": [],
+  "description": "opcode_typed_anchor_ppm_o5 architecture extended with a fourth edge: ERCPT receipt \u2014 decoder-learned entity table (link targets captured from [[X]] / [[X|...]], plus titles) referenced by recency rank. Recipient pushed at structural boundaries during st.up; encoder finds longest entity prefix-match at position i and chooses ERCPT vs LIT/raw/chain by the unified -log2 P(edge) ledger. Targets cross-page entity recurrence beyond the order-5 PPMC window.",
+  "id": "typed_receipt_v1",
+  "measured": {
+    "lane0_contract": {
+      "contract_status": "ok",
+      "generated_at": "2026-06-08T07:42:00+00:00",
+      "proposed_status": "benchmark_or_retire",
+      "reasons": [],
+      "verdict": "program.py imports and exposes compress/decompress."
+    },
+    "lane0_contract_checks": [
+      {
+        "contract_status": "missing_callable",
+        "generated_at": "2026-06-08T07:39:33+00:00",
+        "proposed_status": "retired",
+        "reasons": [
+          "missing_compress",
+          "missing_decompress"
+        ],
+        "verdict": "Retire: missing callable(s): compress, decompress."
+      },
+      {
+        "contract_status": "ok",
+        "generated_at": "2026-06-08T07:42:00+00:00",
+        "proposed_status": "benchmark_or_retire",
+        "reasons": [],
+        "verdict": "program.py imports and exposes compress/decompress."
+      }
+    ]
+  },
+  "status": "benchmark_or_retire",
+  "verdict": "program.py imports and exposes compress/decompress."
 }
