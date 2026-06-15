@@ -3,5 +3,28 @@
   "description": "online reversible wiki-link table followed by cmix; tests entity self-reference on cmix",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "cmix.bin.gz is vendored beside program.py and counted by the harness."
+  "notes": "cmix.bin.gz is vendored beside program.py and counted by the harness.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_title_table_cmix_v1/2026-06-08T173237.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 54033,
+      "program_size": 402019,
+      "hutter_score": 456052,
+      "bits_per_byte": 1.729056,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "7603151d94c251afa073e1c5080a04d5267fdb7dbb10a591edec06690583c522",
+      "compress_time_s": 538.0881,
+      "decompress_time_s": 530.1726,
+      "notes": [
+        "250K archive 54033, program 402019, S 456052; yellow_tucan_numeric_cmix_v1 archive 52545, S 454616."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_title_table_cmix_v1/2026-06-08T173237.json",
+  "status": "measured_negative",
+  "verdict": "Measured negative: deterministic embedded-cmix title-table transform is archive-dense but worse than yellow_tucan_numeric_cmix_v1 and not competitive with fx2/dictcmix controls."
 }

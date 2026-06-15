@@ -1,0 +1,132 @@
+{
+  "id": "fx2_core_tune_title_mctx9000_m0p100_m1p95_lstm1p00_sse950_v1",
+  "family": "fx2-core-tuning",
+  "status": "measured_negative",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "description": "Title-order fx2 package with compile-time core predictor tuning knobs applied to the rebuilt local fx2-cmix substrate.",
+  "build": {
+    "source": "projects/enwiki9/external/fx2-cmix",
+    "command": "make CC=g++ CFLAGS_DEFINES='<defines>' clean cmix",
+    "defines": [
+      "-DSEED=923",
+      "-DUPDATE_LIMIT=3000",
+      "-DFX2_MIXER_CONTEXT_LIMIT=9000",
+      "-DFX2_MIXER0_LR_SCALE=1.0f",
+      "-DFX2_MIXER1_LR_SCALE=0.95f",
+      "-DFX2_LSTM_LR_SCALE=1.0f",
+      "-DFX2_SSE_WR_SCALE_PPM=950"
+    ],
+    "compiler": "g++",
+    "wrapper_template": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+    "payload_files": {
+      "c": 138312,
+      "d": 100098,
+      "p": 894,
+      "program.py": 71
+    },
+    "program_size": 239375,
+    "payload_sha256": {
+      "c": "6d2059c6b6ce4c8ec892c2ca5d7d664378da9f7a5d50f0c3bac9d0f2fc231f3b",
+      "d": "ae0db5a5b300f1795e60af8cf0aa059baae77083a2c5305e8aa05466689fd33a",
+      "p": "80f546d01590d568e73d6e5b4d6bdaf26aed45784dee0589bf7bd3451ec617f8",
+      "program.py": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    }
+  },
+  "hypothesis": "Changing mixer adaptation, context-map capacity, LSTM rate, and SSE update rate can reduce archive bytes directly without storing new side information.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "geometry_title"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "core_tuning",
+        "type": "parameter_controller",
+        "payload": {
+          "discrete": {
+            "substrate": "fx2-cmix",
+            "compiler": "g++"
+          },
+          "continuous": {
+            "mixer_context_limit": 9000,
+            "mixer0_lr_scale": 1.0,
+            "mixer1_lr_scale": 0.95,
+            "lstm_lr_scale": 1.0,
+            "sse_wr_scale_ppm": 950
+          },
+          "structural": {}
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "dictionary_codec": "cmix_self_compressed",
+            "binary_codec": "xz_extreme_check_none"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      },
+      {
+        "from": "core_tuning",
+        "to": "backend",
+        "stream": "compiled_constants"
+      }
+    ]
+  },
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_mctx9000_m0p100_m1p95_lstm1p00_sse950_v1/2026-06-08T084254.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45360,
+      "program_size": 239375,
+      "hutter_score": 284735,
+      "bits_per_byte": 1.45152,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "78a70a14efa9cf05fab93b754311cc851a522fdad6728b7a29b45789eb25f460",
+      "compress_time_s": 201.884,
+      "decompress_time_s": 88.914
+    },
+    "1m_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_mctx9000_m0p100_m1p95_lstm1p00_sse950_v1/2026-06-08T090146.json",
+      "data_size": 1000000,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 175210,
+      "program_size": 239375,
+      "hutter_score": 414585,
+      "bits_per_byte": 1.40168,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "bc66c5c1735052a60c17c6f2f0367605d2288d3dc7d452c643d846bb0405cf28",
+      "compress_time_s": 427.0068,
+      "decompress_time_s": 360.5169
+    }
+  },
+  "verdict": "Exact 1m_driver_gate failed promotion: roundtrip_deterministic=True, archive=175210, ceiling=175204.",
+  "latest_result": "projects/enwiki9/results/fx2_core_tune_title_mctx9000_m0p100_m1p95_lstm1p00_sse950_v1/2026-06-08T090146.json"
+}

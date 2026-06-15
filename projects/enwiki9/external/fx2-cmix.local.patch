@@ -35,6 +35,84 @@ index 5eb75b2..a1b7b38 100644
  
  all: cmix remap
 -
+diff --git a/src/coder/encoder.cpp b/src/coder/encoder.cpp
+index 16a33c7..39ff1da 100644
+--- a/src/coder/encoder.cpp
++++ b/src/coder/encoder.cpp
+@@ -1,5 +1,28 @@
+ #include "encoder.h"
+ 
++#if FX2_RESIDUAL_LOG
++#include <cmath>
++#include <cstdio>
++
++#ifndef FX2_RESIDUAL_LOG_STRIDE
++#define FX2_RESIDUAL_LOG_STRIDE 1ULL
++#endif
++
++#ifndef FX2_RESIDUAL_LOG_MAX_ROWS
++#define FX2_RESIDUAL_LOG_MAX_ROWS 0ULL
++#endif
++
++namespace {
++int ResidualQBits(int bit, unsigned int p1) {
++  const double denom = 65536.0;
++  const double prob = bit ? static_cast<double>(p1) / denom
++                          : static_cast<double>(65536U - p1) / denom;
++  const double bits = -std::log2(prob);
++  return static_cast<int>(bits * 256.0 + 0.5);
++}
++}
++#endif
++
+ Encoder::Encoder(std::ofstream* os, Predictor* p) : os_(os), x1_(0),
+     x2_(0xffffffff), p_(p) {}
+ 
+@@ -13,6 +36,15 @@ unsigned int Encoder::Discretize(float p) {
+ 
+ void Encoder::Encode(int bit) {
+   const unsigned int p = Discretize(p_->Predict());
++#if FX2_RESIDUAL_LOG
++  if ((residual_bit_pos_ % FX2_RESIDUAL_LOG_STRIDE) == 0 &&
++      (FX2_RESIDUAL_LOG_MAX_ROWS == 0 ||
++       residual_rows_ < FX2_RESIDUAL_LOG_MAX_ROWS)) {
++    p_->LogResidualRow(stderr, residual_bit_pos_ >> 3,
++        residual_bit_pos_ & 7ULL, bit, p, ResidualQBits(bit, p));
++    ++residual_rows_;
++  }
++#endif
+   const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +
+       (((x2_ - x1_) & 0xffff) * p >> 16);
+   if (bit) {
+@@ -21,6 +53,9 @@ void Encoder::Encode(int bit) {
+     x1_ = xmid + 1;
+   }
+   p_->Perceive(bit);
++#if FX2_RESIDUAL_LOG
++  ++residual_bit_pos_;
++#endif
+ 
+   while (((x1_^x2_) & 0xff000000) == 0) {
+     WriteByte(x2_ >> 24);
+@@ -40,4 +75,3 @@ void Encoder::Flush() {
+   auto* data = reinterpret_cast<const char*>(out_.data());
+   os_->write(data, out_.size());
+ }
+-
+diff --git a/src/coder/encoder.h b/src/coder/encoder.h
+index ea662b1..20f1045 100644
+--- a/src/coder/encoder.h
++++ b/src/coder/encoder.h
+@@ -20,5 +20,9 @@ class Encoder {
+   std::ofstream* os_;
+   unsigned int x1_, x2_;
+   Predictor* p_;
++#if FX2_RESIDUAL_LOG
++  unsigned long long residual_bit_pos_ = 0;
++  unsigned long long residual_rows_ = 0;
++#endif
+ };
+ #endif
 diff --git a/src/context-manager.cpp b/src/context-manager.cpp
 index f75b3ca..7429e2e 100644
 --- a/src/context-manager.cpp
@@ -458,10 +536,10 @@ index f75b3ca..7429e2e 100644
  }
 -
 diff --git a/src/context-manager.h b/src/context-manager.h
-index d740327..a7e8aff 100644
+index d740327..6466048 100644
 --- a/src/context-manager.h
 +++ b/src/context-manager.h
-@@ -17,8 +17,18 @@
+@@ -17,8 +17,22 @@
  #include <cmath>
  #include "ds/SmallVector.h"
  
@@ -477,10 +555,14 @@ index d740327..a7e8aff 100644
 +#define FX2_STRUCT_SIDECAR_WRT_AWARE 1
 +#endif
 +
++#ifndef FX2_TYPED_ANCHOR_SOFT_SSE
++#define FX2_TYPED_ANCHOR_SOFT_SSE 0
++#endif
++
  struct ContextManager {
    ContextManager();
  
-@@ -58,6 +68,14 @@ struct ContextManager {
+@@ -58,6 +72,14 @@ struct ContextManager {
    void UpdateWords();
    void UpdateRecentBytes();
    void UpdateWRTContext();
@@ -495,7 +577,7 @@ index d740327..a7e8aff 100644
  
    unsigned int bit_context_ = 1, wrt_state_ = 0, bpos=0;
    unsigned long long long_bit_context_ = 1, zero_context_ = 0, history_pos_ = 0,
-@@ -78,6 +96,16 @@ struct ContextManager {
+@@ -78,6 +100,19 @@ struct ContextManager {
        mx17=0,mx17cxt=0,
        mx18=0,mx18cxt=0,
        mxx=0,
@@ -509,10 +591,13 @@ index d740327..a7e8aff 100644
 +      sidecar_mix1=0, sidecar_mix2=0, sidecar_mix3=0, sidecar_mix4=0,
 +      sidecar_mix5=0, sidecar_mix6=0, sidecar_mix7=0, sidecar_mix8=0,
 +#endif
++#if FX2_TYPED_ANCHOR_SOFT_SSE
++      typed_anchor_soft_context=0,
++#endif
        words=0,wordscxt=0,
        ind1=0,context1_ind=0,
        ind2=0,context1_ind2=0,
-@@ -87,6 +115,22 @@ struct ContextManager {
+@@ -87,6 +122,22 @@ struct ContextManager {
        mx19cxt=0;
    std::vector<unsigned char> history_, shared_map_;
    std::vector<unsigned long long> words_, recent_bytes_;
@@ -535,7 +620,7 @@ index d740327..a7e8aff 100644
    llvm::SmallVector<ContextHash, 12> context_hash_contexts_;
    llvm::SmallVector<Sparse, 18> sparse_contexts_;
    llvm::SmallVector<BracketContext, 1> bracket_contexts_;
-@@ -96,4 +140,3 @@ struct ContextManager {
+@@ -96,4 +147,3 @@ struct ContextManager {
  };
  
  #endif
@@ -554,10 +639,10 @@ index f4df691..6c8b40f 100644
    inputs_ = 0;
    const auto& output = lstm_->Perceive(byte_map_[byte_]);
 diff --git a/src/mixer/mixer.cpp b/src/mixer/mixer.cpp
-index ecd752d..603c3b4 100644
+index ecd752d..6668c5a 100644
 --- a/src/mixer/mixer.cpp
 +++ b/src/mixer/mixer.cpp
-@@ -6,6 +6,11 @@
+@@ -6,6 +6,39 @@
  #include <utility>
  #include <math.h>
  #include <sys/resource.h>
@@ -566,10 +651,38 @@ index ecd752d..603c3b4 100644
 +#define FX2_MIXER_CONTEXT_LIMIT 10000ULL
 +#endif
 +
++#ifndef FX2_MIXER_DECAY_T0
++#define FX2_MIXER_DECAY_T0 1000000ULL
++#endif
++
++#ifndef FX2_MIXER_DECAY_T1
++#define FX2_MIXER_DECAY_T1 5000000ULL
++#endif
++
++#ifndef FX2_MIXER_DECAY_T2
++#define FX2_MIXER_DECAY_T2 25000000ULL
++#endif
++
++#ifndef FX2_MIXER_DECAY_P0
++#define FX2_MIXER_DECAY_P0 1000000
++#endif
++
++#ifndef FX2_MIXER_DECAY_P1
++#define FX2_MIXER_DECAY_P1 700000
++#endif
++
++#ifndef FX2_MIXER_DECAY_P2
++#define FX2_MIXER_DECAY_P2 300000
++#endif
++
++#ifndef FX2_MIXER_DECAY_P3
++#define FX2_MIXER_DECAY_P3 200000
++#endif
++
  Mixer::Mixer(const std::valarray<float>& inputs,
      const std::valarray<float>& extra_inputs,
      const unsigned long long& context, float learning_rate,
-@@ -17,7 +22,7 @@ Mixer::Mixer(const std::valarray<float>& inputs,
+@@ -17,7 +50,7 @@ Mixer::Mixer(const std::valarray<float>& inputs,
  
  ContextData* Mixer::GetContextData() {
    ContextData* data;
@@ -578,7 +691,37 @@ index ecd752d..603c3b4 100644
    auto it = context_map_.find(context_); 
    if (context_map_.size() >= limit && it == context_map_.end()) {
      data = &context_base_;
-@@ -87,4 +92,3 @@ void Mixer::Perceive(int bit) {
+@@ -60,13 +93,13 @@ float Mixer::Mix() {
+ 
+ void Mixer::Perceive(int bit) {
+ 
+-  float decay=0.2f;
+-  if ( steps_ < 25000000) {
+-      decay = 0.3f;
+-      if ( steps_ < 5000000) { 
+-          decay = 0.7f;
+-          if ( steps_ < 1000000)  
+-              decay = 1.0f;
++  int decay_ppm = FX2_MIXER_DECAY_P3;
++  if (steps_ < FX2_MIXER_DECAY_T2) {
++      decay_ppm = FX2_MIXER_DECAY_P2;
++      if (steps_ < FX2_MIXER_DECAY_T1) {
++          decay_ppm = FX2_MIXER_DECAY_P1;
++          if (steps_ < FX2_MIXER_DECAY_T0)
++              decay_ppm = FX2_MIXER_DECAY_P0;
+       }
+   }
+   ++steps_;
+@@ -76,7 +109,7 @@ void Mixer::Perceive(int bit) {
+       return;
+   }
+    // ++data->steps;
+-  update = decay * update;
++  update = (static_cast<float>(decay_ppm) / 1000000.0f) * update;
+   ContextData* data = GetContextData();
+   
+   data->weights -= update * inputs_;
+@@ -87,4 +120,3 @@ void Mixer::Perceive(int bit) {
    }*/
  
  }
@@ -672,11 +815,110 @@ index dcc832c..3d98ad0 100644
  
  } // namespace PPMD
 -
+diff --git a/src/models/sidecar-byte.h b/src/models/sidecar-byte.h
+new file mode 100644
+index 0000000..760fd73
+--- /dev/null
++++ b/src/models/sidecar-byte.h
+@@ -0,0 +1,93 @@
++#ifndef SIDECAR_BYTE_H
++#define SIDECAR_BYTE_H
++
++#include "byte-model.h"
++
++#include <algorithm>
++#include <initializer_list>
++#include <vector>
++
++class SidecarByteModel : public ByteModel {
++ public:
++  SidecarByteModel(const unsigned int& byte, const std::vector<bool>& vocab,
++      std::initializer_list<const unsigned long long*> contexts,
++      unsigned int rows)
++      : ByteModel(vocab),
++        byte_(byte),
++        contexts_(contexts),
++        rows_(rows),
++        row_mask_(rows - 1),
++        counts_(contexts_.size() * rows * 256, 0),
++        totals_(contexts_.size() * rows, 0),
++        last_rows_(contexts_.size(), 0) {
++    for (unsigned int i = 0; i < contexts_.size(); ++i) {
++      last_rows_[i] = RowFor(i);
++    }
++  }
++
++  void ByteUpdate() override {
++    for (unsigned int i = 0; i < contexts_.size(); ++i) {
++      UpdateRow(i, last_rows_[i], byte_);
++      last_rows_[i] = RowFor(i);
++    }
++    BuildPrediction();
++    ByteModel::ByteUpdate();
++    float sum = probs_.sum();
++    if (sum > 0) probs_ /= sum;
++  }
++
++ private:
++  unsigned int RowFor(unsigned int table) const {
++    unsigned long long x = *contexts_[table];
++    x ^= x >> 33;
++    x *= 0xff51afd7ed558ccdULL;
++    x ^= x >> 33;
++    x *= 0xc4ceb9fe1a85ec53ULL;
++    x ^= x >> 33;
++    x += 0x9e3779b97f4a7c15ULL * (table + 1);
++    return static_cast<unsigned int>(x) & row_mask_;
++  }
++
++  void UpdateRow(unsigned int table, unsigned int row, unsigned int c) {
++    const unsigned int key = table * rows_ + row;
++    const unsigned int base = key * 256;
++    if (totals_[key] >= 4096) {
++      unsigned int total = 0;
++      for (unsigned int i = 0; i < 256; ++i) {
++        counts_[base + i] = (counts_[base + i] + 1) >> 1;
++        total += counts_[base + i];
++      }
++      totals_[key] = total;
++    }
++    if (counts_[base + c] < 65535) {
++      ++counts_[base + c];
++      ++totals_[key];
++    }
++  }
++
++  void BuildPrediction() {
++#ifndef FX2_STRUCT_SIDECAR_BYTE_PRIOR
++#define FX2_STRUCT_SIDECAR_BYTE_PRIOR 1.0f
++#endif
++    probs_ = FX2_STRUCT_SIDECAR_BYTE_PRIOR;
++    for (unsigned int table = 0; table < contexts_.size(); ++table) {
++      const unsigned int key = table * rows_ + last_rows_[table];
++      const unsigned int total = totals_[key];
++      if (total == 0) continue;
++      const float confidence = std::min(total, 2048u) * (1.0f / 2048.0f);
++      const float denom = 256.0f / (total + 256.0f);
++      const unsigned int base = key * 256;
++      for (unsigned int c = 0; c < 256; ++c) {
++        probs_[c] += confidence * (counts_[base + c] + 1) * denom;
++      }
++    }
++  }
++
++  const unsigned int& byte_;
++  std::vector<const unsigned long long*> contexts_;
++  unsigned int rows_, row_mask_;
++  std::vector<unsigned short> counts_;
++  std::vector<unsigned int> totals_, last_rows_;
++};
++
++#endif
 diff --git a/src/predictor.cpp b/src/predictor.cpp
-index 503edfb..1380933 100644
+index 503edfb..d325f75 100644
 --- a/src/predictor.cpp
 +++ b/src/predictor.cpp
-@@ -3,6 +3,19 @@
+@@ -3,14 +3,129 @@
  #include <stdlib.h>
  #include <stdio.h>
  #include <cstdlib>
@@ -693,10 +935,107 @@ index 503edfb..1380933 100644
 +#ifndef FX2_LSTM_LR_SCALE
 +#define FX2_LSTM_LR_SCALE 1.0f
 +#endif
++
++#ifndef FX2_MANIFOLD_SPHERE_BIAS
++#define FX2_MANIFOLD_SPHERE_BIAS 4120273249u
++#endif
++#ifndef FX2_MANIFOLD_TORUS_BIAS
++#define FX2_MANIFOLD_TORUS_BIAS 250735164u
++#endif
++#ifndef FX2_MANIFOLD_W_FIELD
++#define FX2_MANIFOLD_W_FIELD 59359u
++#endif
++#ifndef FX2_MANIFOLD_W_MODE
++#define FX2_MANIFOLD_W_MODE 47439u
++#endif
++#ifndef FX2_MANIFOLD_W_SLOT
++#define FX2_MANIFOLD_W_SLOT 46729u
++#endif
++#ifndef FX2_MANIFOLD_W_PAGE_KIND
++#define FX2_MANIFOLD_W_PAGE_KIND 58275u
++#endif
++#ifndef FX2_MANIFOLD_W_CHAR_CLASS
++#define FX2_MANIFOLD_W_CHAR_CLASS 64715u
++#endif
++#ifndef FX2_MANIFOLD_W_TEMPLATE_DEPTH
++#define FX2_MANIFOLD_W_TEMPLATE_DEPTH 34915u
++#endif
++#ifndef FX2_MANIFOLD_W_IN_TAG
++#define FX2_MANIFOLD_W_IN_TAG 22917u
++#endif
++#ifndef FX2_MANIFOLD_W_REF
++#define FX2_MANIFOLD_W_REF 53509u
++#endif
++#ifndef FX2_MANIFOLD_W_URL
++#define FX2_MANIFOLD_W_URL 41819u
++#endif
++#ifndef FX2_MANIFOLD_W_NUMBER_CLASS
++#define FX2_MANIFOLD_W_NUMBER_CLASS 52691u
++#endif
++#ifndef FX2_MANIFOLD_W_WORD_LEN
++#define FX2_MANIFOLD_W_WORD_LEN 15197u
++#endif
++#ifndef FX2_MANIFOLD_W_COL_BUCKET
++#define FX2_MANIFOLD_W_COL_BUCKET 13709u
++#endif
++#ifndef FX2_MANIFOLD_W_PAGE_BUCKET
++#define FX2_MANIFOLD_W_PAGE_BUCKET 27931u
++#endif
++#ifndef FX2_MANIFOLD_W_CATEGORY_STATE
++#define FX2_MANIFOLD_W_CATEGORY_STATE 39157u
++#endif
++#ifndef FX2_MANIFOLD_W_TEMPLATE_ARG
++#define FX2_MANIFOLD_W_TEMPLATE_ARG 54377u
++#endif
++#ifndef FX2_MANIFOLD_W_LINK_RECENCY
++#define FX2_MANIFOLD_W_LINK_RECENCY 44741u
++#endif
++#ifndef FX2_MANIFOLD_W_TITLE_HASH
++#define FX2_MANIFOLD_W_TITLE_HASH 61153u
++#endif
++#ifndef FX2_MANIFOLD_W_TEMPLATE_HASH
++#define FX2_MANIFOLD_W_TEMPLATE_HASH 55331u
++#endif
++#ifndef FX2_MANIFOLD_W_LINK_HASH
++#define FX2_MANIFOLD_W_LINK_HASH 42373u
++#endif
++#ifndef FX2_MANIFOLD_W_ENTITY_HASH
++#define FX2_MANIFOLD_W_ENTITY_HASH 33083u
++#endif
++#ifndef FX2_MANIFOLD_W_WORD_HASH
++#define FX2_MANIFOLD_W_WORD_HASH 51511u
++#endif
++#ifndef FX2_MANIFOLD_W_PAIR_SIG
++#define FX2_MANIFOLD_W_PAIR_SIG 62731u
++#endif
++#ifndef FX2_MANIFOLD_W_POS_PHASE
++#define FX2_MANIFOLD_W_POS_PHASE 54399u
++#endif
++
++#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
++static unsigned int ManifoldMix32(unsigned int x) {
++  x ^= x >> 16;
++  x *= 0x7feb352du;
++  x ^= x >> 15;
++  x *= 0x846ca68bu;
++  x ^= x >> 16;
++  return x;
++}
++#endif
  
  Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
      sigmoid_(100001), vocab_(vocab) {
-@@ -11,6 +24,12 @@ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
++#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
++  const unsigned int contexts = FX2_MANIFOLD_P_BUCKETS * 8 *
++      FX2_MANIFOLD_SPHERE_BINS * FX2_MANIFOLD_TORUS_BINS;
++  manifold_zero_counts_.assign(contexts, 0);
++  manifold_one_counts_.assign(contexts, 0);
++#if FX2_MANIFOLD_CORRECTION_BIAS
++  manifold_residual_sums_.assign(contexts, 0);
++#endif
++#endif
+   AddBracket();
+   AddPPMD();
    AddWord();
    AddMatch();
    AddDoubleIndirect();
@@ -709,7 +1048,7 @@ index 503edfb..1380933 100644
    AddMixers();
    auxiliary_size_ = 2;
  }
-@@ -27,19 +46,24 @@ unsigned long long Predictor::GetNumModels() {
+@@ -27,19 +142,24 @@ unsigned long long Predictor::GetNumModels() {
    num += indirect_r_models_.size();
    num += byte_model_->NumOutputs();
    num += byte_mixer_->NumOutputs();
@@ -736,7 +1075,7 @@ index 503edfb..1380933 100644
    }
  }
  
-@@ -120,6 +144,50 @@ void Predictor::AddDoubleIndirect() {
+@@ -120,6 +240,50 @@ void Predictor::AddDoubleIndirect() {
    indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind3,  manager_.bit_context_, delta, manager_.shared_map_);
    indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind5,  manager_.bit_context_, delta, manager_.shared_map_);
  }
@@ -787,7 +1126,7 @@ index 503edfb..1380933 100644
  unsigned int Discretize(float p) {
    return 1 + 4094 * p;
  }
-@@ -128,8 +196,9 @@ void Predictor::AddMixers() {
+@@ -128,8 +292,9 @@ void Predictor::AddMixers() {
    for (unsigned int i = 0; i < vocab_.size(); ++i) {
      if (vocab_[i]) ++vocab_size;
    }
@@ -799,7 +1138,7 @@ index 503edfb..1380933 100644
  
    for (int i = 0; i < 2; ++i) {
      layers_.emplace_back(sigmoid_,
-@@ -163,15 +232,181 @@ void Predictor::AddMixers() {
+@@ -163,15 +328,318 @@ void Predictor::AddMixers() {
    AddMixer(0, manager_.mx16, 0.005);
    AddMixer(0, manager_.mx14, 0.005);
    AddMixer(0, manager_.mx15, 0.005);
@@ -818,6 +1157,10 @@ index 503edfb..1380933 100644
 +  AddMixer(0, manager_.sidecar_mix6, 0.001);
 +  AddMixer(0, manager_.sidecar_mix7, 0.001);
 +  AddMixer(0, manager_.sidecar_mix8, 0.001);
++#endif
++#if FX2_TYPED_ANCHOR_SOFT_SSE && FX2_STRUCT_SIDECAR
++  AddMixer(0, manager_.typed_anchor_soft_context,
++      FX2_TYPED_ANCHOR_SOFT_SSE_WEIGHT);
 +#endif
  
    input_size = mixer_0_.size() + auxiliary_size_;
@@ -978,10 +1321,143 @@ index 503edfb..1380933 100644
 +}
 +#endif
 +
++#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
++unsigned int Predictor::ManifoldBucket() const {
++  const unsigned int char_class =
++      static_cast<unsigned int>((manager_.sidecar_direct4 >> 2) & 7ULL);
++  const unsigned int pos_phase =
++      static_cast<unsigned int>(manager_.side_page_pos >> FX2_MANIFOLD_POS_SHIFT);
++
++  unsigned int sphere = FX2_MANIFOLD_SPHERE_BIAS;
++  sphere += (manager_.side_field & 15u) * FX2_MANIFOLD_W_FIELD;
++  sphere += (static_cast<unsigned int>(manager_.sidecar_lexer_state) & 7u) *
++      FX2_MANIFOLD_W_MODE;
++  sphere += (manager_.side_slot & 15u) * FX2_MANIFOLD_W_SLOT;
++  sphere += (manager_.side_page_kind & 7u) * FX2_MANIFOLD_W_PAGE_KIND;
++  sphere += (char_class & 7u) * FX2_MANIFOLD_W_CHAR_CLASS;
++  sphere += (manager_.side_numeric_class & 7u) *
++      FX2_MANIFOLD_W_NUMBER_CLASS;
++  sphere ^= ManifoldMix32((manager_.side_title_hash & 65535u) *
++      FX2_MANIFOLD_W_TITLE_HASH);
++  sphere ^= ManifoldMix32((manager_.side_template_hash & 65535u) *
++      FX2_MANIFOLD_W_TEMPLATE_HASH);
++  sphere ^= ManifoldMix32((manager_.side_link_hash & 65535u) *
++      FX2_MANIFOLD_W_LINK_HASH);
++  sphere ^= ManifoldMix32((manager_.side_entity_hash & 65535u) *
++      FX2_MANIFOLD_W_ENTITY_HASH);
++  sphere ^= ManifoldMix32((manager_.side_word_hash & 65535u) *
++      FX2_MANIFOLD_W_WORD_HASH);
++
++  unsigned int torus = FX2_MANIFOLD_TORUS_BIAS;
++  torus += (manager_.side_template_depth & 15u) *
++      FX2_MANIFOLD_W_TEMPLATE_DEPTH;
++  torus += (manager_.side_in_tag & 1u) * FX2_MANIFOLD_W_IN_TAG;
++  torus += (manager_.side_ref_active & 1u) * FX2_MANIFOLD_W_REF;
++  torus += (manager_.side_url_state & 3u) * FX2_MANIFOLD_W_URL;
++  torus += (manager_.side_word_len & 31u) * FX2_MANIFOLD_W_WORD_LEN;
++  torus += (manager_.side_col_bucket & 15u) * FX2_MANIFOLD_W_COL_BUCKET;
++  torus += (manager_.side_page_bucket & 31u) * FX2_MANIFOLD_W_PAGE_BUCKET;
++  torus += (manager_.side_category_state & 15u) *
++      FX2_MANIFOLD_W_CATEGORY_STATE;
++  torus += (manager_.side_template_arg & 15u) *
++      FX2_MANIFOLD_W_TEMPLATE_ARG;
++  torus += (manager_.side_link_recency & 15u) *
++      FX2_MANIFOLD_W_LINK_RECENCY;
++  torus ^= ManifoldMix32(static_cast<unsigned int>(
++      manager_.sidecar_pair_sig & 0xffffffffULL) * FX2_MANIFOLD_W_PAIR_SIG);
++  torus ^= ManifoldMix32(pos_phase * FX2_MANIFOLD_W_POS_PHASE);
++
++  const unsigned int sphere_bin = FX2_MANIFOLD_SPHERE_BINS <= 1
++      ? 0
++      : ManifoldMix32(sphere) % FX2_MANIFOLD_SPHERE_BINS;
++  const unsigned int torus_bin = FX2_MANIFOLD_TORUS_BINS <= 1
++      ? 0
++      : ManifoldMix32(torus) % FX2_MANIFOLD_TORUS_BINS;
++  return sphere_bin * FX2_MANIFOLD_TORUS_BINS + torus_bin;
++}
++
++float Predictor::ApplyManifoldOuterSSE(float p) {
++  if (manifold_zero_counts_.empty() || manifold_one_counts_.empty()) {
++    return p;
++  }
++
++  unsigned int p_bucket =
++      static_cast<unsigned int>(p * static_cast<float>(FX2_MANIFOLD_P_BUCKETS));
++  if (p_bucket >= FX2_MANIFOLD_P_BUCKETS) {
++    p_bucket = FX2_MANIFOLD_P_BUCKETS - 1;
++  }
++
++  const unsigned int manifold_bins =
++      FX2_MANIFOLD_SPHERE_BINS * FX2_MANIFOLD_TORUS_BINS;
++  const unsigned int bit_pos = manager_.bpos & 7u;
++  const unsigned int key =
++      ((p_bucket * 8u + bit_pos) * manifold_bins) + ManifoldBucket();
++  manifold_last_key_ = key;
++  manifold_has_last_key_ = key < manifold_zero_counts_.size();
++  if (!manifold_has_last_key_) {
++    return p;
++  }
++
++  const unsigned int zeros = manifold_zero_counts_[key];
++  const unsigned int ones = manifold_one_counts_[key];
++  const unsigned int total = zeros + ones;
++  unsigned int base_p1 = static_cast<unsigned int>(p * 65536.0f);
++  if (base_p1 < 1u) base_p1 = 1u;
++  if (base_p1 > 65535u) base_p1 = 65535u;
++#if FX2_MANIFOLD_CORRECTION_BIAS
++  manifold_last_p1_ = base_p1;
++  float table_p = static_cast<float>(base_p1) / 65536.0f;
++  if (total > 0) {
++    const float mean_delta =
++        static_cast<float>(manifold_residual_sums_[key]) /
++        static_cast<float>(total);
++    float corrected_p1 = static_cast<float>(base_p1) + mean_delta *
++        (static_cast<float>(FX2_MANIFOLD_BLEND_PPM) / 1000000.0f);
++    if (corrected_p1 < 1.0f) corrected_p1 = 1.0f;
++    if (corrected_p1 > 65535.0f) corrected_p1 = 65535.0f;
++    table_p = corrected_p1 / 65536.0f;
++  }
++  p = table_p;
++#else
++  const unsigned long long numerator =
++      (static_cast<unsigned long long>(2u * ones + 1u) << 16);
++  const unsigned long long denominator =
++      static_cast<unsigned long long>(2u * (total + 1u));
++  const float table_p =
++      static_cast<float>(numerator / denominator) / 65536.0f;
++  unsigned int blend_ppm = FX2_MANIFOLD_BLEND_PPM;
++  if (blend_ppm > 1000000u) blend_ppm = 1000000u;
++  p += (table_p - p) * (static_cast<float>(blend_ppm) / 1000000.0f);
++#endif
++  if (p < (1.0f / 65536.0f)) return 1.0f / 65536.0f;
++  if (p > (65535.0f / 65536.0f)) return 65535.0f / 65536.0f;
++  return p;
++}
++
++void Predictor::UpdateManifoldOuterSSE(int bit) {
++  if (!manifold_has_last_key_ ||
++      manifold_last_key_ >= manifold_zero_counts_.size()) {
++    return;
++  }
++  unsigned short& count = bit ? manifold_one_counts_[manifold_last_key_]
++                              : manifold_zero_counts_[manifold_last_key_];
++  if (count < 65535) ++count;
++#if FX2_MANIFOLD_CORRECTION_BIAS
++  if (bit) {
++    manifold_residual_sums_[manifold_last_key_] +=
++        static_cast<int>(65536u - manifold_last_p1_);
++  } else {
++    manifold_residual_sums_[manifold_last_key_] -=
++        static_cast<int>(manifold_last_p1_);
++  }
++#endif
++}
++#endif
++
  int lstmpr=0, lstmex=0;
  float byte_mixer_output=0.0f;
  float Predictor::Predict() {
-@@ -219,6 +454,9 @@ float Predictor::Predict() {
+@@ -219,6 +687,9 @@ float Predictor::Predict() {
      }
    }
    layers_[0].SetInput(input_index++, byte_model_->Predict()[0]);
@@ -991,20 +1467,92 @@ index 503edfb..1380933 100644
  
    float byte_mixer_override = -1;
  
-@@ -241,8 +479,19 @@ float Predictor::Predict() {
+@@ -229,6 +700,66 @@ float Predictor::Predict() {
+   float auxiliary_average = Sigmoid::Logistic(layers_[0].Inputs()[fxcm_model_index]) + Sigmoid::Logistic(layers_[0].Inputs()[byte_mixer_index]);
+   auxiliary_average /= auxiliary_size_;
+   manager_.auxiliary_context_ =auxiliary_average * 15;
++#if FX2_TYPED_ANCHOR_SOFT_SSE && FX2_STRUCT_SIDECAR
++  const unsigned long long typed_anchor_bit_context =
++      manager_.long_bit_context_ & 0xffULL;
++  const unsigned long long typed_anchor_prediction_context =
++      (manager_.auxiliary_context_ & 15ULL) << 8;
++  const unsigned long long typed_anchor_word_bucket =
++      manager_.side_word_len == 0 ? 0ULL :
++      manager_.side_word_len <= 1 ? 1ULL :
++      manager_.side_word_len <= 3 ? 2ULL :
++      manager_.side_word_len <= 7 ? 3ULL :
++      manager_.side_word_len <= 15 ? 4ULL : 5ULL;
++  const unsigned long long typed_anchor_char_class =
++      (manager_.sidecar_direct4 >> 2) & 7ULL;
++#if FX2_TYPED_ANCHOR_CONTEXT_MODE == 1
++  manager_.typed_anchor_soft_context =
++      typed_anchor_bit_context |
++      typed_anchor_prediction_context |
++      ((manager_.side_field & 7ULL) << 12) |
++      ((manager_.sidecar_lexer_state & 7ULL) << 15);
++#elif FX2_TYPED_ANCHOR_CONTEXT_MODE == 2
++  manager_.typed_anchor_soft_context =
++      typed_anchor_bit_context |
++      typed_anchor_prediction_context |
++      ((typed_anchor_word_bucket & 7ULL) << 12) |
++      ((typed_anchor_char_class & 7ULL) << 15);
++#elif FX2_TYPED_ANCHOR_CONTEXT_MODE == 3
++  manager_.typed_anchor_soft_context =
++      typed_anchor_bit_context |
++      typed_anchor_prediction_context |
++      ((manager_.side_field & 7ULL) << 12) |
++      ((typed_anchor_word_bucket & 7ULL) << 15) |
++      ((typed_anchor_char_class & 7ULL) << 18);
++#elif FX2_TYPED_ANCHOR_CONTEXT_MODE == 4
++  manager_.typed_anchor_soft_context =
++      typed_anchor_bit_context |
++      typed_anchor_prediction_context |
++      ((manager_.side_field & 7ULL) << 12) |
++      ((manager_.side_slot & 15ULL) << 15) |
++      ((manager_.sidecar_lexer_state & 7ULL) << 19) |
++      ((manager_.side_page_kind & 7ULL) << 22) |
++      ((typed_anchor_char_class & 7ULL) << 25) |
++      ((manager_.side_col_bucket & 15ULL) << 28);
++#elif FX2_TYPED_ANCHOR_CONTEXT_MODE == 5
++  manager_.typed_anchor_soft_context =
++      typed_anchor_bit_context |
++      typed_anchor_prediction_context |
++      ((manager_.side_field & 7ULL) << 12);
++#elif FX2_TYPED_ANCHOR_CONTEXT_MODE == 6
++  manager_.typed_anchor_soft_context =
++      typed_anchor_bit_context |
++      typed_anchor_prediction_context |
++      ((manager_.sidecar_lexer_state & 7ULL) << 12);
++#else
++  manager_.typed_anchor_soft_context =
++      typed_anchor_bit_context |
++      typed_anchor_prediction_context |
++      ((manager_.side_field & 7ULL) << 12) |
++      ((manager_.side_slot & 15ULL) << 15);
++#endif
++#endif
+ 
+   for (unsigned int i = 0; i < mixer_0_.size(); ++i) {
+     float p = mixer_0_[i].Mix();
+@@ -241,8 +772,24 @@ float Predictor::Predict() {
    float p = Sigmoid::Logistic(mixer_1_[0].Mix());
    p = sse_.Predict(p);
    if (byte_mixer_override >= 0) {
 -    return byte_mixer_override;
 +    p = byte_mixer_override;
-+  }
+   }
 +#if FX2_STRUCT_BYTE_PRIOR && FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM > 0
 +  if (manager_.sidecar_lexer_state != 0 && byte_mixer_override < 0) {
 +    const float prior = StructuralBytePrior();
 +    p += (prior - p) *
 +        (static_cast<float>(FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM) /
 +            1000000.0f);
-   }
++  }
++#endif
++#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
++  if (byte_mixer_override < 0) {
++    p = ApplyManifoldOuterSSE(p);
++  }
 +#endif
 +#if FX2_META_STREAK
 +  last_prediction_ = p;
@@ -1012,7 +1560,7 @@ index 503edfb..1380933 100644
    return p;
  }
  
-@@ -261,8 +510,14 @@ void Predictor::Perceive(int bit) {
+@@ -261,8 +808,14 @@ void Predictor::Perceive(int bit) {
    for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
      indirect_r_models_[i].Perceive(bit);
    }
@@ -1027,17 +1575,20 @@ index 503edfb..1380933 100644
  
    byte_mixer_->Perceive(bit);
  
-@@ -274,6 +529,9 @@ void Predictor::Perceive(int bit) {
+@@ -274,6 +827,12 @@ void Predictor::Perceive(int bit) {
    }
  
    sse_.Perceive(bit);
++#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
++  UpdateManifoldOuterSSE(bit);
++#endif
 +#if FX2_META_STREAK
 +  UpdateMetaStreak(bit);
 +#endif
  
    bool byte_update = false;
    if (manager_.bit_context_ >= 128) byte_update = true;
-@@ -302,6 +560,13 @@ void Predictor::Perceive(int bit) {
+@@ -302,6 +861,13 @@ void Predictor::Perceive(int bit) {
      for (unsigned int j = 0; j < 256; ++j) {
        byte_mixer_->SetInput(j,p[j]);
      }
@@ -1051,7 +1602,7 @@ index 503edfb..1380933 100644
  
      byte_mixer_->ByteUpdate();
     
-@@ -366,7 +631,9 @@ void Predictor::Pretrain(int bit) {
+@@ -366,7 +932,58 @@ void Predictor::Pretrain(int bit) {
      for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
        indirect_r_models_[i].ByteUpdate();
      }
@@ -1061,9 +1612,57 @@ index 503edfb..1380933 100644
      manager_.bit_context_ = 1;
    }
  }
--
+ 
++#if FX2_RESIDUAL_LOG
++void Predictor::LogResidualRow(FILE* out, unsigned long long byte_pos,
++    unsigned long long bit_pos, int bit, unsigned int p1,
++    int baseline_qbits) const {
++  std::fprintf(out,
++      "FX2_RESIDUAL_ROW pos=%llu bit_pos=%llu bit=%d p1=%u "
++      "baseline_qbits=%d split=all bit_count=1"
++#if FX2_STRUCT_SIDECAR
++      " field=%u mode=%llu slot=%u page_kind=%u char_class=%llu "
++      "template_depth=%u in_tag=%u ref=%u url=%u number_class=%u "
++      "word_len=%u col_bucket=%u page_bucket=%u category_state=%u "
++      "template_arg=%u link_recency=%u title_hash=%u template_hash=%u "
++      "link_hash=%u entity_hash=%u word_hash=%u pair_sig=%llu"
++#endif
++      "\n",
++      byte_pos,
++      bit_pos,
++      bit,
++      p1,
++      baseline_qbits
++#if FX2_STRUCT_SIDECAR
++      ,
++      manager_.side_field,
++      manager_.sidecar_lexer_state,
++      manager_.side_slot,
++      manager_.side_page_kind,
++      (manager_.sidecar_direct4 >> 2) & 7ULL,
++      manager_.side_template_depth,
++      manager_.side_in_tag,
++      manager_.side_ref_active,
++      manager_.side_url_state,
++      manager_.side_numeric_class,
++      manager_.side_word_len,
++      manager_.side_col_bucket,
++      manager_.side_page_bucket,
++      manager_.side_category_state,
++      manager_.side_template_arg,
++      manager_.side_link_recency,
++      manager_.side_title_hash,
++      manager_.side_template_hash,
++      manager_.side_link_hash,
++      manager_.side_entity_hash,
++      manager_.side_word_hash,
++      manager_.sidecar_pair_sig
++#endif
++      );
++}
++#endif
 diff --git a/src/predictor.h b/src/predictor.h
-index 5754d1e..1002e17 100644
+index 5754d1e..3123f26 100644
 --- a/src/predictor.h
 +++ b/src/predictor.h
 @@ -16,6 +16,7 @@
@@ -1074,10 +1673,12 @@ index 5754d1e..1002e17 100644
  #include "mixer/lstm.h"
  #include "contexts/context-hash.h"
  #include "contexts/bracket-context.h"
-@@ -34,6 +35,46 @@
+@@ -33,6 +34,91 @@
+ #include <set>
  #include <memory>
  #include <optional>
- 
++#include <cstdio>
++
 +#ifndef FX2_META_STREAK
 +#define FX2_META_STREAK 0
 +#endif
@@ -1118,10 +1719,65 @@ index 5754d1e..1002e17 100644
 +#define FX2_STRUCT_SIDECAR_MIXERS 0
 +#endif
 +
++#ifndef FX2_TYPED_ANCHOR_SOFT_SSE
++#define FX2_TYPED_ANCHOR_SOFT_SSE 0
++#endif
++
++#ifndef FX2_TYPED_ANCHOR_SOFT_SSE_WEIGHT
++#define FX2_TYPED_ANCHOR_SOFT_SSE_WEIGHT 0.0002
++#endif
++
++#ifndef FX2_TYPED_ANCHOR_CONTEXT_MODE
++#define FX2_TYPED_ANCHOR_CONTEXT_MODE 0
++#endif
++
++#ifndef FX2_RESIDUAL_LOG
++#define FX2_RESIDUAL_LOG 0
++#endif
++
++#ifndef FX2_MANIFOLD_OUTER_SSE
++#define FX2_MANIFOLD_OUTER_SSE 0
++#endif
++
++#ifndef FX2_MANIFOLD_P_BUCKETS
++#define FX2_MANIFOLD_P_BUCKETS 32
++#endif
++
++#ifndef FX2_MANIFOLD_SPHERE_BINS
++#define FX2_MANIFOLD_SPHERE_BINS 4
++#endif
++
++#ifndef FX2_MANIFOLD_TORUS_BINS
++#define FX2_MANIFOLD_TORUS_BINS 4
++#endif
++
++#ifndef FX2_MANIFOLD_POS_SHIFT
++#define FX2_MANIFOLD_POS_SHIFT 10
++#endif
++
++#ifndef FX2_MANIFOLD_BLEND_PPM
++#define FX2_MANIFOLD_BLEND_PPM 50000
++#endif
++
++#ifndef FX2_MANIFOLD_CORRECTION_BIAS
++#define FX2_MANIFOLD_CORRECTION_BIAS 0
++#endif
+ 
  class Predictor {
   public:
-   Predictor(const std::vector<bool>& vocab);
-@@ -52,7 +93,19 @@ class Predictor {
+@@ -40,6 +126,11 @@ class Predictor {
+   float Predict();
+   void Perceive(int bit);
+   void Pretrain(int bit);
++#if FX2_RESIDUAL_LOG
++  void LogResidualRow(FILE* out, unsigned long long byte_pos,
++      unsigned long long bit_pos, int bit, unsigned int p1,
++      int baseline_qbits) const;
++#endif
+ 
+  private:
+   unsigned long long GetNumModels();
+@@ -52,7 +143,24 @@ class Predictor {
    void AddDirect();
    void AddMatch();
    void AddDoubleIndirect();
@@ -1138,10 +1794,15 @@ index 5754d1e..1002e17 100644
 +#if FX2_META_STREAK
 +  void UpdateMetaStreak(int bit);
 +#endif
++#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
++  unsigned int ManifoldBucket() const;
++  float ApplyManifoldOuterSSE(float p);
++  void UpdateManifoldOuterSSE(int bit);
++#endif
  
    llvm::SmallVector<Indirect<Nonstationary>, 30-7> indirect_ns_models_; // non-stationary
    llvm::SmallVector<Indirect<RunMap>, 1> indirect_r_models_; // run map
-@@ -70,9 +123,15 @@ class Predictor {
+@@ -70,9 +178,25 @@ class Predictor {
    Sigmoid sigmoid_;
    std::optional<PPMD::PPMD> byte_model_;
    std::optional<ByteMixer> byte_mixer_;
@@ -1153,6 +1814,16 @@ index 5754d1e..1002e17 100644
 +  unsigned long long meta_streak_context_ = 0;
 +  unsigned int meta_streak_len_ = 0;
 +  unsigned int meta_streak_state_ = 0;
++#endif
++#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
++  std::vector<unsigned short> manifold_zero_counts_;
++  std::vector<unsigned short> manifold_one_counts_;
++#if FX2_MANIFOLD_CORRECTION_BIAS
++  std::vector<long long> manifold_residual_sums_;
++  unsigned int manifold_last_p1_ = 32768;
++#endif
++  unsigned int manifold_last_key_ = 0;
++  bool manifold_has_last_key_ = false;
 +#endif
  };
  

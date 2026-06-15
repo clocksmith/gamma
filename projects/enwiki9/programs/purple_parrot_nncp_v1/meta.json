@@ -1,7 +1,35 @@
 {
-  "id": "purple_parrot_nncp_v1",
-  "description": "Online char-LSTM + 32-bit Witten-Neal-Cleary arithmetic coder. Non-cmix neural compression. Pure numpy + Python stdlib, no torch, no pretrained weights. Encoder/decoder run identical SGD-updated LSTM in lockstep for bit-exact roundtrip.",
   "added": "2026-05-09",
-  "deps": ["numpy"],
-  "notes": "Diagnostic v1 establishing the non-cmix lane. Architecture: 1-layer LSTM, H=128, E=32, char-level. Per-step SGD only (no BPTT) — long-term memory comes from carried (h,c). Weights PRNG-seeded (SEED=0x5EED), zero archive cost, regenerated identically on decompress. Predicted enwik9 entropy: 2.0-2.4 b/B → 250-300 MB at full corpus. NOT a fx2-cmix challenger at this size. Throughput: pure-numpy LSTM step is sequential and ~3 matmuls + ~3 outer products per byte; 1 MB scope is tractable, 10 MB scope and beyond is bottlenecked on per-step Python overhead. v2 plans: add BPTT-K=8, second LSTM layer, raise H to 256. v3 plans: int-quant arithmetic for strict cross-host parity (current fp32 numpy is bit-exact same-host single-thread but may differ across CPU archs)."
+  "deps": [
+    "numpy"
+  ],
+  "description": "Online char-LSTM + 32-bit Witten-Neal-Cleary arithmetic coder. Non-cmix neural compression. Pure numpy + Python stdlib, no torch, no pretrained weights. Encoder/decoder run identical SGD-updated LSTM in lockstep for bit-exact roundtrip.",
+  "id": "purple_parrot_nncp_v1",
+  "measured": {
+    "lane0_contract": {
+      "contract_status": "import_error",
+      "generated_at": "2026-06-08T11:35:01+00:00",
+      "proposed_status": "blocked_dependency",
+      "reasons": [
+        "program_py_import_error",
+        "ModuleNotFoundError"
+      ],
+      "verdict": "Blocked: program.py import failed due to a dependency."
+    },
+    "lane0_contract_checks": [
+      {
+        "contract_status": "import_error",
+        "generated_at": "2026-06-08T11:35:01+00:00",
+        "proposed_status": "blocked_dependency",
+        "reasons": [
+          "program_py_import_error",
+          "ModuleNotFoundError"
+        ],
+        "verdict": "Blocked: program.py import failed due to a dependency."
+      }
+    ]
+  },
+  "notes": "Diagnostic v1 establishing the non-cmix lane. Architecture: 1-layer LSTM, H=128, E=32, char-level. Per-step SGD only (no BPTT) \u2014 long-term memory comes from carried (h,c). Weights PRNG-seeded (SEED=0x5EED), zero archive cost, regenerated identically on decompress. Predicted enwik9 entropy: 2.0-2.4 b/B \u2192 250-300 MB at full corpus. NOT a fx2-cmix challenger at this size. Throughput: pure-numpy LSTM step is sequential and ~3 matmuls + ~3 outer products per byte; 1 MB scope is tractable, 10 MB scope and beyond is bottlenecked on per-step Python overhead. v2 plans: add BPTT-K=8, second LSTM layer, raise H to 256. v3 plans: int-quant arithmetic for strict cross-host parity (current fp32 numpy is bit-exact same-host single-thread but may differ across CPU archs).",
+  "status": "blocked_dependency",
+  "verdict": "Blocked: program.py import failed due to a dependency."
 }

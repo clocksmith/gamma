@@ -194,6 +194,22 @@ This is the pruning path for the `benchmark_or_retire` queue. It should run
 before any naming cleanup. Renaming should only touch candidates that Lane 0 has
 classified as `active`, `measured_negative`, or explicitly useful controls.
 
+Current `benchmark_or_retire` cleanup should be consumed in mechanism groups:
+
+- `typed_opcode_custom`: opcode/typed-anchor candidates first, because they feed
+  Lane B structural-state extraction.
+- `schema_xml_title_lzma`: schema, title, and XML skeleton wrappers next,
+  because they are direct macro-residual controls.
+- `named_custom_family`: yellow_tucan and related standalone families, grouped
+  by shared mechanism.
+- `fx2_cmix_or_sidecar`: leave lock-heavy fx2/cmix wrappers to Lane A unless
+  Lane A explicitly asks for a cleanup gate.
+- `baseline_backend`: backend controls last.
+
+The latest contract-only sweep found the remaining `benchmark_or_retire`
+wrappers import cleanly and expose both required callables. They still need
+locked roundtrip evidence before status changes.
+
 Exact gates launched manually with `lib/driver.py` can be folded into a
 candidate contract without another benchmark run:
 
@@ -215,6 +231,32 @@ outer wrapper. The current compile-time knobs are:
 - `FX2_MIXER1_LR_SCALE`: layer-1 mixer learning-rate multiplier.
 - `FX2_LSTM_LR_SCALE`: byte-mixer LSTM learning-rate multiplier.
 - `FX2_SSE_WR_SCALE_PPM`: integer parts-per-thousand scale for SSE write rates.
+
+## Residual Certificate Lane
+
+Residual candidates are only worth packaging after they satisfy a certificate
+gate. The target against the current calibrated production path is:
+
+```text
+required_net_gain = 681,114 bytes = 5,448,912 bits
+```
+
+Use this order:
+
+1. Emit `FX2_RESIDUAL_ROW` traces from an unchanged-byte `fx2` run.
+2. Run an oracle upper-bound scan for the proposed structural state family.
+3. If the oracle cannot clear the target after code/table cost, prune that state
+   family as `measured_negative` evidence.
+4. If the oracle can clear the target, build a causal extractor and score exact
+   residual gain with `fx2_residual_gain_certificate.py` or the shadow coder.
+5. Package a decompressor candidate only after the causal extractor satisfies:
+
+```text
+residual_gain_bits - added_code_bits >= 5,448,912
+```
+
+The first tested KT/APM coupling over `p_bucket,bit_pos,*` states is pruned from
+active search. It remains documented in `RESIDUAL_CERTIFICATE_REPORT.md`.
 
 Use the package helper to build a normal candidate directory from those knobs:
 
@@ -361,6 +403,225 @@ python3 projects/enwiki9/tools/candidate_triage.py --run --update-meta --candida
 
 Only `active` or `measured_negative` Lane B outputs should become named
 frontier points or parents for later search.
+
+### Typed-Anchor Handoff
+
+`opcode_typed_anchor_bitmix_v1` is the strongest current Lane B structural
+signal. Its standalone archive beats `baseline_lzma` at the 1M gate, but it is
+not an fx2-class backend. Treat it as a state extractor, not as a replacement
+compressor. The evidence says the extractor has real density; it does not say
+the rewritten opcode stream should be fed to fx2.
+
+Generate the Lane A handoff report with:
+
+```bash
+python3 projects/enwiki9/tools/typed_anchor_signal_report.py --limit 1000000
+```
+
+The report writes:
+
+```text
+projects/enwiki9/lane_b_typed_anchor_handoff.json
+```
+
+It records both streams:
+
+- `opcode_stream_state`: the state shape used by the standalone physical opcode
+  preprocessor.
+- `raw_stream_state`: the state shape Lane A should prefer when porting to fx2,
+  because fx2 should preserve the original byte stream.
+
+Port only the compact soft state: field, wiki mode, slot, page kind, byte
+class, and column bucket. Do not port the physical opcode rewrite, hard context
+XORs, chain-copy opcodes, or direct final-probability clamps. The first fx2
+candidate is `fx2_typed_anchor_soft_sse_v1`: a narrow SSE/APM-side coordinate
+keyed by prediction bucket, bit position, field, and slot. Promotion is based
+on archive-byte improvement against the same fx2 parent at matching scope.
+
+Build the first candidate package after Lane A releases the scorer:
+
+```bash
+python3 projects/enwiki9/tools/fx2_core_tune_package.py \
+  --id fx2_typed_anchor_soft_sse_v1 \
+  --mixer-context-limit 8000 \
+  --mixer0-lr-scale 1.0 \
+  --mixer1-lr-scale 0.95 \
+  --lstm-lr-scale 1.0 \
+  --sse-wr-scale-ppm 1000 \
+  --mixer-decay-t0 500000 \
+  --mixer-decay-t1 3000000 \
+  --mixer-decay-t2 16000000 \
+  --mixer-decay-p0 1000000 \
+  --mixer-decay-p1 600000 \
+  --mixer-decay-p2 250000 \
+  --mixer-decay-p3 125000 \
+  --typed-anchor-soft-sse \
+  --typed-anchor-soft-sse-weight 0.0002
+```
+
+This compiles `FX2_STRUCT_SIDECAR=5`, which updates raw-stream state without
+activating the older hard context mutations or broad sidecar mixer set.
+
+To build and gate this family through the standard locked promotion path, use:
+
+```bash
+python3 projects/enwiki9/tools/fx2_typed_anchor_soft_queue.py \
+  --run \
+  --gate-size 1024 \
+  --gate-size 250000 \
+  --gate-size 1000000 \
+  --archive-ceiling 250000:<same-parent-250k-archive> \
+  --archive-ceiling 1000000:<same-parent-1m-archive>
+```
+
+Explicit mutations use:
+
+```text
+--spec ID:WEIGHT
+--spec ID:WEIGHT:MODE
+--spec ID:WEIGHT:MODE:MCTX:M0:M1:LSTM:SSEPPM:T0:T1:T2:P0:P1:P2:P3
+```
+
+The queue always passes `--typed-anchor-soft-sse`; it is not a route for the
+physical opcode rewrite.
+
+### Shadow Residual-Coder Certificate
+
+Do not promote new structural side-state by intuition. The stronger proof path
+is an exact shadow arithmetic certificate:
+
+```bash
+python3 projects/enwiki9/tools/fx2_shadow_residual_coder.py \
+  <fx2_residual_log> \
+  --key p_bucket,bit_pos,field,mode \
+  --fx2-decoder-bytes <counted_decoder_bytes> \
+  --patch-bytes <parser_and_coder_patch_bytes> \
+  --print-summary
+```
+
+This consumes per-bit fx2 residual rows containing `bit` and `p1`. If a row has
+`corrected_p1`, that exact probability is encoded. Otherwise the tool builds a
+tiny causal KT table keyed by the requested state and blends it with fx2's
+probability. The table updates only after the current bit is encoded, so the
+model is decoder-realizable.
+
+The certificate theorem is:
+
+```text
+S_new <= |D_fx2| + |D_patch| + exact_shadow_arithmetic_bytes
+```
+
+`fx2_residual_gain_certificate.py` remains useful for log-loss screening.
+`fx2_shadow_residual_coder.py` is stricter: it includes integer probability
+quantization, coder finalization overhead, cold-start cost, and finite decoder
+byte accounting. It labels a 10.95 result constructive only when the trace
+covers the asserted target stream and decoder bytes are supplied.
+
+### Manifold Outer SSE Search
+
+The current structural route is `fx2__manifold_outer_sse__sphere_torus_residual__v01`.
+It treats stochastic search as an offline discovery step only. The online
+candidate must collapse to a fixed-point integer projection and a tiny causal
+outer SSE/APM table keyed by:
+
+```text
+p_bucket,bit_pos,manifold_bucket
+```
+
+Generate raw residual rows with `FX2_RESIDUAL_LOG=1` and
+`FX2_STRUCT_SIDECAR=1`. The residual logger now emits causal page-manifold
+fields including `page_bucket`, `category_state`, `template_arg`,
+`link_recency`, `title_hash`, `template_hash`, `link_hash`, `entity_hash`,
+`word_hash`, and `pair_sig`. These are observational only; they must not alter
+baseline archive bytes.
+
+Run the offline projection search with:
+
+```bash
+python3 projects/enwiki9/tools/fx2_manifold_outer_sse_search.py \
+  <fx2_stderr_residual_log> \
+  --output projects/enwiki9/results/fx2_manifold_outer_sse/search.json \
+  --train-bytes <heldout_start_byte> \
+  --trials 32 \
+  --sphere-bins 4,8 \
+  --torus-bins 4,8 \
+  --pos-shifts 8,10,12 \
+  --blend-ppm 25000,50000,125000 \
+  --shadow-top 3 \
+  --print-summary
+```
+
+Promote only if exact shadow arithmetic, not just log-loss, shows enough
+out-of-sample slope to plausibly pay:
+
+```text
+archive_saved - program_added >= 681114 bytes
+```
+
+Current evidence from `manifold_rich_64k_v1` is negative for the first
+KT/APM-style manifold form. The rich logger emitted the intended causal fields,
+and the focused split search found a tiny held-out qbit gain, but exact shadow
+arithmetic lost bytes:
+
+```text
+trace: projects/enwiki9/results/fx2_residual_probe/manifold_rich_64k_v1/stderr.log
+search: projects/enwiki9/results/fx2_residual_probe/manifold_rich_64k_v1/manifold_outer_sse_search_heldout_shadow.json
+rows: 120000
+best held-out proxy gain: 1.033203125 bytes
+exact full-prefix shadow result: baseline 5616 bytes, shadow 5620 bytes, net -4 bytes
+exact held-out shadow result: baseline 2720 bytes, shadow 2719 bytes, net +1 byte
+```
+
+Do not package this projection. Its post-warm-up slope is real but too small:
+6 held-out bits across 54464 held-out rows is below the 10.95 requirement. The
+usable result is the apparatus: richer causal residual logging, fixed-point
+manifold projection search, exact shadow arithmetic, held-out shadow reranking,
+and a dormant C++ hook. The next manifold attempt must optimize against exact
+shadow bytes directly or use a different correction form.
+
+The residual-bias correction is stronger than KT because it preserves fx2's
+base probability and learns only the signed residual. Low-cardinality bias
+search is exact-positive, but still too weak:
+
+```text
+search: projects/enwiki9/results/fx2_residual_probe/manifold_rich_64k_v1/manifold_outer_sse_search_bias_lowcard_full64k.json
+rows: 301808
+best exact full-prefix result: +62 bits
+best exact held-out result: +3 bits over 39664 held-out rows
+status: apparatus-positive, not candidate-positive
+```
+
+The C++ hook supports this form with `FX2_MANIFOLD_CORRECTION_BIAS=1`, and the
+package helper exposes it as:
+
+```bash
+python3 projects/enwiki9/tools/fx2_core_tune_package.py \
+  --id fx2__manifold_outer_sse__lowcard_bias__v01 \
+  --manifold-outer-sse \
+  --manifold-correction bias \
+  --manifold-p-buckets 16 \
+  --manifold-sphere-bins 4 \
+  --manifold-torus-bins 4 \
+  --manifold-blend-ppm 50000
+```
+
+Do not gate that package until a larger residual trace shows target-scale
+exact shadow slope. The current signal projects below the 681114-byte debt.
+
+Typed-anchor context modes are:
+
+- `0`: prediction bucket, bit context, field, slot
+- `1`: prediction bucket, bit context, field, XML/wiki mode
+- `2`: prediction bucket, bit context, word-length bucket, byte class
+- `3`: prediction bucket, bit context, field, word-length bucket, byte class
+- `4`: compact combined field, slot, mode, page kind, byte class, column bucket
+- `5`: prediction bucket, bit context, field only
+- `6`: prediction bucket, bit context, XML/wiki mode only
+
+Prefer modes `6` and `5` before retesting combined states. The first soft-SSE
+pass showed that combined typed-anchor coordinates can be valid and
+deterministic while still missing archive ceilings; isolated states test whether
+the signal survives without fragmenting the parent model.
 
 ### Projection Rule
 

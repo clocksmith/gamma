@@ -1,0 +1,115 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd2g_cm8_text8_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 2000 MB PPMD cap, and half-sized PAQ8 main/text context maps. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd2g_v1",
+  "hypothesis": "The remaining PAQ5 memory pressure comes from large PAQ8 text maps. Halving the main context and text-model scales should pass the 10 GiB ceiling while retaining more archive strength than dropping all the way to PAQ4.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd2g_cm8_text8_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd2g_cm8_text8_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=2000 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=8 -DCMIX_PAQ8_TEXT_MODEL_SCALE=8"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 2000
+          }
+        }
+      },
+      {
+        "id": "paq8_main_context",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "scale": 8
+          }
+        }
+      },
+      {
+        "id": "paq8_text_model",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "scale": 8
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_main_context",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_text_model",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "250000": {
+      "compressed_size_temp_at_abort": 149359,
+      "partial_output_size_at_abort": 32768,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10516132,
+      "failure": "compression_rss_crossed_10gib_ceiling"
+    }
+  },
+  "verdict": "Rejected for memory. Halving the two largest PAQ5 text maps was still not enough to keep the 250K compression gate under 10 GiB."
+}

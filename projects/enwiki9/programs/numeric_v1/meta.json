@@ -1,7 +1,143 @@
 {
-  "id": "numeric_v1",
-  "description": "ISO YYYY-MM-DD dates re-encoded as 3-byte days-since-1500 integers, then lzma -9e; conservative (ISO only)",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "falls through unchanged on non-ISO dates; escape doubling handles literal 0x11 in input"
+  "description": "ISO YYYY-MM-DD dates re-encoded as 3-byte days-since-1500 integers, then lzma -9e; conservative (ISO only)",
+  "id": "numeric_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "bits_per_byte": 3.21875,
+          "comparison": {
+            "archive_delta_vs_baseline": 0,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 2790
+          },
+          "compressed_size": 412,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 3403,
+          "program_id": "numeric_v1",
+          "program_size": 2991,
+          "program_stats": null,
+          "roundtrip_ok": true
+        },
+        {
+          "bits_per_byte": 2.417024,
+          "comparison": {
+            "archive_delta_vs_baseline": -16,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 2774
+          },
+          "compressed_size": 75532,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 78523,
+          "program_id": "numeric_v1",
+          "program_size": 2991,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-06-08T15:42:09+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "bits_per_byte": 3.21875,
+            "comparison": {
+              "archive_delta_vs_baseline": 0,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 2790
+            },
+            "compressed_size": 412,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 3403,
+            "program_id": "numeric_v1",
+            "program_size": 2991,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "bits_per_byte": 2.417024,
+            "comparison": {
+              "archive_delta_vs_baseline": -16,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 2774
+            },
+            "compressed_size": 75532,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 78523,
+            "program_id": "numeric_v1",
+            "program_size": 2991,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-06-08T15:42:09+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
+  },
+  "notes": "falls through unchanged on non-ISO dates; escape doubling handles literal 0x11 in input",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }

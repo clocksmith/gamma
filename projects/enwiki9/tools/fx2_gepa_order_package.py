@@ -141,7 +141,16 @@ def load_screen_hit(screen_json: pathlib.Path | None, fields: tuple[str, ...]) -
         return None
     data = json.loads(screen_json.read_text())
     wanted = list(fields)
-    for section in ("top_by_score", "diverse_top", "top", "rows"):
+    for section in (
+        "top_by_objective",
+        "top_by_smooth",
+        "top_by_boundary",
+        "frontier",
+        "top_by_score",
+        "diverse_top",
+        "top",
+        "rows",
+    ):
         for row in data.get(section, []):
             row_fields = row.get("fields") or row.get("parts")
             if row_fields == wanted:

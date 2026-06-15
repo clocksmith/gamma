@@ -2,5 +2,28 @@
   "id": "xml_skel_wc3tier_lzma2_1g_v1",
   "description": "Phase 1_WC3 + LZMA2 (1 GiB dict): typed XML field extraction + 3-tier wordcode (128 single-byte 0x80-0xFF + 256 two-byte 0x03 XX + up to 4096 three-byte 0x04 XX YY codes) with alphabetic words and wiki-markup tokens; single LZMA2 over concatenated typed buffer; sha256-validated, strict roundtrip",
   "added": "2026-05-10",
-  "deps": []
+  "deps": [],
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/xml_skel_wc3tier_lzma2_1g_v1/2026-06-08T165208.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 78544,
+      "program_size": 12152,
+      "hutter_score": 90696,
+      "bits_per_byte": 2.513408,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "b10b16facf22e6c5989763394c780fc717b64b03c2f5e2292f881a9e3f2341fc",
+      "compress_time_s": 0.9873,
+      "decompress_time_s": 0.1835,
+      "notes": [
+        "250K archive 78544, program 12152, S 90696; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/xml_skel_wc3tier_lzma2_1g_v1/2026-06-08T165208.json",
+  "status": "retired",
+  "verdict": "Retired: wc3tier XML skeleton worsens 250K archive and score versus baseline_lzma."
 }

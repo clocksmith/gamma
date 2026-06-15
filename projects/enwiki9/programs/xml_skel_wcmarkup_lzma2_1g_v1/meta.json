@@ -2,5 +2,28 @@
   "id": "xml_skel_wcmarkup_lzma2_1g_v1",
   "description": "single-file Phase 1_WC + LZMA2 with 1 GiB dict_size: typed XML field extraction (id/title/timestamp/username/ip/comment) + EXTENDED wordcode pre-pass (alphabetic words AND wiki-markup tokens [[, ]], {{, }}, ==, ''+, ===) on prose scaffold + single LZMA2 (preset 9 EXTREME, 1 GiB dict) over concatenated typed buffer; sha256-validated manifest, strict roundtrip",
   "added": "2026-05-10",
-  "deps": []
+  "deps": [],
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/xml_skel_wcmarkup_lzma2_1g_v1/2026-06-08T165145.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 74760,
+      "program_size": 10571,
+      "hutter_score": 85331,
+      "bits_per_byte": 2.39232,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "3f30552d2cbb9b9c31715c30cc9f6f6e74561969f16b25388d0070e715b632d3",
+      "compress_time_s": 0.5439,
+      "decompress_time_s": 0.1037,
+      "notes": [
+        "250K archive 74760, program 10571, S 85331; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/xml_skel_wcmarkup_lzma2_1g_v1/2026-06-08T165145.json",
+  "status": "retired",
+  "verdict": "Retired: XML skeleton wcmarkup LZMA2 does not pay for its large decoder at 250K."
 }

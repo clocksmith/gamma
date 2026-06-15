@@ -3,5 +3,28 @@
   "description": "custom no-cmix/no-lzma arithmetic coder with adaptive order-0/1/2 byte contexts",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "Foundation for the non-cmix predictor line; Python prototype, not expected to beat LZMA yet."
+  "notes": "Foundation for the non-cmix predictor line; Python prototype, not expected to beat LZMA yet.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_range_order_v1/2026-06-08T162040.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 129795,
+      "program_size": 6202,
+      "hutter_score": 135997,
+      "bits_per_byte": 4.15344,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "5bfe33eeb28e71cfbc3e880f73dc8aa1969b839956d94c62b0c4a9c1b12a6a37",
+      "compress_time_s": 0.939,
+      "decompress_time_s": 1.8985,
+      "notes": [
+        "250K archive 129795, program 6202, S 135997; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_range_order_v1/2026-06-08T162040.json",
+  "status": "retired",
+  "verdict": "Retired: plain range-order arithmetic coder is far behind baseline_lzma and structural range variants at 250K."
 }

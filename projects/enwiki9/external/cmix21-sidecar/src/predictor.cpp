@@ -22,6 +22,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifndef CMIX_PAQ8_LEVEL
+#define CMIX_PAQ8_LEVEL 11
+#endif
+
+#ifndef CMIX_PPMD_MEMORY_MB
+#define CMIX_PPMD_MEMORY_MB 14000
+#endif
+
 Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
     sigmoid_(100001), vocab_(vocab) {
   srand(0xDEADBEEF);
@@ -87,7 +95,7 @@ void Predictor::AddFXCM() {
 }
 
 void Predictor::AddPAQ8() {
-  PAQ8* paq = new PAQ8(11);
+  PAQ8* paq = new PAQ8(CMIX_PAQ8_LEVEL);
   AddModel(paq);
   AddAuxiliary();
 }
@@ -103,7 +111,8 @@ void Predictor::AddBracket() {
 }
 
 void Predictor::AddPPMD() {
-  AddByteModel(new PPMD::PPMD(25, 14000, manager_.bit_context_, vocab_));
+  AddByteModel(new PPMD::PPMD(
+      25, CMIX_PPMD_MEMORY_MB, manager_.bit_context_, vocab_));
 }
 
 void Predictor::AddWord() {

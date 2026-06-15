@@ -3,5 +3,28 @@
   "description": "Frankenstein stdlib-only stack: optional page-topic reorder, XML/text schema split, typed XML atom channels, XML opcode scaffold, title-table receipts plus two-tier wordcode on text, independently LZMA2-compressed streams.",
   "added": "2026-05-24",
   "deps": [],
-  "goal": "Drive no-external-dependency enwik9 experiments toward S=100,000,000 with measured gates."
+  "goal": "Drive no-external-dependency enwik9 experiments toward S=100,000,000 with measured gates.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/schema_title_streams_lzma2_1g_v1/2026-06-08T165335.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 78276,
+      "program_size": 18252,
+      "hutter_score": 96528,
+      "bits_per_byte": 2.504832,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "884a4dbbd65cb9ab355e7914177d6757a225f109999026a5ebd6b50cdbd9c2b5",
+      "compress_time_s": 1.3254,
+      "decompress_time_s": 0.0619,
+      "notes": [
+        "250K archive 78276, program 18252, S 96528; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/schema_title_streams_lzma2_1g_v1/2026-06-08T165335.json",
+  "status": "retired",
+  "verdict": "Retired: schema/title stream LZMA2 typed mode worsens 250K archive and carries a large decoder."
 }

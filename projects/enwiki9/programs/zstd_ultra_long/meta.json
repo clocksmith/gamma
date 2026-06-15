@@ -2,5 +2,30 @@
   "id": "zstd_ultra_long",
   "description": "external zstd CLI at --ultra -22 --long=31, single-threaded",
   "added": "2026-05-09",
-  "deps": ["zstd CLI"]
+  "deps": [
+    "zstd CLI"
+  ],
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/zstd_ultra_long/2026-06-08T165504.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 78134,
+      "program_size": 463,
+      "hutter_score": 78597,
+      "bits_per_byte": 2.500288,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "9bcc091d46c339fdb6975593626931bd076261a4046fce02c467c9c8d7427995",
+      "compress_time_s": 0.3854,
+      "decompress_time_s": 0.0106,
+      "notes": [
+        "250K archive 78134, program 463, S 78597; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/zstd_ultra_long/2026-06-08T165504.json",
+  "status": "retired",
+  "verdict": "Retired: zstd ultra-long baseline loses to baseline_lzma and baseline_bz2 at 250K."
 }

@@ -1,0 +1,91 @@
+{
+  "id": "cmix21_text_mmap_paq9_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using the mmap allocator plus PAQ8 level 9 instead of level 11. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq10_v1",
+  "hypothesis": "PAQ8 level 10 remained near or above the strict memory ceiling during verification. PAQ8 level 9 should clear memory while retaining enough of cmix21 text-mode's full-corpus margin to stay a plausible 10.95 candidate.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq9_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq9_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=9"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 9
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1k_driver_gate": {
+      "data_size": 1024,
+      "compressed_size": 247,
+      "program_size": 561235,
+      "hutter_score": 561482,
+      "bits_per_byte": 1.929688,
+      "roundtrip_ok": true,
+      "determinism_checked": true,
+      "determinism_single_host_byte_equal": true,
+      "determinism_result_path": "projects/enwiki9/results/cmix21_text_mmap_paq9_v1/2026-06-14T152607.json",
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq9_v1/2026-06-14T151951.json",
+      "memory_observation": {
+        "compression_rss_kib": 9448520,
+        "decompression_rss_kib": 9597184,
+        "ceiling_10gib_kib": 10485760,
+        "source": "ps RSS samples during the 1K driver gate"
+      },
+      "notes": "PAQ8 level 9 cleared the sampled 10 GiB resident-memory ceiling on both compression and decompression."
+    },
+    "rejected_neighbors": {
+      "cmix21_text_wrapped_v1": "Unrestricted cmix21 text mode started with roughly 16169036 KiB RSS and is not memory-admissible.",
+      "cmix21_text_mmap_wrapped_v1": "Full PAQ8 level 11 plus mmap still sampled around 11980740 KiB RSS.",
+      "cmix21_text_mmap_ppmd8g_v1": "Reducing only PPMD did not reduce the binding resident memory; sampled around 12040392 KiB RSS.",
+      "cmix21_text_mmap_paq10_v1": "PAQ8 level 10 compression sampled near the ceiling, but decompression sampled around 10880384 KiB RSS.",
+      "cmix21_text_mmap_paq10_ppmd8g_v1": "Combined PAQ8 level 10 and PPMD 8000 MB later rose to around 11241668 KiB RSS during compression."
+    }
+  },
+  "verdict": "Best live frontier program found so far: 1K roundtrip passed with sampled compression/decompression RSS below 10 GiB. Not a 10.95 proof until it survives larger gates and full-corpus score accounting."
+}

@@ -1,0 +1,131 @@
+{
+  "id": "fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_soft_v1",
+  "family": "fx2-core-tuning",
+  "status": "measured_negative",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "description": "Title-order fx2 package with compile-time core predictor tuning knobs applied to the rebuilt local fx2-cmix substrate.",
+  "build": {
+    "source": "projects/enwiki9/external/fx2-cmix",
+    "command": "make CC=g++ CFLAGS_DEFINES='<defines>' clean cmix",
+    "defines": [
+      "-DSEED=923",
+      "-DUPDATE_LIMIT=3000",
+      "-DFX2_MIXER_CONTEXT_LIMIT=8000",
+      "-DFX2_MIXER0_LR_SCALE=1.0f",
+      "-DFX2_MIXER1_LR_SCALE=0.95f",
+      "-DFX2_LSTM_LR_SCALE=1.0f",
+      "-DFX2_SSE_WR_SCALE_PPM=1000",
+      "-DFX2_MIXER_DECAY_T0=1000000ULL",
+      "-DFX2_MIXER_DECAY_T1=5000000ULL",
+      "-DFX2_MIXER_DECAY_T2=25000000ULL",
+      "-DFX2_MIXER_DECAY_P0=1000000",
+      "-DFX2_MIXER_DECAY_P1=800000",
+      "-DFX2_MIXER_DECAY_P2=400000",
+      "-DFX2_MIXER_DECAY_P3=250000"
+    ],
+    "compiler": "g++",
+    "wrapper_template": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+    "payload_files": {
+      "c": 138272,
+      "d": 100118,
+      "p": 894,
+      "program.py": 71
+    },
+    "program_size": 239355,
+    "payload_sha256": {
+      "c": "f37150f2b2ce60440f29674a82f3851a64207f89e5473166dc98936fdc4a3742",
+      "d": "6279dd59cc9058ad3b4dc0f3dd4ca3cc60e73aa94739bb9a8bdeccbda3fa9f24",
+      "p": "80f546d01590d568e73d6e5b4d6bdaf26aed45784dee0589bf7bd3451ec617f8",
+      "program.py": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    }
+  },
+  "hypothesis": "Changing mixer adaptation, context-map capacity, LSTM rate, and SSE update rate can reduce archive bytes directly without storing new side information.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "geometry_title"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "core_tuning",
+        "type": "parameter_controller",
+        "payload": {
+          "discrete": {
+            "substrate": "fx2-cmix",
+            "compiler": "g++"
+          },
+          "continuous": {
+            "mixer_context_limit": 8000,
+            "mixer0_lr_scale": 1.0,
+            "mixer1_lr_scale": 0.95,
+            "lstm_lr_scale": 1.0,
+            "sse_wr_scale_ppm": 1000,
+            "mixer_decay_t0": 1000000,
+            "mixer_decay_t1": 5000000,
+            "mixer_decay_t2": 25000000,
+            "mixer_decay_p0": 1000000,
+            "mixer_decay_p1": 800000,
+            "mixer_decay_p2": 400000,
+            "mixer_decay_p3": 250000
+          },
+          "structural": {}
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "dictionary_codec": "cmix_self_compressed",
+            "binary_codec": "xz_extreme_check_none"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      },
+      {
+        "from": "core_tuning",
+        "to": "backend",
+        "stream": "compiled_constants"
+      }
+    ]
+  },
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_soft_v1/2026-06-08T130817.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45363,
+      "program_size": 239355,
+      "hutter_score": 284718,
+      "bits_per_byte": 1.451616,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "537e237ef7dbdc01903fc3a44cb622ffc8e1755ed57864c506c2d34960a02f4e",
+      "compress_time_s": 207.1331,
+      "decompress_time_s": 108.9382
+    }
+  },
+  "verdict": "Exact 250k_driver_gate failed promotion: roundtrip_deterministic=True, archive=45363, ceiling=45361.",
+  "latest_result": "projects/enwiki9/results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_soft_v1/2026-06-08T130817.json"
+}

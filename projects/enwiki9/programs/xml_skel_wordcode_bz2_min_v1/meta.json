@@ -2,5 +2,28 @@
   "id": "xml_skel_wordcode_bz2_min_v1",
   "description": "minified Phase 1_WC + bz2: typed XML field extraction (id/title/timestamp/username/ip/comment) + wordcode pre-pass on prose scaffold + bz2 over concatenated typed buffer; compact binary framing (no JSON manifest), strict roundtrip, sub-5KB program",
   "added": "2026-05-10",
-  "deps": []
+  "deps": [],
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/xml_skel_wordcode_bz2_min_v1/2026-06-08T165051.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 73057,
+      "program_size": 5033,
+      "hutter_score": 78090,
+      "bits_per_byte": 2.337824,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "57fc6f7b3bff9808b868bc003f328272aa8baecaef61a675efbefbced9775033",
+      "compress_time_s": 0.1771,
+      "decompress_time_s": 0.1089,
+      "notes": [
+        "250K archive 73057, program 5033, S 78090; opcode_word_bz2_tiny_v1 S 73139."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/xml_skel_wordcode_bz2_min_v1/2026-06-08T165051.json",
+  "status": "retired",
+  "verdict": "Retired: XML skeleton wordcode+BZip2 min variant loses to baseline_bz2, baseline_lzma, and opcode_word_bz2_tiny_v1 at 250K."
 }

@@ -29,8 +29,27 @@
         "reasons": [],
         "verdict": "program.py imports and exposes compress/decompress."
       }
-    ]
+    ],
+    "1k_driver_gate": {
+      "result_path": "projects/enwiki9/results/typed_graph_recurse_v1/2026-06-08T161159.json",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 360,
+      "program_size": 5571,
+      "hutter_score": 5931,
+      "bits_per_byte": 2.8125,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "037939f6b374c75542349ed3f1781aba0bd5bdea5a6ae2ac51eca18c53731fef",
+      "compress_time_s": 0.0533,
+      "decompress_time_s": 0.0164,
+      "notes": [
+        "1K archive 360, program 5571, S 5931; 250K probe produced no result JSON."
+      ]
+    }
   },
-  "status": "benchmark_or_retire",
-  "verdict": "program.py imports and exposes compress/decompress."
+  "status": "measured_negative",
+  "verdict": "1K deterministic pass, but 250K probe exited before driver result emission; graph-recursive Python codec is not a scalable Lane B parent.",
+  "latest_result": "projects/enwiki9/results/typed_graph_recurse_v1/2026-06-08T161159.json"
 }
