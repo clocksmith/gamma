@@ -210,8 +210,16 @@ unsigned long long MEM() {
 #define CMIX_PAQ8_MAIN_CONTEXT_SCALE 16
 #endif
 
+#ifndef CMIX_PAQ8_MAIN_CONTEXT_DIV
+#define CMIX_PAQ8_MAIN_CONTEXT_DIV 1
+#endif
+
 #ifndef CMIX_PAQ8_TEXT_MODEL_SCALE
 #define CMIX_PAQ8_TEXT_MODEL_SCALE 16
+#endif
+
+#ifndef CMIX_PAQ8_TEXT_MODEL_DIV
+#define CMIX_PAQ8_TEXT_MODEL_DIV 1
 #endif
 
 #ifndef CMIX_PAQ8_MATCH_SCALE
@@ -8147,8 +8155,8 @@ void XMLModel(Mixer& m, ModelStats *Stats = nullptr){
 U32 last_prediction = 2048;
 
 int contextModel2(ModelStats *Stats) {
-  static ContextMap2 cm(MEM()*CMIX_PAQ8_MAIN_CONTEXT_SCALE, 10);
-  static TextModel textModel(MEM()*CMIX_PAQ8_TEXT_MODEL_SCALE);
+  static ContextMap2 cm((MEM()*CMIX_PAQ8_MAIN_CONTEXT_SCALE)/CMIX_PAQ8_MAIN_CONTEXT_DIV, 10);
+  static TextModel textModel((MEM()*CMIX_PAQ8_TEXT_MODEL_SCALE)/CMIX_PAQ8_TEXT_MODEL_DIV);
   static MatchModel matchModel((MEM()*CMIX_PAQ8_MATCH_SCALE)/CMIX_PAQ8_MATCH_DIV);
   static SparseMatchModel sparseMatchModel(MEM()/CMIX_PAQ8_SPARSE_MATCH_DIV);
   static dmcForest dmcforest;

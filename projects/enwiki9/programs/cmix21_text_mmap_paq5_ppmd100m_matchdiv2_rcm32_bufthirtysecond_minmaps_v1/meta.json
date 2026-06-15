@@ -95,6 +95,14 @@
       }
     ]
   },
-  "measured": {},
-  "verdict": "Unmeasured. Matchdiv2 candidate intended to test the true PAQ-side memory peak while preserving PPMD100."
+  "measured": {
+    "250000": {
+      "program_size": 561038,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10489924,
+      "failure": "compression_rss_crossed_10gib_ceiling"
+    }
+  },
+  "verdict": "Rejected for local memory. MATCH_DIV=2 with PPMD100/RCM32/BUF32 still crossed the 10 GiB guard by 4164 KiB. Match memory alone does not control the PAQ-side peak; the next source-level lens should expose divisors for main context and text-model allocation."
 }
