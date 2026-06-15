@@ -3,5 +3,28 @@
   "description": "reversible ISO-date/year/integer semantic coding followed by cmix",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "cmix.bin.gz is vendored beside program.py and counted by the harness."
+  "notes": "cmix.bin.gz is vendored beside program.py and counted by the harness.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_numeric_cmix_v1/2026-06-08T164918.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 52545,
+      "program_size": 402071,
+      "hutter_score": 454616,
+      "bits_per_byte": 1.68144,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "7b21dff3236355cf1eb6869222693f345e3e9ba8af4bd7489886567c3d5f13bd",
+      "compress_time_s": 553.4883,
+      "decompress_time_s": 551.6332,
+      "notes": [
+        "250K archive 52545, program 402071, S 454616; best same-scope fx2/dictcmix controls are around 45K archive with smaller score."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_numeric_cmix_v1/2026-06-08T164918.json",
+  "status": "measured_negative",
+  "verdict": "Measured negative: embedded-cmix numeric transform is deterministic and archive-dense, but not competitive with existing fx2/dictcmix controls and carries a large backend payload."
 }

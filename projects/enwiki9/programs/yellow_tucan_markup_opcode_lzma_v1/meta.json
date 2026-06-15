@@ -3,5 +3,28 @@
   "description": "no-cmix MediaWiki/XML opcode substitution followed by Python stdlib LZMA extreme mode",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "No external binary; program.py is the complete decompressor."
+  "notes": "No external binary; program.py is the complete decompressor.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_markup_opcode_lzma_v1/2026-06-08T161706.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 75068,
+      "program_size": 2749,
+      "hutter_score": 77817,
+      "bits_per_byte": 2.402176,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "99d398d0b62960dcc37bb568cfb05676b2e00a5614a6660c1fbb45a12c4132c4",
+      "compress_time_s": 1.0605,
+      "decompress_time_s": 0.0216,
+      "notes": [
+        "250K archive 75068, program 2749, S 77817; baseline_lzma archive 75548, program 201, S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_markup_opcode_lzma_v1/2026-06-08T161706.json",
+  "status": "measured_negative",
+  "verdict": "Measured negative: markup opcode deletion lowers 250K archive versus baseline_lzma but not enough to pay for the decoder."
 }

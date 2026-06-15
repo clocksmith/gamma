@@ -1,0 +1,180 @@
+{
+  "id": "fx2_typed_anchor_soft_field_mode_w00005_sse_v1",
+  "family": "fx2-typed-anchor-soft-state",
+  "status": "measured_negative",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "description": "Title-order fx2 package with a narrow typed-anchor soft coordinate compiled into the rebuilt local fx2-cmix substrate.",
+  "build": {
+    "source": "projects/enwiki9/external/fx2-cmix",
+    "command": "make CC=g++ CFLAGS_DEFINES='<defines>' clean cmix",
+    "defines": [
+      "-DSEED=923",
+      "-DUPDATE_LIMIT=3000",
+      "-DFX2_MIXER_CONTEXT_LIMIT=8000",
+      "-DFX2_MIXER0_LR_SCALE=1.0f",
+      "-DFX2_MIXER1_LR_SCALE=0.95f",
+      "-DFX2_LSTM_LR_SCALE=1.0f",
+      "-DFX2_SSE_WR_SCALE_PPM=1000",
+      "-DFX2_MIXER_DECAY_T0=500000ULL",
+      "-DFX2_MIXER_DECAY_T1=3000000ULL",
+      "-DFX2_MIXER_DECAY_T2=16000000ULL",
+      "-DFX2_MIXER_DECAY_P0=1000000",
+      "-DFX2_MIXER_DECAY_P1=600000",
+      "-DFX2_MIXER_DECAY_P2=250000",
+      "-DFX2_MIXER_DECAY_P3=125000",
+      "-DFX2_STRUCT_SIDECAR=5",
+      "-DFX2_TYPED_ANCHOR_SOFT_SSE=1",
+      "-DFX2_TYPED_ANCHOR_SOFT_SSE_WEIGHT=5e-05f",
+      "-DFX2_TYPED_ANCHOR_CONTEXT_MODE=1"
+    ],
+    "compiler": "g++",
+    "wrapper_template": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+    "payload_files": {
+      "c": 143944,
+      "d": 100071,
+      "p": 894,
+      "program.py": 71
+    },
+    "program_size": 244980,
+    "payload_sha256": {
+      "c": "fbed77e50b682f947e263d4d513fe1cf684d40c65414322ea0e267583d4f7470",
+      "d": "41cce6e719f13cc6891b524d0dbbaa3f53ee3df32ddf69c60b89226d92756a3c",
+      "p": "80f546d01590d568e73d6e5b4d6bdaf26aed45784dee0589bf7bd3451ec617f8",
+      "program.py": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    }
+  },
+  "hypothesis": "Typed-anchor field and slot state can act as a weak learned fx2 coordinate without rewriting the byte stream or hard-mutating mature contexts.",
+  "deps": [
+    "stdlib:zlib",
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "geometry_title"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      },
+      {
+        "id": "core_tuning",
+        "type": "parameter_controller",
+        "payload": {
+          "discrete": {
+            "substrate": "fx2-cmix",
+            "compiler": "g++"
+          },
+          "continuous": {
+            "mixer_context_limit": 8000,
+            "mixer0_lr_scale": 1.0,
+            "mixer1_lr_scale": 0.95,
+            "lstm_lr_scale": 1.0,
+            "sse_wr_scale_ppm": 1000,
+            "mixer_decay_t0": 500000,
+            "mixer_decay_t1": 3000000,
+            "mixer_decay_t2": 16000000,
+            "mixer_decay_p0": 1000000,
+            "mixer_decay_p1": 600000,
+            "mixer_decay_p2": 250000,
+            "mixer_decay_p3": 125000,
+            "typed_anchor_soft_sse": true,
+            "typed_anchor_soft_sse_weight": 5e-05,
+            "typed_anchor_context_mode": 1
+          },
+          "structural": {}
+        }
+      },
+      {
+        "id": "typed_anchor_soft_state",
+        "type": "sidecar",
+        "payload": {
+          "discrete": {
+            "mode": "raw_stream_field_slot_soft_coordinate",
+            "enabled": true,
+            "context_mode": 1
+          },
+          "continuous": {
+            "weight": 5e-05
+          },
+          "structural": {
+            "state": [
+              "prediction_bucket",
+              "bit_prefix",
+              "field",
+              "slot"
+            ]
+          }
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "dictionary_codec": "cmix_self_compressed",
+            "binary_codec": "xz_extreme_check_none"
+          },
+          "continuous": {},
+          "structural": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      },
+      {
+        "from": "core_tuning",
+        "to": "backend",
+        "stream": "compiled_constants"
+      },
+      {
+        "from": "typed_anchor_soft_state",
+        "to": "backend",
+        "stream": "learned_internal_context"
+      }
+    ]
+  },
+  "measured": {
+    "1k_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_typed_anchor_soft_field_mode_w00005_sse_v1/2026-06-08T204324.json",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 264,
+      "program_size": 244980,
+      "hutter_score": 245244,
+      "bits_per_byte": 2.0625,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "e8f215e8f94e597edeaef22e563c00b453db9a3ce10b20e3f4c8edbda0aa8fd3",
+      "compress_time_s": 127.8334,
+      "decompress_time_s": 14.0551
+    },
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/fx2_typed_anchor_soft_field_mode_w00005_sse_v1/2026-06-08T204943.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45338,
+      "program_size": 244980,
+      "hutter_score": 290318,
+      "bits_per_byte": 1.450816,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "6d23487092435154d1d2b0cbecdfb01a55dd321573e69998c78ff5b98d960417",
+      "compress_time_s": 202.1718,
+      "decompress_time_s": 87.9414
+    }
+  },
+  "verdict": "Exact 250k_driver_gate typed-anchor soft-SSE gate failed promotion: roundtrip_deterministic=True, archive=45338, ceiling=45332.",
+  "latest_result": "projects/enwiki9/results/fx2_typed_anchor_soft_field_mode_w00005_sse_v1/2026-06-08T204943.json"
+}

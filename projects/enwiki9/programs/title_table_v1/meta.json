@@ -3,5 +3,28 @@
   "description": "online-learned [[Title]] and [[Title|Alt]] back-reference table, then lzma -9e; vocabulary never ships in program_size",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "uses 0x10 ESC byte; falls through gracefully if 0x10 already in input (no fallback yet — 0x10 is rare in enwik9)"
+  "notes": "uses 0x10 ESC byte; falls through gracefully if 0x10 already in input (no fallback yet \u2014 0x10 is rare in enwik9)",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/title_table_v1/2026-06-08T165252.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 77308,
+      "program_size": 4571,
+      "hutter_score": 81879,
+      "bits_per_byte": 2.473856,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "a864f27f2404b8e3c65bc40333772bfedc1775d8b16fe7c14339f64b467b476c",
+      "compress_time_s": 0.0808,
+      "decompress_time_s": 0.0059,
+      "notes": [
+        "250K archive 77308, program 4571, S 81879; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/title_table_v1/2026-06-08T165252.json",
+  "status": "retired",
+  "verdict": "Retired: standalone title table transform worsens 250K archive and score versus baseline_lzma."
 }

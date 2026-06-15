@@ -19,6 +19,7 @@ from typing import Any
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import page_order_gepa as base  # noqa: E402
+import page_order_gepa_boundary as boundary  # noqa: E402
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -197,7 +198,7 @@ def select_diverse(rows: list[dict[str, Any]], limit: int, diversity_weight: flo
         best_objective = float("-inf")
         for index, row in enumerate(remaining):
             min_distance = min(fields_distance(row["fields"], chosen["fields"]) for chosen in selected)
-            objective = float(row["score_delta_vs_original"]) + diversity_weight * min_distance
+            objective = float(row.get("objective_score", row["score_delta_vs_original"])) + diversity_weight * min_distance
             if objective > best_objective:
                 best_index = index
                 best_objective = objective
@@ -205,7 +206,52 @@ def select_diverse(rows: list[dict[str, Any]], limit: int, diversity_weight: flo
     return selected
 
 
-def run(data: bytes, seed: int, max_candidates: int, max_width: int, top: int, seed_specs: int, diversity_weight: float) -> dict[str, Any]:
+def smooth_metrics(
+    features: list[dict[str, Any]],
+    order: list[int],
+    fields: tuple[str, ...],
+    original_edges: dict[str, float],
+    weak_threshold: float,
+    weights: dict[str, float],
+    pair_cache: dict[tuple[int, int], float],
+) -> dict[str, float]:
+    edges = boundary.edge_stats(features, order, fields, weak_threshold, pair_cache)
+    tear_delta = original_edges["tear_deficit"] - edges["tear_deficit"]
+    weak_edge_delta = original_edges["weak_edges"] - edges["weak_edges"]
+    p05_delta = edges["p05_pair_score"] - original_edges["p05_pair_score"]
+    p10_delta = edges["p10_pair_score"] - original_edges["p10_pair_score"]
+    boundary_penalty = edges["prefix_break_weak_edges"] + 0.5 * edges["primary_break_weak_edges"]
+    smooth_objective = (
+        weights["tear"] * tear_delta
+        + weights["weak_edge"] * weak_edge_delta
+        + weights["p05"] * p05_delta
+        + weights["p10"] * p10_delta
+        - weights["boundary"] * boundary_penalty
+    )
+    return {
+        **edges,
+        "tear_deficit_delta_vs_original": tear_delta,
+        "weak_edge_delta_vs_original": weak_edge_delta,
+        "p05_delta_vs_original": p05_delta,
+        "p10_delta_vs_original": p10_delta,
+        "boundary_penalty": boundary_penalty,
+        "smooth_component": smooth_objective,
+    }
+
+
+def run(
+    data: bytes,
+    seed: int,
+    max_candidates: int,
+    max_width: int,
+    top: int,
+    seed_specs: int,
+    diversity_weight: float,
+    objective: str,
+    weak_threshold: float,
+    weights: dict[str, float],
+    dedupe_orders: bool,
+) -> dict[str, Any]:
     head, pages, tail, ids = base.split_pages(data)
     if not pages:
         raise SystemExit("no pages found")
@@ -215,43 +261,96 @@ def run(data: bytes, seed: int, max_candidates: int, max_width: int, top: int, s
     features = [base.page_features(page, pid) for page, pid in zip(pages, ids)]
     original_order = list(range(len(pages)))
     original_score = base.score_order(features, original_order)
+    pair_cache: dict[tuple[int, int], float] = {}
+    original_edges = boundary.edge_stats(features, original_order, (), weak_threshold, pair_cache)
     rng = random.Random(seed)
     candidates = candidate_pool(rng, max_candidates, max_width, seed_specs)
 
-    rows: list[dict[str, Any]] = []
+    order_slots: dict[str, dict[str, Any]] = {}
     for genotype in candidates:
         order = order_for(features, genotype.fields)
         restored = sorted(order, key=lambda index: features[index]["pid"])
         if restored != original_order:
             raise SystemExit(f"{genotype.name}: restore-by-id check failed")
-        metrics = base.score_order(features, order)
         digest = hashlib.sha256(
             b",".join(str(features[index]["pid"]).encode() for index in order)
         ).hexdigest()
+        alias = {"name": genotype.name, "origin": genotype.origin, "fields": list(genotype.fields)}
+        existing = order_slots.get(digest)
+        if existing is not None:
+            existing["aliases"].append(alias)
+            current_fields = tuple(existing["genotype"].fields)
+            if (len(genotype.fields), genotype.fields) < (len(current_fields), current_fields):
+                existing["genotype"] = genotype
+                existing["order"] = order
+            if dedupe_orders:
+                continue
+        order_slots.setdefault(
+            digest,
+            {"genotype": genotype, "order": order, "aliases": [alias]},
+        )
+
+    rows: list[dict[str, Any]] = []
+    for digest, slot in order_slots.items():
+        genotype = slot["genotype"]
+        order = slot["order"]
+        metrics = base.score_order(features, order)
+        score_delta = metrics["adjacency_score"] - original_score["adjacency_score"]
+        extra: dict[str, float] = {}
+        if objective == "smooth":
+            extra = smooth_metrics(
+                features,
+                order,
+                genotype.fields,
+                original_edges,
+                weak_threshold,
+                weights,
+                pair_cache,
+            )
+            objective_score = score_delta + extra["smooth_component"]
+        else:
+            objective_score = score_delta
         rows.append(
             {
                 "name": genotype.name,
                 "origin": genotype.origin,
                 "fields": list(genotype.fields),
+                "alias_count": len(slot["aliases"]),
+                "aliases": slot["aliases"][:8],
                 "pages": len(pages),
                 "moved_pages": sum(1 for old, new in enumerate(order) if old != new),
-                "score_delta_vs_original": metrics["adjacency_score"] - original_score["adjacency_score"],
+                "score_delta_vs_original": score_delta,
+                "objective_score": objective_score,
                 "order_sha256": digest,
                 "first_ids": [features[index]["pid"] for index in order[:10]],
                 **metrics,
+                **extra,
             }
         )
-    rows.sort(key=lambda row: (row["score_delta_vs_original"], row["adjacency_score"]), reverse=True)
+    rows.sort(key=lambda row: (row["objective_score"], row["score_delta_vs_original"], row["adjacency_score"]), reverse=True)
+    top_by_adjacency = sorted(
+        rows,
+        key=lambda row: (row["score_delta_vs_original"], row["adjacency_score"]),
+        reverse=True,
+    )[:top]
     return {
         "input_bytes": len(data),
         "pages": len(pages),
         "head": len(head),
         "tail": len(tail),
         "seed": seed,
-        "candidate_count": len(rows),
-        "basis": "hybrid GEPA no-compression adjacency screen; exact compression required before promotion",
+        "candidate_count": len(candidates),
+        "unique_order_count": len(rows),
+        "dedupe_orders": dedupe_orders,
+        "objective": objective,
+        "weak_threshold": weak_threshold,
+        "weights": weights,
+        "basis": "hybrid GEPA no-compression screen; exact compression required before promotion",
         "original": original_score,
+        "original_edges": original_edges,
         "top_by_score": rows[:top],
+        "top_by_objective": rows[:top],
+        "top_by_adjacency": top_by_adjacency,
         "diverse_top": select_diverse(rows, top, diversity_weight),
     }
 
@@ -266,9 +365,24 @@ def main() -> int:
     parser.add_argument("--seed-specs", type=int, default=1200)
     parser.add_argument("--top", type=int, default=40)
     parser.add_argument("--diversity-weight", type=float, default=120.0)
+    parser.add_argument("--objective", choices=("adjacency", "smooth"), default="adjacency")
+    parser.add_argument("--weak-threshold", type=float, default=1.0)
+    parser.add_argument("--tear-weight", type=float, default=2.0)
+    parser.add_argument("--weak-edge-weight", type=float, default=4.0)
+    parser.add_argument("--p05-weight", type=float, default=80.0)
+    parser.add_argument("--p10-weight", type=float, default=40.0)
+    parser.add_argument("--boundary-weight", type=float, default=1.0)
+    parser.add_argument("--dedupe-orders", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--out-dir", type=pathlib.Path, default=DEFAULT_OUT)
     args = parser.parse_args()
 
+    weights = {
+        "tear": args.tear_weight,
+        "weak_edge": args.weak_edge_weight,
+        "p05": args.p05_weight,
+        "p10": args.p10_weight,
+        "boundary": args.boundary_weight,
+    }
     data = args.data.read_bytes()[: args.limit]
     result = run(
         data=data,
@@ -278,9 +392,14 @@ def main() -> int:
         top=args.top,
         seed_specs=args.seed_specs,
         diversity_weight=args.diversity_weight,
+        objective=args.objective,
+        weak_threshold=args.weak_threshold,
+        weights=weights,
+        dedupe_orders=args.dedupe_orders,
     )
     args.out_dir.mkdir(parents=True, exist_ok=True)
-    out = args.out_dir / f"hybrid_limit{args.limit}_seed{args.seed}.json"
+    suffix = "" if args.objective == "adjacency" else f"_{args.objective}"
+    out = args.out_dir / f"hybrid_limit{args.limit}_seed{args.seed}{suffix}.json"
     out.write_text(json.dumps(result, indent=2) + "\n")
     print(
         json.dumps(

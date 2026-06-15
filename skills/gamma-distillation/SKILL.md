@@ -1,83 +1,68 @@
 ---
 name: gamma-distillation
-description: Run, resume, and troubleshoot GAMMA distillation pipelines for translation and embedding tracks, including checkpoint recovery and ROCm-to-CPU fallback decisions. Use when the user asks to distill, resume interrupted runs, or recover from failed checkpoints.
+description: Run, resume, and troubleshoot GAMMA distillation pipelines for translation and embedding tracks, including checkpoint recovery, ROCm validation, CPU fallback, eval sweeps, and normalized reporting rebuilds.
 ---
 
-# GAMMA Distillation Skill
+# GAMMA Distillation
 
-Use this skill for resilient distillation operations, especially after crashes, reboots, or partial checkpoints.
+Use for resilient translation or embedding distillation. Treat training/eval artifacts and reporting rebuilds as separate workflows.
 
-## Tracks
+## Paths
 
-- Translation distillation: `projects/distillation/translation/`
-- Embedding subset/distill pipeline: `projects/distillation/embedding/`
+- Translation: `projects/distillation/translation/`
+- Embedding: `projects/distillation/embedding/`
+- Translation troubleshooting: `projects/distillation/translation/training/TROUBLESHOOTING.md`
 
-## Mandatory preflight
+## Hard Preflight
 
-Before any distillation launch or long sweep:
-1. Resolve `PYTHON_BIN` (prefer `.venv/bin/python`).
-2. Verify runtime/deps and hardware visibility.
-3. Verify train/eval pair paths and resume path/stage consistency.
-4. Record run contract + runtime mode before launch.
-5. Stop immediately on env mismatch, ROCm invalid-device, resume mismatch, or provenance confusion.
+Before any launch, resume, or checkpoint sweep:
 
-Preflight pattern:
+1. Resolve `PYTHON_BIN` (`.venv/bin/python` preferred).
+2. Verify `torch` and `transformers` import in that interpreter.
+3. Print `torch.cuda.is_available()`, `torch.cuda.device_count()`, target `DEVICE`, and HIP version when present.
+4. On ROCm, prove real GPU compute with a tiny CUDA matmul probe. If it fails with `HIP error: invalid device function`, retry the same probe with `HSA_OVERRIDE_GFX_VERSION=11.0.0`.
+5. Verify train/eval pair files, resume path, and resume stage.
+6. Emit the run contract line before launch.
 
 ```bash
-PYTHON_BIN=.venv/bin/python
-if [ ! -x "$PYTHON_BIN" ]; then
-  PYTHON_BIN=python3
-fi
-
-"$PYTHON_BIN" -c "import torch, transformers; print(torch.__version__); print(transformers.__version__)"
-"$PYTHON_BIN" -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.device_count())"
-"$PYTHON_BIN" -c "import torch; print(getattr(torch.version,'hip', 'no_hip'))"
+PYTHON_BIN=.venv/bin/python; [ -x "$PYTHON_BIN" ] || PYTHON_BIN=python3
+"$PYTHON_BIN" -c "import torch, transformers; print(torch.__version__); print(transformers.__version__); print(torch.cuda.is_available()); print(torch.cuda.device_count()); print(getattr(torch.version,'hip','no_hip'))"
 ```
 
-ROCm compute probe (required when `DEVICE=cuda` on AMD):
-
 ```bash
-# Probe in normal ROCm mode first.
 "$PYTHON_BIN" - <<'PY'
 import torch
 print("cuda_available", torch.cuda.is_available())
 print("cuda_device_count", torch.cuda.device_count())
-if torch.cuda.is_available() and torch.cuda.device_count() > 0:
-    x = torch.randn(256, 256, device="cuda")
-    y = torch.randn(256, 256, device="cuda")
-    print("cuda_matmul_ok", float((x @ y).mean().item()))
+if torch.cuda.is_available() and torch.cuda.device_count():
+    x=torch.randn(256,256,device="cuda"); y=torch.randn(256,256,device="cuda")
+    print("cuda_matmul_ok", float((x@y).mean().item()))
 PY
 ```
 
-If the probe throws `HIP error: invalid device function`, switch runtime mode and re-probe:
+Required contract:
 
-```bash
-HSA_OVERRIDE_GFX_VERSION=11.0.0 "$PYTHON_BIN" - <<'PY'
-import torch
-print("cuda_available", torch.cuda.is_available())
-print("cuda_device_count", torch.cuda.device_count())
-if torch.cuda.is_available() and torch.cuda.device_count() > 0:
-    x = torch.randn(256, 256, device="cuda")
-    y = torch.randn(256, 256, device="cuda")
-    print("cuda_matmul_ok", float((x @ y).mean().item()))
-PY
+```text
+[run-contract] run_name=<name> pairs_input_spec=<path-or-spec> resume_from=<path|none> resume_stage=<stage|none> decode=<greedy|sampled> eval_dataset_paths=<comma-separated paths> device=<auto|cuda|cpu> schedule=<A_then_B|mixed_from_start> runtime_mode=<normal_rocm|rocm_gfx_override|cpu>
 ```
 
-Do not launch training until a compute probe succeeds in the same runtime mode.
+Block immediately on environment drift, ROCm compute failure, resume-stage mismatch, vocab/tokenizer mismatch, or provenance confusion.
 
-## Translation launch points
-
-Primary wrapper (train + optional eval):
+## Translation
 
 ```bash
 bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
 ```
 
-Stage-B checkpoint sweep + live scoreboard:
+Manual entrypoint:
 
 ```bash
-PYTHON_BIN=.venv/bin/python
-[ -x "$PYTHON_BIN" ] || PYTHON_BIN=python3
+$PYTHON_BIN projects/distillation/translation/training/train_translate_distill.py --help
+```
+
+Checkpoint sweep:
+
+```bash
 $PYTHON_BIN projects/distillation/translation/pipeline/run_stage_b_checkpoint_sweep.py \
   --run-root projects/distillation/translation/runs/<run> \
   --checkpoints 1000,2000,3000 \
@@ -87,141 +72,51 @@ $PYTHON_BIN projects/distillation/translation/pipeline/run_stage_b_checkpoint_sw
   --resume
 ```
 
-Direct trainer entrypoint (advanced/manual):
-
-```bash
-PYTHON_BIN=.venv/bin/python
-[ -x "$PYTHON_BIN" ] || PYTHON_BIN=python3
-$PYTHON_BIN projects/distillation/translation/training/train_translate_distill.py --help
-```
-
-Common controls:
-- `OUT_ROOT`, `RUN_NAME`
-- `TOTAL_STEPS`, `SFT_STEPS`, `SAVE_EVERY`
-- `DEVICE`, `DTYPE`
-- `RESUME`, `RESUME_FROM`, `RESUME_STAGE`
-- `SOURCE_LANGS`, `TARGET_LANGS`
-- `TEACHER_MODEL`, `STUDENT_MODEL`
-- `HSA_OVERRIDE_GFX_VERSION`
-
-Required run contract line:
-
-```text
-[run-contract] run_name=<name> pairs_input_spec=<path-or-spec> resume_from=<path|none> resume_stage=<stage|none> decode=<greedy|sampled> eval_dataset_paths=<comma-separated paths> device=<auto|cuda|cpu> schedule=<A_then_B|mixed_from_start> runtime_mode=<normal_rocm|rocm_gfx_override|cpu>
-```
-
-## Resume and Corrupt Checkpoint Recovery
-
-Audit checkpoints first:
+Resume audit:
 
 ```bash
 bash skills/gamma-distillation/scripts/check_translation_checkpoints.sh \
   projects/distillation/translation/runs/<exp>/<run>
-```
-
-Manual quick scan:
-
-```bash
-find projects/distillation/translation/runs -type d -name 'checkpoint-*' | sort
 find projects/distillation/translation/runs -type f -size 0 | head
 ```
 
-Recovery procedure:
-1. Identify latest valid checkpoint in `stage_a` or `stage_b`.
-2. Quarantine partial/zero-byte checkpoint dirs instead of deleting blindly.
-3. Resume with:
+Resume with optimizer/scheduler/RNG continuity when possible:
 
 ```bash
 RESUME=1 RESUME_FROM=<run-root|stage-dir|checkpoint-dir> \
 bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
 ```
 
-## ROCm and CPU Fallback Policy
+## Runtime Policy
 
-Reference:
-- `projects/distillation/translation/training/TROUBLESHOOTING.md`
-
-Strict fallback order (log chosen `runtime_mode`):
 1. Normal ROCm.
-2. `HSA_OVERRIDE_GFX_VERSION=11.0.0`.
-3. Full CPU fallback.
+2. `HSA_OVERRIDE_GFX_VERSION=11.0.0` only after invalid-device failure.
+3. CPU fallback after both ROCm probes fail.
 
-Decision rule:
-- If ROCm is visible but compute probe fails with `invalid device function`, treat `normal_rocm` as blocked and move immediately to `rocm_gfx_override`.
-- If `rocm_gfx_override` probe also fails, block and fall back to CPU.
+After launch, verify metrics file growth, step lines in logs, and GPU use with `rocm-smi` for CUDA/ROCm runs. If a detached job exits immediately, rerun in `tmux`, `screen`, or an interactive PTY.
 
-Preferred commands:
+## Reporting Rebuild
 
-```bash
-# 1) normal ROCm
-bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
-
-# 2) override-only retry (for invalid device function)
-HSA_OVERRIDE_GFX_VERSION=11.0.0 \
-bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
-
-# 3) explicit CPU fallback
-DEVICE=cpu \
-bash projects/distillation/translation/training/run_translation_distill.sh A_then_B
-```
-
-Post-launch liveness checks (required):
-1. Verify stage metrics file exists and grows (for example `stage_a/metrics.jsonl`).
-2. Verify logs emit step lines (for example `[A_then_B_stage_a] step=...`).
-3. Verify `rocm-smi --showuse --json` shows elevated GPU usage during active steps.
-4. If detached/background launch exits immediately, rerun in a persistent session (`tmux`, `screen`, or interactive PTY).
-
-## Scoreboard and index workflow
-
-After each sweep or major eval batch:
-1. Ensure per-run artifacts exist:
-   - `manifest.jsonl`
-   - `scoreboard.md`
-   - `scoreboard_eval_rows.csv`
-   - `scoreboard_checkpoints.csv`
-2. Regenerate run index for handoff:
+After sweeps/evals, ensure `manifest.jsonl`, `scoreboard.md`, `scoreboard_eval_rows.csv`, and `scoreboard_checkpoints.csv` exist, then rebuild:
 
 ```bash
-PYTHON_BIN=.venv/bin/python
-[ -x "$PYTHON_BIN" ] || PYTHON_BIN=python3
 $PYTHON_BIN projects/distillation/translation/pipeline/build_run_index.py
-```
-
-3. Rebuild the cohesive translation results bundle and leaderboard view:
-
-```bash
-PYTHON_BIN=.venv/bin/python
-[ -x "$PYTHON_BIN" ] || PYTHON_BIN=python3
 $PYTHON_BIN projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py
 ```
 
-- Treat this rebuild as the canonical retrieval step for fresh eval results.
-- It rescans raw compare artifacts and refreshes normalized outputs under `projects/distillation/translation/runs/results_bundle/`, including:
-  - `leaderboard_all_compare_rows.csv`
-  - `leaderboard_external_wmt13_en_es_translation_benchmark_128.csv`
-  - `leaderboard_indomain_clean_merged_en_es_translation_benchmark_128.csv`
-  - `leaderboard.md`
-- Keep `RUN_INDEX.md`, `run_index_runs.csv`, `run_index_evals.csv`, and the rebuilt leaderboard artifacts linked in run notes.
+The bundle refreshes normalized leaderboard files under `projects/distillation/translation/runs/results_bundle/`.
 
-## Embedding Pipeline Entry Points
-
-Use the orchestrator for resume/skip logic:
+## Embedding
 
 ```bash
-PY=.venv/bin/python
-[ -x "$PY" ] || PY=python3
+PY=.venv/bin/python; [ -x "$PY" ] || PY=python3
 $PY projects/distillation/embedding/pipeline/run_pipeline.py --help
 ```
 
-Common sequence:
-1. `--steps init`
-2. `--steps fetch,gemini,merge,dataset,pairs`
-3. `--steps distill`
-4. `projects/distillation/embedding/eval/run_benchmark.py` for repeated evaluation
+Use the orchestrator for resume/skip logic, then evaluate with `projects/distillation/embedding/eval/run_benchmark.py`.
 
 ## Guardrails
 
 - Do not auto-download weights unless explicitly allowed.
-- Preserve run logs and summaries inside the run root.
-- Prefer resume over restart to retain optimizer/scheduler/RNG continuity.
-- Avoid mixed `student=cuda` + `teacher=cpu` unless the path is explicitly verified.
+- Preserve logs, manifests, and summaries in run roots.
+- Keep training/eval artifact generation decoupled from reporting rebuilds.

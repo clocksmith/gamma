@@ -3,5 +3,28 @@
   "description": "no-cmix/no-external MediaWiki opcode substitution with Python LZMA2 1GiB dictionary",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "Python stdlib only; intended as the fair no-external comparison to xz_lzma2_1g and ast_opcode_lzma_v1."
+  "notes": "Python stdlib only; intended as the fair no-external comparison to xz_lzma2_1g and ast_opcode_lzma_v1.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_markup_opcode_lzma2_1g_v1/2026-06-08T161818.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 75068,
+      "program_size": 1001,
+      "hutter_score": 76069,
+      "bits_per_byte": 2.402176,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "504d6f72b1c16b4da32edacbc7caf6947a18cb50e7955ddc3603fdd72fc9a3ac",
+      "compress_time_s": 1.4119,
+      "decompress_time_s": 0.0219,
+      "notes": [
+        "250K archive 75068, program 1001, S 76069; lzma_v2 S 75988."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_markup_opcode_lzma2_1g_v1/2026-06-08T161818.json",
+  "status": "retired",
+  "verdict": "Retired as dominated: same 250K archive as yellow_tucan_markup_opcode_lzma_v2 with a larger program."
 }

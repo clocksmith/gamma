@@ -21,6 +21,7 @@
 
 #include "paq8.h"
 #include "../preprocess/preprocessor.h"
+#include "../mmap-alloc.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,6 +73,8 @@ private:
   U32 reserved;
   char *ptr;
   T* data;
+  size_t bytes;
+  bool mapped;
   void create(U32 i);
 public:
   explicit Array(U32 i=0) {create(i);}
@@ -99,30 +102,38 @@ template<class T, int ALIGN> void Array<T, ALIGN>::resize(U32 i) {
   char *saveptr=ptr;
   T *savedata=data;
   int saven=n;
+  size_t savebytes=bytes;
+  bool savemapped=mapped;
   create(i);
   if (saveptr) {
     if (savedata) {
       memcpy(data, savedata, sizeof(T)*min(i, saven));
     }
-    free(saveptr);
+    cmix_mmap_alloc::Release(saveptr, savebytes, savemapped);
   }
 }
 
 template<class T, int ALIGN> void Array<T, ALIGN>::create(U32 i) {
   n=reserved=i;
+  bytes=0;
+  mapped=false;
   if (i<=0) {
     data=0;
     ptr=0;
     return;
   }
   const size_t sz=ALIGN+n*sizeof(T);
-  ptr = (char*)calloc(sz, 1);
-  if (!ptr) quit("Out of memory");
+  bytes = sz;
+  ptr = (char*)cmix_mmap_alloc::Allocate(sz, &mapped);
+  if (!ptr) {
+    fprintf(stderr, "Out of memory allocating %zu bytes\n", sz);
+    abort();
+  }
   data = (ALIGN ? (T*)(ptr+ALIGN-(((long long)ptr)&(ALIGN-1))) : (T*)ptr);
 }
 
 template<class T, int ALIGN> Array<T, ALIGN>::~Array() {
-  free(ptr);
+  cmix_mmap_alloc::Release(ptr, bytes, mapped);
 }
 
 template<class T, int ALIGN> void Array<T, ALIGN>::push_back(const T& x) {
@@ -188,9 +199,44 @@ public:
 };
 
 int level=DEFAULT_OPTION;
+#ifndef CMIX_PAQ8_MEM_DIV
+#define CMIX_PAQ8_MEM_DIV 1
+#endif
 unsigned long long MEM() {
-  return 0x10000UL<<level;
+  return (0x10000UL<<level)/CMIX_PAQ8_MEM_DIV;
 }
+
+#ifndef CMIX_PAQ8_MAIN_CONTEXT_SCALE
+#define CMIX_PAQ8_MAIN_CONTEXT_SCALE 16
+#endif
+
+#ifndef CMIX_PAQ8_TEXT_MODEL_SCALE
+#define CMIX_PAQ8_TEXT_MODEL_SCALE 16
+#endif
+
+#ifndef CMIX_PAQ8_MATCH_SCALE
+#define CMIX_PAQ8_MATCH_SCALE 2
+#endif
+
+#ifndef CMIX_PAQ8_MATCH_DIV
+#define CMIX_PAQ8_MATCH_DIV 1
+#endif
+
+#ifndef CMIX_PAQ8_SPARSE_MATCH_DIV
+#define CMIX_PAQ8_SPARSE_MATCH_DIV 2
+#endif
+
+#ifndef CMIX_PAQ8_RCM_DIV
+#define CMIX_PAQ8_RCM_DIV 1
+#endif
+
+#ifndef CMIX_PAQ8_BUF_SCALE
+#define CMIX_PAQ8_BUF_SCALE 8
+#endif
+
+#ifndef CMIX_PAQ8_BUF_DIV
+#define CMIX_PAQ8_BUF_DIV 1
+#endif
 
 int y=0;
 
@@ -8101,12 +8147,13 @@ void XMLModel(Mixer& m, ModelStats *Stats = nullptr){
 U32 last_prediction = 2048;
 
 int contextModel2(ModelStats *Stats) {
-  static ContextMap2 cm(MEM()*16, 10);
-  static TextModel textModel(MEM()*16);
-  static MatchModel matchModel(MEM()*2);
-  static SparseMatchModel sparseMatchModel(MEM()/2);
+  static ContextMap2 cm(MEM()*CMIX_PAQ8_MAIN_CONTEXT_SCALE, 10);
+  static TextModel textModel(MEM()*CMIX_PAQ8_TEXT_MODEL_SCALE);
+  static MatchModel matchModel((MEM()*CMIX_PAQ8_MATCH_SCALE)/CMIX_PAQ8_MATCH_DIV);
+  static SparseMatchModel sparseMatchModel(MEM()/CMIX_PAQ8_SPARSE_MATCH_DIV);
   static dmcForest dmcforest;
-  static RunContextMap rcm7(MEM()), rcm9(MEM()), rcm10(MEM());
+  static RunContextMap rcm7(MEM()/CMIX_PAQ8_RCM_DIV),
+      rcm9(MEM()/CMIX_PAQ8_RCM_DIV), rcm10(MEM()/CMIX_PAQ8_RCM_DIV);
   static StateMap32 StateMaps[2]={{256},{256*256}};
   static Mixer m(NUM_INPUTS, 77472, NUM_SETS, 32);
   static U32 cxt[16];
@@ -8367,7 +8414,7 @@ void Predictor::update() {
 
 PAQ8::PAQ8(int memory) {
   paq8::level = memory;
-  paq8::buf.setsize(paq8::MEM()*8);
+  paq8::buf.setsize((paq8::MEM()*CMIX_PAQ8_BUF_SCALE)/CMIX_PAQ8_BUF_DIV);
   predictor_.reset(new paq8::Predictor());
 }
 

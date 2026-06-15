@@ -5,6 +5,7 @@
 #include <cstdint>
 #include "ppmd.h"
 #include <cstring>
+#include "../mmap-alloc.h"
 
 namespace PPMD {
 
@@ -40,6 +41,7 @@ struct ppmd_Model {
   };
 
   byte* HeapStart;
+  bool HeapMapped = false;
 
   uint Ptr2Indx( void* p ) {
     qword addr = ((byte*)p)-HeapStart;
@@ -124,7 +126,7 @@ uint U2B( uint NU ) {
 int StartSubAllocator( qword SASize ) {
   qword t = SASize << 20U;
 
-  HeapStart = new byte[t];
+  HeapStart = (byte*)cmix_mmap_alloc::Allocate(t, &HeapMapped);
 
   if( HeapStart==NULL ) return 0;
   SubAllocatorSize = t;
@@ -151,7 +153,12 @@ qword GetUsedMemory() {
 }
 
 void StopSubAllocator() {
-  if( SubAllocatorSize ) SubAllocatorSize=0, delete[] HeapStart;
+  if( SubAllocatorSize ) {
+    cmix_mmap_alloc::Release(HeapStart, SubAllocatorSize, HeapMapped);
+    SubAllocatorSize=0;
+    HeapStart=nullptr;
+    HeapMapped=false;
+  }
 
 }
 

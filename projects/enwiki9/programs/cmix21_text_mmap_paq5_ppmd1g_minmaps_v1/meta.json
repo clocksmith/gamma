@@ -1,0 +1,106 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd1g_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 1000 MB PPMD cap, minimum PAQ8 main/text maps, lighter match maps, and the minimum PAQ rolling buffer. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd2g_minmaps_v1",
+  "hypothesis": "The 2000 MB PPMD minmaps profile roundtripped with a strong 250K archive but exceeded the local 10 GiB guard late in decode. Cutting PPMD to 1000 MB should clear the guard while preserving the PAQ5 minmaps archive slope.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd1g_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd1g_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=1000 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=4 -DCMIX_PAQ8_BUF_SCALE=1"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 1000
+          }
+        }
+      },
+      {
+        "id": "paq8_minmaps",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "main_context_scale": 1,
+            "text_model_scale": 1,
+            "buffer_scale": 1,
+            "match_scale": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 4
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_minmaps",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "250000": {
+      "compressed_size_temp_at_abort": 149359,
+      "partial_output_size_at_abort": 40960,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10506692,
+      "failure": "compression_rss_crossed_10gib_ceiling"
+    }
+  },
+  "verdict": "Rejected for memory. The 1000 MB PPMD minmaps profile still crossed the local 10 GiB guard near the end of compression."
+}

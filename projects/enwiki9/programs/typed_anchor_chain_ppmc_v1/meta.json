@@ -29,8 +29,28 @@
         "reasons": [],
         "verdict": "program.py imports and exposes compress/decompress."
       }
-    ]
+    ],
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/typed_anchor_chain_ppmc_v1/2026-06-08T160656.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 71580,
+      "program_size": 3667,
+      "hutter_score": 75247,
+      "bits_per_byte": 2.29056,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "39035ba6deb8be09c14adb89de0060699ff19459466f4794c3f5ffe579b29f2a",
+      "compress_time_s": 26.2514,
+      "decompress_time_s": 6.06,
+      "notes": [
+        "Same-scope baseline_lzma at 250K: archive 75548, program 201, S 75749; this candidate: archive 71580, program 3667, S 75247.",
+        "400K/500K/1M probes did not produce driver JSON, indicating scale/resource failure in the current implementation."
+      ]
+    }
   },
-  "status": "benchmark_or_retire",
-  "verdict": "program.py imports and exposes compress/decompress."
+  "status": "measured_negative",
+  "verdict": "250K ledger-positive typed-anchor/PPMC signal versus baseline_lzma, but larger probes exited before driver result emission; keep as structural evidence, not a scalable parent.",
+  "latest_result": "projects/enwiki9/results/typed_anchor_chain_ppmc_v1/2026-06-08T160656.json"
 }

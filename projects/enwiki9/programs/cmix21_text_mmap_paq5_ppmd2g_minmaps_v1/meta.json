@@ -1,0 +1,150 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd2g_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 2000 MB PPMD cap, minimum PAQ8 main/text maps, lighter match maps, and the minimum PAQ rolling buffer. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd2g_cm2_text2_buf2_v1",
+  "hypothesis": "The selective PAQ5 trim still crossed the 10 GiB ceiling near the end of compression. Minimum main/text maps and buffer should finally pass memory while retaining more PAQ5 structure than a full PAQ4 downgrade.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd2g_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd2g_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=2000 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=4 -DCMIX_PAQ8_BUF_SCALE=1"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 2000
+          }
+        }
+      },
+      {
+        "id": "paq8_main_context",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "scale": 1
+          }
+        }
+      },
+      {
+        "id": "paq8_text_model",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "scale": 1
+          }
+        }
+      },
+      {
+        "id": "paq8_buffer",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "scale": 1
+          }
+        }
+      },
+      {
+        "id": "paq8_match",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "match_scale": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 4
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_main_context",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_text_model",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_buffer",
+        "to": "cmix21_text",
+        "stream": "history_window"
+      },
+      {
+        "from": "paq8_match",
+        "to": "cmix21_text",
+        "stream": "match_model"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "250000": {
+      "compressed_size": 45177,
+      "program_size": 559759,
+      "hutter_score": 604936,
+      "bits_per_byte": 1.445664,
+      "roundtrip_ok": true,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "compressed_sha256": "d677f53a83db2ab275ecee9799c63f2f29d1195af946a8105c4cf9f7e6f0109d",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd2g_minmaps_v1/2026-06-14T171759.json",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10501256,
+      "memory_note": "Roundtrip completed, but a late decode sample exceeded the local 10 GiB guard."
+    }
+  },
+  "verdict": "Archive-positive but memory-risk. This is the strongest reduced-memory cmix21 text-mode result so far, but it needs a small additional memory shave before promotion under the local 10 GiB guard."
+}

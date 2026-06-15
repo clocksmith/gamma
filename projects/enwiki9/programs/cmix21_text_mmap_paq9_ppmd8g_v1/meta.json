@@ -1,0 +1,78 @@
+{
+  "id": "cmix21_text_mmap_paq9_ppmd8g_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using the mmap allocator, PAQ8 level 9, and an 8000 MB PPMD heap. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq9_v1",
+  "hypothesis": "PAQ8 level 9 passed 1K memory and determinism but crossed the memory ceiling at the 250K compression gate. Capping PPMD at 8000 MB should keep the same cmix21 text path within memory at real prefix scope while preserving enough archive quality to remain a 10.95 prospect.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq9_ppmd8g_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq9_ppmd8g_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=9 -DCMIX_PPMD_MEMORY_MB=8000"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 9
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 8000
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Unmeasured. This is the next memory-admissible cmix21 text candidate after PAQ9/full-PPMD failed 250K RSS."
+}

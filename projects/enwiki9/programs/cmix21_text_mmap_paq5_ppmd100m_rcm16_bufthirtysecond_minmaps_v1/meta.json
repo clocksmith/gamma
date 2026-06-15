@@ -1,0 +1,108 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd100m_rcm16_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "retired",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 100 MB PPMD cap, minimum PAQ8 main/text/match/sparse maps, thinner run-context maps, and a thirtysecond-size PAQ rolling buffer. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_rcm8_bufthirtysecond_minmaps_v1",
+  "hypothesis": "Buffer/32 alone and RCM16+buffer/16 each missed the local memory guard. Combining RCM_DIV=16 with BUF_DIV=32 should create enough headroom while preserving the PAQ5 predictor core and sparse divider.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_rcm16_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_rcm16_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=16 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 100
+          }
+        }
+      },
+      {
+        "id": "paq8_minmaps",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "main_context_scale": 1,
+            "text_model_scale": 1,
+            "buffer_scale": 1,
+            "buffer_div": 32,
+            "match_scale": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 16
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_minmaps",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "250000": {
+      "compressed_size_temp_at_abort": 149359,
+      "partial_compressed_size_at_abort": 40960,
+      "program_size": 559749,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10489160,
+      "failure": "compression_rss_crossed_10gib_ceiling"
+    }
+  },
+  "verdict": "Rejected for local memory. RCM_DIV=16 plus BUF_DIV=32 was the closest miss, crossing the 10 GiB guard by only 3400 KiB while preserving the same partial final archive region."
+}

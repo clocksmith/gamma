@@ -1,0 +1,50 @@
+{
+  "id": "cmix21_text_mmap_wrapped_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using a vendored binary patched to file-back large adaptive tables through mmap. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_wrapped_v1",
+  "hypothesis": "The unrestricted cmix v21 -t archive is below 10.95 percent; if the same predictor can run with resident RAM below the Hutter ceiling by moving large tables to temporary files, it becomes the strongest known constructive frontier program.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_wrapped_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_wrapped_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Unmeasured. This is the current strongest frontier candidate because it targets the known sub-10.95 cmix21 text-mode archive while addressing the Hutter memory constraint."
+}

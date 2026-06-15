@@ -3,5 +3,28 @@
   "description": "custom no-cmix/no-lzma arithmetic coder with integer-mixed global, previous-byte, and MediaWiki state distributions",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "V3 mixes context distributions instead of selecting one; raw bytes are untouched."
+  "notes": "V3 mixes context distributions instead of selecting one; raw bytes are untouched.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_structural_range_v3/2026-06-08T162020.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 125859,
+      "program_size": 6633,
+      "hutter_score": 132492,
+      "bits_per_byte": 4.027488,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "51f861b2c89c8a8de271592123a0484f0b8330213822c599895c5a7e25532356",
+      "compress_time_s": 8.5531,
+      "decompress_time_s": 9.417,
+      "notes": [
+        "250K archive 125859, program 6633, S 132492; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_structural_range_v3/2026-06-08T162020.json",
+  "status": "retired",
+  "verdict": "Retired: representative structural range coder remains far behind baseline_lzma at 250K; no-backend range family is not competitive."
 }

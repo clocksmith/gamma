@@ -3,5 +3,16 @@
   "description": "38-token MediaWiki/XML opcode substitution + cmix back-end (subprocess); architecture test of opcode-on-cmix vs bare cmix",
   "added": "2026-05-09",
   "deps": ["cmix on PATH"],
+  "status": "blocked_dependency",
+  "measured": {
+    "lane_b_driver_gate": {
+      "data_size": 1024,
+      "roundtrip_ok": false,
+      "determinism": null,
+      "verdict": "Blocked before compression: runtime requires cmix on PATH.",
+      "error": "RuntimeError: cmix not on PATH; install from https://github.com/byronknoll/cmix"
+    }
+  },
+  "verdict": "Blocked dependency: cmix executable is not available on PATH; inline or package the backend before scoring.",
   "notes": "Step 2 of locked next-steps. Score-honesty caveat: cmix binary not inlined; inline before any leaderboard-eligible run."
 }

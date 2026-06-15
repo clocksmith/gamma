@@ -1,0 +1,109 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd500m_rcm8_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 500 MB PPMD cap, minimum PAQ8 main/text/match maps, minimum PAQ rolling buffer, and thinner PAQ8 run-context maps. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd500m_minmaps_v1",
+  "hypothesis": "The 500 MB minmaps profile missed the local 10 GiB decode guard by a small margin. Increasing only the run-context divider from 4 to 8 may clear memory without damaging the PAQ5 archive core.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd500m_rcm8_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd500m_rcm8_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=500 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=8 -DCMIX_PAQ8_BUF_SCALE=1"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 500
+          }
+        }
+      },
+      {
+        "id": "paq8_minmaps",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "main_context_scale": 1,
+            "text_model_scale": 1,
+            "buffer_scale": 1,
+            "match_scale": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 8
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_minmaps",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "250000": {
+      "compressed_size_temp_at_abort": 149359,
+      "program_size": 559761,
+      "hutter_score_if_roundtrip_passed": 709120,
+      "bits_per_byte": 4.779488,
+      "partial_output_size_at_abort": 0,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 8408772,
+      "failure": "archive_ceiling_missed_during_compression"
+    }
+  },
+  "verdict": "Rejected. The single-axis run-context shave collapses the 250K archive to 149,359 bytes, so these maps are load-bearing for PAQ5 text mode."
+}

@@ -1,28 +1,29 @@
 ---
 name: gamma-codegen-ladder
-description: Design and run GAMMA code generation benchmarks across JavaScript and TypeScript variants, prompt-quality levels, and temperature sweeps. Use when users ask for TS vs JS comparisons, prompt-level studies, or provider benchmarking in src/benchmarks/codegen.
+description: Design and run GAMMA code generation benchmarks across JavaScript and TypeScript variants, prompt-quality levels, providers, and temperature sweeps. Use for TS vs JS comparisons, prompt-level studies, and src/benchmarks/codegen leaderboard work.
 ---
 
-# GAMMA Codegen Ladder Skill
+# GAMMA Codegen Ladder
 
-Use this skill for codegen benchmark experiments in `src/benchmarks/codegen/`.
+Use for `src/benchmarks/codegen/` experiments where dimensions must stay comparable.
 
-## Scope
+## Axes
 
-- TS vs JS comparisons
-- Prompt quality ladders (`novice` through `expert`)
-- Temperature sweeps and multi-run statistics
-- Provider and model comparisons (Ollama and cloud APIs)
+- Language: `js`, `ts`
+- Prompt level: `novice`, `intermediate`, `advanced`, `expert`
+- Provider/model
+- Temperature and run count
+- Task or category
 
 ## Workflow
 
-1. Inspect available dimensions and providers.
-2. Run a dry smoke to verify task and variant selection.
-3. Run a small live benchmark.
-4. Expand into matrix runs (`language x prompt_level x temperature x provider`).
-5. Summarize outputs from generated reports.
+1. List available tasks, categories, providers, and presets.
+2. Dry-run the intended matrix.
+3. Run a focused live matrix with fixed provider/model and temperature.
+4. Expand one axis at a time.
+5. Summarize pass rate, quality, latency, and variance from generated reports.
 
-## Verified Command Patterns
+## Commands
 
 ```bash
 node src/benchmarks/codegen/index.js --help
@@ -32,8 +33,6 @@ node src/benchmarks/codegen/index.js --list-categories
 node src/benchmarks/codegen/index.js --list-tasks
 ```
 
-Dry smoke:
-
 ```bash
 node src/benchmarks/codegen/index.js \
   --task fibonacci \
@@ -41,8 +40,6 @@ node src/benchmarks/codegen/index.js \
   --prompt-level novice,expert \
   --dry
 ```
-
-Focused live run:
 
 ```bash
 node src/benchmarks/codegen/index.js \
@@ -54,8 +51,6 @@ node src/benchmarks/codegen/index.js \
   --runs 3
 ```
 
-Temperature sweep:
-
 ```bash
 node src/benchmarks/codegen/index.js \
   --task expression-evaluator \
@@ -66,22 +61,10 @@ node src/benchmarks/codegen/index.js \
   --runs 2
 ```
 
-Query interface:
-
-```bash
-node src/benchmarks/codegen/query_cli.js --help
-node src/benchmarks/codegen/query_cli.js "Which model is fastest for TypeScript?"
-```
-
-## Interpretation Checklist
-
-- Compare pass rate and quality deltas between JS and TS at equal prompt levels.
-- Separate deterministic (`temperature=0.0`) from creativity sweeps.
-- Track run-count variance before declaring winners.
-- Keep provider and model versions explicit in every report.
-
 ## Guardrails
 
-- Confirm provider availability before live runs (`--list-providers`).
-- Use `--dry` on new task matrices before expensive executions.
-- Keep category and task scopes small for smoke, then scale up.
+- Compare JS and TS only at identical prompt/provider/temperature/run settings.
+- Separate deterministic rows from temperature sweeps.
+- Confirm provider availability before live runs.
+- Use `query_cli.js` only after artifacts exist:
+  `node src/benchmarks/codegen/query_cli.js "Which model is strongest for TypeScript?"`

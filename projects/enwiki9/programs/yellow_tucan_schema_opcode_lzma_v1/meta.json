@@ -3,5 +3,28 @@
   "description": "no-cmix XML/text split with opcode-coded XML stream and Python stdlib LZMA extreme mode",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "No external binary; program.py is the complete decompressor."
+  "notes": "No external binary; program.py is the complete decompressor.",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_schema_opcode_lzma_v1/2026-06-08T161841.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 77188,
+      "program_size": 4749,
+      "hutter_score": 81937,
+      "bits_per_byte": 2.470016,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "88f65faf66b20f2b617920e424d48ba63770a56ed6db900b26c287423cc6211c",
+      "compress_time_s": 0.2584,
+      "decompress_time_s": 0.0068,
+      "notes": [
+        "250K archive 77188, program 4749, S 81937; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_schema_opcode_lzma_v1/2026-06-08T161841.json",
+  "status": "retired",
+  "verdict": "Retired: schema-opcode split worsens 250K archive and score versus baseline_lzma and markup-opcode variants."
 }

@@ -3,5 +3,29 @@
   "description": "modified fx2-cmix with deterministic MediaWiki sidecar contexts consumed by direct, indirect, match, and mixer models",
   "language": "python-wrapper+c++",
   "deps": [],
-  "notes": "cmix.bin.gz is the locally built modified fx2-cmix binary and is counted by the harness. The binary was built with GCC using SEED=923 and UPDATE_LIMIT=3000."
+  "notes": "cmix.bin.gz is the locally built modified fx2-cmix binary and is counted by the harness. The binary was built with GCC using SEED=923 and UPDATE_LIMIT=3000.",
+  "measured": {
+    "1k_driver_gate": {
+      "result_path": "projects/enwiki9/results/sidecar_cmix_v1/2026-06-08T170033.json",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 302,
+      "program_size": 169798,
+      "hutter_score": 170100,
+      "bits_per_byte": 2.359375,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "1dda671849060c3704c66471d51f20913e49935862819a3782a63f2cebebaa7a",
+      "compress_time_s": 1.3232,
+      "decompress_time_s": 1.2711,
+      "notes": [
+        "1K archive 302, program 169798, S 170100.",
+        "250K gate failed during decompression: embedded sidecar-cmix binary died with SIGBUS."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/sidecar_cmix_v1/2026-06-08T170033.json",
+  "status": "retired",
+  "verdict": "Retired: deterministic 1K pass, but 250K decompression dies with SIGBUS before driver result emission."
 }

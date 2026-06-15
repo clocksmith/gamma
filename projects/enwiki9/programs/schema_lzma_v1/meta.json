@@ -3,5 +3,28 @@
   "description": "two-stream split (XML skeleton vs <text> content) compressed independently with lzma -9e",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "cheap-oracle validation of typed-stream architecture before paying for cmix integration"
+  "notes": "cheap-oracle validation of typed-stream architecture before paying for cmix integration",
+  "measured": {
+    "250k_driver_gate": {
+      "result_path": "projects/enwiki9/results/schema_lzma_v1/2026-06-08T165306.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 77412,
+      "program_size": 2469,
+      "hutter_score": 79881,
+      "bits_per_byte": 2.477184,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "582b42bf6d179d0bc00389326bb6af961327d7640170defb0fe76b9276fdd28c",
+      "compress_time_s": 0.0939,
+      "decompress_time_s": 0.0042,
+      "notes": [
+        "250K archive 77412, program 2469, S 79881; baseline_lzma S 75749."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/schema_lzma_v1/2026-06-08T165306.json",
+  "status": "retired",
+  "verdict": "Retired: schema transform worsens 250K archive and score versus baseline_lzma."
 }

@@ -3,5 +3,29 @@
   "description": "size-optimized no-cmix MediaWiki/XML opcode substitution followed by Python stdlib LZMA extreme mode",
   "added": "2026-05-09",
   "deps": [],
-  "notes": "No external binary; same transform class as v1 with smaller decompressor source and no stats."
+  "notes": "No external binary; same transform class as v1 with smaller decompressor source and no stats.",
+  "measured": {
+    "1m_driver_gate": {
+      "result_path": "projects/enwiki9/results/yellow_tucan_markup_opcode_lzma_v2/2026-06-08T161753.json",
+      "data_size": 1000000,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 289240,
+      "program_size": 920,
+      "hutter_score": 290160,
+      "bits_per_byte": 2.31392,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "52eecf9ac263998b44110d673af0eecdd2ebe251c4e147214bdde7f194f8bfd9",
+      "compress_time_s": 4.7508,
+      "decompress_time_s": 0.0841,
+      "notes": [
+        "1M baseline_lzma S 290933; this candidate S 290160, score delta -773.",
+        "1M opcode_word_bz2_tiny_v1 S 275150; this candidate trails by 15010."
+      ]
+    }
+  },
+  "latest_result": "projects/enwiki9/results/yellow_tucan_markup_opcode_lzma_v2/2026-06-08T161753.json",
+  "status": "measured_negative",
+  "verdict": "Measured structural evidence: markup opcode deletion becomes positive versus baseline_lzma at 1M, but is dominated by opcode_word_bz2_tiny_v1 and opcode_typed_anchor_bitmix_v1."
 }
