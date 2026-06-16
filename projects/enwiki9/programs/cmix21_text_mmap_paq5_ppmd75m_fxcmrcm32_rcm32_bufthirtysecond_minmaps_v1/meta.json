@@ -1,0 +1,112 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd75m_fxcmrcm32_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 75 MB PPMD cap, full PAQ8 main/text/match maps, sparse-match divisor 8, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, full FXCM cmC2 maps, and FXCM run-context maps divided by 32. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "FXCM_RCM_DIV=16 passed the 250K guard but missed the 1M guard by 836 KiB. Increasing only FXCM_RCM_DIV to 32 should provide enough 1M memory margin without touching FXCM cmC2 maps or PAQ main/text/match predictor surfaces.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp with default value 1; PAQ8 memory divisor hooks retained in src/models/paq8.cpp",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm32_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm32_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=75 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=32"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5,
+            "main_context_scale": 1,
+            "main_context_div": 1,
+            "text_model_scale": 1,
+            "text_model_div": 1,
+            "match_scale": 1,
+            "match_div": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 32,
+            "buffer_div": 32
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 75
+          }
+        }
+      },
+      {
+        "id": "fxcm",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "cmc2_div": 1,
+            "rcm_div": 32
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "fxcm",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "compressed_size_temp_at_abort": 682,
+      "partial_decoded_size_at_abort": 0,
+      "program_size": 561210,
+      "roundtrip_ok": false,
+      "failure": "decode_no_output_progress",
+      "note": "Compression produced a 246-byte stream, but decompression consumed CPU with the output file still at 0 bytes across repeated checks; the process group was terminated and the candidate rejected."
+    }
+  },
+  "verdict": "Rejected for decode behavior at 1K. FXCM_RCM_DIV=32 appears too aggressive for the FXCM run-context surface; the next test should use an intermediate divisor between 16 and 32."
+}

@@ -1,7 +1,7 @@
 {
   "id": "cmix21_text_mmap_paq9_v1",
   "family": "cmix21_mmap",
-  "status": "candidate",
+  "status": "retired",
   "description": "cmix v21 forced text-mode wrapper using the mmap allocator plus PAQ8 level 9 instead of level 11. The binary and english.dic are gzip-compressed and counted toward program_size.",
   "parent": "cmix21_text_mmap_paq10_v1",
   "hypothesis": "PAQ8 level 10 remained near or above the strict memory ceiling during verification. PAQ8 level 9 should clear memory while retaining enough of cmix21 text-mode's full-corpus margin to stay a plausible 10.95 candidate.",
@@ -85,7 +85,23 @@
       "cmix21_text_mmap_ppmd8g_v1": "Reducing only PPMD did not reduce the binding resident memory; sampled around 12040392 KiB RSS.",
       "cmix21_text_mmap_paq10_v1": "PAQ8 level 10 compression sampled near the ceiling, but decompression sampled around 10880384 KiB RSS.",
       "cmix21_text_mmap_paq10_ppmd8g_v1": "Combined PAQ8 level 10 and PPMD 8000 MB later rose to around 11241668 KiB RSS during compression."
+    },
+    "250000_memory_gate": {
+      "compressed_size_temp_at_abort": null,
+      "partial_output_size_at_abort": 0,
+      "program_size": 561235,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10857412,
+      "failure": "compression_rss_crossed_10gib_ceiling",
+      "memory_snapshot": "/tmp/cmix21_text_mmap_paq9_v1.smaps_snapshot.txt",
+      "memory_observation": {
+        "rss_kib": 10858624,
+        "anonymous_kib": 9673844,
+        "file_pss_kib": 1181110,
+        "source": "smaps_rollup captured from the cmix process before guard termination"
+      }
     }
   },
-  "verdict": "Best live frontier program found so far: 1K roundtrip passed with sampled compression/decompression RSS below 10 GiB. Not a 10.95 proof until it survives larger gates and full-corpus score accounting."
+  "verdict": "Rejected for local memory at 250K. PAQ8 level 9 passed the 1K roundtrip gate, but the 250K compression gate crossed the 10 GiB guard before emitting an archive."
 }

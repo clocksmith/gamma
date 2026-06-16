@@ -1,7 +1,7 @@
 {
   "id": "cmix21_text_mmap_paq9_ppmd8g_v1",
   "family": "cmix21_mmap",
-  "status": "candidate",
+  "status": "retired",
   "description": "cmix v21 forced text-mode wrapper using the mmap allocator, PAQ8 level 9, and an 8000 MB PPMD heap. The binary and english.dic are gzip-compressed and counted toward program_size.",
   "parent": "cmix21_text_mmap_paq9_v1",
   "hypothesis": "PAQ8 level 9 passed 1K memory and determinism but crossed the memory ceiling at the 250K compression gate. Capping PPMD at 8000 MB should keep the same cmix21 text path within memory at real prefix scope while preserving enough archive quality to remain a 10.95 prospect.",
@@ -73,6 +73,23 @@
       }
     ]
   },
-  "measured": {},
-  "verdict": "Unmeasured. This is the next memory-admissible cmix21 text candidate after PAQ9/full-PPMD failed 250K RSS."
+  "measured": {
+    "250000_memory_gate": {
+      "compressed_size_temp_at_abort": 149359,
+      "partial_output_size_at_abort": 0,
+      "program_size": 561235,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10856436,
+      "failure": "compression_rss_crossed_10gib_ceiling",
+      "memory_snapshot": "/tmp/cmix21_text_mmap_paq9_ppmd8g_v1.smaps_snapshot.txt",
+      "memory_observation": {
+        "rss_kib": 10856436,
+        "anonymous_kib": 9671704,
+        "file_pss_kib": 1181095,
+        "source": "smaps_rollup captured from the cmix process before guard termination"
+      }
+    }
+  },
+  "verdict": "Rejected for local memory at 250K. Capping PPMD to 8000 MB did not fix the PAQ9 memory crest; the run crossed the 10 GiB guard before emitting an archive."
 }

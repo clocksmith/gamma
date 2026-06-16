@@ -1,0 +1,125 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd75m_sparse16_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 75 MB PPMD cap, full PAQ8 main/text/match maps, sparse-match divisor 16, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, full FXCM cmC2 maps, and FXCM run-context maps divided by 16. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "PPMD75 + FXCM_RCM_DIV=16 passed 250K but missed the 1M guard by 836 KiB. Increasing only sparse-match divisor from 8 to 16 should buy the missing 1M memory margin while preserving the PAQ5 main/text/match and FXCM cmC2 surfaces.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp with default value 1; PAQ8 memory divisor hooks retained in src/models/paq8.cpp",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_sparse16_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_sparse16_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=75 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=16 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=16"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5,
+            "main_context_scale": 1,
+            "main_context_div": 1,
+            "text_model_scale": 1,
+            "text_model_div": 1,
+            "match_scale": 1,
+            "match_div": 1,
+            "sparse_match_div": 16,
+            "rcm_div": 32,
+            "buffer_div": 32
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 75
+          }
+        }
+      },
+      {
+        "id": "fxcm",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "cmc2_div": 1,
+            "rcm_div": 16
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "fxcm",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "archive": 246,
+      "program_size": 561213,
+      "hutter_score": 561459,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "b7428375a10ecfc9b58abf8d3729c05056f0cec7822be5728880abc054d92920",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_sparse16_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T054304.json"
+    },
+    "250000": {
+      "archive": 45183,
+      "program_size": 561213,
+      "hutter_score": 606396,
+      "bits_per_byte": 1.445856,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "max_sampled_rss_kib": 10485444,
+      "memory_ceiling_kib": 10485760,
+      "compressed_sha256": "ee96690f8d49a7c7dc133dcd34fadd55b5e03b8205f48d75675fb1ef5368f1ab",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_sparse16_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T060525.json"
+    }
+  },
+  "verdict": "Passed 1K and 250K determinism under the local memory guard, but did not improve the sparse8 boundary: archive is 2 bytes worse than sparse8 at 250K and sampled RSS is higher. Do not promote to 1M; use this as evidence that sparse-match division alone is not the missing margin."
+}
