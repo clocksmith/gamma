@@ -1,0 +1,119 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd100m_mainctxdiv4_textdiv2_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "retired",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 100 MB PPMD cap, main-context divisor 4, text-model divisor 2, sparse-match divisor 8, RCM32 run-context maps, and a thirtysecond-size PAQ rolling buffer. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_mainctxdiv3_textdiv2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "MAIN_CONTEXT_DIV=3 plus TEXT_MODEL_DIV=2 still crossed the guard by 8388 KiB. Increasing only MAIN_CONTEXT_DIV to 4 should create enough resident margin while preserving PAQ5, PPMD100, the match model, and the text model divisor.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_PAQ8_MAIN_CONTEXT_DIV and CMIX_PAQ8_TEXT_MODEL_DIV added to src/models/paq8.cpp with default value 1",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_mainctxdiv4_textdiv2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_mainctxdiv4_textdiv2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=4 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=2 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 100
+          }
+        }
+      },
+      {
+        "id": "paq8_minmaps",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "main_context_scale": 1,
+            "main_context_div": 4,
+            "text_model_scale": 1,
+            "text_model_div": 2,
+            "buffer_scale": 1,
+            "buffer_div": 32,
+            "match_scale": 1,
+            "match_div": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 32
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "paq8_minmaps",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "250000": {
+      "compressed_size_temp_at_abort": 149359,
+      "partial_compressed_size_at_abort": 40960,
+      "program_size": 561436,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10492740,
+      "failure": "compression_rss_crossed_10gib_ceiling",
+      "memory_snapshot": "/tmp/cmix21_text_mmap_paq5_ppmd100m_mainctxdiv4_textdiv2_rcm32_bufthirtysecond_minmaps_v1.smaps_snapshot.txt",
+      "memory_observation": {
+        "rss_kib": 10493256,
+        "anonymous_kib": 10485768,
+        "file_pss_kib": 3770,
+        "source": "smaps_rollup captured from the cmix process before guard termination"
+      }
+    }
+  },
+  "verdict": "Rejected for local memory. MAIN_CONTEXT_DIV=4 with TEXT_MODEL_DIV=2 still crossed the 10 GiB guard by 6980 KiB; smaps shows the PAQ5 branch is now dominated by anonymous in-process regions, not mmap-backed PPMD."
+}

@@ -1,0 +1,148 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd75m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 75 MB PPMD cap, full PAQ8 main/text/match maps, sparse-match divisor 8, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, FXCM run-context maps divided by 16, and a selective divisor on FXCM cmC2 map 13 only. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd75m_fxcmidx13_15_17div2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "The idx13/15/17 cut fixed 1M memory but missed the 174415-byte archive ceiling by one byte. Restoring cmC2 maps 15 and 17 may recover archive quality while keeping enough memory margin from the large cmC2[13] cut.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_FXCM_CMC2_IDX*_DIV added to src/models/fxcmv1.cpp; indexed cmC2 map sizing routes selected maps through per-map divisors while retaining the global CMIX_FXCM_CMC2_DIV path; FXCM_RCM_DIV, non-power RunContextMap range reduction, and PAQ8 memory divisor hooks retained.",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=75 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=16 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5,
+            "main_context_scale": 1,
+            "main_context_div": 1,
+            "text_model_scale": 1,
+            "text_model_div": 1,
+            "match_scale": 1,
+            "match_div": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 32,
+            "buffer_div": 32
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 75
+          }
+        }
+      },
+      {
+        "id": "fxcm",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "cmc2_div": 1,
+            "cmc2_idx13_div": 2,
+            "rcm_div": 16,
+            "match_hash_div": 1
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "fxcm",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "archive": 246,
+      "program_size": 561279,
+      "hutter_score": 561525,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "01850679a940cc5928d332d355b10d8aa2b668d08fe322ffff34e975fcae90f8",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T101921.json"
+    },
+    "250000": {
+      "archive": 45181,
+      "program_size": 561279,
+      "hutter_score": 606460,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "793d0c3a7078fc11f9fc04d9a9070960792c4d95223808404ff941a45a87be8e",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10248400,
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T104154.json"
+    },
+    "1000000": {
+      "archive": 174415,
+      "program_size": 561279,
+      "hutter_score": 735694,
+      "bits_per_byte": 1.39532,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "f9141ec0c158935886b66b668a0898034b9b7d62215b929b61aa78a9e5b50041",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10468272,
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T115542.json"
+    },
+    "10000000": {
+      "compressed_size_temp_at_abort": 6186040,
+      "partial_compressed_size_at_abort": 212992,
+      "program_size": 561279,
+      "roundtrip_ok": false,
+      "deterministic": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10485864,
+      "failure": "compression_rss_crossed_10gib_ceiling"
+    }
+  },
+  "verdict": "1M deterministic guard gate passed exactly at the archive promotion floor: archive 174415, roundtrip true, deterministic true, peak sampled RSS 10468272 KiB under the 10485760 KiB guard. The 10M gate failed by memory only, crossing at 10485864 KiB against the 10485760 KiB guard before producing a scored archive. Next branch should keep this probability shape and shave a very small low-risk memory surface, starting with PPMD 74 MB."
+}

@@ -38,10 +38,10 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | archive | score | program_size | archive_bpb | result |
 |---:|---|---:|---:|---:|---:|---|
 | 1,000 | `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | 243 | 383,619 | 383,376 | 1.944 | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T000100.json` |
-| 1,024 | `fx2cmix_recovered_gcc_o3_struct_direct_match_mixers_xz_v1` | 257 | 302,097 | 301,840 | 2.0078125 | `results/fx2cmix_recovered_gcc_o3_struct_direct_match_mixers_xz_v1/2026-06-07T172705.json` |
+| 1,024 | `cmix21_text_mmap_paq5_ppmd70m_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1` | 246 | 561,459 | 561,213 | 1.921875 | `results/cmix21_text_mmap_paq5_ppmd70m_fxcmrcm16_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T044111.json` |
 | 65,536 | `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | 13,573 | 270,151 | 256,578 | 1.656860352 | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T174031.json` |
 | 250,000 | `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | 44,976 | 428,352 | 383,376 | 1.439232 | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T002058.json` |
-| 1,000,000 | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftdeep_safe_v1` | 175,096 | 414,399 | 239,303 | 1.400768 | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftdeep_safe_v1/2026-06-08T220448.json` |
+| 1,000,000 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | 174,415 | 735,625 | 561,210 | 1.39532 | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json` |
 | 1,048,576 | `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | 182,361 | 438,939 | 256,578 | 1.391304016 | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T175351.json` |
 | 10,000,000 | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | 1,643,289 | 1,882,615 | 239,326 | 1.3146312 | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1/2026-06-08T201540.json` |
 

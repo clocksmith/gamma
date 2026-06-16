@@ -33,6 +33,42 @@ LOCAL_ARTIFACT_PATTERNS = (
     "__pycache__/",
 )
 
+TERMINAL_AUDIT_STATUSES = {
+    "active",
+    "blocked_dependency",
+    "candidate",
+    "measured_negative",
+    "retired",
+    "track_source_before_evolution",
+}
+
+STATUS_DESCRIPTIONS = {
+    "active": (
+        "Contract-valid, registered, source-tracked candidates with valid "
+        "roundtrip evidence and an explicit active metadata status."
+    ),
+    "blocked_dependency": (
+        "Candidates blocked by an external dependency, lock, runtime, or "
+        "baseline requirement rather than by measured compression quality."
+    ),
+    "candidate": (
+        "Contract-valid, registered, source-tracked candidates still awaiting "
+        "Lane 0 measurement or a promotion decision."
+    ),
+    "measured_negative": (
+        "Contract-valid candidates with valid roundtrip evidence that are kept "
+        "as negative empirical evidence instead of active promotion work."
+    ),
+    "retired": (
+        "Candidates with retired metadata or unrepaired contract/schema "
+        "failures that should stay out of active sweeps."
+    ),
+    "track_source_before_evolution": (
+        "Candidates with local source changes that must be serialized into a "
+        "tracked patch or committed source before further evolution."
+    ),
+}
+
 
 def rel(path: pathlib.Path) -> str:
     return path.relative_to(REPO_ROOT).as_posix()
@@ -277,25 +313,27 @@ def classify_candidate(
     if untracked_source_files:
         reasons.append("has_untracked_source_files")
 
-    if not has_program or not has_meta or not registered or meta_error or meta_id_matches is False:
-        return "retire_or_repair_contract", reasons
     if untracked_source_files:
         return "track_source_before_evolution", reasons
+    if not has_program or not has_meta or not registered or meta_error or meta_id_matches is False:
+        return "retired", reasons
     if meta_status == "candidate":
         if valid_evidence_count == 0:
             return "candidate", ["awaiting_lane0_measurement"]
         return "candidate", ["awaiting_lane0_promotion_decision"]
     if meta_status == "measured_negative":
         if valid_evidence_count == 0:
-            return "benchmark_or_retire", ["measured_negative_without_valid_evidence"]
+            return "candidate", ["measured_negative_without_valid_evidence"]
         return "measured_negative", reasons
     if meta_status == "active":
         if valid_evidence_count == 0:
-            return "benchmark_or_retire", ["active_without_valid_evidence"]
+            return "candidate", ["active_without_valid_evidence"]
         return "active", reasons
     if valid_evidence_count == 0:
-        return "benchmark_or_retire", ["no_valid_roundtrip_evidence"]
-    return "active", reasons
+        return "candidate", ["awaiting_lane0_measurement"]
+    if meta_status not in TERMINAL_AUDIT_STATUSES:
+        reasons.append("metadata_status_missing_or_unknown")
+    return "candidate", reasons or ["awaiting_lane0_promotion_decision"]
 
 
 def audit() -> dict[str, Any]:
@@ -391,6 +429,7 @@ def audit() -> dict[str, Any]:
                 "small corpus fixtures",
             ],
             "ignored_local_artifacts": list(LOCAL_ARTIFACT_PATTERNS),
+            "status_definitions": dict(sorted(STATUS_DESCRIPTIONS.items())),
         },
         "summary": {
             "file_entries": count_file_entries(ROOT),
@@ -456,6 +495,19 @@ def render_markdown(inventory: dict[str, Any]) -> str:
     )
     for pattern in inventory["tracking_policy"]["ignored_local_artifacts"]:
         lines.append(f"- `{pattern}`")
+
+    lines.extend(
+        [
+            "",
+            "## Status Definitions",
+            "",
+            "| Status | Meaning |",
+            "|---|---|",
+        ]
+    )
+    status_definitions = inventory["tracking_policy"].get("status_definitions", {})
+    for status, description in sorted(status_definitions.items()):
+        lines.append(f"| `{status}` | {description} |")
 
     problem_candidates = [
         candidate

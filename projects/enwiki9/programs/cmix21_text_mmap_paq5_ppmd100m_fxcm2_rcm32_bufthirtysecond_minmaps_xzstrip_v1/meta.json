@@ -1,0 +1,85 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "Package-only stripped-binary xz recoding of the FXCM2 PAQ5/PPMD100M cmix21 candidate. The dictionary bytes, cmix compile flags, and compression path match cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1; only ELF symbols and counted asset coding change.",
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xz_v1",
+  "hypothesis": "Stripping non-runtime ELF symbol payload and xz-coding the assets should preserve archive behavior while reducing the counted program payload. This improves the ledger if the FXCM2 10M archive slope remains competitive.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space",
+    "Python standard-library lzma module"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_FXCM_CMC2_DIV and CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp; PAQ8 memory divisor hooks retained in src/models/paq8.cpp; packaged executable stripped after build",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1/cmix.bin.xz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1/english.dic.xz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1 && strip cmix"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "package",
+        "type": "program_payload_policy",
+        "payload": {
+          "discrete": {
+            "asset_codec": "xz",
+            "binary_payload_bytes": 295508,
+            "dictionary_payload_bytes": 155996,
+            "binary_symbols": "stripped"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "fxcm",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "cmc2_div": 2,
+            "rcm_div": 1
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 100
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "package",
+        "to": "cmix21_text",
+        "stream": "counted_program_bytes"
+      },
+      {
+        "from": "fxcm",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Awaiting driver replay. Direct asset recoding plus executable stripping lowers binary plus dictionary payload from 558,987 bytes to 451,504 bytes, a 107,483-byte counted-program reduction before wrapper delta, while preserving the same source build and dictionary contents.",
+  "latest_result": null
+}

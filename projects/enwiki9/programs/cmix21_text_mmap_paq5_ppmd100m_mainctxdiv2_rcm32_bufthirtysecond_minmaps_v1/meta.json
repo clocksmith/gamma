@@ -97,6 +97,14 @@
       }
     ]
   },
-  "measured": {},
-  "verdict": "Unmeasured. Mainctxdiv2 candidate intended to identify and reduce the dominant PAQ-side resident allocation."
+  "measured": {
+    "250000": {
+      "program_size": 561003,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10490564,
+      "failure": "compression_rss_crossed_10gib_ceiling"
+    }
+  },
+  "verdict": "Rejected for local memory. MAIN_CONTEXT_DIV=2 with PPMD100/RCM32/BUF32 still crossed the 10 GiB guard by 4804 KiB. Since PPMD, match, and main-context divisors all converge on the same resident crest, the next move is memory attribution before more one-knob cuts."
 }

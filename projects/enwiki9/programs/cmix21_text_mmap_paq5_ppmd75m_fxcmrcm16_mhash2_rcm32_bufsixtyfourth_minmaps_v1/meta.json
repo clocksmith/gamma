@@ -1,0 +1,125 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_mhash2_rcm32_bufsixtyfourth_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 75 MB PPMD cap, full PAQ8 main/text/match maps, sparse-match divisor 8, RCM32 run-context maps, a sixtyfourth-size PAQ rolling buffer, full FXCM cmC2 maps, FXCM run-context maps divided by 16, and FXCM match-position hash table divided by 2. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_mhash2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "mhash2 preserved the 45,182-byte 250K archive but crossed the 1M memory guard. BUF_DIV=64 previously passed 250K with only a 3-byte archive regression. Combining mhash2 with BUF64 tests whether the two narrow cuts create enough 1M memory margin without damaging the archive surface.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_FXCM_RCM_DIV and CMIX_FXCM_MHASH_DIV added to src/models/fxcmv1.cpp; FXCM cmC2 sizes rounded to legal power-of-two table grains; non-power RunContextMap slot selection uses deterministic multiply-high range reduction; PAQ8 memory divisor hooks retained in src/models/paq8.cpp",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_mhash2_rcm32_bufsixtyfourth_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_mhash2_rcm32_bufsixtyfourth_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=75 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=64 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=16 -DCMIX_FXCM_MHASH_DIV=2"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5,
+            "main_context_scale": 1,
+            "main_context_div": 1,
+            "text_model_scale": 1,
+            "text_model_div": 1,
+            "match_scale": 1,
+            "match_div": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 32,
+            "buffer_div": 64
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 75
+          }
+        }
+      },
+      {
+        "id": "fxcm",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "cmc2_div": 1,
+            "rcm_div": 16,
+            "match_hash_div": 2
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "fxcm",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "archive": 246,
+      "program_size": 561287,
+      "hutter_score": 561533,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "b010cf7ace3bce8737ad90508ff7903d07c266ad9e4405ffa044d7f4d1f57450",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_mhash2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-15T085123.json"
+    },
+    "250000": {
+      "archive": 45184,
+      "program_size": 561287,
+      "hutter_score": 606471,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "29ca564b91dc7ff3e91505e54dc5f089eecb8ec8be8aa173840a8db7e54b57e5",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10469316,
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm16_mhash2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-15T091328.json"
+    }
+  },
+  "verdict": "Valid at 250K: archive 45184, roundtrip and determinism passed, peak sampled RSS 10469316 KiB under the 10485760 KiB guard. This is 2 bytes worse than mhash2-only and does not improve peak memory, so do not promote to 1M without another memory cut."
+}

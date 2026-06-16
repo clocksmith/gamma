@@ -1,7 +1,7 @@
 {
   "id": "cmix21_text_mmap_paq8_v1",
   "family": "cmix21_mmap",
-  "status": "candidate",
+  "status": "retired",
   "description": "cmix v21 forced text-mode wrapper using the mmap allocator plus PAQ8 level 8 instead of level 11. The binary and english.dic are gzip-compressed and counted toward program_size.",
   "parent": "cmix21_text_mmap_paq9_v1",
   "hypothesis": "PAQ8 levels 10 and 9 exceeded the resident-memory ceiling at larger prefix scope. PAQ8 level 8 should clear memory at 250K while preserving enough of the cmix21 text-mode archive advantage to remain a plausible frontier branch.",
@@ -59,6 +59,23 @@
       }
     ]
   },
-  "measured": {},
-  "verdict": "Unmeasured. This is the next candidate after PAQ9 failed 250K memory."
+  "measured": {
+    "250000_memory_gate": {
+      "compressed_size_temp_at_abort": 149359,
+      "partial_output_size_at_abort": 0,
+      "program_size": 561232,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10528344,
+      "failure": "compression_rss_crossed_10gib_ceiling",
+      "memory_snapshot": "/tmp/cmix21_text_mmap_paq8_v1.smaps_snapshot.txt",
+      "memory_observation": {
+        "rss_kib": 10528344,
+        "anonymous_kib": 9998616,
+        "file_pss_kib": 526009,
+        "source": "smaps_rollup captured from the cmix process before guard termination"
+      }
+    }
+  },
+  "verdict": "Rejected for local memory at 250K. PAQ8 still crossed the 10 GiB guard before emitting an archive, so broad PAQ level reduction is not an admissible shortcut."
 }

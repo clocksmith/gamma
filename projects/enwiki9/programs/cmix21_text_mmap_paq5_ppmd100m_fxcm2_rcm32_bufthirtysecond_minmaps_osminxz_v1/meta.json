@@ -1,0 +1,87 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "Minimum-size xz package of the FXCM2 PAQ5/PPMD100M cmix21 candidate. It keeps the same cmix source patches, dictionary, forced text mode, mmap allocation, PPMD cap, PAQ memory policy, and FXCM cmC2 divisor, but rebuilds the executable with -Os -s -flto, disables exception/unwind tables, and enables section garbage collection before xz packaging.",
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1",
+  "hypothesis": "Removing unused exception and unwind payload while preserving RTTI should reduce counted program cost without changing the codec state machines. Exact archive behavior still requires replay because the executable is rebuilt with a different compiler profile.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space",
+    "Python standard-library lzma module"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_FXCM_CMC2_DIV and CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp; PAQ8 memory divisor hooks retained in src/models/paq8.cpp; packaged executable built with -Os -s -flto -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -ffunction-sections -fdata-sections -Wl,--gc-sections",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/cmix.bin.xz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/english.dic.xz",
+    "build": "g++ -std=c++14 -Wall -Os -s -flto -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -ffunction-sections -fdata-sections -Wl,--gc-sections -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "package",
+        "type": "program_payload_policy",
+        "payload": {
+          "discrete": {
+            "asset_codec": "xz",
+            "binary_payload_bytes": 146784,
+            "dictionary_payload_bytes": 155996,
+            "wrapper_payload_bytes": 1473,
+            "expected_program_size": 304253,
+            "compile_size_mode": "Os_s_lto_no_exceptions_no_unwind_gc_sections"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "fxcm",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "cmc2_div": 2,
+            "rcm_div": 1
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 100
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "package",
+        "to": "cmix21_text",
+        "stream": "counted_program_bytes"
+      },
+      {
+        "from": "fxcm",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Awaiting driver replay. Minimum-size build plus xz assets lower counted program size from 561,210 bytes to 304,253 bytes, a 256,957-byte reduction. Exact archive behavior must be measured because the executable was rebuilt with different compiler flags.",
+  "latest_result": null
+}

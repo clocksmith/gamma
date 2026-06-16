@@ -90,6 +90,114 @@ unsigned long long wrtcxt=0;
 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
 namespace fxcmv1 {
 
+#ifndef CMIX_FXCM_CMC2_DIV
+#define CMIX_FXCM_CMC2_DIV 1
+#endif
+
+#ifndef CMIX_FXCM_RCM_DIV
+#define CMIX_FXCM_RCM_DIV 1
+#endif
+
+#ifndef CMIX_FXCM_MHASH_DIV
+#define CMIX_FXCM_MHASH_DIV 1
+#endif
+
+#ifndef CMIX_FXCM_CMC2_IDX0_DIV
+#define CMIX_FXCM_CMC2_IDX0_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX1_DIV
+#define CMIX_FXCM_CMC2_IDX1_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX2_DIV
+#define CMIX_FXCM_CMC2_IDX2_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX3_DIV
+#define CMIX_FXCM_CMC2_IDX3_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX4_DIV
+#define CMIX_FXCM_CMC2_IDX4_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX5_DIV
+#define CMIX_FXCM_CMC2_IDX5_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX6_DIV
+#define CMIX_FXCM_CMC2_IDX6_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX7_DIV
+#define CMIX_FXCM_CMC2_IDX7_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX8_DIV
+#define CMIX_FXCM_CMC2_IDX8_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX9_DIV
+#define CMIX_FXCM_CMC2_IDX9_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX10_DIV
+#define CMIX_FXCM_CMC2_IDX10_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX11_DIV
+#define CMIX_FXCM_CMC2_IDX11_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX12_DIV
+#define CMIX_FXCM_CMC2_IDX12_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX13_DIV
+#define CMIX_FXCM_CMC2_IDX13_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX14_DIV
+#define CMIX_FXCM_CMC2_IDX14_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX15_DIV
+#define CMIX_FXCM_CMC2_IDX15_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX16_DIV
+#define CMIX_FXCM_CMC2_IDX16_DIV 1
+#endif
+#ifndef CMIX_FXCM_CMC2_IDX17_DIV
+#define CMIX_FXCM_CMC2_IDX17_DIV 1
+#endif
+
+inline int fxcm_pow2_table_bytes(int bytes, int grain) {
+    int units = bytes / grain;
+    if (units < 1) return grain;
+    int p = 1;
+    while (p <= units / 2) p <<= 1;
+    return p * grain;
+}
+
+inline int fxcm_cmc2_index_div(int idx) {
+    static const int divs[18] = {
+        CMIX_FXCM_CMC2_IDX0_DIV,
+        CMIX_FXCM_CMC2_IDX1_DIV,
+        CMIX_FXCM_CMC2_IDX2_DIV,
+        CMIX_FXCM_CMC2_IDX3_DIV,
+        CMIX_FXCM_CMC2_IDX4_DIV,
+        CMIX_FXCM_CMC2_IDX5_DIV,
+        CMIX_FXCM_CMC2_IDX6_DIV,
+        CMIX_FXCM_CMC2_IDX7_DIV,
+        CMIX_FXCM_CMC2_IDX8_DIV,
+        CMIX_FXCM_CMC2_IDX9_DIV,
+        CMIX_FXCM_CMC2_IDX10_DIV,
+        CMIX_FXCM_CMC2_IDX11_DIV,
+        CMIX_FXCM_CMC2_IDX12_DIV,
+        CMIX_FXCM_CMC2_IDX13_DIV,
+        CMIX_FXCM_CMC2_IDX14_DIV,
+        CMIX_FXCM_CMC2_IDX15_DIV,
+        CMIX_FXCM_CMC2_IDX16_DIV,
+        CMIX_FXCM_CMC2_IDX17_DIV,
+    };
+    int div = CMIX_FXCM_CMC2_DIV * divs[idx];
+    return div < 1 ? 1 : div;
+}
+
+#define FXCM_CMC2_SIZE(x) fxcm_pow2_table_bytes(((x) / CMIX_FXCM_CMC2_DIV), 128)
+#define FXCM_CMC2_SIZE_IDX(i, x) fxcm_pow2_table_bytes(((x) / fxcm_cmc2_index_div(i)), 128)
+#define FXCM_RCM_SIZE(x) ((x) / CMIX_FXCM_RCM_DIV)
+
+inline U32 fxcm_range_reduce(U32 value, U32 range) {
+    return (U32)(((unsigned long long)value * (unsigned long long)range) >> 32);
+}
+
 
 #ifndef min
 inline int min(int a, int b) {return a<b?a:b;}
@@ -763,9 +871,15 @@ struct RunContextMap {
   short rc[512];
   U8 tmp[B];
   U32 n;
+  U32 range;
+  bool powerOfTwoSlots;
   void Init(int m,int rcm_ml=8){ 
     alloc1(t,m,ptr,64);  
-    n=(m/B-1);
+    U32 slots=m/B;
+    if (slots<M) slots=M;
+    n=slots-1;
+    range=slots-M+1;
+    powerOfTwoSlots=ispowerof2(slots);
     for (int r=0;r<B;r++) tmp[r]=0;
     cp=&t[0]+1;
     for (int r=0;r<256;r++) {
@@ -796,7 +910,7 @@ struct RunContextMap {
   
   inline  U8* find(U32 i) {
     U16 chk=(i>>16^i)&0xffff;
-    i=i*M&n;
+    i=powerOfTwoSlots ? ((i*M)&n) : fxcm_range_reduce(i*M, range);
     U8 *p;
     U16 *cp1;
     int j;
@@ -3343,7 +3457,7 @@ void PredictorInit() {
     apmA3.Init();
     apmA4.Init();
     apmA5.Init();
-    rcmA[0].Init(1*4096*4096,6);
+    rcmA[0].Init(FXCM_RCM_SIZE(1*4096*4096),6);
 
     x.mxInputs1.ncount=(515+16+1-5*2-2*2)&-16;
     x.mxInputs2.ncount=(8+15)&-16;
@@ -3356,15 +3470,15 @@ void PredictorInit() {
     mxA[10].setTxWx(x.mxInputs2.ncount,&x.mxInputs2.n[0]);
     mxA[11].setTxWx(x.mxInputs2.ncount,&x.mxInputs2.n[0]);
 
-    cmC2[0].Init( 8*4096*4096,3|(c_r[0]<<8)|(c_s[0]<<16),c_s3[0],&STA6[0][0],c_s4[0],0xf0,1,&st2_p1[0]);
-    cmC2[1].Init(16*4096*4096,1|(c_r[1]<<8)|(c_s[1]<<16),c_s3[1],&STA6[0][0],c_s4[1],0xf0,1,&st2_p1[0]);
-    cmC2[2].Init( 8*4096*4096,1|(c_r[2]<<8)|(c_s[2]<<16),c_s3[2],&STA6[0][0],c_s4[2],0xf0,1,&st2_p1[0]);
-    cmC2[3].Init( 8*4096*4096,1|(c_r[3]<<8)|(c_s[3]<<16),c_s3[3],&STA6[0][0],c_s4[3],0xf0,1,&st2_p1[0]);
-    cmC2[4].Init( 8*4096*4096,2|(c_r[4]<<8)|(c_s[4]<<16),c_s3[4],&STA6[0][0],c_s4[4],0xf0,1,&st2_p1[0]);
-    cmC2[5].Init( 8*4096*4096,6|(c_r[5]<<8)|(c_s[5]<<16),c_s3[5],&STA6[0][0],c_s4[5],0xf0,1,&st2_p1[0]);
-    cmC2[6].Init( 1*4096*4096/64,1|(c_r[6]<<8)|(c_s[6]<<16),c_s3[6],&STA1[0][0],c_s4[6],0,1,&st2_p1[0]);
-    cmC2[7].Init( 2*4096*4096,1|(c_r[7]<<8)|(c_s[7]<<16),c_s3[7],&STA5[0][0],c_s4[7],0xf0,1,&st2_p1[0]);
-    cmC2[8].Init( 8*4096*4096/2,4|(c_r[8]<<8)|(c_s[8]<<16),c_s3[8],&STA4[0][0],c_s4[8],0,1,&st2_p1[0]);
+    cmC2[0].Init( FXCM_CMC2_SIZE_IDX(0, 8*4096*4096),3|(c_r[0]<<8)|(c_s[0]<<16),c_s3[0],&STA6[0][0],c_s4[0],0xf0,1,&st2_p1[0]);
+    cmC2[1].Init(FXCM_CMC2_SIZE_IDX(1, 16*4096*4096),1|(c_r[1]<<8)|(c_s[1]<<16),c_s3[1],&STA6[0][0],c_s4[1],0xf0,1,&st2_p1[0]);
+    cmC2[2].Init( FXCM_CMC2_SIZE_IDX(2, 8*4096*4096),1|(c_r[2]<<8)|(c_s[2]<<16),c_s3[2],&STA6[0][0],c_s4[2],0xf0,1,&st2_p1[0]);
+    cmC2[3].Init( FXCM_CMC2_SIZE_IDX(3, 8*4096*4096),1|(c_r[3]<<8)|(c_s[3]<<16),c_s3[3],&STA6[0][0],c_s4[3],0xf0,1,&st2_p1[0]);
+    cmC2[4].Init( FXCM_CMC2_SIZE_IDX(4, 8*4096*4096),2|(c_r[4]<<8)|(c_s[4]<<16),c_s3[4],&STA6[0][0],c_s4[4],0xf0,1,&st2_p1[0]);
+    cmC2[5].Init( FXCM_CMC2_SIZE_IDX(5, 8*4096*4096),6|(c_r[5]<<8)|(c_s[5]<<16),c_s3[5],&STA6[0][0],c_s4[5],0xf0,1,&st2_p1[0]);
+    cmC2[6].Init( FXCM_CMC2_SIZE_IDX(6, 1*4096*4096/64),1|(c_r[6]<<8)|(c_s[6]<<16),c_s3[6],&STA1[0][0],c_s4[6],0,1,&st2_p1[0]);
+    cmC2[7].Init( FXCM_CMC2_SIZE_IDX(7, 2*4096*4096),1|(c_r[7]<<8)|(c_s[7]<<16),c_s3[7],&STA5[0][0],c_s4[7],0xf0,1,&st2_p1[0]);
+    cmC2[8].Init( FXCM_CMC2_SIZE_IDX(8, 8*4096*4096/2),4|(c_r[8]<<8)|(c_s[8]<<16),c_s3[8],&STA4[0][0],c_s4[8],0,1,&st2_p1[0]);
 
     cmC1[0].Init(     32*4096,2|(c_r[9]<<8)|(c_s[9]<<16),c_s3[9],&STA6[0][0],c_s4[9],0x0,0,&st2_p0[0]);
     cmC1[1].Init(   2*32*4096,3|(c_r[10]<<8)|(c_s[10]<<16),c_s3[10],&STA7[0][0],c_s4[10],0,1,&st2_p1[0]);
@@ -3376,22 +3490,22 @@ void PredictorInit() {
     cmC[2].Init(      2*4096,2|(c_r[15]<<8)|(c_s[15]<<16),c_s3[15],&STA2[0][0],c_s4[15],0xf0,0,&st2_p0[0]);
 
     cmC1[3].Init(    128*4096,2|(c_r[16]<<8)|(c_s[16]<<16),c_s3[16],&STA1[0][0],c_s4[16],0,0,&st2_p0[0]);
-    cmC2[9].Init( 8*4096*4096,4|(c_r[17]<<8)|(c_s[17]<<16),c_s3[17],&STA6[0][0],c_s4[17],0xf0,1,&st2_p1[0]);
-    cmC2[10].Init( 8*4096*4096,6|(c_r[18]<<8)|(c_s[18]<<16),c_s3[18],&STA5[0][0],c_s4[18],0xf0,1,&st2_p1[0]);
-    cmC2[11].Init( 8*4096*4096,5|(c_r[19]<<8)|(c_s[19]<<16),c_s3[19],&STA5[0][0],c_s4[19],0xf0,1,&st2_p1[0]);
-    cmC2[12].Init( 8*4096*4096,2|(c_r[20]<<8)|(c_s[20]<<16),c_s3[20],&STA6[0][0],c_s4[20],0xf0,1,&st2_p1[0]);
-    cmC2[13].Init(16*4096*4096,2|(c_r[21]<<8)|(c_s[21]<<16),c_s3[21],&STA6[0][0],c_s4[21],0xf0,1,&st2_p1[0]);
+    cmC2[9].Init( FXCM_CMC2_SIZE_IDX(9, 8*4096*4096),4|(c_r[17]<<8)|(c_s[17]<<16),c_s3[17],&STA6[0][0],c_s4[17],0xf0,1,&st2_p1[0]);
+    cmC2[10].Init(FXCM_CMC2_SIZE_IDX(10, 8*4096*4096),6|(c_r[18]<<8)|(c_s[18]<<16),c_s3[18],&STA5[0][0],c_s4[18],0xf0,1,&st2_p1[0]);
+    cmC2[11].Init(FXCM_CMC2_SIZE_IDX(11, 8*4096*4096),5|(c_r[19]<<8)|(c_s[19]<<16),c_s3[19],&STA5[0][0],c_s4[19],0xf0,1,&st2_p1[0]);
+    cmC2[12].Init(FXCM_CMC2_SIZE_IDX(12, 8*4096*4096),2|(c_r[20]<<8)|(c_s[20]<<16),c_s3[20],&STA6[0][0],c_s4[20],0xf0,1,&st2_p1[0]);
+    cmC2[13].Init(FXCM_CMC2_SIZE_IDX(13, 16*4096*4096),2|(c_r[21]<<8)|(c_s[21]<<16),c_s3[21],&STA6[0][0],c_s4[21],0xf0,1,&st2_p1[0]);
 
     cmC[3].Init(     32*4096,2|(c_r[22]<<8)|(c_s[22]<<16),c_s3[22],&STA2[0][0],c_s4[22],0x00,1,&st2_p2[0]);
 
-    cmC2[14].Init(4*4096*4096/2,1|(c_r[23]<<8)|(c_s[23]<<16),c_s3[23],&STA6[0][0],c_s4[23],0xf0,1,&st2_p1[0]);
-    cmC2[15].Init(   8*64*4096,1|(c_r[24]<<8)|(c_s[24]<<16),c_s3[24],&STA1[0][0],c_s4[24],0,0,&st2_p0[0]);
+    cmC2[14].Init(FXCM_CMC2_SIZE_IDX(14, 4*4096*4096/2),1|(c_r[23]<<8)|(c_s[23]<<16),c_s3[23],&STA6[0][0],c_s4[23],0xf0,1,&st2_p1[0]);
+    cmC2[15].Init(FXCM_CMC2_SIZE_IDX(15, 8*64*4096),1|(c_r[24]<<8)|(c_s[24]<<16),c_s3[24],&STA1[0][0],c_s4[24],0,0,&st2_p0[0]);
 
     cmC[4].Init(    512*4096,1|(c_r[25]<<8)|(c_s[25]<<16),c_s3[25],&STA1[0][0],c_s4[25],0xf0,1,&st2_p1[0]);
     cmC[5].Init(    512*4096,1|(c_r[26]<<8)|(c_s[26]<<16),c_s3[26],&STA1[0][0],c_s4[26],0xf0,1,&st2_p1[0]);
 
-    cmC2[16].Init( 1*4096*4096/2,1|(c_r[17]<<8)|(c_s[17]<<16),c_s3[17],&STA6[0][0],c_s4[17],0xf0,1,&st2_p1[0]);
-    cmC2[17].Init( 2*4096*4096,2|(c_r[17]<<8)|(c_s[17]<<16),c_s3[17],&STA6[0][0],c_s4[17],0xf0,1,&st2_p1[0]);
+    cmC2[16].Init(FXCM_CMC2_SIZE_IDX(16, 1*4096*4096/2),1|(c_r[17]<<8)|(c_s[17]<<16),c_s3[17],&STA6[0][0],c_s4[17],0xf0,1,&st2_p1[0]);
+    cmC2[17].Init(FXCM_CMC2_SIZE_IDX(17, 2*4096*4096),2|(c_r[17]<<8)|(c_s[17]<<16),c_s3[17],&STA6[0][0],c_s4[17],0xf0,1,&st2_p1[0]);
 
     cmC1[6].Init(1*16*4096,1|(c_r[5]<<8)|(c_s[5]<<16),c_s3[5],&STA6[0][0],c_s4[5],0,0,&st2_p1[0]);
 
@@ -4869,9 +4983,14 @@ Predictor::Predictor()  {
         st2_p1[i]=clp(sc(12*(i - 2048)));
         st2_p2[i]=clp(sc(14*(i - 2048)));
     }
-    // Match model
-    mhashtablemask=0x200000*1-1;
-    alloc1(mhashtable,0x200000*1+32,mhptr,32);
+    // Match model. This table is mask-indexed, so keep candidate sizes to powers of two.
+    const U32 mhashSize = 0x200000U / CMIX_FXCM_MHASH_DIV;
+    if (!ispowerof2(mhashSize)) {
+        fprintf(stderr, "CMIX_FXCM_MHASH_DIV must produce a power-of-two match hash size\n");
+        exit(1);
+    }
+    mhashtablemask=mhashSize-1;
+    alloc1(mhashtable,mhashSize+32,mhptr,32);
     // Generate state tables
     StateTable statetable;
     statetable.Init(28, 28, 31, 29, 23, 4, 17,&STA1[0][0]);
@@ -4912,4 +5031,3 @@ void FXCM::Perceive(int bit) {
   fxcmv1::x.y = bit;
   predictor_->update();
 }
-

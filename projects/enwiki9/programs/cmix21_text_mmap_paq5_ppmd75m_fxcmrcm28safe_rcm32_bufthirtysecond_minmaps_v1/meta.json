@@ -1,0 +1,136 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 75 MB PPMD cap, full PAQ8 main/text/match maps, sparse-match divisor 8, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, full FXCM cmC2 maps, and FXCM run-context maps divided by 28 with safe non-power RunContextMap indexing. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd75m_fxcmrcm24safe_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "FXCM24safe passed 1K but crossed the 10 GiB ceiling during 250K compression. FXCM_RCM_DIV=28 uses the same safe non-power RunContextMap indexing while shaving more FXCM run-context memory, testing whether the archive can remain in the 45.18K 250K region with actual memory margin.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patch": "CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp; FXCM cmC2 sizes rounded to legal power-of-two table grains; non-power RunContextMap slot selection uses deterministic multiply-high range reduction; PAQ8 memory divisor hooks retained in src/models/paq8.cpp",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=75 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=28",
+    "safety_patch": "safe non-power RunContextMap indexing retained; rebuilt with FXCM_RCM_DIV=28"
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "paq8",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "level": 5,
+            "main_context_scale": 1,
+            "main_context_div": 1,
+            "text_model_scale": 1,
+            "text_model_div": 1,
+            "match_scale": 1,
+            "match_div": 1,
+            "sparse_match_div": 8,
+            "rcm_div": 32,
+            "buffer_div": 32
+          }
+        }
+      },
+      {
+        "id": "ppmd",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "memory_mb": 75
+          }
+        }
+      },
+      {
+        "id": "fxcm",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "cmc2_div": 1,
+            "rcm_div": 28,
+            "non_power_rcm_indexing": "multiply_high_range_reduce"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      },
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "paq8",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "ppmd",
+        "to": "cmix21_text",
+        "stream": "probability_model"
+      },
+      {
+        "from": "fxcm",
+        "to": "cmix21_text",
+        "stream": "memory_trim"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "archive": 247,
+      "program_size": 561282,
+      "hutter_score": 561529,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "a43e449c8d91b3e744e30bb9890ef55aed322c9fa9b5ecf300fe3d3f192277bd",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T072707.json"
+    },
+    "250000": {
+      "archive": 45182,
+      "program_size": 561282,
+      "hutter_score": 606464,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "de7b38b2d54cb782127635bcf4260128a4e859d0d53aa50dc3d3a9f0e098ac45",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10463940,
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T074922.json"
+    },
+    "1000000": {
+      "program_size": 561282,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10502084,
+      "smaps_rollup_rss_kib": 10502260,
+      "failure": "compression_rss_crossed_10gib_ceiling",
+      "snapshot_path": "/tmp/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1.1m.smaps_snapshot.txt",
+      "result": null
+    }
+  },
+  "verdict": "Valid at 250K but rejected at 1M for memory: compression crossed the 10485760 KiB guard with max sampled RSS 10502084 KiB before producing a scored 1M archive."
+}
