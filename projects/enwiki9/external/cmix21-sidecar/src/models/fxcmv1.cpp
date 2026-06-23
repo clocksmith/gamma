@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 #define NDEBUG  // remove for debugging (turns on Array bound checks)
 #include <assert.h>
 
@@ -210,7 +211,11 @@ unsigned int prediction_index = 0;
 float conversion_factor = 1.0 / 4095;
 
 void AddPrediction(int x) {
-    assert(prediction_index >= 0 && prediction_index < num_models);
+    if (prediction_index >= model_predictions.size()) {
+        fprintf(stderr, "\nfxcm prediction overflow: index=%u size=%zu\n",
+            prediction_index, model_predictions.size());
+        abort();
+    }
     model_predictions[prediction_index++] = x * conversion_factor;
 }
 
@@ -247,17 +252,98 @@ typedef unsigned long long int U64;
 
 //////////////////////////// Array ////////////////////////////
 
-template <class T> void alloc(T*&ptr, int c) {
-  ptr=(T*)calloc(c, sizeof(T));
+#ifdef CMIX_FXCM_ALLOC_CANARY
+struct FxcmAllocGuard {
+  U8* front;
+  U8* back;
+  size_t guard_bytes;
+  size_t payload_bytes;
+  const char* name;
+  int line;
+};
+
+std::vector<FxcmAllocGuard> fxcm_alloc_guards;
+const U8 kFxcmCanaryByte = 0xa5;
+const size_t kFxcmCanaryBytes = 256;
+
+inline void fxcm_fill_canary(U8* p, size_t n) {
+  memset(p, kFxcmCanaryByte, n);
+}
+
+void fxcm_register_guard(U8* data, size_t payload_bytes, const char* name, int line) {
+  U8* front = data - kFxcmCanaryBytes;
+  U8* back = data + payload_bytes;
+  fxcm_fill_canary(front, kFxcmCanaryBytes);
+  fxcm_fill_canary(back, kFxcmCanaryBytes);
+  FxcmAllocGuard g = {front, back, kFxcmCanaryBytes, payload_bytes, name, line};
+  fxcm_alloc_guards.push_back(g);
+}
+
+void fxcm_check_alloc_guards(const char* where) {
+  static U32 calls = 0;
+  if ((++calls & 255) != 0) return;
+  for (size_t i = 0; i < fxcm_alloc_guards.size(); ++i) {
+    const FxcmAllocGuard& g = fxcm_alloc_guards[i];
+    for (size_t j = 0; j < g.guard_bytes; ++j) {
+      if (g.front[j] != kFxcmCanaryByte) {
+        fprintf(stderr,
+            "\nfxcm heap front canary corrupt: alloc=%s line=%d byte=%zu payload=%zu where=%s\n",
+            g.name, g.line, j, g.payload_bytes, where);
+        abort();
+      }
+    }
+    for (size_t j = 0; j < g.guard_bytes; ++j) {
+      if (g.back[j] != kFxcmCanaryByte) {
+        fprintf(stderr,
+            "\nfxcm heap back canary corrupt: alloc=%s line=%d byte=%zu payload=%zu where=%s\n",
+            g.name, g.line, j, g.payload_bytes, where);
+        abort();
+      }
+    }
+  }
+}
+#else
+void fxcm_check_alloc_guards(const char*) {}
+#endif
+
+template <class T> void fxcm_alloc(T*&ptr, int c, const char* name, int line) {
+  (void)name;
+  (void)line;
+  const size_t payload_bytes = size_t(c) * sizeof(T);
+#ifdef CMIX_FXCM_ALLOC_CANARY
+  U8* raw = (U8*)calloc(payload_bytes + 2 * kFxcmCanaryBytes, 1);
+  if (!raw) exit(1);
+  ptr = (T*)(raw + kFxcmCanaryBytes);
+  fxcm_register_guard((U8*)ptr, payload_bytes, name, line);
+#else
+  ptr = (T*)calloc(payload_bytes, 1);
   if (!ptr) exit(1);
+#endif
 }
  
 // for aligned data
-template <class T> void alloc1(T*&data, int c,T*&ptr,const int align=16) {
-  ptr=(T*)calloc(c, sizeof(T));
-  if (!ptr) exit(1);
-  data=(T*)(((uintptr_t)ptr+(align-1)) & ~(uintptr_t)(align-1));
+template <class T> void fxcm_alloc1(T*&data, int c,T*&ptr,const int align,
+    const char* name, int line) {
+  (void)name;
+  (void)line;
+  const size_t payload_bytes = size_t(c) * sizeof(T);
+#ifdef CMIX_FXCM_ALLOC_CANARY
+  U8* raw = (U8*)calloc(payload_bytes + size_t(align) + 2 * kFxcmCanaryBytes, 1);
+  if (!raw) exit(1);
+  U8* base = raw + kFxcmCanaryBytes;
+  data = (T*)(((uintptr_t)base+(uintptr_t)(align-1)) & ~(uintptr_t)(align-1));
+  ptr = (T*)raw;
+  fxcm_register_guard((U8*)data, payload_bytes, name, line);
+#else
+  U8* raw = (U8*)calloc(payload_bytes + size_t(align), 1);
+  if (!raw) exit(1);
+  data = (T*)(((uintptr_t)raw+(uintptr_t)(align-1)) & ~(uintptr_t)(align-1));
+  ptr = (T*)raw;
+#endif
 }
+
+#define alloc(ptr, c) fxcm_alloc(ptr, c, #ptr, __LINE__)
+#define alloc1(data, c, ptr, align) fxcm_alloc1(data, c, ptr, align, #data, __LINE__)
 
 // Squash returns p = 1/(1 + exp(-d)), d scaled by 8 bits, p scaled by 12 bits
 short sqt[4095];
@@ -303,8 +389,11 @@ struct alignas(64) Inputs{
         short n[S];
         int ncount;     // mixer input count
         void add(int p){
-            assert(ncount >= 0 && ncount <= S);
-            assert(p>-2048 && p<2048);
+            if (ncount < 0 || ncount >= S) {
+                fprintf(stderr, "\nfxcm mixer input overflow: count=%d size=%d\n",
+                    ncount, S);
+                abort();
+            }
             n[ncount++]=p;
             AddPrediction(squash(p));
         }
@@ -483,8 +572,10 @@ void loaddict(FILE  *file){
     int line_count=0,len=0;
     s=(char *)malloc(8192*8);
     while ((len=wfgets(s, 8192*8, file)) )  {
-        dictW[line_count]=(char *)malloc(len);
+        if (line_count >= (int)(sizeof(dictW)/sizeof(dictW[0]))) break;
+        dictW[line_count]=(char *)malloc(len + 1);
         memcpy(dictW[line_count],  s, len);
+        dictW[line_count][len]=0;
         //printf("%d,%s\n",len,dictW[line_count]);
         line_count++;
     }
@@ -1866,6 +1957,17 @@ struct SparseMatchModel {
     const U32 mask=1024*1024-1;
     U8 expectedByte; // prediction is based on this byte (buffer[index]), valid only when length>0
     bool valid;
+    bool HasBufferedIndex(U32 i) const {
+        if (i==0 || pos<=0)
+            return false;
+        const U32 current = U32(pos);
+        return i<current && (current-i)<0x1000000U;
+    }
+    void ClearMatch() {
+        length = index = 0;
+        expectedByte = 0;
+        valid = false;
+    }
     
     void Init() {
         hashIndex=length=expectedByte=0;
@@ -1884,24 +1986,31 @@ struct SparseMatchModel {
         // extend current match, if available
         if (length) {
             index++;
-            if (length<MaxLen)
+            if (HasBufferedIndex(index) && length<MaxLen)
                 length++;
+            else
+                ClearMatch();
         } else {
         // or find a new match
             for (int i=list.GetFirst(); i>=0; i=list.GetNext()) {
                 index = Table[hashes[i]];
-                if (index>0) {
+                if (HasBufferedIndex(index)) {
                     U32 offset = /*sparse[i].offset+*/1;
-                    while (length<sparse[i].minLen && ((buf(offset)^bufr(index-offset))/*&sparse[i].bitMask*/)==0) {
+                    while (length<sparse[i].minLen &&
+                        index>=offset &&
+                        HasBufferedIndex(index-offset) &&
+                        ((buf(offset)^bufr(index-offset))/*&sparse[i].bitMask*/)==0) {
                         length++;
                         offset+=sparse[i].stride;
                     }
                     if (length>=sparse[i].minLen) {
                         length-=(sparse[i].minLen-1);
                       //  index+=sparse[i].deletions;
-                        hashIndex = i;
-                        list.MoveToFront(i);
-                        break;
+                        if (HasBufferedIndex(index)) {
+                            hashIndex = i;
+                            list.MoveToFront(i);
+                            break;
+                        }
                     }
                 }
                 length = index = 0;
@@ -1911,7 +2020,10 @@ struct SparseMatchModel {
         for (U32 i=0; i<NumHashes; i++)
             Table[hashes[i]] = pos;
     
-        expectedByte = bufr(index);
+        if (length>0 && HasBufferedIndex(index))
+            expectedByte = bufr(index);
+        else
+            ClearMatch();
         valid = length>1; // only predict after at least one byte following the match
     }
   
@@ -1920,9 +2032,12 @@ struct SparseMatchModel {
     if (x.bpos==0)
       Update();
 
+    if (length>0 && !HasBufferedIndex(index))
+      ClearMatch();
+
     // check if next bit matches the prediction, accounting for the required bitmask
     if (length>0 && (((expectedByte^B)/*&sparse[hashIndex].bitMask*/)>>(8-x.bpos))!=0)
-      length = 0;
+      ClearMatch();
 
     if (valid) {
       if (length>1 /*&& ((sparse[hashIndex].bitMask>>(7-x.bpos))&1)>0*/) {
@@ -3530,6 +3645,9 @@ int buf(int i){
 int bufr(int i){
     return buffer[i&BMASK];
 }
+inline bool HasMainBufferedIndex(U32 i) {
+    return i < U32(pos) && (U32(pos) - i) < 0x1000000U;
+}
 
 // Match model 2
 // based on paq8px v208
@@ -3617,7 +3735,7 @@ struct MatchInfo {
           if (lengthBak < MAXLEN) {
             lengthBak++;
           }
-          if (bufr(indexBak) == c1) { //                     match continues -> recover 
+          if (HasMainBufferedIndex(indexBak) && bufr(indexBak) == c1) { //                     match continues -> recover 
             length = lengthBak;
             index = indexBak;
           } else { // still mismatch
@@ -3629,6 +3747,11 @@ struct MatchInfo {
           index++;
           if (length < MAXLEN) {
             length++;
+          }
+          if (!HasMainBufferedIndex(index)) {
+            length = 0;
+            index = 0;
+            lengthBak = indexBak = 0;
           }
           if (isInRecoveryMode() && recoveryModePos() >= MINLEN_RM) { // recovery seems to be successful and stable -> exit recovery mode
             lengthBak = indexBak = 0; // purge backup
@@ -3658,7 +3781,11 @@ const int nST=3;
 U32 ctx[nST];
 
 bool isMMatch(const U32 pos, const int MINLEN) {
+    if (!HasMainBufferedIndex(pos))
+      return false;
     for (int length = 1; length <= MINLEN; length++) {
+      if (pos < U32(length) || !HasMainBufferedIndex(pos - length))
+        return false;
       if (buf(length) != bufr(pos - length))
         return false;
     }
@@ -3733,7 +3860,11 @@ void MatchModel2update() {
     matches->Add(pos);
 
     for (U32 i = 0; i < numberOfActiveCandidates; i++) {
-      matchCandidates[i].expectedByte = bufr(matchCandidates[i].index);
+      if (HasMainBufferedIndex(matchCandidates[i].index)) {
+        matchCandidates[i].expectedByte = bufr(matchCandidates[i].index);
+      } else {
+        matchCandidates[i].Init();
+      }
     }
   }
 }
@@ -4542,9 +4673,10 @@ int modelPrediction(int c0,int bpos,int c4){
                 cmC[0].set(word0);
             } else {
                 // Table
-                cmC[0].set(wrt_2b[bufr(colcxt.abovecellpos)]|( ( fccontext) << 8)  | ((BrFcIdx ) << 16));
-                cmC[0].set(bufr(colcxt.abovecellpos)|( ( c1) << 8) );
-                cmC[0].set( word0+wrt_2b[bufr(colcxt.abovecellpos)] );
+                const U8 above_cell_byte = HasMainBufferedIndex(U32(colcxt.abovecellpos)) ? U8(bufr(colcxt.abovecellpos)) : 0;
+                cmC[0].set(wrt_2b[above_cell_byte]|( ( fccontext) << 8)  | ((BrFcIdx ) << 16));
+                cmC[0].set(above_cell_byte|( ( c1) << 8) );
+                cmC[0].set( word0+wrt_2b[above_cell_byte] );
             }
         }
 
@@ -5008,8 +5140,9 @@ Predictor::Predictor()  {
 }
 
 void Predictor::update() {
-  
+  fxcm_check_alloc_guards("before update1");
   update1();
+  fxcm_check_alloc_guards("after update1");
   ResetPredictions();
 }
 

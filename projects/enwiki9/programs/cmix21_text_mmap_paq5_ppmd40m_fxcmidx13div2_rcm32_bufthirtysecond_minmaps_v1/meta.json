@@ -113,6 +113,50 @@
       }
     ]
   },
-  "measured": {},
-  "verdict": "Unmeasured. Boundary candidate to clear the PPMD50 10M memory miss while preserving PAQ5, full main/text/match maps, FXCM idx13-only trim, RCM32, and BUF32."
+  "measured": {
+    "1024": {
+      "archive": 246,
+      "program_size": 559926,
+      "hutter_score": 560172,
+      "bits_per_byte": 1.921875,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "01850679a940cc5928d332d355b10d8aa2b668d08fe322ffff34e975fcae90f8",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 8626248,
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T224443.json"
+    },
+    "250000": {
+      "archive": 45181,
+      "program_size": 559926,
+      "hutter_score": 605107,
+      "bits_per_byte": 1.445792,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "793d0c3a7078fc11f9fc04d9a9070960792c4d95223808404ff941a45a87be8e",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/2026-06-15T230654.json"
+    },
+    "1000000": {
+      "archive": 174415,
+      "program_size": 559926,
+      "hutter_score": 734341,
+      "bits_per_byte": 1.39532,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "f9141ec0c158935886b66b668a0898034b9b7d62215b929b61aa78a9e5b50041",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10447428,
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T104250.json"
+    },
+    "10000000": {
+      "compressed_size_temp_at_abort": 6186040,
+      "partial_compressed_size_at_abort": 466944,
+      "program_size": 559926,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10485832,
+      "failure": "compression_rss_crossed_10gib_ceiling_by_72_kib"
+    }
+  },
+  "verdict": "1M deterministic gate passed with archive 174415, matching the PPMD50/idx13 1M floor, and roundtrip/determinism true. The exact 10M guard gate crossed RSS at 10485832 KiB, 72 KiB over the 10485760 KiB guard, during compression with the same 6186040-byte cmix temp stream and a 466944-byte partial final output. Reject this package as memory-blocked at 10M and test the adjacent PPMD35 valve before cutting high-value PAQ5/FXCM maps."
 }

@@ -31,6 +31,7 @@
 #include <ctype.h>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 #define NDEBUG
 
 #ifdef UNIX
@@ -67,6 +68,89 @@ using preprocessor::Filetype;
 
 void quit(const char* message=0) {}
 
+#ifdef CMIX_PAQ8_ARRAY_CANARY
+struct Paq8ArrayGuard {
+  U8* raw;
+  U8* front;
+  U8* back;
+  const char* label;
+  size_t guard_bytes;
+  size_t payload_bytes;
+  U32 elements;
+  size_t element_bytes;
+  int align;
+  bool active;
+};
+
+const U8 kPaq8ArrayCanaryByte = 0x5a;
+const size_t kPaq8ArrayCanaryBytes = 128;
+std::vector<Paq8ArrayGuard> paq8_array_guards;
+
+#ifndef CMIX_PAQ8_ARRAY_CANARY_SCAN_COUNT
+#define CMIX_PAQ8_ARRAY_CANARY_SCAN_COUNT 1
+#endif
+
+inline void paq8_fill_array_canary(U8* p, size_t n) {
+  memset(p, kPaq8ArrayCanaryByte, n);
+}
+
+void paq8_register_array_guard(U8* raw, U8* data, size_t payload_bytes,
+    U32 elements, size_t element_bytes, int align, const char* label) {
+  U8* front = data - kPaq8ArrayCanaryBytes;
+  U8* back = data + payload_bytes;
+  paq8_fill_array_canary(front, kPaq8ArrayCanaryBytes);
+  paq8_fill_array_canary(back, kPaq8ArrayCanaryBytes);
+  Paq8ArrayGuard g = {raw, front, back, label, kPaq8ArrayCanaryBytes,
+      payload_bytes, elements, element_bytes, align, true};
+  paq8_array_guards.push_back(g);
+}
+
+void paq8_unregister_array_guard(void* raw) {
+  for (size_t i = 0; i < paq8_array_guards.size(); ++i) {
+    if (paq8_array_guards[i].raw == raw && paq8_array_guards[i].active) {
+      paq8_array_guards[i].active = false;
+      return;
+    }
+  }
+}
+
+void paq8_check_array_guards(const char* where) {
+  static size_t cursor = 0;
+  const size_t n = paq8_array_guards.size();
+  if (n == 0) return;
+  size_t scan_count = n;
+#if CMIX_PAQ8_ARRAY_CANARY_SCAN_COUNT > 0
+  scan_count = CMIX_PAQ8_ARRAY_CANARY_SCAN_COUNT;
+#endif
+  if (scan_count > n) scan_count = n;
+  for (size_t attempts = 0; attempts < scan_count; ++attempts) {
+    const size_t i = cursor++ % n;
+    const Paq8ArrayGuard& g = paq8_array_guards[i];
+    if (!g.active) continue;
+    for (size_t j = 0; j < g.guard_bytes; ++j) {
+      if (g.front[j] != kPaq8ArrayCanaryByte) {
+        fprintf(stderr,
+            "\npaq8 array front canary corrupt: guard=%zu label=%s byte=%zu payload=%zu elements=%u elem=%zu align=%d where=%s\n",
+            i, g.label ? g.label : "unknown", j, g.payload_bytes, g.elements,
+            g.element_bytes, g.align, where);
+        abort();
+      }
+    }
+    for (size_t j = 0; j < g.guard_bytes; ++j) {
+      if (g.back[j] != kPaq8ArrayCanaryByte) {
+        fprintf(stderr,
+            "\npaq8 array back canary corrupt: guard=%zu label=%s byte=%zu payload=%zu elements=%u elem=%zu align=%d where=%s\n",
+            i, g.label ? g.label : "unknown", j, g.payload_bytes, g.elements,
+            g.element_bytes, g.align, where);
+        abort();
+      }
+    }
+  }
+}
+#else
+void paq8_check_array_guards(const char*) {}
+#endif
+
 template <class T, int ALIGN=0> class Array {
 private:
   U32 n;
@@ -75,9 +159,11 @@ private:
   T* data;
   size_t bytes;
   bool mapped;
+  const char* label;
   void create(U32 i);
 public:
-  explicit Array(U32 i=0) {create(i);}
+  explicit Array(U32 i=0, const char* label_name="paq8.Array"):
+      label(label_name) {create(i);}
   ~Array();
   T& operator[](U32 i) {
     return data[i];
@@ -109,6 +195,9 @@ template<class T, int ALIGN> void Array<T, ALIGN>::resize(U32 i) {
     if (savedata) {
       memcpy(data, savedata, sizeof(T)*min(i, saven));
     }
+#ifdef CMIX_PAQ8_ARRAY_CANARY
+    paq8_unregister_array_guard(saveptr);
+#endif
     cmix_mmap_alloc::Release(saveptr, savebytes, savemapped);
   }
 }
@@ -122,17 +211,33 @@ template<class T, int ALIGN> void Array<T, ALIGN>::create(U32 i) {
     ptr=0;
     return;
   }
-  const size_t sz=ALIGN+n*sizeof(T);
+  const size_t payload_bytes = n * sizeof(T);
+  const size_t sz=ALIGN+payload_bytes;
+#ifdef CMIX_PAQ8_ARRAY_CANARY
+  const size_t alloc_bytes = sz + 2 * kPaq8ArrayCanaryBytes;
+  bytes = alloc_bytes;
+  ptr = (char*)cmix_mmap_alloc::Allocate(alloc_bytes, &mapped);
+#else
   bytes = sz;
   ptr = (char*)cmix_mmap_alloc::Allocate(sz, &mapped);
+#endif
   if (!ptr) {
-    fprintf(stderr, "Out of memory allocating %zu bytes\n", sz);
+    fprintf(stderr, "Out of memory allocating %zu bytes\n", bytes);
     abort();
   }
+#ifdef CMIX_PAQ8_ARRAY_CANARY
+  U8* base = (U8*)ptr + kPaq8ArrayCanaryBytes;
+  data = (ALIGN ? (T*)(base+ALIGN-(((long long)base)&(ALIGN-1))) : (T*)base);
+  paq8_register_array_guard((U8*)ptr, (U8*)data, payload_bytes, n, sizeof(T), ALIGN, label);
+#else
   data = (ALIGN ? (T*)(ptr+ALIGN-(((long long)ptr)&(ALIGN-1))) : (T*)ptr);
+#endif
 }
 
 template<class T, int ALIGN> Array<T, ALIGN>::~Array() {
+#ifdef CMIX_PAQ8_ARRAY_CANARY
+  paq8_unregister_array_guard(ptr);
+#endif
   cmix_mmap_alloc::Release(ptr, bytes, mapped);
 }
 
@@ -558,7 +663,13 @@ unsigned int prediction_index = 0;
 float conversion_factor = 1.0 / 4095;
 
 void AddPrediction(int x) {
+  paq8_check_array_guards("AddPrediction");
   //printf("%d\n", prediction_index);
+  if (prediction_index >= model_predictions.size()) {
+    fprintf(stderr, "\npaq8 prediction overflow: index=%u size=%zu\n",
+        prediction_index, model_predictions.size());
+    abort();
+  }
   model_predictions[prediction_index++] = x * conversion_factor;
 }
 
@@ -586,7 +697,7 @@ public:
       int context = cxt[i];
       auto* wts = wx_[context].get();
       if (wts == nullptr) {
-        wx_[context] = std::unique_ptr<Array<short, 16>>(new Array<short, 16>(N));
+        wx_[context] = std::unique_ptr<Array<short, 16>>(new Array<short, 16>(N, "Mixer.wx"));
         wts = wx_[context].get();
         for (int i=0; i<N; ++i) (*wts)[i]=init_w;
       }
@@ -597,23 +708,40 @@ public:
 
   void add(int x) {
     AddPrediction(squash(x));
+    if (nx >= N) {
+      fprintf(stderr, "\npaq8 mixer tx overflow: nx=%d N=%d S=%d ncxt=%d\n",
+          nx, N, S, ncxt);
+      abort();
+    }
     tx[nx++]=x;
   }
 
   void set(int cx, int range) {
+    if (ncxt >= S) {
+      fprintf(stderr, "\npaq8 mixer context overflow: ncxt=%d S=%d base=%d range=%d\n",
+          ncxt, S, base, range);
+      abort();
+    }
     cxt[ncxt++]=base+cx;
     base+=range;
   }
 
   int p() {
-    while (nx&7) tx[nx++]=0;
+    while (nx&7) {
+      if (nx >= N) {
+        fprintf(stderr, "\npaq8 mixer pad overflow: nx=%d N=%d S=%d ncxt=%d\n",
+            nx, N, S, ncxt);
+        abort();
+      }
+      tx[nx++]=0;
+    }
     if (mp) {
       mp->update();
       for (int i=0; i<ncxt; ++i) {
         int context = cxt[i];
         auto* wts = wx_[context].get();
         if (wts == nullptr) {
-          wx_[context] = std::unique_ptr<Array<short, 16>>(new Array<short, 16>(N));
+          wx_[context] = std::unique_ptr<Array<short, 16>>(new Array<short, 16>(N, "Mixer.wx"));
           wts = wx_[context].get();
           for (int i=0; i<N; ++i) (*wts)[i]=init_w;
         }
@@ -626,7 +754,7 @@ public:
     else {
       auto* wts = wx_[0].get();
       if (wts == nullptr) {
-        wx_[0] = std::unique_ptr<Array<short, 16>>(new Array<short, 16>(N));
+        wx_[0] = std::unique_ptr<Array<short, 16>>(new Array<short, 16>(N, "Mixer.wx.root"));
         wts = wx_[0].get();
         for (int i=0; i<N; ++i) (*wts)[i]=init_w;          
       }
@@ -1618,7 +1746,7 @@ public:
   void operator+=(const char c) {
     if (End<MAX_WORD_SIZE-1) {
       End+=(Letters[End]>0);
-      Letters[End]=tolower(c);
+      Letters[End]=U8(tolower((unsigned char)c));
     }
   }
   U8 operator[](U8 i) const {
@@ -1674,6 +1802,9 @@ public:
   bool StartsWith(const char *Prefix) const {
     size_t len=strlen(Prefix);
     return (Length()>len && memcmp(&Letters[Start], Prefix, len)==0);
+  }
+  bool HasValidBounds() const {
+    return Start<MAX_WORD_SIZE && End<MAX_WORD_SIZE && Start<=End;
   }
 };
 
@@ -3024,12 +3155,15 @@ public:
     }
   }
   bool Stem(Word *W) {
+    if (!W->HasValidBounds()) return false;
     ConvertUTF8(W);
+    if (!W->HasValidBounds()) return false;
     if (W->Length()<2) {
       Hash(W);
       return false;
     }
     ReplaceSharpS(W);
+    if (!W->HasValidBounds()) return false;
     MarkVowelsAsConsonants(W);
     U32 R1=GetRegion(W, 0), R2=GetRegion(W, R1);
     R1 = min(3, R1);
@@ -3597,6 +3731,17 @@ private:
   const int hashbits;
   U8 expectedByte; // prediction is based on this byte (buffer[index]), valid only when length>0
   bool delta;
+  bool HasBufferedIndex(Buf& buffer, U32 i) const {
+    if (i==0 || pos<=0 || buffer.size()==0)
+      return false;
+    const U32 current = U32(pos);
+    return i<current && (current-i)<buffer.size();
+  }
+  void ClearMatch() {
+    length = index = 0;
+    expectedByte = 0;
+    delta = false;
+  }
   void Update(Buf& buffer, ModelStats *Stats = nullptr) {
     delta = false;
     // update hashes
@@ -3609,17 +3754,22 @@ private:
     // extend current match, if available
     if (length) {
       index++;
-      if (length<MaxLen)
+      if (HasBufferedIndex(buffer, index) && length<MaxLen)
         length++;
+      else
+        ClearMatch();
     }
     // or find a new match, starting with the highest order hash and falling back to lower ones
     else {
       U32 minLen = MinLen+(NumHashes-1)*StepSize, bestLen = 0, bestIndex = 0;
       for (U32 i=0; i<NumHashes && length<minLen; i++, minLen-=StepSize) {
         index = Table[hashes[i]];
-        if (index>0) {
+        if (HasBufferedIndex(buffer, index)) {
           length = 0;
-          while (length<(minLen+MaxExtend) && buffer(length+1)==buffer[index-length-1])
+          while (length<(minLen+MaxExtend) &&
+              index>length+1 &&
+              HasBufferedIndex(buffer, index-length-1) &&
+              buffer(length+1)==buffer[index-length-1])
             length++;
           if (length>bestLen) {
             bestLen = length;
@@ -3637,7 +3787,10 @@ private:
     // update position information in hashtable
     for (U32 i=0; i<NumHashes; i++)
       Table[hashes[i]] = pos;
-    expectedByte = buffer[index];
+    if (length>0 && HasBufferedIndex(buffer, index))
+      expectedByte = buffer[index];
+    else
+      ClearMatch();
     iCtx+=y, iCtx=(buffer(1)<<8)|expectedByte;
     SCM[0]->set(expectedByte);
     SCM[1]->set(expectedByte);
@@ -3696,6 +3849,10 @@ public:
     }
     const int expectedBit = (expectedByte>>(7-bpos))&1;
 
+    if(length>0) {
+      if (!HasBufferedIndex(buffer, index) || index==0)
+        ClearMatch();
+    }
     if(length>0) {
       const bool isMatch = (bpos==0)?(buffer(1)==buffer[index-1]):(((expectedByte+256)>>(8-bpos))==c0); // next bit matches the prediction?
       if(!isMatch) {
@@ -3775,7 +3932,14 @@ private:
   const int hashbits;
   U8 expectedByte; // prediction is based on this byte (buffer[index]), valid only when length>0
   bool valid;
+  bool HasBufferedIndex(Buf& buffer, U32 i) const {
+    if (i==0 || pos<=0 || buffer.size()==0)
+      return false;
+    const U32 current = U32(pos);
+    return i<current && (current-i)<buffer.size();
+  }
   void Update(Buf& buffer, ModelStats *Stats = nullptr) {
+    const bool wasValid = valid;
     // update sparse hashes
     for (U32 i=0; i<NumHashes; i++) {
       U64 hash = 0;
@@ -3786,25 +3950,32 @@ private:
     // extend current match, if available
     if (length) {
       index++;
-      if (length<MaxLen)
+      if (HasBufferedIndex(buffer, index) && length<MaxLen)
         length++;
+      else
+        length = index = 0;
     }
     // or find a new match
     else {     
       for (int i=list.GetFirst(); i>=0; i=list.GetNext()) {
         index = Table[hashes[i]];
-        if (index>0) {
+        if (HasBufferedIndex(buffer, index)) {
           U32 offset = sparse[i].offset+1;
-          while (length<sparse[i].minLen && ((buffer(offset)^buffer[index-offset])&sparse[i].bitMask)==0) {
+          while (length<sparse[i].minLen &&
+              index>=offset &&
+              HasBufferedIndex(buffer, index-offset) &&
+              ((buffer(offset)^buffer[index-offset])&sparse[i].bitMask)==0) {
             length++;
             offset+=sparse[i].stride;
           }
           if (length>=sparse[i].minLen) {
             length-=(sparse[i].minLen-1);
             index+=sparse[i].deletions;
-            hashIndex = i;
-            list.MoveToFront(i);
-            break;
+            if (HasBufferedIndex(buffer, index)) {
+              hashIndex = i;
+              list.MoveToFront(i);
+              break;
+            }
           }
         }
         length = index = 0;
@@ -3814,8 +3985,13 @@ private:
     for (U32 i=0; i<NumHashes; i++)
       Table[hashes[i]] = pos;
     
-    expectedByte = buffer[index];
-    if (valid)
+    if (length>0 && HasBufferedIndex(buffer, index))
+      expectedByte = buffer[index];
+    else {
+      length = index = 0;
+      expectedByte = 0;
+    }
+    if (wasValid)
       iCtx8+=y, iCtx16+=buffer(1);
     valid = length>1; // only predict after at least one byte following the match
     if (valid) {

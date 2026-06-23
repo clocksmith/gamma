@@ -5,6 +5,8 @@
 
 #include <numeric>
 #include <math.h>
+#include <cstdio>
+#include <cstdlib>
 
 Mixer::Mixer(const std::valarray<float>& inputs,
     const std::vector<float>& extra_inputs,
@@ -38,11 +40,25 @@ ContextData* Mixer::GetContextData() {
 
 float Mixer::Mix() {
   ContextData* data = GetContextData();
+  if (data->weights.size() != inputs_.size()) {
+    std::fprintf(stderr,
+        "Mixer::Mix input/weight size mismatch: inputs=%zu weights=%zu\n",
+        inputs_.size(), data->weights.size());
+    std::abort();
+  }
   float p = 0;
   for (int i = 0; i < inputs_.size(); ++i) {
     p += inputs_[i] * data->weights[i];
   }
   p_ = p;
+  if (extra_inputs_vec_.size() < extra_inputs_.size() ||
+      data->extra_weights.size() != extra_inputs_.size()) {
+    std::fprintf(stderr,
+        "Mixer::Mix extra input mismatch: source=%zu local=%zu weights=%zu\n",
+        extra_inputs_vec_.size(), extra_inputs_.size(),
+        data->extra_weights.size());
+    std::abort();
+  }
   for (unsigned int i = 0; i < extra_inputs_.size(); ++i) {
     extra_inputs_[i] = extra_inputs_vec_[i];
   }

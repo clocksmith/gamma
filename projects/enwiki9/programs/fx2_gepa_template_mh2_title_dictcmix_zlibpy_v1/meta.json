@@ -1,0 +1,66 @@
+{
+  "id": "fx2_gepa_template_mh2_title_dictcmix_zlibpy_v1",
+  "family": "fx2-gepa-order",
+  "status": "candidate",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "description": "Self-contained fx2 candidate using a GEPA-derived reversible page-order key.",
+  "hypothesis": "Template/topic/minhash/shape page adjacency can lower archive bytes without storing an order table.",
+  "deps": [],
+  "order_fields": [
+    "template",
+    "mh2",
+    "title"
+  ],
+  "screen_evidence": {
+    "basis": "No-compression GEPA adjacency screen; not a Hutter score.",
+    "source": "projects/enwiki9/results/hierarchical_chunk_embedding_teacher/teacher_1m_v2.json",
+    "hit": null
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "gepa_hybrid",
+            "fields": [
+              "template",
+              "mh2",
+              "title"
+            ]
+          }
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "container": "xz+raw-deflate-wrapper"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      }
+    ]
+  },
+  "measured": {
+    "250000": {
+      "compressed_size": 52132,
+      "program_size": 183952,
+      "hutter_score": 236084,
+      "bits_per_byte": 1.668224,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "result": "projects/enwiki9/results/fx2_gepa_template_mh2_title_dictcmix_zlibpy_v1/2026-06-20T141239.json"
+    }
+  },
+  "verdict": "Measured valid at 250K, but not promotable. Archive matched the old title-order region and did not approach the stronger core/cmix floor."
+}
