@@ -1,0 +1,178 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 100 MB PPMD cap, PAQ8 minmaps, sparse-match divisor 8, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, FXCM cmC2 maps divided by 2, PAQ8 stemmer bounds hardening, conservative MatchModel buffered-index hardening, and SparseMatchModel buffered-index hardening. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "The matchguard candidate still SIGSEGVs at the 10M compression gate below the memory guard at the same 1146880-byte partial archive marker as its parent. SparseMatchModel retains the same stale table-index pattern as MatchModel, dereferencing buffer[index-offset] and buffer[index] without proving the absolute index is still inside the rolling buffer. Guarding only those sparse-match dereferences may clear the 10M crash without changing the cmix21 memory shape.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=100",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=2",
+      "-DCMIX_FXCM_RCM_DIV=1"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 384756,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 562335,
+    "payload_sha256": {
+      "cmix.bin.gz": "82b15e9e0216110e605f8a79eafa6a814bb1013a220e21ce72f7d17dfae2e577",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "100",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_FXCM_CMC2_DIV": "2",
+            "CMIX_FXCM_RCM_DIV": "1"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T235331.json",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 246,
+      "program_size": 562335,
+      "hutter_score": 562581,
+      "bits_per_byte": 1.921875,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "26d167f8df36c8dde8ba13ee65c16a0fb02c77b914fe45f3b93cb0867fb28df4",
+      "compress_time_s": 91.9029,
+      "decompress_time_s": 91.7367,
+      "notes": [
+        "sparseguard 1K gate passed; archive=246; roundtrip and determinism verified."
+      ]
+    },
+    "250000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T001527.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45179,
+      "program_size": 562335,
+      "hutter_score": 607514,
+      "bits_per_byte": 1.445728,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "9c998c3a80ab1b9fa1ee7f9695a0c3332f84b9abba773e419745e25c37cb5dfb",
+      "compress_time_s": 430.6199,
+      "decompress_time_s": 430.7062,
+      "notes": [
+        "sparseguard 250K gate passed; archive=45179; roundtrip and determinism verified; archive matches matchguard floor."
+      ]
+    },
+    "1000000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T012804.json",
+      "data_size": 1000000,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 174399,
+      "program_size": 562335,
+      "hutter_score": 736734,
+      "bits_per_byte": 1.395192,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "84f1b13a77aaefd9f8760cca6a3f57e4a9e01e634d0479a10a114b3e85eee736",
+      "compress_time_s": 1446.5629,
+      "decompress_time_s": 1450.0134,
+      "notes": [
+        "sparseguard 1M gate passed; archive=174399; roundtrip and determinism verified; max_sampled_rss_kib=8849096; archive matches matchguard floor."
+      ]
+    },
+    "10000000": {
+      "data_size": 10000000,
+      "compressed_size_partial_at_abort": 1155072,
+      "program_size": 562335,
+      "roundtrip_ok": false,
+      "determinism": false,
+      "max_sampled_rss_kib": 8949956,
+      "memory_guard_kib": 10485760,
+      "rss_guard_killed": false,
+      "driver_rc": 1,
+      "failure": "cmix_child_sigsegv_during_first_compression",
+      "notes": [
+        "10M sparseguard crossed the prior matchguard crash output region but still exited by SIGSEGV during first compression under the memory guard.",
+        "Next patch target is FXCM SparseMatchModel stale absolute index use in fxcmv1.cpp."
+      ]
+    }
+  },
+  "verdict": "Crash-blocked at 10M by cmix child SIGSEGV during first compression below the memory guard. Keep the 1M archive floor, but promote only through a new package that also guards FXCM SparseMatchModel buffered indexes.",
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T012804.json"
+}

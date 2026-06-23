@@ -6,6 +6,12 @@
 #include <vector>
 #include <string.h>
 
+#ifdef CMIX_CRASH_BACKTRACE
+#include <execinfo.h>
+#include <signal.h>
+#include <unistd.h>
+#endif
+
 #include "preprocess/preprocessor.h"
 #include "coder/encoder.h"
 #include "coder/decoder.h"
@@ -13,6 +19,27 @@
 
 namespace {
   const int kMinVocabFileSize = 10000;
+
+#ifdef CMIX_CRASH_BACKTRACE
+  void CrashBacktraceHandler(int signo) {
+    void* frames[64];
+    const int n = backtrace(frames, 64);
+    const char header[] = "\ncmix crash backtrace\n";
+    write(STDERR_FILENO, header, sizeof(header) - 1);
+    backtrace_symbols_fd(frames, n, STDERR_FILENO);
+    signal(signo, SIG_DFL);
+    raise(signo);
+  }
+
+  void InstallCrashBacktraceHandler() {
+    signal(SIGSEGV, CrashBacktraceHandler);
+    signal(SIGABRT, CrashBacktraceHandler);
+    signal(SIGBUS, CrashBacktraceHandler);
+    signal(SIGILL, CrashBacktraceHandler);
+  }
+#else
+  void InstallCrashBacktraceHandler() {}
+#endif
 
   bool HasPretrainFile() {
     const char* path = getenv("CMIX_PRETRAIN_FILE");
@@ -294,6 +321,8 @@ bool RunDecompression(const std::string& input_path,
 }
 
 int main(int argc, char* argv[]) {
+  InstallCrashBacktraceHandler();
+
   if (argc < 4 || argc > 5 || strlen(argv[1]) != 2 || argv[1][0] != '-' ||
       (argv[1][1] != 'c' && argv[1][1] != 'd' && argv[1][1] != 's' &&
       argv[1][1] != 'n' && argv[1][1] != 't')) {

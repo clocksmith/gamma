@@ -1,0 +1,178 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 100 MB PPMD cap, PAQ8 minmaps, sparse-match divisor 8, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, FXCM cmC2 maps divided by 2, and PAQ8 text word/stemmer bounds hardening. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "The FXCM2 package preserves the strongest 174415-byte 1M archive class but crashes during the 10M compression gate below the memory guard. Kernel crash telemetry resolves the fault counter into paq8::GermanStemmer::Stem, so this candidate keeps the FXCM2 memory shape and adds conservative word-byte/stemmer bounds hardening to remove the crash without changing the compressor substrate.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=100",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=2",
+      "-DCMIX_FXCM_RCM_DIV=1"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 384515,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 562094,
+    "payload_sha256": {
+      "cmix.bin.gz": "087641b2d8bab7560eb0defd8f99a3b269aadd4b4528f0034443c7424039d8c1",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "100",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_FXCM_CMC2_DIV": "2",
+            "CMIX_FXCM_RCM_DIV": "1"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T145439.json",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 246,
+      "program_size": 562094,
+      "hutter_score": 562340,
+      "bits_per_byte": 1.921875,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "2745f0ec7a817fe466a11cc87d7193c292ec5777b02d8a4ef1b1eededddb3807",
+      "compress_time_s": 92.9128,
+      "decompress_time_s": 92.1452,
+      "notes": [
+        "guard max_sampled_rss_kib=7445444 under 10485760 KiB"
+      ]
+    },
+    "250000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T151657.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45182,
+      "program_size": 562094,
+      "hutter_score": 607276,
+      "bits_per_byte": 1.445824,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "e4470aa5c4b8e6ef92081d3f1beb8a360e355b79edb7747de79855be5c1d635a",
+      "compress_time_s": 432.3657,
+      "decompress_time_s": 430.731,
+      "notes": [
+        "guard max_sampled_rss_kib=8691780 under 10485760 KiB"
+      ]
+    },
+    "1000000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T163015.json",
+      "data_size": 1000000,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 174415,
+      "program_size": 562094,
+      "hutter_score": 736509,
+      "bits_per_byte": 1.39532,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
+      "compress_time_s": 1451.961,
+      "decompress_time_s": 1451.2979,
+      "notes": [
+        "guard max_sampled_rss_kib=8849220 under 10485760 KiB"
+      ]
+    },
+    "10000000": {
+      "compressed_size_temp_at_abort": 6186040,
+      "partial_compressed_size_at_abort": 1146880,
+      "program_size": 562094,
+      "roundtrip_ok": false,
+      "determinism": false,
+      "failure": "cmix_child_sigsegv_during_compression",
+      "signal": "SIGSEGV",
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 8949924,
+      "crash_offset": "0x83cf1",
+      "crash_symbol": "paq8::MatchModel::MatchModel(unsigned int)",
+      "notes": [
+        "10M crash replay progressed to the parent partial-output marker, then SIGSEGVed below the memory guard. Kernel crash offset resolves to MatchModel in the optimized cmix binary, not the prior GermanStemmer location."
+      ]
+    }
+  },
+  "verdict": "Crash-blocked at 10M. Stemguard preserves the 174415-byte 1M archive class and reaches the prior 10M partial-output marker under memory, but the 10M compression gate still SIGSEGVs below the guard. The new crash resolves near paq8::MatchModel::MatchModel(unsigned int), so the next candidate should harden or lens MatchModel state rather than changing PAQ level or PPMD.",
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T163015.json"
+}

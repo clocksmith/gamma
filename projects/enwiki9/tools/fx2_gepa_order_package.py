@@ -141,6 +141,12 @@ def load_screen_hit(screen_json: pathlib.Path | None, fields: tuple[str, ...]) -
         return None
     data = json.loads(screen_json.read_text())
     wanted = list(fields)
+    nested = data.get("gepa_distilled_keys")
+    if isinstance(nested, dict):
+        for row in nested.get("top", []):
+            row_fields = row.get("fields") or row.get("parts")
+            if row_fields == wanted:
+                return row
     for section in (
         "top_by_objective",
         "top_by_smooth",

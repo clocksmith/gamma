@@ -68,7 +68,46 @@ struct BLK_NODE {
   int avail() const { return (NextIndx!=0); }
 };
 
+bool IsHeapIndex(uint indx, qword bytes) {
+  if (indx == 0 || HeapStart == nullptr) return false;
+  uint lim = (UnitsStart-HeapStart);
+  qword addr = (indx>=lim) ? qword(indx-lim)*UNIT_SIZE+lim : indx;
+  return addr + bytes <= SubAllocatorSize;
+}
+
+bool IsHeapPointer(void* p, qword bytes) {
+  if (p == NULL || HeapStart == nullptr) return false;
+  byte* bp = (byte*)p;
+  if (bp < HeapStart) return false;
+  qword addr = bp - HeapStart;
+  return addr + bytes <= SubAllocatorSize;
+}
+
+bool IsTextIndex(uint indx, qword bytes) {
+  if (indx == 0 || HeapStart == nullptr) return false;
+  uint lim = (UnitsStart-HeapStart);
+  if (indx >= lim) return false;
+  return qword(indx) + bytes <= lim;
+}
+
+bool IsContextIndex(uint indx) {
+  if (indx == 0 || HeapStart == nullptr) return false;
+  uint lim = (UnitsStart-HeapStart);
+  if (indx < lim) return false;
+  qword addr = qword(indx-lim)*UNIT_SIZE+lim;
+  return addr + UNIT_SIZE <= SubAllocatorSize;
+}
+
+qword HeapUnitGuard() {
+  if (SubAllocatorSize == 0) return 1024;
+  return SubAllocatorSize / UNIT_SIZE + N_INDEXES + 1024;
+}
+
 BLK_NODE* getNext( BLK_NODE* This ) {
+  if (!IsHeapIndex(This->NextIndx, sizeof(BLK_NODE))) {
+    This->NextIndx = 0;
+    return NULL;
+  }
   return (BLK_NODE*)Indx2Ptr(This->NextIndx);
 }
 
@@ -82,17 +121,20 @@ void link( BLK_NODE* This, BLK_NODE* p ) {
 }
 
 void unlink( BLK_NODE* This ) {
-  This->NextIndx = getNext(This)->NextIndx;
+  BLK_NODE* p = getNext(This);
+  This->NextIndx = p ? p->NextIndx : 0;
 }
 
 void* remove( BLK_NODE* This ) {
   BLK_NODE* p = getNext(This);
+  if (!p) return NULL;
   unlink(This);
   This->Stamp--;
   return p;
 }
 
 void insert( BLK_NODE* This, void* pv, int NU ) {
+  if (!IsHeapPointer(pv, sizeof(BLK_NODE))) return;
   BLK_NODE* p = (BLK_NODE*)pv;
   link(This,p);
   p->Stamp = ~uint(0);
@@ -166,14 +208,25 @@ void GlueFreeBlocks() {
   uint i, k, sz;
   MEM_BLK s0;
   pMEM_BLK p, p0=&s0, p1;
+  qword guardLimit = HeapUnitGuard();
 
   if( LoUnit!=HiUnit ) LoUnit[0]=0;
 
   for( p0->NextIndx=0,i=0; i<=N_INDEXES; i++ ) {
+     qword listGuard = 0;
      while( BList[i].avail() ) {
+       if( ++listGuard > guardLimit ) {
+         BList[i].NextIndx = 0;
+         break;
+       }
        p = (MEM_BLK*)remove(&BList[i]);
+       if( !p ) break;
        if( p->NU ) {
-         while( p1 = p + p->NU, p1->Stamp==~uint(0) ) {
+         qword mergeGuard = 0;
+         while( p->NU && ++mergeGuard <= guardLimit ) {
+           p1 = p + p->NU;
+           if( !IsHeapPointer(p1, sizeof(MEM_BLK)) ||
+               p1->Stamp!=~uint(0) || p1->NU==0 ) break;
            p->NU += p1->NU;
            p1->NU = 0;
          }
@@ -182,8 +235,14 @@ void GlueFreeBlocks() {
      }
   }
 
+  qword splitGuard = 0;
   while( s0.avail() ) {
+    if( ++splitGuard > guardLimit ) {
+      s0.NextIndx = 0;
+      break;
+    }
     p = (MEM_BLK*)remove(&s0);
+    if( !p ) break;
     sz= p->NU;
     if( sz ) {
       for(; sz>128; sz-=128, p+=128 ) insert(&BList[N_INDEXES-1],p,128);
@@ -218,7 +277,10 @@ void* AllocUnitsRare( uint indx ) {
     if( ++i == N_INDEXES ) {
       if( !GlueCount-- ) {
         GlueFreeBlocks();
-        if( BList[i=indx].avail() ) return remove(&BList[i]);
+        if( BList[i=indx].avail() ) {
+          void* ptr = remove(&BList[i]);
+          if( ptr ) return ptr;
+        }
       } else {
         i = U2B(Indx2Units[indx]);
         return (UnitsStart-pText>i) ? UnitsStart-=i : NULL;
@@ -227,6 +289,7 @@ void* AllocUnitsRare( uint indx ) {
   } while( !BList[i].avail() );
 
   void* RetVal=remove(&BList[i]);
+  if( !RetVal ) return NULL;
   SplitBlock( RetVal, i, indx );
 
   return RetVal;
@@ -234,7 +297,10 @@ void* AllocUnitsRare( uint indx ) {
 
 void* AllocUnits( uint NU ) {
   uint indx = Units2Indx[NU-1];
-  if( BList[indx].avail() ) return remove(&BList[indx]);
+  if( BList[indx].avail() ) {
+    void* ptr = remove(&BList[indx]);
+    if( ptr ) return ptr;
+  }
   void* RetVal=LoUnit;
   LoUnit += U2B(Indx2Units[indx]);
   if( LoUnit<=HiUnit ) return RetVal;
@@ -244,58 +310,90 @@ void* AllocUnits( uint NU ) {
 
 void* AllocContext() {
   if( HiUnit!=LoUnit ) return HiUnit-=UNIT_SIZE;
-  return BList->avail() ? remove(BList) : AllocUnitsRare(0);
+  if( BList->avail() ) {
+    void* ptr = remove(BList);
+    if( ptr ) return ptr;
+  }
+  return AllocUnitsRare(0);
 }
 
 void FreeUnits( void* ptr, uint NU ) {
+  if( NU==0 || NU>128 || !IsHeapPointer(ptr, U2B(NU)) ) return;
   uint indx = Units2Indx[NU-1];
   insert( &BList[indx], ptr, Indx2Units[indx] );
 }
 
 void FreeUnit( void* ptr ) {
+  if( !IsHeapPointer(ptr, UNIT_SIZE) ) return;
   int i = (byte*)ptr > UnitsStart+128*1024 ? 0 : N_INDEXES;
   insert( &BList[i], ptr, 1 );
 }
 
-void UnitsCpy( void* Dest, void* Src, uint NU ) {
+bool UnitsCpy( void* Dest, void* Src, uint NU ) {
+  if( NU==0 || NU>128 ) return false;
+  qword bytes = U2B(NU);
+  if( !IsHeapPointer(Dest, bytes) || !IsHeapPointer(Src, bytes) ) return false;
   memcpy( Dest, Src, 12*NU );
+  return true;
+}
+
+bool UnitsCpyFromLocal( void* Dest, void* Src, uint NU ) {
+  if( NU==0 || NU>128 ) return false;
+  if( !IsHeapPointer(Dest, U2B(NU)) || Src==NULL ) return false;
+  memcpy( Dest, Src, 12*NU );
+  return true;
 }
 
 void* ExpandUnits( void* OldPtr, uint OldNU ) {
+  if( OldNU==0 || OldNU>=128 || !IsHeapPointer(OldPtr, U2B(OldNU)) ) return NULL;
   uint i0 = Units2Indx[OldNU-1];
   uint i1 = Units2Indx[OldNU-1+1];
   if( i0==i1 ) return OldPtr;
   void* ptr = AllocUnits(OldNU+1);
-  if( ptr ) {
-    UnitsCpy( ptr, OldPtr, OldNU );
+  if( ptr && UnitsCpy( ptr, OldPtr, OldNU ) ) {
     insert( &BList[i0], OldPtr, OldNU );
+  } else {
+    if( ptr ) FreeUnits( ptr, OldNU+1 );
+    ptr = NULL;
   }
   return ptr;
 }
 
 void* ShrinkUnits( void* OldPtr, uint OldNU, uint NewNU ) {
+  if( OldNU==0 || OldNU>128 || NewNU==0 || NewNU>OldNU ||
+      !IsHeapPointer(OldPtr, U2B(OldNU)) ) return NULL;
   uint i0 = Units2Indx[OldNU-1];
   uint i1 = Units2Indx[NewNU-1];
   if( i0==i1 ) return OldPtr;
   if( BList[i1].avail() ) {
     void* ptr = remove(&BList[i1]);
-    UnitsCpy( ptr, OldPtr, NewNU );
-    insert( &BList[i0], OldPtr, Indx2Units[i0] );
-    return ptr;
+    if( ptr && UnitsCpy( ptr, OldPtr, NewNU ) ) {
+      insert( &BList[i0], OldPtr, Indx2Units[i0] );
+      return ptr;
+    }
+    if( ptr ) FreeUnits( ptr, NewNU );
   } else {
     SplitBlock(OldPtr,i0,i1);
     return OldPtr;
   }
+  SplitBlock(OldPtr,i0,i1);
+  return OldPtr;
 }
 
-void* MoveUnitsUp( void* OldPtr, uint NU ) {
-  uint indx = Units2Indx[NU-1];
-  PrefetchData(OldPtr);
-  if( (byte*)OldPtr > UnitsStart+128*1024 ||
-      (BLK_NODE*)OldPtr > getNext(&BList[indx]) ) return OldPtr;
+	void* MoveUnitsUp( void* OldPtr, uint NU ) {
+	  if( NU==0 || NU>128 || !IsHeapPointer(OldPtr, U2B(NU)) ) return NULL;
+	  uint indx = Units2Indx[NU-1];
+	  PrefetchData(OldPtr);
+	  BLK_NODE* next = getNext(&BList[indx]);
+	  if( (byte*)OldPtr > UnitsStart+128*1024 ||
+	      (next && (BLK_NODE*)OldPtr > next) ) return OldPtr;
 
-  void* ptr = remove(&BList[indx]);
-  UnitsCpy( ptr, OldPtr, NU );
+	  void* ptr = remove(&BList[indx]);
+  if( !ptr ) return OldPtr;
+  if( !UnitsCpy( ptr, OldPtr, NU ) ) {
+    FreeUnits( ptr, NU );
+    return NULL;
+  }
 
   insert( &BList[N_INDEXES], OldPtr, Indx2Units[indx] );
 
@@ -314,6 +412,7 @@ void PrepareTextArea() {
 void ExpandTextArea() {
   BLK_NODE* p;
   uint Count[N_INDEXES], i=0;
+  qword guardLimit = HeapUnitGuard();
   memset( Count, 0, sizeof(Count) );
 
   if( AuxUnit!=UnitsStart ) {
@@ -323,8 +422,12 @@ void ExpandTextArea() {
       insert( BList, AuxUnit, 1 );
   }
 
-  while( (p=(BLK_NODE*)UnitsStart)->Stamp == ~uint(0) ) {
+  qword expandGuard = 0;
+  while( IsHeapPointer(UnitsStart, sizeof(BLK_NODE)) &&
+         (p=(BLK_NODE*)UnitsStart)->Stamp == ~uint(0) ) {
+    if( ++expandGuard > guardLimit ) break;
     MEM_BLK* pm = (MEM_BLK*)p;
+    if( pm->NU==0 || pm->NU>128 ) break;
     UnitsStart = (byte*)(pm + pm->NU);
     Count[Units2Indx[pm->NU-1]]++;
     i++;
@@ -333,23 +436,42 @@ void ExpandTextArea() {
 
   if( i ) {
 
-    for( p=BList+N_INDEXES; p->NextIndx; p=getNext(p) ) {
-      while( p->NextIndx && !getNext(p)->Stamp ) {
-        Count[Units2Indx[((MEM_BLK*)getNext(p))->NU-1]]--;
-        unlink(p);
-        BList[N_INDEXES].Stamp--;
-      }
-      if( !p->NextIndx ) break;
-    }
+	    qword chainGuard = 0;
+	    for( p=BList+N_INDEXES; p && p->NextIndx; p=getNext(p) ) {
+	      if( ++chainGuard > guardLimit ) break;
+	      BLK_NODE* next;
+	      while( p->NextIndx && (next = getNext(p)) && !next->Stamp ) {
+	        uint nu = ((MEM_BLK*)next)->NU;
+	        if( nu==0 || nu>128 ) {
+	          unlink(p);
+	          BList[N_INDEXES].Stamp--;
+	          continue;
+	        }
+	        Count[Units2Indx[nu-1]]--;
+	        unlink(p);
+	        BList[N_INDEXES].Stamp--;
+	      }
+	      if( !p->NextIndx ) break;
+	    }
 
-    for( i=0; i<N_INDEXES; i++ ) {
-      for( p=BList+i; Count[i]!=0; p=getNext(p) ) {
-        while( !getNext(p)->Stamp ) {
-          unlink(p); BList[i].Stamp--;
-          if ( !--Count[i] ) break;
-        }
-      }
-    }
+	    for( i=0; i<N_INDEXES; i++ ) {
+	      qword chainGuard = 0;
+	      for( p=BList+i; p && Count[i]!=0; p=getNext(p) ) {
+	        if( ++chainGuard > guardLimit ) break;
+	        BLK_NODE* next;
+	        while( (next = getNext(p)) && !next->Stamp ) {
+	          uint nu = ((MEM_BLK*)next)->NU;
+	          if( nu==0 || nu>128 ) {
+	            unlink(p);
+	            BList[i].Stamp--;
+	            continue;
+	          }
+	          unlink(p); BList[i].Stamp--;
+	          if ( !--Count[i] ) break;
+	        }
+	        if( !p->NextIndx ) break;
+	      }
+	    }
 
   }
 
@@ -363,9 +485,10 @@ template <class T>
 template <class T>
   void SWAP( T& t1, T& t2 ) { T tmp=t1; t1=t2; t2=tmp; }
 
-void PrefetchData(void* Addr) {
-  *(volatile byte*)Addr;
-}
+	void PrefetchData(void* Addr) {
+	  if (!Addr) return;
+	  *(volatile byte*)Addr;
+	}
 
 enum {
   UP_FREQ = 5
@@ -417,9 +540,15 @@ struct STATE {
   uint iSuccessor;
 };
 
-PPM_CONTEXT* getSucc( STATE* This ) {
-  return (PPM_CONTEXT*)Indx2Ptr( This->iSuccessor );
-}
+	PPM_CONTEXT* getSucc( STATE* This ) {
+		  if (!This || !IsHeapIndex(This->iSuccessor, 1)) return NULL;
+		  return (PPM_CONTEXT*)Indx2Ptr( This->iSuccessor );
+		}
+
+	PPM_CONTEXT* getContextSucc( STATE* This ) {
+		  if (!This || !IsContextIndex(This->iSuccessor)) return NULL;
+		  return (PPM_CONTEXT*)Indx2Ptr( This->iSuccessor );
+		}
 
 void SWAP( STATE& s1, STATE& s2 ) {
   word t1 = (word&)s1;
@@ -441,9 +570,37 @@ struct PPM_CONTEXT {
   STATE& oneState() const { return (STATE&) SummFreq; }
 };
 
-STATE* getStats( PPM_CONTEXT* This ) { return (STATE*)Indx2Ptr(This->iStats); }
+	STATE* getStats( PPM_CONTEXT* This ) {
+	  if (!This) return NULL;
+	  uint units = (This->NumStats+2)>>1;
+	  if (units == 0 || units > 128 || !IsHeapIndex(This->iStats, U2B(units))) return NULL;
+	  return (STATE*)Indx2Ptr(This->iStats);
+	}
 
-PPM_CONTEXT* suff( PPM_CONTEXT* This ) { return (PPM_CONTEXT*)Indx2Ptr(This->iSuffix); }
+		PPM_CONTEXT* suff( PPM_CONTEXT* This ) {
+		  if (!This || !IsContextIndex(This->iSuffix)) return NULL;
+		  return (PPM_CONTEXT*)Indx2Ptr(This->iSuffix);
+		}
+
+	STATE* findState( PPM_CONTEXT* This, byte symbol ) {
+		  STATE* p = getStats(This);
+		  if (!p) return NULL;
+	  for (int i = 0; i <= This->NumStats; ++i) {
+	    if (p[i].Symbol == symbol) return p + i;
+	  }
+		  return NULL;
+		}
+
+		bool IsValidContext( PPM_CONTEXT* This ) {
+		  if (!This || !IsHeapPointer(This, sizeof(PPM_CONTEXT))) return false;
+		  if ((byte*)This < UnitsStart) return false;
+		  if (This->NumStats) {
+		    if (!getStats(This)) return false;
+		    if (This->SummFreq == 0) return false;
+		  }
+		  if (This->iSuffix && !IsContextIndex(This->iSuffix)) return false;
+		  return true;
+		}
 
   int _MaxOrder, _CutOff, _MMAX;
   uint _filesize;
@@ -503,8 +660,9 @@ STATE* rescale( PPM_CONTEXT& q, int OrderFall, STATE* FoundState ) {
 
   q.Flags &= 0x14;
 
-  p1 = getStats(&q);
-  tmp = FoundState[0];
+	  p1 = getStats(&q);
+	  if( !p1 ) return FoundState;
+	  tmp = FoundState[0];
   for( p=FoundState; p!=p1; p-- ) p[0]=p[-1];
   p1[0] = tmp;
 
@@ -534,40 +692,56 @@ STATE* rescale( PPM_CONTEXT& q, int OrderFall, STATE* FoundState ) {
     for( i=0; p->Freq==0; i++,p-- );
     EscFreq += i;
     a = (q.NumStats+2) >> 1;
-    if( (q.NumStats-=i)==0 ) {
-      tmp = getStats(&q)[0];
-      tmp.Freq = Min( MAX_FREQ/3, (2*tmp.Freq+EscFreq-1)/EscFreq );
-      q.Flags &= 0x18;
-      FreeUnits( getStats(&q), a );
-      q.oneState() = tmp;
-      FoundState = &q.oneState();
-      return FoundState;
-    }
-    q.iStats = Ptr2Indx( ShrinkUnits(getStats(&q),a,(q.NumStats+2)>>1) );
-  }
+	    if( (q.NumStats-=i)==0 ) {
+	      STATE* stats = getStats(&q);
+	      if( !stats ) return FoundState;
+	      tmp = stats[0];
+		      if( EscFreq<=0 ) EscFreq=1;
+		      tmp.Freq = Min( MAX_FREQ/3, (2*tmp.Freq+EscFreq-1)/EscFreq );
+	      q.Flags &= 0x18;
+	      FreeUnits( stats, a );
+	      q.oneState() = tmp;
+	      FoundState = &q.oneState();
+	      return FoundState;
+	    }
+	    q.iStats = Ptr2Indx( ShrinkUnits(p1,a,(q.NumStats+2)>>1) );
+	  }
 
   q.SummFreq += (EscFreq+1) >> 1;
   if( OrderFall || (q.Flags & 0x04)==0 ) {
     a = (sf-=EscFreq) - f0;
-    a = CLAMP( uint( ( f0*q.SummFreq - sf*getStats(&q)->Freq + a-1 ) / a ), 2U, MAX_FREQ/2U-18U );
-  } else {
-    a = 2;
-  }
+	    STATE* stats = getStats(&q);
+	    if( !stats ) return FoundState;
+		    if( a<=0 ) {
+		      a = 2;
+		    } else {
+		      a = CLAMP( uint( ( f0*q.SummFreq - sf*stats->Freq + a-1 ) / a ), 2U, MAX_FREQ/2U-18U );
+		    }
+	  } else {
+	    a = 2;
+	  }
 
-  (FoundState=getStats(&q))->Freq += a;
+	  FoundState=getStats(&q);
+	  if( !FoundState ) return &q.oneState();
+	  FoundState->Freq += a;
   q.SummFreq += a;
   q.Flags |= 0x04;
 
   return FoundState;
 }
 
-void AuxCutOff( STATE* p, int Order, int MaxOrder ) {
-  if( Order<MaxOrder ) {
-    PrefetchData( getSucc(p) );
-    p->iSuccessor = cutOff( getSucc(p)[0], Order+1,MaxOrder);
-  } else {
-    p->iSuccessor=0;
-  }
+		void AuxCutOff( STATE* p, int Order, int MaxOrder ) {
+		  if( Order<MaxOrder ) {
+		    PPM_CONTEXT* succ = getContextSucc(p);
+		    if( !succ ) {
+		      p->iSuccessor = 0;
+		      return;
+	    }
+	    PrefetchData( succ );
+	    p->iSuccessor = cutOff( succ[0], Order+1,MaxOrder);
+	  } else {
+	    p->iSuccessor=0;
+	  }
 }
 
 uint cutOff( PPM_CONTEXT& q, int Order, int MaxOrder ) {
@@ -577,12 +751,13 @@ uint cutOff( PPM_CONTEXT& q, int Order, int MaxOrder ) {
 
   if( q.NumStats==0 ) {
 
-    int flag = 1;
-    p = &q.oneState();
-    if( (byte*)getSucc(p) >= UnitsStart ) {
-      AuxCutOff( p, Order, MaxOrder );
-      if( p->iSuccessor || Order<O_BOUND ) flag=0;
-    }
+		    int flag = 1;
+		    p = &q.oneState();
+		    PPM_CONTEXT* succ = getContextSucc(p);
+		    if( succ ) {
+		      AuxCutOff( p, Order, MaxOrder );
+		      if( p->iSuccessor || Order<O_BOUND ) flag=0;
+		    }
     if( flag ) {
       FreeUnit( &q );
       return 0;
@@ -590,16 +765,18 @@ uint cutOff( PPM_CONTEXT& q, int Order, int MaxOrder ) {
 
   } else {
 
-    tmp = (q.NumStats+2)>>1;
-    p0 = (STATE*)MoveUnitsUp(getStats(&q),tmp);
-    q.iStats = Ptr2Indx(p0);
+	    tmp = (q.NumStats+2)>>1;
+	    p0 = (STATE*)MoveUnitsUp(getStats(&q),tmp);
+	    if( !p0 ) return 0;
+	    q.iStats = Ptr2Indx(p0);
 
-    for( i=q.NumStats, p=&p0[i]; p>=p0; p-- ) {
-      if( (byte*)getSucc(p) < UnitsStart ) {
-        p[0].iSuccessor=0;
-        SWAP( p[0], p0[i--] );
-      } else AuxCutOff( p, Order, MaxOrder );
-    }
+		    for( i=q.NumStats, p=&p0[i]; p>=p0; p-- ) {
+		      PPM_CONTEXT* succ = getContextSucc(p);
+		      if( !succ ) {
+		        p[0].iSuccessor=0;
+		        SWAP( p[0], p0[i--] );
+		      } else AuxCutOff( p, Order, MaxOrder );
+	    }
 
     if( i!=q.NumStats && Order>0 ) {
       q.NumStats = i;
@@ -611,12 +788,16 @@ uint cutOff( PPM_CONTEXT& q, int Order, int MaxOrder ) {
       }
       if( i==0 ) {
         q.Flags = (q.Flags & 0x10) + 0x08*(p[0].Symbol>=0x40);
-        p[0].Freq = 1+(2*(p[0].Freq-1))/(q.SummFreq-p[0].Freq);
+	        {
+	          int denom = q.SummFreq-p[0].Freq;
+	          p[0].Freq = (denom>0) ? 1+(2*(p[0].Freq-1))/denom : 1;
+	        }
         q.oneState() = p[0];
         FreeUnits( p, tmp );
       } else {
-        p = (STATE*)ShrinkUnits( p0, tmp, (i+2)>>1 );
-        q.iStats = Ptr2Indx(p);
+	        p = (STATE*)ShrinkUnits( p0, tmp, (i+2)>>1 );
+	        if( !p ) return 0;
+	        q.iStats = Ptr2Indx(p);
         Scale = (q.SummFreq>16*i);
         q.Flags = (q.Flags & (0x10+0x04*Scale));
         if( Scale ) {
@@ -640,12 +821,13 @@ uint cutOff( PPM_CONTEXT& q, int Order, int MaxOrder ) {
 
   if( (byte*)&q==UnitsStart ) {
 
-    UnitsCpy( AuxUnit, &q, 1 );
+    if( !UnitsCpyFromLocal( AuxUnit, &q, 1 ) ) return 0;
     return Ptr2Indx(AuxUnit);
   } else {
 
-    if( (byte*)suff(&q)==UnitsStart ) q.iSuffix=Ptr2Indx(AuxUnit);
-  }
+	    PPM_CONTEXT* qs = suff(&q);
+	    if( qs && (byte*)qs==UnitsStart ) q.iSuffix=Ptr2Indx(AuxUnit);
+	  }
 
   return Ptr2Indx(&q);
 }
@@ -657,11 +839,15 @@ void StartModelRare( void ) {
   memset( CharMask, 0, sizeof(CharMask) );
   EscCount=1;
 
-  if( _MaxOrder<2 ) {
-    OrderFall = _MaxOrder;
-    for( PPM_CONTEXT* pc=MaxContext; pc->iSuffix!=0; pc=suff(pc) ) OrderFall--;
-    return;
-  }
+	  if( _MaxOrder<2 ) {
+	    OrderFall = _MaxOrder;
+	    int suffixGuard = 0;
+	    for( PPM_CONTEXT* pc=MaxContext; pc && pc->iSuffix!=0; pc=suff(pc) ) {
+	      if( ++suffixGuard > ORealMAX ) break;
+	      OrderFall--;
+	    }
+	    return;
+	  }
 
   OrderFall = _MaxOrder;
 
@@ -670,19 +856,22 @@ void StartModelRare( void ) {
   InitRL = -( (_MaxOrder<13) ? _MaxOrder : 13 );
   RunLength = InitRL;
 
-  MaxContext = (PPM_CONTEXT*)AllocContext();
-  MaxContext->NumStats = 255;
-  MaxContext->SummFreq = 255+2;
-  MaxContext->iStats = Ptr2Indx(AllocUnits(256/2));
+	  MaxContext = (PPM_CONTEXT*)AllocContext();
+	  if( !MaxContext ) return;
+	  MaxContext->NumStats = 255;
+	  MaxContext->SummFreq = 255+2;
+	  STATE* rootStats = (STATE*)AllocUnits(256/2);
+	  if( !rootStats ) return;
+	  MaxContext->iStats = Ptr2Indx(rootStats);
   MaxContext->Flags = 0;
   MaxContext->iSuffix = 0;
   PrevSuccess = 0;
 
   for( i=0; i<256; i++ ) {
-    getStats(MaxContext)[i].Symbol = i;
-    getStats(MaxContext)[i].Freq = 1;
-    getStats(MaxContext)[i].iSuccessor = 0;
-  }
+	    rootStats[i].Symbol = i;
+	    rootStats[i].Freq = 1;
+	    rootStats[i].iSuccessor = 0;
+	  }
 
   if( 1 ) {
 
@@ -703,11 +892,21 @@ void RestoreModelRare( void ) {
   pText = HeapStart;
   PPM_CONTEXT* pc = saved_pc;
 
-  for(;; MaxContext=suff(MaxContext) ) {
-   if( (MaxContext->NumStats==1) && (MaxContext!=pc) ) {
-     p = getStats(MaxContext);
-     if( (byte*)(getSucc(p+1))>=UnitsStart ) break;
-   } else break;
+	  int restoreChainGuard = 0;
+	  for(;; MaxContext=suff(MaxContext) ) {
+	   if( ++restoreChainGuard > ORealMAX ) {
+	     StartModelRare();
+	     return;
+	   }
+	   if( !MaxContext ) {
+	     StartModelRare();
+	     return;
+	   }
+	   if( (MaxContext->NumStats==1) && (MaxContext!=pc) ) {
+	     p = getStats(MaxContext);
+	     PPM_CONTEXT* succ = p ? getContextSucc(p+1) : NULL;
+	     if( succ ) break;
+	   } else break;
 
     MaxContext->Flags = (MaxContext->Flags & 0x10) + 0x08*(p->Symbol>=0x40);
     p[0].Freq = (p[0].Freq+1) >> 1;
@@ -716,17 +915,41 @@ void RestoreModelRare( void ) {
     FreeUnits( p, 1 );
   }
 
-  while( MaxContext->iSuffix ) MaxContext=suff(MaxContext);
+	  int suffixGuard = 0;
+	  while( MaxContext && MaxContext->iSuffix ) {
+	    if( ++suffixGuard > ORealMAX ) {
+	      StartModelRare();
+	      return;
+	    }
+	    PPM_CONTEXT* s = suff(MaxContext);
+	    if( !s ) break;
+	    MaxContext=s;
+	  }
+	  if( !MaxContext ) {
+	    StartModelRare();
+	    return;
+	  }
 
   AuxUnit = UnitsStart;
 
   ExpandTextArea();
 
-  do {
-    PrepareTextArea();
-    cutOff( MaxContext[0], 0, _MaxOrder );
-    ExpandTextArea();
-  } while( GetUsedMemory()>3*(SubAllocatorSize>>2) );
+  {
+    int restorePasses = 0;
+    qword restoreLimit = 3*(SubAllocatorSize>>2);
+    do {
+      qword before = GetUsedMemory();
+      PrepareTextArea();
+      uint root = MaxContext ? cutOff( MaxContext[0], 0, _MaxOrder ) : 0;
+      ExpandTextArea();
+      qword after = GetUsedMemory();
+      if( !root || (after>restoreLimit && after>=before) ||
+          ++restorePasses>_MaxOrder+2 ) {
+        StartModelRare();
+        return;
+      }
+    } while( GetUsedMemory()>restoreLimit );
+  }
 
   GlueCount = GlueCount1 = 0;
   OrderFall = _MaxOrder;
@@ -738,22 +961,24 @@ PPM_CONTEXT* UpdateModel( PPM_CONTEXT* MinContext ) {
   byte Flag, FSymbol;
   uint ns1, ns, cf, sf, s0, FFreq;
   uint iSuccessor, iFSuccessor;
-  PPM_CONTEXT* pc;
+	  PPM_CONTEXT* pc = MinContext;
   STATE* p = NULL;
 
   FSymbol = FoundState->Symbol;
   FFreq = FoundState->Freq;
   iFSuccessor = FoundState->iSuccessor;
 
-  if( MinContext->iSuffix ) {
-    pc = suff(MinContext);
+	  if( MinContext->iSuffix ) {
+	    pc = suff(MinContext);
+	    if( !pc ) return 0;
 
-    if( pc[0].NumStats ) {
-      p = getStats(pc);
-      if( p[0].Symbol!=FSymbol ) {
-        for( p++; p[0].Symbol!=FSymbol; p++ );
-        if( p[0].Freq >= p[-1].Freq ) SWAP( p[0], p[-1] ), p--;
-      }
+	    if( pc[0].NumStats ) {
+	      STATE* stats = getStats(pc);
+	      p = findState(pc, FSymbol);
+	      if( !p ) return 0;
+	      if( p!=stats ) {
+	        if( p[0].Freq >= p[-1].Freq ) SWAP( p[0], p[-1] ), p--;
+	      }
       if( p[0].Freq<MAX_FREQ-3 ) {
         cf = 2 + (FFreq<28);
         p[0].Freq += cf;
@@ -766,22 +991,26 @@ PPM_CONTEXT* UpdateModel( PPM_CONTEXT* MinContext ) {
   }
   // pc = MaxContext;
 
-  if( !OrderFall && iFSuccessor ) {
-    FoundState->iSuccessor = CreateSuccessors( 1, p, MinContext );
-    if( !FoundState->iSuccessor ) { saved_pc=pc; return 0; };
-    MaxContext = getSucc(FoundState);
-    return MaxContext;
-  }
+	  if( !OrderFall && iFSuccessor ) {
+	    FoundState->iSuccessor = CreateSuccessors( 1, p, MinContext );
+	    if( !FoundState->iSuccessor ) { saved_pc=pc; return 0; };
+	    MaxContext = getContextSucc(FoundState);
+	    return MaxContext;
+	  }
 
   *pText++ = FSymbol;
   iSuccessor = Ptr2Indx(pText);
   if( pText>=UnitsStart ) { saved_pc=pc; return 0; };
 
-  if( iFSuccessor ) {
-    if( (byte*)Indx2Ptr(iFSuccessor) < UnitsStart )
-     iFSuccessor = CreateSuccessors( 0, p, MinContext );
-    else
-     PrefetchData( Indx2Ptr(iFSuccessor) );
+	  if( iFSuccessor ) {
+	    if( !IsHeapIndex(iFSuccessor, 1) ) {
+	      saved_pc=pc;
+	      return 0;
+	    }
+	    if( IsTextIndex(iFSuccessor, 1) )
+	     iFSuccessor = CreateSuccessors( 0, p, MinContext );
+	    else
+	     PrefetchData( Indx2Ptr(iFSuccessor) );
   } else
     iFSuccessor = ReduceOrder( p, MinContext );
 
@@ -795,15 +1024,20 @@ PPM_CONTEXT* UpdateModel( PPM_CONTEXT* MinContext ) {
   s0 = MinContext->SummFreq - FFreq;
   ns = MinContext->NumStats;
   Flag = 0x08*(FSymbol>=0x40);
-  for( pc=MaxContext; pc!=MinContext; pc=suff(pc) ) {
-    ns1 = pc[0].NumStats;
+	  int updateChainGuard = 0;
+	  for( pc=MaxContext; pc!=MinContext; pc=suff(pc) ) {
+	    if( ++updateChainGuard > ORealMAX ) { saved_pc=MinContext; return 0; }
+	    if( !pc ) { saved_pc=MinContext; return 0; }
+	    ns1 = pc[0].NumStats;
 
     if( ns1 ) {
 
-      if( ns1&1 ) {
-        p = (STATE*)ExpandUnits( getStats(pc),(ns1+1)>>1 );
-        if( !p ) { saved_pc=pc; return 0; };
-        pc[0].iStats = Ptr2Indx(p);
+	      if( ns1&1 ) {
+	        STATE* stats = getStats(pc);
+	        if( !stats ) { saved_pc=pc; return 0; }
+	        p = (STATE*)ExpandUnits( stats,(ns1+1)>>1 );
+	        if( !p ) { saved_pc=pc; return 0; };
+	        pc[0].iStats = Ptr2Indx(p);
       }
 
       pc[0].SummFreq += QTable[ns+4] >> 3;
@@ -830,16 +1064,19 @@ PPM_CONTEXT* UpdateModel( PPM_CONTEXT* MinContext ) {
       pc[0].SummFreq += cf;
     }
 
-    p = getStats(pc) + (++pc[0].NumStats);
+	      p = getStats(pc);
+	      if( !p ) { saved_pc=pc; return 0; }
+	      p += (++pc[0].NumStats);
     p[0].iSuccessor = iSuccessor;
     p[0].Symbol = FSymbol;
     p[0].Freq = cf;
     pc[0].Flags |= Flag;
   }
 
-  MaxContext = (PPM_CONTEXT*)Indx2Ptr(iFSuccessor);
-  return MaxContext;
-}
+		  if( !IsContextIndex(iFSuccessor) ) return 0;
+		  MaxContext = (PPM_CONTEXT*)Indx2Ptr(iFSuccessor);
+	  return MaxContext;
+	}
 
 uint CreateSuccessors( uint Skip, STATE* p, PPM_CONTEXT* pc ) {
   byte tmp;
@@ -849,54 +1086,66 @@ uint CreateSuccessors( uint Skip, STATE* p, PPM_CONTEXT* pc ) {
 
   byte sym = FoundState->Symbol;
   uint iUpBranch = FoundState->iSuccessor;
+  int createChainGuard = 0;
 
   if( !Skip ) {
     *pps++ = FoundState;
     if( !pc[0].iSuffix ) goto NO_LOOP;
   }
 
-  if( p ) { pc = suff(pc); goto LOOP_ENTRY; }
+	  if( p ) {
+	    pc = suff(pc);
+	    if( !pc ) return 0;
+	    goto LOOP_ENTRY;
+	  }
 
-  do {
-    pc = suff(pc);
+	  do {
+	    if( ++createChainGuard > ORealMAX ) return 0;
+	    pc = suff(pc);
+	    if( !pc ) return 0;
 
-    if( pc[0].NumStats ) {
+	    if( pc[0].NumStats ) {
 
-      for( p=getStats(pc); p[0].Symbol!=sym; p++ );
+	      p = findState(pc, sym);
+	      if( !p ) return 0;
 
       tmp = 2*(p[0].Freq<MAX_FREQ-1);
       p[0].Freq += tmp;
       pc[0].SummFreq += tmp;
     } else {
 
-      p = &(pc[0].oneState());
-      p[0].Freq += (!suff(pc)->NumStats & (p[0].Freq<16));
+	      p = &(pc[0].oneState());
+	      PPM_CONTEXT* suffix = suff(pc);
+	      p[0].Freq += (!(suffix && suffix->NumStats) & (p[0].Freq<16));
     }
 
 LOOP_ENTRY:
-    if( p[0].iSuccessor!=iUpBranch ) {
-      pc = getSucc(p);
-      break;
-    }
+	    if( p[0].iSuccessor!=iUpBranch ) {
+	      pc = getContextSucc(p);
+	      if( !pc ) return 0;
+	      break;
+	    }
     *pps++ = p;
   } while ( pc[0].iSuffix );
 
 NO_LOOP:
   if( pps==ps ) return Ptr2Indx(pc);
 
-  PPM_CONTEXT ct;
-  ct.NumStats = 0;
-  ct.Flags = 0x10*(sym>=0x40);
-  sym = *(byte*)Indx2Ptr(iUpBranch);
-  ct.oneState().iSuccessor = Ptr2Indx((byte*)Indx2Ptr(iUpBranch)+1);
+	  PPM_CONTEXT ct;
+	  ct.NumStats = 0;
+	  ct.Flags = 0x10*(sym>=0x40);
+	  if( !IsTextIndex(iUpBranch, 2) ) return 0;
+	  sym = *(byte*)Indx2Ptr(iUpBranch);
+	  ct.oneState().iSuccessor = Ptr2Indx((byte*)Indx2Ptr(iUpBranch)+1);
   ct.oneState().Symbol = sym;
   ct.Flags |= 0x08*(sym>=0x40);
 
-  if( pc[0].NumStats ) {
-    for( p=getStats(pc); p[0].Symbol!=sym; p++ );
-    cf = p[0].Freq - 1;
+	  if( pc[0].NumStats ) {
+	    p = findState(pc, sym);
+	    if( !p ) return 0;
+	    cf = p[0].Freq - 1;
     s0 = pc[0].SummFreq - pc[0].NumStats - cf;
-    cf = 1 + ((2*cf<s0) ? (12*cf>s0) : 2+cf/s0);
+	    cf = (s0>0) ? 1 + ((2*cf<s0) ? (12*cf>s0) : 2+cf/s0) : 1;
     ct.oneState().Freq = Min<uint>( 7, cf );
   } else {
     ct.oneState().Freq = pc[0].oneState().Freq;
@@ -923,17 +1172,25 @@ uint ReduceOrder( STATE* p, PPM_CONTEXT* pc ) {
   byte sym = FoundState->Symbol;
   uint iUpBranch = FoundState->iSuccessor;
   OrderFall++;
+  int reduceChainGuard = 0;
 
-  if( p ) { pc=suff(pc); goto LOOP_ENTRY; }
+	  if( p ) {
+	    pc=suff(pc);
+	    if( !pc ) return 0;
+	    goto LOOP_ENTRY;
+	  }
 
   while(1) {
-    if( !pc->iSuffix ) return Ptr2Indx(pc);
-    pc = suff(pc);
+	    if( ++reduceChainGuard > ORealMAX ) return 0;
+	    if( !pc->iSuffix ) return Ptr2Indx(pc);
+	    pc = suff(pc);
+	    if( !pc ) return 0;
 
-    if( pc->NumStats ) {
-      for( p=getStats(pc); p[0].Symbol!=sym; p++ );
-      tmp = 2*(p->Freq<MAX_FREQ-3);
-      p->Freq += tmp;
+	    if( pc->NumStats ) {
+	      p = findState(pc, sym);
+	      if( !p ) return 0;
+	      tmp = 2*(p->Freq<MAX_FREQ-3);
+	      p->Freq += tmp;
       pc->SummFreq += tmp;
     } else {
       p = &(pc->oneState());
@@ -964,11 +1221,25 @@ LOOP_ENTRY:
 int PrevSuccess;
 word BinSumm[25][64];
 
-template< int ProcMode >
-void processBinSymbol( PPM_CONTEXT& q, int symbol ) {
-  STATE& rs = q.oneState();
-  int i = NS2BSIndx[suff(&q)->NumStats] + PrevSuccess + q.Flags + ((RunLength>>26) & 0x20);
-  word& bs = BinSumm[QTable[rs.Freq-1]][i];
+	template< int ProcMode >
+		void processBinSymbol( PPM_CONTEXT& q, int symbol ) {
+		  STATE& rs = q.oneState();
+		  if( rs.Freq==0 ) {
+		    FoundState = 0;
+		    NumMasked = 0;
+		    PrevSuccess = 0;
+		    return;
+		  }
+		  PPM_CONTEXT* suffix = suff(&q);
+		  int suffixStats = suffix ? suffix->NumStats : 0;
+		  int i = NS2BSIndx[suffixStats] + PrevSuccess + q.Flags + ((RunLength>>26) & 0x20);
+		  if( i<0 || i>=64 ) {
+		    FoundState = 0;
+		    NumMasked = 0;
+		    PrevSuccess = 0;
+		    return;
+		  }
+	  word& bs = BinSumm[QTable[Min<uint>(rs.Freq-1,259)]][i];
   BSumm = bs;
   bs -= (BSumm+64) >> PERIOD_BITS;
 
@@ -989,8 +1260,13 @@ void processBinSymbol( PPM_CONTEXT& q, int symbol ) {
 }
 
 template< int ProcMode >
-void processSymbol1( PPM_CONTEXT& q, int symbol ) {
-  STATE* p = getStats(&q);
+	void processSymbol1( PPM_CONTEXT& q, int symbol ) {
+	  STATE* p = getStats(&q);
+	  if( !p ) {
+	    FoundState = 0;
+	    NumMasked = 0;
+	    return;
+	  }
 
   int cnum = q.NumStats;
   int i = p[0].Symbol;
@@ -1047,9 +1323,14 @@ SEE2_CONTEXT SEE2Cont[23][32];
 SEE2_CONTEXT DummySEE2Cont;
 
 template< int ProcMode >
-void processSymbol2( PPM_CONTEXT& q, int symbol ) {
-  byte px[256];
-  STATE* p = getStats(&q);
+	void processSymbol2( PPM_CONTEXT& q, int symbol ) {
+	  byte px[256];
+	  STATE* p = getStats(&q);
+	  if( !p ) {
+	    FoundState = 0;
+	    NumMasked = 0;
+	    return;
+	  }
 
   int c;
   int count=0;
@@ -1061,7 +1342,9 @@ void processSymbol2( PPM_CONTEXT& q, int symbol ) {
   if( cnum != 0xFF ) {
     psee2c = SEE2Cont[ QTable[cnum+3]-4 ];
     psee2c+= (q.SummFreq > 10*(cnum+1));
-    psee2c+= 2*(2*cnum < suff(&q)->NumStats+NumMasked) + q.Flags;
+	    PPM_CONTEXT* suffix = suff(&q);
+	    int suffixStats = suffix ? suffix->NumStats : 0;
+	    psee2c+= 2*(2*cnum < suffixStats+NumMasked) + q.Flags;
     see_freq = psee2c->getMean()+1;
 
   } else {
@@ -1127,8 +1410,18 @@ struct qsym {
 
 };
 
-qsym SQ[1024];
-uint SQ_ptr;
+	qsym SQ[1024];
+	uint SQ_ptr;
+	bool SQ_overflow;
+
+	bool AddSQ( uint sym, uint freq, uint total ) {
+	  if( SQ_ptr >= sizeof(SQ)/sizeof(SQ[0]) ) {
+	    SQ_overflow = true;
+	    return false;
+	  }
+	  SQ[SQ_ptr++].store(sym,freq,total);
+	  return true;
+	}
 
 uint sqp[256];
 
@@ -1143,7 +1436,8 @@ void ConvertSQ( void ) {
 
   for( i=0; i<SQ_ptr; i++ ) {
     c = SQ[i].sym; freq = SQ[i].freq; total = SQ[i].total;
-    prob = qword(qword(cum)*freq)/total;
+	    if( total==0 ) total=1;
+	    prob = qword(qword(cum)*freq)/total;
     if( c<256 ) {
       sqp[c] = prob+1;
     } else {
@@ -1162,21 +1456,26 @@ void ConvertSQ( void ) {
 
 }
 
-void processBinSymbol_T( PPM_CONTEXT& q, int ) {
-  STATE& rs = q.oneState();
-  int i = NS2BSIndx[suff(&q)->NumStats] + PrevSuccess + q.Flags + ((RunLength>>26) & 0x20);
-  word& bs = BinSumm[QTable[rs.Freq-1]][i];
+		void processBinSymbol_T( PPM_CONTEXT& q, int ) {
+		  STATE& rs = q.oneState();
+		  if( rs.Freq==0 ) return;
+		  PPM_CONTEXT* suffix = suff(&q);
+		  int suffixStats = suffix ? suffix->NumStats : 0;
+		  int i = NS2BSIndx[suffixStats] + PrevSuccess + q.Flags + ((RunLength>>26) & 0x20);
+		  if( i<0 || i>=64 ) return;
+	  word& bs = BinSumm[QTable[Min<uint>(rs.Freq-1,259)]][i];
   BSumm = bs;
 
-  SQ[SQ_ptr++].store(rs.Symbol,BSumm+BSumm,SCALE);
-  SQ[SQ_ptr++].store(256,SCALE-BSumm-BSumm,SCALE);
+	  if( !AddSQ(rs.Symbol,BSumm+BSumm,SCALE) ) return;
+	  if( !AddSQ(256,SCALE-BSumm-BSumm,SCALE) ) return;
 
   CharMask[rs.Symbol] = EscCount;
   NumMasked = 0;
 }
 
-void processSymbol1_T( PPM_CONTEXT& q, int ) {
-  STATE* p = getStats(&q);
+	void processSymbol1_T( PPM_CONTEXT& q, int ) {
+	  STATE* p = getStats(&q);
+	  if( !p ) return;
 
   int cnum = q.NumStats;
   int low = 0;
@@ -1186,7 +1485,7 @@ void processSymbol1_T( PPM_CONTEXT& q, int ) {
 
   for( i=0,low=0; i<=cnum; i++ ) {
     freq = p[i].Freq;
-    SQ[SQ_ptr++].store(p[i].Symbol,freq,total);
+	    if( !AddSQ(p[i].Symbol,freq,total) ) break;
     low += freq;
   }
 
@@ -1195,11 +1494,12 @@ void processSymbol1_T( PPM_CONTEXT& q, int ) {
   NumMasked = cnum;
   for( i=0; i<=cnum; i++ ) CharMask[p[i].Symbol]=EscCount;
 
-  SQ[SQ_ptr++].store(256,total-low,total);
+	  AddSQ(256,total-low,total);
 }
 
-void processSymbol2_T( PPM_CONTEXT& q, int ) {
-  STATE* p = getStats(&q);
+	void processSymbol2_T( PPM_CONTEXT& q, int ) {
+	  STATE* p = getStats(&q);
+	  if( !p ) return;
 
   int c;
   int low;
@@ -1210,7 +1510,9 @@ void processSymbol2_T( PPM_CONTEXT& q, int ) {
   if( cnum != 0xFF ) {
     psee2c = SEE2Cont[ QTable[cnum+3]-4 ];
     psee2c+= (q.SummFreq > 10*(cnum+1));
-    psee2c+= 2*(2*cnum < suff(&q)->NumStats+NumMasked) + q.Flags;
+	    PPM_CONTEXT* suffix = suff(&q);
+	    int suffixStats = suffix ? suffix->NumStats : 0;
+	    psee2c+= 2*(2*cnum < suffixStats+NumMasked) + q.Flags;
     see_freq = psee2c->getMean()+1;
 
   } else {
@@ -1228,12 +1530,12 @@ void processSymbol2_T( PPM_CONTEXT& q, int ) {
   for( i=0; i<=cnum; i++ ) {
     c = p[i].Symbol;
     if( CharMask[c]!=EscCount ) {
-      SQ[SQ_ptr++].store(c,p[i].Freq,Total);
-      CharMask[c]=EscCount;
-    }
-  }
+	      if( !AddSQ(c,p[i].Freq,Total) ) break;
+	      CharMask[c]=EscCount;
+	    }
+	  }
 
-  SQ[SQ_ptr++].store(256,see_freq,Total);
+	  AddSQ(256,see_freq,Total);
   NumMasked = cnum;
 }
 
@@ -1261,56 +1563,91 @@ void processSymbol2_T( PPM_CONTEXT& q, int ) {
     StopSubAllocator();
   }
 
-void ppmd_PrepareByte( void ) {
-  SQ_ptr=0; NumMasked=0;
-  int _OrderFall = OrderFall;
+		void ppmd_PrepareByte( void ) {
+		  SQ_ptr=0; SQ_overflow=false; NumMasked=0;
+		  int _OrderFall = OrderFall;
 
-  PPM_CONTEXT* MinContext = MaxContext;
+		  PPM_CONTEXT* MinContext = MaxContext;
+		  if( !IsValidContext(MinContext) ) {
+		    StartModelRare();
+		    MinContext = MaxContext;
+		  }
+		  if( !IsValidContext(MinContext) ) {
+		    ConvertSQ();
+		    return;
+		  }
   if( MinContext->NumStats ) {
     processSymbol1_T( MinContext[0], 0 );
   } else {
     processBinSymbol_T( MinContext[0], 0 );
   }
 
+  int prepareChainGuard = 0;
   while(1) {
-    do {
-      if( !MinContext->iSuffix ) goto Break;
-      OrderFall++;
-      MinContext = suff(MinContext);
-    } while( MinContext->NumStats==NumMasked );
+	    if( ++prepareChainGuard > ORealMAX ) goto Break;
+	    do {
+	      if( !MinContext->iSuffix ) goto Break;
+	      OrderFall++;
+	      MinContext = suff(MinContext);
+	      if( !MinContext ) goto Break;
+	    } while( MinContext->NumStats==NumMasked &&
+	             ++prepareChainGuard <= ORealMAX );
     processSymbol2_T( MinContext[0], 0 );
   }
 
-  Break:
-  EscCount++; NumMasked=0; OrderFall=_OrderFall;
+	  Break:
+	  EscCount++; NumMasked=0; OrderFall=_OrderFall;
 
-  ConvertSQ();
-}
+	  ConvertSQ();
+	  if( SQ_overflow ) StartModelRare();
+	}
 
-void ppmd_UpdateByte( uint c ) {
-  PPM_CONTEXT* MinContext = MaxContext;
+		void ppmd_UpdateByte( uint c ) {
+		  PPM_CONTEXT* MinContext = MaxContext;
+		  if( !IsValidContext(MinContext) ) {
+		    StartModelRare();
+		    MinContext = MaxContext;
+		    if( !IsValidContext(MinContext) ) return;
+		  }
   if( MinContext->NumStats ) {
     processSymbol1<0>( MinContext[0], c );
   } else {
     processBinSymbol<0>( MinContext[0], c );
   }
 
+  int updateChainGuard = 0;
   while( !FoundState ) {
+	    if( ++updateChainGuard > ORealMAX ) {
+	      StartModelRare();
+	      return;
+	    }
     do {
 
-      OrderFall++;
-      MinContext = suff(MinContext);
-    } while( MinContext->NumStats==NumMasked );
-    processSymbol2<0>( MinContext[0], c );
-  }
+	      OrderFall++;
+	      MinContext = suff(MinContext);
+	      if( !MinContext ) {
+	        FoundState = &MaxContext->oneState();
+	        break;
+	      }
+	    } while( MinContext->NumStats==NumMasked &&
+	             ++updateChainGuard <= ORealMAX );
+	    if( MinContext ) processSymbol2<0>( MinContext[0], c );
+		  }
 
-  PPM_CONTEXT* p;
-  if( (OrderFall!=0) || ((byte*)getSucc(FoundState)<UnitsStart) ) {
-    p = UpdateModel( MinContext );
-    if( p ) MaxContext = p;
-  } else {
-    p = MaxContext = getSucc(FoundState);
-  }
+		  PPM_CONTEXT* p;
+		  if( !FoundState ) {
+		    StartModelRare();
+		    return;
+		  }
+		  PPM_CONTEXT* succ = getContextSucc(FoundState);
+		  if( !MinContext ) {
+		    p = 0;
+		  } else if( (OrderFall!=0) || !succ ) {
+		    p = UpdateModel( MinContext );
+		    if( p ) MaxContext = p;
+		  } else {
+	    p = MaxContext = succ;
+	  }
 
   if( p==0 ) {
     if( _CutOff ) {

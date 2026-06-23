@@ -1,0 +1,152 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode mmap wrapper with the PPMD SQ emission bounds fix, PAQ5, PPMD capped at 35 MB, full PAQ main/text/match maps, sparse-match divisor 8, PAQ RCM32, buffer divisor 32, FXCM RCM16, FXCM cmC2 map 13 divided by 2, and the existing allocator/bounds hardening.",
+  "parent": "cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_allocsafe_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "The prior PPMD35 allocsafe shape passed deterministic 1M gates but SIGSEGVed during 10M compression. The observed fault was an unbounded PPMD SQ emission path; rebuilding the same entropy shape from the patched source should preserve the 1M archive class while clearing the 10M crash boundary.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=35 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=16 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=35",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=1",
+      "-DCMIX_FXCM_RCM_DIV=16",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=2"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386273,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 563852,
+    "payload_sha256": {
+      "cmix.bin.gz": "b01749f9c404f9146baf6a5754aee165ede90b40a33b7085b0d95888c401b58a",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "35",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_FXCM_CMC2_DIV": "1",
+            "CMIX_FXCM_RCM_DIV": "16",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "2"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/2026-06-22T125618.json",
+      "compressed_size": 247,
+      "program_size": 563852,
+      "hutter_score": 564099,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "648f1e46afb9d1f6cb26e8c4070e9d8ac09c10ac558d21d8b460fef503455830"
+    },
+    "250000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/2026-06-22T131833.json",
+      "compressed_size": 45178,
+      "program_size": 563852,
+      "hutter_score": 609030,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "7fa8003b7c8b6f3c0f3f139afa1f04bb14201c217c779ce2cbdd9acbba9fe8cc"
+    },
+    "1000000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/2026-06-22T143137.json",
+      "compressed_size": 174527,
+      "program_size": 563852,
+      "hutter_score": 738379,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "0e28a8e2052f56bd617ff29688be0be6eee3e6376a9d03ca00926595a951b67b",
+      "max_sampled_rss_kib": 10444356,
+      "memory_guard_kib": 10485760
+    },
+    "10000000": {
+      "compressed_size_temp_at_abort": 516096,
+      "cmix_temp_size_at_abort": 6186040,
+      "program_size": 563852,
+      "roundtrip_ok": false,
+      "determinism": false,
+      "max_sampled_rss_kib": 10472644,
+      "memory_guard_kib": 10485760,
+      "failure": "cmix_child_first_compression_progress_stall_terminated",
+      "notes": "No result JSON was produced. The SQ bounds rebuild passed 1M but stalled during 10M first compression with stable output and stable I/O counters below the RSS guard."
+    }
+  },
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/2026-06-22T143137.json",
+  "verdict": "Rejected for 10M promotion. The SQ bounds rebuild preserves the parent 1M archive class and clears the prior immediate SIGSEGV mode, but the 10M first compression entered a CPU-active no-progress state below the RSS guard."
+}

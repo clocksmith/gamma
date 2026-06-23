@@ -1,0 +1,144 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode mmap wrapper with PPMD pointer/SQ hardening plus bounded PPMD allocator and suffix-chain guards, PAQ5, PPMD capped at 25 MB, full PAQ main/text/match maps, sparse-match divisor 8, PAQ RCM32, buffer divisor 32, FXCM RCM16, and FXCM cmC2 map 13 divided by 2.",
+  "parent": "cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "The PPMD25 and PPMD35 SQ-hardened builds repeat a CPU-active 10M first-compression plateau at 516096 archive bytes. Bounded PPMD free-list, restore, and suffix-chain guards should reset malformed local PPMD state instead of stalling while preserving the 1M archive class.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=25 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=16 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=25",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=1",
+      "-DCMIX_FXCM_RCM_DIV=16",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=2"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386692,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 564271,
+    "payload_sha256": {
+      "cmix.bin.gz": "f6a26915487f80c7c0237f3a7f555fcb7be968fe5d6139f3f13ca996ce3ecc67",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "25",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_FXCM_CMC2_DIV": "1",
+            "CMIX_FXCM_RCM_DIV": "16",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "2"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "compressed_size": 247,
+      "program_size": 564271,
+      "hutter_score": 564518,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "648f1e46afb9d1f6cb26e8c4070e9d8ac09c10ac558d21d8b460fef503455830"
+    },
+    "250000": {
+      "compressed_size": 45178,
+      "program_size": 564271,
+      "hutter_score": 609449,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "7fa8003b7c8b6f3c0f3f139afa1f04bb14201c217c779ce2cbdd9acbba9fe8cc"
+    },
+    "1000000": {
+      "compressed_size": 174527,
+      "program_size": 564271,
+      "hutter_score": 738798,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "compressed_sha256": "0e28a8e2052f56bd617ff29688be0be6eee3e6376a9d03ca00926595a951b67b"
+    },
+    "10000000": {
+      "compressed_size_temp_at_abort": 1589248,
+      "cmix_temp_size": 6186040,
+      "program_size": 564271,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10485828,
+      "failure": "compression_rss_crossed_guard_after_passing_old_plateau"
+    }
+  },
+  "verdict": "Rejected for local memory at the 10M gate. The PPMD guard patch fixed the old 516096-byte first-compression plateau and preserved the 1M archive class, but RSS crossed the 10 GiB guard during final archive emission."
+}

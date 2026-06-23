@@ -1,0 +1,77 @@
+{
+  "id": "fx2_gepa_template_size_mh4_dictcmix_zlibpy_v1",
+  "family": "fx2-gepa-order",
+  "status": "retired",
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "description": "Self-contained fx2 candidate using a GEPA-derived reversible page-order key.",
+  "hypothesis": "Template/topic/minhash/shape page adjacency can lower archive bytes without storing an order table.",
+  "deps": [],
+  "order_fields": [
+    "template",
+    "size",
+    "mh4"
+  ],
+  "screen_evidence": {
+    "basis": "No-compression GEPA adjacency screen; not a Hutter score.",
+    "source": "projects/enwiki9/results/hierarchical_chunk_embedding_teacher/teacher_10m_v1.json",
+    "hit": {
+      "delta_vs_original": 53.10451779840679,
+      "embedding_adjacency": 230.62833517877107,
+      "fields": [
+        "template",
+        "size",
+        "mh4"
+      ],
+      "first_ids": [
+        1877,
+        925,
+        926,
+        1636,
+        59,
+        60,
+        1100,
+        347
+      ],
+      "moved_pages": 1325,
+      "name": "gepa__template__size__mh4",
+      "pages": 1325
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "page_order",
+        "type": "transform",
+        "payload": {
+          "discrete": {
+            "mode": "gepa_hybrid",
+            "fields": [
+              "template",
+              "size",
+              "mh4"
+            ]
+          }
+        }
+      },
+      {
+        "id": "backend",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "container": "xz+raw-deflate-wrapper"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "page_order",
+        "to": "backend",
+        "stream": "reordered_raw_xml"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Retired as a teacher-only artifact. The 10M from-scratch embedding teacher ranked known geometry controls above this novel key class, and the prior exact embedding-distilled order probe landed in the old title-order archive region rather than the cmix21/fx2 floor. Keep for historical RAG/embedding evidence; do not promote without a stronger exact archive screen."
+}

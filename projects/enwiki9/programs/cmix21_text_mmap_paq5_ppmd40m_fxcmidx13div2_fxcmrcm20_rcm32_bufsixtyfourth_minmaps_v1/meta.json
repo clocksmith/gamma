@@ -1,0 +1,155 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix v21 forced text-mode mmap wrapper with PAQ5, PPMD40, full PAQ main/text/match maps, sparse-match divisor 8, PAQ RCM32, buffer divisor 64, FXCM RCM20, and FXCM cmC2 map 13 divided by 2.",
+  "parent": "cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1",
+  "hypothesis": "The BUF64 PPMD40 idx13-div2 shape exceeded the 10M RSS guard by only 36 KiB, while FXCM_RCM_DIV=24 missed the 1K archive ceiling. FXCM_RCM_DIV=20 is the smallest plausible table cut: it should save about 46 KiB relative to divisor 16 while perturbing the model less than divisor 24.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=40 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=64 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=20 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=40",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=64",
+      "-DCMIX_FXCM_CMC2_DIV=1",
+      "-DCMIX_FXCM_RCM_DIV=20",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=2"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 384986,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 562565,
+    "payload_sha256": {
+      "cmix.bin.gz": "c45ef312d2977bed2f73f19902522081aa9bb10025e3004f588a1aeea20f6c0c",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "40",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "64",
+            "CMIX_FXCM_CMC2_DIV": "1",
+            "CMIX_FXCM_RCM_DIV": "20",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "2"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "archive": 246,
+      "program_size": 562565,
+      "hutter_score": 562811,
+      "bits_per_byte": 1.921875,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "archive_ceiling": 246,
+      "compressed_sha256": "c07e8932ab6315bd98349f8706053d0f7d917a6e814a048d2fb1c100bf0d9026",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T182108.json"
+    },
+    "250000": {
+      "archive": 45178,
+      "program_size": 562565,
+      "hutter_score": 607743,
+      "bits_per_byte": 1.445696,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "archive_ceiling": 45178,
+      "compressed_sha256": "8036b6900612ccdde488b922a22b2a83a834987406b7585e0c84b1d5fea1c861",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T184307.json"
+    },
+    "1000000": {
+      "archive": 174396,
+      "program_size": 562565,
+      "hutter_score": 736961,
+      "bits_per_byte": 1.395168,
+      "roundtrip_ok": true,
+      "deterministic": true,
+      "archive_ceiling": 174396,
+      "compressed_sha256": "380d66a42342da4960585b8e77dcd1dfe79d2799b6f0010968cec454fc9277cb",
+      "result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T202147.json"
+    },
+    "10000000": {
+      "program_size": 562565,
+      "roundtrip_ok": false,
+      "deterministic": false,
+      "archive_ceiling": 1743960,
+      "rss_guard_exceeded": false,
+      "max_sampled_single_rss_kib": 10485700,
+      "memory_ceiling_kib": 10485760,
+      "failure": "cmix_child_sigsegv_during_compression",
+      "guard_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/rss_guard_10m_fxcmrcm20.json"
+    }
+  },
+  "verdict": "1K, 250K, and 1M passed with roundtrip and determinism. The 1M archive is 174396, one byte above the strict parent archive ceiling, but the program payload is one byte smaller than the parent, so same-scope Hutter score ties at 736961. The guarded 10M gate failed by cmix SIGSEGV during compression, not by the RSS guard; peak sampled single-process RSS was 10485700 KiB under the 10485760 KiB ceiling."
+}

@@ -1,0 +1,146 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix21 PAQ5 text-mode PPMD25 guard2 candidate with only FXCM run-context divisor raised from 16 to 20 for the 10M memory boundary.",
+  "parent": "cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "The PPMD25 guard2 build preserved the 1M archive class and fixed the old 10M plateau, but crossed the RSS guard late during archive emission. Raising only FXCM_RCM_DIV from 16 to 20 should buy the required memory margin while preserving PAQ5, PPMD25, main/text/match maps, sparse8, buffer32, and cmC2 idx13/2.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=25 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=20 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=25",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=1",
+      "-DCMIX_FXCM_RCM_DIV=20",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=2"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386695,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 564274,
+    "payload_sha256": {
+      "cmix.bin.gz": "878780902566754b8cf81f11145dd35ba83580aa0af559725ee737835548d68e",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "25",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_FXCM_CMC2_DIV": "1",
+            "CMIX_FXCM_RCM_DIV": "20",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "2"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "compressed_size": 247,
+      "program_size": 564274,
+      "hutter_score": 564521,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "f0034b736ba358647ec3eae6e2a38dee1708cee3573568efe7ddee5d88537bf6"
+    },
+    "250000": {
+      "compressed_size": 45178,
+      "program_size": 564274,
+      "hutter_score": 609452,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "a5208303b78c247507fa021e66692e35434ce3d4f2910cf1b9e142fc8fa9e202"
+    },
+    "1000000": {
+      "compressed_size": 174531,
+      "program_size": 564274,
+      "hutter_score": 738805,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "archive_ceiling": 174531,
+      "compressed_sha256": "ab5a4e4f9d060b0876f374014d4172988d856a17a9caf0f8ff59203fd3ac6a3c"
+    },
+    "10000000": {
+      "compressed_size_temp_at_abort": 1630208,
+      "cmix_temp_size": 6186040,
+      "program_size": 564274,
+      "roundtrip_ok": false,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_rss_kib": 10485828,
+      "archive_ceiling": 1745310,
+      "failure": "compression_rss_crossed_guard_late_during_10m_emission"
+    }
+  },
+  "verdict": "Rejected at the 10M guard. FXCM_RCM_DIV=20 preserved the 1M archive class and cleared the old 516096-byte plateau, but first compression crossed the local RSS ceiling late during archive emission. The next boundary probe should raise only FXCM_RCM_DIV again while preserving PAQ5, PPMD25, PAQ main/text/match maps, sparse8, BUF32, and cmC2 idx13/2."
+}
