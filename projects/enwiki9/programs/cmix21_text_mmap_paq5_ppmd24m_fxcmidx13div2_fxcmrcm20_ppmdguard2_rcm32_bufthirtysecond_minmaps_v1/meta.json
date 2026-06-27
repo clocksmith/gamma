@@ -131,7 +131,19 @@
       "determinism": true,
       "archive_ceiling": 174531,
       "compressed_sha256": "ab5a4e4f9d060b0876f374014d4172988d856a17a9caf0f8ff59203fd3ac6a3c"
+    },
+    "10000000": {
+      "compressed_size": 1638153,
+      "program_size": 564273,
+      "hutter_score": 2202426,
+      "bits_per_byte": 1.310522,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "archive_ceiling": 1745310,
+      "max_sampled_rss_kib": 10484932,
+      "memory_ceiling_kib": 10485760,
+      "compressed_sha256": "bba7f4fe8f13ab77b2126f74d495c37f2746c309882651b97759d28a6c923fe1"
     }
   },
-  "verdict": "Promote to 10M guard. Reducing PPMD from 25 MB to 24 MB preserved the FXCM20 archive class at 1K, 250K, and 1M while avoiding the 250K archive drift seen in FXCM_RCM_DIV=21 and 22."
+  "verdict": "10M passed with archive 1,638,153, deterministic roundtrip, and peak sampled RSS 10,484,932 KiB under the 10,485,760 KiB guard. Archive quality is promotable, but memory headroom is only 828 KiB, so the next promotion should either verify a slightly lower PPMD sibling or accept high risk at the next scope."
 }

@@ -165,14 +165,18 @@ uint U2B( uint NU ) {
   return 8*NU+4*NU;
 }
 
-int StartSubAllocator( qword SASize ) {
-  qword t = SASize << 20U;
+int StartSubAllocatorKB( qword SASizeKB ) {
+  qword t = SASizeKB << 10U;
 
   HeapStart = (byte*)cmix_mmap_alloc::Allocate(t, &HeapMapped);
 
   if( HeapStart==NULL ) return 0;
   SubAllocatorSize = t;
   return 1;
+}
+
+int StartSubAllocator( qword SASize ) {
+  return StartSubAllocatorKB(SASize << 10U);
 }
 
 void InitSubAllocator() {
@@ -1543,14 +1547,18 @@ void ConvertSQ( void ) {
   uint y;
 
   uint Init( uint MaxOrder, uint MMAX, uint CutOff, uint filesize ) {
+    return InitKB(MaxOrder, MMAX << 10U, CutOff, filesize);
+  }
+
+  uint InitKB( uint MaxOrder, uint MemoryKB, uint CutOff, uint filesize ) {
     _MaxOrder = MaxOrder;
     _CutOff = CutOff;
-    _MMAX = MMAX;
+    _MMAX = MemoryKB;
     _filesize = filesize;
 
     PPMD_STARTUP();
 
-    if( !StartSubAllocator( _MMAX ) ) return 1;
+    if( !StartSubAllocatorKB( _MMAX ) ) return 1;
 
     StartModelRare();
 
@@ -1664,10 +1672,10 @@ void ConvertSQ( void ) {
 
 unsigned long long counter_ = 0;
 
-PPMD::PPMD(int order, int memory, const unsigned int& bit_context,
+PPMD::PPMD(int order, int memory_kb, const unsigned int& bit_context,
     const std::vector<bool>& vocab) : ByteModel(vocab), byte_(bit_context) {
   ppmd_model_.reset(new ppmd_Model());
-  ppmd_model_->Init(order,memory,1,0);
+  ppmd_model_->InitKB(order,memory_kb,1,0);
 }
 
 void PPMD::ByteUpdate() {

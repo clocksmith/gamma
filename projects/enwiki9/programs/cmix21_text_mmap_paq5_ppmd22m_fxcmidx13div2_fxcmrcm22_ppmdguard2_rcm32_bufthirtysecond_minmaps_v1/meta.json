@@ -1,0 +1,187 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "cmix21 PAQ5 text-mode PPMD22 candidate shaving FXCM run-context memory from divisor 20 to 22 after the PPMD22 100M near-miss.",
+  "parent": "cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "PPMD22 plus FXCM_RCM20 passed exact 10M but crossed the 100M local RSS guard by 36 KiB. Increasing only FXCM_RCM_DIV from 20 to 22 should recover a small memory margin while preserving PAQ5, PPMD22, main/text/match maps, sparse8, RCM32, BUF32, and FXCM cmC2 IDX13_DIV2.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=22 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=22 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=22",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=1",
+      "-DCMIX_FXCM_RCM_DIV=22",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=2"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386695,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 564274,
+    "payload_sha256": {
+      "cmix.bin.gz": "50ae9096dda7ba920a6beab7356c4e96b752309f2b5d733bfde2555c7063c97a",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "22",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_FXCM_CMC2_DIV": "1",
+            "CMIX_FXCM_RCM_DIV": "22",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "2"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T171721.json",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 246,
+      "program_size": 564274,
+      "hutter_score": 564520,
+      "bits_per_byte": 1.921875,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "360829784a3f213367ba546e68acd3e6a3e93ed68a5bcbdecf44f6e289140452",
+      "compress_time_s": 99.1338,
+      "decompress_time_s": 97.821
+    },
+    "250000_archive_miss": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T172454.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45179,
+      "program_size": 564274,
+      "hutter_score": 609453,
+      "bits_per_byte": 1.445728,
+      "roundtrip_ok": null,
+      "determinism": null,
+      "compressed_sha256": "3b093a20f59cd8678bc27c8b49606a9ac5684724230c8dc24aa9ea3b0e1b32d0",
+      "compress_time_s": 437.3221,
+      "decompress_time_s": 0.0
+    },
+    "250000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T174708.json",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45179,
+      "program_size": 564274,
+      "hutter_score": 609453,
+      "bits_per_byte": 1.445728,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "3b093a20f59cd8678bc27c8b49606a9ac5684724230c8dc24aa9ea3b0e1b32d0",
+      "compress_time_s": 436.7338,
+      "decompress_time_s": 440.946
+    },
+    "1000000": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T185956.json",
+      "data_size": 1000000,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 174529,
+      "program_size": 564274,
+      "hutter_score": 738803,
+      "bits_per_byte": 1.396232,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "b2980789e22b3e2577604832347ad5973fbcf4dc097a4ebf4fddcee3ecbe62ea",
+      "compress_time_s": 1441.377,
+      "decompress_time_s": 1459.3026
+    },
+    "10000000_archive_miss": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T225727.json",
+      "data_size": 10000000,
+      "data_md5": "2d1946513a5e933b897180084549dfc0",
+      "data_sha256": "5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97",
+      "compressed_size": 1638102,
+      "program_size": 564274,
+      "hutter_score": 2202376,
+      "bits_per_byte": 1.310482,
+      "roundtrip_ok": null,
+      "determinism": null,
+      "compressed_sha256": "c6a4871001774005dd16d6f34151462211a123dc25e704e0f55178e8590f1408",
+      "compress_time_s": 14232.2673,
+      "decompress_time_s": 0.0
+    }
+  },
+  "verdict": "10M guarded run completed under the local single-process RSS guard but missed the strict RCM20 archive ceiling by 1 byte: archive 1,638,102 vs ceiling 1,638,101. Roundtrip and determinism were skipped by the driver because of the archive ceiling miss. Treat as evidence that FXCM_RCM_DIV=22 buys memory headroom at a tiny archive cost, not as a promotable 10M pass.",
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T225727.json"
+}
