@@ -30,6 +30,10 @@
 #define CMIX_PPMD_MEMORY_MB 14000
 #endif
 
+#ifndef CMIX_PPMD_MEMORY_KB
+#define CMIX_PPMD_MEMORY_KB (CMIX_PPMD_MEMORY_MB * 1024)
+#endif
+
 Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
     sigmoid_(100001), vocab_(vocab) {
   srand(0xDEADBEEF);
@@ -112,7 +116,7 @@ void Predictor::AddBracket() {
 
 void Predictor::AddPPMD() {
   AddByteModel(new PPMD::PPMD(
-      25, CMIX_PPMD_MEMORY_MB, manager_.bit_context_, vocab_));
+      25, CMIX_PPMD_MEMORY_KB, manager_.bit_context_, vocab_));
 }
 
 void Predictor::AddWord() {
