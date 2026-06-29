@@ -113,6 +113,67 @@ The missing step is disciplined attribution: introduce one context family at a
 time, route it through native cmix-sidecar machinery, measure the archive delta,
 subtract counted program growth, and retire contexts that do not pay.
 
+## Boundary To Other FSM Clusters
+
+Only the causal-compression cluster applies directly to `enwik9`.
+
+| Cluster or column | Applies to final `enwik9` archive? | Correct role here |
+|---|---|---|
+| Cluster 1: causal compression | Yes | Main lossless byte-ledger lane: cmix/fx2/cmix21, exact replay, causal side state, counted decoder bytes. |
+| Cluster 2: functional tensor representation | No, not directly | Offline teacher only. It may discover clusters, routes, or deterministic rules, but the final archive should not ship a large model unless its byte savings exceed its full counted cost. |
+| Cluster 3: deterministic execution runtime | No, except as tooling | Useful for model/runtime reproducibility, not a Hutter decompressor dependency. |
+| Descriptor-MoE and FSM-Swarm | No | Relevant to distributed model execution, not to a single-file `enwik9` proof path. |
+
+Therefore FX2-SC should stay small: causal parser state, tiny tables, exact
+shadow coding, and final archive replay. Simulatte-style physics ledgers and
+Doppler tensor manifests may inspire proof discipline, but they are not
+submission artifacts for this corpus.
+
+Cluster 2/3 artifacts only help this project as offline teachers. A Qwen,
+Gemma, embedding, descriptor, Doppler, MoE, or swarm system may discover page
+families, parser states, or ordering rules. The final `enwik9` decompressor
+must ship only the distilled deterministic rule or table, and those bytes must
+be counted. A large model artifact is not admissible by implication; it must
+beat its full byte, runtime, memory, and reproducibility cost.
+
+## Current Novel Lane Register
+
+| Lane | Mechanism | Why it is novel | Current rule |
+|---|---|---|---|
+| Causal residual/SSE patch compiler | Logs base probabilities, groups residuals by deterministic Wiki/XML state, emits tiny outer-SSE corrections. | Turns structural features into byte-counted patches instead of broad transforms. | Shadow-coder savings must exceed code/table bytes. |
+| Causal schema trie / seed dictionary | Builds bounded tries from already-decoded titles, refs, URLs, template keys, and page-local terms. | Gets dictionary-like priors without shipping a dictionary payload. | State must be causal, bounded, and abstaining. |
+| Embedding-teacher ordering | Uses embeddings offline to find page families, then distills them into deterministic ordering keys or parser states. | Uses neural semantics as discovery, not as shipped decoder state. | Do not ship the embedding model unless its byte cost is beaten. |
+| Deterministic expert router / MWCC | Runs tiny prose, markup, URL, numeric, and citation experts and gates them by causal past loss. | Avoids transmitted route tokens by selecting from history. | Expert count and tables must stay small enough to pay under MDL. |
+| I-SSA / bounded attractor state | Updates a small integer state vector from decoded bytes and maps it to calibration buckets. | Handles malformed markup as trajectory drift instead of parser failure. | Use only as a soft coordinate; never replace the base compressor. |
+| Value-ranked memory lensing | Measures archive damage per KiB saved for PPMD, FXCM, RCM, buffers, and maps. | Treats memory admissibility as an empirical compression allocation problem. | Primary active lane while cmix21 candidates are under promotion. |
+
+## Residual Validation Gate
+
+FX2-SC features are not accepted because they are semantically plausible. They
+are accepted only when paired prediction evidence pays for the shipped bytes:
+
+```text
+net_saved_bytes =
+    held_out_shadow_saved_bits / 8
+  - added_code_bytes
+  - added_table_bytes
+```
+
+Promotion requires:
+
+```text
+net_saved_bytes > 0
+```
+
+and the win must survive block-level inspection. Report total gain, median block
+gain, number of winning and losing blocks, largest loss block, and content class
+for major losses. A feature that wins only one prefix or one structural region is
+a search clue, not a compiled candidate.
+
+Do not use output clamping as a shortcut. Structural state must enter as an
+outer SSE/APM coordinate, bounded logit correction, or tiny causal expert that
+can abstain when support is weak.
+
 ## Mathematical Model
 
 Context mixers combine many model predictions. For a bit `b`, a model emits
@@ -1133,16 +1194,20 @@ PREPROCESSOR_WINS | PREPROCESSOR_LOSES | INCOMPLETE | NON_DETERMINISTIC
 
 ## Canonical Execution Order
 
-1. Schema baseline: template hash, argument index, field, slot.
-2. Soft symbol reduction: value class, URL/numeric/date, table coordinates.
-3. Lexical priming: title tokens, citation MTF, link/entity recency.
-4. Namespace and page-kind partitioning.
-5. Active geometry as stream-order context.
-6. Reversible geometry sorting only with permutation accounting.
-7. Role-specific copy hints.
-8. Shallow grammar in stable prose spans.
-9. Bounded fixed-point SSM gating.
-10. Custom backend event tests for ideas that do not fit cmix-sidecar.
+1. Keep cmix21 memory-shaped candidates moving through exact gates.
+2. Reproduce the public `fx2-cmix` lane for official-accounting calibration.
+3. Build exact base-probability logs only where they do not disturb output.
+4. Run residual heatmaps and shadow coding by causal Wiki/XML state.
+5. Schema baseline: template hash, argument index, field, slot.
+6. Soft symbol reduction: value class, URL/numeric/date, table coordinates.
+7. Lexical priming: title tokens, citation MTF, link/entity recency.
+8. Namespace and page-kind partitioning.
+9. Active geometry as stream-order context.
+10. Reversible geometry sorting only with permutation accounting.
+11. Role-specific copy hints.
+12. Shallow grammar in stable prose spans.
+13. Bounded fixed-point SSM gating.
+14. Custom backend event tests for ideas that do not fit cmix-sidecar.
 
 ## References
 
