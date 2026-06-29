@@ -1,7 +1,7 @@
 {
   "id": "cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
   "family": "cmix21_mmap",
-  "status": "passed",
+  "status": "active",
   "description": "cmix21 PAQ5 text-mode PPMD22400K candidate preserving the PPMD22 archive-winning surface while shaving only 128 KiB from the PPMD suballocator.",
   "parent": "cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
   "hypothesis": "PPMD22 passed exact 10M at the branch archive floor but missed the 100M single-process RSS guard by 36 KiB; PPMD21 bought memory but missed strict 10M archive by 64 bytes. A 22400 KiB PPMD cap should buy enough RSS margin with materially less archive loss than dropping a full MiB.",
@@ -152,8 +152,36 @@
       "compressed_sha256": "ab5a4e4f9d060b0876f374014d4172988d856a17a9caf0f8ff59203fd3ac6a3c",
       "compress_time_s": 1452.1133,
       "decompress_time_s": 1452.7311
+    },
+    "10m_driver_gate": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T005909.json",
+      "data_size": 10000000,
+      "data_md5": "2d1946513a5e933b897180084549dfc0",
+      "data_sha256": "5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97",
+      "compressed_size": 1638083,
+      "program_size": 564276,
+      "hutter_score": 2202359,
+      "bits_per_byte": 1.310466,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "66a662b8e466e3b42823bee3557b6d2f6dd56f93477ae569ed205864aeaa0186",
+      "compress_time_s": 14376.3411,
+      "decompress_time_s": 14320.3924
+    },
+    "100000000_rss_guard_fail": {
+      "guard_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd22400k_100000000_rss_guard.json",
+      "data_size": 100000000,
+      "roundtrip_ok": false,
+      "determinism": false,
+      "rss_guard_exceeded": true,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_single_rss_kib": 10485828,
+      "max_sampled_tree_rss_kib": 10602336,
+      "single_rss_over_ceiling_kib": 68,
+      "partial_compressed_size_at_abort": 2121728,
+      "failure": "compression_rss_crossed_10gib_ceiling_before_archive_or_roundtrip"
     }
   },
-  "verdict": "1M guarded determinism gate passed with granular PPMD cap: archive 174,531 <= 174,531 ceiling, roundtrip true, deterministic byte-equal, RSS guard did not trip. This preserves the PPMD22/PPMD21 1M archive floor while shaving 128 KiB from the PPMD suballocator.",
-  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-27T120526.json"
+  "verdict": "Exact 10M gate passed roundtrip/determinism with archive=1638083; best cmix21 10M archive so far. Rejected for 100M promotion: compression crossed the local RSS guard by 68 KiB before producing a scored archive or roundtrip.",
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T005909.json"
 }
