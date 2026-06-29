@@ -745,6 +745,25 @@ Thus FX2-SC is not a new entropy coder. It is a Hutter-specific compression
 system topology for using recomputable Wikipedia structure without destroying
 the evidence that context mixers already exploit.
 
+### 12.1 Current Repository Mapping
+
+The current repository separates proof-bearing implementation from research
+supporting machinery:
+
+| Item | Repository role | Final-archive role |
+|---|---|---|
+| `cmix21` memory shaping | Active target lane for archive slope and admissibility. | Direct candidate substrate if it survives `1G` and official accounting. |
+| FX2-SC residual/SSE compiler | Structural patch lane for tiny causal corrections. | Possible add-on only if exact shadow coding proves positive MDL. |
+| Causal schema trie / seed dictionary | Research lane for history-derived structural priors. | Possible add-on only with bounded state and no uncounted dictionary. |
+| Embedding-teacher ordering | Offline discovery lane for semantic clusters and deterministic keys. | No shipped model unless counted savings exceed model bytes. |
+| Functional tensor descriptors and runtime manifests | Model/runtime research in other repositories. | Not part of the `enwik9` decompressor unless distilled to tiny counted rules. |
+
+This keeps the novelty claim narrow. FX2-SC does not assert that external
+embedding models, distributed runtimes, or physics-style ledgers are part of a
+valid Hutter submission. They are useful only when they produce a small,
+deterministic rule that improves exact compressed bytes after all costs are
+counted.
+
 ## 13. Empirical Rollout
 
 The paper version intentionally does not claim measured wins for unrun

@@ -58,6 +58,82 @@ Slice rows are diagnostic. A 1 MB or 100 MB prefix result can validate an idea,
 but it is not a substitute for a full 1 GB row. The README's scope-discipline
 section explains why prefix results do not scale linearly on `enwik9`.
 
+## Current Target Strategy Register
+
+This section tracks the strategies currently relevant to the `10.95%` target.
+It is separate from the benchmark snapshot because several rows are live
+research lanes, not measured full-corpus results.
+
+| Lane | Implementation locus | Novelty | Current proof state | Promotion rule |
+|---|---|---|---|---|
+| `cmix21` memory-shaped text mode | `programs/cmix21_text_mmap_*`, `tools/cmix21_package_candidate.py`, `CMIX21_LOCK_SAFE_QUEUE.md` | Medium. The compressor class is established; the novelty is value-ranked memory shaping under the guard. | Best exact local archive evidence is still gate-scoped. No 1 GB proof. | Promote unchanged through `10M -> 100M -> 1G` only after roundtrip, determinism, and RSS pass. |
+| `fx2-cmix` public reproduction | `programs/fx2cmix_public_repro_v1`, `docs/lane0_fx2_public_repro.md`, `tools/fx2_public_repro_queue.py` | Low. This is an accounting and reproducibility lane, not a new algorithm. | Required to anchor official-style packaging and compare against the current public record family. | Keep separate from experimental lanes; use it to validate score math and submission packaging. |
+| Causal residual/SSE patch compiler | `tools/fx2_residual_*`, `tools/fx2_shadow_residual_coder.py`, `tools/fx2_mwcc_router_shadow.py` | High. Uses exact prediction logs to compile tiny causal corrections. | Prior residual/APM families were too weak; the lane stays alive only as a stricter shadow-coder proof path. | Promote only if held-out shadow bytes saved exceed added code/table bytes. |
+| CR-SSE / WikiFSM sidecar | `FX2_SC.md`, `FX2_SC_PAPER.md`, `external/cmix21-sidecar/` | High. Preserves raw bytes while feeding recomputable Wiki/XML state to outer calibration. | Design and partial substrate exist; no full target proof. | Add one narrow state family at a time and retire if `score_delta <= 0`. |
+| Causal schema trie / seed dictionary | Future `tools/` probe plus bounded parser state | High. Builds tries only from already-decoded titles, templates, refs, and URLs. | Conceptual lane; not a measured candidate until a result JSON exists. | Must abstain aggressively and count all code. No static dictionary payload is allowed unless counted. |
+| Embedding-teacher ordering | `tools/embedding_teacher_order.py`, `tools/hierarchical_chunk_embedding_teacher.py` | High as offline discovery, low as final artifact unless distilled. | Useful for finding clusters and deterministic keys; not suitable as a shipped model payload. | Ship only tiny deterministic rules or hashes learned from embeddings, never a large embedding model unless it beats its byte cost. |
+| Deterministic expert router / MWCC | `tools/fx2_mwcc_router_shadow.py` | High. Routes tiny experts by causal past loss without transmitting route tokens. | Shadow/probe lane, not a proven compressor. | Needs exact shadow-coder savings and a small, deterministic implementation. |
+| I-SSA / bounded attractor state | `I_SSA_LOCK_SAFE_REPORT.md`, `tools/fx2_issa_shadow_search.py` | High. Replaces brittle stack parsing with small integer trajectory state. | Reported as a lock-safe research lane; not a winner candidate by itself. | Treat as an outer calibration coordinate only. Reject if it fragments or destabilizes base predictions. |
+
+## Promotion And Accounting Discipline
+
+The target lane is not closed by a prefix archive number. A Hutter-facing claim
+requires an official-accounting replay on the full `1,000,000,000` byte corpus.
+Track both the local screening proxy and the submission-style ledger:
+
+```text
+local screening score = archive_payload + local program_proxy
+submission score      = comp9/source_package + archive9
+```
+
+Anything needed to reproduce the result belongs in one of those counted
+packages: wrappers, required options, static dictionaries, sort rules, tables,
+model descriptors, build scripts, and decompressor configuration. A result row
+is promotable only when compression, decode, roundtrip hash, determinism replay,
+RSS guard, and artifact accounting are all present.
+
+Memory evidence must also name the unit. The local guard used by current runs is
+`10GiB = 10,485,760 KiB`. A stricter decimal interpretation is
+`10GB = 9,765,625 KiB`. A candidate barely under the local binary guard is a
+valid local gate result, but not automatically submission-grade.
+
+For memory-shaping variants, report the measured tradeoff rather than only the
+archive rank:
+
+```text
+archive_penalty_per_kib_saved =
+    (archive_bytes_lower_memory - archive_bytes_higher_memory)
+  / (memory_kib_higher_memory - memory_kib_lower_memory)
+```
+
+Apply this to PPMD, FXCM index maps, FXCM run-context maps, PAQ RCM, rolling
+buffers, sparse maps, and mmap allocation behavior. Prefer the smallest memory
+reduction that creates reliable promotion margin.
+
+Residual/SSE and router ideas need an even stricter gate:
+
+```text
+held_out_shadow_saved_bytes > added_code_bytes + added_table_bytes
+```
+
+The gain must be distributed across blocks or content classes. A single lucky
+prefix is not enough evidence to compile a feature into the target candidate.
+
+## Paper And Design Notes
+
+Use these tracked documents for paper-style algorithm development and strategy
+handoff:
+
+| Document | Role |
+|---|---|
+| `FX2_SC_PAPER.md` | Paper-style thesis for non-destructive structural/cognitive context mixing. |
+| `FX2_SC.md` | Execution roadmap and ablation contract for FX2-SC. |
+| `RESIDUAL_CERTIFICATE_REPORT.md` | Residual/APM proof report and negative evidence. |
+| `RESIDUAL_ROUTER_LOCK_SAFE_REPORT.md` | Router-specific residual report. |
+| `I_SSA_LOCK_SAFE_REPORT.md` | Integer state-space attractor report. |
+| `CMIX21_LOCK_SAFE_QUEUE.md` | Active cmix21 memory-shaping queue and promotion posture. |
+| `docs/enwik9_compression_optimization_report_2026-06-26.md` | Longer project report and retrospective snapshot. |
+
 ## `schema_title_streams_lzma2_1g_v1`
 
 Status: `MEASURED`, best full-corpus score in the current result set.
@@ -303,3 +379,7 @@ Algorithm fixes:
 4. For `yellow_tucan`, the next real model improvement is not more prose around
    v5. It is a stronger backoff or mixer that can beat v5 on the same 1 MB
    prefix with `roundtrip_ok` and determinism recorded.
+5. For the Hutter-target lane, keep `cmix21` memory shaping and FX2-SC residual
+   calibration separate. Memory-shaping candidates decide admissibility and
+   archive slope; sidecar residual candidates decide whether any tiny structural
+   patch can pay its counted byte cost.
