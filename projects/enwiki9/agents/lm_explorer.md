@@ -74,7 +74,7 @@ The robust answer for a competition decoder: **integer arithmetic throughout.** 
 5. Layer a small mixer (logistic regression over predictions from multiple context families). Expect 1.0–1.1 bits/byte.
 6. Only now consider adding a frozen learned component.
 
-Each step is ~1–4 weeks of work and requires a measurement.
+Each step requires its own measurement before it can justify the next layer.
 
 ## Reporting discipline
 

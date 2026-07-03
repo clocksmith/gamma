@@ -1,0 +1,1311 @@
+#!/usr/bin/env python3
+"""Emit a compact enwiki9 status receipt from current artifacts.
+
+This is a lock-safe operator view. It does not launch compression. It combines
+the conservative upper-bound certificate, cmix21 gate receipts, and current
+process/lock state into one JSON/Markdown receipt.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import fcntl
+import json
+import pathlib
+import shlex
+import subprocess
+import sys
+from typing import Any
+
+import cmix21_gate_decider
+
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+REPO_ROOT = ROOT.parent.parent
+CERT_PATH = ROOT / "upper_bound_certificate.json"
+OUT_JSON = ROOT / "docs" / "status_receipt.json"
+OUT_MD = ROOT / "docs" / "status_receipt.md"
+HEAVY_LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
+LATEST_DELAYED_STATUS_LOG = ROOT / "run_logs" / "enwiki9_delayed_status_latest.log"
+LOCAL_RSS_GUARD_KIB = 10_485_760
+DECIMAL_10GB_GUARD_KIB = 10_000_000_000 // 1024
+
+
+def rel(path: pathlib.Path) -> str:
+    return path.resolve().relative_to(REPO_ROOT).as_posix()
+
+
+def logical_rel(path: pathlib.Path) -> str:
+    return path.absolute().relative_to(REPO_ROOT).as_posix()
+
+
+def load_json(path: pathlib.Path) -> dict[str, Any]:
+    try:
+        return json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def mtime_utc(path: pathlib.Path) -> str | None:
+    try:
+        return (
+            dt.datetime.fromtimestamp(path.stat().st_mtime, dt.timezone.utc)
+            .replace(microsecond=0)
+            .isoformat()
+        )
+    except OSError:
+        return None
+
+
+def top_status_by_label(cert: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    rows = cert.get("top_status", [])
+    if not isinstance(rows, list):
+        return {}
+    out: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        if isinstance(row, dict) and isinstance(row.get("label"), str):
+            out[row["label"]] = row
+    return out
+
+
+def lock_state() -> dict[str, Any]:
+    HEAVY_LOCK.touch(exist_ok=True)
+    with HEAVY_LOCK.open("w") as handle:
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return {"path": str(HEAVY_LOCK), "held": True}
+        finally:
+            try:
+                fcntl.flock(handle, fcntl.LOCK_UN)
+            except OSError:
+                pass
+    return {"path": str(HEAVY_LOCK), "held": False}
+
+
+def operator_logs_state() -> dict[str, Any]:
+    state: dict[str, Any] = {
+        "latest_delayed_status_log": logical_rel(LATEST_DELAYED_STATUS_LOG),
+        "latest_delayed_status_log_present": LATEST_DELAYED_STATUS_LOG.exists(),
+    }
+    if LATEST_DELAYED_STATUS_LOG.exists():
+        try:
+            state["latest_delayed_status_log_resolved"] = rel(LATEST_DELAYED_STATUS_LOG.resolve())
+        except OSError:
+            pass
+    return state
+
+
+def candidate_audit_summary_state() -> dict[str, Any]:
+    proc = subprocess.run(
+        [sys.executable, "projects/enwiki9/tools/candidate_audit.py", "--json"],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    state: dict[str, Any] = {"returncode": proc.returncode}
+    if proc.returncode != 0:
+        state["error"] = proc.stderr.strip() or proc.stdout.strip() or "candidate audit failed"
+        return state
+    try:
+        payload = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        state["error"] = f"candidate audit emitted invalid JSON: {exc}"
+        return state
+    summary = payload.get("summary")
+    if isinstance(summary, dict):
+        state["summary"] = summary
+    return state
+
+
+def active_candidate_recent_artifacts(candidate: str | None, limit: int = 12) -> list[dict[str, Any]]:
+    if not candidate:
+        return []
+    result_dir = ROOT / "results" / candidate
+    try:
+        paths = [path for path in result_dir.iterdir() if path.is_file()]
+    except OSError:
+        return []
+    rows_with_stat: list[tuple[pathlib.Path, Any]] = []
+    for path in paths:
+        try:
+            stat = path.stat()
+        except OSError:
+            continue
+        rows_with_stat.append((path, stat))
+    rows: list[dict[str, Any]] = []
+    for path, stat in sorted(rows_with_stat, key=lambda item: item[1].st_mtime_ns, reverse=True)[:limit]:
+        rows.append(
+            {
+                "path": rel(path),
+                "bytes": stat.st_size,
+                "mtime_utc": dt.datetime.fromtimestamp(stat.st_mtime, dt.timezone.utc)
+                .replace(microsecond=0)
+                .isoformat(),
+            }
+        )
+    return rows
+
+
+def pgrep(pattern: str) -> list[str]:
+    proc = subprocess.run(
+        ["pgrep", "-af", pattern],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    lines = [line for line in proc.stdout.splitlines() if line.strip()]
+    return [line for line in lines if "enwiki9_status_receipt.py" not in line]
+
+
+def ps_rss_for_pattern(pattern: str) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for line in pgrep(pattern):
+        pid_text = line.split(maxsplit=1)[0]
+        try:
+            pid = int(pid_text)
+        except ValueError:
+            continue
+        proc = subprocess.run(
+            ["ps", "-o", "pid=,ppid=,pgid=,stat=,rss=,args=", "-p", str(pid)],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        for ps_line in proc.stdout.splitlines():
+            parts = ps_line.strip().split(maxsplit=5)
+            if len(parts) < 6:
+                continue
+            try:
+                rows.append(
+                    {
+                        "pid": int(parts[0]),
+                        "ppid": int(parts[1]),
+                        "pgid": int(parts[2]),
+                        "stat": parts[3],
+                        "rss_kib": int(parts[4]),
+                        "args": parts[5],
+                    }
+                )
+            except ValueError:
+                continue
+    return rows
+
+
+def cmix_native_mode(parts: list[str]) -> str:
+    if "-d" in parts:
+        return "decode"
+    if "-t" in parts:
+        return "text_compress"
+    if "-c" in parts:
+        return "compress"
+    if "-n" in parts:
+        return "no_preprocess_compress"
+    if "-s" in parts:
+        return "preprocess_only"
+    return "unknown"
+
+
+def active_process_state() -> dict[str, Any]:
+    guard_rows = ps_rss_for_pattern("run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21-mmap-bin")
+    controller_rows = ps_rss_for_pattern("projects/enwiki9/tools/cmix21_gate_decider.py")
+    cmix_rows = [row for row in guard_rows if "cmix21-mmap-bin" in row["args"]]
+    max_cmix = max(cmix_rows, key=lambda row: row["rss_kib"], default=None)
+    state: dict[str, Any] = {
+        "active_rows": guard_rows,
+        "controller_rows": controller_rows,
+        "cmix_rows": cmix_rows,
+        "rss_guard_kib": LOCAL_RSS_GUARD_KIB,
+        "decimal_10gb_guard_kib": DECIMAL_10GB_GUARD_KIB,
+        "max_cmix_process": max_cmix,
+        "active_scorer_observed": bool(guard_rows),
+    }
+    if guard_rows:
+        active_tree_rss_kib = sum(int(row["rss_kib"]) for row in guard_rows)
+        state["active_tree_rss_kib"] = active_tree_rss_kib
+        state["active_tree_margin_kib"] = LOCAL_RSS_GUARD_KIB - active_tree_rss_kib
+        state["active_tree_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - active_tree_rss_kib
+        if active_tree_rss_kib > LOCAL_RSS_GUARD_KIB:
+            state["active_tree_rss_over_guard_kib"] = active_tree_rss_kib - LOCAL_RSS_GUARD_KIB
+            state["active_tree_rss_warning"] = (
+                "active process tree RSS crossed the local numeric guard; the running kill guard is single-process"
+            )
+        if active_tree_rss_kib > DECIMAL_10GB_GUARD_KIB:
+            state["active_tree_decimal_10gb_over_kib"] = active_tree_rss_kib - DECIMAL_10GB_GUARD_KIB
+    if max_cmix is not None:
+        state["single_process_margin_kib"] = LOCAL_RSS_GUARD_KIB - int(max_cmix["rss_kib"])
+        state["single_process_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - int(max_cmix["rss_kib"])
+        if int(max_cmix["rss_kib"]) > DECIMAL_10GB_GUARD_KIB:
+            state["single_process_decimal_10gb_over_kib"] = int(max_cmix["rss_kib"]) - DECIMAL_10GB_GUARD_KIB
+            state["single_process_decimal_10gb_warning"] = (
+                "active cmix RSS exceeds decimal 10GB even if it remains under the local binary 10GiB guard"
+            )
+        io_path = pathlib.Path("/proc") / str(max_cmix["pid"]) / "io"
+        proc_io: dict[str, int] = {}
+        try:
+            for line in io_path.read_text().splitlines():
+                if ":" not in line:
+                    continue
+                key, raw_value = line.split(":", 1)
+                try:
+                    proc_io[key.strip()] = int(raw_value.strip())
+                except ValueError:
+                    continue
+        except OSError:
+            proc_io = {}
+        if proc_io:
+            state["active_proc_io"] = proc_io
+        try:
+            parts = shlex.split(str(max_cmix["args"]))
+        except ValueError:
+            parts = []
+        if parts:
+            state["active_cmix_mode"] = cmix_native_mode(parts)
+        if len(parts) >= 2:
+            input_path = pathlib.Path(parts[-2])
+            output_path = pathlib.Path(parts[-1])
+            output_temp_path = pathlib.Path(str(output_path) + ".cmix.temp")
+            temp: dict[str, Any] = {
+                "input_path": str(input_path),
+                "output_path": str(output_path),
+                "output_temp_path": str(output_temp_path),
+            }
+            for label, path in (
+                ("input_bytes", input_path),
+                ("output_bytes", output_path),
+                ("output_temp_bytes", output_temp_path),
+            ):
+                try:
+                    temp[label] = path.stat().st_size
+                except OSError:
+                    temp[label] = None
+            temp["input_mtime_utc"] = mtime_utc(input_path)
+            temp["output_mtime_utc"] = mtime_utc(output_path)
+            temp["output_temp_mtime_utc"] = mtime_utc(output_temp_path)
+            state["active_temp_io"] = temp
+    return state
+
+
+def observed_gate_command_state(
+    candidate: str | None,
+    scope: int | None,
+    process_state: dict[str, Any],
+) -> dict[str, Any]:
+    rows = process_state.get("active_rows")
+    if not isinstance(rows, list):
+        rows = []
+    driver_rows = [
+        row for row in rows
+        if isinstance(row, dict) and process_role(row.get("args")) == "driver"
+    ]
+    observed: list[dict[str, Any]] = []
+    for row in driver_rows:
+        args = str(row.get("args", ""))
+        try:
+            parts = shlex.split(args)
+        except ValueError:
+            parts = args.split()
+        observed_scope: int | None = None
+        if "--limit" in parts:
+            index = parts.index("--limit")
+            if index + 1 < len(parts):
+                try:
+                    observed_scope = int(parts[index + 1])
+                except ValueError:
+                    observed_scope = None
+        observed.append(
+            {
+                "pid": row.get("pid"),
+                "candidate_matches": bool(candidate and candidate in parts),
+                "scope_bytes": observed_scope,
+                "scope_matches": observed_scope == scope,
+                "check_determinism": "--check-determinism" in parts,
+            }
+        )
+    active_gate_observed = any(
+        row.get("candidate_matches") is True
+        and row.get("scope_matches") is True
+        and row.get("check_determinism") is True
+        for row in observed
+    )
+    mismatch_count = sum(
+        1
+        for row in observed
+        if not (
+            row.get("candidate_matches") is True
+            and row.get("scope_matches") is True
+            and row.get("check_determinism") is True
+        )
+    )
+    return {
+        "expected_candidate": candidate,
+        "expected_scope_bytes": scope,
+        "driver_process_count": len(observed),
+        "active_gate_command_observed": active_gate_observed,
+        "mismatch_count": mismatch_count,
+        "driver_processes": observed,
+    }
+
+
+def observed_controller_command_state(
+    candidate: str | None,
+    scope: int | None,
+    process_state: dict[str, Any],
+) -> dict[str, Any]:
+    rows = process_state.get("controller_rows")
+    if not isinstance(rows, list):
+        rows = []
+    observed: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        args = str(row.get("args", ""))
+        try:
+            parts = shlex.split(args)
+        except ValueError:
+            parts = args.split()
+        controller_candidate: str | None = None
+        if "projects/enwiki9/tools/cmix21_gate_decider.py" in parts:
+            index = parts.index("projects/enwiki9/tools/cmix21_gate_decider.py")
+            if index + 1 < len(parts):
+                controller_candidate = parts[index + 1]
+        controller_scope: int | None = None
+        if "--scope" in parts:
+            index = parts.index("--scope")
+            if index + 1 < len(parts):
+                try:
+                    controller_scope = int(parts[index + 1])
+                except ValueError:
+                    controller_scope = None
+        observed.append(
+            {
+                "pid": row.get("pid"),
+                "candidate": controller_candidate,
+                "candidate_matches_active": bool(candidate and controller_candidate == candidate),
+                "scope_bytes": controller_scope,
+                "scope_matches_active_gate": controller_scope == scope,
+                "apply_terminal": "--apply-terminal" in parts,
+                "normalize": "--normalize" in parts,
+                "launch_next": "--launch-next" in parts,
+                "package_lower": "--package-lower" in parts,
+            }
+        )
+    return {
+        "expected_active_candidate": candidate,
+        "expected_active_scope_bytes": scope,
+        "controller_process_count": len(observed),
+        "controller_processes": observed,
+        "scope_note": (
+            "Controller scope may be the completed parent gate that launched the active child; "
+            "the observed driver command is authoritative for the active gate scope."
+        ),
+    }
+
+
+def active_candidate_from_cert(cert: dict[str, Any]) -> tuple[str | None, int | None]:
+    labels = top_status_by_label(cert)
+    active_gate = labels.get("active gate", {})
+    next_gate = labels.get("next gate", {})
+    active = labels.get("active candidate", {})
+    candidate = active_gate.get("program_id") or next_gate.get("program_id") or active.get("program_id")
+    scope = active_gate.get("scope_bytes") or next_gate.get("scope_bytes")
+    if isinstance(candidate, str) and isinstance(scope, int):
+        return candidate, scope
+    if isinstance(candidate, str):
+        return candidate, None
+    return None, None
+
+
+def active_candidate_from_process(process_state: dict[str, Any]) -> tuple[str | None, int | None]:
+    rows = process_state.get("active_rows")
+    if not isinstance(rows, list):
+        return None, None
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        args = str(row.get("args", ""))
+        if "projects/enwiki9/lib/driver.py" not in args:
+            continue
+        try:
+            parts = shlex.split(args)
+        except ValueError:
+            parts = args.split()
+        try:
+            driver_index = parts.index("projects/enwiki9/lib/driver.py")
+        except ValueError:
+            continue
+        candidate = parts[driver_index + 1] if driver_index + 1 < len(parts) else None
+        scope: int | None = None
+        if "--limit" in parts:
+            index = parts.index("--limit")
+            if index + 1 < len(parts):
+                try:
+                    scope = int(parts[index + 1])
+                except ValueError:
+                    scope = None
+        if isinstance(candidate, str) and candidate:
+            return candidate, scope
+    return None, None
+
+
+def gate_state(candidate: str | None, scope: int | None) -> dict[str, Any] | None:
+    if candidate is None or scope is None:
+        return None
+    guard = cmix21_gate_decider.default_guard_path(candidate, scope)
+    return cmix21_gate_decider.decide(candidate, scope, guard, step_kib=128)
+
+
+def gate_evidence_status(gate: dict[str, Any] | None) -> dict[str, Any]:
+    gate = gate if isinstance(gate, dict) else {}
+    verdict = gate.get("verdict")
+    driver_present = gate.get("driver_result_json_present") is True
+    guard_present = gate.get("rss_guard_json_present") is True
+    guard_terminal = guard_present and gate.get("rss_guard_status") != "running" and gate.get("returncode") is not None
+    scored = driver_present and verdict in {
+        "pass",
+        "roundtrip_fail",
+        "determinism_fail",
+        "guard_returncode_fail",
+    }
+    live_guard_only = guard_present and not driver_present and gate.get("rss_guard_status") == "running"
+    if scored:
+        claim_status = "scored_gate_result_present"
+    elif live_guard_only:
+        claim_status = "live_guard_monitor_only"
+    elif guard_present and not driver_present:
+        claim_status = "guard_without_driver_result"
+    else:
+        claim_status = "awaiting_gate_receipts"
+    return {
+        "driver_result_terminal": driver_present,
+        "rss_guard_terminal": guard_terminal,
+        "scored_gate_result_present": scored,
+        "live_guard_only": live_guard_only,
+        "claim_status": claim_status,
+        "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
+    }
+
+
+def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | None:
+    if candidate is None or scope is None:
+        return None
+    next_scope = cmix21_gate_decider.next_scope(scope)
+    pass_action: dict[str, Any]
+    if next_scope is None:
+        pass_action = {
+            "action": "run official accounting audit",
+            "reason": "the current gate is already full-corpus scope",
+        }
+    else:
+        pass_action = {
+            "action": "promote unchanged",
+            "next_scope_bytes": next_scope,
+            "command": cmix21_gate_decider.command_for_gate(candidate, next_scope),
+        }
+    return {
+        "if_passes": pass_action,
+        "if_rss_fails": {
+            "action": "record RSS failure and package lower PPMD cap",
+            "lower_memory_suggestion": cmix21_gate_decider.lower_ppmd_suggestion(candidate, 128),
+        },
+        "if_roundtrip_or_determinism_fails": {
+            "action": "record failure and do not promote",
+            "reason": "compression evidence is not a deterministic constructive upper-bound row",
+        },
+    }
+
+
+def operator_action(
+    heavy_lock: dict[str, Any],
+    process_state: dict[str, Any],
+    gate: dict[str, Any] | None,
+) -> dict[str, Any]:
+    gate = gate if isinstance(gate, dict) else {}
+    lock_held = heavy_lock.get("held") is True
+    active_scorer = process_state.get("active_scorer_observed") is True
+    verdict = gate.get("verdict")
+    next_action = gate.get("next_action")
+
+    if lock_held and active_scorer:
+        return {
+            "safe_to_launch_heavy_gate": False,
+            "action": "wait_for_current_gate_receipts",
+            "reason": "the serialized scorer lane is already owned by an observed guarded process",
+            "allowed_work": [
+                "refresh status receipt",
+                "inspect driver and RSS receipts",
+                "update documentation and accounting ledgers",
+                "work on shadow-coder specs from cached logs",
+            ],
+            "forbidden_work": [
+                "launch another compression gate",
+                "package a fallback candidate",
+                "run result-corpus forecast scans",
+                "change active candidate source",
+            ],
+        }
+    if lock_held:
+        return {
+            "safe_to_launch_heavy_gate": False,
+            "action": "inspect_lock_owner",
+            "reason": "the heavy lock is held but no guarded scorer was observed in the process scan",
+            "allowed_work": ["inspect process table", "inspect receipts", "avoid new scorer launch"],
+            "forbidden_work": ["launch another compression gate"],
+        }
+    if verdict == "pass":
+        return {
+            "safe_to_launch_heavy_gate": False,
+            "action": "record_pass_then_promote",
+            "reason": "the gate passed; metadata and ledgers must be updated before the next scope launch",
+            "record_command": gate.get("record_command"),
+            "next_gate_command": gate.get("next_gate_command"),
+        }
+    if verdict == "rss_fail":
+        return {
+            "safe_to_launch_heavy_gate": False,
+            "action": "record_rss_failure_then_package_lower_candidate",
+            "reason": "RSS failure must be recorded before the next memory-valve candidate is built",
+            "lower_memory_suggestion": gate.get("lower_memory_suggestion"),
+        }
+    if verdict in {"roundtrip_fail", "determinism_fail", "guard_returncode_fail"}:
+        return {
+            "safe_to_launch_heavy_gate": False,
+            "action": "record_failure_and_stop_promotion",
+            "reason": "a failed constructive gate cannot be promoted",
+        }
+    if verdict in {"incomplete", "receipt_incomplete", "running"} or next_action in {
+        "wait_for_gate_receipts",
+        "wait_for_rss_guard_receipt",
+        "wait_for_gate_completion",
+    }:
+        return {
+            "safe_to_launch_heavy_gate": False,
+            "action": "wait_for_gate_receipts",
+            "reason": "the gate state is incomplete and cannot drive a mutation yet",
+        }
+    return {
+        "safe_to_launch_heavy_gate": True,
+        "action": "inspect_queue_before_launch",
+        "reason": "no lock owner or terminal gate receipt blocks the next queue decision",
+    }
+
+
+def add_active_decode_progress(process_state: dict[str, Any], gate: dict[str, Any] | None) -> None:
+    if process_state.get("active_cmix_mode") != "decode":
+        return
+    gate = gate if isinstance(gate, dict) else {}
+    scope = gate.get("scope_bytes")
+    temp = process_state.get("active_temp_io")
+    if not isinstance(scope, int) or scope <= 0 or not isinstance(temp, dict):
+        return
+    output_temp_bytes = temp.get("output_temp_bytes")
+    if not isinstance(output_temp_bytes, int):
+        return
+    capped = min(output_temp_bytes, scope)
+    process_state["active_decode_progress"] = {
+        "scope_bytes": scope,
+        "staging_output_bytes": output_temp_bytes,
+        "capped_output_bytes": capped,
+        "remaining_scope_bytes": max(scope - capped, 0),
+        "scope_fraction": capped / scope,
+        "scope_percent": (100.0 * capped) / scope,
+    }
+
+
+def handoff_state(
+    *,
+    candidate: str | None,
+    scope: int | None,
+    heavy_lock: dict[str, Any],
+    process_state: dict[str, Any],
+    gate: dict[str, Any] | None,
+    action: dict[str, Any],
+    proof: dict[str, Any],
+) -> dict[str, Any]:
+    gate = gate if isinstance(gate, dict) else {}
+    terminal_verdicts = {
+        "pass",
+        "rss_fail",
+        "roundtrip_fail",
+        "determinism_fail",
+        "guard_returncode_fail",
+    }
+    verdict = gate.get("verdict")
+    terminal = verdict in terminal_verdicts
+    apply_command = gate.get("apply_terminal_command")
+    out: dict[str, Any] = {
+        "candidate": candidate,
+        "scope_bytes": scope,
+        "gate_verdict": verdict,
+        "gate_next_action": gate.get("next_action"),
+        "terminal_verdict_present": terminal,
+        "heavy_lock_held": heavy_lock.get("held"),
+        "active_scorer_observed": process_state.get("active_scorer_observed"),
+        "heavy_gate_mutation_allowed": False,
+        "recommended_action": action.get("action"),
+        "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
+        "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
+        "claim_rule": "No prefix row proves 10.95%.",
+    }
+    if isinstance(apply_command, list):
+        out["apply_terminal_command"] = apply_command
+        out["command_source"] = "cmix21_gate_decider.apply_terminal_command"
+        out["heavy_gate_mutation_allowed"] = True
+    elif terminal:
+        out["command_source"] = "terminal verdict lacks apply command; inspect cmix21_gate_decider before acting"
+    else:
+        out["command_source"] = "none while gate is non-terminal"
+    return out
+
+
+def operator_summary_state(
+    *,
+    candidate: str | None,
+    scope: int | None,
+    proof: dict[str, Any],
+    heavy_lock: dict[str, Any],
+    process_state: dict[str, Any],
+    gate: dict[str, Any] | None,
+    action: dict[str, Any],
+    handoff: dict[str, Any],
+) -> dict[str, Any]:
+    """Flatten the nested receipt into the handoff fields operators poll first."""
+
+    gate = gate if isinstance(gate, dict) else {}
+    max_cmix = process_state.get("max_cmix_process")
+    max_sampled_single_rss_kib = gate.get("max_sampled_single_rss_kib")
+    latest_sample_single_rss_kib = gate.get("latest_sample_max_single_rss_kib")
+    summary: dict[str, Any] = {
+        "candidate": candidate,
+        "scope_bytes": scope,
+        "gate_verdict": gate.get("verdict"),
+        "gate_next_action": gate.get("next_action"),
+        "heavy_lock_held": heavy_lock.get("held"),
+        "active_scorer_observed": process_state.get("active_scorer_observed"),
+        "active_cmix_mode": process_state.get("active_cmix_mode"),
+        "driver_result_present": gate.get("driver_result_json_present"),
+        "driver_result_json": gate.get("driver_result_json"),
+        "rss_guard_present": gate.get("rss_guard_json_present"),
+        "rss_guard_status": gate.get("rss_guard_status"),
+        "rss_guard_json": gate.get("rss_guard_json"),
+        "rss_guard_json_sha256": gate.get("rss_guard_json_sha256"),
+        "rss_samples": gate.get("sample_count"),
+        "binary_10gib_guard_kib": LOCAL_RSS_GUARD_KIB,
+        "decimal_10gb_guard_kib": DECIMAL_10GB_GUARD_KIB,
+        "max_sampled_single_rss_kib": max_sampled_single_rss_kib,
+        "latest_sample_single_rss_kib": latest_sample_single_rss_kib,
+        "max_sampled_single_decimal_10gb_margin_kib": None,
+        "max_sampled_single_decimal_10gb_safe": None,
+        "latest_sample_single_decimal_10gb_margin_kib": None,
+        "latest_sample_single_decimal_10gb_safe": None,
+        "single_rss_margin_kib": gate.get("single_rss_margin_kib"),
+        "latest_sample_single_rss_margin_kib": gate.get("latest_sample_single_rss_margin_kib"),
+        "active_process_tree_rss_kib": process_state.get("active_tree_rss_kib"),
+        "active_process_tree_margin_kib": process_state.get("active_tree_margin_kib"),
+        "active_process_tree_decimal_10gb_margin_kib": process_state.get("active_tree_decimal_10gb_margin_kib"),
+        "operator_action": action.get("action"),
+        "safe_to_launch_heavy_gate": action.get("safe_to_launch_heavy_gate"),
+        "terminal_verdict_present": handoff.get("terminal_verdict_present"),
+        "heavy_gate_mutation_allowed": handoff.get("heavy_gate_mutation_allowed"),
+        "command_source": handoff.get("command_source"),
+        "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
+        "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
+        "claim_rule": "No prefix row proves 10.95%.",
+    }
+    if isinstance(max_sampled_single_rss_kib, int):
+        summary["max_sampled_single_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - max_sampled_single_rss_kib
+        summary["max_sampled_single_decimal_10gb_safe"] = max_sampled_single_rss_kib <= DECIMAL_10GB_GUARD_KIB
+    if isinstance(latest_sample_single_rss_kib, int):
+        summary["latest_sample_single_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - latest_sample_single_rss_kib
+        summary["latest_sample_single_decimal_10gb_safe"] = latest_sample_single_rss_kib <= DECIMAL_10GB_GUARD_KIB
+    if isinstance(max_cmix, dict):
+        summary["active_cmix_pid"] = max_cmix.get("pid")
+        summary["active_cmix_rss_kib"] = max_cmix.get("rss_kib")
+        summary["active_cmix_single_process_margin_kib"] = process_state.get("single_process_margin_kib")
+        summary["active_cmix_decimal_10gb_margin_kib"] = process_state.get("single_process_decimal_10gb_margin_kib")
+    if isinstance(handoff.get("apply_terminal_command"), list):
+        summary["apply_terminal_command"] = handoff.get("apply_terminal_command")
+    return summary
+
+
+def receipt() -> dict[str, Any]:
+    cert = load_json(CERT_PATH)
+    labels = top_status_by_label(cert)
+    proof = cert.get("proof_status", {}) if isinstance(cert.get("proof_status"), dict) else {}
+    target = cert.get("target", {}) if isinstance(cert.get("target"), dict) else {}
+    heavy_lock = lock_state()
+    process_state = active_process_state()
+    candidate, scope = active_candidate_from_cert(cert)
+    process_candidate, process_scope = active_candidate_from_process(process_state)
+    if process_candidate is not None:
+        candidate = process_candidate
+        if process_scope is not None:
+            scope = process_scope
+    gate = gate_state(candidate, scope)
+    add_active_decode_progress(process_state, gate)
+    action = operator_action(heavy_lock, process_state, gate)
+    handoff = handoff_state(
+        candidate=candidate,
+        scope=scope,
+        heavy_lock=heavy_lock,
+        process_state=process_state,
+        gate=gate,
+        action=action,
+        proof=proof,
+    )
+    operator_summary = operator_summary_state(
+        candidate=candidate,
+        scope=scope,
+        proof=proof,
+        heavy_lock=heavy_lock,
+        process_state=process_state,
+        gate=gate,
+        action=action,
+        handoff=handoff,
+    )
+    return {
+        "receipt_type": "operator_status",
+        "project": "enwiki9",
+        "generated_at_utc": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+        "operator_summary": operator_summary,
+        "target_score_10_95": target.get("target_score_10_95", 109_500_000),
+        "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
+        "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
+        "best_exact_10m": labels.get("best exact 10M"),
+        "best_exact_10m_archive": labels.get("best exact 10M archive"),
+        "best_exact_100m": labels.get("best exact 100M"),
+        "best_full_1g": labels.get("best full 1G"),
+        "best_forecast": labels.get("best forecast"),
+        "active_candidate": labels.get("active candidate"),
+        "active_gate": labels.get("active gate"),
+        "next_gate": labels.get("next gate") or labels.get("active gate"),
+        "blocker": labels.get("blocker"),
+        "heavy_lock": heavy_lock,
+        "operator_logs": operator_logs_state(),
+        "candidate_audit": candidate_audit_summary_state(),
+        "active_candidate_recent_artifacts": active_candidate_recent_artifacts(candidate),
+        "active_processes": process_state,
+        "observed_gate_command": observed_gate_command_state(candidate, scope, process_state),
+        "observed_controller_command": observed_controller_command_state(candidate, scope, process_state),
+        "gate_decision": gate,
+        "gate_evidence_status": gate_evidence_status(gate),
+        "operator_action": action,
+        "handoff": handoff,
+        "contingencies": contingencies(candidate, scope),
+    }
+
+
+def fmt_bool(value: Any) -> str:
+    return "true" if value is True else "false" if value is False else "unknown"
+
+
+def fmt_int(value: Any) -> str:
+    return f"{value:,}" if isinstance(value, int) else "n/a"
+
+
+def fmt_float(value: Any, digits: int = 6) -> str:
+    return f"{value:.{digits}f}" if isinstance(value, float) else "n/a"
+
+
+def fmt_list(value: Any) -> str:
+    if not isinstance(value, list) or not value:
+        return "n/a"
+    return "; ".join(str(item) for item in value)
+
+
+def fmt_command(value: Any, limit: int = 150) -> str:
+    text = str(value) if value is not None else ""
+    return text if len(text) <= limit else text[: max(limit - 3, 0)] + "..."
+
+
+def process_role(args: Any) -> str:
+    text = str(args)
+    if "cmix21_gate_decider.py" in text:
+        return "gate_decider"
+    if "flock" in text and "enwiki9-heavy.lock" in text:
+        return "lock_wrapper"
+    if "run_with_rss_guard.py" in text:
+        return "rss_guard"
+    if "projects/enwiki9/lib/driver.py" in text:
+        return "driver"
+    if "cmix21-mmap-bin" in text:
+        return "native_cmix"
+    return "process"
+
+
+def render_md(data: dict[str, Any]) -> str:
+    proc_state = data.get("active_processes", {})
+    max_cmix = proc_state.get("max_cmix_process") if isinstance(proc_state, dict) else None
+    gate = data.get("gate_decision") if isinstance(data.get("gate_decision"), dict) else {}
+    summary = data.get("operator_summary") if isinstance(data.get("operator_summary"), dict) else {}
+    lines = [
+        "# enwiki9 Status Receipt",
+        "",
+        "Generated from the current certificate, gate receipts, lock state, and process table.",
+        "",
+        f"- Generated at UTC: `{data.get('generated_at_utc', 'unknown')}`",
+        "",
+        "## Target State",
+        "",
+        f"- `10.95%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
+        f"- Full-corpus constructive result present: `{fmt_bool(data.get('has_full_corpus_constructive_result'))}`",
+        f"- `10.95%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
+        "",
+        "## Operator Summary",
+        "",
+        f"- Candidate: `{summary.get('candidate', 'unknown')}`",
+        f"- Scope bytes: `{fmt_int(summary.get('scope_bytes'))}`",
+        f"- Gate verdict: `{summary.get('gate_verdict', 'unknown')}`",
+        f"- Gate next action: `{summary.get('gate_next_action', 'unknown')}`",
+        f"- Heavy lock held: `{fmt_bool(summary.get('heavy_lock_held'))}`",
+        f"- Active scorer observed: `{fmt_bool(summary.get('active_scorer_observed'))}`",
+        f"- Active cmix mode: `{summary.get('active_cmix_mode') or 'n/a'}`",
+        f"- Driver result present: `{fmt_bool(summary.get('driver_result_present'))}`",
+        f"- RSS guard status: `{summary.get('rss_guard_status') or 'n/a'}`",
+        f"- RSS samples: `{fmt_int(summary.get('rss_samples'))}`",
+        f"- Binary `10GiB` guard KiB: `{fmt_int(summary.get('binary_10gib_guard_kib'))}`",
+        f"- Decimal `10GB` guard KiB: `{fmt_int(summary.get('decimal_10gb_guard_kib'))}`",
+        f"- Max sampled single RSS KiB: `{fmt_int(summary.get('max_sampled_single_rss_kib'))}`",
+        f"- Latest sampled single RSS KiB: `{fmt_int(summary.get('latest_sample_single_rss_kib'))}`",
+        f"- Tightest binary single-process margin KiB: `{fmt_int(summary.get('single_rss_margin_kib'))}`",
+        f"- Tightest decimal single-process margin KiB: `{fmt_int(summary.get('max_sampled_single_decimal_10gb_margin_kib'))}`",
+        f"- Latest binary single-process margin KiB: `{fmt_int(summary.get('latest_sample_single_rss_margin_kib'))}`",
+        f"- Latest decimal single-process margin KiB: `{fmt_int(summary.get('latest_sample_single_decimal_10gb_margin_kib'))}`",
+        f"- Safe to launch heavy gate: `{fmt_bool(summary.get('safe_to_launch_heavy_gate'))}`",
+        f"- Terminal verdict present: `{fmt_bool(summary.get('terminal_verdict_present'))}`",
+        f"- Command source: `{summary.get('command_source', 'unknown')}`",
+        f"- Claim rule: `{summary.get('claim_rule', 'unknown')}`",
+        "",
+        "## Active Gate",
+        "",
+        f"- Heavy lock held: `{fmt_bool(data.get('heavy_lock', {}).get('held'))}`",
+        f"- Gate verdict: `{gate.get('verdict', 'unknown')}`",
+        f"- Next action: `{gate.get('next_action', 'unknown')}`",
+        f"- Candidate: `{gate.get('candidate', 'unknown')}`",
+        f"- Scope bytes: `{fmt_int(gate.get('scope_bytes'))}`",
+        f"- Driver result JSON: `{gate.get('driver_result_json') or 'not present'}`",
+        f"- Driver result present: `{fmt_bool(gate.get('driver_result_json_present'))}`",
+        f"- RSS guard JSON: `{gate.get('rss_guard_json') or 'not present'}`",
+        f"- RSS guard present: `{fmt_bool(gate.get('rss_guard_json_present'))}`",
+        f"- Active scorer observed: `{fmt_bool(proc_state.get('active_scorer_observed'))}`",
+    ]
+    if gate.get("rss_guard_json_present") is True:
+        lines.extend(
+            [
+                f"- RSS guard status: `{gate.get('rss_guard_status', 'unknown')}`",
+                f"- RSS guard JSON bytes: `{fmt_int(gate.get('rss_guard_json_bytes'))}`",
+                f"- RSS guard JSON modified UTC: `{gate.get('rss_guard_json_mtime_utc') or 'n/a'}`",
+                f"- RSS guard JSON SHA-256: `{gate.get('rss_guard_json_sha256') or 'n/a'}`",
+                f"- RSS samples: `{fmt_int(gate.get('sample_count'))}`",
+                f"- Max sampled single RSS KiB: `{fmt_int(gate.get('max_sampled_single_rss_kib'))}`",
+                f"- Max sampled tree RSS KiB: `{fmt_int(gate.get('max_sampled_tree_rss_kib'))}`",
+                f"- Single-process RSS margin KiB: `{fmt_int(gate.get('single_rss_margin_kib'))}`",
+                f"- Single-process decimal `10GB` margin KiB: `{fmt_int(summary.get('max_sampled_single_decimal_10gb_margin_kib'))}`",
+                f"- Tree RSS margin KiB: `{fmt_int(gate.get('tree_rss_margin_kib'))}`",
+                f"- Tree decimal `10GB` margin KiB: `{fmt_int(summary.get('active_process_tree_decimal_10gb_margin_kib'))}`",
+                f"- Latest sampled single RSS KiB: `{fmt_int(gate.get('latest_sample_max_single_rss_kib'))}`",
+                f"- Latest sampled tree RSS KiB: `{fmt_int(gate.get('latest_sample_tree_rss_kib'))}`",
+                f"- Latest sampled single-process margin KiB: `{fmt_int(gate.get('latest_sample_single_rss_margin_kib'))}`",
+                f"- Latest sampled single-process decimal `10GB` margin KiB: `{fmt_int(summary.get('latest_sample_single_decimal_10gb_margin_kib'))}`",
+                f"- Latest sampled tree margin KiB: `{fmt_int(gate.get('latest_sample_tree_rss_margin_kib'))}`",
+            ]
+        )
+    if (
+        gate.get("rss_guard_json_present") is False
+        and proc_state.get("active_scorer_observed") is True
+    ):
+        lines.append(
+            "- Live guard note: `guard JSON is absent while the scorer is observed; "
+            "keep waiting for final receipts and use process-table RSS meanwhile`"
+        )
+    if isinstance(gate.get("compressed_size"), int):
+        lines.extend(
+            [
+                "",
+                "## Gate Result Diagnostics",
+                "",
+                f"- Archive bytes: `{fmt_int(gate.get('compressed_size'))}`",
+                f"- Program bytes: `{fmt_int(gate.get('program_size'))}`",
+                f"- Local score: `{fmt_int(gate.get('local_score'))}`",
+                f"- Archive b/B: `{fmt_float(gate.get('archive_bpb'), 7)}`",
+                f"- Required full archive bytes for `10.95%`: `{fmt_int(gate.get('required_full_archive_bytes_for_10_95'))}`",
+                f"- Linear archive projection score: `{fmt_int(gate.get('linear_archive_projection_score'))}`",
+                "- Diagnostic note: `linear projection is not a proof; use it only to compare slope pressure`",
+            ]
+        )
+    if isinstance(gate.get("apply_terminal_command"), list):
+        lines.extend(
+            [
+                "",
+                "## Terminal Gate Command",
+                "",
+                "```bash",
+                " ".join(str(part) for part in gate["apply_terminal_command"]),
+                "```",
+            ]
+        )
+    evidence_status = data.get("gate_evidence_status") if isinstance(data.get("gate_evidence_status"), dict) else {}
+    if evidence_status:
+        lines.extend(
+            [
+                "",
+                "## Gate Evidence Status",
+                "",
+                f"- Claim status: `{evidence_status.get('claim_status', 'unknown')}`",
+                f"- Driver result terminal: `{fmt_bool(evidence_status.get('driver_result_terminal'))}`",
+                f"- RSS guard terminal: `{fmt_bool(evidence_status.get('rss_guard_terminal'))}`",
+                f"- Scored gate result present: `{fmt_bool(evidence_status.get('scored_gate_result_present'))}`",
+                f"- Live guard only: `{fmt_bool(evidence_status.get('live_guard_only'))}`",
+                f"- Claim rule: `{evidence_status.get('claim_rule', 'unknown')}`",
+            ]
+        )
+    observed_gate = data.get("observed_gate_command") if isinstance(data.get("observed_gate_command"), dict) else {}
+    if observed_gate:
+        lines.extend(
+            [
+                "",
+                "## Observed Gate Command",
+                "",
+                f"- Expected candidate: `{observed_gate.get('expected_candidate', 'unknown')}`",
+                f"- Expected scope bytes: `{fmt_int(observed_gate.get('expected_scope_bytes'))}`",
+                f"- Driver process count: `{fmt_int(observed_gate.get('driver_process_count'))}`",
+                f"- Active gate command observed: `{fmt_bool(observed_gate.get('active_gate_command_observed'))}`",
+                f"- Driver command mismatch count: `{fmt_int(observed_gate.get('mismatch_count'))}`",
+                "",
+                "| PID | Candidate Match | Scope Bytes | Scope Match | Determinism Flag |",
+                "|---:|---|---:|---|---|",
+            ]
+        )
+        driver_processes = observed_gate.get("driver_processes")
+        if isinstance(driver_processes, list) and driver_processes:
+            for row in driver_processes:
+                if not isinstance(row, dict):
+                    continue
+                lines.append(
+                    f"| {fmt_int(row.get('pid'))} | "
+                    f"`{fmt_bool(row.get('candidate_matches'))}` | "
+                    f"{fmt_int(row.get('scope_bytes'))} | "
+                    f"`{fmt_bool(row.get('scope_matches'))}` | "
+                    f"`{fmt_bool(row.get('check_determinism'))}` |"
+                )
+        else:
+            lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    observed_controller = (
+        data.get("observed_controller_command")
+        if isinstance(data.get("observed_controller_command"), dict)
+        else {}
+    )
+    if observed_controller:
+        lines.extend(
+            [
+                "",
+                "## Observed Controller Command",
+                "",
+                f"- Expected active candidate: `{observed_controller.get('expected_active_candidate', 'unknown')}`",
+                f"- Expected active scope bytes: `{fmt_int(observed_controller.get('expected_active_scope_bytes'))}`",
+                f"- Controller process count: `{fmt_int(observed_controller.get('controller_process_count'))}`",
+                f"- Scope note: `{observed_controller.get('scope_note', 'unknown')}`",
+                "",
+                "| PID | Candidate Match | Controller Scope | Scope Match Active Gate | Apply Terminal | Launch Next | Package Lower |",
+                "|---:|---|---:|---|---|---|---|",
+            ]
+        )
+        controller_processes = observed_controller.get("controller_processes")
+        if isinstance(controller_processes, list) and controller_processes:
+            for row in controller_processes:
+                if not isinstance(row, dict):
+                    continue
+                lines.append(
+                    f"| {fmt_int(row.get('pid'))} | "
+                    f"`{fmt_bool(row.get('candidate_matches_active'))}` | "
+                    f"{fmt_int(row.get('scope_bytes'))} | "
+                    f"`{fmt_bool(row.get('scope_matches_active_gate'))}` | "
+                    f"`{fmt_bool(row.get('apply_terminal'))}` | "
+                    f"`{fmt_bool(row.get('launch_next'))}` | "
+                    f"`{fmt_bool(row.get('package_lower'))}` |"
+                )
+        else:
+            lines.append("| n/a | n/a | n/a | n/a | n/a | n/a | n/a |")
+    action = data.get("operator_action") if isinstance(data.get("operator_action"), dict) else {}
+    if action:
+        lines.extend(
+            [
+                "",
+                "## Operator Action",
+                "",
+                f"- Safe to launch heavy gate: `{fmt_bool(action.get('safe_to_launch_heavy_gate'))}`",
+                f"- Action: `{action.get('action', 'unknown')}`",
+                f"- Reason: `{action.get('reason', 'unknown')}`",
+                f"- Allowed work: `{fmt_list(action.get('allowed_work'))}`",
+                f"- Forbidden work: `{fmt_list(action.get('forbidden_work'))}`",
+            ]
+        )
+    handoff = data.get("handoff") if isinstance(data.get("handoff"), dict) else {}
+    if handoff:
+        lines.extend(
+            [
+                "",
+                "## Handoff",
+                "",
+                f"- Terminal verdict present: `{fmt_bool(handoff.get('terminal_verdict_present'))}`",
+                f"- Heavy gate mutation allowed: `{fmt_bool(handoff.get('heavy_gate_mutation_allowed'))}`",
+                f"- Recommended action: `{handoff.get('recommended_action', 'unknown')}`",
+                f"- Command source: `{handoff.get('command_source', 'unknown')}`",
+                f"- Claim rule: `{handoff.get('claim_rule', 'unknown')}`",
+            ]
+        )
+        if isinstance(handoff.get("apply_terminal_command"), list):
+            lines.extend(
+                [
+                    "- Apply terminal command:",
+                    "```bash",
+                    " ".join(str(part) for part in handoff["apply_terminal_command"]),
+                    "```",
+                ]
+            )
+    operator_logs = data.get("operator_logs") if isinstance(data.get("operator_logs"), dict) else {}
+    if operator_logs:
+        lines.extend(
+            [
+                "",
+                "## Operator Logs",
+                "",
+                f"- Latest delayed status log: `{operator_logs.get('latest_delayed_status_log', 'n/a')}`",
+                f"- Latest delayed status log present: `{fmt_bool(operator_logs.get('latest_delayed_status_log_present'))}`",
+            ]
+        )
+        if operator_logs.get("latest_delayed_status_log_resolved"):
+            lines.append(
+                f"- Latest delayed status resolved log: `{operator_logs.get('latest_delayed_status_log_resolved')}`"
+            )
+    candidate_audit = data.get("candidate_audit") if isinstance(data.get("candidate_audit"), dict) else {}
+    summary = candidate_audit.get("summary") if isinstance(candidate_audit.get("summary"), dict) else {}
+    if candidate_audit:
+        lines.extend(
+            [
+                "",
+                "## Candidate Audit",
+                "",
+                f"- Audit return code: `{fmt_int(candidate_audit.get('returncode'))}`",
+            ]
+        )
+        if summary:
+            status_counts = summary.get("candidate_status_counts")
+            lines.extend(
+                [
+                    f"- Program directories: `{fmt_int(summary.get('program_directories'))}`",
+                    f"- Registered programs: `{fmt_int(summary.get('registered_programs'))}`",
+                    f"- Untracked nonignored entries: `{fmt_int(summary.get('untracked_nonignored_entries'))}`",
+                    f"- Modified tracked entries: `{fmt_int(summary.get('modified_tracked_entries'))}`",
+                ]
+            )
+            if isinstance(status_counts, dict):
+                status_summary = ", ".join(
+                    f"{key}={value}" for key, value in sorted(status_counts.items())
+                )
+                lines.append(f"- Candidate statuses: `{status_summary}`")
+        elif candidate_audit.get("error"):
+            lines.append(f"- Audit error: `{candidate_audit.get('error')}`")
+    active_rows = proc_state.get("active_rows") if isinstance(proc_state, dict) else None
+    if isinstance(active_rows, list):
+        lines.extend(
+            [
+                "",
+                "## Active Runner Process Table",
+                "",
+                "| Role | PID | PPID | RSS KiB | Command |",
+                "|---|---:|---:|---:|---|",
+            ]
+        )
+        if active_rows:
+            for row in active_rows:
+                if not isinstance(row, dict):
+                    continue
+                args = row.get("args")
+                lines.append(
+                    f"| `{process_role(args)}` | "
+                    f"{fmt_int(row.get('pid'))} | "
+                    f"{fmt_int(row.get('ppid'))} | "
+                    f"{fmt_int(row.get('rss_kib'))} | "
+                    f"`{fmt_command(args)}` |"
+                )
+        else:
+            lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    controller_rows = proc_state.get("controller_rows") if isinstance(proc_state, dict) else None
+    if isinstance(controller_rows, list) and controller_rows:
+        lines.extend(
+            [
+                "",
+                "## Active Controller Process Table",
+                "",
+                "| Role | PID | PPID | RSS KiB | Command |",
+                "|---|---:|---:|---:|---|",
+            ]
+        )
+        for row in controller_rows:
+            if not isinstance(row, dict):
+                continue
+            args = row.get("args")
+            lines.append(
+                f"| `{process_role(args)}` | "
+                f"{fmt_int(row.get('pid'))} | "
+                f"{fmt_int(row.get('ppid'))} | "
+                f"{fmt_int(row.get('rss_kib'))} | "
+                f"`{fmt_command(args)}` |"
+            )
+    artifacts = data.get("active_candidate_recent_artifacts")
+    if isinstance(artifacts, list):
+        lines.extend(
+            [
+                "",
+                "## Active Candidate Recent Artifacts",
+                "",
+                "| Path | Bytes | Modified UTC |",
+                "|---|---:|---|",
+            ]
+        )
+        if artifacts:
+            for artifact in artifacts:
+                if not isinstance(artifact, dict):
+                    continue
+                lines.append(
+                    f"| `{artifact.get('path', 'unknown')}` | "
+                    f"{fmt_int(artifact.get('bytes'))} | "
+                    f"`{artifact.get('mtime_utc', 'unknown')}` |"
+                )
+        else:
+            lines.append("| n/a | n/a | n/a |")
+    if max_cmix:
+        temp = proc_state.get("active_temp_io", {}) if isinstance(proc_state.get("active_temp_io"), dict) else {}
+        proc_io = proc_state.get("active_proc_io", {}) if isinstance(proc_state.get("active_proc_io"), dict) else {}
+        progress = (
+            proc_state.get("active_decode_progress")
+            if isinstance(proc_state.get("active_decode_progress"), dict)
+            else {}
+        )
+        lines.extend(
+            [
+                "",
+                "## Active RSS",
+                "",
+                f"- Max cmix PID: `{max_cmix.get('pid')}`",
+                f"- Active cmix mode: `{proc_state.get('active_cmix_mode', 'unknown')}`",
+                f"- Max cmix RSS KiB: `{fmt_int(max_cmix.get('rss_kib'))}`",
+                f"- Active process tree RSS KiB: `{fmt_int(proc_state.get('active_tree_rss_kib'))}`",
+                f"- Local binary `10GiB` guard KiB: `{fmt_int(proc_state.get('rss_guard_kib'))}`",
+                f"- Decimal `10GB` guard KiB: `{fmt_int(proc_state.get('decimal_10gb_guard_kib'))}`",
+                f"- Single-process binary margin KiB: `{fmt_int(proc_state.get('single_process_margin_kib'))}`",
+                f"- Single-process decimal margin KiB: `{fmt_int(proc_state.get('single_process_decimal_10gb_margin_kib'))}`",
+                f"- Active process tree margin KiB (binary): `{fmt_int(proc_state.get('active_tree_margin_kib'))}`",
+                f"- Active process tree decimal margin KiB: `{fmt_int(proc_state.get('active_tree_decimal_10gb_margin_kib'))}`",
+                f"- Temp input path: `{temp.get('input_path', 'unknown')}`",
+                f"- Temp output path: `{temp.get('output_path', 'unknown')}`",
+                f"- Temp output staging path: `{temp.get('output_temp_path', 'unknown')}`",
+                f"- Temp input bytes: `{fmt_int(temp.get('input_bytes'))}`",
+                f"- Temp output bytes: `{fmt_int(temp.get('output_bytes'))}`",
+                f"- Temp output staging bytes: `{fmt_int(temp.get('output_temp_bytes'))}`",
+                f"- Temp input modified UTC: `{temp.get('input_mtime_utc') or 'n/a'}`",
+                f"- Temp output modified UTC: `{temp.get('output_mtime_utc') or 'n/a'}`",
+                f"- Temp output staging modified UTC: `{temp.get('output_temp_mtime_utc') or 'n/a'}`",
+                f"- Process read bytes: `{fmt_int(proc_io.get('read_bytes'))}`",
+                f"- Process write bytes: `{fmt_int(proc_io.get('write_bytes'))}`",
+            ]
+        )
+        if progress:
+            lines.extend(
+                [
+                    f"- Decode scope progress: `{fmt_int(progress.get('capped_output_bytes'))}` / `{fmt_int(progress.get('scope_bytes'))}` bytes (`{fmt_float(progress.get('scope_percent'), 3)}%`)",
+                    f"- Decode remaining scope bytes: `{fmt_int(progress.get('remaining_scope_bytes'))}`",
+                ]
+            )
+        if proc_state.get("active_tree_rss_warning"):
+            lines.append(f"- Active process tree warning: `{proc_state.get('active_tree_rss_warning')}`")
+    conting = data.get("contingencies") if isinstance(data.get("contingencies"), dict) else {}
+    if conting:
+        if_passes = conting.get("if_passes", {}) if isinstance(conting.get("if_passes"), dict) else {}
+        if_rss = conting.get("if_rss_fails", {}) if isinstance(conting.get("if_rss_fails"), dict) else {}
+        lower = if_rss.get("lower_memory_suggestion", {}) if isinstance(if_rss.get("lower_memory_suggestion"), dict) else {}
+        lines.extend(
+            [
+                "",
+                "## Contingencies",
+                "",
+                f"- If current gate passes: `{if_passes.get('action', 'unknown')}`",
+                f"- Pass next scope: `{fmt_int(if_passes.get('next_scope_bytes'))}`",
+                f"- If RSS fails: `{if_rss.get('action', 'unknown')}`",
+                f"- Lower candidate: `{lower.get('suggested_candidate', 'unknown')}`",
+                f"- Lower PPMD KiB: `{fmt_int(lower.get('suggested_kib'))}`",
+                "- If roundtrip or determinism fails: `record failure and do not promote`",
+            ]
+        )
+    lines.extend(["", "## Proof Boundary", ""])
+    for key in ("best_exact_10m", "best_exact_10m_archive", "best_exact_100m", "best_full_1g", "best_forecast"):
+        row = data.get(key)
+        if not isinstance(row, dict):
+            continue
+        lines.append(
+            f"- {key}: `{row.get('program_id', row.get('status', 'none'))}`; "
+            f"status `{row.get('status', 'artifact-backed')}`; "
+            f"score `{fmt_int(row.get('hutter_score', row.get('projected_score')) )}`"
+        )
+    lines.extend(["", "## Claim Rule", "", "No prefix row proves `10.95%`."])
+    lines.append("")
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--json-out", type=pathlib.Path, default=OUT_JSON)
+    parser.add_argument("--md-out", type=pathlib.Path, default=OUT_MD)
+    parser.add_argument("--check", action="store_true", help="validate current receipt can be rendered")
+    args = parser.parse_args()
+
+    data = receipt()
+    rendered_json = json.dumps(data, indent=2, sort_keys=True) + "\n"
+    rendered_md = render_md(data)
+    if args.check:
+        required = (
+            "project",
+            "target_score_10_95",
+            "has_10_95_constructive_upper_bound",
+            "heavy_lock",
+            "active_processes",
+            "operator_logs",
+            "candidate_audit",
+            "active_candidate_recent_artifacts",
+            "handoff",
+            "gate_decision",
+            "gate_evidence_status",
+            "observed_gate_command",
+            "operator_action",
+            "contingencies",
+        )
+        missing = [key for key in required if key not in data]
+        if missing:
+            print("missing required receipt keys: " + ", ".join(missing))
+            return 1
+        try:
+            json.loads(rendered_json)
+        except json.JSONDecodeError as exc:
+            print(f"invalid JSON render: {exc}")
+            return 1
+        if not rendered_md.startswith("# enwiki9 Status Receipt\n"):
+            print("invalid Markdown render")
+            return 1
+        print("status_receipt_render_ok")
+        return 0
+
+    args.json_out.parent.mkdir(parents=True, exist_ok=True)
+    args.json_out.write_text(rendered_json)
+    args.md_out.write_text(rendered_md)
+    print(f"wrote {rel(args.json_out)}")
+    print(f"wrote {rel(args.md_out)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

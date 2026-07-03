@@ -5,6 +5,10 @@ tracked source contract, tracked metadata, and measured evidence. The goal is to
 make the candidate pool ready for open-ended search without allowing abandoned
 or undocumented experiments to pollute the active set.
 
+For the broader project ownership map, active proof lane, and document routing,
+see `PROJECT_ORGANIZATION.md`. This file owns candidate lifecycle and evidence
+rules; it does not own the live cmix21 promotion queue or final proof claim.
+
 ## Directory Contract
 
 Active candidates live under:
@@ -640,7 +644,7 @@ and decoder:
 
 ### Macro-Residual Token Search
 
-Static macro tables saturate quickly, so token additions must be measured
+Static macro tables saturate at small table sizes, so token additions must be measured
 instead of guessed. Use the locked helper against a parent program that exposes
 its byte macro list as `S`:
 

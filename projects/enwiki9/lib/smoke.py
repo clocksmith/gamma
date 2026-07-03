@@ -3,11 +3,11 @@
 Runs five cheap checks in order; exits non-zero on the first failure.
 None of these write to results/.
 
-  1. 1 KB roundtrip            — API sanity (sub-second)
-  2. 100 KB roundtrip          — logic check (seconds)
+  1. 1 KB roundtrip            — API sanity
+  2. 100 KB roundtrip          — logic check
   3. determinism diff          — compress twice, sha256-equal
   4. /dev/urandom check        — counting-argument lower bound
-  5. prefix roundtrip          — pick a size that finishes in ~2 min
+  5. prefix roundtrip          — pick a size appropriate for the program class
 
 Usage:
   python3 lib/smoke.py <program_id>
@@ -127,7 +127,7 @@ def main() -> int:
                     help="bytes for the prefix tier (default 100MB; "
                          "drop to 1_000_000 for cmix-class programs)")
     ap.add_argument("--skip-prefix", action="store_true",
-                    help="run only tiers 1-4 (~30 sec total)")
+                    help="run only tiers 1-4")
     args = ap.parse_args()
     return smoke(args.program_id, args.prefix, args.data, args.skip_prefix)
 
