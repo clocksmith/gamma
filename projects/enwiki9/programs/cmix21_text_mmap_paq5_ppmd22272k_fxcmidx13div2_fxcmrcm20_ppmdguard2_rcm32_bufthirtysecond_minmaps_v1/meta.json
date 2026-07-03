@@ -1,7 +1,7 @@
 {
   "id": "cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
   "family": "cmix21_mmap",
-  "status": "candidate",
+  "status": "active",
   "description": "cmix21 PAQ5 text-mode PPMD22272K candidate shaving only 128 KiB from the best 10M ppmd22400k branch after its 100M RSS miss.",
   "parent": "cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
   "hypothesis": "PPMD22400K passed exact 10M at archive=1638083 but crossed the 100M single-process RSS guard by 68 KiB. A 22272 KiB PPMD cap should buy a narrow safety margin while preserving nearly all of the ppmd22400k archive slope, unlike the broader ppmd21888k cut which missed the 10M archive ceiling.",
@@ -121,7 +121,10 @@
       "determinism": true,
       "compressed_sha256": "f0034b736ba358647ec3eae6e2a38dee1708cee3573568efe7ddee5d88537bf6",
       "compress_time_s": 96.6466,
-      "decompress_time_s": 96.3572
+      "decompress_time_s": 96.3572,
+      "result_json_bytes": 1429,
+      "result_json_mtime_utc": "2026-06-28T15:55:18+00:00",
+      "result_json_sha256": "106b12092bbff044a8468f00980760ddc3acfdd7289f2222e200fa6bb93e5d86"
     },
     "250000": {
       "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T121736.json",
@@ -136,7 +139,10 @@
       "determinism": true,
       "compressed_sha256": "a5208303b78c247507fa021e66692e35434ce3d4f2910cf1b9e142fc8fa9e202",
       "compress_time_s": 436.3847,
-      "decompress_time_s": 435.6195
+      "decompress_time_s": 435.6195,
+      "result_json_bytes": 1435,
+      "result_json_mtime_utc": "2026-06-28T16:17:36+00:00",
+      "result_json_sha256": "fa39963770d24708cc5817759574016969ed67b66bd39306830d00757621c31a"
     },
     "1000000": {
       "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T133015.json",
@@ -151,9 +157,46 @@
       "determinism": true,
       "compressed_sha256": "ab5a4e4f9d060b0876f374014d4172988d856a17a9caf0f8ff59203fd3ac6a3c",
       "compress_time_s": 1445.0245,
-      "decompress_time_s": 1446.0206
+      "decompress_time_s": 1446.0206,
+      "result_json_bytes": 1439,
+      "result_json_mtime_utc": "2026-06-28T17:30:15+00:00",
+      "result_json_sha256": "c5318f6cf5b61cc5efe61380bb16fca9a4354f9a2c21bc99e09679348a55a4c2"
+    },
+    "10m_driver_gate": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-29T012252.json",
+      "data_size": 10000000,
+      "data_md5": "2d1946513a5e933b897180084549dfc0",
+      "data_sha256": "5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97",
+      "compressed_size": 1638114,
+      "program_size": 564275,
+      "hutter_score": 2202389,
+      "bits_per_byte": 1.310491,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "7f528231df581559424ed7dff2a896f9ce13f95c7a6c7a24c7ccca0fef543be2",
+      "compress_time_s": 14136.0916,
+      "decompress_time_s": 14274.4194,
+      "result_json_bytes": 1444,
+      "result_json_mtime_utc": "2026-06-29T05:22:52+00:00",
+      "result_json_sha256": "9402715a25ffe940f32734967fa741e8798c44a43177d81a4e202fedaef856fe"
+    },
+    "100000000_rss_guard_fail": {
+      "guard_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd22272k_100000000_rss_guard.json",
+      "data_size": 100000000,
+      "roundtrip_ok": false,
+      "determinism": false,
+      "rss_guard_exceeded": true,
+      "memory_ceiling_kib": 10485760,
+      "max_sampled_single_rss_kib": 10485796,
+      "max_sampled_tree_rss_kib": 10602552,
+      "single_rss_over_ceiling_kib": 36,
+      "partial_compressed_size_at_abort": 2162688,
+      "failure": "compression_rss_crossed_10gib_ceiling_before_archive_or_roundtrip",
+      "rss_guard_json_bytes": 722,
+      "rss_guard_json_mtime_utc": "2026-06-29T10:39:09+00:00",
+      "rss_guard_json_sha256": "a0e1a386bf2833e8854f7060dbb79391075d8a26d544fc2f295ed82eaaa90fbb"
     }
   },
-  "verdict": "1M gate passed roundtrip/determinism at archive=174531 exactly on the ceiling; RSS guard passed with max_single_rss=10443972 KiB. Proceed to guarded 10M.",
-  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T133015.json"
+  "verdict": "Exact 10M gate passed roundtrip/determinism at archive=1638114; rejected for 100M promotion because compression crossed the local RSS guard by 36 KiB before producing a scored archive or roundtrip.",
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-29T012252.json"
 }

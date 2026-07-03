@@ -38,32 +38,32 @@ while decoded < length:
 
 This pattern should be written down once, shared via a helper, and used by every typed-stream program that needs ESC-byte escape. **Action: extract to `lib/typed_stream.py`** so it can't be re-bugged independently in each new program.
 
-## Hardware reality (cmix wall clock on this box)
+## Hardware reality (cmix resource class on this box)
 
-| scope | observed wall clock | category |
+| scope | observed behavior | category |
 | --- | --- | --- |
-| 1 KB cmix | ~2.25 sec | smoke |
-| 1 MB cmix | **>10 min** (timeout fired, not completed) | committed run |
-| 10 MB cmix | **>30 min** (timeout fired, not completed) | overnight |
-| 100 MB cmix | likely **multi-hour** | overnight + large window |
-| 1 GB cmix | likely **multi-day** | certification only |
+| 1 KB cmix | completes on this host | smoke |
+| 1 MB cmix | exceeded the local interactive timeout | committed run |
+| 10 MB cmix | exceeded the local interactive timeout | guarded proof gate |
+| 100 MB cmix | requires the serialized heavy-lock lane | scale gate |
+| 1 GB cmix | requires the serialized heavy-lock lane | certification gate |
 
-Implication: **cmix is not the iteration substrate on this machine.** Even 1 MB cmix is >10 min, well outside an iteration loop. The cmix-based blue_dolphin programs (apex, master_ultimate, markup_opcode_cmix) are not benchable on this hardware in iteration time.
+Implication: **cmix is not the iteration substrate on this machine.** The cmix-based blue_dolphin programs (apex, master_ultimate, markup_opcode_cmix) belong to the same serialized scoring lane as other heavy candidates.
 
 The realistic separation:
-- **Iteration**: lzma-class only. seconds per run. all preprocessor logic validated here.
-- **cmix bench**: queued as committed runs. Overnight or longer. Substrate-question gating only after lzma iteration validates a feature direction.
-- **Certification**: full 10⁹ on cmix. Multi-day. One-shot per architectural decision.
+- **Iteration**: lzma-class only; use it to validate reversible preprocessor logic and archive deltas.
+- **cmix bench**: guarded runs under `/tmp/enwiki9-heavy.lock` after lzma-class evidence validates a feature direction.
+- **Certification**: full `10^9` on cmix with exact replay, RSS guard, determinism, and official accounting.
 
 ## The 10% (sub-100 MB) gap
 
 100 MB on enwik9 is not reachable in pure-Python lzma class. The lzma plateau is ~190 MB (xz_lzma2_1g already at 197.8 MB). Closing the 90 MB gap to 10% requires:
 
 1. **cmix substrate** — gets to ~110 MB (11%) with markup opcode preprocessing. The Python wrapper is `purple_parrot_apex_v1`. Can't iterate on this hardware.
-2. **C++ cmix fork with sidecar context families** — adds the 10 sidecar features (computed by `compute_sidecar_features()` in `master_ultimate_v1`) as additional mixer inputs. Predicted ~99–105 MB. Multi-month engineering.
+2. **C++ cmix fork with sidecar context families** — adds the 10 sidecar features (computed by `compute_sidecar_features()` in `master_ultimate_v1`) as additional mixer inputs. Predicted ~99–105 MB. This is a source fork plus replay-gate lane.
 3. **Integer-quantized SSM as a mixer family** (Phase 6 / sub-100 MB bet) — predicted 94–99 MB if the determinism contract holds. Pinned design from prior turns: N=16 subsampled updates, 32-segment integer LUT softmax, fixed-PRNG-seeded weights, hidden state zeroed, truncated BPTT K=64, byte-level distribution.
 
-None of (2) or (3) is single-session Python work. The blue_dolphin Python ceiling on this hardware is the apex program at cmix-class compression, ~110-113 MB full corpus.
+None of (2) or (3) is a Python-only packaging change. The blue_dolphin Python ceiling on this hardware is the apex program at cmix-class compression, ~110-113 MB full corpus.
 
 ## Next steps per program
 
@@ -71,14 +71,14 @@ None of (2) or (3) is single-session Python work. The blue_dolphin Python ceilin
 **Retire.** The score-honest version is `purple_parrot_apex_v1`. No reason to keep this in the registry — it under-counts by importing `cmix_wrapped`'s binary.
 
 ### `blue_dolphin_mediawiki_inline_v1`
-**Run on full 10⁹ via lzma** — overnight or cloud host. Compare against `baseline_lzma` (211.8 MB) and `schema_lzma_v1` (209.9 MB). The hypothesis to test: *do inline state-transition markers (avoiding stream-split context loss) help an lzma back-end, or does the marker overhead exceed the typed-context benefit?* Predicted: probably loses to schema_lzma_v1 because lzma can't exploit the markers as semantic signals (lzma is dictionary-based, not context-mixing). If it *wins*, that's a meaningful Track-A signal for cmix re-test.
+**Run via lzma-class gate when the scoring lane is free.** Compare against `baseline_lzma` (211.8 MB) and `schema_lzma_v1` (209.9 MB). The hypothesis to test: *do inline state-transition markers (avoiding stream-split context loss) help an lzma back-end, or does the marker overhead exceed the typed-context benefit?* Predicted: probably loses to schema_lzma_v1 because lzma can't exploit the markers as semantic signals (lzma is dictionary-based, not context-mixing). If it *wins*, that's a meaningful Track-A signal for cmix re-test.
 
 Specific bench command: `python3 lib/driver.py blue_dolphin_mediawiki_inline_v1` (full corpus default).
 
 ### `blue_dolphin_tree_macro_v1`
 **Run on 10 MB and 100 MB lzma** to see if tree-macro admission earns its bookkeeping at scope. The fixed-span macro miner (`ast_macro_lzma_v1`) failed at +0.89% to +4.69% loss; this *should* do better because (a) it works on parsed templates not byte spans, (b) frequency floor is f≥3 with a true savings test, (c) arguments stay literal. If it loses by a similar margin, the parsed-template-macro idea is empirically retired.
 
-After the lzma full corpus run: if it wins or is close (<1% loss), queue cmix at 100 MB overnight as the substrate test.
+After the lzma full corpus run: if it wins or is close (<1% loss), queue cmix at 100 MB under the guarded substrate test.
 
 ### `blue_dolphin_master_ultimate_v1`
 **Defer until layer ablations land.** This program bundles 6 layers. Pragmatic next step: run *each layer in isolation* on lzma full corpus before benchmarking the bundle. Specifically:
@@ -97,15 +97,15 @@ Without isolated layer measurements, master_ultimate's S can't be attributed to 
 
 The tractable next bench actions on this hardware:
 
-1. **`blue_dolphin_mediawiki_inline_v1` full corpus, lzma.** ~30 min. Tells us whether inline-marker channels beat raw lzma + whether they beat schema_lzma_v1. **Highest info-per-time** in the iteration tier.
+1. **`blue_dolphin_mediawiki_inline_v1` full corpus, lzma.** Tells us whether inline-marker channels beat raw lzma and whether they beat schema_lzma_v1. This has the best evidence-to-resource profile in the iteration tier.
 
-2. **`blue_dolphin_tree_macro_v1` full corpus, lzma.** ~30 min. Tells us whether the parsed-template macro idea earns bookkeeping at scale. Validates Phase 5 of the locked plan.
+2. **`blue_dolphin_tree_macro_v1` full corpus, lzma.** Tells us whether the parsed-template macro idea earns bookkeeping at scale. Validates Phase 5 of the locked plan.
 
-3. **Compose `blue_dolphin_mediawiki_inline_v1` + markup opcode + lzma**. New program (`blue_dolphin_inline_opcode_lzma_v1`?). Tests whether two layers compose positively under lzma. ~2 KB program; ~30 min full corpus.
+3. **Compose `blue_dolphin_mediawiki_inline_v1` + markup opcode + lzma**. New program (`blue_dolphin_inline_opcode_lzma_v1`?). Tests whether two layers compose positively under lzma. Count the added program bytes before promotion.
 
-4. **`purple_parrot_apex_v1` cmix at 1 MB**. Already queued by user; ~10+ min. Tells us the substrate question (does markup opcode help cmix or fight it).
+4. **`purple_parrot_apex_v1` cmix at 1 MB**. Already queued by user. Tells us the substrate question: does markup opcode help cmix or fight it?
 
-The cmix-substrate-question programs (apex variants, markup_opcode_cmix) should not run on this machine — they belong to the overnight queue or the cloud routine.
+The cmix-substrate-question programs (apex variants, markup_opcode_cmix) must run only under the serialized heavy-lock queue or an equivalent audited worker.
 
 ## Cross-cutting infrastructure
 
@@ -113,14 +113,14 @@ The cmix-substrate-question programs (apex variants, markup_opcode_cmix) should 
 
 2. **Add scope-aware program_size sanity to `lib/driver.py`.** Marginal-byte break-even is `8 × |program| / n` bits/byte. The driver should report this number alongside b/B so contributors can see whether their preprocessor's archive Δ exceeds its program-size cost at the scope they ran at.
 
-3. **`lib/smoke.py` needs a cmix-aware path.** The current 5-tier smoke runs 100 KB through cmix at tier 2, which times out on this hardware. A `--cmix-class` mode that drops tier 2 to 10 KB and tier 5 to 10 KB-1 MB would let cmix-using programs smoke in <2 minutes.
+3. **`lib/smoke.py` needs a cmix-aware path.** The current 5-tier smoke runs 100 KB through cmix at tier 2, which exceeds the local interactive timeout. A `--cmix-class` mode should use smaller tiers for cmix-using programs and report that this is only contract smoke, not score evidence.
 
-4. **Move SSM-context-family work to a cloud branch.** The integer-quantized Mamba-class SSM is the sub-100 MB bet. It's not buildable on this machine in iteration time. Either offload to a cloud worker, or accept that this is the project's certification-tier work, not iteration-tier.
+4. **Move SSM-context-family work to an audited worker branch.** The integer-quantized Mamba-class SSM is the sub-100 MB bet. Treat it as a source fork plus replay-gate lane, not as an iteration-tier Python package.
 
 ## Honest closing
 
-The blue_dolphin namespace was an architectural exercise — bundle every winning idea into one program (`master_ultimate`), then test. The empirical lesson is that bundling without isolated Δ measurement is unverifiable; the marginal-byte-break-even math punishes elaborate architecture at iteration scope; and cmix wall clock on this hardware makes the cmix-substrate question only answerable on overnight or cloud runs.
+The blue_dolphin namespace was an architectural exercise — bundle every winning idea into one program (`master_ultimate`), then test. The empirical lesson is that bundling without isolated Δ measurement is unverifiable; the marginal-byte-break-even math punishes elaborate architecture at iteration scope; and cmix substrate questions must run only through an audited heavy-lock lane or equivalent worker.
 
 The shippable program from this namespace is *not* `master_ultimate`. It's the equivalent of `purple_parrot_apex_v1` (markup opcode + inlined cmix). The blue_dolphin work that has measurable forward value is the lzma-class typed-stream variants — `mediawiki_inline_v1` and `tree_macro_v1` — both of which now smoke clean and need full-corpus runs to settle.
 
-**Pinned next action**: queue `blue_dolphin_mediawiki_inline_v1` and `blue_dolphin_tree_macro_v1` for full corpus lzma runs. Both ~30 min. Numbers from those settle Phase 4 (typed inline channels) and Phase 5 (parsed-template macros) for this repo without spending any cmix time.
+**Pinned next action**: queue `blue_dolphin_mediawiki_inline_v1` and `blue_dolphin_tree_macro_v1` for lzma-class full-corpus runs when the scoring lane is available. Numbers from those settle Phase 4 (typed inline channels) and Phase 5 (parsed-template macros) for this repo without spending cmix scorer capacity.

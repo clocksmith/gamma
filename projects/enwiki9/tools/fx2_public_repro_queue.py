@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import fcntl
 import hashlib
 import json
 import os
@@ -151,32 +152,32 @@ def prepare_from_root_binary() -> dict[str, Any]:
     if missing:
         raise SystemExit("missing source asset(s): " + ", ".join(rel(path) for path in missing))
 
-    CANDIDATE_DIR.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="fx2-public-package-") as td:
-        root = pathlib.Path(td)
-        cmix_orig = root / "cmix_orig"
-        shutil.copy2(ROOT_BINARY, cmix_orig)
-        os.chmod(cmix_orig, 0o755)
+    with HeavyLock("fx2 public root-binary package preparation"):
+        CANDIDATE_DIR.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="fx2-public-package-") as td:
+            root = pathlib.Path(td)
+            cmix_orig = root / "cmix_orig"
+            shutil.copy2(ROOT_BINARY, cmix_orig)
+            os.chmod(cmix_orig, 0o755)
 
-        comp_dict = root / "comp_dict"
-        comp_order = root / "comp_order"
-        header = root / "header.dat"
-        subprocess.run([str(cmix_orig), "-c", str(SOURCE_DICT), str(comp_dict)], cwd=root, check=True)
-        subprocess.run([str(cmix_orig), "-c", str(SOURCE_ORDER), str(comp_order)], cwd=root, check=True)
-        subprocess.run(
-            [
-                str(cmix_orig),
-                "-h",
-                str(comp_dict.stat().st_size),
-                str(comp_order.stat().st_size),
-                "0",
-            ],
-            cwd=root,
-            check=True,
-        )
-        if not header.exists():
+            comp_dict = root / "comp_dict"
+            comp_order = root / "comp_order"
             header = root / "header.dat"
-        concatenate([cmix_orig, comp_dict, comp_order, header], CANDIDATE_PACKAGE)
+            run_pack_command([str(cmix_orig), "-c", str(SOURCE_DICT), str(comp_dict)], cwd=root)
+            run_pack_command([str(cmix_orig), "-c", str(SOURCE_ORDER), str(comp_order)], cwd=root)
+            run_pack_command(
+                [
+                    str(cmix_orig),
+                    "-h",
+                    str(comp_dict.stat().st_size),
+                    str(comp_order.stat().st_size),
+                    "0",
+                ],
+                cwd=root,
+            )
+            if not header.exists():
+                header = root / "header.dat"
+            concatenate([cmix_orig, comp_dict, comp_order, header], CANDIDATE_PACKAGE)
 
     os.chmod(CANDIDATE_PACKAGE, 0o755)
     return {
@@ -254,6 +255,46 @@ def run_command(command: list[str], cwd: pathlib.Path) -> subprocess.CompletedPr
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
+
+
+class HeavyLock:
+    def __init__(self, label: str) -> None:
+        self.label = label
+        self.handle: Any = None
+
+    def __enter__(self) -> "HeavyLock":
+        LOCK.parent.mkdir(parents=True, exist_ok=True)
+        self.handle = LOCK.open("w")
+        try:
+            fcntl.flock(self.handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise SystemExit(
+                f"heavy lock is busy; {self.label} must not compete with the active scorer"
+            ) from exc
+        return self
+
+    def __exit__(self, exc_type: object, exc: object, tb: object) -> None:
+        if self.handle is not None:
+            fcntl.flock(self.handle.fileno(), fcntl.LOCK_UN)
+            self.handle.close()
+
+
+def run_pack_command(command: list[str], cwd: pathlib.Path) -> subprocess.CompletedProcess[str]:
+    proc = run_command(command, cwd)
+    if proc.returncode != 0:
+        raise SystemExit(
+            json.dumps(
+                {
+                    "status": "failed",
+                    "command": command,
+                    "returncode": proc.returncode,
+                    "stdout_tail": proc.stdout[-4000:],
+                    "stderr_tail": proc.stderr[-4000:],
+                },
+                indent=2,
+            )
+        )
+    return proc
 
 
 def run_archive_once(data_path: pathlib.Path, package_path: pathlib.Path) -> dict[str, Any]:

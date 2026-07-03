@@ -5,6 +5,37 @@ Lossless compression of `enwik9` — the first 10^9 bytes of the English Wikiped
 For a mechanism-level guide to the custom algorithms and their measured status,
 see [ALGORITHMS.md](ALGORITHMS.md).
 
+For a plain-English view of what each major algorithm does and how it scored,
+see [docs/algorithm_cards.md](docs/algorithm_cards.md).
+
+For the project ownership map, active proof lane, and documentation routing,
+see [PROJECT_ORGANIZATION.md](PROJECT_ORGANIZATION.md).
+
+For the current generated operator receipt, see
+[docs/status_receipt.md](docs/status_receipt.md).
+
+For artifact-backed rankings from result JSONs only, see
+[docs/evidence_matrix.md](docs/evidence_matrix.md).
+
+For a compact generated top-results view by measured scope, see
+[docs/best_results.md](docs/best_results.md).
+
+For the active cmix21 PPMD memory-valve ladder, see
+[docs/cmix21_memory_valves.md](docs/cmix21_memory_valves.md).
+
+For cached residual/SSE shadow evidence, see
+[docs/residual_shadow_matrix.md](docs/residual_shadow_matrix.md).
+
+For the strategy and novel-algorithm research register, see
+[docs/research_register.md](docs/research_register.md).
+
+For the primary novel SRSTC / streaming self-referential retrieval strategy
+that turns cosine-style similarity into deterministic compressor state, see
+[docs/streaming_retrieval_mixer.md](docs/streaming_retrieval_mixer.md).
+
+For handoff/continuation rules during active cmix21 runs, see
+[docs/takeover_runbook.md](docs/takeover_runbook.md).
+
 For the FX2-SC sidecar-context implementation roadmap, see
 [FX2_SC.md](FX2_SC.md). For the paper-style thesis version, see
 [FX2_SC_PAPER.md](FX2_SC_PAPER.md).
@@ -18,6 +49,7 @@ Candidate source, metadata, audit, retirement, and PGSG-readiness rules are in
 ```
 enwiki9/
 ├── README.md              this file
+├── PROJECT_ORGANIZATION.md ownership map + active proof lane
 ├── ALGORITHMS.md          custom algorithm mechanisms + benchmark status
 ├── FX2_SC.md              sidecar-context thesis + rollout plan
 ├── FX2_SC_PAPER.md        paper-style FX2-SC design thesis
@@ -33,6 +65,8 @@ enwiki9/
 │       └── program.py     exposes compress(bytes)->bytes, decompress(bytes)->bytes
 ├── lib/
 │   └── driver.py          run/verify/score one program
+├── tools/                 audit, package, queue, residual, ordering utilities
+├── docs/                  algorithm cards, accounting, shadow-coder, reports, and handoff notes
 ├── results/
 │   └── <program_id>/<timestamp>.json   per-run measurements
 └── bench.py               run all programs, update leaderboard
@@ -447,7 +481,7 @@ Each step-change represents a *different model class*, not a parameter sweep. Go
 | 2021 | starlit (Artemiy Margaritov) | 115,352,938 | −1.13% | cmix + Doc2Vec article reordering |
 | 2017 (pre-prize) | phda9 v1.8 (Alexander Rhatushnyak) | 116,673,681 | (baseline) | hand-tuned context model |
 
-`fx2-cmix` is the bar to beat. The 5.04 MB delta from `phda9` to `fx2-cmix` represents **seven years** of work across multiple authors, each shaving sub-percent. Improvements at this end of the curve are millimetric.
+`fx2-cmix` is the bar to beat. The 5.04 MB delta from `phda9` to `fx2-cmix` represents multiple public leaderboard generations across multiple authors, each shaving sub-percent. Improvements at this end of the curve are millimetric.
 
 ### Per-entrant: what each adds
 
@@ -464,7 +498,7 @@ cmix is the **operational reference** for everything in this repo. Attack surfac
 
 **starlit (Margaritov, 2021)** — cmix + a preprocessing pass that **reorders articles** by Doc2Vec similarity before passing to cmix. The intuition: similar articles compress better when adjacent (more long-range matches, more context overlap). The reordering map ships in the decompressor. Gain: ~1.13% over phda9. *Attack surface*: confirms cross-article structural similarity is exploitable. The Doc2Vec model is too large to ship inline; the ordering map is what's stored.
 
-**fast cmix (Kumar, 2023)** — Tighter pipeline derived from cmix, with reduced runtime to fit the 50-hour envelope on lighter hardware. Architecture is cmix + minor tweaks; gain is mostly engineering, not new ideas. *Attack surface*: shows that the contest's compute envelope is binding.
+**fast cmix (Kumar, 2023)** — Tighter pipeline derived from cmix, with reduced runtime to fit the official compute envelope on lighter hardware. Architecture is cmix + minor tweaks; gain is mostly engineering, not new ideas. *Attack surface*: shows that the contest's compute envelope is binding.
 
 **fx-cmix / fx2-cmix (Orav, 2024)** — Current record. Builds on cmix with:
 - **Single-Pass Wikipedia Transform** — a custom preprocessor that recognizes wikitext templates and links structurally (`[|` markers), routing them through a separate stream from prose. This is the most architecturally significant addition since cmix.

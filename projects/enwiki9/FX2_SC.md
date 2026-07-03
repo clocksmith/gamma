@@ -9,6 +9,30 @@ It is not a benchmark result. Measured program scores belong in
 separates the research hypothesis from the empirical ledger so implementation
 work can be reviewed without overstating unmeasured claims.
 
+## Top Status
+
+FX2-SC is a novel sidecar/calibration lane, but the primary novel strategy is
+now SRSTC / streaming self-referential semantic retrieval. FX2-SC remains
+valuable as the outer SSE/APM and structural-state layer that SRSTC can use
+after exact shadow evidence exists. The current proof path is still governed by
+exact gate artifacts. Use this table before making any claim about progress to
+`10.95%`.
+
+| Item | Current value | Evidence boundary |
+|---|---|---|
+| Best exact `10M` local score | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1`: score `1,882,615`, archive `1,643,289`, program `239,326` | Exact artifact-backed prefix result only. |
+| Best exact `10M` cmix21 archive | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: archive `1,638,083`, local score `2,202,359` | Exact artifact-backed prefix result; not active because larger-scope RSS behavior is unsuitable. |
+| `ppmd21888k` bracket result | Exact `10M` replay passed at archive `1,638,182`; unchanged `100M` promotion failed RSS guard by `36` KiB | Guard receipt: `ppmd21888k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
+| `ppmd21760k` bracket result | Exact `10M` replay passed at archive `1,638,204`; unchanged `100M` promotion failed RSS guard by `72` KiB | Guard receipt: `ppmd21760k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
+| `ppmd21632k` bracket result | Exact `10M` replay passed at archive `1,638,229`; unchanged `100M` promotion failed RSS guard by `68` KiB | Guard receipt: `ppmd21632k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
+| `ppmd21504k` bracket result | Exact `10M` replay passed at archive `1,638,165`; unchanged `100M` promotion failed RSS guard by `72` KiB | Guard receipt: `ppmd21504k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
+| Active candidate | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: exact `1,024` byte replay passed with roundtrip and determinism | Result: `results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-02T143419.json`; guard receipt: `ppmd21376k_1024_determinism_rss_guard.json`. |
+| Active gate | `ppmd21376k` unchanged `250,000` byte RSS-guarded determinism replay | Launch or wait for this promotion gate; use terminal driver and RSS receipts before any retune. |
+| Best `100M` evidence | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: metadata-inherited score `15,040,789`, archive `14,857,781`, program `183,008` | Inherited by payload and ordered-stream identity from the verified geometry parent. No exact `100M` result JSON is present in `results/`. |
+| Best full `1G` proof | None | The certificate generator reports no verified full-corpus result JSON in this checkout. |
+| Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: projected `110,181,114` | Forecast quality: `fx2-calibrated-from-exact-100m`; not a constructive proof. |
+| Active blocker | Active `ppmd21376k` `250,000` byte deterministic replay has not produced terminal driver and RSS receipts yet | Do not retune or launch another compression gate while the lock is held. |
+
 ## Abstract
 
 The strongest measured context-mixing systems on `enwik9` are already excellent
@@ -33,6 +57,11 @@ The central hypothesis is:
 Wikipedia structure should be used as a recomputable predictive lens,
 not as an inline text transform.
 ```
+
+Strategic update: that lens should feed a stronger primary model, SRSTC, when
+possible. SRSTC adds self-referential span tables, deterministic sketch
+similarity, and patch-copy priors; FX2-SC supplies the causal parser state and
+calibration surface.
 
 ## Score Contract
 
@@ -140,12 +169,13 @@ beat its full byte, runtime, memory, and reproducibility cost.
 
 | Lane | Mechanism | Why it is novel | Current rule |
 |---|---|---|---|
-| Causal residual/SSE patch compiler | Logs base probabilities, groups residuals by deterministic Wiki/XML state, emits tiny outer-SSE corrections. | Turns structural features into byte-counted patches instead of broad transforms. | Shadow-coder savings must exceed code/table bytes. |
-| Causal schema trie / seed dictionary | Builds bounded tries from already-decoded titles, refs, URLs, template keys, and page-local terms. | Gets dictionary-like priors without shipping a dictionary payload. | State must be causal, bounded, and abstaining. |
+| SRSTC / streaming retrieval mixer | Builds bounded self-referential SimHash/minhash retrieval tables from completed decoded spans and predicts soft patch-copy continuations from similar prior spans. | Converts cosine-style semantic recurrence into the primary deterministic history-derived compressor state. | Must first win exact held-out shadow bytes; then enter as the smallest paying outer SSE/APM, router input, or custom-backend component. |
+| Causal residual/SSE patch compiler | Logs base probabilities, groups residuals by deterministic Wiki/XML state, emits tiny outer-SSE corrections. | Turns structural features into byte-counted patches instead of broad transforms. | Shadow-coder savings must exceed code/table bytes; useful as SRSTC calibration. |
+| Causal schema trie / seed dictionary | Builds bounded tries from already-decoded titles, refs, URLs, template keys, and page-local terms. | Gets dictionary-like priors without shipping a dictionary payload. | State must be causal, bounded, abstaining, and usable as an SRSTC table family. |
 | Embedding-teacher ordering | Uses embeddings offline to find page families, then distills them into deterministic ordering keys or parser states. | Uses neural semantics as discovery, not as shipped decoder state. | Do not ship the embedding model unless its byte cost is beaten. |
 | Deterministic expert router / MWCC | Runs tiny prose, markup, URL, numeric, and citation experts and gates them by causal past loss. | Avoids transmitted route tokens by selecting from history. | Expert count and tables must stay small enough to pay under MDL. |
 | I-SSA / bounded attractor state | Updates a small integer state vector from decoded bytes and maps it to calibration buckets. | Handles malformed markup as trajectory drift instead of parser failure. | Use only as a soft coordinate; never replace the base compressor. |
-| Value-ranked memory lensing | Measures archive damage per KiB saved for PPMD, FXCM, RCM, buffers, and maps. | Treats memory admissibility as an empirical compression allocation problem. | Primary active lane while cmix21 candidates are under promotion. |
+| Value-ranked memory lensing | Measures archive damage per KiB saved for PPMD, FXCM, RCM, buffers, and maps. | Treats memory admissibility as an empirical compression allocation problem. | Backup proof lane and baseline while cmix21 candidates are under promotion. |
 
 ## Residual Validation Gate
 
@@ -1215,9 +1245,14 @@ PREPROCESSOR_WINS | PREPROCESSOR_LOSES | INCOMPLETE | NON_DETERMINISTIC
   vocabulary.
 - `ALGORITHMS.md` for measured custom algorithm mechanisms and benchmark
   status.
+- `docs/official_accounting_checklist.md` for promoted-candidate official
+  score accounting.
+- `docs/shadow_coder_spec.md` for probability-log and residual/SSE validation
+  requirements.
+- `docs/embedding_teacher_rules.md` for offline embedding-teacher boundaries.
 - `external/cmix21-sidecar/` for the current sidecar-oriented C++ substrate.
-- `typed_anchor_chain_ppmc_v1` for the strongest measured full-corpus custom
-  entropy backend in this checkout.
+- `typed_anchor_chain_ppmc_v1` for the strongest measured custom entropy
+  backend artifact currently present in this checkout.
 - `schema_title_streams_lzma2_1g_v1` and `ast_opcode_lzma_v1` for measured
   structural preprocessing wins with LZMA2 backends.
 

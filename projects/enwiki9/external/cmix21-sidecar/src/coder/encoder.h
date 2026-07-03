@@ -18,6 +18,9 @@ class Encoder {
   std::ofstream* os_;
   unsigned int x1_, x2_;
   Predictor* p_;
+#ifdef CMIX_TRACE_ROWS
+  unsigned long long bit_count_;
+#endif
 };
 
 #endif

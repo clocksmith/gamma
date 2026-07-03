@@ -75,7 +75,9 @@ def _write_json(path: pathlib.Path | None, payload: dict) -> None:
     if path is None:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2) + "\n")
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2) + "\n")
+    tmp.replace(path)
 
 
 def main() -> int:
@@ -98,16 +100,37 @@ def main() -> int:
     peak_single = 0
     peak_tree = 0
     peak_sample: dict | None = None
+    latest_sample: dict | None = None
+    sample_count = 0
     exceeded = False
 
     try:
         while True:
             rc = proc.poll()
             sample = _sample(proc.pid)
+            latest_sample = sample
+            sample_count += 1
             if sample["max_single_rss_kib"] > peak_single:
                 peak_single = sample["max_single_rss_kib"]
                 peak_sample = sample
             peak_tree = max(peak_tree, sample["tree_rss_kib"])
+            _write_json(
+                args.guard_json,
+                {
+                    "label": args.label,
+                    "command": command,
+                    "limit_kib": args.limit_kib,
+                    "max_sampled_single_rss_kib": peak_single,
+                    "max_sampled_tree_rss_kib": peak_tree,
+                    "peak_sample": peak_sample,
+                    "latest_sample": sample,
+                    "sample_count": sample_count,
+                    "rss_guard_exceeded": False,
+                    "returncode": None,
+                    "status": "running",
+                    "elapsed_s": round(time.time() - started_at, 4),
+                },
+            )
             if sample["max_single_rss_kib"] > args.limit_kib:
                 exceeded = True
                 try:
@@ -142,8 +165,11 @@ def main() -> int:
         "max_sampled_single_rss_kib": peak_single,
         "max_sampled_tree_rss_kib": peak_tree,
         "peak_sample": peak_sample,
+        "latest_sample": latest_sample,
+        "sample_count": sample_count,
         "rss_guard_exceeded": exceeded,
         "returncode": rc,
+        "status": "rss_guard_exceeded" if exceeded else "complete",
         "elapsed_s": round(time.time() - started_at, 4),
     }
     _write_json(args.guard_json, payload)

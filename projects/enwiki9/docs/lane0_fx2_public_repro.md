@@ -12,6 +12,38 @@ Public target recorded by the upstream repository:
 - Counted executable size: `441463`
 - Reported RAM max: `9523660 KiB`
 
+## Current Preflight State
+
+Latest lock-safe preflight command:
+
+```bash
+python3 projects/enwiki9/tools/fx2_public_repro_queue.py --preflight
+```
+
+Current facts:
+
+- `projects/enwiki9/data/enwik9` exists at `1,000,000,000` bytes.
+- Corpus SHA-256 is
+  `159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc`.
+- `projects/enwiki9/external/fx2-cmix` exists.
+- Root binary `external/fx2-cmix/cmix` exists at `379,312` bytes.
+- Dictionary `external/fx2-cmix/dictionary/english.dic` exists.
+- Article-order asset
+  `external/fx2-cmix/src/readalike_prepr/data/new_article_order` exists.
+- Build script `external/fx2-cmix/build_and_construct_comp.sh` exists.
+- Exact upstream package `external/fx2-cmix/run/cmix` is absent.
+- Candidate package `programs/fx2cmix_public_repro_v1/cmix` is absent.
+- Required exact-build tools reported absent: `clang++-17`,
+  `llvm-profdata-17`, `upx-ucl`.
+
+Interpretation:
+
+```text
+Lane 0 can validate local control packaging from the root binary, but it cannot
+claim exact public executable-size reproduction until the upstream package or
+equivalent build-tool path is present and counted.
+```
+
 This lane must stay separate from:
 
 - Lane 1: experimental `cmix21` memory shaping.
@@ -67,6 +99,10 @@ python3 projects/enwiki9/tools/fx2_public_repro_queue.py --prepare-from-root-bin
 That control validates the `-e/archive9` machinery, but it is not an exact
 public executable-size reproduction unless the reported package size matches the
 upstream target.
+
+This command invokes cmix to compress package assets, so the helper now holds
+`/tmp/enwiki9-heavy.lock` and refuses to run while an active scorer owns the
+lock.
 
 Run the guarded full reproduction:
 

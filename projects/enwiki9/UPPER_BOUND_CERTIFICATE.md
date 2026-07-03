@@ -17,6 +17,19 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 - Full-corpus constructive result present: `False`
 - 10.95 constructive upper bound present: `False`
 
+## Top Status
+
+| Claim | Program | Scope | Score | Evidence | Status |
+|---|---|---:|---:|---|---|
+| best exact 10M | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | 10,000,000 | 1,882,615 | exact result JSON with roundtrip_ok true | exact artifact-backed |
+| best exact 10M archive | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 10,000,000 | 2,202,359 | exact result JSON with roundtrip_ok true; archive-slope reference only | exact artifact-backed |
+| best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
+| best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
+| best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | n/a | 110,181,114 | forecast only; not a constructive proof | fx2-calibrated-from-exact-100m |
+| active candidate | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 10,000,000 | 2,202,372 | exact 10,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 10,000,000 byte gate passed |
+| blocker | `n/a` | n/a | n/a | active 100,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
+| active gate | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 100,000,000 | n/a | unchanged 100,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+
 ## Best Full-Corpus Result
 
 No verified full-corpus result JSON is present in this workspace.
