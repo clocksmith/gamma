@@ -64,6 +64,16 @@ python3 projects/distillation/translation/pipeline/rebuild_translation_results_b
   - `leaderboard_indomain_clean_merged_en_es_translation_benchmark_128.csv`
   - `leaderboard.md`
 
+### Intent-First Operations
+
+- Treat Gamma intent as the named proof target for the active lane: token game, benchmark, distillation, or compression.
+- For compression work, anchor every run to the stated score target and dataset. Legal/memory gates are scaffolding unless they plausibly move the target metric.
+- Do not kill an idea from global average lift when the user is asking for conditional attribution. Separate current implementation weakness from the concept being tested.
+- For distillation, answer from the run contract, artifacts, checkpoints, scoreboards, and GPU/process state; do not infer active progress from a launched command alone.
+- Before reporting live jobs, inspect process owners, logs, output files, and GPU activity.
+- If a reporting artifact is the source of truth, encode gaps and next commands inside that artifact instead of hiding them in chat prose.
+- Keep compression, distillation, token-game, and benchmark contexts separate unless the user explicitly bridges them.
+
 ### Key Paths
 - `src/game/` - Game logic and UI
 - `src/engines/` - Engine backends (llamacpp, pytorch, vllm, ollama)
