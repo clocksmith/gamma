@@ -32,7 +32,9 @@ A 100M RSS pass would still not prove a full 1G target result.
 | 21,632 | `cmix21_text_mmap_paq5_ppmd21632k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,805 | rss pass (41,916 KiB margin) | 1,638,229 | 2,202,503 | true | rss pass (3,516 KiB margin; tree 36,740 KiB over) | rss fail (68 KiB over; tree 116,824 KiB over) | `results/cmix21_text_mmap_paq5_ppmd21632k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-01T123224.json` |
 | 21,504 | `cmix21_text_mmap_paq5_ppmd21504k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | n/a | n/a | missing | 1,638,165 | 2,202,438 | true | rss pass (3,644 KiB margin; tree 36,876 KiB over) | rss fail (72 KiB over; tree 116,828 KiB over) | `results/cmix21_text_mmap_paq5_ppmd21504k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-02T060615.json` |
 | 21,504 | `cmix21_text_mmap_paq5_ppmd21m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,805 | rss pass (41,916 KiB margin) | n/a | n/a | n/a | rss pass (3,516 KiB margin; tree 25,340 KiB over) | missing | n/a |
-| 21,376 | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,805 | rss pass (41,788 KiB margin) | 1,638,098 | 2,202,372 | true | rss pass (3,772 KiB margin; tree 36,136 KiB over) | missing | `results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-03T062324.json` |
+| 21,376 | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,805 | rss pass (41,788 KiB margin) | 1,638,098 | 2,202,372 | true | rss pass (3,772 KiB margin; tree 36,136 KiB over) | rss fail (116 KiB over; tree 116,672 KiB over) | `results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-03T062324.json` |
+| 21,248 | `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,805 | rss pass (41,916 KiB margin) | 1,638,222 | 2,202,496 | true | rss pass (868 KiB margin; tree 36,356 KiB over) | rss fail (64 KiB over; tree 116,940 KiB over) | `results/cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-06T060100.json` |
+| 21,120 | `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,521 | missing | n/a | n/a | n/a | missing | missing | n/a |
 
 ## Decimal 10GB Risk
 
@@ -63,7 +65,9 @@ decimal_10gb_guard_kib = 9,765,625
 | 21,632 | `cmix21_text_mmap_paq5_ppmd21632k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | over (678,219 KiB over; tree 699,319 KiB over) | over (716,619 KiB over; tree 756,875 KiB over) | over (720,203 KiB over; tree 836,959 KiB over) |
 | 21,504 | `cmix21_text_mmap_paq5_ppmd21504k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | over (716,491 KiB over; tree 757,011 KiB over) | over (720,207 KiB over; tree 836,963 KiB over) |
 | 21,504 | `cmix21_text_mmap_paq5_ppmd21m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | over (678,219 KiB over; tree 699,187 KiB over) | over (716,619 KiB over; tree 745,475 KiB over) | missing |
-| 21,376 | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | over (678,347 KiB over; tree 699,319 KiB over) | over (716,363 KiB over; tree 756,271 KiB over) | missing |
+| 21,376 | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | over (678,347 KiB over; tree 699,319 KiB over) | over (716,363 KiB over; tree 756,271 KiB over) | over (720,251 KiB over; tree 836,807 KiB over) |
+| 21,248 | `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | over (678,219 KiB over; tree 699,451 KiB over) | over (719,267 KiB over; tree 756,491 KiB over) | over (720,199 KiB over; tree 837,075 KiB over) |
+| 21,120 | `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
 
 ## PPMD-Only Decimal Feasibility
 
@@ -71,16 +75,14 @@ This section asks whether the measured PPMD cap ladder alone can close the
 decimal `10GB` memory gap. It uses `10M` single-process RSS guard receipts
 because that is the current active boundary.
 
-- Active/reference cap: `ppmd21376k` at `21,376` KiB.
-- Active/reference `10M` max single RSS: `10,481,988` KiB.
-- Active/reference decimal `10GB` margin: `-716,363` KiB.
-- Observed cap span: `22,400` -> `21,376` KiB.
-- Observed RSS drop across that span: `+1,024` KiB.
-- Observed RSS drop per KiB cap cut: `1` KiB/KiB.
-- PPMD-only cap cut needed for decimal `10GB`: `716,363` KiB.
-- Projected PPMD cap after that cut: `-694,987` KiB.
-- PPMD-only feasibility verdict: `not feasible`; decimal admissibility needs another memory surface or an official accounting decision that accepts binary `10GiB`.
-- Certificate active scope at render time: `100,000,000` bytes.
+- Active/reference cap: `ppmd22400k` at `22,400` KiB.
+- Active/reference `10M` max single RSS: `10,483,012` KiB.
+- Active/reference decimal `10GB` margin: `-717,387` KiB.
+- Observed cap span: `22,400` -> `21,248` KiB.
+- Observed RSS drop across that span: `-1,880` KiB.
+- Observed RSS drop per KiB cap cut: `-1.631944` KiB/KiB.
+- PPMD-only feasibility verdict: `not feasible`; observed RSS did not decrease across the measured cap span, so decimal admissibility needs another memory surface or an official accounting decision that accepts binary `10GiB`.
+- Certificate active scope at render time: `250,000` bytes.
 
 ## Adjacent Archive Delta
 
@@ -94,7 +96,8 @@ because that is the current active boundary.
 | 21,888 | 21,760 | 22 | 128 | 0.171875 | lower cap still failed 100M RSS |
 | 21,760 | 21,632 | 25 | 128 | 0.1953125 | lower cap still failed 100M RSS |
 | 21,632 | 21,504 | -64 | 128 | -0.5 | lower cap still failed 100M RSS |
-| 21,504 | 21,376 | -67 | 128 | -0.5234375 | await 100M receipt |
+| 21,504 | 21,376 | -67 | 128 | -0.5234375 | lower cap still failed 100M RSS |
+| 21,376 | 21,248 | 124 | 128 | 0.96875 | lower cap still failed 100M RSS |
 
 ## Current Read
 
@@ -106,7 +109,9 @@ because that is the current active boundary.
 - `ppmd21760k` has exact `10M` replay evidence but failed recorded `100M` RSS by `72` KiB. Decimal `10GB` overage would be `720,207` KiB.
 - `ppmd21632k` has exact `10M` replay evidence but failed recorded `100M` RSS by `68` KiB. Decimal `10GB` overage would be `720,203` KiB.
 - `ppmd21504k` has exact `10M` replay evidence but failed recorded `100M` RSS by `72` KiB. Decimal `10GB` overage would be `720,207` KiB.
+- `ppmd21376k` has exact `10M` replay evidence but failed recorded `100M` RSS by `116` KiB. Decimal `10GB` overage would be `720,251` KiB.
+- `ppmd21248k` has exact `10M` replay evidence but failed recorded `100M` RSS by `64` KiB. Decimal `10GB` overage would be `720,199` KiB.
 - The next lower cap `40,960` KiB already has historical package rows (`ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
 - The next lower cap `21,504` KiB already has historical package rows (`ppmd21m`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
-- `ppmd21376k` is the active promotion lane: exact `10M` archive `1,638,098`, score `2,202,372`; active gate is `100,000,000` bytes with RSS status missing.
-- The next mutation should wait until this active promotion gate records a terminal receipt.
+- `ppmd21120k` is the active restarted ladder: latest exact prefix `1,024` scored `564,521`; active gate RSS status is missing. Certificate active gate is `250,000` bytes.
+- The next mutation should wait until the active restarted ladder records its current gate.

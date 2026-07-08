@@ -1,0 +1,59 @@
+{
+  "id": "srstc_raw_order2_aggregate_richkeys_v1",
+  "description": "Standalone SRSTC raw byte-bit codec using order-2 base context, deterministic wiki/sketch retrieval keys, rich schema/slot/word retrieval keys, aggregate retrieval probability, and fixed-point binary arithmetic coding.",
+  "added": "2026-07-05",
+  "deps": [],
+  "family": "srstc",
+  "status": "candidate",
+  "source_receipt": "projects/enwiki9/results/streaming_retrieval_shadow/raw1m_richkeys_cap300k_v1.json",
+  "shadow_basis": {
+    "method": "streaming_retrieval_raw_shadow_v1",
+    "trace_version": "raw_enwik9_bits_msb_v1",
+    "typed_key_profile": "rich",
+    "data_bytes_loaded": 1048576,
+    "encoded_rows": 8388608,
+    "heldout_shadow_saved_bytes": 16706,
+    "net_saved_bytes": 4418,
+    "largest_block_regression_bytes": 0.0,
+    "block_regression_count": 0,
+    "verdict": "positive_shadow_only"
+  },
+  "measured": {
+    "1024_driver_determinism": {
+      "data_size": 1024,
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 389,
+      "program_size": 21996,
+      "hutter_score": 22385,
+      "bits_per_byte": 3.039062,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
+      "compressed_sha256": "37cd2c324a464d489a863fcf0c48fcf5cddbe281f7ce7e662613401c5114f5fb",
+      "receipt": "projects/enwiki9/results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183630.json",
+      "verdict": "archive_positive_score_negative"
+    },
+    "4096_driver_determinism": {
+      "data_size": 4096,
+      "data_sha256": "652ed0541c8b9e2d8194c2a1cd20a3ea516efaa542082535c0ef57267e1ca49e",
+      "compressed_size": 1300,
+      "program_size": 21996,
+      "hutter_score": 23296,
+      "bits_per_byte": 2.539062,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
+      "compressed_sha256": "4920c026fa1d03b61dc61c173adf12ea028fa2c3a6c2a549b9d573de2ac43dc8",
+      "receipt": "projects/enwiki9/results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183706.json",
+      "verdict": "archive_positive_score_negative"
+    }
+  },
+  "contract": {
+    "compress": "compress(data: bytes) -> bytes",
+    "decompress": "decompress(blob: bytes) -> bytes",
+    "causality": "Predictor state is read before each bit and updated only after the bit is encoded or decoded."
+  },
+  "notes": [
+    "This is a real decoder-replayable codec form of the SRSTC rich-key shadow model, not a target score claim.",
+    "The package exists to prove the rich retrieval keys can be replayed by a decoder and to support prefix scaling tests.",
+    "Promotion requires exact driver evidence and comparison against same-scope baselines."
+  ]
+}

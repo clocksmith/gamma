@@ -23,6 +23,10 @@ RESULTS_DIR = ROOT / "results" / "streaming_retrieval_shadow"
 OUT_JSON = ROOT / "docs" / "streaming_retrieval_receipt_audit.json"
 OUT_MD = ROOT / "docs" / "streaming_retrieval_receipt_audit.md"
 
+CURRENT_WINNER = 110_793_128
+TARGET_SCORE = 109_500_000
+BEST_FORECAST = 110_181_114
+
 
 @dataclass(frozen=True)
 class AuditConfig:
@@ -265,6 +269,125 @@ def load_rows(results_dir: pathlib.Path, config: AuditConfig) -> list[dict[str, 
     return rows
 
 
+def objective_row(row: dict[str, Any], *, forecast_gap: int, public_gap: int) -> dict[str, Any]:
+    net = row.get("net_saved_bytes")
+    forecast_gap_remaining = None
+    public_gap_remaining = None
+    closes_forecast_gap = False
+    closes_public_gap = False
+    if isinstance(net, (int, float)):
+        forecast_gap_remaining = forecast_gap - net
+        public_gap_remaining = public_gap - net
+        closes_forecast_gap = forecast_gap_remaining <= 0
+        closes_public_gap = public_gap_remaining <= 0
+    return {
+        "path": row.get("path"),
+        "net_saved_bytes": net,
+        "heldout_shadow_saved_bytes": row.get("heldout_shadow_saved_bytes"),
+        "max_online_state_bytes": row.get("max_online_state_bytes"),
+        "largest_block_regression_bytes": row.get("largest_block_regression_bytes"),
+        "promotion_ready_shadow": row.get("promotion_ready_shadow"),
+        "promotion_blockers": row.get("promotion_blockers") or [],
+        "forecast_gap_remaining_bytes": forecast_gap_remaining,
+        "public_gap_remaining_bytes": public_gap_remaining,
+        "closes_forecast_gap": closes_forecast_gap,
+        "closes_public_gap": closes_public_gap,
+    }
+
+
+def objective_selection(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    forecast_gap = BEST_FORECAST - TARGET_SCORE
+    public_gap = CURRENT_WINNER - TARGET_SCORE
+    positive_net = [
+        row for row in rows
+        if isinstance(row.get("net_saved_bytes"), (int, float))
+        and row["net_saved_bytes"] > 0
+    ]
+    promotion_ready = [row for row in positive_net if row.get("promotion_ready_shadow") is True]
+    target_closing = [
+        row for row in positive_net
+        if row["net_saved_bytes"] >= forecast_gap
+    ]
+    regression_blocked = [
+        row for row in positive_net
+        if row.get("promotion_blockers") == ["block_regression_within_cap"]
+    ]
+
+    best_ready = max(
+        promotion_ready,
+        key=lambda row: row["net_saved_bytes"],
+        default=None,
+    )
+    best_target_closing = max(
+        target_closing,
+        key=lambda row: row["net_saved_bytes"],
+        default=None,
+    )
+    best_regression_blocked = max(
+        regression_blocked,
+        key=lambda row: row["net_saved_bytes"],
+        default=None,
+    )
+    top_objective_rows = sorted(
+        positive_net,
+        key=lambda row: (
+            not (row["net_saved_bytes"] >= forecast_gap),
+            row.get("promotion_ready_shadow") is not True,
+            -(row["net_saved_bytes"]),
+            row["path"],
+        ),
+    )[:12]
+
+    if best_ready is not None and best_ready["net_saved_bytes"] >= forecast_gap:
+        recommended_action = "package_promotion_ready_shadow_piece"
+        action_reason = "a promotion-ready shadow receipt closes the forecast-to-target byte gap"
+    elif (
+        best_regression_blocked is not None
+        and best_regression_blocked["net_saved_bytes"] >= forecast_gap
+    ):
+        recommended_action = "remove_or_route_block_regressions_before_packaging"
+        action_reason = (
+            "the best target-closing receipt is blocked only by small block regressions"
+        )
+    elif best_ready is not None:
+        recommended_action = "use_best_ready_piece_as_fallback_and_expand_generator"
+        action_reason = (
+            "promotion-ready receipts are positive but do not close the forecast-to-target gap"
+        )
+    else:
+        recommended_action = "generate_more_shadow_receipts_before_packaging"
+        action_reason = "no positive promotion-ready receipt is available"
+
+    return {
+        "current_winner_score": CURRENT_WINNER,
+        "best_forecast_score": BEST_FORECAST,
+        "target_score": TARGET_SCORE,
+        "public_gap_bytes": public_gap,
+        "forecast_gap_bytes": forecast_gap,
+        "best_target_closing_receipt": (
+            objective_row(best_target_closing, forecast_gap=forecast_gap, public_gap=public_gap)
+            if best_target_closing is not None
+            else None
+        ),
+        "best_regression_blocked_receipt": (
+            objective_row(best_regression_blocked, forecast_gap=forecast_gap, public_gap=public_gap)
+            if best_regression_blocked is not None
+            else None
+        ),
+        "best_promotion_ready_receipt": (
+            objective_row(best_ready, forecast_gap=forecast_gap, public_gap=public_gap)
+            if best_ready is not None
+            else None
+        ),
+        "recommended_action": recommended_action,
+        "action_reason": action_reason,
+        "top_objective_rows": [
+            objective_row(row, forecast_gap=forecast_gap, public_gap=public_gap)
+            for row in top_objective_rows
+        ],
+    }
+
+
 def summarize(rows: list[dict[str, Any]], config: AuditConfig) -> dict[str, Any]:
     positive_net = [row for row in rows if (row.get("net_saved_bytes") or 0) > 0]
     promotion_ready = [row for row in rows if row.get("promotion_ready_shadow") is True]
@@ -332,6 +455,7 @@ def summarize(rows: list[dict[str, Any]], config: AuditConfig) -> dict[str, Any]
         "promotion_blocker_counts": dict(sorted(blocker_counts.items())),
         "complete_block_rerun_queue": complete_block_rerun_queue,
         "substrate_summary": substrate_summary,
+        "objective_selection": objective_selection(rows),
         "top_rows": rows[:20],
     }
 
@@ -379,6 +503,85 @@ def render_md(summary: dict[str, Any]) -> str:
                 f"- Best receipt blockers: `{', '.join(best.get('promotion_blockers') or ['none'])}`",
             ]
         )
+    selection = (
+        summary.get("objective_selection")
+        if isinstance(summary.get("objective_selection"), dict)
+        else {}
+    )
+    if selection:
+        best_target = (
+            selection.get("best_target_closing_receipt")
+            if isinstance(selection.get("best_target_closing_receipt"), dict)
+            else None
+        )
+        best_ready = (
+            selection.get("best_promotion_ready_receipt")
+            if isinstance(selection.get("best_promotion_ready_receipt"), dict)
+            else None
+        )
+        lines.extend(
+            [
+                "",
+                "## Objective Selection",
+                "",
+                "This is the SRSTC generator-verifier-selector loop in receipt form:",
+                "candidate receipts are generated separately, verified by held-out",
+                "same-coder bytes, then selected by net bytes after counted costs",
+                "and promotion blockers.",
+                "",
+                f"- Current winner score: `{fmt_number(selection.get('current_winner_score'))}`",
+                f"- Best forecast score: `{fmt_number(selection.get('best_forecast_score'))}`",
+                f"- Target score: `{fmt_number(selection.get('target_score'))}`",
+                f"- Public-record gap to target: `{fmt_number(selection.get('public_gap_bytes'))}` bytes",
+                f"- Forecast gap to target: `{fmt_number(selection.get('forecast_gap_bytes'))}` bytes",
+                f"- Recommended action: `{selection.get('recommended_action', 'unknown')}`",
+                f"- Reason: `{selection.get('action_reason', 'unknown')}`",
+            ]
+        )
+        if best_target:
+            lines.extend(
+                [
+                    f"- Best target-closing receipt: `{best_target.get('path')}`",
+                    f"- Target-closing net saved bytes: `{fmt_number(best_target.get('net_saved_bytes'))}`",
+                    f"- Forecast gap remaining after best target-closing receipt: `{fmt_number(best_target.get('forecast_gap_remaining_bytes'))}`",
+                    f"- Target-closing blockers: `{', '.join(best_target.get('promotion_blockers') or ['none'])}`",
+                ]
+            )
+        if best_ready:
+            lines.extend(
+                [
+                    f"- Best promotion-ready fallback: `{best_ready.get('path')}`",
+                    f"- Ready fallback net saved bytes: `{fmt_number(best_ready.get('net_saved_bytes'))}`",
+                    f"- Forecast gap remaining after ready fallback: `{fmt_number(best_ready.get('forecast_gap_remaining_bytes'))}`",
+                ]
+            )
+        rows = selection.get("top_objective_rows")
+        if isinstance(rows, list) and rows:
+            lines.extend(
+                [
+                    "",
+                    "| Receipt | Net Saved | Forecast Gap Remaining | Ready | Largest Regression | Blockers |",
+                    "|---|---:|---:|---|---:|---|",
+                ]
+            )
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                blockers_text = ", ".join(row.get("promotion_blockers") or ["none"])
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        [
+                            f"`{row.get('path')}`",
+                            fmt_number(row.get("net_saved_bytes")),
+                            fmt_number(row.get("forecast_gap_remaining_bytes")),
+                            f"`{str(row.get('promotion_ready_shadow')).lower()}`",
+                            fmt_number(row.get("largest_block_regression_bytes")),
+                            f"`{blockers_text}`",
+                        ]
+                    )
+                    + " |"
+                )
     blockers = summary.get("promotion_blocker_counts")
     if isinstance(blockers, dict) and blockers:
         lines.extend(["", "## Blocker Counts", "", "| Blocker | Receipts |", "|---|---:|"])

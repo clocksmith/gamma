@@ -144,6 +144,7 @@ def record_command(
     result_path: pathlib.Path,
     guard_path: pathlib.Path,
     verdict: str,
+    note: str,
 ) -> list[str]:
     label_by_scope = {
         10_000_000: "10m_determinism_replay",
@@ -165,6 +166,8 @@ def record_command(
         "--verdict",
         verdict,
         "--note",
+        note,
+        "--note",
         f"Guard artifact: {rel(guard_path) or guard_path.as_posix()}",
     ]
 
@@ -174,6 +177,7 @@ def record_rss_failure_command(
     scope: int,
     guard_path: pathlib.Path,
     verdict: str,
+    note: str,
 ) -> list[str]:
     return [
         "python3",
@@ -190,6 +194,8 @@ def record_rss_failure_command(
         "active",
         "--verdict",
         verdict,
+        "--note",
+        note,
         "--note",
         f"Guard artifact: {rel(guard_path) or guard_path.as_posix()}",
     ]
@@ -393,27 +399,38 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
                 payload["single_rss_over_guard_kib"] = max_single - limit
             payload["verdict"] = "rss_fail"
             payload["recorded_rss_failure"] = already_recorded
+            lower = lower_ppmd_suggestion(candidate, step_kib)
+            payload["lower_memory_suggestion"] = lower
             if already_recorded:
-                payload["next_action"] = "bracket_lower_from_recorded_rss_failure"
-                payload["apply_terminal_command"] = apply_terminal_command(
-                    candidate,
-                    scope,
-                    package_lower=True,
-                )
+                lower_id = lower.get("suggested_candidate") if isinstance(lower, dict) else None
+                lower_meta = PROGRAMS / lower_id / "meta.json" if isinstance(lower_id, str) else None
+                if lower_meta is not None and lower_meta.exists():
+                    payload["next_action"] = "launch_lower_prefix_gate"
+                    payload["lower_candidate_packaged"] = True
+                    payload["lower_prefix_scope_bytes"] = 1_024
+                    payload["lower_prefix_gate_command"] = command_for_gate(lower_id, 1_024)
+                else:
+                    payload["next_action"] = "bracket_lower_from_recorded_rss_failure"
+                    payload["lower_candidate_packaged"] = False
+                    payload["apply_terminal_command"] = apply_terminal_command(
+                        candidate,
+                        scope,
+                        package_lower=True,
+                    )
             else:
                 payload["next_action"] = "record_rss_failure_and_bracket_lower"
                 payload["record_rss_failure_command"] = record_rss_failure_command(
                     candidate,
                     scope,
                     guard_path,
-                        f"{scope} gate failed RSS guard before producing a scored archive or roundtrip.",
+                    "rss_fail",
+                    f"{scope} gate failed RSS guard before producing a scored archive or roundtrip.",
                 )
                 payload["apply_terminal_command"] = apply_terminal_command(
                     candidate,
                     scope,
                     package_lower=True,
                 )
-            payload["lower_memory_suggestion"] = lower_ppmd_suggestion(candidate, step_kib)
             return payload
         if guard.get("status") == "running":
             payload["verdict"] = "running"
@@ -490,6 +507,7 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
             scope,
             result_path,
             guard_path,
+            "pass",
             f"{scope} gate passed with roundtrip, determinism, and RSS guard.",
         )
         nxt = next_scope(scope)

@@ -149,6 +149,16 @@ class BoundedByteTable:
         counter[byte_value & 0xFF] += 1
 
 
+def _distance_since_any(data: bytes, markers: bytes) -> int:
+    if not data:
+        return 255
+    marker_set = set(markers)
+    for distance, byte in enumerate(reversed(data)):
+        if byte in marker_set:
+            return min(distance, 255)
+    return 255
+
+
 @dataclass
 class RetrievalState:
     data: bytes
@@ -189,8 +199,29 @@ class RetrievalState:
         word_sig = wiki.get("word_sig", (0, 0))
         if not isinstance(word_sig, tuple):
             word_sig = (0, 0)
+        line_pos_bucket = bucket(_distance_since_any(tail, b"\n"), (0, 1, 3, 7, 15, 31, 63, 127))
+        markup_pos_bucket = bucket(
+            _distance_since_any(tail, b"\n|={}<>[]"),
+            (0, 1, 2, 4, 8, 16, 32, 64),
+        )
+        token_pos_bucket = bucket(
+            _distance_since_any(tail, b" \t\r\n|={}<>[]/\"'&;:,."),
+            (0, 1, 2, 4, 8, 16, 32, 64),
+        )
         sim = simhash16(sketch_window)
         suffix_hash = fnv64_bytes(suffix) & 0xFFFF
+        continuation_hash = fnv64_ints(
+            (
+                field,
+                mode,
+                slot,
+                line_pos_bucket,
+                markup_pos_bucket,
+                token_pos_bucket,
+                int(word_sig[0]),
+                int(word_sig[1]),
+            )
+        ) & 0xFFFF
         features = {
             "field": field,
             "mode": mode,
@@ -198,11 +229,18 @@ class RetrievalState:
             "column": column,
             "word_len_bucket": int(word_sig[0]),
             "word_class": int(word_sig[1]),
+            "line_pos_bucket": line_pos_bucket,
+            "markup_pos_bucket": markup_pos_bucket,
+            "token_pos_bucket": token_pos_bucket,
+            "continuation_hash": continuation_hash,
             "suffix_hash": suffix_hash,
             "simhash16": sim,
             "sim_band0": sim & 0xFF,
             "sim_band1": (sim >> 8) & 0xFF,
-            "schema_hash": fnv64_ints((field, mode, slot, column, int(word_sig[0]), int(word_sig[1]))) & 0xFFFF,
+            "schema_hash": fnv64_ints(
+                (field, mode, slot, column, int(word_sig[0]), int(word_sig[1]))
+            )
+            & 0xFFFF,
         }
         self.cached_pos = self.pos
         self.cached_features = features
@@ -364,6 +402,27 @@ def features_from_row(row: dict[str, Any], fallback: dict[str, Any]) -> dict[str
             number_class,
         )
     ) & 0xFFFF
+    line_pos_bucket = as_int(
+        row, "line_pos_bucket", default=int(fallback.get("line_pos_bucket", 0))
+    )
+    markup_pos_bucket = as_int(
+        row, "markup_pos_bucket", default=int(fallback.get("markup_pos_bucket", 0))
+    )
+    token_pos_bucket = as_int(
+        row, "token_pos_bucket", default=int(fallback.get("token_pos_bucket", 0))
+    )
+    continuation_hash = fnv64_ints(
+        (
+            field,
+            mode,
+            slot,
+            line_pos_bucket,
+            markup_pos_bucket,
+            token_pos_bucket,
+            bucket(word_len, (0, 1, 3, 7, 15)),
+            char_class,
+        )
+    ) & 0xFFFF
     return {
         "field": field,
         "mode": mode,
@@ -371,6 +430,10 @@ def features_from_row(row: dict[str, Any], fallback: dict[str, Any]) -> dict[str
         "column": column,
         "word_len_bucket": bucket(word_len, (0, 1, 3, 7, 15)),
         "word_class": char_class,
+        "line_pos_bucket": line_pos_bucket,
+        "markup_pos_bucket": markup_pos_bucket,
+        "token_pos_bucket": token_pos_bucket,
+        "continuation_hash": continuation_hash,
         "suffix_hash": suffix_hash,
         "simhash16": sim,
         "sim_band0": sim & 0xFF,
@@ -387,6 +450,7 @@ def make_keys(
     partial_len: int,
     partial_prefix: int,
     partial_byte_family: str,
+    typed_key_profile: str = "base",
 ) -> list[tuple[Any, ...]]:
     pbin = prob_bucket(p1, p_buckets)
     keys: list[tuple[Any, ...]] = [
@@ -403,6 +467,93 @@ def make_keys(
             features["sim_band0"],
         ),
     ]
+    if typed_key_profile in {"rich", "richpos"}:
+        keys.extend(
+            [
+                (
+                    "schema_slot",
+                    bit_pos,
+                    pbin,
+                    features["field"],
+                    features["mode"],
+                    features["slot"],
+                ),
+                (
+                    "schema_column",
+                    bit_pos,
+                    pbin,
+                    features["field"],
+                    features["mode"],
+                    features["column"],
+                ),
+                (
+                    "schema_word",
+                    bit_pos,
+                    pbin,
+                    features["schema_hash"],
+                    features["word_len_bucket"],
+                    features["word_class"],
+                ),
+                (
+                    "sim_schema",
+                    bit_pos,
+                    pbin,
+                    features["sim_band0"],
+                    features["schema_hash"],
+                ),
+                (
+                    "suffix_schema",
+                    bit_pos,
+                    pbin,
+                    features["suffix_hash"],
+                    features["schema_hash"],
+                ),
+            ]
+        )
+    if typed_key_profile == "richpos":
+        keys.extend(
+            [
+                (
+                    "schema_pos",
+                    bit_pos,
+                    pbin,
+                    features["field"],
+                    features["mode"],
+                    features["slot"],
+                    features["markup_pos_bucket"],
+                ),
+                (
+                    "line_pos",
+                    bit_pos,
+                    pbin,
+                    features["field"],
+                    features["mode"],
+                    features["line_pos_bucket"],
+                ),
+                (
+                    "token_pos",
+                    bit_pos,
+                    pbin,
+                    features["schema_hash"],
+                    features["token_pos_bucket"],
+                    features["word_class"],
+                ),
+                (
+                    "suffix_pos",
+                    bit_pos,
+                    pbin,
+                    features["suffix_hash"],
+                    features["continuation_hash"],
+                ),
+                (
+                    "sim_pos",
+                    bit_pos,
+                    pbin,
+                    features["sim_band0"],
+                    features["continuation_hash"],
+                ),
+            ]
+        )
     if partial_byte_family != "none" and partial_len > 0:
         partial_bucket = fnv64_ints((partial_len, partial_prefix, bit_pos)) & 0xFFFF
         if partial_byte_family in {"direct", "all"}:
@@ -700,6 +851,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             partial_len,
             partial_prefix,
             args.partial_byte_family,
+            args.typed_key_profile,
         )
         byte_keys = make_byte_keys(features)
         byte_prior, byte_hits, byte_support = byte_prior_p1(
@@ -842,6 +994,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     data_hash = hashlib.sha256(data).hexdigest()
     bands = ["suffix", "sim0", "sim1", "schema", "hybrid"]
+    if args.typed_key_profile in {"rich", "richpos"}:
+        bands.extend(
+            [
+                "schema_slot",
+                "schema_column",
+                "schema_word",
+                "sim_schema",
+                "suffix_schema",
+            ]
+        )
+    if args.typed_key_profile == "richpos":
+        bands.extend(["schema_pos", "line_pos", "token_pos", "suffix_pos", "sim_pos"])
     if args.partial_byte_family in {"direct", "all"}:
         bands.extend(["partial", "partial_pbin", "partial_mode", "partial_field"])
     if args.partial_byte_family in {"sketch", "all"}:
@@ -856,6 +1020,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "feature_source": args.feature_source,
         "alignment_max_positions": args.alignment_max_positions,
         "partial_byte_family": args.partial_byte_family,
+        "typed_key_profile": args.typed_key_profile,
         "partial_byte_state": args.partial_byte_family != "none",
         "byte_table_cap_entries": args.byte_table_cap_entries,
         "byte_prior_blend_ppm": args.byte_prior_blend_ppm,
@@ -869,6 +1034,20 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     sketch_schema_hash = hashlib.sha256(
         json.dumps(sketch_schema, sort_keys=True).encode("utf-8")
     ).hexdigest()
+    alignment_report = alignment.report(data)
+    alignment_valid_for_feature_source = not (
+        args.feature_source == "data"
+        and alignment_report.get("complete_bytes_checked")
+        and alignment_report.get("warning")
+    )
+    proof_blocker = None
+    if not alignment_valid_for_feature_source:
+        proof_blocker = (
+            "feature_source=data requires trace bits to reconstruct the supplied "
+            "data bytes; use feature_source=row or a byte-aligned trace"
+        )
+        if verdict != "incomplete":
+            verdict = "invalid_trace_alignment"
 
     return {
         "receipt_type": "streaming_retrieval_shadow",
@@ -890,7 +1069,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "ignored_rows": ignored_rows,
         "train_bytes": args.train_bytes,
         "feature_source": args.feature_source,
-        "trace_data_alignment": alignment.report(data),
+        "trace_data_alignment": alignment_report,
+        "trace_alignment_valid_for_feature_source": alignment_valid_for_feature_source,
+        "proof_blocker": proof_blocker,
         "sketch_schema": sketch_schema,
         "sketch_schema_hash": sketch_schema_hash,
         "retrieval_table_cap_entries": args.table_cap_entries,
@@ -997,6 +1178,12 @@ def main() -> int:
         choices=("none", "sketch", "direct", "all"),
         default="sketch",
         help="causal current-byte prefix key family to add to the retrieval table",
+    )
+    parser.add_argument(
+        "--typed-key-profile",
+        choices=("base", "rich", "richpos"),
+        default="base",
+        help="typed retrieval key family; richpos adds causal continuation-position keys",
     )
     parser.add_argument(
         "--expert-mode",

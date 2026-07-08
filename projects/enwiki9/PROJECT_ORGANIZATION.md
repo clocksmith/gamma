@@ -67,13 +67,13 @@ cmix21 memory-shaped candidate
 Current working family:
 
 ```text
-ppmd22400k -> ppmd22272k -> ppmd21888k -> ppmd21760k -> ppmd21632k -> ppmd21504k -> ppmd21376k
+ppmd22400k -> ppmd22272k -> ppmd21888k -> ppmd21760k -> ppmd21632k -> ppmd21504k -> ppmd21376k -> ppmd21248k -> ppmd21120k
 ```
 
 Active candidate ID:
 
 ```text
-cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
 ```
 
 Interpretation:
@@ -89,8 +89,10 @@ Interpretation:
   guard by `68` KiB before a scored archive or roundtrip.
 - `ppmd21504k` passed exact `10M` replay but failed unchanged `100M` RSS by
   `72` KiB before a scored archive or roundtrip.
-- `ppmd21376k` is the active restarted ladder; its exact `1,024`,
-  `250,000`, and `1,000,000` byte replays passed and the next active gate is
+- `ppmd21376k` passed exact prefix replays but failed unchanged `100M` RSS by
+  `116` KiB before a scored archive or roundtrip.
+- `ppmd21248k` is the active restarted ladder; its exact `1,024`,
+  `250,000`, and `1,000,000` byte replays passed and the active gate is
   unchanged `10,000,000` bytes.
 
 The promotion rule is strict:

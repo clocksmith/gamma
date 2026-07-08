@@ -546,8 +546,12 @@ def check_status_handoff(findings: list[Finding]) -> None:
         handoff.get("terminal_verdict_present") is True
         and handoff.get("gate_verdict") in DECIDER_APPLY_COMMAND_VERDICTS
         and "apply_terminal_command" not in handoff
+        and not (
+            handoff.get("gate_next_action") == "launch_lower_prefix_gate"
+            and "next_gate_command" in handoff
+        )
     ):
-        findings.append(Finding(status_path, "terminal pass/RSS handoff missing apply_terminal_command"))
+        findings.append(Finding(status_path, "terminal pass/RSS handoff missing command"))
     if handoff.get("gate_verdict") not in DECIDER_APPLY_COMMAND_VERDICTS and "apply_terminal_command" in handoff:
         findings.append(Finding(status_path, "non-apply terminal handoff unexpectedly has apply_terminal_command"))
     if "## Handoff" not in status_md:

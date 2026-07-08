@@ -460,7 +460,12 @@ def ppmd_decimal_feasibility_section(
         ]
     )
     if required_cap_cut is None or projected_cap is None:
-        lines.append("- PPMD-only feasibility verdict: `unproven`; observed RSS did not decrease across the measured cap span.")
+        lines.append(
+            "- PPMD-only feasibility verdict: `not feasible`; observed RSS did not "
+            "decrease across the measured cap span, so decimal admissibility needs "
+            "another memory surface or an official accounting decision that accepts "
+            "binary `10GiB`."
+        )
     elif projected_cap <= 0:
         lines.extend(
             [

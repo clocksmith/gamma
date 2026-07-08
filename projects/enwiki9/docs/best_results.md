@@ -10,8 +10,8 @@ No prefix row proves 10.95%.
 No forecast or metadata-inherited row is included.
 ```
 
-- Result JSON files scanned: `670`
-- Roundtrip-passing rows: `648`
+- Result JSON files scanned: `677`
+- Roundtrip-passing rows: `655`
 
 ## Scope `1,000,000,000` Bytes
 

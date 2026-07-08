@@ -54,7 +54,7 @@ BEST_FORECAST = {
 }
 
 ACTIVE_CANDIDATE_ID = (
-    "cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_"
+    "cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_"
     "ppmdguard2_rcm32_bufthirtysecond_minmaps_v1"
 )
 RUNNING_CANDIDATE_GLOB = "cmix21_text_mmap_paq5_ppmd*fxcmrcm20*/*rss_guard.json"

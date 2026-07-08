@@ -19,6 +19,16 @@ novel algorithm strategy is SRSTC / streaming self-referential semantic
 retrieval. The older structural lanes stay in the plan as backup substrates,
 baselines, or SRSTC components rather than being discarded.
 
+Current active cmix21 candidate:
+
+```text
+cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+```
+
+This candidate is the lower PPMD bracket after `ppmd21248k` failed the
+`100M` RSS guard. Its exact `1K` replay passed with roundtrip, determinism, and
+RSS guard evidence; the next proof gate is the unchanged `250K` replay.
+
 ## Top Status
 
 This table is the current claim boundary. It separates exact prefix proof,
@@ -32,13 +42,14 @@ metadata-inherited evidence, forecast evidence, and the active gate.
 | `ppmd21760k` bracket result | Exact `10M` replay passed at archive `1,638,204`, then unchanged `100M` promotion failed RSS guard by `72` KiB before a scored archive or roundtrip | Guard receipt: `ppmd21760k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
 | `ppmd21632k` bracket result | Exact `10M` replay passed at archive `1,638,229`, local score `2,202,503`, then unchanged `100M` promotion failed RSS guard by `68` KiB before a scored archive or roundtrip | Guard receipt: `ppmd21632k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
 | `ppmd21504k` bracket result | Exact `10M` replay passed at archive `1,638,165`, local score `2,202,438`, then unchanged `100M` promotion failed RSS guard by `72` KiB before a scored archive or roundtrip | Guard receipt: `ppmd21504k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
-| Active candidate | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: packaged from `ppmd21504k` with `-DCMIX_PPMD_MEMORY_KB=21376` | Exact `1K`, `250K`, and `1M` replays passed with roundtrip, determinism, and RSS receipts; it is the next PPMD-only cut after the `ppmd21504k` `100M` RSS failure. |
-| Active gate | `ppmd21376k` unchanged `10M` RSS-guarded determinism replay | Launch the active gate unchanged; if it passes, promote unchanged to `100M`. |
+| `ppmd21376k` bracket result | Exact `10M` replay passed, then unchanged `100M` promotion failed RSS guard by `116` KiB before a scored archive or roundtrip | Guard receipt: `ppmd21376k_100000000_determinism_rss_guard.json`; this is now the upper bracket for the active PPMD-only cut. |
+| Active candidate | `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: packaged from `ppmd21376k` with `-DCMIX_PPMD_MEMORY_KB=21248` | Exact `1K`, `250K`, and `1M` replays passed with roundtrip, determinism, and RSS receipts; it is the next PPMD-only cut after the `ppmd21376k` `100M` RSS failure. |
+| Active gate | `ppmd21248k` unchanged `10M` RSS-guarded determinism replay | Wait for terminal driver and RSS receipts; if it passes, promote unchanged to `100M`. |
 | Best `100M` evidence | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: metadata-inherited score `15,040,789`, archive `14,857,781`, program `183,008` | Inherited from the verified geometry parent package by payload and ordered-stream identity. No exact `100M` result JSON is present under `results/` in this checkout. |
 | Best full `1G` proof | None | The certificate generator reports no verified full-corpus result JSON in this checkout. |
 | Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: projected `110,181,114` | Forecast quality: `fx2-calibrated-from-exact-100m`. It is not a constructive proof. |
-| Current blocker | `ppmd21376k` has no terminal `10M` result yet | Complete the active `10M` replay before any `100M` promotion. |
-| Next gate | If `ppmd21376k` passes `10M`, run the same package at `100M`; if it fails by RSS, package the next lower valve | No retune before a terminal gate result. |
+| Current blocker | `ppmd21248k` has no terminal `10M` result yet | Complete the active `10M` replay before any `100M` promotion. |
+| Next gate | If `ppmd21248k` passes `10M`, run the same package at `100M`; if it fails by RSS, package the next lower valve | No retune before a terminal gate result. |
 
 ## Classification
 
@@ -78,9 +89,10 @@ locally with `roundtrip_ok: true`.
 Current read:
 
 - Primary novel strategy: SRSTC / streaming self-referential semantic retrieval, tracked in `docs/streaming_retrieval_mixer.md`; complete-block shadow evidence is positive, but there is no compressor score claim until integration and replay exist.
+- Standalone SRSTC codec candidate now exists as `srstc_raw_order2_aggregate_sketch_v1`; bounded driver no-save checks at `1,024` and `4,096` bytes roundtrip and are deterministic, but the current pure-Python package is score-negative and should be treated as codec proof, not a target contender.
 - Best exact `10M` score row in current result JSONs: `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` at `S = 1,882,615`.
 - Best exact `10M` archive row in current result JSONs: `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` at archive `1,638,083`.
-- Active lower-memory cmix21 candidate: `ppmd21376k`; exact `1K`, `250K`, and `1M` replays passed, and the unchanged `10M` determinism replay is the active gate after `ppmd21504k` failed unchanged `100M` RSS.
+- Active lower-memory cmix21 candidate: `ppmd21248k`; exact `1K`, `250K`, and `1M` replays passed, and the unchanged `10M` determinism replay is the active gate after `ppmd21376k` failed unchanged `100M` RSS.
 - No verified full-corpus result JSON is present in this checkout. Do not present historical `1G` rows as current constructive proof until the artifact exists or is regenerated.
 - `purple_parrot_nncp_v1` and `blue_dolphin_tree_macro_v1` have source code and lane notes, but no matching result JSON in this checkout. Do not present them as measured benchmark wins until those artifacts exist.
 
@@ -104,10 +116,10 @@ research lanes, not measured full-corpus results.
 
 | Lane | Implementation locus | Novelty | Current proof state | Promotion rule |
 |---|---|---|---|---|
-| SRSTC / streaming self-referential retrieval | `docs/streaming_retrieval_mixer.md`, `tools/streaming_retrieval_mixer_plan.py`, `tools/streaming_retrieval_shadow.py`, `results/streaming_retrieval_shadow/` | High. Uses already-decoded spans, deterministic sketch similarity, self-referential tables, patch-copy priors, and causal regret routing as a primary probability model. | Best complete-block raw shadow receipt: `8,192K` data, `65,536,000` encoded rows, `112,212` held-out bytes saved, `99,924` net bytes after code estimate, and `0` block regressions. | Promote only after adjacent-scope confirmation and after the smallest deterministic paying component survives exact replay in a compressor substrate. |
+| SRSTC / streaming self-referential retrieval | `docs/streaming_retrieval_mixer.md`, `tools/streaming_retrieval_mixer_plan.py`, `tools/streaming_retrieval_shadow.py`, `results/streaming_retrieval_shadow/`, `programs/srstc_raw_order2_aggregate_sketch_v1/` | High. Uses already-decoded spans, deterministic sketch similarity, self-referential tables, patch-copy priors, and causal regret routing as a primary probability model. | Highest-net complete-block raw shadow receipt: `65,536K` data, `524,288,000` encoded rows, `897,062` held-out bytes saved, `884,774` net bytes after code estimate, `22,400,000` max online state bytes, and `3` block regressions with max regression `22.397` bytes. Highest zero-regression ready shadow receipt remains `16,384K` data with `225,663` held-out bytes saved and `213,375` net bytes. Standalone codec proof exists at small prefixes through `srstc_raw_order2_aggregate_sketch_v1`, with deterministic roundtrip but score-negative package overhead. | Treat `raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks` as the integration target, but do not promote the raw-only shadow model as a target compressor. First remove or route around the block regressions, then compile the smallest paying SRSTC correction into the strongest admissible substrate and require exact replay. |
 | `cmix21` memory-shaped text mode | `programs/cmix21_text_mmap_*`, `tools/cmix21_package_candidate.py`, `CMIX21_LOCK_SAFE_QUEUE.md` | Medium. The compressor class is established; the novelty is value-ranked memory shaping under the guard. | Best exact local archive evidence is still gate-scoped. No 1 GB proof. | Keep as the serialized proof lane and backup substrate; promote unchanged through `10M -> 100M -> 1G` only after roundtrip, determinism, and RSS pass. |
 | `fx2-cmix` public reproduction | `programs/fx2cmix_public_repro_v1`, `docs/lane0_fx2_public_repro.md`, `tools/fx2_public_repro_queue.py` | Low. This is an accounting and reproducibility lane, not a new algorithm. | Required to anchor official-style packaging and compare against the current public record family. | Keep separate from experimental lanes; use it to validate score math and submission packaging. |
-| Causal residual/SSE patch compiler | `tools/fx2_residual_*`, `tools/fx2_shadow_residual_coder.py`, `tools/fx2_mwcc_router_shadow.py`, `tools/fx2_residual_shadow_matrix.py` | High. Uses exact prediction logs to compile tiny causal corrections. | Generated cached matrix: `190` residual/SSE rows, `83` positive measured or held-out shadow rows, `0` constructive residual certificates. | Promote only if held-out shadow bytes saved exceed added code/table bytes and the receipt becomes full-coverage/counting-complete. |
+| Causal residual/SSE patch compiler | `tools/fx2_residual_*`, `tools/fx2_shadow_residual_coder.py`, `tools/fx2_mwcc_router_shadow.py`, `tools/fx2_residual_shadow_matrix.py` | High. Uses exact prediction logs to compile tiny causal corrections. | Generated cached matrix: `239` residual/SSE rows, `111` positive measured or held-out shadow rows, `0` constructive residual certificates. | Promote only if held-out shadow bytes saved exceed added code/table bytes and the receipt becomes full-coverage/counting-complete. |
 | CR-SSE / WikiFSM sidecar | `FX2_SC.md`, `FX2_SC_PAPER.md`, `external/cmix21-sidecar/` | High. Preserves raw bytes while feeding recomputable Wiki/XML state to outer calibration. | Design and partial substrate exist; no full target proof. | Add one narrow state family at a time and retire if `score_delta <= 0`. |
 | Causal schema trie / seed dictionary | Future `tools/` probe plus bounded parser state | High. Builds tries only from already-decoded titles, templates, refs, and URLs. | Conceptual lane; not a measured candidate until a result JSON exists. | Must abstain aggressively and count all code. No static dictionary payload is allowed unless counted. |
 | Embedding-teacher ordering | `tools/embedding_teacher_order.py`, `tools/hierarchical_chunk_embedding_teacher.py` | High as offline discovery, low as final artifact unless distilled. | Useful for finding clusters and deterministic keys; not suitable as a shipped model payload. | Ship only tiny deterministic rules or hashes learned from embeddings, never a large embedding model unless it beats its byte cost. |

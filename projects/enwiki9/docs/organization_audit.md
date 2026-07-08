@@ -8,28 +8,28 @@ benchmark report and does not launch or require any scorer work.
 Current shallow workspace observations:
 
 ```text
-program directories under programs/: 518
-registered programs in index.json: 223
+program directories under programs/: 522
+registered programs in index.json: 225
 docs file entries under docs/: 23
-tools files under tools/: 77
+tools files under tools/: 79
 active: 24
 candidate: 67
 measured_negative: 77
 blocked_dependency: 12
-retired: 334
+retired: 338
 track_source_before_evolution: 4
-untracked nonignored entries: 54
-modified tracked entries: 116
+untracked nonignored entries: 14
+modified tracked entries: 38
 ```
 
 Interpretation:
 
 - candidate folders have outpaced the generated audit snapshot;
 - `index.json` is intentionally narrower than the filesystem;
-- generated inventory should not be refreshed while an active heavy gate still
-  has unrecorded evidence;
-- the next inventory refresh should happen after the active `ppmd21376k` gate is
-  recorded or fails with a guard receipt.
+- generated inventory should be refreshed whenever receipt/audit rows change so
+  status receipts and organization docs share the same counts;
+- the `ppmd21376k` `100M` gate is recorded as an RSS failure; the lower
+  `ppmd21248k` bracket is packaged and its unchanged `10M` gate is running.
 - `tools/enwiki9_delayed_status_check.sh` now reports live process RSS,
   `cmix21_gate_decider.py` output, and any unguarded `cmix21-mmap-bin`
   process outside the RSS-guard tree.

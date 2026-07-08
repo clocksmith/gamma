@@ -1,0 +1,62 @@
+{
+  "id": "srstc_raw_order2_aggregate_sketch_v1",
+  "description": "Standalone SRSTC raw byte-bit codec using order-2 base context, deterministic wiki/sketch retrieval keys, aggregate retrieval probability, and fixed-point binary arithmetic coding.",
+  "added": "2026-07-03",
+  "deps": [],
+  "family": "srstc",
+  "status": "candidate",
+  "source_receipt": "projects/enwiki9/results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json",
+  "shadow_basis": {
+    "method": "streaming_retrieval_raw_shadow_v1",
+    "trace_version": "raw_enwik9_bits_msb_v1",
+    "data_bytes_loaded": 65536000,
+    "encoded_rows": 524288000,
+    "heldout_shadow_saved_bytes": 897062,
+    "net_saved_bytes": 884774,
+    "largest_block_regression_bytes": 22.3974609375,
+    "block_regression_count": 3,
+    "verdict": "positive_shadow_only"
+  },
+  "measured": {
+    "1024_driver_no_save": {
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 410,
+      "program_size": 20688,
+      "hutter_score": 21098,
+      "bits_per_byte": 3.203125,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
+      "compressed_sha256": "e0a1d77700c49ec12d29a9ae8ae6a41cded90812ac8d4ead58f941811e19e9dd",
+      "baseline_lzma_compressed_size": 412,
+      "baseline_lzma_hutter_score": 613,
+      "verdict": "archive_positive_score_negative"
+    },
+    "4096_driver_no_save": {
+      "data_size": 4096,
+      "data_md5": "98e8e5f90d50dffb02081982d10f325d",
+      "data_sha256": "652ed0541c8b9e2d8194c2a1cd20a3ea516efaa542082535c0ef57267e1ca49e",
+      "compressed_size": 1340,
+      "program_size": 20688,
+      "hutter_score": 22028,
+      "bits_per_byte": 2.617188,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
+      "compressed_sha256": "07c04d0c2fa777190ccd56036142792f96140e888d301b5d5bc0320c37b643cf",
+      "baseline_lzma_compressed_size": 1024,
+      "baseline_lzma_hutter_score": 1225,
+      "verdict": "score_negative"
+    }
+  },
+  "contract": {
+    "compress": "compress(data: bytes) -> bytes",
+    "decompress": "decompress(blob: bytes) -> bytes",
+    "causality": "Predictor state is read before each bit and updated only after the bit is encoded or decoded."
+  },
+  "notes": [
+    "This is a real decoder-replayable codec form of the SRSTC shadow model, not a target score claim.",
+    "The byte-prior table from the shadow receipt is intentionally omitted because byte_prior_blend_ppm was zero in the winning receipt and did not affect probabilities.",
+    "Promotion requires exact driver evidence and comparison against same-scope baselines."
+  ]
+}

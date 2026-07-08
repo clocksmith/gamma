@@ -12,8 +12,8 @@ No forecast or inherited metadata is included here.
 
 ## Proof Boundary
 
-- Result JSON files scanned: `670`
-- Roundtrip-passing rows: `648`
+- Result JSON files scanned: `677`
+- Roundtrip-passing rows: `655`
 - Verified full `1G` rows in this checkout: `0`
 - `10.95%` target reached by this matrix: `False`
 - Best full `1G` score: `none present`
@@ -24,6 +24,7 @@ No forecast or inherited metadata is included here.
 |---|---|---:|---:|---:|---:|---:|---|---|
 | `fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1` | fx2 geometry/order wrapper | 1,000 | 365,803 | 260 | 365,543 | 2.08 | true | `results/fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1/2026-06-06T225521.json` |
 | `baseline_bz2` | baseline compressor | 1,024 | 567 | 401 | 166 | 3.1328125 | true | `results/baseline_bz2/2026-06-07T184036.json` |
+| `srstc_raw_order2_aggregate_richkeys_v1` | custom candidate | 4,096 | 23,296 | 1,300 | 21,996 | 2.5390625 | true | `results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183706.json` |
 | `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 65,536 | 22,805 | 22,604 | 201 | 2.75927734 | true | `results/baseline_lzma/2026-06-07T152335.json` |
 | `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T114728.json` |
 | `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 1,000,000 | 266,493 | 261,652 | 4,841 | 2.093216 | true | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T120140.json` |
@@ -36,6 +37,7 @@ No forecast or inherited metadata is included here.
 |---|---|---:|---:|---:|---:|---:|---|---|
 | `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | custom candidate | 1,000 | 383,619 | 243 | 383,376 | 1.944 | true | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T000100.json` |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,024 | 562,732 | 246 | 562,486 | 1.921875 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T042102.json` |
+| `srstc_raw_order2_aggregate_richkeys_v1` | custom candidate | 4,096 | 23,296 | 1,300 | 21,996 | 2.5390625 | true | `results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183706.json` |
 | `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | fx2 sidecar or stream split | 65,536 | 270,151 | 13,573 | 256,578 | 1.65686035 | true | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T174031.json` |
 | `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | custom candidate | 250,000 | 428,352 | 44,976 | 383,376 | 1.439232 | not recorded | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T002058.json` |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,961 | 174,395 | 562,566 | 1.39516 | not recorded | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T155023.json` |

@@ -490,6 +490,112 @@ def gate_evidence_status(gate: dict[str, Any] | None) -> dict[str, Any]:
     }
 
 
+def active_gate_status_state(
+    cert_row: dict[str, Any] | None,
+    gate: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Expose the live gate decision through the compatibility active_gate row."""
+
+    if not isinstance(cert_row, dict) and not isinstance(gate, dict):
+        return None
+    row = dict(cert_row) if isinstance(cert_row, dict) else {}
+    row["label"] = "active gate"
+    if not isinstance(gate, dict):
+        return row
+
+    candidate = gate.get("candidate")
+    scope = gate.get("scope_bytes")
+    verdict = gate.get("verdict")
+    row["source"] = "gate_decision"
+    if isinstance(candidate, str):
+        row["program_id"] = candidate
+    if isinstance(scope, int):
+        row["scope_bytes"] = scope
+    if isinstance(verdict, str):
+        row["status"] = verdict
+    for key in (
+        "next_action",
+        "driver_result_json",
+        "driver_result_json_present",
+        "rss_guard_json",
+        "rss_guard_json_present",
+        "rss_guard_status",
+        "sample_count",
+        "returncode",
+        "max_sampled_single_rss_kib",
+        "max_sampled_tree_rss_kib",
+        "single_rss_margin_kib",
+        "tree_rss_margin_kib",
+        "latest_sample_max_single_rss_kib",
+        "latest_sample_tree_rss_kib",
+        "latest_sample_single_rss_margin_kib",
+        "latest_sample_tree_rss_margin_kib",
+    ):
+        if key in gate:
+            row[key] = gate.get(key)
+    if verdict == "rss_fail":
+        row["evidence"] = (
+            "terminal RSS guard failure; no scored driver result was produced for this gate"
+        )
+    elif verdict == "pass":
+        row["evidence"] = "terminal gate pass with driver result and RSS guard evidence"
+    elif verdict in {"roundtrip_fail", "determinism_fail", "guard_returncode_fail"}:
+        row["evidence"] = f"terminal gate failure: {verdict}"
+    elif isinstance(verdict, str):
+        row["evidence"] = f"gate decision is {verdict}; wait for terminal receipts"
+    return row
+
+
+def blocker_status_state(
+    cert_row: dict[str, Any] | None,
+    gate: dict[str, Any] | None,
+    action: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Keep the blocker row aligned with terminal gate decisions."""
+
+    if not isinstance(cert_row, dict) and not isinstance(gate, dict):
+        return None
+    row = dict(cert_row) if isinstance(cert_row, dict) else {}
+    row["label"] = "blocker"
+    if not isinstance(gate, dict):
+        return row
+
+    verdict = gate.get("verdict")
+    if verdict == "rss_fail":
+        row.update(
+            {
+                "status": "rss_guard_exceeded_pending_record",
+                "evidence": (
+                    "the active gate exceeded the RSS guard before producing a scored driver result"
+                ),
+                "next_action": action.get("action"),
+                "candidate": gate.get("candidate"),
+                "scope_bytes": gate.get("scope_bytes"),
+            }
+        )
+    elif verdict == "pass":
+        row.update(
+            {
+                "status": "gate_pass_pending_record",
+                "evidence": "the active gate passed; record it before promoting the next scope",
+                "next_action": action.get("action"),
+                "candidate": gate.get("candidate"),
+                "scope_bytes": gate.get("scope_bytes"),
+            }
+        )
+    elif verdict in {"roundtrip_fail", "determinism_fail", "guard_returncode_fail"}:
+        row.update(
+            {
+                "status": f"{verdict}_pending_record",
+                "evidence": "the active gate has a terminal failure that must be recorded",
+                "next_action": action.get("action"),
+                "candidate": gate.get("candidate"),
+                "scope_bytes": gate.get("scope_bytes"),
+            }
+        )
+    return row
+
+
 def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | None:
     if candidate is None or scope is None:
         return None
@@ -565,6 +671,13 @@ def operator_action(
             "next_gate_command": gate.get("next_gate_command"),
         }
     if verdict == "rss_fail":
+        if next_action == "launch_lower_prefix_gate":
+            return {
+                "safe_to_launch_heavy_gate": True,
+                "action": "launch_lower_prefix_gate",
+                "reason": "RSS failure is recorded and the lower memory-valve candidate is packaged",
+                "next_gate_command": gate.get("lower_prefix_gate_command"),
+            }
         return {
             "safe_to_launch_heavy_gate": False,
             "action": "record_rss_failure_then_package_lower_candidate",
@@ -655,6 +768,13 @@ def handoff_state(
         out["apply_terminal_command"] = apply_command
         out["command_source"] = "cmix21_gate_decider.apply_terminal_command"
         out["heavy_gate_mutation_allowed"] = True
+    elif isinstance(gate.get("lower_prefix_gate_command"), list):
+        out["next_gate_command"] = gate.get("lower_prefix_gate_command")
+        out["command_source"] = "cmix21_gate_decider.lower_prefix_gate_command"
+        out["heavy_gate_mutation_allowed"] = (
+            heavy_lock.get("held") is not True
+            and process_state.get("active_scorer_observed") is not True
+        )
     elif terminal:
         out["command_source"] = "terminal verdict lacks apply command; inspect cmix21_gate_decider before acting"
     else:
@@ -729,6 +849,8 @@ def operator_summary_state(
         summary["active_cmix_decimal_10gb_margin_kib"] = process_state.get("single_process_decimal_10gb_margin_kib")
     if isinstance(handoff.get("apply_terminal_command"), list):
         summary["apply_terminal_command"] = handoff.get("apply_terminal_command")
+    if isinstance(handoff.get("next_gate_command"), list):
+        summary["next_gate_command"] = handoff.get("next_gate_command")
     return summary
 
 
@@ -767,6 +889,8 @@ def receipt() -> dict[str, Any]:
         action=action,
         handoff=handoff,
     )
+    certificate_active_gate = labels.get("active gate")
+    certificate_blocker = labels.get("blocker")
     return {
         "receipt_type": "operator_status",
         "project": "enwiki9",
@@ -781,9 +905,11 @@ def receipt() -> dict[str, Any]:
         "best_full_1g": labels.get("best full 1G"),
         "best_forecast": labels.get("best forecast"),
         "active_candidate": labels.get("active candidate"),
-        "active_gate": labels.get("active gate"),
-        "next_gate": labels.get("next gate") or labels.get("active gate"),
-        "blocker": labels.get("blocker"),
+        "active_gate": active_gate_status_state(certificate_active_gate, gate),
+        "certificate_active_gate": certificate_active_gate,
+        "next_gate": labels.get("next gate") or certificate_active_gate,
+        "blocker": blocker_status_state(certificate_blocker, gate, action),
+        "certificate_blocker": certificate_blocker,
         "heavy_lock": heavy_lock,
         "operator_logs": operator_logs_state(),
         "candidate_audit": candidate_audit_summary_state(),
@@ -1064,6 +1190,15 @@ def render_md(data: dict[str, Any]) -> str:
                     "- Apply terminal command:",
                     "```bash",
                     " ".join(str(part) for part in handoff["apply_terminal_command"]),
+                    "```",
+                ]
+            )
+        if isinstance(handoff.get("next_gate_command"), list):
+            lines.extend(
+                [
+                    "- Next gate command:",
+                    "```bash",
+                    " ".join(str(part) for part in handoff["next_gate_command"]),
                     "```",
                 ]
             )

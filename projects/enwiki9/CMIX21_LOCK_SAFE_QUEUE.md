@@ -15,7 +15,9 @@ audit context.
 | `cmix21_text_mmap_paq5_ppmd21760k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Packaged from `ppmd21888k` with `-DCMIX_PPMD_MEMORY_KB=21760`; program size `564,273`. Exact `1K`, `250K`, `1M`, and `10M` replays passed. The exact `10M` replay produced archive `1,638,204`, local score `2,202,477`, roundtrip true, determinism true, and max sampled single RSS `10,482,248` KiB. The unchanged `100M` promotion failed the local RSS guard by `72` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
 | `cmix21_text_mmap_paq5_ppmd21632k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Packaged from `ppmd21760k` with `-DCMIX_PPMD_MEMORY_KB=21632`; program size `564,274`. Exact `1K`, `250K`, `1M`, and `10M` replays passed. The exact `10M` replay produced archive `1,638,229`, local score `2,202,503`, roundtrip true, determinism true, and max sampled single RSS `10,482,244` KiB. The unchanged `100M` promotion failed the local RSS guard by `68` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
 | `cmix21_text_mmap_paq5_ppmd21504k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Packaged from `ppmd21632k` with `-DCMIX_PPMD_MEMORY_KB=21504`; program size `564,273`. Exact `10M` replay passed at archive `1,638,165`, local score `2,202,438`, roundtrip true, determinism true, and max sampled single RSS `10,482,116` KiB, `3,644` KiB under the local binary guard. The unchanged `100M` promotion failed the local RSS guard by `72` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
-| `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Active prefix-ladder candidate | Packaged from `ppmd21504k` with `-DCMIX_PPMD_MEMORY_KB=21376`; program size `564,274`. Exact `1K` replay passed at archive `247`, local score `564,521`, roundtrip true, determinism true, and max sampled single RSS `8,632,576` KiB. Exact `250K` replay passed at archive `45,178`, local score `609,452`, roundtrip true, determinism true, and max sampled single RSS `10,229,572` KiB. Exact `1M` replay passed at archive `174,531`, local score `738,805`, roundtrip true, determinism true, and max sampled single RSS `10,443,972` KiB. | Launch the unchanged `10M` replay. If it passes, record it and promote unchanged to `100M`; if it fails by RSS, record the bracket and package the next lower memory valve. |
+| `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Packaged from `ppmd21504k` with `-DCMIX_PPMD_MEMORY_KB=21376`; program size `564,274`. Exact `1K`, `250K`, `1M`, and `10M` replays passed. The unchanged `100M` promotion failed the local RSS guard by `116` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
+| `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed upper candidate | Packaged from `ppmd21376k` with `-DCMIX_PPMD_MEMORY_KB=21248`; program size `564,274`. Exact `1K`, `250K`, `1M`, and `10M` replays passed. The unchanged `100M` promotion failed the local RSS guard by `64` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. |
+| `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Active prefix-ladder candidate | Packaged from `ppmd21248k` with `-DCMIX_PPMD_MEMORY_KB=21120`; program size `564,274`. Exact `1K` replay passed at archive `247`, roundtrip true, determinism true, and max sampled single RSS `8,624,384` KiB. | Run the unchanged `250K` replay next. If it passes, record it and promote unchanged to `1M`; if it fails by RSS, record the bracket and inspect non-PPMD memory surfaces. |
 | `cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Historical high-quality boundary | Best nearby archive family, but memory-fragile at larger scope. | Keep as baseline for bytes lost per KiB saved. |
 | `cmix21_text_mmap_paq5_ppmd21m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Coarse lower-memory bracket | Bought memory margin but cost archive bytes versus the `22m` family. | Use only as a lower-bound control for the PPMD memory derivative. |
 
@@ -84,7 +86,8 @@ python3 projects/enwiki9/tools/cmix21_memory_valve_report.py
 | PPMD cap | `ppmd21888k` | `ppmd21760k` | `22` bytes at exact deterministic `10M` | `128` KiB cap cut | `0.171875` bytes/KiB | `ppmd21760k` passed exact `10M` but failed unchanged `100M` RSS by `72` KiB; keep as upper bracket. |
 | PPMD cap | `ppmd21760k` | `ppmd21632k` | `25` bytes at exact deterministic `10M` | `128` KiB cap cut | `0.1953125` bytes/KiB | `ppmd21632k` passed exact `10M` but failed unchanged `100M` RSS by `68` KiB; keep as upper bracket. |
 | PPMD cap | `ppmd21632k` | `ppmd21504k` | `-64` bytes at exact deterministic `10M` | `128` KiB cap cut | `-0.5` bytes/KiB | `ppmd21504k` improved the exact `10M` archive while cutting memory, but unchanged `100M` failed RSS by `72` KiB; keep as an upper bracket. |
-| PPMD cap | `ppmd21504k` | `ppmd21376k` | no paired exact prefix row yet | `128` KiB cap cut | not computed | `ppmd21376k` is packaged after `ppmd21504k` failed `100M`; run the prefix ladder before assigning archive penalty. |
+| PPMD cap | `ppmd21504k` | `ppmd21376k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd21376k` preserved prefix determinism but failed unchanged `100M` RSS by `116` KiB. |
+| PPMD cap | `ppmd21376k` | `ppmd21248k` | no paired exact `10M` row yet | `128` KiB cap cut | not computed | `ppmd21248k` is packaged after `ppmd21376k` failed `100M`; active `10M` gate is running. |
 | FXCM index map | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Do not cut this surface until PPMD bracketing fails or exact ablation receipts identify a cheaper KiB source. |
 | FXCM RCM | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Earlier FXCM RCM divisor changes can break decode; require prefix gates from `1K` before any promotion. |
 | PAQ RCM | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Keep primary PAQ history continuity protected unless an exact memory-value pair beats the PPMD valve. |
@@ -108,16 +111,16 @@ enough RSS margin for `100M`, then `1G`, while preserving deterministic replay.
 The active heavy-lock candidate is the next PPMD-only cut:
 
 ```text
-cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
-scope: first prefix gate
+cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+scope: 10000000
 mode: --check-determinism
-guard receipt: ppmd21376k_<scope>_determinism_rss_guard.json
+guard receipt: ppmd21248k_10000000_determinism_rss_guard.json
 ```
 
-This candidate exists because `ppmd21504k` passed exact `10M` replay but failed
+This candidate exists because `ppmd21376k` passed exact prefix replays but failed
 the unchanged `100M` promotion by RSS guard before a scored archive was
 produced. The exact `1K`, `250K`, and `1M` replays passed; the active gate is
-now the unchanged `10M` determinism replay. The active gate remains incomplete until both
+the unchanged `10M` determinism replay. The active gate remains incomplete until both
 the driver result JSON and RSS guard JSON are terminal. No secondary heavy gate,
 package build, or result-corpus CPU sweep should be launched while a gate owns
 the lock.
