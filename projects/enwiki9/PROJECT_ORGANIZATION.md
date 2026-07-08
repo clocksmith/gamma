@@ -57,6 +57,7 @@ The active proof lane is:
 
 ```text
 cmix21 memory-shaped candidate
+  -> exact 250K replay
   -> exact 1M replay
   -> exact 10M replay
   -> exact 100M replay
@@ -91,9 +92,11 @@ Interpretation:
   `72` KiB before a scored archive or roundtrip.
 - `ppmd21376k` passed exact prefix replays but failed unchanged `100M` RSS by
   `116` KiB before a scored archive or roundtrip.
-- `ppmd21248k` is the active restarted ladder; its exact `1,024`,
-  `250,000`, and `1,000,000` byte replays passed and the active gate is
-  unchanged `10,000,000` bytes.
+- `ppmd21248k` passed exact `1,024`, `250,000`, `1,000,000`, and
+  `10,000,000` byte replays, then failed unchanged `100M` RSS by `64` KiB
+  before a scored archive or roundtrip.
+- `ppmd21120k` is the active restarted ladder; its exact `1,024` byte replay
+  passed and the active gate is unchanged `250,000` bytes.
 
 The promotion rule is strict:
 
