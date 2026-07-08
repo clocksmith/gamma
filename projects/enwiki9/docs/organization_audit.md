@@ -18,7 +18,7 @@ measured_negative: 77
 blocked_dependency: 12
 retired: 340
 untracked nonignored entries: 0
-modified tracked entries: 4
+modified tracked entries: 8
 ```
 
 Interpretation:

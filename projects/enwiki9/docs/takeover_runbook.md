@@ -92,26 +92,26 @@ This candidate exists because:
   archive or roundtrip.
 - `ppmd21376k` passed exact prefix replays but failed unchanged `100M` RSS by
   `116` KiB before a scored archive or roundtrip.
-- `ppmd21248k` is the next PPMD-only cut. Its exact `1,024` byte replay passed
-  with roundtrip, determinism, and RSS guard. Its exact `250,000` byte replay
-  also passed at archive `45,178`, roundtrip true, determinism true, and max
-  sampled single RSS `10,229,576` KiB. Its exact `1,000,000` byte replay passed
-  at archive `174,531`, local score `738,805`, roundtrip true, determinism
-  true, and max sampled single RSS `10,443,844` KiB.
+- `ppmd21248k` passed exact `1,024`, `250,000`, `1,000,000`, and
+  `10,000,000` byte replays, then failed unchanged `100M` RSS by `64` KiB
+  before a scored archive or roundtrip.
+- `ppmd21120k` is the next PPMD-only cut. Its exact `1,024` byte replay passed
+  at archive `247`, roundtrip true, determinism true, and max sampled single
+  RSS `8,624,384` KiB.
 
 Current gate:
 
 ```text
-scope: 10000000
+scope: 250000
 mode: --check-determinism
-guard: ppmd21248k_10000000_determinism_rss_guard.json
+guard: ppmd21120k_250000_determinism_rss_guard.json
 ```
 
-When `ppmd21248k` finishes `10,000,000` byte determinism:
+When `ppmd21120k` finishes `250,000` byte determinism:
 
 | Result | Action |
 |---|---|
-| roundtrip true, determinism true, RSS pass | record exact `10,000,000`; promote unchanged to the next gate. |
+| roundtrip true, determinism true, RSS pass | record exact `250,000`; promote unchanged to the next gate. |
 | archive worse but still clean | record exact penalty; decide by memory-value table before promoting. |
 | RSS fail | record RSS failure; lower the smallest memory surface again. |
 | roundtrip fail | mark candidate as failed at this gate; do not promote. |
@@ -122,8 +122,8 @@ Use the decider before changing queue state:
 
 ```bash
 python3 projects/enwiki9/tools/cmix21_gate_decider.py \
-  cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 \
-  --scope 10000000
+  cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 \
+  --scope 250000
 ```
 
 Or use the active-gate wrapper, which reads the current certificate active gate

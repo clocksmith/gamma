@@ -87,7 +87,8 @@ python3 projects/enwiki9/tools/cmix21_memory_valve_report.py
 | PPMD cap | `ppmd21760k` | `ppmd21632k` | `25` bytes at exact deterministic `10M` | `128` KiB cap cut | `0.1953125` bytes/KiB | `ppmd21632k` passed exact `10M` but failed unchanged `100M` RSS by `68` KiB; keep as upper bracket. |
 | PPMD cap | `ppmd21632k` | `ppmd21504k` | `-64` bytes at exact deterministic `10M` | `128` KiB cap cut | `-0.5` bytes/KiB | `ppmd21504k` improved the exact `10M` archive while cutting memory, but unchanged `100M` failed RSS by `72` KiB; keep as an upper bracket. |
 | PPMD cap | `ppmd21504k` | `ppmd21376k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd21376k` preserved prefix determinism but failed unchanged `100M` RSS by `116` KiB. |
-| PPMD cap | `ppmd21376k` | `ppmd21248k` | no paired exact `10M` row yet | `128` KiB cap cut | not computed | `ppmd21248k` is packaged after `ppmd21376k` failed `100M`; active `10M` gate is running. |
+| PPMD cap | `ppmd21376k` | `ppmd21248k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd21248k` preserved prefix determinism but failed unchanged `100M` RSS by `64` KiB. |
+| PPMD cap | `ppmd21248k` | `ppmd21120k` | restart gate ladder in progress | `128` KiB cap cut | pending exact paired rows | `ppmd21120k` passed exact `1K`; active `250K` gate is launchable. |
 | FXCM index map | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Do not cut this surface until PPMD bracketing fails or exact ablation receipts identify a cheaper KiB source. |
 | FXCM RCM | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Earlier FXCM RCM divisor changes can break decode; require prefix gates from `1K` before any promotion. |
 | PAQ RCM | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Keep primary PAQ history continuity protected unless an exact memory-value pair beats the PPMD valve. |
@@ -111,17 +112,17 @@ enough RSS margin for `100M`, then `1G`, while preserving deterministic replay.
 The active heavy-lock candidate is the next PPMD-only cut:
 
 ```text
-cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
-scope: 10000000
+cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+scope: 250000
 mode: --check-determinism
-guard receipt: ppmd21248k_10000000_determinism_rss_guard.json
+guard receipt: ppmd21120k_250000_determinism_rss_guard.json
 ```
 
-This candidate exists because `ppmd21376k` passed exact prefix replays but failed
-the unchanged `100M` promotion by RSS guard before a scored archive was
-produced. The exact `1K`, `250K`, and `1M` replays passed; the active gate is
-the unchanged `10M` determinism replay. The active gate remains incomplete until both
-the driver result JSON and RSS guard JSON are terminal. No secondary heavy gate,
+This candidate exists because `ppmd21248k` passed exact prefix replays but
+failed the unchanged `100M` promotion by RSS guard before a scored archive was
+produced. The exact `1K` replay passed; the active gate is the unchanged
+`250K` determinism replay. The active gate remains incomplete until both the
+driver result JSON and RSS guard JSON are terminal. No secondary heavy gate,
 package build, or result-corpus CPU sweep should be launched while a gate owns
 the lock.
 

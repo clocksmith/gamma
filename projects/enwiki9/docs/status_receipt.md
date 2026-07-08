@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-08T00:23:29+00:00`
+- Generated at UTC: `2026-07-08T00:45:46+00:00`
 
 ## Target State
 
@@ -112,7 +112,7 @@ flock -n /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_gua
 - Program directories: `522`
 - Registered programs: `225`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `4`
+- Modified tracked entries: `8`
 - Candidate statuses: `active=24, blocked_dependency=12, candidate=69, measured_negative=77, retired=340`
 
 ## Active Runner Process Table
