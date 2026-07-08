@@ -58,25 +58,37 @@ shaving memory around an established context mixer.
         evidence only. They do not modify the active compressor and do not prove
         `10.95%`.
 
-        - Cached receipts: `104`
-        - Receipts with held-out rows: `97`
-        - Verdict counts: `flat_shadow`: `38`, `incomplete`: `7`, `negative_shadow`: `28`, `positive_shadow_only`: `31`
-        - Feature-source counts: `data`: `11`, `raw_data`: `32`, `row`: `11`, `unknown`: `50`
-        - Receipts with trace/data alignment warnings: `21`
-        - Best held-out saved bytes: `445842.0` from `results/streaming_retrieval_shadow/raw32768k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json`.
-        - Best net saved bytes after code/table estimate: `433554.0` from `results/streaming_retrieval_shadow/raw32768k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json`.
+        - Cached receipts: `133`
+        - Receipts with held-out rows: `126`
+        - Verdict counts: `flat_shadow`: `40`, `incomplete`: `7`, `negative_shadow`: `31`, `positive_shadow_only`: `55`
+        - Feature-source counts: `data`: `12`, `raw_data`: `56`, `row`: `15`, `unknown`: `50`
+        - Receipts with trace/data alignment warnings: `25`
+        - Best held-out saved bytes: `897062.0` from `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json`.
+        - Best net saved bytes after code/table estimate: `884774.0` from `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json`.
 
         Current interpretation: at least one receipt clears the counted code/table estimate in shadow. That is still not a compressor claim; the next gate is block-regression audit and packaging the smallest deterministic paying piece.
 
         Cached trace/data alignment warnings remain only on receipts that compare raw data bytes to cached `bit` rows; raw byte-aligned `raw_data` receipts avoid that mismatch.
 
-Receipt audit:
+            Receipt audit:
 
-- Positive net receipts: `10`
-- Promotion-ready shadow receipts: `5`
-- Best receipt promotion blockers: `block_regression_within_cap`
+            - Positive net receipts: `14`
+            - Promotion-ready shadow receipts: `8`
+            - Best receipt promotion blockers: `block_regression_within_cap`
 
-The generated receipt audit is `docs/streaming_retrieval_receipt_audit.md`.
+Objective selector:
+
+- Recommended action: `remove_or_route_block_regressions_before_packaging`
+- Reason: `the best target-closing receipt is blocked only by small block regressions`
+- Best target-closing receipt: `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json`
+- Target-closing net bytes: `884774.0`
+- Forecast gap after target-closing receipt: `clears by 203,660`
+- Target-closing blockers: `block_regression_within_cap`
+- Best promotion-ready fallback: `results/streaming_retrieval_shadow/raw16384k_richkeys_cap300k_v1.json`
+- Ready fallback net bytes: `260560.0`
+- Forecast gap after ready fallback: `420,554`
+
+            The generated receipt audit is `docs/streaming_retrieval_receipt_audit.md`.
 
 ## Algorithm
 
@@ -127,6 +139,22 @@ The coefficients are causal fixed-point weights updated from past
 loss. A wrong high-confidence retrieval costs bits, but it cannot
 desynchronize decoding because every byte keeps nonzero probability
 and every table update is derived from decoded bytes.
+
+Current raw-shadow implementation note: `tools/streaming_retrieval_raw_shadow.py`
+can now run SRSTC as a probabilistic typed copy channel, not only as
+a sketch hint. Enable it with `--copy-channel-enabled`,
+`--log-odds-mix`, `--expert-mode no_regret_abstain`, and
+`--block-fallback-qbits`. The receipt records typed table value for
+prose, titles, templates, refs, URLs, table rows, infoboxes,
+category/link contexts, and entity-like contexts, plus copy-channel
+rows, selected expert bands, proposed block gain before fallback,
+and exact same-coder bytes after fallback. It also records
+`conditional_attribution`, which separates copy availability from
+router-selected copy and compares typed retrieval, byte prior, and
+copy priors on the same bits. Copy confidence can be made
+type-specific with `--copy-channel-type-blends`, so a weak entity or
+category copy bucket can be suppressed without disabling ref, URL,
+table, or prose continuation.
 
 ## Why This Is Different
 
@@ -188,7 +216,39 @@ A valid first receipt must contain:
   "sketch_schema_hash": "",
   "table_update_rule_hash": "",
   "retrieval_table_cap_entries": null,
+  "sketch_schema": {
+    "copy_channel": {
+      "blend_ppm": null,
+      "type_blends": {
+        "prose": null,
+        "title": null,
+        "template": null,
+        "ref": null,
+        "url": null,
+        "table": null,
+        "infobox": null,
+        "category_link": null,
+        "entity": null
+      }
+    }
+  },
   "retrieved_neighbors_per_bit": null,
+  "conditional_attribution": {
+    "schema": "conditional_copy_attribution_v1",
+    "buckets": {
+      "typed_retrieval": {"direct_gain_bytes_vs_copy": null},
+      "byte_prior": {"direct_gain_bytes_vs_copy": null},
+      "copy_available": {
+        "selected_rows": null,
+        "direct_gain_bytes_vs_typed": null,
+        "direct_gain_bytes_vs_byte_prior": null,
+        "mean_copy_best_sketch_distance": null,
+        "mean_copy_abs_offset": null,
+        "mean_copy_edit_distance": null
+      },
+      "copy_<span_type>": {"selected_rows": null}
+    }
+  },
   "patch_alignment_modes": [],
   "escape_floor": null,
   "base_shadow_bytes": null,
@@ -216,6 +276,7 @@ Python integration point.
 | 2 | Add standalone SRSTC shadow scoring on cached residual rows and raw byte-aligned corpus bits with base, local match, retrieval patch, schema, and entity/ref experts. | Exact shadow bytes for base versus SRSTC-mixed probabilities. |
 | 3 | Add block-level held-out splits and page-family diagnostics. | Winning/losing block table, largest-regression field, and concentrated-gain flag. |
 | 4 | Add fixed-point regret routing over base and SRSTC experts. | Router shadow receipt with counted code/table estimates and replayed weight hashes. |
+| 4a | Add typed copy-channel tables with log-odds mixing, MDL-value eviction, no-regret abstain routing, block fallback, and conditional attribution in the raw shadow scorer. | Raw-shadow receipt fields for `typed_copy_channel`, copy expert bands, `block_fallback`, and `conditional_attribution`. |
 | 5 | Integrate only the smallest winning SRSTC component into the strongest admissible substrate. | Prefix replay result JSON with roundtrip and determinism. |
 
 ## Kill Gates

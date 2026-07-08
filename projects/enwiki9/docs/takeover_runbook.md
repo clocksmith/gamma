@@ -68,7 +68,7 @@ If no run is active:
 Current lane:
 
 ```text
-cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
 ```
 
 This candidate exists because:
@@ -90,27 +90,28 @@ This candidate exists because:
 - `ppmd21504k` passed exact `10M` replay at archive `1,638,165`, local score
   `2,202,438`, then failed unchanged `100M` RSS by `72` KiB before a scored
   archive or roundtrip.
-- `ppmd21376k` is the next PPMD-only cut. Its exact `1,024` byte replay passed
+- `ppmd21376k` passed exact prefix replays but failed unchanged `100M` RSS by
+  `116` KiB before a scored archive or roundtrip.
+- `ppmd21248k` is the next PPMD-only cut. Its exact `1,024` byte replay passed
   with roundtrip, determinism, and RSS guard. Its exact `250,000` byte replay
-  also passed at archive `45,178`, local score `609,452`, roundtrip true,
-  determinism true, and max sampled single RSS `10,229,572` KiB. Its exact
-  `1,000,000` byte replay passed at archive `174,531`, local score `738,805`,
-  roundtrip true, determinism true, and max sampled single RSS `10,443,972`
-  KiB.
+  also passed at archive `45,178`, roundtrip true, determinism true, and max
+  sampled single RSS `10,229,576` KiB. Its exact `1,000,000` byte replay passed
+  at archive `174,531`, local score `738,805`, roundtrip true, determinism
+  true, and max sampled single RSS `10,443,844` KiB.
 
 Current gate:
 
 ```text
 scope: 10000000
 mode: --check-determinism
-guard: ppmd21376k_10000000_determinism_rss_guard.json
+guard: ppmd21248k_10000000_determinism_rss_guard.json
 ```
 
-When `ppmd21376k` finishes `10,000,000` byte determinism:
+When `ppmd21248k` finishes `10,000,000` byte determinism:
 
 | Result | Action |
 |---|---|
-| roundtrip true, determinism true, RSS pass | record exact `250,000`; promote unchanged to the next gate. |
+| roundtrip true, determinism true, RSS pass | record exact `10,000,000`; promote unchanged to the next gate. |
 | archive worse but still clean | record exact penalty; decide by memory-value table before promoting. |
 | RSS fail | record RSS failure; lower the smallest memory surface again. |
 | roundtrip fail | mark candidate as failed at this gate; do not promote. |
@@ -121,7 +122,7 @@ Use the decider before changing queue state:
 
 ```bash
 python3 projects/enwiki9/tools/cmix21_gate_decider.py \
-  cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 \
+  cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 \
   --scope 10000000
 ```
 

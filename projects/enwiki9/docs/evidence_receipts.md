@@ -284,9 +284,31 @@ are implemented as deterministic fixed-point soft priors with nonzero escape.
   "span_schema_hash": "",
   "sketch_schema": {
     "partial_byte_family": "none|sketch|direct|all",
-    "expert_mode": "aggregate|best_band|best_band_abstain",
+    "expert_mode": "aggregate|best_band|best_band_abstain|no_regret|no_regret_abstain",
     "router_decay_shift": null,
     "router_abstain_margin_qbits": null,
+    "copy_channel": {
+      "enabled": null,
+      "as_band": null,
+      "blend_ppm": null,
+      "type_blends": {
+        "prose": null,
+        "title": null,
+        "template": null,
+        "ref": null,
+        "url": null,
+        "table": null,
+        "infobox": null,
+        "category_link": null,
+        "entity": null
+      },
+      "cap_entries": null,
+      "top_k": null,
+      "max_key_scan": null,
+      "min_support": null,
+      "offsets": [],
+      "escape_ppm": null
+    },
     "bands": []
   },
   "sketch_schema_hash": "",
@@ -300,6 +322,43 @@ are implemented as deterministic fixed-point soft priors with nonzero escape.
     "router_base_loss_qbits": null,
     "router_loss_qbits": {},
     "router_regret_qbits": {}
+  },
+  "conditional_attribution": {
+    "schema": "conditional_copy_attribution_v1",
+    "interpretation": "Rows count availability; selected_rows count router selection; positive direct_gain_bytes_vs_X means this prior beat X on the same bits.",
+    "buckets": {
+      "typed_retrieval": {
+        "rows": null,
+        "selected_rows": null,
+        "direct_gain_bytes_vs_base": null,
+        "direct_gain_bytes_vs_copy": null,
+        "direct_gain_bytes_vs_byte_prior": null,
+        "heldout_direct_gain_bytes_vs_base": null,
+        "heldout_selected_gain_bytes_vs_base": null
+      },
+      "byte_prior": {
+        "rows": null,
+        "selected_rows": null,
+        "direct_gain_bytes_vs_base": null,
+        "direct_gain_bytes_vs_copy": null,
+        "heldout_direct_gain_bytes_vs_base": null,
+        "heldout_selected_gain_bytes_vs_base": null
+      },
+      "copy_available": {
+        "rows": null,
+        "selected_rows": null,
+        "direct_gain_bytes_vs_base": null,
+        "direct_gain_bytes_vs_typed": null,
+        "direct_gain_bytes_vs_byte_prior": null,
+        "heldout_direct_gain_bytes_vs_base": null,
+        "heldout_selected_gain_bytes_vs_base": null,
+        "mean_copy_candidates_scanned": null,
+        "mean_copy_best_sketch_distance": null,
+        "mean_copy_abs_offset": null,
+        "mean_copy_age_bucket": null,
+        "mean_copy_edit_distance": null
+      }
+    }
   },
   "patch_alignment_modes": [],
   "escape_floor": null,
@@ -315,6 +374,15 @@ are implemented as deterministic fixed-point soft priors with nonzero escape.
   "verdict": "incomplete"
 }
 ```
+
+For copy-channel receipts, read `copy_available` as a diagnostic bucket, not a
+promotion claim. Promotion depends on `selected_rows`, held-out selected gain,
+and type-specific `copy_<span_type>` buckets beating typed retrieval and byte
+prior controls on the same bits. This preserves the copy idea while allowing a
+specific weak copy key to be redesigned or demoted. When `type_blends` is
+present, the receipt is testing per-type copy confidence; omitted copy types use
+the global `blend_ppm`, and explicitly listed types use their own fixed-point
+blend.
 
 Promotion requires:
 

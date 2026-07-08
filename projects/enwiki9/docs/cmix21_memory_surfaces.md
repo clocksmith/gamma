@@ -12,13 +12,13 @@ They do not prove a target result and do not replace exact gate promotion.
 
 ## Active Gate Context
 
-- Active candidate: `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Active scope bytes: `100,000,000`
-- cmix21 candidates with result or guard evidence: `60`
+- Active candidate: `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Active scope bytes: `250,000`
+- cmix21 candidates with result or guard evidence: `62`
 
 ## Observed Knob Values
 
-- PPMD caps KiB: `21376`, `21504`, `21632`, `21760`, `21888`, `22272`, `22400`, `22528`, `23552`, `24576`, `25600`, `35840`, `40960`, `51200`, `61440`, `71680`, `75776`, `76800`, `102400`
+- PPMD caps KiB: `21120`, `21248`, `21376`, `21504`, `21632`, `21760`, `21888`, `22272`, `22400`, `22528`, `23552`, `24576`, `25600`, `35840`, `40960`, `51200`, `61440`, `71680`, `75776`, `76800`, `102400`
 - PAQ levels: `5`, `9`
 - FXCM-RCM values: `2`, `4`, `8`, `16`, `20`, `21`, `22`, `24`, `28`
 - RCM values: `32`
@@ -30,7 +30,7 @@ They do not prove a target result and do not replace exact gate promotion.
 
 | Candidate | PPMD KiB | PAQ | FXCM-RCM | RCM | Buffer | Guards | Latest prefix | Prefix archive | 10M archive | 10M RSS | 100M RSS |
 |---|---:|---:|---:|---:|---|---|---:|---:|---:|---|---|
-| `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 21,376 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,531 | 1,638,098 | pass; bin +3,772 KiB; dec -716,363 KiB | missing |
+| `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 21,120 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,024 | 247 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | 40,960 | 5 | n/a | 32 | bufsixtyfourth | n/a | 1,000,000 | 174,395 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | n/a | 1,000,000 | 174,396 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | ppmdguard | 1,000,000 | 174,396 | n/a | missing | missing |
@@ -56,6 +56,8 @@ They do not prove a target result and do not replace exact gate promotion.
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard5_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | ppmdguard5 | 1,000,000 | 174,527 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm21_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 22,528 | 5 | 21 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,529 | n/a | pass; bin +2,780 KiB; dec -717,355 KiB | missing |
 | `cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm22_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 22,528 | 5 | 22 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,529 | n/a | pass; bin +2,876 KiB; dec -717,259 KiB | missing |
+| `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 21,248 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,531 | 1,638,222 | pass; bin +868 KiB; dec -719,267 KiB | fail; bin -64 KiB; dec -720,199 KiB |
+| `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 21,376 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,531 | 1,638,098 | pass; bin +3,772 KiB; dec -716,363 KiB | fail; bin -116 KiB; dec -720,251 KiB |
 | `cmix21_text_mmap_paq5_ppmd21632k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 21,632 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,531 | 1,638,229 | pass; bin +3,516 KiB; dec -716,619 KiB | fail; bin -68 KiB; dec -720,203 KiB |
 | `cmix21_text_mmap_paq5_ppmd21760k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 21,760 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,531 | 1,638,204 | pass; bin +3,512 KiB; dec -716,623 KiB | fail; bin -72 KiB; dec -720,207 KiB |
 | `cmix21_text_mmap_paq5_ppmd21888k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 21,888 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,531 | 1,638,182 | pass; bin +3,292 KiB; dec -716,843 KiB | fail; bin -36 KiB; dec -720,171 KiB |
@@ -68,8 +70,6 @@ They do not prove a target result and do not replace exact gate promotion.
 | `cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 25,600 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,531 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd2g_minmaps_v1` | n/a | 5 | n/a | n/a | n/a | n/a | 250,000 | 45,177 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard2_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | ppmdguard2 | 250,000 | 45,178 | n/a | missing | missing |
-| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard3_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | ppmdguard3 | 250,000 | 45,178 | n/a | missing | missing |
-| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard4_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | ppmdguard4 | 250,000 | 45,178 | n/a | missing | missing |
 
 ## Readout
 

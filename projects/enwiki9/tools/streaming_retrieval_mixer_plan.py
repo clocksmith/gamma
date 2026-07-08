@@ -100,6 +100,15 @@ def load_audit() -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
+def fmt_gap(value: Any) -> str:
+    number = as_float(value)
+    if number is None:
+        return "n/a"
+    if number < 0:
+        return f"clears by {fmt_int(int(abs(number)))}"
+    return fmt_int(int(number))
+
+
 def evidence_section() -> str:
     evidence = load_receipts()
     rows = evidence["rows"]
@@ -193,6 +202,40 @@ def evidence_section() -> str:
             raw_blockers = best.get("promotion_blockers")
             if isinstance(raw_blockers, list):
                 blockers = [str(item) for item in raw_blockers]
+        selection = audit.get("objective_selection")
+        selection_note = ""
+        if isinstance(selection, dict):
+            target_closing = selection.get("best_target_closing_receipt")
+            ready = selection.get("best_promotion_ready_receipt")
+            if isinstance(target_closing, dict) or isinstance(ready, dict):
+                target_lines = []
+                if isinstance(target_closing, dict):
+                    target_lines.extend(
+                        [
+                            f"- Best target-closing receipt: `{target_closing.get('path')}`",
+                            f"- Target-closing net bytes: `{target_closing.get('net_saved_bytes')}`",
+                            f"- Forecast gap after target-closing receipt: `{fmt_gap(target_closing.get('forecast_gap_remaining_bytes'))}`",
+                            f"- Target-closing blockers: `{', '.join(target_closing.get('promotion_blockers') or ['none'])}`",
+                        ]
+                    )
+                if isinstance(ready, dict):
+                    target_lines.extend(
+                        [
+                            f"- Best promotion-ready fallback: `{ready.get('path')}`",
+                            f"- Ready fallback net bytes: `{ready.get('net_saved_bytes')}`",
+                            f"- Forecast gap after ready fallback: `{fmt_gap(ready.get('forecast_gap_remaining_bytes'))}`",
+                        ]
+                    )
+                selection_note = "\n".join(
+                    [
+                        "",
+                        "Objective selector:",
+                        "",
+                        f"- Recommended action: `{selection.get('recommended_action', 'unknown')}`",
+                        f"- Reason: `{selection.get('action_reason', 'unknown')}`",
+                        *target_lines,
+                    ]
+                )
         audit_note = textwrap.dedent(
             f"""\
 
@@ -201,6 +244,7 @@ def evidence_section() -> str:
             - Positive net receipts: `{audit.get('positive_net_receipts', 'n/a')}`
             - Promotion-ready shadow receipts: `{audit.get('promotion_ready_shadow_receipts', 'n/a')}`
             - Best receipt promotion blockers: `{', '.join(blockers) if blockers else 'none'}`
+            {selection_note}
 
             The generated receipt audit is `docs/streaming_retrieval_receipt_audit.md`.
             """
@@ -343,6 +387,22 @@ def render() -> str:
             desynchronize decoding because every byte keeps nonzero probability
             and every table update is derived from decoded bytes.
 
+            Current raw-shadow implementation note: `tools/streaming_retrieval_raw_shadow.py`
+            can now run SRSTC as a probabilistic typed copy channel, not only as
+            a sketch hint. Enable it with `--copy-channel-enabled`,
+            `--log-odds-mix`, `--expert-mode no_regret_abstain`, and
+            `--block-fallback-qbits`. The receipt records typed table value for
+            prose, titles, templates, refs, URLs, table rows, infoboxes,
+            category/link contexts, and entity-like contexts, plus copy-channel
+            rows, selected expert bands, proposed block gain before fallback,
+            and exact same-coder bytes after fallback. It also records
+            `conditional_attribution`, which separates copy availability from
+            router-selected copy and compares typed retrieval, byte prior, and
+            copy priors on the same bits. Copy confidence can be made
+            type-specific with `--copy-channel-type-blends`, so a weak entity or
+            category copy bucket can be suppressed without disabling ref, URL,
+            table, or prose continuation.
+
             ## Why This Is Different
 
             Existing `hierarchical_retrieval_shadow.py` mostly asks whether a
@@ -403,7 +463,39 @@ def render() -> str:
               "sketch_schema_hash": "",
               "table_update_rule_hash": "",
               "retrieval_table_cap_entries": null,
+              "sketch_schema": {{
+                "copy_channel": {{
+                  "blend_ppm": null,
+                  "type_blends": {{
+                    "prose": null,
+                    "title": null,
+                    "template": null,
+                    "ref": null,
+                    "url": null,
+                    "table": null,
+                    "infobox": null,
+                    "category_link": null,
+                    "entity": null
+                  }}
+                }}
+              }},
               "retrieved_neighbors_per_bit": null,
+              "conditional_attribution": {{
+                "schema": "conditional_copy_attribution_v1",
+                "buckets": {{
+                  "typed_retrieval": {{"direct_gain_bytes_vs_copy": null}},
+                  "byte_prior": {{"direct_gain_bytes_vs_copy": null}},
+                  "copy_available": {{
+                    "selected_rows": null,
+                    "direct_gain_bytes_vs_typed": null,
+                    "direct_gain_bytes_vs_byte_prior": null,
+                    "mean_copy_best_sketch_distance": null,
+                    "mean_copy_abs_offset": null,
+                    "mean_copy_edit_distance": null
+                  }},
+                  "copy_<span_type>": {{"selected_rows": null}}
+                }}
+              }},
               "patch_alignment_modes": [],
               "escape_floor": null,
               "base_shadow_bytes": null,
@@ -431,6 +523,7 @@ def render() -> str:
             | 2 | Add standalone SRSTC shadow scoring on cached residual rows and raw byte-aligned corpus bits with base, local match, retrieval patch, schema, and entity/ref experts. | Exact shadow bytes for base versus SRSTC-mixed probabilities. |
             | 3 | Add block-level held-out splits and page-family diagnostics. | Winning/losing block table, largest-regression field, and concentrated-gain flag. |
             | 4 | Add fixed-point regret routing over base and SRSTC experts. | Router shadow receipt with counted code/table estimates and replayed weight hashes. |
+            | 4a | Add typed copy-channel tables with log-odds mixing, MDL-value eviction, no-regret abstain routing, block fallback, and conditional attribution in the raw shadow scorer. | Raw-shadow receipt fields for `typed_copy_channel`, copy expert bands, `block_fallback`, and `conditional_attribution`. |
             | 5 | Integrate only the smallest winning SRSTC component into the strongest admissible substrate. | Prefix replay result JSON with roundtrip and determinism. |
 
             ## Kill Gates

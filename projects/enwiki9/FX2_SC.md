@@ -26,12 +26,13 @@ exact gate artifacts. Use this table before making any claim about progress to
 | `ppmd21760k` bracket result | Exact `10M` replay passed at archive `1,638,204`; unchanged `100M` promotion failed RSS guard by `72` KiB | Guard receipt: `ppmd21760k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
 | `ppmd21632k` bracket result | Exact `10M` replay passed at archive `1,638,229`; unchanged `100M` promotion failed RSS guard by `68` KiB | Guard receipt: `ppmd21632k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
 | `ppmd21504k` bracket result | Exact `10M` replay passed at archive `1,638,165`; unchanged `100M` promotion failed RSS guard by `72` KiB | Guard receipt: `ppmd21504k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
-| Active candidate | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: exact `1,024` byte replay passed with roundtrip and determinism | Result: `results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-02T143419.json`; guard receipt: `ppmd21376k_1024_determinism_rss_guard.json`. |
-| Active gate | `ppmd21376k` unchanged `250,000` byte RSS-guarded determinism replay | Launch or wait for this promotion gate; use terminal driver and RSS receipts before any retune. |
+| `ppmd21376k` bracket result | Exact prefix replays passed; unchanged `100M` promotion failed RSS guard by `116` KiB | Guard receipt: `ppmd21376k_100000000_determinism_rss_guard.json`; this is now the upper bracket for the active candidate. |
+| Active candidate | `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: exact `1,024` byte replay passed with roundtrip and determinism | Result: `results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-07T201228.json`; guard receipt: `ppmd21120k_1024_determinism_rss_guard.json`. |
+| Active gate | `ppmd21120k` unchanged `250,000` byte RSS-guarded determinism replay | Launch only through the guarded handoff command in `docs/status_receipt.md`. |
 | Best `100M` evidence | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: metadata-inherited score `15,040,789`, archive `14,857,781`, program `183,008` | Inherited by payload and ordered-stream identity from the verified geometry parent. No exact `100M` result JSON is present in `results/`. |
 | Best full `1G` proof | None | The certificate generator reports no verified full-corpus result JSON in this checkout. |
 | Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: projected `110,181,114` | Forecast quality: `fx2-calibrated-from-exact-100m`; not a constructive proof. |
-| Active blocker | Active `ppmd21376k` `250,000` byte deterministic replay has not produced terminal driver and RSS receipts yet | Do not retune or launch another compression gate while the lock is held. |
+| Active blocker | No full-corpus constructive result exists; the active `ppmd21120k` lane has only passed the `1K` prefix gate | Continue exact prefix promotion in order and do not claim `10.95%` from prefix evidence. |
 
 ## Abstract
 

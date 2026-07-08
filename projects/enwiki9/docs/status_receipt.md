@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-03T17:23:27+00:00`
+- Generated at UTC: `2026-07-08T00:15:40+00:00`
 
 ## Target State
 
@@ -12,8 +12,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Summary
 
-- Candidate: `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Scope bytes: `100,000,000`
+- Candidate: `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Scope bytes: `250,000`
 - Gate verdict: `incomplete`
 - Gate next action: `wait_for_gate_receipts`
 - Heavy lock held: `false`
@@ -40,11 +40,11 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Heavy lock held: `false`
 - Gate verdict: `incomplete`
 - Next action: `wait_for_gate_receipts`
-- Candidate: `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Scope bytes: `100,000,000`
+- Candidate: `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Scope bytes: `250,000`
 - Driver result JSON: `not present`
 - Driver result present: `false`
-- RSS guard JSON: `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21376k_100000000_determinism_rss_guard.json`
+- RSS guard JSON: `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21120k_250000_determinism_rss_guard.json`
 - RSS guard present: `false`
 - Active scorer observed: `false`
 
@@ -59,8 +59,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Observed Gate Command
 
-- Expected candidate: `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Expected scope bytes: `100,000,000`
+- Expected candidate: `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Expected scope bytes: `250,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -71,14 +71,14 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Observed Controller Command
 
-- Expected active candidate: `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Expected active scope bytes: `100,000,000`
-- Controller process count: `1`
+- Expected active candidate: `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Expected active scope bytes: `250,000`
+- Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
 | PID | Candidate Match | Controller Scope | Scope Match Active Gate | Apply Terminal | Launch Next | Package Lower |
 |---:|---|---:|---|---|---|---|
-| 883,071 | `true` | 10,000,000 | `false` | `true` | `true` | `false` |
+| n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 
 ## Operator Action
 
@@ -105,11 +105,11 @@ Generated from the current certificate, gate receipts, lock state, and process t
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `518`
-- Registered programs: `223`
-- Untracked nonignored entries: `54`
-- Modified tracked entries: `118`
-- Candidate statuses: `active=24, blocked_dependency=12, candidate=67, measured_negative=77, retired=334, track_source_before_evolution=4`
+- Program directories: `522`
+- Registered programs: `225`
+- Untracked nonignored entries: `14`
+- Modified tracked entries: `38`
+- Candidate statuses: `active=24, blocked_dependency=12, candidate=67, measured_negative=77, retired=338, track_source_before_evolution=4`
 
 ## Active Runner Process Table
 
@@ -117,32 +117,20 @@ Generated from the current certificate, gate receipts, lock state, and process t
 |---|---:|---:|---:|---|
 | n/a | n/a | n/a | n/a | n/a |
 
-## Active Controller Process Table
-
-| Role | PID | PPID | RSS KiB | Command |
-|---|---:|---:|---:|---|
-| `gate_decider` | 883,071 | 2,004,460 | 18,816 | `python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_min...` |
-
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21376k_10000000_determinism_rss_guard.json` | 882 | `2026-07-03T10:23:24+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-03T062324.json` | 1,444 | `2026-07-03T10:23:24+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21376k_1000000_determinism_rss_guard.json` | 878 | `2026-07-02T20:30:49+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-02T163048.json` | 1,439 | `2026-07-02T20:30:48+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21376k_250000_determinism_rss_guard.json` | 876 | `2026-07-02T19:04:40+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-02T150440.json` | 1,435 | `2026-07-02T19:04:40+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21376k_1024_determinism_rss_guard.json` | 865 | `2026-07-02T18:34:20+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-02T143419.json` | 1,430 | `2026-07-02T18:34:19+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21120k_1024_determinism_rss_guard.json` | 863 | `2026-07-08T00:12:28+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-07T201228.json` | 1,431 | `2026-07-08T00:12:28+00:00` |
 
 ## Contingencies
 
 - If current gate passes: `promote unchanged`
-- Pass next scope: `1,000,000,000`
+- Pass next scope: `1,000,000`
 - If RSS fails: `record RSS failure and package lower PPMD cap`
-- Lower candidate: `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Lower PPMD KiB: `21,248`
+- Lower candidate: `cmix21_text_mmap_paq5_ppmd20992k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Lower PPMD KiB: `20,992`
 - If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary

@@ -76,8 +76,10 @@ heavy lane.
 | `streaming_retrieval_mixer_plan.py` | Generates `docs/streaming_retrieval_mixer.md`, the lock-safe SRSTC causal sketch-retrieval algorithm and receipt contract. |
 | `streaming_retrieval_shadow.py` | Runs exact-shadow SRSTC/sketch-retrieval probes on cached residual rows with true bits and base probabilities. |
 | `streaming_retrieval_raw_shadow.py` | Runs exact-shadow SRSTC/sketch-retrieval probes on raw byte-aligned corpus bits with an adaptive raw baseline. |
+| `streaming_retrieval_codec.py` | Experimental SRSTC codec harness for turning raw shadow probabilities into replayable archive bytes. |
 | `streaming_retrieval_receipt_audit.py` | Audits cached SRSTC receipts for held-out net savings, alignment safety, state bounds, and complete block-regression evidence. |
 | `streaming_retrieval_continue_shadow.py` | Reads the SRSTC audit queue, chooses the next complete-block rerun, and refuses to execute it while the cmix heavy lock is held unless explicitly overridden. |
+| `streaming_retrieval_fx2_trace_queue.py` | Prints lock-safe SRSTC shadow commands for an existing `FX2_RESIDUAL_ROW` log or residual-probe manifest; it does not launch a compressor. |
 | `fx2_mwcc_router_shadow.py` | Deterministic router shadow evaluation. |
 | `fx2_manifold_outer_sse_search.py` | Manifold/outer-SSE search lane. |
 | `fx2_issa_shadow_search.py` | Integer state-space attractor shadow lane. |
