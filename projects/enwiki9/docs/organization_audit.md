@@ -13,13 +13,12 @@ registered programs in index.json: 225
 docs file entries under docs/: 23
 tools files under tools/: 79
 active: 24
-candidate: 67
+candidate: 69
 measured_negative: 77
 blocked_dependency: 12
-retired: 338
-track_source_before_evolution: 4
-untracked nonignored entries: 14
-modified tracked entries: 38
+retired: 340
+untracked nonignored entries: 0
+modified tracked entries: 4
 ```
 
 Interpretation:
@@ -28,8 +27,9 @@ Interpretation:
 - `index.json` is intentionally narrower than the filesystem;
 - generated inventory should be refreshed whenever receipt/audit rows change so
   status receipts and organization docs share the same counts;
-- the `ppmd21376k` `100M` gate is recorded as an RSS failure; the lower
-  `ppmd21248k` bracket is packaged and its unchanged `10M` gate is running.
+- the `ppmd21248k` `100M` gate is recorded as an RSS failure; the lower
+  `ppmd21120k` bracket is packaged, has a `1K` pass receipt, and exposes its
+  unchanged `250K` gate as the launchable active lane.
 - `tools/enwiki9_delayed_status_check.sh` now reports live process RSS,
   `cmix21_gate_decider.py` output, and any unguarded `cmix21-mmap-bin`
   process outside the RSS-guard tree.
