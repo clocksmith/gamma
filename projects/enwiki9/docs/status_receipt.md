@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-08T00:15:40+00:00`
+- Generated at UTC: `2026-07-08T00:23:29+00:00`
 
 ## Target State
 
@@ -30,9 +30,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Tightest decimal single-process margin KiB: `n/a`
 - Latest binary single-process margin KiB: `n/a`
 - Latest decimal single-process margin KiB: `n/a`
-- Safe to launch heavy gate: `false`
+- Safe to launch heavy gate: `true`
 - Terminal verdict present: `false`
-- Command source: `none while gate is non-terminal`
+- Command source: `operator_action.next_gate_command`
 - Claim rule: `No prefix row proves 10.95%.`
 
 ## Active Gate
@@ -82,19 +82,23 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Action
 
-- Safe to launch heavy gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
+- Safe to launch heavy gate: `true`
+- Action: `launch_active_gate`
+- Reason: `the active candidate and scope have no guard or driver receipt yet`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
 ## Handoff
 
 - Terminal verdict present: `false`
-- Heavy gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
-- Command source: `none while gate is non-terminal`
+- Heavy gate mutation allowed: `true`
+- Recommended action: `launch_active_gate`
+- Command source: `operator_action.next_gate_command`
 - Claim rule: `No prefix row proves 10.95%.`
+- Next gate command:
+```bash
+flock -n /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --sample-interval 1 --guard-json projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21120k_250000_determinism_rss_guard.json --label cmix21_ppmd21120k_fxcmrcm20_250000_determinism -- python3 projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 --limit 250000 --check-determinism
+```
 
 ## Operator Logs
 
@@ -107,9 +111,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Audit return code: `0`
 - Program directories: `522`
 - Registered programs: `225`
-- Untracked nonignored entries: `14`
-- Modified tracked entries: `38`
-- Candidate statuses: `active=24, blocked_dependency=12, candidate=67, measured_negative=77, retired=338, track_source_before_evolution=4`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `4`
+- Candidate statuses: `active=24, blocked_dependency=12, candidate=69, measured_negative=77, retired=340`
 
 ## Active Runner Process Table
 

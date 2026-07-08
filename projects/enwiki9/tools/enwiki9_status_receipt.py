@@ -690,6 +690,22 @@ def operator_action(
             "action": "record_failure_and_stop_promotion",
             "reason": "a failed constructive gate cannot be promoted",
         }
+    if (
+        verdict == "incomplete"
+        and gate.get("rss_guard_json_present") is False
+        and gate.get("driver_result_json_present") is False
+        and isinstance(gate.get("candidate"), str)
+        and isinstance(gate.get("scope_bytes"), int)
+    ):
+        return {
+            "safe_to_launch_heavy_gate": True,
+            "action": "launch_active_gate",
+            "reason": "the active candidate and scope have no guard or driver receipt yet",
+            "next_gate_command": cmix21_gate_decider.command_for_gate(
+                gate["candidate"],
+                gate["scope_bytes"],
+            ),
+        }
     if verdict in {"incomplete", "receipt_incomplete", "running"} or next_action in {
         "wait_for_gate_receipts",
         "wait_for_rss_guard_receipt",
@@ -768,6 +784,13 @@ def handoff_state(
         out["apply_terminal_command"] = apply_command
         out["command_source"] = "cmix21_gate_decider.apply_terminal_command"
         out["heavy_gate_mutation_allowed"] = True
+    elif isinstance(action.get("next_gate_command"), list):
+        out["next_gate_command"] = action.get("next_gate_command")
+        out["command_source"] = "operator_action.next_gate_command"
+        out["heavy_gate_mutation_allowed"] = (
+            heavy_lock.get("held") is not True
+            and process_state.get("active_scorer_observed") is not True
+        )
     elif isinstance(gate.get("lower_prefix_gate_command"), list):
         out["next_gate_command"] = gate.get("lower_prefix_gate_command")
         out["command_source"] = "cmix21_gate_decider.lower_prefix_gate_command"
