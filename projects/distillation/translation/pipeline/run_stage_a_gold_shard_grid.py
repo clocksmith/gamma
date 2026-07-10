@@ -23,14 +23,8 @@ REBUILD_BUNDLE_SCRIPT = (
     PROJECT_ROOT / "projects" / "distillation" / "translation" / "pipeline" / "rebuild_translation_results_bundle.py"
 )
 DEFAULT_PYTHON_BIN = PROJECT_ROOT / ".venv" / "bin" / "python"
-DEFAULT_TEACHER_MODEL = (
-    "/home/x/.cache/huggingface/hub/models--google--translategemma-4b-it/"
-    "snapshots/10042cb0e6e7fdce748996a71dc3dc432a4e0c89"
-)
-DEFAULT_STUDENT_MODEL = (
-    "/home/x/.cache/huggingface/hub/models--google--gemma-3-1b-it/"
-    "snapshots/dcc83ea841ab6100d6b47a070329e1ba4cf78752"
-)
+DEFAULT_TEACHER_MODEL = "google/translategemma-4b-it"
+DEFAULT_STUDENT_MODEL = "google/gemma-3-1b-it"
 DEFAULT_GOLD_1280 = (
     PROJECT_ROOT
     / "projects"
@@ -122,6 +116,10 @@ def _runtime_mode(device: str, hsa_override: str) -> str:
     if str(device).strip().lower() == "cpu":
         return "cpu"
     return "rocm_gfx_override" if str(hsa_override).strip() else "normal_rocm"
+
+
+def _sweep_mode(args: argparse.Namespace) -> str:
+    return "after_train" if bool(args.defer_live_sweeps) else "live"
 
 
 def _normalize_stage_a_steps(total_steps: int, sft_steps: int) -> tuple[int, int]:
@@ -242,9 +240,7 @@ def _dataset_spec_text(paths: list[Path]) -> str:
 
 
 def _materialized_dataset_path(*, run_root: Path, size: int, source_paths: list[Path]) -> Path:
-    if len(source_paths) == 1:
-        return source_paths[0]
-    return run_root / "inputs" / f"train_pairs.rows{size}.merged.jsonl"
+    return run_root / "inputs" / f"train_pairs.rows{size}.normalized.jsonl"
 
 
 def _normalize_translation_pair_row(obj: dict[str, Any], *, path: Path, line_no: int) -> dict[str, Any]:
@@ -350,7 +346,8 @@ def _run_contract_line(
         f"eval_dataset_paths={eval_text} "
         f"device={args.device} "
         "schedule=A_then_B "
-        f"runtime_mode={_runtime_mode(str(args.device), str(args.hsa_override_gfx_version))}"
+        f"runtime_mode={_runtime_mode(str(args.device), str(args.hsa_override_gfx_version))} "
+        f"sweep_mode={_sweep_mode(args)}"
     )
 
 
@@ -417,6 +414,8 @@ def _build_train_cmd(
         str(int(args.seed)),
         "--select-best-checkpoint",
     ]
+    if bool(args.allow_download):
+        cmd.append("--allow-download")
     if str(args.teacher_device).strip():
         cmd.extend(["--teacher-device", str(args.teacher_device).strip()])
     return cmd
@@ -485,16 +484,18 @@ def _build_sweep_cmd(
         str(int(args.seed)),
         "--decode",
         "greedy",
-        "--teacher-model",
-        str(args.teacher_model),
         "--python-bin",
         str(python_bin),
         "--out-dir",
         str(out_dir),
         "--resume",
     ]
+    if not bool(args.student_only_sweep):
+        cmd.extend(["--teacher-model", str(args.teacher_model)])
     if str(args.hsa_override_gfx_version).strip():
         cmd.extend(["--hsa-override-gfx-version", str(args.hsa_override_gfx_version).strip()])
+    if bool(args.allow_download):
+        cmd.append("--allow-download")
     return cmd
 
 
@@ -572,8 +573,23 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--eval-max-new-tokens", type=int, default=192)
     ap.add_argument("--eval-device", default="cuda")
     ap.add_argument("--eval-dtype", default="bfloat16", choices=["auto", "float16", "bfloat16", "float32"])
+    ap.add_argument(
+        "--student-only-sweep",
+        action="store_true",
+        help="Rank checkpoints using student eval only; omit teacher comparison from checkpoint sweeps.",
+    )
+    ap.add_argument(
+        "--defer-live-sweeps",
+        action="store_true",
+        help="Train first, then sweep all ready checkpoints after training finishes.",
+    )
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--poll-seconds", type=float, default=30.0)
+    ap.add_argument(
+        "--allow-download",
+        action="store_true",
+        help="Allow the trainer to fetch missing Hugging Face model files.",
+    )
     ap.add_argument(
         "--hsa-override-gfx-version",
         default="11.0.0",
@@ -681,7 +697,8 @@ def main() -> int:
             "[eval-sweep] "
             f"eval2={eval2_pairs} "
             f"eval3={eval3_pairs} "
-            f"device={args.eval_device} dtype={args.eval_dtype}"
+            f"device={args.eval_device} dtype={args.eval_dtype} "
+            f"mode={_sweep_mode(args)}"
         )
 
     if not args.launch:
@@ -697,14 +714,12 @@ def main() -> int:
             raise RuntimeError(f"run root already exists: {run_root}")
         logs_dir = run_root / "logs"
         logs_dir.mkdir(parents=True, exist_ok=True)
-        if len(plan["source_paths"]) > 1:
-            merged_rows, manifest_path = _write_merged_dataset(Path(plan["dataset_path"]), list(plan["source_paths"]))
-            if merged_rows != int(plan["row_count"]):
-                raise RuntimeError(
-                    f"merged dataset row count mismatch for {plan['run_name']}: expected {plan['row_count']}, found {merged_rows}"
-                )
-        else:
-            manifest_path = None
+        normalized_rows, manifest_path = _write_merged_dataset(Path(plan["dataset_path"]), list(plan["source_paths"]))
+        if normalized_rows != int(plan["row_count"]):
+            raise RuntimeError(
+                f"normalized dataset row count mismatch for {plan['run_name']}: "
+                f"expected {plan['row_count']}, found {normalized_rows}"
+            )
         contract_path = run_root / "run_contract.txt"
         contract_path.write_text(str(plan["contract_line"]) + "\n", encoding="utf-8")
 
@@ -716,8 +731,7 @@ def main() -> int:
         _log_line(supervisor_log, str(plan["contract_line"]))
         _log_line(supervisor_log, f"[dataset] rows={plan['row_count']} path={plan['dataset_path']}")
         _log_line(supervisor_log, f"[dataset] pairs_input_spec={plan['dataset_spec']}")
-        if manifest_path is not None:
-            _log_line(supervisor_log, f"[dataset-merge] manifest={manifest_path}")
+        _log_line(supervisor_log, f"[dataset-normalize] manifest={manifest_path}")
         _log_line(supervisor_log, f"[train-run] cmd={shlex.join(plan['train_cmd'])}")
 
         swept_checkpoint_names: set[str] = set()
@@ -735,7 +749,7 @@ def main() -> int:
                 stage_dir = run_root / "stage_a"
                 ready = _ready_checkpoints(stage_dir) if stage_dir.is_dir() else []
                 pending = [path for path in ready if path.name not in swept_checkpoint_names]
-                if pending:
+                if pending and not bool(args.defer_live_sweeps):
                     sweep_cmd = _build_sweep_cmd(args, python_bin=python_bin, run_root=run_root, checkpoints=pending)
                     _log_line(supervisor_log, f"[sweep-run] checkpoints={','.join(path.name for path in pending)}")
                     rc = _run_and_log(sweep_cmd, env=child_env, log_path=sweep_log)

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd /home/x/deco/gamma
+/home/x/deco/gamma/.venv_rocm/bin/python projects/distillation/translation/pipeline/run_stage_a_gold_shard_grid.py --sizes 8 --dataset 8=projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/entity_guard/entity_guard.filtered.jsonl --tag pack04_replace10_codex_lowfruit_entity_guard --total-steps 4000 --sft-steps 4000 --save-every 1000 --launch
