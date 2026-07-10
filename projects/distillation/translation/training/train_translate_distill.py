@@ -11,6 +11,7 @@ Supported schedules:
 from __future__ import annotations
 
 import argparse
+from difflib import SequenceMatcher
 import glob
 import json
 import math
@@ -215,8 +216,15 @@ def _parse_args() -> argparse.Namespace:
         default=12,
         help="Keep at most this many checkpoints per stage, always retaining first and last.",
     )
+    ap.add_argument(
+        "--save-optimizer-state",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Store optimizer and scheduler tensors in checkpoints for exact training resume.",
+    )
     ap.add_argument("--log-every", type=int, default=20)
     ap.add_argument("--lambda-kd", type=float, default=0.5)
+    ap.add_argument("--lambda-sft", type=float, default=1.0)
     ap.add_argument("--mu-triplet", type=float, default=0.1)
     ap.add_argument("--margin", type=float, default=0.2)
     ap.add_argument("--kd-temperature", type=float, default=1.0)
@@ -704,9 +712,50 @@ def _ce_loss(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     )
 
 
-def _kd_loss(student_logits: torch.Tensor, teacher_logits: torch.Tensor, labels: torch.Tensor, temperature: float) -> torch.Tensor:
-    shift_s, shift_labels = _shift_logits_and_labels(student_logits, labels)
-    shift_t, _ = _shift_logits_and_labels(teacher_logits, labels)
+def _matching_target_positions(
+    student_labels: torch.Tensor,
+    teacher_labels: torch.Tensor,
+) -> list[tuple[list[int], list[int]]]:
+    """Align target-token positions while ignoring model-specific prompt lengths."""
+    student_shift = student_labels[:, 1:]
+    teacher_shift = teacher_labels[:, 1:]
+    if student_shift.size(0) != teacher_shift.size(0):
+        raise RuntimeError(
+            "KD batch mismatch: "
+            f"student={student_shift.size(0)} teacher={teacher_shift.size(0)}"
+        )
+
+    aligned: list[tuple[list[int], list[int]]] = []
+    for student_row, teacher_row in zip(student_shift, teacher_shift, strict=True):
+        student_positions = student_row.ne(-100).nonzero(as_tuple=False).flatten().tolist()
+        teacher_positions = teacher_row.ne(-100).nonzero(as_tuple=False).flatten().tolist()
+        student_tokens = [int(student_row[pos].item()) for pos in student_positions]
+        teacher_tokens = [int(teacher_row[pos].item()) for pos in teacher_positions]
+
+        if student_tokens == teacher_tokens:
+            aligned.append((student_positions, teacher_positions))
+            continue
+
+        student_match: list[int] = []
+        teacher_match: list[int] = []
+        matcher = SequenceMatcher(a=student_tokens, b=teacher_tokens, autojunk=False)
+        for block in matcher.get_matching_blocks():
+            for offset in range(int(block.size)):
+                student_match.append(student_positions[int(block.a) + offset])
+                teacher_match.append(teacher_positions[int(block.b) + offset])
+        aligned.append((student_match, teacher_match))
+    return aligned
+
+
+def _kd_loss(
+    student_logits: torch.Tensor,
+    teacher_logits: torch.Tensor,
+    student_labels: torch.Tensor,
+    teacher_labels: torch.Tensor,
+    temperature: float,
+) -> torch.Tensor:
+    shift_s, _ = _shift_logits_and_labels(student_logits, student_labels)
+    shift_t, _ = _shift_logits_and_labels(teacher_logits, teacher_labels)
     if shift_s.size(-1) != shift_t.size(-1):
         min_vocab = int(min(shift_s.size(-1), shift_t.size(-1)))
         if min_vocab <= 0:
@@ -717,15 +766,33 @@ def _kd_loss(student_logits: torch.Tensor, teacher_logits: torch.Tensor, labels:
         shift_t = shift_t[..., :min_vocab]
     if temperature <= 0:
         temperature = 1.0
-    mask = shift_labels.ne(-100).view(-1)
-    if not torch.any(mask):
-        return torch.tensor(0.0, device=student_logits.device)
-    flat_s = shift_s.view(-1, shift_s.size(-1))[mask]
-    flat_t = shift_t.view(-1, shift_t.size(-1))[mask]
+
+    aligned = _matching_target_positions(student_labels, teacher_labels)
     t = float(temperature)
-    sl = F.log_softmax(flat_s / t, dim=-1)
-    tp = F.softmax(flat_t / t, dim=-1)
-    return F.kl_div(sl, tp, reduction="batchmean") * (t * t)
+    total_loss = torch.tensor(0.0, device=student_logits.device)
+    total_tokens = 0
+    for batch_idx, (student_positions, teacher_positions) in enumerate(aligned):
+        if not student_positions:
+            continue
+        student_idx = torch.as_tensor(student_positions, device=shift_s.device, dtype=torch.long)
+        teacher_idx = torch.as_tensor(teacher_positions, device=shift_t.device, dtype=torch.long)
+        student_target_logits = shift_s[batch_idx].index_select(0, student_idx).float()
+        teacher_target_logits = shift_t[batch_idx].index_select(0, teacher_idx).to(
+            device=student_target_logits.device,
+            dtype=torch.float32,
+        )
+        student_log_probs = F.log_softmax(student_target_logits / t, dim=-1)
+        teacher_probs = F.softmax(teacher_target_logits / t, dim=-1)
+        total_loss = total_loss + F.kl_div(
+            student_log_probs,
+            teacher_probs,
+            reduction="sum",
+        ) * (t * t)
+        total_tokens += len(student_positions)
+
+    if total_tokens <= 0:
+        return torch.tensor(0.0, device=student_logits.device)
+    return total_loss / float(total_tokens)
 
 
 def _sequence_score(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
@@ -772,14 +839,24 @@ def _is_valid_checkpoint_dir(path: Path) -> bool:
         return False
 
     config_path = ckpt / "config.json"
-    if not config_path.is_file() or config_path.stat().st_size == 0:
+    adapter_config_path = ckpt / "adapter_config.json"
+    metadata_path = config_path if config_path.is_file() else adapter_config_path
+    if not metadata_path.is_file() or metadata_path.stat().st_size == 0:
         return False
     try:
-        json.loads(config_path.read_text(encoding="utf-8"))
+        json.loads(metadata_path.read_text(encoding="utf-8"))
     except Exception:
         return False
 
-    has_model = (ckpt / "model.safetensors").is_file() or (ckpt / "pytorch_model.bin").is_file()
+    has_model = any(
+        (ckpt / filename).is_file()
+        for filename in (
+            "model.safetensors",
+            "pytorch_model.bin",
+            "adapter_model.safetensors",
+            "adapter_model.bin",
+        )
+    )
     if not has_model:
         # Allow index-based shards for older checkpoint layouts.
         if not any(ckpt.glob("*.safetensors")) and not any(ckpt.glob("*.bin")):
@@ -1039,6 +1116,7 @@ def _save_checkpoint(
     loss_mean20: float | None = None,
     stage_name: str = "",
     keep_checkpoints: int = 0,
+    save_optimizer_state: bool = True,
 ) -> None:
     ckpt = stage_dir / f"checkpoint-{step:06d}"
     ckpt.mkdir(parents=True, exist_ok=True)
@@ -1048,12 +1126,12 @@ def _save_checkpoint(
         "step": int(step),
         "timer": time.time(),
     }
-    if optimizer is not None:
+    if save_optimizer_state and optimizer is not None:
         try:
             state["optimizer_state_dict"] = optimizer.state_dict()
         except Exception:
             pass
-    if scheduler is not None:
+    if save_optimizer_state and scheduler is not None:
         try:
             state["scheduler_state_dict"] = scheduler.state_dict()
         except Exception:
@@ -1181,6 +1259,7 @@ def _train_stage(
     student,
     tokenizer,
     teacher,
+    teacher_tokenizer,
     optimizer,
     scheduler,
     args: argparse.Namespace,
@@ -1191,6 +1270,7 @@ def _train_stage(
     use_triplet: bool,
     seed: int,
     device: str,
+    teacher_device: str,
     rng: random.Random,
     vocab_remap: VocabRemap | None,
 ) -> dict[str, float]:
@@ -1208,6 +1288,7 @@ def _train_stage(
                 "batch_size": int(args.batch_size),
                 "use_kd": bool(use_kd),
                 "use_triplet": bool(use_triplet),
+                "kd_alignment": "model_native_aligned_targets" if use_kd else "none",
             },
         )
 
@@ -1286,12 +1367,34 @@ def _train_stage(
 
         loss_kd = torch.tensor(0.0, device=student_logits.device)
         if use_kd and teacher is not None:
+            if teacher_tokenizer is None:
+                raise RuntimeError("KD requested without a teacher tokenizer.")
+            teacher_ids, teacher_mask, teacher_token_types, teacher_labels = _encode_chat_batch(
+                teacher_tokenizer,
+                batch,
+                max_seq_length=int(args.max_seq_length),
+                max_prompt_length=int(args.max_prompt_length),
+                device=teacher_device,
+                target_key="target_pos",
+            )
             with torch.no_grad():
-                teacher_out = _forward_model(teacher, pos_ids, pos_mask, pos_token_types)
+                teacher_out = _forward_model(
+                    teacher,
+                    teacher_ids,
+                    teacher_mask,
+                    teacher_token_types,
+                )
                 teacher_logits = teacher_out.logits
                 if vocab_remap is not None:
                     teacher_logits = _project_teacher_logits_to_subset(teacher_logits, vocab_remap)
-            loss_kd = _kd_loss(student_logits_loss, teacher_logits, pos_labels_student, float(args.kd_temperature))
+                    teacher_labels = _remap_labels(teacher_labels, vocab_remap)
+            loss_kd = _kd_loss(
+                student_logits_loss,
+                teacher_logits,
+                pos_labels_student,
+                teacher_labels,
+                float(args.kd_temperature),
+            )
 
         loss_triplet = torch.tensor(0.0, device=student_logits.device)
         if batch_use_triplet and neg_ids is not None:
@@ -1312,7 +1415,11 @@ def _train_stage(
                 margin=float(args.margin),
             )
 
-        loss = loss_pos + float(args.lambda_kd) * loss_kd + float(args.mu_triplet) * loss_triplet
+        loss = (
+            float(args.lambda_sft) * loss_pos
+            + float(args.lambda_kd) * loss_kd
+            + float(args.mu_triplet) * loss_triplet
+        )
         if (not torch.isfinite(loss)) or (not loss.requires_grad):
             continue
 
@@ -1380,6 +1487,7 @@ def _train_stage(
                 loss_mean20=(statistics.fmean(losses[-min(len(losses), 20):]) if losses else None),
                 stage_name=stage_name,
                 keep_checkpoints=int(args.keep_checkpoints),
+                save_optimizer_state=bool(args.save_optimizer_state),
             )
     if not losses or total > 0:
         _save_checkpoint(
@@ -1394,6 +1502,7 @@ def _train_stage(
             loss_mean20=(statistics.fmean(losses[-min(len(losses), 20):]) if losses else None),
             stage_name=stage_name,
             keep_checkpoints=int(args.keep_checkpoints),
+            save_optimizer_state=bool(args.save_optimizer_state),
         )
 
     pred_path = _save_predictions(student, tokenizer, vocab_remap, rows, args, stage_dir, device=device)
@@ -1641,33 +1750,38 @@ def main() -> int:
             )
 
     teacher = None
+    teacher_tok = None
     skip_kd = False
     teacher_prepared = False
 
-    def _prepare_teacher_for_kd() -> tuple[Any | None, bool]:
-        nonlocal teacher, skip_kd, teacher_prepared
+    def _prepare_teacher_for_kd() -> tuple[Any | None, Any | None, bool]:
+        nonlocal teacher, teacher_tok, skip_kd, teacher_prepared
         if teacher_prepared:
-            return teacher, skip_kd
+            return teacher, teacher_tok, skip_kd
 
         teacher_prepared = True
-        if bool(args.skip_kd_when_device_mismatch):
-            teacher_tok = _load_tokenizer_only(
-                str(args.teacher_model),
-                local_files_only=bool(args.local_files_only),
-            )
-            if str(teacher_tok.get_vocab()) != str(tok.get_vocab()):
+        teacher_tok = _load_tokenizer_only(
+            str(args.teacher_model),
+            local_files_only=bool(args.local_files_only),
+        )
+        if teacher_tok.get_vocab() != tok.get_vocab():
+            if bool(args.skip_kd_when_device_mismatch):
                 print("[warn] teacher/student tokenizers appear incompatible; KD disabled.")
                 skip_kd = True
-                return None, skip_kd
+                return None, None, skip_kd
+            raise RuntimeError(
+                "Teacher and student token vocabularies differ; token-logit KD requires "
+                "identical token-to-id mappings."
+            )
 
         print(f"[model] loading teacher on device={teacher_device}")
-        teacher, _ = _load_model_and_tokenizer(
+        teacher, teacher_tok = _load_model_and_tokenizer(
             str(args.teacher_model),
             teacher_device,
             dtype=dtype,
             local_files_only=bool(args.local_files_only),
         )
-        return teacher, skip_kd
+        return teacher, teacher_tok, skip_kd
 
     if args.schedule == "A_then_B":
         stage_a_dir = run_root / "stage_a"
@@ -1679,6 +1793,7 @@ def main() -> int:
                 student=student,
                 tokenizer=tok,
                 teacher=None,
+                teacher_tokenizer=None,
                 optimizer=optimizer,
                 scheduler=scheduler,
                 args=args,
@@ -1689,6 +1804,7 @@ def main() -> int:
                 use_triplet=False,
                 seed=int(args.seed),
                 device=device,
+                teacher_device=teacher_device,
                 rng=rng,
                 vocab_remap=vocab_remap,
             )
@@ -1697,13 +1813,14 @@ def main() -> int:
         stage_b_dir = run_root / "stage_b"
         stage_b: dict[str, float] = {}
         if run_stage_b:
-            teacher, skip_kd = _prepare_teacher_for_kd()
+            teacher, teacher_tok, skip_kd = _prepare_teacher_for_kd()
             stage_b = _train_stage(
                 stage_name="A_then_B_stage_b",
                 rows=pair_rows,
                 student=student,
                 tokenizer=tok,
                 teacher=teacher,
+                teacher_tokenizer=teacher_tok,
                 optimizer=optimizer,
                 scheduler=scheduler,
                 args=args,
@@ -1714,6 +1831,7 @@ def main() -> int:
                 use_triplet=not (args.mu_triplet <= 0),
                 seed=int(args.seed),
                 device=device,
+                teacher_device=teacher_device,
                 rng=rng,
                 vocab_remap=vocab_remap,
             )
@@ -1728,13 +1846,14 @@ def main() -> int:
         stage_mix_dir = run_root / "mixed"
         stage_mix: dict[str, float] = {}
         if run_stage_mixed:
-            teacher, skip_kd = _prepare_teacher_for_kd()
+            teacher, teacher_tok, skip_kd = _prepare_teacher_for_kd()
             stage_mix = _train_stage(
                 stage_name="mixed_from_start",
                 rows=pair_rows,
                 student=student,
                 tokenizer=tok,
                 teacher=teacher,
+                teacher_tokenizer=teacher_tok,
                 optimizer=optimizer,
                 scheduler=scheduler,
                 args=args,
@@ -1745,6 +1864,7 @@ def main() -> int:
                 use_triplet=not (args.mu_triplet <= 0),
                 seed=int(args.seed),
                 device=device,
+                teacher_device=teacher_device,
                 rng=rng,
                 vocab_remap=vocab_remap,
             )
@@ -1802,9 +1922,12 @@ def main() -> int:
         "distill_steps": int(distill_steps),
         "lora_enabled": bool(lora_enabled),
         "lambda_kd": float(args.lambda_kd),
+        "lambda_sft": float(args.lambda_sft),
         "mu_triplet": float(args.mu_triplet),
         "margin": float(args.margin),
         "kd_temperature": float(args.kd_temperature),
+        "kd_alignment": "model_native_aligned_targets",
+        "save_optimizer_state": bool(args.save_optimizer_state),
         "vocab_subset_active": bool(vocab_remap is not None),
         "student_vocab_size": int(len(vocab_remap.new_to_old)) if vocab_remap is not None else -1,
         "resumed": bool(args.resume) and resume_checkpoint is not None,

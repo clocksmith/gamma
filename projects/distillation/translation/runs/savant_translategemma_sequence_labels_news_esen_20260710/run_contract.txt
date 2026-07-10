@@ -1,0 +1,9 @@
+[run-contract] run_name=savant_translategemma_sequence_labels_news_esen_20260710 pairs_input_spec=projects/distillation/translation/training_data/savant_news/news_commentary_en_es.local.jsonl resume_from=none resume_stage=none decode=greedy eval_dataset_paths=projects/distillation/translation/training_data/savant_news/news_commentary_en_es.local.jsonl device=cuda schedule=teacher_label_generation runtime_mode=normal_rocm sweep_mode=after_train
+
+teacher_model=google/translategemma-4b-it
+teacher_snapshot=/home/x/.cache/huggingface_gamma_rocm/hub/models--google--translategemma-4b-it/snapshots/10042cb0e6e7fdce748996a71dc3dc432a4e0c89
+teacher_revision=10042cb0e6e7fdce748996a71dc3dc432a4e0c89
+teacher_direction=es-en
+dataset_manifest=projects/distillation/translation/training_data/savant_news/news_commentary_en_es.local.manifest.json
+dataset_usage_scope=local_research_only
+purpose=sequence_distillation_labels

@@ -13,6 +13,26 @@ Terminology used in this document:
 - Stage A checkpoint: a checkpoint under `stage_a/`.
 - Stage B continuation: follow-on distillation training under `stage_b/`.
 
+## Current strict student-teacher proof
+
+The artifact-backed Gemma 3 1B Savant student beats the current
+`google/translategemma-4b-it` teacher on both primary metrics on the 128-row
+in-domain clean holdout, using one paired greedy evaluation on ROCm:
+
+| model | BLEU | chrF | rows |
+| --- | ---: | ---: | ---: |
+| Savant Gemma 3 1B | 54.4500 | 72.3516 | 128 |
+| TranslateGemma 4B | 45.4563 | 70.8387 | 128 |
+| student delta | +8.9937 | +1.5129 | 128 |
+
+The student also wins BLEU and chrF in each direction. This claim is scoped to
+the in-domain clean holdout. On external WMT13, the same paired run gives the
+student `33.7353 / 59.6065` and the teacher `33.6973 / 60.8011`, so external
+chrF is not yet a student win.
+
+Receipt:
+`projects/distillation/translation/runs/savant_student_teacher_paired_20260710/claim_receipt.md`
+
 ## Historical proof point
 
 On the stored `1280`-row ablation run (`translategemma4b_es_en_gemma3_1b_full_20260303_114100`), the Stage A checkpoint at 32k steps (`stage_a/checkpoint-032000`) is close to the teacher on external BLEU:

@@ -1,0 +1,87 @@
+{
+  "decode_metadata": {
+    "decode_mode": "greedy",
+    "length_penalty": 1.0,
+    "num_beams": 1,
+    "temperature": 0.0,
+    "top_k": 50,
+    "top_p": 1.0
+  },
+  "delta": null,
+  "direction_metrics": {
+    "es_en_bleu": 36.73394189092225,
+    "es_en_chrf": 65.01840926814873,
+    "es_en_comet": null,
+    "es_en_sample_count": 2048,
+    "total_sample_count": 2048
+  },
+  "eval_samples": 2048,
+  "pair_files": [
+    "projects/distillation/translation/training_data/savant_news/news_commentary_en_es.local.jsonl"
+  ],
+  "pairs": "projects/distillation/translation/training_data/savant_news/news_commentary_en_es.local.jsonl",
+  "provenance": {
+    "adapter_name": "translategemma",
+    "arch": "gemma_causal_lm",
+    "comet_available": false,
+    "dtype": "bfloat16",
+    "eval_dataset_label": "",
+    "eval_dataset_path": "projects/distillation/translation/training_data/savant_news/news_commentary_en_es.local.jsonl",
+    "execution_mode": "causal-chat",
+    "model_id": "/home/x/.cache/huggingface_gamma_rocm/hub/models--google--translategemma-4b-it/snapshots/10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+    "model_revision": "",
+    "runtime_device": "cuda",
+    "tokenizer_id": "/home/x/.cache/huggingface_gamma_rocm/hub/models--google--translategemma-4b-it/snapshots/10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+    "tokenizer_revision": ""
+  },
+  "source_langs": [
+    "es"
+  ],
+  "student": {
+    "count": 2048,
+    "label": "student",
+    "metrics_by_pair": {
+      "es-en": {
+        "bleu": {
+          "available": true,
+          "score": 36.73394189092225
+        },
+        "chrf": {
+          "available": true,
+          "score": 65.01840926814873
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.634765625
+        },
+        "n": 2048
+      }
+    },
+    "metrics_overall": {
+      "bleu": {
+        "available": true,
+        "score": 36.73394189092225
+      },
+      "chrf": {
+        "available": true,
+        "score": 65.01840926814873
+      },
+      "exact_match": {
+        "available": true,
+        "score": 0.634765625
+      },
+      "n": 2048
+    },
+    "model": "/home/x/.cache/huggingface_gamma_rocm/hub/models--google--translategemma-4b-it/snapshots/10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+    "predictions": {
+      "path": "projects/distillation/translation/runs/savant_translategemma_sequence_labels_news_esen_20260710/teacher_labels/student_predictions.jsonl"
+    },
+    "vocab_subset_active": false,
+    "vocab_subset_dir": ""
+  },
+  "target_langs": [
+    "en"
+  ],
+  "teacher": null,
+  "vocab_subset_dir": ""
+}

@@ -77,6 +77,49 @@ def _dataset_label(value: str) -> str:
     return text
 
 
+def _float_slug(value: float) -> str:
+    return format(float(value), ".6g").replace("-", "m").replace(".", "p")
+
+
+def _decode_label(
+    decode: str,
+    num_beams: int,
+    length_penalty: float,
+    num_candidates: int = 1,
+    temperature: float = 0.0,
+    top_p: float = 1.0,
+    candidate_selection: str = "first",
+) -> str:
+    if decode == "greedy":
+        if num_beams != 1:
+            raise RuntimeError("--decode greedy requires --num-beams 1")
+        if num_candidates != 1:
+            raise RuntimeError("--decode greedy requires --num-candidates 1")
+        return "greedy"
+    if decode == "beam":
+        if num_beams < 2:
+            raise RuntimeError("--decode beam requires --num-beams >= 2")
+        if num_candidates > num_beams:
+            raise RuntimeError("--decode beam requires --num-beams >= --num-candidates")
+        penalty = _float_slug(length_penalty)
+        return f"beam{num_beams}_lp{penalty}"
+    if decode == "sampled":
+        if num_beams != 1:
+            raise RuntimeError("--decode sampled requires --num-beams 1")
+        if num_candidates < 2:
+            raise RuntimeError("--decode sampled requires --num-candidates >= 2")
+        if temperature <= 0.0:
+            raise RuntimeError("--decode sampled requires --temperature > 0")
+        if candidate_selection == "first":
+            raise RuntimeError("--decode sampled requires a non-default --candidate-selection")
+        selection = candidate_selection.replace("_", "")
+        return (
+            f"sample{num_candidates}_t{_float_slug(temperature)}_"
+            f"p{_float_slug(top_p)}_{selection}"
+        )
+    raise RuntimeError(f"Unsupported decode policy: {decode}")
+
+
 def _collect_checkpoints(stage_b_dir: Path, checkpoints_arg: str) -> list[Path]:
     if checkpoints_arg.strip().lower() == "auto":
         all_ckpts = [p for p in stage_b_dir.glob("checkpoint-*") if p.is_dir()]
@@ -287,6 +330,13 @@ def _md_table(rows: list[dict[str, Any]], cols: list[tuple[str, str]]) -> str:
     return "\n".join([header, sep] + body)
 
 
+def _without_scoreboard_timestamp(text: str) -> str:
+    lines = text.splitlines()
+    if len(lines) >= 3 and lines[2].startswith("Updated: "):
+        lines[2] = "Updated: <ignored>"
+    return "\n".join(lines)
+
+
 def _write_scoreboard(
     out_dir: Path,
     manifest_rows: list[dict[str, Any]],
@@ -311,6 +361,12 @@ def _write_scoreboard(
                 "chrf": _fmt_float(row.get("chrf")),
                 "samples": row.get("samples", ""),
                 "duration_s": _fmt_float(row.get("duration_s")),
+                "num_beams": row.get("num_beams", ""),
+                "length_penalty": row.get("length_penalty", ""),
+                "num_candidates": row.get("num_candidates", ""),
+                "candidate_selection": row.get("candidate_selection", ""),
+                "eval_offset": row.get("eval_offset", ""),
+                "eval_samples": row.get("eval_samples", ""),
                 "pairs": row.get("pairs", ""),
                 "compare_summary": row.get("compare_summary", ""),
                 "log_path": row.get("log_path", ""),
@@ -388,6 +444,12 @@ def _write_scoreboard(
             "chrf",
             "samples",
             "duration_s",
+            "num_beams",
+            "length_penalty",
+            "num_candidates",
+            "candidate_selection",
+            "eval_offset",
+            "eval_samples",
             "pairs",
             "compare_summary",
             "log_path",
@@ -407,8 +469,16 @@ def _write_scoreboard(
         agg_fields.append(f"{ev_name}_chrf")
     _write_csv(agg_csv, agg_rows, agg_fields)
 
+    scoreboard_title = next(
+        (
+            str(row.get("scoreboard_title", "")).strip()
+            for row in manifest_rows
+            if str(row.get("scoreboard_title", "")).strip()
+        ),
+        "Stage B Checkpoint Sweep Scoreboard",
+    )
     md_lines: list[str] = []
-    md_lines.append("# Stage B Checkpoint Sweep Scoreboard")
+    md_lines.append(f"# {scoreboard_title}")
     md_lines.append("")
     md_lines.append(f"Updated: {_now_utc()}")
     md_lines.append(f"Run root: `{_safe_rel(run_root, repo_root)}`")
@@ -446,6 +516,10 @@ def _write_scoreboard(
                     ("bleu", "bleu"),
                     ("chrf", "chrf"),
                     ("samples", "samples"),
+                    ("num_beams", "beams"),
+                    ("length_penalty", "length_penalty"),
+                    ("num_candidates", "candidates"),
+                    ("candidate_selection", "candidate_selection"),
                     ("duration_s", "duration_s"),
                 ],
             )
@@ -460,7 +534,13 @@ def _write_scoreboard(
     md_lines.append(f"- Eval rows CSV: `{_safe_rel(eval_csv, repo_root)}`")
     md_lines.append(f"- Checkpoint ranking CSV: `{_safe_rel(agg_csv, repo_root)}`")
     md_lines.append("")
-    (out_dir / "scoreboard.md").write_text("\n".join(md_lines), encoding="utf-8")
+    scoreboard_path = out_dir / "scoreboard.md"
+    scoreboard_text = "\n".join(md_lines)
+    if scoreboard_path.is_file():
+        existing_text = scoreboard_path.read_text(encoding="utf-8")
+        if _without_scoreboard_timestamp(existing_text) == _without_scoreboard_timestamp(scoreboard_text):
+            return
+    scoreboard_path.write_text(scoreboard_text, encoding="utf-8")
 
 
 def _parse_args() -> argparse.Namespace:
@@ -497,7 +577,16 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--device", default="auto")
     ap.add_argument("--dtype", default="auto", choices=["auto", "float16", "bfloat16", "float32"])
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--decode", default="greedy", choices=["greedy"])
+    ap.add_argument("--decode", default="greedy", choices=["greedy", "beam", "sampled"])
+    ap.add_argument("--num-beams", type=int, default=1)
+    ap.add_argument("--length-penalty", type=float, default=1.0)
+    ap.add_argument("--num-candidates", type=int, default=1)
+    ap.add_argument("--candidate-selection", default="first", choices=["first", "mbr_chrf"])
+    ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--top-p", type=float, default=1.0)
+    ap.add_argument("--top-k", type=int, default=50)
+    ap.add_argument("--eval-offset", type=int, default=0)
+    ap.add_argument("--eval-samples", type=int, default=0, help="0 = all rows.")
     ap.add_argument("--teacher-model", default="")
     ap.add_argument("--allow-download", action="store_true")
     ap.add_argument(
@@ -549,6 +638,15 @@ def _parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = _parse_args()
+    decode = _decode_label(
+        str(args.decode),
+        int(args.num_beams),
+        float(args.length_penalty),
+        int(args.num_candidates),
+        float(args.temperature),
+        float(args.top_p),
+        str(args.candidate_selection),
+    )
     repo_root = Path(__file__).resolve().parents[4]
     run_root = Path(args.run_root).resolve()
     stage_dir = run_root / args.stage_dir
@@ -586,18 +684,24 @@ def main() -> int:
     print(f"[sweep] out_dir={_safe_rel(out_dir, repo_root)}")
     print(f"[sweep] checkpoints={','.join(p.name for p in checkpoints)}")
     print(f"[sweep] evals={','.join(_dataset_label(name) for name, _ in eval_specs)}")
-    print(f"[sweep] decode={args.decode}")
+    print(
+        f"[sweep] decode={decode} num_beams={int(args.num_beams)} "
+        f"length_penalty={float(args.length_penalty):.6g} num_candidates={int(args.num_candidates)} "
+        f"candidate_selection={args.candidate_selection} temperature={float(args.temperature):.6g} "
+        f"top_p={float(args.top_p):.6g} eval_offset={int(args.eval_offset)} "
+        f"eval_samples={int(args.eval_samples)}"
+    )
 
-    _write_scoreboard(out_dir, manifest_rows, repo_root, run_root, args.decode, eval_specs)
+    _write_scoreboard(out_dir, manifest_rows, repo_root, run_root, decode, eval_specs)
 
     for ckpt in checkpoints:
         ckpt_step = _checkpoint_step_from_name(ckpt.name)
         for eval_name, eval_pairs in eval_specs:
-            if args.resume and _is_done(manifest_rows, ckpt.name, eval_name, args.decode):
+            if args.resume and _is_done(manifest_rows, ckpt.name, eval_name, decode):
                 print(f"[skip] {ckpt.name} x {eval_name} already completed")
                 continue
 
-            case_name = f"{eval_name}__{ckpt.name}__{args.decode}"
+            case_name = f"{eval_name}__{ckpt.name}__{decode}"
             case_dir = out_dir / case_name
             case_dir.mkdir(parents=True, exist_ok=True)
             log_path = case_dir / "eval_run.log"
@@ -638,22 +742,36 @@ def main() -> int:
                 str(int(args.batch_size)),
                 "--seed",
                 str(int(args.seed)),
+                "--num-beams",
+                str(int(args.num_beams)),
+                "--length-penalty",
+                str(float(args.length_penalty)),
+                "--num-candidates",
+                str(int(args.num_candidates)),
+                "--candidate-selection",
+                str(args.candidate_selection),
                 "--temperature",
-                "0.0",
+                str(float(args.temperature)),
                 "--top-p",
-                "1.0",
+                str(float(args.top_p)),
                 "--top-k",
-                "50",
+                str(int(args.top_k)),
                 "--eval-bleu",
                 "--eval-chrf",
                 "--allow-partial-contract",
             ]
+            if int(args.eval_samples) > 0:
+                base_cmd.extend(["--eval-samples", str(int(args.eval_samples))])
+            if int(args.eval_offset) > 0:
+                base_cmd.extend(["--eval-offset", str(int(args.eval_offset))])
+            if str(args.decode) == "sampled":
+                base_cmd.append("--do-sample")
             if str(args.teacher_model).strip():
                 base_cmd.extend(["--teacher-model", str(args.teacher_model).strip()])
             if args.allow_download:
                 base_cmd.append("--allow-download")
 
-            gpu_failures = _consecutive_failures(manifest_rows, ckpt.name, eval_name, args.decode)
+            gpu_failures = _consecutive_failures(manifest_rows, ckpt.name, eval_name, decode)
             attempt_logs: list[str] = []
             attempt_index = 0
             current_device = str(args.device)
@@ -735,7 +853,16 @@ def main() -> int:
                     "checkpoint_path": _safe_rel(ckpt, repo_root),
                     "eval_name": eval_name,
                     "pairs": _safe_rel(eval_pairs, repo_root),
-                    "decode": args.decode,
+                    "decode": decode,
+                    "num_beams": int(args.num_beams),
+                    "length_penalty": float(args.length_penalty),
+                    "num_candidates": int(args.num_candidates),
+                    "candidate_selection": str(args.candidate_selection),
+                    "temperature": float(args.temperature),
+                    "top_p": float(args.top_p),
+                    "top_k": int(args.top_k),
+                    "eval_offset": int(args.eval_offset),
+                    "eval_samples": int(args.eval_samples),
                     "status": int(rc),
                     "duration_s": float(duration_s),
                     "bleu": bleu,
@@ -757,7 +884,7 @@ def main() -> int:
                 }
                 _append_manifest(manifest_path, row)
                 manifest_rows.append(row)
-                _write_scoreboard(out_dir, manifest_rows, repo_root, run_root, args.decode, eval_specs)
+                _write_scoreboard(out_dir, manifest_rows, repo_root, run_root, decode, eval_specs)
 
                 if rc == 0:
                     print(

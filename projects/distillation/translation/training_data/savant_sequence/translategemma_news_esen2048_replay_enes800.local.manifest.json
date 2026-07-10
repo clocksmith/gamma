@@ -1,0 +1,50 @@
+{
+  "evaluation_exclusions": [
+    {
+      "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+      "sha256": "8454f014eee7ba862c3d4cc4a80169c99e47de2ec39cc5baa176424859db6c47"
+    },
+    {
+      "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl",
+      "sha256": "0bef72ecdc09eb0d65564312f76c0333d756d5a4978608b4f69a6b5ad4857e39"
+    }
+  ],
+  "output": {
+    "path": "projects/distillation/translation/training_data/savant_sequence/translategemma_news_esen2048_replay_enes800.local.jsonl",
+    "sha256": "a924d2d2cd1a3ac8acf473b90e164dc2dc5be4a7eecd63809f216d8603bf3c98"
+  },
+  "replay": {
+    "directions": [
+      "en-es"
+    ],
+    "inputs": [
+      {
+        "path": "projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p05/pack_06/frozen_best5.pack_06.replace05.jsonl",
+        "sha256": "cf3b187959fa142836ef802558e64b655c63cd3ae5bd508ed81c3158a270ae71"
+      }
+    ],
+    "requested_rows": 800
+  },
+  "selection": {
+    "counts": {
+      "replay_rows": 1600,
+      "teacher_rows": 2048
+    },
+    "rows": 2848,
+    "rows_by_pair": {
+      "en-es": 800,
+      "es-en": 2048
+    },
+    "rows_by_source": {
+      "replay": 800,
+      "sequence_teacher": 2048
+    },
+    "seed": 42
+  },
+  "teacher": {
+    "model": "google/translategemma-4b-it@10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+    "predictions": "projects/distillation/translation/runs/savant_translategemma_sequence_labels_news_esen_20260710/teacher_labels/student_predictions.jsonl",
+    "predictions_sha256": "98f0ac2f2df389248cbb2ea65fce62e4bdf14eb413fd70de15615adfd69adc66"
+  },
+  "usage_scope": "local_research_only"
+}

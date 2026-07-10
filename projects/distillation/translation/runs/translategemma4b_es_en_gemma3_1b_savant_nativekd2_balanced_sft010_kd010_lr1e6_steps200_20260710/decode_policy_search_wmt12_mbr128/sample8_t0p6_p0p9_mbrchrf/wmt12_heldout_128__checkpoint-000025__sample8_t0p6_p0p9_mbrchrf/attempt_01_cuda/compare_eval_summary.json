@@ -1,0 +1,123 @@
+{
+  "decode_metadata": {
+    "candidate_selection": "mbr_chrf",
+    "decode_mode": "sampled",
+    "length_penalty": 1.0,
+    "num_beams": 1,
+    "num_candidates": 8,
+    "temperature": 0.6,
+    "top_k": 50,
+    "top_p": 0.9
+  },
+  "delta": null,
+  "direction_metrics": {
+    "en_es_bleu": 27.701953398072046,
+    "en_es_chrf": 53.87552070161534,
+    "en_es_comet": null,
+    "en_es_sample_count": 58,
+    "es_en_bleu": 34.25310552665779,
+    "es_en_chrf": 61.00795155233042,
+    "es_en_comet": null,
+    "es_en_sample_count": 70,
+    "total_sample_count": 128
+  },
+  "eval_offset": 0,
+  "eval_samples": 128,
+  "pair_files": [
+    "projects/distillation/translation/training_data/savant_wmt/sacrebleu_wmt12_en_es_bidirectional.local.jsonl"
+  ],
+  "pairs": "projects/distillation/translation/training_data/savant_wmt/sacrebleu_wmt12_en_es_bidirectional.local.jsonl",
+  "provenance": {
+    "adapter_name": "translategemma",
+    "adapter_scale": 1.0,
+    "arch": "gemma_causal_lm",
+    "candidate_selection": "mbr_chrf",
+    "comet_available": false,
+    "dtype": "bfloat16",
+    "eval_dataset_label": "",
+    "eval_dataset_path": "projects/distillation/translation/training_data/savant_wmt/sacrebleu_wmt12_en_es_bidirectional.local.jsonl",
+    "eval_offset": 0,
+    "execution_mode": "causal-chat",
+    "interpolate_alpha": null,
+    "interpolate_model": "",
+    "model_id": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/mixed/checkpoint-000025",
+    "model_revision": "",
+    "num_candidates": 8,
+    "runtime_device": "cuda",
+    "tokenizer_id": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/mixed/checkpoint-000025",
+    "tokenizer_revision": ""
+  },
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "student": {
+    "adapter_scale": 1.0,
+    "candidate_selection": "mbr_chrf",
+    "count": 128,
+    "interpolate_alpha": null,
+    "interpolate_model": "",
+    "label": "student",
+    "metrics_by_pair": {
+      "en-es": {
+        "bleu": {
+          "available": true,
+          "score": 27.701953398072046
+        },
+        "chrf": {
+          "available": true,
+          "score": 53.87552070161534
+        },
+        "exact_match": {
+          "available": true,
+          "score": 1.7241379310344827
+        },
+        "n": 58
+      },
+      "es-en": {
+        "bleu": {
+          "available": true,
+          "score": 34.25310552665779
+        },
+        "chrf": {
+          "available": true,
+          "score": 61.00795155233042
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.0
+        },
+        "n": 70
+      }
+    },
+    "metrics_overall": {
+      "bleu": {
+        "available": true,
+        "score": 31.170662494501673
+      },
+      "chrf": {
+        "available": true,
+        "score": 57.64300857271532
+      },
+      "exact_match": {
+        "available": true,
+        "score": 0.78125
+      },
+      "n": 128
+    },
+    "model": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/mixed/checkpoint-000025",
+    "num_candidates": 8,
+    "predictions": {
+      "path": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/decode_policy_search_wmt12_mbr128/sample8_t0p6_p0p9_mbrchrf/wmt12_heldout_128__checkpoint-000025__sample8_t0p6_p0p9_mbrchrf/attempt_01_cuda/student_predictions.jsonl"
+    },
+    "scaled_adapter_layers": 0,
+    "vocab_subset_active": false,
+    "vocab_subset_dir": ""
+  },
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher": null,
+  "vocab_subset_dir": ""
+}
