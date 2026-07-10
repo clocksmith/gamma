@@ -1,0 +1,38 @@
+{
+  "builder": "projects/distillation/translation/pipeline/filter_translation_pairs_with_cli_judge.py",
+  "command": "codex exec --ephemeral --skip-git-repo-check --sandbox workspace-write -C /home/x/deco/gamma --color never -o {response_file} -",
+  "extra_instruction": "Prefer rows that would not look out of place in WMT-style external evaluation.",
+  "generated_utc": "2026-07-07 23:20:32 UTC",
+  "input": "projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_04/frozen_best5.pack_04.replace10.jsonl",
+  "input_rows": 1600,
+  "judge_profile": "external_wmt",
+  "out_dir": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt",
+  "outputs": {
+    "filtered": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt/external_wmt.filtered.jsonl",
+    "receipts": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt/external_wmt.receipts.jsonl",
+    "rejected": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt/external_wmt.rejected.jsonl",
+    "review": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt/external_wmt.review.jsonl",
+    "rewrite_queue": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt/external_wmt.rewrite_queue.jsonl",
+    "summary_json": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt/external_wmt.summary.json",
+    "summary_md": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/external_wmt/external_wmt.summary.md"
+  },
+  "prefix": "external_wmt",
+  "processed_rows": 8,
+  "prompt_mode": "stdin",
+  "reason_counts": {
+    "low_adequacy": 2,
+    "low_literalness": 6
+  },
+  "rewrite_mode": "queue",
+  "route_counts": {
+    "drop": 6,
+    "keep": 2
+  },
+  "start_index": 0,
+  "thresholds": {
+    "min_adequacy": 4.25,
+    "min_confidence": 0.6,
+    "min_entity_number_preservation": 4.0,
+    "min_literalness": 3.75
+  }
+}

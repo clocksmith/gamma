@@ -10,6 +10,7 @@ This directory is the canonical documentation index for GAMMA.
 | Engine internals | [ENGINE_ARCHITECTURE.md](ENGINE_ARCHITECTURE.md) |
 | Model format compatibility | [MODEL_FORMATS.md](MODEL_FORMATS.md) |
 | Benchmarking workflows | [BENCHMARKING.md](BENCHMARKING.md) |
+| Hybrid distillation method | [HYBRID_DISTILLATION.md](HYBRID_DISTILLATION.md) |
 | Translation distillation ops + leaderboards | [../projects/distillation/translation/README.md](../projects/distillation/translation/README.md) |
 | Integrations/API usage | [integration-guide.md](integration-guide.md) |
 | Mind Meld usage + status | [../src/mind_meld/README.md](../src/mind_meld/README.md) |

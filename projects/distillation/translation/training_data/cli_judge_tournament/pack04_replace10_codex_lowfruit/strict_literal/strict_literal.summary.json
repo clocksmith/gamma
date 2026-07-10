@@ -1,0 +1,34 @@
+{
+  "builder": "projects/distillation/translation/pipeline/filter_translation_pairs_with_cli_judge.py",
+  "command": "codex exec --ephemeral --skip-git-repo-check --sandbox workspace-write -C /home/x/deco/gamma --color never -o {response_file} -",
+  "extra_instruction": "Favor rows that teach literal coverage over fluent paraphrase.",
+  "generated_utc": "2026-07-07 23:20:32 UTC",
+  "input": "projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_04/frozen_best5.pack_04.replace10.jsonl",
+  "input_rows": 1600,
+  "judge_profile": "strict_literal",
+  "out_dir": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal",
+  "outputs": {
+    "filtered": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal/strict_literal.filtered.jsonl",
+    "receipts": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal/strict_literal.receipts.jsonl",
+    "rejected": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal/strict_literal.rejected.jsonl",
+    "review": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal/strict_literal.review.jsonl",
+    "rewrite_queue": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal/strict_literal.rewrite_queue.jsonl",
+    "summary_json": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal/strict_literal.summary.json",
+    "summary_md": "projects/distillation/translation/training_data/cli_judge_tournament/pack04_replace10_codex_lowfruit/strict_literal/strict_literal.summary.md"
+  },
+  "prefix": "strict_literal",
+  "processed_rows": 8,
+  "prompt_mode": "stdin",
+  "reason_counts": {},
+  "rewrite_mode": "queue",
+  "route_counts": {
+    "keep": 8
+  },
+  "start_index": 0,
+  "thresholds": {
+    "min_adequacy": 4.25,
+    "min_confidence": 0.6,
+    "min_entity_number_preservation": 4.25,
+    "min_literalness": 4.0
+  }
+}

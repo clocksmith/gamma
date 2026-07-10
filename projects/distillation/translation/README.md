@@ -81,33 +81,62 @@ Interpretation:
 
 ## Current shard-screening mainline
 
-The leave-two-out shard screen plus confirmation ladder now supports one frozen
-Stage A pack mix for the gold-grid line:
+The artifact-backed current student external leader is:
 
-- Frozen mainline packs: `01,02,03,04,06`
-- Mainline confirmation run:
-  - `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_confirm_best5`
-- Best external checkpoint in that run:
-  - `stage_a/checkpoint-002000`
-  - `eval2_external`: BLEU `33.3780`, chrF `58.8324`
-  - `eval3_indomain_clean`: BLEU `53.0393`, chrF `72.3284`
-- Same run, later checkpoint:
-  - `stage_a/checkpoint-004000`
-  - `eval2_external`: BLEU `33.0257`, chrF `59.2763`
-  - `eval3_indomain_clean`: BLEU `54.0257`, chrF `72.2480`
+- Run:
+  `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_codexreplace05_pack06_defer_studentonly_v1`
+- Checkpoint: `stage_a/checkpoint-004000`
+- Training data:
+  `projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p05/pack_06/frozen_best5.pack_06.replace05.jsonl`
+- `eval2_external`: BLEU `33.7353`, chrF `59.6065`
+- `eval3_indomain_clean`: BLEU `54.4500`, chrF `72.3516`
 
-Recent confirmation context:
+Previous artifact-backed external student leader:
 
-- `best-6` anchor (`01,02,03,04,05,06`) peaked at external BLEU `32.4566`
-- `best-7` (`01,02,03,04,05,06,08`) peaked at external BLEU `32.8224`
+- `rows1568_bf16_codexlow_pack06_prune10_defer_studentonly_v2/checkpoint-003000`
+- `eval2_external`: BLEU `32.9055`, chrF `59.4631`
+
+Fresh follow-up evidence:
+
+- Run:
+  `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1584_bf16_codexprune05_pack06_defer_studentonly_v1`
+- Checkpoint: `stage_a/checkpoint-003500`
+- Training data:
+  `projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p05/pack_06/frozen_best5.pack_06.prune05.jsonl`
+- `eval2_external`: BLEU `32.8755`, chrF `58.9218`
+- `eval3_indomain_clean`: BLEU `53.8487`, chrF `72.6181`
+- Conclusion: smaller prune alone nearly matched the previous `32.9055`
+  artifact-backed student leader, but the partial replacement variant is the
+  clear current external winner.
+
+- Run:
+  `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_codexreplace05_pack06_6k_dense500_defer_studentonly_v1`
+- Best checkpoint: `stage_a/checkpoint-003000`
+- `eval2_external`: BLEU `33.2481`, chrF `59.4567`
+- Conclusion: extending the whole schedule to 6k was weaker than the 4k
+  `replace05` run for external WMT13.
+
+- Run:
+  `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1600_bf16_codexreplace05_pack06_ckpt4000_lr5e6_1k_dense250_v1`
+- Best checkpoint: `stage_a/checkpoint-000250`
+- `eval2_external`: BLEU `33.6283`, chrF `59.6061`
+- Conclusion: low-LR polish from the `33.7353` checkpoint was close, but did
+  not improve the current external leader.
+
+Important provenance note:
+
+- Earlier notes referenced `rows1600_bf16_confirm_best5` with external BLEU
+  `33.3780`, but that run directory is not present in the local artifact tree
+  and the normalized `RUN_COMPARE.md` / `results_bundle` outputs do not contain
+  that row. Treat `33.7353` as the current local artifact-backed student target.
 
 Working interpretation:
 
-- The current best external BLEU in the shard-screening line came from the
-  `5`-pack, not the `6`-pack or `7`-pack confirmations.
-- The pack-count search should pause here.
-- The next likely gains are inside the frozen `01,02,03,04,06` data mix rather
-  than from adding more packs.
+- The strongest current data edit is `pack_06.replace05`, with the checkpoint
+  selected by external validation at `004000`.
+- Adjacent follow-up runs should preserve the 4k schedule unless there is a
+  concrete reason to retune the learning-rate curve; the 6k schedule weakened
+  external WMT13.
 
 ## Current status of the scale-up line
 
@@ -216,6 +245,101 @@ The most important columns are:
 - `indomain_match`
 - `gold_exact_overlap_pct`
 - `gold_loose_overlap_pct`
+
+## CLI Judge Dataset Filtering
+
+Use this script to route current training-pair JSONL rows through a local host
+CLI judge such as Codex or Claude, then emit clean filtered data plus audit
+receipts:
+
+```bash
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+$PY projects/distillation/translation/pipeline/filter_translation_pairs_with_cli_judge.py \
+  --input projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_04/frozen_best5.pack_04.replace10.jsonl \
+  --out-dir projects/distillation/translation/training_data/cli_judge_filter/pack04_replace10_codex \
+  --prefix pack04_replace10_codex \
+  --command 'codex exec --ephemeral --skip-git-repo-check -C /home/x/deco/gamma -o {response_file} -' \
+  --prompt-mode stdin \
+  --rewrite-mode queue
+```
+
+For Claude Code in print mode:
+
+```bash
+$PY projects/distillation/translation/pipeline/filter_translation_pairs_with_cli_judge.py \
+  --input projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_04/frozen_best5.pack_04.replace10.jsonl \
+  --out-dir projects/distillation/translation/training_data/cli_judge_filter/pack04_replace10_claude \
+  --prefix pack04_replace10_claude \
+  --command 'claude -p --output-format text' \
+  --prompt-mode stdin \
+  --rewrite-mode queue
+```
+
+The command is split with `shlex` and run without a shell. Prompts can be passed
+by `stdin`, final argument, or prompt file. The placeholders `{prompt_file}` and
+`{response_file}` are substituted before execution; `{response_file}` is useful
+for `codex exec -o` so the parser reads the final assistant message instead of
+CLI event output.
+
+Outputs are written under `--out-dir`:
+
+- `<prefix>.filtered.jsonl`: rows routed `keep`, with the original training
+  schema unless `--rewrite-mode apply` is used
+- `<prefix>.rejected.jsonl`: rows routed `drop`, with judge metadata
+- `<prefix>.review.jsonl`: low-confidence or rewrite-needed rows for manual
+  review
+- `<prefix>.rewrite_queue.jsonl`: rows with a proposed `corrected_target`
+- `<prefix>.receipts.jsonl`: command, prompt/response hashes, parsed judge JSON,
+  route, and reasons per row
+- `<prefix>.summary.json` and `<prefix>.summary.md`
+
+Smoke the plumbing without invoking a host model:
+
+```bash
+$PY projects/distillation/translation/pipeline/filter_translation_pairs_with_cli_judge.py \
+  --input projects/distillation/translation/training_data/gold_shards/gold_quality_4x640.train_3x640.jsonl \
+  --out-dir /tmp/gamma_cli_judge_smoke \
+  --prefix smoke_keep \
+  --limit 4 \
+  --mock-decision keep
+```
+
+## Codex Judge Tournament
+
+Use this script to run a GEPA-style tournament over judge/filter recipes. Each
+recipe runs the CLI judge filter, scores the filtered dataset with the existing
+dataset QA scorer, builds an Elo/Pareto scoreboard, emits a reflection prompt,
+and writes a Stage A command for the champion filtered dataset:
+
+```bash
+PY=.venv_rocm/bin/python
+[ -x "$PY" ] || PY=python3
+$PY projects/distillation/translation/pipeline/run_cli_judge_tournament.py \
+  --input projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_04/frozen_best5.pack_04.replace10.jsonl \
+  --out-dir projects/distillation/translation/training_data/cli_judge_tournament \
+  --prefix pack04_replace10_codex_lowfruit \
+  --limit 8 \
+  --only-recipe strict_literal \
+  --only-recipe entity_guard \
+  --only-recipe external_wmt \
+  --resume \
+  --command 'codex exec --ephemeral --skip-git-repo-check --sandbox workspace-write -C /home/x/deco/gamma --color never -o {response_file} -'
+```
+
+Important: a sampled tournament is a recipe-selection signal, not a complete
+training dataset unless the filtered output covers the intended row count. Use
+the full-candidate scorer to choose a complete low-friction Stage A dataset:
+
+```bash
+python3 projects/distillation/translation/pipeline/score_translation_pair_datasets.py \
+  projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_04/frozen_best5.pack_04.replace10.jsonl \
+  projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_04/frozen_best5.pack_04.prune10.jsonl \
+  projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_06/frozen_best5.pack_06.replace10.jsonl \
+  projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p10/pack_06/frozen_best5.pack_06.prune10.jsonl \
+  --out-dir projects/distillation/translation/training_data/qa \
+  --prefix frozen_best5_refine_full_candidates
+```
 
 ## Gold Expansion Builder
 

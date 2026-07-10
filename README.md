@@ -46,6 +46,7 @@ python gamma.py mind-meld --help
 
 - [docs/README.md](./docs/README.md): documentation map and ownership
 - [docs/BENCHMARKING.md](./docs/BENCHMARKING.md): speed, quality, codegen, and mind-meld benchmarking
+- [docs/HYBRID_DISTILLATION.md](./docs/HYBRID_DISTILLATION.md): reusable hybrid distillation method for coding, translation, and capability students
 - [docs/integration-guide.md](./docs/integration-guide.md): OpenAI/LangChain/API/MCP integrations
 - [src/mind_meld/README.md](./src/mind_meld/README.md): Mind Meld usage, configs, and operational guardrails
 - [flux/README.md](./flux/README.md): Flux install, CLI, and reference
