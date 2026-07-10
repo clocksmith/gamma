@@ -1,0 +1,115 @@
+{
+  "decode_metadata": {
+    "decode_mode": "greedy",
+    "length_penalty": 1.0,
+    "num_beams": 1,
+    "temperature": 0.0,
+    "top_k": 50,
+    "top_p": 1.0
+  },
+  "delta": null,
+  "direction_metrics": {
+    "en_es_bleu": 29.60597839668473,
+    "en_es_chrf": 55.80371822386305,
+    "en_es_comet": null,
+    "en_es_sample_count": 118,
+    "es_en_bleu": 31.628299422623023,
+    "es_en_chrf": 58.650389155803,
+    "es_en_comet": null,
+    "es_en_sample_count": 138,
+    "total_sample_count": 256
+  },
+  "eval_samples": 256,
+  "pair_files": [
+    "projects/distillation/translation/training_data/savant_wmt/sacrebleu_wmt12_en_es_bidirectional.local.jsonl"
+  ],
+  "pairs": "projects/distillation/translation/training_data/savant_wmt/sacrebleu_wmt12_en_es_bidirectional.local.jsonl",
+  "provenance": {
+    "adapter_name": "translategemma",
+    "adapter_scale": 1.0,
+    "arch": "gemma_causal_lm",
+    "comet_available": false,
+    "dtype": "bfloat16",
+    "eval_dataset_label": "",
+    "eval_dataset_path": "projects/distillation/translation/training_data/savant_wmt/sacrebleu_wmt12_en_es_bidirectional.local.jsonl",
+    "execution_mode": "causal-chat",
+    "interpolate_alpha": null,
+    "interpolate_model": "",
+    "model_id": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/mixed/checkpoint-000025",
+    "model_revision": "",
+    "runtime_device": "cuda",
+    "tokenizer_id": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/mixed/checkpoint-000025",
+    "tokenizer_revision": ""
+  },
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "student": {
+    "adapter_scale": 1.0,
+    "count": 256,
+    "interpolate_alpha": null,
+    "interpolate_model": "",
+    "label": "student",
+    "metrics_by_pair": {
+      "en-es": {
+        "bleu": {
+          "available": true,
+          "score": 29.60597839668473
+        },
+        "chrf": {
+          "available": true,
+          "score": 55.80371822386305
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.847457627118644
+        },
+        "n": 118
+      },
+      "es-en": {
+        "bleu": {
+          "available": true,
+          "score": 31.628299422623023
+        },
+        "chrf": {
+          "available": true,
+          "score": 58.650389155803
+        },
+        "exact_match": {
+          "available": true,
+          "score": 1.4492753623188406
+        },
+        "n": 138
+      }
+    },
+    "metrics_overall": {
+      "bleu": {
+        "available": true,
+        "score": 30.636684026106295
+      },
+      "chrf": {
+        "available": true,
+        "score": 57.236669331933655
+      },
+      "exact_match": {
+        "available": true,
+        "score": 1.171875
+      },
+      "n": 256
+    },
+    "model": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/mixed/checkpoint-000025",
+    "predictions": {
+      "path": "/home/x/deco/gamma/projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710/decode_policy_search_wmt12_256/greedy/wmt12_heldout_256__checkpoint-000025__greedy/attempt_01_cuda/student_predictions.jsonl"
+    },
+    "scaled_adapter_layers": 0,
+    "vocab_subset_active": false,
+    "vocab_subset_dir": ""
+  },
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher": null,
+  "vocab_subset_dir": ""
+}

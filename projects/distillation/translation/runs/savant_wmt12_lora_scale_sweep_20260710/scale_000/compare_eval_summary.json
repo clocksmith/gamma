@@ -1,0 +1,111 @@
+{
+  "decode_metadata": {
+    "decode_mode": "greedy",
+    "length_penalty": 1.0,
+    "num_beams": 1,
+    "temperature": 0.0,
+    "top_k": 50,
+    "top_p": 1.0
+  },
+  "delta": null,
+  "direction_metrics": {
+    "en_es_bleu": 32.2444228960754,
+    "en_es_chrf": 58.72366209980454,
+    "en_es_comet": null,
+    "en_es_sample_count": 64,
+    "es_en_bleu": 33.506536781607444,
+    "es_en_chrf": 61.20844154284249,
+    "es_en_comet": null,
+    "es_en_sample_count": 64,
+    "total_sample_count": 128
+  },
+  "eval_samples": 128,
+  "pair_files": [
+    "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl"
+  ],
+  "pairs": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+  "provenance": {
+    "adapter_name": "translategemma",
+    "adapter_scale": 0.0,
+    "arch": "gemma_causal_lm",
+    "comet_available": false,
+    "dtype": "bfloat16",
+    "eval_dataset_label": "",
+    "eval_dataset_path": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+    "execution_mode": "causal-chat",
+    "model_id": "projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_wmt12_lora_r16_lr1e5_steps1000_20260710/stage_a/checkpoint-000100",
+    "model_revision": "",
+    "runtime_device": "cuda",
+    "tokenizer_id": "projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_wmt12_lora_r16_lr1e5_steps1000_20260710/stage_a/checkpoint-000100",
+    "tokenizer_revision": ""
+  },
+  "source_langs": [
+    "en",
+    "es"
+  ],
+  "student": {
+    "adapter_scale": 0.0,
+    "count": 128,
+    "label": "student",
+    "metrics_by_pair": {
+      "en-es": {
+        "bleu": {
+          "available": true,
+          "score": 32.2444228960754
+        },
+        "chrf": {
+          "available": true,
+          "score": 58.72366209980454
+        },
+        "exact_match": {
+          "available": true,
+          "score": 0.0
+        },
+        "n": 64
+      },
+      "es-en": {
+        "bleu": {
+          "available": true,
+          "score": 33.506536781607444
+        },
+        "chrf": {
+          "available": true,
+          "score": 61.20844154284249
+        },
+        "exact_match": {
+          "available": true,
+          "score": 1.5625
+        },
+        "n": 64
+      }
+    },
+    "metrics_overall": {
+      "bleu": {
+        "available": true,
+        "score": 33.833522729771396
+      },
+      "chrf": {
+        "available": true,
+        "score": 59.855802215389254
+      },
+      "exact_match": {
+        "available": true,
+        "score": 0.78125
+      },
+      "n": 128
+    },
+    "model": "projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_wmt12_lora_r16_lr1e5_steps1000_20260710/stage_a/checkpoint-000100",
+    "predictions": {
+      "path": "projects/distillation/translation/runs/savant_wmt12_lora_scale_sweep_20260710/scale_000/student_predictions.jsonl"
+    },
+    "scaled_adapter_layers": 182,
+    "vocab_subset_active": false,
+    "vocab_subset_dir": ""
+  },
+  "target_langs": [
+    "en",
+    "es"
+  ],
+  "teacher": null,
+  "vocab_subset_dir": ""
+}

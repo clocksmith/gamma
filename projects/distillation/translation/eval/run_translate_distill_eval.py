@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import math
 import statistics
 from dataclasses import dataclass
 from pathlib import Path
@@ -54,6 +55,13 @@ class EvalRow:
     source: str
     target_pos: str
     pair: str
+
+
+@dataclass(frozen=True)
+class GenerationResult:
+    text: str
+    candidates: tuple[str, ...]
+    selected_index: int
 
 
 @dataclass(frozen=True)
@@ -268,6 +276,17 @@ def _parse_args() -> argparse.Namespace:
     )
     ap.add_argument("--model", required=True, help="Student candidate model (HF model id/path or checkpoint path).")
     ap.add_argument(
+        "--interpolate-model",
+        default="",
+        help="Optional same-architecture checkpoint used for in-memory student weight interpolation.",
+    )
+    ap.add_argument(
+        "--interpolate-alpha",
+        type=float,
+        default=1.0,
+        help="Student weights become (1-alpha)*--model + alpha*--interpolate-model.",
+    )
+    ap.add_argument(
         "--teacher-model",
         default="",
         help="Optional teacher model for baseline comparison.",
@@ -305,10 +324,31 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--max-new-tokens", type=int, default=192)
     ap.add_argument("--batch-size", type=int, default=2)
     ap.add_argument("--eval-samples", type=int, default=0, help="0 = all rows.")
+    ap.add_argument(
+        "--eval-offset",
+        type=int,
+        default=0,
+        help="Skip this many rows after language filters, before applying --eval-samples.",
+    )
     ap.add_argument("--device", default="auto")
     ap.add_argument("--dtype", default="auto", choices=["auto", "float16", "bfloat16", "float32"])
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--do-sample", action="store_true")
+    ap.add_argument("--num-beams", type=int, default=1)
+    ap.add_argument("--length-penalty", type=float, default=1.0)
+    ap.add_argument("--num-candidates", type=int, default=1)
+    ap.add_argument(
+        "--candidate-selection",
+        default="first",
+        choices=["first", "mbr_chrf"],
+        help="Select among returned candidates; mbr_chrf uses symmetric chrF consensus.",
+    )
+    ap.add_argument(
+        "--adapter-scale",
+        type=float,
+        default=1.0,
+        help="Multiply loaded LoRA adapter contributions for student evaluation.",
+    )
     ap.add_argument("--temperature", type=float, default=0.0)
     ap.add_argument("--top-p", type=float, default=1.0)
     ap.add_argument("--top-k", type=int, default=50)
@@ -420,11 +460,13 @@ def _load_rows(
     source_langs: set[str],
     target_langs: set[str],
     max_rows: int,
+    row_offset: int = 0,
     *,
     allow_compat_mismatch: bool,
     allow_partial_contract: bool,
 ) -> list[EvalRow]:
     rows: list[EvalRow] = []
+    eligible_rows_seen = 0
     for path in paths:
         with path.open("r", encoding="utf-8") as f:
             for ln, line in enumerate(f, start=1):
@@ -454,6 +496,10 @@ def _load_rows(
                     continue
                 if not source or not target_pos or not source_lang or not target_lang:
                     continue
+                if eligible_rows_seen < max(0, int(row_offset)):
+                    eligible_rows_seen += 1
+                    continue
+                eligible_rows_seen += 1
                 pair = _safe_text(obj.get("pair")) or f"{source_lang}-{target_lang}"
                 rows.append(
                     EvalRow(
@@ -529,6 +575,101 @@ def _load_model_and_tokenizer(model_ref: str, device: str, dtype: torch.dtype, l
     return model, tok
 
 
+def _interpolate_module_weights(base: torch.nn.Module, tuned: torch.nn.Module, alpha: float) -> None:
+    if not math.isfinite(float(alpha)):
+        raise RuntimeError(f"Interpolation alpha must be finite, got {alpha}")
+    tuned_parameters = dict(tuned.named_parameters())
+    tuned_buffers = dict(tuned.named_buffers())
+    with torch.no_grad():
+        for name, parameter in base.named_parameters():
+            other = tuned_parameters.get(name)
+            if other is None or other.shape != parameter.shape:
+                raise RuntimeError(f"Interpolation parameter mismatch: {name}")
+            parameter.mul_(1.0 - float(alpha)).add_(other.to(parameter), alpha=float(alpha))
+        for name, buffer in base.named_buffers():
+            other = tuned_buffers.get(name)
+            if other is None or other.shape != buffer.shape:
+                raise RuntimeError(f"Interpolation buffer mismatch: {name}")
+            if torch.is_floating_point(buffer):
+                buffer.mul_(1.0 - float(alpha)).add_(other.to(buffer), alpha=float(alpha))
+            else:
+                buffer.copy_(other.to(buffer))
+
+
+def _load_interpolated_model_and_tokenizer(
+    base_ref: str,
+    tuned_ref: str,
+    alpha: float,
+    device: str,
+    dtype: torch.dtype,
+    local_files_only: bool,
+):
+    tokenizer = AutoTokenizer.from_pretrained(base_ref, local_files_only=local_files_only)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    base = AutoModelForCausalLM.from_pretrained(
+        base_ref,
+        torch_dtype=dtype,
+        local_files_only=local_files_only,
+    )
+    tuned = AutoModelForCausalLM.from_pretrained(
+        tuned_ref,
+        torch_dtype=dtype,
+        local_files_only=local_files_only,
+    )
+    _interpolate_module_weights(base, tuned, float(alpha))
+    del tuned
+    base.to(device)
+    base.eval()
+    return base, tokenizer
+
+
+def _scale_lora_adapters(model: Any, scale: float) -> int:
+    if not math.isfinite(float(scale)):
+        raise RuntimeError(f"Adapter scale must be finite, got {scale}")
+    if math.isclose(float(scale), 1.0, rel_tol=0.0, abs_tol=1e-12):
+        return 0
+    scaled = 0
+    for module in model.modules():
+        scaling = getattr(module, "scaling", None)
+        scale_layer = getattr(module, "scale_layer", None)
+        if isinstance(scaling, dict) and scaling and callable(scale_layer):
+            scale_layer(float(scale))
+            scaled += 1
+    if scaled <= 0:
+        raise RuntimeError(
+            f"--adapter-scale={scale} requested, but the student model has no loaded LoRA layers."
+        )
+    return scaled
+
+
+def _select_candidate(candidates: list[str], method: str) -> int:
+    if not candidates:
+        raise RuntimeError("Cannot select from an empty candidate list.")
+    if method == "first" or len(candidates) == 1:
+        return 0
+    if method != "mbr_chrf":
+        raise RuntimeError(f"Unsupported candidate selection method: {method}")
+    if sacrebleu is None:
+        raise RuntimeError("mbr_chrf candidate selection requires sacrebleu.")
+
+    metric = _METRIC_CACHE.get("sacrebleu_chrf_mbr")
+    if metric is None:
+        metric = sacrebleu.metrics.CHRF()
+        _METRIC_CACHE["sacrebleu_chrf_mbr"] = metric
+    scores: list[float] = []
+    for index, candidate in enumerate(candidates):
+        pair_scores: list[float] = []
+        for other_index, other in enumerate(candidates):
+            if index == other_index:
+                continue
+            forward = float(metric.sentence_score(candidate, [other]).score)
+            reverse = float(metric.sentence_score(other, [candidate]).score)
+            pair_scores.append(0.5 * (forward + reverse))
+        scores.append(statistics.fmean(pair_scores) if pair_scores else 0.0)
+    return max(range(len(candidates)), key=lambda index: (scores[index], -index))
+
+
 def _generate_rows(
     model,
     tokenizer,
@@ -539,13 +680,18 @@ def _generate_rows(
     max_prompt_length: int,
     max_new_tokens: int,
     do_sample: bool,
+    num_beams: int,
+    length_penalty: float,
+    num_candidates: int,
+    candidate_selection: str,
     temperature: float,
     top_p: float,
     top_k: int,
-) -> list[str]:
+) -> list[GenerationResult]:
     if not rows:
         return []
-    out: list[str] = []
+    out: list[GenerationResult] = []
+    candidate_count = max(1, int(num_candidates))
     for start in range(0, len(rows), max(1, batch_size)):
         chunk = rows[start : start + batch_size]
         prompts = [_to_chat_text(tokenizer, r.source_lang, r.target_lang, r.source) for r in chunk]
@@ -564,12 +710,17 @@ def _generate_rows(
         gen_kwargs: dict[str, Any] = {
             "max_new_tokens": int(max_new_tokens),
             "do_sample": bool(do_sample),
-            "top_p": float(top_p),
-            "top_k": int(top_k),
+            "num_beams": max(1, int(num_beams)),
+            "num_return_sequences": candidate_count,
+            "length_penalty": float(length_penalty),
             "pad_token_id": tokenizer.eos_token_id,
         }
         if do_sample:
             gen_kwargs["temperature"] = float(temperature)
+            gen_kwargs["top_p"] = float(top_p)
+            gen_kwargs["top_k"] = int(top_k)
+        if int(num_beams) > 1:
+            gen_kwargs["early_stopping"] = True
         with torch.no_grad():
             generated = model.generate(
                 input_ids=batch_enc["input_ids"],
@@ -579,13 +730,23 @@ def _generate_rows(
         # Use padded input length, not attention_mask sum, for left-padded tokenizers.
         input_len = batch_enc["input_ids"].shape[1]
         for i in range(len(chunk)):
-            pred_ids = generated[i][input_len:]
-            if vocab_remap is not None:
-                pred_ids = _restore_ids_to_old_vocab(pred_ids, vocab_remap)
-            if torch.is_tensor(pred_ids) and pred_ids.ndim > 1:
-                pred_ids = pred_ids[0] if pred_ids.shape[0] > 0 else torch.tensor([], dtype=torch.long)
-            pred = tokenizer.decode(pred_ids, skip_special_tokens=True)
-            out.append(_safe_text(pred))
+            candidates: list[str] = []
+            for candidate_index in range(candidate_count):
+                generated_index = i * candidate_count + candidate_index
+                pred_ids = generated[generated_index][input_len:]
+                if vocab_remap is not None:
+                    pred_ids = _restore_ids_to_old_vocab(pred_ids, vocab_remap)
+                if torch.is_tensor(pred_ids) and pred_ids.ndim > 1:
+                    pred_ids = pred_ids[0] if pred_ids.shape[0] > 0 else torch.tensor([], dtype=torch.long)
+                candidates.append(_safe_text(tokenizer.decode(pred_ids, skip_special_tokens=True)))
+            selected_index = _select_candidate(candidates, candidate_selection)
+            out.append(
+                GenerationResult(
+                    text=candidates[selected_index],
+                    candidates=tuple(candidates),
+                    selected_index=selected_index,
+                )
+            )
     return out
 
 
@@ -798,9 +959,21 @@ def _evaluate_model(
             tokenizer.pad_token = tokenizer.eos_token
         vocab_remap = _load_vocab_remap(str(vocab_subset_dir), tokenizer)
 
-    if tokenizer is None:
+    interpolate_model = str(args.interpolate_model).strip() if label == "student" else ""
+    if tokenizer is None and interpolate_model:
+        model, tokenizer = _load_interpolated_model_and_tokenizer(
+            model_ref,
+            interpolate_model,
+            float(args.interpolate_alpha),
+            device,
+            dtype,
+            bool(args.local_files_only),
+        )
+    elif tokenizer is None:
         model, tokenizer = _load_model_and_tokenizer(model_ref, device, dtype=dtype, local_files_only=bool(args.local_files_only))
     else:
+        if interpolate_model:
+            raise RuntimeError("Weight interpolation is not supported with a vocab subset.")
         model = AutoModelForCausalLM.from_pretrained(
             model_ref,
             torch_dtype=dtype,
@@ -808,12 +981,15 @@ def _evaluate_model(
         ).to(device)
         model.eval()
 
+    adapter_scale = float(args.adapter_scale) if label == "student" else 1.0
+    scaled_adapter_layers = _scale_lora_adapters(model, adapter_scale)
+
     rng = list(rows)
     if args.seed:
         # Deterministic output for deterministic decoding.
         torch.manual_seed(int(args.seed))
 
-    pred_texts = _generate_rows(
+    generations = _generate_rows(
         model=model,
         tokenizer=tokenizer,
         rows=rng,
@@ -822,25 +998,32 @@ def _evaluate_model(
         max_prompt_length=int(args.max_prompt_length),
         max_new_tokens=int(args.max_new_tokens),
         do_sample=bool(args.do_sample),
+        num_beams=int(args.num_beams),
+        length_penalty=float(args.length_penalty),
+        num_candidates=int(args.num_candidates),
+        candidate_selection=str(args.candidate_selection),
         temperature=float(args.temperature),
         top_p=float(args.top_p),
         top_k=int(args.top_k),
         vocab_remap=vocab_remap,
     )
     refs = [r.target_pos for r in rng]
-    preds = [p for p in pred_texts]
+    preds = [generation.text for generation in generations]
     pred_rows: list[dict[str, Any]] = []
-    for row, pred in zip(rng, preds):
-        pred_rows.append(
-            {
-                "pair": row.pair,
-                "src_lang": row.source_lang,
-                "tgt_lang": row.target_lang,
-                "source": row.source,
-                "target_pos": row.target_pos,
-                "pred": pred,
-            }
-        )
+    for row, generation in zip(rng, generations):
+        pred_row: dict[str, Any] = {
+            "pair": row.pair,
+            "src_lang": row.source_lang,
+            "tgt_lang": row.target_lang,
+            "source": row.source,
+            "target_pos": row.target_pos,
+            "pred": generation.text,
+        }
+        if len(generation.candidates) > 1:
+            pred_row["candidates"] = list(generation.candidates)
+            pred_row["candidate_selection"] = str(args.candidate_selection)
+            pred_row["selected_candidate_index"] = int(generation.selected_index)
+        pred_rows.append(pred_row)
     out_dir.mkdir(parents=True, exist_ok=True)
     with pred_path.open("w", encoding="utf-8") as f:
         for rec in pred_rows:
@@ -889,6 +1072,12 @@ def _evaluate_model(
         },
         "metrics_overall": overall,
         "metrics_by_pair": pair_metrics,
+        "adapter_scale": adapter_scale,
+        "scaled_adapter_layers": scaled_adapter_layers,
+        "interpolate_model": interpolate_model,
+        "interpolate_alpha": float(args.interpolate_alpha) if interpolate_model else None,
+        "num_candidates": int(args.num_candidates),
+        "candidate_selection": str(args.candidate_selection),
     }
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -914,6 +1103,12 @@ def _pair_delta(student_val: float | None, teacher_val: float | None) -> float |
 
 def main() -> int:
     args = _parse_args()
+    if int(args.num_candidates) < 1:
+        raise RuntimeError("--num-candidates must be >= 1")
+    if int(args.num_candidates) > 1 and not bool(args.do_sample) and int(args.num_beams) < int(args.num_candidates):
+        raise RuntimeError("Deterministic multi-candidate decoding requires --num-beams >= --num-candidates")
+    if str(args.candidate_selection) != "first" and int(args.num_candidates) < 2:
+        raise RuntimeError("Non-default candidate selection requires --num-candidates >= 2")
     torch.manual_seed(int(args.seed))
     source_langs = _parse_csv_set(str(args.source_langs))
     target_langs = _parse_csv_set(str(args.target_langs))
@@ -923,6 +1118,7 @@ def main() -> int:
         source_langs=source_langs,
         target_langs=target_langs,
         max_rows=int(args.eval_samples),
+        row_offset=int(args.eval_offset),
         allow_compat_mismatch=bool(args.allow_compat_mismatch),
         allow_partial_contract=bool(args.allow_partial_contract),
     )
@@ -982,7 +1178,12 @@ def main() -> int:
     comet_available = bool(isinstance(comet_overall, dict) and comet_overall.get("available", False))
 
     # Resolve effective decode mode and device.
-    effective_decode = "greedy" if not args.do_sample else "sampled"
+    if args.do_sample:
+        effective_decode = "sampled"
+    elif int(args.num_beams) > 1:
+        effective_decode = "beam"
+    else:
+        effective_decode = "greedy"
     effective_device = _resolve_device(str(args.device))
     effective_dtype = str(args.dtype) if args.dtype != "auto" else (
         "bfloat16" if torch.cuda.is_available() else "float32"
@@ -998,6 +1199,7 @@ def main() -> int:
         "source_langs": sorted(source_langs),
         "target_langs": sorted(target_langs),
         "eval_samples": int(len(rows)),
+        "eval_offset": int(args.eval_offset),
         "vocab_subset_dir": str(args.vocab_subset_dir),
         "student": student_summary,
         "teacher": None,
@@ -1005,6 +1207,10 @@ def main() -> int:
         "direction_metrics": direction_metrics,
         "decode_metadata": {
             "decode_mode": effective_decode,
+            "num_beams": int(args.num_beams),
+            "length_penalty": float(args.length_penalty),
+            "num_candidates": int(args.num_candidates),
+            "candidate_selection": str(args.candidate_selection),
             "temperature": float(args.temperature),
             "top_p": float(args.top_p),
             "top_k": int(args.top_k),
@@ -1016,11 +1222,19 @@ def main() -> int:
             "tokenizer_revision": "",
             "eval_dataset_path": str(args.pairs),
             "eval_dataset_label": "",
+            "eval_offset": int(args.eval_offset),
             "adapter_name": inferred_adapter,
             "runtime_device": effective_device,
             "dtype": effective_dtype,
             "execution_mode": "causal-chat",
             "arch": inferred_arch,
+            "adapter_scale": float(args.adapter_scale),
+            "interpolate_model": str(args.interpolate_model),
+            "interpolate_alpha": (
+                float(args.interpolate_alpha) if str(args.interpolate_model).strip() else None
+            ),
+            "num_candidates": int(args.num_candidates),
+            "candidate_selection": str(args.candidate_selection),
             "comet_available": comet_available,
         },
     }

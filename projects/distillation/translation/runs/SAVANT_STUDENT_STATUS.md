@@ -1,14 +1,59 @@
 # Savant Student Status
 
 Generated: 2026-07-07
-Updated: 2026-07-09 UTC
+Updated: 2026-07-10 UTC
 
 ## Target
 
 Distill `google/translategemma-4b-it` into the Gemma 3 1B student for EN<->ES
 with better external generalization than the current frozen best-5 mainline.
 
-## Current Artifact-Backed Best
+## Strict Student-Beats-Teacher Proof
+
+Claim state: **pass**, scoped to the 128-row in-domain clean holdout.
+
+Fresh paired greedy evaluation on the same ordered rows and ROCm runtime:
+
+| scope | model | BLEU | chrF | samples |
+| --- | --- | ---: | ---: | ---: |
+| in-domain clean | Savant Gemma 3 1B | 54.4500 | 72.3516 | 128 |
+| in-domain clean | TranslateGemma 4B | 45.4563 | 70.8387 | 128 |
+| in-domain clean | student delta | +8.9937 | +1.5129 | 128 |
+
+Direction checks also pass both metrics:
+
+| direction | student BLEU | teacher BLEU | student chrF | teacher chrF |
+| --- | ---: | ---: | ---: | ---: |
+| EN->ES | 57.7884 | 51.3369 | 73.0159 | 72.9659 |
+| ES->EN | 50.3034 | 37.7406 | 71.5408 | 68.2184 |
+
+Receipt:
+`projects/distillation/translation/runs/savant_student_teacher_paired_20260710/claim_receipt.md`
+
+Boundary: this does not claim an external WMT13 sweep. The same fresh paired
+external run scores the student at `33.7353 / 59.6065` and the teacher at
+`33.6973 / 60.8011`, for deltas of `+0.0380 BLEU / -1.1946 chrF`.
+
+## Native-Prompt KD Follow-Up
+
+The trainer now encodes teacher batches with TranslateGemma's own tokenizer and
+chat template, then aligns matching target-token positions before computing
+KL. Historical Stage B used the student's prompt positions for both models.
+
+New external Pareto candidates from the corrected KD lane:
+
+| candidate | BLEU | chrF | result |
+| --- | ---: | ---: | --- |
+| ES->EN native-KD checkpoint 100 | 33.8753 | 59.7127 | new BLEU leader; improves both old metrics |
+| balanced native-KD checkpoint 100 | 33.8237 | 59.7999 | new chrF leader; improves both old metrics |
+
+Neither candidate clears external teacher chrF. Direct News Commentary SFT and
+beam-4 decoding were evaluated and rejected because both reduced external BLEU
+and chrF. The News Commentary builder pins dataset revision
+`bbaf548083e788e0e6d2ca68efc325283fe2aff5`, excludes exact and high-overlap
+eval matches, and marks the unknown-license output local-research-only.
+
+## Current Artifact-Backed Proof Checkpoint
 
 New best local student:
 

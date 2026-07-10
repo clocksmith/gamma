@@ -242,6 +242,13 @@ def _md_table(rows: list[dict[str, Any]], columns: list[tuple[str, str]]) -> str
     return "\n".join([header, sep] + body)
 
 
+def _without_scoreboard_timestamp(text: str) -> str:
+    lines = text.splitlines()
+    if len(lines) >= 3 and lines[2].startswith("Updated: "):
+        lines[2] = "Updated: <ignored>"
+    return "\n".join(lines)
+
+
 def _write_live_eval_artifacts(
     out_dir: Path,
     rows: list[dict[str, Any]],
@@ -389,7 +396,13 @@ def _write_live_eval_artifacts(
             "",
         ]
     )
-    (out_dir / "scoreboard.md").write_text("\n".join(lines), encoding="utf-8")
+    scoreboard_path = out_dir / "scoreboard.md"
+    scoreboard_text = "\n".join(lines)
+    if scoreboard_path.is_file():
+        existing_text = scoreboard_path.read_text(encoding="utf-8")
+        if _without_scoreboard_timestamp(existing_text) == _without_scoreboard_timestamp(scoreboard_text):
+            return
+    scoreboard_path.write_text(scoreboard_text, encoding="utf-8")
 
 
 def _run_contract_line(*, run_name: str, subset_path: Path, eval_pairs: Path, args: argparse.Namespace) -> str:

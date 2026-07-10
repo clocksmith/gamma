@@ -1,0 +1,51 @@
+{
+  "evaluation_exclusions": [
+    {
+      "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+      "sha256": "8454f014eee7ba862c3d4cc4a80169c99e47de2ec39cc5baa176424859db6c47"
+    },
+    {
+      "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl",
+      "sha256": "0bef72ecdc09eb0d65564312f76c0333d756d5a4978608b4f69a6b5ad4857e39"
+    }
+  ],
+  "output": {
+    "path": "projects/distillation/translation/training_data/savant_sequence/translategemma_wmt12_esen1024_replay_enes256.local.jsonl",
+    "sha256": "3d6d2d74b85c8aff1f5c78112872eefdf4ea8f09d8838c44c077bb2737c2a5c8"
+  },
+  "replay": {
+    "directions": [
+      "en-es"
+    ],
+    "inputs": [
+      {
+        "path": "projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p05/pack_06/frozen_best5.pack_06.replace05.jsonl",
+        "sha256": "cf3b187959fa142836ef802558e64b655c63cd3ae5bd508ed81c3158a270ae71"
+      }
+    ],
+    "requested_rows": 256
+  },
+  "selection": {
+    "counts": {
+      "rejected_duplicate": 1,
+      "replay_rows": 1600,
+      "teacher_rows": 1024
+    },
+    "rows": 1279,
+    "rows_by_pair": {
+      "en-es": 256,
+      "es-en": 1023
+    },
+    "rows_by_source": {
+      "replay": 256,
+      "sequence_teacher": 1023
+    },
+    "seed": 42
+  },
+  "teacher": {
+    "model": "google/translategemma-4b-it@10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+    "predictions": "projects/distillation/translation/runs/savant_translategemma_sequence_labels_wmt12_esen_20260710/teacher_labels/student_predictions.jsonl",
+    "predictions_sha256": "77b227b4d8882deb59afa94243331140dc4caeab92a3567e1fd7040e04d1b200"
+  },
+  "usage_scope": "local_research_only"
+}
