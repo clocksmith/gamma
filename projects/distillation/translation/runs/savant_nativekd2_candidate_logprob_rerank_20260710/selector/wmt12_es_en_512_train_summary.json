@@ -1,0 +1,132 @@
+{
+  "algorithm": "ridge_sentence_chrf_delta",
+  "baselines": {
+    "current": {
+      "bleu": 30.669194522035443,
+      "chrf": 57.51117563071333,
+      "rows": 512
+    },
+    "in_sample_selector": {
+      "bleu": 30.217288210890626,
+      "chrf": 58.096132402101134,
+      "rows": 512
+    },
+    "oracle_sentence_chrf": {
+      "bleu": 32.59212285838898,
+      "chrf": 59.491988423985354,
+      "rows": 512
+    },
+    "specialist": {
+      "bleu": 29.444078319978452,
+      "chrf": 56.534113415876384,
+      "rows": 512
+    }
+  },
+  "candidate_sources": [
+    "current",
+    "specialist"
+  ],
+  "cross_validation": [
+    {
+      "choice_counts": {
+        "current": 353,
+        "specialist": 159
+      },
+      "metrics": {
+        "bleu": 29.972220320531623,
+        "chrf": 57.92612790854261,
+        "rows": 512
+      },
+      "regularization": 0.001
+    },
+    {
+      "choice_counts": {
+        "current": 355,
+        "specialist": 157
+      },
+      "metrics": {
+        "bleu": 30.01614847098692,
+        "chrf": 57.92603762480676,
+        "rows": 512
+      },
+      "regularization": 0.01
+    },
+    {
+      "choice_counts": {
+        "current": 358,
+        "specialist": 154
+      },
+      "metrics": {
+        "bleu": 30.023729592440684,
+        "chrf": 57.944767067338354,
+        "rows": 512
+      },
+      "regularization": 0.1
+    },
+    {
+      "choice_counts": {
+        "current": 408,
+        "specialist": 104
+      },
+      "metrics": {
+        "bleu": 30.244407893499783,
+        "chrf": 57.88133155978644,
+        "rows": 512
+      },
+      "regularization": 1.0
+    },
+    {
+      "choice_counts": {
+        "current": 508,
+        "specialist": 4
+      },
+      "metrics": {
+        "bleu": 30.562612101345113,
+        "chrf": 57.55406291884633,
+        "rows": 512
+      },
+      "regularization": 10.0
+    }
+  ],
+  "in_sample_choice_counts": {
+    "current": 350,
+    "specialist": 162
+  },
+  "inference_target_access": false,
+  "model": {
+    "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/wmt12_es_en_512_selector.json",
+    "sha256": "e3de69b5a1924147bfe6ebc0d5e35276d33a26c6b162346c13eef2ae40dfd11b"
+  },
+  "regularization_grid": [
+    0.001,
+    0.01,
+    0.1,
+    1.0,
+    10.0
+  ],
+  "score_keys": [
+    "current_model_scores",
+    "specialist_model_scores"
+  ],
+  "selected_cross_validation": {
+    "choice_counts": {
+      "current": 358,
+      "specialist": 154
+    },
+    "metrics": {
+      "bleu": 30.023729592440684,
+      "chrf": 57.944767067338354,
+      "rows": 512
+    },
+    "regularization": 0.1
+  },
+  "selected_regularization": 0.1,
+  "training_input": {
+    "folds": 5,
+    "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_router_train_es_en_512_cross_scored.jsonl",
+    "rows": 512,
+    "seed": 42,
+    "sha256": "f05bd5a683abbd245cb229bcdd92caa90ebac25a5f2235e477b3faded9446b31",
+    "target": "candidate1_sentence_chrf_minus_candidate0_sentence_chrf"
+  }
+}

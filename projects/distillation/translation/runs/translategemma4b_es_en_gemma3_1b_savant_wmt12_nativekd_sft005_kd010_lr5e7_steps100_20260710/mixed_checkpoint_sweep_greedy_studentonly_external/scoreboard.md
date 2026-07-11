@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-10 20:23:29 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_wmt12_nativekd_sft005_kd010_lr5e7_steps100_20260710`
 Decode: `greedy`
 
@@ -15,12 +15,12 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-000025 | 25 | external_wmt13_en_es_translation_benchmark_128 | 33.8204 | 59.6688 | 128 | 49.0065 |
-| checkpoint-000050 | 50 | external_wmt13_en_es_translation_benchmark_128 | 33.6977 | 59.5921 | 128 | 48.0052 |
-| checkpoint-000075 | 75 | external_wmt13_en_es_translation_benchmark_128 | 33.6609 | 59.6837 | 128 | 47.0049 |
-| checkpoint-000100 | 100 | external_wmt13_en_es_translation_benchmark_128 | 33.7772 | 59.7257 | 128 | 47.0056 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-000025 | 25 | external_wmt13_en_es_translation_benchmark_128 | 33.8204 | 59.6688 | 128 |  |  |  |  | 49.0065 |
+| checkpoint-000050 | 50 | external_wmt13_en_es_translation_benchmark_128 | 33.6977 | 59.5921 | 128 |  |  |  |  | 48.0052 |
+| checkpoint-000075 | 75 | external_wmt13_en_es_translation_benchmark_128 | 33.6609 | 59.6837 | 128 |  |  |  |  | 47.0049 |
+| checkpoint-000100 | 100 | external_wmt13_en_es_translation_benchmark_128 | 33.7772 | 59.7257 | 128 |  |  |  |  | 47.0056 |
 
 ## Files
 

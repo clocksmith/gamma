@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-09 21:35:24 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1568_bf16_codexlow_pack06_prune10_defer_studentonly_v2`
 Decode: `greedy`
 
@@ -15,16 +15,16 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-001000 | 1000 | external_wmt13_en_es_translation_benchmark_128 | 30.8198 | 57.3670 | 128 | 67.0083 |
-| checkpoint-002000 | 2000 | external_wmt13_en_es_translation_benchmark_128 | 32.1052 | 58.4338 | 128 | 65.0079 |
-| checkpoint-003000 | 3000 | external_wmt13_en_es_translation_benchmark_128 | 32.9055 | 59.4631 | 128 | 67.0078 |
-| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 32.0768 | 59.1377 | 128 | 66.0080 |
-| checkpoint-001000 | 1000 | indomain_clean_merged_en_es_translation_benchmark_128 | 51.0253 | 71.6275 | 128 | 95.0115 |
-| checkpoint-002000 | 2000 | indomain_clean_merged_en_es_translation_benchmark_128 | 53.1370 | 71.6379 | 128 | 92.0106 |
-| checkpoint-003000 | 3000 | indomain_clean_merged_en_es_translation_benchmark_128 | 54.8940 | 72.8595 | 128 | 93.0112 |
-| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 54.8306 | 72.6761 | 128 | 93.0110 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-001000 | 1000 | external_wmt13_en_es_translation_benchmark_128 | 30.8198 | 57.3670 | 128 |  |  |  |  | 67.0083 |
+| checkpoint-002000 | 2000 | external_wmt13_en_es_translation_benchmark_128 | 32.1052 | 58.4338 | 128 |  |  |  |  | 65.0079 |
+| checkpoint-003000 | 3000 | external_wmt13_en_es_translation_benchmark_128 | 32.9055 | 59.4631 | 128 |  |  |  |  | 67.0078 |
+| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 32.0768 | 59.1377 | 128 |  |  |  |  | 66.0080 |
+| checkpoint-001000 | 1000 | indomain_clean_merged_en_es_translation_benchmark_128 | 51.0253 | 71.6275 | 128 |  |  |  |  | 95.0115 |
+| checkpoint-002000 | 2000 | indomain_clean_merged_en_es_translation_benchmark_128 | 53.1370 | 71.6379 | 128 |  |  |  |  | 92.0106 |
+| checkpoint-003000 | 3000 | indomain_clean_merged_en_es_translation_benchmark_128 | 54.8940 | 72.8595 | 128 |  |  |  |  | 93.0112 |
+| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 54.8306 | 72.6761 | 128 |  |  |  |  | 93.0110 |
 
 ## Files
 

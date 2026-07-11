@@ -1,0 +1,96 @@
+{
+  "algorithm": "weighted_logistic",
+  "bias": -0.3766751943625584,
+  "candidate_sources": [
+    "current",
+    "specialist"
+  ],
+  "feature_expansion": "linear",
+  "feature_means": [
+    -0.08735221463815646,
+    -0.7041289746933794,
+    -0.6167767600552231,
+    -0.45301432188126345,
+    -0.1658629485875065,
+    0.28715137329375695,
+    -0.22467146853950332,
+    0.9043626349245522,
+    -0.013189573114392708,
+    -0.011245846492328602,
+    0.0003717258540717254,
+    0.8557044347583969,
+    -0.009375,
+    4.756040646114773
+  ],
+  "feature_names": [
+    "current_model_scores_candidate0_mean",
+    "current_model_scores_candidate1_mean",
+    "current_model_scores_gap",
+    "specialist_model_scores_candidate0_mean",
+    "specialist_model_scores_candidate1_mean",
+    "specialist_model_scores_gap",
+    "score_gap_product",
+    "score_gap_disagreement",
+    "candidate_token_log_ratio",
+    "candidate_char_log_ratio",
+    "candidate_word_log_ratio",
+    "candidate_similarity",
+    "numeric_error_delta",
+    "source_char_log"
+  ],
+  "feature_scales": [
+    0.09574027699062618,
+    0.7689506654996832,
+    0.7557062272181595,
+    0.30950897792028453,
+    0.08498097511527108,
+    0.2769615717665985,
+    0.5625333705786894,
+    0.8614756285883914,
+    0.12883414700503992,
+    0.13349375454996376,
+    0.13118792739680735,
+    0.11397213256059797,
+    0.23029787097365872,
+    0.6565845487095736
+  ],
+  "inference_target_access": false,
+  "regularization": 0.1,
+  "schema_version": 1,
+  "score_keys": [
+    "current_model_scores",
+    "specialist_model_scores"
+  ],
+  "training": {
+    "folds": 5,
+    "inputs": [
+      {
+        "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_es_en_128_two_checkpoint_cross_scored.jsonl",
+        "sha256": "6e80843f4833c8ceecb2300fcde7b6ab8dd0794b77fa05787e55425a9a86e418"
+      },
+      {
+        "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_router_train_es_en_512_cross_scored.jsonl",
+        "sha256": "f05bd5a683abbd245cb229bcdd92caa90ebac25a5f2235e477b3faded9446b31"
+      }
+    ],
+    "rows": 640,
+    "seed": 42,
+    "target": "candidate1_sentence_chrf_minus_candidate0_sentence_chrf"
+  },
+  "weights": [
+    -0.41997349975148107,
+    0.09777690165845392,
+    0.15269689283952723,
+    0.028438900695330265,
+    0.11591810985883536,
+    0.003786586403469556,
+    0.17492701600344068,
+    -0.13273155492460117,
+    0.14742690048165663,
+    0.4666345485094008,
+    0.051234344511938645,
+    -0.04110394676527691,
+    0.06645441966165974,
+    0.00019460333766848533
+  ]
+}

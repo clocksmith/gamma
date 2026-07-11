@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-10 21:27:09 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_seqsft_wmt12_esen1023_replay256_lr2e7_steps50_20260710`
 Decode: `greedy`
 
@@ -14,11 +14,11 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | duration_s |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-000010 | 10 | wmt12_heldout_256 | 30.4784 | 56.9409 | 256 | 1 | 1.0 | 171.0196 |
-| checkpoint-000030 | 30 | wmt12_heldout_256 | 30.6340 | 57.0771 | 256 | 1 | 1.0 | 171.0189 |
-| checkpoint-000050 | 50 | wmt12_heldout_256 | 30.2732 | 56.9117 | 256 | 1 | 1.0 | 171.0194 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-000010 | 10 | wmt12_heldout_256 | 30.4784 | 56.9409 | 256 | 1 | 1.0 |  |  | 171.0196 |
+| checkpoint-000030 | 30 | wmt12_heldout_256 | 30.6340 | 57.0771 | 256 | 1 | 1.0 |  |  | 171.0189 |
+| checkpoint-000050 | 50 | wmt12_heldout_256 | 30.2732 | 56.9117 | 256 | 1 | 1.0 |  |  | 171.0194 |
 
 ## Files
 

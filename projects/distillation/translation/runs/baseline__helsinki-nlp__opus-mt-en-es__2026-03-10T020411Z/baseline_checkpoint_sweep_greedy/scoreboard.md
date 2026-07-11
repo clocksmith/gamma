@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-09 21:35:24 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/baseline__helsinki-nlp__opus-mt-en-es__2026-03-10T020411Z`
 Decode: `greedy`
 
@@ -12,10 +12,10 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| final | 0 | external_wmt13_en_es_translation_benchmark_128 | 35.6963 | 61.7223 | 64 | 90.3401 |
-| final | 0 | indomain_clean_merged_en_es_translation_benchmark_128 | 61.2861 | 76.7630 | 64 | 9.6005 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| final | 0 | external_wmt13_en_es_translation_benchmark_128 | 35.6963 | 61.7223 | 64 |  |  |  |  | 90.3401 |
+| final | 0 | indomain_clean_merged_en_es_translation_benchmark_128 | 61.2861 | 76.7630 | 64 |  |  |  |  | 9.6005 |
 
 ## Files
 

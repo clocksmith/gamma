@@ -1,0 +1,140 @@
+{
+  "algorithm": "weighted_logistic",
+  "baselines": {
+    "current": {
+      "bleu": 31.017786391439003,
+      "chrf": 57.81154242128772,
+      "rows": 640
+    },
+    "in_sample_selector": {
+      "bleu": 30.721780473644124,
+      "chrf": 58.320813275772245,
+      "rows": 640
+    },
+    "oracle_sentence_chrf": {
+      "bleu": 33.045232221696565,
+      "chrf": 59.84515904064238,
+      "rows": 640
+    },
+    "specialist": {
+      "bleu": 29.85477262957599,
+      "chrf": 56.86921016770774,
+      "rows": 640
+    }
+  },
+  "candidate_sources": [
+    "current",
+    "specialist"
+  ],
+  "cross_validation": [
+    {
+      "choice_counts": {
+        "current": 446,
+        "specialist": 194
+      },
+      "metrics": {
+        "bleu": 30.517894494679428,
+        "chrf": 58.22343770788275,
+        "rows": 640
+      },
+      "regularization": 0.001
+    },
+    {
+      "choice_counts": {
+        "current": 449,
+        "specialist": 191
+      },
+      "metrics": {
+        "bleu": 30.533681165248748,
+        "chrf": 58.204049150630844,
+        "rows": 640
+      },
+      "regularization": 0.01
+    },
+    {
+      "choice_counts": {
+        "current": 467,
+        "specialist": 173
+      },
+      "metrics": {
+        "bleu": 30.603418806591336,
+        "chrf": 58.257482704451846,
+        "rows": 640
+      },
+      "regularization": 0.1
+    },
+    {
+      "choice_counts": {
+        "current": 527,
+        "specialist": 113
+      },
+      "metrics": {
+        "bleu": 30.478832627610636,
+        "chrf": 58.11049030024582,
+        "rows": 640
+      },
+      "regularization": 1.0
+    },
+    {
+      "choice_counts": {
+        "current": 631,
+        "specialist": 9
+      },
+      "metrics": {
+        "bleu": 30.817910783246663,
+        "chrf": 57.869522610333824,
+        "rows": 640
+      },
+      "regularization": 10.0
+    }
+  ],
+  "in_sample_choice_counts": {
+    "current": 471,
+    "specialist": 169
+  },
+  "inference_target_access": false,
+  "model": {
+    "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/wmt12_es_en_640_logistic_selector.json",
+    "sha256": "ea6b562550e0af02aa2d55cf63ea913ce1eb09e150d0dfe93348f175cc02b65d"
+  },
+  "regularization_grid": [
+    0.001,
+    0.01,
+    0.1,
+    1.0,
+    10.0
+  ],
+  "score_keys": [
+    "current_model_scores",
+    "specialist_model_scores"
+  ],
+  "selected_cross_validation": {
+    "choice_counts": {
+      "current": 467,
+      "specialist": 173
+    },
+    "metrics": {
+      "bleu": 30.603418806591336,
+      "chrf": 58.257482704451846,
+      "rows": 640
+    },
+    "regularization": 0.1
+  },
+  "selected_regularization": 0.1,
+  "training_input": {
+    "folds": 5,
+    "inputs": [
+      {
+        "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_es_en_128_two_checkpoint_cross_scored.jsonl",
+        "sha256": "6e80843f4833c8ceecb2300fcde7b6ab8dd0794b77fa05787e55425a9a86e418"
+      },
+      {
+        "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_router_train_es_en_512_cross_scored.jsonl",
+        "sha256": "f05bd5a683abbd245cb229bcdd92caa90ebac25a5f2235e477b3faded9446b31"
+      }
+    ],
+    "rows": 640,
+    "seed": 42,
+    "target": "candidate1_sentence_chrf_minus_candidate0_sentence_chrf"
+  }
+}

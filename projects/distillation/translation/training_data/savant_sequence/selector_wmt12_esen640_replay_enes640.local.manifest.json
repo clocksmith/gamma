@@ -1,0 +1,50 @@
+{
+  "evaluation_exclusions": [
+    {
+      "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+      "sha256": "8454f014eee7ba862c3d4cc4a80169c99e47de2ec39cc5baa176424859db6c47"
+    },
+    {
+      "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval3_indomain_clean_merged_128.jsonl",
+      "sha256": "0bef72ecdc09eb0d65564312f76c0333d756d5a4978608b4f69a6b5ad4857e39"
+    }
+  ],
+  "output": {
+    "path": "projects/distillation/translation/training_data/savant_sequence/selector_wmt12_esen640_replay_enes640.local.jsonl",
+    "sha256": "1980e019f644698181d125b9220bdb58bb28d88b198f1906cdf17aaa5b6306a7"
+  },
+  "replay": {
+    "directions": [
+      "en-es"
+    ],
+    "inputs": [
+      {
+        "path": "projects/distillation/translation/training_data/frozen_best5_refine/frozen_best5.p05/pack_06/frozen_best5.pack_06.replace05.jsonl",
+        "sha256": "cf3b187959fa142836ef802558e64b655c63cd3ae5bd508ed81c3158a270ae71"
+      }
+    ],
+    "requested_rows": 640
+  },
+  "selection": {
+    "counts": {
+      "replay_rows": 1600,
+      "teacher_rows": 640
+    },
+    "rows": 1280,
+    "rows_by_pair": {
+      "en-es": 640,
+      "es-en": 640
+    },
+    "rows_by_source": {
+      "replay": 640,
+      "sequence_teacher": 640
+    },
+    "seed": 42
+  },
+  "teacher": {
+    "model": "savant_nativekd2_reference_free_mlp_selector_wmt12_640",
+    "predictions": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/wmt12_es_en_640_selected_predictions_mlp.jsonl",
+    "predictions_sha256": "f269293b9ea4650e08fce2288075a29e2d346fba057b891269fa9ca64b9c5670"
+  },
+  "usage_scope": "local_research_only"
+}

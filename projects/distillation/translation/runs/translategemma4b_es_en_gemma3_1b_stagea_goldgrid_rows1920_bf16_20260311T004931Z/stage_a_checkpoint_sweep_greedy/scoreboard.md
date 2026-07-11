@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-09 21:35:24 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1920_bf16_20260311T004931Z`
 Decode: `greedy`
 
@@ -13,12 +13,12 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-002000 | 2000 | external_wmt13_en_es_translation_benchmark_128 | 31.8592 | 58.3089 | 128 | 619.0769 |
-| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 31.4576 | 58.1105 | 128 | 271.0299 |
-| checkpoint-002000 | 2000 | indomain_clean_merged_en_es_translation_benchmark_128 | 50.7787 | 71.0132 | 128 | 542.0673 |
-| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 53.0721 | 71.6879 | 128 | 407.0471 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-002000 | 2000 | external_wmt13_en_es_translation_benchmark_128 | 31.8592 | 58.3089 | 128 |  |  |  |  | 619.0769 |
+| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 31.4576 | 58.1105 | 128 |  |  |  |  | 271.0299 |
+| checkpoint-002000 | 2000 | indomain_clean_merged_en_es_translation_benchmark_128 | 50.7787 | 71.0132 | 128 |  |  |  |  | 542.0673 |
+| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 53.0721 | 71.6879 | 128 |  |  |  |  | 407.0471 |
 
 ## Files
 
