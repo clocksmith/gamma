@@ -1,5 +1,12 @@
 # Hybrid Distillation Guide
 
+Hybrid distillation is one method family inside the broader
+[verifier-guided learning](./VERIFIER_GUIDED_LEARNING.md) program. Use that
+guide for automatic prompt optimization, GEPA naming, preference optimization,
+minimum-risk training, RLVR, domain reward contracts, and the cross-repository
+experiment register. This page remains canonical for controlled data lanes,
+SFT, knowledge distillation, routing, and checkpoint selection.
+
 Hybrid distillation is an evidence-driven way to make a smaller student model
 better on a named capability without blindly adding more data, more steps, or
 more teacher output. The core loop is:
