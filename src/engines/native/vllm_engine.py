@@ -9,7 +9,7 @@ try:
     import torch
 except ImportError:
     raise ImportError(
-        "vLLM library not found. Install with `pip install -r requirements-vllm.txt`"
+        "vLLM library not found. Install with `pip install -r requirements/vllm.txt`"
     )
 
 logger = logging.getLogger(__name__)

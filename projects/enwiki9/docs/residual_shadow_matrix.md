@@ -14,16 +14,17 @@ roundtrip, determinism, and official accounting all pass.
 
 ## Summary
 
-- Cached JSON receipts scanned into rows: `239`
-- Rows with positive measured or held-out shadow bytes: `111`
+- Cached JSON receipts scanned into rows: `243`
+- Rows with positive measured or held-out shadow bytes: `114`
 - Constructive residual certificates: `0`
-- Best cached shadow-only byte delta: `897,062` from `streaming_retrieval_shadow` / `streaming_retrieval_raw_shadow_v1`.
+- Best cached shadow-only byte delta: `916,540` from `streaming_retrieval_shadow` / `streaming_retrieval_raw_shadow_v1`.
 - Current interpretation: useful signal exists, but no cached residual row is complete enough to become a Hutter-target candidate.
 
 ## Rows
 
 | Family | Model | Key | Encoded rows | Coverage | Saved bytes | Held-out saved bytes | Code bytes | Verdict | Receipt |
 |---|---|---|---:|---:|---:|---:|---:|---|---|
+| `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=640000,support=8,suffix=32,sketch=96` | 524,288,000 | 0.065536 | 917,041 | 916,540 | 16,076 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=640000,support=8,suffix=32,sketch=96` | 524,288,000 | 0.065536 | 897,562 | 897,062 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=640000,support=8,suffix=32,sketch=96` | 262,144,000 | 0.032768 | 446,342 | 445,842 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw32768k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=640000,support=8,suffix=32,sketch=96` | 134,217,728 | 0.01677722 | 273,544 | 272,848 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw16384k_richkeys_cap300k_v1.json` |
@@ -66,6 +67,7 @@ roundtrip, determinism, and official accounting all pass.
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=640000,support=4,suffix=32,sketch=96` | 262,144 | 3.2768e-05 | 1,092 | 405 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw32k_attribution_copy_edit_v1.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=640000,support=4,suffix=32,sketch=96` | 262,144 | 3.2768e-05 | 1,097 | 401 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw32k_attribution_nocopy_v1.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=10000,support=8,suffix=32,sketch=96` | 4,096,000 | 0.000512 | 279 | 264 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw512k_v1_order2_aggregate_sketch_b10000_s8.json` |
+| `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=640000,support=8,suffix=32,sketch=96` | 512,000 | 6.4e-05 | 610 | 250 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw64k_order2_aggregate_sketch_b640000_s8_blockposterior_v1.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=10000,support=8,suffix=32,sketch=96` | 2,048,000 | 0.000256 | 127 | 112 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw256k_v1_order2_aggregate_sketch_b10000_s8.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=5000,support=8,suffix=32,sketch=96` | 2,048,000 | 0.000256 | 65 | 57 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw256k_v1_order2_aggregate_sketch_b5000_s8.json` |
 | `residual_apm_1m_mode_charclass_b050` | `residual_gain_certificate` | `all` | 4,805,936 | 0.000600742 | 34.86865 | n/a | 0 | `positive_shadow_only` | `results/fx2_residual_probe/residual_apm_1m_mode_charclass_b050/residual_gain_certificate.json` |
@@ -74,6 +76,7 @@ roundtrip, determinism, and official accounting all pass.
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=1000,support=8,suffix=32,sketch=96` | 1,024,000 | 0.000128 | 10 | 7 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw128k_v1_order3_aggregate_sketch_b1000_s8.json` |
 | `residual_apm_64k_field_mode_full/sweep` | `residual_gain_certificate` | `all` | 301,808 | 3.7726e-05 | 5.504883 | n/a | 0 | `positive_shadow_only` | `results/fx2_residual_probe/residual_apm_64k_field_mode_full/sweep/p_bucket_bit_pos_field_mode_char_class_b50000.cert.json` |
 | `residual_apm_64k_field_mode_full/sweep` | `residual_gain_certificate` | `all` | 301,808 | 3.7726e-05 | 5.504883 | n/a | 0 | `positive_shadow_only` | `results/fx2_residual_probe/residual_apm_64k_field_mode_full/sweep/p_bucket_bit_pos_mode_char_class_b50000.cert.json` |
+| `fx2_xml_residual_screen_v1` | `fx2_xml_residual_screen_v1` | `mode_char` | 4,805,936 | n/a | 18 | 5 | 6,144 | `positive_shadow_only` | `results/fx2_residual_probe/fx2_xml_residual_screen_v1/receipt.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_raw_shadow_v1` | `blend=10000,support=8,suffix=32,sketch=96` | 262,144 | 3.2768e-05 | 10 | 5 | 12,288 | `positive_shadow_only` | `results/streaming_retrieval_shadow/raw32k_complete_block_audit_v1.json` |
 | `residual_apm_64k_field_mode_full/sweep` | `residual_gain_certificate` | `all` | 301,808 | 3.7726e-05 | 4.84668 | n/a | 0 | `positive_shadow_only` | `results/fx2_residual_probe/residual_apm_64k_field_mode_full/sweep/p_bucket_bit_pos_field_mode_b50000.cert.json` |
 | `residual_apm_64k_field_mode_full/sweep` | `residual_gain_certificate` | `all` | 301,808 | 3.7726e-05 | 4.84668 | n/a | 0 | `positive_shadow_only` | `results/fx2_residual_probe/residual_apm_64k_field_mode_full/sweep/p_bucket_bit_pos_field_mode_slot_b50000.cert.json` |
@@ -203,6 +206,7 @@ roundtrip, determinism, and official accounting all pass.
 | `search_250k_stride1_500k_shifthard_p1p650_p2p300` | `fx2_shadow_residual_coder_v1` | `p_bucket,bit_pos,char_class` | 500,000 | 1 | -4 | n/a | 0 | `negative_shadow` | `results/fx2_residual_probe/search_250k_stride1_500k_shifthard_p1p650_p2p300/shadow_top_char_class.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_shadow_v2` | `blend=160000,support=8,suffix=32,sketch=96` | 500,000 | 6.25e-05 | -8 | -4 | 12,288 | `negative_shadow` | `results/streaming_retrieval_shadow/fx2_500k_rawlog_order2_best_band_abstain_sketch_b160000_s8.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_shadow_v2` | `blend=320000,support=8,suffix=32,sketch=96` | 500,000 | 6.25e-05 | -8 | -4 | 12,288 | `negative_shadow` | `results/streaming_retrieval_shadow/fx2_500k_rawlog_rowfeatures_order2_best_band_abstain_sketch_b320000_s8.json` |
+| `streaming_retrieval_shadow` | `streaming_retrieval_shadow_v2` | `blend=640000,support=8,suffix=32,sketch=96` | 4,805,936 | 0.000600742 | 5 | -4 | 16,076 | `negative_shadow` | `results/streaming_retrieval_shadow/fx2_apm1m_full_4805936_order2_aggregate_sketch_b640000_s8_blockposterior_v1.json` |
 | `streaming_retrieval_shadow` | `streaming_retrieval_shadow_v1` | `blend=50000,support=4,suffix=32,sketch=96` | 500,000 | 6.25e-05 | -7 | -5 | 12,288 | `negative_shadow` | `results/streaming_retrieval_shadow/apm1m_500k_srsh_v1.json` |
 | `residual_apm_64k_field_mode_full/sweep` | `residual_gain_certificate` | `all` | 301,808 | 3.7726e-05 | -5.182129 | n/a | 0 | `negative_shadow` | `results/fx2_residual_probe/residual_apm_64k_field_mode_full/sweep/p_bucket_bit_pos_field_mode_char_class_b125000.cert.json` |
 | `residual_apm_64k_field_mode_full/sweep` | `residual_gain_certificate` | `all` | 301,808 | 3.7726e-05 | -5.182129 | n/a | 0 | `negative_shadow` | `results/fx2_residual_probe/residual_apm_64k_field_mode_full/sweep/p_bucket_bit_pos_mode_char_class_b125000.cert.json` |

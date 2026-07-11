@@ -211,12 +211,20 @@ def cmix_native_mode(parts: list[str]) -> str:
 
 
 def active_process_state() -> dict[str, Any]:
-    guard_rows = ps_rss_for_pattern("run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21-mmap-bin")
+    guard_rows = ps_rss_for_pattern(
+        "run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21-mmap-bin|"
+        "fx2_public_repro_queue.py|fx2-public-package-.*/cmix_orig"
+    )
+    research_rows = ps_rss_for_pattern(
+        "projects/enwiki9/tools/(streaming_retrieval_.*shadow|page_order_gepa|"
+        "article_order_teacher_distill).py"
+    )
     controller_rows = ps_rss_for_pattern("projects/enwiki9/tools/cmix21_gate_decider.py")
     cmix_rows = [row for row in guard_rows if "cmix21-mmap-bin" in row["args"]]
     max_cmix = max(cmix_rows, key=lambda row: row["rss_kib"], default=None)
     state: dict[str, Any] = {
-        "active_rows": guard_rows,
+        "active_rows": guard_rows + research_rows,
+        "research_rows": research_rows,
         "controller_rows": controller_rows,
         "cmix_rows": cmix_rows,
         "rss_guard_kib": LOCAL_RSS_GUARD_KIB,
@@ -596,6 +604,10 @@ def blocker_status_state(
     return row
 
 
+def is_ppmd_cmix_candidate(candidate: str | None) -> bool:
+    return isinstance(candidate, str) and candidate.startswith("cmix21_text_mmap_") and "ppmd" in candidate
+
+
 def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | None:
     if candidate is None or scope is None:
         return None
@@ -612,11 +624,25 @@ def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | 
             "next_scope_bytes": next_scope,
             "command": cmix21_gate_decider.command_for_gate(candidate, next_scope),
         }
+    if not is_ppmd_cmix_candidate(candidate):
+        pass_action = {
+            "action": "record pass and apply candidate target-gate promotion rule",
+            "next_scope_bytes": next_scope,
+            "reason": "non-cmix candidates may need archive ceilings, target-gate metadata, or candidate-specific guard labels",
+        }
     return {
         "if_passes": pass_action,
         "if_rss_fails": {
-            "action": "record RSS failure and package lower PPMD cap",
-            "lower_memory_suggestion": cmix21_gate_decider.lower_ppmd_suggestion(candidate, 128),
+            "action": (
+                "record RSS failure and package lower PPMD cap"
+                if is_ppmd_cmix_candidate(candidate)
+                else "record RSS failure and retire or repackage this integration shape"
+            ),
+            "lower_memory_suggestion": (
+                cmix21_gate_decider.lower_ppmd_suggestion(candidate, 128)
+                if is_ppmd_cmix_candidate(candidate)
+                else None
+            ),
         },
         "if_roundtrip_or_determinism_fails": {
             "action": "record failure and do not promote",
@@ -663,6 +689,13 @@ def operator_action(
             "forbidden_work": ["launch another compression gate"],
         }
     if verdict == "pass":
+        if not is_ppmd_cmix_candidate(gate.get("candidate")):
+            return {
+                "safe_to_launch_heavy_gate": False,
+                "action": "record_pass_then_apply_candidate_promotion_rule",
+                "reason": "non-cmix candidate passed; apply the candidate metadata promotion rule before launching another gate",
+                "record_command": gate.get("record_command"),
+            }
         return {
             "safe_to_launch_heavy_gate": False,
             "action": "record_pass_then_promote",
@@ -671,6 +704,13 @@ def operator_action(
             "next_gate_command": gate.get("next_gate_command"),
         }
     if verdict == "rss_fail":
+        if not is_ppmd_cmix_candidate(gate.get("candidate")):
+            return {
+                "safe_to_launch_heavy_gate": False,
+                "action": "record_rss_failure_then_retire_or_repackage_candidate",
+                "reason": "non-cmix RSS failure has no PPMD lower-memory bracket",
+                "record_command": gate.get("record_rss_failure_command"),
+            }
         if next_action == "launch_lower_prefix_gate":
             return {
                 "safe_to_launch_heavy_gate": True,
@@ -733,7 +773,12 @@ def add_active_decode_progress(process_state: dict[str, Any], gate: dict[str, An
         return
     output_temp_bytes = temp.get("output_temp_bytes")
     if not isinstance(output_temp_bytes, int):
-        return
+        output_temp_bytes = temp.get("output_bytes")
+    if not isinstance(output_temp_bytes, int):
+        # cmix may not materialize either decode output path until its first
+        # completed write. The absence of a file means zero observed progress,
+        # not an unknown decode scope.
+        output_temp_bytes = 0
     capped = min(output_temp_bytes, scope)
     process_state["active_decode_progress"] = {
         "scope_bytes": scope,
@@ -821,7 +866,9 @@ def operator_summary_state(
     gate = gate if isinstance(gate, dict) else {}
     max_cmix = process_state.get("max_cmix_process")
     max_sampled_single_rss_kib = gate.get("max_sampled_single_rss_kib")
+    max_sampled_tree_rss_kib = gate.get("max_sampled_tree_rss_kib")
     latest_sample_single_rss_kib = gate.get("latest_sample_max_single_rss_kib")
+    latest_sample_tree_rss_kib = gate.get("latest_sample_tree_rss_kib")
     summary: dict[str, Any] = {
         "candidate": candidate,
         "scope_bytes": scope,
@@ -843,8 +890,12 @@ def operator_summary_state(
         "latest_sample_single_rss_kib": latest_sample_single_rss_kib,
         "max_sampled_single_decimal_10gb_margin_kib": None,
         "max_sampled_single_decimal_10gb_safe": None,
+        "max_sampled_tree_decimal_10gb_margin_kib": None,
+        "max_sampled_tree_decimal_10gb_safe": None,
         "latest_sample_single_decimal_10gb_margin_kib": None,
         "latest_sample_single_decimal_10gb_safe": None,
+        "latest_sample_tree_decimal_10gb_margin_kib": None,
+        "latest_sample_tree_decimal_10gb_safe": None,
         "single_rss_margin_kib": gate.get("single_rss_margin_kib"),
         "latest_sample_single_rss_margin_kib": gate.get("latest_sample_single_rss_margin_kib"),
         "active_process_tree_rss_kib": process_state.get("active_tree_rss_kib"),
@@ -862,9 +913,15 @@ def operator_summary_state(
     if isinstance(max_sampled_single_rss_kib, int):
         summary["max_sampled_single_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - max_sampled_single_rss_kib
         summary["max_sampled_single_decimal_10gb_safe"] = max_sampled_single_rss_kib <= DECIMAL_10GB_GUARD_KIB
+    if isinstance(max_sampled_tree_rss_kib, int):
+        summary["max_sampled_tree_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - max_sampled_tree_rss_kib
+        summary["max_sampled_tree_decimal_10gb_safe"] = max_sampled_tree_rss_kib <= DECIMAL_10GB_GUARD_KIB
     if isinstance(latest_sample_single_rss_kib, int):
         summary["latest_sample_single_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - latest_sample_single_rss_kib
         summary["latest_sample_single_decimal_10gb_safe"] = latest_sample_single_rss_kib <= DECIMAL_10GB_GUARD_KIB
+    if isinstance(latest_sample_tree_rss_kib, int):
+        summary["latest_sample_tree_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - latest_sample_tree_rss_kib
+        summary["latest_sample_tree_decimal_10gb_safe"] = latest_sample_tree_rss_kib <= DECIMAL_10GB_GUARD_KIB
     if isinstance(max_cmix, dict):
         summary["active_cmix_pid"] = max_cmix.get("pid")
         summary["active_cmix_rss_kib"] = max_cmix.get("rss_kib")
@@ -983,12 +1040,25 @@ def process_role(args: Any) -> str:
         return "driver"
     if "cmix21-mmap-bin" in text:
         return "native_cmix"
+    if "fx2_public_repro_queue.py" in text:
+        return "fx2_package"
+    if "fx2-public-package-" in text and "cmix_orig" in text:
+        return "native_fx2"
+    if "streaming_retrieval_shadow.py" in text:
+        return "target_trace_shadow"
+    if "streaming_retrieval_raw_shadow.py" in text:
+        return "raw_shadow"
+    if "article_order_teacher_distill.py" in text:
+        return "order_teacher"
+    if "page_order_gepa.py" in text:
+        return "order_proxy"
     return "process"
 
 
 def render_md(data: dict[str, Any]) -> str:
     proc_state = data.get("active_processes", {})
     max_cmix = proc_state.get("max_cmix_process") if isinstance(proc_state, dict) else None
+    active_rows = proc_state.get("active_rows") if isinstance(proc_state, dict) else None
     gate = data.get("gate_decision") if isinstance(data.get("gate_decision"), dict) else {}
     summary = data.get("operator_summary") if isinstance(data.get("operator_summary"), dict) else {}
     lines = [
@@ -1055,12 +1125,13 @@ def render_md(data: dict[str, Any]) -> str:
                 f"- Single-process RSS margin KiB: `{fmt_int(gate.get('single_rss_margin_kib'))}`",
                 f"- Single-process decimal `10GB` margin KiB: `{fmt_int(summary.get('max_sampled_single_decimal_10gb_margin_kib'))}`",
                 f"- Tree RSS margin KiB: `{fmt_int(gate.get('tree_rss_margin_kib'))}`",
-                f"- Tree decimal `10GB` margin KiB: `{fmt_int(summary.get('active_process_tree_decimal_10gb_margin_kib'))}`",
+                f"- Tree decimal `10GB` margin KiB: `{fmt_int(summary.get('max_sampled_tree_decimal_10gb_margin_kib'))}`",
                 f"- Latest sampled single RSS KiB: `{fmt_int(gate.get('latest_sample_max_single_rss_kib'))}`",
                 f"- Latest sampled tree RSS KiB: `{fmt_int(gate.get('latest_sample_tree_rss_kib'))}`",
                 f"- Latest sampled single-process margin KiB: `{fmt_int(gate.get('latest_sample_single_rss_margin_kib'))}`",
                 f"- Latest sampled single-process decimal `10GB` margin KiB: `{fmt_int(summary.get('latest_sample_single_decimal_10gb_margin_kib'))}`",
                 f"- Latest sampled tree margin KiB: `{fmt_int(gate.get('latest_sample_tree_rss_margin_kib'))}`",
+                f"- Latest sampled tree decimal `10GB` margin KiB: `{fmt_int(summary.get('latest_sample_tree_decimal_10gb_margin_kib'))}`",
             ]
         )
     if (
@@ -1380,6 +1451,26 @@ def render_md(data: dict[str, Any]) -> str:
                     f"- Decode remaining scope bytes: `{fmt_int(progress.get('remaining_scope_bytes'))}`",
                 ]
             )
+        if proc_state.get("active_tree_rss_warning"):
+            lines.append(f"- Active process tree warning: `{proc_state.get('active_tree_rss_warning')}`")
+    elif isinstance(active_rows, list) and active_rows:
+        lines.extend(
+            [
+                "",
+                "## Active RSS",
+                "",
+                "- Max cmix PID: `n/a`",
+                "- Active cmix mode: `n/a`",
+                "- Max cmix RSS KiB: `n/a`",
+                f"- Active process tree RSS KiB: `{fmt_int(proc_state.get('active_tree_rss_kib'))}`",
+                f"- Local binary `10GiB` guard KiB: `{fmt_int(proc_state.get('rss_guard_kib'))}`",
+                f"- Decimal `10GB` guard KiB: `{fmt_int(proc_state.get('decimal_10gb_guard_kib'))}`",
+                "- Single-process binary margin KiB: `n/a`",
+                "- Single-process decimal margin KiB: `n/a`",
+                f"- Active process tree margin KiB (binary): `{fmt_int(proc_state.get('active_tree_margin_kib'))}`",
+                f"- Active process tree decimal margin KiB: `{fmt_int(proc_state.get('active_tree_decimal_10gb_margin_kib'))}`",
+            ]
+        )
         if proc_state.get("active_tree_rss_warning"):
             lines.append(f"- Active process tree warning: `{proc_state.get('active_tree_rss_warning')}`")
     conting = data.get("contingencies") if isinstance(data.get("contingencies"), dict) else {}

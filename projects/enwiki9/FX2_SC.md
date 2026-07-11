@@ -11,28 +11,38 @@ work can be reviewed without overstating unmeasured claims.
 
 ## Top Status
 
-FX2-SC is a novel sidecar/calibration lane, but the primary novel strategy is
-now SRSTC / streaming self-referential semantic retrieval. FX2-SC remains
-valuable as the outer SSE/APM and structural-state layer that SRSTC can use
-after exact shadow evidence exists. The current proof path is still governed by
-exact gate artifacts. Use this table before making any claim about progress to
-`10.95%`.
+FX2-SC is no longer the active target-bearing gate. The minimized sidecar
+backend plus exact measured reversible geometry-title transform was rejected by
+the canonical `10M` archive ceiling. The generated certificate now names
+`cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`
+at `10,000,000` bytes as the active constructive gate after exact `250K` and
+`1M` replays. SRSTC / streaming self-referential semantic retrieval
+remains the primary residual research lane, but it must transfer into a counted
+deterministic component before it changes the score claim. Use this table
+before making any claim about progress to `10.95%`.
 
 | Item | Current value | Evidence boundary |
 |---|---|---|
 | Best exact `10M` local score | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1`: score `1,882,615`, archive `1,643,289`, program `239,326` | Exact artifact-backed prefix result only. |
-| Best exact `10M` cmix21 archive | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: archive `1,638,083`, local score `2,202,359` | Exact artifact-backed prefix result; not active because larger-scope RSS behavior is unsuitable. |
+| Best exact `10M` cmix21 archive | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: archive `1,638,076`, local score `2,202,351` | Exact artifact-backed prefix result; not active because larger-scope RSS behavior is unsuitable. |
 | `ppmd21888k` bracket result | Exact `10M` replay passed at archive `1,638,182`; unchanged `100M` promotion failed RSS guard by `36` KiB | Guard receipt: `ppmd21888k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
 | `ppmd21760k` bracket result | Exact `10M` replay passed at archive `1,638,204`; unchanged `100M` promotion failed RSS guard by `72` KiB | Guard receipt: `ppmd21760k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
 | `ppmd21632k` bracket result | Exact `10M` replay passed at archive `1,638,229`; unchanged `100M` promotion failed RSS guard by `68` KiB | Guard receipt: `ppmd21632k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
 | `ppmd21504k` bracket result | Exact `10M` replay passed at archive `1,638,165`; unchanged `100M` promotion failed RSS guard by `72` KiB | Guard receipt: `ppmd21504k_100000000_determinism_rss_guard.json`; this is now a memory bracket, not the active candidate. |
-| `ppmd21376k` bracket result | Exact prefix replays passed; unchanged `100M` promotion failed RSS guard by `116` KiB | Guard receipt: `ppmd21376k_100000000_determinism_rss_guard.json`; this is now the upper bracket for the active candidate. |
-| Active candidate | `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`: exact `1,024` byte replay passed with roundtrip and determinism | Result: `results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-07T201228.json`; guard receipt: `ppmd21120k_1024_determinism_rss_guard.json`. |
-| Active gate | `ppmd21120k` unchanged `250,000` byte RSS-guarded determinism replay | Launch only through the guarded handoff command in `docs/status_receipt.md`. |
+| `ppmd21376k` bracket result | Exact prefix replays passed; unchanged `100M` promotion failed RSS guard by `116` KiB | Guard receipt: `ppmd21376k_100000000_determinism_rss_guard.json`; this is now memory-bracket evidence. |
+| `ppmd20992k` bracket result | Exact `10M` replay passed at archive `1,638,161`; unchanged `100M` promotion failed RSS guard by `68` KiB | Guard receipt: `ppmd20992k_100000000_determinism_rss_guard.json`; this is now memory-bracket evidence. |
+| `ppmd20864k` bracket result | Exact `10M` archive `1,638,076`; unchanged `100M` crossed the RSS guard by `68` KiB before archive or roundtrip | Guard receipt: `ppmd20864k_100000000_determinism_rss_guard.json`; do not promote unchanged. |
+| Retired cmix21 candidate | `ppmd20736k` | Exact gates passed through `1M`, but the `10M` run reached `10,472,644` KiB, `707,019` KiB over official decimal `10GB`; no archive claim was made. |
+| `ppmd20608k` bracket result | Exact `1,024` replay passed, then unchanged `250,000` promotion exceeded decimal `10GB` by `240,207` KiB | Guard receipt: `ppmd20608k_250000_determinism_rss_guard.json`; do not promote unchanged. |
+| `ppmd20480k` bracket result | Exact `1,024` replay passed; unchanged `250,000` byte gate exceeded official decimal `10GB` by `3,275` KiB | This is a terminal PPMD-only memory bracket, not the active proof gate. |
+| Active cmix21 gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` at `10,000,000` bytes | Exact `1M` archive `174,525`, roundtrip true, determinism true, peak RSS `8,831,176` KiB; full `1G` proof remains pending. |
+| Active baseline | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | Strongest calibrated admissible baseline, projected `681,114` bytes above target. |
+| Retired FX2-SC sidecar gate | `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` canonical `10M` ceiling abort | Native-output lower bound `1,641,762`, `10,181` bytes above the `1,631,581` promotion ceiling before final flush; memory was healthy. |
+| Compact FX2 XML residual screen | `fx2_xml_residual_screen_v1`, best key `mode_char` | Cached FX2 trace result saved `5` held-out bytes and `-6,139` net after code; not promotable. |
 | Best `100M` evidence | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: metadata-inherited score `15,040,789`, archive `14,857,781`, program `183,008` | Inherited by payload and ordered-stream identity from the verified geometry parent. No exact `100M` result JSON is present in `results/`. |
 | Best full `1G` proof | None | The certificate generator reports no verified full-corpus result JSON in this checkout. |
 | Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: projected `110,181,114` | Forecast quality: `fx2-calibrated-from-exact-100m`; not a constructive proof. |
-| Active blocker | No full-corpus constructive result exists; the active `ppmd21120k` lane has only passed the `1K` prefix gate | Continue exact prefix promotion in order and do not claim `10.95%` from prefix evidence. |
+| Active blocker | No full-corpus constructive result exists, and no current residual/XML/layout mechanism has cleared counted held-out evidence against the strongest substrate | A replacement must first win in target-substrate shadow or replay before native promotion. |
 
 ## Abstract
 
@@ -59,10 +69,11 @@ Wikipedia structure should be used as a recomputable predictive lens,
 not as an inline text transform.
 ```
 
-Strategic update: that lens should feed a stronger primary model, SRSTC, when
-possible. SRSTC adds self-referential span tables, deterministic sketch
-similarity, and patch-copy priors; FX2-SC supplies the causal parser state and
-calibration surface.
+Strategic update: that lens is now being tested directly in the active
+geometry-title sidecar gate. SRSTC can still use FX2-SC parser state and
+calibration surfaces later, but the current constructive question is whether
+the minimized sidecar backend plus measured reversible layout clears the
+canonical `10M` promotion ceiling.
 
 ## Score Contract
 
@@ -1225,20 +1236,27 @@ PREPROCESSOR_WINS | PREPROCESSOR_LOSES | INCOMPLETE | NON_DETERMINISTIC
 
 ## Canonical Execution Order
 
-1. Keep cmix21 memory-shaped candidates moving through exact gates.
-2. Reproduce the public `fx2-cmix` lane for official-accounting calibration.
-3. Build exact base-probability logs only where they do not disturb output.
-4. Run residual heatmaps and shadow coding by causal Wiki/XML state.
-5. Schema baseline: template hash, argument index, field, slot.
-6. Soft symbol reduction: value class, URL/numeric/date, table coordinates.
-7. Lexical priming: title tokens, citation MTF, link/entity recency.
-8. Namespace and page-kind partitioning.
-9. Active geometry as stream-order context.
-10. Reversible geometry sorting only with permutation accounting.
-11. Role-specific copy hints.
-12. Shallow grammar in stable prose spans.
-13. Bounded fixed-point SSM gating.
-14. Custom backend event tests for ideas that do not fit cmix-sidecar.
+1. Treat `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` as retired in its
+   current measured form.
+2. Do not run another native sidecar gate until a compact residual/XML/layout
+   mechanism clears counted held-out target-substrate evidence.
+3. Use the certificate-active
+   `cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+   bracket gate only for operator receipt maintenance.
+4. Keep the public `fx2-cmix` lane available for official-accounting
+   calibration.
+5. Build exact base-probability logs only where they do not disturb output.
+6. Run residual heatmaps and shadow coding by causal Wiki/XML state.
+7. Schema baseline: template hash, argument index, field, slot.
+8. Soft symbol reduction: value class, URL/numeric/date, table coordinates.
+9. Lexical priming: title tokens, citation MTF, link/entity recency.
+10. Namespace and page-kind partitioning.
+11. Active geometry as stream-order context.
+12. Reversible geometry sorting only with permutation accounting.
+13. Role-specific copy hints.
+14. Shallow grammar in stable prose spans.
+15. Bounded fixed-point SSM gating.
+16. Custom backend event tests for ideas that do not fit cmix-sidecar.
 
 ## References
 

@@ -2,7 +2,7 @@
 
 This directory is the canonical documentation index for GAMMA.
 
-## Canonical Map
+## Architecture Map
 
 | Topic | Canonical doc |
 |---|---|

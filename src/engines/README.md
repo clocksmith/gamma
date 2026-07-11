@@ -148,7 +148,7 @@ avoid tokenizer boundary drift rather than copying incompatible entries.
 
 - vLLM requires an NVIDIA GPU with CUDA. It is not supported on macOS or ROCm
   in GAMMA.
-- PyTorch ROCm is supported via `requirements-rocm.txt`. Prefer the `pytorch`
+- PyTorch ROCm is supported via `requirements/rocm.txt`. Prefer the `pytorch`
   engine on AMD; `pytorch_cuda` is NVIDIA-specific.
 - LlamaCpp Vulkan is available on Linux when `llama-cpp-python` is rebuilt with
   `CMAKE_ARGS="-DGGML_VULKAN=ON"`.
@@ -175,17 +175,17 @@ Each engine has its own requirements file:
 pip install -r requirements.txt           # Base dependencies
 
 # Native Engines
-pip install -r requirements-pytorch.txt   # PyTorch + transformers
-pip install -r requirements-mlx.txt       # MLX (Apple Silicon)
-pip install -r requirements-llamacpp.txt  # llama-cpp-python
-pip install -r requirements-jax.txt       # JAX/Flax
-pip install -r requirements-onnx.txt      # ONNX Runtime
-pip install -r requirements-tensorflow.txt # TensorFlow
-pip install -r requirements-vllm.txt      # vLLM (NVIDIA only)
+pip install -r requirements/pytorch.txt   # PyTorch + transformers
+pip install -r requirements/mlx.txt       # MLX (Apple Silicon)
+pip install -r requirements/llamacpp.txt  # llama-cpp-python
+pip install -r requirements/jax.txt       # JAX/Flax
+pip install -r requirements/onnx.txt      # ONNX Runtime
+pip install -r requirements/tensorflow.txt # TensorFlow
+pip install -r requirements/vllm.txt      # vLLM (NVIDIA only)
 
 # GPU-specific
-pip install -r requirements-cuda.txt      # NVIDIA CUDA support
-pip install -r requirements-rocm.txt      # AMD ROCm support
+pip install -r requirements/cuda.txt      # NVIDIA CUDA support
+pip install -r requirements/rocm.txt      # AMD ROCm support
 ```
 
 ## External References

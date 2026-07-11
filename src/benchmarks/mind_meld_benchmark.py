@@ -15,6 +15,7 @@ import random
 import time
 import json
 import sys
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Any
 from dataclasses import dataclass, asdict, field
 import numpy as np
@@ -406,7 +407,7 @@ class MindMeldBenchmark:
 
     def _print_result_summary(self, result: BenchmarkResult):
         """Print summary of benchmark result."""
-        print(f"\n📊 Results:")
+        print("\nResults:")
         print(f"  Total Time: {result.total_time:.2f}s")
         print(f"  Speed: {result.tokens_per_second:.2f} tokens/sec")
         print(f"  Avg Latency: {result.avg_token_latency*1000:.2f}ms/token")
@@ -418,7 +419,7 @@ class MindMeldBenchmark:
 
     def generate_report(
         self,
-        output_path: str = "benchmark_report.html"
+        output_path: str = "reports/benchmark_report.html"
     ):
         """
         Generate HTML benchmark report.
@@ -432,10 +433,12 @@ class MindMeldBenchmark:
 
         html = self._build_html_report()
 
-        with open(output_path, 'w') as f:
+        report_path = Path(output_path)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        with report_path.open('w', encoding='utf-8') as f:
             f.write(html)
 
-        self._log(f"Report saved to: {output_path}")
+        self._log(f"Report saved to: {report_path}")
 
     def _build_html_report(self) -> str:
         """Build HTML report from results."""
@@ -913,8 +916,8 @@ Available strategies:
     parser.add_argument(
         '--output',
         type=str,
-        default='benchmark_report.html',
-        help='Output HTML report path (default: benchmark_report.html)'
+        default='reports/benchmark_report.html',
+        help='Output HTML report path (default: reports/benchmark_report.html)'
     )
 
     parser.add_argument(

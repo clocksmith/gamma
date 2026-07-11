@@ -38,7 +38,7 @@ matches the question:
 
 | Question | Read first | Reason |
 |---|---|---|
-| What is closest to a target proof? | Active proof lane row, then active `cmix21` card | This is the only lane currently moving through exact gates. |
+| What is closest to a target proof? | Full `1G` proof row, then current blocker/retired-gate rows | No native target-bearing gate is active after the latest ceiling rejections. |
 | What compresses best at the measured `10M` prefix? | Best exact local score and best exact archive rows | Score and archive answer different questions because program bytes differ. |
 | What is most novel? | SRSTC / Streaming Retrieval Mixer, then FX2-SC, causal schema trie, embedding-teacher, and I-SSA cards | SRSTC is the primary semantic-recurrence lane; the others are backup or component lanes until receipts prove otherwise. |
 | What is submission-relevant? | Full `1G` proof row | Prefixes, forecasts, and inherited metadata are only screening evidence. |
@@ -46,10 +46,13 @@ matches the question:
 Score reality check:
 
 ```text
-The active cmix21 lane has the best archive-slope attack surface and remains
-the serialized proof lane, but the primary novel strategy is SRSTC / streaming
-self-referential retrieval. Existing structural lanes are retained as backup
-substrates or SRSTC components until shadow coding proves net bytes.
+The calibrated fx2 geometry package is the prize-facing baseline. The recent
+GEPA and FX2-SC sidecar target-bearing gates are retired after canonical `10M`
+ceiling failures. SRSTC / streaming self-referential retrieval remains the
+primary residual-modeling delta only after it transfers to the strongest
+substrate or distills into a smaller counted component. The PPMD-only ladder is
+retired; the active cmix21 package uses global FXCM cmC2 division by two plus
+the original PAQ rolling buffer to obtain material RSS margin.
 ```
 
 ## One-Screen Scoreboard
@@ -57,9 +60,10 @@ substrates or SRSTC components until shadow coding proves net bytes.
 | Rank purpose | Program or lane | Scope | Score/archive | Evidence class | Read it as |
 |---|---|---:|---|---|---|
 | Best exact local score at `10M` | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | `10,000,000` | S `1,882,615`; archive `1,643,289` | exact artifact-backed prefix | Best score row in this checkout at `10M`; not a full-corpus proof. |
-| Best exact archive at `10M` | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | `10,000,000` | S `2,202,359`; archive `1,638,083` | exact artifact-backed prefix | Best current archive slope reference; memory blocked at larger scope. |
-| Active proof lane | `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | `1,024` passed; `250,000` next gate | archive `247`; local score `564,521`; roundtrip true; determinism true; max sampled single RSS `8,624,384` KiB | exact artifact-backed prefix | Run the same package unchanged at `250K`; promote only after roundtrip, determinism, and RSS pass. |
-| Primary novel strategy | SRSTC / Streaming Retrieval Mixer | `8,192K` complete-block shadow receipt: `112,212` held-out bytes saved, `99,924` net bytes after code estimate | exact shadow evidence only | Strongest novel lane; not a compressor result until the paying component is integrated and replayed. |
+| Best exact archive at `10M` | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | `10,000,000` | S `2,202,351`; archive `1,638,076` | exact artifact-backed prefix | Best local archive reference, not the active proof gate. |
+| Active proof lane | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | `10,000,000` running after exact `1,000,000` pass | `1M`: archive `174,525`, score `738,785`, peak RSS `8,831,176` KiB | exact constructive prefix | Promote unchanged only through the decider; no prefix proves `10.95%`. |
+| Retired sidecar gate | `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` | canonical `10,000,000` lower bound | native output `1,641,762`; ceiling `1,631,581` | terminal ceiling abort | Archive slope failed; memory was healthy, and no completed archive/roundtrip/score is claimed. |
+| Primary novel strategy | SRSTC / Streaming Retrieval Mixer | `65,536K` block-posterior shadow receipt: `916,540` held-out bytes saved, `900,464` net bytes after code estimate, all `4,000` blocks positive | exact shadow evidence only | Target-closing at the shadow boundary by `219,350` bytes; not a compressor result until the paying component is integrated and replayed. |
 | Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | projected `1G` | projected S `110,181,114` | forecast only | Record-class lead, still above `109,500,000` and not constructive. |
 | Best full `1G` proof | none in this checkout | `1,000,000,000` | none | not verified | This is the blocker. |
 
@@ -67,10 +71,10 @@ substrates or SRSTC components until shadow coding proves net bytes.
 
 | Lane | Novelty | Implementation status | Evidence status |
 |---|---|---|---|
-| cmix21 memory shaping | Low algorithmic novelty, high engineering value | Implemented candidate packages with exact gates | Active winner path because it preserves strong byte prediction under memory constraints. |
+| cmix21 memory shaping | Low algorithmic novelty, high engineering value | Implemented candidate packages with exact gates | Retired from the prize path after the deepest cut exceeded decimal `10GB`; retained as research evidence. |
 | fx2 core tuning | Moderate local novelty around tuned contexts/SSE rates | Implemented package lanes | Best exact `10M` local score row, but no full `1G` proof here. |
-| FX2-SC residual/SSE | Higher novelty: non-destructive causal structure calibration | Cached matrix has `239` residual/SSE rows, `111` positive measured or held-out shadow rows, and `0` constructive residual certificates | Add-on path only until saved bytes exceed counted code/table bytes with full coverage. |
-| SRSTC / Streaming retrieval mixer | Highest current novelty: causal sketch-neighbor continuation model rebuilt from decoded history with self-referential tables and patch-copy priors | Complete-block raw shadow receipt exists at `8,192K`: `65,536,000` encoded rows, `112,212` held-out bytes saved, `99,924` net bytes, `0` block regressions | Primary novel strategy; next step is confirming adjacent scopes and integrating only the smallest deterministic paying component. |
+| FX2-SC residual/SSE | Higher novelty: non-destructive causal structure calibration | Cached matrix has `243` residual/SSE rows, `114` positive measured or held-out shadow rows, and `0` constructive residual certificates. The compact XML screen is non-promotable: best key `mode_char` saved `5` held-out bytes and `-6,139` after code. | Add-on path only until saved bytes exceed counted code/table bytes with full coverage. |
+| SRSTC / Streaming retrieval mixer | Highest current novelty: causal sketch-neighbor continuation model rebuilt from decoded history with self-referential tables, patch-copy priors, and a decoder-rebuilt block posterior | Exact `65,536K` shadow receipt has `524,288,000` encoded rows, `916,540` held-out bytes saved, `900,464` net bytes, all `4,000` blocks positive, and `0` block regressions | Primary novel strategy; compile the smallest paying component into the strongest substrate and require exact constructive replay. |
 | Causal schema trie | Higher novelty: history-derived structural dictionary | Design/spec lane | No compression proof yet. |
 | Embedding-teacher ordering | Novel offline search method, not a payload | Teacher tools exist; final payload must be distilled rules | Forecast/search support only unless distilled rule gains are exact. |
 | I-SSA attractor state | Novel robust structural-state coordinate | Research report lane | No target proof; possible outer-SSE coordinate. |
@@ -84,13 +88,15 @@ Plain-English candidate map:
 
 | Candidate family | What it is trying to do | Current status |
 |---|---|---|
-| SRSTC / Streaming retrieval mixer | Build deterministic self-referential semantic tables from already-decoded spans, retrieve similar prior contexts with integer sketches, and mix patch-copy probabilities into the next-byte model. | Primary novel strategy; best target-closing shadow receipt saves `884,774` net bytes but is blocked by small block regressions; best promotion-ready fallback saves `260,560` net bytes. |
-| Fine-valve `cmix21` PPMD ladder | Keep the strong cmix21 next-bit model, but shave memory in the least damaging place until larger gates fit the RSS guard. | Active proof lane; `ppmd21120k` is packaged after `ppmd21248k` failed unchanged `100M` RSS. |
+| Retired FX2-SC geometry-title sidecar | Tested whether the minimized sidecar backend plus exact measured reversible geometry-title transform could beat the calibrated target ceiling under counted program bytes. | Terminal canonical `10M` ceiling abort: native output lower bound `1,641,762`, `10,181` bytes above the `1,631,581` promotion ceiling before final flush. |
+| SRSTC / Streaming retrieval mixer | Build deterministic self-referential semantic tables from already-decoded spans, retrieve similar prior contexts with integer sketches, and mix patch-copy probabilities into the next-byte model. | Primary novel strategy; the exact `65,536K` block-posterior shadow receipt saves `900,464` net bytes, closes the forecast gap by `219,350` bytes, and has zero block regressions. Constructive substrate integration is the remaining proof boundary. |
+| Fine-valve `cmix21` PPMD ladder | Keep the strong cmix21 next-bit model, but shave memory in the least damaging place until larger gates fit the RSS guard. | `ppmd20736k`, `ppmd20608k`, and `ppmd20480k` are retired after decimal-memory aborts. This lane is memory-bracket evidence, not the active proof gate. |
 | `fx2` geometry/core tuning | Use known fx2/cmix strengths plus ordering, dictionary, and tuning wrappers to anchor record-class fallback math. | Strong forecast and exact prefix rows, but no full constructive proof in this checkout. |
-| FX2-SC residual/SSE sidecar | Learn deterministic Wiki/XML correction states without rewriting the byte stream or fragmenting primary context hashes. | Novel add-on lane; needs exact shadow-coder net-byte evidence before packaging. |
+| FX2-SC residual/SSE sidecar | Learn deterministic Wiki/XML correction states without rewriting the byte stream or fragmenting primary context hashes. | Novel add-on lane; current compact XML screen fails code-cost accounting, so the next state must be stronger before packaging. |
 
 | Candidate | Mechanism | Best evidence | What it proves | Next action |
 |---|---|---|---|---|
+| `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` | Minimized FX2-SC byte-split/direct/extra/page-match backend with the exact measured reversible geometry-title transform. | Terminal canonical `10M` ceiling abort: native-output lower bound `1,641,762`, `10,181` bytes over the `1,631,581` promotion ceiling; max sampled tree RSS `6,072,528` KiB with `3,693,097` KiB decimal-`10GB` margin. | This exact integration shape is retired. It proves a target-ceiling miss, not a completed archive, roundtrip, determinism result, or score. | Do not promote unchanged; only a different residual/layout mechanism can reopen this lane. |
 | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Strong `cmix21` text model with a fine PPMD cap and memory-shaped context maps. | `10M`: archive `1,638,083`, local score `2,202,359`, program `564,276`, b/B `1.3104664`. | Best nearby `10M` archive reference in the current cmix21 family. Larger-scope memory behavior blocks it as the sole path. | Keep as high-quality archive bracket. |
 | `cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Same family with a smaller PPMD cap to buy RSS margin. | `10M`: archive `1,638,114`, local score `2,202,389`, roundtrip true, determinism true. `100M`: RSS guard exceeded by `36` KiB before scored archive. | Exact `10M` replay is valid; unchanged `100M` promotion is not admissible under the local guard. | Use as upper memory bracket. |
 | `cmix21_text_mmap_paq5_ppmd21888k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper PPMD memory valve after `ppmd22272k` failed `100M` RSS. | Exact `10M` replay: archive `1,638,182`, local score `2,202,456`, program `564,274`, roundtrip true, determinism true, max RSS `10,482,468` KiB, margin `3,292` KiB. `100M`: RSS guard exceeded by `36` KiB before scored archive. | Lower-memory candidate has a complete `10M` replay, but the unchanged `100M` promotion is not locally admissible. | Keep as the upper bracket for the next PPMD-only cut. |
@@ -99,12 +105,36 @@ Plain-English candidate map:
 | `cmix21_text_mmap_paq5_ppmd21504k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Next PPMD cap cut after `ppmd21632k` failed unchanged `100M` RSS. | Exact `10M`: archive `1,638,165`, local score `2,202,438`, program `564,273`, roundtrip true, determinism true, max sampled single RSS `10,482,116` KiB. `100M`: RSS guard exceeded by `72` KiB before scored archive. | The package is deterministic through `10M`; unchanged `100M` is not locally admissible under the recorded guard. | Keep as upper bracket for the active PPMD-only cut. |
 | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | PPMD cap cut after `ppmd21504k` failed unchanged `100M` RSS. | Exact prefix replays passed; unchanged `100M` RSS guard exceeded by `116` KiB before scored archive. | This is memory-bracket evidence, not the active cut. | Keep as bracket evidence; do not promote unchanged at `100M`. |
 | `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | PPMD cap cut after `ppmd21376k` failed unchanged `100M` RSS. | Exact `1K`, `250K`, `1M`, and `10M` replays passed; unchanged `100M` RSS guard exceeded by `64` KiB before scored archive. | Package is deterministic through `10M`, but unchanged `100M` is not locally admissible under the recorded guard. | Keep as the upper bracket for the active PPMD-only cut. |
-| `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | PPMD cap cut after `ppmd21248k` failed unchanged `100M` RSS. | Exact `1K`: archive `247`, program `564,274`, roundtrip true, determinism true, max sampled single RSS `8,624,384` KiB. | Package has restarted the deterministic prefix ladder; unchanged `250K` is the active proof gate. | Launch the unchanged `250K` gate from `docs/status_receipt.json` and promote only after exact gate receipts pass. |
+| `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Prior lower-memory PPMD cap cut. | Exact prefix ladder reached `10M` before the active lane moved lower. | Bracket evidence, not the active proof gate. | Keep as bracket context. |
+| `cmix21_text_mmap_paq5_ppmd20992k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed upper PPMD cap cut. | Exact `10M`: archive `1,638,161`, program `564,273`, local score `2,202,434`, roundtrip true, determinism true, RSS guard complete. `100M`: RSS guard exceeded by `68` KiB before scored archive. | Package is deterministic through `10M`; unchanged `100M` is not locally admissible under the recorded guard. | Keep as upper bracket for the active PPMD-only cut. |
+| `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed upper PPMD cap cut. | Exact `10M`: archive `1,638,076`; unchanged `100M` crossed the RSS guard by `68` KiB before archive or roundtrip. | Not admissible unchanged at `100M`. | Keep as upper bracket. |
+| `cmix21_text_mmap_paq5_ppmd20736k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Final lower-memory PPMD cap cut. | Exact through `1M`; terminal `10M` guard recorded `10,472,644` KiB RSS and official decimal memory failure. | Establishes that this PPMD-only family is not prize-admissible unchanged. | Keep as terminal memory-bracket evidence; do not promote. |
+| `cmix21_text_mmap_paq5_ppmd20608k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed lower-memory PPMD cap cut. | Exact `1,024`: archive `247`, score `564,521`, roundtrip true, determinism true, max sampled single RSS `8,631,192` KiB. Unchanged `250,000`: decimal-memory abort, `240,207` KiB over official decimal `10GB`. | Establishes that this cut still lacks enough decimal memory margin at the next prefix. | Keep as memory-bracket evidence. |
+| `cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Lower-memory PPMD cap cut. | Exact `1,024`: archive `247`, score `564,519`, roundtrip true, determinism true. Unchanged `250,000`: official decimal memory abort, `3,275` KiB over `10GB`. | Establishes the lower terminal PPMD-only bracket. | Keep as memory-bracket evidence; do not promote unchanged. |
 | `fx2cmix_public_repro_v1` | Reproduction/accounting lane for the public fx2-cmix family. | Source lane exists; see `docs/lane0_fx2_public_repro.md`. | Anchors official packaging and score accounting. It is not a new compression idea. | Keep separate from cmix21 winner path. |
 
 ## How The Top Lanes Work
 
-### Active `cmix21` Memory-Shaped Text Mode
+### Retired FX2-SC Sidecar Geometry-Title Gate
+
+Algorithm steps:
+
+1. Preserve the raw `enwik9` bytes while applying the reversible
+   geometry-title layout already measured for this backend.
+2. Use the minimized FX2-SC byte-split/direct/extra/page-match backend.
+3. Count the complete local program package at `256,906` bytes.
+4. Run canonical `10M` with an archive ceiling of `1,631,581`.
+5. Abort when native output exceeded the ceiling before final flush.
+
+Why this is the active path:
+
+```text
+It was the constructive test of whether measured sidecar layout evidence could
+close the calibrated forecast gap under counted program bytes. It failed by
+archive slope, not memory.
+```
+
+### `cmix21` Memory-Shaped Text Mode
 
 Algorithm steps:
 
@@ -116,15 +146,15 @@ Algorithm steps:
 4. Reduce selected memory surfaces so RSS stays under the guard.
 5. Use the PPMD cap as the current measured memory valve.
 6. Run exact prefix gates with roundtrip and determinism enabled.
-7. Promote the same package unchanged when a gate passes.
-8. If a gate fails, record the receipt and cut the cheapest measured memory
-   surface next.
+7. Treat exact rows as archive/memory evidence.
+8. Re-enter the prize lane only through a different memory surface with
+   decimal `10GB` margin.
 
-Why this is the active path:
+Why this remains useful:
 
 ```text
-It is not the most novel idea, but it has the strongest current archive slope.
-The novelty is the measured memory-value ladder that keeps the model admissible.
+It still provides the best local archive reference rows, but the PPMD-only
+memory ladder has terminal decimal-memory failures at the current boundary.
 ```
 
 ### `fx2` Core-Tuning And Geometry Lane

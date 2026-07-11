@@ -187,6 +187,7 @@ def best_ranked_shadow(path: pathlib.Path, data: dict[str, Any]) -> ShadowRow | 
     if best_item is None:
         return None
     exact = best_item.get("exact_shadow_arithmetic")
+    model_cost = best_item.get("model_cost") if isinstance(best_item.get("model_cost"), dict) else {}
     splits = best_item.get("splits") if isinstance(best_item.get("splits"), dict) else {}
     test = splits.get("test") if isinstance(splits.get("test"), dict) else {}
     return ShadowRow(
@@ -200,7 +201,7 @@ def best_ranked_shadow(path: pathlib.Path, data: dict[str, Any]) -> ShadowRow | 
         saved_bytes=as_float(exact.get("saved_bytes")),
         heldout_saved_bits=as_float(exact.get("heldout_saved_bits") or test.get("gain_bits")),
         heldout_saved_bytes=as_float(exact.get("heldout_saved_bytes") or test.get("gain_bytes")),
-        code_bytes=None,
+        code_bytes=as_float(model_cost.get("added_code_bytes_estimate")),
         constructive=False,
         verdict=verdict(as_float(exact.get("saved_bytes")), as_float(exact.get("heldout_saved_bytes") or test.get("gain_bytes")), False),
     )

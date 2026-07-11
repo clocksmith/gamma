@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Continue SRSTC shadow proof work from the receipt audit queue.
+"""Continue SRSTC shadow proof work from the receipt audit queues.
 
 This script is deliberately conservative. By default it will not run a
-complete-block SRSTC rerun while the cmix21 heavy lock is held, because the
-active 100M/1G gates are the proof lane that must not be perturbed.
+block-posterior or complete-block SRSTC replay while the cmix21 heavy lock is
+held, because the active proof gate must not be perturbed.
 """
 
 from __future__ import annotations
@@ -49,16 +49,29 @@ def refresh_audit() -> None:
     )
 
 
-def pick_queue_row(audit: dict[str, Any]) -> dict[str, Any] | None:
-    queue = audit.get("complete_block_rerun_queue")
-    if not isinstance(queue, list):
-        return None
-    for row in queue:
-        if not isinstance(row, dict):
+def pick_queue_row(audit: dict[str, Any]) -> tuple[dict[str, Any], str, str] | None:
+    queue_specs = (
+        (
+            "block_posterior_rerun_queue",
+            "block_posterior_rerun_command",
+            "block_posterior",
+        ),
+        (
+            "complete_block_rerun_queue",
+            "complete_block_rerun_command",
+            "complete_blocks",
+        ),
+    )
+    for queue_name, command_field, queue_kind in queue_specs:
+        queue = audit.get(queue_name)
+        if not isinstance(queue, list):
             continue
-        command = row.get("complete_block_rerun_command")
-        if isinstance(command, str) and command.strip():
-            return row
+        for row in queue:
+            if not isinstance(row, dict):
+                continue
+            command = row.get(command_field)
+            if isinstance(command, str) and command.strip():
+                return row, command_field, queue_kind
     return None
 
 
@@ -82,8 +95,9 @@ def main() -> int:
 
     lock_held = heavy_lock_held()
     audit = load_json(AUDIT_JSON)
-    row = pick_queue_row(audit)
-    command = row.get("complete_block_rerun_command") if row else None
+    selected = pick_queue_row(audit)
+    row, command_field, queue_kind = selected if selected else (None, None, None)
+    command = row.get(command_field) if row and command_field else None
     output_path = command_output_path(command) if isinstance(command, str) else None
 
     decision: dict[str, Any] = {
@@ -94,6 +108,7 @@ def main() -> int:
         "run_requested": args.run,
         "allow_while_heavy_lock": args.allow_while_heavy_lock,
         "selected_receipt": row.get("path") if row else None,
+        "selected_queue_kind": queue_kind,
         "selected_net_saved_bytes": row.get("net_saved_bytes") if row else None,
         "selected_heldout_saved_bytes": row.get("heldout_shadow_saved_bytes") if row else None,
         "selected_command": command,
@@ -107,12 +122,12 @@ def main() -> int:
     }
 
     if row is None or not isinstance(command, str):
-        decision["verdict"] = "no_complete_block_rerun_available"
+        decision["verdict"] = "no_shadow_rerun_available"
         print(json.dumps(decision, indent=2, sort_keys=True))
         return 0
     if lock_held and not args.allow_while_heavy_lock:
         decision["verdict"] = "blocked_by_heavy_lock"
-        decision["next_action"] = "wait_for_cmix_gate_or_pass_allow_while_heavy_lock"
+        decision["next_action"] = "wait_for_cmix_gate"
         print(json.dumps(decision, indent=2, sort_keys=True))
         return 0
     if not args.run:
@@ -123,7 +138,7 @@ def main() -> int:
 
     subprocess.run(shlex.split(command), cwd=REPO_ROOT, check=True)
     refresh_audit()
-    decision["verdict"] = "ran_complete_block_rerun"
+    decision["verdict"] = f"ran_{queue_kind}_rerun"
     decision["ran"] = True
     decision["output_exists"] = output_path.exists() if output_path is not None else None
     print(json.dumps(decision, indent=2, sort_keys=True))

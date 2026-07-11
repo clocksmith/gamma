@@ -3,7 +3,7 @@
 
 This tool does not run a compressor. It pins the primary novel streaming
 self-referential retrieval lane to an explicit algorithm, receipt contract, and
-promotion gate so it can be implemented and audited beside the active cmix21
+promotion gate so it can be implemented and audited beside the active guarded
 scorer and the backup structural lanes.
 """
 
@@ -98,6 +98,186 @@ def load_audit() -> dict[str, Any] | None:
     except (OSError, json.JSONDecodeError):
         return None
     return payload if isinstance(payload, dict) else None
+
+
+def block_posterior_section() -> str:
+    rows: list[dict[str, Any]] = []
+    for path in sorted(RESULTS_DIR.glob("*.json")):
+        try:
+            receipt = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(receipt, dict):
+            continue
+        router = receipt.get("block_router")
+        if not isinstance(router, dict) or router.get("mode") != "posterior":
+            continue
+        rows.append(
+            {
+                "path": path.relative_to(ROOT).as_posix(),
+                "method": receipt.get("method"),
+                "base_trace": receipt.get("base_trace"),
+                "data_bytes": receipt.get("data_bytes_loaded"),
+                "encoded_rows": receipt.get("encoded_rows"),
+                "position_span": receipt.get("position_span"),
+                "shadow_saved_bytes": receipt.get("shadow_saved_bytes"),
+                "heldout_saved_bytes": receipt.get("heldout_shadow_saved_bytes"),
+                "net_saved_bytes": receipt.get("net_saved_bytes"),
+                "added_code_bytes": receipt.get("added_code_bytes_estimate"),
+                "raw_gain_bytes": router.get("raw_srstc_gain_bytes_before_router"),
+                "routed_gain_bytes": router.get("routed_gain_bytes_before_fallback"),
+                "largest_regression": receipt.get("largest_block_regression_bytes"),
+                "regression_count": receipt.get("block_regression_count"),
+                "positive_block_count": receipt.get("positive_block_count"),
+                "posterior": router.get("posterior"),
+            }
+        )
+    best = max(rows, key=lambda row: as_float(row.get("data_bytes")) or 0, default=None)
+    fx2_transfer = max(
+        (
+            row
+            for row in rows
+            if row.get("method") == "streaming_retrieval_shadow_v2"
+            and isinstance(row.get("base_trace"), str)
+        ),
+        key=lambda row: as_float(row.get("encoded_rows")) or 0,
+        default=None,
+    )
+    audit = load_audit() or {}
+    queue = audit.get("block_posterior_rerun_queue")
+    queued = queue[0] if isinstance(queue, list) and queue else None
+    if not isinstance(queued, dict):
+        queued = None
+    evidence_lines: list[str]
+    if best is None:
+        evidence_lines = ["- No block-posterior shadow receipt exists yet."]
+    else:
+        posterior = best.get("posterior")
+        posterior = posterior if isinstance(posterior, dict) else {}
+        evidence_lines = [
+            f"- Current execution receipt: `{best['path']}`",
+            f"- Measured scope: `{fmt_int(int(best.get('data_bytes') or 0))}` source bytes",
+            f"- Raw SRSTC qbit gain: `{best.get('raw_gain_bytes')}` bytes",
+            f"- Posterior-routed qbit gain: `{best.get('routed_gain_bytes')}` bytes",
+            f"- Same-coder arithmetic saved bytes: `{best.get('shadow_saved_bytes')}`",
+            f"- Held-out saved bytes: `{best.get('heldout_saved_bytes')}`; net after code: `{best.get('net_saved_bytes')}`",
+            f"- Block regressions: `{best.get('regression_count')}`; largest: `{best.get('largest_regression')}` bytes",
+            f"- Posterior resets: `{posterior.get('block_resets')}`; mean SRSTC weight: `{posterior.get('mean_srstc_weight_ppm')}` ppm",
+        ]
+    best_regression_count = (
+        as_float(best.get("regression_count")) if best is not None else None
+    )
+    completed_target_replay = (
+        best is not None
+        and (as_float(best.get("data_bytes")) or 0) >= 65_536_000
+        and best_regression_count == 0
+    )
+    if completed_target_replay:
+        result_lines = [
+            "The target-closing retention replay is complete. It saves 916,540",
+            "held-out bytes and 900,464 net bytes after the counted 16,076-byte",
+            "code estimate, clearing the 681,114-byte forecast gap by 219,350 bytes",
+            "at the shadow boundary. All 4,000 measured blocks are positive; the",
+            "three raw SRSTC regressions are positive after posterior routing.",
+            "",
+            "This discharges the shadow-level regression gate. It does not prove that",
+            "the gain stacks unchanged on cmix21 or fx2 probabilities. The next proof",
+            "step is to compile the smallest paying component into the strongest",
+            "admissible substrate and require exact archive, roundtrip, determinism,",
+            "RSS, and official byte accounting.",
+        ]
+    else:
+        result_lines = [
+            "The queued replay is a retention test, not a request for a new 681,114",
+            "bytes. SRSTC already found 897,062 gross held-out bytes at the target-closing",
+            "scope. With the 16,076-byte counted code budget, the replay needs 697,190",
+            "gross bytes, so it can surrender 199,872 bytes, or 22.28% of the existing",
+            "gross saving, and still close the forecast gap. The observed blocker is",
+            "42.305 regression bytes across three of 4,000 blocks, or 0.0047% of gross.",
+            "That makes the posterior experiment an insurance problem over exceptional",
+            "blocks. The cautions are focused: the 64,000-byte probe does not reach",
+            "the losing blocks, and the fixed-point implementation must earn its own",
+            "scaled replay receipt instead of inheriting the ideal Bayesian bound.",
+        ]
+    if fx2_transfer is not None:
+        span = fx2_transfer.get("position_span")
+        span = span if isinstance(span, dict) else {}
+        result_lines.extend(
+            [
+                "",
+                "The unchanged aggregate transfer to fx2 is now measured and retired.",
+                f"The target trace covers `{fmt_int(int(fx2_transfer.get('encoded_rows') or 0))}` coded rows through byte position `{fmt_int(int(span.get('max_pos') or 0))}`.",
+                f"It saves `{fx2_transfer.get('shadow_saved_bytes')}` same-coder bytes overall but `{fx2_transfer.get('heldout_saved_bytes')}` held-out bytes; net after counted code is `{fx2_transfer.get('net_saved_bytes')}`.",
+                f"The receipt has `{fx2_transfer.get('regression_count')}` regressing blocks and is `{fx2_transfer['path']}`.",
+                "Do not compile this expert unchanged. A replacement must predict fx2",
+                "residuals directly or improve reversible stream/page order.",
+            ]
+        )
+    queue_lines: list[str]
+    if queued is None:
+        if completed_target_replay:
+            if fx2_transfer is not None and (as_float(fx2_transfer.get("net_saved_bytes")) or 0) <= 0:
+                queue_lines = [
+                    "No block-posterior rerun or unchanged native integration is queued; the target-substrate transfer failed counted net savings."
+                ]
+            else:
+                queue_lines = [
+                    "No block-posterior rerun is queued; the next action is constructive integration."
+                ]
+        else:
+            queue_lines = ["No target-closing block-posterior replay is currently queued."]
+    else:
+        queue_lines = [
+            "The lock-aware queue pins the target-closing replay:",
+            "",
+            "```bash",
+            str(queued.get("block_posterior_rerun_command") or ""),
+            "```",
+            "",
+            "`streaming_retrieval_continue_shadow.py` selects this command first",
+            "and by default refuses to launch it while `/tmp/enwiki9-heavy.lock` is held.",
+        ]
+    return "\n".join(
+        [
+            "## Block-Posterior Loss Router",
+            "",
+            "The first target-closing router experiment is a two-expert posterior",
+            "over the raw order-2 base and the aggregate SRSTC correction. Weights",
+            "reset at public 16,384-byte boundaries, predict with integer arithmetic,",
+            "and update only after the current decoded bit. No block ID, label, model",
+            "weight, or offline index is shipped.",
+            "",
+            "With equal priors, the ideal exact Bayesian mixture is within one bit per",
+            "block of either expert. Across 4,000 blocks that ideal insurance budget is",
+            "500 bytes. The existing 884,774 net-byte shadow closes the 681,114-byte",
+            "forecast gap by 203,660 bytes; after the measured 3,788-byte router-source",
+            "delta, 199,872 bytes remain before any routed probability change. The implemented",
+            "24-bit posterior is measured rather than credited with that ideal proof.",
+            "A same-scope 32-bit control saved 606 arithmetic bytes versus 610 at",
+            "24 bits, so the implemented precision is selected by evidence; the 24-bit",
+            "floor also acts as a deterministic recovery prior after saturation.",
+            "",
+            *result_lines,
+            "",
+            *evidence_lines,
+            "",
+            "The decoder-replayable implementation is",
+            "`programs/srstc_raw_order2_aggregate_sketch_blockposterior_v1/`.",
+            "Its 1,024- and 4,096-byte driver checks roundtrip and produce byte-identical",
+            "archives; these are codec-shape checks, not scaled compression evidence.",
+            "",
+            "The regression labels and weak positive controls are generated by",
+            "`tools/streaming_retrieval_block_regime_audit.py`. They show that the three",
+            "losers span ordinary long prose with links/headings and one page-boundary",
+            "block, rather than one clean XML mode. Embedding teachers should search",
+            "those labeled regimes for small causal rules, then compete against this",
+            "loss-only posterior instead of shipping semantic labels. The generated",
+            "`docs/streaming_retrieval_block_teacher_manifest.jsonl` exposes all 4,000",
+            "continuous block-gain labels with contiguous train/validation/test splits.",
+            "",
+            *queue_lines,
+        ]
+    )
 
 
 def fmt_gap(value: Any) -> str:
@@ -286,13 +466,14 @@ def render() -> str:
             Working name: `SRSTC`, the Streaming Self-Referential Semantic
             Table Coder.
 
-            This is now the primary novel-algorithm strategy for `enwik9`. The
-            active `cmix21` memory-valve ladder remains the serialized proof
-            lane and a strong backup substrate, but it is no longer treated as
-            the main source of new modeling power. SRSTC targets a different
-            byte class: causal semantic and structural recurrence that ordinary
-            suffix matches, static transforms, and narrow residual patches do
-            not model directly.
+            This is now the primary novel residual-modeling strategy for
+            `enwik9`. The active guarded sidecar gate remains serialized, and
+            the cmix21 memory-valve ladder remains archive/memory-bracket
+            evidence, but neither is treated as the main source of new
+            modeling power. SRSTC targets a different byte class: causal
+            semantic and structural recurrence that ordinary suffix matches,
+            static transforms, and narrow residual patches do not model
+            directly.
 
             Status: design plus cached shadow-evidence lane. This document is
             generated by `tools/streaming_retrieval_mixer_plan.py`; it is not a
@@ -403,6 +584,8 @@ def render() -> str:
             category copy bucket can be suppressed without disabling ref, URL,
             table, or prose continuation.
 
+            @@BLOCK_POSTERIOR_SECTION@@
+
             ## Why This Is Different
 
             Existing `hierarchical_retrieval_shadow.py` mostly asks whether a
@@ -505,6 +688,12 @@ def render() -> str:
               "added_code_bytes_estimate": null,
               "added_static_table_bytes": null,
               "max_online_state_bytes": null,
+              "block_router": {{
+                "mode": "none",
+                "raw_srstc_gain_bytes_before_router": null,
+                "routed_gain_bytes_before_fallback": null,
+                "posterior": null
+              }},
               "largest_block_regression_bytes": null,
               "net_saved_bytes": null,
               "verdict": "incomplete"
@@ -537,9 +726,9 @@ def render() -> str:
               behavior;
             - implementation requires shipping an embedding model or index.
 
-            ## Relationship To Active cmix21 Work
+            ## Relationship To Active Guarded Work
 
-            Keep the active `cmix21` scorer serialized and untouched. SRSTC work
+            Keep the active guarded scorer serialized and untouched. SRSTC work
             runs beside it on cached traces, corpus-prefix shadow scoring, and
             design receipts. If SRSTC proves positive MDL, it should first enter
             as the smallest paying outer correction or router input to the
@@ -558,7 +747,12 @@ def render() -> str:
             record the exact transformed byte stream used for the trace.
             """
     )
-    return body.replace("@@EVIDENCE_SECTION@@", evidence_section()).strip() + "\n"
+    return (
+        body.replace("@@EVIDENCE_SECTION@@", evidence_section())
+        .replace("@@BLOCK_POSTERIOR_SECTION@@", block_posterior_section())
+        .strip()
+        + "\n"
+    )
 
 
 def main() -> int:

@@ -19,8 +19,10 @@ REPO_ROOT = ROOT.parent.parent
 PROGRAMS = ROOT / "programs"
 RESULTS = ROOT / "results"
 LOCAL_RSS_GUARD_KIB = 10_485_760
+OFFICIAL_DECIMAL_RSS_GUARD_KIB = 10_000_000_000 // 1024
 FULL_SCOPE_BYTES = 1_000_000_000
 TARGET_SCORE_BYTES = 109_500_000
+OFFICIAL_DECIMAL_MEMORY_FAILURE = "active_compressor_exceeded_official_decimal_10gb_limit"
 
 
 def rel(path: pathlib.Path | None) -> str | None:
@@ -84,16 +86,57 @@ def default_guard_path(candidate: str, scope: int) -> pathlib.Path:
     return RESULTS / candidate / f"{tag}_{scope}_determinism_rss_guard.json"
 
 
+def guard_scope_from_path(path: pathlib.Path) -> int | None:
+    match = re.search(r"_(?P<scope>[0-9]+).*rss_guard[.]json$", path.name)
+    if not match:
+        return None
+    try:
+        return int(match.group("scope"))
+    except ValueError:
+        return None
+
+
+def guard_scope_from_command(payload: dict[str, Any]) -> int | None:
+    command = payload.get("command")
+    if not isinstance(command, list):
+        return None
+    parts = [str(part) for part in command]
+    if "--limit" not in parts:
+        return None
+    index = parts.index("--limit")
+    if index + 1 >= len(parts):
+        return None
+    try:
+        return int(parts[index + 1])
+    except ValueError:
+        return None
+
+
+def guard_scope(path: pathlib.Path, payload: dict[str, Any] | None) -> int | None:
+    if isinstance(payload, dict):
+        scope = guard_scope_from_command(payload)
+        if scope is not None:
+            return scope
+    return guard_scope_from_path(path)
+
+
 def existing_guard_path(candidate: str, scope: int) -> pathlib.Path | None:
     result_dir = RESULTS / candidate
-    paths = sorted(result_dir.glob(f"*_{scope}*rss_guard.json"))
-    if not paths:
+    matches: list[pathlib.Path] = []
+    for path in sorted(result_dir.glob("*rss_guard.json")):
+        try:
+            payload = load_json(path)
+        except Exception:
+            payload = {}
+        if guard_scope(path, payload) == scope:
+            matches.append(path)
+    if not matches:
         return None
 
     def sort_key(path: pathlib.Path) -> tuple[int, float]:
         return (1 if "determinism" in path.name else 0, path.stat().st_mtime)
 
-    return max(paths, key=sort_key)
+    return max(matches, key=sort_key)
 
 
 def next_scope(scope: int) -> int | None:
@@ -122,6 +165,8 @@ def command_for_gate(candidate: str, scope: int) -> list[str]:
         "projects/enwiki9/tools/run_with_rss_guard.py",
         "--limit-kib",
         str(LOCAL_RSS_GUARD_KIB),
+        "--official-decimal-limit-kib",
+        str(OFFICIAL_DECIMAL_RSS_GUARD_KIB),
         "--sample-interval",
         "1",
         "--guard-json",
@@ -274,7 +319,9 @@ def recorded_rss_failure(candidate: str, scope: int) -> dict[str, Any] | None:
             continue
         if row.get("data_size") != scope:
             continue
-        if row.get("rss_guard_exceeded") is not True:
+        memory_failure = row.get("failure") == OFFICIAL_DECIMAL_MEMORY_FAILURE
+        memory_failure = memory_failure or row.get("guard_failure") == OFFICIAL_DECIMAL_MEMORY_FAILURE
+        if row.get("rss_guard_exceeded") is not True and not memory_failure:
             continue
         return {
             "label": label,
@@ -282,6 +329,8 @@ def recorded_rss_failure(candidate: str, scope: int) -> dict[str, Any] | None:
             "max_sampled_single_rss_kib": row.get("max_sampled_single_rss_kib"),
             "memory_ceiling_kib": row.get("memory_ceiling_kib"),
             "single_rss_over_ceiling_kib": row.get("single_rss_over_ceiling_kib"),
+            "official_decimal_limit_kib": row.get("official_decimal_limit_kib"),
+            "official_decimal_over_limit_kib": row.get("official_decimal_over_limit_kib"),
             "failure": row.get("failure"),
         }
     return None
@@ -363,6 +412,9 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
         payload["rss_guard_status"] = guard.get("status")
         payload["sample_count"] = guard.get("sample_count")
         payload["rss_guard_exceeded"] = guard.get("rss_guard_exceeded")
+        payload["guard_failure"] = guard.get("failure")
+        payload["official_decimal_limit_kib"] = guard.get("official_decimal_limit_kib")
+        payload["official_decimal_over_limit_kib"] = guard.get("official_decimal_over_limit_kib")
         max_single = guard.get("max_sampled_single_rss_kib")
         max_tree = guard.get("max_sampled_tree_rss_kib")
         limit = guard.get("limit_kib")
@@ -393,14 +445,20 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
                 payload["tree_rss_boundary_warning"] = (
                     "process tree RSS crossed the same numeric ceiling; the local kill guard is single-process"
                 )
-        if guard.get("rss_guard_exceeded") is True:
+        official_decimal_memory_failed = (
+            guard.get("failure") == OFFICIAL_DECIMAL_MEMORY_FAILURE
+            or guard.get("status") == "aborted_official_decimal_memory_limit"
+        )
+        if guard.get("rss_guard_exceeded") is True or official_decimal_memory_failed:
             already_recorded = recorded_rss_failure(candidate, scope)
             if isinstance(max_single, int) and isinstance(limit, int):
-                payload["single_rss_over_guard_kib"] = max_single - limit
+                payload["single_rss_over_guard_kib"] = max(0, max_single - limit)
             payload["verdict"] = "rss_fail"
             payload["recorded_rss_failure"] = already_recorded
             lower = lower_ppmd_suggestion(candidate, step_kib)
             payload["lower_memory_suggestion"] = lower
+            if official_decimal_memory_failed:
+                payload["memory_failure_kind"] = "official_decimal_10gb"
             if already_recorded:
                 lower_id = lower.get("suggested_candidate") if isinstance(lower, dict) else None
                 lower_meta = PROGRAMS / lower_id / "meta.json" if isinstance(lower_id, str) else None
@@ -424,7 +482,12 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
                     scope,
                     guard_path,
                     "rss_fail",
-                    f"{scope} gate failed RSS guard before producing a scored archive or roundtrip.",
+                    (
+                        f"{scope} gate failed official decimal 10GB memory accounting "
+                        "before producing a scored archive or roundtrip."
+                        if official_decimal_memory_failed
+                        else f"{scope} gate failed RSS guard before producing a scored archive or roundtrip."
+                    ),
                 )
                 payload["apply_terminal_command"] = apply_terminal_command(
                     candidate,

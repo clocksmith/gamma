@@ -1,13 +1,14 @@
 {
   "best_net_receipt": {
-    "added_code_bytes_estimate": 12288,
+    "added_code_bytes_estimate": 16076,
     "added_static_table_bytes": 0,
     "alignment_warning": false,
     "base_trace": "raw_enwik9_bits_msb",
     "block_audit_source": "complete",
+    "block_posterior_rerun_command": null,
     "checks": {
       "alignment_ok": true,
-      "block_regression_within_cap": false,
+      "block_regression_within_cap": true,
       "complete_block_audit": true,
       "has_heldout": true,
       "positive_heldout": true,
@@ -20,43 +21,42 @@
     "data_bytes_loaded": 65536000,
     "encoded_rows": 524288000,
     "feature_source": "raw_data",
-    "heldout_shadow_saved_bytes": 897062.0,
-    "largest_block_regression_bytes": 22.3974609375,
-    "max_online_state_bytes": 22400000,
+    "heldout_shadow_saved_bytes": 916540.0,
+    "largest_block_regression_bytes": 0.0,
+    "max_online_state_bytes": 22400032,
     "method": "streaming_retrieval_raw_shadow_v1",
-    "net_saved_bytes": 884774.0,
-    "path": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json",
-    "promotion_blockers": [
-      "block_regression_within_cap"
-    ],
-    "promotion_ready_shadow": false,
-    "shadow_saved_bytes": 897562.0,
+    "net_saved_bytes": 900464.0,
+    "path": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+    "promotion_blockers": [],
+    "promotion_ready_shadow": true,
+    "shadow_saved_bytes": 917041.0,
     "train_bytes": 32000,
     "verdict": "positive_shadow_only",
-    "visible_block_gain_bytes": 892659.4892578125,
-    "visible_block_regression_bytes": 42.30517578125,
-    "visible_block_regression_count": 3,
+    "visible_block_gain_bytes": 913049.2534179688,
+    "visible_block_regression_bytes": 0.0,
+    "visible_block_regression_count": 0,
     "visible_block_rows": 4000,
-    "visible_positive_block_count": 3997
+    "visible_positive_block_count": 4000
   },
+  "block_posterior_rerun_queue": [],
   "complete_block_rerun_queue": [],
   "max_block_regression_bytes": 0.0,
   "max_online_state_bytes": 64000000,
   "objective_selection": {
-    "action_reason": "the best target-closing receipt is blocked only by small block regressions",
+    "action_reason": "a promotion-ready shadow receipt closes the forecast-to-target byte gap",
     "best_forecast_score": 110181114,
     "best_promotion_ready_receipt": {
-      "closes_forecast_gap": false,
+      "closes_forecast_gap": true,
       "closes_public_gap": false,
-      "forecast_gap_remaining_bytes": 420554.0,
-      "heldout_shadow_saved_bytes": 272848.0,
+      "forecast_gap_remaining_bytes": -219350.0,
+      "heldout_shadow_saved_bytes": 916540.0,
       "largest_block_regression_bytes": 0.0,
-      "max_online_state_bytes": 33600000,
-      "net_saved_bytes": 260560.0,
-      "path": "results/streaming_retrieval_shadow/raw16384k_richkeys_cap300k_v1.json",
+      "max_online_state_bytes": 22400032,
+      "net_saved_bytes": 900464.0,
+      "path": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
       "promotion_blockers": [],
       "promotion_ready_shadow": true,
-      "public_gap_remaining_bytes": 1032568.0
+      "public_gap_remaining_bytes": 392664.0
     },
     "best_regression_blocked_receipt": {
       "closes_forecast_gap": true,
@@ -76,24 +76,35 @@
     "best_target_closing_receipt": {
       "closes_forecast_gap": true,
       "closes_public_gap": false,
-      "forecast_gap_remaining_bytes": -203660.0,
-      "heldout_shadow_saved_bytes": 897062.0,
-      "largest_block_regression_bytes": 22.3974609375,
-      "max_online_state_bytes": 22400000,
-      "net_saved_bytes": 884774.0,
-      "path": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json",
-      "promotion_blockers": [
-        "block_regression_within_cap"
-      ],
-      "promotion_ready_shadow": false,
-      "public_gap_remaining_bytes": 408354.0
+      "forecast_gap_remaining_bytes": -219350.0,
+      "heldout_shadow_saved_bytes": 916540.0,
+      "largest_block_regression_bytes": 0.0,
+      "max_online_state_bytes": 22400032,
+      "net_saved_bytes": 900464.0,
+      "path": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+      "promotion_blockers": [],
+      "promotion_ready_shadow": true,
+      "public_gap_remaining_bytes": 392664.0
     },
     "current_winner_score": 110793128,
     "forecast_gap_bytes": 681114,
     "public_gap_bytes": 1293128,
-    "recommended_action": "remove_or_route_block_regressions_before_packaging",
+    "recommended_action": "package_promotion_ready_shadow_piece",
     "target_score": 109500000,
     "top_objective_rows": [
+      {
+        "closes_forecast_gap": true,
+        "closes_public_gap": false,
+        "forecast_gap_remaining_bytes": -219350.0,
+        "heldout_shadow_saved_bytes": 916540.0,
+        "largest_block_regression_bytes": 0.0,
+        "max_online_state_bytes": 22400032,
+        "net_saved_bytes": 900464.0,
+        "path": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+        "promotion_blockers": [],
+        "promotion_ready_shadow": true,
+        "public_gap_remaining_bytes": 392664.0
+      },
       {
         "closes_forecast_gap": true,
         "closes_public_gap": false,
@@ -242,46 +253,31 @@
         ],
         "promotion_ready_shadow": false,
         "public_gap_remaining_bytes": 1193204.0
-      },
-      {
-        "closes_forecast_gap": false,
-        "closes_public_gap": false,
-        "forecast_gap_remaining_bytes": 634538.0,
-        "heldout_shadow_saved_bytes": 58864.0,
-        "largest_block_regression_bytes": 0.0,
-        "max_online_state_bytes": 12800000,
-        "net_saved_bytes": 46576.0,
-        "path": "results/streaming_retrieval_shadow/raw4096k_v1_order2_aggregate_sketch_b640000_s8.json",
-        "promotion_blockers": [
-          "complete_block_audit"
-        ],
-        "promotion_ready_shadow": false,
-        "public_gap_remaining_bytes": 1246552.0
       }
     ]
   },
-  "positive_net_receipts": 14,
+  "positive_net_receipts": 15,
   "promotion_blocker_counts": {
-    "alignment_ok": 25,
-    "block_regression_within_cap": 63,
+    "alignment_ok": 26,
+    "block_regression_within_cap": 64,
     "complete_block_audit": 76,
     "has_heldout": 7,
-    "positive_heldout": 78,
-    "positive_net": 119,
-    "raw_data_source": 77
+    "positive_heldout": 79,
+    "positive_net": 121,
+    "raw_data_source": 78
   },
-  "promotion_ready_shadow_receipts": 8,
+  "promotion_ready_shadow_receipts": 9,
   "receipt_type": "streaming_retrieval_receipt_audit",
-  "receipts_scanned": 133,
+  "receipts_scanned": 136,
   "source_results_dir": "results/streaming_retrieval_shadow",
   "substrate_summary": [
     {
-      "best_heldout_shadow_saved_bytes": 897062.0,
-      "best_net_saved_bytes": 884774.0,
-      "best_receipt": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json",
-      "positive_net_receipts": 14,
-      "promotion_ready_shadow_receipts": 8,
-      "receipts": 56,
+      "best_heldout_shadow_saved_bytes": 916540.0,
+      "best_net_saved_bytes": 900464.0,
+      "best_receipt": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+      "positive_net_receipts": 15,
+      "promotion_ready_shadow_receipts": 9,
+      "receipts": 58,
       "substrate": "streaming_retrieval_raw_shadow_v1 / raw_enwik9_bits_msb"
     },
     {
@@ -317,7 +313,7 @@
       "best_receipt": "results/streaming_retrieval_shadow/fx2_apm1m_cache_rowfeatures_v1_order2_best_band_abstain_sketch_b20000_s8_rows4805936.json",
       "positive_net_receipts": 0,
       "promotion_ready_shadow_receipts": 0,
-      "receipts": 3,
+      "receipts": 4,
       "substrate": "streaming_retrieval_shadow_v2 / projects/enwiki9/results/fx2_residual_cache/apm1m_full_4805936.tsv"
     },
     {
@@ -359,11 +355,51 @@
   ],
   "top_rows": [
     {
+      "added_code_bytes_estimate": 16076,
+      "added_static_table_bytes": 0,
+      "alignment_warning": false,
+      "base_trace": "raw_enwik9_bits_msb",
+      "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
+      "checks": {
+        "alignment_ok": true,
+        "block_regression_within_cap": true,
+        "complete_block_audit": true,
+        "has_heldout": true,
+        "positive_heldout": true,
+        "positive_net": true,
+        "raw_data_source": true,
+        "state_within_cap": true
+      },
+      "complete_block_audit": true,
+      "complete_block_rerun_command": null,
+      "data_bytes_loaded": 65536000,
+      "encoded_rows": 524288000,
+      "feature_source": "raw_data",
+      "heldout_shadow_saved_bytes": 916540.0,
+      "largest_block_regression_bytes": 0.0,
+      "max_online_state_bytes": 22400032,
+      "method": "streaming_retrieval_raw_shadow_v1",
+      "net_saved_bytes": 900464.0,
+      "path": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+      "promotion_blockers": [],
+      "promotion_ready_shadow": true,
+      "shadow_saved_bytes": 917041.0,
+      "train_bytes": 32000,
+      "verdict": "positive_shadow_only",
+      "visible_block_gain_bytes": 913049.2534179688,
+      "visible_block_regression_bytes": 0.0,
+      "visible_block_regression_count": 0,
+      "visible_block_rows": 4000,
+      "visible_positive_block_count": 4000
+    },
+    {
       "added_code_bytes_estimate": 12288,
       "added_static_table_bytes": 0,
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -402,6 +438,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -440,6 +477,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -478,6 +516,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -516,6 +555,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -554,6 +594,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -592,6 +633,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -630,6 +672,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -668,6 +711,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": false,
@@ -708,6 +752,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": "python3 projects/enwiki9/tools/streaming_retrieval_raw_shadow.py --data projects/enwiki9/data/enwik9 --limit-bytes 32768000 --train-bytes 32000 --suffix-len 32 --sketch-len 96 --base-order 2 --p-buckets 32 --min-support 8 --blend-ppm 640000 --base-table-cap-entries 200000 --retrieval-table-cap-entries 200000 --byte-table-cap-entries 100000 --partial-byte-family sketch --typed-key-profile base --expert-mode aggregate --byte-prior-blend-ppm 0 --byte-min-support 4 --router-decay-shift 6 --router-abstain-margin-qbits 128 --block-bytes 16384 --block-router-mode posterior --block-posterior-srstc-prior-ppm 500000 --block-posterior-weight-bits 24 --added-code-bytes-estimate 16076 --added-static-table-bytes 0 --scope-bytes 1000000000 --progress-interval-bytes 1048576 --output projects/enwiki9/results/streaming_retrieval_shadow/raw32768k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json --print-summary --baseline-score 110181114 --target-score 109500000",
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": false,
@@ -748,6 +793,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "worst_blocks_only",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -788,6 +834,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "worst_blocks_only",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -828,6 +875,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "worst_blocks_only",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -868,6 +916,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "worst_blocks_only",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -908,6 +957,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "worst_blocks_only",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -949,6 +999,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "worst_blocks_only",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": true,
@@ -990,6 +1041,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": false,
@@ -1031,6 +1083,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": null,
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": false,
@@ -1072,6 +1125,7 @@
       "alignment_warning": false,
       "base_trace": "raw_enwik9_bits_msb",
       "block_audit_source": "complete",
+      "block_posterior_rerun_command": "python3 projects/enwiki9/tools/streaming_retrieval_raw_shadow.py --data projects/enwiki9/data/enwik9 --limit-bytes 1048576 --train-bytes 32768 --suffix-len 32 --sketch-len 96 --base-order 2 --p-buckets 32 --min-support 4 --blend-ppm 640000 --base-table-cap-entries 300000 --retrieval-table-cap-entries 300000 --byte-table-cap-entries 150000 --partial-byte-family sketch --typed-key-profile base --expert-mode no_regret_abstain --byte-prior-blend-ppm 0 --byte-min-support 4 --router-decay-shift 6 --router-abstain-margin-qbits 128 --block-bytes 16384 --block-router-mode posterior --block-posterior-srstc-prior-ppm 500000 --block-posterior-weight-bits 24 --added-code-bytes-estimate 16076 --added-static-table-bytes 0 --scope-bytes 1000000000 --progress-interval-bytes 1048576 --output projects/enwiki9/results/streaming_retrieval_shadow/raw1m_attribution_nocopy_current_cap300k_v1_blockposterior_v1.json --print-summary --log-odds-mix --baseline-score 110181114 --target-score 109500000",
       "checks": {
         "alignment_ok": true,
         "block_regression_within_cap": false,
@@ -1093,47 +1147,6 @@
       "method": "streaming_retrieval_raw_shadow_v1",
       "net_saved_bytes": -8175.0,
       "path": "results/streaming_retrieval_shadow/raw1m_attribution_nocopy_current_cap300k_v1.json",
-      "promotion_blockers": [
-        "positive_net",
-        "block_regression_within_cap"
-      ],
-      "promotion_ready_shadow": false,
-      "shadow_saved_bytes": 5228.0,
-      "train_bytes": 32768,
-      "verdict": "positive_shadow_only",
-      "visible_block_gain_bytes": 5222.16748046875,
-      "visible_block_regression_bytes": 94.40771484375,
-      "visible_block_regression_count": 45,
-      "visible_block_rows": 64,
-      "visible_positive_block_count": 19
-    },
-    {
-      "added_code_bytes_estimate": 12288,
-      "added_static_table_bytes": 0,
-      "alignment_warning": false,
-      "base_trace": "raw_enwik9_bits_msb",
-      "block_audit_source": "complete",
-      "checks": {
-        "alignment_ok": true,
-        "block_regression_within_cap": false,
-        "complete_block_audit": true,
-        "has_heldout": true,
-        "positive_heldout": true,
-        "positive_net": false,
-        "raw_data_source": true,
-        "state_within_cap": true
-      },
-      "complete_block_audit": true,
-      "complete_block_rerun_command": null,
-      "data_bytes_loaded": 1048576,
-      "encoded_rows": 8388608,
-      "feature_source": "raw_data",
-      "heldout_shadow_saved_bytes": 4113.0,
-      "largest_block_regression_bytes": 2.404296875,
-      "max_online_state_bytes": 33600000,
-      "method": "streaming_retrieval_raw_shadow_v1",
-      "net_saved_bytes": -8175.0,
-      "path": "results/streaming_retrieval_shadow/raw1m_no_copy_control_v1.json",
       "promotion_blockers": [
         "positive_net",
         "block_regression_within_cap"

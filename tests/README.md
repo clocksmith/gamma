@@ -199,7 +199,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - run: python -m pip install -r requirements-base.txt
+      - run: python -m pip install -r requirements/base.txt
       - run: python gamma.py help
       - run: python gamma.py help game
       - run: python gamma.py help mind-meld

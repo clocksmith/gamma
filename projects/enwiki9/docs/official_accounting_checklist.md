@@ -22,17 +22,17 @@ S_local = program_proxy_bytes + archive_payload_bytes
 
 ## Active Local Budget
 
-For the active cmix21 lane, the current local program proxy is:
+For the active fx2 geometry baseline, the current local program proxy is:
 
 ```text
-program_proxy_bytes = 564,274
+program_proxy_bytes = 183,008
 ```
 
 Against the internal target:
 
 ```text
 target_score_bytes = 109,500,000
-required_full_corpus_archive_payload_bytes <= 108,935,726
+required_full_corpus_archive_payload_bytes <= 109,316,992
 ```
 
 This budget is local screening math only. Official `comp9/source package`
@@ -43,15 +43,21 @@ The active candidate's current local proxy package is made of:
 
 | Local proxy file | Role |
 |---|---|
-| `cmix.bin.gz` | Compressed native cmix21 binary payload used by `program.py`. |
-| `english.dic.gz` | Compressed dictionary payload required by the native cmix21 binary. |
-| `program.py` | Python wrapper that extracts payloads, runs compression/decompression, and restores bytes. |
+| `c` | XZ-packed fx2-cmix native binary payload. |
+| `d` | cmix-compressed English dictionary payload. |
+| `p` | Raw-deflate Python transform payload. |
+| `program.py` | Loader that reconstructs and executes the counted transform. |
 
 That proxy package is valid for local screening because the in-repo driver
 counts the three files. It is not automatically an official `comp9` package.
 Any full-corpus claim must first decide whether the official artifact is a
 binary package, a source package, or another accepted packaging shape, then
 count that exact artifact.
+
+The calibrated full score is `110,181,114`, leaving `681,114` bytes of debt to
+the target before any added SRSTC code. That calibration is forecast evidence,
+not a full-corpus proof. Any integrated delta must save at least
+`681,114 + added_program_bytes` on the exact archive.
 
 ## External Rule Boundary
 
@@ -135,20 +141,20 @@ are materialized and hashed.
 
 ## Memory Unit Risk
 
-The local guard currently uses:
+Historical cmix screens used:
 
 ```text
 10 GiB = 10,485,760 KiB
 ```
 
-Some official wording is commonly read as decimal:
+Prize-facing gates now enforce:
 
 ```text
 10 GB = 9,765,625 KiB
 ```
 
-A candidate that merely passes the local `10GiB` guard is not automatically
-safe under decimal `10GB`. Any promoted result should record both:
+A candidate that merely passes the historical `10GiB` guard is not safe under
+decimal `10GB`. Any promoted result should record both:
 
 ```text
 binary_margin_kib = 10,485,760 - peak_rss_kib
@@ -158,11 +164,9 @@ decimal_margin_kib = 9,765,625 - peak_rss_kib
 If `decimal_margin_kib < 0`, the result must be labeled as local-guard evidence,
 not submission-grade memory evidence.
 
-The current local guard enforces `max_sampled_single_rss_kib`. It also records
-`max_sampled_tree_rss_kib`, but wrapper and Python driver overhead are local
-testbed artifacts. A promoted candidate still needs a package-level audit that
-measures the actual submitted compressor/archive execution path without
-unnecessary harness processes.
+The fx2 prize runner enforces `max_sampled_tree_rss_kib` at `9,765,625` KiB.
+This counts wrapper and child processes together. A promoted candidate still
+needs a package-level audit of the exact submitted compressor/archive path.
 
 ## Promotion Receipt Template
 
@@ -182,7 +186,8 @@ unnecessary harness processes.
   "sha256_restored": null,
   "archive_sha256": null,
   "peak_rss_kib": null,
-  "rss_guard_kib": 10485760,
+  "rss_guard_kib": 9765625,
+  "rss_guard_limit_mode": "tree",
   "binary_margin_kib": null,
   "decimal_margin_kib": null,
   "temp_disk_bytes": null,

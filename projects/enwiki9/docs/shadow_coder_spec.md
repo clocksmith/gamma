@@ -222,6 +222,16 @@ Evaluate state families in this order so regressions are attributable:
 Do not combine families until each single-family row has a receipt. Combination
 search without attribution recreates the earlier parameter-churn problem.
 
+Current compact XML/Wiki screen result:
+
+```text
+receipt: results/fx2_residual_probe/fx2_xml_residual_screen_v1/receipt.json
+best key: mode_char
+held-out saved bytes: 5
+net held-out bytes after code estimate: -6,139
+promotion: no native gate; design a stronger target-substrate mechanism first
+```
+
 ## Receipt Template
 
 ```json

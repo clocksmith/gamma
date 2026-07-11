@@ -3,7 +3,7 @@
 This lock-safe audit checks candidate `meta.json` receipt references.
 It does not launch compression and does not score a candidate.
 
-- Artifact checks: `231`
+- Artifact checks: `285`
 - OK: `true`
 - Rule: `Rows with recorded receipt hashes must match their artifact files. Rows without hashes are legacy evidence and should be repaired when re-recorded.`
 
@@ -11,7 +11,7 @@ It does not launch compression and does not score a candidate.
 
 | Status | Count |
 |---|---:|
-| `match` | 231 |
+| `match` | 285 |
 
 ## Hash Mismatches
 
@@ -44,6 +44,13 @@ These are not failures; they show receipt files reused by multiple meta labels.
 | Path | Reference Count |
 |---|---:|
 | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json` | 2 |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20352k_250000_determinism_rss_guard.json` | 2 |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20480k_250000_determinism_rss_guard.json` | 2 |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20608k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20608k_250000_determinism_rss_guard.json` | 2 |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20736k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20736k_10000000_determinism_rss_guard.json` | 2 |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20864k_100000000_determinism_rss_guard.json` | 2 |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20992k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20992k_100000000_determinism_rss_guard.json` | 2 |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21120k_100000000_determinism_rss_guard.json` | 2 |
 | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21248k_100000000_determinism_rss_guard.json` | 2 |
 | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21376k_100000000_determinism_rss_guard.json` | 2 |
 | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd21504k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd21504k_100000000_determinism_rss_guard.json` | 2 |

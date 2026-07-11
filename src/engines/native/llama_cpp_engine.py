@@ -5,7 +5,7 @@ from typing import List, Tuple, Optional, Dict, Any
 try:
     import numpy as np
     from llama_cpp import Llama, llama_supports_gpu_offload
-except ImportError: raise ImportError("'llama-cpp-python' library not found. Install with `pip install -r requirements-llamacpp.txt`")
+except ImportError: raise ImportError("'llama-cpp-python' library not found. Install with `pip install -r requirements/llamacpp.txt`")
 
 logger = logging.getLogger(__name__)
 

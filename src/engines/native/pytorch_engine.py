@@ -7,7 +7,7 @@ import numpy as np
 try:
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-except ImportError: raise ImportError("PyTorch-related libraries (transformers, torch, bitsandbytes, accelerate) not found. `pip install -r requirements-pytorch.txt`")
+except ImportError: raise ImportError("PyTorch-related libraries (transformers, torch, bitsandbytes, accelerate) not found. `pip install -r requirements/pytorch.txt`")
 
 logger = logging.getLogger(__name__)
 

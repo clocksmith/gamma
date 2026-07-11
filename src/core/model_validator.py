@@ -177,7 +177,7 @@ class ModelValidator:
                     suggestion=(
                         "Download GGUF version or convert to GGUF first. "
                         "On Linux AMD, you can use llama.cpp Vulkan after conversion. "
-                        "See requirements-llamacpp.txt and docs/ENGINE_ARCHITECTURE.md"
+                        "See requirements/llamacpp.txt and docs/ENGINE_ARCHITECTURE.md"
                     )
                 )
             elif model_format != 'gguf' and model_format != 'path':

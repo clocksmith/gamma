@@ -62,8 +62,8 @@ heavy lane.
 | `fx2_loss_windows.py` | Breaks loss into windows. |
 | `fx2_loss_spans.py` | Reports loss spans. |
 | `fx2_loss_sample_summary.py` | Summarizes sampled loss rows. |
-| `fx2_residual_probe.py` | Probes residual correction families. |
-| `fx2_residual_cache.py` | Caches residual state. |
+| `fx2_residual_probe.py` | Builds flag-clean FX2 residual probes, including archive-neutral WRT observation traces. |
+| `fx2_residual_cache.py` | Caches legacy and WRT Wiki shell residual state. |
 | `fx2_residual_heatmap.py` | Builds residual heatmaps. |
 | `fx2_residual_apm_score.py` | Scores APM-style residual corrections. |
 | `fx2_residual_gain_certificate.py` | Certifies residual gains. |
@@ -71,14 +71,20 @@ heavy lane.
 | `fx2_residual_oracle_upper_bound.py` | Estimates residual upper-bound potential. |
 | `fx2_residual_state_search.py` | Searches residual state families. |
 | `fx2_residual_state_search_stream.py` | Streamed residual state search. |
+| `fx2_residual_xml_ledger.py` | Runs legacy or WRT Wiki shell residual ledgers on an exact FX2 trace with qbit screening, abstention, and exact replay for selected keys. |
+| `wrt_trace_extract.py` | Reconstructs the exact WRT byte stream from an aligned FX2 bit trace and writes a hash-counted alignment receipt. |
+| `wrt_wiki_shell_copy_rule_ledger.py` | Distills bounded WRT copy evidence into tiny causal rules and confirms selected rules on an untouched split with counted code cost. |
+| `wrt_wiki_shell_residual_tree.py` | Trains and exports a small causal residual decision tree from WRT shell state with held-out promotion thresholds and counted node cost. |
 | `fx2_shadow_residual_coder.py` | Shadow-coder evaluator for residual probabilities. |
 | `fx2_residual_shadow_matrix.py` | Generates `docs/residual_shadow_matrix.md` from cached residual/SSE JSON receipts. |
+| `fx2_xml_residual_screen.py` | Ranks compact causal XML/Wiki residual correction keys on cached FX2 traces with held-out/code-cost accounting. |
 | `streaming_retrieval_mixer_plan.py` | Generates `docs/streaming_retrieval_mixer.md`, the lock-safe SRSTC causal sketch-retrieval algorithm and receipt contract. |
-| `streaming_retrieval_shadow.py` | Runs exact-shadow SRSTC/sketch-retrieval probes on cached residual rows with true bits and base probabilities. |
+| `streaming_retrieval_shadow.py` | Runs exact-shadow SRSTC/sketch retrieval on raw, legacy-row, or aligned WRT shell traces, including independently routed byte-memory bands. |
 | `streaming_retrieval_raw_shadow.py` | Runs exact-shadow SRSTC/sketch-retrieval probes on raw byte-aligned corpus bits with an adaptive raw baseline. |
 | `streaming_retrieval_codec.py` | Experimental SRSTC codec harness for turning raw shadow probabilities into replayable archive bytes. |
 | `streaming_retrieval_receipt_audit.py` | Audits cached SRSTC receipts for held-out net savings, alignment safety, state bounds, and complete block-regression evidence. |
-| `streaming_retrieval_continue_shadow.py` | Reads the SRSTC audit queue, chooses the next complete-block rerun, and refuses to execute it while the cmix heavy lock is held unless explicitly overridden. |
+| `streaming_retrieval_block_regime_audit.py` | Labels regressing and weak-positive SRSTC blocks with offline teacher-only Wikipedia/XML regime diagnostics and causal prefix checkpoints. |
+| `streaming_retrieval_continue_shadow.py` | Reads the SRSTC audit queues, prioritizes the target-closing block-posterior replay, and by default refuses to execute while the cmix heavy lock is held. |
 | `streaming_retrieval_fx2_trace_queue.py` | Prints lock-safe SRSTC shadow commands for an existing `FX2_RESIDUAL_ROW` log or residual-probe manifest; it does not launch a compressor. |
 | `fx2_mwcc_router_shadow.py` | Deterministic router shadow evaluation. |
 | `fx2_manifold_outer_sse_search.py` | Manifold/outer-SSE search lane. |
@@ -93,6 +99,7 @@ They become runner-adjacent if they invoke a compressor.
 | Tool | Purpose |
 |---|---|
 | `embedding_teacher_order.py` | Offline embedding-teacher ordering experiments. |
+| `article_order_teacher_distill.py` | Distills deterministic order keys against the upstream Voyage/t-SNE article-order teacher. |
 | `hierarchical_chunk_embedding_teacher.py` | Hierarchical chunk embedding-teacher probes. |
 | `hierarchical_retrieval_shadow.py` | Retrieval-style shadow experiments. |
 | `page_order_screen.py` | Screens page ordering rules. |

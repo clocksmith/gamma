@@ -83,6 +83,13 @@ def _write_json(path: pathlib.Path | None, payload: dict) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit-kib", type=int, required=True)
+    parser.add_argument(
+        "--limit-mode",
+        choices=("max_single", "tree"),
+        default="max_single",
+        help="enforce the largest process RSS or aggregate process-tree RSS",
+    )
+    parser.add_argument("--official-decimal-limit-kib", type=int)
     parser.add_argument("--sample-interval", type=float, default=5.0)
     parser.add_argument("--guard-json", type=pathlib.Path)
     parser.add_argument("--label", default=None)
@@ -103,6 +110,8 @@ def main() -> int:
     latest_sample: dict | None = None
     sample_count = 0
     exceeded = False
+    official_decimal_exceeded = False
+    failure: str | None = None
 
     try:
         while True:
@@ -120,6 +129,13 @@ def main() -> int:
                     "label": args.label,
                     "command": command,
                     "limit_kib": args.limit_kib,
+                    "limit_mode": args.limit_mode,
+                    "official_decimal_limit_kib": args.official_decimal_limit_kib,
+                    "official_decimal_over_limit_kib": (
+                        max(0, sample["max_single_rss_kib"] - args.official_decimal_limit_kib)
+                        if args.official_decimal_limit_kib is not None
+                        else None
+                    ),
                     "max_sampled_single_rss_kib": peak_single,
                     "max_sampled_tree_rss_kib": peak_tree,
                     "peak_sample": peak_sample,
@@ -131,8 +147,33 @@ def main() -> int:
                     "elapsed_s": round(time.time() - started_at, 4),
                 },
             )
-            if sample["max_single_rss_kib"] > args.limit_kib:
+            measured_kib = (
+                sample["tree_rss_kib"]
+                if args.limit_mode == "tree"
+                else sample["max_single_rss_kib"]
+            )
+            if measured_kib > args.limit_kib:
                 exceeded = True
+                failure = "compression_rss_crossed_local_guard_before_archive_or_roundtrip"
+                try:
+                    os.killpg(proc.pid, signal.SIGTERM)
+                except ProcessLookupError:
+                    pass
+                try:
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    try:
+                        os.killpg(proc.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    proc.wait()
+                break
+            if (
+                args.official_decimal_limit_kib is not None
+                and sample["max_single_rss_kib"] > args.official_decimal_limit_kib
+            ):
+                official_decimal_exceeded = True
+                failure = "active_compressor_exceeded_official_decimal_10gb_limit"
                 try:
                     os.killpg(proc.pid, signal.SIGTERM)
                 except ProcessLookupError:
@@ -162,6 +203,13 @@ def main() -> int:
         "label": args.label,
         "command": command,
         "limit_kib": args.limit_kib,
+        "limit_mode": args.limit_mode,
+        "official_decimal_limit_kib": args.official_decimal_limit_kib,
+        "official_decimal_over_limit_kib": (
+            max(0, peak_single - args.official_decimal_limit_kib)
+            if args.official_decimal_limit_kib is not None
+            else None
+        ),
         "max_sampled_single_rss_kib": peak_single,
         "max_sampled_tree_rss_kib": peak_tree,
         "peak_sample": peak_sample,
@@ -169,12 +217,20 @@ def main() -> int:
         "sample_count": sample_count,
         "rss_guard_exceeded": exceeded,
         "returncode": rc,
-        "status": "rss_guard_exceeded" if exceeded else "complete",
+        "status": (
+            "rss_guard_exceeded"
+            if exceeded
+            else "aborted_official_decimal_memory_limit"
+            if official_decimal_exceeded
+            else "complete"
+        ),
         "elapsed_s": round(time.time() - started_at, 4),
     }
+    if failure is not None:
+        payload["failure"] = failure
     _write_json(args.guard_json, payload)
     print(json.dumps({"rss_guard": payload}, indent=2))
-    if exceeded:
+    if exceeded or official_decimal_exceeded:
         return 75
     return int(rc or 0)
 

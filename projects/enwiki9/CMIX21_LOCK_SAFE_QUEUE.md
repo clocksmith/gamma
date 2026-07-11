@@ -2,13 +2,18 @@
 
 ## Current Fine-Valve Working Set
 
-The active cmix21 search has moved from coarse memory divisors to fine PPMD
-caps around the best observed archive/memory boundary. Treat this section as
-the current strategy register; older observations below remain historical
-audit context.
+The fine PPMD-only search is terminal after the 20352 KiB package crossed the
+official decimal limit at `250K`. The active replacement is
+`cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`:
+global FXCM cmC2 division by two supplies the material RSS cut, while the
+original rolling buffer removes the reduced-buffer crash mechanism. Its exact
+`1M` gate produced archive `174,525`, roundtrip, and determinism at peak RSS
+`8,831,176` KiB; the unchanged `10M` gate is active. Older observations below
+remain historical audit context.
 
 | candidate | role | known posture | current or next action |
 | --- | --- | --- | --- |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | Active target-bearing memory cut | Exact `1K`, `250K`, and `1M` gates passed; `1M` archive `174,525`, program `564,260`, peak RSS `8,831,176` KiB. | Wait for the unchanged exact `10M` receipt, then use `cmix21_gate_decider.py`. |
 | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Best nearby `10M` archive reference | Exact `10M` archive evidence exists at `1,638,083`, but the larger-scope RSS behavior made it unsuitable as the only live path. | Keep as archive-quality reference and memory-boundary control. |
 | `cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Narrow memory-margin candidate | Exact `10M` replay passed at archive `1,638,114`, local score `2,202,389`, roundtrip true, determinism true, and max sampled single RSS `10,482,852` KiB under the `10,485,760` KiB guard. Unchanged `100M` promotion crossed the same guard by `36` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the current PPMD memory valve. Do not retune it unless bracketing data says this surface is still cheapest. |
 | `cmix21_text_mmap_paq5_ppmd21888k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Exact no-ceiling `10M` replay passed at archive `1,638,182`, local score `2,202,456`, program size `564,274`, roundtrip true, determinism true, and max sampled single RSS `10,482,468` KiB. The unchanged `100M` promotion failed the local RSS guard at `10,485,796` KiB, `36` KiB over the `10,485,760` KiB guard, before producing a scored archive or roundtrip. | Keep as the upper bracket for the next PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
@@ -17,7 +22,12 @@ audit context.
 | `cmix21_text_mmap_paq5_ppmd21504k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Packaged from `ppmd21632k` with `-DCMIX_PPMD_MEMORY_KB=21504`; program size `564,273`. Exact `10M` replay passed at archive `1,638,165`, local score `2,202,438`, roundtrip true, determinism true, and max sampled single RSS `10,482,116` KiB, `3,644` KiB under the local binary guard. The unchanged `100M` promotion failed the local RSS guard by `72` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
 | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Packaged from `ppmd21504k` with `-DCMIX_PPMD_MEMORY_KB=21376`; program size `564,274`. Exact `1K`, `250K`, `1M`, and `10M` replays passed. The unchanged `100M` promotion failed the local RSS guard by `116` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
 | `cmix21_text_mmap_paq5_ppmd21248k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed upper candidate | Packaged from `ppmd21376k` with `-DCMIX_PPMD_MEMORY_KB=21248`; program size `564,274`. Exact `1K`, `250K`, `1M`, and `10M` replays passed. The unchanged `100M` promotion failed the local RSS guard by `64` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. |
-| `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Active prefix-ladder candidate | Packaged from `ppmd21248k` with `-DCMIX_PPMD_MEMORY_KB=21120`; program size `564,274`. Exact `1K` replay passed at archive `247`, roundtrip true, determinism true, and max sampled single RSS `8,624,384` KiB. | Run the unchanged `250K` replay next. If it passes, record it and promote unchanged to `1M`; if it fails by RSS, record the bracket and inspect non-PPMD memory surfaces. |
+| `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Prior lower-memory bracket | Packaged from `ppmd21248k` with `-DCMIX_PPMD_MEMORY_KB=21120`; program size `564,274`. Exact prefix replays reached the `10M` ladder before the active lane moved lower. | Keep as bracket context; do not mutate it while the active gate is running. |
+| `cmix21_text_mmap_paq5_ppmd20992k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed upper candidate | Packaged as the next lower PPMD-only cut; program size `564,273`. Exact `10M` replay passed at archive `1,638,161`, local score `2,202,434`, roundtrip true, determinism true, and RSS guard complete. The unchanged `100M` promotion failed the local RSS guard by `68` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the active PPMD-only cut. |
+| `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed upper candidate | Exact `10M` replay passed at archive `1,638,076`; unchanged `100M` crossed the local RSS guard by `68` KiB before a scored archive or roundtrip. | Keep as the upper bracket; do not rerun unchanged at `100M`. |
+| `cmix21_text_mmap_paq5_ppmd20736k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Retired official candidate | Passed exact gates through `1,000,000`, then reached `10,472,644` KiB RSS during the `10,000,000` gate, `707,019` KiB above decimal `10GB`. | Keep the terminal guard receipt as a memory bracket; do not promote in the prize lane. |
+| `cmix21_text_mmap_paq5_ppmd20608k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Bracketed lower-memory candidate | Exact `1,024` replay passed with archive `247`, local score `564,521`, roundtrip true, determinism true, and max sampled single RSS `8,631,192` KiB. The unchanged `250,000` promotion exceeded decimal `10GB` by `240,207` KiB before archive completion. | Keep as a terminal memory bracket; do not promote unchanged. |
+| `cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Lower terminal PPMD bracket | Exact `1,024` replay passed with archive `247`, local score `564,519`, roundtrip true, determinism true, max sampled single RSS `8,628,352` KiB, and official decimal overage `0` KiB. The unchanged `250,000` gate exceeded decimal `10GB` by `3,275` KiB. | Keep as terminal memory-bracket evidence; do not promote unchanged. |
 | `cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Historical high-quality boundary | Best nearby archive family, but memory-fragile at larger scope. | Keep as baseline for bytes lost per KiB saved. |
 | `cmix21_text_mmap_paq5_ppmd21m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Coarse lower-memory bracket | Bought memory margin but cost archive bytes versus the `22m` family. | Use only as a lower-bound control for the PPMD memory derivative. |
 
@@ -88,7 +98,9 @@ python3 projects/enwiki9/tools/cmix21_memory_valve_report.py
 | PPMD cap | `ppmd21632k` | `ppmd21504k` | `-64` bytes at exact deterministic `10M` | `128` KiB cap cut | `-0.5` bytes/KiB | `ppmd21504k` improved the exact `10M` archive while cutting memory, but unchanged `100M` failed RSS by `72` KiB; keep as an upper bracket. |
 | PPMD cap | `ppmd21504k` | `ppmd21376k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd21376k` preserved prefix determinism but failed unchanged `100M` RSS by `116` KiB. |
 | PPMD cap | `ppmd21376k` | `ppmd21248k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd21248k` preserved prefix determinism but failed unchanged `100M` RSS by `64` KiB. |
-| PPMD cap | `ppmd21248k` | `ppmd21120k` | restart gate ladder in progress | `128` KiB cap cut | pending exact paired rows | `ppmd21120k` passed exact `1K`; active `250K` gate is launchable. |
+| PPMD cap | `ppmd21248k` | `ppmd21120k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd21120k` reached the prefix ladder before the active lane moved lower. |
+| PPMD cap | `ppmd21120k` | `ppmd20992k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd20992k` passed exact `10M` but failed unchanged `100M` RSS by `68` KiB. |
+| PPMD cap | `ppmd20992k` | `ppmd20864k` | measured after exact gate replay | `128` KiB cap cut | see generated valve report | `ppmd20864k` passed exact `1M`; active `10M` gate is next. |
 | FXCM index map | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Do not cut this surface until PPMD bracketing fails or exact ablation receipts identify a cheaper KiB source. |
 | FXCM RCM | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Earlier FXCM RCM divisor changes can break decode; require prefix gates from `1K` before any promotion. |
 | PAQ RCM | unmeasured | unmeasured | no paired same-scope row | no measured KiB delta | not computed | Keep primary PAQ history continuity protected unless an exact memory-value pair beats the PPMD valve. |
@@ -107,35 +119,40 @@ archive_penalty_per_kib_saved =
 The goal is not lowest memory. The goal is the least archive damage that creates
 enough RSS margin for `100M`, then `1G`, while preserving deterministic replay.
 
-## Active Constraint
+## Terminal Constraint
 
-The active heavy-lock candidate is the next PPMD-only cut:
+The final PPMD-only cut tested for official admissibility was:
 
 ```text
-cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+cmix21_text_mmap_paq5_ppmd20736k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+scope: 10000000
+mode: --check-determinism
+guard receipt: ppmd20736k_10000000_determinism_rss_guard.json
+```
+
+The compressor reached `10,472,644` KiB before archive completion. The run was
+stopped and recorded as `official_decimal_memory_fail`; it was still under the
+historical binary `10GiB` single-process guard but over the official decimal
+ceiling by `707,019` KiB. No archive, roundtrip, determinism, or score claim is
+made for the aborted gate. The cmix21 ladder is no longer the active prize lane.
+
+The last lower-memory qualification attempt is now terminal:
+
+```text
+cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
 scope: 250000
 mode: --check-determinism
-guard receipt: ppmd21120k_250000_determinism_rss_guard.json
+guard receipt: ppmd20480k_250000_determinism_rss_guard.json
+verdict: official decimal memory failure by 3,275 KiB
 ```
 
-This candidate exists because `ppmd21248k` passed exact prefix replays but
-failed the unchanged `100M` promotion by RSS guard before a scored archive was
-produced. The exact `1K` replay passed; the active gate is the unchanged
-`250K` determinism replay. The active gate remains incomplete until both the
-driver result JSON and RSS guard JSON are terminal. No secondary heavy gate,
-package build, or result-corpus CPU sweep should be launched while a gate owns
-the lock.
-
-If this gate passes:
+The active non-cmix target-bearing gate is:
 
 ```text
-record exact result -> regenerate receipts -> promote the same package unchanged
-```
-
-If this gate fails by RSS:
-
-```text
-record RSS failure -> package the next lower PPMD-only cut -> restart prefix gates from 1K
+fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1
+scope: 10000000
+mode: --check-determinism --archive-ceiling 1631581
+guard receipt: results/fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1/10m_target_gate_rss_guard.json
 ```
 
 ## Parallel Work Policy
@@ -166,9 +183,9 @@ run result-corpus forecast sweeps
 change active candidate source or registry metadata
 ```
 
-This is why SRSTC shadow scoring can run beside the cmix21 gate when it is
-explicitly reduced-priority and low-RSS, while another `100M` or `1G` compressor
-gate must wait for a terminal receipt.
+This is why cached SRSTC or teacher analysis can run beside the active sidecar
+gate when it is explicitly reduced-priority and low-RSS, while another `100M`
+or `1G` compressor gate must wait for a terminal receipt.
 
 ## Live Audit Summary
 

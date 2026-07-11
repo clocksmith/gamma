@@ -14,6 +14,7 @@ import zlib
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROGRAMS = ROOT / "programs"
 DEFAULT_TEMPLATE = PROGRAMS / "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1"
+LOADER = "import zlib;exec(zlib.decompress(open(__file__[:-9],\"rb\").read(),-15))\n"
 SUPPORTED_FIELDS = {
     "kind",
     "template",
@@ -33,6 +34,7 @@ SUPPORTED_FIELDS = {
     "mh2",
     "mh3",
     "mh4",
+    "simhash",
 }
 
 
@@ -67,7 +69,7 @@ def payload_source(fields: tuple[str, ...]) -> str:
          return tuple(o)
         def w(v,l=160):
          o=[];e=set()
-         for m in re.finditer(rb"[a-z][a-z0-9]{{2,24}}",v.lower()):
+         for m in re.finditer(rb"[a-z][a-z0-9]{2,24}",v.lower()):
           x=m.group(0)
           if x not in e:o.append(x);e.add(x)
           if L(o)>=l:break
@@ -86,6 +88,16 @@ def payload_source(fields: tuple[str, ...]) -> str:
            if h<z:z=h
           o.append(z>>40)
          return tuple(o)
+        def hs(t,b=64):
+         if not t:return b"\\x00"*(b//8)
+         a=[0]*b
+         for x in t:
+          h=int.from_bytes(hashlib.blake2s(x,digest_size=b//8).digest(),"big")
+          for i in G(b):a[i]+=1 if h>>i&1 else-1
+         v=0
+         for i,x in enumerate(a):
+          if x>=0:v|=1<<i
+         return v.to_bytes(b//8,"big")
         def sh(p):
          o=bytearray()
          for x in p.splitlines()[:160]:
@@ -93,7 +105,7 @@ def payload_source(fields: tuple[str, ...]) -> str:
           if not y:o.extend(b"_;")
           elif y.startswith(b"<"):
            m=re.match(rb"</?([a-zA-Z0-9:_-]+)",y);o.extend((m.group(1).lower()[:8]if m else b"<")+b";")
-          elif y.startswith(b"{{"):o.extend(b"T"+n(f(y,rb"\\{{\\{{\\s*([^|}}\\n]{{1,64}})"),32)+b";")
+          elif y.startswith(b"{{"):o.extend(b"T"+n(f(y,rb"\\{\\{\\s*([^|}\\n]{1,64})"),32)+b";")
           elif y.startswith(b"|"):o.extend(b"P;")
           elif y.startswith(b"=="):o.extend(b"H;")
           elif y.startswith((b"*",b"#",b":",b";")):o.extend(y[:1]+b";")
@@ -112,12 +124,12 @@ def payload_source(fields: tuple[str, ...]) -> str:
          if L(p)>1 and L(v)==L(set(v))and(u or v==S(v)):return z[:a],p,z[i:],v
         def key(p,pid):
          rt=f(p,rb"<title>(.*?)</title>");ti=n(rt,220);tx=f(p,rb"<text[^>]*>(.*?)</text>")or p
-         ca=u(re.findall(rb"\\[\\[Category:([^\\]|\\n]{{1,120})",p,2));tm=u(re.findall(rb"\\{{\\{{\\s*([a-z0-9 _-]{{1,80}})(?:[|}}\\n])",p,2));pa=u(re.findall(rb"\\|\\s*([a-z0-9 _-]{{1,50}})\\s*=",p,2),10,50)
-         rd=n(f(p,rb"#redirect\\s*\\[\\[([^\\]|\\n]{{1,140})"),140);fl=n(f(p,rb"\\[\\[([^\\]|\\n]{{1,120})(?:\\|[^\\]\\n]*)?\\]\\]"),120)
+         ca=u(re.findall(rb"\\[\\[Category:([^\\]|\\n]{1,120})",p,2));tm=u(re.findall(rb"\\{\\{\\s*([a-z0-9 _-]{1,80})(?:[|}\\n])",p,2));pa=u(re.findall(rb"\\|\\s*([a-z0-9 _-]{1,50})\\s*=",p,2),10,50)
+         rd=n(f(p,rb"#redirect\\s*\\[\\[([^\\]|\\n]{1,140})"),140);fl=n(f(p,rb"\\[\\[([^\\]|\\n]{1,120})(?:\\|[^\\]\\n]*)?\\]\\]"),120)
          pr,su,rv,ns=tp(rt);to=w(tx,160);ib=any(b"infobox"in x for x in tm);tax=any(b"taxobox"in x or b"speciesbox"in x for x in tm)
          ki=b"redirect"if rd else b"category"if ti.startswith(b"category ")else b"list"if ti.startswith(b"list of")else b"disambig"if b"disambiguation"in ti else b"taxon"if tax else b"infobox"if ib else b"category_tagged"if ca else b"plain"
          cat=b" ".join(ca[:4]);tmp=b" ".join(tm[:4]);top=cat or tmp or fl or pr or ti;mm=mh(to,8)
-         V={"kind":ki,"template":tmp,"topic":top,"category":cat,"redirect":rd,"first_link":fl,"params":b" ".join(pa[:6]),"title":ti,"title_prefix":pr,"title_suffix":su,"rev_title":rv,"namespace":ns,"shape":sh(p),"size":g(L(p)),"lines":g(p.count(b"\\n")),"mh2":mm[:2],"mh3":mm[:3],"mh4":mm[:4]}
+         V={"kind":ki,"template":tmp,"topic":top,"category":cat,"redirect":rd,"first_link":fl,"params":b" ".join(pa[:6]),"title":ti,"title_prefix":pr,"title_suffix":su,"rev_title":rv,"namespace":ns,"shape":sh(p),"size":g(L(p)),"lines":g(p.count(b"\\n")),"mh2":mm[:2],"mh3":mm[:3],"mh4":mm[:4],"simhash":hs(to)}
          return tuple(V[x]for x in F)+(pid,)
         def o(z):
          x=sp(z)
@@ -178,13 +190,20 @@ def main() -> int:
         raise SystemExit(f"unsupported fields: {bad}")
     if len(fields) < 2:
         raise SystemExit("need at least two fields")
-    if not (args.template / "program.py").exists():
-        raise SystemExit(f"missing template candidate: {args.template}")
+    binary_src = args.template / "c"
+    if not binary_src.exists():
+        binary_src = args.template / "cmix.xz"
+    dictionary_src = args.template / "d"
+    if not dictionary_src.exists():
+        dictionary_src = args.template / "english.dic.cmix"
+    if not binary_src.exists() or not dictionary_src.exists():
+        raise SystemExit(f"missing template codec assets: {args.template}")
 
     out_dir = PROGRAMS / args.id
     out_dir.mkdir(parents=True, exist_ok=True)
-    for name in ("program.py", "c", "d"):
-        shutil.copy2(args.template / name, out_dir / name)
+    shutil.copy2(binary_src, out_dir / "c")
+    shutil.copy2(dictionary_src, out_dir / "d")
+    (out_dir / "program.py").write_text(LOADER)
     source = payload_source(fields)
     (out_dir / "p").write_bytes(raw_deflate(source.encode()))
 

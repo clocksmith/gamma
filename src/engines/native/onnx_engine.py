@@ -5,7 +5,7 @@ try:
     import onnxruntime as ort
     import numpy as np
     from transformers import AutoTokenizer
-except ImportError: raise ImportError("ONNX Runtime or Transformers library not found. Install with `pip install -r requirements-onnx.txt`")
+except ImportError: raise ImportError("ONNX Runtime or Transformers library not found. Install with `pip install -r requirements/onnx.txt`")
 
 from src.core.engine_interface import LLMEngine
 from src.core.types import PredictionResult

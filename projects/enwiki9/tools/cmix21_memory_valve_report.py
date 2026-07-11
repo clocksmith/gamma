@@ -411,6 +411,7 @@ def ppmd_decimal_feasibility_section(
         cand
         for cand in candidates
         if cand.guard_10m is not None and cand.guard_10m.max_single_kib > 0
+        and "_fxcmidx13div2_" in cand.program_id
     ]
     active_candidate, active_scope = active_gate
     active = next((cand for cand in rows if cand.program_id == active_candidate), None)

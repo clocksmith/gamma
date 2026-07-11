@@ -10,8 +10,8 @@ No prefix row proves 10.95%.
 No forecast or metadata-inherited row is included.
 ```
 
-- Result JSON files scanned: `677`
-- Roundtrip-passing rows: `655`
+- Result JSON files scanned: `697`
+- Roundtrip-passing rows: `675`
 
 ## Scope `1,000,000,000` Bytes
 
@@ -31,15 +31,15 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 |---|---|---:|---:|---:|---:|---|---|
 | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | fx2/cmix tuned wrapper | 1,882,615 | 1,643,289 | 239,326 | 1.3146312 | true | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1/2026-06-08T201540.json` |
 | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftdeep_safe_v1` | fx2/cmix tuned wrapper | 1,882,649 | 1,643,346 | 239,303 | 1.3146768 | true | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftdeep_safe_v1/2026-06-09T004038.json` |
-| `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 2,202,359 | 1,638,083 | 564,276 | 1.3104664 | true | `results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T005909.json` |
+| `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 2,202,351 | 1,638,076 | 564,275 | 1.3104608 | true | `results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-10T042446.json` |
 
 ### Best Archives
 
 | Program | Mechanism | Score | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
+| `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 2,202,351 | 1,638,076 | 564,275 | 1.3104608 | true | `results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-10T042446.json` |
 | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 2,202,359 | 1,638,083 | 564,276 | 1.3104664 | true | `results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T005909.json` |
 | `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 2,202,372 | 1,638,098 | 564,274 | 1.3104784 | true | `results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-03T062324.json` |
-| `cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 2,202,376 | 1,638,101 | 564,275 | 1.3104808 | true | `results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T114711.json` |
 
 
 ## Scope `1,000,000` Bytes
