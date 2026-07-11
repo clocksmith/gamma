@@ -26,6 +26,7 @@ OUT_MD = ROOT / "docs" / "streaming_retrieval_receipt_audit.md"
 CURRENT_WINNER = 110_793_128
 TARGET_SCORE = 109_500_000
 BEST_FORECAST = 110_181_114
+BLOCK_POSTERIOR_CODE_BYTES_ESTIMATE = 3_788
 
 
 @dataclass(frozen=True)
@@ -203,6 +204,103 @@ def complete_block_rerun_command(
     return shell_join(parts)
 
 
+def block_posterior_rerun_command(
+    path: pathlib.Path,
+    receipt: dict[str, Any],
+    block: dict[str, Any],
+) -> str | None:
+    if receipt.get("method") != "streaming_retrieval_raw_shadow_v1":
+        return None
+    if not block["complete_block_audit"] or block["largest_block_regression_bytes"] <= 0:
+        return None
+    schema = as_dict(receipt.get("sketch_schema"))
+    if str(schema.get("block_router_mode") or "none") != "none":
+        return None
+    if bool(as_dict(schema.get("copy_channel")).get("enabled")):
+        return None
+    data_path = worktree_rel_path(receipt.get("data"))
+    data_bytes = as_int(receipt.get("data_bytes_loaded"))
+    train_bytes = as_int(receipt.get("train_bytes"))
+    if data_path is None or data_bytes is None or train_bytes is None:
+        return None
+
+    output = RESULTS_DIR / f"{path.stem}_blockposterior_v1.json"
+    if output.exists():
+        return None
+    parts: list[Any] = [
+        "python3",
+        "projects/enwiki9/tools/streaming_retrieval_raw_shadow.py",
+        "--data",
+        data_path,
+        "--limit-bytes",
+        data_bytes,
+        "--train-bytes",
+        train_bytes,
+        "--suffix-len",
+        as_int(schema.get("suffix_len")) or 32,
+        "--sketch-len",
+        as_int(schema.get("sketch_len")) or 96,
+        "--base-order",
+        as_int(schema.get("base_order")) or 2,
+        "--p-buckets",
+        as_int(schema.get("p_buckets")) or 32,
+        "--min-support",
+        as_int(schema.get("min_support")) or 8,
+        "--blend-ppm",
+        as_int(schema.get("blend_ppm")) or 640000,
+        "--base-table-cap-entries",
+        as_int(schema.get("base_table_cap_entries")) or 200000,
+        "--retrieval-table-cap-entries",
+        as_int(schema.get("retrieval_table_cap_entries")) or 200000,
+        "--byte-table-cap-entries",
+        as_int(schema.get("byte_table_cap_entries")) or 100000,
+        "--partial-byte-family",
+        str(schema.get("partial_byte_family") or "sketch"),
+        "--typed-key-profile",
+        str(schema.get("typed_key_profile") or "base"),
+        "--expert-mode",
+        str(schema.get("expert_mode") or "aggregate"),
+        "--byte-prior-blend-ppm",
+        as_int(schema.get("byte_prior_blend_ppm")) or 0,
+        "--byte-min-support",
+        as_int(schema.get("byte_min_support")) or 4,
+        "--router-decay-shift",
+        as_int(schema.get("router_decay_shift")) or 6,
+        "--router-abstain-margin-qbits",
+        as_int(schema.get("router_abstain_margin_qbits")) or 128,
+        "--block-bytes",
+        as_int(schema.get("block_bytes")) or 16384,
+        "--block-router-mode",
+        "posterior",
+        "--block-posterior-srstc-prior-ppm",
+        500000,
+        "--block-posterior-weight-bits",
+        24,
+        "--added-code-bytes-estimate",
+        (as_int(receipt.get("added_code_bytes_estimate")) or 0)
+        + BLOCK_POSTERIOR_CODE_BYTES_ESTIMATE,
+        "--added-static-table-bytes",
+        as_int(receipt.get("added_static_table_bytes")) or 0,
+        "--scope-bytes",
+        as_int(receipt.get("scope_bytes")) or 1000000000,
+        "--progress-interval-bytes",
+        1048576,
+        "--output",
+        output.resolve().relative_to(WORKTREE_ROOT).as_posix(),
+        "--print-summary",
+    ]
+    if bool(schema.get("log_odds_mix")):
+        parts.append("--log-odds-mix")
+    target = as_dict(receipt.get("target"))
+    baseline_score = as_int(target.get("baseline_score"))
+    target_score = as_int(target.get("target_score"))
+    if baseline_score is not None:
+        parts.extend(["--baseline-score", baseline_score])
+    if target_score is not None:
+        parts.extend(["--target-score", target_score])
+    return shell_join(parts)
+
+
 def audit_receipt(path: pathlib.Path, receipt: dict[str, Any], config: AuditConfig) -> dict[str, Any]:
     heldout_saved = as_float(receipt.get("heldout_shadow_saved_bytes"))
     net_saved = as_float(receipt.get("net_saved_bytes"))
@@ -215,6 +313,7 @@ def audit_receipt(path: pathlib.Path, receipt: dict[str, Any], config: AuditConf
     feature_source = str(receipt.get("feature_source") or "unknown")
     block = block_audit(receipt)
     rerun_command = complete_block_rerun_command(path, receipt, block)
+    posterior_rerun_command = block_posterior_rerun_command(path, receipt, block)
 
     checks = {
         "has_heldout": heldout_saved is not None,
@@ -248,6 +347,7 @@ def audit_receipt(path: pathlib.Path, receipt: dict[str, Any], config: AuditConf
         "promotion_blockers": blockers,
         "promotion_ready_shadow": promotion_ready,
         "complete_block_rerun_command": rerun_command,
+        "block_posterior_rerun_command": posterior_rerun_command,
         **block,
     }
 
@@ -407,6 +507,13 @@ def summarize(rows: list[dict[str, Any]], config: AuditConfig) -> dict[str, Any]
         and "complete_block_audit" in row.get("promotion_blockers", [])
         and (row.get("net_saved_bytes") or 0) > 0
     ][:8]
+    block_posterior_rerun_queue = [
+        row
+        for row in rows
+        if row.get("block_posterior_rerun_command")
+        and row.get("promotion_blockers") == ["block_regression_within_cap"]
+        and (row.get("net_saved_bytes") or 0) >= BEST_FORECAST - TARGET_SCORE
+    ][:4]
     substrate_groups: dict[str, dict[str, Any]] = {}
     for row in rows:
         key = f"{row.get('method') or 'unknown'} / {row.get('base_trace') or 'unknown'}"
@@ -454,6 +561,7 @@ def summarize(rows: list[dict[str, Any]], config: AuditConfig) -> dict[str, Any]
         "best_net_receipt": best_net,
         "promotion_blocker_counts": dict(sorted(blocker_counts.items())),
         "complete_block_rerun_queue": complete_block_rerun_queue,
+        "block_posterior_rerun_queue": block_posterior_rerun_queue,
         "substrate_summary": substrate_summary,
         "objective_selection": objective_selection(rows),
         "top_rows": rows[:20],
@@ -621,6 +729,108 @@ def render_md(summary: dict[str, Any]) -> str:
                 + " |"
             )
 
+    posterior_queue = summary.get("block_posterior_rerun_queue")
+    if isinstance(posterior_queue, list) and posterior_queue:
+        first_posterior = posterior_queue[0]
+        first_posterior = first_posterior if isinstance(first_posterior, dict) else {}
+        forecast_debt = BEST_FORECAST - TARGET_SCORE
+        queued_code_budget = (
+            as_int(first_posterior.get("added_code_bytes_estimate")) or 0
+        ) + BLOCK_POSTERIOR_CODE_BYTES_ESTIMATE
+        required_gross_after_router = forecast_debt + queued_code_budget
+        existing_gross = as_float(first_posterior.get("heldout_shadow_saved_bytes"))
+        available_degradation = (
+            existing_gross - required_gross_after_router
+            if existing_gross is not None
+            else None
+        )
+        required_retention_pct = (
+            required_gross_after_router * 100.0 / existing_gross
+            if existing_gross
+            else None
+        )
+        allowed_surrender_pct = (
+            100.0 - required_retention_pct
+            if required_retention_pct is not None
+            else None
+        )
+        visible_regression_bytes = as_float(
+            first_posterior.get("visible_block_regression_bytes")
+        )
+        visible_regression_share_pct = (
+            visible_regression_bytes * 100.0 / existing_gross
+            if visible_regression_bytes is not None and existing_gross
+            else None
+        )
+        lines.extend(
+            [
+                "",
+                "## Block-Posterior Replay Queue",
+                "",
+                "These complete-block receipts close the forecast gap but regress on",
+                "isolated blocks. The queued causal experiment mixes the base and raw",
+                "SRSTC experts with decoder-rebuilt fixed-point posterior weights.",
+                "It is not searching for a fresh forecast-gap improvement; it is testing",
+                "whether a replayable posterior can preserve enough of an already",
+                "target-closing SRSTC shadow gain while insuring exceptional blocks.",
+                "",
+                "Economics:",
+                "",
+                "```text",
+                f"required gross after router = {fmt_number(forecast_debt)} debt + {fmt_number(queued_code_budget)} code = {fmt_number(required_gross_after_router)}",
+                f"existing gross             = {fmt_number(existing_gross)}",
+                f"available degradation      = {fmt_number(available_degradation)}",
+                f"required retention         = {fmt_number(required_retention_pct)}%",
+                f"allowed surrender          = {fmt_number(allowed_surrender_pct)}%",
+                f"observed regression bytes  = {fmt_number(visible_regression_bytes)} across {fmt_number(first_posterior.get('visible_block_regression_count'))} of {fmt_number(first_posterior.get('visible_block_rows'))} blocks",
+                f"regression share of gross  = {fmt_number(visible_regression_share_pct)}%",
+                "```",
+                "",
+                "The small-scope block-posterior probe is a fixed-cost amortization check,",
+                "not counter-evidence to the mechanism: its role is to prove deterministic",
+                "causal improvement before the queued same-scope replay tests retention.",
+                "",
+                "| Receipt | Net Saved | Largest Regression | Counted Router Delta |",
+                "|---|---:|---:|---:|",
+            ]
+        )
+        for row in posterior_queue:
+            if not isinstance(row, dict):
+                continue
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        f"`{row.get('path')}`",
+                        fmt_number(row.get("net_saved_bytes")),
+                        fmt_number(row.get("largest_block_regression_bytes")),
+                        fmt_number(BLOCK_POSTERIOR_CODE_BYTES_ESTIMATE),
+                    ]
+                )
+                + " |"
+            )
+        lines.extend(["", "Commands:", ""])
+        for row in posterior_queue:
+            command = (
+                row.get("block_posterior_rerun_command")
+                if isinstance(row, dict)
+                else None
+            )
+            if isinstance(command, str) and command:
+                lines.extend(["```bash", command, "```", ""])
+        lines.extend(
+            [
+                "The lock-aware continuation helper selects this queue first:",
+                "",
+                "```bash",
+                "python3 projects/enwiki9/tools/streaming_retrieval_continue_shadow.py --refresh-audit",
+                "```",
+                "",
+                "Add `--run` only after it reports that the cmix heavy lock is clear.",
+                "",
+            ]
+        )
+
     queue = summary.get("complete_block_rerun_queue")
     if isinstance(queue, list) and queue:
         lines.extend(
@@ -667,8 +877,7 @@ def render_md(summary: dict[str, Any]) -> str:
                 "python3 projects/enwiki9/tools/streaming_retrieval_continue_shadow.py --refresh-audit",
                 "```",
                 "",
-                "Add `--run` only when the helper reports that the cmix heavy lock is clear,",
-                "or pass `--allow-while-heavy-lock` intentionally.",
+                "Add `--run` only when the helper reports that the cmix heavy lock is clear.",
                 "",
             ]
         )

@@ -65,13 +65,36 @@ If no run is active:
 
 ## Active Candidate Decision Tree
 
-Current lane:
+Prize-facing baseline:
 
 ```text
-cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
+fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1
 ```
 
-This candidate exists because:
+Current decision:
+
+```text
+run fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1 at canonical 10M
+  -> archive <= 1,631,581 with roundtrip/determinism/RSS: promote unchanged to exact 100M
+  -> archive ceiling miss or replay failure: retire or repackage this integration shape
+```
+
+Active target-bearing gate:
+
+```text
+active candidate: fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1
+scope: 10000000
+mode: --check-determinism --archive-ceiling 1631581
+guard: results/fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1/10m_target_gate_rss_guard.json
+program bytes: 256906
+```
+
+Supporting evidence is promising but not a result: the same backend/transform
+won by `46` archive bytes at exact `1M`, and historical sidecar `10M` evidence
+is `1,630,563`, below the target ceiling. The current guarded replay decides
+whether that transfers under canonical accounting.
+
+The prior cmix21 ladder is terminal memory-bracket evidence because:
 
 - `ppmd22400k` is the best nearby archive reference;
 - `ppmd22272k` passed exact `10M` replay but failed unchanged `100M` RSS by
@@ -95,39 +118,71 @@ This candidate exists because:
 - `ppmd21248k` passed exact `1,024`, `250,000`, `1,000,000`, and
   `10,000,000` byte replays, then failed unchanged `100M` RSS by `64` KiB
   before a scored archive or roundtrip.
-- `ppmd21120k` is the next PPMD-only cut. Its exact `1,024` byte replay passed
-  at archive `247`, roundtrip true, determinism true, and max sampled single
-  RSS `8,624,384` KiB.
+- `ppmd20992k` passed exact `10,000,000` bytes, then failed unchanged `100M`
+  RSS by `68` KiB before a scored archive or roundtrip.
+- `ppmd20864k` passed exact `10M` at archive `1,638,076`, then crossed the
+  unchanged `100M` RSS guard by `68` KiB before archive or roundtrip.
+- `ppmd20736k` passed the guarded `1,024`, `250,000`, and `1,000,000` byte
+  gates, then reached `10,472,644` KiB during its `10,000,000` gate. That is
+  `707,019` KiB above official decimal `10GB`, so the run was stopped without
+  an archive claim and the candidate was retired.
+- `ppmd20608k` passed `1,024` bytes, then exceeded official decimal `10GB` by
+  `240,207` KiB during the unchanged `250,000` byte gate. It is now a memory
+  bracket, not the active candidate.
 
-Current gate:
+Terminal cmix21 receipt:
 
 ```text
+candidate: cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1
 scope: 250000
 mode: --check-determinism
-guard: ppmd21120k_250000_determinism_rss_guard.json
+guard: ppmd20480k_250000_determinism_rss_guard.json
+verdict: official decimal memory failure by 3,275 KiB
 ```
 
-When `ppmd21120k` finishes `250,000` byte determinism:
+Active replacement gate:
+
+```text
+candidate: cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
+scope: 10000000
+mode: --check-determinism
+guard: ppmd20352k_10000000_determinism_rss_guard.json
+prior exact gate: 1000000 archive 174525, roundtrip true, determinism true
+```
+
+Do not resume from the retired `ppmd20736k` or bracketed `ppmd20608k` receipt.
+The `ppmd20480k` package restarted the lower-memory qualification ladder,
+passed `1,024` bytes, and then failed the official decimal memory check at
+`250,000` bytes. It is now a terminal memory bracket.
+
+Historical terminal handling table:
 
 | Result | Action |
 |---|---|
-| roundtrip true, determinism true, RSS pass | record exact `250,000`; promote unchanged to the next gate. |
+| roundtrip true, determinism true, RSS pass | record exact `10,000,000`; promote unchanged to the next gate. |
 | archive worse but still clean | record exact penalty; decide by memory-value table before promoting. |
 | RSS fail | record RSS failure; lower the smallest memory surface again. |
 | roundtrip fail | mark candidate as failed at this gate; do not promote. |
 | determinism fail | keep archive as non-deterministic evidence only; do not promote. |
 | crash or missing JSON | record failure mode; inspect guard JSON before retrying. |
 
-Use the decider before changing queue state:
+For historical cmix21 terminal handling, use the decider before changing queue
+state:
 
 ```bash
 python3 projects/enwiki9/tools/cmix21_gate_decider.py \
-  cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 \
+  cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 \
   --scope 250000
 ```
 
-Or use the active-gate wrapper, which reads the current certificate active gate
-and delegates the terminal action back to the decider:
+For the current sidecar gate, read `docs/status_receipt.json` first. If the
+gate is still running, wait. If it is terminal, record the result and apply the
+candidate `target_gate` promotion rule from
+`programs/fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1/meta.json`.
+
+The active-gate wrapper reads the current certificate active gate and delegates
+terminal actions to the decider, but non-cmix candidates may require
+candidate-specific archive ceilings and promotion rules:
 
 ```bash
 python3 projects/enwiki9/tools/cmix21_continue_active_gate.py --refresh
@@ -140,16 +195,18 @@ same decider-owned action:
 python3 projects/enwiki9/tools/cmix21_continue_active_gate.py --refresh --apply-terminal
 ```
 
-For a terminal pass or RSS failure, run the exact `apply_terminal_command`
-printed by the decider. It records the terminal evidence and regenerates the
-evidence views:
+For a terminal cmix21 pass or RSS failure, run the exact
+`apply_terminal_command` printed by the decider. It records the terminal
+evidence and regenerates the evidence views:
 
 ```bash
 <apply_terminal_command from cmix21_gate_decider.py>
 ```
 
 Do not hand-compose `--launch-next` or `--package-lower`; those flags are part
-of the printed command only when the terminal verdict supports them.
+of the printed command only when the terminal verdict supports them. For the
+sidecar candidate, use the recorded archive ceiling and `target_gate` metadata
+before constructing any promotion command.
 
 If `--apply-terminal` is used when the verdict is still running, incomplete, or
 a non-promotable failure state, the decider exits without executing commands.

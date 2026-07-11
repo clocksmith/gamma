@@ -19,6 +19,22 @@ python gamma.py game
 
 Engine-specific setup is in [src/engines/README.md](./src/engines/README.md).
 
+## Repository Layout
+
+The root is limited to stable entrypoints, project metadata, and tool configuration.
+
+| Path | Ownership |
+|---|---|
+| `src/` | Gamma runtime, engines, game, benchmarks, and integrations |
+| `projects/` | Self-contained research and distillation work |
+| `tools/` | Operator-facing utilities and model analysis |
+| `requirements/` | Engine and hardware-specific dependency manifests |
+| `docs/` | Canonical architecture and usage documentation |
+| `tests/` | Automated test suites |
+
+Keep generated reports under `reports/`, run output under its owning project, and
+new project-specific utilities beside that project rather than at repository root.
+
 ## CLI Surface
 
 ```bash
@@ -39,6 +55,8 @@ python gamma.py [command]
 ```bash
 python gamma.py help
 python gamma.py help benchmark
+python gamma.py help codegen
+python gamma.py game --comparison --help
 python gamma.py mind-meld --help
 ```
 
@@ -51,6 +69,7 @@ python gamma.py mind-meld --help
 - [src/mind_meld/README.md](./src/mind_meld/README.md): Mind Meld usage, configs, and operational guardrails
 - [flux/README.md](./flux/README.md): Flux install, CLI, and reference
 - [tools/README.md](./tools/README.md): project tooling and feedback loop commands
+- [requirements/README.md](./requirements/README.md): dependency profiles by engine and hardware
 - [projects/distillation/embedding/README.md](./projects/distillation/embedding/README.md): EmbeddingGemma distillation
 - [projects/distillation/translation/README.md](./projects/distillation/translation/README.md): TranslateGemma distillation
 - [src/functiongemma_training/README.md](./src/functiongemma_training/README.md): FunctionGemma training path

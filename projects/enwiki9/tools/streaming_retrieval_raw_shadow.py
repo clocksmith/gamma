@@ -25,6 +25,7 @@ from streaming_retrieval_shadow import (
     BandRouter,
     BitCounts,
     BoundedCounterTable,
+    FixedPointBlockPosterior,
     PartialByteState,
     RetrievalState,
     SplitTotals,
@@ -996,7 +997,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     totals = {name: SplitTotals() for name in ("train", "test", "all")}
     block_qbits: dict[int, SplitTotals] = {}
     proposed_block_qbits: dict[int, SplitTotals] = {}
+    raw_srstc_block_qbits: dict[int, SplitTotals] = {}
     block_fallback_state: dict[int, BlockFallbackStats] = {}
+    block_posterior = FixedPointBlockPosterior(
+        srstc_prior_ppm=args.block_posterior_srstc_prior_ppm,
+        weight_bits=args.block_posterior_weight_bits,
+    )
     selected_band_counts: Counter[str] = Counter()
     copy_type_counts: Counter[str] = Counter()
 
@@ -1191,8 +1197,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         elif args.byte_prior_blend_ppm > 0:
             corrected_p1 = blend_probability(corrected_p1, byte_prior, args.byte_prior_blend_ppm)
 
-        proposed_p1 = corrected_p1
         block = block_id(pos, args.block_bytes)
+        raw_srstc_p1 = corrected_p1
+        posterior_weight_ppm: int | None = None
+        if args.block_router_mode == "posterior":
+            corrected_p1 = block_posterior.mix(block, base_p1, raw_srstc_p1)
+            posterior_weight_ppm = block_posterior.srstc_weight_ppm
+        proposed_p1 = corrected_p1
         block_state = block_fallback_state.setdefault(block, BlockFallbackStats())
         if args.block_fallback_qbits > 0 and block_state.disabled:
             corrected_p1 = base_p1
@@ -1218,6 +1229,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
         base_qbits = qbits_for(bit, base_p1)
         candidate_qbits = qbits_for(bit, corrected_p1)
+        raw_srstc_qbits = qbits_for(bit, raw_srstc_p1)
         proposed_candidate_qbits = qbits_for(bit, proposed_p1)
         copy_p1 = copy_prior.p1 if copy_prior is not None else None
         if typed_prior_p1 is not None:
@@ -1281,6 +1293,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         proposed_block.rows += 1
         proposed_block.baseline_qbits += base_qbits
         proposed_block.candidate_qbits += proposed_candidate_qbits
+        raw_srstc_block = raw_srstc_block_qbits.setdefault(block, SplitTotals())
+        raw_srstc_block.rows += 1
+        raw_srstc_block.baseline_qbits += base_qbits
+        raw_srstc_block.candidate_qbits += raw_srstc_qbits
         block_state.proposed_baseline_qbits += base_qbits
         block_state.proposed_candidate_qbits += proposed_candidate_qbits
         if (
@@ -1327,6 +1343,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     "typed_retrieval": typed_prior_p1,
                     "copy": copy_prior.p1 if copy_prior is not None else None,
                     "byte_prior": byte_prior,
+                    "raw_srstc": raw_srstc_p1,
                     "proposed": proposed_p1,
                     "final": corrected_p1,
                 },
@@ -1350,6 +1367,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "qbits": {
                     "base": base_qbits,
                     "candidate": candidate_qbits,
+                    "raw_srstc": raw_srstc_qbits,
                     "proposed_candidate": proposed_candidate_qbits,
                     "gain": base_qbits - candidate_qbits,
                     "proposed_gain": base_qbits - proposed_candidate_qbits,
@@ -1380,6 +1398,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     ),
                 },
                 "block_delta": {
+                    "raw_srstc_gain_qbits": (
+                        raw_srstc_block.baseline_qbits
+                        - raw_srstc_block.candidate_qbits
+                    ),
                     "candidate_gain_qbits": (
                         block_total.baseline_qbits - block_total.candidate_qbits
                     ),
@@ -1387,6 +1409,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         proposed_block.baseline_qbits - proposed_block.candidate_qbits
                     ),
                     "fallback_disabled": block_state.disabled,
+                },
+                "block_posterior": {
+                    "mode": args.block_router_mode,
+                    "srstc_weight_ppm": posterior_weight_ppm,
                 },
             }
             trace_file.write(json.dumps(trace_row, sort_keys=True) + "\n")
@@ -1406,6 +1432,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 args.copy_channel_type_blends,
                 args.log_odds_mix,
             )
+        if args.block_router_mode == "posterior":
+            block_posterior.update(block, bit, base_p1, raw_srstc_p1)
         partial_state.observe(pos, bit)
         if partial_state.length == 8:
             for key in byte_keys:
@@ -1466,6 +1494,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     proposed_gain_qbits = sum(
         total.baseline_qbits - total.candidate_qbits for total in proposed_block_qbits.values()
     )
+    raw_srstc_gain_qbits = sum(
+        total.baseline_qbits - total.candidate_qbits
+        for total in raw_srstc_block_qbits.values()
+    )
+    raw_srstc_block_rows = [
+        {"block_id": bid, "rows": total.rows, "gain_bytes": total.gain_bytes}
+        for bid, total in sorted(raw_srstc_block_qbits.items())
+    ]
+    raw_srstc_block_rows.sort(key=lambda item: item["gain_bytes"])
 
     heldout_saved_bytes = (
         heldout_baseline.byte_count - heldout_candidate.byte_count if heldout_rows else None
@@ -1544,6 +1581,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "log_odds_mix": args.log_odds_mix,
         "router_decay_shift": args.router_decay_shift,
         "router_abstain_margin_qbits": args.router_abstain_margin_qbits,
+        "block_bytes": args.block_bytes,
+        "block_router_mode": args.block_router_mode,
+        "block_posterior_srstc_prior_ppm": args.block_posterior_srstc_prior_ppm,
+        "block_posterior_weight_bits": args.block_posterior_weight_bits,
         "block_fallback_qbits": args.block_fallback_qbits,
         "copy_channel": {
             "enabled": args.copy_channel_enabled,
@@ -1636,15 +1677,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "typed_retrieval_p1",
                 "copy_p1",
                 "byte_prior_p1",
+                "raw_srstc_p1",
                 "selected_expert",
                 "expert_scores_qbits",
                 "expert_weights_ppm",
                 "qbit_gain",
+                "raw_srstc_qbits",
                 "typed_retrieval_gain_vs_base",
                 "copy_gain_vs_base",
                 "copy_gain_vs_typed",
                 "copy_gain_vs_byte_prior",
                 "block_delta",
+                "block_posterior",
             ],
         },
         "typed_copy_channel": copy_channel.receipt(),
@@ -1661,6 +1705,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             + args.retrieval_table_cap_entries * 32
             + args.byte_table_cap_entries * 96
             + (args.copy_channel_cap_entries * COPY_ENTRY_RESIDENT_BYTES if args.copy_channel_enabled else 0)
+            + (32 if args.block_router_mode == "posterior" else 0)
         ),
         "largest_block_regression_bytes": largest_regression,
         "block_regression_count": block_regression_count,
@@ -1681,7 +1726,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             )[:64],
             "proposed_gain_bytes_before_fallback": proposed_gain_qbits / 2048.0,
         },
+        "block_router": {
+            "mode": args.block_router_mode,
+            "raw_srstc_gain_bytes_before_router": raw_srstc_gain_qbits / 2048.0,
+            "routed_gain_bytes_before_fallback": proposed_gain_qbits / 2048.0,
+            "posterior": (
+                block_posterior.receipt()
+                if args.block_router_mode == "posterior"
+                else None
+            ),
+        },
         "block_rows": block_rows,
+        "raw_srstc_block_rows_before_router": raw_srstc_block_rows,
         "proposed_block_rows_before_fallback": proposed_block_rows[:64],
         "split_qbit_totals": {
             name: {
@@ -1714,7 +1770,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "causality": (
             "raw bits are emitted MSB-first from data bytes; all base and retrieval "
-            "counters are updated only after encoding the current bit"
+            "counters and optional block-posterior weights are updated only after "
+            "encoding the current bit"
         ),
         "verdict": verdict,
     }
@@ -1759,6 +1816,14 @@ def main() -> int:
     parser.add_argument("--router-decay-shift", type=int, default=6)
     parser.add_argument("--router-abstain-margin-qbits", type=int, default=128)
     parser.add_argument("--block-bytes", type=int, default=16_384)
+    parser.add_argument(
+        "--block-router-mode",
+        choices=("none", "posterior"),
+        default="none",
+        help="causally mix the base and proposed SRSTC experts within each block",
+    )
+    parser.add_argument("--block-posterior-srstc-prior-ppm", type=int, default=500_000)
+    parser.add_argument("--block-posterior-weight-bits", type=int, default=24)
     parser.add_argument("--block-fallback-qbits", type=int, default=0)
     parser.add_argument("--copy-channel-enabled", action="store_true")
     parser.add_argument("--copy-channel-as-band", action="store_true")
@@ -1833,6 +1898,10 @@ def main() -> int:
         raise SystemExit("router settings must be nonnegative")
     if args.block_fallback_qbits < 0:
         raise SystemExit("--block-fallback-qbits must be nonnegative")
+    if not 0 < args.block_posterior_srstc_prior_ppm < 1_000_000:
+        raise SystemExit("--block-posterior-srstc-prior-ppm must be in (0, 1000000)")
+    if not 8 <= args.block_posterior_weight_bits <= 48:
+        raise SystemExit("--block-posterior-weight-bits must be in [8, 48]")
     if args.copy_channel_blend_ppm < 0 or args.copy_channel_blend_ppm > 1_000_000:
         raise SystemExit("--copy-channel-blend-ppm must be between 0 and 1000000")
     if (

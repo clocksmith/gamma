@@ -21,7 +21,9 @@ from typing import Any
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+REPO_ROOT = ROOT.parent.parent
 RESULTS_DEFAULT = ROOT / "results"
+PROGRAMS_DEFAULT = ROOT / "programs"
 OUT_JSON_DEFAULT = ROOT / "upper_bound_certificate.json"
 OUT_MD_DEFAULT = ROOT / "UPPER_BOUND_CERTIFICATE.md"
 
@@ -53,11 +55,8 @@ BEST_FORECAST = {
     "source": "results/forecast_frontier/forecasts.jsonl",
 }
 
-ACTIVE_CANDIDATE_ID = (
-    "cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_"
-    "ppmdguard2_rcm32_bufthirtysecond_minmaps_v1"
-)
-RUNNING_CANDIDATE_GLOB = "cmix21_text_mmap_paq5_ppmd*fxcmrcm20*/*rss_guard.json"
+ACTIVE_CANDIDATE_ID = "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1"
+RUNNING_CANDIDATE_GLOB = "*/*rss_guard.json"
 GUARD_SCOPE_RE = re.compile(r"_(?P<scope>[0-9]+).*rss_guard[.]json$")
 
 
@@ -233,11 +232,10 @@ def load_guard(path: pathlib.Path) -> dict[str, Any] | None:
 
 def latest_gate_guard(program_id: str, scope: int) -> tuple[pathlib.Path, dict[str, Any]] | None:
     result_dir = RESULTS_DEFAULT / program_id
-    matches = sorted(result_dir.glob(f"*_{scope}*rss_guard.json"))
     loaded: list[tuple[pathlib.Path, dict[str, Any]]] = []
-    for path in matches:
+    for path in sorted(result_dir.glob("*rss_guard.json")):
         guard = load_guard(path)
-        if guard is not None:
+        if guard is not None and guard_scope(path, guard) == scope:
             loaded.append((path, guard))
     if not loaded:
         return None
@@ -260,16 +258,54 @@ def guard_scope_from_path(path: pathlib.Path) -> int | None:
         return None
 
 
+def guard_candidate_scope_from_command(guard: dict[str, Any]) -> tuple[str, int] | None:
+    command = guard.get("command")
+    if not isinstance(command, list):
+        return None
+    parts = [str(part) for part in command]
+    try:
+        driver_index = parts.index("projects/enwiki9/lib/driver.py")
+    except ValueError:
+        return None
+    if driver_index + 1 >= len(parts):
+        return None
+    candidate = parts[driver_index + 1]
+    if "--limit" not in parts:
+        return None
+    limit_index = parts.index("--limit")
+    if limit_index + 1 >= len(parts):
+        return None
+    try:
+        scope = int(parts[limit_index + 1])
+    except ValueError:
+        return None
+    return candidate, scope
+
+
+def guard_scope(path: pathlib.Path, guard: dict[str, Any]) -> int | None:
+    from_command = guard_candidate_scope_from_command(guard)
+    if from_command is not None:
+        return from_command[1]
+    return guard_scope_from_path(path)
+
+
 def latest_running_gate() -> tuple[str, int, pathlib.Path, dict[str, Any]] | None:
     loaded: list[tuple[str, int, pathlib.Path, dict[str, Any]]] = []
     for path in sorted(RESULTS_DEFAULT.glob(RUNNING_CANDIDATE_GLOB)):
         guard = load_guard(path)
-        scope = guard_scope_from_path(path)
-        if guard is None or scope is None:
+        if guard is None:
             continue
         if guard.get("status") != "running":
             continue
-        loaded.append((path.parent.name, scope, path, guard))
+        from_command = guard_candidate_scope_from_command(guard)
+        if from_command is not None:
+            candidate, scope = from_command
+        else:
+            scope = guard_scope_from_path(path)
+            if scope is None:
+                continue
+            candidate = path.parent.name
+        loaded.append((candidate, scope, path, guard))
     if not loaded:
         return None
     return max(
@@ -281,11 +317,42 @@ def latest_running_gate() -> tuple[str, int, pathlib.Path, dict[str, Any]] | Non
     )
 
 
+def latest_active_cmix_meta() -> tuple[str, pathlib.Path, str] | None:
+    loaded: list[tuple[str, pathlib.Path, pathlib.Path]] = []
+    for meta_path in sorted(PROGRAMS_DEFAULT.glob("cmix21_text_mmap_paq5_ppmd*fxcmrcm20*/meta.json")):
+        try:
+            meta = json.loads(meta_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if meta.get("status") != "active":
+            continue
+        latest_result = meta.get("latest_result")
+        if not isinstance(latest_result, str) or not latest_result:
+            continue
+        result_path = REPO_ROOT / latest_result
+        if not result_path.exists():
+            continue
+        loaded.append((meta_path.parent.name, result_path, latest_result))
+    if not loaded:
+        return None
+    candidate, result_path, latest_result = max(
+        loaded,
+        key=lambda item: item[1].stat().st_mtime,
+    )
+    return candidate, result_path, f"active cmix meta latest_result: {latest_result}"
+
+
 def active_candidate_context() -> tuple[str, int | None, str]:
     running = latest_running_gate()
     if running is not None:
         candidate, scope, path, _guard = running
         return candidate, scope, f"running RSS guard receipt: {path.relative_to(ROOT)}"
+    active_cmix = latest_active_cmix_meta()
+    if active_cmix is not None:
+        candidate, _path, source = active_cmix
+        return candidate, None, source
+    if not ACTIVE_CANDIDATE_ID.startswith("cmix21_text_mmap_"):
+        return ACTIVE_CANDIDATE_ID, None, "explicit non-cmix active candidate constant"
     return ACTIVE_CANDIDATE_ID, None, "fallback active candidate constant"
 
 

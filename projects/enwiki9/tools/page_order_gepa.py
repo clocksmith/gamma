@@ -96,6 +96,22 @@ def minhash(tokens: tuple[bytes, ...], bands: int = 8) -> tuple[int, ...]:
     return tuple(out)
 
 
+def simhash(tokens: tuple[bytes, ...], bits: int = 64) -> bytes:
+    """Return a locality-preserving content signature for lexicographic sort."""
+    if not tokens:
+        return b"\0" * (bits // 8)
+    accum = [0] * bits
+    for token in tokens:
+        digest = int.from_bytes(hashlib.blake2s(token, digest_size=bits // 8).digest(), "big")
+        for bit in range(bits):
+            accum[bit] += 1 if digest & (1 << bit) else -1
+    value = 0
+    for bit, weight in enumerate(accum):
+        if weight >= 0:
+            value |= 1 << bit
+    return value.to_bytes(bits // 8, "big")
+
+
 def shape_sig(page: bytes) -> bytes:
     sig = bytearray()
     for raw in page.splitlines()[:160]:
@@ -187,6 +203,7 @@ def page_features(page: bytes, pid: int) -> dict[str, Any]:
         "line_bucket": bucket(page.count(b"\n")),
         "tokens": set(token_set),
         "minhash": minhash(token_set),
+        "simhash": simhash(token_set),
     }
 
 
@@ -209,6 +226,7 @@ FEATURES = {
     "mh2": lambda f: f["minhash"][:2],
     "mh3": lambda f: f["minhash"][:3],
     "mh4": lambda f: f["minhash"][:4],
+    "simhash": lambda f: f["simhash"],
 }
 
 
@@ -216,9 +234,11 @@ SEEDS = [
     ("geometry", ("redirect", "category", "template", "topic")),
     ("geometry_title", ("redirect", "category", "template", "topic", "title")),
     ("geometry_suffix", ("redirect", "category", "template", "topic", "title_suffix")),
+    ("geometry_simhash", ("redirect", "category", "template", "topic", "simhash")),
     ("topic_mh3", ("topic", "mh3", "kind", "size")),
     ("template_params", ("template", "params", "category", "title_suffix")),
     ("shape_topic", ("shape", "topic", "kind", "size")),
+    ("kind_simhash", ("kind", "simhash", "shape", "size")),
 ]
 
 
@@ -232,6 +252,7 @@ def candidate_specs(max_specs: int) -> list[tuple[str, tuple[str, ...]]]:
         "kind",
         "shape",
         "mh3",
+        "simhash",
         "namespace",
     ]
     mids = ["title_prefix", "title_suffix", "rev_title", "params", "first_link", "mh2", "size"]
@@ -316,7 +337,8 @@ def main() -> int:
     parser.add_argument("--max-candidates", type=int, default=250)
     args = parser.parse_args()
 
-    data = args.data.read_bytes()[: args.limit]
+    with args.data.open("rb") as handle:
+        data = handle.read(args.limit)
     head, pages, tail, ids = split_pages(data)
     if not pages:
         raise SystemExit("no pages found")

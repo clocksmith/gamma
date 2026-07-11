@@ -303,6 +303,7 @@ def run_triage_gate(
     baseline: str,
     lock_path: pathlib.Path,
     update_meta: bool,
+    archive_ceiling: int | None,
 ) -> dict[str, Any]:
     cmd = [
         sys.executable,
@@ -319,6 +320,8 @@ def run_triage_gate(
     ]
     if update_meta:
         cmd.insert(3, "--update-meta")
+    if archive_ceiling is not None:
+        cmd.extend(["--archive-ceiling", f"{gate_size}:{archive_ceiling}"])
 
     proc = subprocess.run(
         cmd,
@@ -402,6 +405,7 @@ def run_queue(args: argparse.Namespace, candidates: list[dict[str, Any]]) -> dic
                 baseline=args.baseline,
                 lock_path=args.lock_path,
                 update_meta=not args.no_update_meta,
+                archive_ceiling=args.archive_ceilings.get(gate_size),
             )
             gate = extract_gate(run)
             delta = archive_delta(gate)
@@ -436,6 +440,13 @@ def main() -> int:
         default=["candidate", "track_source_before_evolution"],
     )
     parser.add_argument("--gate-size", action="append", type=int, default=None)
+    parser.add_argument(
+        "--archive-ceiling",
+        action="append",
+        default=[],
+        metavar="LIMIT:BYTES",
+        help="target-bearing archive ceiling passed to candidate triage; repeatable",
+    )
     parser.add_argument("--advance-after-gate", type=int, default=250000)
     parser.add_argument("--baseline", default=DEFAULT_BASELINE)
     parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK)
@@ -448,6 +459,16 @@ def main() -> int:
     parser.add_argument("--skip-transform-noop", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--skip-known-transform-sha", action=argparse.BooleanOptionalAction, default=True)
     args = parser.parse_args()
+
+    args.archive_ceilings = {}
+    for value in args.archive_ceiling:
+        if ":" not in value:
+            raise SystemExit("--archive-ceiling values must be LIMIT:BYTES")
+        raw_limit, raw_bytes = value.split(":", 1)
+        limit, ceiling = int(raw_limit), int(raw_bytes)
+        if limit <= 0 or ceiling <= 0:
+            raise SystemExit("--archive-ceiling LIMIT and BYTES must be positive")
+        args.archive_ceilings[limit] = ceiling
 
     if args.top <= 0:
         raise SystemExit("--top must be positive")
@@ -491,6 +512,7 @@ def main() -> int:
         "baseline": args.baseline,
         "gate_sizes": args.gate_size,
         "advance_after_gate": args.advance_after_gate,
+        "archive_ceilings": args.archive_ceilings,
         "lock_path": str(args.lock_path),
         "wait": args.wait,
         "selected": candidates,

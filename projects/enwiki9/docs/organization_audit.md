@@ -8,17 +8,18 @@ benchmark report and does not launch or require any scorer work.
 Current shallow workspace observations:
 
 ```text
-program directories under programs/: 522
+program directories under programs/: 532
 registered programs in index.json: 225
-docs file entries under docs/: 23
-tools files under tools/: 79
+docs file entries under docs/: 30
+tools files under tools/: 86
 active: 24
 candidate: 69
 measured_negative: 77
+track_source_before_evolution: 10
 blocked_dependency: 12
 retired: 340
-untracked nonignored entries: 0
-modified tracked entries: 8
+untracked nonignored entries: 55
+modified tracked entries: 55
 ```
 
 Interpretation:
@@ -27,9 +28,13 @@ Interpretation:
 - `index.json` is intentionally narrower than the filesystem;
 - generated inventory should be refreshed whenever receipt/audit rows change so
   status receipts and organization docs share the same counts;
-- the `ppmd21248k` `100M` gate is recorded as an RSS failure; the lower
-  `ppmd21120k` bracket is packaged, has a `1K` pass receipt, and exposes its
-  unchanged `250K` gate as the launchable active lane.
+- the PPMD-only ladder is retired after the `ppmd20352k` package crossed the
+  official decimal 10 GB limit at 250K; the active
+  `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`
+  package instead halves the large FXCM cmC2 tables and restores the original
+  PAQ rolling buffer. Its exact 250K receipt preserves the 45,178-byte archive
+  while reducing peak RSS to 8,677,444 KiB, and its unchanged 1M replay is the
+  active heavy gate.
 - `tools/enwiki9_delayed_status_check.sh` now reports live process RSS,
   `cmix21_gate_decider.py` output, and any unguarded `cmix21-mmap-bin`
   process outside the RSS-guard tree.
@@ -52,8 +57,11 @@ The following ownership documents now exist:
 | `docs/shadow_coder_spec.md` | Residual/SSE trace schema and validation contract. |
 | `docs/residual_shadow_matrix.md` | Generated matrix of cached residual/SSE shadow receipts and constructive-proof status. |
 | `docs/streaming_retrieval_mixer.md` | Generated causal sketch-retrieval algorithm, receipt schema, implementation queue, and kill gates. |
+| `docs/streaming_retrieval_block_regime_audit.md` | Offline teacher-only SRSTC regression labels and weak-positive controls. |
+| `docs/streaming_retrieval_block_teacher_manifest.jsonl` | All `4,000` block-gain labels and contiguous teacher splits; never a decoder-side lookup. |
 | `tools/streaming_retrieval_shadow.py` | Exact-shadow SRSTC/sketch-retrieval scorer over cached residual traces. |
-| `tools/streaming_retrieval_continue_shadow.py` | Safe continuation helper for SRSTC complete-block reruns, guarded by the cmix heavy lock by default. |
+| `tools/streaming_retrieval_block_regime_audit.py` | Generates the teacher-only block audit and training manifest from complete receipt rows. |
+| `tools/streaming_retrieval_continue_shadow.py` | Safe continuation helper that prioritizes the target-closing block-posterior replay and honors the cmix heavy lock by default. |
 | `docs/embedding_teacher_rules.md` | Offline embedding-teacher boundaries and distilled-rule rules. |
 | `docs/research_register.md` | Strategy and novel-algorithm register with promote and kill gates. |
 | `docs/status_receipt.md` / `docs/status_receipt.json` | Generated one-page operator state from certificate, lock, gate, and RSS artifacts. |
@@ -81,8 +89,9 @@ programs/ contains more candidate directories than index.json registers
 Action:
 
 ```text
-Use candidate_audit.py and candidate_triage.py after the active cmix21 result is
-recorded. Register, retire, or source-boundary-block each unregistered folder.
+Use candidate_audit.py and candidate_triage.py after the active sidecar result
+is recorded. Register, retire, or source-boundary-block each unregistered
+folder.
 ```
 
 ### Generated Inventory
@@ -156,7 +165,7 @@ bytes are counted and whose gains are exact.
 Problem:
 
 ```text
-The public reproduction lane can be confused with the active cmix21 winner
+The public reproduction lane can be confused with the active target-bearing
 path.
 ```
 
@@ -164,7 +173,7 @@ Action:
 
 ```text
 Keep it as an accounting and reproducibility anchor. Do not substitute it for
-the active cmix21 promotion path.
+the active sidecar promotion path.
 ```
 
 ## Claim Hygiene

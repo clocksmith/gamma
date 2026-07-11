@@ -32,22 +32,42 @@ Current facts:
   `external/fx2-cmix/src/readalike_prepr/data/new_article_order` exists.
 - Build script `external/fx2-cmix/build_and_construct_comp.sh` exists.
 - Exact upstream package `external/fx2-cmix/run/cmix` is absent.
-- Candidate package `programs/fx2cmix_public_repro_v1/cmix` is absent.
+- Candidate root-binary control package
+  `programs/fx2cmix_public_repro_v1/cmix` exists at `680,876` bytes with
+  SHA-256 `6fdccda4b637dc07160378df82d96957db8e32e932152856d99feb664b987590`.
 - Required exact-build tools reported absent: `clang++-17`,
   `llvm-profdata-17`, `upx-ucl`.
 
 Interpretation:
 
 ```text
-Lane 0 can validate local control packaging from the root binary, but it cannot
-claim exact public executable-size reproduction until the upstream package or
-equivalent build-tool path is present and counted.
+Lane 0 can validate local control packaging from the root binary. The control
+is `239,413` bytes larger than the public `441,463`-byte executable, so it
+cannot claim exact public executable-size reproduction until the upstream
+package or equivalent build-tool path is present and counted.
 ```
 
 This lane must stay separate from:
 
 - Lane 1: experimental `cmix21` memory shaping.
 - Lane 2: residual, embedding-teacher, manifold, or soft-state probes.
+
+## No Exact Top-Three Prefix Matrix
+
+This checkout does not contain a clean exact `1M`/`10M` calibration matrix for
+the three published submission programs. In particular:
+
+- the local `fx2-cmix` lane has source and a `680,876`-byte control package,
+  but not the exact public `441,463`-byte executable package;
+- an exact upstream `fx-cmix` submission package is not present as its own
+  local lane;
+- an exact upstream `fast cmix` submission package is not present as its own
+  local lane.
+
+Local `fx2cmix_recovered_*`, cmix21, geometry-order, and core-tune prefix rows
+are derivative experiments. They must not be labeled as exact prefix results
+for the published top-three submissions. The absence is not repaired by
+running the public fx2 full-corpus-specialized path on an arbitrary prefix.
 
 ## Why Prefix Gates Are Invalid Here
 
@@ -110,6 +130,11 @@ Run the guarded full reproduction:
 python3 projects/enwiki9/tools/fx2_public_repro_queue.py --run-guarded
 ```
 
+The guarded runner enforces the official decimal `10GB` ceiling as
+`9,765,625` KiB over aggregate process-tree RSS. Its terminal metadata record
+attaches the guard JSON to the full result rather than relying on a separate
+unlinked memory receipt.
+
 The success condition is not a forecast. The result must prove:
 
 - restored bytes equal `projects/enwiki9/data/enwik9`;
@@ -117,4 +142,4 @@ The success condition is not a forecast. The result must prove:
 - `program_size` equals the counted fx2-cmix executable/package bytes for this
   lane;
 - `hutter_score = compressed_size + program_size`;
-- RSS guard did not trip.
+- aggregate process-tree RSS stayed at or below `9,765,625` KiB.

@@ -62,6 +62,13 @@ Mind Meld canonical docs: [../src/mind_meld/README.md](../src/mind_meld/README.m
 | `view_sessions.py` | Inspect saved game sessions |
 | `log_analyzer.py` | Parse and classify failures from logs |
 | `auto_fixer.py` | Suggest fixes for common failure patterns |
+| `model_analysis/extract_attention.py` | Inspect attention for a repeated-token prompt |
+| `model_analysis/extract_probabilities.py` | Inspect next-token probabilities |
+| `model_analysis/generate_texture_pack.py` | Export a compact attention texture dataset |
+| `model_analysis/generate_tree_data.py` | Export the full canvas/context prompt tree |
+
+Model-analysis details and artifact locations are in
+[model_analysis/README.md](./model_analysis/README.md).
 
 ### Feedback Loop
 

@@ -1,0 +1,224 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "active",
+  "description": "cmix21 PAQ5 text-mode candidate with the proven 20352 KiB PPMD cap, global FXCM cmC2 division by two, FXCM run-context division by 20, and the original 16 MiB PAQ rolling buffer restored to prevent reduced-buffer stale-index crashes.",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "Global cmC2 division is the only measured single allocation cut large enough to clear the decimal 10 GB contract. Prior FXCM2 candidates stayed near 8.95 GiB at 10M but crashed after the artificially reduced 64 KiB rolling buffer wrapped. Restoring the original 16 MiB buffer should remove that crash mechanism for negligible RSS cost while retaining more than the external cmix21 score margin.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=20 -DCMIX_PPMD_MEMORY_KB=20352 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=8 -DCMIX_PAQ8_BUF_DIV=1 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=20 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=1",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=20",
+      "-DCMIX_PPMD_MEMORY_KB=20352",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=8",
+      "-DCMIX_PAQ8_BUF_DIV=1",
+      "-DCMIX_FXCM_CMC2_DIV=2",
+      "-DCMIX_FXCM_RCM_DIV=20",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=1"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386681,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 564260,
+    "payload_sha256": {
+      "cmix.bin.gz": "cbc9a8c978165f0da26da526f1699c062a6a4ee83eff8240d2f6515c6616f020",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "20",
+            "CMIX_PPMD_MEMORY_KB": "20352",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "8",
+            "CMIX_PAQ8_BUF_DIV": "1",
+            "CMIX_FXCM_CMC2_DIV": "2",
+            "CMIX_FXCM_RCM_DIV": "20",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "1"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {
+    "1024_determinism_replay": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/2026-07-11T111858.json",
+      "result_json_bytes": 1413,
+      "result_json_mtime_utc": "2026-07-11T15:18:58+00:00",
+      "result_json_sha256": "abe56dd67ab69f29e6353ec49e8b0f5b3d628a86d93813d1a4207df81d8297fe",
+      "data_size": 1024,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 247,
+      "program_size": 564260,
+      "hutter_score": 564507,
+      "bits_per_byte": 1.929688,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "ce2df2d79044233226d91f700e0b1127786b30116229b80ac2cb78f8df4bb481",
+      "compress_time_s": 98.6285,
+      "decompress_time_s": 99.2019,
+      "rss_guard_json": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/fxcm2_buffull_1024_determinism_rss_guard.json",
+      "rss_guard_json_bytes": 954,
+      "rss_guard_json_mtime_utc": "2026-07-11T15:18:59+00:00",
+      "rss_guard_json_sha256": "e21d814ea191d2765570e20a4c34ef03c56cf2140e77158ed79fe0ec663e0cfb",
+      "rss_guard_kib": 10485760,
+      "rss_guard_limit_mode": "max_single",
+      "max_sampled_single_rss_kib": 7419716,
+      "max_sampled_tree_rss_kib": 7439076,
+      "rss_guard_exceeded": false,
+      "rss_guard_returncode": 0,
+      "rss_guard_status": "complete",
+      "rss_sample_count": 299,
+      "official_decimal_limit_kib": 9765625,
+      "official_decimal_over_limit_kib": 0,
+      "guard_failure": null,
+      "notes": [
+        "1024 gate passed with roundtrip, determinism, and official decimal RSS margin."
+      ]
+    },
+    "250000_determinism_replay": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/2026-07-11T114129.json",
+      "result_json_bytes": 1418,
+      "result_json_mtime_utc": "2026-07-11T15:41:29+00:00",
+      "result_json_sha256": "5721fc4273e89657a0309ab8a33f9956cf9c57ef82dc48697ea31e985f6f880a",
+      "data_size": 250000,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "compressed_size": 45178,
+      "program_size": 564260,
+      "hutter_score": 609438,
+      "bits_per_byte": 1.445696,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "2e7431863ed524b14bd34644a242c90b2a26b8bd684cc9a58d8d28c86c35ab48",
+      "compress_time_s": 443.216,
+      "decompress_time_s": 446.7131,
+      "rss_guard_json": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/fxcm2_buffull_250000_determinism_rss_guard.json",
+      "rss_guard_json_bytes": 960,
+      "rss_guard_json_mtime_utc": "2026-07-11T15:41:29+00:00",
+      "rss_guard_json_sha256": "ef28486ba0d81be34b32a2cef1cd64bc2b5789f1c54435f7970b7a1da761c7c5",
+      "rss_guard_kib": 10485760,
+      "rss_guard_limit_mode": "max_single",
+      "max_sampled_single_rss_kib": 8677444,
+      "max_sampled_tree_rss_kib": 8696792,
+      "rss_guard_exceeded": false,
+      "rss_guard_returncode": 0,
+      "rss_guard_status": "complete",
+      "rss_sample_count": 1335,
+      "official_decimal_limit_kib": 9765625,
+      "official_decimal_over_limit_kib": 0,
+      "guard_failure": null,
+      "notes": [
+        "250000 gate passed with roundtrip, determinism, and RSS guard.",
+        "Guard artifact: projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/fxcm2_buffull_250000_determinism_rss_guard.json"
+      ]
+    },
+    "1000000_determinism_replay": {
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/2026-07-11T125536.json",
+      "result_json_bytes": 1421,
+      "result_json_mtime_utc": "2026-07-11T16:55:36+00:00",
+      "result_json_sha256": "ea4d751e4e7ef9d45eb90d08029e2a62c397255aafda8b97ddfdcd41783f0c59",
+      "data_size": 1000000,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "compressed_size": 174525,
+      "program_size": 564260,
+      "hutter_score": 738785,
+      "bits_per_byte": 1.3962,
+      "roundtrip_ok": true,
+      "determinism": true,
+      "compressed_sha256": "78d0500e6976ee3a960141c0462504fe28c35fe3d35f5ed808b2687e6d8b84ec",
+      "compress_time_s": 1472.9168,
+      "decompress_time_s": 1471.0775,
+      "rss_guard_json": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_1000000_determinism_rss_guard.json",
+      "rss_guard_json_bytes": 970,
+      "rss_guard_json_mtime_utc": "2026-07-11T16:55:37+00:00",
+      "rss_guard_json_sha256": "7054e1a5fdd079e22bd3f5057a6739bb75da72f06761b89eba8bb0fd56df6b5b",
+      "rss_guard_kib": 10485760,
+      "rss_guard_limit_mode": "max_single",
+      "max_sampled_single_rss_kib": 8831176,
+      "max_sampled_tree_rss_kib": 8852104,
+      "rss_guard_exceeded": false,
+      "rss_guard_returncode": 0,
+      "rss_guard_status": "complete",
+      "rss_sample_count": 4418,
+      "official_decimal_limit_kib": 9765625,
+      "official_decimal_over_limit_kib": 0,
+      "guard_failure": null,
+      "notes": [
+        "1000000 gate passed with roundtrip, determinism, and RSS guard.",
+        "Guard artifact: projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_1000000_determinism_rss_guard.json"
+      ]
+    }
+  },
+  "verdict": "pass",
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/2026-07-11T125536.json"
+}

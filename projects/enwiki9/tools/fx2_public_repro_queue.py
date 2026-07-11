@@ -41,6 +41,7 @@ LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
 BUSY_CODE = 75
 
 FULL_ENWIK9_BYTES = 1_000_000_000
+OFFICIAL_DECIMAL_10GB_KIB = 10_000_000_000 // 1024
 PUBLIC_TARGET = {
     "program": "fx2-cmix",
     "total_score": 110_793_128,
@@ -59,6 +60,13 @@ def file_size(path: pathlib.Path) -> int | None:
         return path.stat().st_size
     except OSError:
         return None
+
+
+def load_json(path: pathlib.Path) -> dict[str, Any]:
+    payload = json.loads(path.read_text())
+    if not isinstance(payload, dict):
+        raise ValueError(f"expected JSON object: {path}")
+    return payload
 
 
 def sha256_file(path: pathlib.Path) -> str:
@@ -363,7 +371,12 @@ def save_result(result: dict[str, Any]) -> pathlib.Path:
     return path
 
 
-def record_result(result_path: pathlib.Path, status: str, verdict: str) -> None:
+def record_result(
+    result_path: pathlib.Path,
+    status: str,
+    verdict: str,
+    guard_path: pathlib.Path | None = None,
+) -> None:
     command = [
         sys.executable,
         str(RECORD),
@@ -377,6 +390,8 @@ def record_result(result_path: pathlib.Path, status: str, verdict: str) -> None:
         "--verdict",
         verdict,
     ]
+    if guard_path is not None:
+        command.extend(["--guard-json", str(guard_path)])
     proc = run_command(command, REPO_ROOT)
     if proc.returncode != 0:
         raise SystemExit(proc.stderr.strip() or proc.stdout.strip())
@@ -452,7 +467,9 @@ def run_guarded(check_determinism: bool) -> int:
         sys.executable,
         str(RSS_GUARD),
         "--limit-kib",
-        "10485760",
+        str(OFFICIAL_DECIMAL_10GB_KIB),
+        "--limit-mode",
+        "tree",
         "--sample-interval",
         "1",
         "--guard-json",
@@ -469,6 +486,24 @@ def run_guarded(check_determinism: bool) -> int:
     if check_determinism:
         command.append("--check-determinism")
     proc = subprocess.run(command, cwd=REPO_ROOT)
+    result_paths = sorted(
+        (path for path in RESULTS_DIR.glob("*.json") if path != guard_json),
+        key=lambda path: path.stat().st_mtime_ns,
+    )
+    if guard_json.exists() and result_paths:
+        result = load_json(result_paths[-1])
+        roundtrip_ok = result.get("roundtrip_ok") is True
+        record_result(
+            result_paths[-1],
+            "active" if roundtrip_ok else "measured_negative",
+            (
+                "Full public fx2-cmix reproduction completed with exact restored bytes "
+                "and an attached official decimal-memory guard."
+                if roundtrip_ok
+                else "Full public fx2-cmix reproduction failed before exact restored bytes."
+            ),
+            guard_json,
+        )
     return int(proc.returncode)
 
 

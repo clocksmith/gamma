@@ -95,12 +95,23 @@ pip install -r requirements.txt
 python gamma.py game  # Run the game
 ```
 
-## No time estimates
+## No engineering-work time estimates
 
-- never estimate work in hours, days, weeks, or any other time unit, in code, comments, commit messages, status updates, receipts, or chat replies
-- do not say "~30 min", "~2 hr", "multi-day", "quick", "long-running" as size proxies for engineering work
-- describe what the work IS — the file to change, the function to add, the schema field to extend, the named blocker to fix — not how long it should take
-- if scope must be conveyed, list the concrete deltas (lines/files/symbols touched) instead of a duration
+- Do not estimate how long coding, debugging, refactoring, documentation,
+  research, cleanup, or other engineering work will take in hours, days, weeks,
+  or other time units in code, comments, commit messages, status updates,
+  receipts, or chat replies.
+- Do not use duration phrases such as "~30 min", "~2 hr", "multi-day",
+  "quick", or "long-running" as size proxies for engineering work.
+- For engineering scope, describe what the work is: the file to change, the
+  function to add, the schema field to extend, the named blocker to fix, or the
+  concrete deltas such as files, symbols, and receipts touched.
+- This restriction does not apply to already-running processes, benchmark
+  jobs, training runs, compression gates, downloads, or other live operations
+  with observable counters. For those, provide runtime/finish estimates when
+  useful, based on measured progress such as bytes, blocks, samples, log steps,
+  subprocess stage, or repeated timestamps. State the basis and uncertainty
+  when progress is nonlinear or stage-dependent.
 
 ## Pick the real fix
 

@@ -209,6 +209,19 @@ Treat this translation distillation work as two separate continuous workflows:
 
 These workflows are intentionally decoupled. Training and eval may still be running while the rebuild step is rerun repeatedly; the rebuild step must stay safe, resumable, and idempotent against partial data.
 
+## Maintenance Utilities
+
+Project-specific dataset utilities live in `pipeline/`:
+
+```bash
+python projects/distillation/translation/pipeline/validate_existing_rows.py --help
+python projects/distillation/translation/pipeline/expand_synthetic_en_es_pairs.py --help
+```
+
+`expand_synthetic_en_es_pairs.py` rewrites the configured shard set and records
+its seed and generation settings in the shard manifest. Review its target path
+before running it. Historical operator notes live under `runs/notes/`.
+
 ## Deterministic sweep + scoreboard
 
 Use this script to evaluate Stage B distillation checkpoints and update scoreboard artifacts after each eval row:

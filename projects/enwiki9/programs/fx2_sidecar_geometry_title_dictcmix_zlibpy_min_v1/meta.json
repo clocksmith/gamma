@@ -1,0 +1,86 @@
+{
+  "id": "fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1",
+  "family": "fx2-sc-geometry-order",
+  "status": "measured_negative",
+  "parent": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1",
+  "description": "Minimized FX2-SC byte-split/direct/extra/page-match backend with the exact measured reversible geometry-title transform payload.",
+  "hypothesis": "The sidecar backend's exact 1M geometry-title archive win can persist at 10M, while minimized packaging removes enough program debt to close the calibrated 109,500,000-byte target gap.",
+  "deps": [
+    "stdlib:lzma",
+    "stdlib:zlib",
+    "C++ runtime for the bundled fx2 sidecar binary"
+  ],
+  "build_defines": [
+    "SEED=923",
+    "UPDATE_LIMIT=3000",
+    "DISABLE_SIDECAR_MIXERS",
+    "SIDECAR_BYTE_MODEL",
+    "SIDECAR_BYTE_SPLIT",
+    "SIDECAR_NO_INDIRECT",
+    "SIDECAR_EXTRA_MATCH",
+    "SIDECAR_PAGE_MATCH"
+  ],
+  "build": {
+    "program_files": {
+      "c": 155876,
+      "d": 100065,
+      "p": 894,
+      "program.py": 71,
+      "total": 256906
+    },
+    "payload_sha256": {
+      "c": "7715a2f99ec37ae5cdfd67757377a6fbba1f7ded2671387f9bc01cc510b1acb9",
+      "d": "ef62bdf002523de2039ed57acb4b51c6a54a7368199a44b8fac6188fd39abc8b",
+      "p": "80f546d01590d568e73d6e5b4d6bdaf26aed45784dee0589bf7bd3451ec617f8",
+      "program.py": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
+    },
+    "backend_source": "fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1",
+    "transform_source": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1"
+  },
+  "measured": {
+    "ordered_stream_identity": {
+      "input_bytes": 10000000,
+      "ordered_sha256": "fa8ec8a64e0e623796af5a6a11e789529680a6b1c4c43c87a97f726c3fbd87cf",
+      "equal_to_readable_same_backend_selector_transform": true,
+      "restore_ok": true
+    },
+    "same_backend_1m_selector_evidence": {
+      "input_bytes": 1000000,
+      "geometry_selected_archive_bytes": 175164,
+      "raw_backend_archive_bytes": 175210,
+      "geometry_archive_gain_bytes": 46,
+      "roundtrip_ok": true,
+      "source": "results/fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1/2026-06-06T233210.json and results/fx2_sidecar_byte_split_direct_extra_page_match_v1/2026-06-07T081032.json",
+      "claim_boundary": "Exact same-scope evidence for the backend/transform combination; not a 10M or 1G result."
+    },
+    "10m_target_ceiling_abort": {
+      "receipt": "projects/enwiki9/results/fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1/10m_target_ceiling_abort.json",
+      "evidence_level": "exact_native_output_lower_bound_on_canonical_10m_prefix_with_guarded_rss",
+      "input_bytes": 10000000,
+      "last_progress_percent": 99.57,
+      "native_output_lower_bound_bytes": 1641762,
+      "maximum_archive_bytes_for_promotion": 1631581,
+      "lower_bound_over_promotion_ceiling_bytes": 10181,
+      "archive_completed": false,
+      "roundtrip_ok": null,
+      "determinism_single_host_byte_equal": null,
+      "max_sampled_tree_rss_kib": 6072528,
+      "official_decimal_tree_margin_kib": 3693097,
+      "verdict": "Target-ceiling rejection with healthy official aggregate-tree RSS."
+    }
+  },
+  "target_gate": {
+    "evidence_level": "calibrated promotion threshold; not a constructive 1G result",
+    "target_score_bytes": 109500000,
+    "baseline_candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+    "baseline_10m_archive_bytes": 1642858,
+    "baseline_calibrated_1g_archive_bytes": 109998106,
+    "candidate_program_bytes": 256906,
+    "calibrated_10m_to_1g_archive_scale": 66.95533418670768,
+    "required_1g_archive_gain_bytes": 755012,
+    "required_10m_archive_gain_bytes": 11277,
+    "maximum_10m_archive_bytes_for_promotion": 1631581,
+    "promotion_rule": "Promote to exact 100M only if the exact deterministic canonical-10M archive is <= 1631581 bytes; otherwise retire this integration shape."
+  },
+  "verdict": "Measured negative for the 10.95 target: exact native output exceeded the canonical-10M promotion ceiling before final flush, so this integration shape does not earn a 100M replay."
+}

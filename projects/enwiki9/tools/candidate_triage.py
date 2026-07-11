@@ -158,6 +158,7 @@ def run_driver_locked(
     limit: int,
     lock_path: pathlib.Path,
     driver_timeout: int | None = None,
+    archive_ceiling: int | None = None,
 ) -> DriverRun:
     active = active_heavy_processes()
     if active:
@@ -184,6 +185,15 @@ def run_driver_locked(
         str(limit),
         "--check-determinism",
     ]
+    if archive_ceiling is not None:
+        cmd.extend(
+            [
+                "--archive-ceiling",
+                str(archive_ceiling),
+                "--determinism-archive-ceiling",
+                str(archive_ceiling),
+            ]
+        )
     proc = subprocess.Popen(
         cmd,
         cwd=REPO_ROOT,
@@ -610,6 +620,7 @@ def triage_one(
     baseline_cache: dict[int, DriverRun],
     driver_timeout: int | None,
     reuse_baseline_evidence: bool,
+    archive_ceilings: dict[int, int],
 ) -> dict[str, Any]:
     gates: list[dict[str, Any]] = []
     for gate_size in gate_sizes:
@@ -662,6 +673,7 @@ def triage_one(
             limit=gate_size,
             lock_path=lock_path,
             driver_timeout=driver_timeout,
+            archive_ceiling=archive_ceilings.get(gate_size),
         )
         if candidate_run.result is None:
             status, reason = classify_driver_failure(candidate_run)
@@ -678,7 +690,26 @@ def triage_one(
             candidate_result=candidate_run.result,
             baseline_result=baseline_run.result,
         )
+        ceiling = archive_ceilings.get(gate_size)
+        ceiling_missed = (
+            ceiling is not None
+            and isinstance(candidate_run.result.get("compressed_size"), int)
+            and candidate_run.result["compressed_size"] > ceiling
+        )
+        gate["archive_ceiling"] = ceiling
+        gate["archive_ceiling_missed"] = ceiling_missed
         gates.append(gate)
+
+        if ceiling_missed:
+            return {
+                "id": candidate_id,
+                "proposed_status": "measured_negative",
+                "verdict": (
+                    f"Retire: exact archive exceeded the target-bearing ceiling at "
+                    f"{gate_size}: {candidate_run.result['compressed_size']} > {ceiling}."
+                ),
+                "gates": gates,
+            }
 
         if candidate_run.result.get("roundtrip_ok") is not True:
             return {
@@ -754,6 +785,7 @@ def render_dry_run(
     gate_sizes: list[int],
     baseline_id: str,
     lock_path: pathlib.Path,
+    archive_ceilings: dict[int, int],
 ) -> dict[str, Any]:
     return {
         "mode": "dry_run",
@@ -763,6 +795,7 @@ def render_dry_run(
         "planned_gates": gate_sizes,
         "baseline": baseline_id,
         "lock_path": str(lock_path),
+        "archive_ceilings": archive_ceilings,
         "selected": [
             {
                 "id": candidate.get("id"),
@@ -795,6 +828,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--limit-candidates", type=int, default=None)
     parser.add_argument("--skip-candidates", type=int, default=0)
     parser.add_argument("--gate-size", action="append", type=int, default=None)
+    parser.add_argument(
+        "--archive-ceiling",
+        action="append",
+        default=[],
+        metavar="LIMIT:BYTES",
+        help=(
+            "skip roundtrip and determinism when a candidate archive exceeds the "
+            "target-bearing ceiling for a gate; repeatable"
+        ),
+    )
     parser.add_argument("--baseline", default=DEFAULT_BASELINE)
     parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK_PATH)
     parser.add_argument("--run", action="store_true", help="execute locked gates")
@@ -824,6 +867,16 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     args = parser.parse_args(argv)
+
+    archive_ceilings: dict[int, int] = {}
+    for value in args.archive_ceiling:
+        if ":" not in value:
+            raise SystemExit("--archive-ceiling values must be LIMIT:BYTES")
+        raw_limit, raw_bytes = value.split(":", 1)
+        limit, ceiling = int(raw_limit), int(raw_bytes)
+        if limit <= 0 or ceiling <= 0:
+            raise SystemExit("--archive-ceiling LIMIT and BYTES must be positive")
+        archive_ceilings[limit] = ceiling
 
     if args.limit_candidates is not None and args.limit_candidates <= 0:
         raise SystemExit("--limit-candidates must be positive")
@@ -880,6 +933,7 @@ def main(argv: list[str] | None = None) -> int:
             gate_sizes=gate_sizes,
             baseline_id=args.baseline,
             lock_path=args.lock_path,
+            archive_ceilings=archive_ceilings,
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
@@ -909,6 +963,7 @@ def main(argv: list[str] | None = None) -> int:
             baseline_cache=baseline_cache,
             driver_timeout=args.driver_timeout,
             reuse_baseline_evidence=args.reuse_baseline_evidence,
+            archive_ceilings=archive_ceilings,
         )
         triage_rows.append(row)
         if args.update_meta and not is_transient_lock_block(row):
@@ -927,6 +982,7 @@ def main(argv: list[str] | None = None) -> int:
         "baseline": args.baseline,
         "reuse_baseline_evidence": args.reuse_baseline_evidence,
         "gate_sizes": gate_sizes,
+        "archive_ceilings": archive_ceilings,
         "lock_path": str(args.lock_path),
         "triage": triage_rows,
     }

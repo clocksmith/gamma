@@ -1,0 +1,30 @@
+# TranslateGemma Distillation Notes
+
+1. Clean current run
+- Active clean run is:
+  projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_full_train17532_real1b_20260305_210210
+- This run uses the correct 1B student via explicit local snapshot path for google/gemma-3-1b-it.
+- It is currently Stage A only from a metrics perspective: loss_ce is active, loss_kd=0, loss_triplet=0.
+
+2. Wrong-student issue
+- We confirmed that an earlier March 5 run named like a Gemma 3 1B run was actually launched with:
+  --student-model google/translategemma-4b-it
+- That run is invalid for the 4B-to-1B distillation question.
+- The translation wrapper defaults were patched so the default student is now google/gemma-3-1b-it.
+
+3. What looks valid from old results
+- We appear to have at least one credible older 1280-row baseline checkpoint:
+  projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_full_train1280_20260303_114100/stage_a/checkpoint-032000
+- I would treat that checkpoint as a usable comparison baseline.
+- I would not treat the entire old run as fully provenance-clean end-to-end because its Stage B history and resume path are messy.
+
+4. Best inference from old benchmarks
+- Stage A alone can produce a strong student.
+- On stored evals, the stage_a/checkpoint-032000 result is close to the 4B teacher on external BLEU and stronger on the in-domain eval.
+- The current Stage B recipe has not shown a net gain over a strong Stage A checkpoint.
+- The broken old final checkpoints should not be used as the main reference for recipe quality.
+
+5. Current interpretation
+- The teacher/student pair is learnable.
+- The main risk area is Stage B method/provenance, not whether Stage A can fit the task.
+- The current clean real-1B run is the run that should decide what is actually true going forward.

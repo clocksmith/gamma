@@ -7,7 +7,7 @@ try:
     import mlx.core as mx
     from mlx_lm import load as mlx_load_model
     import numpy as np
-except ImportError: raise ImportError("MLX libraries (mlx, mlx-lm) not found. Install with `pip install -r requirements-mlx.txt` (Apple Silicon recommended).")
+except ImportError: raise ImportError("MLX libraries (mlx, mlx-lm) not found. Install with `pip install -r requirements/mlx.txt` (Apple Silicon recommended).")
 
 from src.core.engine_interface import LLMEngine
 from src.core.types import PredictionResult

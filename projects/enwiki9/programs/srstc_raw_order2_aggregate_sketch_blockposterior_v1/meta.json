@@ -1,0 +1,111 @@
+{
+  "id": "srstc_raw_order2_aggregate_sketch_blockposterior_v1",
+  "description": "Standalone SRSTC aggregate-sketch codec with a decoder-rebuilt fixed-point posterior over the base and SRSTC experts, reset at deterministic 16,384-byte blocks.",
+  "added": "2026-07-09",
+  "deps": [],
+  "family": "srstc",
+  "status": "candidate",
+  "source_receipt": "projects/enwiki9/results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+  "scale_target_receipt": "projects/enwiki9/results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+  "mechanism": {
+    "experts": [
+      "raw order-2 base",
+      "base plus aggregate SRSTC correction"
+    ],
+    "block_bytes": 16384,
+    "weight_bits": 24,
+    "base_prior_ppm": 500000,
+    "srstc_prior_ppm": 500000,
+    "state_source": "decoded prefix, current expert probabilities, current decoded bit, and counted constants only",
+    "ideal_exact_bayes_regret_bound_bits_per_block": 1,
+    "proof_boundary": "The one-bit bound describes the ideal exact Bayesian mixture. Promotion depends on measured fixed-point replay and counted archive bytes."
+  },
+  "shadow_basis": {
+    "scope": "64 KiB execution check only",
+    "data_bytes_loaded": 64000,
+    "encoded_rows": 512000,
+    "unrouted_shadow_saved_bytes": 597,
+    "routed_shadow_saved_bytes": 610,
+    "unrouted_qbit_gain_bytes": 589.904296875,
+    "routed_qbit_gain_bytes": 603.5908203125,
+    "largest_block_regression_bytes": 0.0,
+    "block_regression_count": 0,
+    "block_resets": 4,
+    "verdict": "positive_shadow_only"
+  },
+  "measured": {
+    "64k_weight_precision_control": {
+      "weight_bits_24_shadow_saved_bytes": 610,
+      "weight_bits_32_shadow_saved_bytes": 606,
+      "selected_weight_bits": 24,
+      "evidence_level": "small_shadow_execution_check"
+    },
+    "1024_driver_no_save": {
+      "data_size": 1024,
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "compressed_size": 410,
+      "program_size": 24476,
+      "hutter_score": 24886,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
+      "compressed_sha256": "f1a521d6b61115c970b1485a3e778b564a7ace902e73f4ade5c984df8927a3c9"
+    },
+    "4096_driver_no_save": {
+      "data_size": 4096,
+      "data_sha256": "652ed0541c8b9e2d8194c2a1cd20a3ea516efaa542082535c0ef57267e1ca49e",
+      "compressed_size": 1340,
+      "program_size": 24476,
+      "hutter_score": 25816,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
+      "compressed_sha256": "07e6b3014f71ace40c8c5380a0d284d48d8fec79f48418c58334d1146b445858"
+    },
+    "20000_block_boundary_check": {
+      "data_size": 20000,
+      "compressed_size": 8778,
+      "posterior_block_resets": 2,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
+      "compressed_sha256": "a9582b89e19ff7a5cd39e1532625bad3ce3940c0ecd4d263a6a5bd5a36e64bcc"
+    },
+    "implementation_differential": {
+      "rows": 20000,
+      "blocks": 5,
+      "prediction_equal": true,
+      "posterior_weight_equal": true
+    },
+    "65536k_raw_shadow_replay": {
+      "data_bytes_loaded": 65536000,
+      "encoded_rows": 524288000,
+      "heldout_shadow_saved_bytes": 916540,
+      "added_code_bytes_estimate": 16076,
+      "net_saved_bytes": 900464,
+      "block_regression_count": 0,
+      "largest_block_regression_bytes": 0.0,
+      "evidence_level": "target_closing_raw_shadow_only"
+    },
+    "fx2_target_trace_transfer": {
+      "receipt": "projects/enwiki9/results/streaming_retrieval_shadow/fx2_apm1m_full_4805936_order2_aggregate_sketch_b640000_s8_blockposterior_v1.json",
+      "encoded_rows": 4805936,
+      "position_span_bytes": 600742,
+      "shadow_saved_bytes": 5,
+      "heldout_shadow_saved_bytes": -4,
+      "added_code_bytes_estimate": 16076,
+      "net_saved_bytes": -16080,
+      "block_regression_count": 35,
+      "verdict": "negative_shadow_do_not_integrate_this_shape"
+    }
+  },
+  "contract": {
+    "compress": "compress(data: bytes) -> bytes",
+    "decompress": "decompress(blob: bytes) -> bytes",
+    "causality": "Both experts predict from prefix state; the posterior predicts before and updates after the current decoded bit."
+  },
+  "notes": [
+    "This is a decoder-replayable codec proof and a small shadow execution check, not a 10.95% claim.",
+    "The 65,536,000-byte block-posterior replay is complete at 900,464 net shadow bytes with zero block regressions.",
+    "The target-closing raw shadow uses an order-2 base and cannot be added arithmetically to the fx2 geometry forecast; target-substrate transfer must be measured first.",
+    "The first complete cached fx2 target-trace transfer is negative after held-out and code accounting, so the raw aggregate expert plus posterior must not be compiled into fx2 unchanged.",
+    "The pure-Python standalone source is evidence of shape, not the intended final substrate; a paying implementation must be compiled into the strongest counted codec path."
+  ]
+}

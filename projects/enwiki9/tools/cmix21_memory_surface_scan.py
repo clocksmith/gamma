@@ -236,12 +236,7 @@ def guard_status(guard: GuardRow | None) -> str:
     if guard is None:
         return "missing"
     if guard.status == "running":
-        return (
-            "running; "
-            f"current bin {fmt_signed(guard.margin_kib)} KiB; "
-            f"current dec {fmt_signed(guard.decimal_margin_kib)} KiB; "
-            "terminal margin pending"
-        )
+        return "running; terminal margin pending"
     elif guard.exceeded:
         state = "fail"
     else:

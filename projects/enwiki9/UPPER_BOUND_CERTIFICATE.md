@@ -22,13 +22,13 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | Claim | Program | Scope | Score | Evidence | Status |
 |---|---|---:|---:|---|---|
 | best exact 10M | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | 10,000,000 | 1,882,615 | exact result JSON with roundtrip_ok true | exact artifact-backed |
-| best exact 10M archive | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 10,000,000 | 2,202,359 | exact result JSON with roundtrip_ok true; archive-slope reference only | exact artifact-backed |
+| best exact 10M archive | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 10,000,000 | 2,202,351 | exact result JSON with roundtrip_ok true; archive-slope reference only | exact artifact-backed |
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | n/a | 110,181,114 | forecast only; not a constructive proof | fx2-calibrated-from-exact-100m |
-| active candidate | `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,521 | exact 1,024 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 1,024 byte gate passed |
-| blocker | `n/a` | n/a | n/a | active 250,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 250,000 | n/a | unchanged 250,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+| active candidate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 1,000,000 | 738,785 | exact 1,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 1,000,000 byte gate passed |
+| blocker | `n/a` | n/a | n/a | active 10,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
+| active gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 10,000,000 | n/a | unchanged 10,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | running |
 
 ## Best Full-Corpus Result
 
@@ -58,7 +58,7 @@ No verified full-corpus result JSON is present in this workspace.
 | 250,000 | `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | 44,976 | 428,352 | 383,376 | 1.439232 | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T002058.json` |
 | 1,000,000 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | 174,395 | 736,961 | 562,566 | 1.39516 | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T155023.json` |
 | 1,048,576 | `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | 182,361 | 438,939 | 256,578 | 1.391304016 | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T175351.json` |
-| 10,000,000 | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,638,083 | 2,202,359 | 564,276 | 1.3104664 | `results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T005909.json` |
+| 10,000,000 | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,638,076 | 2,202,351 | 564,275 | 1.3104608 | `results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-10T042446.json` |
 
 ## Notes
 

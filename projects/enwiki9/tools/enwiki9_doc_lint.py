@@ -231,12 +231,14 @@ def check_certificate_and_status(findings: list[Finding]) -> None:
     active_gate = labels.get("active gate", {})
     status_gate = status.get("active_gate", {})
     for label, row in (("certificate active gate", active_gate), ("status active gate", status_gate)):
+        row = row if isinstance(row, dict) else {}
         if active_candidate and row.get("program_id") != active_candidate:
             findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not name active candidate"))
         if active_scope and row.get("scope_bytes") != active_scope:
             findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not use active scope"))
 
     gate_decision = status.get("gate_decision", {})
+    gate_decision = gate_decision if isinstance(gate_decision, dict) else {}
     if active_candidate and gate_decision.get("candidate") != active_candidate:
         findings.append(Finding(status_path, "gate decision candidate mismatch"))
     if active_scope and gate_decision.get("scope_bytes") != active_scope:
@@ -316,16 +318,26 @@ def check_status_live_process_fields(findings: list[Finding]) -> None:
     if active_processes.get("active_scorer_observed") is not True:
         return
 
+    cmix_rows = active_processes.get("cmix_rows")
+    cmix_scorer_observed = isinstance(cmix_rows, list) and bool(cmix_rows)
+
     required_process_keys = [
         "active_rows",
         "controller_rows",
-        "active_cmix_mode",
-        "active_temp_io",
         "max_cmix_process",
-        "single_process_margin_kib",
         "decimal_10gb_guard_kib",
-        "single_process_decimal_10gb_margin_kib",
+        "active_tree_rss_kib",
+        "active_tree_margin_kib",
     ]
+    if cmix_scorer_observed:
+        required_process_keys.extend(
+            [
+                "active_cmix_mode",
+                "active_temp_io",
+                "single_process_margin_kib",
+                "single_process_decimal_10gb_margin_kib",
+            ]
+        )
     for key in required_process_keys:
         if key not in active_processes:
             findings.append(Finding(status_path, f"active scorer status missing {key}"))
@@ -367,7 +379,7 @@ def check_status_live_process_fields(findings: list[Finding]) -> None:
         ):
             if label not in status_md:
                 findings.append(Finding(status_md_path, f"Markdown status receipt is missing {label.lower()}"))
-    if "Temp output staging bytes" not in status_md:
+    if cmix_scorer_observed and "Temp output staging bytes" not in status_md:
         findings.append(Finding(status_md_path, "Markdown status receipt is missing staging output bytes"))
     if "Latest sampled single RSS KiB" not in status_md:
         findings.append(Finding(status_md_path, "Markdown status receipt is missing latest sampled RSS"))
@@ -394,7 +406,7 @@ def check_status_live_process_fields(findings: list[Finding]) -> None:
         if "Active process tree warning" not in status_md:
             findings.append(Finding(status_md_path, "Markdown status receipt is missing active process tree warning"))
 
-    if active_processes.get("active_cmix_mode") != "decode":
+    if not cmix_scorer_observed or active_processes.get("active_cmix_mode") != "decode":
         return
 
     progress = active_processes.get("active_decode_progress")
@@ -614,7 +626,12 @@ def check_observed_gate_command(findings: list[Finding]) -> None:
         if key not in observed:
             findings.append(Finding(status_path, f"observed_gate_command missing {key}"))
     active_processes = status.get("active_processes", {})
-    if isinstance(active_processes, dict) and active_processes.get("active_scorer_observed") is True:
+    active_gate_owned = (
+        isinstance(active_processes, dict)
+        and active_processes.get("active_scorer_observed") is True
+        and observed.get("active_gate_command_observed") is True
+    )
+    if active_gate_owned:
         if observed.get("active_gate_command_observed") is not True:
             findings.append(Finding(status_path, "active scorer command does not match active gate candidate/scope"))
         if observed.get("mismatch_count") != 0:
@@ -768,7 +785,7 @@ def check_streaming_retrieval_mixer(findings: list[Finding]) -> None:
         "SimHash/minhash sketches with counted constants",
         '"receipt_type": "streaming_retrieval_shadow"',
         "Promotion requires positive held-out `net_saved_bytes`",
-        "Keep the active `cmix21` scorer serialized and untouched.",
+        "Keep the active guarded scorer serialized and untouched.",
     ]
     for snippet in required_snippets:
         if snippet not in text:

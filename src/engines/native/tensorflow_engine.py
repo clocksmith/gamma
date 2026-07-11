@@ -6,7 +6,7 @@ try:
     import tensorflow as tf
     from transformers import TFAutoModelForCausalLM, AutoTokenizer
     import numpy as np
-except ImportError: raise ImportError("TensorFlow or Transformers library not found. Install with `pip install -r requirements-tensorflow.txt`")
+except ImportError: raise ImportError("TensorFlow or Transformers library not found. Install with `pip install -r requirements/tensorflow.txt`")
 
 logger = logging.getLogger(__name__)
 

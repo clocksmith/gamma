@@ -179,7 +179,16 @@ python3 projects/enwiki9/tools/enwiki9_normalize_receipts.py
 Do not hide state in chat. Encode next actions, blockers, proof status, and
 claim boundaries in the relevant repository artifacts.
 
-## No Time Estimates
+## No Engineering-Work Time Estimates
 
-Do not estimate work in hours, days, weeks, or any other time unit. Describe the
-specific gate, file, receipt, function, or blocker instead.
+Do not estimate how long coding, debugging, refactoring, documentation,
+research, cleanup, or other engineering work will take in hours, days, weeks, or
+other time units. Describe the specific gate, file, receipt, function, blocker,
+or concrete source delta instead.
+
+This restriction does not apply to already-running processes, benchmark jobs,
+compression gates, shadow replays, downloads, or other live operations with
+observable counters. For those, provide runtime/finish estimates when useful,
+based on measured progress such as bytes, blocks, samples, subprocess stage,
+RSS guard samples, output-file growth, or repeated timestamps. State the basis
+and uncertainty when progress is nonlinear or stage-dependent.

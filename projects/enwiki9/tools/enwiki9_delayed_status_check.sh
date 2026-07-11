@@ -6,8 +6,8 @@ REPO_ROOT="$(cd "$ROOT/../.." && pwd)"
 OUT_DIR="$ROOT/run_logs"
 mkdir -p "$OUT_DIR"
 
-DEFAULT_ACTIVE_CANDIDATE="cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1"
-DEFAULT_ACTIVE_SCOPE="250000"
+DEFAULT_ACTIVE_CANDIDATE="cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1"
+DEFAULT_ACTIVE_SCOPE="10000000"
 read -r ACTIVE_CANDIDATE ACTIVE_SCOPE < <(
   python3 - "$ROOT/upper_bound_certificate.json" "$DEFAULT_ACTIVE_CANDIDATE" "$DEFAULT_ACTIVE_SCOPE" <<'PY'
 import json

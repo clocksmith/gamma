@@ -1,7 +1,7 @@
 {
   "id": "fx2cmix_public_repro_v1",
   "family": "lane0-public-fx2-cmix-reproduction",
-  "status": "source_tracking",
+  "status": "control_prepared",
   "description": "Lane 0 reproduction wrapper for the published fx2-cmix Hutter Prize package path. This candidate is intentionally separate from experimental fx2 and cmix21 lanes: it exercises the upstream cmix -e flow that emits archive9, then executes archive9 to restore enwik9.",
   "upstream": "https://github.com/kaitz/fx2-cmix",
   "source": "projects/enwiki9/external/fx2-cmix",
@@ -14,6 +14,21 @@
   },
   "scope": "Full enwik9 only. The upstream -e/archive9 path uses fixed enwik9 split and article-order constants, so prefix gates are not a valid reproduction of the public package path.",
   "prepare": "Use projects/enwiki9/tools/fx2_public_repro_queue.py --preflight, then --build-upstream to attempt the exact upstream build_and_construct_comp.sh flow. After projects/enwiki9/external/fx2-cmix/run/cmix exists, run --prepare. If the exact upstream package is absent, --prepare-from-root-binary can assemble a local public-flow control package from projects/enwiki9/external/fx2-cmix/cmix, but that is not an exact public executable-size reproduction unless its package size matches the upstream target.",
-  "measured": {},
-  "verdict": "Not run. This lane exists to reproduce the published fx2-cmix baseline and validate local data, accounting, RSS guard, and result parsing before trusting full-corpus experimental claims."
+  "measured": {
+    "root_binary_control_package": {
+      "package_path": "projects/enwiki9/programs/fx2cmix_public_repro_v1/cmix",
+      "program_size": 680876,
+      "sha256": "6fdccda4b637dc07160378df82d96957db8e32e932152856d99feb664b987590",
+      "executable": true,
+      "source_binary": "projects/enwiki9/external/fx2-cmix/cmix",
+      "delta_vs_public_executable_bytes": 239413,
+      "exact_public_executable_match": false,
+      "missing_exact_build_tools": [
+        "clang++-17",
+        "llvm-profdata-17",
+        "upx-ucl"
+      ]
+    }
+  },
+  "verdict": "Local root-binary control package is materialized and counted. It can validate the -e/archive9 flow, but it is not an exact public executable reproduction and must not be used to claim the published score."
 }

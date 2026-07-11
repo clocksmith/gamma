@@ -62,7 +62,8 @@ def build_fx2(args: argparse.Namespace, build_log: pathlib.Path) -> list[str]:
     flags = [
         f"-DSEED={args.seed}",
         f"-DUPDATE_LIMIT={args.update_limit}",
-        "-DFX2_STRUCT_SIDECAR=1",
+        f"-DFX2_STRUCT_SIDECAR={args.struct_sidecar}",
+        f"-DFX2_WRT_OBSERVATION={int(args.wrt_observation)}",
         "-DFX2_RESIDUAL_LOG=1",
         f"-DFX2_RESIDUAL_LOG_STRIDE={args.residual_stride}",
         f"-DFX2_RESIDUAL_LOG_MAX_ROWS={args.max_rows}",
@@ -77,6 +78,7 @@ def build_fx2(args: argparse.Namespace, build_log: pathlib.Path) -> list[str]:
             f"CC={args.compiler}",
             "STRIP_FLAG=",
             f"CFLAGS_DEFINES={' '.join(flags)}",
+            "clean",
             "cmix",
         ],
         cwd=FX2_DIR,
@@ -96,6 +98,9 @@ def main() -> int:
     ap.add_argument("--compiler", default="g++")
     ap.add_argument("--seed", type=int, default=923)
     ap.add_argument("--update-limit", type=int, default=3000)
+    ap.add_argument("--struct-sidecar", type=int, choices=(0, 1, 2, 3, 4), default=1)
+    ap.add_argument("--wrt-observation", action="store_true")
+    ap.add_argument("--trace-only", action="store_true")
     ap.add_argument("--residual-stride", type=int, default=1)
     ap.add_argument("--max-rows", type=int, default=0)
     ap.add_argument("--define", action="append", default=[])
@@ -119,6 +124,9 @@ def main() -> int:
 
     if args.limit <= 0:
         raise SystemExit("--limit must be positive")
+    args.data = args.data.resolve()
+    args.dictionary = args.dictionary.resolve()
+    args.out_dir = args.out_dir.resolve()
     if not args.data.exists():
         raise SystemExit(f"missing data: {args.data}")
     if not args.dictionary.exists():
@@ -151,52 +159,53 @@ def main() -> int:
         stdout=stdout_log,
         stderr=stderr_log,
     )
-    capture(
-        [
-            sys.executable,
-            str(ROOT / "tools" / "fx2_residual_apm_score.py"),
-            str(stderr_log),
-            "--output",
-            str(scored_rows),
-            "--summary",
-            str(score_summary),
-            "--key",
-            args.key,
-            "--p-buckets",
-            str(args.p_buckets),
-            "--alpha",
-            str(args.alpha),
-            "--blend-ppm",
-            str(args.blend_ppm),
-            "--train-bytes",
-            str(args.train_bytes),
-        ],
-        cwd=ROOT,
-    )
-    capture(
-        [
-            sys.executable,
-            str(ROOT / "tools" / "fx2_residual_gain_certificate.py"),
-            str(scored_rows),
-            "--output",
-            str(cert_path),
-            "--baseline-score",
-            str(args.baseline_score),
-            "--target-score",
-            str(args.target_score),
-            "--scope-bytes",
-            str(args.scope_bytes),
-            "--patch-bytes",
-            str(args.patch_bytes),
-            "--table-bits",
-            str(args.table_bits),
-            "--gate-split",
-            args.gate_split,
-        ]
-        + (["--full-coverage"] if args.full_coverage else []),
-        cwd=ROOT,
-    )
-    if args.manifold_search:
+    if not args.trace_only:
+        capture(
+            [
+                sys.executable,
+                str(ROOT / "tools" / "fx2_residual_apm_score.py"),
+                str(stderr_log),
+                "--output",
+                str(scored_rows),
+                "--summary",
+                str(score_summary),
+                "--key",
+                args.key,
+                "--p-buckets",
+                str(args.p_buckets),
+                "--alpha",
+                str(args.alpha),
+                "--blend-ppm",
+                str(args.blend_ppm),
+                "--train-bytes",
+                str(args.train_bytes),
+            ],
+            cwd=ROOT,
+        )
+        capture(
+            [
+                sys.executable,
+                str(ROOT / "tools" / "fx2_residual_gain_certificate.py"),
+                str(scored_rows),
+                "--output",
+                str(cert_path),
+                "--baseline-score",
+                str(args.baseline_score),
+                "--target-score",
+                str(args.target_score),
+                "--scope-bytes",
+                str(args.scope_bytes),
+                "--patch-bytes",
+                str(args.patch_bytes),
+                "--table-bits",
+                str(args.table_bits),
+                "--gate-split",
+                args.gate_split,
+            ]
+            + (["--full-coverage"] if args.full_coverage else []),
+            cwd=ROOT,
+        )
+    if args.manifold_search and not args.trace_only:
         manifold_train_bytes = (
             args.manifold_train_bytes
             if args.manifold_train_bytes is not None
@@ -219,24 +228,25 @@ def main() -> int:
             cwd=ROOT,
         )
 
-    cert = json.loads(cert_path.read_text())
-    summary = json.loads(score_summary.read_text())
+    cert = json.loads(cert_path.read_text()) if not args.trace_only else None
+    summary = json.loads(score_summary.read_text()) if not args.trace_only else None
     manifest = {
         "label": args.label,
         "limit": args.limit,
         "raw_sha256": hashlib.sha256(raw).hexdigest(),
         "compressed_size": comp_path.stat().st_size,
+        "trace_only": args.trace_only,
         "build_flags": flags,
         "logs": {
             "stdout": str(stdout_log),
             "stderr": str(stderr_log),
-            "scored_rows": str(scored_rows),
-            "score_summary": str(score_summary),
-            "certificate": str(cert_path),
+            "scored_rows": str(scored_rows) if not args.trace_only else None,
+            "score_summary": str(score_summary) if not args.trace_only else None,
+            "certificate": str(cert_path) if not args.trace_only else None,
             "manifold_search": str(manifold_path) if args.manifold_search else None,
         },
         "score_summary": summary,
-        "certificate_gate": cert["gate"],
+        "certificate_gate": cert["gate"] if cert else None,
     }
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     print(json.dumps(manifest, indent=2, sort_keys=True))

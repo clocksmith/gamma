@@ -7,7 +7,7 @@ try:
     from jax import random
     from transformers import FlaxAutoModelForCausalLM, AutoTokenizer
     import numpy as np
-except ImportError: raise ImportError("JAX related libraries (jax, jaxlib, flax, transformers) not found. Install with `pip install -r requirements-jax.txt`")
+except ImportError: raise ImportError("JAX related libraries (jax, jaxlib, flax, transformers) not found. Install with `pip install -r requirements/jax.txt`")
 
 from src.core.engine_interface import LLMEngine
 from src.core.types import PredictionResult

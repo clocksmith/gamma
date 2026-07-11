@@ -68,12 +68,18 @@ def guard_record(guard: dict[str, Any], guard_path: pathlib.Path) -> dict[str, A
         "rss_guard_json_mtime_utc": meta["mtime_utc"],
         "rss_guard_json_sha256": meta["sha256"],
         "rss_guard_kib": guard.get("limit_kib"),
+        "rss_guard_limit_mode": guard.get("limit_mode", "max_single"),
         "max_sampled_single_rss_kib": guard.get("max_sampled_single_rss_kib"),
         "max_sampled_tree_rss_kib": guard.get("max_sampled_tree_rss_kib"),
         "rss_guard_exceeded": guard.get("rss_guard_exceeded"),
         "rss_guard_returncode": guard.get("returncode"),
         "rss_guard_status": guard.get("status"),
         "rss_sample_count": guard.get("sample_count"),
+        "official_decimal_limit_kib": guard.get("official_decimal_limit_kib"),
+        "official_decimal_over_limit_kib": guard.get(
+            "official_decimal_over_limit_kib"
+        ),
+        "guard_failure": guard.get("failure"),
     }
 
 
@@ -123,7 +129,9 @@ def guard_only_record(
     limit = guard.get("limit_kib")
     if isinstance(max_rss, int) and isinstance(limit, int):
         record["single_rss_over_ceiling_kib"] = max_rss - limit
-    if guard.get("rss_guard_exceeded") is True:
+    if isinstance(guard.get("failure"), str):
+        record["failure"] = guard["failure"]
+    elif guard.get("rss_guard_exceeded") is True:
         record["failure"] = "compression_rss_crossed_local_guard_before_archive_or_roundtrip"
     return record
 
