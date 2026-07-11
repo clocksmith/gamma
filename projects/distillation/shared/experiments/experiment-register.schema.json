@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clocksmith/gamma/projects/distillation/shared/experiments/experiment-register.schema.json",
+  "title": "Verifier-guided learning experiment register record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "experimentId",
+    "recordedAt",
+    "domain",
+    "owner",
+    "hypothesis",
+    "methodIds",
+    "status",
+    "claimBoundary",
+    "artifact",
+    "rewardComponents",
+    "nextGate"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "experimentId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "recordedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "domain": {
+      "enum": [
+        "coding",
+        "finance_documents",
+        "legal_documents",
+        "translation",
+        "wgsl"
+      ]
+    },
+    "owner": {
+      "$ref": "#/$defs/repositoryPointer"
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "methodIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "active_learning",
+          "adversarial_self_play",
+          "checkpoint_selection",
+          "data_centric_sft",
+          "dpo",
+          "execution_verified_sft",
+          "gepa",
+          "grpo_rlvr",
+          "human_adjudicated_sft",
+          "logit_distillation",
+          "minimum_risk_training",
+          "on_policy_distillation",
+          "process_supervision",
+          "reflective_prompt_mutation",
+          "rejection_sampling",
+          "routing",
+          "rule_based_ai_feedback",
+          "sequence_level_distillation"
+        ]
+      }
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "harness_ready",
+        "mechanics_proven",
+        "capability_proven",
+        "promoted",
+        "rejected",
+        "blocked"
+      ]
+    },
+    "claimBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "path",
+        "revision",
+        "sha256"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+/[a-z0-9_.-]+$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "relatedArtifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "repository",
+          "path",
+          "revision",
+          "sha256"
+        ],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "pattern": "^[a-z0-9_.-]+/[a-z0-9_.-]+$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "rewardComponents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "role",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "type": {
+            "enum": [
+              "deterministic",
+              "learned_metric",
+              "ai_judge",
+              "human_adjudicated"
+            ]
+          },
+          "role": {
+            "enum": [
+              "blocking",
+              "supporting",
+              "promotion"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "nextGate": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "repositoryPointer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "path"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+/[a-z0-9_.-]+$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

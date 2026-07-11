@@ -11,6 +11,8 @@ This directory is the canonical documentation index for GAMMA.
 | Model format compatibility | [MODEL_FORMATS.md](MODEL_FORMATS.md) |
 | Benchmarking workflows | [BENCHMARKING.md](BENCHMARKING.md) |
 | Hybrid distillation method | [HYBRID_DISTILLATION.md](HYBRID_DISTILLATION.md) |
+| Verifier-guided learning, RLVR, prompt optimization, and experiment states | [VERIFIER_GUIDED_LEARNING.md](VERIFIER_GUIDED_LEARNING.md) |
+| Cross-repository experiment register | [../projects/distillation/shared/experiments/README.md](../projects/distillation/shared/experiments/README.md) |
 | Translation distillation ops + leaderboards | [../projects/distillation/translation/README.md](../projects/distillation/translation/README.md) |
 | Integrations/API usage | [integration-guide.md](integration-guide.md) |
 | Mind Meld usage + status | [../src/mind_meld/README.md](../src/mind_meld/README.md) |
