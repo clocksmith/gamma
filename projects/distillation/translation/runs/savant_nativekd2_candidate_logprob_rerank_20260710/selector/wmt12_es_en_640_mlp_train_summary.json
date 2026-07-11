@@ -1,0 +1,101 @@
+{
+  "algorithm": "mlp_regression",
+  "baselines": {
+    "current": {
+      "bleu": 31.017786391439003,
+      "chrf": 57.81154242128772,
+      "rows": 640
+    },
+    "in_sample_selector": {
+      "bleu": 30.726844872697296,
+      "chrf": 58.469805640550696,
+      "rows": 640
+    },
+    "oracle_sentence_chrf": {
+      "bleu": 33.045232221696565,
+      "chrf": 59.84515904064238,
+      "rows": 640
+    },
+    "specialist": {
+      "bleu": 29.85477262957599,
+      "chrf": 56.86921016770774,
+      "rows": 640
+    }
+  },
+  "candidate_sources": [
+    "current",
+    "specialist"
+  ],
+  "cross_validation": [
+    {
+      "choice_counts": {
+        "current": 361,
+        "specialist": 279
+      },
+      "metrics": {
+        "bleu": 30.452605537448846,
+        "chrf": 57.92197694871023,
+        "rows": 640
+      },
+      "regularization": 0.001
+    },
+    {
+      "choice_counts": {
+        "current": 398,
+        "specialist": 242
+      },
+      "metrics": {
+        "bleu": 30.599114053460752,
+        "chrf": 58.35951181742159,
+        "rows": 640
+      },
+      "regularization": 0.01
+    }
+  ],
+  "in_sample_choice_counts": {
+    "current": 414,
+    "specialist": 226
+  },
+  "inference_target_access": false,
+  "model": {
+    "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/wmt12_es_en_640_mlp_selector.json",
+    "sha256": "be07d39d282004929b04d2ba2ce02bc7ba94a99a152373264d8d922dd077bf85"
+  },
+  "regularization_grid": [
+    0.001,
+    0.01
+  ],
+  "score_keys": [
+    "current_model_scores",
+    "specialist_model_scores"
+  ],
+  "selected_cross_validation": {
+    "choice_counts": {
+      "current": 398,
+      "specialist": 242
+    },
+    "metrics": {
+      "bleu": 30.599114053460752,
+      "chrf": 58.35951181742159,
+      "rows": 640
+    },
+    "regularization": 0.01
+  },
+  "selected_regularization": 0.01,
+  "training_input": {
+    "folds": 5,
+    "inputs": [
+      {
+        "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_es_en_128_two_checkpoint_cross_scored.jsonl",
+        "sha256": "6e80843f4833c8ceecb2300fcde7b6ab8dd0794b77fa05787e55425a9a86e418"
+      },
+      {
+        "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_router_train_es_en_512_cross_scored.jsonl",
+        "sha256": "f05bd5a683abbd245cb229bcdd92caa90ebac25a5f2235e477b3faded9446b31"
+      }
+    ],
+    "rows": 640,
+    "seed": 42,
+    "target": "candidate1_sentence_chrf_minus_candidate0_sentence_chrf"
+  }
+}

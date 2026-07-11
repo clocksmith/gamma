@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-09 21:35:24 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/baseline__google__translategemma-4b-it__2026-03-10T014945Z`
 Decode: `greedy`
 
@@ -12,10 +12,10 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| final | 0 | external_wmt13_en_es_translation_benchmark_128 | 22.6563 | 56.8741 | 128 |  |
-| final | 0 | indomain_clean_merged_en_es_translation_benchmark_128 | 35.6382 | 67.9067 | 128 |  |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| final | 0 | external_wmt13_en_es_translation_benchmark_128 | 22.6563 | 56.8741 | 128 |  |  |  |  |  |
+| final | 0 | indomain_clean_merged_en_es_translation_benchmark_128 | 35.6382 | 67.9067 | 128 |  |  |  |  |  |
 
 ## Files
 

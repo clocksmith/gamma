@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-10 19:52:55 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_seqkd_news_esen2048_replay800_lr1e6_steps400_20260710`
 Decode: `greedy`
 
@@ -19,16 +19,16 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-000050 | 50 | external_wmt13_en_es_translation_benchmark_128 | 33.7695 | 59.7352 | 128 | 47.0057 |
-| checkpoint-000100 | 100 | external_wmt13_en_es_translation_benchmark_128 | 33.7219 | 59.7788 | 128 | 47.0057 |
-| checkpoint-000150 | 150 | external_wmt13_en_es_translation_benchmark_128 | 33.6551 | 59.5816 | 128 | 47.0057 |
-| checkpoint-000200 | 200 | external_wmt13_en_es_translation_benchmark_128 | 33.5693 | 59.6542 | 128 | 47.0060 |
-| checkpoint-000250 | 250 | external_wmt13_en_es_translation_benchmark_128 | 33.7325 | 59.6301 | 128 | 47.0057 |
-| checkpoint-000300 | 300 | external_wmt13_en_es_translation_benchmark_128 | 33.3888 | 59.4295 | 128 | 47.0062 |
-| checkpoint-000350 | 350 | external_wmt13_en_es_translation_benchmark_128 | 33.6044 | 59.5814 | 128 | 47.0058 |
-| checkpoint-000400 | 400 | external_wmt13_en_es_translation_benchmark_128 | 33.5674 | 59.5227 | 128 | 47.0060 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-000050 | 50 | external_wmt13_en_es_translation_benchmark_128 | 33.7695 | 59.7352 | 128 |  |  |  |  | 47.0057 |
+| checkpoint-000100 | 100 | external_wmt13_en_es_translation_benchmark_128 | 33.7219 | 59.7788 | 128 |  |  |  |  | 47.0057 |
+| checkpoint-000150 | 150 | external_wmt13_en_es_translation_benchmark_128 | 33.6551 | 59.5816 | 128 |  |  |  |  | 47.0057 |
+| checkpoint-000200 | 200 | external_wmt13_en_es_translation_benchmark_128 | 33.5693 | 59.6542 | 128 |  |  |  |  | 47.0060 |
+| checkpoint-000250 | 250 | external_wmt13_en_es_translation_benchmark_128 | 33.7325 | 59.6301 | 128 |  |  |  |  | 47.0057 |
+| checkpoint-000300 | 300 | external_wmt13_en_es_translation_benchmark_128 | 33.3888 | 59.4295 | 128 |  |  |  |  | 47.0062 |
+| checkpoint-000350 | 350 | external_wmt13_en_es_translation_benchmark_128 | 33.6044 | 59.5814 | 128 |  |  |  |  | 47.0058 |
+| checkpoint-000400 | 400 | external_wmt13_en_es_translation_benchmark_128 | 33.5674 | 59.5227 | 128 |  |  |  |  | 47.0060 |
 
 ## Files
 

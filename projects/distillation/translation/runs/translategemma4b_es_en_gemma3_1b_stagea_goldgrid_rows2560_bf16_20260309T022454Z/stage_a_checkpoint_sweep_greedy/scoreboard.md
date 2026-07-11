@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-09 21:35:24 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows2560_bf16_20260309T022454Z`
 Decode: `greedy`
 
@@ -12,10 +12,10 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-001500 | 1500 | external_wmt13_en_es_translation_benchmark_128 | 27.1233 | 57.0740 | 128 | 620.4787 |
-| checkpoint-001500 | 1500 | indomain_clean_merged_en_es_translation_benchmark_128 | 43.7387 | 69.1177 | 128 | 923.7015 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-001500 | 1500 | external_wmt13_en_es_translation_benchmark_128 | 27.1233 | 57.0740 | 128 |  |  |  |  | 620.4787 |
+| checkpoint-001500 | 1500 | indomain_clean_merged_en_es_translation_benchmark_128 | 43.7387 | 69.1177 | 128 |  |  |  |  | 923.7015 |
 
 ## Files
 

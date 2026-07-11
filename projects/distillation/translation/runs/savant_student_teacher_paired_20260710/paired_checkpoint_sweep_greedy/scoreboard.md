@@ -1,6 +1,6 @@
 # Stage A Checkpoint Evaluation Scoreboard
 
-Updated: 2026-07-10 17:21:13 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/savant_student_teacher_paired_20260710`
 Decode: `greedy`
 
@@ -12,10 +12,10 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 33.7353 | 59.6065 | 128 |  |
-| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 54.4500 | 72.3516 | 128 |  |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 33.7353 | 59.6065 | 128 |  |  |  |  |  |
+| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 54.4500 | 72.3516 | 128 |  |  |  |  |  |
 
 ## Files
 

@@ -33,6 +33,32 @@ chrF is not yet a student win.
 Receipt:
 `projects/distillation/translation/runs/savant_student_teacher_paired_20260710/claim_receipt.md`
 
+## Current external frontier
+
+The balanced native-prompt KD2 checkpoint at `mixed/checkpoint-000025` is the
+current single-checkpoint external leader. A WMT12-trained, reference-free MLP
+selector improves the external result by routing only ES->EN rows between that
+checkpoint and an older Stage A specialist:
+
+| external WMT13 system | BLEU | chrF | rows |
+| --- | ---: | ---: | ---: |
+| native-KD2 single checkpoint | 34.1896 | 59.9388 | 128 |
+| two-checkpoint MLP directional route | 34.8274 | 60.4653 | 128 |
+| TranslateGemma 4B teacher | 33.6973 | 60.8011 | 128 |
+| routed delta vs teacher | +1.1302 | -0.3358 | 128 |
+
+The selector was trained and cross-validated exclusively on 640 WMT12 ES->EN
+rows and did not use WMT13 references during application. This is a routed
+two-checkpoint result, not a single-student proof. A balanced 30-step attempt to
+distill its choices back into the native-KD2 checkpoint regressed on external
+BLEU and chrF and was rejected.
+
+Receipts:
+
+- `projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/scoreboard.md`
+- `projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/external_wmt13_128_mlp/compare_eval_summary.json`
+- `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_selectorsft_balanced_lr1e7_steps30_20260710/stage_a_checkpoint_sweep_greedy_studentonly_external/scoreboard.md`
+
 ## Historical proof point
 
 On the stored `1280`-row ablation run (`translategemma4b_es_en_gemma3_1b_full_20260303_114100`), the Stage A checkpoint at 32k steps (`stage_a/checkpoint-032000`) is close to the teacher on external BLEU:
@@ -86,7 +112,7 @@ Interpretation:
 - The strong Stage A BLEU result is real, but belongs to the older `1280`-row run.
 - The newer `17532`-row run is currently an indomain-specialized line: very strong on eval3, weak on external eval2.
 
-## Current model selection status
+## Historical model selection status
 
 - Current best deploy candidate: `stage_a/checkpoint-008000` from:
   - `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldlegacy1280_bf16_20260307T231031Z`

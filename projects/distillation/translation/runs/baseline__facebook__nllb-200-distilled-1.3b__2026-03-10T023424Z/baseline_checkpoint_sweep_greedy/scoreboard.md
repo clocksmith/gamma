@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-09 21:35:24 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/baseline__facebook__nllb-200-distilled-1.3b__2026-03-10T023424Z`
 Decode: `greedy`
 
@@ -12,10 +12,10 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| final | 0 | external_wmt13_en_es_translation_benchmark_128 | 37.9870 | 62.9284 | 128 | 157.4607 |
-| final | 0 | indomain_clean_merged_en_es_translation_benchmark_128 | 58.8747 | 76.8520 | 128 | 210.1090 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| final | 0 | external_wmt13_en_es_translation_benchmark_128 | 37.9870 | 62.9284 | 128 |  |  |  |  | 157.4607 |
+| final | 0 | indomain_clean_merged_en_es_translation_benchmark_128 | 58.8747 | 76.8520 | 128 |  |  |  |  | 210.1090 |
 
 ## Files
 

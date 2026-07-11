@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-10 20:00:32 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_wmt12_lora_r16_lr1e5_steps1000_20260710`
 Decode: `greedy`
 
@@ -13,10 +13,10 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-000100 | 100 | external_wmt13_en_es_translation_benchmark_128 | 32.8773 | 58.8924 | 128 | 63.0077 |
-| checkpoint-000200 | 200 | external_wmt13_en_es_translation_benchmark_128 | 31.6911 | 57.4136 | 128 | 63.0080 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-000100 | 100 | external_wmt13_en_es_translation_benchmark_128 | 32.8773 | 58.8924 | 128 |  |  |  |  | 63.0077 |
+| checkpoint-000200 | 200 | external_wmt13_en_es_translation_benchmark_128 | 31.6911 | 57.4136 | 128 |  |  |  |  | 63.0080 |
 
 ## Files
 

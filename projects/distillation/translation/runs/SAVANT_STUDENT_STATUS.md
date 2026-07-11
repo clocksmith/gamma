@@ -1,7 +1,7 @@
 # Savant Student Status
 
 Generated: 2026-07-07
-Updated: 2026-07-10 UTC
+Updated: 2026-07-11 UTC
 
 ## Target
 
@@ -52,6 +52,48 @@ beam-4 decoding were evaluated and rejected because both reduced external BLEU
 and chrF. The News Commentary builder pins dataset revision
 `bbaf548083e788e0e6d2ca68efc325283fe2aff5`, excludes exact and high-overlap
 eval matches, and marks the unknown-license output local-research-only.
+
+## Reference-Free Selector Follow-Up
+
+The balanced native-prompt KD2 run produced the current single-checkpoint
+external leader at `mixed/checkpoint-000025`. A reference-free ES->EN selector
+then routed between that checkpoint and the older Stage A specialist while
+leaving the native-KD2 EN->ES predictions unchanged:
+
+| external WMT13 system | BLEU | chrF | result |
+| --- | ---: | ---: | --- |
+| native-KD2 checkpoint 25 | 34.1896 | 59.9388 | current single-checkpoint leader |
+| WMT12-trained MLP directional route | 34.8274 | 60.4653 | current routed frontier |
+| TranslateGemma 4B teacher | 33.6973 | 60.8011 | paired teacher baseline |
+| routed delta vs teacher | +1.1302 | -0.3358 | BLEU win; chrF gap remains |
+
+The MLP selector was trained and five-fold cross-validated only on 640 WMT12
+ES->EN rows. It uses the two candidate likelihoods plus reference-free length,
+overlap, and numeric-preservation features. WMT13 target text was not available
+to selection. On the 64 external ES->EN rows it chose native-KD2 37 times and
+the specialist 27 times.
+
+Boundary: the routed result composes two frozen Gemma 3 1B checkpoints and a
+small selector. It is not a single-student checkpoint and does not establish an
+external student-beats-teacher proof because teacher chrF remains higher.
+
+A conservative attempt to distill the routed WMT12 choices into one checkpoint
+used 640 selected ES->EN rows plus 640 EN->ES replay rows, initialized from
+native-KD2 checkpoint 25, and ran for 30 steps at learning rate `1e-7`. The best
+BLEU checkpoint scored `33.8287 / 59.6799`; the best chrF checkpoint scored
+`33.8015 / 59.7271`. Both are below the initializer, so this continuation is
+rejected. A separate legacy sequence-SFT sweep could not start evaluation
+because its checkpoint directories contained no model weights; that failure is
+preserved in its sweep artifacts.
+
+Receipts:
+
+- selector scoreboard:
+  `projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/scoreboard.md`
+- routed paired comparison:
+  `projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/external_wmt13_128_mlp/compare_eval_summary.json`
+- single-checkpoint continuation scoreboard:
+  `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_selectorsft_balanced_lr1e7_steps30_20260710/stage_a_checkpoint_sweep_greedy_studentonly_external/scoreboard.md`
 
 ## Current Artifact-Backed Proof Checkpoint
 

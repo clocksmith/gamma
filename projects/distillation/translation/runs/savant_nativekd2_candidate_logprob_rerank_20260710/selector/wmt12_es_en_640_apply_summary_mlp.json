@@ -1,0 +1,48 @@
+{
+  "algorithm": "mlp_regression",
+  "candidate_baselines": {
+    "current": {
+      "bleu": 31.017786391439003,
+      "chrf": 57.81154242128772,
+      "rows": 640
+    },
+    "specialist": {
+      "bleu": 29.85477262957599,
+      "chrf": 56.86921016770774,
+      "rows": 640
+    }
+  },
+  "candidate_sources": [
+    "current",
+    "specialist"
+  ],
+  "choice_counts": {
+    "current": 414,
+    "specialist": 226
+  },
+  "inputs": [
+    {
+      "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_es_en_128_two_checkpoint_cross_scored.jsonl",
+      "sha256": "6e80843f4833c8ceecb2300fcde7b6ab8dd0794b77fa05787e55425a9a86e418"
+    },
+    {
+      "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/wmt12_router_train_es_en_512_cross_scored.jsonl",
+      "sha256": "f05bd5a683abbd245cb229bcdd92caa90ebac25a5f2235e477b3faded9446b31"
+    }
+  ],
+  "model": {
+    "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/wmt12_es_en_640_mlp_selector.json",
+    "sha256": "be07d39d282004929b04d2ba2ce02bc7ba94a99a152373264d8d922dd077bf85"
+  },
+  "output": {
+    "path": "projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/wmt12_es_en_640_selected_predictions_mlp.jsonl",
+    "sha256": "f269293b9ea4650e08fce2288075a29e2d346fba057b891269fa9ca64b9c5670"
+  },
+  "post_selection_metrics": {
+    "bleu": 30.726844872697296,
+    "chrf": 58.469805640550696,
+    "rows": 640
+  },
+  "rows": 640,
+  "selection_target_access": false
+}

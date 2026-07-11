@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-09 21:35:24 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_stagea_goldgrid_rows1280_bf16_20260309T185602Z`
 Decode: `greedy`
 
@@ -14,14 +14,14 @@ Decode: `greedy`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | duration_s |
-| --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-002000 | 2000 | external_wmt13_en_es_translation_benchmark_128 | 27.2349 | 57.1826 | 128 | 613.0719 |
-| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 27.2071 | 56.9757 | 128 | 365.0378 |
-| checkpoint-006000 | 6000 | external_wmt13_en_es_translation_benchmark_128 | 27.4061 | 57.1701 | 128 | 268.0263 |
-| checkpoint-002000 | 2000 | indomain_clean_merged_en_es_translation_benchmark_128 | 46.6153 | 70.5080 | 128 | 916.1013 |
-| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 47.1364 | 69.5194 | 128 | 402.0407 |
-| checkpoint-006000 | 6000 | indomain_clean_merged_en_es_translation_benchmark_128 | 47.3852 | 69.5635 | 128 | 405.0423 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-002000 | 2000 | external_wmt13_en_es_translation_benchmark_128 | 27.2349 | 57.1826 | 128 |  |  |  |  | 613.0719 |
+| checkpoint-004000 | 4000 | external_wmt13_en_es_translation_benchmark_128 | 27.2071 | 56.9757 | 128 |  |  |  |  | 365.0378 |
+| checkpoint-006000 | 6000 | external_wmt13_en_es_translation_benchmark_128 | 27.4061 | 57.1701 | 128 |  |  |  |  | 268.0263 |
+| checkpoint-002000 | 2000 | indomain_clean_merged_en_es_translation_benchmark_128 | 46.6153 | 70.5080 | 128 |  |  |  |  | 916.1013 |
+| checkpoint-004000 | 4000 | indomain_clean_merged_en_es_translation_benchmark_128 | 47.1364 | 69.5194 | 128 |  |  |  |  | 402.0407 |
+| checkpoint-006000 | 6000 | indomain_clean_merged_en_es_translation_benchmark_128 | 47.3852 | 69.5635 | 128 |  |  |  |  | 405.0423 |
 
 ## Files
 

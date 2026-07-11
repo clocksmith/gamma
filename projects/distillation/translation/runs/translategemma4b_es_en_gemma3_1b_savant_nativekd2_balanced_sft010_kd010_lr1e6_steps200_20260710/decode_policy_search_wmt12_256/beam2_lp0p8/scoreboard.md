@@ -1,6 +1,6 @@
 # Stage B Checkpoint Sweep Scoreboard
 
-Updated: 2026-07-10 20:42:06 UTC
+Updated: 2026-07-11 00:13:11 UTC
 Run root: `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_nativekd2_balanced_sft010_kd010_lr1e6_steps200_20260710`
 Decode: `beam2_lp0p8`
 
@@ -12,9 +12,9 @@ Decode: `beam2_lp0p8`
 
 ## Eval Rows
 
-| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | duration_s |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| checkpoint-000025 | 25 | wmt12_heldout_256 | 30.8768 | 57.3098 | 256 | 2 | 0.8 | 180.0195 |
+| checkpoint | step | eval | bleu | chrf | samples | beams | length_penalty | candidates | candidate_selection | duration_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| checkpoint-000025 | 25 | wmt12_heldout_256 | 30.8768 | 57.3098 | 256 | 2 | 0.8 |  |  | 180.0195 |
 
 ## Files
 
