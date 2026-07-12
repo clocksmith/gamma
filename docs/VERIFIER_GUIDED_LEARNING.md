@@ -204,9 +204,16 @@ Doppler compared 2,392 base samples with 2,392 adapted samples on 299 public
 tasks under the same sampler and verifier runtime. Pass@1 rose from 8.36% to
 88.29%; the external Zero-TVM subgroup rose from 9.73% to 71.68%. This is
 narrow capability evidence for compiler repair, not RLVR or semantic kernel
-correctness. V11 derives DPO and clipped GRPO-with-KL updates only from the
-separate 285-task diagnostic split and reserves the public split for policy
-comparison. Promotion still requires the remaining seeds, data controls, and
+correctness.
+
+V11 derived both optimizer lanes only from the separate 285-task diagnostic
+split. Twelve groups supplied 96 nonzero-advantage samples, of which 11 groups
+had constructive verifier variance and one varied only on exact-reference
+match. One clipped GRPO-with-KL update raised public pass@1 from 88.29% to
+94.98%, with 20 paired wins and zero losses. Zero-TVM pass@1 rose from 71.68%
+to 86.73%. The matched 400-step DPO lane overfit 11 pairs and regressed to
+36.79%, so it is rejected. This is a one-seed public compiler-repair RLVR
+result. Promotion still requires the remaining seeds, data controls, and
 sealed dispatch, oracle, numerical, metamorphic, and regression suite.
 
 WGSL reward variance is classified before making an RLVR claim. Constructive
