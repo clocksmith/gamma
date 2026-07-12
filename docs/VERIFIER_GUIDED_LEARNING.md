@@ -197,15 +197,17 @@ hidden-verifier receipts. SelfCodeAlign is relevant here because it generates
 coding tasks and responses, validates them in a sandbox, and selects passing
 examples for instruction tuning.
 
-Doppler WGSL V9 now implements that experimental surface. Its Radeon verifier
+Doppler WGSL V10 now has a primary Qwen 3.5 9B SFT result. Its Radeon verifier
 accepted 2,714 compiler-reproducing replacement tasks from 345 kernels, split
-by kernel family with no overlap. Gamma provides completion-masked SFT, DPO,
-grouped sampling with policy/reference token log-probabilities, and a clipped
-GRPO-with-KL update. A one-step non-capability fixture executed each optimizer
-path, but the primary `Qwen/Qwen3.5-9B` weights are not provisioned, so V9
-remains `harness_ready`. Neither the fixture nor the compiler corpus establishes
-semantic WGSL improvement; promotion still requires the sealed dispatch,
-oracle, numerical, metamorphic, and regression suite.
+by kernel family with no overlap. Gamma trained the seed-11 rank-32 adapter and
+Doppler compared 2,392 base samples with 2,392 adapted samples on 299 public
+tasks under the same sampler and verifier runtime. Pass@1 rose from 8.36% to
+88.29%; the external Zero-TVM subgroup rose from 9.73% to 71.68%. This is
+narrow capability evidence for compiler repair, not RLVR or semantic kernel
+correctness. V11 derives DPO and clipped GRPO-with-KL updates only from the
+separate 285-task diagnostic split and reserves the public split for policy
+comparison. Promotion still requires the remaining seeds, data controls, and
+sealed dispatch, oracle, numerical, metamorphic, and regression suite.
 
 ### Translation
 
