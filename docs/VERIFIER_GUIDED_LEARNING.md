@@ -209,6 +209,13 @@ separate 285-task diagnostic split and reserves the public split for policy
 comparison. Promotion still requires the remaining seeds, data controls, and
 sealed dispatch, oracle, numerical, metamorphic, and regression suite.
 
+WGSL reward variance is classified before making an RLVR claim. Constructive
+variance changes contract or compiler outcome; exact-only variance may be no
+more than whitespace around two compiling answers. All-pass and all-fail
+groups have no group-relative signal. For all-fail training tasks, a
+compiler-qualified reference paired with the modal on-policy failure is
+reference-anchored corrective DPO, not on-policy RLVR.
+
 ### Translation
 
 Translation has deterministic constraints and reference-based quality metrics,
