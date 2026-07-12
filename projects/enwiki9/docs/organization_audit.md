@@ -17,9 +17,9 @@ candidate: 69
 measured_negative: 77
 track_source_before_evolution: 10
 blocked_dependency: 12
-retired: 340
-untracked nonignored entries: 55
-modified tracked entries: 55
+retired: 350
+untracked nonignored entries: 0
+modified tracked entries: 13
 ```
 
 Interpretation:

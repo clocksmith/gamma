@@ -26,9 +26,9 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | n/a | 110,181,114 | forecast only; not a constructive proof | fx2-calibrated-from-exact-100m |
-| active candidate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 1,000,000 | 738,785 | exact 1,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 1,000,000 byte gate passed |
-| blocker | `n/a` | n/a | n/a | active 10,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 10,000,000 | n/a | unchanged 10,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | running |
+| active candidate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 10,000,000 | 2,202,600 | exact 10,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 10,000,000 byte gate passed |
+| blocker | `n/a` | n/a | n/a | active 100,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
+| active gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 100,000,000 | n/a | unchanged 100,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
 
 ## Best Full-Corpus Result
 
