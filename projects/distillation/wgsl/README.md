@@ -37,7 +37,9 @@ task ordering from silently excluding late mixed-reward groups. Gradients are
 accumulated against the rollout policy and applied in exactly one optimizer
 update; requests other than one update per rollout batch with zero stale-policy
 updates fail closed. The response records the ordering rule, signal sample
-count, microsteps, optimizer steps, and stale-policy contract.
+count, microsteps, optimizer steps, and stale-policy contract. GRPO keeps the
+adapter in evaluation mode while gradients are enabled so LoRA dropout cannot
+corrupt old-policy importance ratios.
 DPO treats completions as exact code artifacts: it preserves leading/trailing
 whitespace and permits empty or whitespace-only rejected samples instead of
 normalizing away verifier-observed failures. The frozen base-policy
