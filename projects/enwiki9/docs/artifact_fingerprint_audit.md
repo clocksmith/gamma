@@ -3,7 +3,7 @@
 This lock-safe audit checks candidate `meta.json` receipt references.
 It does not launch compression and does not score a candidate.
 
-- Artifact checks: `285`
+- Artifact checks: `287`
 - OK: `true`
 - Rule: `Rows with recorded receipt hashes must match their artifact files. Rows without hashes are legacy evidence and should be repaired when re-recorded.`
 
@@ -11,7 +11,7 @@ It does not launch compression and does not score a candidate.
 
 | Status | Count |
 |---|---:|
-| `match` | 285 |
+| `match` | 287 |
 
 ## Hash Mismatches
 

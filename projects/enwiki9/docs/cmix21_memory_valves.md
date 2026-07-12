@@ -40,7 +40,7 @@ A 100M RSS pass would still not prove a full 1G target result.
 | 20,736 | `cmix21_text_mmap_paq5_ppmd20736k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,805 | rss pass (41,788 KiB margin) | n/a | n/a | n/a | rss pass (13,116 KiB margin; tree 15,564 KiB over) | missing | n/a |
 | 20,608 | `cmix21_text_mmap_paq5_ppmd20608k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,521 | missing | n/a | n/a | n/a | missing | missing | n/a |
 | 20,480 | `cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,519 | missing | n/a | n/a | n/a | missing | missing | n/a |
-| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 1,000,000 | 738,785 | rss pass (1,654,584 KiB margin) | n/a | n/a | n/a | rss running (terminal margin pending) | missing | n/a |
+| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 1,000,000 | 738,785 | rss pass (1,654,584 KiB margin) | 1,638,340 | 2,202,600 | true | rss pass (1,614,424 KiB margin) | missing | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/2026-07-12T005633.json` |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,521 | missing | n/a | n/a | n/a | missing | missing | n/a |
 
 ## Decimal 10GB Risk
@@ -80,7 +80,7 @@ decimal_10gb_guard_kib = 9,765,625
 | 20,736 | `cmix21_text_mmap_paq5_ppmd20736k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | over (678,347 KiB over; tree 699,251 KiB over) | over (707,019 KiB over; tree 735,699 KiB over) | missing |
 | 20,608 | `cmix21_text_mmap_paq5_ppmd20608k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
 | 20,480 | `cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
-| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | within (934,449 KiB margin; tree 913,521 KiB margin) | running (terminal margin pending) | missing |
+| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | within (934,449 KiB margin; tree 913,521 KiB margin) | within (894,289 KiB margin; tree 854,193 KiB margin) | missing |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
 
 ## PPMD-Only Decimal Feasibility
@@ -98,7 +98,7 @@ because that is the current active boundary.
 - PPMD-only cap cut needed for decimal `10GB`: `115,137` KiB.
 - Projected PPMD cap after that cut: `-92,737` KiB.
 - PPMD-only feasibility verdict: `not feasible`; decimal admissibility needs another memory surface or an official accounting decision that accepts binary `10GiB`.
-- Certificate active scope at render time: `10,000,000` bytes.
+- Certificate active scope at render time: `100,000,000` bytes.
 
 ## Adjacent Archive Delta
 
@@ -117,6 +117,7 @@ because that is the current active boundary.
 | 21,248 | 21,120 | -77 | 128 | -0.6015625 | lower cap still failed 100M RSS |
 | 21,120 | 20,992 | 16 | 128 | 0.125 | lower cap still failed 100M RSS |
 | 20,992 | 20,864 | -85 | 128 | -0.6640625 | lower cap still failed 100M RSS |
+| 20,864 | 20,352 | 264 | 512 | 0.515625 | await 100M receipt |
 
 ## Current Read
 
@@ -136,6 +137,6 @@ because that is the current active boundary.
 - The next lower cap `40,960` KiB already has historical package rows (`ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
 - The next lower cap `21,504` KiB already has historical package rows (`ppmd21m`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
 - The next lower cap `20,352` KiB already has historical package rows (`ppmd20352k`, `ppmd20352k`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
-- `ppmd20352k` is the active restarted ladder: active gate is `10,000,000` bytes with RSS status rss running (terminal margin pending).
+- `ppmd20352k` is the active promotion lane: exact `10M` archive `1,638,340`, score `2,202,600`; active gate is `100,000,000` bytes with RSS status missing.
 - The next lower cap `20,352` KiB already has historical package rows (`ppmd20352k`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
-- The next mutation should wait until this live guard records a terminal receipt.
+- The next mutation should wait until this active promotion gate records a terminal receipt.
