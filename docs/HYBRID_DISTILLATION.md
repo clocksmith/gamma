@@ -276,6 +276,13 @@ separate diagnostic partition so the public comparison cannot leak into DPO or
 GRPO training. This result does not promote the adapter: only one seed and one
 data lane are complete, and compilation is not a semantic ML-kernel oracle.
 
+V12 corrects the pending data ablation before execution. The earlier 800-step
+dataset order exposed the same prefix in all three lanes, so it could not test
+external replacement. The registered V12 workloads seed/hash-order and consume
+all 1,200 rows in each lane. They also separate 64-token short repairs from a
+640-token long stratum using only the visible broken-span length, then recombine
+the original denominator.
+
 The contrast with the rejected predecessor is methodologically useful.
 TranslateGemma Stage A used a capable 1B initialization, 1,600 curated pairs,
 4,000 full-weight steps, checkpoint selection, and adjacent data controls. The
