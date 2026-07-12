@@ -271,10 +271,14 @@ GRPO RLVR using the same tasks, sampler, token budget, and verifier bundle.
 This keeps the data-lane question separate from the optimizer question.
 
 The seed-11 anchor SFT result raised family-disjoint compiler-repair pass@1
-from 8.36% to 88.29% on 299 tasks. V11 keeps optimizer construction on the
-separate diagnostic partition so the public comparison cannot leak into DPO or
-GRPO training. This result does not promote the adapter: only one seed and one
-data lane are complete, and compilation is not a semantic ML-kernel oracle.
+from 8.36% to 88.29% on 299 tasks. V11 kept optimizer construction on the
+separate diagnostic partition so the public comparison could not leak into DPO
+or GRPO training. One GRPO update raised pass@1 again to 94.98%, with 20
+paired wins and zero losses; its external Zero-TVM effect was +15.04 points.
+The ordinary DPO control fell to 36.79% after 400 steps on 11 pairs and is
+rejected. This result does not promote the adapter: only one optimizer seed
+and one SFT data lane are complete, and compilation is not a semantic ML-kernel
+oracle.
 
 V12 corrects the pending data ablation before execution. The earlier 800-step
 dataset order exposed the same prefix in all three lanes, so it could not test

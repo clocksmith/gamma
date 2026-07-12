@@ -61,6 +61,20 @@ A one-step Gemma 3 270M fixture executed SFT, grouped rollout, DPO, and GRPO
 only to validate mechanics. Its sampled repairs produced zero compiler passes,
 and it is excluded from every V9 capability comparison.
 
+The primary Qwen run now has two measured stages. Doppler V10 raised
+family-disjoint public compiler-repair pass@1 from 8.36% to 88.29% with the
+seed-11 SFT adapter. V11 sampled only the disjoint diagnostic partition,
+identified 12 verifier-varying groups and 96 nonzero-advantage samples, and
+made one clipped GRPO-with-KL optimizer update. Under the same public sampler
+and Radeon verifier, the GRPO policy reached 94.98% pass@1, with 20 paired wins
+and zero losses against SFT. The Zero-TVM subgroup rose from 71.68% to 86.73%.
+
+The matched DPO lane is a retained negative result. Four hundred steps on 11
+on-policy pairs drove the training margin upward while public pass@1 collapsed
+to 36.79%. Reference-anchored pairs from all-fail groups were emitted
+separately and were not used. DPO requires a new disjoint checkpoint-selection
+contract before another capability run.
+
 The first prepared Doppler corpus is compiler-reproducing replacement repair.
 It establishes a training substrate, not a semantic-kernel capability claim.
 Promotion remains dependent on Doppler's sealed semantic repair suite and the
