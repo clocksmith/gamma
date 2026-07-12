@@ -197,6 +197,16 @@ hidden-verifier receipts. SelfCodeAlign is relevant here because it generates
 coding tasks and responses, validates them in a sandbox, and selects passing
 examples for instruction tuning.
 
+Doppler WGSL V9 now implements that experimental surface. Its Radeon verifier
+accepted 2,714 compiler-reproducing replacement tasks from 345 kernels, split
+by kernel family with no overlap. Gamma provides completion-masked SFT, DPO,
+grouped sampling with policy/reference token log-probabilities, and a clipped
+GRPO-with-KL update. A one-step non-capability fixture executed each optimizer
+path, but the primary `Qwen/Qwen3.5-9B` weights are not provisioned, so V9
+remains `harness_ready`. Neither the fixture nor the compiler corpus establishes
+semantic WGSL improvement; promotion still requires the sealed dispatch,
+oracle, numerical, metamorphic, and regression suite.
+
 ### Translation
 
 Translation has deterministic constraints and reference-based quality metrics,

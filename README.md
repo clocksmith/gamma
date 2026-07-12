@@ -74,6 +74,7 @@ python gamma.py mind-meld --help
 - [requirements/README.md](./requirements/README.md): dependency profiles by engine and hardware
 - [projects/distillation/embedding/README.md](./projects/distillation/embedding/README.md): EmbeddingGemma distillation
 - [projects/distillation/translation/README.md](./projects/distillation/translation/README.md): TranslateGemma distillation
+- [projects/distillation/wgsl/README.md](./projects/distillation/wgsl/README.md): Doppler WGSL SFT, DPO, rollout, and GRPO optimizer backend
 - [src/functiongemma_training/README.md](./src/functiongemma_training/README.md): FunctionGemma training path
 
 ## Integrations and Ecosystem

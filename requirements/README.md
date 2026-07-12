@@ -18,7 +18,10 @@ pip install -r requirements/rocm.txt
 # Engine extras
 pip install -r requirements/pytorch.txt
 pip install -r requirements/llamacpp.txt
+
+# Verifier-guided SFT, DPO, and GRPO after installing hardware torch
+pip install -r requirements/verifier-training.txt
 ```
 
 Available profiles are `base`, `core`, `cuda`, `jax`, `llamacpp`, `mlx`,
-`onnx`, `pytorch`, `rocm`, `tensorflow`, and `vllm`.
+`onnx`, `pytorch`, `rocm`, `tensorflow`, `verifier-training`, and `vllm`.
