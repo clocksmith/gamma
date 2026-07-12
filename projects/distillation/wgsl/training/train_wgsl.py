@@ -1022,7 +1022,7 @@ def _run_grpo_update(request: dict[str, Any], runtime: dict[str, Any], output_ro
     updates_per_rollout_batch, maximum_stale_policy_updates = _grpo_update_contract(training)
     training_seed = _require_int(training.get("seed"), "training.seed")
     _seed_everything(training_seed, runtime)
-    model.train()
+    model.eval()
     metrics_path = output_root / "metrics.jsonl"
     losses: list[float] = []
     samples = _seed_shuffled_grpo_samples(groups, training_seed)
@@ -1100,6 +1100,7 @@ def _run_grpo_update(request: dict[str, Any], runtime: dict[str, Any], output_ro
             "optimizerSteps": 1,
             "updatesPerRolloutBatch": updates_per_rollout_batch,
             "maximumStalePolicyUpdates": maximum_stale_policy_updates,
+            "dropoutDisabled": True,
             "sampleOrder": "seed_shuffled",
             "signalSampleCount": len(samples),
             "nonzeroAdvantageSteps": nonzero_advantage_steps,
