@@ -255,9 +255,9 @@ The scoreboard should include:
 Promotion should be based on the external capability target, not the checkpoint
 with the lowest training loss.
 
-### WGSL V9 application
+### WGSL V10/V11 application
 
-The Doppler WGSL V9 program applies this design with three equal 1,200-row
+The Doppler WGSL program applies this design with three equal 1,200-row
 lanes: a Doppler-only anchor, a 20% pinned external-kernel replacement, and a
 20% random in-domain replacement. The primary student is Qwen 3.5 9B; Qwen 3.5
 2B is an efficiency control and Qwen 3.6 27B is a teacher/ceiling. Compiler
@@ -269,6 +269,25 @@ The optimizer comparisons start from the same selected SFT checkpoint:
 best-of-eight rejection sampling, DPO pairs derived from the frozen groups, and
 GRPO RLVR using the same tasks, sampler, token budget, and verifier bundle.
 This keeps the data-lane question separate from the optimizer question.
+
+The seed-11 anchor SFT result raised family-disjoint compiler-repair pass@1
+from 8.36% to 88.29% on 299 tasks. V11 keeps optimizer construction on the
+separate diagnostic partition so the public comparison cannot leak into DPO or
+GRPO training. This result does not promote the adapter: only one seed and one
+data lane are complete, and compilation is not a semantic ML-kernel oracle.
+
+The contrast with the rejected predecessor is methodologically useful.
+TranslateGemma Stage A used a capable 1B initialization, 1,600 curated pairs,
+4,000 full-weight steps, checkpoint selection, and adjacent data controls. The
+old WGSL V8 lane used Gemma 3 270M, four unique repairs duplicated to eight
+rows, one optimizer step, rank-4 LoRA on two projections, and prose-shaped
+targets. V10 uses Qwen 3.5 9B, hundreds of compiler-verified replacement rows,
+100 optimizer updates, rank-32 LoRA across attention and MLP projections, and
+the same replacement-only contract at training and evaluation. Model capacity,
+data coverage, update budget, and response contract all changed together
+between V8 and V10, so V10 explains why the tiny fixture was not a useful
+capability experiment; it does not isolate which one of those four changes is
+causal.
 
 ## Designing The Next Lane
 
