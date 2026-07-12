@@ -51,6 +51,37 @@ def test_jsonl_loader_is_fail_closed(tmp_path):
         MODULE._read_jsonl(empty)
 
 
+def test_sft_seed_hash_order_is_deterministic_and_complete():
+    rows = [{"rowId": f"row-{index}"} for index in range(12)]
+    first, first_receipt = MODULE._order_sft_rows(
+        rows,
+        {"rowOrder": "seed_hash_sorted_v1", "seed": 11},
+    )
+    second, second_receipt = MODULE._order_sft_rows(
+        rows,
+        {"rowOrder": "seed_hash_sorted_v1", "seed": 11},
+    )
+    different, _ = MODULE._order_sft_rows(
+        rows,
+        {"rowOrder": "seed_hash_sorted_v1", "seed": 29},
+    )
+    assert first == second
+    assert first_receipt == second_receipt
+    assert first != rows
+    assert first != different
+    assert {row["rowId"] for row in first} == {row["rowId"] for row in rows}
+    assert first_receipt["rowOrder"] == "seed_hash_sorted_v1"
+    assert len(first_receipt["rowOrderSha256"]) == 64
+
+
+def test_sft_row_order_rejects_unknown_policy():
+    with pytest.raises(RuntimeError, match="training.rowOrder"):
+        MODULE._order_sft_rows(
+            [{"rowId": "row-1"}],
+            {"rowOrder": "shuffle_somehow", "seed": 11},
+        )
+
+
 def test_dpo_completion_text_preserves_whitespace_and_empty_negatives():
     assert MODULE._require_text("  replacement  ", "chosen", allow_empty=True) == "  replacement  "
     assert MODULE._require_text("  ", "rejected", allow_empty=True) == "  "

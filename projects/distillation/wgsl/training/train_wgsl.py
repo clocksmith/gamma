@@ -405,6 +405,41 @@ def _seed_everything(seed: int, runtime: dict[str, Any]) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
+def _order_sft_rows(
+    rows: list[dict[str, Any]],
+    training: dict[str, Any],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    row_order = str(training.get("rowOrder") or "dataset_order").strip()
+    if row_order == "dataset_order":
+        ordered = list(rows)
+    elif row_order == "seed_hash_sorted_v1":
+        seed = _require_int(training.get("seed"), "training.seed")
+        keyed: list[tuple[str, int, dict[str, Any]]] = []
+        for index, row in enumerate(rows):
+            row_id = _require_string(
+                row.get("rowId") or row.get("taskId") or row.get("id"),
+                f"training row {index + 1} identity",
+            )
+            key = _sha256_text(f"{seed}\0{row_id}")
+            keyed.append((key, index, row))
+        ordered = [entry[2] for entry in sorted(keyed)]
+    else:
+        raise RuntimeError(
+            "training.rowOrder must be dataset_order or seed_hash_sorted_v1"
+        )
+    ordered_ids = [
+        _require_string(
+            row.get("rowId") or row.get("taskId") or row.get("id") or f"index-{index}",
+            f"ordered training row {index + 1} identity",
+        )
+        for index, row in enumerate(ordered)
+    ]
+    return ordered, {
+        "rowOrder": row_order,
+        "rowOrderSha256": _sha256_text(_stable_json(ordered_ids)),
+    }
+
+
 def _run_sft(request: dict[str, Any], runtime: dict[str, Any], output_root: Path) -> dict[str, Any]:
     torch = runtime["torch"]
     training = _require_object(request.get("training"), "training")
@@ -417,6 +452,7 @@ def _run_sft(request: dict[str, Any], runtime: dict[str, Any], output_root: Path
     max_length = _require_int(training.get("maxLength"), "training.maxLength", 2)
     max_grad_norm = _require_float(training.get("maxGradNorm"), "training.maxGradNorm")
     seed = _require_int(training.get("seed"), "training.seed")
+    rows, row_order_receipt = _order_sft_rows(rows, training)
     _seed_everything(seed, runtime)
     metrics_path = output_root / "metrics.jsonl"
     optimizer.zero_grad(set_to_none=True)
@@ -459,6 +495,9 @@ def _run_sft(request: dict[str, Any], runtime: dict[str, Any], output_root: Path
             "loss": losses[-1],
             "meanLoss": sum(losses) / len(losses),
             "steps": steps,
+            "datasetRows": len(rows),
+            "distinctRowsVisited": min(steps, len(rows)),
+            **row_order_receipt,
         },
         "metricsPath": str(metrics_path),
     }
