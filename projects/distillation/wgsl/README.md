@@ -40,7 +40,9 @@ updates fail closed. The response records the ordering rule, signal sample
 count, microsteps, optimizer steps, and stale-policy contract.
 DPO treats completions as exact code artifacts: it preserves leading/trailing
 whitespace and permits empty or whitespace-only rejected samples instead of
-normalizing away verifier-observed failures.
+normalizing away verifier-observed failures. The frozen base-policy
+chosen/rejected sequence scores are cached once per pair; trainable-policy
+scores remain current on every optimizer update.
 
 The primary V9 student is `Qwen/Qwen3.5-9B`. `Qwen/Qwen3.5-2B` is an
 efficiency control, not a gate on the 9B lane. The already provisioned

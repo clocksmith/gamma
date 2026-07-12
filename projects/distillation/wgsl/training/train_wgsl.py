@@ -464,26 +464,20 @@ def _run_sft(request: dict[str, Any], runtime: dict[str, Any], output_root: Path
     }
 
 
-def _policy_and_reference_logprob(
+def _sequence_logprob(
     model: Any,
     tokenizer: Any,
     prompt: str,
     completion: str,
     max_length: int,
     runtime: dict[str, Any],
-) -> tuple[Any, Any]:
+) -> Any:
     torch = runtime["torch"]
     encoded = _encode_pair(tokenizer, prompt, completion, max_length)
     tensors = _tensorize(encoded, torch)
-    policy_logprob = _completion_logprobs(
+    return _completion_logprobs(
         model, tensors, torch, runtime["functional"]
     ).sum()
-    context = model.disable_adapter() if hasattr(model, "disable_adapter") else nullcontext()
-    with torch.no_grad(), context:
-        reference_logprob = _completion_logprobs(
-            model, tensors, torch, runtime["functional"]
-        ).sum()
-    return policy_logprob, reference_logprob
 
 
 def _run_dpo(request: dict[str, Any], runtime: dict[str, Any], output_root: Path) -> dict[str, Any]:
@@ -503,16 +497,39 @@ def _run_dpo(request: dict[str, Any], runtime: dict[str, Any], output_root: Path
     _seed_everything(_require_int(training.get("seed"), "training.seed"), runtime)
     metrics_path = output_root / "metrics.jsonl"
     losses: list[float] = []
+    prepared_rows = []
+    reference_context = (
+        model.disable_adapter() if hasattr(model, "disable_adapter") else nullcontext()
+    )
+    with torch.no_grad(), reference_context:
+        for row in rows:
+            prompt = _require_text(row.get("prompt"), "DPO row.prompt")
+            chosen = _require_text(row.get("chosen"), "DPO row.chosen", allow_empty=True)
+            rejected = _require_text(row.get("rejected"), "DPO row.rejected", allow_empty=True)
+            prepared_rows.append({
+                "prompt": prompt,
+                "chosen": chosen,
+                "rejected": rejected,
+                "chosenReference": float(_sequence_logprob(
+                    model, tokenizer, prompt, chosen, max_length, runtime
+                ).item()),
+                "rejectedReference": float(_sequence_logprob(
+                    model, tokenizer, prompt, rejected, max_length, runtime
+                ).item()),
+            })
     for step in range(steps):
-        row = rows[step % len(rows)]
-        prompt = _require_text(row.get("prompt"), "DPO row.prompt")
-        chosen = _require_text(row.get("chosen"), "DPO row.chosen", allow_empty=True)
-        rejected = _require_text(row.get("rejected"), "DPO row.rejected", allow_empty=True)
-        chosen_policy, chosen_reference = _policy_and_reference_logprob(
-            model, tokenizer, prompt, chosen, max_length, runtime
+        row = prepared_rows[step % len(prepared_rows)]
+        chosen_policy = _sequence_logprob(
+            model, tokenizer, row["prompt"], row["chosen"], max_length, runtime
         )
-        rejected_policy, rejected_reference = _policy_and_reference_logprob(
-            model, tokenizer, prompt, rejected, max_length, runtime
+        rejected_policy = _sequence_logprob(
+            model, tokenizer, row["prompt"], row["rejected"], max_length, runtime
+        )
+        chosen_reference = torch.tensor(
+            row["chosenReference"], dtype=chosen_policy.dtype, device=chosen_policy.device
+        )
+        rejected_reference = torch.tensor(
+            row["rejectedReference"], dtype=rejected_policy.dtype, device=rejected_policy.device
         )
         margin = (chosen_policy - rejected_policy) - (chosen_reference - rejected_reference)
         loss = -functional.logsigmoid(beta * margin)
@@ -537,7 +554,12 @@ def _run_dpo(request: dict[str, Any], runtime: dict[str, Any], output_root: Path
         "inputPolicyHash": input_policy_hash,
         "policyHash": policy_hash,
         "checkpointStep": steps,
-        "metrics": {"loss": losses[-1], "meanLoss": sum(losses) / len(losses), "steps": steps},
+        "metrics": {
+            "loss": losses[-1],
+            "meanLoss": sum(losses) / len(losses),
+            "steps": steps,
+            "referenceCacheRows": len(prepared_rows),
+        },
         "metricsPath": str(metrics_path),
     }
 
