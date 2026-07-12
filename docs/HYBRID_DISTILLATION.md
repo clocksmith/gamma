@@ -255,6 +255,21 @@ The scoreboard should include:
 Promotion should be based on the external capability target, not the checkpoint
 with the lowest training loss.
 
+### WGSL V9 application
+
+The Doppler WGSL V9 program applies this design with three equal 1,200-row
+lanes: a Doppler-only anchor, a 20% pinned external-kernel replacement, and a
+20% random in-domain replacement. The primary student is Qwen 3.5 9B; Qwen 3.5
+2B is an efficiency control and Qwen 3.6 27B is a teacher/ceiling. Compiler
+repair is the prepared training substrate. Family-disjoint and sealed semantic
+repair pass@1, not completion loss or the mechanics fixture, controls
+promotion.
+
+The optimizer comparisons start from the same selected SFT checkpoint:
+best-of-eight rejection sampling, DPO pairs derived from the frozen groups, and
+GRPO RLVR using the same tasks, sampler, token budget, and verifier bundle.
+This keeps the data-lane question separate from the optimizer question.
+
 ## Designing The Next Lane
 
 Use this decision table after every sweep:
