@@ -1,8 +1,9 @@
 # Experiment Register
 
-This directory is Gamma's pointer-only register for verifier-guided learning
-experiments across domain repositories. Simulatte visual-construction trials use
-the `simulation_rendering` domain and `construction_search` method ID.
+This directory is Gamma's pointer-only SAME-R experiment register across domain
+repositories. Verifier-guided learning is one participating method family;
+Simulatte visual-construction trials use the `simulation_rendering` domain and
+`construction_search` method ID.
 
 - `experiment-register.schema.json` defines the record contract.
 - `experiment-register.jsonl` contains one JSON object per experiment.
@@ -21,11 +22,11 @@ prove.
 Run:
 
 ```bash
-python projects/distillation/shared/experiments/validate_experiment_register.py
+python projects/samer/experiments/validate_experiment_register.py
 ```
 
-See [`SAME-R`](../../../samer/README.md) for swappable approaches, matched
+See [`SAME-R`](../README.md) for swappable approaches, matched
 evaluation, detailed trial stages, and their mapping to the register's coarse
 statuses. See
-[`docs/VERIFIER_GUIDED_LEARNING.md`](../../../../docs/VERIFIER_GUIDED_LEARNING.md)
+[`docs/VERIFIER_GUIDED_LEARNING.md`](../../../docs/VERIFIER_GUIDED_LEARNING.md)
 for optimizer, reward, and RLVR terminology.

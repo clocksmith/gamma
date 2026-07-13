@@ -18,7 +18,7 @@ The repository ownership split is:
   the boundary between machine scores and human authority.
 
 The checked-in register is
-[`projects/distillation/shared/experiments/experiment-register.jsonl`](../projects/distillation/shared/experiments/experiment-register.jsonl).
+[`projects/samer/experiments/experiment-register.jsonl`](../projects/samer/experiments/experiment-register.jsonl).
 It stores pointers and claim boundaries, not copied result bundles.
 
 ## Industry Names
@@ -293,7 +293,7 @@ The register is pointer-only. Each JSONL row records:
 Validate it with:
 
 ```bash
-python projects/distillation/shared/experiments/validate_experiment_register.py
+python projects/samer/experiments/validate_experiment_register.py
 ```
 
 When sibling repositories are present in the same workspace, the validator

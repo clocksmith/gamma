@@ -55,7 +55,7 @@ structures, furniture, tools, environments, and unseen composites.
 | `tools/samer/run-construction-trial.mjs` | Simulatte matched Phase 6 executor |
 | `tools/samer/gold-visual-evaluator.mjs` | Simulatte machine and human gold gate |
 | `tools/audit-intent-scene-screenshots.mjs` | Simulatte live pixel collector |
-| `projects/distillation/shared/experiments/experiment-register.jsonl` | Gamma immutable evidence pointers |
+| `projects/samer/experiments/experiment-register.jsonl` | Gamma immutable evidence pointers |
 
 Run from the Simulatte repository:
 
