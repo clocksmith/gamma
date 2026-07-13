@@ -1,0 +1,1221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clocksmith/gamma/projects/samer/contracts/same-r-contract-suite.schema.json",
+  "title": "SAME-R contract validation bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "suiteId",
+    "approachRegistry",
+    "participantRegistry",
+    "labelAuthorities",
+    "causalContract",
+    "runContracts",
+    "contaminationAudit",
+    "metricEvidence",
+    "trialReceipt",
+    "selectionReceipt",
+    "saturationDecision"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "suiteId": { "$ref": "#/$defs/id" },
+    "approachRegistry": { "$ref": "#/$defs/approachRegistry" },
+    "participantRegistry": { "$ref": "#/$defs/participantRegistry" },
+    "labelAuthorities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/labelAuthority" }
+    },
+    "causalContract": { "$ref": "#/$defs/causalContract" },
+    "runContracts": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/$defs/runContract" }
+    },
+    "contaminationAudit": { "$ref": "#/$defs/contaminationAudit" },
+    "metricEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/metricEvidence" }
+    },
+    "trialReceipt": { "$ref": "#/$defs/trialReceipt" },
+    "selectionReceipt": { "$ref": "#/$defs/selectionReceipt" },
+    "saturationDecision": { "$ref": "#/$defs/saturationDecision" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitRevision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "nonemptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifactPointer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision", "path", "sha256"],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+/[a-z0-9_.-]+$"
+        },
+        "revision": { "$ref": "#/$defs/gitRevision" },
+        "path": { "$ref": "#/$defs/nonemptyString" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "budgetVector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposalCalls",
+        "criticCalls",
+        "teacherCalls",
+        "generationCalls",
+        "materializations",
+        "trainingRuns",
+        "evaluationCalls",
+        "evaluationLooks",
+        "checkpointEvaluations",
+        "itemEvaluations",
+        "adjudications",
+        "humanDecisions",
+        "sealedHoldoutLooks",
+        "recursionDepth",
+        "childCount",
+        "modelTokensByParticipant"
+      ],
+      "properties": {
+        "proposalCalls": { "type": "integer", "minimum": 0 },
+        "criticCalls": { "type": "integer", "minimum": 0 },
+        "teacherCalls": { "type": "integer", "minimum": 0 },
+        "generationCalls": { "type": "integer", "minimum": 0 },
+        "materializations": { "type": "integer", "minimum": 0 },
+        "trainingRuns": { "type": "integer", "minimum": 0 },
+        "evaluationCalls": { "type": "integer", "minimum": 0 },
+        "evaluationLooks": { "type": "integer", "minimum": 0 },
+        "checkpointEvaluations": { "type": "integer", "minimum": 0 },
+        "itemEvaluations": { "type": "integer", "minimum": 0 },
+        "adjudications": { "type": "integer", "minimum": 0 },
+        "humanDecisions": { "type": "integer", "minimum": 0 },
+        "sealedHoldoutLooks": { "type": "integer", "minimum": 0 },
+        "recursionDepth": { "type": "integer", "minimum": 0 },
+        "childCount": { "type": "integer", "minimum": 0 },
+        "modelTokensByParticipant": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "approachRegistry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "registryId",
+        "revision",
+        "entries",
+        "history",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "registryId": { "$ref": "#/$defs/id" },
+        "revision": { "$ref": "#/$defs/gitRevision" },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "approachId",
+              "approachRevision",
+              "mechanismType",
+              "implementation",
+              "eligibleDomains",
+              "eligibleCapabilities",
+              "requiredInputs",
+              "producedArtifacts",
+              "allowedRoles",
+              "proposalSchemaId",
+              "budget",
+              "evidenceRequirements",
+              "incompatibilities",
+              "status"
+            ],
+            "properties": {
+              "approachId": { "$ref": "#/$defs/id" },
+              "approachRevision": { "$ref": "#/$defs/nonemptyString" },
+              "mechanismType": { "$ref": "#/$defs/id" },
+              "implementation": { "$ref": "#/$defs/artifactPointer" },
+              "eligibleDomains": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/id" }
+              },
+              "eligibleCapabilities": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/id" }
+              },
+              "requiredInputs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/id" }
+              },
+              "producedArtifacts": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/id" }
+              },
+              "allowedRoles": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "proposer",
+                    "critic",
+                    "teacher",
+                    "materializer",
+                    "executor",
+                    "evaluator",
+                    "selector",
+                    "adjudicator"
+                  ]
+                }
+              },
+              "proposalSchemaId": { "$ref": "#/$defs/nonemptyString" },
+              "budget": { "$ref": "#/$defs/budgetVector" },
+              "evidenceRequirements": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/$defs/nonemptyString" }
+              },
+              "incompatibilities": {
+                "type": "array",
+                "items": { "$ref": "#/$defs/nonemptyString" }
+              },
+              "status": {
+                "enum": [
+                  "eligible",
+                  "disabled",
+                  "blocked",
+                  "saturated_for_scope",
+                  "superseded"
+                ]
+              }
+            }
+          }
+        },
+        "history": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "accepted",
+            "rejected",
+            "blocked",
+            "invalidated",
+            "saturated",
+            "promoted"
+          ],
+          "properties": {
+            "accepted": { "$ref": "#/$defs/idArray" },
+            "rejected": { "$ref": "#/$defs/idArray" },
+            "blocked": { "$ref": "#/$defs/idArray" },
+            "invalidated": { "$ref": "#/$defs/idArray" },
+            "saturated": { "$ref": "#/$defs/idArray" },
+            "promoted": { "$ref": "#/$defs/idArray" }
+          }
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "idArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "participantRegistry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "participants", "sha256"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "participants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "participantId",
+              "kind",
+              "providerId",
+              "revision",
+              "owner",
+              "roles",
+              "domains",
+              "dataAccess",
+              "wrapperHash",
+              "instructionHash",
+              "promptTemplateHash",
+              "toolContractHash",
+              "decodeContractHash",
+              "retryPolicyHash",
+              "labelAuthorityIds",
+              "budget",
+              "conflictPolicy"
+            ],
+            "properties": {
+              "participantId": { "$ref": "#/$defs/id" },
+              "kind": {
+                "enum": ["human", "model", "program", "domain_script"]
+              },
+              "providerId": { "$ref": "#/$defs/nonemptyString" },
+              "revision": { "$ref": "#/$defs/nonemptyString" },
+              "owner": { "$ref": "#/$defs/nonemptyString" },
+              "roles": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "proposer",
+                    "critic",
+                    "teacher",
+                    "materializer",
+                    "executor",
+                    "evaluator",
+                    "selector",
+                    "adjudicator"
+                  ]
+                }
+              },
+              "domains": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/id" }
+              },
+              "dataAccess": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "qualification",
+                  "training",
+                  "publicDiagnostic",
+                  "checkpointSelection",
+                  "sealedPromotion",
+                  "selectorMetaEvaluation"
+                ],
+                "properties": {
+                  "qualification": { "type": "boolean" },
+                  "training": { "type": "boolean" },
+                  "publicDiagnostic": { "type": "boolean" },
+                  "checkpointSelection": { "type": "boolean" },
+                  "sealedPromotion": { "type": "boolean" },
+                  "selectorMetaEvaluation": { "type": "boolean" }
+                }
+              },
+              "wrapperHash": { "$ref": "#/$defs/sha256" },
+              "instructionHash": { "$ref": "#/$defs/sha256" },
+              "promptTemplateHash": { "$ref": "#/$defs/sha256" },
+              "toolContractHash": { "$ref": "#/$defs/sha256" },
+              "decodeContractHash": { "$ref": "#/$defs/sha256" },
+              "retryPolicyHash": { "$ref": "#/$defs/sha256" },
+              "labelAuthorityIds": { "$ref": "#/$defs/idArray" },
+              "budget": { "$ref": "#/$defs/budgetVector" },
+              "conflictPolicy": { "$ref": "#/$defs/nonemptyString" }
+            }
+          }
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "labelAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "authorityId",
+        "participantId",
+        "owner",
+        "qualificationReceipt",
+        "scope",
+        "allowedActions",
+        "deniedCells",
+        "validFrom",
+        "invalidationTriggers",
+        "downstreamManifestIds",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "authorityId": { "$ref": "#/$defs/id" },
+        "participantId": { "$ref": "#/$defs/id" },
+        "owner": { "$ref": "#/$defs/nonemptyString" },
+        "qualificationReceipt": { "$ref": "#/$defs/artifactPointer" },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "domain",
+            "capability",
+            "populationHash",
+            "languages",
+            "categories",
+            "taskShapes",
+            "outputEnvelopeHash"
+          ],
+          "properties": {
+            "domain": { "$ref": "#/$defs/id" },
+            "capability": { "$ref": "#/$defs/id" },
+            "populationHash": { "$ref": "#/$defs/sha256" },
+            "languages": { "$ref": "#/$defs/idArray" },
+            "categories": { "$ref": "#/$defs/idArray" },
+            "taskShapes": { "$ref": "#/$defs/idArray" },
+            "outputEnvelopeHash": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "allowedActions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "positive_label",
+              "negative_label",
+              "abstain",
+              "correct",
+              "rank",
+              "score",
+              "construct",
+              "adjudicate"
+            ]
+          }
+        },
+        "deniedCells": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["category", "taskShape", "reason", "metricReceipt"],
+            "properties": {
+              "category": { "$ref": "#/$defs/id" },
+              "taskShape": { "$ref": "#/$defs/id" },
+              "reason": { "$ref": "#/$defs/nonemptyString" },
+              "metricReceipt": { "$ref": "#/$defs/artifactPointer" }
+            }
+          }
+        },
+        "validFrom": { "$ref": "#/$defs/nonemptyString" },
+        "invalidationTriggers": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonemptyString" }
+        },
+        "downstreamManifestIds": { "$ref": "#/$defs/idArray" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "causalContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "experimentId",
+        "interventionId",
+        "domain",
+        "owners",
+        "capability",
+        "population",
+        "baselineArtifact",
+        "approachId",
+        "independentVariable",
+        "causalHypothesis",
+        "matchedOperation",
+        "primaryMetric",
+        "guardrails",
+        "failureInterpretation",
+        "lanes",
+        "search",
+        "saturationRule",
+        "invalidationTriggers",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "experimentId": { "$ref": "#/$defs/id" },
+        "interventionId": { "$ref": "#/$defs/id" },
+        "domain": { "$ref": "#/$defs/id" },
+        "owners": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["domain", "method", "evaluator", "artifact", "humanAuthority"],
+          "properties": {
+            "domain": { "$ref": "#/$defs/nonemptyString" },
+            "method": { "$ref": "#/$defs/nonemptyString" },
+            "evaluator": { "$ref": "#/$defs/nonemptyString" },
+            "artifact": { "$ref": "#/$defs/nonemptyString" },
+            "humanAuthority": { "$ref": "#/$defs/nonemptyString" }
+          }
+        },
+        "capability": { "$ref": "#/$defs/id" },
+        "population": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "definition",
+            "inclusionRule",
+            "exclusionRule",
+            "unitOfAnalysis",
+            "groupingUnit",
+            "splitManifestHashes",
+            "expectedDenominators",
+            "outsideClaim"
+          ],
+          "properties": {
+            "definition": { "$ref": "#/$defs/nonemptyString" },
+            "inclusionRule": { "$ref": "#/$defs/nonemptyString" },
+            "exclusionRule": { "$ref": "#/$defs/nonemptyString" },
+            "unitOfAnalysis": { "$ref": "#/$defs/id" },
+            "groupingUnit": { "$ref": "#/$defs/id" },
+            "splitManifestHashes": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": { "$ref": "#/$defs/sha256" }
+            },
+            "expectedDenominators": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": { "type": "integer", "minimum": 1 }
+            },
+            "outsideClaim": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/nonemptyString" }
+            }
+          }
+        },
+        "baselineArtifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "modelId",
+            "modelRevision",
+            "baseCheckpointId",
+            "baseCheckpointSha256",
+            "tokenizerRevision",
+            "tokenizerSha256",
+            "parameterManifestSha256"
+          ],
+          "properties": {
+            "modelId": { "$ref": "#/$defs/nonemptyString" },
+            "modelRevision": { "$ref": "#/$defs/nonemptyString" },
+            "baseCheckpointId": { "$ref": "#/$defs/nonemptyString" },
+            "baseCheckpointSha256": { "$ref": "#/$defs/sha256" },
+            "tokenizerRevision": { "$ref": "#/$defs/nonemptyString" },
+            "tokenizerSha256": { "$ref": "#/$defs/sha256" },
+            "parameterManifestSha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "approachId": { "$ref": "#/$defs/id" },
+        "independentVariable": { "$ref": "#/$defs/nonemptyString" },
+        "causalHypothesis": { "$ref": "#/$defs/nonemptyString" },
+        "matchedOperation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "operation",
+            "count",
+            "positions",
+            "positionPolicyHash",
+            "orderingPolicy",
+            "candidatePoolHash",
+            "promptTemplateHash",
+            "generationCallLimit",
+            "retryPolicyId"
+          ],
+          "properties": {
+            "operation": {
+              "enum": ["keep", "add", "remove", "replace", "reorder", "filter", "weight", "relabel", "prompt", "optimizer", "serving"]
+            },
+            "count": { "type": "integer", "minimum": 0 },
+            "positions": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "integer", "minimum": 0 }
+            },
+            "positionPolicyHash": { "$ref": "#/$defs/sha256" },
+            "orderingPolicy": { "$ref": "#/$defs/nonemptyString" },
+            "candidatePoolHash": { "$ref": "#/$defs/sha256" },
+            "promptTemplateHash": { "$ref": "#/$defs/sha256" },
+            "generationCallLimit": { "type": "integer", "minimum": 0 },
+            "retryPolicyId": { "$ref": "#/$defs/id" }
+          }
+        },
+        "primaryMetric": { "$ref": "#/$defs/metricDefinition" },
+        "guardrails": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/metricDefinition" }
+        },
+        "failureInterpretation": {
+          "type": "object",
+          "minProperties": 5,
+          "additionalProperties": { "$ref": "#/$defs/nonemptyString" }
+        },
+        "lanes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["anchor", "targeted", "randomControl"],
+          "properties": {
+            "anchor": { "$ref": "#/$defs/id" },
+            "targeted": { "$ref": "#/$defs/id" },
+            "randomControl": { "$ref": "#/$defs/id" }
+          }
+        },
+        "search": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method",
+            "adaptive",
+            "candidateFamilyHash",
+            "nominalCandidateBudget",
+            "adjustedDecisionBudget",
+            "multiplicityPolicy",
+            "budget"
+          ],
+          "properties": {
+            "method": {
+              "enum": ["exhaustive", "grid", "seeded_random", "bayesian", "bandit", "human_proposed", "model_proposed", "multi_model", "recursive_samer"]
+            },
+            "adaptive": { "type": "boolean" },
+            "candidateFamilyHash": { "$ref": "#/$defs/sha256" },
+            "nominalCandidateBudget": { "type": "integer", "minimum": 1 },
+            "adjustedDecisionBudget": { "type": "integer", "minimum": 1 },
+            "multiplicityPolicy": { "$ref": "#/$defs/nonemptyString" },
+            "budget": { "$ref": "#/$defs/budgetVector" }
+          }
+        },
+        "saturationRule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ruleId", "eligibleReasonCodes", "minimumEffect", "noImprovementWindow"],
+          "properties": {
+            "ruleId": { "$ref": "#/$defs/id" },
+            "eligibleReasonCodes": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/id" }
+            },
+            "minimumEffect": { "type": ["number", "null"] },
+            "noImprovementWindow": { "type": ["integer", "null"], "minimum": 1 }
+          }
+        },
+        "invalidationTriggers": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonemptyString" }
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "metricDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metricId", "direction", "evaluatorId", "evaluatorHash", "threshold", "decisionRole"],
+      "properties": {
+        "metricId": { "$ref": "#/$defs/id" },
+        "direction": { "enum": ["maximize", "minimize", "pass"] },
+        "evaluatorId": { "$ref": "#/$defs/id" },
+        "evaluatorHash": { "$ref": "#/$defs/sha256" },
+        "threshold": { "type": ["number", "boolean", "null"] },
+        "decisionRole": { "enum": ["primary", "blocking_guardrail", "supporting", "diagnostic"] }
+      }
+    },
+    "runContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "runId",
+        "experimentId",
+        "interventionId",
+        "causalContractSha256",
+        "laneId",
+        "seed",
+        "repositoryRevision",
+        "student",
+        "data",
+        "training",
+        "evaluation",
+        "contractValidity",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "runId": { "$ref": "#/$defs/id" },
+        "experimentId": { "$ref": "#/$defs/id" },
+        "interventionId": { "$ref": "#/$defs/id" },
+        "causalContractSha256": { "$ref": "#/$defs/sha256" },
+        "laneId": { "$ref": "#/$defs/id" },
+        "seed": { "type": "integer", "minimum": 0 },
+        "repositoryRevision": { "$ref": "#/$defs/gitRevision" },
+        "student": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "modelId",
+            "modelRevision",
+            "baseCheckpointId",
+            "baseCheckpointSha256",
+            "tokenizerRevision",
+            "tokenizerSha256",
+            "parameterManifestSha256",
+            "adapter"
+          ],
+          "properties": {
+            "modelId": { "$ref": "#/$defs/nonemptyString" },
+            "modelRevision": { "$ref": "#/$defs/nonemptyString" },
+            "baseCheckpointId": { "$ref": "#/$defs/nonemptyString" },
+            "baseCheckpointSha256": { "$ref": "#/$defs/sha256" },
+            "tokenizerRevision": { "$ref": "#/$defs/nonemptyString" },
+            "tokenizerSha256": { "$ref": "#/$defs/sha256" },
+            "parameterManifestSha256": { "$ref": "#/$defs/sha256" },
+            "adapter": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "targets",
+                "rank",
+                "alpha",
+                "dropout",
+                "initializationMethod",
+                "initializationSeed",
+                "initialParametersSha256",
+                "trainableParameterManifestSha256"
+              ],
+              "properties": {
+                "type": { "$ref": "#/$defs/id" },
+                "targets": { "$ref": "#/$defs/idArray" },
+                "rank": { "type": "integer", "minimum": 1 },
+                "alpha": { "type": "number", "exclusiveMinimum": 0 },
+                "dropout": { "type": "number", "minimum": 0, "maximum": 1 },
+                "initializationMethod": { "$ref": "#/$defs/id" },
+                "initializationSeed": { "type": "integer", "minimum": 0 },
+                "initialParametersSha256": { "$ref": "#/$defs/sha256" },
+                "trainableParameterManifestSha256": { "$ref": "#/$defs/sha256" }
+              }
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "manifestId",
+            "manifestSha256",
+            "rowCount",
+            "orderedRowIds",
+            "orderedRowIdsArtifact",
+            "rowOrderSha256",
+            "consumedRowCount",
+            "consumedPrefixSha256",
+            "resumeCursor"
+          ],
+          "properties": {
+            "manifestId": { "$ref": "#/$defs/id" },
+            "manifestSha256": { "$ref": "#/$defs/sha256" },
+            "rowCount": { "type": "integer", "minimum": 1 },
+            "orderedRowIds": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/id" }
+            },
+            "orderedRowIdsArtifact": { "$ref": "#/$defs/artifactPointer" },
+            "rowOrderSha256": { "$ref": "#/$defs/sha256" },
+            "consumedRowCount": { "type": "integer", "minimum": 0 },
+            "consumedPrefixSha256": { "$ref": "#/$defs/sha256" },
+            "resumeCursor": { "type": ["integer", "null"], "minimum": 0 }
+          }
+        },
+        "training": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "optimizerHash",
+            "scheduleHash",
+            "precision",
+            "deviceClass",
+            "runtimeMode",
+            "updateBudget",
+            "retryPolicy",
+            "checkpointPolicy"
+          ],
+          "properties": {
+            "optimizerHash": { "$ref": "#/$defs/sha256" },
+            "scheduleHash": { "$ref": "#/$defs/sha256" },
+            "precision": { "$ref": "#/$defs/id" },
+            "deviceClass": { "$ref": "#/$defs/id" },
+            "runtimeMode": { "$ref": "#/$defs/id" },
+            "updateBudget": { "type": "integer", "minimum": 1 },
+            "retryPolicy": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["policyId", "maximumAttempts", "retryableFailureCodes", "preserveSeed", "failedAttemptsDebitBudget"],
+              "properties": {
+                "policyId": { "$ref": "#/$defs/id" },
+                "maximumAttempts": { "type": "integer", "minimum": 1 },
+                "retryableFailureCodes": { "$ref": "#/$defs/idArray" },
+                "preserveSeed": { "type": "boolean" },
+                "failedAttemptsDebitBudget": { "type": "boolean" }
+              }
+            },
+            "checkpointPolicy": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["expectedCheckpointIds", "selectionRule", "terminalCheckpointHasPrivilege"],
+              "properties": {
+                "expectedCheckpointIds": { "$ref": "#/$defs/idArray" },
+                "selectionRule": { "$ref": "#/$defs/nonemptyString" },
+                "terminalCheckpointHasPrivilege": { "const": false }
+              }
+            }
+          }
+        },
+        "evaluation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["evaluatorId", "evaluatorHash", "decodePolicyHash", "checkpointDenominator", "itemDenominators"],
+          "properties": {
+            "evaluatorId": { "$ref": "#/$defs/id" },
+            "evaluatorHash": { "$ref": "#/$defs/sha256" },
+            "decodePolicyHash": { "$ref": "#/$defs/sha256" },
+            "checkpointDenominator": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["expected", "evaluated", "failed", "omitted"],
+              "properties": {
+                "expected": { "$ref": "#/$defs/idArray" },
+                "evaluated": { "$ref": "#/$defs/idArray" },
+                "failed": { "$ref": "#/$defs/idArray" },
+                "omitted": { "$ref": "#/$defs/idArray" }
+              }
+            },
+            "itemDenominators": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["expected", "scored", "missing", "malformed", "excluded"],
+                "properties": {
+                  "expected": { "type": "integer", "minimum": 1 },
+                  "scored": { "type": "integer", "minimum": 0 },
+                  "missing": { "type": "integer", "minimum": 0 },
+                  "malformed": { "type": "integer", "minimum": 0 },
+                  "excluded": { "type": "integer", "minimum": 0 }
+                }
+              }
+            }
+          }
+        },
+        "contractValidity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "invalidationReceiptIds", "supersedesRunContractSha256"],
+          "properties": {
+            "status": { "enum": ["valid", "invalidated", "blocked"] },
+            "invalidationReceiptIds": { "$ref": "#/$defs/idArray" },
+            "supersedesRunContractSha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+          }
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "contaminationAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "auditId", "populations", "checks", "accessAudit", "approvedExceptions", "blockingIssueIds", "overallStatus", "sha256"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "auditId": { "$ref": "#/$defs/id" },
+        "populations": {
+          "type": "object",
+          "minProperties": 6,
+          "additionalProperties": { "$ref": "#/$defs/artifactPointer" }
+        },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["checkId", "checkType", "leftPopulation", "rightPopulation", "checkerId", "checkerHash", "threshold", "denominator", "overlapCount", "overlapItemIds", "status", "disposition"],
+            "properties": {
+              "checkId": { "$ref": "#/$defs/id" },
+              "checkType": { "$ref": "#/$defs/id" },
+              "leftPopulation": { "$ref": "#/$defs/id" },
+              "rightPopulation": { "$ref": "#/$defs/id" },
+              "checkerId": { "$ref": "#/$defs/id" },
+              "checkerHash": { "$ref": "#/$defs/sha256" },
+              "threshold": { "type": ["number", "string", "null"] },
+              "denominator": { "type": "integer", "minimum": 0 },
+              "overlapCount": { "type": "integer", "minimum": 0 },
+              "overlapItemIds": { "$ref": "#/$defs/idArray" },
+              "status": { "enum": ["pass", "fail", "blocked", "not_applicable"] },
+              "disposition": { "$ref": "#/$defs/nonemptyString" }
+            }
+          }
+        },
+        "accessAudit": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["participantId", "population", "accessType", "status", "evidence"],
+            "properties": {
+              "participantId": { "$ref": "#/$defs/id" },
+              "population": { "$ref": "#/$defs/id" },
+              "accessType": { "enum": ["none", "direct", "indirect", "tool_mediated", "cached", "unknown"] },
+              "status": { "enum": ["pass", "fail", "blocked"] },
+              "evidence": { "$ref": "#/$defs/artifactPointer" }
+            }
+          }
+        },
+        "approvedExceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["exceptionId", "authority", "affectedItemIds", "rationale", "narrowedClaim"],
+            "properties": {
+              "exceptionId": { "$ref": "#/$defs/id" },
+              "authority": { "$ref": "#/$defs/nonemptyString" },
+              "affectedItemIds": { "$ref": "#/$defs/idArray" },
+              "rationale": { "$ref": "#/$defs/nonemptyString" },
+              "narrowedClaim": { "$ref": "#/$defs/nonemptyString" }
+            }
+          }
+        },
+        "blockingIssueIds": { "$ref": "#/$defs/idArray" },
+        "overallStatus": { "enum": ["pass", "fail", "blocked"] },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "metricEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "metricEvidenceId",
+        "metricId",
+        "value",
+        "measurementType",
+        "adjudicationType",
+        "decisionRole",
+        "scorerId",
+        "scorerRevision",
+        "scorerPolicyHash",
+        "promptHash",
+        "populationHash",
+        "denominator",
+        "uncertainty",
+        "itemLevelArtifact",
+        "dissent",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "metricEvidenceId": { "$ref": "#/$defs/id" },
+        "metricId": { "$ref": "#/$defs/id" },
+        "value": { "type": ["number", "boolean", "string", "null"] },
+        "measurementType": { "enum": ["deterministic_measurement", "reference_scored", "learned_metric", "ai_judged", "human_judged"] },
+        "adjudicationType": { "enum": ["none", "machine_adjudicated", "human_adjudicated", "human_and_machine_adjudicated"] },
+        "decisionRole": { "enum": ["primary", "blocking_guardrail", "supporting", "diagnostic"] },
+        "scorerId": { "$ref": "#/$defs/id" },
+        "scorerRevision": { "$ref": "#/$defs/nonemptyString" },
+        "scorerPolicyHash": { "$ref": "#/$defs/sha256" },
+        "promptHash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "populationHash": { "$ref": "#/$defs/sha256" },
+        "denominator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["expected", "scored", "missing", "malformed", "excluded", "disputed"],
+          "properties": {
+            "expected": { "type": "integer", "minimum": 1 },
+            "scored": { "type": "integer", "minimum": 0 },
+            "missing": { "type": "integer", "minimum": 0 },
+            "malformed": { "type": "integer", "minimum": 0 },
+            "excluded": { "type": "integer", "minimum": 0 },
+            "disputed": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "uncertainty": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "lower", "upper"],
+          "properties": {
+            "method": { "$ref": "#/$defs/nonemptyString" },
+            "lower": { "type": ["number", "null"] },
+            "upper": { "type": ["number", "null"] }
+          }
+        },
+        "itemLevelArtifact": { "$ref": "#/$defs/artifactPointer" },
+        "dissent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["abstentions", "disagreements", "overrides"],
+          "properties": {
+            "abstentions": { "type": "integer", "minimum": 0 },
+            "disagreements": { "type": "integer", "minimum": 0 },
+            "overrides": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "trialReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "trialId",
+        "causalContractSha256",
+        "runContractIds",
+        "attempts",
+        "checkpointScoreboard",
+        "metricEvidenceIds",
+        "contaminationAuditId",
+        "disposition",
+        "reasonCode",
+        "claim",
+        "claimBoundary",
+        "invalidated",
+        "budgetDebit",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "trialId": { "$ref": "#/$defs/id" },
+        "causalContractSha256": { "$ref": "#/$defs/sha256" },
+        "runContractIds": { "$ref": "#/$defs/idArray" },
+        "attempts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["attemptId", "runId", "attemptNumber", "status", "failureCode", "budgetDebited", "denominatorDisposition", "artifact"],
+            "properties": {
+              "attemptId": { "$ref": "#/$defs/id" },
+              "runId": { "$ref": "#/$defs/id" },
+              "attemptNumber": { "type": "integer", "minimum": 1 },
+              "status": { "enum": ["success", "failed", "blocked"] },
+              "failureCode": { "type": ["string", "null"] },
+              "budgetDebited": { "type": "boolean" },
+              "denominatorDisposition": { "enum": ["included", "excluded_infrastructure", "blocked"] },
+              "artifact": { "$ref": "#/$defs/artifactPointer" }
+            }
+          }
+        },
+        "checkpointScoreboard": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["expected", "attempted", "evaluated", "failed", "omitted", "selectedCheckpointId", "artifact"],
+          "properties": {
+            "expected": { "type": "integer", "minimum": 1 },
+            "attempted": { "type": "integer", "minimum": 0 },
+            "evaluated": { "type": "integer", "minimum": 0 },
+            "failed": { "type": "integer", "minimum": 0 },
+            "omitted": { "type": "integer", "minimum": 0 },
+            "selectedCheckpointId": { "type": ["string", "null"] },
+            "artifact": { "$ref": "#/$defs/artifactPointer" }
+          }
+        },
+        "metricEvidenceIds": { "$ref": "#/$defs/idArray" },
+        "contaminationAuditId": { "$ref": "#/$defs/id" },
+        "disposition": { "enum": ["accepted", "rejected", "blocked", "invalidated", "promoted"] },
+        "reasonCode": { "$ref": "#/$defs/id" },
+        "claim": { "$ref": "#/$defs/nonemptyString" },
+        "claimBoundary": { "$ref": "#/$defs/nonemptyString" },
+        "invalidated": { "type": "boolean" },
+        "budgetDebit": { "$ref": "#/$defs/budgetVector" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "selectionReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "selectionId",
+        "selectorParticipantId",
+        "selectorRevision",
+        "selectorPolicyHash",
+        "historyHash",
+        "registryHash",
+        "frozenContractHash",
+        "budgetBefore",
+        "candidatesConsidered",
+        "candidatesRejected",
+        "selectedApproachId",
+        "selectedInterventionId",
+        "causalContractSha256",
+        "budgetDebit",
+        "budgetRemaining",
+        "recursivePath",
+        "saturationDecisionId",
+        "humanGate",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "selectionId": { "$ref": "#/$defs/id" },
+        "selectorParticipantId": { "$ref": "#/$defs/id" },
+        "selectorRevision": { "$ref": "#/$defs/nonemptyString" },
+        "selectorPolicyHash": { "$ref": "#/$defs/sha256" },
+        "historyHash": { "$ref": "#/$defs/sha256" },
+        "registryHash": { "$ref": "#/$defs/sha256" },
+        "frozenContractHash": { "$ref": "#/$defs/sha256" },
+        "budgetBefore": { "$ref": "#/$defs/budgetVector" },
+        "candidatesConsidered": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["proposalId", "approachId", "interventionId", "participantId", "valid", "rank", "score"],
+            "properties": {
+              "proposalId": { "$ref": "#/$defs/id" },
+              "approachId": { "$ref": "#/$defs/id" },
+              "interventionId": { "$ref": "#/$defs/id" },
+              "participantId": { "$ref": "#/$defs/id" },
+              "valid": { "type": "boolean" },
+              "rank": { "type": ["integer", "null"], "minimum": 1 },
+              "score": { "type": ["number", "null"] }
+            }
+          }
+        },
+        "candidatesRejected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["proposalId", "reasonCode", "evidence"],
+            "properties": {
+              "proposalId": { "$ref": "#/$defs/id" },
+              "reasonCode": { "$ref": "#/$defs/id" },
+              "evidence": { "$ref": "#/$defs/nonemptyString" }
+            }
+          }
+        },
+        "selectedApproachId": { "type": ["string", "null"] },
+        "selectedInterventionId": { "type": ["string", "null"] },
+        "causalContractSha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "budgetDebit": { "$ref": "#/$defs/budgetVector" },
+        "budgetRemaining": { "$ref": "#/$defs/budgetVector" },
+        "recursivePath": { "$ref": "#/$defs/idArray" },
+        "saturationDecisionId": { "$ref": "#/$defs/id" },
+        "humanGate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "status", "authority", "overrideReceiptId"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "status": { "enum": ["not_required", "pending", "approved", "rejected", "overridden"] },
+            "authority": { "type": ["string", "null"] },
+            "overrideReceiptId": { "type": ["string", "null"] }
+          }
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "saturationDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "decisionId",
+        "saturated",
+        "reasonCode",
+        "scope",
+        "budgetDeclared",
+        "budgetSpent",
+        "budgetRemaining",
+        "eligibleUntriedApproachIds",
+        "pendingRequiredTrialIds",
+        "blockedTrialIds",
+        "terminalTrialIds",
+        "ruleEvidence",
+        "decisionPolicyHash",
+        "sha256"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "decisionId": { "$ref": "#/$defs/id" },
+        "saturated": { "type": "boolean" },
+        "reasonCode": {
+          "enum": [
+            "required_evaluations_pending",
+            "eligible_candidates_remain",
+            "budget_or_evidence_unresolved",
+            "promotion_achieved",
+            "candidate_budget_exhausted",
+            "eligible_registry_exhausted",
+            "predeclared_diminishing_returns_rule_met",
+            "domain_owner_stop"
+          ]
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["capability", "populationHash", "frozenContractHash", "approachRegistryHash", "historyHash"],
+          "properties": {
+            "capability": { "$ref": "#/$defs/id" },
+            "populationHash": { "$ref": "#/$defs/sha256" },
+            "frozenContractHash": { "$ref": "#/$defs/sha256" },
+            "approachRegistryHash": { "$ref": "#/$defs/sha256" },
+            "historyHash": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "budgetDeclared": { "$ref": "#/$defs/budgetVector" },
+        "budgetSpent": { "$ref": "#/$defs/budgetVector" },
+        "budgetRemaining": { "$ref": "#/$defs/budgetVector" },
+        "eligibleUntriedApproachIds": { "$ref": "#/$defs/idArray" },
+        "pendingRequiredTrialIds": { "$ref": "#/$defs/idArray" },
+        "blockedTrialIds": { "$ref": "#/$defs/idArray" },
+        "terminalTrialIds": { "$ref": "#/$defs/idArray" },
+        "ruleEvidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonemptyString" }
+        },
+        "decisionPolicyHash": { "$ref": "#/$defs/sha256" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}
