@@ -145,7 +145,6 @@ lanes unless all model/index bytes are counted.
 | Tool | Purpose |
 |---|---|
 | `enwiki9_delayed_status_check.sh` | Delayed status probe for active runs, including cmix phase, staging temp files, decode scope progress, lock state, gate-decider output, and a stable `run_logs/enwiki9_delayed_status_latest.log` pointer. |
-| `enwiki9_migration_receipt.py` | Generates the AMD host migration receipt from CPU, RAM, kernel, compiler, Python, filesystem, dependency, SSH, destination, and quarantined-corpus evidence. It never installs packages, authorizes keys, creates filesystems, promotes corpus files, or launches a compressor. |
 
 ## Maintenance Rules
 

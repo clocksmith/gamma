@@ -6,14 +6,15 @@ The fine PPMD-only search is terminal after the 20352 KiB package crossed the
 official decimal limit at `250K`. The active replacement is
 `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`:
 global FXCM cmC2 division by two supplies the material RSS cut, while the
-original rolling buffer removes the reduced-buffer crash mechanism. Its exact
-`1M` gate produced archive `174,525`, roundtrip, and determinism at peak RSS
-`8,831,176` KiB; the unchanged `10M` gate is active. Older observations below
-remain historical audit context.
+original rolling buffer removes the reduced-buffer crash mechanism. Source
+handoff metadata records its `10M` archive as `1,638,340`, with roundtrip and
+determinism true at peak single-process RSS `8,871,336` KiB; the original
+result JSON awaits local overlay restoration. A fresh unchanged `100M` gate is
+active. Older observations below remain historical audit context.
 
 | candidate | role | known posture | current or next action |
 | --- | --- | --- | --- |
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | Active target-bearing memory cut | Exact `1K`, `250K`, and `1M` gates passed; `1M` archive `174,525`, program `564,260`, peak RSS `8,831,176` KiB. | Wait for the unchanged exact `10M` receipt, then use `cmix21_gate_decider.py`. |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | Active target-bearing memory cut | Source-handoff metadata records passed `1K`, `250K`, `1M`, and `10M` gates; `10M` archive `1,638,340`, program `564,260`, peak single-process RSS `8,871,336` KiB. The historical result overlay is absent locally. | Wait for the fresh unchanged `100M` terminal receipts, then use `cmix21_gate_decider.py` without retuning. |
 | `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Best nearby `10M` archive reference | Exact `10M` archive evidence exists at `1,638,083`, but the larger-scope RSS behavior made it unsuitable as the only live path. | Keep as archive-quality reference and memory-boundary control. |
 | `cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Narrow memory-margin candidate | Exact `10M` replay passed at archive `1,638,114`, local score `2,202,389`, roundtrip true, determinism true, and max sampled single RSS `10,482,852` KiB under the `10,485,760` KiB guard. Unchanged `100M` promotion crossed the same guard by `36` KiB before producing a scored archive or roundtrip. | Keep as the upper bracket for the current PPMD memory valve. Do not retune it unless bracketing data says this surface is still cheapest. |
 | `cmix21_text_mmap_paq5_ppmd21888k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | Deeper memory valve, now bracketed | Exact no-ceiling `10M` replay passed at archive `1,638,182`, local score `2,202,456`, program size `564,274`, roundtrip true, determinism true, and max sampled single RSS `10,482,468` KiB. The unchanged `100M` promotion failed the local RSS guard at `10,485,796` KiB, `36` KiB over the `10,485,760` KiB guard, before producing a scored archive or roundtrip. | Keep as the upper bracket for the next PPMD-only cut. Do not rerun unchanged at `100M` unless the guard policy changes. |
@@ -134,7 +135,8 @@ The compressor reached `10,472,644` KiB before archive completion. The run was
 stopped and recorded as `official_decimal_memory_fail`; it was still under the
 historical binary `10GiB` single-process guard but over the official decimal
 ceiling by `707,019` KiB. No archive, roundtrip, determinism, or score claim is
-made for the aborted gate. The cmix21 ladder is no longer the active prize lane.
+made for the aborted gate. That PPMD-only ladder is terminal; the current
+FXCM2/full-buffer replacement is the active cmix21 proof lane.
 
 The last lower-memory qualification attempt is now terminal:
 
@@ -146,13 +148,14 @@ guard receipt: ppmd20480k_250000_determinism_rss_guard.json
 verdict: official decimal memory failure by 3,275 KiB
 ```
 
-The active non-cmix target-bearing gate is:
+The active target-bearing gate is:
 
 ```text
-fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1
-scope: 10000000
-mode: --check-determinism --archive-ceiling 1631581
-guard receipt: results/fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1/10m_target_gate_rss_guard.json
+cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
+scope: 100000000
+mode: --check-determinism
+guard receipt: results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json
+prior source-handoff gate: 10000000 archive 1638340, roundtrip true, determinism true; original result JSON pending local restoration
 ```
 
 ## Parallel Work Policy
@@ -183,7 +186,7 @@ run result-corpus forecast sweeps
 change active candidate source or registry metadata
 ```
 
-This is why cached SRSTC or teacher analysis can run beside the active sidecar
+This is why cached SRSTC or teacher analysis can run beside the active cmix21
 gate when it is explicitly reduced-priority and low-RSS, while another `100M`
 or `1G` compressor gate must wait for a terminal receipt.
 

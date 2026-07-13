@@ -42,14 +42,27 @@ reversible layout.
 The active constructive lane is separate:
 
 ```text
-candidate          = fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1
-program bytes      = 256,906
-10M archive ceiling = 1,631,581
+candidate     = cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
+10M archive   = 1,638,340 (source-handoff receipt)
+roundtrip     = true
+determinism   = true
+current scope = fresh unchanged guarded 100M replay
 ```
 
-That gate tests whether a minimized FX2-SC sidecar backend plus the measured
-geometry-title transform can close enough of the forecast gap under counted
-program bytes.
+That gate establishes the exact memory-shaped cmix21 substrate and promotion
+path. It does not make the raw SRSTC saving additive. The retired FX2-SC
+sidecar remains negative evidence from its canonical `10M` target-ceiling
+abort.
+
+Gamma's SAME-R contract now supplies the correct outer experiment for any
+teacher-guided successor: freeze the exact FX2 trace, coder, candidates,
+student/router budget, split, and payload accounting; compare anchor,
+teacher-curated, and deterministic random-control lanes; select only by heldout
+codelength after counted bytes. The current Qwen fixed32 selection universe is
+retired from promotion for insufficient demonstrated realizable margin, not
+disproven. A successor teacher must create new causal experts or state
+representations and pass a fresh oracle-economics screen before training. See
+`docs/same_r_hutter_strategy_audit.md`.
 
 ## What A Tuned Embedding Model Can Do
 
@@ -307,19 +320,22 @@ is causal state that improves probabilities while preserving raw bytes.
 
 The investigation supports this path:
 
-1. Let the active `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` gate
-   finish and record terminal archive, roundtrip, determinism, RSS, and
-   accounting receipts.
-2. Use embedding teachers offline to find better deterministic sketch features,
-   page-family keys, and abstention rules.
-3. Re-score SRSTC and residual shadows against the strongest substrate with
+1. Let the active unchanged `100M` cmix21 gate finish and record its terminal
+   archive, roundtrip, determinism, RSS, identity, and accounting receipts.
+2. Run the pinned identical-stream cmix21 component trace and exact FX2
+   comparison after the proof boundary. Apply the full-component and fixed-blend
+   convex-hull economics gates before causal searches.
+3. Use embedding teachers offline only to create new deterministic sketch
+   features, page-family keys, abstention rules, or experts after the current
+   candidate universe is measured.
+4. Re-score SRSTC and residual shadows against the strongest substrate with
    block fallback, type-specific copy channels, and fixed-point regret routing.
-4. Require receipts with saved bytes, counted code/table bytes, block
+5. Require receipts with saved bytes, counted code/table bytes, block
    regressions, state bytes, schema hashes, and deterministic replay hashes.
-5. Compile only the smallest paying component into the strongest admissible
+6. Compile only the smallest paying component into the strongest admissible
    substrate.
-6. Run exact prefix replay with roundtrip and determinism.
-7. Promote to full `1G` only after exact larger-scope gates and official
+7. Run exact prefix replay with roundtrip and determinism.
+8. Promote to full `1G` only after exact larger-scope gates and official
    accounting accept the same constructive package.
 
 ## Conclusion

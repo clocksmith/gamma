@@ -228,29 +228,23 @@ def check_certificate_and_status(findings: list[Finding]) -> None:
 
     labels = top_status_by_label(cert)
     active_candidate, active_scope = active_gate_from_certificate(cert)
-    active_gate_value = labels.get("active gate")
-    active_gate = active_gate_value if isinstance(active_gate_value, dict) else {}
-    status_gate_value = status.get("active_gate")
-    status_gate = status_gate_value if isinstance(status_gate_value, dict) else {}
+    active_gate = labels.get("active gate", {})
+    status_gate = status.get("active_gate", {})
     for label, row in (("certificate active gate", active_gate), ("status active gate", status_gate)):
-        if not row:
-            continue
+        row = row if isinstance(row, dict) else {}
         if active_candidate and row.get("program_id") != active_candidate:
             findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not name active candidate"))
         if active_scope and row.get("scope_bytes") != active_scope:
             findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not use active scope"))
 
-    gate_decision_value = status.get("gate_decision")
-    gate_decision = gate_decision_value if isinstance(gate_decision_value, dict) else {}
-    if gate_decision:
-        if active_candidate and gate_decision.get("candidate") != active_candidate:
-            findings.append(Finding(status_path, "gate decision candidate mismatch"))
-        if active_scope and gate_decision.get("scope_bytes") != active_scope:
-            findings.append(Finding(status_path, "gate decision scope mismatch"))
-        if gate_decision.get("verdict") not in DECIDER_VERDICTS:
-            findings.append(Finding(status_path, "gate decision has unknown verdict"))
-    elif active_gate or status_gate:
-        findings.append(Finding(status_path, "active gate is present without a gate decision object"))
+    gate_decision = status.get("gate_decision", {})
+    gate_decision = gate_decision if isinstance(gate_decision, dict) else {}
+    if active_candidate and gate_decision.get("candidate") != active_candidate:
+        findings.append(Finding(status_path, "gate decision candidate mismatch"))
+    if active_scope and gate_decision.get("scope_bytes") != active_scope:
+        findings.append(Finding(status_path, "gate decision scope mismatch"))
+    if gate_decision.get("verdict") not in DECIDER_VERDICTS:
+        findings.append(Finding(status_path, "gate decision has unknown verdict"))
     if (
         gate_decision.get("verdict") == "running"
         and gate_decision.get("rss_guard_json_present") is True

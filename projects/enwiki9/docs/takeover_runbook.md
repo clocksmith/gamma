@@ -4,10 +4,10 @@ This runbook is for continuing the `enwiki9` proof pipeline without relying on
 chat history. It assumes the project root is:
 
 ```text
-/home/clocksmith/deco/gamma/projects/enwiki9
+/home/x/deco/gamma/projects/enwiki9
 ```
 
-Run commands from `/home/clocksmith/deco/gamma` unless stated otherwise.
+Run commands from `/home/x/deco/gamma` unless stated otherwise.
 
 ## First Checks
 
@@ -74,25 +74,27 @@ fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1
 Current decision:
 
 ```text
-run fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1 at canonical 10M
-  -> archive <= 1,631,581 with roundtrip/determinism/RSS: promote unchanged to exact 100M
-  -> archive ceiling miss or replay failure: retire or repackage this integration shape
+source-handoff metadata records the cmix21 FXCM2/full-buffer 10M pass at archive 1,638,340
+  -> wait for the unchanged exact 100M terminal receipts
+  -> use only cmix21_gate_decider.py output to record or promote
 ```
 
 Active target-bearing gate:
 
 ```text
-active candidate: fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1
-scope: 10000000
-mode: --check-determinism --archive-ceiling 1631581
-guard: results/fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1/10m_target_gate_rss_guard.json
-program bytes: 256906
+active candidate: cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
+scope: 100000000
+mode: --check-determinism
+guard: results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json
+program bytes: 564260
 ```
 
-Supporting evidence is promising but not a result: the same backend/transform
-won by `46` archive bytes at exact `1M`, and historical sidecar `10M` evidence
-is `1,630,563`, below the target ceiling. The current guarded replay decides
-whether that transfers under canonical accounting.
+Source-handoff metadata records the `10M` predecessor at archive `1,638,340`,
+with roundtrip and determinism true and peak single-process RSS `8,871,336`
+KiB; its original result JSON is pending local overlay restoration. The current
+guarded replay tests the identical package freshly at `100M`; it does not
+establish a full-corpus score until the later exact `1G` replay and accounting
+audit pass.
 
 The prior cmix21 ladder is terminal memory-bracket evidence because:
 
@@ -144,10 +146,10 @@ Active replacement gate:
 
 ```text
 candidate: cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
-scope: 10000000
+scope: 100000000
 mode: --check-determinism
-guard: ppmd20352k_10000000_determinism_rss_guard.json
-prior exact gate: 1000000 archive 174525, roundtrip true, determinism true
+guard: ppmd20352k_100000000_determinism_rss_guard.json
+prior source-handoff gate: 10000000 archive 1638340, roundtrip true, determinism true; original result JSON pending local restoration
 ```
 
 Do not resume from the retired `ppmd20736k` or bracketed `ppmd20608k` receipt.
@@ -159,7 +161,7 @@ Historical terminal handling table:
 
 | Result | Action |
 |---|---|
-| roundtrip true, determinism true, RSS pass | record exact `10,000,000`; promote unchanged to the next gate. |
+| roundtrip true, determinism true, RSS pass | record the exact current scope; promote unchanged only through the decider's next action. |
 | archive worse but still clean | record exact penalty; decide by memory-value table before promoting. |
 | RSS fail | record RSS failure; lower the smallest memory surface again. |
 | roundtrip fail | mark candidate as failed at this gate; do not promote. |
