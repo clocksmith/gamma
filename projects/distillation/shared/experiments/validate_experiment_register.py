@@ -25,6 +25,7 @@ DOMAINS = {
     "coding",
     "finance_documents",
     "legal_documents",
+    "simulation_rendering",
     "translation",
     "wgsl",
 }
@@ -32,6 +33,7 @@ METHOD_IDS = {
     "active_learning",
     "adversarial_self_play",
     "checkpoint_selection",
+    "construction_search",
     "data_centric_sft",
     "dpo",
     "execution_verified_sft",

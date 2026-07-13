@@ -1,13 +1,17 @@
 # Experiment Register
 
 This directory is Gamma's pointer-only register for verifier-guided learning
-experiments across Gamma, Doppler, and Columbo.
+experiments across domain repositories. Simulatte visual-construction trials use
+the `simulation_rendering` domain and `construction_search` method ID.
 
 - `experiment-register.schema.json` defines the record contract.
 - `experiment-register.jsonl` contains one JSON object per experiment.
 - `validate_experiment_register.py` validates identifiers, enums, claim
   boundaries, paths, revisions, digests, duplicate IDs, and available artifact
   bytes.
+
+For an available Git repository, validation reads each artifact from its pinned
+`revision:path`; later worktree edits cannot change the evidence verdict.
 
 Do not copy domain result bundles here. Point to one primary immutable evidence
 artifact and any related artifacts needed to support the claim boundary in
