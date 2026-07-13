@@ -636,6 +636,14 @@ def _run_parity_microstep(
         raise RuntimeError("parity fixture does not use the pinned Qwen 3.5 RoPE pairing")
     if architecture_contract.get("partialRotaryFactor") != 0.25:
         raise RuntimeError("parity fixture does not use the pinned Qwen 3.5 partial-RoPE factor")
+    decoder_source_path = Path(
+        inspect.getsourcefile(runtime["Qwen3_5DecoderLayer"]) or ""
+    ).resolve()
+    if not decoder_source_path.is_file():
+        raise RuntimeError("could not identify the Transformers Qwen3.5 decoder source")
+    decoder_source_sha256 = hashlib.sha256(decoder_source_path.read_bytes()).hexdigest()
+    if architecture_contract.get("transformersDecoderSourceSha256") != decoder_source_sha256:
+        raise RuntimeError("Transformers Qwen3.5 decoder source does not match the frozen fixture")
     optimizer_config = _require_object(fixture.get("optimizer"), "fixture.optimizer")
     if optimizer_config.get("type") != "adamw":
         raise RuntimeError("parity fixture optimizer.type must be adamw")
@@ -817,11 +825,6 @@ def _run_parity_microstep(
             "moment1": _parity_values(state["exp_avg"]),
             "moment2": _parity_values(state["exp_avg_sq"]),
         }
-    decoder_source_path = Path(
-        inspect.getsourcefile(runtime["Qwen3_5DecoderLayer"]) or ""
-    ).resolve()
-    if not decoder_source_path.is_file():
-        raise RuntimeError("could not identify the Transformers Qwen3.5 decoder source")
     return {
         "fixtureSha256": fixture_hash,
         "precisionContract": fixture["precisionContract"],
@@ -830,7 +833,7 @@ def _run_parity_microstep(
             "library": "transformers",
             "version": runtime["transformersVersion"],
             "class": "Qwen3_5DecoderLayer",
-            "sourceSha256": hashlib.sha256(decoder_source_path.read_bytes()).hexdigest(),
+            "sourceSha256": decoder_source_sha256,
         },
         "rank": next(iter(adapters.values()))["rank"],
         "alpha": next(iter(adapters.values()))["alpha"],
