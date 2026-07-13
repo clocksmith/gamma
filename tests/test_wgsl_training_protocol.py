@@ -97,6 +97,7 @@ def test_protocol_rejects_unversioned_request_before_runtime_imports():
 
 def test_parity_microstep_is_a_versioned_protocol_action():
     assert "parity_microstep" in MODULE.SUPPORTED_ACTIONS
+    assert "parity_prefix" in MODULE.SUPPORTED_ACTIONS
     assert MODULE.PARITY_DECODER_ORDER == (
         "input_norm_token_mixer_residual_post_attention_norm_mlp_residual"
     )
