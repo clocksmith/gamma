@@ -15,7 +15,23 @@ from typing import Any
 
 
 PROTOCOL = "gamma_wgsl_trainer_json_v1"
-SUPPORTED_ACTIONS = {"preflight", "sft", "dpo", "rollout", "grpo_update"}
+SUPPORTED_ACTIONS = {
+    "preflight",
+    "sft",
+    "dpo",
+    "rollout",
+    "grpo_update",
+    "parity_microstep",
+}
+PARITY_ADAPTER_PATHS = (
+    "layers.0.self_attn.q_proj",
+    "layers.0.self_attn.k_proj",
+    "layers.0.self_attn.v_proj",
+    "layers.0.self_attn.o_proj",
+    "layers.0.mlp.gate_proj",
+    "layers.0.mlp.up_proj",
+    "layers.0.mlp.down_proj",
+)
 
 
 def _require_object(value: Any, label: str) -> dict[str, Any]:
@@ -500,6 +516,310 @@ def _run_sft(request: dict[str, Any], runtime: dict[str, Any], output_root: Path
             **row_order_receipt,
         },
         "metricsPath": str(metrics_path),
+    }
+
+
+def _parity_tensor_contract(value: Any, label: str) -> dict[str, Any]:
+    spec = _require_object(value, label)
+    shape_value = spec.get("shape")
+    data_value = spec.get("data")
+    if not isinstance(shape_value, list) or not shape_value:
+        raise RuntimeError(f"{label}.shape must be a non-empty array")
+    shape = [
+        _require_int(dimension, f"{label}.shape[{index}]", 1)
+        for index, dimension in enumerate(shape_value)
+    ]
+    if not isinstance(data_value, list):
+        raise RuntimeError(f"{label}.data must be an array")
+    expected = math.prod(shape)
+    if len(data_value) != expected:
+        raise RuntimeError(
+            f"{label}.data length mismatch: expected {expected}, got {len(data_value)}"
+        )
+    data = [
+        _require_float(item, f"{label}.data[{index}]")
+        for index, item in enumerate(data_value)
+    ]
+    return {"shape": shape, "data": data}
+
+
+def _load_parity_fixture(request: dict[str, Any]) -> tuple[dict[str, Any], Path, str]:
+    fixture_path = Path(
+        _require_string(request.get("fixturePath"), "fixturePath")
+    ).resolve()
+    fixture = _require_object(_read_json(fixture_path), "parity fixture")
+    if fixture.get("artifactType") != "qwen_sft_backend_parity_fixture":
+        raise RuntimeError("parity fixture artifactType mismatch")
+    if fixture.get("schemaVersion") != 1:
+        raise RuntimeError("parity fixture schemaVersion must be 1")
+    precision = _require_object(fixture.get("precisionContract"), "precisionContract")
+    if _require_float(precision.get("adapterDropout"), "adapterDropout") != 0:
+        raise RuntimeError("parity fixture requires zero adapter dropout")
+    adapters = _require_object(fixture.get("adapters"), "adapters")
+    if set(adapters) != set(PARITY_ADAPTER_PATHS):
+        raise RuntimeError("parity fixture adapter paths do not match the frozen contract")
+    return fixture, fixture_path, _sha256_file(fixture_path)
+
+
+def _parity_torch_tensor(
+    value: Any,
+    label: str,
+    torch: Any,
+    *,
+    requires_grad: bool = False,
+) -> Any:
+    contract = _parity_tensor_contract(value, label)
+    tensor = torch.tensor(contract["data"], dtype=torch.float32, device="cuda")
+    tensor = tensor.reshape(contract["shape"])
+    if requires_grad:
+        tensor = torch.nn.Parameter(tensor)
+    return tensor
+
+
+def _parity_rms_norm(value: Any, weight: Any, eps: float, torch: Any) -> Any:
+    inverse_rms = torch.rsqrt(value.square().mean(dim=-1, keepdim=True) + eps)
+    return value * inverse_rms * (1 + weight)
+
+
+def _parity_projection(
+    value: Any,
+    weight: Any,
+    adapter: dict[str, Any],
+) -> Any:
+    base = value @ weight.transpose(0, 1)
+    return base + ((value @ adapter["A"] @ adapter["B"])
+                   * (adapter["alpha"] / adapter["rank"]))
+
+
+def _parity_partial_rope(
+    value: Any,
+    cosine: Any,
+    sine: Any,
+    layer: dict[str, Any],
+    torch: Any,
+) -> Any:
+    head_dim = _require_int(layer.get("headDim"), "layer.headDim", 1)
+    rotary_dim = _require_int(layer.get("rotaryDim"), "layer.rotaryDim", 1)
+    pair_span = _require_int(layer.get("pairSpanDim"), "layer.pairSpanDim", 1)
+    interleaved = layer.get("interleaved") is True
+    if rotary_dim % 2 or pair_span % 2 or rotary_dim > head_dim or pair_span > head_dim:
+        raise RuntimeError("invalid parity partial-RoPE geometry")
+    components = [value[..., index] for index in range(head_dim)]
+    for pair in range(rotary_dim // 2):
+        first = pair * 2 if interleaved else pair
+        second = (pair * 2) + 1 if interleaved else pair + (pair_span // 2)
+        first_value = value[..., first]
+        second_value = value[..., second]
+        pair_cosine = cosine[:, pair].unsqueeze(1)
+        pair_sine = sine[:, pair].unsqueeze(1)
+        components[first] = (first_value * pair_cosine) - (second_value * pair_sine)
+        components[second] = (first_value * pair_sine) + (second_value * pair_cosine)
+    return torch.stack(components, dim=-1)
+
+
+def _parity_values(value: Any) -> list[float]:
+    return [float(item) for item in value.detach().float().cpu().reshape(-1).tolist()]
+
+
+def _run_parity_microstep(
+    request: dict[str, Any],
+    runtime: dict[str, Any],
+    _output_root: Path,
+) -> dict[str, Any]:
+    torch = runtime["torch"]
+    functional = runtime["functional"]
+    fixture, _fixture_path, fixture_hash = _load_parity_fixture(request)
+    model = _require_object(fixture.get("model"), "fixture.model")
+    layer = _require_object(fixture.get("layer"), "fixture.layer")
+    optimizer_config = _require_object(fixture.get("optimizer"), "fixture.optimizer")
+    if optimizer_config.get("type") != "adamw":
+        raise RuntimeError("parity fixture optimizer.type must be adamw")
+    if hasattr(torch.backends, "cuda") and hasattr(torch.backends.cuda, "matmul"):
+        torch.backends.cuda.matmul.allow_tf32 = False
+    if hasattr(torch, "set_float32_matmul_precision"):
+        torch.set_float32_matmul_precision("highest")
+
+    frozen_specs = _require_object(fixture.get("frozen"), "fixture.frozen")
+    frozen = {
+        name: _parity_torch_tensor(spec, f"frozen.{name}", torch)
+        for name, spec in frozen_specs.items()
+    }
+    adapter_specs = _require_object(fixture.get("adapters"), "fixture.adapters")
+    adapters: dict[str, dict[str, Any]] = {}
+    parameters: dict[str, Any] = {}
+    for adapter_path in PARITY_ADAPTER_PATHS:
+        adapter_spec = _require_object(
+            adapter_specs.get(adapter_path), f"adapters.{adapter_path}"
+        )
+        rank = _require_int(adapter_spec.get("rank"), f"{adapter_path}.rank", 1)
+        alpha = _require_float(adapter_spec.get("alpha"), f"{adapter_path}.alpha")
+        pair = {"rank": rank, "alpha": alpha}
+        for kind in ("A", "B"):
+            parameter = _parity_torch_tensor(
+                adapter_spec.get(kind),
+                f"adapters.{adapter_path}.{kind}",
+                torch,
+                requires_grad=True,
+            )
+            pair[kind] = parameter
+            parameters[f"{adapter_path}.lora_{kind}"] = parameter
+        if pair["A"].shape[1] != rank or pair["B"].shape[0] != rank:
+            raise RuntimeError(f"{adapter_path} does not match rank {rank}")
+        adapters[adapter_path] = pair
+
+    token_ids_value = fixture.get("tokenIds")
+    targets_value = fixture.get("targets")
+    unmasked_value = fixture.get("unmaskedTargets")
+    if not all(isinstance(value, list) for value in (token_ids_value, targets_value, unmasked_value)):
+        raise RuntimeError("parity fixture tokenIds and targets must be arrays")
+    token_ids = torch.tensor(token_ids_value, dtype=torch.long, device="cuda")
+    targets = torch.tensor(targets_value, dtype=torch.long, device="cuda")
+    unmasked_targets = torch.tensor(unmasked_value, dtype=torch.long, device="cuda")
+    num_tokens = _require_int(model.get("numTokens"), "model.numTokens", 1)
+    hidden_size = _require_int(model.get("hiddenSize"), "model.hiddenSize", 1)
+    intermediate_size = _require_int(
+        model.get("intermediateSize"), "model.intermediateSize", 1
+    )
+    vocab_size = _require_int(model.get("vocabSize"), "model.vocabSize", 2)
+    active_tokens = _require_int(
+        model.get("activeTokenCount"), "model.activeTokenCount", 1
+    )
+    if token_ids.numel() != num_tokens or targets.numel() != num_tokens:
+        raise RuntimeError("parity token count mismatch")
+    if int(targets.ne(-100).sum().item()) != active_tokens:
+        raise RuntimeError("parity active-token count mismatch")
+    eps = _require_float(model.get("rmsEps"), "model.rmsEps")
+    num_heads = _require_int(layer.get("numHeads"), "layer.numHeads", 1)
+    num_kv_heads = _require_int(layer.get("numKVHeads"), "layer.numKVHeads", 1)
+    head_dim = _require_int(layer.get("headDim"), "layer.headDim", 1)
+    if num_heads % num_kv_heads:
+        raise RuntimeError("parity numHeads must be divisible by numKVHeads")
+    query_size = num_heads * head_dim
+
+    hidden = frozen["embedding"].index_select(0, token_ids)
+    input_norm = _parity_rms_norm(hidden, frozen["inputNorm"], eps, torch)
+    q_projection = _parity_projection(
+        input_norm, frozen["qWeight"], adapters["layers.0.self_attn.q_proj"]
+    )
+    q_split = q_projection.reshape(num_tokens, num_heads, 2, head_dim)
+    query = q_split[:, :, 0, :]
+    output_gate = q_split[:, :, 1, :]
+    key = _parity_projection(
+        input_norm, frozen["kWeight"], adapters["layers.0.self_attn.k_proj"]
+    ).reshape(num_tokens, num_kv_heads, head_dim)
+    value = _parity_projection(
+        input_norm, frozen["vWeight"], adapters["layers.0.self_attn.v_proj"]
+    ).reshape(num_tokens, num_kv_heads, head_dim)
+    query = _parity_rms_norm(query, frozen["qNorm"], eps, torch)
+    key = _parity_rms_norm(key, frozen["kNorm"], eps, torch)
+    query = _parity_partial_rope(
+        query, frozen["cosine"], frozen["sine"], layer, torch
+    )
+    key = _parity_partial_rope(
+        key, frozen["cosine"], frozen["sine"], layer, torch
+    )
+    heads_per_kv = num_heads // num_kv_heads
+    kv_indices = torch.arange(num_heads, device="cuda") // heads_per_kv
+    key_by_head = key[:, kv_indices, :]
+    value_by_head = value[:, kv_indices, :]
+    scores = torch.einsum("thd,shd->hts", query, key_by_head) / math.sqrt(head_dim)
+    causal_mask = torch.triu(
+        torch.ones((num_tokens, num_tokens), dtype=torch.bool, device="cuda"),
+        diagonal=1,
+    )
+    probabilities = torch.softmax(scores.masked_fill(causal_mask.unsqueeze(0), -torch.inf), dim=-1)
+    attention = torch.einsum("hts,shd->thd", probabilities, value_by_head)
+    gated_attention = (attention * torch.sigmoid(output_gate)).reshape(num_tokens, query_size)
+    attention_output = _parity_projection(
+        gated_attention,
+        frozen["oWeight"],
+        adapters["layers.0.self_attn.o_proj"],
+    )
+    normalized_attention = _parity_rms_norm(
+        attention_output, frozen["postAttentionNorm"], eps, torch
+    )
+    post_attention = hidden + normalized_attention
+    gate = _parity_projection(
+        post_attention, frozen["gateWeight"], adapters["layers.0.mlp.gate_proj"]
+    )
+    up = _parity_projection(
+        post_attention, frozen["upWeight"], adapters["layers.0.mlp.up_proj"]
+    )
+    activated = functional.silu(gate) * up
+    if activated.shape != (num_tokens, intermediate_size):
+        raise RuntimeError("parity MLP activation shape mismatch")
+    down = _parity_projection(
+        activated, frozen["downWeight"], adapters["layers.0.mlp.down_proj"]
+    )
+    layer_output = post_attention + down
+    final_norm = _parity_rms_norm(layer_output, frozen["finalNorm"], eps, torch)
+    logits = final_norm @ frozen["lmHead"].transpose(0, 1)
+    if logits.shape != (num_tokens, vocab_size):
+        raise RuntimeError("parity logits shape mismatch")
+    loss = functional.cross_entropy(logits, targets, ignore_index=-100, reduction="mean")
+    unmasked_loss = functional.cross_entropy(logits, unmasked_targets, reduction="mean")
+    if not torch.isfinite(loss) or not torch.isfinite(unmasked_loss):
+        raise RuntimeError("parity loss is non-finite")
+
+    initial = {name: parameter.detach().clone() for name, parameter in parameters.items()}
+    optimizer = torch.optim.AdamW(
+        list(parameters.values()),
+        lr=_require_float(optimizer_config.get("lr"), "optimizer.lr"),
+        betas=(
+            _require_float(optimizer_config.get("beta1"), "optimizer.beta1"),
+            _require_float(optimizer_config.get("beta2"), "optimizer.beta2"),
+        ),
+        eps=_require_float(optimizer_config.get("eps"), "optimizer.eps"),
+        weight_decay=_require_float(
+            optimizer_config.get("weightDecay"), "optimizer.weightDecay"
+        ),
+        foreach=False,
+        fused=False,
+    )
+    optimizer.zero_grad(set_to_none=True)
+    loss.backward()
+    gradients = {}
+    for name, parameter in parameters.items():
+        if parameter.grad is None or not torch.isfinite(parameter.grad).all():
+            raise RuntimeError(f"parity gradient missing or non-finite for {name}")
+        gradients[name] = parameter.grad.detach().clone()
+    optimizer.step()
+
+    tensors = {}
+    every_parameter_changed = True
+    all_gradients_nonzero = True
+    for name, parameter in parameters.items():
+        state = optimizer.state[parameter]
+        gradient = gradients[name]
+        every_parameter_changed = every_parameter_changed and bool(
+            torch.any(parameter.detach() != initial[name]).item()
+        )
+        all_gradients_nonzero = all_gradients_nonzero and bool(
+            torch.any(gradient != 0).item()
+        )
+        tensors[name] = {
+            "shape": list(parameter.shape),
+            "initial": _parity_values(initial[name]),
+            "gradient": _parity_values(gradient),
+            "parameter": _parity_values(parameter),
+            "moment1": _parity_values(state["exp_avg"]),
+            "moment2": _parity_values(state["exp_avg_sq"]),
+        }
+    return {
+        "fixtureSha256": fixture_hash,
+        "precisionContract": fixture["precisionContract"],
+        "rank": next(iter(adapters.values()))["rank"],
+        "alpha": next(iter(adapters.values()))["alpha"],
+        "activeTokenCount": active_tokens,
+        "parameterCount": len(parameters),
+        "parameterNames": list(parameters),
+        "optimizerStepCount": 1,
+        "meanLoss": float(loss.detach().item()),
+        "unmaskedMeanLoss": float(unmasked_loss.detach().item()),
+        "allGradientsNonzero": all_gradients_nonzero,
+        "everyParameterChanged": every_parameter_changed,
+        "tensors": tensors,
+        "claimBoundary": "Gamma PyTorch/ROCm reference for one tiny rank-32, zero-dropout, token-aligned completion-masked Qwen full-layer microstep; not production Qwen geometry, Hugging Face causal-label shifting, V12 dropout, sustained training, or capability evidence.",
     }
 
 
@@ -1202,6 +1522,8 @@ def execute(request: dict[str, Any]) -> dict[str, Any]:
         result = _run_dpo(request, runtime, output_root)
     elif action == "rollout":
         result = _run_rollout(request, runtime, output_root)
+    elif action == "parity_microstep":
+        result = _run_parity_microstep(request, runtime, output_root)
     else:
         result = _run_grpo_update(request, runtime, output_root)
     return {

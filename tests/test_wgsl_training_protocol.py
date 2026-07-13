@@ -95,6 +95,33 @@ def test_protocol_rejects_unversioned_request_before_runtime_imports():
         MODULE.execute({})
 
 
+def test_parity_microstep_is_a_versioned_protocol_action():
+    assert "parity_microstep" in MODULE.SUPPORTED_ACTIONS
+    assert MODULE.PARITY_ADAPTER_PATHS == (
+        "layers.0.self_attn.q_proj",
+        "layers.0.self_attn.k_proj",
+        "layers.0.self_attn.v_proj",
+        "layers.0.self_attn.o_proj",
+        "layers.0.mlp.gate_proj",
+        "layers.0.mlp.up_proj",
+        "layers.0.mlp.down_proj",
+    )
+
+
+def test_parity_tensor_contract_is_fail_closed():
+    assert MODULE._parity_tensor_contract(
+        {"shape": [2, 2], "data": [1, 2, 3, 4]}, "fixture"
+    ) == {"shape": [2, 2], "data": [1.0, 2.0, 3.0, 4.0]}
+    with pytest.raises(RuntimeError, match="length mismatch"):
+        MODULE._parity_tensor_contract(
+            {"shape": [2, 2], "data": [1, 2, 3]}, "fixture"
+        )
+    with pytest.raises(RuntimeError, match="must be finite"):
+        MODULE._parity_tensor_contract(
+            {"shape": [1], "data": [float("nan")]}, "fixture"
+        )
+
+
 def test_tree_hash_changes_with_adapter_bytes(tmp_path):
     adapter = tmp_path / "adapter"
     adapter.mkdir()
