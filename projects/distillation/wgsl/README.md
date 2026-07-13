@@ -79,6 +79,18 @@ to 36.79%. Reference-anchored pairs from all-fail groups were emitted
 separately and were not used. DPO requires a new disjoint checkpoint-selection
 contract before another capability run.
 
+The subsequent V12 controlled-data experiment is also complete. It trained
+base-initialized Qwen 3.5 9B LoRA policies for `anchor`, targeted `external20`,
+and count-matched `random20` lanes at seeds 11, 29, and 47. Each run consumed
+all 1,200 seed/hash-ordered rows exactly once. On the frozen 299-task public
+compiler split, `external20` reached `99.443%` mean pass@1 versus `98.439%` for
+anchor and `98.885%` for random20, and beat anchor at every seed. None of the
+six per-seed paired comparisons was significant after Holm correction; the
+long stratum has only nine tasks. The immutable
+[Doppler V12 result](https://github.com/clocksmith/doppler/blob/015c628aba6988428e06657a8e81ebd095815aec/docs/status/wgsl-repair-v12-2026-07-13.md)
+therefore supports seed-confirmed compiler-repair data-curation evidence, not
+semantic-kernel correctness or promotion.
+
 The first prepared Doppler corpus is compiler-reproducing replacement repair.
 It establishes a training substrate, not a semantic-kernel capability claim.
 Promotion remains dependent on Doppler's sealed semantic repair suite and the
