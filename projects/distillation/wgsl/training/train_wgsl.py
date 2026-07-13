@@ -23,6 +23,7 @@ SUPPORTED_ACTIONS = {
     "rollout",
     "grpo_update",
     "parity_microstep",
+    "parity_prefix",
 }
 PARITY_ADAPTER_PATHS = (
     "layers.0.self_attn.q_proj",
@@ -680,14 +681,6 @@ def _run_parity_microstep(
             raise RuntimeError(f"{adapter_path} does not match rank {rank}")
         adapters[adapter_path] = pair
 
-    token_ids_value = fixture.get("tokenIds")
-    targets_value = fixture.get("targets")
-    unmasked_value = fixture.get("unmaskedTargets")
-    if not all(isinstance(value, list) for value in (token_ids_value, targets_value, unmasked_value)):
-        raise RuntimeError("parity fixture tokenIds and targets must be arrays")
-    token_ids = torch.tensor(token_ids_value, dtype=torch.long, device="cuda")
-    targets = torch.tensor(targets_value, dtype=torch.long, device="cuda")
-    unmasked_targets = torch.tensor(unmasked_value, dtype=torch.long, device="cuda")
     num_tokens = _require_int(model.get("numTokens"), "model.numTokens", 1)
     hidden_size = _require_int(model.get("hiddenSize"), "model.hiddenSize", 1)
     intermediate_size = _require_int(
@@ -697,10 +690,64 @@ def _run_parity_microstep(
     active_tokens = _require_int(
         model.get("activeTokenCount"), "model.activeTokenCount", 1
     )
-    if token_ids.numel() != num_tokens or targets.numel() != num_tokens:
-        raise RuntimeError("parity token count mismatch")
-    if int(targets.ne(-100).sum().item()) != active_tokens:
-        raise RuntimeError("parity active-token count mismatch")
+    prefix_mode = request.get("action") == "parity_prefix"
+    if prefix_mode:
+        prefix_contract = _require_object(
+            fixture.get("prefixContract"), "fixture.prefixContract"
+        )
+        prefix_rows_value = fixture.get("prefixRows")
+        if not isinstance(prefix_rows_value, list) or not prefix_rows_value:
+            raise RuntimeError("parity prefixRows must be a non-empty array")
+        training_rows = [
+            _require_object(value, f"fixture.prefixRows[{index}]")
+            for index, value in enumerate(prefix_rows_value)
+        ]
+        accumulation_steps = _require_int(
+            prefix_contract.get("accumulationSteps"),
+            "fixture.prefixContract.accumulationSteps",
+            1,
+        )
+        checkpoint_after_microstep = _require_int(
+            prefix_contract.get("checkpointAfterMicrostep"),
+            "fixture.prefixContract.checkpointAfterMicrostep",
+            1,
+        )
+        expected_optimizer_steps = _require_int(
+            prefix_contract.get("optimizerStepCount"),
+            "fixture.prefixContract.optimizerStepCount",
+            1,
+        )
+        expected_microsteps = _require_int(
+            prefix_contract.get("microstepCount"),
+            "fixture.prefixContract.microstepCount",
+            1,
+        )
+        checkpoint_after_optimizer_step = _require_int(
+            prefix_contract.get("checkpointAfterOptimizerStep"),
+            "fixture.prefixContract.checkpointAfterOptimizerStep",
+            1,
+        )
+        if expected_microsteps != len(training_rows):
+            raise RuntimeError("parity prefix microstep contract is inconsistent")
+        if len(training_rows) % accumulation_steps:
+            raise RuntimeError("parity prefix row count must fill every accumulation window")
+        if checkpoint_after_microstep % accumulation_steps:
+            raise RuntimeError("parity prefix checkpoint must follow a complete accumulation window")
+        if checkpoint_after_optimizer_step != checkpoint_after_microstep // accumulation_steps:
+            raise RuntimeError("parity prefix checkpoint optimizer step is inconsistent")
+        if expected_optimizer_steps != len(training_rows) // accumulation_steps:
+            raise RuntimeError("parity prefix optimizer-step contract is inconsistent")
+    else:
+        training_rows = [{
+            "rowId": "qwen-microstep-1",
+            "tokenIds": fixture.get("tokenIds"),
+            "targets": fixture.get("targets"),
+            "unmaskedTargets": fixture.get("unmaskedTargets"),
+        }]
+        prefix_contract = None
+        accumulation_steps = 1
+        checkpoint_after_microstep = 1
+        expected_optimizer_steps = 1
     eps = _require_float(model.get("rmsEps"), "model.rmsEps")
     num_heads = _require_int(layer.get("numHeads"), "layer.numHeads", 1)
     num_kv_heads = _require_int(layer.get("numKVHeads"), "layer.numKVHeads", 1)
@@ -714,7 +761,6 @@ def _run_parity_microstep(
     if rotary_dim / head_dim != architecture_contract["partialRotaryFactor"]:
         raise RuntimeError("parity fixture rotary geometry differs from its architecture contract")
 
-    hidden = frozen["embedding"].index_select(0, token_ids)
     config = runtime["Qwen3_5TextConfig"](
         vocab_size=vocab_size,
         hidden_size=hidden_size,
@@ -765,22 +811,6 @@ def _run_parity_microstep(
         ),
         diagonal=1,
     )
-    layer_output = decoder(
-        hidden.unsqueeze(0),
-        position_embeddings=(cosine, sine),
-        attention_mask=causal_mask,
-        position_ids=torch.arange(num_tokens, device="cuda").unsqueeze(0),
-        use_cache=False,
-    ).squeeze(0)
-    final_norm = _parity_rms_norm(layer_output, frozen["finalNorm"], eps, torch)
-    logits = final_norm @ frozen["lmHead"].transpose(0, 1)
-    if logits.shape != (num_tokens, vocab_size):
-        raise RuntimeError("parity logits shape mismatch")
-    loss = functional.cross_entropy(logits, targets, ignore_index=-100, reduction="mean")
-    unmasked_loss = functional.cross_entropy(logits, unmasked_targets, reduction="mean")
-    if not torch.isfinite(loss) or not torch.isfinite(unmasked_loss):
-        raise RuntimeError("parity loss is non-finite")
-
     initial = {name: parameter.detach().clone() for name, parameter in parameters.items()}
     optimizer = torch.optim.AdamW(
         list(parameters.values()),
@@ -797,35 +827,137 @@ def _run_parity_microstep(
         fused=False,
     )
     optimizer.zero_grad(set_to_none=True)
-    loss.backward()
-    gradients = {}
-    for name, parameter in parameters.items():
-        if parameter.grad is None or not torch.isfinite(parameter.grad).all():
-            raise RuntimeError(f"parity gradient missing or non-finite for {name}")
-        gradients[name] = parameter.grad.detach().clone()
-    optimizer.step()
-
-    tensors = {}
-    every_parameter_changed = True
+    row_ids: list[str] = []
+    losses: list[float] = []
+    optimizer_step_count = 0
+    checkpoint: dict[str, Any] | None = None
+    last_gradients: dict[str, Any] = {}
     all_gradients_nonzero = True
-    for name, parameter in parameters.items():
-        state = optimizer.state[parameter]
-        gradient = gradients[name]
-        every_parameter_changed = every_parameter_changed and bool(
-            torch.any(parameter.detach() != initial[name]).item()
+    unmasked_loss_value: float | None = None
+
+    def checked_ids(value: Any, label: str) -> list[int]:
+        if not isinstance(value, list) or len(value) != num_tokens:
+            raise RuntimeError(f"{label} must contain {num_tokens} token IDs")
+        parsed: list[int] = []
+        for index, item in enumerate(value):
+            if isinstance(item, bool) or int(item) != float(item):
+                raise RuntimeError(f"{label}[{index}] must be an integer")
+            token = int(item)
+            if token < 0 or token >= vocab_size:
+                raise RuntimeError(f"{label}[{index}] is outside the fixture vocabulary")
+            parsed.append(token)
+        return parsed
+
+    def checked_targets(value: Any, label: str) -> list[int]:
+        if not isinstance(value, list) or len(value) != num_tokens:
+            raise RuntimeError(f"{label} must contain {num_tokens} targets")
+        parsed: list[int] = []
+        for index, item in enumerate(value):
+            if isinstance(item, bool) or int(item) != float(item):
+                raise RuntimeError(f"{label}[{index}] must be an integer")
+            target = int(item)
+            if target != -100 and (target < 0 or target >= vocab_size):
+                raise RuntimeError(f"{label}[{index}] is outside the fixture vocabulary")
+            parsed.append(target)
+        if sum(target != -100 for target in parsed) != active_tokens:
+            raise RuntimeError(f"{label} active-token count mismatch")
+        return parsed
+
+    def capture_state(gradients: dict[str, Any] | None = None) -> dict[str, Any]:
+        state_tensors: dict[str, Any] = {}
+        for name, parameter in parameters.items():
+            state = optimizer.state[parameter]
+            state_tensors[name] = {
+                "shape": list(parameter.shape),
+                "parameter": _parity_values(parameter),
+                "moment1": _parity_values(state["exp_avg"]),
+                "moment2": _parity_values(state["exp_avg_sq"]),
+            }
+            if gradients is not None:
+                state_tensors[name]["gradient"] = _parity_values(gradients[name])
+        return state_tensors
+
+    for row_index, row in enumerate(training_rows):
+        row_label = f"fixture.prefixRows[{row_index}]" if prefix_mode else "fixture"
+        row_id = _require_string(row.get("rowId"), f"{row_label}.rowId")
+        token_ids_value = checked_ids(row.get("tokenIds"), f"{row_label}.tokenIds")
+        targets_value = checked_targets(row.get("targets"), f"{row_label}.targets")
+        token_ids = torch.tensor(token_ids_value, dtype=torch.long, device="cuda")
+        targets = torch.tensor(targets_value, dtype=torch.long, device="cuda")
+        hidden = frozen["embedding"].index_select(0, token_ids)
+        layer_output = decoder(
+            hidden.unsqueeze(0),
+            position_embeddings=(cosine, sine),
+            attention_mask=causal_mask,
+            position_ids=torch.arange(num_tokens, device="cuda").unsqueeze(0),
+            use_cache=False,
+        ).squeeze(0)
+        final_norm = _parity_rms_norm(layer_output, frozen["finalNorm"], eps, torch)
+        logits = final_norm @ frozen["lmHead"].transpose(0, 1)
+        if logits.shape != (num_tokens, vocab_size):
+            raise RuntimeError("parity logits shape mismatch")
+        loss = functional.cross_entropy(
+            logits, targets, ignore_index=-100, reduction="mean"
         )
-        all_gradients_nonzero = all_gradients_nonzero and bool(
-            torch.any(gradient != 0).item()
-        )
-        tensors[name] = {
-            "shape": list(parameter.shape),
-            "initial": _parity_values(initial[name]),
-            "gradient": _parity_values(gradient),
-            "parameter": _parity_values(parameter),
-            "moment1": _parity_values(state["exp_avg"]),
-            "moment2": _parity_values(state["exp_avg_sq"]),
-        }
-    return {
+        if not torch.isfinite(loss):
+            raise RuntimeError(f"parity loss is non-finite for {row_id}")
+        if not prefix_mode:
+            unmasked_value = checked_ids(
+                row.get("unmaskedTargets"), f"{row_label}.unmaskedTargets"
+            )
+            unmasked_targets = torch.tensor(
+                unmasked_value, dtype=torch.long, device="cuda"
+            )
+            unmasked_loss = functional.cross_entropy(
+                logits, unmasked_targets, reduction="mean"
+            )
+            if not torch.isfinite(unmasked_loss):
+                raise RuntimeError("parity unmasked loss is non-finite")
+            unmasked_loss_value = float(unmasked_loss.detach().item())
+        row_ids.append(row_id)
+        losses.append(float(loss.detach().item()))
+        (loss / accumulation_steps).backward()
+
+        microstep_count = row_index + 1
+        if microstep_count % accumulation_steps:
+            continue
+        last_gradients = {}
+        for name, parameter in parameters.items():
+            if parameter.grad is None or not torch.isfinite(parameter.grad).all():
+                raise RuntimeError(f"parity gradient missing or non-finite for {name}")
+            last_gradients[name] = parameter.grad.detach().clone()
+            all_gradients_nonzero = all_gradients_nonzero and bool(
+                torch.any(parameter.grad != 0).item()
+            )
+        optimizer.step()
+        optimizer_step_count += 1
+        if microstep_count == checkpoint_after_microstep:
+            checkpoint_row_ids = list(row_ids)
+            checkpoint = {
+                "microstepCount": microstep_count,
+                "optimizerStepCount": optimizer_step_count,
+                "consumedRowIds": checkpoint_row_ids,
+                "consumedPrefixSha256": _sha256_text(
+                    json.dumps(checkpoint_row_ids, separators=(",", ":"))
+                ),
+                "tensors": capture_state(),
+            }
+        optimizer.zero_grad(set_to_none=True)
+
+    if optimizer_step_count != expected_optimizer_steps or not last_gradients:
+        raise RuntimeError("parity optimizer-step count differs from the fixture contract")
+    consumed_prefix_sha256 = _sha256_text(json.dumps(row_ids, separators=(",", ":")))
+    if prefix_mode and prefix_contract.get("consumedPrefixSha256") != consumed_prefix_sha256:
+        raise RuntimeError("parity consumed-prefix hash differs from the fixture contract")
+    if prefix_mode and checkpoint is None:
+        raise RuntimeError("parity prefix checkpoint was not captured")
+
+    tensors = capture_state(last_gradients)
+    every_parameter_changed = all(
+        bool(torch.any(parameter.detach() != initial[name]).item())
+        for name, parameter in parameters.items()
+    )
+    common = {
         "fixtureSha256": fixture_hash,
         "precisionContract": fixture["precisionContract"],
         "architectureContract": architecture_contract,
@@ -840,12 +972,34 @@ def _run_parity_microstep(
         "activeTokenCount": active_tokens,
         "parameterCount": len(parameters),
         "parameterNames": list(parameters),
-        "optimizerStepCount": 1,
-        "meanLoss": float(loss.detach().item()),
-        "unmaskedMeanLoss": float(unmasked_loss.detach().item()),
+        "optimizerStepCount": optimizer_step_count,
         "allGradientsNonzero": all_gradients_nonzero,
         "everyParameterChanged": every_parameter_changed,
-        "tensors": tensors,
+    }
+    if prefix_mode:
+        return {
+            **common,
+            "accumulationSteps": accumulation_steps,
+            "microstepCount": len(training_rows),
+            "consumedRowIds": row_ids,
+            "consumedPrefixSha256": consumed_prefix_sha256,
+            "losses": losses,
+            "meanLoss": sum(losses) / len(losses),
+            "checkpoint": checkpoint,
+            "tensors": tensors,
+            "claimBoundary": "Gamma PyTorch/ROCm reference for a deterministic four-row, two-update, rank-32 matched prefix through one tiny Transformers Qwen3_5DecoderLayer with completion masking and AdamW accumulation; not checkpoint reload, production Qwen geometry, V12 dropout, sustained training, or capability evidence.",
+        }
+    return {
+        **common,
+        "meanLoss": losses[0],
+        "unmaskedMeanLoss": unmasked_loss_value,
+        "tensors": {
+            name: {
+                **tensor,
+                "initial": _parity_values(initial[name]),
+            }
+            for name, tensor in tensors.items()
+        },
         "claimBoundary": "Gamma PyTorch/ROCm reference for one tiny rank-32, zero-dropout, token-aligned completion-masked microstep through the Transformers Qwen3_5DecoderLayer using the pinned residual-before-post-attention-norm and split-half partial-RoPE contracts; not production Qwen geometry, Hugging Face causal-label shifting, V12 dropout, sustained training, or capability evidence.",
     }
 
@@ -1549,7 +1703,7 @@ def execute(request: dict[str, Any]) -> dict[str, Any]:
         result = _run_dpo(request, runtime, output_root)
     elif action == "rollout":
         result = _run_rollout(request, runtime, output_root)
-    elif action == "parity_microstep":
+    elif action in {"parity_microstep", "parity_prefix"}:
         result = _run_parity_microstep(request, runtime, output_root)
     else:
         result = _run_grpo_update(request, runtime, output_root)
