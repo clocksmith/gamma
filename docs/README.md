@@ -10,8 +10,7 @@ This directory is the canonical documentation index for GAMMA.
 | Engine internals | [ENGINE_ARCHITECTURE.md](ENGINE_ARCHITECTURE.md) |
 | Model format compatibility | [MODEL_FORMATS.md](MODEL_FORMATS.md) |
 | Benchmarking workflows | [BENCHMARKING.md](BENCHMARKING.md) |
-| Evidence-Gated Capability Transfer: controlled lanes, teacher qualification, external selection, and promotion receipts | [EVIDENCE_GATED_CAPABILITY_TRANSFER.md](EVIDENCE_GATED_CAPABILITY_TRANSFER.md) |
-| Hybrid distillation legacy-name compatibility pointer | [HYBRID_DISTILLATION.md](HYBRID_DISTILLATION.md) |
+| SAME-R: swappable approaches, matched evaluation, replication, and capability transfer | [../projects/samer/README.md](../projects/samer/README.md) |
 | Verifier-guided learning, RLVR, prompt optimization, and experiment states | [VERIFIER_GUIDED_LEARNING.md](VERIFIER_GUIDED_LEARNING.md) |
 | Cross-repository experiment register | [../projects/distillation/shared/experiments/README.md](../projects/distillation/shared/experiments/README.md) |
 | Translation distillation ops + leaderboards | [../projects/distillation/translation/README.md](../projects/distillation/translation/README.md) |
