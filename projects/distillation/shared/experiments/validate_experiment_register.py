@@ -46,6 +46,7 @@ METHOD_IDS = {
     "routing",
     "rule_based_ai_feedback",
     "sequence_level_distillation",
+    "training_backend_parity",
 }
 STATUSES = {
     "proposed",
