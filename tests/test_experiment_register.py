@@ -38,6 +38,30 @@ def _write_rows(path: Path, rows: list[dict[str, object]]) -> None:
     )
 
 
+def _init_git_repository(path: Path) -> str:
+    path.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=path, check=True)
+    subprocess.run(
+        ["git", "config", "user.name", "Gamma Test"], cwd=path, check=True
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "gamma@example.invalid"],
+        cwd=path,
+        check=True,
+    )
+    marker = path / "marker.txt"
+    marker.write_text("initial\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=path, check=True)
+    subprocess.run(["git", "commit", "-qm", "initial"], cwd=path, check=True)
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=path,
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout.strip()
+
+
 class ExperimentRegisterTests(unittest.TestCase):
     def test_checked_in_register_and_schema_are_valid(self) -> None:
         _VALIDATOR.validate_schema_alignment()
@@ -172,6 +196,37 @@ class ExperimentRegisterTests(unittest.TestCase):
             )
             self.assertEqual(validated[0]["artifact"]["revision"], revision)
 
+    def test_git_artifact_missing_at_pinned_revision_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            workspace = Path(temp_dir)
+            repository = workspace / "gamma"
+            revision = _init_git_repository(repository)
+            artifact = repository / "evidence" / "receipt.json"
+            artifact.parent.mkdir()
+            artifact.write_text("{}\n", encoding="utf-8")
+
+            record = copy.deepcopy(
+                _VALIDATOR.validate_register(verify_available_artifacts=False)[0]
+            )
+            record["owner"] = {
+                "repository": "clocksmith/gamma",
+                "path": "evidence",
+            }
+            record["artifact"] = {
+                "repository": "clocksmith/gamma",
+                "path": "evidence/receipt.json",
+                "revision": revision,
+                "sha256": hashlib.sha256(artifact.read_bytes()).hexdigest(),
+            }
+            record.pop("relatedArtifacts", None)
+            register = workspace / "missing-at-revision.jsonl"
+            _write_rows(register, [record])
+
+            with self.assertRaisesRegex(
+                _VALIDATOR.RegistryValidationError,
+                "does not exist at recorded revision",
+            ):
+                _VALIDATOR.validate_register(register, workspace_root=workspace)
 
 if __name__ == "__main__":
     unittest.main()
