@@ -35,12 +35,10 @@ curation, and training loop. Use the name that identifies the mechanism:
 | Optimize a policy with programmatic pass/fail or numeric rewards | reinforcement learning with verifiable rewards (RLVR) |
 | The complete repeated loop | verifier-guided self-improvement or an execution-grounded data flywheel |
 
-[`Evidence-Gated Capability Transfer`](EVIDENCE_GATED_CAPABILITY_TRANSFER.md)
-is Gamma's controlled-experiment method for teacher outputs, curated anchors,
-matched data lanes, checkpoint selection, compact mechanism distillation, and
-receipt-bound promotion. `Hybrid distillation` remains a narrow legacy term for
-the teacher-assisted distillation subtype. RLVR is a neighboring method, not a
-synonym for EGCT or hybrid distillation.
+[`SAME-R`](../projects/samer/README.md) is Gamma's implementation-neutral outer
+method for running swappable approaches under matched evaluation and
+replication. `Hybrid distillation` is one teacher-assisted inner approach. RLVR
+is another possible inner approach; neither is a synonym for SAME-R.
 
 ## Scientific Chain
 
@@ -82,9 +80,9 @@ Interpret them separately:
 - Different signs across reference protocols leave the conclusion
   protocol-dependent.
 
-## Evidence States
+## Experiment Register Statuses
 
-Every registered experiment uses one of these states:
+The cross-repository experiment register uses one of these coarse statuses:
 
 | State | Meaning |
 | --- | --- |
@@ -98,6 +96,11 @@ Every registered experiment uses one of these states:
 
 Promotion must move through these states. It must never infer
 `capability_proven` from `mechanics_proven`.
+
+SAME-R trial ledgers may record more detailed stages such as
+`teacher_qualified`, `transfer_observed`, `control_confirmed`, and
+`seed_confirmed`. The canonical SAME-R project defines their mapping to this
+enforced register enum.
 
 ## Method Taxonomy
 

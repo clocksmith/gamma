@@ -1,25 +1,70 @@
-# Evidence-Gated Capability Transfer
+# SAME-R
 
-Evidence-Gated Capability Transfer (EGCT) is Gamma's canonical method for
-moving a named capability into a model, router, rule system, or other learned
-component while preserving causal attribution and reproducible promotion
-evidence.
+**SAME-R** (identifier `samer`) means **Swappable Approaches under Matched
+Evaluation and Replication**. Its recursive reading is **SAMER Applies Methods,
+Evaluates, Repeats**.
 
-`Hybrid distillation` is retained as a legacy name for one EGCT subtype:
-teacher-assisted controlled-lane training. It is not the umbrella term because
-EGCT also covers construction-gold data, verifier-filtered SFT, active data
-selection, compact rule distillation, checkpoint selection, and serving changes
-that must be evaluated separately from capability movement.
+> Different inners. Same rims.
 
-This document is the controlled-experiment companion to
-[`VERIFIER_GUIDED_LEARNING.md`](VERIFIER_GUIDED_LEARNING.md). That document
-defines the broader method taxonomy. This document defines how a specific
-capability-transfer claim is designed, executed, compared, recorded, and
-promoted.
+SAME-R is Gamma's implementation-neutral outer method for testing changes to
+data, prompts, teachers, training algorithms, models, rules, routers, kernels,
+and execution plans. The inner approach may change; the comparison, evaluation,
+replication, receipt, and promotion boundaries remain matched.
+
+`Hybrid distillation` is one SAME-R inner approach: teacher-assisted
+controlled-lane training. It is not the umbrella term because SAME-R can also
+run construction-gold generation, verifier-filtered SFT, active data selection,
+prompt search, preference or policy optimization, compact rule distillation,
+checkpoint selection, routing, and serving experiments.
+
+This README is canonical for the SAME-R outer method and its capability-transfer
+profile. [`VERIFIER_GUIDED_LEARNING.md`](../../docs/VERIFIER_GUIDED_LEARNING.md)
+owns the broader optimizer, reward, and RLVR taxonomy. Domain projects own their
+data, executors, evaluators, artifacts, and promotion decisions.
+
+## Algorithm Contract
+
+A SAME-R implementation maintains:
+
+- a typed registry of eligible inner approaches;
+- a frozen objective, evaluator, guardrails, and comparison budget;
+- accepted, rejected, blocked, and saturated trial history;
+- immutable run contracts and receipt pointers; and
+- a selection policy for the next approach and intervention.
+
+Each inner approach must satisfy this conceptual interface:
+
+```text
+propose(history, frozen_contract) -> intervention
+materialize(intervention) -> candidate
+execute(candidate, frozen_contract) -> run_artifacts
+summarize(run_artifacts) -> receipt
+is_saturated(history, declared_budget) -> boolean
+```
+
+The outer method owns matched evaluation, replication, retention, and promotion.
+An inner approach does not select its own promotion metric or silently change
+the frozen contract. A SAME-R instance may itself be registered as an inner
+approach when it returns one candidate and one receipt under the enclosing
+contract; that is the recursion boundary.
+
+Gamma currently executes these operations through domain-specific project
+scripts, manifests, scoreboards, and human-selected next interventions. A shared
+automatic approach registry and `select_approach(history)` implementation do not
+yet exist. Until they do, SAME-R is the canonical algorithm and experiment
+contract, while operator selection remains explicit rather than claimed as
+automated.
+
+## Capability-Transfer Profile
+
+Capability transfer is the primary SAME-R profile: an intervention attempts to
+move a named externally measured behavior into a model, router, rule system, or
+other learned component. A transfer claim is an outcome of the trial, not an
+assumption built into the method name.
 
 ## One-Sentence Contract
 
-An EGCT claim has this form:
+A SAME-R capability-transfer claim has this form:
 
 ```text
 Under a frozen student, training recipe, dataset budget, evaluator, and split,
@@ -31,9 +76,9 @@ is bound to complete receipts R.
 If any clause is missing, the result is evidence for a narrower statement, not
 a capability-transfer claim.
 
-## The Questions EGCT Separates
+## The Questions SAME-R Separates
 
-EGCT exists to keep these questions from collapsing into one aggregate score:
+SAME-R exists to keep these questions from collapsing into one aggregate score:
 
 1. Did the teacher, generator, selector, or curator produce a different data
    distribution?
@@ -49,7 +94,7 @@ Training loss directly addresses only question 2.
 
 ## Scope
 
-EGCT applies to:
+SAME-R applies to:
 
 - supervised fine-tuning;
 - logit or representation distillation;
@@ -63,7 +108,7 @@ EGCT applies to:
 - compression predictors and expert routers;
 - serving changes that might alter outputs.
 
-EGCT does not imply:
+SAME-R does not imply:
 
 - policy-gradient reinforcement learning;
 - grouped rollouts or advantages;
@@ -89,9 +134,11 @@ EGCT does not imply:
 These mechanisms may be combined only after each new axis is independently
 measured.
 
-## Evidence States
+## Trial Stages
 
-Every registered EGCT experiment has exactly one current evidence state.
+A SAME-R project ledger may record one current detailed trial stage. These
+stages describe progress inside SAME-R; they are not the coarse `status` enum
+enforced by the cross-repository experiment register.
 
 | State | Minimum evidence | Permitted claim |
 |---|---|---|
@@ -106,17 +153,32 @@ Every registered EGCT experiment has exactly one current evidence state.
 | `promotion_ready` | Deployment/package constraints and final lineage checks pass. | The selected artifact may enter promotion review. |
 | `deployed` | Deployment receipt identifies the exact promoted artifact. | The capability artifact is active in the named environment. |
 
-States are monotonic only when their evidence remains valid. A changed dataset,
-evaluator, prompt, model, or package may invalidate an earlier state.
+Stages advance only while their evidence remains valid. A changed dataset,
+evaluator, prompt, model, or package may invalidate an earlier stage. A
+teacher-free approach skips `teacher_qualified`.
+
+The pointer-only cross-repository register intentionally uses fewer statuses:
+
+| SAME-R trial stage | Experiment-register `status` |
+|---|---|
+| `proposed` | `proposed` |
+| `harness_ready` | `harness_ready` |
+| `mechanics_proven` through `seed_confirmed` | `mechanics_proven` |
+| `capability_proven` or `promotion_ready` | `capability_proven` |
+| `deployed` | `promoted` |
+
+Terminal dispositions map directly to `rejected` or `blocked`. The register
+must not claim `capability_proven` from `transfer_observed`,
+`control_confirmed`, or `seed_confirmed` alone.
 
 ## Ownership Contract
 
-An EGCT program assigns these roles explicitly:
+A SAME-R program assigns these roles explicitly:
 
 | Role | Responsibility |
 |---|---|
 | Domain owner | Defines legal data, target behavior, category semantics, and human authority. |
-| Method owner | Defines lanes, controls, evidence states, and causal claim boundary. |
+| Method owner | Defines lanes, controls, trial stages, and causal claim boundary. |
 | Executor | Runs training and evaluation under the frozen contract. |
 | Teacher owner | Freezes teacher identity, wrapper, instruction, decoding, and qualification evidence. |
 | Evaluator owner | Versions the scorer, thresholds, category rules, and malformed-output policy. |
@@ -554,9 +616,9 @@ Semantic Table Coder. `SRSTM` is not currently a registered Gamma mechanism;
 when it appears without a separate definition, treat it as a likely reference
 to SRSTC rather than silently creating a second algorithm.
 
-EGCT and SRSTC occupy different layers:
+SAME-R and SRSTC occupy different layers:
 
-| Layer | EGCT | SRSTC |
+| Layer | SAME-R | SRSTC |
 |---|---|---|
 | Purpose | Establish whether an intervention transfers capability. | Predict future bits from decoder-rebuilt semantic and structural recurrence. |
 | Runtime role | None required; it is an experiment and promotion method. | Active compressor expert, retrieval table, probability mixer, and router. |
@@ -565,7 +627,7 @@ EGCT and SRSTC occupy different layers:
 | Teacher use | Qualify, compare, and distill teachers under controlled lanes. | May consume only a final prefix-rebuildable distilled mechanism. |
 | Final artifact | Selected model, adapter, rule, table, router, or no-promotion result. | Deterministic decoder component and arithmetic-coded archive. |
 
-SRSTC can be an EGCT target. EGCT can test interventions to improve:
+SRSTC can be a SAME-R target. SAME-R can test interventions to improve:
 
 - span segmentation;
 - sketch or key construction;
@@ -576,12 +638,12 @@ SRSTC can be an EGCT target. EGCT can test interventions to improve:
 - table capacity and eviction;
 - integration with FX2 residual probabilities.
 
-EGCT does not replace SRSTC, and SRSTC does not by itself establish an EGCT
+SAME-R does not replace SRSTC, and SRSTC does not by itself establish a SAME-R
 causal claim. A positive SRSTC shadow receipt proves measured codelength for one
 mechanism. It does not prove why a teacher-selected data or feature intervention
 worked unless the matched lanes and controls isolate that intervention.
 
-### EGCT experiment for Qwen-guided SRSTC
+### SAME-R experiment for Qwen-guided SRSTC
 
 The strongest proposed bridge is:
 
@@ -597,7 +659,7 @@ Qwen3 reranker scores continuation usefulness offline
         |
 exact counterfactual coder computes the gold codelength delta
         |
-small causal student/router is trained under matched EGCT lanes
+small causal student/router is trained under matched SAME-R lanes
         |
 student is replayed against untouched FX2 blocks
         |
@@ -658,7 +720,7 @@ Blocking failures include:
 | Level | Evidence | Claim |
 |---:|---|---|
 | 1 | Qwen teacher ranking or representation result. | Chooses a candidate intervention. |
-| 2 | Matched EGCT shadow lanes on exact FX2 residual rows. | Tests whether Qwen selection transfers to codelength. |
+| 2 | Matched SAME-R shadow lanes on exact FX2 residual rows. | Tests whether Qwen selection transfers to codelength. |
 | 3 | Tiny student or rule with counted payload on held-out blocks. | Establishes positive net shadow capability. |
 | 4 | Multiple disjoint block and seed confirmations. | Establishes transfer stability. |
 | 5 | Native archive, roundtrip, determinism, resource, and official accounting receipts. | Establishes a constructive compression result. |
@@ -717,7 +779,7 @@ or page-order proxy does not answer it.
 
 ## Worked Applications And Claim Boundaries
 
-These examples illustrate how to apply EGCT. A historical result remains bound
+These examples illustrate how to apply SAME-R. A historical result remains bound
 to its original receipts. A planned profile does not become evidence merely by
 appearing here.
 
@@ -802,7 +864,7 @@ the missing SFT data-lane controls or seed confirmations.
 V12 corrects a data-ablation flaw: an earlier update budget consumed the same
 prefix across nominal lanes, so the experiment did not actually expose the
 replacement difference. V12 hash-orders and consumes the complete matched lane
-budgets. This is a core EGCT lesson: different manifest names do not prove that
+budgets. This is a core SAME-R lesson: different manifest names do not prove that
 the learner consumed different interventions.
 
 ### Gamma, Doppler, and Columbo grounded extraction profile
@@ -928,7 +990,7 @@ redaction and clause/responsiveness tails.
 The scan-loop extension may use prefix KV retention, reset to a recorded
 sequence length, token-to-character anchoring, and category-specific candidate
 scores. It remains a serving experiment until output parity is proven. If the
-changed scan loop alters findings, it becomes a separate EGCT capability axis.
+changed scan loop alters findings, it becomes a separate SAME-R capability axis.
 
 #### Explicit exclusions
 
@@ -940,7 +1002,7 @@ external capability selection.
 
 ### Interpreting null and negative results
 
-An EGCT program records null and negative lanes as first-class evidence:
+A SAME-R program records null and negative lanes as first-class evidence:
 
 - targeted equals random: the heuristic is not established;
 - lower loss with unchanged external score: fit without transfer;
@@ -1066,9 +1128,9 @@ coder traces, or archive hashes, live beside the relevant checkpoint receipt.
 
 ## Naming Guidance
 
-Use `EGCT` only for an experiment that has a frozen contract, controlled lane or
+Use `SAME-R` only for an experiment that has a frozen contract, controlled lane or
 otherwise justified causal comparison, external behavior metric, guardrails,
-and receipt-visible evidence state.
+and a receipt-visible trial stage.
 
 Use narrower mechanism names when appropriate:
 
@@ -1080,5 +1142,5 @@ Use narrower mechanism names when appropriate:
 - `external-behavior checkpoint selection`;
 - `state-reuse serving optimization`.
 
-Do not rename SRSTC to EGCT. SRSTC is an algorithm. EGCT is the method used to
-test and improve it.
+Do not rename SRSTC to SAME-R. SRSTC is an inner compression mechanism; SAME-R
+is the outer method used to test and improve it.

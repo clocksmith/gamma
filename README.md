@@ -8,6 +8,28 @@ Interactive LLM exploration for gameplay, model comparison, and reproducible ben
 - Architecture map: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 - Full docs index: [docs/README.md](./docs/README.md)
 
+## SAME-R
+
+**SAME-R** is Gamma's implementation-neutral outer method: **Swappable
+Approaches under Matched Evaluation and Replication**. Its recursive expansion
+is **SAMER Applies Methods, Evaluates, Repeats**.
+
+> Different inners. Same rims.
+
+The inner approach can be human or agent labeling, data construction, prompt
+search, SFT, distillation, preference or policy optimization, routing, kernel
+search, or a future method. SAME-R keeps the objective, evaluator, controls,
+replication policy, receipts, and promotion boundary matched. A SAME-R instance
+may itself run as an inner approach.
+
+Gamma currently executes SAME-R through domain project scripts, manifests, and
+human-selected interventions. The shared automatic approach registry and
+selector remain an explicit implementation boundary.
+
+- [SAME-R project and capability-transfer protocol](./projects/samer/README.md)
+- [Cross-repository experiment register](./projects/distillation/shared/experiments/README.md)
+- [Verifier-guided optimizer and reward taxonomy](./docs/VERIFIER_GUIDED_LEARNING.md)
+
 ## Quick Start
 
 ```bash
@@ -64,7 +86,7 @@ python gamma.py mind-meld --help
 
 - [docs/README.md](./docs/README.md): documentation map and ownership
 - [docs/BENCHMARKING.md](./docs/BENCHMARKING.md): speed, quality, codegen, and mind-meld benchmarking
-- [docs/EVIDENCE_GATED_CAPABILITY_TRANSFER.md](./docs/EVIDENCE_GATED_CAPABILITY_TRANSFER.md): controlled capability-transfer experiments, teacher qualification, external checkpoint selection, and receipt-bound promotion
+- [projects/samer/README.md](./projects/samer/README.md): SAME-R algorithm, controlled capability-transfer trials, and promotion contract
 - [docs/VERIFIER_GUIDED_LEARNING.md](./docs/VERIFIER_GUIDED_LEARNING.md): prompt optimization, verifier-filtered data, RLVR, domain reward boundaries, and experiment states
 - [projects/distillation/shared/experiments/README.md](./projects/distillation/shared/experiments/README.md): cross-repository experiment register contract
 - [docs/integration-guide.md](./docs/integration-guide.md): OpenAI/LangChain/API/MCP integrations
