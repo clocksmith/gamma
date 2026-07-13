@@ -139,33 +139,6 @@ def existing_guard_path(candidate: str, scope: int) -> pathlib.Path | None:
     return max(matches, key=sort_key)
 
 
-def guard_path_for_new_attempt(candidate: str, scope: int) -> tuple[pathlib.Path, int]:
-    base = default_guard_path(candidate, scope)
-    if not base.exists():
-        return base, 1
-    try:
-        payload = load_json(base)
-    except Exception:
-        payload = {}
-    if payload.get("status") == "running":
-        return base, 1
-
-    attempt = 2
-    while True:
-        candidate_path = base.with_name(
-            base.name.replace("_rss_guard.json", f"_attempt{attempt}_rss_guard.json")
-        )
-        if not candidate_path.exists():
-            return candidate_path, attempt
-        try:
-            candidate_payload = load_json(candidate_path)
-        except Exception:
-            candidate_payload = {}
-        if candidate_payload.get("status") == "running":
-            return candidate_path, attempt
-        attempt += 1
-
-
 def next_scope(scope: int) -> int | None:
     if scope == 1_024:
         return 250_000
@@ -181,12 +154,9 @@ def next_scope(scope: int) -> int | None:
 
 
 def command_for_gate(candidate: str, scope: int) -> list[str]:
-    guard, attempt = guard_path_for_new_attempt(candidate, scope)
+    guard = default_guard_path(candidate, scope)
     tag = re.search(r"ppmd(\d+k)", candidate)
     label_tag = f"ppmd{tag.group(1)}" if tag else "gate"
-    label = f"cmix21_{label_tag}_fxcmrcm20_{scope}_determinism"
-    if attempt > 1:
-        label += f"_attempt{attempt}"
     return [
         "flock",
         "-n",
@@ -202,7 +172,7 @@ def command_for_gate(candidate: str, scope: int) -> list[str]:
         "--guard-json",
         rel(guard) or str(guard),
         "--label",
-        label,
+        f"cmix21_{label_tag}_fxcmrcm20_{scope}_determinism",
         "--",
         "python3",
         "projects/enwiki9/lib/driver.py",
@@ -265,35 +235,6 @@ def record_rss_failure_command(
         str(scope),
         "--label",
         f"{scope}_rss_guard_fail",
-        "--status",
-        "active",
-        "--verdict",
-        verdict,
-        "--note",
-        note,
-        "--note",
-        f"Guard artifact: {rel(guard_path) or guard_path.as_posix()}",
-    ]
-
-
-def record_guard_failure_command(
-    candidate: str,
-    scope: int,
-    guard_path: pathlib.Path,
-    verdict: str,
-    note: str,
-) -> list[str]:
-    return [
-        "python3",
-        "projects/enwiki9/tools/record_driver_result.py",
-        candidate,
-        "--guard-json",
-        rel(guard_path) or str(guard_path),
-        "--guard-only",
-        "--scope",
-        str(scope),
-        "--label",
-        f"{scope}_{verdict}",
         "--status",
         "active",
         "--verdict",
@@ -446,12 +387,7 @@ def lower_ppmd_suggestion(candidate: str, step_kib: int) -> dict[str, Any] | Non
 
 
 def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) -> dict[str, Any]:
-    default_guard = default_guard_path(candidate, scope)
-    if guard_path == default_guard:
-        discovered_guard = existing_guard_path(candidate, scope)
-        if discovered_guard is not None:
-            guard_path = discovered_guard
-    elif not guard_path.exists():
+    if not guard_path.exists():
         discovered_guard = existing_guard_path(candidate, scope)
         if discovered_guard is not None:
             guard_path = discovered_guard
@@ -562,18 +498,6 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
         if guard.get("status") == "running":
             payload["verdict"] = "running"
             payload["next_action"] = "wait_for_gate_completion"
-            return payload
-        if result is None and guard.get("returncode") not in (0, None):
-            payload["verdict"] = "guard_returncode_fail"
-            payload["next_action"] = "record_guard_failure"
-            payload["record_failure_command"] = record_guard_failure_command(
-                candidate,
-                scope,
-                guard_path,
-                "guard_returncode_fail",
-                f"{scope} gate guard returned nonzero before a driver result was produced.",
-            )
-            payload["apply_terminal_command"] = apply_terminal_command(candidate, scope)
             return payload
 
     if result:

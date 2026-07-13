@@ -15,7 +15,11 @@ full enwik9 official score <= 109,500,000 bytes
 The project currently has no full-corpus constructive proof at that target.
 The active native proof lane is
 `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`.
-It passed exact `1K`, `250K`, and `1M` gates and is running unchanged at `10M`.
+Source-handoff metadata records passed `1K`, `250K`, `1M`, and `10M` gates;
+the recorded `10M` archive is `1,638,340` bytes with roundtrip and determinism
+true. Its original result JSON is pending local overlay restoration. The same
+package is running a fresh unchanged `100M` replay under the serialized RSS
+guard.
 The primary novel residual strategy is SRSTC / streaming self-referential
 semantic retrieval: a causal probability model built from already-decoded
 spans, deterministic sketches, self-referential tables, patch-copy priors, and
@@ -47,6 +51,7 @@ receipts show that one should be promoted.
 | Which SRSTC receipts are actually promotable? | `docs/streaming_retrieval_receipt_audit.md` and `docs/streaming_retrieval_receipt_audit.json` | Conservative audit of held-out net savings, alignment safety, online state bounds, and complete block-regression evidence. |
 | What corpus regimes explain the SRSTC regressions? | `docs/streaming_retrieval_block_regime_audit.md` and `docs/streaming_retrieval_block_regime_audit.json` | Offline teacher-only labels and weak-positive controls; only the causal prefix checkpoints may seed a final distilled rule. |
 | How could offline teachers and decoder-rebuilt retrieval close the target debt? | `docs/offline_teacher_retrieval_investigation.md` | Target-debt math, admissible embedding-teacher use, deterministic rule/dictionary/routing/retrieval lanes, and proof gates for counted replay. |
+| Does the current search follow Gamma's latest SAME-R strategy? | `docs/same_r_hutter_strategy_audit.md` | Matched-evaluation audit, exact-codelength controls, oracle-economics gates, candidate-universe saturation, mechanism priorities, and missing constructive evidence. |
 | What evidence level does a teacher, shadow, prefix, block, or full replay prove? | `ALGORITHMS.md` and `docs/research_register.md` | Five-level evidence ladder separating proxy forecasts, target-substrate shadows, counted prefix receipts, disjoint block receipts, and full official score claims. |
 | Where are strategy and novel-algorithm research lanes tracked? | `docs/research_register.md` | Research lane, local files, evidence class, promote gate, and kill gate. |
 | What non-heavy official accounting docs exist? | `docs/official_accounting_checklist.md` | Submission byte accounting, memory-unit risk, promoted-result receipt. |
@@ -65,7 +70,8 @@ cmix21 public 108,244,767-byte external anchor
   -> global FXCM cmC2/2 memory cut plus original rolling buffer
   -> exact 250K archive-neutral pass
   -> exact 1M archive 174525, roundtrip and determinism pass
-  -> unchanged 10M gate
+  -> source-handoff-recorded 10M archive 1638340, roundtrip and determinism pass
+  -> fresh unchanged 100M gate (active)
 ```
 
 Active baseline:

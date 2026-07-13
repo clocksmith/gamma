@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Audit SRSTC streaming-retrieval shadow receipts.
 
-The audit is deliberately conservative: a positive shadow receipt is not marked
-promotion-ready unless it has held-out savings, alignment safety, bounded
-online state, and complete block-regression evidence.
+The audit separates raw-shadow readiness from target-substrate transfer. A raw
+receipt is not marked promotion-ready unless it has held-out savings, alignment
+safety, bounded online state, and complete block-regression evidence; even then,
+packaging requires a separately paying target-probability-trace receipt.
 """
 
 from __future__ import annotations
@@ -27,6 +28,7 @@ CURRENT_WINNER = 110_793_128
 TARGET_SCORE = 109_500_000
 BEST_FORECAST = 110_181_114
 BLOCK_POSTERIOR_CODE_BYTES_ESTIMATE = 3_788
+RAW_SHADOW_METHOD = "streaming_retrieval_raw_shadow_v1"
 
 
 @dataclass(frozen=True)
@@ -315,6 +317,13 @@ def audit_receipt(path: pathlib.Path, receipt: dict[str, Any], config: AuditConf
     rerun_command = complete_block_rerun_command(path, receipt, block)
     posterior_rerun_command = block_posterior_rerun_command(path, receipt, block)
 
+    method = str(receipt.get("method") or "unknown")
+    base_trace = str(receipt.get("base_trace") or "unknown")
+    substrate_class = (
+        "raw_order2_shadow"
+        if method == RAW_SHADOW_METHOD
+        else "target_probability_trace"
+    )
     checks = {
         "has_heldout": heldout_saved is not None,
         "positive_heldout": heldout_saved is not None and heldout_saved > 0,
@@ -327,11 +336,25 @@ def audit_receipt(path: pathlib.Path, receipt: dict[str, Any], config: AuditConf
     }
     blockers = [name for name, ok in checks.items() if not ok]
     promotion_ready = not blockers
+    target_substrate_checks = {
+        "target_probability_trace": substrate_class == "target_probability_trace",
+        "has_heldout": checks["has_heldout"],
+        "positive_heldout": checks["positive_heldout"],
+        "positive_net": checks["positive_net"],
+        "alignment_ok": checks["alignment_ok"],
+        "state_within_cap": checks["state_within_cap"],
+        "block_regression_within_cap": checks["block_regression_within_cap"],
+        "complete_block_audit": checks["complete_block_audit"],
+    }
+    target_substrate_blockers = [
+        name for name, ok in target_substrate_checks.items() if not ok
+    ]
     return {
         "path": rel(path),
         "verdict": str(receipt.get("verdict") or "incomplete"),
-        "method": str(receipt.get("method") or "unknown"),
-        "base_trace": str(receipt.get("base_trace") or "unknown"),
+        "method": method,
+        "base_trace": base_trace,
+        "substrate_class": substrate_class,
         "feature_source": feature_source,
         "encoded_rows": as_int(receipt.get("encoded_rows")),
         "data_bytes_loaded": as_int(receipt.get("data_bytes_loaded")),
@@ -346,6 +369,9 @@ def audit_receipt(path: pathlib.Path, receipt: dict[str, Any], config: AuditConf
         "checks": checks,
         "promotion_blockers": blockers,
         "promotion_ready_shadow": promotion_ready,
+        "target_substrate_checks": target_substrate_checks,
+        "target_substrate_blockers": target_substrate_blockers,
+        "target_substrate_ready": not target_substrate_blockers,
         "complete_block_rerun_command": rerun_command,
         "block_posterior_rerun_command": posterior_rerun_command,
         **block,
@@ -388,6 +414,10 @@ def objective_row(row: dict[str, Any], *, forecast_gap: int, public_gap: int) ->
         "largest_block_regression_bytes": row.get("largest_block_regression_bytes"),
         "promotion_ready_shadow": row.get("promotion_ready_shadow"),
         "promotion_blockers": row.get("promotion_blockers") or [],
+        "substrate_class": row.get("substrate_class"),
+        "target_substrate_ready": row.get("target_substrate_ready"),
+        "target_substrate_blockers": row.get("target_substrate_blockers") or [],
+        "encoded_rows": row.get("encoded_rows"),
         "forecast_gap_remaining_bytes": forecast_gap_remaining,
         "public_gap_remaining_bytes": public_gap_remaining,
         "closes_forecast_gap": closes_forecast_gap,
@@ -412,6 +442,18 @@ def objective_selection(rows: list[dict[str, Any]]) -> dict[str, Any]:
         row for row in positive_net
         if row.get("promotion_blockers") == ["block_regression_within_cap"]
     ]
+    target_substrate_rows = [
+        row
+        for row in rows
+        if row.get("substrate_class") == "target_probability_trace"
+        and isinstance(row.get("net_saved_bytes"), (int, float))
+    ]
+    target_substrate_positive = [
+        row for row in target_substrate_rows if row["net_saved_bytes"] > 0
+    ]
+    target_substrate_ready = [
+        row for row in target_substrate_positive if row.get("target_substrate_ready") is True
+    ]
 
     best_ready = max(
         promotion_ready,
@@ -428,6 +470,23 @@ def objective_selection(rows: list[dict[str, Any]]) -> dict[str, Any]:
         key=lambda row: row["net_saved_bytes"],
         default=None,
     )
+    broadest_target_substrate = max(
+        target_substrate_rows,
+        key=lambda row: (
+            row.get("encoded_rows") or 0,
+            (
+                row["net_saved_bytes"]
+                if isinstance(row.get("net_saved_bytes"), (int, float))
+                else float("-inf")
+            ),
+        ),
+        default=None,
+    )
+    best_target_substrate_ready = max(
+        target_substrate_ready,
+        key=lambda row: row["net_saved_bytes"],
+        default=None,
+    )
     top_objective_rows = sorted(
         positive_net,
         key=lambda row: (
@@ -438,9 +497,21 @@ def objective_selection(rows: list[dict[str, Any]]) -> dict[str, Any]:
         ),
     )[:12]
 
-    if best_ready is not None and best_ready["net_saved_bytes"] >= forecast_gap:
-        recommended_action = "package_promotion_ready_shadow_piece"
-        action_reason = "a promotion-ready shadow receipt closes the forecast-to-target byte gap"
+    if (
+        best_target_substrate_ready is not None
+        and best_target_substrate_ready["net_saved_bytes"] >= forecast_gap
+    ):
+        recommended_action = "package_target_substrate_transfer_piece"
+        action_reason = (
+            "a counted held-out target-substrate transfer receipt closes the "
+            "forecast-to-target byte gap"
+        )
+    elif best_ready is not None and best_ready["net_saved_bytes"] >= forecast_gap:
+        recommended_action = "construct_residual_conditioned_target_substrate_transfer"
+        action_reason = (
+            "the raw-shadow receipt closes the forecast gap, but no counted "
+            "target-substrate receipt proves sufficient realizable transfer"
+        )
     elif (
         best_regression_blocked is not None
         and best_regression_blocked["net_saved_bytes"] >= forecast_gap
@@ -449,10 +520,17 @@ def objective_selection(rows: list[dict[str, Any]]) -> dict[str, Any]:
         action_reason = (
             "the best target-closing receipt is blocked only by small block regressions"
         )
-    elif best_ready is not None:
-        recommended_action = "use_best_ready_piece_as_fallback_and_expand_generator"
+    elif best_target_substrate_ready is not None:
+        recommended_action = "expand_target_substrate_transfer_before_packaging"
         action_reason = (
-            "promotion-ready receipts are positive but do not close the forecast-to-target gap"
+            "target-substrate transfer is positive and replay-ready but does not "
+            "close the forecast-to-target gap"
+        )
+    elif best_ready is not None:
+        recommended_action = "construct_target_substrate_transfer_from_ready_raw_piece"
+        action_reason = (
+            "raw promotion-ready receipts are positive but have no paying "
+            "target-substrate transfer receipt"
         )
     else:
         recommended_action = "generate_more_shadow_receipts_before_packaging"
@@ -477,6 +555,27 @@ def objective_selection(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "best_promotion_ready_receipt": (
             objective_row(best_ready, forecast_gap=forecast_gap, public_gap=public_gap)
             if best_ready is not None
+            else None
+        ),
+        "target_substrate_receipts": len(target_substrate_rows),
+        "target_substrate_positive_net_receipts": len(target_substrate_positive),
+        "target_substrate_ready_receipts": len(target_substrate_ready),
+        "broadest_target_substrate_receipt": (
+            objective_row(
+                broadest_target_substrate,
+                forecast_gap=forecast_gap,
+                public_gap=public_gap,
+            )
+            if broadest_target_substrate is not None
+            else None
+        ),
+        "best_target_substrate_ready_receipt": (
+            objective_row(
+                best_target_substrate_ready,
+                forecast_gap=forecast_gap,
+                public_gap=public_gap,
+            )
+            if best_target_substrate_ready is not None
             else None
         ),
         "recommended_action": recommended_action,
@@ -627,6 +726,11 @@ def render_md(summary: dict[str, Any]) -> str:
             if isinstance(selection.get("best_promotion_ready_receipt"), dict)
             else None
         )
+        broadest_transfer = (
+            selection.get("broadest_target_substrate_receipt")
+            if isinstance(selection.get("broadest_target_substrate_receipt"), dict)
+            else None
+        )
         lines.extend(
             [
                 "",
@@ -644,8 +748,21 @@ def render_md(summary: dict[str, Any]) -> str:
                 f"- Forecast gap to target: `{fmt_number(selection.get('forecast_gap_bytes'))}` bytes",
                 f"- Recommended action: `{selection.get('recommended_action', 'unknown')}`",
                 f"- Reason: `{selection.get('action_reason', 'unknown')}`",
+                f"- Target-substrate receipts: `{fmt_number(selection.get('target_substrate_receipts'))}`",
+                f"- Positive-net target-substrate receipts: `{fmt_number(selection.get('target_substrate_positive_net_receipts'))}`",
+                f"- Replay-ready target-substrate receipts: `{fmt_number(selection.get('target_substrate_ready_receipts'))}`",
             ]
         )
+        if broadest_transfer:
+            lines.extend(
+                [
+                    f"- Broadest target-substrate receipt: `{broadest_transfer.get('path')}`",
+                    f"- Broadest target-substrate encoded rows: `{fmt_number(broadest_transfer.get('encoded_rows'))}`",
+                    f"- Broadest target-substrate net bytes: `{fmt_number(broadest_transfer.get('net_saved_bytes'))}`",
+                    f"- Broadest target-substrate held-out bytes: `{fmt_number(broadest_transfer.get('heldout_shadow_saved_bytes'))}`",
+                    f"- Broadest target-substrate blockers: `{', '.join(broadest_transfer.get('target_substrate_blockers') or ['none'])}`",
+                ]
+            )
         if best_target:
             lines.extend(
                 [
@@ -668,8 +785,8 @@ def render_md(summary: dict[str, Any]) -> str:
             lines.extend(
                 [
                     "",
-                    "| Receipt | Net Saved | Forecast Gap Remaining | Ready | Largest Regression | Blockers |",
-                    "|---|---:|---:|---|---:|---|",
+                    "| Receipt | Substrate | Net Saved | Forecast Gap Remaining | Raw-shadow Ready | Largest Regression | Blockers |",
+                    "|---|---|---:|---:|---|---:|---|",
                 ]
             )
             for row in rows:
@@ -681,6 +798,7 @@ def render_md(summary: dict[str, Any]) -> str:
                     + " | ".join(
                         [
                             f"`{row.get('path')}`",
+                            f"`{row.get('substrate_class') or 'unknown'}`",
                             fmt_number(row.get("net_saved_bytes")),
                             fmt_number(row.get("forecast_gap_remaining_bytes")),
                             f"`{str(row.get('promotion_ready_shadow')).lower()}`",
@@ -917,7 +1035,8 @@ def render_md(summary: dict[str, Any]) -> str:
             "## Readout",
             "",
             "- A positive net receipt can justify more shadow work.",
-            "- A promotion-ready receipt requires complete block evidence before any compressor integration.",
+            "- Raw-shadow promotion readiness does not prove additive transfer onto fx2 or cmix21.",
+            "- Packaging requires a positive counted target-substrate replay, not only a raw-shadow win.",
             "- Existing receipts without full block rows should be regenerated with complete block diagnostics before packaging.",
         ]
     )

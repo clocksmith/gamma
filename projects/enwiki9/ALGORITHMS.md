@@ -26,6 +26,12 @@ memory-bracket evidence. Its replacement active proof lane is
 which halves the large FXCM cmC2 tables and restores the original PAQ rolling
 buffer.
 
+Gamma's SAME-R method is the outer matched-evaluation contract for improving
+these mechanisms; it is not a compressor and does not rename SRSTC. The
+enwiki9 mapping, oracle-economics gates, matched-control requirements, and
+candidate-universe retirement rules are audited in
+`docs/same_r_hutter_strategy_audit.md`.
+
 Current active baseline:
 
 ```text
@@ -59,7 +65,7 @@ metadata-inherited evidence, forecast evidence, and the active gate.
 | Retired cmix21 candidate | `ppmd20736k` passed exact gates through `1,000,000`, then was stopped during `10,000,000` | Measured compressor RSS was `10,472,644` KiB, `707,019` KiB over the official decimal ceiling. Terminal guard label: `10000000_official_decimal_memory_abort`. |
 | `ppmd20608k` bracket result | Exact `1,024` replay passed, then unchanged `250,000` promotion exceeded the official decimal memory ceiling | Guard receipt: `ppmd20608k_250000_determinism_rss_guard.json`; max sampled single RSS was `10,005,832` KiB, `240,207` KiB over decimal `10GB`. |
 | `ppmd20480k` bracket result | Exact `1,024` replay passed, then unchanged `250,000` promotion exceeded official decimal `10GB` by `3,275` KiB | This is the lower terminal PPMD-only bracket, not the active proof gate. |
-| Active cmix21 proof gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` at `10,000,000` bytes | Exact `1M` replay produced archive `174,525`, roundtrip and determinism true, peak RSS `8,831,176` KiB, and improved the prior local archive reference by `6` bytes. The package is now running unchanged at `10M`. |
+| Active cmix21 proof gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` at `100,000,000` bytes | Source-handoff metadata records a `10M` archive of `1,638,340`, roundtrip and determinism true, and peak single-process RSS `8,871,336` KiB; that original result JSON is pending local overlay restoration. The same package is now running a fresh unchanged `100M` replay; no terminal `100M` result is claimed yet. |
 | Active baseline | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | Strongest calibrated admissible baseline; full score remains forecast-only until exact `1G` replay. |
 | Active target-bearing gate | FXCM2/full-buffer cmix21 package above | This is an exact constructive promotion lane; it does not prove `10.95%` until the unchanged full `1G` package passes accounting. |
 | Retired FX2-SC sidecar geometry-title gate | Native-output lower bound `1,641,762` at `99.57%`, already `10,181` bytes above the `1,631,581` promotion ceiling before final flush | Terminal receipt: `results/fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1/10m_target_ceiling_abort.json`. Memory was healthy: max sampled tree RSS `6,072,528` KiB with `3,693,097` KiB decimal-`10GB` margin. No completed archive, roundtrip, determinism, or score is claimed. |
@@ -71,8 +77,8 @@ metadata-inherited evidence, forecast evidence, and the active gate.
 | Best `100M` evidence | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: metadata-inherited score `15,040,789`, archive `14,857,781`, program `183,008` | Inherited from the verified geometry parent package by payload and ordered-stream identity. No exact `100M` result JSON is present under `results/` in this checkout. |
 | Best full `1G` proof | None | The certificate generator reports no verified full-corpus result JSON in this checkout. |
 | Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: projected `110,181,114` | Forecast quality: `fx2-calibrated-from-exact-100m`. It is not a constructive proof. |
-| Current blocker | No full-corpus constructive result exists, and no current residual/XML/layout mechanism has cleared counted held-out evidence against the strongest substrate | Sidecar, GEPA, unchanged SRSTC-to-FX2, and compact XML residual keys are all retired in their current measured forms. |
-| Next gate | Build a replacement target-substrate mechanism first: compact causal residual/SSE, XML/Wiki layout, schema trie, or retrieval component that clears held-out code-cost accounting before native replay | Do not claim `10.95%` until a full `1G` archive and counted decoder package clear official accounting. |
+| Current blocker | The unchanged `100M` cmix21 gate is still running, no full-corpus constructive result exists, and no residual/XML/layout mechanism has cleared counted held-out evidence against the strongest substrate | Sidecar, GEPA, unchanged SRSTC-to-FX2, compact XML residual keys, and Qwen fixed32 selection are retired from the current promotion queue in their measured forms. |
+| Next gate | Wait for the terminal `100M` receipts and follow only `cmix21_gate_decider.py`; a clean pass promotes the identical package along the serialized proof ladder | In parallel, admit a residual or retrieval component only after exact held-out gain clears its complete code/table payload. Do not claim `10.95%` until a full `1G` archive and counted decoder package clear official accounting. |
 
 ## Classification
 
@@ -111,11 +117,12 @@ locally with `roundtrip_ok: true`.
 
 Current read:
 
-- There is no active target-bearing native gate after the GEPA and FX2-SC
-  sidecar target-ceiling aborts. The sidecar native-output lower bound reached
-  `1,641,762`, already `10,181` bytes above its `1,631,581` promotion ceiling
-  before final flush; memory was healthy, so this is an archive-slope failure,
-  not an RSS failure.
+- GEPA and the FX2-SC sidecar remain retired after their target-ceiling
+  aborts. The active target-bearing native gate is now the FXCM2/full-buffer
+  cmix21 package. Source-handoff metadata records the `10M` pass at archive
+  `1,638,340`, while its original result JSON awaits local overlay restoration;
+  the identical package is running a fresh `100M` replay. This is proof-lane
+  evidence, not a full-corpus score claim.
 - SRSTC / streaming self-referential semantic retrieval remains a measured
   residual-modeling contingency, tracked in `docs/streaming_retrieval_mixer.md`.
   It enters the proof lane only as a real integrated codec candidate after it
