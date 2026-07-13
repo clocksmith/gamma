@@ -35,11 +35,12 @@ A SAME-R implementation maintains:
 Each inner approach must satisfy this conceptual interface:
 
 ```text
-propose(history, frozen_contract) -> intervention
+propose(history, frozen_contract, proposal_budget) -> intervention
 materialize(intervention) -> candidate
 execute(candidate, frozen_contract) -> run_artifacts
 summarize(run_artifacts) -> receipt
-is_saturated(history, declared_budget) -> boolean
+select_approach(history, frozen_contract, selector_budget) -> selection_receipt
+is_saturated(history, declared_budget) -> saturation_decision
 ```
 
 The outer method owns matched evaluation, replication, retention, and promotion.
@@ -54,6 +55,144 @@ automatic approach registry and `select_approach(history)` implementation do not
 yet exist. Until they do, SAME-R is the canonical algorithm and experiment
 contract, while operator selection remains explicit rather than claimed as
 automated.
+
+## Automatic Cross-Domain Multi-Model Selector
+
+This section specifies the intended selector. It is not a description of a
+currently implemented Gamma service and is not evidence that automatic or
+recursive selection works.
+
+### Typed approach registry and history
+
+The registry is immutable by revision and contains one entry per eligible inner
+approach:
+
+```text
+approach_entry = {
+  approach_id,
+  approach_revision,
+  mechanism_type,
+  implementation_pointer,
+  eligible_domains,
+  eligible_capabilities,
+  required_inputs,
+  produced_artifacts,
+  allowed_roles,
+  proposal_contract,
+  budget_contract,
+  evidence_requirements,
+  incompatibilities,
+  status,
+  accepted_trial_ids,
+  rejected_trial_ids,
+  blocked_trial_ids,
+  saturated_scope_ids
+}
+```
+
+`status` is `eligible`, `disabled`, `blocked`, or `saturated_for_scope`.
+Accepted, rejected, blocked, invalidated, and saturated histories are separate
+typed collections; absence from the accepted set is not a rejection receipt.
+Every history entry binds the approach revision, causal contract, run contract,
+budget debit, disposition reason, and evidence hashes. Registry edits create a
+new registry hash and therefore a new selector input.
+
+### Registered participants and roles
+
+Humans, Claude, Codex, Gemini, local models, deterministic programs, and
+domain-specific scripts may all be registered participants. A provider name
+does not grant authority. Each registration freezes:
+
+- participant ID, provider/model ID, immutable revision when available, and
+  owning organization;
+- allowed roles: `proposer`, `critic`, `teacher`, `materializer`, `executor`,
+  `evaluator`, `selector`, or `adjudicator`;
+- allowed domains and data-access boundary;
+- wrapper, system instruction, prompt template, tool contract, decoding,
+  retry, and timeout hashes;
+- proposal, generation, evaluation, token, and human-review budgets; and
+- conflict policy when one participant occupies more than one role.
+
+Claude, Codex, and Gemini may propose different interventions, critique each
+other's causal contracts, or serve as qualified teachers. Agreement among them
+is not capability evidence. A participant may not inspect a sealed holdout,
+change the evaluator, enlarge its own budget, or promote its own candidate.
+Domain evaluation and the frozen promotion rule remain authoritative.
+
+### Selector inputs and output
+
+The selector consumes normalized summaries rather than comparing raw BLEU,
+pass@1, F1, codelength, and latency as if they shared a scale. Each history row
+exposes:
+
+```text
+trial_summary = {
+  domain,
+  capability,
+  population,
+  contract_hash,
+  approach_id,
+  intervention_id,
+  trial_stage,
+  disposition,
+  effect_vs_anchor,
+  effect_vs_random_control,
+  uncertainty,
+  guardrail_status,
+  evidence_quality,
+  budget_spent,
+  receipt_hashes
+}
+```
+
+`select_approach(...)` returns a receipt, not only an approach name:
+
+```text
+selection_receipt = {
+  selector_id,
+  selector_revision,
+  selector_prompt_or_policy_hash,
+  history_hash,
+  registry_hash,
+  frozen_contract_hash,
+  budget_before,
+  candidates_considered,
+  candidates_rejected_with_reasons,
+  selected_approach_id,
+  selected_intervention_id,
+  causal_contract_hash,
+  budget_debit,
+  saturation_check,
+  human_gate,
+  receipt_hash
+}
+```
+
+Cross-domain history may supply a prior such as "dense checkpoint evaluation
+often finds an earlier external peak." It may not transfer a domain conclusion
+such as "GRPO wins" or "replacement wins" without a new matched domain trial.
+
+### Recursive selection boundary
+
+A SAME-R instance may be registered as one inner approach of another SAME-R
+instance. The child receives a fixed sub-contract and sub-budget, may run its
+own registered approaches, and must return exactly one candidate plus one
+complete child receipt. The parent treats the child as an approach with:
+
+- a declared maximum recursion depth and maximum child count;
+- all descendant proposal, model, training, and evaluation calls charged to
+  the parent-visible budget;
+- no authority to alter the parent objective, population, evaluator,
+  guardrails, or promotion threshold; and
+- explicit propagation of every rejected, blocked, and saturated descendant.
+
+Recursion is orchestration, not proof. An automatic-selector claim requires a
+frozen meta-evaluation that compares the selector against a named operator or
+policy baseline under the same histories, registries, domains, and total
+budget. The primary selector metric, regret or opportunity-cost metric,
+guardrails, replication policy, and receipt set must be declared before the
+comparison. Until such a receipt exists, recursive self-selection remains a
+specified capability, not a demonstrated one.
 
 ## Capability-Transfer Profile
 
@@ -219,6 +358,108 @@ guardrails: zero malformed JSON; no category precision below threshold
 control: equal-count deterministic random construction templates
 ```
 
+## Per-Intervention Causal Contract
+
+Every proposed intervention has its own immutable causal contract before any
+prompt generation, row selection, training, or evaluation call. The contract
+is narrower than the experiment program: it identifies one independent
+variable and the exact matched operation used to test it.
+
+The machine-readable contract records at least:
+
+```json
+{
+  "schema_version": 1,
+  "experiment_id": "",
+  "intervention_id": "",
+  "capability": "",
+  "population": {
+    "definition": "",
+    "inclusion_rule": "",
+    "exclusion_rule": "",
+    "unit_of_analysis": "",
+    "split_manifest_hashes": {}
+  },
+  "baseline_artifact": {
+    "model_id": "",
+    "model_revision": "",
+    "base_checkpoint_id": "",
+    "base_checkpoint_sha256": ""
+  },
+  "intervention": {
+    "approach_id": "",
+    "independent_variable": "",
+    "causal_hypothesis": "",
+    "matched_operation": {
+      "operation": "replace",
+      "count": 0,
+      "positions": [],
+      "position_policy_hash": "",
+      "ordering_policy": "",
+      "prompt_template_hash": "",
+      "generation_call_limit": 0
+    }
+  },
+  "primary_metric": {
+    "metric_id": "",
+    "direction": "maximize",
+    "evaluator_id": "",
+    "evaluator_hash": "",
+    "promotion_threshold": null
+  },
+  "guardrails": [],
+  "failure_interpretation": {
+    "targeted_equals_anchor": "",
+    "targeted_equals_random": "",
+    "guardrail_failure": "",
+    "seed_failure": "",
+    "budget_exhaustion": ""
+  },
+  "lanes": {
+    "anchor": "",
+    "targeted": "",
+    "random_control": ""
+  },
+  "search": {
+    "method": "",
+    "adaptive": false,
+    "candidate_budget": 0,
+    "prompt_generation_call_budget": 0,
+    "model_call_budget": 0,
+    "evaluation_call_budget": 0,
+    "evaluation_look_budget": 0,
+    "adjusted_budget_policy": "",
+    "multiplicity_policy": ""
+  },
+  "saturation_rule": {
+    "rule_id": "",
+    "eligible_reason_codes": [],
+    "minimum_effect": null,
+    "no_improvement_window": null
+  },
+  "contract_sha256": ""
+}
+```
+
+The matched operation includes operation kind, count, exact positions or a
+hashed position policy, row-order policy, prompt/instruction hashes, generation
+calls, retries, and evaluator looks. If the targeted lane replaces 16 rows,
+the random control also replaces 16 rows at the matched positions unless
+position is the declared independent variable.
+
+The contract declares the search method: exhaustive, grid, seeded random,
+Bayesian, bandit, human-proposed, model-proposed, multi-model, or recursive
+SAME-R. Adaptive searches declare both the nominal budget and the adjusted
+decision budget, including candidate-family size, repeated evaluator looks,
+and the multiplicity or sealed-holdout policy. Calls that return malformed or
+rejected candidates still debit the declared budget unless a predeclared
+infrastructure-failure rule says otherwise.
+
+The complete field and invalidation contract lives in
+[`CAUSAL_AND_EVIDENCE_CONTRACTS.md`](CAUSAL_AND_EVIDENCE_CONTRACTS.md). The
+machine-readable definitions and canonical example live under
+[`contracts/`](contracts/README.md).
+
 ## Frozen Run Contract
 
 Every run emits a human-readable contract line and a machine-readable contract
@@ -234,6 +475,7 @@ The machine-readable form records at least:
 {
   "schema_version": 1,
   "experiment_id": "",
+  "causal_contract_sha256": "",
   "lane_id": "",
   "run_name": "",
   "teacher": {
@@ -245,19 +487,34 @@ The machine-readable form records at least:
   },
   "student": {
     "model_id": "",
-    "revision": "",
-    "initial_checkpoint_hash": "",
-    "adapter_targets": [],
-    "rank": null,
-    "alpha": null,
-    "dropout": null
+    "model_revision": "",
+    "base_checkpoint_id": "",
+    "base_checkpoint_sha256": "",
+    "tokenizer_revision": "",
+    "tokenizer_sha256": "",
+    "parameter_manifest_sha256": "",
+    "adapter": {
+      "type": null,
+      "targets": [],
+      "rank": null,
+      "alpha": null,
+      "dropout": null,
+      "initialization_method": null,
+      "initialization_seed": null,
+      "initial_parameters_sha256": null,
+      "trainable_parameter_manifest_sha256": null
+    }
   },
   "data": {
     "manifest_path": "",
     "manifest_hash": "",
     "row_count": null,
+    "ordered_row_ids_path": "",
     "row_order_hash": "",
-    "split_hashes": {}
+    "split_hashes": {},
+    "consumed_row_count": 0,
+    "consumed_prefix_hash": "",
+    "resume_cursor": null
   },
   "training": {
     "optimizer": {},
@@ -265,17 +522,53 @@ The machine-readable form records at least:
     "precision": "",
     "seed": null,
     "device": "",
-    "runtime_mode": ""
+    "runtime_mode": "",
+    "retry_policy": {
+      "maximum_attempts": 1,
+      "retryable_failure_codes": [],
+      "attempts_share_seed": true,
+      "failed_attempts_count_toward_budget": true
+    },
+    "checkpoint_policy": {
+      "save_updates": [],
+      "selection_rule": "",
+      "terminal_checkpoint_has_privilege": false
+    }
   },
   "evaluation": {
     "evaluator_id": "",
     "evaluator_hash": "",
     "decode_policy": {},
     "datasets": [],
-    "promotion_rule": ""
-  }
+    "promotion_rule": "",
+    "checkpoint_denominator": {
+      "expected_checkpoint_ids": [],
+      "evaluated_checkpoint_ids": [],
+      "failed_checkpoint_ids": [],
+      "omitted_checkpoint_ids": []
+    },
+    "item_denominators": {}
+  },
+  "contract_validity": {
+    "status": "valid",
+    "invalidation_triggers": [],
+    "supersedes_run_contract_sha256": null
+  },
+  "run_contract_sha256": ""
 }
 ```
+
+The run contract hash covers a canonical serialization with the
+`run_contract_sha256` field omitted. Exact model, tokenizer, base checkpoint,
+adapter initialization, initial adapter parameters, and trainable-parameter
+manifest identities are required. A model name or adapter rank without those
+hashes is incomplete lineage.
+
+Every attempt is retained. A retry receipt records the attempt number, failure
+code, seed, inputs, outputs, and whether the attempt remains in the task and
+budget denominators. Retries may recover declared infrastructure failures; they
+may not silently erase malformed output, verifier failure, timeout policy, or
+an unfavorable model result.
 
 ## What Must Stay Frozen
 
@@ -397,6 +690,26 @@ A teacher qualification receipt binds:
 A teacher may label only the categories and task shapes it qualifies. Overall
 quality does not override a failed category threshold.
 
+Qualification creates scoped label authority, represented by a receipt with:
+
+- authority ID; teacher/curator/human identity and immutable revision;
+- domain, capability, population, language, category, task shape, output
+  envelope, and label-operation scope;
+- qualification corpus, instruction, wrapper, decoding, retry, evaluator, and
+  threshold hashes;
+- allowed positive, negative, abstain, correction, and adjudication actions;
+- explicitly denied categories and failure cells;
+- valid-from event, invalidation triggers, superseded authority, and human
+  owner; and
+- downstream row IDs and manifests that consumed the authority.
+
+Authority never transfers by provider family or consensus. Qualification of
+Claude on one category does not qualify another Claude revision, Codex,
+Gemini, another language, another population, or another output contract.
+Multi-model agreement may be recorded as evidence, but each label still names
+the authority that permitted it. Labels outside scope are blocked from
+training manifests rather than downgraded to unverified data.
+
 ### Fail-closed outputs
 
 Teacher output is invalid when it contains an unaccepted envelope, prose where
@@ -455,6 +768,51 @@ still matter as an experimental control. Official full-corpus accounting is the
 final target, but a search method that cannot transfer across disjoint blocks is
 unlikely to survive counted integration.
 
+### Comprehensive contamination audit
+
+The audit is a machine-readable blocking artifact, not a prose assertion. It
+binds the exact revisions and hashes of qualification, prompt-development,
+construction, training, public-diagnostic, checkpoint-selection, and sealed
+promotion populations. For every pair of populations it records:
+
+- exact, normalized, loose, semantic, template, source-group, repository,
+  matter, page, family, and block overlap checks;
+- overlap counts, item IDs, checker ID/version/hash, threshold, status, and
+  disposition;
+- whether a teacher, proposer, critic, selector, evaluator, or human reviewer
+  could access each population;
+- prompts, few-shot examples, retrieval indexes, caches, generated labels, and
+  prior prediction outputs that could carry evaluation information;
+- checkpoint-selection looks and whether the sealed holdout was opened;
+- approved exceptions with domain-owner authority and a narrowed claim; and
+- an overall `pass`, `fail`, or `blocked` result with blocking issue IDs.
+
+Unknown access, missing hashes, or an unexecuted required check is `blocked`,
+not `pass`.
+
+### Contract invalidation
+
+A contract is invalidated when any frozen causal input changes, including:
+
+- capability, population, split membership, item order, or denominator;
+- baseline model, tokenizer, base checkpoint, adapter initialization, or
+  trainable-parameter identity;
+- data manifest, operation count, positions, prompt, generation policy, label
+  authority, or teacher qualification;
+- optimizer, schedule, precision, device class, seed, retry, checkpoint, or
+  resume policy;
+- evaluator, metric implementation, adjudication policy, decode contract,
+  guardrail, threshold, or promotion rule;
+- search method, candidate family, adjusted budget, evaluator-look budget,
+  recursion depth, or selector policy; or
+- contamination status or newly discovered overlap.
+
+Invalidation produces an immutable invalidation receipt naming the old contract
+hash, trigger, affected evidence, discovery time, discovering authority, and
+replacement contract when one exists. Invalidated runs remain in history but
+cannot support selection or promotion. A new hash opens a new comparison axis;
+it does not silently amend the old run.
+
 ## Training Execution
 
 The executor must verify before launch:
@@ -486,6 +844,13 @@ For each saved checkpoint, record:
 - model and adapter hashes;
 - evaluator and dataset hashes.
 
+The checkpoint denominator is explicit. The receipt lists every checkpoint
+required by the frozen cadence, every checkpoint successfully evaluated, every
+failed evaluation attempt, and every omission with a predeclared reason code.
+The scoreboard reports `expected`, `attempted`, `evaluated`, `failed`, and
+`omitted` counts. A missing or failed checkpoint cannot disappear because its
+result would weaken the selected candidate.
+
 Selection is lexicographic:
 
 1. reject contract, safety, contamination, and policy failures;
@@ -513,13 +878,51 @@ result = {
 }
 ```
 
-Each component declares an evidence type:
+Each component is typed on independent axes:
 
-- `deterministic`;
-- `reference_scored`;
-- `learned_metric`;
-- `ai_judge`;
-- `human_adjudicated`.
+```text
+metric_evidence = {
+  metric_id,
+  value,
+  measurement_type,
+  adjudication_type,
+  decision_role,
+  scorer_id,
+  scorer_revision,
+  scorer_or_policy_hash,
+  prompt_hash,
+  population_hash,
+  item_denominator,
+  missing_count,
+  malformed_count,
+  uncertainty,
+  item_level_artifact,
+  receipt_hash
+}
+```
+
+`measurement_type` is one of:
+
+- `deterministic_measurement`: exact compiler, roundtrip, arithmetic coder,
+  schema, hash, or executable oracle;
+- `reference_scored`: BLEU, chrF, exact match, F1, or another versioned
+  comparison against declared references;
+- `learned_metric`: a frozen learned scorer whose identity and calibration are
+  part of the receipt;
+- `ai_judged`: a frozen model judge with prompt, tools, decoding, retry, and
+  failure behavior; or
+- `human_judged`: a declared rubric applied by identified reviewers.
+
+`adjudication_type` is `none`, `machine_adjudicated`, `human_adjudicated`, or
+`human_and_machine_adjudicated`. This axis records who or what resolves the
+metric into a decision. A deterministic compiler result is usually machine
+adjudicated; an AI-judged score may later receive human adjudication; a hybrid
+gate may require both. `decision_role` is `primary`, `blocking_guardrail`,
+`supporting`, or `diagnostic`.
+
+AI or human agreement does not turn a learned judgment into a deterministic
+measurement. Every adjudicated result retains dissent, abstentions, overrides,
+rubric version, and the pre-adjudication machine evidence.
 
 Do not let a scalar average compensate for a blocking contract or safety
 failure.
@@ -541,6 +944,77 @@ Run additional seeds only after a targeted lane beats the primary anchor and
 random control. Seeds confirm a hypothesis; they should not be used to search
 for one favorable run.
 
+## Search Budget And Formal Saturation
+
+Every search declares its method and budget before observing candidate
+outcomes. The budget records:
+
+- eligible approach IDs and candidate-family hash;
+- proposal, critic, teacher, generation, materialization, training,
+  evaluation, adjudication, and human-decision call ceilings;
+- model-token ceilings by registered participant;
+- candidate, lane, seed, checkpoint, item, and evaluator-look ceilings;
+- maximum recursion depth, child count, and descendant calls;
+- public-diagnostic access and sealed-holdout access counts;
+- adaptive search policy and state hash;
+- nominal candidate budget, adjusted decision budget, candidate-family size,
+  and multiplicity policy; and
+- accounting rules for malformed output, rejected proposals, retries,
+  infrastructure failures, blocked trials, and invalidated contracts.
+
+An adaptive method cannot enlarge its family, add evaluator looks, change its
+correction, or open the sealed holdout after seeing results. Such a change
+invalidates the search contract and starts a new lineage.
+
+`is_saturated(history, declared_budget)` returns this decision object:
+
+```json
+{
+  "schema_version": 1,
+  "saturated": false,
+  "reason_code": "eligible_candidates_remain",
+  "scope": {
+    "capability": "",
+    "population_hash": "",
+    "frozen_contract_sha256": "",
+    "approach_registry_sha256": "",
+    "history_sha256": ""
+  },
+  "budget_declared": {},
+  "budget_spent": {},
+  "budget_remaining": {},
+  "eligible_untried_approach_ids": [],
+  "pending_required_trial_ids": [],
+  "blocked_trial_ids": [],
+  "terminal_trial_ids": [],
+  "rule_evidence": [],
+  "decision_policy_sha256": "",
+  "decision_receipt_sha256": ""
+}
+```
+
+Permitted terminal reason codes are:
+
+- `promotion_achieved`: the frozen promotion rule passed;
+- `candidate_budget_exhausted`: the declared candidate or call budget is
+  spent;
+- `eligible_registry_exhausted`: every eligible approach has a terminal
+  receipt for this contract;
+- `predeclared_diminishing_returns_rule_met`: the frozen effect, uncertainty,
+  and no-improvement window all pass; or
+- `domain_owner_stop`: a named human authority stops the search and records a
+  terminal no-promotion decision.
+
+`blocked` is not `saturated`. Pending required evaluations prevent saturation.
+Budget exhaustion means only that this registry, contract, and budget are
+saturated; it does not prove that the capability cannot improve. Adding an
+approach, changing the population, or enlarging the budget opens a new lineage
+with a new saturation scope.
+
+The selector algorithm, recursive accounting rules, and selector
+meta-evaluation contract are detailed in
+[`SELECTOR_AND_SATURATION.md`](SELECTOR_AND_SATURATION.md).
+
 ## Promotion Receipt
 
 A promotion receipt contains:
@@ -553,18 +1027,32 @@ A promotion receipt contains:
   "evidence_state": "promotion_ready",
   "claim": "",
   "claim_boundary": "",
+  "causal_contract_hash": "",
   "run_contract_hash": "",
+  "approach_registry_hash": "",
+  "selection_receipt_hash": "",
+  "saturation_decision_hash": "",
+  "model_revision": "",
+  "base_checkpoint_hash": "",
+  "adapter_initial_parameters_hash": null,
+  "adapter_final_parameters_hash": null,
   "lane_manifest_hashes": {},
   "row_order_hashes": {},
+  "ordered_row_id_artifacts": {},
   "teacher_qualification_receipts": [],
+  "label_authority_receipts": [],
   "checkpoint_scoreboard_hash": "",
+  "checkpoint_denominator": {},
   "selected_checkpoint": "",
   "selected_checkpoint_hash": "",
   "primary_metric": {},
+  "metric_evidence_receipts": [],
   "guardrails": {},
   "random_control": {},
   "seed_confirmation": {},
   "contamination_audit": {},
+  "retry_receipts": [],
+  "contract_invalidation_receipts": [],
   "runtime_receipts": [],
   "deployment_constraints": {},
   "review_status": ""
@@ -1126,32 +1614,68 @@ coder traces, or archive hashes, live beside the relevant checkpoint receipt.
 ## Minimal Operating Loop
 
 1. Name one capability and one primary external metric.
-2. Write the causal hypothesis and guardrails.
-3. Freeze the run and evaluation contract.
-4. Materialize anchor, targeted, and random-control lanes.
-5. Validate manifests, splits, ordering, and teacher qualification.
-6. Train the same recipe on every lane.
-7. Evaluate every eligible checkpoint externally.
-8. Compare targeted versus anchor and random control.
-9. Inspect category, item, and failure deltas.
-10. Confirm the selected conclusion across required seeds.
-11. Build the promotion receipt or record the terminal negative result.
-12. Design the next isolated intervention from the observed evidence.
+2. Freeze the population, causal hypothesis, guardrails, failure
+   interpretation, matched operation, and causal-contract hash.
+3. Freeze participant roles, scoped label authority, approach-registry hash,
+   search method, adjusted budget, recursion limits, and saturation rule.
+4. Freeze exact model, tokenizer, base-checkpoint, adapter-initialization,
+   training, retry, checkpoint, evaluation, and adjudication identities.
+5. Materialize anchor, targeted, and random-control lanes.
+6. Validate manifests, ordered row IDs, positions, consumed-row hashes,
+   splits, label authority, and the contamination audit.
+7. Train the same recipe on every lane and retain every attempt.
+8. Evaluate every required checkpoint and preserve the full checkpoint and
+   item denominators.
+9. Compare targeted versus anchor and random control under typed metric
+   evidence.
+10. Inspect category, item, failure, adjudication, and contract-invalidation
+    deltas.
+11. Confirm the selected conclusion across required seeds.
+12. Emit a selection receipt naming considered and rejected approaches.
+13. Build the promotion receipt or record the terminal negative result.
+14. Evaluate `is_saturated(history, declared_budget)` and retain its decision
+    receipt.
+15. Select the next isolated intervention, or stop for the recorded saturation
+    reason.
 
 ## Adoption Checklist
 
 - [ ] Canonical capability and metric named.
+- [ ] Population, causal hypothesis, matched operation, and failure
+      interpretation frozen per intervention.
 - [ ] Legacy or ambiguous method name replaced by a mechanism-specific term.
+- [ ] Typed approach registry and accepted/rejected/blocked/saturated histories
+      hashed.
+- [ ] Human, Claude, Codex, Gemini, program, and other participant roles,
+      prompts, revisions, tools, and budgets frozen where used.
 - [ ] Anchor, targeted, and random-control lanes materialized.
 - [ ] Run contract frozen and hashed.
-- [ ] Row provenance and deterministic order recorded.
+- [ ] Exact model, tokenizer, base checkpoint, adapter initialization, initial
+      parameter, and trainable-parameter hashes recorded.
+- [ ] Row provenance, ordered row IDs, operation positions, consumed prefix,
+      deterministic order, and denominator recorded.
 - [ ] Teacher qualification disjoint from training and promotion evaluation.
+- [ ] Scoped label-authority receipts block unqualified categories, task
+      shapes, populations, and label operations.
 - [ ] Construction-gold rows excluded from the real-world KPI holdout.
+- [ ] Comprehensive contamination audit passed with access paths and overlap
+      results visible.
+- [ ] Retry attempts and their budget/denominator dispositions retained.
 - [ ] Every checkpoint evaluated under the same external contract.
+- [ ] Expected, attempted, evaluated, failed, and omitted checkpoint counts
+      reconcile.
 - [ ] Malformed outputs fail closed and remain in denominators.
+- [ ] Every metric declares measurement type, adjudication type, decision role,
+      scorer identity, uncertainty, and item-level evidence.
 - [ ] Category/family regressions inspected.
 - [ ] Seed policy completed.
 - [ ] Serving evidence separated from capability evidence.
+- [ ] Search method, adaptive state, nominal budget, adjusted decision budget,
+      evaluator looks, multiplicity policy, and recursive descendant costs
+      recorded.
+- [ ] Selection receipt lists every considered and rejected approach.
+- [ ] Formal saturation decision records scope, budget, pending work, and reason.
+- [ ] Contract invalidation triggers and superseding hashes reconciled.
 - [ ] Promotion receipt binds every relevant artifact hash.
 - [ ] Negative and null lanes retained.
 

@@ -1,0 +1,1332 @@
+{
+  "schemaVersion": 1,
+  "suiteId": "example.samer.contract",
+  "approachRegistry": {
+    "schemaVersion": 1,
+    "registryId": "example.registry",
+    "revision": "1111111111111111111111111111111111111111",
+    "entries": [
+      {
+        "approachId": "targeted.replace",
+        "approachRevision": "1",
+        "mechanismType": "data_centric_sft",
+        "implementation": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-targeted-replace.json",
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "eligibleDomains": ["wgsl"],
+        "eligibleCapabilities": ["compiler_repair"],
+        "requiredInputs": ["row_manifest", "compiler_verifier"],
+        "producedArtifacts": ["adapter", "trial_receipt"],
+        "allowedRoles": ["proposer", "materializer", "executor"],
+        "proposalSchemaId": "same-r.causal-contract.v1",
+        "budget": {
+          "proposalCalls": 2,
+          "criticCalls": 2,
+          "teacherCalls": 0,
+          "generationCalls": 4,
+          "materializations": 1,
+          "trainingRuns": 3,
+          "evaluationCalls": 6,
+          "evaluationLooks": 1,
+          "checkpointEvaluations": 6,
+          "itemEvaluations": 24,
+          "adjudications": 0,
+          "humanDecisions": 1,
+          "sealedHoldoutLooks": 0,
+          "recursionDepth": 0,
+          "childCount": 0,
+          "modelTokensByParticipant": {
+            "claude.proposer": 2048,
+            "gemini.proposer": 2048
+          }
+        },
+        "evidenceRequirements": [
+          "anchor_targeted_random_control",
+          "compiler_pass_at_1",
+          "contamination_audit"
+        ],
+        "incompatibilities": ["sealed_holdout_access"],
+        "status": "eligible"
+      },
+      {
+        "approachId": "recursive.samer",
+        "approachRevision": "1",
+        "mechanismType": "recursive_selector",
+        "implementation": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-recursive-selector.json",
+          "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "eligibleDomains": ["wgsl", "translation"],
+        "eligibleCapabilities": ["compiler_repair", "translation_quality"],
+        "requiredInputs": ["typed_history", "sub_budget"],
+        "producedArtifacts": ["candidate", "selection_receipt", "saturation_decision"],
+        "allowedRoles": ["proposer", "selector"],
+        "proposalSchemaId": "same-r.selection-receipt.v1",
+        "budget": {
+          "proposalCalls": 4,
+          "criticCalls": 4,
+          "teacherCalls": 0,
+          "generationCalls": 8,
+          "materializations": 2,
+          "trainingRuns": 6,
+          "evaluationCalls": 12,
+          "evaluationLooks": 2,
+          "checkpointEvaluations": 12,
+          "itemEvaluations": 48,
+          "adjudications": 1,
+          "humanDecisions": 1,
+          "sealedHoldoutLooks": 0,
+          "recursionDepth": 1,
+          "childCount": 2,
+          "modelTokensByParticipant": {
+            "claude.proposer": 4096,
+            "codex.critic": 4096,
+            "gemini.proposer": 4096
+          }
+        },
+        "evidenceRequirements": ["child_receipts", "selector_meta_evaluation"],
+        "incompatibilities": ["unbounded_recursion"],
+        "status": "eligible"
+      }
+    ],
+    "history": {
+      "accepted": ["trial.synthetic.accepted"],
+      "rejected": ["trial.synthetic.rejected"],
+      "blocked": ["trial.synthetic.blocked"],
+      "invalidated": ["trial.synthetic.invalidated"],
+      "saturated": [],
+      "promoted": []
+    },
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "participantRegistry": {
+    "schemaVersion": 1,
+    "participants": [
+      {
+        "participantId": "human.owner",
+        "kind": "human",
+        "providerId": "gamma-domain-owner",
+        "revision": "policy-1",
+        "owner": "Gamma domain owner",
+        "roles": ["adjudicator"],
+        "domains": ["wgsl"],
+        "dataAccess": {
+          "qualification": true,
+          "training": true,
+          "publicDiagnostic": true,
+          "checkpointSelection": true,
+          "sealedPromotion": true,
+          "selectorMetaEvaluation": true
+        },
+        "wrapperHash": "0101010101010101010101010101010101010101010101010101010101010101",
+        "instructionHash": "0202020202020202020202020202020202020202020202020202020202020202",
+        "promptTemplateHash": "0303030303030303030303030303030303030303030303030303030303030303",
+        "toolContractHash": "0404040404040404040404040404040404040404040404040404040404040404",
+        "decodeContractHash": "0505050505050505050505050505050505050505050505050505050505050505",
+        "retryPolicyHash": "0606060606060606060606060606060606060606060606060606060606060606",
+        "labelAuthorityIds": [],
+        "budget": {
+          "proposalCalls": 0,
+          "criticCalls": 0,
+          "teacherCalls": 0,
+          "generationCalls": 0,
+          "materializations": 0,
+          "trainingRuns": 0,
+          "evaluationCalls": 0,
+          "evaluationLooks": 0,
+          "checkpointEvaluations": 0,
+          "itemEvaluations": 0,
+          "adjudications": 2,
+          "humanDecisions": 2,
+          "sealedHoldoutLooks": 1,
+          "recursionDepth": 0,
+          "childCount": 0,
+          "modelTokensByParticipant": {}
+        },
+        "conflictPolicy": "Human overrides require a separate adjudication receipt."
+      },
+      {
+        "participantId": "claude.proposer",
+        "kind": "model",
+        "providerId": "anthropic/claude-example",
+        "revision": "example-revision",
+        "owner": "Anthropic example participant",
+        "roles": ["proposer", "teacher"],
+        "domains": ["wgsl"],
+        "dataAccess": {
+          "qualification": true,
+          "training": true,
+          "publicDiagnostic": false,
+          "checkpointSelection": false,
+          "sealedPromotion": false,
+          "selectorMetaEvaluation": false
+        },
+        "wrapperHash": "1111111111111111111111111111111111111111111111111111111111111111",
+        "instructionHash": "1212121212121212121212121212121212121212121212121212121212121212",
+        "promptTemplateHash": "1313131313131313131313131313131313131313131313131313131313131313",
+        "toolContractHash": "1414141414141414141414141414141414141414141414141414141414141414",
+        "decodeContractHash": "1515151515151515151515151515151515151515151515151515151515151515",
+        "retryPolicyHash": "1616161616161616161616161616161616161616161616161616161616161616",
+        "labelAuthorityIds": ["authority.claude.repair"],
+        "budget": {
+          "proposalCalls": 2,
+          "criticCalls": 0,
+          "teacherCalls": 4,
+          "generationCalls": 4,
+          "materializations": 0,
+          "trainingRuns": 0,
+          "evaluationCalls": 0,
+          "evaluationLooks": 0,
+          "checkpointEvaluations": 0,
+          "itemEvaluations": 0,
+          "adjudications": 0,
+          "humanDecisions": 0,
+          "sealedHoldoutLooks": 0,
+          "recursionDepth": 0,
+          "childCount": 0,
+          "modelTokensByParticipant": {
+            "claude.proposer": 4096
+          }
+        },
+        "conflictPolicy": "Teacher output cannot evaluate or promote its own candidate."
+      },
+      {
+        "participantId": "codex.critic",
+        "kind": "model",
+        "providerId": "openai/codex-example",
+        "revision": "example-revision",
+        "owner": "OpenAI example participant",
+        "roles": ["critic"],
+        "domains": ["wgsl"],
+        "dataAccess": {
+          "qualification": false,
+          "training": true,
+          "publicDiagnostic": false,
+          "checkpointSelection": false,
+          "sealedPromotion": false,
+          "selectorMetaEvaluation": false
+        },
+        "wrapperHash": "2121212121212121212121212121212121212121212121212121212121212121",
+        "instructionHash": "2222222222222222222222222222222222222222222222222222222222222222",
+        "promptTemplateHash": "2323232323232323232323232323232323232323232323232323232323232323",
+        "toolContractHash": "2424242424242424242424242424242424242424242424242424242424242424",
+        "decodeContractHash": "2525252525252525252525252525252525252525252525252525252525252525",
+        "retryPolicyHash": "2626262626262626262626262626262626262626262626262626262626262626",
+        "labelAuthorityIds": [],
+        "budget": {
+          "proposalCalls": 0,
+          "criticCalls": 2,
+          "teacherCalls": 0,
+          "generationCalls": 0,
+          "materializations": 0,
+          "trainingRuns": 0,
+          "evaluationCalls": 0,
+          "evaluationLooks": 0,
+          "checkpointEvaluations": 0,
+          "itemEvaluations": 0,
+          "adjudications": 0,
+          "humanDecisions": 0,
+          "sealedHoldoutLooks": 0,
+          "recursionDepth": 0,
+          "childCount": 0,
+          "modelTokensByParticipant": {
+            "codex.critic": 4096
+          }
+        },
+        "conflictPolicy": "Critique has no label or promotion authority."
+      },
+      {
+        "participantId": "gemini.proposer",
+        "kind": "model",
+        "providerId": "google/gemini-example",
+        "revision": "example-revision",
+        "owner": "Google example participant",
+        "roles": ["proposer"],
+        "domains": ["wgsl"],
+        "dataAccess": {
+          "qualification": false,
+          "training": true,
+          "publicDiagnostic": false,
+          "checkpointSelection": false,
+          "sealedPromotion": false,
+          "selectorMetaEvaluation": false
+        },
+        "wrapperHash": "3131313131313131313131313131313131313131313131313131313131313131",
+        "instructionHash": "3232323232323232323232323232323232323232323232323232323232323232",
+        "promptTemplateHash": "3333333333333333333333333333333333333333333333333333333333333333",
+        "toolContractHash": "3434343434343434343434343434343434343434343434343434343434343434",
+        "decodeContractHash": "3535353535353535353535353535353535353535353535353535353535353535",
+        "retryPolicyHash": "3636363636363636363636363636363636363636363636363636363636363636",
+        "labelAuthorityIds": [],
+        "budget": {
+          "proposalCalls": 2,
+          "criticCalls": 0,
+          "teacherCalls": 0,
+          "generationCalls": 2,
+          "materializations": 0,
+          "trainingRuns": 0,
+          "evaluationCalls": 0,
+          "evaluationLooks": 0,
+          "checkpointEvaluations": 0,
+          "itemEvaluations": 0,
+          "adjudications": 0,
+          "humanDecisions": 0,
+          "sealedHoldoutLooks": 0,
+          "recursionDepth": 0,
+          "childCount": 0,
+          "modelTokensByParticipant": {
+            "gemini.proposer": 4096
+          }
+        },
+        "conflictPolicy": "Proposal has no label, evaluator, or promotion authority."
+      },
+      {
+        "participantId": "selector.program",
+        "kind": "program",
+        "providerId": "gamma/samer-selector-example",
+        "revision": "1",
+        "owner": "Gamma method owner",
+        "roles": ["selector"],
+        "domains": ["wgsl"],
+        "dataAccess": {
+          "qualification": false,
+          "training": true,
+          "publicDiagnostic": false,
+          "checkpointSelection": false,
+          "sealedPromotion": false,
+          "selectorMetaEvaluation": false
+        },
+        "wrapperHash": "4141414141414141414141414141414141414141414141414141414141414141",
+        "instructionHash": "4242424242424242424242424242424242424242424242424242424242424242",
+        "promptTemplateHash": "4343434343434343434343434343434343434343434343434343434343434343",
+        "toolContractHash": "4444444444444444444444444444444444444444444444444444444444444444",
+        "decodeContractHash": "4545454545454545454545454545454545454545454545454545454545454545",
+        "retryPolicyHash": "4646464646464646464646464646464646464646464646464646464646464646",
+        "labelAuthorityIds": [],
+        "budget": {
+          "proposalCalls": 4,
+          "criticCalls": 2,
+          "teacherCalls": 0,
+          "generationCalls": 4,
+          "materializations": 1,
+          "trainingRuns": 3,
+          "evaluationCalls": 6,
+          "evaluationLooks": 1,
+          "checkpointEvaluations": 6,
+          "itemEvaluations": 24,
+          "adjudications": 0,
+          "humanDecisions": 1,
+          "sealedHoldoutLooks": 0,
+          "recursionDepth": 1,
+          "childCount": 1,
+          "modelTokensByParticipant": {
+            "claude.proposer": 2048,
+            "codex.critic": 2048,
+            "gemini.proposer": 2048
+          }
+        },
+        "conflictPolicy": "Selector cannot evaluate or promote selected candidates."
+      },
+      {
+        "participantId": "compiler.evaluator",
+        "kind": "program",
+        "providerId": "example/wgsl-compiler",
+        "revision": "1",
+        "owner": "Gamma evaluator owner",
+        "roles": ["evaluator"],
+        "domains": ["wgsl"],
+        "dataAccess": {
+          "qualification": true,
+          "training": false,
+          "publicDiagnostic": true,
+          "checkpointSelection": true,
+          "sealedPromotion": false,
+          "selectorMetaEvaluation": false
+        },
+        "wrapperHash": "5151515151515151515151515151515151515151515151515151515151515151",
+        "instructionHash": "5252525252525252525252525252525252525252525252525252525252525252",
+        "promptTemplateHash": "5353535353535353535353535353535353535353535353535353535353535353",
+        "toolContractHash": "5454545454545454545454545454545454545454545454545454545454545454",
+        "decodeContractHash": "5555555555555555555555555555555555555555555555555555555555555555",
+        "retryPolicyHash": "5656565656565656565656565656565656565656565656565656565656565656",
+        "labelAuthorityIds": [],
+        "budget": {
+          "proposalCalls": 0,
+          "criticCalls": 0,
+          "teacherCalls": 0,
+          "generationCalls": 0,
+          "materializations": 0,
+          "trainingRuns": 0,
+          "evaluationCalls": 6,
+          "evaluationLooks": 1,
+          "checkpointEvaluations": 6,
+          "itemEvaluations": 24,
+          "adjudications": 6,
+          "humanDecisions": 0,
+          "sealedHoldoutLooks": 0,
+          "recursionDepth": 0,
+          "childCount": 0,
+          "modelTokensByParticipant": {}
+        },
+        "conflictPolicy": "Evaluator cannot propose, label, select, or promote."
+      }
+    ],
+    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "labelAuthorities": [
+    {
+      "schemaVersion": 1,
+      "authorityId": "authority.claude.repair",
+      "participantId": "claude.proposer",
+      "owner": "Gamma domain owner",
+      "qualificationReceipt": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-qualification.json",
+        "sha256": "6161616161616161616161616161616161616161616161616161616161616161"
+      },
+      "scope": {
+        "domain": "wgsl",
+        "capability": "compiler_repair",
+        "populationHash": "6262626262626262626262626262626262626262626262626262626262626262",
+        "languages": ["wgsl"],
+        "categories": ["syntax_repair"],
+        "taskShapes": ["replacement_completion"],
+        "outputEnvelopeHash": "6363636363636363636363636363636363636363636363636363636363636363"
+      },
+      "allowedActions": ["positive_label", "abstain", "correct"],
+      "deniedCells": [
+        {
+          "category": "semantic_repair",
+          "taskShape": "full_kernel_synthesis",
+          "reason": "Qualification threshold was not met.",
+          "metricReceipt": {
+            "repository": "clocksmith/gamma",
+            "revision": "1111111111111111111111111111111111111111",
+            "path": "projects/samer/contracts/example-qualification-failure.json",
+            "sha256": "6464646464646464646464646464646464646464646464646464646464646464"
+          }
+        }
+      ],
+      "validFrom": "example-qualification-sealed",
+      "invalidationTriggers": [
+        "participant_revision_changed",
+        "instruction_hash_changed",
+        "population_changed",
+        "evaluator_changed"
+      ],
+      "downstreamManifestIds": ["manifest.targeted"],
+      "sha256": "6565656565656565656565656565656565656565656565656565656565656565"
+    }
+  ],
+  "causalContract": {
+    "schemaVersion": 1,
+    "experimentId": "example.wgsl.repair",
+    "interventionId": "intervention.targeted.replace",
+    "domain": "wgsl",
+    "owners": {
+      "domain": "Gamma WGSL owner",
+      "method": "Gamma SAME-R owner",
+      "evaluator": "Gamma compiler evaluator owner",
+      "artifact": "Gamma artifact owner",
+      "humanAuthority": "Gamma domain owner"
+    },
+    "capability": "compiler_repair",
+    "population": {
+      "definition": "Synthetic four-item family-disjoint WGSL example population.",
+      "inclusionRule": "Items listed by the frozen example split manifests.",
+      "exclusionRule": "Any item outside the frozen example manifests.",
+      "unitOfAnalysis": "task",
+      "groupingUnit": "repair_family",
+      "splitManifestHashes": {
+        "training": "7171717171717171717171717171717171717171717171717171717171717171",
+        "diagnostic": "7272727272727272727272727272727272727272727272727272727272727272"
+      },
+      "expectedDenominators": {
+        "diagnostic": 4
+      },
+      "outsideClaim": ["semantic_correctness", "runtime_performance"]
+    },
+    "baselineArtifact": {
+      "modelId": "example/qwen-student",
+      "modelRevision": "example-model-revision",
+      "baseCheckpointId": "example-base",
+      "baseCheckpointSha256": "7373737373737373737373737373737373737373737373737373737373737373",
+      "tokenizerRevision": "example-tokenizer-revision",
+      "tokenizerSha256": "7474747474747474747474747474747474747474747474747474747474747474",
+      "parameterManifestSha256": "7575757575757575757575757575757575757575757575757575757575757575"
+    },
+    "approachId": "targeted.replace",
+    "independentVariable": "Selection policy for one replacement row.",
+    "causalHypothesis": "Verifier-qualified targeted replacement improves family-disjoint compiler pass@1 beyond anchor and matched random replacement.",
+    "matchedOperation": {
+      "operation": "replace",
+      "count": 1,
+      "positions": [1],
+      "positionPolicyHash": "7676767676767676767676767676767676767676767676767676767676767676",
+      "orderingPolicy": "sha256(seed + NUL + row_id)",
+      "candidatePoolHash": "7777777777777777777777777777777777777777777777777777777777777777",
+      "promptTemplateHash": "1313131313131313131313131313131313131313131313131313131313131313",
+      "generationCallLimit": 4,
+      "retryPolicyId": "retry.infrastructure.only"
+    },
+    "primaryMetric": {
+      "metricId": "compiler_pass_at_1",
+      "direction": "maximize",
+      "evaluatorId": "compiler.evaluator",
+      "evaluatorHash": "7878787878787878787878787878787878787878787878787878787878787878",
+      "threshold": 0.75,
+      "decisionRole": "primary"
+    },
+    "guardrails": [
+      {
+        "metricId": "malformed_output_count",
+        "direction": "minimize",
+        "evaluatorId": "compiler.evaluator",
+        "evaluatorHash": "7878787878787878787878787878787878787878787878787878787878787878",
+        "threshold": 0,
+        "decisionRole": "blocking_guardrail"
+      }
+    ],
+    "failureInterpretation": {
+      "targeted_equals_anchor": "No observed transfer from targeted replacement.",
+      "targeted_equals_random": "Selection heuristic is not established.",
+      "guardrail_failure": "Reject candidate regardless of aggregate score.",
+      "seed_failure": "Record a single-seed observation only.",
+      "budget_exhaustion": "This declared search is saturated without promotion."
+    },
+    "lanes": {
+      "anchor": "lane.anchor",
+      "targeted": "lane.targeted",
+      "randomControl": "lane.random"
+    },
+    "search": {
+      "method": "multi_model",
+      "adaptive": false,
+      "candidateFamilyHash": "7979797979797979797979797979797979797979797979797979797979797979",
+      "nominalCandidateBudget": 2,
+      "adjustedDecisionBudget": 2,
+      "multiplicityPolicy": "single frozen diagnostic look; sealed promotion holdout unopened",
+      "budget": {
+        "proposalCalls": 4,
+        "criticCalls": 2,
+        "teacherCalls": 4,
+        "generationCalls": 4,
+        "materializations": 1,
+        "trainingRuns": 3,
+        "evaluationCalls": 6,
+        "evaluationLooks": 1,
+        "checkpointEvaluations": 6,
+        "itemEvaluations": 24,
+        "adjudications": 1,
+        "humanDecisions": 1,
+        "sealedHoldoutLooks": 0,
+        "recursionDepth": 1,
+        "childCount": 1,
+        "modelTokensByParticipant": {
+          "claude.proposer": 2048,
+          "codex.critic": 2048,
+          "gemini.proposer": 2048
+        }
+      }
+    },
+    "saturationRule": {
+      "ruleId": "saturation.example",
+      "eligibleReasonCodes": [
+        "promotion_achieved",
+        "candidate_budget_exhausted",
+        "eligible_registry_exhausted",
+        "predeclared_diminishing_returns_rule_met",
+        "domain_owner_stop"
+      ],
+      "minimumEffect": 0.05,
+      "noImprovementWindow": 2
+    },
+    "invalidationTriggers": [
+      "population_changed",
+      "model_revision_changed",
+      "adapter_initialization_changed",
+      "row_order_changed",
+      "prompt_changed",
+      "evaluator_changed",
+      "budget_changed",
+      "contamination_discovered"
+    ],
+    "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "runContracts": [
+    {
+      "schemaVersion": 1,
+      "runId": "run.anchor.seed11",
+      "experimentId": "example.wgsl.repair",
+      "interventionId": "intervention.targeted.replace",
+      "causalContractSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "laneId": "lane.anchor",
+      "seed": 11,
+      "repositoryRevision": "1111111111111111111111111111111111111111",
+      "student": {
+        "modelId": "example/qwen-student",
+        "modelRevision": "example-model-revision",
+        "baseCheckpointId": "example-base",
+        "baseCheckpointSha256": "7373737373737373737373737373737373737373737373737373737373737373",
+        "tokenizerRevision": "example-tokenizer-revision",
+        "tokenizerSha256": "7474747474747474747474747474747474747474747474747474747474747474",
+        "parameterManifestSha256": "7575757575757575757575757575757575757575757575757575757575757575",
+        "adapter": {
+          "type": "lora",
+          "targets": ["q_proj", "v_proj"],
+          "rank": 8,
+          "alpha": 16,
+          "dropout": 0.05,
+          "initializationMethod": "kaiming_uniform",
+          "initializationSeed": 11,
+          "initialParametersSha256": "8181818181818181818181818181818181818181818181818181818181818181",
+          "trainableParameterManifestSha256": "8282828282828282828282828282828282828282828282828282828282828282"
+        }
+      },
+      "data": {
+        "manifestId": "manifest.anchor",
+        "manifestSha256": "8383838383838383838383838383838383838383838383838383838383838383",
+        "rowCount": 4,
+        "orderedRowIds": ["row.001", "row.002", "row.003", "row.004"],
+        "orderedRowIdsArtifact": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-anchor-order.txt",
+          "sha256": "8484848484848484848484848484848484848484848484848484848484848484"
+        },
+        "rowOrderSha256": "8484848484848484848484848484848484848484848484848484848484848484",
+        "consumedRowCount": 4,
+        "consumedPrefixSha256": "8484848484848484848484848484848484848484848484848484848484848484",
+        "resumeCursor": null
+      },
+      "training": {
+        "optimizerHash": "8585858585858585858585858585858585858585858585858585858585858585",
+        "scheduleHash": "8686868686868686868686868686868686868686868686868686868686868686",
+        "precision": "bf16",
+        "deviceClass": "rocm",
+        "runtimeMode": "rocm_gfx_override",
+        "updateBudget": 2,
+        "retryPolicy": {
+          "policyId": "retry.infrastructure.only",
+          "maximumAttempts": 2,
+          "retryableFailureCodes": ["infrastructure_failure"],
+          "preserveSeed": true,
+          "failedAttemptsDebitBudget": true
+        },
+        "checkpointPolicy": {
+          "expectedCheckpointIds": ["checkpoint.001", "checkpoint.002"],
+          "selectionRule": "blocking guards then maximum compiler_pass_at_1",
+          "terminalCheckpointHasPrivilege": false
+        }
+      },
+      "evaluation": {
+        "evaluatorId": "compiler.evaluator",
+        "evaluatorHash": "7878787878787878787878787878787878787878787878787878787878787878",
+        "decodePolicyHash": "8787878787878787878787878787878787878787878787878787878787878787",
+        "checkpointDenominator": {
+          "expected": ["checkpoint.001", "checkpoint.002"],
+          "evaluated": ["checkpoint.001", "checkpoint.002"],
+          "failed": [],
+          "omitted": []
+        },
+        "itemDenominators": {
+          "diagnostic": {
+            "expected": 4,
+            "scored": 4,
+            "missing": 0,
+            "malformed": 0,
+            "excluded": 0
+          }
+        }
+      },
+      "contractValidity": {
+        "status": "valid",
+        "invalidationReceiptIds": [],
+        "supersedesRunContractSha256": null
+      },
+      "sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    {
+      "schemaVersion": 1,
+      "runId": "run.targeted.seed11",
+      "experimentId": "example.wgsl.repair",
+      "interventionId": "intervention.targeted.replace",
+      "causalContractSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "laneId": "lane.targeted",
+      "seed": 11,
+      "repositoryRevision": "1111111111111111111111111111111111111111",
+      "student": {
+        "modelId": "example/qwen-student",
+        "modelRevision": "example-model-revision",
+        "baseCheckpointId": "example-base",
+        "baseCheckpointSha256": "7373737373737373737373737373737373737373737373737373737373737373",
+        "tokenizerRevision": "example-tokenizer-revision",
+        "tokenizerSha256": "7474747474747474747474747474747474747474747474747474747474747474",
+        "parameterManifestSha256": "7575757575757575757575757575757575757575757575757575757575757575",
+        "adapter": {
+          "type": "lora",
+          "targets": ["q_proj", "v_proj"],
+          "rank": 8,
+          "alpha": 16,
+          "dropout": 0.05,
+          "initializationMethod": "kaiming_uniform",
+          "initializationSeed": 11,
+          "initialParametersSha256": "8181818181818181818181818181818181818181818181818181818181818181",
+          "trainableParameterManifestSha256": "8282828282828282828282828282828282828282828282828282828282828282"
+        }
+      },
+      "data": {
+        "manifestId": "manifest.targeted",
+        "manifestSha256": "8989898989898989898989898989898989898989898989898989898989898989",
+        "rowCount": 4,
+        "orderedRowIds": ["row.001", "row.targeted", "row.003", "row.004"],
+        "orderedRowIdsArtifact": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-targeted-order.txt",
+          "sha256": "9090909090909090909090909090909090909090909090909090909090909090"
+        },
+        "rowOrderSha256": "9090909090909090909090909090909090909090909090909090909090909090",
+        "consumedRowCount": 4,
+        "consumedPrefixSha256": "9090909090909090909090909090909090909090909090909090909090909090",
+        "resumeCursor": null
+      },
+      "training": {
+        "optimizerHash": "8585858585858585858585858585858585858585858585858585858585858585",
+        "scheduleHash": "8686868686868686868686868686868686868686868686868686868686868686",
+        "precision": "bf16",
+        "deviceClass": "rocm",
+        "runtimeMode": "rocm_gfx_override",
+        "updateBudget": 2,
+        "retryPolicy": {
+          "policyId": "retry.infrastructure.only",
+          "maximumAttempts": 2,
+          "retryableFailureCodes": ["infrastructure_failure"],
+          "preserveSeed": true,
+          "failedAttemptsDebitBudget": true
+        },
+        "checkpointPolicy": {
+          "expectedCheckpointIds": ["checkpoint.001", "checkpoint.002"],
+          "selectionRule": "blocking guards then maximum compiler_pass_at_1",
+          "terminalCheckpointHasPrivilege": false
+        }
+      },
+      "evaluation": {
+        "evaluatorId": "compiler.evaluator",
+        "evaluatorHash": "7878787878787878787878787878787878787878787878787878787878787878",
+        "decodePolicyHash": "8787878787878787878787878787878787878787878787878787878787878787",
+        "checkpointDenominator": {
+          "expected": ["checkpoint.001", "checkpoint.002"],
+          "evaluated": ["checkpoint.001", "checkpoint.002"],
+          "failed": [],
+          "omitted": []
+        },
+        "itemDenominators": {
+          "diagnostic": {
+            "expected": 4,
+            "scored": 4,
+            "missing": 0,
+            "malformed": 0,
+            "excluded": 0
+          }
+        }
+      },
+      "contractValidity": {
+        "status": "valid",
+        "invalidationReceiptIds": [],
+        "supersedesRunContractSha256": null
+      },
+      "sha256": "9191919191919191919191919191919191919191919191919191919191919191"
+    },
+    {
+      "schemaVersion": 1,
+      "runId": "run.random.seed11",
+      "experimentId": "example.wgsl.repair",
+      "interventionId": "intervention.targeted.replace",
+      "causalContractSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "laneId": "lane.random",
+      "seed": 11,
+      "repositoryRevision": "1111111111111111111111111111111111111111",
+      "student": {
+        "modelId": "example/qwen-student",
+        "modelRevision": "example-model-revision",
+        "baseCheckpointId": "example-base",
+        "baseCheckpointSha256": "7373737373737373737373737373737373737373737373737373737373737373",
+        "tokenizerRevision": "example-tokenizer-revision",
+        "tokenizerSha256": "7474747474747474747474747474747474747474747474747474747474747474",
+        "parameterManifestSha256": "7575757575757575757575757575757575757575757575757575757575757575",
+        "adapter": {
+          "type": "lora",
+          "targets": ["q_proj", "v_proj"],
+          "rank": 8,
+          "alpha": 16,
+          "dropout": 0.05,
+          "initializationMethod": "kaiming_uniform",
+          "initializationSeed": 11,
+          "initialParametersSha256": "8181818181818181818181818181818181818181818181818181818181818181",
+          "trainableParameterManifestSha256": "8282828282828282828282828282828282828282828282828282828282828282"
+        }
+      },
+      "data": {
+        "manifestId": "manifest.random",
+        "manifestSha256": "9292929292929292929292929292929292929292929292929292929292929292",
+        "rowCount": 4,
+        "orderedRowIds": ["row.001", "row.random", "row.003", "row.004"],
+        "orderedRowIdsArtifact": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-random-order.txt",
+          "sha256": "9393939393939393939393939393939393939393939393939393939393939393"
+        },
+        "rowOrderSha256": "9393939393939393939393939393939393939393939393939393939393939393",
+        "consumedRowCount": 4,
+        "consumedPrefixSha256": "9393939393939393939393939393939393939393939393939393939393939393",
+        "resumeCursor": null
+      },
+      "training": {
+        "optimizerHash": "8585858585858585858585858585858585858585858585858585858585858585",
+        "scheduleHash": "8686868686868686868686868686868686868686868686868686868686868686",
+        "precision": "bf16",
+        "deviceClass": "rocm",
+        "runtimeMode": "rocm_gfx_override",
+        "updateBudget": 2,
+        "retryPolicy": {
+          "policyId": "retry.infrastructure.only",
+          "maximumAttempts": 2,
+          "retryableFailureCodes": ["infrastructure_failure"],
+          "preserveSeed": true,
+          "failedAttemptsDebitBudget": true
+        },
+        "checkpointPolicy": {
+          "expectedCheckpointIds": ["checkpoint.001", "checkpoint.002"],
+          "selectionRule": "blocking guards then maximum compiler_pass_at_1",
+          "terminalCheckpointHasPrivilege": false
+        }
+      },
+      "evaluation": {
+        "evaluatorId": "compiler.evaluator",
+        "evaluatorHash": "7878787878787878787878787878787878787878787878787878787878787878",
+        "decodePolicyHash": "8787878787878787878787878787878787878787878787878787878787878787",
+        "checkpointDenominator": {
+          "expected": ["checkpoint.001", "checkpoint.002"],
+          "evaluated": ["checkpoint.001", "checkpoint.002"],
+          "failed": [],
+          "omitted": []
+        },
+        "itemDenominators": {
+          "diagnostic": {
+            "expected": 4,
+            "scored": 4,
+            "missing": 0,
+            "malformed": 0,
+            "excluded": 0
+          }
+        }
+      },
+      "contractValidity": {
+        "status": "valid",
+        "invalidationReceiptIds": [],
+        "supersedesRunContractSha256": null
+      },
+      "sha256": "9494949494949494949494949494949494949494949494949494949494949494"
+    }
+  ],
+  "contaminationAudit": {
+    "schemaVersion": 1,
+    "auditId": "audit.example",
+    "populations": {
+      "qualification": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-qualification-population.json",
+        "sha256": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+      },
+      "prompt_development": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-prompt-population.json",
+        "sha256": "a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2"
+      },
+      "construction": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-construction-population.json",
+        "sha256": "a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3"
+      },
+      "training": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-training-population.json",
+        "sha256": "a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4"
+      },
+      "public_diagnostic": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-public-population.json",
+        "sha256": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+      },
+      "sealed_promotion": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-sealed-population.json",
+        "sha256": "a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6"
+      },
+      "selector_meta_evaluation": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-selector-meta-population.json",
+        "sha256": "a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7"
+      }
+    },
+    "checks": [
+      {
+        "checkId": "check.exact.training.public",
+        "checkType": "exact_hash_overlap",
+        "leftPopulation": "training",
+        "rightPopulation": "public_diagnostic",
+        "checkerId": "exact_hash_checker",
+        "checkerHash": "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+        "threshold": 0,
+        "denominator": 8,
+        "overlapCount": 0,
+        "overlapItemIds": [],
+        "status": "pass",
+        "disposition": "No exact overlap."
+      },
+      {
+        "checkId": "check.group.training.public",
+        "checkType": "family_group_overlap",
+        "leftPopulation": "training",
+        "rightPopulation": "public_diagnostic",
+        "checkerId": "family_group_checker",
+        "checkerHash": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "threshold": 0,
+        "denominator": 8,
+        "overlapCount": 0,
+        "overlapItemIds": [],
+        "status": "pass",
+        "disposition": "No family overlap."
+      }
+    ],
+    "accessAudit": [
+      {
+        "participantId": "claude.proposer",
+        "population": "sealed_promotion",
+        "accessType": "none",
+        "status": "pass",
+        "evidence": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-access-claude-sealed.json",
+          "sha256": "b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3"
+        }
+      },
+      {
+        "participantId": "selector.program",
+        "population": "sealed_promotion",
+        "accessType": "none",
+        "status": "pass",
+        "evidence": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-access-selector-sealed.json",
+          "sha256": "b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4"
+        }
+      }
+    ],
+    "approvedExceptions": [],
+    "blockingIssueIds": [],
+    "overallStatus": "pass",
+    "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "metricEvidence": [
+    {
+      "schemaVersion": 1,
+      "metricEvidenceId": "metric.compiler.pass",
+      "metricId": "compiler_pass_at_1",
+      "value": 0.75,
+      "measurementType": "deterministic_measurement",
+      "adjudicationType": "machine_adjudicated",
+      "decisionRole": "primary",
+      "scorerId": "compiler.evaluator",
+      "scorerRevision": "1",
+      "scorerPolicyHash": "7878787878787878787878787878787878787878787878787878787878787878",
+      "promptHash": null,
+      "populationHash": "7272727272727272727272727272727272727272727272727272727272727272",
+      "denominator": {
+        "expected": 4,
+        "scored": 4,
+        "missing": 0,
+        "malformed": 0,
+        "excluded": 0,
+        "disputed": 0
+      },
+      "uncertainty": {
+        "method": "exact item denominator; interval omitted in synthetic example",
+        "lower": null,
+        "upper": null
+      },
+      "itemLevelArtifact": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-item-results.json",
+        "sha256": "c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1"
+      },
+      "dissent": {
+        "abstentions": 0,
+        "disagreements": 0,
+        "overrides": 0
+      },
+      "sha256": "c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2"
+    },
+    {
+      "schemaVersion": 1,
+      "metricEvidenceId": "metric.malformed.count",
+      "metricId": "malformed_output_count",
+      "value": 0,
+      "measurementType": "deterministic_measurement",
+      "adjudicationType": "machine_adjudicated",
+      "decisionRole": "blocking_guardrail",
+      "scorerId": "compiler.evaluator",
+      "scorerRevision": "1",
+      "scorerPolicyHash": "7878787878787878787878787878787878787878787878787878787878787878",
+      "promptHash": null,
+      "populationHash": "7272727272727272727272727272727272727272727272727272727272727272",
+      "denominator": {
+        "expected": 4,
+        "scored": 4,
+        "missing": 0,
+        "malformed": 0,
+        "excluded": 0,
+        "disputed": 0
+      },
+      "uncertainty": {
+        "method": "exact count",
+        "lower": 0,
+        "upper": 0
+      },
+      "itemLevelArtifact": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-format-results.json",
+        "sha256": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3"
+      },
+      "dissent": {
+        "abstentions": 0,
+        "disagreements": 0,
+        "overrides": 0
+      },
+      "sha256": "c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4"
+    }
+  ],
+  "trialReceipt": {
+    "schemaVersion": 1,
+    "trialId": "trial.synthetic.accepted",
+    "causalContractSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "runContractIds": ["run.anchor.seed11", "run.targeted.seed11", "run.random.seed11"],
+    "attempts": [
+      {
+        "attemptId": "attempt.anchor.1",
+        "runId": "run.anchor.seed11",
+        "attemptNumber": 1,
+        "status": "success",
+        "failureCode": null,
+        "budgetDebited": true,
+        "denominatorDisposition": "included",
+        "artifact": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-attempt-anchor.json",
+          "sha256": "d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1"
+        }
+      },
+      {
+        "attemptId": "attempt.targeted.1",
+        "runId": "run.targeted.seed11",
+        "attemptNumber": 1,
+        "status": "success",
+        "failureCode": null,
+        "budgetDebited": true,
+        "denominatorDisposition": "included",
+        "artifact": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-attempt-targeted.json",
+          "sha256": "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2"
+        }
+      },
+      {
+        "attemptId": "attempt.random.1",
+        "runId": "run.random.seed11",
+        "attemptNumber": 1,
+        "status": "success",
+        "failureCode": null,
+        "budgetDebited": true,
+        "denominatorDisposition": "included",
+        "artifact": {
+          "repository": "clocksmith/gamma",
+          "revision": "1111111111111111111111111111111111111111",
+          "path": "projects/samer/contracts/example-attempt-random.json",
+          "sha256": "d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3"
+        }
+      }
+    ],
+    "checkpointScoreboard": {
+      "expected": 6,
+      "attempted": 6,
+      "evaluated": 6,
+      "failed": 0,
+      "omitted": 0,
+      "selectedCheckpointId": "checkpoint.002",
+      "artifact": {
+        "repository": "clocksmith/gamma",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "projects/samer/contracts/example-scoreboard.json",
+        "sha256": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4"
+      }
+    },
+    "metricEvidenceIds": ["metric.compiler.pass", "metric.malformed.count"],
+    "contaminationAuditId": "audit.example",
+    "disposition": "accepted",
+    "reasonCode": "targeted_observed",
+    "claim": "The synthetic targeted lane passed the example diagnostic threshold.",
+    "claimBoundary": "Synthetic contract example only; no model capability claim.",
+    "invalidated": false,
+    "budgetDebit": {
+      "proposalCalls": 2,
+      "criticCalls": 1,
+      "teacherCalls": 1,
+      "generationCalls": 1,
+      "materializations": 1,
+      "trainingRuns": 3,
+      "evaluationCalls": 6,
+      "evaluationLooks": 1,
+      "checkpointEvaluations": 6,
+      "itemEvaluations": 24,
+      "adjudications": 0,
+      "humanDecisions": 1,
+      "sealedHoldoutLooks": 0,
+      "recursionDepth": 0,
+      "childCount": 0,
+      "modelTokensByParticipant": {
+        "claude.proposer": 1024,
+        "codex.critic": 1024,
+        "gemini.proposer": 1024
+      }
+    },
+    "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  },
+  "selectionReceipt": {
+    "schemaVersion": 1,
+    "selectionId": "selection.example",
+    "selectorParticipantId": "selector.program",
+    "selectorRevision": "1",
+    "selectorPolicyHash": "e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
+    "historyHash": "e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2",
+    "registryHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "frozenContractHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "budgetBefore": {
+      "proposalCalls": 4,
+      "criticCalls": 2,
+      "teacherCalls": 4,
+      "generationCalls": 4,
+      "materializations": 2,
+      "trainingRuns": 6,
+      "evaluationCalls": 12,
+      "evaluationLooks": 2,
+      "checkpointEvaluations": 12,
+      "itemEvaluations": 48,
+      "adjudications": 1,
+      "humanDecisions": 2,
+      "sealedHoldoutLooks": 0,
+      "recursionDepth": 1,
+      "childCount": 1,
+      "modelTokensByParticipant": {
+        "claude.proposer": 2048,
+        "codex.critic": 2048,
+        "gemini.proposer": 2048
+      }
+    },
+    "candidatesConsidered": [
+      {
+        "proposalId": "proposal.targeted",
+        "approachId": "targeted.replace",
+        "interventionId": "intervention.targeted.replace",
+        "participantId": "claude.proposer",
+        "valid": true,
+        "rank": 1,
+        "score": 0.8
+      },
+      {
+        "proposalId": "proposal.recursive",
+        "approachId": "recursive.samer",
+        "interventionId": "intervention.recursive.example",
+        "participantId": "gemini.proposer",
+        "valid": false,
+        "rank": null,
+        "score": null
+      }
+    ],
+    "candidatesRejected": [
+      {
+        "proposalId": "proposal.recursive",
+        "reasonCode": "child_budget_not_allocated",
+        "evidence": "The frozen decision selected the directly materializable candidate."
+      }
+    ],
+    "selectedApproachId": "targeted.replace",
+    "selectedInterventionId": "intervention.targeted.replace",
+    "causalContractSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "budgetDebit": {
+      "proposalCalls": 2,
+      "criticCalls": 1,
+      "teacherCalls": 1,
+      "generationCalls": 1,
+      "materializations": 1,
+      "trainingRuns": 3,
+      "evaluationCalls": 6,
+      "evaluationLooks": 1,
+      "checkpointEvaluations": 6,
+      "itemEvaluations": 24,
+      "adjudications": 0,
+      "humanDecisions": 1,
+      "sealedHoldoutLooks": 0,
+      "recursionDepth": 0,
+      "childCount": 0,
+      "modelTokensByParticipant": {
+        "claude.proposer": 1024,
+        "codex.critic": 1024,
+        "gemini.proposer": 1024
+      }
+    },
+    "budgetRemaining": {
+      "proposalCalls": 2,
+      "criticCalls": 1,
+      "teacherCalls": 3,
+      "generationCalls": 3,
+      "materializations": 1,
+      "trainingRuns": 3,
+      "evaluationCalls": 6,
+      "evaluationLooks": 1,
+      "checkpointEvaluations": 6,
+      "itemEvaluations": 24,
+      "adjudications": 1,
+      "humanDecisions": 1,
+      "sealedHoldoutLooks": 0,
+      "recursionDepth": 1,
+      "childCount": 1,
+      "modelTokensByParticipant": {
+        "claude.proposer": 1024,
+        "codex.critic": 1024,
+        "gemini.proposer": 1024
+      }
+    },
+    "recursivePath": ["example.wgsl.repair"],
+    "saturationDecisionId": "saturation.example.decision",
+    "humanGate": {
+      "required": true,
+      "status": "approved",
+      "authority": "human.owner",
+      "overrideReceiptId": null
+    },
+    "sha256": "f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1"
+  },
+  "saturationDecision": {
+    "schemaVersion": 1,
+    "decisionId": "saturation.example.decision",
+    "saturated": false,
+    "reasonCode": "eligible_candidates_remain",
+    "scope": {
+      "capability": "compiler_repair",
+      "populationHash": "7272727272727272727272727272727272727272727272727272727272727272",
+      "frozenContractHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "approachRegistryHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "historyHash": "e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2"
+    },
+    "budgetDeclared": {
+      "proposalCalls": 4,
+      "criticCalls": 2,
+      "teacherCalls": 4,
+      "generationCalls": 4,
+      "materializations": 2,
+      "trainingRuns": 6,
+      "evaluationCalls": 12,
+      "evaluationLooks": 2,
+      "checkpointEvaluations": 12,
+      "itemEvaluations": 48,
+      "adjudications": 1,
+      "humanDecisions": 2,
+      "sealedHoldoutLooks": 0,
+      "recursionDepth": 1,
+      "childCount": 1,
+      "modelTokensByParticipant": {
+        "claude.proposer": 2048,
+        "codex.critic": 2048,
+        "gemini.proposer": 2048
+      }
+    },
+    "budgetSpent": {
+      "proposalCalls": 2,
+      "criticCalls": 1,
+      "teacherCalls": 1,
+      "generationCalls": 1,
+      "materializations": 1,
+      "trainingRuns": 3,
+      "evaluationCalls": 6,
+      "evaluationLooks": 1,
+      "checkpointEvaluations": 6,
+      "itemEvaluations": 24,
+      "adjudications": 0,
+      "humanDecisions": 1,
+      "sealedHoldoutLooks": 0,
+      "recursionDepth": 0,
+      "childCount": 0,
+      "modelTokensByParticipant": {
+        "claude.proposer": 1024,
+        "codex.critic": 1024,
+        "gemini.proposer": 1024
+      }
+    },
+    "budgetRemaining": {
+      "proposalCalls": 2,
+      "criticCalls": 1,
+      "teacherCalls": 3,
+      "generationCalls": 3,
+      "materializations": 1,
+      "trainingRuns": 3,
+      "evaluationCalls": 6,
+      "evaluationLooks": 1,
+      "checkpointEvaluations": 6,
+      "itemEvaluations": 24,
+      "adjudications": 1,
+      "humanDecisions": 1,
+      "sealedHoldoutLooks": 0,
+      "recursionDepth": 1,
+      "childCount": 1,
+      "modelTokensByParticipant": {
+        "claude.proposer": 1024,
+        "codex.critic": 1024,
+        "gemini.proposer": 1024
+      }
+    },
+    "eligibleUntriedApproachIds": ["recursive.samer"],
+    "pendingRequiredTrialIds": [],
+    "blockedTrialIds": ["trial.synthetic.blocked"],
+    "terminalTrialIds": [
+      "trial.synthetic.accepted",
+      "trial.synthetic.rejected",
+      "trial.synthetic.invalidated"
+    ],
+    "ruleEvidence": [
+      "One eligible untried approach remains and the remaining budget can fund it."
+    ],
+    "decisionPolicyHash": "f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2",
+    "sha256": "f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3"
+  }
+}
