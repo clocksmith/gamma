@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 import re
+import subprocess
 from typing import Any
 
 
@@ -256,14 +257,37 @@ def _verify_artifact(
         if not repository_root.is_dir():
             continue
         artifact_path = repository_root / artifact["path"]
-        if not artifact_path.is_file():
-            raise RegistryValidationError(
-                f"line {line_number}: available artifact does not exist: {artifact_path}"
+        git_repository = subprocess.run(
+            ["git", "-C", str(repository_root), "rev-parse", "--is-inside-work-tree"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if git_repository.returncode == 0 and git_repository.stdout.strip() == "true":
+            revision_path = f'{artifact["revision"]}:{artifact["path"]}'
+            historical = subprocess.run(
+                ["git", "-C", str(repository_root), "show", revision_path],
+                check=False,
+                capture_output=True,
             )
-        digest = hashlib.sha256(artifact_path.read_bytes()).hexdigest()
+            if historical.returncode != 0:
+                raise RegistryValidationError(
+                    f"line {line_number}: artifact does not exist at recorded revision: "
+                    f"{artifact['repository']}@{revision_path}"
+                )
+            artifact_bytes = historical.stdout
+            identity = f"{artifact['repository']}@{revision_path}"
+        else:
+            if not artifact_path.is_file():
+                raise RegistryValidationError(
+                    f"line {line_number}: available artifact does not exist: {artifact_path}"
+                )
+            artifact_bytes = artifact_path.read_bytes()
+            identity = str(artifact_path)
+        digest = hashlib.sha256(artifact_bytes).hexdigest()
         if digest != artifact["sha256"]:
             raise RegistryValidationError(
-                f"line {line_number}: artifact hash mismatch for {artifact_path}"
+                f"line {line_number}: artifact hash mismatch for {identity}"
             )
 
 

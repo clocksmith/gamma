@@ -6,7 +6,9 @@ import copy
 import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -118,6 +120,57 @@ class ExperimentRegisterTests(unittest.TestCase):
                 _VALIDATOR.RegistryValidationError, "hash mismatch"
             ):
                 _VALIDATOR.validate_register(register, workspace_root=workspace)
+
+    def test_git_artifact_is_verified_at_recorded_revision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            workspace = Path(temp_dir)
+            repository = workspace / "gamma"
+            artifact = repository / "evidence" / "receipt.json"
+            artifact.parent.mkdir(parents=True)
+            artifact.write_text("{\"version\":1}\n", encoding="utf-8")
+            subprocess.run(["git", "-C", str(repository), "init", "-q"], check=True)
+            subprocess.run(["git", "-C", str(repository), "add", "."], check=True)
+            commit_env = {
+                **os.environ,
+                "GIT_AUTHOR_NAME": "Gamma Test",
+                "GIT_AUTHOR_EMAIL": "gamma-test@example.invalid",
+                "GIT_COMMITTER_NAME": "Gamma Test",
+                "GIT_COMMITTER_EMAIL": "gamma-test@example.invalid",
+            }
+            subprocess.run(
+                ["git", "-C", str(repository), "commit", "-q", "-m", "fixture"],
+                check=True,
+                env=commit_env,
+            )
+            revision = subprocess.check_output(
+                ["git", "-C", str(repository), "rev-parse", "HEAD"],
+                text=True,
+            ).strip()
+            expected_hash = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            artifact.write_text("{\"version\":2}\n", encoding="utf-8")
+
+            record = copy.deepcopy(
+                _VALIDATOR.validate_register(verify_available_artifacts=False)[0]
+            )
+            record["owner"] = {
+                "repository": "clocksmith/gamma",
+                "path": "evidence",
+            }
+            record["artifact"] = {
+                "repository": "clocksmith/gamma",
+                "path": "evidence/receipt.json",
+                "revision": revision,
+                "sha256": expected_hash,
+            }
+            record.pop("relatedArtifacts", None)
+            register = workspace / "historical.jsonl"
+            _write_rows(register, [record])
+
+            validated = _VALIDATOR.validate_register(
+                register,
+                workspace_root=workspace,
+            )
+            self.assertEqual(validated[0]["artifact"]["revision"], revision)
 
 
 if __name__ == "__main__":
