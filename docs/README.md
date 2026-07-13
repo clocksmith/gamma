@@ -12,7 +12,7 @@ This directory is the canonical documentation index for GAMMA.
 | Benchmarking workflows | [BENCHMARKING.md](BENCHMARKING.md) |
 | SAME-R: swappable approaches, matched evaluation, replication, and capability transfer | [../projects/samer/README.md](../projects/samer/README.md) |
 | Verifier-guided learning, RLVR, prompt optimization, and experiment states | [VERIFIER_GUIDED_LEARNING.md](VERIFIER_GUIDED_LEARNING.md) |
-| Cross-repository experiment register | [../projects/distillation/shared/experiments/README.md](../projects/distillation/shared/experiments/README.md) |
+| Cross-repository experiment register | [../projects/samer/experiments/README.md](../projects/samer/experiments/README.md) |
 | Translation distillation ops + leaderboards | [../projects/distillation/translation/README.md](../projects/distillation/translation/README.md) |
 | Integrations/API usage | [integration-guide.md](integration-guide.md) |
 | Mind Meld usage + status | [../src/mind_meld/README.md](../src/mind_meld/README.md) |

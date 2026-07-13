@@ -27,7 +27,7 @@ human-selected interventions. The shared automatic approach registry and
 selector remain an explicit implementation boundary.
 
 - [SAME-R project and capability-transfer protocol](./projects/samer/README.md)
-- [Cross-repository experiment register](./projects/distillation/shared/experiments/README.md)
+- [Cross-repository experiment register](./projects/samer/experiments/README.md)
 - [Verifier-guided optimizer and reward taxonomy](./docs/VERIFIER_GUIDED_LEARNING.md)
 
 ## Quick Start
@@ -88,7 +88,7 @@ python gamma.py mind-meld --help
 - [docs/BENCHMARKING.md](./docs/BENCHMARKING.md): speed, quality, codegen, and mind-meld benchmarking
 - [projects/samer/README.md](./projects/samer/README.md): SAME-R algorithm, controlled capability-transfer trials, and promotion contract
 - [docs/VERIFIER_GUIDED_LEARNING.md](./docs/VERIFIER_GUIDED_LEARNING.md): prompt optimization, verifier-filtered data, RLVR, domain reward boundaries, and experiment states
-- [projects/distillation/shared/experiments/README.md](./projects/distillation/shared/experiments/README.md): cross-repository experiment register contract
+- [projects/samer/experiments/README.md](./projects/samer/experiments/README.md): cross-repository experiment register contract
 - [docs/integration-guide.md](./docs/integration-guide.md): OpenAI/LangChain/API/MCP integrations
 - [src/mind_meld/README.md](./src/mind_meld/README.md): Mind Meld usage, configs, and operational guardrails
 - [flux/README.md](./flux/README.md): Flux install, CLI, and reference

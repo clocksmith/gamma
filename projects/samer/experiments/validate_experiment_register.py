@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Gamma's cross-repository verifier-guided experiment register."""
+"""Validate Gamma's cross-repository SAME-R experiment register."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import subprocess
 from typing import Any
 
 
-REPO_ROOT = Path(__file__).resolve().parents[4]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_REGISTER = Path(__file__).with_name("experiment-register.jsonl")
 SCHEMA_PATH = Path(__file__).with_name("experiment-register.schema.json")
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]*$")

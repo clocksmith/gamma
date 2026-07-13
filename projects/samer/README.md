@@ -1283,7 +1283,7 @@ promotion rules. They are not evidence that SAME-R automatically chose the
 interventions. Every approach selection represented here was made explicitly by
 an operator or a domain-specific script. The machine-readable subset is pinned
 by repository revision and SHA-256 in the [cross-repository experiment
-register](../distillation/shared/experiments/experiment-register.jsonl).
+register](./experiments/experiment-register.jsonl).
 
 | Program | Artifact-backed observation | SAME-R rule supported | Claim boundary |
 |---|---|---|---|

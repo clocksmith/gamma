@@ -1,4 +1,4 @@
-"""Contract tests for the verifier-guided experiment register."""
+"""Contract tests for the SAME-R experiment register."""
 
 from __future__ import annotations
 
@@ -17,8 +17,7 @@ import unittest
 _VALIDATOR_PATH = (
     Path(__file__).resolve().parents[1]
     / "projects"
-    / "distillation"
-    / "shared"
+    / "samer"
     / "experiments"
     / "validate_experiment_register.py"
 )
