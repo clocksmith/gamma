@@ -35,10 +35,12 @@ curation, and training loop. Use the name that identifies the mechanism:
 | Optimize a policy with programmatic pass/fail or numeric rewards | reinforcement learning with verifiable rewards (RLVR) |
 | The complete repeated loop | verifier-guided self-improvement or an execution-grounded data flywheel |
 
-“Hybrid distillation” remains Gamma's name for the data-centric combination of
-teacher outputs, curated anchors, controlled data lanes, checkpoint selection,
-logit distillation, and routing. RLVR is a neighboring method, not a synonym
-for hybrid distillation.
+[`Evidence-Gated Capability Transfer`](EVIDENCE_GATED_CAPABILITY_TRANSFER.md)
+is Gamma's controlled-experiment method for teacher outputs, curated anchors,
+matched data lanes, checkpoint selection, compact mechanism distillation, and
+receipt-bound promotion. `Hybrid distillation` remains a narrow legacy term for
+the teacher-assisted distillation subtype. RLVR is a neighboring method, not a
+synonym for EGCT or hybrid distillation.
 
 ## Scientific Chain
 

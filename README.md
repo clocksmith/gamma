@@ -64,7 +64,7 @@ python gamma.py mind-meld --help
 
 - [docs/README.md](./docs/README.md): documentation map and ownership
 - [docs/BENCHMARKING.md](./docs/BENCHMARKING.md): speed, quality, codegen, and mind-meld benchmarking
-- [docs/HYBRID_DISTILLATION.md](./docs/HYBRID_DISTILLATION.md): reusable hybrid distillation method for coding, translation, and capability students
+- [docs/EVIDENCE_GATED_CAPABILITY_TRANSFER.md](./docs/EVIDENCE_GATED_CAPABILITY_TRANSFER.md): controlled capability-transfer experiments, teacher qualification, external checkpoint selection, and receipt-bound promotion
 - [docs/VERIFIER_GUIDED_LEARNING.md](./docs/VERIFIER_GUIDED_LEARNING.md): prompt optimization, verifier-filtered data, RLVR, domain reward boundaries, and experiment states
 - [projects/distillation/shared/experiments/README.md](./projects/distillation/shared/experiments/README.md): cross-repository experiment register contract
 - [docs/integration-guide.md](./docs/integration-guide.md): OpenAI/LangChain/API/MCP integrations
