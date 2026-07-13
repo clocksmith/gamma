@@ -777,6 +777,35 @@ or page-order proxy does not answer it.
   student/data selection.
 - Selection: net bytes after compressed payload and integration cost.
 
+## Evidence For The Outer Contract
+
+The results below are evidence for SAME-R's evaluation, control, selection, and
+promotion rules. They are not evidence that SAME-R automatically chose the
+interventions. Every approach selection represented here was made explicitly by
+an operator or a domain-specific script.
+
+| Program | Artifact-backed observation | SAME-R rule supported | Claim boundary |
+|---|---|---|---|
+| TranslateGemma partial replacement | Targeted `replace05` reached external WMT13 BLEU `33.7353`, above the `32.9055` prior leader. Extending the same data to 6k steps fell to `33.2481`; low-learning-rate polish reached `33.6283` without making a new leader. See the [translation results](../distillation/translation/README.md) and [normalized bundle](../distillation/translation/runs/results_bundle/summary.md). | Select checkpoints by the frozen external metric; neither lower loss, more updates, continuation, nor final-step status has promotion privilege. | This supports external checkpoint selection for this EN/ES experiment. It does not by itself complete random-control or seed-confirmed attribution for `replace05`. |
+| WGSL SFT capability transfer | The verified Qwen 3.5 9B seed-11 SFT path moved family-disjoint public compiler-repair pass@1 from `8.36%` to `88.29%` over `299` tasks. See the [WGSL project receipt](../distillation/wgsl/README.md) and [Doppler V10 receipt](https://github.com/clocksmith/doppler/blob/main/docs/status/wgsl-repair-v10-2026-07-12.md). | Measure capability on an external execution-based evaluator rather than inferring it from training loss. | This establishes one-seed compiler repair, not semantic kernel correctness, seed stability, or promotion readiness. |
+| WGSL optimizer comparison | From the selected SFT checkpoint, one clipped GRPO-with-KL update reached `94.98%` public pass@1 with 20 paired wins and zero losses, while the retained DPO lane regressed to `36.79%`. See the [WGSL project receipt](../distillation/wgsl/README.md) and [Doppler V11 receipt](https://github.com/clocksmith/doppler/blob/main/docs/status/wgsl-repair-v11-2026-07-12.md). | Inner methods are swappable under a fixed sampler and verifier, and losing methods remain in history rather than being hidden. | This is a one-seed public compiler-repair optimizer result. It is not a general GRPO-over-DPO claim or semantic-kernel proof. |
+| WGSL V12 lane correction | The earlier 800-step schedule exposed byte-identical prefixes in nominal `anchor`, `external20`, and `random20` lanes, so the comparison did not expose the declared intervention. V12 seed/hash-orders 1,200 rows per lane, records the order hash, and consumes every lane once. See the [Doppler V12 design receipt](https://github.com/clocksmith/doppler/blob/main/docs/status/wgsl-repair-v12-design-2026-07-12.md). | Manifest names are insufficient: row-order hashes, consumed-row counts, full-lane exposure, and resume cursors belong in the run contract. | This validates a harness correction and invalidates the earlier attribution. V12 capability results must come from the corrected nine-run matrix. |
+| Columbo teacher qualification | On a disjoint 6-document, 52-span, 17-category qualification corpus, Claude qualified `14/17` categories and Codex `15/17`, with zero format failures. Both failed `employer` recall (`0.5`) and `person_name` precision (`0.5556`); Claude also missed the `witness_identity` precision threshold. See the [Columbo qualification log](https://github.com/clocksmith/columbo/blob/main/docs/hybrid-distillation-plan.md) and the [Claude](https://github.com/clocksmith/columbo/blob/main/corpus/training/columbo/teacher-distillation/qualification/claude-p-sonnet.qualification.2026-07-13T00-45-29-853Z.qualification.json) and [Codex](https://github.com/clocksmith/columbo/blob/main/corpus/training/columbo/teacher-distillation/qualification/codex-exec.qualification.2026-07-13T00-46-58-234Z.qualification.json) receipts. | Teacher authority is category-scoped and fail-closed; an overall score cannot authorize labels for a failed category. | These receipts qualify teacher/category cells only. They do not prove student transfer or authorize the failed cells. |
+| Doppler serving and state reuse | Doppler compare receipts keep output or semantic correctness beside, but separate from, efficiency accounting: the generation receipt records an exact `128/128` token match and a resolved KV-cache plan, while the reranker receipt records semantic correctness and separately times the shared 73-token prefix phase. See the [generation parity receipt](https://github.com/clocksmith/doppler/blob/main/benchmarks/vendors/results/compare_latest.json) and [reranker prefix receipt](https://github.com/clocksmith/doppler/blob/main/benchmarks/vendors/results/rerank_compare_latest.json). | KV/prefix reuse is serving evidence only after output parity or the declared semantic contract passes; latency and memory gains do not become capability gains. | These receipts support serving correctness and efficiency accounting for their exact models and workloads. They do not show that model capability improved. |
+| Null and rejected trials | Retained artifacts include neutral-to-worse kernel geometries, translation random-control rows and overtrained checkpoints, the failed DPO policy, and continuations that did not beat their selected anchor. See Doppler's [ruled-out kernel table](https://github.com/clocksmith/doppler/blob/main/docs/developer-guides/16-kernel-performance-optimization.md), Gamma's [translation comparison ledger](../distillation/translation/runs/RUN_COMPARE.md), and the V11 receipt above. | Null, equivalent, regressing, and rejected lanes remain first-class history and constrain the next intervention. | Negative evidence is scoped to the tested shape, seed, artifact, and evaluator; it is not a universal ban on the method family. |
+
+Together, these results validate SAME-R's outer evaluation discipline: matched
+contracts expose invalid comparisons, external metrics select artifacts,
+category and regression guardrails limit authority, parity separates serving
+from capability, and receipts retain both winners and failures.
+
+They do **not** validate automatic cross-domain approach selection, recursive
+self-selection, or autonomous promotion. Gamma still lacks the shared typed
+approach registry and `select_approach(history)` implementation described in
+the algorithm contract. The recursive selector remains an explicit
+implementation boundary until it proposes interventions, receives receipts,
+and reproduces better selections under an enclosing frozen SAME-R contract.
+
 ## Worked Applications And Claim Boundaries
 
 These examples illustrate how to apply SAME-R. A historical result remains bound
