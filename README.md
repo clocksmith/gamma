@@ -1,14 +1,50 @@
 # GAMMA
 
-**G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively
-
-Interactive LLM exploration for gameplay, model comparison, and reproducible benchmarking.
+A toolkit for exploring, measuring, comparing, and improving language models
+through interactive and reproducible experiments.
 
 - Browser demo: https://simulatte.world
 - Architecture map: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 - Full docs index: [docs/README.md](./docs/README.md)
 
-## SAME-R
+## What GAMMA Means
+
+GAMMA is deliberately a family name rather than one rigid expansion. Each
+backronym names a real project surface or goal:
+
+| Context | Reading | What it names |
+|---|---|---|
+| Interactive game | **G**ame **A**nalyzing **M**odel **M**ethods **A**ttentively | Predicting model continuations and inspecting the choices behind them. |
+| Comparison and benchmarking | **G**uessing **A**lternative **M**odel **M**echanics **A**nalytically | Comparing models, engines, decoding policies, and performance under recorded contracts. |
+| Learning and interpretability | **G**rasping **A**ttention **M**echanism **M**ysteries **A**ccessibly | Making logits, tokenization, attention-capable backends, and generation mechanics understandable. |
+| SAME-R research | **G**eneralized **A**pproach **M**atching, **M**easurement, and **A**ttribution | Testing different methods under matched evaluation and determining what caused an observed improvement. |
+
+These are contextual readings, not separate product names. `GAMMA` remains the
+stable project and command identity.
+
+## Choose a Surface
+
+| Surface | Purpose | Starting point |
+|---|---|---|
+| Game and chat | Explore next-token prediction interactively. | `python gamma.py game` |
+| Comparison and benchmarking | Compare model behavior, throughput, latency, and code generation. | `python gamma.py comparison` or `python gamma.py benchmark` |
+| Mind Meld | Coordinate and swap among multiple model engines. | `python gamma.py mind-meld` |
+| SAME-R | Compare prompts, data, teachers, training methods, routers, kernels, or other approaches under matched rims. | [projects/samer/README.md](./projects/samer/README.md) |
+| Domain research | Run translation, embedding, WGSL, compression, and other owned experiments. | [projects/](./projects/) |
+| Integrations | Connect Gamma through APIs, MCP, and supported model engines. | [docs/integration-guide.md](./docs/integration-guide.md) |
+
+## Quick Start
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python gamma.py game
+```
+
+Engine-specific setup is in [src/engines/README.md](./src/engines/README.md).
+
+## SAME-R Research Method
 
 **SAME-R** is Gamma's implementation-neutral outer method: **Swappable
 Approaches under Matched Evaluation and Replication**. Its recursive expansion
@@ -29,17 +65,6 @@ selector remain an explicit implementation boundary.
 - [SAME-R project and capability-transfer protocol](./projects/samer/README.md)
 - [Cross-repository experiment register](./projects/samer/experiments/README.md)
 - [Verifier-guided optimizer and reward taxonomy](./docs/VERIFIER_GUIDED_LEARNING.md)
-
-## Quick Start
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python gamma.py game
-```
-
-Engine-specific setup is in [src/engines/README.md](./src/engines/README.md).
 
 ## Repository Layout
 
