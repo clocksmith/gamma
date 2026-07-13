@@ -30,6 +30,10 @@ Grouped sampling runs all declared samples in one model batch while preserving
 an independent frozen RNG seed per row after temperature and top-p filtering.
 Policy and reference token log-probabilities are collected in a bounded batch,
 with token-mask alignment checked by Doppler before optimizer use.
+Evaluation-only rollouts may set `generation.captureLogprobs` to `false` when
+the frozen evaluator consumes completions but no policy or reference scores.
+The choice is part of `rollout-state.json`, so a resume cannot mix capture
+contracts. GRPO rollouts retain the default `true` setting.
 GRPO excludes zero-advantage samples from optimizer input, then applies the
 declared training seed to a deterministic shuffle before its microstep budget
 is consumed. This enforces the declared `zero_advantages` behavior and prevents

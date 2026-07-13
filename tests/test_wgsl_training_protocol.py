@@ -245,6 +245,18 @@ def test_rollout_output_rejects_stale_state(tmp_path):
         )
 
 
+def test_rollout_logprob_capture_defaults_on_and_can_be_disabled():
+    assert MODULE._capture_rollout_logprobs({}) is True
+    assert MODULE._capture_rollout_logprobs({"generation": {}}) is True
+    assert MODULE._capture_rollout_logprobs({
+        "generation": {"captureLogprobs": False}
+    }) is False
+    with pytest.raises(RuntimeError, match="must be a boolean"):
+        MODULE._capture_rollout_logprobs({
+            "generation": {"captureLogprobs": "false"}
+        })
+
+
 def test_per_row_seeded_sampler_is_deterministic():
     import torch
 

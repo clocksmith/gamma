@@ -902,6 +902,19 @@ def _prepare_rollout_output(
     return rollout_path, groups
 
 
+def _capture_rollout_logprobs(request: dict[str, Any]) -> bool:
+    generation = request.get("generation")
+    if generation is None:
+        return True
+    generation = _require_object(generation, "generation")
+    value = generation.get("captureLogprobs")
+    if value is None:
+        return True
+    if not isinstance(value, bool):
+        raise RuntimeError("generation.captureLogprobs must be a boolean")
+    return value
+
+
 def _run_rollout(request: dict[str, Any], runtime: dict[str, Any], output_root: Path) -> dict[str, Any]:
     dataset_path = Path(_require_string(request.get("datasetPath"), "datasetPath")).resolve()
     tasks = _read_jsonl(dataset_path)
@@ -911,6 +924,7 @@ def _run_rollout(request: dict[str, Any], runtime: dict[str, Any], output_root: 
     if sampling.get("taskLimit") is not None:
         tasks = tasks[: _require_int(sampling.get("taskLimit"), "sampling.taskLimit", 1)]
     adapter_path, policy_hash = _rollout_policy_identity(request)
+    capture_logprobs = _capture_rollout_logprobs(request)
     rollout_state = {
         "schemaVersion": 1,
         "model": _require_object(request.get("model"), "model"),
@@ -927,6 +941,7 @@ def _run_rollout(request: dict[str, Any], runtime: dict[str, Any], output_root: 
             "gradientCheckpointing": False,
             "sampleBatchSize": group_size,
             "logprobBatchSize": group_size,
+            "captureLogprobs": capture_logprobs,
         },
     }
     rollout_path, existing_groups = _prepare_rollout_output(
@@ -983,13 +998,14 @@ def _run_rollout(request: dict[str, Any], runtime: dict[str, Any], output_root: 
         for sample_index, sample in enumerate(samples):
             sample["sampleId"] = f"{task_id}-sample-{sample_index + 1}"
             rollout_tokens += sum(sample["completionMask"])
-        _attach_batched_completion_logprobs(
-            model,
-            tokenizer,
-            samples,
-            runtime,
-            group_size,
-        )
+        if capture_logprobs:
+            _attach_batched_completion_logprobs(
+                model,
+                tokenizer,
+                samples,
+                runtime,
+                group_size,
+            )
         _write_metric(rollout_path, {
             "schemaVersion": 1,
             "taskId": task_id,
@@ -1007,6 +1023,7 @@ def _run_rollout(request: dict[str, Any], runtime: dict[str, Any], output_root: 
             "groupSize": group_size,
             "rolloutTokens": rollout_tokens,
             "resumedGroups": len(existing_groups),
+            "captureLogprobs": capture_logprobs,
         },
     }
 
