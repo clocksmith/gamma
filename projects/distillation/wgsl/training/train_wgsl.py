@@ -7,6 +7,7 @@ import argparse
 from contextlib import nullcontext
 import hashlib
 import importlib.metadata
+import inspect
 import json
 import math
 from pathlib import Path
@@ -32,6 +33,10 @@ PARITY_ADAPTER_PATHS = (
     "layers.0.mlp.up_proj",
     "layers.0.mlp.down_proj",
 )
+PARITY_DECODER_ORDER = (
+    "input_norm_token_mixer_residual_post_attention_norm_mlp_residual"
+)
+PARITY_ROPE_PAIRING = "split_half_within_partial_rotary_prefix"
 
 
 def _require_object(value: Any, label: str) -> dict[str, Any]:
@@ -129,6 +134,8 @@ def _runtime_imports() -> dict[str, Any]:
         from huggingface_hub import snapshot_download
         from peft import LoraConfig, TaskType, PeftModel, get_peft_model
         from transformers import AutoModelForCausalLM, AutoTokenizer
+        from transformers.models.qwen3_5.configuration_qwen3_5 import Qwen3_5TextConfig
+        from transformers.models.qwen3_5.modeling_qwen3_5 import Qwen3_5DecoderLayer
         try:
             from transformers import AutoModelForMultimodalLM
         except ImportError:
@@ -154,6 +161,8 @@ def _runtime_imports() -> dict[str, Any]:
         "AutoModelForCausalLM": AutoModelForCausalLM,
         "AutoModelForMultimodalLM": AutoModelForMultimodalLM,
         "AutoTokenizer": AutoTokenizer,
+        "Qwen3_5TextConfig": Qwen3_5TextConfig,
+        "Qwen3_5DecoderLayer": Qwen3_5DecoderLayer,
         "transformersVersion": transformers_version,
     }
 
@@ -581,40 +590,27 @@ def _parity_rms_norm(value: Any, weight: Any, eps: float, torch: Any) -> Any:
     return value * inverse_rms * (1 + weight)
 
 
-def _parity_projection(
-    value: Any,
+def _install_parity_lora_projection(
+    module: Any,
     weight: Any,
     adapter: dict[str, Any],
-) -> Any:
-    base = value @ weight.transpose(0, 1)
-    return base + ((value @ adapter["A"] @ adapter["B"])
-                   * (adapter["alpha"] / adapter["rank"]))
-
-
-def _parity_partial_rope(
-    value: Any,
-    cosine: Any,
-    sine: Any,
-    layer: dict[str, Any],
     torch: Any,
-) -> Any:
-    head_dim = _require_int(layer.get("headDim"), "layer.headDim", 1)
-    rotary_dim = _require_int(layer.get("rotaryDim"), "layer.rotaryDim", 1)
-    pair_span = _require_int(layer.get("pairSpanDim"), "layer.pairSpanDim", 1)
-    interleaved = layer.get("interleaved") is True
-    if rotary_dim % 2 or pair_span % 2 or rotary_dim > head_dim or pair_span > head_dim:
-        raise RuntimeError("invalid parity partial-RoPE geometry")
-    components = [value[..., index] for index in range(head_dim)]
-    for pair in range(rotary_dim // 2):
-        first = pair * 2 if interleaved else pair
-        second = (pair * 2) + 1 if interleaved else pair + (pair_span // 2)
-        first_value = value[..., first]
-        second_value = value[..., second]
-        pair_cosine = cosine[:, pair].unsqueeze(1)
-        pair_sine = sine[:, pair].unsqueeze(1)
-        components[first] = (first_value * pair_cosine) - (second_value * pair_sine)
-        components[second] = (first_value * pair_sine) + (second_value * pair_cosine)
-    return torch.stack(components, dim=-1)
+) -> None:
+    with torch.no_grad():
+        module.weight.copy_(weight)
+    module.weight.requires_grad_(False)
+    module._parity_lora_a = adapter["A"]
+    module._parity_lora_b = adapter["B"]
+    module._parity_lora_scale = adapter["alpha"] / adapter["rank"]
+
+    def forward(value: Any) -> Any:
+        base = value @ module.weight.transpose(0, 1)
+        return base + (
+            (value @ module._parity_lora_a @ module._parity_lora_b)
+            * module._parity_lora_scale
+        )
+
+    module.forward = forward
 
 
 def _parity_values(value: Any) -> list[float]:
@@ -631,6 +627,15 @@ def _run_parity_microstep(
     fixture, _fixture_path, fixture_hash = _load_parity_fixture(request)
     model = _require_object(fixture.get("model"), "fixture.model")
     layer = _require_object(fixture.get("layer"), "fixture.layer")
+    architecture_contract = _require_object(
+        fixture.get("architectureContract"), "fixture.architectureContract"
+    )
+    if architecture_contract.get("decoderOrder") != PARITY_DECODER_ORDER:
+        raise RuntimeError("parity fixture does not use the pinned Qwen 3.5 decoder order")
+    if architecture_contract.get("ropePairing") != PARITY_ROPE_PAIRING:
+        raise RuntimeError("parity fixture does not use the pinned Qwen 3.5 RoPE pairing")
+    if architecture_contract.get("partialRotaryFactor") != 0.25:
+        raise RuntimeError("parity fixture does not use the pinned Qwen 3.5 partial-RoPE factor")
     optimizer_config = _require_object(fixture.get("optimizer"), "fixture.optimizer")
     if optimizer_config.get("type") != "adamw":
         raise RuntimeError("parity fixture optimizer.type must be adamw")
@@ -692,66 +697,73 @@ def _run_parity_microstep(
     num_heads = _require_int(layer.get("numHeads"), "layer.numHeads", 1)
     num_kv_heads = _require_int(layer.get("numKVHeads"), "layer.numKVHeads", 1)
     head_dim = _require_int(layer.get("headDim"), "layer.headDim", 1)
+    rotary_dim = _require_int(layer.get("rotaryDim"), "layer.rotaryDim", 1)
+    pair_span_dim = _require_int(layer.get("pairSpanDim"), "layer.pairSpanDim", 1)
     if num_heads % num_kv_heads:
         raise RuntimeError("parity numHeads must be divisible by numKVHeads")
-    query_size = num_heads * head_dim
+    if pair_span_dim != rotary_dim or layer.get("interleaved") is not False:
+        raise RuntimeError("parity fixture does not use Qwen split-half partial RoPE")
+    if rotary_dim / head_dim != architecture_contract["partialRotaryFactor"]:
+        raise RuntimeError("parity fixture rotary geometry differs from its architecture contract")
 
     hidden = frozen["embedding"].index_select(0, token_ids)
-    input_norm = _parity_rms_norm(hidden, frozen["inputNorm"], eps, torch)
-    q_projection = _parity_projection(
-        input_norm, frozen["qWeight"], adapters["layers.0.self_attn.q_proj"]
+    config = runtime["Qwen3_5TextConfig"](
+        vocab_size=vocab_size,
+        hidden_size=hidden_size,
+        intermediate_size=intermediate_size,
+        num_hidden_layers=1,
+        num_attention_heads=num_heads,
+        num_key_value_heads=num_kv_heads,
+        head_dim=head_dim,
+        layer_types=["full_attention"],
+        rms_norm_eps=eps,
+        attention_dropout=0.0,
+        attention_bias=False,
+        use_cache=False,
     )
-    q_split = q_projection.reshape(num_tokens, num_heads, 2, head_dim)
-    query = q_split[:, :, 0, :]
-    output_gate = q_split[:, :, 1, :]
-    key = _parity_projection(
-        input_norm, frozen["kWeight"], adapters["layers.0.self_attn.k_proj"]
-    ).reshape(num_tokens, num_kv_heads, head_dim)
-    value = _parity_projection(
-        input_norm, frozen["vWeight"], adapters["layers.0.self_attn.v_proj"]
-    ).reshape(num_tokens, num_kv_heads, head_dim)
-    query = _parity_rms_norm(query, frozen["qNorm"], eps, torch)
-    key = _parity_rms_norm(key, frozen["kNorm"], eps, torch)
-    query = _parity_partial_rope(
-        query, frozen["cosine"], frozen["sine"], layer, torch
+    config._attn_implementation = "eager"
+    decoder = runtime["Qwen3_5DecoderLayer"](config, 0).to(
+        device="cuda", dtype=torch.float32
     )
-    key = _parity_partial_rope(
-        key, frozen["cosine"], frozen["sine"], layer, torch
-    )
-    heads_per_kv = num_heads // num_kv_heads
-    kv_indices = torch.arange(num_heads, device="cuda") // heads_per_kv
-    key_by_head = key[:, kv_indices, :]
-    value_by_head = value[:, kv_indices, :]
-    scores = torch.einsum("thd,shd->hts", query, key_by_head) / math.sqrt(head_dim)
+    decoder.requires_grad_(False)
+    with torch.no_grad():
+        decoder.input_layernorm.weight.copy_(frozen["inputNorm"])
+        decoder.post_attention_layernorm.weight.copy_(frozen["postAttentionNorm"])
+        decoder.self_attn.q_norm.weight.copy_(frozen["qNorm"])
+        decoder.self_attn.k_norm.weight.copy_(frozen["kNorm"])
+    projection_modules = {
+        "layers.0.self_attn.q_proj": (decoder.self_attn.q_proj, "qWeight"),
+        "layers.0.self_attn.k_proj": (decoder.self_attn.k_proj, "kWeight"),
+        "layers.0.self_attn.v_proj": (decoder.self_attn.v_proj, "vWeight"),
+        "layers.0.self_attn.o_proj": (decoder.self_attn.o_proj, "oWeight"),
+        "layers.0.mlp.gate_proj": (decoder.mlp.gate_proj, "gateWeight"),
+        "layers.0.mlp.up_proj": (decoder.mlp.up_proj, "upWeight"),
+        "layers.0.mlp.down_proj": (decoder.mlp.down_proj, "downWeight"),
+    }
+    for adapter_path, (module, weight_name) in projection_modules.items():
+        _install_parity_lora_projection(
+            module, frozen[weight_name], adapters[adapter_path], torch
+        )
+    cosine = torch.cat([frozen["cosine"], frozen["cosine"]], dim=-1).unsqueeze(0)
+    sine = torch.cat([frozen["sine"], frozen["sine"]], dim=-1).unsqueeze(0)
+    if cosine.shape[-1] != rotary_dim or sine.shape != cosine.shape:
+        raise RuntimeError("parity fixture cosine/sine shape does not match rotaryDim")
     causal_mask = torch.triu(
-        torch.ones((num_tokens, num_tokens), dtype=torch.bool, device="cuda"),
+        torch.full(
+            (1, 1, num_tokens, num_tokens),
+            -torch.inf,
+            dtype=torch.float32,
+            device="cuda",
+        ),
         diagonal=1,
     )
-    probabilities = torch.softmax(scores.masked_fill(causal_mask.unsqueeze(0), -torch.inf), dim=-1)
-    attention = torch.einsum("hts,shd->thd", probabilities, value_by_head)
-    gated_attention = (attention * torch.sigmoid(output_gate)).reshape(num_tokens, query_size)
-    attention_output = _parity_projection(
-        gated_attention,
-        frozen["oWeight"],
-        adapters["layers.0.self_attn.o_proj"],
-    )
-    normalized_attention = _parity_rms_norm(
-        attention_output, frozen["postAttentionNorm"], eps, torch
-    )
-    post_attention = hidden + normalized_attention
-    gate = _parity_projection(
-        post_attention, frozen["gateWeight"], adapters["layers.0.mlp.gate_proj"]
-    )
-    up = _parity_projection(
-        post_attention, frozen["upWeight"], adapters["layers.0.mlp.up_proj"]
-    )
-    activated = functional.silu(gate) * up
-    if activated.shape != (num_tokens, intermediate_size):
-        raise RuntimeError("parity MLP activation shape mismatch")
-    down = _parity_projection(
-        activated, frozen["downWeight"], adapters["layers.0.mlp.down_proj"]
-    )
-    layer_output = post_attention + down
+    layer_output = decoder(
+        hidden.unsqueeze(0),
+        position_embeddings=(cosine, sine),
+        attention_mask=causal_mask,
+        position_ids=torch.arange(num_tokens, device="cuda").unsqueeze(0),
+        use_cache=False,
+    ).squeeze(0)
     final_norm = _parity_rms_norm(layer_output, frozen["finalNorm"], eps, torch)
     logits = final_norm @ frozen["lmHead"].transpose(0, 1)
     if logits.shape != (num_tokens, vocab_size):
@@ -805,9 +817,21 @@ def _run_parity_microstep(
             "moment1": _parity_values(state["exp_avg"]),
             "moment2": _parity_values(state["exp_avg_sq"]),
         }
+    decoder_source_path = Path(
+        inspect.getsourcefile(runtime["Qwen3_5DecoderLayer"]) or ""
+    ).resolve()
+    if not decoder_source_path.is_file():
+        raise RuntimeError("could not identify the Transformers Qwen3.5 decoder source")
     return {
         "fixtureSha256": fixture_hash,
         "precisionContract": fixture["precisionContract"],
+        "architectureContract": architecture_contract,
+        "referenceImplementation": {
+            "library": "transformers",
+            "version": runtime["transformersVersion"],
+            "class": "Qwen3_5DecoderLayer",
+            "sourceSha256": hashlib.sha256(decoder_source_path.read_bytes()).hexdigest(),
+        },
         "rank": next(iter(adapters.values()))["rank"],
         "alpha": next(iter(adapters.values()))["alpha"],
         "activeTokenCount": active_tokens,
@@ -819,7 +843,7 @@ def _run_parity_microstep(
         "allGradientsNonzero": all_gradients_nonzero,
         "everyParameterChanged": every_parameter_changed,
         "tensors": tensors,
-        "claimBoundary": "Gamma PyTorch/ROCm reference for one tiny rank-32, zero-dropout, token-aligned completion-masked Qwen full-layer microstep; not production Qwen geometry, Hugging Face causal-label shifting, V12 dropout, sustained training, or capability evidence.",
+        "claimBoundary": "Gamma PyTorch/ROCm reference for one tiny rank-32, zero-dropout, token-aligned completion-masked microstep through the Transformers Qwen3_5DecoderLayer using the pinned residual-before-post-attention-norm and split-half partial-RoPE contracts; not production Qwen geometry, Hugging Face causal-label shifting, V12 dropout, sustained training, or capability evidence.",
     }
 
 

@@ -97,6 +97,10 @@ def test_protocol_rejects_unversioned_request_before_runtime_imports():
 
 def test_parity_microstep_is_a_versioned_protocol_action():
     assert "parity_microstep" in MODULE.SUPPORTED_ACTIONS
+    assert MODULE.PARITY_DECODER_ORDER == (
+        "input_norm_token_mixer_residual_post_attention_norm_mlp_residual"
+    )
+    assert MODULE.PARITY_ROPE_PAIRING == "split_half_within_partial_rotary_prefix"
     assert MODULE.PARITY_ADAPTER_PATHS == (
         "layers.0.self_attn.q_proj",
         "layers.0.self_attn.k_proj",
