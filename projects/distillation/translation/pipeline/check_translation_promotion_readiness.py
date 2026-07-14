@@ -26,6 +26,47 @@ EXPECTED_POPULATION_ROLES = (
     "promotion",
 )
 
+MATCHED_TRAINING_BLOCKERS = frozenset(
+    {
+        "diagnostic_error_ledger_human_adjudication_pending",
+        "human_review_rubric_and_threshold_absent",
+        "license_catalog_contains_unverified_sources",
+        "licensed_checkpoint_selection_sources_absent",
+        "licensed_promotion_sources_absent",
+        "licensed_seed_confirmation_sources_absent",
+        "licensed_training_sources_absent",
+        "matched_run_contract_absent",
+        "population_calibration_identity_absent",
+        "population_calibration_unmaterialized",
+        "population_checkpoint_selection_identity_absent",
+        "population_checkpoint_selection_unmaterialized",
+        "population_contamination_audit_absent",
+        "population_manifests_and_hashes_absent",
+        "population_promotion_identity_absent",
+        "population_promotion_unmaterialized",
+        "population_seed_confirmation_identity_absent",
+        "population_seed_confirmation_unmaterialized",
+    }
+)
+
+CHECKPOINT_SELECTION_BLOCKERS = MATCHED_TRAINING_BLOCKERS | {
+    "matched_lane_receipts_absent",
+}
+
+BF16_WINNER_BLOCKERS = CHECKPOINT_SELECTION_BLOCKERS | {
+    "bf16_quality_target_not_met",
+    "comet_evidence_absent",
+    "seed_confirmation_absent",
+}
+
+DOPPLER_ARTIFACT_COMPETITION_BLOCKERS = BF16_WINNER_BLOCKERS | {
+    "gamma_bf16_selection_receipt_absent",
+}
+
+PROMOTION_SUBMISSION_BLOCKERS = DOPPLER_ARTIFACT_COMPETITION_BLOCKERS | {
+    "hosted_artifact_quality_target_not_met",
+}
+
 
 def _load_json(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
@@ -141,6 +182,18 @@ def build_readiness_receipt(
         blockers.add("diagnostic_error_ledger_human_adjudication_pending")
 
     sorted_blockers = sorted(blockers)
+    blocker_set = set(sorted_blockers)
+
+    def phase_blockers(required: frozenset[str] | set[str]) -> list[str]:
+        return sorted(blocker_set.intersection(required))
+
+    admission_blockers = {
+        "matchedTraining": phase_blockers(MATCHED_TRAINING_BLOCKERS),
+        "checkpointSelection": phase_blockers(CHECKPOINT_SELECTION_BLOCKERS),
+        "bf16WinnerDeclaration": phase_blockers(BF16_WINNER_BLOCKERS),
+        "dopplerArtifactCompetition": phase_blockers(DOPPLER_ARTIFACT_COMPETITION_BLOCKERS),
+        "promotionSubmission": phase_blockers(PROMOTION_SUBMISSION_BLOCKERS),
+    }
     core = {
         "schemaVersion": 1,
         "readinessId": "gamma.translation.enes.single-student.readiness.v1",
@@ -170,12 +223,13 @@ def build_readiness_receipt(
             "receipt": contract.get("baselineHandoff", {}).get("selectionReceipt"),
         },
         "admission": {
-            "matchedTrainingAllowed": not sorted_blockers,
-            "checkpointSelectionAllowed": not sorted_blockers,
-            "bf16WinnerDeclarationAllowed": False,
-            "dopplerArtifactCompetitionAllowed": False,
-            "promotionAllowed": False,
+            "matchedTrainingAllowed": not admission_blockers["matchedTraining"],
+            "checkpointSelectionAllowed": not admission_blockers["checkpointSelection"],
+            "bf16WinnerDeclarationAllowed": not admission_blockers["bf16WinnerDeclaration"],
+            "dopplerArtifactCompetitionAllowed": not admission_blockers["dopplerArtifactCompetition"],
+            "promotionAllowed": not admission_blockers["promotionSubmission"],
         },
+        "admissionBlockers": admission_blockers,
         "blockers": sorted_blockers,
     }
     return {**core, "receiptHash": _hash_receipt_core(core)}
