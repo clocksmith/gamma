@@ -29,13 +29,36 @@ the matched campaign, declared seeds, and blocking human review complete.
 - `promotion-contract.v1.json`: target, comparator, population, metric,
   matched-lane, seed, human-review, and deployment-fidelity rules.
 - `promotion-contract.schema.json`: executable structure for the contract.
+- `human-review-contract.v1.json`: frozen blocking review protocol. It fixes
+  blinding, reviewer qualification, adjudication, population floors, a paired
+  exact sign test with Holm correction, direction/domain non-regression, and
+  critical-error guardrails before any review population is materialized.
+- `human-review-contract.schema.json`: executable structure for the review
+  protocol.
+- `population-procurement-contract.v1.json`: frozen row counts, content mix,
+  native-source/reference rules, role separation, rights, contamination, and
+  custody requirements for calibration, selection, confirmation, and the
+  one-use promotion population. It is a procurement specification; every role
+  remains unmaterialized.
+- `population-procurement-contract.schema.json`: executable structure for the
+  procurement specification.
 - `data-license-catalog.v1.json`: current data lineage and license eligibility.
-  An `unknown` license status blocks a source from the new campaign.
+  Any status other than `verified` blocks a source from the new campaign. The
+  catalog now binds exact candidate revisions for MASSIVE 1.0, TICO-19, and
+  FLORES+ across conversational, medical, and general-informational domains.
+  They remain ineligible pending human approval, role assignment, and the
+  recorded source-specific audits.
+- `public-source-candidate-verification-2026-07-14.json`: network replay receipt
+  for the exact MASSIVE archive and bound EN/ES files, TICO-19 files, and
+  FLORES+ revision/gating metadata. Its pass is source-identity-only and grants
+  no campaign eligibility.
 - `error-ledger.schema.json`: row-level diagnostic and adjudication envelope.
 - `error-ledger.wmt13-nativekd2.v1.json`: deterministic diagnostic ledger built
   from the stored WMT13 predictions. It stores row indexes, hashes, signals,
   and artifact pointers rather than duplicating source, reference, or prediction
-  text. Automated signals are not human labels.
+  text. Automated signals are not human labels. Human disposition is required
+  separately for the input/reference and for every compared system; a generic
+  row label cannot satisfy the gate.
 - `promotion-readiness.v1.json`: deterministic denial receipt for the current
   repository state. It records the population, license, human-review, run-
   contract, selection, and promotion blockers without declaring a winner.
@@ -51,6 +74,65 @@ python3 projects/distillation/translation/pipeline/check_translation_promotion_r
 
 Use `--allow-blocked` only when refreshing an audit receipt. It does not grant
 training, selection, artifact competition, or promotion authority.
+
+Evaluate a completed blinded review ledger with:
+
+```bash
+python3 projects/distillation/translation/pipeline/evaluate_translation_human_review.py REVIEW_LEDGER.json
+```
+
+The evaluator maps custodied A/B assignments only after adjudication, verifies
+the complete item-by-comparator matrix, applies the frozen paired test and Holm
+family, checks every direction/domain stratum, and emits a hashed pass or fail
+receipt. It never substitutes automatic scores for missing human dispositions.
+
+The three public source candidates are not the sealed promotion population.
+FLORES+ is explicitly gated to protect evaluation integrity, while TICO-19 and
+MASSIVE are public. They may support pre-promotion roles only after admission.
+The promotion population must contain newly commissioned or otherwise
+inaccessible, licensed material held by the external custodian and must remain
+unavailable to trainers, selectors, and ordinary agent workspaces.
+
+Replay public source identity verification with:
+
+```bash
+python3 projects/distillation/translation/pipeline/verify_translation_data_sources.py
+```
+
+Build the diagnostic human-review package only from a custodian-owned secret:
+
+```bash
+python3 projects/distillation/translation/pipeline/build_translation_error_review_package.py \
+  --ledger projects/distillation/translation/promotion/error-ledger.wmt13-nativekd2.v1.json \
+  --blinding-key /CUSTODY/blinding-key.bin \
+  --worklist-id gamma-translation-wmt13-diagnostic-review-v1 \
+  --out-worklist /REVIEWER/worklist.json \
+  --out-mapping /CUSTODY/system-mapping.json
+```
+
+The reviewer worklist contains source, reference, and randomized output labels
+but no system identities or automated signals. The separately written mapping
+is mode `0600`, binds every prediction hash, and must remain unavailable to
+reviewers. Two qualified reviewers and a distinct adjudicator must complete the
+per-system ledger; no agent may synthesize those human dispositions.
+
+After both reviewer submissions and the distinct adjudicator submission bind
+the same worklist, the custodian merges them with:
+
+```bash
+python3 projects/distillation/translation/pipeline/merge_translation_error_review.py \
+  --ledger projects/distillation/translation/promotion/error-ledger.wmt13-nativekd2.v1.json \
+  --worklist /REVIEWER/worklist.json \
+  --mapping /CUSTODY/system-mapping.json \
+  --reviewer /CUSTODY/reviewer-one.json \
+  --reviewer /CUSTODY/reviewer-two.json \
+  --adjudicator /CUSTODY/adjudicator.json \
+  --out /CUSTODY/error-ledger.adjudicated.json
+```
+
+The merge rejects missing rows or outputs, duplicate actors, an adjudicator who
+is also a reviewer, unsupported labels, missing evidence, tampered receipts,
+and an adjudication that does not bind both reviewer submission hashes.
 
 The receipt reports blockers separately for matched training, checkpoint
 selection, BF16 winner declaration, Doppler artifact competition, and promotion

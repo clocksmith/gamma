@@ -69,6 +69,9 @@
   },
   "populationPolicy": {
     "wmt13Role": "diagnostic_only",
+    "procurementContractPath": "projects/distillation/translation/promotion/population-procurement-contract.v1.json",
+    "procurementContractSha256": "f7b08e9926b27f8a97ef65f2544f97c4b97d7cf2ace01d1ae0de40c177fa671d",
+    "procurementStatus": "frozen_requirements_awaiting_materialization",
     "roles": [
       {
         "role": "calibration",
@@ -171,11 +174,13 @@
   ],
   "humanReview": {
     "role": "blocking",
+    "contractPath": "projects/distillation/translation/promotion/human-review-contract.v1.json",
+    "contractSha256": "4b47e18426ccceefeb22045a03b5c0891f1e36ef3c510438daee2a48a4e32068",
     "blinding": "Reviewers receive randomized system labels and no model, lane, seed, or artifact identity.",
     "comparison": "Item-paired candidate versus every blocking comparator in both directions and every external domain.",
     "criticalErrorClasses": ["omission", "morphology", "entity", "number", "negation", "idiom", "direction_contract"],
     "adjudication": "Two independent qualified bilingual reviewers plus a distinct adjudicator for disagreement.",
-    "thresholdStatus": "blocked_until_rubric_revision_and_statistical_rule_are_frozen_before_population_materialization"
+    "thresholdStatus": "frozen"
   },
   "matchedCampaign": {
     "errorLedger": "projects/distillation/translation/promotion/error-ledger.wmt13-nativekd2.v1.json",
@@ -237,7 +242,6 @@
       "population_manifests_and_hashes_absent",
       "population_contamination_audit_absent",
       "license_catalog_contains_unverified_sources",
-      "human_review_rubric_and_threshold_absent",
       "matched_run_contract_absent",
       "comet_evidence_absent",
       "matched_lane_receipts_absent",

@@ -21,6 +21,9 @@ CONTRACT_SCHEMA_PATH = PROMOTION_ROOT / "promotion-contract.schema.json"
 LEDGER_PATH = PROMOTION_ROOT / "error-ledger.wmt13-nativekd2.v1.json"
 LEDGER_SCHEMA_PATH = PROMOTION_ROOT / "error-ledger.schema.json"
 CATALOG_PATH = PROMOTION_ROOT / "data-license-catalog.v1.json"
+PUBLIC_SOURCE_RECEIPT_PATH = PROMOTION_ROOT / "public-source-candidate-verification-2026-07-14.json"
+POPULATION_PROCUREMENT_PATH = PROMOTION_ROOT / "population-procurement-contract.v1.json"
+POPULATION_PROCUREMENT_SCHEMA_PATH = PROMOTION_ROOT / "population-procurement-contract.schema.json"
 
 BUILDER_PATH = (
     REPO_ROOT
@@ -35,6 +38,23 @@ assert _SPEC is not None and _SPEC.loader is not None
 _BUILDER = importlib.util.module_from_spec(_SPEC)
 sys.modules[_SPEC.name] = _BUILDER
 _SPEC.loader.exec_module(_BUILDER)
+
+_REVIEW_PACKAGE_PATH = (
+    REPO_ROOT
+    / "projects"
+    / "distillation"
+    / "translation"
+    / "pipeline"
+    / "build_translation_error_review_package.py"
+)
+_REVIEW_PACKAGE_SPEC = importlib.util.spec_from_file_location(
+    "build_translation_error_review_package_contract",
+    _REVIEW_PACKAGE_PATH,
+)
+assert _REVIEW_PACKAGE_SPEC is not None and _REVIEW_PACKAGE_SPEC.loader is not None
+_REVIEW_PACKAGE = importlib.util.module_from_spec(_REVIEW_PACKAGE_SPEC)
+sys.modules[_REVIEW_PACKAGE_SPEC.name] = _REVIEW_PACKAGE
+_REVIEW_PACKAGE_SPEC.loader.exec_module(_REVIEW_PACKAGE)
 
 _BASELINE_PATH = (
     REPO_ROOT
@@ -89,6 +109,26 @@ class TranslationPromotionContractTests(unittest.TestCase):
         self.assertLessEqual(target["maximumParameters"], 1_000_000_000)
         self.assertEqual(target["directions"], ["en-es", "es-en"])
         self.assertEqual(target["evaluatedArtifact"], "exact_hosted_doppler_browser_artifact")
+
+    def test_population_procurement_contract_is_frozen_but_not_materialized(self) -> None:
+        procurement = json.loads(POPULATION_PROCUREMENT_PATH.read_text(encoding="utf-8"))
+        schema = json.loads(POPULATION_PROCUREMENT_SCHEMA_PATH.read_text(encoding="utf-8"))
+        jsonschema.Draft202012Validator(schema).validate(procurement)
+        self.assertEqual(procurement["status"], "frozen_requirements_awaiting_materialization")
+        self.assertTrue(all(role["status"] == "unmaterialized" for role in procurement["roles"]))
+        self.assertEqual(
+            {role["role"]: role["totalDistinctItems"] for role in procurement["roles"]},
+            {
+                "calibration": 300,
+                "checkpoint_selection": 1200,
+                "seed_confirmation": 1200,
+                "promotion": 1500,
+            },
+        )
+        self.assertEqual(
+            self.contract["populationPolicy"]["procurementContractSha256"],
+            hashlib.sha256(POPULATION_PROCUREMENT_PATH.read_bytes()).hexdigest(),
+        )
 
     def test_current_bf16_artifact_is_baseline_not_winner(self) -> None:
         handoff = self.contract["baselineHandoff"]
@@ -170,6 +210,69 @@ class TranslationPromotionContractTests(unittest.TestCase):
                 self.assertFalse(entry["confirmationEligible"])
                 self.assertFalse(entry["promotionEligible"])
 
+    def test_new_external_domain_sources_are_exact_candidates_not_admitted_data(self) -> None:
+        catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+        observed = {entry["sourceId"]: entry for entry in catalog["entries"]}
+        expected = {
+            "massive-1.0-en-us-es-es-candidate": (
+                "conversational_assistant",
+                "ff6bd8e4b27c3543e4f8fe2108f32bb95a6f8740",
+                "CC-BY-4.0",
+            ),
+            "tico19-en-es-la-candidate": (
+                "medical_public_health",
+                "55d70dc0b1d1d0b2151c5e22815d823fedac3f2f",
+                "CC0-1.0",
+            ),
+            "flores-plus-en-es-candidate": (
+                "general_informational",
+                "b3a5298db5721c8a682e7ef00a37fcc9ab522757",
+                "CC-BY-SA-4.0",
+            ),
+        }
+        for source_id, (domain, revision, license_id) in expected.items():
+            entry = observed[source_id]
+            self.assertEqual(entry["domain"], domain)
+            self.assertEqual(entry["sourceRevision"], revision)
+            self.assertEqual(entry["licenseId"], license_id)
+            self.assertNotEqual(entry["licenseStatus"], "verified")
+            self.assertIsNone(entry["humanApprovalReceipt"])
+            self.assertFalse(entry["trainingEligible"])
+            self.assertFalse(entry["selectionEligible"])
+            self.assertFalse(entry["confirmationEligible"])
+            self.assertFalse(entry["promotionEligible"])
+
+        flores = observed["flores-plus-en-es-candidate"]
+        self.assertEqual(flores["allowedUse"], "evaluation_candidate_only; never_training")
+        self.assertIn("gated_auto", flores["accessPolicy"])
+
+    def test_public_source_verification_receipt_is_immutable_and_non_admitting(self) -> None:
+        receipt = json.loads(PUBLIC_SOURCE_RECEIPT_PATH.read_text(encoding="utf-8"))
+        receipt_hash = receipt.pop("receiptHash")
+        canonical = json.dumps(
+            receipt,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        self.assertEqual(hashlib.sha256(canonical).hexdigest(), receipt_hash)
+        self.assertEqual(receipt["status"], "pass_source_identity_only")
+        self.assertFalse(receipt["campaignEligibilityGranted"])
+        self.assertTrue(all(source["sourceIdentityMatched"] for source in receipt["sources"]))
+        self.assertTrue(all(source["campaignEligible"] is False for source in receipt["sources"]))
+
+        catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+        candidates = {
+            entry["sourceId"]: entry
+            for entry in catalog["entries"]
+            if entry.get("sourceVerificationReceipt")
+        }
+        self.assertEqual({source["sourceId"] for source in receipt["sources"]}, set(candidates))
+        for source in receipt["sources"]:
+            entry = candidates[source["sourceId"]]
+            self.assertEqual(entry["sourceRevision"], source["sourceRevision"])
+            self.assertEqual(entry["sourceVerificationReceiptHash"], receipt_hash)
+
     def test_materialized_error_ledger_matches_schema(self) -> None:
         ledger = json.loads(LEDGER_PATH.read_text(encoding="utf-8"))
         schema = json.loads(LEDGER_SCHEMA_PATH.read_text(encoding="utf-8"))
@@ -180,6 +283,18 @@ class TranslationPromotionContractTests(unittest.TestCase):
         for row in ledger["rows"]:
             self.assertNotIn("source", row)
             self.assertNotIn("reference", row)
+            self.assertNotIn("labels", row["adjudication"])
+            self.assertEqual(row["adjudication"]["inputAssessment"]["status"], "pending")
+            self.assertEqual(
+                set(row["adjudication"]["systemAssessments"]),
+                set(row["systems"]),
+            )
+            self.assertTrue(
+                all(
+                    assessment["status"] == "pending"
+                    for assessment in row["adjudication"]["systemAssessments"].values()
+                )
+            )
             for system in row["systems"].values():
                 self.assertNotIn("prediction", system)
 
@@ -217,6 +332,69 @@ class TranslationPromotionContractTests(unittest.TestCase):
                     ledger_id="test-ledger",
                 )
 
+    def test_diagnostic_review_package_blinds_systems_and_replays(self) -> None:
+        population = {
+            "pair": "en-es",
+            "source": "Keep number 12",
+            "target_pos": "Conserva el número 12",
+            "tgt_lang": "es",
+        }
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temp_dir:
+            root = Path(temp_dir)
+            population_path = root / "population.jsonl"
+            alpha_path = root / "alpha.jsonl"
+            beta_path = root / "beta.jsonl"
+            ledger_path = root / "ledger.json"
+            population_path.write_text(json.dumps(population) + "\n", encoding="utf-8")
+            alpha_path.write_text(
+                json.dumps({**population, "pred": "Conserva el número 12"}) + "\n",
+                encoding="utf-8",
+            )
+            beta_path.write_text(
+                json.dumps({**population, "pred": "Conserva el número"}) + "\n",
+                encoding="utf-8",
+            )
+            ledger = _BUILDER.build_error_ledger(
+                population_path,
+                [("system-alpha", alpha_path), ("system-beta", beta_path)],
+                ledger_id="diagnostic-ledger-with-hidden-system-names",
+            )
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            key = b"fixed-test-key-material-32-bytes!!"
+
+            first_worklist, first_mapping = _REVIEW_PACKAGE.build_review_package(
+                ledger_path,
+                key,
+                worklist_id="blinded-review-v1",
+            )
+            second_worklist, second_mapping = _REVIEW_PACKAGE.build_review_package(
+                ledger_path,
+                key,
+                worklist_id="blinded-review-v1",
+            )
+
+            self.assertEqual(first_worklist, second_worklist)
+            self.assertEqual(first_mapping, second_mapping)
+            visible = json.dumps(first_worklist)
+            self.assertNotIn("system-alpha", visible)
+            self.assertNotIn("system-beta", visible)
+            custodied = json.dumps(first_mapping)
+            self.assertIn("system-alpha", custodied)
+            self.assertIn("system-beta", custodied)
+            self.assertEqual(first_worklist["rowCount"], 1)
+            self.assertEqual(first_worklist["systemCount"], 2)
+
+            alpha_path.write_text(
+                json.dumps({**population, "pred": "tampered"}) + "\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(RuntimeError, "prediction bytes do not match"):
+                _REVIEW_PACKAGE.build_review_package(
+                    ledger_path,
+                    key,
+                    worklist_id="blinded-review-v1",
+                )
+
     def test_current_campaign_readiness_fails_closed_without_selecting_a_winner(self) -> None:
         receipt = _READINESS.build_readiness_receipt()
 
@@ -234,11 +412,14 @@ class TranslationPromotionContractTests(unittest.TestCase):
             "population_seed_confirmation_unmaterialized",
             "population_promotion_unmaterialized",
             "license_catalog_contains_unverified_sources",
-            "human_review_rubric_and_threshold_absent",
             "matched_run_contract_absent",
             "gamma_bf16_selection_receipt_absent",
         ):
             self.assertIn(blocker, receipt["blockers"])
+        self.assertNotIn("human_review_rubric_and_threshold_absent", receipt["blockers"])
+        self.assertNotIn("population_materialization_contract_absent", receipt["blockers"])
+        self.assertTrue(receipt["humanReview"]["identityBound"])
+        self.assertTrue(receipt["populationProcurement"]["identityBound"])
 
     def test_post_training_evidence_does_not_circularly_block_matched_training(self) -> None:
         contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
@@ -269,7 +450,17 @@ class TranslationPromotionContractTests(unittest.TestCase):
         })
         ledger = json.loads(LEDGER_PATH.read_text(encoding="utf-8"))
         for row in ledger["rows"]:
-            row["adjudication"]["status"] = "adjudicated"
+            adjudication = row["adjudication"]
+            adjudication["status"] = "complete"
+            adjudication["inputAssessment"]["status"] = "usable"
+            adjudication["reviewerIds"] = ["reviewer-1", "reviewer-2"]
+            adjudication["adjudicatorId"] = "adjudicator-1"
+            adjudication["reviewerSubmissionSha256s"] = ["a" * 64, "b" * 64]
+            adjudication["adjudicatorSubmissionSha256"] = "c" * 64
+            adjudication["worklistReceiptHash"] = "d" * 64
+            adjudication["mappingReceiptHash"] = "e" * 64
+            for assessment in adjudication["systemAssessments"].values():
+                assessment["status"] = "complete"
 
         with tempfile.TemporaryDirectory(dir=PROMOTION_ROOT) as temp_dir:
             root = Path(temp_dir)

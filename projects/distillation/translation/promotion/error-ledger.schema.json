@@ -12,6 +12,7 @@
     "role": { "const": "diagnostic_only" },
     "population": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["path", "sha256", "rows"],
       "properties": {
         "path": { "type": "string" },
@@ -19,7 +20,20 @@
         "rows": { "type": "integer", "minimum": 1 }
       }
     },
-    "systems": { "type": "array", "minItems": 2, "items": { "type": "object" } },
+    "systems": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["systemId", "predictionsPath", "predictionsSha256"],
+        "properties": {
+          "systemId": { "type": "string", "minLength": 1 },
+          "predictionsPath": { "type": "string", "minLength": 1 },
+          "predictionsSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
     "errorTaxonomy": {
       "const": ["omission", "morphology", "entity", "number", "negation", "idiom", "direction_contract"]
     },
@@ -28,6 +42,7 @@
       "minItems": 1,
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "rowId",
           "rowIndex",
@@ -43,19 +58,145 @@
           "direction": { "enum": ["en-es", "es-en"] },
           "sourceSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
           "referenceSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-          "systems": { "type": "object" },
+          "systems": {
+            "type": "object",
+            "minProperties": 2,
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["predictionSha256", "automatedSignals"],
+              "properties": {
+                "predictionSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                "automatedSignals": { "type": "object" }
+              }
+            }
+          },
           "adjudication": {
             "type": "object",
-            "required": ["status", "labels", "reviewerIds", "notes"],
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "inputAssessment",
+              "systemAssessments",
+              "reviewerIds",
+              "adjudicatorId",
+              "reviewerSubmissionSha256s",
+              "adjudicatorSubmissionSha256",
+              "worklistReceiptHash",
+              "mappingReceiptHash",
+              "notes"
+            ],
             "properties": {
               "status": { "enum": ["pending", "complete"] },
-              "labels": {
-                "type": "array",
-                "items": { "enum": ["omission", "morphology", "entity", "number", "negation", "idiom", "direction_contract"] }
+              "inputAssessment": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["status", "notes"],
+                "properties": {
+                  "status": {
+                    "enum": ["pending", "usable", "source_issue", "reference_issue", "source_and_reference_issue"]
+                  },
+                  "notes": { "type": "string" }
+                }
+              },
+              "systemAssessments": {
+                "type": "object",
+                "minProperties": 2,
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["status", "errors", "notes"],
+                  "properties": {
+                    "status": { "enum": ["pending", "complete"] },
+                    "errors": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["class", "severity", "evidence"],
+                        "properties": {
+                          "class": {
+                            "enum": ["omission", "morphology", "entity", "number", "negation", "idiom", "direction_contract"]
+                          },
+                          "severity": { "enum": ["minor", "major", "critical"] },
+                          "evidence": { "type": "string", "minLength": 1 }
+                        }
+                      }
+                    },
+                    "notes": { "type": "string" }
+                  }
+                }
               },
               "reviewerIds": { "type": "array", "items": { "type": "string" } },
+              "adjudicatorId": { "type": ["string", "null"] },
+              "reviewerSubmissionSha256s": {
+                "type": "array",
+                "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+              },
+              "adjudicatorSubmissionSha256": {
+                "type": ["string", "null"],
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "worklistReceiptHash": {
+                "type": ["string", "null"],
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "mappingReceiptHash": {
+                "type": ["string", "null"],
+                "pattern": "^[0-9a-f]{64}$"
+              },
               "notes": { "type": "string" }
-            }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "status": { "const": "complete" } }
+                },
+                "then": {
+                  "properties": {
+                    "inputAssessment": {
+                      "properties": {
+                        "status": {
+                          "enum": ["usable", "source_issue", "reference_issue", "source_and_reference_issue"]
+                        }
+                      }
+                    },
+                    "systemAssessments": {
+                      "additionalProperties": {
+                        "properties": { "status": { "const": "complete" } }
+                      }
+                    },
+                    "reviewerIds": {
+                      "type": "array",
+                      "minItems": 2,
+                      "uniqueItems": true,
+                      "items": { "type": "string", "minLength": 1 }
+                    },
+                    "adjudicatorId": { "type": "string", "minLength": 1 },
+                    "reviewerSubmissionSha256s": {
+                      "type": "array",
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "uniqueItems": true,
+                      "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+                    },
+                    "adjudicatorSubmissionSha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "worklistReceiptHash": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "mappingReceiptHash": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    }
+                  }
+                }
+              }
+            ]
           }
         }
       }

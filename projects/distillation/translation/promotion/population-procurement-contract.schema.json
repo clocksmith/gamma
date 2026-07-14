@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clocksmith/gamma/projects/distillation/translation/promotion/population-procurement-contract.schema.json",
+  "title": "Gamma EN/ES population procurement and custody contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "procurementContractId",
+    "status",
+    "owner",
+    "directions",
+    "domains",
+    "roles",
+    "contentPolicy",
+    "rightsPolicy",
+    "contaminationPolicy",
+    "custodyPolicy",
+    "manifestRequirements",
+    "blockingConditions"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "procurementContractId": {
+      "const": "gamma.translation.enes.population-procurement.v1"
+    },
+    "status": { "const": "frozen_requirements_awaiting_materialization" },
+    "owner": { "const": "clocksmith/gamma" },
+    "directions": { "const": ["en-es", "es-en"] },
+    "domains": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["domainId", "definition", "requiredContent"],
+        "properties": {
+          "domainId": {
+            "enum": ["general_informational", "medical_public_health", "conversational_assistant"]
+          },
+          "definition": { "type": "string", "minLength": 1 },
+          "requiredContent": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "status",
+          "distinctItemsPerDirectionDomainCell",
+          "totalDistinctItems",
+          "sourcePolicy",
+          "custodian",
+          "access",
+          "lookBudget"
+        ],
+        "properties": {
+          "role": {
+            "enum": ["calibration", "checkpoint_selection", "seed_confirmation", "promotion"]
+          },
+          "status": { "const": "unmaterialized" },
+          "distinctItemsPerDirectionDomainCell": { "type": "integer", "minimum": 1 },
+          "totalDistinctItems": { "type": "integer", "minimum": 6 },
+          "sourcePolicy": { "type": "string", "minLength": 1 },
+          "candidateSourceIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "custodian": { "type": "string", "minLength": 1 },
+          "access": { "type": "string", "minLength": 1 },
+          "lookBudget": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "contentPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nativeSourceAuthorship",
+        "referenceCreation",
+        "reversePairReuse",
+        "modelInvolvement",
+        "naturalItemMinimumFraction",
+        "targetedChallengeMaximumFraction",
+        "contextualItemMinimumFraction",
+        "requiredPhenomena",
+        "privacy"
+      ],
+      "properties": {
+        "nativeSourceAuthorship": { "const": "English sources are authored natively for en-es; Spanish sources are authored natively for es-en." },
+        "referenceCreation": { "const": "Each reference is produced by an independent qualified professional translator with context and then quality-controlled by a second bilingual reviewer." },
+        "reversePairReuse": { "const": "forbidden" },
+        "modelInvolvement": { "const": "No candidate, comparator, teacher, frontier model, or machine translation output may author, translate, select, rewrite, or quality-control evaluation rows." },
+        "naturalItemMinimumFraction": { "const": 0.8 },
+        "targetedChallengeMaximumFraction": { "const": 0.2 },
+        "contextualItemMinimumFraction": { "const": 0.35 },
+        "requiredPhenomena": {
+          "const": ["omission", "morphology", "entity", "number", "negation", "idiom", "register", "discourse_context"]
+        },
+        "privacy": { "const": "No personal, patient, privileged, confidential, or production-customer data." }
+      }
+    },
+    "rightsPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requiredGrant", "publication", "attribution", "humanApproval"],
+      "properties": {
+        "requiredGrant": { "type": "string", "minLength": 1 },
+        "publication": { "type": "string", "minLength": 1 },
+        "attribution": { "type": "string", "minLength": 1 },
+        "humanApproval": { "const": "A named human owner signs a source-and-rights receipt before any row is materialized or viewed by Gamma." }
+      }
+    },
+    "contaminationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["populations", "checks", "unknownResult"],
+      "properties": {
+        "populations": {
+          "const": [
+            "historical_training",
+            "historical_diagnostics",
+            "new_training",
+            "teacher_generation",
+            "calibration",
+            "checkpoint_selection",
+            "seed_confirmation",
+            "promotion"
+          ]
+        },
+        "checks": {
+          "const": [
+            "exact_bytes",
+            "unicode_normalized_text",
+            "punctuation_and_whitespace_normalized_text",
+            "near_duplicate_minhash",
+            "source_url",
+            "document_family",
+            "author_or_vendor",
+            "template",
+            "semantic_similarity_review_queue"
+          ]
+        },
+        "unknownResult": { "const": "blocking" }
+      }
+    },
+    "custodyPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roleSeparation", "promotion", "accessLog", "failure"],
+      "properties": {
+        "roleSeparation": { "type": "string", "minLength": 1 },
+        "promotion": { "type": "string", "minLength": 1 },
+        "accessLog": { "type": "string", "minLength": 1 },
+        "failure": { "type": "string", "minLength": 1 }
+      }
+    },
+    "manifestRequirements": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "blockingConditions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

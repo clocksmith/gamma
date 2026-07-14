@@ -18,6 +18,11 @@ DEFAULT_CONTRACT = PROMOTION_ROOT / "promotion-contract.v1.json"
 DEFAULT_SCHEMA = PROMOTION_ROOT / "promotion-contract.schema.json"
 DEFAULT_CATALOG = PROMOTION_ROOT / "data-license-catalog.v1.json"
 DEFAULT_LEDGER = PROMOTION_ROOT / "error-ledger.wmt13-nativekd2.v1.json"
+DEFAULT_LEDGER_SCHEMA = PROMOTION_ROOT / "error-ledger.schema.json"
+DEFAULT_HUMAN_REVIEW_CONTRACT = PROMOTION_ROOT / "human-review-contract.v1.json"
+DEFAULT_HUMAN_REVIEW_SCHEMA = PROMOTION_ROOT / "human-review-contract.schema.json"
+DEFAULT_POPULATION_PROCUREMENT_CONTRACT = PROMOTION_ROOT / "population-procurement-contract.v1.json"
+DEFAULT_POPULATION_PROCUREMENT_SCHEMA = PROMOTION_ROOT / "population-procurement-contract.schema.json"
 
 EXPECTED_POPULATION_ROLES = (
     "calibration",
@@ -42,6 +47,7 @@ MATCHED_TRAINING_BLOCKERS = frozenset(
         "population_checkpoint_selection_unmaterialized",
         "population_contamination_audit_absent",
         "population_manifests_and_hashes_absent",
+        "population_materialization_contract_absent",
         "population_promotion_identity_absent",
         "population_promotion_unmaterialized",
         "population_seed_confirmation_identity_absent",
@@ -151,20 +157,55 @@ def build_readiness_receipt(
     schema_path: Path = DEFAULT_SCHEMA,
     catalog_path: Path = DEFAULT_CATALOG,
     ledger_path: Path = DEFAULT_LEDGER,
+    ledger_schema_path: Path = DEFAULT_LEDGER_SCHEMA,
+    human_review_contract_path: Path = DEFAULT_HUMAN_REVIEW_CONTRACT,
+    human_review_schema_path: Path = DEFAULT_HUMAN_REVIEW_SCHEMA,
+    population_procurement_contract_path: Path = DEFAULT_POPULATION_PROCUREMENT_CONTRACT,
+    population_procurement_schema_path: Path = DEFAULT_POPULATION_PROCUREMENT_SCHEMA,
 ) -> dict[str, Any]:
     contract = _load_json(contract_path)
     schema = _load_json(schema_path)
     catalog = _load_json(catalog_path)
     ledger = _load_json(ledger_path)
+    ledger_schema = _load_json(ledger_schema_path)
+    human_review_contract = _load_json(human_review_contract_path)
+    human_review_schema = _load_json(human_review_schema_path)
+    population_procurement_contract = _load_json(population_procurement_contract_path)
+    population_procurement_schema = _load_json(population_procurement_schema_path)
     jsonschema.Draft202012Validator(schema).validate(contract)
+    jsonschema.Draft202012Validator(ledger_schema).validate(ledger)
+    jsonschema.Draft202012Validator(human_review_schema).validate(human_review_contract)
+    jsonschema.Draft202012Validator(population_procurement_schema).validate(population_procurement_contract)
 
     blockers: set[str] = set()
     populations = _population_state(contract, blockers)
     licenses = _license_state(catalog, blockers)
 
+    population_policy = contract.get("populationPolicy", {})
+    observed_procurement_path = str(population_procurement_contract_path.relative_to(REPO_ROOT))
+    observed_procurement_hash = _sha256_file(population_procurement_contract_path)
+    procurement_contract_bound = (
+        population_policy.get("procurementContractPath") == observed_procurement_path
+        and population_policy.get("procurementContractSha256") == observed_procurement_hash
+        and population_policy.get("procurementStatus") == "frozen_requirements_awaiting_materialization"
+        and population_procurement_contract.get("status") == "frozen_requirements_awaiting_materialization"
+    )
+    if not procurement_contract_bound:
+        blockers.add("population_materialization_contract_absent")
+
     human_review = contract.get("humanReview", {})
     human_status = human_review.get("thresholdStatus")
-    if human_status != "frozen":
+    declared_human_path = human_review.get("contractPath")
+    observed_human_path = str(human_review_contract_path.relative_to(REPO_ROOT))
+    declared_human_hash = human_review.get("contractSha256")
+    observed_human_hash = _sha256_file(human_review_contract_path)
+    human_contract_bound = (
+        human_status == "frozen"
+        and human_review_contract.get("status") == "frozen_protocol_no_outcome_evidence"
+        and declared_human_path == observed_human_path
+        and declared_human_hash == observed_human_hash
+    )
+    if not human_contract_bound:
         blockers.add("human_review_rubric_and_threshold_absent")
 
     matched_campaign = contract.get("matchedCampaign", {})
@@ -175,10 +216,31 @@ def build_readiness_receipt(
         blockers.add(str(blocker))
 
     adjudication_totals: dict[str, int] = {}
+    input_assessment_totals: dict[str, int] = {}
+    system_assessment_totals: dict[str, int] = {}
+    diagnostic_rows_complete = True
     for row in ledger.get("rows", []):
-        status = str(row.get("adjudication", {}).get("status", "missing"))
+        adjudication = row.get("adjudication", {})
+        status = str(adjudication.get("status", "missing"))
         adjudication_totals[status] = adjudication_totals.get(status, 0) + 1
-    if adjudication_totals.get("pending", 0):
+        input_status = str(adjudication.get("inputAssessment", {}).get("status", "missing"))
+        input_assessment_totals[input_status] = input_assessment_totals.get(input_status, 0) + 1
+        system_assessments = adjudication.get("systemAssessments", {})
+        row_system_statuses = [
+            str(assessment.get("status", "missing"))
+            for assessment in system_assessments.values()
+            if isinstance(assessment, dict)
+        ]
+        for system_status in row_system_statuses:
+            system_assessment_totals[system_status] = system_assessment_totals.get(system_status, 0) + 1
+        if (
+            status != "complete"
+            or input_status == "pending"
+            or len(row_system_statuses) != len(ledger.get("systems", []))
+            or any(system_status != "complete" for system_status in row_system_statuses)
+        ):
+            diagnostic_rows_complete = False
+    if not diagnostic_rows_complete:
         blockers.add("diagnostic_error_ledger_human_adjudication_pending")
 
     sorted_blockers = sorted(blockers)
@@ -204,18 +266,48 @@ def build_readiness_receipt(
             "contractSchema": {"path": str(schema_path.relative_to(REPO_ROOT)), "sha256": _sha256_file(schema_path)},
             "licenseCatalog": {"path": str(catalog_path.relative_to(REPO_ROOT)), "sha256": _sha256_file(catalog_path)},
             "diagnosticErrorLedger": {"path": str(ledger_path.relative_to(REPO_ROOT)), "sha256": _sha256_file(ledger_path)},
+            "diagnosticErrorLedgerSchema": {
+                "path": str(ledger_schema_path.relative_to(REPO_ROOT)),
+                "sha256": _sha256_file(ledger_schema_path),
+            },
+            "humanReviewContract": {
+                "path": observed_human_path,
+                "sha256": observed_human_hash,
+            },
+            "humanReviewSchema": {
+                "path": str(human_review_schema_path.relative_to(REPO_ROOT)),
+                "sha256": _sha256_file(human_review_schema_path),
+            },
+            "populationProcurementContract": {
+                "path": observed_procurement_path,
+                "sha256": observed_procurement_hash,
+            },
+            "populationProcurementSchema": {
+                "path": str(population_procurement_schema_path.relative_to(REPO_ROOT)),
+                "sha256": _sha256_file(population_procurement_schema_path),
+            },
         },
         "presentClaim": contract.get("presentClaim", {}).get("status"),
         "populations": populations,
+        "populationProcurement": {
+            "status": population_procurement_contract.get("status"),
+            "identityBound": procurement_contract_bound,
+            "blockingConditions": population_procurement_contract.get("blockingConditions", []),
+        },
         "licenses": licenses,
         "humanReview": {
             "thresholdStatus": human_status,
+            "contractStatus": human_review_contract.get("status"),
+            "identityBound": human_contract_bound,
             "role": human_review.get("role"),
         },
         "diagnosticErrorLedger": {
             "role": ledger.get("role"),
             "rows": len(ledger.get("rows", [])),
             "adjudicationStatusTotals": adjudication_totals,
+            "inputAssessmentStatusTotals": input_assessment_totals,
+            "systemAssessmentStatusTotals": system_assessment_totals,
+            "complete": diagnostic_rows_complete,
         },
         "selection": {
             "authority": contract.get("baselineHandoff", {}).get("selectionAuthority"),
@@ -241,6 +333,19 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--schema", type=Path, default=DEFAULT_SCHEMA)
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
     parser.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER)
+    parser.add_argument("--ledger-schema", type=Path, default=DEFAULT_LEDGER_SCHEMA)
+    parser.add_argument("--human-review-contract", type=Path, default=DEFAULT_HUMAN_REVIEW_CONTRACT)
+    parser.add_argument("--human-review-schema", type=Path, default=DEFAULT_HUMAN_REVIEW_SCHEMA)
+    parser.add_argument(
+        "--population-procurement-contract",
+        type=Path,
+        default=DEFAULT_POPULATION_PROCUREMENT_CONTRACT,
+    )
+    parser.add_argument(
+        "--population-procurement-schema",
+        type=Path,
+        default=DEFAULT_POPULATION_PROCUREMENT_SCHEMA,
+    )
     parser.add_argument("--out", type=Path)
     parser.add_argument(
         "--allow-blocked",
@@ -257,6 +362,11 @@ def main() -> int:
         schema_path=args.schema,
         catalog_path=args.catalog,
         ledger_path=args.ledger,
+        ledger_schema_path=args.ledger_schema,
+        human_review_contract_path=args.human_review_contract,
+        human_review_schema_path=args.human_review_schema,
+        population_procurement_contract_path=args.population_procurement_contract,
+        population_procurement_schema_path=args.population_procurement_schema,
     )
     output = json.dumps(receipt, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
     if args.out:

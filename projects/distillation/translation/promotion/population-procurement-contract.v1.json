@@ -1,0 +1,154 @@
+{
+  "$schema": "./population-procurement-contract.schema.json",
+  "schemaVersion": 1,
+  "procurementContractId": "gamma.translation.enes.population-procurement.v1",
+  "status": "frozen_requirements_awaiting_materialization",
+  "owner": "clocksmith/gamma",
+  "directions": ["en-es", "es-en"],
+  "domains": [
+    {
+      "domainId": "general_informational",
+      "definition": "Factual explanatory, news, travel, civic, cultural, and practical informational prose that is not drawn from prior WMT or Gamma development material.",
+      "requiredContent": ["named_entities_and_numbers", "idioms_and_register", "multi_sentence_context"]
+    },
+    {
+      "domainId": "medical_public_health",
+      "definition": "Non-patient public-health and medical information spanning instructions, risk communication, terminology, negation, dosage-like numbers, and uncertainty.",
+      "requiredContent": ["terminology_and_morphology", "negation_and_risk", "numbers_units_and_instructions"]
+    },
+    {
+      "domainId": "conversational_assistant",
+      "definition": "Natural assistant requests and responses spanning everyday tasks, scheduling, travel, commerce, media, home, and device interactions.",
+      "requiredContent": ["entities_dates_times_and_numbers", "colloquial_idioms", "elliptical_and_context_dependent_requests"]
+    }
+  ],
+  "roles": [
+    {
+      "role": "calibration",
+      "status": "unmaterialized",
+      "distinctItemsPerDirectionDomainCell": 50,
+      "totalDistinctItems": 300,
+      "sourcePolicy": "Use only human-approved, role-assigned rows from the exact public candidates. Public visibility is acceptable because calibration cannot select or promote a model.",
+      "candidateSourceIds": [
+        "flores-plus-en-es-candidate",
+        "tico19-en-es-la-candidate",
+        "massive-1.0-en-us-es-es-candidate"
+      ],
+      "custodian": "Gamma evaluation owner",
+      "access": "Visible under a predeclared calibration look budget; forbidden for training, row curation, checkpoint selection, and promotion claims.",
+      "lookBudget": "One baseline/comparator calibration pass and one human-rubric calibration pass after manifest freeze."
+    },
+    {
+      "role": "checkpoint_selection",
+      "status": "unmaterialized",
+      "distinctItemsPerDirectionDomainCell": 200,
+      "totalDistinctItems": 1200,
+      "sourcePolicy": "Newly commissioned source and reference material from a source, author, vendor, document, and template family disjoint from every other role and all training data.",
+      "custodian": "Gamma evaluator/selector separate from trainers and data curators",
+      "access": "Rows remain hidden until all lane artifacts for a declared look are committed. Predictions and aggregate receipts may be returned; source/reference bytes remain evaluator-only.",
+      "lookBudget": "Exactly the look count frozen by the matched run contract; every attempted look is recorded and failures consume a look unless predeclared infrastructure recovery applies."
+    },
+    {
+      "role": "seed_confirmation",
+      "status": "unmaterialized",
+      "distinctItemsPerDirectionDomainCell": 200,
+      "totalDistinctItems": 1200,
+      "sourcePolicy": "Newly commissioned source and reference material from a second source, author, vendor, document, and template family disjoint from training, calibration, selection, and promotion.",
+      "custodian": "Gamma confirmation evaluator separate from trainers, curators, and the recipe selector",
+      "access": "One evaluation for each frozen seed after the recipe, checkpoint rule, decode policy, and seed identities are committed.",
+      "lookBudget": "One complete pass for each of seeds 11, 29, and 47; no row-level feedback returns before all three receipts seal."
+    },
+    {
+      "role": "promotion",
+      "status": "unmaterialized",
+      "distinctItemsPerDirectionDomainCell": 250,
+      "totalDistinctItems": 1500,
+      "sourcePolicy": "Newly commissioned source and reference material from a third independent source, author, vendor, document, and template family, created after this contract freeze and never made public before terminal evaluation.",
+      "custodian": "External promotion custodian with no training, curation, selection, conversion, or hosting role",
+      "access": "No source, reference, row metadata, or per-item result enters the ordinary Gamma, Doppler, or agent workspace. The custodian returns only the frozen aggregate and permitted audit receipt.",
+      "lookBudget": "One committed exact hosted Doppler artifact, one use. A valid quality failure consumes the population."
+    }
+  ],
+  "contentPolicy": {
+    "nativeSourceAuthorship": "English sources are authored natively for en-es; Spanish sources are authored natively for es-en.",
+    "referenceCreation": "Each reference is produced by an independent qualified professional translator with context and then quality-controlled by a second bilingual reviewer.",
+    "reversePairReuse": "forbidden",
+    "modelInvolvement": "No candidate, comparator, teacher, frontier model, or machine translation output may author, translate, select, rewrite, or quality-control evaluation rows.",
+    "naturalItemMinimumFraction": 0.8,
+    "targetedChallengeMaximumFraction": 0.2,
+    "contextualItemMinimumFraction": 0.35,
+    "requiredPhenomena": [
+      "omission",
+      "morphology",
+      "entity",
+      "number",
+      "negation",
+      "idiom",
+      "register",
+      "discourse_context"
+    ],
+    "privacy": "No personal, patient, privileged, confidential, or production-customer data."
+  },
+  "rightsPolicy": {
+    "requiredGrant": "Written rights must cover evaluation, blinded review, internal reproducibility storage, hashing, comparator processing, and use of aggregate results in commercial and public claims.",
+    "publication": "The manifest declares whether source/reference text, predictions, and limited examples may be published. Lack of redistribution rights does not permit publishing protected text.",
+    "attribution": "Every source, author, translator, reviewer, vendor, and upstream license receives the attribution required by its signed receipt without exposing sealed rows.",
+    "humanApproval": "A named human owner signs a source-and-rights receipt before any row is materialized or viewed by Gamma."
+  },
+  "contaminationPolicy": {
+    "populations": [
+      "historical_training",
+      "historical_diagnostics",
+      "new_training",
+      "teacher_generation",
+      "calibration",
+      "checkpoint_selection",
+      "seed_confirmation",
+      "promotion"
+    ],
+    "checks": [
+      "exact_bytes",
+      "unicode_normalized_text",
+      "punctuation_and_whitespace_normalized_text",
+      "near_duplicate_minhash",
+      "source_url",
+      "document_family",
+      "author_or_vendor",
+      "template",
+      "semantic_similarity_review_queue"
+    ],
+    "unknownResult": "blocking"
+  },
+  "custodyPolicy": {
+    "roleSeparation": "Trainer, teacher, curator, selector, evaluator, reviewer, adjudicator, converter, host, and promotion custodian identities and denied role combinations are receipt-bound.",
+    "promotion": "Promotion encryption keys, raw bytes, mappings, and item results remain solely with the external custodian until a terminal receipt exists.",
+    "accessLog": "Every read, prediction submission, retry, failure, export, and aggregate disclosure records actor, role, artifact hash, population hash, event type, and sequence number.",
+    "failure": "Unauthorized access, unknown overlap, identity mismatch, model-assisted row creation, or an extra look invalidates the affected population and requires a replacement contract."
+  },
+  "manifestRequirements": [
+    "population_id",
+    "role",
+    "encrypted_artifact_identity",
+    "plaintext_population_sha256_under_custody",
+    "row_count",
+    "direction_domain_cell_counts",
+    "natural_and_targeted_content_counts",
+    "contextual_item_count",
+    "source_document_family_hashes",
+    "author_translator_reviewer_vendor_receipts",
+    "rights_and_attribution_receipts",
+    "contamination_audit_receipt",
+    "access_control_policy_hash",
+    "look_budget",
+    "allowed_and_forbidden_uses"
+  ],
+  "blockingConditions": [
+    "named_population_custodians_absent",
+    "human_source_and_rights_approvals_absent",
+    "commissioned_selection_population_absent",
+    "commissioned_confirmation_population_absent",
+    "externally_custodied_promotion_population_absent",
+    "population_manifests_and_hashes_absent",
+    "population_contamination_audit_absent"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "./human-review-contract.schema.json",
+  "schemaVersion": 1,
+  "reviewContractId": "gamma.translation.enes.single-student.human-review.v1",
+  "status": "frozen_protocol_no_outcome_evidence",
+  "owner": "clocksmith/gamma",
+  "scope": {
+    "candidate": "one_committed_single-checkpoint_router-free_student",
+    "directions": ["en-es", "es-en"],
+    "domains": ["general_informational", "medical_public_health", "conversational_assistant"],
+    "blockingPhases": ["checkpoint_selection", "promotion"],
+    "seedConfirmationRole": "automatic_metrics_and_machine_guardrails_across_seeds_11_29_47; human_review_applies_to_the_committed_checkpoint_selected_after_seed_confirmation"
+  },
+  "blockingComparators": [
+    "google/translategemma-4b-it",
+    "facebook/nllb-200-distilled-600M",
+    "facebook/m2m100_1.2B"
+  ],
+  "populationMinimums": {
+    "checkpoint_selection": {
+      "distinctItemsPerDirectionDomainCell": 200,
+      "directions": 2,
+      "domains": 3
+    },
+    "promotion": {
+      "distinctItemsPerDirectionDomainCell": 250,
+      "directions": 2,
+      "domains": 3
+    }
+  },
+  "presentation": {
+    "unit": "one_source_item_candidate_comparator_pair",
+    "visibleFields": [
+      "source_text",
+      "target_direction",
+      "domain",
+      "document_context_when_available",
+      "independent_reference",
+      "output_a",
+      "output_b"
+    ],
+    "hiddenFields": [
+      "model_identity",
+      "candidate_side",
+      "lane",
+      "seed",
+      "checkpoint",
+      "artifact_format"
+    ],
+    "sideAssignment": "deterministic_hmac_sha256_with_custodian_secret_and_item_comparator_id",
+    "referencePolicy": "show_one_independent_professional_reference; never_show_teacher_or_candidate_outputs_as_reference",
+    "mappingCustody": "system_side_mapping_is_separate_from_reviewer_worklist_and_unavailable_to_reviewers"
+  },
+  "reviewerQualification": {
+    "language": "professional_or_demonstrably_equivalent_bilingual_en_es",
+    "minimumQualification": "pass_a_frozen_calibration_set_at_or_above_0.80_exact_agreement_with_gold_dispositions_and_zero_missed_direction_contract_or_negation_errors",
+    "receipt": "reviewer_identity_role_calibration_population_hash_score_and_validity_window_required",
+    "conflicts": "reviewer_must_not_have_trained_selected_or_generated_any_compared_artifact"
+  },
+  "assignment": {
+    "independentReviewersPerUnit": 2,
+    "adjudicator": "one_distinct_qualified_bilingual_adjudicator",
+    "independence": "reviewers_cannot_see_each_others_judgments_before_submission",
+    "adjudicationTrigger": "any_preference_disagreement_or_any_disagreement_on_critical_error_presence_or_severity",
+    "adjudicationVisibility": "adjudicator_sees_source_context_reference_outputs_and_both_anonymized_judgments_but_not_system_identity"
+  },
+  "rubric": {
+    "blindedPreferenceLabels": ["output_a_better", "tie", "output_b_better"],
+    "canonicalPreferenceLabels": ["candidate_better", "tie", "comparator_better"],
+    "severityLabels": ["none", "minor", "major", "critical"],
+    "criticalErrorClasses": [
+      "omission",
+      "morphology",
+      "entity",
+      "number",
+      "negation",
+      "idiom",
+      "direction_contract"
+    ],
+    "decisionOrder": [
+      "preservation_of_meaning",
+      "critical_error_avoidance",
+      "target_language_correctness",
+      "register_and_context",
+      "fluency",
+      "minimal_unnecessary_addition"
+    ]
+  },
+  "statisticalDecision": {
+    "alpha": 0.05,
+    "primaryTest": "one_sided_exact_paired_sign_test_candidate_better_than_comparator",
+    "multiplicity": "holm_bonferroni_across_the_three_blocking_comparator_tests_within_each_phase",
+    "tiePolicy": "exclude_ties_from_the_exact_sign_test_but_report_them",
+    "overallRule": "for_every_blocking_comparator_candidate_better_count_exceeds_comparator_better_count_and_holm_adjusted_p_is_at_most_0.05",
+    "stratumGuardrail": "for_every_blocking_comparator_candidate_better_count_is_not_less_than_comparator_better_count_in_each_direction_each_domain_and_each_direction_by_domain_cell",
+    "criticalErrorGuardrail": "for_every_blocking_comparator_and_critical_error_class_candidate_count_is_not_greater_than_comparator_count; candidate_direction_contract_count_must_be_zero",
+    "completenessRule": "all_expected_item_comparator_pairs_have_two_independent_judgments_a_complete_final_disposition_and_bound_output_hashes; candidate_output_hash_and_candidate_error_labels_are_consistent_across_comparators_for_each_item; missing_malformed_duplicate_or_unblinded_units_block",
+    "passRule": "all_overall_tests_all_stratum_guardrails_all_critical_error_guardrails_and_completeness_must_pass; no_scalar_average_compensates_for_a_blocking_failure"
+  },
+  "failurePolicy": {
+    "unqualifiedReviewer": "invalidate_affected_units_before_unblinding",
+    "identityExposure": "invalidate_affected_units_and_issue_invalidation_receipt",
+    "missingDisposition": "blocking_failure_no_imputation",
+    "promotionFailure": "terminal_failure_consumes_the_one_use_population_look"
+  }
+}

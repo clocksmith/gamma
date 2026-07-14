@@ -122,9 +122,21 @@
     "populationPolicy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["wmt13Role", "roles", "overlapPolicy"],
+      "required": [
+        "wmt13Role",
+        "procurementContractPath",
+        "procurementContractSha256",
+        "procurementStatus",
+        "roles",
+        "overlapPolicy"
+      ],
       "properties": {
         "wmt13Role": { "const": "diagnostic_only" },
+        "procurementContractPath": {
+          "const": "projects/distillation/translation/promotion/population-procurement-contract.v1.json"
+        },
+        "procurementContractSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "procurementStatus": { "const": "frozen_requirements_awaiting_materialization" },
         "roles": {
           "type": "array",
           "minItems": 4,
@@ -197,7 +209,42 @@
         }
       }
     },
-    "humanReview": { "type": "object" },
+    "humanReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "contractPath",
+        "contractSha256",
+        "blinding",
+        "comparison",
+        "criticalErrorClasses",
+        "adjudication",
+        "thresholdStatus"
+      ],
+      "properties": {
+        "role": { "const": "blocking" },
+        "contractPath": {
+          "const": "projects/distillation/translation/promotion/human-review-contract.v1.json"
+        },
+        "contractSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "blinding": { "type": "string", "minLength": 1 },
+        "comparison": { "type": "string", "minLength": 1 },
+        "criticalErrorClasses": {
+          "const": [
+            "omission",
+            "morphology",
+            "entity",
+            "number",
+            "negation",
+            "idiom",
+            "direction_contract"
+          ]
+        },
+        "adjudication": { "type": "string", "minLength": 1 },
+        "thresholdStatus": { "const": "frozen" }
+      }
+    },
     "matchedCampaign": { "type": "object" },
     "baseModelComparison": { "type": "object" },
     "deploymentFidelity": { "type": "object" },
