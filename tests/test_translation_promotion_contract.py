@@ -240,6 +240,65 @@ class TranslationPromotionContractTests(unittest.TestCase):
         ):
             self.assertIn(blocker, receipt["blockers"])
 
+    def test_post_training_evidence_does_not_circularly_block_matched_training(self) -> None:
+        contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+        for population in contract["populationPolicy"]["roles"]:
+            population["status"] = "frozen"
+            population["manifestPath"] = f"custody/{population['role']}.manifest.json"
+            population["populationHash"] = "a" * 64
+        contract["humanReview"]["thresholdStatus"] = "frozen"
+        contract["matchedCampaign"]["runContract"] = "promotion/matched-run-contract.v1.json"
+        contract["promotionDecision"]["blockers"] = [
+            "comet_evidence_absent",
+            "matched_lane_receipts_absent",
+            "seed_confirmation_absent",
+            "gamma_bf16_selection_receipt_absent",
+            "bf16_quality_target_not_met",
+            "hosted_artifact_quality_target_not_met",
+            "one_use_promotion_receipt_absent",
+        ]
+
+        catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+        catalog["status"] = "ready"
+        catalog["entries"][0].update({
+            "licenseStatus": "verified",
+            "trainingEligible": True,
+            "selectionEligible": True,
+            "confirmationEligible": True,
+            "promotionEligible": True,
+        })
+        ledger = json.loads(LEDGER_PATH.read_text(encoding="utf-8"))
+        for row in ledger["rows"]:
+            row["adjudication"]["status"] = "adjudicated"
+
+        with tempfile.TemporaryDirectory(dir=PROMOTION_ROOT) as temp_dir:
+            root = Path(temp_dir)
+            contract_path = root / "contract.json"
+            schema_path = root / "schema.json"
+            catalog_path = root / "catalog.json"
+            ledger_path = root / "ledger.json"
+            contract_path.write_text(json.dumps(contract), encoding="utf-8")
+            schema_path.write_text(CONTRACT_SCHEMA_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+            catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            receipt = _READINESS.build_readiness_receipt(
+                contract_path=contract_path,
+                schema_path=schema_path,
+                catalog_path=catalog_path,
+                ledger_path=ledger_path,
+            )
+
+        self.assertTrue(receipt["admission"]["matchedTrainingAllowed"])
+        self.assertFalse(receipt["admission"]["checkpointSelectionAllowed"])
+        self.assertFalse(receipt["admission"]["bf16WinnerDeclarationAllowed"])
+        self.assertFalse(receipt["admission"]["dopplerArtifactCompetitionAllowed"])
+        self.assertFalse(receipt["admission"]["promotionAllowed"])
+        self.assertEqual(receipt["admissionBlockers"]["matchedTraining"], [])
+        self.assertIn(
+            "matched_lane_receipts_absent",
+            receipt["admissionBlockers"]["checkpointSelection"],
+        )
+
     def test_committed_readiness_receipt_matches_current_inputs(self) -> None:
         committed = json.loads(
             (PROMOTION_ROOT / "promotion-readiness.v1.json").read_text(encoding="utf-8")

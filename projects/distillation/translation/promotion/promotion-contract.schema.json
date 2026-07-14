@@ -139,8 +139,22 @@
               "status": { "enum": ["unmaterialized", "frozen"] },
               "allowedUses": { "type": "array", "items": { "type": "string" } },
               "forbiddenAccess": { "type": "array", "items": { "type": "string" } },
-              "lookPolicy": { "type": "string", "minLength": 1 }
-            }
+              "lookPolicy": { "type": "string", "minLength": 1 },
+              "manifestPath": { "type": "string", "minLength": 1 },
+              "populationHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": { "const": "frozen" }
+                  }
+                },
+                "then": {
+                  "required": ["manifestPath", "populationHash"]
+                }
+              }
+            ]
           }
         },
         "overlapPolicy": { "type": "string", "minLength": 1 }

@@ -52,6 +52,13 @@ python3 projects/distillation/translation/pipeline/check_translation_promotion_r
 Use `--allow-blocked` only when refreshing an audit receipt. It does not grant
 training, selection, artifact competition, or promotion authority.
 
+The receipt reports blockers separately for matched training, checkpoint
+selection, BF16 winner declaration, Doppler artifact competition, and promotion
+submission. Outcome evidence such as matched-lane receipts, seed confirmation,
+or a Gamma winner receipt cannot circularly block the training phase that must
+produce it. Population, license, contamination, human-review-rule, error-ledger,
+and matched-run-contract blockers still fail closed before training.
+
 ## Required order
 
 1. Preserve the current NativeKD2 BF16 baseline, freeze the Gamma-to-Doppler
