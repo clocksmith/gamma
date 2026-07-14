@@ -14,7 +14,7 @@ A 100M RSS pass would still not prove a full 1G target result.
 
 | PPMD cap KiB | Candidate | Latest sub-10M scope | Latest sub-10M score | 1M RSS | 10M archive | 10M score | 10M determinism | 10M RSS | 100M RSS | 10M result |
 |---:|---|---:|---:|---|---:|---:|---|---|---|---|
-| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | n/a | n/a | missing | n/a | n/a | n/a | missing | rss running (terminal margin pending) | n/a |
+| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | n/a | n/a | missing | n/a | n/a | n/a | missing | rss pass (1,588,440 KiB margin) | n/a |
 
 ## Decimal 10GB Risk
 
@@ -27,7 +27,7 @@ decimal_10gb_guard_kib = 9,765,625
 
 | PPMD cap KiB | Candidate | 1M decimal RSS | 10M decimal RSS | 100M decimal RSS |
 |---:|---|---|---|---|
-| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | missing | missing | running (terminal margin pending) |
+| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | missing | missing | within (868,305 KiB margin; tree 747,677 KiB margin) |
 
 ## PPMD-Only Decimal Feasibility
 
@@ -44,5 +44,4 @@ because that is the current active boundary.
 
 ## Current Read
 
-- `ppmd20352k` is the active restarted ladder: active gate is `100,000,000` bytes with RSS status rss running (terminal margin pending).
-- The next mutation should wait until this live guard records a terminal receipt.
+- The next mutation should be selected only after the active promotion receipt exists.
