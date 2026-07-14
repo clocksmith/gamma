@@ -13,7 +13,29 @@ Terminology used in this document:
 - Stage A checkpoint: a checkpoint under `stage_a/`.
 - Stage B continuation: follow-on distillation training under `stage_b/`.
 
-## Current strict student-teacher proof
+## Promotion boundary
+
+The canonical future promotion target is
+[`promotion/promotion-contract.v1.json`](./promotion/promotion-contract.v1.json),
+with its human-readable operating rules in
+[`promotion/README.md`](./promotion/README.md). The target is one checkpoint,
+no router, at most 1B parameters, both EN to ES and ES to EN, evaluated as the
+exact hosted Doppler browser artifact.
+
+Current results establish feasibility, not promotion. WMT13 is now
+diagnostic-only because its references and results influenced data,
+checkpoint, decode, and router selection. It cannot select or promote a future
+candidate. Promotion remains blocked on disjoint population manifests,
+verified data licenses, COMET, blinded human review, matched lanes, confirmed
+seeds, exact hosted-artifact quality, and a one-use externally custodied final
+evaluation.
+
+The current NativeKD2 BF16 checkpoint is a frozen reproducibility baseline,
+not the BF16 winner. Before Columbo, Doppler may freeze its handoff format and
+build shared import/parity machinery. Gamma retains sole checkpoint-selection
+authority and will issue no winner receipt until the new campaign completes.
+
+## Current in-domain feasibility evidence
 
 The artifact-backed Gemma 3 1B Savant student beats the current
 `google/translategemma-4b-it` teacher on both primary metrics on the 128-row
@@ -33,7 +55,7 @@ chrF is not yet a student win.
 Receipt:
 `projects/distillation/translation/runs/savant_student_teacher_paired_20260710/claim_receipt.md`
 
-## Current external frontier
+## Current WMT13 diagnostic frontier
 
 The balanced native-prompt KD2 checkpoint at `mixed/checkpoint-000025` is the
 current single-checkpoint external leader. A WMT12-trained, reference-free MLP
@@ -59,7 +81,7 @@ Receipts:
 - `projects/distillation/translation/runs/savant_nativekd2_candidate_logprob_rerank_20260710/selector/external_wmt13_128_mlp/compare_eval_summary.json`
 - `projects/distillation/translation/runs/translategemma4b_es_en_gemma3_1b_savant_selectorsft_balanced_lr1e7_steps30_20260710/stage_a_checkpoint_sweep_greedy_studentonly_external/scoreboard.md`
 
-## Historical proof point
+## Historical feasibility point
 
 On the stored `1280`-row ablation run (`translategemma4b_es_en_gemma3_1b_full_20260303_114100`), the Stage A checkpoint at 32k steps (`stage_a/checkpoint-032000`) is close to the teacher on external BLEU:
 

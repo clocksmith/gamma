@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clocksmith/gamma/projects/distillation/translation/promotion/promotion-contract.schema.json",
+  "title": "Gamma EN/ES single-student promotion contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contractId",
+    "contractState",
+    "owner",
+    "presentClaim",
+    "baselineHandoff",
+    "promotionTarget",
+    "populationPolicy",
+    "comparators",
+    "metrics",
+    "humanReview",
+    "matchedCampaign",
+    "baseModelComparison",
+    "deploymentFidelity",
+    "promotionDecision"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "contractId": { "const": "gamma.translation.enes.single-student.promotion.v1" },
+    "contractState": {
+      "enum": [
+        "target_frozen_populations_unmaterialized",
+        "campaign_ready",
+        "candidate_committed",
+        "terminal"
+      ]
+    },
+    "owner": { "const": "clocksmith/gamma" },
+    "presentClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "summary", "evidence", "absentEvidence"],
+      "properties": {
+        "status": { "const": "feasibility_only" },
+        "summary": { "type": "string", "minLength": 1 },
+        "evidence": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+        "absentEvidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "baselineHandoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "purpose",
+        "dopplerContract",
+        "selectionAuthority",
+        "selectionReceipt",
+        "preColumboAllowed",
+        "preGammaSelectionForbidden"
+      ],
+      "properties": {
+        "status": { "const": "baseline_frozen_not_selected" },
+        "purpose": {
+          "const": [
+            "reproducible_nativekd2_bf16_baseline",
+            "trainer_to_doppler_handoff_format",
+            "shared_import_and_parity_machinery"
+          ]
+        },
+        "dopplerContract": { "type": "string", "minLength": 1 },
+        "selectionAuthority": { "const": "clocksmith/gamma" },
+        "selectionReceipt": { "const": null },
+        "preColumboAllowed": {
+          "const": [
+            "preserve_baseline",
+            "freeze_handoff",
+            "implement_shared_import_parity"
+          ]
+        },
+        "preGammaSelectionForbidden": {
+          "const": [
+            "declare_bf16_winner",
+            "run_doppler_artifact_competition",
+            "promote_translation_artifact"
+          ]
+        }
+      }
+    },
+    "promotionTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkpointCount",
+        "routerAllowed",
+        "maximumParameters",
+        "directions",
+        "evaluatedArtifact",
+        "externalDomainMinimum",
+        "confirmedSeeds"
+      ],
+      "properties": {
+        "checkpointCount": { "const": 1 },
+        "routerAllowed": { "const": false },
+        "maximumParameters": { "const": 1000000000 },
+        "directions": {
+          "const": ["en-es", "es-en"]
+        },
+        "evaluatedArtifact": { "const": "exact_hosted_doppler_browser_artifact" },
+        "externalDomainMinimum": { "type": "integer", "minimum": 2 },
+        "confirmedSeeds": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "populationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wmt13Role", "roles", "overlapPolicy"],
+      "properties": {
+        "wmt13Role": { "const": "diagnostic_only" },
+        "roles": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["role", "status", "allowedUses", "forbiddenAccess", "lookPolicy"],
+            "properties": {
+              "role": {
+                "enum": ["calibration", "checkpoint_selection", "seed_confirmation", "promotion"]
+              },
+              "status": { "enum": ["unmaterialized", "frozen"] },
+              "allowedUses": { "type": "array", "items": { "type": "string" } },
+              "forbiddenAccess": { "type": "array", "items": { "type": "string" } },
+              "lookPolicy": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "overlapPolicy": { "type": "string", "minLength": 1 }
+      }
+    },
+    "comparators": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["modelId", "revision", "tokenizerId", "tokenizerRevision", "role"],
+        "properties": {
+          "modelId": { "type": "string", "minLength": 1 },
+          "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "tokenizerId": { "type": "string", "minLength": 1 },
+          "tokenizerRevision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "role": { "enum": ["blocking", "diagnostic"] }
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["metricId", "implementation", "role", "comparisonRule", "strata"],
+        "properties": {
+          "metricId": { "enum": ["bleu", "chrf", "comet"] },
+          "implementation": { "type": "object" },
+          "role": { "const": "blocking" },
+          "comparisonRule": { "const": "strictly_greater_than_each_blocking_comparator" },
+          "strata": {
+            "type": "array",
+            "minItems": 3,
+            "uniqueItems": true,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "humanReview": { "type": "object" },
+    "matchedCampaign": { "type": "object" },
+    "baseModelComparison": { "type": "object" },
+    "deploymentFidelity": { "type": "object" },
+    "promotionDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "blockers"],
+      "properties": {
+        "status": { "enum": ["blocked", "passed", "failed"] },
+        "blockers": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

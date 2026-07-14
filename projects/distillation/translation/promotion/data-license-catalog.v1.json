@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "gamma.translation.enes.promotion-data-license.v1",
+  "status": "blocked_unverified_licenses",
+  "eligibilityRule": "A source may enter the new campaign only when its exact source revision or bytes, license text and revision, allowed use, redistribution rule, derived-artifact rule, and human approval receipt are recorded. Unknown or missing fields block use.",
+  "entries": [
+    {
+      "sourceId": "wmt13-enes-128-legacy",
+      "dataset": "WMT13 EN/ES evaluation subset",
+      "artifactPath": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl",
+      "sha256": "8454f014eee7ba862c3d4cc4a80169c99e47de2ec39cc5baa176424859db6c47",
+      "historicalUse": ["data_selection", "checkpoint_selection", "decode_selection", "router_evaluation"],
+      "newCampaignRoles": ["diagnostic_only"],
+      "licenseStatus": "unverified",
+      "licenseId": null,
+      "licenseRevision": null,
+      "allowedUse": "diagnostic_only_pending_license_review",
+      "trainingEligible": false,
+      "selectionEligible": false,
+      "confirmationEligible": false,
+      "promotionEligible": false
+    },
+    {
+      "sourceId": "sacrebleu-wmt12-enes-bidirectional-legacy",
+      "dataset": "sacreBLEU WMT12 EN/ES",
+      "artifactPath": "projects/distillation/translation/training_data/savant_wmt/sacrebleu_wmt12_en_es_bidirectional.local.jsonl",
+      "sha256": "f923a8fc42703448d0c2dae037e38ae028926b1dddaedf2b4c9f3d217eff6b3e",
+      "historicalUse": ["router_training", "sequence_distillation_source", "diagnostic"],
+      "newCampaignRoles": [],
+      "licenseStatus": "unverified",
+      "licenseId": null,
+      "licenseRevision": null,
+      "allowedUse": "historical_local_research_only",
+      "trainingEligible": false,
+      "selectionEligible": false,
+      "confirmationEligible": false,
+      "promotionEligible": false
+    },
+    {
+      "sourceId": "news-commentary-enes-legacy",
+      "dataset": "Helsinki-NLP/news_commentary en-es",
+      "sourceRevision": "bbaf548083e788e0e6d2ca68efc325283fe2aff5",
+      "artifactPath": "projects/distillation/translation/training_data/savant_news/news_commentary_en_es.local.jsonl",
+      "sha256": "a3dbccfd902e12796062fb01ab9756a054a70ff612d471cb62156996e6a61c76",
+      "historicalUse": ["sequence_distillation_source", "diagnostic"],
+      "newCampaignRoles": [],
+      "licenseStatus": "unverified",
+      "licenseId": null,
+      "licenseRevision": null,
+      "allowedUse": "historical_local_research_only",
+      "trainingEligible": false,
+      "selectionEligible": false,
+      "confirmationEligible": false,
+      "promotionEligible": false
+    }
+  ],
+  "requiredUnmaterializedCatalogCells": [
+    "licensed_training_sources_by_domain_and_direction",
+    "calibration_population_sources",
+    "checkpoint_selection_population_sources",
+    "seed_confirmation_population_sources",
+    "externally_custodied_promotion_population_sources",
+    "multi_teacher_output_license_and_derived_artifact_terms"
+  ]
+}

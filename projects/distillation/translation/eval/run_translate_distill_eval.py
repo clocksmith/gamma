@@ -275,11 +275,13 @@ def _parse_args() -> argparse.Namespace:
         ),
     )
     ap.add_argument("--model", required=True, help="Student candidate model (HF model id/path or checkpoint path).")
+    ap.add_argument("--model-revision", default="", help="Immutable student model revision for remote model IDs.")
     ap.add_argument(
         "--interpolate-model",
         default="",
         help="Optional same-architecture checkpoint used for in-memory student weight interpolation.",
     )
+    ap.add_argument("--interpolate-model-revision", default="", help="Immutable interpolation model revision.")
     ap.add_argument(
         "--interpolate-alpha",
         type=float,
@@ -291,6 +293,7 @@ def _parse_args() -> argparse.Namespace:
         default="",
         help="Optional teacher model for baseline comparison.",
     )
+    ap.add_argument("--teacher-model-revision", default="", help="Immutable teacher model revision.")
     ap.add_argument(
         "--vocab-subset-dir",
         default="",
@@ -304,6 +307,8 @@ def _parse_args() -> argparse.Namespace:
             "Defaults to --teacher-model."
         ),
     )
+    ap.add_argument("--tokenizer-revision", default="", help="Immutable student tokenizer revision.")
+    ap.add_argument("--teacher-tokenizer-revision", default="", help="Immutable teacher tokenizer revision.")
     ap.add_argument(
         "--source-langs",
         default="",
@@ -363,6 +368,11 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--eval-chrf", action="store_true", help="Compute chrF if available.")
     ap.add_argument("--eval-comet", action="store_true", help="Compute COMET if comet package is available.")
     ap.add_argument("--comet-model", default="Unbabel/wmt22-comet-da", help="COMET checkpoint id/path.")
+    ap.add_argument(
+        "--comet-revision",
+        default="2760a223ac957f30acfb18c8aa649b01cf1d75f2",
+        help="Immutable COMET model revision for remote model IDs.",
+    )
     ap.add_argument("--comet-batch-size", type=int, default=8)
     ap.add_argument(
         "--allow-compat-mismatch",
@@ -561,14 +571,52 @@ def _to_chat_text(tokenizer, source_lang: str, target_lang: str, source_text: st
     return prompt_text
 
 
-def _load_model_and_tokenizer(model_ref: str, device: str, dtype: torch.dtype, local_files_only: bool):
-    tok = AutoTokenizer.from_pretrained(model_ref, local_files_only=local_files_only)
+def _revision_kwargs(revision: str) -> dict[str, str]:
+    value = str(revision).strip()
+    return {"revision": value} if value else {}
+
+
+def _resolve_tokenizer_identity(
+    model_ref: str,
+    model_revision: str,
+    tokenizer_ref: str = "",
+    tokenizer_revision: str = "",
+) -> tuple[str, str]:
+    effective_ref = str(tokenizer_ref).strip() or model_ref
+    effective_revision = str(tokenizer_revision).strip()
+    if not effective_revision and effective_ref == model_ref:
+        effective_revision = str(model_revision).strip()
+    return effective_ref, effective_revision
+
+
+def _load_model_and_tokenizer(
+    model_ref: str,
+    device: str,
+    dtype: torch.dtype,
+    local_files_only: bool,
+    *,
+    model_revision: str = "",
+    tokenizer_ref: str = "",
+    tokenizer_revision: str = "",
+):
+    effective_tokenizer_ref, effective_tokenizer_revision = _resolve_tokenizer_identity(
+        model_ref,
+        model_revision,
+        tokenizer_ref,
+        tokenizer_revision,
+    )
+    tok = AutoTokenizer.from_pretrained(
+        effective_tokenizer_ref,
+        local_files_only=local_files_only,
+        **_revision_kwargs(effective_tokenizer_revision),
+    )
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
     model = AutoModelForCausalLM.from_pretrained(
         model_ref,
         torch_dtype=dtype,
         local_files_only=local_files_only,
+        **_revision_kwargs(model_revision),
     )
     model.to(device)
     model.eval()
@@ -603,19 +651,36 @@ def _load_interpolated_model_and_tokenizer(
     device: str,
     dtype: torch.dtype,
     local_files_only: bool,
+    *,
+    base_revision: str = "",
+    tuned_revision: str = "",
+    tokenizer_ref: str = "",
+    tokenizer_revision: str = "",
 ):
-    tokenizer = AutoTokenizer.from_pretrained(base_ref, local_files_only=local_files_only)
+    effective_tokenizer_ref, effective_tokenizer_revision = _resolve_tokenizer_identity(
+        base_ref,
+        base_revision,
+        tokenizer_ref,
+        tokenizer_revision,
+    )
+    tokenizer = AutoTokenizer.from_pretrained(
+        effective_tokenizer_ref,
+        local_files_only=local_files_only,
+        **_revision_kwargs(effective_tokenizer_revision),
+    )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     base = AutoModelForCausalLM.from_pretrained(
         base_ref,
         torch_dtype=dtype,
         local_files_only=local_files_only,
+        **_revision_kwargs(base_revision),
     )
     tuned = AutoModelForCausalLM.from_pretrained(
         tuned_ref,
         torch_dtype=dtype,
         local_files_only=local_files_only,
+        **_revision_kwargs(tuned_revision),
     )
     _interpolate_module_weights(base, tuned, float(alpha))
     del tuned
@@ -772,14 +837,19 @@ def _normalize_metric_path(model_path: str) -> str | None:
     return None
 
 
-def _resolve_comet_checkpoint(path: str, allow_download: bool) -> tuple[str, str | None]:
-    cached = _COMET_MODEL_CACHE.get(path)
+def _resolve_comet_checkpoint(
+    path: str,
+    allow_download: bool,
+    revision: str = "",
+) -> tuple[str, str | None]:
+    cache_key = f"{path}@{revision}" if revision else path
+    cached = _COMET_MODEL_CACHE.get(cache_key)
     if isinstance(cached, str):
         return cached, None
 
     p = _normalize_metric_path(path)
     if p is not None:
-        _COMET_MODEL_CACHE[path] = p
+        _COMET_MODEL_CACHE[cache_key] = p
         return p, None
 
     # Remote Hugging Face style identifiers typically look like "org/repo".
@@ -795,7 +865,13 @@ def _resolve_comet_checkpoint(path: str, allow_download: bool) -> tuple[str, str
         return path, "comet model not found locally and --allow-download is disabled"
 
     try:
-        local_snapshot = Path(snapshot_download(repo_id=path, local_files_only=False))
+        local_snapshot = Path(
+            snapshot_download(
+                repo_id=path,
+                revision=revision or None,
+                local_files_only=False,
+            )
+        )
     except Exception as e:
         return path, f"failed to download COMET checkpoint {path}: {e}"
 
@@ -803,7 +879,7 @@ def _resolve_comet_checkpoint(path: str, allow_download: bool) -> tuple[str, str
     if resolved is None:
         return path, f"no checkpoint found in downloaded COMET artifact: {local_snapshot}"
 
-    _COMET_MODEL_CACHE[path] = resolved
+    _COMET_MODEL_CACHE[cache_key] = resolved
     return resolved, None
 
 def _compute_metrics(predictions: list[str], references: list[str], do_bleu: bool, do_chrf: bool) -> dict[str, Any]:
@@ -884,6 +960,7 @@ def _compute_comet(
     predictions: list[str],
     references: list[str],
     comet_model_path: str,
+    comet_model_revision: str,
     batch_size: int,
     allow_download: bool,
 ) -> dict[str, Any]:
@@ -895,6 +972,7 @@ def _compute_comet(
         resolved_model_path, model_error = _resolve_comet_checkpoint(
             comet_model_path,
             allow_download=allow_download,
+            revision=comet_model_revision,
         )
         if model_error:
             return _safe_metric_error(model_error)
@@ -927,6 +1005,8 @@ def _compute_comet(
             "available": True,
             "score": float(statistics.fmean(scores)),
             "count": int(len(scores)),
+            "model_id": comet_model_path,
+            "model_revision": comet_model_revision,
         }
     except Exception as e:
         return _safe_metric_error(f"comet inference failed: {e}")
@@ -948,13 +1028,27 @@ def _evaluate_model(
     del source_langs, target_langs
     device = _resolve_device(str(args.device))
     dtype = _choose_torch_dtype(str(args.dtype))
+    model_revision = str(args.model_revision if label == "student" else args.teacher_model_revision)
+    tokenizer_revision = str(
+        args.tokenizer_revision if label == "student" else args.teacher_tokenizer_revision
+    )
+    effective_tokenizer_ref, effective_tokenizer_revision = _resolve_tokenizer_identity(
+        model_ref,
+        model_revision,
+        tokenizer_ref,
+        tokenizer_revision,
+    )
     vocab_remap = None
     tokenizer = None
     if str(vocab_subset_dir).strip():
         base_tok_ref = str(tokenizer_ref).strip()
         if not base_tok_ref:
             base_tok_ref = model_ref
-        tokenizer = AutoTokenizer.from_pretrained(base_tok_ref, local_files_only=bool(args.local_files_only))
+        tokenizer = AutoTokenizer.from_pretrained(
+            base_tok_ref,
+            local_files_only=bool(args.local_files_only),
+            **_revision_kwargs(effective_tokenizer_revision),
+        )
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
         vocab_remap = _load_vocab_remap(str(vocab_subset_dir), tokenizer)
@@ -968,9 +1062,21 @@ def _evaluate_model(
             device,
             dtype,
             bool(args.local_files_only),
+            base_revision=model_revision,
+            tuned_revision=str(args.interpolate_model_revision),
+            tokenizer_ref=effective_tokenizer_ref,
+            tokenizer_revision=effective_tokenizer_revision,
         )
     elif tokenizer is None:
-        model, tokenizer = _load_model_and_tokenizer(model_ref, device, dtype=dtype, local_files_only=bool(args.local_files_only))
+        model, tokenizer = _load_model_and_tokenizer(
+            model_ref,
+            device,
+            dtype=dtype,
+            local_files_only=bool(args.local_files_only),
+            model_revision=model_revision,
+            tokenizer_ref=effective_tokenizer_ref,
+            tokenizer_revision=effective_tokenizer_revision,
+        )
     else:
         if interpolate_model:
             raise RuntimeError("Weight interpolation is not supported with a vocab subset.")
@@ -978,6 +1084,7 @@ def _evaluate_model(
             model_ref,
             torch_dtype=dtype,
             local_files_only=bool(args.local_files_only),
+            **_revision_kwargs(model_revision),
         ).to(device)
         model.eval()
 
@@ -1046,6 +1153,7 @@ def _evaluate_model(
                 pred,
                 ref,
                 str(args.comet_model),
+                str(args.comet_revision),
                 int(args.comet_batch_size),
                 allow_download=not bool(args.local_files_only),
             )
@@ -1057,12 +1165,16 @@ def _evaluate_model(
             preds,
             refs,
             str(args.comet_model),
+            str(args.comet_revision),
             int(args.comet_batch_size),
             allow_download=not bool(args.local_files_only),
         )
 
     summary = {
         "model": str(model_ref),
+        "model_revision": model_revision,
+        "tokenizer": effective_tokenizer_ref,
+        "tokenizer_revision": effective_tokenizer_revision,
         "label": label,
         "count": int(len(rng)),
         "vocab_subset_dir": str(vocab_subset_dir),
@@ -1217,9 +1329,9 @@ def main() -> int:
         },
         "provenance": {
             "model_id": str(args.model),
-            "model_revision": "",
-            "tokenizer_id": str(args.tokenizer_model or args.teacher_model or args.model),
-            "tokenizer_revision": "",
+            "model_revision": str(args.model_revision),
+            "tokenizer_id": str(student_summary.get("tokenizer", student_tokenizer_ref)),
+            "tokenizer_revision": str(student_summary.get("tokenizer_revision", "")),
             "eval_dataset_path": str(args.pairs),
             "eval_dataset_label": "",
             "eval_offset": int(args.eval_offset),
@@ -1236,6 +1348,8 @@ def main() -> int:
             "num_candidates": int(args.num_candidates),
             "candidate_selection": str(args.candidate_selection),
             "comet_available": comet_available,
+            "comet_model_id": str(args.comet_model) if args.eval_comet else "",
+            "comet_model_revision": str(args.comet_revision) if args.eval_comet else "",
         },
     }
 

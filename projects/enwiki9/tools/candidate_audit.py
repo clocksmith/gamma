@@ -117,13 +117,24 @@ def count_dirs(path: pathlib.Path) -> int:
     return sum(1 for child in path.rglob("*") if child.is_dir()) + 1
 
 
-def driver_program_size(program_dir: pathlib.Path) -> int:
+def missing_payload_targets(program_dir: pathlib.Path) -> list[str]:
+    return sorted(
+        child.name
+        for child in program_dir.iterdir()
+        if child.is_symlink() and not child.exists()
+    )
+
+
+def driver_program_size(program_dir: pathlib.Path) -> int | None:
     size = 0
     for child in sorted(program_dir.iterdir()):
         if child.name in ("meta.json", "__pycache__") or child.name.startswith("."):
             continue
         if child.is_file() or child.is_symlink():
-            size += child.stat().st_size
+            try:
+                size += child.stat().st_size
+            except FileNotFoundError:
+                return None
     return size
 
 
@@ -369,6 +380,7 @@ def audit() -> dict[str, Any]:
         meta_id = meta.get("id") if isinstance(meta, dict) else None
         meta_id_matches = None if meta_id is None else meta_id == program_id
         results = collect_results(program_id)
+        missing_payloads = missing_payload_targets(program_dir)
         program_size = driver_program_size(program_dir)
         meta_evidence = collect_meta_evidence(
             meta if isinstance(meta, dict) else None,
@@ -387,6 +399,9 @@ def audit() -> dict[str, Any]:
             meta_id_matches=meta_id_matches,
             valid_evidence_count=total_valid_evidence,
         )
+        if missing_payloads:
+            status = "candidate"
+            reasons = [*reasons, "missing_payload_target"]
         results.update(meta_evidence)
         results["total_valid_evidence"] = total_valid_evidence
 
@@ -404,6 +419,7 @@ def audit() -> dict[str, Any]:
                 "description": meta.get("description") if isinstance(meta, dict) else None,
                 "deps": meta.get("deps") if isinstance(meta, dict) else None,
                 "driver_program_size": program_size,
+                "missing_payload_targets": missing_payloads,
                 "source_file_entries": len(source_files),
                 "tracked_source_file_entries": len(tracked_source_files),
                 "untracked_source_files": untracked_source_files,

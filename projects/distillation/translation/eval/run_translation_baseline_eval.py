@@ -223,6 +223,9 @@ def generate_causal_chat(
     model_id: str,
     rows: list[EvalRow],
     *,
+    revision: str = "main",
+    tokenizer_id: str = "",
+    tokenizer_revision: str = "main",
     device: str = "auto",
     dtype: str = "auto",
     batch_size: int = 2,
@@ -236,12 +239,19 @@ def generate_causal_chat(
     resolved_device = _resolve_device(device)
     resolved_dtype = _resolve_dtype(dtype)
 
-    tokenizer = AutoTokenizer.from_pretrained(model_id, local_files_only=local_files_only)
+    tokenizer = AutoTokenizer.from_pretrained(
+        tokenizer_id or model_id,
+        revision=tokenizer_revision,
+        local_files_only=local_files_only,
+    )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     model = AutoModelForCausalLM.from_pretrained(
-        model_id, dtype=resolved_dtype, local_files_only=local_files_only,
+        model_id,
+        revision=revision,
+        dtype=resolved_dtype,
+        local_files_only=local_files_only,
     )
     model.to(resolved_device)
     model.eval()
@@ -298,6 +308,9 @@ def generate_seq2seq(
     rows: list[EvalRow],
     *,
     arch: str,
+    revision: str = "main",
+    tokenizer_id: str = "",
+    tokenizer_revision: str = "main",
     device: str = "auto",
     dtype: str = "auto",
     batch_size: int = 8,
@@ -310,9 +323,16 @@ def generate_seq2seq(
     resolved_device = _resolve_device(device)
     resolved_dtype = _resolve_dtype(dtype)
 
-    tokenizer = AutoTokenizer.from_pretrained(model_id, local_files_only=local_files_only)
+    tokenizer = AutoTokenizer.from_pretrained(
+        tokenizer_id or model_id,
+        revision=tokenizer_revision,
+        local_files_only=local_files_only,
+    )
     model = AutoModelForSeq2SeqLM.from_pretrained(
-        model_id, dtype=resolved_dtype, local_files_only=local_files_only,
+        model_id,
+        revision=revision,
+        dtype=resolved_dtype,
+        local_files_only=local_files_only,
     )
     model.to(resolved_device)
     model.eval()
@@ -488,13 +508,20 @@ def evaluate_model(
     if baseline.execution_mode == "causal-chat":
         predictions = generate_causal_chat(
             baseline.model_id, rows,
+            revision=baseline.revision,
+            tokenizer_id=baseline.tokenizer_id,
+            tokenizer_revision=baseline.tokenizer_revision,
             device=device, dtype=dtype, batch_size=batch_size,
             local_files_only=local_files_only,
         )
     elif baseline.execution_mode == "seq2seq":
         predictions = generate_seq2seq(
             baseline.model_id, rows,
-            arch=baseline.arch, device=device, dtype=dtype,
+            arch=baseline.arch,
+            revision=baseline.revision,
+            tokenizer_id=baseline.tokenizer_id,
+            tokenizer_revision=baseline.tokenizer_revision,
+            device=device, dtype=dtype,
             batch_size=batch_size, local_files_only=local_files_only,
         )
     else:
@@ -751,6 +778,9 @@ def write_run_contract(
         f"schedule=baseline "
         f"runtime_mode=baseline "
         f"model_id={baseline.model_id} "
+        f"model_revision={baseline.revision} "
+        f"tokenizer_id={baseline.tokenizer_id} "
+        f"tokenizer_revision={baseline.tokenizer_revision} "
         f"execution_mode={baseline.execution_mode} "
         f"arch={baseline.arch}"
     )
@@ -850,6 +880,8 @@ def run_baseline_eval(
     write_run_contract(run_dir, baseline, eval_dataset_paths=eval_dataset_paths, device=device)
 
     print(f"[baseline] model={baseline.model_id}")
+    print(f"[baseline] model_revision={baseline.revision}")
+    print(f"[baseline] tokenizer={baseline.tokenizer_id}@{baseline.tokenizer_revision}")
     print(f"[baseline] arch={baseline.arch} execution_mode={baseline.execution_mode}")
     print(f"[baseline] run_dir={run_dir}")
 
@@ -960,7 +992,7 @@ def main() -> int:
     if args.dry_run:
         print("[baseline] DRY RUN - would evaluate:")
         for b in targets:
-            print(f"  {b.model_id} ({b.execution_mode}/{b.arch})")
+            print(f"  {b.model_id}@{b.revision} ({b.execution_mode}/{b.arch})")
             for name, path in eval_datasets:
                 print(f"    -> {name}: {path}")
         return 0
