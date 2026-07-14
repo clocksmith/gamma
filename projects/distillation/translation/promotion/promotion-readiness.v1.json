@@ -11,7 +11,6 @@
       "bf16_quality_target_not_met",
       "comet_evidence_absent",
       "diagnostic_error_ledger_human_adjudication_pending",
-      "human_review_rubric_and_threshold_absent",
       "license_catalog_contains_unverified_sources",
       "licensed_checkpoint_selection_sources_absent",
       "licensed_promotion_sources_absent",
@@ -29,7 +28,6 @@
     ],
     "checkpointSelection": [
       "diagnostic_error_ledger_human_adjudication_pending",
-      "human_review_rubric_and_threshold_absent",
       "license_catalog_contains_unverified_sources",
       "licensed_checkpoint_selection_sources_absent",
       "licensed_promotion_sources_absent",
@@ -49,7 +47,6 @@
       "comet_evidence_absent",
       "diagnostic_error_ledger_human_adjudication_pending",
       "gamma_bf16_selection_receipt_absent",
-      "human_review_rubric_and_threshold_absent",
       "license_catalog_contains_unverified_sources",
       "licensed_checkpoint_selection_sources_absent",
       "licensed_promotion_sources_absent",
@@ -67,7 +64,6 @@
     ],
     "matchedTraining": [
       "diagnostic_error_ledger_human_adjudication_pending",
-      "human_review_rubric_and_threshold_absent",
       "license_catalog_contains_unverified_sources",
       "licensed_checkpoint_selection_sources_absent",
       "licensed_promotion_sources_absent",
@@ -87,7 +83,6 @@
       "diagnostic_error_ledger_human_adjudication_pending",
       "gamma_bf16_selection_receipt_absent",
       "hosted_artifact_quality_target_not_met",
-      "human_review_rubric_and_threshold_absent",
       "license_catalog_contains_unverified_sources",
       "licensed_checkpoint_selection_sources_absent",
       "licensed_promotion_sources_absent",
@@ -110,7 +105,6 @@
     "diagnostic_error_ledger_human_adjudication_pending",
     "gamma_bf16_selection_receipt_absent",
     "hosted_artifact_quality_target_not_met",
-    "human_review_rubric_and_threshold_absent",
     "license_catalog_contains_unverified_sources",
     "licensed_checkpoint_selection_sources_absent",
     "licensed_promotion_sources_absent",
@@ -132,40 +126,82 @@
     "adjudicationStatusTotals": {
       "pending": 128
     },
+    "complete": false,
+    "inputAssessmentStatusTotals": {
+      "pending": 128
+    },
     "role": "diagnostic_only",
-    "rows": 128
+    "rows": 128,
+    "systemAssessmentStatusTotals": {
+      "pending": 512
+    }
   },
   "humanReview": {
+    "contractStatus": "frozen_protocol_no_outcome_evidence",
+    "identityBound": true,
     "role": "blocking",
-    "thresholdStatus": "blocked_until_rubric_revision_and_statistical_rule_are_frozen_before_population_materialization"
+    "thresholdStatus": "frozen"
   },
   "identity": {
     "contract": {
       "path": "projects/distillation/translation/promotion/promotion-contract.v1.json",
-      "sha256": "bc8f2e9c5ac686578634347f86fc847271c02e8add6a0d42baaa63083ac2bc8a"
+      "sha256": "2beead044b739ca832c9aa996416ea9b9080db4ae499d1bc77be74736d6a1a4e"
     },
     "contractSchema": {
       "path": "projects/distillation/translation/promotion/promotion-contract.schema.json",
-      "sha256": "748d8bd81a37acd39f9322e690a4408518eb7f3ebb5764a8df919740ea1007a9"
+      "sha256": "bfa714055e84085d81b0f83d66d849f47456fe36cc6496fc4c6e8d033ad787e1"
     },
     "diagnosticErrorLedger": {
       "path": "projects/distillation/translation/promotion/error-ledger.wmt13-nativekd2.v1.json",
-      "sha256": "a0e8bf9bf637498e5d458a3dc63988e321e816190faab28ced95fb843576ee1e"
+      "sha256": "a490c285e611894bea55a0dcd42a8d1647b6bf51798ff87294c2e7695999e7e2"
+    },
+    "diagnosticErrorLedgerSchema": {
+      "path": "projects/distillation/translation/promotion/error-ledger.schema.json",
+      "sha256": "56bacdd74954fca589ee241c10ccb432a96f0b4ec5bf6d6a2134fb2f7d43fa90"
+    },
+    "humanReviewContract": {
+      "path": "projects/distillation/translation/promotion/human-review-contract.v1.json",
+      "sha256": "4b47e18426ccceefeb22045a03b5c0891f1e36ef3c510438daee2a48a4e32068"
+    },
+    "humanReviewSchema": {
+      "path": "projects/distillation/translation/promotion/human-review-contract.schema.json",
+      "sha256": "7de4936fd996da45f0d8af5574ece4b7da44aa24784873bb7aa780c7276e2611"
     },
     "licenseCatalog": {
       "path": "projects/distillation/translation/promotion/data-license-catalog.v1.json",
-      "sha256": "5b59037abfa65b3ab875477a7e854f4d3897957a7c0575f5415e680484be9b35"
+      "sha256": "23709e8e62b31c4f21c62ba34b2f2c132532e7e27d148644bffcf33fe46e9e94"
+    },
+    "populationProcurementContract": {
+      "path": "projects/distillation/translation/promotion/population-procurement-contract.v1.json",
+      "sha256": "f7b08e9926b27f8a97ef65f2544f97c4b97d7cf2ace01d1ae0de40c177fa671d"
+    },
+    "populationProcurementSchema": {
+      "path": "projects/distillation/translation/promotion/population-procurement-contract.schema.json",
+      "sha256": "286611c123406aece89df54ead34e243ac1d8fa1953aa6e1526e70bc4f54c2c2"
     }
   },
   "licenses": {
     "catalogId": "gamma.translation.enes.promotion-data-license.v1",
     "confirmationEligibleCount": 0,
-    "entryCount": 3,
+    "entryCount": 6,
     "promotionEligibleCount": 0,
     "selectionEligibleCount": 0,
     "status": "blocked_unverified_licenses",
     "trainingEligibleCount": 0,
     "verifiedEntryCount": 0
+  },
+  "populationProcurement": {
+    "blockingConditions": [
+      "named_population_custodians_absent",
+      "human_source_and_rights_approvals_absent",
+      "commissioned_selection_population_absent",
+      "commissioned_confirmation_population_absent",
+      "externally_custodied_promotion_population_absent",
+      "population_manifests_and_hashes_absent",
+      "population_contamination_audit_absent"
+    ],
+    "identityBound": true,
+    "status": "frozen_requirements_awaiting_materialization"
   },
   "populations": {
     "calibration": {
@@ -191,7 +227,7 @@
   },
   "presentClaim": "feasibility_only",
   "readinessId": "gamma.translation.enes.single-student.readiness.v1",
-  "receiptHash": "1a482ef34b3aa010e9eff91a1770fe2ce23dea74aee3c68031a02d71147ac671",
+  "receiptHash": "a3c87754c11c8fd648acb46783dfad06dc27b7d149dbc961e9d18191a854fc89",
   "schemaVersion": 1,
   "selection": {
     "authority": "clocksmith/gamma",

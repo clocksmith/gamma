@@ -199,8 +199,24 @@ def build_error_ledger(
             "systems": row_systems,
             "adjudication": {
                 "status": "pending",
-                "labels": [],
+                "inputAssessment": {
+                    "status": "pending",
+                    "notes": "",
+                },
+                "systemAssessments": {
+                    system_id: {
+                        "status": "pending",
+                        "errors": [],
+                        "notes": "",
+                    }
+                    for system_id, _ in systems
+                },
                 "reviewerIds": [],
+                "adjudicatorId": None,
+                "reviewerSubmissionSha256s": [],
+                "adjudicatorSubmissionSha256": None,
+                "worklistReceiptHash": None,
+                "mappingReceiptHash": None,
                 "notes": "",
             },
         })
