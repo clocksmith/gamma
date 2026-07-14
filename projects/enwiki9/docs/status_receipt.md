@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-13T21:08:15+00:00`
+- Generated at UTC: `2026-07-14T01:13:23+00:00`
 
 ## Target State
 
@@ -21,15 +21,15 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active cmix mode: `text_compress`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `72,982`
+- RSS samples: `87,677`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `8,896,924`
-- Latest sampled single RSS KiB: `8,896,924`
-- Tightest binary single-process margin KiB: `1,588,836`
-- Tightest decimal single-process margin KiB: `868,701`
-- Latest binary single-process margin KiB: `1,588,836`
-- Latest decimal single-process margin KiB: `868,701`
+- Max sampled single RSS KiB: `8,897,248`
+- Latest sampled single RSS KiB: `8,897,248`
+- Tightest binary single-process margin KiB: `1,588,512`
+- Tightest decimal single-process margin KiB: `868,377`
+- Latest binary single-process margin KiB: `1,588,512`
+- Latest decimal single-process margin KiB: `868,377`
 - Safe to launch heavy gate: `false`
 - Terminal verdict present: `false`
 - Command source: `none while gate is non-terminal`
@@ -49,21 +49,21 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active scorer observed: `true`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `1,130`
-- RSS guard JSON modified UTC: `2026-07-13T21:08:15+00:00`
-- RSS guard JSON SHA-256: `e45e2d79754c27d443057545969930df55606c42fd890ee374b3a6444a6f9b2b`
-- RSS samples: `72,982`
-- Max sampled single RSS KiB: `8,896,924`
-- Max sampled tree RSS KiB: `9,017,552`
-- Single-process RSS margin KiB: `1,588,836`
-- Single-process decimal `10GB` margin KiB: `868,701`
-- Tree RSS margin KiB: `1,468,208`
-- Tree decimal `10GB` margin KiB: `748,073`
-- Latest sampled single RSS KiB: `8,896,924`
-- Latest sampled tree RSS KiB: `9,017,552`
-- Latest sampled single-process margin KiB: `1,588,836`
-- Latest sampled single-process decimal `10GB` margin KiB: `868,701`
-- Latest sampled tree margin KiB: `1,468,208`
-- Latest sampled tree decimal `10GB` margin KiB: `748,073`
+- RSS guard JSON modified UTC: `2026-07-14T01:13:23+00:00`
+- RSS guard JSON SHA-256: `1ea5951c79ee256175069975b469e2f288e3d850cf7af6ac39f26d7ded979b1d`
+- RSS samples: `87,677`
+- Max sampled single RSS KiB: `8,897,248`
+- Max sampled tree RSS KiB: `9,017,876`
+- Single-process RSS margin KiB: `1,588,512`
+- Single-process decimal `10GB` margin KiB: `868,377`
+- Tree RSS margin KiB: `1,467,884`
+- Tree decimal `10GB` margin KiB: `747,749`
+- Latest sampled single RSS KiB: `8,897,248`
+- Latest sampled tree RSS KiB: `9,017,876`
+- Latest sampled single-process margin KiB: `1,588,512`
+- Latest sampled single-process decimal `10GB` margin KiB: `868,377`
+- Latest sampled tree margin KiB: `1,467,884`
+- Latest sampled tree decimal `10GB` margin KiB: `747,749`
 
 ## Gate Evidence Status
 
@@ -120,22 +120,12 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Candidate Audit
 
-- Audit return code: `1`
-- Audit error: `Traceback (most recent call last):
-  File "/home/x/deco/gamma/projects/enwiki9/tools/candidate_audit.py", line 614, in <module>
-    sys.exit(main())
-             ~~~~^^
-  File "/home/x/deco/gamma/projects/enwiki9/tools/candidate_audit.py", line 598, in main
-    inventory = audit()
-  File "/home/x/deco/gamma/projects/enwiki9/tools/candidate_audit.py", line 372, in audit
-    program_size = driver_program_size(program_dir)
-  File "/home/x/deco/gamma/projects/enwiki9/tools/candidate_audit.py", line 126, in driver_program_size
-    size += child.stat().st_size
-            ~~~~~~~~~~^^
-  File "/usr/lib/python3.14/pathlib/__init__.py", line 655, in stat
-    return os.stat(self, follow_symlinks=follow_symlinks)
-           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '/home/x/deco/gamma/projects/enwiki9/programs/enwiki9_zip_model_control_v1/model.enwik9.zip'`
+- Audit return code: `0`
+- Program directories: `532`
+- Registered programs: `225`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `3`
+- Candidate statuses: `active=7, blocked_dependency=12, candidate=144, measured_negative=20, retired=349`
 
 ## Active Runner Process Table
 
@@ -144,34 +134,34 @@ FileNotFoundError: [Errno 2] No such file or directory: '/home/x/deco/gamma/proj
 | `lock_wrapper` | 3,688,674 | 2,787,113 | 2,064 | `flock -n /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --s...` |
 | `rss_guard` | 3,688,676 | 3,688,674 | 16,868 | `python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json pro...` |
 | `driver` | 3,688,683 | 3,688,676 | 120,628 | `python3 projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1 --limit 100000000 --che...` |
-| `native_cmix` | 3,688,798 | 3,688,683 | 8,896,924 | `/tmp/cmix21-mmap-bin-55x0e2g1 -t /tmp/cmix21-mmap-dict-kiumjrbu /tmp/tmpfd24qtbz/in /tmp/tmpfd24qtbz/out` |
+| `native_cmix` | 3,688,798 | 3,688,683 | 8,897,248 | `/tmp/cmix21-mmap-bin-55x0e2g1 -t /tmp/cmix21-mmap-dict-kiumjrbu /tmp/tmpfd24qtbz/in /tmp/tmpfd24qtbz/out` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json` | 1,130 | `2026-07-13T21:08:15+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json` | 1,130 | `2026-07-14T01:13:23+00:00` |
 
 ## Active RSS
 
 - Max cmix PID: `3688798`
 - Active cmix mode: `text_compress`
-- Max cmix RSS KiB: `8,896,924`
-- Active process tree RSS KiB: `9,036,484`
+- Max cmix RSS KiB: `8,897,248`
+- Active process tree RSS KiB: `9,036,808`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `1,588,836`
-- Single-process decimal margin KiB: `868,701`
-- Active process tree margin KiB (binary): `1,449,276`
-- Active process tree decimal margin KiB: `729,141`
+- Single-process binary margin KiB: `1,588,512`
+- Single-process decimal margin KiB: `868,377`
+- Active process tree margin KiB (binary): `1,448,952`
+- Active process tree decimal margin KiB: `728,817`
 - Temp input path: `/tmp/tmpfd24qtbz/in`
 - Temp output path: `/tmp/tmpfd24qtbz/out`
 - Temp output staging path: `/tmp/tmpfd24qtbz/out.cmix.temp`
 - Temp input bytes: `100,000,000`
-- Temp output bytes: `11,591,680`
+- Temp output bytes: `14,540,800`
 - Temp output staging bytes: `60,830,193`
 - Temp input modified UTC: `2026-07-13T00:50:32+00:00`
-- Temp output modified UTC: `2026-07-13T21:07:42+00:00`
+- Temp output modified UTC: `2026-07-14T01:12:44+00:00`
 - Temp output staging modified UTC: `2026-07-13T00:50:34+00:00`
 - Process read bytes: `0`
 - Process write bytes: `0`

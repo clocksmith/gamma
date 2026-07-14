@@ -95,6 +95,25 @@ class TranslateDistillEvalTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "no loaded LoRA layers"):
             _EVAL._scale_lora_adapters(torch.nn.Linear(2, 2), 0.5)
 
+    def test_tokenizer_revision_inherits_for_same_repository(self) -> None:
+        tokenizer_ref, tokenizer_revision = _EVAL._resolve_tokenizer_identity(
+            "example/student",
+            "1" * 40,
+        )
+
+        self.assertEqual(tokenizer_ref, "example/student")
+        self.assertEqual(tokenizer_revision, "1" * 40)
+
+    def test_tokenizer_revision_does_not_cross_repositories(self) -> None:
+        tokenizer_ref, tokenizer_revision = _EVAL._resolve_tokenizer_identity(
+            "example/student",
+            "1" * 40,
+            "example/teacher-tokenizer",
+        )
+
+        self.assertEqual(tokenizer_ref, "example/teacher-tokenizer")
+        self.assertEqual(tokenizer_revision, "")
+
 
 if __name__ == "__main__":
     unittest.main()

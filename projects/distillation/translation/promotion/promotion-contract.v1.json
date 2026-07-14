@@ -1,0 +1,251 @@
+{
+  "$schema": "./promotion-contract.schema.json",
+  "schemaVersion": 1,
+  "contractId": "gamma.translation.enes.single-student.promotion.v1",
+  "contractState": "target_frozen_populations_unmaterialized",
+  "owner": "clocksmith/gamma",
+  "presentClaim": {
+    "status": "feasibility_only",
+    "summary": "One Gemma 3 1B NativeKD2 checkpoint serves EN to ES and ES to EN without a router, and Doppler hosts an integrity-verified Q4K browser artifact. Neither artifact has passed the promotion contract.",
+    "evidence": [
+      {
+        "artifact": "gamma_nativekd2_bf16",
+        "population": "wmt13_enes_128_diagnostic",
+        "bleu": 34.1896,
+        "chrf": 59.9388,
+        "checkpointCount": 1,
+        "router": false,
+        "source": "projects/distillation/translation/README.md"
+      },
+      {
+        "artifact": "doppler_nativekd2_q4k_hosted",
+        "population": "wmt13_enes_128_diagnostic",
+        "bleu": 31.9149,
+        "chrf": 58.2124,
+        "integrityVerified": true,
+        "browserVerified": true,
+        "source": "clocksmith/doppler:docs/status/translategemma-nativekd2-doppler-2026-07-11.md"
+      }
+    ],
+    "absentEvidence": [
+      "blocking_comet",
+      "blinded_human_review",
+      "multiple_external_domains",
+      "confirmed_seeds",
+      "materialized_disjoint_populations",
+      "sealed_one_use_promotion_evaluation",
+      "exact_hosted_artifact_quality_win"
+    ]
+  },
+  "baselineHandoff": {
+    "status": "baseline_frozen_not_selected",
+    "purpose": [
+      "reproducible_nativekd2_bf16_baseline",
+      "trainer_to_doppler_handoff_format",
+      "shared_import_and_parity_machinery"
+    ],
+    "dopplerContract": "clocksmith/doppler:tools/policies/nativekd2-bf16-baseline-handoff.json",
+    "selectionAuthority": "clocksmith/gamma",
+    "selectionReceipt": null,
+    "preColumboAllowed": [
+      "preserve_baseline",
+      "freeze_handoff",
+      "implement_shared_import_parity"
+    ],
+    "preGammaSelectionForbidden": [
+      "declare_bf16_winner",
+      "run_doppler_artifact_competition",
+      "promote_translation_artifact"
+    ]
+  },
+  "promotionTarget": {
+    "checkpointCount": 1,
+    "routerAllowed": false,
+    "maximumParameters": 1000000000,
+    "directions": ["en-es", "es-en"],
+    "evaluatedArtifact": "exact_hosted_doppler_browser_artifact",
+    "externalDomainMinimum": 3,
+    "confirmedSeeds": [11, 29, 47]
+  },
+  "populationPolicy": {
+    "wmt13Role": "diagnostic_only",
+    "roles": [
+      {
+        "role": "calibration",
+        "status": "unmaterialized",
+        "allowedUses": ["baseline_measurement", "metric_calibration", "human_rubric_calibration"],
+        "forbiddenAccess": ["training", "data_selection", "checkpoint_selection", "promotion_claim"],
+        "lookPolicy": "Visible only for calibration under a predeclared look budget."
+      },
+      {
+        "role": "checkpoint_selection",
+        "status": "unmaterialized",
+        "allowedUses": ["checkpoint_selection", "data_recipe_selection"],
+        "forbiddenAccess": ["training", "row_curation", "teacher_labeling", "seed_confirmation_claim", "promotion_claim"],
+        "lookPolicy": "Evaluator and selector access only after lane artifacts are committed; every look is counted."
+      },
+      {
+        "role": "seed_confirmation",
+        "status": "unmaterialized",
+        "allowedUses": ["confirm_selected_recipe_across_declared_seeds"],
+        "forbiddenAccess": ["training", "row_curation", "checkpoint_selection", "recipe_selection", "promotion_claim"],
+        "lookPolicy": "One evaluation for each declared seed after recipe and checkpoint rules are frozen."
+      },
+      {
+        "role": "promotion",
+        "status": "unmaterialized",
+        "allowedUses": ["terminal_promotion_decision"],
+        "forbiddenAccess": ["training", "teacher", "curator", "selector", "ordinary_agent_workspace", "checkpoint_selection", "seed_confirmation"],
+        "lookPolicy": "Externally custodied, one committed hosted artifact, one use; failure consumes the slot."
+      }
+    ],
+    "overlapPolicy": "No exact, normalized, near-duplicate, source-family, document, author, or template overlap across roles; unknown overlap status blocks the campaign."
+  },
+  "comparators": [
+    {
+      "modelId": "google/translategemma-4b-it",
+      "revision": "10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+      "tokenizerId": "google/translategemma-4b-it",
+      "tokenizerRevision": "10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+      "role": "blocking"
+    },
+    {
+      "modelId": "facebook/nllb-200-distilled-600M",
+      "revision": "f8d333a098d19b4fd9a8b18f94170487ad3f821d",
+      "tokenizerId": "facebook/nllb-200-distilled-600M",
+      "tokenizerRevision": "f8d333a098d19b4fd9a8b18f94170487ad3f821d",
+      "role": "blocking"
+    },
+    {
+      "modelId": "facebook/m2m100_1.2B",
+      "revision": "7b36184180524c1a1bbfa37f120a608046250b98",
+      "tokenizerId": "facebook/m2m100_1.2B",
+      "tokenizerRevision": "7b36184180524c1a1bbfa37f120a608046250b98",
+      "role": "blocking"
+    },
+    {
+      "modelId": "facebook/nllb-200-distilled-1.3B",
+      "revision": "7be3e24664b38ce1cac29b8aeed6911aa0cf0576",
+      "tokenizerId": "facebook/nllb-200-distilled-1.3B",
+      "tokenizerRevision": "7be3e24664b38ce1cac29b8aeed6911aa0cf0576",
+      "role": "diagnostic"
+    }
+  ],
+  "metrics": [
+    {
+      "metricId": "bleu",
+      "implementation": {
+        "package": "sacrebleu",
+        "version": "2.6.0",
+        "call": "sacrebleu.corpus_bleu",
+        "tokenization": "library_default"
+      },
+      "role": "blocking",
+      "comparisonRule": "strictly_greater_than_each_blocking_comparator",
+      "strata": ["overall", "en-es", "es-en", "each_external_domain"]
+    },
+    {
+      "metricId": "chrf",
+      "implementation": {
+        "package": "sacrebleu",
+        "version": "2.6.0",
+        "call": "sacrebleu.metrics.CHRF",
+        "configuration": "library_default"
+      },
+      "role": "blocking",
+      "comparisonRule": "strictly_greater_than_each_blocking_comparator",
+      "strata": ["overall", "en-es", "es-en", "each_external_domain"]
+    },
+    {
+      "metricId": "comet",
+      "implementation": {
+        "package": "unbabel-comet",
+        "version": "2.2.7",
+        "modelId": "Unbabel/wmt22-comet-da",
+        "modelRevision": "2760a223ac957f30acfb18c8aa649b01cf1d75f2"
+      },
+      "role": "blocking",
+      "comparisonRule": "strictly_greater_than_each_blocking_comparator",
+      "strata": ["overall", "en-es", "es-en", "each_external_domain"]
+    }
+  ],
+  "humanReview": {
+    "role": "blocking",
+    "blinding": "Reviewers receive randomized system labels and no model, lane, seed, or artifact identity.",
+    "comparison": "Item-paired candidate versus every blocking comparator in both directions and every external domain.",
+    "criticalErrorClasses": ["omission", "morphology", "entity", "number", "negation", "idiom", "direction_contract"],
+    "adjudication": "Two independent qualified bilingual reviewers plus a distinct adjudicator for disagreement.",
+    "thresholdStatus": "blocked_until_rubric_revision_and_statistical_rule_are_frozen_before_population_materialization"
+  },
+  "matchedCampaign": {
+    "errorLedger": "projects/distillation/translation/promotion/error-ledger.wmt13-nativekd2.v1.json",
+    "runContract": null,
+    "lanes": [
+      "nativekd2_anchor",
+      "verifier_filtered_multi_teacher",
+      "router_sequence_distillation",
+      "matched_random_control_replacement"
+    ],
+    "frozenAcrossLanes": [
+      "base_checkpoint",
+      "adapter_or_full_parameter_initialization",
+      "training_row_count",
+      "target_token_exposure",
+      "optimizer_update_budget",
+      "direction_balance",
+      "domain_balance",
+      "row_order_policy",
+      "checkpoint_denominator",
+      "decode_policy",
+      "evaluation_look_budget",
+      "seed"
+    ],
+    "randomControlRule": "Match the targeted replacement count, positions, direction strata, domain strata, and candidate-pool eligibility with deterministic seeded selection.",
+    "recipeSelectionRule": "Select one data intervention under checkpoint-selection evidence before any base-model comparison.",
+    "bf16SelectionRule": "Gamma alone selects and freezes the BF16 winner after the matched lanes, declared seeds, blocking automatic metrics and guardrails, and blinded human review pass on the frozen Gamma populations."
+  },
+  "baseModelComparison": {
+    "status": "separate_contract_required",
+    "candidates": [
+      {
+        "modelId": "google/gemma-3-1b-it",
+        "revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752"
+      },
+      {
+        "modelId": "Qwen/Qwen3.5-0.8B",
+        "revision": "2fc06364715b967f1860aea9cf38778875588b17"
+      }
+    ],
+    "rule": "Freeze the selected data recipe first; architecture and data intervention may not change in one causal comparison."
+  },
+  "deploymentFidelity": {
+    "owner": "clocksmith/doppler",
+    "candidateArtifactLanes": ["current_q4k", "selective_f16", "quantization_aware_training"],
+    "entryGate": "A BF16 single student must carry Gamma's selection receipt after clearing the matched campaign, checkpoint-selection and seed-confirmation populations, blocking automatic metrics and guardrails, and blinded human review.",
+    "requiredEvidence": [
+      "exact_hosted_manifest_and_shard_hashes",
+      "tokenizer_prompt_and_decode_identity",
+      "transformers_to_doppler_output_parity",
+      "exact_hosted_artifact_metrics_on_all_frozen_populations",
+      "browser_load_and_execution_receipt"
+    ],
+    "promotionRule": "Only the exact hosted artifact may be submitted to the one-use promotion population."
+  },
+  "promotionDecision": {
+    "status": "blocked",
+    "blockers": [
+      "population_manifests_and_hashes_absent",
+      "population_contamination_audit_absent",
+      "license_catalog_contains_unverified_sources",
+      "human_review_rubric_and_threshold_absent",
+      "matched_run_contract_absent",
+      "comet_evidence_absent",
+      "matched_lane_receipts_absent",
+      "seed_confirmation_absent",
+      "gamma_bf16_selection_receipt_absent",
+      "bf16_quality_target_not_met",
+      "hosted_artifact_quality_target_not_met",
+      "one_use_promotion_receipt_absent"
+    ]
+  }
+}
