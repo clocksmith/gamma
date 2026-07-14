@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-14T01:41:42+00:00`
+- Generated at UTC: `2026-07-14T03:10:45+00:00`
 
 ## Target State
 
@@ -21,15 +21,15 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active cmix mode: `decode`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `89,374`
+- RSS samples: `94,713`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `8,897,320`
-- Latest sampled single RSS KiB: `7,996,000`
+- Latest sampled single RSS KiB: `7,546,424`
 - Tightest binary single-process margin KiB: `1,588,440`
 - Tightest decimal single-process margin KiB: `868,305`
-- Latest binary single-process margin KiB: `2,489,760`
-- Latest decimal single-process margin KiB: `1,769,625`
+- Latest binary single-process margin KiB: `2,939,336`
+- Latest decimal single-process margin KiB: `2,219,201`
 - Safe to launch heavy gate: `false`
 - Terminal verdict present: `false`
 - Command source: `none while gate is non-terminal`
@@ -48,22 +48,22 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - RSS guard present: `true`
 - Active scorer observed: `true`
 - RSS guard status: `running`
-- RSS guard JSON bytes: `1,130`
-- RSS guard JSON modified UTC: `2026-07-14T01:41:41+00:00`
-- RSS guard JSON SHA-256: `c129337ec4166a99749599a7c43cb77727cd5091d61fc9736500e18b5aa8b5f0`
-- RSS samples: `89,374`
+- RSS guard JSON bytes: `1,127`
+- RSS guard JSON modified UTC: `2026-07-14T03:10:45+00:00`
+- RSS guard JSON SHA-256: `07232b2d5f7718de21b0977b3b72c699edb77759775b0bb779c0ef0400faf927`
+- RSS samples: `94,713`
 - Max sampled single RSS KiB: `8,897,320`
 - Max sampled tree RSS KiB: `9,017,948`
 - Single-process RSS margin KiB: `1,588,440`
 - Single-process decimal `10GB` margin KiB: `868,305`
 - Tree RSS margin KiB: `1,467,812`
 - Tree decimal `10GB` margin KiB: `747,677`
-- Latest sampled single RSS KiB: `7,996,000`
-- Latest sampled tree RSS KiB: `8,131,212`
-- Latest sampled single-process margin KiB: `2,489,760`
-- Latest sampled single-process decimal `10GB` margin KiB: `1,769,625`
-- Latest sampled tree margin KiB: `2,354,548`
-- Latest sampled tree decimal `10GB` margin KiB: `1,634,413`
+- Latest sampled single RSS KiB: `7,546,424`
+- Latest sampled tree RSS KiB: `7,553,676`
+- Latest sampled single-process margin KiB: `2,939,336`
+- Latest sampled single-process decimal `10GB` margin KiB: `2,219,201`
+- Latest sampled tree margin KiB: `2,932,084`
+- Latest sampled tree decimal `10GB` margin KiB: `2,211,949`
 
 ## Gate Evidence Status
 
@@ -131,42 +131,42 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `native_cmix` | 3,327,202 | 3,688,683 | 8,012,744 | `/tmp/cmix21-mmap-bin-55x0e2g1 -d /tmp/cmix21-mmap-dict-kiumjrbu /tmp/tmphin8pkox/in /tmp/tmphin8pkox/out` |
-| `lock_wrapper` | 3,688,674 | 2,787,113 | 2,064 | `flock -n /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --s...` |
-| `rss_guard` | 3,688,676 | 3,688,674 | 16,868 | `python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json pro...` |
-| `driver` | 3,688,683 | 3,688,676 | 135,212 | `python3 projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1 --limit 100000000 --che...` |
+| `native_cmix` | 3,327,202 | 3,688,683 | 7,546,484 | `/tmp/cmix21-mmap-bin-55x0e2g1 -d /tmp/cmix21-mmap-dict-kiumjrbu /tmp/tmphin8pkox/in /tmp/tmphin8pkox/out` |
+| `lock_wrapper` | 3,688,674 | 2,787,113 | 1,944 | `flock -n /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --s...` |
+| `rss_guard` | 3,688,676 | 3,688,674 | 5,764 | `python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json pro...` |
+| `driver` | 3,688,683 | 3,688,676 | 7,252 | `python3 projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1 --limit 100000000 --che...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json` | 1,130 | `2026-07-14T01:41:41+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json` | 1,127 | `2026-07-14T03:10:45+00:00` |
 
 ## Active RSS
 
 - Max cmix PID: `3327202`
 - Active cmix mode: `decode`
-- Max cmix RSS KiB: `8,012,744`
-- Active process tree RSS KiB: `8,166,888`
+- Max cmix RSS KiB: `7,546,484`
+- Active process tree RSS KiB: `7,561,444`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `2,473,016`
-- Single-process decimal margin KiB: `1,752,881`
-- Active process tree margin KiB (binary): `2,318,872`
-- Active process tree decimal margin KiB: `1,598,737`
+- Single-process binary margin KiB: `2,939,276`
+- Single-process decimal margin KiB: `2,219,141`
+- Active process tree margin KiB (binary): `2,924,316`
+- Active process tree decimal margin KiB: `2,204,181`
 - Temp input path: `/tmp/tmphin8pkox/in`
 - Temp output path: `/tmp/tmphin8pkox/out`
 - Temp output staging path: `/tmp/tmphin8pkox/out.cmix.temp`
 - Temp input bytes: `14,864,716`
 - Temp output bytes: `n/a`
-- Temp output staging bytes: `0`
+- Temp output staging bytes: `4,136,960`
 - Temp input modified UTC: `2026-07-14T01:40:31+00:00`
 - Temp output modified UTC: `n/a`
-- Temp output staging modified UTC: `2026-07-14T01:41:32+00:00`
-- Process read bytes: `0`
+- Temp output staging modified UTC: `2026-07-14T03:10:37+00:00`
+- Process read bytes: `900,284,416`
 - Process write bytes: `0`
-- Decode scope progress: `0` / `100,000,000` bytes (`0.000%`)
-- Decode remaining scope bytes: `100,000,000`
+- Decode scope progress: `4,136,960` / `100,000,000` bytes (`4.137%`)
+- Decode remaining scope bytes: `95,863,040`
 
 ## Contingencies
 
