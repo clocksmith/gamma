@@ -1,7 +1,7 @@
 {
   "id": "cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1",
   "family": "cmix21_mmap",
-  "status": "active",
+  "status": "retired",
   "description": "cmix21 PAQ5 text-mode candidate with the proven 20352 KiB PPMD cap, global FXCM cmC2 division by two, FXCM run-context division by 20, and the original 16 MiB PAQ rolling buffer restored to prevent reduced-buffer stale-index crashes.",
   "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
   "hypothesis": "Global cmC2 division is the only measured single allocation cut large enough to clear the decimal 10 GB contract. Prior FXCM2 candidates stayed near 8.95 GiB at 10M but crashed after the artificially reduced 64 KiB rolling buffer wrapped. Restoring the original 16 MiB buffer should remove that crash mechanism for negligible RSS cost while retaining more than the external cmix21 score margin.",
@@ -254,8 +254,35 @@
         "10000000 gate passed with roundtrip, determinism, and RSS guard.",
         "Guard artifact: projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_10000000_determinism_rss_guard.json"
       ]
+    },
+    "100000000_guard_returncode_fail": {
+      "guard_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json",
+      "data_size": 100000000,
+      "roundtrip_ok": false,
+      "determinism": false,
+      "rss_guard_json": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json",
+      "rss_guard_json_bytes": 981,
+      "rss_guard_json_mtime_utc": "2026-07-14T20:48:40+00:00",
+      "rss_guard_json_sha256": "f32a3a8fdfc4effa8ea513b95030dd523e535b02eec13e54be5c044f03b05077",
+      "rss_guard_kib": 10485760,
+      "rss_guard_limit_mode": "max_single",
+      "max_sampled_single_rss_kib": 8897320,
+      "max_sampled_tree_rss_kib": 9017948,
+      "rss_guard_exceeded": false,
+      "rss_guard_returncode": -15,
+      "rss_guard_status": "complete",
+      "rss_sample_count": 158129,
+      "official_decimal_limit_kib": 9765625,
+      "official_decimal_over_limit_kib": 0,
+      "guard_failure": null,
+      "single_rss_over_ceiling_kib": -1588440,
+      "notes": [
+        "100000000 gate guard returned -15 before a complete driver result was produced; no roundtrip or determinism claim is made.",
+        "Guard artifact: projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json",
+        "User-authorized economic stop after the exact first-pass archive reached 14,864,716 bytes, 149,143 bytes above the 14,715,573-byte unified-executable promotion screen. The incomplete decode is not candidate evidence, and 1G promotion is forbidden."
+      ]
     }
   },
-  "verdict": "pass",
+  "verdict": "guard_returncode_fail",
   "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/2026-07-12T005633.json"
 }

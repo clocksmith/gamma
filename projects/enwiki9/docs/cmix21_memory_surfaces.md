@@ -12,8 +12,8 @@ They do not prove a target result and do not replace exact gate promotion.
 
 ## Active Gate Context
 
-- Active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`
-- Active scope bytes: `100,000,000`
+- Active candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Active scope bytes: `n/a`
 - cmix21 candidates with result or guard evidence: `1`
 
 ## Observed Knob Values
@@ -30,7 +30,7 @@ They do not prove a target result and do not replace exact gate promotion.
 
 | Candidate | PPMD KiB | PAQ | FXCM-RCM | RCM | Buffer | Guards | Latest prefix | Prefix archive | 10M archive | 10M RSS | 100M RSS |
 |---|---:|---:|---:|---:|---|---|---:|---:|---:|---|---|
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 20,352 | 5 | 20 | 32 | buffull | ppmdguard2 | n/a | n/a | n/a | missing | running; terminal margin pending |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 20,352 | 5 | 20 | 32 | buffull | ppmdguard2 | n/a | n/a | n/a | missing | pass; bin +1,588,440 KiB; dec +868,305 KiB |
 
 ## Readout
 

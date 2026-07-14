@@ -280,6 +280,35 @@ def record_result_failure_command(
     return command
 
 
+def record_guard_failure_command(
+    candidate: str,
+    scope: int,
+    guard_path: pathlib.Path,
+    verdict: str,
+    reason: str,
+) -> list[str]:
+    return [
+        "python3",
+        "projects/enwiki9/tools/record_driver_result.py",
+        candidate,
+        "--guard-json",
+        rel(guard_path) or str(guard_path),
+        "--guard-only",
+        "--scope",
+        str(scope),
+        "--label",
+        f"{scope}_{verdict}",
+        "--status",
+        "active",
+        "--verdict",
+        verdict,
+        "--note",
+        reason,
+        "--note",
+        f"Guard artifact: {rel(guard_path) or guard_path.as_posix()}",
+    ]
+
+
 def apply_terminal_command(
     candidate: str,
     scope: int,
@@ -498,6 +527,24 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
         if guard.get("status") == "running":
             payload["verdict"] = "running"
             payload["next_action"] = "wait_for_gate_completion"
+            return payload
+
+        guard_returncode = guard.get("returncode")
+        if result is None and guard_returncode not in (0, None):
+            payload["verdict"] = "guard_returncode_fail"
+            payload["next_action"] = "record_guard_failure"
+            payload["record_failure_command"] = record_guard_failure_command(
+                candidate,
+                scope,
+                guard_path,
+                "guard_returncode_fail",
+                (
+                    f"{scope} gate guard returned {guard_returncode} before a "
+                    "complete driver result was produced; no roundtrip or "
+                    "determinism claim is made."
+                ),
+            )
+            payload["apply_terminal_command"] = apply_terminal_command(candidate, scope)
             return payload
 
     if result:
