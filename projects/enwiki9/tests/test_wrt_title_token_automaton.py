@@ -138,11 +138,13 @@ def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
     stream = wrt_literal_stream(RAW)
     trace = tmp_path / "trace.bin"
     archive = tmp_path / "archive.cmix"
+    payload = tmp_path / "archive.payload"
     store = tmp_path / "wrt.store"
     dictionary = tmp_path / "english.dic"
     output = tmp_path / "receipt.json"
     write_uniform_trace(trace, stream)
     payload_bytes = write_archive(archive, stream)
+    payload.write_bytes(bytes(payload_bytes))
     store.write_bytes(bytes(5) + stream)
     dictionary.write_bytes(b"")
 
@@ -156,6 +158,8 @@ def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
             str(len(RAW)),
             "--archive",
             str(archive),
+            "--payload",
+            str(payload),
             "--wrt-store",
             str(store),
             "--window-id",
@@ -183,6 +187,7 @@ def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
     assert receipt["validations"]["archive"]["payload_bytes"] == payload_bytes
     assert receipt["validations"]["archive"]["baseline_range_match"] is True
     assert receipt["validations"]["archive"]["trace_wrt_bytes_match"] is True
+    assert receipt["validations"]["payload"]["baseline_range_match"] is True
     assert receipt["validations"]["wrt_store"]["trace_matches_store"] is True
     assert receipt["best"]["source"] == "current"
     assert receipt["substrate"] == {

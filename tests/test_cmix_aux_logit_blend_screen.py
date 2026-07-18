@@ -115,6 +115,30 @@ def test_standalone_endpoint_trace_uses_frozen_base(tmp_path: Path) -> None:
     assert receipt["exact_replay"]["full"]["saved_bytes"] > 0
 
 
+def test_standalone_endpoint_accepts_generic_p1_header(tmp_path: Path) -> None:
+    args = fixture_args(tmp_path)
+    pair = np.memmap(
+        args.pair_trace,
+        dtype="<u2",
+        mode="r",
+        offset=MODULE.PAIR_HEADER_BYTES,
+        shape=(800, 2),
+    )
+    endpoint = tmp_path / "generic.p1"
+    endpoint.write_bytes(
+        b"CMX21P1\0"
+        + struct.pack("<Q", 800)
+        + np.asarray(pair[:, 1], dtype="<u2").tobytes()
+    )
+    args.pair_trace = None
+    args.endpoint_p1 = endpoint
+
+    receipt = MODULE.run(args)
+
+    assert receipt["identity"]["trace_kind"] == "independent_causal_endpoint"
+    assert receipt["exact_replay"]["full"]["saved_bytes"] > 0
+
+
 def test_native_q16_blend_is_symmetric_and_bounded() -> None:
     base = np.asarray([1, 8192, 32768, 57344, 65535], dtype=np.uint16)
     endpoint = np.asarray([65535, 57344, 32768, 8192, 1], dtype=np.uint16)

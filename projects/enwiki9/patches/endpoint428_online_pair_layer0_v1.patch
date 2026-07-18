@@ -1,0 +1,259 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -8,3 +8,3 @@
+ PROGRAM := comp9a-decomp9
+ ALIASES := comp9a decomp9
+-SOURCE_ARCHIVE := ../comp9a-decomp9-original-lstm200-fx2lite428-contextguard-source.zip
++SOURCE_ARCHIVE := ../comp9a-decomp9-original-lstm200-fx2lite428-onlinepairlayer0-source.zip
+diff --git a/src/online-residual-mixer.h b/src/online-residual-mixer.h
+new file mode 100644
+--- /dev/null
++++ b/src/online-residual-mixer.h
+@@ -0,0 +1,48 @@
++#ifndef ONLINE_RESIDUAL_MIXER_H
++#define ONLINE_RESIDUAL_MIXER_H
++
++#include <array>
++#include <cstdint>
++
++class OnlineResidualMixer {
++ public:
++  static const unsigned int kEndpointCount = 28;
++  OnlineResidualMixer();
++  std::uint16_t Predict(std::uint16_t base,
++      const std::array<std::uint16_t, kEndpointCount>& endpoints);
++  void Perceive(int bit);
++
++ private:
++  static const unsigned int kFeatureCount = kEndpointCount + 1;
++  static const unsigned int kContextCount = 256;
++  static const std::int32_t kWeightScale = 1 << 20;
++
++  static std::int32_t Log2Q16(std::uint32_t value);
++  static std::int64_t ShiftTowardZero(std::int64_t value,
++      unsigned int shift);
++  static std::int64_t DivideRoundNearest(std::int64_t value,
++      std::int64_t divisor);
++  static unsigned int ByteClass(unsigned char value);
++  static unsigned int ConfidenceBin(std::uint16_t base);
++  std::uint16_t Probability(std::int64_t target) const;
++  void UpdateWeight(std::int32_t* weight, std::int64_t error,
++      std::int32_t feature, unsigned int shift);
++  void Decay(std::int32_t* weights);
++
++  std::array<std::int32_t, 65536> logit_;
++  std::array<std::int32_t, 65536> loss0_;
++  std::array<std::int32_t, 65536> loss1_;
++  std::array<std::int32_t, kFeatureCount> global_;
++  std::array<std::array<std::int32_t, kFeatureCount>, kContextCount> local_;
++  std::array<std::int64_t, kContextCount> regret_;
++  std::array<std::uint32_t, kContextCount> seen_;
++  std::array<std::int32_t, kFeatureCount> features_;
++  std::uint64_t row_;
++  std::uint32_t context_;
++  std::uint16_t base_;
++  std::uint16_t hypothetical_;
++  unsigned char previous_byte_;
++  unsigned char current_byte_;
++};
++
++#endif
+diff --git a/src/online-residual-mixer.cpp b/src/online-residual-mixer.cpp
+new file mode 100644
+--- /dev/null
++++ b/src/online-residual-mixer.cpp
+@@ -0,0 +1,138 @@
++#include "online-residual-mixer.h"
++
++#include <algorithm>
++#include <cmath>
++#include <cstdlib>
++
++std::int32_t OnlineResidualMixer::Log2Q16(std::uint32_t value) {
++  if (value == 0) std::abort();
++  const unsigned int integer = 31U - __builtin_clz(value);
++  std::uint64_t normalized =
++      static_cast<std::uint64_t>(value) << (31U - integer);
++  std::uint32_t fraction = 0;
++  for (int bit = 15; bit >= 0; --bit) {
++    std::uint64_t squared = (normalized * normalized) >> 31;
++    if (squared >= (std::uint64_t{1} << 32)) {
++      squared >>= 1;
++      fraction |= std::uint32_t{1} << bit;
++    }
++    normalized = squared;
++  }
++  return static_cast<std::int32_t>((integer << 16) | fraction);
++}
++
++std::int64_t OnlineResidualMixer::ShiftTowardZero(
++    std::int64_t value, unsigned int shift) {
++  return value >= 0 ? value >> shift : -((-value) >> shift);
++}
++
++std::int64_t OnlineResidualMixer::DivideRoundNearest(
++    std::int64_t value, std::int64_t divisor) {
++  return value >= 0 ? (value + divisor / 2) / divisor
++      : -((-value + divisor / 2) / divisor);
++}
++
++unsigned int OnlineResidualMixer::ByteClass(unsigned char value) {
++  if (value >= 'a' && value <= 'z') return 0;
++  if (value >= 'A' && value <= 'Z') return 1;
++  if (value >= '0' && value <= '9') return 2;
++  if (value == ' ' || value == '\n' || value == '\t') return 3;
++  if (value == '<' || value == '>' || value == '{' || value == '}' ||
++      value == '[' || value == ']' || value == '|' || value == '=') return 4;
++  if (value >= 128) return 5;
++  if (value == '/' || value == ':' || value == '&' || value == ';' ||
++      value == '_' || value == '-') return 6;
++  return 7;
++}
++
++unsigned int OnlineResidualMixer::ConfidenceBin(std::uint16_t base) {
++  const unsigned int distance =
++      base > 32768 ? base - 32768 : 32768 - base;
++  if (distance < 4096) return 0;
++  if (distance < 12288) return 1;
++  if (distance < 24576) return 2;
++  return 3;
++}
++
++OnlineResidualMixer::OnlineResidualMixer()
++    : logit_{}, loss0_{}, loss1_{}, global_{}, local_{}, regret_{}, seen_{},
++      features_{}, row_(0), context_(0), base_(32768), hypothetical_(32768),
++      previous_byte_(0), current_byte_(0) {
++  logit_[0] = Log2Q16(1) - Log2Q16(65535);
++  for (std::uint32_t p = 1; p < 65536; ++p) {
++    logit_[p] = Log2Q16(p) - Log2Q16(65536U - p);
++    loss0_[p] = static_cast<std::int32_t>(
++        -std::log2(static_cast<double>(65536U - p) / 65536.0) * 256.0 + 0.5);
++    loss1_[p] = static_cast<std::int32_t>(
++        -std::log2(static_cast<double>(p) / 65536.0) * 256.0 + 0.5);
++  }
++}
++
++std::uint16_t OnlineResidualMixer::Probability(std::int64_t target) const {
++  const auto begin = logit_.begin() + 1;
++  const auto end = logit_.end();
++  const auto upper = std::lower_bound(begin, end, target);
++  if (upper == begin) return 1;
++  if (upper == end) return 65535;
++  const std::uint16_t high =
++      static_cast<std::uint16_t>(upper - logit_.begin());
++  const std::uint16_t low = high - 1;
++  return target - logit_[low] <= logit_[high] - target ? low : high;
++}
++
++std::uint16_t OnlineResidualMixer::Predict(std::uint16_t base,
++    const std::array<std::uint16_t, kEndpointCount>& endpoints) {
++  base_ = base;
++  const std::int32_t base_logit = logit_[base];
++  for (unsigned int i = 0; i < kEndpointCount; ++i) {
++    features_[i] = std::max<std::int32_t>(-262144,
++        std::min<std::int32_t>(262144, logit_[endpoints[i]] - base_logit));
++  }
++  features_[kEndpointCount] = 65536;
++  context_ = (((row_ & 7) * 8 + ByteClass(previous_byte_)) * 4) +
++      ConfidenceBin(base);
++  std::int64_t correction = 0;
++  for (unsigned int i = 0; i < kFeatureCount; ++i) {
++    correction += static_cast<std::int64_t>(
++        global_[i] + local_[context_][i]) * features_[i];
++  }
++  hypothetical_ = Probability(base_logit +
++      DivideRoundNearest(correction, kWeightScale));
++  return seen_[context_] >= 256 && regret_[context_] > 0
++      ? hypothetical_ : base;
++}
++
++void OnlineResidualMixer::UpdateWeight(std::int32_t* weight,
++    std::int64_t error, std::int32_t feature, unsigned int shift) {
++  const std::int64_t updated = static_cast<std::int64_t>(*weight) +
++      ShiftTowardZero(error * feature, shift);
++  *weight = static_cast<std::int32_t>(std::max<std::int64_t>(-kWeightScale,
++      std::min<std::int64_t>(kWeightScale, updated)));
++}
++
++void OnlineResidualMixer::Decay(std::int32_t* weights) {
++  for (unsigned int i = 0; i < kFeatureCount; ++i) {
++    weights[i] -= static_cast<std::int32_t>(
++        ShiftTowardZero(weights[i], 18));
++  }
++}
++
++void OnlineResidualMixer::Perceive(int bit) {
++  const std::int64_t error = (bit ? 65536LL : 0) - hypothetical_;
++  for (unsigned int i = 0; i < kFeatureCount; ++i) {
++    UpdateWeight(&global_[i], error, features_[i], 24);
++    UpdateWeight(&local_[context_][i], error, features_[i], 22);
++  }
++  const std::int64_t gain = (bit ? loss1_[base_] : loss0_[base_]) -
++      (bit ? loss1_[hypothetical_] : loss0_[hypothetical_]);
++  regret_[context_] += gain - ShiftTowardZero(regret_[context_], 14);
++  if ((++seen_[context_] & 1023U) == 0) {
++    Decay(global_.data());
++    Decay(local_[context_].data());
++  }
++  current_byte_ = static_cast<unsigned char>((current_byte_ << 1) | bit);
++  if ((++row_ & 7) == 0) {
++    previous_byte_ = current_byte_;
++    current_byte_ = 0;
++  }
++}
+diff --git a/src/predictor.h b/src/predictor.h
+--- a/src/predictor.h
++++ b/src/predictor.h
+@@ -13,6 +13,7 @@
+ #endif
+ #include "context-manager.h"
+ #include "fixed-logit-blend.h"
++#include "online-residual-mixer.h"
+ 
+ #include <vector>
+ #include <set>
+@@ -59,6 +60,7 @@
+   Sigmoid sigmoid_;
+   std::vector<std::unique_ptr<ByteMixer>> byte_mixers_;
+   std::vector<bool> vocab_;
+   FixedLogitBlend fixed_logit_blend_;
++  OnlineResidualMixer online_residual_mixer_;
+   void* fx2lite_endpoint_;
+ };
+diff --git a/src/predictor.cpp b/src/predictor.cpp
+--- a/src/predictor.cpp
++++ b/src/predictor.cpp
+@@ -598,8 +598,12 @@ float Predictor::Predict() {
+   auxiliary_average /= auxiliary_.size();
+   manager_.auxiliary_context_ = auxiliary_average * 15;
+ 
++  std::array<std::uint16_t,
++      OnlineResidualMixer::kEndpointCount> residual_endpoints{};
+   for (unsigned int i = 0; i < mixers_[0].size(); ++i) {
+     float p = mixers_[0][i]->Mix();
++    residual_endpoints[i] = static_cast<std::uint16_t>(
++        1 + static_cast<unsigned int>(65534.0f * Sigmoid::Logistic(p)));
+     layers_[0]->SetExtraInput(p);
+     layers_[1]->SetStretchedInput(i, p);
+     layers_[2]->SetStretchedInput(i, p);
+@@ -625,13 +629,18 @@ float Predictor::Predict() {
+   const std::uint16_t endpoint_p1 =
+       fx2lite_endpoint428::Predict(fx2lite_endpoint_);
+   const std::uint16_t mixed_p1 =
+       fixed_logit_blend_.Mix(base_p1, endpoint_p1);
++  residual_endpoints[26] = base_p1;
++  residual_endpoints[27] = endpoint_p1;
++  const std::uint16_t final_p1 =
++      online_residual_mixer_.Predict(mixed_p1, residual_endpoints);
+   // Encoder and decoder both discretize this float as 1 + 65534 * p. Return
+   // the midpoint of mixed_p1's quantization bin so the integer result is
+   // stable against the final float conversion.
+-  return (static_cast<float>(mixed_p1) - 0.5f) / 65534.0f;
++  return (static_cast<float>(final_p1) - 0.5f) / 65534.0f;
+ }
+ 
+ void Predictor::Perceive(int bit) {
++  online_residual_mixer_.Perceive(bit);
+   for (unsigned int i = 0; i < models_.size(); ++i) {
+     if (i == fxcm_index_) continue;

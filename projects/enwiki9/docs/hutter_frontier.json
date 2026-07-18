@@ -1,0 +1,297 @@
+{
+  "schema": "enwiki9_hutter_frontier_v1",
+  "target": {
+    "input_bytes": 1000000000,
+    "score_bytes": 109500000,
+    "required_roundtrip": true
+  },
+  "canonical_best_forecast_id": "endpoint428_context_recovery_10m",
+  "candidates": [
+    {
+      "id": "endpoint428_pair_layer0_online_residual_successor",
+      "name": "endpoint428 plus online compact/FX2/layer-0 residual mixer",
+      "rank": 1,
+      "status": "active",
+      "evidence_tier": "idea",
+      "scope_bytes": 1000000,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "patches/compact_layer0_p1_trace_v1.patch",
+        "tools/compact_layer0_online_mixer_screen.cpp",
+        "tools/compact_layer0_online_mixer_receipt.py"
+      ],
+      "source_required": true,
+      "decision": "Extend the positive fixed-point online mixer with the already-computed compact post-SSE and FX2-lite428 preblend probabilities so it can adapt the fixed 31:9 endpoint blend without new model state.",
+      "next_gate": "Require archive and pair-trace identity plus at least 69.404 B/M on full and held-out exact arithmetic replay before native integration.",
+      "disqualifiers": []
+    },
+    {
+      "id": "endpoint428_layer0_online_residual_v1",
+      "name": "endpoint428 plus regret-gated online layer-0 residual mixer",
+      "rank": 2,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 46,
+      "gain_bytes_per_1m": 46.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_compact_layer0_online_mixer_1m_v1/receipt.json",
+        "results/endpoint428_compact_layer0_online_mixer_1m_v1/screen_source.cpp",
+        "tools/compact_layer0_online_mixer_receipt.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_compact_layer0_online_mixer_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full/saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_compact_layer0_online_mixer_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full_saved_bytes_per_1m_raw",
+          "candidate_field": "gain_bytes_per_1m"
+        }
+      ],
+      "source_required": true,
+      "decision": "The frozen regret-gated byte-regime mixer transferred across all three splits and saved 11 exact holdout bytes, but its 55 B/M proportional held-out rate remains below the 57.404 B/M gross debt before code.",
+      "next_gate": "Retain the causal online architecture and add only the two free endpoint428 upstream probabilities; do not integrate v1 unchanged.",
+      "disqualifiers": [
+        "46 B/M full-prefix rate is below the gross forecast debt",
+        "55 B/M proportional held-out rate is below the gross forecast debt",
+        "Program bytes are not yet counted"
+      ]
+    },
+    {
+      "id": "endpoint428_layer0_sparse_residual_successor",
+      "name": "endpoint428 plus static sparse compact layer-0 residual blend",
+      "rank": 3,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 19,
+      "gain_bytes_per_1m": 19.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_compact_layer0_sparse_blend_1m_v1/receipt.json",
+        "tools/compact_layer0_sparse_blend_screen.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_compact_layer0_sparse_blend_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full/saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_compact_layer0_sparse_blend_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full_saved_bytes_per_1m_raw",
+          "candidate_field": "gain_bytes_per_1m"
+        }
+      ],
+      "source_required": true,
+      "decision": "Train-only coefficients gained on training, lost on development, and lost three exact bytes on proportional holdout.",
+      "next_gate": "None unchanged; regime drift motivated the separately frozen causal online successor.",
+      "disqualifiers": [
+        "Negative development transfer",
+        "Negative proportional held-out exact replay"
+      ]
+    },
+    {
+      "id": "endpoint428_layer0_residual_successor",
+      "name": "endpoint428 plus one compact layer-0 residual endpoint",
+      "rank": 4,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 10,
+      "gain_bytes_per_1m": 10.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_compact_layer0_blend_1m_v1/receipt.json",
+        "tools/compact_layer0_blend_screen.py",
+        "patches/compact_layer0_p1_trace_v1.patch"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_compact_layer0_blend_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full/saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_compact_layer0_blend_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full_saved_bytes_per_1m_raw",
+          "candidate_field": "gain_bytes_per_1m"
+        }
+      ],
+      "source_required": true,
+      "decision": "The development-selected interval_classmap_b endpoint saved 10 exact bytes overall but only 1 byte on proportional holdout, far below the required rate.",
+      "next_gate": "None unchanged; the 26 endpoints remain inputs to the separately frozen sparse multivariate successor.",
+      "disqualifiers": [
+        "Only 5 B/M on proportional held-out replay",
+        "Far below the 69.404 B/M provisional accounting floor"
+      ]
+    },
+    {
+      "id": "endpoint428_context_recovery_10m",
+      "name": "compact-200 plus FX2-lite endpoint428",
+      "rank": 5,
+      "status": "retired_unchanged",
+      "evidence_tier": "constructive_prefix",
+      "scope_bytes": 10000000,
+      "archive_bytes": 1635695,
+      "program_bytes": 349195,
+      "forecast_score": 109557404,
+      "measured_gain_bytes": 1818,
+      "gain_bytes_per_1m": 181.8,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "docs/status_receipt.json",
+        "docs/research_register.md",
+        "ALGORITHMS.md"
+      ],
+      "metric_assertions": [
+        {
+          "source": "docs/status_receipt.json",
+          "pointer": "/best_forecast/projected_score",
+          "candidate_field": "forecast_score"
+        },
+        {
+          "source": "docs/status_receipt.json",
+          "pointer": "/best_forecast/archive_bytes",
+          "candidate_field": "archive_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Closest canonical counted forecast and current substrate, but unchanged promotion is retired after missing the 10M economics ceiling by 575 bytes.",
+      "next_gate": "Add a causal component that clears 57.404 B/M plus its counted program cost before another native gate.",
+      "disqualifiers": [
+        "No exact full-corpus result",
+        "10M decode and deterministic re-encode were not authorized after the economics miss"
+      ]
+    },
+    {
+      "id": "srstc_blockposterior_raw_shadow",
+      "name": "SRSTC block-posterior retrieval",
+      "rank": 6,
+      "status": "active",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 65536000,
+      "measured_gain_bytes": 916540,
+      "program_bytes": 16076,
+      "net_shadow_gain_bytes": 900464,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+        "docs/streaming_retrieval_receipt_audit.md",
+        "ALGORITHMS.md"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+          "pointer": "/net_saved_bytes",
+          "candidate_field": "net_shadow_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Large causal raw-stream headroom remains a discovery asset, but the unchanged expert did not transfer to FX2 and earns no score credit.",
+      "next_gate": "Predict endpoint428 residuals on an identical stream and integrate only the smallest paying dependency-closed component.",
+      "disqualifiers": [
+        "Shadow replay rather than native archive",
+        "Unchanged FX2 transfer was negative"
+      ]
+    },
+    {
+      "id": "heterogeneous_112_plus_80",
+      "name": "heterogeneous recurrent 112+80",
+      "rank": 7,
+      "status": "retired_unchanged",
+      "evidence_tier": "constructive_prefix",
+      "scope_bytes": 10000000,
+      "archive_bytes": 1635670,
+      "program_bytes": 264646,
+      "forecast_score": 109498879,
+      "measured_gain_bytes": 7956,
+      "gain_bytes_per_1m": 795.6,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "ALGORITHMS.md",
+        "docs/fx2_cmix21_nopaq_lstm_frontier.md"
+      ],
+      "source_required": true,
+      "decision": "Historical under-target forecast with complete 10M wrapper proof, retired because the untouched offset-500M slice retained only 4 B/M over 112 and runtime direction failed.",
+      "next_gate": "None unchanged; retain as a correctness and recurrent-substrate control.",
+      "disqualifiers": [
+        "Later-region transfer failure",
+        "Runtime projection failure",
+        "No exact full-corpus result"
+      ]
+    },
+    {
+      "id": "paqfree_96x2",
+      "name": "PAQ-free recurrent 96x2",
+      "rank": 8,
+      "status": "historical_control",
+      "evidence_tier": "constructive_prefix",
+      "scope_bytes": 10000000,
+      "archive_bytes": 1638528,
+      "program_bytes": 264427,
+      "measured_gain_bytes": 5098,
+      "gain_bytes_per_1m": 509.8,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "ALGORITHMS.md",
+        "docs/fx2_cmix21_nopaq_lstm_frontier.md"
+      ],
+      "source_required": true,
+      "decision": "Clean constructive control proving the compact online recurrent architecture, but below its counted promotion floor.",
+      "next_gate": "Use only as a matched control or reusable substrate for a genuinely new endpoint.",
+      "disqualifiers": [
+        "Insufficient counted gain",
+        "No exact full-corpus result"
+      ]
+    },
+    {
+      "id": "endpoint428_mxx_sse",
+      "name": "endpoint428 mxx-keyed online SSE",
+      "rank": 9,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": -151,
+      "gain_bytes_per_1m": -151.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_mxx_sse_1m_v1/receipt.json",
+        "tools/endpoint428_mxx_sse_shadow.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_mxx_sse_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full/saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_mxx_sse_1m_v1/receipt.json",
+          "pointer": "/economics/full_exact_saved_bytes_per_1m",
+          "candidate_field": "gain_bytes_per_1m"
+        }
+      ],
+      "source_required": true,
+      "decision": "Dictionary-pretrained decoder reconstruction selected mxx_p32_mean512 on development, then lost 151 exact bytes overall and 24 bytes on proportional holdout; 13 of 16 holdout blocks regressed.",
+      "next_gate": "None for this calibration family; retain mxx only as a context feature inside richer already-computed mixers.",
+      "disqualifiers": [
+        "Negative development gain",
+        "Negative exact full and held-out replay"
+      ]
+    }
+  ],
+  "quarantine": [
+    {
+      "id": "typed_skip_cts_premature_event_length",
+      "name": "typed Skip-CTS with premature event-length exposure",
+      "reason": "Causality defect exposed event length before decoder reconstruction; prior gains receive zero credit.",
+      "source_paths": [],
+      "source_required": false,
+      "replacement_evidence": "Corrected typed Skip-CTS and entity-node backoff were reported negative in the latest machine handoff; their receipts are not yet present in this checkout."
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+import sys
+
+
+TOOL = (
+    Path(__file__).resolve().parents[1]
+    / "skills/enwiki9-status/scripts/report.py"
+)
+SPEC = importlib.util.spec_from_file_location("enwiki9_status_skill", TOOL)
+assert SPEC and SPEC.loader
+MODULE = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = MODULE
+SPEC.loader.exec_module(MODULE)
+
+
+def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
+    (tmp_path / "AGENTS.md").write_text("fixture\n")
+    evidence = tmp_path / "receipt.json"
+    evidence.write_text("{}\n")
+    ledger = {
+        "schema": "enwiki9_hutter_frontier_v1",
+        "target": {
+            "input_bytes": 1_000_000_000,
+            "score_bytes": 109_500_000,
+            "required_roundtrip": True,
+        },
+        "canonical_best_forecast_id": "candidate",
+        "candidates": [
+            {
+                "id": "candidate",
+                "name": "candidate",
+                "rank": 1,
+                "status": "active",
+                "evidence_tier": "constructive_prefix",
+                "forecast_score": 109_557_404,
+                "score_credit_bytes": 0,
+                "source_paths": ["receipt.json"],
+                "source_required": True,
+                "metric_assertions": [],
+                "decision": "test",
+                "next_gate": "test",
+            }
+        ],
+        "quarantine": [],
+    }
+    operational = {
+        "target_score_10_95": 109_500_000,
+        "best_forecast": {"projected_score": 109_557_404},
+        "best_full_1g": {"status": "not verified"},
+        "has_10_95_constructive_upper_bound": False,
+    }
+    return evidence, ledger, operational
+
+
+def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+
+    status, errors = MODULE.validate_and_normalize(
+        tmp_path, ledger, operational
+    )
+
+    assert errors == []
+    assert status["official"]["verified_full_corpus_result"] is False
+    assert status["canonical_forecast"]["forecast_margin_bytes"] == -57_404
+    assert "Official distance: unknown" in MODULE.render_markdown(status)
+
+
+def test_nonconstructive_score_credit_fails_closed(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    ledger["candidates"][0]["evidence_tier"] = "causal_shadow"
+    ledger["candidates"][0]["score_credit_bytes"] = 1
+
+    _, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("nonconstructive evidence has score credit" in error for error in errors)
+
+
+def test_missing_required_source_fails_closed(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    ledger["candidates"][0]["source_paths"] = ["missing.json"]
+
+    _, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("required evidence source missing" in error for error in errors)
+
+
+def test_verified_official_win_requires_roundtrip(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    operational["best_full_1g"] = {
+        "scope_bytes": 1_000_000_000,
+        "hutter_score": 109_499_999,
+        "roundtrip_ok": False,
+    }
+
+    status, _ = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert status["official"]["won"] is False
+    assert status["official"]["verified_full_corpus_result"] is False
+
+
+def test_metric_assertion_detects_receipt_drift(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    ledger["candidates"][0]["metric_assertions"] = [
+        {
+            "source": "receipt.json",
+            "pointer": "/score",
+            "candidate_field": "forecast_score",
+        }
+    ]
+    (tmp_path / "receipt.json").write_text(json.dumps({"score": 1}) + "\n")
+
+    _, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("disagrees with" in error for error in errors)
