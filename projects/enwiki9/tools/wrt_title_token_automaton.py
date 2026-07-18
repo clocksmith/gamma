@@ -19,6 +19,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import BinaryIO, Iterable, Iterator, Sequence
 
+from wrt_exact import (
+    ParsedStore,
+    TEXT_SEGMENT,
+    WrtEvent,
+    parse_store,
+    read_dictionary_words,
+    token_index,
+    wrt_byte_transform,
+)
+
 
 TRACE_MAGIC = b"FX2PT01\n"
 TRACE_RECORD = struct.Struct("<HB")
@@ -39,30 +49,8 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def char_swap(value: int) -> int:
-    if ord("{") <= value < 127:
-        value += ord("P") - ord("{")
-    elif ord("P") <= value < ord("T"):
-        value -= ord("P") - ord("{")
-    elif ord(":") <= value <= ord("?") or ord("J") <= value <= ord("O"):
-        value ^= 0x70
-    if value in (ord("X"), ord("`")):
-        value ^= ord("X") ^ ord("`")
-    return value
-
-
-def load_dictionary(path: Path) -> list[bytes]:
-    words: list[bytes] = []
-    word = bytearray()
-    for value in path.read_bytes():
-        if ord("a") <= value <= ord("z"):
-            word.append(value)
-        elif word:
-            words.append(bytes(word))
-            word.clear()
-    if word:
-        words.append(bytes(word))
-    return words
+char_swap = wrt_byte_transform
+load_dictionary = read_dictionary_words
 
 
 @dataclass(frozen=True)
@@ -101,90 +89,25 @@ class WrtUnit:
     decoded: bytes
 
 
-class WrtTokenizer:
-    def __init__(self, dictionary: list[bytes]) -> None:
-        self.dictionary = dictionary
-        self.escape = False
-        self.upper = False
-        self.capital = False
-        self.pending_encoded = bytearray()
-        self.pending_logical = bytearray()
-
-    @staticmethod
-    def token_id(values: bytes) -> int:
-        if len(values) == 1:
-            return values[0] - 0x80
-        if len(values) == 2:
-            return 80 + (values[0] - 0xD0) * 80 + (values[1] - 0x80)
-        return 3920 + (values[0] - 0xF0) * 32 * 80 + (values[1] - 0xD0) * 80 + (values[2] - 0x80)
-
-    def _apply_case(self, data: bytes) -> bytes:
-        output = bytearray(data)
-        for index, value in enumerate(output):
-            if (index == 0 and self.capital) or self.upper:
-                if ord("a") <= value <= ord("z"):
-                    output[index] = value - 32
-        self.capital = False
-        return bytes(output)
-
-    def feed(self, encoded: int) -> WrtUnit | None:
-        logical = char_swap(encoded)
-        if self.escape:
-            self.escape = False
-            self.upper = False
-            raw = bytes(self.pending_encoded) + bytes((encoded,))
-            self.pending_encoded.clear()
-            return WrtUnit(0x30000 + logical, raw, bytes((logical,)))
-
-        if self.pending_logical:
-            self.pending_encoded.append(encoded)
-            self.pending_logical.append(logical)
-            first = self.pending_logical[0]
-            expected = 1 if first <= 0xCF else (2 if first <= 0xEF else 3)
-            if len(self.pending_logical) < expected:
-                return None
-            token_bytes = bytes(self.pending_logical)
-            token_id = self.token_id(token_bytes)
-            word = self.dictionary[token_id] if token_id < len(self.dictionary) else b""
-            unit = WrtUnit(token_id, bytes(self.pending_encoded), self._apply_case(word))
-            self.pending_encoded.clear()
-            self.pending_logical.clear()
-            return unit
-
-        if logical == 0x0C:
-            self.escape = True
-            self.pending_encoded.append(encoded)
-            return None
-        if logical == 0x07:
-            self.upper = True
-            return WrtUnit(0x20000 + logical, bytes((encoded,)), b"")
-        if logical == 0x40:
-            self.capital = True
-            return WrtUnit(0x20000 + logical, bytes((encoded,)), b"")
-        if logical == 0x06:
-            self.upper = False
-            return WrtUnit(0x20000 + logical, bytes((encoded,)), b"")
-        if logical >= 0x80:
-            self.pending_encoded.append(encoded)
-            self.pending_logical.append(logical)
-            first = self.pending_logical[0]
-            expected = 1 if first <= 0xCF else (2 if first <= 0xEF else 3)
-            if expected > 1:
-                return None
-            token_id = self.token_id(bytes(self.pending_logical))
-            word = self.dictionary[token_id] if token_id < len(self.dictionary) else b""
-            unit = WrtUnit(token_id, bytes(self.pending_encoded), self._apply_case(word))
-            self.pending_encoded.clear()
-            self.pending_logical.clear()
-            return unit
-
-        literal = logical
-        if (self.capital or self.upper) and ord("a") <= literal <= ord("z"):
-            literal -= 32
-        if not (ord("a") <= literal <= ord("z") or ord("A") <= literal <= ord("Z")):
-            self.upper = False
-        self.capital = False
-        return WrtUnit(0x10000 + logical, bytes((encoded,)), bytes((literal,)))
+def unit_from_event(event: WrtEvent) -> WrtUnit:
+    logical = bytes(wrt_byte_transform(value) for value in event.encoded)
+    if event.kind == "token":
+        signature = token_index(logical)
+    elif event.kind == "escaped_literal":
+        if len(logical) != 2:
+            raise ValueError("invalid escaped WRT event")
+        signature = 0x30000 + logical[1]
+    elif event.kind == "control":
+        if len(logical) != 1:
+            raise ValueError("invalid WRT control event")
+        signature = 0x20000 + logical[0]
+    elif event.kind == "literal":
+        if len(logical) != 1:
+            raise ValueError("invalid WRT literal event")
+        signature = 0x10000 + logical[0]
+    else:
+        raise ValueError(f"unsupported WRT event kind: {event.kind}")
+    return WrtUnit(signature, event.encoded, event.decoded)
 
 
 class WikiState:
@@ -325,8 +248,7 @@ class TitleTokenModel:
 
 
 class TitleEndpointState:
-    def __init__(self, dictionary: list[bytes]) -> None:
-        self.tokenizer = WrtTokenizer(dictionary)
+    def __init__(self) -> None:
         self.wiki = WikiState()
         self.current_units: list[WrtUnit] = []
         self.current = TitleTokenModel()
@@ -340,12 +262,12 @@ class TitleEndpointState:
     def endpoints(self) -> tuple[Endpoint | None, Endpoint | None]:
         return self.current.endpoint(), self.previous.endpoint()
 
-    def feed(self, encoded: int) -> None:
+    def observe_stream_byte(self, encoded: int) -> None:
         self.current.observe_stream_byte(encoded)
         self.previous.observe_stream_byte(encoded)
-        unit = self.tokenizer.feed(encoded)
-        if unit is None:
-            return
+
+    def observe_event(self, event: WrtEvent) -> None:
+        unit = unit_from_event(event)
         title_before = self.wiki.title_mode
         prose_before = self.wiki.prose_mode
         in_tag_before = self.wiki.in_tag
@@ -477,12 +399,30 @@ class Fx2RangeCounter:
 
 def score_trace(
     trace: Path,
-    dictionary: list[bytes],
+    parsed: ParsedStore,
     specs: Sequence[VariantSpec],
     exact_ids: set[str] | None = None,
 ) -> tuple[dict[str, VariantStats], dict[str, object]]:
     states = {spec.variant_id: VariantStats(spec) for spec in specs}
-    endpoint_state = TitleEndpointState(dictionary)
+    states_by_source = {
+        source: [
+            (variant_id, state)
+            for variant_id, state in states.items()
+            if state.spec.source == source
+        ]
+        for source in ("current", "previous")
+    }
+    endpoint_state = TitleEndpointState()
+    events_by_end = {event.end: event for event in parsed.events}
+    if len(events_by_end) != len(parsed.events):
+        raise ValueError("multiple WRT events end at one stream offset")
+    expected_start = 6
+    for event in parsed.events:
+        if event.start != expected_start or event.end <= event.start:
+            raise ValueError("WRT events do not form a contiguous causal stream")
+        expected_start = event.end
+    if expected_start != len(parsed.stream):
+        raise ValueError("WRT events do not cover the complete text segment")
     exact_ids = exact_ids or set()
     exact = {variant_id: Fx2RangeCounter() for variant_id in exact_ids}
     baseline = Fx2RangeCounter() if exact_ids else None
@@ -490,6 +430,8 @@ def score_trace(
     wrt_bytes = 0
 
     for byte_pos, trace_byte in enumerate(iter_trace_bytes(trace)):
+        if byte_pos >= len(parsed.stream) or trace_byte.value != parsed.stream[byte_pos]:
+            raise ValueError("compact trace truth bytes differ from the exact WRT store")
         current, previous = endpoint_state.endpoints()
         endpoints = {"current": current, "previous": previous}
         prefix = 0
@@ -499,32 +441,39 @@ def score_trace(
         for bit_pos, (p1, bit) in enumerate(zip(trace_byte.probabilities, trace_byte.bits)):
             if baseline is not None:
                 baseline.encode(bit, p1)
-            for variant_id, state in states.items():
-                endpoint = endpoints[state.spec.source]
-                candidate: tuple[int, int] | None = None
-                if endpoint is not None:
-                    candidate = state.probability(endpoint, bit_pos, prefix, p1)
-                chosen = p1
-                if candidate is not None:
-                    candidate_p1, _ = candidate
-                    delta = loss_qbits(bit, p1) - loss_qbits(bit, candidate_p1)
-                    state.eligible_bits += 1
-                    state.counterfactual_qbits += delta
-                    event_deltas[variant_id] = event_deltas.get(variant_id, 0) + delta
-                    apply = state.spec.router == "always" or state.regret_qbits > 0
-                    if apply:
-                        chosen = candidate_p1
-                        state.applied_bits += 1
-                        state.qbits_saved += delta
-                        block = byte_pos // BLOCK_BYTES
-                        state.block_qbits[block] = state.block_qbits.get(block, 0) + delta
-                    if state.spec.router == "regret12":
-                        state.regret_qbits = max(
-                            -(1 << 24),
-                            min(1 << 24, decay_toward_zero(state.regret_qbits) + delta),
-                        )
-                if variant_id in exact:
-                    exact[variant_id].encode(bit, chosen)
+            for source, source_states in states_by_source.items():
+                endpoint = endpoints[source]
+                # Discovery has no exact coders to advance. Avoid visiting every
+                # variant on the overwhelmingly common rows where its source has
+                # no prediction. Exact replay still feeds the base probability to
+                # every frozen coder on those rows.
+                if endpoint is None and not exact:
+                    continue
+                for variant_id, state in source_states:
+                    candidate: tuple[int, int] | None = None
+                    if endpoint is not None:
+                        candidate = state.probability(endpoint, bit_pos, prefix, p1)
+                    chosen = p1
+                    if candidate is not None:
+                        candidate_p1, _ = candidate
+                        delta = loss_qbits(bit, p1) - loss_qbits(bit, candidate_p1)
+                        state.eligible_bits += 1
+                        state.counterfactual_qbits += delta
+                        event_deltas[variant_id] = event_deltas.get(variant_id, 0) + delta
+                        apply = state.spec.router == "always" or state.regret_qbits > 0
+                        if apply:
+                            chosen = candidate_p1
+                            state.applied_bits += 1
+                            state.qbits_saved += delta
+                            block = byte_pos // BLOCK_BYTES
+                            state.block_qbits[block] = state.block_qbits.get(block, 0) + delta
+                        if state.spec.router == "regret12":
+                            state.regret_qbits = max(
+                                -(1 << 24),
+                                min(1 << 24, decay_toward_zero(state.regret_qbits) + delta),
+                            )
+                    if variant_id in exact:
+                        exact[variant_id].encode(bit, chosen)
             prefix = (prefix << 1) | bit
         for variant_id, delta in event_deltas.items():
             state = states[variant_id]
@@ -537,7 +486,19 @@ def score_trace(
                 state.negative_byte_qbits += delta
             else:
                 state.flat_byte_events += 1
-        endpoint_state.feed(trace_byte.value)
+        endpoint_state.observe_stream_byte(trace_byte.value)
+        event = events_by_end.get(byte_pos + 1)
+        if event is not None:
+            endpoint_state.observe_event(event)
+
+    if wrt_bytes != len(parsed.stream):
+        raise ValueError("compact trace length differs from the exact WRT stream")
+    decoded_sha256 = endpoint_state.decoded_sha256.hexdigest()
+    expected_decoded_sha256 = hashlib.sha256(parsed.decoded).hexdigest()
+    if endpoint_state.decoded_bytes != parsed.raw_length:
+        raise ValueError("causal event replay did not reconstruct the declared raw length")
+    if decoded_sha256 != expected_decoded_sha256:
+        raise ValueError("causal event replay differs from the exact WRT decode")
 
     exact_rows: dict[str, object] = {}
     if baseline is not None:
@@ -553,7 +514,11 @@ def score_trace(
         "wrt_bytes": wrt_bytes,
         "wrt_sha256": wrt_digest.hexdigest(),
         "decoded_bytes": endpoint_state.decoded_bytes,
-        "decoded_sha256": endpoint_state.decoded_sha256.hexdigest(),
+        "decoded_sha256": decoded_sha256,
+        "exact_store_raw_bytes": parsed.raw_length,
+        "exact_store_events": len(parsed.events),
+        "exact_store_event_kinds": parsed.kind_counts,
+        "events_released_after_completion": True,
         "pages": endpoint_state.pages,
         "titles": endpoint_state.titles,
         "title_units": endpoint_state.title_units,
@@ -619,7 +584,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--dictionary", type=Path, required=True)
     parser.add_argument("--scope-bytes", type=int, required=True)
     parser.add_argument("--archive", type=Path)
-    parser.add_argument("--wrt-store", type=Path)
+    parser.add_argument("--wrt-store", type=Path, required=True)
+    parser.add_argument("--raw-input", type=Path, required=True)
     parser.add_argument("--window-id", required=True)
     parser.add_argument("--phase", choices=("selection", "confirmation"), required=True)
     parser.add_argument("--variant-id")
@@ -641,7 +607,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise SystemExit("target gap cannot be negative")
     if args.full_scope_bytes <= 0:
         raise SystemExit("full-scope-bytes must be positive")
-    for path in (args.trace, args.dictionary):
+    for path in (args.trace, args.dictionary, args.wrt_store, args.raw_input):
         if not path.is_file():
             raise SystemExit(f"missing input: {path}")
     if args.substrate_receipt and not args.substrate_receipt.is_file():
@@ -654,7 +620,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     else:
         first_specs = specs
     dictionary = load_dictionary(args.dictionary)
-    first, diagnostics = score_trace(args.trace, dictionary, first_specs)
+    parsed = parse_store(args.wrt_store, args.dictionary)
+    raw_input = args.raw_input.read_bytes()
+    if raw_input != parsed.decoded:
+        raise SystemExit("exact WRT decode differs from --raw-input")
+    if args.scope_bytes != parsed.raw_length:
+        raise SystemExit("--scope-bytes differs from the exact WRT raw length")
+    first, diagnostics = score_trace(args.trace, parsed, first_specs)
     rows = [row_for(stats, args.scope_bytes) for stats in first.values()]
     rows.sort(
         key=lambda row: (
@@ -685,7 +657,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         + control_rows[: min(4, args.exact_top)]
     }
     exact_specs = [parse_variant_id(value, specs) for value in exact_ids]
-    _, exact_diagnostics = score_trace(args.trace, dictionary, exact_specs, exact_ids)
+    _, exact_diagnostics = score_trace(args.trace, parsed, exact_specs, exact_ids)
     exact = exact_diagnostics["exact"]
     for row in rows:
         row["exact"] = exact.get(str(row["variant_id"]))
@@ -705,16 +677,25 @@ def main(argv: Sequence[str] | None = None) -> int:
             "trace_wrt_bytes_match": archive_wrt_bytes == diagnostics["wrt_bytes"],
             "baseline_range_match": baseline_values == {payload_bytes},
         }
-    if args.wrt_store:
-        stored = args.wrt_store.read_bytes()
-        traced = b"".join(bytes((row.value,)) for row in iter_trace_bytes(args.trace))
-        candidates = (stored, stored[5:] if len(stored) >= 5 else b"")
-        validations["wrt_store"] = {
-            "path": str(args.wrt_store),
-            "sha256": sha256_file(args.wrt_store),
-            "trace_matches_store": traced in candidates,
-            "trace_sha256": hashlib.sha256(traced).hexdigest(),
-        }
+    validations["wrt_store"] = {
+        "path": str(args.wrt_store),
+        "sha256": sha256_file(args.wrt_store),
+        "storage_header_bytes": parsed.storage_header_bytes,
+        "stream_bytes": len(parsed.stream),
+        "stream_sha256": hashlib.sha256(parsed.stream).hexdigest(),
+        "trace_matches_store": diagnostics["wrt_sha256"]
+        == hashlib.sha256(parsed.stream).hexdigest(),
+        "raw_length": parsed.raw_length,
+        "decoded_sha256": hashlib.sha256(parsed.decoded).hexdigest(),
+        "event_count": len(parsed.events),
+        "event_kind_counts": parsed.kind_counts,
+    }
+    validations["raw_input"] = {
+        "path": str(args.raw_input),
+        "bytes": args.raw_input.stat().st_size,
+        "sha256": sha256_file(args.raw_input),
+        "matches_exact_wrt_decode": True,
+    }
 
     tool = Path(__file__).resolve()
     substrate_receipt = None

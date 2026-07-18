@@ -77,7 +77,9 @@ constructive replay when the headroom justifies it.
 
 ## Start From Current State
 
-Run commands from `/home/clocksmith/deco/gamma` unless a tool says otherwise.
+Run commands from the repository root reported by
+`git rev-parse --show-toplevel` unless a tool says otherwise. Do not encode a
+machine-specific checkout path in commands, receipts, or continuation docs.
 At the start of an enwiki9 work session, inspect:
 
 ```bash
@@ -121,6 +123,10 @@ Oracle and teacher results show available information, not realizable gain.
 Qbits and loss estimates rank candidates; exact coder replay establishes saved
 bytes. Cold-reset windows, opening prefixes, later slices, and cumulative runs
 are different populations and must not silently substitute for one another.
+
+If a trace, alignment, evaluator, decoder-state, or causality defect is found,
+quarantine every dependent receipt and rebuild it from corrected inputs. A
+favorable result from invalid instrumentation is not evidence.
 
 Claim `10.95%` only when all are true:
 
