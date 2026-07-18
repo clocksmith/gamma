@@ -12,18 +12,52 @@
       "name": "endpoint428 plus online compact/FX2/layer-0 residual mixer",
       "rank": 1,
       "status": "active",
-      "evidence_tier": "idea",
+      "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
+      "measured_gain_bytes": 67,
+      "gain_bytes_per_1m": 67.0,
+      "heldout_measured_gain_bytes": 15,
+      "heldout_gain_bytes_per_proportional_1m": 74.99993757724815,
+      "maximum_incremental_program_bytes": 9596,
       "score_credit_bytes": 0,
       "source_paths": [
-        "patches/compact_layer0_p1_trace_v1.patch",
+        "results/endpoint428_pair_layer0_online_mixer_1m_v1/receipt.json",
+        "results/endpoint428_pair_layer0_online_mixer_1m_v1/screen.json",
+        "results/endpoint428_pair_layer0_online_mixer_1m_v1/screen_source.cpp",
+        "patches/endpoint428_online_pair_layer0_v1.patch",
         "tools/compact_layer0_online_mixer_screen.cpp",
         "tools/compact_layer0_online_mixer_receipt.py"
       ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_pair_layer0_online_mixer_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full/saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_mixer_1m_v1/receipt.json",
+          "pointer": "/exact_replay/full_saved_bytes_per_1m_raw",
+          "candidate_field": "gain_bytes_per_1m"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_mixer_1m_v1/receipt.json",
+          "pointer": "/exact_replay/holdout/saved_bytes",
+          "candidate_field": "heldout_measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_mixer_1m_v1/receipt.json",
+          "pointer": "/exact_replay/holdout_saved_bytes_per_proportional_1m_raw",
+          "candidate_field": "heldout_gain_bytes_per_proportional_1m"
+        }
+      ],
       "source_required": true,
-      "decision": "Extend the positive fixed-point online mixer with the already-computed compact post-SSE and FX2-lite428 preblend probabilities so it can adapt the fixed 31:9 endpoint blend without new model state.",
-      "next_gate": "Require archive and pair-trace identity plus at least 69.404 B/M on full and held-out exact arithmetic replay before native integration.",
-      "disqualifiers": []
+      "decision": "The frozen pair-enhanced online mixer reproduced deterministically and saved 67 exact bytes overall plus 15 exact bytes on proportional holdout. That clears the 57.404 B/M gross forecast debt, but not the provisional 69.404 B/M floor derived from an assumed 12,000-byte implementation, and three one-byte held-out block regressions exceeded the two-block research guard. It earns no score credit. A frozen native accounting probe remains justified because the measured gain can pay for at most 9,596 incremental compressed program bytes.",
+      "next_gate": "Reproduce the frozen probability stream inside endpoint428, require byte-identical P1 and archive output, and measure the actual compressed program delta. Continue only if the delta is at most 9,596 bytes, then require positive disjoint transfer before an exact 10M economics gate.",
+      "disqualifiers": [
+        "No native archive, roundtrip, determinism, RSS, or counted source result",
+        "67 B/M is below the provisional 69.404 B/M floor when assuming 12,000 added program bytes",
+        "Three held-out blocks regressed by one byte each, exceeding the frozen two-block guard"
+      ]
     },
     {
       "id": "endpoint428_layer0_online_residual_v1",

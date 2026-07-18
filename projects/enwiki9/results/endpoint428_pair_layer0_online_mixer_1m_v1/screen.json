@@ -1,0 +1,22 @@
+{
+  "schema": "compact_layer0_online_mixer_screen_v2",
+  "evidence_level": "causal_train_dev_selected_pre_exact_replay",
+  "scope": {"rows": 4805936, "train_end_row": 2883561, "dev_end_row": 3844748, "selection_reads_holdout": false},
+  "causality": {"prediction_precedes_current_truth": true, "weights_update_after_current_truth": true, "previous_byte_context_only": true, "shipped_weights_required": false},
+  "feature_contract": {"layer0_endpoint_count": 26, "free_upstream_endpoints": ["compact_post_sse", "fx2lite428_preblend"], "feature_count_with_bias": 29},
+  "configs": [
+    {"name": "global_lr22", "context": "global", "global_shift": 22, "local_shift": 0, "gated": false, "train_gain_qbits": -77941, "dev_gain_qbits": -49952},
+    {"name": "global_lr24", "context": "global", "global_shift": 24, "local_shift": 0, "gated": false, "train_gain_qbits": 44416, "dev_gain_qbits": -8997},
+    {"name": "hier_bitpos_g24_l21", "context": "bit_position", "global_shift": 24, "local_shift": 21, "gated": false, "train_gain_qbits": -300791, "dev_gain_qbits": -135771},
+    {"name": "hier_bitpos_g24_l23", "context": "bit_position", "global_shift": 24, "local_shift": 23, "gated": false, "train_gain_qbits": 8795, "dev_gain_qbits": -30817},
+    {"name": "hier_regime_g24_l20", "context": "previous_byte_class_bit_position_base_confidence", "global_shift": 24, "local_shift": 20, "gated": false, "train_gain_qbits": -372213, "dev_gain_qbits": -191088},
+    {"name": "hier_regime_g24_l22", "context": "previous_byte_class_bit_position_base_confidence", "global_shift": 24, "local_shift": 22, "gated": false, "train_gain_qbits": 104303, "dev_gain_qbits": -10557},
+    {"name": "hier_regime_g24_l20_regret", "context": "previous_byte_class_bit_position_base_confidence", "global_shift": 24, "local_shift": 20, "gated": true, "train_gain_qbits": -30459, "dev_gain_qbits": -4384},
+    {"name": "hier_regime_g24_l22_regret", "context": "previous_byte_class_bit_position_base_confidence", "global_shift": 24, "local_shift": 22, "gated": true, "train_gain_qbits": 79632, "dev_gain_qbits": 6004}
+  ],
+  "selection": {"name": "hier_regime_g24_l22_regret", "index": 7, "dev_gain_qbits": 6004},
+  "qbit_replay": {"train_gain_qbits": 79632, "dev_gain_qbits": 6004, "holdout_gain_qbits": 27585},
+  "deterministic_probability_replay": true,
+  "candidate_p1_path": "/home/x/enwiki9-nonproof/results/endpoint428_compact_layer0_trace_1m_v2/pair_online_mixer_candidate.p1",
+  "claim_boundary": "Causal probability replay only; exact range coding, native integration, program accounting, memory, and full-corpus proof remain required."
+}
