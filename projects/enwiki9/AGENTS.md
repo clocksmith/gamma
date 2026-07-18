@@ -103,6 +103,98 @@ When no safe heavy gate is available, keep moving horizontally:
 - write probes that are cheap, causal, deterministic, byte-counted, and easy to
   retire.
 
+## Prize-Facing Endpoint Experiment Contract
+
+Measure add-on endpoints incrementally against the closest counted constructive
+substrate in the current receipts, not only against a weaker diagnostic base.
+At the present frontier that substrate is compact-`200` plus FX2-lite
+endpoint428. Raw FX2 and compact-base-only results may explain a mechanism, but
+they must not select or promote the prize-facing variant.
+
+For matched endpoint work, emit one aligned record population containing:
+
+```text
+compact-base probability
+endpoint428 probability
+true bit
+decoder-reconstructed WRT state needed by the endpoint
+```
+
+Generate both probability streams in the same execution whenever their online
+state can interact. Preserve continuous recurrent, mixer, PPMD, and FXCM state;
+do not splice separately generated streams and assume semantic identity.
+
+Before interpreting gain, require all observation-neutral identity checks:
+
+- trace-enabled and trace-disabled archives are byte-identical;
+- the recorded base probabilities reproduce the exact arithmetic payload;
+- WRT stream, truth bits, decoded raw bytes, dictionary, input, binary, and
+  source hashes match their frozen contract;
+- the trace covers every scored bit exactly once and reports malformed or
+  missing rows as a terminal failure.
+
+Every window or slice must declare its state origin:
+
+- `cold_reset_window`: model state starts at the window boundary;
+- `cumulative_from_corpus_start`: state evolves from byte zero;
+- `warmup_then_score`: name and hash the unscored warmup and scored suffix.
+
+Do not use cold-reset scaling as cumulative evidence without a matched
+calibration receipt. Report opening-prefix, later reset-slice, and cumulative
+results separately.
+
+Use frozen selection and confirmation:
+
+1. Freeze window manifests, population roles, component universe, candidate
+   parameters, router update, block size, seed, tool/source hashes, and exact
+   accounting method before selection.
+2. Select only on declared selection/development populations.
+3. Freeze the complete variant identifier before opening confirmation.
+4. Evaluate only that variant on confirmation; do not use confirmation results
+   to alter context depth, blend, support, smoothing, route, or payload.
+5. Require the targeted endpoint to beat its matched causal control, such as a
+   previous-title or deterministic random-control endpoint.
+
+Oracle evidence screens information availability; it never promotes a router.
+If the endpoint oracle is below the counted requirement, retire that endpoint
+universe before selector work. If the oracle is sufficient but causal retention
+fails, change the probability endpoint or its causal state. For trie/entity
+models, prefer calibrated node-support and hierarchical backoff probabilities
+from exact node to parent to global state before another selector grid over the
+same hard predictions.
+
+Use qbits to rank training candidates, then replay the frozen candidate with
+the exact arithmetic coder. Report exact saved bytes, qbit gain, coverage,
+positive/regressing/flat blocks, largest regression, state bytes, and causal
+retention relative to the oracle.
+
+Charge the deterministic compressed incremental package delta produced by the
+same packaging method:
+
+```text
+required_gain_B_per_M = remaining_score_debt / 1000
+                      + compressed_incremental_package_bytes / 1000
+                      + explicitly counted table/option bytes / 1000
+```
+
+Do not substitute raw research-tool source size for the final package delta,
+and do not omit integration code, static tables, configuration, or decoder
+state that must ship. Preserve comfortable held-out margin for arithmetic and
+integration transfer before authorizing a native gate.
+
+The promotion order is:
+
+```text
+matched endpoint oracle
+  -> frozen causal selection
+  -> sealed exact heldout replay
+  -> compressed incremental package accounting
+  -> native integration over the closest substrate
+  -> exact 10M roundtrip/determinism/RSS gate
+  -> larger unchanged gates
+  -> official 1G accounting and roundtrip
+```
+
 ## Novel Algorithm Strategy
 
 The primary novel strategy is SRSTC / streaming self-referential semantic
