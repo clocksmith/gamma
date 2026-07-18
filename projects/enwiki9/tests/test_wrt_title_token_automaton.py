@@ -12,6 +12,7 @@ TOOL = (
     / "tools"
     / "wrt_title_token_automaton.py"
 )
+sys.path.insert(0, str(TOOL.parent))
 SPEC = importlib.util.spec_from_file_location("wrt_title_token_automaton", TOOL)
 assert SPEC is not None and SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -31,8 +32,23 @@ RAW = (
 )
 
 
-def wrt_literal_stream(raw: bytes) -> bytes:
-    return bytes(MODULE.char_swap(value) for value in raw)
+def wrt_literal_store(raw: bytes) -> tuple[bytes, bytes]:
+    stream = (
+        bytes((MODULE.TEXT_SEGMENT,))
+        + len(raw).to_bytes(4, "big")
+        + bytes((MODULE.TEXT_SEGMENT,))
+        + bytes(MODULE.char_swap(value) for value in raw)
+    )
+    return bytes((0x80, 0, 0, 0, 0)) + stream, stream
+
+
+def parse_synthetic_store(tmp_path: Path) -> tuple[MODULE.ParsedStore, Path, bytes]:
+    stored, stream = wrt_literal_store(RAW)
+    store_path = tmp_path / "wrt.store"
+    dictionary_path = tmp_path / "english.dic"
+    store_path.write_bytes(stored)
+    dictionary_path.write_bytes(b"")
+    return MODULE.parse_store(store_path, dictionary_path), dictionary_path, stream
 
 
 def write_uniform_trace(path: Path, stream: bytes) -> None:
@@ -63,35 +79,30 @@ def test_char_swap_is_an_involution() -> None:
     assert all(MODULE.char_swap(MODULE.char_swap(value)) == value for value in range(256))
 
 
-def test_wrt_tokenizer_decodes_literals_controls_and_dictionary_codes() -> None:
-    tokenizer = MODULE.WrtTokenizer([b"alpha"] * 81)
-    literal = tokenizer.feed(MODULE.char_swap(ord("z")))
-    assert literal is not None and literal.decoded == b"z"
+def test_exact_wrt_events_map_to_title_units() -> None:
+    literal = MODULE.unit_from_event(
+        MODULE.WrtEvent(6, 7, bytes((MODULE.char_swap(ord("z")),)), b"z", "literal")
+    )
+    assert literal.signature == 0x10000 + ord("z")
+    assert literal.decoded == b"z"
 
-    capital = tokenizer.feed(MODULE.char_swap(0x40))
-    assert capital is not None and capital.decoded == b""
-    word = tokenizer.feed(MODULE.char_swap(0x80))
-    assert word is not None and word.signature == 0 and word.decoded == b"Alpha"
-
-    assert tokenizer.feed(MODULE.char_swap(0xD0)) is None
-    wide = tokenizer.feed(MODULE.char_swap(0x80))
-    assert wide is not None and wide.signature == 80 and wide.decoded == b"alpha"
+    token = MODULE.unit_from_event(
+        MODULE.WrtEvent(7, 8, bytes((MODULE.char_swap(0x80),)), b"Alpha", "token")
+    )
+    assert token.signature == 0
+    assert token.decoded == b"Alpha"
 
 
 def test_compact_trace_reconstructs_wrt_bytes_and_title_endpoint_wins(tmp_path: Path) -> None:
-    stream = wrt_literal_stream(RAW)
+    parsed, _, stream = parse_synthetic_store(tmp_path)
     trace = tmp_path / "trace.bin"
-    dictionary_path = tmp_path / "english.dic"
     write_uniform_trace(trace, stream)
-    dictionary_path.write_bytes(b"")
 
     specs = [
         MODULE.VariantSpec("current", 1, 200_000, True, "always"),
         MODULE.VariantSpec("previous", 1, 200_000, True, "always"),
     ]
-    stats, diagnostics = MODULE.score_trace(
-        trace, MODULE.load_dictionary(dictionary_path), specs
-    )
+    stats, diagnostics = MODULE.score_trace(trace, parsed, specs)
     current = stats[specs[0].variant_id]
     previous = stats[specs[1].variant_id]
 
@@ -108,19 +119,36 @@ def test_compact_trace_reconstructs_wrt_bytes_and_title_endpoint_wins(tmp_path: 
 
 
 def test_regret_router_updates_only_after_observed_truth(tmp_path: Path) -> None:
-    stream = wrt_literal_stream(RAW)
+    parsed, _, stream = parse_synthetic_store(tmp_path)
     trace = tmp_path / "trace.bin"
     write_uniform_trace(trace, stream)
     spec = MODULE.VariantSpec("current", 1, 100_000, True, "regret12")
-    stats, _ = MODULE.score_trace(trace, [], [spec])
+    stats, _ = MODULE.score_trace(trace, parsed, [spec])
     row = stats[spec.variant_id]
 
     assert row.eligible_bits > row.applied_bits > 0
     assert row.counterfactual_qbits >= row.qbits_saved > 0
 
 
+def test_sparse_discovery_path_matches_exact_replay_stats(tmp_path: Path) -> None:
+    parsed, _, stream = parse_synthetic_store(tmp_path)
+    trace = tmp_path / "trace.bin"
+    write_uniform_trace(trace, stream)
+    specs = [
+        MODULE.VariantSpec("current", 1, 200_000, True, "always"),
+        MODULE.VariantSpec("previous", 1, 100_000, False, "regret12"),
+    ]
+    discovery, _ = MODULE.score_trace(trace, parsed, specs)
+    exact_ids = {spec.variant_id for spec in specs}
+    replay, diagnostics = MODULE.score_trace(trace, parsed, specs, exact_ids)
+
+    for variant_id in exact_ids:
+        assert discovery[variant_id].__dict__ == replay[variant_id].__dict__
+        assert diagnostics["exact"][variant_id]["baseline_payload_bytes"] > 0
+
+
 def test_fx2_range_counter_matches_uniform_payload_contract() -> None:
-    stream = wrt_literal_stream(RAW)
+    _, stream = wrt_literal_store(RAW)
     first = MODULE.Fx2RangeCounter()
     second = MODULE.Fx2RangeCounter()
     for value in stream:
@@ -135,18 +163,20 @@ def test_fx2_range_counter_matches_uniform_payload_contract() -> None:
 
 
 def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
-    stream = wrt_literal_stream(RAW)
+    stored, stream = wrt_literal_store(RAW)
     trace = tmp_path / "trace.bin"
     archive = tmp_path / "archive.cmix"
     payload = tmp_path / "archive.payload"
     store = tmp_path / "wrt.store"
     dictionary = tmp_path / "english.dic"
+    raw_input = tmp_path / "raw.bin"
     output = tmp_path / "receipt.json"
     write_uniform_trace(trace, stream)
     payload_bytes = write_archive(archive, stream)
     payload.write_bytes(bytes(payload_bytes))
-    store.write_bytes(bytes(5) + stream)
+    store.write_bytes(stored)
     dictionary.write_bytes(b"")
+    raw_input.write_bytes(RAW)
 
     exit_code = MODULE.main(
         [
@@ -162,6 +192,8 @@ def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
             str(payload),
             "--wrt-store",
             str(store),
+            "--raw-input",
+            str(raw_input),
             "--window-id",
             "selection-synthetic",
             "--phase",
@@ -189,6 +221,7 @@ def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
     assert receipt["validations"]["archive"]["trace_wrt_bytes_match"] is True
     assert receipt["validations"]["payload"]["baseline_range_match"] is True
     assert receipt["validations"]["wrt_store"]["trace_matches_store"] is True
+    assert receipt["validations"]["raw_input"]["matches_exact_wrt_decode"] is True
     assert receipt["best"]["source"] == "current"
     assert receipt["substrate"] == {
         "id": "endpoint428",
