@@ -132,10 +132,9 @@ class WrtTokenizer:
         if self.escape:
             self.escape = False
             self.upper = False
-            payload = self._apply_case(bytes((logical,)))
             raw = bytes(self.pending_encoded) + bytes((encoded,))
             self.pending_encoded.clear()
-            return WrtUnit(0x30000 + logical, raw, payload)
+            return WrtUnit(0x30000 + logical, raw, bytes((logical,)))
 
         if self.pending_logical:
             self.pending_encoded.append(encoded)
@@ -620,7 +619,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             str(row["variant_id"]),
         )
     )
-    exact_ids = {str(row["variant_id"]) for row in rows[: args.exact_top]}
+    candidate_rows = [row for row in rows if row["source"] == "current"]
+    control_rows = [row for row in rows if row["source"] == "previous"]
+    exact_ids = {
+        str(row["variant_id"])
+        for row in candidate_rows[: args.exact_top]
+        + control_rows[: min(4, args.exact_top)]
+    }
     exact_specs = [parse_variant_id(value, specs) for value in exact_ids]
     _, exact_diagnostics = score_trace(args.trace, dictionary, exact_specs, exact_ids)
     exact = exact_diagnostics["exact"]
@@ -692,7 +697,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "diagnostics": diagnostics,
         "validations": validations,
         "rows": rows,
-        "best": rows[0] if rows else None,
+        "best": candidate_rows[0] if candidate_rows else None,
+        "best_control": control_rows[0] if control_rows else None,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
