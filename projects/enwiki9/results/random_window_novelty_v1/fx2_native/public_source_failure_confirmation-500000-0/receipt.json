@@ -1,0 +1,113 @@
+{
+  "algorithm": {
+    "decoder_table_payload_bytes": 0,
+    "integrated_source_cost_counted": false,
+    "name": "title_echo",
+    "transform_deterministic": true,
+    "transform_roundtrip_ok": true,
+    "transform_tool": "/home/clocksmith/deco/gamma/projects/enwiki9/tools/random_window_novelty_screen.py",
+    "transform_tool_sha256": "aa74fac4081345673fe4243062a8a34b5736ac1b5db99877a5001070a04aeb93"
+  },
+  "claim_boundary": "This arbitrary-window FX2/WRT comparison is not an official prefix score, a counted integration, or a 10.95% proof.",
+  "confirmation_receipt": {
+    "path": "/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/confirmation.json",
+    "sha256": "fe97c31ad666f8d95d598f2b863b97b845b7a9778c8668a7a1be7127472ce1ac",
+    "tool_sha256": "aa74fac4081345673fe4243062a8a34b5736ac1b5db99877a5001070a04aeb93"
+  },
+  "corpus": {
+    "bytes": 1000000000,
+    "path": "/home/clocksmith/deco/gamma/projects/enwiki9/data/enwik9",
+    "receipt_sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "window_sha256": "e0b59bfa27e67aae7621c3590197cc306d9bc248c18778f58457e68e5172edb6"
+  },
+  "created_utc": "2026-07-18T18:33:38Z",
+  "evidence_level": "target_substrate_random_window_roundtrip_and_determinism",
+  "failure": "phase identity_compress_a returned 245",
+  "fx2": {
+    "binary_bytes": 303536,
+    "binary_path": "/tmp/enwiki9-title-echo-fx2-public-04c5806f/cmix",
+    "binary_sha256": "171919c514b8d5a366576434a307ada2a3aa067c7c1f02a91394f6309ef25e5b",
+    "build_contract": "SEED=923 UPDATE_LIMIT=3000 O3 fast / Os WRT -march=native -ffast-math -fno-strict-aliasing",
+    "compiler": "g++ 13.3.0",
+    "dictionary_bytes": 411996,
+    "dictionary_path": "projects/enwiki9/external/fx2-cmix/dictionary/english.dic",
+    "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+    "source_commit": "04c5806f99b9b0fa8572be8c8063b4324ec405de",
+    "wrt_preprocessing": true
+  },
+  "guard_contract": {
+    "limit_mode": "max_single",
+    "local_10gib_limit_kib": 10485760,
+    "official_decimal_10gb_limit_kib": 9765625
+  },
+  "host": {
+    "cpu_count": 4,
+    "machine": "x86_64",
+    "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "python": "3.12.3"
+  },
+  "mode": "random_window_fx2_wrt_native_transform_gate",
+  "phases": [
+    {
+      "command": [
+        "/tmp/enwiki9-title-echo-fx2-public-04c5806f/cmix",
+        "-c",
+        "/home/clocksmith/deco/gamma/projects/enwiki9/external/fx2-cmix/dictionary/english.dic",
+        "/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/fx2_native/confirmation-500000-0/identity.input",
+        "/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/fx2_native/confirmation-500000-0/identity.a.cmix"
+      ],
+      "elapsed_s": 25.59536,
+      "guard": {
+        "command": [
+          "/tmp/enwiki9-title-echo-fx2-public-04c5806f/cmix",
+          "-c",
+          "/home/clocksmith/deco/gamma/projects/enwiki9/external/fx2-cmix/dictionary/english.dic",
+          "/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/fx2_native/confirmation-500000-0/identity.input",
+          "/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/fx2_native/confirmation-500000-0/identity.a.cmix"
+        ],
+        "elapsed_s": 25.5576,
+        "label": "identity_compress_a",
+        "latest_sample": {
+          "max_single_rss_kib": 0,
+          "processes": [],
+          "tree_rss_kib": 0
+        },
+        "limit_kib": 10485760,
+        "limit_mode": "max_single",
+        "max_sampled_single_rss_kib": 5256596,
+        "max_sampled_tree_rss_kib": 5256596,
+        "official_decimal_limit_kib": 9765625,
+        "official_decimal_over_limit_kib": 0,
+        "peak_sample": {
+          "max_single_rss_kib": 5256596,
+          "processes": [
+            {
+              "pid": 2641751,
+              "rss_kib": 5256596
+            }
+          ],
+          "tree_rss_kib": 5256596
+        },
+        "returncode": -11,
+        "rss_guard_exceeded": false,
+        "sample_count": 103,
+        "status": "complete"
+      },
+      "guard_path": "/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/fx2_native/confirmation-500000-0/phases/identity_compress_a.guard.json",
+      "log_path": "/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/fx2_native/confirmation-500000-0/phases/identity_compress_a.log",
+      "log_sha256": "2bb159ff693e659af399eaf4eaed3e0c69feb6a3d27fa4f89f9ba448cc5f4e8d",
+      "name": "identity_compress_a",
+      "returncode": 245
+    }
+  ],
+  "promotion_boundary": "Positive disjoint native windows earn an integrated WRT-aware title endpoint with counted source; they do not earn a full-corpus gate.",
+  "schema_version": 1,
+  "status": "failed",
+  "window": {
+    "offset": 70252800,
+    "sha256": "e0b59bfa27e67aae7621c3590197cc306d9bc248c18778f58457e68e5172edb6",
+    "window_id": "confirmation-500000-0",
+    "window_size": 500000
+  }
+}

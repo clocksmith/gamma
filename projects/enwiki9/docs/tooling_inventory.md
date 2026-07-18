@@ -132,6 +132,8 @@ lanes unless all model/index bytes are counted.
 | `fx2_reorder_dictionary.py` | Reorder/dictionary experiments. |
 | `causal_state_screen.py` | Screens causal state candidates. |
 | `sketch_probe.py` | Sketch-based signal probes. |
+| `random_window_novelty_screen.py` | Runs deterministic selection/confirmation screens for reversible zero-table Wikipedia transforms on disjoint random 500K/1M windows, with matched controls and two proxy backends. |
+| `random_window_fx2_title_echo_gate.py` | Runs a frozen random-window raw/title-echo pair through six serialized, RSS-guarded native FX2/WRT encode/decode/determinism phases. It must own `/tmp/enwiki9-heavy.lock`. |
 
 ## Native Codec Prototypes
 
