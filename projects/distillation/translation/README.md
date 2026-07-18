@@ -31,9 +31,10 @@ seeds, exact hosted-artifact quality, and a one-use externally custodied final
 evaluation.
 
 The current NativeKD2 BF16 checkpoint is a frozen reproducibility baseline,
-not the BF16 winner. Before Columbo, Doppler may freeze its handoff format and
-build shared import/parity machinery. Gamma retains sole checkpoint-selection
-authority and will issue no winner receipt until the new campaign completes.
+not the BF16 winner. Doppler may freeze the generic handoff format and build
+import/parity machinery without selecting a translation winner. Gamma retains
+sole checkpoint-selection authority and will issue no winner receipt until the
+new campaign completes.
 
 ## Current in-domain feasibility evidence
 
