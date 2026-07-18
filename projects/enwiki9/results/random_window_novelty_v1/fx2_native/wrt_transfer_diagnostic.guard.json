@@ -1,0 +1,38 @@
+{
+  "label": "random_window_title_echo_wrt_transfer_diagnostic",
+  "command": [
+    "bash",
+    "-lc",
+    "\nset -euo pipefail\nCMIX=/tmp/enwiki9-title-echo-fx2-worktree-652b1860/cmix\nDICT=/home/clocksmith/deco/gamma/projects/enwiki9/external/fx2-cmix/dictionary/english.dic\nBASE=/home/clocksmith/deco/gamma/projects/enwiki9/results/random_window_novelty_v1/fx2_native\nfor WINDOW in confirmation-500000-0 confirmation-1000000-0; do\n  DIR=\"$BASE/$WINDOW\"\n  \"$CMIX\" -s \"$DICT\" \"$DIR/identity.input\" \"$DIR/identity.wrt.store\"\n  \"$CMIX\" -s \"$DICT\" \"$DIR/title_echo.input\" \"$DIR/title_echo.wrt.store\"\n  \"$CMIX\" -d \"$DICT\" \"$DIR/identity.wrt.store\" \"$DIR/identity.wrt.restored\"\n  \"$CMIX\" -d \"$DICT\" \"$DIR/title_echo.wrt.store\" \"$DIR/title_echo.wrt.restored\"\n  cmp \"$DIR/identity.input\" \"$DIR/identity.wrt.restored\"\n  cmp \"$DIR/title_echo.input\" \"$DIR/title_echo.wrt.restored\"\ndone\n"
+  ],
+  "limit_kib": 10485760,
+  "limit_mode": "max_single",
+  "official_decimal_limit_kib": 9765625,
+  "official_decimal_over_limit_kib": 0,
+  "max_sampled_single_rss_kib": 6968,
+  "max_sampled_tree_rss_kib": 10552,
+  "peak_sample": {
+    "processes": [
+      {
+        "pid": 2650544,
+        "rss_kib": 3584
+      },
+      {
+        "pid": 2650551,
+        "rss_kib": 6968
+      }
+    ],
+    "max_single_rss_kib": 6968,
+    "tree_rss_kib": 10552
+  },
+  "latest_sample": {
+    "processes": [],
+    "max_single_rss_kib": 0,
+    "tree_rss_kib": 0
+  },
+  "sample_count": 4,
+  "rss_guard_exceeded": false,
+  "returncode": 0,
+  "status": "complete",
+  "elapsed_s": 0.3039
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "receipt_type": "random_window_title_echo_wrt_transfer_diagnostic",
+  "evidence_level": "wrt_only_reversible_diagnostic",
+  "claim_boundary": "WRT storage sizes diagnose preprocessing transfer only. They are not entropy-coded archive gains, official prefix scores, or a 10.95% proof.",
+  "algorithm": "title_echo",
+  "fx2_binary_sha256": "4d9f0df9904453635c213a158da1bdf387763dc7c4088e3d61681598c97fc2df",
+  "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+  "guard_receipt": {
+    "path": "results/random_window_novelty_v1/fx2_native/wrt_transfer_diagnostic.guard.json",
+    "sha256": "75dcb85ec336c922975dfe5943c335faa039fce8ec99ccc4f573e175d3423006",
+    "status": "complete",
+    "returncode": 0,
+    "rss_guard_exceeded": false,
+    "max_sampled_single_rss_kib": 6968,
+    "max_sampled_tree_rss_kib": 10552
+  },
+  "rows": [
+    {
+      "window_id": "confirmation-500000-0",
+      "scope_bytes": 500000,
+      "raw_input_bytes": 500000,
+      "title_echo_input_bytes": 487634,
+      "source_size_delta_bytes": -12366,
+      "raw_wrt_store_bytes": 310098,
+      "title_echo_wrt_store_bytes": 305446,
+      "wrt_store_delta_bytes": -4652,
+      "retained_source_reduction_fraction": 0.376192787,
+      "raw_wrt_store_sha256": "4946ca62a87124eb5e33cf31d964a3b8194a4e3eee9bee1739fcd1fe9e0c30e3",
+      "title_echo_wrt_store_sha256": "50a3fc8b040a61aae66ccb09d1929327aae5a31906e64c1b85772c3b5e4b9142",
+      "raw_roundtrip_sha256": "e0b59bfa27e67aae7621c3590197cc306d9bc248c18778f58457e68e5172edb6",
+      "title_echo_roundtrip_sha256": "2b82a3270d0f6f42c1e65c8255154f1e60dff36bc9dd92e9cc8c1db457a16235",
+      "raw_wrt_roundtrip_ok": true,
+      "title_echo_wrt_roundtrip_ok": true
+    },
+    {
+      "window_id": "confirmation-1000000-0",
+      "scope_bytes": 1000000,
+      "raw_input_bytes": 1000000,
+      "title_echo_input_bytes": 977584,
+      "source_size_delta_bytes": -22416,
+      "raw_wrt_store_bytes": 607022,
+      "title_echo_wrt_store_bytes": 598008,
+      "wrt_store_delta_bytes": -9014,
+      "retained_source_reduction_fraction": 0.402123483,
+      "raw_wrt_store_sha256": "338d695a3998ddd38a6e99e2dbb7a680c0150bf028bebc8160f680a4a2f6d2c9",
+      "title_echo_wrt_store_sha256": "850e28b8e1e57cfff2c1c4d3f2283d08136e24cf32aebcb95367ebd01f2c9192",
+      "raw_roundtrip_sha256": "60726f13d8560ec27b085b4e58ef47ae116881f6c95889868625c812804595cc",
+      "title_echo_roundtrip_sha256": "1c3e4d8a3586478930b82a576f40ef9cd3e74d911106681f06c59e3ad89137c1",
+      "raw_wrt_roundtrip_ok": true,
+      "title_echo_wrt_roundtrip_ok": true
+    }
+  ],
+  "aggregate": {
+    "source_size_delta_bytes": -34782,
+    "wrt_store_delta_bytes": -13666,
+    "retained_source_reduction_fraction": 0.392904376
+  },
+  "interpretation": "The transform remains reversible and shortens the WRT stream at both scopes, but the paired native FX2 archives regress. FX2 models the original WRT sequence more efficiently than the shorter marker sequence, so byte removal alone is not transferable gain."
+}

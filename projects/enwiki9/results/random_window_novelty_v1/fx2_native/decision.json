@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "receipt_type": "random_window_title_echo_fx2_native_decision",
+  "evidence_level": "target_substrate_random_window_roundtrip_and_determinism",
+  "claim_boundary": "These are paired arbitrary-window FX2/WRT receipts. They are not official prefix scores, counted submission integrations, full-corpus results, or a 10.95% proof.",
+  "algorithm": "title_echo_pre_wrt_inline_reference",
+  "proxy_evidence": {
+    "selection_receipt_sha256": "7acc1c3d928f86fae3ad87dac58bf6fb5bc10c5231aac07db992876226672239",
+    "confirmation_receipt_sha256": "fe97c31ad666f8d95d598f2b863b97b845b7a9778c8668a7a1be7127472ce1ac",
+    "candidate_rows_won": 48,
+    "candidate_rows_measured": 48,
+    "confirmation_minimum_gain_bytes_per_million": 1614.0,
+    "matched_previous_title_confirmation_regressions": 28,
+    "matched_previous_title_confirmation_rows": 32
+  },
+  "native_backend": {
+    "base_commit": "04c5806f99b9b0fa8572be8c8063b4324ec405de",
+    "source_tree_sha256": "e65f20613bed9bcf51d61ffbde3f6aa2270da7425a87f0fe5fb4d0a992131c67",
+    "source_diff_sha256": "652b1860ee8f4322aefcc319ae1795b5a12150bc8634edbcd8cba9ba574f6e86",
+    "binary_sha256": "4d9f0df9904453635c213a158da1bdf387763dc7c4088e3d61681598c97fc2df",
+    "binary_bytes": 307632,
+    "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+    "build_contract": "Research worktree snapshot with experimental features at default-off values and the PPMD MAP_FIXED remap correction; SEED=923, UPDATE_LIMIT=3000, GCC 13.3.0, O3/Os, march=native, fast-math, no-strict-aliasing.",
+    "paired_comparison_note": "Both control and candidate use the identical binary and WRT dictionary. This is not a claim of byte-identical public fx2 reproduction."
+  },
+  "native_rows": [
+    {
+      "window_id": "confirmation-500000-0",
+      "scope_bytes": 500000,
+      "receipt_path": "results/random_window_novelty_v1/fx2_native/confirmation-500000-0.json",
+      "receipt_sha256": "27e6bf52a078c8a63a799fd8b67c3074af99f606805cd10e60097dc1ca3cc06f",
+      "identity_archive_bytes": 96880,
+      "candidate_archive_bytes": 97008,
+      "archive_delta_vs_identity": 128,
+      "gross_gain_bytes_per_million": -256.0,
+      "source_size_delta_bytes": -12366,
+      "identity_roundtrip_ok": true,
+      "candidate_roundtrip_ok": true,
+      "identity_deterministic": true,
+      "candidate_deterministic": true,
+      "peak_single_rss_kib": 5728728,
+      "verdict": "negative_native_transfer"
+    },
+    {
+      "window_id": "confirmation-1000000-0",
+      "scope_bytes": 1000000,
+      "receipt_path": "results/random_window_novelty_v1/fx2_native/confirmation-1000000-0.json",
+      "receipt_sha256": "8f4e739cba9ec91fdf0a10852b82e371bd3b75765280978675e9f77184b1895d",
+      "identity_archive_bytes": 184336,
+      "candidate_archive_bytes": 184683,
+      "archive_delta_vs_identity": 347,
+      "gross_gain_bytes_per_million": -347.0,
+      "source_size_delta_bytes": -22416,
+      "identity_roundtrip_ok": true,
+      "candidate_roundtrip_ok": true,
+      "identity_deterministic": true,
+      "candidate_deterministic": true,
+      "peak_single_rss_kib": 5783164,
+      "verdict": "negative_native_transfer"
+    }
+  ],
+  "aggregate_native": {
+    "scope_bytes": 1500000,
+    "archive_delta_vs_identity": 475,
+    "gross_gain_bytes_per_million": -316.666667,
+    "all_roundtrip_ok": true,
+    "all_deterministic": true,
+    "rss_guard_exceeded": false,
+    "official_decimal_memory_exceeded": false
+  },
+  "wrt_diagnostic": {
+    "receipt_path": "results/random_window_novelty_v1/fx2_native/wrt_transfer_diagnostic.json",
+    "receipt_sha256": "72fcdd48838008fca2b5f5c8eb9f4b446a812d7d3222be23bd77b24e8c8b7fbb",
+    "wrt_store_delta_500k": -4652,
+    "wrt_store_delta_1m": -9014,
+    "interpretation": "The representation is shorter after WRT at both scopes, but the final FX2 archives are larger. The inline markers damage predictor context more than their length reduction pays."
+  },
+  "upstream_build_failure": {
+    "classification": "environment_and_source_correctness_evidence_only",
+    "receipt_path": "results/random_window_novelty_v1/fx2_native/public_source_failure_confirmation-500000-0/receipt.json",
+    "receipt_sha256": "d6a2d41804dd94625f2383dba5ae09365c4987f9eb0e5c20684a98c693321ab6",
+    "guard_returncode": -11,
+    "max_sampled_single_rss_kib": 5256596,
+    "reason": "The unmodified base commit lost the PPMD mmap heap address at periodic remap and received SIGSEGV. It produced no candidate archive comparison."
+  },
+  "verdict": "retire_pre_wrt_title_echo_transform",
+  "forecast_change_bytes": 0,
+  "retirement_reason": "The frozen candidate is negative on both matched native FX2/WRT scopes before any integration source bytes are charged. No marker, alias, selectivity, or weight sweep on this pre-WRT shape is justified.",
+  "next_mechanism": {
+    "name": "wrt_title_token_automaton_v1",
+    "stream_rewrite": false,
+    "state_contract": "Capture current-page title WRT token IDs and literal expansions only after they decode; build a bounded page-local prefix/failure automaton; expose exact title-prefix match length and predicted next token/byte to an online fixed-point endpoint; update regret only after decoded truth.",
+    "control": "Run the mechanically identical previous-page-title automaton as a matched control.",
+    "promotion_gate": "On disjoint 500K and 1M exact FX2 traces, require more than 700 gross B/1M at every scope before code, positive gain after measured code/state cost, bounded regressions, causal replay identity, and no confirmation tuning.",
+    "reason": "It preserves the original WRT stream and asks whether title state improves probability, avoiding the destructive inline-marker representation that failed here."
+  }
+}
