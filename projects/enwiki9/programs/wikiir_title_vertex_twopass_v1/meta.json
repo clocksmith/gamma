@@ -1,0 +1,13 @@
+{
+  "id": "wikiir_title_vertex_twopass_v1",
+  "description": "Dictionary-free reversible title graph: preserve literal page titles, encode matching link targets as IDs, then reconstruct forward and backward links with a two-pass inverse.",
+  "added": "2026-07-18",
+  "deps": [],
+  "compares_against": [
+    "wikiir_title_vertex_v1",
+    "cmix21_lstm200_fx2lite428_context_recovery_10m_v1"
+  ],
+  "status": "retired",
+  "terminal_evidence": "The exact 1M IR removes 3,967 raw bytes and saves 52 LZMA bytes before its mode byte, but the guarded target archive is 174,134 versus 173,963, a 171-byte regression. At 10M it removes 20,682 raw bytes but loses 28 LZMA bytes and falls back to literal.",
+  "evidence_boundary": "Negative reversible representation evidence only; no score claim."
+}

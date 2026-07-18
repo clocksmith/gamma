@@ -122,8 +122,9 @@ survive native integration.
 7. Use Qwen only after a new candidate universe clears a fresh oracle screen;
    then execute matched anchor, Qwen-curated, and deterministic random-control
    lanes with identical budgets and sealed blocks.
-8. Promote the unchanged native package through exact larger scopes and
-   official accounting.
+8. Promote only a replacement native package whose counted prefix economics,
+   roundtrip, determinism, RSS, and held-out evidence clear its frozen screen;
+   the unchanged CMIX21 package is retired and must not advance to `1G`.
 
 ## Retired Or Secondary Shapes
 
@@ -136,8 +137,8 @@ survive native integration.
 - Raw order-2 SRSTC savings are discovery evidence, not additive FX2 savings.
 - Broad XML/SSE hashes, MWCC, and I-SSA remain diagnostic until they clear
   counted held-out economics.
-- PPMD-only memory cuts are bracket evidence; the active proof package uses a
-  different FXCM memory surface.
+- PPMD-only memory cuts and the stopped FXCM-memory package are bracket and
+  substrate evidence, not active prize candidates.
 
 ## What Would Confirm The Strategy Worked
 

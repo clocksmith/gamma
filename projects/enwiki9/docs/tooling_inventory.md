@@ -23,6 +23,7 @@ runner-adjacent.
 | `enwiki9_normalize_receipts.py` | Regenerates certificate, evidence matrix, memory-valve report, residual matrix, and status receipt in one non-heavy pass. |
 | `enwiki9_artifact_fingerprint_audit.py` | Verifies recorded result/guard receipt hashes in candidate meta rows and reports legacy rows missing fingerprints. |
 | `enwiki9_doc_lint.py` | Validates live docs, claim flags, active-gate consistency, status-summary fields, stale paths, and tool inventory coverage. |
+| `run_fx2_cmix21_wrapper_proof.py` | Runs a serialized guarded source-wrapper archive-identity, roundtrip, and deterministic-replay proof only after a sealed `10M` screen authorizes it. |
 | `frontier_target_report.py` | Ranks projected or exact rows against a target percentage. |
 | `forecast_frontier.py` | Forecast/frontier reporting for candidate triage. |
 
@@ -72,6 +73,46 @@ heavy lane.
 | `fx2_residual_state_search.py` | Searches residual state families. |
 | `fx2_residual_state_search_stream.py` | Streamed residual state search. |
 | `fx2_residual_xml_ledger.py` | Runs legacy or WRT Wiki shell residual ledgers on an exact FX2 trace with qbit screening, abstention, and exact replay for selected keys. |
+| `fx2_cmix21_nested_endpoint_screen.cpp` | Validates archive-neutral matched `96x2`/CMIX endpoint traces, selects only on development rows, and performs exact fixed-point range encode/decode and economics replay. |
+| `fx2_cmix21_contextual_endpoint_screen.py` | Kill-gates train-fitted causal context selection over frozen matched `96x2` endpoint blends before any online-mixer integration. |
+| `fx2_cmix21_affine_endpoint_screen.py` | Fits a training-only affine-logit correction over matched FX2/CMIX endpoints and reports disjoint train, development, and holdout qbit economics. |
+| `build_cmix21_p1_matched_trace.py` | Converts an observation-only CMX21P1 probability stream plus its reversible WRT store into the minimal CMNEST1 truth/probability trace accepted by the exact endpoint replay. |
+| `build_reproducible_source_shar.py` | Reconstructs a declared text source tree through one readable deterministic shell bundle and can emit the standard two-entry bzip2 source ZIP. |
+| `build_reproducible_source_zip.py` | Builds deterministic direct-entry ZIP variants from an explicit source file list for package-method comparisons. |
+| `run_fx2_cmix21_backend_identity_screen.py` | Alternates reference and candidate backends on one guarded input to test archive identity and runtime without changing compression arithmetic. |
+| `seal_reproducible_source_shar_package.py` | Seals bundle, ZIP, source reconstruction, clean-build, backend, and wrapper identity for the counted source representation. |
+| `seal_fx2_cmix21_backend_identity_runtime_screen.py` | Seals arithmetic identity and measured runtime/RSS evidence for a backend-only optimization. |
+| `seal_fx2_cmix21_lstm200_source_frontier.py` | Combines constructive 200x2 evidence, reproducible package cost, and source equivalence into the frozen disjoint-screen boundary. |
+| `seal_fx2_cmix21_lstm200_disjoint.py` | Seals the exact offset-500M reset-slice economics decision for source-built 200x2. |
+| `seal_fx2_cmix21_matched_disjoint.py` | Combines the frozen same-store 96x2/full-CMIX replay, clean guards, and revised package economics into a native-integration or retirement decision. |
+| `seal_fx2_cmix21_source_package_accounting.py` | Applies a verified source-package representation to an existing wrapper proof without relabeling codec evidence. |
+| `seal_fx2_cmix21_dual_rate_receipt.py` | Seals source, archive, roundtrip, determinism, runtime, and accounting evidence for the quarantined phase-aligned recurrent candidate. |
+| `seal_fx2_cmix21_lstm112_10m_receipt.py` | Verifies and seals the terminal native-112 cumulative-10M archive, RSS, source-mismatch, and counted economics decision. |
+| `seal_fx2_cmix21_lstm112_plus80_10m_receipt.py` | Verifies the exact geometry-title package, transform, clean source binary, cumulative-10M archive, RSS, and counted heterogeneous-endpoint decision. |
+| `seal_fx2_cmix21_lstm112_plus80_terminal.py` | Combines the passed exact 10M wrapper proof with matched opening/later recurrent receipts and seals the no-larger-gate retirement decision. |
+| `seal_fx2_cmix21_original_order_blend.py` | Seals the frozen exact-original-order FX2/compact-200 blend across the opening 1M and confirmation 10M scopes, including ordering and source-package economics. |
+| `fx2_attribution_external_base_screen.py` | Screens causal component endpoints against an exact external base probability stream with train/dev/holdout separation, exact range replay, and regression/economics gates. |
+| `cmix_aux_logit_blend_screen.py` | Selects and replays bounded logit blends between a frozen CMIX base and an independently evolved causal endpoint, including fixed-point-ready weights and held-out block audits. |
+| `wikiir_prior_page_columnar_probe.py` | Repackages the exact prior-page ADD/COPY/RUN IR into fourteen typed columns, verifies byte-identical IR/raw reconstruction, and applies per-column MDL accounting. |
+| `wikiir_materialize.py` | Materializes a deterministic WikiIR prefix, verifies exact raw inversion, and seals program/input/IR identities before a target-backend probe. |
+| `wikiir_title_vertex_tail_layout.py` | Repackages the exact title-as-vertex choices with the text skeleton first and a self-locating directory trailer, isolating backend adaptation from selected information. |
+| `wrt_sequence_memoizer_trace.py` | Emits a deterministic bounded integer Sequence-Memoizer endpoint over completed WRT token suffixes for exact matched hybrid replay. |
+| `seal_wikiir_target_backend_probe.py` | Seals an exact raw-to-IR inverse and guarded target-backend encode economics result; it explicitly withholds codec-proof status when a terminal archive miss makes backend decode irrational. |
+| `seal_cmix21_lstm200_fx2lite428_native.py` | Seals native compact-200 plus endpoint428 wrapper identity, roundtrip, determinism, aggregate decimal RSS, reproducible source-package identity, and conservative forecast economics. |
+| `seal_cmix21_lstm200_fx2lite428_ppmd_recovery.py` | Seals the endpoint428 PPMD failure reproduction, repaired 1M archive identity, 1.5M roundtrip/determinism, clean source reconstruction, decimal tree RSS, and adjusted strict-10M economics ceiling. |
+| `seal_cmix21_lstm200_fx2lite428_10m.py` | Seals the canonical original-order 10M archive screen and, only after an economics pass, its exact roundtrip and deterministic replay while keeping 1G authorization separate. |
+| `seal_cmix21_lstm200_fx2lite428_10m_codec_failure.py` | Seals a non-memory endpoint428 10M codec termination, preserved WRT stream, and archive-identical RAM-PPMD control without manufacturing an archive or economics result. |
+| `seal_cmix21_lstm200_fx2lite428_ram_recovery.py` | Seals archive-neutral composition of RAM-backed auxiliary PPMD storage and deterministic context recovery through the exact 1.5M boundary, including clean source and adjusted 10M economics. |
+| `seal_cmix21_lstm200_fx2lite428_stats_failure.py` | Maps the combined-recovery exact-10M SIGSEGV from the kernel fault address through a machine-code-identical symbol build to the FX2-lite PPMD statistics dereference, while preserving the no-score boundary. |
+| `seal_cmix21_lstm200_fx2lite428_stats_recovery.py` | Seals the clean-built statistics-span recovery at exact 1M, requires archive identity and deterministic source reconstruction, and recalculates the strict exact-10M accounting ceiling. |
+| `seal_cmix21_lstm200_fx2lite428_allocator_failure.py` | Maps the repaired exact-10M SIGSEGV through a machine-code-identical symbol build to the FX2-lite PPMD free-list allocator chain, preserves the no-score boundary, and authorizes only a full primary-PPMD safety port with exact-1M identity replay. |
+| `seal_cmix21_lstm200_fx2lite428_primaryppmd_identity_failure.py` | Seals the wholesale primary-PPMD exact-1M archive regression under a clean decimal-memory guard and authorizes only a selective allocator/free-list port that retains the archive-neutral v9 model behavior. |
+| `seal_cmix21_lstm200_fx2lite428_allocator_recovery.py` | Seals the selective allocator/free-list recovery with exact-1M archive identity, roundtrip, independent clean-build determinism, decimal tree-RSS guards, reproducible counted source, and a recalculated strict exact-10M ceiling. |
+| `seal_cmix21_lstm200_fx2lite428_context_restore_failure.py` | Maps the allocator-recovered exact-10M SIGSEGV through a machine-code-identical symbol build to the FX2-lite PPMD `RestoreModelRare` suffix walk, preserves the no-score boundary, and authorizes only bounded context-restore recovery. |
+| `seal_cmix21_lstm200_fx2lite428_context_recovery.py` | Seals bounded reset-time context/suffix recovery with exact-1M archive identity, roundtrip, independent clean-build determinism, decimal tree-RSS guards, reproducible counted source, and a revised strict exact-10M ceiling. |
+| `seal_wrt_static_boundary_swap_disjoint.py` | Seals an untouched reset-slice archive comparison for the static WRT dictionary boundary-swap candidate. |
+| `seal_wrt_static_boundary_swap_geometry_title_proxy.py` | Seals reversible geometry-title proxy evidence and compressed store/dictionary costs for a static WRT boundary swap. |
+| `seal_wrt_static_boundary_swap_112plus80_gate.py` | Seals the exact 10M static-WRT-swap comparison against the source-built 112+80 codec, including package delta and projected-score accounting. |
 | `wrt_trace_extract.py` | Reconstructs the exact WRT byte stream from an aligned FX2 bit trace and writes a hash-counted alignment receipt. |
 | `wrt_wiki_shell_copy_rule_ledger.py` | Distills bounded WRT copy evidence into tiny causal rules and confirms selected rules on an untouched split with counted code cost. |
 | `wrt_wiki_shell_residual_tree.py` | Trains and exports a small causal residual decision tree from WRT shell state with held-out promotion thresholds and counted node cost. |

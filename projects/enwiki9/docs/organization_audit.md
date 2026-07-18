@@ -12,14 +12,11 @@ program directories under programs/: 532
 registered programs in index.json: 225
 docs file entries under docs/: 30
 tools files under tools/: 86
-active: 24
-candidate: 69
-measured_negative: 77
-track_source_before_evolution: 10
+active: 7
+candidate: 144
+measured_negative: 20
 blocked_dependency: 12
-retired: 350
-untracked nonignored entries: 0
-modified tracked entries: 13
+retired: 349
 ```
 
 Interpretation:
@@ -28,13 +25,11 @@ Interpretation:
 - `index.json` is intentionally narrower than the filesystem;
 - generated inventory should be refreshed whenever receipt/audit rows change so
   status receipts and organization docs share the same counts;
-- the PPMD-only ladder is retired after the `ppmd20352k` package crossed the
-  official decimal 10 GB limit at 250K; the active
-  `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`
-  package instead halves the large FXCM cmC2 tables and restores the original
-  PAQ rolling buffer. Its exact 250K receipt preserves the 45,178-byte archive
-  while reducing peak RSS to 8,677,444 KiB, and its unchanged 1M replay is the
-  active heavy gate.
+- the PPMD-only ladder is retired, and its FXCM2/full-buffer replacement is
+  also retired after the `100M` first archive missed the unified-executable
+  screen by `149,143` bytes. No heavy target-bearing gate is active;
+- live dirty-worktree counts belong in `docs/status_receipt.md`, not this stable
+  organization snapshot;
 - `tools/enwiki9_delayed_status_check.sh` now reports live process RSS,
   `cmix21_gate_decider.py` output, and any unguarded `cmix21-mmap-bin`
   process outside the RSS-guard tree.
@@ -173,7 +168,7 @@ Action:
 
 ```text
 Keep it as an accounting and reproducibility anchor. Do not substitute it for
-the active sidecar promotion path.
+a target-bearing candidate that has cleared cumulative counted economics.
 ```
 
 ## Claim Hygiene

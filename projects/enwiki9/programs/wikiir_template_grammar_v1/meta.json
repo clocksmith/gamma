@@ -1,0 +1,25 @@
+{
+  "id": "wikiir_template_grammar_v1",
+  "description": "WikiIR ordered MediaWiki-template skeleton grammar with named-value holes, explicit counted rules/references, exact inverse replay, and a one-byte LZMA MDL fallback.",
+  "added": "2026-07-18",
+  "deps": [],
+  "compares_against": [
+    "baseline_lzma",
+    "blue_dolphin_tree_macro_savings_v1"
+  ],
+  "verified_1m_discovery": {
+    "input_bytes": 1000000,
+    "templates_parsed": 542,
+    "rules_admitted": 17,
+    "rule_references": 313,
+    "raw_ir_delta_bytes": 3735,
+    "baseline_lzma_archive_bytes": 290732,
+    "grammar_lzma_archive_bytes": 291940,
+    "grammar_archive_delta_bytes": 1208,
+    "selected_mode": "literal",
+    "roundtrip_ok": true,
+    "determinism_ok": true
+  },
+  "verdict": "The ordered-hole grammar is reversible and shrinks the raw IR, but its global LZMA serialization is retired because it regresses the matched archive. Typed-hole structure remains eligible under a different target-backend or field-column layout.",
+  "evidence_boundary": "Discovery representation probe; not an FX2 result or official-score claim."
+}

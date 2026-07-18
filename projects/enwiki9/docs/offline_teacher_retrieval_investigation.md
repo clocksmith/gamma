@@ -39,20 +39,21 @@ The unchanged aggregate expert has already failed that transfer against an fx2
 trace, so the next SRSTC use must target fx2 residuals directly or change the
 reversible layout.
 
-The active constructive lane is separate:
+The retired native substrate lane is separate:
 
 ```text
 candidate     = cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
 10M archive   = 1,638,340 (source-handoff receipt)
 roundtrip     = true
 determinism   = true
-current scope = fresh unchanged guarded 100M replay
+100M archive  = 14,864,716 (first archive)
+decision      = stopped; misses unified-executable screen by 149,143 bytes
 ```
 
-That gate establishes the exact memory-shaped cmix21 substrate and promotion
-path. It does not make the raw SRSTC saving additive. The retired FX2-SC
-sidecar remains negative evidence from its canonical `10M` target-ceiling
-abort.
+That run established exact memory-shaped cmix21 substrate evidence but cannot
+advance to `1G`. It does not make the raw SRSTC saving additive. The retired
+FX2-SC sidecar remains negative evidence from its canonical `10M`
+target-ceiling abort.
 
 Gamma's SAME-R contract now supplies the correct outer experiment for any
 teacher-guided successor: freeze the exact FX2 trace, coder, candidates,
