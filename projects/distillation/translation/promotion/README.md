@@ -144,23 +144,21 @@ and matched-run-contract blockers still fail closed before training.
 ## Required order
 
 1. Preserve the current NativeKD2 BF16 baseline, freeze the Gamma-to-Doppler
-   handoff format, and implement the import/parity machinery shared with
-   Columbo. Do not select a translation winner.
-2. Execute Columbo's independent Qwen 3.5 0.8B bridge, parity, selection,
-   confirmation, promotion, registry approval, and governed export path.
-3. Materialize and hash disjoint translation calibration,
+   handoff format, and implement generic import/parity machinery. Do not select
+   a translation winner.
+2. Materialize and hash disjoint translation calibration,
    checkpoint-selection, seed-confirmation, and externally custodied promotion
    populations. Complete the license catalog and contamination audit first.
-4. Complete the WMT13 diagnostic error ledger, then run the matched NativeKD2,
+3. Complete the WMT13 diagnostic error ledger, then run the matched NativeKD2,
    verifier-filtered multi-teacher, router-sequence, and random-control lanes
    under identical initialization, exposure, update, ordering, decode, and
    seed rules.
-5. Select the data recipe before opening the separate Gemma 3 1B versus Qwen
+4. Select the data recipe before opening the separate Gemma 3 1B versus Qwen
    3.5 0.8B base-model contract. Gamma then selects and freezes one BF16 winner
    using its population, seed, metric, guardrail, and human-review receipts.
-6. Doppler imports that exact selected checkpoint and compares Q4K,
+5. Doppler imports that exact selected checkpoint and compares Q4K,
    selective-F16, and QAT artifacts derived from its identity.
-7. Submit one committed hosted artifact to the externally custodied promotion
+6. Submit one committed hosted artifact to the externally custodied promotion
    population. A failed submission consumes the promotion look.
 
 No artifact may be called promoted until every blocking field in
