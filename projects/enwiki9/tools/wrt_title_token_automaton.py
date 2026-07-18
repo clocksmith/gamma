@@ -619,6 +619,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--dictionary", type=Path, required=True)
     parser.add_argument("--scope-bytes", type=int, required=True)
     parser.add_argument("--archive", type=Path)
+    parser.add_argument("--payload", type=Path)
     parser.add_argument("--wrt-store", type=Path)
     parser.add_argument("--window-id", required=True)
     parser.add_argument("--phase", choices=("selection", "confirmation"), required=True)
@@ -646,6 +647,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise SystemExit(f"missing input: {path}")
     if args.substrate_receipt and not args.substrate_receipt.is_file():
         raise SystemExit(f"missing substrate receipt: {args.substrate_receipt}")
+    if args.payload and not args.payload.is_file():
+        raise SystemExit(f"missing arithmetic payload: {args.payload}")
 
     specs = all_specs()
     if args.variant_id:
@@ -691,12 +694,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         row["exact"] = exact.get(str(row["variant_id"]))
 
     validations: dict[str, object] = {}
+    baseline_values = {
+        int(value["baseline_payload_bytes"])
+        for value in exact.values()
+    }
     if args.archive:
         payload_bytes, archive_wrt_bytes = archive_payload_bytes(args.archive)
-        baseline_values = {
-            int(value["baseline_payload_bytes"])
-            for value in exact.values()
-        }
         validations["archive"] = {
             "path": str(args.archive),
             "sha256": sha256_file(args.archive),
@@ -704,6 +707,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             "wrt_bytes": archive_wrt_bytes,
             "trace_wrt_bytes_match": archive_wrt_bytes == diagnostics["wrt_bytes"],
             "baseline_range_match": baseline_values == {payload_bytes},
+        }
+    if args.payload:
+        validations["payload"] = {
+            "path": str(args.payload),
+            "sha256": sha256_file(args.payload),
+            "bytes": args.payload.stat().st_size,
+            "baseline_range_match": baseline_values == {args.payload.stat().st_size},
         }
     if args.wrt_store:
         stored = args.wrt_store.read_bytes()

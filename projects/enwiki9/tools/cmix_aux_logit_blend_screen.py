@@ -27,6 +27,7 @@ if str(TOOLS_DIR) not in sys.path:
 
 from fx2_attribution_external_base_screen import (  # noqa: E402
     P1_HEADER_BYTES,
+    P1_MAGICS,
     PPM,
     QBITS_PER_BYTE,
     PROBABILITY_TOTAL,
@@ -61,7 +62,10 @@ def read_pair_header(path: Path) -> int:
 def read_endpoint_header(path: Path) -> int:
     with path.open("rb") as source:
         header = source.read(ENDPOINT_HEADER_BYTES)
-    if len(header) != ENDPOINT_HEADER_BYTES or header[:8] != ENDPOINT_MAGIC:
+    if (
+        len(header) != ENDPOINT_HEADER_BYTES
+        or header[:8] not in P1_MAGICS | {ENDPOINT_MAGIC}
+    ):
         raise ValueError("invalid standalone endpoint trace header")
     rows = struct.unpack_from("<Q", header, 8)[0]
     if rows < 1 or path.stat().st_size != ENDPOINT_HEADER_BYTES + 2 * rows:

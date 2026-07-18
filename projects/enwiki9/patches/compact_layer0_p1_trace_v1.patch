@@ -1,0 +1,72 @@
+diff --git a/src/predictor.cpp b/src/predictor.cpp
+--- a/src/predictor.cpp
++++ b/src/predictor.cpp
+@@ -94,8 +94,9 @@ void FinalizeTrace(std::FILE* file, std::uint64_t rows) {
+ 
+ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
+     sigmoid_(100001), vocab_(vocab), fx2lite_endpoint_(nullptr),
+-    auxiliary_pair_trace_(nullptr), endpoint_reset_trace_(nullptr),
+-    prediction_rows_(0), endpoint_reset_events_(0),
++    auxiliary_pair_trace_(nullptr), endpoint_reset_trace_(nullptr),
++    layer0_p1_trace_(nullptr), prediction_rows_(0),
++    endpoint_reset_events_(0),
+     last_endpoint_reset_count_(0) {
+   srand(0xDEADBEEF);
+ 
+@@ -126,17 +127,22 @@ Predictor::~Predictor() {
+ void Predictor::InitializeAuxiliaryTrace() {
+   static const char kPairMagic[8] = {'C', 'M', 'X', 'A', 'U', 'X', '1', 0};
+   static const char kResetMagic[8] = {'C', 'M', 'X', 'R', 'S', 'T', '1', 0};
++  static const char kLayer0Magic[8] = {'C', 'M', 'L', '0', 'P', '1', 'V', '1'};
+   auxiliary_pair_trace_ = OpenTrace("CMIX_AUX_PAIR_TRACE", kPairMagic);
+   endpoint_reset_trace_ = OpenTrace("CMIX_AUX_RESET_TRACE", kResetMagic);
++  layer0_p1_trace_ = OpenTrace("CMIX_LAYER0_P1_TRACE", kLayer0Magic);
++  layer0_trace_row_.resize(2 * mixers_[0].size());
+   last_endpoint_reset_count_ =
+       fx2lite_endpoint428::ResetCount(fx2lite_endpoint_);
+ }
+ 
+ void Predictor::FinalizeAuxiliaryTrace() {
+   FinalizeTrace(auxiliary_pair_trace_, prediction_rows_);
+   FinalizeTrace(endpoint_reset_trace_, endpoint_reset_events_);
++  FinalizeTrace(layer0_p1_trace_, prediction_rows_);
+   auxiliary_pair_trace_ = nullptr;
+   endpoint_reset_trace_ = nullptr;
++  layer0_p1_trace_ = nullptr;
+ }
+ 
+ void Predictor::WriteAuxiliaryPair(
+@@ -694,10 +700,21 @@ float Predictor::Predict() {
+ 
+   for (unsigned int i = 0; i < mixers_[0].size(); ++i) {
+     float p = mixers_[0][i]->Mix();
++    if (layer0_p1_trace_ != nullptr) {
++      const std::uint16_t p1 = static_cast<std::uint16_t>(
++          1 + static_cast<unsigned int>(
++                  65534.0f * Sigmoid::Logistic(p)));
++      layer0_trace_row_[2 * i] = static_cast<unsigned char>(p1);
++      layer0_trace_row_[2 * i + 1] = static_cast<unsigned char>(p1 >> 8);
++    }
+     layers_[0]->SetExtraInput(p);
+     layers_[1]->SetStretchedInput(i, p);
+     layers_[2]->SetStretchedInput(i, p);
+   }
++  if (layer0_p1_trace_ != nullptr) {
++    WriteExact(layer0_p1_trace_, layer0_trace_row_.data(),
++        layer0_trace_row_.size());
++  }
+   layers_[0]->ClearExtraInputs();
+   for (unsigned int i = 0; i < auxiliary_.size(); ++i) {
+     float p = layers_[0]->Inputs()[auxiliary_[i]];
+diff --git a/src/predictor.h b/src/predictor.h
+--- a/src/predictor.h
++++ b/src/predictor.h
+@@ -69,6 +69,8 @@ class Predictor {
+   void* fx2lite_endpoint_;
+   std::FILE* auxiliary_pair_trace_;
+   std::FILE* endpoint_reset_trace_;
++  std::FILE* layer0_p1_trace_;
++  std::vector<unsigned char> layer0_trace_row_;
+   std::uint64_t prediction_rows_;
+   std::uint64_t endpoint_reset_events_;
+   std::uint64_t last_endpoint_reset_count_;
