@@ -419,6 +419,12 @@ class VariantStats:
     counterfactual_qbits: int = 0
     regret_qbits: int = 0
     block_qbits: dict[int, int] = field(default_factory=dict)
+    eligible_byte_events: int = 0
+    positive_byte_events: int = 0
+    regressing_byte_events: int = 0
+    flat_byte_events: int = 0
+    positive_byte_oracle_qbits: int = 0
+    negative_byte_qbits: int = 0
 
     def probability(self, endpoint: Endpoint, bit_pos: int, prefix: int, base_p1: int) -> tuple[int, int] | None:
         if endpoint.match_tokens < self.spec.min_context:
@@ -487,6 +493,7 @@ def score_trace(
         current, previous = endpoint_state.endpoints()
         endpoints = {"current": current, "previous": previous}
         prefix = 0
+        event_deltas: dict[str, int] = {}
         wrt_digest.update(bytes((trace_byte.value,)))
         wrt_bytes += 1
         for bit_pos, (p1, bit) in enumerate(zip(trace_byte.probabilities, trace_byte.bits)):
@@ -503,6 +510,7 @@ def score_trace(
                     delta = loss_qbits(bit, p1) - loss_qbits(bit, candidate_p1)
                     state.eligible_bits += 1
                     state.counterfactual_qbits += delta
+                    event_deltas[variant_id] = event_deltas.get(variant_id, 0) + delta
                     apply = state.spec.router == "always" or state.regret_qbits > 0
                     if apply:
                         chosen = candidate_p1
@@ -518,6 +526,17 @@ def score_trace(
                 if variant_id in exact:
                     exact[variant_id].encode(bit, chosen)
             prefix = (prefix << 1) | bit
+        for variant_id, delta in event_deltas.items():
+            state = states[variant_id]
+            state.eligible_byte_events += 1
+            if delta > 0:
+                state.positive_byte_events += 1
+                state.positive_byte_oracle_qbits += delta
+            elif delta < 0:
+                state.regressing_byte_events += 1
+                state.negative_byte_qbits += delta
+            else:
+                state.flat_byte_events += 1
         endpoint_state.feed(trace_byte.value)
 
     exact_rows: dict[str, object] = {}
@@ -558,6 +577,16 @@ def row_for(stats: VariantStats, scope_bytes: int) -> dict[str, object]:
         "qbit_saved_bytes": stats.qbits_saved / 2048.0,
         "qbit_gain_bytes_per_million": stats.qbits_saved / 2048.0 * 1_000_000 / scope_bytes,
         "counterfactual_qbits": stats.counterfactual_qbits,
+        "eligible_byte_events": stats.eligible_byte_events,
+        "positive_byte_events": stats.positive_byte_events,
+        "regressing_byte_events": stats.regressing_byte_events,
+        "flat_byte_events": stats.flat_byte_events,
+        "positive_byte_oracle_qbits": stats.positive_byte_oracle_qbits,
+        "positive_byte_oracle_bytes": stats.positive_byte_oracle_qbits / 2048.0,
+        "positive_byte_oracle_bytes_per_million": (
+            stats.positive_byte_oracle_qbits / 2048.0 * 1_000_000 / scope_bytes
+        ),
+        "negative_byte_qbits": stats.negative_byte_qbits,
         "positive_blocks": sum(value > 0 for value in blocks),
         "regressing_blocks": sum(value < 0 for value in blocks),
         "flat_blocks": sum(value == 0 for value in blocks),
@@ -595,13 +624,28 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--phase", choices=("selection", "confirmation"), required=True)
     parser.add_argument("--variant-id")
     parser.add_argument("--exact-top", type=int, default=8)
+    parser.add_argument("--substrate-id", default="raw_fx2")
+    parser.add_argument("--state-contract", default="cold_reset_random_window")
+    parser.add_argument("--substrate-receipt", type=Path)
+    parser.add_argument("--gross-floor-bpm", type=float, default=700.0)
+    parser.add_argument("--target-gap-bytes", type=int)
+    parser.add_argument("--incremental-program-bytes", type=int, default=0)
+    parser.add_argument("--full-scope-bytes", type=int, default=1_000_000_000)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.scope_bytes <= 0 or args.exact_top <= 0:
         raise SystemExit("scope and exact-top must be positive")
+    if args.gross_floor_bpm < 0 or args.incremental_program_bytes < 0:
+        raise SystemExit("economic byte counts and rates cannot be negative")
+    if args.target_gap_bytes is not None and args.target_gap_bytes < 0:
+        raise SystemExit("target gap cannot be negative")
+    if args.full_scope_bytes <= 0:
+        raise SystemExit("full-scope-bytes must be positive")
     for path in (args.trace, args.dictionary):
         if not path.is_file():
             raise SystemExit(f"missing input: {path}")
+    if args.substrate_receipt and not args.substrate_receipt.is_file():
+        raise SystemExit(f"missing substrate receipt: {args.substrate_receipt}")
 
     specs = all_specs()
     if args.variant_id:
@@ -621,6 +665,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     candidate_rows = [row for row in rows if row["source"] == "current"]
     control_rows = [row for row in rows if row["source"] == "previous"]
+    oracle_candidate_rows = sorted(
+        candidate_rows,
+        key=lambda row: (
+            -float(row["positive_byte_oracle_bytes_per_million"]),
+            str(row["variant_id"]),
+        ),
+    )
+    oracle_control_rows = sorted(
+        control_rows,
+        key=lambda row: (
+            -float(row["positive_byte_oracle_bytes_per_million"]),
+            str(row["variant_id"]),
+        ),
+    )
     exact_ids = {
         str(row["variant_id"])
         for row in candidate_rows[: args.exact_top]
@@ -659,10 +717,24 @@ def main(argv: Sequence[str] | None = None) -> int:
         }
 
     tool = Path(__file__).resolve()
+    substrate_receipt = None
+    if args.substrate_receipt:
+        substrate_receipt = {
+            "path": str(args.substrate_receipt),
+            "bytes": args.substrate_receipt.stat().st_size,
+            "sha256": sha256_file(args.substrate_receipt),
+        }
+    required_gain_bpm = None
+    if args.target_gap_bytes is not None:
+        required_gain_bpm = (
+            (args.target_gap_bytes + args.incremental_program_bytes)
+            * 1_000_000
+            / args.full_scope_bytes
+        )
     payload = {
         "schema_version": 1,
         "receipt_type": "wrt_title_token_automaton_shadow",
-        "evidence_level": "compact_exact_fx2_probability_trace_shadow",
+        "evidence_level": "compact_exact_probability_trace_shadow",
         "claim_boundary": (
             "This is a causal shadow replay on an arbitrary random window. "
             "It is not integrated source, a native candidate archive, a prefix score, "
@@ -671,6 +743,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         "window_id": args.window_id,
         "phase": args.phase,
         "scope_bytes": args.scope_bytes,
+        "substrate": {
+            "id": args.substrate_id,
+            "state_contract": args.state_contract,
+            "receipt": substrate_receipt,
+        },
+        "economics": {
+            "gross_screen_bytes_per_million": args.gross_floor_bpm,
+            "target_gap_bytes": args.target_gap_bytes,
+            "incremental_program_bytes": args.incremental_program_bytes,
+            "full_scope_bytes": args.full_scope_bytes,
+            "required_gain_bytes_per_million": required_gain_bpm,
+        },
         "trace": {
             "path": str(args.trace),
             "bytes": args.trace.stat().st_size,
@@ -692,13 +776,23 @@ def main(argv: Sequence[str] | None = None) -> int:
             "routers": ["always", "regret12"],
             "expert_probability_one": EXPERT_ONE,
             "block_bytes": BLOCK_BYTES,
-            "target_gross_bytes_per_million": 700,
+            "target_gross_bytes_per_million": args.gross_floor_bpm,
+            "oracle_definition": (
+                "Future-label abstention independently chooses each eligible WRT "
+                "byte event after summing that event's causal-prefix bit deltas."
+            ),
         },
         "diagnostics": diagnostics,
         "validations": validations,
         "rows": rows,
         "best": candidate_rows[0] if candidate_rows else None,
         "best_control": control_rows[0] if control_rows else None,
+        "best_positive_byte_oracle": (
+            oracle_candidate_rows[0] if oracle_candidate_rows else None
+        ),
+        "best_control_positive_byte_oracle": (
+            oracle_control_rows[0] if oracle_control_rows else None
+        ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")

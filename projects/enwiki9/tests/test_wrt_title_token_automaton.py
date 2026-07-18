@@ -102,6 +102,9 @@ def test_compact_trace_reconstructs_wrt_bytes_and_title_endpoint_wins(tmp_path: 
     assert current.eligible_bits > 0
     assert current.qbits_saved > 0
     assert current.qbits_saved > previous.qbits_saved
+    assert current.eligible_byte_events > 0
+    assert current.positive_byte_events > 0
+    assert current.positive_byte_oracle_qbits >= current.qbits_saved
 
 
 def test_regret_router_updates_only_after_observed_truth(tmp_path: Path) -> None:
@@ -161,6 +164,14 @@ def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
             "selection",
             "--exact-top",
             "2",
+            "--substrate-id",
+            "endpoint428",
+            "--state-contract",
+            "continuous_original_order",
+            "--target-gap-bytes",
+            "57404",
+            "--incremental-program-bytes",
+            "12000",
             "--output",
             str(output),
         ]
@@ -174,3 +185,12 @@ def test_cli_receipt_binds_trace_archive_and_store(tmp_path: Path) -> None:
     assert receipt["validations"]["archive"]["trace_wrt_bytes_match"] is True
     assert receipt["validations"]["wrt_store"]["trace_matches_store"] is True
     assert receipt["best"]["source"] == "current"
+    assert receipt["substrate"] == {
+        "id": "endpoint428",
+        "receipt": None,
+        "state_contract": "continuous_original_order",
+    }
+    assert receipt["economics"]["required_gain_bytes_per_million"] == 69.404
+    assert receipt["best_positive_byte_oracle"][
+        "positive_byte_oracle_bytes_per_million"
+    ] >= receipt["best"]["qbit_gain_bytes_per_million"]
