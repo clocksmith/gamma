@@ -1,47 +1,32 @@
 diff --git a/makefile b/makefile
-index 5eb75b2..a1b7b38 100644
+index 5eb75b2..86485a1 100644
 --- a/makefile
 +++ b/makefile
-@@ -1,8 +1,9 @@
- CC = clang++-17
- 
- ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+@@ -3,0 +4 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 +FP_FAST_FLAG:=$(shell $(CC) --version 2>/dev/null | grep -qi clang && echo -ffp-model=fast || echo -ffast-math)
- 
+@@ -5 +6 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 -CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
-+CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format 
- 
- ifdef COREI7
- $(info COREI7 defined)
-@@ -22,6 +23,7 @@ CPPFLAGS_PART-THAT-CAN-BE-SLOW    += -Os -fdata-sections -ffunction-sections
- CPPFLAGS_PART-THAT-SHOULD-BE-FAST += -O3 -fdata-sections -ffunction-sections
- 
- LFLAGS := -m64 -Wl,--gc-sections -std=c++17
++CPPFLAGS_PART-THAT-SHOULD-BE-FAST := $(CFLAGS_DEFINES) -m64 -Wall -std=c++17 $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable $(FP_FAST_FLAG) -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format
+@@ -24,0 +26 @@ LFLAGS := -m64 -Wl,--gc-sections -std=c++17
 +STRIP_FLAG := -s
- 
- 
- prof_gen: CPPFLAGS_PART-THAT-CAN-BE-SLOW    += -fprofile-generate=$(ROOT_DIR)/pgo_data
-@@ -42,7 +44,7 @@ fast: src/coder/decoder.cpp src/coder/decoder.h src/coder/encoder.cpp src/coder/
- 	$(CC) $(CPPFLAGS_PART-THAT-SHOULD-BE-FAST) src/coder/decoder.cpp src/coder/encoder.cpp src/context-manager.cpp src/contexts/bit-context.cpp src/contexts/bracket-context.cpp src/contexts/combined-context.cpp src/contexts/context-hash.cpp src/contexts/indirect-hash.cpp src/contexts/interval-hash.cpp src/contexts/interval.cpp src/contexts/sparse.cpp src/models/bracket.cpp src/models/byte-model.cpp src/models/direct-hash.cpp src/models/direct.cpp src/models/indirect.cpp src/models/match.cpp src/models/fxcmv1.cpp src/models/ppmd.cpp src/states/nonstationary.cpp src/states/run-map.cpp src/mixer/byte-mixer.cpp src/mixer/mixer-input.cpp src/mixer/mixer.cpp src/mixer/sigmoid.cpp src/mixer/sse.cpp -c src/predictor.cpp src/runner.cpp
- 
- cmix: fast slow
+@@ -39 +41 @@ slow: src/preprocess/preprocessor.cpp src/preprocess/preprocessor.h src/preproce
+-	$(CC) $(CPPFLAGS_PART-THAT-CAN-BE-SLOW) src/preprocess/preprocessor.cpp src/preprocess/dictionary.cpp -c 
++	$(CC) $(CPPFLAGS_PART-THAT-CAN-BE-SLOW) src/preprocess/preprocessor.cpp src/preprocess/dictionary.cpp -c
+@@ -45 +47 @@ cmix: fast slow
 -	$(CC) $(LFLAGS) bit-context.o bracket-context.o bracket.o byte-mixer.o byte-model.o combined-context.o context-hash.o context-manager.o decoder.o dictionary.o direct-hash.o direct.o encoder.o indirect-hash.o indirect.o interval-hash.o interval.o match.o mixer-input.o mixer.o nonstationary.o fxcmv1.o ppmd.o predictor.o preprocessor.o run-map.o runner.o sigmoid.o sparse.o sse.o -s -o cmix
 +	$(CC) $(LFLAGS) bit-context.o bracket-context.o bracket.o byte-mixer.o byte-model.o combined-context.o context-hash.o context-manager.o decoder.o dictionary.o direct-hash.o direct.o encoder.o indirect-hash.o indirect.o interval-hash.o interval.o match.o mixer-input.o mixer.o nonstationary.o fxcmv1.o ppmd.o predictor.o preprocessor.o run-map.o runner.o sigmoid.o sparse.o sse.o $(STRIP_FLAG) -o cmix
- 	rm -f *.o
- 
- remap: src/readalike_prepr/article_remap.cpp
-@@ -54,4 +56,3 @@ clean:
- 	rm -f remap
- 
- all: cmix remap
+@@ -57 +58,0 @@ all: cmix remap
 -
 diff --git a/src/coder/encoder.cpp b/src/coder/encoder.cpp
-index 16a33c7..39ff1da 100644
+index 16a33c7..6e33fc0 100644
 --- a/src/coder/encoder.cpp
 +++ b/src/coder/encoder.cpp
-@@ -1,5 +1,28 @@
- #include "encoder.h"
- 
+@@ -2,0 +3,28 @@
++#if FX2_COMPACT_PROB_TRACE
++#include <cstdio>
++#include <cstdlib>
++#endif
++
 +#if FX2_RESIDUAL_LOG
 +#include <cmath>
 +#include <cstdio>
@@ -65,13 +50,41 @@ index 16a33c7..39ff1da 100644
 +}
 +#endif
 +
- Encoder::Encoder(std::ofstream* os, Predictor* p) : os_(os), x1_(0),
-     x2_(0xffffffff), p_(p) {}
- 
-@@ -13,6 +36,15 @@ unsigned int Encoder::Discretize(float p) {
- 
- void Encoder::Encode(int bit) {
-   const unsigned int p = Discretize(p_->Predict());
+@@ -4 +32,21 @@ Encoder::Encoder(std::ofstream* os, Predictor* p) : os_(os), x1_(0),
+-    x2_(0xffffffff), p_(p) {}
++    x2_(0xffffffff), p_(p) {
++#if FX2_COMPACT_PROB_TRACE
++  const char* trace_path = std::getenv("FX2_COMPACT_PROB_TRACE_PATH");
++  if (trace_path == nullptr || trace_path[0] == '\0') {
++    std::fprintf(stderr,
++        "FX2_COMPACT_PROB_TRACE_PATH is required when compact tracing is enabled\n");
++    std::exit(EXIT_FAILURE);
++  }
++  compact_trace_ = std::fopen(trace_path, "wb");
++  if (compact_trace_ == nullptr) {
++    std::perror("failed to open compact probability trace");
++    std::exit(EXIT_FAILURE);
++  }
++  static const unsigned char header[8] = {
++      'F', 'X', '2', 'P', 'T', '0', '1', '\n'};
++  if (std::fwrite(header, 1, sizeof(header), compact_trace_) != sizeof(header)) {
++    std::perror("failed to write compact probability trace header");
++    std::exit(EXIT_FAILURE);
++  }
++#endif
++}
+@@ -15,0 +64,20 @@ void Encoder::Encode(int bit) {
++#if FX2_COMPACT_PROB_TRACE
++  const unsigned char record[3] = {
++      static_cast<unsigned char>(p & 0xff),
++      static_cast<unsigned char>((p >> 8) & 0xff),
++      static_cast<unsigned char>(bit & 1)};
++  if (std::fwrite(record, 1, sizeof(record), compact_trace_) != sizeof(record)) {
++    std::perror("failed to write compact probability trace row");
++    std::exit(EXIT_FAILURE);
++  }
++  ++compact_trace_rows_;
++#endif
 +#if FX2_RESIDUAL_LOG
 +  if ((residual_bit_pos_ % FX2_RESIDUAL_LOG_STRIDE) == 0 &&
 +      (FX2_RESIDUAL_LOG_MAX_ROWS == 0 ||
@@ -81,54 +94,53 @@ index 16a33c7..39ff1da 100644
 +    ++residual_rows_;
 +  }
 +#endif
-   const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +
-       (((x2_ - x1_) & 0xffff) * p >> 16);
-   if (bit) {
-@@ -21,6 +53,9 @@ void Encoder::Encode(int bit) {
-     x1_ = xmid + 1;
-   }
-   p_->Perceive(bit);
+@@ -23,0 +92,3 @@ void Encoder::Encode(int bit) {
 +#if FX2_RESIDUAL_LOG
 +  ++residual_bit_pos_;
 +#endif
- 
-   while (((x1_^x2_) & 0xff000000) == 0) {
-     WriteByte(x2_ >> 24);
-@@ -40,4 +75,3 @@ void Encoder::Flush() {
-   auto* data = reinterpret_cast<const char*>(out_.data());
-   os_->write(data, out_.size());
- }
+@@ -41,0 +113,9 @@ void Encoder::Flush() {
++#if FX2_COMPACT_PROB_TRACE
++  if (std::fclose(compact_trace_) != 0) {
++    std::perror("failed to close compact probability trace");
++    std::exit(EXIT_FAILURE);
++  }
++  compact_trace_ = nullptr;
++  std::fprintf(stderr, "\nFX2_COMPACT_PROB_TRACE rows=%llu bytes=%llu\n",
++      compact_trace_rows_, 8ULL + compact_trace_rows_ * 3ULL);
++#endif
+@@ -43 +122,0 @@ void Encoder::Flush() {
 -
 diff --git a/src/coder/encoder.h b/src/coder/encoder.h
-index ea662b1..20f1045 100644
+index ea662b1..468b4ea 100644
 --- a/src/coder/encoder.h
 +++ b/src/coder/encoder.h
-@@ -20,5 +20,9 @@ class Encoder {
-   std::ofstream* os_;
-   unsigned int x1_, x2_;
-   Predictor* p_;
+@@ -6,0 +7,8 @@
++#ifndef FX2_COMPACT_PROB_TRACE
++#define FX2_COMPACT_PROB_TRACE 0
++#endif
++
++#if FX2_COMPACT_PROB_TRACE
++#include <cstdio>
++#endif
++
+@@ -22,0 +31,8 @@ class Encoder {
++#if FX2_COMPACT_PROB_TRACE
++  FILE* compact_trace_ = nullptr;
++  unsigned long long compact_trace_rows_ = 0;
++#endif
 +#if FX2_RESIDUAL_LOG
 +  unsigned long long residual_bit_pos_ = 0;
 +  unsigned long long residual_rows_ = 0;
 +#endif
- };
- #endif
 diff --git a/src/context-manager.cpp b/src/context-manager.cpp
 index f75b3ca..7429e2e 100644
 --- a/src/context-manager.cpp
 +++ b/src/context-manager.cpp
-@@ -1,4 +1,7 @@
- #include "context-manager.h"
+@@ -1,0 +2,3 @@
 +#include <algorithm>
 +#include <cstring>
 +
- extern unsigned long long wrtcxt;
- 
- extern const unsigned char wrt_2b[256];
-@@ -62,8 +65,347 @@ ContextManager::ContextManager() : history_(60000000, 0),
-     hashes_ind3.resize(0x2000000, 0);
-     hashes_ind4.resize(0x100, 0);
-     hashes_ind5.resize(0x100, 0);
+@@ -64,0 +68,39 @@ ContextManager::ContextManager() : history_(60000000, 0),
 +#if FX2_STRUCT_SIDECAR
 +    sidecar_pairs_.resize(1 << 20, 0);
 +#endif
@@ -168,8 +180,7 @@ index f75b3ca..7429e2e 100644
 +    ++b;
 +  }
 +  return b;
- }
- 
+@@ -66,0 +109,300 @@ ContextManager::ContextManager() : history_(60000000, 0),
 +static unsigned int SideClass(unsigned char c) {
 +  if (c >= 'A' && c <= 'Z') return 1;
 +  if (c >= 'a' && c <= 'z') return 2;
@@ -470,13 +481,7 @@ index f75b3ca..7429e2e 100644
 +}
 +#endif
 +
- void ContextManager::UpdateHistory() {
-   history_[history_pos_] = bit_context_;
-   ++history_pos_;
-@@ -185,6 +527,15 @@ void ContextManager::UpdateContexts(int bit) {
-     UpdateWords();
-     UpdateRecentBytes();
-     UpdateWRTContext();
+@@ -187,0 +530,9 @@ void ContextManager::UpdateContexts(int bit) {
 +#if FX2_STRUCT_SIDECAR
 +    UpdateStructuralSidecar();
 +#if FX2_STRUCT_SIDECAR == 2
@@ -486,18 +491,10 @@ index f75b3ca..7429e2e 100644
 +    ind5 ^= StructuralContext(105) & 0x3fffffffULL;
 +#endif
 +#endif
- 
-     for (auto& context : context_hash_contexts_) {
-       context.Update();
-@@ -212,10 +563,43 @@ void ContextManager::UpdateContexts(int bit) {
-   mx17=(b3stream&0x3f)*256+long_bit_context_;// 7f or 3f
-   
-       if (bpos==0)  mxx=(stream2bR&63)*8 + (b3stream&7);
+@@ -215 +566 @@ void ContextManager::UpdateContexts(int bit) {
 -    else if (bpos>3) {
 +  else if (bpos>3) {
-         mxx=((b2stream<<2)&63)+wrt_2b[(long_bit_context_<<(8-bpos))&255]*8+(b3stream&7);
-     } else    
-         mxx=(stream2bR&63)*8 +(b3stream&7);
+@@ -218,0 +570,34 @@ void ContextManager::UpdateContexts(int bit) {
 +
 +#if FX2_STRUCT_SIDECAR == 1 || FX2_STRUCT_SIDECAR == 2
 +  wordscxt ^= (StructuralContext(11) & 0xffff) << 8;
@@ -532,21 +529,16 @@ index f75b3ca..7429e2e 100644
 +  sidecar_mix8 = ((side_col_bucket & 15) * 8 + (side_numeric_class & 7))
 +      * 256 + long_bit_context_;
 +#endif
-         
- }
+@@ -221 +605,0 @@ void ContextManager::UpdateContexts(int bit) {
 -
 diff --git a/src/context-manager.h b/src/context-manager.h
 index d740327..6466048 100644
 --- a/src/context-manager.h
 +++ b/src/context-manager.h
-@@ -17,8 +17,22 @@
- #include <cmath>
- #include "ds/SmallVector.h"
- 
+@@ -19,0 +20,2 @@
 +#include <array>
 +#include <string>
- #include <vector>
- 
+@@ -21,0 +24,12 @@
 +#ifndef FX2_STRUCT_SIDECAR
 +#define FX2_STRUCT_SIDECAR 0
 +#endif
@@ -559,13 +551,7 @@ index d740327..6466048 100644
 +#define FX2_TYPED_ANCHOR_SOFT_SSE 0
 +#endif
 +
- struct ContextManager {
-   ContextManager();
- 
-@@ -58,6 +72,14 @@ struct ContextManager {
-   void UpdateWords();
-   void UpdateRecentBytes();
-   void UpdateWRTContext();
+@@ -60,0 +75,8 @@ struct ContextManager {
 +#if FX2_STRUCT_SIDECAR
 +  void UpdateStructuralSidecar();
 +  unsigned long long StructuralContext(unsigned int salt) const;
@@ -574,13 +560,7 @@ index d740327..6466048 100644
 +  bool SidecarEndsWithFold(const char* s) const;
 +  void SidecarRememberEntity(unsigned int h);
 +#endif
- 
-   unsigned int bit_context_ = 1, wrt_state_ = 0, bpos=0;
-   unsigned long long long_bit_context_ = 1, zero_context_ = 0, history_pos_ = 0,
-@@ -78,6 +100,19 @@ struct ContextManager {
-       mx17=0,mx17cxt=0,
-       mx18=0,mx18cxt=0,
-       mxx=0,
+@@ -80,0 +103,13 @@ struct ContextManager {
 +#if FX2_STRUCT_SIDECAR
 +      sidecar_lexer_state=0, sidecar_xml_depth=0, sidecar_utf8_tail=0,
 +      sidecar_prev_byte=0, sidecar_pair_sig=0, sidecar_template_depth=0,
@@ -594,13 +574,7 @@ index d740327..6466048 100644
 +#if FX2_TYPED_ANCHOR_SOFT_SSE
 +      typed_anchor_soft_context=0,
 +#endif
-       words=0,wordscxt=0,
-       ind1=0,context1_ind=0,
-       ind2=0,context1_ind2=0,
-@@ -87,6 +122,22 @@ struct ContextManager {
-       mx19cxt=0;
-   std::vector<unsigned char> history_, shared_map_;
-   std::vector<unsigned long long> words_, recent_bytes_;
+@@ -89,0 +125,16 @@ struct ContextManager {
 +#if FX2_STRUCT_SIDECAR
 +  std::vector<unsigned int> sidecar_pairs_;
 +  unsigned int side_text=0, side_in_tag=0, side_template_hash=0,
@@ -617,35 +591,20 @@ index d740327..6466048 100644
 +  std::array<unsigned int, 16> side_recent_links_{};
 +  std::array<unsigned int, 32> side_recent_entities_{};
 +#endif
-   llvm::SmallVector<ContextHash, 12> context_hash_contexts_;
-   llvm::SmallVector<Sparse, 18> sparse_contexts_;
-   llvm::SmallVector<BracketContext, 1> bracket_contexts_;
-@@ -96,4 +147,3 @@ struct ContextManager {
- };
- 
- #endif
+@@ -99 +149,0 @@ struct ContextManager {
 -
 diff --git a/src/mixer/byte-mixer.cpp b/src/mixer/byte-mixer.cpp
 index f4df691..6c8b40f 100644
 --- a/src/mixer/byte-mixer.cpp
 +++ b/src/mixer/byte-mixer.cpp
-@@ -20,7 +20,7 @@ void ByteMixer::SetInput(int index, float val) {
- }
- 
- void ByteMixer::ByteUpdate() {
+@@ -23 +23 @@ void ByteMixer::ByteUpdate() {
 -  inputs_ *= 2 / num_models_;
 +  inputs_ *= 2.0f / num_models_;
-   lstm_->SetInput(inputs_);
-   inputs_ = 0;
-   const auto& output = lstm_->Perceive(byte_map_[byte_]);
 diff --git a/src/mixer/mixer.cpp b/src/mixer/mixer.cpp
 index ecd752d..6668c5a 100644
 --- a/src/mixer/mixer.cpp
 +++ b/src/mixer/mixer.cpp
-@@ -6,6 +6,39 @@
- #include <utility>
- #include <math.h>
- #include <sys/resource.h>
+@@ -8,0 +9,33 @@
 +
 +#ifndef FX2_MIXER_CONTEXT_LIMIT
 +#define FX2_MIXER_CONTEXT_LIMIT 10000ULL
@@ -679,22 +638,10 @@ index ecd752d..6668c5a 100644
 +#define FX2_MIXER_DECAY_P3 200000
 +#endif
 +
- Mixer::Mixer(const std::valarray<float>& inputs,
-     const std::valarray<float>& extra_inputs,
-     const unsigned long long& context, float learning_rate,
-@@ -17,7 +50,7 @@ Mixer::Mixer(const std::valarray<float>& inputs,
- 
- ContextData* Mixer::GetContextData() {
-   ContextData* data;
+@@ -20 +53 @@ ContextData* Mixer::GetContextData() {
 -  unsigned long long limit = 10000;
 +  unsigned long long limit = FX2_MIXER_CONTEXT_LIMIT;
-   auto it = context_map_.find(context_); 
-   if (context_map_.size() >= limit && it == context_map_.end()) {
-     data = &context_base_;
-@@ -60,13 +93,13 @@ float Mixer::Mix() {
- 
- void Mixer::Perceive(int bit) {
- 
+@@ -63,7 +96,7 @@ void Mixer::Perceive(int bit) {
 -  float decay=0.2f;
 -  if ( steps_ < 25000000) {
 -      decay = 0.3f;
@@ -709,42 +656,21 @@ index ecd752d..6668c5a 100644
 +          decay_ppm = FX2_MIXER_DECAY_P1;
 +          if (steps_ < FX2_MIXER_DECAY_T0)
 +              decay_ppm = FX2_MIXER_DECAY_P0;
-       }
-   }
-   ++steps_;
-@@ -76,7 +109,7 @@ void Mixer::Perceive(int bit) {
-       return;
-   }
-    // ++data->steps;
+@@ -79 +112 @@ void Mixer::Perceive(int bit) {
 -  update = decay * update;
 +  update = (static_cast<float>(decay_ppm) / 1000000.0f) * update;
-   ContextData* data = GetContextData();
-   
-   data->weights -= update * inputs_;
-@@ -87,4 +120,3 @@ void Mixer::Perceive(int bit) {
-   }*/
- 
- }
+@@ -90 +122,0 @@ void Mixer::Perceive(int bit) {
 -
 diff --git a/src/mixer/sse.cpp b/src/mixer/sse.cpp
 index 78f701b..3e18e65 100644
 --- a/src/mixer/sse.cpp
 +++ b/src/mixer/sse.cpp
-@@ -5,6 +5,10 @@
- 
- #include <math.h>
- 
+@@ -7,0 +8,4 @@
 +#ifndef FX2_SSE_WR_SCALE_PPM
 +#define FX2_SSE_WR_SCALE_PPM 1000
 +#endif
 +
- namespace SSE_sh {
- 
- typedef unsigned short word;
-@@ -79,6 +83,13 @@ double log2( double a ) { return M_LOG2E*log(a); }
- 
- double exp2( double a ) { return exp( a/M_LOG2E ); }
- 
+@@ -81,0 +86,7 @@ double exp2( double a ) { return exp( a/M_LOG2E ); }
 +int ScaledWriteRate(int wr) {
 +  int scaled = (wr * FX2_SSE_WR_SCALE_PPM + 500) / 1000;
 +  if (scaled < 1) return 1;
@@ -752,68 +678,470 @@ index 78f701b..3e18e65 100644
 +  return scaled;
 +}
 +
- double st( double p ) { return log2((1-p)/p); }
- 
- double sq( double p ) { return 1.0/(1.0+exp2(p)); }
-@@ -289,10 +300,12 @@ uint M_Estimate( uint p ) {
- }
- 
- void M_Update( uint bit ) {
+@@ -292 +303,2 @@ void M_Update( uint bit ) {
 -  s6[sm6x].SSE_Update( bit, M_sm6wrA*128+M_sm6wrB, su6 );
 +  s6[sm6x].SSE_Update(
 +      bit, ScaledWriteRate(M_sm6wrA*128+M_sm6wrB), su6 );
-   x1[mix1].Update( bit, mix1_s0,mix1_s1, M_x1wr, mix1_p );
- 
+@@ -295 +307,2 @@ void M_Update( uint bit ) {
 -  s7[sm7x].SSE_Update( bit, M_sm6wrA*128+M_sm7wrB, su7 );
 +  s7[sm7x].SSE_Update(
 +      bit, ScaledWriteRate(M_sm6wrA*128+M_sm7wrB), su7 );
-   x2[mix2].Update( bit, mix2_s0,mix2_s1, M_x2wr, mix2_p );
- 
-   M_j += M_j+bit;
 diff --git a/src/models/byte-model.h b/src/models/byte-model.h
 index 11af112..7df7c67 100644
 --- a/src/models/byte-model.h
 +++ b/src/models/byte-model.h
-@@ -13,13 +13,12 @@ class ByteModel : public Model {
-   const std::valarray<float>& BytePredict();
-    std::valarray<float>& Predict() ;
-   void Perceive(int bit);
+@@ -15,0 +16 @@ class ByteModel : public Model {
 +  virtual void ByteUpdate();
-   int ex;
-  protected:
+@@ -18 +18,0 @@ class ByteModel : public Model {
 -  void ByteUpdate();
-   int top_, mid_, bot_;
-   const std::vector<bool>& vocab_;
-   std::valarray<float> probs_;
- };
- 
- #endif
+@@ -25 +24,0 @@ class ByteModel : public Model {
 -
+diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
+index eec2580..67606d8 100644
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -30,0 +31,2 @@
++#include <string>
++#include <vector>
+@@ -2211,0 +2214,363 @@ inline int charSwap(int c){
++#if FX2_WRT_OBSERVATION
++namespace {
++
++WrtObservation wrt_observation;
++std::vector<std::string> wrt_observation_dictionary;
++std::vector<unsigned char> wrt_observation_token;
++bool wrt_observation_escape = false;
++bool wrt_observation_upper = false;
++bool wrt_observation_capital = false;
++bool wrt_observation_in_tag = false;
++bool wrt_observation_tag_closing = false;
++bool wrt_observation_tag_name_done = false;
++bool wrt_observation_in_entity = false;
++bool wrt_observation_line_start = true;
++unsigned int wrt_observation_heading_equals = 0;
++unsigned char wrt_observation_previous = 0;
++std::string wrt_observation_tag;
++std::string wrt_observation_tail;
++std::string wrt_observation_entity;
++
++unsigned int ObservationHash(unsigned int hash, unsigned char c) {
++  return (hash * 16777619u) ^ static_cast<unsigned int>(c);
++}
++
++bool ObservationTailEndsWith(const char* suffix) {
++  const size_t length = strlen(suffix);
++  return wrt_observation_tail.size() >= length &&
++      wrt_observation_tail.compare(
++          wrt_observation_tail.size() - length, length, suffix) == 0;
++}
++
++void ObservationFinishTag(bool self_closing) {
++  std::transform(wrt_observation_tag.begin(), wrt_observation_tag.end(),
++      wrt_observation_tag.begin(), [](unsigned char c) {
++        return static_cast<char>(std::tolower(c));
++      });
++  const bool closing = wrt_observation_tag_closing;
++  const std::string& tag = wrt_observation_tag;
++  if (tag == "page") {
++    wrt_observation.page_boundary = closing ? 2u : 1u;
++    wrt_observation.page_mode = closing ? 0u : 1u;
++    if (!closing) {
++      wrt_observation.section_state = 0;
++      wrt_observation.section_level = 0;
++      wrt_observation.section_hash = 0;
++      wrt_observation.title_hash = 0;
++    }
++  } else if (tag == "title") {
++    wrt_observation.title_mode = closing ? 0u : 1u;
++    if (!closing) wrt_observation.title_hash = 0;
++  } else if (tag == "text") {
++    wrt_observation.prose_mode = closing ? 0u : 1u;
++  } else if (tag == "ref") {
++    wrt_observation.ref_mode = (closing || self_closing) ? 0u : 1u;
++    if (!closing) wrt_observation.ref_hash = 0;
++  } else if (tag == "table") {
++    wrt_observation.table_mode = closing ? 0u : 1u;
++  }
++  wrt_observation_tag.clear();
++  wrt_observation_tag_closing = false;
++  wrt_observation_tag_name_done = false;
++}
++
++void ObserveWikiChar(unsigned char c) {
++  if (wrt_observation_tail.size() == 16) {
++    wrt_observation_tail.erase(0, 1);
++  }
++  wrt_observation_tail.push_back(
++      static_cast<char>(std::tolower(static_cast<unsigned char>(c))));
++
++  if (c == '<') {
++    wrt_observation_in_tag = true;
++    wrt_observation_tag.clear();
++    wrt_observation_tag_closing = false;
++    wrt_observation_tag_name_done = false;
++  } else if (wrt_observation_in_tag) {
++    if (wrt_observation_tag.empty() && !wrt_observation_tag_name_done &&
++        c == '/') {
++      wrt_observation_tag_closing = true;
++    } else if (!wrt_observation_tag_name_done &&
++        ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
++         (c >= '0' && c <= '9'))) {
++      if (wrt_observation_tag.size() < 24) {
++        wrt_observation_tag.push_back(static_cast<char>(c));
++      }
++    } else if (!wrt_observation_tag.empty() && c != '/') {
++      wrt_observation_tag_name_done = true;
++    }
++    if (c == '>') {
++      ObservationFinishTag(wrt_observation_previous == '/');
++      wrt_observation_in_tag = false;
++    }
++  }
++
++  if (!wrt_observation_in_tag) {
++    if (wrt_observation.title_mode) {
++      wrt_observation.title_hash = ObservationHash(wrt_observation.title_hash, c);
++    }
++    if (wrt_observation.template_depth > 0) {
++      wrt_observation.template_hash = ObservationHash(
++          wrt_observation.template_hash, c);
++    }
++    if (wrt_observation.ref_mode) {
++      wrt_observation.ref_hash = ObservationHash(wrt_observation.ref_hash, c);
++    }
++  }
++
++  if (wrt_observation_previous == '{' && c == '{') {
++    if (wrt_observation.template_depth < 15) {
++      ++wrt_observation.template_depth;
++    }
++    if (wrt_observation.template_depth == 1) {
++      wrt_observation.template_hash = 0;
++    }
++  } else if (wrt_observation_previous == '}' && c == '}' &&
++      wrt_observation.template_depth > 0) {
++    --wrt_observation.template_depth;
++  }
++
++  if (wrt_observation_previous == '{' && c == '|') {
++    wrt_observation.table_mode = 1;
++  } else if (wrt_observation_previous == '|' && c == '}') {
++    wrt_observation.table_mode = 0;
++  }
++
++  if (ObservationTailEndsWith("http://") ||
++      ObservationTailEndsWith("https://")) {
++    wrt_observation.url_mode = 1;
++  } else if (wrt_observation.url_mode &&
++      (c <= 32 || c == ']' || c == '|' || c == '<' || c == '>' ||
++       c == '"')) {
++    wrt_observation.url_mode = 0;
++  }
++
++  if (c == '\n' || c == '\r') {
++    if (wrt_observation.section_state == 1) {
++      wrt_observation.section_state = 2;
++    }
++    wrt_observation_line_start = true;
++    wrt_observation_heading_equals = 0;
++    wrt_observation.list_mode = 0;
++  } else if (wrt_observation_line_start) {
++    if (c == '=') {
++      if (wrt_observation_heading_equals < 6) {
++        ++wrt_observation_heading_equals;
++      }
++    } else if (c == ' ' || c == '\t') {
++      // Keep waiting for the first visible line character.
++    } else {
++      if (wrt_observation_heading_equals >= 2) {
++        wrt_observation.section_state = 1;
++        wrt_observation.section_level = wrt_observation_heading_equals;
++        wrt_observation.section_hash = 0;
++      }
++      wrt_observation.list_mode =
++          (c == '*' || c == '#' || c == ';' || c == ':') ? 1u : 0u;
++      wrt_observation_line_start = false;
++    }
++  } else if (wrt_observation.section_state == 1 && c != '=') {
++    wrt_observation.section_hash = ObservationHash(
++        wrt_observation.section_hash,
++        static_cast<unsigned char>(std::tolower(c)));
++  }
++
++  if (c >= '0' && c <= '9') {
++    wrt_observation.number_class =
++        wrt_observation.number_class == 0 ? 1u :
++        (wrt_observation.number_class < 3 ? wrt_observation.number_class + 1 : 3u);
++  } else {
++    wrt_observation.number_class = 0;
++  }
++  wrt_observation_previous = c;
++}
++
++void ObserveDecodedChar(unsigned char c) {
++  ++wrt_observation.decoded_chars;
++  ++wrt_observation.reconstructed_bytes;
++
++  if (wrt_observation_in_entity) {
++    if (c == ';') {
++      const std::string entity = wrt_observation_entity;
++      wrt_observation_entity.clear();
++      wrt_observation_in_entity = false;
++      if (entity == "lt") {
++        ObserveWikiChar('<');
++      } else if (entity == "gt") {
++        ObserveWikiChar('>');
++      } else if (entity == "amp") {
++        ObserveWikiChar('&');
++      } else if (entity == "quot") {
++        ObserveWikiChar('"');
++      } else if (entity == "apos") {
++        ObserveWikiChar('\'');
++      } else {
++        ObserveWikiChar('&');
++        for (unsigned char value : entity) ObserveWikiChar(value);
++        ObserveWikiChar(';');
++      }
++      return;
++    }
++    if (wrt_observation_entity.size() < 12 &&
++        ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
++         (c >= '0' && c <= '9') || c == '#')) {
++      wrt_observation_entity.push_back(
++          static_cast<char>(std::tolower(static_cast<unsigned char>(c))));
++      return;
++    }
++    const std::string entity = wrt_observation_entity;
++    wrt_observation_entity.clear();
++    wrt_observation_in_entity = false;
++    ObserveWikiChar('&');
++    for (unsigned char value : entity) ObserveWikiChar(value);
++  }
++
++  if (c == '&') {
++    wrt_observation_in_entity = true;
++    wrt_observation_entity.clear();
++    return;
++  }
++  ObserveWikiChar(c);
++}
++
++unsigned int ObservationTokenId(const std::vector<unsigned char>& bytes) {
++  if (bytes.empty()) return 0;
++  if (bytes.size() == 1) return bytes[0] - 0x80u;
++  if (bytes.size() == 2) {
++    return 80u + (bytes[0] - 0xd0u) * 80u + (bytes[1] - 0x80u);
++  }
++  return 3920u + (bytes[0] - 0xf0u) * 32u * 80u +
++      (bytes[1] - 0xd0u) * 80u + (bytes[2] - 0x80u);
++}
++
++void ObserveDictionaryToken() {
++  const unsigned int token_id = ObservationTokenId(wrt_observation_token);
++  wrt_observation.token_id = token_id;
++  wrt_observation.dictionary_hit_type = wrt_observation_token.size();
++  wrt_observation.literal_phase = 3;
++  if (token_id < wrt_observation_dictionary.size()) {
++    std::string word = wrt_observation_dictionary[token_id];
++    for (size_t i = 0; i < word.size(); ++i) {
++      unsigned char c = static_cast<unsigned char>(word[i]);
++      if ((i == 0 && wrt_observation_capital) || wrt_observation_upper) {
++        c = static_cast<unsigned char>(std::toupper(c));
++      }
++      ObserveDecodedChar(c);
++    }
++  }
++  wrt_observation_capital = false;
++  wrt_observation_token.clear();
++}
++
++void ObserveWrtByte(unsigned char encoded) {
++  const unsigned char c = static_cast<unsigned char>(charSwap(encoded));
++  wrt_observation.stream_byte = encoded;
++  wrt_observation.token_class = 0;
++  wrt_observation.token_id = 0;
++  wrt_observation.dictionary_hit_type = 0;
++  wrt_observation.literal_phase = 0;
++  wrt_observation.decoded_chars = 0;
++  wrt_observation.page_boundary = 0;
++
++  if (wrt_observation_escape) {
++    wrt_observation_escape = false;
++    wrt_observation_upper = false;
++    wrt_observation.token_class = 1;
++    wrt_observation.literal_phase = 2;
++    ObserveDecodedChar(c);
++    return;
++  }
++  if (c == 0x0c) {
++    wrt_observation_escape = true;
++    wrt_observation.token_class = 1;
++    wrt_observation.literal_phase = 1;
++    return;
++  }
++  if (c == 0x07) {
++    wrt_observation_upper = true;
++    wrt_observation.token_class = 2;
++    wrt_observation.literal_phase = 1;
++    return;
++  }
++  if (c == 0x40) {
++    wrt_observation_capital = true;
++    wrt_observation.token_class = 2;
++    wrt_observation.literal_phase = 1;
++    return;
++  }
++  if (c == 0x06) {
++    wrt_observation_upper = false;
++    wrt_observation.token_class = 2;
++    wrt_observation.literal_phase = 1;
++    return;
++  }
++  if (c >= 0x80) {
++    wrt_observation.token_class = wrt_observation_token.empty() ? 3u : 4u;
++    wrt_observation.literal_phase = 1;
++    wrt_observation_token.push_back(c);
++    const size_t expected = wrt_observation_token[0] <= 0xcf ? 1u :
++        (wrt_observation_token[0] <= 0xef ? 2u : 3u);
++    if (wrt_observation_token.size() == expected) {
++      ObserveDictionaryToken();
++    }
++    return;
++  }
++
++  wrt_observation.literal_phase = 2;
++  unsigned char literal = c;
++  if ((wrt_observation_capital || wrt_observation_upper) &&
++      literal >= 'a' && literal <= 'z') {
++    literal = static_cast<unsigned char>(std::toupper(literal));
++  }
++  if (!(literal >= 'a' && literal <= 'z') &&
++      !(literal >= 'A' && literal <= 'Z')) {
++    wrt_observation_upper = false;
++  }
++  wrt_observation_capital = false;
++  ObserveDecodedChar(literal);
++}
++
++}  // namespace
++
++void LoadWrtObservationDictionary(FILE* dictionary) {
++  wrt_observation_dictionary.clear();
++  if (dictionary == nullptr) return;
++  std::rewind(dictionary);
++  std::string word;
++  for (int value = std::getc(dictionary); value != EOF;
++       value = std::getc(dictionary)) {
++    const unsigned char c = static_cast<unsigned char>(value);
++    if (c >= 'a' && c <= 'z') {
++      word.push_back(static_cast<char>(c));
++    } else if (!word.empty()) {
++      wrt_observation_dictionary.push_back(word);
++      word.clear();
++    }
++  }
++  if (!word.empty()) wrt_observation_dictionary.push_back(word);
++  std::rewind(dictionary);
++}
++
++void ResetWrtObservation() {
++  wrt_observation = WrtObservation{};
++  wrt_observation_token.clear();
++  wrt_observation_escape = false;
++  wrt_observation_upper = false;
++  wrt_observation_capital = false;
++  wrt_observation_in_tag = false;
++  wrt_observation_tag_closing = false;
++  wrt_observation_tag_name_done = false;
++  wrt_observation_in_entity = false;
++  wrt_observation_line_start = true;
++  wrt_observation_heading_equals = 0;
++  wrt_observation_previous = 0;
++  wrt_observation_tag.clear();
++  wrt_observation_tail.clear();
++  wrt_observation_entity.clear();
++}
++
++const WrtObservation& GetWrtObservation() {
++  return wrt_observation;
++}
++#endif
++
+@@ -3724,0 +4090,3 @@ int modelPrediction(int c0,int bpos,int c4){
++#if FX2_WRT_OBSERVATION
++        ObserveWrtByte(static_cast<unsigned char>(c1));
++#endif
+@@ -4824,0 +5193,9 @@ void FXCM::Perceive(int bit) {
++#if FX2_WRT_OBSERVATION
++void FXCM::LoadWrtObservationDictionary(FILE* dictionary) {
++    fxcmv1::LoadWrtObservationDictionary(dictionary);
++}
++
++void FXCM::ResetWrtObservation() {
++    fxcmv1::ResetWrtObservation();
++}
++#endif
+diff --git a/src/models/fxcmv1.h b/src/models/fxcmv1.h
+index d192708..d361721 100644
+--- a/src/models/fxcmv1.h
++++ b/src/models/fxcmv1.h
+@@ -6,0 +7,5 @@
++#include <cstdio>
++
++#ifndef FX2_WRT_OBSERVATION
++#define FX2_WRT_OBSERVATION 0
++#endif
+@@ -8,0 +14,32 @@ namespace fxcmv1 {
++#if FX2_WRT_OBSERVATION
++  struct WrtObservation {
++    unsigned int stream_byte = 0;
++    unsigned int token_class = 0;
++    unsigned int token_id = 0;
++    unsigned int dictionary_hit_type = 0;
++    unsigned int literal_phase = 0;
++    unsigned int decoded_chars = 0;
++    unsigned int page_boundary = 0;
++    unsigned int page_mode = 0;
++    unsigned int title_mode = 0;
++    unsigned int prose_mode = 0;
++    unsigned int ref_mode = 0;
++    unsigned int url_mode = 0;
++    unsigned int table_mode = 0;
++    unsigned int list_mode = 0;
++    unsigned int template_depth = 0;
++    unsigned int number_class = 0;
++    unsigned int section_state = 0;
++    unsigned int section_level = 0;
++    unsigned int title_hash = 0;
++    unsigned int template_hash = 0;
++    unsigned int ref_hash = 0;
++    unsigned int section_hash = 0;
++    unsigned long long reconstructed_bytes = 0;
++  };
++
++  void LoadWrtObservationDictionary(FILE* dictionary);
++  void ResetWrtObservation();
++  const WrtObservation& GetWrtObservation();
++#endif
++
+@@ -23,0 +61,4 @@ class FXCM : public Model {
++#if FX2_WRT_OBSERVATION
++  void LoadWrtObservationDictionary(FILE* dictionary);
++  void ResetWrtObservation();
++#endif
 diff --git a/src/models/ppmd.cpp b/src/models/ppmd.cpp
 index dcc832c..3d98ad0 100644
 --- a/src/models/ppmd.cpp
 +++ b/src/models/ppmd.cpp
-@@ -1389,12 +1389,14 @@ void PPMD::ByteUpdate() {
-   ByteModel::ByteUpdate();
-   probs_ /= probs_.sum();
-   if (mmap_to_disk && counter_ % 20000 == 0) {
+@@ -1392 +1392,2 @@ void PPMD::ByteUpdate() {
 -    int err = munmap(ppmd_model_->HeapStart, mmap_size);
 +    byte* heap_start = ppmd_model_->HeapStart;
 +    int err = munmap(heap_start, mmap_size);
-     if(err != 0) {
-       exit(EXIT_FAILURE);
-     }
-     int fd = open(mmap_path, O_RDWR);
+@@ -1397 +1398,2 @@ void PPMD::ByteUpdate() {
 -    ppmd_model_->HeapStart = (byte*) mmap(NULL, mmap_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 +    ppmd_model_->HeapStart = (byte*) mmap(
 +        heap_start, mmap_size, PROT_READ|PROT_WRITE, MAP_SHARED | MAP_FIXED, fd, 0);
-     if(ppmd_model_->HeapStart == MAP_FAILED) {
-       exit(EXIT_FAILURE);
-     }
-@@ -1403,4 +1405,3 @@ void PPMD::ByteUpdate() {
- }
- 
- } // namespace PPMD
+@@ -1406 +1407,0 @@ void PPMD::ByteUpdate() {
 -
 diff --git a/src/models/sidecar-byte.h b/src/models/sidecar-byte.h
 new file mode 100644
@@ -915,13 +1243,10 @@ index 0000000..760fd73
 +
 +#endif
 diff --git a/src/predictor.cpp b/src/predictor.cpp
-index 503edfb..d325f75 100644
+index 503edfb..e4ed5fb 100644
 --- a/src/predictor.cpp
 +++ b/src/predictor.cpp
-@@ -3,14 +3,129 @@
- #include <stdlib.h>
- #include <stdio.h>
- #include <cstdlib>
+@@ -5,0 +6,100 @@
 +#include <cmath>
 +
 +#ifndef FX2_MIXER0_LR_SCALE
@@ -1022,9 +1347,7 @@ index 503edfb..d325f75 100644
 +  return x;
 +}
 +#endif
- 
- Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
-     sigmoid_(100001), vocab_(vocab) {
+@@ -8,0 +109,9 @@ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
 +#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
 +  const unsigned int contexts = FX2_MANIFOLD_P_BUCKETS * 8 *
 +      FX2_MANIFOLD_SPHERE_BINS * FX2_MANIFOLD_TORUS_BINS;
@@ -1034,51 +1357,38 @@ index 503edfb..d325f75 100644
 +  manifold_residual_sums_.assign(contexts, 0);
 +#endif
 +#endif
-   AddBracket();
-   AddPPMD();
-   AddWord();
-   AddMatch();
-   AddDoubleIndirect();
+@@ -13,0 +123,6 @@ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
 +#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_MODELS
 +  AddStructuralSidecarModels();
 +#endif
 +#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_BYTE_MODEL
 +  AddStructuralSidecarByteModels();
 +#endif
-   AddMixers();
-   auxiliary_size_ = 2;
- }
-@@ -27,19 +142,24 @@ unsigned long long Predictor::GetNumModels() {
-   num += indirect_r_models_.size();
-   num += byte_model_->NumOutputs();
-   num += byte_mixer_->NumOutputs();
+@@ -17,0 +133,10 @@ Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
++#if FX2_WRT_OBSERVATION
++void Predictor::LoadWrtObservationDictionary(FILE* dictionary) {
++  fxcm_model_.LoadWrtObservationDictionary(dictionary);
++}
++
++void Predictor::ResetWrtObservation() {
++  fxcm_model_.ResetWrtObservation();
++}
++#endif
++
+@@ -29,0 +155,3 @@ unsigned long long Predictor::GetNumModels() {
 +#if FX2_STRUCT_BYTE_PRIOR && FX2_STRUCT_BYTE_PRIOR_AS_INPUT
 +  num += 1;
 +#endif
-   return num;
- }
- 
- void Predictor::AddMixer(int layer, const unsigned long long& context,
-     float learning_rate) {
+@@ -34,0 +163,2 @@ void Predictor::AddMixer(int layer, const unsigned long long& context,
 +  const float tuned_learning_rate =
 +      learning_rate * (layer == 0 ? FX2_MIXER0_LR_SCALE : FX2_MIXER1_LR_SCALE);
-   if (layer == 0) {
-     mixer_0_.emplace_back(
-         layers_[layer].Inputs(), layers_[layer].ExtraInputs(), context,
+@@ -38 +168 @@ void Predictor::AddMixer(int layer, const unsigned long long& context,
 -      learning_rate, mixer_0_.size());
 +      tuned_learning_rate, mixer_0_.size());
-   } else {
-     mixer_1_.emplace_back(
-         layers_[layer].Inputs(), layers_[layer].ExtraInputs(), context,
+@@ -42 +172 @@ void Predictor::AddMixer(int layer, const unsigned long long& context,
 -      learning_rate, mixer_1_.size());
 +      tuned_learning_rate, mixer_1_.size());
-   }
- }
- 
-@@ -120,6 +240,50 @@ void Predictor::AddDoubleIndirect() {
-   indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind3,  manager_.bit_context_, delta, manager_.shared_map_);
-   indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind5,  manager_.bit_context_, delta, manager_.shared_map_);
- }
+@@ -122,0 +253,44 @@ void Predictor::AddDoubleIndirect() {
 +
 +#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_MODELS
 +void Predictor::AddStructuralSidecarModels() {
@@ -1123,25 +1433,13 @@ index 503edfb..d325f75 100644
 +}
 +#endif
 +
- unsigned int Discretize(float p) {
-   return 1 + 4094 * p;
- }
-@@ -128,8 +292,9 @@ void Predictor::AddMixers() {
-   for (unsigned int i = 0; i < vocab_.size(); ++i) {
-     if (vocab_[i]) ++vocab_size;
-   }
+@@ -131,2 +305,3 @@ void Predictor::AddMixers() {
 -  byte_mixer_.emplace(1, manager_.bit_context_, vocab_,
 -      vocab_size, new Lstm(vocab_size, vocab_size, 200, 1, 128, 0.03, 10));
 +  byte_mixer_.emplace(1 + sidecar_byte_models_.size(), manager_.bit_context_, vocab_,
 +      vocab_size, new Lstm(
 +          vocab_size, vocab_size, 200, 1, 128, 0.03 * FX2_LSTM_LR_SCALE, 10));
- 
-   for (int i = 0; i < 2; ++i) {
-     layers_.emplace_back(sigmoid_,
-@@ -163,15 +328,318 @@ void Predictor::AddMixers() {
-   AddMixer(0, manager_.mx16, 0.005);
-   AddMixer(0, manager_.mx14, 0.005);
-   AddMixer(0, manager_.mx15, 0.005);
+@@ -165,0 +341,20 @@ void Predictor::AddMixers() {
 +#if FX2_META_STREAK == 2
 +  AddMixer(0, meta_streak_context_, 0.00005);
 +#endif
@@ -1162,19 +1460,13 @@ index 503edfb..d325f75 100644
 +  AddMixer(0, manager_.typed_anchor_soft_context,
 +      FX2_TYPED_ANCHOR_SOFT_SSE_WEIGHT);
 +#endif
- 
-   input_size = mixer_0_.size() + auxiliary_size_;
-   layers_[1].SetNumModels(input_size);
- 
+@@ -169,0 +365,3 @@ void Predictor::AddMixers() {
 +#if FX2_META_STREAK == 1
 +  AddMixer(1, meta_streak_context_, 0.0003);
 +#else
-   AddMixer(1,manager_.zero_context_, 0.0003);
+@@ -170,0 +369 @@ void Predictor::AddMixers() {
 +#endif
- 
-   layers_[0].SetExtraInputSize(mixer_0_.size());
- 
- }
+@@ -174,0 +374,279 @@ void Predictor::AddMixers() {
 +#if FX2_META_STREAK
 +void Predictor::UpdateMetaStreak(int bit) {
 +  const float error = std::fabs(last_prediction_ - static_cast<float>(bit));
@@ -1454,23 +1746,11 @@ index 503edfb..d325f75 100644
 +}
 +#endif
 +
- int lstmpr=0, lstmex=0;
- float byte_mixer_output=0.0f;
- float Predictor::Predict() {
-@@ -219,6 +687,9 @@ float Predictor::Predict() {
-     }
-   }
-   layers_[0].SetInput(input_index++, byte_model_->Predict()[0]);
+@@ -221,0 +700,3 @@ float Predictor::Predict() {
 +#if FX2_STRUCT_BYTE_PRIOR && FX2_STRUCT_BYTE_PRIOR_AS_INPUT
 +  layers_[0].SetInput(input_index++, StructuralBytePrior());
 +#endif
- 
-   float byte_mixer_override = -1;
- 
-@@ -229,6 +700,66 @@ float Predictor::Predict() {
-   float auxiliary_average = Sigmoid::Logistic(layers_[0].Inputs()[fxcm_model_index]) + Sigmoid::Logistic(layers_[0].Inputs()[byte_mixer_index]);
-   auxiliary_average /= auxiliary_size_;
-   manager_.auxiliary_context_ =auxiliary_average * 15;
+@@ -231,0 +713,60 @@ float Predictor::Predict() {
 +#if FX2_TYPED_ANCHOR_SOFT_SSE && FX2_STRUCT_SIDECAR
 +  const unsigned long long typed_anchor_bit_context =
 +      manager_.long_bit_context_ & 0xffULL;
@@ -1531,23 +1811,17 @@ index 503edfb..d325f75 100644
 +      ((manager_.side_slot & 15ULL) << 15);
 +#endif
 +#endif
- 
-   for (unsigned int i = 0; i < mixer_0_.size(); ++i) {
-     float p = mixer_0_[i].Mix();
-@@ -241,8 +772,24 @@ float Predictor::Predict() {
-   float p = Sigmoid::Logistic(mixer_1_[0].Mix());
-   p = sse_.Predict(p);
-   if (byte_mixer_override >= 0) {
+@@ -244 +785,8 @@ float Predictor::Predict() {
 -    return byte_mixer_override;
 +    p = byte_mixer_override;
-   }
++  }
 +#if FX2_STRUCT_BYTE_PRIOR && FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM > 0
 +  if (manager_.sidecar_lexer_state != 0 && byte_mixer_override < 0) {
 +    const float prior = StructuralBytePrior();
 +    p += (prior - p) *
 +        (static_cast<float>(FX2_STRUCT_BYTE_PRIOR_DIRECT_BLEND_PPM) /
 +            1000000.0f);
-+  }
+@@ -245,0 +794,9 @@ float Predictor::Predict() {
 +#endif
 +#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
 +  if (byte_mixer_override < 0) {
@@ -1557,41 +1831,22 @@ index 503edfb..d325f75 100644
 +#if FX2_META_STREAK
 +  last_prediction_ = p;
 +#endif
-   return p;
- }
- 
-@@ -261,8 +808,14 @@ void Predictor::Perceive(int bit) {
-   for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
-     indirect_r_models_[i].Perceive(bit);
-   }
+@@ -263,0 +821,3 @@ void Predictor::Perceive(int bit) {
 +  for (auto& model : sidecar_byte_models_) {
 +    model->Perceive(bit);
 +  }
- 
-   byte_model_->Perceive(bit);
+@@ -265,0 +826,3 @@ void Predictor::Perceive(int bit) {
 +  for (auto& model : sidecar_byte_models_) {
 +    model->Perceive(bit);
 +  }
- 
-   byte_mixer_->Perceive(bit);
- 
-@@ -274,6 +827,12 @@ void Predictor::Perceive(int bit) {
-   }
- 
-   sse_.Perceive(bit);
+@@ -276,0 +840,6 @@ void Predictor::Perceive(int bit) {
 +#if FX2_MANIFOLD_OUTER_SSE && FX2_STRUCT_SIDECAR
 +  UpdateManifoldOuterSSE(bit);
 +#endif
 +#if FX2_META_STREAK
 +  UpdateMetaStreak(bit);
 +#endif
- 
-   bool byte_update = false;
-   if (manager_.bit_context_ >= 128) byte_update = true;
-@@ -302,6 +861,13 @@ void Predictor::Perceive(int bit) {
-     for (unsigned int j = 0; j < 256; ++j) {
-       byte_mixer_->SetInput(j,p[j]);
-     }
+@@ -304,0 +874,7 @@ void Predictor::Perceive(int bit) {
 +    for (auto& model : sidecar_byte_models_) {
 +      model->ByteUpdate();
 +      const std::valarray<float>& side_p = model->BytePredict();
@@ -1599,24 +1854,18 @@ index 503edfb..d325f75 100644
 +        byte_mixer_->SetInput(j, side_p[j]);
 +      }
 +    }
- 
-     byte_mixer_->ByteUpdate();
-    
-@@ -366,7 +932,58 @@ void Predictor::Pretrain(int bit) {
-     for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
-       indirect_r_models_[i].ByteUpdate();
-     }
+@@ -368,0 +945,3 @@ void Predictor::Pretrain(int bit) {
 +    for (auto& model : sidecar_byte_models_) {
 +      model->ByteUpdate();
 +    }
-     manager_.bit_context_ = 1;
-   }
- }
- 
+@@ -372,0 +952,88 @@ void Predictor::Pretrain(int bit) {
 +#if FX2_RESIDUAL_LOG
 +void Predictor::LogResidualRow(FILE* out, unsigned long long byte_pos,
 +    unsigned long long bit_pos, int bit, unsigned int p1,
 +    int baseline_qbits) const {
++#if FX2_WRT_OBSERVATION
++  const fxcmv1::WrtObservation& wrt = fxcmv1::GetWrtObservation();
++#endif
 +  std::fprintf(out,
 +      "FX2_RESIDUAL_ROW pos=%llu bit_pos=%llu bit=%d p1=%u "
 +      "baseline_qbits=%d split=all bit_count=1"
@@ -1626,6 +1875,17 @@ index 503edfb..d325f75 100644
 +      "word_len=%u col_bucket=%u page_bucket=%u category_state=%u "
 +      "template_arg=%u link_recency=%u title_hash=%u template_hash=%u "
 +      "link_hash=%u entity_hash=%u word_hash=%u pair_sig=%llu"
++#endif
++#if FX2_WRT_OBSERVATION
++      " wrt_stream_byte=%u wrt_token_class=%u wrt_token_id=%u "
++      "wrt_dictionary_hit_type=%u wrt_literal_phase=%u "
++      "wrt_decoded_chars=%u wrt_page_boundary=%u wrt_page_mode=%u "
++      "wrt_title_mode=%u wrt_prose_mode=%u wrt_ref_mode=%u "
++      "wrt_url_mode=%u wrt_table_mode=%u wrt_list_mode=%u "
++      "wrt_template_depth=%u wrt_number_class=%u "
++      "wrt_section_state=%u wrt_section_level=%u wrt_title_hash=%u "
++      "wrt_template_hash=%u wrt_ref_hash=%u wrt_section_hash=%u "
++      "wrt_reconstructed_bytes=%llu"
 +#endif
 +      "\n",
 +      byte_pos,
@@ -1658,25 +1918,42 @@ index 503edfb..d325f75 100644
 +      manager_.side_word_hash,
 +      manager_.sidecar_pair_sig
 +#endif
++#if FX2_WRT_OBSERVATION
++      ,
++      wrt.stream_byte,
++      wrt.token_class,
++      wrt.token_id,
++      wrt.dictionary_hit_type,
++      wrt.literal_phase,
++      wrt.decoded_chars,
++      wrt.page_boundary,
++      wrt.page_mode,
++      wrt.title_mode,
++      wrt.prose_mode,
++      wrt.ref_mode,
++      wrt.url_mode,
++      wrt.table_mode,
++      wrt.list_mode,
++      wrt.template_depth,
++      wrt.number_class,
++      wrt.section_state,
++      wrt.section_level,
++      wrt.title_hash,
++      wrt.template_hash,
++      wrt.ref_hash,
++      wrt.section_hash,
++      wrt.reconstructed_bytes
++#endif
 +      );
 +}
 +#endif
 diff --git a/src/predictor.h b/src/predictor.h
-index 5754d1e..3123f26 100644
+index 5754d1e..1b5efce 100644
 --- a/src/predictor.h
 +++ b/src/predictor.h
-@@ -16,6 +16,7 @@
- #include "models/ppmd.h"
- #include "models/bracket.h"
- #include "models/fxcmv1.h"
+@@ -18,0 +19 @@
 +#include "models/sidecar-byte.h"
- #include "mixer/lstm.h"
- #include "contexts/context-hash.h"
- #include "contexts/bracket-context.h"
-@@ -33,6 +34,91 @@
- #include <set>
- #include <memory>
- #include <optional>
+@@ -35,0 +37,85 @@
 +#include <cstdio>
 +
 +#ifndef FX2_META_STREAK
@@ -1762,32 +2039,24 @@ index 5754d1e..3123f26 100644
 +#ifndef FX2_MANIFOLD_CORRECTION_BIAS
 +#define FX2_MANIFOLD_CORRECTION_BIAS 0
 +#endif
- 
- class Predictor {
-  public:
-@@ -40,6 +126,11 @@ class Predictor {
-   float Predict();
-   void Perceive(int bit);
-   void Pretrain(int bit);
+@@ -42,0 +129,9 @@ class Predictor {
++#if FX2_WRT_OBSERVATION
++  void LoadWrtObservationDictionary(FILE* dictionary);
++  void ResetWrtObservation();
++#endif
 +#if FX2_RESIDUAL_LOG
 +  void LogResidualRow(FILE* out, unsigned long long byte_pos,
 +      unsigned long long bit_pos, int bit, unsigned int p1,
 +      int baseline_qbits) const;
 +#endif
- 
-  private:
-   unsigned long long GetNumModels();
-@@ -52,7 +143,24 @@ class Predictor {
-   void AddDirect();
-   void AddMatch();
-   void AddDoubleIndirect();
+@@ -54,0 +150,6 @@ class Predictor {
 +#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_MODELS
 +  void AddStructuralSidecarModels();
 +#endif
 +#if FX2_STRUCT_SIDECAR && FX2_STRUCT_SIDECAR_BYTE_MODEL
 +  void AddStructuralSidecarByteModels();
 +#endif
-   void AddMixers();
+@@ -55,0 +157,11 @@ class Predictor {
 +#if FX2_STRUCT_BYTE_PRIOR
 +  float StructuralBytePrior() const;
 +#endif
@@ -1799,16 +2068,9 @@ index 5754d1e..3123f26 100644
 +  float ApplyManifoldOuterSSE(float p);
 +  void UpdateManifoldOuterSSE(int bit);
 +#endif
- 
-   llvm::SmallVector<Indirect<Nonstationary>, 30-7> indirect_ns_models_; // non-stationary
-   llvm::SmallVector<Indirect<RunMap>, 1> indirect_r_models_; // run map
-@@ -70,9 +178,25 @@ class Predictor {
-   Sigmoid sigmoid_;
-   std::optional<PPMD::PPMD> byte_model_;
-   std::optional<ByteMixer> byte_mixer_;
+@@ -72,0 +185 @@ class Predictor {
 +  std::vector<std::unique_ptr<SidecarByteModel>> sidecar_byte_models_;
-   std::vector<bool> vocab_;
-    FXCM fxcm_model_;
+@@ -74,0 +188,16 @@ class Predictor {
 +#if FX2_META_STREAK
 +  float last_prediction_ = 0.5f;
 +  unsigned long long meta_streak_context_ = 0;
@@ -1825,7 +2087,17 @@ index 5754d1e..3123f26 100644
 +  unsigned int manifold_last_key_ = 0;
 +  bool manifold_has_last_key_ = false;
 +#endif
- };
- 
- #endif
+@@ -78 +206,0 @@ class Predictor {
 -
+diff --git a/src/preprocess/preprocessor.cpp b/src/preprocess/preprocessor.cpp
+index 017ff8a..aa42464 100644
+--- a/src/preprocess/preprocessor.cpp
++++ b/src/preprocess/preprocessor.cpp
+@@ -19,0 +20,3 @@ void Pretrain(Predictor* p, FILE* dictionary) {
++#if FX2_WRT_OBSERVATION
++  p->LoadWrtObservationDictionary(dictionary);
++#endif
+@@ -49,0 +53,3 @@ void Pretrain(Predictor* p, FILE* dictionary) {
++#if FX2_WRT_OBSERVATION
++  p->ResetWrtObservation();
++#endif
