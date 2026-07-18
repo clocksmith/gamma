@@ -88,6 +88,8 @@ def render_markdown(receipt: dict[str, object]) -> str:
             "",
             f"- Window: `{receipt['window']['window_id']}`",
             f"- Phase: `{receipt['phase']}`",
+            f"- Substrate: `{receipt['shadow']['substrate']['id']}`",
+            f"- State contract: `{receipt['shadow']['substrate']['state_contract']}`",
             f"- Raw scope: `{receipt['window']['window_size']}` bytes",
             f"- WRT bytes: `{receipt['trace']['wrt_bytes']}`",
             f"- Archive bytes: `{receipt['archive']['bytes']}`",
@@ -98,6 +100,7 @@ def render_markdown(receipt: dict[str, object]) -> str:
             f"- Best current-title variant: `{best.get('variant_id', 'n/a')}`",
             f"- Current-title qbit gain: `{best.get('qbit_gain_bytes_per_million', 'n/a')}` B/1M",
             f"- Current-title exact saved bytes: `{(best.get('exact') or {}).get('saved_bytes', 'n/a')}`",
+            f"- Best future-label byte oracle: `{(receipt['shadow'].get('best_positive_byte_oracle') or {}).get('positive_byte_oracle_bytes_per_million', 'n/a')}` B/1M",
             f"- Best previous-title control: `{control.get('variant_id', 'n/a')}`",
             f"- Previous-title control qbit gain: `{control.get('qbit_gain_bytes_per_million', 'n/a')}` B/1M",
             f"- Verdict: `{receipt['verdict']}`",
@@ -215,6 +218,12 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], int]:
         args.window_id,
         "--phase",
         args.phase,
+        "--substrate-id",
+        "raw_fx2",
+        "--state-contract",
+        "cold_reset_frozen_random_window",
+        "--gross-floor-bpm",
+        str(args.gross_floor_bpm),
         "--exact-top",
         str(args.exact_top),
         "--output",
@@ -239,7 +248,9 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], int]:
     best = shadow.get("best") or {}
     control = shadow.get("best_control") or {}
     exact = best.get("exact") or {}
-    economic = float(best.get("qbit_gain_bytes_per_million", 0)) > 700
+    economic = (
+        float(best.get("qbit_gain_bytes_per_million", 0)) > args.gross_floor_bpm
+    )
     exact_positive = int(exact.get("saved_bytes", 0)) > 0
     control_lower = float(control.get("qbit_gain_bytes_per_million", 0)) < float(
         best.get("qbit_gain_bytes_per_million", 0)
@@ -312,6 +323,9 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], int]:
         "shadow": {
             "best": best,
             "best_control": control,
+            "best_positive_byte_oracle": shadow.get("best_positive_byte_oracle"),
+            "substrate": shadow["substrate"],
+            "economics": shadow["economics"],
             "diagnostics": shadow["diagnostics"],
             "validations": shadow["validations"],
         },
@@ -341,6 +355,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--local-limit-kib", type=int, default=LOCAL_10GIB_KIB)
     parser.add_argument("--decimal-limit-kib", type=int, default=DECIMAL_10GB_KIB)
     parser.add_argument("--exact-top", type=int, default=8)
+    parser.add_argument("--gross-floor-bpm", type=float, default=700.0)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--json-out", type=Path)
     parser.add_argument("--md-out", type=Path)
@@ -357,6 +372,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise SystemExit(f"missing required file: {path}")
     if args.local_limit_kib < args.decimal_limit_kib:
         raise SystemExit("binary guard cannot be smaller than decimal guard")
+    if args.gross_floor_bpm < 0:
+        raise SystemExit("gross floor cannot be negative")
     if args.phase == "confirmation" and not args.variant_id:
         raise SystemExit("confirmation requires a frozen --variant-id")
 
