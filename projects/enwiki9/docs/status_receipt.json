@@ -9,36 +9,8 @@
   "active_candidate_recent_artifacts": [],
   "active_gate": null,
   "active_processes": {
-    "active_rows": [
-      {
-        "args": "/bin/bash -lc flock /tmp/enwiki9-heavy.lock bash -s <<'SCRIPT' set -euo pipefail cd /home/x/deco/gamma TEST=/home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_geometry_1m_ppmd20352k_v1 BIN=/home/x/enwiki9-nonproof/cmix21-fx2-wrt-hybrid-v1/cmix.fx2wrt.ppmd20352k DICT=/home/x/enwiki9-nonproof/gamma/projects/enwiki9/external/fx2-cmix/dictionary/english.dic STORE=/home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_frontend_1m_v1/geometry.hybrid.store FX2_ARCHIVE=/home/x/enwiki9-nonproof/results/fx2_order_geometry_1m.comp mkdir -p \"$TEST\" for path in replay.comp replay_guard.json archive_screen.json; do test ! -e \"$TEST/$path\"; done python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json \"$TEST/replay_guard.json\" --label fx2_cmix21_hybrid_geometry_1m_ppmd20352k_replay -- \"$BIN\" -r \"$DICT\" \"$STORE\" \"$TEST/replay.comp\" python3 - \"$FX2_ARCHIVE\" \"$TEST/replay.comp\" \"$TEST/archive_screen.json\" <<'PY' import datetime, hashlib, json, pathlib, sys fx2, hybrid, out = map(pathlib.Path, sys.argv[1:]) def digest(p):  h=hashlib.sha256()  with p.open('rb') as f:   while b:=f.read(1<<20): h.update(b)  return {'path':str(p),'bytes':p.stat().st_size,'sha256':h.hexdigest()} a=digest(fx2); b=digest(hybrid); gain=a['bytes']-b['bytes'] payload={'schema':'fx2_cmix21_hybrid_geometry_1m_archive_screen_v1','generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope_raw_bytes':1_000_000,'evidence_level':'exact_stored_stream_archive_screen_nonproof','fx2_geometry_archive':a,'hybrid_geometry_archive':b,'gross_saved_bytes':gain,'gross_saved_bytes_per_1m':gain,'required_gross_bytes_per_1m_at_379296_program_forecast':877.402,'clears_program_adjusted_forecast_rate':gain>877.402,'roundtrip_ok':None,'determinism_ok':None,'promotion_authorized':False,'claim_boundary':'Exact geometry stored-stream archive evidence only; integrated decode, determinism, portable package accounting, disjoint scaling, and 1G score remain unproven.'} out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\\n') print(json.dumps(payload,sort_keys=True)) PY SCRIPT",
-        "pgid": 3783327,
-        "pid": 3783327,
-        "ppid": 2803071,
-        "rss_kib": 3848,
-        "stat": "Ss"
-      },
-      {
-        "args": "python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json /home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_geometry_1m_ppmd20352k_v1/replay_guard.json --label fx2_cmix21_hybrid_geometry_1m_ppmd20352k_replay -- /home/x/enwiki9-nonproof/cmix21-fx2-wrt-hybrid-v1/cmix.fx2wrt.ppmd20352k -r /home/x/enwiki9-nonproof/gamma/projects/enwiki9/external/fx2-cmix/dictionary/english.dic /home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_frontend_1m_v1/geometry.hybrid.store /home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_geometry_1m_ppmd20352k_v1/replay.comp",
-        "pgid": 3783327,
-        "pid": 3868009,
-        "ppid": 3868007,
-        "rss_kib": 16672,
-        "stat": "S"
-      },
-      {
-        "args": "/bin/bash -lc flock /tmp/enwiki9-heavy.lock bash -s <<'SCRIPT' set -euo pipefail cd /home/x/deco/gamma SCREEN=/home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_geometry_1m_ppmd20352k_v1/archive_screen.json TEST=/home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_geometry_1m_clean_v1 BIN=/home/x/enwiki9-nonproof/cmix21-fx2-wrt-hybrid-clean-v1/cmix.fx2wrt.clean.ppmd20352k DICT=/home/x/enwiki9-nonproof/gamma/projects/enwiki9/external/fx2-cmix/dictionary/english.dic INPUT=/home/x/enwiki9-nonproof/results/page_order_inputs_1m/1000000_geometry.raw REPLAY=/home/x/enwiki9-nonproof/results/fx2_cmix21_hybrid_geometry_1m_ppmd20352k_v1/replay.comp if ! python3 - \"$SCREEN\" <<'PY' import json,sys raise SystemExit(0 if json.load(open(sys.argv[1]))['clears_program_adjusted_forecast_rate'] else 1) PY then   printf 'geometry archive screen did not clear; clean integrated proof skipped\\n'   exit 0 fi mkdir -p \"$TEST\" for path in archive.comp restored.raw archive.second.comp encode_guard.json decode_guard.json encode_second_guard.json; do test ! -e \"$TEST/$path\"; done python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json \"$TEST/encode_guard.json\" --label fx2_cmix21_hybrid_geometry_1m_clean_encode -- \"$BIN\" -c \"$DICT\" \"$INPUT\" \"$TEST/archive.comp\" >\"$TEST/encode.log\" 2>&1 cmp -s \"$TEST/archive.comp\" \"$REPLAY\" python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json \"$TEST/decode_guard.json\" --label fx2_cmix21_hybrid_geometry_1m_clean_decode -- \"$BIN\" -d \"$DICT\" \"$TEST/archive.comp\" \"$TEST/restored.raw\" >\"$TEST/decode.log\" 2>&1 cmp -s \"$INPUT\" \"$TEST/restored.raw\" python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json \"$TEST/encode_second_guard.json\" --label fx2_cmix21_hybrid_geometry_1m_clean_encode_second -- \"$BIN\" -c \"$DICT\" \"$INPUT\" \"$TEST/archive.second.comp\" >\"$TEST/encode_second.log\" 2>&1 cmp -s \"$TEST/archive.comp\" \"$TEST/archive.second.comp\" sha256sum \"$INPUT\" \"$TEST/restored.raw\" \"$TEST/archive.comp\" \"$TEST/archive.second.comp\" wc -c \"$INPUT\" \"$TEST/restored.raw\" \"$TEST/archive.comp\" \"$TEST/archive.second.comp\" SCRIPT",
-        "pgid": 3869431,
-        "pid": 3869431,
-        "ppid": 2803071,
-        "rss_kib": 3908,
-        "stat": "Ss"
-      }
-    ],
-    "active_scorer_observed": true,
-    "active_tree_decimal_10gb_margin_kib": 9741197,
-    "active_tree_margin_kib": 10461332,
-    "active_tree_rss_kib": 24428,
+    "active_rows": [],
+    "active_scorer_observed": false,
     "cmix_rows": [],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
@@ -88,16 +60,16 @@
     "returncode": 0,
     "summary": {
       "candidate_status_counts": {
-        "active": 7,
+        "active": 24,
         "blocked_dependency": 12,
-        "candidate": 144,
-        "measured_negative": 20,
-        "retired": 349
+        "candidate": 69,
+        "measured_negative": 77,
+        "retired": 350
       },
-      "directories": 558,
-      "file_entries": 2123,
-      "ignored_entries": 14,
-      "modified_tracked_entries": 10,
+      "directories": 2085,
+      "file_entries": 7527,
+      "ignored_entries": 5855,
+      "modified_tracked_entries": 0,
       "program_directories": 532,
       "registered_programs": 225,
       "top_level_file_entries": {
@@ -105,13 +77,14 @@
         ".codex-reminders": 4,
         "<root>": 26,
         "agents": 5,
-        "data": 7,
+        "build": 3705,
+        "data": 8,
         "docs": 31,
-        "external": 81,
+        "external": 204,
         "lib": 4,
         "programs": 1875,
-        "results": 1,
-        "run_logs": 2,
+        "results": 1548,
+        "run_logs": 30,
         "tools": 86
       },
       "tracked_entries": 2120,
@@ -130,9 +103,9 @@
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
-  "generated_at_utc": "2026-07-14T21:54:38+00:00",
+  "generated_at_utc": "2026-07-18T17:52:04+00:00",
   "handoff": {
-    "active_scorer_observed": true,
+    "active_scorer_observed": false,
     "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
     "claim_rule": "No prefix row proves 10.95%.",
     "command_source": "none while gate is non-terminal",
@@ -141,15 +114,15 @@
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "heavy_gate_mutation_allowed": false,
-    "heavy_lock_held": true,
-    "recommended_action": "wait_for_current_gate_receipts",
+    "heavy_lock_held": false,
+    "recommended_action": "inspect_queue_before_launch",
     "scope_bytes": null,
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
   "has_full_corpus_constructive_result": false,
   "heavy_lock": {
-    "held": true,
+    "held": false,
     "path": "/tmp/enwiki9-heavy.lock"
   },
   "next_gate": null,
@@ -169,33 +142,21 @@
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "wait_for_current_gate_receipts",
-    "allowed_work": [
-      "refresh status receipt",
-      "inspect driver and RSS receipts",
-      "update documentation and accounting ledgers",
-      "work on shadow-coder specs from cached logs"
-    ],
-    "forbidden_work": [
-      "launch another compression gate",
-      "package a fallback candidate",
-      "run result-corpus forecast scans",
-      "change active candidate source"
-    ],
-    "reason": "the serialized scorer lane is already owned by an observed guarded process",
-    "safe_to_launch_heavy_gate": false
+    "action": "inspect_queue_before_launch",
+    "reason": "no lock owner or terminal gate receipt blocks the next queue decision",
+    "safe_to_launch_heavy_gate": true
   },
   "operator_logs": {
     "latest_delayed_status_log": "projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log",
     "latest_delayed_status_log_present": true,
-    "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260714T040213Z.log"
+    "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260709T122555Z.log"
   },
   "operator_summary": {
     "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": 9741197,
-    "active_process_tree_margin_kib": 10461332,
-    "active_process_tree_rss_kib": 24428,
-    "active_scorer_observed": true,
+    "active_process_tree_decimal_10gb_margin_kib": null,
+    "active_process_tree_margin_kib": null,
+    "active_process_tree_rss_kib": null,
+    "active_scorer_observed": false,
     "binary_10gib_guard_kib": 10485760,
     "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
     "claim_rule": "No prefix row proves 10.95%.",
@@ -208,7 +169,7 @@
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "heavy_gate_mutation_allowed": false,
-    "heavy_lock_held": true,
+    "heavy_lock_held": false,
     "latest_sample_single_decimal_10gb_margin_kib": null,
     "latest_sample_single_decimal_10gb_safe": null,
     "latest_sample_single_rss_kib": null,
@@ -220,13 +181,13 @@
     "max_sampled_single_rss_kib": null,
     "max_sampled_tree_decimal_10gb_margin_kib": null,
     "max_sampled_tree_decimal_10gb_safe": null,
-    "operator_action": "wait_for_current_gate_receipts",
+    "operator_action": "inspect_queue_before_launch",
     "rss_guard_json": null,
     "rss_guard_json_sha256": null,
     "rss_guard_present": null,
     "rss_guard_status": null,
     "rss_samples": null,
-    "safe_to_launch_heavy_gate": false,
+    "safe_to_launch_heavy_gate": true,
     "scope_bytes": null,
     "single_rss_margin_kib": null,
     "terminal_verdict_present": false
