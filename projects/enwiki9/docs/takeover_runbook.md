@@ -74,27 +74,24 @@ fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1
 Current decision:
 
 ```text
-source-handoff metadata records the cmix21 FXCM2/full-buffer 10M pass at archive 1,638,340
-  -> wait for the unchanged exact 100M terminal receipts
-  -> use only cmix21_gate_decider.py output to record or promote
+the cmix21 FXCM2/full-buffer 100M first archive misses its promotion screen
+  -> preserve the terminal economic receipt and forbid unchanged 1G
+  -> build an archive-identical attribution probe for a conditional endpoint
 ```
 
 Active target-bearing gate:
 
 ```text
-active candidate: cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
-scope: 100000000
-mode: --check-determinism
-guard: results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json
-program bytes: 564260
+none
 ```
 
 Source-handoff metadata records the `10M` predecessor at archive `1,638,340`,
 with roundtrip and determinism true and peak single-process RSS `8,871,336`
-KiB; its original result JSON is pending local overlay restoration. The current
-guarded replay tests the identical package freshly at `100M`; it does not
-establish a full-corpus score until the later exact `1G` replay and accounting
-audit pass.
+KiB; its original result JSON is pending local overlay restoration. The
+unchanged `100M` replay produced a `14,864,716`-byte first archive, which is
+`149,143` bytes above the unified-executable promotion screen. Decode was
+stopped before roundtrip and determinism completed. This is terminal economic
+substrate evidence, not authorization for a `1G` replay.
 
 The prior cmix21 ladder is terminal memory-bracket evidence because:
 
@@ -142,7 +139,7 @@ guard: ppmd20480k_250000_determinism_rss_guard.json
 verdict: official decimal memory failure by 3,275 KiB
 ```
 
-Active replacement gate:
+Retired replacement gate:
 
 ```text
 candidate: cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
@@ -150,6 +147,7 @@ scope: 100000000
 mode: --check-determinism
 guard: ppmd20352k_100000000_determinism_rss_guard.json
 prior source-handoff gate: 10000000 archive 1638340, roundtrip true, determinism true; original result JSON pending local restoration
+100M first archive: 14864716; unified-executable screen miss: 149143; no 1G promotion
 ```
 
 Do not resume from the retired `ppmd20736k` or bracketed `ppmd20608k` receipt.

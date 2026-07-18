@@ -6,23 +6,19 @@ REPO_ROOT="$(cd "$ROOT/../.." && pwd)"
 OUT_DIR="$ROOT/run_logs"
 mkdir -p "$OUT_DIR"
 
-DEFAULT_ACTIVE_CANDIDATE="cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1"
-DEFAULT_ACTIVE_SCOPE="100000000"
 read -r ACTIVE_CANDIDATE ACTIVE_SCOPE < <(
-  python3 - "$ROOT/upper_bound_certificate.json" "$DEFAULT_ACTIVE_CANDIDATE" "$DEFAULT_ACTIVE_SCOPE" <<'PY'
+  python3 - "$ROOT/upper_bound_certificate.json" <<'PY'
 import json
 import pathlib
 import sys
 
 
 cert_path = pathlib.Path(sys.argv[1])
-default_candidate = sys.argv[2]
-default_scope = sys.argv[3]
 
 try:
     cert = json.loads(cert_path.read_text())
 except (OSError, json.JSONDecodeError):
-    print(default_candidate, default_scope)
+    print("__NONE__ 0")
     raise SystemExit
 
 for row in cert.get("top_status", []):
@@ -32,11 +28,11 @@ for row in cert.get("top_status", []):
         continue
     candidate = row.get("program_id")
     scope = row.get("scope_bytes")
-    if isinstance(candidate, str) and isinstance(scope, int):
+    if isinstance(candidate, str) and isinstance(scope, int) and scope > 0:
         print(candidate, scope)
         raise SystemExit
 
-print(default_candidate, default_scope)
+print("__NONE__ 0")
 PY
 )
 RSS_GUARD_KIB="10485760"
@@ -228,12 +224,20 @@ if not printed:
 PY
   echo
   echo "[active_gate_decider]"
-  python3 "$ROOT/tools/cmix21_gate_decider.py" "$ACTIVE_CANDIDATE" --scope "$ACTIVE_SCOPE" || true
+  if [[ "$ACTIVE_CANDIDATE" == "__NONE__" ]]; then
+    echo "none"
+  else
+    python3 "$ROOT/tools/cmix21_gate_decider.py" "$ACTIVE_CANDIDATE" --scope "$ACTIVE_SCOPE" || true
+  fi
   echo
   echo "[active_candidate_recent_results]"
-  find "$ROOT/results/$ACTIVE_CANDIDATE" -maxdepth 1 -type f \
-    -printf '%TY-%Tm-%Td %TH:%TM:%TS %s %p\n' 2>/dev/null \
-    | sort | tail -20 || true
+  if [[ "$ACTIVE_CANDIDATE" == "__NONE__" ]]; then
+    echo "none"
+  else
+    find "$ROOT/results/$ACTIVE_CANDIDATE" -maxdepth 1 -type f \
+      -printf '%TY-%Tm-%Td %TH:%TM:%TS %s %p\n' 2>/dev/null \
+      | sort | tail -20 || true
+  fi
   echo
   echo "[candidate_audit_summary]"
   python3 "$ROOT/tools/candidate_audit.py" --json 2>/dev/null \

@@ -1,0 +1,35 @@
+{
+  "id": "wikiir_prior_page_delta_v1",
+  "description": "WikiIR prior-page prototype delta using explicit reference distance and ADD/COPY/RUN events with per-page and global MDL fallback.",
+  "added": "2026-07-18",
+  "deps": [],
+  "compares_against": [
+    "baseline_lzma",
+    "wikiir_template_grammar_v1"
+  ],
+  "verified_1m_discovery": {
+    "input_bytes": 1000000,
+    "complete_pages": 171,
+    "delta_pages": 170,
+    "copied_bytes": 168837,
+    "raw_ir_delta_bytes": 112287,
+    "baseline_lzma_archive_bytes": 290732,
+    "interleaved_delta_lzma_archive_bytes": 314924,
+    "interleaved_archive_delta_bytes": 24192,
+    "selected_mode": "literal",
+    "roundtrip_ok": true,
+    "determinism_ok": true
+  },
+  "target_backend_1m_screen": {
+    "baseline_hybrid_archive_bytes": 173963,
+    "wikiir_hybrid_archive_bytes": 200865,
+    "archive_regression_bytes": 26902,
+    "max_sampled_tree_rss_kib": 9064492,
+    "official_decimal_margin_kib": 701133,
+    "raw_ir_roundtrip_ok": true,
+    "backend_decode_run": false,
+    "receipt": "/home/x/enwiki9-nonproof/results/wikiir_prior_page_delta_1m_v1_hybrid_screen.json"
+  },
+  "verdict": "The representation exposes large exact prior-page copy structure, but both the interleaved LZMA serialization and the guarded target-backend encode are terminally negative. Retire this ADD/COPY/RUN event universe and move to a different typed representation.",
+  "evidence_boundary": "Discovery representation probe; not an FX2 result or official-score claim."
+}

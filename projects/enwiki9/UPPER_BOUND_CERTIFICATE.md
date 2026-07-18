@@ -25,7 +25,7 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best exact 10M archive | `n/a` | 10,000,000 | n/a | no exact 10M archive result JSON with roundtrip_ok true found | missing |
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
-| best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | n/a | 110,181,114 | forecast only; not a constructive proof | fx2-calibrated-from-exact-100m |
+| best forecast | `cmix21_lstm200_fx2lite428_context_recovery_10m_v1` | 10,000,000 | 109,557,404 | exact guarded 10M archive screen with counted program economics; terminal verdict retire_repaired_endpoint428_strict_10m_economics_miss; forecast only, not a constructive full-corpus proof | exact-10m-counted-projection |
 | active candidate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | n/a | n/a | no constructive result is present for the active candidate | not started |
 
 ## Best Full-Corpus Result
@@ -36,11 +36,13 @@ No verified full-corpus result JSON is present in this workspace.
 
 | data_size | program | score | archive | program_size | percent | result |
 |---:|---|---:|---:|---:|---:|---|
+| 1,000,000 | `baseline_lzma` | 290,933 | 290,732 | 201 | 29.0933 | `results/baseline_lzma/2026-07-18T135552.json` |
 
 ## Best Exact Archive By Scope
 
 | data_size | program | archive | score | program_size | archive_bpb | result |
 |---:|---|---:|---:|---:|---:|---|
+| 1,000,000 | `baseline_lzma` | 290,732 | 290,933 | 201 | 2.325856 | `results/baseline_lzma/2026-07-18T135552.json` |
 
 ## Notes
 

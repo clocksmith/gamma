@@ -33,7 +33,7 @@ decimal_10gb_guard_kib = 9,765,625
 
 This section asks whether the measured PPMD cap ladder alone can close the
 decimal `10GB` memory gap. It uses `10M` single-process RSS guard receipts
-because that is the current active boundary.
+when those receipts are available.
 
 - Not enough `10M` guard receipts exist to estimate a PPMD-only memory slope.
 
@@ -44,4 +44,4 @@ because that is the current active boundary.
 
 ## Current Read
 
-- The next mutation should be selected only after the active promotion receipt exists.
+- No certificate active gate exists. Select the next mutation from recorded cumulative archive economics before assigning a new candidate identity.

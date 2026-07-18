@@ -28,6 +28,9 @@ DEFAULT_RECEIPT = (
 DEFAULT_JSON = ROOT / "docs" / "streaming_retrieval_block_regime_audit.json"
 DEFAULT_MD = ROOT / "docs" / "streaming_retrieval_block_regime_audit.md"
 DEFAULT_MANIFEST = ROOT / "docs" / "streaming_retrieval_block_teacher_manifest.jsonl"
+CANONICAL_ENWIK9_SHA256 = (
+    "a8dee03d6b1636a7ffe5912f91b23e475f321456505ea6e41e44b349353520c7"
+)
 
 MARKERS: dict[str, bytes] = {
     "page_open": b"<page",
@@ -52,6 +55,74 @@ def load_json(path: pathlib.Path) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise ValueError(f"expected JSON object: {path}")
     return payload
+
+
+def sha256(path: pathlib.Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for block in iter(lambda: source.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def load_receipt_with_manifest_recovery(
+    receipt_path: pathlib.Path,
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    if receipt_path.exists():
+        return load_json(receipt_path), None
+    if receipt_path.resolve() != DEFAULT_RECEIPT.resolve():
+        raise FileNotFoundError(receipt_path)
+    if not DEFAULT_MANIFEST.is_file():
+        raise FileNotFoundError(
+            f"missing source receipt and recovery manifest: {receipt_path}"
+        )
+
+    block_rows: list[dict[str, Any]] = []
+    for line_number, line in enumerate(DEFAULT_MANIFEST.read_text().splitlines(), 1):
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if not isinstance(row, dict):
+            raise ValueError(f"manifest row {line_number} is not an object")
+        block_id = as_int(row.get("block_id"), -1)
+        source_bytes = as_int(row.get("source_bytes"), 0)
+        expected_offset = block_id * 16_384
+        if block_id != len(block_rows):
+            raise ValueError(
+                f"manifest row {line_number} is not contiguous: {block_id}"
+            )
+        if as_int(row.get("offset_bytes"), -1) != expected_offset:
+            raise ValueError(f"manifest row {line_number} has a bad offset")
+        if source_bytes != 16_384:
+            raise ValueError(f"manifest row {line_number} has a bad byte count")
+        gain_bytes = float(row.get("gain_bytes", 0))
+        if bool(row.get("regression_label")) != (gain_bytes < 0):
+            raise ValueError(f"manifest row {line_number} has a bad label")
+        block_rows.append(
+            {
+                "block_id": block_id,
+                "gain_bytes": gain_bytes,
+                "rows": source_bytes * 8,
+            }
+        )
+    if len(block_rows) != 4_000:
+        raise ValueError(f"unexpected recovery manifest rows: {len(block_rows)}")
+
+    receipt = {
+        "receipt_type": "streaming_retrieval_shadow",
+        "sketch_schema": {"block_bytes": 16_384},
+        "data": str(ROOT / "data" / "enwik9"),
+        "data_sha256": CANONICAL_ENWIK9_SHA256,
+        "block_rows": block_rows,
+    }
+    recovery = {
+        "mode": "preserved_teacher_manifest",
+        "reason": "original ignored result overlay is absent in this checkout",
+        "manifest": DEFAULT_MANIFEST.resolve().relative_to(ROOT).as_posix(),
+        "manifest_sha256": sha256(DEFAULT_MANIFEST),
+        "rows": len(block_rows),
+    }
+    return receipt, recovery
 
 
 def as_int(value: Any, default: int) -> int:
@@ -161,7 +232,7 @@ def teacher_split(block_id: int, block_count: int) -> str:
 
 
 def build(receipt_path: pathlib.Path, control_count: int) -> dict[str, Any]:
-    receipt = load_json(receipt_path)
+    receipt, source_recovery = load_receipt_with_manifest_recovery(receipt_path)
     if receipt.get("receipt_type") != "streaming_retrieval_shadow":
         raise ValueError("receipt is not a streaming_retrieval_shadow")
     schema = receipt.get("sketch_schema")
@@ -230,6 +301,7 @@ def build(receipt_path: pathlib.Path, control_count: int) -> dict[str, Any]:
         "receipt_type": "streaming_retrieval_block_regime_audit",
         "evidence_level": "offline_teacher_only",
         "source_receipt": receipt_path.resolve().relative_to(ROOT).as_posix(),
+        "source_receipt_recovery": source_recovery,
         "data": str(data_path),
         "data_sha256": receipt.get("data_sha256"),
         "block_bytes": block_bytes,
@@ -273,10 +345,20 @@ def render_md(payload: dict[str, Any]) -> str:
         f"- Total visible regression: `{payload['regression_bytes']:.3f}` bytes",
         f"- Teacher manifest rows: `{payload['teacher_manifest_summary']['rows']:,}`",
         f"- Teacher manifest: `{payload['teacher_manifest']}`",
+    ]
+    recovery = payload.get("source_receipt_recovery")
+    if isinstance(recovery, dict):
+        lines.append(
+            "- Source recovery: preserved teacher manifest "
+            f"`{recovery['manifest']}` (`{recovery['rows']:,}` rows)"
+        )
+    lines.extend(
+        [
         "",
         "| Label | Block | Gain Bytes | Nearby Titles | Links | Templates | URLs | Headings | Pages |",
         "|---|---:|---:|---|---:|---:|---:|---:|---:|",
-    ]
+        ]
+    )
     for row in rows:
         counts = row["full_block_teacher_only"]["marker_counts"]
         titles = "; ".join(row["nearby_titles_teacher_only"][:4]) or "n/a"

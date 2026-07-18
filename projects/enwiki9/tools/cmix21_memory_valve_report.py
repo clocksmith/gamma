@@ -426,7 +426,7 @@ def ppmd_decimal_feasibility_section(
         "",
         "This section asks whether the measured PPMD cap ladder alone can close the",
         "decimal `10GB` memory gap. It uses `10M` single-process RSS guard receipts",
-        "because that is the current active boundary.",
+        "when those receipts are available.",
         "",
     ]
     if len(rows) < 2 or active is None or active.guard_10m is None:
@@ -579,7 +579,10 @@ def current_read(candidates: list[Candidate], active_gate: tuple[str | None, int
         lines.extend(same_cap_successor_note(candidates, active_restart))
         lines.append("- The next mutation should wait until the active restarted ladder records its current gate.")
     else:
-        lines.append("- The next mutation should be selected only after the active promotion receipt exists.")
+        lines.append(
+            "- No certificate active gate exists. Select the next mutation from recorded "
+            "cumulative archive economics before assigning a new candidate identity."
+        )
     return "\n".join(lines)
 
 

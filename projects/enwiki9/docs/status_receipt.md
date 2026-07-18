@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-18T17:52:04+00:00`
+- Generated at UTC: `2026-07-18T20:06:09+00:00`
 
 ## Target State
 
@@ -100,16 +100,16 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 - Latest delayed status log: `projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log`
 - Latest delayed status log present: `true`
-- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260709T122555Z.log`
+- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260715T010811Z.log`
 
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `532`
+- Program directories: `537`
 - Registered programs: `225`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `0`
-- Candidate statuses: `active=24, blocked_dependency=12, candidate=69, measured_negative=77, retired=350`
+- Untracked nonignored entries: `65`
+- Modified tracked entries: `4`
+- Candidate statuses: `active=7, blocked_dependency=12, candidate=144, measured_negative=20, retired=351, track_source_before_evolution=3`
 
 ## Active Runner Process Table
 
@@ -129,7 +129,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - best_exact_10m_archive: `missing`; status `missing`; score `n/a`
 - best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `metadata-inherited`; score `15,040,789`
 - best_full_1g: `not verified`; status `not verified`; score `n/a`
-- best_forecast: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `fx2-calibrated-from-exact-100m`; score `110,181,114`
+- best_forecast: `cmix21_lstm200_fx2lite428_context_recovery_10m_v1`; status `exact-10m-counted-projection`; score `109,557,404`
 
 ## Claim Rule
 

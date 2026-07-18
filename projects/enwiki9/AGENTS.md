@@ -35,11 +35,17 @@ expected byte leverage per added code/table byte and per guarded run.
 
 Run commands from `/home/clocksmith/deco/gamma` unless a tool states otherwise.
 
-First refresh or inspect the live operator receipt:
+First inspect the existing live operator receipt:
 
 ```bash
-python3 projects/enwiki9/tools/enwiki9_status_receipt.py
+sed -n '1,240p' projects/enwiki9/docs/status_receipt.md
 ```
+
+Do not regenerate `docs/status_receipt.md` or `docs/status_receipt.json` as a
+routine session-start or repository-sync action. Regenerate them only when the
+user explicitly requests a refresh or when the active task changes the
+underlying gate, certificate, lock, or process state and requires an updated
+handoff receipt.
 
 Read these before acting:
 

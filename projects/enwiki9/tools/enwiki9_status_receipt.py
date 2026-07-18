@@ -11,8 +11,10 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import fcntl
+import hashlib
 import json
 import pathlib
+import re
 import shlex
 import subprocess
 import sys
@@ -30,6 +32,16 @@ HEAVY_LOCK = pathlib.Path("/tmp/enwiki9-heavy.lock")
 LATEST_DELAYED_STATUS_LOG = ROOT / "run_logs" / "enwiki9_delayed_status_latest.log"
 LOCAL_RSS_GUARD_KIB = 10_485_760
 DECIMAL_10GB_GUARD_KIB = 10_000_000_000 // 1024
+
+
+def scope_from_gate_label(label: str) -> int | None:
+    """Recover an explicitly named raw scope such as ``10m`` from a label."""
+
+    match = re.search(r"(?:^|_)([1-9][0-9]*)([kmg])(?:_|$)", label.lower())
+    if match is None:
+        return None
+    scale = {"k": 1_000, "m": 1_000_000, "g": 1_000_000_000}[match.group(2)]
+    return int(match.group(1)) * scale
 
 
 def rel(path: pathlib.Path) -> str:
@@ -54,6 +66,17 @@ def mtime_utc(path: pathlib.Path) -> str | None:
             .replace(microsecond=0)
             .isoformat()
         )
+    except OSError:
+        return None
+
+
+def sha256(path: pathlib.Path) -> str | None:
+    try:
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            while block := stream.read(1 << 20):
+                digest.update(block)
+        return digest.hexdigest()
     except OSError:
         return None
 
@@ -196,6 +219,77 @@ def ps_rss_for_pattern(pattern: str) -> list[dict[str, Any]]:
     return rows
 
 
+def ps_all() -> list[dict[str, Any]]:
+    proc = subprocess.run(
+        ["ps", "-eo", "pid=,ppid=,pgid=,stat=,rss=,args="],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    rows: list[dict[str, Any]] = []
+    for line in proc.stdout.splitlines():
+        parts = line.strip().split(maxsplit=5)
+        if len(parts) < 6:
+            continue
+        try:
+            rows.append(
+                {
+                    "pid": int(parts[0]),
+                    "ppid": int(parts[1]),
+                    "pgid": int(parts[2]),
+                    "stat": parts[3],
+                    "rss_kib": int(parts[4]),
+                    "args": parts[5],
+                }
+            )
+        except ValueError:
+            continue
+    return rows
+
+
+def expand_process_groups(seed_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    pgids = {
+        row.get("pgid")
+        for row in seed_rows
+        if isinstance(row.get("pgid"), int) and row.get("pgid", 0) > 0
+    }
+    if not pgids:
+        return seed_rows
+    all_rows = ps_all()
+    expanded = [row for row in all_rows if row.get("pgid") in pgids]
+    selected_pids = {
+        row.get("pid") for row in expanded if isinstance(row.get("pid"), int)
+    }
+    changed = True
+    while changed:
+        changed = False
+        for row in all_rows:
+            pid = row.get("pid")
+            if pid in selected_pids or row.get("ppid") not in selected_pids:
+                continue
+            expanded.append(row)
+            if isinstance(pid, int):
+                selected_pids.add(pid)
+            changed = True
+    return expanded or seed_rows
+
+
+def is_cmix_codec_row(row: dict[str, Any]) -> bool:
+    try:
+        parts = shlex.split(str(row.get("args", "")))
+    except ValueError:
+        return False
+    if not parts:
+        return False
+    executable = pathlib.Path(parts[0]).name
+    codec_name = (
+        executable.startswith("cmix21-mmap-bin")
+        or executable in {"cmix", "cmix.bin", "cmix_orig"}
+    )
+    return codec_name and cmix_native_mode(parts) != "unknown"
+
+
 def cmix_native_mode(parts: list[str]) -> str:
     if "-d" in parts:
         return "decode"
@@ -211,16 +305,17 @@ def cmix_native_mode(parts: list[str]) -> str:
 
 
 def active_process_state() -> dict[str, Any]:
-    guard_rows = ps_rss_for_pattern(
+    guard_seed_rows = ps_rss_for_pattern(
         "run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21-mmap-bin|"
         "fx2_public_repro_queue.py|fx2-public-package-.*/cmix_orig"
     )
+    guard_rows = expand_process_groups(guard_seed_rows)
     research_rows = ps_rss_for_pattern(
         "projects/enwiki9/tools/(streaming_retrieval_.*shadow|page_order_gepa|"
         "article_order_teacher_distill).py"
     )
     controller_rows = ps_rss_for_pattern("projects/enwiki9/tools/cmix21_gate_decider.py")
-    cmix_rows = [row for row in guard_rows if "cmix21-mmap-bin" in row["args"]]
+    cmix_rows = [row for row in guard_rows if is_cmix_codec_row(row)]
     max_cmix = max(cmix_rows, key=lambda row: row["rss_kib"], default=None)
     state: dict[str, Any] = {
         "active_rows": guard_rows + research_rows,
@@ -460,6 +555,127 @@ def active_candidate_from_process(process_state: dict[str, Any]) -> tuple[str | 
     return None, None
 
 
+def live_speedlab_gate_from_process(
+    process_state: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Recover a quarantined speedlab gate directly from its live RSS guard."""
+
+    rows = process_state.get("active_rows")
+    if not isinstance(rows, list):
+        return None
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        args = str(row.get("args", ""))
+        if "run_with_rss_guard.py" not in args or "--label" not in args:
+            continue
+        try:
+            parts = shlex.split(args)
+        except ValueError:
+            parts = args.split()
+        if "--guard-json" not in parts or "--label" not in parts or "--" not in parts:
+            continue
+        guard_index = parts.index("--guard-json")
+        label_index = parts.index("--label")
+        command_index = parts.index("--")
+        if (
+            guard_index + 1 >= len(parts)
+            or label_index + 1 >= len(parts)
+            or command_index + 1 >= len(parts)
+        ):
+            continue
+        guard_path_text = parts[guard_index + 1]
+        # A shell launcher can expose the unevaluated command (for example,
+        # ``--guard-json $out/guard.json``) alongside the actual guard child.
+        # Do not let that wrapper shadow the child's concrete live receipt.
+        if "$" in guard_path_text:
+            continue
+        guard_path = pathlib.Path(guard_path_text)
+        label = parts[label_index + 1]
+        command = parts[command_index + 1 :]
+        if len(command) < 3:
+            continue
+        input_path = pathlib.Path(command[-2])
+        output_path = pathlib.Path(command[-1])
+        scope = scope_from_gate_label(label)
+        if scope is None:
+            try:
+                scope = input_path.stat().st_size
+            except OSError:
+                scope = None
+        guard = load_json(guard_path)
+        guard_status = guard.get("status")
+        receipt_path = guard_path.parent / "receipt.json"
+        if guard_status == "running":
+            verdict = "running"
+            next_action = "wait_for_gate_completion"
+        elif receipt_path.is_file():
+            verdict = "pass" if guard.get("returncode") == 0 else "guard_returncode_fail"
+            next_action = "inspect_speedlab_receipt"
+        else:
+            verdict = "receipt_incomplete"
+            next_action = "wait_for_gate_receipts"
+        gate: dict[str, Any] = {
+            "candidate": label,
+            "scope_bytes": scope,
+            "verdict": verdict,
+            "next_action": next_action,
+            "source": "live_speedlab_rss_guard",
+            "driver_result_json": str(receipt_path),
+            "driver_result_json_present": receipt_path.is_file(),
+            "rss_guard_json": str(guard_path),
+            "rss_guard_json_present": guard_path.is_file(),
+            "rss_guard_status": guard_status,
+            "sample_count": guard.get("sample_count"),
+            "returncode": guard.get("returncode"),
+            "max_sampled_single_rss_kib": guard.get(
+                "max_sampled_single_rss_kib"
+            ),
+            "max_sampled_tree_rss_kib": guard.get("max_sampled_tree_rss_kib"),
+            "latest_sample_max_single_rss_kib": (
+                guard.get("latest_sample", {}).get("max_single_rss_kib")
+                if isinstance(guard.get("latest_sample"), dict)
+                else None
+            ),
+            "latest_sample_tree_rss_kib": (
+                guard.get("latest_sample", {}).get("tree_rss_kib")
+                if isinstance(guard.get("latest_sample"), dict)
+                else None
+            ),
+            "input_path": str(input_path),
+            "output_path": str(output_path),
+            "command": command,
+            "promotion_authorized": False,
+            "claim_rule": "A speedlab prefix is not a constructive 1G score.",
+        }
+        try:
+            guard_stat = guard_path.stat()
+        except OSError:
+            pass
+        else:
+            gate["rss_guard_json_bytes"] = guard_stat.st_size
+            gate["rss_guard_json_mtime_utc"] = mtime_utc(guard_path)
+            gate["rss_guard_json_sha256"] = sha256(guard_path)
+        max_single = gate.get("max_sampled_single_rss_kib")
+        max_tree = gate.get("max_sampled_tree_rss_kib")
+        latest_single = gate.get("latest_sample_max_single_rss_kib")
+        latest_tree = gate.get("latest_sample_tree_rss_kib")
+        if isinstance(max_single, int):
+            gate["single_rss_margin_kib"] = LOCAL_RSS_GUARD_KIB - max_single
+        if isinstance(max_tree, int):
+            gate["tree_rss_margin_kib"] = LOCAL_RSS_GUARD_KIB - max_tree
+        if isinstance(latest_single, int):
+            gate["latest_sample_single_rss_margin_kib"] = (
+                LOCAL_RSS_GUARD_KIB - latest_single
+            )
+        if isinstance(latest_tree, int):
+            gate["latest_sample_tree_rss_margin_kib"] = (
+                LOCAL_RSS_GUARD_KIB - latest_tree
+            )
+        return gate
+    return None
+
+
 def gate_state(candidate: str | None, scope: int | None) -> dict[str, Any] | None:
     if candidate is None or scope is None:
         return None
@@ -514,7 +730,7 @@ def active_gate_status_state(
     candidate = gate.get("candidate")
     scope = gate.get("scope_bytes")
     verdict = gate.get("verdict")
-    row["source"] = "gate_decision"
+    row["source"] = gate.get("source", "gate_decision")
     if isinstance(candidate, str):
         row["program_id"] = candidate
     if isinstance(scope, int):
@@ -538,6 +754,9 @@ def active_gate_status_state(
         "latest_sample_tree_rss_kib",
         "latest_sample_single_rss_margin_kib",
         "latest_sample_tree_rss_margin_kib",
+        "rss_guard_json_bytes",
+        "rss_guard_json_mtime_utc",
+        "rss_guard_json_sha256",
     ):
         if key in gate:
             row[key] = gate.get(key)
@@ -608,6 +827,18 @@ def is_ppmd_cmix_candidate(candidate: str | None) -> bool:
     return isinstance(candidate, str) and candidate.startswith("cmix21_text_mmap_") and "ppmd" in candidate
 
 
+def is_diagnostic_trace_candidate(candidate: str | None) -> bool:
+    """Return whether a guarded codec run exists to emit a shadow trace.
+
+    These runs are prerequisites for a separate matched replay.  A clean
+    guard proves that the trace producer completed within its resource
+    contract; it is not a scored compressor gate and must never inherit the
+    generic next-scope promotion ladder.
+    """
+
+    return isinstance(candidate, str) and candidate.endswith("_trace")
+
+
 def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | None:
     if candidate is None or scope is None:
         return None
@@ -624,7 +855,16 @@ def contingencies(candidate: str | None, scope: int | None) -> dict[str, Any] | 
             "next_scope_bytes": next_scope,
             "command": cmix21_gate_decider.command_for_gate(candidate, next_scope),
         }
-    if not is_ppmd_cmix_candidate(candidate):
+    if is_diagnostic_trace_candidate(candidate):
+        pass_action = {
+            "action": "run pinned matched replay and seal the trace receipt",
+            "next_scope_bytes": None,
+            "reason": (
+                "a diagnostic trace is not a scored archive and cannot be "
+                "promoted through the compression-gate scope ladder"
+            ),
+        }
+    elif not is_ppmd_cmix_candidate(candidate):
         pass_action = {
             "action": "record pass and apply candidate target-gate promotion rule",
             "next_scope_bytes": next_scope,
@@ -942,12 +1182,18 @@ def receipt() -> dict[str, Any]:
     heavy_lock = lock_state()
     process_state = active_process_state()
     candidate, scope = active_candidate_from_cert(cert)
-    process_candidate, process_scope = active_candidate_from_process(process_state)
-    if process_candidate is not None:
-        candidate = process_candidate
-        if process_scope is not None:
-            scope = process_scope
-    gate = gate_state(candidate, scope)
+    live_speedlab_gate = live_speedlab_gate_from_process(process_state)
+    if live_speedlab_gate is not None:
+        candidate = live_speedlab_gate.get("candidate")
+        scope = live_speedlab_gate.get("scope_bytes")
+        gate = live_speedlab_gate
+    else:
+        process_candidate, process_scope = active_candidate_from_process(process_state)
+        if process_candidate is not None:
+            candidate = process_candidate
+            if process_scope is not None:
+                scope = process_scope
+        gate = gate_state(candidate, scope)
     add_active_decode_progress(process_state, gate)
     action = operator_action(heavy_lock, process_state, gate)
     handoff = handoff_state(

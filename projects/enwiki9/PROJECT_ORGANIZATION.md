@@ -12,18 +12,58 @@ The project has one proof objective:
 full enwik9 official score <= 109,500,000 bytes
 ```
 
-The project currently has no full-corpus constructive proof at that target.
-The active native proof lane is
-`cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`.
-Source-handoff metadata records passed `1K`, `250K`, `1M`, and `10M` gates;
-the recorded `10M` archive is `1,638,340` bytes with roundtrip and determinism
-true. Its original result JSON is pending local overlay restoration. The same
-package is running a fresh unchanged `100M` replay under the serialized RSS
-guard.
-The primary novel residual strategy is SRSTC / streaming self-referential
-semantic retrieval: a causal probability model built from already-decoded
-spans, deterministic sketches, self-referential tables, patch-copy priors, and
-fixed-point regret routing.
+The project currently has no full-corpus constructive proof at that target. A
+counted heterogeneous-recurrent cumulative-`10M` backend screen and exact
+source-wrapper replay are terminal, but neither can prove the target. The unchanged
+`cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1`
+package is economically retired: its exact `100M` first archive was
+`14,864,716` bytes, which missed the unified-executable promotion screen by
+`149,143` bytes, so it must not advance to `1G`.
+
+The original-order archive-neutral `CMIX21F3` trace is terminal, and its large
+full-teacher complement is not additive to the constructive geometry `96x2`
+candidate. The corrected matched-geometry opening experiment retained only
+`290 B/1M` overall and `355 B/1M` on internal holdout. The frozen blend then
+retained only `61 B/1M` on an offset-`500M` same-store slice, versus the
+repackaged base's `252.737 B/1M` debt before integration. Family averages,
+individual layer-0 outputs, continuous 160/200-cell probes, the full final
+endpoint, and the measured contextual maps are retired as add-on experts in
+their measured forms. Separately, the standalone PAQ-free
+`200x2` codec has an exact first-`1M` archive of `174,055` and saves
+`1,149 B/1M`, but the frozen offset-`500M` reset slice retains only
+`370 B/1M` against its source-accounted `762.424 B/1M` floor. It is retired
+without replay or a larger unchanged gate. The lower-cost heterogeneous `112+80`
+construction saves `1,084 B/1M` at the first `1M` and `795.6 B/1M`
+cumulatively at `10M`. Its `1,635,670`-byte archive misses deflate-ZIP
+accounting by `37` bytes. A reproducible `264,646`-byte direct-entry bzip2 ZIP
+reconstructs all `77` source files and clean-builds twice to the exact
+wrapper-proven program, saving `23,619` counted bytes over the prior selected
+package. The selected linear forecast is `109,467,156`; applying the same
+package saving to the `1M`-to-`10M` tail forecast gives `109,498,879`.
+The wrapper passes identity, roundtrip, determinism, and RSS. On the matched
+offset-`500M` reset slice, however, `112+80` saves only `353 B/1M` total and
+only `4 B/1M` over native `112`; it is retired from promotion. Raw-order SRSTC
+shadow saving remains non-additive evidence. The explicit command-costed WRT
+phrase-copy macro has now been tested: all `432` active development
+configurations lose bytes, so its frozen holdout action is abstention. Do not
+duplicate that endpoint shape.
+
+The active construction gate is instead a matched original-order replacement.
+On the archive-identical exact FX2 stream, a fixed compact-`200` blend saves
+`1,345 B/1M` overall and `1,325 B/1M` on internal holdout with zero block
+regressions and exact range-decoder replay. This cannot be added to the geometry
+forecast: original order gives back `506.4 B/1M` at the exact `10M` FX2
+boundary, and the separately evolved predictors do not yet establish a counted
+combined program or memory bound. The `750000`-ppm blend is frozen for
+cumulative `10M`; a pass advances only to one-process shared-state integration.
+
+Fixed `96x2` now has a reproducible `264,427`-byte source package that
+clean-builds twice to the exact backend and wrapper. This lowers its
+cumulative-tail forecast debt to `252,737` bytes. The package authorized one
+frozen disjoint test of the already replayable fixed full-CMIX complement; the
+measured `61 B/1M` result retires that complement without native integration or
+a larger gate. Receipt:
+`results/fx2_cmix21_matched_disjoint_terminal_v1/receipt.json`.
 
 The older structural concepts are not discarded. They become backup lanes,
 baselines, SRSTC components, or offline-teacher discovery tools until exact
@@ -52,6 +92,8 @@ receipts show that one should be promoted.
 | What corpus regimes explain the SRSTC regressions? | `docs/streaming_retrieval_block_regime_audit.md` and `docs/streaming_retrieval_block_regime_audit.json` | Offline teacher-only labels and weak-positive controls; only the causal prefix checkpoints may seed a final distilled rule. |
 | How could offline teachers and decoder-rebuilt retrieval close the target debt? | `docs/offline_teacher_retrieval_investigation.md` | Target-debt math, admissible embedding-teacher use, deterministic rule/dictionary/routing/retrieval lanes, and proof gates for counted replay. |
 | Does the current search follow Gamma's latest SAME-R strategy? | `docs/same_r_hutter_strategy_audit.md` | Matched-evaluation audit, exact-codelength controls, oracle-economics gates, candidate-universe saturation, mechanism priorities, and missing constructive evidence. |
+| What did the PAQ-free FX2/CMIX21 LSTM frontier prove? | `docs/fx2_cmix21_nopaq_lstm_frontier.md` | Exact first-`1M` constructive evidence, cumulative `10M` economics, runtime/RSS frontier, counted package boundary, retirement reason, and the conditional-endpoint next gate. |
+| What did the matched CMIX21/96x2 endpoint screen prove? | `docs/cmix21_fx2_family_trace_correction.md` | The original-order basis mismatch, constant FXCM/PAQ trace bug, archive-neutral geometry correction, exact `290 B/1M` replay, and current endpoint-universe retirement boundary. |
 | What evidence level does a teacher, shadow, prefix, block, or full replay prove? | `ALGORITHMS.md` and `docs/research_register.md` | Five-level evidence ladder separating proxy forecasts, target-substrate shadows, counted prefix receipts, disjoint block receipts, and full official score claims. |
 | Where are strategy and novel-algorithm research lanes tracked? | `docs/research_register.md` | Research lane, local files, evidence class, promote gate, and kill gate. |
 | What non-heavy official accounting docs exist? | `docs/official_accounting_checklist.md` | Submission byte accounting, memory-unit risk, promoted-result receipt. |
@@ -63,16 +105,10 @@ receipts show that one should be promoted.
 
 ## Active Proof Lane
 
-The active target-bearing proof gate is:
-
-```text
-cmix21 public 108,244,767-byte external anchor
-  -> global FXCM cmC2/2 memory cut plus original rolling buffer
-  -> exact 250K archive-neutral pass
-  -> exact 1M archive 174525, roundtrip and determinism pass
-  -> source-handoff-recorded 10M archive 1638340, roundtrip and determinism pass
-  -> fresh unchanged 100M gate (active)
-```
+No target-bearing full-corpus proof gate is active. The unchanged CMIX21 package was
+stopped after its `14,864,716`-byte `100M` first archive missed the
+`14,715,573` unified-executable screen by `149,143` bytes. It must not advance
+to `1G`.
 
 Active baseline:
 
@@ -83,11 +119,17 @@ fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1
 Certificate-active candidate:
 
 ```text
-cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1
+none
 ```
 
-This package is target-bearing only as a constructive promotion lane; no prefix
-result is a `109,500,000` proof.
+A serialized source-wrapper replay is terminal for the exact geometry-title
+`112+80` recurrent construction. Its two framed archives are byte-identical at
+`1,635,671`, marker `G`, backend payload identity, roundtrip, determinism, and
+clean resources all pass. The later-region matched control retains only
+`4 B/1M` over native `112`, so no larger recurrent gate is authorized. The
+archive-neutral individual/nested endpoint probe and its contextual selector
+are complete and insufficient. No prefix can prove `109,500,000` without
+counted full-corpus replay.
 
 Retired cmix21 bracket:
 
@@ -100,6 +142,34 @@ Interpretation:
 - The fx2 geometry baseline has `100M` archive `14,857,781`, counted program
   `183,008`, and calibrated full forecast `110,181,114`.
 - The remaining forecast debt is `681,114` bytes.
+- A global blend of original-order FX2 and the full CMIX21 final probability
+  saved `1,400.007 B/1M` on sealed holdout, but that stream differs from the
+  geometry `96x2` substrate and the value is not additive to its forecast.
+- The original compact-family trace recorded FXCM and PAQ8 as constant midpoint
+  padding outputs. `CMX21F3` corrected that observation bug while preserving
+  the archive and final P1 trace exactly, but its best compact family mixture
+  retained only `323.434 B/1M` on sealed holdout and is retired.
+- On the exact geometry `96x2` stream, the continuously evolved full-CMIX21
+  endpoint retained only `290 B/1M` overall and `355 B/1M` on internal
+  opening holdout. The opening-selected blend retained only `61 B/1M` on the
+  offset-`500M` same-store slice. Exact range decode passed with zero holdout
+  block regressions, but the result misses the revised debt by `191.737 B/1M`
+  even before integration. Existing individual and nested endpoints are
+  therefore retired from selector optimization.
+- The standalone PAQ-free `200x2` codec is a different construction. Its exact
+  first-`1M` gain is `1,149` bytes, but its reproducible package requires
+  `762.424 B/1M` and the frozen offset-`500M` slice retains only `370 B/1M`.
+  Receipt: `results/fx2_cmix21_lstm200_disjoint_terminal_v1/receipt.json`.
+- Native `112x2` saves `675.8 B/1M` cumulatively at `10M` but misses its
+  counted archive ceiling by `1,234` bytes. Heterogeneous `112+80` improves it
+  by `1,198` exact bytes and saves `795.6 B/1M`. Its accepted reproducible
+  source package is `264,646` bytes. Wrapper replay passes, but the offset-`500M`
+  reset slice retains only `4 B/1M` over native `112`; unchanged recurrent
+  factorization is retired from larger gates.
+- The static WRT dictionary boundary swap is retired: its storage proxy was
+  positive, but the exact cumulative-`10M` archive regressed by `1,140` bytes.
+- The WRT token-span causal specialist is retired after losing `1` exact byte
+  on sealed holdout and matching its deterministic random control.
 - The retired FX2-SC sidecar candidate had counted program size `256,906`; its
   canonical `10M` native-output lower bound reached `1,641,762`, which is
   `10,181` bytes above the `1,631,581` promotion ceiling before final flush.
@@ -116,8 +186,7 @@ Interpretation:
   bytes by `240,207` KiB, so it is retained as a memory bracket.
 - `ppmd20480k` passed `1,024` bytes. Its latest recorded `250,000` gate
   exceeded official decimal `10GB` by `3,275` KiB, so it is bracket evidence,
-  not the active proof lane, even though the generated certificate still names
-  the same full candidate id as the operator active gate.
+  not the active proof lane.
 
 The promotion rule is:
 

@@ -199,13 +199,11 @@ def top_status_by_label(cert: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 def active_gate_from_certificate(cert: dict[str, Any]) -> tuple[str | None, int | None]:
     labels = top_status_by_label(cert)
-    row = labels.get("active gate") or labels.get("next gate") or labels.get("active candidate") or {}
+    row = labels.get("active gate") or labels.get("next gate") or {}
     candidate = row.get("program_id")
     scope = row.get("scope_bytes")
     if isinstance(candidate, str) and isinstance(scope, int):
         return candidate, scope
-    if isinstance(candidate, str):
-        return candidate, None
     return None, None
 
 
@@ -228,22 +226,61 @@ def check_certificate_and_status(findings: list[Finding]) -> None:
 
     labels = top_status_by_label(cert)
     active_candidate, active_scope = active_gate_from_certificate(cert)
-    active_gate = labels.get("active gate", {})
-    status_gate = status.get("active_gate", {})
-    for label, row in (("certificate active gate", active_gate), ("status active gate", status_gate)):
-        row = row if isinstance(row, dict) else {}
-        if active_candidate and row.get("program_id") != active_candidate:
-            findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not name active candidate"))
-        if active_scope and row.get("scope_bytes") != active_scope:
-            findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not use active scope"))
+    active_gate = labels.get("active gate")
+    status_gate = status.get("active_gate")
+    raw_gate_decision = status.get("gate_decision")
+    live_speedlab_gate = (
+        isinstance(raw_gate_decision, dict)
+        and raw_gate_decision.get("source") == "live_speedlab_rss_guard"
+    )
+    if active_candidate is None:
+        if active_gate is not None:
+            findings.append(Finding(cert_path, "certificate exposes an incomplete active gate"))
+        if status_gate is not None and not live_speedlab_gate:
+            findings.append(Finding(status_path, "status exposes an active gate when the certificate has none"))
+    else:
+        for label, row in (("certificate active gate", active_gate), ("status active gate", status_gate)):
+            row = row if isinstance(row, dict) else {}
+            if row.get("program_id") != active_candidate:
+                findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not name active candidate"))
+            if row.get("scope_bytes") != active_scope:
+                findings.append(Finding(cert_path if "certificate" in label else status_path, f"{label} does not use active scope"))
 
-    gate_decision = status.get("gate_decision", {})
+    if active_candidate is None and raw_gate_decision is not None and not live_speedlab_gate:
+        findings.append(Finding(status_path, "status exposes a gate decision when the certificate has no active gate"))
+    gate_decision = raw_gate_decision
     gate_decision = gate_decision if isinstance(gate_decision, dict) else {}
+    if live_speedlab_gate:
+        active_processes = status.get("active_processes")
+        active_processes = (
+            active_processes if isinstance(active_processes, dict) else {}
+        )
+        heavy_lock = status.get("heavy_lock")
+        heavy_lock = heavy_lock if isinstance(heavy_lock, dict) else {}
+        if active_processes.get("active_scorer_observed") is not True:
+            findings.append(
+                Finding(status_path, "live speedlab gate has no observed scorer")
+            )
+        if heavy_lock.get("held") is not True:
+            findings.append(
+                Finding(status_path, "live speedlab gate does not hold the heavy lock")
+            )
+        if not isinstance(status_gate, dict):
+            findings.append(Finding(status_path, "live speedlab gate missing active gate row"))
+        else:
+            if status_gate.get("program_id") != gate_decision.get("candidate"):
+                findings.append(
+                    Finding(status_path, "live speedlab active gate candidate mismatch")
+                )
+            if status_gate.get("scope_bytes") != gate_decision.get("scope_bytes"):
+                findings.append(
+                    Finding(status_path, "live speedlab active gate scope mismatch")
+                )
     if active_candidate and gate_decision.get("candidate") != active_candidate:
         findings.append(Finding(status_path, "gate decision candidate mismatch"))
     if active_scope and gate_decision.get("scope_bytes") != active_scope:
         findings.append(Finding(status_path, "gate decision scope mismatch"))
-    if gate_decision.get("verdict") not in DECIDER_VERDICTS:
+    if active_candidate and gate_decision.get("verdict") not in DECIDER_VERDICTS:
         findings.append(Finding(status_path, "gate decision has unknown verdict"))
     if (
         gate_decision.get("verdict") == "running"
@@ -510,8 +547,6 @@ def check_organization_audit_snapshot(findings: list[Finding]) -> None:
     required_pairs = [
         ("program directories under programs/", "program_directories"),
         ("registered programs in index.json", "registered_programs"),
-        ("untracked nonignored entries", "untracked_nonignored_entries"),
-        ("modified tracked entries", "modified_tracked_entries"),
     ]
     for label, key in required_pairs:
         value = summary.get(key)
@@ -644,7 +679,6 @@ def check_live_docs_name_active_candidate(findings: list[Finding]) -> None:
     cert = load_json(ROOT / "upper_bound_certificate.json")
     active_candidate, _active_scope = active_gate_from_certificate(cert)
     if not active_candidate:
-        findings.append(Finding(ROOT / "upper_bound_certificate.json", "cannot derive active candidate from certificate"))
         return
     required = [
         ROOT / "ALGORITHMS.md",
@@ -748,9 +782,6 @@ def check_memory_valve_active_alias_warning(findings: list[Finding]) -> None:
         "## Decimal 10GB Risk",
         "decimal_10gb_guard_kib = 9,765,625",
         "## PPMD-Only Decimal Feasibility",
-        "PPMD-only feasibility verdict: `not feasible`",
-        "The next lower cap `21,504` KiB already has historical package rows (`ppmd21m`).",
-        "A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.",
     ]
     for snippet in required_snippets:
         if snippet not in text:

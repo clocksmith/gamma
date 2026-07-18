@@ -48,11 +48,17 @@ Score reality check:
 ```text
 The calibrated fx2 geometry package is the prize-facing baseline. The recent
 GEPA and FX2-SC sidecar target-bearing gates are retired after canonical `10M`
-ceiling failures. SRSTC / streaming self-referential retrieval remains the
-primary residual-modeling delta only after it transfers to the strongest
-substrate or distills into a smaller counted component. The PPMD-only ladder is
-retired; the active cmix21 package uses global FXCM cmC2 division by two plus
-the original PAQ rolling buffer to obtain material RSS margin.
+ceiling failures. The unchanged cmix21 package is also retired after its
+`100M` archive missed the counted promotion screen. The PAQ-free `96x2`
+endpoint is constructive but economically insufficient at cumulative `10M`.
+The corrected matched CMIX21 endpoint trace is terminal and below its economics
+floor: its best exact geometry-`96x2` blend retains `290 B/1M` overall and
+`355 B/1M` on internal holdout. A standalone `200x2` PAQ-free codec saves
+`1,149 B/1M` at the first `1M` and clears its counted linear forecast, but has
+no larger-scope or execution qualification. The active research target is a
+lower-cost deterministic recurrent construction that retains that capacity,
+not a richer selector over the measured CMIX endpoints. It is not a
+target-bearing proof gate.
 ```
 
 ## One-Screen Scoreboard
@@ -61,7 +67,11 @@ the original PAQ rolling buffer to obtain material RSS margin.
 |---|---|---:|---|---|---|
 | Best exact local score at `10M` | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | `10,000,000` | S `1,882,615`; archive `1,643,289` | exact artifact-backed prefix | Best score row in this checkout at `10M`; not a full-corpus proof. |
 | Best exact archive at `10M` | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | `10,000,000` | S `2,202,351`; archive `1,638,076` | exact artifact-backed prefix | Best local archive reference, not the active proof gate. |
-| Active proof lane | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | `10,000,000` running after exact `1,000,000` pass | `1M`: archive `174,525`, score `738,785`, peak RSS `8,831,176` KiB | exact constructive prefix | Promote unchanged only through the decider; no prefix proves `10.95%`. |
+| Active proof lane | none | n/a | n/a | no active heavy gate | Build the conditional endpoint and require cumulative counted evidence before assigning a new gate. |
+| PAQ-free hybrid | fixed `96x2` endpoint | cumulative `10,000,000` | archive `1,638,528`; saves `5,098` bytes or `509.8 B/1M` | exact guarded archive screen | Retired unchanged because the counted requirement is `799.079 B/1M`; preserve as the conditional-endpoint substrate. |
+| Active discovery candidate | standalone PAQ-free `200x2` | first `1,000,000` | archive `174,055`; saves `1,149` bytes; counted linear forecast `109,149,965` | exact guarded archive plus roundtrip/determinism | Retain as capacity evidence; reduce recurrent cost and require larger-scope scaling before promotion. |
+| Completed research probe | individual/nested CMIX endpoints plus continuously evolved full teacher | exact geometry `96x2` WRT stream | best exact fixed blend saves `290 B/1M` overall and `355 B/1M` on internal holdout, with zero holdout block regressions and exact decoder replay | matched shadow plus archive-neutral instrumentation | Retire this endpoint universe; build a new WRT page/phrase, title-echo, template/reference, or direct residual-SRSTC endpoint. |
+| Retired WRT specialist | token-span causal selector | sealed `399,992`-byte holdout | lost `1` exact byte; random control also lost `1` | causal sealed-holdout shadow | Retire this selector/context shape; do not infer that all future WRT endpoints are impossible. |
 | Retired sidecar gate | `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` | canonical `10,000,000` lower bound | native output `1,641,762`; ceiling `1,631,581` | terminal ceiling abort | Archive slope failed; memory was healthy, and no completed archive/roundtrip/score is claimed. |
 | Primary novel strategy | SRSTC / Streaming Retrieval Mixer | `65,536K` block-posterior shadow receipt: `916,540` held-out bytes saved, `900,464` net bytes after code estimate, all `4,000` blocks positive | exact shadow evidence only | Target-closing at the shadow boundary by `219,350` bytes; not a compressor result until the paying component is integrated and replayed. |
 | Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | projected `1G` | projected S `110,181,114` | forecast only | Record-class lead, still above `109,500,000` and not constructive. |
@@ -73,7 +83,7 @@ the original PAQ rolling buffer to obtain material RSS margin.
 |---|---|---|---|
 | cmix21 memory shaping | Low algorithmic novelty, high engineering value | Implemented candidate packages with exact gates | Retired from the prize path after the deepest cut exceeded decimal `10GB`; retained as research evidence. |
 | fx2 core tuning | Moderate local novelty around tuned contexts/SSE rates | Implemented package lanes | Best exact `10M` local score row, but no full `1G` proof here. |
-| FX2-SC residual/SSE | Higher novelty: non-destructive causal structure calibration | Cached matrix has `243` residual/SSE rows, `114` positive measured or held-out shadow rows, and `0` constructive residual certificates. The compact XML screen is non-promotable: best key `mode_char` saved `5` held-out bytes and `-6,139` after code. | Add-on path only until saved bytes exceed counted code/table bytes with full coverage. |
+| FX2-SC residual/SSE | Higher novelty: non-destructive causal structure calibration | The generated matrix in this checkout has `0` residual/SSE rows and `0` positive measured or held-out shadow rows because its ignored receipt overlay is absent. The historical ledger had `243` rows, `114` positives, and `0` constructive certificates. The compact XML screen is non-promotable. | Add-on path only until saved bytes exceed counted code/table bytes with full coverage. |
 | SRSTC / Streaming retrieval mixer | Highest current novelty: causal sketch-neighbor continuation model rebuilt from decoded history with self-referential tables, patch-copy priors, and a decoder-rebuilt block posterior | Exact `65,536K` shadow receipt has `524,288,000` encoded rows, `916,540` held-out bytes saved, `900,464` net bytes, all `4,000` blocks positive, and `0` block regressions | Primary novel strategy; compile the smallest paying component into the strongest substrate and require exact constructive replay. |
 | Causal schema trie | Higher novelty: history-derived structural dictionary | Design/spec lane | No compression proof yet. |
 | Embedding-teacher ordering | Novel offline search method, not a payload | Teacher tools exist; final payload must be distilled rules | Forecast/search support only unless distilled rule gains are exact. |

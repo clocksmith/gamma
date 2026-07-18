@@ -47,13 +47,15 @@ METADATA_INHERITED_100M = {
     ),
 }
 
-BEST_FORECAST = {
+BASELINE_FORECAST = {
     "program_id": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
     "projected_score": 110_181_114,
     "quality": "fx2-calibrated-from-exact-100m",
     "evidence": "forecast only; not a constructive proof",
     "source": "results/forecast_frontier/forecasts.jsonl",
 }
+
+COUNTED_10M_FORECAST_EVIDENCE = "exact_guarded_10m_archive_screen"
 
 ACTIVE_CANDIDATE_ID = "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1"
 RUNNING_CANDIDATE_GLOB = "*/*rss_guard.json"
@@ -147,6 +149,62 @@ def load_result(path: pathlib.Path) -> Result | None:
         determinism_ok=determinism_ok(data),
         timestamp=str(data.get("timestamp", "")),
     )
+
+
+def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[str, Any]:
+    """Return the strongest counted forecast backed by an exact 10M screen.
+
+    Prefix forecasts remain non-constructive.  This only prevents the generated
+    operator views from staying pinned to the older FX2 calibration after a
+    newer exact, guarded, counted 10M archive screen has sealed.
+    """
+
+    candidates = [dict(BASELINE_FORECAST)]
+    for path in sorted(results_dir.glob("*/receipt.json")):
+        try:
+            payload = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if payload.get("evidence_level") != COUNTED_10M_FORECAST_EVIDENCE:
+            continue
+        scope = payload.get("scope")
+        economics = payload.get("economics")
+        decision = payload.get("decision")
+        if not isinstance(scope, dict) or scope.get("raw_bytes") != 10_000_000:
+            continue
+        if not isinstance(economics, dict) or not isinstance(decision, dict):
+            continue
+        projected_score = economics.get("conservative_projected_score_bytes")
+        target_score = economics.get("target_score_bytes")
+        if (
+            isinstance(projected_score, bool)
+            or not isinstance(projected_score, int)
+            or target_score != TARGET_10_95
+        ):
+            continue
+        try:
+            source = path.relative_to(ROOT).as_posix()
+        except ValueError:
+            source = str(path)
+        candidates.append(
+            {
+                "program_id": path.parent.name,
+                "projected_score": projected_score,
+                "quality": "exact-10m-counted-projection",
+                "evidence": (
+                    "exact guarded 10M archive screen with counted program "
+                    f"economics; terminal verdict {decision.get('verdict', 'unknown')}; "
+                    "forecast only, not a constructive full-corpus proof"
+                ),
+                "source": source,
+                "scope_bytes": 10_000_000,
+                "archive_bytes": economics.get("candidate_archive_bytes_10m"),
+                "projected_margin_bytes": economics.get(
+                    "conservative_projected_margin_bytes"
+                ),
+            }
+        )
+    return min(candidates, key=lambda row: int(row["projected_score"]))
 
 
 def iter_results(results_dir: pathlib.Path) -> list[Result]:
@@ -394,6 +452,7 @@ def build_top_status(
     exact_best: list[Result],
     exact_archive_best: list[Result],
     all_rows: list[Result],
+    results_dir: pathlib.Path = RESULTS_DEFAULT,
 ) -> list[dict[str, Any]]:
     exact_by_size = {row.data_size: row for row in exact_best}
     archive_by_size = {row.data_size: row for row in exact_archive_best}
@@ -480,14 +539,17 @@ def build_top_status(
             )
         )
 
+    best_forecast = best_forecast_record(results_dir)
     rows.append(
         top_status_record(
             "best forecast",
-            BEST_FORECAST["quality"],
-            BEST_FORECAST["evidence"],
-            program_id=BEST_FORECAST["program_id"],
-            projected_score=BEST_FORECAST["projected_score"],
-            source=BEST_FORECAST["source"],
+            best_forecast["quality"],
+            best_forecast["evidence"],
+            **{
+                key: value
+                for key, value in best_forecast.items()
+                if key not in {"quality", "evidence"}
+            },
         )
     )
     active_candidate_id, active_scope_override, active_source = active_candidate_context()
@@ -558,7 +620,9 @@ def build_top_status(
     return rows
 
 
-def build_certificate(rows: list[Result]) -> dict[str, Any]:
+def build_certificate(
+    rows: list[Result], results_dir: pathlib.Path = RESULTS_DEFAULT
+) -> dict[str, Any]:
     exact_best = best_by_size(rows)
     full_exact = [row for row in rows if row.is_full_corpus_proof]
     full_winners = [
@@ -602,8 +666,12 @@ def build_certificate(rows: list[Result]) -> dict[str, Any]:
             if best_constructive is not None
             else None,
         },
-        "top_status": build_top_status(exact_best, best_archive_by_size(rows), rows),
-        "top_status_table": build_top_status(exact_best, best_archive_by_size(rows), rows),
+        "top_status": build_top_status(
+            exact_best, best_archive_by_size(rows), rows, results_dir
+        ),
+        "top_status_table": build_top_status(
+            exact_best, best_archive_by_size(rows), rows, results_dir
+        ),
         "best_exact_upper_bounds_by_scope": [
             result_record(row) for row in exact_best
         ],
@@ -737,7 +805,7 @@ def main() -> int:
     args = parser.parse_args()
 
     rows = iter_results(args.results_dir)
-    cert = build_certificate(rows)
+    cert = build_certificate(rows, args.results_dir)
     args.json_out.write_text(json.dumps(cert, indent=2) + "\n")
     write_markdown(cert, args.md_out)
 
