@@ -93,11 +93,22 @@ heavy lane.
 | `seal_fx2_cmix21_original_order_blend.py` | Seals the frozen exact-original-order FX2/compact-200 blend across the opening 1M and confirmation 10M scopes, including ordering and source-package economics. |
 | `fx2_attribution_external_base_screen.py` | Screens causal component endpoints against an exact external base probability stream with train/dev/holdout separation, exact range replay, and regression/economics gates. |
 | `cmix_aux_logit_blend_screen.py` | Selects and replays bounded logit blends between a frozen CMIX base and an independently evolved causal endpoint, including fixed-point-ready weights and held-out block audits. |
+| `endpoint428_paired_trace.py` | Validates same-execution compact-base, endpoint428, hybrid, and truth streams; proves trace-on/off archive identity and emits an exact `FX2PT01` hybrid trace. |
+| `fx2_compact_trace_window.py` | Extracts and seals identity-checked cold-reset or cumulative compact probability windows without relabeling them as prefix evidence. |
+| `p1_wrt_to_fx2pt_trace.py` | Combines an exact P1 probability stream with its matching WRT store into the compact `FX2PT01` truth/probability trace format. |
 | `wikiir_prior_page_columnar_probe.py` | Repackages the exact prior-page ADD/COPY/RUN IR into fourteen typed columns, verifies byte-identical IR/raw reconstruction, and applies per-column MDL accounting. |
 | `wikiir_materialize.py` | Materializes a deterministic WikiIR prefix, verifies exact raw inversion, and seals program/input/IR identities before a target-backend probe. |
 | `wikiir_title_vertex_tail_layout.py` | Repackages the exact title-as-vertex choices with the text skeleton first and a self-locating directory trailer, isolating backend adaptation from selected information. |
 | `wrt_sequence_memoizer_trace.py` | Emits a deterministic bounded integer Sequence-Memoizer endpoint over completed WRT token suffixes for exact matched hybrid replay. |
 | `wrt_entity_trie_fx2_shadow.py` | Reconstructs title and link entities from the unchanged WRT stream, builds decoder-causal entity tries, and scores fixed-point continuation probabilities against an exact FX2-compatible base trace. |
+| `wrt_entity_node_backoff_trace.py` | Emits a bounded endpoint428-relative residual calibration trace keyed by decoder-built entity-trie node and support. |
+| `wrt_event_srstc_trace.py` | Emits an endpoint428-relative SRSTC-style continuation endpoint keyed by decoder-rebuilt raw semantic state before each completed WRT event. |
+| `cmix_aux_bucket_calibration.py` | Trains then freezes a compact decoder-rebuilt probability-bucket calibration over an auxiliary endpoint and exact base trace. |
+| `wrt_entity_regret_router_shadow.py` | Applies node-local causal reflected regret to the exact WRT entity-trie endpoint with frozen train/held-out accounting. |
+| `wrt_exact.py` | Parses FX2/CMIX21 WRT stores into exact decoded bytes and completed causal events shared by WRT-native scorers. |
+| `wrt_title_token_automaton.py` | Scores hard current-title transition rules and previous-title controls against an exact compact probability trace with raw/store/archive identity checks. |
+| `wrt_title_support_backoff.py` | Scores integer hierarchical title-transition probabilities and current-minus-previous contrast against the same exact substrate. |
+| `wrt_typed_skip_cts_trace.py` | Emits a residual-aware integer endpoint from global and decoder-rebuilt Wiki field/mode/slot suffix histories that skip intervening regimes. |
 | `seal_wikiir_target_backend_probe.py` | Seals an exact raw-to-IR inverse and guarded target-backend encode economics result; it explicitly withholds codec-proof status when a terminal archive miss makes backend decode irrational. |
 | `seal_cmix21_lstm200_fx2lite428_native.py` | Seals native compact-200 plus endpoint428 wrapper identity, roundtrip, determinism, aggregate decimal RSS, reproducible source-package identity, and conservative forecast economics. |
 | `seal_cmix21_lstm200_fx2lite428_ppmd_recovery.py` | Seals the endpoint428 PPMD failure reproduction, repaired 1M archive identity, 1.5M roundtrip/determinism, clean source reconstruction, decimal tree RSS, and adjusted strict-10M economics ceiling. |
