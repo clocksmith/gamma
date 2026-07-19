@@ -13,9 +13,24 @@ from pathlib import Path
 import random
 from typing import Any
 
+try:
+    from projects.distillation.wgsl.training.lora_transport import transport_lora
+except ModuleNotFoundError:
+    from lora_transport import transport_lora
+
 
 PROTOCOL = "gamma_wgsl_trainer_json_v1"
-SUPPORTED_ACTIONS = {"preflight", "sft", "dpo", "rollout", "grpo_update"}
+SUPPORTED_ACTIONS = {
+    "preflight",
+    "transport",
+    "capture_kd",
+    "materialize_sequence_kd",
+    "kd_sft",
+    "sft",
+    "dpo",
+    "rollout",
+    "grpo_update",
+}
 
 
 def _require_object(value: Any, label: str) -> dict[str, Any]:
@@ -112,6 +127,8 @@ def _runtime_imports() -> dict[str, Any]:
         import torch.nn.functional as functional
         from huggingface_hub import snapshot_download
         from peft import LoraConfig, TaskType, PeftModel, get_peft_model
+        from safetensors import safe_open
+        from safetensors.torch import save_file as save_safetensors
         from transformers import AutoModelForCausalLM, AutoTokenizer
         try:
             from transformers import AutoModelForMultimodalLM
@@ -135,10 +152,13 @@ def _runtime_imports() -> dict[str, Any]:
         "TaskType": TaskType,
         "PeftModel": PeftModel,
         "get_peft_model": get_peft_model,
+        "safe_open": safe_open,
+        "save_safetensors": save_safetensors,
         "AutoModelForCausalLM": AutoModelForCausalLM,
         "AutoModelForMultimodalLM": AutoModelForMultimodalLM,
         "AutoTokenizer": AutoTokenizer,
         "transformersVersion": transformers_version,
+        "peftVersion": importlib.metadata.version("peft"),
     }
 
 
@@ -497,6 +517,459 @@ def _run_sft(request: dict[str, Any], runtime: dict[str, Any], output_root: Path
             "steps": steps,
             "datasetRows": len(rows),
             "distinctRowsVisited": min(steps, len(rows)),
+            **row_order_receipt,
+        },
+        "metricsPath": str(metrics_path),
+    }
+
+
+def _completion_logits(logits: Any, labels: Any) -> Any:
+    shifted_labels = labels[:, 1:]
+    mask = shifted_labels.ne(-100)
+    return logits[:, :-1, :][mask]
+
+
+def _capture_kd_trace(
+    request: dict[str, Any],
+    runtime: dict[str, Any],
+    output_root: Path,
+) -> dict[str, Any]:
+    torch = runtime["torch"]
+    training = _require_object(request.get("training"), "training")
+    dataset_path = Path(_require_string(request.get("datasetPath"), "datasetPath")).resolve()
+    rows = _read_jsonl(dataset_path)
+    rows, row_order_receipt = _order_sft_rows(rows, training)
+    model, tokenizer, model_path = _load_policy(request, runtime)
+    if not hasattr(model, "disable_adapter"):
+        raise RuntimeError("capture_kd requires a teacher adapterPath")
+    model.eval()
+    top_k = _require_int(training.get("topK"), "training.topK", 1)
+    max_length = _require_int(training.get("maxLength"), "training.maxLength", 2)
+    token_rows = []
+    adapted_rows = []
+    base_rows = []
+    offsets = [0]
+    row_ids = []
+    input_hashes = []
+    metrics_path = output_root / "capture-metrics.jsonl"
+    for index, row in enumerate(rows):
+        prompt = _row_text(row, "prompt")
+        completion = _row_text(row, "completion")
+        encoded = _encode_pair(tokenizer, prompt, completion, max_length)
+        tensors = _tensorize(encoded, torch)
+        with torch.no_grad():
+            adapted_output = model(
+                input_ids=tensors["input_ids"],
+                attention_mask=tensors["attention_mask"],
+            )
+            adapted_completion = _completion_logits(adapted_output.logits, tensors["labels"]).float()
+            if adapted_completion.shape[0] != encoded["completionTokenCount"]:
+                raise RuntimeError("capture_kd completion-token alignment failed")
+            effective_top_k = min(top_k, int(adapted_completion.shape[-1]))
+            adapted_top, token_ids = torch.topk(
+                adapted_completion,
+                k=effective_top_k,
+                dim=-1,
+            )
+            del adapted_output, adapted_completion
+            with model.disable_adapter():
+                base_output = model(
+                    input_ids=tensors["input_ids"],
+                    attention_mask=tensors["attention_mask"],
+                )
+                base_completion = _completion_logits(base_output.logits, tensors["labels"]).float()
+                base_top = base_completion.gather(-1, token_ids)
+            del base_output, base_completion
+        token_rows.append(token_ids.to(device="cpu", dtype=torch.int32))
+        adapted_rows.append(adapted_top.to(device="cpu", dtype=torch.float16))
+        base_rows.append(base_top.to(device="cpu", dtype=torch.float16))
+        offsets.append(offsets[-1] + encoded["completionTokenCount"])
+        row_id = _require_string(
+            row.get("rowId") or row.get("taskId") or row.get("id") or f"index-{index}",
+            f"KD row {index + 1} identity",
+        )
+        row_ids.append(row_id)
+        input_hashes.append(_sha256_text(_stable_json({
+            "prompt": prompt,
+            "completion": completion,
+            "inputIds": encoded["inputIds"],
+        })))
+        _write_metric(metrics_path, {
+            "row": index + 1,
+            "rowId": row_id,
+            "completionTokens": encoded["completionTokenCount"],
+            "cumulativeCompletionTokens": offsets[-1],
+            "topK": effective_top_k,
+        })
+        del tensors, token_ids, adapted_top, base_top
+        torch.cuda.empty_cache()
+    trace_path = output_root / "teacher-topk.safetensors"
+    runtime["save_safetensors"]({
+        "token_ids": torch.cat(token_rows, dim=0),
+        "adapted_logits": torch.cat(adapted_rows, dim=0),
+        "base_logits": torch.cat(base_rows, dim=0),
+        "row_offsets": torch.tensor(offsets, dtype=torch.int64),
+    }, str(trace_path), metadata={"format": "pt"})
+    manifest = {
+        "schema": "gamma.wgsl-kd-trace/v1",
+        "teacherModelPath": str(model_path),
+        "teacherAdapterPath": str(Path(_require_string(request.get("adapterPath"), "adapterPath")).resolve()),
+        "teacherAdapterTreeSha256": _hash_tree(
+            Path(_require_string(request.get("adapterPath"), "adapterPath")).resolve()
+        ),
+        "datasetPath": str(dataset_path),
+        "datasetSha256": _sha256_file(dataset_path),
+        "tracePath": str(trace_path),
+        "traceSha256": _sha256_file(trace_path),
+        "topK": top_k,
+        "support": "adapted-teacher-topk-renormalized-v1",
+        "rowIds": row_ids,
+        "inputHashes": input_hashes,
+        "completionTokens": offsets[-1],
+        **row_order_receipt,
+        "claimBoundary": "Teacher top-k evidence only; no student capability or executable-package claim.",
+    }
+    manifest_path = output_root / "teacher-topk-manifest.json"
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "modelPath": str(model_path),
+        "tracePath": str(trace_path),
+        "traceSha256": manifest["traceSha256"],
+        "manifestPath": str(manifest_path),
+        "manifestSha256": _sha256_file(manifest_path),
+        "metricsPath": str(metrics_path),
+        "metrics": {
+            "datasetRows": len(rows),
+            "completionTokens": offsets[-1],
+            "topK": top_k,
+            **row_order_receipt,
+        },
+    }
+
+
+def _load_kd_trace(request: dict[str, Any], runtime: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    manifest_path = Path(_require_string(request.get("traceManifestPath"), "traceManifestPath")).resolve()
+    expected_manifest_hash = _require_string(
+        request.get("traceManifestSha256"),
+        "traceManifestSha256",
+    )
+    if _sha256_file(manifest_path) != expected_manifest_hash:
+        raise RuntimeError("KD trace manifest hash mismatch")
+    manifest = _require_object(_read_json(manifest_path), "KD trace manifest")
+    trace_path = Path(_require_string(manifest.get("tracePath"), "trace.tracePath")).resolve()
+    if _sha256_file(trace_path) != _require_string(manifest.get("traceSha256"), "trace.traceSha256"):
+        raise RuntimeError("KD trace payload hash mismatch")
+    tensors = {}
+    with runtime["safe_open"](str(trace_path), framework="pt", device="cpu") as handle:
+        for key in ("token_ids", "adapted_logits", "base_logits", "row_offsets"):
+            tensors[key] = handle.get_tensor(key)
+    return manifest, tensors
+
+
+def _kd_target_logits(
+    method: str,
+    teacher_adapted: Any,
+    teacher_base: Any,
+    student_base: Any,
+    delta_scale: float,
+) -> Any:
+    if method == "llm-neo-topk-v1":
+        return teacher_adapted
+    if method == "delta-kd-topk-v1":
+        if student_base is None:
+            raise RuntimeError("delta-kd requires student base logits")
+        return student_base + (delta_scale * (teacher_adapted - teacher_base))
+    raise RuntimeError(f"unsupported KD method: {method}")
+
+
+def _materialize_sequence_kd(
+    request: dict[str, Any],
+    runtime: dict[str, Any],
+    output_root: Path,
+) -> dict[str, Any]:
+    training = _require_object(request.get("training"), "training")
+    dataset_path = Path(_require_string(request.get("datasetPath"), "datasetPath")).resolve()
+    rows = _read_jsonl(dataset_path)
+    rows, row_order_receipt = _order_sft_rows(rows, training)
+    manifest, trace = _load_kd_trace(request, runtime)
+    if manifest.get("datasetSha256") != _sha256_file(dataset_path):
+        raise RuntimeError("sequence KD trace dataset hash mismatch")
+    if manifest.get("rowOrderSha256") != row_order_receipt["rowOrderSha256"]:
+        raise RuntimeError("sequence KD trace row order mismatch")
+    teacher_model_path = Path(manifest["teacherModelPath"])
+    tokenizer = _load_tokenizer(teacher_model_path, runtime)
+    expected_tokenizer_hash = _require_string(
+        request.get("teacherTokenizerSha256"),
+        "teacherTokenizerSha256",
+    )
+    if _sha256_file(teacher_model_path / "tokenizer.json") != expected_tokenizer_hash:
+        raise RuntimeError("sequence KD teacher tokenizer identity mismatch")
+    max_length = _require_int(training.get("maxLength"), "training.maxLength", 2)
+    output_token_budget = _require_int(
+        training.get("outputTokenBudget"),
+        "training.outputTokenBudget",
+        1,
+    )
+    offsets = trace["row_offsets"].tolist()
+    admitted = []
+    rejected = []
+    for index, row in enumerate(rows):
+        prompt = _row_text(row, "prompt")
+        completion = _row_text(row, "completion")
+        encoded = _encode_pair(tokenizer, prompt, completion, max_length)
+        full_prompt_ids = tokenizer.encode(prompt, add_special_tokens=True)
+        encoded_prompt_tokens = sum(1 for value in encoded["labels"] if value == -100)
+        start, end = int(offsets[index]), int(offsets[index + 1])
+        gold_tokens = [value for value in encoded["labels"] if value != -100]
+        teacher_tokens = [int(value) for value in trace["token_ids"][start:end, 0].tolist()]
+        top_logits = trace["adapted_logits"][start:end]
+        reason = None
+        if encoded_prompt_tokens != len(full_prompt_ids):
+            reason = "prompt_truncated_by_training_encoder"
+        elif len(gold_tokens) > output_token_budget:
+            reason = "completion_exceeds_output_token_budget"
+        elif top_logits.shape[1] < 2 or not bool((top_logits[:, 0] > top_logits[:, 1]).all()):
+            reason = "teacher_argmax_is_not_unique"
+        elif teacher_tokens != gold_tokens:
+            reason = "teacher_argmax_differs_from_reference_sequence"
+        if reason:
+            rejected.append({
+                "rowId": row.get("rowId") or row.get("taskId") or row.get("id"),
+                "reason": reason,
+                "matchingPrefixTokens": next(
+                    (
+                        token_index
+                        for token_index, pair in enumerate(zip(teacher_tokens, gold_tokens))
+                        if pair[0] != pair[1]
+                    ),
+                    min(len(teacher_tokens), len(gold_tokens)),
+                ),
+                "completionTokens": len(gold_tokens),
+            })
+            continue
+        row_id = _require_string(
+            row.get("rowId") or row.get("taskId") or row.get("id"),
+            f"sequence KD row {index + 1} identity",
+        )
+        admitted.append({
+            "schema": "doppler.wgsl-writer-sequence-kd-row/v1",
+            "rowId": row_id,
+            "taskId": row_id,
+            "prompt": prompt,
+            "completion": completion,
+            "teacherModelPath": str(teacher_model_path),
+            "teacherAdapterTreeSha256": manifest["teacherAdapterTreeSha256"],
+            "oracle": "teacher_forced_argmax_induction_v1",
+        })
+    if not admitted:
+        raise RuntimeError("teacher certified zero exact greedy sequences for sequence KD")
+    dataset_output_path = output_root / "sequence-kd.jsonl"
+    dataset_output_path.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in admitted),
+        encoding="utf-8",
+    )
+    receipt = {
+        "schema": "gamma.wgsl-sequence-kd-materialization/v1",
+        "teacherModelPath": str(teacher_model_path),
+        "teacherAdapterPath": manifest["teacherAdapterPath"],
+        "teacherAdapterTreeSha256": manifest["teacherAdapterTreeSha256"],
+        "traceManifestPath": str(Path(request["traceManifestPath"]).resolve()),
+        "traceManifestSha256": request["traceManifestSha256"],
+        "sourceDatasetPath": str(dataset_path),
+        "sourceDatasetSha256": _sha256_file(dataset_path),
+        "datasetPath": str(dataset_output_path),
+        "datasetSha256": _sha256_file(dataset_output_path),
+        "sourceRows": len(rows),
+        "admittedRows": len(admitted),
+        "rejectedRows": len(rejected),
+        "outputTokenBudget": output_token_budget,
+        "oracle": "teacher_forced_argmax_induction_v1",
+        "proof": "Every gold next token, including EOS, is the unique recorded greedy argmax under the same untruncated prompt and inductively identical gold prefix.",
+        "rejected": rejected,
+        **row_order_receipt,
+        "claimBoundary": "Exact teacher hard-sequence admission only; student training and Chromium execution decide capability.",
+    }
+    receipt_path = output_root / "sequence-kd-receipt.json"
+    receipt_path.write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "datasetPath": str(dataset_output_path),
+        "datasetSha256": receipt["datasetSha256"],
+        "receiptPath": str(receipt_path),
+        "receiptSha256": _sha256_file(receipt_path),
+        "metrics": {
+            "sourceRows": len(rows),
+            "admittedRows": len(admitted),
+            "rejectedRows": len(rejected),
+        },
+    }
+
+
+def _run_kd_sft(request: dict[str, Any], runtime: dict[str, Any], output_root: Path) -> dict[str, Any]:
+    torch = runtime["torch"]
+    functional = runtime["functional"]
+    training = _require_object(request.get("training"), "training")
+    distillation = _require_object(request.get("distillation"), "distillation")
+    method = _require_string(distillation.get("method"), "distillation.method")
+    if method not in {"llm-neo-topk-v1", "delta-kd-topk-v1"}:
+        raise RuntimeError("unsupported distillation.method")
+    dataset_path = Path(_require_string(request.get("datasetPath"), "datasetPath")).resolve()
+    rows = _read_jsonl(dataset_path)
+    rows, row_order_receipt = _order_sft_rows(rows, training)
+    manifest, trace = _load_kd_trace(request, runtime)
+    if manifest.get("datasetSha256") != _sha256_file(dataset_path):
+        raise RuntimeError("KD trace dataset hash mismatch")
+    if manifest.get("rowOrderSha256") != row_order_receipt["rowOrderSha256"]:
+        raise RuntimeError("KD trace row order mismatch")
+    model, tokenizer, model_path = _load_policy(request, runtime)
+    expected_tokenizer_hash = _require_string(
+        request.get("teacherTokenizerSha256"),
+        "teacherTokenizerSha256",
+    )
+    teacher_tokenizer_path = Path(manifest["teacherModelPath"]) / "tokenizer.json"
+    student_tokenizer_path = model_path / "tokenizer.json"
+    if (
+        _sha256_file(teacher_tokenizer_path) != expected_tokenizer_hash
+        or _sha256_file(student_tokenizer_path) != expected_tokenizer_hash
+    ):
+        raise RuntimeError("teacher/student tokenizer identity mismatch")
+    model.train()
+    optimizer = _optimizer(model, training, torch)
+    steps = _require_int(training.get("steps"), "training.steps", 1)
+    accumulation = _require_int(
+        training.get("gradientAccumulationSteps"),
+        "training.gradientAccumulationSteps",
+        1,
+    )
+    max_length = _require_int(training.get("maxLength"), "training.maxLength", 2)
+    max_grad_norm = _require_float(training.get("maxGradNorm"), "training.maxGradNorm")
+    temperature = _require_float(distillation.get("temperature"), "distillation.temperature")
+    alpha_ce = _require_float(distillation.get("alphaCe"), "distillation.alphaCe")
+    alpha_kd = _require_float(distillation.get("alphaKd"), "distillation.alphaKd")
+    delta_scale = _require_float(distillation.get("deltaScale"), "distillation.deltaScale")
+    _seed_everything(_require_int(training.get("seed"), "training.seed"), runtime)
+    offsets = trace["row_offsets"].tolist()
+    metrics_path = output_root / "metrics.jsonl"
+    optimizer.zero_grad(set_to_none=True)
+    losses = []
+    for step in range(steps):
+        row_index = step % len(rows)
+        row = rows[row_index]
+        encoded = _encode_pair(
+            tokenizer,
+            _row_text(row, "prompt"),
+            _row_text(row, "completion"),
+            max_length,
+        )
+        input_hash = _sha256_text(_stable_json({
+            "prompt": _row_text(row, "prompt"),
+            "completion": _row_text(row, "completion"),
+            "inputIds": encoded["inputIds"],
+        }))
+        if input_hash != manifest["inputHashes"][row_index]:
+            raise RuntimeError(f"KD row input hash mismatch at index {row_index}")
+        start, end = int(offsets[row_index]), int(offsets[row_index + 1])
+        if end - start != encoded["completionTokenCount"]:
+            raise RuntimeError(f"KD completion-token mismatch at index {row_index}")
+        token_ids = trace["token_ids"][start:end].to(device="cuda", dtype=torch.long)
+        teacher_adapted = trace["adapted_logits"][start:end].to(device="cuda", dtype=torch.float32)
+        teacher_base = trace["base_logits"][start:end].to(device="cuda", dtype=torch.float32)
+        tensors = _tensorize(encoded, torch)
+        outputs = model(**tensors)
+        student_completion = _completion_logits(outputs.logits, tensors["labels"]).float()
+        student_selected = student_completion.gather(-1, token_ids)
+        student_base_selected = None
+        if method == "delta-kd-topk-v1":
+            if not hasattr(model, "disable_adapter"):
+                raise RuntimeError("delta-kd requires a student LoRA adapter")
+            model.eval()
+            with torch.no_grad(), model.disable_adapter():
+                base_outputs = model(
+                    input_ids=tensors["input_ids"],
+                    attention_mask=tensors["attention_mask"],
+                )
+                student_base = _completion_logits(base_outputs.logits, tensors["labels"]).float()
+                student_base_selected = student_base.gather(-1, token_ids)
+                del base_outputs, student_base
+            model.train()
+        target_logits = _kd_target_logits(
+            method,
+            teacher_adapted,
+            teacher_base,
+            student_base_selected,
+            delta_scale,
+        )
+        student_log_probs = functional.log_softmax(student_selected / temperature, dim=-1)
+        target_probs = functional.softmax(target_logits / temperature, dim=-1)
+        kd_loss = functional.kl_div(
+            student_log_probs,
+            target_probs,
+            reduction="batchmean",
+        ) * (temperature * temperature)
+        ce_loss = outputs.loss
+        total_loss = (alpha_ce * ce_loss) + (alpha_kd * kd_loss)
+        if not torch.isfinite(total_loss):
+            raise RuntimeError(f"nonfinite KD loss at step {step + 1}")
+        (total_loss / accumulation).backward()
+        if (step + 1) % accumulation == 0 or step + 1 == steps:
+            grad_norm = float(torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm).item())
+            optimizer.step()
+            optimizer.zero_grad(set_to_none=True)
+        else:
+            grad_norm = 0.0
+        raw_loss = float(total_loss.detach().item())
+        losses.append(raw_loss)
+        _write_metric(metrics_path, {
+            "step": step + 1,
+            "loss": raw_loss,
+            "lossCe": float(ce_loss.detach().item()),
+            "lossKd": float(kd_loss.detach().item()),
+            "gradNorm": grad_norm,
+            "completionTokens": encoded["completionTokenCount"],
+            "method": method,
+        })
+        del (
+            outputs,
+            tensors,
+            token_ids,
+            teacher_adapted,
+            teacher_base,
+            student_completion,
+            student_selected,
+            student_base_selected,
+            target_logits,
+            target_probs,
+            student_log_probs,
+            total_loss,
+            ce_loss,
+            kd_loss,
+        )
+        torch.cuda.empty_cache()
+    adapter_path, policy_hash = _save_adapter(model, output_root)
+    return {
+        "modelPath": str(model_path),
+        "adapterPath": str(adapter_path),
+        "policyHash": policy_hash,
+        "checkpointStep": steps,
+        "traceManifestSha256": _sha256_file(
+            Path(_require_string(request.get("traceManifestPath"), "traceManifestPath")).resolve()
+        ),
+        "metrics": {
+            "loss": losses[-1],
+            "meanLoss": sum(losses) / len(losses),
+            "steps": steps,
+            "datasetRows": len(rows),
+            "method": method,
+            "temperature": temperature,
+            "alphaCe": alpha_ce,
+            "alphaKd": alpha_kd,
+            "deltaScale": delta_scale,
+            "support": manifest["support"],
             **row_order_receipt,
         },
         "metricsPath": str(metrics_path),
@@ -1196,6 +1669,14 @@ def execute(request: dict[str, Any]) -> dict[str, Any]:
     runtime_receipt = _prove_rocm(runtime, _require_string(training.get("dtype"), "training.dtype"))
     if action == "preflight":
         result = _preflight(request, runtime)
+    elif action == "transport":
+        result = transport_lora(request, runtime, output_root)
+    elif action == "capture_kd":
+        result = _capture_kd_trace(request, runtime, output_root)
+    elif action == "materialize_sequence_kd":
+        result = _materialize_sequence_kd(request, runtime, output_root)
+    elif action == "kd_sft":
+        result = _run_kd_sft(request, runtime, output_root)
     elif action == "sft":
         result = _run_sft(request, runtime, output_root)
     elif action == "dpo":

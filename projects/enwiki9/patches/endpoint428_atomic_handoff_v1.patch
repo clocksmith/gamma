@@ -1,0 +1,105 @@
+--- a/src/fx2lite/endpoint428.cpp
++++ b/src/fx2lite/endpoint428.cpp
+@@ -1,9 +1,9 @@
+ #include "endpoint428.h"
+ 
+-#include <condition_variable>
++#include <atomic>
+ #include <cstdlib>
++#include <immintrin.h>
+ #include <memory>
+-#include <mutex>
+ #include <thread>
+ #include <valarray>
+ 
+@@ -56,32 +56,29 @@ class Endpoint {
+   }
+ 
+   ~Endpoint() {
+-    {
+-      std::lock_guard<std::mutex> lock(worker_mutex_);
+-      stop_ = true;
+-      worker_cv_.notify_all();
+-    }
++    stop_.store(true, std::memory_order_release);
+     if (worker_.joinable()) worker_.join();
+   }
+ 
+   std::uint16_t Predict() {
+-    std::unique_lock<std::mutex> lock(worker_mutex_);
+     if (!worker_started_) {
+       worker_started_ = true;
+       worker_ = std::thread(&Endpoint::RunWorker, this);
+     }
+-    worker_cv_.wait(lock, [this] { return prediction_ready_ || stop_; });
+-    if (stop_) std::abort();
++    while (!prediction_ready_.load(std::memory_order_acquire)) {
++      if (stop_.load(std::memory_order_relaxed)) std::abort();
++      _mm_pause();
++    }
+     return prediction_;
+   }
+ 
+   void Perceive(int bit) {
+-    std::lock_guard<std::mutex> lock(worker_mutex_);
+-    if (!worker_started_ || !prediction_ready_ || bit_pending_) std::abort();
+-    prediction_ready_ = false;
++    if (!worker_started_ ||
++        !prediction_ready_.load(std::memory_order_relaxed) ||
++        bit_pending_.load(std::memory_order_relaxed)) std::abort();
++    prediction_ready_.store(false, std::memory_order_relaxed);
+     pending_bit_ = bit;
+-    bit_pending_ = true;
+-    worker_cv_.notify_all();
++    bit_pending_.store(true, std::memory_order_release);
+   }
+ 
+   void Pretrain(int bit) {
+@@ -128,22 +125,20 @@ class Endpoint {
+ 
+   void RunWorker() {
+     std::uint16_t next_prediction = PredictSync();
+-    std::unique_lock<std::mutex> lock(worker_mutex_);
+     prediction_ = next_prediction;
+-    prediction_ready_ = true;
+-    worker_cv_.notify_all();
+-    while (!stop_) {
+-      worker_cv_.wait(lock, [this] { return bit_pending_ || stop_; });
+-      if (stop_) break;
++    prediction_ready_.store(true, std::memory_order_release);
++    while (!stop_.load(std::memory_order_acquire)) {
++      while (!bit_pending_.load(std::memory_order_acquire) &&
++             !stop_.load(std::memory_order_relaxed)) {
++        _mm_pause();
++      }
++      if (stop_.load(std::memory_order_relaxed)) break;
+       const int bit = pending_bit_;
+-      bit_pending_ = false;
+-      lock.unlock();
++      bit_pending_.store(false, std::memory_order_relaxed);
+       PerceiveSync(bit);
+       next_prediction = PredictSync();
+-      lock.lock();
+       prediction_ = next_prediction;
+-      prediction_ready_ = true;
+-      worker_cv_.notify_all();
++      prediction_ready_.store(true, std::memory_order_release);
+     }
+   }
+ 
+@@ -152,12 +147,10 @@ class Endpoint {
+   std::unique_ptr<PPMD::PPMD> ppmd_;
+   std::unique_ptr<ByteMixer> byte_mixer_;
+   std::thread worker_;
+-  std::mutex worker_mutex_;
+-  std::condition_variable worker_cv_;
+   bool worker_started_;
+-  bool stop_;
+-  bool bit_pending_;
+-  bool prediction_ready_;
++  std::atomic<bool> stop_;
++  std::atomic<bool> bit_pending_;
++  std::atomic<bool> prediction_ready_;
+   int pending_bit_;
+   std::uint16_t prediction_;
+ };
