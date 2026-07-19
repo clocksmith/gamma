@@ -1,0 +1,115 @@
+{
+  "schema": "clocksmith.exposure-ledger/v1",
+  "schemaSha256": "sha256:5262a2ed29dd97d163c49f21ab69b54103dc524c68959dc0561defb128fdc038",
+  "ledgerId": "gamma.translation.enes.exposure.v1",
+  "repository": "gamma",
+  "events": [
+    {
+      "repository": "gamma",
+      "experimentId": "gamma.translation.enes.single-student.promotion.v1",
+      "actor": {
+        "type": "repository",
+        "id": "clocksmith/gamma"
+      },
+      "eventId": "gamma-translation-draft",
+      "occurredAt": "2026-03-10T01:49:45.000Z",
+      "type": "campaign_transition",
+      "receipt": {
+        "id": "promotion-contract",
+        "sha256": "sha256:2beead044b739ca832c9aa996416ea9b9080db4ae499d1bc77be74736d6a1a4e",
+        "path": "projects/distillation/translation/promotion/promotion-contract.v1.json"
+      },
+      "details": {
+        "from": null,
+        "to": "draft"
+      },
+      "sequence": 0,
+      "previousEventHash": null,
+      "eventHash": "sha256:1103d864cc74afbdc138403198fc06d942641a618f153fb5cf8ec9fbc0268401"
+    },
+    {
+      "repository": "gamma",
+      "experimentId": "gamma.translation.enes.single-student.promotion.v1",
+      "actor": {
+        "type": "repository",
+        "id": "clocksmith/gamma"
+      },
+      "eventId": "gamma-wmt13-registered",
+      "occurredAt": "2026-03-10T01:49:46.000Z",
+      "type": "artifact_registered",
+      "artifact": {
+        "id": "wmt13-enes-128-legacy",
+        "sha256": "sha256:8454f014eee7ba862c3d4cc4a80169c99e47de2ec39cc5baa176424859db6c47",
+        "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl"
+      },
+      "role": "development",
+      "details": {
+        "acquisitionPath": "legacy WMT13 evaluation material",
+        "labelingPath": "public references",
+        "componentId": "wmt13-enes",
+        "familyId": "legacy-wmt",
+        "firstExposureTimeBasis": "earliest checked-in TranslateGemma run timestamp"
+      },
+      "sequence": 1,
+      "previousEventHash": "sha256:1103d864cc74afbdc138403198fc06d942641a618f153fb5cf8ec9fbc0268401",
+      "eventHash": "sha256:7004ddf27fe2bc9d208d5e6398c00a39e43e3724967d33f8eb10fe90921590ca"
+    },
+    {
+      "repository": "gamma",
+      "experimentId": "gamma.translation.enes.single-student.promotion.v1",
+      "actor": {
+        "type": "repository",
+        "id": "clocksmith/gamma"
+      },
+      "eventId": "gamma-wmt13-exposed-development",
+      "occurredAt": "2026-03-10T01:49:47.000Z",
+      "type": "artifact_exposed",
+      "artifact": {
+        "id": "wmt13-enes-128-legacy",
+        "sha256": "sha256:8454f014eee7ba862c3d4cc4a80169c99e47de2ec39cc5baa176424859db6c47",
+        "path": "projects/distillation/translation/training_data/translate_distill_pairs.eval2_wmt13_enes_128.jsonl"
+      },
+      "role": "development",
+      "details": {
+        "experimentIds": [
+          "translategemma-nativekd2",
+          "savant-nativekd2"
+        ],
+        "personIds": [],
+        "decisionIds": [
+          "data_selection",
+          "checkpoint_selection",
+          "decode_selection",
+          "router_evaluation"
+        ],
+        "promotionUseAllowed": false
+      },
+      "sequence": 2,
+      "previousEventHash": "sha256:7004ddf27fe2bc9d208d5e6398c00a39e43e3724967d33f8eb10fe90921590ca",
+      "eventHash": "sha256:342db73dfbdd804ccb9f444091099c202a529e119f504f3623d2a78d267184a7"
+    },
+    {
+      "repository": "gamma",
+      "experimentId": "gamma.translation.enes.single-student.promotion.v1",
+      "actor": {
+        "type": "repository",
+        "id": "clocksmith/gamma"
+      },
+      "eventId": "gamma-translation-contract-frozen",
+      "occurredAt": "2026-07-14T00:00:00.000Z",
+      "type": "campaign_transition",
+      "receipt": {
+        "id": "promotion-contract",
+        "sha256": "sha256:2beead044b739ca832c9aa996416ea9b9080db4ae499d1bc77be74736d6a1a4e",
+        "path": "projects/distillation/translation/promotion/promotion-contract.v1.json"
+      },
+      "details": {
+        "from": "draft",
+        "to": "frozen"
+      },
+      "sequence": 3,
+      "previousEventHash": "sha256:342db73dfbdd804ccb9f444091099c202a529e119f504f3623d2a78d267184a7",
+      "eventHash": "sha256:1ffda7d81c05ecef32131f87c4aa0e7d92250171aeb4511c818254f468a5784e"
+    }
+  ]
+}
