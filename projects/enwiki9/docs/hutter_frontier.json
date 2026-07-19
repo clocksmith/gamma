@@ -264,6 +264,61 @@
       ]
     },
     {
+      "id": "layer0_pair_phase_composite_v1",
+      "name": "layer0 mixer10 plus pair adaptation plus WRT phase residual",
+      "rank": 2,
+      "status": "active",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 140,
+      "gain_bytes_per_1m": 140.0,
+      "program_ceiling_bytes": 13407,
+      "counterfactual_full_transfer_score": 109430811,
+      "counterfactual_full_transfer_margin_bytes": 69189,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/layer0_pair_phase_composite_1m_v1/decision.json",
+        "tools/compact_layer0_online_mixer_screen.cpp",
+        "tools/wrt_phase_residual_native.h",
+        "tools/wrt_phase_residual_native.cpp"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/layer0_pair_phase_composite_1m_v1/decision.json",
+          "pointer": "/exact_chain/combined_gain_over_endpoint428_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/layer0_pair_phase_composite_1m_v1/decision.json",
+          "pointer": "/exact_chain/combined_gain_bytes_per_1m",
+          "candidate_field": "gain_bytes_per_1m"
+        },
+        {
+          "source": "results/layer0_pair_phase_composite_1m_v1/decision.json",
+          "pointer": "/economics/conservative_program_ceiling_bytes",
+          "candidate_field": "program_ceiling_bytes"
+        },
+        {
+          "source": "results/layer0_pair_phase_composite_1m_v1/decision.json",
+          "pointer": "/economics/counterfactual_full_transfer_score_bytes",
+          "candidate_field": "counterfactual_full_transfer_score"
+        },
+        {
+          "source": "results/layer0_pair_phase_composite_1m_v1/decision.json",
+          "pointer": "/economics/counterfactual_margin_bytes",
+          "candidate_field": "counterfactual_full_transfer_margin_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Exact causal replay composes 77 B/M from layer0 mixer10, 32 B/M from pair adaptation, and 31 B/M from frozen WRT phase residual. The 140 B/M shadow counterfactually scores 109,430,811 after a conservative 13,407-byte ceiling, but related-stream composition earns zero score credit.",
+      "next_gate": "Integrate mixer10-as-base, pair adaptation, and phase Predict/Perceive in a fresh counted source package; require P1 identity, exact archive gain, roundtrip, determinism, decimal-10GB RSS, and broader-scope transfer.",
+      "disqualifiers": [
+        "Related independent P1 streams are not a native combined archive",
+        "No broader-scope transfer evidence",
+        "The 109,430,811 score is a counterfactual full-transfer calculation, not a forecast"
+      ]
+    },
+    {
       "id": "layer0_wrt_hierarchical_phase_residual_log128_v1",
       "name": "layer-0 endpoint plus hierarchical WRT phase residual SSE",
       "rank": 3,
@@ -701,7 +756,7 @@
     {
       "id": "wrt_event_context_and_adaptive_phase_endpoint428_v1",
       "name": "WRT completed-event context tree and adaptive phase residuals",
-      "rank": 14,
+      "rank": 15,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -732,7 +787,7 @@
     {
       "id": "wrt_phase_strength_router_shell_regime_v1",
       "name": "WRT phase strength router and shell-regime backoff",
-      "rank": 15,
+      "rank": 16,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -765,7 +820,7 @@
     {
       "id": "wrt_phase_newton_residual_blend_v1",
       "name": "WRT phase Newton residual and equal-correction blend",
-      "rank": 16,
+      "rank": 17,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -796,7 +851,7 @@
     {
       "id": "endpoint_residual_surprise_history_v1",
       "name": "endpoint428 surprise-history retrieval",
-      "rank": 17,
+      "rank": 18,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -827,7 +882,7 @@
     {
       "id": "endpoint428_pair_only_online_mixer_v1",
       "name": "endpoint428 pair-only online mixer",
-      "rank": 18,
+      "rank": 19,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
