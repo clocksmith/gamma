@@ -8,7 +8,7 @@ benchmark report and does not launch or require any scorer work.
 Current shallow workspace observations:
 
 ```text
-program directories under programs/: 539
+program directories under programs/: 540
 registered programs in index.json: 225
 docs file entries under docs/: 30
 tools files under tools/: 86
@@ -16,7 +16,7 @@ active: 7
 candidate: 144
 measured_negative: 20
 blocked_dependency: 12
-retired: 354
+retired: 357
 track_source_before_evolution: 2
 ```
 

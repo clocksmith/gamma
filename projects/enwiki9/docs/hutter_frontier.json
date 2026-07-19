@@ -5,19 +5,20 @@
     "score_bytes": 109500000,
     "required_roundtrip": true
   },
-  "canonical_best_forecast_id": "endpoint428_context_recovery_10m",
+  "canonical_best_forecast_id": "endpoint428_pair_layer0_online_residual_successor",
   "candidates": [
     {
       "id": "endpoint428_pair_layer0_online_residual_successor",
       "name": "endpoint428 plus online compact/FX2/layer-0 residual mixer",
       "rank": 1,
-      "status": "active",
-      "evidence_tier": "constructive_prefix",
-      "scope_bytes": 1000000,
-      "archive_bytes": 173896,
-      "program_bytes": 350942,
-      "incremental_program_bytes": 1747,
-      "forecast_score": 109492151,
+      "status": "active_full_gate_authorized",
+      "evidence_tier": "constructive_exact_10m",
+      "scope_bytes": 10000000,
+      "archive_bytes": 1635174,
+      "program_bytes": 278825,
+      "incremental_program_bytes": -70370,
+      "forecast_score": 109452151,
+      "opening_prefix_forecast_score": 109492151,
       "measured_gain_bytes": 67,
       "gain_bytes_per_1m": 67.0,
       "disjoint_measured_gain_bytes": 89,
@@ -27,11 +28,20 @@
       "heldout_measured_gain_bytes": 15,
       "heldout_gain_bytes_per_proportional_1m": 74.99993757724815,
       "maximum_incremental_program_bytes": 9596,
-      "required_exact_10m_gain_bytes": 884,
-      "maximum_exact_10m_archive_bytes": 1634811,
+      "prior_bzip2_required_exact_10m_gain_bytes": 884,
+      "prior_bzip2_maximum_exact_10m_archive_bytes": 1634811,
+      "exact_10m_archive_bytes": 1635174,
+      "exact_10m_saved_bytes": 521,
+      "exact_10m_gain_bytes_per_1m": 52.1,
+      "exact_10m_forecast_score": 109452151,
+      "exact_10m_forecast_margin_bytes": 47849,
+      "prior_bzip2_exact_10m_archive_ceiling_margin_bytes": -363,
       "score_credit_bytes": 0,
       "source_paths": [
         "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
+        "results/endpoint428_pair_layer0_online_native_10m_v1/receipt.json",
+        "results/endpoint428_pair_layer0_online_lzma_package_v1/receipt.json",
+        "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
         "results/endpoint428_pair_layer0_online_mixer_1m_v1/receipt.json",
         "results/endpoint428_pair_layer0_online_mixer_1m_v1/screen.json",
         "results/endpoint428_pair_layer0_online_mixer_1m_v1/screen_source.cpp",
@@ -41,24 +51,24 @@
       ],
       "metric_assertions": [
         {
-          "source": "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
-          "pointer": "/prefix/candidate_archive_bytes",
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/candidate_archive_bytes_10m",
           "candidate_field": "archive_bytes"
         },
         {
-          "source": "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
-          "pointer": "/economics/candidate_program_bytes",
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/candidate_package_bytes",
           "candidate_field": "program_bytes"
         },
         {
-          "source": "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
-          "pointer": "/economics/incremental_program_bytes",
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/incremental_program_bytes_vs_base",
           "candidate_field": "incremental_program_bytes"
         },
         {
           "source": "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
           "pointer": "/economics/provisional_prefix_forecast_score_bytes",
-          "candidate_field": "forecast_score"
+          "candidate_field": "opening_prefix_forecast_score"
         },
         {
           "source": "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
@@ -103,21 +113,50 @@
         {
           "source": "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
           "pointer": "/economics/required_exact_10m_gain_bytes",
-          "candidate_field": "required_exact_10m_gain_bytes"
+          "candidate_field": "prior_bzip2_required_exact_10m_gain_bytes"
         },
         {
           "source": "results/endpoint428_pair_layer0_online_native_1m_v1/receipt.json",
           "pointer": "/economics/maximum_exact_10m_archive_bytes",
-          "candidate_field": "maximum_exact_10m_archive_bytes"
+          "candidate_field": "prior_bzip2_maximum_exact_10m_archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/candidate_archive_bytes_10m",
+          "candidate_field": "exact_10m_archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/saved_bytes_10m",
+          "candidate_field": "exact_10m_saved_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/saved_bytes_per_1m",
+          "candidate_field": "exact_10m_gain_bytes_per_1m"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/conservative_provisional_score_bytes",
+          "candidate_field": "forecast_score"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_lzma_replay_v1/receipt.json",
+          "pointer": "/economics/provisional_target_margin_bytes",
+          "candidate_field": "exact_10m_forecast_margin_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_online_native_10m_v1/receipt.json",
+          "pointer": "/economics/archive_ceiling_margin_bytes",
+          "candidate_field": "prior_bzip2_exact_10m_archive_ceiling_margin_bytes"
         }
       ],
       "source_required": true,
-      "decision": "The frozen native candidate exactly reproduced its shadow P1, saved 67 bytes at 1M, roundtripped, deterministically rebuilt and re-encoded, and stayed under the decimal memory limit. Its deterministic source package costs 1,747 bytes over endpoint428, giving a provisional counted forecast of 109,492,151. A cold-reset offset-500M archive independently saved 89 bytes. These are constructive prefix and disjoint-transfer results, not a full-corpus score.",
-      "next_gate": "Complete the frozen exact 10M archive. Require at least 884 bytes of gain over endpoint428's 1,635,695-byte archive, so the candidate ceiling is exactly 1,634,811. Decode and deterministically re-encode only if that economics ceiling passes.",
+      "decision": "The frozen exact 10M archive is 1,635,174 bytes, saving 521 bytes (52.1 B/M) over endpoint428. The immutable BZip2 accounting record missed its frozen ceiling, but the independently reconstructed 278,825-byte LZMA source ZIP saves 72,117 package bytes and changes the counted forecast to 109,452,151 (10.9452151%), 47,849 bytes below target. Exact decode and independent deterministic re-encode pass with clean decimal-memory guards, so the full-1G gate is authorized.",
+      "next_gate": "Freeze the exact LZMA package and wrapper identities, then run guarded exact full-enwik9 encode, decode, deterministic re-encode, and official package-plus-archive accounting.",
       "disqualifiers": [
-        "No terminal exact 10M economics result",
         "No exact full-corpus result",
-        "The 109,492,151 score is a calibrated prefix projection, not official proof"
+        "The 109,452,151 score is an exact-10M calibrated projection, not official proof"
       ]
     },
     {
@@ -299,19 +338,20 @@
       "gain_bytes_per_1m": 181.8,
       "score_credit_bytes": 0,
       "source_paths": [
+        "results/cmix21_lstm200_fx2lite428_context_recovery_10m_v1/receipt.json",
         "docs/status_receipt.json",
         "docs/research_register.md",
         "ALGORITHMS.md"
       ],
       "metric_assertions": [
         {
-          "source": "docs/status_receipt.json",
-          "pointer": "/best_forecast/projected_score",
+          "source": "results/cmix21_lstm200_fx2lite428_context_recovery_10m_v1/receipt.json",
+          "pointer": "/economics/conservative_projected_score_bytes",
           "candidate_field": "forecast_score"
         },
         {
-          "source": "docs/status_receipt.json",
-          "pointer": "/best_forecast/archive_bytes",
+          "source": "results/cmix21_lstm200_fx2lite428_context_recovery_10m_v1/receipt.json",
+          "pointer": "/economics/candidate_archive_bytes_10m",
           "candidate_field": "archive_bytes"
         }
       ],

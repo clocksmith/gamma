@@ -72,24 +72,34 @@ def build_shar(root: pathlib.Path, names: list[str], output: pathlib.Path) -> No
     output.chmod(0o755)
 
 
-def build_package(bundle: pathlib.Path, output: pathlib.Path) -> None:
+ZIP_METHODS = {
+    "bzip2": (zipfile.ZIP_BZIP2, 9),
+    "lzma": (zipfile.ZIP_LZMA, None),
+}
+
+
+def build_package(
+    bundle: pathlib.Path, output: pathlib.Path, *, zip_method: str = "bzip2"
+) -> None:
     """Write the counted two-entry source package deterministically."""
 
+    compression, compresslevel = ZIP_METHODS[zip_method]
     output.parent.mkdir(parents=True, exist_ok=True)
     entries = (
         ("Makefile", PACKAGE_MAKEFILE, 0o100644),
         ("source_bundle.sh", bundle.read_bytes(), 0o100755),
     )
-    with zipfile.ZipFile(
-        output,
-        "w",
-        compression=zipfile.ZIP_BZIP2,
-        compresslevel=9,
-        strict_timestamps=True,
-    ) as archive:
+    options = {
+        "mode": "w",
+        "compression": compression,
+        "strict_timestamps": True,
+    }
+    if compresslevel is not None:
+        options["compresslevel"] = compresslevel
+    with zipfile.ZipFile(output, **options) as archive:
         for name, payload, mode in entries:
             info = zipfile.ZipInfo(name, date_time=PACKAGE_TIMESTAMP)
-            info.compress_type = zipfile.ZIP_BZIP2
+            info.compress_type = compression
             info.create_system = 3
             info.external_attr = (mode & 0xFFFF) << 16
             archive.writestr(info, payload)
@@ -109,12 +119,18 @@ def main() -> int:
         type=pathlib.Path,
         help="optional deterministic ZIP containing Makefile and source bundle",
     )
+    parser.add_argument(
+        "--zip-method",
+        choices=tuple(ZIP_METHODS),
+        default="bzip2",
+        help="compression method for --package-zip (default: bzip2)",
+    )
     args = parser.parse_args()
     names = source_names(args.file_list)
     build_shar(args.root, names, args.output)
     print(f"source_shar={args.output} bytes={args.output.stat().st_size}")
     if args.package_zip is not None:
-        build_package(args.output, args.package_zip)
+        build_package(args.output, args.package_zip, zip_method=args.zip_method)
         print(f"source_zip={args.package_zip} bytes={args.package_zip.stat().st_size}")
     return 0
 

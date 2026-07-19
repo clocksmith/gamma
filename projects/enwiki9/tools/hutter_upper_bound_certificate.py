@@ -55,7 +55,12 @@ BASELINE_FORECAST = {
     "source": "results/forecast_frontier/forecasts.jsonl",
 }
 
-COUNTED_10M_FORECAST_EVIDENCE = "exact_guarded_10m_archive_screen"
+COUNTED_10M_FORECAST_EVIDENCE = {
+    "constructive_counted_exact_10m_lzma_package_and_codec_proof",
+    "counted_lzma_zip_package_plus_guarded_exact_10m_archive",
+    "exact_guarded_10m_archive_screen",
+    "guarded_exact_10m_archive_screen",
+}
 
 ACTIVE_CANDIDATE_ID = "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1"
 RUNNING_CANDIDATE_GLOB = "*/*rss_guard.json"
@@ -165,17 +170,25 @@ def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[st
             payload = json.loads(path.read_text())
         except (OSError, json.JSONDecodeError):
             continue
-        if payload.get("evidence_level") != COUNTED_10M_FORECAST_EVIDENCE:
+        if payload.get("evidence_level") not in COUNTED_10M_FORECAST_EVIDENCE:
             continue
         scope = payload.get("scope")
         economics = payload.get("economics")
         decision = payload.get("decision")
+        proof = payload.get("proof")
         if not isinstance(scope, dict) or scope.get("raw_bytes") != 10_000_000:
             continue
         if not isinstance(economics, dict) or not isinstance(decision, dict):
             continue
-        projected_score = economics.get("conservative_projected_score_bytes")
-        target_score = economics.get("target_score_bytes")
+        projected_score = economics.get(
+            "conservative_projected_score_bytes",
+            economics.get("conservative_provisional_score_bytes"),
+        )
+        projected_margin = economics.get(
+            "conservative_projected_margin_bytes",
+            economics.get("provisional_target_margin_bytes"),
+        )
+        target_score = economics.get("target_score_bytes", TARGET_10_95)
         if (
             isinstance(projected_score, bool)
             or not isinstance(projected_score, int)
@@ -199,12 +212,21 @@ def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[st
                 "source": source,
                 "scope_bytes": 10_000_000,
                 "archive_bytes": economics.get("candidate_archive_bytes_10m"),
-                "projected_margin_bytes": economics.get(
-                    "conservative_projected_margin_bytes"
+                "projected_margin_bytes": projected_margin,
+                "codec_replay_complete": bool(
+                    isinstance(proof, dict)
+                    and proof.get("roundtrip_ok") is True
+                    and proof.get("determinism_ok") is True
                 ),
             }
         )
-    return min(candidates, key=lambda row: int(row["projected_score"]))
+    return min(
+        candidates,
+        key=lambda row: (
+            int(row["projected_score"]),
+            0 if row.get("codec_replay_complete") is True else 1,
+        ),
+    )
 
 
 def iter_results(results_dir: pathlib.Path) -> list[Result]:
