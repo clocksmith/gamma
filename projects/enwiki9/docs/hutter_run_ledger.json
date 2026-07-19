@@ -7,27 +7,27 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 39,
-    "candidate_count": 37,
+    "run_count": 40,
+    "candidate_count": 38,
     "runs_by_scope": {
       "1024": 3,
       "10000": 9,
       "500000": 2,
       "600747": 1,
-      "1000000": 17,
+      "1000000": 18,
       "2000000": 1,
       "10000000": 5,
       "65536000": 1
     },
     "runs_by_evidence_tier": {
-      "causal_shadow": 19,
+      "causal_shadow": 20,
       "constructive_prefix": 7,
       "proxy": 13
     },
     "runs_by_status": {
       "active": 2,
       "historical_control": 2,
-      "retired_unchanged": 35
+      "retired_unchanged": 36
     }
   },
   "runs": [
@@ -973,6 +973,46 @@
         "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
         "tools/endpoint_sparse_gru_distill_screen.py",
         "tests/test_endpoint_sparse_gru_distill_screen.py"
+      ],
+      "scope_percent_of_corpus": 0.1,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint_dilated_context_1m_v1__1000000",
+      "candidate_id": "endpoint_dilated_context_1m_v1",
+      "parent_candidate_id": "endpoint_sparse_gru_distill_1m_v1",
+      "candidate_name": "dilated causal-byte FX2 residual model",
+      "rank": 40,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "primary_frontier_run": true,
+      "scope_bytes": 1000000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 177029,
+      "archive_bytes": 176946,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 83,
+      "gain_bytes_per_1m": 83.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": null,
+      "score_credit_bytes": 0,
+      "decision": "Development-only selection chooses epoch one. The seven-lag float model saves 83 exact bytes overall through train-only gain but regresses 0.780 bytes on sealed holdout; every later checkpoint regresses development further versus a payload-aware 693.186 B/M requirement.",
+      "next_gate": "None unchanged. Stop generic byte-history replacements and obtain component-level compact-state attribution or build a genuinely WRT-event-native endpoint.",
+      "disqualifiers": [
+        "Negative sealed-holdout gain",
+        "Negative development gain at every checkpoint",
+        "Full-scope gain is train-dominated and below twelve percent of the payload-aware floor",
+        "Float weights are not quantized or counted"
+      ],
+      "source_paths": [
+        "results/endpoint_dilated_context_1m_v1/decision.json",
+        "tools/endpoint_dilated_context_screen.py",
+        "tests/test_endpoint_dilated_context_screen.py"
       ],
       "scope_percent_of_corpus": 0.1,
       "forecast_percent": null,

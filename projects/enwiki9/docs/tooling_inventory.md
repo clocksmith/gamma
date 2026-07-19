@@ -104,6 +104,7 @@ heavy lane.
 | `compact_layer0_online_mixer_receipt.py` | Seals exact arithmetic and replay evidence for a frozen compact online-mixer probability stream. |
 | `endpoint_diagonal_reservoir_screen.cpp` | Screens decoder-built diagonal multi-timescale reservoirs over exact P1 streams or either endpoint of a same-execution pair trace, with development-only selection, exact range-coder accounting, and a neutral zero-update control. |
 | `endpoint_sparse_gru_distill_screen.py` | Distills a same-execution slow endpoint into a small causal byte GRU over a fast base endpoint, selects checkpoints without holdout reads, and applies exact truth-codelength plus payload-aware economics gates. |
+| `endpoint_dilated_context_screen.py` | Screens a small nonrecurrent residual model over exact prior bytes at power-of-two lags, with development-only selection, sealed holdout, exact range replay, and payload-aware economics. |
 | `endpoint428_mxx_sse_shadow.py` | Screens decoder-causal endpoint428 SSE tables keyed by FX2's reconstructed `mxx` state. |
 | `fx2lite_fxcm_hash_mixer_trace.cpp` | Emits causal compact hashed-mixer endpoints from FX2-lite's already-computed FXCM probability vector. |
 | `fx2_compact_trace_window.py` | Extracts and seals identity-checked cold-reset or cumulative compact probability windows without relabeling them as prefix evidence. |
