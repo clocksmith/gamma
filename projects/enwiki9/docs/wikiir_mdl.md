@@ -37,7 +37,7 @@ predictors never observe.
 
 ## Measured Creative Probe Ledger
 
-The first `1M` discovery population now has nine exact probe receipts.  These rows
+The first `1M` discovery population now has thirteen exact probe receipts.  These rows
 do not change the score forecast:
 
 | Probe | Reversible signal | Exact backend result | Decision |
@@ -51,12 +51,21 @@ do not change the score forecast:
 | Front-table title graph | `172` titles and `147` exact links remove `2,393` raw bytes | Guarded hybrid archive is `174,550` versus `173,963`, a `587`-byte regression | Retire the copied-title dictionary layout |
 | Tail-table title graph | Identical selected titles/links with the skeleton first; removes `2,388` raw bytes | Guarded hybrid archive is `174,515` versus `173,963`, a `552`-byte regression | Metadata placement recovers only `35` bytes; retire this serialization |
 | Dictionary-free two-pass title graph | Preserves literal titles, supports forward references, and maps `216` exact/normalized links; removes `3,967` raw bytes | LZMA saves `52` bytes before mode, but the guarded hybrid is `174,134` versus `173,963`, a `171`-byte regression. At `10M`, `2,556` links remove `20,682` raw bytes but LZMA loses `28`. | Retire unchanged preprocessing. Preserve the two-pass inverse idea for other event universes and move title reuse into a direct WRT probability endpoint. |
+| Causal page-list COPY/ADD delta | Earlier-page overlap is genuine: the target-list-only control finds `2,399` bytes over deterministic random at `1M`. The complete transform retains only `539` bytes across `15/171` pages after escaped raw skeletons, references, and inverse commands. | Exact materialization is `1,000,174` bytes (`-174` raw delta); LZMA is `291,900` versus literal `290,732`, a `1,168`-byte regression. Raw and archive inversion are deterministic. | Retire this link-target skeleton and COPY/ADD serialization. The overlap does not justify a target-backend gate; revisit only with a page-scoped event that shares more than target strings. |
+| Same-skeleton prior-page template values | `169` template occurrences have an earlier complete-page occurrence with the same ordered skeleton, but only one repeated field is even recoverable and its COPY command costs more than the value. Matched prior-selection and random controls both save `0`. | The exact MDL headroom is zero before raw surface, IR, backend, or source costs. | Retire same-field value COPY as a page-prototype event. Do not build a full transform; a successor must exploit typed reference/URL/date structure, not generic repeated template values. |
+| Self-trained URL-host dictionary | The decoder learns `396` hosts from literal prefix URLs and replaces `109` later hosts, removing `1,401` raw IR bytes with no static dictionary. The exact inverse, compressor roundtrip, and repeated archive are deterministic. | LZMA archive is `290,956` versus literal `290,732`, a `224`-byte regression before the mode byte. | Retire this host-reference serialization without a target-backend gate. Preserve the self-trained typed-dictionary mechanism only for a richer URL/reference event that can also exploit paths, dates, or citation field structure. |
+| Self-trained URL host-plus-first-path dictionary | The decoder reconstructs `396` hosts and `434` prefixes from prior literal URLs, then uses `42` host and `67` prefix references. The exact inverse removes `1,852` raw IR bytes and is deterministic. | LZMA archive is `290,932` versus literal `290,732`, a `200`-byte regression before the mode byte. The extra path structure recovers only `24` compressed bytes over host-only reuse. | Retire this URL-prefix serialization unchanged. Do not run the target backend; the local control is terminally negative before mode or source cost. |
+
+The earlier raw-MDL screen estimated `1,856` bytes for host-plus-first-path
+reuse. The exact four-byte-framed inverse realizes `1,852` bytes, so the
+screen-to-construction transfer is understood; the remaining failure is backend
+economics, not reversibility or hidden dictionary cost.
 
 Receipts and exact artifacts are under `/home/x/enwiki9-nonproof/results/` with
 the `wikiir_` and `wrt_sequence_memoizer_` prefixes.  The target-backend
 receipts include `wikiir_prior_page_delta_1m_v1_hybrid_screen.json`,
-`wikiir_webgraph_1m_v1_hybrid_screen.json`, and the `wikiir_title_vertex_*`
-screens.  They settle the measured
+`wikiir_webgraph_1m_v1_hybrid_screen.json`, the `wikiir_title_vertex_*`
+screens, and `wikiir_page_list_delta_1m_v1_materialization.json`.  They settle the measured
 serializations negatively without claiming codec proofs: each exact raw-to-IR
 inverse passed and each guarded encode completed, but backend decode was
 intentionally skipped after the terminal archive-size miss.  Schema v2 compares
@@ -257,8 +266,8 @@ orthogonal descriptions in this order:
 1. direct WRT entity continuation: build a decoder-reconstructed trie from
    completed title and link event sequences, activate it only within link
    targets, and score it incrementally against exact FX2 probabilities;
-2. actual page-list referentiation/intervalization only if its measured overlap
-   repays the set and occurrence-order streams;
+2. typed template/reference/URL columns or a prior-page prototype delta that
+   replaces more than isolated link targets;
 3. typed-field Skip-CTS over page/template/reference/URL state;
 4. a different parameterized grammar whose events remain useful to the target
    backend rather than expanding into byte-level ADD/COPY/RUN commands.

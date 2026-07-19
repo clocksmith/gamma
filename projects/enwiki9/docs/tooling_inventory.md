@@ -104,6 +104,9 @@ heavy lane.
 | `wrt_entity_node_backoff_trace.py` | Emits a bounded endpoint428-relative residual calibration trace keyed by decoder-built entity-trie node and support. |
 | `wrt_event_srstc_trace.py` | Emits an endpoint428-relative SRSTC-style continuation endpoint keyed by decoder-rebuilt raw semantic state before each completed WRT event. |
 | `cmix_aux_bucket_calibration.py` | Trains then freezes a compact decoder-rebuilt probability-bucket calibration over an auxiliary endpoint and exact base trace. |
+| `wikiir_page_list_referentiation_probe.py` | Measures WebGraph-style ordered link-list COPY/ADD headroom against earlier pages with a deterministic random-prior control. |
+| `wikiir_template_value_referentiation_probe.py` | Measures complete-page-causal same-skeleton template-field COPY/ADD headroom against a matched deterministic prior-template control. |
+| `wikiir_url_prefix_reuse_probe.py` | Screens a self-trained URL host-plus-first-path-prefix reference event with full opcode and identifier costs before inverse construction. |
 | `wrt_entity_regret_router_shadow.py` | Applies node-local causal reflected regret to the exact WRT entity-trie endpoint with frozen train/held-out accounting. |
 | `wrt_exact.py` | Parses FX2/CMIX21 WRT stores into exact decoded bytes and completed causal events shared by WRT-native scorers. |
 | `wrt_title_token_automaton.py` | Scores hard current-title transition rules and previous-title controls against an exact compact probability trace with raw/store/archive identity checks. |
