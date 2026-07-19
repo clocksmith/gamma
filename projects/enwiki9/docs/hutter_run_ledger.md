@@ -3,8 +3,8 @@
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
 - Target: `109,500,000` bytes (`10.9500000%`).
-- Candidate runs indexed: `28`.
-- Candidate lineages indexed: `26`.
+- Candidate runs indexed: `29`.
+- Candidate lineages indexed: `27`.
 
 ## 65,536,000 Bytes
 
@@ -67,6 +67,7 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | `endpoint428_mixer_flat_context_runtime_proxy_v1__10000` | `proxy` | `active` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_lstm_serial_forward_runtime_proxy_v1__10000` | `proxy` | `active` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_lstm_backward_dual_accum_runtime_proxy_v1__10000` | `proxy` | `active` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_inline_logit_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | opening_prefix | 2,817 | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 
 ## 1,024 Bytes
 
