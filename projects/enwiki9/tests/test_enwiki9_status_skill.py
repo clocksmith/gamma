@@ -67,7 +67,10 @@ def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
     assert status["official"]["verified_full_corpus_result"] is False
     assert status["canonical_forecast"]["forecast_margin_bytes"] == -57_404
     markdown = MODULE.render_markdown(status)
-    assert "Official distance: unknown" in markdown
+    assert "Verified official full-1G score: `unknown`" in markdown
+    assert "Best counted forecast: `109,557,404`" in markdown
+    assert "distance above target `57,404`" in markdown
+    assert "Active candidate provisional projection: `109,557,404`" in markdown
     assert "## Continue" in markdown
     assert "Continue toward the Hutter Prize" in markdown
     assert "Highest-value next gate: test" in markdown
@@ -138,3 +141,27 @@ def test_metric_assertion_detects_receipt_drift(tmp_path: Path) -> None:
     _, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
 
     assert any("disagrees with" in error for error in errors)
+
+
+def test_live_observation_renders_guarded_progress(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    live = {
+        "candidate": "candidate",
+        "scope_bytes": 10_000_000,
+        "progress_percent": 35.02,
+        "guard_status": "running",
+        "terminal": False,
+        "max_sampled_single_rss_kib": 9_000_000,
+        "max_sampled_tree_rss_kib": 9_010_000,
+        "official_decimal_limit_kib": 9_765_625,
+        "rss_guard_exceeded": False,
+    }
+
+    status, errors = MODULE.validate_and_normalize(
+        tmp_path, ledger, operational, live
+    )
+    markdown = MODULE.render_markdown(status)
+
+    assert errors == []
+    assert "scope `10,000,000`; progress `35.02%`" in markdown
+    assert "decimal single-process margin `765,625` KiB" in markdown
