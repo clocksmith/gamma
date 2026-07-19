@@ -97,6 +97,13 @@ class TranslationPromotionContractTests(unittest.TestCase):
     def test_contract_matches_schema(self) -> None:
         jsonschema.Draft202012Validator(self.schema).validate(self.contract)
 
+    def test_readiness_loader_halts_on_nonfinite_json(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            evidence = Path(directory) / "nonfinite.json"
+            evidence.write_text('{"loss": NaN}\n', encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "nonfinite JSON value NaN"):
+                _READINESS._load_json(evidence)
+
     def test_target_is_future_promotion_not_present_claim(self) -> None:
         self.assertEqual(self.contract["presentClaim"]["status"], "feasibility_only")
         self.assertEqual(self.contract["promotionDecision"]["status"], "blocked")
