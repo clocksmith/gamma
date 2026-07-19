@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clocksmith/gamma/projects/samer/domains/tinker_browser/evaluation-input.schema.json",
+  "title": "Tinker Browser Adapter Evaluation Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "evaluationId",
+    "artifact",
+    "populations",
+    "evidence",
+    "metrics",
+    "determinism",
+    "claimBoundary"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.tinker-browser-evaluation-input/v1" },
+    "evaluationId": { "type": "string", "minLength": 1 },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseModelId",
+        "baseCheckpointSha256",
+        "adapterId",
+        "adapterSha256",
+        "trainer",
+        "trainingRunId"
+      ],
+      "properties": {
+        "baseModelId": { "type": "string", "minLength": 1 },
+        "baseCheckpointSha256": { "$ref": "#/$defs/sha256" },
+        "adapterId": { "type": "string", "minLength": 1 },
+        "adapterSha256": { "$ref": "#/$defs/sha256" },
+        "trainer": { "const": "thinking-machines/tinker" },
+        "trainingRunId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "populations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "retention"],
+      "properties": {
+        "task": { "$ref": "#/$defs/taskPopulation" },
+        "retention": { "$ref": "#/$defs/retentionPopulation" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dopplerIdentity", "dopplerParity"],
+      "properties": {
+        "dopplerIdentity": { "$ref": "#/$defs/evidence" },
+        "dopplerParity": { "$ref": "#/$defs/evidence" }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "retention"],
+      "properties": {
+        "task": { "$ref": "#/$defs/taskMetric" },
+        "retention": { "$ref": "#/$defs/retentionMetric" }
+      }
+    },
+    "determinism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sameDeviceRunToRun",
+        "sameDeviceBatchInvariant",
+        "crossDeviceNumerical",
+        "crossDeviceOutputAgreement"
+      ],
+      "properties": {
+        "sameDeviceRunToRun": { "$ref": "#/$defs/numericalLevel" },
+        "sameDeviceBatchInvariant": { "$ref": "#/$defs/numericalLevel" },
+        "crossDeviceNumerical": { "$ref": "#/$defs/numericalLevel" },
+        "crossDeviceOutputAgreement": { "$ref": "#/$defs/outputAgreement" }
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^(sha256:)?[0-9a-f]{64}$" },
+    "fraction": { "type": "number", "minimum": 0, "maximum": 1 },
+    "populationBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "sha256", "sampleCount"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "role": { "type": "string" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sampleCount": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "taskPopulation": {
+      "allOf": [
+        { "$ref": "#/$defs/populationBase" },
+        { "properties": { "role": { "const": "sealed_task" } } }
+      ]
+    },
+    "retentionPopulation": {
+      "allOf": [
+        { "$ref": "#/$defs/populationBase" },
+        { "properties": { "role": { "const": "sealed_retention" } } }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receiptSha256", "decision"],
+      "properties": {
+        "receiptSha256": { "$ref": "#/$defs/sha256" },
+        "decision": { "enum": ["pass", "block"] }
+      }
+    },
+    "taskMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metricId", "base", "candidate", "minimumCandidate", "minimumGain"],
+      "properties": {
+        "metricId": { "type": "string", "minLength": 1 },
+        "base": { "$ref": "#/$defs/fraction" },
+        "candidate": { "$ref": "#/$defs/fraction" },
+        "minimumCandidate": { "$ref": "#/$defs/fraction" },
+        "minimumGain": { "$ref": "#/$defs/fraction" }
+      }
+    },
+    "retentionMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metricId", "base", "candidate", "maximumRegression"],
+      "properties": {
+        "metricId": { "type": "string", "minLength": 1 },
+        "base": { "$ref": "#/$defs/fraction" },
+        "candidate": { "$ref": "#/$defs/fraction" },
+        "maximumRegression": { "$ref": "#/$defs/fraction" }
+      }
+    },
+    "numericalLevel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "maxAbsDifference", "tolerance"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "maxAbsDifference": { "type": "number", "minimum": 0 },
+        "tolerance": { "type": "number", "minimum": 0 }
+      }
+    },
+    "outputAgreement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "matchingOutputs", "totalOutputs", "minimumAgreement"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "matchingOutputs": { "type": "integer", "minimum": 0 },
+        "totalOutputs": { "type": "integer", "minimum": 1 },
+        "minimumAgreement": { "$ref": "#/$defs/fraction" }
+      }
+    }
+  }
+}
