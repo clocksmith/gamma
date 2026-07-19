@@ -42,7 +42,13 @@ def source_names(path: pathlib.Path) -> list[str]:
     return names
 
 
-def inspect_zip(path: pathlib.Path) -> dict[str, object]:
+ZIP_METHODS = {
+    "bzip2": zipfile.ZIP_BZIP2,
+    "lzma": zipfile.ZIP_LZMA,
+}
+
+
+def inspect_zip(path: pathlib.Path, *, expected_method: str) -> dict[str, object]:
     with zipfile.ZipFile(path) as archive:
         names = archive.namelist()
         bad = archive.testzip()
@@ -53,6 +59,10 @@ def inspect_zip(path: pathlib.Path) -> dict[str, object]:
             "integrity_ok": bad is None,
             "all_entries_bzip2": all(
                 method == zipfile.ZIP_BZIP2 for method in methods
+            ),
+            "compression_method": expected_method,
+            "all_entries_expected_method": all(
+                method == ZIP_METHODS[expected_method] for method in methods
             ),
             "comment_bytes": len(archive.comment),
         }
@@ -88,6 +98,12 @@ def main() -> int:
     parser.add_argument("--zip-a", type=pathlib.Path, required=True)
     parser.add_argument("--zip-b", type=pathlib.Path, required=True)
     parser.add_argument("--dictionary-name", default="english.dic")
+    parser.add_argument(
+        "--zip-method",
+        choices=tuple(ZIP_METHODS),
+        default="bzip2",
+        help="required compression method for both source ZIPs",
+    )
     parser.add_argument("--clean-backend-a", type=pathlib.Path)
     parser.add_argument("--clean-backend-b", type=pathlib.Path)
     parser.add_argument("--clean-program-a", type=pathlib.Path)
@@ -113,8 +129,8 @@ def main() -> int:
 
     bundle_identity = args.bundle_a.read_bytes() == args.bundle_b.read_bytes()
     zip_identity = args.zip_a.read_bytes() == args.zip_b.read_bytes()
-    zip_a = inspect_zip(args.zip_a)
-    zip_b = inspect_zip(args.zip_b)
+    zip_a = inspect_zip(args.zip_a, expected_method=args.zip_method)
+    zip_b = inspect_zip(args.zip_b, expected_method=args.zip_method)
     reconstruction_ok, mismatch = verify_reconstruction(
         root=args.root, names=names, source_zip=args.zip_a
     )
@@ -164,7 +180,7 @@ def main() -> int:
         and zip_identity
         and zip_a["direct_entries_ok"]
         and zip_a["integrity_ok"]
-        and zip_a["all_entries_bzip2"]
+        and zip_a["all_entries_expected_method"]
         and zip_a["comment_bytes"] == 0
         and zip_b == zip_a
         and reconstruction_ok
