@@ -1,0 +1,9 @@
+--- a/src/mixer/lstm.cpp
++++ b/src/mixer/lstm.cpp
+@@ -93 +93 @@
+-  if (epoch_ == 0) {
++  if (epoch_ == 0 && (bptt_window_++ & 1U) == 0) {
+--- a/src/mixer/lstm.h
++++ b/src/mixer/lstm.h
+@@ -31,0 +32 @@
++  unsigned int bptt_window_ = 0;

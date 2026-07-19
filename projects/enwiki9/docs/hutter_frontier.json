@@ -1274,6 +1274,68 @@
         "No timing evidence authorized",
         "No exact-candidate source transplant"
       ]
+    },
+    {
+      "id": "endpoint428_lstm_alternate_bptt_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "name": "alternate-window recurrent backpropagation",
+      "rank": 29,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 1024,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 272,
+      "archive_bytes": 273,
+      "measured_gain_bytes": -1,
+      "gain_bytes_per_1m": -976.5625,
+      "score_credit_bytes": 0,
+      "roundtrip_ok": null,
+      "deterministic_reencode_ok": null,
+      "max_sampled_tree_rss_kib": 5889792,
+      "source_paths": [
+        "patches/cmix21_lstm_alternate_bptt_v1.patch",
+        "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/input_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/baseline_archive_bytes",
+          "candidate_field": "baseline_archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/candidate_archive_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/measured_gain_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/gain_bytes_per_1m",
+          "candidate_field": "gain_bytes_per_1m"
+        },
+        {
+          "source": "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/maximum_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "Alternating the 100-byte BPTT window loses one archive byte at the first 1K economics gate. The unpaired elapsed sample receives no credit, and no schedule ladder or larger run is authorized.",
+      "next_gate": "None unchanged. Pursue model-level endpoint concurrency or a new recurrent representation after synchronizing the checksum-bound exact source package.",
+      "disqualifiers": [
+        "Proportional score budget exceeded at 1K",
+        "No controlled timing evidence",
+        "Exact candidate source package unavailable locally"
+      ]
     }
   ],
   "quarantine": [
