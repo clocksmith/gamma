@@ -11,6 +11,10 @@ TOOLS = Path(__file__).resolve().parents[1] / "tools"
 sys.path.insert(0, str(TOOLS))
 
 from seal_wrt_hashed_residual_online import FROZEN_VARIANT, window  # noqa: E402
+from seal_wrt_hierarchical_phase_residual import (  # noqa: E402
+    FROZEN_VARIANT as HIERARCHICAL_VARIANT,
+    seal_window as seal_hierarchical_window,
+)
 
 
 def core_receipt(best_variant: str) -> dict:
@@ -80,10 +84,69 @@ def test_selection_rejects_a_different_winner(tmp_path: Path) -> None:
         )
 
 
-@pytest.mark.skipif(shutil.which("g++") is None, reason="g++ unavailable")
-def test_cpp_screen_builds_with_warnings_as_errors() -> None:
-    source = TOOLS / "wrt_hashed_residual_online_screen.cpp"
-    subprocess.run(
-        ["g++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "-fsyntax-only", str(source)],
-        check=True,
+def test_hierarchical_confirmation_ignores_local_selection(tmp_path: Path) -> None:
+    trace_dir = tmp_path / "trace"
+    trace_dir.mkdir()
+    for name in (
+        "input.raw",
+        "probability.trace",
+        "input.wrt.store",
+        "baseline.cmix",
+        "compression.guard.json",
+    ):
+        (trace_dir / name).write_bytes(name.encode())
+    core = tmp_path / "hierarchical.json"
+    core.write_text(
+        json.dumps(
+            {
+                "best_variant_id": "confirmation_local_winner",
+                "baseline_payload_bytes": 100,
+                "variants": [
+                    {
+                        "variant_id": HIERARCHICAL_VARIANT,
+                        "prior": 256,
+                        "strength_ppm": 250_000,
+                        "state_bytes": 13_615_104,
+                        "train_qbits": 10,
+                        "development_qbits": 8,
+                        "holdout_qbits": 6,
+                        "exact_saved_bytes": 4,
+                        "candidate_payload_bytes": 96,
+                        "positive_blocks": 1,
+                        "regressing_blocks": 0,
+                        "block_qbits": [24],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
     )
+    result = seal_hierarchical_window(
+        tmp_path,
+        phase="confirmation",
+        offset=10,
+        core_path=core,
+        trace_dir=trace_dir,
+    )
+    assert result["locally_best_variant_id"] == "confirmation_local_winner"
+    assert result["frozen_variant"]["variant_id"] == HIERARCHICAL_VARIANT
+    assert result["frozen_variant"]["exact_saved_bytes_per_million"] == 8.0
+
+
+@pytest.mark.skipif(shutil.which("g++") is None, reason="g++ unavailable")
+@pytest.mark.parametrize(
+    "source_name",
+    ["wrt_hashed_residual_online_screen.cpp", "wrt_hierarchical_phase_residual_screen.cpp"],
+)
+def test_cpp_screen_builds_with_warnings_as_errors(source_name: str) -> None:
+    source = TOOLS / source_name
+    command = [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsyntax-only",
+        str(source),
+    ]
+    subprocess.run(command, check=True)

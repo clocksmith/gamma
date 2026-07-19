@@ -165,6 +165,22 @@ source cost, so the unchanged endpoint is retired.  The positive primitive is
 retained for one hierarchical event-phase backoff construction that must clear
 target economics on disjoint exact traces.
 
+The hierarchical successor clears that discovery screen.  It backs full byte-
+prefix residuals off through 4-bit, 2-bit, and event-phase tables, and replaces
+linear FX2 confidence bins with deterministic tail-sensitive bins.  The frozen
+`p256_s250000_log128` form saves `45`, `40`, and `42` exact bytes on three
+disjoint `500K` traces (`90`, `80`, and `84 B/1M`); all `17` blocks are
+positive.  Direct endpoint428 transfer then retains only `44 B/1M`, below the
+`57.404 B/1M` debt before source cost, so that unchanged placement is retired.
+
+The hierarchy remains complementary to the available independent layer-0
+endpoint: it adds `41` exact bytes, with all `10` blocks positive, to the
+layer's existing `77`-byte gain.  The combined `118 B/1M` shadow gives a
+counterfactual `109,457,607` (`10.9457607%`) score after a conservative
+`18,203`-byte program ceiling, or `42,393` bytes under target.  That is not the
+canonical forecast because this layer-0 endpoint is not the exact native pair
+candidate and no combined native replay exists.
+
 ## Receipts
 
 - `results/random_window_novelty_v1/selection.json`
@@ -177,3 +193,4 @@ target economics on disjoint exact traces.
 - `results/random_window_novelty_v1/fx2_native/wrt_transfer_diagnostic.json`
 - `results/random_window_novelty_v1/fx2_native/decision.json`
 - `results/fx2_reference_residual_v1/wrt-hashed-residual-online-two-window-decision.json`
+- `results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-target-substrate-decision.json`

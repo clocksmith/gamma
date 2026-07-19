@@ -114,6 +114,8 @@ heavy lane.
 | `wrt_normalized_phrase_endpoint_trace.py` | Emits a causal normalized long-context WRT phrase endpoint as a `CMXAUX1` pair plus exact FX2 `CMX21P1` base for frozen generic calibration. |
 | `wrt_hashed_residual_online_screen.cpp` | Screens payload-free online hashed residual SSE over FX2 probability, completed WRT event-history hashes, causal current-event prefix, bit phase, and prior byte. |
 | `seal_wrt_hashed_residual_online.py` | Freezes the development-selected WRT residual variant, ignores confirmation-local reselection, binds both raw-FX2 traces and inputs by hash, and records endpoint428 debt economics. |
+| `wrt_hierarchical_phase_residual_screen.cpp` | Applies payload-free integer Bayesian residual backoff across WRT event phase, 2-bit, 4-bit, and full byte prefixes with tail-sensitive FX2 probability buckets. |
+| `seal_wrt_hierarchical_phase_residual.py` | Freezes the log-bucket hierarchy, binds three raw-FX2 and two target-substrate replays by content hash, retires insufficient direct endpoint428 transfer, and accounts the layer-0 composite counterfactual without forecast credit. |
 | `cmix_aux_bucket_calibration.py` | Trains then freezes a compact decoder-rebuilt probability-bucket calibration over an auxiliary endpoint and exact base trace. |
 | `wikiir_page_list_referentiation_probe.py` | Measures WebGraph-style ordered link-list COPY/ADD headroom against earlier pages with a deterministic random-prior control. |
 | `wikiir_template_value_referentiation_probe.py` | Measures complete-page-causal same-skeleton template-field COPY/ADD headroom against a matched deterministic prior-template control. |

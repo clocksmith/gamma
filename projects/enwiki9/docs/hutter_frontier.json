@@ -121,9 +121,66 @@
       ]
     },
     {
+      "id": "layer0_wrt_hierarchical_phase_residual_log128_v1",
+      "name": "layer-0 endpoint plus hierarchical WRT phase residual SSE",
+      "rank": 2,
+      "status": "active",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 118,
+      "gain_bytes_per_1m": 118.0,
+      "hierarchy_incremental_gain_bytes_per_1m": 41.0,
+      "program_ceiling_bytes": 18203,
+      "counterfactual_full_transfer_score": 109457607,
+      "counterfactual_full_transfer_margin_bytes": 42393,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-target-substrate-decision.json",
+        "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-endpoint428-1000000.json",
+        "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-layer0mixer10-1000000.json",
+        "tools/wrt_hierarchical_phase_residual_screen.cpp",
+        "tools/seal_wrt_hierarchical_phase_residual.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-target-substrate-decision.json",
+          "pointer": "/economics/layer0_composite_exact_saved_bytes_per_million",
+          "candidate_field": "gain_bytes_per_1m"
+        },
+        {
+          "source": "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-target-substrate-decision.json",
+          "pointer": "/target_substrate/layer0_composite/frozen_hierarchy_incremental_exact_saved_bytes",
+          "candidate_field": "hierarchy_incremental_gain_bytes_per_1m"
+        },
+        {
+          "source": "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-target-substrate-decision.json",
+          "pointer": "/economics/layer0_composite_program_ceiling_bytes",
+          "candidate_field": "program_ceiling_bytes"
+        },
+        {
+          "source": "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-target-substrate-decision.json",
+          "pointer": "/economics/layer0_composite_counterfactual_score_bytes",
+          "candidate_field": "counterfactual_full_transfer_score"
+        },
+        {
+          "source": "results/fx2_reference_residual_v1/wrt-hierarchical-phase-residual-target-substrate-decision.json",
+          "pointer": "/economics/layer0_composite_counterfactual_margin_bytes",
+          "candidate_field": "counterfactual_full_transfer_margin_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "The frozen hierarchy saves only 44 B/M directly over endpoint428 and is retired unchanged. Over the available independent layer-0 endpoint it adds 41 exact bytes with all 10 blocks positive to the layer's existing 77-byte gain. The combined 118 B/M shadow has a 109,457,607 counterfactual after a conservative 18,203-byte program ceiling.",
+      "next_gate": "Replay the frozen hierarchy over the exact native pair/layer-0 candidate P1, then integrate only if combined counted economics remain target-closing.",
+      "disqualifiers": [
+        "Available layer-0 endpoint is related to but not identical with the exact native pair/layer-0 candidate",
+        "No combined native archive, roundtrip, determinism, or runtime receipt",
+        "The 109,457,607 score is a counterfactual full-transfer calculation, not a forecast"
+      ]
+    },
+    {
       "id": "endpoint428_layer0_online_residual_v1",
       "name": "endpoint428 plus regret-gated online layer-0 residual mixer",
-      "rank": 2,
+      "rank": 3,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -159,7 +216,7 @@
     {
       "id": "endpoint428_layer0_sparse_residual_successor",
       "name": "endpoint428 plus static sparse compact layer-0 residual blend",
-      "rank": 3,
+      "rank": 4,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -193,7 +250,7 @@
     {
       "id": "endpoint428_layer0_residual_successor",
       "name": "endpoint428 plus one compact layer-0 residual endpoint",
-      "rank": 4,
+      "rank": 5,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -228,7 +285,7 @@
     {
       "id": "endpoint428_context_recovery_10m",
       "name": "compact-200 plus FX2-lite endpoint428",
-      "rank": 5,
+      "rank": 6,
       "status": "retired_unchanged",
       "evidence_tier": "constructive_prefix",
       "scope_bytes": 10000000,
@@ -266,7 +323,7 @@
     {
       "id": "srstc_blockposterior_raw_shadow",
       "name": "SRSTC block-posterior retrieval",
-      "rank": 6,
+      "rank": 7,
       "status": "active",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 65536000,
@@ -297,7 +354,7 @@
     {
       "id": "heterogeneous_112_plus_80",
       "name": "heterogeneous recurrent 112+80",
-      "rank": 7,
+      "rank": 8,
       "status": "retired_unchanged",
       "evidence_tier": "constructive_prefix",
       "scope_bytes": 10000000,
@@ -323,7 +380,7 @@
     {
       "id": "paqfree_96x2",
       "name": "PAQ-free recurrent 96x2",
-      "rank": 8,
+      "rank": 9,
       "status": "historical_control",
       "evidence_tier": "constructive_prefix",
       "scope_bytes": 10000000,
@@ -347,7 +404,7 @@
     {
       "id": "endpoint428_mxx_sse",
       "name": "endpoint428 mxx-keyed online SSE",
-      "rank": 9,
+      "rank": 10,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -381,7 +438,7 @@
     {
       "id": "wikiir_reference_delta_serializations_v1",
       "name": "WikiIR same-skeleton reference COPY/ADD layouts",
-      "rank": 10,
+      "rank": 11,
       "status": "retired_unchanged",
       "evidence_tier": "proxy",
       "scope_bytes": 2000000,
@@ -421,7 +478,7 @@
     {
       "id": "wrt_reference_prefix_cts_fx2_v1",
       "name": "Causal WRT reference-prefix CTS over exact FX2",
-      "rank": 11,
+      "rank": 12,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 500000,
@@ -458,7 +515,7 @@
     {
       "id": "wrt_normalized_phrase_context_regret_fx2_v1",
       "name": "Normalized WRT phrase copy with causal context regret",
-      "rank": 12,
+      "rank": 13,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 500000,
