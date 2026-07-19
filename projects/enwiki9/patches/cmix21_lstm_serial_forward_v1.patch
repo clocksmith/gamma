@@ -1,0 +1,9 @@
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -64,7 +64,6 @@ void LstmLayer::ForwardPass(const std::valarray<float>& input, int input_symbol,
+   last_state_[epoch_] = state_;
+
+-#pragma omp parallel for num_threads(3) schedule(static)
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+     float forget = forget_gate_.weights_[i][input_symbol];
+     float node = input_node_.weights_[i][input_symbol];
