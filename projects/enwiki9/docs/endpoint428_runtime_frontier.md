@@ -108,3 +108,27 @@ bounded atomic worker protocol, composed with the exact atomic endpoint
 handoff. It must first reproduce the frozen probability trace and archive, then
 show at least `10%` incremental matched `250K` runtime reduction over the atomic
 endpoint implementation. Anything less is terminal before `1M`.
+
+That candidate is terminal. Its `1K` archive and probability trace are exact,
+but on the first matched `250K` candidate run it reaches only `73.10%` after
+`152.59 s`, already beyond the `105.0611 s` ceiling derived from the completed
+`116.7345 s` atomic-endpoint reference. The adaptive atomic/futex dispatch does
+not convert the profiled barrier cost into wall-time savings; all remaining
+runs and every larger gate were stopped.
+
+The dual-`80` score-rescue branch is also closed. The retained `250000 ppm` WRT
+phase residual produces `44,952` bytes at `250K`. Doubling phase strength to
+`500000 ppm` produces `44,968`; changing the already-counted outer mixer to the
+pre-existing faster local-adaptation regime (`global24/local20`, warmup `128`,
+regret decay `12`) produces `44,991`. Both miss the precommitted `44,947` ceiling,
+so no further strength/rate ladder or `1M` run is authorized.
+
+Freezing both recurrent BPTT bodies after their first `1,000` horizon updates
+is terminal at the matched `250K` gate. The candidate archive is `44,986`, `28`
+bytes worse than the `44,958` reference. After the already-measured `1,407`-byte
+source reserve, its calibrated counted projection is `109,483,335` bytes
+(`10.9483335%`), leaving only `16,665` bytes of target margin. Runtime falls
+from `85.7544 s` to `81.7419 s`, a `4.679%` reduction, below the precommitted
+`30%` gate. Even the impossible upper bound of eliminating the measured BPTT
+region from the beginning cannot supply the official runtime reduction, so the
+remaining matched runs, decode, and every larger gate were stopped.
