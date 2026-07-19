@@ -1,0 +1,75 @@
+{
+  "schema": "gamma.tinker-browser-evaluation-input/v1",
+  "evaluationId": "synthetic.tinker-browser.mechanics",
+  "artifact": {
+    "baseModelId": "synthetic-qwen-3.5-4b",
+    "baseCheckpointSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "adapterId": "synthetic-tinker-lora",
+    "adapterSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "trainer": "thinking-machines/tinker",
+    "trainingRunId": "synthetic-not-a-tinker-run"
+  },
+  "populations": {
+    "task": {
+      "id": "synthetic.sealed-task",
+      "role": "sealed_task",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "sampleCount": 20
+    },
+    "retention": {
+      "id": "synthetic.sealed-retention",
+      "role": "sealed_retention",
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "sampleCount": 20
+    }
+  },
+  "evidence": {
+    "dopplerIdentity": {
+      "receiptSha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "decision": "pass"
+    },
+    "dopplerParity": {
+      "receiptSha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "decision": "pass"
+    }
+  },
+  "metrics": {
+    "task": {
+      "metricId": "synthetic_exact_match",
+      "base": 0.5,
+      "candidate": 0.7,
+      "minimumCandidate": 0.65,
+      "minimumGain": 0.1
+    },
+    "retention": {
+      "metricId": "synthetic_retention",
+      "base": 0.8,
+      "candidate": 0.79,
+      "maximumRegression": 0.02
+    }
+  },
+  "determinism": {
+    "sameDeviceRunToRun": {
+      "required": true,
+      "maxAbsDifference": 0,
+      "tolerance": 0
+    },
+    "sameDeviceBatchInvariant": {
+      "required": true,
+      "maxAbsDifference": 0,
+      "tolerance": 0
+    },
+    "crossDeviceNumerical": {
+      "required": false,
+      "maxAbsDifference": 0.0002,
+      "tolerance": 0.0001
+    },
+    "crossDeviceOutputAgreement": {
+      "required": false,
+      "matchingOutputs": 19,
+      "totalOutputs": 20,
+      "minimumAgreement": 0.95
+    }
+  },
+  "claimBoundary": "Synthetic evaluator fixture only. It is not a Tinker run, model result, sealed evaluation, or promotion receipt."
+}

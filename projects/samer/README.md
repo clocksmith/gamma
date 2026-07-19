@@ -1276,6 +1276,17 @@ or page-order proxy does not answer it.
   intermediate receipts.
 - Profile: [Simulatte construction](./domains/simulatte/README.md).
 
+### Tinker-trained browser adapters
+
+- Primary metric: sealed task gain over the byte-identical base checkpoint.
+- Guardrails: sealed retention, Doppler import and inference parity, exact
+  adapter lineage, and explicit determinism levels.
+- Controls: base checkpoint, Tinker PEFT candidate, and any declared training
+  or adapter-capacity control under matched populations.
+- Selection: exact Doppler browser artifact behavior, not trainer loss or an
+  upstream PEFT score.
+- Profile: [Tinker browser adapter evaluation](./domains/tinker_browser/README.md).
+
 ## Evidence For The Outer Contract
 
 The results below are evidence for SAME-R's evaluation, control, selection, and
