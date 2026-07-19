@@ -7,27 +7,27 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 36,
-    "candidate_count": 34,
+    "run_count": 37,
+    "candidate_count": 35,
     "runs_by_scope": {
       "1024": 3,
       "10000": 9,
       "500000": 2,
       "600747": 1,
-      "1000000": 14,
+      "1000000": 15,
       "2000000": 1,
       "10000000": 5,
       "65536000": 1
     },
     "runs_by_evidence_tier": {
-      "causal_shadow": 16,
+      "causal_shadow": 17,
       "constructive_prefix": 7,
       "proxy": 13
     },
     "runs_by_status": {
       "active": 2,
       "historical_control": 2,
-      "retired_unchanged": 32
+      "retired_unchanged": 33
     }
   },
   "runs": [
@@ -854,6 +854,45 @@
         "results/endpoint_fixed_share_stack_1m_v1/screen.json",
         "tools/endpoint_fixed_share_stack.cpp",
         "tests/test_endpoint_fixed_share_stack.py"
+      ],
+      "scope_percent_of_corpus": 0.1,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "fx2_diagonal_reservoir_replacement_1m_v1__1000000",
+      "candidate_id": "fx2_diagonal_reservoir_replacement_1m_v1",
+      "parent_candidate_id": null,
+      "candidate_name": "diagonal-reservoir FX2 replacement",
+      "rank": 37,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "primary_frontier_run": true,
+      "scope_bytes": 1000000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": null,
+      "archive_bytes": null,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": null,
+      "score_credit_bytes": 0,
+      "decision": "Development-only selection chooses the zero-update control and saves no bytes. The best post-hoc variant saves only five bytes, regresses three blocks, and loses development qbits versus 681.114 B/M required before code.",
+      "next_gate": "None unchanged. Require cross-state interactions, token/event inputs, or teacher-trained dynamics in a new fast replacement representation.",
+      "disqualifiers": [
+        "Zero development-selected gain",
+        "Post-hoc gain is less than one percent of required headroom",
+        "No native archive, runtime, or full-corpus evidence"
+      ],
+      "source_paths": [
+        "results/fx2_diagonal_reservoir_replacement_1m_v1/decision.json",
+        "tools/endpoint_diagonal_reservoir_screen.cpp",
+        "tests/test_endpoint_diagonal_reservoir_screen.py"
       ],
       "scope_percent_of_corpus": 0.1,
       "forecast_percent": null,

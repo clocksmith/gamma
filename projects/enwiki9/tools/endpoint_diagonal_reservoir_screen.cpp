@@ -255,6 +255,8 @@ class DiagonalReservoir {
 
 struct Args {
   std::string p1;
+  std::string pair_trace;
+  unsigned int pair_endpoint = 0;
   std::string store;
   std::string output;
 };
@@ -266,12 +268,19 @@ Args ParseArgs(int argc, char** argv) {
     if (++index >= argc) throw std::runtime_error("missing value for " + key);
     const std::string value = argv[index];
     if (key == "--p1") args.p1 = value;
+    else if (key == "--pair-trace") args.pair_trace = value;
+    else if (key == "--pair-endpoint") {
+      args.pair_endpoint = static_cast<unsigned int>(std::stoul(value));
+    }
     else if (key == "--wrt-store") args.store = value;
     else if (key == "--output") args.output = value;
     else throw std::runtime_error("unknown option " + key);
   }
-  if (args.p1.empty() || args.store.empty() || args.output.empty()) {
-    throw std::runtime_error("--p1, --wrt-store, and --output are required");
+  if ((args.p1.empty() == args.pair_trace.empty()) || args.store.empty() ||
+      args.output.empty() || args.pair_endpoint > 1) {
+    throw std::runtime_error(
+        "exactly one of --p1 or --pair-trace, a --pair-endpoint in 0..1, "
+        "--wrt-store, and --output are required");
   }
   return args;
 }
@@ -281,24 +290,36 @@ Args ParseArgs(int argc, char** argv) {
 int main(int argc, char** argv) {
   try {
     const Args args = ParseArgs(argc, argv);
-    const auto p1 = ReadFile(args.p1);
+    const auto base_trace = ReadFile(
+        args.p1.empty() ? args.pair_trace : args.p1);
     const auto store = ReadFile(args.store);
-    const std::array<unsigned char, 8> magic = {
+    const std::array<unsigned char, 8> p1_magic = {
         'C', 'M', 'X', '2', '1', 'P', '1', 0};
-    if (p1.size() < 16 ||
-        !std::equal(magic.begin(), magic.end(), p1.begin())) {
-      throw std::runtime_error("invalid P1 magic");
+    const std::array<unsigned char, 8> pair_magic = {
+        'C', 'M', 'X', 'A', 'U', 'X', '1', 0};
+    const bool use_pair = !args.pair_trace.empty();
+    const auto& expected_magic = use_pair ? pair_magic : p1_magic;
+    if (base_trace.size() < 16 || !std::equal(expected_magic.begin(),
+                                               expected_magic.end(),
+                                               base_trace.begin())) {
+      throw std::runtime_error(use_pair ? "invalid pair-trace magic"
+                                        : "invalid P1 magic");
     }
-    const std::uint64_t rows = ReadU64(p1.data() + 8);
-    if (rows == 0 || (rows & 7) != 0 || p1.size() != 16 + rows * 2 ||
+    const std::uint64_t rows = ReadU64(base_trace.data() + 8);
+    const std::uint64_t record_bytes = use_pair ? 4 : 2;
+    if (rows == 0 || (rows & 7) != 0 ||
+        base_trace.size() != 16 + rows * record_bytes ||
         store.size() != 5 + rows / 8) {
-      throw std::runtime_error("P1/store dimensions differ");
+      throw std::runtime_error("base trace/store dimensions differ");
     }
 
     const std::vector<Config> configs = {
         {8, 25}, {8, 26}, {8, 27}, {8, 28}, {8, 29}, {8, 30}, {8, 44},
         {16, 25}, {16, 26}, {16, 27}, {16, 28}, {16, 29}, {16, 30}, {16, 44},
-        {32, 25}, {32, 26}, {32, 27}, {32, 28}, {32, 29}, {32, 30}, {32, 44}};
+        {32, 25}, {32, 26}, {32, 27}, {32, 28}, {32, 29}, {32, 30}, {32, 44},
+        {64, 25}, {64, 26}, {64, 27}, {64, 28}, {64, 29}, {64, 30}, {64, 44},
+        {128, 25}, {128, 26}, {128, 27}, {128, 28}, {128, 29}, {128, 30},
+        {128, 44}};
     Tables tables;
     std::vector<DiagonalReservoir> models;
     models.reserve(configs.size());
@@ -312,7 +333,8 @@ int main(int argc, char** argv) {
     const std::uint64_t holdout_start = rows * 4 / 5;
 
     for (std::uint64_t row = 0; row < rows; ++row) {
-      const unsigned char* record = p1.data() + 16 + row * 2;
+      const unsigned char* record = base_trace.data() + 16 +
+          row * record_bytes + (use_pair ? args.pair_endpoint * 2 : 0);
       const std::uint16_t base =
           static_cast<std::uint16_t>(record[0] | (record[1] << 8));
       if (base == 0) throw std::runtime_error("zero P1 probability");
@@ -354,6 +376,10 @@ int main(int argc, char** argv) {
         << "  \"evidence_level\": \"causal_endpoint428_probability_shadow\",\n"
         << "  \"rows\": " << rows << ",\n"
         << "  \"raw_bytes\": " << rows / 8 << ",\n"
+        << "  \"base_trace_kind\": \""
+        << (use_pair ? "same_execution_pair_endpoint" : "p1") << "\",\n"
+        << "  \"pair_endpoint\": "
+        << (use_pair ? std::to_string(args.pair_endpoint) : "null") << ",\n"
         << "  \"selection_reads_holdout\": false,\n"
         << "  \"baseline_payload_bytes\": " << baseline.bytes() << ",\n"
         << "  \"best_variant_id\": \"" << configs[best].Name() << "\",\n"
