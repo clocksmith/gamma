@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "receipt_type": "layer0_pair_phase_composite_decision",
+  "evidence_level": "causal_exact_p1_shadow",
+  "scope": {"raw_bytes": 1000000, "rows": 4805936, "block_bytes": 65536},
+  "hypothesis": "Use the strongest individual compact layer0 endpoint as the arithmetic base, adapt the free compact/FX2-lite428 pair around it, then apply the frozen WRT phase residual.",
+  "inputs": {
+    "endpoint428_p1_sha256": "1aba2ddb90c9e3a9a2a350f7d8d14f65a6128b96e6baa7bd50e09dacaca06955",
+    "layer0_mixer10_p1_sha256": "3ad0f2fa7ee1340c769042c5e7c3c648608073f4d4d472b44db5b972925a5360",
+    "pair_trace_sha256": "6585007e1e359606e9d88924d432a31dae4ca6cd86af56a8d5a24af43a13ab19",
+    "wrt_store_sha256": "1e209c7d19a22af5ce6a1de3bab1fc636669f40686aebd88bbe9dc8e5411e583"
+  },
+  "causality": {
+    "prediction_precedes_current_truth": true,
+    "online_pair_weights_update_after_current_truth": true,
+    "phase_statistics_update_after_current_truth": true,
+    "shipped_weights_required": false,
+    "phase_payload_bytes": 0
+  },
+  "pair_adaptation": {
+    "selection_reads_holdout": false,
+    "selected_config": "hier_regime_g24_l22",
+    "train_gain_qbits": 33453,
+    "development_gain_qbits": 17614,
+    "holdout_gain_qbits": 17939,
+    "base_repeated_layer0_sha256": "b9449dcdfbe39aef98b7955905a04137689ea1b5b51a5dfba3eb3a4f5a3ec2b8",
+    "candidate_p1_sha256": "acacc13c8e18354324149520fa8e23a555c6009b8c08e568c1b1cd1aa3aefc63",
+    "normalized_screen_sha256": "4aa54d9131b7aafe5731abbba734185517765d1aaa6fb75f20f2f6402aec3edc",
+    "duplicate_probability_replay": true
+  },
+  "exact_chain": {
+    "endpoint428_payload_bytes": 173926,
+    "layer0_mixer10_payload_bytes": 173849,
+    "layer0_gain_over_endpoint428_bytes": 77,
+    "pair_adapted_payload_bytes": 173817,
+    "pair_incremental_gain_bytes": 32,
+    "pair_proportional_holdout_incremental_gain_bytes_per_1m": 35,
+    "phase_calibrated_payload_bytes": 173786,
+    "phase_incremental_gain_bytes": 31,
+    "combined_gain_over_endpoint428_bytes": 140,
+    "combined_gain_bytes_per_1m": 140,
+    "phase_positive_blocks": 9,
+    "phase_regressing_blocks": 1,
+    "phase_receipt_sha256": "248ccafa9840939712bbaa4d67e7bb231120f98b30df7aab8b98f9743972a022",
+    "duplicate_phase_replay": true
+  },
+  "economics": {
+    "canonical_base_score_bytes": 109557404,
+    "canonical_target_debt_bytes": 57404,
+    "conservative_program_ceiling_bytes": 13407,
+    "required_gain_bytes_per_1m": 70.811,
+    "measured_gain_bytes_per_1m": 140,
+    "counterfactual_full_transfer_score_bytes": 109430811,
+    "counterfactual_full_transfer_percent": 10.9430811,
+    "counterfactual_margin_bytes": 69189,
+    "score_credit_bytes": 0
+  },
+  "decision": {
+    "verdict": "promote_to_native_source_integration",
+    "reason": "The three mechanisms retain complementary exact gain and clear the conservative debt-plus-code floor by 69.189 B/1M. The architecture is stronger than the prior layer0-plus-phase shadow, but related-stream transfer and native correctness remain unproved.",
+    "promotion_authorized": true,
+    "native_or_full_score_claim_authorized": false,
+    "next_action": "In a fresh source package, make compact layer0 mixer10 the arithmetic base, apply the frozen pair online mixer, then WrtPhaseResidual Predict/Perceive. Require P1 identity, counted package cost, exact archive gain, roundtrip, determinism, decimal-10GB RSS, and broader-scope transfer before a full gate."
+  },
+  "claim_boundary": "Exact deterministic causal 1M shadow composition over related locally available P1 streams. The layer0 endpoint is not the active native pair/layer0 candidate stream. The counterfactual is not a forecast or official score."
+}
