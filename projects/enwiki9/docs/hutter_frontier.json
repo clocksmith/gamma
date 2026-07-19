@@ -761,6 +761,99 @@
         "Shell-regime backoff is negative incrementally on both substrates",
         "Layer-0 development transfer is negative and block regressions increase"
       ]
+    },
+    {
+      "id": "wrt_phase_newton_residual_blend_v1",
+      "name": "WRT phase Newton residual and equal-correction blend",
+      "rank": 16,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 3,
+      "gain_bytes_per_1m": 3.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/wrt_phase_newton_residual_1m_v1/decision.json",
+        "tools/wrt_phase_newton_residual_screen.cpp",
+        "tests/test_wrt_phase_newton_residual_screen.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/wrt_phase_newton_residual_1m_v1/decision.json",
+          "pointer": "/independent_layer0/equal_correction_blend/incremental_vs_frozen_bytes",
+          "candidate_field": "measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Confidence-weighted logit geometry improves split qbits and block consistency, but the equal blend adds only one endpoint428 byte and three independent-layer0 bytes over the smaller frozen phase component. New source gzip cost is 4,924 bytes.",
+      "next_gate": "None unchanged. Preserve the geometry only inside a genuinely new endpoint with independent headroom.",
+      "disqualifiers": [
+        "Incremental gain is below the remaining debt before source cost",
+        "Compressed source costs more than the measured total gain",
+        "No native archive evidence"
+      ]
+    },
+    {
+      "id": "endpoint_residual_surprise_history_v1",
+      "name": "endpoint428 surprise-history retrieval",
+      "rank": 17,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 12,
+      "gain_bytes_per_1m": 12.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint_residual_history_1m_v1/decision.json",
+        "tools/endpoint_residual_history_screen.cpp",
+        "tests/test_endpoint_residual_history_screen.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint_residual_history_1m_v1/decision.json",
+          "pointer": "/selection_result/exact_saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Development selects history-2, which saves 12 exact bytes but retains only 453 holdout qbits and regresses three of ten blocks. Longer histories are holdout-negative.",
+      "next_gate": "None unchanged. Residual-native retrieval must create a different coded endpoint rather than another surprise calibration table.",
+      "disqualifiers": [
+        "Selection misses 57.404 B/1M before source cost",
+        "Three block regressions",
+        "Independent confirmation withheld after failed selection gate"
+      ]
+    },
+    {
+      "id": "endpoint428_pair_only_online_mixer_v1",
+      "name": "endpoint428 pair-only online mixer",
+      "rank": 18,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": 22,
+      "gain_bytes_per_1m": 22.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_pair_only_online_mixer_1m_v1/decision.json",
+        "tools/compact_layer0_online_mixer_screen.cpp",
+        "tools/compact_layer0_online_mixer_receipt.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_pair_only_online_mixer_1m_v1/decision.json",
+          "pointer": "/exact_replay/full_saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "The holdout-blind frozen regime-regret mixer saves 22 B/1M overall and 25 B/1M proportional holdout with zero holdout regressions when all layer0 features are algebraically zero.",
+      "next_gate": "None unchanged. Recover or regenerate individual layer0 endpoints, or create a different endpoint universe.",
+      "disqualifiers": [
+        "Pair-only rate misses 57.404 B/1M before code",
+        "No native archive evidence",
+        "Most stronger-mixer gain depends on unavailable individual layer0 endpoints"
+      ]
     }
   ],
   "quarantine": [
