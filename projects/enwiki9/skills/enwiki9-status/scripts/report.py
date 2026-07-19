@@ -316,9 +316,27 @@ def render_markdown(status: dict[str, Any]) -> str:
             "",
             "Only an exact 1,000,000,000-byte replay with complete accounting, "
             "roundtrip, and score at or below 109,500,000 is a win.",
-            "",
         ]
     )
+    if official["won"]:
+        continuation = (
+            "Hutter target achieved. Preserve the exact proof, reproduce it from "
+            "the counted package, and complete submission packaging."
+        )
+    else:
+        active = next(
+            (
+                row
+                for row in status["candidates"]
+                if row.get("status") in {"active", "promotable"}
+            ),
+            None,
+        )
+        next_gate = active.get("next_gate") if active else None
+        continuation = "Continue toward the Hutter Prize."
+        if next_gate:
+            continuation += f" Highest-value next gate: {next_gate}"
+    lines.extend(["", "## Continue", "", continuation, ""])
     return "\n".join(lines)
 
 

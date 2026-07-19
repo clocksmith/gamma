@@ -1,11 +1,14 @@
 diff --git a/Makefile b/Makefile
 --- a/Makefile
 +++ b/Makefile
-@@ -8,3 +8,3 @@
- PROGRAM := comp9a-decomp9
- ALIASES := comp9a decomp9
+@@ -10 +10 @@
 -SOURCE_ARCHIVE := ../comp9a-decomp9-original-lstm200-fx2lite428-contextguard-source.zip
 +SOURCE_ARCHIVE := ../comp9a-decomp9-original-lstm200-fx2lite428-onlinepairlayer0-source.zip
+diff --git a/cmix-nopaq.make b/cmix-nopaq.make
+--- a/cmix-nopaq.make
++++ b/cmix-nopaq.make
+@@ -10,0 +11 @@
++	src/online-residual-mixer.cpp \
 diff --git a/src/online-residual-mixer.h b/src/online-residual-mixer.h
 new file mode 100644
 --- /dev/null
@@ -205,55 +208,26 @@ new file mode 100644
 diff --git a/src/predictor.h b/src/predictor.h
 --- a/src/predictor.h
 +++ b/src/predictor.h
-@@ -13,6 +13,7 @@
- #endif
- #include "context-manager.h"
- #include "fixed-logit-blend.h"
+@@ -15,0 +16 @@
 +#include "online-residual-mixer.h"
- 
- #include <vector>
- #include <set>
-@@ -59,6 +60,7 @@
-   Sigmoid sigmoid_;
-   std::vector<std::unique_ptr<ByteMixer>> byte_mixers_;
-   std::vector<bool> vocab_;
-   FixedLogitBlend fixed_logit_blend_;
+@@ -62,0 +64 @@
 +  OnlineResidualMixer online_residual_mixer_;
-   void* fx2lite_endpoint_;
- };
 diff --git a/src/predictor.cpp b/src/predictor.cpp
 --- a/src/predictor.cpp
 +++ b/src/predictor.cpp
-@@ -598,8 +598,12 @@ float Predictor::Predict() {
-   auxiliary_average /= auxiliary_.size();
-   manager_.auxiliary_context_ = auxiliary_average * 15;
- 
+@@ -600,0 +601,2 @@
 +  std::array<std::uint16_t,
 +      OnlineResidualMixer::kEndpointCount> residual_endpoints{};
-   for (unsigned int i = 0; i < mixers_[0].size(); ++i) {
-     float p = mixers_[0][i]->Mix();
+@@ -602,0 +605,2 @@
 +    residual_endpoints[i] = static_cast<std::uint16_t>(
 +        1 + static_cast<unsigned int>(65534.0f * Sigmoid::Logistic(p)));
-     layers_[0]->SetExtraInput(p);
-     layers_[1]->SetStretchedInput(i, p);
-     layers_[2]->SetStretchedInput(i, p);
-@@ -625,13 +629,18 @@ float Predictor::Predict() {
-   const std::uint16_t endpoint_p1 =
-       fx2lite_endpoint428::Predict(fx2lite_endpoint_);
-   const std::uint16_t mixed_p1 =
-       fixed_logit_blend_.Mix(base_p1, endpoint_p1);
+@@ -628,0 +633,4 @@
 +  residual_endpoints[26] = base_p1;
 +  residual_endpoints[27] = endpoint_p1;
 +  const std::uint16_t final_p1 =
 +      online_residual_mixer_.Predict(mixed_p1, residual_endpoints);
-   // Encoder and decoder both discretize this float as 1 + 65534 * p. Return
-   // the midpoint of mixed_p1's quantization bin so the integer result is
-   // stable against the final float conversion.
+@@ -632 +640 @@
 -  return (static_cast<float>(mixed_p1) - 0.5f) / 65534.0f;
 +  return (static_cast<float>(final_p1) - 0.5f) / 65534.0f;
- }
- 
- void Predictor::Perceive(int bit) {
+@@ -635,0 +644 @@
 +  online_residual_mixer_.Perceive(bit);
-   for (unsigned int i = 0; i < models_.size(); ++i) {
-     if (i == fxcm_index_) continue;
