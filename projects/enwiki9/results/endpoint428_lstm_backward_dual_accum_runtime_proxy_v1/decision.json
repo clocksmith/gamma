@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_lstm_backward_dual_accum_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "When both recurrent error products are required, accumulate them in one traversal of the same error vector while preserving each dot product's term order.",
+  "implementation": {
+    "ancestor": "closest tracked CMIX21 ancestor after pointer reuse, 32K flat context tables, and serial fused forward traversal",
+    "patch": "patches/cmix21_lstm_backward_dual_accum_v1.patch",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_source_sha256": "1e6649bf8d47d40d3507705cea9766a5da3a450430658fc922fd6f039633a58c",
+    "candidate_source_sha256": "56269f6041e7a9859756f2cbae84d6cc890317a25c6637d4ebe86d8d67fe8549",
+    "candidate_binary_sha256": "1c7f4946adb4ab61734cd57287639cc1e8b0a968e638d80bbd90b753bd087c90"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "candidate_elapsed_s": 3.4238,
+    "candidate_peak_tree_rss_kib": 5891072
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [13.9928, 13.7942, 13.6952],
+    "candidate_elapsed_s": [13.5936, 13.5950, 13.7964],
+    "reference_median_elapsed_s": 13.7942,
+    "candidate_median_elapsed_s": 13.5950,
+    "incremental_runtime_reduction_fraction": 0.01444085195226975,
+    "paired_runtime_reduction_fraction": [0.028528957749699876, 0.01444085195226975, -0.007389450318359746],
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_six_archives_identical": true,
+    "maximum_reference_peak_tree_rss_kib": 7638900,
+    "maximum_candidate_peak_tree_rss_kib": 7633792,
+    "all_guards_clean": true,
+    "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_backward_dual_accum_ancestor_real10k_v1"
+  },
+  "rejected_adam_scalar_cache": {
+    "reference_median_elapsed_s": 13.6942,
+    "candidate_median_elapsed_s": 13.7987,
+    "runtime_reduction_fraction": -0.007630967855004295,
+    "archive_identity": true,
+    "decision": "Retire. Hoisting repeated Adam scalar corrections preserves the archive but regresses the controlled median."
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false,
+    "reason": "This is archive-identical ancestor evidence with one paired timing regression; exact candidate transfer and reference-calibrated official timing remain required."
+  },
+  "decision": {
+    "verdict": "preserve_for_exact_source_confirmation",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "next_action": "After recovering the exact candidate package, test this patch separately on top of the stronger pointer/table/serial-forward bundle and retain it only if the controlled exact-source median remains positive."
+  },
+  "validation": {
+    "doc_lint": "pass before normalization",
+    "status_reporter_strict": "pass",
+    "patch_dry_run": "pass against the serial-forward flat-context ancestor tree",
+    "receipt_normalizer": "environment_failure",
+    "normalizer_failure_reason": "The local ignored-artifact overlay leaves the organization snapshot and artifact fingerprint audit stale; generated view churn was not retained and no proof state was relabeled."
+  },
+  "claim_boundary": "This receipt proves archive identity and a 1.444% median runtime reduction on the closest constructive ancestor. One paired run regresses, so it is weaker than the serial-forward result and earns no official runtime credit."
+}

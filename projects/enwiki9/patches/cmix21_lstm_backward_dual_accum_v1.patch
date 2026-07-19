@@ -1,0 +1,32 @@
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -198,6 +198,18 @@
+   neurons.error_ -= ((neurons.error_ * neurons.norm_[epoch]).sum() /
+       num_cells_) * neurons.norm_[epoch];
+-  if (layer > 0) {
++  if (layer > 0 && epoch > 0) {
++    for (unsigned int i = 0; i < num_cells_; ++i) {
++      float hidden_sum = 0;
++      float stored_sum = 0;
++      for (unsigned int j = 0; j < num_cells_; ++j) {
++        const float error = neurons.error_[j];
++        hidden_sum += error * neurons.transpose_[num_cells_ + i][j];
++        stored_sum += error * neurons.transpose_[i][j];
++      }
++      (*hidden_error)[i] += hidden_sum;
++      stored_error_[i] += stored_sum;
++    }
++  } else if (layer > 0) {
+     for (unsigned int i = 0; i < num_cells_; ++i) {
+       float f = 0;
+       for (unsigned int j = 0; j < num_cells_; ++j) {
+@@ -205,8 +217,7 @@
+       }
+       (*hidden_error)[i] += f;
+     }
+-  }
+-  if (epoch > 0) {
++  } else if (epoch > 0) {
+     for (unsigned int i = 0; i < num_cells_; ++i) {
+       float f = 0;
+       for (unsigned int j = 0; j < num_cells_; ++j) {

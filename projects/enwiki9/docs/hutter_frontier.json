@@ -1038,6 +1038,30 @@
         "Non-positive controlled exact-source median",
         "The combined runtime successor remains outside the official rule"
       ]
+    },
+    {
+      "id": "endpoint428_lstm_backward_dual_accum_runtime_proxy_v1",
+      "name": "fused recurrent backward error accumulators",
+      "rank": 26,
+      "status": "active",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_lstm_backward_dual_accum_runtime_proxy_v1/decision.json",
+        "patches/cmix21_lstm_backward_dual_accum_v1.patch",
+        "patches/cmix21_lstm_serial_forward_v1.patch"
+      ],
+      "source_required": true,
+      "decision": "Fusing the two recurrent backward dot products preserves all six 10K archives and reduces median runtime by 1.444%, but one of three paired comparisons regresses by 0.739%. It is a weaker confirmation candidate, not official runtime evidence.",
+      "next_gate": "Test separately on the recovered exact candidate after the stronger pointer/table/serial-forward bundle; retain only if its exact-source controlled median remains positive.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source median",
+        "The combined runtime successor remains outside the official rule"
+      ]
     }
   ],
   "quarantine": [
