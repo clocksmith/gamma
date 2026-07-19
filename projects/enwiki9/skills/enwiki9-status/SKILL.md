@@ -24,6 +24,8 @@ missing required evidence, arithmetic drift, and invalid evidence tiers.
    process state changed.
 3. Run the reporter. Treat its JSON as the normalized answer and its Markdown
    as the user-facing summary.
+   Use `docs/hutter_run_ledger.json` when comparing the same candidate across
+   scopes or corpus populations; do not reconstruct run history from prose.
 4. Start with one compact score-status block: target in bytes and percent,
    verified official score in bytes and percent or `unknown`, best counted
    forecast in bytes and percent with signed distance, active candidate
