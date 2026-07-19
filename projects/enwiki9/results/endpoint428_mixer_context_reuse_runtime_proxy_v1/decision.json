@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_mixer_context_reuse_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Reusing the ContextData pointer resolved by Mixer::Mix in the immediately following Mixer::Perceive removes one hash lookup per mixer and bit without changing arithmetic or learned state.",
+  "implementation": {
+    "ancestor": "external/cmix21-sidecar with the fused three-gate and explicit output-update reference patch",
+    "patch": "patches/cmix21_mixer_context_reuse_v1.patch",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_source_sha256": {
+      "src/mixer/mixer.cpp": "f86a34334f412097f7d778d123678119b5a8ad698cc74b0c3deb164357946cc9",
+      "src/mixer/mixer.h": "a2dd32d5ad556d387d92de541fe42659492b45591709e0c2708e7228eef343f9"
+    },
+    "candidate_source_sha256": {
+      "src/mixer/mixer.cpp": "d0139413a46fbcb8aa7fc8189ba22188ed7bef3c6dbd8855d84a92a7e476d104",
+      "src/mixer/mixer.h": "d4ac39f55234b894cfe33ce6bbc4186031caff6e8abe772accae8f85f6412cc3"
+    },
+    "reference_binary_sha256": "5bff7a6cf15c275ffb61206d3f49c7c29d6c5584e5087ca5ad470369c468962c",
+    "candidate_binary_sha256": "7473436c27b70871e2f84fc147e45c05cd27a879decb0ba48c460ba72f8bca2b"
+  },
+  "scopes": [
+    {
+      "input_bytes": 1024,
+      "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "reference_elapsed_s": [3.60, 3.59, 3.60, 3.64],
+      "candidate_elapsed_s": [3.53, 3.55, 3.54, 3.57],
+      "reference_median_elapsed_s": 3.60,
+      "candidate_median_elapsed_s": 3.545,
+      "runtime_reduction_fraction": 0.0152777778,
+      "archive_bytes": 272,
+      "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+      "archive_identity": true,
+      "guard_count": 8,
+      "maximum_peak_tree_rss_kib": 5868416,
+      "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_mixer_context_cache_ancestor_1k_v1"
+    },
+    {
+      "input_bytes": 10000,
+      "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+      "population": "opening raw Wikipedia prefix from data/enwik9_250000.bin",
+      "reference_elapsed_s": [15.47, 15.54],
+      "candidate_elapsed_s": [15.22, 15.29],
+      "reference_median_elapsed_s": 15.505,
+      "candidate_median_elapsed_s": 15.255,
+      "runtime_reduction_fraction": 0.0161238310,
+      "archive_bytes": 2817,
+      "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+      "archive_identity": true,
+      "guard_count": 4,
+      "maximum_peak_tree_rss_kib": 7617536,
+      "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_mixer_context_cache_ancestor_real10k_v1"
+    }
+  ],
+  "resources": {
+    "official_decimal_limit_kib": 9765625,
+    "official_decimal_over_limit_kib": 0,
+    "all_12_guards_clean": true
+  },
+  "screened_extensions": {
+    "shared_global_decay_cache": "not promoted; only a noisy 0.55% median increment at 10K",
+    "last_context_key_cache": "not promoted; 0.91% median increment at 10K with one of four paired regressions"
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false,
+    "reason": "The result is an ancestor-codec runtime proxy and its measured reduction is far below the current official-runtime gap."
+  },
+  "decision": {
+    "verdict": "promote_minimal_patch_to_exact_source_transplant_only",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "next_action": "Recover the checksum-bound exact 102-file candidate source package, apply only the Mix-to-Perceive ContextData pointer reuse patch, require exact archive identity, then measure controlled reference-calibrated runtime. Continue profiling for orthogonal computation removal because this patch cannot qualify runtime by itself."
+  },
+  "validation": {
+    "focused_tests": "12 passed",
+    "doc_lint": "pass before normalization",
+    "status_reporter_strict": "pass",
+    "patch_dry_run": "pass against the tracked ancestor-derived reference tree",
+    "receipt_normalizer": "environment_failure",
+    "normalizer_failure_reason": "The local ignored-artifact overlay makes the organization snapshot and artifact fingerprint audit stale; generated view churn was not retained and no proof state was relabeled."
+  },
+  "claim_boundary": "This receipt establishes a small archive-identical runtime reduction on the closest tracked CMIX21 ancestor. It does not prove transfer to endpoint428, qualify official runtime, alter the counted 109,408,345-byte forecast, or authorize a full-corpus replay."
+}

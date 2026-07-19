@@ -912,9 +912,32 @@
       ]
     },
     {
+      "id": "endpoint428_mixer_context_reuse_runtime_proxy_v1",
+      "name": "Mix-to-Perceive context-pointer reuse",
+      "rank": 21,
+      "status": "active",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_mixer_context_reuse_runtime_proxy_v1/decision.json",
+        "patches/cmix21_mixer_context_reuse_v1.patch"
+      ],
+      "source_required": true,
+      "decision": "The minimal patch removes the second context hash lookup between each Mixer::Mix and its immediately following Mixer::Perceive. Closest-ancestor archives are byte-identical across 12 clean guards; median runtime falls 1.528% at 1K and 1.612% on a real 10K Wikipedia prefix. This is useful exact-source transplant evidence but far below the official-runtime gap.",
+      "next_gate": "Recover the checksum-bound exact 102-file candidate source package, apply only the context-pointer reuse, require exact archive identity, and run controlled reference-calibrated timing while pursuing orthogonal computation removal.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source runtime reduction",
+        "The combined runtime successor remains outside the official rule"
+      ]
+    },
+    {
       "id": "endpoint428_persistent_gate_runtime_transfer_ancestor_1k_v1",
       "name": "persistent-region LSTM scheduling and worker-count transfer",
-      "rank": 21,
+      "rank": 22,
       "status": "retired_unchanged",
       "evidence_tier": "proxy",
       "scope_bytes": 1024,
