@@ -122,6 +122,7 @@ heavy lane.
 | `wrt_event_context_tree_residual_screen.cpp` | Compares cumulative phase-prefix residual calibration with nested completed-event identity and exponentially decayed phase variants on an exact P1/WRT stream. |
 | `wrt_phase_strength_router_screen.cpp` | Causally routes scaled frozen-phase corrections and tests a decoder-reconstructed Wiki-mode residual backoff against exact P1 controls. |
 | `wrt_phase_newton_residual_screen.cpp` | Compares fixed-point WRT-phase logit-gradient/curvature endpoints and one frozen/Newton blend against exact endpoint P1 controls. |
+| `endpoint_residual_history_screen.cpp` | Screens decoder-rebuilt endpoint-surprise histories as causal residual-retrieval keys on exact P1 streams. |
 | `wrt_shell_regime_extract.py` | Converts aligned WRT shell rows into an overlapping page/title/prose/ref/URL/table/list/template mode mask without treating concurrent modes as exclusive. |
 | `cmix_aux_bucket_calibration.py` | Trains then freezes a compact decoder-rebuilt probability-bucket calibration over an auxiliary endpoint and exact base trace. |
 | `wikiir_page_list_referentiation_probe.py` | Measures WebGraph-style ordered link-list COPY/ADD headroom against earlier pages with a deterministic random-prior control. |
