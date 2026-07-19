@@ -1,0 +1,76 @@
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -82,0 +83,11 @@
++  float forget_square_sum = 0.0f;
++  float node_square_sum = 0.0f;
++  float output_square_sum = 0.0f;
++  for (unsigned int i = 0; i < num_cells_; ++i) {
++    const float forget = forget_gate_.norm_[epoch_][i];
++    const float node = input_node_.norm_[epoch_][i];
++    const float output = output_gate_.norm_[epoch_][i];
++    forget_square_sum += forget * forget;
++    node_square_sum += node * node;
++    output_square_sum += output * output;
++  }
+@@ -84,6 +95 @@
+-      ((forget_gate_.norm_[epoch_] * forget_gate_.norm_[epoch_]).sum() /
+-       num_cells_) + 1e-5f);
+-  forget_gate_.norm_[epoch_] *= forget_gate_.ivar_[epoch_];
+-  forget_gate_.state_[epoch_] =
+-      forget_gate_.norm_[epoch_] * forget_gate_.gamma_ + forget_gate_.beta_;
+-
++      (forget_square_sum / num_cells_) + 1e-5f);
+@@ -91,6 +97 @@
+-      ((input_node_.norm_[epoch_] * input_node_.norm_[epoch_]).sum() /
+-       num_cells_) + 1e-5f);
+-  input_node_.norm_[epoch_] *= input_node_.ivar_[epoch_];
+-  input_node_.state_[epoch_] =
+-      input_node_.norm_[epoch_] * input_node_.gamma_ + input_node_.beta_;
+-
++      (node_square_sum / num_cells_) + 1e-5f);
+@@ -98,5 +99 @@
+-      ((output_gate_.norm_[epoch_] * output_gate_.norm_[epoch_]).sum() /
+-       num_cells_) + 1e-5f);
+-  output_gate_.norm_[epoch_] *= output_gate_.ivar_[epoch_];
+-  output_gate_.state_[epoch_] =
+-      output_gate_.norm_[epoch_] * output_gate_.gamma_ + output_gate_.beta_;
++      (output_square_sum / num_cells_) + 1e-5f);
+@@ -105,5 +102,26 @@
+-    forget_gate_.state_[epoch_][i] = Sigmoid::Logistic(
+-        forget_gate_.state_[epoch_][i]);
+-    input_node_.state_[epoch_][i] = tanh(input_node_.state_[epoch_][i]);
+-    output_gate_.state_[epoch_][i] = Sigmoid::Logistic(
+-        output_gate_.state_[epoch_][i]);
++    float forget_norm = forget_gate_.norm_[epoch_][i] *
++        forget_gate_.ivar_[epoch_];
++    float node_norm = input_node_.norm_[epoch_][i] *
++        input_node_.ivar_[epoch_];
++    float output_norm = output_gate_.norm_[epoch_][i] *
++        output_gate_.ivar_[epoch_];
++    forget_gate_.norm_[epoch_][i] = forget_norm;
++    input_node_.norm_[epoch_][i] = node_norm;
++    output_gate_.norm_[epoch_][i] = output_norm;
++
++    const float forget = Sigmoid::Logistic(forget_norm *
++        forget_gate_.gamma_[i] + forget_gate_.beta_[i]);
++    const float node = tanh(node_norm * input_node_.gamma_[i] +
++        input_node_.beta_[i]);
++    const float output = Sigmoid::Logistic(output_norm *
++        output_gate_.gamma_[i] + output_gate_.beta_[i]);
++    forget_gate_.state_[epoch_][i] = forget;
++    input_node_.state_[epoch_][i] = node;
++    output_gate_.state_[epoch_][i] = output;
++
++    const float input_gate = 1.0f - forget;
++    input_gate_state_[epoch_][i] = input_gate;
++    state_[i] = state_[i] * forget + node * input_gate;
++    const float tanh_state = tanh(state_[i]);
++    tanh_state_[epoch_][i] = tanh_state;
++    (*hidden)[hidden_start + i] = output * tanh_state;
+@@ -111,6 +128,0 @@
+-  input_gate_state_[epoch_] = 1.0f - forget_gate_.state_[epoch_];
+-  state_ *= forget_gate_.state_[epoch_];
+-  state_ += input_node_.state_[epoch_] * input_gate_state_[epoch_];
+-  tanh_state_[epoch_] = tanh(state_);
+-  std::slice slice = std::slice(hidden_start, num_cells_, 1);
+-  (*hidden)[slice] = output_gate_.state_[epoch_] * tanh_state_[epoch_];

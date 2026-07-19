@@ -1212,6 +1212,68 @@
         "No exact-candidate source transplant",
         "No official runtime credit"
       ]
+    },
+    {
+      "id": "endpoint428_lstm_forward_state_fuse_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "name": "fused LSTM forward normalization and state traversal",
+      "rank": 28,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 1024,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 272,
+      "archive_bytes": 273,
+      "measured_gain_bytes": -1,
+      "gain_bytes_per_1m": -976.5625,
+      "score_credit_bytes": 0,
+      "roundtrip_ok": null,
+      "deterministic_reencode_ok": null,
+      "max_sampled_tree_rss_kib": 5893632,
+      "source_paths": [
+        "patches/cmix21_lstm_forward_state_fuse_v1.patch",
+        "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/input_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/baseline_archive_bytes",
+          "candidate_field": "baseline_archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/candidate_archive_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/measured_gain_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/gain_bytes_per_1m",
+          "candidate_field": "gain_bytes_per_1m"
+        },
+        {
+          "source": "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_1k/maximum_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "The first guarded real-Wikipedia 1K archive changes by one byte, so the scalar fused traversal is not an unchanged-stream runtime successor and receives no score or runtime credit.",
+      "next_gate": "None unchanged. Preserve exact floating-point expression order in the next runtime mechanism, or re-clear score economics as a new stream.",
+      "disqualifiers": [
+        "Archive identity failed at the first 1K kill gate",
+        "No timing evidence authorized",
+        "No exact-candidate source transplant"
+      ]
     }
   ],
   "quarantine": [
