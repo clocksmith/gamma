@@ -7,10 +7,10 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 29,
-    "candidate_count": 27,
+    "run_count": 30,
+    "candidate_count": 28,
     "runs_by_scope": {
-      "1024": 1,
+      "1024": 2,
       "10000": 5,
       "500000": 2,
       "600747": 1,
@@ -22,12 +22,12 @@
     "runs_by_evidence_tier": {
       "causal_shadow": 15,
       "constructive_prefix": 7,
-      "proxy": 7
+      "proxy": 8
     },
     "runs_by_status": {
       "active": 8,
       "historical_control": 2,
-      "retired_unchanged": 19
+      "retired_unchanged": 20
     }
   },
   "runs": [
@@ -1165,6 +1165,44 @@
         "results/endpoint428_persistent_gate_runtime_transfer_ancestor_1k_v1/decision.json",
         "tools/lstm_gate_runtime_probe.cpp",
         "tests/test_lstm_gate_runtime_probe.py"
+      ],
+      "scope_percent_of_corpus": 0.0001024,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_lstm_forward_state_fuse_runtime_proxy_v1__1024",
+      "candidate_id": "endpoint428_lstm_forward_state_fuse_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "candidate_name": "fused LSTM forward normalization and state traversal",
+      "rank": 28,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "primary_frontier_run": true,
+      "scope_bytes": 1024,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 272,
+      "archive_bytes": 273,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": -1,
+      "gain_bytes_per_1m": -976.5625,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 5893632,
+      "score_credit_bytes": 0,
+      "decision": "The first guarded real-Wikipedia 1K archive changes by one byte, so the scalar fused traversal is not an unchanged-stream runtime successor and receives no score or runtime credit.",
+      "next_gate": "None unchanged. Preserve exact floating-point expression order in the next runtime mechanism, or re-clear score economics as a new stream.",
+      "disqualifiers": [
+        "Archive identity failed at the first 1K kill gate",
+        "No timing evidence authorized",
+        "No exact-candidate source transplant"
+      ],
+      "source_paths": [
+        "patches/cmix21_lstm_forward_state_fuse_v1.patch",
+        "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json"
       ],
       "scope_percent_of_corpus": 0.0001024,
       "forecast_percent": null,

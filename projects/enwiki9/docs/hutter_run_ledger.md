@@ -3,8 +3,8 @@
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
 - Target: `109,500,000` bytes (`10.9500000%`).
-- Candidate runs indexed: `29`.
-- Candidate lineages indexed: `27`.
+- Candidate runs indexed: `30`.
+- Candidate lineages indexed: `28`.
 
 ## 65,536,000 Bytes
 
@@ -74,3 +74,4 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
 | `endpoint428_persistent_gate_runtime_transfer_ancestor_1k_v1__1024` | `proxy` | `retired_unchanged` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_lstm_forward_state_fuse_runtime_proxy_v1__1024` | `proxy` | `retired_unchanged` | opening_prefix | 273 | -1 | -976.562 | unknown | unknown | unknown | not recorded |

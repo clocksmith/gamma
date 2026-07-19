@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_lstm_forward_state_fuse_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Replacing repeated valarray normalization, affine, activation, state, and hidden traversals with scalar fused loops can remove a material part of the LSTM forward cost while preserving the learned trajectory.",
+  "baseline": {
+    "candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+    "source_sha256": "1e6649bf8d47d40d3507705cea9766a5da3a450430658fc922fd6f039633a58c",
+    "binary_sha256": "3f56e844fcec452bff257b3cc5eecf18e1a8c3c2ce49447e897f3a91aae5df0f",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30"
+  },
+  "implementation": {
+    "patch": "patches/cmix21_lstm_forward_state_fuse_v1.patch",
+    "source_sha256": "5ce61cfe331a9e7da13b540b960380428bc70414163c5547615d371f4ae2aa05",
+    "binary_sha256": "31f1cbb1fc76cbfbf27e56eee81adc61e9ec9f4fcbdb6bd7df67617d5a3b23cc",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "failed_compiler_probe": "The pinned clang++-17 executable was absent; make failed before compilation or codec execution. The qualified local g++ contract then built successfully."
+  },
+  "real_wikipedia_1k": {
+    "input_bytes": 1024,
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+    "baseline_archive_bytes": 272,
+    "candidate_archive_bytes": 273,
+    "candidate_archive_sha256": "4c38ea9e46ac8118da7da3899dfaa91c670e809bc332b82595e68aa3dffb55ce",
+    "measured_gain_bytes": -1,
+    "gain_bytes_per_1m": -976.5625,
+    "archive_identity": false,
+    "roundtrip_tested": false,
+    "deterministic_reencode_tested": false,
+    "maximum_tree_rss_kib": 5893632,
+    "official_decimal_over_limit_kib": 0,
+    "guard_clean": true,
+    "guard_returncode": 0
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false
+  },
+  "decision": {
+    "verdict": "retire_forward_state_fuse_unchanged",
+    "promotion_authorized": false,
+    "larger_scope_authorized": false,
+    "full_1g_gate_authorized": false,
+    "reason": "The first 1K archive-identity gate fails by one byte. The changed floating-point reduction and expression order alter the learned probability trajectory, so runtime measurement cannot qualify an unchanged-stream successor.",
+    "next_action": "Do not time or tune this fusion order. Preserve the serial fused-gate dot traversal and seek work removal that retains the exact floating-point operation order, or explicitly re-clear score economics as a new stream."
+  },
+  "claim_boundary": "This receipt records a retired 1K ancestor runtime proxy. It does not qualify endpoint428 runtime, establish a score regression beyond this opening prefix, or change the counted forecast."
+}
