@@ -54,6 +54,29 @@ def run(input_path: Path, scope_bytes: int, program_path: Path) -> tuple[bytes, 
     determinism_ok = first_ir == second_ir and first_stats == second_stats
     if not roundtrip_ok or not determinism_ok:
         raise RuntimeError("WikiIR roundtrip or determinism failed")
+    local_backend: dict[str, Any] | None = None
+    compress = getattr(module, "compress", None)
+    decompress = getattr(module, "decompress", None)
+    stats = getattr(module, "stats", None)
+    if callable(compress) and callable(decompress):
+        first_archive = compress(raw)
+        first_backend_stats = stats() if callable(stats) else {}
+        second_archive = compress(raw)
+        second_backend_stats = stats() if callable(stats) else {}
+        backend_roundtrip_ok = decompress(first_archive) == raw
+        backend_deterministic = (
+            first_archive == second_archive
+            and first_backend_stats == second_backend_stats
+        )
+        if not backend_roundtrip_ok or not backend_deterministic:
+            raise RuntimeError("WikiIR local backend roundtrip or determinism failed")
+        local_backend = {
+            "archive_bytes": len(first_archive),
+            "archive_sha256": sha256_bytes(first_archive),
+            "roundtrip_ok": backend_roundtrip_ok,
+            "deterministic": backend_deterministic,
+            "stats": first_backend_stats,
+        }
     receipt = {
         "schema": "wikiir_materialization_v1",
         "evidence_level": "exact_reversible_representation_prefix",
@@ -76,7 +99,11 @@ def run(input_path: Path, scope_bytes: int, program_path: Path) -> tuple[bytes, 
             "raw_ir_roundtrip_ok": roundtrip_ok,
             "encode_ir_deterministic": determinism_ok,
         },
-        "claim_boundary": "Representation evidence only; no backend or official-score claim.",
+        "local_backend": local_backend,
+        "claim_boundary": (
+            "Representation and optional local-backend evidence only; no target "
+            "backend or official-score claim."
+        ),
     }
     return first_ir, receipt
 
