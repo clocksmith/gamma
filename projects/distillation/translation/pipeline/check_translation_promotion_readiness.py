@@ -23,6 +23,8 @@ DEFAULT_HUMAN_REVIEW_CONTRACT = PROMOTION_ROOT / "human-review-contract.v1.json"
 DEFAULT_HUMAN_REVIEW_SCHEMA = PROMOTION_ROOT / "human-review-contract.schema.json"
 DEFAULT_POPULATION_PROCUREMENT_CONTRACT = PROMOTION_ROOT / "population-procurement-contract.v1.json"
 DEFAULT_POPULATION_PROCUREMENT_SCHEMA = PROMOTION_ROOT / "population-procurement-contract.schema.json"
+DEFAULT_EXPOSURE_LEDGER = PROMOTION_ROOT / "exposure-ledger.v1.json"
+EXPECTED_EXPOSURE_LEDGER_SCHEMA_SHA256 = "sha256:5262a2ed29dd97d163c49f21ab69b54103dc524c68959dc0561defb128fdc038"
 
 EXPECTED_POPULATION_ROLES = (
     "calibration",
@@ -75,7 +77,10 @@ PROMOTION_SUBMISSION_BLOCKERS = DOPPLER_ARTIFACT_COMPETITION_BLOCKERS | {
 
 
 def _load_json(path: Path) -> dict[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
+    def reject_nonfinite(token: str) -> None:
+        raise RuntimeError(f"{path}: nonfinite JSON value {token}")
+
+    value = json.loads(path.read_text(encoding="utf-8"), parse_constant=reject_nonfinite)
     if not isinstance(value, dict):
         raise RuntimeError(f"{path}: expected a JSON object")
     return value
@@ -97,6 +102,36 @@ def _hash_receipt_core(value: dict[str, Any]) -> str:
         separators=(",", ":"),
     ).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
+
+
+def _validate_exposure_ledger(ledger: dict[str, Any]) -> list[str]:
+    reasons: list[str] = []
+    if ledger.get("schema") != "clocksmith.exposure-ledger/v1":
+        reasons.append("schema_mismatch")
+    if ledger.get("schemaSha256") != EXPECTED_EXPOSURE_LEDGER_SCHEMA_SHA256:
+        reasons.append("schema_digest_mismatch")
+    previous_hash: str | None = None
+    repository = ledger.get("repository")
+    for index, event in enumerate(ledger.get("events", [])):
+        if event.get("sequence") != index:
+            reasons.append(f"sequence_mismatch_{index}")
+        if event.get("repository") != repository:
+            reasons.append(f"repository_mismatch_{index}")
+        if event.get("previousEventHash") != previous_hash:
+            reasons.append(f"chain_mismatch_{index}")
+        core = {key: value for key, value in event.items() if key != "eventHash"}
+        observed = f"sha256:{_hash_receipt_core(core)}"
+        if event.get("eventHash") != observed:
+            reasons.append(f"event_hash_mismatch_{index}")
+        previous_hash = event.get("eventHash")
+    wmt13_roles = {
+        event.get("role")
+        for event in ledger.get("events", [])
+        if event.get("artifact", {}).get("id") == "wmt13-enes-128-legacy"
+    }
+    if wmt13_roles != {"development"}:
+        reasons.append("wmt13_must_be_development_only")
+    return reasons
 
 
 def _population_state(contract: dict[str, Any], blockers: set[str]) -> dict[str, Any]:
@@ -162,6 +197,7 @@ def build_readiness_receipt(
     human_review_schema_path: Path = DEFAULT_HUMAN_REVIEW_SCHEMA,
     population_procurement_contract_path: Path = DEFAULT_POPULATION_PROCUREMENT_CONTRACT,
     population_procurement_schema_path: Path = DEFAULT_POPULATION_PROCUREMENT_SCHEMA,
+    exposure_ledger_path: Path = DEFAULT_EXPOSURE_LEDGER,
 ) -> dict[str, Any]:
     contract = _load_json(contract_path)
     schema = _load_json(schema_path)
@@ -172,12 +208,16 @@ def build_readiness_receipt(
     human_review_schema = _load_json(human_review_schema_path)
     population_procurement_contract = _load_json(population_procurement_contract_path)
     population_procurement_schema = _load_json(population_procurement_schema_path)
+    exposure_ledger = _load_json(exposure_ledger_path)
     jsonschema.Draft202012Validator(schema).validate(contract)
     jsonschema.Draft202012Validator(ledger_schema).validate(ledger)
     jsonschema.Draft202012Validator(human_review_schema).validate(human_review_contract)
     jsonschema.Draft202012Validator(population_procurement_schema).validate(population_procurement_contract)
 
     blockers: set[str] = set()
+    exposure_ledger_reasons = _validate_exposure_ledger(exposure_ledger)
+    if exposure_ledger_reasons:
+        blockers.add("exposure_ledger_invalid")
     populations = _population_state(contract, blockers)
     licenses = _license_state(catalog, blockers)
 
@@ -286,8 +326,18 @@ def build_readiness_receipt(
                 "path": str(population_procurement_schema_path.relative_to(REPO_ROOT)),
                 "sha256": _sha256_file(population_procurement_schema_path),
             },
+            "exposureLedger": {
+                "path": str(exposure_ledger_path.relative_to(REPO_ROOT)),
+                "sha256": _sha256_file(exposure_ledger_path),
+                "schemaSha256": exposure_ledger.get("schemaSha256"),
+            },
         },
         "presentClaim": contract.get("presentClaim", {}).get("status"),
+        "exposureLedger": {
+            "valid": not exposure_ledger_reasons,
+            "reasons": exposure_ledger_reasons,
+            "wmt13Role": "development",
+        },
         "populations": populations,
         "populationProcurement": {
             "status": population_procurement_contract.get("status"),
