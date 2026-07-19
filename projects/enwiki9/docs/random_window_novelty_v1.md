@@ -149,6 +149,22 @@ ranges. The next eligible construction is `wrt_title_token_automaton_v1`:
 This no-rewrite endpoint tests whether title state improves probability without
 destroying the WRT context that the native replay showed to be valuable.
 
+## Follow-On Event-Phase Residual
+
+A separate payload-free residual SSE found a small, distributed signal in WRT
+event phase rather than title identity.  Development selected a collision-free
+table keyed by current event byte/bit prefix and FX2 confidence, with a coarse
+base-confidence backoff.  It saved `17` exact bytes (`34 B/1M`) on the event-
+dense offset-`306M` window and the frozen form saved `22` (`44 B/1M`) on the
+disjoint offset-`205,537,142` window.  Every one of the `11` measured blocks
+was positive.
+
+This is causal raw-FX2 shadow evidence, not endpoint428 evidence.  The observed
+rate is below the `57.404 B/1M` remaining endpoint428 debt before integration
+source cost, so the unchanged endpoint is retired.  The positive primitive is
+retained for one hierarchical event-phase backoff construction that must clear
+target economics on disjoint exact traces.
+
 ## Receipts
 
 - `results/random_window_novelty_v1/selection.json`
@@ -160,3 +176,4 @@ destroying the WRT context that the native replay showed to be valuable.
 - `results/random_window_novelty_v1/fx2_native/confirmation-1000000-0.json`
 - `results/random_window_novelty_v1/fx2_native/wrt_transfer_diagnostic.json`
 - `results/random_window_novelty_v1/fx2_native/decision.json`
+- `results/fx2_reference_residual_v1/wrt-hashed-residual-online-two-window-decision.json`
