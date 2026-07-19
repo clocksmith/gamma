@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_paq8_second_mru_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Use ContextMap2 Bucket's already-recorded second MRU entry as a guarded fast path before its seven-entry checksum scan, without changing replacement or MRU-update semantics.",
+  "implementation": {
+    "ancestor": "PAQ8 direct-context runtime proxy",
+    "patch": "patches/cmix21_paq8_second_mru_v1.patch",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_source_sha256": "49055a445c81750a53155c2eb775c0f573c25309d73db06036fda4b7ff490f96",
+    "candidate_source_sha256": "23441a48713c85b9252f3fd5c31361f12690f39e4eca643de20deae9dd23de58",
+    "candidate_binary_sha256": "49f261a7b63a8988123b875fb49f7cf0243c1a2331c65fe8cf694a5fdc5830bb"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "candidate_peak_tree_rss_kib": 5892992,
+    "guard_clean": true
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [13.1859, 13.6024, 13.3973, 13.2924],
+    "candidate_elapsed_s": [13.4956, 13.3897, 13.3895, 13.391],
+    "reference_median_elapsed_s": 13.34485,
+    "candidate_median_elapsed_s": 13.39035,
+    "incremental_runtime_reduction_fraction": -0.0034095549968713593,
+    "candidate_speedup": 0.9966020305667889,
+    "paired_runtime_reduction_fraction": [-0.023487209822613504, 0.015636946421219777, 0.0005822068625767569, -0.0074177725617645685],
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_eight_archives_identical": true,
+    "maximum_reference_peak_tree_rss_kib": 7638784,
+    "maximum_candidate_peak_tree_rss_kib": 7638528,
+    "all_guards_clean": true,
+    "sample_interval_s": 0.1,
+    "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_paq8_second_mru_runtime_proxy_v1"
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false
+  },
+  "decision": {
+    "verdict": "retire_paq8_second_mru_unchanged",
+    "reason": "All archives are identical, but the balanced candidate median regresses by 0.341% and paired directions split two positive to two negative. The shortcut does not remove material ContextMap2 work.",
+    "next_action": "Preserve the positive PAQ8 direct-index context patch. Target a ContextMap2 table/state layout or dependency change that removes measurable memory work rather than another lookup branch."
+  },
+  "claim_boundary": "Archive-identical balanced 10K runtime proxy on the closest constructive ancestor. No exact endpoint428 transfer, official runtime credit, forecast change, or full-corpus claim exists."
+}

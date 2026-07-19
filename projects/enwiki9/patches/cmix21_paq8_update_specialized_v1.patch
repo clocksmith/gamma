@@ -1,0 +1,76 @@
+--- a/src/models/paq8.cpp
++++ b/src/models/paq8.cpp
+@@ -1386,15 +1386,12 @@
+   U32 bits;
+   U8 lastByte, lastBit, bitPos;
+   inline void Update() {
+-    for (U32 i=0; i<index; i++) {
+-      if (BitState[i])
+-        *BitState[i] = nex(*BitState[i], lastBit);
+-
+-      if (bitPos>1 && ByteHistory[i][0]==0)
+-        BitState[i] = nullptr;
+-      else {
+-        switch (bitPos) {
+-          case 0: {
++    switch (bitPos) {
++      case 0:
++        for (U32 i=0; i<index; i++) {
++          if (BitState[i])
++            *BitState[i] = nex(*BitState[i], lastBit);
++          {
+             const U16 chk = Chk[i];
+             const U32 ctx = Contexts[i];
+             BitState[i] = BitState0[i] = Table[(ctx+bits)&mask].Find(chk);
+@@ -1426,17 +1423,45 @@
+             ByteHistory[i] = BitState0[i]+3;
+             HasHistory[i] = *BitState0[i]>15;
+-            break;
+           }
+-          case 2: case 5: {
++        }
++        break;
++      case 1:
++        for (U32 i=0; i<index; i++) {
++          if (BitState[i])
++            *BitState[i] = nex(*BitState[i], lastBit);
++          BitState[i] = BitState0[i]+1+lastBit;
++        }
++        break;
++      case 2: case 5:
++        for (U32 i=0; i<index; i++) {
++          if (BitState[i])
++            *BitState[i] = nex(*BitState[i], lastBit);
++          if (ByteHistory[i][0]==0) {
++            BitState[i] = nullptr;
++          }
++          else {
+             const U16 chk = Chk[i];
+             const U32 ctx = Contexts[i];
+             BitState[i] = BitState0[i] = Table[(ctx+bits)&mask].Find(chk);
+-            break;
+           }
+-          case 1: case 3: case 6: BitState[i] = BitState0[i]+1+lastBit; break;
+-          case 4: case 7: BitState[i] = BitState0[i]+3+(bits&3); break;
+         }
+-      }
++        break;
++      case 3: case 6:
++        for (U32 i=0; i<index; i++) {
++          if (BitState[i])
++            *BitState[i] = nex(*BitState[i], lastBit);
++          BitState[i] = ByteHistory[i][0]==0
++              ? nullptr : BitState0[i]+1+lastBit;
++        }
++        break;
++      case 4: case 7:
++        for (U32 i=0; i<index; i++) {
++          if (BitState[i])
++            *BitState[i] = nex(*BitState[i], lastBit);
++          BitState[i] = ByteHistory[i][0]==0
++              ? nullptr : BitState0[i]+3+(bits&3);
++        }
++        break;
+     }
+   }
+ public:

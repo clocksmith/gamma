@@ -1,0 +1,16 @@
+--- a/src/models/paq8.cpp
++++ b/src/models/paq8.cpp
+@@ -27,7 +27,6 @@
+ #include <time.h>
+ #include <math.h>
+ #include <ctype.h>
+-#include <unordered_map>
+ #include <memory>
+ #include <vector>
+ #define NDEBUG
+@@ -683 +682 @@
+-  std::unordered_map<unsigned int, std::unique_ptr<Array<short, 16>>> wx_;
++  std::vector<std::unique_ptr<Array<short, 16>>> wx_;
+@@ -776 +775 @@
+-    tx(N), cxt(S), ncxt(0), base(0), nx(0), pr(S), mp(0) {
++    tx(N), wx_(m), cxt(S), ncxt(0), base(0), nx(0), pr(S), mp(0) {

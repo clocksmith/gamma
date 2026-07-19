@@ -1175,6 +1175,227 @@
       ]
     },
     {
+      "id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "name": "PAQ8 direct-indexed finite context weights",
+      "rank": 32,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "population": "opening_prefix",
+      "archive_bytes": 2817,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "max_sampled_tree_rss_kib": 7631360,
+      "source_paths": [
+        "results/endpoint428_paq8_direct_context_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_direct_context_v1.patch"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_paq8_direct_context_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/input_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_direct_context_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/archive_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_direct_context_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/maximum_candidate_peak_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "Replacing the PAQ8 mixer's bounded unordered context map with its constructor-declared direct pointer vector preserves all six 10K archives and reduces median runtime by 2.954%. Every paired comparison improves and peak RSS is slightly lower, but the updated exact-source runtime bound makes transplant subeconomic.",
+      "next_gate": "None unchanged. Preserve the technique for a materially faster architecture; do not spend an exact-source gate on this proxy.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source median",
+        "Even optimistic combination cannot approach the official runtime requirement"
+      ]
+    },
+    {
+      "id": "endpoint_fixed_share_stack_1m_v1",
+      "name": "multi-endpoint Bayesian fixed-share stack",
+      "rank": 33,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "population": "opening_prefix",
+      "measured_gain_bytes": 4,
+      "gain_bytes_per_1m": 4.0,
+      "heldout_measured_gain_bytes": 1,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint_fixed_share_stack_1m_v1/decision.json",
+        "results/endpoint_fixed_share_stack_1m_v1/screen.json",
+        "tools/endpoint_fixed_share_stack.cpp",
+        "tests/test_endpoint_fixed_share_stack.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint_fixed_share_stack_1m_v1/decision.json",
+          "pointer": "/baseline_and_scope/raw_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint_fixed_share_stack_1m_v1/decision.json",
+          "pointer": "/result/full_saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint_fixed_share_stack_1m_v1/decision.json",
+          "pointer": "/result/holdout_saved_bytes",
+          "candidate_field": "heldout_measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "The development-selected causal fixed-share stack saves only four exact bytes overall and one on sealed holdout before endpoint integration or code cost. The large noncausal span oracle is not ordinary context-local persistence.",
+      "next_gate": "None unchanged. Prefer a new endpoint representation or score-neutral runtime removal.",
+      "disqualifiers": [
+        "Gain cannot pay endpoint integration or code",
+        "No native archive or broader transfer",
+        "No full-corpus score credit"
+      ]
+    },
+    {
+      "id": "endpoint428_paq8_update_specialized_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "name": "PAQ8 ContextMap2 bit-position loop specialization",
+      "rank": 34,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "population": "opening_prefix",
+      "archive_bytes": 2817,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "max_sampled_tree_rss_kib": 7635328,
+      "source_paths": [
+        "results/endpoint428_paq8_update_specialized_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_update_specialized_v1.patch"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_paq8_update_specialized_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/input_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_update_specialized_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/archive_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_update_specialized_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/maximum_candidate_peak_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "Hoisting the byte-global bit-position switch preserves all six 10K archives but reduces median runtime by only 0.038%, with the paired spread dominated by noise. Retire this specialization unchanged.",
+      "next_gate": "None unchanged. Preserve direct-index context storage and profile a different whole-region dependency or data structure.",
+      "disqualifiers": [
+        "Runtime movement is not material relative to measurement spread",
+        "No exact endpoint428 source transfer",
+        "No official runtime or score credit"
+      ]
+    },
+    {
+      "id": "endpoint428_paq8_second_mru_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "name": "PAQ8 ContextMap2 second-MRU fast path",
+      "rank": 35,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "population": "opening_prefix",
+      "archive_bytes": 2817,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "max_sampled_tree_rss_kib": 7638528,
+      "source_paths": [
+        "results/endpoint428_paq8_second_mru_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_second_mru_v1.patch"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_paq8_second_mru_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/input_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_second_mru_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/archive_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_second_mru_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/maximum_candidate_peak_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "The second-MRU lookup preserves all eight 10K archives but regresses the balanced median by 0.341%, with paired directions split evenly. Retire this shortcut unchanged.",
+      "next_gate": "None unchanged. Preserve direct-index mixer contexts and target a ContextMap2 table/state layout or dependency change that removes measurable memory work.",
+      "disqualifiers": [
+        "Negative balanced runtime median",
+        "No exact endpoint428 source transfer",
+        "No official runtime or score credit"
+      ]
+    },
+    {
+      "id": "endpoint428_paq8_simd_bucket_find_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "name": "PAQ8 ContextMap2 SIMD checksum lookup",
+      "rank": 36,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "population": "opening_prefix",
+      "archive_bytes": 2817,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "max_sampled_tree_rss_kib": 7638400,
+      "source_paths": [
+        "results/endpoint428_paq8_simd_bucket_find_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_simd_bucket_find_v1.patch"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_paq8_simd_bucket_find_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/input_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_simd_bucket_find_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/archive_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_paq8_simd_bucket_find_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/maximum_candidate_peak_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "The semantics-preserving SSE2 lookup keeps all sixteen balanced 10K archives identical, roundtrips exactly, reduces median runtime by 1.136%, and improves six of eight pairs with unchanged observed peak RSS. Combined with direct indexing and the prior exact-source subset, optimistic leverage is only 18.053% versus 83.093% required.",
+      "next_gate": "None unchanged. Preserve the technique for a materially faster architecture; do not spend an exact-source gate on this proxy bundle.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source median",
+        "Unsupported target instruction set or package/runtime economics miss",
+        "The optimistic combined runtime bound cannot change official eligibility"
+      ]
+    },
+    {
       "id": "endpoint428_inline_logit_runtime_proxy_v1",
       "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
       "name": "inline probability-logit table lookup",

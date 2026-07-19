@@ -7,27 +7,27 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 31,
-    "candidate_count": 29,
+    "run_count": 36,
+    "candidate_count": 34,
     "runs_by_scope": {
       "1024": 3,
-      "10000": 5,
+      "10000": 9,
       "500000": 2,
       "600747": 1,
-      "1000000": 13,
+      "1000000": 14,
       "2000000": 1,
       "10000000": 5,
       "65536000": 1
     },
     "runs_by_evidence_tier": {
-      "causal_shadow": 15,
+      "causal_shadow": 16,
       "constructive_prefix": 7,
-      "proxy": 9
+      "proxy": 13
     },
     "runs_by_status": {
       "active": 2,
       "historical_control": 2,
-      "retired_unchanged": 27
+      "retired_unchanged": 32
     }
   },
   "runs": [
@@ -820,6 +820,46 @@
       "forecast_margin_bytes": null
     },
     {
+      "run_id": "endpoint_fixed_share_stack_1m_v1__1000000",
+      "candidate_id": "endpoint_fixed_share_stack_1m_v1",
+      "parent_candidate_id": null,
+      "candidate_name": "multi-endpoint Bayesian fixed-share stack",
+      "rank": 33,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "primary_frontier_run": true,
+      "scope_bytes": 1000000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": null,
+      "archive_bytes": null,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 4,
+      "gain_bytes_per_1m": 4.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": null,
+      "score_credit_bytes": 0,
+      "decision": "The development-selected causal fixed-share stack saves only four exact bytes overall and one on sealed holdout before endpoint integration or code cost. The large noncausal span oracle is not ordinary context-local persistence.",
+      "next_gate": "None unchanged. Prefer a new endpoint representation or score-neutral runtime removal.",
+      "disqualifiers": [
+        "Gain cannot pay endpoint integration or code",
+        "No native archive or broader transfer",
+        "No full-corpus score credit"
+      ],
+      "source_paths": [
+        "results/endpoint_fixed_share_stack_1m_v1/decision.json",
+        "results/endpoint_fixed_share_stack_1m_v1/screen.json",
+        "tools/endpoint_fixed_share_stack.cpp",
+        "tests/test_endpoint_fixed_share_stack.py"
+      ],
+      "scope_percent_of_corpus": 0.1,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
       "run_id": "endpoint_diagonal_reservoir_dual_trace_v1__600747",
       "candidate_id": "endpoint_diagonal_reservoir_dual_trace_v1",
       "parent_candidate_id": null,
@@ -1131,6 +1171,159 @@
       ],
       "source_paths": [
         "results/endpoint428_inline_logit_runtime_proxy_v1/decision.json"
+      ],
+      "scope_percent_of_corpus": 0.001,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_paq8_direct_context_runtime_proxy_v1__10000",
+      "candidate_id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "candidate_name": "PAQ8 direct-indexed finite context weights",
+      "rank": 32,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "primary_frontier_run": true,
+      "scope_bytes": 10000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": null,
+      "archive_bytes": 2817,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 7631360,
+      "score_credit_bytes": 0,
+      "decision": "Replacing the PAQ8 mixer's bounded unordered context map with its constructor-declared direct pointer vector preserves all six 10K archives and reduces median runtime by 2.954%. Every paired comparison improves and peak RSS is slightly lower, but the updated exact-source runtime bound makes transplant subeconomic.",
+      "next_gate": "None unchanged. Preserve the technique for a materially faster architecture; do not spend an exact-source gate on this proxy.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source median",
+        "Even optimistic combination cannot approach the official runtime requirement"
+      ],
+      "source_paths": [
+        "results/endpoint428_paq8_direct_context_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_direct_context_v1.patch"
+      ],
+      "scope_percent_of_corpus": 0.001,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_paq8_update_specialized_runtime_proxy_v1__10000",
+      "candidate_id": "endpoint428_paq8_update_specialized_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "candidate_name": "PAQ8 ContextMap2 bit-position loop specialization",
+      "rank": 34,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "primary_frontier_run": true,
+      "scope_bytes": 10000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": null,
+      "archive_bytes": 2817,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 7635328,
+      "score_credit_bytes": 0,
+      "decision": "Hoisting the byte-global bit-position switch preserves all six 10K archives but reduces median runtime by only 0.038%, with the paired spread dominated by noise. Retire this specialization unchanged.",
+      "next_gate": "None unchanged. Preserve direct-index context storage and profile a different whole-region dependency or data structure.",
+      "disqualifiers": [
+        "Runtime movement is not material relative to measurement spread",
+        "No exact endpoint428 source transfer",
+        "No official runtime or score credit"
+      ],
+      "source_paths": [
+        "results/endpoint428_paq8_update_specialized_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_update_specialized_v1.patch"
+      ],
+      "scope_percent_of_corpus": 0.001,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_paq8_second_mru_runtime_proxy_v1__10000",
+      "candidate_id": "endpoint428_paq8_second_mru_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "candidate_name": "PAQ8 ContextMap2 second-MRU fast path",
+      "rank": 35,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "primary_frontier_run": true,
+      "scope_bytes": 10000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": null,
+      "archive_bytes": 2817,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 7638528,
+      "score_credit_bytes": 0,
+      "decision": "The second-MRU lookup preserves all eight 10K archives but regresses the balanced median by 0.341%, with paired directions split evenly. Retire this shortcut unchanged.",
+      "next_gate": "None unchanged. Preserve direct-index mixer contexts and target a ContextMap2 table/state layout or dependency change that removes measurable memory work.",
+      "disqualifiers": [
+        "Negative balanced runtime median",
+        "No exact endpoint428 source transfer",
+        "No official runtime or score credit"
+      ],
+      "source_paths": [
+        "results/endpoint428_paq8_second_mru_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_second_mru_v1.patch"
+      ],
+      "scope_percent_of_corpus": 0.001,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_paq8_simd_bucket_find_runtime_proxy_v1__10000",
+      "candidate_id": "endpoint428_paq8_simd_bucket_find_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_paq8_direct_context_runtime_proxy_v1",
+      "candidate_name": "PAQ8 ContextMap2 SIMD checksum lookup",
+      "rank": 36,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "primary_frontier_run": true,
+      "scope_bytes": 10000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": null,
+      "archive_bytes": 2817,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 7638400,
+      "score_credit_bytes": 0,
+      "decision": "The semantics-preserving SSE2 lookup keeps all sixteen balanced 10K archives identical, roundtrips exactly, reduces median runtime by 1.136%, and improves six of eight pairs with unchanged observed peak RSS. Combined with direct indexing and the prior exact-source subset, optimistic leverage is only 18.053% versus 83.093% required.",
+      "next_gate": "None unchanged. Preserve the technique for a materially faster architecture; do not spend an exact-source gate on this proxy bundle.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source median",
+        "Unsupported target instruction set or package/runtime economics miss",
+        "The optimistic combined runtime bound cannot change official eligibility"
+      ],
+      "source_paths": [
+        "results/endpoint428_paq8_simd_bucket_find_runtime_proxy_v1/decision.json",
+        "patches/cmix21_paq8_simd_bucket_find_v1.patch"
       ],
       "scope_percent_of_corpus": 0.001,
       "forecast_percent": null,

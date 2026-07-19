@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_paq8_direct_context_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Use the PAQ8 Mixer constructor's exact finite context count to replace its unordered context-to-weight map with a directly indexed pointer vector, eliminating hashing without changing context identity or prediction arithmetic.",
+  "implementation": {
+    "ancestor": "closest tracked CMIX21 ancestor after pointer reuse, 32K compact-mixer context tables, and serial fused-LSTM forward traversal",
+    "patch": "patches/cmix21_paq8_direct_context_v1.patch",
+    "context_capacity": 77472,
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_source_sha256": "27742d0065637d9c776abc8b3292479a3c599a802f50bcfcbeade05ee4743abf",
+    "candidate_source_sha256": "49055a445c81750a53155c2eb775c0f573c25309d73db06036fda4b7ff490f96",
+    "candidate_binary_sha256": "23ce9ab4b3861a9e80bf6eb01a9881333c8d8e66c7b4b4520e50bb2ad61d27a4"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "rss_claim_allowed": false,
+    "rss_exclusion": "The default five-second sampler observed only the wrapper for this short smoke run; the balanced 10K guards use 0.1-second sampling."
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [13.8937, 13.9006, 14.0943],
+    "candidate_elapsed_s": [13.593, 13.49, 13.3893],
+    "reference_median_elapsed_s": 13.9006,
+    "candidate_median_elapsed_s": 13.49,
+    "incremental_runtime_reduction_fraction": 0.029538293311080134,
+    "candidate_speedup": 1.0304373610081543,
+    "minimum_paired_runtime_reduction_fraction": 0.021642902898436043,
+    "maximum_paired_runtime_reduction_fraction": 0.05002022094038016,
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_six_archives_identical": true,
+    "maximum_reference_peak_tree_rss_kib": 7638912,
+    "maximum_candidate_peak_tree_rss_kib": 7631360,
+    "all_guards_clean": true,
+    "sample_interval_s": 0.1,
+    "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_paq8_direct_context_runtime_proxy_v1"
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false,
+    "reason": "This is archive-identical ancestor transfer evidence; the checksum-bound exact candidate source bundle remains unavailable."
+  },
+  "decision": {
+    "verdict": "promote_paq8_direct_context_patch_to_exact_source_transplant",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "next_action": "Recover the exact 102-file candidate package, transplant the PAQ8 direct-context vector with the previously positive pointer, 32K table, and serial-LSTM patches, require exact archive identity, then run controlled reference-calibrated timing."
+  },
+  "claim_boundary": "This receipt proves archive identity and a 2.954% incremental median runtime reduction on the closest constructive ancestor. It does not prove exact endpoint428 transfer, official runtime compliance, a full-corpus result, or a 10.95% score."
+}
