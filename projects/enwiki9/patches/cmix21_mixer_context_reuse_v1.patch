@@ -1,39 +1,15 @@
 --- a/src/mixer/mixer.h
 +++ b/src/mixer/mixer.h
-@@ -28,6 +28,7 @@
-   const std::vector<float>& extra_inputs_vec_;
-   std::valarray<float> extra_inputs_;
-   float p_, learning_rate_;
+@@ -30,0 +31 @@
 +  ContextData* active_data_;
-   const unsigned long long& context_;
-   unsigned long long max_steps_, steps_;
-   std::unordered_map<unsigned int, std::unique_ptr<ContextData>> context_map_;
 --- a/src/mixer/mixer.cpp
 +++ b/src/mixer/mixer.cpp
-@@ -13,7 +13,8 @@
-     const unsigned long long& context, float learning_rate,
-     unsigned int extra_input_size) : inputs_(inputs),
-     extra_inputs_vec_(extra_inputs), extra_inputs_(extra_input_size), p_(0.5),
+@@ -16 +16,2 @@
 -    learning_rate_(learning_rate), context_(context), max_steps_(1), steps_(0)
 +    learning_rate_(learning_rate), active_data_(nullptr), context_(context),
 +    max_steps_(1), steps_(0)
-     {}
- 
- ContextData* Mixer::GetContextData() {
-@@ -40,6 +41,7 @@
- 
- float Mixer::Mix() {
-   ContextData* data = GetContextData();
+@@ -42,0 +44 @@
 +  active_data_ = data;
-   if (data->weights.size() != inputs_.size()) {
-     std::fprintf(stderr,
-         "Mixer::Mix input/weight size mismatch: inputs=%zu weights=%zu\n",
-@@ -71,7 +73,7 @@
- }
- 
- void Mixer::Perceive(int bit) {
+@@ -74 +76 @@
 -  ContextData* data = GetContextData();
 +  ContextData* data = active_data_;
-   float decay = 0.9 / pow(0.0000001 * steps_ + 0.8, 0.8);
-   decay *= 1.5 - ((1.0 * data->steps) / max_steps_);
-   float update = decay * learning_rate_ * (Sigmoid::Logistic(p_) - bit);
