@@ -1167,6 +1167,51 @@
         "Non-positive controlled exact-source median",
         "The combined runtime successor remains outside the official rule"
       ]
+    },
+    {
+      "id": "endpoint428_inline_logit_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "name": "inline probability-logit table lookup",
+      "rank": 27,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "population": "opening_prefix",
+      "archive_bytes": 2817,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "roundtrip_ok": null,
+      "deterministic_reencode_ok": null,
+      "max_sampled_tree_rss_kib": 7639040,
+      "source_paths": [
+        "results/endpoint428_inline_logit_runtime_proxy_v1/decision.json"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_inline_logit_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/input_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint428_inline_logit_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/archive_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_inline_logit_runtime_proxy_v1/decision.json",
+          "pointer": "/real_wikipedia_10k/maximum_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "The unchanged lookup arithmetic preserves all balanced 10K archives, but the candidate median regresses by 0.0355% and paired directions disagree. The release build receives no runtime credit.",
+      "next_gate": "None unchanged. Target a materially different LSTM or context-update implementation and require archive identity before matched timing.",
+      "disqualifiers": [
+        "Non-positive balanced median",
+        "No exact-candidate source transplant",
+        "No official runtime credit"
+      ]
     }
   ],
   "quarantine": [

@@ -7,11 +7,11 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 28,
-    "candidate_count": 26,
+    "run_count": 29,
+    "candidate_count": 27,
     "runs_by_scope": {
       "1024": 1,
-      "10000": 4,
+      "10000": 5,
       "500000": 2,
       "600747": 1,
       "1000000": 13,
@@ -22,12 +22,12 @@
     "runs_by_evidence_tier": {
       "causal_shadow": 15,
       "constructive_prefix": 7,
-      "proxy": 6
+      "proxy": 7
     },
     "runs_by_status": {
       "active": 8,
       "historical_control": 2,
-      "retired_unchanged": 18
+      "retired_unchanged": 19
     }
   },
   "runs": [
@@ -1088,6 +1088,43 @@
         "results/endpoint428_lstm_backward_dual_accum_runtime_proxy_v1/decision.json",
         "patches/cmix21_lstm_backward_dual_accum_v1.patch",
         "patches/cmix21_lstm_serial_forward_v1.patch"
+      ],
+      "scope_percent_of_corpus": 0.001,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_inline_logit_runtime_proxy_v1__10000",
+      "candidate_id": "endpoint428_inline_logit_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "candidate_name": "inline probability-logit table lookup",
+      "rank": 27,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "primary_frontier_run": true,
+      "scope_bytes": 10000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": null,
+      "archive_bytes": 2817,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 7639040,
+      "score_credit_bytes": 0,
+      "decision": "The unchanged lookup arithmetic preserves all balanced 10K archives, but the candidate median regresses by 0.0355% and paired directions disagree. The release build receives no runtime credit.",
+      "next_gate": "None unchanged. Target a materially different LSTM or context-update implementation and require archive identity before matched timing.",
+      "disqualifiers": [
+        "Non-positive balanced median",
+        "No exact-candidate source transplant",
+        "No official runtime credit"
+      ],
+      "source_paths": [
+        "results/endpoint428_inline_logit_runtime_proxy_v1/decision.json"
       ],
       "scope_percent_of_corpus": 0.001,
       "forecast_percent": null,

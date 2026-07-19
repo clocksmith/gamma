@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_inline_logit_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Inlining the fixed-table Sigmoid::Logit lookup removes out-of-line call overhead from the roughly 167 million input transformations observed on the 10K profile without changing probability arithmetic.",
+  "profile": {
+    "method": "g++ -pg flat profile over the pointer-reuse, 32K-table, serial-forward ancestor",
+    "scope_bytes": 10000,
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "top_self_time_percent": [
+      {"symbol": "LstmLayer::ForwardPass", "percent": 15.00},
+      {"symbol": "paq8::ContextMap2::Update", "percent": 10.92},
+      {"symbol": "LstmLayer::BackwardPass(NeuronLayer&)", "percent": 9.05},
+      {"symbol": "Mixer::Mix", "percent": 7.58},
+      {"symbol": "Sigmoid::Logit", "percent": 3.67}
+    ],
+    "perf_event_result": "environment_failure",
+    "perf_event_reason": "kernel.perf_event_paranoid=4; no codec execution occurred in the failed perf attempt"
+  },
+  "implementation": {
+    "change": "Move the unchanged Sigmoid::Logit table-index body from sigmoid.cpp into sigmoid.h for compiler inlining.",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_binary_sha256": "3f56e844fcec452bff257b3cc5eecf18e1a8c3c2ce49447e897f3a91aae5df0f",
+    "candidate_binary_sha256": "67dfe7bb94b47585dfd6eb6d84ce2929edf5e264dd9bd43f547cdd3443dd0e8a",
+    "reference_sigmoid_cpp_sha256": "d6aeb3606f3bac9acf3dbbf9362e3864f308ce3d0140918170c5a845ad7d4ee5",
+    "reference_sigmoid_h_sha256": "b5d53dd88856437f51cdaebeab3e6399ce62ebf2d2c081292c957dacdf4c9cab",
+    "candidate_sigmoid_cpp_sha256": "1d95a6a9976f7bce22e82b78c4ce9ad91692b6e0d6dd431f1a959c871585c1",
+    "candidate_sigmoid_h_sha256": "36c4a4cf78e849bd1a47d83f3faa67ac5b1850d1a5824403de86b0d6a778204b"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "guard_clean": true
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [13.6887, 13.7937, 13.9914],
+    "candidate_elapsed_s": [13.7986, 13.6871, 13.8919],
+    "reference_median_elapsed_s": 13.7937,
+    "candidate_median_elapsed_s": 13.7986,
+    "runtime_reduction_fraction": -0.00035523463610206214,
+    "paired_runtime_reduction_fraction": [
+      -0.008028519874056679,
+      0.007728165756831036,
+      0.007111511356976486
+    ],
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_six_archives_identical": true,
+    "maximum_tree_rss_kib": 7639040,
+    "all_guards_clean": true,
+    "balanced_order": ["reference", "candidate", "candidate", "reference", "reference", "candidate"]
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false
+  },
+  "decision": {
+    "verdict": "retire_inline_logit_unchanged",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "reason": "Archive identity and memory pass, but the balanced median regresses by 0.0355% and paired directions disagree. The profile percentage was largely out-of-line instrumentation cost rather than removable release-build work.",
+    "next_action": "Do not tune or retest Logit inlining. Target the LSTM forward/backward data path or PAQ ContextMap2 only through a materially different implementation with an archive-identity smoke gate."
+  },
+  "claim_boundary": "This receipt records a retired 10K ancestor runtime proxy. It does not qualify endpoint428 runtime, change the counted forecast, or authorize a larger gate."
+}
