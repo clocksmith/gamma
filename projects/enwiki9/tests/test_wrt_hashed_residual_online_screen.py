@@ -136,7 +136,12 @@ def test_hierarchical_confirmation_ignores_local_selection(tmp_path: Path) -> No
 @pytest.mark.skipif(shutil.which("g++") is None, reason="g++ unavailable")
 @pytest.mark.parametrize(
     "source_name",
-    ["wrt_hashed_residual_online_screen.cpp", "wrt_hierarchical_phase_residual_screen.cpp"],
+    [
+        "wrt_hashed_residual_online_screen.cpp",
+        "wrt_hierarchical_phase_residual_screen.cpp",
+        "wrt_phase_residual_native.cpp",
+        "wrt_phase_residual_native_replay.cpp",
+    ],
 )
 def test_cpp_screen_builds_with_warnings_as_errors(source_name: str) -> None:
     source = TOOLS / source_name

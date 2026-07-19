@@ -146,13 +146,20 @@ def main() -> int:
     layer_row = selected_row(layer_core, layer_core_path)
     layer_receipt_path = overlay / "layer0_mixer10_over_endpoint428_nativeq16_v1.json"
     layer_receipt = load_json(layer_receipt_path)
+    native_component_path = base / "wrt-phase-residual-native-component.json"
+    native_component = load_json(native_component_path)
     layer_gain = int(layer_receipt["exact_replay"]["full"]["saved_bytes"])
     layer_required_bpm = float(layer_receipt["economics"]["required_incremental_bytes_per_1m"])
     layer_program_allowance = round((layer_required_bpm - TARGET_DEBT_BYTES / 1000) * 1000)
     hierarchy_endpoint_gain = int(endpoint_row["exact_saved_bytes"])
     hierarchy_layer_gain = int(layer_row["exact_saved_bytes"])
+    if int(native_component["exact_replay"]["saved_bytes"]) != hierarchy_layer_gain:
+        raise ValueError("native component replay differs from hierarchy screen")
+    hierarchy_component_cost = int(
+        native_component["sources"]["component_concatenated_gzip9_bytes"]
+    )
     composite_gain = layer_gain + hierarchy_layer_gain
-    composite_program_ceiling = layer_program_allowance + gzip_bytes
+    composite_program_ceiling = layer_program_allowance + hierarchy_component_cost
     composite_score = CANONICAL_FORECAST_BYTES - composite_gain * 1000 + composite_program_ceiling
     target_substrate = {
         "endpoint428": {
@@ -180,9 +187,11 @@ def main() -> int:
             "regressing_blocks": layer_row["regressing_blocks"],
             "block_qbits": layer_row["block_qbits"],
             "layer0_program_allowance_bytes": layer_program_allowance,
-            "hierarchy_standalone_gzip_ceiling_bytes": gzip_bytes,
+            "hierarchy_component_gzip_bytes": hierarchy_component_cost,
             "counterfactual_full_transfer_score_bytes": composite_score,
-            "counterfactual_full_transfer_score_percent": composite_score / 1_000_000_000 * 100,
+            "counterfactual_full_transfer_score_percent": round(
+                composite_score / 1_000_000_000 * 100, 7
+            ),
             "counterfactual_full_transfer_margin_bytes": TARGET_BYTES - composite_score,
             "counterfactual_is_not_forecast": True,
             "artifacts": {
@@ -203,6 +212,7 @@ def main() -> int:
                     "layer0_mixer10_over_endpoint428_nativeq16_v1.json",
                 ),
                 "screen_receipt": artifact(root, layer_core_path),
+                "native_component_receipt": artifact(root, native_component_path),
             },
         },
     }
@@ -240,7 +250,9 @@ def main() -> int:
             "layer0_composite_exact_saved_bytes_per_million": float(composite_gain),
             "layer0_composite_program_ceiling_bytes": composite_program_ceiling,
             "layer0_composite_counterfactual_score_bytes": composite_score,
-            "layer0_composite_counterfactual_score_percent": composite_score / 1_000_000_000 * 100,
+            "layer0_composite_counterfactual_score_percent": round(
+                composite_score / 1_000_000_000 * 100, 7
+            ),
             "layer0_composite_counterfactual_margin_bytes": TARGET_BYTES - composite_score,
             "counterfactual_is_not_forecast": True,
         },
