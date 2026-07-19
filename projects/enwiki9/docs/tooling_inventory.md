@@ -17,6 +17,7 @@ runner-adjacent.
 | `cmix21_memory_valve_report.py` | Generates the PPMD cap ladder and archive/RSS tradeoff report. |
 | `cmix21_memory_surface_scan.py` | Scans cmix21 result and guard receipts for non-PPMD memory-surface evidence. |
 | `hutter_upper_bound_certificate.py` | Builds or refreshes upper-bound certificate state. |
+| `hutter_run_ledger.py` | Generates source-bound JSON and Markdown candidate-run ledgers grouped by measured scope, corpus population, evidence tier, proof state, and forecast. |
 | `enwiki9_evidence_matrix.py` | Generates `docs/evidence_matrix.md` from result JSONs only. |
 | `enwiki9_best_results.py` | Generates `docs/best_results.md`, a compact top-results view by measured scope. |
 | `enwiki9_status_receipt.py` | Generates `docs/status_receipt.md/json` from certificate, lock, gate, and process state, including a flat `operator_summary` for handoff automation. |

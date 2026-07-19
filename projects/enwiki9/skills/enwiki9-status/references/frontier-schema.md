@@ -18,6 +18,11 @@ the generated operational `docs/status_receipt.json`; it does not replace it.
 - `metric_assertions`: optional JSON-pointer checks binding a candidate field
   directly to a machine-readable source receipt.
 - `decision`, `next_gate`, `disqualifiers`: concise current interpretation.
+- `parent_candidate_id`: optional direct lineage parent.
+- `additional_runs`: optional source-bound measurements for other scopes or
+  corpus populations of the same candidate. Each run requires `run_id`,
+  `scope_bytes`, `population`, `source_paths`, and JSON-pointer
+  `metric_assertions` for decisive duplicated metrics.
 
 ## Status Values
 

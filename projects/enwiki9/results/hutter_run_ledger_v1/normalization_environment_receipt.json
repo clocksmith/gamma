@@ -1,0 +1,20 @@
+{
+  "schema": "enwiki9_normalization_environment_receipt_v1",
+  "generated_at_utc": "2026-07-19T20:10:05Z",
+  "subject": "hutter_run_ledger_v1",
+  "command": "python3 projects/enwiki9/tools/enwiki9_normalize_receipts.py --json",
+  "status": "environment_failure",
+  "candidate_evidence_changed": false,
+  "failures": [
+    {
+      "component": "enwiki9_artifact_fingerprint_audit.py",
+      "reason": "The local ignored-artifact overlay contains historical artifacts that fail the tracked fingerprint audit."
+    },
+    {
+      "component": "enwiki9_doc_lint.py",
+      "reason": "Generated organization and residual summary counts differ from tracked snapshots because the local ignored-artifact overlay is not the canonical historical overlay."
+    }
+  ],
+  "preservation": "Unrelated regenerated views were restored to their tracked state. Candidate receipts, archives, source packages, and proof state were not relabeled or mutated.",
+  "claim_boundary": "This is an environment receipt only. It is not compression evidence and receives no score credit."
+}

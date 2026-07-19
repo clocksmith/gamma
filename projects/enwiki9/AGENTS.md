@@ -90,6 +90,8 @@ pgrep -af 'run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21|enwiki9-heav
 Use these sources as needed rather than rereading all of them mechanically:
 
 - `docs/status_receipt.json` for live gate and lock state;
+- `docs/hutter_run_ledger.json` for normalized candidate results by measured
+  scope, population, evidence tier, proof state, and forecast;
 - `ALGORITHMS.md` and `docs/research_register.md` for measured frontiers;
 - `docs/takeover_runbook.md` for proof continuation;
 - `CMIX21_LOCK_SAFE_QUEUE.md` only for the serialized cmix21 lane.
@@ -190,6 +192,12 @@ views, run:
 ```bash
 python3 projects/enwiki9/tools/enwiki9_normalize_receipts.py
 ```
+
+Record multiple measured scopes or corpus populations for one candidate as
+source-bound `additional_runs` in `docs/hutter_frontier.json`. Each run needs a
+stable run ID, scope, population label, receipt path, and JSON-pointer metric
+assertions for decisive numbers. Do not overwrite a prefix, disjoint window,
+or later-scope result with a newer aggregate.
 
 If normalization depends on an unavailable overlay, record that environment
 failure without relabeling research evidence or mutating unrelated proof state.
