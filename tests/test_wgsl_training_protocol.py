@@ -4,6 +4,12 @@ from pathlib import Path
 
 import pytest
 
+from projects.distillation.wgsl.training.lora_transport import (
+    compress_lora_terms,
+    countsketch_rows,
+    transport_projection_seed,
+)
+
 
 SCRIPT = (
     Path(__file__).resolve().parents[1]
@@ -105,6 +111,68 @@ def test_tree_hash_changes_with_adapter_bytes(tmp_path):
     second = MODULE._hash_tree(adapter)
     assert len(first) == 64
     assert first != second
+
+
+def test_countsketch_transport_is_seeded_and_shape_safe():
+    import torch
+
+    source = torch.arange(35, dtype=torch.float32).reshape(7, 5)
+    first = countsketch_rows(source, 3, 47, torch)
+    second = countsketch_rows(source, 3, 47, torch)
+    different = countsketch_rows(source, 3, 29, torch)
+    assert first.shape == (3, 5)
+    assert torch.equal(first, second)
+    assert not torch.equal(first, different)
+    assert torch.isfinite(first).all()
+
+
+def test_factor_qr_svd_compression_preserves_exact_low_rank_delta():
+    import torch
+
+    generator = torch.Generator().manual_seed(47)
+    factor_a = torch.randn((2, 5), generator=generator)
+    factor_b = torch.randn((7, 2), generator=generator)
+    output_a, output_b, receipt = compress_lora_terms(
+        [(factor_a, factor_b, 0.75)],
+        target_rank=2,
+        target_scale=2.0,
+        torch=torch,
+    )
+    expected = 0.75 * (factor_b @ factor_a)
+    actual = 2.0 * (output_b @ output_a)
+    assert torch.allclose(expected, actual, atol=1e-5, rtol=1e-5)
+    assert receipt["retainedEnergy"] == pytest.approx(1.0)
+
+
+def test_transport_projection_basis_is_shared_across_adapter_lineages():
+    first = transport_projection_seed(47, 3, "self_attn.q_proj", 7)
+    second = transport_projection_seed(47, 3, "self_attn.q_proj", 7)
+    other_layer = transport_projection_seed(47, 3, "self_attn.q_proj", 11)
+    assert first == second
+    assert first != other_layer
+
+
+def test_delta_kd_transfers_teacher_adapter_shift_to_student_base():
+    import torch
+
+    teacher_base = torch.tensor([[1.0, 2.0]])
+    teacher_adapted = torch.tensor([[1.5, 1.0]])
+    student_base = torch.tensor([[3.0, 4.0]])
+    target = MODULE._kd_target_logits(
+        "delta-kd-topk-v1",
+        teacher_adapted,
+        teacher_base,
+        student_base,
+        0.5,
+    )
+    assert torch.equal(target, torch.tensor([[3.25, 3.5]]))
+    assert MODULE._kd_target_logits(
+        "llm-neo-topk-v1",
+        teacher_adapted,
+        teacher_base,
+        None,
+        1.0,
+    ) is teacher_adapted
 
 
 def test_base_policy_load_skips_lora_attachment(monkeypatch, tmp_path):

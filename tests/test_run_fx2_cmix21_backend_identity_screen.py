@@ -35,6 +35,11 @@ def test_summarize_runs_reports_identity_and_runtime_reduction() -> None:
     result = MODULE.summarize_runs(runs)
     assert result["all_guards_clean"]
     assert result["archive_identity"]
+    assert result["role_archive_determinism"] == {
+        "reference": True,
+        "candidate": True,
+    }
+    assert result["role_archive_bytes"] == {"reference": 7, "candidate": 7}
     assert result["reference_median_elapsed_s"] == 10.5
     assert result["candidate_median_elapsed_s"] == 8.5
     assert result["candidate_runtime_reduction_fraction"] == (
@@ -75,3 +80,64 @@ def test_build_backend_command_is_unchanged_without_affinity() -> None:
     )
     assert command[1] == "-c"
     assert "taskset" not in command
+
+
+def test_pareto_evaluation_credits_deterministic_smaller_archive() -> None:
+    metrics = {
+        "role_archive_determinism": {"reference": True, "candidate": True},
+        "role_archive_bytes": {"reference": 44_958, "candidate": 44_931},
+        "candidate_runtime_reduction_fraction": -0.043,
+    }
+    result = MODULE.evaluate_pareto_candidate(
+        metrics,
+        scope_bytes=250_000,
+        baseline_counted_forecast_bytes=109_408_345,
+        calibration_factor=66.955334,
+        target_score_bytes=109_500_000,
+        minimum_runtime_reduction_fraction=0.0,
+    )
+    assert result["candidate_archive_savings_bytes"] == 27
+    assert result["candidate_provisional_counted_forecast_bytes"] == 109_336_034
+    assert result["target_margin_bytes"] == 163_966
+    assert result["score_projection_pass"]
+    assert not result["runtime_screen_pass"]
+    assert result["verdict"] == "score_projection_passed_runtime_screen_failed"
+    assert not result["larger_prize_gate_authorized"]
+
+
+def test_pareto_evaluation_rejects_same_role_nondeterminism() -> None:
+    metrics = {
+        "role_archive_determinism": {"reference": True, "candidate": False},
+        "role_archive_bytes": {"reference": 44_958, "candidate": None},
+        "candidate_runtime_reduction_fraction": 0.2,
+    }
+    result = MODULE.evaluate_pareto_candidate(
+        metrics,
+        scope_bytes=250_000,
+        baseline_counted_forecast_bytes=109_408_345,
+        calibration_factor=66.955334,
+        target_score_bytes=109_500_000,
+        minimum_runtime_reduction_fraction=0.0,
+    )
+    assert result["verdict"] == "reject_nondeterministic_role_archive"
+    assert not result["larger_prize_gate_authorized"]
+
+
+def test_pareto_evaluation_distinguishes_target_margin_from_score_gain() -> None:
+    metrics = {
+        "role_archive_determinism": {"reference": True, "candidate": True},
+        "role_archive_bytes": {"reference": 44_958, "candidate": 44_979},
+        "candidate_runtime_reduction_fraction": 0.061,
+    }
+    result = MODULE.evaluate_pareto_candidate(
+        metrics,
+        scope_bytes=250_000,
+        baseline_counted_forecast_bytes=109_408_345,
+        calibration_factor=66.955334,
+        target_score_bytes=109_500_000,
+        minimum_runtime_reduction_fraction=0.10,
+    )
+    assert result["candidate_archive_delta_bytes"] == 21
+    assert result["score_projection_pass"]
+    assert not result["runtime_screen_pass"]
+    assert result["verdict"] == "target_projection_passed_runtime_threshold_missed"

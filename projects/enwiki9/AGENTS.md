@@ -43,6 +43,17 @@ matter after program cost, transfer loss, memory, and runtime.
   integration.
 - Do not run a costly larger gate that is already known to miss unless its
   result resolves a specific decision that cannot be answered more cheaply.
+- Before every promotion or larger-scope gate, compute the candidate's best-case
+  remaining byte leverage after counted program cost and measured transfer loss.
+  State a numeric kill condition. If the candidate cannot still reach the target,
+  stop it immediately: do not spend another run on determinism, receipts, tuning,
+  or a larger scope. Pivot to a mechanism with enough measured or bounded
+  headroom to matter.
+- An in-flight early-stop inference must compare like execution phases and
+  account for fixed startup, pretraining, preprocessing, and teardown work. Do
+  not extrapolate whole-run completion from a phase-local progress counter. If
+  the available telemetry cannot prove the kill condition, let the smallest
+  decisive gate finish rather than falsely retiring a viable candidate.
 
 Every substantive experiment should state, as briefly as possible:
 
