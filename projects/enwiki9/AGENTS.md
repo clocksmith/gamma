@@ -147,6 +147,28 @@ selection are useful protections against overfitting. Apply them in proportion
 to the claim. They are required before generalization claims, but they must not
 become ceremony that delays a direct exact test.
 
+## Status Reporting
+
+Use `skills/enwiki9-status` for Hutter Prize status. Every user-facing status
+update must state, compactly:
+
+- the `109,500,000` target;
+- the verified official full-1G score, or `unknown` when none exists;
+- the best counted forecast and its signed distance from target;
+- the active candidate's receipt-backed projection and distance, or `unknown`;
+- the live gate's scope, progress, RSS guard state, and terminal status.
+
+Label partial archive sizes and progress projections as provisional. Never call
+them a current score, subtract them from the official distance, or let them
+replace the last terminal receipt.
+
+Live monitoring must be event-driven. Sample guards as often as needed for
+safety, but do not publish unchanged polling output. Emit a routine update only
+when progress crosses a five-percentage-point milestone. Emit immediately on a
+terminal result, guard breach, material memory-boundary crossing, heavy-lock or
+candidate-identity change, or an explicit user status request. Persist the last
+emitted milestone so a restarted watcher does not repeat old updates.
+
 ## Record Decisions
 
 Do not leave important state only in chat. Record decisive commands, hashes,

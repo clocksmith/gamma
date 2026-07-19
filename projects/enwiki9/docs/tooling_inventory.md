@@ -94,6 +94,12 @@ heavy lane.
 | `fx2_attribution_external_base_screen.py` | Screens causal component endpoints against an exact external base probability stream with train/dev/holdout separation, exact range replay, and regression/economics gates. |
 | `cmix_aux_logit_blend_screen.py` | Selects and replays bounded logit blends between a frozen CMIX base and an independently evolved causal endpoint, including fixed-point-ready weights and held-out block audits. |
 | `endpoint428_paired_trace.py` | Validates same-execution compact-base, endpoint428, hybrid, and truth streams; proves trace-on/off archive identity and emits an exact `FX2PT01` hybrid trace. |
+| `compact_layer0_blend_screen.py` | Selects one compact layer-0 residual endpoint over endpoint428 using development rows before sealed holdout replay. |
+| `compact_layer0_sparse_blend_screen.py` | Fits and exactly replays a sparse fixed-point compact layer-0 blend over endpoint428. |
+| `compact_layer0_online_mixer_screen.cpp` | Runs the causal fixed-point online endpoint428/compact layer-0 residual mixer with frozen holdout boundaries. |
+| `compact_layer0_online_mixer_receipt.py` | Seals exact arithmetic and replay evidence for a frozen compact online-mixer probability stream. |
+| `endpoint428_mxx_sse_shadow.py` | Screens decoder-causal endpoint428 SSE tables keyed by FX2's reconstructed `mxx` state. |
+| `fx2lite_fxcm_hash_mixer_trace.cpp` | Emits causal compact hashed-mixer endpoints from FX2-lite's already-computed FXCM probability vector. |
 | `fx2_compact_trace_window.py` | Extracts and seals identity-checked cold-reset or cumulative compact probability windows without relabeling them as prefix evidence. |
 | `p1_wrt_to_fx2pt_trace.py` | Combines an exact P1 probability stream with its matching WRT store into the compact `FX2PT01` truth/probability trace format. |
 | `wikiir_prior_page_columnar_probe.py` | Repackages the exact prior-page ADD/COPY/RUN IR into fourteen typed columns, verifies byte-identical IR/raw reconstruction, and applies per-column MDL accounting. |
@@ -108,6 +114,7 @@ heavy lane.
 | `wikiir_template_value_referentiation_probe.py` | Measures complete-page-causal same-skeleton template-field COPY/ADD headroom against a matched deterministic prior-template control. |
 | `wikiir_url_prefix_reuse_probe.py` | Screens a self-trained URL host-plus-first-path-prefix reference event with full opcode and identifier costs before inverse construction. |
 | `wrt_entity_regret_router_shadow.py` | Applies node-local causal reflected regret to the exact WRT entity-trie endpoint with frozen train/held-out accounting. |
+| `wrt_entity_context_mixer_shadow.py` | Selects and exactly replays a causal contextual mixer over WRT entity-trie residual experts. |
 | `wrt_exact.py` | Parses FX2/CMIX21 WRT stores into exact decoded bytes and completed causal events shared by WRT-native scorers. |
 | `wrt_title_token_automaton.py` | Scores hard current-title transition rules and previous-title controls against an exact compact probability trace with raw/store/archive identity checks. |
 | `wrt_title_support_backoff.py` | Scores integer hierarchical title-transition probabilities and current-minus-previous contrast against the same exact substrate. |
@@ -125,6 +132,7 @@ heavy lane.
 | `seal_cmix21_lstm200_fx2lite428_allocator_recovery.py` | Seals the selective allocator/free-list recovery with exact-1M archive identity, roundtrip, independent clean-build determinism, decimal tree-RSS guards, reproducible counted source, and a recalculated strict exact-10M ceiling. |
 | `seal_cmix21_lstm200_fx2lite428_context_restore_failure.py` | Maps the allocator-recovered exact-10M SIGSEGV through a machine-code-identical symbol build to the FX2-lite PPMD `RestoreModelRare` suffix walk, preserves the no-score boundary, and authorizes only bounded context-restore recovery. |
 | `seal_cmix21_lstm200_fx2lite428_context_recovery.py` | Seals bounded reset-time context/suffix recovery with exact-1M archive identity, roundtrip, independent clean-build determinism, decimal tree-RSS guards, reproducible counted source, and a revised strict exact-10M ceiling. |
+| `seal_endpoint428_pair_layer0_native.py` | Seals native endpoint428 pair/layer-0 1M identity, roundtrip, deterministic source accounting, disjoint transfer, and exact 10M economics. |
 | `seal_wrt_static_boundary_swap_disjoint.py` | Seals an untouched reset-slice archive comparison for the static WRT dictionary boundary-swap candidate. |
 | `seal_wrt_static_boundary_swap_geometry_title_proxy.py` | Seals reversible geometry-title proxy evidence and compressed store/dictionary costs for a static WRT boundary swap. |
 | `seal_wrt_static_boundary_swap_112plus80_gate.py` | Seals the exact 10M static-WRT-swap comparison against the source-built 112+80 codec, including package delta and projected-score accounting. |
@@ -203,6 +211,7 @@ lanes unless all model/index bytes are counted.
 | Tool | Purpose |
 |---|---|
 | `enwiki9_delayed_status_check.sh` | Delayed status probe for active runs, including cmix phase, staging temp files, decode scope progress, lock state, gate-decider output, and a stable `run_logs/enwiki9_delayed_status_latest.log` pointer. |
+| `enwiki9_gate_watch.py` | Silently samples a live native gate and emits durable JSON events only at progress milestones or guard, memory, identity, lock, process, and terminal state changes. |
 
 ## Maintenance Rules
 

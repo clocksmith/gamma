@@ -132,6 +132,7 @@ def validate_and_normalize(
     project_root: Path,
     ledger: dict[str, Any],
     operational: dict[str, Any],
+    live_observation: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
     if ledger.get("schema") != "enwiki9_hutter_frontier_v1":
@@ -237,6 +238,7 @@ def validate_and_normalize(
                 "active_processes": operational.get("active_processes"),
                 "heavy_lock": operational.get("heavy_lock"),
                 "operator_action": operational.get("operator_action"),
+                "live_observation": live_observation,
             },
             "repository": git_state(project_root),
             "validation": {"ok": not errors, "errors": errors},
@@ -252,18 +254,72 @@ def fmt_int(value: Any) -> str:
 def render_markdown(status: dict[str, Any]) -> str:
     official = status["official"]
     forecast = status.get("canonical_forecast") or {}
-    lines = ["# enwiki9 Hutter Status", ""]
+    target_score = status["target"]["score_bytes"]
+    lines = ["# enwiki9 Hutter Status", "", "## Score Status", ""]
+    lines.append(f"- Target score: `{fmt_int(target_score)}` bytes.")
     if official["won"]:
         lines.append(
-            f"Official win verified: score `{fmt_int(official['result']['hutter_score'])}`."
+            f"- Verified official full-1G score: "
+            f"`{fmt_int(official['result']['hutter_score'])}`; target achieved."
         )
     elif official["verified_full_corpus_result"]:
         lines.append(
-            f"Official full-corpus result: `{fmt_int(official['result']['hutter_score'])}`; "
-            f"distance above target `{fmt_int(official['distance_bytes'])}` bytes."
+            f"- Verified official full-1G score: "
+            f"`{fmt_int(official['result']['hutter_score'])}`; distance above target "
+            f"`{fmt_int(official['distance_bytes'])}` bytes."
         )
     else:
-        lines.append("Official distance: unknown; no verified exact 1G result exists.")
+        lines.append(
+            "- Verified official full-1G score: `unknown`; no exact result exists."
+        )
+        lines.append("- Official distance: `unknown`.")
+    forecast_score = forecast.get("forecast_score")
+    forecast_debt = forecast.get("forecast_debt_bytes")
+    lines.append(
+        f"- Best counted forecast: `{fmt_int(forecast_score)}`; "
+        f"distance above target `{fmt_int(forecast_debt)}` bytes."
+    )
+    active = next(
+        (
+            row
+            for row in status["candidates"]
+            if row.get("status") in {"active", "promotable"}
+        ),
+        None,
+    )
+    active_score = active.get("forecast_score") if active else None
+    active_debt = active.get("forecast_debt_bytes") if active else None
+    active_margin = active.get("forecast_margin_bytes") if active else None
+    if active_score is None:
+        lines.append("- Active candidate projection: `unknown`; not receipt-backed yet.")
+    else:
+        distance_label = "margin below target" if active_margin >= 0 else "distance above target"
+        distance_value = active_margin if active_margin >= 0 else active_debt
+        lines.append(
+            f"- Active candidate provisional projection: `{fmt_int(active_score)}`; "
+            f"{distance_label} `{fmt_int(distance_value)}` bytes."
+        )
+    live = status["operational"].get("live_observation") or {}
+    if live:
+        decimal_limit = live.get("official_decimal_limit_kib")
+        single_rss = live.get("max_sampled_single_rss_kib")
+        decimal_margin = (
+            decimal_limit - single_rss
+            if isinstance(decimal_limit, int) and isinstance(single_rss, int)
+            else None
+        )
+        lines.append(
+            f"- Live gate: `{live.get('candidate', 'unknown')}` at scope "
+            f"`{fmt_int(live.get('scope_bytes'))}`; progress "
+            f"`{live.get('progress_percent', 'unknown')}%`; guard "
+            f"`{live.get('guard_status', 'unknown')}`; terminal "
+            f"`{bool(live.get('terminal'))}`."
+        )
+        lines.append(
+            f"- Live RSS: process-tree `{fmt_int(live.get('max_sampled_tree_rss_kib'))}` KiB; "
+            f"decimal single-process margin `{fmt_int(decimal_margin)}` KiB; "
+            f"breach `{bool(live.get('rss_guard_exceeded'))}`."
+        )
     lines.extend(
         [
             "",
@@ -345,6 +401,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--project-root", type=Path)
     parser.add_argument("--ledger", type=Path)
     parser.add_argument("--operational-status", type=Path)
+    parser.add_argument("--live-observation", type=Path)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     parser.add_argument("--format", choices=("markdown", "json"), default="markdown")
@@ -359,8 +416,16 @@ def main() -> int:
     operational_path = (
         args.operational_status or root / "docs" / "status_receipt.json"
     )
+    live_observation = (
+        load_object(args.live_observation)
+        if args.live_observation is not None
+        else None
+    )
     status, errors = validate_and_normalize(
-        root, load_object(ledger_path), load_object(operational_path)
+        root,
+        load_object(ledger_path),
+        load_object(operational_path),
+        live_observation,
     )
     markdown = render_markdown(status)
     encoded = json.dumps(status, indent=2, sort_keys=True) + "\n"
