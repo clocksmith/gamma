@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_paq8_simd_bucket_find_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Compare ContextMap2 Bucket's seven 16-bit checksums with one SSE2 operation, preserve current-MRU priority and lowest-index match semantics, and run the unchanged replacement scan only on misses.",
+  "implementation": {
+    "ancestor": "PAQ8 direct-context runtime proxy",
+    "patch": "patches/cmix21_paq8_simd_bucket_find_v1.patch",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "instruction_requirement": "SSE2",
+    "reference_source_sha256": "49055a445c81750a53155c2eb775c0f573c25309d73db06036fda4b7ff490f96",
+    "candidate_source_sha256": "9999c72b6ff721bb77aabf39125240c6fffced2d7103aa723613a1e10fcd81a4",
+    "candidate_binary_sha256": "df0685252f3230a3177dca1fd2f7f554e3b73143e4df61ce04b4d0d4f2688149"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "candidate_peak_tree_rss_kib": 5886592,
+    "guard_clean": true
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [13.1898, 13.389, 13.7902, 13.6892, 13.7903, 13.4963, 13.8932, 13.4845],
+    "candidate_elapsed_s": [13.2974, 13.2998, 13.5961, 13.5946, 13.2957, 13.3844, 13.496, 13.4924],
+    "reference_median_elapsed_s": 13.59275,
+    "candidate_median_elapsed_s": 13.4384,
+    "incremental_runtime_reduction_fraction": 0.01135531809236535,
+    "candidate_speedup": 1.0114857423502797,
+    "paired_runtime_reduction_fraction": [-0.00815781892068111, 0.006662185376054967, 0.014075212832301244, 0.006910557227595462, 0.03586578972176096, 0.008291161281240068, 0.02858952581118819, -0.0005858578367755091],
+    "median_paired_runtime_reduction_fraction": 0.007600859254417764,
+    "positive_pairs": 6,
+    "pair_count": 8,
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_sixteen_archives_identical": true,
+    "roundtrip_ok": true,
+    "restored_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "maximum_reference_peak_tree_rss_kib": 7638400,
+    "maximum_candidate_peak_tree_rss_kib": 7638400,
+    "decode_peak_tree_rss_kib": 7636864,
+    "all_guards_clean": true,
+    "sample_interval_s": 0.1,
+    "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_paq8_simd_bucket_find_runtime_proxy_v1"
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false,
+    "reason": "This is an archive-identical ancestor runtime proxy; exact endpoint428 source transfer and official reference calibration remain absent."
+  },
+  "decision": {
+    "verdict": "promote_paq8_simd_bucket_find_to_exact_source_transplant",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "reason": "All sixteen balanced archives are identical, roundtrip passes, median runtime falls 1.136%, six of eight pairs improve, median paired improvement is 0.760%, and observed peak RSS is unchanged.",
+    "next_action": "Transplant after PAQ8 direct-index contexts into the checksum-bound exact candidate, require exact archive identity, then measure the combined patch stack under controlled reference-calibrated timing."
+  },
+  "claim_boundary": "This receipt proves archive identity, roundtrip, clean decimal guards, and a positive balanced 10K runtime proxy on the closest constructive ancestor. It does not prove exact endpoint428 transfer, official runtime compliance, forecast change, or a full-corpus score."
+}

@@ -100,6 +100,7 @@ heavy lane.
 | `compact_layer0_blend_screen.py` | Selects one compact layer-0 residual endpoint over endpoint428 using development rows before sealed holdout replay. |
 | `compact_layer0_sparse_blend_screen.py` | Fits and exactly replays a sparse fixed-point compact layer-0 blend over endpoint428. |
 | `compact_layer0_online_mixer_screen.cpp` | Runs the causal fixed-point online endpoint428/compact layer-0 residual mixer with frozen holdout boundaries. |
+| `endpoint_fixed_share_stack.cpp` | Runs a deterministic decoder-causal Bayesian fixed-share stack over preserved P1 endpoints with development-only configuration selection and exact arithmetic replay. |
 | `compact_layer0_online_mixer_receipt.py` | Seals exact arithmetic and replay evidence for a frozen compact online-mixer probability stream. |
 | `endpoint_diagonal_reservoir_screen.cpp` | Screens tiny decoder-built diagonal multi-timescale reservoirs over exact P1 streams with development-only selection, exact range-coder accounting, and a neutral zero-update control. |
 | `endpoint428_mxx_sse_shadow.py` | Screens decoder-causal endpoint428 SSE tables keyed by FX2's reconstructed `mxx` state. |

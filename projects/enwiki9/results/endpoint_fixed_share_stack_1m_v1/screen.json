@@ -1,0 +1,21 @@
+{
+  "schema": "endpoint_fixed_share_stack_v1",
+  "evidence_level": "causal_dev_selected_exact_arithmetic_shadow",
+  "scope": {"rows": 4805936, "train_end_row": 2883561, "dev_end_row": 3844748, "selection_reads_holdout": false},
+  "causality": {"prediction_precedes_truth": true, "posterior_updates_after_truth": true, "shipped_weights_required": false},
+  "endpoints": ["base", "endpoint428", "entity", "mxx", "mxx_dict", "shared_fxcm", "shared_fxcm_raw", "layer0"],
+  "configs": [
+    {"name": "global_p90_s10", "context": "global", "base_prior_ppm": 900000, "share_ppm": 10, "train_gain_qbits": 3449, "dev_gain_qbits": -238},
+    {"name": "global_p99_s10", "context": "global", "base_prior_ppm": 990000, "share_ppm": 10, "train_gain_qbits": 2359, "dev_gain_qbits": 63},
+    {"name": "bitpos_p90_s10", "context": "bit_position", "base_prior_ppm": 900000, "share_ppm": 10, "train_gain_qbits": 5928, "dev_gain_qbits": 231},
+    {"name": "bitpos_p99_s10", "context": "bit_position", "base_prior_ppm": 990000, "share_ppm": 10, "train_gain_qbits": 2807, "dev_gain_qbits": 54},
+    {"name": "regime_p90_s10", "context": "previous_byte_class_bit_position_base_confidence", "base_prior_ppm": 900000, "share_ppm": 10, "train_gain_qbits": 11213, "dev_gain_qbits": 875},
+    {"name": "regime_p99_s10", "context": "previous_byte_class_bit_position_base_confidence", "base_prior_ppm": 990000, "share_ppm": 10, "train_gain_qbits": 5631, "dev_gain_qbits": 1161},
+    {"name": "regime_p99_s1000", "context": "previous_byte_class_bit_position_base_confidence", "base_prior_ppm": 990000, "share_ppm": 1000, "train_gain_qbits": 926, "dev_gain_qbits": 119}
+  ],
+  "selection": {"index": 5, "name": "regime_p99_s10"},
+  "qbit_replay": {"train_gain_qbits": 5631, "dev_gain_qbits": 1161, "holdout_gain_qbits": 2129},
+  "exact_replay": {"full": {"base_payload_bytes": 173849, "candidate_payload_bytes": 173845, "saved_bytes": 4}, "holdout": {"base_payload_bytes": 31327, "candidate_payload_bytes": 31326, "saved_bytes": 1}},
+  "deterministic_probability_replay": true,
+  "claim_boundary": "Causal trace replay only; endpoint integration, counted code, native roundtrip, resources, broader transfer, and full-corpus proof remain required."
+}

@@ -1,0 +1,13 @@
+diff --git a/src/models/paq8.cpp b/src/models/paq8.cpp
+--- a/src/models/paq8.cpp
++++ b/src/models/paq8.cpp
+@@ -1357,6 +1357,9 @@ class ContextMap2 {
+                                     // If not found, insert or replace lowest priority (skipping 2 most recent).
+       if (Checksums[MRU&15]==Checksum)
+         return &BitState[MRU&15][0];
++      const int previous = MRU>>4;
++      if (previous<7 && Checksums[previous]==Checksum)
++        return MRU=MRU<<4|previous, &BitState[previous][0];
+       int worst=0xFFFF, index=0;
+       for (int i=0; i<7; ++i) {
+         if (Checksums[i]==Checksum)

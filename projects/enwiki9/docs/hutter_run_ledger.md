@@ -3,8 +3,8 @@
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
 - Target: `109,500,000` bytes (`10.9500000%`).
-- Candidate runs indexed: `31`.
-- Candidate lineages indexed: `29`.
+- Candidate runs indexed: `36`.
+- Candidate lineages indexed: `34`.
 
 ## 65,536,000 Bytes
 
@@ -45,6 +45,7 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | `wrt_phase_newton_residual_blend_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 3 | 3.000 | unknown | unknown | unknown | not recorded |
 | `endpoint_residual_surprise_history_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 12 | 12.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_pair_only_online_mixer_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 22 | 22.000 | unknown | unknown | unknown | not recorded |
+| `endpoint_fixed_share_stack_1m_v1__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | unknown | 4 | 4.000 | unknown | unknown | unknown | not recorded |
 
 ## 600,747 Bytes
 
@@ -68,6 +69,10 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | `endpoint428_lstm_serial_forward_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_lstm_backward_dual_accum_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_inline_logit_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | opening_prefix | 2,817 | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_paq8_direct_context_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | opening_prefix | 2,817 | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_paq8_update_specialized_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | opening_prefix | 2,817 | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_paq8_second_mru_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | opening_prefix | 2,817 | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_paq8_simd_bucket_find_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | opening_prefix | 2,817 | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 
 ## 1,024 Bytes
 

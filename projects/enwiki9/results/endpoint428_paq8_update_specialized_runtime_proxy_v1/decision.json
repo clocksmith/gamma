@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_paq8_update_specialized_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Hoist the byte-global bit-position switch outside PAQ8 ContextMap2's 33-context update loop while preserving context order and state operations.",
+  "implementation": {
+    "ancestor": "PAQ8 direct-context runtime proxy",
+    "patch": "patches/cmix21_paq8_update_specialized_v1.patch",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_source_sha256": "49055a445c81750a53155c2eb775c0f573c25309d73db06036fda4b7ff490f96",
+    "candidate_source_sha256": "ebba7f22a1da1d2e74e189254a96a7a8248c0c60dc8c5cf92cad0da3595da6f1",
+    "candidate_binary_sha256": "5a4f7e42f2e4233fa935f12ec8ed988dd2a2ceaa6147882fbe6304dda5b24f7b"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "candidate_peak_tree_rss_kib": 5889664,
+    "guard_clean": true
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [13.2968, 13.2974, 13.6959],
+    "candidate_elapsed_s": [13.2923, 13.2884, 13.4949],
+    "reference_median_elapsed_s": 13.2974,
+    "candidate_median_elapsed_s": 13.2923,
+    "incremental_runtime_reduction_fraction": 0.0003835336231143343,
+    "minimum_paired_runtime_reduction_fraction": 0.0003384272907767411,
+    "maximum_paired_runtime_reduction_fraction": 0.014675924911834967,
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_six_archives_identical": true,
+    "maximum_reference_peak_tree_rss_kib": 7634688,
+    "maximum_candidate_peak_tree_rss_kib": 7635328,
+    "all_guards_clean": true,
+    "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_paq8_update_specialized_runtime_proxy_v1"
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false
+  },
+  "decision": {
+    "verdict": "retire_paq8_update_specialization_unchanged",
+    "reason": "The archive-identical median reduction is only 0.038%, and the paired spread is dominated by one noisy run. The profiled ContextMap2 cost is table and state work, not the repeated switch.",
+    "next_action": "Do not expand bit-position loop specializations. Preserve the positive PAQ8 direct-context lookup and target a different whole-region dependency or data structure."
+  },
+  "claim_boundary": "Archive-identical balanced 10K runtime proxy on the closest ancestor. No exact endpoint428 transfer, official runtime credit, forecast change, or full-corpus claim exists."
+}
