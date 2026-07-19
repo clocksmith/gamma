@@ -1,0 +1,125 @@
+{
+  "schema": "endpoint428_runtime_successor_decision_v1",
+  "generated_at_utc": "2026-07-19T12:34:26Z",
+  "evidence_tier": "constructive_prefix",
+  "scope_bytes": 250000,
+  "target": {
+    "score_bytes": 109500000,
+    "score_percent": 10.95
+  },
+  "baseline": {
+    "archive_bytes": 44967,
+    "archive_sha256": "73d215cc5894e5891cdaee18953103b0c064183460f42275a27518723559ff22",
+    "binary_sha256": "bcfe8de1fd266269762fb0b22d98a85e0b74980d35f9aba9233cea02e6a13682"
+  },
+  "gate_dot_fuse": {
+    "mechanism": "accumulate forget, input-node, and output-gate dense dots in one shared-input traversal",
+    "archive_bytes": 44958,
+    "archive_sha256": "8159fad519e0d409dbda296b3f6bbe348a541e59a090a5001b18b8bfe655ca0d",
+    "matched_saved_bytes": 9,
+    "saved_bytes_per_1m_at_measured_prefix": 36.0,
+    "binary_sha256": "538e3662a8c579f7958c676c688fc03972815e66866308df564e1826a2bbcc3a",
+    "source_sha256": "7b9d4fed31a1a6108046e158c27fbb7e9ea18f377b1e7534c98081d1881da489",
+    "encode_elapsed_s": 89.5632,
+    "adjacent_reference_elapsed_s": 90.3079,
+    "decode_elapsed_s": 90.0489,
+    "roundtrip_ok": true,
+    "input_and_roundtrip_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+    "max_sampled_tree_rss_kib": 8988768,
+    "official_decimal_over_limit_kib": 0,
+    "deterministic_encodes": 2
+  },
+  "output_update_loop": {
+    "mechanism": "replace the allocation-heavy output-weight valarray expression with an explicit in-place scalar loop",
+    "archive_bytes": 44958,
+    "archive_sha256": "8159fad519e0d409dbda296b3f6bbe348a541e59a090a5001b18b8bfe655ca0d",
+    "archive_identity": true,
+    "binary_sha256": "d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194",
+    "source_sha256": "0a5739a001fd651ec5a26a7f0e61e79e1e401e84bcc00c4e0b8fa4e69e87f10e",
+    "run_order": [
+      "reference",
+      "candidate",
+      "candidate",
+      "reference"
+    ],
+    "reference_elapsed_s": [
+      74.7255,
+      75.4783
+    ],
+    "candidate_elapsed_s": [
+      74.72,
+      75.2224
+    ],
+    "reference_median_elapsed_s": 75.1019,
+    "candidate_median_elapsed_s": 74.9712,
+    "candidate_runtime_reduction_fraction": 0.0017403021761100979,
+    "all_guards_clean": true,
+    "max_sampled_tree_rss_kib": 8988680
+  },
+  "source_package": {
+    "compression_method": "lzma",
+    "source_files": 102,
+    "package_bytes": 280147,
+    "package_sha256": "19ddcc4ec1b6f31958bed4aa19c0fbc83a56c78121933e1447e4ee011547aee0",
+    "current_best_package_bytes": 278825,
+    "incremental_package_bytes": 1322,
+    "calibration_factor": 66.955334,
+    "minimum_exact_10m_archive_savings_to_pay_package": 20,
+    "bundle_identity": true,
+    "zip_identity": true,
+    "reconstructed_source_identity": true,
+    "clean_backend_identity": true,
+    "clean_program_identity": true,
+    "reference_backend_identity": true,
+    "proof_complete": true,
+    "clean_backend_sha256": "d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194",
+    "clean_program_sha256": "37ee8cd73ade9845b1afcb39f3bbd9358956c3ff9aea3b69328da7441ee32361",
+    "claim_boundary": "The counted source package is reproducible, but its 1,322-byte cost versus the current best package is not score credit until an exact larger changed-stream replay establishes enough archive savings."
+  },
+  "profile": {
+    "instrumented_scope_bytes": 250000,
+    "gomp_barrier_wait_end_cpu_percent": 49.0,
+    "gomp_team_barrier_wait_end_cpu_percent": 3.34,
+    "interpretation": "OpenMP worker idle and synchronization dominate sampled aggregate CPU time, but active waiting and the tested SIMD/layout successors did not improve matched wall time."
+  },
+  "retired_successors": [
+    {
+      "id": "gate_simd_reduction_v1",
+      "archive_bytes": 44964,
+      "elapsed_s": 75.222,
+      "reason": "six-byte archive regression and no runtime gain versus the controlled reference median"
+    },
+    {
+      "id": "gate_transpose_avx2_v1",
+      "archive_bytes": 44958,
+      "elapsed_s": 75.9804,
+      "reason": "exact stream identity but slower steady-state runtime"
+    },
+    {
+      "id": "output_transpose_avx2_v1",
+      "archive_bytes": null,
+      "elapsed_s_at_abort": 77.3041,
+      "reason": "interrupted after decisive steady-state runtime regression; no terminal archive claim"
+    },
+    {
+      "id": "openmp_active_wait_v1",
+      "archive_bytes": 44967,
+      "elapsed_s": 100.1121,
+      "reason": "active worker waiting regressed runtime"
+    }
+  ],
+  "decision": {
+    "verdict": "retain_constructive_runtime_successor_but_runtime_not_qualified",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "package_accounting_complete": true,
+    "exact_10m_accounting_complete": true,
+    "exact_10m_receipt": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+    "next_action": "Preserve the exact 10M stream and counted package while developing a materially faster substrate implementation. Runtime qualification remains a separate controlled gate."
+  },
+  "source_paths": [
+    "patches/endpoint428_gate_dot_fuse_output_update_loop_v1.patch",
+    "results/endpoint428_pair_layer0_runtime_successors_250k_v1/source_package_receipt.json"
+  ],
+  "claim_boundary": "This receipt records the 250K implementation decision and reproducible 280,147-byte package. The linked exact 10M receipt establishes the changed stream's archive, roundtrip, deterministic re-encode, memory, and improved counted forecast. Neither receipt establishes full-corpus runtime qualification, an official score, or full-1G authorization."
+}

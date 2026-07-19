@@ -5,14 +5,14 @@
     "score_bytes": 109500000,
     "required_roundtrip": true
   },
-  "canonical_best_forecast_id": "endpoint428_pair_layer0_online_residual_successor",
+  "canonical_best_forecast_id": "endpoint428_gate_dot_fuse_output_update_loop_v1",
   "candidates": [
     {
       "id": "endpoint428_pair_layer0_online_residual_successor",
       "name": "endpoint428 plus online compact/FX2/layer-0 residual mixer",
-      "rank": 1,
-      "status": "active_full_gate_authorized",
-      "evidence_tier": "constructive_exact_10m",
+      "rank": 2,
+      "status": "active",
+      "evidence_tier": "constructive_prefix",
       "scope_bytes": 10000000,
       "archive_bytes": 1635174,
       "program_bytes": 278825,
@@ -152,17 +152,121 @@
         }
       ],
       "source_required": true,
-      "decision": "The frozen exact 10M archive is 1,635,174 bytes, saving 521 bytes (52.1 B/M) over endpoint428. The immutable BZip2 accounting record missed its frozen ceiling, but the independently reconstructed 278,825-byte LZMA source ZIP saves 72,117 package bytes and changes the counted forecast to 109,452,151 (10.9452151%), 47,849 bytes below target. Exact decode and independent deterministic re-encode pass with clean decimal-memory guards, so the full-1G gate is authorized.",
-      "next_gate": "Freeze the exact LZMA package and wrapper identities, then run guarded exact full-enwik9 encode, decode, deterministic re-encode, and official package-plus-archive accounting.",
+      "decision": "The frozen exact 10M archive is 1,635,174 bytes, saving 521 bytes (52.1 B/M) over endpoint428. The independently reconstructed 278,825-byte LZMA source ZIP changes the counted forecast to 109,452,151 (10.9452151%), 47,849 bytes below target. Exact decode and independent deterministic re-encode pass with clean decimal-memory guards, but the exact 1M runtime projects 88.7147 hours on this host and does not qualify under the official runtime rule. The full-1G gate is not authorized.",
+      "next_gate": "Promote a frozen runtime successor only after controlled matched evidence and reference-calibrated compliance with the official runtime rule while preserving counted score and memory qualification.",
       "disqualifiers": [
         "No exact full-corpus result",
-        "The 109,452,151 score is an exact-10M calibrated projection, not official proof"
+        "The 109,452,151 score is an exact-10M calibrated projection, not official proof",
+        "The current source build is not runtime-qualified under the official rule"
+      ]
+    },
+    {
+      "id": "endpoint428_gate_dot_fuse_output_update_loop_v1",
+      "name": "endpoint428 fused recurrent gates plus explicit output update loop",
+      "rank": 1,
+      "status": "active",
+      "evidence_tier": "constructive_prefix",
+      "scope_bytes": 10000000,
+      "archive_bytes": 1634500,
+      "program_bytes": 280147,
+      "incremental_program_bytes": -69048,
+      "forecast_score": 109408345,
+      "exact_10m_forecast_margin_bytes": 91655,
+      "measured_gain_bytes": 1195,
+      "gain_bytes_per_1m": 119.5,
+      "score_credit_bytes": 0,
+      "reference_median_elapsed_s": 75.1019,
+      "candidate_median_elapsed_s": 74.9712,
+      "runtime_reduction_fraction": 0.0017403021761100979,
+      "roundtrip_ok": true,
+      "deterministic_reencode_ok": true,
+      "max_sampled_tree_rss_kib": 9082568,
+      "source_paths": [
+        "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+        "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
+        "results/endpoint428_pair_layer0_runtime_successors_250k_v1/source_package_receipt.json",
+        "patches/endpoint428_gate_dot_fuse_output_update_loop_v1.patch"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/economics/candidate_archive_bytes_10m",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
+          "pointer": "/source_package/package_bytes",
+          "candidate_field": "program_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/economics/incremental_program_bytes_vs_base",
+          "candidate_field": "incremental_program_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/economics/conservative_forecast_score_bytes",
+          "candidate_field": "forecast_score"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/economics/forecast_target_margin_bytes",
+          "candidate_field": "exact_10m_forecast_margin_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/economics/saved_bytes_10m",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/economics/saved_bytes_per_1m",
+          "candidate_field": "gain_bytes_per_1m"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
+          "pointer": "/output_update_loop/reference_median_elapsed_s",
+          "candidate_field": "reference_median_elapsed_s"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
+          "pointer": "/output_update_loop/candidate_median_elapsed_s",
+          "candidate_field": "candidate_median_elapsed_s"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
+          "pointer": "/output_update_loop/candidate_runtime_reduction_fraction",
+          "candidate_field": "runtime_reduction_fraction"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/proof/roundtrip_ok",
+          "candidate_field": "roundtrip_ok"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/proof/deterministic_reencode_ok",
+          "candidate_field": "deterministic_reencode_ok"
+        },
+        {
+          "source": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+          "pointer": "/resource_guards/maximum_peak_tree_rss_kib",
+          "candidate_field": "max_sampled_tree_rss_kib"
+        }
+      ],
+      "source_required": true,
+      "decision": "The fused/output-loop successor produces a 1,634,500-byte exact 10M archive, saving 1,195 bytes over endpoint428 and 674 bytes over the prior best stream. Its reproducible 280,147-byte package costs 1,322 bytes more than the prior package, but the frozen calibration still improves the counted forecast by 43,806 bytes to 109,408,345 (10.9408345%), 91,655 below target. Exact decode, independent deterministic re-encode, and all decimal-memory guards pass. The overlapping WGSL workload excludes these elapsed measurements from runtime qualification.",
+      "next_gate": "Preserve the exact stream and counted package while developing a materially faster substrate implementation. Require controlled reference-calibrated compliance with the official runtime rule before any full-1G gate.",
+      "disqualifiers": [
+        "No exact full-corpus result",
+        "The 109,408,345 score is an exact-10M calibrated forecast, not official proof",
+        "The current implementation is not runtime-qualified under the official rule"
       ]
     },
     {
       "id": "layer0_wrt_hierarchical_phase_residual_log128_v1",
       "name": "layer-0 endpoint plus hierarchical WRT phase residual SSE",
-      "rank": 2,
+      "rank": 3,
       "status": "active",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -222,7 +326,7 @@
     {
       "id": "endpoint428_layer0_online_residual_v1",
       "name": "endpoint428 plus regret-gated online layer-0 residual mixer",
-      "rank": 3,
+      "rank": 4,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -258,7 +362,7 @@
     {
       "id": "endpoint428_layer0_sparse_residual_successor",
       "name": "endpoint428 plus static sparse compact layer-0 residual blend",
-      "rank": 4,
+      "rank": 5,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -292,7 +396,7 @@
     {
       "id": "endpoint428_layer0_residual_successor",
       "name": "endpoint428 plus one compact layer-0 residual endpoint",
-      "rank": 5,
+      "rank": 6,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -327,7 +431,7 @@
     {
       "id": "endpoint428_context_recovery_10m",
       "name": "compact-200 plus FX2-lite endpoint428",
-      "rank": 6,
+      "rank": 7,
       "status": "retired_unchanged",
       "evidence_tier": "constructive_prefix",
       "scope_bytes": 10000000,
@@ -366,7 +470,7 @@
     {
       "id": "srstc_blockposterior_raw_shadow",
       "name": "SRSTC block-posterior retrieval",
-      "rank": 7,
+      "rank": 8,
       "status": "active",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 65536000,
@@ -397,7 +501,7 @@
     {
       "id": "heterogeneous_112_plus_80",
       "name": "heterogeneous recurrent 112+80",
-      "rank": 8,
+      "rank": 9,
       "status": "retired_unchanged",
       "evidence_tier": "constructive_prefix",
       "scope_bytes": 10000000,
@@ -423,7 +527,7 @@
     {
       "id": "paqfree_96x2",
       "name": "PAQ-free recurrent 96x2",
-      "rank": 9,
+      "rank": 10,
       "status": "historical_control",
       "evidence_tier": "constructive_prefix",
       "scope_bytes": 10000000,
@@ -447,7 +551,7 @@
     {
       "id": "endpoint428_mxx_sse",
       "name": "endpoint428 mxx-keyed online SSE",
-      "rank": 10,
+      "rank": 11,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 1000000,
@@ -481,7 +585,7 @@
     {
       "id": "wikiir_reference_delta_serializations_v1",
       "name": "WikiIR same-skeleton reference COPY/ADD layouts",
-      "rank": 11,
+      "rank": 12,
       "status": "retired_unchanged",
       "evidence_tier": "proxy",
       "scope_bytes": 2000000,
@@ -521,7 +625,7 @@
     {
       "id": "wrt_reference_prefix_cts_fx2_v1",
       "name": "Causal WRT reference-prefix CTS over exact FX2",
-      "rank": 12,
+      "rank": 13,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 500000,
@@ -558,7 +662,7 @@
     {
       "id": "wrt_normalized_phrase_context_regret_fx2_v1",
       "name": "Normalized WRT phrase copy with causal context regret",
-      "rank": 13,
+      "rank": 14,
       "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "scope_bytes": 500000,
