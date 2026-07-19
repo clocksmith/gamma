@@ -80,6 +80,7 @@ heavy lane.
 | `build_cmix21_p1_matched_trace.py` | Converts an observation-only CMX21P1 probability stream plus its reversible WRT store into the minimal CMNEST1 truth/probability trace accepted by the exact endpoint replay. |
 | `build_reproducible_source_shar.py` | Reconstructs a declared text source tree through one readable deterministic shell bundle and can emit the standard two-entry bzip2 source ZIP. |
 | `build_reproducible_source_zip.py` | Builds deterministic direct-entry ZIP variants from an explicit source file list for package-method comparisons. |
+| `minify_cpp_source.py` | Lexically removes C/C++ comments while preserving literals, token separation, and line counts, and mirrors non-code package inputs unchanged. |
 | `run_fx2_cmix21_backend_identity_screen.py` | Alternates reference and candidate backends on one guarded input to test archive identity and runtime without changing compression arithmetic. |
 | `seal_reproducible_source_shar_package.py` | Seals bundle, ZIP, source reconstruction, clean-build, backend, and wrapper identity for the counted source representation. |
 | `seal_fx2_cmix21_backend_identity_runtime_screen.py` | Seals arithmetic identity and measured runtime/RSS evidence for a backend-only optimization. |

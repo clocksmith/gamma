@@ -4,9 +4,12 @@
 
 The frozen counted candidate remains the endpoint428 compact/FX2 pair, 26
 layer-0 endpoints, fused recurrent-gate traversal, explicit output update, and
-online residual mixer. Its exact `10M` archive is `1,634,500` bytes and its
-counted forecast is `109,408,345` bytes (`10.9408345%`), `91,655` bytes below
-the `109,500,000` target. No official full-`1G` score exists.
+online residual mixer. Its exact `10M` archive is `1,634,500` bytes. Removing
+comments from the counted `102`-file source tree reduces the deterministic LZMA
+package from `280,147` to `261,125` bytes while two clean builds retain the
+frozen backend and wrapper hashes. The revised counted forecast is therefore
+`109,389,323` bytes (`10.9389323%`), `110,677` bytes below the `109,500,000`
+target. No official full-`1G` score exists.
 
 Runtime successors are screened on the same `250K` transformed prefix in
 alternating reference/candidate/candidate/reference order with CPUs `0-3` and
@@ -33,6 +36,7 @@ score and does not establish transfer beyond the measured prefix.
 | Dual `96`, half horizons | `44,949` | `-9` | `73.9870 s` | `50.6564 s` | `31.53%` | `109,384,242` | `115,758` | Pareto prefix pass; score fallback |
 | Dual `80`, half horizons | `44,967` | `+9` | `74.8597 s` | `48.2715 s` | `35.52%` | `109,432,449` | `67,551` | Pareto prefix pass; failed transfer at `1M` |
 | Atomic endpoint handoff | `44,958` | `0` | `119.2097 s` | `105.1546 s` | `11.79%` | unchanged | `91,655` | Retired after reduction decayed to `5.62%` at `1M` |
+| Runtime composite at `1K` | `259` | same size, different hash | `21.56675 s` | `21.69125 s` | `-0.58%` | not projected | n/a | Retired before `250K`; dual-backward accumulator changes stream |
 
 All listed runs have deterministic same-role archives and clean decimal-memory
 guards. Identity candidates additionally reproduce the reference archive.
@@ -132,3 +136,24 @@ from `85.7544 s` to `81.7419 s`, a `4.679%` reduction, below the precommitted
 `30%` gate. Even the impossible upper bound of eliminating the measured BPTT
 region from the beginning cannot supply the official runtime reduction, so the
 remaining matched runs, decode, and every larger gate were stopped.
+
+The exact-source runtime composite is terminal before `250K`. Atomic endpoint
+handoff, a flat `32K` mixer table, serial fused forward traversal, and fused
+dual backward accumulators are deterministic at `1K`, but the candidate's
+`259`-byte archive hash differs from the frozen hash. Removing only the dual
+backward accumulator restores exact SHA-256
+`245b647b159599882620e473c5694e305aa0b2fd390a28a19cae72b04fdd72d4`,
+isolating compiler reassociation in that accumulator as the stream change.
+The full composite is also `0.577%` slower in the matched startup-dominated
+screen. The surviving exact components have an optimistic additive measured
+reduction of only `13.963%`, versus `83.093%` required to turn the measured
+`88.7147 h` projection into the published four-core `14.9989 h` cap. This
+numeric bound forbids the `250K` timing gate.
+
+The counted package lane is independently positive. Lexical comment stripping
+removes `109,041` source bytes without changing tokens or line counts. Two
+bundles and two direct-entry LZMA ZIPs are identical; the `261,125`-byte ZIP
+has SHA-256 `b6fe6b09...`, and both clean builds reproduce backend SHA-256
+`d1066630...` and wrapper SHA-256 `37ee8cd7...`. The `19,022` counted bytes are
+accepted in the forecast, but do not authorize a full-`1G` run while runtime is
+unqualified.

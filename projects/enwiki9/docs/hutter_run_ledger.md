@@ -16,7 +16,7 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 
 | Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
-| `endpoint428_gate_dot_fuse_output_update_loop_v1__10000000` | `constructive_prefix` | `active` | opening_prefix | 1,634,500 | 1,195 | 119.500 | 280,147 | 109,408,345 (10.9408345%) | 91,655 | RT=true, DET=true |
+| `endpoint428_gate_dot_fuse_output_update_loop_v1__10000000` | `constructive_prefix` | `active` | opening_prefix | 1,634,500 | 1,195 | 119.500 | 261,125 | 109,389,323 (10.9389323%) | 110,677 | RT=true, DET=true |
 | `endpoint428_pair_layer0_online_residual_successor__10000000` | `constructive_prefix` | `retired_unchanged` | opening_prefix | 1,635,174 | 521 | 52.100 | 278,825 | 109,452,151 (10.9452151%) | 47,849 | not recorded |
 | `endpoint428_context_recovery_10m__10000000` | `constructive_prefix` | `retired_unchanged` | unspecified | 1,635,695 | 1,818 | 181.800 | 349,195 | 109,557,404 (10.9557404%) | -57,404 | not recorded |
 | `heterogeneous_112_plus_80__10000000` | `constructive_prefix` | `retired_unchanged` | unspecified | 1,635,670 | 7,956 | 795.600 | 264,646 | 109,498,879 (10.9498879%) | 1,121 | not recorded |
@@ -34,8 +34,8 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
 | `endpoint428_pair_layer0_online_residual_successor__1m_offset500m` | `constructive_prefix` | `retired_unchanged` | cold_reset_disjoint_window | 45,051 | 89 | 89.000 | 350,942 | 109,470,151 (10.9470151%) | 29,849 | not recorded |
 | `endpoint428_pair_layer0_online_residual_successor__1m_prefix` | `constructive_prefix` | `retired_unchanged` | opening_prefix | 173,896 | 67 | 67.000 | 350,942 | 109,492,151 (10.9492151%) | 7,849 | RT=true, DET=true |
-| `layer0_pair_phase_composite_v1__1000000` | `causal_shadow` | `active` | unspecified | unknown | 140 | 140.000 | unknown | unknown | unknown | not recorded |
-| `layer0_wrt_hierarchical_phase_residual_log128_v1__1000000` | `causal_shadow` | `active` | unspecified | unknown | 118 | 118.000 | unknown | unknown | unknown | not recorded |
+| `layer0_pair_phase_composite_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 140 | 140.000 | unknown | unknown | unknown | not recorded |
+| `layer0_wrt_hierarchical_phase_residual_log128_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 118 | 118.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_layer0_online_residual_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 46 | 46.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_layer0_sparse_residual_successor__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 19 | 19.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_layer0_residual_successor__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 10 | 10.000 | unknown | unknown | unknown | not recorded |
@@ -63,10 +63,10 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 
 | Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
-| `endpoint428_mixer_context_reuse_runtime_proxy_v1__10000` | `proxy` | `active` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
-| `endpoint428_mixer_flat_context_runtime_proxy_v1__10000` | `proxy` | `active` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
-| `endpoint428_lstm_serial_forward_runtime_proxy_v1__10000` | `proxy` | `active` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
-| `endpoint428_lstm_backward_dual_accum_runtime_proxy_v1__10000` | `proxy` | `active` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_mixer_context_reuse_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_mixer_flat_context_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_lstm_serial_forward_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint428_lstm_backward_dual_accum_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | unspecified | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_inline_logit_runtime_proxy_v1__10000` | `proxy` | `retired_unchanged` | opening_prefix | 2,817 | 0 | 0.000 | unknown | unknown | unknown | not recorded |
 
 ## 1,024 Bytes
