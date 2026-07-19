@@ -24,11 +24,12 @@ missing required evidence, arithmetic drift, and invalid evidence tiers.
    process state changed.
 3. Run the reporter. Treat its JSON as the normalized answer and its Markdown
    as the user-facing summary.
-4. Start with one compact score-status block: target, verified official score
-   or `unknown`, best counted forecast and signed distance, active candidate
-   receipt-backed projection and distance or `unknown`, then live gate scope,
-   progress, RSS, and terminal state. Label every partial projection
-   provisional.
+4. Start with one compact score-status block: target in bytes and percent,
+   verified official score in bytes and percent or `unknown`, best counted
+   forecast in bytes and percent with signed distance, active candidate
+   receipt-backed projection in bytes and percent with distance or `unknown`,
+   then live gate scope, progress, RSS, and terminal state. Label every partial
+   projection provisional.
 5. Follow with candidate evidence, the latest decisive result, and next gate.
 6. Never subtract a shadow/oracle gain from an official or constructive score.
 7. End every report with `Continue toward the Hutter Prize` and the
@@ -51,6 +52,9 @@ are silent and its state file suppresses repeats.
 - Never print an unchanged score block merely because another sample arrived.
 - Recompute archive ceilings from receipt-bound debt, calibration, and counted
   program bytes. Do not transcribe a ceiling from chat.
+- Compute Hutter percentages directly from the exact byte score and full
+  1,000,000,000-byte corpus. Use seven digits after the decimal so a narrow
+  target crossing remains visible.
 
 ## Record New Evidence
 

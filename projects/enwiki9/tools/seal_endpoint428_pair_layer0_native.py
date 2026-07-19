@@ -79,6 +79,23 @@ def calculate_economics(
     }
 
 
+def add_disjoint_economics(
+    economics: dict[str, Any], *, disjoint_gain_bytes: int
+) -> None:
+    forecast = (
+        BASE_FORECAST_SCORE
+        - disjoint_gain_bytes * 1000
+        + int(economics["incremental_program_bytes"])
+    )
+    economics.update(
+        {
+            "disjoint_gain_bytes_per_1m": float(disjoint_gain_bytes),
+            "provisional_disjoint_forecast_score_bytes": forecast,
+            "provisional_disjoint_forecast_margin_bytes": TARGET_SCORE - forecast,
+        }
+    )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--shadow-receipt", type=Path, required=True)
@@ -158,6 +175,7 @@ def main() -> int:
         candidate_program_bytes=args.candidate_package_a.stat().st_size,
         prefix_gain_bytes=prefix_gain,
     )
+    add_disjoint_economics(economics, disjoint_gain_bytes=disjoint_gain)
     if economics["incremental_program_bytes"] < 0:
         raise ValueError("candidate program delta is unexpectedly negative")
     if economics["provisional_prefix_forecast_margin_bytes"] <= 0:
