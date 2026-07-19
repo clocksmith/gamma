@@ -1,0 +1,103 @@
+--- a/src/mixer/mixer.h
++++ b/src/mixer/mixer.h
+@@ -3,7 +3,6 @@
+
+ #include <vector>
+ #include <valarray>
+-#include <unordered_map>
+ #include <memory>
+
+ struct ContextData {
+@@ -14,6 +13,48 @@ struct ContextData {
+   std::valarray<float> weights, extra_weights;
+ };
+
++class ContextTable {
++ public:
++  ContextTable() : slots_(32768), size_(0) {}
++
++  ContextData* Find(unsigned int key) {
++    Slot& slot = FindSlot(key);
++    return slot.occupied ? slot.data.get() : nullptr;
++  }
++
++  ContextData* FindOrCreate(unsigned int key,
++      unsigned long long input_size, unsigned long long extra_input_size) {
++    Slot& slot = FindSlot(key);
++    if (!slot.occupied) {
++      slot.occupied = true;
++      slot.key = key;
++      slot.data.reset(new ContextData(input_size, extra_input_size));
++      ++size_;
++    }
++    return slot.data.get();
++  }
++
++  unsigned int size() const { return size_; }
++
++ private:
++  struct Slot {
++    unsigned int key = 0;
++    bool occupied = false;
++    std::unique_ptr<ContextData> data;
++  };
++
++  Slot& FindSlot(unsigned int key) {
++    unsigned int index = (key * 2654435761u) & (slots_.size() - 1);
++    while (slots_[index].occupied && slots_[index].key != key) {
++      index = (index + 1) & (slots_.size() - 1);
++    }
++    return slots_[index];
++  }
++
++  std::vector<Slot> slots_;
++  unsigned int size_;
++};
++
+ class Mixer {
+  public:
+   Mixer(const std::valarray<float>& inputs,
+@@ -31,7 +72,7 @@ class Mixer {
+   ContextData* active_data_;
+   const unsigned long long& context_;
+   unsigned long long max_steps_, steps_;
+-  std::unordered_map<unsigned int, std::unique_ptr<ContextData>> context_map_;
++  ContextTable context_map_;
+ };
+
+ #endif
+--- a/src/mixer/mixer.cpp
++++ b/src/mixer/mixer.cpp
+@@ -18,25 +18,13 @@ Mixer::Mixer(const std::valarray<float>& inputs,
+     {}
+
+ ContextData* Mixer::GetContextData() {
+-  ContextData* data;
+-  unsigned long long limit = 10000;
+-  if (context_map_.size() >= limit && context_map_.find(context_) == context_map_.end()) {
+-    data = context_map_[0xDEADBEEF].get();
+-    if (data == nullptr) {
+-      context_map_[0xDEADBEEF] = std::unique_ptr<ContextData>(
+-          new ContextData(inputs_.size(), extra_inputs_.size()));
+-      data = context_map_[0xDEADBEEF].get();
+-    }
+-  } else {
+-    data = context_map_[context_].get();
+-    if (data == nullptr) {
+-      context_map_[context_] = std::unique_ptr<ContextData>(
+-          new ContextData(inputs_.size(), extra_inputs_.size()));
+-      data = context_map_[context_].get();
+-    }
+-  }
+-
+-  return data;
++  const unsigned int key = static_cast<unsigned int>(context_);
++  ContextData* data = context_map_.Find(key);
++  if (data != nullptr) return data;
++  const unsigned int selected = context_map_.size() >= 10000
++      ? 0xDEADBEEF : key;
++  return context_map_.FindOrCreate(
++      selected, inputs_.size(), extra_inputs_.size());
+ }
+
+ float Mixer::Mix() {

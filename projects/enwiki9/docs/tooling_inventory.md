@@ -99,6 +99,7 @@ heavy lane.
 | `compact_layer0_sparse_blend_screen.py` | Fits and exactly replays a sparse fixed-point compact layer-0 blend over endpoint428. |
 | `compact_layer0_online_mixer_screen.cpp` | Runs the causal fixed-point online endpoint428/compact layer-0 residual mixer with frozen holdout boundaries. |
 | `compact_layer0_online_mixer_receipt.py` | Seals exact arithmetic and replay evidence for a frozen compact online-mixer probability stream. |
+| `endpoint_diagonal_reservoir_screen.cpp` | Screens tiny decoder-built diagonal multi-timescale reservoirs over exact P1 streams with development-only selection, exact range-coder accounting, and a neutral zero-update control. |
 | `endpoint428_mxx_sse_shadow.py` | Screens decoder-causal endpoint428 SSE tables keyed by FX2's reconstructed `mxx` state. |
 | `fx2lite_fxcm_hash_mixer_trace.cpp` | Emits causal compact hashed-mixer endpoints from FX2-lite's already-computed FXCM probability vector. |
 | `fx2_compact_trace_window.py` | Extracts and seals identity-checked cold-reset or cumulative compact probability windows without relabeling them as prefix evidence. |

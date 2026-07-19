@@ -958,6 +958,61 @@
         "The full-cell variant changes the archive without improving runtime",
         "The exact 102-file candidate source package is unavailable in this checkout"
       ]
+    },
+    {
+      "id": "endpoint_diagonal_reservoir_dual_trace_v1",
+      "name": "decoder-built diagonal reservoir residual primitive",
+      "rank": 23,
+      "status": "historical_control",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 600747,
+      "measured_gain_bytes": 9,
+      "gain_bytes_per_1m": 14.981348221464277,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint_diagonal_reservoir_dual_trace_v1/decision.json",
+        "tools/endpoint_diagonal_reservoir_screen.cpp",
+        "tests/test_endpoint_diagonal_reservoir_screen.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint_diagonal_reservoir_dual_trace_v1/decision.json",
+          "pointer": "/endpoint428_trace/exact_saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "The development-selected 8-cell/update-26 reservoir saves 9 exact bytes over endpoint428 with 9/10 blocks positive and 5 exact bytes on an independent FX2 trace with 6/6 blocks positive. The result is deterministic and causal but too small to justify adding per-bit work while runtime is the binding gate.",
+      "next_gate": "Use this primitive only inside a materially faster replacement for an existing recurrent dependency, then require matched endpoint428 archive economics and controlled runtime improvement.",
+      "disqualifiers": [
+        "No native candidate archive or counted integration package",
+        "Added per-bit work moves the unresolved runtime gate in the wrong direction",
+        "No full-corpus score credit"
+      ]
+    },
+    {
+      "id": "endpoint428_mixer_flat_context_runtime_proxy_v1",
+      "name": "fixed-capacity mixer context table after pointer reuse",
+      "rank": 24,
+      "status": "active",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_mixer_flat_context_runtime_proxy_v1/decision.json",
+        "patches/cmix21_mixer_flat_context_v1.patch",
+        "patches/cmix21_mixer_context_reuse_v1.patch"
+      ],
+      "source_required": true,
+      "decision": "The 32K open-address table preserves all six real-Wikipedia 10K archives and reduces median runtime by an additional 2.02% over pointer reuse. All guards are clean; a denser 16K table regresses by 1.79% and is rejected.",
+      "next_gate": "Recover the checksum-bound exact candidate source package, transplant pointer reuse plus the 32K table, require exact archive identity, and measure controlled reference-calibrated runtime.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source median",
+        "The combined runtime successor remains outside the official rule"
+      ]
     }
   ],
   "quarantine": [

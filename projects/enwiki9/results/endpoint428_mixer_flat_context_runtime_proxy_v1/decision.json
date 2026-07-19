@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_mixer_flat_context_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Replacing the capped unordered context map with a fixed-capacity open-address table removes allocation and node-chasing overhead without changing context selection, prediction arithmetic, or learned state.",
+  "implementation": {
+    "ancestor": "closest tracked CMIX21 ancestor after Mix-to-Perceive pointer reuse",
+    "patch": "patches/cmix21_mixer_flat_context_v1.patch",
+    "slots_per_mixer": 32768,
+    "context_cap": 10000,
+    "collision_resolution": "linear probing",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_source_sha256": {
+      "src/mixer/mixer.cpp": "d0139413a46fbcb8aa7fc8189ba22188ed7bef3c6dbd8855d84a92a7e476d104",
+      "src/mixer/mixer.h": "d4ac39f55234b894cfe33ce6bbc4186031caff6e8abe772accae8f85f6412cc3"
+    },
+    "candidate_source_sha256": {
+      "src/mixer/mixer.cpp": "481d71599a9246ed4df64ca1eae2de6a10f62f0c98b9ea5d285b3dcc2e5db59c",
+      "src/mixer/mixer.h": "651036efaaddefea5a50aeebb657e11f1f9559deef24d3c0fd6df8c93252b62e"
+    },
+    "reference_binary_sha256": "7473436c27b70871e2f84fc147e45c05cd27a879decb0ba48c460ba72f8bca2b",
+    "candidate_binary_sha256": "375f04e111140b7e71c5dd97f8314f56443add6dfc71ba9431f4b3e20f1994f9"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "candidate_elapsed_s": 3.5295,
+    "candidate_peak_tree_rss_kib": 5889792
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [14.3382, 15.4599, 16.1688],
+    "candidate_elapsed_s": [15.1481, 14.5443, 15.2464],
+    "reference_median_elapsed_s": 15.4599,
+    "candidate_median_elapsed_s": 15.1481,
+    "incremental_runtime_reduction_fraction": 0.020168306392667472,
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_six_archives_identical": true,
+    "maximum_reference_peak_tree_rss_kib": 7616640,
+    "maximum_candidate_peak_tree_rss_kib": 7632624,
+    "all_guards_clean": true,
+    "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_mixer_flat_context_ancestor_real10k_v1"
+  },
+  "rejected_refinement": {
+    "slots_per_mixer": 16384,
+    "reference_32k_median_elapsed_s": 13.98775,
+    "candidate_16k_median_elapsed_s": 14.23785,
+    "runtime_reduction_fraction": -0.017879930653607604,
+    "archive_identity": true,
+    "reason": "The denser table reduces RSS slightly but increases collision probing and loses on the balanced median."
+  },
+  "rejected_direct_extra_input_rewrite": {
+    "scope_bytes": 1024,
+    "archive_identity": true,
+    "full_manual_loop_elapsed_s": 3.9452,
+    "extra_only_elapsed_s": 3.6363,
+    "flat_table_smoke_elapsed_s": 3.5295,
+    "decision": "Do not promote. Both rewrites preserve the archive but regress the matched flat-table smoke, and the explicit main-weight loops are the larger loss."
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false,
+    "reason": "This is archive-identical ancestor transfer evidence; the checksum-bound exact candidate source bundle remains unavailable."
+  },
+  "decision": {
+    "verdict": "promote_32k_patch_to_exact_source_transplant_only",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "next_action": "Recover the exact 102-file candidate package, apply pointer reuse plus the 32K flat context table, require exact archive identity, and measure controlled reference-calibrated runtime."
+  },
+  "validation": {
+    "focused_tests": "2 passed",
+    "doc_lint": "pass before normalization",
+    "status_reporter_strict": "pass after frontier status correction",
+    "patch_dry_run": "pass against the pointer-reuse ancestor tree",
+    "receipt_normalizer": "environment_failure",
+    "normalizer_failure_reason": "The local ignored-artifact overlay leaves the organization snapshot and artifact fingerprint audit stale; generated view churn was not retained and no proof state was relabeled."
+  },
+  "claim_boundary": "This receipt proves archive identity and a 2.02% incremental median runtime reduction on the closest constructive ancestor. It does not prove exact endpoint428 transfer, official runtime compliance, a full-corpus result, or a 10.95% score."
+}
