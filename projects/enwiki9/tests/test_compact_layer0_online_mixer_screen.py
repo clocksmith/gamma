@@ -64,3 +64,30 @@ def test_online_screen_is_deterministic_and_holdout_blind(tmp_path: Path) -> Non
     assert receipt["deterministic_probability_replay"] is True
     assert output_p1.stat().st_size == 16 + 2 * 800
     assert receipt["selection"]["dev_gain_qbits"] > 0
+
+    frozen_p1 = tmp_path / "frozen.p1"
+    frozen_json = tmp_path / "frozen.json"
+    subprocess.run(
+        [
+            str(binary),
+            "--layer0-trace",
+            str(layer),
+            "--pair-trace",
+            str(pair),
+            "--base-p1",
+            str(base),
+            "--wrt-store",
+            str(store),
+            "--output-p1",
+            str(frozen_p1),
+            "--output-json",
+            str(frozen_json),
+            "--frozen-config",
+            "global_lr22",
+        ],
+        check=True,
+    )
+    frozen = json.loads(frozen_json.read_text())
+    assert frozen["evidence_level"] == "causal_frozen_config_confirmation_replay"
+    assert frozen["selection"]["mode"] == "frozen_config"
+    assert frozen["selection"]["name"] == "global_lr22"
