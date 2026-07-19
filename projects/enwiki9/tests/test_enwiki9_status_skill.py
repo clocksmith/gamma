@@ -67,10 +67,12 @@ def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
     assert status["official"]["verified_full_corpus_result"] is False
     assert status["canonical_forecast"]["forecast_margin_bytes"] == -57_404
     markdown = MODULE.render_markdown(status)
+    assert "Target score: `109,500,000` bytes (`10.9500000%`)" in markdown
     assert "Verified official full-1G score: `unknown`" in markdown
-    assert "Best counted forecast: `109,557,404`" in markdown
+    assert "Best counted forecast: `109,557,404` (`10.9557404%`)" in markdown
     assert "distance above target `57,404`" in markdown
-    assert "Active candidate provisional projection: `109,557,404`" in markdown
+    assert "`0.0057404 percentage points`" in markdown
+    assert "Active candidate provisional projection: `109,557,404` (`10.9557404%`)" in markdown
     assert "## Continue" in markdown
     assert "Continue toward the Hutter Prize" in markdown
     assert "Highest-value next gate: test" in markdown
@@ -165,3 +167,8 @@ def test_live_observation_renders_guarded_progress(tmp_path: Path) -> None:
     assert errors == []
     assert "scope `10,000,000`; progress `35.02%`" in markdown
     assert "decimal single-process margin `765,625` KiB" in markdown
+
+
+def test_score_percentage_uses_full_corpus_denominator() -> None:
+    assert MODULE.fmt_score_percent(109_500_000) == "10.9500000%"
+    assert MODULE.fmt_score_percent(109_492_151) == "10.9492151%"

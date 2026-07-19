@@ -153,14 +153,22 @@ Use `skills/enwiki9-status` for Hutter Prize status. Every user-facing status
 update must state, compactly:
 
 - the `109,500,000` target;
-- the verified official full-1G score, or `unknown` when none exists;
-- the best counted forecast and its signed distance from target;
-- the active candidate's receipt-backed projection and distance, or `unknown`;
+- the `10.9500000%` target percentage;
+- the verified official full-1G score in bytes and percent, or `unknown` when
+  none exists;
+- the best counted forecast in bytes and percent plus its signed distance from
+  target;
+- the active candidate's receipt-backed projection in bytes and percent plus
+  its distance, or `unknown`;
 - the live gate's scope, progress, RSS guard state, and terminal status.
 
 Label partial archive sizes and progress projections as provisional. Never call
 them a current score, subtract them from the official distance, or let them
 replace the last terminal receipt.
+
+Compute every displayed Hutter percentage as `score_bytes / 1,000,000,000 *
+100`; do not round through an intermediate ratio. A percentage forecast remains
+a forecast and does not become an official score.
 
 Live monitoring must be event-driven. Sample guards as often as needed for
 safety, but do not publish unchanged polling output. Emit a routine update only

@@ -251,22 +251,41 @@ def fmt_int(value: Any) -> str:
     return "unknown" if value is None else f"{int(value):,}"
 
 
+def fmt_score_percent(score: Any, input_bytes: Any = 1_000_000_000) -> str:
+    if not isinstance(score, int) or not isinstance(input_bytes, int) or input_bytes <= 0:
+        return "unknown"
+    return f"{score * 100 / input_bytes:.7f}%"
+
+
+def fmt_point_distance(byte_distance: Any, input_bytes: int = 1_000_000_000) -> str:
+    if not isinstance(byte_distance, int):
+        return "unknown"
+    return f"{byte_distance * 100 / input_bytes:.7f} percentage points"
+
+
 def render_markdown(status: dict[str, Any]) -> str:
     official = status["official"]
     forecast = status.get("canonical_forecast") or {}
     target_score = status["target"]["score_bytes"]
     lines = ["# enwiki9 Hutter Status", "", "## Score Status", ""]
-    lines.append(f"- Target score: `{fmt_int(target_score)}` bytes.")
+    lines.append(
+        f"- Target score: `{fmt_int(target_score)}` bytes "
+        f"(`{fmt_score_percent(target_score)}`)."
+    )
     if official["won"]:
         lines.append(
             f"- Verified official full-1G score: "
-            f"`{fmt_int(official['result']['hutter_score'])}`; target achieved."
+            f"`{fmt_int(official['result']['hutter_score'])}` "
+            f"(`{fmt_score_percent(official['result']['hutter_score'])}`); "
+            "target achieved."
         )
     elif official["verified_full_corpus_result"]:
         lines.append(
             f"- Verified official full-1G score: "
-            f"`{fmt_int(official['result']['hutter_score'])}`; distance above target "
-            f"`{fmt_int(official['distance_bytes'])}` bytes."
+            f"`{fmt_int(official['result']['hutter_score'])}` "
+            f"(`{fmt_score_percent(official['result']['hutter_score'])}`); "
+            f"distance above target `{fmt_int(official['distance_bytes'])}` bytes "
+            f"(`{fmt_point_distance(official['distance_bytes'])}`)."
         )
     else:
         lines.append(
@@ -276,8 +295,10 @@ def render_markdown(status: dict[str, Any]) -> str:
     forecast_score = forecast.get("forecast_score")
     forecast_debt = forecast.get("forecast_debt_bytes")
     lines.append(
-        f"- Best counted forecast: `{fmt_int(forecast_score)}`; "
-        f"distance above target `{fmt_int(forecast_debt)}` bytes."
+        f"- Best counted forecast: `{fmt_int(forecast_score)}` "
+        f"(`{fmt_score_percent(forecast_score)}`); distance above target "
+        f"`{fmt_int(forecast_debt)}` bytes "
+        f"(`{fmt_point_distance(forecast_debt)}`)."
     )
     active = next(
         (
@@ -296,9 +317,20 @@ def render_markdown(status: dict[str, Any]) -> str:
         distance_label = "margin below target" if active_margin >= 0 else "distance above target"
         distance_value = active_margin if active_margin >= 0 else active_debt
         lines.append(
-            f"- Active candidate provisional projection: `{fmt_int(active_score)}`; "
-            f"{distance_label} `{fmt_int(distance_value)}` bytes."
+            f"- Active candidate provisional projection: `{fmt_int(active_score)}` "
+            f"(`{fmt_score_percent(active_score)}`); {distance_label} "
+            f"`{fmt_int(distance_value)}` bytes "
+            f"(`{fmt_point_distance(distance_value)}`)."
         )
+        disjoint_score = active.get("disjoint_forecast_score")
+        disjoint_margin = active.get("disjoint_forecast_margin_bytes")
+        if isinstance(disjoint_score, int) and isinstance(disjoint_margin, int):
+            lines.append(
+                f"- Disjoint-slice diagnostic extrapolation: "
+                f"`{fmt_int(disjoint_score)}` "
+                f"(`{fmt_score_percent(disjoint_score)}`); provisional margin "
+                f"`{fmt_int(disjoint_margin)}` bytes."
+            )
     live = status["operational"].get("live_observation") or {}
     if live:
         decimal_limit = live.get("official_decimal_limit_kib")
