@@ -3,8 +3,8 @@
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
 - Target: `109,500,000` bytes (`10.9500000%`).
-- Candidate runs indexed: `37`.
-- Candidate lineages indexed: `35`.
+- Candidate runs indexed: `39`.
+- Candidate lineages indexed: `37`.
 
 ## 65,536,000 Bytes
 
@@ -47,6 +47,8 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | `endpoint428_pair_only_online_mixer_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 22 | 22.000 | unknown | unknown | unknown | not recorded |
 | `endpoint_fixed_share_stack_1m_v1__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | unknown | 4 | 4.000 | unknown | unknown | unknown | not recorded |
 | `fx2_diagonal_reservoir_replacement_1m_v1__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | unknown | 0 | 0.000 | unknown | unknown | unknown | not recorded |
+| `endpoint_sparse_gru_distill_1m_v1__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | 177,006 | 23 | 23.000 | unknown | unknown | unknown | not recorded |
+| `endpoint_sparse_gru_residual_distill_1m_v2__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | 177,113 | -84 | -84.000 | unknown | unknown | unknown | not recorded |
 
 ## 600,747 Bytes
 

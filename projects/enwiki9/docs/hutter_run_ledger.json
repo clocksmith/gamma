@@ -7,27 +7,27 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 37,
-    "candidate_count": 35,
+    "run_count": 39,
+    "candidate_count": 37,
     "runs_by_scope": {
       "1024": 3,
       "10000": 9,
       "500000": 2,
       "600747": 1,
-      "1000000": 15,
+      "1000000": 17,
       "2000000": 1,
       "10000000": 5,
       "65536000": 1
     },
     "runs_by_evidence_tier": {
-      "causal_shadow": 17,
+      "causal_shadow": 19,
       "constructive_prefix": 7,
       "proxy": 13
     },
     "runs_by_status": {
       "active": 2,
       "historical_control": 2,
-      "retired_unchanged": 33
+      "retired_unchanged": 35
     }
   },
   "runs": [
@@ -893,6 +893,86 @@
         "results/fx2_diagonal_reservoir_replacement_1m_v1/decision.json",
         "tools/endpoint_diagonal_reservoir_screen.cpp",
         "tests/test_endpoint_diagonal_reservoir_screen.py"
+      ],
+      "scope_percent_of_corpus": 0.1,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint_sparse_gru_distill_1m_v1__1000000",
+      "candidate_id": "endpoint_sparse_gru_distill_1m_v1",
+      "parent_candidate_id": "fx2_diagonal_reservoir_replacement_1m_v1",
+      "candidate_name": "compact-teacher sparse GRU FX2 replacement",
+      "rank": 38,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "primary_frontier_run": true,
+      "scope_bytes": 1000000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 177029,
+      "archive_bytes": 177006,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": 23,
+      "gain_bytes_per_1m": 23.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": null,
+      "score_credit_bytes": 0,
+      "decision": "Development-only selection chooses epoch one. The float causal replay saves 23 exact bytes overall but regresses 4.893 bytes on sealed holdout, retaining less than one percent of the compact teacher's 2,830.637-byte headroom versus a payload-aware 688.818 B/M requirement.",
+      "next_gate": "None unchanged. Attribute the teacher residual to specific compact state transitions or learned event representations before attempting another replacement model.",
+      "disqualifiers": [
+        "Negative sealed-holdout gain",
+        "Less than one percent of teacher headroom retained",
+        "Exact full-scope gain is under four percent of the payload-aware floor",
+        "Float weights are not quantized or counted"
+      ],
+      "source_paths": [
+        "results/endpoint_sparse_gru_distill_1m_v1/decision.json",
+        "tools/endpoint_sparse_gru_distill_screen.py",
+        "tests/test_endpoint_sparse_gru_distill_screen.py"
+      ],
+      "scope_percent_of_corpus": 0.1,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint_sparse_gru_residual_distill_1m_v2__1000000",
+      "candidate_id": "endpoint_sparse_gru_residual_distill_1m_v2",
+      "parent_candidate_id": "endpoint_sparse_gru_distill_1m_v1",
+      "candidate_name": "compact-teacher residual-logit sparse GRU",
+      "rank": 39,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "primary_frontier_run": true,
+      "scope_bytes": 1000000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 177029,
+      "archive_bytes": 177113,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": -84,
+      "gain_bytes_per_1m": -84.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": null,
+      "score_credit_bytes": 0,
+      "decision": "Direct residual-logit training lowers its declared training loss but development selection still chooses epoch one. Exact replay loses 84 bytes overall and 26.283 bytes on sealed holdout, so weak KL gradients were not the reason the sparse GRU failed to retain the compact complement.",
+      "next_gate": "None unchanged. Require component/state attribution or a materially different event-level representation before another learned replacement.",
+      "disqualifiers": [
+        "Negative exact full-scope gain",
+        "Negative sealed-holdout gain",
+        "Every development checkpoint regresses",
+        "Float weights are not quantized or counted"
+      ],
+      "source_paths": [
+        "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
+        "tools/endpoint_sparse_gru_distill_screen.py",
+        "tests/test_endpoint_sparse_gru_distill_screen.py"
       ],
       "scope_percent_of_corpus": 0.1,
       "forecast_percent": null,
