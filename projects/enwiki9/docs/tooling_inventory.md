@@ -116,6 +116,9 @@ heavy lane.
 | `seal_wrt_hashed_residual_online.py` | Freezes the development-selected WRT residual variant, ignores confirmation-local reselection, binds both raw-FX2 traces and inputs by hash, and records endpoint428 debt economics. |
 | `wrt_hierarchical_phase_residual_screen.cpp` | Applies payload-free integer Bayesian residual backoff across WRT event phase, 2-bit, 4-bit, and full byte prefixes with tail-sensitive FX2 probability buckets. |
 | `seal_wrt_hierarchical_phase_residual.py` | Freezes the log-bucket hierarchy, binds three raw-FX2 and two target-substrate replays by content hash, retires insufficient direct endpoint428 transfer, and accounts the layer-0 composite counterfactual without forecast credit. |
+| `wrt_phase_residual_native.cpp` and `wrt_phase_residual_native.h` | Production-shaped zero-payload `Predict/Perceive` component for the frozen hierarchical event-phase residual, with all state rebuilt online. |
+| `wrt_phase_residual_native_replay.cpp` | Replays the production component against an exact `CMX21P1` stream and WRT truth store using the archive range coder. |
+| `seal_wrt_phase_residual_native.py` | Requires two byte-identical clean builds and exact duplicate P1 replays, binds component source/input hashes, and records compressed source and state cost. |
 | `cmix_aux_bucket_calibration.py` | Trains then freezes a compact decoder-rebuilt probability-bucket calibration over an auxiliary endpoint and exact base trace. |
 | `wikiir_page_list_referentiation_probe.py` | Measures WebGraph-style ordered link-list COPY/ADD headroom against earlier pages with a deterministic random-prior control. |
 | `wikiir_template_value_referentiation_probe.py` | Measures complete-page-causal same-skeleton template-field COPY/ADD headroom against a matched deterministic prior-template control. |

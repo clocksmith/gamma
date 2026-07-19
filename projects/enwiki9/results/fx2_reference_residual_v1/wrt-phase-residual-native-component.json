@@ -1,0 +1,73 @@
+{
+  "claim_boundary": "This proves clean-build and exact P1 replay identity for the frozen component. It is not a combined native archive, roundtrip, runtime, or full-corpus proof.",
+  "clean_builds": [
+    {
+      "bytes": 28416,
+      "sha256": "29ff4726bfb2b07f6fac1463f2ba831795938505034c97a1c58b6180813c37ef"
+    },
+    {
+      "bytes": 28416,
+      "sha256": "29ff4726bfb2b07f6fac1463f2ba831795938505034c97a1c58b6180813c37ef"
+    }
+  ],
+  "compile_flags": [
+    "-std=c++17",
+    "-O3",
+    "-Wall",
+    "-Wextra",
+    "-Werror"
+  ],
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "evidence_level": "constructive_component_exact_p1_replay",
+  "exact_replay": {
+    "baseline_payload_bytes": 173849,
+    "candidate_payload_bytes": 173808,
+    "replay_count": 2,
+    "replay_results_identical": true,
+    "rows": 4805936,
+    "saved_bytes": 41,
+    "saved_bytes_per_million_raw": 41.0,
+    "state_bytes": 13615104
+  },
+  "input_artifacts": {
+    "layer0_p1": {
+      "availability": "local_nonproof_overlay_not_in_git",
+      "bytes": 9611888,
+      "logical_name": "layer0_mixer10_over_endpoint428_nativeq16_v1.p1",
+      "sha256": "3ad0f2fa7ee1340c769042c5e7c3c648608073f4d4d472b44db5b972925a5360"
+    },
+    "wrt_store": {
+      "availability": "local_nonproof_overlay_not_in_git",
+      "bytes": 600747,
+      "logical_name": "input.wrt.store",
+      "sha256": "1e209c7d19a22af5ce6a1de3bab1fc636669f40686aebd88bbe9dc8e5411e583"
+    }
+  },
+  "integration_contract": {
+    "decoder_state_rebuilt_online": true,
+    "payload_bytes": 0,
+    "perceive": "call WrtPhaseResidual::Perceive after coding each true bit",
+    "predict": "call WrtPhaseResidual::Predict with the pair/layer0 final P1 before arithmetic coding"
+  },
+  "promotion_authorized": false,
+  "receipt_type": "wrt_phase_residual_native_component",
+  "schema_version": 1,
+  "sources": {
+    "component_concatenated_gzip9_bytes": 1407,
+    "header": {
+      "bytes": 1091,
+      "path": "projects/enwiki9/tools/wrt_phase_residual_native.h",
+      "sha256": "e340dbfbab530810926eb0dcd87bb852dafaf1d595265ff93a09636a0946b505"
+    },
+    "implementation": {
+      "bytes": 3594,
+      "path": "projects/enwiki9/tools/wrt_phase_residual_native.cpp",
+      "sha256": "bb2db8d894b3f6ceab42cc5c0ffd233d81fdd38508d59dbebfe0492e76ccd569"
+    },
+    "replay_harness": {
+      "bytes": 3390,
+      "path": "projects/enwiki9/tools/wrt_phase_residual_native_replay.cpp",
+      "sha256": "cfc67589118c76475adbdfc48aba6df81f918252f7ea49f50834d5b1e0e30e4f"
+    }
+  }
+}

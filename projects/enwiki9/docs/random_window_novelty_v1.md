@@ -175,11 +175,13 @@ positive.  Direct endpoint428 transfer then retains only `44 B/1M`, below the
 
 The hierarchy remains complementary to the available independent layer-0
 endpoint: it adds `41` exact bytes, with all `10` blocks positive, to the
-layer's existing `77`-byte gain.  The combined `118 B/1M` shadow gives a
-counterfactual `109,457,607` (`10.9457607%`) score after a conservative
-`18,203`-byte program ceiling, or `42,393` bytes under target.  That is not the
-canonical forecast because this layer-0 endpoint is not the exact native pair
-candidate and no combined native replay exists.
+layer's existing `77`-byte gain.  A production-shaped zero-payload component
+reproduces the `41`-byte gain in two byte-identical clean builds; its sources
+gzip to `1,407` bytes.  The combined `118 B/1M` shadow gives a counterfactual
+`109,452,811` (`10.9452811%`) score after a conservative `13,407`-byte program
+ceiling, or `47,189` bytes under target.  That is not the canonical forecast
+because this layer-0 endpoint is not the exact native pair candidate and no
+combined native replay exists.
 
 ## Receipts
 
