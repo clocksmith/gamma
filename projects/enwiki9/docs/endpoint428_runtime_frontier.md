@@ -203,6 +203,18 @@ reduction of only `13.963%`, versus `83.093%` required to turn the measured
 `88.7147 h` projection into the published four-core `14.9989 h` cap. This
 numeric bound forbids the `250K` timing gate.
 
+A profiling-only rebuild of the pruned compact-replacement source confirms
+that the architectural boundary is recurrent work rather than an unprofiled
+outer hot spot. On the existing `250K` population, `gprof` accounts for
+`169.47` aggregate sampled CPU seconds. LSTM OpenMP worker bodies, Adam, and
+OpenMP synchronization account for `143.49` seconds (`84.67%`); barrier waits
+alone account for `94.80` seconds (`55.94%`). Address inspection maps the two
+mislabelled local-symbol buckets to the LSTM forward and predict/perceive
+OpenMP workers, and the LSTM sources contain every OpenMP pragma in the codec.
+The profiling build changes the archive and receives no score credit. The
+concentration supports modeled-work removal, but does not reopen the retired
+serial, persistent-region, worker-count, or BPTT schedule ladders.
+
 The counted package lane is independently positive. Lexical comment stripping
 removes `109,041` source bytes without changing tokens or line counts. Two
 bundles and two direct-entry LZMA ZIPs are identical; the `261,125`-byte ZIP
