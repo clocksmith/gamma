@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_persistent_gate_runtime_transfer_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "scope": {
+    "raw_bytes": 1024,
+    "input_mode": "cmix21 no-preprocess",
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496"
+  },
+  "hypothesis": "The bit-identical persistent-region speedup from the isolated fused-gate probe transfers to a real CMIX21 codec, or an arithmetic-identical worker-count change removes the three-thread scheduling penalty.",
+  "build": {
+    "ancestor": "external/cmix21-sidecar",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_binary_sha256": "5bff7a6cf15c275ffb61206d3f49c7c29d6c5584e5087ca5ad470369c468962c",
+    "persistent_activation_binary_sha256": "16fefb6ac7aafb9fa9320cd726f39e8b260ffaedda587323686ca454d006197a",
+    "persistent_cell_binary_sha256": "a7275b9a49f03c5c582b3b14cedee650b1ee9b49845f52a34ffbb16919d6843a",
+    "threads2_binary_sha256": "47e810d8a8d1222f552cc584f19ff6025f832af4a849fde1811e2246fb0ef177",
+    "threads4_binary_sha256": "58a00a7d635912f8b26033f04e11a7dfbb1b53172707643826a82fc138ac2563"
+  },
+  "reference": {
+    "mechanism": "fused three-gate dot traversal, serial normalization/activation/state update, explicit output-weight update loop, three workers",
+    "source_sha256": "dc06dbffd1ae2abc5c49eeb26a63f67b108d79ea0d447e8ebb494246ebc8fe76",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30"
+  },
+  "variants": [
+    {
+      "id": "persistent_activation_v1",
+      "mechanism": "keep the OpenMP region through serial normalization and parallel gate activation",
+      "source_sha256": "c5c0ba3cf130fab619ac83ed20b96179c1ea4486e5c7fb5104b89f9904fdef89",
+      "reference_elapsed_s": [3.6264, 3.7330, 3.6300, 3.6252],
+      "candidate_elapsed_s": [3.6253, 3.6267, 4.2494, 3.7294],
+      "reference_median_elapsed_s": 3.6282,
+      "candidate_median_elapsed_s": 3.67805,
+      "runtime_reduction_fraction": -0.0137395954,
+      "archive_bytes": 272,
+      "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+      "archive_identity": true,
+      "verdict": "retire_runtime_regression"
+    },
+    {
+      "id": "persistent_cell_v1",
+      "mechanism": "parallel activation, cell-state, tanh-state, and hidden-state transforms after serial normalization",
+      "source_sha256": "7bb705ffc386dfedec30037efeae121c6a2595415e939dd08f79baa6c0cf6439",
+      "candidate_elapsed_s": [3.6270],
+      "archive_bytes": 273,
+      "archive_sha256": "21d37b69e74b9a5356d86f5f426aa00e5a4f721c29aeff1baa6a5d741c0869ec",
+      "archive_identity": false,
+      "archive_delta_bytes": 1,
+      "verdict": "retire_archive_regression_without_runtime_gain"
+    },
+    {
+      "id": "fused_threads2_v1",
+      "mechanism": "unchanged fused arithmetic with two workers instead of three",
+      "source_sha256": "ea20abeecd49985c4ad2919d856ab4da41ea3b29aff87835022a2402409ad968",
+      "reference_elapsed_s": [3.6256, 3.7348, 3.6253, 3.7497],
+      "candidate_elapsed_s": [3.7220, 3.7220, 3.7226, 3.7244],
+      "reference_median_elapsed_s": 3.6802,
+      "candidate_median_elapsed_s": 3.7223,
+      "runtime_reduction_fraction": -0.0114395957,
+      "archive_bytes": 272,
+      "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+      "archive_identity": true,
+      "verdict": "retire_runtime_regression"
+    },
+    {
+      "id": "fused_threads4_v1",
+      "mechanism": "unchanged fused arithmetic with four workers instead of three",
+      "source_sha256": "0db448a7f62bd4d888805435d7066cef13b373bfcf58fc4edd995cae74a0d944",
+      "reference_elapsed_s": [3.6252, 3.6266, 3.6277, 3.6259],
+      "candidate_elapsed_s": [3.6351, 4.0351, 3.6357, 4.1521],
+      "reference_median_elapsed_s": 3.62625,
+      "candidate_median_elapsed_s": 3.8354,
+      "runtime_reduction_fraction": -0.0576766632,
+      "archive_bytes": 272,
+      "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+      "archive_identity": true,
+      "verdict": "retire_runtime_regression"
+    }
+  ],
+  "resources": {
+    "official_decimal_limit_kib": 9765625,
+    "maximum_peak_single_rss_kib": 5870720,
+    "official_decimal_over_limit_kib": 0,
+    "all_25_guards_clean": true,
+    "raw_artifact_roots": [
+      "/home/clocksmith/enwiki9-nonproof/results/cmix21_persistent_activation_ancestor_1k_v1",
+      "/home/clocksmith/enwiki9-nonproof/results/cmix21_persistent_cell_ancestor_1k_v1",
+      "/home/clocksmith/enwiki9-nonproof/results/cmix21_fused_threads2_ancestor_1k_v1",
+      "/home/clocksmith/enwiki9-nonproof/results/cmix21_fused_threads4_ancestor_1k_v1"
+    ]
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false
+  },
+  "decision": {
+    "verdict": "retire_persistent_region_and_worker_count_family",
+    "reason": "The positive isolated-kernel proxy does not transfer to the real ancestor codec. Every archive-identical whole-codec variant is slower at the measured scope, and the only broader parallel transform changes and worsens the archive without a runtime gain.",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "next_action": "Do not tune OpenMP persistence or worker count further. Resume only with the exact candidate source bundle and a materially different algorithmic runtime reduction such as removing work, not rescheduling the same work."
+  },
+  "validation": {
+    "focused_tests": "12 passed",
+    "doc_lint": "pass before normalization",
+    "status_reporter_strict": "pass",
+    "receipt_normalizer": "environment_failure",
+    "normalizer_failure_reason": "The local ignored-artifact overlay makes the organization snapshot and artifact fingerprint audit stale; generated view churn was not retained and no proof state was relabeled."
+  },
+  "claim_boundary": "This terminal decision applies to the tested persistent-region and worker-count implementations on the closest tracked CMIX21 ancestor. It does not invalidate the exact endpoint428 archive forecast, qualify its runtime, or prove behavior on the unavailable 102-file candidate source bundle."
+}

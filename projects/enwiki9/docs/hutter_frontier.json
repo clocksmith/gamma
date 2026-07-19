@@ -910,6 +910,31 @@
         "No native archive evidence",
         "Most stronger-mixer gain depends on unavailable individual layer0 endpoints"
       ]
+    },
+    {
+      "id": "endpoint428_persistent_gate_runtime_transfer_ancestor_1k_v1",
+      "name": "persistent-region LSTM scheduling and worker-count transfer",
+      "rank": 21,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 1024,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_persistent_gate_runtime_proxy_v1/decision.json",
+        "results/endpoint428_persistent_gate_runtime_transfer_ancestor_1k_v1/decision.json",
+        "tools/lstm_gate_runtime_probe.cpp",
+        "tests/test_lstm_gate_runtime_probe.py"
+      ],
+      "source_required": true,
+      "decision": "The isolated fused-gate kernel was bit-identical and 1.214x to 1.551x faster, but the gain did not transfer to a real CMIX21 ancestor codec. Archive-identical activation persistence and two- and four-worker variants regress median whole-codec runtime by 1.374%, 1.144%, and 5.768%. Extending persistence through cell transforms adds one archive byte without a runtime gain.",
+      "next_gate": "None for scheduling unchanged. Recover the checksum-bound exact candidate source package, then test a successor that removes material predictor computation or dependencies while preserving the exact archive.",
+      "disqualifiers": [
+        "All archive-identical whole-codec variants regress controlled median runtime",
+        "The full-cell variant changes the archive without improving runtime",
+        "The exact 102-file candidate source package is unavailable in this checkout"
+      ]
     }
   ],
   "quarantine": [
