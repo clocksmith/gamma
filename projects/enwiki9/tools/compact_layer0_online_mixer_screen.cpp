@@ -371,6 +371,7 @@ struct Args {
   std::string wrt_store;
   std::string output_p1;
   std::string output_json;
+  std::string frozen_config;
   std::uint32_t train_end_ppm = 600000;
   std::uint32_t dev_end_ppm = 800000;
 };
@@ -390,6 +391,7 @@ Args ParseArgs(int argc, char** argv) {
     else if (option == "--wrt-store") args.wrt_store = Value(&index, argc, argv);
     else if (option == "--output-p1") args.output_p1 = Value(&index, argc, argv);
     else if (option == "--output-json") args.output_json = Value(&index, argc, argv);
+    else if (option == "--frozen-config") args.frozen_config = Value(&index, argc, argv);
     else if (option == "--train-end-ppm") {
       args.train_end_ppm = std::stoul(Value(&index, argc, argv));
     } else if (option == "--dev-end-ppm") {
@@ -446,9 +448,19 @@ int main(int argc, char** argv) {
                               nullptr));
     }
     std::size_t selected = 0;
-    for (std::size_t index = 1; index < configs.size(); ++index) {
-      if (discovery[index].dev_gain_qbits > discovery[selected].dev_gain_qbits) {
-        selected = index;
+    if (args.frozen_config.empty()) {
+      for (std::size_t index = 1; index < configs.size(); ++index) {
+        if (discovery[index].dev_gain_qbits > discovery[selected].dev_gain_qbits) {
+          selected = index;
+        }
+      }
+    } else {
+      while (selected < configs.size() &&
+             configs[selected].name != args.frozen_config) {
+        ++selected;
+      }
+      if (selected == configs.size()) {
+        throw std::runtime_error("unknown frozen config " + args.frozen_config);
       }
     }
 
@@ -479,7 +491,11 @@ int main(int argc, char** argv) {
     if (!output) throw std::runtime_error("cannot create output JSON");
     output << "{\n";
     output << "  \"schema\": \"compact_layer0_online_mixer_screen_v2\",\n";
-    output << "  \"evidence_level\": \"causal_train_dev_selected_pre_exact_replay\",\n";
+    output << "  \"evidence_level\": \""
+           << (args.frozen_config.empty()
+                   ? "causal_train_dev_selected_pre_exact_replay"
+                   : "causal_frozen_config_confirmation_replay")
+           << "\",\n";
     output << "  \"scope\": {\"rows\": " << input.rows
            << ", \"train_end_row\": " << train_end
            << ", \"dev_end_row\": " << dev_end
@@ -505,7 +521,9 @@ int main(int argc, char** argv) {
              << "}" << (index + 1 == configs.size() ? "\n" : ",\n");
     }
     output << "  ],\n";
-    output << "  \"selection\": {\"name\": \"" << configs[selected].name
+    output << "  \"selection\": {\"mode\": \""
+           << (args.frozen_config.empty() ? "development_argmax" : "frozen_config")
+           << "\", \"name\": \"" << configs[selected].name
            << "\", \"index\": " << selected
            << ", \"dev_gain_qbits\": " << discovery[selected].dev_gain_qbits
            << "},\n";

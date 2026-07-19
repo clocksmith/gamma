@@ -35,6 +35,8 @@ score and does not establish transfer beyond the measured prefix.
 | Dual `112`, half horizons | `44,958` | `0` | `73.6100 s` | `53.6551 s` | `27.11%` | `109,408,345` | `91,655` | Pareto prefix pass |
 | Dual `96`, half horizons | `44,949` | `-9` | `73.9870 s` | `50.6564 s` | `31.53%` | `109,384,242` | `115,758` | Pareto prefix pass; score fallback |
 | Dual `80`, half horizons | `44,967` | `+9` | `74.8597 s` | `48.2715 s` | `35.52%` | `109,432,449` | `67,551` | Pareto prefix pass; failed transfer at `1M` |
+| Dual `112`, atomic handoff plus serial fused forward | `44,958` | `0` | `61.6707 s` | `66.0642 s` | `-7.12%` | `109,448,323` | `51,677` | Archive-exact; retired for runtime regression |
+| Dual `112`, sidecar tail `memmove` and reverse suffix compare | `44,958` | `0` | `54.9064 s` | `55.4065 s` | `-0.91%` | `109,448,323` | `51,677` | Archive-exact; retired for runtime regression |
 | Atomic endpoint handoff | `44,958` | `0` | `119.2097 s` | `105.1546 s` | `11.79%` | unchanged | `91,655` | Retired after reduction decayed to `5.62%` at `1M` |
 | Runtime composite at `1K` | `259` | same size, different hash | `21.56675 s` | `21.69125 s` | `-0.58%` | not projected | n/a | Retired before `250K`; dual-backward accumulator changes stream |
 
@@ -74,11 +76,62 @@ The exact `10M` changed-stream encode is terminal and rejects dual `96`. Its
 with peak tree RSS `9,022,568` KiB, but the stream economics forbid decode,
 deterministic re-encode, package promotion, and a full-`1G` gate.
 
-Dual `112` with half horizons is terminal at `1M`. Its `173,961`-byte archive
-is `59` bytes worse than the `173,902`-byte reference, and its `263.516 s`
-single encode is slower than the prior matched reference median. The guard is
-clean, but it misses the precommitted no-regression condition, so no duplicate
-or exact `10M` gate is authorized.
+Dual `112` with half horizons was reopened only after two new facts changed its
+economics: lexical package minification enlarged the score budget, and a
+cold-reset offset-`500M` population reduced its loss from `59 B/1M` on the
+opening prefix to `12 B/1M`. The conservative projection retains the worse
+`59 B/1M` loss, giving `109,448,323` bytes (`10.9448323%`), `51,677` below
+target. On the disjoint population it reduces elapsed encode time from
+`255.0435 s` to `180.0267 s` (`29.4133%`) with clean roundtrip and decimal-RSS
+guards. These are two exact cold-reset `1M` populations, not a full-corpus
+score or an official runtime qualification.
+
+Two archive-exact dual-`112` follow-ups are terminal at `250K`. Composing the
+atomic endpoint handoff with serial fused forward traversal regresses matched
+median runtime by `7.1240%`. Replacing the 32-byte sidecar tail shift with
+`memmove` and comparing suffixes backward regresses it by `0.9108%`. Neither
+can supply the missing absolute runtime reduction, so both stop before larger
+gates.
+
+The replacement-economics branch asks whether removing the whole FX2-lite428
+endpoint can pay in source bytes and recovered compact-only residual signal.
+The sealed same-execution trace attributes `272 B/1M` to FX2. A deterministic
+minified compact-only LZMA package is `235,176` bytes, only `25,949` bytes
+smaller than the `261,125`-byte pair package; deletion alone therefore projects
+to `109,635,374`, `135,374` above target. Replaying the existing 26 layer-0
+endpoints over compact alone recovers `103 B/1M` overall and `55 B/1M` on
+proportional holdout. The resulting package-adjusted projection is
+`109,532,374`, still `32,374` above target, so layer-0 alone is retired.
+
+The frozen hierarchical WRT phase residual is the only promoted recovery
+follow-up. Over compact plus layer-0 it saves another exact `36 B/1M`; all ten
+blocks, development, and holdout are positive. With its conservative
+`1,407`-byte source reserve, the opening-prefix projection is `109,497,781`
+(`10.9497781%`), only `2,219` below target. The unchanged frozen form passes
+its offset-`500M` confirmation: compact layer-0 saves `85 B/1M`, phase saves
+another `49 B/1M` against its `34 B/1M` floor, and the combined `45,045`-byte
+payload is `58` bytes better than the original compact/FX2 pair payload on that
+population.
+
+The first native integration composes exactly at `1K`, `250K`, and `1M`, but
+its `238,406`-byte source package leaves the exact `174,099`-byte `1M` archive
+three bytes above the authorized archive ceiling. It is terminal without a
+decode. Removing only inactive trace paths, unused LSTM serialization, an
+inactive crash handler, and non-build package entries produces two identical
+`235,420`-byte LZMA packages. Two reconstructed clean builds are byte-identical.
+The reconstructed candidate reproduces the `254`-byte `1K`, `44,979`-byte
+`250K`, and `174,099`-byte `1M` archives. The `1M` decode roundtrips exactly,
+the deterministic re-encode is byte-identical, and all decimal-memory guards
+pass with peak process-tree RSS `7,578,364 KiB`.
+
+After the measured `25,705`-byte package saving versus the frozen pair, the
+native replacement projects to `109,499,618` bytes (`10.9499618%`), only `382`
+below target. This is the score-qualified replacement frontier, not an
+official full-`1G` score. Its measured `1M` encode remains runtime-unqualified,
+so the exact implementation stops before `1G`. The next runtime branch must
+change the recurrent representation or supply model-level concurrency while
+retaining counted score; source-only micro-optimizations cannot close the
+throughput gap.
 
 The dual-`80` mixer/adapter/phase composition is terminal. At `250K`, the full
 composition produces `44,997` bytes and the pair-only form produces `45,015`,
