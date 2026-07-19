@@ -214,6 +214,8 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], int]:
         str(archive_path),
         "--wrt-store",
         str(store_path),
+        "--raw-input",
+        str(input_path),
         "--window-id",
         args.window_id,
         "--phase",

@@ -109,6 +109,9 @@ heavy lane.
 | `wrt_entity_trie_fx2_shadow.py` | Reconstructs title and link entities from the unchanged WRT stream, builds decoder-causal entity tries, and scores fixed-point continuation probabilities against an exact FX2-compatible base trace. |
 | `wrt_entity_node_backoff_trace.py` | Emits a bounded endpoint428-relative residual calibration trace keyed by decoder-built entity-trie node and support. |
 | `wrt_event_srstc_trace.py` | Emits an endpoint428-relative SRSTC-style continuation endpoint keyed by decoder-rebuilt raw semantic state before each completed WRT event. |
+| `wrt_reference_prefix_cts_shadow.py` | Scores a causal prior-reference WRT continuation table against an exact FX2 trace, with development/holdout qbits, positive-event oracle accounting, and exact range replay. |
+| `wrt_normalized_phrase_copy_shadow.py` | Scores exact and number/whitespace-normalized long WRT event-suffix continuation models against an exact FX2 trace with chronological partitions and exact range replay. |
+| `wrt_normalized_phrase_endpoint_trace.py` | Emits a causal normalized long-context WRT phrase endpoint as a `CMXAUX1` pair plus exact FX2 `CMX21P1` base for frozen generic calibration. |
 | `cmix_aux_bucket_calibration.py` | Trains then freezes a compact decoder-rebuilt probability-bucket calibration over an auxiliary endpoint and exact base trace. |
 | `wikiir_page_list_referentiation_probe.py` | Measures WebGraph-style ordered link-list COPY/ADD headroom against earlier pages with a deterministic random-prior control. |
 | `wikiir_template_value_referentiation_probe.py` | Measures complete-page-causal same-skeleton template-field COPY/ADD headroom against a matched deterministic prior-template control. |

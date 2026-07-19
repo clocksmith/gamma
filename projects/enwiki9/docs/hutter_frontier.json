@@ -417,6 +417,82 @@
         "Semantic layouts lose to matched literal controls",
         "No endpoint428 residual replay or native archive gain"
       ]
+    },
+    {
+      "id": "wrt_reference_prefix_cts_fx2_v1",
+      "name": "Causal WRT reference-prefix CTS over exact FX2",
+      "rank": 11,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 500000,
+      "measured_gain_bytes": -1,
+      "gain_bytes_per_1m": -2.0,
+      "oracle_headroom_bytes": 0.072265625,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/fx2_reference_residual_v1/reference-dense-500000-0-shadow.json",
+        "tools/wrt_reference_prefix_cts_shadow.py",
+        "tests/test_wrt_reference_prefix_cts_shadow.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/fx2_reference_residual_v1/reference-dense-500000-0-shadow.json",
+          "pointer": "/best_by_selection_rule/exact/saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/fx2_reference_residual_v1/reference-dense-500000-0-shadow.json",
+          "pointer": "/best_by_selection_rule/partitions/all/positive_event_oracle_saved_bytes",
+          "candidate_field": "oracle_headroom_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "The decoder-rebuilt endpoint loses one exact arithmetic byte on an event-dense 500K FX2 trace. Train, development, and holdout qbits are all negative, while the positive-event oracle is only 0.072266 byte.",
+      "next_gate": "None for this continuation representation or a router over its wins. Change the predicted representation rather than tuning reference contexts, support, or blend weights.",
+      "disqualifiers": [
+        "Negative exact FX2 replay",
+        "Negative development and holdout qbits",
+        "Positive-event oracle is economically negligible"
+      ]
+    },
+    {
+      "id": "wrt_normalized_phrase_context_regret_fx2_v1",
+      "name": "Normalized WRT phrase copy with causal context regret",
+      "rank": 12,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 500000,
+      "measured_gain_bytes": 4,
+      "gain_bytes_per_1m": 8.0,
+      "oracle_headroom_bytes": 142.7255859375,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/fx2_reference_residual_v1/normalized-phrase-copy-context-regret-500000-0-shadow.json",
+        "results/fx2_reference_residual_v1/phrase-k12-bucketcal-b8-e8-s128.json",
+        "results/fx2_reference_residual_v1/phrase-k12-bucketcal-b16-e16-s64.json",
+        "tools/wrt_normalized_phrase_copy_shadow.py",
+        "tools/wrt_normalized_phrase_endpoint_trace.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/fx2_reference_residual_v1/normalized-phrase-copy-context-regret-500000-0-shadow.json",
+          "pointer": "/best_by_selection_rule/exact/saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/fx2_reference_residual_v1/normalized-phrase-copy-context-regret-500000-0-shadow.json",
+          "pointer": "/best_by_selection_rule/partitions/all/positive_event_oracle_saved_bytes",
+          "candidate_field": "oracle_headroom_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Causal per-context regret recovers four exact bytes, but only 8 B/1M versus 57.404 B/1M debt before code; development is positive and holdout qbits are negative. Frozen confidence calibrators are exact-negative.",
+      "next_gate": "None unchanged. Require a new causal feature or representation that retains the phrase oracle on disjoint evidence before any native integration.",
+      "disqualifiers": [
+        "Exact rate is below target debt before source cost",
+        "Holdout qbits are negative",
+        "Frozen train-prefix calibrators regress"
+      ]
     }
   ],
   "quarantine": [
