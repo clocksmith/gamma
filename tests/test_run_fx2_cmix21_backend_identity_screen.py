@@ -51,3 +51,27 @@ def test_artifact_hashes_content() -> None:
     assert result["sha256"] == (
         "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
     )
+
+
+def test_build_backend_command_applies_requested_cpu_affinity() -> None:
+    command = MODULE.build_backend_command(
+        binary=pathlib.Path("backend"),
+        dictionary=pathlib.Path("english.dic"),
+        input_path=pathlib.Path("input.bin"),
+        archive=pathlib.Path("archive.bin"),
+        cpu_list="0,1,2,3",
+    )
+    assert command[:3] == ["taskset", "--cpu-list", "0,1,2,3"]
+    assert command[4] == "-c"
+
+
+def test_build_backend_command_is_unchanged_without_affinity() -> None:
+    command = MODULE.build_backend_command(
+        binary=pathlib.Path("backend"),
+        dictionary=pathlib.Path("english.dic"),
+        input_path=pathlib.Path("input.bin"),
+        archive=pathlib.Path("archive.bin"),
+        cpu_list=None,
+    )
+    assert command[1] == "-c"
+    assert "taskset" not in command

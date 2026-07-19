@@ -70,8 +70,29 @@ def summarize_runs(runs: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def build_backend_command(
+    *,
+    binary: Path,
+    dictionary: Path,
+    input_path: Path,
+    archive: Path,
+    cpu_list: str | None,
+) -> list[str]:
+    command = [
+        str(binary.resolve()),
+        "-c",
+        str(dictionary.resolve()),
+        str(input_path.resolve()),
+        str(archive.resolve()),
+    ]
+    if cpu_list:
+        return ["taskset", "--cpu-list", cpu_list, *command]
+    return command
+
+
 def run_guarded(
     *,
+    repo_root: Path,
     guard_tool: Path,
     label: str,
     command: list[str],
@@ -98,7 +119,7 @@ def run_guarded(
     with stdout_path.open("wb") as stdout, stderr_path.open("wb") as stderr:
         completed = subprocess.run(
             guarded_command,
-            cwd="/home/x/deco/gamma",
+            cwd=repo_root,
             stdout=stdout,
             stderr=stderr,
             check=False,
@@ -110,12 +131,20 @@ def run_guarded(
 
 
 def main() -> int:
+    repo_root = Path(__file__).resolve().parents[3]
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--candidate", type=Path, required=True)
     parser.add_argument("--dictionary", type=Path, required=True)
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--cpu-list",
+        help=(
+            "optional taskset CPU list used for every matched run, for example "
+            "0,2,4,6 for a four-physical-core qualification"
+        ),
+    )
     parser.add_argument(
         "--guard-tool",
         type=Path,
@@ -147,14 +176,15 @@ def main() -> int:
         for index, role in enumerate(RUN_ORDER, start=1):
             archive = args.output_dir / f"{index:02d}_{role}.comp"
             guard_path = args.output_dir / f"{index:02d}_{role}_guard.json"
-            command = [
-                str(binaries[role].resolve()),
-                "-c",
-                str(args.dictionary.resolve()),
-                str(args.input.resolve()),
-                str(archive.resolve()),
-            ]
+            command = build_backend_command(
+                binary=binaries[role],
+                dictionary=args.dictionary,
+                input_path=args.input,
+                archive=archive,
+                cpu_list=args.cpu_list,
+            )
             completed, guard = run_guarded(
+                repo_root=repo_root,
                 guard_tool=args.guard_tool,
                 label=f"fx2_cmix21_backend_identity_{role}_{index}",
                 command=command,
@@ -210,6 +240,10 @@ def main() -> int:
             "input": artifact(args.input),
         },
         "run_order": list(RUN_ORDER),
+        "runtime_environment": {
+            "requested_cpu_list": args.cpu_list,
+            "cpu_affinity_constrained": bool(args.cpu_list),
+        },
         "runs": runs,
         "metrics": metrics,
         "decision": {
