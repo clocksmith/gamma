@@ -25,9 +25,9 @@
       "proxy": 9
     },
     "runs_by_status": {
-      "active": 8,
+      "active": 2,
       "historical_control": 2,
-      "retired_unchanged": 21
+      "retired_unchanged": 27
     }
   },
   "runs": [
@@ -83,31 +83,32 @@
       "population": "opening_prefix",
       "baseline_archive_bytes": 1635695,
       "archive_bytes": 1634500,
-      "program_bytes": 280147,
-      "incremental_program_bytes": -69048,
+      "program_bytes": 261125,
+      "incremental_program_bytes": -88070,
       "measured_gain_bytes": 1195,
       "gain_bytes_per_1m": 119.5,
-      "forecast_score_bytes": 109408345,
+      "forecast_score_bytes": 109389323,
       "roundtrip_ok": true,
       "determinism_ok": true,
       "max_sampled_tree_rss_kib": 9082568,
       "score_credit_bytes": 0,
-      "decision": "The fused/output-loop successor produces a 1,634,500-byte exact 10M archive, saving 1,195 bytes over endpoint428 and 674 bytes over the prior best stream. Its reproducible 280,147-byte package costs 1,322 bytes more than the prior package, but the frozen calibration still improves the counted forecast by 43,806 bytes to 109,408,345 (10.9408345%), 91,655 below target. Exact decode, independent deterministic re-encode, and all decimal-memory guards pass. The overlapping WGSL workload excludes these elapsed measurements from runtime qualification.",
-      "next_gate": "Preserve the exact stream and counted package while developing a materially faster substrate implementation. Require controlled reference-calibrated compliance with the official runtime rule before any full-1G gate.",
+      "decision": "The fused/output-loop successor produces a 1,634,500-byte exact 10M archive, saving 1,195 bytes over endpoint428 and 674 bytes over the prior best stream. Lexical comment stripping reduces its reproducible LZMA package from 280,147 to 261,125 bytes while two clean builds preserve backend and wrapper identity. The revised counted forecast is 109,389,323 (10.9389323%), 110,677 below target. Exact decode, independent deterministic re-encode, and all decimal-memory guards pass. Runtime remains unqualified.",
+      "next_gate": "Build a model-work reduction or replacement architecture whose measured score loss fits the 110,677-byte counted margin and whose reference-calibrated runtime satisfies the official rule before any full-1G gate.",
       "disqualifiers": [
         "No exact full-corpus result",
-        "The 109,408,345 score is an exact-10M calibrated forecast, not official proof",
+        "The 109,389,323 score is an exact-10M calibrated forecast, not official proof",
         "The current implementation is not runtime-qualified under the official rule"
       ],
       "source_paths": [
         "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
         "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
         "results/endpoint428_pair_layer0_runtime_successors_250k_v1/source_package_receipt.json",
+        "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_minified_lzma_source_package_v1/decision.json",
         "patches/endpoint428_gate_dot_fuse_output_update_loop_v1.patch"
       ],
       "scope_percent_of_corpus": 1.0,
-      "forecast_percent": 10.9408345,
-      "forecast_margin_bytes": 91655
+      "forecast_percent": 10.9389323,
+      "forecast_margin_bytes": 110677
     },
     {
       "run_id": "endpoint428_pair_layer0_online_residual_successor__10000000",
@@ -392,7 +393,7 @@
       "parent_candidate_id": null,
       "candidate_name": "layer0 mixer10 plus pair adaptation plus WRT phase residual",
       "rank": 3,
-      "status": "active",
+      "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "primary_frontier_run": true,
       "scope_bytes": 1000000,
@@ -409,8 +410,8 @@
       "determinism_ok": null,
       "max_sampled_tree_rss_kib": null,
       "score_credit_bytes": 0,
-      "decision": "Exact causal replay composes 77 B/M from layer0 mixer10, 32 B/M from pair adaptation, and 31 B/M from frozen WRT phase residual. The 140 B/M shadow counterfactually scores 109,430,811 after a conservative 13,407-byte ceiling, but related-stream composition earns zero score credit.",
-      "next_gate": "Integrate mixer10-as-base, pair adaptation, and phase Predict/Perceive in a fresh counted source package; require P1 identity, exact archive gain, roundtrip, determinism, decimal-10GB RSS, and broader-scope transfer.",
+      "decision": "Exact causal replay suggested 140 B/M, but native composition rejected the inference. The full and pair-only forms regress at 250K; phase alone is positive but the dual-80 exact 1M archive is 174,054, above the zero-cost kill ceiling. This counterfactual earns zero score credit.",
+      "next_gate": "None unchanged. A successor needs genuinely different modeled information or a faster representation, not another pair/phase/mixer parameterization.",
       "disqualifiers": [
         "Related independent P1 streams are not a native combined archive",
         "No broader-scope transfer evidence",
@@ -432,7 +433,7 @@
       "parent_candidate_id": null,
       "candidate_name": "layer-0 endpoint plus hierarchical WRT phase residual SSE",
       "rank": 4,
-      "status": "active",
+      "status": "retired_unchanged",
       "evidence_tier": "causal_shadow",
       "primary_frontier_run": true,
       "scope_bytes": 1000000,
@@ -449,8 +450,8 @@
       "determinism_ok": null,
       "max_sampled_tree_rss_kib": null,
       "score_credit_bytes": 0,
-      "decision": "The frozen hierarchy saves only 44 B/M directly over endpoint428 and is retired unchanged. Over the available independent layer-0 endpoint it adds 41 exact bytes with all 10 blocks positive to the layer's existing 77-byte gain. A production-shaped zero-payload component reproduces the 41-byte gain in two byte-identical clean builds and costs 1,407 gzip bytes. The combined 118 B/M shadow has a 109,452,811 counterfactual after a conservative 13,407-byte program ceiling.",
-      "next_gate": "Replay the frozen hierarchy over the exact native pair/layer-0 candidate P1, then integrate only if combined counted economics remain target-closing.",
+      "decision": "The hierarchy saves 44 B/M directly over endpoint428 and 41 B/M over an independent layer-0 trace, but the native dual-80 target-substrate phase form reaches only 174,054 bytes at exact 1M. It misses the zero-cost rescue ceiling, so the favorable 118 B/M counterfactual remains zero-credit shadow evidence.",
+      "next_gate": "None unchanged. Reuse phase context only inside a materially different faster endpoint with independently sufficient score headroom.",
       "disqualifiers": [
         "Available layer-0 endpoint is related to but not identical with the exact native pair/layer-0 candidate",
         "No combined native archive, roundtrip, determinism, or runtime receipt",
@@ -943,7 +944,7 @@
       "parent_candidate_id": null,
       "candidate_name": "Mix-to-Perceive context-pointer reuse",
       "rank": 21,
-      "status": "active",
+      "status": "retired_unchanged",
       "evidence_tier": "proxy",
       "primary_frontier_run": true,
       "scope_bytes": 10000,
@@ -960,8 +961,8 @@
       "determinism_ok": null,
       "max_sampled_tree_rss_kib": null,
       "score_credit_bytes": 0,
-      "decision": "The minimal patch removes the second context hash lookup between each Mixer::Mix and its immediately following Mixer::Perceive. Closest-ancestor archives are byte-identical across 12 clean guards; median runtime falls 1.528% at 1K and 1.612% on a real 10K Wikipedia prefix. This is useful exact-source transplant evidence but far below the official-runtime gap.",
-      "next_gate": "Recover the checksum-bound exact 102-file candidate source package, apply only the context-pointer reuse, require exact archive identity, and run controlled reference-calibrated timing while pursuing orthogonal computation removal.",
+      "decision": "The exact frozen source already contains pointer reuse. It remains archive-exact, but belongs to a terminal component bundle whose optimistic runtime leverage is far below the official requirement.",
+      "next_gate": "None unchanged. Preserve it in the frozen implementation and pivot to material model-work removal.",
       "disqualifiers": [
         "Any archive drift on the exact candidate",
         "Non-positive controlled exact-source runtime reduction",
@@ -969,6 +970,7 @@
       ],
       "source_paths": [
         "results/endpoint428_mixer_context_reuse_runtime_proxy_v1/decision.json",
+        "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_runtime_composite_isolation_1k_v1/decision.json",
         "patches/cmix21_mixer_context_reuse_v1.patch"
       ],
       "scope_percent_of_corpus": 0.001,
@@ -981,7 +983,7 @@
       "parent_candidate_id": null,
       "candidate_name": "fixed-capacity mixer context table after pointer reuse",
       "rank": 24,
-      "status": "active",
+      "status": "retired_unchanged",
       "evidence_tier": "proxy",
       "primary_frontier_run": true,
       "scope_bytes": 10000,
@@ -998,8 +1000,8 @@
       "determinism_ok": null,
       "max_sampled_tree_rss_kib": null,
       "score_credit_bytes": 0,
-      "decision": "The 32K open-address table preserves all six real-Wikipedia 10K archives and reduces median runtime by an additional 2.02% over pointer reuse. All guards are clean; a denser 16K table regresses by 1.79% and is rejected.",
-      "next_gate": "Recover the checksum-bound exact candidate source package, transplant pointer reuse plus the 32K table, require exact archive identity, and measure controlled reference-calibrated runtime.",
+      "decision": "The 32K table preserves proxy archives, but the exact-source bundle cannot supply enough runtime leverage. The exact frozen-source table screen is slightly negative, and the component is terminal before a larger gate.",
+      "next_gate": "None unchanged. Pivot to material modeled-work removal.",
       "disqualifiers": [
         "Any archive drift on the exact candidate",
         "Non-positive controlled exact-source median",
@@ -1007,6 +1009,7 @@
       ],
       "source_paths": [
         "results/endpoint428_mixer_flat_context_runtime_proxy_v1/decision.json",
+        "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_runtime_composite_isolation_1k_v1/decision.json",
         "patches/cmix21_mixer_flat_context_v1.patch",
         "patches/cmix21_mixer_context_reuse_v1.patch"
       ],
@@ -1020,7 +1023,7 @@
       "parent_candidate_id": null,
       "candidate_name": "serial fused-LSTM forward traversal after mixer runtime patches",
       "rank": 25,
-      "status": "active",
+      "status": "retired_unchanged",
       "evidence_tier": "proxy",
       "primary_frontier_run": true,
       "scope_bytes": 10000,
@@ -1037,8 +1040,8 @@
       "determinism_ok": null,
       "max_sampled_tree_rss_kib": null,
       "score_credit_bytes": 0,
-      "decision": "The previously untested serial fused forward path preserves all six real-Wikipedia 10K archives and reduces median runtime by 8.344% over the parallel flat-table reference. Every pair improves by at least 8.32% and peak RSS is slightly lower.",
-      "next_gate": "Recover the checksum-bound exact candidate source package, transplant pointer reuse, 32K context tables, and serial fused forward traversal, require exact archive identity, and measure controlled reference-calibrated runtime.",
+      "decision": "Serial forward remains archive-exact in the recovered source, but the surviving exact component bundle has only 13.963% optimistic additive leverage against an 83.093% absolute runtime requirement.",
+      "next_gate": "None unchanged. Preserve the implementation evidence and pivot to a faster model architecture.",
       "disqualifiers": [
         "Any archive drift on the exact candidate",
         "Non-positive controlled exact-source median",
@@ -1046,6 +1049,7 @@
       ],
       "source_paths": [
         "results/endpoint428_lstm_serial_forward_runtime_proxy_v1/decision.json",
+        "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_runtime_composite_isolation_1k_v1/decision.json",
         "patches/cmix21_lstm_serial_forward_v1.patch",
         "patches/cmix21_mixer_flat_context_v1.patch",
         "patches/cmix21_mixer_context_reuse_v1.patch"
@@ -1060,7 +1064,7 @@
       "parent_candidate_id": null,
       "candidate_name": "fused recurrent backward error accumulators",
       "rank": 26,
-      "status": "active",
+      "status": "retired_unchanged",
       "evidence_tier": "proxy",
       "primary_frontier_run": true,
       "scope_bytes": 10000,
@@ -1077,8 +1081,8 @@
       "determinism_ok": null,
       "max_sampled_tree_rss_kib": null,
       "score_credit_bytes": 0,
-      "decision": "Fusing the two recurrent backward dot products preserves all six 10K archives and reduces median runtime by 1.444%, but one of three paired comparisons regresses by 0.739%. It is a weaker confirmation candidate, not official runtime evidence.",
-      "next_gate": "Test separately on the recovered exact candidate after the stronger pointer/table/serial-forward bundle; retain only if its exact-source controlled median remains positive.",
+      "decision": "The proxy was exact, but the recovered -ffast-math build deterministically changes the 1K archive hash from 245b647b... to b06f017a.... Removing only this component restores identity, and the full composite is 0.577% slower at 1K.",
+      "next_gate": "None unchanged. Any future changed-stream accumulator must independently pay score and runtime economics.",
       "disqualifiers": [
         "Any archive drift on the exact candidate",
         "Non-positive controlled exact-source median",
@@ -1086,6 +1090,8 @@
       ],
       "source_paths": [
         "results/endpoint428_lstm_backward_dual_accum_runtime_proxy_v1/decision.json",
+        "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_runtime_composite_identity_1k_v1/receipt.json",
+        "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_runtime_composite_isolation_1k_v1/decision.json",
         "patches/cmix21_lstm_backward_dual_accum_v1.patch",
         "patches/cmix21_lstm_serial_forward_v1.patch"
       ],
