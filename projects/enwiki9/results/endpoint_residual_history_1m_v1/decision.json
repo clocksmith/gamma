@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint_residual_history_decision",
+  "evidence_level": "causal_exact_p1_shadow",
+  "scope": {"raw_bytes": 1000000, "rows": 4805936, "block_bytes": 65536},
+  "hypothesis": "Recent endpoint surprise sequences identify recurring residual regimes not represented by decoded byte context alone.",
+  "inputs": {
+    "endpoint428_p1_sha256": "1aba2ddb90c9e3a9a2a350f7d8d14f65a6128b96e6baa7bd50e09dacaca06955",
+    "wrt_store_sha256": "1e209c7d19a22af5ce6a1de3bab1fc636669f40686aebd88bbe9dc8e5411e583"
+  },
+  "implementation": {
+    "source_sha256": "b01417cd55a8090ee211c4ee710f5cd11508693f3b192cbf7ab86c465bd3b439",
+    "source_gzip9_bytes": 3758,
+    "history_lengths": [2, 4, 8],
+    "selection_rule": "highest development qbits; holdout is confirmation only",
+    "duplicate_replay_sha256": "5f719976d0f560ac7c336d88e7bc315d0556823aa7cb3539977b023ac0237b48"
+  },
+  "causality": {
+    "prediction_precedes_current_truth": true,
+    "surprise_history_updates_after_current_truth": true,
+    "state_rebuilt_from_decoded_prefix": true,
+    "payload_bytes": 0
+  },
+  "selection_result": {
+    "selected_variant": "surprise_history_2",
+    "baseline_payload_bytes": 173926,
+    "exact_saved_bytes": 12,
+    "train_qbits": 5421,
+    "development_qbits": 4599,
+    "holdout_qbits": 453,
+    "positive_blocks": 7,
+    "regressing_blocks": 3,
+    "other_variants": [
+      {"variant_id": "surprise_history_4", "exact_saved_bytes": 5, "development_qbits": 2649, "holdout_qbits": -6977},
+      {"variant_id": "surprise_history_8", "exact_saved_bytes": -19, "development_qbits": -13050, "holdout_qbits": -20412}
+    ]
+  },
+  "economics": {
+    "canonical_target_debt_bytes_per_1m": 57.404,
+    "selected_gain_bytes_per_1m": 12,
+    "source_cost_equivalent_bytes_per_1m": 56.127,
+    "promotion_floor_before_source_cost_met": false
+  },
+  "decision": {
+    "verdict": "retire_surprise_history_retrieval_unchanged",
+    "reason": "The development-selected history-2 endpoint is subeconomic before source cost, has negligible held-out qbit gain, and regresses three blocks. Longer histories are negative on holdout.",
+    "confirmation_run_authorized": false,
+    "score_credit_bytes": 0,
+    "promotion_authorized": false,
+    "next_action": "Do not tune history length, hash size, prior, or strength. Residual-native retrieval must create a different coded endpoint rather than another calibration table."
+  },
+  "claim_boundary": "Exact deterministic causal endpoint428 P1 selection replay only. Independent-substrate confirmation was withheld after the selection gate failed. This is not a native archive, counted forecast, or full-corpus score."
+}
