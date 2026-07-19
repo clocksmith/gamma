@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_lstm_alternate_bptt_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "Running the 100-byte recurrent backpropagation window on alternating windows can remove roughly half of the measured backward-pass work while retaining enough online adaptation to remain inside the active candidate's score margin.",
+  "baseline": {
+    "candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+    "lstm_cpp_sha256": "71acdbcffd70bdb1a06c097a781edd516d5ea0123f0bda07265eb929ce356b5d",
+    "lstm_h_sha256": "d4f68657bf27f90c3a2c342ce43bd402881a90c4def9c0b0b61145433c20c1cf",
+    "binary_sha256": "3f56e844fcec452bff257b3cc5eecf18e1a8c3c2ce49447e897f3a91aae5df0f",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30"
+  },
+  "implementation": {
+    "patch": "patches/cmix21_lstm_alternate_bptt_v1.patch",
+    "lstm_cpp_sha256": "b9f3c68a732c292ad52d3ba73a757cd30ec5af4680242a5e099d90effa302fff",
+    "lstm_h_sha256": "4c1b155dbb3f7f72a4cb7ce256a60e082bb23536e10bf711c6a6aa6ae44461b5",
+    "binary_sha256": "357c8f8a791a89b374e8e11145479cfae13e3ccb75eecd27833e161f21b3d3c6",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "mechanism": "Execute the existing BPTT body for the first 100-byte window and every second window thereafter; forward inference and per-byte output-layer updates remain enabled."
+  },
+  "real_wikipedia_1k": {
+    "input_bytes": 1024,
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+    "baseline_archive_bytes": 272,
+    "candidate_archive_bytes": 273,
+    "candidate_archive_sha256": "615d4b7120acebbd24a9908474466fa8303793c67a4f15a434192d851ab06798",
+    "measured_gain_bytes": -1,
+    "gain_bytes_per_1m": -976.5625,
+    "archive_identity": false,
+    "roundtrip_tested": false,
+    "deterministic_reencode_tested": false,
+    "maximum_tree_rss_kib": 5889792,
+    "official_decimal_over_limit_kib": 0,
+    "guard_clean": true,
+    "guard_returncode": 0,
+    "single_run_elapsed_s": 3.3206,
+    "timing_claim_allowed": false
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false
+  },
+  "decision": {
+    "verdict": "retire_alternate_bptt_unchanged",
+    "promotion_authorized": false,
+    "larger_scope_authorized": false,
+    "full_1g_gate_authorized": false,
+    "reason": "The first 1K economics gate loses one archive byte, already exceeding the proportional score budget. The unpaired elapsed sample is diagnostic only and cannot rescue the score miss.",
+    "next_action": "Do not tune BPTT skip schedules. Seek model-level concurrency or a new recurrent representation with materially larger runtime leverage and independently re-cleared score economics."
+  },
+  "dependency_audit": {
+    "exact_candidate_source_available_locally": false,
+    "tracked_path_search_found_bundle": false,
+    "exact_size_unreachable_blob_search_found_bundle": false,
+    "claim": "No native endpoint428 transplant or runtime claim is possible on this checkout until the checksum-bound source package is synchronized."
+  },
+  "claim_boundary": "This receipt records a retired 1K ancestor runtime proxy. It does not qualify endpoint428 runtime, establish scaling beyond this prefix, or change the counted forecast."
+}

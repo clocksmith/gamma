@@ -7,10 +7,10 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 30,
-    "candidate_count": 28,
+    "run_count": 31,
+    "candidate_count": 29,
     "runs_by_scope": {
-      "1024": 2,
+      "1024": 3,
       "10000": 5,
       "500000": 2,
       "600747": 1,
@@ -22,12 +22,12 @@
     "runs_by_evidence_tier": {
       "causal_shadow": 15,
       "constructive_prefix": 7,
-      "proxy": 8
+      "proxy": 9
     },
     "runs_by_status": {
       "active": 8,
       "historical_control": 2,
-      "retired_unchanged": 20
+      "retired_unchanged": 21
     }
   },
   "runs": [
@@ -1203,6 +1203,44 @@
       "source_paths": [
         "patches/cmix21_lstm_forward_state_fuse_v1.patch",
         "results/endpoint428_lstm_forward_state_fuse_runtime_proxy_v1/decision.json"
+      ],
+      "scope_percent_of_corpus": 0.0001024,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_lstm_alternate_bptt_runtime_proxy_v1__1024",
+      "candidate_id": "endpoint428_lstm_alternate_bptt_runtime_proxy_v1",
+      "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "candidate_name": "alternate-window recurrent backpropagation",
+      "rank": 29,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "primary_frontier_run": true,
+      "scope_bytes": 1024,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 272,
+      "archive_bytes": 273,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": -1,
+      "gain_bytes_per_1m": -976.5625,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 5889792,
+      "score_credit_bytes": 0,
+      "decision": "Alternating the 100-byte BPTT window loses one archive byte at the first 1K economics gate. The unpaired elapsed sample receives no credit, and no schedule ladder or larger run is authorized.",
+      "next_gate": "None unchanged. Pursue model-level endpoint concurrency or a new recurrent representation after synchronizing the checksum-bound exact source package.",
+      "disqualifiers": [
+        "Proportional score budget exceeded at 1K",
+        "No controlled timing evidence",
+        "Exact candidate source package unavailable locally"
+      ],
+      "source_paths": [
+        "patches/cmix21_lstm_alternate_bptt_v1.patch",
+        "results/endpoint428_lstm_alternate_bptt_runtime_proxy_v1/decision.json"
       ],
       "scope_percent_of_corpus": 0.0001024,
       "forecast_percent": null,
