@@ -100,6 +100,7 @@ def assertion_audit(
     project_root: Path, row: dict[str, Any], errors: list[str]
 ) -> list[dict[str, Any]]:
     audits: list[dict[str, Any]] = []
+    source_required = row.get("source_required", True)
     for assertion in row.get("metric_assertions", []):
         source_text = assertion.get("source")
         pointer = assertion.get("pointer")
@@ -113,6 +114,16 @@ def assertion_audit(
         try:
             source = Path(source_text)
             resolved = source if source.is_absolute() else project_root / source
+            if not source_required and not resolved.exists():
+                audit.update(
+                    {
+                        "pass": None,
+                        "skipped": True,
+                        "reason": "optional source absent",
+                    }
+                )
+                audits.append(audit)
+                continue
             observed = json_pointer(load_object(resolved), pointer)
             expected = row[field]
             audit.update({"observed": observed, "expected": expected})
@@ -294,11 +305,22 @@ def render_markdown(status: dict[str, Any]) -> str:
         lines.append("- Official distance: `unknown`.")
     forecast_score = forecast.get("forecast_score")
     forecast_debt = forecast.get("forecast_debt_bytes")
+    forecast_margin = forecast.get("forecast_margin_bytes")
+    forecast_distance_label = (
+        "margin below target"
+        if isinstance(forecast_margin, int) and forecast_margin >= 0
+        else "distance above target"
+    )
+    forecast_distance = (
+        forecast_margin
+        if isinstance(forecast_margin, int) and forecast_margin >= 0
+        else forecast_debt
+    )
     lines.append(
         f"- Best counted forecast: `{fmt_int(forecast_score)}` "
-        f"(`{fmt_score_percent(forecast_score)}`); distance above target "
-        f"`{fmt_int(forecast_debt)}` bytes "
-        f"(`{fmt_point_distance(forecast_debt)}`)."
+        f"(`{fmt_score_percent(forecast_score)}`); {forecast_distance_label} "
+        f"`{fmt_int(forecast_distance)}` bytes "
+        f"(`{fmt_point_distance(forecast_distance)}`)."
     )
     active = next(
         (
