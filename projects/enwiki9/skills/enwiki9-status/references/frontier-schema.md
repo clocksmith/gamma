@@ -12,7 +12,9 @@ the generated operational `docs/status_receipt.json`; it does not replace it.
 - `score_credit_bytes`: bytes allowed to affect the constructive forecast;
   always zero for idea, proxy, oracle, and causal shadow rows.
 - `source_paths`: repository-relative or absolute receipt paths.
-- `source_required`: whether missing source paths fail strict validation.
+- `source_required`: whether missing source paths fail strict validation. When
+  false, assertions against absent historical overlays are marked skipped;
+  assertions against sources that are present remain mandatory and fail closed.
 - `metric_assertions`: optional JSON-pointer checks binding a candidate field
   directly to a machine-readable source receipt.
 - `decision`, `next_gate`, `disqualifiers`: concise current interpretation.

@@ -145,6 +145,62 @@ def test_metric_assertion_detects_receipt_drift(tmp_path: Path) -> None:
     assert any("disagrees with" in error for error in errors)
 
 
+def test_missing_optional_assertion_source_is_skipped(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    candidate = ledger["candidates"][0]
+    candidate["source_required"] = False
+    candidate["source_paths"] = ["missing.json"]
+    candidate["metric_assertions"] = [
+        {
+            "source": "missing.json",
+            "pointer": "/score",
+            "candidate_field": "forecast_score",
+        }
+    ]
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert errors == []
+    audit = status["canonical_forecast"]["metric_assertion_audit"][0]
+    assert audit["pass"] is None
+    assert audit["skipped"] is True
+    assert audit["reason"] == "optional source absent"
+
+
+def test_present_optional_assertion_source_still_detects_drift(
+    tmp_path: Path,
+) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    candidate = ledger["candidates"][0]
+    candidate["source_required"] = False
+    candidate["metric_assertions"] = [
+        {
+            "source": "receipt.json",
+            "pointer": "/score",
+            "candidate_field": "forecast_score",
+        }
+    ]
+    (tmp_path / "receipt.json").write_text(json.dumps({"score": 1}) + "\n")
+
+    _, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+
+    assert any("disagrees with" in error for error in errors)
+
+
+def test_under_target_forecast_renders_margin_below_target(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    ledger["candidates"][0]["forecast_score"] = 109_408_345
+    operational["best_forecast"]["projected_score"] = 109_408_345
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+    markdown = MODULE.render_markdown(status)
+
+    assert errors == []
+    assert "Best counted forecast: `109,408,345` (`10.9408345%`)" in markdown
+    assert "margin below target `91,655` bytes" in markdown
+    assert "distance above target `0`" not in markdown
+
+
 def test_live_observation_renders_guarded_progress(tmp_path: Path) -> None:
     _, ledger, operational = write_fixture(tmp_path)
     live = {
