@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "receipt_type": "fx2_diagonal_reservoir_replacement_decision",
+  "evidence_level": "causal_shadow",
+  "hypothesis": "A decoder-built diagonal multi-timescale reservoir with online fixed-point readout can replace enough of the expensive compact recurrent endpoint over the same-execution FX2 endpoint to close the 681.114 B/M baseline debt at much lower runtime.",
+  "scope": {
+    "original_raw_bytes": 1000000,
+    "wrt_bytes": 600742,
+    "rows": 4805936,
+    "population": "opening_prefix",
+    "pair_endpoint": 1,
+    "pair_endpoint_role": "same-execution FX2-lite428 endpoint"
+  },
+  "economics": {
+    "required_gain_bytes_per_1m": 681.114,
+    "fx2_payload_bytes": 177029,
+    "endpoint428_payload_bytes": 173926,
+    "available_compact_complement_bytes_per_1m": 3103,
+    "selected_gain_bytes": 0,
+    "selected_gain_bytes_per_1m": 0.0,
+    "score_credit_bytes": 0
+  },
+  "selection": {
+    "reads_holdout": false,
+    "candidate_cells": [8, 16, 32, 64, 128],
+    "selected_variant": "c128_u44",
+    "selected_is_zero_update_control": true,
+    "selected_development_qbits": 0,
+    "selected_holdout_qbits": 0,
+    "selected_exact_saved_bytes": 0
+  },
+  "post_hoc_upper_observation": {
+    "variant": "c8_u25",
+    "development_qbits": -2789,
+    "holdout_qbits": 3253,
+    "exact_saved_bytes": 5,
+    "positive_blocks": 7,
+    "regressing_blocks": 3,
+    "selection_credit": false
+  },
+  "artifacts": {
+    "screen": "/home/clocksmith/enwiki9-nonproof/results/fx2_diagonal_reservoir_replacement_1m_v1/screen.json",
+    "screen_sha256": "f4bdd8b4c6cd948a4d9980af48ece6acc01eac26dfa7afa18b4c531a89263732",
+    "pair_trace": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/endpoint428_pair_trace.bin",
+    "wrt_store": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/input.wrt.store",
+    "source": "tools/endpoint_diagonal_reservoir_screen.cpp",
+    "source_sha256": "b257c0ed7e80176d22285c657f5b8d36e0675623227da9801bab74320496165e"
+  },
+  "decision": {
+    "verdict": "retire_diagonal_reservoir_replacement_unchanged",
+    "reason": "Development-only selection chooses the zero-update control and realizes no gain. The best post-hoc full replay saves only 5 B/M, regresses three blocks, and has negative development loss, versus 681.114 B/M required before code.",
+    "next_action": "Do not expand diagonal cell or learning-rate ladders. A future fast recurrent replacement must introduce cross-state interactions, token/event inputs, or teacher-trained dynamics rather than independent leaky byte hashes."
+  },
+  "claim_boundary": "Causal same-execution FX2 probability-trace replay only. No native archive, runtime qualification, counted integration, full-corpus replay, or official score exists."
+}

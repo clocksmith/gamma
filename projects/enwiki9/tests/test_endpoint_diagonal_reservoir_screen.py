@@ -42,10 +42,43 @@ def test_diagonal_reservoir_is_deterministic_and_holdout_blind(tmp_path: Path) -
     receipt = json.loads(first.read_text())
     assert receipt["selection_reads_holdout"] is False
     assert receipt["rows"] == 800
-    assert len(receipt["variants"]) == 21
+    assert len(receipt["variants"]) == 35
     assert all(row["state_bytes"] < 20000 for row in receipt["variants"])
     zero_rate = [
         row for row in receipt["variants"] if row["update_shift"] == 44
     ]
     assert all(row["max_absolute_weight"] == 0 for row in zero_rate)
     assert all(row["exact_saved_bytes"] == 0 for row in zero_rate)
+
+
+def test_diagonal_reservoir_reads_selected_pair_endpoint(tmp_path: Path) -> None:
+    binary = tmp_path / "screen"
+    subprocess.run(
+        ["g++", "-std=c++17", "-O2", str(SOURCE), "-o", str(binary)],
+        check=True,
+    )
+    p1, store = write_inputs(tmp_path)
+    raw = p1.read_bytes()
+    rows = struct.unpack_from("<Q", raw, 8)[0]
+    base = np.frombuffer(raw, dtype="<u2", offset=16).copy()
+    pair = tmp_path / "pair.bin"
+    endpoints = np.column_stack((np.full(rows, 16384, dtype="<u2"), base))
+    pair.write_bytes(b"CMXAUX1\0" + struct.pack("<Q", rows) + endpoints.tobytes())
+    output = tmp_path / "pair.json"
+    subprocess.run(
+        [
+            str(binary),
+            "--pair-trace",
+            str(pair),
+            "--pair-endpoint",
+            "1",
+            "--wrt-store",
+            str(store),
+            "--output",
+            str(output),
+        ],
+        check=True,
+    )
+    receipt = json.loads(output.read_text())
+    assert receipt["base_trace_kind"] == "same_execution_pair_endpoint"
+    assert receipt["pair_endpoint"] == 1
