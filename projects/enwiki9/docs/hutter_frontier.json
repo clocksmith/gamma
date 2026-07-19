@@ -1439,6 +1439,120 @@
       ]
     },
     {
+      "id": "endpoint_sparse_gru_distill_1m_v1",
+      "parent_candidate_id": "fx2_diagonal_reservoir_replacement_1m_v1",
+      "name": "compact-teacher sparse GRU FX2 replacement",
+      "rank": 38,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 177029,
+      "archive_bytes": 177006,
+      "measured_gain_bytes": 23,
+      "gain_bytes_per_1m": 23.0,
+      "heldout_measured_gain_bytes": -4.893174406977778,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint_sparse_gru_distill_1m_v1/decision.json",
+        "tools/endpoint_sparse_gru_distill_screen.py",
+        "tests/test_endpoint_sparse_gru_distill_screen.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint_sparse_gru_distill_1m_v1/decision.json",
+          "pointer": "/inputs/source_scope_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_distill_1m_v1/decision.json",
+          "pointer": "/exact_full_scope_replay/baseline_payload_bytes",
+          "candidate_field": "baseline_archive_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_distill_1m_v1/decision.json",
+          "pointer": "/exact_full_scope_replay/candidate_payload_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_distill_1m_v1/decision.json",
+          "pointer": "/exact_full_scope_replay/candidate_saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_distill_1m_v1/decision.json",
+          "pointer": "/splits/2/candidate_gain_bytes",
+          "candidate_field": "heldout_measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Development-only selection chooses epoch one. The float causal replay saves 23 exact bytes overall but regresses 4.893 bytes on sealed holdout, retaining less than one percent of the compact teacher's 2,830.637-byte headroom versus a payload-aware 688.818 B/M requirement.",
+      "next_gate": "None unchanged. Attribute the teacher residual to specific compact state transitions or learned event representations before attempting another replacement model.",
+      "disqualifiers": [
+        "Negative sealed-holdout gain",
+        "Less than one percent of teacher headroom retained",
+        "Exact full-scope gain is under four percent of the payload-aware floor",
+        "Float weights are not quantized or counted"
+      ]
+    },
+    {
+      "id": "endpoint_sparse_gru_residual_distill_1m_v2",
+      "parent_candidate_id": "endpoint_sparse_gru_distill_1m_v1",
+      "name": "compact-teacher residual-logit sparse GRU",
+      "rank": 39,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 177029,
+      "archive_bytes": 177113,
+      "measured_gain_bytes": -84,
+      "gain_bytes_per_1m": -84.0,
+      "heldout_measured_gain_bytes": -26.28344566777014,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
+        "tools/endpoint_sparse_gru_distill_screen.py",
+        "tests/test_endpoint_sparse_gru_distill_screen.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
+          "pointer": "/inputs/source_scope_bytes",
+          "candidate_field": "scope_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
+          "pointer": "/exact_full_scope_replay/baseline_payload_bytes",
+          "candidate_field": "baseline_archive_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
+          "pointer": "/exact_full_scope_replay/candidate_payload_bytes",
+          "candidate_field": "archive_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
+          "pointer": "/exact_full_scope_replay/candidate_saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/endpoint_sparse_gru_residual_distill_1m_v2/decision.json",
+          "pointer": "/splits/2/candidate_gain_bytes",
+          "candidate_field": "heldout_measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Direct residual-logit training lowers its declared training loss but development selection still chooses epoch one. Exact replay loses 84 bytes overall and 26.283 bytes on sealed holdout, so weak KL gradients were not the reason the sparse GRU failed to retain the compact complement.",
+      "next_gate": "None unchanged. Require component/state attribution or a materially different event-level representation before another learned replacement.",
+      "disqualifiers": [
+        "Negative exact full-scope gain",
+        "Negative sealed-holdout gain",
+        "Every development checkpoint regresses",
+        "Float weights are not quantized or counted"
+      ]
+    },
+    {
       "id": "endpoint428_inline_logit_runtime_proxy_v1",
       "parent_candidate_id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
       "name": "inline probability-logit table lookup",

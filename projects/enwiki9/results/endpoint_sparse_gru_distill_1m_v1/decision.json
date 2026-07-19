@@ -1,0 +1,142 @@
+{
+  "claim_boundary": "Offline float teacher distillation with causal replay. The compact teacher is not decoder-available; weights are not yet quantized or counted; no archive, native runtime, memory, disjoint transfer, or full-corpus claim is established.",
+  "decision": "retire this learned recurrent representation before native integration",
+  "economics": {
+    "required_gain_before_payload_bytes_per_million": 681.114,
+    "required_gain_with_estimated_int8_payload_bytes_per_million": 688.818,
+    "target_debt_bytes": 681114
+  },
+  "evidence_level": "offline_teacher_causal_float_shadow",
+  "exact_full_scope_replay": {
+    "baseline_payload_bytes": 177029,
+    "candidate_payload_bytes": 177006,
+    "candidate_saved_bytes": 23,
+    "teacher_payload_bytes": 174198
+  },
+  "hypothesis": "A learned cross-state byte recurrence can retain enough of the compact endpoint's same-execution complement over fast FX2 to justify fixed-point quantization.",
+  "implementation": {
+    "device": "cpu",
+    "source": "/home/clocksmith/deco/gamma/projects/enwiki9/tools/endpoint_sparse_gru_distill_screen.py",
+    "source_sha256": "644d551c5d984479b0a7a69fe6b61928bd95da9b9aa66648e4e8c874468a4d6f",
+    "torch_version": "2.13.0+cpu"
+  },
+  "inputs": {
+    "base_pair_endpoint": 1,
+    "pair_trace": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/endpoint428_pair_trace.bin",
+    "pair_trace_sha256": "6585007e1e359606e9d88924d432a31dae4ca6cd86af56a8d5a24af43a13ab19",
+    "source_scope_bytes": 1000000,
+    "teacher_pair_endpoint": 0,
+    "wrt_bytes": 600742,
+    "wrt_store": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/input.wrt.store",
+    "wrt_store_sha256": "1e209c7d19a22af5ce6a1de3bab1fc636669f40686aebd88bbe9dc8e5411e583"
+  },
+  "model": {
+    "cells": 16,
+    "embedding_dims": 8,
+    "estimated_int8_payload_bytes": 7704,
+    "float_parameter_bytes": 30592,
+    "parameter_count": 7648,
+    "sequence_bytes": 256,
+    "warmup_bytes": 64
+  },
+  "promotion_authorized": false,
+  "quantization_gate_passed": false,
+  "schema": "endpoint_sparse_gru_distill_screen_v1",
+  "selection": {
+    "development_fraction": 0.2,
+    "history": [
+      {
+        "development_gain_bytes": -4.399798829195788,
+        "development_gain_bytes_per_million": -21.999067385630525,
+        "epoch": 1,
+        "training_objective_loss": 0.20636245375333648
+      },
+      {
+        "development_gain_bytes": -7.251303736804402,
+        "development_gain_bytes_per_million": -36.25663939021333,
+        "epoch": 2,
+        "training_objective_loss": 0.20629875771780767
+      },
+      {
+        "development_gain_bytes": -6.866035667087999,
+        "development_gain_bytes_per_million": -34.330292628406454,
+        "epoch": 3,
+        "training_objective_loss": 0.2062578133936884
+      },
+      {
+        "development_gain_bytes": -8.715445529589488,
+        "development_gain_bytes_per_million": -43.57737272644279,
+        "epoch": 4,
+        "training_objective_loss": 0.20623200905178996
+      },
+      {
+        "development_gain_bytes": -8.561181318815215,
+        "development_gain_bytes_per_million": -42.80604910466833,
+        "epoch": 5,
+        "training_objective_loss": 0.20621057965692766
+      },
+      {
+        "development_gain_bytes": -13.048682224121876,
+        "development_gain_bytes_per_million": -65.24362833075395,
+        "epoch": 6,
+        "training_objective_loss": 0.2061916900892671
+      }
+    ],
+    "holdout_fraction": 0.2,
+    "holdout_reads_during_selection": false,
+    "objective": "teacher_kl",
+    "seed": 20260719,
+    "selected_epoch": 1,
+    "train_fraction": 0.6
+  },
+  "splits": [
+    {
+      "base_qbits": 219189184.69407955,
+      "candidate_gain_bytes": 32.14295126595243,
+      "candidate_gain_bytes_per_million": 53.571615168502255,
+      "candidate_qbits": 219123355.92988688,
+      "source_equivalent_bytes": 599999.6670783798,
+      "split": "train",
+      "teacher_headroom_bytes": 1843.8383828141668,
+      "teacher_headroom_retained_fraction": 0.01743262943517539,
+      "teacher_qbits": 215413003.68607613,
+      "wrt_bytes": 360445
+    },
+    {
+      "base_qbits": 78120017.49959794,
+      "candidate_gain_bytes": -4.399798829195788,
+      "candidate_gain_bytes_per_million": -21.999067385630525,
+      "candidate_qbits": 78129028.28760013,
+      "source_equivalent_bytes": 199999.33415675946,
+      "split": "development",
+      "teacher_headroom_bytes": 527.4277616265317,
+      "teacher_headroom_retained_fraction": -0.00834199325349745,
+      "teacher_qbits": 77039845.4437868,
+      "wrt_bytes": 120148
+    },
+    {
+      "base_qbits": 65245898.29135775,
+      "candidate_gain_bytes": -4.893174406977778,
+      "candidate_gain_bytes_per_million": -24.465749857232638,
+      "candidate_qbits": 65255919.51254324,
+      "source_equivalent_bytes": 200000.9987648608,
+      "split": "holdout",
+      "teacher_headroom_bytes": 459.37053448254665,
+      "teacher_headroom_retained_fraction": -0.010651911778559427,
+      "teacher_qbits": 64305107.43673749,
+      "wrt_bytes": 120149
+    },
+    {
+      "base_qbits": 362555100.48503524,
+      "candidate_gain_bytes": 22.849978029698832,
+      "candidate_gain_bytes_per_million": 22.849978029698832,
+      "candidate_qbits": 362508303.7300304,
+      "source_equivalent_bytes": 1000000.0,
+      "split": "all",
+      "teacher_headroom_bytes": 2830.636678923416,
+      "teacher_headroom_retained_fraction": 0.008072381100632606,
+      "teacher_qbits": 356757956.5666001,
+      "wrt_bytes": 600742
+    }
+  ]
+}
