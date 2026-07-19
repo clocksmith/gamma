@@ -113,6 +113,9 @@ heavy lane.
 | `wikiir_page_list_referentiation_probe.py` | Measures WebGraph-style ordered link-list COPY/ADD headroom against earlier pages with a deterministic random-prior control. |
 | `wikiir_template_value_referentiation_probe.py` | Measures complete-page-causal same-skeleton template-field COPY/ADD headroom against a matched deterministic prior-template control. |
 | `wikiir_url_prefix_reuse_probe.py` | Screens a self-trained URL host-plus-first-path-prefix reference event with full opcode and identifier costs before inverse construction. |
+| `wikiir_citation_field_columnar_probe.py` | Screens an exact reversible citation-template field-value columnar transform against matched ordinal buckets on deterministic random 500K/1M windows. |
+| `wikiir_named_ref_intern_probe.py` | Screens exact decoder-built interning of repeated `<ref name>` values against a matched literal-mode container on deterministic random 500K/1M windows. |
+| `wikiir_reference_delta_probe.py` | Screens exact causal COPY/ADD deltas against earlier same-skeleton reference bodies on event-dense and random 500K/1M windows with a matched literal-container control. |
 | `wrt_entity_regret_router_shadow.py` | Applies node-local causal reflected regret to the exact WRT entity-trie endpoint with frozen train/held-out accounting. |
 | `wrt_entity_context_mixer_shadow.py` | Selects and exactly replays a causal contextual mixer over WRT entity-trie residual experts. |
 | `wrt_exact.py` | Parses FX2/CMIX21 WRT stores into exact decoded bytes and completed causal events shared by WRT-native scorers. |

@@ -377,6 +377,46 @@
         "Negative development gain",
         "Negative exact full and held-out replay"
       ]
+    },
+    {
+      "id": "wikiir_reference_delta_serializations_v1",
+      "name": "WikiIR same-skeleton reference COPY/ADD layouts",
+      "rank": 10,
+      "status": "retired_unchanged",
+      "evidence_tier": "proxy",
+      "scope_bytes": 2000000,
+      "measured_gain_bytes": -2976,
+      "gain_bytes_per_1m": -1488.0,
+      "oracle_headroom_bytes": 125092,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/wikiir_citation_field_columnar_random_v1/selection.json",
+        "results/wikiir_named_ref_intern_random_v1/selection.json",
+        "results/wikiir_reference_delta_random_v1/selection_dense.json",
+        "results/wikiir_reference_delta_random_v1/selection_inline_dense.json",
+        "tools/wikiir_reference_delta_probe.py",
+        "docs/wikiir_mdl.md"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/wikiir_reference_delta_random_v1/selection_inline_dense.json",
+          "pointer": "/aggregates/1/lzma_saved_vs_raw",
+          "candidate_field": "measured_gain_bytes"
+        },
+        {
+          "source": "results/wikiir_reference_delta_random_v1/selection_inline_dense.json",
+          "pointer": "/full_corpus_causal_raw_mdl_oracle/raw_mdl_saved_bytes",
+          "candidate_field": "oracle_headroom_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Causal prior-reference retrieval exposes 125,092 raw MDL bytes across full enwik9, but exact columnar and inline layouts both lose on event-dense 500K and 1M BZip2/LZMA proxies and lose to matched literal containers. The oracle is not archive gain.",
+      "next_gate": "None for these serializations. Reuse the parser or retrieval candidates only inside a genuinely target-residual probability endpoint.",
+      "disqualifiers": [
+        "Negative exact reversible proxy gain in both layouts and scopes",
+        "Semantic layouts lose to matched literal controls",
+        "No endpoint428 residual replay or native archive gain"
+      ]
     }
   ],
   "quarantine": [

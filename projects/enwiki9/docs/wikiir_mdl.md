@@ -37,7 +37,7 @@ predictors never observe.
 
 ## Measured Creative Probe Ledger
 
-The first `1M` discovery population now has thirteen exact probe receipts.  These rows
+The measured discovery populations now have sixteen exact probe receipts. These rows
 do not change the score forecast:
 
 | Probe | Reversible signal | Exact backend result | Decision |
@@ -55,6 +55,9 @@ do not change the score forecast:
 | Same-skeleton prior-page template values | `169` template occurrences have an earlier complete-page occurrence with the same ordered skeleton, but only one repeated field is even recoverable and its COPY command costs more than the value. Matched prior-selection and random controls both save `0`. | The exact MDL headroom is zero before raw surface, IR, backend, or source costs. | Retire same-field value COPY as a page-prototype event. Do not build a full transform; a successor must exploit typed reference/URL/date structure, not generic repeated template values. |
 | Self-trained URL-host dictionary | The decoder learns `396` hosts from literal prefix URLs and replaces `109` later hosts, removing `1,401` raw IR bytes with no static dictionary. The exact inverse, compressor roundtrip, and repeated archive are deterministic. | LZMA archive is `290,956` versus literal `290,732`, a `224`-byte regression before the mode byte. | Retire this host-reference serialization without a target-backend gate. Preserve the self-trained typed-dictionary mechanism only for a richer URL/reference event that can also exploit paths, dates, or citation field structure. |
 | Self-trained URL host-plus-first-path dictionary | The decoder reconstructs `396` hosts and `434` prefixes from prior literal URLs, then uses `42` host and `67` prefix references. The exact inverse removes `1,852` raw IR bytes and is deterministic. | LZMA archive is `290,932` versus literal `290,732`, a `200`-byte regression before the mode byte. The extra path structure recovers only `24` compressed bytes over host-only reuse. | Retire this URL-prefix serialization unchanged. Do not run the target backend; the local control is terminally negative before mode or source cost. |
+| Citation-field columnar values | Exact inversion removes selected URL/date/person/title values from completed citation templates and streams them by semantic key; ordinal buckets are the matched layout control. | Across two random windows per scope, the all-field semantic form loses `232` LZMA bytes at `500K` and `144` at `1M`; every semantic LZMA family is non-positive and semantic grouping does not consistently beat control. | Retire this field-columnar serialization without a target-backend gate. Sparse citation values do not pay framing or recover independent backend information. |
+| Decoder-built named-reference interning | Full-corpus census finds `2,375` names, `755` repeat occurrences, and only `11,363` maximum raw bytes before container and code costs. | The raw ceiling is already below the `57,404`-byte endpoint428 debt; sampled windows contain no events and show only framing loss. | Retire as a primary component by impossibility bound. A broader reference mechanism may reuse the parser, but name interning cannot close the target. |
+| Same-skeleton reference COPY/ADD | A causal last-16 retrieval search over `7,055` complete reference bodies finds `1,854` paying events and `125,092` raw MDL bytes, enough discovery headroom before backend effects. | Both exact layouts fail: columnar loses `464`/`1,968` LZMA bytes versus raw on dense `500K`/`1M`, while inline loses `1,008`/`2,976`; both are worse than matched literal containers. Every inverse passes. | Retire both serializations unchanged. The oracle is information already captured by mature backend context; revisit only as a target-residual probability endpoint, not another COPY/ADD layout. |
 
 The earlier raw-MDL screen estimated `1,856` bytes for host-plus-first-path
 reuse. The exact four-byte-framed inverse realizes `1,852` bytes, so the
@@ -71,6 +74,10 @@ inverse passed and each guarded encode completed, but backend decode was
 intentionally skipped after the terminal archive-size miss.  Schema v2 compares
 complete native archives on both sides; an earlier payload-only baseline
 comparison overcharged each WikiIR candidate by `37` bytes and was corrected.
+The newer local random-window receipts are
+`results/wikiir_citation_field_columnar_random_v1/selection.json`,
+`results/wikiir_named_ref_intern_random_v1/selection.json`, and the two
+`results/wikiir_reference_delta_random_v1/selection_*_dense.json` layouts.
 
 ## Exact Typed IR Contract
 
