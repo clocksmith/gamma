@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_lstm_serial_forward_runtime_proxy_decision",
+  "evidence_level": "constructive_ancestor_runtime_screen",
+  "hypothesis": "For the 200-cell fused LSTM forward traversal, eliminating the three-worker OpenMP team and barrier is faster than parallel execution while preserving each cell's floating-point accumulation order.",
+  "implementation": {
+    "ancestor": "closest tracked CMIX21 ancestor after Mix-to-Perceive pointer reuse and 32K flat context tables",
+    "patch": "patches/cmix21_lstm_serial_forward_v1.patch",
+    "change": "remove the single OpenMP parallel-for pragma from the fused three-gate forward traversal",
+    "compiler": "g++ -std=c++14 -Wall -Ofast -march=native -fopenmp",
+    "reference_source_sha256": "dc06dbffd1ae2abc5c49eeb26a63f67b108d79ea0d447e8ebb494246ebc8fe76",
+    "candidate_source_sha256": "1e6649bf8d47d40d3507705cea9766a5da3a450430658fc922fd6f039633a58c",
+    "reference_binary_sha256": "375f04e111140b7e71c5dd97f8314f56443add6dfc71ba9431f4b3e20f1994f9",
+    "candidate_binary_sha256": "3f56e844fcec452bff257b3cc5eecf18e1a8c3c2ce49447e897f3a91aae5df0f"
+  },
+  "smoke_scope": {
+    "input_bytes": 1024,
+    "input_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+    "archive_bytes": 272,
+    "archive_sha256": "7cd2d6d1d9f4e2dedda92794d8653fa771e8ccf1db1718994a40bafa7503fb30",
+    "archive_identity": true,
+    "candidate_elapsed_s": 3.4239,
+    "candidate_peak_tree_rss_kib": 5889536
+  },
+  "real_wikipedia_10k": {
+    "input_bytes": 10000,
+    "input_sha256": "321868b6f37a7bc0b1253c7fa04c3823de4a6f4a61f939cd514720d2aef38284",
+    "reference_elapsed_s": [14.9356, 15.0492, 15.1521],
+    "candidate_elapsed_s": [13.6923, 13.7935, 13.7978],
+    "reference_median_elapsed_s": 15.0492,
+    "candidate_median_elapsed_s": 13.7935,
+    "incremental_runtime_reduction_fraction": 0.08343965127714435,
+    "candidate_speedup": 1.0910356327255593,
+    "minimum_paired_runtime_reduction_fraction": 0.0832440611692869,
+    "maximum_paired_runtime_reduction_fraction": 0.08938034991849315,
+    "archive_bytes": 2817,
+    "archive_sha256": "7898e1948322297c46defefafbca27b5b53b5b9b76f23115fe916c5eef78edb6",
+    "all_six_archives_identical": true,
+    "maximum_reference_peak_tree_rss_kib": 7637760,
+    "maximum_candidate_peak_tree_rss_kib": 7635200,
+    "all_guards_clean": true,
+    "raw_artifact_root": "/home/clocksmith/enwiki9-nonproof/results/cmix21_fused_serial_flat_context_ancestor_real10k_v1"
+  },
+  "prior_evidence_correction": {
+    "source": "results/endpoint428_persistent_gate_runtime_transfer_ancestor_1k_v1/decision.json",
+    "correction": "That receipt tested two and four workers plus persistent-region variants, but not one-worker serial execution. Its terminal claim is valid for the tested implementations, not the previously unmeasured serial fused path."
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false,
+    "reason": "This is archive-identical ancestor transfer evidence; the checksum-bound exact candidate source bundle and reference-calibrated official timing remain unavailable."
+  },
+  "decision": {
+    "verdict": "promote_serial_forward_patch_to_exact_source_transplant",
+    "promotion_authorized": false,
+    "full_1g_gate_authorized": false,
+    "next_action": "Recover the exact 102-file candidate package, apply pointer reuse, the 32K flat context table, and serial fused forward traversal, require exact archive identity, then run controlled reference-calibrated timing."
+  },
+  "validation": {
+    "focused_tests": "2 passed",
+    "doc_lint": "pass before normalization",
+    "status_reporter_strict": "pass",
+    "patch_dry_run": "pass against the flat-context ancestor tree",
+    "receipt_normalizer": "environment_failure",
+    "normalizer_failure_reason": "The local ignored-artifact overlay leaves the organization snapshot and artifact fingerprint audit stale; generated view churn was not retained and no proof state was relabeled."
+  },
+  "claim_boundary": "This receipt proves archive identity and an 8.344% incremental median runtime reduction on the closest constructive ancestor. It does not prove exact endpoint428 transfer, official runtime compliance, a full-corpus result, or a 10.95% score."
+}

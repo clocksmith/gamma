@@ -1013,6 +1013,31 @@
         "Non-positive controlled exact-source median",
         "The combined runtime successor remains outside the official rule"
       ]
+    },
+    {
+      "id": "endpoint428_lstm_serial_forward_runtime_proxy_v1",
+      "name": "serial fused-LSTM forward traversal after mixer runtime patches",
+      "rank": 25,
+      "status": "active",
+      "evidence_tier": "proxy",
+      "scope_bytes": 10000,
+      "measured_gain_bytes": 0,
+      "gain_bytes_per_1m": 0.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/endpoint428_lstm_serial_forward_runtime_proxy_v1/decision.json",
+        "patches/cmix21_lstm_serial_forward_v1.patch",
+        "patches/cmix21_mixer_flat_context_v1.patch",
+        "patches/cmix21_mixer_context_reuse_v1.patch"
+      ],
+      "source_required": true,
+      "decision": "The previously untested serial fused forward path preserves all six real-Wikipedia 10K archives and reduces median runtime by 8.344% over the parallel flat-table reference. Every pair improves by at least 8.32% and peak RSS is slightly lower.",
+      "next_gate": "Recover the checksum-bound exact candidate source package, transplant pointer reuse, 32K context tables, and serial fused forward traversal, require exact archive identity, and measure controlled reference-calibrated runtime.",
+      "disqualifiers": [
+        "Any archive drift on the exact candidate",
+        "Non-positive controlled exact-source median",
+        "The combined runtime successor remains outside the official rule"
+      ]
     }
   ],
   "quarantine": [
