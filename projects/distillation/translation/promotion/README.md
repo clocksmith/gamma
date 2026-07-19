@@ -26,6 +26,10 @@ the matched campaign, declared seeds, and blocking human review complete.
 
 ## Contract artifacts
 
+- `exposure-ledger.v1.json`: append-only, hash-chained chronology that records
+  WMT13 exclusively as development evidence and pins the shared Clocksmith
+  schema digest. Promotion readiness verifies this ledger before evaluating
+  later gates.
 - `promotion-contract.v1.json`: target, comparator, population, metric,
   matched-lane, seed, human-review, and deployment-fidelity rules.
 - `promotion-contract.schema.json`: executable structure for the contract.
