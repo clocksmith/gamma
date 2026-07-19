@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_pair_only_online_mixer_decision",
+  "evidence_level": "causal_dev_selected_exact_arithmetic_shadow",
+  "scope": {"raw_bytes": 1000000, "rows": 4805936},
+  "hypothesis": "Adaptive online reweighting of the already-computed compact and FX2-lite428 pair endpoints can close endpoint428's remaining debt without layer-0 endpoints.",
+  "ablation_contract": {
+    "screen": "tools/compact_layer0_online_mixer_screen.cpp",
+    "layer0_endpoint_count": 26,
+    "layer0_values_equal_base_probability": true,
+    "layer0_features_therefore_exactly_zero": true,
+    "base_repeated_layer0_sha256": "6536f83e99389f827f611755fc6db1a937f16b226687b007ae63a24ac11c8991",
+    "pair_trace_sha256": "6585007e1e359606e9d88924d432a31dae4ca6cd86af56a8d5a24af43a13ab19"
+  },
+  "causality": {
+    "prediction_precedes_current_truth": true,
+    "weights_update_after_current_truth": true,
+    "previous_byte_context_only": true,
+    "shipped_weights_required": false
+  },
+  "selection": {
+    "selection_reads_holdout": false,
+    "selected_config": "hier_regime_g24_l22_regret",
+    "train_gain_qbits": 28565,
+    "development_gain_qbits": 3882,
+    "holdout_gain_qbits": 10310
+  },
+  "exact_replay": {
+    "baseline_payload_bytes": 173926,
+    "candidate_payload_bytes": 173904,
+    "candidate_payload_sha256": "657619c77073f931361a76fe90abb8fb6cebab891a6048c362b4b0672eb4e746",
+    "candidate_p1_sha256": "9bf08352877ff79378f16bcaf3e422c7c197748c0e0a5c750501508cfdb68f94",
+    "full_saved_bytes": 22,
+    "full_saved_bytes_per_1m": 22,
+    "proportional_holdout_saved_bytes_per_1m": 25,
+    "holdout_blocks": 16,
+    "holdout_regressing_blocks": 0,
+    "deterministic_probability_replay": true
+  },
+  "economics": {
+    "canonical_target_debt_bytes_per_1m": 57.404,
+    "provisional_code_bytes": 12000,
+    "required_incremental_bytes_per_1m": 69.404,
+    "full_and_holdout_clear_required_rate": false
+  },
+  "decision": {
+    "verdict": "retire_pair_only_online_mixer_unchanged",
+    "reason": "Pair-only adaptation is stable and non-regressing but retains less than half the remaining debt before code. The stronger pair-plus-layer0 signal therefore depends materially on individual layer-0 interactions.",
+    "score_credit_bytes": 0,
+    "promotion_authorized": false,
+    "next_action": "Do not tune pair-only learning rates or contexts. Recover or regenerate individual layer-0 endpoints, or create a different endpoint universe."
+  },
+  "claim_boundary": "Exact causal 1M arithmetic shadow replay. The repeated-base layer trace is an algebraic zero-feature ablation, not the unavailable native layer0 trace. This is not a native archive, forecast, or full-corpus score."
+}
