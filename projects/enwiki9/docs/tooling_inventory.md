@@ -82,6 +82,7 @@ heavy lane.
 | `run_fx2_cmix21_backend_identity_screen.py` | Alternates reference and candidate backends on one guarded input to test archive identity and runtime without changing compression arithmetic. |
 | `seal_reproducible_source_shar_package.py` | Seals bundle, ZIP, source reconstruction, clean-build, backend, and wrapper identity for the counted source representation. |
 | `seal_fx2_cmix21_backend_identity_runtime_screen.py` | Seals arithmetic identity and measured runtime/RSS evidence for a backend-only optimization. |
+| `lstm_gate_runtime_probe.cpp` | Compares current, persistent-region, and serial fused three-gate schedules while requiring bit-identical LSTM state and output. |
 | `seal_fx2_cmix21_lstm200_source_frontier.py` | Combines constructive 200x2 evidence, reproducible package cost, and source equivalence into the frozen disjoint-screen boundary. |
 | `seal_fx2_cmix21_lstm200_disjoint.py` | Seals the exact offset-500M reset-slice economics decision for source-built 200x2. |
 | `seal_fx2_cmix21_matched_disjoint.py` | Combines the frozen same-store 96x2/full-CMIX replay, clean guards, and revised package economics into a native-integration or retirement decision. |

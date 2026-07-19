@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "receipt_type": "endpoint428_persistent_gate_runtime_proxy_decision",
+  "evidence_level": "runtime_proxy",
+  "hypothesis": "Keep the fused three-gate dot traversal, but retain one OpenMP region through the serial normalization boundary and parallel cell-state transform so workers do useful stream-preserving work instead of leaving and re-entering the team.",
+  "baseline": "The retained endpoint428 runtime successor performs the fused cell dots in one OpenMP parallel-for, then performs normalization, gate activation, cell-state update, and hidden-state update serially.",
+  "machine": {
+    "cpu": "11th Gen Intel Core i3-1115G4",
+    "logical_cpus": 4,
+    "physical_cores": 2,
+    "compiler": "g++ -std=c++17 -O3 -march=native -fopenmp",
+    "openmp_environment": "OMP_PROC_BIND=true OMP_PLACES=threads"
+  },
+  "probe": {
+    "source": "tools/lstm_gate_runtime_probe.cpp",
+    "source_sha256": "e54c68abaab413900d6f2210b50e89fad7c29dff9972b09dec655edc1849b920",
+    "cells": 200,
+    "threads": 3,
+    "rounds_per_shape": 7,
+    "shapes": [
+      {
+        "inputs": 128,
+        "iterations": 4000,
+        "current_seconds": [0.107181638, 0.115785682, 0.106765687, 0.108006988, 0.106856861, 0.106635275, 0.106385858],
+        "persistent_seconds": [0.069398790, 0.072713273, 0.068528407, 0.069575647, 0.069244540, 0.068756333, 0.068696582],
+        "median_speedup": 1.550915681,
+        "minimum_speedup": 1.543181036,
+        "maximum_speedup": 1.592359651
+      },
+      {
+        "inputs": 256,
+        "iterations": 2400,
+        "current_seconds": [0.318401150, 0.114080839, 0.090153830, 0.090195465, 0.090403651, 0.090610812, 0.090280134],
+        "persistent_seconds": [0.071435440, 0.138774180, 0.066714218, 0.066020356, 0.066630600, 0.066829910, 0.066673269],
+        "median_speedup": 1.355842197,
+        "minimum_speedup": 0.822060984,
+        "maximum_speedup": 4.457187497,
+        "noise_note": "Two opposite-direction scheduler outliers are retained rather than discarded."
+      },
+      {
+        "inputs": 512,
+        "iterations": 1200,
+        "current_seconds": [0.071332629, 0.069971284, 0.070241339, 0.070323280, 0.069665023, 0.070064825, 0.069266623],
+        "persistent_seconds": [0.059358352, 0.057220692, 0.057880350, 0.057790489, 0.057785589, 0.059483308, 0.057060751],
+        "median_speedup": 1.213561062,
+        "minimum_speedup": 1.177890527,
+        "maximum_speedup": 1.222831839
+      }
+    ]
+  },
+  "identity": {
+    "current_persistent_bit_identity_all_runs": true,
+    "current_serial_bit_identity_all_runs": true,
+    "cross_mode_state_checksums_equal_all_runs": true,
+    "normalization_accumulation_order_preserved": true,
+    "shipped_weights_required": false
+  },
+  "source_portability": {
+    "exact_candidate_source_available_in_checkout": false,
+    "receipt_source_root": "/home/x/enwiki9-nonproof/runtime/endpoint428_pair_layer0_dual_context_lstm_parallel_v2_native_fastmath_staticgomp_bptt_output_single_lookup_extra_fuse_gate_dot_fuse_output_update_loop_v1",
+    "tracked_ancestor_applies_endpoint_patch_cleanly": false,
+    "reason": "The retained receipt records hashes and a final delta, but the 102-file source bundle and intermediate runtime deltas are not tracked in this checkout. The exact codec cannot be reconstructed here from the retained patches alone."
+  },
+  "economics": {
+    "score_credit_bytes": 0,
+    "forecast_change_bytes": 0,
+    "official_runtime_credit": false
+  },
+  "decision": {
+    "verdict": "promote_to_exact_source_transplant_only",
+    "reason": "All measured shapes preserve arithmetic and show a positive median kernel speedup, but an isolated kernel proxy cannot establish codec wall time or official runtime compliance.",
+    "next_action": "Make the exact counted source bundle available as a checksum-bound artifact, transplant the persistent region without changing normalization order, require byte-identical 250K and 10M archives, then run an alternating controlled backend timing screen. Retire if the whole-codec median does not improve materially.",
+    "full_1g_gate_authorized": false
+  },
+  "claim_boundary": "This is a bounded forward-kernel runtime proxy on the local two-core host. It is not an exact codec build, archive result, full-program runtime measurement, score forecast, or official Hutter result."
+}
