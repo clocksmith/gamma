@@ -99,6 +99,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--decode-guard", type=Path)
     parser.add_argument("--archive-second", type=Path)
     parser.add_argument("--determinism-guard", type=Path)
+    parser.add_argument("--determinism-wrapper", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
 
@@ -154,6 +155,16 @@ def main() -> int:
         raise ValueError("all replay arguments must be provided together")
     if replay_requested and not economics["economics_pass"]:
         raise ValueError("codec replay cannot promote an economics miss")
+    determinism_wrapper = args.determinism_wrapper or args.wrapper
+    if args.determinism_wrapper is not None and not replay_requested:
+        raise ValueError("--determinism-wrapper requires complete replay arguments")
+    determinism_wrapper_artifact = artifact(determinism_wrapper)
+    recorded_determinism_wrapper = native["artifacts"]["clean_program_a"]
+    if any(
+        determinism_wrapper_artifact[key] != recorded_determinism_wrapper[key]
+        for key in ("bytes", "sha256")
+    ):
+        raise ValueError("determinism wrapper differs from sealed clean program A")
 
     proof = {
         "canonical_input": True,
@@ -199,7 +210,7 @@ def main() -> int:
         )
         require_guard_invocation(
             determinism_guard,
-            wrapper=args.wrapper,
+            wrapper=determinism_wrapper,
             mode="c",
             source=args.input,
             target=args.archive_second,
@@ -215,6 +226,7 @@ def main() -> int:
                 "restored": restored,
                 "decode_guard": artifact(args.decode_guard),
                 "archive_second": archive_second,
+                "determinism_wrapper": determinism_wrapper_artifact,
                 "determinism_guard": artifact(args.determinism_guard),
             }
         )
