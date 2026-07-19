@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "receipt_type": "wrt_phase_newton_residual_decision",
+  "evidence_level": "causal_exact_p1_shadow",
+  "scope": {
+    "raw_bytes": 1000000,
+    "rows": 4805936,
+    "block_bytes": 65536
+  },
+  "hypothesis": "Online logit-gradient and curvature statistics conditioned on decoder-visible WRT event phase can retain more endpoint residual gain than probability-space averaging.",
+  "causality": {
+    "prediction_precedes_current_truth": true,
+    "statistics_update_after_current_truth": true,
+    "state_rebuilt_from_decoded_prefix": true,
+    "payload_bytes": 0
+  },
+  "inputs": {
+    "endpoint428_p1_sha256": "1aba2ddb90c9e3a9a2a350f7d8d14f65a6128b96e6baa7bd50e09dacaca06955",
+    "independent_layer0_p1_sha256": "3ad0f2fa7ee1340c769042c5e7c3c648608073f4d4d472b44db5b972925a5360",
+    "wrt_store_sha256": "1e209c7d19a22af5ce6a1de3bab1fc636669f40686aebd88bbe9dc8e5411e583"
+  },
+  "implementation": {
+    "source_sha256": "e967a4ab0919310aac623692a5e3a94b120615431458d425255927d7403cd66b",
+    "newton_source_gzip9_bytes": 4924,
+    "combined_sources_gzip9_bytes": 5704,
+    "prior_observations": [64, 256, 1024],
+    "damping": "1/4 fixed before evaluation",
+    "selection_rule": "highest development qbits; holdout is confirmation only"
+  },
+  "endpoint428": {
+    "baseline_payload_bytes": 173926,
+    "newton_prior64": {
+      "exact_saved_bytes": 42,
+      "train_qbits": 43141,
+      "development_qbits": 17910,
+      "holdout_qbits": 19155,
+      "positive_blocks": 10,
+      "regressing_blocks": 0
+    },
+    "frozen_phase_control": {
+      "exact_saved_bytes": 44,
+      "train_qbits": 37999,
+      "development_qbits": 15584,
+      "holdout_qbits": 15839,
+      "positive_blocks": 9,
+      "regressing_blocks": 1
+    },
+    "equal_correction_blend": {
+      "exact_saved_bytes": 45,
+      "incremental_vs_frozen_bytes": 1,
+      "train_qbits": 44778,
+      "development_qbits": 17612,
+      "holdout_qbits": 19588,
+      "positive_blocks": 10,
+      "regressing_blocks": 0
+    },
+    "replay_sha256": "d98186f1756b9b29c63df7bd4504744df5f3a1297c01165d54c8cb9d377342c6"
+  },
+  "independent_layer0": {
+    "baseline_payload_bytes": 173849,
+    "newton_prior64": {
+      "exact_saved_bytes": 40,
+      "train_qbits": 45378,
+      "development_qbits": 14433,
+      "holdout_qbits": 17696,
+      "positive_blocks": 10,
+      "regressing_blocks": 0
+    },
+    "frozen_phase_control": {
+      "exact_saved_bytes": 41,
+      "train_qbits": 40506,
+      "development_qbits": 10117,
+      "holdout_qbits": 15569,
+      "positive_blocks": 10,
+      "regressing_blocks": 0
+    },
+    "equal_correction_blend": {
+      "exact_saved_bytes": 44,
+      "incremental_vs_frozen_bytes": 3,
+      "train_qbits": 46167,
+      "development_qbits": 12942,
+      "holdout_qbits": 17809,
+      "positive_blocks": 10,
+      "regressing_blocks": 0
+    },
+    "replay_sha256": "3a55cf8cf64841717ed0cec8b276472c059201b772d48335e517b1e232e00991"
+  },
+  "economics": {
+    "canonical_target_debt_bytes_per_1m": 57.404,
+    "best_incremental_gain_over_frozen_bytes_per_1m": 3,
+    "newton_source_cost_equivalent_bytes_per_1m": 73.541,
+    "source_cost_projection_divisor": 66.955334,
+    "net_incremental_margin_before_native_integration_bytes_per_1m": -127.946
+  },
+  "decision": {
+    "verdict": "retire_newton_and_equal_correction_blend_unchanged",
+    "reason": "Confidence-weighted logit geometry improves split qbits and block consistency but adds only one endpoint428 byte and three independent-layer0 bytes over the smaller frozen component. The incremental gain cannot pay the remaining debt or compressed source cost.",
+    "score_credit_bytes": 0,
+    "promotion_authorized": false,
+    "next_action": "Do not tune priors, damping, or blend weights. Preserve confidence-weighted residual geometry as a possible primitive only inside a genuinely new endpoint with independent headroom."
+  },
+  "claim_boundary": "Exact deterministic causal 1M P1 shadow replay. This is not a native archive, counted forecast, or full-corpus score."
+}
