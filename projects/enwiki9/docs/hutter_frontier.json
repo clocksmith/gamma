@@ -697,6 +697,70 @@
         "Holdout qbits are negative",
         "Frozen train-prefix calibrators regress"
       ]
+    },
+    {
+      "id": "wrt_event_context_and_adaptive_phase_endpoint428_v1",
+      "name": "WRT completed-event context tree and adaptive phase residuals",
+      "rank": 14,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": -2,
+      "gain_bytes_per_1m": -2.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/wrt_residual_mechanisms_endpoint428_1m_v1/decision.json",
+        "tools/wrt_event_context_tree_residual_screen.cpp",
+        "tests/test_wrt_event_context_tree_residual_screen.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/wrt_residual_mechanisms_endpoint428_1m_v1/decision.json",
+          "pointer": "/endpoint428/best_adaptive_phase_prefix/exact_saved_bytes",
+          "candidate_field": "measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "Nested completed-event identity loses 17 exact bytes over endpoint428 and 29 over the independent layer-0 endpoint. The best adaptive-decay form loses two bytes over endpoint428 and has negative development and holdout qbits; faster decay is worse. Positive matched phase-prefix controls isolate the failure to history fragmentation and forgetting rather than the harness.",
+      "next_gate": "None unchanged. Preserve the cumulative hierarchical phase component and require an exact target-candidate P1 before testing another combiner.",
+      "disqualifiers": [
+        "Nested completed-event context is exact-negative on both substrates",
+        "All adaptive variants have negative development and holdout transfer",
+        "Compressed research source exceeds 5 KB while candidate archive gain is non-positive"
+      ]
+    },
+    {
+      "id": "wrt_phase_strength_router_shell_regime_v1",
+      "name": "WRT phase strength router and shell-regime backoff",
+      "rank": 15,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "scope_bytes": 1000000,
+      "measured_gain_bytes": -10,
+      "gain_bytes_per_1m": -10.0,
+      "score_credit_bytes": 0,
+      "source_paths": [
+        "results/wrt_phase_router_shell_regime_1m_v1/decision.json",
+        "tools/wrt_phase_strength_router_screen.cpp",
+        "tools/wrt_shell_regime_extract.py",
+        "tests/test_wrt_phase_strength_router_screen.py",
+        "tests/test_wrt_shell_regime_extract.py"
+      ],
+      "metric_assertions": [
+        {
+          "source": "results/wrt_phase_router_shell_regime_1m_v1/decision.json",
+          "pointer": "/decision/measured_incremental_gain_bytes",
+          "candidate_field": "measured_gain_bytes"
+        }
+      ],
+      "source_required": true,
+      "decision": "The frozen cumulative phase component saves 44 endpoint428 bytes and 41 independent-layer0 bytes. Global/contextual strength routing reduces those gains to 18/2 and 18/3. Corrected overlapping Wiki-mode masks retain only 34 and 28 bytes, negative increments of 10 and 13 bytes versus the frozen phase control.",
+      "next_gate": "None unchanged. Keep the cumulative phase component and require a genuinely new endpoint or the exact pair P1.",
+      "disqualifiers": [
+        "Strength routers discard most of the stable phase gain",
+        "Shell-regime backoff is negative incrementally on both substrates",
+        "Layer-0 development transfer is negative and block regressions increase"
+      ]
     }
   ],
   "quarantine": [

@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "receipt_type": "wrt_residual_mechanisms_endpoint428_decision",
+  "evidence_level": "causal_shadow",
+  "scope": {
+    "raw_bytes": 1000000,
+    "rows": 4805936,
+    "train_end_ppm": 333333,
+    "holdout_start_ppm": 666667
+  },
+  "causality": {
+    "prediction_precedes_current_truth": true,
+    "event_history_uses_completed_wrt_events_only": true,
+    "decoder_rebuilds_all_state": true,
+    "payload_bytes": 0
+  },
+  "inputs": {
+    "endpoint428_p1": {
+      "bytes": 9611888,
+      "sha256": "1aba2ddb90c9e3a9a2a350f7d8d14f65a6128b96e6baa7bd50e09dacaca06955"
+    },
+    "independent_layer0_p1": {
+      "bytes": 9611888,
+      "sha256": "3ad0f2fa7ee1340c769042c5e7c3c648608073f4d4d472b44db5b972925a5360"
+    },
+    "wrt_store": {
+      "bytes": 600747,
+      "sha256": "1e209c7d19a22af5ce6a1de3bab1fc636669f40686aebd88bbe9dc8e5411e583"
+    }
+  },
+  "implementation": {
+    "path": "projects/enwiki9/tools/wrt_event_context_tree_residual_screen.cpp",
+    "sha256": "998b5acca1de04a3e74485300e5c4bd852a5161a214b01cc9cfcf95759c965a7",
+    "gzip9_bytes": 5105,
+    "parameters": {
+      "hash_bits": 19,
+      "prior": 256,
+      "strength_ppm": 250000,
+      "adaptive_decay_shifts": [6, 8, 10]
+    }
+  },
+  "determinism": {
+    "replays": 2,
+    "byte_identical": true,
+    "layer0_receipt_sha256": "90f98ca0b44f803f3b1841bb2037a54db77c3190334b7fc27486718a60273354"
+  },
+  "endpoint428": {
+    "baseline_payload_bytes": 173926,
+    "phase_prefix_control_saved_bytes": 36,
+    "nested_completed_event_context": {
+      "exact_saved_bytes": -17,
+      "development_qbits": -23473,
+      "holdout_qbits": -39875,
+      "positive_blocks": 3,
+      "regressing_blocks": 7
+    },
+    "best_adaptive_phase_prefix": {
+      "variant_id": "adaptive_phase_prefix_d10",
+      "exact_saved_bytes": -2,
+      "development_qbits": -2345,
+      "holdout_qbits": -7595,
+      "positive_blocks": 6,
+      "regressing_blocks": 4
+    },
+    "local_receipt_sha256": "eaf1bcb536b78e72e86525ab350c67d809544d4cec27c8b6602b018f7e09755e"
+  },
+  "independent_layer0": {
+    "baseline_payload_bytes": 173849,
+    "phase_prefix_control_saved_bytes": 34,
+    "nested_completed_event_context": {
+      "exact_saved_bytes": -29,
+      "development_qbits": -39264,
+      "holdout_qbits": -40395,
+      "positive_blocks": 2,
+      "regressing_blocks": 8
+    },
+    "best_adaptive_phase_prefix": {
+      "variant_id": "adaptive_phase_prefix_d10",
+      "exact_saved_bytes": 0,
+      "development_qbits": -6015,
+      "holdout_qbits": -8969,
+      "positive_blocks": 5,
+      "regressing_blocks": 5
+    }
+  },
+  "decision": {
+    "verdict": "retire_nested_event_context_and_adaptive_phase_unchanged",
+    "reason": "Completed-event identity fragments the paying phase signal, and all adaptive-decay variants have negative development and holdout transfer. The cumulative phase-prefix controls remain positive, so the negative result is mechanism-specific.",
+    "score_credit_bytes": 0,
+    "promotion_authorized": false,
+    "next_action": "Preserve the cumulative hierarchical WRT phase component and replay it only over an exact target candidate P1; do not tune event-history or forgetting variants."
+  },
+  "claim_boundary": "Exact causal 1M P1 replay with deterministic shadow receipts. This is not a native archive, counted candidate, or full-corpus score."
+}
