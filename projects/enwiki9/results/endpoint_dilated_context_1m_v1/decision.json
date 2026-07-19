@@ -1,0 +1,135 @@
+{
+  "claim_boundary": "Causal float shadow selected without holdout reads. Weights are not quantized or counted; no constructive archive, native resource, disjoint, or full-corpus claim.",
+  "decision": "retire this dilated-context representation before native integration",
+  "economics": {
+    "required_gain_before_payload_bytes_per_million": 681.114,
+    "required_gain_with_estimated_int8_payload_bytes_per_million": 693.186,
+    "target_debt_bytes": 681114
+  },
+  "evidence_level": "causal_float_shadow",
+  "exact_full_scope_replay": {
+    "baseline_payload_bytes": 177029,
+    "candidate_payload_bytes": 176946,
+    "candidate_saved_bytes": 83
+  },
+  "hypothesis": "Explicit power-of-two byte lags retain fast complementary sequence information that a small recurrent bottleneck and local lookup tables missed.",
+  "implementation": {
+    "device": "cpu",
+    "source": "/home/clocksmith/deco/gamma/projects/enwiki9/tools/endpoint_dilated_context_screen.py",
+    "source_sha256": "e74247ec6354ab0f39d987ba6672d3cb77a826dd2cb2fc7188384d928f7985ee",
+    "torch_version": "2.13.0+cpu"
+  },
+  "inputs": {
+    "base_pair_endpoint": 1,
+    "pair_trace": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/endpoint428_pair_trace.bin",
+    "pair_trace_sha256": "6585007e1e359606e9d88924d432a31dae4ca6cd86af56a8d5a24af43a13ab19",
+    "source_scope_bytes": 1000000,
+    "wrt_bytes": 600742,
+    "wrt_store": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/input.wrt.store",
+    "wrt_store_sha256": "1e209c7d19a22af5ce6a1de3bab1fc636669f40686aebd88bbe9dc8e5411e583"
+  },
+  "model": {
+    "embedding_dims": 4,
+    "estimated_int8_payload_bytes": 12072,
+    "float_parameter_bytes": 47936,
+    "hidden_dims": 16,
+    "parameter_count": 11984
+  },
+  "promotion_authorized": false,
+  "quantization_gate_passed": false,
+  "schema": "endpoint_dilated_context_screen_v1",
+  "selection": {
+    "development_fraction": 0.2,
+    "history": [
+      {
+        "development_gain_bytes": -1.0404242183067254,
+        "development_gain_bytes_per_million": -5.2021384105771125,
+        "epoch": 1,
+        "training_truth_bce": 0.20579310683135255
+      },
+      {
+        "development_gain_bytes": -5.42729976947885,
+        "development_gain_bytes_per_million": -27.13658919096667,
+        "epoch": 2,
+        "training_truth_bce": 0.20564094896559712
+      },
+      {
+        "development_gain_bytes": -13.366655974146852,
+        "development_gain_bytes_per_million": -66.83350237391325,
+        "epoch": 3,
+        "training_truth_bce": 0.20549788902382798
+      },
+      {
+        "development_gain_bytes": -23.273952082759934,
+        "development_gain_bytes_per_million": -116.37014783518136,
+        "epoch": 4,
+        "training_truth_bce": 0.20535576915588502
+      },
+      {
+        "development_gain_bytes": -33.627935013500974,
+        "development_gain_bytes_per_million": -168.14023484269902,
+        "epoch": 5,
+        "training_truth_bce": 0.2052210877599218
+      },
+      {
+        "development_gain_bytes": -44.88906307056459,
+        "development_gain_bytes_per_million": -224.44606258229112,
+        "epoch": 6,
+        "training_truth_bce": 0.20509520277595297
+      }
+    ],
+    "holdout_fraction": 0.2,
+    "holdout_reads_during_selection": false,
+    "lags": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "objective": "truth_bce",
+    "seed": 20260719,
+    "selected_epoch": 1,
+    "train_fraction": 0.6
+  },
+  "splits": [
+    {
+      "base_qbits": 219189184.69407955,
+      "candidate_gain_bytes": 84.79095582090667,
+      "candidate_gain_bytes_per_million": 141.31833811472796,
+      "candidate_qbits": 219015532.81655833,
+      "source_equivalent_bytes": 599999.6670783798,
+      "split": "train",
+      "wrt_bytes": 360445
+    },
+    {
+      "base_qbits": 78120017.49959794,
+      "candidate_gain_bytes": -1.0404242183067254,
+      "candidate_gain_bytes_per_million": -5.2021384105771125,
+      "candidate_qbits": 78122148.28839703,
+      "source_equivalent_bytes": 199999.33415675946,
+      "split": "development",
+      "wrt_bytes": 120148
+    },
+    {
+      "base_qbits": 65245898.29135775,
+      "candidate_gain_bytes": -0.7802645113115432,
+      "candidate_gain_bytes_per_million": -3.901303074135607,
+      "candidate_qbits": 65247496.273076914,
+      "source_equivalent_bytes": 200000.9987648608,
+      "split": "holdout",
+      "wrt_bytes": 120149
+    },
+    {
+      "base_qbits": 362555100.48503524,
+      "candidate_gain_bytes": 82.97026709106285,
+      "candidate_gain_bytes_per_million": 82.97026709106285,
+      "candidate_qbits": 362385177.37803274,
+      "source_equivalent_bytes": 1000000.0,
+      "split": "all",
+      "wrt_bytes": 600742
+    }
+  ]
+}
