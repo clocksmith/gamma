@@ -66,7 +66,11 @@ def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
     assert errors == []
     assert status["official"]["verified_full_corpus_result"] is False
     assert status["canonical_forecast"]["forecast_margin_bytes"] == -57_404
-    assert "Official distance: unknown" in MODULE.render_markdown(status)
+    markdown = MODULE.render_markdown(status)
+    assert "Official distance: unknown" in markdown
+    assert "## Continue" in markdown
+    assert "Continue toward the Hutter Prize" in markdown
+    assert "Highest-value next gate: test" in markdown
 
 
 def test_nonconstructive_score_credit_fails_closed(tmp_path: Path) -> None:
@@ -100,6 +104,24 @@ def test_verified_official_win_requires_roundtrip(tmp_path: Path) -> None:
 
     assert status["official"]["won"] is False
     assert status["official"]["verified_full_corpus_result"] is False
+
+
+def test_verified_win_closes_with_proof_preservation(tmp_path: Path) -> None:
+    _, ledger, operational = write_fixture(tmp_path)
+    operational["best_full_1g"] = {
+        "scope_bytes": 1_000_000_000,
+        "hutter_score": 109_499_999,
+        "roundtrip_ok": True,
+    }
+    operational["has_10_95_constructive_upper_bound"] = True
+
+    status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
+    markdown = MODULE.render_markdown(status)
+
+    assert errors == []
+    assert status["official"]["won"] is True
+    assert "Hutter target achieved" in markdown
+    assert "submission packaging" in markdown
 
 
 def test_metric_assertion_detects_receipt_drift(tmp_path: Path) -> None:

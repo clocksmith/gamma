@@ -27,6 +27,10 @@ missing required evidence, arithmetic drift, and invalid evidence tiers.
 4. Report in this order: official proof, canonical counted forecast, active
    candidate, latest decisive evidence, next gate.
 5. Never subtract a shadow/oracle gain from an official or constructive score.
+6. End every report with `Continue toward the Hutter Prize` and the
+   highest-ranked active candidate's evidence-producing next gate. After a
+   verified win, replace that directive with proof preservation, reproduction,
+   and submission packaging.
 
 ## Record New Evidence
 
