@@ -1,0 +1,108 @@
+{
+  "schema": "endpoint428_runtime_successor_10m_v1",
+  "generated_at_utc": "2026-07-19T15:29:05Z",
+  "evidence_tier": "constructive_prefix",
+  "evidence_level": "constructive_counted_exact_10m_lzma_package_and_codec_proof",
+  "algorithm": "endpoint428 compact/FX2 pair plus 26 layer-0 online residual endpoints, fused three-gate recurrent dot traversal, and explicit output-weight update loop",
+  "scope_bytes": 10000000,
+  "scope": {
+    "raw_bytes": 10000000
+  },
+  "target": {
+    "score_bytes": 109500000,
+    "score_percent": 10.95
+  },
+  "artifacts": {
+    "input": {
+      "bytes": 10000000,
+      "sha256": "5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97"
+    },
+    "archive": {
+      "bytes": 1634500,
+      "sha256": "93d7f5cb69ecad5457078ff9de34a63d8b0a8dcf21cc0fa9e20df895e13b1880"
+    },
+    "restored": {
+      "bytes": 10000000,
+      "sha256": "5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97"
+    },
+    "deterministic_reencode": {
+      "bytes": 1634500,
+      "sha256": "93d7f5cb69ecad5457078ff9de34a63d8b0a8dcf21cc0fa9e20df895e13b1880"
+    },
+    "source_package": {
+      "bytes": 280147,
+      "sha256": "19ddcc4ec1b6f31958bed4aa19c0fbc83a56c78121933e1447e4ee011547aee0"
+    },
+    "clean_program_a": {
+      "bytes": 2326416,
+      "sha256": "37ee8cd73ade9845b1afcb39f3bbd9358956c3ff9aea3b69328da7441ee32361"
+    },
+    "clean_program_b": {
+      "bytes": 2326416,
+      "sha256": "37ee8cd73ade9845b1afcb39f3bbd9358956c3ff9aea3b69328da7441ee32361"
+    },
+    "encode_guard": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/encode_guard.json",
+    "decode_guard": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/decode_guard.json",
+    "reencode_guard": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/reencode_guard.json",
+    "source_package_receipt": "results/endpoint428_pair_layer0_runtime_successors_250k_v1/source_package_receipt.json",
+    "source_patch": "patches/endpoint428_gate_dot_fuse_output_update_loop_v1.patch"
+  },
+  "resource_guards": {
+    "official_decimal_limit_kib": 9765625,
+    "encode_peak_single_rss_kib": 9077908,
+    "decode_peak_single_rss_kib": 9078392,
+    "reencode_peak_single_rss_kib": 9078564,
+    "maximum_peak_single_rss_kib": 9078564,
+    "maximum_peak_tree_rss_kib": 9082568,
+    "official_decimal_over_limit_kib": 0,
+    "all_guards_clean": true,
+    "timing_claim_allowed": false,
+    "timing_claim_exclusion": "An unrelated CPU-heavy WGSL training process overlapped all three replays, so elapsed measurements are recorded by the guards but are not runtime-qualification evidence."
+  },
+  "economics": {
+    "base_archive_bytes_10m": 1635695,
+    "candidate_archive_bytes_10m": 1634500,
+    "saved_bytes_10m": 1195,
+    "saved_bytes_per_1m": 119.5,
+    "base_package_bytes": 349195,
+    "candidate_package_bytes": 280147,
+    "incremental_program_bytes_vs_base": -69048,
+    "calibration_factor": 66.955334,
+    "base_forecast_score_bytes": 109557404,
+    "provisional_calibrated_score_float": 109408344.37587,
+    "conservative_forecast_score_bytes": 109408345,
+    "conservative_provisional_score_bytes": 109408345,
+    "forecast_score_percent": 10.9408345,
+    "forecast_target_margin_bytes": 91655,
+    "provisional_target_margin_bytes": 91655,
+    "target_score_bytes": 109500000,
+    "previous_best_archive_bytes_10m": 1635174,
+    "archive_saved_bytes_vs_previous_best": 674,
+    "package_added_bytes_vs_previous_best": 1322,
+    "previous_best_forecast_score_bytes": 109452151,
+    "forecast_improvement_bytes_vs_previous_best": 43806,
+    "economics_pass": true
+  },
+  "proof": {
+    "canonical_input": true,
+    "source_package_reproducible": true,
+    "independent_clean_builds_identical": true,
+    "encode_guard_clean": true,
+    "roundtrip_ok": true,
+    "determinism_ok": true,
+    "decode_guard_clean": true,
+    "deterministic_reencode_ok": true,
+    "reencode_guard_clean": true,
+    "decimal_memory_ok": true,
+    "proof_complete_at_10m": true,
+    "full_corpus_official": false
+  },
+  "decision": {
+    "verdict": "promote_new_best_counted_10m_forecast_runtime_still_unqualified",
+    "score_economics_pass": true,
+    "promotion_authorized": true,
+    "full_1g_gate_authorized": false,
+    "next_action": "Preserve the exact stream and package while developing a materially faster substrate implementation. Re-authorize a full 1G gate only after controlled reference-calibrated compliance with the official runtime rule."
+  },
+  "claim_boundary": "This receipt establishes an exact guarded 10M constructive archive, exact roundtrip, independent deterministic re-encode, reproducible counted source package, and a conservative 109,408,345-byte forecast. It does not establish an official full-1G score or runtime eligibility."
+}

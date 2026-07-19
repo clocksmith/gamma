@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-19T11:40:01+00:00`
+- Generated at UTC: `2026-07-19T15:37:57+00:00`
 
 ## Target State
 
@@ -108,7 +108,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Program directories: `540`
 - Registered programs: `225`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `2`
+- Modified tracked entries: `0`
 - Candidate statuses: `active=7, blocked_dependency=12, candidate=144, measured_negative=20, retired=357`
 
 ## Active Runner Process Table
@@ -129,7 +129,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - best_exact_10m_archive: `missing`; status `missing`; score `n/a`
 - best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `metadata-inherited`; score `15,040,789`
 - best_full_1g: `not verified`; status `not verified`; score `n/a`
-- best_forecast: `endpoint428_pair_layer0_online_lzma_replay_v1`; status `exact-10m-counted-projection`; score `109,452,151`
+- best_forecast: `endpoint428_pair_layer0_runtime_successor_10m_v1`; status `exact-10m-counted-projection`; score `109,408,345`
 
 ## Claim Rule
 

@@ -1,0 +1,75 @@
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -63,15 +63,48 @@
+ void LstmLayer::ForwardPass(const std::valarray<float>& input, int input_symbol,
+     std::valarray<float>* hidden, int hidden_start) {
+   last_state_[epoch_] = state_;
+-#pragma omp parallel sections num_threads(3)
+-  {
+-#pragma omp section
+-    { ForwardPass(forget_gate_, input, input_symbol); }
+-#pragma omp section
+-    { ForwardPass(input_node_, input, input_symbol); }
+-#pragma omp section
+-    { ForwardPass(output_gate_, input, input_symbol); }
++
++  // The three gates consume the same dense input.  Traverse it once per cell
++  // and accumulate all gate dots together instead of assigning one complete
++  // input traversal to each OpenMP section.
++#pragma omp parallel for num_threads(3) schedule(static)
++  for (unsigned int i = 0; i < num_cells_; ++i) {
++    float forget = forget_gate_.weights_[i][input_symbol];
++    float node = input_node_.weights_[i][input_symbol];
++    float output = output_gate_.weights_[i][input_symbol];
++    for (unsigned int j = 0; j < input.size(); ++j) {
++      const float value = input[j];
++      const unsigned int weight_index = output_size_ + j;
++      forget += value * forget_gate_.weights_[i][weight_index];
++      node += value * input_node_.weights_[i][weight_index];
++      output += value * output_gate_.weights_[i][weight_index];
++    }
++    forget_gate_.norm_[epoch_][i] = forget;
++    input_node_.norm_[epoch_][i] = node;
++    output_gate_.norm_[epoch_][i] = output;
+   }
++
++  forget_gate_.ivar_[epoch_] = 1.0f / sqrt(
++      ((forget_gate_.norm_[epoch_] * forget_gate_.norm_[epoch_]).sum() /
++       num_cells_) + 1e-5f);
++  forget_gate_.norm_[epoch_] *= forget_gate_.ivar_[epoch_];
++  forget_gate_.state_[epoch_] =
++      forget_gate_.norm_[epoch_] * forget_gate_.gamma_ + forget_gate_.beta_;
++
++  input_node_.ivar_[epoch_] = 1.0f / sqrt(
++      ((input_node_.norm_[epoch_] * input_node_.norm_[epoch_]).sum() /
++       num_cells_) + 1e-5f);
++  input_node_.norm_[epoch_] *= input_node_.ivar_[epoch_];
++  input_node_.state_[epoch_] =
++      input_node_.norm_[epoch_] * input_node_.gamma_ + input_node_.beta_;
++
++  output_gate_.ivar_[epoch_] = 1.0f / sqrt(
++      ((output_gate_.norm_[epoch_] * output_gate_.norm_[epoch_]).sum() /
++       num_cells_) + 1e-5f);
++  output_gate_.norm_[epoch_] *= output_gate_.ivar_[epoch_];
++  output_gate_.state_[epoch_] =
++      output_gate_.norm_[epoch_] * output_gate_.gamma_ + output_gate_.beta_;
++
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+     forget_gate_.state_[epoch_][i] = Sigmoid::Logistic(
+         forget_gate_.state_[epoch_][i]);
+--- a/src/mixer/lstm.cpp
++++ b/src/mixer/lstm.cpp
+@@ -120,8 +120,11 @@
+ #pragma omp parallel for num_threads(3) schedule(static)
+   for (unsigned int i = 0; i < output_size_; ++i) {
+     float error = (i == input) ? (output_[last_epoch][i] - 1) : output_[last_epoch][i];
+-    output_layer_[epoch_][i] = output_layer_[last_epoch][i];
+-    output_layer_[epoch_][i] -= learning_rate_ * error * hidden_;
++    const float scaled_error = learning_rate_ * error;
++    for (unsigned int j = 0; j < hidden_.size(); ++j) {
++      output_layer_[epoch_][i][j] = output_layer_[last_epoch][i][j] -
++          scaled_error * hidden_[j];
++    }
+   }
+   return Predict(input);
+ }
