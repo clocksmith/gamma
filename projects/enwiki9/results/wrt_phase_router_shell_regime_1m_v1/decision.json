@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "receipt_type": "wrt_phase_router_shell_regime_decision",
+  "evidence_level": "causal_shadow",
+  "scope": {
+    "raw_bytes": 1000000,
+    "rows": 4805936
+  },
+  "causality": {
+    "prediction_precedes_current_truth": true,
+    "regret_updates_after_current_truth": true,
+    "shell_mask_uses_decoder_visible_state": true,
+    "payload_bytes": 0
+  },
+  "shell_alignment": {
+    "wrt_stream_sha256": "e189af24b87542ad8e6eebdcefa34e193018302a2bd45cd82246ca36216ac43f",
+    "endpoint428_store_payload_sha256": "e189af24b87542ad8e6eebdcefa34e193018302a2bd45cd82246ca36216ac43f",
+    "mode_mask_sha256": "21e0fd218c1c8dba02cf059ccaa40be11a6043e3cee055ed1627f564394b5cb7",
+    "mask_bits": [
+      "page",
+      "title",
+      "prose",
+      "reference",
+      "url",
+      "table",
+      "list",
+      "template"
+    ],
+    "overlapping_modes_preserved": true,
+    "priority_regime_rejected": true
+  },
+  "implementation": {
+    "router_source_sha256": "bd8f88cd05f77a3a41984028281eda5c7a164eaf3ab94d3b3e4372354639c84e",
+    "extractor_source_sha256": "ab4e2eb4a23a46d53c48425f5bf393ff6a67595ef883d5b3c4a3a1198c79ccdb",
+    "combined_gzip9_bytes": 5925,
+    "deterministic_replays": 2
+  },
+  "endpoint428": {
+    "baseline_payload_bytes": 173926,
+    "frozen_phase_saved_bytes": 44,
+    "global_strength_regret_saved_bytes": 18,
+    "contextual_strength_regret_saved_bytes": 2,
+    "shell_regime_after_phase": {
+      "saved_bytes": 34,
+      "incremental_vs_frozen_phase_bytes": -10,
+      "development_qbits": 1255,
+      "holdout_qbits": 5754,
+      "positive_blocks": 6,
+      "regressing_blocks": 4
+    },
+    "local_receipt_sha256": "6ae0b45e78d64d8dc5e6ff844366d44d5f28503c1450b46022dbc7b57b2d4ef1"
+  },
+  "independent_layer0": {
+    "baseline_payload_bytes": 173849,
+    "frozen_phase_saved_bytes": 41,
+    "global_strength_regret_saved_bytes": 18,
+    "contextual_strength_regret_saved_bytes": 3,
+    "shell_regime_after_phase": {
+      "saved_bytes": 28,
+      "incremental_vs_frozen_phase_bytes": -13,
+      "development_qbits": -4767,
+      "holdout_qbits": 2835,
+      "positive_blocks": 5,
+      "regressing_blocks": 5
+    },
+    "local_receipt_sha256": "3217c116b3ed61b83af4f4e495edafd783ea765790fff9ec7665efa0aca32352"
+  },
+  "decision": {
+    "verdict": "retire_strength_router_and_shell_regime_backoff_unchanged",
+    "reason": "Both regret routers discard most of the stable phase gain. The corrected overlapping shell mask remains positive versus the original substrate but is negative incrementally after the frozen phase component on both exact local P1 streams.",
+    "measured_incremental_gain_bytes": -10,
+    "score_credit_bytes": 0,
+    "promotion_authorized": false,
+    "next_action": "Keep the frozen cumulative phase component unchanged. Require a genuinely new endpoint or the exact pair P1; do not tune strength routing or shell-mode masks."
+  },
+  "normalization": {
+    "attempted": true,
+    "completed": false,
+    "classification": "environment_failure",
+    "reason": "This host lacks the historical ignored receipt overlay required by the artifact fingerprint audit. Generated overlay-dependent views were restored; strict frontier reporting passes from the source-bound receipts."
+  },
+  "claim_boundary": "Exact causal 1M P1 shadow replay. This is not a native archive, counted score, or full-corpus proof."
+}
