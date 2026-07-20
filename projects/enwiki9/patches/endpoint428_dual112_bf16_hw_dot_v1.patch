@@ -1,0 +1,190 @@
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -5,10 +5,50 @@
+ 
+ #include <math.h>
+ #include <algorithm>
++#include <cstring>
++#include <immintrin.h>
+ #include <numeric>
+ 
+ namespace {
+ 
++float BFloat16Round(float value) {
++  std::uint32_t bits;
++  std::memcpy(&bits, &value, sizeof(bits));
++  bits += 0x7fffU + ((bits >> 16) & 1U);
++  bits &= 0xffff0000U;
++  std::memcpy(&value, &bits, sizeof(value));
++  return value;
++}
++
++void QuantizeWeights(std::valarray<float>* weights) {
++  for (std::size_t index = 0; index < weights->size(); ++index) {
++    (*weights)[index] = BFloat16Round((*weights)[index]);
++  }
++}
++
++float BFloat16Dot(const std::valarray<float>& input,
++    std::valarray<float>* weights, unsigned int offset, float bias) {
++  const float* input_data = &const_cast<std::valarray<float>&>(input)[0];
++  float* weight_data = &(*weights)[0] + offset;
++  __m512 accum = _mm512_mask_mov_ps(_mm512_setzero_ps(), 1,
++      _mm512_set1_ps(bias));
++  unsigned int index = 0;
++  for (; index + 32 <= input.size(); index += 32) {
++    const __m512 input_low = _mm512_loadu_ps(input_data + index);
++    const __m512 input_high = _mm512_loadu_ps(input_data + index + 16);
++    const __m512 weight_low = _mm512_loadu_ps(weight_data + index);
++    const __m512 weight_high = _mm512_loadu_ps(weight_data + index + 16);
++    const __m512bh packed_input = _mm512_cvtne2ps_pbh(input_high, input_low);
++    const __m512bh packed_weight = _mm512_cvtne2ps_pbh(weight_high, weight_low);
++    accum = _mm512_dpbf16_ps(accum, packed_input, packed_weight);
++  }
++  float result = _mm512_reduce_add_ps(accum);
++  for (; index < input.size(); ++index) {
++    result += BFloat16Round(input_data[index]) * weight_data[index];
++  }
++  return result;
++}
++
+ void Adam(std::valarray<float>* g, std::valarray<float>* m,
+     std::valarray<float>* v, std::valarray<float>* w, float learning_rate,
+     float t, unsigned long long update_limit) {
+@@ -30,6 +70,7 @@
+     (*w) -= alpha * (((*m) / (float)(1.0f - pow(beta1, update_limit))) /
+         (sqrt((*v) / (float)(1.0f - pow(beta2, update_limit)) + eps)));
+   }
++  QuantizeWeights(w);
+ }
+ 
+ }
+@@ -52,9 +93,9 @@
+   float range = 2 * val;
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+     for (unsigned int j = 0; j < forget_gate_.weights_[i].size(); ++j) {
+-      forget_gate_.weights_[i][j] = low + Rand() * range;
+-      input_node_.weights_[i][j] = low + Rand() * range;
+-      output_gate_.weights_[i][j] = low + Rand() * range;
++      forget_gate_.weights_[i][j] = BFloat16Round(low + Rand() * range);
++      input_node_.weights_[i][j] = BFloat16Round(low + Rand() * range);
++      output_gate_.weights_[i][j] = BFloat16Round(low + Rand() * range);
+     }
+     forget_gate_.weights_[i][forget_gate_.weights_[i].size() - 1] = 1;
+   }
+@@ -69,16 +110,12 @@
+   // input traversal to each OpenMP section.
+ #pragma omp parallel for num_threads(3) schedule(static)
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+-    float forget = forget_gate_.weights_[i][input_symbol];
+-    float node = input_node_.weights_[i][input_symbol];
+-    float output = output_gate_.weights_[i][input_symbol];
+-    for (unsigned int j = 0; j < input.size(); ++j) {
+-      const float value = input[j];
+-      const unsigned int weight_index = output_size_ + j;
+-      forget += value * forget_gate_.weights_[i][weight_index];
+-      node += value * input_node_.weights_[i][weight_index];
+-      output += value * output_gate_.weights_[i][weight_index];
+-    }
++    float forget = BFloat16Dot(input, &forget_gate_.weights_[i], output_size_,
++        forget_gate_.weights_[i][input_symbol]);
++    float node = BFloat16Dot(input, &input_node_.weights_[i], output_size_,
++        input_node_.weights_[i][input_symbol]);
++    float output = BFloat16Dot(input, &output_gate_.weights_[i], output_size_,
++        output_gate_.weights_[i][input_symbol]);
+     forget_gate_.norm_[epoch_][i] = forget;
+     input_node_.norm_[epoch_][i] = node;
+     output_gate_.norm_[epoch_][i] = output;
+--- a/src/fx2lite/mixer/lstm-layer.hpp
++++ b/src/fx2lite/mixer/lstm-layer.hpp
+@@ -4,11 +4,51 @@
+ 
+ #include <math.h>
+ #include <algorithm>
++#include <cstdint>
++#include <cstring>
++#include <immintrin.h>
+ #include <numeric>
+ 
+ #define FAST_TANH tanh //fast_tanh
+ #define FAST_TANH_VEC tanh //fast_tanh_vec
+ namespace {
++inline float BFloat16Round(float value) {
++  std::uint32_t bits;
++  std::memcpy(&bits, &value, sizeof(bits));
++  bits += 0x7fffU + ((bits >> 16) & 1U);
++  bits &= 0xffff0000U;
++  std::memcpy(&value, &bits, sizeof(value));
++  return value;
++}
++
++inline void QuantizeWeights(std::valarray<float>* weights) {
++  for (std::size_t index = 0; index < weights->size(); ++index) {
++    (*weights)[index] = BFloat16Round((*weights)[index]);
++  }
++}
++
++inline float BFloat16Dot(const std::valarray<float>& input,
++    std::valarray<float>* weights, unsigned int offset, float bias) {
++  const float* input_data = &const_cast<std::valarray<float>&>(input)[0];
++  float* weight_data = &(*weights)[0] + offset;
++  __m512 accum = _mm512_mask_mov_ps(_mm512_setzero_ps(), 1,
++      _mm512_set1_ps(bias));
++  unsigned int index = 0;
++  for (; index + 32 <= input.size(); index += 32) {
++    const __m512 input_low = _mm512_loadu_ps(input_data + index);
++    const __m512 input_high = _mm512_loadu_ps(input_data + index + 16);
++    const __m512 weight_low = _mm512_loadu_ps(weight_data + index);
++    const __m512 weight_high = _mm512_loadu_ps(weight_data + index + 16);
++    const __m512bh packed_input = _mm512_cvtne2ps_pbh(input_high, input_low);
++    const __m512bh packed_weight = _mm512_cvtne2ps_pbh(weight_high, weight_low);
++    accum = _mm512_dpbf16_ps(accum, packed_input, packed_weight);
++  }
++  float result = _mm512_reduce_add_ps(accum);
++  for (; index < input.size(); ++index) {
++    result += BFloat16Round(input_data[index]) * weight_data[index];
++  }
++  return result;
++}
+ // inline float fast_tanh(const float x)
+ // {
+ //     const float ax = fabs(x);
+@@ -56,6 +96,7 @@
+     (*w) -= alpha * (((*m) / (float)(1.0f - pow(beta1, UPDATE_LIMIT))) /
+         (sqrt((*v) / (float)(1.0f - pow(beta2, UPDATE_LIMIT)) + eps)));
+   }
++  QuantizeWeights(w);
+ }
+ 
+ }
+@@ -78,9 +119,9 @@
+   float range = 2 * val;
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+     for (unsigned int j = 0; j < forget_gate_.weights_[i].size(); ++j) {
+-      forget_gate_.weights_[i][j] = low + Rand() * range;
+-      input_node_.weights_[i][j] = low + Rand() * range;
+-      output_gate_.weights_[i][j] = low + Rand() * range;
++      forget_gate_.weights_[i][j] = BFloat16Round(low + Rand() * range);
++      input_node_.weights_[i][j] = BFloat16Round(low + Rand() * range);
++      output_gate_.weights_[i][j] = BFloat16Round(low + Rand() * range);
+     }
+     forget_gate_.weights_[i][forget_gate_.weights_[i].size() - 1] = 1;
+   }
+@@ -112,10 +153,8 @@
+ inline void LstmLayer::ForwardPass(NeuronLayer& neurons,
+     const std::valarray<float>& input, int input_symbol) {
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+-    float f = neurons.weights_[i][input_symbol];
+-    for (unsigned int j = 0; j < input.size(); ++j) {
+-      f += input[j] * neurons.weights_[i][output_size_ + j];
+-    }
++    float f = BFloat16Dot(input, &neurons.weights_[i], output_size_,
++        neurons.weights_[i][input_symbol]);
+     neurons.norm_[epoch_][i] = f;
+   }
+   neurons.ivar_[epoch_] = 1.0f / sqrt(((neurons.norm_[epoch_] *
+@@ -230,4 +269,3 @@
+   weights.push_back(&output_gate_.weights_);
+   return weights;
+ }
+-
