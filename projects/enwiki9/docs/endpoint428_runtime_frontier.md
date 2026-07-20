@@ -215,6 +215,26 @@ The profiling build changes the archive and receives no score credit. The
 concentration supports modeled-work removal, but does not reopen the retired
 serial, persistent-region, worker-count, or BPTT schedule ladders.
 
+Independent page sharding is terminal. A deterministic splitter chooses four
+decoder-visible `<page>` boundaries at offsets `222,281`, `495,350`, and
+`742,779` in the opening `1M`. The four independent dual-`112` archives total
+`185,480` bytes; a reversible fixed-width directory adds `44`, producing an
+exact `185,524`-byte container. Every shard roundtrips, but the container is
+`11,563` bytes larger than the `173,961`-byte unsharded archive.
+
+The reset cost fits the parent's diagnostic `51,677`-byte score margin, but
+the concurrency dependency does not fit memory. Four unmodified processes
+cross the decimal-`10GB` tree guard during initialization at `9,841,944 KiB`.
+Quartering the shared and FXCM compound tables retains a favorable `+6` bytes
+on the `222,281`-byte first shard, yet four-process initialization still
+reaches `10,293,400 KiB`. Reducing shared, match, direct-hash, and compound
+tables to one-sixteenth misses the four-way per-shard ceiling even at `1K`.
+It fits the three-way per-shard ceiling at `222,281` bytes, but loses `15`
+archive bytes (`67.482 B/1M`), above the parent's `51.677 B/1M` score budget.
+The diagnostic projection is `109,515,805` bytes, `15,805` above target before
+any full-corpus shard-directory or reset uncertainty. No concurrency timing or
+larger gate is authorized for independent page sharding.
+
 The counted package lane is independently positive. Lexical comment stripping
 removes `109,041` source bytes without changing tokens or line counts. Two
 bundles and two direct-entry LZMA ZIPs are identical; the `261,125`-byte ZIP

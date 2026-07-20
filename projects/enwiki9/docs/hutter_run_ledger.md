@@ -3,7 +3,7 @@
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
 - Target: `109,500,000` bytes (`10.9500000%`).
-- Candidate runs indexed: `41`.
+- Candidate runs indexed: `43`.
 - Candidate lineages indexed: `38`.
 
 ## 65,536,000 Bytes
@@ -33,6 +33,7 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
 | `endpoint428_compact_layer0_phase_native_pruned_v3__1m_prefix` | `constructive_prefix` | `active` | opening_prefix | 174,099 | -136 | -136.000 | 235,420 | 109,499,618 (10.9499618%) | 382 | RT=true, DET=true |
+| `endpoint428_dual112_page_shards_v1__1m_prefix` | `constructive_prefix` | `active` | opening_prefix_page_shards | 185,524 | -11,563 | -11563.000 | 261,125 | unknown | unknown | RT=true |
 | `endpoint428_pair_layer0_online_residual_successor__1m_offset500m` | `constructive_prefix` | `retired_unchanged` | cold_reset_disjoint_window | 45,051 | 89 | 89.000 | 350,942 | 109,470,151 (10.9470151%) | 29,849 | not recorded |
 | `endpoint428_pair_layer0_online_residual_successor__1m_prefix` | `constructive_prefix` | `retired_unchanged` | opening_prefix | 173,896 | 67 | 67.000 | 350,942 | 109,492,151 (10.9492151%) | 7,849 | RT=true, DET=true |
 | `layer0_pair_phase_composite_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 140 | 140.000 | unknown | unknown | unknown | not recorded |
@@ -64,6 +65,12 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
 | `wrt_reference_prefix_cts_fx2_v1__500000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | -1 | -2.000 | unknown | unknown | unknown | not recorded |
 | `wrt_normalized_phrase_context_regret_fx2_v1__500000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 4 | 8.000 | unknown | unknown | unknown | not recorded |
+
+## 222,281 Bytes
+
+| Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|---|
+| `endpoint428_dual112_sixteenth_state_page_shard_v1__222281_prefix` | `constructive_prefix` | `active` | opening_prefix_page_shard_000 | 39,606 | -15 | -67.482 | 261,125 | unknown | unknown | not recorded |
 
 ## 10,000 Bytes
 

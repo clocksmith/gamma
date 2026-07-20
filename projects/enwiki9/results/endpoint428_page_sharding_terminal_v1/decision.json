@@ -1,0 +1,115 @@
+{
+  "schema": "endpoint428_page_sharding_terminal_v1",
+  "evidence_level": "constructive_prefix_page_shards_and_bounded_concurrency_guards",
+  "claim_boundary": "The exact 1M opening-prefix page shards prove deterministic boundaries, reversible container accounting, four independent roundtrips, and reset cost only on that population. The concurrency guards prove the tested independent-process layouts exceed or fit the stated aggregate RSS gates. Per-byte score projections are kill-gate diagnostics, not official full-corpus scores. No page-sharded candidate receives score credit.",
+  "target": {
+    "score_bytes": 109500000,
+    "score_percent": 10.95,
+    "official_full_1g_score_bytes": null
+  },
+  "parent": {
+    "algorithm": "endpoint428 compact/FX2 pair plus 26 layer-0 endpoints and online residual mixer, both recurrent widths 112, both recurrent horizons halved",
+    "binary_sha256": "a1c4562721332dab401e8666e9d8f49cc52776a7f2bd8494524970bf609b9452",
+    "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+    "counted_forecast_bytes": 109448323,
+    "counted_forecast_percent": 10.9448323,
+    "distance_below_target_bytes": 51677
+  },
+  "page_layout": {
+    "input_bytes": 1000000,
+    "input_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+    "boundaries": [0, 222281, 495350, 742779, 1000000],
+    "all_internal_boundaries_are_literal_page_starts": true,
+    "exact_raw_reconstruction": true
+  },
+  "unmodified_four_shards": {
+    "reference_unsharded_archive_bytes": 173961,
+    "shard_archive_bytes": [39591, 51295, 46142, 48452],
+    "payload_archive_bytes": 185480,
+    "directory_bytes": 44,
+    "container_bytes": 185524,
+    "container_sha256": "b5e42835365a9b4048fb0a28335905029f03196f49158d42dae60235c8276995",
+    "archive_delta_bytes": 11563,
+    "measured_gain_bytes": -11563,
+    "all_four_roundtrips_exact": true,
+    "container_unpack_exact": true,
+    "sequential_encode_elapsed_seconds": 215.894,
+    "sequential_decode_elapsed_seconds": 215.3469,
+    "maximum_single_shard_tree_rss_kib": 8944560,
+    "four_way_concurrency": {
+      "decimal_10gb_tree_limit_kib": 9765625,
+      "peak_tree_rss_kib": 9841944,
+      "guard_exceeded": true,
+      "archive_completed": false,
+      "decision": "retire_unmodified_independent_four_way_sharding"
+    }
+  },
+  "quarter_state": {
+    "configuration": {
+      "shared_map_contexts": 2000000,
+      "main_cmc2_divisor": 8,
+      "fx2lite_cmc2_divisor": 16
+    },
+    "binary_sha256": "5b93cb4f64c861502f3313a3c8aa004d0b101b673fff080d396e131f1eef2d5a",
+    "scope_bytes": 222281,
+    "population": "opening_prefix_page_shard_000",
+    "reference_archive_bytes": 39591,
+    "archive_bytes": 39597,
+    "archive_loss_bytes": 6,
+    "archive_loss_bytes_per_1m": 26.99286038842726,
+    "diagnostic_projected_score_bytes": 109475316,
+    "peak_tree_rss_kib": 5323968,
+    "four_way_concurrency_peak_tree_rss_kib": 10293400,
+    "four_way_guard_exceeded": true,
+    "decision": "score_kill_gate_passed_but_four_way_memory_failed"
+  },
+  "lazy_direct_control": {
+    "binary_sha256": "af5e118ef5729f5b942038e54c45fc64b855a2c4ca4bfe3d9f618dd9fccb30f2",
+    "scope_bytes": 222281,
+    "archive_identity_with_quarter_state": true,
+    "archive_bytes": 39597,
+    "peak_tree_rss_kib": 5324164,
+    "decision": "retire_no_measured_memory_reduction"
+  },
+  "sixteenth_state": {
+    "configuration": {
+      "shared_map_contexts": 500000,
+      "match_map_divisor": 16,
+      "direct_hash_divisor": 16,
+      "main_cmc2_divisor": 32,
+      "fx2lite_cmc2_divisor": 64
+    },
+    "binary_sha256": "4d330bac28f7fa213a858ed1938fc3d360bc53bef8f8818cb0e6adde81801d1c",
+    "scope_1k": {
+      "archive_bytes": 259,
+      "peak_tree_rss_kib": 2739592,
+      "four_way_per_shard_ceiling_kib": 2441406,
+      "four_way_memory_passed": false
+    },
+    "scope_222281": {
+      "population": "opening_prefix_page_shard_000",
+      "reference_archive_bytes": 39591,
+      "archive_bytes": 39606,
+      "archive_loss_bytes": 15,
+      "measured_gain_bytes": -15,
+      "archive_loss_bytes_per_1m": 67.48215097106815,
+      "diagnostic_projected_score_bytes": 109515805,
+      "diagnostic_distance_above_target_bytes": 15805,
+      "peak_tree_rss_kib": 3035592,
+      "three_way_per_shard_ceiling_kib": 3255208,
+      "three_way_memory_passed": true,
+      "score_kill_gate_passed": false
+    },
+    "decision": "retire_three_way_score_failure_and_four_way_memory_failure"
+  },
+  "source_reproduction": {
+    "base_source_identity": "endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_dual112_half_horizon_v1",
+    "state_scaling_patch": "patches/endpoint428_page_shard_state_scaling_v1.patch",
+    "splitter": "tools/enwiki9_page_shards.py",
+    "container": "tools/enwiki9_shard_container.py"
+  },
+  "score_credit_bytes": 0,
+  "promotion_authorized": false,
+  "decision": "retire_independent_page_sharding_family",
+  "next_action": "Do not retry independent page sharding or smaller dense-table capacities. Preserve the dual-112 parent and pursue concurrency within one shared model state or a materially different low-state recurrent representation with disjoint score evidence."
+}
