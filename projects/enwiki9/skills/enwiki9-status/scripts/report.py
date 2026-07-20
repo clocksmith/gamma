@@ -6,8 +6,11 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import json
+import re
 from pathlib import Path
 import subprocess
+import shlex
+import fcntl
 from typing import Any
 
 
@@ -47,6 +50,199 @@ def load_object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError(f"expected JSON object: {path}")
     return value
+
+
+def _scope_from_label_suffix(raw_label: str) -> int | None:
+    match = re.search(r"_(\d+)([kmg])?_determinism$", raw_label)
+    if not match:
+        return None
+    value = int(match.group(1))
+    unit = match.group(2)
+    if unit is None:
+        return value
+    if unit == "k":
+        return value * 1_000
+    if unit == "m":
+        return value * 1_000_000
+    if unit == "g":
+        return value * 1_000_000_000
+    return None
+
+
+def _canonical_candidate_from_label(raw_label: str) -> str:
+    return re.sub(r"_\d+(?:[kmg])?_determinism$", "", raw_label)
+
+
+def _read_live_guard_row(project_root: Path) -> dict[str, Any] | None:
+    """Recover the running guard process and its live command state."""
+
+    proc = subprocess.run(
+        ["pgrep", "-af", "run_with_rss_guard.py|projects/enwiki9/lib/driver.py"],
+        cwd=project_root.parents[1],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    best: dict[str, Any] | None = None
+    for line in proc.stdout.splitlines():
+        parts = line.strip().split(maxsplit=1)
+        if len(parts) != 2:
+            continue
+        pid_text, raw_args = parts
+        try:
+            pid = int(pid_text)
+        except ValueError:
+            continue
+        if "run_with_rss_guard.py" not in raw_args:
+            continue
+        try:
+            args = shlex.split(raw_args)
+        except ValueError:
+            args = raw_args.split()
+        if "--guard-json" not in args or "--label" not in args or "--" not in args:
+            continue
+        guard_index = args.index("--guard-json")
+        label_index = args.index("--label")
+        dash_index = args.index("--")
+        if (
+            guard_index + 1 >= len(args)
+            or label_index + 1 >= len(args)
+            or dash_index + 1 >= len(args)
+        ):
+            continue
+        guard_path = args[guard_index + 1]
+        label = args[label_index + 1]
+        command = args[dash_index + 1 :]
+        candidate = None
+        scope = None
+        check_determinism = "--check-determinism" in command
+        if "gamma/projects/enwiki9/lib/driver.py" in command:
+            driver_index = command.index("gamma/projects/enwiki9/lib/driver.py")
+            if driver_index + 1 < len(command):
+                candidate = command[driver_index + 1]
+            if "--limit" in command:
+                idx = command.index("--limit")
+                if idx + 1 < len(command):
+                    try:
+                        scope = int(command[idx + 1])
+                    except ValueError:
+                        scope = None
+        if not isinstance(candidate, str):
+            candidate = _canonical_candidate_from_label(label)
+        if isinstance(scope, type(None)):
+            scope = _scope_from_label_suffix(label)
+
+        resolved_guard_path = (
+            _resolve_candidate_path(project_root, guard_path) or Path(guard_path)
+        )
+        telemetry = (
+            load_object(resolved_guard_path) if resolved_guard_path.exists() else {}
+        )
+        row = {
+            "pid": pid,
+            "label": label,
+            "candidate": _canonical_candidate_from_label(candidate),
+            "candidate_with_scope": candidate,
+            "scope_bytes": scope,
+            "check_determinism": check_determinism,
+            "command": command,
+            "rss_guard_json": str(resolved_guard_path),
+            "guard_json_token": str(guard_path),
+            "guard_status": telemetry.get("status"),
+            "guard_elapsed_s": telemetry.get("elapsed_s"),
+            "sample_count": telemetry.get("sample_count"),
+            "max_sampled_single_rss_kib": telemetry.get("max_sampled_single_rss_kib"),
+            "max_sampled_tree_rss_kib": telemetry.get("max_sampled_tree_rss_kib"),
+            "official_decimal_limit_kib": telemetry.get("official_decimal_limit_kib"),
+            "official_decimal_over_limit_kib": telemetry.get("official_decimal_over_limit_kib"),
+            "rss_guard_exceeded": telemetry.get("rss_guard_exceeded"),
+            "returncode": telemetry.get("returncode"),
+        }
+        if best is None:
+            best = row
+        elif best.get("pid") is None:
+            best = row
+    return best
+
+
+def _resolve_candidate_path(project_root: Path, raw_path: str) -> Path | None:
+    if not raw_path:
+        return None
+    candidate = Path(raw_path)
+    candidates: list[Path] = [candidate]
+    if not candidate.is_absolute():
+        candidates.extend(
+            [
+                project_root / candidate,
+                project_root.parent / candidate,
+                project_root.parent.parent / candidate,
+                Path.cwd() / candidate,
+            ]
+        )
+        if raw_path.startswith("gamma/"):
+            stripped = Path(raw_path.removeprefix("gamma/"))
+            candidates.extend(
+                [
+                    project_root.parent.parent / stripped,
+                    Path.cwd() / stripped,
+                ]
+            )
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
+
+
+def _heavy_lock_state(lock_path: Path) -> dict[str, Any]:
+    lock_path = Path(lock_path)
+    if not lock_path.exists():
+        return {"path": str(lock_path), "held": False, "holders": []}
+    held = False
+    try:
+        with lock_path.open("r"):
+            try:
+                with lock_path.open("r+") as handle:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                held = True
+            else:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+    except OSError:
+        pass
+    proc = subprocess.run(
+        ["pgrep", "-af", str(lock_path)],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    holders: list[int] = []
+    for line in proc.stdout.splitlines():
+        parts = line.strip().split(maxsplit=1)
+        if len(parts) != 2:
+            continue
+        pid_text, raw_args = parts
+        if "flock" not in raw_args:
+            continue
+        try:
+            holders.append(int(pid_text))
+        except ValueError:
+            pass
+    return {
+        "path": str(lock_path),
+        "held": held,
+        "holders": sorted(set(holders)),
+    }
+
+
+def _load_live_observation(project_root: Path) -> dict[str, Any]:
+    row = _read_live_guard_row(project_root)
+    if row is None:
+        return {}
+    return row
+
+
+def _resolve_scope_text(value: Any) -> str:
+    return fmt_int(value) if value is not None else "unknown"
 
 
 def git_state(project_root: Path) -> dict[str, Any]:
@@ -274,11 +470,65 @@ def fmt_point_distance(byte_distance: Any, input_bytes: int = 1_000_000_000) -> 
     return f"{byte_distance * 100 / input_bytes:.7f} percentage points"
 
 
+def render_live_state(status: dict[str, Any]) -> list[str]:
+    lines: list[str] = ["## Live Run State", ""]
+    live = status["operational"].get("live_observation") or {}
+    lock_state = status["operational"].get("heavy_lock") or {}
+    if live:
+        decimal_limit = live.get("official_decimal_limit_kib")
+        over_limit = live.get("official_decimal_over_limit_kib")
+        single_rss = live.get("max_sampled_single_rss_kib")
+        guard_status = live.get("guard_status", "running")
+        guard_elapsed = live.get("guard_elapsed_s")
+        sample_count = live.get("sample_count")
+        lines.extend(
+            [
+                f"- Running command: `{live.get('candidate', 'unknown')}` "
+                f"`--limit {live.get('scope_bytes') or 'unknown'}` "
+                f"`--check-determinism {str(bool(live.get('check_determinism'))).lower()}`; "
+                f"guard `{guard_status}`.",
+                f"- Command PID: `{live.get('pid', 'unknown')}`; candidate label: `{live.get('label', 'unknown')}`.",
+            ]
+        )
+        if isinstance(guard_elapsed, (int, float)):
+            lines.append(
+                f"- Guard elapsed: `{guard_elapsed:.4f}` seconds; samples `{fmt_int(sample_count)}`."
+            )
+        else:
+            lines.append(
+                f"- Guard elapsed: `{guard_elapsed}`; samples `{fmt_int(sample_count)}`."
+            )
+        lines.append(f"- Guard JSON: `{live.get('rss_guard_json', 'unknown')}`.")
+        lines.append(
+            f"- Live RSS: single `{fmt_int(single_rss)}` KiB, tree `{fmt_int(live.get('max_sampled_tree_rss_kib'))}` KiB; "
+            f"official decimal over-limit `{fmt_int(over_limit)} KiB`."
+        )
+        if isinstance(decimal_limit, int):
+            lines.append(f"- Decimal guard limit: `{fmt_int(decimal_limit)}` KiB.")
+            lines.append(f"- Official decimal over-limit KiB: `{fmt_int(over_limit)}`.")
+        lines.append(
+            f"- Heavy lock: `{lock_state.get('path', '/tmp/enwiki9-heavy.lock')}` "
+            f"held: `{bool(lock_state.get('held'))}`, holder pids `{lock_state.get('holders', [])}`."
+        )
+    else:
+        lines.append(f"- Heavy lock held: `{bool(lock_state.get('held'))}`.")
+        lines.append(f"- Heavy lock path: `{lock_state.get('path', '/tmp/enwiki9-heavy.lock')}`.")
+        lock_holders = lock_state.get("holders", [])
+        if lock_holders:
+            lines.append(f"- Lock holder pids: `{lock_holders}`.")
+        else:
+            lines.append("- Lock holder pids: `[]`.")
+    lines.append("")
+    return lines
+
+
 def render_markdown(status: dict[str, Any]) -> str:
     official = status["official"]
     forecast = status.get("canonical_forecast") or {}
     target_score = status["target"]["score_bytes"]
-    lines = ["# enwiki9 Hutter Status", "", "## Score Status", ""]
+    lines = ["# enwiki9 Hutter Status", ""]
+    lines.extend(render_live_state(status))
+    lines.extend(["## Score Status", ""])
     lines.append(
         f"- Target score: `{fmt_int(target_score)}` bytes "
         f"(`{fmt_score_percent(target_score)}`)."
@@ -353,27 +603,6 @@ def render_markdown(status: dict[str, Any]) -> str:
                 f"(`{fmt_score_percent(disjoint_score)}`); provisional margin "
                 f"`{fmt_int(disjoint_margin)}` bytes."
             )
-    live = status["operational"].get("live_observation") or {}
-    if live:
-        decimal_limit = live.get("official_decimal_limit_kib")
-        single_rss = live.get("max_sampled_single_rss_kib")
-        decimal_margin = (
-            decimal_limit - single_rss
-            if isinstance(decimal_limit, int) and isinstance(single_rss, int)
-            else None
-        )
-        lines.append(
-            f"- Live gate: `{live.get('candidate', 'unknown')}` at scope "
-            f"`{fmt_int(live.get('scope_bytes'))}`; progress "
-            f"`{live.get('progress_percent', 'unknown')}%`; guard "
-            f"`{live.get('guard_status', 'unknown')}`; terminal "
-            f"`{bool(live.get('terminal'))}`."
-        )
-        lines.append(
-            f"- Live RSS: process-tree `{fmt_int(live.get('max_sampled_tree_rss_kib'))}` KiB; "
-            f"decimal single-process margin `{fmt_int(decimal_margin)}` KiB; "
-            f"breach `{bool(live.get('rss_guard_exceeded'))}`."
-        )
     lines.extend(
         [
             "",
@@ -403,13 +632,6 @@ def render_markdown(status: dict[str, Any]) -> str:
             f"{fmt_int(row.get('forecast_margin_bytes'))} | {measured_text} | "
             f"{row.get('next_gate', '')} |"
         )
-    lines.extend(["", "## Live State", ""])
-    lock = status["operational"].get("heavy_lock") or {}
-    processes = status["operational"].get("active_processes") or {}
-    lines.append(f"- Heavy lock held: `{bool(lock.get('held'))}`.")
-    lines.append(
-        f"- Active scorer observed: `{bool(processes.get('active_scorer_observed'))}`."
-    )
     lines.extend(["", "## Quarantine", ""])
     if status["quarantine"]:
         for row in status["quarantine"]:
@@ -470,15 +692,31 @@ def main() -> int:
     operational_path = (
         args.operational_status or root / "docs" / "status_receipt.json"
     )
+    operational = load_object(operational_path)
+    if args.live_observation is not None:
+        live_observation = load_object(args.live_observation)
+    else:
+        live_observation = _load_live_observation(root)
+    if not live_observation:
+        handoff = operational.get("handoff") if isinstance(operational, dict) else {}
+        if isinstance(handoff, dict):
+            fallback_candidate = handoff.get("candidate")
+            if fallback_candidate:
+                live_observation = {
+                    "candidate": fallback_candidate,
+                    "scope_bytes": handoff.get("scope_bytes"),
+                    "guard_status": "unknown",
+                }
+    if isinstance(operational, dict):
+        operational = dict(operational)
+        operational["heavy_lock"] = _heavy_lock_state(Path("/tmp/enwiki9-heavy.lock"))
     live_observation = (
-        load_object(args.live_observation)
-        if args.live_observation is not None
-        else None
+        live_observation if isinstance(live_observation, dict) else None
     )
     status, errors = validate_and_normalize(
         root,
         load_object(ledger_path),
-        load_object(operational_path),
+        operational,
         live_observation,
     )
     markdown = render_markdown(status)
