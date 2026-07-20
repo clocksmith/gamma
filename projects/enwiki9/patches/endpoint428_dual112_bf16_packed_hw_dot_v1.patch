@@ -1,0 +1,312 @@
+--- a/src/mixer/lstm-layer.h
++++ b/src/mixer/lstm-layer.h
+@@ -1,6 +1,7 @@
+ #ifndef LSTM_LAYER_H
+ #define LSTM_LAYER_H
+ 
++#include <cstdint>
+ #include <valarray>
+ #include <vector>
+ #include <stdlib.h>
+@@ -12,6 +13,7 @@
+     gamma_u_(num_cells), gamma_m_(num_cells), gamma_v_(num_cells),
+     beta_(num_cells), beta_u_(num_cells), beta_m_(num_cells),
+     beta_v_(num_cells), weights_(std::valarray<float>(input_size), num_cells),
++    packed_weights_(std::valarray<std::uint16_t>(input_size), num_cells),
+     state_(std::valarray<float>(num_cells), horizon),
+     update_(std::valarray<float>(input_size), num_cells),
+     m_(std::valarray<float>(input_size), num_cells),
+@@ -23,6 +25,7 @@
+       beta_, beta_u_, beta_m_, beta_v_;
+   std::valarray<std::valarray<float>> weights_, state_, update_, m_, v_,
+       transpose_, norm_;
++  std::valarray<std::valarray<std::uint16_t>> packed_weights_;
+ };
+ 
+ class LstmLayer {
+@@ -43,6 +46,7 @@
+   std::valarray<float> state_, state_error_, stored_error_;
+   std::valarray<std::valarray<float>> tanh_state_, input_gate_state_,
+       last_state_;
++  std::vector<std::uint16_t> packed_input_;
+   float gradient_clip_, learning_rate_;
+   unsigned int num_cells_, epoch_, horizon_, input_size_, output_size_;
+   unsigned long long update_steps_ = 0, update_limit_ = 3000;
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -26,25 +26,61 @@
+   }
+ }
+ 
+-float BFloat16Dot(const std::valarray<float>& input,
+-    std::valarray<float>* weights, unsigned int offset, float bias) {
+-  const float* input_data = &const_cast<std::valarray<float>&>(input)[0];
+-  float* weight_data = &(*weights)[0] + offset;
++std::uint16_t BFloat16Bits(float value) {
++  value = BFloat16Round(value);
++  std::uint32_t bits;
++  std::memcpy(&bits, &value, sizeof(bits));
++  return static_cast<std::uint16_t>(bits >> 16);
++}
++
++float BFloat16Expand(std::uint16_t value) {
++  std::uint32_t bits = static_cast<std::uint32_t>(value) << 16;
++  float expanded;
++  std::memcpy(&expanded, &bits, sizeof(expanded));
++  return expanded;
++}
++
++void PackBFloat16(const std::valarray<float>& source,
++    std::valarray<std::uint16_t>* packed) {
++  for (std::size_t index = 0; index < source.size(); ++index) {
++    (*packed)[index] = BFloat16Bits(source[index]);
++  }
++}
++
++void PackBFloat16(const std::valarray<float>& source,
++    std::vector<std::uint16_t>* packed) {
++  const float* source_data = &const_cast<std::valarray<float>&>(source)[0];
++  unsigned int index = 0;
++  for (; index + 32 <= source.size(); index += 32) {
++    const __m512 low = _mm512_loadu_ps(source_data + index);
++    const __m512 high = _mm512_loadu_ps(source_data + index + 16);
++    const __m512bh values = _mm512_cvtne2ps_pbh(high, low);
++    _mm512_storeu_si512(reinterpret_cast<void*>(packed->data() + index),
++        (__m512i)values);
++  }
++  for (; index < source.size(); ++index) {
++    (*packed)[index] = BFloat16Bits(source_data[index]);
++  }
++}
++
++float BFloat16Dot(const std::vector<std::uint16_t>& input,
++    std::valarray<std::uint16_t>* weights, unsigned int offset, float bias) {
++  const std::uint16_t* input_data = input.data();
++  std::uint16_t* weight_data = &(*weights)[0] + offset;
+   __m512 accum = _mm512_mask_mov_ps(_mm512_setzero_ps(), 1,
+       _mm512_set1_ps(bias));
+   unsigned int index = 0;
+   for (; index + 32 <= input.size(); index += 32) {
+-    const __m512 input_low = _mm512_loadu_ps(input_data + index);
+-    const __m512 input_high = _mm512_loadu_ps(input_data + index + 16);
+-    const __m512 weight_low = _mm512_loadu_ps(weight_data + index);
+-    const __m512 weight_high = _mm512_loadu_ps(weight_data + index + 16);
+-    const __m512bh packed_input = _mm512_cvtne2ps_pbh(input_high, input_low);
+-    const __m512bh packed_weight = _mm512_cvtne2ps_pbh(weight_high, weight_low);
++    const __m512bh packed_input = (__m512bh)_mm512_loadu_si512(
++        reinterpret_cast<const void*>(input_data + index));
++    const __m512bh packed_weight = (__m512bh)_mm512_loadu_si512(
++        reinterpret_cast<const void*>(weight_data + index));
+     accum = _mm512_dpbf16_ps(accum, packed_input, packed_weight);
+   }
+   float result = _mm512_reduce_add_ps(accum);
+   for (; index < input.size(); ++index) {
+-    result += BFloat16Round(input_data[index]) * weight_data[index];
++    result += BFloat16Expand(input_data[index]) *
++        BFloat16Expand(weight_data[index]);
+   }
+   return result;
+ }
+@@ -82,6 +118,7 @@
+     tanh_state_(std::valarray<float>(num_cells), horizon),
+     input_gate_state_(std::valarray<float>(num_cells), horizon),
+     last_state_(std::valarray<float>(num_cells), horizon),
++    packed_input_(input_size - output_size),
+     gradient_clip_(gradient_clip), learning_rate_(learning_rate),
+     num_cells_(num_cells), epoch_(0), horizon_(horizon),
+     input_size_(auxiliary_input_size), output_size_(output_size),
+@@ -98,23 +135,27 @@
+       output_gate_.weights_[i][j] = BFloat16Round(low + Rand() * range);
+     }
+     forget_gate_.weights_[i][forget_gate_.weights_[i].size() - 1] = 1;
++    PackBFloat16(forget_gate_.weights_[i], &forget_gate_.packed_weights_[i]);
++    PackBFloat16(input_node_.weights_[i], &input_node_.packed_weights_[i]);
++    PackBFloat16(output_gate_.weights_[i], &output_gate_.packed_weights_[i]);
+   }
+ }
+ 
+ void LstmLayer::ForwardPass(const std::valarray<float>& input, int input_symbol,
+     std::valarray<float>* hidden, int hidden_start) {
+   last_state_[epoch_] = state_;
++  PackBFloat16(input, &packed_input_);
+ 
+   // The three gates consume the same dense input.  Traverse it once per cell
+   // and accumulate all gate dots together instead of assigning one complete
+   // input traversal to each OpenMP section.
+ #pragma omp parallel for num_threads(3) schedule(static)
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+-    float forget = BFloat16Dot(input, &forget_gate_.weights_[i], output_size_,
++    float forget = BFloat16Dot(packed_input_, &forget_gate_.packed_weights_[i], output_size_,
+         forget_gate_.weights_[i][input_symbol]);
+-    float node = BFloat16Dot(input, &input_node_.weights_[i], output_size_,
++    float node = BFloat16Dot(packed_input_, &input_node_.packed_weights_[i], output_size_,
+         input_node_.weights_[i][input_symbol]);
+-    float output = BFloat16Dot(input, &output_gate_.weights_[i], output_size_,
++    float output = BFloat16Dot(packed_input_, &output_gate_.packed_weights_[i], output_size_,
+         output_gate_.weights_[i][input_symbol]);
+     forget_gate_.norm_[epoch_][i] = forget;
+     input_node_.norm_[epoch_][i] = node;
+@@ -279,6 +320,7 @@
+       for (unsigned int i = 0; i < num_cells_; ++i) {
+         Adam(&neurons.update_[i], &neurons.m_[i], &neurons.v_[i],
+             &neurons.weights_[i], learning_rate_, update_steps_, update_limit_);
++        PackBFloat16(neurons.weights_[i], &neurons.packed_weights_[i]);
+       }
+     }
+   }
+--- a/src/fx2lite/mixer/lstm-layer.h
++++ b/src/fx2lite/mixer/lstm-layer.h
+@@ -1,6 +1,7 @@
+ #ifndef LSTM_LAYER_H
+ #define LSTM_LAYER_H
+ 
++#include <cstdint>
+ #include <valarray>
+ #include <vector>
+ #include <stdlib.h>
+@@ -12,6 +13,7 @@
+     gamma_u_(num_cells), gamma_m_(num_cells), gamma_v_(num_cells),
+     beta_(num_cells), beta_u_(num_cells), beta_m_(num_cells),
+     beta_v_(num_cells), weights_(std::valarray<float>(input_size), num_cells),
++    packed_weights_(std::valarray<std::uint16_t>(input_size), num_cells),
+     state_(std::valarray<float>(num_cells), horizon),
+     update_(std::valarray<float>(input_size), num_cells),
+     m_(std::valarray<float>(input_size), num_cells),
+@@ -23,6 +25,7 @@
+       beta_, beta_u_, beta_m_, beta_v_;
+   std::valarray<std::valarray<float>> weights_, state_, update_, m_, v_,
+       transpose_, norm_;
++  std::valarray<std::valarray<std::uint16_t>> packed_weights_;
+ };
+ 
+ class LstmLayer {
+@@ -43,6 +46,7 @@
+   std::valarray<float> state_, state_error_, stored_error_;
+   std::valarray<std::valarray<float>> tanh_state_, input_gate_state_,
+       last_state_;
++  std::vector<std::uint16_t> packed_input_;
+   float gradient_clip_, learning_rate_;
+   unsigned int num_cells_, epoch_, horizon_, input_size_, output_size_;
+   unsigned long long update_steps_ = 0;
+@@ -58,4 +62,3 @@
+ #include "lstm-layer.hpp"
+ 
+ #endif
+-
+--- a/src/fx2lite/mixer/lstm-layer.hpp
++++ b/src/fx2lite/mixer/lstm-layer.hpp
+@@ -27,25 +27,61 @@
+   }
+ }
+ 
+-inline float BFloat16Dot(const std::valarray<float>& input,
+-    std::valarray<float>* weights, unsigned int offset, float bias) {
+-  const float* input_data = &const_cast<std::valarray<float>&>(input)[0];
+-  float* weight_data = &(*weights)[0] + offset;
++inline std::uint16_t BFloat16Bits(float value) {
++  value = BFloat16Round(value);
++  std::uint32_t bits;
++  std::memcpy(&bits, &value, sizeof(bits));
++  return static_cast<std::uint16_t>(bits >> 16);
++}
++
++inline float BFloat16Expand(std::uint16_t value) {
++  std::uint32_t bits = static_cast<std::uint32_t>(value) << 16;
++  float expanded;
++  std::memcpy(&expanded, &bits, sizeof(expanded));
++  return expanded;
++}
++
++inline void PackBFloat16(const std::valarray<float>& source,
++    std::valarray<std::uint16_t>* packed) {
++  for (std::size_t index = 0; index < source.size(); ++index) {
++    (*packed)[index] = BFloat16Bits(source[index]);
++  }
++}
++
++inline void PackBFloat16(const std::valarray<float>& source,
++    std::vector<std::uint16_t>* packed) {
++  const float* source_data = &const_cast<std::valarray<float>&>(source)[0];
++  unsigned int index = 0;
++  for (; index + 32 <= source.size(); index += 32) {
++    const __m512 low = _mm512_loadu_ps(source_data + index);
++    const __m512 high = _mm512_loadu_ps(source_data + index + 16);
++    const __m512bh values = _mm512_cvtne2ps_pbh(high, low);
++    _mm512_storeu_si512(reinterpret_cast<void*>(packed->data() + index),
++        (__m512i)values);
++  }
++  for (; index < source.size(); ++index) {
++    (*packed)[index] = BFloat16Bits(source_data[index]);
++  }
++}
++
++inline float BFloat16Dot(const std::vector<std::uint16_t>& input,
++    std::valarray<std::uint16_t>* weights, unsigned int offset, float bias) {
++  const std::uint16_t* input_data = input.data();
++  std::uint16_t* weight_data = &(*weights)[0] + offset;
+   __m512 accum = _mm512_mask_mov_ps(_mm512_setzero_ps(), 1,
+       _mm512_set1_ps(bias));
+   unsigned int index = 0;
+   for (; index + 32 <= input.size(); index += 32) {
+-    const __m512 input_low = _mm512_loadu_ps(input_data + index);
+-    const __m512 input_high = _mm512_loadu_ps(input_data + index + 16);
+-    const __m512 weight_low = _mm512_loadu_ps(weight_data + index);
+-    const __m512 weight_high = _mm512_loadu_ps(weight_data + index + 16);
+-    const __m512bh packed_input = _mm512_cvtne2ps_pbh(input_high, input_low);
+-    const __m512bh packed_weight = _mm512_cvtne2ps_pbh(weight_high, weight_low);
++    const __m512bh packed_input = (__m512bh)_mm512_loadu_si512(
++        reinterpret_cast<const void*>(input_data + index));
++    const __m512bh packed_weight = (__m512bh)_mm512_loadu_si512(
++        reinterpret_cast<const void*>(weight_data + index));
+     accum = _mm512_dpbf16_ps(accum, packed_input, packed_weight);
+   }
+   float result = _mm512_reduce_add_ps(accum);
+   for (; index < input.size(); ++index) {
+-    result += BFloat16Round(input_data[index]) * weight_data[index];
++    result += BFloat16Expand(input_data[index]) *
++        BFloat16Expand(weight_data[index]);
+   }
+   return result;
+ }
+@@ -108,6 +144,7 @@
+     tanh_state_(std::valarray<float>(num_cells), horizon),
+     input_gate_state_(std::valarray<float>(num_cells), horizon),
+     last_state_(std::valarray<float>(num_cells), horizon),
++    packed_input_(input_size - output_size),
+     gradient_clip_(gradient_clip), learning_rate_(learning_rate),
+     num_cells_(num_cells), epoch_(0), horizon_(horizon),
+     input_size_(auxiliary_input_size), output_size_(output_size),
+@@ -124,12 +161,16 @@
+       output_gate_.weights_[i][j] = BFloat16Round(low + Rand() * range);
+     }
+     forget_gate_.weights_[i][forget_gate_.weights_[i].size() - 1] = 1;
++    PackBFloat16(forget_gate_.weights_[i], &forget_gate_.packed_weights_[i]);
++    PackBFloat16(input_node_.weights_[i], &input_node_.packed_weights_[i]);
++    PackBFloat16(output_gate_.weights_[i], &output_gate_.packed_weights_[i]);
+   }
+ }
+ 
+ inline void LstmLayer::ForwardPass(const std::valarray<float>& input, int input_symbol,
+     std::valarray<float>* hidden, int hidden_start) {
+   last_state_[epoch_] = state_;
++  PackBFloat16(input, &packed_input_);
+   ForwardPass(forget_gate_, input, input_symbol);
+   ForwardPass(input_node_, input, input_symbol);
+   ForwardPass(output_gate_, input, input_symbol);
+@@ -153,7 +194,7 @@
+ inline void LstmLayer::ForwardPass(NeuronLayer& neurons,
+     const std::valarray<float>& input, int input_symbol) {
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+-    float f = BFloat16Dot(input, &neurons.weights_[i], output_size_,
++    float f = BFloat16Dot(packed_input_, &neurons.packed_weights_[i], output_size_,
+         neurons.weights_[i][input_symbol]);
+     neurons.norm_[epoch_][i] = f;
+   }
+@@ -254,6 +295,7 @@
+     for (unsigned int i = 0; i < num_cells_; ++i) {
+       Adam(&neurons.update_[i], &neurons.m_[i], &neurons.v_[i],
+           &neurons.weights_[i], learning_rate_, update_steps_);
++      PackBFloat16(neurons.weights_[i], &neurons.packed_weights_[i]);
+     }
+     Adam(&neurons.gamma_u_, &neurons.gamma_m_, &neurons.gamma_v_,
+         &neurons.gamma_, learning_rate_, update_steps_);
