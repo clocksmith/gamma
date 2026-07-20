@@ -270,13 +270,13 @@ class ModelValidator:
                 if not torch.cuda.is_available():
                     return ValidationResult(
                         is_valid=True,
-                        warning_message=f"⚠️  Engine '{engine}' requires CUDA but CUDA is not available",
+                        warning_message=f"▲ Engine '{engine}' requires CUDA but CUDA is not available",
                         suggestion="Use 'pytorch' or 'llamacpp' engine for CPU/other hardware"
                     )
             except ImportError:
                 return ValidationResult(
                     is_valid=True,
-                    warning_message=f"⚠️  Cannot check CUDA availability (torch not installed)",
+                    warning_message=f"▲ Cannot check CUDA availability (torch not installed)",
                     suggestion="Install torch to verify CUDA support"
                 )
 
@@ -286,7 +286,7 @@ class ModelValidator:
             if not (platform.system() == "Darwin" and platform.machine().startswith("arm")):
                 return ValidationResult(
                     is_valid=True,
-                    warning_message=f"⚠️  Engine '{engine}' is optimized for Apple Silicon but you're on {platform.system()} {platform.machine()}",
+                    warning_message=f"▲ Engine '{engine}' is optimized for Apple Silicon but you're on {platform.system()} {platform.machine()}",
                     suggestion="Use 'pytorch' or 'llamacpp' engine for better compatibility"
                 )
 
@@ -389,17 +389,17 @@ class ModelValidator:
 def print_validation_result(result: ValidationResult, model_spec: str = ""):
     """Pretty print a validation result."""
     if not result.is_valid:
-        print(f"\n❌ Invalid configuration: {model_spec}")
+        print(f"\n✗ Invalid configuration: {model_spec}")
         print(f"   {result.error_message}")
         if result.suggestion:
-            print(f"   💡 Suggestion: {result.suggestion}")
+            print(f"   Hint: {result.suggestion}")
         print()
         return False
 
     if result.warning_message:
         print(f"\n{result.warning_message}")
         if result.suggestion:
-            print(f"   💡 Suggestion: {result.suggestion}")
+            print(f"   Hint: {result.suggestion}")
         print()
 
     return True

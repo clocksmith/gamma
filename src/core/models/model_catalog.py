@@ -514,7 +514,7 @@ class ModelSelector:
             print("No models found for this engine.")
             return
 
-        print(f"\n📦 Available Models (Page {self.current_page + 1}/{self.total_pages()}):")
+        print(f"\nAvailable Models (Page {self.current_page + 1}/{self.total_pages()}):")
         print("-" * 80)
 
         for i in range(start_idx, end_idx):
@@ -522,9 +522,9 @@ class ModelSelector:
             num = i + 1
 
             # Format the display
-            rec = "⭐" if model.recommended else "  "
-            local = "💾" if model.available_locally else "☁️ "
-            auth = "🔐" if model.requires_auth and not model.available_locally else "  "
+            rec = "★" if model.recommended else "  "
+            local = "●" if model.available_locally else "○"
+            auth = "⚑" if model.requires_auth and not model.available_locally else "  "
 
             print(f"{local} {rec} {num:2}. {model.name:<40} [{model.size:>4}] {model.memory_estimate:>6}")
             print(f"          {model.description}")
@@ -541,7 +541,7 @@ class ModelSelector:
             elif model.requires_auth:
                 print(f"          {auth} Download: HuggingFace (requires auth)")
             else:
-                print(f"          ☁️  Download: HuggingFace (auto-download)")
+                print(f"          {local} Download: HuggingFace (auto-download)")
 
             print()
 
@@ -556,7 +556,7 @@ class ModelSelector:
         local_count = sum(1 for m in self.filtered_models if m.available_locally)
         cloud_count = len(self.filtered_models) - local_count
 
-        print("\nLegend: 💾=Local  ☁️=Download  ⭐=Recommended  🔐=Auth Required")
+        print("\nLegend: ●=Local  ○=Download  ★=Recommended  ⚑=Auth Required")
         print(f"Status: {local_count} local, {cloud_count} downloadable")
         print("\nOptions:")
         print("  • Enter model number (1-{})".format(len(self.filtered_models)))
@@ -667,13 +667,13 @@ class ModelSelector:
 
             # If no GPU, skip check
             if available_vram_mb == 0:
-                print("\n⚠️  No GPU detected - model will run on CPU (slow)")
+                print("\n▲ No GPU detected - model will run on CPU (slow)")
                 return
 
             # Check if model fits
             fits, message, estimate = check_model_fits(model_path, available_vram_mb)
 
-            print(f"\n📊 Memory Estimate:")
+            print(f"\nMemory Estimate:")
             print(format_memory_estimate(estimate))
             print(f"\n{message}")
 
@@ -685,7 +685,7 @@ class ModelSelector:
 
         except Exception as e:
             # If estimation fails, just warn and continue
-            print(f"\n⚠️  Could not estimate memory requirements: {e}")
+            print(f"\n▲ Could not estimate memory requirements: {e}")
             pass
 
 
@@ -888,7 +888,5 @@ def get_smallest_model() -> Optional[ModelInfo]:
 
 
     return smallest_model
-
-
 
 

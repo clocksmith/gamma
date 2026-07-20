@@ -195,7 +195,7 @@ def check_model_fits(model_identifier: str, available_vram_mb: int,
         return (True, message, estimate)
     else:
         shortage_gb = (required_mb - available_vram_mb) / 1024
-        message = f"⚠ Insufficient VRAM! Requires {required_gb:.1f}GB, only {available_gb:.1f}GB available (need {shortage_gb:.1f}GB more)"
+        message = f"▲ Insufficient VRAM! Requires {required_gb:.1f}GB, only {available_gb:.1f}GB available (need {shortage_gb:.1f}GB more)"
 
         # Suggest quantization
         if shortage_gb > 10:
