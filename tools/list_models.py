@@ -25,7 +25,7 @@ ensure_project_root_on_path()
 def list_ollama_models():
     """List models from Ollama."""
     print("=" * 70)
-    print("📦 Ollama Models")
+    print("Ollama Models")
     print("=" * 70)
 
     try:
@@ -62,18 +62,18 @@ def list_ollama_models():
                     print(f"  {model_name:<35} {size:<12} {modified:<20}")
 
             print(f"\n  Total: {len(models)} model(s)")
-            print(f"\n  💡 Use as: ollama:MODEL_NAME (e.g., ollama:gemma2:2b)")
+            print(f"\n  Tip: Use as ollama:MODEL_NAME (e.g., ollama:gemma2:2b)")
         else:
-            print("  ⚠️  Ollama CLI not responding")
+            print("  ▲ Ollama CLI not responding")
             print("  Is Ollama running? Try: ollama serve")
 
     except FileNotFoundError:
-        print("  ⚠️  Ollama not installed")
+        print("  ▲ Ollama not installed")
         print("  Install from: https://ollama.ai/")
     except subprocess.TimeoutExpired:
-        print("  ⚠️  Ollama timeout")
+        print("  ▲ Ollama timeout")
     except Exception as e:
-        print(f"  ⚠️  Error: {e}")
+        print(f"  ▲ Error: {e}")
 
     print()
 
@@ -81,7 +81,7 @@ def list_ollama_models():
 def list_huggingface_models():
     """List models from HuggingFace cache."""
     print("=" * 70)
-    print("🤗 HuggingFace Cached Models")
+    print("HuggingFace Cached Models")
     print("=" * 70)
 
     hf_cache = Path.home() / ".cache" / "huggingface" / "hub"
@@ -121,14 +121,14 @@ def list_huggingface_models():
 
     print(f"\n  Total: {len(model_dirs)} model(s)")
     print(f"  Cache location: {hf_cache}")
-    print(f"\n  💡 Use as: pytorch:ORG/MODEL (e.g., pytorch:google/gemma-2-2b-it)")
+    print(f"\n  Tip: Use as pytorch:ORG/MODEL (e.g., pytorch:google/gemma-2-2b-it)")
     print()
 
 
 def list_local_gguf_files():
     """List local GGUF files in common locations."""
     print("=" * 70)
-    print("📁 Local GGUF Files")
+    print("Local GGUF Files")
     print("=" * 70)
 
     # Search locations
@@ -166,9 +166,9 @@ def list_local_gguf_files():
         for path in search_paths:
             exists = "✓" if path.exists() else "✗"
             print(f"    {exists} {path}")
-        print("\n  💡 Place GGUF files in: " + str(project_root / "models"))
+        print("\n  Tip: Place GGUF files in: " + str(project_root / "models"))
     else:
-        print(f"\n  💡 Use as: llamacpp:/path/to/file.gguf")
+        print(f"\n  Tip: Use as llamacpp:/path/to/file.gguf")
 
     print()
 
@@ -176,7 +176,7 @@ def list_local_gguf_files():
 def show_summary():
     """Show a helpful summary."""
     print("=" * 70)
-    print("💡 Quick Reference")
+    print("Quick Reference")
     print("=" * 70)
     print("""
   Use models with any GAMMA command:
