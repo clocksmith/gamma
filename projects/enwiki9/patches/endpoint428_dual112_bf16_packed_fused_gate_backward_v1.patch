@@ -1,0 +1,81 @@
+--- a/src/mixer/lstm-layer.h
++++ b/src/mixer/lstm-layer.h
+@@ -55,9 +55,11 @@
+   void ClipGradients(std::valarray<float>* arr);
+   void ForwardPass(NeuronLayer& neurons, const std::valarray<float>& input,
+       int input_symbol);
+-  void BackwardPass(NeuronLayer& neurons, const std::valarray<float>&input,
+-      int epoch, int layer, int input_symbol,
+-      std::valarray<float>* hidden_error);
++  void PrepareBackwardPass(NeuronLayer& neurons, int epoch);
++  void BackwardPassParallel(NeuronLayer& neurons,
++      const std::valarray<float>& input, int epoch, int layer,
++      int input_symbol, std::valarray<float>* hidden_error);
++  void FinishBackwardPass(NeuronLayer& neurons, int epoch);
+ };
+ 
+ #endif
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -251,18 +251,30 @@
+     }
+   }
+ 
+-  BackwardPass(forget_gate_, input, epoch, layer, input_symbol, hidden_error);
+-  BackwardPass(input_node_, input, epoch, layer, input_symbol, hidden_error);
+-  BackwardPass(output_gate_, input, epoch, layer, input_symbol, hidden_error);
++  PrepareBackwardPass(forget_gate_, epoch);
++  PrepareBackwardPass(input_node_, epoch);
++  PrepareBackwardPass(output_gate_, epoch);
++
++#pragma omp parallel num_threads(3)
++  {
++    BackwardPassParallel(forget_gate_, input, epoch, layer, input_symbol,
++        hidden_error);
++    BackwardPassParallel(input_node_, input, epoch, layer, input_symbol,
++        hidden_error);
++    BackwardPassParallel(output_gate_, input, epoch, layer, input_symbol,
++        hidden_error);
++  }
++
++  FinishBackwardPass(forget_gate_, epoch);
++  FinishBackwardPass(input_node_, epoch);
++  FinishBackwardPass(output_gate_, epoch);
+ 
+   ClipGradients(&state_error_);
+   ClipGradients(&stored_error_);
+   ClipGradients(hidden_error);
+ }
+ 
+-void LstmLayer::BackwardPass(NeuronLayer& neurons,
+-    const std::valarray<float>&input, int epoch, int layer, int input_symbol,
+-    std::valarray<float>* hidden_error) {
++void LstmLayer::PrepareBackwardPass(NeuronLayer& neurons, int epoch) {
+   if (epoch == (int)horizon_ - 1) {
+     neurons.gamma_u_ = 0;
+     neurons.beta_u_ = 0;
+@@ -272,9 +284,11 @@
+   neurons.error_ *= neurons.gamma_ * neurons.ivar_[epoch];
+   neurons.error_ -= ((neurons.error_ * neurons.norm_[epoch]).sum() /
+       num_cells_) * neurons.norm_[epoch];
++}
+ 
+-#pragma omp parallel num_threads(3)
+-  {
++void LstmLayer::BackwardPassParallel(NeuronLayer& neurons,
++    const std::valarray<float>& input, int epoch, int layer, int input_symbol,
++    std::valarray<float>* hidden_error) {
+     if (epoch == (int)horizon_ - 1) {
+ #pragma omp for schedule(static)
+       for (unsigned int i = 0; i < num_cells_; ++i) {
+@@ -323,8 +337,9 @@
+         PackBFloat16(neurons.weights_[i], &neurons.packed_weights_[i]);
+       }
+     }
+-  }
++}
+ 
++void LstmLayer::FinishBackwardPass(NeuronLayer& neurons, int epoch) {
+   if (epoch == 0) {
+     Adam(&neurons.gamma_u_, &neurons.gamma_m_, &neurons.gamma_v_,
+         &neurons.gamma_, learning_rate_, update_steps_, update_limit_);
