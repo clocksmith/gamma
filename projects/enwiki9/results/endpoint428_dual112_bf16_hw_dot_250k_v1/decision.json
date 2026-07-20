@@ -1,0 +1,69 @@
+{
+  "schema": "endpoint428_dual112_bf16_hw_dot_250k_v1",
+  "evidence_level": "constructive_opening_prefix_numeric_sensitivity_and_hardware_screen",
+  "claim_boundary": "Exact 250K opening-prefix evidence only. The hardware timing is not an alternating matched qualification, the prefix archive is not a full-corpus score, and no forecast or score credit is assigned.",
+  "target": {
+    "score_bytes": 109500000,
+    "score_percent": 10.95,
+    "official_full_1g_score_bytes": null
+  },
+  "best_counted_forecast": {
+    "score_bytes": 109389323,
+    "score_percent": 10.9389323,
+    "distance_below_target_bytes": 110677
+  },
+  "parent": {
+    "algorithm": "endpoint428 pair, 26 layer-0 endpoints, online residual mixer, dual recurrent width 112, half horizons",
+    "binary_sha256": "a1c4562721332dab401e8666e9d8f49cc52776a7f2bd8494524970bf609b9452",
+    "dictionary_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+    "counted_forecast_bytes": 109448323,
+    "counted_forecast_percent": 10.9448323,
+    "distance_below_target_bytes": 51677,
+    "scope_250k_reference_archive_bytes": 44958
+  },
+  "population": {
+    "scope_bytes": 250000,
+    "label": "opening_prefix_250k",
+    "input_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+  },
+  "scalar_bf16_weight_sensitivity": {
+    "algorithm": "BF16-round both online LSTM weight sets after initialization and every Adam update; retain scalar float products and accumulation.",
+    "binary_sha256": "c0d39cbc83129f2faa83193881e1b7dd2c17f838a168f74e22b485ca58dba4d5",
+    "archive_bytes": 44955,
+    "archive_sha256": "a546a85db614f4ecf78387e31d75ddad6a3291d2d34c1d1dec52bb331a1af1f6",
+    "archive_delta_vs_parent_bytes": -3,
+    "encode_elapsed_seconds": 134.32,
+    "decode_elapsed_seconds": 133.58,
+    "reencode_elapsed_seconds": 133.84,
+    "maximum_peak_tree_rss_kib": 8936648,
+    "roundtrip_ok": true,
+    "deterministic_reencode_ok": true,
+    "decimal_10gb_guards_passed": true,
+    "score_kill_ceiling_bytes": 44970,
+    "score_kill_gate_passed": true
+  },
+  "avx512_bf16_gate_dot": {
+    "algorithm": "Scalar BF16-weight candidate plus BF16-rounded dense inputs and AVX-512 BF16 dot-product accumulation for both recurrent endpoints.",
+    "binary_sha256": "98a1a0de3ceaa063b9558613c0cdf5661f3d6c2b189bf1b26eae0a612573e8b1",
+    "archive_bytes": 44957,
+    "archive_sha256": "e113021fc27f79e51c574ab1be217f4acb1cf052a8a2021c7943f70d2413c339",
+    "archive_delta_vs_parent_bytes": -1,
+    "archive_delta_vs_scalar_bf16_bytes": 2,
+    "encode_elapsed_seconds": 122.41,
+    "scalar_bf16_encode_elapsed_seconds": 134.32,
+    "single_run_runtime_reduction_percent": 8.86688505062537,
+    "peak_tree_rss_kib": 8935364,
+    "decimal_10gb_guard_passed": true,
+    "score_kill_ceiling_bytes": 44970,
+    "score_kill_gate_passed": true,
+    "matched_runtime_qualification_passed": false
+  },
+  "source_reproduction": {
+    "base_source_identity": "endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_dual112_half_horizon_v1",
+    "patch": "patches/endpoint428_dual112_bf16_hw_dot_v1.patch"
+  },
+  "score_credit_bytes": 0,
+  "promotion_authorized": false,
+  "decision": "preserve_score_safe_bf16_primitive_but_withhold_runtime_promotion",
+  "next_action": "Pack BF16 input once per forward pass and maintain packed BF16 weight shadows. Preserve the 44957-byte stream, then repeat the 250K score ceiling and require at least 10% runtime reduction before larger scope."
+}

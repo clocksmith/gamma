@@ -21,6 +21,18 @@ be at least `10%` before a larger gate is authorized.
 The calibrated prefix projection is research evidence. It is not an official
 score and does not establish transfer beyond the measured prefix.
 
+The dual-`112` BF16 numeric screen is score-safe on the opening `250K` prefix.
+Rounding both recurrent endpoints' weights after initialization and every Adam
+update produces a `44,955`-byte archive, three bytes better than the
+`44,958`-byte parent. Exact decode and independent re-encode pass. Converting
+the dense recurrent input to BF16 and using AVX-512 BF16 dot products produces
+`44,957` bytes and reduces one encode from `134.32 s` to `122.41 s` (`8.87%`).
+Peak tree RSS remains below decimal `10GB`. This is not an alternating matched
+runtime result and it misses the `10%` promotion threshold, so it receives no
+forecast or score credit. The only authorized successor packs each input once
+and maintains BF16 weight shadows; it must preserve the hardware stream and
+clear the same score and runtime gates.
+
 ## Terminal screens
 
 | Candidate | Candidate archive | Archive delta | Reference median | Candidate median | Runtime reduction | Provisional counted forecast | Target margin | Decision |
@@ -39,6 +51,7 @@ score and does not establish transfer beyond the measured prefix.
 | Dual `112`, sidecar tail `memmove` and reverse suffix compare | `44,958` | `0` | `54.9064 s` | `55.4065 s` | `-0.91%` | `109,448,323` | `51,677` | Archive-exact; retired for runtime regression |
 | Atomic endpoint handoff | `44,958` | `0` | `119.2097 s` | `105.1546 s` | `11.79%` | unchanged | `91,655` | Retired after reduction decayed to `5.62%` at `1M` |
 | Runtime composite at `1K` | `259` | same size, different hash | `21.56675 s` | `21.69125 s` | `-0.58%` | not projected | n/a | Retired before `250K`; dual-backward accumulator changes stream |
+| Dual `112` BF16 weights, AVX-512 BF16 gate dots | `44,957` | `-1` | `134.32 s` scalar BF16 | `122.41 s` hardware BF16 | `8.87%` single-run | not projected | unknown | Score-safe primitive; matched runtime promotion withheld |
 
 All listed runs have deterministic same-role archives and clean decimal-memory
 guards. Identity candidates additionally reproduce the reference archive.
