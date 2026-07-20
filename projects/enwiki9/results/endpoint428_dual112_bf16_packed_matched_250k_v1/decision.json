@@ -1,0 +1,47 @@
+{
+  "schema": "endpoint428_dual112_bf16_packed_matched_250k_v1",
+  "evidence_level": "constructive_opening_prefix_alternating_runtime_screen",
+  "claim_boundary": "Alternating 250K opening-prefix evidence only; not a full-corpus score or official runtime result. No forecast or score credit is assigned.",
+  "target": {"score_bytes": 109500000, "score_percent": 10.95, "official_full_1g_score_bytes": null},
+  "best_counted_forecast": {"score_bytes": 109389323, "score_percent": 10.9389323, "distance_below_target_bytes": 110677},
+  "population": {
+    "scope_bytes": 250000,
+    "label": "opening_prefix_250k",
+    "input_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+  },
+  "reference": {
+    "algorithm": "Dual-112 half-horizon endpoint428 with BF16-rounded online weights and scalar float products.",
+    "binary_sha256": "c0d39cbc83129f2faa83193881e1b7dd2c17f838a168f74e22b485ca58dba4d5",
+    "archive_bytes": 44955,
+    "archive_sha256": "a546a85db614f4ecf78387e31d75ddad6a3291d2d34c1d1dec52bb331a1af1f6",
+    "elapsed_seconds": [135.07, 136.74],
+    "median_elapsed_seconds": 135.905,
+    "maximum_peak_tree_rss_kib": 8929328
+  },
+  "candidate": {
+    "algorithm": "Dual-112 half-horizon endpoint428 with BF16 weights, AVX-512 BF16 dots, once-packed inputs, and packed weight shadows refreshed after Adam updates.",
+    "binary_sha256": "b1095954793efbad0a01e80881bf34c5a90f358ba2b19990590f09ac2c4cdf48",
+    "archive_bytes": 44957,
+    "archive_sha256": "e113021fc27f79e51c574ab1be217f4acb1cf052a8a2021c7943f70d2413c339",
+    "archive_delta_vs_reference_bytes": 2,
+    "score_kill_ceiling_bytes": 44970,
+    "score_kill_gate_passed": true,
+    "elapsed_seconds": [122.39, 123.67],
+    "median_elapsed_seconds": 123.03,
+    "matched_runtime_reduction_percent": 9.473529303557632,
+    "runtime_promotion_floor_percent": 10.0,
+    "runtime_promotion_passed": false,
+    "maximum_peak_tree_rss_kib": 8936848
+  },
+  "execution_order": ["reference", "candidate", "candidate", "reference"],
+  "all_archives_deterministic_by_role": true,
+  "all_decimal_10gb_guards_passed": true,
+  "source_reproduction": {
+    "base_source_identity": "endpoint428_dual112_bf16_hw_dot_v1",
+    "patch": "patches/endpoint428_dual112_bf16_packed_hw_dot_v1.patch"
+  },
+  "score_credit_bytes": 0,
+  "promotion_authorized": false,
+  "decision": "retire_forward_only_bf16_packing_below_runtime_floor",
+  "next_action": "Preserve BF16 as score-safe numeric evidence. A successor must also accelerate backward propagation or online updates, pass a smallest-scope stream gate, and clear the alternating 10% runtime floor."
+}

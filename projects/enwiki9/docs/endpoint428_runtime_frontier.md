@@ -33,6 +33,15 @@ forecast or score credit. The only authorized successor packs each input once
 and maintains BF16 weight shadows; it must preserve the hardware stream and
 clear the same score and runtime gates.
 
+The packed BF16 successor removes repeated conversion by packing the dense
+input once per forward pass and refreshing packed weight shadows after Adam
+updates. Its alternating scalar/packed/packed/scalar `250K` screen is fully
+deterministic by role. Scalar BF16 median is `135.905 s`; packed BF16 median is
+`123.03 s`, a `9.4735%` reduction. All decimal-memory guards pass, with packed
+peak tree RSS `8,936,848 KiB`. Because this misses the frozen `10%` floor, the
+forward-only packed implementation is terminal before `1M`. BF16 remains a
+score-safe primitive, but a successor must also reduce backward/update work.
+
 ## Terminal screens
 
 | Candidate | Candidate archive | Archive delta | Reference median | Candidate median | Runtime reduction | Provisional counted forecast | Target margin | Decision |
@@ -52,6 +61,7 @@ clear the same score and runtime gates.
 | Atomic endpoint handoff | `44,958` | `0` | `119.2097 s` | `105.1546 s` | `11.79%` | unchanged | `91,655` | Retired after reduction decayed to `5.62%` at `1M` |
 | Runtime composite at `1K` | `259` | same size, different hash | `21.56675 s` | `21.69125 s` | `-0.58%` | not projected | n/a | Retired before `250K`; dual-backward accumulator changes stream |
 | Dual `112` BF16 weights, AVX-512 BF16 gate dots | `44,957` | `-1` | `134.32 s` scalar BF16 | `122.41 s` hardware BF16 | `8.87%` single-run | not projected | unknown | Score-safe primitive; matched runtime promotion withheld |
+| Dual `112` packed BF16 forward path | `44,957` | `+2` vs scalar BF16 | `135.905 s` | `123.03 s` | `9.4735%` | not projected | unknown | Deterministic and score-safe at `250K`; retired below `10%` floor |
 
 All listed runs have deterministic same-role archives and clean decimal-memory
 guards. Identity candidates additionally reproduce the reference archive.
