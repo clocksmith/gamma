@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-19T23:25:57+00:00`
+- Generated at UTC: `2026-07-20T15:57:55+00:00`
 
 ## Target State
 
@@ -17,7 +17,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Gate verdict: `None`
 - Gate next action: `None`
 - Heavy lock held: `false`
-- Active scorer observed: `false`
+- Active scorer observed: `true`
 - Active cmix mode: `n/a`
 - Driver result present: `unknown`
 - RSS guard status: `n/a`
@@ -46,7 +46,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Driver result present: `unknown`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
-- Active scorer observed: `false`
+- Active scorer observed: `true`
 
 ## Gate Evidence Status
 
@@ -61,13 +61,13 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 - Expected candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
 - Expected scope bytes: `n/a`
-- Driver process count: `0`
+- Driver process count: `1`
 - Active gate command observed: `false`
-- Driver command mismatch count: `0`
+- Driver command mismatch count: `1`
 
 | PID | Candidate Match | Scope Bytes | Scope Match | Determinism Flag |
 |---:|---|---:|---|---|
-| n/a | n/a | n/a | n/a | n/a |
+| 1 | `false` | n/a | `true` | `false` |
 
 ## Observed Controller Command
 
@@ -108,20 +108,36 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Program directories: `540`
 - Registered programs: `225`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `7`
+- Modified tracked entries: `0`
 - Candidate statuses: `active=7, blocked_dependency=12, candidate=144, measured_negative=20, retired=357`
 
 ## Active Runner Process Table
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| n/a | n/a | n/a | n/a | n/a |
+| `driver` | 1 | 0 | 1,540 | `bwrap --new-session --die-with-parent --ro-bind / / --dev /dev --bind /tmp /tmp --perms 555 --tmpfs /tmp/.git --remount-ro /tmp/.git --perms 555 --...` |
+| `process` | 2 | 1 | 21,720 | `python3 gamma/projects/enwiki9/tools/cmix21_continue_active_gate.py --refresh` |
+| `process` | 6 | 2 | 25,620 | `python3 projects/enwiki9/tools/enwiki9_status_receipt.py` |
+| `process` | 9 | 6 | 4,116 | `ps -eo pid=,ppid=,pgid=,stat=,rss=,args=` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
 | n/a | n/a | n/a |
+
+## Active RSS
+
+- Max cmix PID: `n/a`
+- Active cmix mode: `n/a`
+- Max cmix RSS KiB: `n/a`
+- Active process tree RSS KiB: `52,996`
+- Local binary `10GiB` guard KiB: `10,485,760`
+- Decimal `10GB` guard KiB: `9,765,625`
+- Single-process binary margin KiB: `n/a`
+- Single-process decimal margin KiB: `n/a`
+- Active process tree margin KiB (binary): `10,432,764`
+- Active process tree decimal margin KiB: `9,712,629`
 
 ## Proof Boundary
 
