@@ -1,0 +1,55 @@
+{
+  "schema": "endpoint428_dual112_bf16_packed_microbranches_250k_v1",
+  "evidence_level": "constructive_opening_prefix_runtime_kill_gates",
+  "claim_boundary": "Single candidate executions against a frozen matched-median ceiling on the 250K opening prefix. Archive identity and memory are exact; timings are kill-gate evidence, not official runtime qualification or full-corpus scores.",
+  "target": {"score_bytes": 109500000, "score_percent": 10.95, "official_full_1g_score_bytes": null},
+  "best_counted_forecast": {"score_bytes": 109389323, "score_percent": 10.9389323, "distance_below_target_bytes": 110677},
+  "parent": {
+    "algorithm": "Dual-112 BF16 packed forward path",
+    "archive_bytes": 44957,
+    "archive_sha256": "e113021fc27f79e51c574ab1be217f4acb1cf052a8a2021c7943f70d2413c339",
+    "matched_median_elapsed_seconds": 123.03,
+    "matched_scalar_bf16_median_elapsed_seconds": 135.905,
+    "promotion_ceiling_seconds": 122.3145
+  },
+  "candidates": [
+    {
+      "id": "packed_nowait",
+      "mechanism": "Remove three dependency-free worksharing barriers per main-LSTM gate backward pass.",
+      "binary_sha256": "fb4ffaee2d50bf491ce42bb81d126a61edd3b1c94b138ee4a1ad6e58c654612c",
+      "patch": "patches/endpoint428_dual112_bf16_packed_nowait_v1.patch",
+      "archive_bytes": 44957,
+      "archive_identity": true,
+      "elapsed_seconds": 122.51,
+      "peak_tree_rss_kib": 8936696,
+      "promotion_ceiling_passed": false
+    },
+    {
+      "id": "packed_fused_gate_backward",
+      "mechanism": "Reuse one standard OpenMP team across all three main-LSTM backward gates.",
+      "binary_sha256": "5e05a26557f615d655f2515942a6ff5c2ebb52270eb816f4b6a37557f7774d7b",
+      "patch": "patches/endpoint428_dual112_bf16_packed_fused_gate_backward_v1.patch",
+      "archive_bytes": 44957,
+      "archive_identity": true,
+      "elapsed_seconds": 122.99,
+      "peak_tree_rss_kib": 8935860,
+      "promotion_ceiling_passed": false
+    },
+    {
+      "id": "packed_adam_scalar_cache",
+      "mechanism": "Compose the prior exact Adam correction-scalar cache with both BF16 recurrent endpoints.",
+      "binary_sha256": "a867065c8fd4c2324364c337b47d732aef8035ceece5e2c1e303c88825f25f9a",
+      "patch": "patches/endpoint428_dual112_bf16_packed_adam_cache_v1.patch",
+      "archive_bytes": 44957,
+      "archive_identity": true,
+      "elapsed_seconds": 124.66,
+      "peak_tree_rss_kib": 8934728,
+      "promotion_ceiling_passed": false
+    }
+  ],
+  "all_decimal_10gb_guards_passed": true,
+  "score_credit_bytes": 0,
+  "promotion_authorized": false,
+  "decision": "retire_packed_bf16_synchronization_and_adam_microbranch",
+  "next_action": "Do not combine or tune these micro-optimizations. Preserve the score-safe BF16 forward primitive and test a materially different backward representation with an early exact-stream and score ceiling."
+}

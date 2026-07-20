@@ -1,0 +1,168 @@
+--- a/src/mixer/lstm-layer.cpp
++++ b/src/mixer/lstm-layer.cpp
+@@ -11,6 +11,24 @@
+ 
+ namespace {
+ 
++struct AdamScalars {
++  float alpha;
++  float beta1_correction;
++  float beta2_correction;
++};
++
++AdamScalars GetAdamScalars(float learning_rate, float t,
++    unsigned long long update_limit) {
++  const float beta1 = 0.025, beta2 = 0.9999;
++  const float effective_t = t < update_limit ? t : update_limit;
++  AdamScalars scalars;
++  scalars.alpha = learning_rate * 0.1f /
++      sqrt(5e-5f * effective_t + 1.0f);
++  scalars.beta1_correction = (float)(1.0f - pow(beta1, effective_t));
++  scalars.beta2_correction = (float)(1.0f - pow(beta2, effective_t));
++  return scalars;
++}
++
+ float BFloat16Round(float value) {
+   std::uint32_t bits;
+   std::memcpy(&bits, &value, sizeof(bits));
+@@ -86,26 +104,15 @@
+ }
+ 
+ void Adam(std::valarray<float>* g, std::valarray<float>* m,
+-    std::valarray<float>* v, std::valarray<float>* w, float learning_rate,
+-    float t, unsigned long long update_limit) {
++    std::valarray<float>* v, std::valarray<float>* w,
++    const AdamScalars& scalars) {
+   const float beta1 = 0.025, beta2 = 0.9999, eps = 1e-6f; 
+-  float alpha;
+-  if (t < update_limit) {
+-    alpha = learning_rate * 0.1f / sqrt(5e-5f * t + 1.0f); 
+-  } else {
+-    alpha = learning_rate * 0.1f / sqrt(5e-5f * update_limit + 1.0f); 
+-  }
+   (*m) *= beta1;
+   (*m) += (1.0f - beta1) * (*g);
+   (*v) *= beta2;
+   (*v) += (1.0f - beta2) * (*g) * (*g);
+-  if (t < update_limit) {
+-    (*w) -= alpha * (((*m) / (float)(1.0f - pow(beta1, t))) /
+-        (sqrt((*v) / (float)(1.0f - pow(beta2, t)) + eps)));
+-  } else {
+-    (*w) -= alpha * (((*m) / (float)(1.0f - pow(beta1, update_limit))) /
+-        (sqrt((*v) / (float)(1.0f - pow(beta2, update_limit)) + eps)));
+-  }
++  (*w) -= scalars.alpha * (((*m) / scalars.beta1_correction) /
++      (sqrt((*v) / scalars.beta2_correction + eps)));
+   QuantizeWeights(w);
+ }
+ 
+@@ -273,6 +280,11 @@
+   neurons.error_ -= ((neurons.error_ * neurons.norm_[epoch]).sum() /
+       num_cells_) * neurons.norm_[epoch];
+ 
++  AdamScalars adam_scalars = {};
++  if (epoch == 0) {
++    adam_scalars = GetAdamScalars(
++        learning_rate_, update_steps_, update_limit_);
++  }
+ #pragma omp parallel num_threads(3)
+   {
+     if (epoch == (int)horizon_ - 1) {
+@@ -319,7 +331,7 @@
+ #pragma omp for schedule(static)
+       for (unsigned int i = 0; i < num_cells_; ++i) {
+         Adam(&neurons.update_[i], &neurons.m_[i], &neurons.v_[i],
+-            &neurons.weights_[i], learning_rate_, update_steps_, update_limit_);
++            &neurons.weights_[i], adam_scalars);
+         PackBFloat16(neurons.weights_[i], &neurons.packed_weights_[i]);
+       }
+     }
+@@ -327,9 +339,9 @@
+ 
+   if (epoch == 0) {
+     Adam(&neurons.gamma_u_, &neurons.gamma_m_, &neurons.gamma_v_,
+-        &neurons.gamma_, learning_rate_, update_steps_, update_limit_);
++        &neurons.gamma_, adam_scalars);
+     Adam(&neurons.beta_u_, &neurons.beta_m_, &neurons.beta_v_,
+-        &neurons.beta_, learning_rate_, update_steps_, update_limit_);
++        &neurons.beta_, adam_scalars);
+   }
+ }
+ 
+--- a/src/fx2lite/mixer/lstm-layer.hpp
++++ b/src/fx2lite/mixer/lstm-layer.hpp
+@@ -12,6 +12,22 @@
+ #define FAST_TANH tanh //fast_tanh
+ #define FAST_TANH_VEC tanh //fast_tanh_vec
+ namespace {
++struct AdamScalars {
++  float alpha;
++  float beta1_correction;
++  float beta2_correction;
++};
++
++inline AdamScalars GetAdamScalars(float learning_rate, float t) {
++  const float beta1 = 0.025, beta2 = 0.9999;
++  const float effective_t = t < UPDATE_LIMIT ? t : UPDATE_LIMIT;
++  AdamScalars scalars;
++  scalars.alpha = learning_rate * 0.1f /
++      sqrt(5e-5f * effective_t + 1.0f);
++  scalars.beta1_correction = (float)(1.0f - pow(beta1, effective_t));
++  scalars.beta2_correction = (float)(1.0f - pow(beta2, effective_t));
++  return scalars;
++}
+ inline float BFloat16Round(float value) {
+   std::uint32_t bits;
+   std::memcpy(&bits, &value, sizeof(bits));
+@@ -112,26 +128,15 @@
+ // }
+ 
+ inline void Adam(std::valarray<float>* g, std::valarray<float>* m,
+-    std::valarray<float>* v, std::valarray<float>* w, float learning_rate,
+-    float t) {
++    std::valarray<float>* v, std::valarray<float>* w,
++    const AdamScalars& scalars) {
+   const float beta1 = 0.025, beta2 = 0.9999, eps = 1e-6f; 
+-  float alpha;
+-  if (t < UPDATE_LIMIT) {
+-    alpha = learning_rate * 0.1f / sqrt(5e-5f * t + 1.0f); 
+-  } else {
+-    alpha = learning_rate * 0.1f / sqrt(5e-5f * UPDATE_LIMIT + 1.0f); 
+-  }
+   (*m) *= beta1;
+   (*m) += (1.0f - beta1) * (*g);
+   (*v) *= beta2;
+   (*v) += (1.0f - beta2) * (*g) * (*g);
+-  if (t < UPDATE_LIMIT) {
+-    (*w) -= alpha * (((*m) / (float)(1.0f - pow(beta1, t))) /
+-        (sqrt((*v) / (float)(1.0f - pow(beta2, t)) + eps)));
+-  } else {
+-    (*w) -= alpha * (((*m) / (float)(1.0f - pow(beta1, UPDATE_LIMIT))) /
+-        (sqrt((*v) / (float)(1.0f - pow(beta2, UPDATE_LIMIT)) + eps)));
+-  }
++  (*w) -= scalars.alpha * (((*m) / scalars.beta1_correction) /
++      (sqrt((*v) / scalars.beta2_correction + eps)));
+   QuantizeWeights(w);
+ }
+ 
+@@ -292,15 +297,17 @@
+     neurons.update_[i][input_symbol] += neurons.error_[i];
+   }
+   if (epoch == 0) {
++    const AdamScalars adam_scalars = GetAdamScalars(
++        learning_rate_, update_steps_);
+     for (unsigned int i = 0; i < num_cells_; ++i) {
+       Adam(&neurons.update_[i], &neurons.m_[i], &neurons.v_[i],
+-          &neurons.weights_[i], learning_rate_, update_steps_);
++          &neurons.weights_[i], adam_scalars);
+       PackBFloat16(neurons.weights_[i], &neurons.packed_weights_[i]);
+     }
+     Adam(&neurons.gamma_u_, &neurons.gamma_m_, &neurons.gamma_v_,
+-        &neurons.gamma_, learning_rate_, update_steps_);
++        &neurons.gamma_, adam_scalars);
+     Adam(&neurons.beta_u_, &neurons.beta_m_, &neurons.beta_v_,
+-        &neurons.beta_, learning_rate_, update_steps_);
++        &neurons.beta_, adam_scalars);
+   }
+ }
+ 

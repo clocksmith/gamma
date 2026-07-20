@@ -42,6 +42,14 @@ peak tree RSS `8,936,848 KiB`. Because this misses the frozen `10%` floor, the
 forward-only packed implementation is terminal before `1M`. BF16 remains a
 score-safe primitive, but a successor must also reduce backward/update work.
 
+Three exact-stream follow-ups cannot close the remaining runtime gap. Removing
+dependency-free backward barriers reaches `122.51 s`; reusing one OpenMP team
+across the three main-LSTM gates reaches `122.99 s`; composing the previously
+positive Adam correction-scalar cache regresses to `124.66 s`. Each produces
+the same `44,957`-byte archive and passes the decimal-memory guard, but each
+misses the `122.3145 s` ceiling implied by the matched scalar baseline and
+`10%` promotion floor. This synchronization/update micro-branch is closed.
+
 ## Terminal screens
 
 | Candidate | Candidate archive | Archive delta | Reference median | Candidate median | Runtime reduction | Provisional counted forecast | Target margin | Decision |
