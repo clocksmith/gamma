@@ -24,6 +24,8 @@ runner-adjacent.
 | `enwiki9_normalize_receipts.py` | Regenerates certificate, evidence matrix, memory-valve report, residual matrix, and status receipt in one non-heavy pass. |
 | `enwiki9_artifact_fingerprint_audit.py` | Verifies recorded result/guard receipt hashes in candidate meta rows and reports legacy rows missing fingerprints. |
 | `enwiki9_doc_lint.py` | Validates live docs, claim flags, active-gate consistency, status-summary fields, stale paths, and tool inventory coverage. |
+| `enwiki9_page_shards.py` | Splits an exact XML byte stream at deterministic decoder-visible `<page>` boundaries and proves byte-exact reconstruction. |
+| `enwiki9_shard_container.py` | Packs independent shard archives with raw/archive lengths into a reversible fixed-width container; four shards use a 44-byte directory. |
 | `run_fx2_cmix21_wrapper_proof.py` | Runs a serialized guarded source-wrapper archive-identity, roundtrip, and deterministic-replay proof only after a sealed `10M` screen authorizes it. |
 | `frontier_target_report.py` | Ranks projected or exact rows against a target percentage. |
 | `forecast_frontier.py` | Forecast/frontier reporting for candidate triage. |

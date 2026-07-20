@@ -1,0 +1,55 @@
+diff --git a/src/context-manager.cpp b/src/context-manager.cpp
+--- a/src/context-manager.cpp
++++ b/src/context-manager.cpp
+@@ -14,0 +15,4 @@
++#ifndef CMIX_SHARED_MAP_CONTEXTS
++#define CMIX_SHARED_MAP_CONTEXTS 8000000
++#endif
++
+@@ -16 +20 @@
+-    shared_map_(256*8000000, 0), words_(8, 0), recent_bytes_(8, 0) {}
++    shared_map_(256*CMIX_SHARED_MAP_CONTEXTS, 0), words_(8, 0), recent_bytes_(8, 0) {}
+diff --git a/src/models/match.cpp b/src/models/match.cpp
+--- a/src/models/match.cpp
++++ b/src/models/match.cpp
+@@ -0,0 +1 @@
++#include <algorithm>
+@@ -3,0 +5,10 @@
++#ifndef CMIX_MATCH_MAP_DIV
++#define CMIX_MATCH_MAP_DIV 1
++#endif
++
++namespace {
++unsigned long long MatchMapSize(unsigned long long size) {
++  return std::max(1ULL, size / CMIX_MATCH_MAP_DIV);
++}
++}
++
+@@ -11 +22 @@
+-    divisor_(1.0 / (limit + delta)), map_(map_size, 0) {
++    divisor_(1.0 / (limit + delta)), map_(MatchMapSize(map_size), 0) {
+diff --git a/src/models/direct-hash.cpp b/src/models/direct-hash.cpp
+--- a/src/models/direct-hash.cpp
++++ b/src/models/direct-hash.cpp
+@@ -0,0 +1 @@
++#include <algorithm>
+@@ -3,0 +5,10 @@
++#ifndef CMIX_DIRECT_HASH_DIV
++#define CMIX_DIRECT_HASH_DIV 1
++#endif
++
++namespace {
++int DirectHashSize(int size) {
++  return std::max(1, size / CMIX_DIRECT_HASH_DIV);
++}
++}
++
+@@ -8,4 +19,4 @@
+-    predictions_(size, std::array<float, 256>()),
+-    counts_(size, std::array<unsigned char, 256>()),
+-    checksums_(size, 0) {
+-  for (int i = 0; i < size; ++i) {
++    predictions_(DirectHashSize(size), std::array<float, 256>()),
++    counts_(DirectHashSize(size), std::array<unsigned char, 256>()),
++    checksums_(DirectHashSize(size), 0) {
++  for (int i = 0; i < DirectHashSize(size); ++i) {

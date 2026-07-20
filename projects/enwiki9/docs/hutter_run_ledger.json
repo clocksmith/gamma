@@ -7,25 +7,26 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 41,
+    "run_count": 43,
     "candidate_count": 38,
     "runs_by_scope": {
       "1024": 3,
       "10000": 9,
+      "222281": 1,
       "500000": 2,
       "600747": 1,
-      "1000000": 19,
+      "1000000": 20,
       "2000000": 1,
       "10000000": 5,
       "65536000": 1
     },
     "runs_by_evidence_tier": {
       "causal_shadow": 20,
-      "constructive_prefix": 8,
+      "constructive_prefix": 10,
       "proxy": 13
     },
     "runs_by_status": {
-      "active": 3,
+      "active": 5,
       "historical_control": 2,
       "retired_unchanged": 36
     }
@@ -350,6 +351,43 @@
       "scope_percent_of_corpus": 0.1,
       "forecast_percent": 10.9499618,
       "forecast_margin_bytes": 382
+    },
+    {
+      "run_id": "endpoint428_dual112_page_shards_v1__1m_prefix",
+      "candidate_id": "endpoint428_gate_dot_fuse_output_update_loop_v1",
+      "parent_candidate_id": "endpoint428_pair_layer0_online_residual_successor",
+      "candidate_name": "endpoint428 fused recurrent gates plus explicit output update loop",
+      "rank": 1,
+      "status": "active",
+      "evidence_tier": "constructive_prefix",
+      "primary_frontier_run": false,
+      "scope_bytes": 1000000,
+      "offset_bytes": 0,
+      "population": "opening_prefix_page_shards",
+      "baseline_archive_bytes": 173961,
+      "archive_bytes": 185524,
+      "program_bytes": 261125,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": -11563,
+      "gain_bytes_per_1m": -11563.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": true,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 8944560,
+      "score_credit_bytes": 0,
+      "decision": "The fused/output-loop successor produces a 1,634,500-byte exact 10M archive, saving 1,195 bytes over endpoint428 and 674 bytes over the prior best stream. Lexical comment stripping reduces its reproducible LZMA package from 280,147 to 261,125 bytes while two clean builds preserve backend and wrapper identity. The revised counted forecast is 109,389,323 (10.9389323%), 110,677 below target. Exact decode, independent deterministic re-encode, and all decimal-memory guards pass. Runtime remains unqualified.",
+      "next_gate": "Build a model-work reduction or replacement architecture whose measured score loss fits the 110,677-byte counted margin and whose reference-calibrated runtime satisfies the official rule before any full-1G gate.",
+      "disqualifiers": [
+        "No exact full-corpus result",
+        "The 109,389,323 score is an exact-10M calibrated forecast, not official proof",
+        "The current implementation is not runtime-qualified under the official rule"
+      ],
+      "source_paths": [
+        "results/endpoint428_page_sharding_terminal_v1/decision.json"
+      ],
+      "scope_percent_of_corpus": 0.1,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
     },
     {
       "run_id": "endpoint428_pair_layer0_online_residual_successor__1m_offset500m",
@@ -1172,6 +1210,43 @@
         "tools/wrt_normalized_phrase_endpoint_trace.py"
       ],
       "scope_percent_of_corpus": 0.05,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "endpoint428_dual112_sixteenth_state_page_shard_v1__222281_prefix",
+      "candidate_id": "endpoint428_gate_dot_fuse_output_update_loop_v1",
+      "parent_candidate_id": "endpoint428_pair_layer0_online_residual_successor",
+      "candidate_name": "endpoint428 fused recurrent gates plus explicit output update loop",
+      "rank": 1,
+      "status": "active",
+      "evidence_tier": "constructive_prefix",
+      "primary_frontier_run": false,
+      "scope_bytes": 222281,
+      "offset_bytes": 0,
+      "population": "opening_prefix_page_shard_000",
+      "baseline_archive_bytes": 39591,
+      "archive_bytes": 39606,
+      "program_bytes": 261125,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": -15,
+      "gain_bytes_per_1m": -67.48215097106815,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": null,
+      "determinism_ok": null,
+      "max_sampled_tree_rss_kib": 3035592,
+      "score_credit_bytes": 0,
+      "decision": "The fused/output-loop successor produces a 1,634,500-byte exact 10M archive, saving 1,195 bytes over endpoint428 and 674 bytes over the prior best stream. Lexical comment stripping reduces its reproducible LZMA package from 280,147 to 261,125 bytes while two clean builds preserve backend and wrapper identity. The revised counted forecast is 109,389,323 (10.9389323%), 110,677 below target. Exact decode, independent deterministic re-encode, and all decimal-memory guards pass. Runtime remains unqualified.",
+      "next_gate": "Build a model-work reduction or replacement architecture whose measured score loss fits the 110,677-byte counted margin and whose reference-calibrated runtime satisfies the official rule before any full-1G gate.",
+      "disqualifiers": [
+        "No exact full-corpus result",
+        "The 109,389,323 score is an exact-10M calibrated forecast, not official proof",
+        "The current implementation is not runtime-qualified under the official rule"
+      ],
+      "source_paths": [
+        "results/endpoint428_page_sharding_terminal_v1/decision.json"
+      ],
+      "scope_percent_of_corpus": 0.0222281,
       "forecast_percent": null,
       "forecast_margin_bytes": null
     },
