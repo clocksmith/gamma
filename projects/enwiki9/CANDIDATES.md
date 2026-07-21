@@ -167,19 +167,8 @@ python3 projects/enwiki9/tools/candidate_triage.py \
   --candidate <candidate_id>
 ```
 
-Do not wrap `candidate_triage.py` in another `flock`. The script runs each
-`lib/driver.py` gate through:
-
-```text
-flock -n -E 75 /tmp/enwiki9-heavy.lock python3 projects/enwiki9/lib/driver.py ...
-```
-
-It also runs a process preflight before every gate using the heavy-process
-pattern `bench.py|lib/driver.py|cmix|qm_context|enwik9`. If another scoring
-process is visible or the non-blocking lock is already owned, triage stops
-without launching a benchmark. A busy lock is treated as a transient scheduler
-block; `--update-meta` does not write candidate lifecycle changes for that
-lock-only outcome.
+By default the script runs each `lib/driver.py` gate without heavy-lock gating.
+Use `--respect-heavy-lock` to require this extra serialization.
 
 Default gates are:
 

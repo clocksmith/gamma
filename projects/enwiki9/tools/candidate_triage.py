@@ -1,8 +1,7 @@
 """Lane 0 triage for enwiki9 candidate measurement cleanup.
 
 The default mode is a dry-run inventory filter. Scoring runs require --run and
-are executed through a non-blocking flock around lib/driver.py, with a process
-preflight before every gate.
+supports optional heavy-lock-aware scheduling to avoid overlapping scorers.
 """
 
 from __future__ import annotations
@@ -29,6 +28,7 @@ DEFAULT_BASELINE = "baseline_lzma"
 DEFAULT_GATE_SIZES = (1024, 250000)
 HEAVY_PROCESS_PATTERN = "bench.py|lib/driver.py|cmix|qm_context"
 FLOCK_BUSY_CODE = 75
+RESPECT_HEAVY_LOCK_DEFAULT = False
 DRIVER_TIMEOUT_CODE = 124
 RESULTS_DIR = ROOT / "results"
 
@@ -157,34 +157,44 @@ def run_driver_locked(
     *,
     limit: int,
     lock_path: pathlib.Path,
+    respect_heavy_lock: bool,
     driver_timeout: int | None = None,
     archive_ceiling: int | None = None,
 ) -> DriverRun:
-    active = active_heavy_processes()
-    if active:
-        return DriverRun(
-            program_id=program_id,
-            limit=limit,
-            returncode=FLOCK_BUSY_CODE,
-            stdout="",
-            stderr="\n".join(active),
-            result=None,
-            blocked_reason="preflight_busy",
-        )
-
-    cmd = [
-        "flock",
-        "-n",
-        "-E",
-        str(FLOCK_BUSY_CODE),
-        str(lock_path),
-        sys.executable,
-        str(DRIVER),
-        program_id,
-        "--limit",
-        str(limit),
-        "--check-determinism",
-    ]
+    if respect_heavy_lock:
+        active = active_heavy_processes()
+        if active:
+            return DriverRun(
+                program_id=program_id,
+                limit=limit,
+                returncode=FLOCK_BUSY_CODE,
+                stdout="",
+                stderr="\n".join(active),
+                result=None,
+                blocked_reason="preflight_busy",
+            )
+        cmd = [
+            "flock",
+            "-n",
+            "-E",
+            str(FLOCK_BUSY_CODE),
+            str(lock_path),
+            sys.executable,
+            str(DRIVER),
+            program_id,
+            "--limit",
+            str(limit),
+            "--check-determinism",
+        ]
+    else:
+        cmd = [
+            sys.executable,
+            str(DRIVER),
+            program_id,
+            "--limit",
+            str(limit),
+            "--check-determinism",
+        ]
     if archive_ceiling is not None:
         cmd.extend(
             [
@@ -229,7 +239,9 @@ def run_driver_locked(
             blocked_reason=None,
         )
 
-    blocked_reason = "lock_busy" if proc.returncode == FLOCK_BUSY_CODE else None
+    blocked_reason = (
+        "lock_busy" if respect_heavy_lock and proc.returncode == FLOCK_BUSY_CODE else None
+    )
     proc_stdout = stdout if stdout is not None else ""
     proc_stderr = stderr if stderr is not None else ""
     return DriverRun(
@@ -617,6 +629,7 @@ def triage_one(
     gate_sizes: list[int],
     baseline_id: str,
     lock_path: pathlib.Path,
+    respect_heavy_lock: bool,
     baseline_cache: dict[int, DriverRun],
     driver_timeout: int | None,
     reuse_baseline_evidence: bool,
@@ -644,6 +657,7 @@ def triage_one(
                 baseline_run = run_driver_locked(
                     baseline_id,
                     limit=gate_size,
+                    respect_heavy_lock=respect_heavy_lock,
                     lock_path=lock_path,
                     driver_timeout=driver_timeout,
                 )
@@ -671,6 +685,7 @@ def triage_one(
         candidate_run = run_driver_locked(
             candidate_id,
             limit=gate_size,
+            respect_heavy_lock=respect_heavy_lock,
             lock_path=lock_path,
             driver_timeout=driver_timeout,
             archive_ceiling=archive_ceilings.get(gate_size),
@@ -785,6 +800,7 @@ def render_dry_run(
     gate_sizes: list[int],
     baseline_id: str,
     lock_path: pathlib.Path,
+    respect_heavy_lock: bool,
     archive_ceilings: dict[int, int],
 ) -> dict[str, Any]:
     return {
@@ -795,6 +811,7 @@ def render_dry_run(
         "planned_gates": gate_sizes,
         "baseline": baseline_id,
         "lock_path": str(lock_path),
+        "respect_heavy_lock": respect_heavy_lock,
         "archive_ceilings": archive_ceilings,
         "selected": [
             {
@@ -840,7 +857,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--baseline", default=DEFAULT_BASELINE)
     parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK_PATH)
-    parser.add_argument("--run", action="store_true", help="execute locked gates")
+    parser.add_argument("--run", action="store_true", help="execute gates")
+    parser.add_argument(
+        "--respect-heavy-lock",
+        action="store_true",
+        default=RESPECT_HEAVY_LOCK_DEFAULT,
+        help=(
+            "serialize each driver gate through /tmp/enwiki9-heavy.lock (off by default)."
+        ),
+    )
     parser.add_argument(
         "--contract-check",
         action="store_true",
@@ -933,22 +958,24 @@ def main(argv: list[str] | None = None) -> int:
             gate_sizes=gate_sizes,
             baseline_id=args.baseline,
             lock_path=args.lock_path,
+            respect_heavy_lock=args.respect_heavy_lock,
             archive_ceilings=archive_ceilings,
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
 
-    active = active_heavy_processes()
-    if active:
-        payload = {
-            "mode": "run",
-            "status": "blocked",
-            "blocked_reason": "preflight_busy",
-            "active_processes": active,
-            "selected_count": len(selected),
-        }
-        print(json.dumps(payload, indent=2, sort_keys=True))
-        return 75
+    if args.respect_heavy_lock:
+        active = active_heavy_processes()
+        if active:
+            payload = {
+                "mode": "run",
+                "status": "blocked",
+                "blocked_reason": "preflight_busy",
+                "active_processes": active,
+                "selected_count": len(selected),
+            }
+            print(json.dumps(payload, indent=2, sort_keys=True))
+            return 75
 
     baseline_cache: dict[int, DriverRun] = {}
     triage_rows: list[dict[str, Any]] = []
@@ -960,6 +987,7 @@ def main(argv: list[str] | None = None) -> int:
             gate_sizes=gate_sizes,
             baseline_id=args.baseline,
             lock_path=args.lock_path,
+            respect_heavy_lock=args.respect_heavy_lock,
             baseline_cache=baseline_cache,
             driver_timeout=args.driver_timeout,
             reuse_baseline_evidence=args.reuse_baseline_evidence,
@@ -984,6 +1012,7 @@ def main(argv: list[str] | None = None) -> int:
         "gate_sizes": gate_sizes,
         "archive_ceilings": archive_ceilings,
         "lock_path": str(args.lock_path),
+        "respect_heavy_lock": args.respect_heavy_lock,
         "triage": triage_rows,
     }
     print(json.dumps(payload, indent=2, sort_keys=True))
