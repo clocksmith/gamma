@@ -1,9 +1,4 @@
 {
-  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
-  "family": "fx2-cmix-recovered",
-  "status": "active",
-  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v2",
-  "description": "Recovered fx2-cmix GCC baseline payload with the minwrap_v2 Python wrapper and check-free xz containers for the executable and dictionary. No predictor, dictionary bytes after decompression, or archive-coding behavior is changed.",
   "build": {
     "compiler": "g++",
     "defines": [
@@ -19,111 +14,130 @@
     ],
     "packaging": "Reuses the minwrap_v2 wrapper and repacks cmix/english.dic as xz streams with --check=none."
   },
-  "hypothesis": "Removing xz integrity check bytes from counted payload files reduces S while preserving decompressed fx2 executable and dictionary bytes.",
   "deps": [],
+  "description": "Recovered fx2-cmix GCC baseline payload with the minwrap_v2 Python wrapper and check-free xz containers for the executable and dictionary. No predictor, dictionary bytes after decompression, or archive-coding behavior is changed.",
+  "family": "fx2-cmix-recovered",
+  "hypothesis": "Removing xz integrity check bytes from counted payload files reduces S while preserving decompressed fx2 executable and dictionary bytes.",
+  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v3",
+  "inferred_frontier": {
+    "1m_driver_expected": {
+      "archive_basis_program": "fx2cmix_recovered_gcc_o3_xz_v1",
+      "archive_basis_scope": "measured 1 MiB driver result",
+      "archive_delta_vs_baseline": 0,
+      "baseline_hutter_score": 466767,
+      "baseline_program": "fx2cmix_recovered_gcc_o3_xz_v1",
+      "compressed_size": 182395,
+      "data_size": 1048576,
+      "determinism_ok": "inferred",
+      "evidence_basis": "inferred_archive_identity_not_driver_measured",
+      "hutter_score": 466023,
+      "program_delta_vs_baseline": -744,
+      "program_size": 283628,
+      "program_size_basis": "measured minwrap_v3 driver program_size at 1 KiB and 64 KiB",
+      "requires_driver_confirmation": true,
+      "roundtrip_ok": "inferred",
+      "score_delta_vs_baseline": -744
+    },
+    "full_corpus_forecast": {
+      "delta_vs_100m_target": 8851716,
+      "delta_vs_threshold": -833481,
+      "evidence_basis": "fx2_calibrated_forecast_not_driver_measured",
+      "hutter_score": 108851716,
+      "percent_of_raw": 10.8851716,
+      "requires_full_scope_confirmation": true,
+      "threshold": 109685197
+    }
+  },
+  "measured": {
+    "1k_smoke": {
+      "baseline_hutter_score": 284634,
+      "compressed_size": 262,
+      "data_size": 1024,
+      "determinism_ok": true,
+      "hutter_score": 283890,
+      "parent_hutter_score": 283906,
+      "program_size": 283628,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -744,
+      "score_delta_vs_parent": -16,
+      "timestamp": "2026-06-07T15:40:01"
+    },
+    "64k_screen": {
+      "archive_delta_vs_baseline": 0,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "compressed_size": 13585,
+      "data_size": 65536,
+      "determinism_ok": true,
+      "hutter_score": 297213,
+      "parent_hutter_score": 297229,
+      "program_size": 283628,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -744,
+      "score_delta_vs_parent": -16,
+      "timestamp": "2026-06-07T15:42:11"
+    },
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T18:57:53+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1000000."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T18:57:53+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1000000."
+      }
+    ]
+  },
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v2",
   "pgsg": {
+    "edges": [
+      {
+        "from": "container",
+        "stream": "payload",
+        "to": "wrapper"
+      },
+      {
+        "from": "wrapper",
+        "stream": "exec",
+        "to": "substrate"
+      }
+    ],
     "nodes": [
       {
         "id": "substrate",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "codec": "fx2-cmix",
-            "build": "recovered_gcc_o3"
+            "build": "recovered_gcc_o3",
+            "codec": "fx2-cmix"
           }
-        }
+        },
+        "type": "codec"
       },
       {
         "id": "wrapper",
-        "type": "packaging",
         "payload": {
           "discrete": {
             "mode": "minimal_python_xz_unpack_no_pathlib"
           }
-        }
+        },
+        "type": "packaging"
       },
       {
         "id": "container",
-        "type": "packaging",
         "payload": {
           "discrete": {
-            "format": "xz",
-            "check": "none"
+            "check": "none",
+            "format": "xz"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "container",
-        "to": "wrapper",
-        "stream": "payload"
-      },
-      {
-        "from": "wrapper",
-        "to": "substrate",
-        "stream": "exec"
+        },
+        "type": "packaging"
       }
     ]
   },
-  "measured": {
-    "1k_smoke": {
-      "data_size": 1024,
-      "compressed_size": 262,
-      "program_size": 283628,
-      "hutter_score": 283890,
-      "parent_hutter_score": 283906,
-      "baseline_hutter_score": 284634,
-      "score_delta_vs_parent": -16,
-      "score_delta_vs_baseline": -744,
-      "roundtrip_ok": true,
-      "determinism_ok": true,
-      "timestamp": "2026-06-07T15:40:01"
-    },
-    "64k_screen": {
-      "data_size": 65536,
-      "compressed_size": 13585,
-      "program_size": 283628,
-      "hutter_score": 297213,
-      "parent_hutter_score": 297229,
-      "baseline_compressed_size": 13585,
-      "baseline_hutter_score": 297957,
-      "archive_delta_vs_baseline": 0,
-      "score_delta_vs_parent": -16,
-      "score_delta_vs_baseline": -744,
-      "roundtrip_ok": true,
-      "determinism_ok": true,
-      "timestamp": "2026-06-07T15:42:11"
-    }
-  },
-  "inferred_frontier": {
-    "1m_driver_expected": {
-      "evidence_basis": "inferred_archive_identity_not_driver_measured",
-      "data_size": 1048576,
-      "compressed_size": 182395,
-      "program_size": 283628,
-      "hutter_score": 466023,
-      "archive_basis_program": "fx2cmix_recovered_gcc_o3_xz_v1",
-      "archive_basis_scope": "measured 1 MiB driver result",
-      "program_size_basis": "measured minwrap_v3 driver program_size at 1 KiB and 64 KiB",
-      "baseline_program": "fx2cmix_recovered_gcc_o3_xz_v1",
-      "baseline_hutter_score": 466767,
-      "score_delta_vs_baseline": -744,
-      "archive_delta_vs_baseline": 0,
-      "program_delta_vs_baseline": -744,
-      "roundtrip_ok": "inferred",
-      "determinism_ok": "inferred",
-      "requires_driver_confirmation": true
-    },
-    "full_corpus_forecast": {
-      "evidence_basis": "fx2_calibrated_forecast_not_driver_measured",
-      "hutter_score": 108851716,
-      "percent_of_raw": 10.8851716,
-      "threshold": 109685197,
-      "delta_vs_threshold": -833481,
-      "delta_vs_100m_target": 8851716,
-      "requires_full_scope_confirmation": true
-    }
-  },
-  "verdict": "Promote as current recovered fx2 package winner. It preserves recovered fx2 archive bytes at the 64 KiB screen and reduces counted program size by 744 bytes versus fx2cmix_recovered_gcc_o3_xz_v1."
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1000000."
 }

@@ -1,198 +1,218 @@
 {
-  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1",
-  "family": "cmix21_mmap",
-  "status": "active",
-  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 100 MB PPMD cap, PAQ8 minmaps, sparse-match divisor 8, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, and FXCM cmC2 maps divided by 2. The binary and english.dic are gzip-compressed and counted toward program_size.",
-  "parent": "cmix21_text_mmap_paq5_ppmd100m_rcm32_bufthirtysecond_minmaps_v1",
-  "hypothesis": "PAQ8 wrapper-level main/text divisors kept missing memory because AddFXCM owns large independent anonymous maps. Dividing only FXCM cmC2 map sizes should clear the local guard while preserving more archive quality than broad PAQ level downgrades.",
   "deps": [
     "C++ runtime for the vendored cmix binary",
     "POSIX mmap and temporary filesystem space"
   ],
-  "source": {
-    "tree": "projects/enwiki9/external/cmix21-sidecar",
-    "patch": "CMIX_FXCM_CMC2_DIV and CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp; PAQ8 memory divisor hooks retained in src/models/paq8.cpp",
-    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
-    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
-    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1"
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 100 MB PPMD cap, PAQ8 minmaps, sparse-match divisor 8, RCM32 run-context maps, a thirtysecond-size PAQ rolling buffer, and FXCM cmC2 maps divided by 2. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "family": "cmix21_mmap",
+  "hypothesis": "PAQ8 wrapper-level main/text divisors kept missing memory because AddFXCM owns large independent anonymous maps. Dividing only FXCM cmC2 map sizes should clear the local guard while preserving more archive quality than broad PAQ level downgrades.",
+  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1",
+  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json",
+  "measured": {
+    "1000000": {
+      "bits_per_byte": 1.39532,
+      "compressed_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
+      "compressed_size": 174415,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "data_size": 1000000,
+      "determinism": {
+        "first_run_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
+        "second_run_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
+        "single_host_byte_equal": true
+      },
+      "hutter_score": 735625,
+      "max_sampled_rss_kib": 8848964,
+      "memory_ceiling_kib": 10485760,
+      "program_size": 561210,
+      "result_json_bytes": 1407,
+      "result_json_mtime_utc": "2026-06-15T03:41:58+00:00",
+      "result_json_sha256": "4cf13c1e02d0debda6ae2bf853956cb0d454bad43120824d7f884ed58b9c6b1e",
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json",
+      "roundtrip_ok": true
+    },
+    "10000000": {
+      "compressed_size": null,
+      "determinism": null,
+      "driver_exit_code": 1,
+      "failure": "cmix_child_sigsegv_during_compression",
+      "last_sampled_partial_output_size": 1146880,
+      "last_sampled_temp_size": 6186040,
+      "max_sampled_rss_kib": 8950084,
+      "memory_ceiling_kib": 10485760,
+      "notes": [
+        "Guarded 10M screen stayed under the memory ceiling but the cmix child died with SIGSEGV before driver roundtrip validation.",
+        "The driver removed the temporary directory, so the sampled partial output is telemetry only and not a scored archive."
+      ],
+      "program_size": 561210,
+      "roundtrip_ok": false
+    },
+    "1m_driver_determinism_gate": {
+      "bits_per_byte": 1.39532,
+      "compress_time_s": 1448.4604,
+      "compressed_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
+      "compressed_size": 174415,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "data_size": 1000000,
+      "decompress_time_s": 1458.4134,
+      "determinism": true,
+      "hutter_score": 735625,
+      "notes": [
+        "Guarded /tmp/enwiki9-heavy.lock run completed without an RSS-crossing snapshot."
+      ],
+      "program_size": 561210,
+      "result_json_bytes": 1407,
+      "result_json_mtime_utc": "2026-06-15T03:41:58+00:00",
+      "result_json_sha256": "4cf13c1e02d0debda6ae2bf853956cb0d454bad43120824d7f884ed58b9c6b1e",
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json",
+      "roundtrip_ok": true
+    },
+    "250000": {
+      "bits_per_byte": 1.445824,
+      "compressed_sha256": "e4470aa5c4b8e6ef92081d3f1beb8a360e355b79edb7747de79855be5c1d635a",
+      "compressed_size": 45182,
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "determinism": null,
+      "hutter_score": 606392,
+      "max_sampled_rss_kib": 8690116,
+      "memory_ceiling_kib": 10485760,
+      "program_size": 561210,
+      "result_json": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T222820.json",
+      "roundtrip_ok": true
+    },
+    "250k_driver_gate": {
+      "bits_per_byte": 1.445824,
+      "compress_time_s": 438.1702,
+      "compressed_sha256": "e4470aa5c4b8e6ef92081d3f1beb8a360e355b79edb7747de79855be5c1d635a",
+      "compressed_size": 45182,
+      "data_md5": "58df7be6473925f769c9621aeaff05cb",
+      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+      "data_size": 250000,
+      "decompress_time_s": 438.0904,
+      "determinism": null,
+      "hutter_score": 606392,
+      "notes": [
+        "Guarded /tmp/enwiki9-heavy.lock run completed without an RSS-crossing snapshot."
+      ],
+      "program_size": 561210,
+      "result_json_bytes": 1033,
+      "result_json_mtime_utc": "2026-06-15T02:28:20+00:00",
+      "result_json_sha256": "0cbae255f49eb61c4ec8b4967a2bab35fba8309760b188c147f073f5df4a5df6",
+      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T222820.json",
+      "roundtrip_ok": true
+    },
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T21:04:25+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1000000."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T18:56:23+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1000000."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T21:04:25+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1000000."
+      }
+    ]
   },
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_rcm32_bufthirtysecond_minmaps_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "paq8",
+        "stream": "probability_model",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "fxcm",
+        "stream": "memory_trim",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "ppmd",
+        "stream": "probability_model",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "mmap_allocator",
+        "stream": "state_storage",
+        "to": "cmix21_text"
+      }
+    ],
     "nodes": [
       {
         "id": "paq8",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
+            "buffer_div": 32,
             "level": 5,
-            "main_context_scale": 1,
             "main_context_div": 1,
-            "text_model_scale": 1,
-            "text_model_div": 1,
-            "match_scale": 1,
+            "main_context_scale": 1,
             "match_div": 1,
-            "sparse_match_div": 8,
+            "match_scale": 1,
             "rcm_div": 32,
-            "buffer_div": 32
+            "sparse_match_div": 8,
+            "text_model_div": 1,
+            "text_model_scale": 1
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "fxcm",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "cmc2_div": 2,
             "rcm_div": 1
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "ppmd",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "memory_mb": 100
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "mmap_allocator",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "mode": "file_backed_large_tables"
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "cmix21_text",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "mode": "forced_text",
-            "codec": "cmix21"
+            "codec": "cmix21",
+            "mode": "forced_text"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "paq8",
-        "to": "cmix21_text",
-        "stream": "probability_model"
-      },
-      {
-        "from": "fxcm",
-        "to": "cmix21_text",
-        "stream": "memory_trim"
-      },
-      {
-        "from": "ppmd",
-        "to": "cmix21_text",
-        "stream": "probability_model"
-      },
-      {
-        "from": "mmap_allocator",
-        "to": "cmix21_text",
-        "stream": "state_storage"
+        },
+        "type": "codec"
       }
     ]
   },
-  "measured": {
-    "250000": {
-      "compressed_size": 45182,
-      "program_size": 561210,
-      "hutter_score": 606392,
-      "bits_per_byte": 1.445824,
-      "roundtrip_ok": true,
-      "determinism": null,
-      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
-      "compressed_sha256": "e4470aa5c4b8e6ef92081d3f1beb8a360e355b79edb7747de79855be5c1d635a",
-      "memory_ceiling_kib": 10485760,
-      "max_sampled_rss_kib": 8690116,
-      "result_json": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T222820.json"
-    },
-    "250k_driver_gate": {
-      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T222820.json",
-      "data_size": 250000,
-      "data_md5": "58df7be6473925f769c9621aeaff05cb",
-      "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
-      "compressed_size": 45182,
-      "program_size": 561210,
-      "hutter_score": 606392,
-      "bits_per_byte": 1.445824,
-      "roundtrip_ok": true,
-      "determinism": null,
-      "compressed_sha256": "e4470aa5c4b8e6ef92081d3f1beb8a360e355b79edb7747de79855be5c1d635a",
-      "compress_time_s": 438.1702,
-      "decompress_time_s": 438.0904,
-      "notes": [
-        "Guarded /tmp/enwiki9-heavy.lock run completed without an RSS-crossing snapshot."
-      ],
-      "result_json_bytes": 1033,
-      "result_json_mtime_utc": "2026-06-15T02:28:20+00:00",
-      "result_json_sha256": "0cbae255f49eb61c4ec8b4967a2bab35fba8309760b188c147f073f5df4a5df6"
-    },
-    "1000000": {
-      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json",
-      "data_size": 1000000,
-      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
-      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
-      "compressed_size": 174415,
-      "program_size": 561210,
-      "hutter_score": 735625,
-      "bits_per_byte": 1.39532,
-      "roundtrip_ok": true,
-      "determinism": {
-        "single_host_byte_equal": true,
-        "first_run_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
-        "second_run_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331"
-      },
-      "compressed_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
-      "memory_ceiling_kib": 10485760,
-      "max_sampled_rss_kib": 8848964,
-      "result_json_bytes": 1407,
-      "result_json_mtime_utc": "2026-06-15T03:41:58+00:00",
-      "result_json_sha256": "4cf13c1e02d0debda6ae2bf853956cb0d454bad43120824d7f884ed58b9c6b1e"
-    },
-    "1m_driver_determinism_gate": {
-      "result_path": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json",
-      "data_size": 1000000,
-      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
-      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
-      "compressed_size": 174415,
-      "program_size": 561210,
-      "hutter_score": 735625,
-      "bits_per_byte": 1.39532,
-      "roundtrip_ok": true,
-      "determinism": true,
-      "compressed_sha256": "32c5ed0b509f9c581914d938d9179621b394451351935565f7ee78c8cd5ee331",
-      "compress_time_s": 1448.4604,
-      "decompress_time_s": 1458.4134,
-      "notes": [
-        "Guarded /tmp/enwiki9-heavy.lock run completed without an RSS-crossing snapshot."
-      ],
-      "result_json_bytes": 1407,
-      "result_json_mtime_utc": "2026-06-15T03:41:58+00:00",
-      "result_json_sha256": "4cf13c1e02d0debda6ae2bf853956cb0d454bad43120824d7f884ed58b9c6b1e"
-    },
-    "10000000": {
-      "compressed_size": null,
-      "program_size": 561210,
-      "roundtrip_ok": false,
-      "determinism": null,
-      "memory_ceiling_kib": 10485760,
-      "max_sampled_rss_kib": 8950084,
-      "last_sampled_partial_output_size": 1146880,
-      "last_sampled_temp_size": 6186040,
-      "failure": "cmix_child_sigsegv_during_compression",
-      "driver_exit_code": 1,
-      "notes": [
-        "Guarded 10M screen stayed under the memory ceiling but the cmix child died with SIGSEGV before driver roundtrip validation.",
-        "The driver removed the temporary directory, so the sampled partial output is telemetry only and not a scored archive."
-      ]
-    }
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "patch": "CMIX_FXCM_CMC2_DIV and CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp; PAQ8 memory divisor hooks retained in src/models/paq8.cpp",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
   },
-  "verdict": "Blocked at the 10M screen by a cmix child SIGSEGV during compression, not by memory. The 1M deterministic archive remains strong at 174,415 bytes and the 10M memory profile stayed under the guard, but this exact FXCM cmC2-div2 shape is not promotable until the crash surface is removed.",
-  "latest_result": "projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json"
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1000000."
 }

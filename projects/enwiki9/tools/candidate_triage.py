@@ -634,6 +634,7 @@ def triage_one(
     baseline_id: str,
     lock_path: pathlib.Path,
     baseline_cache: dict[int, DriverRun],
+    respect_heavy_lock: bool,
     driver_timeout: int | None,
     reuse_baseline_evidence: bool,
     archive_ceilings: dict[int, int],

@@ -28,7 +28,7 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best forecast | `endpoint428_pair_layer0_runtime_successor_minified_package_v1` | 10,000,000 | 109,389,323 | exact guarded 10M archive screen with counted program economics; terminal verdict promote_smaller_counted_package_runtime_still_unqualified; forecast only, not a constructive full-corpus proof | exact-10m-counted-projection |
 | active candidate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 10,000,000 | 1,825,866 | exact 10,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 10,000,000 byte gate passed |
 | blocker | `n/a` | n/a | n/a | active 100,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | n/a | unchanged 100,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+| active gate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | n/a | unchanged 100,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | running |
 
 ## Best Full-Corpus Result
 
@@ -40,7 +40,7 @@ No verified full-corpus result JSON is present in this workspace.
 |---:|---|---:|---:|---:|---:|---|
 | 1,024 | `baseline_zlib` | 495 | 334 | 161 | 48.33984375 | `results/baseline_zlib/2026-07-20T152000.json` |
 | 250,000 | `opcode_typed_anchor_bitmix_v1` | 72,800 | 67,959 | 4,841 | 29.12 | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| 1,000,000 | `baseline_lzma` | 290,933 | 290,732 | 201 | 29.0933 | `results/baseline_lzma/2026-07-18T135552.json` |
+| 1,000,000 | `opcode_typed_anchor_bitmix_v1` | 266,493 | 261,652 | 4,841 | 26.6493 | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T150923.json` |
 | 10,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 1,825,866 | 1,642,858 | 183,008 | 18.25866 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
 
 ## Best Exact Archive By Scope
@@ -49,7 +49,7 @@ No verified full-corpus result JSON is present in this workspace.
 |---:|---|---:|---:|---:|---:|---|
 | 1,024 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 243 | 304,496 | 304,253 | 1.8984375 | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T163727.json` |
 | 250,000 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 44,978 | 349,231 | 304,253 | 1.439296 | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T170257.json` |
-| 1,000,000 | `baseline_lzma` | 290,732 | 290,933 | 201 | 2.325856 | `results/baseline_lzma/2026-07-18T135552.json` |
+| 1,000,000 | `fx2_struct_top_mixer_v1` | 175,172 | 447,188 | 272,016 | 1.401376 | `results/fx2_struct_top_mixer_v1/2026-07-21T151947.json` |
 | 10,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 1,642,858 | 1,825,866 | 183,008 | 1.3142864 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
 
 ## Notes
