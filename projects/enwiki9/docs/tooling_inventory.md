@@ -43,7 +43,8 @@ heavy lane.
 | Tool | Purpose |
 |---|---|
 | `candidate_audit.py` | Audits candidate contracts, registry state, source files, and evidence. |
-| `candidate_triage.py` | Selects benchmark-or-retire candidates and prints gate plans. |
+| `candidate_triage.py` | Selects benchmark-or-retire candidates and prints locked gate plans. |
+| `build_triage_ledger.py` | Builds an execution ledger for triage batches from batch queues and per-candidate logs. |
 | `cmix21_package_candidate.py` | Packages cmix21 variants into candidate directories. |
 
 ## cmix/fx2 Core Tuning And Reproduction

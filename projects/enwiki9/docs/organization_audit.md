@@ -12,20 +12,20 @@ program directories under programs/: 540
 registered programs in index.json: 225
 docs file entries under docs/: 30
 tools files under tools/: 86
-active: 7
-candidate: 144
-measured_negative: 20
-blocked_dependency: 12
-retired: 357
+active: 24
+candidate: 17
+measured_negative: 77
+blocked_dependency: 30
+retired: 392
 track_source_before_evolution: 2
 ```
 
 Interpretation:
 
 - candidate folders have outpaced the generated audit snapshot;
-- `index.json` is intentionally narrower than the filesystem;
-- generated inventory should be refreshed whenever receipt/audit rows change so
-  status receipts and organization docs share the same counts;
+- generated inventory currently reports a different live candidate status split; refresh
+  `candidate_inventory.json` when active gating work advances, then mirror those
+  counts here.
 - the PPMD-only ladder is retired, and its FXCM2/full-buffer replacement is
   also retired after the `100M` first archive missed the unified-executable
   screen by `149,143` bytes. No heavy target-bearing gate is active;

@@ -1,17 +1,6 @@
 {
-  "id": "fx2_timestamp_direct_only_byte_split_extra_page_match_v1",
-  "description": "Size-oriented FX2-SC raw-stream sidecar candidate adding only a bounded XML timestamp direct context to the current byte-split/direct/extra/page-match backend.",
   "added": "2026-06-06",
-  "deps": ["C++ runtime for the bundled cmix/fx2 binary"],
-  "source_tree": "external/cmix21-sidecar",
   "basis": "Direct-only timestamp ablation after the timestamp direct+indirect build showed archive signal but high counted binary cost. The primary byte stream is preserved exactly.",
-  "build_flags": [
-    "-Os",
-    "-ffunction-sections",
-    "-fdata-sections",
-    "-Wl,--gc-sections",
-    "-s"
-  ],
   "build_defines": [
     "SEED=923",
     "UPDATE_LIMIT=3000",
@@ -24,6 +13,18 @@
     "SIDECAR_TIMESTAMP_CONTEXT",
     "SIDECAR_TIMESTAMP_DIRECT_ONLY"
   ],
+  "build_flags": [
+    "-Os",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-Wl,--gc-sections",
+    "-s"
+  ],
+  "comparison_baseline": "fx2_sidecar_byte_split_direct_extra_page_match_v1",
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "description": "Size-oriented FX2-SC raw-stream sidecar candidate adding only a bounded XML timestamp direct context to the current byte-split/direct/extra/page-match backend.",
   "fx2_sc_concepts": [
     "raw_stream_preserved",
     "schema_template_ctx",
@@ -35,5 +36,30 @@
     "citation_anchor_mtf",
     "timestamp_model"
   ],
-  "comparison_baseline": "fx2_sidecar_byte_split_direct_extra_page_match_v1"
+  "id": "fx2_timestamp_direct_only_byte_split_extra_page_match_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:38:17+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:52:25+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:38:17+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
+  "source_tree": "external/cmix21-sidecar",
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024."
 }

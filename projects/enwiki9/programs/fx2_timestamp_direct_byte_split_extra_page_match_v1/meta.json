@@ -1,9 +1,5 @@
 {
-  "id": "fx2_timestamp_direct_byte_split_extra_page_match_v1",
-  "description": "FX2-SC raw-stream sidecar candidate adding a bounded XML timestamp position/class context to the current byte-split/direct/extra/page-match sidecar backend.",
   "added": "2026-06-06",
-  "deps": ["C++ runtime for the bundled cmix/fx2 binary"],
-  "source_tree": "external/cmix21-sidecar",
   "basis": "Tests whether decoder-recomputed timestamp position and expected character class reduce archive bytes enough to pay for the added predictor state and counted binary size. The primary byte stream is preserved exactly.",
   "build_defines": [
     "SEED=923",
@@ -16,6 +12,11 @@
     "SIDECAR_PAGE_MATCH",
     "SIDECAR_TIMESTAMP_CONTEXT"
   ],
+  "comparison_baseline": "fx2_sidecar_byte_split_direct_extra_page_match_v1",
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "description": "FX2-SC raw-stream sidecar candidate adding a bounded XML timestamp position/class context to the current byte-split/direct/extra/page-match sidecar backend.",
   "fx2_sc_concepts": [
     "raw_stream_preserved",
     "schema_template_ctx",
@@ -27,5 +28,30 @@
     "citation_anchor_mtf",
     "timestamp_model"
   ],
-  "comparison_baseline": "fx2_sidecar_byte_split_direct_extra_page_match_v1"
+  "id": "fx2_timestamp_direct_byte_split_extra_page_match_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:38:14+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:52:25+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:38:14+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
+  "source_tree": "external/cmix21-sidecar",
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024."
 }

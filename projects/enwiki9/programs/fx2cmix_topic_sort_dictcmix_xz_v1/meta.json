@@ -1,46 +1,71 @@
 {
-  "id": "fx2cmix_topic_sort_dictcmix_xz_v1",
-  "description": "Reversible page-topic ordering wrapper around the current 100MB-best fx2cmix xz-packed binary and cmix-compressed dictionary package",
   "added": "2026-06-02",
-  "deps": ["C++ runtime for the vendored cmix binary"],
   "basis": "Tests whether the measured page-topic locality signal carries into the fx2cmix_wrapped_dictcmix_xz_min_v1 backend family at same-scope archive gates.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
+  "description": "Reversible page-topic ordering wrapper around the current 100MB-best fx2cmix xz-packed binary and cmix-compressed dictionary package",
   "expected_use": "diagnostic 10MB archive-delta gate before any 100MB promotion",
+  "id": "fx2cmix_topic_sort_dictcmix_xz_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:38:26+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:52:37+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:38:26+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "program_files": {
     "cmix.xz": 142512,
     "english.dic.cmix": 100130,
     "program.py": 1586,
     "total": 244228
   },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024.",
   "verified_gates": {
-    "1k_driver_smoke": {
-      "input_bytes": 1000,
-      "compressed_size": 258,
+    "100m_driver_new_frontier": {
+      "compressed_sha256": "4ccada471c79739d15e8b74b7e1b260233aa46583a2a39d0a8538499d5641dc5",
+      "compressed_size": 14880439,
+      "delta_vs_fx2cmix_wrapped_dictcmix_xz_min_v1_100m": -83777,
+      "hutter_score": 15124667,
+      "input_bytes": 100000000,
       "program_size": 244228,
-      "hutter_score": 244486,
-      "roundtrip_ok": true
+      "result_json": "results/fx2cmix_topic_sort_dictcmix_xz_v1/2026-06-02T141754.json",
+      "roundtrip_ok": true,
+      "score_percent": 15.124667
     },
     "10m_driver_topic_order_backend_delta": {
-      "result_json": "results/fx2cmix_topic_sort_dictcmix_xz_v1/2026-06-02T055419.json",
-      "input_bytes": 10000000,
       "compressed_size": 1645609,
-      "program_size": 244228,
-      "hutter_score": 1889837,
-      "score_percent": 18.89837,
-      "roundtrip_ok": true,
       "delta_vs_fx2cmix_wrapped_dictcmix_xz_min_v1_10m": -1901,
-      "delta_vs_global_10m_frontier": 60607
-    },
-    "100m_driver_new_frontier": {
-      "result_json": "results/fx2cmix_topic_sort_dictcmix_xz_v1/2026-06-02T141754.json",
-      "input_bytes": 100000000,
-      "compressed_size": 14880439,
+      "delta_vs_global_10m_frontier": 60607,
+      "hutter_score": 1889837,
+      "input_bytes": 10000000,
       "program_size": 244228,
-      "hutter_score": 15124667,
-      "score_percent": 15.124667,
+      "result_json": "results/fx2cmix_topic_sort_dictcmix_xz_v1/2026-06-02T055419.json",
       "roundtrip_ok": true,
-      "delta_vs_fx2cmix_wrapped_dictcmix_xz_min_v1_100m": -83777,
-      "compressed_sha256": "4ccada471c79739d15e8b74b7e1b260233aa46583a2a39d0a8538499d5641dc5"
+      "score_percent": 18.89837
+    },
+    "1k_driver_smoke": {
+      "compressed_size": 258,
+      "hutter_score": 244486,
+      "input_bytes": 1000,
+      "program_size": 244228,
+      "roundtrip_ok": true
     }
-  },
-  "verdict": "New exact 100MB frontier for the fx2cmix_wrapped_dictcmix_xz_min_v1 backend family; not a global 10MB frontier result."
+  }
 }

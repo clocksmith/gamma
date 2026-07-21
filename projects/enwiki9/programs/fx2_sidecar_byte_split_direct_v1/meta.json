@@ -1,8 +1,5 @@
 {
-  "id": "fx2_sidecar_byte_split_direct_v1",
-  "description": "fx2-cmix fork with the byte stream unchanged, three decoder-built MediaWiki sidecar byte probability models, and four direct sidecar probability inputs; indirect and match sidecar models are disabled.",
   "added": "2026-05-30",
-  "deps": ["C++ runtime for the vendored cmix binary"],
   "build_defines": [
     "SEED=923",
     "UPDATE_LIMIT=3000",
@@ -12,26 +9,213 @@
     "SIDECAR_NO_INDIRECT",
     "SIDECAR_NO_MATCH"
   ],
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
+  "description": "fx2-cmix fork with the byte stream unchanged, three decoder-built MediaWiki sidecar byte probability models, and four direct sidecar probability inputs; indirect and match sidecar models are disabled.",
+  "id": "fx2_sidecar_byte_split_direct_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 2.03125,
+          "comparison": {
+            "archive_delta_vs_baseline": -152,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 362240
+          },
+          "compressed_size": 260,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 362853,
+          "program_id": "fx2_sidecar_byte_split_direct_v1",
+          "program_size": 362593,
+          "program_stats": null,
+          "roundtrip_ok": true
+        },
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.44848,
+          "comparison": {
+            "archive_delta_vs_baseline": -30283,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 332109
+          },
+          "compressed_size": 45265,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 407858,
+          "program_id": "fx2_sidecar_byte_split_direct_v1",
+          "program_size": 362593,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T16:43:38+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.03125,
+            "comparison": {
+              "archive_delta_vs_baseline": -152,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 362240
+            },
+            "compressed_size": 260,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 362853,
+            "program_id": "fx2_sidecar_byte_split_direct_v1",
+            "program_size": 362593,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:53:43+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 250000."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.03125,
+            "comparison": {
+              "archive_delta_vs_baseline": -152,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 362240
+            },
+            "compressed_size": 260,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 362853,
+            "program_id": "fx2_sidecar_byte_split_direct_v1",
+            "program_size": 362593,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.44848,
+            "comparison": {
+              "archive_delta_vs_baseline": -30283,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 332109
+            },
+            "compressed_size": 45265,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 407858,
+            "program_id": "fx2_sidecar_byte_split_direct_v1",
+            "program_size": 362593,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T16:43:38+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
+  },
+  "status": "measured_negative",
+  "tradeoff": {
+    "archive_delta_vs_fx2_sidecar_byte_split_v1_10m": -82,
+    "cmix_bin_gz_delta_vs_fx2_sidecar_byte_split_v1": 216
+  },
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses.",
   "verified_gates": {
-    "250k_order_phda9": {
-      "compressed_size": 48358,
-      "baseline_fx2_sidecar_byte_split_v1": 48368,
-      "baseline_fx2cmix_wrapped_v1": 48369
-    },
-    "1m_order_phda9": {
-      "compressed_size": 174594,
-      "baseline_fx2_sidecar_byte_split_v1": 174616,
-      "baseline_fx2cmix_wrapped_v1": 174633
-    },
     "10m_order_phda9": {
-      "compressed_size": 1630710,
       "baseline_fx2_sidecar_byte_split_v1": 1630792,
       "baseline_fx2cmix_wrapped_v1": 1631730,
+      "compressed_size": 1630710,
       "roundtrip_ok": true
+    },
+    "1m_order_phda9": {
+      "baseline_fx2_sidecar_byte_split_v1": 174616,
+      "baseline_fx2cmix_wrapped_v1": 174633,
+      "compressed_size": 174594
+    },
+    "250k_order_phda9": {
+      "baseline_fx2_sidecar_byte_split_v1": 48368,
+      "baseline_fx2cmix_wrapped_v1": 48369,
+      "compressed_size": 48358
     }
-  },
-  "tradeoff": {
-    "cmix_bin_gz_delta_vs_fx2_sidecar_byte_split_v1": 216,
-    "archive_delta_vs_fx2_sidecar_byte_split_v1_10m": -82
   }
 }

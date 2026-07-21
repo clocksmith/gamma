@@ -1,45 +1,254 @@
 {
-  "id": "integer_online_context_arith_v3",
-  "family": "integer-online-context-arithmetic",
-  "status": "experimental",
-  "description": "Morphic-transition C++17 integer online context arithmetic prototype. Builds qm_context_codec_v1.cpp with QM_MORPHIC_TRANSITIONS=1, preserving the v1 table size and mixer profile while switching local state transitions based on a 64-bit bit-density monitor.",
-  "source": "projects/enwiki9/tools/qm_context_codec_v1.cpp",
   "build": "g++ -O3 -std=c++17 -DNDEBUG -DQM_TABLE_BITS=22 -DQM_MIX_PROFILE=1 -DQM_MORPHIC_TRANSITIONS=1 projects/enwiki9/tools/qm_context_codec_v1.cpp -o /tmp/qm && xz -9 -c /tmp/qm > programs/integer_online_context_arith_v3/qm.xz",
+  "description": "Morphic-transition C++17 integer online context arithmetic prototype. Builds qm_context_codec_v1.cpp with QM_MORPHIC_TRANSITIONS=1, preserving the v1 table size and mixer profile while switching local state transitions based on a 64-bit bit-density monitor.",
+  "family": "integer-online-context-arithmetic",
+  "id": "integer_online_context_arith_v3",
+  "measured": {
+    "1k_determinism_smoke": {
+      "bits_per_byte": 4.90625,
+      "compressed_size": 628,
+      "data_size": 1024,
+      "hutter_score": 16797,
+      "program_size": 16169,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true
+    },
+    "1m_driver": {
+      "baseline_lzma_hutter_score": 290933,
+      "bits_per_byte": 4.243881,
+      "compressed_size": 556254,
+      "data_size": 1048576,
+      "hutter_score": 572423,
+      "integer_online_context_arith_v1_hutter_score": 564027,
+      "program_size": 16169,
+      "roundtrip_ok": true,
+      "timestamp": "2026-06-07T13:38:07"
+    },
+    "64k_screen": {
+      "baseline_lzma_hutter_score": 22805,
+      "bits_per_byte": 4.547852,
+      "compressed_size": 37256,
+      "data_size": 65536,
+      "hutter_score": 53425,
+      "integer_online_context_arith_v1_hutter_score": 65721,
+      "program_size": 16169,
+      "roundtrip_ok": true
+    },
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 4.90625,
+          "comparison": {
+            "archive_delta_vs_baseline": 216,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 16184
+          },
+          "compressed_size": 628,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 16797,
+          "program_id": "integer_online_context_arith_v3",
+          "program_size": 16169,
+          "program_stats": null,
+          "roundtrip_ok": true
+        },
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 4.006496,
+          "comparison": {
+            "archive_delta_vs_baseline": 49655,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 65623
+          },
+          "compressed_size": 125203,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 141372,
+          "program_id": "integer_online_context_arith_v3",
+          "program_size": 16169,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T16:38:34+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: valid deterministic loser."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 4.90625,
+            "comparison": {
+              "archive_delta_vs_baseline": 216,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 16184
+            },
+            "compressed_size": 628,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 16797,
+            "program_id": "integer_online_context_arith_v3",
+            "program_size": 16169,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 4.006496,
+            "comparison": {
+              "archive_delta_vs_baseline": 49655,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 65623
+            },
+            "compressed_size": 125203,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 141372,
+            "program_id": "integer_online_context_arith_v3",
+            "program_size": 16169,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:52:43+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 4.90625,
+            "comparison": {
+              "archive_delta_vs_baseline": 216,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 16184
+            },
+            "compressed_size": 628,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 16797,
+            "program_id": "integer_online_context_arith_v3",
+            "program_size": 16169,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 4.006496,
+            "comparison": {
+              "archive_delta_vs_baseline": 49655,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 65623
+            },
+            "compressed_size": 125203,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 141372,
+            "program_id": "integer_online_context_arith_v3",
+            "program_size": 16169,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T16:38:34+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      }
+    ]
+  },
   "notes": [
     "Implements Strategy 2 from the advanced pipeline plan.",
     "The entropy window is advanced once per coded bit, then reused by all local context-table mutations for that bit."
   ],
-  "measured": {
-    "1k_determinism_smoke": {
-      "data_size": 1024,
-      "compressed_size": 628,
-      "program_size": 16169,
-      "hutter_score": 16797,
-      "bits_per_byte": 4.90625,
-      "roundtrip_ok": true,
-      "single_host_byte_equal": true
-    },
-    "64k_screen": {
-      "data_size": 65536,
-      "compressed_size": 37256,
-      "program_size": 16169,
-      "hutter_score": 53425,
-      "bits_per_byte": 4.547852,
-      "integer_online_context_arith_v1_hutter_score": 65721,
-      "baseline_lzma_hutter_score": 22805,
-      "roundtrip_ok": true
-    },
-    "1m_driver": {
-      "data_size": 1048576,
-      "compressed_size": 556254,
-      "program_size": 16169,
-      "hutter_score": 572423,
-      "bits_per_byte": 4.243881,
-      "integer_online_context_arith_v1_hutter_score": 564027,
-      "baseline_lzma_hutter_score": 290933,
-      "roundtrip_ok": true,
-      "timestamp": "2026-06-07T13:38:07"
-    }
-  },
-  "verdict": "Reject as a standalone compressor. Morpic transitions improved the 1 KiB and 64 KiB screens versus v1, but regressed on the exact 1 MiB prefix and remains far behind LZMA."
+  "source": "projects/enwiki9/tools/qm_context_codec_v1.cpp",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: valid deterministic loser."
 }

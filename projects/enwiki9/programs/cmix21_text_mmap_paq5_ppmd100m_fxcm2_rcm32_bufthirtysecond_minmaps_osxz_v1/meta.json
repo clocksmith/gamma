@@ -1,85 +1,106 @@
 {
-  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1",
-  "family": "cmix21_mmap",
-  "status": "candidate",
-  "description": "Size-optimized xz package of the FXCM2 PAQ5/PPMD100M cmix21 candidate. It keeps the same cmix source patches, dictionary, forced text mode, mmap allocation, PPMD cap, PAQ memory policy, and FXCM cmC2 divisor, but rebuilds the executable with -Os -s before xz packaging.",
-  "parent": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1",
-  "hypothesis": "A size-optimized executable should materially reduce counted program payload while preserving cmix21's compression behavior closely enough to improve the final ledger. Because compiler flags can alter exact floating-point or optimization behavior, this candidate requires a replay rather than inheriting parent measurements.",
   "deps": [
     "C++ runtime for the vendored cmix binary",
     "POSIX mmap and temporary filesystem space",
     "Python standard-library lzma module"
   ],
-  "source": {
-    "tree": "projects/enwiki9/external/cmix21-sidecar",
-    "patch": "CMIX_FXCM_CMC2_DIV and CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp; PAQ8 memory divisor hooks retained in src/models/paq8.cpp; packaged executable built with -Os -s",
-    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1/cmix.bin.xz",
-    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1/english.dic.xz",
-    "build": "g++ -std=c++14 -Wall -Os -s -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1"
+  "description": "Size-optimized xz package of the FXCM2 PAQ5/PPMD100M cmix21 candidate. It keeps the same cmix source patches, dictionary, forced text mode, mmap allocation, PPMD cap, PAQ memory policy, and FXCM cmC2 divisor, but rebuilds the executable with -Os -s before xz packaging.",
+  "family": "cmix21_mmap",
+  "hypothesis": "A size-optimized executable should materially reduce counted program payload while preserving cmix21's compression behavior closely enough to improve the final ledger. Because compiler flags can alter exact floating-point or optimization behavior, this candidate requires a replay rather than inheriting parent measurements.",
+  "id": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1",
+  "latest_result": null,
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:38:15+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:52:22+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:38:15+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
   },
+  "parent": "cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "package",
+        "stream": "counted_program_bytes",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "fxcm",
+        "stream": "memory_trim",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "ppmd",
+        "stream": "probability_model",
+        "to": "cmix21_text"
+      }
+    ],
     "nodes": [
       {
         "id": "package",
-        "type": "program_payload_policy",
         "payload": {
           "discrete": {
             "asset_codec": "xz",
             "binary_payload_bytes": 172592,
-            "dictionary_payload_bytes": 155996,
-            "compile_size_mode": "Os_s"
+            "compile_size_mode": "Os_s",
+            "dictionary_payload_bytes": 155996
           }
-        }
+        },
+        "type": "program_payload_policy"
       },
       {
         "id": "cmix21_text",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "mode": "forced_text",
-            "codec": "cmix21"
+            "codec": "cmix21",
+            "mode": "forced_text"
           }
-        }
+        },
+        "type": "codec"
       },
       {
         "id": "fxcm",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "cmc2_div": 2,
             "rcm_div": 1
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "ppmd",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "memory_mb": 100
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "package",
-        "to": "cmix21_text",
-        "stream": "counted_program_bytes"
-      },
-      {
-        "from": "fxcm",
-        "to": "cmix21_text",
-        "stream": "memory_trim"
-      },
-      {
-        "from": "ppmd",
-        "to": "cmix21_text",
-        "stream": "probability_model"
+        },
+        "type": "memory_policy"
       }
     ]
   },
-  "measured": {},
-  "verdict": "Awaiting driver replay. Size-optimized build plus xz assets lower binary plus dictionary payload from 558,987 bytes to 328,588 bytes, a 230,399-byte counted-program reduction before wrapper delta. Exact archive behavior must be measured because the executable was rebuilt with different optimization flags.",
-  "latest_result": null
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1/cmix.bin.xz",
+    "build": "g++ -std=c++14 -Wall -Os -s -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=100 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=2 -DCMIX_FXCM_RCM_DIV=1",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1/english.dic.xz",
+    "patch": "CMIX_FXCM_CMC2_DIV and CMIX_FXCM_RCM_DIV added to src/models/fxcmv1.cpp; PAQ8 memory divisor hooks retained in src/models/paq8.cpp; packaged executable built with -Os -s",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
+  },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024."
 }

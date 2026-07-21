@@ -1,11 +1,31 @@
 {
-  "id": "fx2_gepa_kind_template_category_redirect_mh4_dictcmix_zlibpy_v1",
-  "family": "fx2-gepa-order",
-  "status": "candidate",
-  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
-  "description": "Self-contained fx2 candidate using a GEPA-derived reversible page-order key.",
-  "hypothesis": "Template/topic/minhash/shape page adjacency can lower archive bytes without storing an order table.",
   "deps": [],
+  "description": "Self-contained fx2 candidate using a GEPA-derived reversible page-order key.",
+  "family": "fx2-gepa-order",
+  "hypothesis": "Template/topic/minhash/shape page adjacency can lower archive bytes without storing an order table.",
+  "id": "fx2_gepa_kind_template_category_redirect_mh4_dictcmix_zlibpy_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:37:57+00:00",
+      "proposed_status": "blocked_dependency",
+      "verdict": "blocked_dependency: dependency_error at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:51:46+00:00",
+        "proposed_status": "blocked_dependency",
+        "verdict": "blocked_dependency: dependency_error at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:37:57+00:00",
+        "proposed_status": "blocked_dependency",
+        "verdict": "blocked_dependency: dependency_error at 1024."
+      }
+    ]
+  },
   "order_fields": [
     "kind",
     "template",
@@ -13,12 +33,48 @@
     "redirect",
     "mh4"
   ],
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "pgsg": {
+    "edges": [
+      {
+        "from": "page_order",
+        "stream": "reordered_raw_xml",
+        "to": "backend"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "page_order",
+        "payload": {
+          "discrete": {
+            "fields": [
+              "kind",
+              "template",
+              "category",
+              "redirect",
+              "mh4"
+            ],
+            "mode": "gepa_hybrid"
+          }
+        },
+        "type": "transform"
+      },
+      {
+        "id": "backend",
+        "payload": {
+          "discrete": {
+            "codec": "fx2-cmix",
+            "container": "xz+raw-deflate-wrapper"
+          }
+        },
+        "type": "codec"
+      }
+    ]
+  },
   "screen_evidence": {
     "basis": "No-compression GEPA adjacency screen; not a Hutter score.",
-    "source": "projects/enwiki9/results/page_order_gepa/hybrid_limit10000000_seed271828.json",
     "hit": {
-      "name": "hybrid_m00741",
-      "origin": "mutation",
+      "adjacency_score": 5385.4561305369425,
       "fields": [
         "kind",
         "template",
@@ -26,10 +82,6 @@
         "redirect",
         "mh4"
       ],
-      "pages": 1325,
-      "moved_pages": 1324,
-      "score_delta_vs_original": 2546.207045847305,
-      "order_sha256": "724e1bbe12beeda7c366381acaff602eb3916b3fc7c4d5450f07dcf6ed5d4c69",
       "first_ids": [
         1642,
         695,
@@ -42,48 +94,17 @@
         1423,
         888
       ],
-      "adjacency_score": 5385.4561305369425,
       "mean_pair_score": 4.0675650532756364,
+      "moved_pages": 1324,
+      "name": "hybrid_m00741",
+      "order_sha256": "724e1bbe12beeda7c366381acaff602eb3916b3fc7c4d5450f07dcf6ed5d4c69",
+      "origin": "mutation",
+      "pages": 1325,
+      "score_delta_vs_original": 2546.207045847305,
       "topic_runs": 207.0
-    }
+    },
+    "source": "projects/enwiki9/results/page_order_gepa/hybrid_limit10000000_seed271828.json"
   },
-  "pgsg": {
-    "nodes": [
-      {
-        "id": "page_order",
-        "type": "transform",
-        "payload": {
-          "discrete": {
-            "mode": "gepa_hybrid",
-            "fields": [
-              "kind",
-              "template",
-              "category",
-              "redirect",
-              "mh4"
-            ]
-          }
-        }
-      },
-      {
-        "id": "backend",
-        "type": "codec",
-        "payload": {
-          "discrete": {
-            "codec": "fx2-cmix",
-            "container": "xz+raw-deflate-wrapper"
-          }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "page_order",
-        "to": "backend",
-        "stream": "reordered_raw_xml"
-      }
-    ]
-  },
-  "measured": {},
-  "verdict": "Unmeasured GEPA-order candidate."
+  "status": "blocked_dependency",
+  "verdict": "blocked_dependency: dependency_error at 1024."
 }

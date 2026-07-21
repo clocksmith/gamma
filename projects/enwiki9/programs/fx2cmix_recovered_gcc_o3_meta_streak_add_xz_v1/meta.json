@@ -1,8 +1,4 @@
 {
-  "id": "fx2cmix_recovered_gcc_o3_meta_streak_add_xz_v1",
-  "family": "fx2-cmix-recovered",
-  "status": "experimental",
-  "description": "Recovered fx2-cmix GCC build with FX2_META_STREAK=2. Preserves the baseline final zero-context mixer and adds a weak first-layer meta-streak expert keyed by recent predictor correctness, streak bucket, bit context, line-break state, and longest match bucket.",
   "build": {
     "compiler": "g++",
     "defines": [
@@ -19,34 +15,121 @@
     ],
     "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward the local driver program_size."
   },
+  "description": "Recovered fx2-cmix GCC build with FX2_META_STREAK=2. Preserves the baseline final zero-context mixer and adds a weak first-layer meta-streak expert keyed by recent predictor correctness, streak bucket, bit context, line-break state, and longest match bucket.",
+  "family": "fx2-cmix-recovered",
+  "id": "fx2cmix_recovered_gcc_o3_meta_streak_add_xz_v1",
+  "measured": {
+    "1m_driver": {
+      "archive_delta_vs_baseline": 4,
+      "baseline_hutter_score": 466767,
+      "bits_per_byte": 1.391594,
+      "compressed_size": 182399,
+      "data_size": 1048576,
+      "hutter_score": 466464,
+      "program_delta_vs_baseline": -307,
+      "program_size": 284065,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -303,
+      "timestamp": "2026-06-07T11:00:02"
+    },
+    "64k_screen": {
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "compressed_size": 13585,
+      "data_size": 65536,
+      "hutter_score": 297650,
+      "program_size": 284065,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -307
+    },
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:39:04+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.046875,
+            "comparison": {
+              "archive_delta_vs_baseline": -150,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 283714
+            },
+            "compressed_size": 262,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 284327,
+            "program_id": "fx2cmix_recovered_gcc_o3_meta_streak_add_xz_v1",
+            "program_size": 284065,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.448832,
+            "comparison": {
+              "archive_delta_vs_baseline": -30272,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 253592
+            },
+            "compressed_size": 45276,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 329341,
+            "program_id": "fx2cmix_recovered_gcc_o3_meta_streak_add_xz_v1",
+            "program_size": 284065,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:58:03+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:39:04+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "notes": [
     "Designed after FX2_META_STREAK=1 lost on the 1 MiB ledger by replacing the final-layer global mixer context.",
     "This candidate keeps the baseline final-layer context and tests whether a weak additive streak expert can learn without destabilizing calibration."
   ],
-  "measured": {
-    "64k_screen": {
-      "data_size": 65536,
-      "compressed_size": 13585,
-      "program_size": 284065,
-      "hutter_score": 297650,
-      "baseline_compressed_size": 13585,
-      "baseline_hutter_score": 297957,
-      "score_delta_vs_baseline": -307,
-      "roundtrip_ok": true
-    },
-    "1m_driver": {
-      "data_size": 1048576,
-      "compressed_size": 182399,
-      "program_size": 284065,
-      "hutter_score": 466464,
-      "bits_per_byte": 1.391594,
-      "baseline_hutter_score": 466767,
-      "score_delta_vs_baseline": -303,
-      "archive_delta_vs_baseline": 4,
-      "program_delta_vs_baseline": -307,
-      "roundtrip_ok": true,
-      "timestamp": "2026-06-07T11:00:02"
-    }
-  },
-  "verdict": "Tiny 1 MiB ledger win only because the packed program is smaller; archive bytes regressed by 4. Keep as a reproducible package-size curiosity, not as a route toward the 10 percent target."
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024."
 }

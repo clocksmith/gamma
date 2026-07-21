@@ -1,8 +1,4 @@
 {
-  "id": "fx2cmix_recovered_gcc_o3_struct_sidecar_xz_v1",
-  "family": "fx2-cmix-recovered",
-  "status": "experimental",
-  "description": "Recovered fx2-cmix GCC build with FX2_STRUCT_SIDECAR=1. Adds a decoder-recomputable FSL/OGI sidecar in ContextManager and injects its bounded structural hash into selected existing mixer context IDs without changing the coded byte stream.",
   "build": {
     "compiler": "g++",
     "defines": [
@@ -19,31 +15,118 @@
     ],
     "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward local driver program_size."
   },
+  "description": "Recovered fx2-cmix GCC build with FX2_STRUCT_SIDECAR=1. Adds a decoder-recomputable FSL/OGI sidecar in ContextManager and injects its bounded structural hash into selected existing mixer context IDs without changing the coded byte stream.",
+  "family": "fx2-cmix-recovered",
+  "id": "fx2cmix_recovered_gcc_o3_struct_sidecar_xz_v1",
+  "measured": {
+    "1k_smoke": {
+      "baseline_compressed_size": 262,
+      "compressed_size": 267,
+      "data_size": 1024,
+      "hutter_score": 285539,
+      "program_size": 285272,
+      "roundtrip_ok": true
+    },
+    "64k_screen": {
+      "archive_delta_vs_baseline": 63,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "compressed_size": 13648,
+      "data_size": 65536,
+      "hutter_score": 298920,
+      "program_size": 285272,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": 963,
+      "timestamp": "2026-06-07T13:41:48"
+    },
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:39:05+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.085938,
+            "comparison": {
+              "archive_delta_vs_baseline": -145,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 284926
+            },
+            "compressed_size": 267,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 285539,
+            "program_id": "fx2cmix_recovered_gcc_o3_struct_sidecar_xz_v1",
+            "program_size": 285272,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.453376,
+            "comparison": {
+              "archive_delta_vs_baseline": -30130,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 254941
+            },
+            "compressed_size": 45418,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 330690,
+            "program_id": "fx2cmix_recovered_gcc_o3_struct_sidecar_xz_v1",
+            "program_size": 285272,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:57:59+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:39:05+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "notes": [
     "This is the high-potential sidecar injection path: structural state splits fx2's existing tuned mixer contexts instead of replacing fx2 with a standalone model.",
     "Mode 1 mutates mixer contexts only; indirect byte contexts remain baseline."
   ],
-  "measured": {
-    "1k_smoke": {
-      "data_size": 1024,
-      "compressed_size": 267,
-      "program_size": 285272,
-      "hutter_score": 285539,
-      "baseline_compressed_size": 262,
-      "roundtrip_ok": true
-    },
-    "64k_screen": {
-      "data_size": 65536,
-      "compressed_size": 13648,
-      "program_size": 285272,
-      "hutter_score": 298920,
-      "baseline_compressed_size": 13585,
-      "baseline_hutter_score": 297957,
-      "archive_delta_vs_baseline": 63,
-      "score_delta_vs_baseline": 963,
-      "roundtrip_ok": true,
-      "timestamp": "2026-06-07T13:41:48"
-    }
-  },
-  "verdict": "Reject. Broad structural sidecar mutation fragmented too many mixer contexts and lost archive bytes at the 64 KiB screen."
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024."
 }

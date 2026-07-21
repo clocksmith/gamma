@@ -153,14 +153,14 @@ def next_scope(scope: int) -> int | None:
     return None
 
 
-def command_for_gate(candidate: str, scope: int) -> list[str]:
+def command_for_gate(
+    candidate: str,
+    scope: int,
+) -> list[str]:
     guard = default_guard_path(candidate, scope)
     tag = re.search(r"ppmd(\d+k)", candidate)
     label_tag = f"ppmd{tag.group(1)}" if tag else "gate"
-    return [
-        "flock",
-        "-n",
-        "/tmp/enwiki9-heavy.lock",
+    command = [
         "python3",
         "projects/enwiki9/tools/run_with_rss_guard.py",
         "--limit-kib",
@@ -181,6 +181,7 @@ def command_for_gate(candidate: str, scope: int) -> list[str]:
         str(scope),
         "--check-determinism",
     ]
+    return command
 
 
 def record_command(
@@ -415,7 +416,12 @@ def lower_ppmd_suggestion(candidate: str, step_kib: int) -> dict[str, Any] | Non
     }
 
 
-def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) -> dict[str, Any]:
+def decide(
+    candidate: str,
+    scope: int,
+    guard_path: pathlib.Path,
+    step_kib: int,
+) -> dict[str, Any]:
     if not guard_path.exists():
         discovered_guard = existing_guard_path(candidate, scope)
         if discovered_guard is not None:
@@ -495,7 +501,10 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
                     payload["next_action"] = "launch_lower_prefix_gate"
                     payload["lower_candidate_packaged"] = True
                     payload["lower_prefix_scope_bytes"] = 1_024
-                    payload["lower_prefix_gate_command"] = command_for_gate(lower_id, 1_024)
+                    payload["lower_prefix_gate_command"] = command_for_gate(
+                        lower_id,
+                        1_024,
+                    )
                 else:
                     payload["next_action"] = "bracket_lower_from_recorded_rss_failure"
                     payload["lower_candidate_packaged"] = False
@@ -627,7 +636,10 @@ def decide(candidate: str, scope: int, guard_path: pathlib.Path, step_kib: int) 
         else:
             payload["next_action"] = "promote_unchanged"
             payload["next_scope_bytes"] = nxt
-            payload["next_gate_command"] = command_for_gate(candidate, nxt)
+            payload["next_gate_command"] = command_for_gate(
+                candidate,
+                nxt,
+            )
             payload["apply_terminal_command"] = apply_terminal_command(
                 candidate,
                 scope,
@@ -713,7 +725,12 @@ def main() -> int:
     args = parser.parse_args()
 
     guard_path = args.guard_json or default_guard_path(args.candidate, args.scope)
-    decision = decide(args.candidate, args.scope, guard_path, args.ppmd_step_kib)
+    decision = decide(
+        args.candidate,
+        args.scope,
+        guard_path,
+        args.ppmd_step_kib,
+    )
     print(json.dumps(decision, indent=2))
     if args.apply_terminal:
         executed = apply_terminal_decision(

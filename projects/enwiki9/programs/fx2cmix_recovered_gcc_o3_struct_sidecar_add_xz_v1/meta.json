@@ -1,8 +1,4 @@
 {
-  "id": "fx2cmix_recovered_gcc_o3_struct_sidecar_add_xz_v1",
-  "family": "fx2-cmix-recovered",
-  "status": "experimental",
-  "description": "Recovered fx2-cmix GCC build with FX2_STRUCT_SIDECAR=4. Adds the decoder-recomputable FSL/OGI sidecar as one weak extra first-layer mixer context, without mutating baseline contexts.",
   "build": {
     "compiler": "g++",
     "defines": [
@@ -19,31 +15,118 @@
     ],
     "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward local driver program_size."
   },
+  "description": "Recovered fx2-cmix GCC build with FX2_STRUCT_SIDECAR=4. Adds the decoder-recomputable FSL/OGI sidecar as one weak extra first-layer mixer context, without mutating baseline contexts.",
+  "family": "fx2-cmix-recovered",
+  "id": "fx2cmix_recovered_gcc_o3_struct_sidecar_add_xz_v1",
+  "measured": {
+    "1k_smoke": {
+      "baseline_compressed_size": 262,
+      "compressed_size": 262,
+      "data_size": 1024,
+      "hutter_score": 285216,
+      "program_size": 284954,
+      "roundtrip_ok": true
+    },
+    "64k_screen": {
+      "archive_delta_vs_baseline": 1,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "compressed_size": 13586,
+      "data_size": 65536,
+      "hutter_score": 298540,
+      "program_size": 284954,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": 583,
+      "timestamp": "2026-06-07T13:48:35"
+    },
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:39:04+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.046875,
+            "comparison": {
+              "archive_delta_vs_baseline": -150,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 284603
+            },
+            "compressed_size": 262,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 285216,
+            "program_id": "fx2cmix_recovered_gcc_o3_struct_sidecar_add_xz_v1",
+            "program_size": 284954,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.448864,
+            "comparison": {
+              "archive_delta_vs_baseline": -30271,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 254482
+            },
+            "compressed_size": 45277,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 330231,
+            "program_id": "fx2cmix_recovered_gcc_o3_struct_sidecar_add_xz_v1",
+            "program_size": 284954,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:59:28+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:39:04+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "notes": [
     "Low-risk ablation after broad and narrow context mutation both lost at the 64 KiB screen.",
     "Baseline fx2 contexts remain unchanged; only one additional sidecar mixer is added."
   ],
-  "measured": {
-    "1k_smoke": {
-      "data_size": 1024,
-      "compressed_size": 262,
-      "program_size": 284954,
-      "hutter_score": 285216,
-      "baseline_compressed_size": 262,
-      "roundtrip_ok": true
-    },
-    "64k_screen": {
-      "data_size": 65536,
-      "compressed_size": 13586,
-      "program_size": 284954,
-      "hutter_score": 298540,
-      "baseline_compressed_size": 13585,
-      "baseline_hutter_score": 297957,
-      "archive_delta_vs_baseline": 1,
-      "score_delta_vs_baseline": 583,
-      "roundtrip_ok": true,
-      "timestamp": "2026-06-07T13:48:35"
-    }
-  },
-  "verdict": "Reject at the 64 KiB screen. Additive sidecar is the least harmful profile, but it still lost 1 archive byte and grew the counted package."
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024."
 }

@@ -1,7 +1,158 @@
 {
-  "id": "fx2cmix_wrapped_xz_v1",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
   "description": "xz-asset wrapper around the existing fx2cmix_wrapped_v1 binary and dictionary",
-  "deps": ["C++ runtime for the vendored cmix binary"],
+  "id": "fx2cmix_wrapped_xz_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 2.023438,
+          "comparison": {
+            "archive_delta_vs_baseline": -153,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 298838
+          },
+          "compressed_size": 259,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 299451,
+          "program_id": "fx2cmix_wrapped_xz_v1",
+          "program_size": 299192,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T16:41:24+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 250000."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.023438,
+            "comparison": {
+              "archive_delta_vs_baseline": -153,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 298838
+            },
+            "compressed_size": 259,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 299451,
+            "program_id": "fx2cmix_wrapped_xz_v1",
+            "program_size": 299192,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.448896,
+            "comparison": {
+              "archive_delta_vs_baseline": -30270,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 268721
+            },
+            "compressed_size": 45278,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 344470,
+            "program_id": "fx2cmix_wrapped_xz_v1",
+            "program_size": 299192,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:57:16+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.023438,
+            "comparison": {
+              "archive_delta_vs_baseline": -153,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 298838
+            },
+            "compressed_size": 259,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 299451,
+            "program_id": "fx2cmix_wrapped_xz_v1",
+            "program_size": 299192,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T16:41:24+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 250000."
+      }
+    ]
+  },
   "notes": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, stored as xz members and extracted by program.py before invoking cmix with the same -c/-d dictionary arguments.",
   "program_files": {
     "cmix.xz": 142520,
@@ -9,44 +160,45 @@
     "program.py": 668,
     "total": 299192
   },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 250000.",
   "verified_gates": {
-    "1k_driver_smoke": {
-      "input_bytes": 1000,
-      "compressed_size": 257,
+    "100m_inherited_from_fx2cmix_wrapped_v1": {
+      "compressed_size": 14965167,
+      "distance_to_10_percent_score": 5264359,
+      "hutter_score": 15264359,
+      "input_bytes": 100000000,
       "program_size": 299192,
-      "hutter_score": 299449,
-      "roundtrip_ok": true,
-      "deterministic": true,
-      "result_path": "results/fx2cmix_wrapped_xz_v1/2026-06-01T134721.json"
-    },
-    "1k_byte_identity_vs_fx2cmix_wrapped_v1": {
-      "input_bytes": 1000,
-      "parent_program": "fx2cmix_wrapped_v1",
-      "parent_compressed_size": 257,
-      "parent_compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
-      "compressed_size": 257,
-      "compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
-      "roundtrip_ok": true
+      "roundtrip_basis": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, same -c/-d dictionary arguments, byte-identical 1KB archive output, and inherited parent 100MB roundtrip result.",
+      "score_delta_vs_fx2cmix_wrapped_gz_v1": -44352,
+      "score_percent": 15.264359
     },
     "10m_inherited_from_fx2cmix_wrapped_v1": {
-      "input_bytes": 10000000,
       "compressed_size": 1648461,
-      "program_size": 299192,
       "hutter_score": 1947653,
-      "score_percent": 19.47653,
-      "score_delta_vs_fx2cmix_wrapped_gz_v1": -44352,
-      "roundtrip_basis": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, same -c/-d dictionary arguments, and byte-identical 1KB archive output."
-    },
-    "100m_inherited_from_fx2cmix_wrapped_v1": {
-      "input_bytes": 100000000,
-      "compressed_size": 14965167,
+      "input_bytes": 10000000,
       "program_size": 299192,
-      "hutter_score": 15264359,
-      "score_percent": 15.264359,
+      "roundtrip_basis": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, same -c/-d dictionary arguments, and byte-identical 1KB archive output.",
       "score_delta_vs_fx2cmix_wrapped_gz_v1": -44352,
-      "distance_to_10_percent_score": 5264359,
-      "roundtrip_basis": "Same native cmix and english.dic bytes as fx2cmix_wrapped_v1, same -c/-d dictionary arguments, byte-identical 1KB archive output, and inherited parent 100MB roundtrip result."
+      "score_percent": 19.47653
+    },
+    "1k_byte_identity_vs_fx2cmix_wrapped_v1": {
+      "compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "compressed_size": 257,
+      "input_bytes": 1000,
+      "parent_compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "parent_compressed_size": 257,
+      "parent_program": "fx2cmix_wrapped_v1",
+      "roundtrip_ok": true
+    },
+    "1k_driver_smoke": {
+      "compressed_size": 257,
+      "deterministic": true,
+      "hutter_score": 299449,
+      "input_bytes": 1000,
+      "program_size": 299192,
+      "result_path": "results/fx2cmix_wrapped_xz_v1/2026-06-01T134721.json",
+      "roundtrip_ok": true
     }
-  },
-  "verdict": "Promote as the current best measured percentage route by inherited archive identity and lower counted program bytes. This is a packaging improvement only; it does not change the entropy model."
+  }
 }

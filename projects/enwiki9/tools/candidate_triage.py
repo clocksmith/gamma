@@ -1,7 +1,9 @@
 """Lane 0 triage for enwiki9 candidate measurement cleanup.
 
-The default mode is a dry-run inventory filter. Scoring runs require --run and
-supports optional heavy-lock-aware scheduling to avoid overlapping scorers.
+The default mode is a dry-run inventory filter. Scoring runs require --run.
+By default, gate invocations bypass lock-based serialization and run directly for
+maximal host parallelism; use --respect-heavy-lock to retain serialized heavy
+lock behavior.
 """
 
 from __future__ import annotations
@@ -173,6 +175,7 @@ def run_driver_locked(
                 result=None,
                 blocked_reason="preflight_busy",
             )
+
         cmd = [
             "flock",
             "-n",
@@ -195,6 +198,7 @@ def run_driver_locked(
             str(limit),
             "--check-determinism",
         ]
+
     if archive_ceiling is not None:
         cmd.extend(
             [
@@ -629,7 +633,6 @@ def triage_one(
     gate_sizes: list[int],
     baseline_id: str,
     lock_path: pathlib.Path,
-    respect_heavy_lock: bool,
     baseline_cache: dict[int, DriverRun],
     driver_timeout: int | None,
     reuse_baseline_evidence: bool,
@@ -857,14 +860,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--baseline", default=DEFAULT_BASELINE)
     parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK_PATH)
-    parser.add_argument("--run", action="store_true", help="execute gates")
+    parser.add_argument("--run", action="store_true", help="execute scoring gates")
     parser.add_argument(
         "--respect-heavy-lock",
         action="store_true",
-        default=RESPECT_HEAVY_LOCK_DEFAULT,
-        help=(
-            "serialize each driver gate through /tmp/enwiki9-heavy.lock (off by default)."
-        ),
+        help="serialize gates using /tmp/enwiki9-heavy.lock and active-process preflight.",
     )
     parser.add_argument(
         "--contract-check",

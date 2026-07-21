@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-20T18:31:02+00:00`
+- Generated at UTC: `2026-07-21T16:56:32+00:00`
 
 ## Target State
 
@@ -12,9 +12,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Summary
 
-- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1_10m`
-- Scope bytes: `10,000,000`
-- Gate verdict: `receipt_incomplete`
+- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Scope bytes: `100,000,000`
+- Gate verdict: `incomplete`
 - Gate next action: `wait_for_gate_receipts`
 - Heavy lock held: `false`
 - Active scorer observed: `true`
@@ -30,21 +30,21 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Tightest decimal single-process margin KiB: `n/a`
 - Latest binary single-process margin KiB: `n/a`
 - Latest decimal single-process margin KiB: `n/a`
-- Safe to launch heavy gate: `false`
+- Safe to launch heavy gate: `true`
 - Terminal verdict present: `false`
-- Command source: `none while gate is non-terminal`
+- Command source: `operator_action.next_gate_command`
 - Claim rule: `No prefix row proves 10.95%.`
 
 ## Active Gate
 
 - Heavy lock held: `false`
-- Gate verdict: `receipt_incomplete`
+- Gate verdict: `incomplete`
 - Next action: `wait_for_gate_receipts`
-- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1_10m`
-- Scope bytes: `10,000,000`
-- Driver result JSON: `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/receipt.json`
+- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Scope bytes: `100,000,000`
+- Driver result JSON: `not present`
 - Driver result present: `false`
-- RSS guard JSON: `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_10000000_determinism_rss_guard.json`
+- RSS guard JSON: `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json`
 - RSS guard present: `false`
 - Active scorer observed: `true`
 - Live guard note: `guard JSON is absent while the scorer is observed; keep waiting for final receipts and use process-table RSS meanwhile`
@@ -60,20 +60,20 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Observed Gate Command
 
-- Expected candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1_10m`
-- Expected scope bytes: `10,000,000`
-- Driver process count: `0`
+- Expected candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Expected scope bytes: `100,000,000`
+- Driver process count: `1`
 - Active gate command observed: `false`
-- Driver command mismatch count: `0`
+- Driver command mismatch count: `1`
 
 | PID | Candidate Match | Scope Bytes | Scope Match | Determinism Flag |
 |---:|---|---:|---|---|
-| n/a | n/a | n/a | n/a | n/a |
+| 331,314 | `false` | 1,024 | `false` | `true` |
 
 ## Observed Controller Command
 
-- Expected active candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1_10m`
-- Expected active scope bytes: `10,000,000`
+- Expected active candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Expected active scope bytes: `100,000,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -83,9 +83,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Action
 
-- Safe to launch heavy gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
+- Safe to launch heavy gate: `true`
+- Action: `launch_active_gate`
+- Reason: `the active candidate and scope have no guard or driver receipt yet`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
@@ -93,60 +93,60 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 - Terminal verdict present: `false`
 - Heavy gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
-- Command source: `none while gate is non-terminal`
+- Recommended action: `launch_active_gate`
+- Command source: `operator_action.next_gate_command`
 - Claim rule: `No prefix row proves 10.95%.`
+- Next gate command:
+```bash
+python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json --label cmix21_gate_fxcmrcm20_100000000_determinism -- python3 projects/enwiki9/lib/driver.py fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1 --limit 100000000 --check-determinism
+```
 
 ## Operator Logs
 
 - Latest delayed status log: `projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log`
 - Latest delayed status log present: `true`
-- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260715T010811Z.log`
+- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log`
 
 ## Candidate Audit
 
 - Audit return code: `0`
 - Program directories: `540`
 - Registered programs: `225`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `4`
-- Candidate statuses: `active=7, blocked_dependency=12, candidate=144, measured_negative=20, retired=357`
+- Untracked nonignored entries: `6`
+- Modified tracked entries: `113`
+- Candidate statuses: `active=24, blocked_dependency=30, candidate=17, measured_negative=77, retired=392`
 
 ## Active Runner Process Table
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `lock_wrapper` | 2,872,957 | 964,780 | 19,472 | `/home/x/.codex/tmp/arg0/codex-arg0bVB3hB/codex-linux-sandbox --sandbox-policy-cwd /home/x/deco --command-cwd /home/x/deco --permission-profile {"ty...` |
-| `lock_wrapper` | 2,872,975 | 2,872,957 | 2,284 | `bwrap --new-session --die-with-parent --ro-bind / / --dev /dev --bind /tmp /tmp --perms 555 --tmpfs /tmp/.git --remount-ro /tmp/.git --perms 555 --...` |
-| `lock_wrapper` | 2,872,976 | 2,872,975 | 1,576 | `bwrap --new-session --die-with-parent --ro-bind / / --dev /dev --bind /tmp /tmp --perms 555 --tmpfs /tmp/.git --remount-ro /tmp/.git --perms 555 --...` |
-| `lock_wrapper` | 2,872,977 | 2,872,976 | 2,036 | `flock -n /tmp/enwiki9-heavy.lock python3 tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 ...` |
-| `rss_guard` | 2,872,979 | 2,872,977 | 16,624 | `python3 tools/run_with_rss_guard.py --limit-kib 10485760 --official-decimal-limit-kib 9765625 --sample-interval 1 --guard-json results/fx2_geometry...` |
-| `process` | 2,872,986 | 2,872,979 | 51,348 | `python3 lib/driver.py fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1 --limit 10000000` |
-| `process` | 2,897,366 | 2,872,986 | 5,951,080 | `/tmp/g5b -c /tmp/g5d /tmp/g5i /tmp/g5o` |
+| `driver` | 331,314 | 1 | 21,808 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2_gepa_kind_template_topic_mh4_revtitle_title_size_dictcmix_zlibpy_v1 --limit ...` |
+| `process` | 331,479 | 331,314 | 3,370,948 | `/tmp/g331314b -d /home/x/deco/gamma/projects/enwiki9/programs/fx2_gepa_kind_template_topic_mh4_revtitle_title_size_dictcmix_zlibpy_v1/d /tmp/g331314d` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| n/a | n/a | n/a |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_10000000_determinism_rss_guard.json` | 874 | `2026-07-20T19:57:07+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` | 1,012 | `2026-07-20T19:57:07+00:00` |
 
 ## Active RSS
 
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `6,044,420`
+- Active process tree RSS KiB: `3,392,756`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `4,441,340`
-- Active process tree decimal margin KiB: `3,721,205`
+- Active process tree margin KiB (binary): `7,093,004`
+- Active process tree decimal margin KiB: `6,372,869`
 
 ## Contingencies
 
 - If current gate passes: `record pass and apply candidate target-gate promotion rule`
-- Pass next scope: `100,000,000`
+- Pass next scope: `1,000,000,000`
 - If RSS fails: `record RSS failure and retire or repackage this integration shape`
 - Lower candidate: `unknown`
 - Lower PPMD KiB: `n/a`
@@ -154,8 +154,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Proof Boundary
 
-- best_exact_10m: `missing`; status `missing`; score `n/a`
-- best_exact_10m_archive: `missing`; status `missing`; score `n/a`
+- best_exact_10m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `exact artifact-backed`; score `1,825,866`
+- best_exact_10m_archive: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `exact artifact-backed`; score `1,825,866`
 - best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `metadata-inherited`; score `15,040,789`
 - best_full_1g: `not verified`; status `not verified`; score `n/a`
 - best_forecast: `endpoint428_pair_layer0_runtime_successor_minified_package_v1`; status `exact-10m-counted-projection`; score `109,389,323`
