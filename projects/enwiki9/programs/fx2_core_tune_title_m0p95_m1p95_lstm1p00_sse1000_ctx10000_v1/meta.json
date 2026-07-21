@@ -1,11 +1,5 @@
 {
-  "id": "fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1",
-  "family": "fx2-core-tuning",
-  "status": "active",
-  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
-  "description": "Title-order fx2 package with compile-time core predictor tuning knobs applied to the rebuilt local fx2-cmix substrate.",
   "build": {
-    "source": "projects/enwiki9/external/fx2-cmix",
     "command": "make CC=g++ CFLAGS_DEFINES='<defines>' clean cmix",
     "defines": [
       "-DSEED=923",
@@ -16,135 +10,161 @@
       "-DFX2_LSTM_LR_SCALE=1.0f",
       "-DFX2_SSE_WR_SCALE_PPM=1000"
     ],
-    "wrapper_template": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
     "payload_files": {
       "c": 138092,
       "d": 100097,
       "p": 894,
       "program.py": 71
     },
-    "program_size": 239154,
     "payload_sha256": {
       "c": "d4322cb9993a78a01d84b4c19e6c0c85144e1db58e8c6c7c0c0cceb9b2b0fa98",
       "d": "c1265a17336e479014c4a4cb276c2b30811fcd5fc361c5dc9c0886168b26b9c6",
       "p": "80f546d01590d568e73d6e5b4d6bdaf26aed45784dee0589bf7bd3451ec617f8",
       "program.py": "7330e1c01160819389274242d7e4925bc5e524ed4574cdd11b4ab6153b26adb8"
-    }
+    },
+    "program_size": 239154,
+    "source": "projects/enwiki9/external/fx2-cmix",
+    "wrapper_template": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1"
   },
-  "hypothesis": "Changing mixer adaptation, context-map capacity, LSTM rate, and SSE update rate can reduce archive bytes directly without storing new side information.",
   "deps": [
     "stdlib:zlib",
     "C++ runtime for the bundled cmix/fx2 binary"
   ],
-  "pgsg": {
-    "nodes": [
+  "description": "Title-order fx2 package with compile-time core predictor tuning knobs applied to the rebuilt local fx2-cmix substrate.",
+  "family": "fx2-core-tuning",
+  "hypothesis": "Changing mixer adaptation, context-map capacity, LSTM rate, and SSE update rate can reduce archive bytes directly without storing new side information.",
+  "id": "fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1",
+  "latest_result": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-08T000326.json",
+  "measured": {
+    "1k_driver_gate": {
+      "bits_per_byte": 2.070312,
+      "compressed_sha256": "9b71d073eb7a8c03f0016ed6eebeb5c17c1ca5682c96519f4a64f8877aa13b16",
+      "compressed_size": 265,
+      "data_size": 1024,
+      "determinism": true,
+      "hutter_score": 239419,
+      "program_size": 239154,
+      "result_json_bytes": 1370,
+      "result_json_mtime_utc": "2026-06-08T03:39:16+00:00",
+      "result_json_sha256": "aa78b651f3d33f654b5633499c51600b3757876b09db6ea4536253c4df7ec035",
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-07T233916.json",
+      "roundtrip_ok": true
+    },
+    "1m_driver_gate": {
+      "bits_per_byte": 1.401744,
+      "compress_time_s": 424.0054,
+      "compressed_sha256": "5bca5eca91f55a689d4de112995f453743e48afea9eab7235179b9819a93c563",
+      "compressed_size": 175218,
+      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
+      "data_size": 1000000,
+      "decompress_time_s": 312.6026,
+      "determinism": true,
+      "hutter_score": 414372,
+      "program_size": 239154,
+      "result_json_bytes": 1377,
+      "result_json_mtime_utc": "2026-06-08T04:03:26+00:00",
+      "result_json_sha256": "71956f50ebdf8e6e9aac5e53ed2c2f27f0b41656d5a083bb59585e44da26c672",
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-08T000326.json",
+      "roundtrip_ok": true
+    },
+    "250k_driver_gate": {
+      "archive_delta_vs_recovered_fx2_semantic_250k": 46,
+      "bits_per_byte": 1.45232,
+      "compressed_sha256": "6fbeca2867a61014fb774b4586d20265e0f974e025da5e13b25d83e9a166debd",
+      "compressed_size": 45365,
+      "data_size": 250000,
+      "determinism": true,
+      "hutter_score": 284519,
+      "program_size": 239154,
+      "result_json_bytes": 1373,
+      "result_json_mtime_utc": "2026-06-08T03:45:45+00:00",
+      "result_json_sha256": "283e8be3fdc4cd37074c7723adbd90846cd2db8bb85d9162749da55668e36273",
+      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-07T234545.json",
+      "roundtrip_ok": true,
+      "scale_verdict": "archive_negative_vs_best_recovered_fx2_250k_and_payload_heavy",
+      "score_delta_vs_geometry_title_250k": 49374
+    },
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T21:36:45+00:00",
+      "proposed_status": "blocked_dependency",
+      "verdict": "blocked_dependency: dependency_error at 1000000."
+    },
+    "lane0_triage_runs": [
       {
-        "id": "page_order",
-        "type": "transform",
-        "payload": {
-          "discrete": {
-            "mode": "geometry_title"
-          },
-          "continuous": {},
-          "structural": {}
-        }
+        "gates": [],
+        "generated_at": "2026-07-21T18:44:22+00:00",
+        "proposed_status": "blocked_dependency",
+        "verdict": "blocked_dependency: dependency_error at 1000000."
       },
       {
-        "id": "core_tuning",
-        "type": "parameter_controller",
-        "payload": {
-          "discrete": {
-            "substrate": "fx2-cmix",
-            "compiler": "g++"
-          },
-          "continuous": {
-            "mixer_context_limit": 10000,
-            "mixer0_lr_scale": 0.95,
-            "mixer1_lr_scale": 0.95,
-            "lstm_lr_scale": 1.0,
-            "sse_wr_scale_ppm": 1000
-          },
-          "structural": {}
-        }
-      },
-      {
-        "id": "backend",
-        "type": "codec",
-        "payload": {
-          "discrete": {
-            "codec": "fx2-cmix",
-            "dictionary_codec": "cmix_self_compressed",
-            "binary_codec": "xz_extreme_check_none"
-          },
-          "continuous": {},
-          "structural": {}
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "page_order",
-        "to": "backend",
-        "stream": "reordered_raw_xml"
-      },
-      {
-        "from": "core_tuning",
-        "to": "backend",
-        "stream": "compiled_constants"
+        "gates": [],
+        "generated_at": "2026-07-21T21:36:45+00:00",
+        "proposed_status": "blocked_dependency",
+        "verdict": "blocked_dependency: dependency_error at 1000000."
       }
     ]
   },
-  "measured": {
-    "1k_driver_gate": {
-      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-07T233916.json",
-      "data_size": 1024,
-      "compressed_size": 265,
-      "program_size": 239154,
-      "hutter_score": 239419,
-      "bits_per_byte": 2.070312,
-      "roundtrip_ok": true,
-      "determinism": true,
-      "compressed_sha256": "9b71d073eb7a8c03f0016ed6eebeb5c17c1ca5682c96519f4a64f8877aa13b16",
-      "result_json_bytes": 1370,
-      "result_json_mtime_utc": "2026-06-08T03:39:16+00:00",
-      "result_json_sha256": "aa78b651f3d33f654b5633499c51600b3757876b09db6ea4536253c4df7ec035"
-    },
-    "250k_driver_gate": {
-      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-07T234545.json",
-      "data_size": 250000,
-      "compressed_size": 45365,
-      "program_size": 239154,
-      "hutter_score": 284519,
-      "bits_per_byte": 1.45232,
-      "roundtrip_ok": true,
-      "determinism": true,
-      "compressed_sha256": "6fbeca2867a61014fb774b4586d20265e0f974e025da5e13b25d83e9a166debd",
-      "archive_delta_vs_recovered_fx2_semantic_250k": 46,
-      "score_delta_vs_geometry_title_250k": 49374,
-      "scale_verdict": "archive_negative_vs_best_recovered_fx2_250k_and_payload_heavy",
-      "result_json_bytes": 1373,
-      "result_json_mtime_utc": "2026-06-08T03:45:45+00:00",
-      "result_json_sha256": "283e8be3fdc4cd37074c7723adbd90846cd2db8bb85d9162749da55668e36273"
-    },
-    "1m_driver_gate": {
-      "result_path": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-08T000326.json",
-      "data_size": 1000000,
-      "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
-      "data_sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad",
-      "compressed_size": 175218,
-      "program_size": 239154,
-      "hutter_score": 414372,
-      "bits_per_byte": 1.401744,
-      "roundtrip_ok": true,
-      "determinism": true,
-      "compressed_sha256": "5bca5eca91f55a689d4de112995f453743e48afea9eab7235179b9819a93c563",
-      "compress_time_s": 424.0054,
-      "decompress_time_s": 312.6026,
-      "result_json_bytes": 1377,
-      "result_json_mtime_utc": "2026-06-08T04:03:26+00:00",
-      "result_json_sha256": "71956f50ebdf8e6e9aac5e53ed2c2f27f0b41656d5a083bb59585e44da26c672"
-    }
+  "parent": "fx2_geometry_title_sort_dictcmix_xz_zlibpy_min_v1",
+  "pgsg": {
+    "edges": [
+      {
+        "from": "page_order",
+        "stream": "reordered_raw_xml",
+        "to": "backend"
+      },
+      {
+        "from": "core_tuning",
+        "stream": "compiled_constants",
+        "to": "backend"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "page_order",
+        "payload": {
+          "continuous": {},
+          "discrete": {
+            "mode": "geometry_title"
+          },
+          "structural": {}
+        },
+        "type": "transform"
+      },
+      {
+        "id": "core_tuning",
+        "payload": {
+          "continuous": {
+            "lstm_lr_scale": 1.0,
+            "mixer0_lr_scale": 0.95,
+            "mixer1_lr_scale": 0.95,
+            "mixer_context_limit": 10000,
+            "sse_wr_scale_ppm": 1000
+          },
+          "discrete": {
+            "compiler": "g++",
+            "substrate": "fx2-cmix"
+          },
+          "structural": {}
+        },
+        "type": "parameter_controller"
+      },
+      {
+        "id": "backend",
+        "payload": {
+          "continuous": {},
+          "discrete": {
+            "binary_codec": "xz_extreme_check_none",
+            "codec": "fx2-cmix",
+            "dictionary_codec": "cmix_self_compressed"
+          },
+          "structural": {}
+        },
+        "type": "codec"
+      }
+    ]
   },
-  "latest_result": "projects/enwiki9/results/fx2_core_tune_title_m0p95_m1p95_lstm1p00_sse1000_ctx10000_v1/2026-06-08T000326.json",
-  "verdict": "Exact 1K/250K/1M gates passed roundtrip and determinism. Archive improved strongly versus title-order control at 250K and 1M, but larger program payload and conservative scale forecast still miss the 10.95 target; keep as active core-tuning seed for parameter search."
+  "status": "blocked_dependency",
+  "verdict": "blocked_dependency: dependency_error at 1000000."
 }

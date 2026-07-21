@@ -64,14 +64,14 @@
     "tree_rss_margin_kib": 10481844
   },
   "active_processes": {
-    "active_cmix_mode": "text_compress",
+    "active_cmix_mode": "compress",
     "active_proc_io": {
       "cancelled_write_bytes": 0,
-      "rchar": 3508469,
-      "read_bytes": 62447616,
-      "syscr": 790,
-      "syscw": 11249,
-      "wchar": 1416814,
+      "rchar": 4561826,
+      "read_bytes": 0,
+      "syscr": 929,
+      "syscw": 21359,
+      "wchar": 1557422,
       "write_bytes": 0
     },
     "active_rows": [
@@ -136,7 +136,7 @@
         "pgid": 1783414,
         "pid": 1783481,
         "ppid": 1783414,
-        "rss_kib": 2497212,
+        "rss_kib": 2497244,
         "stat": "R"
       },
       {
@@ -152,7 +152,119 @@
         "pgid": 2999317,
         "pid": 2999386,
         "ppid": 2999317,
-        "rss_kib": 1939016,
+        "rss_kib": 1939068,
+        "stat": "R"
+      },
+      {
+        "args": "/bin/bash -c cd /home/x/deco && python3 - <<'PY' import os, subprocess, time, pathlib from concurrent.futures import ThreadPoolExecutor  ROOT = pathlib.Path('gamma/projects/enwiki9') ids_path = ROOT / 'run_batch_candidate_ids_candidate_only_remaining_tofire2.txt' ids = [x.strip() for x in ids_path.read_text().splitlines() if x.strip()]  # Detect currently running 1M candidates and skip them so we don't collide. active_lines = subprocess.run(     ['pgrep', '-af', 'projects/enwiki9/lib/driver.py'],     text=True, stdout=subprocess.PIPE, check=False ).stdout.splitlines() active = set() for line in active_lines:     parts = line.split()     if '--limit' in parts:         i = parts.index('--limit')         if i >= 1:             cand = parts[i-1]             if parts[i+1] == '1000000' and not cand.startswith('/'):                 active.add(cand)  pending = [cid for cid in ids if cid not in active]  # Conservative global fanout based on available resources. cpus = os.cpu_count() or 1 # leave headroom for existing load and I/O churn max_workers = max(1, min(len(pending), max(4, cpus // 2))) print(f'pending={len(pending)} active={len(active)} cpus={cpus} workers={max_workers}')  log_dir = ROOT / 'run_logs' log_dir.mkdir(exist_ok=True)   def run_one(cid: str):     log = log_dir / f'fanout_global_1m_{cid}.log'     cmd = [         'python3',         'tools/candidate_triage.py',         '--run',         '--candidate', cid,         '--gate-size', '1000000',         '--update-meta',     ]     start = time.time()     with open(log, 'w') as f:         f.write(f'[launcher] start={time.strftime(\"%Y-%m-%dT%H:%M:%S\")}\\n')         proc = subprocess.run(cmd, cwd=ROOT, stdout=f, stderr=subprocess.STDOUT)         f.write(f'[launcher] end={time.strftime(\"%Y-%m-%dT%H:%M:%S\")} rc={proc.returncode} elapsed={time.time()-start:.1f}s\\n')     return cid, proc.returncode  if not pending:     print('no pending candidates to launch') else:     with ThreadPoolExecutor(max_workers=max_workers) as ex:         futures = {ex.submit(run_one, cid): cid for cid in pending}         done = 0         for fut in futures:             cid = futures[fut]             try:                 rc = fut.result()[1]             except Exception as exc:                 rc = f'ERR:{exc}'             done += 1             if done % 4 == 0 or done == len(pending):                 print(f'completed {done}/{len(pending)} last={cid} rc={rc}') PY",
+        "pgid": 3082538,
+        "pid": 3082538,
+        "ppid": 964780,
+        "rss_kib": 304,
+        "stat": "Ss"
+      },
+      {
+        "args": "python3 -",
+        "pgid": 3082538,
+        "pid": 3082539,
+        "ppid": 3082538,
+        "rss_kib": 12552,
+        "stat": "Sl"
+      },
+      {
+        "args": "python3 tools/candidate_triage.py --run --candidate fx2_struct_top_nodict_min_v1 --gate-size 1000000 --update-meta",
+        "pgid": 3082538,
+        "pid": 3085608,
+        "ppid": 3082539,
+        "rss_kib": 12152,
+        "stat": "S"
+      },
+      {
+        "args": "python3 tools/candidate_triage.py --run --candidate fx2_struct_top_nodict_v1 --gate-size 1000000 --update-meta",
+        "pgid": 3082538,
+        "pid": 3085610,
+        "ppid": 3082539,
+        "rss_kib": 12148,
+        "stat": "S"
+      },
+      {
+        "args": "python3 tools/candidate_triage.py --run --candidate fx2_struct_top_nodict_xz_v1 --gate-size 1000000 --update-meta",
+        "pgid": 3082538,
+        "pid": 3085689,
+        "ppid": 3082539,
+        "rss_kib": 12148,
+        "stat": "S"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2_struct_top_nodict_v1 --limit 1000000 --check-determinism",
+        "pgid": 3085786,
+        "pid": 3085786,
+        "ppid": 3085610,
+        "rss_kib": 15552,
+        "stat": "Ss"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2_struct_top_nodict_min_v1 --limit 1000000 --check-determinism",
+        "pgid": 3085805,
+        "pid": 3085805,
+        "ppid": 3085608,
+        "rss_kib": 15644,
+        "stat": "Ss"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2_struct_top_nodict_xz_v1 --limit 1000000 --check-determinism",
+        "pgid": 3085878,
+        "pid": 3085878,
+        "ppid": 3085689,
+        "rss_kib": 15568,
+        "stat": "Ss"
+      },
+      {
+        "args": "python3 tools/candidate_triage.py --run --candidate fx2cmix_recovered_gcc_o3_struct_sidecar_add_xz_v1 --gate-size 1000000 --update-meta",
+        "pgid": 3082538,
+        "pid": 3087668,
+        "ppid": 3082539,
+        "rss_kib": 12148,
+        "stat": "S"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2cmix_recovered_gcc_o3_struct_sidecar_add_xz_v1 --limit 1000000 --check-determinism",
+        "pgid": 3087953,
+        "pid": 3087953,
+        "ppid": 3087668,
+        "rss_kib": 18016,
+        "stat": "Ss"
+      },
+      {
+        "args": "/tmp/fx2-struct-top-nodict-cmix-ytwmf54p -d /tmp/tmptb9p1e3f/in /tmp/tmptb9p1e3f/out",
+        "pgid": 3085786,
+        "pid": 3189714,
+        "ppid": 3085786,
+        "rss_kib": 5750316,
+        "stat": "R"
+      },
+      {
+        "args": "/tmp/tmpz8au16y6 -d /tmp/tmp831c8cxz/i /tmp/tmp831c8cxz/o",
+        "pgid": 3085805,
+        "pid": 3191508,
+        "ppid": 3085805,
+        "rss_kib": 5726644,
+        "stat": "R"
+      },
+      {
+        "args": "/tmp/tmp6762oefj -d /tmp/tmpnhwp2ahy/i /tmp/tmpnhwp2ahy/o",
+        "pgid": 3085878,
+        "pid": 3199975,
+        "ppid": 3085878,
+        "rss_kib": 5703164,
+        "stat": "R"
+      },
+      {
+        "args": "/tmp/fx2structa-3087953/cmix -c /tmp/fx2structa-3087953/english.dic /tmp/tmp28d2lfzy/in /tmp/tmp28d2lfzy/out",
+        "pgid": 3087953,
+        "pid": 3229120,
+        "ppid": 3087953,
+        "rss_kib": 5749412,
         "stat": "R"
       },
       {
@@ -160,166 +272,60 @@
         "pgid": 3264266,
         "pid": 3264266,
         "ppid": 1,
-        "rss_kib": 306404,
+        "rss_kib": 318104,
         "stat": "Ss"
       },
       {
-        "args": "/tmp/g3264266b -c /tmp/g3264266d /tmp/g3264266i /tmp/g3264266o",
+        "args": "/tmp/g3264266b -d /home/x/deco/gamma/projects/enwiki9/programs/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/d /tmp/g3264266d",
         "pgid": 3264266,
-        "pid": 3294491,
+        "pid": 3264433,
         "ppid": 3264266,
-        "rss_kib": 5914600,
-        "stat": "R"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2cmix_recovered_gcc_o3_xz_minwrap_v1 --limit 1000000 --check-determinism",
-        "pgid": 3403409,
-        "pid": 3403409,
-        "ppid": 3403401,
-        "rss_kib": 18008,
-        "stat": "Ss"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2_core_tune_title_m0p100_m1p95_lstm1p00_sse1000_ctx10000_v1 --limit 1000000 --check-determinism",
-        "pgid": 3419115,
-        "pid": 3419115,
-        "ppid": 3419106,
-        "rss_kib": 14508,
-        "stat": "Ss"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufsixtyfourth_minmaps_v1 --limit 1000000 --check-determinism",
-        "pgid": 3472447,
-        "pid": 3472447,
-        "ppid": 3472183,
-        "rss_kib": 12004,
-        "stat": "Ss"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1 --limit 1000000 --check-determinism",
-        "pgid": 3472466,
-        "pid": 3472466,
-        "ppid": 3472186,
-        "rss_kib": 12004,
-        "stat": "Ss"
-      },
-      {
-        "args": "/tmp/cmix21-mmap-bin-grxgqplc -t /tmp/cmix21-mmap-dict-1er0_i_t /tmp/tmppyxuo5o5/in /tmp/tmppyxuo5o5/out",
-        "pgid": 3472447,
-        "pid": 3472506,
-        "ppid": 3472447,
-        "rss_kib": 10285768,
-        "stat": "R"
-      },
-      {
-        "args": "/tmp/cmix21-mmap-bin-_jeq375z -t /tmp/cmix21-mmap-dict-lq2qk7l8 /tmp/tmprjicne3k/in /tmp/tmprjicne3k/out",
-        "pgid": 3472466,
-        "pid": 3472545,
-        "ppid": 3472466,
-        "rss_kib": 10183504,
-        "stat": "R"
-      },
-      {
-        "args": "/tmp/g3419115b -c /tmp/g3419115d /tmp/g3419115i /tmp/g3419115o",
-        "pgid": 3419115,
-        "pid": 3474690,
-        "ppid": 3419115,
-        "rss_kib": 3327988,
-        "stat": "R"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2_gepa_kind_template_topic_title_prefix_suffix_dictcmix_zlibpy_v1 --limit 1000000 --check-determinism",
-        "pgid": 3475108,
-        "pid": 3475108,
-        "ppid": 3474821,
-        "rss_kib": 18224,
-        "stat": "Ss"
-      },
-      {
-        "args": "/tmp/g3475108b -d /home/x/deco/gamma/projects/enwiki9/programs/fx2_gepa_kind_template_topic_title_prefix_suffix_dictcmix_zlibpy_v1/d /tmp/g3475108d",
-        "pgid": 3475108,
-        "pid": 3475208,
-        "ppid": 3475108,
-        "rss_kib": 1788952,
-        "stat": "R"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/lib/driver.py fx2_struct_top_dictcmix_xz_min_v1 --limit 1000000 --check-determinism",
-        "pgid": 3475277,
-        "pid": 3475277,
-        "ppid": 3474963,
-        "rss_kib": 15784,
-        "stat": "Ss"
-      },
-      {
-        "args": "/tmp/fx2m3475277b -d /home/x/deco/gamma/projects/enwiki9/programs/fx2_struct_top_dictcmix_xz_min_v1/english.dic.cmix /tmp/fx2m3475277d",
-        "pgid": 3475277,
-        "pid": 3475349,
-        "ppid": 3475277,
-        "rss_kib": 6149756,
-        "stat": "R"
-      },
-      {
-        "args": "/tmp/fx2mw3403409/c -c /tmp/fx2mw3403409/d /tmp/tmpi5eed8a8/i /tmp/tmpi5eed8a8/o",
-        "pgid": 3403409,
-        "pid": 3501927,
-        "ppid": 3403409,
-        "rss_kib": 5461016,
+        "rss_kib": 2319336,
         "stat": "R"
       }
     ],
     "active_scorer_observed": true,
     "active_temp_io": {
       "input_bytes": 1000000,
-      "input_mtime_utc": "2026-07-21T21:41:38+00:00",
-      "input_path": "/tmp/tmppyxuo5o5/in",
-      "output_bytes": 16384,
-      "output_mtime_utc": "2026-07-21T21:44:29+00:00",
-      "output_path": "/tmp/tmppyxuo5o5/out",
-      "output_temp_bytes": 593350,
-      "output_temp_mtime_utc": "2026-07-21T21:41:38+00:00",
-      "output_temp_path": "/tmp/tmppyxuo5o5/out.cmix.temp"
+      "input_mtime_utc": "2026-07-21T21:19:57+00:00",
+      "input_path": "/tmp/tmp28d2lfzy/in",
+      "output_bytes": 0,
+      "output_mtime_utc": "2026-07-21T21:19:57+00:00",
+      "output_path": "/tmp/tmp28d2lfzy/out",
+      "output_temp_bytes": 600742,
+      "output_temp_mtime_utc": "2026-07-21T21:19:57+00:00",
+      "output_temp_path": "/tmp/tmp28d2lfzy/out.cmix.temp"
     },
-    "active_tree_decimal_10gb_margin_kib": -47345603,
-    "active_tree_decimal_10gb_over_kib": 47345603,
-    "active_tree_margin_kib": -46625468,
-    "active_tree_rss_kib": 57111228,
-    "active_tree_rss_over_guard_kib": 46625468,
+    "active_tree_decimal_10gb_margin_kib": -29530375,
+    "active_tree_decimal_10gb_over_kib": 29530375,
+    "active_tree_margin_kib": -28810240,
+    "active_tree_rss_kib": 39296000,
+    "active_tree_rss_over_guard_kib": 28810240,
     "active_tree_rss_warning": "active process tree RSS crossed the local numeric guard; the running kill guard is single-process",
     "cmix_rows": [
       {
-        "args": "/tmp/cmix21-mmap-bin-grxgqplc -t /tmp/cmix21-mmap-dict-1er0_i_t /tmp/tmppyxuo5o5/in /tmp/tmppyxuo5o5/out",
-        "pgid": 3472447,
-        "pid": 3472506,
-        "ppid": 3472447,
-        "rss_kib": 10285768,
-        "stat": "R"
-      },
-      {
-        "args": "/tmp/cmix21-mmap-bin-_jeq375z -t /tmp/cmix21-mmap-dict-lq2qk7l8 /tmp/tmprjicne3k/in /tmp/tmprjicne3k/out",
-        "pgid": 3472466,
-        "pid": 3472545,
-        "ppid": 3472466,
-        "rss_kib": 10183504,
+        "args": "/tmp/fx2structa-3087953/cmix -c /tmp/fx2structa-3087953/english.dic /tmp/tmp28d2lfzy/in /tmp/tmp28d2lfzy/out",
+        "pgid": 3087953,
+        "pid": 3229120,
+        "ppid": 3087953,
+        "rss_kib": 5749412,
         "stat": "R"
       }
     ],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
     "max_cmix_process": {
-      "args": "/tmp/cmix21-mmap-bin-grxgqplc -t /tmp/cmix21-mmap-dict-1er0_i_t /tmp/tmppyxuo5o5/in /tmp/tmppyxuo5o5/out",
-      "pgid": 3472447,
-      "pid": 3472506,
-      "ppid": 3472447,
-      "rss_kib": 10285768,
+      "args": "/tmp/fx2structa-3087953/cmix -c /tmp/fx2structa-3087953/english.dic /tmp/tmp28d2lfzy/in /tmp/tmp28d2lfzy/out",
+      "pgid": 3087953,
+      "pid": 3229120,
+      "ppid": 3087953,
+      "rss_kib": 5749412,
       "stat": "R"
     },
     "research_rows": [],
     "rss_guard_kib": 10485760,
-    "single_process_decimal_10gb_margin_kib": -520143,
-    "single_process_decimal_10gb_over_kib": 520143,
-    "single_process_decimal_10gb_warning": "active cmix RSS exceeds decimal 10GB even if it remains under the local binary 10GiB guard",
-    "single_process_margin_kib": 199992
+    "single_process_decimal_10gb_margin_kib": 4016213,
+    "single_process_margin_kib": 4736348
   },
   "best_exact_100m": {
     "compressed_size": 14857781,
@@ -401,16 +407,16 @@
         "measured_negative": 88,
         "retired": 397
       },
-      "directories": 956,
-      "file_entries": 3754,
-      "ignored_entries": 1615,
+      "directories": 950,
+      "file_entries": 3701,
+      "ignored_entries": 1563,
       "modified_tracked_entries": 111,
       "program_directories": 540,
       "registered_programs": 225,
       "top_level_file_entries": {
         ".claude": 1,
         ".codex-reminders": 4,
-        "<root>": 36,
+        "<root>": 35,
         "agents": 5,
         "data": 7,
         "docs": 42,
@@ -418,14 +424,14 @@
         "lib": 4,
         "patches": 20,
         "programs": 1891,
-        "results": 1020,
-        "run_logs": 397,
+        "results": 1003,
+        "run_logs": 362,
         "skills": 4,
         "tests": 57,
         "tools": 185
       },
       "tracked_entries": 2408,
-      "untracked_nonignored_entries": 7
+      "untracked_nonignored_entries": 6
     }
   },
   "certificate_active_gate": {
@@ -496,7 +502,7 @@
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
-  "generated_at_utc": "2026-07-21T21:45:03+00:00",
+  "generated_at_utc": "2026-07-21T21:23:15+00:00",
   "handoff": {
     "active_scorer_observed": true,
     "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
@@ -535,7 +541,7 @@
   },
   "observed_gate_command": {
     "active_gate_command_observed": true,
-    "driver_process_count": 12,
+    "driver_process_count": 11,
     "driver_processes": [
       {
         "candidate_matches": false,
@@ -573,58 +579,51 @@
         "scope_matches": false
       },
       {
+        "candidate_matches": false,
+        "check_determinism": false,
+        "pid": 3082538,
+        "scope_bytes": null,
+        "scope_matches": false
+      },
+      {
+        "candidate_matches": false,
+        "check_determinism": true,
+        "pid": 3085786,
+        "scope_bytes": 1000000,
+        "scope_matches": false
+      },
+      {
+        "candidate_matches": false,
+        "check_determinism": true,
+        "pid": 3085805,
+        "scope_bytes": 1000000,
+        "scope_matches": false
+      },
+      {
+        "candidate_matches": false,
+        "check_determinism": true,
+        "pid": 3085878,
+        "scope_bytes": 1000000,
+        "scope_matches": false
+      },
+      {
+        "candidate_matches": false,
+        "check_determinism": true,
+        "pid": 3087953,
+        "scope_bytes": 1000000,
+        "scope_matches": false
+      },
+      {
         "candidate_matches": true,
         "check_determinism": true,
         "pid": 3264266,
         "scope_bytes": 100000000,
         "scope_matches": true
-      },
-      {
-        "candidate_matches": false,
-        "check_determinism": true,
-        "pid": 3403409,
-        "scope_bytes": 1000000,
-        "scope_matches": false
-      },
-      {
-        "candidate_matches": false,
-        "check_determinism": true,
-        "pid": 3419115,
-        "scope_bytes": 1000000,
-        "scope_matches": false
-      },
-      {
-        "candidate_matches": false,
-        "check_determinism": true,
-        "pid": 3472447,
-        "scope_bytes": 1000000,
-        "scope_matches": false
-      },
-      {
-        "candidate_matches": false,
-        "check_determinism": true,
-        "pid": 3472466,
-        "scope_bytes": 1000000,
-        "scope_matches": false
-      },
-      {
-        "candidate_matches": false,
-        "check_determinism": true,
-        "pid": 3475108,
-        "scope_bytes": 1000000,
-        "scope_matches": false
-      },
-      {
-        "candidate_matches": false,
-        "check_determinism": true,
-        "pid": 3475277,
-        "scope_bytes": 1000000,
-        "scope_matches": false
       }
     ],
     "expected_candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
     "expected_scope_bytes": 100000000,
-    "mismatch_count": 11
+    "mismatch_count": 10
   },
   "operator_action": {
     "action": "wait_for_gate_receipts",
@@ -637,14 +636,14 @@
     "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log"
   },
   "operator_summary": {
-    "active_cmix_decimal_10gb_margin_kib": -520143,
-    "active_cmix_mode": "text_compress",
-    "active_cmix_pid": 3472506,
-    "active_cmix_rss_kib": 10285768,
-    "active_cmix_single_process_margin_kib": 199992,
-    "active_process_tree_decimal_10gb_margin_kib": -47345603,
-    "active_process_tree_margin_kib": -46625468,
-    "active_process_tree_rss_kib": 57111228,
+    "active_cmix_decimal_10gb_margin_kib": 4016213,
+    "active_cmix_mode": "compress",
+    "active_cmix_pid": 3229120,
+    "active_cmix_rss_kib": 5749412,
+    "active_cmix_single_process_margin_kib": 4736348,
+    "active_process_tree_decimal_10gb_margin_kib": -29530375,
+    "active_process_tree_margin_kib": -28810240,
+    "active_process_tree_rss_kib": 39296000,
     "active_scorer_observed": true,
     "binary_10gib_guard_kib": 10485760,
     "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",

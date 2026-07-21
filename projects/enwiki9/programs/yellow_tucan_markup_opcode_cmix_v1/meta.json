@@ -6,9 +6,9 @@
   "measured": {
     "lane0_triage": {
       "gates": [],
-      "generated_at": "2026-07-21T16:38:36+00:00",
+      "generated_at": "2026-07-21T21:08:27+00:00",
       "proposed_status": "retired",
-      "verdict": "retired: driver_failure at 1024."
+      "verdict": "retired: driver_failure at 1000000."
     },
     "lane0_triage_runs": [
       {
@@ -22,10 +22,60 @@
         "generated_at": "2026-07-21T16:38:36+00:00",
         "proposed_status": "retired",
         "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.545096,
+            "comparison": {
+              "archive_delta_vs_baseline": -97595,
+              "baseline": {
+                "bits_per_byte": 2.325856,
+                "compressed_size": 290732,
+                "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+                "data_size": 1000000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 290933,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 302195
+            },
+            "compressed_size": 193137,
+            "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+            "data_size": 1000000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 593128,
+            "program_id": "yellow_tucan_markup_opcode_cmix_v1",
+            "program_size": 399991,
+            "program_stats": {
+              "opcode_token_count": 27129,
+              "source_len": 1000000,
+              "syntax_deleted_bytes": 43619,
+              "syntax_matched_bytes": 97877,
+              "transformed_size": 956381
+            },
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T20:18:24+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T21:08:27+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1000000."
       }
     ]
   },
   "notes": "cmix.bin.gz is vendored beside program.py and counted by the harness.",
   "status": "retired",
-  "verdict": "retired: driver_failure at 1024."
+  "verdict": "retired: driver_failure at 1000000."
 }

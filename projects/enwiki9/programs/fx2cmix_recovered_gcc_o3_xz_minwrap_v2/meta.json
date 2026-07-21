@@ -1,9 +1,4 @@
 {
-  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v2",
-  "family": "fx2-cmix-recovered",
-  "status": "active",
-  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v1",
-  "description": "Recovered fx2-cmix GCC baseline payload with a smaller Python wrapper than minwrap_v1. No predictor, dictionary, or archive-coding behavior is changed.",
   "build": {
     "compiler": "g++",
     "defines": [
@@ -19,67 +14,86 @@
     ],
     "packaging": "Reuses the xz-packed cmix and english.dic payloads from fx2cmix_recovered_gcc_o3_xz_v1; only program.py is minimized further."
   },
-  "hypothesis": "The recovered fx2 wrapper can reduce counted program size further while preserving archive bytes.",
   "deps": [],
+  "description": "Recovered fx2-cmix GCC baseline payload with a smaller Python wrapper than minwrap_v1. No predictor, dictionary, or archive-coding behavior is changed.",
+  "family": "fx2-cmix-recovered",
+  "hypothesis": "The recovered fx2 wrapper can reduce counted program size further while preserving archive bytes.",
+  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v2",
+  "measured": {
+    "1k_smoke": {
+      "baseline_hutter_score": 284634,
+      "compressed_size": 262,
+      "data_size": 1024,
+      "determinism_ok": true,
+      "hutter_score": 283906,
+      "parent_hutter_score": 283979,
+      "program_size": 283644,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -728,
+      "score_delta_vs_parent": -73,
+      "timestamp": "2026-06-07T15:35:15"
+    },
+    "64k_screen": {
+      "archive_delta_vs_baseline": 0,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "compressed_size": 13585,
+      "data_size": 65536,
+      "determinism_ok": true,
+      "hutter_score": 297229,
+      "parent_hutter_score": 297302,
+      "program_size": 283644,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -728,
+      "score_delta_vs_parent": -73,
+      "timestamp": "2026-06-07T15:37:25"
+    },
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T18:57:40+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1000000."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T18:57:40+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1000000."
+      }
+    ]
+  },
+  "parent": "fx2cmix_recovered_gcc_o3_xz_minwrap_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "wrapper",
+        "stream": "exec",
+        "to": "substrate"
+      }
+    ],
     "nodes": [
       {
         "id": "substrate",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "codec": "fx2-cmix",
-            "build": "recovered_gcc_o3"
+            "build": "recovered_gcc_o3",
+            "codec": "fx2-cmix"
           }
-        }
+        },
+        "type": "codec"
       },
       {
         "id": "wrapper",
-        "type": "packaging",
         "payload": {
           "discrete": {
             "mode": "minimal_python_xz_unpack_no_pathlib"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "wrapper",
-        "to": "substrate",
-        "stream": "exec"
+        },
+        "type": "packaging"
       }
     ]
   },
-  "measured": {
-    "1k_smoke": {
-      "data_size": 1024,
-      "compressed_size": 262,
-      "program_size": 283644,
-      "hutter_score": 283906,
-      "parent_hutter_score": 283979,
-      "baseline_hutter_score": 284634,
-      "score_delta_vs_parent": -73,
-      "score_delta_vs_baseline": -728,
-      "roundtrip_ok": true,
-      "determinism_ok": true,
-      "timestamp": "2026-06-07T15:35:15"
-    },
-    "64k_screen": {
-      "data_size": 65536,
-      "compressed_size": 13585,
-      "program_size": 283644,
-      "hutter_score": 297229,
-      "parent_hutter_score": 297302,
-      "baseline_compressed_size": 13585,
-      "baseline_hutter_score": 297957,
-      "archive_delta_vs_baseline": 0,
-      "score_delta_vs_parent": -73,
-      "score_delta_vs_baseline": -728,
-      "roundtrip_ok": true,
-      "determinism_ok": true,
-      "timestamp": "2026-06-07T15:37:25"
-    }
-  },
-  "verdict": "Promote as current recovered fx2 package winner. It preserves recovered fx2 archive bytes at the 64 KiB screen and reduces counted program size by 728 bytes versus fx2cmix_recovered_gcc_o3_xz_v1."
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1000000."
 }

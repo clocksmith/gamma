@@ -1,9 +1,4 @@
 {
-  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v1",
-  "family": "fx2-cmix-recovered",
-  "status": "active",
-  "parent": "fx2cmix_recovered_gcc_o3_xz_v1",
-  "description": "Recovered fx2-cmix GCC baseline payload with a smaller Python wrapper. No predictor, dictionary, or archive-coding behavior is changed.",
   "build": {
     "compiler": "g++",
     "defines": [
@@ -19,64 +14,153 @@
     ],
     "packaging": "Reuses the xz-packed cmix and english.dic payloads from fx2cmix_recovered_gcc_o3_xz_v1; only program.py is minimized."
   },
-  "hypothesis": "The recovered fx2 wrapper can reduce counted program size without changing compressed archives.",
   "deps": [],
+  "description": "Recovered fx2-cmix GCC baseline payload with a smaller Python wrapper. No predictor, dictionary, or archive-coding behavior is changed.",
+  "family": "fx2-cmix-recovered",
+  "hypothesis": "The recovered fx2 wrapper can reduce counted program size without changing compressed archives.",
+  "id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v1",
+  "measured": {
+    "1k_smoke": {
+      "baseline_compressed_size": 262,
+      "baseline_hutter_score": 284634,
+      "compressed_size": 262,
+      "data_size": 1024,
+      "determinism_ok": true,
+      "hutter_score": 283979,
+      "program_size": 283717,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -655,
+      "timestamp": "2026-06-07T15:30:33"
+    },
+    "64k_screen": {
+      "archive_delta_vs_baseline": 0,
+      "baseline_compressed_size": 13585,
+      "baseline_hutter_score": 297957,
+      "compressed_size": 13585,
+      "data_size": 65536,
+      "determinism_ok": true,
+      "hutter_score": 297302,
+      "program_size": 283717,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": -655,
+      "timestamp": "2026-06-07T15:32:42"
+    },
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.401624,
+          "comparison": {
+            "archive_delta_vs_baseline": -115529,
+            "baseline": {
+              "bits_per_byte": 2.325856,
+              "compressed_size": 290732,
+              "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+              "data_size": 1000000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 290933,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 167987
+          },
+          "compressed_size": 175203,
+          "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+          "data_size": 1000000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 458920,
+          "program_id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v1",
+          "program_size": 283717,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T21:48:45+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T18:56:26+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1000000."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.401624,
+            "comparison": {
+              "archive_delta_vs_baseline": -115529,
+              "baseline": {
+                "bits_per_byte": 2.325856,
+                "compressed_size": 290732,
+                "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+                "data_size": 1000000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 290933,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 167987
+            },
+            "compressed_size": 175203,
+            "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+            "data_size": 1000000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 458920,
+            "program_id": "fx2cmix_recovered_gcc_o3_xz_minwrap_v1",
+            "program_size": 283717,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T21:48:45+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
+  },
+  "parent": "fx2cmix_recovered_gcc_o3_xz_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "wrapper",
+        "stream": "exec",
+        "to": "substrate"
+      }
+    ],
     "nodes": [
       {
         "id": "substrate",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "codec": "fx2-cmix",
-            "build": "recovered_gcc_o3"
+            "build": "recovered_gcc_o3",
+            "codec": "fx2-cmix"
           }
-        }
+        },
+        "type": "codec"
       },
       {
         "id": "wrapper",
-        "type": "packaging",
         "payload": {
           "discrete": {
             "mode": "minimal_python_xz_unpack"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "wrapper",
-        "to": "substrate",
-        "stream": "exec"
+        },
+        "type": "packaging"
       }
     ]
   },
-  "measured": {
-    "1k_smoke": {
-      "data_size": 1024,
-      "compressed_size": 262,
-      "program_size": 283717,
-      "hutter_score": 283979,
-      "baseline_compressed_size": 262,
-      "baseline_hutter_score": 284634,
-      "score_delta_vs_baseline": -655,
-      "roundtrip_ok": true,
-      "determinism_ok": true,
-      "timestamp": "2026-06-07T15:30:33"
-    },
-    "64k_screen": {
-      "data_size": 65536,
-      "compressed_size": 13585,
-      "program_size": 283717,
-      "hutter_score": 297302,
-      "baseline_compressed_size": 13585,
-      "baseline_hutter_score": 297957,
-      "archive_delta_vs_baseline": 0,
-      "score_delta_vs_baseline": -655,
-      "roundtrip_ok": true,
-      "determinism_ok": true,
-      "timestamp": "2026-06-07T15:32:42"
-    }
-  },
-  "verdict": "Promote as a packaging-only improvement. It preserves recovered fx2 archive bytes at the 64 KiB screen and reduces counted program size by 655 bytes versus fx2cmix_recovered_gcc_o3_xz_v1."
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }
