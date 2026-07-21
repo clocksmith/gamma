@@ -1,7 +1,31 @@
 {
-  "id": "fx2cmix_wrapped_dictcmix_xz_min_v1",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
   "description": "Minified wrapper for the xz-packed fx2-cmix binary plus cmix-compressed english.dic payload",
-  "deps": ["C++ runtime for the vendored cmix binary"],
+  "id": "fx2cmix_wrapped_dictcmix_xz_min_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:41:31+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:37:57+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:41:31+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "notes": "Compression behavior should match fx2cmix_wrapped_dictcmix_xz_v1 byte-for-byte; this variant only reduces the scored Python wrapper bytes.",
   "program_files": {
     "cmix.xz": 142512,
@@ -9,25 +33,26 @@
     "program.py": 635,
     "total": 243277
   },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024.",
   "verified_gates": {
-    "1k_driver_identity_vs_fx2cmix_wrapped_dictcmix_xz_v1": {
-      "input_bytes": 1000,
-      "compressed_size": 257,
-      "program_size": 243277,
-      "hutter_score": 243534,
-      "compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
-      "parent_compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
-      "roundtrip_ok": true
-    },
     "100m_inherited_from_fx2cmix_wrapped_dictcmix_xz_v1": {
-      "input_bytes": 100000000,
       "compressed_size": 14965167,
-      "program_size": 243277,
-      "hutter_score": 15208444,
-      "score_percent": 15.208444,
       "distance_to_10_percent_score": 5208444,
-      "roundtrip_basis": "Same decompressed native binary, byte-identical decoded dictionary, same -c/-d dictionary arguments, and byte-identical 1KB archive output."
+      "hutter_score": 15208444,
+      "input_bytes": 100000000,
+      "program_size": 243277,
+      "roundtrip_basis": "Same decompressed native binary, byte-identical decoded dictionary, same -c/-d dictionary arguments, and byte-identical 1KB archive output.",
+      "score_percent": 15.208444
+    },
+    "1k_driver_identity_vs_fx2cmix_wrapped_dictcmix_xz_v1": {
+      "compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "compressed_size": 257,
+      "hutter_score": 243534,
+      "input_bytes": 1000,
+      "parent_compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "program_size": 243277,
+      "roundtrip_ok": true
     }
-  },
-  "verdict": "Promote as a packaging-only improvement over fx2cmix_wrapped_dictcmix_xz_v1."
+  }
 }

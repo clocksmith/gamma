@@ -1,62 +1,308 @@
 {
-  "id": "srstc_raw_order2_aggregate_sketch_v1",
-  "description": "Standalone SRSTC raw byte-bit codec using order-2 base context, deterministic wiki/sketch retrieval keys, aggregate retrieval probability, and fixed-point binary arithmetic coding.",
   "added": "2026-07-03",
-  "deps": [],
-  "family": "srstc",
-  "status": "candidate",
-  "source_receipt": "projects/enwiki9/results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json",
-  "shadow_basis": {
-    "method": "streaming_retrieval_raw_shadow_v1",
-    "trace_version": "raw_enwik9_bits_msb_v1",
-    "data_bytes_loaded": 65536000,
-    "encoded_rows": 524288000,
-    "heldout_shadow_saved_bytes": 897062,
-    "net_saved_bytes": 884774,
-    "largest_block_regression_bytes": 22.3974609375,
-    "block_regression_count": 3,
-    "verdict": "positive_shadow_only"
+  "contract": {
+    "causality": "Predictor state is read before each bit and updated only after the bit is encoded or decoded.",
+    "compress": "compress(data: bytes) -> bytes",
+    "decompress": "decompress(blob: bytes) -> bytes"
   },
+  "deps": [],
+  "description": "Standalone SRSTC raw byte-bit codec using order-2 base context, deterministic wiki/sketch retrieval keys, aggregate retrieval probability, and fixed-point binary arithmetic coding.",
+  "family": "srstc",
+  "id": "srstc_raw_order2_aggregate_sketch_v1",
   "measured": {
     "1024_driver_no_save": {
-      "data_size": 1024,
-      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
-      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
-      "compressed_size": 410,
-      "program_size": 20688,
-      "hutter_score": 21098,
-      "bits_per_byte": 3.203125,
-      "roundtrip_ok": true,
-      "single_host_byte_equal": true,
-      "compressed_sha256": "e0a1d77700c49ec12d29a9ae8ae6a41cded90812ac8d4ead58f941811e19e9dd",
       "baseline_lzma_compressed_size": 412,
       "baseline_lzma_hutter_score": 613,
+      "bits_per_byte": 3.203125,
+      "compressed_sha256": "e0a1d77700c49ec12d29a9ae8ae6a41cded90812ac8d4ead58f941811e19e9dd",
+      "compressed_size": 410,
+      "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+      "data_sha256": "ef3e698d40b8b36d6d1776feccc25bab3d01de872a4fd8e56f5b929631568496",
+      "data_size": 1024,
+      "hutter_score": 21098,
+      "program_size": 20688,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
       "verdict": "archive_positive_score_negative"
     },
     "4096_driver_no_save": {
-      "data_size": 4096,
-      "data_md5": "98e8e5f90d50dffb02081982d10f325d",
-      "data_sha256": "652ed0541c8b9e2d8194c2a1cd20a3ea516efaa542082535c0ef57267e1ca49e",
-      "compressed_size": 1340,
-      "program_size": 20688,
-      "hutter_score": 22028,
-      "bits_per_byte": 2.617188,
-      "roundtrip_ok": true,
-      "single_host_byte_equal": true,
-      "compressed_sha256": "07c04d0c2fa777190ccd56036142792f96140e888d301b5d5bc0320c37b643cf",
       "baseline_lzma_compressed_size": 1024,
       "baseline_lzma_hutter_score": 1225,
+      "bits_per_byte": 2.617188,
+      "compressed_sha256": "07c04d0c2fa777190ccd56036142792f96140e888d301b5d5bc0320c37b643cf",
+      "compressed_size": 1340,
+      "data_md5": "98e8e5f90d50dffb02081982d10f325d",
+      "data_sha256": "652ed0541c8b9e2d8194c2a1cd20a3ea516efaa542082535c0ef57267e1ca49e",
+      "data_size": 4096,
+      "hutter_score": 22028,
+      "program_size": 20688,
+      "roundtrip_ok": true,
+      "single_host_byte_equal": true,
       "verdict": "score_negative"
-    }
-  },
-  "contract": {
-    "compress": "compress(data: bytes) -> bytes",
-    "decompress": "decompress(blob: bytes) -> bytes",
-    "causality": "Predictor state is read before each bit and updated only after the bit is encoded or decoded."
+    },
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 3.203125,
+          "comparison": {
+            "archive_delta_vs_baseline": -2,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 20485
+          },
+          "compressed_size": 410,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 21098,
+          "program_id": "srstc_raw_order2_aggregate_sketch_v1",
+          "program_size": 20688,
+          "program_stats": {
+            "base_contexts": 2258,
+            "retrieval_contexts": 33920,
+            "retrieval_mean_hits": 39.7727816720807,
+            "retrieval_rows": 5849,
+            "rows": 8192
+          },
+          "roundtrip_ok": true
+        },
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 3.02112,
+          "comparison": {
+            "archive_delta_vs_baseline": 18862,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 39349
+          },
+          "compressed_size": 94410,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 115098,
+          "program_id": "srstc_raw_order2_aggregate_sketch_v1",
+          "program_size": 20688,
+          "program_stats": {
+            "base_contexts": 59459,
+            "retrieval_contexts": 200000,
+            "retrieval_mean_hits": 254.09095153302982,
+            "retrieval_rows": 1647163,
+            "rows": 2000000
+          },
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T16:42:48+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: valid deterministic loser."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 3.203125,
+            "comparison": {
+              "archive_delta_vs_baseline": -2,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 20485
+            },
+            "compressed_size": 410,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 21098,
+            "program_id": "srstc_raw_order2_aggregate_sketch_v1",
+            "program_size": 20688,
+            "program_stats": {
+              "base_contexts": 2258,
+              "retrieval_contexts": 33920,
+              "retrieval_mean_hits": 39.7727816720807,
+              "retrieval_rows": 5849,
+              "rows": 8192
+            },
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 3.02112,
+            "comparison": {
+              "archive_delta_vs_baseline": 18862,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 39349
+            },
+            "compressed_size": 94410,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 115098,
+            "program_id": "srstc_raw_order2_aggregate_sketch_v1",
+            "program_size": 20688,
+            "program_stats": {
+              "base_contexts": 59459,
+              "retrieval_contexts": 200000,
+              "retrieval_mean_hits": 254.09095153302982,
+              "retrieval_rows": 1647163,
+              "rows": 2000000
+            },
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:55:44+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 3.203125,
+            "comparison": {
+              "archive_delta_vs_baseline": -2,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 20485
+            },
+            "compressed_size": 410,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 21098,
+            "program_id": "srstc_raw_order2_aggregate_sketch_v1",
+            "program_size": 20688,
+            "program_stats": {
+              "base_contexts": 2258,
+              "retrieval_contexts": 33920,
+              "retrieval_mean_hits": 39.7727816720807,
+              "retrieval_rows": 5849,
+              "rows": 8192
+            },
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 3.02112,
+            "comparison": {
+              "archive_delta_vs_baseline": 18862,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 39349
+            },
+            "compressed_size": 94410,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 115098,
+            "program_id": "srstc_raw_order2_aggregate_sketch_v1",
+            "program_size": 20688,
+            "program_stats": {
+              "base_contexts": 59459,
+              "retrieval_contexts": 200000,
+              "retrieval_mean_hits": 254.09095153302982,
+              "retrieval_rows": 1647163,
+              "rows": 2000000
+            },
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T16:42:48+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      }
+    ]
   },
   "notes": [
     "This is a real decoder-replayable codec form of the SRSTC shadow model, not a target score claim.",
     "The byte-prior table from the shadow receipt is intentionally omitted because byte_prior_blend_ppm was zero in the winning receipt and did not affect probabilities.",
     "Promotion requires exact driver evidence and comparison against same-scope baselines."
-  ]
+  ],
+  "shadow_basis": {
+    "block_regression_count": 3,
+    "data_bytes_loaded": 65536000,
+    "encoded_rows": 524288000,
+    "heldout_shadow_saved_bytes": 897062,
+    "largest_block_regression_bytes": 22.3974609375,
+    "method": "streaming_retrieval_raw_shadow_v1",
+    "net_saved_bytes": 884774,
+    "trace_version": "raw_enwik9_bits_msb_v1",
+    "verdict": "positive_shadow_only"
+  },
+  "source_receipt": "projects/enwiki9/results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks.json",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: valid deterministic loser."
 }

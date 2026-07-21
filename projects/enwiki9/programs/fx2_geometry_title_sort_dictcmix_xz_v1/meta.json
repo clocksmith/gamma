@@ -1,52 +1,77 @@
 {
-  "id": "fx2_geometry_title_sort_dictcmix_xz_v1",
-  "description": "Reversible article-geometry page ordering wrapper with title tie-breakers around the smaller fx2_topic_sort_dictcmix_xz_v1 backend assets",
   "added": "2026-06-03",
-  "deps": ["C++ runtime for the vendored cmix binary"],
   "basis": "Tests whether adding title tie-breakers inside the current article-geometry ordering key improves archive size enough to offset the wrapper size increase.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
+  "description": "Reversible article-geometry page ordering wrapper with title tie-breakers around the smaller fx2_topic_sort_dictcmix_xz_v1 backend assets",
+  "diagnostics": {
+    "100m_exact_gate": {
+      "reason": "Stopped before result because the diagnostic gain is small relative to the active 100MB score gap.",
+      "result_json": null,
+      "status": "not_verified"
+    },
+    "100m_lzma_filter": {
+      "archive_delta_bytes": -1688,
+      "codec": "Python lzma preset=9|PRESET_EXTREME on transformed raw stream",
+      "current_geometry_bytes": 24641360,
+      "input_bytes": 100000000,
+      "title_tie_geometry_bytes": 24639672
+    }
+  },
   "expected_use": "Verified 1KB smoke and 10MB exact frontier gates. The 100MB LZMA diagnostic is favorable, but there is no exact 100MB verified gate; do not promote at 100MB.",
+  "id": "fx2_geometry_title_sort_dictcmix_xz_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:38:07+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:51:54+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:38:07+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "program_files": {
     "cmix.xz": 81840,
     "english.dic.cmix": 100208,
     "program.py": 1849,
     "total": 183897
   },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024.",
   "verified_gates": {
-    "1k_driver_smoke": {
-      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_v1/2026-06-03T173542.json",
-      "input_bytes": 1000,
-      "compressed_size": 256,
-      "program_size": 183897,
-      "hutter_score": 184153,
-      "roundtrip_ok": true,
-      "compressed_sha256": "57ce4a6025ec441cb135cbf3ccbf353919e83b88fd2c16e9841d648791f78f8f"
-    },
     "10m_driver_new_frontier": {
-      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_v1/2026-06-03T192500.json",
-      "input_bytes": 10000000,
+      "compressed_sha256": "c42cd7b84576b983b4d1b01fd24a1e560c897708a88ed32b56013d94647957d8",
       "compressed_size": 1642758,
-      "program_size": 183897,
-      "hutter_score": 1826655,
-      "score_percent": 18.26655,
-      "distance_to_10_percent_score": 826655,
-      "roundtrip_ok": true,
       "delta_vs_fx2_geometry_sort_dictcmix_xz_v1_10m": -81,
-      "compressed_sha256": "c42cd7b84576b983b4d1b01fd24a1e560c897708a88ed32b56013d94647957d8"
-    }
-  },
-  "diagnostics": {
-    "100m_lzma_filter": {
-      "input_bytes": 100000000,
-      "codec": "Python lzma preset=9|PRESET_EXTREME on transformed raw stream",
-      "current_geometry_bytes": 24641360,
-      "title_tie_geometry_bytes": 24639672,
-      "archive_delta_bytes": -1688
+      "distance_to_10_percent_score": 826655,
+      "hutter_score": 1826655,
+      "input_bytes": 10000000,
+      "program_size": 183897,
+      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_v1/2026-06-03T192500.json",
+      "roundtrip_ok": true,
+      "score_percent": 18.26655
     },
-    "100m_exact_gate": {
-      "status": "not_verified",
-      "result_json": null,
-      "reason": "Stopped before result because the diagnostic gain is small relative to the active 100MB score gap."
+    "1k_driver_smoke": {
+      "compressed_sha256": "57ce4a6025ec441cb135cbf3ccbf353919e83b88fd2c16e9841d648791f78f8f",
+      "compressed_size": 256,
+      "hutter_score": 184153,
+      "input_bytes": 1000,
+      "program_size": 183897,
+      "result_json": "results/fx2_geometry_title_sort_dictcmix_xz_v1/2026-06-03T173542.json",
+      "roundtrip_ok": true
     }
-  },
-  "verdict": "New exact 10MB frontier. No exact 100MB promotion."
+  }
 }

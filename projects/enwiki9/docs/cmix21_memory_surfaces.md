@@ -13,16 +13,16 @@ They do not prove a target result and do not replace exact gate promotion.
 ## Active Gate Context
 
 - Active candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
-- Active scope bytes: `n/a`
-- cmix21 candidates with result or guard evidence: `1`
+- Active scope bytes: `100,000,000`
+- cmix21 candidates with result or guard evidence: `6`
 
 ## Observed Knob Values
 
-- PPMD caps KiB: `20352`
+- PPMD caps KiB: `20352`, `102400`
 - PAQ levels: `5`
 - FXCM-RCM values: `20`
 - RCM values: `32`
-- Buffer tokens: `buffull`
+- Buffer tokens: `buffull`, `bufthirtysecond`
 - Guard token sets: `ppmdguard2`
 - Match token sets: n/a
 
@@ -30,6 +30,11 @@ They do not prove a target result and do not replace exact gate promotion.
 
 | Candidate | PPMD KiB | PAQ | FXCM-RCM | RCM | Buffer | Guards | Latest prefix | Prefix archive | 10M archive | 10M RSS | 100M RSS |
 |---|---:|---:|---:|---:|---|---|---:|---:|---:|---|---|
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 44,978 | n/a | missing | missing |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 44,978 | n/a | missing | missing |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 45,184 | n/a | missing | missing |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 45,184 | n/a | missing | missing |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 45,184 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 20,352 | 5 | 20 | 32 | buffull | ppmdguard2 | n/a | n/a | n/a | missing | pass; bin +1,588,440 KiB; dec +868,305 KiB |
 
 ## Readout

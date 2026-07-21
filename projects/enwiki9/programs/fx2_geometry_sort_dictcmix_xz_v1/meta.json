@@ -1,49 +1,74 @@
 {
-  "id": "fx2_geometry_sort_dictcmix_xz_v1",
-  "description": "Reversible article-geometry page ordering wrapper around the smaller fx2_topic_sort_dictcmix_xz_v1 backend assets",
   "added": "2026-06-02",
-  "deps": ["C++ runtime for the vendored cmix binary"],
   "basis": "Tests whether the geometry ordering win from fx2cmix_geometry_sort_dictcmix_xz_v1 also clears the current exact 10MB frontier when paired with the smaller context-6 backend package.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
+  "description": "Reversible article-geometry page ordering wrapper around the smaller fx2_topic_sort_dictcmix_xz_v1 backend assets",
   "expected_use": "Verified 1KB smoke, 10MB exact, and 100MB exact frontier gates.",
+  "id": "fx2_geometry_sort_dictcmix_xz_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:37:57+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:52:01+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:37:57+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "program_files": {
     "cmix.xz": 81840,
     "english.dic.cmix": 100208,
     "program.py": 1830,
     "total": 183878
   },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024.",
   "verified_gates": {
-    "1k_driver_smoke": {
-      "result_json": "results/fx2_geometry_sort_dictcmix_xz_v1/2026-06-02T201857.json",
-      "input_bytes": 1000,
-      "compressed_size": 256,
+    "100m_driver_new_frontier": {
+      "compressed_sha256": "589339950fd499f287c35f433ca7b901504858440cd49a81a9cabd65be9c03ca",
+      "compressed_size": 14857781,
+      "delta_vs_fx2cmix_geometry_sort_dictcmix_xz_v1_100m": -71052,
+      "distance_to_10_percent_score": 5041659,
+      "hutter_score": 15041659,
+      "input_bytes": 100000000,
       "program_size": 183878,
-      "hutter_score": 184134,
+      "result_json": "results/fx2_geometry_sort_dictcmix_xz_v1/2026-06-03T172741.json",
       "roundtrip_ok": true,
-      "compressed_sha256": "57ce4a6025ec441cb135cbf3ccbf353919e83b88fd2c16e9841d648791f78f8f"
+      "score_percent": 15.041659
     },
     "10m_driver_new_frontier": {
-      "result_json": "results/fx2_geometry_sort_dictcmix_xz_v1/2026-06-02T221421.json",
-      "input_bytes": 10000000,
+      "compressed_sha256": "9ad73c6e900714b55aff83825863b011682e678233ec2a9b3ef19fddee00c4a4",
       "compressed_size": 1642858,
-      "program_size": 183878,
-      "hutter_score": 1826736,
-      "score_percent": 18.26736,
-      "roundtrip_ok": true,
       "delta_vs_fx2_topic_sort_dictcmix_xz_min_v1_10m": -2494,
-      "compressed_sha256": "9ad73c6e900714b55aff83825863b011682e678233ec2a9b3ef19fddee00c4a4"
-    },
-    "100m_driver_new_frontier": {
-      "result_json": "results/fx2_geometry_sort_dictcmix_xz_v1/2026-06-03T172741.json",
-      "input_bytes": 100000000,
-      "compressed_size": 14857781,
+      "hutter_score": 1826736,
+      "input_bytes": 10000000,
       "program_size": 183878,
-      "hutter_score": 15041659,
-      "score_percent": 15.041659,
-      "distance_to_10_percent_score": 5041659,
+      "result_json": "results/fx2_geometry_sort_dictcmix_xz_v1/2026-06-02T221421.json",
       "roundtrip_ok": true,
-      "delta_vs_fx2cmix_geometry_sort_dictcmix_xz_v1_100m": -71052,
-      "compressed_sha256": "589339950fd499f287c35f433ca7b901504858440cd49a81a9cabd65be9c03ca"
+      "score_percent": 18.26736
+    },
+    "1k_driver_smoke": {
+      "compressed_sha256": "57ce4a6025ec441cb135cbf3ccbf353919e83b88fd2c16e9841d648791f78f8f",
+      "compressed_size": 256,
+      "hutter_score": 184134,
+      "input_bytes": 1000,
+      "program_size": 183878,
+      "result_json": "results/fx2_geometry_sort_dictcmix_xz_v1/2026-06-02T201857.json",
+      "roundtrip_ok": true
     }
-  },
-  "verdict": "New exact 10MB and 100MB frontier. Promote as the current measured article-geometry smaller-backend frontier."
+  }
 }

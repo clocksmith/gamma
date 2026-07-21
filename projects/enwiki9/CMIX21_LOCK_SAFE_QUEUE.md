@@ -7,8 +7,9 @@ the memory boundary. Its FXCM2/full-buffer replacement reached a
 `14,864,716`-byte first archive at `100M`, missing the unified-executable
 promotion screen of `14,715,573` by `149,143` bytes. Decode was stopped before
 roundtrip and determinism completed because archive economics already forbid
-an unchanged `1G` promotion. No cmix21 gate is active. Older observations below
-remain historical audit context.
+an unchanged `1G` promotion. No cmix21 gate is active. The current active prize
+candidate in this checkout is `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`.
+Older observations below remain historical audit context.
 
 | candidate | role | known posture | current or next action |
 | --- | --- | --- | --- |

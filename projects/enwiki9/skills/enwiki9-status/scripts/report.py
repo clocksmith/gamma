@@ -199,10 +199,9 @@ def _heavy_lock_state(lock_path: Path) -> dict[str, Any]:
         return {"path": str(lock_path), "held": False, "holders": []}
     held = False
     try:
-        with lock_path.open("r"):
+        with lock_path.open("r+") as handle:
             try:
-                with lock_path.open("r+") as handle:
-                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError:
                 held = True
             else:

@@ -1,157 +1,371 @@
 {
-  "id": "fx2_struct_top_mixer_v1",
+  "deps": [
+    "C++ runtime for the vendored cmix binary"
+  ],
   "description": "size-optimized fx2-cmix fork with a second structural top-layer mixer keyed by MediaWiki column/numeric state and blended at 1/16 with the global top mixer",
-  "deps": ["C++ runtime for the vendored cmix binary"],
-  "notes": "Built from external/fx2-cmix with GCC using SEED=923, UPDATE_LIMIT=3000, FX2_STRUCT_TOP_MIXER, FX2_STRUCT_TOP_MIXER_WEIGHT=16, FX2_STRUCT_TOP_MIXER_CONTEXT=6, all objects compiled with -Os and link-time optimization enabled. cmix.bin.gz and english.dic.gz are counted by the harness.",
-  "verified_gates": {
-    "250k_prefix_direct_binary": {
-      "compressed_size": 45265,
-      "baseline_same_source": 45272,
-      "archive_delta": -7
+  "id": "fx2_struct_top_mixer_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 2.0,
+          "comparison": {
+            "archive_delta_vs_baseline": -156,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 271659
+          },
+          "compressed_size": 256,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 272272,
+          "program_id": "fx2_struct_top_mixer_v1",
+          "program_size": 272016,
+          "program_stats": null,
+          "roundtrip_ok": true
+        },
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.448512,
+          "comparison": {
+            "archive_delta_vs_baseline": -30282,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 241533
+          },
+          "compressed_size": 45266,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 317282,
+          "program_id": "fx2_struct_top_mixer_v1",
+          "program_size": 272016,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T16:46:22+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
     },
-    "1m_prefix_direct_binary": {
-      "compressed_size": 175172,
-      "baseline_same_source": 175193,
-      "archive_delta": -21,
-      "roundtrip_ok": true
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.0,
+            "comparison": {
+              "archive_delta_vs_baseline": -156,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 271659
+            },
+            "compressed_size": 256,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 272272,
+            "program_id": "fx2_struct_top_mixer_v1",
+            "program_size": 272016,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.448512,
+            "comparison": {
+              "archive_delta_vs_baseline": -30282,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 241533
+            },
+            "compressed_size": 45266,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 317282,
+            "program_id": "fx2_struct_top_mixer_v1",
+            "program_size": 272016,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:59:49+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.0,
+            "comparison": {
+              "archive_delta_vs_baseline": -156,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 271659
+            },
+            "compressed_size": 256,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 272272,
+            "program_id": "fx2_struct_top_mixer_v1",
+            "program_size": 272016,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.448512,
+            "comparison": {
+              "archive_delta_vs_baseline": -30282,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 241533
+            },
+            "compressed_size": 45266,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 317282,
+            "program_id": "fx2_struct_top_mixer_v1",
+            "program_size": 272016,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T16:46:22+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
+  },
+  "notes": "Built from external/fx2-cmix with GCC using SEED=923, UPDATE_LIMIT=3000, FX2_STRUCT_TOP_MIXER, FX2_STRUCT_TOP_MIXER_WEIGHT=16, FX2_STRUCT_TOP_MIXER_CONTEXT=6, all objects compiled with -Os and link-time optimization enabled. cmix.bin.gz and english.dic.gz are counted by the harness.",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses.",
+  "verified_gates": {
+    "10m_prefix_direct_context6_size_build": {
+      "baseline_fx2_structural_sidecar_v1_hutter_score": 2004449,
+      "cmix_bin_gz": 100907,
+      "compressed_size": 1647550,
+      "hutter_score": 1925877,
+      "program_size": 278327,
+      "roundtrip_ok": true,
+      "score_delta_vs_context0_size_build": -7,
+      "score_delta_vs_fx2_structural_sidecar_v1": -78572
+    },
+    "10m_prefix_direct_no_top_size_control": {
+      "cmix_bin_gz": 100869,
+      "compressed_size": 1647611,
+      "hutter_score": 1925900,
+      "program_size": 278289,
+      "verdict": "pruned; top-mixer size build wins exact S by 16 bytes at 10MB"
     },
     "10m_prefix_direct_o3": {
-      "compressed_size": 1648028,
-      "baseline_fx2_structural_sidecar_v1_compressed_size": 1647812,
       "archive_delta": 216,
+      "baseline_fx2_structural_sidecar_v1_compressed_size": 1647812,
+      "compressed_size": 1648028,
       "verdict": "pruned as an archive-only O3 candidate"
     },
-    "250k_prefix_direct_size_build": {
-      "compressed_size": 45266,
-      "cmix_bin_gz": 100909,
-      "program_size": 278329,
-      "hutter_score": 323595
-    },
-    "1m_prefix_direct_size_build": {
-      "compressed_size": 175174,
-      "cmix_bin_gz": 100909,
-      "program_size": 278329,
-      "hutter_score": 453503,
-      "roundtrip_ok": true,
-      "baseline_fx2_structural_sidecar_v1_hutter_score": 531814,
-      "score_delta_vs_fx2_structural_sidecar_v1": -78311
-    },
     "10m_prefix_direct_size_build": {
-      "compressed_size": 1647555,
-      "cmix_bin_gz": 100909,
-      "program_size": 278329,
-      "hutter_score": 1925884,
       "baseline_fx2_structural_sidecar_v1_hutter_score": 2004449,
-      "score_delta_vs_fx2_structural_sidecar_v1": -78565,
-      "roundtrip_ok": true
-    },
-    "1m_prefix_direct_context6_size_build": {
-      "compressed_size": 175173,
-      "cmix_bin_gz": 100907,
-      "program_size": 278327,
-      "hutter_score": 453500,
+      "cmix_bin_gz": 100909,
+      "compressed_size": 1647555,
+      "hutter_score": 1925884,
+      "program_size": 278329,
       "roundtrip_ok": true,
-      "score_delta_vs_context0_size_build": -3
-    },
-    "250k_prefix_direct_context6_lto_size_build": {
-      "compressed_size": 45266,
-      "cmix_bin_gz": 94596,
-      "program_size": 272016,
-      "hutter_score": 317282,
-      "roundtrip_ok": true,
-      "score_delta_vs_context6_size_build": -6313
-    },
-    "1m_prefix_direct_context6_lto_size_build": {
-      "compressed_size": 175172,
-      "cmix_bin_gz": 94596,
-      "program_size": 272016,
-      "hutter_score": 447188,
-      "roundtrip_ok": true,
-      "score_delta_vs_context6_size_build": -6312
-    },
-    "1m_driver_context6_lto_size_build": {
-      "result_json": "results/fx2_struct_top_mixer_v1/2026-06-01T082409.json",
-      "compressed_size": 175172,
-      "cmix_bin_gz": 94596,
-      "program_size": 272016,
-      "hutter_score": 447188,
-      "roundtrip_ok": true
-    },
-    "250k_context7_hot_field_prev_class": {
-      "compressed_size": 45272,
-      "cmix_bin_gz": 101053,
-      "hutter_score_without_dictionary_wrapper": 146325,
-      "verdict": "pruned; archive worsened versus context6 and binary grew"
+      "score_delta_vs_fx2_structural_sidecar_v1": -78565
     },
     "1m_context6_extra5_avg_os": {
-      "compressed_size": 175170,
-      "baseline_context6_os_compressed_size": 175173,
       "archive_delta": -3,
-      "cmix_bin_gz": 100949,
       "baseline_context6_os_cmix_bin_gz": 100907,
+      "baseline_context6_os_compressed_size": 175173,
       "binary_delta": 42,
+      "cmix_bin_gz": 100949,
+      "compressed_size": 175170,
       "score_delta_without_dictionary_wrapper": 39,
       "verdict": "pruned; tiny archive win does not pay for the extra top-context binary bytes"
     },
-    "250k_context6_wrt_direct_m13_lto": {
-      "compressed_size": 45221,
-      "cmix_bin_gz": 94758,
-      "hutter_score_without_dictionary_wrapper": 139979,
-      "baseline_context6_lto_without_dictionary_wrapper": 139862,
-      "verdict": "pruned as exact candidate; archive saved 45 bytes but binary grew 162 bytes"
-    },
     "1m_context6_w20_lto_os": {
-      "compressed_size": 175174,
-      "baseline_context6_w16_lto_compressed_size": 175172,
       "archive_delta": 2,
-      "cmix_bin_gz": 95424,
       "baseline_context6_w16_lto_cmix_bin_gz": 94596,
+      "baseline_context6_w16_lto_compressed_size": 175172,
       "binary_delta": 828,
+      "cmix_bin_gz": 95424,
+      "compressed_size": 175174,
       "score_delta_without_dictionary_wrapper": 830,
       "verdict": "pruned; changing the structural top-mixer blend from weight 16 to 20 worsened the 1MB archive and grew the LTO package"
     },
     "1m_context6_wrt_direct_m13_os": {
-      "compressed_size": 175104,
       "cmix_bin_gz": 101140,
+      "compressed_size": 175104,
       "roundtrip_ok": true,
       "verdict": "archive diagnostic only; archive saved 68 bytes versus context6 LTO but non-LTO binary overhead dominated"
     },
+    "1m_driver_context6_lto_size_build": {
+      "cmix_bin_gz": 94596,
+      "compressed_size": 175172,
+      "hutter_score": 447188,
+      "program_size": 272016,
+      "result_json": "results/fx2_struct_top_mixer_v1/2026-06-01T082409.json",
+      "roundtrip_ok": true
+    },
+    "1m_prefix_direct_binary": {
+      "archive_delta": -21,
+      "baseline_same_source": 175193,
+      "compressed_size": 175172,
+      "roundtrip_ok": true
+    },
+    "1m_prefix_direct_context6_lto_size_build": {
+      "cmix_bin_gz": 94596,
+      "compressed_size": 175172,
+      "hutter_score": 447188,
+      "program_size": 272016,
+      "roundtrip_ok": true,
+      "score_delta_vs_context6_size_build": -6312
+    },
+    "1m_prefix_direct_context6_size_build": {
+      "cmix_bin_gz": 100907,
+      "compressed_size": 175173,
+      "hutter_score": 453500,
+      "program_size": 278327,
+      "roundtrip_ok": true,
+      "score_delta_vs_context0_size_build": -3
+    },
+    "1m_prefix_direct_no_top_size_control": {
+      "cmix_bin_gz": 100869,
+      "compressed_size": 175196,
+      "hutter_score": 453485,
+      "program_size": 278289,
+      "verdict": "archive worsened but exact S won by 18 bytes at 1MB; promoted to 10MB control"
+    },
+    "1m_prefix_direct_size_build": {
+      "baseline_fx2_structural_sidecar_v1_hutter_score": 531814,
+      "cmix_bin_gz": 100909,
+      "compressed_size": 175174,
+      "hutter_score": 453503,
+      "program_size": 278329,
+      "roundtrip_ok": true,
+      "score_delta_vs_fx2_structural_sidecar_v1": -78311
+    },
     "250k_context6_expert_gate_d14_c8_m0_b2": {
-      "compressed_size": 47372,
       "cmix_bin_gz": 102281,
+      "compressed_size": 47372,
       "verdict": "pruned; aggressive learned selector destabilized the mixer"
     },
     "250k_context6_fxcm_template_pos_lto": {
-      "compressed_size": 45265,
-      "cmix_bin_gz": 94750,
-      "hutter_score_without_dictionary_wrapper": 140015,
       "baseline_context6_lto_without_dictionary_wrapper": 139862,
+      "cmix_bin_gz": 94750,
+      "compressed_size": 45265,
+      "hutter_score_without_dictionary_wrapper": 140015,
       "verdict": "pruned; archive saved 1 byte but binary grew 154 bytes"
     },
-    "10m_prefix_direct_context6_size_build": {
-      "compressed_size": 1647550,
-      "cmix_bin_gz": 100907,
-      "program_size": 278327,
-      "hutter_score": 1925877,
-      "baseline_fx2_structural_sidecar_v1_hutter_score": 2004449,
-      "score_delta_vs_fx2_structural_sidecar_v1": -78572,
-      "score_delta_vs_context0_size_build": -7,
-      "roundtrip_ok": true
+    "250k_context6_wrt_direct_m13_lto": {
+      "baseline_context6_lto_without_dictionary_wrapper": 139862,
+      "cmix_bin_gz": 94758,
+      "compressed_size": 45221,
+      "hutter_score_without_dictionary_wrapper": 139979,
+      "verdict": "pruned as exact candidate; archive saved 45 bytes but binary grew 162 bytes"
     },
-    "1m_prefix_direct_no_top_size_control": {
-      "compressed_size": 175196,
-      "cmix_bin_gz": 100869,
-      "program_size": 278289,
-      "hutter_score": 453485,
-      "verdict": "archive worsened but exact S won by 18 bytes at 1MB; promoted to 10MB control"
+    "250k_context7_hot_field_prev_class": {
+      "cmix_bin_gz": 101053,
+      "compressed_size": 45272,
+      "hutter_score_without_dictionary_wrapper": 146325,
+      "verdict": "pruned; archive worsened versus context6 and binary grew"
     },
-    "10m_prefix_direct_no_top_size_control": {
-      "compressed_size": 1647611,
-      "cmix_bin_gz": 100869,
-      "program_size": 278289,
-      "hutter_score": 1925900,
-      "verdict": "pruned; top-mixer size build wins exact S by 16 bytes at 10MB"
+    "250k_prefix_direct_binary": {
+      "archive_delta": -7,
+      "baseline_same_source": 45272,
+      "compressed_size": 45265
+    },
+    "250k_prefix_direct_context6_lto_size_build": {
+      "cmix_bin_gz": 94596,
+      "compressed_size": 45266,
+      "hutter_score": 317282,
+      "program_size": 272016,
+      "roundtrip_ok": true,
+      "score_delta_vs_context6_size_build": -6313
+    },
+    "250k_prefix_direct_size_build": {
+      "cmix_bin_gz": 100909,
+      "compressed_size": 45266,
+      "hutter_score": 323595,
+      "program_size": 278329
     }
-  },
-  "verdict": "Promote the context-6 top-mixer LTO size build. The top-mixer archive effect is small and O3 10MB regressed, but the size build cuts counted program size enough to create a large exact-S win. Context 6 beats the original field/slot top selector by 3 bytes at 1MB and 7 bytes at 10MB; LTO then preserves the 250K archive, improves the 1MB archive by 1 byte, and cuts counted program size by 6311 bytes. Follow-up hotspot selectors, extra top-context fusion, WRT-direct fusion, structural weight-20 blending, native fxcm template-position context, and tuned expert gating did not produce an exact-score improvement."
+  }
 }

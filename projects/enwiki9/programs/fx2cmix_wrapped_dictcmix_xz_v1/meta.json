@@ -1,9 +1,31 @@
 {
-  "id": "fx2cmix_wrapped_dictcmix_xz_v1",
-  "description": "xz-packed fx2-cmix binary with the english.dic payload compressed by the same fx2-cmix binary in no-dictionary mode",
   "deps": [
     "C++ runtime for the vendored cmix binary"
   ],
+  "description": "xz-packed fx2-cmix binary with the english.dic payload compressed by the same fx2-cmix binary in no-dictionary mode",
+  "id": "fx2cmix_wrapped_dictcmix_xz_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:41:30+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:37:58+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:41:30+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
   "notes": "Same native cmix bytes and decoded english.dic bytes as fx2cmix_wrapped_xz_v1. The wrapper decodes english.dic.cmix through the bundled cmix binary, then invokes the same dictionary-mode -c/-d path as the parent package.",
   "program_files": {
     "cmix.xz": 142512,
@@ -11,36 +33,37 @@
     "program.py": 642,
     "total": 243284
   },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024.",
   "verified_gates": {
-    "1k_byte_identity_vs_fx2cmix_wrapped_xz_v1": {
-      "input_bytes": 1000,
-      "parent_program": "fx2cmix_wrapped_xz_v1",
-      "parent_compressed_size": 257,
-      "parent_compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
-      "compressed_size": 257,
-      "compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
-      "roundtrip_ok": true,
-      "deterministic": true
+    "100m_inherited_from_fx2cmix_wrapped_xz_v1": {
+      "compressed_size": 14965167,
+      "distance_to_10_percent_score": 5208451,
+      "hutter_score": 15208451,
+      "input_bytes": 100000000,
+      "program_size": 243284,
+      "roundtrip_basis": "Same native cmix bytes, byte-identical decoded dictionary, same dictionary-mode arguments, byte-identical 1KB archive output, and inherited parent 100MB roundtrip result.",
+      "score_delta_vs_fx2cmix_wrapped_xz_v1": -55908,
+      "score_percent": 15.208451
     },
     "10m_inherited_from_fx2cmix_wrapped_xz_v1": {
-      "input_bytes": 10000000,
       "compressed_size": 1648461,
-      "program_size": 243284,
       "hutter_score": 1891745,
-      "score_percent": 18.91745,
-      "score_delta_vs_fx2cmix_wrapped_xz_v1": -55908,
-      "roundtrip_basis": "Same native cmix bytes, byte-identical decoded dictionary, same dictionary-mode arguments, and byte-identical 1KB archive output."
-    },
-    "100m_inherited_from_fx2cmix_wrapped_xz_v1": {
-      "input_bytes": 100000000,
-      "compressed_size": 14965167,
+      "input_bytes": 10000000,
       "program_size": 243284,
-      "hutter_score": 15208451,
-      "score_percent": 15.208451,
+      "roundtrip_basis": "Same native cmix bytes, byte-identical decoded dictionary, same dictionary-mode arguments, and byte-identical 1KB archive output.",
       "score_delta_vs_fx2cmix_wrapped_xz_v1": -55908,
-      "distance_to_10_percent_score": 5208451,
-      "roundtrip_basis": "Same native cmix bytes, byte-identical decoded dictionary, same dictionary-mode arguments, byte-identical 1KB archive output, and inherited parent 100MB roundtrip result."
+      "score_percent": 18.91745
+    },
+    "1k_byte_identity_vs_fx2cmix_wrapped_xz_v1": {
+      "compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "compressed_size": 257,
+      "deterministic": true,
+      "input_bytes": 1000,
+      "parent_compressed_md5": "733b45306296809f74f6f7b96b2f5cda",
+      "parent_compressed_size": 257,
+      "parent_program": "fx2cmix_wrapped_xz_v1",
+      "roundtrip_ok": true
     }
-  },
-  "verdict": "Promote as the current best measured 100MB percentage package. This is a packaging improvement only; it does not change the entropy model."
+  }
 }

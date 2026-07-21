@@ -1,8 +1,4 @@
 {
-  "id": "fx2cmix_recovered_gcc_o3_meta_streak_xz_v1",
-  "family": "fx2-cmix-recovered",
-  "status": "experimental",
-  "description": "Recovered fx2-cmix GCC build with FX2_META_STREAK=1. Adds a bounded self-referential streak context to the final mixer layer, keyed by recent predictor correctness, streak bucket, bit context, line-break state, and longest match bucket.",
   "build": {
     "compiler": "g++",
     "defines": [
@@ -19,24 +15,175 @@
     ],
     "packaging": "cmix and english.dic are xz-packed and unpacked by program.py; both count toward the local driver program_size."
   },
+  "description": "Recovered fx2-cmix GCC build with FX2_META_STREAK=1. Adds a bounded self-referential streak context to the final mixer layer, keyed by recent predictor correctness, streak bucket, bit context, line-break state, and longest match bucket.",
+  "family": "fx2-cmix-recovered",
+  "id": "fx2cmix_recovered_gcc_o3_meta_streak_xz_v1",
+  "measured": {
+    "1m_driver": {
+      "archive_delta_vs_baseline": 2748,
+      "baseline_hutter_score": 466767,
+      "bits_per_byte": 1.412529,
+      "compressed_size": 185143,
+      "data_size": 1048576,
+      "hutter_score": 469193,
+      "program_delta_vs_baseline": -322,
+      "program_size": 284050,
+      "roundtrip_ok": true,
+      "score_delta_vs_baseline": 2426,
+      "timestamp": "2026-06-07T10:39:00"
+    },
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 5.257812,
+          "comparison": {
+            "archive_delta_vs_baseline": 261,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 284110
+          },
+          "compressed_size": 673,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 284723,
+          "program_id": "fx2cmix_recovered_gcc_o3_meta_streak_xz_v1",
+          "program_size": 284050,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T16:41:24+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 250000."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 5.257812,
+            "comparison": {
+              "archive_delta_vs_baseline": 261,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 284110
+            },
+            "compressed_size": 673,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 284723,
+            "program_id": "fx2cmix_recovered_gcc_o3_meta_streak_xz_v1",
+            "program_size": 284050,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.527424,
+            "comparison": {
+              "archive_delta_vs_baseline": -27816,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 256033
+            },
+            "compressed_size": 47732,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 331782,
+            "program_id": "fx2cmix_recovered_gcc_o3_meta_streak_xz_v1",
+            "program_size": 284050,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:57:51+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 5.257812,
+            "comparison": {
+              "archive_delta_vs_baseline": 261,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 284110
+            },
+            "compressed_size": 673,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 284723,
+            "program_id": "fx2cmix_recovered_gcc_o3_meta_streak_xz_v1",
+            "program_size": 284050,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T16:41:24+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 250000."
+      }
+    ]
+  },
   "notes": [
     "Uses the recovered fx2-cmix source with the PPMD mmap remap fixed to preserve pointer stability.",
     "Same wrapper path as fx2cmix_recovered_gcc_o3_xz_v1 so score deltas isolate the predictor experiment."
   ],
-  "measured": {
-    "1m_driver": {
-      "data_size": 1048576,
-      "compressed_size": 185143,
-      "program_size": 284050,
-      "hutter_score": 469193,
-      "bits_per_byte": 1.412529,
-      "baseline_hutter_score": 466767,
-      "score_delta_vs_baseline": 2426,
-      "archive_delta_vs_baseline": 2748,
-      "program_delta_vs_baseline": -322,
-      "roundtrip_ok": true,
-      "timestamp": "2026-06-07T10:39:00"
-    }
-  },
-  "verdict": "Reject. Replacing the final-layer global context with the meta-streak context regressed the archive enough to overwhelm the small program-size reduction."
+  "status": "retired",
+  "verdict": "retired: driver_failure at 250000."
 }

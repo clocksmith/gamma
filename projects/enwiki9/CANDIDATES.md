@@ -117,10 +117,10 @@ python3 projects/enwiki9/tools/candidate_triage.py --limit-candidates 10
 ```
 
 The dry-run reads `candidate_inventory.json`, selects `benchmark_or_retire`
-candidates by default, and prints the locked gate plan. It does not score or
+candidates by default, and prints the planned gated command sequence. It does not score or
 write metadata.
 
-Before spending the scorer lock, contract-only cleanup can validate the
+Before scoring, contract-only cleanup can validate the
 `program.py` API without compression:
 
 ```bash
@@ -167,8 +167,20 @@ python3 projects/enwiki9/tools/candidate_triage.py \
   --candidate <candidate_id>
 ```
 
-By default the script runs each `lib/driver.py` gate without heavy-lock gating.
-Use `--respect-heavy-lock` to require this extra serialization.
+By default, `candidate_triage.py --run` runs each `lib/driver.py` gate directly.
+To retain lock serialization, add `--respect-heavy-lock`. With that flag, the
+script runs each gate through:
+
+```text
+flock -n -E 75 /tmp/enwiki9-heavy.lock python3 projects/enwiki9/lib/driver.py ...
+```
+
+With `--respect-heavy-lock`, it also runs a process preflight before every gate
+using the heavy-process pattern `bench.py|lib/driver.py|cmix|qm_context|enwik9`.
+If another scoring process is visible or the non-blocking lock is already owned,
+triage stops without launching a benchmark. A busy lock is treated as a
+transient scheduler block; `--update-meta` does not write candidate lifecycle
+changes for that lock-only outcome.
 
 Default gates are:
 

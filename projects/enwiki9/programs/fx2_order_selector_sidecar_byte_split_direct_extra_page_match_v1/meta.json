@@ -1,8 +1,5 @@
 {
-  "id": "fx2_order_selector_sidecar_byte_split_direct_extra_page_match_v1",
-  "description": "Lossless one-byte rate-ledger selector over raw FX2-SC and several reversible page-order modes, backed by the byte-split/direct/extra/page-match FX2-SC binary.",
   "added": "2026-06-07",
-  "deps": ["C++ runtime for the bundled cmix/fx2 binary"],
   "basis": "Keeps the raw byte stream as an admissible mode and tests reversible page-order transforms that can be restored by sorting decoded page blocks back by their unique sorted page ids. No explicit permutation metadata is stored.",
   "build_defines": [
     "SEED=923",
@@ -14,6 +11,11 @@
     "SIDECAR_EXTRA_MATCH",
     "SIDECAR_PAGE_MATCH"
   ],
+  "deps": [
+    "C++ runtime for the bundled cmix/fx2 binary"
+  ],
+  "description": "Lossless one-byte rate-ledger selector over raw FX2-SC and several reversible page-order modes, backed by the byte-split/direct/extra/page-match FX2-SC binary.",
+  "expected_use": "Screen at 1MB, then promote only if the selected page-order mode beats the raw FX2-SC archive by more than the mode tag and counted wrapper growth at the same scope.",
   "fx2_sc_concepts": [
     "schema_template_ctx",
     "soft_symbol_reduction",
@@ -22,5 +24,29 @@
     "reversible_geometry_sort",
     "rate_ledger"
   ],
-  "expected_use": "Screen at 1MB, then promote only if the selected page-order mode beats the raw FX2-SC archive by more than the mode tag and counted wrapper growth at the same scope."
+  "id": "fx2_order_selector_sidecar_byte_split_direct_extra_page_match_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [],
+      "generated_at": "2026-07-21T16:38:22+00:00",
+      "proposed_status": "retired",
+      "verdict": "retired: driver_failure at 1024."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T02:52:33+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [],
+        "generated_at": "2026-07-21T16:38:22+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      }
+    ]
+  },
+  "status": "retired",
+  "verdict": "retired: driver_failure at 1024."
 }

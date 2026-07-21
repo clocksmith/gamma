@@ -1,7 +1,222 @@
 {
-  "id": "fx2cmix_wrapped_v1",
-  "description": "Score-honest wrapper around the fx2-cmix engine (Oct-2024 Hutter Prize winner): cmix-class context-mixing predictor with a single-pass Wikipedia transform, online reverse-dictionary transform, and paq8px-style NLP stemming. The cmix binary and english.dic dictionary are vendored in this directory and counted toward program_size.",
   "added": "2026-05-12",
-  "deps": ["C++ runtime for the vendored cmix binary; rebuild from external/fx2-cmix/src for a portable submission"],
-  "notes": "small-scope ratios are dominated by dictionary pretraining cost; the ~11% asymptote only shows at full 1GB scale. 1GB run is on the order of tens of hours and tens of GB RAM."
+  "deps": [
+    "C++ runtime for the vendored cmix binary; rebuild from external/fx2-cmix/src for a portable submission"
+  ],
+  "description": "Score-honest wrapper around the fx2-cmix engine (Oct-2024 Hutter Prize winner): cmix-class context-mixing predictor with a single-pass Wikipedia transform, online reverse-dictionary transform, and paq8px-style NLP stemming. The cmix binary and english.dic dictionary are vendored in this directory and counted toward program_size.",
+  "id": "fx2cmix_wrapped_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 2.023438,
+          "comparison": {
+            "archive_delta_vs_baseline": -153,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 757970
+          },
+          "compressed_size": 259,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 758583,
+          "program_id": "fx2cmix_wrapped_v1",
+          "program_size": 758324,
+          "program_stats": null,
+          "roundtrip_ok": true
+        },
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.448896,
+          "comparison": {
+            "archive_delta_vs_baseline": -30270,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 727853
+          },
+          "compressed_size": 45278,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 803602,
+          "program_id": "fx2cmix_wrapped_v1",
+          "program_size": 758324,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-21T16:43:49+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.023438,
+            "comparison": {
+              "archive_delta_vs_baseline": -153,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 757970
+            },
+            "compressed_size": 259,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 758583,
+            "program_id": "fx2cmix_wrapped_v1",
+            "program_size": 758324,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.448896,
+            "comparison": {
+              "archive_delta_vs_baseline": -30270,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 727853
+            },
+            "compressed_size": 45278,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 803602,
+            "program_id": "fx2cmix_wrapped_v1",
+            "program_size": 758324,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T02:57:31+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 2.023438,
+            "comparison": {
+              "archive_delta_vs_baseline": -153,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 757970
+            },
+            "compressed_size": 259,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 758583,
+            "program_id": "fx2cmix_wrapped_v1",
+            "program_size": 758324,
+            "program_stats": null,
+            "roundtrip_ok": true
+          },
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.448896,
+            "comparison": {
+              "archive_delta_vs_baseline": -30270,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 727853
+            },
+            "compressed_size": 45278,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 803602,
+            "program_id": "fx2cmix_wrapped_v1",
+            "program_size": 758324,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-21T16:43:49+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
+  },
+  "notes": "small-scope ratios are dominated by dictionary pretraining cost; the ~11% asymptote only shows at full 1GB scale. 1GB run is on the order of tens of hours and tens of GB RAM.",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }
