@@ -26,6 +26,7 @@ ACTIVE_PATTERN = (
     "bench.py|projects/enwiki9/lib/driver.py|lib/driver.py|cmix|qm_context|"
     "enwiki9-heavy.lock|fx2_core_tune_queue.py|fx2_core_tune_package.py"
 )
+RESPECT_HEAVY_LOCK_DEFAULT = False
 
 
 def load_json(path: pathlib.Path) -> Any:
@@ -389,15 +390,16 @@ def run_queue(args: argparse.Namespace, candidates: list[dict[str, Any]]) -> dic
         for gate_size in args.gate_size:
             if not should_continue:
                 break
-            clear = wait_for_clear(
-                args.lock_path,
-                wait=args.wait,
-                poll_interval=args.poll_interval,
-            )
-            if clear["status"] != "clear":
-                candidate_result["blocked"] = clear
-                results.append(candidate_result)
-                return {"status": "blocked", "results": results}
+            if args.respect_heavy_lock:
+                clear = wait_for_clear(
+                    args.lock_path,
+                    wait=args.wait,
+                    poll_interval=args.poll_interval,
+                )
+                if clear["status"] != "clear":
+                    candidate_result["blocked"] = clear
+                    results.append(candidate_result)
+                    return {"status": "blocked", "results": results}
 
             run = run_triage_gate(
                 candidate["id"],
@@ -451,6 +453,15 @@ def main() -> int:
     parser.add_argument("--baseline", default=DEFAULT_BASELINE)
     parser.add_argument("--lock-path", type=pathlib.Path, default=DEFAULT_LOCK)
     parser.add_argument("--poll-interval", type=float, default=30.0)
+    parser.add_argument(
+        "--respect-heavy-lock",
+        action="store_true",
+        default=RESPECT_HEAVY_LOCK_DEFAULT,
+        help=(
+            "wait for /tmp/enwiki9-heavy.lock and matching active-process silence "
+            "before launching queued gates (off by default)."
+        ),
+    )
     parser.add_argument("--wait", action="store_true")
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--no-update-meta", action="store_true")
@@ -514,6 +525,7 @@ def main() -> int:
         "advance_after_gate": args.advance_after_gate,
         "archive_ceilings": args.archive_ceilings,
         "lock_path": str(args.lock_path),
+        "respect_heavy_lock": args.respect_heavy_lock,
         "wait": args.wait,
         "selected": candidates,
     }
