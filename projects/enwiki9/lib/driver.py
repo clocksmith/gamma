@@ -12,7 +12,8 @@ The driver:
   4. measures sizes, times, and bits/byte
   5. (optional) compresses a second time and verifies byte-equal output
   6. writes results/<program_id>/<timestamp>.json
-  7. prints the result
+  7. appends one row to results/run_ledger.jsonl (unless --no-ledger)
+  8. prints the result
 """
 
 from __future__ import annotations
@@ -27,8 +28,12 @@ import platform
 import sys
 import time
 
+from typing import Any
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DEFAULT = ROOT / "data" / "enwik9"
+RESULT_LEDGER_PATH = ROOT / "results" / "run_ledger.jsonl"
+LEDGER_SCHEMA = "enwiki9_driver_run_ledger_v1"
 
 
 def _load(program_id: str):
@@ -44,6 +49,88 @@ def _load(program_id: str):
     return mod, path
 
 
+def _sample_rss_kib() -> int | None:
+    try:
+        status = pathlib.Path("/proc/self/status")
+        with status.open() as fh:
+            for line in fh:
+                if line.startswith("VmRSS:"):
+                    parts = line.split()
+                    if len(parts) >= 2 and parts[1].isdigit():
+                        return int(parts[1])
+        return None
+    except OSError:
+        pass
+
+    try:
+        import resource
+
+        usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        return int(usage) if platform.system() != "Darwin" else int(usage // 1024)
+    except Exception:
+        return None
+
+
+def _load_program_name(program_id: str) -> str | None:
+    meta = ROOT / "programs" / program_id / "meta.json"
+    if not meta.exists():
+        return None
+    try:
+        data = json.loads(meta.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    name = data.get("name")
+    if isinstance(name, str) and name.strip():
+        return name.strip()
+    desc = data.get("description")
+    if isinstance(desc, str) and desc.strip():
+        return desc.strip()
+    return None
+
+
+def _append_run_ledger(row: dict[str, Any]) -> None:
+    RESULT_LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with RESULT_LEDGER_PATH.open("a", encoding="utf-8") as out:
+        out.write(json.dumps(row, sort_keys=True) + "\n")
+
+
+def _build_run_ledger_row(
+    result: dict[str, Any],
+    result_path: pathlib.Path | None,
+    program_name: str | None,
+    no_save: bool,
+) -> dict[str, Any]:
+    memory = result.get("memory_kib") or {}
+    return {
+        "schema": LEDGER_SCHEMA,
+        "run_id": f"{result['program_id']}__{result['timestamp'].replace(':', '')}__{result['compressed_md5'][:8]}",
+        "program_id": result["program_id"],
+        "algorithm_name": program_name or result["program_id"],
+        "data_size": result.get("data_size"),
+        "data_md5": result.get("data_md5"),
+        "data_sha256": result.get("data_sha256"),
+        "compressed_size": result.get("compressed_size"),
+        "program_size": result.get("program_size"),
+        "hutter_score": result.get("hutter_score"),
+        "bits_per_byte": result.get("bits_per_byte"),
+        "compress_time_s": result.get("compress_time_s"),
+        "decompress_time_s": result.get("decompress_time_s"),
+        "run_time_s": result.get("run_time_s"),
+        "determinism_ok": result.get("determinism", {}).get("single_host_byte_equal")
+        if isinstance(result.get("determinism"), dict)
+        else None,
+        "roundtrip_ok": result.get("roundtrip_ok"),
+        "result_path": str(result_path) if result_path is not None else None,
+        "archival_scope": "full" if not no_save else "ephemeral",
+        "timestamp": result.get("timestamp"),
+        "recorded_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
+        "host": result.get("host"),
+        "memory_kib_before": memory.get("before"),
+        "memory_kib_after": memory.get("after"),
+        "memory_kib_peak": memory.get("peak"),
+        "rss_sample_count": memory.get("sample_count"),
+    }
+
 def run(
     program_id: str,
     data_path: pathlib.Path,
@@ -53,9 +140,11 @@ def run(
     determinism_archive_ceiling: int | None = None,
 ) -> dict:
     mod, src_path = _load(program_id)
+    program_name = _load_program_name(program_id)
     raw = data_path.read_bytes()
     if limit is not None:
         raw = raw[:limit]
+    rss_before = _sample_rss_kib()
 
     t0 = time.perf_counter()
     compressed = mod.compress(raw)
@@ -83,6 +172,7 @@ def run(
     program_size = sum(sz for _, sz in program_files)
     archive_md5 = hashlib.md5(compressed).hexdigest()
     archive_sha256 = hashlib.sha256(compressed).hexdigest()
+    rss_after_compress = _sample_rss_kib()
 
     determinism: dict | None = None
     should_check_determinism = (
@@ -123,6 +213,11 @@ def run(
         }
 
     bits_per_byte = (compressed_size * 8 / len(raw)) if raw else 0.0
+    t_finished = time.perf_counter()
+    t_total = t_finished - t0
+    rss_after = _sample_rss_kib()
+    rss_samples = [v for v in (rss_before, rss_after_compress, rss_after) if isinstance(v, int)]
+    rss_peak = max(rss_samples) if rss_samples else None
 
     result = {
         "program_id": program_id,
@@ -153,8 +248,17 @@ def run(
             "python": platform.python_version(),
             "node": platform.node(),
         },
+        "program_name": program_name,
+        "memory_kib": {
+            "before": rss_before,
+            "during_compress": rss_after_compress,
+            "after": rss_after,
+            "peak": rss_peak,
+            "sample_count": len(rss_samples),
+        },
         "timestamp": _dt.datetime.now().isoformat(timespec="seconds"),
     }
+    result["run_time_s"] = round(t_total, 4)
     if program_stats is not None:
         result["program_stats"] = program_stats
     return result
@@ -188,6 +292,7 @@ def main() -> int:
         help="skip the second compression when the first archive misses this byte ceiling",
     )
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument("--no-ledger", action="store_true")
     args = ap.parse_args()
 
     if not args.data.exists():
@@ -206,7 +311,16 @@ def main() -> int:
         out_dir = ROOT / "results" / args.program_id
         out_dir.mkdir(parents=True, exist_ok=True)
         stamp = result["timestamp"].replace(":", "")
-        (out_dir / f"{stamp}.json").write_text(json.dumps(result, indent=2) + "\n")
+        result_path = out_dir / f"{stamp}.json"
+        result_path.write_text(json.dumps(result, indent=2) + "\n")
+        if not args.no_ledger:
+            ledger_row = _build_run_ledger_row(
+                result,
+                result_path=result_path,
+                program_name=result.get("program_name"),
+                no_save=args.no_save,
+            )
+            _append_run_ledger(ledger_row)
 
     print(json.dumps(result, indent=2))
     return 0 if result["roundtrip_ok"] is not False else 1

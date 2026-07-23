@@ -96,13 +96,16 @@ At the start of an enwiki9 work session, inspect:
 ```bash
 sed -n '1,240p' projects/enwiki9/docs/status_receipt.md
 pgrep -af 'run_with_rss_guard|projects/enwiki9/lib/driver.py|cmix21|enwiki9-heavy.lock'
+tail -n 20 projects/enwiki9/results/run_ledger.jsonl
 ```
 
 Use these sources as needed rather than rereading all of them mechanically:
 
 - `docs/status_receipt.json` for live gate and lock state;
-- `docs/hutter_run_ledger.json` for normalized candidate results by measured
-  scope, population, evidence tier, proof state, and forecast;
+- `results/run_ledger.jsonl` for the canonical append-only per-run registry
+  (timing, memory, determinism, and result path back-pointer);
+- `docs/hutter_run_ledger.json` for normalized candidate rows by measured scope,
+  population, evidence tier, proof state, and forecast;
 - `ALGORITHMS.md` and `docs/research_register.md` for measured frontiers;
 - `docs/takeover_runbook.md` for proof continuation;
 - `CMIX21_LOCK_SAFE_QUEUE.md` only for the serialized cmix21 lane.
@@ -202,6 +205,13 @@ views, run:
 
 ```bash
 python3 projects/enwiki9/tools/enwiki9_normalize_receipts.py
+```
+
+If results appear missing from `results/run_ledger.jsonl`, rebuild it from the
+stored per-run JSONs before regenerating generated views:
+
+```bash
+python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite
 ```
 
 Record multiple measured scopes or corpus populations for one candidate as

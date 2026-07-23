@@ -68,7 +68,8 @@ enwiki9/
 ├── tools/                 audit, package, queue, residual, ordering utilities
 ├── docs/                  algorithm cards, accounting, shadow-coder, reports, and handoff notes
 ├── results/
-│   └── <program_id>/<timestamp>.json   per-run measurements
+│   ├── <program_id>/<timestamp>.json   per-run measurements
+│   └── run_ledger.jsonl                append-only central run ledger
 └── bench.py               run all programs, update leaderboard
 ```
 
@@ -116,6 +117,27 @@ bits_per_byte = compressed_size · 8 / data_size
 
 It maps to information-theoretic statements (Shannon entropy of natural English is ~0.6–1.3 b/char depending on protocol; `fx2-cmix` achieves ~0.886 b/B on `enwik9`). It is **archive-only** — it does not include `program_size`. A program with great `b/B` and giant decompressor is a bad submission. **`S` is what matters; `b/B` is what we use to talk shop.**
 
+## Central run ledger
+
+`results/run_ledger.jsonl` is the append-only, canonical run registry for driver executions that persist result JSONs.
+
+Each line is one row and includes:
+
+- `run_id`, `program_id`, `algorithm_name`
+- `data_size`, `compressed_size`, `program_size`, `hutter_score`
+- `compress_time_s`, `decompress_time_s`, `run_time_s`
+- `memory_kib_before`, `memory_kib_after`, `memory_kib_peak`
+- `roundtrip_ok`, `determinism_ok`, `timestamp`, `host`
+- `result_path` back-pointer to the per-run JSON
+
+To rebuild from existing historical result JSONs:
+
+```bash
+python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite
+```
+
+Use `--program-id <id1> <id2>` to limit scope or `--append` to keep existing rows.
+
 ## Interpreting result JSONs
 
 Every run produces `results/<program_id>/<timestamp>.json` with these fields:
@@ -136,6 +158,7 @@ Every run produces `results/<program_id>/<timestamp>.json` with these fields:
 | `roundtrip_ok` | `decompress(compress(x)) == x`. Binary. **Non-negotiable.** |
 | `determinism` | present only if `--check-determinism`; reports byte-equal across two compress calls on this host |
 | `host` | machine, OS, python version, hostname — for cross-host comparison |
+| `memory_kib` | memory snapshot (before, during compress, after, peak) sampled in KiB |
 | `timestamp` | ISO 8601, used in the result filename |
 
 A result is **valid** iff `roundtrip_ok == true` and `data_size + data_md5` are consistent with the corpus you intended to measure. A result without `roundtrip_ok` is not a result; it's a bug report.
