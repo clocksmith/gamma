@@ -220,6 +220,33 @@ python3 projects/enwiki9/tools/enwiki9_status_receipt.py
 }
 ```
 
+## Run Ledger Row (canonical per-run artifact)
+
+`results/run_ledger.jsonl` is the central append-only registry for every completed
+driver run that writes a result JSON.
+
+Each row is one JSON object using schema `enwiki9_driver_run_ledger_v1` with at least:
+
+- `run_id`, `program_id`, `algorithm_name`
+- `data_path`, `data_size`, `data_md5`, `data_sha256`
+- `compressed_size`, `program_size`, `hutter_score`, `bits_per_byte`
+- `compress_time_s`, `decompress_time_s`, `run_time_s`
+- `determinism_ok`, `roundtrip_ok`
+- `memory_kib_before`, `memory_kib_after`, `memory_kib_peak`
+- `result_path`, `timestamp`, `recorded_utc`, `host`
+
+The row is authoritative for:
+
+- run discovery and identity (`run_id` + `timestamp`)
+- memory/RSS trend tracking
+- result indexing and reproducibility pointers
+
+To rebuild from saved per-run result JSONs:
+
+```bash
+python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite
+```
+
 ## Gate Result Receipt
 
 Use this for `1K`, `250K`, `1M`, `10M`, `100M`, and `1G` gates.

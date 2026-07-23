@@ -76,11 +76,13 @@ receipts show that one should be promoted.
 | What is the project and how are results reported? | `README.md` | Scoring math, result JSON fields, scope discipline, reporting vocabulary. |
 | What algorithms exist and what evidence do they have? | `ALGORITHMS.md` | Mechanism explanations, measured rows, current strategy register, paper/design note index. |
 | How can a reader orient on the main algorithms? | `docs/algorithm_cards.md` | Plain-English cards: mechanism, score, proof boundary, next role. |
+| What are the canonical per-run stored records? | `results/run_ledger.jsonl` | Append-only run registry with `run_id`, timing, memory snapshots, determinism, and result-pointer fields. |
 | What artifact-backed rows currently rank best by scope? | `docs/evidence_matrix.md` | Generated score/archive matrix from result JSONs only; no forecasts or inherited metadata. |
 | What are the top rows without the full evidence matrix? | `docs/best_results.md` | Generated compact top-three score/archive rows for selected measured scopes. |
 | What is the current one-page operator status? | `docs/status_receipt.md` and `docs/status_receipt.json` | Generated target state, lock state, active RSS, gate decision, and proof boundary. |
 | What candidate folders are valid or retired? | `CANDIDATES.md` | Candidate contract, lifecycle, evidence basis, retirement rules, audit commands. |
 | What is the generated candidate audit snapshot? | `CANDIDATE_INVENTORY.md` and `candidate_inventory.json` | Generated inventory and status counts. Do not hand-edit generated facts. |
+| What is the source-bound frontier ledger? | `docs/hutter_run_ledger.json` and `docs/hutter_run_ledger.md` | Candidate-run frontier rows with measured scope, evidence tier, forecast fields, proof/disqualifier states, and source-pointer assertions. |
 | What is the current cmix21 execution queue? | `CMIX21_LOCK_SAFE_QUEUE.md` | Active memory-valve candidates, lock-safe gates, memory-value table, promotion posture. |
 | What does the measured PPMD memory-valve ladder show? | `docs/cmix21_memory_valves.md` | Generated cmix21 cap ladder, 10M archive deltas, and recorded RSS outcomes. |
 | What non-PPMD cmix21 memory surfaces have evidence? | `docs/cmix21_memory_surfaces.md` | Generated scan of PAQ, FXCM-RCM, RCM, buffer, guard, and match-token evidence from saved receipts. |
