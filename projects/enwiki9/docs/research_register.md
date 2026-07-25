@@ -566,3 +566,9 @@ The snapshot candidate's deterministic LZMA source package is 281,403 bytes, SHA
 ### 2026-07-25 deterministic certification: permanent FX2 snapshot freeze
 
 The preferred permanent-FX2-snapshot candidate passed exact canonical 10M certification. Original and decoded SHA-256 are both `5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97`. Original and replay archive SHA-256 are both `84d055ca137a93210426485c8790b51308312f38e898eef86bbcc97dda77cd2f`, with archive size 1,635,030 bytes. Decode used 3,238.13 seconds and 9,087,276 KiB peak RSS; deterministic re-encode used 3,252.25 seconds and 9,083,240 KiB peak RSS. This proves 10M losslessness and reproducibility, not full-1G score or runtime eligibility. Receipt: `results/endpoint428_fx2_snapshot_freeze5m_permanent_v1/certification.json`.
+
+### 2026-07-25 MSP-428 phase timing
+
+An archive-identical diagnostic build measured the exact main-recurrent 5,000,000-step boundary. Encode reached maturity at 2,830.470355863 seconds and completed the mature interval in 474.120649001 seconds; process wall was 3,305.37 seconds. Decode reached maturity at 2,762.419981847 seconds and completed the mature interval in 474.721886005 seconds; process wall was 3,237.93 seconds. Decode reproduced the canonical 10M SHA-256 exactly.
+
+The near-identical mature encode/decode intervals show that arithmetic direction is not the dominant mature-path distinction. Whole-run 10M averages substantially overstate steady-state cost, but official extrapolation still requires transformed-step density and exact raw position at the maturity boundary. Receipt: `results/endpoint428_msp428_phase_timing_10m_v1/phase_timing.json`.
