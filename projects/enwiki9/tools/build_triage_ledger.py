@@ -217,14 +217,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--batch",
         type=Path,
-        default=PROJECT_ROOT / "run_batch_candidate_ids.txt",
-        help="candidate batch list (default: run_batch_candidate_ids.txt)",
+        default=PROJECT_ROOT / "operations" / "queues" / "run_batch_candidate_ids.txt",
+        help="candidate batch list (default: operations/queues/run_batch_candidate_ids.txt)",
     )
     parser.add_argument(
         "--remaining",
         type=Path,
-        default=PROJECT_ROOT / "run_batch_candidate_ids_remaining.txt",
-        help="remaining queue file (default: run_batch_candidate_ids_remaining.txt)",
+        default=PROJECT_ROOT / "operations" / "queues" / "run_batch_candidate_ids_remaining.txt",
+        help="remaining queue file (default: operations/queues/run_batch_candidate_ids_remaining.txt)",
     )
     parser.add_argument(
         "--log-dir",

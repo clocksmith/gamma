@@ -1,6 +1,9 @@
 """Run a single program against enwik9 and emit a result JSON.
 
 Usage: python3 lib/driver.py <program_id> [--data PATH] [--limit BYTES]
+                              [--run-purpose PURPOSE] [--run-scope-label LABEL]
+                              [--run-context CONTEXT] [--run-source SOURCE]
+                              [--run-tag TAG]
                               [--check-determinism]
                               [--archive-ceiling BYTES]
                               [--determinism-archive-ceiling BYTES] [--no-save]
@@ -34,6 +37,12 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DEFAULT = ROOT / "data" / "enwik9"
 RESULT_LEDGER_PATH = ROOT / "results" / "run_ledger.jsonl"
 LEDGER_SCHEMA = "enwiki9_driver_run_ledger_v1"
+SCOPE_LABELS = {
+    1024: "1k",
+    250_000: "250k",
+    1_000_000: "1m",
+    10_000_000: "10m",
+}
 
 
 def _load(program_id: str):
@@ -88,6 +97,51 @@ def _load_program_name(program_id: str) -> str | None:
     return None
 
 
+def _normalize_text(value: str | None) -> str | None:
+    if not isinstance(value, str):
+        return None
+    stripped = value.strip()
+    return stripped or None
+
+
+def _infer_scope_label(limit: int | None) -> str:
+    if limit is None:
+        return "full"
+    return SCOPE_LABELS.get(limit, f"{limit}B")
+
+
+def _infer_run_purpose(
+    explicit: str | None,
+    limit: int | None,
+    check_determinism: bool,
+) -> str:
+    if explicit is not None:
+        return explicit
+    if check_determinism:
+        return "verification"
+    if limit in SCOPE_LABELS:
+        return "smoke"
+    if limit is None:
+        return "replay"
+    return "candidate"
+
+
+def _parse_run_tags(raw: list[str]) -> list[str]:
+    values: list[str] = []
+    for item in raw:
+        for part in item.split(","):
+            token = part.strip()
+            if token:
+                values.append(token)
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for token in values:
+        if token not in seen:
+            seen.add(token)
+            deduped.append(token)
+    return deduped
+
+
 def _append_run_ledger(row: dict[str, Any]) -> None:
     RESULT_LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
     with RESULT_LEDGER_PATH.open("a", encoding="utf-8") as out:
@@ -116,6 +170,11 @@ def _build_run_ledger_row(
         "compress_time_s": result.get("compress_time_s"),
         "decompress_time_s": result.get("decompress_time_s"),
         "run_time_s": result.get("run_time_s"),
+        "run_purpose": result.get("run_purpose"),
+        "run_scope_label": result.get("run_scope_label"),
+        "run_context": result.get("run_context"),
+        "run_source": result.get("run_source"),
+        "run_tags": result.get("run_tags"),
         "determinism_ok": result.get("determinism", {}).get("single_host_byte_equal")
         if isinstance(result.get("determinism"), dict)
         else None,
@@ -138,7 +197,21 @@ def run(
     check_determinism: bool = False,
     archive_ceiling: int | None = None,
     determinism_archive_ceiling: int | None = None,
+    run_purpose: str | None = None,
+    run_scope_label: str | None = None,
+    run_context: str | None = None,
+    run_source: str | None = None,
+    run_tags: list[str] | None = None,
 ) -> dict:
+    inferred_purpose = _infer_run_purpose(
+        run_purpose=_normalize_text(run_purpose),
+        limit=limit,
+        check_determinism=check_determinism,
+    )
+    inferred_scope_label = _normalize_text(run_scope_label) or _infer_scope_label(limit)
+    normalized_context = _normalize_text(run_context)
+    normalized_source = _normalize_text(run_source)
+    normalized_tags = run_tags or []
     mod, src_path = _load(program_id)
     program_name = _load_program_name(program_id)
     raw = data_path.read_bytes()
@@ -241,6 +314,11 @@ def run(
         }
         if archive_ceiling_missed
         else None,
+        "run_purpose": inferred_purpose,
+        "run_scope_label": inferred_scope_label,
+        "run_context": normalized_context,
+        "run_source": normalized_source,
+        "run_tags": normalized_tags,
         "determinism": determinism,
         "host": {
             "machine": platform.machine(),
@@ -291,6 +369,35 @@ def main() -> int:
         default=None,
         help="skip the second compression when the first archive misses this byte ceiling",
     )
+    ap.add_argument(
+        "--run-purpose",
+        default=None,
+        help=(
+            "provenance label for this run (for example: smoke|gate|control|"
+            "verification|rebaseline|replay)"
+        ),
+    )
+    ap.add_argument(
+        "--run-scope-label",
+        default=None,
+        help="override inferred scope label (for example: full|1k|250k|1m|10m)",
+    )
+    ap.add_argument(
+        "--run-context",
+        default=None,
+        help="short workflow/lane context label (for example: cmix21_1m_queue)",
+    )
+    ap.add_argument(
+        "--run-source",
+        default=None,
+        help="how this run was launched (manual|queue|script|gate|normalized)",
+    )
+    ap.add_argument(
+        "--run-tag",
+        action="append",
+        default=[],
+        help="repeatable provenance tag (or comma-separated list)",
+    )
     ap.add_argument("--no-save", action="store_true")
     ap.add_argument("--no-ledger", action="store_true")
     args = ap.parse_args()
@@ -305,6 +412,11 @@ def main() -> int:
         args.check_determinism,
         args.archive_ceiling,
         args.determinism_archive_ceiling,
+        run_purpose=args.run_purpose,
+        run_scope_label=args.run_scope_label,
+        run_context=args.run_context,
+        run_source=args.run_source,
+        run_tags=_parse_run_tags(args.run_tag),
     )
 
     if not args.no_save:

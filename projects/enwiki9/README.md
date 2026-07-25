@@ -2,14 +2,27 @@
 
 Lossless compression of `enwik9` — the first 10^9 bytes of the English Wikipedia XML dump (Matt Mahoney / Hutter Prize benchmark).
 
+## Primary Workflow
+
+Create, mutate, queue, parallelize, measure, and track algorithms through
+[ADAPTIVE_WORKFLOW.md](ADAPTIVE_WORKFLOW.md) and
+`tools/enwiki9_lab.py`.
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py status
+python3 projects/enwiki9/tools/enwiki9_lab.py proposals
+python3 projects/enwiki9/tools/enwiki9_lab.py discover-gates --dry-run
+python3 projects/enwiki9/tools/enwiki9_lab.py run --adaptive --continuous
+```
+
+This adaptive loop is the main operational surface. The remaining documents
+explain algorithms, evidence, accounting, and proof boundaries.
+
 For a mechanism-level guide to the custom algorithms and their measured status,
 see [ALGORITHMS.md](ALGORITHMS.md).
 
 For a plain-English view of what each major algorithm does and how it scored,
 see [docs/algorithm_cards.md](docs/algorithm_cards.md).
-
-For the project ownership map, active proof lane, and documentation routing,
-see [PROJECT_ORGANIZATION.md](PROJECT_ORGANIZATION.md).
 
 For the current generated operator receipt, see
 [docs/status_receipt.md](docs/status_receipt.md).
@@ -33,27 +46,24 @@ For the primary novel SRSTC / streaming self-referential retrieval strategy
 that turns cosine-style similarity into deterministic compressor state, see
 [docs/streaming_retrieval_mixer.md](docs/streaming_retrieval_mixer.md).
 
-For handoff/continuation rules during active cmix21 runs, see
-[docs/takeover_runbook.md](docs/takeover_runbook.md).
-
 For the FX2-SC sidecar-context implementation roadmap, see
 [FX2_SC.md](FX2_SC.md). For the paper-style thesis version, see
 [FX2_SC_PAPER.md](FX2_SC_PAPER.md).
 
-Candidate source, metadata, audit, retirement, and PGSG-readiness rules are in
-[CANDIDATES.md](CANDIDATES.md). The current generated audit snapshot is
-[CANDIDATE_INVENTORY.md](CANDIDATE_INVENTORY.md).
+Candidate creation, mutation, lifecycle, continuation, directory ownership, and
+parallel execution rules are in
+[ADAPTIVE_WORKFLOW.md](ADAPTIVE_WORKFLOW.md). The current generated audit
+snapshot is [CANDIDATE_INVENTORY.md](CANDIDATE_INVENTORY.md).
 
 ## Layout
 
 ```
 enwiki9/
 ├── README.md              this file
-├── PROJECT_ORGANIZATION.md ownership map + active proof lane
+├── ADAPTIVE_WORKFLOW.md   primary create, mutate, queue, run, and track loop
 ├── ALGORITHMS.md          custom algorithm mechanisms + benchmark status
 ├── FX2_SC.md              sidecar-context thesis + rollout plan
 ├── FX2_SC_PAPER.md        paper-style FX2-SC design thesis
-├── CANDIDATES.md          candidate lifecycle + PGSG metadata policy
 ├── CANDIDATE_INVENTORY.md generated candidate audit snapshot
 ├── index.json             registry of programs + leaderboard
 ├── data/
@@ -67,11 +77,41 @@ enwiki9/
 │   └── driver.py          run/verify/score one program
 ├── tools/                 audit, package, queue, residual, ordering utilities
 ├── docs/                  algorithm cards, accounting, shadow-coder, reports, and handoff notes
+├── operations/
+│   └── queues/            durable operator queue inputs; runtime logs stay in run_logs/
 ├── results/
 │   ├── <program_id>/<timestamp>.json   per-run measurements
+│   ├── probes/            non-candidate diagnostic and comparison outputs
 │   └── run_ledger.jsonl                append-only central run ledger
 └── bench.py               run all programs, update leaderboard
 ```
+
+## Root and registry discipline
+
+The project root is a routing surface, not an output directory. Keep only
+project policy, canonical strategy/certificate documents, generated canonical
+inventories, and supported entry points there.
+
+Use these destinations for other files:
+
+| Artifact | Destination |
+|---|---|
+| Historical research notes | `docs/research/historical_candidate_notes/` |
+| Operator handoffs | `docs/handoffs/` |
+| Diagnostic probe JSON | `results/probes/` |
+| Durable queue inputs | `operations/queues/` |
+| Runtime logs and transient status snapshots | `run_logs/` |
+| Runnable utilities | `tools/` |
+
+`index.json` and `candidate_inventory.json` intentionally answer different
+questions. `index.json` is the curated public program and leaderboard registry.
+`candidate_inventory.json` is the generated audit of every program directory,
+including historical, retired, blocked, and unregistered candidates. A
+difference between their counts is expected; an unclassified program directory
+in the generated inventory is the defect.
+
+Run `python3 tools/candidate_audit.py --write` after structural or candidate
+metadata changes. Do not copy its counts into hand-maintained documents.
 
 ## Program contract
 
@@ -124,16 +164,36 @@ It maps to information-theoretic statements (Shannon entropy of natural English 
 Each line is one row and includes:
 
 - `run_id`, `program_id`, `algorithm_name`
+- `run_scope_label`, `run_purpose`, `run_context`, `run_source`, `run_tags`
 - `data_size`, `compressed_size`, `program_size`, `hutter_score`
 - `compress_time_s`, `decompress_time_s`, `run_time_s`
 - `memory_kib_before`, `memory_kib_after`, `memory_kib_peak`
 - `roundtrip_ok`, `determinism_ok`, `timestamp`, `host`
 - `result_path` back-pointer to the per-run JSON
 
+`run_scope_label` is a human scope label (for example `full`, `1m`, `10m`) and
+is often paired with `data_size`. `run_purpose` is the workflow intent
+(`smoke`, `verification`, `candidate`, `rebaseline`, etc.). `run_context`,
+`run_source`, and `run_tags` are optional provenance fields.
+
 To rebuild from existing historical result JSONs:
 
 ```bash
 python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite
+```
+
+For long-running or repeated candidate workflows, include these on invocation so
+repeat and verification passes stay distinguishable in the ledger:
+
+```bash
+python3 lib/driver.py baseline_lzma \
+  --limit 1000000 \
+  --run-purpose smoke \
+  --run-scope-label 1m \
+  --run-context gate_1m \
+  --run-source script \
+  --run-tag baseline \
+  --run-tag gate_1m
 ```
 
 Use `--program-id <id1> <id2>` to limit scope or `--append` to keep existing rows.
@@ -146,6 +206,11 @@ Every run produces `results/<program_id>/<timestamp>.json` with these fields:
 |---|---|
 | `program_id` | matches a directory under `programs/` |
 | `data_path` | the corpus or fixture used as input |
+| `run_purpose` | workflow intent at time of execution (`smoke`, `verification`, `candidate`, etc.) |
+| `run_scope_label` | inferred or explicit scope label (`full`, `1m`, `10m`, etc.) |
+| `run_context` | optional lane/workflow label for grouping repeated runs |
+| `run_source` | optional launch source (`queue`, `manual`, `script`, etc.) |
+| `run_tags` | optional list of repeatable provenance tags |
 | `data_size` | bytes of input fed to `compress()` |
 | `data_md5` / `data_sha256` | hashes of input — must match across hosts to compare |
 | `compressed_size` | bytes returned by `compress()` |

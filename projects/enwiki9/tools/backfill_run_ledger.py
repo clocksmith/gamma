@@ -16,6 +16,27 @@ RESULTS_DIR = ROOT / "results"
 PROGRAMS_DIR = ROOT / "programs"
 LEDGER_PATH = RESULTS_DIR / "run_ledger.jsonl"
 LEDGER_SCHEMA = "enwiki9_driver_run_ledger_v1"
+KNOWN_SCOPE_LABELS = {
+    1024: "1k",
+    250_000: "250k",
+    1_000_000: "1m",
+    10_000_000: "10m",
+    1_000_000_000: "full",
+}
+
+
+def _infer_scope_label(data_size: Any) -> str:
+    if not isinstance(data_size, int):
+        return "unknown"
+    return KNOWN_SCOPE_LABELS.get(data_size, f"{data_size}B")
+
+
+def _infer_run_purpose(determinism: Any, data_size: Any) -> str:
+    if isinstance(determinism, dict) and "single_host_byte_equal" in determinism:
+        return "verification"
+    if isinstance(data_size, int) and data_size in KNOWN_SCOPE_LABELS:
+        return "smoke"
+    return "candidate"
 
 
 def rel(path: pathlib.Path) -> str:
@@ -131,6 +152,15 @@ def build_ledger_row(
         "compress_time_s": result.get("compress_time_s"),
         "decompress_time_s": result.get("decompress_time_s"),
         "run_time_s": result.get("run_time_s"),
+        "run_purpose": result.get("run_purpose")
+        if isinstance(result.get("run_purpose"), str)
+        else _infer_run_purpose(determinism, result.get("data_size")),
+        "run_scope_label": result.get("run_scope_label")
+        if isinstance(result.get("run_scope_label"), str)
+        else _infer_scope_label(result.get("data_size")),
+        "run_context": result.get("run_context"),
+        "run_source": result.get("run_source"),
+        "run_tags": result.get("run_tags") if isinstance(result.get("run_tags"), list) else [],
         "determinism_ok": determinism.get("single_host_byte_equal")
         if isinstance(determinism, dict)
         else None,

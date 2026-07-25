@@ -14,13 +14,13 @@ They do not prove a target result and do not replace exact gate promotion.
 
 - Active candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
 - Active scope bytes: `100,000,000`
-- cmix21 candidates with result or guard evidence: `6`
+- cmix21 candidates with result or guard evidence: `7`
 
 ## Observed Knob Values
 
-- PPMD caps KiB: `20352`, `102400`
+- PPMD caps KiB: `20352`, `76800`, `102400`
 - PAQ levels: `5`
-- FXCM-RCM values: `20`
+- FXCM-RCM values: `20`, `28`
 - RCM values: `32`
 - Buffer tokens: `buffull`, `bufthirtysecond`
 - Guard token sets: `ppmdguard2`
@@ -30,6 +30,7 @@ They do not prove a target result and do not replace exact gate promotion.
 
 | Candidate | PPMD KiB | PAQ | FXCM-RCM | RCM | Buffer | Guards | Latest prefix | Prefix archive | 10M archive | 10M RSS | 100M RSS |
 |---|---:|---:|---:|---:|---|---|---:|---:|---:|---|---|
+| `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | 76,800 | 5 | 28 | 32 | bufthirtysecond | n/a | 1,000,000 | 174,423 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 44,978 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 44,978 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 45,184 | n/a | missing | missing |

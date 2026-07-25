@@ -4,8 +4,9 @@ This lock-safe audit checks candidate `meta.json` receipt references.
 It does not launch compression and does not score a candidate.
 
 - Artifact checks: `289`
-- OK: `false`
-- Rule: `Rows with recorded receipt hashes must match their artifact files. Rows without hashes are legacy evidence and should be repaired when re-recorded.`
+- Present artifact integrity OK: `true`
+- Local artifact set complete: `false`
+- Rule: `Present artifacts with recorded receipt hashes must match. Missing local artifacts remain explicit provenance gaps and cannot support proof claims, but do not block regeneration of views from a partial checkout. Rows without hashes are legacy evidence and should be repaired when re-recorded.`
 
 ## Status Counts
 

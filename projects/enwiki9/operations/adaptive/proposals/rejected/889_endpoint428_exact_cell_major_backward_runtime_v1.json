@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-07-24T21:23:47+00:00",
+  "evidence": [
+    "results/endpoint428_exact_source_runtime_stack_cell_major_backward_v1/development.json",
+    "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_gate_dot_fuse_gprof_250k_v1/gprof.txt"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "Cell-owned processing across all three recurrent gates removes most fine-grained OpenMP barriers while preserving each output element arithmetic order and the exact endpoint428 archive stream.",
+  "kill_condition": "Any archive mismatch at 1K, memory violation, or less than 5 percent alternating guarded runtime reduction.",
+  "max_program_bytes": 261125,
+  "mechanism_class": "representation",
+  "parent": null,
+  "priority": 110,
+  "promotion_condition": "Exact 1K archive identity and roundtrip, then at least 15 percent alternating guarded 250K runtime reduction with clean decimal 10GB memory.",
+  "proposal_id": "endpoint428_exact_cell_major_backward_runtime_v1",
+  "rejected_at": "2026-07-24T21:37:04+00:00",
+  "rejection_reason": "Exact 1K identity and roundtrip passed, but the alternating guarded 250K candidate median was 1.94 percent slower than the parent; larger gates are not authorized.",
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "state": "rejected",
+  "title": "Exact endpoint428 cell-major recurrent backward scheduling"
+}

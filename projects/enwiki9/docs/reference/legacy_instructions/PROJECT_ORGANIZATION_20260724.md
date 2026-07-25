@@ -4,6 +4,40 @@ This file is the ownership map for the `enwiki9` compression project. It
 defines where strategy, algorithms, evidence, tools, and submission accounting
 belong so the project does not drift back into scattered notes.
 
+## Filesystem Zones
+
+The project root contains only canonical routing documents, project policy,
+certificates, generated canonical inventories, and supported entry points.
+Everything else has one owner:
+
+| Zone | Owns |
+|---|---|
+| `docs/research/` | Historical and active design notes that are not canonical project status. |
+| `docs/handoffs/` | Durable operator handoffs. |
+| `results/probes/` | Diagnostic JSON and other non-candidate measurement outputs. |
+| `operations/queues/` | Durable queue inputs consumed by operator tools. |
+| `run_logs/` | Transient logs, progress files, and status snapshots. |
+| `tools/` | Runnable utilities at stable compatibility paths. |
+
+Do not write ad hoc JSON, logs, queue lists, or research notes to the project
+root. Tool defaults must point to the owning zone.
+
+`tools/` remains a flat compatibility surface because receipts, tests, and
+operator commands invoke those paths directly. Use `tools/README.md` for
+purpose-based routing and `docs/tooling_inventory.md` for the detailed catalog.
+New tool families may use subdirectories when they do not break those stable
+paths.
+
+The two program registries have distinct ownership:
+
+- `index.json` is the curated public program and leaderboard registry.
+- `candidate_inventory.json` is the generated audit of every directory under
+  `programs/`, including retired, blocked, historical, and unregistered work.
+
+Count differences between them are expected. Missing lifecycle classification
+in the generated inventory is not expected. Refresh the inventory with
+`python3 tools/candidate_audit.py --write`; never mirror its counts manually.
+
 ## Current Operating Thesis
 
 The project has one proof objective:
@@ -76,7 +110,7 @@ receipts show that one should be promoted.
 | What is the project and how are results reported? | `README.md` | Scoring math, result JSON fields, scope discipline, reporting vocabulary. |
 | What algorithms exist and what evidence do they have? | `ALGORITHMS.md` | Mechanism explanations, measured rows, current strategy register, paper/design note index. |
 | How can a reader orient on the main algorithms? | `docs/algorithm_cards.md` | Plain-English cards: mechanism, score, proof boundary, next role. |
-| What are the canonical per-run stored records? | `results/run_ledger.jsonl` | Append-only run registry with `run_id`, timing, memory snapshots, determinism, and result-pointer fields. |
+| What are the canonical per-run stored records? | `results/run_ledger.jsonl` | Append-only run registry with `run_id`, scope labels, purpose/context tags, timing, memory snapshots, determinism, and result-pointer fields. |
 | What artifact-backed rows currently rank best by scope? | `docs/evidence_matrix.md` | Generated score/archive matrix from result JSONs only; no forecasts or inherited metadata. |
 | What are the top rows without the full evidence matrix? | `docs/best_results.md` | Generated compact top-three score/archive rows for selected measured scopes. |
 | What is the current one-page operator status? | `docs/status_receipt.md` and `docs/status_receipt.json` | Generated target state, lock state, active RSS, gate decision, and proof boundary. |

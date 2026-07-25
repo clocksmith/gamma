@@ -17,7 +17,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROGRAMS = ROOT / "programs"
 DATA_DEFAULT = ROOT / "data" / "enwik9"
 DEFAULT_CANDIDATE = "opcode_typed_anchor_bitmix_v1"
-DEFAULT_OUT = ROOT / "lane_b_typed_anchor_handoff.json"
+DEFAULT_OUT = ROOT / "docs" / "handoffs" / "lane_b_typed_anchor_handoff.json"
 
 FIELD_NAMES = {
     0: "outside",

@@ -1,0 +1,117 @@
+--- /home/x/enwiki9-nonproof/runtime/endpoint428_pair_layer0_dual_context_lstm_parallel_v2_native_fastmath_staticgomp_bptt_output_single_lookup_extra_fuse_gate_dot_fuse_output_update_loop_v1/src/mixer/mixer.h	2026-07-19 04:24:16.126318684 -0400
++++ /home/x/enwiki9-nonproof/runtime/endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_runtime_stack_v1/src/mixer/mixer.h	2026-07-24 17:08:39.331162767 -0400
+@@ -3,7 +3,6 @@
+ 
+ #include <vector>
+ #include <valarray>
+-#include <unordered_map>
+ #include <memory>
+ 
+ struct ContextData {
+@@ -14,6 +13,48 @@
+   std::valarray<float> weights, extra_weights;
+ };
+ 
++class ContextTable {
++ public:
++  ContextTable() : slots_(32768), size_(0) {}
++
++  ContextData* Find(unsigned int key) {
++    Slot& slot = FindSlot(key);
++    return slot.occupied ? slot.data.get() : nullptr;
++  }
++
++  ContextData* FindOrCreate(unsigned int key,
++      unsigned long long input_size, unsigned long long extra_input_size) {
++    Slot& slot = FindSlot(key);
++    if (!slot.occupied) {
++      slot.occupied = true;
++      slot.key = key;
++      slot.data.reset(new ContextData(input_size, extra_input_size));
++      ++size_;
++    }
++    return slot.data.get();
++  }
++
++  unsigned int size() const { return size_; }
++
++ private:
++  struct Slot {
++    unsigned int key = 0;
++    bool occupied = false;
++    std::unique_ptr<ContextData> data;
++  };
++
++  Slot& FindSlot(unsigned int key) {
++    unsigned int index = (key * 2654435761u) & (slots_.size() - 1);
++    while (slots_[index].occupied && slots_[index].key != key) {
++      index = (index + 1) & (slots_.size() - 1);
++    }
++    return slots_[index];
++  }
++
++  std::vector<Slot> slots_;
++  unsigned int size_;
++};
++
+ class Mixer {
+  public:
+   Mixer(const std::valarray<float>& inputs,
+@@ -32,7 +73,7 @@
+   const unsigned long long& context_;
+   unsigned long long max_steps_, steps_;
+   ContextData* active_context_data_;
+-  std::unordered_map<unsigned int, std::unique_ptr<ContextData>> context_map_;
++  ContextTable context_map_;
+ };
+ 
+ #endif
+--- /home/x/enwiki9-nonproof/runtime/endpoint428_pair_layer0_dual_context_lstm_parallel_v2_native_fastmath_staticgomp_bptt_output_single_lookup_extra_fuse_gate_dot_fuse_output_update_loop_v1/src/mixer/mixer.cpp	2026-07-19 07:08:47.286648890 -0400
++++ /home/x/enwiki9-nonproof/runtime/endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_runtime_stack_v1/src/mixer/mixer.cpp	2026-07-24 17:08:39.332162762 -0400
+@@ -18,30 +18,12 @@
+ 
+ ContextData* Mixer::GetContextData() {
+   const unsigned int context_key = static_cast<unsigned int>(context_);
+-  if (context_map_.size() < 10000) {
+-    std::unique_ptr<ContextData>& slot = context_map_[context_key];
+-    if (slot == nullptr) {
+-      slot = std::unique_ptr<ContextData>(
+-          new ContextData(inputs_.size(), extra_inputs_.size()));
+-    }
+-    return slot.get();
+-  }
+-
+-  auto found = context_map_.find(context_key);
+-  if (found != context_map_.end()) {
+-    if (found->second == nullptr) {
+-      found->second = std::unique_ptr<ContextData>(
+-          new ContextData(inputs_.size(), extra_inputs_.size()));
+-    }
+-    return found->second.get();
+-  }
+-
+-  std::unique_ptr<ContextData>& slot = context_map_[0xDEADBEEF];
+-  if (slot == nullptr) {
+-    slot = std::unique_ptr<ContextData>(
+-        new ContextData(inputs_.size(), extra_inputs_.size()));
+-  }
+-  return slot.get();
++  ContextData* data = context_map_.Find(context_key);
++  if (data != nullptr) return data;
++  const unsigned int selected = context_map_.size() >= 10000
++      ? 0xDEADBEEF : context_key;
++  return context_map_.FindOrCreate(
++      selected, inputs_.size(), extra_inputs_.size());
+ }
+ 
+ float Mixer::Mix() {
+--- /home/x/enwiki9-nonproof/runtime/endpoint428_pair_layer0_dual_context_lstm_parallel_v2_native_fastmath_staticgomp_bptt_output_single_lookup_extra_fuse_gate_dot_fuse_output_update_loop_v1/src/mixer/lstm-layer.cpp	2026-07-19 07:47:03.305779597 -0400
++++ /home/x/enwiki9-nonproof/runtime/endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_runtime_stack_v1/src/mixer/lstm-layer.cpp	2026-07-24 17:09:13.201992803 -0400
+@@ -67,7 +67,6 @@
+   // The three gates consume the same dense input.  Traverse it once per cell
+   // and accumulate all gate dots together instead of assigning one complete
+   // input traversal to each OpenMP section.
+-#pragma omp parallel for num_threads(3) schedule(static)
+   for (unsigned int i = 0; i < num_cells_; ++i) {
+     float forget = forget_gate_.weights_[i][input_symbol];
+     float node = input_node_.weights_[i][input_symbol];

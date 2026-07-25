@@ -202,3 +202,363 @@ posterior traces, and oracle routing are discovery tools. A final Hutter
 candidate may use only the distilled deterministic mechanism that the decoder
 rebuilds from the already-decoded prefix, with every byte of code, table, and
 configuration counted.
+
+## 2026-07-24: Exact-build recovery, global LSTM limits, and residual attribution
+
+The endpoint428/dual-112 build recipe was recovered from retained build logs and reproduced exactly. The required release flags include OpenMP, fast-math, native tuning, LTO, the 20 MB PPMD limits, endpoint context-scaling definitions, pthread, static libstdc++/libgcc, explicit static libgomp linkage, and a final `strip`. The untouched reconstructed dual-112 executable is byte-identical to the retained parent (`a1c4562721332dab401e8666e9d8f49cc52776a7f2bd8494524970bf609b9452`, 1,899,840 bytes). Earlier reconstruction attempts without the full macro set changed the stream and exceeded the memory envelope; they are not evidence about the parent lineage.
+
+Uniform main-LSTM horizon reduction found a local optimum at horizon 25. At 250K it produced 44,942 bytes versus dual-112's 44,958 and direct matched medians of 74.65 versus 79.45 seconds. At 1M it produced 173,969 bytes versus 173,961, with exact decode, deterministic re-encode, and peak RSS below 9 GB. Horizons 12, 6, 3, and 1 produced 44,962, 44,964, 45,011, and 45,045 bytes at 250K, respectively. Horizon 25 is therefore retained only as a runtime/score tradeoff; its sign reversal between 250K and 1M prohibits treating the prefix gain as a full-corpus score improvement.
+
+Increasing the main OpenMP team is not productive. Environment requests for 4, 8, and 16 CPUs did nothing because the source fixes three workers. Exact-source four-worker execution was slower, and speculative wider/reconstructed variants either slowed execution or crossed the decimal 10 GB guard. The recurrent-fan-in-64 representation saved 18 bytes at 250K but failed to improve matched runtime; removing its redundant tail clearing regressed runtime. These independent negative results make another uniform cell-count, horizon, fan-in, or worker sweep low priority.
+
+Matched 1M probability traces now compare continuously evolving dual-112 and dual-96 models over the same 4,805,936 WRT-coded bits. Dual-112 produced 173,961 bytes in 250.26 seconds; dual-96 produced 174,037 bytes in 225.08 seconds. Thus the observed capacity increment costs about 25 seconds and buys 76 archive bytes at this scope. This does not prove that the advantage is causally selectable or computationally sparse.
+
+The active decisive experiment is `tools/endpoint_trace_gain_density.py` over `results/endpoint428_dual112_vs_dual96_trace_1m_v1/`. It ranks WRT-byte blocks by realized dual-112 log-loss advantage while both recurrent states continue evolving, reports oracle coverage at 1%, 5%, 10%, 20%, and 50%, and charges the information-theoretic lower bound for transmitting the selected-block mask. This first curve measures output-gain concentration only. Any implementation must separately prove that recurrent state evolution can be eliminated, reconstructed, or compiled cheaply. The preferred follow-on, conditional on concentration, is an MDL-optimized residual program over cheap causal features; predictive-state quotienting is the fallback if gain is diffuse.
+## 2026-07-24: DPLR-112 state-supervised replacement and residual compilers
+
+The exact endpoint428 teacher trace at 1M remains 173,961 archive bytes with SHA-256 `1b8d63ad348976d9b27b599e306fb1447e87af91f7526786c93c9508e37b1f23`. A transition trace was added without changing those bytes. The bounded trace contains 120,000 rows per recurrent branch; the full main trace contains all 600,742 WRT rows. Each row records the 205 causal input features plus previous and next 112-dimensional hidden and cell states.
+
+Output-only DPLR ranks 1, 2, and 4 failed. Deep rank 1 produced 4.496 and 4.479 branch bits per byte on quantized holdout; rank 4 produced 4.635 and 4.479, versus teacher branch costs of roughly 2.444 and 2.124. This proposal was rejected before native integration.
+
+State supervision materially improved transition quality. Quantized rank 4 autonomous rollout hidden RMSE was 0.168 main and 0.244 side. Rank 16 improved those to 0.147 and 0.210, using 13,512 raw parameter bytes per branch. Expanding the event channel from 4 to 16 gave only a small state improvement.
+
+A zero-initialized causal online binary-prefix readout was then evaluated over continuous student rollout. Best rank-16 event-16 holdout costs were 2.894 bits per WRT byte for main and 2.876 for side. Excess over the corresponding teacher branches remained 0.449 and 0.775 bits per WRT byte, failing the predeclared 0.25 kill threshold. The state-supervised rank-16 proposal was rejected before native integration.
+
+The teacher trace shows that compact base is already close to final endpoint428: 2.320671 versus 2.316118 bits per byte over the 1M trace, a 2,735-bit difference. A zero-package four-table online residual program recovered only 106 bits. A 16K-cell offline hashed compiler had a fragile projected net gain of 1,377 bytes but worsened its sealed holdout.
+
+A low-rank residual compiler using the actual 205 causal LSTM inputs generalized consistently. On the full trace's final 90,112-byte holdout, quantized rank 8 saved 23.50 bits versus compact base with a 6,246-byte compressed parameter file. Endpoint428 final saved 394.02 bits on the same holdout, so the compiler recovered about 6 percent of the required residual. It is useful evidence but not a runtime-solving replacement.
+
+Decision: do not integrate the screened DPLR or residual models natively. Next measure the singular spectra of endpoint428's learned gate matrices, separated into direct-symbol, causal-feature, and recurrent blocks. Use that measurement to choose block-low-rank, sparse-plus-low-rank, or predictive-state quotient structure rather than increasing a uniform shared rank.
+## 2026-07-24: learned spectra and freeze-forward attribution
+
+Exact 1M end-state weight snapshots were emitted without changing the 173,961-byte archive. At this scale, both recurrent models use 205 input symbols and 205 output symbols. The main model has two 112-cell layers; the side model has one. This corrects the first state-shadow simplification, which supervised only the first main layer.
+
+The learned matrices are not low rank. At rank 16, full gate matrices retain only about 33 to 39 percent of squared singular energy. Direct-symbol and causal-feature blocks retain about 37 to 47 percent. Even after removing the diagonal, recurrent blocks retain only about 51 to 66 percent at rank 16. Uniform DPLR rank growth was therefore approximating genuinely high-rank learned interactions.
+
+Freeze-after-3000 preserves dense recurrent forward state but bypasses later BPTT, Adam, output updates, and associated synchronization. It roundtrips exactly. At 250K, float freeze produces 45,127 bytes in 49.42 seconds versus the 44,958-byte parent near 79.45 seconds. Packed BF16 hardware-dot freeze produces 45,128 bytes in 45.33 seconds. Both are faster but miss score and runtime requirements.
+
+Cycle instrumentation on packed BF16 freeze attributes, over 151,215 calls per branch, 7.31 billion cycles to recurrent layers and 7.29 billion to output projection and softmax combined. The whole encode consumes 97.05 user seconds and 45.60 wall seconds. After online learning is removed, recurrent forward is no longer sufficiently dominant for neural elimination alone to satisfy the runtime bound. The earlier 84.67 percent attribution applied to workers, Adam, synchronization, and recurrent work as a group, not to frozen forward.
+
+Decision: the next runtime investigation must attribute non-neural execution, including fixed initialization, WRT, arithmetic coding, context updates, FXCM/PPMD, and memory traffic. Preserve full-rank recurrent forward only if its remaining score contribution justifies its measured post-freeze cycles.
+## 2026-07-24: compact runtime allocation boundary
+
+The pruned compact endpoint remains the counted-score fallback: 174,099 bytes at 1M, a 235,420-byte package, and projected score 109,499,618. Its projected margin is only 382 bytes, so runtime changes must be almost score-neutral.
+
+Whole-program `gprof` on frozen packed BF16 attributes 69.97 percent of sampled self time to `gomp_barrier_wait_end`. The next non-barrier functions are the main and side FXCM `E1::get` paths, followed by indirect contexts, mixer context access, word processing, and context-map mixing. This profile omits LTO and is attribution evidence, not a timing receipt.
+
+Removing OpenMP from paired frozen BF16 reduces user CPU from 96.42 to 55.17 seconds but increases 250K wall time from 45.33 to 48.47 seconds. Active OpenMP spinning on unchanged compact preserves 44,979 bytes but worsens wall time to 56.98 seconds. Scheduler policy alone is not the solution.
+
+Compact freeze-after-100K produces 45,045 bytes at 250K. Freeze-after-500K produces 174,204 at 1M, losing 105 bytes over only the final roughly 100K WRT symbols. Continuing output SGD while freezing recurrent BPTT recovers 60 bytes but still produces 174,144. Both recurrent and output adaptation remain materially useful late in the stream.
+
+Uniform BPTT stride 4 after a 3,000-symbol warmup produces 45,095 bytes in 48.30 seconds. Scaling recurrent learning rate by four worsens this to 45,107. A causal surprise gate updates 1,027 of 1,513 horizons and improves compression to 45,004, but runtime remains 53.08 seconds. Surprise selects useful updates, yet BPTT frequency is not the dominant compact wall-time lever.
+
+Decision: preserve continuous adaptation. Next target output projection and softmax arithmetic plus FXCM/context-map execution. Any approximation must be evaluated against compact's 382-byte projected margin and exact package size.
+## Compact output-update/projection fusion: rejected
+
+The compact LSTM updates each dense output row from the previous hidden vector
+and immediately projects the next hidden vector through the updated row. A
+candidate reordered recurrent forward propagation ahead of the output update
+and fused the update with the following dot product. The causal equations were
+unchanged, but the saved hidden-vector load changed floating-point code
+generation under the production flags.
+
+The 1K candidate roundtripped at 254 bytes, but its archive was not
+byte-identical to the parent. The matched 250K gate on the same CPUs produced:
+
+| Variant | Archive bytes | Wall seconds | Max RSS KiB |
+|---|---:|---:|---:|
+| compact parent | 44,979 | 56.75 | 7,523,440 |
+| fused update/projection | 44,991 | 57.22 | 7,523,456 |
+
+The branch is rejected. The result is stronger than a failed implementation
+detail: the second dense output-matrix pass was already cache-resident, so
+removing that pass did not expose a useful wall-time lever. Subsequent work
+should target online recurrent training and dense recurrent interaction, not
+output-layer memory traffic.
+
+Receipt:
+`results/endpoint428_compact_output_update_predict_fused_matched_250k_v1/decision.json`.
+## Butterfly-112 structured recurrent campaign
+
+The DPLR rank bottleneck was replaced with a full-rank butterfly transform.
+Each of four gates uses seven stages of pairwise 2x2 mixing over a padded
+128-state vector. A rank-4 shared input projection and rank-16 event embedding
+keep the representation compact. One branch has 21,124 int8 parameters and
+costs an estimated 20,676 multiply-accumulates per transition. A 255-node
+prefix readout adds 28,815 int8 parameters. Two branches plus readouts total
+99,878 raw int8 bytes before scales, code, and compression.
+
+The first readout screen incorrectly used the trace event class as the target
+byte. Direct comparison against the exact teacher truth showed only one match
+in 600,742 rows. Those `v1` readout rates are invalid and are not evidence.
+The corrected `v2` screen reconstructs bytes from the one-byte-shifted exact
+teacher trace.
+
+Butterfly state retention improved over rank-16 event DPLR. On the main
+4,096-row fake-int8 rollout, hidden and cell RMSE were approximately 0.103 and
+0.289, versus DPLR's 0.144 and 0.337. Side hidden RMSE also improved slightly,
+although cell RMSE regressed.
+
+Teacher-forced state matching was insufficient. Training the prefix readout on
+a 120K quantized student rollout produced 3.3083 bits per byte on main and
+3.3196 on side. Window-32 rollout state training improved these to 3.2584 and
+3.3028.
+
+Joint causal prefix-loss and state-anchor training produced strong reset-local
+rates: 2.5023 bits per byte on main and 2.4864 on side over 4,096 rows.
+However, carrying quantized student state continuously from row zero through
+120K rows yielded 3.1607 and 3.1962 bits per byte on the final 18K. Increasing
+main training windows from 32 to 128 improved the reset-local rate to 2.4783
+but worsened the no-reset rate to 3.1784.
+
+The continuously evolving butterfly student is rejected before native codec
+integration. The result identifies autonomous state drift, not local
+structured capacity, as the failure. The next valid composition is
+deterministic periodic rehydration: train from a public zero state at fixed
+block boundaries and reset identically in encoder and decoder. This requires
+no route side information and makes the training and deployment state
+distributions identical.
+
+Receipt: `results/butterfly112_campaign_v1/decision.json`.
+## Low-bit full-rank recurrent campaign
+
+Exact endpoint428 snapshots contain three recurrent transforms per layer:
+forget, input-node, and output. The main snapshot has two 112-cell layers and
+435,213 floats; side has one layer and 198,893 floats. This corrects the
+four-gate conventional-LSTM assumption in the initial DPLR-112 proposal.
+
+Row-scaled binary quantization retains approximately 55% to 61% of matrix
+energy while both complete snapshots plus fp16 row scales occupy 82,100
+bytes. This is more full-matrix energy than rank-16 DPLR retained in the gate
+matrices and preserves dense interaction rank.
+
+The teacher trace field order is `base, side, main, final, bit`. An interim
+helper reversed main and side. Results produced through that helper are invalid
+as branch-specific evidence. Direct conditioning of the 205-way output
+softmax was also rejected as a proxy because the validated codec contract uses
+the recorded prefix nodes. Final screens use the existing validated
+`TeacherTrace` and `PrefixReadout` implementations.
+
+On side, all-binary recurrent state plus rank-16 readout uses 30,121 bytes and
+scores 2.9974 bits per byte on a 4,096-row rollout, versus the side teacher's
+1.7036. Rank-32 improves the student to 2.8109 at 35,993 bytes.
+
+Precision was then allocated by gate role. Making only the input-node matrix
+ternary improves rollout state MSE and reaches 2.6579 bits per byte with a
+rank-16 readout at 37,443 bytes. Making all three side transforms ternary
+reaches 2.5982 bits per byte at 52,087 bytes. The remaining 0.8945-bit gap is
+too large for native integration.
+
+Fixed structured and low-bit students are therefore rejected. The next family
+retains causal online learning without transmitting a model: train the exact
+dense recurrent model on a deterministic prefix, freeze and quantize the
+learned weights identically in encoder and decoder, discard optimizer and BPTT
+state, and use a fixed low-bit forward kernel thereafter.
+
+Receipt: `results/lowbit112_campaign_v1/decision.json`.
+
+## 2026-07-24 - Causal warmup int8/VNNI and DPLR-112 boundary
+
+### Question
+
+Can endpoint428 retain its recurrent gain while eliminating online recurrent training, dense float inference, and worker overhead? Does DPLR-112 already satisfy that requirement?
+
+### Measured results
+
+- Freezing recurrent adaptation after 500,000 causal steps costs 45 bytes at 1M: 174,144 versus the compact parent's 174,099.
+- Row-scaled int8 recurrent weights cost zero additional bytes versus that float freeze in the native VNNI build: both produce 174,144 bytes at 1M.
+- Freezing and quantizing both recurrent and output paths at 500,000 steps roundtrips exactly on the canonical original 1M prefix. It produces 175,500 bytes, compresses in 128.26 seconds, decompresses in 127.09 seconds, and uses about 7.58 GB RSS.
+- In the 3,000-step steady-state diagnostic, the three-worker active build takes 30.89 seconds at 250K. Passive waiting takes 34.41 seconds; two workers take 31.29 seconds; `GOMP_SPINCOUNT=10000` takes 31.04 seconds; `GOMP_SPINCOUNT=100000` takes 30.98 seconds.
+- A non-LTO gprof run assigns 76.78% of sampled CPU time to `gomp_barrier_wait_end`. The fixed VNNI recurrent arithmetic itself is negligible in that profile.
+
+### Decision
+
+Do not promote full causal output freeze as a winning candidate. Retain causal recurrent warmup-freeze and the fixed int8/VNNI kernels as runtime primitives. Reject passive waiting, the two-worker mutation, and the spin-count sweep.
+
+DPLR-112 remains a research hypothesis, not a candidate. Its algebra is plausible, but it must reduce the old recurrent region to at most 1.86% while preserving the teacher's continuously rolled-out gain. Existing low-rank, butterfly, binary, and ternary students fail that compression gate through state drift. A DPLR implementation using the current byte-frequency OpenMP structure would also inherit the measured synchronization bottleneck.
+
+### Next boundary
+
+The next architecture must remove byte-frequency worker synchronization or compile away the recurrent contribution. Any native DPLR rank-1/2/4 ablation must use exact continuous-state rollout, exact range-coded bytes, counted package size, matched encode/decode runtime, exact roundtrip, and sealed offset blocks before promotion.
+
+Receipt: `results/endpoint428_causal_warmup_int8_v1/decision.json`.
+
+## 2026-07-24 - DPLR-112 rank-1/2/4 empirical gate
+
+### Hypothesis
+
+A fixed quantized diagonal-plus-low-rank recurrent student can preserve endpoint428's 112-dimensional recurrent behavior at rank 1, 2, or 4 while reducing the old recurrent region to at most 1.86% of its runtime.
+
+### Experiment
+
+Train the existing exact-trace DPLR state student at ranks 1, 2, and 4 on the same main-model trace, then roll each state continuously for 18,000 sealed rows. Advance only the best state model to a quantized rank-16 prefix readout and compare actual coded log loss against the teacher.
+
+### Result
+
+- Rank 1 continuous hidden/cell RMSE: 0.172186 / 0.386741.
+- Rank 2 continuous hidden/cell RMSE: 0.164282 / 0.372428.
+- Rank 4 continuous hidden/cell RMSE: 0.161914 / 0.370052.
+- On 17,999 continuous holdout bytes, the rank-4 readout uses 71,281.64 bits versus the teacher's 42,924.09 bits.
+- The rank-4 excess is 28,357.55 bits, about 1.5755 bits per byte. Its student rate is 3.9603 bits per byte.
+- Quantized rank-4 state and readout parameters occupy 13,772 and 6,721 bytes respectively.
+
+### Decision
+
+Reject this DPLR-112 rank-1/2/4 instantiation before native codec integration. The best proposed rank loses orders of magnitude more coded bits than the endpoint margin permits, and ranks 1 and 2 have worse recurrent drift. This result does not disprove every structured recurrent model; it disproves the proposed rank set under the available exact continuous-rollout construction.
+
+The next decision experiment is oracle gain density. If teacher gain is concentrated, pursue state-decoupled selective residual execution. If it is diffuse, pursue full residual compilation or predictive-state quotienting instead.
+
+Receipt: `results/dplr112_state_rank124_v1/decision.json`.
+
+## 2026-07-24 - Endpoint428 oracle gain density and residual compilation
+
+### Oracle gain density
+
+The 1M teacher trace contains 4,805,936 coded bits over 600,742 WRT bytes. Endpoint428 final gains 2,735.01 ideal bits, or 341.88 bytes, over its recorded base probability. Positive byte-local gain totals 23,458.15 bits, so most local gains are canceled by losses elsewhere.
+
+At 512-byte blocks, the best oracle 10% captures 36.38% of net teacher gain and leaves only 447.12 bits after the information-theoretic mask lower bound. Selecting 50% captures 106.41% of net gain and leaves 1,741.83 bits after mask cost. This is an output-suppression oracle with continuously evolving teacher state; it is not evidence that state evolution can be skipped.
+
+Decision: reject sparse routing as the main runtime discontinuity on this trace. Gain is too diffuse and canceled to support rare neural bursts with preserved score.
+
+### Residual compiler screens
+
+A static hashed residual's best result uses 256 cells and a 261-byte compressed table. It improves base ideal loss by only 4.79 bits, loses 2,730.22 bits versus endpoint final, and is net negative after table bytes.
+
+A causal online hashed residual is worse. The best sealed holdout result among 256 through 65,536 cells uses 65,536 cells at learning rate 1 and adds 33,604.82 bits versus base and 34,345.07 bits versus endpoint final.
+
+Decision: reject simple static and online hashed residual compilation. Advance richer causal feature interactions. If they fail, the remaining compiled-state direction is predictive-state quotienting rather than an independent correction table.
+
+Caveat: this trace campaign has no separately packaged base-only archive or measured base-only runtime. Gain-density decisions use ideal log loss. The zero-second base runtime is an explicit optimistic interpolation input, not a measurement.
+
+Receipt: `results/endpoint428_residual_program_screen_1m_v1/decision.json`.
+
+## 2026-07-24 - Causal feature residual and predictive-state quotient
+
+### Causal feature residual
+
+A compact non-recurrent residual over the existing causal feature trace was trained at ranks 1, 4, and 16. All three lose to the base predictor on sealed 18,000-byte holdout. Rank 4 is best but adds 35.35 bits versus base and 91.93 bits versus endpoint final. Reject feature-only low-rank residual compilation.
+
+### Predictive-state quotient
+
+The full two-layer recurrent state, 448 floats per byte, was projected to 16 principal dimensions and clustered into 64, 256, and 1,024 quotient states. Event-conditioned transition lookup was trained on the first 70% and evaluated both teacher-forced and continuously.
+
+- 64 states: holdout transition accuracy 62.17%; continuous accuracy 39.15%; first divergence at transition 3.
+- 256 states: holdout transition accuracy 53.99%; continuous accuracy 8.88%; first divergence at transition 4.
+- 1,024 states: holdout transition accuracy 36.97%; continuous accuracy 3.35%; first divergence at transition 4.
+
+A learned low-rank transition classifier over the 205 causal inputs improves the 64-state model but remains non-deterministic. Rank 16 uses 9,488 parameters and reaches 56.70% continuous holdout accuracy. Rank 64 uses 37,760 parameters and reaches 58.06%. Both diverge at transition 3.
+
+Decision: reject the tested predictive-state quotient. State anchors would be required every few symbols, making side information prohibitive. Do not implement these students natively. Return to the exact full-rank causal int8 model and profile its single-worker steady state.
+
+Receipt: `results/endpoint428_predictive_state_quotient_decision_v1.json`.
+
+## 2026-07-24 - Exact serial profile and compact-map promotion
+
+### Exact fixed-int8 serial profile
+
+After causal full freeze and serial fixed-int8 execution, recurrent inference is no longer the dominant region. `LstmLayer::ForwardPass` is 0.77% of the non-LTO serial profile. The leading self-time regions are:
+
+- `fxcmv1::E1<14,128>::get`: 15.22%.
+- `Mixer::GetContextData`: 10.47%.
+- `Mixer::Mix`: 9.33%.
+- `Indirect::Predict`: 8.35%.
+- `fxcmv1::ContextMap2::mix`: 6.84%.
+- `fxcmv1::procWord`: 6.45%.
+
+Conclusion: DPLR or another recurrent-only replacement cannot close the runtime gap after fixed int8 conversion. Conventional context lookup and mixer work dominate.
+
+### Context-container mutations
+
+The endpoint already contains Mix-to-Perceive context-pointer reuse. A 32K fixed open-address table preserves archives and improves 250K runtime, but its long-scope result is unstable and it costs 166 exact LZMA package bytes in the initial implementation. Do not promote it.
+
+Replacing only `std::unordered_map` with the already-counted `emhash6::HashMap`, initialized at 16,384 buckets, preserves exact behavior:
+
+- 250K archive: 45,059 bytes, byte-identical to parent.
+- 250K wall: 54.11 seconds versus matched parent 56.62, a 4.43% reduction.
+- 1M archive: 174,099 bytes with SHA-256 `f8dbb64d1a6a15449533857b8f66d2e261c7c17461630f99c36ac1ec1922d673`, byte-identical to parent.
+- Current-host order reversal: candidate 178.88 seconds, parent 190.85 seconds, candidate 177.67 seconds. This is a 6.27% to 6.91% matched reduction.
+- RSS: 7,578,932 KiB, below the decimal 10GB limit.
+- Exact deterministic LZMA source package: 278,362 bytes versus parent 278,344, a cost of 18 bytes.
+- Raw self-extractor: 2,098,736 bytes versus parent 2,111,024, a reduction of 12,288 bytes.
+
+Promote as the runtime-improved projected frontier. Its projected score is 109,499,636, leaving 364 bytes under the internal 109,500,000 target. This is not an official score proof; the margin remains too narrow for projection error and no full-1G receipt exists.
+
+Receipt: `results/endpoint428_compact_emhash_runtime_v1/decision.json`.
+
+## 2026-07-25 - Pair emhash promotion and sidecar-indirect transfer failure
+
+### Sidecar indirect deletion
+
+Removing the eight sidecar indirect models initially looked promising:
+
+- Compact opening 1M: 174,048 versus 174,099, a 51-byte gain.
+- Compact offset-500M 1M: 45,100 versus 45,140, a 40-byte gain.
+- Pair opening 1M: 173,859 versus historical 173,961, a 102-byte gain.
+- Pair package: 280,109 versus 280,147, a 38-byte reduction.
+- Pair opening 1M exact roundtrip and deterministic re-encode both pass.
+
+The transfer gates reject it:
+
+- Pair offset-500M 1M: 45,065 versus pair parent 45,051, a 14-byte regression.
+- Pair opening 10M: 1,635,156 versus pair parent 1,634,500, a 656-byte regression.
+- Compact opening 10M is 1,637,107, still 2,607 bytes worse than the pair frontier.
+
+Decision: reject sidecar indirect deletion. The apparent 1M gain is an opening-prefix overfit and does not survive the 10M population. This is another direct example of why sub-1M score signs cannot authorize promotion.
+
+### Pair emhash-only runtime successor
+
+The context-container change was isolated from model deletion. Replacing `std::unordered_map` with the already-counted `emhash6::HashMap` preserves archives in adjacent builds:
+
+- Matched 250K: both 44,958 bytes; wall 109.77 to 106.49 seconds, a 2.99% reduction.
+- Matched current-build 1M: both 173,902 bytes with SHA-256 `6d32bddb912b14d318f2770ae2624f59d76ab402ab0fb53a13a76d4f70d6da04`; wall 363.96 to 354.12 seconds, a 2.70% reduction.
+- Candidate 1M RSS: 9,054,436 KiB, below the decimal 10GB limit.
+- Exact LZMA package: 280,154 bytes, 7 bytes above the historical parent package.
+
+Promote the emhash-only pair successor. The existing score projection becomes 109,389,330 with 110,670 bytes of margin. This is a projected runtime successor, not an official full-1G proof.
+
+Historical and current-build absolute 1M archives differ, so archive identity claims use adjacent builds only. Historical archives remain the basis of the existing score projection.
+
+Receipt: `results/endpoint428_pair_emhash_and_sidecar_pruning_v1/decision.json`.
+
+## 2026-07-25: Causal recurrent int8 schedules
+
+**Question.** Can endpoint428 retain its 112-state adaptive recurrent model during a causal warmup, freeze it into deterministic int8/VNNI inference for most later symbols, and periodically refresh online weights to bound long-stream compression regret?
+
+**Canonical 10M results against the historical pair archive of 1,634,500 bytes:**
+
+| Schedule | Archive | Delta | Wall | Peak RSS |
+|---|---:|---:|---:|---:|
+| Freeze permanently after 500K recurrent steps | 1,644,289 | +9,789 | 2,697.02 s | 9,083,572 KiB |
+| Freeze permanently after 5M recurrent steps | 1,634,968 | +468 | 3,318.33 s | 9,083,780 KiB |
+| Warm 500K, freeze 500K, refresh 100K | 1,642,793 | +8,293 | 2,806.60 s | 9,083,624 KiB |
+| Warm 5M, freeze 500K, refresh 100K | 1,634,906 | +406 | 3,294.33 s | 9,083,360 KiB |
+
+The mature periodic schedule improves 62 bytes over permanent freezing after 5M and 9,383 bytes over freezing after 500K. The result supports two conclusions: recurrent parameters require substantial causal adaptation before quantization, and bounded refresh helps once the state is mature. Early periodic refresh does not repair an immature frozen model.
+
+The mature schedule's deterministic LZMA source package is 281,399 bytes, SHA-256 `f065a9025ec3be974c3023c47313e885939ebf216f067c79cd7d3f5418f52fe2`, or +1,252 bytes versus the historical pair package. Naively scaling the +406-byte 10M archive delta gives a projected counted score of 109,431,175 and 68,825 bytes of internal margin. This is a screening projection, not a full-1G proof.
+
+**Decision: retain as a research candidate, not the official frontier.** It is score-plausible and provides a causal route from online recurrent training to mostly fixed integer inference, but it has not demonstrated full-corpus regret, exact full-scale replay, or the required official runtime reduction. Receipt: `results/endpoint428_pair_causal_int8_schedule_v1/decision.json`.
+
+## 2026-07-25: Post-freeze runtime attribution and barrier experiments
+
+A compiler-instrumented 250K profile showed that the first recurrent-int8 implementation had not removed its synchronization architecture. Self time was led by `gomp_barrier_wait_end` at 49.62%, the fused int8 gate path at 12.21%, `Fx2LiteLstm::Predict` at 7.00%, main-LSTM OpenMP perceive work at 4.26%, and `Mixer::Mix` at 2.47%. The two 14-way `E1::get` implementations together accounted for only 3.58%. Instrumentation inflates runtime and the run includes initialization/pretraining, so these are attribution data rather than an official timing receipt.
+
+Two `E1` micro-optimizations were rejected. AVX2 checksum matching changed opening 1M from 173,902 to 173,899 bytes and 352.25 to 350.59 seconds, but at offset 500M/250K it changed 11,525 to 11,526 bytes and 111.56 to 111.63 seconds. Always-inlining the scalar lookup was archive-identical at opening 250K but changed 105.94 to 106.03 seconds. The measured bottleneck is not the 14-way checksum comparison.
+
+Removing the main LSTM's OpenMP regions in a freeze-from-step-zero benchmark preserved the 45,086-byte 250K archive size and reduced wall time from 85.12 to 67.91 seconds; aggregate user CPU fell from 202.31 to 86.11 seconds. This proves that barrier-free execution is valuable when fixed inference dominates.
+
+The same behavior conditionally enabled only during the mature 5M-warmup periodic schedule did not transfer at canonical 10M: archive 1,634,909 versus 1,634,906, and wall 3,382.53 versus 3,294.33 seconds. The sample is warmup-heavy, but this implementation cannot be promoted from indirect extrapolation.
+
+**Decision.** Reject both `E1` variants and the current mature conditional-serial integration. Retain the freeze-dominant serial result as architectural evidence. The next recurrent target is the independent FX2 endpoint LSTM, which remains continuously trained and appears explicitly in the post-freeze profile. Receipt: `results/endpoint428_postfreeze_runtime_campaign_v1/decision.json`.
+
+## 2026-07-25: FX2 causal freeze and horizon-snapshot ensemble
+
+The post-freeze profile showed the independent 200-cell FX2 LSTM remained continuously trained. A causal 500K-step screen therefore stopped its recurrent BPTT and Adam while continuing dense forward state evolution and output-layer adaptation. Opening 1M improved 173,902 to 173,901 bytes and 352.25 to 350.45 seconds. On the same raw offset-500M 1M fixture, it improved 40,161 to 40,158 bytes and 394.79 to 387.58 seconds.
+
+A stronger variant stopped output-layer updates as well. Because FX2 stores output matrices in a horizon-128 epoch ring, the cheap phase deterministically cycles 128 mature readout snapshots while recurrent hidden state continues to evolve. This is a fixed snapshot ensemble, not a single frozen readout. It improved opening 1M to 173,898 bytes in 346.17 seconds and offset-500M 1M to 40,157 bytes in 381.68 seconds.
+
+With 5M warmup, 500K cheap intervals, and 100K refresh intervals, the recurrent-training-only FX2 schedule produced 1,635,052 bytes in 3,261.60 seconds at canonical 10M. The snapshot ensemble improved this to 1,635,030 bytes in 3,259.31 seconds. Relative to the main-only mature int8 schedule, it costs 124 archive bytes and saves 35.02 seconds.
+
+The snapshot candidate's deterministic LZMA source package is 281,403 bytes, SHA-256 `c24890b3231415441b472d6ba5ae1dc59591cbd03317cb7780dd5c0fedcccc6b`. Naively scaling the +530-byte archive delta versus the historical frontier gives a counted projection of 109,443,579 and 56,421 bytes of internal margin. This is not full-1G evidence.
+
+**Decision: retain as the preferred dual-recurrent Pareto candidate.** The next mutation replaces fixed refresh timing with a cheap causal trigger derived from realized FX2 loss, so compute allocation responds to model drift in real time. Receipt: `results/endpoint428_fx2_snapshot_freeze_campaign_v1/decision.json`.

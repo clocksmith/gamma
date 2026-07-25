@@ -1,0 +1,24 @@
+{
+  "claimed_at": "2026-07-24T23:40:11+00:00",
+  "created_at": "2026-07-24T23:40:11+00:00",
+  "evidence": [
+    "docs/research_register.md",
+    "results/endpoint_diagonal_reservoir_dual_trace_v1/decision.json",
+    "results/endpoint428_dual112_vs_dual80_phase_trace_1m_v1/gain_density.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "Starting from exact source endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_dual112_half_horizon_v1, a frozen integer DPLR recurrent model with 112 hidden/cell states, shared rank-1/2/4 interaction channels, diagonal recurrence, and causal event embeddings can preserve score-critical recurrent information while eliminating dense forward matrices, BPTT, Adam, worker dispatch, and barriers.",
+  "kill_condition": "No rank in 1/2/4 fits the counted score budget on sealed disjoint windows, integer shadow diverges between encoder and decoder, parameter package exceeds remaining margin, or measured runtime cannot approach the absolute official bound.",
+  "max_program_bytes": 110677,
+  "mechanism_class": "representation",
+  "owner": "codex",
+  "parent": null,
+  "priority": 120,
+  "promotion_condition": "Quantized shadow passes sealed disjoint coding-loss gates; integrated codec roundtrips and deterministically re-encodes; counted full-score forecast remains at or below 109500000; matched recurrent replacement consumes at most 1.86 percent of the old recurrent region and absolute official runtime, decimal 10GB memory, and package limits pass.",
+  "proposal_id": "dplr112_fixed_quantized_v1",
+  "rejected_at": "2026-07-25T01:17:27+00:00",
+  "rejection_reason": "Output-only rank-1/2/4 shadow screen failed before native integration. Deep rank 1 quantized holdout was 4.496/4.479 bits per byte and deep rank 4 was 4.635/4.479 versus teacher 2.444/2.124; added package 14,639/17,307 bytes. Current previous-byte event input and 64-byte reset training do not reconstruct endpoint428 recurrent state. Reconsider only with sealed hidden/cell/gate traces, continuous-state training, or richer causal features. Evidence: results/dplr112_rank1_shadow_1m_deep_v1/receipt.json and results/dplr112_rank4_shadow_1m_deep_v1/receipt.json.",
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "state": "rejected",
+  "title": "Fixed quantized diagonal-plus-low-rank 112-state recurrent replacement"
+}
