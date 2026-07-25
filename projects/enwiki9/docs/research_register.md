@@ -562,3 +562,7 @@ With 5M warmup, 500K cheap intervals, and 100K refresh intervals, the recurrent-
 The snapshot candidate's deterministic LZMA source package is 281,403 bytes, SHA-256 `c24890b3231415441b472d6ba5ae1dc59591cbd03317cb7780dd5c0fedcccc6b`. Naively scaling the +530-byte archive delta versus the historical frontier gives a counted projection of 109,443,579 and 56,421 bytes of internal margin. This is not full-1G evidence.
 
 **Decision: retain as the preferred dual-recurrent Pareto candidate.** The next mutation replaces fixed refresh timing with a cheap causal trigger derived from realized FX2 loss, so compute allocation responds to model drift in real time. Receipt: `results/endpoint428_fx2_snapshot_freeze_campaign_v1/decision.json`.
+
+### 2026-07-25 deterministic certification: permanent FX2 snapshot freeze
+
+The preferred permanent-FX2-snapshot candidate passed exact canonical 10M certification. Original and decoded SHA-256 are both `5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97`. Original and replay archive SHA-256 are both `84d055ca137a93210426485c8790b51308312f38e898eef86bbcc97dda77cd2f`, with archive size 1,635,030 bytes. Decode used 3,238.13 seconds and 9,087,276 KiB peak RSS; deterministic re-encode used 3,252.25 seconds and 9,083,240 KiB peak RSS. This proves 10M losslessness and reproducibility, not full-1G score or runtime eligibility. Receipt: `results/endpoint428_fx2_snapshot_freeze5m_permanent_v1/certification.json`.
