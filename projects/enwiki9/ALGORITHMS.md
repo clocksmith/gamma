@@ -385,10 +385,9 @@ handoff:
 | `docs/embedding_teacher_rules.md` | Rules for using embeddings offline and distilling only counted deterministic logic. |
 | `docs/offline_teacher_retrieval_investigation.md` | Target-closing investigation tying offline embedding teachers, deterministic rules, decoder-rebuilt retrieval, routing, and counted proof gates to the `109,500,000` objective. |
 | `docs/research_register.md` | Strategy and novel-algorithm register with foundation, local files, promote gate, and kill gate. |
-| `PROJECT_ORGANIZATION.md` | Ownership map for docs, evidence, strategy, active proof lane, and update rules. |
+| `ADAPTIVE_WORKFLOW.md` | Primary candidate creation, mutation, queueing, execution, tracking, and promotion workflow. |
 | `docs/tooling_inventory.md` | Grouped inventory of tool scripts and their lock-safety expectations. |
 | `docs/organization_audit.md` | Current organization audit, cleanup queue, and claim-hygiene notes. |
-| `docs/takeover_runbook.md` | Operator runbook for active-run checks, result recording, and promotion decisions. |
 | `docs/evidence_receipts.md` | Standard receipt shapes for gate results, memory-value rows, shadow residuals, and official claims. |
 | `docs/algorithm_cards.md` | Mechanism-and-score cards for major algorithms and active candidate lanes. |
 | `docs/evidence_matrix.md` | Generated artifact-backed score/archive rankings by measured scope. |

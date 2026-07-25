@@ -242,10 +242,13 @@ def payload(checks: list[ArtifactCheck]) -> dict[str, Any]:
             )[:25]
         ],
         "duplicate_artifact_references": duplicates[:25],
-        "ok": not mismatches and not missing_artifacts,
+        "ok": not mismatches,
+        "artifact_set_complete": not missing_artifacts,
         "rule": (
-            "Rows with recorded receipt hashes must match their artifact files. "
-            "Rows without hashes are legacy evidence and should be repaired when re-recorded."
+            "Present artifacts with recorded receipt hashes must match. Missing local "
+            "artifacts remain explicit provenance gaps and cannot support proof claims, "
+            "but do not block regeneration of views from a partial checkout. Rows "
+            "without hashes are legacy evidence and should be repaired when re-recorded."
         ),
     }
 
@@ -259,7 +262,8 @@ def render_md(data: dict[str, Any]) -> str:
         "It does not launch compression and does not score a candidate.",
         "",
         f"- Artifact checks: `{data.get('artifact_checks', 0):,}`",
-        f"- OK: `{str(data.get('ok')).lower()}`",
+        f"- Present artifact integrity OK: `{str(data.get('ok')).lower()}`",
+        f"- Local artifact set complete: `{str(data.get('artifact_set_complete')).lower()}`",
         f"- Rule: `{data.get('rule', '')}`",
         "",
         "## Status Counts",

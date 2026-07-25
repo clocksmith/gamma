@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-07-25T01:37:11+00:00",
+  "evidence": [
+    "results/dplr112_state_main_rank4_v1/receipt.json",
+    "results/dplr112_state_side_rank4_v1/receipt.json",
+    "results/dplr112_online_readout_main_rank4_highlr_v1/receipt.json",
+    "results/dplr112_online_readout_side_rank4_highlr_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "The rank-4 DPLR transition beats persistence but leaves excessive rollout coding loss. Expanding only the shared interaction rank to 16 while preserving 112 hidden/cell states, int8 storage, causal event embeddings, and a zero-initialized online binary-prefix readout can recover the missing cross-state dynamics without restoring dense BPTT, Adam, 256-way softmax updates, workers, or barriers.",
+  "kill_condition": "Reject before native integration if rank 16 does not materially improve both branch rollouts, if best causal online readout remains more than 0.25 bits per WRT byte above teacher on either sealed holdout, if combined counted parameters and code exceed 110677 bytes, or if operation profiling cannot satisfy the official runtime bound.",
+  "max_program_bytes": 110677,
+  "mechanism_class": "representation",
+  "parent": null,
+  "priority": 121,
+  "promotion_condition": "Quantized state shadow improves rank-4 holdout and autonomous rollout; causal online readout approaches teacher branch loss; native integer integration roundtrips deterministically, remains within the counted 109500000 forecast, and satisfies the absolute runtime and memory bounds.",
+  "proposal_id": "dplr112_rank16_state_supervised_v2",
+  "rejected_at": "2026-07-25T01:40:41+00:00",
+  "rejection_reason": "State supervision and rank 16 improved rollout, but the counted causal output gate failed. Best sealed holdout excess remained 0.459 bits/WRT-byte main and 0.759 side with event rank 4; event rank 16 reached 0.449 main and 0.775 side. Both exceed the 0.25 kill threshold before native integration. Combined event16 state parameters were 41,232 raw bytes. Evidence: results/dplr112_online_readout_main_rank16_event16_v1/receipt.json and results/dplr112_online_readout_side_rank16_event16_v1/receipt.json.",
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "state": "rejected",
+  "title": "State-supervised rank-16 DPLR with causal online prefix readout"
+}

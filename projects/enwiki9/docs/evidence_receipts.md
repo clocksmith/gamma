@@ -228,12 +228,20 @@ driver run that writes a result JSON.
 Each row is one JSON object using schema `enwiki9_driver_run_ledger_v1` with at least:
 
 - `run_id`, `program_id`, `algorithm_name`
+- `run_scope_label`, `run_purpose`, `run_context`, `run_source`, `run_tags`
 - `data_path`, `data_size`, `data_md5`, `data_sha256`
 - `compressed_size`, `program_size`, `hutter_score`, `bits_per_byte`
 - `compress_time_s`, `decompress_time_s`, `run_time_s`
 - `determinism_ok`, `roundtrip_ok`
 - `memory_kib_before`, `memory_kib_after`, `memory_kib_peak`
 - `result_path`, `timestamp`, `recorded_utc`, `host`
+
+`run_scope_label` should usually be explicit (`full`, `1k`, `250k`, `1m`, `10m`) and
+is inferred from `--limit` when omitted. `run_purpose` is intended to distinguish
+intent (`smoke`, `verification`, `candidate`, `rebaseline`, etc.). `run_context`,
+`run_source`, and `run_tags` are optional provenance fields that make repeated
+work streams distinguishable when many similar runs are grouped by the same
+scope and algorithm.
 
 The row is authoritative for:
 

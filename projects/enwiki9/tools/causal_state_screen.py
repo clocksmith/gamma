@@ -19,7 +19,7 @@ from typing import Any, Callable
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA_DEFAULT = ROOT / "data" / "enwik9"
-OUT_DEFAULT = ROOT / "causal_state_screen.json"
+OUT_DEFAULT = ROOT / "results" / "probes" / "causal_state_screen.json"
 STRICT_TARGET_GAP_BYTES = 681_114
 
 

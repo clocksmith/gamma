@@ -10,6 +10,7 @@ runner-adjacent.
 
 | Tool | Purpose |
 |---|---|
+| `enwiki9_lab.py` | Primary adaptive experiment loop: creates and clones candidates, records mutation lineage, selects the next exact gate, manages atomic durable jobs, fans out small gates, serializes heavy work, and refreshes inventories and reports after terminal batches. |
 | `run_with_rss_guard.py` | Wraps commands with RSS sampling and guard enforcement; writes live and final guard JSON. |
 | `record_driver_result.py` | Records driver/guard evidence into candidate meta rows, including receipt paths, byte sizes, modified UTC stamps, and SHA-256 fingerprints. |
 | `cmix21_gate_decider.py` | Reads cmix21 driver and RSS guard receipts, prints the next safe action, and emits terminal apply commands for pass, RSS failure, and non-promotable terminal failures. |
