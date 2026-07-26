@@ -19,6 +19,41 @@ analyze evidence
 Use `tools/enwiki9_lab.py` for this loop. Do not build separate ad hoc launchers
 or keep experiment state only in chat.
 
+## Record The Discovery Boundary
+
+The project has four distinct durable layers. Do not collapse them:
+
+```text
+considered idea or conclusion
+    -> docs/research_register.md
+
+ranked batch of unmeasured ideas
+    -> dated docs/*portfolio*.md and docs/*portfolio*.json
+
+actionable falsifiable experiment
+    -> operations/adaptive/proposals/
+
+completed exact evidence
+    -> results/<candidate_id>/ and results/run_ledger.jsonl
+```
+
+Every algorithm that receives meaningful analysis must be recorded even when
+it is rejected before implementation, merged into an existing lineage, parked,
+or authorized only as an oracle. Such entries remain `idea`, `proxy`, `oracle`,
+or `causal_shadow` and receive zero score credit.
+
+A portfolio records evaluation and ranking; it does not create active work.
+Promote only the selected bounded probes into adaptive proposals. Every
+proposal must cite its register section, portfolio ID, predecessor receipt, or
+other durable evidence through `--evidence`.
+
+After a decisive run, update both layers:
+
+1. Preserve exact artifacts and the canonical run-ledger row.
+2. Append the algorithm-level conclusion and next gate to
+   `docs/research_register.md`.
+3. Refresh generated inventories, frontier views, and operator status.
+
 ## Discover And Propose Algorithms
 
 Algorithm discovery is separate from gate discovery. Record a proposal before
@@ -56,6 +91,10 @@ python3 projects/enwiki9/tools/enwiki9_lab.py develop \
 
 Proposal state is durable under `operations/adaptive/proposals/`. Developing a
 proposal records its candidate ID and mutation lineage.
+
+Do not create proposals for every brainstormed portfolio row. Create one only
+when the hypothesis, causal contract, exact control, source budget, promotion
+gate, and kill gate are concrete enough to run.
 
 ## Create
 
@@ -215,6 +254,41 @@ python3 projects/enwiki9/tools/enwiki9_lab.py refresh
 Stop a continuous runner with the normal process interrupt. Pending and
 terminal job records remain durable.
 
+## Cross-Device Operation
+
+Git is the replication layer for algorithms and evidence. Active processes and
+`/tmp/enwiki9-heavy.lock` are host-local.
+
+Before work on a device:
+
+```bash
+cd /home/clocksmith/deco
+./rdpull.sh
+cd gamma
+python3 projects/enwiki9/tools/enwiki9_lab.py status
+```
+
+Before a heavy run:
+
+1. Pull current state.
+2. Claim the proposal and queue a unique candidate-and-scope gate.
+3. Push the ownership record before another host begins related work.
+4. Inspect the selected host's process table and local heavy lock.
+
+After a terminal result or decisive research conclusion:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py refresh
+cd /home/clocksmith/deco
+./rdpush.sh
+```
+
+The pushed handoff must contain the proposal transition, candidate metadata,
+exact receipt, `results/run_ledger.jsonl` row, research-register conclusion,
+and refreshed status. Logs that are still being written are not durable
+evidence. A committed status receipt describes the producing host at its
+timestamp; it is not proof that the process remains live elsewhere.
+
 ## Promotion And Kill Rules
 
 - Start with the smallest decisive gate.
@@ -235,10 +309,13 @@ terminal job records remain durable.
 
 | Question | Source |
 |---|---|
+| What algorithms have been considered, merged, parked, or rejected? | `docs/research_register.md` |
+| What unmeasured batches and rankings were recorded? | The dated `docs/*portfolio*.md` and `docs/*portfolio*.json` named by the research register |
 | What algorithms are proposed or claimed? | `operations/adaptive/proposals/` |
 | What work is queued or running? | `operations/adaptive/<state>/` |
 | How was a candidate derived? | `operations/adaptive/mutations.jsonl` and `programs/<id>/meta.json` |
 | What did a worker emit? | `run_logs/adaptive/<job_id>.log` |
 | What exact run was recorded? | `results/<id>/` and `results/run_ledger.jsonl` |
 | What is each candidate's lifecycle? | `candidate_inventory.json` |
+| What source-bound evidence affects the target? | `docs/hutter_frontier.json` and `docs/hutter_run_ledger.json` |
 | What is the current proof boundary? | `docs/status_receipt.md` and `UPPER_BOUND_CERTIFICATE.md` |
