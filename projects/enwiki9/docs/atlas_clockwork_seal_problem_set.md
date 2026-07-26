@@ -58,25 +58,30 @@ The complete object is available to contestants while constructing their
 finite mathematical submission. It is not available to the runtime
 interpreter while reconstructing the object.
 
-## 2. Runtime instance
+## 2. Runtime instances
 
-The organizer separately supplies a frozen runtime object \(R\). It contains
-only:
-
-- Fixed finite constants.
-- Canonical grammar definitions.
-- Exact coder definitions.
-- Causal observable generators.
-- Route-specific fixed interpreters.
-- Route-specific targets and resource bounds.
-
-The runtime object does not contain \(x\), a future-symbol table, an uncharged
-prediction trace, or any equivalent encoding of the construction object.
-
-Before reconstructing position \(t\), the interpreter may calculate
+The organizer supplies one common frozen Seal object \(S_{\mathrm{common}}\)
+and five disjoint frozen runtime objects
 
 \[
-\omega_t=\Omega(R,x_{<t},\zeta_{\le t}),
+R_A,R_B,R_C,R_D,R_E.
+\]
+
+The common object contains only route-neutral grammar, serialization, and coder
+definitions. Runtime object \(R_i\) contains only route \(i\)'s fixed constants,
+causal observable generators, interpreter adapter, target, and resource bounds.
+Its complete reachable dependency closure is frozen, hashed, and charged to
+route \(i\).
+
+No runtime object contains \(x\), a future-symbol table, an uncharged
+prediction trace, another route's fixed object, or any equivalent encoding of
+the construction object.
+
+Before reconstructing position \(t\) on route \(i\), the interpreter may
+calculate
+
+\[
+\omega_{i,t}=\Omega_i(S_{\mathrm{common}},R_i,x_{<t},\zeta_{\le t}),
 \]
 
 where \(\zeta_{\le t}\) denotes only paid auxiliary information whose release
@@ -127,12 +132,14 @@ execution bounds. The full definitions are owned by the Seal.
 
 ## 4. Independence
 
-The five problems share only \(x\), \(R\), the block boundaries, the Seal, and
-organizer-declared causal observables. Each route has a separate namespace,
-serializer, fixed-cost ledger, target, interpreter entry point, and verdict.
+The five problems share only \(x\), the block boundaries, and
+\(S_{\mathrm{common}}\). Each route has a separate \(R_i\), namespace,
+serializer adapter, fixed-cost ledger, target, interpreter entry point, and
+verdict.
 
 A verifier evaluating one route must not load any submitted artifact from
-another route.
+another route or any fixed object outside the transitive dependency closure of
+that route's \(R_i\).
 
 ---
 
@@ -246,84 +253,142 @@ D, or E.
 
 ---
 
-# Problem B: Predictive Quotient
+# Problem B: Minimal Predictive Right Quotient
 
 ## B.1 Objective
 
-Construct a finite quotient of causal histories that shares predictive state
-across histories while preserving a deterministic next-state recurrence and
-meeting the absolute target without paid block labels.
+Construct the unique coarsest predictive right congruence of a supplied finite
+causal history automaton, realize its quotient recurrence, and meet the
+absolute target without paid labels.
 
-## B.2 Supplied data
+## B.2 Supplied finite history system
 
-Problem B supplies:
+Problem B supplies, inside its construction data:
 
-- A finite descriptor alphabet \(\mathcal D_B\).
-- A causal descriptor generator
-  \[
-  d_t=\Delta_B(R,x_{<t}).
-  \]
-- A finite dyadic probability denominator \(2^r\).
-- Bounds \(B_{B,C},B_{B,Q},B_{B,O},B_{B,M}\).
-- An absolute target \(T_B\).
+1. A finite history-state set \(H_B\).
+2. An initial history state \(h_1\in H_B\).
+3. A finite descriptor alphabet \(\mathcal D_B\).
+4. A causal runtime descriptor generator
+   \[
+   d_t=\Delta_B(S_{\mathrm{common}},R_B,x_{<t}).
+   \]
+5. A total deterministic history transition
+   \[
+   T_B:H_B\times\mathcal D_B\times\{0,1\}\to H_B.
+   \]
+6. A finite predictive-color map
+   \[
+   \chi_B:H_B\times\mathcal D_B\to\mathcal K_B.
+   \]
+7. A dyadic numerator assigned to every color
+   \[
+   \alpha_B:\mathcal K_B\to\{1,\ldots,2^r-1\}.
+   \]
+8. Bounds \(B_{B,C},B_{B,Q},B_{B,O},B_{B,M}\).
+9. An absolute target \(T_B\).
+
+The fixed runtime object \(R_B\) contains the finite history transition and
+causal descriptor generator only when their complete fixed costs are charged
+to \(L_{\mathrm{fixed},B}\). Predictive colors may be used offline to define
+the quotient but are not runtime advice unless their required representation
+is included in \(R_B\) or `C_B`.
 
 No label or selector channel is supplied. Thus \(Z_B\) is empty.
 
-## B.3 Required construction
+## B.3 Predictive right congruence
 
-Construct the finite tuple
+An equivalence relation \(\sim\) on \(H_B\) is admissible exactly when, for all
+\(h,h'\in H_B\), \(d\in\mathcal D_B\), and \(b\in\{0,1\}\),
 
 \[
-\mathcal Q=(Q,q_1,\delta,\nu,E).
+h\sim h'
+\Longrightarrow
+\chi_B(h,d)=\chi_B(h',d),
 \]
 
-It consists of:
+and
 
-1. A finite quotient-state set \(Q\).
-2. An initial quotient state \(q_1\in Q\).
-3. A deterministic transition
+\[
+h\sim h'
+\Longrightarrow
+T_B(h,d,b)\sim T_B(h',d,b).
+\]
+
+Thus equivalent histories have identical predictive colors for every
+descriptor and remain equivalent after every equal continuation symbol.
+
+Among all admissible equivalence relations, let \(\sim_B^\star\) be the
+coarsest one, meaning every other admissible relation refines it. Because
+\(H_B\) is finite and admissibility is closed under intersection of
+distinguishability refinements, this relation is uniquely defined.
+
+## B.4 Required construction
+
+Construct
+
+\[
+\mathcal Q=(Q,\pi,q_1,\delta,\nu,\mathcal W),
+\]
+
+where:
+
+1. \(\pi:H_B\twoheadrightarrow Q\) is a surjection satisfying
    \[
-   \delta:Q\times\mathcal D_B\times\{0,1\}\to Q.
+   \pi(h)=\pi(h')\Longleftrightarrow h\sim_B^\star h'.
    \]
-4. A deterministic numerator map
+2. \(q_1=\pi(h_1)\).
+3. The induced transition is
    \[
-   \nu:Q\times\mathcal D_B\to\{1,\ldots,2^r-1\}.
+   \delta(\pi(h),d,b)=\pi(T_B(h,d,b)).
    \]
-5. A finite exceptional-transition set \(E\), serialized completely in `C`.
+4. The induced numerator is
+   \[
+   \nu(\pi(h),d)=\alpha_B(\chi_B(h,d)).
+   \]
+5. \(\mathcal W\) is a finite minimality witness.
 
-The quotient must be a right congruence on every reachable submitted history:
-if two histories occupy the same quotient state and have the same current
-descriptor, then equal reconstructed next bits must produce the same next
-quotient state, except through an explicitly represented exception in \(E\).
+No exceptional congruence violations are permitted. A history requiring
+different behavior must belong to a refined quotient state.
 
-At position \(t\), use
+The witness \(\mathcal W\) must give, for every pair of distinct quotient
+states, either an immediate predictive-color distinction or a finite
+descriptor-and-bit continuation whose first distinction proves the pair
+cannot be merged by any admissible right congruence.
+
+At runtime, the interpreter tracks only \(q_t\). It uses
 
 \[
 a_t=\nu(q_t,d_t),
 \]
 
-then update
+then updates
 
 \[
 q_{t+1}=\delta(q_t,d_t,x_t).
 \]
 
-## B.4 Mathematical proof obligations
+It does not consult \(\pi\), \(\chi_B\), or the construction history state
+unless their runtime representations are explicitly fixed and charged.
+
+## B.5 Mathematical proof obligations
 
 Prove:
 
-- Every descriptor is causally available.
-- The represented relation is finite.
-- The transition is single-valued.
-- The quotient congruence holds on all reachable states.
-- Every exception is represented exactly once.
-- Equal runtime histories produce equal states and numerators.
-- The exact coded and resource inequalities hold.
+- The descriptor generator is causal.
+- \(\pi\) is a total surjection.
+- Its fibers form an equivalence relation.
+- Predictive-color equality holds within every fiber.
+- \(\delta\) and \(\nu\) are well defined, independent of representative.
+- The quotient is a right congruence.
+- Every pair of quotient states has a valid distinguishing witness.
+- The witness proves coarseness and therefore minimal quotient cardinality.
+- Runtime recurrence uses no hidden history-specific exception.
+- Exact coding and resource inequalities hold.
 
-An empirical clustering score, approximate state similarity, teacher hidden
-state, or nonconstructive minimality theorem is not a solution.
+An empirical clustering, approximate state similarity, ordinary transducer
+without \(\pi\), or nonconstructive assertion of minimality is not a solution.
 
-## B.5 Pass condition
+## B.6 Pass condition
 
 Problem B passes exactly when
 
@@ -350,82 +415,140 @@ D, or E.
 
 ---
 
-# Problem C: Exact Continuation Geometry
+# Problem C: Wheeler Continuation Geometry
 
 ## C.1 Objective
 
-Construct a bounded causal geometry over previously reconstructed history that
-retrieves exact earlier continuations and converts them into an exact
-probability measure under the absolute target.
+Construct a bounded causal Wheeler graph over completed event history, perform
+exact rank/select backward search, retrieve only earlier continuations, and
+convert those continuations into an exact probability measure under the
+absolute target.
 
 ## C.2 Supplied data
 
 Problem C supplies:
 
-- A finite event alphabet \(\mathcal E_C\).
+- A totally ordered finite event alphabet \((\mathcal E_C,\prec)\).
 - A causal event generator from reconstructed prefixes.
-- Permitted finite index primitives.
+- A canonical online graph-construction interface.
+- Canonical bitvector `rank` and `select` semantics.
+- Four organizer-frozen diagnostic control adapters.
 - A finite dyadic probability denominator \(2^r\).
 - Bounds \(B_{C,C},B_{C,I},B_{C,O},B_{C,M}\).
 - An absolute target \(T_C\).
 
-No future index, target-position table, or offline continuation trace is
-available at runtime. The index must be rebuilt from reconstructed history.
+No future graph, suffix array, occurrence list, target-position table, or
+offline continuation trace is available at runtime. Every index state must be
+rebuilt from completed reconstructed events.
 
-## C.3 Required construction
+## C.3 Wheeler graph
 
-Construct the finite tuple
+At event time \(t\), the submitted online builder defines a finite
+edge-labeled directed graph
 
 \[
-\mathcal W=(\eta,\iota,\rho,\mu,\beta).
+\mathcal G_t=(V_t,E_t,\lambda_t,<_{t}),
 \]
 
-It consists of:
+where \(\lambda_t:E_t\to\mathcal E_C\) and \(<_{t}\) is a total order on
+\(V_t\).
 
-1. A finite equivalence-signature map \(\eta\) over completed causal events.
-2. A deterministic online index update \(\iota\).
-3. A deterministic retrieval map \(\rho\) that returns zero or more candidate
-   positions \(u<t\).
-4. A finite candidate weighting map \(\mu\).
-5. A finite fallback and blending map \(\beta\) producing a numerator in
-   \(\{1,\ldots,2^r-1\}\).
+The graph is Wheeler exactly when:
 
-At every position, each retrieved candidate bit must already belong to the
-reconstructed prefix. A candidate may propose a continuation beginning at an
-earlier position, but the map may inspect only the portion already stored in
-the runtime index.
+1. Every indegree-zero node precedes every positive-indegree node.
+2. For edges \((u,v)\) and \((u',v')\), if
+   \[
+   \lambda(u,v)\prec\lambda(u',v'),
+   \]
+   then
+   \[
+   v<_{t}v'.
+   \]
+3. If the edge labels are equal and \(u<_{t}u'\), then
+   \[
+   v\le_t v'.
+   \]
 
-The complete ordering, tie breaking, eviction, collision handling, fallback,
-and table-capacity rules must be finite and represented in `C`.
+The submitted builder must preserve these axioms after every completed event.
 
-## C.4 Required controls
+## C.4 Wheeler index
 
-The proof must report exact complete lengths for:
+List edges by source-node Wheeler order, with the route's canonical
+within-source label and destination tie breaking. Let \(L_t\) be the resulting
+edge-label sequence. The index contains:
+
+- \(L_t\).
+- Cumulative symbol counts \(C_t[c]\).
+- Canonical bitvectors for node boundaries and edge destinations.
+- Exact `rank_c(L_t,k)` and `select_c(L_t,j)` support.
+- An occurrence map from accepted graph states to prior completed positions.
+
+For a pattern \(P=c_1\cdots c_k\), backward search begins with the full Wheeler
+interval and applies the frozen rank-based interval recurrence supplied by
+\(R_C\). The resulting interval must equal exactly the set of graph states
+reachable by paths labeled \(P\).
+
+## C.5 Required construction
+
+Construct
+
+\[
+\mathcal W=(\eta,\mathfrak B,\rho,\mu,\beta),
+\]
+
+where:
+
+1. \(\eta\) maps each completed causal event to a represented Wheeler label.
+2. \(\mathfrak B\) is the online Wheeler graph and index builder.
+3. \(\rho\) performs backward search and returns zero or more occurrence
+   positions \(u<t\) from the resulting interval.
+4. \(\mu\) assigns finite integer candidate weights.
+5. \(\beta\) combines candidate votes with a represented fallback and returns
+   a numerator in \(\{1,\ldots,2^r-1\}\).
+
+Two completed histories are suffix-equivalent at depth \(k\) exactly when
+their represented length-\(k\) event suffixes produce the same Wheeler search
+interval. Any broader equivalence introduced by \(\eta\) must be explicit in
+`C_C` and is tested through the same graph axioms.
+
+Every retrieved occurrence and every candidate continuation bit must lie in
+the reconstructed prefix. Ordering, ties, graph updates, rank/select layout,
+occurrence insertion, eviction, collision handling, and fallback are finite
+and canonical.
+
+## C.6 Organizer-owned controls
+
+The four controls are frozen in \(R_C\) before submissions:
 
 ```text
-C0  fallback measure without retrieval
-C1  exact-history retrieval only
-C2  submitted equivalence retrieval
-CR  submitted index with deterministic signature permutation
+C0  fallback numerator with no index lookup
+C1  exact-event Wheeler labels with submitted capacities
+C2  submitted labels, graph, retrieval, and blend
+CR  submitted construction with the frozen nonidentity label permutation
 ```
 
-Controls provide diagnostics only. Passing depends exclusively on the absolute
-submitted-route target.
+The control adapters fix initialization, capacities, coder semantics,
+finalization, permutation, and accounting. Contestants provide no control
+implementation. Missing control output invalidates the audit, but controls
+provide no acceptance credit.
 
-## C.5 Proof obligations
+## C.7 Proof obligations
 
 Prove:
 
+- Every graph prefix satisfies all Wheeler axioms.
+- Edge ordering and bitvector layout are canonical.
+- Rank and select results match direct enumeration.
+- Backward-search intervals match path-labeled state sets.
+- The stated suffix-equivalence condition holds.
 - Every retrieved position satisfies \(u<t\).
-- Index contents are identical in encoder and decoder recurrences.
-- Equal indexed histories produce equal candidate orderings.
-- Collision and eviction rules are deterministic.
-- Every candidate-derived bit is already known at prediction time.
-- The numerator is always within the dyadic range.
-- All dynamic state satisfies the index and resource bounds.
+- Index contents and occurrence ordering agree in encoder and decoder.
+- Every candidate-derived bit is already reconstructed.
+- Collision, eviction, exhaustion, and fallback are deterministic.
+- Numerators and all dynamic state satisfy their bounds.
 - The exact submitted route satisfies \(L_C\le T_C\).
 
-## C.6 Pass condition
+## C.8 Pass condition
 
 Problem C passes exactly when
 
@@ -697,10 +820,10 @@ establish before release that each \(V_i\) loads only:
 
 - The common frozen instance.
 - The common Seal.
-- Route \(i\)'s fixed adapter and bounds.
+- Route \(i\)'s disjoint runtime object \(R_i\), adapter, and bounds.
 - Route \(i\)'s submitted `C`, `Z`, `Y`, `F`, and `P` objects.
 
-It loads no artifact from any other route.
+It loads no submitted artifact or fixed dependency from any other route.
 
 The examination passes exactly when
 
