@@ -839,3 +839,23 @@ independent-audit, and verification artifacts.
 Decision: `UNBOUND`; authorized routes: none; score credit: zero. Preserve the
 problems for expert review only. Do not distribute the candidate examination
 until the verifier reports `VALID_BOUND`.
+
+## 2026-07-26 Seal-2 target-bearing antecedent proposals
+
+The next binding work is now represented by two adaptive proposals:
+
+- `seal2_route_c_under_target_teacher_v1` is primary. It receives no credit
+  from reported or forecast teacher scores. Promotion begins with an exact
+  counted full-1G teacher below `108,000,000`, then requires certified global
+  contraction, deterministic dyadic compilation, exact full-corpus score at or
+  below target, official memory, and official runtime.
+- `seal2_route_a_paid_predictor_partition_v1` is secondary. It must recover the
+  complete `1,389,323`-byte forecast debt plus every selector, description,
+  framing, finalization, and package byte. Labels must be decoder-visible before
+  use, and the frozen mechanism must transfer on chronological and offset
+  populations before an exact full-corpus replay.
+
+Both remain proposals with zero score and Seal credit. Route C and Route A stay
+removed from candidate authorization until their respective verification
+receipts satisfy the committed conditional-binding schema. Routes B and D have
+no active binding proposal.
