@@ -26,6 +26,18 @@ FROZEN = (
     STATUS,
     OPS / "route-binding.schema.json",
     *ROUTE_FILES.values(),
+    ROOT
+    / "operations"
+    / "adaptive"
+    / "proposals"
+    / "proposed"
+    / "881_seal2_route_c_under_target_teacher_v1.json",
+    ROOT
+    / "operations"
+    / "adaptive"
+    / "proposals"
+    / "proposed"
+    / "929_seal2_route_a_paid_predictor_partition_v1.json",
     Path(__file__).resolve(),
 )
 

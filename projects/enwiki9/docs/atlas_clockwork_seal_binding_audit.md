@@ -72,3 +72,22 @@ All routes are removed from candidate authorization. They remain in the problem
 bank for expert mathematical review only. Seal-2 may become `BOUND` only after
 at least one hidden reduction supplies every missing antecedent and passes the
 committed verifier.
+
+## Operational antecedent work
+
+Two zero-credit proposals are registered through the canonical adaptive
+workflow:
+
+1. Primary Route C proposal:
+   `seal2_route_c_under_target_teacher_v1`. It must first reproduce an exact
+   under-target full-corpus teacher, then certify contraction and compile a
+   dyadic integer codec within the teacher's measured score slack and official
+   resources.
+2. Secondary Route A proposal:
+   `seal2_route_a_paid_predictor_partition_v1`. It must causally encode every
+   selector and explanation, transfer chronologically, and pay the complete
+   `1,389,323`-byte forecast debt plus package and framing costs under exact
+   joint replay.
+
+Neither proposal changes this audit decision. Proposal state, forecasts,
+teachers, and partial scopes have zero Seal credit.
