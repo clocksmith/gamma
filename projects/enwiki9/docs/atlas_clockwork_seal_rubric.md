@@ -1,25 +1,23 @@
 # Private Rubric for the Atlas and Clockwork Mathematical Examination
 
 Classification: `ORGANIZER ONLY`
-Rubric version: `ACS-MATH-RUBRIC-1`
-Required Seal: `ACS-MATH-SEAL-1`
+Rubric version: `ACS-MATH-RUBRIC-2`
+Required Seal: `ACS-MATH-SEAL-2`
 
 ## 1. Solver-facing boundary
 
-This rubric must not be sent to solvers as part of the examination. The solver
-receives only:
+This rubric is not sent to solvers. The solver receives only:
 
 ```text
 atlas_clockwork_seal_problem_set.md
 ```
 
-The solver submits one mathematical manuscript. No software, numerical corpus,
-archive, table bundle, manifest, schema, benchmark, or execution receipt is
-required.
+The submission is one pencil-and-paper mathematical manuscript. No program,
+dataset, archive, benchmark, manifest, or execution receipt is requested.
 
 ## 2. Mathematical verdicts
 
-Each problem receives one verdict:
+Each independent problem receives exactly one verdict:
 
 ```text
 COMPLETE
@@ -28,149 +26,111 @@ INCORRECT
 NOT_ATTEMPTED
 ```
 
-- `COMPLETE` means every requested theorem, construction, proof, sharpness
-  claim, and counterexample obligation is correct.
-- `INCOMPLETE` means the principal argument may be correct but at least one
-  requested result or case is missing.
-- `INCORRECT` means a claimed theorem, construction, or proof contains a
-  substantive error.
-- `NOT_ATTEMPTED` means no solution was submitted for that problem.
+`COMPLETE` means every fixed theorem, construction, edge case, and sharpness
+obligation stated in that problem is proved. There are no discretionary
+"strongest possible" or "weakest hypotheses" grading clauses.
 
-A complete solution to any one independent problem passes the public
-examination.
+The public examination passes if and only if at least one independent problem
+is `COMPLETE`.
 
-## 3. General mathematical standards
+## 3. General standards
 
-A complete solution must:
+A `COMPLETE` solution must:
 
-- State every newly introduced object precisely.
-- Prove existence before using a selected object.
-- Separate necessary from sufficient conditions.
-- Treat finite boundary and zero-count cases.
-- Give explicit constructions where requested.
-- Prove claimed optimality or sharpness.
-- Identify every dependence of a bound.
-- Avoid reliance on numerical experiments.
-- Avoid assuming another examination problem.
-
-Published theorems may be cited in standard form. A specialized result central
-to the requested conclusion must be proved or reduced transparently to a
-published theorem.
+- Define every introduced object.
+- Prove existence before selection.
+- Separate necessity and sufficiency.
+- Treat zero, empty, and finite boundary cases.
+- Give each requested explicit construction.
+- Prove each stated constant and sharpness example.
+- Depend on no other examination problem.
+- Use no numerical experiment as proof.
 
 ## 4. Problem A grading
 
-Problem A is `COMPLETE` only if the manuscript establishes:
+Problem A is `COMPLETE` only if it proves:
 
-1. The exact relaxed variational formula.
-2. Existence and characterization of optimizing weights.
-3. Correct treatment of unused explanations.
-4. Constructive conversion from relaxed weights to a binary prefix code.
-5. The best proved universal integer-prefix gap, with matching examples when
-   sharpness is claimed.
-6. A necessary-and-sufficient description-priced threshold condition.
-7. The sharp perturbation bound and equality cases.
-
-A rowwise numerical optimizer, unproved alternating procedure, or fixed-gain
-example is incomplete.
+1. The exact assignment-entropy dual formula.
+2. Existence and the complete optimizer characterization, including zero
+   weights.
+3. The fixed inequality
+   \(\mathcal V^*(G)-J\le V^*(G)\le\mathcal V^*(G)\).
+4. A legal constructive prefix code with inactive zero-weight explanations.
+5. Existence of \(L(n)\) and the exact description-priced threshold theorem.
+6. The perturbation bound \(J\varepsilon\), its optimality, and equality cases.
 
 ## 5. Problem B grading
 
-Problem B is `COMPLETE` only if the manuscript establishes:
+Problem B is `COMPLETE` only if it proves:
 
-1. The direct behavioral equivalence
-   \[
-   h\equiv h'
-   \Longleftrightarrow
-   \forall u\in A^*,
-   \operatorname{Trace}(h,u)=\operatorname{Trace}(h',u).
-   \]
-2. Color preservation and right-congruence properties.
-3. Unique coarseness.
-4. Finite distinguishing words and a proved length bound.
-5. Finite minimality certificates.
-6. The Wheeler interval theorem.
-7. A converse with every required hypothesis or counterexample.
-8. A correct resolution of canonical minimal Wheeler refinement.
-9. A continuation-interval bound and extremal examples.
-
-A deterministic transducer without an explicit quotient theorem is
-incomplete. An index implementation is irrelevant to the mathematical verdict.
+1. Behavioral equivalence is the unique coarsest color-preserving right
+   congruence.
+2. The \(|Q|-2\) distinguishing-word bound and an attaining family.
+3. The requested finite pairwise distinguishing certificate.
+4. The exact equivalence between Wheeler order and the stated one-letter
+   interval and monotonicity conditions.
+5. The interval theorem for every continuation.
+6. The depth-\(L\) unfolding is Wheeler and has the stated exact vertex and edge
+   counts.
+7. The unfolding's interval and finite-certificate claims.
+8. The quadratic continuation-interval bound and linear lower-bound family.
 
 ## 6. Problem C grading
 
-Problem C is `COMPLETE` only if the manuscript establishes:
+Problem C is `COMPLETE` only if it proves:
 
-1. A uniform state bound valid for every input sequence and length.
-2. Exact dependence on contraction and all approximation errors.
-3. The sharp base-two logistic-loss Lipschitz constant.
-4. A cumulative excess-loss theorem valid for every outcome sequence.
-5. A rational Householder-plus-sparse approximation theorem.
-6. A characterization of exact zero-residual realizability.
-7. An explicit precision threshold for prescribed cumulative allowance.
-8. Sharpness examples or lower bounds for principal terms.
-
-Simulation, average-case stability, or an argument depending on one selected
-input sequence is incomplete.
+1. The nearest-dyadic Euclidean rounding bound.
+2. The stated uniform shadowing inequality and one-dimensional attainment.
+3. The sharp base-two logistic Lipschitz constant.
+4. The cumulative loss inequality and closed geometric-sum form.
+5. The stated Householder-factor perturbation inequality.
+6. Rational orthogonal matrices use at most \(d\) rational Householder
+   reflections.
+7. The stated precision condition and explicit dimension-dependent dyadic lower
+   bound on \(m\).
 
 ## 7. Problem D grading
 
-Problem D is `COMPLETE` only if the manuscript establishes:
+Problem D is `COMPLETE` only if it proves:
 
-1. The exact kernel-based collision characterization.
-2. Sharp relations among successful parity depth, rank, and collisions.
-3. A proof or disproof of a universal nested family with constant overhead.
-4. The strongest valid replacement theorem if universal constant overhead is
-   impossible.
-5. Unique-coset theorems for structured residual balls.
-6. Matching constructions and obstructions for the required examples.
-7. A finite bounded-search uniqueness certificate.
-8. A lower bound on certificate information when claimed.
-
-Empirical syndrome tests or probabilistic collision estimates do not complete
-the problem.
+1. The exact kernel collision characterization and successful-depth formula.
+2. The finite separating-map theorem by both probabilistic and deterministic
+   arguments.
+3. Dependent-row deletion and extension to a nested full-rank family.
+4. The exact difference-set criterion.
+5. Its Hamming-ball, minimum-distance, counting, and affine-union consequences.
+6. The bounded-search certificate equivalence.
+7. The exact worst-case count of \(j\) matrix-vector evaluations.
 
 ## 8. Independence audit
 
-A problem solution may not cite another requested result from this examination.
-If a proof relies on a lemma identical to another problem's requested theorem,
-the solver must prove that lemma independently within the attempted solution or
-cite a preexisting published theorem.
+A solution may not cite another requested result from this examination. If it
+needs an equivalent lemma, it must prove it independently or cite a preexisting
+published theorem. One problem's verdict cannot affect another's.
 
-One problem's incompleteness or incorrectness cannot affect an independently
-complete solution to another problem.
+## 9. Public decision
 
-## 9. Public examination decision
-
-The public examination passes exactly when at least one problem is graded
-`COMPLETE`.
-
-The organizer reports mathematical verdicts separately. It does not mention
-private applications, hidden datasets, compression targets, implementation, or
-transfer in solver-facing feedback.
+The organizer reports only the mathematical verdicts. Solver-facing feedback
+must not mention private applications, hidden data, implementation, targets, or
+transfer.
 
 ## 10. Private application review
 
-After a public solution is graded `COMPLETE`, a separate organizer team applies
-the private Seal.
-
-The application team must not alter the solver's theorem. It may instantiate
-variables, derive finite parameters, and implement the construction exactly as
-the theorem permits.
-
+After a `COMPLETE` verdict, a separate organizer team applies
+`ACS-MATH-SEAL-2` without changing the theorem or the frozen canonical map.
 Private transfer receives one status:
 
 ```text
 TRANSFER_PASS
-TRANSFER_FAIL_HYPOTHESES
-TRANSFER_FAIL_CONSTRUCTION
-TRANSFER_FAIL_TARGET
-TRANSFER_FAIL_RESOURCES
-TRANSFER_INVALID
+SEAL_INVALID
+ORGANIZER_IMPLEMENTATION_FAILURE
 ```
 
-A mathematically complete proof does not automatically receive
-`TRANSFER_PASS`. Transfer requires the corresponding private hypothesis,
-construction, and exact verifier receipts.
+Every `COMPLETE` solution to a published route must receive `TRANSFER_PASS`.
+`SEAL_INVALID` means the organizer published a route without a valid universal
+transfer proof. `ORGANIZER_IMPLEMENTATION_FAILURE` means the frozen implication
+remains valid but its prescribed instantiation was executed incorrectly.
+Neither failure may be attributed to the solver.
 
 ## 11. Separation of claims
 
@@ -180,9 +140,8 @@ Public claim:
 
 Private transfer claim:
 
-> The organizer proved the hidden application satisfies the theorem's
-> hypotheses, instantiated the construction, and verified the resulting exact
-> artifact.
+> Before publication, the organizer proved every complete solution to the route
+> transfers; after submission, it instantiated the frozen canonical map and
+> verified the exact artifact.
 
-These claims must never be conflated. The organizer may reveal the private
-claim only when every Seal requirement is satisfied.
+The private claim may be revealed only with every Seal receipt.
