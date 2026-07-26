@@ -2,6 +2,7 @@
 
 Classification: `ORGANIZER ONLY`
 Seal version: `ACS-MATH-SEAL-2`
+Activation status: `UNBOUND`
 
 ## 1. Purpose
 
@@ -16,6 +17,13 @@ and satisfies the hidden target, exactness, and resource bounds.
 
 A route for which that universal implication has not been proved must be
 removed before the examination is published.
+
+`UNBOUND` means this document is only a normative specification, not a transfer
+certificate. The status may change to `BOUND` only when every published route
+has all committed artifacts listed in Section 2, their hashes appear in one
+immutable commitment manifest, and an independent verifier has accepted that
+manifest. Until then, the public examination is not authorized for solver
+distribution.
 
 ## 2. Frozen private commitments
 
@@ -140,8 +148,8 @@ with sufficient counted margin, runtime, and memory.
 
 From any `COMPLETE` solution, choose the lexicographically first successful
 matrix, extend it by the frozen basis order, and emit the canonical
-bounded-search certificate. Exact reconstruction verifies the already-proved
-implication.
+bounded-search first-hit certificate. Exact reconstruction verifies the
+already-proved implication.
 
 ## 7. Independence
 
@@ -196,3 +204,26 @@ V_i(\Psi_i(S_i))=\operatorname{PASS}.
 The proof must include target and resource sufficiency, not merely mathematical
 applicability. Without this implication and all committed objects, Route \(i\)
 must not appear in the public examination.
+
+## 10. Binding artifact requirement
+
+A `BOUND` Seal requires actual organizer-owned artifacts, not additional prose:
+
+```text
+commitment.json
+hypotheses/route-a.json
+hypotheses/route-b.json
+hypotheses/route-c.json
+hypotheses/route-d.json
+maps/route-a.*
+maps/route-b.*
+maps/route-c.*
+maps/route-d.*
+verifier/
+verification-receipt.json
+```
+
+The commitment records the exact hash, byte length, schema version, and role of
+every artifact. Missing routes must be removed from the public examination
+rather than represented by placeholders. A manifest with unresolved,
+estimated, or `TODO` fields cannot activate the Seal.

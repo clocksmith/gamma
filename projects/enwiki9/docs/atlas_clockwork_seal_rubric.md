@@ -3,6 +3,7 @@
 Classification: `ORGANIZER ONLY`
 Rubric version: `ACS-MATH-RUBRIC-2`
 Required Seal: `ACS-MATH-SEAL-2`
+Required Seal status for distribution: `BOUND`
 
 ## 1. Solver-facing boundary
 
@@ -86,7 +87,8 @@ Problem C is `COMPLETE` only if it proves:
 5. The stated Householder-factor perturbation inequality.
 6. Rational orthogonal matrices use at most \(d\) rational Householder
    reflections.
-7. The stated precision condition and explicit dimension-dependent dyadic lower
+7. The widened-intermediate and final-requantization operator bound.
+8. The stated precision condition and explicit dimension-dependent dyadic lower
    bound on \(m\).
 
 ## 7. Problem D grading
@@ -99,7 +101,7 @@ Problem D is `COMPLETE` only if it proves:
 3. Dependent-row deletion and extension to a nested full-rank family.
 4. The exact difference-set criterion.
 5. Its Hamming-ball, minimum-distance, counting, and affine-union consequences.
-6. The bounded-search certificate equivalence.
+6. The bounded-search first-hit certificate equivalence.
 7. The exact worst-case count of \(j\) matrix-vector evaluations.
 
 ## 8. Independence audit
@@ -116,8 +118,9 @@ transfer.
 
 ## 10. Private application review
 
-After a `COMPLETE` verdict, a separate organizer team applies
-`ACS-MATH-SEAL-2` without changing the theorem or the frozen canonical map.
+Distribution is forbidden unless `ACS-MATH-SEAL-2` is `BOUND` by its immutable
+artifact manifest. After a `COMPLETE` verdict, a separate organizer team
+applies that exact Seal without changing the theorem or frozen canonical map.
 Private transfer receives one status:
 
 ```text
