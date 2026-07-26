@@ -12,10 +12,8 @@
 
 namespace {
 
-constexpr uint32_t TOTAL = 4096;
-constexpr uint32_t HALF = 0x80000000u;
-constexpr uint32_t FIRST_QUARTER = 0x40000000u;
-constexpr uint32_t THIRD_QUARTER = 0xc0000000u;
+constexpr uint32_t TOTAL = 1u << 16;
+constexpr uint32_t MAX_CODE = 0xffffffffu;
 
 struct Segment {
   uint64_t prompt_start;
@@ -25,51 +23,38 @@ struct Segment {
 };
 
 struct ArithmeticCounter {
-  uint32_t low = 0;
-  uint32_t high = 0xffffffffu;
-  uint64_t pending = 0;
-  uint64_t output_bits = 0;
-
-  void emit() {
-    ++output_bits;
-    output_bits += pending;
-    pending = 0;
-  }
+  uint32_t x1 = 0;
+  uint32_t x2 = MAX_CODE;
+  uint64_t output_bytes = 0;
 
   void encode(int bit, uint32_t p1) {
     p1 = std::max<uint32_t>(1, std::min<uint32_t>(TOTAL - 1, p1));
-    uint64_t range = static_cast<uint64_t>(high) - low + 1;
-    uint32_t cut = low + static_cast<uint32_t>((range * (TOTAL - p1)) / TOTAL);
-    if (cut <= low) cut = low + 1;
-    if (cut > high) cut = high;
+    uint32_t delta = x2 - x1;
+    uint64_t midpoint64 =
+        static_cast<uint64_t>(x1) +
+        static_cast<uint64_t>(delta >> 16) * p1 +
+        ((static_cast<uint64_t>(delta & 0xffffu) * p1) >> 16);
+    uint32_t midpoint = static_cast<uint32_t>(midpoint64);
     if (bit) {
-      low = cut;
+      x2 = midpoint;
     } else {
-      high = cut - 1;
+      x1 = midpoint + 1;
     }
-    for (;;) {
-      if (high < HALF) {
-        emit();
-      } else if (low >= HALF) {
-        emit();
-        low -= HALF;
-        high -= HALF;
-      } else if (low >= FIRST_QUARTER && high < THIRD_QUARTER) {
-        ++pending;
-        low -= FIRST_QUARTER;
-        high -= FIRST_QUARTER;
-      } else {
-        break;
-      }
-      low <<= 1;
-      high = (high << 1) | 1u;
+    while (((x1 ^ x2) & 0xff000000u) == 0) {
+      ++output_bytes;
+      x1 <<= 8;
+      x2 = (x2 << 8) + 255;
     }
   }
 
   uint64_t finish_bytes() {
-    ++pending;
-    emit();
-    return (output_bits + 7) / 8;
+    while (((x1 ^ x2) & 0xff000000u) == 0) {
+      ++output_bytes;
+      x1 <<= 8;
+      x2 = (x2 << 8) + 255;
+    }
+    ++output_bytes;
+    return output_bytes;
   }
 };
 
@@ -221,7 +206,7 @@ int main_impl(int argc, char **argv) {
   auto p1_at = [&](uint64_t row) -> uint16_t {
     size_t offset = 16 + 2 * row;
     uint16_t value = trace[offset] | (static_cast<uint16_t>(trace[offset + 1]) << 8);
-    if (value == 0 || value >= TOTAL) throw std::runtime_error("invalid P1");
+    if (value == 0) throw std::runtime_error("invalid P1");
     return value;
   };
   auto segments = read_segments(segment_path);
@@ -360,7 +345,9 @@ int main_impl(int argc, char **argv) {
   std::ofstream output(output_path);
   if (!output) throw std::runtime_error("cannot create output JSON");
   output << "{\n";
-  output << "  \"schema\": \"endpoint_page_prompt_exact_helper_v1\",\n";
+  output << "  \"schema\": \"endpoint_page_prompt_exact_helper_v2\",\n";
+  output << "  \"probability_total\": " << TOTAL << ",\n";
+  output << "  \"range_coder\": \"endpoint_uint16_byte_range_v1\",\n";
   output << "  \"rows\": " << rows << ",\n";
   output << "  \"wrt_stream_bytes\": " << stream.size() << ",\n";
   output << "  \"pages\": " << segments.size() << ",\n";

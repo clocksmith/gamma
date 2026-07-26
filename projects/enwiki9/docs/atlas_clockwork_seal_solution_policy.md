@@ -153,6 +153,30 @@ Binding requires at least a low-rank energy on the hidden application,
 constructive bounded reconstruction, complete coding accounting, and eligible
 resource receipts.
 
+## 7.1 Post-solution extraction
+
+After a problem is mathematically `COMPLETE`, do not enlarge or replace it
+merely because its hidden antecedent is absent. First produce an extraction
+memorandum containing:
+
+1. The exact theorem conclusions now available to the organizer.
+2. The canonical finite witness or construction licensed by those conclusions.
+3. Every hidden antecedent not supplied by the theorem.
+4. The exact experiment or certificate that can establish each antecedent.
+5. A fail-closed transfer status and zero score credit until all antecedents
+   are satisfied.
+
+A new public problem is justified only when transfer is blocked by a genuinely
+unknown mathematical proposition whose proof would discharge a frozen
+antecedent. Missing data, missing implementation, negative compression,
+unmeasured runtime, unavailable teachers, and absent full-corpus receipts are
+organizer obligations, not new pencil-and-paper questions.
+
+The organizer must never ask a solver to rediscover a compressor by disguising
+an empirical search problem as a theorem. A target-bearing route must identify
+the hidden finite instance and prove the conditional reduction before solver
+distribution.
+
 ## 8. Disclosure
 
 The public problem may be distributed only when its applicable Seal policy
@@ -189,3 +213,8 @@ received on 2026-07-26. It is bound to the exact
 Its mathematical status is `COMPLETE` with two specification corrections. Its
 Seal-transfer status is `ALGEBRA_ONLY`, and it receives zero compression-score
 credit.
+
+The combined Problems A-C submission is also registered. Problems A and B are
+`COMPLETE`; Problem C is `COMPLETE` under the solver-confirmed C1
+qualification. Their transfer states remain `ANTECEDENT_PARTIAL`,
+`ALGEBRA_ONLY`, and `ANTECEDENT_PARTIAL`, respectively.

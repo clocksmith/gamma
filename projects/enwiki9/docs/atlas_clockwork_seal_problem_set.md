@@ -1,11 +1,16 @@
 # The Atlas and Clockwork Mathematical Examination
 
 Distribution status: `DRAFT - EXPERT REVIEW ONLY`
+Problem version: `ACS-MATH-DRAFT-2-WORKING`
 
 This document is a problem bank, not an authorized candidate examination.
 `ACS-MATH-SEAL-2` is `UNBOUND`, and no route is authorized for solver
 distribution. This notice may be removed only after the committed Seal
 verifier reports `VALID_BOUND`.
+
+This working draft incorporates the C1, D3, and D4 corrections discovered in
+the recorded solutions to `ACS-MATH-DRAFT-1`. It is not frozen for a solver
+submission until its exact hash is entered in the version ledger.
 
 ## Instructions to solvers
 
@@ -432,8 +437,11 @@ e_t
 (\varepsilon_A S+\varepsilon_b+\eta_m).
 \]
 
-Prove that the coefficients of \(e_1\) and of the accumulated one-step error
-are attainable in dimension one.
+Prove exact one-dimensional attainment of the coefficients of \(e_1\) and of
+the accumulated one-step error whenever \(\rho\) is attainable by the permitted
+rational coefficient class. For every real \(\rho\in[0,1)\), prove that the
+same coefficients are sharp as suprema over admissible rational scalar
+contraction factors tending upward to \(\rho\).
 
 ### C2. Cumulative logistic-loss transfer
 
@@ -621,8 +629,15 @@ full-rank family.
 
 ### D3. Structured residual sets
 
-For an arbitrary finite \(B\subseteq\mathbb F_2^n\), prove that every coset of
-\(\ker H\) meets \(B\) in at most one point if and only if
+For an arbitrary finite \(B\subseteq\mathbb F_2^n\), including
+\(B=\varnothing\), prove that every coset of \(\ker H\) meets \(B\) in at most
+one point if and only if
+
+\[
+\ker H\cap(B-B)\subseteq\{0\}.
+\]
+
+Prove that when \(B\ne\varnothing\), the inclusion is equivalent to
 
 \[
 \ker H\cap(B-B)=\{0\}.
@@ -662,8 +677,11 @@ x=y_j,
 \]
 
 Prove that these checks are necessary and sufficient for the bounded decoder to
-return \(x\), and that direct verification requires exactly \(j\)
-matrix-vector evaluations in the worst case.
+return \(x\). Define the canonical sequential verifier to evaluate
+\(H(y_1),\ldots,H(y_j)\) in order, stopping at the claimed first hit. Prove
+that this verifier performs exactly \(j\) matrix-vector evaluations on a valid
+certificate. Do not claim this count as a lower bound for arbitrary verifiers
+that may preprocess the candidate span or reuse linear dependencies.
 
 ## D.3 Strict solution requirement
 
@@ -672,7 +690,8 @@ A complete solution must provide:
 - The exact collision theorem and successful-depth expression.
 - The separating-map theorem, both existence proofs, and nested extension.
 - The exact difference-set theorem and its stated applications.
-- The bounded-search first-hit theorem and exact verification cost.
+- The bounded-search first-hit theorem and the exact canonical sequential
+  verification cost.
 
 A parity-search implementation or empirical collision table is not a solution.
 

@@ -859,3 +859,70 @@ Both remain proposals with zero score and Seal credit. Route C and Route A stay
 removed from candidate authorization until their respective verification
 receipts satisfy the committed conditional-binding schema. Routes B and D have
 no active binding proposal.
+
+## 2026-07-26 Seal-2 Route A first transfer: SIBYL page calibration
+
+The first concrete application of the solved paid-information theorem used
+each complete page body as a row and sixteen frozen monotone endpoint logit
+calibrations as explanations. A selected explanation was encoded after the
+complete title and before any affected body bit. The endpoint probability
+trajectory remained unchanged.
+
+The prior helper had never produced evidence because it incorrectly assumed a
+`4096` probability total while reading native uint16 endpoint probabilities.
+The repaired helper uses total `65536` and the endpoint byte-range arithmetic
+semantics. The frozen opening-1M replay covered `4,805,936` probability rows.
+
+Exact result:
+
+```text
+gross sixteen-choice page oracle:  +7 bytes
+paid adaptive page labels:         -33 bytes
+scaled gross gate:                3000 bytes
+scaled net gate:                  2300 bytes
+```
+
+Decision: `retire_simple_page_calibration`. The oracle itself misses by roughly
+three orders of magnitude, so curve-grid, blend, support, and label-prior
+tuning are excluded. The result has `causal_shadow` status and zero score or
+Seal credit.
+
+Route A is not globally disproved. It remains open only for a materially
+different bounded explanation family whose members have independently useful
+probability trajectories, not alternate calibrations of one trajectory.
+Evidence:
+`results/endpoint428_page_prompt_calibration_v0/route_a_opening1m_receipt.json`
+and
+`results/endpoint428_page_prompt_calibration_v0/decision.json`.
+
+## 2026-07-26 Seal-2 Route A multi-endpoint paid partition
+
+The materially different follow-up replaced calibration curves with nine
+aligned probability trajectories: phase-pair, pair, native layer0, endpoint428,
+fixed-share, entity-context, MXX, dictionary-pretrained MXX, and shared-FXCM.
+The strongest phase-pair trajectory was the baseline. Whole-page choices were
+made only for payload after each decoded title, with fixed-width and adaptive
+labels encoded before the selected body.
+
+Exact opening-1M result:
+
+```text
+gross page oracle:      +6 bytes
+fixed paid labels:     -80 bytes
+adaptive paid labels:   -3 bytes
+scaled gross gate:    3000 bytes
+scaled net gate:      2300 bytes
+```
+
+Decision: `retire_current_multi_endpoint_family`. Existing endpoint diversity
+is almost completely redundant at page scale, and the gross oracle misses by
+approximately three orders of magnitude. Subset search, label-prior tuning, and
+page-level routing over these traces are excluded.
+
+This result does not prove that all paid partitions fail. Route A can reopen
+only for explanations with large independently measured residual gain, or for
+a different selection granularity whose gross oracle clears a predeclared
+target-scale gate before selector engineering. Evidence:
+`results/seal2_route_a_paid_predictor_partition_v1/opening1m_multi_endpoint_receipt.json`
+and
+`results/seal2_route_a_paid_predictor_partition_v1/decision.json`.

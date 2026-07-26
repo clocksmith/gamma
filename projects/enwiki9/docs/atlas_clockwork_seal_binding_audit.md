@@ -12,9 +12,8 @@ The target is an exact counted score at or below `108,000,000` bytes on exactly
 not establish an exact full-corpus baseline:
 
 - Verified full-1G score: unknown.
-- Best counted forecast: `109,389,323`.
-- Forecast-only distance above target: `1,389,323`.
-- Operational status and frontier forecast disagree.
+- Planning forecast: `109,524,268`.
+- Forecast-only distance above target: `1,524,268`.
 - Source and arithmetic validation fail because required evidence is missing.
 
 Forecasts cannot discharge a hypothesis-and-margin certificate.
@@ -29,8 +28,22 @@ complete representation costs, and target margin after prefix loss.
 The canonical map would select the lexicographically first maximizing
 assignment and minimum-price prefix code. No qualifying gain matrix or
 target-bearing codebook exists. The theorem allocates known gain; it creates no
-predictive information. Proving the missing antecedent would already certify a
-winning construction.
+predictive information.
+
+Two opening-1M antecedent probes are now terminal:
+
+- Sixteen page-calibration curves produced only `+7` gross oracle bytes and
+  `-33` bytes after adaptive labels.
+- A paid partition over nine preserved endpoint traces produced only `+6`
+  gross oracle bytes, `-80` bytes with fixed labels, and `-3` bytes with
+  adaptive labels.
+
+These exact shadows show that the current page-level calibration and existing
+endpoint-explanation families are too redundant to instantiate Route A.
+Subset or label tuning is not a valid continuation. Route A may reopen only
+with materially new causal explanations or a different granularity whose
+predeclared gross oracle gate clears target-scale economics before selector
+engineering.
 
 ## Route B: rejected
 
@@ -86,8 +99,9 @@ workflow:
 2. Secondary Route A proposal:
    `seal2_route_a_paid_predictor_partition_v1`. It must causally encode every
    selector and explanation, transfer chronologically, and pay the complete
-   `1,389,323`-byte forecast debt plus package and framing costs under exact
-   joint replay.
+   target debt plus package and framing costs under exact joint replay. Its
+   current nine-endpoint, page-granularity realization is retired after
+   negative paid-selector evidence.
 
 Neither proposal changes this audit decision. Proposal state, forecasts,
 teachers, and partial scopes have zero Seal credit.
