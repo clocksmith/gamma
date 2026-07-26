@@ -1,7 +1,7 @@
 # Independent Finite Prediction Olympiad: Organizer Rubric
 
-Rubric version: `ACS-RUBRIC-2`
-Required Seal: `ACS-SEAL-2`
+Rubric version: `ACS-RUBRIC-3`
+Required Seal: `ACS-SEAL-3`
 
 ## 1. Scope
 
@@ -54,7 +54,8 @@ Before accepting submissions, the organizer publishes hashes for:
 - Public problem set.
 - Seal and rubric versions.
 - Construction object and boundaries.
-- Runtime object.
+- Common runtime-neutral object.
+- Every route-specific runtime object and dependency-closure hash.
 - Observable generators.
 - Canonical serializer.
 - FDAC encoder and decoder.
@@ -95,7 +96,9 @@ A missing mandatory object yields `INVALID`.
 
 ### G1. Construction/runtime isolation
 
-Run the route interpreter without access to the construction copy of \(x\).
+Run the route interpreter with only \(S_{\mathrm{common}}\), its own \(R_i\),
+and submitted route channels, without access to the construction copy of
+\(x\).
 Verify that every runtime observable is generated from the frozen runtime
 object, reconstructed prefix, and logically released auxiliary data.
 
@@ -234,18 +237,32 @@ A proof that supplies runtime information yields `INVALID`.
 
 ### G11. Route independence
 
-Evaluate the route in an environment containing no submitted artifacts from
-other routes. A route that imports another route's table, state, label, payload,
-proof witness, or score credit yields `INVALID`.
+Evaluate the route in an environment containing no submitted artifacts or
+fixed runtime objects from other routes. Compute the transitive dependency
+closure reachable from \(S_{\mathrm{common}}\cup R_i\). Reject any reachable
+route-specific table, code, generator, adapter, target, or constant owned by
+another route.
+
+A route that imports another route's fixed or submitted state, table, label,
+payload, proof witness, or score credit yields `INVALID`.
 
 ### G12. Private binding
 
-Verify the precommitted private binding theorem for the route. Confirm hashes,
-fixed costs, target mapping, package mapping, resource mapping, and adapter
-identity.
+Load the precommitted binding manifest, binding verifier, adapter, application
+verifier, and resource protocol by hash. Run the binding verifier on canonical
+`F/C/Z/Y`. Require it to produce the complete bound artifact and a canonical
+receipt proving:
+
+- Exact channel and fixed-cost mapping.
+- Exact bound archive and package byte counts.
+- Exact reconstruction of the bound input.
+- Deterministic second artifact.
+- Passing bound resource measurements.
+- Passing final application verdict.
 
 A route may pass the public mathematics without this gate, but the examination
-must not issue transferable `PASS` unless G12 succeeds.
+must not issue transferable `PASS` unless G12 succeeds. A prose implication or
+unchecked adapter does not pass.
 
 ## 5. Route A adapter: Paid Partition Martingale
 
@@ -296,30 +313,53 @@ Require
 Issue `PASS_A` exactly when A0 through A3 and G0 through G12 pass. No other
 route is loaded.
 
-## 6. Route B adapter: Predictive Quotient
+## 6. Route B adapter: Minimal Predictive Right Quotient
 
 ### B0. Required finite objects
 
-Require quotient states, initial state, deterministic transition, numerator
-map, represented exceptions, congruence proof, and closure proof.
+Require the finite history automaton, quotient states, explicit surjection
+\(\pi\), initial state, induced transition, induced numerator map, predictive
+color preservation proof, right-congruence proof, and minimality witnesses.
 
 ### B1. Descriptor causality
 
-Recompute every descriptor from the runtime prefix. A descriptor stream that
-is merely supplied by the construction view yields `INVALID`.
+Recompute every descriptor from
+\(S_{\mathrm{common}},R_B,x_{<t}\). A descriptor stream merely supplied by the
+construction view yields `INVALID`.
 
 ### B2. Congruence
 
-For every reachable pair represented by the same quotient state and current
-descriptor, verify that equal next bits produce equal successor states unless a
-specific charged exception applies.
+Verify directly for every pair \(h,h'\) with \(\pi(h)=\pi(h')\), every
+descriptor \(d\), and both bits \(b\):
 
-### B3. Exception accounting
+\[
+\chi_B(h,d)=\chi_B(h',d)
+\]
 
-Verify every exception is finite, reachable or explicitly retained, canonically
-ordered, and represented once in `C_B`.
+and
 
-### B4. Route bounds
+\[
+\pi(T_B(h,d,b))=\pi(T_B(h',d,b)).
+\]
+
+Any violation yields `FAIL`. Exceptions are prohibited; a differing history
+must occupy a refined quotient state.
+
+### B3. Surjection and induced-map validity
+
+Verify \(\pi\) is total and onto. Reconstruct every fiber. Verify the submitted
+\(\delta\) and \(\nu\) equal their induced definitions for every
+representative and are therefore well defined.
+
+### B4. Minimality
+
+For every pair of distinct quotient states, verify the submitted finite
+distinguishing witness. Confirm that its descriptor-and-bit continuation
+produces the first predictive-color distinction and that all earlier steps
+remain defined. The complete witness set must prove no two quotient states can
+be merged by an admissible right congruence.
+
+### B5. Route bounds
 
 Require
 
@@ -335,40 +375,60 @@ Require
 \operatorname{Mem}_B\le B_{B,M}.
 \]
 
-### B5. Verdict
+### B6. Verdict
 
-Issue `PASS_B` exactly when B0 through B4 and G0 through G12 pass. No other
+Issue `PASS_B` exactly when B0 through B5 and G0 through G12 pass. No other
 route is loaded.
 
-## 7. Route C adapter: Exact Continuation Geometry
+## 7. Route C adapter: Wheeler Continuation Geometry
 
 ### C0. Required finite objects
 
-Require signature map, online index update, retrieval map, candidate weighting,
-fallback blend, all capacities, and deterministic collision and eviction rules.
+Require the event-label map, online Wheeler graph builder, total node orders,
+edge-label sequences, rank/select structures, cumulative counts, boundary
+bitvectors, occurrence map, retrieval map, candidate weighting, fallback
+blend, capacities, and deterministic collision and eviction rules.
 
 ### C1. Prefix-only index
 
-Construct the index from an empty initial state while replaying the decoded
-prefix. Reject offline target-position tables or entries created before their
+Construct every graph and index prefix from an empty initial state while
+replaying decoded events. Reject offline graphs, suffix arrays,
+target-position tables, occurrence entries, or nodes created before their
 source events complete.
 
-### C2. Candidate legality
+### C2. Wheeler axioms
+
+For every completed graph prefix, verify the total node order, source-node
+prefix condition, unequal-label ordering implication, and equal-label
+monotonicity implication for every edge pair.
+
+### C3. Rank/select and backward search
+
+Compare every submitted rank and select operation with direct enumeration.
+For every audited pattern, compare the backward-search interval with direct
+enumeration of graph states reachable by paths carrying that label sequence.
+Verify the submitted suffix-equivalence classes are exactly the claimed equal
+intervals.
+
+### C4. Candidate legality
 
 For every retrieval, require each candidate position \(u<t\). Verify every
 candidate bit used by the numerator is already reconstructed and stored.
 
-### C3. Deterministic geometry
+### C5. Deterministic geometry
 
-Verify ordering, tie breaking, collisions, eviction, fallback, and candidate
-exhaustion independently in encoder and decoder recurrences.
+Verify graph updates, edge order, bitvector layout, occurrence insertion,
+ordering, ties, collisions, eviction, fallback, and candidate exhaustion
+independently in encoder and decoder recurrences.
 
-### C4. Controls
+### C6. Organizer-owned controls
 
-Publish exact totals for C0, C1, C2, and CR controls under identical coding and
-finalization. Controls do not affect acceptance.
+Load C0, C1, C2, and CR adapters from frozen \(R_C\). Publish exact totals
+under identical initialization, capacities, coding, framing, and finalization.
+Contestant-supplied control logic is prohibited. Controls do not affect
+acceptance.
 
-### C5. Route bounds
+### C7. Route bounds
 
 Require
 
@@ -384,9 +444,9 @@ Require
 \operatorname{Mem}_C\le B_{C,M}.
 \]
 
-### C6. Verdict
+### C8. Verdict
 
-Issue `PASS_C` exactly when C0 through C5 and G0 through G12 pass. No other
+Issue `PASS_C` exactly when C0 through C7 and G0 through G12 pass. No other
 route is loaded.
 
 ## 8. Route D adapter: Integer Dynamical Realization
@@ -526,6 +586,8 @@ For every attempted route, publish:
 - Physical receipt when required.
 - Proof-verifier result.
 - Private-binding manifest hash.
+- Binding-verifier and adapter hashes.
+- Canonical binding receipt and final bound-application verdict.
 
 The verifier's exact integer output controls the verdict when a contestant's
 ledger disagrees.

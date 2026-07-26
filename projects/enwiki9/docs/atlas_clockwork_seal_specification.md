@@ -1,6 +1,6 @@
 # Atlas-Clockwork Seal Specification
 
-Seal version: `ACS-SEAL-2`
+Seal version: `ACS-SEAL-3`
 
 ## 1. Purpose
 
@@ -31,16 +31,17 @@ Before accepting submissions, the organizer freezes and hashes:
 
 1. This Seal version.
 2. The construction object and boundaries.
-3. The runtime object.
-4. Every causal observable generator.
-5. The canonical serializer.
-6. The exact finite-state coder.
-7. Every route adapter.
-8. Every route target and resource bound.
-9. The fixed interpreter.
-10. The verifier.
-11. The physical execution protocol.
-12. The private application-binding manifest.
+3. The common runtime-neutral Seal object.
+4. Each route-specific runtime object and its reachable dependency closure.
+5. Every causal observable generator.
+6. The canonical serializer.
+7. The exact finite-state coder.
+8. Every route adapter.
+9. Every route target and resource bound.
+10. The fixed interpreter.
+11. The verifier.
+12. The physical execution protocol.
+13. The private application-binding manifest and binding verifier.
 
 Any semantic change creates a new Seal version and a new examination instance.
 No submission may select among Seal versions.
@@ -54,10 +55,11 @@ The contestant and offline verifier may inspect the complete finite object
 
 ### 3.2 Runtime view
 
-The runtime interpreter receives only:
+The runtime interpreter for route \(i\) receives only:
 
 ```text
-frozen runtime object R
+common runtime-neutral object S_common
+route-specific runtime object R_i
 framing F
 certificate C
 paid auxiliary channel Z
@@ -80,14 +82,19 @@ network or external files
 
 ### 3.3 Observable rule
 
-Every runtime observable must be produced by a frozen causal generator
+Every runtime observable must be produced by route \(i\)'s frozen causal
+generator
 
 \[
-\omega_t=\Omega(R,x_{<t},\zeta_{\le t}).
+\omega_{i,t}
+=
+\Omega_i(S_{\mathrm{common}},R_i,x_{<t},\zeta_{\le t}).
 \]
 
-The generator's implementation and fixed tables belong to the route's fixed
-ledger. Any submission-specific table belongs to `C`.
+The generator's implementation and fixed tables belong only to route \(i\)'s
+fixed ledger. Any submission-specific table belongs to `C`. The verifier
+computes the transitive code-and-data dependency closure reachable from
+\(R_i\) and rejects a reference to any other route's fixed object.
 
 A precomputed position-indexed observable stream is prohibited unless its
 complete representation is charged in `C`. The verifier must test runtime
@@ -216,12 +223,71 @@ Then repeatedly apply the first applicable rule:
 After the final symbol, increment \(c\). If \(l<Q\), emit zero followed by
 \(c\) ones. Otherwise emit one followed by \(c\) zeros.
 
-The decoder initializes the same interval and a \(w\)-bit code register from
-the stated payload. It appends zero bits only after the exact stated payload
-length for initialization and renormalization. At each symbol it computes the
-same split \(s\), decodes zero when the code register is less than \(s\), and
-otherwise decodes one. It mirrors every interval and renormalization update.
-It stops after the exact symbol count supplied by `F` or the frozen instance.
+Let the exact payload bit length be \(m\). Define a read function
+\(\operatorname{Read}()\) with cursor \(k\), initially zero:
+
+\[
+\operatorname{Read}()=
+\begin{cases}
+Y_k,&k<m,\\
+0,&m\le k<m+w,\\
+\operatorname{INVALID},&k\ge m+w.
+\end{cases}
+\]
+
+After every call, increment \(k\). Thus at most \(w\) implicit zero-fill bits
+exist, none belongs to `Y`, and consuming a \((w+1)\)-st fill bit invalidates
+the stream.
+
+The decoder state is \((l,h,v,c_D,k)\). Initialize
+
+\[
+(l,h,c_D,k)=(0,M-1,0,0)
+\]
+
+and load
+
+\[
+v=\sum_{j=1}^{w}2^{w-j}\operatorname{Read}().
+\]
+
+Before each symbol, compute the same \(R\) and \(s\) as the encoder. Decode
+zero exactly when \(v<s\), setting \(h=s-1\). Otherwise decode one and set
+\(l=s\).
+
+Then repeatedly apply the first applicable rule:
+
+1. If \(h<H\), set
+   \[
+   (l,h,v)=(2l,2h+1,2v+\operatorname{Read}()),
+   \]
+   and set \(c_D=0\).
+2. If \(l\ge H\), set
+   \[
+   (l,h,v)
+   =
+   (2(l-H),2(h-H)+1,2(v-H)+\operatorname{Read}()),
+   \]
+   and set \(c_D=0\).
+3. If \(l\ge Q\) and \(h<U\), set
+   \[
+   (l,h,v)
+   =
+   (2(l-Q),2(h-Q)+1,2(v-Q)+\operatorname{Read}()),
+   \]
+   and increment \(c_D\).
+4. Otherwise stop renormalizing.
+
+Every accepted step must preserve
+
+\[
+0\le l\le v\le h<M.
+\]
+
+The decoder stops after the exact symbol count supplied by `F` or the frozen
+route instance. It does not consume or interpret encoder finalization
+separately; those emitted bits enter the code register through
+\(\operatorname{Read}()\).
 
 The fixed verifier must establish for every accepted route:
 
@@ -230,7 +296,9 @@ The fixed verifier must establish for every accepted route:
 - The payload is deterministic.
 - The decoder reconstructs the exact symbol count.
 - A second encoding emits the identical payload.
-- No bit beyond the declared zero fill is consumed.
+- The split always satisfies \(l<s\le h\).
+- The decoder invariant \(l\le v\le h\) holds after every update.
+- No more than \(w\) implicit zero-fill bits are consumed.
 
 Block-reset coding is permitted only when declared by the route adapter. Each
 block is terminated independently, and exact block bit lengths belong to `F`.
@@ -396,8 +464,11 @@ prefix-freeness, exact lengths, or other mathematical obligations.
 
 ## 14. Route independence
 
-Each route has a separate adapter and verdict. To evaluate route \(i\), the
-verifier loads no submitted object from route \(j\ne i\).
+Each route has a separate \(R_i\), adapter, fixed-cost ledger, and verdict. To
+evaluate route \(i\), the verifier loads no submitted object from route
+\(j\ne i\). It also computes the reachable dependency closure of
+\(S_{\mathrm{common}}\cup R_i\) and proves that no route-specific code, table,
+constant, generator, target, or adapter from \(R_j\) is reachable.
 
 Cross-route citations are allowed only for public mathematical theorems that do
 not contain instance-specific data or artifacts. A route may not inherit
@@ -405,11 +476,12 @@ another route's score credit, state, table, label, payload, or proof witness.
 
 The final examination verdict is the logical OR of route verdicts.
 
-## 15. Private application-binding theorem
+## 15. Private application-binding theorem and verifier
 
-Before public release, the organizer freezes a private binding manifest. It
-must establish a mechanical map \(\Psi_i\) for every route \(i\) such that a
-passing route becomes a complete artifact in the bound application.
+Before public release, the organizer freezes a private binding manifest and a
+machine-executable binding verifier. They define a total deterministic map
+\(\Psi_i\) for every route \(i\) from canonical `F/C/Z/Y` channels to one
+complete artifact in the bound application.
 
 The manifest binds:
 
@@ -421,7 +493,37 @@ The manifest binds:
 - Mathematical and physical resource gates to application limits.
 - Determinism and exact inversion to application requirements.
 
-For every route, the organizer must prove
+The manifest has a canonical schema containing:
+
+```text
+seal_version
+route_id
+construction_hash
+bound_input_hash
+route_target_bits
+bound_target_bytes
+fixed_cost_ledger
+channel_to_artifact_map
+adapter_hash
+application_verifier_hash
+resource_protocol_hash
+counting_rule_hash
+```
+
+For every attempted passing route, the binding verifier must:
+
+1. Recompute and hash canonical `F/C/Z/Y`.
+2. Execute \(\Psi_i\) using the precommitted adapter.
+3. Produce the complete bound archive and package.
+4. Recompute every counted package and archive byte.
+5. Run the bound decoder without the construction object.
+6. Verify exact bound-input reconstruction.
+7. Verify deterministic second artifact production.
+8. Run the bound resource protocol.
+9. Emit a canonical binding receipt containing all hashes, lengths, times,
+   memory measurements, and the final application verdict.
+
+For every route, the machine-checked receipt must establish
 
 \[
 V_i(C_i,Z_i,Y_i,F_i,P_i)=\operatorname{PASS}
@@ -430,8 +532,10 @@ V_i(C_i,Z_i,Y_i,F_i,P_i)=\operatorname{PASS}
 \]
 
 The binding may remain private when the public examination must reveal no
-external interpretation, but its hash, creation time, and Seal version must be
-committed before accepting submissions.
+external interpretation, but the manifest hash, verifier hash, adapter hash,
+creation time, and Seal version must be committed before accepting
+submissions. A prose proof without the executable receipt does not satisfy the
+binding gate.
 
 Without this theorem, the examination may still be mathematically valid but is
 not certified as transferable.
