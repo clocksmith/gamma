@@ -572,3 +572,19 @@ The preferred permanent-FX2-snapshot candidate passed exact canonical 10M certif
 An archive-identical diagnostic build measured the exact main-recurrent 5,000,000-step boundary. Encode reached maturity at 2,830.470355863 seconds and completed the mature interval in 474.120649001 seconds; process wall was 3,305.37 seconds. Decode reached maturity at 2,762.419981847 seconds and completed the mature interval in 474.721886005 seconds; process wall was 3,237.93 seconds. Decode reproduced the canonical 10M SHA-256 exactly.
 
 The near-identical mature encode/decode intervals show that arithmetic direction is not the dominant mature-path distinction. Whole-run 10M averages substantially overstate steady-state cost, but official extrapolation still requires transformed-step density and exact raw position at the maturity boundary. Receipt: `results/endpoint428_msp428_phase_timing_10m_v1/phase_timing.json`.
+
+## 2026-07-25: MSP-428 main readout causal controls
+
+Permanent main recurrent freezing with its output readout still adapting produced 1,635,119 bytes. Its exact mature interval was 447.134755534 seconds over 1,251,852 post-boundary transformed steps. The source package is 281,401 bytes, giving a naive projected score of 109,452,477 and 47,523 bytes of internal margin.
+
+Freezing the main output update and cycling its existing 128 horizon matrices produced 1,635,676 bytes, +557, with a mature interval of 438.963623379 seconds. Selecting only the latest mature matrix produced the identical 1,635,676-byte archive, but improved the mature interval to 425.730064056 seconds because the readout working set remained localized.
+
+**Decision: reject both frozen main readouts; retain adaptive main readout.** The identical archive sizes show that stale snapshot diversity is not the cause of the compression loss at this scope. Main readout adaptation itself earns 557 bytes over the remaining 10M suffix, more than the score budget can safely surrender. A single snapshot improves locality but still projects above the target. The next main-readout mutation should retain only a tiny adaptive calibration or low-rank correction, after endpoint/substrate cycle attribution. Receipt: `results/endpoint428_msp428_main_readout_controls_v1/decision.json`.
+
+## 2026-07-25: MSP-428 mature critical-path attribution
+
+An archive-identical TSC-instrumented canonical 10M run measured only the interval after main recurrent step 5,000,000. Total mature cycles were 1,344,292,816,470. Main LSTM work used 107,125,669,740 cycles, or 7.97%. Main-thread waiting for the already-persistent FX2 worker used 184,211,657,224 cycles, or 13.70%. FX2 worker compute used 633,316,022,040 cycles concurrently. Predictor `Predict` plus `Perceive` used 1,337,411,144,739 cycles; subtracting main LSTM and FX2 wait leaves a main-thread substrate remainder of 1,046,073,817,775 cycles, or 77.82% of the mature interval.
+
+This is an upper-bound rejection of neural surprise gating as the primary runtime solution. Even zero-cost main neural state evolution saves at most 7.97%. Eliminating it and every FX2 wait saves at most 21.67%, leaving the conventional context/mixer/coder substrate as the critical path. The FX2 endpoint is already a persistent concurrent lane, so general endpoint-lane restructuring cannot cross the runtime boundary by itself.
+
+**Decision: move primary runtime research to reversible structural compilation.** Surprise gating remains potentially useful only after the substrate is reduced; implementing it now would optimize a bounded secondary cost. Next gates are typed XML compilation and bounded schema-plus-exception article encoding, each compared against the existing WRT transform to avoid double counting. Receipt: `results/endpoint428_msp428_mature_cycle_attribution_10m_v1/decision.json`.
