@@ -13,7 +13,7 @@ from typing import Any
 
 BASELINE_FORECAST_SCORE_BYTES = 110_181_114
 BASELINE_PROGRAM_BYTES = 183_008
-TARGET_SCORE_BYTES = 109_500_000
+TARGET_SCORE_BYTES = 109_000_000
 OPTION_BYTES = 3
 RAW_SCOPE_BYTES = 1_000_000
 CONFIRMATION_SCOPE_BYTES = 10_000_000
@@ -406,7 +406,7 @@ def main() -> int:
             "This is constructive, counted, deterministic, roundtrip-verified 1M "
             "prefix evidence. Both score rows are linear forecasts, not a full-corpus "
             "upper bound. A 10.95 percent claim remains forbidden until an exact 1G "
-            "archive plus counted program is at most 109,500,000 bytes and roundtrip "
+            "archive plus counted program is at most 109,000,000 bytes and roundtrip "
             "passes."
         ),
     }

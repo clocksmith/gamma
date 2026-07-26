@@ -383,7 +383,7 @@ handoff:
 | `docs/wikiir_mdl.md` | Reversible typed-IR compiler strategy, orthogonal representation queue, exact MDL contract, and first three headroom probes. |
 | `docs/streaming_retrieval_block_regime_audit.md` | Offline-teacher audit of the three target-closing receipt regressions against weak positive controls; full-block labels are not decoder-admissible. |
 | `docs/embedding_teacher_rules.md` | Rules for using embeddings offline and distilling only counted deterministic logic. |
-| `docs/offline_teacher_retrieval_investigation.md` | Target-closing investigation tying offline embedding teachers, deterministic rules, decoder-rebuilt retrieval, routing, and counted proof gates to the `109,500,000` objective. |
+| `docs/offline_teacher_retrieval_investigation.md` | Target-closing investigation tying offline embedding teachers, deterministic rules, decoder-rebuilt retrieval, routing, and counted proof gates to the `109,000,000` objective. |
 | `docs/research_register.md` | Strategy and novel-algorithm register with foundation, local files, promote gate, and kill gate. |
 | `ADAPTIVE_WORKFLOW.md` | Primary candidate creation, mutation, queueing, execution, tracking, and promotion workflow. |
 | `docs/tooling_inventory.md` | Grouped inventory of tool scripts and their lock-safety expectations. |

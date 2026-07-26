@@ -173,7 +173,7 @@ def main() -> int:
     parser.add_argument("--code-bytes", type=int, default=12_288)
     parser.add_argument("--scope-bytes", type=int, default=1_000_000_000)
     parser.add_argument("--baseline-score", type=int, default=110_181_114)
-    parser.add_argument("--target-score", type=int, default=109_500_000)
+    parser.add_argument("--target-score", type=int, default=109_000_000)
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 

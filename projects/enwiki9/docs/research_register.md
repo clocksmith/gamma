@@ -588,3 +588,16 @@ An archive-identical TSC-instrumented canonical 10M run measured only the interv
 This is an upper-bound rejection of neural surprise gating as the primary runtime solution. Even zero-cost main neural state evolution saves at most 7.97%. Eliminating it and every FX2 wait saves at most 21.67%, leaving the conventional context/mixer/coder substrate as the critical path. The FX2 endpoint is already a persistent concurrent lane, so general endpoint-lane restructuring cannot cross the runtime boundary by itself.
 
 **Decision: move primary runtime research to reversible structural compilation.** Surprise gating remains potentially useful only after the substrate is reduced; implementing it now would optimize a bounded secondary cost. Next gates are typed XML compilation and bounded schema-plus-exception article encoding, each compared against the existing WRT transform to avoid double counting. Receipt: `results/endpoint428_msp428_mature_cycle_attribution_10m_v1/decision.json`.
+
+## 2026-07-25 target rebase: cmix-lex verified
+
+Primary evidence changes the competitive target. Matt Mahoney's Large Text Compression Benchmark lists `cmix-lex` `archive9` at exactly `109,190,109` bytes. The submission repository separately reports the Hutter accounting total `S = archive9 + cmix = 109,650,047` bytes. James Bowery's independent build produced a `109,201,040`-byte self-extracting archive in `40.286` normalized-eligible hours, decoded in `40.841` hours, and used `9,993 MB`/`9,845 MB`, establishing that the family is plausibly eligible rather than a compression-only benchmark entry.
+
+Sources:
+
+- https://mattmahoney.net/dc/text.html#1091
+- https://github.com/blahem/cmix-lex
+
+Decision: `109,500,000` is retired as the active internal target. The new active counted target is `109,000,000` bytes, which is `190,109` bytes below the published self-extracting `archive9` benchmark and also below the submission's Hutter-accounted total. Historical receipts retain their original targets.
+
+Frontier consequence: the best project forecast `109,389,323` now misses the active target by `389,323` bytes. It is no longer described as forecast-winning. XML21 and ARIADNE-0 remain mechanism experiments, but promotion now requires a descendant projection below `109,000,000` plus exact full-1G roundtrip, deterministic package accounting, runtime eligibility, and memory eligibility.

@@ -392,7 +392,7 @@ def screen(data: bytes, limit: int, alpha: int) -> dict[str, Any]:
         "candidate_model": "adaptive (prev_byte, causal_state) byte distribution",
         "causality": "state is read before the current byte and updated after the byte",
         "target": {
-            "strict_10_95_score": 109_500_000,
+            "strict_10_95_score": 109_000_000,
             "current_projected_path": 110_181_114,
             "required_net_gain_bytes": STRICT_TARGET_GAP_BYTES,
             "required_bits_per_byte_before_program_cost": round(

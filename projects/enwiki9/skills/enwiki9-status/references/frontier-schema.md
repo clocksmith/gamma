@@ -33,7 +33,7 @@ is retired; give them separate rows.
 ## Arithmetic
 
 ```text
-target_score = 109500000
+target_score = 109000000
 margin_bytes = target_score - forecast_score
 debt_bytes = max(forecast_score - target_score, 0)
 required_gain_B_per_M = debt_bytes / 1000 + added_program_bytes / 1000

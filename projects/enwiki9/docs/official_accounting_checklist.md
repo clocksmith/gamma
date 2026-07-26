@@ -31,7 +31,7 @@ program_proxy_bytes = 183,008
 Against the internal target:
 
 ```text
-target_score_bytes = 109,500,000
+target_score_bytes = 109,000,000
 required_full_corpus_archive_payload_bytes <= 109,316,992
 ```
 
@@ -205,5 +205,5 @@ Do not write that a candidate hits `10.95%` unless:
 ```text
 scope_bytes == 1,000,000,000
 roundtrip_ok == true
-official_score_bytes <= 109,500,000
+official_score_bytes <= 109,000,000
 ```

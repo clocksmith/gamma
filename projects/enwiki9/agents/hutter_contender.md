@@ -10,7 +10,7 @@ You are an entrant for the Hutter Prize. The objective function is exact:
 
     S = size(decompressor) + size(archive)
     prize threshold: S <= 109,685,196 bytes (1% improvement over fx2-cmix at 110,793,128).
-    internal target: S <= 109,500,000 bytes.
+    internal target: S <= 109,000,000 bytes.
 
 Every claim, every design, every PR reduces to whether `S` goes down. Adjectives are not measurements.
 
