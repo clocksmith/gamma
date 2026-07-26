@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/clockwork/v1/gamma-candidate-receipt.schema.json",
+  "title": "gamma.candidate_receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "authority",
+    "contractSetDigest",
+    "challengeDigest",
+    "candidateDigest",
+    "gammaMaterialization",
+    "gates",
+    "ledgers",
+    "result",
+    "firstFailedGate",
+    "sourceRevision",
+    "environment",
+    "createdAt",
+    "receiptDigest"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.candidate_receipt.v1" },
+    "authority": { "const": "gamma" },
+    "contractSetDigest": { "$ref": "#/$defs/digest" },
+    "challengeDigest": { "$ref": "#/$defs/digest" },
+    "candidateDigest": { "$ref": "#/$defs/digest" },
+    "proofReceiptDigest": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "searchReceiptDigest": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "gammaMaterialization": {
+      "type": "object",
+      "required": ["id", "digest"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roundtrip",
+        "chronologicalReplay",
+        "sourceAccounting",
+        "transfer",
+        "runtime",
+        "memory"
+      ],
+      "properties": {
+        "roundtrip": { "$ref": "#/$defs/gate" },
+        "chronologicalReplay": { "$ref": "#/$defs/gate" },
+        "sourceAccounting": { "$ref": "#/$defs/gate" },
+        "transfer": { "$ref": "#/$defs/gate" },
+        "runtime": { "$ref": "#/$defs/gate" },
+        "memory": { "$ref": "#/$defs/gate" }
+      }
+    },
+    "ledgers": {
+      "type": "object",
+      "required": ["bytes", "package", "runtime", "memory"],
+      "properties": {
+        "bytes": { "type": "object" },
+        "package": { "type": "object" },
+        "runtime": { "type": "object" },
+        "memory": { "type": "object" }
+      }
+    },
+    "result": { "enum": ["accepted", "rejected", "indeterminate"] },
+    "firstFailedGate": { "type": ["string", "null"] },
+    "sourceRevision": { "$ref": "#/$defs/digest" },
+    "environment": { "type": "object", "minProperties": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidenceDigest"],
+      "properties": {
+        "status": { "enum": ["passed", "failed", "indeterminate"] },
+        "evidenceDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

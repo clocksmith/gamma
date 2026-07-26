@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/clockwork/v1/challenge.schema.json",
+  "title": "clockwork.challenge.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "challengeId",
+    "version",
+    "visibility",
+    "authority",
+    "contractSetDigest",
+    "genomeSchema",
+    "canonicalSerialization",
+    "kernelDigest",
+    "evaluatorDigest",
+    "population",
+    "traceClosure",
+    "arithmetic",
+    "objectives",
+    "budgets",
+    "permittedCandidateKinds",
+    "permittedMutations",
+    "seeds",
+    "receiptHashAlgorithm",
+    "gammaImportTarget",
+    "acceptanceGates",
+    "challengeDigest"
+  ],
+  "properties": {
+    "schema": { "const": "clockwork.challenge.v1" },
+    "challengeId": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "visibility": { "enum": ["public_development", "private_gamma"] },
+    "authority": { "const": "gamma" },
+    "contractSetDigest": { "$ref": "#/$defs/digest" },
+    "genomeSchema": { "type": "object", "minProperties": 1 },
+    "canonicalSerialization": { "const": "canonical-json-rfc8785-profile-v1" },
+    "kernelDigest": { "$ref": "#/$defs/digest" },
+    "evaluatorDigest": { "$ref": "#/$defs/digest" },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "digest"],
+      "properties": {
+        "kind": { "enum": ["inline", "chunked-merkle"] },
+        "digest": { "$ref": "#/$defs/digest" },
+        "chunks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/digest" }
+        }
+      }
+    },
+    "traceClosure": { "type": "object", "minProperties": 1 },
+    "arithmetic": { "type": "object", "minProperties": 1 },
+    "objectives": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "direction"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "direction": { "enum": ["minimize", "maximize", "constraint"] }
+        }
+      }
+    },
+    "budgets": { "type": "object", "minProperties": 1 },
+    "permittedCandidateKinds": { "$ref": "#/$defs/nonEmptyStrings" },
+    "permittedMutations": { "$ref": "#/$defs/nonEmptyStrings" },
+    "seeds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 0 }
+    },
+    "receiptHashAlgorithm": { "const": "sha256" },
+    "gammaImportTarget": { "type": "string", "minLength": 1 },
+    "acceptanceGates": { "$ref": "#/$defs/nonEmptyStrings" },
+    "challengeDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

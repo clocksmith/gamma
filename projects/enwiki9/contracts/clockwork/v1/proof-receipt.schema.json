@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/clockwork/v1/proof-receipt.schema.json",
+  "title": "clockwork.proof_receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "routeBindingDigest",
+    "submissionDigest",
+    "normalizedProofDigest",
+    "validator",
+    "checkedHypotheses",
+    "checkedConclusions",
+    "result",
+    "failureCodes",
+    "environment",
+    "receiptDigest"
+  ],
+  "properties": {
+    "schema": { "const": "clockwork.proof_receipt.v1" },
+    "routeBindingDigest": { "$ref": "#/$defs/digest" },
+    "submissionDigest": { "$ref": "#/$defs/digest" },
+    "normalizedProofDigest": { "$ref": "#/$defs/digest" },
+    "validator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sourceDigest"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "sourceDigest": { "$ref": "#/$defs/digest" },
+        "proofCheckerDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "checkedHypotheses": { "$ref": "#/$defs/strings" },
+    "checkedConclusions": { "$ref": "#/$defs/strings" },
+    "result": { "enum": ["valid", "invalid", "indeterminate"] },
+    "failureCodes": { "$ref": "#/$defs/strings" },
+    "firstDivergentBoundary": { "type": ["string", "null"] },
+    "extractedCandidateDigest": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "environment": { "type": "object", "minProperties": 1 },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "strings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
