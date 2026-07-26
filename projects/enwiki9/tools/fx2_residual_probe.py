@@ -111,7 +111,7 @@ def main() -> int:
     ap.add_argument("--train-bytes", type=int, default=0)
     ap.add_argument("--scope-bytes", type=int, default=1_000_000_000)
     ap.add_argument("--baseline-score", type=int, default=110_181_114)
-    ap.add_argument("--target-score", type=int, default=109_500_000)
+    ap.add_argument("--target-score", type=int, default=109_000_000)
     ap.add_argument("--patch-bytes", type=int, default=0)
     ap.add_argument("--table-bits", type=int, default=0)
     ap.add_argument("--gate-split", choices=["train", "test", "all"], default="all")

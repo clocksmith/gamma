@@ -64,11 +64,11 @@ After a decisive result, update `docs/hutter_frontier.json` in the same change
 as its receipt. Follow [frontier-schema.md](references/frontier-schema.md).
 
 - Bind every numeric claim to at least one source path.
-- Normalize margin as `109500000 - score`; positive is below target.
+- Normalize margin as `109000000 - score`; positive is below target.
 - Preserve retired and quarantined rows instead of deleting them.
 - Set `score_credit_bytes` to zero for proxy, oracle, and shadow evidence.
 - Mark a full win only for exact `1,000,000,000` input bytes, complete program
-  accounting, successful roundtrip, and score at or below `109,500,000`.
+  accounting, successful roundtrip, and score at or below `109,000,000`.
 - Run the project receipt normalizer after changing receipts or generated views.
 
 ## Claim Language

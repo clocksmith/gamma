@@ -174,7 +174,7 @@ def main() -> int:
         )
 
     baseline_forecast = 110_181_114
-    target_score = 109_500_000
+    target_score = 109_000_000
     baseline_program_bytes = 183_008
     option_bytes = 3
     archive_marker_bytes = 1

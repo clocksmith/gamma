@@ -13,7 +13,7 @@ from typing import Any
 
 
 REFERENCE_TAIL_FORECAST_SCORE = 109_498_879
-TARGET_SCORE = 109_500_000
+TARGET_SCORE = 109_000_000
 
 
 def sha256(path: Path) -> str:

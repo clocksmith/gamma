@@ -82,7 +82,7 @@ def calculate_economics(
         - candidate_archive_bytes,
         "provisional_calibrated_score_float": projected_score_float,
         "conservative_provisional_score_bytes": projected_score,
-        "provisional_target_margin_bytes": 109_500_000 - projected_score,
+        "provisional_target_margin_bytes": 109_000_000 - projected_score,
         "economics_pass": passed,
     }
 

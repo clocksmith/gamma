@@ -252,7 +252,7 @@ def main() -> int:
     )
     parser.add_argument("--baseline-counted-forecast-bytes", type=int)
     parser.add_argument("--calibration-factor", type=float)
-    parser.add_argument("--target-score-bytes", type=int, default=109_500_000)
+    parser.add_argument("--target-score-bytes", type=int, default=109_000_000)
     parser.add_argument(
         "--minimum-runtime-reduction-fraction", type=float, default=0.0
     )

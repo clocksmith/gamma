@@ -28,7 +28,7 @@ DEFAULT_ROWS = ROOT / "results" / "fx2_residual_cache" / "apm1m_full_4805936.tsv
 DEFAULT_OUT = ROOT / "results" / "fx2_residual_xml_ledger" / "apm1m_v1.json"
 
 BASELINE_SCORE = 110_181_114
-TARGET_SCORE = 109_500_000
+TARGET_SCORE = 109_000_000
 CALIBRATED_10M_TO_1G = 66.95533418670768
 
 TRACE_FIELDS = (
