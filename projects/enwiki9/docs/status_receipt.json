@@ -1,73 +1,7 @@
 {
-  "active_candidate": {
-    "active_source": "running RSS guard receipt: results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
-    "archive_bpb": 1.18862248,
-    "compressed_size": 14857781,
-    "data_sha256": "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8",
-    "data_size": 100000000,
-    "determinism_ok": true,
-    "evidence": "exact 100,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt",
-    "hutter_score": 15040789,
-    "label": "active candidate",
-    "program_id": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
-    "program_size": 183008,
-    "result_path": "results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json",
-    "roundtrip_ok": true,
-    "scope_bytes": 100000000,
-    "score_percent": 15.040789,
-    "status": "exact 100,000,000 byte gate passed",
-    "timestamp": "2026-07-22T22:21:47"
-  },
-  "active_candidate_recent_artifacts": [
-    {
-      "bytes": 1388,
-      "mtime_utc": "2026-07-23T02:21:47+00:00",
-      "path": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json"
-    },
-    {
-      "bytes": 923,
-      "mtime_utc": "2026-07-21T21:23:10+00:00",
-      "path": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json"
-    },
-    {
-      "bytes": 874,
-      "mtime_utc": "2026-07-20T19:57:07+00:00",
-      "path": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_10000000_determinism_rss_guard.json"
-    },
-    {
-      "bytes": 1012,
-      "mtime_utc": "2026-07-20T19:57:07+00:00",
-      "path": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json"
-    }
-  ],
-  "active_gate": {
-    "active_source": "running RSS guard receipt: results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
-    "driver_result_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json",
-    "driver_result_json_present": true,
-    "evidence": "gate decision is running; wait for terminal receipts",
-    "label": "active gate",
-    "latest_sample_max_single_rss_kib": 3916,
-    "latest_sample_single_rss_margin_kib": 10481844,
-    "latest_sample_tree_rss_kib": 3916,
-    "latest_sample_tree_rss_margin_kib": 10481844,
-    "max_sampled_single_rss_kib": 3916,
-    "max_sampled_tree_rss_kib": 3916,
-    "next_action": "wait_for_gate_completion",
-    "program_id": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
-    "returncode": null,
-    "rss_guard_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
-    "rss_guard_json_bytes": 923,
-    "rss_guard_json_mtime_utc": "2026-07-21T21:23:10+00:00",
-    "rss_guard_json_present": true,
-    "rss_guard_json_sha256": "bc9512b59b2c979a6ba0128b6d257adc6ce15f13592f8415027949a6d6f1f1fe",
-    "rss_guard_status": "running",
-    "sample_count": 1,
-    "scope_bytes": 100000000,
-    "single_rss_margin_kib": 10481844,
-    "source": "gate_decision",
-    "status": "running",
-    "tree_rss_margin_kib": 10481844
-  },
+  "active_candidate": null,
+  "active_candidate_recent_artifacts": [],
+  "active_gate": null,
   "active_processes": {
     "active_cmix_mode": "decode",
     "active_decode_progress": {
@@ -278,6 +212,10 @@
     "single_process_decimal_10gb_warning": "active cmix RSS exceeds decimal 10GB even if it remains under the local binary 10GiB guard",
     "single_process_margin_kib": -221680
   },
+  "adaptive_jobs": {
+    "running_job_count": 0,
+    "running_jobs": []
+  },
   "best_exact_100m": {
     "archive_bpb": 1.18862248,
     "compressed_size": 14857781,
@@ -351,9 +289,12 @@
     "status": "not verified"
   },
   "blocker": {
-    "evidence": "active 100,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet",
+    "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+    "evidence": "the certificate names a running gate, but no matching adaptive job, owning process, or attributable lock evidence exists",
     "label": "blocker",
-    "status": "open"
+    "next_action": "reconcile_orphaned_gate_receipt",
+    "scope_bytes": 100000000,
+    "status": "orphaned_running_receipt"
   },
   "candidate_audit": {
     "returncode": 0,
@@ -361,15 +302,14 @@
       "candidate_status_counts": {
         "active": 22,
         "blocked_dependency": 31,
-        "candidate": 2,
+        "candidate": 3,
         "measured_negative": 91,
-        "retired": 397,
-        "track_source_before_evolution": 1
+        "retired": 397
       },
       "directories": 1260,
       "file_entries": 5097,
       "ignored_entries": 2801,
-      "modified_tracked_entries": 19,
+      "modified_tracked_entries": 1,
       "program_directories": 544,
       "registered_programs": 227,
       "top_level_file_entries": {
@@ -390,9 +330,28 @@
         "tests": 57,
         "tools": 223
       },
-      "tracked_entries": 2487,
-      "untracked_nonignored_entries": 10
+      "tracked_entries": 2496,
+      "untracked_nonignored_entries": 0
     }
+  },
+  "certificate_active_candidate": {
+    "active_source": "running RSS guard receipt: results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
+    "archive_bpb": 1.18862248,
+    "compressed_size": 14857781,
+    "data_sha256": "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8",
+    "data_size": 100000000,
+    "determinism_ok": true,
+    "evidence": "exact 100,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt",
+    "hutter_score": 15040789,
+    "label": "active candidate",
+    "program_id": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+    "program_size": 183008,
+    "result_path": "results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json",
+    "roundtrip_ok": true,
+    "scope_bytes": 100000000,
+    "score_percent": 15.040789,
+    "status": "exact 100,000,000 byte gate passed",
+    "timestamp": "2026-07-22T22:21:47"
   },
   "certificate_active_gate": {
     "active_source": "running RSS guard receipt: results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
@@ -407,21 +366,7 @@
     "label": "blocker",
     "status": "open"
   },
-  "contingencies": {
-    "if_passes": {
-      "action": "record pass and apply candidate target-gate promotion rule",
-      "next_scope_bytes": 1000000000,
-      "reason": "non-cmix candidates may need archive ceilings, target-gate metadata, or candidate-specific guard labels"
-    },
-    "if_roundtrip_or_determinism_fails": {
-      "action": "record failure and do not promote",
-      "reason": "compression evidence is not a deterministic constructive upper-bound row"
-    },
-    "if_rss_fails": {
-      "action": "record RSS failure and retire or repackage this integration shape",
-      "lower_memory_suggestion": null
-    }
-  },
+  "contingencies": null,
   "gate_decision": {
     "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
     "driver_result_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json",
@@ -434,11 +379,15 @@
     "latest_sample_single_rss_margin_kib": 10481844,
     "latest_sample_tree_rss_kib": 3916,
     "latest_sample_tree_rss_margin_kib": 10481844,
+    "live_gate": false,
+    "liveness_classification": "orphaned_running_receipt",
     "max_sampled_single_rss_kib": 3916,
     "max_sampled_tree_rss_kib": 3916,
-    "next_action": "wait_for_gate_completion",
+    "next_action": "reconcile_orphaned_gate_receipt",
     "official_decimal_limit_kib": 9765625,
     "official_decimal_over_limit_kib": 0,
+    "persisted_next_action": "wait_for_gate_completion",
+    "persisted_verdict": "running",
     "returncode": null,
     "rss_guard_exceeded": false,
     "rss_guard_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
@@ -452,30 +401,45 @@
     "scope_bytes": 100000000,
     "single_rss_margin_kib": 10481844,
     "tree_rss_margin_kib": 10481844,
-    "verdict": "running"
+    "verdict": "orphaned_running_receipt"
   },
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
-    "claim_status": "awaiting_gate_receipts",
+    "claim_status": "orphaned_running_receipt",
     "driver_result_terminal": true,
+    "live_gate": false,
     "live_guard_only": false,
+    "liveness_classification": "orphaned_running_receipt",
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
-  "generated_at_utc": "2026-07-26T12:06:42+00:00",
+  "gate_liveness": {
+    "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+    "claim_rule": "A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive running job backed by the host-local heavy lock. The lock alone never identifies a gate.",
+    "classification": "orphaned_running_receipt",
+    "heavy_lock_held": false,
+    "heavy_lock_is_supporting_only": true,
+    "is_live": false,
+    "matching_adaptive_job_count": 0,
+    "matching_controller_count": 0,
+    "matching_driver_observed": false,
+    "persisted_running": true,
+    "scope_bytes": 100000000
+  },
+  "generated_at_utc": "2026-07-26T12:42:28+00:00",
   "handoff": {
     "active_scorer_observed": true,
-    "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+    "candidate": null,
     "claim_rule": "No prefix row proves 10.95%.",
     "command_source": "none while gate is non-terminal",
-    "gate_next_action": "wait_for_gate_completion",
-    "gate_verdict": "running",
+    "gate_next_action": "reconcile_orphaned_gate_receipt",
+    "gate_verdict": "orphaned_running_receipt",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "heavy_gate_mutation_allowed": false,
     "heavy_lock_held": false,
-    "recommended_action": "wait_for_gate_receipts",
-    "scope_bytes": 100000000,
+    "recommended_action": "reconcile_orphaned_gate_receipt",
+    "scope_bytes": null,
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
@@ -484,14 +448,7 @@
     "held": false,
     "path": "/tmp/enwiki9-heavy.lock"
   },
-  "next_gate": {
-    "active_source": "running RSS guard receipt: results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
-    "evidence": "unchanged 100,000,000 byte RSS-guarded determinism replay; wait for terminal receipts",
-    "label": "active gate",
-    "program_id": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
-    "scope_bytes": 100000000,
-    "status": "running"
-  },
+  "next_gate": null,
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
@@ -572,8 +529,17 @@
     "mismatch_count": 9
   },
   "operator_action": {
-    "action": "wait_for_gate_receipts",
-    "reason": "the gate state is incomplete and cannot drive a mutation yet",
+    "action": "reconcile_orphaned_gate_receipt",
+    "allowed_work": [
+      "inspect and repair the orphaned receipt",
+      "run non-heavy oracle and shadow experiments",
+      "claim and publish independent non-heavy work"
+    ],
+    "forbidden_work": [
+      "report the orphaned receipt as active",
+      "launch another heavy gate"
+    ],
+    "reason": "persisted running state has no live owner and must be cleared or terminalized before another heavy gate is launched",
     "safe_to_launch_heavy_gate": false
   },
   "operator_logs": {
@@ -592,14 +558,14 @@
     "active_process_tree_rss_kib": 33673140,
     "active_scorer_observed": true,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+    "candidate": null,
     "claim_rule": "No prefix row proves 10.95%.",
     "command_source": "none while gate is non-terminal",
     "decimal_10gb_guard_kib": 9765625,
     "driver_result_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json",
     "driver_result_present": true,
-    "gate_next_action": "wait_for_gate_completion",
-    "gate_verdict": "running",
+    "gate_next_action": "reconcile_orphaned_gate_receipt",
+    "gate_verdict": "orphaned_running_receipt",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "heavy_gate_mutation_allowed": false,
@@ -615,16 +581,44 @@
     "max_sampled_single_rss_kib": 3916,
     "max_sampled_tree_decimal_10gb_margin_kib": 9761709,
     "max_sampled_tree_decimal_10gb_safe": true,
-    "operator_action": "wait_for_gate_receipts",
+    "operator_action": "reconcile_orphaned_gate_receipt",
     "rss_guard_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
     "rss_guard_json_sha256": "bc9512b59b2c979a6ba0128b6d257adc6ce15f13592f8415027949a6d6f1f1fe",
     "rss_guard_present": true,
     "rss_guard_status": "running",
     "rss_samples": 1,
     "safe_to_launch_heavy_gate": false,
-    "scope_bytes": 100000000,
+    "scope_bytes": null,
     "single_rss_margin_kib": 10481844,
     "terminal_verdict_present": false
+  },
+  "orphaned_gate": {
+    "active_source": "running RSS guard receipt: results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
+    "driver_result_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json",
+    "driver_result_json_present": true,
+    "evidence": "persisted running receipt has no live owning job/process evidence; it is preserved as orphaned state, not an active gate",
+    "label": "active gate",
+    "latest_sample_max_single_rss_kib": 3916,
+    "latest_sample_single_rss_margin_kib": 10481844,
+    "latest_sample_tree_rss_kib": 3916,
+    "latest_sample_tree_rss_margin_kib": 10481844,
+    "max_sampled_single_rss_kib": 3916,
+    "max_sampled_tree_rss_kib": 3916,
+    "next_action": "reconcile_orphaned_gate_receipt",
+    "program_id": "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1",
+    "returncode": null,
+    "rss_guard_json": "projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json",
+    "rss_guard_json_bytes": 923,
+    "rss_guard_json_mtime_utc": "2026-07-21T21:23:10+00:00",
+    "rss_guard_json_present": true,
+    "rss_guard_json_sha256": "bc9512b59b2c979a6ba0128b6d257adc6ce15f13592f8415027949a6d6f1f1fe",
+    "rss_guard_status": "running",
+    "sample_count": 1,
+    "scope_bytes": 100000000,
+    "single_rss_margin_kib": 10481844,
+    "source": "gate_decision",
+    "status": "orphaned_running_receipt",
+    "tree_rss_margin_kib": 10481844
   },
   "project": "enwiki9",
   "receipt_type": "operator_status",

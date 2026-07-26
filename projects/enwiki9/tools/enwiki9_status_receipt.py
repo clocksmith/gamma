@@ -683,8 +683,124 @@ def gate_state(candidate: str | None, scope: int | None) -> dict[str, Any] | Non
     return cmix21_gate_decider.decide(candidate, scope, guard, step_kib=128)
 
 
-def gate_evidence_status(gate: dict[str, Any] | None) -> dict[str, Any]:
+def adaptive_running_jobs_state() -> dict[str, Any]:
+    running_dir = ROOT / "operations" / "adaptive" / "running"
+    jobs: list[dict[str, Any]] = []
+    try:
+        paths = sorted(running_dir.glob("*.json"))
+    except OSError:
+        paths = []
+    for path in paths:
+        job = load_json(path)
+        if not job:
+            continue
+        jobs.append(
+            {
+                "job_id": job.get("job_id") or path.stem,
+                "candidate_id": job.get("candidate_id"),
+                "gate_size": job.get("gate_size"),
+                "state": job.get("state"),
+                "started_at": job.get("started_at"),
+                "path": logical_rel(path),
+            }
+        )
+    return {
+        "running_job_count": len(jobs),
+        "running_jobs": jobs,
+    }
+
+
+def gate_liveness_state(
+    candidate: str | None,
+    scope: int | None,
+    gate: dict[str, Any] | None,
+    process_state: dict[str, Any],
+    adaptive_state: dict[str, Any],
+    heavy_lock: dict[str, Any],
+) -> dict[str, Any]:
     gate = gate if isinstance(gate, dict) else {}
+    verdict = gate.get("verdict")
+    persisted_running = verdict == "running" or gate.get("rss_guard_status") == "running"
+    observed_gate = observed_gate_command_state(candidate, scope, process_state)
+    observed_controller = observed_controller_command_state(candidate, scope, process_state)
+    controller_processes = observed_controller.get("controller_processes")
+    if not isinstance(controller_processes, list):
+        controller_processes = []
+    matching_controllers = [
+        row
+        for row in controller_processes
+        if isinstance(row, dict) and row.get("candidate_matches_active") is True
+    ]
+    running_jobs = adaptive_state.get("running_jobs")
+    if not isinstance(running_jobs, list):
+        running_jobs = []
+    matching_jobs = [
+        row
+        for row in running_jobs
+        if isinstance(row, dict)
+        and row.get("candidate_id") == candidate
+        and row.get("gate_size") == scope
+    ]
+    driver_observed = observed_gate.get("active_gate_command_observed") is True
+    lock_held = heavy_lock.get("held") is True
+    live = persisted_running and (
+        driver_observed
+        or bool(matching_controllers)
+        or (bool(matching_jobs) and lock_held)
+    )
+    if not persisted_running:
+        classification = "not_persisted_running"
+    elif live:
+        classification = "live_observed_owner"
+    elif matching_jobs:
+        classification = "registered_running_job_without_live_owner"
+    elif lock_held:
+        classification = "orphaned_running_receipt_with_unattributed_lock"
+    else:
+        classification = "orphaned_running_receipt"
+    return {
+        "candidate": candidate,
+        "scope_bytes": scope,
+        "persisted_running": persisted_running,
+        "classification": classification,
+        "is_live": live,
+        "matching_driver_observed": driver_observed,
+        "matching_controller_count": len(matching_controllers),
+        "matching_adaptive_job_count": len(matching_jobs),
+        "heavy_lock_held": lock_held,
+        "heavy_lock_is_supporting_only": True,
+        "claim_rule": (
+            "A persisted running receipt is live only with an exact driver, an "
+            "owning controller, or a matching adaptive running job backed by "
+            "the host-local heavy lock. The lock alone never identifies a gate."
+        ),
+    }
+
+
+def reconcile_gate_liveness(
+    gate: dict[str, Any] | None,
+    liveness: dict[str, Any],
+) -> dict[str, Any] | None:
+    if not isinstance(gate, dict):
+        return None
+    if liveness.get("persisted_running") is not True or liveness.get("is_live") is True:
+        return gate
+    reconciled = dict(gate)
+    reconciled["persisted_verdict"] = gate.get("verdict")
+    reconciled["persisted_next_action"] = gate.get("next_action")
+    reconciled["verdict"] = "orphaned_running_receipt"
+    reconciled["next_action"] = "reconcile_orphaned_gate_receipt"
+    reconciled["live_gate"] = False
+    reconciled["liveness_classification"] = liveness.get("classification")
+    return reconciled
+
+
+def gate_evidence_status(
+    gate: dict[str, Any] | None,
+    liveness: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    gate = gate if isinstance(gate, dict) else {}
+    liveness = liveness if isinstance(liveness, dict) else {}
     verdict = gate.get("verdict")
     driver_present = gate.get("driver_result_json_present") is True
     guard_present = gate.get("rss_guard_json_present") is True
@@ -696,7 +812,9 @@ def gate_evidence_status(gate: dict[str, Any] | None) -> dict[str, Any]:
         "guard_returncode_fail",
     }
     live_guard_only = guard_present and not driver_present and gate.get("rss_guard_status") == "running"
-    if scored:
+    if verdict == "orphaned_running_receipt":
+        claim_status = "orphaned_running_receipt"
+    elif scored:
         claim_status = "scored_gate_result_present"
     elif live_guard_only:
         claim_status = "live_guard_monitor_only"
@@ -709,6 +827,8 @@ def gate_evidence_status(gate: dict[str, Any] | None) -> dict[str, Any]:
         "rss_guard_terminal": guard_terminal,
         "scored_gate_result_present": scored,
         "live_guard_only": live_guard_only,
+        "live_gate": liveness.get("is_live"),
+        "liveness_classification": liveness.get("classification"),
         "claim_status": claim_status,
         "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
     }
@@ -768,6 +888,11 @@ def active_gate_status_state(
         row["evidence"] = "terminal gate pass with driver result and RSS guard evidence"
     elif verdict in {"roundtrip_fail", "determinism_fail", "guard_returncode_fail"}:
         row["evidence"] = f"terminal gate failure: {verdict}"
+    elif verdict == "orphaned_running_receipt":
+        row["evidence"] = (
+            "persisted running receipt has no live owning job/process evidence; "
+            "it is preserved as orphaned state, not an active gate"
+        )
     elif isinstance(verdict, str):
         row["evidence"] = f"gate decision is {verdict}; wait for terminal receipts"
     return row
@@ -815,6 +940,19 @@ def blocker_status_state(
             {
                 "status": f"{verdict}_pending_record",
                 "evidence": "the active gate has a terminal failure that must be recorded",
+                "next_action": action.get("action"),
+                "candidate": gate.get("candidate"),
+                "scope_bytes": gate.get("scope_bytes"),
+            }
+        )
+    elif verdict == "orphaned_running_receipt":
+        row.update(
+            {
+                "status": "orphaned_running_receipt",
+                "evidence": (
+                    "the certificate names a running gate, but no matching adaptive "
+                    "job, owning process, or attributable lock evidence exists"
+                ),
                 "next_action": action.get("action"),
                 "candidate": gate.get("candidate"),
                 "scope_bytes": gate.get("scope_bytes"),
@@ -902,6 +1040,21 @@ def operator_action(
     verdict = gate.get("verdict")
     next_action = gate.get("next_action")
 
+    if verdict == "orphaned_running_receipt":
+        return {
+            "safe_to_launch_heavy_gate": False,
+            "action": "reconcile_orphaned_gate_receipt",
+            "reason": (
+                "persisted running state has no live owner and must be cleared or "
+                "terminalized before another heavy gate is launched"
+            ),
+            "allowed_work": [
+                "inspect and repair the orphaned receipt",
+                "run non-heavy oracle and shadow experiments",
+                "claim and publish independent non-heavy work",
+            ],
+            "forbidden_work": ["report the orphaned receipt as active", "launch another heavy gate"],
+        }
     if lock_held and active_scorer:
         return {
             "safe_to_launch_heavy_gate": False,
@@ -1181,6 +1334,7 @@ def receipt() -> dict[str, Any]:
     target = cert.get("target", {}) if isinstance(cert.get("target"), dict) else {}
     heavy_lock = lock_state()
     process_state = active_process_state()
+    adaptive_state = adaptive_running_jobs_state()
     candidate, scope = active_candidate_from_cert(cert)
     live_speedlab_gate = live_speedlab_gate_from_process(process_state)
     if live_speedlab_gate is not None:
@@ -1194,11 +1348,23 @@ def receipt() -> dict[str, Any]:
             if process_scope is not None:
                 scope = process_scope
         gate = gate_state(candidate, scope)
+    liveness = gate_liveness_state(
+        candidate,
+        scope,
+        gate,
+        process_state,
+        adaptive_state,
+        heavy_lock,
+    )
+    gate = reconcile_gate_liveness(gate, liveness)
+    orphaned = gate is not None and gate.get("verdict") == "orphaned_running_receipt"
+    live_candidate = None if orphaned else candidate
+    live_scope = None if orphaned else scope
     add_active_decode_progress(process_state, gate)
     action = operator_action(heavy_lock, process_state, gate)
     handoff = handoff_state(
-        candidate=candidate,
-        scope=scope,
+        candidate=live_candidate,
+        scope=live_scope,
         heavy_lock=heavy_lock,
         process_state=process_state,
         gate=gate,
@@ -1206,8 +1372,8 @@ def receipt() -> dict[str, Any]:
         proof=proof,
     )
     operator_summary = operator_summary_state(
-        candidate=candidate,
-        scope=scope,
+        candidate=live_candidate,
+        scope=live_scope,
         proof=proof,
         heavy_lock=heavy_lock,
         process_state=process_state,
@@ -1230,24 +1396,30 @@ def receipt() -> dict[str, Any]:
         "best_exact_100m": labels.get("best exact 100M"),
         "best_full_1g": labels.get("best full 1G"),
         "best_forecast": labels.get("best forecast"),
-        "active_candidate": labels.get("active candidate"),
-        "active_gate": active_gate_status_state(certificate_active_gate, gate),
+        "active_candidate": None if orphaned else labels.get("active candidate"),
+        "certificate_active_candidate": labels.get("active candidate"),
+        "active_gate": None if orphaned else active_gate_status_state(certificate_active_gate, gate),
+        "orphaned_gate": (
+            active_gate_status_state(certificate_active_gate, gate) if orphaned else None
+        ),
         "certificate_active_gate": certificate_active_gate,
-        "next_gate": labels.get("next gate") or certificate_active_gate,
+        "next_gate": None if orphaned else (labels.get("next gate") or certificate_active_gate),
         "blocker": blocker_status_state(certificate_blocker, gate, action),
         "certificate_blocker": certificate_blocker,
         "heavy_lock": heavy_lock,
         "operator_logs": operator_logs_state(),
         "candidate_audit": candidate_audit_summary_state(),
-        "active_candidate_recent_artifacts": active_candidate_recent_artifacts(candidate),
+        "active_candidate_recent_artifacts": active_candidate_recent_artifacts(live_candidate),
+        "adaptive_jobs": adaptive_state,
         "active_processes": process_state,
         "observed_gate_command": observed_gate_command_state(candidate, scope, process_state),
         "observed_controller_command": observed_controller_command_state(candidate, scope, process_state),
         "gate_decision": gate,
-        "gate_evidence_status": gate_evidence_status(gate),
+        "gate_liveness": liveness,
+        "gate_evidence_status": gate_evidence_status(gate, liveness),
         "operator_action": action,
         "handoff": handoff,
-        "contingencies": contingencies(candidate, scope),
+        "contingencies": contingencies(live_candidate, live_scope),
     }
 
 
@@ -1316,7 +1488,7 @@ def render_md(data: dict[str, Any]) -> str:
         "",
         "## Target State",
         "",
-        f"- `10.95%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
+        f"- `10.8000000%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
         f"- Full-corpus constructive result present: `{fmt_bool(data.get('has_full_corpus_constructive_result'))}`",
         f"- `10.95%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
         "",
@@ -1345,7 +1517,11 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Command source: `{summary.get('command_source', 'unknown')}`",
         f"- Claim rule: `{summary.get('claim_rule', 'unknown')}`",
         "",
-        "## Active Gate",
+        (
+            "## Orphaned Gate Reconciliation"
+            if gate.get("verdict") == "orphaned_running_receipt"
+            else "## Active Gate"
+        ),
         "",
         f"- Heavy lock held: `{fmt_bool(data.get('heavy_lock', {}).get('held'))}`",
         f"- Gate verdict: `{gate.get('verdict', 'unknown')}`",
@@ -1358,6 +1534,18 @@ def render_md(data: dict[str, Any]) -> str:
         f"- RSS guard present: `{fmt_bool(gate.get('rss_guard_json_present'))}`",
         f"- Active scorer observed: `{fmt_bool(proc_state.get('active_scorer_observed'))}`",
     ]
+    liveness = data.get("gate_liveness") if isinstance(data.get("gate_liveness"), dict) else {}
+    if liveness:
+        lines.extend(
+            [
+                f"- Live gate: `{fmt_bool(liveness.get('is_live'))}`",
+                f"- Liveness classification: `{liveness.get('classification', 'unknown')}`",
+                f"- Matching adaptive jobs: `{fmt_int(liveness.get('matching_adaptive_job_count'))}`",
+                f"- Matching controllers: `{fmt_int(liveness.get('matching_controller_count'))}`",
+                f"- Matching driver observed: `{fmt_bool(liveness.get('matching_driver_observed'))}`",
+                f"- Liveness claim rule: `{liveness.get('claim_rule', 'unknown')}`",
+            ]
+        )
     if gate.get("rss_guard_json_present") is True:
         lines.extend(
             [
