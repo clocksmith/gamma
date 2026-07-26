@@ -1,835 +1,629 @@
-# The Independent Finite Prediction Olympiad
+# The Atlas and Clockwork Mathematical Examination
 
-## Public statement
+## Instructions to solvers
 
-This examination contains five independent constructive problems over one
-finite binary object. Each problem is a complete alternative route. A solution
-to any one problem passes the examination.
+This is a pencil-and-paper examination in finite mathematics. It contains four
+independent problems. Each problem asks for a theorem, a constructive
+mathematical description, and a proof.
 
-The acceptance rule is
+No numerical dataset, computer program, experiment, implementation, benchmark,
+or machine-generated certificate is part of the examination. A solver may use
+ordinary mathematical notation and established theorems, provided every
+nonstandard result used is stated precisely.
 
-\[
-\boxed{
-\operatorname{PASS}_A
-\lor \operatorname{PASS}_B
-\lor \operatorname{PASS}_C
-\lor \operatorname{PASS}_D
-\lor \operatorname{PASS}_E.
-}
-\]
+A complete solution to any one problem is accepted as a complete independent
+solution. No problem depends on a definition, lemma, or result from another
+problem.
 
-No problem may use another problem's solution, certificate, labels, state,
-tables, savings, proof, or acceptance result.
+The four subjects are:
 
-Contestants submit finite mathematical objects and proofs. They do not submit
-executables. Canonical serialization, exact coding, runtime evaluation,
-reversibility, and acceptance are controlled by the separately versioned
-`Atlas-Clockwork Seal Specification`.
+1. Prefix-paid information and finite variational duality.
+2. Predictive right congruences and Wheeler interval geometry.
+3. Integer shadowing of contractive selective recurrences.
+4. Unique reconstruction in energy-ordered parity cosets.
 
-An asymptotic existence theorem, probabilistic construction without a fixed
-realization, floating-point experiment, or uncharged oracle is not a solution.
+All logarithms are base two unless stated otherwise.
 
 ---
 
-# I. Common finite instance
+# Problem A: The Paid-Information Variational Principle
 
-## 1. Construction object
+## A.1 Finite paid-information system
 
-The organizer supplies a finite binary object
+Let \(J\) and \(K\) be positive integers. Let
 
 \[
-x=x_1x_2\cdots x_n,
-\qquad x_t\in\{0,1\},
+G=(g_{jk})\in\mathbb R^{J\times K}
 \]
 
-and a partition
+be an arbitrary finite gain matrix. Entry \(g_{jk}\) is the gain obtained on
+block \(j\) when explanation \(k\) is selected before that block is revealed.
+
+A binary prefix code on \(\{1,\ldots,K\}\) is represented by integer lengths
 
 \[
-0=b_0<b_1<\cdots<b_N=n.
+\ell_1,\ldots,\ell_K\in\mathbb N
 \]
 
-Block \(I_j\) is
+satisfying Kraft's inequality
 
 \[
-I_j=\{b_{j-1}+1,\ldots,b_j\}.
+\sum_{k=1}^{K}2^{-\ell_k}\le 1.
 \]
 
-The complete object is available to contestants while constructing their
-finite mathematical submission. It is not available to the runtime
-interpreter while reconstructing the object.
-
-## 2. Runtime instances
-
-The organizer supplies one common frozen Seal object \(S_{\mathrm{common}}\)
-and five disjoint frozen runtime objects
+For a legal length vector \(\ell\), define the paid-information value
 
 \[
-R_A,R_B,R_C,R_D,R_E.
-\]
-
-The common object contains only route-neutral grammar, serialization, and coder
-definitions. Runtime object \(R_i\) contains only route \(i\)'s fixed constants,
-causal observable generators, interpreter adapter, target, and resource bounds.
-Its complete reachable dependency closure is frozen, hashed, and charged to
-route \(i\).
-
-No runtime object contains \(x\), a future-symbol table, an uncharged
-prediction trace, another route's fixed object, or any equivalent encoding of
-the construction object.
-
-Before reconstructing position \(t\) on route \(i\), the interpreter may
-calculate
-
-\[
-\omega_{i,t}=\Omega_i(S_{\mathrm{common}},R_i,x_{<t},\zeta_{\le t}),
-\]
-
-where \(\zeta_{\le t}\) denotes only paid auxiliary information whose release
-time has arrived. The complete output and state of \(\Omega\) must be
-determined by this expression.
-
-A submitted mathematical object may inspect all of \(x\) during construction,
-but every surviving instance-dependent bit used during reconstruction must be
-serialized and charged by the Seal.
-
-## 3. Common coding and accounting
-
-Every route uses the fixed finite-state dyadic arithmetic coder and the
-canonical channels defined by the Seal:
-
-```text
-F  framing and lengths
-C  decoder-required finite certificate
-Z  paid labels, selectors, or auxiliary choices
-Y  coded data payload
-P  verifier-only proof, unavailable during reconstruction
-```
-
-Only `F`, `C`, `Z`, and `Y` contribute variable coded length. `P` is required
-for mathematical verification but cannot be read by the runtime interpreter.
-
-For route \(i\), the exact total is
-
-\[
-L_i
+V_G(\ell)
 =
-L_{\mathrm{fixed},i}
-+8|F_i|
-+8|C_i|
-+8|Z_i|
-+|Y_i|.
+\sum_{j=1}^{J}
+\max_{1\le k\le K}
+\left(g_{jk}-\ell_k\right).
 \]
 
-Every route has an absolute bit target \(T_i\). It passes its length gate only
-if
+Define
 
 \[
-\boxed{L_i\le T_i.}
+V^*(G)
+=
+\sup_{\ell\in\mathbb N^K:
+\sum_k2^{-\ell_k}\le1}
+V_G(\ell).
 \]
 
-Every route also has finite certificate, state, operation, memory, and physical
-execution bounds. The full definitions are owned by the Seal.
+Ties in each row may be resolved arbitrarily. A solution must show that the
+value does not depend on tie resolution.
 
-## 4. Independence
+## A.2 Relaxed weights
 
-The five problems share only \(x\), the block boundaries, and
-\(S_{\mathrm{common}}\). Each route has a separate \(R_i\), namespace,
-serializer adapter, fixed-cost ledger, target, interpreter entry point, and
-verdict.
+Let
 
-A verifier evaluating one route must not load any submitted artifact from
-another route or any fixed object outside the transitive dependency closure of
-that route's \(R_i\).
+\[
+\Delta_K
+=
+\left\{
+q\in(0,1]^K:
+\sum_{k=1}^{K}q_k\le1
+\right\}.
+\]
+
+Define the relaxed functional
+
+\[
+\mathcal V_G(q)
+=
+\sum_{j=1}^{J}
+\max_{1\le k\le K}
+\left(g_{jk}+\log q_k\right).
+\]
+
+For an assignment
+
+\[
+z=(z_1,\\ldots,z_J)
+\in\{1,\ldots,K\}^J,
+\]
+
+let
+
+\[
+n_k(z)=|\{j:z_j=k\}|.
+\]
+
+Adopt the convention \(0\log0=0\).
+
+## A.3 Questions
+
+Prove all of the following.
+
+### A1. Exact finite duality
+
+Derive an exact variational formula for
+
+\[
+\sup_{q\in\Delta_K}\mathcal V_G(q)
+\]
+
+as a maximization over assignments \(z\). The final expression must contain
+only the selected gains \(g_{j,z_j}\), the counts \(n_k(z)\), and an explicit
+entropy term.
+
+Prove existence of an optimizer and characterize every optimizing weight
+vector \(q\), including unused explanations.
+
+### A2. Integer prefix penalty
+
+Prove universal upper and lower bounds relating \(V^*(G)\) to the relaxed
+optimum. The gap must be an explicit constant independent of the magnitudes of
+the entries of \(G\).
+
+Determine the smallest universal constant that can hold for every \(J,K,G\),
+or prove matching lower and upper constants if the exact optimum cannot be
+expressed by one constant.
+
+Your proof must construct an actual prefix code from an optimizing relaxed
+weight vector.
+
+### A3. Description-priced explanations
+
+Let \(d_1,\ldots,d_K\ge0\) be arbitrary finite description prices and define
+
+\[
+V_{G,d}(\ell,z)
+=
+\sum_{j=1}^{J}
+(g_{j,z_j}-\ell_{z_j})
+-
+\sum_{k:n_k(z)>0}d_k.
+\]
+
+Derive a necessary-and-sufficient variational condition for
+
+\[
+\max_{\ell,z}V_{G,d}(\ell,z)>D
+\]
+
+for an arbitrary real threshold \(D\). The condition may involve a finite
+maximization, convex conjugate, or dual measure, but it must not assume the
+assignment \(z\) in advance.
+
+### A4. Stability under perturbation
+
+For matrices \(G,G'\) satisfying
+
+\[
+\max_{j,k}|g_{jk}-g'_{jk}|\le\varepsilon,
+\]
+
+prove the sharpest possible universal bound on
+
+\[
+|V^*(G)-V^*(G')|.
+\]
+
+Characterize equality cases.
+
+## A.4 Strict solution requirement
+
+A complete solution must provide:
+
+- The exact dual formula.
+- A constructive prefix-code argument.
+- A complete treatment of zero-count explanations.
+- A description-priced threshold theorem.
+- A sharp stability theorem.
+
+Numerical optimization of particular matrices is not a solution.
 
 ---
 
-# Problem A: Paid Partition Martingale
+# Problem B: The Predictive Wheeler-Quotient Theorem
 
-## A.1 Objective
+## B.1 Colored deterministic system
 
-Construct a finite predictive measure that purchases block-level information
-through explicitly charged labels and uses it to reduce the complete exact
-length below the absolute target.
-
-## A.2 Supplied data
-
-Problem A supplies:
-
-- A finite dyadic probability denominator \(2^r\).
-- Causal observable alphabets \(\mathcal O_A\).
-- A block-label release schedule.
-- Bounds \(B_{A,C},B_{A,Z},B_{A,S},B_{A,O},B_{A,M}\).
-- An absolute target \(T_A\).
-- A baseline payload for diagnostic comparison only.
-
-The baseline is not available as an uncharged prediction trace during runtime.
-Any baseline coordinate exposed to a submitted construction is generated
-causally by the fixed runtime object.
-
-## A.3 Required construction
-
-Construct the finite tuple
+Let \(H\) be a nonempty finite set, let \(A\) be a finite totally ordered
+alphabet, and let
 
 \[
-\mathcal A=(\mathcal Z,\kappa,S,s_1,\Phi,G).
+T:H\times A\to H
 \]
 
-It consists of:
-
-1. A finite label alphabet \(\mathcal Z\), possibly a singleton.
-2. A prefix-free binary code \(\kappa:\mathcal Z\to\{0,1\}^*\).
-3. One label \(z_j\in\mathcal Z\) for every block.
-4. A finite predictive state set \(S\).
-5. An explicit initial state \(s_1\in S\).
-6. A deterministic transition
-   \[
-   \Phi:S\times\mathcal O_A\times\mathcal Z\times\{0,1\}\to S.
-   \]
-7. A deterministic numerator map
-   \[
-   G:S\times\mathcal O_A\times\mathcal Z
-   \to\{1,\ldots,2^r-1\}.
-   \]
-
-The constructor may choose \(z_j\) after inspecting the complete block. The
-interpreter consumes and releases \(\kappa(z_j)\) at the declared block release
-point before any probability may depend on \(z_j\). Future labels remain
-logically unavailable even if their serialized bits occur later in `Z`.
-
-At position \(t\in I_j\), define
+be a total deterministic transition. Let
 
 \[
-a_t=G(s_t,\omega_t,z_j),
+c:H\to C
 \]
 
-then, only after reconstructing \(x_t\), update
+be a coloring into a finite set \(C\).
+
+Extend \(T\) to words in \(A^*\) in the usual way. For \(h\in H\) and
+\(u=a_1\cdots a_m\in A^*\), define the color trace
 
 \[
-s_{t+1}=\Phi(s_t,\omega_t,z_j,x_t).
+\operatorname{Trace}(h,u)
+=
+\bigl(
+ c(h),
+ c(T(h,a_1)),
+ \ldots,
+ c(T(h,a_1\cdots a_m))
+\bigr).
 \]
 
-## A.4 Submitted objects
-
-Submit:
-
-- The finite label alphabet and code.
-- The complete label sequence.
-- The state representation.
-- The transition and numerator maps.
-- Every table, constant, exception, and initializer.
-- A proof of prefix-free decoding.
-- A proof of causality and state closure.
-- A joint encoder-decoder recurrence proof.
-- Exact channel and resource ledgers.
-- A proof that \(L_A\le T_A\).
-
-## A.5 Pass condition
-
-Problem A passes exactly when the Seal verifies
+Define behavioral equivalence by
 
 \[
-L_A\le T_A,
+h\equiv h'
+\quad\Longleftrightarrow\quad
+\forall u\in A^*,
+\quad
+\operatorname{Trace}(h,u)
+=
+\operatorname{Trace}(h',u).
 \]
+
+Let \(Q=H/{\equiv}\), and write \([h]\) for the class of \(h\).
+
+## B.2 Labeled quotient graph
+
+Form a directed labeled multigraph \(G_Q\) with vertex set \(Q\). For every
+\(q=[h]\in Q\) and \(a\in A\), include the edge
 
 \[
-|C_A|\le B_{A,C},
-\qquad
-|Z_A|\le B_{A,Z},
+q\xrightarrow{a}[T(h,a)].
 \]
+
+A total order \(<\) on \(Q\) is called Wheeler when:
+
+1. Every indegree-zero vertex precedes every positive-indegree vertex.
+2. If \(u\xrightarrow{a}v\) and \(u'\xrightarrow{a'}v'\) with \(a<a'\), then
+   \(v<v'\).
+3. If the two labels are equal and \(u<u'\), then \(v\le v'\).
+
+For a word \(w\in A^*\), let \(I(w)\subseteq Q\) be the vertices reachable by
+a path labeled \(w\).
+
+## B.3 Questions
+
+Prove all of the following.
+
+### B1. Myhill-Nerode characterization
+
+Prove that \(\equiv\) is the unique coarsest equivalence relation on \(H\)
+that preserves colors and is a right congruence for \(T\).
+
+Prove that two unequal classes admit a finite distinguishing word. Establish
+the best universal upper bound you can on the length of a shortest
+distinguishing word in terms of \(|H|\) or \(|Q|\), and determine whether the
+bound is sharp.
+
+Give a finite certificate of minimality consisting solely of representatives
+and distinguishing words.
+
+### B2. Wheeler interval theorem
+
+Assume \(G_Q\) admits a Wheeler order. Prove that, for every word \(w\), the set
+\(I(w)\) is an interval in that order.
+
+Prove a converse under the weakest hypotheses you can identify: if every
+nonempty \(I(w)\) is an interval in some total order, when must that order
+satisfy the Wheeler axioms?
+
+State every necessary exception explicitly.
+
+### B3. Minimal Wheeler refinement
+
+When \(G_Q\) does not admit a Wheeler order, define a finite refinement of
+behavioral classes by splitting classes but never merging behaviorally unequal
+states.
+
+Prove or disprove:
+
+> Every finite colored deterministic system has a unique coarsest refinement
+> whose quotient graph admits a Wheeler order, up to order-preserving colored
+> isomorphism.
+
+If false, characterize the obstruction and define a canonical optimum using a
+precise secondary criterion. Prove existence and provide a finite minimality
+certificate.
+
+### B4. Continuation multiplicity bound
+
+Suppose the refined Wheeler graph has \(r\) maximal equal-label runs in its
+edge sequence under source order. Derive the strongest general bound you can
+on the number of distinct continuation intervals
 
 \[
-|S|\le B_{A,S},
-\qquad
-\operatorname{Ops}_A\le B_{A,O},
-\qquad
-\operatorname{Mem}_A\le B_{A,M},
+\{I(w):w\in A^*\}
 \]
 
-plus exact reconstruction, deterministic replay, canonical re-encoding, and
-the physical execution gate.
+in terms of \(|Q|\), \(|A|\), and \(r\).
 
-A valid Problem A solution is complete and uses no result from Problems B, C,
-D, or E.
+Provide examples showing which terms in your bound are necessary.
+
+## B.4 Strict solution requirement
+
+A complete solution must provide:
+
+- The behavioral-equivalence theorem directly from traces.
+- Finite distinguishing certificates.
+- The Wheeler interval theorem and converse conditions.
+- A proved resolution of the minimal-refinement question.
+- A continuation-interval bound with extremal examples.
+
+An implementation of automaton minimization or graph indexing is not a
+solution.
 
 ---
 
-# Problem B: Minimal Predictive Right Quotient
+# Problem C: Integer Shadowing of Selective Recurrences
 
-## B.1 Objective
+## C.1 Contractive selective system
 
-Construct the unique coarsest predictive right congruence of a supplied finite
-causal history automaton, realize its quotient recurrence, and meet the
-absolute target without paid labels.
-
-## B.2 Supplied finite history system
-
-Problem B supplies, inside its construction data:
-
-1. A finite history-state set \(H_B\).
-2. An initial history state \(h_1\in H_B\).
-3. A finite descriptor alphabet \(\mathcal D_B\).
-4. A causal runtime descriptor generator
-   \[
-   d_t=\Delta_B(S_{\mathrm{common}},R_B,x_{<t}).
-   \]
-5. A total deterministic history transition
-   \[
-   T_B:H_B\times\mathcal D_B\times\{0,1\}\to H_B.
-   \]
-6. A finite predictive-color map
-   \[
-   \chi_B:H_B\times\mathcal D_B\to\mathcal K_B.
-   \]
-7. A dyadic numerator assigned to every color
-   \[
-   \alpha_B:\mathcal K_B\to\{1,\ldots,2^r-1\}.
-   \]
-8. Bounds \(B_{B,C},B_{B,Q},B_{B,O},B_{B,M}\).
-9. An absolute target \(T_B\).
-
-The fixed runtime object \(R_B\) contains the finite history transition and
-causal descriptor generator only when their complete fixed costs are charged
-to \(L_{\mathrm{fixed},B}\). Predictive colors may be used offline to define
-the quotient but are not runtime advice unless their required representation
-is included in \(R_B\) or `C_B`.
-
-No label or selector channel is supplied. Thus \(Z_B\) is empty.
-
-## B.3 Predictive right congruence
-
-An equivalence relation \(\sim\) on \(H_B\) is admissible exactly when, for all
-\(h,h'\in H_B\), \(d\in\mathcal D_B\), and \(b\in\{0,1\}\),
+Let \((V,\|\cdot\|)\) be \(\mathbb R^d\) with a fixed norm. Let \(\mathcal A\)
+be a finite alphabet. For every \(a\in\mathcal A\), let
 
 \[
-h\sim h'
-\Longrightarrow
-\chi_B(h,d)=\chi_B(h',d),
+F_a(s)=A_as+b_a,
 \]
 
-and
+where \(A_a\in\mathbb Q^{d\times d}\), \(b_a\in\mathbb Q^d\), and
 
 \[
-h\sim h'
-\Longrightarrow
-T_B(h,d,b)\sim T_B(h',d,b).
+\|A_a\|\le\rho<1.
 \]
 
-Thus equivalent histories have identical predictive colors for every
-descriptor and remain equivalent after every equal continuation symbol.
-
-Among all admissible equivalence relations, let \(\sim_B^\star\) be the
-coarsest one, meaning every other admissible relation refines it. Because
-\(H_B\) is finite and admissibility is closed under intersection of
-distinguishability refinements, this relation is uniquely defined.
-
-## B.4 Required construction
-
-Construct
+Given an input sequence \(a_1,\ldots,a_n\), define
 
 \[
-\mathcal Q=(Q,\pi,q_1,\delta,\nu,\mathcal W),
+s_{t+1}=F_{a_t}(s_t).
 \]
 
-where:
-
-1. \(\pi:H_B\twoheadrightarrow Q\) is a surjection satisfying
-   \[
-   \pi(h)=\pi(h')\Longleftrightarrow h\sim_B^\star h'.
-   \]
-2. \(q_1=\pi(h_1)\).
-3. The induced transition is
-   \[
-   \delta(\pi(h),d,b)=\pi(T_B(h,d,b)).
-   \]
-4. The induced numerator is
-   \[
-   \nu(\pi(h),d)=\alpha_B(\chi_B(h,d)).
-   \]
-5. \(\mathcal W\) is a finite minimality witness.
-
-No exceptional congruence violations are permitted. A history requiring
-different behavior must belong to a refined quotient state.
-
-The witness \(\mathcal W\) must give, for every pair of distinct quotient
-states, either an immediate predictive-color distinction or a finite
-descriptor-and-bit continuation whose first distinction proves the pair
-cannot be merged by any admissible right congruence.
-
-At runtime, the interpreter tracks only \(q_t\). It uses
+Let the output logit be
 
 \[
-a_t=\nu(q_t,d_t),
+y_t=c^Ts_t+\gamma_{a_t},
 \]
 
-then updates
+where \(c\in\mathbb Q^d\) and \(\gamma_a\in\mathbb Q\).
+
+For \(x\in\{0,1\}\), define logistic loss
 
 \[
-q_{t+1}=\delta(q_t,d_t,x_t).
+\lambda(x,y)
+=
+\log_2(1+e^y)-\frac{xy}{\ln2}.
 \]
 
-It does not consult \(\pi\), \(\chi_B\), or the construction history state
-unless their runtime representations are explicitly fixed and charged.
+## C.2 Integer shadow system
 
-## B.5 Mathematical proof obligations
-
-Prove:
-
-- The descriptor generator is causal.
-- \(\pi\) is a total surjection.
-- Its fibers form an equivalence relation.
-- Predictive-color equality holds within every fiber.
-- \(\delta\) and \(\nu\) are well defined, independent of representative.
-- The quotient is a right congruence.
-- Every pair of quotient states has a valid distinguishing witness.
-- The witness proves coarseness and therefore minimal quotient cardinality.
-- Runtime recurrence uses no hidden history-specific exception.
-- Exact coding and resource inequalities hold.
-
-An empirical clustering, approximate state similarity, ordinary transducer
-without \(\pi\), or nonconstructive assertion of minimality is not a solution.
-
-## B.6 Pass condition
-
-Problem B passes exactly when
+For integer precision \(m\ge1\), let
 
 \[
-L_B\le T_B,
+\Lambda_m=2^{-m}\mathbb Z^d.
 \]
+
+A rounding map \(R_m:\mathbb R^d\to\Lambda_m\) is admissible when
 
 \[
-|C_B|\le B_{B,C},
-\qquad
-|Q|\le B_{B,Q},
+\|R_m(v)-v\|\le\eta_m
 \]
+
+for every \(v\), with explicit \(\eta_m\).
+
+Define the integer shadow recurrence
 
 \[
-\operatorname{Ops}_B\le B_{B,O},
-\qquad
-\operatorname{Mem}_B\le B_{B,M},
+\widehat s_{t+1}
+=
+R_m(\widehat A_{a_t}\widehat s_t+
+\widehat b_{a_t}),
 \]
 
-and every common Seal gate passes.
+and output
 
-A valid Problem B solution is complete and uses no result from Problems A, C,
-D, or E.
+\[
+\widehat y_t
+=
+\widehat c^T\widehat s_t+
+\widehat\gamma_{a_t}.
+\]
+
+All hatted quantities must be rational with denominator dividing \(2^m\).
+
+## C.3 Questions
+
+Prove all of the following.
+
+### C1. Uniform shadowing
+
+Derive the sharpest uniform upper bound you can for
+
+\[
+\sup_{1\le t\le n}\|s_t-\widehat s_t\|
+\]
+
+in terms of:
+
+- Initial-state error.
+- \(\rho\).
+- Matrix approximation errors.
+- Bias approximation errors.
+- Rounding error \(\eta_m\).
+- A bound on the exact and shadow states.
+
+Your theorem must hold uniformly over every input sequence and every length
+\(n\).
+
+### C2. Cumulative logistic-loss transfer
+
+Prove an explicit bound on
+
+\[
+\sum_{t=1}^{n}
+\left(
+\lambda(x_t,\widehat y_t)
+-
+\lambda(x_t,y_t)
+\right)
+\]
+
+that holds for every binary outcome sequence \(x_1,\ldots,x_n\).
+
+Determine the sharp Lipschitz constant of logistic loss with respect to the
+logit under base-two measurement, and propagate every approximation term
+explicitly.
+
+### C3. Householder realization
+
+For a rational matrix \(A\) with \(\|A\|<1\), study representations of the
+form
+
+\[
+A
+=
+D
+\prod_{j=1}^{k}
+\left(
+I-2\frac{v_jv_j^T}{v_j^Tv_j}
+\right)
++E,
+\]
+
+where \(D\) is diagonal, the \(v_j\) are rational, and \(E\) is sparse.
+
+Derive sufficient conditions and explicit bounds on \(k\), the sparsity of
+\(E\), and coefficient denominators guaranteeing operator error at most
+\(\delta\).
+
+Determine which classes of contractive matrices admit exact representation
+with \(E=0\), and prove your characterization.
+
+### C4. Precision threshold
+
+Given a prescribed total allowance \(\varepsilon>0\), derive a constructive
+inequality on \(m,k,\delta\), and the coefficient approximations sufficient to
+guarantee cumulative excess logistic loss at most \(\varepsilon\) for every
+sequence of length \(n\).
+
+The result must state all dependence on \(n,d,\rho,c\), and the state bound.
+
+## C.4 Strict solution requirement
+
+A complete solution must provide:
+
+- A uniform integer-shadowing theorem.
+- A cumulative logistic-loss theorem.
+- A rational Householder-plus-sparse approximation theorem.
+- An explicit precision threshold.
+- Sharpness examples or lower bounds for the principal terms.
+
+Numerical simulation of selected recurrences is not a solution.
 
 ---
 
-# Problem C: Wheeler Continuation Geometry
+# Problem D: Energy-Ordered Parity Reconstruction
 
-## C.1 Objective
+## D.1 Ordered finite space
 
-Construct a bounded causal Wheeler graph over completed event history, perform
-exact rank/select backward search, retrieve only earlier continuations, and
-convert those continuations into an exact probability measure under the
-absolute target.
-
-## C.2 Supplied data
-
-Problem C supplies:
-
-- A totally ordered finite event alphabet \((\mathcal E_C,\prec)\).
-- A causal event generator from reconstructed prefixes.
-- A canonical online graph-construction interface.
-- Canonical bitvector `rank` and `select` semantics.
-- Four organizer-frozen diagnostic control adapters.
-- A finite dyadic probability denominator \(2^r\).
-- Bounds \(B_{C,C},B_{C,I},B_{C,O},B_{C,M}\).
-- An absolute target \(T_C\).
-
-No future graph, suffix array, occurrence list, target-position table, or
-offline continuation trace is available at runtime. Every index state must be
-rebuilt from completed reconstructed events.
-
-## C.3 Wheeler graph
-
-At event time \(t\), the submitted online builder defines a finite
-edge-labeled directed graph
+Let \(X=\mathbb F_2^n\). Let
 
 \[
-\mathcal G_t=(V_t,E_t,\lambda_t,<_{t}),
+E:X\to\mathbb R
 \]
 
-where \(\lambda_t:E_t\to\mathcal E_C\) and \(<_{t}\) is a total order on
-\(V_t\).
+be an arbitrary energy function, and let \(\prec_E\) be the total order obtained
+by increasing energy with lexicographic tie breaking.
 
-The graph is Wheeler exactly when:
-
-1. Every indegree-zero node precedes every positive-indegree node.
-2. For edges \((u,v)\) and \((u',v')\), if
-   \[
-   \lambda(u,v)\prec\lambda(u',v'),
-   \]
-   then
-   \[
-   v<_{t}v'.
-   \]
-3. If the edge labels are equal and \(u<_{t}u'\), then
-   \[
-   v\le_t v'.
-   \]
-
-The submitted builder must preserve these axioms after every completed event.
-
-## C.4 Wheeler index
-
-List edges by source-node Wheeler order, with the route's canonical
-within-source label and destination tie breaking. Let \(L_t\) be the resulting
-edge-label sequence. The index contains:
-
-- \(L_t\).
-- Cumulative symbol counts \(C_t[c]\).
-- Canonical bitvectors for node boundaries and edge destinations.
-- Exact `rank_c(L_t,k)` and `select_c(L_t,j)` support.
-- An occurrence map from accepted graph states to prior completed positions.
-
-For a pattern \(P=c_1\cdots c_k\), backward search begins with the full Wheeler
-interval and applies the frozen rank-based interval recurrence supplied by
-\(R_C\). The resulting interval must equal exactly the set of graph states
-reachable by paths labeled \(P\).
-
-## C.5 Required construction
-
-Construct
+For \(x\in X\), define its energy rank
 
 \[
-\mathcal W=(\eta,\mathfrak B,\rho,\mu,\beta),
+r_E(x)
+=
+1+|\{y\in X:y\prec_E x\}|.
 \]
 
-where:
-
-1. \(\eta\) maps each completed causal event to a represented Wheeler label.
-2. \(\mathfrak B\) is the online Wheeler graph and index builder.
-3. \(\rho\) performs backward search and returns zero or more occurrence
-   positions \(u<t\) from the resulting interval.
-4. \(\mu\) assigns finite integer candidate weights.
-5. \(\beta\) combines candidate votes with a represented fallback and returns
-   a numerator in \(\{1,\ldots,2^r-1\}\).
-
-Two completed histories are suffix-equivalent at depth \(k\) exactly when
-their represented length-\(k\) event suffixes produce the same Wheeler search
-interval. Any broader equivalence introduced by \(\eta\) must be explicit in
-`C_C` and is tested through the same graph axioms.
-
-Every retrieved occurrence and every candidate continuation bit must lie in
-the reconstructed prefix. Ordering, ties, graph updates, rank/select layout,
-occurrence insertion, eviction, collision handling, and fallback are finite
-and canonical.
-
-## C.6 Organizer-owned controls
-
-The four controls are frozen in \(R_C\) before submissions:
-
-```text
-C0  fallback numerator with no index lookup
-C1  exact-event Wheeler labels with submitted capacities
-C2  submitted labels, graph, retrieval, and blend
-CR  submitted construction with the frozen nonidentity label permutation
-```
-
-The control adapters fix initialization, capacities, coder semantics,
-finalization, permutation, and accounting. Contestants provide no control
-implementation. Missing control output invalidates the audit, but controls
-provide no acceptance credit.
-
-## C.7 Proof obligations
-
-Prove:
-
-- Every graph prefix satisfies all Wheeler axioms.
-- Edge ordering and bitvector layout are canonical.
-- Rank and select results match direct enumeration.
-- Backward-search intervals match path-labeled state sets.
-- The stated suffix-equivalence condition holds.
-- Every retrieved position satisfies \(u<t\).
-- Index contents and occurrence ordering agree in encoder and decoder.
-- Every candidate-derived bit is already reconstructed.
-- Collision, eviction, exhaustion, and fallback are deterministic.
-- Numerators and all dynamic state satisfy their bounds.
-- The exact submitted route satisfies \(L_C\le T_C\).
-
-## C.8 Pass condition
-
-Problem C passes exactly when
+Let
 
 \[
-L_C\le T_C,
+H_k:X\to\mathbb F_2^k
 \]
+
+be a nested family of linear maps: the first \(k
+	ext{ rows of }H_{k+1}\)
+coincide with \(H_k\).
+
+For syndrome \(s\in\mathbb F_2^k\), define the ideal reconstruction
 
 \[
-|C_C|\le B_{C,C},
-\qquad
-\operatorname{IndexBits}_C\le B_{C,I},
+D_k(s)
+=
+\min_{\prec_E}\{y:H_k(y)=s\}.
 \]
+
+## D.2 Questions
+
+Prove all of the following.
+
+### D1. Exact collision characterization
+
+Prove a necessary-and-sufficient condition for
 
 \[
-\operatorname{Ops}_C\le B_{C,O},
-\qquad
-\operatorname{Mem}_C\le B_{C,M},
+D_k(H_kx)=x
 \]
 
-and every common Seal gate passes.
+expressed solely in terms of the vectors preceding \(x\) under \(\prec_E\) and
+the kernel of \(H_k\).
 
-A valid Problem C solution is complete and uses no result from Problems A, B,
-D, or E.
+Derive the sharpest general relationship possible among minimum successful
+\(k\), energy rank, and the collision structure of the nested family.
+
+### D2. Universal nested families
+
+Determine whether there exists a deterministic nested family \((H_k)\),
+independent of \(E\), with a universal constant \(c\) such that for every
+energy order and every \(x\),
+
+\[
+D_k(H_kx)=x
+\]
+
+for some
+
+\[
+k\le\lceil\log_2r_E(x)\rceil+c.
+\]
+
+Prove existence with the smallest possible \(c\), or prove impossibility and
+give the strongest replacement theorem.
+
+### D3. Structured residual balls
+
+Let \(p\in X\) be a prototype and suppose energy is monotone in a weighted
+edit measure around \(p\). Characterize linear maps for which every coset
+intersects the radius-\(r\) residual ball in at most one point.
+
+Relate the minimum number of parity rows to the cardinality and additive
+structure of the residual ball. Give matching constructions and obstructions
+for at least Hamming balls and disjoint weighted edit families.
+
+### D4. Bounded-search certificate
+
+Let \(S\subseteq X\) be a finite candidate set listed in energy order. Define a
+bounded decoder that searches exactly the first \(B\) candidates.
+
+Give a finite certificate, verifiable by ordinary mathematical reasoning, that
+proves a transmitted syndrome uniquely identifies \(x\) within this bounded
+search. Determine the minimum information such a certificate must contain in
+the worst case without simply listing all rejected candidates.
+
+## D.3 Strict solution requirement
+
+A complete solution must provide:
+
+- The exact collision theorem.
+- A resolution of the universal-family question.
+- Prototype-residual uniqueness theorems.
+- A bounded-search uniqueness certificate.
+- Extremal examples proving sharpness or impossibility where claimed.
+
+A parity-search implementation or empirical collision table is not a solution.
 
 ---
 
-# Problem D: Integer Dynamical Realization
+# Final independence rule
 
-## D.1 Objective
+The four problems are logically independent:
 
-Replace a separately supplied rational teacher with a bounded integer
-dynamical system whose complete exact coded length and resources satisfy an
-absolute target.
+- Problem A concerns finite variational coding under Kraft's inequality.
+- Problem B concerns behavioral quotients and ordered graph geometry.
+- Problem C concerns shadowing and rational matrix approximation.
+- Problem D concerns linear cosets and energy order.
 
-## D.2 Supplied data
+A solution to one problem may use standard published mathematics but may not
+assume a result requested by another problem in this examination.
 
-Problem D supplies its own finite teacher
-
-\[
-\tau_{t+1}=F^*(\tau_t,\omega_t,x_t),
-\qquad
-p_t^*=G^*(\tau_t,\omega_t),
-\]
-
-with:
-
-- An exact initial teacher state.
-- Exact rational transition and output semantics.
-- A teacher certificate and exact teacher payload.
-- A finite integer instruction alphabet \(\mathcal I_D\).
-- Exact semantics and operation cost for every instruction.
-- Bounds \(B_{D,C},B_{D,S},B_{D,O},B_{D,M}\).
-- An absolute target \(T_D\).
-- A diagnostic degradation allowance \(\Sigma_D\).
-
-The teacher belongs only to Problem D construction data. It is not available
-at candidate runtime unless represented and charged in `C_D`.
-
-## D.3 Required construction
-
-Construct
-
-\[
-\mathcal K=(U,u_1,\widehat F,\widehat G),
-\]
-
-where:
-
-- \(U\) is a finite bounded-integer state space.
-- \(u_1\) is explicit.
-- \(\widehat F\) is a finite instruction sequence implementing the transition.
-- \(\widehat G\) is a finite instruction sequence producing a dyadic numerator.
-
-The candidate may approximate, factor, quantize, sparsify, reorganize, or
-replace the teacher. It may also ignore the teacher and provide a different
-bounded construction. The absolute target determines acceptance.
-
-## D.4 Proof obligations
-
-Prove:
-
-- Every instruction has declared integer semantics.
-- Every reachable state remains in \(U\).
-- Overflow, signedness, division, shifting, lookup, rounding, and saturation
-  are defined.
-- Teacher construction data is absent from runtime unless charged.
-- The integer recurrence is causal and deterministic.
-- Encoder and decoder states agree by induction.
-- The exact global length difference from the teacher is reported.
-- The absolute target and resource inequalities hold.
-
-Per-position rational log loss may be reported only as nonadditive diagnostic
-evidence.
-
-## D.5 Pass condition
-
-Problem D passes exactly when
-
-\[
-L_D\le T_D,
-\]
-
-\[
-|C_D|\le B_{D,C},
-\qquad
-\operatorname{StateBits}(U)\le B_{D,S},
-\]
-
-\[
-\operatorname{Ops}_D\le B_{D,O},
-\qquad
-\operatorname{Mem}_D\le B_{D,M},
-\]
-
-and every common Seal gate passes. The diagnostic inequality
-
-\[
-L_D-L_{\mathrm{teacher}}\le\Sigma_D
-\]
-
-may be required by a particular instance, but it never replaces the absolute
-target.
-
-A valid Problem D solution is complete and uses no result from Problems A, B,
-C, or E.
-
----
-
-# Problem E: Prototype-Coset Reconstruction
-
-## E.1 Objective
-
-Construct an exact block representation using causal prototypes and explicitly
-paid residual identifiers. The representation may use edit descriptions,
-finite parity cosets, or a canonical mixture, but every block must reconstruct
-exactly under bounded search.
-
-## E.2 Supplied data
-
-Problem E supplies:
-
-- A block partition specific to this route.
-- A finite prototype grammar.
-- Permitted causal prototype-bank updates.
-- A finite family of binary check-matrix constructors.
-- A finite residual-energy grammar.
-- A fixed bounded deterministic residual decoder.
-- Bounds \(B_{E,C},B_{E,Z},B_{E,S},B_{E,O},B_{E,M}\).
-- An absolute target \(T_E\).
-
-A runtime prototype may be fixed in `C_E` or generated from completed earlier
-blocks. It may not depend on an unreconstructed current or future block.
-
-## E.3 Required construction
-
-Construct
-
-\[
-\mathcal P=(\Pi,\mathcal B,\mathcal R,\mathcal H,\mathcal D).
-\]
-
-It consists of:
-
-1. A finite prototype-selection rule \(\Pi\).
-2. A bounded causal prototype bank \(\mathcal B\).
-3. A finite explicit-edit grammar \(\mathcal R\).
-4. A finite nested parity family \(\mathcal H\), possibly empty.
-5. A deterministic bounded reconstruction rule \(\mathcal D\).
-
-For each block, the paid record in `Z_E` declares one mode:
-
-```text
-literal
-prototype plus explicit edit
-prototype plus syndrome
-prototype plus syndrome plus literal residual
-```
-
-Every prototype identifier, mode, edit, syndrome bit, search-depth choice,
-exception, and literal residue is represented exactly once. Literal mode must
-always be available.
-
-For a syndrome mode, the submission must define:
-
-- The exact matrix and its rank over \(\operatorname{GF}(2)\).
-- The exact candidate ordering.
-- The exact tie-breaking rule.
-- The exact expansion and memory budget.
-- The unique candidate returned by the bounded decoder.
-
-The encoder may choose a mode after inspecting the complete block because the
-complete mode record and residual are paid before reconstruction of that block.
-
-## E.4 Proof obligations
-
-Prove:
-
-- Every selected prototype is available at its release time.
-- The prototype bank evolves identically in encoder and decoder recurrences.
-- Every explicit edit is uniquely invertible.
-- Every accepted syndrome reconstruction returns exactly the intended block.
-- Every failed bounded search selects a represented fallback.
-- Every matrix, rank, search rule, and energy constant is finite and charged.
-- The concatenated reconstructed blocks equal \(x\).
-- The exact target and resource inequalities hold.
-
-## E.5 Pass condition
-
-Problem E passes exactly when
-
-\[
-L_E\le T_E,
-\]
-
-\[
-|C_E|\le B_{E,C},
-\qquad
-|Z_E|\le B_{E,Z},
-\]
-
-\[
-\operatorname{StateBits}_E\le B_{E,S},
-\qquad
-\operatorname{Ops}_E\le B_{E,O},
-\qquad
-\operatorname{Mem}_E\le B_{E,M},
-\]
-
-and every common Seal gate passes.
-
-A valid Problem E solution is complete and uses no result from Problems A, B,
-C, or D.
-
----
-
-# II. Strict solution standard
-
-For any attempted route, the contestant must submit:
-
-- Every finite mathematical object required by that route.
-- Canonical serializer input for `C` and `Z`.
-- Exact integer channel lengths.
-- Exact state, operation, and memory ledgers.
-- Causality, closure, replay, and target proofs.
-- Any route-specific proof required above.
-
-The proof channel `P` is verifier-only. It cannot initialize state, provide a
-prediction, resolve a tie, choose a mode, or supply any reconstruction bit.
-
-The following are never sufficient:
-
-- Forecasts.
-- Prefix extrapolations.
-- Ideal entropy or log-loss without exact coding.
-- Oracle labels without their charged codewords.
-- Independently added savings.
-- Uncounted model information.
-- Hidden teacher traces.
-- Probabilistic correctness.
-- Expected runtime.
-- A construction that requires another route.
-
----
-
-# III. Final independence theorem
-
-Let \(V_i\) be the Seal verifier restricted to route \(i\). The organizer must
-establish before release that each \(V_i\) loads only:
-
-- The common frozen instance.
-- The common Seal.
-- Route \(i\)'s disjoint runtime object \(R_i\), adapter, and bounds.
-- Route \(i\)'s submitted `C`, `Z`, `Y`, `F`, and `P` objects.
-
-It loads no submitted artifact or fixed dependency from any other route.
-
-The examination passes exactly when
-
-\[
-\exists i\in\{A,B,C,D,E\}:V_i=\operatorname{PASS}.
-\]
-
-Thus every problem is a complete alternative theorem, not a stage in a shared
-pipeline.
+The solver submits only a mathematical manuscript containing definitions,
+lemmas, constructions, proofs, and counterexamples. No other artifact is
+required.
