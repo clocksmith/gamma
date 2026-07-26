@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/clockwork/v1/contract-set.schema.json",
+  "title": "clockwork.contract_set.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "version", "hashAlgorithm", "schemas", "contractSetDigest"],
+  "properties": {
+    "schema": { "const": "clockwork.contract_set.v1" },
+    "version": { "const": 1 },
+    "hashAlgorithm": { "const": "sha256" },
+    "schemas": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "schemaId", "digest"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9-]+\\.schema\\.json$" },
+          "schemaId": { "type": "string", "minLength": 1 },
+          "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "contractSetDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

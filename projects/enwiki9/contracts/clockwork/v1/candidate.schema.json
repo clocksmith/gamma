@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/clockwork/v1/candidate.schema.json",
+  "title": "clockwork.candidate.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contractSetDigest",
+    "challengeDigest",
+    "candidateKind",
+    "canonicalGenomeBase64",
+    "candidateDigest",
+    "genome",
+    "genomeSchemaDigest",
+    "parentCandidateDigests",
+    "lineage",
+    "resourceDeclaration",
+    "traceClosureDeclaration",
+    "literalIdentityFallback",
+    "createdBy"
+  ],
+  "properties": {
+    "schema": { "const": "clockwork.candidate.v1" },
+    "contractSetDigest": { "$ref": "#/$defs/digest" },
+    "challengeDigest": { "$ref": "#/$defs/digest" },
+    "candidateKind": { "type": "string", "minLength": 1 },
+    "canonicalGenomeBase64": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$"
+    },
+    "candidateDigest": { "$ref": "#/$defs/digest" },
+    "genome": { "type": "object" },
+    "genomeSchemaDigest": { "$ref": "#/$defs/digest" },
+    "parentCandidateDigests": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/digest" }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system", "shadowId"],
+      "properties": {
+        "system": { "enum": ["reploid", "external", "gamma"] },
+        "shadowId": { "type": ["string", "null"] },
+        "evidenceDigests": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/digest" }
+        }
+      }
+    },
+    "resourceDeclaration": { "type": "object", "minProperties": 1 },
+    "traceClosureDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["closed", "consumedFeatures", "mutatesUpstream"],
+      "properties": {
+        "closed": { "const": true },
+        "consumedFeatures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "mutatesUpstream": { "const": false }
+      }
+    },
+    "literalIdentityFallback": { "type": "boolean" },
+    "createdBy": {
+      "type": "object",
+      "required": ["tool", "version"],
+      "properties": {
+        "tool": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}
