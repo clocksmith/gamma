@@ -80,6 +80,26 @@ This working draft:
    disclaims an unrestricted verifier lower bound.
 4. Preserves the remaining statements from `ACS-MATH-DRAFT-1`.
 
+### Draft 2 adversarial audit
+
+An expert audit after the initial C1, D3, and D4 corrections found no new
+counterexample to the substantive A-D theorems. It identified seven formal
+issues that are incorporated into the working draft:
+
+1. C4 now distinguishes nearest-rounded initial state from an externally fixed
+   error floor and requires explicit finite-precision feasibility.
+2. D3 now defines Hamming balls and restricts all radii to integers.
+3. D4 now defines the domains of \(B\) and \(j\), including empty search.
+4. B2 and B3 now define continuation endpoint sets, require integer depth, and
+   make the unfolding relative to a supplied state order.
+5. D's energy has a finite exact representation and decidable comparator.
+6. C3 removes qualitative, unused sparsity terminology.
+7. The Route C transfer map now treats the factorization as a frozen supplied
+   antecedent rather than a theorem-generated optimum.
+
+These corrections do not alter the Seal decision or provide compression-score
+credit.
+
 Before this draft can govern a submission, the organizer must freeze its exact
 SHA-256, record the source-bound commit, perform a fresh mathematical audit,
 and make an independent Seal decision. No existing submission is retroactively

@@ -259,8 +259,11 @@ A total order \(<\) on \(Q\) is Wheeler when:
    \(v<v'\).
 3. If labels are equal and \(u<u'\), then \(v\le v'\).
 
-For \(w\in A^*\), let \(I(w)\subseteq Q\) be the vertices reachable by a path
-labeled \(w\).
+For \(w\in A^*\), define the continuation image from all quotient states by
+
+\[
+I(w)=\{\overline T(q,w):q\in Q\}\subseteq Q.
+\]
 
 ## B.3 Questions
 
@@ -291,9 +294,10 @@ Prove the following equivalence for a total order \(<\) on \(Q\):
 
 Under either condition, prove by induction that every \(I(w)\) is an interval.
 
-### B3. Canonical finite Wheeler unfolding
+### B3. Finite Wheeler unfolding relative to a state order
 
-Fix \(L\ge0\). Define the depth-\(L\) path unfolding with vertices
+Fix \(L\in\mathbb Z_{\ge0}\) and a total order on \(Q\). Define the depth-\(L\)
+path unfolding with vertices
 
 \[
 (q,w)\in Q\times A^{\le L},
@@ -306,9 +310,9 @@ tagged by terminal class \(T(q,w)\), and edges
 \qquad(|w|<L).
 \]
 
-Order vertices first by colexicographic order of \(w\), then by a fixed order of
-\(q\). Prove that this unfolding is Wheeler, never merges behaviorally unequal
-terminal classes, and has exactly
+Order vertices first by colexicographic order of \(w\), then by the supplied
+order on \(Q\). Prove that this order-relative unfolding is Wheeler, never
+merges behaviorally unequal terminal classes, and has exactly
 
 \[
 |Q|\sum_{i=0}^{L}|A|^i
@@ -317,9 +321,16 @@ terminal classes, and has exactly
 \quad\text{edges}.
 \]
 
-Prove that every represented continuation of length at most \(L\) occupies one
-interval. Give a finite certificate consisting of the ordered vertex list,
-terminal-class tags, and edge list.
+For \(u\in A^{\le L}\), define its represented endpoint set by
+
+\[
+J_L(u)=
+\{(q,wu):q\in Q,\ w\in A^*,\ |w|+|u|\le L\}.
+\]
+
+Prove that every \(J_L(u)\) occupies one interval. Give a finite certificate
+consisting of the supplied state order, ordered vertex list, terminal-class
+tags, and edge list.
 
 ### B4. Continuation multiplicity bound
 
@@ -478,8 +489,8 @@ A=D\prod_{j=1}^{k}H_j+E,
 H_j=I-2\frac{v_jv_j^T}{v_j^Tv_j},
 \]
 
-where \(D\) is diagonal, every nonzero \(v_j\) is rational, and \(E\) is
-sparse. Suppose
+where \(D\) is diagonal and every nonzero \(v_j\) and every entry of \(E\) are
+rational. Suppose
 
 \[
 \|\widehat D-D\|_2\le\varepsilon_D,
@@ -526,7 +537,8 @@ at most \(d\) rational Householder reflections.
 
 ### C4. Precision threshold
 
-Let \(\delta_A\) be the complete C3 error, including
+Assume \(n,d\in\mathbb Z_{>0}\) and \(\varepsilon>0\). Let \(\delta_A\) be the
+complete C3 error, including
 \(\eta_{A,m}\), and define
 
 \[
@@ -548,8 +560,17 @@ Prove that
 is sufficient for cumulative excess logistic loss at most \(\varepsilon\) on
 every sequence of length \(n\). Substitute the C3 expression for \(\delta_A\).
 For nearest dyadic scalar rounding, state and prove explicit dimension-dependent
-bounds in \(m\) for vector and matrix approximation errors, and substitute them
-to obtain a fully explicit sufficient lower bound on \(m\).
+bounds in \(m\) for vector and matrix approximation errors.
+
+First assume every stored coefficient and the initial state are obtained by
+nearest-\(m\)-dyadic rounding. Substitute the resulting error functions to
+obtain a finite explicit sufficient lower bound on \(m\).
+
+Then treat the case where \(e_1\) or another approximation error is externally
+fixed rather than controlled by \(m\). State the explicit feasibility condition
+that the resulting \(m\)-independent loss floor is strictly below
+\(\varepsilon\), derive a sufficient lower bound on \(m\) when that condition
+holds, and prove that no finite \(m\) is guaranteed by this bound when it fails.
 
 ## C.4 Strict solution requirement
 
@@ -569,9 +590,10 @@ Numerical simulation of selected recurrences is not a solution.
 
 ## D.1 Ordered finite space
 
-Let \(X=\mathbb F_2^n\). Let \(E:X\to\mathbb R\), and let \(\prec_E\) be the
-total order obtained by increasing energy with lexicographic tie breaking. For
-\(x\in X\), define
+Let \(X=\mathbb F_2^n\). Let \(E:X\to\mathbb R\) be supplied by a finite exact
+representation with a decidable exact comparison procedure. Let \(\prec_E\)
+be the total order obtained by increasing energy with lexicographic tie
+breaking. For \(x\in X\), define
 
 \[
 r_E(x)=1+|\{y\in X:y\prec_E x\}|.
@@ -643,7 +665,13 @@ Prove that when \(B\ne\varnothing\), the inclusion is equivalent to
 \ker H\cap(B-B)=\{0\}.
 \]
 
-Apply this theorem to the Hamming ball \(B_r\), using
+For an integer \(r\in\{0,\ldots,n\}\), define the Hamming ball
+
+\[
+B_r=\{x\in\mathbb F_2^n:\operatorname{wt}(x)\le r\}.
+\]
+
+Apply this theorem to \(B_r\), using
 \(B_r-B_r=B_{\min(2r,n)}\). Prove that uniqueness is equivalent to the kernel
 code having minimum distance greater than \(2r\), with the zero code assigned
 infinite minimum distance, and derive
@@ -652,7 +680,9 @@ infinite minimum distance, and derive
 2^k\ge|B_r|.
 \]
 
-For
+For \(m\in\mathbb Z_{\ge0}\), centers
+\(p_i\in\mathbb F_2^n\), and radii
+\(r_i\in\{0,\ldots,n\}\), let
 
 \[
 B=\bigcup_{i=1}^{m}(p_i+B_{r_i}),
@@ -663,11 +693,14 @@ necessary and sufficient for unique coset intersection.
 
 ### D4. Bounded-search first-hit certificate
 
-Let \(S_B=(y_1,\ldots,y_B)\) be the first \(B\) candidates in energy order.
+Let \(B\in\{0,\ldots,2^n\}\), and let
+\(S_B=(y_1,\ldots,y_B)\) be the first \(B\) candidates in energy order.
 Define the bounded decoder to return the first \(y_i\) satisfying \(H(y_i)=s\),
 or `FAIL` if none exists.
 
-Assume a verifier is given \(H\), \(s\), \(S_B\), and a claimed pair \((j,x)\).
+When \(B\ge1\), assume a verifier is given \(H\), \(s\), \(S_B\), and a
+claimed pair \((j,x)\) with \(j\in\{1,\ldots,B\}\). When \(B=0\), the decoder
+returns `FAIL` and no first-hit pair exists.
 Prove that the pair is a valid finite first-hit certificate if and only if
 
 \[
