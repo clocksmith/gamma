@@ -270,7 +270,11 @@ Prove the following equivalence for a total order \(<\) on \(Q\):
 
 1. The order is Wheeler.
 2. Indegree-zero vertices come first; each \(I(a)\), \(a\in A\), is an
-   interval; the nonempty one-letter intervals occur in alphabet order; and
+   interval; for all \(a<a'\) with \(I(a),I(a')\ne\varnothing\),
+   \[
+   \max I(a)<\min I(a');
+   \]
+   and
    \(q\mapsto T(q,a)\) is nondecreasing for every fixed \(a\).
 
 Under either condition, prove by induction that every \(I(w)\) is an interval.
@@ -388,7 +392,11 @@ R_m(\widehat A_{a_t}\widehat s_t+\widehat b_{a_t}),
 \widehat c^T\widehat s_t+\widehat\gamma_{a_t}.
 \]
 
-All hatted scalar coordinates are dyadic with denominator dividing \(2^m\).
+The stored recurrent coefficients
+\(\widehat A_a,\widehat b_a,\widehat c,\widehat\gamma_a\) and every stored state
+\(\widehat s_t\) are dyadic with denominator dividing \(2^m\). Matrix-vector
+products may use exact widened rational intermediates, but \(R_m\) is applied
+before the next state is stored.
 
 ## C.3 Questions
 
@@ -468,17 +476,34 @@ sparse. Suppose
 \|D\|_2\le d_0.
 \]
 
-Prove
+Define the exact widened intermediate and its stored dyadic realization by
 
 \[
-\left\|
-\widehat D\prod_{j=1}^{k}\widehat H_j+
-\widehat E-A
-\right\|_2
+\widetilde A
+=
+\widehat D\prod_{j=1}^{k}\widehat H_j+\widehat E,
+\qquad
+\widehat A=Q_m(\widetilde A),
+\]
+
+where \(Q_m\) rounds every entry to the nearest multiple of \(2^{-m}\) under a
+fixed tie rule. Prove
+
+\[
+\|Q_m(M)-M\|_2
+\le
+\eta_{A,m}:=d\,2^{-m-1}
+\]
+
+for every \(d\times d\) matrix \(M\), and prove
+
+\[
+\|\widehat A-A\|_2
 \le
 \varepsilon_D(1+\varepsilon_H)^k
 +d_0[(1+\varepsilon_H)^k-1]
-+\varepsilon_E.
++\varepsilon_E
++\eta_{A,m}.
 \]
 
 Also prove that every rational orthogonal \(d\times d\) matrix is a product of
@@ -486,7 +511,8 @@ at most \(d\) rational Householder reflections.
 
 ### C4. Precision threshold
 
-Let \(\delta_A\) be the C3 matrix-factor error and define
+Let \(\delta_A\) be the complete C3 error, including
+\(\eta_{A,m}\), and define
 
 \[
 \varepsilon_{\rm step}=\delta_AS+\varepsilon_b+\eta_m.
@@ -536,9 +562,10 @@ total order obtained by increasing energy with lexicographic tie breaking. For
 r_E(x)=1+|\{y\in X:y\prec_E x\}|.
 \]
 
-Let \(H_k:X\to\mathbb F_2^k\) be a nested family of linear maps: the first
-\(k\) rows of \(H_{k+1}\) coincide with \(H_k\). For \(s\in\mathbb F_2^k\),
-define
+For \(0\le k\le n\), let \(H_k:X\to\mathbb F_2^k\) be a nested family of
+linear maps: \(H_0\) is the zero-row map, the first \(k\) rows of \(H_{k+1}\)
+coincide with \(H_k\), and \(H_n\) has rank \(n\). For
+\(s\in\mathbb F_2^k\), define
 
 \[
 D_k(s)=\min_{\prec_E}\{y:H_k(y)=s\}.
@@ -612,14 +639,14 @@ B=\bigcup_{i=1}^{m}(p_i+B_{r_i}),
 write and prove the exact pairwise-difference condition on \(\ker H\) that is
 necessary and sufficient for unique coset intersection.
 
-### D4. Bounded-search certificate
+### D4. Bounded-search first-hit certificate
 
 Let \(S_B=(y_1,\ldots,y_B)\) be the first \(B\) candidates in energy order.
 Define the bounded decoder to return the first \(y_i\) satisfying \(H(y_i)=s\),
 or `FAIL` if none exists.
 
 Assume a verifier is given \(H\), \(s\), \(S_B\), and a claimed pair \((j,x)\).
-Prove that the pair is a valid finite uniqueness certificate if and only if
+Prove that the pair is a valid finite first-hit certificate if and only if
 
 \[
 x=y_j,
@@ -638,7 +665,7 @@ A complete solution must provide:
 - The exact collision theorem and successful-depth expression.
 - The separating-map theorem, both existence proofs, and nested extension.
 - The exact difference-set theorem and its stated applications.
-- The bounded-search certificate theorem and exact verification cost.
+- The bounded-search first-hit theorem and exact verification cost.
 
 A parity-search implementation or empirical collision table is not a solution.
 
