@@ -107,7 +107,7 @@ def render_markdown(receipt: dict[str, object]) -> str:
             "",
             "This arbitrary-window compact trace is causal shadow evidence. It is not",
             "integrated source, a native candidate archive, an official prefix result,",
-            "or a `10.95%` proof.",
+            "or a `10.80%` proof.",
             "",
         ]
     )
@@ -272,7 +272,7 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], int]:
         "evidence_level": "guarded_exact_fx2_probability_trace_shadow",
         "claim_boundary": (
             "This arbitrary-window trace is not integrated source, a native candidate "
-            "archive, an official prefix result, or a 10.95% proof."
+            "archive, an official prefix result, or a 10.80% proof."
         ),
         "phase": args.phase,
         "window": window,

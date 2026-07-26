@@ -1,0 +1,19 @@
+{
+  "added": "2026-07-25",
+  "deps": [],
+  "description": "MOIRAI rateless whole-block syndrome inference",
+  "family": "whole_block_syndrome_inference",
+  "hypothesis": "A deterministic whole-block energy combining forward and reverse statistics can identify exact blocks from fewer transmitted syndrome bits than causal coding while retaining full-depth exact fallback.",
+  "id": "moirai_wrt_syndrome_v1",
+  "status": "candidate",
+  "mechanism": {
+    "block_bits": 12,
+    "causal_state": "bounded order-8 forward and reverse bit contexts learned from prior reconstructed blocks",
+    "fallback": "full 12-bit invertible Gray-syndrome prefix",
+    "inference": "exhaustive deterministic minimum-energy coset decoding",
+    "reverse_weight": 64,
+    "weight_scale": 256
+  },
+  "promotion_gate": "Exact archive must beat the matched causal control and forward-only syndrome form after all depth, syndrome, header, finalization, and source bytes.",
+  "kill_gate": "Retire v1 if bidirectional syndrome inference is not smaller than both controls or bounded exhaustive decoding is not scalable."
+}

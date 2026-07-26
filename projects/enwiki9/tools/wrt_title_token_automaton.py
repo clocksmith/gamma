@@ -729,7 +729,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "claim_boundary": (
             "This is a causal shadow replay on an arbitrary random window. "
             "It is not integrated source, a native candidate archive, a prefix score, "
-            "or a 10.95% proof."
+            "or a 10.80% proof."
         ),
         "window_id": args.window_id,
         "phase": args.phase,

@@ -1222,7 +1222,7 @@ def receipt() -> dict[str, Any]:
         "project": "enwiki9",
         "generated_at_utc": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "operator_summary": operator_summary,
-        "target_score_10_95": target.get("target_score_10_95", 109_000_000),
+        "target_score_10_95": target.get("target_score_10_95", 108_000_000),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
         "best_exact_10m": labels.get("best exact 10M"),

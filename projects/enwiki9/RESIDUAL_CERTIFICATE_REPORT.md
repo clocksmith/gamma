@@ -1,5 +1,7 @@
 # Residual Certificate Report
 
+> Superseded as an active target by `docs/target_revision_20260725.md`. Historical target arithmetic below is preserved.
+
 This report tracks the certificate-first path toward the 10.95% target. It is
 not a leaderboard claim. It records whether a causal residual correction explains
 enough of `fx2`'s remaining log-loss to justify building a production candidate.

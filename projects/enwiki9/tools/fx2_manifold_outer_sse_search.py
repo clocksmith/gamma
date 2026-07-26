@@ -673,7 +673,7 @@ def main() -> int:
     parser.add_argument("--max-rows", type=int, default=0)
     parser.add_argument("--feature", action="append", default=[])
     parser.add_argument("--baseline-score", type=int, default=110_181_114)
-    parser.add_argument("--target-score", type=int, default=109_000_000)
+    parser.add_argument("--target-score", type=int, default=108_000_000)
     parser.add_argument("--scope-bytes", type=int, default=1_000_000_000)
     parser.add_argument("--print-summary", action="store_true")
     args = parser.parse_args()

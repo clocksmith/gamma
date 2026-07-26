@@ -598,6 +598,84 @@ Sources:
 - https://mattmahoney.net/dc/text.html#1091
 - https://github.com/blahem/cmix-lex
 
-Decision: `109,500,000` is retired as the active internal target. The new active counted target is `109,000,000` bytes, which is `190,109` bytes below the published self-extracting `archive9` benchmark and also below the submission's Hutter-accounted total. Historical receipts retain their original targets.
+Decision: `109,500,000` is retired as the active internal target. The active hierarchy is a `109,000,000` engineering checkpoint, a `108,500,000` minimum prize-competitive gate, and a `108,000,000` canonical design target. Research economics and promotion gates optimize against `108,000,000`; historical receipts retain their original targets.
 
-Frontier consequence: the best project forecast `109,389,323` now misses the active target by `389,323` bytes. It is no longer described as forecast-winning. XML21 and ARIADNE-0 remain mechanism experiments, but promotion now requires a descendant projection below `109,000,000` plus exact full-1G roundtrip, deterministic package accounting, runtime eligibility, and memory eligibility.
+Frontier consequence: the best project forecast `109,389,323` now misses the canonical design target by `1,389,323` bytes and the engineering checkpoint by `389,323` bytes. It is no longer described as forecast-winning. XML21 and ARIADNE-0 remain mechanism experiments, but promotion now requires a descendant projection below `108,000,000` plus exact full-1G roundtrip, deterministic package accounting, runtime eligibility, and memory eligibility.
+
+## 2026-07-25 normalized cross-domain and decoder-state candidate portfolios
+
+Twenty-four project-new synthesis candidates are now normalized in
+`docs/candidate_portfolio_20260725.md` and its machine-readable companion
+`docs/candidate_portfolio_20260725.json`. This registration does not grant score
+credit or publication-level novelty. It prevents overlapping mechanisms from
+being rerun under new names and records explicit oracle, shadow, replacement,
+park, merge, and rejection states.
+
+The canonical execution order after closing XML21 certification is Wheeler
+exact-continuation oracle (`A07`), Soft Changepoint WRT-event shadow (`B09`),
+Tensor-Train residual trace (`B07`), Householder selective-state replacement
+(`B06`), Symmetry-Orbit exact oracle (`A05`), Parallel MDL runtime replacement
+(`A11`), then mutual-information and observable causal-state oracles (`B02`,
+`B01`). Homeostatic ecology is merged into Regret-Banked Specialist Ecology;
+ARIADNE circuits, full sequence tensor circuits, Koopman, topology,
+reaction-diffusion, rhetorical roles, clones, replay, and replica exchange are
+parked or oracle-gated. Both bits-back proposals and the symplectic learner are
+rejected absent materially new evidence.
+
+The active economics are the `108,000,000` canonical design target and
+`1,389,323` forecast debt. Wheeler's old `600 B/M` discovery threshold is
+superseded by a roughly `1,500 B/M` distant-window truth-oracle feasibility gate
+and approximately `2,100 B/M` canonical 10M exact-replay promotion gate after
+estimated source growth. Oracles and shadows receive zero score credit. Runtime
+candidates must replace an equal-capacity measured control rather than run
+alongside endpoint428. Independently positive components must survive exact
+joint replay; additivity is never assumed.
+
+## 2026-07-25 winning-composition hypothesis and three candidates
+
+The research policy now permits a slice that loses alone when an exact complete
+subset lattice proves reproducible positive marginal contribution inside a
+composition. This supersedes the stricter independent-win rule only for the
+registered compositions in `docs/winning_compositions_20260725.md` and
+`docs/winning_compositions_20260725.json`. Baseline, all singleton slices, all
+pairs, and the triple must be replayed on identical populations. Interaction is
+measured explicitly; no gain or runtime effect is assumed additive.
+
+Three zero-credit winning candidates are registered:
+
+1. `C01 Wheeler Phase Tensor Retriever` combines `A07 + B09 + B07`: exact
+   prior-history continuations, soft regime eligibility, and tensor interaction
+   scoring. Its first authorized work is a truth-aware continuation ceiling,
+   followed by a frozen causal subset lattice. No Wheeler index is built before
+   both pass.
+2. `C02 Selective Tensor State Replacement` combines `B06 + B07 + B09`:
+   selective compact state with Householder mixing, tensor readout, and
+   changepoint-modulated forgetting. It is eligible only as a changed-stream
+   replacement for measured endpoint work.
+3. `C03 Orbit-Phase Parallel MDL Coder` combines `A05 + A11 + B09`: a paid
+   page model, soft phase-conditioned contexts, exact realization orbits, and
+   independently decodable segments. Its first gate is the cheap orbit oracle.
+
+The canonical target remains `108,000,000`, with `1,389,323` bytes of forecast
+debt. C01 retains the `1,500 B/M` distant truth-oracle and approximately
+`2,100 B/M` canonical 10M exact-net gates. C02 and C03 must project at or below
+`108,000,000`, pass exact roundtrip and determinism, stay within the decimal
+10GB guard, and prove controlled runtime replacement. The full composition must
+beat every proper subset after counted source, framing, memory, and runtime cost.
+
+## 2026-07-25: Language, multiview, and self-improving harness portfolio
+
+Canonical evaluation:
+
+- Human registry: `docs/language_harness_portfolio_20260725.md`
+- Machine registry: `docs/language_harness_portfolio_20260725.json`
+- Entries: D01-D12; all remain `idea` with `score_credit_bytes = 0`.
+- First score probe: D02 `twinstream_raw_wrt_dual_reconstruction_v1`.
+- First discovery-harness change: D10 `autopsy_self_harness_residual_miner_v1`, integrated into the existing adaptive workflow rather than a parallel queue.
+- Second score probe: D07 `qud_heading_answer_state_v1`.
+- Conditional oracle: D06 `chronicle_entity_event_oracle_v1`.
+- Merged lines: D05 into Bayesian Rhetorical Transfer Matrix; D12 into parked MOIRAI-XML.
+- Frozen architecture L01 uses AUTOPSY + DARWIN only offline; the submitted codec contains only independently positive, frozen, counted slices.
+- Corrected premise: ARIADNE-0 is terminal, with 118 bytes of order gain but a 9,069-byte complete-framing loss at 1M; it is not untested.
+
+No run was launched and no score, forecast, or frontier entry changed.

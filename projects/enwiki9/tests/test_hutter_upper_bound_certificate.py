@@ -30,9 +30,9 @@ class BestForecastRecordTests(unittest.TestCase):
                         "scope": {"raw_bytes": 10_000_000},
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_695,
-                            "conservative_projected_margin_bytes": -57_404,
+                            "conservative_projected_margin_bytes": -1_557_404,
                             "conservative_projected_score_bytes": 109_557_404,
-                            "target_score_bytes": 109_000_000,
+                            "target_score_bytes": 108_000_000,
                         },
                         "decision": {"verdict": "retire_economics_miss"},
                     }
@@ -58,8 +58,8 @@ class BestForecastRecordTests(unittest.TestCase):
                         "evidence_level": "exact_guarded_1m_archive_screen",
                         "scope": {"raw_bytes": 1_000_000},
                         "economics": {
-                            "conservative_projected_score_bytes": 109_000_000,
-                            "target_score_bytes": 109_000_000,
+                            "conservative_projected_score_bytes": 108_000_000,
+                            "target_score_bytes": 108_000_000,
                         },
                         "decision": {"verdict": "opening_pass"},
                     }
@@ -130,8 +130,8 @@ class BestForecastRecordTests(unittest.TestCase):
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_452_151,
-                            "provisional_target_margin_bytes": 47_849,
-                            "target_score_bytes": 109_000_000,
+                            "provisional_target_margin_bytes": -1_452_151,
+                            "target_score_bytes": 108_000_000,
                         },
                         "proof": {"roundtrip_ok": False, "determinism_ok": False},
                         "decision": {"verdict": "replay_pending"},
@@ -150,8 +150,8 @@ class BestForecastRecordTests(unittest.TestCase):
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_452_151,
-                            "provisional_target_margin_bytes": 47_849,
-                            "target_score_bytes": 109_000_000,
+                            "provisional_target_margin_bytes": -1_452_151,
+                            "target_score_bytes": 108_000_000,
                         },
                         "decision": {
                             "verdict": "constructive_exact_10m_lzma_pass"

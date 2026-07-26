@@ -118,7 +118,7 @@ def render_markdown(receipt: dict[str, object]) -> str:
         f"- FX2 source commit: `{receipt['fx2']['source_commit']}`",
         f"- FX2 binary SHA-256: `{receipt['fx2']['binary_sha256']}`",
         "- Backend path: native FX2 `-c`/`-d` with WRT dictionary preprocessing.",
-        "- Claim boundary: an arbitrary-window target-substrate result is not an official prefix score or a 10.95% proof.",
+        "- Claim boundary: an arbitrary-window target-substrate result is not an official prefix score or a 10.80% proof.",
         "",
     ]
     if result:
@@ -231,7 +231,7 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], int]:
         "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "status": "running",
         "evidence_level": "target_substrate_random_window_roundtrip_and_determinism",
-        "claim_boundary": "This arbitrary-window FX2/WRT comparison is not an official prefix score, a counted integration, or a 10.95% proof.",
+        "claim_boundary": "This arbitrary-window FX2/WRT comparison is not an official prefix score, a counted integration, or a 10.80% proof.",
         "promotion_boundary": "Positive disjoint native windows earn an integrated WRT-aware title endpoint with counted source; they do not earn a full-corpus gate.",
         "confirmation_receipt": {
             "path": str(args.confirmation),

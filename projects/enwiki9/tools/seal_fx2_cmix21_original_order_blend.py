@@ -14,7 +14,7 @@ from typing import Any
 
 BASELINE_FORECAST_SCORE_BYTES = 110_181_114
 BASELINE_PROGRAM_BYTES = 183_008
-TARGET_SCORE_BYTES = 109_000_000
+TARGET_SCORE_BYTES = 108_000_000
 ARCHIVE_MARKER_BYTES = 1
 OPTION_BYTES = 3
 EXPECTED_WEIGHT_PPM = 750_000
@@ -397,7 +397,7 @@ def main() -> int:
         "claim_boundary": (
             "This receipt measures a frozen blend of two separately evolved "
             "probability streams. The compact-only package size is an optimistic "
-            "integration floor, not counted combined-program evidence. A 10.95 percent "
+            "integration floor, not counted combined-program evidence. A 10.80 percent "
             "claim still requires one native decoder-replayable process, combined source "
             "and state accounting, roundtrip, determinism, runtime, and official 1G proof."
         ),

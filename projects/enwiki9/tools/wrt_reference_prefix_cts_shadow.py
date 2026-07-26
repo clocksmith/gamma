@@ -567,7 +567,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "evidence_level": "causal_exact_fx2_probability_trace_shadow",
         "claim_boundary": (
             "Selection-window causal shadow only. This is not integrated source, "
-            "a native candidate archive, a full-corpus score, or a 10.95% proof."
+            "a native candidate archive, a full-corpus score, or a 10.80% proof."
         ),
         "window_id": args.window_id,
         "phase": args.phase,

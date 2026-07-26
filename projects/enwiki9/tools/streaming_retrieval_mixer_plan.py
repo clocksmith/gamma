@@ -23,7 +23,7 @@ RESULTS_DIR = ROOT / "results" / "streaming_retrieval_shadow"
 AUDIT_JSON = ROOT / "docs" / "streaming_retrieval_receipt_audit.json"
 
 CURRENT_WINNER = 110_793_128
-TARGET_SCORE = 109_000_000
+TARGET_SCORE = 108_000_000
 BEST_FORECAST = 110_181_114
 
 

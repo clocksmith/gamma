@@ -25,7 +25,7 @@ OUT_JSON = ROOT / "docs" / "streaming_retrieval_receipt_audit.json"
 OUT_MD = ROOT / "docs" / "streaming_retrieval_receipt_audit.md"
 
 CURRENT_WINNER = 110_793_128
-TARGET_SCORE = 109_000_000
+TARGET_SCORE = 108_000_000
 BEST_FORECAST = 110_181_114
 BLOCK_POSTERIOR_CODE_BYTES_ESTIMATE = 3_788
 RAW_SHADOW_METHOD = "streaming_retrieval_raw_shadow_v1"
