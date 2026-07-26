@@ -679,3 +679,110 @@ Canonical evaluation:
 - Corrected premise: ARIADNE-0 is terminal, with 118 bytes of order gain but a 9,069-byte complete-framing loss at 1M; it is not untested.
 
 No run was launched and no score, forecast, or frontier entry changed.
+
+## 2026-07-25 ARIADNE-0 canonical 1M WRT gate: ordering primitive only
+
+Candidate: `ariadne0_coarse_anchor_order_v1`
+
+Receipt: `results/ariadne0_coarse_anchor_order_1m_v1/decision.json`
+
+The constructive harness used opaque WRT emission groups consisting of zero-output controls plus the next output-producing event, an unframed original-order `R`, framed original-order `O0`, fixed evidence-first `O1`, fresh bounded forward PPM replay, lexical-only exact current-page anchor cache, separate descriptor accounting, exact arithmetic archives, exact WRT-store reconstruction, and page-index-mod-5 development/holdout reporting.
+
+Terminal result:
+
+- `R`: `279,565` bytes.
+- Development-selected `O0`: `O0_p1_0`, `288,752` bytes.
+- Development-selected `O1`: `O1_p1_0`, `288,634` bytes.
+- `O1 - O0`: `-118` bytes, so physical evidence-first ordering is mechanism-positive.
+- `O1 - R`: `+9,069` bytes, so framing destroys the complete gain.
+- Development order gain: `26.077` ideal bits.
+- Holdout order gain: `303.848` ideal bits.
+- Development complete gain: `-10,797.923` ideal bits.
+- Holdout complete gain: `-11,392.152` ideal bits.
+- Required source-adjusted gate: `257.524 B/M`.
+- Score-economically-positive: `false`.
+
+Decision: `retain_ordering_primitive_reject_transform`. Stop ARIADNE-0 at the first failed complete-transform gate. Do not run larger scopes, matched-cache controls, learned ordering, graph lattices, or native integration. The useful scientific result is narrow: coarse anchor-first physical order improves the already-framed representation, but the exact node graph costs far more than the order saves, and the selected zero blend gives no evidence that the lexical anchor endpoint contributes.
+
+## 2026-07-25 MOIRAI disposition: general WRT path retired, XML residual parked
+
+The supplied MOIRAI microblock result reports exact roundtrip, bidirectional energy only `2` bytes better than forward energy, a `27`-byte loss versus causal coding, a `33`-byte loss versus literal coding, and `30.2` seconds for a `256`-byte smoke. No corresponding MOIRAI source or receipt was discoverable in the canonical repository at registration time, so these figures are recorded as receipt-unbound supplied evidence rather than a canonical Gamma benchmark.
+
+Decision: do not run another general WRT rank-syndrome parameter sweep. The combination loses both rate and runtime by decisive margins. The only surviving hypothesis is `MOIRAI-XML`: deterministic prototype-plus-syndrome correction for highly constrained XML envelopes, revision skeletons, template shells, or category tails with sparse residuals and hard propagation.
+
+`MOIRAI-XML` is parked behind the terminal XML21 decision. Its mandatory controls are literal, existing causal, explicit schema/edit program, direct energy rank, ideal syndrome, and constructive bounded-search syndrome. The primary kill condition is failure to beat the explicit edit codec after descriptor and source cost; secondary kills are broad candidate search, material ideal-to-constructive syndrome depth, or runtime incompatible with the full-run critical path. It receives no score or frontier credit until a canonical exact receipt exists.
+
+## 2026-07-25 twelve-algorithm frontier triage under 109,000,000
+
+The active score gap is `389,323` projected bytes before projection uncertainty, while the endpoint428 family remains runtime-ineligible. No listed algorithm is independently a winning design because most are additive predictor lanes rather than replacements for the mature substrate.
+
+Authorized bounded research directions:
+
+- `Wheeler Equivalence Retrieval` (#7): highest score relevance, but only as an exact WRT continuation oracle followed by a bounded index-cost screen. Existing retrieval failures make the prior low. It must clear a safety gate materially above the approximately `389 B/M` nominal target gap and demonstrate that index queries replace rather than add context work.
+- `Parallel MDL Page-Phase Coder` (#11): runtime-only substitution candidate. It must compare a transmitted fixed page model plus parallel payload directly against the serial mature substrate. It receives no compression credit from parallelism and dies on any material score regression or insufficient critical-path replacement.
+- `Symmetry-Orbit Realization Coder` (#5): cheap offline exact joint-codelength oracle only. Test surface orbits and static dictionary packaging before any stream mutation. WRT already handles case and common words, so the prior is modest.
+- `Regret-Banked Specialist Ecology` (#8): workflow/search infrastructure, not a score algorithm. It may automate birth and eviction of already legal endpoints after the active evidence lanes close.
+
+Parked or rejected without implementation:
+
+- `Epsilon-WRT Causal-State Compiler` (#1): overlaps failed predictive-state quotient work and risks state explosion and expensive online equivalence tests. Reconsider only after an offline oracle proves a compact causal partition with disjoint gain.
+- `Renormalized Article Residual Cascade` (#2): coarse observables derived from an unresolved block must be transmitted before they can condition that block; otherwise they only predict later blocks and reduce to hierarchical contexts.
+- `Locally Purified WRT Circuit` (#3): tractable in principle, but bounded-rank versions approach HMM-like capacity and higher rank adds contraction/training cost. Restrict any future use to structural regions.
+- `Koopman Observable Mixer` (#4), `Topological Recurrence Gate` (#6), and `Replica-Exchange Forgetting Mixer` (#12): likely duplicate existing decay, regime, parser, and mixture coordinates while adding runtime.
+- `Coupled-Particle Schema Bits-Back` (#9): latent, seed, particle, determinism, and runtime costs are misaligned with the current frontier and overlap negative schema evidence.
+- `Constraint-Marginal ARIADNE Circuit` (#10): evidence-first framing already lost `9,069` bytes to unframed R at canonical 1M. Only a no-reorder structural marginal circuit could reopen the question.
+
+Decision: do not launch any of the twelve before XML21 reaches its terminal certified decision. If a new lane opens, run #7's offline exact oracle first, #5's dictionary/event oracle second, and treat #11 as a separately accounted runtime experiment.
+
+## 2026-07-25 design target tightened to 108,000,000
+
+The active internal design objective is now `108,000,000` counted bytes. Historical receipts and earlier target-rebase notes retain the target used when they were produced.
+
+Relative to the best project forecast `109,389,323`, the active design-target debt is `1,389,323` bytes before projection uncertainty. Under the current calibration and safety policy, a new component adding approximately `40KB` of counted implementation must save approximately `21KB` on canonical 10M before it is eligible for promotion. The earlier approximately `2KB` discovery threshold is retired.
+
+Operational ranking is fixed as: finish XML21 certification; run the exact symmetry-orbit joint-codelength oracle; run Wheeler retrieval only as a disjoint endpoint-probability shadow; attempt Parallel MDL only as runtime substitution; use specialist ecology only to accelerate and discipline these experiments. Wheeler is falsification-worthy, not likely to win.
+
+## 2026-07-25 Wheeler experiment split and tightened gates
+
+Wheeler retrieval is split into two experiments before any compressed index implementation:
+
+1. `truth-aware continuation oracle`: may use the true continuation only to measure maximum recoverable redundancy. It receives zero score credit. Feasibility requires at least `1,500 B/M` on distant windows.
+2. `frozen causal continuation shadow`: retrieves and ranks continuations using decoded history only, freezes selection policy before holdout, and exact-replays arithmetic coding. Promotion requires approximately `2,100 B/M` on canonical 10M after estimated source growth, plus positive offset, random-window, and article-family transfer.
+
+Do not implement a Wheeler graph, wavelet matrix, FM-style index, or native endpoint until both experiments pass. Efficient indexing cannot rescue an unprofitable predictor. Any later combination of Wheeler, symmetry-orbit coding, and runtime substitution must be evaluated by exact joint replay; component gains are not assumed additive.
+
+## 2026-07-25 XML21 terminal 10M decision: retire unchanged
+
+Receipt: `results/endpoint428_msp428_xml21_opcode_timing_10m_v1/decision.json`
+
+XML21 is constructively valid but score-negative. It reduced the canonical 10M WRT store from `6,251,857` to `6,135,818` bytes, removing `116,039` stored bytes and reducing total predictor steps from `6,251,852` to `6,135,813`. Exact decode reconstructed all `10,000,000` input bytes with SHA-256 `5985c81c...3d97`. Deterministic re-encode produced a byte-identical `1,635,991`-byte archive with SHA-256 `9d71b594...a49574`.
+
+Against the adjacent permanent-main parent, archive size regressed from `1,635,119` to `1,635,991`, or `+872` bytes at 10M. The reproducible source package is `282,240` bytes versus parent `281,401`, or `+839` bytes. Calibrated projection worsens from `109,452,477` to `109,540,516`, a score regression of `88,039` bytes and a `1,540,516`-byte debt to the `108,000,000` design target.
+
+Mature encode time improved from `447.134755534` to `420.375228969` seconds, saving `26.759526565` seconds or approximately `5.98%`. However, surviving-step time increased from approximately `357.176` to `370.114` microseconds, so the step reduction partially exposed worse per-step behavior. Encode/decode/re-encode peak RSS remained below 10GB at `9,089,880`, `9,094,332`, and `9,090,096` KiB.
+
+Decision: `retire_xml21_unchanged`. It is neither a score candidate nor an admissible runtime trade under the 108M objective. Do not add patterns, run disjoint XML21 scopes, or combine it with ARIADNE/MOIRAI. Preserve the result as evidence that transformed-step reduction can improve mature runtime while worsening both arithmetic rate and per-surviving-step cost.
+
+## 2026-07-25 Wheeler exact-continuation truth oracle
+
+`wrt_wheeler_truth_oracle_v1` passed the zero-credit feasibility gate on both held-out populations. The ideal truth-aware selector recovered 10,354.1259 B/M on the opening holdout and 3,609.7904 B/M on the offset-500M holdout, versus the required 1,500 B/M on every scope. This proves recoverable exact-continuation redundancy under the tested bounded suffix/role family; it is not a causal codec and receives no score credit. The result authorizes only the frozen causal shadow. A Wheeler/wavelet index remains prohibited until that shadow reaches approximately 2,100 B/M on canonical 10M after source growth and transfers positively across offset, random-window, and article-family populations.
+
+## 2026-07-25 Wheeler causal shadow terminal result
+
+The truth-aware continuation oracle exposed large zero-credit headroom, but the frozen causal shadow failed before offset replay. Exact opening-1M arithmetic replays at suffix depths 1, 2, 4, and 8 lost 987, 691, 671, and 774 bytes respectively. Proportional holdout rates were -1,010, -770, -740, and -830 B/M. Every one of 16 holdout blocks regressed at every depth, and development-selected mixing chose the weakest tested 10% endpoint weight while still losing. The 2,100 B/M promotion gate was missed by direction, not margin. Decision: retire Wheeler exact-continuation retrieval v1; do not run offset/random/article-family shadows and do not implement a Wheeler graph, wavelet matrix, or native index. The oracle-to-shadow gap shows that target-dependent continuation selection, not continuation availability, carried the apparent redundancy.
+
+## 2026-07-25 symmetry-orbit raw MDL oracle
+
+The zero-credit reversible raw-span oracle screened case, apostrophe spelling, hyphen/space realization, numeric formatting, XML quoting, and a fixed common-spelling cluster set on opening and offset-500M scopes. Only numeric formatting cleared the 1,500 B/M holdout feasibility gate on both populations: 9,579.0148 B/M opening and 25,753.9579 B/M offset 500M. Case gained 6,591.4420 B/M opening but lost 7,771.0294 B/M at offset; apostrophe, common spelling, hyphen/space, and XML quote failed. Decision: authorize only a causal exact-WRT numeric-format probability shadow. The raw MDL result receives no score credit and does not authorize a reversible transform.
+
+## 2026-07-25 numeric symmetry exact-WRT shadow
+
+The only family surviving the raw MDL oracle did not survive endpoint competition. The causal exact-WRT numeric continuation endpoint was active on 23,535 emission groups and had supported predictions on 169,901 bit rows. Development selected the minimum tested 10% blend but still lost 6.8555 B/M. Exact opening-1M replay lost 12 archive payload bytes overall and 25 B/M on proportional holdout; 5 of 16 holdout blocks regressed. Decision: retire numeric-format symmetry v1 and close all six screened symmetry families unchanged. Do not run offset replay, build a transform, or add spelling/etymology tables. The raw oracle measured factorability relative to a weak surface code, not disjoint gain over endpoint428.
+
+## 2026-07-25 parallel MDL endpoint-substitution bounds
+
+The zero-credit canonical-10M block oracle tested independent 64KiB, 256KiB, and 1MiB WRT segments at orders 0 through 5 against the 1,635,119-byte parent and a 21,000-byte promotion requirement. With model transmission free, the best selected-order payload was 336,970 bytes, exposing substantial hindsight fit. Naive sparse model accounting expanded the best result to 2,998,810 bytes, a 1,363,691-byte regression. The earned bottom-up context-tree successor retained only splits whose coding gain paid topology, symbol-set, composition, and count costs; it still produced 2,813,101 bytes, a 1,177,982-byte regression, with 87,417 leaves and 3,408 paid splits. Decision: retire parallel two-pass MDL v1 as endpoint substitution. The gap is model-description cost, not lack of hindsight fit. Do not construct the page-parallel codec or claim runtime value from the free-model bound.
+
+## 2026-07-25 epoch-frozen parallel context substitution
+
+To avoid the model-description failure of two-pass MDL, a causal successor trained fixed WRT byte-context tables from the first 5,000,000 transformed bytes, copied the exact parent probabilities during warmup, and replaced mature probabilities thereafter. Orders 0, 1, and 2 used 1,534 bytes, 392,704 bytes, and 100,532,224 bytes of model state. Exact canonical-10M replays at a 99.9999% replacement weight lost 664,268, 351,196, and 263,021 archive payload bytes respectively. Proportional holdout rates were -331,712, -175,384, and -131,382 B/M, with all 16 holdout blocks regressing for every order. Decision: retire epoch-frozen byte-context endpoint substitution v1. Prior-history model availability removes transmission cost but does not preserve endpoint428's mature conditional information.
