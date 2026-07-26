@@ -19,6 +19,14 @@ import time
 import uuid
 from typing import Any
 
+from enwiki9_omega import (
+    MECHANISM_BONUSES,
+    descendant_productivity,
+    ensure_layout as ensure_omega_layout,
+    iter_exclusions,
+    proposal_search_fields,
+    record_exclusion,
+)
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROGRAMS = ROOT / "programs"
@@ -52,6 +60,7 @@ def ensure_layout() -> None:
     for directory in PROPOSAL_DIRS.values():
         directory.mkdir(parents=True, exist_ok=True)
     RUN_LOGS.mkdir(parents=True, exist_ok=True)
+    ensure_omega_layout()
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -238,6 +247,10 @@ def create_proposal(
     kill_condition: str,
     evidence: list[str],
     priority: int,
+    mechanism_change: str | None = None,
+    interfaces_exposed: list[str] | None = None,
+    retired_neighborhoods: list[str] | None = None,
+    parent_proposal_id: str | None = None,
 ) -> dict[str, Any]:
     ensure_layout()
     validate_id(proposal_id)
@@ -245,6 +258,13 @@ def create_proposal(
         raise FileExistsError(f"proposal already exists: {proposal_id}")
     if parent is not None and not candidate_path(parent).is_dir():
         raise FileNotFoundError(f"proposal parent candidate not found: {parent}")
+    search_fields = proposal_search_fields(
+        priority=priority,
+        mechanism_change=mechanism_change,
+        interfaces_exposed=interfaces_exposed,
+        retired_neighborhoods=retired_neighborhoods,
+        parent_proposal_id=parent_proposal_id,
+    )
     proposal = {
         "schema": "enwiki9_algorithm_proposal_v1",
         "proposal_id": proposal_id,
@@ -260,8 +280,10 @@ def create_proposal(
         "priority": priority,
         "state": "proposed",
         "created_at": utc_now(),
+        **search_fields,
     }
-    filename = f"{999 - max(0, min(999, priority)):03d}_{proposal_id}.json"
+    search_priority = int(proposal["search_priority"])
+    filename = f"{999 - max(0, min(999, search_priority)):03d}_{proposal_id}.json"
     atomic_json(PROPOSAL_DIRS["proposed"] / filename, proposal)
     return proposal
 
@@ -282,7 +304,7 @@ def iter_proposals(states: set[str] | None = None) -> list[dict[str, Any]]:
             rows.append(proposal)
     rows.sort(
         key=lambda row: (
-            -int(row.get("priority", 0)),
+            -int(row.get("search_priority", row.get("priority", 0))),
             str(row.get("created_at", "")),
             str(row.get("proposal_id", "")),
         )
@@ -333,6 +355,16 @@ def develop_proposal(
         description=str(proposal.get("title", proposal_id)),
         replacements=replacements,
     )
+    meta_path = destination / "meta.json"
+    meta = load_json(meta_path)
+    meta["omega"] = {
+        "proposal_id": proposal_id,
+        "mechanism_change": proposal.get("mechanism_change", "unspecified"),
+        "interfaces_exposed": proposal.get("interfaces_exposed", []),
+        "retired_neighborhoods": proposal.get("retired_neighborhoods", []),
+        "parent_proposal_id": proposal.get("parent_proposal_id"),
+    }
+    atomic_json(meta_path, meta)
     proposal = transition_proposal(
         proposal_id,
         target_state="developed",
@@ -731,9 +763,33 @@ def build_parser() -> argparse.ArgumentParser:
     propose.add_argument("--kill", required=True)
     propose.add_argument("--evidence", action="append", default=[])
     propose.add_argument("--priority", type=int, default=50)
+    propose.add_argument(
+        "--mechanism-change",
+        choices=sorted(MECHANISM_BONUSES),
+        default="unspecified",
+    )
+    propose.add_argument("--interface", action="append", default=[])
+    propose.add_argument("--retired-neighborhood", action="append", default=[])
+    propose.add_argument("--parent-proposal")
 
     proposals = subparsers.add_parser("proposals", help="list algorithm proposals")
     proposals.add_argument("--state", action="append", choices=PROPOSAL_STATES)
+
+    exclude = subparsers.add_parser(
+        "exclude", help="record a machine-readable negative mechanism result"
+    )
+    exclude.add_argument("exclusion_id")
+    exclude.add_argument("--mechanism", required=True)
+    exclude.add_argument("--population", required=True)
+    exclude.add_argument("--failure", required=True)
+    exclude.add_argument("--retired-dimension", action="append", default=[])
+    exclude.add_argument("--unsettled-successor", action="append", default=[])
+    exclude.add_argument("--evidence", action="append", default=[])
+
+    subparsers.add_parser("exclusions", help="list OMEGA exclusion knowledge")
+    subparsers.add_parser(
+        "productivity", help="rank candidate ancestors by descendant productivity"
+    )
 
     claim = subparsers.add_parser("claim", help="claim an algorithm proposal")
     claim.add_argument("proposal_id")
@@ -822,8 +878,30 @@ def main() -> int:
                 kill_condition=args.kill,
                 evidence=args.evidence,
                 priority=args.priority,
+                mechanism_change=args.mechanism_change,
+                interfaces_exposed=args.interface,
+                retired_neighborhoods=args.retired_neighborhood,
+                parent_proposal_id=args.parent_proposal,
             )
             print(json.dumps(proposal, indent=2, sort_keys=True))
+            return 0
+        if args.command == "exclude":
+            exclusion = record_exclusion(
+                exclusion_id=args.exclusion_id,
+                mechanism=args.mechanism,
+                population=args.population,
+                failure=args.failure,
+                retired_dimensions=args.retired_dimension,
+                unsettled_successors=args.unsettled_successor,
+                evidence=args.evidence,
+            )
+            print(json.dumps(exclusion, indent=2, sort_keys=True))
+            return 0
+        if args.command == "exclusions":
+            print(json.dumps(iter_exclusions(), indent=2, sort_keys=True))
+            return 0
+        if args.command == "productivity":
+            print(json.dumps(descendant_productivity(), indent=2, sort_keys=True))
             return 0
         if args.command == "proposals":
             states = None if args.state is None else set(args.state)

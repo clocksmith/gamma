@@ -16,6 +16,30 @@ analyze evidence
 -> promote, retry explicitly, mutate, or retire
 ```
 
+OMEGA is the archive-search layer inside this loop. It does not compress data
+and receives no score credit. It preserves negative mechanism knowledge,
+prioritizes mechanism changes over parameter changes, and retains productive
+lineages even when an ancestor is not an immediate score leader.
+
+Before proposing a successor in a measured neighborhood, inspect exclusions:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py exclusions
+python3 projects/enwiki9/tools/enwiki9_lab.py productivity
+```
+
+Record a decisive negative result:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py exclude <exclusion_id> \
+  --mechanism "<information source or coding mechanism>" \
+  --population "<exact measured population>" \
+  --failure "<receipt-backed terminal failure>" \
+  --retired-dimension "<dimension no longer worth sweeping>" \
+  --unsettled-successor "<materially different successor>" \
+  --evidence <receipt>
+```
+
 Use `tools/enwiki9_lab.py` for this loop. Do not build separate ad hoc launchers
 or keep experiment state only in chat.
 
@@ -68,12 +92,40 @@ python3 projects/enwiki9/tools/enwiki9_lab.py propose <proposal_id> \
   --max-program-bytes <bytes> \
   --promotion "<numeric promotion condition>" \
   --kill "<numeric kill condition>" \
+  --mechanism-change change_coded_alphabet \
+  --interface "<clean interface exposed to descendants>" \
+  --retired-neighborhood "<negative neighborhood this does not repeat>" \
   --evidence <receipt-or-document>
 ```
 
 Mechanism classes are `substrate`, `endpoint`, `representation`, and `coder`.
 Keep orthogonal proposals active rather than collapsing search into one tuning
 ladder.
+
+Mechanism-change classes receive an explicit search bonus or penalty:
+
+```text
+favor:
+  delete_predictor_work
+  change_coded_alphabet
+  change_update_schedule
+  replace_representation
+  add_state_coordinate
+  compile_state_machine
+  add_macro_family
+
+penalize:
+  parameter_tuning
+  mixture_expansion
+```
+
+The bonus changes search ordering only. It never changes measured archive
+bytes, counted package bytes, runtime, memory, or promotion gates.
+
+For more than eight independently positive components, do not enumerate the
+full subset lattice. Measure singles, screen pairs, use branch-and-bound,
+select a small number of triples, and reserve the full lattice for the final
+small set.
 
 List and claim proposals:
 
