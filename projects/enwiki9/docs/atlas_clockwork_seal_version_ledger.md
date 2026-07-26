@@ -70,3 +70,33 @@ The next draft must:
 
 No existing submission will be retroactively graded against
 `ACS-MATH-DRAFT-2`.
+
+## Submission ACS-ABC-20260726T203531Z-b7dd49a0
+
+`ACS-MATH-DRAFT-1` received a normalized combined solution for Problems A,
+B, and C at `2026-07-26T20:35:31Z`.
+
+`A` and `B` are mathematically complete as written. `C` is complete
+with the following semantic qualification.
+
+### Erratum C1
+
+Under the requirement that scalar recurrence coefficients are rational, an
+arbitrary irrational bound \(\rho\) cannot generally be attained exactly in
+dimension one. Replace unconditional exact attainability with:
+
+\[
+\text{exact attainment for attainable }\rho,
+\qquad
+\text{supremal sharpness for every real }\rho\in[0,1).
+\]
+
+This changes the literal sharpness requirement and must be incorporated into
+`ACS-MATH-DRAFT-2`. Existing submissions remain governed by the original
+problem hash.
+
+The submission and review are recorded at:
+
+`docs/atlas_clockwork_seal_problems_abc_solution.md`
+
+`docs/atlas_clockwork_seal_problems_abc_solution.review.md`
