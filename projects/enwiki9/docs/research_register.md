@@ -800,3 +800,18 @@ Two workflow defects were repaired while executing the first OMEGA candidate. Ad
 The decisive opening WRT gate encoded the exact 600,747-byte store. It roundtripped and deterministically re-encoded the identical store hash. The codec processed 490,000 events using 1,090,747 categorical decisions versus 4,805,976 bit decisions, a 77.3044 percent reduction. Compression took 1.5703 seconds, decompression 2.2426 seconds, peak RSS was 25,504 KiB, and the archive was 367,924 bytes. Endpoint428's matched opening archive is 175,241 bytes, so the event control regressed by 192,683 bytes, far beyond the 15,000-byte kill gate. V0 is retired; no KESTREL, Householder, tensor, changepoint, or PHASECODE mechanism is stacked onto it.
 
 `vulcan_event_ppm_v1` is the materially different earned successor: bounded order-2/order-1/order-0 exact-event PPM with V0 used only for escape. Its source is developed and registered, but the canonical inventory currently blocks measurement because the new candidate files are not yet tracked. No compression claim exists for V1.
+
+## 2026-07-26 D02 TWINSTREAM opening-1M terminal decision
+
+Candidate: `twinstream_raw_wrt_dual_reconstruction_v1`
+
+Receipts:
+
+- `results/twinstream_raw_wrt_dual_reconstruction_v1/opening_1m_shadow.json`
+- `results/twinstream_raw_wrt_dual_reconstruction_v1/decision.json`
+
+The six uncovered leading WRT bytes were repaired as one exact zero-raw fallback group. The resulting fresh arithmetic replay covered `600,742` WRT bytes and reconstructed the exact `1,000,000`-byte raw population. The valid full-opening deltas against P0 were: P1 raw history `+5,808` saved bytes; P2 shared raw/WRT state `-6,498`; P3 completed-event reverse reconstruction `-6,453`; matched-capacity PX `-2,478`.
+
+The emitted page partition is quarantined. The first harness searched for a complete `</page>` marker inside each emission group, so markers crossing event boundaries were missed and it reported zero completed pages. Its development and holdout rows are not evidence, and the receipt cannot authorize offset transfer.
+
+Decision: `retire_current_shared_state_realization`. Both score-bearing shared-view controls regress decisively on the valid complete opening aggregate, so no blend sweep, offset run, or native integration is authorized. P1's positive raw-history aggregate is preserved only as a separate non-sharing observation. D02 and all its shadows retain zero score credit. The primary research lane moves to SIBYL V0 explicitly paid page prompts.
