@@ -30,7 +30,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT_DEFAULT = ROOT / "shadow_residual_coder_certificate.json"
 
 DEFAULT_BASELINE_SCORE = 110_181_114
-DEFAULT_TARGET_SCORE = 109_000_000
+DEFAULT_TARGET_SCORE = 108_000_000
 DEFAULT_SCOPE_BYTES = 1_000_000_000
 
 PAIR_RE = re.compile(r"([A-Za-z_][A-Za-z0-9_]*)=([^ \t]+)")

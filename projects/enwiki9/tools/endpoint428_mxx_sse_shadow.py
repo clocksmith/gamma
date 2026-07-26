@@ -562,7 +562,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "holdout_start_ppm": args.holdout_start_ppm,
         },
         "economics": {
-            "target_score_bytes": 109_000_000,
+            "target_score_bytes": 108_000_000,
             "remaining_debt_bytes_per_1m": args.remaining_debt_bytes_per_1m,
             "provisional_code_bytes": args.provisional_code_bytes,
             "provisional_code_bytes_per_1m": code_rate,

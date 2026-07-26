@@ -20,7 +20,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 RESULTS_DIR = ROOT / "results"
 OUT_MD = ROOT / "docs" / "evidence_matrix.md"
 FULL_INPUT_BYTES = 1_000_000_000
-TARGET_10_95 = 109_000_000
+TARGET_10_95 = 108_000_000
 
 
 @dataclass(frozen=True)

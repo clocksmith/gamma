@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 
-TARGET_SCORE_BYTES = 109_000_000
+TARGET_SCORE_BYTES = 108_000_000
 CONFIRMATION_SCOPE_BYTES = 10_000_000
 FULL_SCOPE_BYTES = 1_000_000_000
 
@@ -354,7 +354,7 @@ def main() -> int:
         "claim_boundary": (
             "This receipt proves the recovery at 1.5M and preserves the proven 1M "
             "archive. It authorizes only an exact 10M economics gate. It is not a "
-            "full-corpus score or a 10.95 percent claim."
+            "full-corpus score or a 10.80 percent claim."
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

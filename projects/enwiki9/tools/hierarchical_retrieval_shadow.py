@@ -29,7 +29,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEFAULT_DATA = ROOT / "data" / "enwik9"
 DEFAULT_OUT = ROOT / "results" / "hierarchical_retrieval_shadow" / "latest.json"
 DEFAULT_BASELINE_SCORE = 110_181_114
-DEFAULT_TARGET_SCORE = 109_000_000
+DEFAULT_TARGET_SCORE = 108_000_000
 DEFAULT_SCOPE_BYTES = 1_000_000_000
 PAIR_RE = re.compile(r"([A-Za-z_][A-Za-z0-9_]*)=([^ \t]+)")
 PREFIX = "FX2_RESIDUAL_ROW "

@@ -28,7 +28,7 @@ OUT_JSON_DEFAULT = ROOT / "upper_bound_certificate.json"
 OUT_MD_DEFAULT = ROOT / "UPPER_BOUND_CERTIFICATE.md"
 
 FULL_INPUT_BYTES = 1_000_000_000
-TARGET_10_95 = 109_000_000
+TARGET_10_95 = 108_000_000
 CALIBRATED_BASELINE_SCORE = 110_181_114
 
 METADATA_INHERITED_100M = {
@@ -703,7 +703,7 @@ def build_certificate(
         "notes": [
             "Prefix results prove upper bounds only for that prefix, not for enwik9.",
             "Projected 1GB scores are search evidence and are excluded from proof_status.",
-            "A 10.95 proof requires a full 1GB result with score <= 109000000.",
+            "A 10.80 proof requires a full 1GB result with score <= 108000000.",
         ],
     }
 

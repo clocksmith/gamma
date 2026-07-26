@@ -383,7 +383,7 @@ handoff:
 | `docs/wikiir_mdl.md` | Reversible typed-IR compiler strategy, orthogonal representation queue, exact MDL contract, and first three headroom probes. |
 | `docs/streaming_retrieval_block_regime_audit.md` | Offline-teacher audit of the three target-closing receipt regressions against weak positive controls; full-block labels are not decoder-admissible. |
 | `docs/embedding_teacher_rules.md` | Rules for using embeddings offline and distilling only counted deterministic logic. |
-| `docs/offline_teacher_retrieval_investigation.md` | Target-closing investigation tying offline embedding teachers, deterministic rules, decoder-rebuilt retrieval, routing, and counted proof gates to the `109,000,000` objective. |
+| `docs/offline_teacher_retrieval_investigation.md` | Target-closing investigation tying offline embedding teachers, deterministic rules, decoder-rebuilt retrieval, routing, and counted proof gates to the `108,000,000` objective. |
 | `docs/research_register.md` | Strategy and novel-algorithm register with foundation, local files, promote gate, and kill gate. |
 | `ADAPTIVE_WORKFLOW.md` | Primary candidate creation, mutation, queueing, execution, tracking, and promotion workflow. |
 | `docs/tooling_inventory.md` | Grouped inventory of tool scripts and their lock-safety expectations. |
@@ -642,3 +642,41 @@ Algorithm fixes:
    calibration separate. Memory-shaping candidates decide admissibility and
    archive slope; sidecar residual candidates decide whether any tiny structural
    patch can pay its counted byte cost.
+
+## 2026-07-25 Candidate Portfolio Index
+
+The current cross-domain and decoder-state synthesis portfolio is maintained in:
+
+| Path | Purpose |
+|---|---|
+| `docs/candidate_portfolio_20260725.md` | Human-readable registry of twenty-four considered candidates, overlap normalization, triage, gates, and controls. |
+| `docs/candidate_portfolio_20260725.json` | Machine-readable candidate IDs, states, priorities, sources, target economics, execution order, and required controls. |
+
+These entries are proposals, not result receipts. `docs/hutter_frontier.json`,
+generated ledgers, and status receipts remain authoritative for measured score
+evidence. The normalized post-XML21 research order is `A07`, `B09`, `B07`,
+`B06`, `A05`, `A11`, `B02`, and `B01`. No parked or rejected candidate may be
+queued without a new receipt-backed premise recorded in the research register.
+
+## 2026-07-25 Winning Composition Registry
+
+| Path | Purpose |
+|---|---|
+| `docs/winning_compositions_20260725.md` | Human specification for C01 Wheeler-Phase-Tensor, C02 Selective-Tensor-State, and C03 Orbit-Phase-Parallel-MDL compositions, including complete subset-lattice accounting. |
+| `docs/winning_compositions_20260725.json` | Machine-readable components, priorities, target gates, interaction policy, promotion conditions, kill conditions, and execution order. |
+
+A composition slice is no longer required to win independently. It must instead
+show positive net marginal contribution when removed from the full registered
+composition on development and sealed holdout. Every three-component candidate
+must replay `baseline`, `A`, `B`, `C`, `AB`, `AC`, `BC`, and `ABC` with identical
+inputs and controls. This exception applies only to C01-C03 and does not grant
+score credit before exact constructive receipts.
+
+## Language and harness portfolio (2026-07-25)
+
+The D01-D12 language, multiview, discourse, and self-improving-harness proposals are normalized in:
+
+- `docs/language_harness_portfolio_20260725.md`
+- `docs/language_harness_portfolio_20260725.json`
+
+The portfolio separates score mechanisms from research infrastructure. D02 TWINSTREAM and D07 QUD-CODE are the leading bounded score probes. D10 AUTOPSY and D09 DARWIN-CODEC extend the offline adaptive workflow and receive no compression credit. L01 freezes all discovered source before submission and admits only receipt-positive slices through a complete subset-lattice test.

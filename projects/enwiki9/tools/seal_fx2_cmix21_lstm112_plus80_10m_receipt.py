@@ -13,7 +13,7 @@ from typing import Any
 
 
 BASELINE_FORECAST_BYTES = 110_181_114
-TARGET_SCORE_BYTES = 109_000_000
+TARGET_SCORE_BYTES = 108_000_000
 BASELINE_PROGRAM_BYTES = 183_008
 OPTION_BYTES = 3
 ARCHIVE_MARKER_BYTES = 1
@@ -448,7 +448,7 @@ def main() -> int:
         "claim_boundary": (
             "Exact clean 10M backend archive, source-build identity, transform, and "
             "RSS evidence. A pass authorizes package proof only; it is not a full-"
-            "corpus score or 10.95 percent claim."
+            "corpus score or 10.80 percent claim."
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

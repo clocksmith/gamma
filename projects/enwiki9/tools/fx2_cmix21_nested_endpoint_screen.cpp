@@ -446,7 +446,7 @@ struct Args {
   std::uint32_t holdout_start_ppm = 800000;
   std::uint32_t top_endpoints = 8;
   std::uint64_t baseline_score_bytes = 109789279;
-  std::uint64_t target_score_bytes = 109500000;
+  std::uint64_t target_score_bytes = 108000000;
   double native_integration_margin_bytes_per_1m = 500.0;
   std::uint64_t payload_bytes = 0;
   bool payload_known = false;

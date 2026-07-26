@@ -75,7 +75,7 @@ def render(rows: list[evidence.Row], top_limit: int) -> str:
         "",
         "```text",
         "Rows here are artifact-backed only for their measured scope.",
-        "No prefix row proves 10.95%.",
+        "No prefix row proves 10.80%.",
         "No forecast or metadata-inherited row is included.",
         "```",
         "",

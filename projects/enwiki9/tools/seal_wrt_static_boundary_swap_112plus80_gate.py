@@ -9,7 +9,7 @@ import json
 import pathlib
 
 
-TARGET_SCORE = 109_000_000
+TARGET_SCORE = 108_000_000
 CURRENT_TAIL_PROJECTED_SCORE = 109_522_498
 SCOPE_BYTES = 10_000_000
 FULL_SCOPE_BYTES = 1_000_000_000
@@ -58,7 +58,7 @@ def economics(
         "source_package_delta_bytes": package_delta_bytes,
         "net_saved_bytes_at_10m": net_saved_10m,
         "tail_projected_score_bytes": projected_score,
-        "tail_projected_margin_to_109000000_bytes": TARGET_SCORE - projected_score,
+        "tail_projected_margin_to_108000000_bytes": TARGET_SCORE - projected_score,
     }
 
 
@@ -240,7 +240,7 @@ def main() -> int:
         "claim_boundary": (
             "This receipt is at most exact 10M constructive evidence. The projected "
             "score assumes the measured 10M dictionary effect persists over 1G; only a "
-            "counted full-corpus archive at or below 109000000 with roundtrip can prove "
+            "counted full-corpus archive at or below 108000000 with roundtrip can prove "
             "the target."
         ),
     }

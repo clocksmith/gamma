@@ -339,7 +339,7 @@ def main() -> int:
         "evidence_level": "selection_distilled_confirmation_exact_shadow",
         "claim_boundary": (
             "Rules are selected only from the middle trace split and exact-replayed "
-            "on the untouched suffix. This is not a native archive or 10.95% claim."
+            "on the untouched suffix. This is not a native archive or 10.80% claim."
         ),
         "input": str(args.rows),
         "rows": rows,
