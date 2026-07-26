@@ -75,9 +75,10 @@ Problem B is `COMPLETE` only if it proves:
 4. The exact equivalence between Wheeler order and the stated one-letter
    interval and monotonicity conditions.
 5. The interval theorem for every continuation.
-6. The depth-\(L\) unfolding is Wheeler and has the stated exact vertex and edge
-   counts.
-7. The unfolding's interval and finite-certificate claims.
+6. The depth-\(L\) order-relative unfolding is Wheeler and has the stated exact
+   vertex and edge counts.
+7. The formally defined endpoint sets are intervals, and the supplied state
+   order is included in the finite certificate.
 8. The quadratic continuation-interval bound and linear lower-bound family.
 
 ## 6. Problem C grading
@@ -94,8 +95,9 @@ Problem C is `COMPLETE` only if it proves:
 6. Rational orthogonal matrices use at most \(d\) rational Householder
    reflections.
 7. The widened-intermediate and final-requantization operator bound.
-8. The stated precision condition and explicit dimension-dependent dyadic lower
-   bound on \(m\).
+8. The stated precision condition, the finite-\(m\) feasibility condition, and
+   explicit dimension-dependent dyadic lower bounds on \(m\) for both
+   nearest-rounded and externally fixed initial-state errors.
 
 ## 7. Problem D grading
 
@@ -103,12 +105,13 @@ Problem D is `COMPLETE` only if it proves:
 
 1. The exact kernel collision characterization and successful-depth formula.
 2. The finite separating-map theorem by both probabilistic and deterministic
-   arguments.
+   arguments under the supplied decidable exact energy order.
 3. Dependent-row deletion and extension to a nested full-rank family.
 4. The universally valid difference-set inclusion criterion, including the
    empty-set case, and its equality form for nonempty sets.
 5. Its Hamming-ball, minimum-distance, counting, and affine-union consequences.
-6. The bounded-search first-hit certificate equivalence.
+6. The bounded-search first-hit certificate equivalence with the stated
+   \(B\) and \(j\) domains.
 7. The exact count of \(j\) matrix-vector evaluations for the canonical
    sequential verifier, without treating it as an unrestricted lower bound.
 

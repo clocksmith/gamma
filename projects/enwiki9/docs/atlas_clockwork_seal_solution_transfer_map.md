@@ -80,21 +80,24 @@ then may an index be implemented.
 ### Mathematically available
 
 - Uniform shadowing of contractive selective recurrences.
-- Exact loss transfer under dyadic approximation.
+- A rigorous upper bound on cumulative excess loss under dyadic approximation.
 - Rational Householder realization and perturbation bounds.
 - An explicit sufficient fixed-point precision.
 
 ### Canonical extraction
 
-Given a frozen contractive teacher and certified constants, choose the minimum
-allowed precision and lexicographically first valid factorization, then
-instantiate the deterministic integer recurrence.
+Given a frozen contractive teacher, a frozen supplied factorization, and
+certified constants, choose the least dyadic precision satisfying the public
+sufficient bound, then instantiate the committed factor order, rounding rule,
+and deterministic integer recurrence.
 
 ### Missing antecedent
 
 There is no locally certified, exact, full-corpus under-target teacher with
 global contraction, sufficient score slack, and official resource receipts.
-Without that teacher, the theorem cannot guarantee an under-target student.
+The public theorem also assumes rather than discovers a useful matrix
+factorization. Without a teacher and a frozen supplied factorization, it cannot
+guarantee an under-target student.
 
 ### Reopening condition
 
