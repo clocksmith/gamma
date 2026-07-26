@@ -1084,3 +1084,46 @@ integrate NNCP, launch an unchanged larger CPU teacher, extrapolate the bounded
 2,301 bytes, or subtract it from Gamma. Further work requires an accelerated
 hash-bound causal trace or a smaller causal teacher compiled into a counted
 integer student.
+## REVLOG implicit revision-log column coding with exact state replay
+
+Proposal: `revlog_slot_bypass_v1`
+
+RADIX-ISLAND is terminal because its direct numeric representation exceeded
+the parent digit qbits before markers and framing. REVLOG is the only authorized
+numeric successor because it changes the information source: exact XML paths,
+cross-record ordering, timestamp/revision relationships, and the
+username-to-contributor-ID functional dependency.
+
+The first experiment is an opening-1M truth-aware WRT/P1 oracle with C1 through
+C5 plus shuffled `CS` and `CU` controls. It must clear a 4,000 B/M parent
+information ceiling and a fully charged 3,000 B/M combined-gain gate before any
+distant or native work. Generic numeric extraction and parameter sweeps remain
+retired. Plan: `docs/revlog_slot_bypass_plan.md`.
+
+<!-- REVLOG_SLOT_BYPASS_RESULT_START -->
+Status: **retire_revlog_and_close_numeric_research**, zero score credit.
+
+The opening-1M exact WRT/P1 oracle found 631 selected
+outer-XML fields across 171 complete pages. Their combined
+parent ceiling is 1006.917 B/M
+against the predeclared 4,000 B/M Gate 0. The fully charged C5 oracle is
+-386.333 B/M against the
+3,000 B/M Gate 1.
+
+Class results:
+
+- C1 page ID: -0.788 B/M.
+- C2 timestamp: -269.990 B/M.
+- C3 revision ID: -53.304 B/M.
+- C4 contributor ID: -110.252 B/M.
+- CS shuffled timestamp control: 5299 side bits versus C3's 2706.
+- CU shuffled username control: 2845 side bits versus C4's 2200.
+
+Timestamp ordering leaves 24
+revision-ID inversions. The contributor table observes
+49 unchanged repeated usernames and
+0 contradictions.
+
+Decision: reject native REVLOG integration, close numeric research, and move the primary lane to aligned teacher-quotient compilation. Receipt:
+`results/revlog_slot_bypass_opening_1m_v1/decision.json`.
+<!-- REVLOG_SLOT_BYPASS_RESULT_END -->
