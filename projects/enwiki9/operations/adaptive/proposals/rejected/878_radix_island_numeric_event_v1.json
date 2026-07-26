@@ -1,0 +1,32 @@
+{
+  "claimed_at": "2026-07-26T23:22:30+00:00",
+  "created_at": "2026-07-26T23:22:30+00:00",
+  "evidence": [
+    "External STC reports a 2629561-byte full-enwik9 same-coder digit-decomposition ablation, but Gamma radix_stc_context_ordered_numeric_v1 regressed 1013 bytes at opening 1M because its framed numeric representation stayed on the parent trajectory. RADIX-ISLAND instead tests post-WRT typed events and a separate numeric coder. External and oracle evidence receive zero score credit."
+  ],
+  "expected_savings_bytes": 2629561,
+  "hypothesis": "A post-WRT typed numeric-event representation can remove eligible digit runs from endpoint428 and encode decoder-derived numeric islands with a separate mixed-radix/delta coder, capturing at least 3000 bytes per million of exact parent digit regret while reducing mature prediction decisions.",
+  "interfaces_exposed": [
+    "exact WRT emission groups, decoder-derived numeric island keys, separate integer numeric coder, parent P1 digit-regret ledger"
+  ],
+  "kill_condition": "Retire unchanged if the conservative oracle is below 3000 B/M, if context-keyed island delta coding does not beat occurrence-order run coding, if native R2 or R4 is negative after complete framing/source cost, or if old-trajectory probabilities are used for score credit.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "representation",
+  "owner": "codex",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 101,
+  "promotion_condition": "Zero-credit oracle must clear 3000 B/M on opening and aggregate distant populations after charging conservative two-byte NUM markers, lengths, direct/delta modes, bitmaps, side framing, and exact prefix lengths. Native R2 run lifting must then be positive before R4 island coding; canonical 10M requires at least 25000 gross and 23000 net bytes, exact replay, deterministic roundtrip, at least 1.5 percent fewer main predictions, and at least 1 percent decode wall reduction.",
+  "proposal_id": "radix_island_numeric_event_v1",
+  "rejected_at": "2026-07-26T23:25:44+00:00",
+  "rejection_reason": "Terminal opening-1M oracle failure: endpoint428 spends only 2.603215 bits per eligible digit, while direct mixed-radix values alone cost 3.257186 bits per digit before markers. Optimistic R2 loses 5463.253 B/M; conservative R4 loses 15826.628 B/M. Context ordering saves 1063 side bits, but island composition adds 623 bits. Retire without native implementation, distant replay, or tuning.",
+  "retired_neighborhoods": [
+    "wrapper-level digit framing that sends main and numeric side bytes through the unchanged parent"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 121,
+  "state": "rejected",
+  "title": "RADIX-ISLAND run-lifted numeric event codec"
+}
