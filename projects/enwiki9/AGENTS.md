@@ -80,8 +80,13 @@ kill condition. Compare only identical corpus populations and scopes.
 | Generated lifecycle inventory | `candidate_inventory.json` |
 | Source-bound proof frontier | `docs/hutter_frontier.json` and `docs/hutter_run_ledger.json` |
 | Current operator status | `docs/status_receipt.md` |
+| Atlas-Clockwork problem bank, binding audit, commitment, and activation | `docs/atlas_clockwork_seal_*.md` and `operations/atlas_clockwork_seal_v2/` |
 
 Do not leave decisive commands, hashes, outcomes, or next actions only in chat.
+
+Do not distribute `docs/atlas_clockwork_seal_problem_set.md` to candidates
+unless `python3 tools/atlas_clockwork_seal.py verify --require-bound` reports
+`VALID_BOUND`. Expert review of an `UNBOUND` draft is allowed.
 
 ## Algorithm And Evidence Recording Contract
 

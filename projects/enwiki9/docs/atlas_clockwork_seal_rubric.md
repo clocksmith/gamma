@@ -34,6 +34,10 @@ obligation stated in that problem is proved. There are no discretionary
 The public examination passes if and only if at least one independent problem
 is `COMPLETE`.
 
+A `COMPLETE` verdict establishes the corresponding proposition \(T_i\). The
+private application team does not parse the manuscript for an executable
+witness; it applies the proof-independent canonical map frozen by Seal-2.
+
 ## 3. General standards
 
 A `COMPLETE` solution must:

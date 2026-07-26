@@ -185,25 +185,34 @@ component gains do not establish transfer.
 
 ## 9. Universal private transfer theorem
 
-For each published route \(i\), let:
+For each proposed route \(i\), let:
 
-- \(S_i\) range over every public solution graded `COMPLETE`.
-- \(H_i\) be the frozen quantitative hypothesis-and-margin proof.
-- \(\Psi_i\) be the frozen total canonical application map.
-- \(V_i\) be the exact frozen verifier.
+- \(T_i\) be the exact public mathematical proposition.
+- \(H_i\) be the frozen quantitative proof that the hidden finite instance
+  satisfies all hypotheses and target-margin antecedents.
+- \(W_i(H_i)\) be the finite set of application witnesses satisfying the
+  conclusion of \(T_i\).
+- \(\Psi_i(H_i)\) be the canonically least witness in \(W_i(H_i)\).
+- \(V_i\) be the exact frozen application verifier.
+
+The application map does not parse or depend on the syntax of a candidate
+manuscript. A `COMPLETE` verdict establishes \(T_i\); the frozen map depends
+only on the hidden instance and theorem conclusion.
 
 Before publication, prove
 
 \[
-\forall S_i,\qquad
-\operatorname{COMPLETE}_i(S_i)\land H_i
+H_i\land T_i
 \Longrightarrow
-V_i(\Psi_i(S_i))=\operatorname{PASS}.
+W_i(H_i)\ne\varnothing
+\land
+V_i(\Psi_i(H_i))=\operatorname{PASS}.
 \]
 
-The proof must include target and resource sufficiency, not merely mathematical
-applicability. Without this implication and all committed objects, Route \(i\)
-must not appear in the public examination.
+This conditional proof must include exact target and resource sufficiency.
+\(\Psi_i\) must use a frozen finite ordering and decidable witness predicate.
+Without the proof and all committed objects, Route \(i\) must be removed from
+the candidate examination.
 
 ## 10. Binding artifact requirement
 
@@ -227,3 +236,12 @@ The commitment records the exact hash, byte length, schema version, and role of
 every artifact. Missing routes must be removed from the public examination
 rather than represented by placeholders. A manifest with unresolved,
 estimated, or `TODO` fields cannot activate the Seal.
+
+The canonical implementation and current decision live under
+`operations/atlas_clockwork_seal_v2/`. Before any candidate distribution run:
+
+```text
+python3 tools/atlas_clockwork_seal.py verify --require-bound
+```
+
+Only `VALID_BOUND` authorizes release.

@@ -1,5 +1,12 @@
 # The Atlas and Clockwork Mathematical Examination
 
+Distribution status: `DRAFT - EXPERT REVIEW ONLY`
+
+This document is a problem bank, not an authorized candidate examination.
+`ACS-MATH-SEAL-2` is `UNBOUND`, and no route is authorized for solver
+distribution. This notice may be removed only after the committed Seal
+verifier reports `VALID_BOUND`.
+
 ## Instructions to solvers
 
 This is a pencil-and-paper examination in finite mathematics. It contains four
