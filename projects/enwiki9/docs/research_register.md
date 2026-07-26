@@ -815,3 +815,27 @@ The six uncovered leading WRT bytes were repaired as one exact zero-raw fallback
 The emitted page partition is quarantined. The first harness searched for a complete `</page>` marker inside each emission group, so markers crossing event boundaries were missed and it reported zero completed pages. Its development and holdout rows are not evidence, and the receipt cannot authorize offset transfer.
 
 Decision: `retire_current_shared_state_realization`. Both score-bearing shared-view controls regress decisively on the valid complete opening aggregate, so no blend sweep, offset run, or native integration is authorized. P1's positive raw-history aggregate is preserved only as a separate non-sharing observation. D02 and all its shadows retain zero score credit. The primary research lane moves to SIBYL V0 explicitly paid page prompts.
+
+## 2026-07-26 Atlas-Clockwork Seal-2 conditional binding audit
+
+The problem bank was audited against the exact `108,000,000` full-corpus target.
+The reduction now treats a candidate manuscript as proof of proposition \(T_i\);
+the organizer map depends only on the hidden finite instance and theorem
+conclusion and never parses arbitrary proof prose.
+
+All routes are removed from candidate authorization. Route A lacks an exact
+full-corpus gain matrix and target-bearing codebook. Route B supplies interval
+geometry but no codelength theorem, and its causal shadow is negative. Route C
+lacks an exact under-target teacher, contraction certificate, and score/resource
+margin. Route D requires low true energy rank and feasible search, neither
+supplied by parity separation.
+
+The package under `operations/atlas_clockwork_seal_v2/` records four rejection
+decisions, the evidence inconsistency, route schema, immutable commitment, and
+activation state. `tools/atlas_clockwork_seal.py` refuses candidate distribution
+without complete hypothesis, conditional-reduction, canonical-map, resource,
+independent-audit, and verification artifacts.
+
+Decision: `UNBOUND`; authorized routes: none; score credit: zero. Preserve the
+problems for expert review only. Do not distribute the candidate examination
+until the verifier reports `VALID_BOUND`.
