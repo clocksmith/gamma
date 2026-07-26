@@ -58,18 +58,22 @@ The next problem version must explicitly bind the claim to the canonical direct
 verifier or define a computational model strong enough to support a lower
 bound. This is a semantic clarification and requires a new problem version.
 
-## ACS-MATH-DRAFT-2-WORKING
+## ACS-MATH-DRAFT-2
 
 ```text
 artifact:
   docs/atlas_clockwork_seal_problem_set.md
+sha256:
+  c1a6f63d94f8568ecd7b56968ad849977edfcd2c94a9c5ba11f24073f0055fa2
+source_bound_gamma_commit:
+  3824395f
 state:
-  WORKING_COPY_NOT_FROZEN
+  FROZEN_MATHEMATICAL_ARTIFACT
 seal_state:
   UNBOUND
 ```
 
-This working draft:
+This frozen mathematical draft:
 
 1. Replaces C1's unconditional exact-attainment demand with exact attainment
    for admissible rational contraction factors and supremal sharpness for every
@@ -100,10 +104,10 @@ issues that are incorporated into the working draft:
 These corrections do not alter the Seal decision or provide compression-score
 credit.
 
-Before this draft can govern a submission, the organizer must freeze its exact
-SHA-256, record the source-bound commit, perform a fresh mathematical audit,
-and make an independent Seal decision. No existing submission is retroactively
-graded against this working draft.
+The exact SHA-256 and source lineage are recorded above. The mathematical audit
+is complete, but this artifact cannot govern a candidate examination unless an
+independent future Seal decision reports `BOUND`. No existing submission is
+retroactively graded against this draft.
 
 ## Submission ACS-ABC-20260726T203531Z-b7dd49a0
 

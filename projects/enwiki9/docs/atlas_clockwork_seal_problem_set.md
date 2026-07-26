@@ -1,16 +1,16 @@
 # The Atlas and Clockwork Mathematical Examination
 
 Distribution status: `DRAFT - EXPERT REVIEW ONLY`
-Problem version: `ACS-MATH-DRAFT-2-WORKING`
+Problem version: `ACS-MATH-DRAFT-2`
 
 This document is a problem bank, not an authorized candidate examination.
 `ACS-MATH-SEAL-2` is `UNBOUND`, and no route is authorized for solver
 distribution. This notice may be removed only after the committed Seal
 verifier reports `VALID_BOUND`.
 
-This working draft incorporates the C1, D3, and D4 corrections discovered in
+This frozen mathematical draft incorporates the C1, D3, and D4 corrections discovered in
 the recorded solutions to `ACS-MATH-DRAFT-1`. It is not frozen for a solver
-submission until its exact hash is entered in the version ledger.
+submission under Seal-2 because the Seal remains `UNBOUND`.
 
 ## Instructions to solvers
 
