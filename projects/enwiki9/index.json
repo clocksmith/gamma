@@ -1,55 +1,4 @@
 {
-  "challenge": "enwik9",
-  "description": "Hutter Prize: lossless compression of the first 10^9 bytes of English Wikipedia",
-  "source": "http://mattmahoney.net/dc/enwik9.zip",
-  "references": [
-    "http://prize.hutter1.net/",
-    "http://mattmahoney.net/dc/text.html",
-    "http://mattmahoney.net/dc/textdata.html"
-  ],
-  "data": {
-    "path": "data/enwik9",
-    "expected_size": 1000000000,
-    "zip_md5": "3e773f8a1577fda2e27f871ca17f31fd"
-  },
-  "scoring": {
-    "formula": "S = compressed_size + program_size",
-    "current_record": 110793128,
-    "prize_threshold": 109685197,
-    "notes": "S1 (decompressor) + S2 (archive) per http://prize.hutter1.net/ ; we use program.py source as a stand-in for S1 in the in-repo bench"
-  },
-  "external_leaderboard": [
-    {
-      "date": "2024-09-03",
-      "author": "Kaido Orav & Byron Knoll",
-      "decompressor": "fx2-cmix",
-      "total_size": 110793128
-    },
-    {
-      "date": "2024-02-02",
-      "author": "Kaido Orav",
-      "decompressor": "fx-cmix",
-      "total_size": 112578322
-    },
-    {
-      "date": "2023-07-16",
-      "author": "Saurabh Kumar",
-      "decompressor": "fast cmix",
-      "total_size": 114156155
-    },
-    {
-      "date": "2021-05-31",
-      "author": "Artemiy Margaritov",
-      "decompressor": "starlit",
-      "total_size": 115352938
-    },
-    {
-      "date": "2019-07-04",
-      "author": "Alexander Rhatushnyak",
-      "decompressor": "phda9 v1.8",
-      "total_size": 116673681
-    }
-  ],
   "agents": [
     {
       "id": "hutter_contender",
@@ -70,6 +19,57 @@
     {
       "id": "dac_crackpot",
       "path": "agents/dac_crackpot.md"
+    }
+  ],
+  "challenge": "enwik9",
+  "data": {
+    "expected_size": 1000000000,
+    "path": "data/enwik9",
+    "zip_md5": "3e773f8a1577fda2e27f871ca17f31fd"
+  },
+  "description": "Hutter Prize: lossless compression of the first 10^9 bytes of English Wikipedia",
+  "external_leaderboard": [
+    {
+      "author": "Kaido Orav & Byron Knoll",
+      "date": "2024-09-03",
+      "decompressor": "fx2-cmix",
+      "total_size": 110793128
+    },
+    {
+      "author": "Kaido Orav",
+      "date": "2024-02-02",
+      "decompressor": "fx-cmix",
+      "total_size": 112578322
+    },
+    {
+      "author": "Saurabh Kumar",
+      "date": "2023-07-16",
+      "decompressor": "fast cmix",
+      "total_size": 114156155
+    },
+    {
+      "author": "Artemiy Margaritov",
+      "date": "2021-05-31",
+      "decompressor": "starlit",
+      "total_size": 115352938
+    },
+    {
+      "author": "Alexander Rhatushnyak",
+      "date": "2019-07-04",
+      "decompressor": "phda9 v1.8",
+      "total_size": 116673681
+    }
+  ],
+  "leaderboard": [
+    {
+      "compress_time_s": 5375.284,
+      "compressed_size": 23706379,
+      "data_size": 100000000,
+      "hutter_score": 23710046,
+      "program_id": "typed_anchor_chain_ppmc_v1",
+      "program_size": 3667,
+      "roundtrip_ok": true,
+      "timestamp": "2026-05-11T02:30:59"
     }
   ],
   "programs": [
@@ -593,9 +593,6 @@
       "id": "schema_title_streams_lzma2_1g_z_v1"
     },
     {
-      "id": "srstc_raw_order2_aggregate_sketch_v1"
-    },
-    {
       "id": "semantic_mixer_range_v1"
     },
     {
@@ -603,6 +600,12 @@
     },
     {
       "id": "sidecar_mix_cmix_v1"
+    },
+    {
+      "id": "srstc_raw_order2_aggregate_richkeys_v1"
+    },
+    {
+      "id": "srstc_raw_order2_aggregate_sketch_v1"
     },
     {
       "id": "title_ref_columnar_lzma_v1"
@@ -621,6 +624,12 @@
     },
     {
       "id": "typed_receipt_v1"
+    },
+    {
+      "id": "vulcan_event_control_v0"
+    },
+    {
+      "id": "vulcan_event_ppm_v1"
     },
     {
       "id": "xml_scaffold__macro_residual__punct_media__lzma_extreme__min__v04"
@@ -744,21 +753,18 @@
     },
     {
       "id": "zstd_ultra_long"
-    },
-    {
-      "id": "srstc_raw_order2_aggregate_richkeys_v1"
     }
   ],
-  "leaderboard": [
-    {
-      "program_id": "typed_anchor_chain_ppmc_v1",
-      "hutter_score": 23710046,
-      "compressed_size": 23706379,
-      "program_size": 3667,
-      "data_size": 100000000,
-      "compress_time_s": 5375.284,
-      "roundtrip_ok": true,
-      "timestamp": "2026-05-11T02:30:59"
-    }
-  ]
+  "references": [
+    "http://prize.hutter1.net/",
+    "http://mattmahoney.net/dc/text.html",
+    "http://mattmahoney.net/dc/textdata.html"
+  ],
+  "scoring": {
+    "current_record": 110793128,
+    "formula": "S = compressed_size + program_size",
+    "notes": "S1 (decompressor) + S2 (archive) per http://prize.hutter1.net/ ; we use program.py source as a stand-in for S1 in the in-repo bench",
+    "prize_threshold": 109685197
+  },
+  "source": "http://mattmahoney.net/dc/enwik9.zip"
 }

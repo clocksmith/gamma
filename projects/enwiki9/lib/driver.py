@@ -111,12 +111,12 @@ def _infer_scope_label(limit: int | None) -> str:
 
 
 def _infer_run_purpose(
-    explicit: str | None,
+    run_purpose: str | None,
     limit: int | None,
     check_determinism: bool,
 ) -> str:
-    if explicit is not None:
-        return explicit
+    if run_purpose is not None:
+        return run_purpose
     if check_determinism:
         return "verification"
     if limit in SCOPE_LABELS:

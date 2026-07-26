@@ -41,12 +41,12 @@ Backup concepts are retained as components:
 | Quantity | Bytes |
 |---|---:|
 | Current public-record line used by local ledger | `110,793,128` |
-| Internal target | `109,500,000` |
-| Required improvement versus current winner | `1,293,128` |
+| Internal target | `108,000,000` |
+| Required improvement versus current winner | `2,793,128` |
 | Best local forecast | `110,181,114` |
 | Forecast margin versus current winner | `612,014` |
-| Forecast gap to target | `681,114` |
-| Forecast gap in bits | `5,448,912` |
+| Forecast gap to target | `2,181,114` |
+| Forecast gap in bits | `17,448,912` |
 
 The active memory-valve ladder can still produce a constructive
 proof. The research gap is that its algorithmic novelty is low.
