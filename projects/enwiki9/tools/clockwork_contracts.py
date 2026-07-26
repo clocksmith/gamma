@@ -100,6 +100,12 @@ def validate_artifact(path: Path) -> dict[str, Any]:
         schema,
         format_checker=jsonschema.FormatChecker(),
     ).validate(artifact)
+    contract_set = load_contract_set()
+    if (
+        "contractSetDigest" in artifact
+        and artifact["contractSetDigest"] != contract_set["contractSetDigest"]
+    ):
+        raise ValueError("artifact contractSetDigest does not match canonical contract set")
     if artifact["schema"] == "clockwork.candidate.v1":
         genome_bytes = base64.b64decode(
             artifact["canonicalGenomeBase64"],
@@ -109,6 +115,16 @@ def validate_artifact(path: Path) -> dict[str, Any]:
             raise ValueError("canonicalGenomeBase64 does not encode canonical genome")
         if sha256_digest(genome_bytes) != artifact["candidateDigest"]:
             raise ValueError("candidateDigest does not bind canonical genome bytes")
+    digest_fields = {
+        "clockwork.route_binding.v1": "artifactDigest",
+        "clockwork.proof_receipt.v1": "receiptDigest",
+        "clockwork.challenge.v1": "challengeDigest",
+        "clockwork.search_receipt.v1": "receiptDigest",
+        "gamma.candidate_receipt.v1": "receiptDigest",
+    }
+    digest_field = digest_fields.get(artifact["schema"])
+    if digest_field and artifact_digest(artifact, digest_field) != artifact[digest_field]:
+        raise ValueError(f"{digest_field} does not bind canonical artifact bytes")
     return artifact
 
 

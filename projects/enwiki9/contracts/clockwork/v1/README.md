@@ -22,6 +22,11 @@ that digest field. Individual schema digests use the same canonical JSON
 profile: UTF-8, sorted object keys, no insignificant whitespace, and no
 non-finite numbers.
 
+Artifact validation also verifies the current contract-set identity and each
+schema's self-digest field. Candidate identity is the SHA-256 of the decoded
+canonical genome bytes; mutable lineage or transport metadata is not part of
+that candidate digest.
+
 The schema files are public. Private application certificates, theorem
 holdouts, and verifier material are not stored here; public route bindings
 carry only their digests.

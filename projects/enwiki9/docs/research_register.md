@@ -926,3 +926,25 @@ target-scale gate before selector engineering. Evidence:
 `results/seal2_route_a_paid_predictor_partition_v1/opening1m_multi_endpoint_receipt.json`
 and
 `results/seal2_route_a_paid_predictor_partition_v1/decision.json`.
+## 2026-07-26 Clockwork residual-expert bridge validation
+
+Gamma imported the digest-bound M3T4 search result at revision
+`e6d0ed9d4d319a7e30f6697f430488dca6ceeec3` and independently evaluated
+candidate `sha256:77149698...c48a7c9`. The Python gate did not import M3T4
+evaluation code. It reproduced the 16-row development ledger exactly, then ran
+an 8-row Gamma-owned transfer population.
+
+All bounded bridge gates passed: canonical roundtrip and literal identity
+fallback, byte-identical chronological replay, source accounting, transfer,
+runtime, and memory. Development Brier-loss savings were `621,169,320` integer
+units; transfer savings were `458,209,182`; the canonical genome was `109`
+bytes, estimated execution was `22` cycles per row, and peak candidate state
+was `8` bytes.
+
+Receipt:
+`results/clockwork_residual_expert_7714969866c6/receipt.json`
+
+Decision: accept only as proof that the Clockwork challenge, candidate, advisory
+search receipt, independent Gamma replay, and Gamma receipt chain works
+end-to-end. `compressionBytesClaimed` is false. This synthetic Brier objective
+has no enwiki9 byte-score, full-corpus, Hutter frontier, theorem, or Seal credit.
