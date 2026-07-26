@@ -1,760 +1,336 @@
-# The Atlas, Clockwork, and Seal Examination
+# The Atlas and Clockwork Challenge
 
-## Public statement
+## Public problem statement
 
-This examination concerns finite binary objects, rational sequential measures,
-exact interval geometry, finite program descriptions, and bounded integer
-dynamical systems. No external interpretation is part of the problem.
+This challenge consists of two independent constructive problems over finite
+binary data. A solution to either problem is complete on its own. Problem A
+does not use a solution to Problem B, and Problem B does not use a solution to
+Problem A.
 
-A submitted solution must be constructive and machine-verifiable.
+All quantities in an instance are finite integers, finite bit strings, or
+rationals represented by integer pairs. Every submitted object must be finite.
+An asymptotic existence theorem is not a solution.
 
----
+The organizer supplies:
 
-# I. Common mathematical framework
+- a finite binary sequence x = x_1 ... x_n;
+- a partition 0 = b_0 < b_1 < ... < b_N = n;
+- finite observable data available at each position;
+- numerical limits and a target T;
+- the exact finite-state coder defined below;
+- canonical encodings for every permitted submitted object.
 
-## 1. The sealed object
-
-A binary object is supplied:
-
-\[
-x=x_1x_2\cdots x_n,\qquad x_t\in\{0,1\}.
-\]
-
-It is divided into consecutive chambers:
-
-\[
-I_1,I_2,\ldots,I_N.
-\]
-
-Every chamber is divided into a revealed prefix and a concealed suffix:
-
-\[
-I_j=H_j\mathbin\Vert J_j.
-\]
-
-The symbols in \(H_j\) must be reconstructed before any chamber-specific label
-affecting \(J_j\) may be read.
-
-The complete object, chamber boundaries, and prefix boundaries are supplied as
-exact machine-readable data.
-
-## 2. The reference law
-
-A deterministic sequential machine \(B\) supplies, before each symbol \(x_t\),
-an integer
-
-\[
-p_t\in\{1,\ldots,Q-1\},
-\]
-
-representing the rational probability \(p_t/Q\) of \(x_t=1\).
-
-It also exposes
-
-\[
-v_t\in\mathbb Z^d,
-\]
-
-a vector of observable coordinates, and
-
-\[
-e_{t,1},\ldots,e_{t,m}\in\{1,\ldots,Q-1\},
-\]
-
-a finite collection of component predictions.
-
-Every \(v_t\) and \(e_{t,r}\) must be determined by
-
-\[
-x_{<t}=x_1,\ldots,x_{t-1},
-\]
-
-the fixed initial state, and previously read chamber labels.
-
-No coordinate may depend on \(x_t\) or later symbols.
-
-## 3. Exact interval length
-
-For a probability sequence \(q_1,\ldots,q_n\), define an arithmetic interval
-recursively.
-
-Initially:
-
-\[
-[a_0,b_0)=[0,1).
-\]
-
-At position \(t\), divide the current interval in the ratio
-
-\[
-(Q-q_t):q_t.
-\]
-
-If \(x_t=0\), retain the lower subinterval. If \(x_t=1\), retain the upper
-subinterval.
-
-Let the final interval be
-
-\[
-[a_n,b_n).
-\]
-
-Define \(\mathcal A_Q(x;q)\) as the smallest integer \(\ell\) for which a
-dyadic interval
-
-\[
-\left[\frac{k}{2^\ell},\frac{k+1}{2^\ell}\right)
-\]
-
-is contained in \([a_n,b_n)\). Ties are resolved by choosing the smallest
-\(k\).
-
-Thus \(\mathcal A_Q\) is an exact integer. Labels inserted between symbols are
-treated as additional symbols with their own declared probability model.
-
-## 4. Program description length
-
-A finite prefix-free grammar \(\Gamma\) is supplied. It describes:
-
-- Integer constants.
-- Lookup tables.
-- Decision DAGs.
-- Sparse vectors.
-- Finite-state tables.
-- Transition circuits.
-- Chamber-label models.
-- Arithmetic-coder parameters.
-- Initialization rules.
-
-For any object \(Y\) representable in this grammar, define
-
-\[
-K_\Gamma(Y)=|\operatorname{encode}_\Gamma(Y)|.
-\]
-
-Every table entry, constant, mask, basis vector, state initializer, and
-exceptional transition must occur in \(\operatorname{encode}_\Gamma(Y)\).
-
-## 5. Integer probability geometry
-
-Two exact lookup tables are supplied:
-
-\[
-\operatorname{Logit}_Q:
-\{1,\ldots,Q-1\}\rightarrow\{-R,\ldots,R\},
-\]
-
-and
-
-\[
-\operatorname{Sigmoid}_Q:
-\{-R,\ldots,R\}\rightarrow\{1,\ldots,Q-1\}.
-\]
-
-Both tables are monotone. Their contents and description costs are fixed by
-the instance.
-
-## 6. Resource machine
-
-Execution is measured on an abstract word-RAM \(\mathfrak M_w\) with \(w\)-bit
-words.
-
-Permitted unit-cost operations are:
-
-- Integer addition and subtraction.
-- Bounded integer multiplication.
-- Bit shifts.
-- Bitwise Boolean operations.
-- Comparison.
-- Conditional selection.
-- Indexed lookup.
-- Fixed permutation.
-- Saturating clamp.
-- Reading or writing one state word.
-
-Division, variable-precision arithmetic, tensor contraction, matrix
-multiplication, and reflection operations must be expanded into the permitted
-primitives and charged accordingly.
-
-The instance supplies
-
-\[
-T_{\max},
-\qquad
-M_{\max},
-\qquad
-L^\star,
-\qquad
-\Sigma.
-\]
-
-These are the total operation bound, peak live-word bound, final length bound,
-and compilation-loss allowance.
+The blocks are I_j = {b_(j-1)+1, ..., b_j}. The problems share only this
+instance and the common definitions below.
 
 ---
 
-# Problem I: The Atlas of Paid Information
+## 1. Exact finite-state dyadic coder
 
-## Objective
+Every probability must be dyadic:
 
-Construct a finite chamber-prompt system that uses explicitly represented
-chamber information to reduce the exact total description length.
+q_t(1) = a_t / 2^r,  q_t(0) = 1 - q_t(1),
 
-## 1. Atlas structure
+where r is fixed by the instance and 1 <= a_t <= 2^r - 1.
 
-An Atlas is a tuple
+Let the coder word width be w >= r + 3. Define
 
-\[
-\mathcal H=(C,D,G),
-\]
+M = 2^w,  H = 2^(w-1),  Q = 2^(w-2),  U = 3Q.
 
-where
+The encoder state is (l, h, c), initially (0, M-1, 0), where c is the number
+of pending underflow bits. For a symbol with numerator a, define
 
-\[
-C=\{C_0,\ldots,C_{K-1}\}
-\]
+R = h - l + 1,
 
-is a finite codebook, \(D\) is a causal decision DAG, and \(G\) is a
-deterministic chamber-label probability model.
+s = l + floor(R(2^r-a)/2^r).
 
-Every codeword \(C_k\) contains
+For symbol 0, replace h by s-1. For symbol 1, replace l by s. Then repeatedly
+apply the first applicable rule:
 
-\[
-C_k=(b_k,w_k,A_k,m_k).
-\]
+1. If h < H, emit 0 followed by c copies of 1, set c = 0, and replace
+   (l,h) by (2l, 2h+1).
+2. If l >= H, emit 1 followed by c copies of 0, set c = 0, and replace
+   (l,h) by (2(l-H), 2(h-H)+1).
+3. If l >= Q and h < U, increment c and replace
+   (l,h) by (2(l-Q), 2(h-Q)+1).
+4. Otherwise stop renormalizing and process the next symbol.
 
-Here:
+After the final symbol, increment c. If l < Q, emit 0 followed by c copies of
+1. Otherwise emit 1 followed by c copies of 0.
 
-- \(b_k\) is a quantized integer bias.
-- \(w_k\in\mathbb Z^m\) is a sparse component-weight vector.
-- \(A_k\) is a finite causal correction table.
-- \(m_k\in\{0,1\}^m\) is a component activation mask.
+The resulting bit string is FDAC_(w,r)(x;q).
 
-The codebook size satisfies
+The decoder is the exact inverse. It initializes the same interval and loads a
+w-bit register from the coded payload, appending zero bits after the stated
+payload length only for register initialization and renormalization. At each
+step it computes the same s. It decodes 0 exactly when the register is less
+than s, and otherwise decodes 1. It mirrors the selected interval and all
+renormalizations, shifting in the next payload bit or a zero after the payload
+ends. It stops after the externally stated n symbols.
 
-\[
-1\le K\le K_{\max}.
-\]
+The block version resets (l,h,c) at every block and concatenates terminated
+block payloads using canonically encoded lengths. The instance states whether
+the continuous or block-reset version is required.
 
-The combined number of nonzero weights, DAG nodes, table entries, and
-exceptional transitions must satisfy the supplied instance bounds.
-
-## 2. Chamber labels
-
-For each chamber \(I_j\), the constructor may inspect the entire chamber and
-choose
-
-\[
-z_j\in\{0,\ldots,K-1\}.
-\]
-
-The label must be represented immediately after reconstructing \(H_j\) and
-before reconstructing any symbol of \(J_j\).
-
-The probability assigned to \(z_j\) by \(G\) may depend only on
-
-\[
-x_{<H_j},
-\qquad
-H_j,
-\qquad
-z_1,\ldots,z_{j-1}.
-\]
-
-It may not depend on \(J_j\) or later chambers.
-
-The choice of \(z_j\) may depend on the complete chamber because its complete
-representation cost is paid.
-
-## 3. Corrected probabilities
-
-For \(t\in J_j\), let the DAG select a leaf state
-
-\[
-r_t=D(v_t,x_{<t},z_j).
-\]
-
-Define
-
-\[
-\lambda_t
-=
-\operatorname{Logit}_Q(p_t)
-+b_{z_j}
-+A_{z_j}(r_t)
-+
-\sum_{r=1}^{m}
-m_{z_j,r}w_{z_j,r}
-\left(
-\operatorname{Logit}_Q(e_{t,r})
--
-\operatorname{Logit}_Q(p_t)
-\right).
-\]
-
-Then
-
-\[
-q_t=
-\operatorname{Sigmoid}_Q
-\left(
-\operatorname{Clamp}_{[-R,R]}(\lambda_t)
-\right).
-\]
-
-For \(t\in H_j\), use
-
-\[
-q_t=p_t.
-\]
-
-Every operation in this definition must use fixed integer semantics.
-
-## 4. Atlas length
-
-Let \(y_{\mathcal H}\) be the augmented sequence formed by inserting each
-encoded \(z_j\) immediately after \(H_j\).
-
-Let \(\pi_{\mathcal H}\) be the combined probability sequence for:
-
-- Original object symbols under \(q_t\).
-- Label symbols under \(G\).
-- Framing and termination symbols.
-
-Define
-
-\[
-L_{\mathrm{Atlas}}
-=
-\mathcal A_Q(y_{\mathcal H};\pi_{\mathcal H})
-+
-K_\Gamma(\mathcal H).
-\]
-
-## 5. Required inequality
-
-Construct \(\mathcal H\) and \(z_1,\ldots,z_N\) satisfying
-
-\[
-\boxed{
-L_{\mathrm{Atlas}}\le L^\star-\Sigma.
-}
-\]
-
-The reserved margin \(\Sigma\) is unavailable to the Atlas. It is reserved for
-Problem II.
-
-## 6. Separation controls
-
-The submission must calculate exact lengths for:
-
-\[
-Z_0:
-\text{the reference law without an Atlas},
-\]
-
-\[
-Z_1:
-\text{one global codeword with no chamber labels},
-\]
-
-\[
-Z_K:
-\text{the submitted paid-label Atlas},
-\]
-
-\[
-Z_R:
-\text{a fixed permutation of the submitted labels},
-\]
-
-\[
-Z_P:
-\text{labels chosen causally from revealed prefixes only}.
-\]
-
-The same interval rules, codebook accounting, and finalization rules apply to
-every control. Only \(Z_K\) determines whether Problem I passes.
-
-## 7. Submitted mathematical objects
-
-The Problem I submission consists of:
-
-- The codebook \(C\).
-- The decision DAG \(D\).
-- The label model \(G\).
-- The label sequence \(z_1,\ldots,z_N\).
-- The prefix-free grammar representation of the Atlas.
-- Exact interval-length calculations for all controls.
-- A causality proof.
-- A proof of the required inequality.
+This finite recurrence, not an ideal real interval or logarithmic surrogate,
+determines the payload length.
 
 ---
 
-# Problem II: The Clockwork Realization
+## 2. Histories and admissible observables
 
-## Objective
+Before position t, the public history is
 
-Replace the complete predictive mechanism from Problem I with a bounded
-uniform integer machine while surrendering no more than the reserved allowance
-\(\Sigma\).
+H_t = (x_1, ..., x_(t-1), j, z_1, ..., z_j, omega_t),
 
-## 1. Supplied predictive system
+where j is the block containing t, z_j is a paid block label if labels are
+used, and omega_t contains only organizer-declared observables available
+before x_t.
 
-The successful Problem I construction defines a rational sequential system
+A probability numerator is admissible only if it is a deterministic function
+of H_t, the submitted finite certificate, and the fixed instance.
 
-\[
-s_{t+1}=F(s_t,x_t,z_j),
-\]
+A block label may depend on the entire block, but its complete codeword is
+charged and made available before any payload bit whose probability uses that
+label. Labels are paid side information, not hidden observations.
 
-\[
-q_t=G_F(s_t,x_{<t},z_j).
-\]
+Two histories identical as finite strings must produce identical probability
+numerators and identical next states.
 
-The state \(s_t\) may be large, the transition expensive, or its original
-representation unsuitable for the resource machine.
+---
 
-Its total exact description length is \(L_{\mathrm{Atlas}}\).
+## 3. Disjoint length accounting
 
-## 2. Required integer system
+For either problem, the organizer forms exactly four variable bit strings:
 
-Construct
+C = canonical submitted certificate,
 
-\[
-u_{t+1}=\widehat F(u_t,x_t,z_j),
-\]
+Z = canonical paid labels or auxiliary choices,
 
-\[
-\widehat q_t=\widehat G(u_t,x_{<t},z_j),
-\]
+Y = FDAC payload,
 
-where \(\widehat F\) and \(\widehat G\) are uniform programs over
-\(\mathfrak M_w\).
+F = canonical framing of lengths and block boundaries.
 
-Uniformity means:
+These strings are disjoint. No bit may occur in more than one. No submitted
+table, constant, label, selector, state seed, or exception may be used unless
+it occurs in exactly one charged channel.
 
-- The same transition program is used at every position.
-- Position-dependent constants come from counted finite tables.
-- No constant is obtained from the sealed object unless it is represented.
-- No execution trace is available as an unrepresented table.
-- Offline construction is permitted, but every surviving output is counted.
+The total length is
 
-The machine may use:
+L_total = L_fixed + |C| + |Z| + |Y| + |F|,
 
-- Quantized state coordinates.
-- Structured sparse transforms.
-- Low-rank factors.
-- Finite-state quotients.
-- Bounded context tables.
-- Integer calibration tables.
-- Fixed permutations.
-- Explicitly serialized exceptional transitions.
+where L_fixed is the instance's stated constant for fixed organizer machinery.
+A solution must prove L_total <= T.
 
-## 3. Clockwork representation length
+---
 
-Use the same chamber-label sequence unless a replacement sequence is
-explicitly represented and counted.
+# Problem A: The Atlas of Paid Information
+
+## A.1 Given
+
+In addition to the common instance, Problem A supplies:
+
+- baseline dyadic numerators p_t in {1, ..., 2^r-1};
+- observable vectors v_t over specified finite integer alphabets;
+- a finite list of permitted state-register types;
+- bounds B_C, B_Z, B_S, B_O, B_M;
+- a target T_A.
+
+The baseline payload Y_0 = FDAC_(w,r)(x;p) is supplied for comparison only. A
+submitted construction is scored by its complete disjoint length, not ideal
+log loss.
+
+## A.2 Find
+
+Construct all of the following finite mathematical objects:
+
+1. A finite label alphabet Zeta, possibly the singleton alphabet.
+2. A prefix-free binary code kappa on Zeta.
+3. Labels z_1, ..., z_N in Zeta.
+4. A finite state set S and initial state s_1.
+5. A deterministic transition map
+   Phi: S x O x {0,1} -> S.
+6. A deterministic numerator map
+   A: S x O x Zeta -> {1, ..., 2^r-1}.
+7. A canonical certificate completely describing these objects.
+8. A proof of the target inequality and every bound below.
+
+At position t in I_j, use
+
+a_t = A(s_t, omega_t, z_j),
+
+then update only after observing the actual bit:
+
+s_(t+1) = Phi(s_t, omega_t, x_t).
+
+Any boundary transition declared by the instance may use only already paid
+labels and completed data.
+
+## A.3 Required inequalities
 
 Let
 
-\[
-L_{\mathrm{Clock}}
-=
-\mathcal A_Q(y_{\mathcal H};\widehat\pi)
-+
-K_\Gamma(\widehat F,\widehat G,\widehat{\mathcal H}),
-\]
+C_A = Canon(Zeta, kappa, S, s_1, Phi, A),
 
-where \(\widehat\pi\) contains the probabilities produced by the compiled
-machine.
+Z_A = kappa(z_1) ... kappa(z_N),
 
-The compiled system must satisfy
+Y_A = FDAC_(w,r)(x;a),
 
-\[
-\boxed{
-L_{\mathrm{Clock}}-L_{\mathrm{Atlas}}\le\Sigma.
-}
-\]
+and let F_A be canonical framing. A valid solution must establish
 
-Consequently,
+L_fixed,A + |C_A| + |Z_A| + |Y_A| + |F_A| <= T_A.
 
-\[
-L_{\mathrm{Clock}}\le L^\star.
-\]
+It must also establish
 
-## 4. Resource inequalities
+|C_A| <= B_C,  |Z_A| <= B_Z,  |S| <= B_S,
 
-The constructor must prove
+Ops_A(x) <= B_O,  Mem_A(x) <= B_M,
 
-\[
-\boxed{
-\operatorname{Ops}_{\mathfrak M_w}
-(\widehat F,\widehat G,x)
-\le T_{\max},
-}
-\]
+using the fixed operation and memory functions supplied with the instance.
 
-and
+## A.4 Required proof
 
-\[
-\boxed{
-\operatorname{PeakWords}_{\mathfrak M_w}
-(\widehat F,\widehat G,x)
-\le M_{\max}.
-}
-\]
+The proof must include:
 
-Operation counts cover:
+1. Prefix condition: the label code is prefix-free and parses uniquely.
+2. Causality: every a_t depends only on H_t.
+3. Joint replay: two independent recurrences with the same certificate,
+   labels, and reconstructed history produce the same state and numerator at
+   every position.
+4. Exact coding: Y_A is the Section 1 coder output, symbol by symbol.
+5. Accounting: every used submitted bit belongs to exactly one of C_A, Z_A,
+   Y_A, F_A.
+6. Boundedness: all finite bounds are met.
+7. Target: the exact integer total is at most T_A.
 
-- Initialization.
-- Label decoding.
-- State transitions.
-- Probability generation.
-- Table addressing.
-- Arithmetic interval updates.
-- Finalization.
-- Exceptional paths.
-- Destruction or release of temporary state.
+## A.5 Strict solution standard
 
-## 5. State approximation certificate
+A solution must give the actual finite tables, formulas, labels, recurrence,
+codewords, integer lengths, and proofs. It is not enough to show existence.
 
-If \(\widehat q_t\ne q_t\), report the exact realized degradation
+Floating-point probabilities, approximate logarithms, uncharged advice,
+external data, probabilistic correctness, and asymptotic savings are not
+permitted.
 
-\[
-\Delta_t
-=
-\ell(x_t,\widehat q_t)-\ell(x_t,q_t)
-\]
-
-under the exact interval functional.
-
-Provide
-
-\[
-\Delta_{\mathrm{total}}
-=
-L_{\mathrm{Clock}}-L_{\mathrm{Atlas}}.
-\]
-
-The degradation certificate separates:
-
-- Probability approximation.
-- Added program description.
-- Removed program description.
-- Label changes.
-- Framing changes.
-- Finalization changes.
-
-## 6. Submitted mathematical objects
-
-The Problem II submission consists of:
-
-- Complete integer transition and output circuits.
-- Every serialized table and constant.
-- The exact initial state.
-- Word-width, overflow, rounding, and saturation rules.
-- The exact operation count.
-- The exact peak-state count.
-- The exact interval-length calculation.
-- The exact program-length delta.
-- A proof of the compilation-loss inequality.
-- A proof of uniformity.
+A valid solution to Problem A is complete and does not require Problem B.
 
 ---
 
-# Problem III: The Seal of Exact Reversibility
+# Problem B: The Clockwork Realization
 
-## Objective
+## B.1 Given
 
-Turn the Clockwork construction into one canonical self-delimiting
-representation and prove exact inversion, exact length, and bounded execution.
+Problem B is independent of Problem A. It supplies its own finite teacher
+system
 
-## 1. Canonical representation
+tau_(t+1) = F*(tau_t, omega_t, x_t),
 
-Construct a bitstring
+p*_t = G*(tau_t, omega_t),
 
-\[
-W=
-\operatorname{Header}
-\mathbin\Vert
-\operatorname{Program}
-\mathbin\Vert
-\operatorname{Tables}
-\mathbin\Vert
-\operatorname{Labels}
-\mathbin\Vert
-\operatorname{Payload}.
-\]
+together with:
 
-Every field is self-delimiting or has a length determined by earlier decoded
-fields.
+- the teacher's exact initial state and certificate;
+- the teacher's exact payload and complete charged length;
+- a finite instruction alphabet I;
+- exact integer semantics for every instruction;
+- a fixed organizer interpreter for I;
+- bounds B'_C, B'_S, B'_O, B'_M;
+- a target T_B.
 
-The representation specifies:
+The teacher is part of the Problem B instance. It is not produced by, selected
+by, or derived from Problem A.
 
-- Grammar version.
-- Integer width.
-- Probability denominator.
-- Initial state.
-- Codebook and DAG.
-- Compiled transition system.
-- Label-model initialization.
-- Arithmetic-interval initialization.
-- Payload and finalization rules.
+The instruction alphabet may contain only operations explicitly listed in the
+instance, such as bounded addition, subtraction, multiplication, shift,
+comparison, selection, table lookup, permutation, clamping, and fixed-shape
+integer contraction. Overflow, rounding, saturation, and division semantics
+are fixed by the instance.
 
-No external file or unstated convention may be required.
+## B.2 Find
 
-## 2. Encoder and decoder
+Construct a finite clockwork
 
-Construct deterministic programs
+Ck = (U, u_1, F_hat, G_hat),
 
-\[
-E:\{0,1\}^n\rightarrow\{0,1\}^\star,
-\]
+where U is a finite bounded-integer state space, u_1 is explicit, and F_hat
+and G_hat are finite instruction sequences implementing
 
-and
+u_(t+1) = F_hat(u_t, omega_t, x_t),
 
-\[
-D:\{0,1\}^\star\rightarrow\{0,1\}^n.
-\]
+a_hat,t = G_hat(u_t, omega_t) in {1, ..., 2^r-1}.
 
-They must satisfy
+The clockwork may approximate, reorganize, or replace the teacher. It is judged
+only by exact finite coding length, exact reconstruction, and the supplied
+resource bounds.
 
-\[
-\boxed{
-D(E(x))=x.
-}
-\]
+Problem B permits no Atlas labels or Atlas certificate. If the Problem B
+instance supplies its own auxiliary selector channel, it is charged
+independently as Z_B; otherwise Z_B is empty.
 
-The proof proceeds by induction.
-
-Assume both sides agree through position \(t-1\). Prove they possess identical:
-
-- Chamber position.
-- Label state.
-- Predictive state.
-- Integer tables.
-- Probability \(q_t\).
-- Arithmetic interval.
-- Update result after \(x_t\).
-
-Then prove the base case, termination, and finalization.
-
-## 3. Canonical re-encoding
+## B.3 Required inequalities
 
 Let
 
-\[
-W_1=E(x),
-\]
+C_B = Canon(U, u_1, F_hat, G_hat),
 
-\[
-x'=D(W_1),
-\]
+Y_B = FDAC_(w,r)(x;a_hat),
 
-and
+and let F_B be canonical framing. A valid solution must establish
 
-\[
-W_2=E(x').
-\]
+L_fixed,B + |C_B| + |Z_B| + |Y_B| + |F_B| <= T_B.
 
-Require
+It must also establish
 
-\[
-\boxed{x'=x}
-\]
+|C_B| <= B'_C,
 
-and
+StateBits(U) <= B'_S,
 
-\[
-\boxed{W_2=W_1}.
-\]
+Ops_B(x) <= B'_O,  Mem_B(x) <= B'_M.
 
-Canonicality must not depend on:
+Any teacher comparison must use the exact global integer difference
 
-- Thread scheduling.
-- Hash-table iteration order.
-- Floating-point behavior.
-- Filesystem ordering.
-- Wall-clock timing.
-- Uninitialized memory.
-- Platform-dependent integer overflow.
+Delta L = (|C_B| + |Z_B| + |Y_B| + |F_B|) - L_teacher.
 
-## 4. Final inequalities
+A per-position log-loss trace may be submitted as a diagnostic, but it is not
+an additive decomposition of FDAC output bytes and cannot replace the exact
+global calculation.
 
-The final construction must satisfy
+## B.4 Required proof
 
-\[
-\boxed{
-|W|+K_\Gamma(E,D)\le L^\star.
-}
-\]
+The proof must include:
 
-It must also satisfy
+1. Instruction legality under I and its exact integer semantics.
+2. Closure of every reachable state in U.
+3. Causality of every a_hat,t.
+4. Joint replay for identical reconstructed histories.
+5. Exact production of Y_B by the Section 1 coder.
+6. Exactly-once accounting of every submitted bit.
+7. Exact satisfaction of state, operation, and memory bounds.
+8. The complete integer target inequality.
 
-\[
-\boxed{
-\operatorname{Ops}_{\mathfrak M_w}(E,x)\le T_{\max},
-}
-\]
+## B.5 Strict solution standard
 
-\[
-\boxed{
-\operatorname{Ops}_{\mathfrak M_w}(D,W)\le T_{\max},
-}
-\]
+A solution must submit the explicit bounded-integer state representation,
+instruction sequences, constants, tables, and proofs.
 
-\[
-\boxed{
-\operatorname{PeakWords}_{\mathfrak M_w}(E,x)\le M_{\max},
-}
-\]
+An existence argument, floating-point simulation, average-case operation
+claim, unbounded integer computation, hidden table, external model, or
+probabilistic replay is not a solution.
 
-and
-
-\[
-\boxed{
-\operatorname{PeakWords}_{\mathfrak M_w}(D,W)\le M_{\max}.
-}
-\]
-
-The length certificate must reconcile exactly with Problem II. Every bit
-introduced by packaging, field alignment, model serialization, or finalization
-appears in the final inequality.
-
-## 5. Submitted mathematical objects
-
-The Problem III submission consists of:
-
-- The canonical bitstring \(W\).
-- The encoder \(E\).
-- The decoder \(D\).
-- The complete grammar representation.
-- The field-length ledger.
-- The interval-length ledger.
-- The operation ledger.
-- The memory ledger.
-- The induction proof.
-- The roundtrip certificate.
-- The canonical re-encoding certificate.
-- An independent verifier.
+A valid solution to Problem B is complete and does not require Problem A.
 
 ---
 
-# Final theorem to establish
+# 4. Independence theorem
 
-The examination is solved by establishing:
+Let Pass_A mean that every condition of Problem A holds, and Pass_B mean that
+every condition of Problem B holds. The challenge acceptance condition is
 
-\[
-\boxed{
-\begin{aligned}
-D(E(x)) &= x,\\
-E(D(E(x))) &= E(x),\\
-|E(x)|+K_\Gamma(E,D) &\le L^\star,\\
-\operatorname{Ops}(E),\operatorname{Ops}(D) &\le T_{\max},\\
-\operatorname{Memory}(E),\operatorname{Memory}(D) &\le M_{\max}.
-\end{aligned}
-}
-\]
+Pass_A OR Pass_B.
 
-No interpretation beyond these statements is required to solve the
-examination.
+The organizer must be able to verify Atlas without loading, executing, or
+assuming Clockwork, and Clockwork without loading, executing, or assuming
+Atlas.
+
+A contestant may submit both, but neither may cite the other as a lemma,
+certificate, data source, state initializer, or accounting credit.
