@@ -68,6 +68,8 @@ kill condition. Compare only identical corpus populations and scopes.
 
 | State | Owner |
 |---|---|
+| Every considered algorithm, composition, merge, park, rejection, and conclusion | `docs/research_register.md` |
+| Machine-readable batch evaluations and ranked portfolios | `docs/*portfolio*.json` and their named companion registries |
 | Algorithm proposals | `operations/adaptive/proposals/` |
 | Candidate source and hypothesis | `programs/<id>/` |
 | Mutation lineage | `operations/adaptive/mutations.jsonl` |
@@ -76,9 +78,59 @@ kill condition. Compare only identical corpus populations and scopes.
 | Exact candidate receipts | `results/<id>/` |
 | Canonical run registry | `results/run_ledger.jsonl` |
 | Generated lifecycle inventory | `candidate_inventory.json` |
+| Source-bound proof frontier | `docs/hutter_frontier.json` and `docs/hutter_run_ledger.json` |
 | Current operator status | `docs/status_receipt.md` |
 
 Do not leave decisive commands, hashes, outcomes, or next actions only in chat.
+
+## Algorithm And Evidence Recording Contract
+
+- Record every meaningfully evaluated algorithm in `docs/research_register.md`,
+  including ideas that are parked, merged, rejected before implementation, or
+  retained only as an oracle. Give unmeasured ideas zero score credit.
+- Use a dated machine-readable portfolio JSON when evaluating a batch of ideas.
+  The portfolio is an index, not an operational queue or compression receipt.
+- Materialize only actionable, falsifiable work with `enwiki9_lab.py propose`.
+  Link the proposal's `--evidence` fields back to its research-register section,
+  portfolio entry, predecessor receipt, or paper.
+- Store every completed exact run under `results/<id>/`; ensure it appears in
+  `results/run_ledger.jsonl`. Record decisive promotion, mutation, merge, park,
+  or retirement conclusions back in `docs/research_register.md`.
+- Update `docs/hutter_frontier.json` only for source-bound evidence. Oracles,
+  proxies, causal shadows, and ideas receive zero score credit.
+- Do not create a second algorithm registry, queue, or device-local notebook.
+  Extend these canonical files and the adaptive workflow instead.
+
+## Cross-Device Handoff
+
+Git synchronizes durable research state; it does not synchronize live
+processes, RAM, logs still being written, or `/tmp/enwiki9-heavy.lock`.
+
+Before beginning work on another device:
+
+```bash
+cd /home/clocksmith/deco
+./rdpull.sh
+cd gamma
+python3 projects/enwiki9/tools/enwiki9_lab.py status
+```
+
+Before launching a heavy gate, pull first, claim and queue the unique proposal
+or candidate, and publish that ownership before another device can claim the
+same work. Treat each host's heavy lock as local, not cluster-wide.
+
+After a decisive run or research decision:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py refresh
+cd /home/clocksmith/deco
+./rdpush.sh
+```
+
+The handoff is complete only after the commit containing proposal state,
+receipts, run-ledger rows, conclusions, and generated status is pushed.
+Never infer that a process is active on another device from committed status;
+inspect that host directly.
 
 ## Safety
 
