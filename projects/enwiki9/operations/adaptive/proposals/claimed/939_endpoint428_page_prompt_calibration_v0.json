@@ -1,0 +1,32 @@
+{
+  "claimed_at": "2026-07-26T14:26:17+00:00",
+  "created_at": "2026-07-26T14:26:17+00:00",
+  "evidence": [
+    "projects/enwiki9/docs/research_register.md",
+    "https://prize.hutter1.net/hrules.htm",
+    "https://www.bellard.org/nncp/"
+  ],
+  "expected_savings_bytes": 3000000,
+  "hypothesis": "A 3-5 bit explicitly transmitted page prompt selected after whole-page inspection can choose among 16 fixed endpoint428 logit calibration regimes and save at least 30,000 gross bytes on canonical 10M, revealing target-scale page-global residual information without changing the underlying causal model trajectory.",
+  "interfaces_exposed": [
+    "Explicit entropy-coded page prompt placed after exact title and before body, selecting a frozen monotone integer logit calibration while preserving the endpoint state trajectory."
+  ],
+  "kill_condition": "Retire simple page calibration if the unconstrained 16-choice page oracle saves less than 30,000 gross bytes on canonical 10M or if net gain after exact prompt coding is below 23,000 bytes. Do not tune curve grids after a decisive miss.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "owner": "codex",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Require at least 30,000 gross bytes and 23,000 net bytes on canonical 10M after entropy-coded page labels, codebook, and amortized source; frozen offset-500M gain at least 2,000 B/M; Z16 must beat global Z1 and shuffled-label ZR controls, with title-causal ZP reported separately.",
+  "proposal_id": "endpoint428_page_prompt_calibration_v0",
+  "retired_neighborhoods": [
+    "Unlike ARIADNE, schema sidecars, page sharding, retrieval, and TWINSTREAM, SIBYL pays a tiny future-informed page label, preserves byte order and continuous state, and tests residual-loss clusters rather than semantic categories."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 60,
+  "state": "claimed",
+  "title": "SIBYL-MIX V0 MDL-coded page calibration prompts"
+}
