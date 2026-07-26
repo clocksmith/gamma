@@ -85,7 +85,9 @@ Problem B is `COMPLETE` only if it proves:
 Problem C is `COMPLETE` only if it proves:
 
 1. The nearest-dyadic Euclidean rounding bound.
-2. The stated uniform shadowing inequality and one-dimensional attainment.
+2. The stated uniform shadowing inequality, exact one-dimensional attainment
+   for admissible rational contraction factors, and supremal sharpness for
+   every real \(\rho\in[0,1)\).
 3. The sharp base-two logistic Lipschitz constant.
 4. The cumulative loss inequality and closed geometric-sum form.
 5. The stated Householder-factor perturbation inequality.
@@ -103,10 +105,12 @@ Problem D is `COMPLETE` only if it proves:
 2. The finite separating-map theorem by both probabilistic and deterministic
    arguments.
 3. Dependent-row deletion and extension to a nested full-rank family.
-4. The exact difference-set criterion.
+4. The universally valid difference-set inclusion criterion, including the
+   empty-set case, and its equality form for nonempty sets.
 5. Its Hamming-ball, minimum-distance, counting, and affine-union consequences.
 6. The bounded-search first-hit certificate equivalence.
-7. The exact worst-case count of \(j\) matrix-vector evaluations.
+7. The exact count of \(j\) matrix-vector evaluations for the canonical
+   sequential verifier, without treating it as an unrestricted lower bound.
 
 ## 8. Independence audit
 

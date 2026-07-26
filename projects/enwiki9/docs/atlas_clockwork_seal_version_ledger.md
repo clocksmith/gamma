@@ -58,18 +58,32 @@ The next problem version must explicitly bind the claim to the canonical direct
 verifier or define a computational model strong enough to support a lower
 bound. This is a semantic clarification and requires a new problem version.
 
-## Planned ACS-MATH-DRAFT-2
+## ACS-MATH-DRAFT-2-WORKING
 
-The next draft must:
+```text
+artifact:
+  docs/atlas_clockwork_seal_problem_set.md
+state:
+  WORKING_COPY_NOT_FROZEN
+seal_state:
+  UNBOUND
+```
 
-1. Apply the corrected D3 hypothesis or subset formulation.
-2. Bind D4's count to the canonical sequential direct verifier.
-3. Preserve the remaining Problem D statements unless separately amended.
-4. Receive a new SHA-256 and changelog entry.
-5. Undergo a fresh private Seal binding audit.
+This working draft:
 
-No existing submission will be retroactively graded against
-`ACS-MATH-DRAFT-2`.
+1. Replaces C1's unconditional exact-attainment demand with exact attainment
+   for admissible rational contraction factors and supremal sharpness for every
+   real contraction bound.
+2. Replaces D3's equality by the universally valid subset condition and
+   recovers equality under the explicit hypothesis \(B\ne\varnothing\).
+3. Binds D4's \(j\)-evaluation count to the canonical sequential verifier and
+   disclaims an unrestricted verifier lower bound.
+4. Preserves the remaining statements from `ACS-MATH-DRAFT-1`.
+
+Before this draft can govern a submission, the organizer must freeze its exact
+SHA-256, record the source-bound commit, perform a fresh mathematical audit,
+and make an independent Seal decision. No existing submission is retroactively
+graded against this working draft.
 
 ## Submission ACS-ABC-20260726T203531Z-b7dd49a0
 
@@ -100,3 +114,18 @@ The submission and review are recorded at:
 `docs/atlas_clockwork_seal_problems_abc_solution.md`
 
 `docs/atlas_clockwork_seal_problems_abc_solution.review.md`
+
+## Solver-confirmed corrigendum C1/D3/D4
+
+Received at `2026-07-26T21:21:37Z` and recorded as
+`ACS-CORRIGENDUM-20260726T212137Z-282aaa6a`.
+
+The solver formally confirmed the C1 admissible-attainment interpretation, the
+D3 nonempty-set/inclusion correction, and the D4 canonical-sequential-verifier
+scope. The confirmation applies to submissions
+`ACS-ABC-20260726T203531Z-b7dd49a0` and
+`ACS-D-20260726T202536Z-273dbe2f`.
+
+This closes the mathematical errata review for `ACS-MATH-DRAFT-1`. It does
+not create a target-bearing antecedent, authorize distribution, change Seal-2
+from `UNBOUND`, or receive compression-score credit.

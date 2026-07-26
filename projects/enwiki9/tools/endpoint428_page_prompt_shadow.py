@@ -165,8 +165,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         verdict = "mechanism_positive_requires_frozen_offset_transfer"
     source_bytes = CPP.stat().st_size + Path(__file__).stat().st_size
     return {
-        "schema": "endpoint428_page_prompt_shadow_v0",
+        "schema": "endpoint428_page_prompt_shadow_v1",
         "candidate_id": "endpoint428_page_prompt_calibration_v0",
+        "seal_route": "A_paid_predictor_partition",
         "evidence_level": "exact_arithmetic_trace_shadow_zero_score_credit",
         "trace_classification": args.trace_classification,
         "inputs": {
@@ -210,6 +211,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "helper_compile_command": compile_command,
             "helper_binary_sha256": helper_sha256,
             "integer_probability_tables": True,
+            "native_probability_total": 65_536,
+            "range_coder_semantics": "endpoint_uint16_byte_range_v1",
             "exact_arithmetic_label_and_payload_interleaving": True,
             "underlying_model_trajectory_unchanged": True,
         },
