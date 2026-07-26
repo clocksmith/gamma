@@ -1,0 +1,120 @@
+{
+  "schema": "clockwork.challenge.v1",
+  "challengeId": "clockwork.residual_expert_search.v1",
+  "version": 1,
+  "visibility": "public_development",
+  "authority": "gamma",
+  "contractSetDigest": "sha256:d97c9fc90434bfddb1168d1013ae071af1b995abbdcefa3b4113af811b152384",
+  "genomeSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "enabled",
+      "biasQ15",
+      "featureWeightsQ15",
+      "stateWeightQ15",
+      "stateDecayQ8"
+    ],
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      },
+      "biasQ15": {
+        "type": "integer",
+        "minimum": -4096,
+        "maximum": 4096
+      },
+      "featureWeightsQ15": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {
+          "type": "integer",
+          "minimum": -4096,
+          "maximum": 4096
+        }
+      },
+      "stateWeightQ15": {
+        "type": "integer",
+        "minimum": -4096,
+        "maximum": 4096
+      },
+      "stateDecayQ8": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      }
+    }
+  },
+  "canonicalSerialization": "canonical-json-rfc8785-profile-v1",
+  "kernelDigest": "sha256:992fe87276b18210e3f3f8bc8cf0c4edd6c32ed716cc8a7b02337f52397876f3",
+  "evaluatorDigest": "sha256:ccd30e06114f3c1f424917af01d549e3295622a07faca597d9574fd0f30de5bf",
+  "population": {
+    "kind": "inline",
+    "digest": "sha256:577cb49f2df81f36b59f4ae964818d50302901c579970323856a54985932c7d1"
+  },
+  "traceClosure": {
+    "contract": "frozen-causal-residual-trace/v1",
+    "candidateMayConsume": [
+      "baselineProbabilityQ15",
+      "features",
+      "ownState"
+    ],
+    "candidateMayMutateUpstream": false
+  },
+  "arithmetic": {
+    "integers": "ecmascript-safe-integer",
+    "division": "truncate-toward-zero",
+    "probabilityScale": 32768,
+    "stateScale": 256,
+    "loss": "binary-brier-q15-squared-v1"
+  },
+  "objectives": [
+    {
+      "id": "developmentLossUnits",
+      "direction": "minimize"
+    },
+    {
+      "id": "canonicalGenomeBytes",
+      "direction": "minimize"
+    },
+    {
+      "id": "estimatedCycles",
+      "direction": "minimize"
+    },
+    {
+      "id": "peakStateBytes",
+      "direction": "minimize"
+    }
+  ],
+  "budgets": {
+    "maxCanonicalGenomeBytes": 256,
+    "maxEstimatedCyclesPerRow": 32,
+    "maxPeakStateBytes": 8
+  },
+  "permittedCandidateKinds": [
+    "residual-expert"
+  ],
+  "permittedMutations": [
+    "replace-coefficient",
+    "perturb-coefficient",
+    "toggle-enabled"
+  ],
+  "seeds": [
+    7,
+    19,
+    43
+  ],
+  "receiptHashAlgorithm": "sha256",
+  "gammaImportTarget": "enwiki9_lab/clockwork/residual_expert/v1",
+  "acceptanceGates": [
+    "schema",
+    "trace-closure",
+    "literal-identity-fallback",
+    "chronological-replay",
+    "source-accounting",
+    "runtime-memory-budgets",
+    "gamma-independent-evaluator"
+  ],
+  "challengeDigest": "sha256:6b0f29571d204710d97f18a9cfaee2f79e66e419632fd37c15ca39e9307ad4a2"
+}
