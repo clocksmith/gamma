@@ -2,7 +2,7 @@
 
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
-- Target: `109,500,000` bytes (`10.9500000%`).
+- Target: `108,000,000` bytes (`10.8000000%`).
 - Candidate runs indexed: `43`.
 - Candidate lineages indexed: `38`.
 
@@ -16,10 +16,10 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 
 | Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
-| `endpoint428_gate_dot_fuse_output_update_loop_v1__10000000` | `constructive_prefix` | `active` | opening_prefix | 1,634,500 | 1,195 | 119.500 | 261,125 | 109,389,323 (10.9389323%) | 110,677 | RT=true, DET=true |
-| `endpoint428_pair_layer0_online_residual_successor__10000000` | `constructive_prefix` | `retired_unchanged` | opening_prefix | 1,635,174 | 521 | 52.100 | 278,825 | 109,452,151 (10.9452151%) | 47,849 | not recorded |
-| `endpoint428_context_recovery_10m__10000000` | `constructive_prefix` | `retired_unchanged` | unspecified | 1,635,695 | 1,818 | 181.800 | 349,195 | 109,557,404 (10.9557404%) | -57,404 | not recorded |
-| `heterogeneous_112_plus_80__10000000` | `constructive_prefix` | `retired_unchanged` | unspecified | 1,635,670 | 7,956 | 795.600 | 264,646 | 109,498,879 (10.9498879%) | 1,121 | not recorded |
+| `endpoint428_gate_dot_fuse_output_update_loop_v1__10000000` | `constructive_prefix` | `active` | opening_prefix | 1,634,500 | 1,195 | 119.500 | 261,125 | 109,389,323 (10.9389323%) | -1,389,323 | RT=true, DET=true |
+| `endpoint428_pair_layer0_online_residual_successor__10000000` | `constructive_prefix` | `retired_unchanged` | opening_prefix | 1,635,174 | 521 | 52.100 | 278,825 | 109,452,151 (10.9452151%) | -1,452,151 | not recorded |
+| `endpoint428_context_recovery_10m__10000000` | `constructive_prefix` | `retired_unchanged` | unspecified | 1,635,695 | 1,818 | 181.800 | 349,195 | 109,557,404 (10.9557404%) | -1,557,404 | not recorded |
+| `heterogeneous_112_plus_80__10000000` | `constructive_prefix` | `retired_unchanged` | unspecified | 1,635,670 | 7,956 | 795.600 | 264,646 | 109,498,879 (10.9498879%) | -1,498,879 | not recorded |
 | `paqfree_96x2__10000000` | `constructive_prefix` | `historical_control` | unspecified | 1,638,528 | 5,098 | 509.800 | 264,427 | unknown | unknown | not recorded |
 
 ## 2,000,000 Bytes
@@ -32,10 +32,10 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 
 | Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
-| `endpoint428_compact_layer0_phase_native_pruned_v3__1m_prefix` | `constructive_prefix` | `active` | opening_prefix | 174,099 | -136 | -136.000 | 235,420 | 109,499,618 (10.9499618%) | 382 | RT=true, DET=true |
+| `endpoint428_compact_layer0_phase_native_pruned_v3__1m_prefix` | `constructive_prefix` | `active` | opening_prefix | 174,099 | -136 | -136.000 | 235,420 | 109,499,618 (10.9499618%) | -1,499,618 | RT=true, DET=true |
 | `endpoint428_dual112_page_shards_v1__1m_prefix` | `constructive_prefix` | `active` | opening_prefix_page_shards | 185,524 | -11,563 | -11563.000 | 261,125 | unknown | unknown | RT=true |
-| `endpoint428_pair_layer0_online_residual_successor__1m_offset500m` | `constructive_prefix` | `retired_unchanged` | cold_reset_disjoint_window | 45,051 | 89 | 89.000 | 350,942 | 109,470,151 (10.9470151%) | 29,849 | not recorded |
-| `endpoint428_pair_layer0_online_residual_successor__1m_prefix` | `constructive_prefix` | `retired_unchanged` | opening_prefix | 173,896 | 67 | 67.000 | 350,942 | 109,492,151 (10.9492151%) | 7,849 | RT=true, DET=true |
+| `endpoint428_pair_layer0_online_residual_successor__1m_offset500m` | `constructive_prefix` | `retired_unchanged` | cold_reset_disjoint_window | 45,051 | 89 | 89.000 | 350,942 | 109,470,151 (10.9470151%) | -1,470,151 | not recorded |
+| `endpoint428_pair_layer0_online_residual_successor__1m_prefix` | `constructive_prefix` | `retired_unchanged` | opening_prefix | 173,896 | 67 | 67.000 | 350,942 | 109,492,151 (10.9492151%) | -1,492,151 | RT=true, DET=true |
 | `layer0_pair_phase_composite_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 140 | 140.000 | unknown | unknown | unknown | not recorded |
 | `layer0_wrt_hierarchical_phase_residual_log128_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 118 | 118.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_layer0_online_residual_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 46 | 46.000 | unknown | unknown | unknown | not recorded |

@@ -28,9 +28,9 @@ and promotion blockers.
 
 - Current winner score: `110,793,128`
 - Best forecast score: `110,181,114`
-- Target score: `109,500,000`
-- Public-record gap to target: `1,293,128` bytes
-- Forecast gap to target: `681,114` bytes
+- Target score: `108,000,000`
+- Public-record gap to target: `2,793,128` bytes
+- Forecast gap to target: `2,181,114` bytes
 - Recommended action: `generate_more_shadow_receipts_before_packaging`
 - Reason: `no positive promotion-ready receipt is available`
 - Target-substrate receipts: `0`

@@ -37,6 +37,8 @@ QUEUE_DIRS = {state: ADAPTIVE / state for state in QUEUE_STATES}
 PROPOSAL_STATES = ("proposed", "claimed", "developed", "rejected")
 PROPOSAL_DIRS = {state: ADAPTIVE / "proposals" / state for state in PROPOSAL_STATES}
 MUTATION_LOG = ADAPTIVE / "mutations.jsonl"
+INDEX_PATH = ROOT / "index.json"
+INDEX_LOCK = ADAPTIVE / "index.lock"
 RUN_LOGS = ROOT / "run_logs" / "adaptive"
 TRIAGE = ROOT / "tools" / "candidate_triage.py"
 AUDIT = ROOT / "tools" / "candidate_audit.py"
@@ -93,6 +95,27 @@ def validate_id(candidate_id: str) -> None:
             "candidate id must start with a lowercase letter or digit and contain "
             "only lowercase letters, digits, dots, dashes, or underscores"
         )
+
+
+def register_candidate(candidate_id: str) -> None:
+    validate_id(candidate_id)
+    INDEX_LOCK.parent.mkdir(parents=True, exist_ok=True)
+    with INDEX_LOCK.open("a+") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        index = load_json(INDEX_PATH)
+        programs = index.get("programs")
+        if not isinstance(programs, list):
+            raise ValueError(f"invalid programs list: {INDEX_PATH}")
+        known = {
+            row.get("id")
+            for row in programs
+            if isinstance(row, dict) and isinstance(row.get("id"), str)
+        }
+        if candidate_id not in known:
+            programs.append({"id": candidate_id})
+            programs.sort(key=lambda row: str(row.get("id", "")))
+            atomic_json(INDEX_PATH, index)
+        fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
 
 
 def candidate_path(candidate_id: str) -> pathlib.Path:
@@ -219,6 +242,7 @@ def create_candidate(
                 "program_replacements": applied,
             },
         )
+        register_candidate(candidate_id)
     except Exception:
         shutil.rmtree(destination)
         raise

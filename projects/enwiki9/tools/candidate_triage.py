@@ -667,10 +667,10 @@ def triage_one(
                 )
             baseline_cache[gate_size] = baseline_run
         if baseline_run.result is None or baseline_run.returncode != 0:
-            status, reason = classify_driver_failure(baseline_run)
+            _status, reason = classify_driver_failure(baseline_run)
             return {
                 "id": candidate_id,
-                "proposed_status": status,
+                "proposed_status": "blocked_dependency",
                 "verdict": f"Blocked: baseline {baseline_id} failed at {gate_size}: {reason}.",
                 "gates": gates,
                 "blocked_reason": baseline_run.blocked_reason,
