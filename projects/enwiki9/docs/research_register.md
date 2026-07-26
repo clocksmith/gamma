@@ -948,3 +948,139 @@ Decision: accept only as proof that the Clockwork challenge, candidate, advisory
 search receipt, independent Gamma replay, and Gamma receipt chain works
 end-to-end. `compressionBytesClaimed` is false. This synthetic Brier objective
 has no enwiki9 byte-score, full-corpus, Hutter frontier, theorem, or Seal credit.
+## 2026-07-26 RADIX-STC target-scale numeric representation probe
+
+`radix_stc_context_ordered_numeric_v1` is registered as a zero-credit
+representation proposal. The external STC paper reports a `2,629,561`-byte
+same-coder full-enwik9 ablation under its BWT/M03-family backend. Gamma's own
+numeric-format oracle is positive on opening and offset-500M holdout, while
+the prior causal numeric endpoint is exact-negative.
+
+This authorizes one clean N0-N4 native-backend falsification. External,
+oracle, raw-transform, and projected gains receive zero score credit. N4 must
+be positive on opening and offset-500M scopes and save at least `25,000`
+gross / `23,000` net bytes on canonical 10M. Failure retires the unchanged
+target-backend transfer without parameter sweeps. The implementation and
+claim boundary are specified in `docs/radix_stc_research_plan.md`.
+
+Terminal result: N4 produced `174,909` archive bytes against the exact
+receipt-bound N0 archive of `173,896`, a `1,013`-byte opening-1M regression.
+Roundtrip, deterministic re-encode, and the decimal memory guard passed.
+Although N4 removed `13,634` main digit decisions, the complete framed stream
+grew and compressed worse. The proposal is rejected unchanged. Offset,
+canonical-10M, N1-N3, and context-key sweeps are not authorized. Score credit
+remains zero.
+
+## 2026-07-26: SIBYL-MDL paid page calibration is terminal negative
+
+Candidate: `sibyl_mdl_paid_page_regime_v1`
+
+SIBYL V0 tested whether complete-page truth could select one of sixteen fixed
+monotone integer calibrations of the selected endpoint428 final P1. The label
+was explicitly charged as four bits per complete page plus fixed framing. The
+selected source-bound binary already emitted the probability before truth, so
+no codec source mutation was required.
+
+The trace manifest at
+`results/endpoint_final_trace_1m_v1/manifest.json` proves 4,805,936 rows equal
+the exact 600,742-byte WRT bitstream, exact WRT-to-raw reconstruction, and
+range replay identity with the parent's 173,859-byte arithmetic payload.
+
+The decision at
+`results/sibyl_page_prompt_opening_1m_v0/decision.json` covers 171 complete
+pages and 982,919 raw bytes. Perfect future-informed page selection saved only
+six gross payload bytes. Labels and framing cost 102 bytes, producing a net
+96-byte regression. The global curve was identity; a rotated-label control
+regressed by 1,298 net bytes.
+
+Decision: terminal rejection at the opening sign gate. Do not run canonical
+10M, instrument individual components, add curves, or use bits-back to rescue
+simple page calibration. This oracle receives zero score credit and does not
+change the 109,524,268 planning forecast or the 1,524,268-byte design debt.
+
+## 2026-07-26: ORACLE-DISTILL exact alignment passes; stream-order transfer is blocked
+
+Candidate: `oracle_distill_nncp_residual_integer_v1`
+
+The official MIT-licensed NNCP v3.3 source archive was acquired from Bellard's
+site with SHA-256
+`7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119`
+and built on CPU. No NVIDIA runtime exists on this host. The published
+107,261,318-byte total remains external teacher evidence and receives zero
+Gamma score credit.
+
+Gate 0 receipt:
+`results/nncp_symbol_raw_map_opening_1m_v1/receipt.json`.
+The reversible preprocessor maps all 753,198 opening-1M symbols to exact raw
+intervals, reconstructs the raw SHA-256, and places every one of 171 complete
+page starts and ends on a symbol boundary.
+
+Bounded Gate 1 receipt:
+`results/nncp_teacher_trace_smoke_v1/receipt.json`.
+The 10,000-row true-symbol probability trace is archive-neutral: trace-off and
+trace-on archives are both 9,246 bytes with identical SHA-256. Coder counts,
+true symbols, probabilities, and unique original positions pass. The guarded
+adjacent pair peaked at 5,782,588 KiB tree RSS.
+
+Compatibility warning: NNCP used 32 streams. 9,999 of 10,000 symbols executed
+outside original order, with displacement up to 9,672 symbols. Outcomes from
+multiple raw regions affect later online updates, so the published teacher is
+not directly a raw-order causal residual. The bounded startup mean loss of
+6.781875 bits per teacher symbol provides no target-scale advantage evidence.
+
+Decision: keep ORACLE-DISTILL active only at the representation-compatibility
+gate. Do not run an unchanged 1M CPU teacher, train a student, or subtract the
+published NNCP gap. The next valid evidence must isolate preprocessing,
+stream-order, and predictor contributions under an exact causal control or a
+hash-bound accelerated teacher trace.
+
+## 2026-07-26: RADIX-ISLAND terminally rejected by digit-regret oracle
+
+Candidate: `radix_island_numeric_event_v1`
+
+RADIX-ISLAND was registered as a distinct post-WRT successor to the already
+retired wrapper-level RADIX-STC transform. The zero-credit oracle at
+`results/radix_island_oracle_opening_1m_v1/decision.json` binds the selected
+pre-truth P1 trace, exact WRT store, dictionary, raw reconstruction, emission
+groups, digit runs, decoder-derived context keys, and explicit mixed-radix,
+mode, bitmap, Rice, marker, and frame lengths.
+
+The opening 1M contains 21,082 eligible digits in 7,448 runs. Endpoint428's
+integer qbit cost is only 14,049,529 qbits, equal to 2.603215 bits per digit.
+Direct mixed-radix values alone require 68,664 bits, equal to 3.257186 bits per
+digit, before any marker or framing. Thus the proposed side alphabet is already
+more expensive than the parent prediction.
+
+The optimistic four-bit-marker R2 control loses 5,463.253 B/M. Conservative
+R2 loses 16,635.253 B/M. Context-keyed deltas recover 1,063 side bits versus
+occurrence order but still lose 15,748.753 B/M. Multi-field island composition
+adds 623 bits back, and full conservative R4 loses 15,826.628 B/M.
+
+Decision: terminal rejection before native implementation. Do not run distant
+or canonical scopes, implement R2/R4, tune separators or contexts, or claim the
+external BWT-family STC result as Gamma score evidence. Preserve only the
+positive 1,063-bit context-ordering primitive; it is far below economic scale
+and receives zero score credit. Forecast and design debt are unchanged.
+
+## 2026-07-26: NNCP single-stream causal control improves bounded compression but is runtime-hostile
+
+Candidate: `oracle_distill_nncp_residual_integer_v1`
+
+The exact decision at
+`results/nncp_teacher_causal_smoke_v1/decision.json` compares the official NNCP
+`enwik9` profile at the same 10,000-symbol scope. Batch-32 produced a 9,246-byte
+archive at 7.397 reported bits per symbol. Batch-1 produced 6,945 bytes at
+5.556 bits per symbol, a 2,301-byte bounded improvement. Thus the causal
+single-stream schedule is compression-positive at startup and the observed
+teacher signal is not solely created by reordered streams.
+
+The control is not a viable decoder. Batch-1 required 1,927.1691 seconds versus
+a 279.797-second mean for the adjacent batch-32 encodes, a 6.887-times ratio.
+Peak tree RSS was 1,857,532 KiB for batch-1 versus 5,782,588 KiB for batch-32.
+Both guards passed the decimal 10GB ceiling.
+
+Decision: retain only as zero-credit offline distillation evidence. Do not
+integrate NNCP, launch an unchanged larger CPU teacher, extrapolate the bounded
+2,301 bytes, or subtract it from Gamma. Further work requires an accelerated
+hash-bound causal trace or a smaller causal teacher compiled into a counted
+integer student.
