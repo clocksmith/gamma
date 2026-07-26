@@ -1,91 +1,180 @@
-# enwiki9 Hutter Status
+# enwiki9 Status Receipt
 
-## Live Run State
+Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Running command: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` `--limit 250000` `--check-determinism false`; guard `unknown`.
-- Command PID: `unknown`; candidate label: `unknown`.
-- Guard elapsed: `None`; samples `unknown`.
-- Guard JSON: `unknown`.
-- Live RSS: single `unknown` KiB, tree `unknown` KiB; official decimal over-limit `unknown KiB`.
-- Heavy lock: `/tmp/enwiki9-heavy.lock` held: `False`, holder pids `[]`.
+- Generated at UTC: `2026-07-26T23:32:45+00:00`
 
-## Score Status
+## Target State
 
-- Target score: `108,000,000` bytes (`10.8000000%`).
-- Verified official full-1G score: `unknown`; no exact result exists.
-- Official distance: `unknown`.
-- Best counted forecast: `109,389,323` (`10.9389323%`); distance above target `1,389,323` bytes (`0.1389323 percentage points`).
-- Active candidate provisional projection: `109,389,323` (`10.9389323%`); distance above target `1,389,323` bytes (`0.1389323 percentage points`).
+- `10.8000000%` target score: `108,000,000`
+- Full-corpus constructive result present: `false`
+- `10.95%` constructive upper bound present: `false`
 
-## Canonical Counted Forecast
+## Operator Summary
 
-- `endpoint428 fused recurrent gates plus explicit output update loop`: score `109,389,323`, margin `-1,389,323` bytes (positive is below target).
-- Evidence: `constructive_prefix`; status `active`.
-- Decision: The fused/output-loop successor produces a 1,634,500-byte exact 10M archive, saving 1,195 bytes over endpoint428 and 674 bytes over the prior best stream. Lexical comment stripping reduces its reproducible LZMA package from 280,147 to 261,125 bytes while two clean builds preserve backend and wrapper identity. The revised counted forecast is 109,389,323 (10.9389323%), 110,677 below target. Exact decode, independent deterministic re-encode, and all decimal-memory guards pass. Runtime remains unqualified.
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Scope bytes: `250,000`
+- Gate verdict: `rss_fail`
+- Gate next action: `bracket_lower_from_recorded_rss_failure`
+- Heavy lock held: `false`
+- Active scorer observed: `false`
+- Active cmix mode: `n/a`
+- Driver result present: `false`
+- RSS guard status: `aborted_official_decimal_memory_limit`
+- RSS samples: `173`
+- Binary `10GiB` guard KiB: `10,485,760`
+- Decimal `10GB` guard KiB: `9,765,625`
+- Max sampled single RSS KiB: `9,768,612`
+- Latest sampled single RSS KiB: `9,768,612`
+- Tightest binary single-process margin KiB: `717,148`
+- Tightest decimal single-process margin KiB: `-2,987`
+- Latest binary single-process margin KiB: `717,148`
+- Latest decimal single-process margin KiB: `-2,987`
+- Safe to launch heavy gate: `false`
+- Terminal verdict present: `true`
+- Command source: `cmix21_gate_decider.apply_terminal_command`
+- Claim rule: `No prefix row proves 10.95%.`
 
-## Candidate Frontier
+## Active Gate
 
-| Rank | Candidate | Tier | Status | Forecast | Margin | Measured Gain | Next Gate |
-|---:|---|---|---|---:|---:|---:|---|
-| 1 | endpoint428 fused recurrent gates plus explicit output update loop | `constructive_prefix` | `active` | 109,389,323 | -1,389,323 | 119.500 B/M | Build a model-work reduction or replacement architecture whose measured score loss fits the 110,677-byte counted margin and whose reference-calibrated runtime satisfies the official rule before any full-1G gate. |
-| 2 | endpoint428 plus online compact/FX2/layer-0 residual mixer | `constructive_prefix` | `retired_unchanged` | 109,452,151 | -1,452,151 | 52.100 B/M | Promote a frozen runtime successor only after controlled matched evidence and reference-calibrated compliance with the official runtime rule while preserving counted score and memory qualification. |
-| 3 | layer0 mixer10 plus pair adaptation plus WRT phase residual | `causal_shadow` | `retired_unchanged` | unknown | unknown | 140.000 B/M | None unchanged. A successor needs genuinely different modeled information or a faster representation, not another pair/phase/mixer parameterization. |
-| 4 | layer-0 endpoint plus hierarchical WRT phase residual SSE | `causal_shadow` | `retired_unchanged` | unknown | unknown | 118.000 B/M | None unchanged. Reuse phase context only inside a materially different faster endpoint with independently sufficient score headroom. |
-| 5 | endpoint428 plus regret-gated online layer-0 residual mixer | `causal_shadow` | `retired_unchanged` | unknown | unknown | 46.000 B/M | Retain the causal online architecture and add only the two free endpoint428 upstream probabilities; do not integrate v1 unchanged. |
-| 6 | endpoint428 plus static sparse compact layer-0 residual blend | `causal_shadow` | `retired_unchanged` | unknown | unknown | 19.000 B/M | None unchanged; regime drift motivated the separately frozen causal online successor. |
-| 7 | endpoint428 plus one compact layer-0 residual endpoint | `causal_shadow` | `retired_unchanged` | unknown | unknown | 10.000 B/M | None unchanged; the 26 endpoints remain inputs to the separately frozen sparse multivariate successor. |
-| 8 | compact-200 plus FX2-lite endpoint428 | `constructive_prefix` | `retired_unchanged` | 109,557,404 | -1,557,404 | 181.800 B/M | Add a causal component that clears 57.404 B/M plus its counted program cost before another native gate. |
-| 9 | SRSTC block-posterior retrieval | `causal_shadow` | `active` | unknown | unknown | n/a | Predict endpoint428 residuals on an identical stream and integrate only the smallest paying dependency-closed component. |
-| 10 | heterogeneous recurrent 112+80 | `constructive_prefix` | `retired_unchanged` | 109,498,879 | -1,498,879 | 795.600 B/M | None unchanged; retain as a correctness and recurrent-substrate control. |
-| 11 | PAQ-free recurrent 96x2 | `constructive_prefix` | `historical_control` | unknown | unknown | 509.800 B/M | Use only as a matched control or reusable substrate for a genuinely new endpoint. |
-| 12 | endpoint428 mxx-keyed online SSE | `causal_shadow` | `retired_unchanged` | unknown | unknown | -151.000 B/M | None for this calibration family; retain mxx only as a context feature inside richer already-computed mixers. |
-| 13 | WikiIR same-skeleton reference COPY/ADD layouts | `proxy` | `retired_unchanged` | unknown | unknown | -1,488.000 B/M | None for these serializations. Reuse the parser or retrieval candidates only inside a genuinely target-residual probability endpoint. |
-| 14 | Causal WRT reference-prefix CTS over exact FX2 | `causal_shadow` | `retired_unchanged` | unknown | unknown | -2.000 B/M | None for this continuation representation or a router over its wins. Change the predicted representation rather than tuning reference contexts, support, or blend weights. |
-| 15 | Normalized WRT phrase copy with causal context regret | `causal_shadow` | `retired_unchanged` | unknown | unknown | 8.000 B/M | None unchanged. Require a new causal feature or representation that retains the phrase oracle on disjoint evidence before any native integration. |
-| 16 | WRT completed-event context tree and adaptive phase residuals | `causal_shadow` | `retired_unchanged` | unknown | unknown | -2.000 B/M | None unchanged. Preserve the cumulative hierarchical phase component and require an exact target-candidate P1 before testing another combiner. |
-| 17 | WRT phase strength router and shell-regime backoff | `causal_shadow` | `retired_unchanged` | unknown | unknown | -10.000 B/M | None unchanged. Keep the cumulative phase component and require a genuinely new endpoint or the exact pair P1. |
-| 18 | WRT phase Newton residual and equal-correction blend | `causal_shadow` | `retired_unchanged` | unknown | unknown | 3.000 B/M | None unchanged. Preserve the geometry only inside a genuinely new endpoint with independent headroom. |
-| 19 | endpoint428 surprise-history retrieval | `causal_shadow` | `retired_unchanged` | unknown | unknown | 12.000 B/M | None unchanged. Residual-native retrieval must create a different coded endpoint rather than another surprise calibration table. |
-| 20 | endpoint428 pair-only online mixer | `causal_shadow` | `retired_unchanged` | unknown | unknown | 22.000 B/M | None unchanged. Recover or regenerate individual layer0 endpoints, or create a different endpoint universe. |
-| 21 | Mix-to-Perceive context-pointer reuse | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Preserve it in the frozen implementation and pivot to material model-work removal. |
-| 22 | persistent-region LSTM scheduling and worker-count transfer | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None for scheduling unchanged. Recover the checksum-bound exact candidate source package, then test a successor that removes material predictor computation or dependencies while preserving the exact archive. |
-| 23 | decoder-built diagonal reservoir residual primitive | `causal_shadow` | `historical_control` | unknown | unknown | 14.981 B/M | Use this primitive only inside a materially faster replacement for an existing recurrent dependency, then require matched endpoint428 archive economics and controlled runtime improvement. |
-| 24 | fixed-capacity mixer context table after pointer reuse | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Pivot to material modeled-work removal. |
-| 25 | serial fused-LSTM forward traversal after mixer runtime patches | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Preserve the implementation evidence and pivot to a faster model architecture. |
-| 26 | fused recurrent backward error accumulators | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Any future changed-stream accumulator must independently pay score and runtime economics. |
-| 27 | inline probability-logit table lookup | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Target a materially different LSTM or context-update implementation and require archive identity before matched timing. |
-| 28 | fused LSTM forward normalization and state traversal | `proxy` | `retired_unchanged` | unknown | unknown | -976.562 B/M | None unchanged. Preserve exact floating-point expression order in the next runtime mechanism, or re-clear score economics as a new stream. |
-| 29 | alternate-window recurrent backpropagation | `proxy` | `retired_unchanged` | unknown | unknown | -976.562 B/M | None unchanged. Pursue model-level endpoint concurrency or a new recurrent representation after synchronizing the checksum-bound exact source package. |
-| 32 | PAQ8 direct-indexed finite context weights | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Preserve the technique for a materially faster architecture; do not spend an exact-source gate on this proxy. |
-| 33 | multi-endpoint Bayesian fixed-share stack | `causal_shadow` | `retired_unchanged` | unknown | unknown | 4.000 B/M | None unchanged. Prefer a new endpoint representation or score-neutral runtime removal. |
-| 34 | PAQ8 ContextMap2 bit-position loop specialization | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Preserve direct-index context storage and profile a different whole-region dependency or data structure. |
-| 35 | PAQ8 ContextMap2 second-MRU fast path | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Preserve direct-index mixer contexts and target a ContextMap2 table/state layout or dependency change that removes measurable memory work. |
-| 36 | PAQ8 ContextMap2 SIMD checksum lookup | `proxy` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Preserve the technique for a materially faster architecture; do not spend an exact-source gate on this proxy bundle. |
-| 37 | diagonal-reservoir FX2 replacement | `causal_shadow` | `retired_unchanged` | unknown | unknown | 0.000 B/M | None unchanged. Require cross-state interactions, token/event inputs, or teacher-trained dynamics in a new fast replacement representation. |
-| 38 | compact-teacher sparse GRU FX2 replacement | `causal_shadow` | `retired_unchanged` | unknown | unknown | 23.000 B/M | None unchanged. Attribute the teacher residual to specific compact state transitions or learned event representations before attempting another replacement model. |
-| 39 | compact-teacher residual-logit sparse GRU | `causal_shadow` | `retired_unchanged` | unknown | unknown | -84.000 B/M | None unchanged. Require component/state attribution or a materially different event-level representation before another learned replacement. |
-| 40 | dilated causal-byte FX2 residual model | `causal_shadow` | `retired_unchanged` | unknown | unknown | 83.000 B/M | None unchanged. Stop generic byte-history replacements and obtain component-level compact-state attribution or build a genuinely WRT-event-native endpoint. |
+- Heavy lock held: `false`
+- Gate verdict: `rss_fail`
+- Next action: `bracket_lower_from_recorded_rss_failure`
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Scope bytes: `250,000`
+- Driver result JSON: `not present`
+- Driver result present: `false`
+- RSS guard JSON: `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20352k_250000_determinism_rss_guard.json`
+- RSS guard present: `true`
+- Active scorer observed: `false`
+- Live gate: `false`
+- Liveness classification: `not_persisted_running`
+- Matching adaptive jobs: `0`
+- Matching controllers: `0`
+- Matching driver observed: `false`
+- Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive running job backed by the host-local heavy lock. The lock alone never identifies a gate.`
+- RSS guard status: `aborted_official_decimal_memory_limit`
+- RSS guard JSON bytes: `1,237`
+- RSS guard JSON modified UTC: `2026-07-11T15:13:39+00:00`
+- RSS guard JSON SHA-256: `e83b46f7d57fa85bff44d2222700d43f098bf74378174e4ec12d19c74032502f`
+- RSS samples: `173`
+- Max sampled single RSS KiB: `9,768,612`
+- Max sampled tree RSS KiB: `9,787,964`
+- Single-process RSS margin KiB: `717,148`
+- Single-process decimal `10GB` margin KiB: `-2,987`
+- Tree RSS margin KiB: `697,796`
+- Tree decimal `10GB` margin KiB: `-22,339`
+- Latest sampled single RSS KiB: `9,768,612`
+- Latest sampled tree RSS KiB: `9,787,964`
+- Latest sampled single-process margin KiB: `717,148`
+- Latest sampled single-process decimal `10GB` margin KiB: `-2,987`
+- Latest sampled tree margin KiB: `697,796`
+- Latest sampled tree decimal `10GB` margin KiB: `-22,339`
 
-## Quarantine
+## Terminal Gate Command
 
-- `typed_skip_cts_premature_event_length`: Causality defect exposed event length before decoder reconstruction; prior gains receive zero credit.
+```bash
+python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 --scope 250000 --apply-terminal --normalize --package-lower
+```
 
-## Validation
+## Gate Evidence Status
 
-- Source and arithmetic validation: `FAIL`.
-- endpoint428_gate_dot_fuse_output_update_loop_v1: required evidence source missing
-- endpoint428_gate_dot_fuse_output_update_loop_v1: metric assertion could not be verified
-- endpoint428_gate_dot_fuse_output_update_loop_v1: metric assertion could not be verified
-- endpoint428_gate_dot_fuse_output_update_loop_v1: metric assertion could not be verified
-- endpoint428_gate_dot_fuse_output_update_loop_v1: metric assertion could not be verified
-- endpoint428_mixer_context_reuse_runtime_proxy_v1: required evidence source missing
-- endpoint428_mixer_flat_context_runtime_proxy_v1: required evidence source missing
-- endpoint428_lstm_serial_forward_runtime_proxy_v1: required evidence source missing
-- endpoint428_lstm_backward_dual_accum_runtime_proxy_v1: required evidence source missing
-- canonical frontier forecast disagrees with operational receipt
+- Claim status: `guard_without_driver_result`
+- Driver result terminal: `false`
+- RSS guard terminal: `true`
+- Scored gate result present: `false`
+- Live guard only: `false`
+- Claim rule: `Only a terminal driver result with roundtrip evidence can become a benchmark row.`
 
-Only an exact 1,000,000,000-byte replay with complete accounting, roundtrip, and score at or below 108,000,000 is a win.
+## Observed Gate Command
 
-## Continue
+- Expected candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Expected scope bytes: `250,000`
+- Driver process count: `0`
+- Active gate command observed: `false`
+- Driver command mismatch count: `0`
 
-Continue toward the Hutter Prize. Highest-value next gate: Build a model-work reduction or replacement architecture whose measured score loss fits the 110,677-byte counted margin and whose reference-calibrated runtime satisfies the official rule before any full-1G gate.
+| PID | Candidate Match | Scope Bytes | Scope Match | Determinism Flag |
+|---:|---|---:|---|---|
+| n/a | n/a | n/a | n/a | n/a |
+
+## Observed Controller Command
+
+- Expected active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Expected active scope bytes: `250,000`
+- Controller process count: `0`
+- Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
+
+| PID | Candidate Match | Controller Scope | Scope Match Active Gate | Apply Terminal | Launch Next | Package Lower |
+|---:|---|---:|---|---|---|---|
+| n/a | n/a | n/a | n/a | n/a | n/a | n/a |
+
+## Operator Action
+
+- Safe to launch heavy gate: `false`
+- Action: `record_rss_failure_then_package_lower_candidate`
+- Reason: `RSS failure must be recorded before the next memory-valve candidate is built`
+- Allowed work: `n/a`
+- Forbidden work: `n/a`
+
+## Handoff
+
+- Terminal verdict present: `true`
+- Heavy gate mutation allowed: `true`
+- Recommended action: `record_rss_failure_then_package_lower_candidate`
+- Command source: `cmix21_gate_decider.apply_terminal_command`
+- Claim rule: `No prefix row proves 10.95%.`
+- Apply terminal command:
+```bash
+python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 --scope 250000 --apply-terminal --normalize --package-lower
+```
+
+## Operator Logs
+
+- Latest delayed status log: `projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log`
+- Latest delayed status log present: `true`
+- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260709T122555Z.log`
+
+## Candidate Audit
+
+- Audit return code: `0`
+- Program directories: `546`
+- Registered programs: `229`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `16`
+- Candidate statuses: `active=22, blocked_dependency=31, candidate=5, measured_negative=89, retired=399`
+
+## Active Runner Process Table
+
+| Role | PID | PPID | RSS KiB | Command |
+|---|---:|---:|---:|---|
+| n/a | n/a | n/a | n/a | n/a |
+
+## Active Candidate Recent Artifacts
+
+| Path | Bytes | Modified UTC |
+|---|---:|---|
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20352k_250000_determinism_rss_guard.json` | 1,237 | `2026-07-11T15:13:39+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/ppmd20352k_1024_determinism_rss_guard.json` | 978 | `2026-07-11T15:10:12+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-11T111011.json` | 1,430 | `2026-07-11T15:10:11+00:00` |
+
+## Contingencies
+
+- If current gate passes: `promote unchanged`
+- Pass next scope: `1,000,000`
+- If RSS fails: `record RSS failure and package lower PPMD cap`
+- Lower candidate: `cmix21_text_mmap_paq5_ppmd20224k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Lower PPMD KiB: `20,224`
+- If roundtrip or determinism fails: `record failure and do not promote`
+
+## Proof Boundary
+
+- best_exact_10m: `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1`; status `exact artifact-backed`; score `1,882,615`
+- best_exact_10m_archive: `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`; status `exact artifact-backed`; score `2,202,351`
+- best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `exact artifact-backed`; score `15,462,586`
+- best_full_1g: `not verified`; status `not verified`; score `n/a`
+- best_forecast: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `fx2-calibrated-from-exact-100m`; score `110,181,114`
+
+## Claim Rule
+
+No prefix row proves `10.95%`.
