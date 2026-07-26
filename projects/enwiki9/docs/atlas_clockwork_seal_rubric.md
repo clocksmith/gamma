@@ -1,642 +1,359 @@
-# Rubric for the Atlas, Clockwork, and Seal Examination
+# The Atlas and Clockwork Challenge: Organizer Rubric
 
-## 1. Grading model
+## 1. Purpose
 
-The examination is graded by strict verification rather than partial credit.
+This document defines strict organizer-owned verification for the two
+independent problems in the public statement.
 
-Every problem receives exactly one status:
+The Seal is not a contestant problem. It is the fixed acceptance procedure,
+fixed interpreter, measured resource gate, and theorem used by the organizer.
 
-```text
-PASS
-FAIL
-INVALID
-```
+The final decision is:
 
-`PASS` means every mathematical inequality, construction requirement,
-admissibility rule, and artifact check succeeds.
+PASS = PASS_A OR PASS_B.
 
-`FAIL` means the submission is well-formed but does not establish a required
-inequality, resource bound, identity, or construction.
-
-`INVALID` means the evidence is not admissible, an object is missing, a cost is
-uncounted, or the verifier cannot reproduce the claimed calculation.
-
-The examination passes only when all three problems receive `PASS`.
+A submission that passes either route is accepted even if the other route is
+absent or fails.
 
 ---
 
-# 2. Global admissibility rules
+## 2. Decision vocabulary
 
-## 2.1 Exactness
+Each route receives exactly one terminal verdict:
 
-All probabilities, states, lengths, and resource counts must use exact integer
-or rational semantics.
+- PASS: every mandatory condition for that route is established.
+- FAIL: the submission is well formed but violates at least one mandatory
+  inequality, exactness condition, or resource limit.
+- INVALID: the submission cannot be evaluated under the fixed specification,
+  uses prohibited information or arithmetic, has ambiguous serialization, or
+  omits a mandatory artifact.
 
-The following are inadmissible as final evidence:
-
-- Floating-point probabilities.
-- Approximate logarithms.
-- Expected lengths.
-- Sampled estimates.
-- Prefix projections.
-- Asymptotic bounds without finite-instance evaluation.
-- Confidence intervals in place of exact quantities.
-
-Floating-point arithmetic may be used during private search, but no submitted
-object or proof may depend on it.
-
-## 2.2 Complete accounting
-
-The following must be represented and counted:
-
-- Programs.
-- Tables.
-- Codebooks.
-- Chamber labels.
-- Framing.
-- Length fields.
-- Initialization.
-- Exceptional cases.
-- Alignment and padding.
-- Arithmetic finalization.
-- Model-selection information.
-- Replacement or retained reference components.
-
-Any uncounted information yields `INVALID`.
-
-## 2.3 Information availability
-
-Before each reconstructed symbol, the submitted machine may use only:
-
-- Previously reconstructed symbols.
-- Fixed represented programs and tables.
-- Labels already read from the representation.
-- State deterministically derived from these objects.
-
-Using an unrevealed current or future symbol without first representing the
-necessary label yields `INVALID`.
-
-## 2.4 Joint replay
-
-Savings from separately measured mechanisms may not be added.
-
-Every claimed combined result must be measured through one exact replay of the
-complete combined state trajectory.
-
-Violation yields `INVALID`.
-
-## 2.5 Uniformity
-
-The submitted transition system must be uniform over positions.
-
-Position-specific behavior is permitted only through explicitly represented
-finite tables or programs.
-
-An uncounted time-indexed trace, prediction stream, or position-specific
-constant yields `INVALID`.
-
-## 2.6 Reproducibility
-
-Every machine-readable artifact must include:
-
-- Byte length.
-- SHA-256 hash.
-- Format identifier.
-- Dependency identifiers.
-- Deterministic construction rule.
-
-A missing or mismatching artifact yields `INVALID`.
+No partial credit changes a terminal verdict. Diagnostics may rank failed
+research submissions, but they do not weaken acceptance.
 
 ---
 
-# 3. Problem I rubric: The Atlas
+## 3. Organizer-owned objects
 
-## 3.1 Required artifacts
+Before releasing an instance, the organizer freezes and hashes:
 
-The submission must contain:
+1. the finite input and block boundaries;
+2. all observable streams and availability times;
+3. w, r, FDAC, and framing rules;
+4. the canonical serializer;
+5. the fixed interpreter for each route;
+6. exact operation-count and memory-count semantics;
+7. targets and finite bounds;
+8. the reference execution protocol;
+9. the complete verifier;
+10. a private adapter, if the instance is embedded in another application.
 
-- `atlas.codebook`
-- `atlas.dag`
-- `atlas.label_model`
-- `atlas.labels`
-- `atlas.grammar_encoding`
-- `atlas.controls`
-- `atlas.interval_ledger`
-- `atlas.causality_proof`
-- `atlas.decision`
-
-Equivalent names are permitted if the manifest maps them unambiguously.
-
-## 3.2 Codebook validity
-
-Verify:
-
-- \(1\le K\le K_{\max}\).
-- Every bias is within the supplied quantization range.
-- Every weight is an allowed integer.
-- Every sparsity bound is satisfied.
-- Every activation mask has dimension \(m\).
-- Every correction table is finite.
-- Every codeword has a unique prefix-free grammar representation.
-
-Any failure produces `INVALID`.
-
-## 3.3 DAG validity
-
-Verify:
-
-- The graph is finite and acyclic.
-- Every internal node tests one declared observable.
-- Every leaf selects one valid correction state.
-- Node, depth, and table bounds are satisfied.
-- Evaluation order is deterministic.
-- No node reads an unavailable coordinate.
-
-Reading an unavailable coordinate produces `INVALID`.
-
-Exceeding a structural bound produces `FAIL`.
-
-## 3.4 Label legality
-
-For every chamber \(I_j=H_j\Vert J_j\), verify:
-
-- \(H_j\) is reconstructed before \(z_j\) is read.
-- \(z_j\) is read before the first corrected symbol in \(J_j\).
-- The probability used to represent \(z_j\) depends only on permitted history.
-- Every label symbol is included in the interval ledger.
-- Every label-model update is deterministic.
-
-An illegal label placement produces `INVALID`.
-
-## 3.5 Probability reconstruction
-
-Two independent implementations must reconstruct every \(q_t\).
-
-Require:
-
-\[
-q_t^{(1)}=q_t^{(2)}
-\qquad
-\text{for all }t.
-\]
-
-The verifier compares complete probability-trace hashes and performs direct
-spot-independent full traversal.
-
-Any disagreement produces `INVALID`.
-
-## 3.6 Control verification
-
-Recompute exact lengths for:
-
-- \(Z_0\)
-- \(Z_1\)
-- \(Z_K\)
-- \(Z_R\)
-- \(Z_P\)
-
-The controls must share the declared arithmetic and finalization semantics.
-
-Control failure does not automatically fail the Atlas inequality, but a
-missing or non-comparable control produces `INVALID`.
-
-## 3.7 Atlas inequality
-
-Recompute:
-
-\[
-L_{\mathrm{Atlas}}
-=
-\mathcal A_Q(y_{\mathcal H};\pi_{\mathcal H})
-+
-K_\Gamma(\mathcal H).
-\]
-
-Problem I passes exactly when:
-
-\[
-L_{\mathrm{Atlas}}\le L^\star-\Sigma.
-\]
-
-If the construction is valid but the inequality fails, return `FAIL`.
+Contestants do not submit or modify these objects. Their fixed length is the
+stated L_fixed,A or L_fixed,B. The organizer publishes hashes of all public
+frozen objects before accepting solutions. Any change creates a new instance.
 
 ---
 
-# 4. Problem II rubric: The Clockwork
+## 4. Canonical serialization and disjoint accounting
 
-## 4.1 Required artifacts
+### 4.1 Four variable channels
 
-The submission must contain:
+For each route, the serializer produces:
 
-- `clockwork.transition`
-- `clockwork.output`
-- `clockwork.initial_state`
-- `clockwork.tables`
-- `clockwork.grammar_encoding`
-- `clockwork.interval_ledger`
-- `clockwork.operation_ledger`
-- `clockwork.memory_ledger`
-- `clockwork.degradation_ledger`
-- `clockwork.uniformity_proof`
-- `clockwork.decision`
+- C: certificate bytes;
+- Z: label or auxiliary-choice bytes;
+- Y: FDAC payload and its final partial-byte length;
+- F: framing bytes.
 
-## 4.2 Integer-circuit validity
+The channels are concatenated in the fixed order F || C || Z || Y. Framing
+contains only canonical lengths, block counts, modes, and padding counts. It
+contains no model parameter or prediction table.
 
-Verify:
+### 4.2 Exactly-once rule
 
-- Every operation belongs to the permitted word-RAM instruction set.
-- Every intermediate value has a declared width.
-- Overflow behavior is defined.
-- Signedness is defined.
-- Shift behavior is defined.
-- Rounding and saturation are defined.
-- Lookup bounds are proved.
-- Exceptional paths terminate.
+Each non-fixed object used during reconstruction has one owner:
 
-Undefined behavior produces `INVALID`.
+| Object | Required owner |
+|---|---|
+| transition or probability table | C |
+| instruction sequence and constants | C |
+| non-fixed state initializer | C |
+| block label or auxiliary selector | Z |
+| coded data symbols | Y |
+| channel lengths and block boundaries | F |
 
-## 4.3 Uniformity verification
+The verifier rejects an object duplicated across channels, an uncharged used
+object, a label present in both Z and the FDAC source alphabet, a table expanded
+from an uncharged seed, or a certificate charged again as executable size.
 
-Verify:
+### 4.3 Exact total
 
-- One transition circuit applies to every position.
-- One output circuit applies to every position.
-- Every position-dependent value is read from a represented table.
-- The sealed object is not embedded in an uncounted constant sequence.
-- No teacher trace is required during final execution.
+The only acceptance length is
 
-A hidden position-dependent trace produces `INVALID`.
+L_total = L_fixed + 8|F_bytes| + 8|C_bytes| + 8|Z_bytes| + |Y_bits|.
 
-## 4.4 Probability verification
+For a byte target T, acceptance requires ceil(L_total/8) <= T.
 
-Reconstruct the complete \(\widehat q_t\) sequence independently.
-
-Require:
-
-\[
-\widehat q_t^{(1)}=\widehat q_t^{(2)}
-\qquad
-\text{for all }t.
-\]
-
-Any disagreement produces `INVALID`.
-
-## 4.5 Degradation accounting
-
-Recompute:
-
-\[
-\Delta_{\mathrm{total}}
-=
-L_{\mathrm{Clock}}-L_{\mathrm{Atlas}}.
-\]
-
-The degradation ledger must reconcile:
-
-- Probability changes.
-- Program additions.
-- Program removals.
-- Table additions.
-- Table removals.
-- Label changes.
-- Framing changes.
-- Finalization changes.
-
-An unreconciled bit produces `INVALID`.
-
-## 4.6 Operation bound
-
-Recompute the exact or valid worst-case operation count:
-
-\[
-\operatorname{Ops}_{\mathfrak M_w}
-(\widehat F,\widehat G,x).
-\]
-
-Count every operation performed during:
-
-- Initialization.
-- Label processing.
-- State transitions.
-- Probability production.
-- Interval updates.
-- Exceptional paths.
-- Finalization.
-
-Problem II requires:
-
-\[
-\operatorname{Ops}\le T_{\max}.
-\]
-
-Average or expected operation counts are inadmissible.
-
-## 4.7 Memory bound
-
-Recompute the peak number of simultaneously live words:
-
-\[
-\operatorname{PeakWords}_{\mathfrak M_w}
-(\widehat F,\widehat G,x).
-\]
-
-Count:
-
-- Static tables resident in memory.
-- Dynamic state.
-- Arithmetic state.
-- Label state.
-- Temporary buffers.
-- Recursion or stack state.
-- Exceptional-path allocations.
-
-Problem II requires:
-
-\[
-\operatorname{PeakWords}\le M_{\max}.
-\]
-
-## 4.8 Clockwork inequality
-
-Recompute:
-
-\[
-L_{\mathrm{Clock}}
-=
-\mathcal A_Q(y_{\mathcal H};\widehat\pi)
-+
-K_\Gamma(\widehat F,\widehat G,\widehat{\mathcal H}).
-\]
-
-Problem II passes exactly when:
-
-\[
-L_{\mathrm{Clock}}-L_{\mathrm{Atlas}}\le\Sigma,
-\]
-
-\[
-\operatorname{Ops}\le T_{\max},
-\]
-
-and
-
-\[
-\operatorname{PeakWords}\le M_{\max}.
-\]
-
-A valid construction missing any inequality receives `FAIL`.
+No ideal interval length, Shannon length, entropy estimate, projection,
+hypothetical amortization, or extrapolation may replace this integer.
 
 ---
 
-# 5. Problem III rubric: The Seal
+## 5. Fixed FDAC verification
 
-## 5.1 Required artifacts
+The verifier implements the public FDAC recurrence literally. For every symbol
+it records position, block, numerator, pre-update interval, split, selected
+subinterval, renormalizations, emitted bits, and post-update state.
 
-The submission must contain:
+The independent decoder records its payload position, code register, decoded
+bit, interval trace, reconstructed state, and numerator.
 
-- `seal.manifest`
-- `seal.bitstring`
-- `seal.encoder`
-- `seal.decoder`
-- `seal.grammar_encoding`
-- `seal.field_ledger`
-- `seal.interval_ledger`
-- `seal.operation_ledger`
-- `seal.memory_ledger`
-- `seal.induction_proof`
-- `seal.roundtrip_receipt`
-- `seal.reencode_receipt`
-- `seal.verifier`
-- `seal.decision`
+A route fails unless:
 
-## 5.2 Self-delimitation
+1. encoder output is bit-for-bit deterministic;
+2. decoder reconstructs exactly n bits;
+3. reconstructed data equals the frozen instance;
+4. encoder and decoder numerator traces agree everywhere;
+5. a second clean encoding emits the identical payload;
+6. all termination and partial-byte rules are exact;
+7. only specified zero fill is read after the payload.
 
-Verify that every field is:
-
-- Prefix-free, or
-- Assigned a length determined entirely by earlier fields.
-
-The decoder must locate every boundary without external information.
-
-Ambiguous framing produces `INVALID`.
-
-## 5.3 Initialization identity
-
-Before decoding the first represented symbol, verify that encoder and decoder
-have identical:
-
-- Grammar version.
-- Word width.
-- Probability denominator.
-- Initial predictive state.
-- Initial label state.
-- Initial interval state.
-- Tables and codebook.
-
-Any mismatch produces `INVALID`.
-
-## 5.4 Inductive identity
-
-For every reconstructed position \(t\), verify:
-
-\[
-\text{encoder state}_t=\text{decoder state}_t,
-\]
-
-\[
-q_t^{E}=q_t^{D},
-\]
-
-\[
-\text{interval}_t^{E}=\text{interval}_t^{D}.
-\]
-
-After reconstructing \(x_t\), verify identical updates on both sides.
-
-Failure at any position produces `FAIL` if the programs are otherwise
-well-defined, or `INVALID` if behavior is undefined.
-
-## 5.5 Roundtrip
-
-Compute:
-
-\[
-W_1=E(x),
-\]
-
-\[
-x'=D(W_1).
-\]
-
-Require:
-
-\[
-x'=x.
-\]
-
-Byte inequality produces `FAIL`.
-
-## 5.6 Canonical re-encoding
-
-Compute:
-
-\[
-W_2=E(x').
-\]
-
-Require:
-
-\[
-W_2=W_1.
-\]
-
-Any difference produces `FAIL`.
-
-## 5.7 Final length
-
-Recompute:
-
-\[
-L_{\mathrm{final}}
-=
-|W_1|
-+
-K_\Gamma(E,D).
-\]
-
-The field ledger must sum exactly to \(|W_1|\). The program ledger must sum
-exactly to \(K_\Gamma(E,D)\).
-
-Problem III requires:
-
-\[
-L_{\mathrm{final}}\le L^\star.
-\]
-
-## 5.8 Final resource bounds
-
-Recompute:
-
-\[
-\operatorname{Ops}(E,x),
-\qquad
-\operatorname{Ops}(D,W_1),
-\]
-
-\[
-\operatorname{PeakWords}(E,x),
-\qquad
-\operatorname{PeakWords}(D,W_1).
-\]
-
-Require:
-
-\[
-\operatorname{Ops}(E,x)\le T_{\max},
-\]
-
-\[
-\operatorname{Ops}(D,W_1)\le T_{\max},
-\]
-
-\[
-\operatorname{PeakWords}(E,x)\le M_{\max},
-\]
-
-\[
-\operatorname{PeakWords}(D,W_1)\le M_{\max}.
-\]
-
-## 5.9 Determinism
-
-The verifier rejects dependence on:
-
-- Thread scheduling.
-- Unordered iteration.
-- Filesystem ordering.
-- Wall-clock timing.
-- Randomness without a represented seed.
-- Floating-point behavior.
-- Uninitialized memory.
-- Platform-dependent overflow.
-
-Any such dependency produces `INVALID`.
+An ideal rational interval is diagnostic only.
 
 ---
 
-# 6. Independent verifier contract
+## 6. Common causality and replay gate
 
-The independent verifier receives only:
+At every position t, the verifier compares the encoder state after the true
+prefix with the decoder state after the reconstructed prefix. It demands exact
+equality of visible history, paid-label availability, every state register,
+every observable, every numerator, every boundary transition, and every
+post-symbol update.
 
-- The public finite instance.
-- The submitted manifest.
-- The submitted machine-readable artifacts.
+A route is INVALID if a probability uses x_t before decoding, any later
+symbol, a label before its codeword is available, an observable before its
+declared time, nondeterministic iteration, wall-clock state, thread scheduling,
+external files, network state, or unspecified floating-point behavior.
 
-It must not access a network, hidden model, external table, or private
-execution trace.
-
-It performs:
-
-1. Format and hash validation.
-2. Grammar decoding.
-3. Atlas reconstruction.
-4. Atlas interval replay.
-5. Clockwork reconstruction.
-6. Clockwork interval replay.
-7. Resource-ledger verification.
-8. Encoder execution.
-9. Decoder execution.
-10. Canonical re-encoding.
-11. Final length reconciliation.
-12. Final decision.
-
-Its terminal output is one of:
-
-```text
-VALID
-FAIL PROBLEM_I <condition>
-FAIL PROBLEM_II <condition>
-FAIL PROBLEM_III <condition>
-INVALID <condition>
-```
-
-`VALID` is emitted only if every requirement in this rubric passes.
+Whole-block-dependent labels are allowed only because their exact codewords are
+charged in Z and available before first use.
 
 ---
 
-# 7. Final acceptance theorem
+## 7. Problem A rubric
 
-The verifier emits `VALID` only after establishing:
+### A0. Artifact completeness
 
-\[
-L_{\mathrm{Atlas}}\le L^\star-\Sigma,
-\]
+Problem A must provide the label alphabet, prefix code, all block labels,
+finite state representation, initial state, transition, numerator construction,
+all tables and constants, canonical serializer input, causality proof,
+joint-replay proof, exact length ledger, and exact resource ledger.
 
-\[
-L_{\mathrm{Clock}}-L_{\mathrm{Atlas}}\le\Sigma,
-\]
+A missing mandatory item gives INVALID.
 
-\[
-D(E(x))=x,
-\]
+### A1. Label-code proof
 
-\[
-E(D(E(x)))=E(x),
-\]
+The grader verifies directly that every label has one codeword, no codeword is
+a prefix of another, concatenation parses uniquely, every used label is
+declared, and Z is exactly the canonical concatenation.
 
-\[
-|E(x)|+K_\Gamma(E,D)\le L^\star,
-\]
+### A2. Finite-state proof
 
-\[
-\operatorname{Ops}(E),\operatorname{Ops}(D)\le T_{\max},
-\]
+The grader enumerates states when the bound permits and always executes the
+full trace. The initial state and every successor must lie in S, maps must be
+single-valued, every numerator must lie in {1, ..., 2^r-1}, and equal inputs
+must give equal outputs.
 
-and
+### A3. Atlas target gate
 
-\[
-\operatorname{Memory}(E),\operatorname{Memory}(D)\le M_{\max}.
-\]
+Compute
 
-All three problems must pass. A failure or invalid result in any problem fails
-the examination.
+L_A = L_fixed,A + |C_A| + |Z_A| + |Y_A| + |F_A|.
+
+All must hold:
+
+L_A <= T_A,
+
+|C_A| <= B_C,  |Z_A| <= B_Z,  |S| <= B_S,
+
+Ops_A(x) <= B_O,  Mem_A(x) <= B_M.
+
+Equality at a bound passes.
+
+### A4. Atlas route verdict
+
+PASS_A is issued if and only if A0 through A3 and all common gates pass.
+Problem B is not loaded or consulted.
+
+---
+
+## 8. Problem B rubric
+
+### B0. Artifact completeness
+
+Problem B must provide the bounded state layout, exact initial state, complete
+update and numerator instruction sequences, all constants and tables,
+canonical serializer input, instruction-legality proof, state-closure proof,
+causality and joint-replay proofs, exact global length ledger, and exact
+resource ledger.
+
+A missing mandatory item gives INVALID.
+
+### B1. Independence from Atlas
+
+The grader starts from the separately frozen teacher. The route is INVALID if
+it imports an Atlas label, state, table, certificate, teacher, score credit, or
+artifact requiring an Atlas solution. The common input and fixed FDAC do not
+create dependence.
+
+### B2. Instruction legality
+
+For every instruction, the grader checks opcode membership, operand type and
+width, overflow behavior, rounding and division, table bounds, deterministic
+branches, output width, and exact counted cost. An undeclared instruction or
+arithmetic semantic gives INVALID.
+
+### B3. State closure
+
+The proof establishes closure for all reachable states when universal closure
+is requested. The verifier also checks the full observed trace. Out-of-range
+lookup, undeclared state, or overflow outside declared semantics gives FAIL.
+
+### B4. Clockwork target gate
+
+Compute
+
+L_B = L_fixed,B + |C_B| + |Z_B| + |Y_B| + |F_B|.
+
+All must hold:
+
+L_B <= T_B,
+
+|C_B| <= B'_C,
+
+StateBits(U) <= B'_S,
+
+Ops_B(x) <= B'_O,  Mem_B(x) <= B'_M.
+
+The teacher comparison is diagnostic. Passing depends on the absolute target.
+
+### B5. Global degradation rule
+
+The only exact coded-length difference is
+
+Delta L = (|C_B| + |Z_B| + |Y_B| + |F_B|) - L_teacher.
+
+Per-symbol rational log loss may locate errors, but it must be labeled
+`diagnostic_nonadditive` and cannot substitute for Delta L.
+
+### B6. Clockwork route verdict
+
+PASS_B is issued if and only if B0 through B5 and all common gates pass.
+Problem A is not loaded or consulted.
+
+---
+
+## 9. Resource acceptance
+
+### 9.1 Mathematical resource ledger
+
+The fixed interpreter counts exact operations under the instance. This count
+is reproducible but does not by itself imply a physical execution bound.
+
+### 9.2 Reference execution gate
+
+When physical limits apply, the organizer runs the fixed interpreter under a
+frozen protocol specifying machine and processor configuration, core count,
+memory limit and measurement method, interpreter hash, operating-system image,
+input and output hashes, process-tree accounting, encode and decode commands,
+repetition policy, and maximum encode and decode times.
+
+Physical eligibility requires both the mathematical resource ledger and the
+measured fixed-interpreter receipt to pass.
+
+An instance may instead publish a conservative calibrated implication theorem
+from operation and memory bounds to physical acceptance, but it must be frozen
+and proved for the fixed interpreter. Without it, measured execution is
+mandatory.
+
+### 9.3 No contestant executable
+
+Contestants submit finite mathematical objects and proofs, not encoders,
+decoders, manifests, shell commands, or resource monitors. The organizer-owned
+interpreter serializes and evaluates those objects. A private application
+adapter is organizer-owned, fixed, and charged in L_fixed.
+
+---
+
+## 10. Controls and audit artifacts
+
+Controls create no acceptance credit. The organizer publishes the baseline or
+teacher payload, submitted payload, exact global difference, separate C/Z/Y/F
+lengths, numerator-trace hash, state-trace hash, payload hash, decoded-output
+hash, deterministic second-encode hash, operation count, peak interpreted state
+bytes, and physical receipt when required.
+
+A disagreement between a claimed integer and verifier output is resolved in
+favor of the verifier.
+
+---
+
+## 11. Uniformity and forbidden tailoring
+
+A construction may depend on the finite instance only through objects that are
+explicitly serialized and charged. It may not hide instance bits in symbol
+names, noncanonical table order, proof prose, unused constants, undefined
+behavior, timing, addresses, hash collisions, interpreter choices, floating
+point payloads, or alternative serializations.
+
+The serializer rejects irrelevant degrees of freedom where practical. All
+remaining submitted bits are charged regardless of whether they are called
+parameters, proofs, metadata, or padding.
+
+---
+
+## 12. Seal acceptance theorem
+
+### Theorem
+
+Assume the frozen serializer, FDAC implementation, verifier, and interpreter
+satisfy their published specifications.
+
+If PASS_A is issued, the Atlas objects alone define a finite, deterministic,
+exactly reversible construction whose complete charged length is at most T_A
+and whose resources satisfy the Atlas bounds.
+
+If PASS_B is issued, the Clockwork objects alone define a finite,
+deterministic, exactly reversible construction whose complete charged length
+is at most T_B and whose resources satisfy the Clockwork bounds.
+
+Therefore PASS_A OR PASS_B is sufficient for final acceptance.
+
+### Proof
+
+For either passing route, framing uniquely separates C, Z, and Y. The fixed
+interpreter reconstructs the finite predictor from C, obtains every permitted
+auxiliary choice from Z, and computes a dyadic numerator before each symbol.
+Joint replay gives equality of encoder and decoder numerator sequences. The
+FDAC inverse therefore reconstructs every symbol exactly. The exactly-once
+ledger includes every non-fixed bit, and the absolute target gate bounds the
+total together with fixed machinery. The resource gate supplies the required
+mathematical and, when applicable, physical bounds. Neither argument refers to
+the other route. QED.
+
+---
+
+## 13. Final decision table
+
+| Atlas | Clockwork | Final |
+|---|---|---|
+| PASS | any verdict or absent | PASS |
+| any non-PASS verdict or absent | PASS | PASS |
+| absent | absent | INVALID |
+| FAIL | FAIL | FAIL |
+| INVALID | FAIL or absent | INVALID |
+| FAIL or absent | INVALID | INVALID |
+| INVALID | INVALID | INVALID |
+
+The organizer reports route verdicts separately even when the other route has
+already established final acceptance.
