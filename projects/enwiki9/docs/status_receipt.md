@@ -2,20 +2,20 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-26T12:06:42+00:00`
+- Generated at UTC: `2026-07-26T12:42:28+00:00`
 
 ## Target State
 
-- `10.95%` target score: `108,000,000`
+- `10.8000000%` target score: `108,000,000`
 - Full-corpus constructive result present: `false`
 - `10.95%` constructive upper bound present: `false`
 
 ## Operator Summary
 
-- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
-- Scope bytes: `100,000,000`
-- Gate verdict: `running`
-- Gate next action: `wait_for_gate_completion`
+- Candidate: `None`
+- Scope bytes: `n/a`
+- Gate verdict: `orphaned_running_receipt`
+- Gate next action: `reconcile_orphaned_gate_receipt`
 - Heavy lock held: `false`
 - Active scorer observed: `true`
 - Active cmix mode: `decode`
@@ -35,11 +35,11 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves 10.95%.`
 
-## Active Gate
+## Orphaned Gate Reconciliation
 
 - Heavy lock held: `false`
-- Gate verdict: `running`
-- Next action: `wait_for_gate_completion`
+- Gate verdict: `orphaned_running_receipt`
+- Next action: `reconcile_orphaned_gate_receipt`
 - Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
 - Scope bytes: `100,000,000`
 - Driver result JSON: `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json`
@@ -47,6 +47,12 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - RSS guard JSON: `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json`
 - RSS guard present: `true`
 - Active scorer observed: `true`
+- Live gate: `false`
+- Liveness classification: `orphaned_running_receipt`
+- Matching adaptive jobs: `0`
+- Matching controllers: `0`
+- Matching driver observed: `false`
+- Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive running job backed by the host-local heavy lock. The lock alone never identifies a gate.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `923`
 - RSS guard JSON modified UTC: `2026-07-21T21:23:10+00:00`
@@ -67,7 +73,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Gate Evidence Status
 
-- Claim status: `awaiting_gate_receipts`
+- Claim status: `orphaned_running_receipt`
 - Driver result terminal: `true`
 - RSS guard terminal: `false`
 - Scored gate result present: `false`
@@ -108,16 +114,16 @@ Generated from the current certificate, gate receipts, lock state, and process t
 ## Operator Action
 
 - Safe to launch heavy gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
-- Allowed work: `n/a`
-- Forbidden work: `n/a`
+- Action: `reconcile_orphaned_gate_receipt`
+- Reason: `persisted running state has no live owner and must be cleared or terminalized before another heavy gate is launched`
+- Allowed work: `inspect and repair the orphaned receipt; run non-heavy oracle and shadow experiments; claim and publish independent non-heavy work`
+- Forbidden work: `report the orphaned receipt as active; launch another heavy gate`
 
 ## Handoff
 
 - Terminal verdict present: `false`
 - Heavy gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
+- Recommended action: `reconcile_orphaned_gate_receipt`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves 10.95%.`
 
@@ -132,9 +138,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Audit return code: `0`
 - Program directories: `544`
 - Registered programs: `227`
-- Untracked nonignored entries: `10`
-- Modified tracked entries: `19`
-- Candidate statuses: `active=22, blocked_dependency=31, candidate=2, measured_negative=91, retired=397, track_source_before_evolution=1`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `1`
+- Candidate statuses: `active=22, blocked_dependency=31, candidate=3, measured_negative=91, retired=397`
 
 ## Active Runner Process Table
 
@@ -163,10 +169,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json` | 1,388 | `2026-07-23T02:21:47+00:00` |
-| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json` | 923 | `2026-07-21T21:23:10+00:00` |
-| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_10000000_determinism_rss_guard.json` | 874 | `2026-07-20T19:57:07+00:00` |
-| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` | 1,012 | `2026-07-20T19:57:07+00:00` |
+| n/a | n/a | n/a |
 
 ## Active RSS
 
@@ -194,15 +197,6 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Decode scope progress: `593,350` / `100,000,000` bytes (`0.593%`)
 - Decode remaining scope bytes: `99,406,650`
 - Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
-
-## Contingencies
-
-- If current gate passes: `record pass and apply candidate target-gate promotion rule`
-- Pass next scope: `1,000,000,000`
-- If RSS fails: `record RSS failure and retire or repackage this integration shape`
-- Lower candidate: `unknown`
-- Lower PPMD KiB: `n/a`
-- If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary
 
