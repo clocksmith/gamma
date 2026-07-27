@@ -357,3 +357,19 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - Conclusion: retire joint full-symbol multinomial extraction, while leaving
   context-conditioned fibers and variable-length phrase partitions open
 - Score credit: 0 bytes
+
+## PCMF-1: Paid Conditional Multinomial Fibers
+
+- Problem: `docs/paid_conditional_multinomial_problem.md`
+- Solution: `docs/paid_conditional_multinomial_solution.md`
+- Construction: `tools/paid_conditional_multinomial_gate.cpp`
+- Frozen instance: exact opening-1M endpoint trace with the preceding two WRT
+  bytes as the causal context
+- Mathematical status: `MATH_COMPLETE`
+- Transfer status: `INSTANTIATED_TERMINAL_NEGATIVE`
+- Exact result: parent payload identity and all side/residual/WRT roundtrips
+  pass; no paid context is positive and the best is -31.335846 ideal bits
+  before shared framing or source cost
+- Conclusion: retire context-two full conditional multinomials without a
+  context-length or support-pruning sweep
+- Score credit: 0 bytes

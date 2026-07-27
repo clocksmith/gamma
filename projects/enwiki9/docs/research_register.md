@@ -2246,3 +2246,33 @@ Evidence:
 - `tools/joint_multinomial_fiber_gate.cpp`
 - `results/joint_multinomial_fiber_v1/decision.json`
 - `operations/adaptive/exclusions/joint_full_symbol_multinomial_opening1m_v1.json`
+
+## 2026-07-27: PCMF-1 paid context-two multinomials are terminal negative
+
+PCMF-1 transmits complete next-symbol count vectors for selected causal
+two-byte WRT contexts, codes those context subsequences without replacement,
+and leaves all other positions on the exact parent range coder. The theorem
+proves context partitioning, multinomial and binary-tree probability
+factorization, exact paid context selection, and decoder-prefix
+reproducibility.
+
+The frozen opening-1M gate reproduces all 4,805,936 parent decisions and the
+175,188-byte parent payload. The nonempty side-coder control, residual coder,
+and 600,742-byte WRT reconstruction all pass. No context has positive paid
+ideal contribution. The best single context is already 31.335846 bits
+negative before the shared frame, finite range-coder overhead, or the measured
+4,316-byte compressed standalone source cost.
+
+Decision: retire context-two complete conditional multinomials and do not run
+a context-length, support-pruning, or probability-resolution ladder. A
+successor needs dynamic causal state, variable-length events, or a mature
+under-target teacher rather than another static future-count table. Score
+credit is zero.
+
+Evidence:
+
+- `docs/paid_conditional_multinomial_problem.md`
+- `docs/paid_conditional_multinomial_solution.md`
+- `tools/paid_conditional_multinomial_gate.cpp`
+- `results/paid_conditional_multinomial_c2_v1/decision.json`
+- `operations/adaptive/exclusions/paid_conditional_multinomial_c2_opening1m_v1.json`
