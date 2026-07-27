@@ -320,3 +320,14 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - DWNF-1 composition: wrapper 3774 to 1885 bytes; final package 271340 bytes; 2269 bytes saved against FCF-1.
 - Constructive transfer: clean build reproduced the exact 837176-byte executable and 411996-byte dictionary hashes.
 - Boundary: replacement 250K native archive, roundtrip, determinism, runtime, and memory gate queued; score credit zero.
+
+## SCLE-1: Slack-Carrier Literal Embedding
+
+- Problem: `docs/slack_carrier_literal_embedding_problem.md`
+- Solution: `docs/slack_carrier_literal_embedding_solution.md`
+- Construction: `tools/embed_nncp_makefile_flags.py`
+- Frozen instance: `programs/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/`
+- Exact carrier result: 145 marker bytes fit inside existing Makefile tar slack; raw tar remains 819200 bytes and no byte outside the member allocation changes.
+- Exact codec result: all 377 XZ members re-evaluated; new minimum 233012 bytes with an 800 KiB dictionary.
+- Constructive transfer: wrapper 1099 to 1007 bytes; package 234099 to 234019 bytes; normalized nncp and libnc.so hashes exact.
+- Boundary: replacement native 10K archive, roundtrip, determinism, runtime, and memory gate queued; score credit zero.
