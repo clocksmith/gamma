@@ -72,6 +72,68 @@ def relative_shift(x: torch.Tensor) -> torch.Tensor:
     return padded[:, 1:, :].reshape(heads, query, key)
 
 
+def forward_segment(
+    weights: dict[str, torch.Tensor],
+    token: torch.Tensor,
+    memory: torch.Tensor,
+    segment: int,
+    memory_length: int,
+    heads: int,
+    d_key: int,
+    d_value: int,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    d_model = weights["embed"].shape[0]
+    layer_input = weights["embed"][:, token].T.contiguous() * d_model**0.5
+    normalized = rms_norm(
+        layer_input, weights["ln_g_0"], weights["ln_b_0"]
+    )
+    history = torch.cat((memory, normalized), dim=0)
+    query = F.linear(normalized, weights["w_q_0"])
+    key_value = F.linear(history, weights["w_kv_0"])
+    key, value = torch.split(
+        key_value, (heads * d_key, heads * d_value), dim=-1
+    )
+    query = query.view(segment, heads, d_key).permute(1, 0, 2)
+    key = key.view(memory_length + segment, heads, d_key).permute(1, 0, 2)
+    value = value.view(
+        memory_length + segment, heads, d_value
+    ).permute(1, 0, 2)
+    content = torch.einsum("hkd,htd->htk", key, query)
+    w_r = weights["w_r_0"].permute(2, 1, 0)
+    relative = torch.einsum("hkd,htd->htk", w_r, query)
+    relative = relative + (
+        weights["b_r_0"].T[:, None, :] * (d_key * d_model) ** 0.5
+    )
+    score = (content + relative_shift(relative)) / d_key**0.5
+    device = score.device
+    qpos = torch.arange(segment, device=device)[:, None]
+    kpos = torch.arange(memory_length + segment, device=device)[None, :]
+    mask = kpos > memory_length + qpos
+    score = score.masked_fill(mask[None, :, :], -torch.inf)
+    probability = torch.softmax(score, dim=-1)
+    attended = torch.einsum("htk,hkd->htd", probability, value)
+    attended = attended.permute(1, 0, 2).reshape(segment, heads * d_value)
+    layer_input = layer_input + F.linear(attended, weights["w_o_0"])
+    ff_input = rms_norm(
+        layer_input, weights["ln_g_1"], weights["ln_b_1"]
+    )
+    gate, value_ff = F.linear(
+        ff_input, weights["ff1_0"], weights["ff_bias1_0"]
+    ).chunk(2, dim=-1)
+    hidden = F.gelu(gate) * value_ff
+    layer_input = layer_input + F.linear(
+        hidden, weights["ff2_0"], weights["ff_bias2_0"]
+    )
+    layer_input = rms_norm(
+        layer_input, weights["ln_g_2"], weights["ln_b_2"]
+    )
+    logits = F.linear(
+        layer_input, weights["embed_out"], weights["out_bias"]
+    ).float()
+    next_memory = torch.cat((memory, normalized), dim=0)[-memory_length:]
+    return logits, next_memory
+
+
 def evaluate(
     weights: dict[str, torch.Tensor],
     symbols: np.ndarray,
@@ -88,60 +150,81 @@ def evaluate(
     inputs = np.concatenate((np.zeros(1, dtype=np.int64), symbols[:-1]))
     memory = torch.zeros(memory_length, d_model, device=device, dtype=dtype)
     outputs: list[torch.Tensor] = []
-    w_r = weights["w_r_0"].permute(2, 1, 0)
-    b_r = weights["b_r_0"]
     for start in range(0, len(symbols), segment):
         token = torch.from_numpy(inputs[start : start + segment]).to(device)
-        layer_input = (
-            weights["embed"][:, token].T.contiguous() * d_model**0.5
+        logits, next_memory = forward_segment(
+            weights,
+            token,
+            memory,
+            segment,
+            memory_length,
+            heads,
+            d_key,
+            d_value,
         )
-        normalized = rms_norm(
-            layer_input, weights["ln_g_0"], weights["ln_b_0"]
-        )
-        history = torch.cat((memory, normalized), dim=0)
-        query = F.linear(normalized, weights["w_q_0"])
-        key_value = F.linear(history, weights["w_kv_0"])
-        key, value = torch.split(
-            key_value, (heads * d_key, heads * d_value), dim=-1
-        )
-        query = query.view(segment, heads, d_key).permute(1, 0, 2)
-        key = key.view(memory_length + segment, heads, d_key).permute(1, 0, 2)
-        value = value.view(
-            memory_length + segment, heads, d_value
-        ).permute(1, 0, 2)
-        content = torch.einsum("hkd,htd->htk", key, query)
-        relative = torch.einsum("hkd,htd->htk", w_r, query)
-        relative = relative + (
-            b_r.T[:, None, :] * (d_key * d_model) ** 0.5
-        )
-        score = (content + relative_shift(relative)) / d_key**0.5
-        qpos = torch.arange(segment, device=device)[:, None]
-        kpos = torch.arange(memory_length + segment, device=device)[None, :]
-        mask = kpos > memory_length + qpos
-        score = score.masked_fill(mask[None, :, :], -torch.inf)
-        probability = torch.softmax(score, dim=-1)
-        attended = torch.einsum("htk,hkd->htd", probability, value)
-        attended = attended.permute(1, 0, 2).reshape(segment, heads * d_value)
-        layer_input = layer_input + F.linear(attended, weights["w_o_0"])
-        ff_input = rms_norm(
-            layer_input, weights["ln_g_1"], weights["ln_b_1"]
-        )
-        gate, value_ff = F.linear(
-            ff_input, weights["ff1_0"], weights["ff_bias1_0"]
-        ).chunk(2, dim=-1)
-        hidden = F.gelu(gate) * value_ff
-        layer_input = layer_input + F.linear(
-            hidden, weights["ff2_0"], weights["ff_bias2_0"]
-        )
-        layer_input = rms_norm(
-            layer_input, weights["ln_g_2"], weights["ln_b_2"]
-        )
-        logits = F.linear(
-            layer_input, weights["embed_out"], weights["out_bias"]
-        ).float()
         outputs.append(torch.softmax(logits, dim=-1).cpu())
-        memory = torch.cat((memory, normalized), dim=0)[-memory_length:]
+        memory = next_memory
     return torch.cat(outputs, dim=0)
+
+
+def evaluate_online(
+    initial: dict[str, torch.Tensor],
+    symbols: np.ndarray,
+    segment: int,
+    memory_length: int,
+    heads: int,
+    d_key: int,
+    d_value: int,
+    device: torch.device,
+    dtype: torch.dtype,
+    learning_rate: float,
+    gradient_clip: float,
+) -> tuple[torch.Tensor, dict[str, torch.Tensor], list[float]]:
+    parameters = {
+        name: torch.nn.Parameter(value.to(device=device, dtype=dtype))
+        for name, value in initial.items()
+    }
+    optimizer = torch.optim.Adam(
+        list(parameters.values()),
+        lr=learning_rate,
+        betas=(0.0, 0.9999),
+        eps=1e-8,
+    )
+    d_model = parameters["embed"].shape[0]
+    memory = torch.zeros(
+        memory_length, d_model, device=device, dtype=dtype
+    )
+    inputs = np.concatenate((np.zeros(1, dtype=np.int64), symbols[:-1]))
+    outputs: list[torch.Tensor] = []
+    losses: list[float] = []
+    for start in range(0, len(symbols), segment):
+        token = torch.from_numpy(inputs[start : start + segment]).to(device)
+        target = torch.from_numpy(symbols[start : start + segment]).to(device)
+        optimizer.zero_grad(set_to_none=True)
+        logits, next_memory = forward_segment(
+            parameters,
+            token,
+            memory,
+            segment,
+            memory_length,
+            heads,
+            d_key,
+            d_value,
+        )
+        outputs.append(torch.softmax(logits.detach(), dim=-1).cpu())
+        loss = F.cross_entropy(logits, target, reduction="mean")
+        losses.append(float(loss.detach().cpu()))
+        loss.backward()
+        for parameter in parameters.values():
+            if parameter.grad is not None:
+                parameter.grad.clamp_(-gradient_clip, gradient_clip)
+        optimizer.step()
+        memory = next_memory.detach()
+    final = {
+        name: parameter.detach().float().cpu()
+        for name, parameter in parameters.items()
+    }
+    return torch.cat(outputs, dim=0), final, losses
 
 
 def main() -> int:
@@ -154,6 +237,9 @@ def main() -> int:
         "--compute-dtype", choices=("f32", "bf16"), default="f32"
     )
     parser.add_argument("--tolerance", type=float, default=2e-5)
+    parser.add_argument("--online-lr", type=float)
+    parser.add_argument("--gradient-clip", type=float, default=0.05)
+    parser.add_argument("--final-export", type=Path)
     args = parser.parse_args()
 
     torch.set_default_dtype(torch.float32)
@@ -162,9 +248,41 @@ def main() -> int:
     teacher = torch.from_numpy(np.stack(distributions))
     device = torch.device(args.device)
     dtype = torch.float32 if args.compute_dtype == "f32" else torch.bfloat16
-    student = evaluate(weights, symbols, 4, 4, 2, 8, 8, device, dtype)
+    losses: list[float] | None = None
+    final_parameter_error: dict[str, float] | None = None
+    if args.online_lr is None:
+        student = evaluate(weights, symbols, 4, 4, 2, 8, 8, device, dtype)
+    else:
+        if args.final_export is None:
+            raise ValueError("--online-lr requires --final-export")
+        student, final, losses = evaluate_online(
+            weights,
+            symbols,
+            4,
+            4,
+            2,
+            8,
+            8,
+            device,
+            dtype,
+            args.online_lr,
+            args.gradient_clip,
+        )
+        teacher_final, _ = load_export(args.final_export)
+        final_parameter_error = {
+            name: float((final[name] - teacher_final[name]).abs().max())
+            for name in sorted(final)
+        }
     error = (student - teacher).abs()
-    passed = float(error.max()) <= args.tolerance
+    max_parameter_error = (
+        max(final_parameter_error.values())
+        if final_parameter_error is not None
+        else 0.0
+    )
+    passed = (
+        float(error.max()) <= args.tolerance
+        and max_parameter_error <= args.tolerance
+    )
     result = {
         "schema": "gamma.nncp_libnc_relative_parity.v1",
         "status": "PASS" if passed else "FAIL",
@@ -179,10 +297,15 @@ def main() -> int:
         "maximum_distribution_sum_error": float(
             (student.sum(dim=-1) - 1).abs().max()
         ),
+        "online_learning_rate": args.online_lr,
+        "gradient_clip": args.gradient_clip if args.online_lr is not None else None,
+        "segment_losses": losses,
+        "maximum_absolute_parameter_error": max_parameter_error,
+        "parameter_maximum_errors": final_parameter_error,
         "claims": {
             "frozen_minimal_distribution_parity": passed,
             "bf16_full_profile_parity": False,
-            "online_update_parity": False,
+            "online_update_parity": passed and args.online_lr is not None,
             "codec_roundtrip": False,
             "compression_improvement": False,
         },
