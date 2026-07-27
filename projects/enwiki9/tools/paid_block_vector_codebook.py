@@ -241,16 +241,20 @@ def partition_metrics(
     mask: np.ndarray,
     label_bits: int,
     row_counts: np.ndarray,
+    raw_bytes: int,
+    total_rows: int,
 ) -> dict[str, Any]:
     selected = scores.min(axis=1)
     blocks = int(np.count_nonzero(mask))
     rows = int(row_counts[mask].sum())
     saved_bits = float((baseline[mask] - selected[mask]).sum()) / QBITS
     charged_bits = blocks * label_bits
-    raw_equivalent = max(1.0, rows / 8.0)
+    raw_equivalent = max(1.0, raw_bytes * rows / total_rows)
     return {
         "name": name,
         "blocks": blocks,
+        "trace_rows": rows,
+        "raw_equivalent_bytes_proportional": raw_equivalent,
         "surrogate_saved_bits": saved_bits,
         "label_bits": charged_bits,
         "net_surrogate_bits": saved_bits - charged_bits,
@@ -286,7 +290,10 @@ def analyze(
     costs, observations = aggregate_costs(
         corrected, truth, block_index, bucket, block_count
     )
-    development = (np.arange(block_count) % 5) != 4
+    if block_count < 2:
+        raise ValueError("at least two blocks are required for a sealed holdout")
+    development_blocks = max(1, min(block_count - 1, (4 * block_count) // 5))
+    development = np.arange(block_count) < development_blocks
     holdout = ~development
     codebook = train_codebook(
         costs, observations, development, requested_codewords
@@ -322,6 +329,8 @@ def analyze(
         development,
         label_bits,
         row_counts,
+        raw_bytes,
+        len(truth),
     )
     holdout_metrics = partition_metrics(
         "holdout",
@@ -330,6 +339,8 @@ def analyze(
         holdout,
         label_bits,
         row_counts,
+        raw_bytes,
+        len(truth),
     )
     exact_pass = net_bpm >= NET_GATE_BPM
     holdout_pass = (
@@ -365,7 +376,13 @@ def analyze(
             "label_bytes": label_bytes,
             "codebook_bytes": codebook_bytes,
             "source_bytes": source_bytes,
-            "development_rule": "block_index_mod_5_not_equal_4",
+            "development_rule": (
+                "first_floor_four_fifths_blocks_with_nonempty_partition_guards"
+            ),
+            "holdout_rule": "remaining_final_chronological_blocks",
+            "partition_rate_normalization": (
+                "raw_bytes_times_partition_trace_rows_over_total_trace_rows"
+            ),
             "codebook": codebook.tolist(),
             "labels_sha256": hashlib.sha256(
                 labels.astype(np.uint8).tobytes()
