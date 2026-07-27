@@ -1,0 +1,183 @@
+--- a/Makefile	2026-07-18 19:36:26.729275880 -0400
++++ b/Makefile	2026-07-26 21:28:08.033370792 -0400
+@@ -17,6 +17,7 @@
+ 	-DCMIX_PPMD_MEMORY_KB=20352 \
+ 	-DCMIX_USE_PAQ8=0 \
+ 	-DCMIX_BINARY_P1_TRACE=1 \
++	-DCMIX_MIXREGRET_TRACE=1 \
+ 	-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 \
+ 	-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 \
+ 	-DCMIX_PAQ8_TEXT_MODEL_SCALE=1 \
+--- a/src/predictor.h	2026-07-18 19:36:26.729430160 -0400
++++ b/src/predictor.h	2026-07-26 21:28:08.033370792 -0400
+@@ -18,6 +18,11 @@
+ #include <vector>
+ #include <set>
+ #include <memory>
++#ifdef CMIX_MIXREGRET_TRACE
++#include <array>
++#include <cstdint>
++#include <cstdio>
++#endif
+ 
+ class Predictor {
+  public:
+@@ -48,6 +53,11 @@
+   void AddSidecarByte();
+ #endif
+   void AddMixers();
++#ifdef CMIX_MIXREGRET_TRACE
++  void InitializeMixregretTrace();
++  void CloseMixregretTrace();
++  void WriteMixregretTraceRow(int bit);
++#endif
+ 
+   std::vector<std::unique_ptr<Model>> models_;
+   std::vector<std::unique_ptr<ByteModel>> byte_models_;
+@@ -63,6 +73,13 @@
+   FixedLogitBlend fixed_logit_blend_;
+   OnlineResidualMixer online_residual_mixer_;
+   void* fx2lite_endpoint_;
++#ifdef CMIX_MIXREGRET_TRACE
++  static const unsigned int kMixregretEndpointCount = 30;
++  FILE* mixregret_trace_file_ = nullptr;
++  std::uint64_t mixregret_trace_rows_ = 0;
++  std::array<std::uint16_t, kMixregretEndpointCount>
++      mixregret_endpoint_p1_{};
++#endif
+ };
+ 
+ #endif
+--- a/src/predictor.cpp	2026-07-18 19:36:26.729477980 -0400
++++ b/src/predictor.cpp	2026-07-26 21:28:08.034370787 -0400
+@@ -61,12 +61,106 @@
+ #endif
+   AddMixers();
+   fx2lite_endpoint_ = fx2lite_endpoint428::Create(vocab_);
++#ifdef CMIX_MIXREGRET_TRACE
++  InitializeMixregretTrace();
++#endif
+ }
+ 
+ Predictor::~Predictor() {
++#ifdef CMIX_MIXREGRET_TRACE
++  CloseMixregretTrace();
++#endif
+   fx2lite_endpoint428::Destroy(fx2lite_endpoint_);
+ }
+ 
++#ifdef CMIX_MIXREGRET_TRACE
++namespace {
++void WriteMixregretU16(FILE* file, std::uint16_t value) {
++  const unsigned char bytes[2] = {
++      static_cast<unsigned char>(value),
++      static_cast<unsigned char>(value >> 8)};
++  if (std::fwrite(bytes, 1, sizeof(bytes), file) != sizeof(bytes)) {
++    std::perror("CMIX_MIXREGRET_TRACE row");
++    std::abort();
++  }
++}
++
++void WriteMixregretU32(FILE* file, std::uint32_t value) {
++  unsigned char bytes[4];
++  for (unsigned int i = 0; i < 4; ++i) {
++    bytes[i] = static_cast<unsigned char>(value >> (8 * i));
++  }
++  if (std::fwrite(bytes, 1, sizeof(bytes), file) != sizeof(bytes)) {
++    std::perror("CMIX_MIXREGRET_TRACE header");
++    std::abort();
++  }
++}
++
++void WriteMixregretU64(FILE* file, std::uint64_t value) {
++  unsigned char bytes[8];
++  for (unsigned int i = 0; i < 8; ++i) {
++    bytes[i] = static_cast<unsigned char>(value >> (8 * i));
++  }
++  if (std::fwrite(bytes, 1, sizeof(bytes), file) != sizeof(bytes)) {
++    std::perror("CMIX_MIXREGRET_TRACE header");
++    std::abort();
++  }
++}
++}  // namespace
++
++void Predictor::InitializeMixregretTrace() {
++  const char* path = std::getenv("CMIX_MIXREGRET_TRACE");
++  if (path == nullptr || path[0] == '\0') return;
++  mixregret_trace_file_ = std::fopen(path, "wb+");
++  if (mixregret_trace_file_ == nullptr) {
++    std::perror("CMIX_MIXREGRET_TRACE");
++    std::abort();
++  }
++  std::setvbuf(mixregret_trace_file_, nullptr, _IOFBF, 1U << 20);
++  const unsigned char magic[8] = {'M', 'I', 'X', 'R', 'G', 'T', '1', '\0'};
++  if (std::fwrite(magic, 1, sizeof(magic), mixregret_trace_file_) !=
++      sizeof(magic)) {
++    std::perror("CMIX_MIXREGRET_TRACE header");
++    std::abort();
++  }
++  WriteMixregretU32(mixregret_trace_file_, 1);
++  WriteMixregretU32(mixregret_trace_file_, 36);
++  WriteMixregretU32(
++      mixregret_trace_file_, 1 + 2 * kMixregretEndpointCount);
++  WriteMixregretU32(mixregret_trace_file_, kMixregretEndpointCount);
++  WriteMixregretU32(mixregret_trace_file_, 0);
++  WriteMixregretU64(mixregret_trace_file_, 0);
++  mixregret_endpoint_p1_.fill(32768);
++}
++
++void Predictor::WriteMixregretTraceRow(int bit) {
++  if (mixregret_trace_file_ == nullptr) return;
++  if (std::fputc(bit, mixregret_trace_file_) == EOF) {
++    std::perror("CMIX_MIXREGRET_TRACE row");
++    std::abort();
++  }
++  for (std::uint16_t p1 : mixregret_endpoint_p1_) {
++    WriteMixregretU16(mixregret_trace_file_, p1);
++  }
++  ++mixregret_trace_rows_;
++}
++
++void Predictor::CloseMixregretTrace() {
++  if (mixregret_trace_file_ == nullptr) return;
++  if (std::fflush(mixregret_trace_file_) != 0 ||
++      std::fseek(mixregret_trace_file_, 28, SEEK_SET) != 0) {
++    std::perror("CMIX_MIXREGRET_TRACE finalize");
++    std::abort();
++  }
++  WriteMixregretU64(mixregret_trace_file_, mixregret_trace_rows_);
++  if (std::fclose(mixregret_trace_file_) != 0) {
++    std::perror("CMIX_MIXREGRET_TRACE close");
++    std::abort();
++  }
++  mixregret_trace_file_ = nullptr;
++}
++#endif
++
+ unsigned long long Predictor::GetNumModels() {
+   unsigned long long num = 0;
+   for (unsigned int i = 0; i < models_.size(); ++i) {
+@@ -634,6 +728,13 @@
+   residual_endpoints[27] = endpoint_p1;
+   const std::uint16_t final_p1 =
+       online_residual_mixer_.Predict(mixed_p1, residual_endpoints);
++#ifdef CMIX_MIXREGRET_TRACE
++  mixregret_endpoint_p1_[0] = final_p1;
++  mixregret_endpoint_p1_[1] = mixed_p1;
++  for (unsigned int i = 0; i < residual_endpoints.size(); ++i) {
++    mixregret_endpoint_p1_[2 + i] = residual_endpoints[i];
++  }
++#endif
+   // Encoder and decoder both discretize this float as 1 + 65534 * p. Return
+   // the midpoint of mixed_p1's quantization bin so the integer result is
+   // stable against the final float conversion.
+@@ -641,6 +742,9 @@
+ }
+ 
+ void Predictor::Perceive(int bit) {
++#ifdef CMIX_MIXREGRET_TRACE
++  WriteMixregretTraceRow(bit);
++#endif
+   online_residual_mixer_.Perceive(bit);
+   for (unsigned int i = 0; i < models_.size(); ++i) {
+     if (i == fxcm_index_) continue;
