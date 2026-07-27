@@ -124,6 +124,21 @@ by absent empirical predictor, coloring, teacher, or residual objects.
   `results/elf_nonsegment_suffix_x86_v1/screen.json`. It is not queued until
   the x86 parent passes its native gate.
 
+### SCC-1: source-closure compilation
+
+- Problem: `docs/source_closure_compilation_problem.md`
+- Solution: `docs/source_closure_compilation_solution.md`
+- Proposal: `source_closure_compilation_b2_v1`
+- Candidate: `cmix21_b2_source_closure_rawlzma2_v1`
+- Construction: a canonical 73-member USTAR source-and-dictionary closure,
+  raw LZMA2 coding, frozen B2 build flags, and an exact native wrapper.
+- Exact package screen: `307675` bytes, saving `134287` bytes over the
+  x86-binary parent and `256471` bytes over B2.
+- Evidence: `results/source_closure_compilation_b2_v1/screen.json`.
+- Pending gate: `20260727T204000Z_578a72f77b`.
+- Score credit: `0`; two clean build projections, archive identity, roundtrip,
+  deterministic re-encode, compiler runtime, and resources remain unproved.
+
 ### ELI-1: ELF load-image equivalence
 
 - Problem: `docs/elf_load_image_equivalence_problem.md`
