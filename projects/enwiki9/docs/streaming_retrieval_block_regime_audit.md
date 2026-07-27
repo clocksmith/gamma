@@ -8,6 +8,7 @@ This is offline teacher evidence, not an admissible decoder feature table.
 - Total visible regression: `42.305` bytes
 - Teacher manifest rows: `4,000`
 - Teacher manifest: `docs/streaming_retrieval_block_teacher_manifest.jsonl`
+- Source recovery: preserved teacher manifest `docs/streaming_retrieval_block_teacher_manifest.jsonl` (`4,000` rows)
 
 | Label | Block | Gain Bytes | Nearby Titles | Links | Templates | URLs | Headings | Pages |
 |---|---:|---:|---|---:|---:|---:|---:|---:|
