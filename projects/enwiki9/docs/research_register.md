@@ -1863,3 +1863,47 @@ bytes receive score credit.
 - Evidence: `results/elf_load_image_b2_striplzma_v1/receipt.json`.
 - Pending gate: `20260727T192337Z_1179f991ff`.
 - Boundary: full native compression identity and official resources remain mandatory; the theorem does not transfer B2 score credit before those gates and B2's own terminal receipt.
+
+## RPF-1: row-parallel floating-point equivalence for NNCP Compact5
+
+**Status:** developed and queued; no compression credit.
+
+The row-parallel theorem proves bitwise equivalence when output coordinates are partitioned among workers while every coordinate retains its original scalar reduction order. It does not license reassociation or parallel reduction within a coordinate. The construction was instantiated as `nncp_compact5_preprocessed_xz_t4_v1`, which changes only the NNCP worker count from one to four over the exact Compact5 reversible representation and XZ-transcoded source package.
+
+The exact 10,000-byte gate is job `20260727T192837Z_c6f3177f63`. Promotion requires exact archive identity with `nncp_compact5_preprocessed_xz_v1`, exact reconstruction and deterministic re-encoding, plus at least 25% measured elapsed reduction. Any archive mismatch or insufficient speedup retires this instantiation without a thread ladder. This is a runtime-equivalence mechanism and receives zero score credit until native evidence passes all stated conditions.
+
+## QSP-1: same-domain quantized NNCP soft quotient
+
+**Status:** mathematics complete, observer and arithmetic mechanism instantiated, terminal startup negative, proposal rejected, zero score credit.
+
+QSP-1 projects full NNCP teacher distributions onto finite decoder-visible suffix contexts. The exact dyadic table optimizer follows from discrete concavity: start every symbol count at one and allocate each remaining count to the largest current marginal cross-entropy reduction. A matched hard-label control uses identical contexts, denominator, serialization, and arithmetic coder.
+
+The archive-neutral Compact5 observer is bound by `results/nncp_teacher_distribution_compact5_smoke_v1/receipt.json`. On 64 raw bytes it produced 78 u16be symbols; trace-on and trace-off archives were identical, raw reconstruction was exact, all distributions were positive and normalized, and the maximum normalization error was 1.326e-7. The QSP arithmetic encoder and decoder roundtripped at depths 0, 1, and 2.
+
+The startup compression result is negative. On the 28-symbol chronological holdout, soft tables cost 5 to 6 more payload bytes than matched hard tables. After deterministic LZMA model cost, soft models were worse by 148, 2,091, and 1,724 bytes at depths 0, 1, and 2. This scope is a mechanics receipt, not mature predictive evidence.
+
+The exact 1K successor contains 1,231 reversible symbols with an 820/411 chronological split. Although the teacher itself has 1,433.5 heldout ideal bits, soft suffix centroids lose 99 to 187 arithmetic payload bytes and 241 to 9,881 two-part bytes to their matched hard controls. Proposal `nncp_quantized_soft_quotient_student_v1` is rejected. Exclusion `qsp_suffix_centroid_1k_negative_v1` retires suffix depth, denominator, support, and table-cap tuning for this representation. A genuinely different causal student state may reuse the verified teacher observer. Teacher loss and all startup results receive zero score credit.
+
+### QSP-1 observer reproducibility addendum
+
+The Compact5 distribution observer now has two byte-identical clean builds under fixed file/debug prefix maps and `--build-id=none`. Both produce binary SHA-256 `17c7448c7d082273189852ad838341c23e057eb5b07e1e8df31faca9fe683972`; the deterministic rebuild reproduces the original archive and distribution-trace hashes exactly. The complete source, patch, compiler, flags, runtime-library binding, and twin-build evidence are recorded in `results/nncp_teacher_distribution_compact5_smoke_v1/deterministic_build_receipt.json`.
+
+## DTA-1: deterministic teacher-automaton closure
+
+**Status:** mathematics complete, exact mechanism instantiated, terminal startup negative, zero score credit.
+
+DTA-1 canonically clusters full NNCP distributions, chooses the cellwise mode transition for every `(state, decoded_symbol)` pair, runs that transition table in closed loop, and fits exact dyadic soft outputs. A matched hard-label automaton shares the clustering, transition table, state trajectory, denominator, serialization, and arithmetic coder.
+
+On the 1K Compact5 trace, both automata roundtrip and finish in the same encoder/decoder state. Deterministic closure conflicts on 125 of 819 teacher-state transitions, and the closed-loop path agrees with only 654 of 820 clustered teacher states. The soft automaton uses a 343-byte archive and 646-byte compressed model, versus 237 and 300 bytes for the hard control. It therefore loses 106 payload bytes and 452 complete two-part bytes.
+
+Exclusion `dta_teacher_cluster_1k_negative_v1` retires automaton state-count, iteration-count, denominator, and centroid tuning. The verified teacher headroom remains an oracle for a genuinely different recurrent or factored-state student. No DTA quantity receives score credit.
+
+## FLP-1: factorized dyadic-logit projection
+
+**Status:** mathematics complete, exact mechanism instantiated, terminal startup negative, zero score credit.
+
+FLP-1 uses decoder-visible symbol features at lags 1, 2, 4, and 8, with 64 buckets per lag and a bias table. A fixed convex softmax training schedule produces real teacher and hard-label models; both are quantized to int8 bit logits. Serialized dyadic exponential constants and exact largest-remainder normalization produce deterministic 4096-total arithmetic probabilities.
+
+On the 1K Compact5 trace, both models roundtrip and neither clips a weight. The soft model uses a 328-byte archive and 3,992-byte compressed model. The matched hard model uses 97 and 3,935 bytes. Soft targets therefore lose 231 payload bytes and 288 complete two-part bytes.
+
+Exclusion `flp_lag_logit_1k_negative_v1` retires startup-trace lag, bucket-width, epoch, learning-rate, and logit-scale tuning. Together with QSP-1 and DTA-1, this shows that the present startup teacher trace is useful for observer mechanics but not for selecting another soft-student architecture. Further distillation requires a mature batch-1 teacher trace and one newly frozen recurrent state. No FLP quantity receives score credit.

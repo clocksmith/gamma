@@ -105,3 +105,53 @@ No exact full-1G result exists. The canonical `109389323` value remains a
 10M-calibrated forecast with missing source-bound materialization and
 unqualified runtime. None of the modules above may be added arithmetically to
 that forecast without a valid dependency chain and complete joint accounting.
+
+## RPF-1: Row-Parallel Floating-Point Equivalence
+
+- Problem: `docs/row_parallel_floating_point_problem.md`
+- Constructive solution: `docs/row_parallel_floating_point_solution.md`
+- Mathematical status: `MATH_COMPLETE`
+- Instantiation: NNCP Compact5 batch-1 execution with `-T 4`, preserving each output coordinate's scalar reduction order while assigning disjoint rows to workers.
+- Candidate: `nncp_compact5_preprocessed_xz_t4_v1`
+- Proposal: `nncp_compact5_row_parallel_t4_v1`
+- Native gate: `20260727T192837Z_c6f3177f63`, exact 10,000-byte roundtrip and deterministic archive comparison.
+- Transfer status: `NATIVE_QUEUED`
+- Promotion condition: archive identity with the single-thread parent and at least 25% elapsed-time reduction.
+- Kill condition: any archive divergence, determinism failure, or less than 25% elapsed-time reduction; no thread-count ladder.
+- Score credit: 0 bytes until exact native evidence establishes an eligible improvement.
+
+## QSP-1: Quantized Soft-Quotient Projection
+
+- Problem: `docs/quantized_soft_quotient_problem.md`
+- Constructive solution: `docs/quantized_soft_quotient_solution.md`
+- Mathematical status: `MATH_COMPLETE`
+- Live finite instance: `results/nncp_teacher_distribution_compact5_smoke_v1/receipt.json`
+- Mechanism receipt: `results/nncp_quantized_soft_quotient_smoke_v1/decision.json`
+- Transfer status: `INSTANTIATED_TERMINAL_NEGATIVE`
+- Exact result: arithmetic roundtrip passed at depths 0, 1, and 2. On the 1K gate, the teacher-soft student lost 99 to 187 payload bytes and 241 to 9,881 two-part bytes against matched hard-label students on 411 heldout symbols.
+- Proposal: `nncp_quantized_soft_quotient_student_v1`, rejected.
+- Conclusion: retire suffix-centroid depth, denominator, support, and table-cap tuning. Preserve the verified full-distribution observer for a student with genuinely different causal state.
+- Score credit: 0 bytes.
+
+## DTA-1: Deterministic Teacher-Automaton Closure
+
+- Problem: `docs/deterministic_teacher_automaton_problem.md`
+- Constructive solution: `docs/deterministic_teacher_automaton_solution.md`
+- Mathematical status: `MATH_COMPLETE`
+- Mechanism receipt: `results/nncp_teacher_automaton_1k_v1/decision.json`
+- Transfer status: `INSTANTIATED_TERMINAL_NEGATIVE`
+- Exact result: the eight-state soft and hard automata both roundtrip with exact final-state agreement. The soft automaton loses 106 payload bytes and 452 two-part bytes to the matched hard control on 411 heldout symbols.
+- Structural result: 125 of 819 teacher-state transitions conflict with deterministic closure; closed-loop states agree with 654 of 820 clustered teacher states.
+- Conclusion: retire state-count, clustering-iteration, denominator, and centroid tuning for this finite teacher-cluster automaton.
+- Score credit: 0 bytes.
+
+## FLP-1: Factorized Dyadic-Logit Projection
+
+- Problem: `docs/factorized_logit_projection_problem.md`
+- Constructive solution: `docs/factorized_logit_projection_solution.md`
+- Mathematical status: `MATH_COMPLETE`
+- Mechanism receipt: `results/nncp_factorized_logit_1k_v1/decision.json`
+- Transfer status: `INSTANTIATED_TERMINAL_NEGATIVE`
+- Exact result: soft and matched hard int8 models roundtrip with no clipped weights. The soft model loses 231 payload bytes and 288 complete two-part bytes on 411 heldout symbols.
+- Conclusion: retire startup-trace lag, bucket-width, epoch, learning-rate, and logit-scale tuning. A new student requires mature teacher evidence and a newly frozen recurrent state.
+- Score credit: 0 bytes.

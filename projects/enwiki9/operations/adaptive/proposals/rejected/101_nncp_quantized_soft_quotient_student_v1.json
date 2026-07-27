@@ -1,0 +1,30 @@
+{
+  "created_at": "2026-07-27T19:49:01+00:00",
+  "evidence": [
+    "docs/quantized_soft_quotient_problem.md",
+    "docs/quantized_soft_quotient_solution.md",
+    "results/nncp_quantized_soft_quotient_smoke_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2100000,
+  "hypothesis": "A finite decoder-visible suffix quotient trained from mature batch-1 NNCP distributions can retain at least 2100 B/M net in the native reversible symbol domain while beating an equal-capacity hard-label control.",
+  "interfaces_exposed": [
+    "NNCP reversible u16be symbols; static dyadic context tables; exact arithmetic payload"
+  ],
+  "kill_condition": "Retire this suffix-quotient family if the frozen soft student fails to beat the matched hard-label control or is below 2100 B/M net on either population; do not open a depth, denominator, or table-cap ladder.",
+  "max_program_bytes": 262144,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "endpoint",
+  "parent": "nncp_compact5_preprocessed_xz_v1",
+  "parent_proposal_id": null,
+  "priority": 880,
+  "promotion_condition": "On frozen chronological and distant mature traces, exact student arithmetic bytes plus compressed model bytes save at least 2100 B/M and beat the matched hard-label control; native encode/decode is deterministic and exact.",
+  "proposal_id": "nncp_quantized_soft_quotient_student_v1",
+  "rejected_at": "2026-07-27T19:56:14+00:00",
+  "rejection_reason": "The exact 1K same-domain gate found no two-part soft win: payload lost 99-187 bytes and total lost 241-9881 bytes to matched hard-label controls across frozen depths 0,1,2. Retire suffix centroids without a ladder.",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 898,
+  "state": "rejected",
+  "title": "Same-domain quantized NNCP soft-quotient student"
+}
