@@ -2077,3 +2077,44 @@ derived trace passes split and coder-continuity verification. A matched
 branch-centroid screen tested twelve depth/support configurations. Soft teacher
 centroids lost to hard-label controls in all twelve by 792.032 to 1,502.377
 ideal bits. This retires scalar suffix centroids, not HRQ stateful students.
+
+## 2026-07-27: DSAQ-1 and ROLQ-1 recurrent NNCP branch students are startup negative
+
+Two independent constructive results were added and solved:
+
+- `DSAQ-1` proves decoder synchronization, finite-state causality, a unique
+  Schur-complement ridge construction, coefficient quantization bounds, and
+  log-loss transfer for decoded-state affine students.
+- `ROLQ-1` constructs a monotone symmetric exact rational-odds lookup from
+  integer scores to positive uint15 branch frequencies, with approximation and
+  loss bounds.
+
+Both were instantiated on the exact `1231`-symbol, `9848`-branch batch-1 trace
+with `800` chronological training symbols and `431` sealed holdout symbols.
+The only recurrent state used node-local and global decoded-branch EWMAs at
+shifts `2,5,9,13`. Soft-teacher and hard-label controls had identical state and
+serialization shape.
+
+The affine soft recurrence improves its static soft control by `390.570071`
+ideal bits but loses the matched hard recurrent control by `508.672803` bits.
+The rational-odds soft recurrence improves its static soft control by
+`361.612590` bits but loses the matched hard recurrent control by `527.486407`
+bits. The hard recurrent variants save `63.552880` and `57.522021` payload bits
+respectively, but neither repays added packed model bytes. Compressed-model
+variation does not override the equal-capacity hard-control failure.
+
+Proposal `nncp_decoded_state_logit_student_v1` is rejected and OMEGA exclusion
+`nncp_decoded_state_branch_affine_startup_v1` retires the frozen shift, ridge,
+score-range, affine-frequency, and rational-odds-logit neighborhood. A mature
+trace may justify a genuinely different predictive-state quotient, but no
+shift/ridge/range ladder is authorized. These are causal shadows with zero
+score credit.
+
+Evidence:
+
+- `docs/decoded_state_affine_quantizer_problem.md`
+- `docs/decoded_state_affine_quantizer_solution.md`
+- `docs/rational_odds_lookup_problem.md`
+- `docs/rational_odds_lookup_solution.md`
+- `results/nncp_branch_affine_state_1k_v1/decision.json`
+- `results/nncp_branch_logit_state_1k_v1/decision.json`
