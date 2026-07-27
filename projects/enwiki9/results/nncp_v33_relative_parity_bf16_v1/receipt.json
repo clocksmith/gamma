@@ -1,0 +1,55 @@
+{
+  "schema": "gamma.nncp_v33_relative_parity_receipt.v1",
+  "status": "PASS_BF16_MINIATURE_ROCM",
+  "score_credit_bytes": 0,
+  "instance": {
+    "layers": 1,
+    "d_model": 32,
+    "heads": 2,
+    "d_key": 8,
+    "d_value": 8,
+    "d_inner": 64,
+    "d_pos": 8,
+    "memory_length": 4,
+    "segment_length": 4,
+    "vocabulary": 256,
+    "symbols": 64,
+    "parameter_types": ["bf16", "f32"],
+    "compute_type": "bf16",
+    "device": "Radeon 8060S Graphics",
+    "learning_rate": 0
+  },
+  "proof": {
+    "archive_neutral_observation": true,
+    "archive_bytes": 161,
+    "archive_sha256": "c4bfed710dfd45ac2013bcb891d21716f7825b7e0ad2894c49f21d54377ffb6f",
+    "teacher_rows": 64,
+    "distribution_width": 256,
+    "maximum_absolute_probability_error": 0.00013130716979503632,
+    "mean_absolute_probability_error": 0.0000060892275541846175,
+    "tolerance": 0.001
+  },
+  "artifacts": {
+    "decision": {
+      "path": "results/nncp_v33_relative_parity_bf16_v1/decision.json",
+      "sha256": "6c2b4fccc0898ac4182f2956154ebfeee4cd97e13032070d2e0bfdbe5324b155"
+    },
+    "parity_source": {
+      "path": "tools/nncp_libnc_relative_parity.py",
+      "sha256": "af25810afd8999a7c94abc8e3d3449334ef5d7cbbc4bfe92323eecd202cfee93"
+    },
+    "external_coefficients": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_06/mini.coefs",
+      "sha256": "2cb8a6c81823a08a68e91ffb79f4967b8c705f97c658db863fa3ff5d4f0dbcc6"
+    },
+    "external_export_manifest": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_06/export/manifest.json",
+      "sha256": "e6ef35a9b40fbeb0c95ede06e59cdb7bce944ee20477e883fcb2a9c221ecdf47"
+    },
+    "external_teacher_trace": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_06/trace/teacher.bin",
+      "sha256": "c770607707368649b3356e895eb2796bf88d4b8f731c107d1d55559c85f797c8"
+    }
+  },
+  "claim_boundary": "Frozen miniature BF16 inference parity on ROCm only. No full-profile parity, online-update parity, codec replacement, compression gain, or score credit."
+}
