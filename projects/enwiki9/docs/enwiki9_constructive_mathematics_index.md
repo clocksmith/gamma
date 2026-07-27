@@ -299,3 +299,13 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - Guarantee: cell containment implies byte-identical arithmetic archive
 - Missing antecedent: real teacher trace, compiled student, target-wide boxes, and resource receipt
 - Score credit: zero
+## HRQ-1: Hierarchical Ratio-Quantizer Transfer
+
+- Problem: `docs/hierarchical_ratio_quantizer_problem.md`
+- Solution: `docs/hierarchical_ratio_quantizer_solution.md`
+- Observer materializer: `tools/materialize_nncp_branch_frequency_observer.py`
+- Trace verifier: `tools/verify_nncp_branch_frequency_trace.py`
+- Transfer target: Compact5 NNCP branch-frequency student
+- Guarantee: exact visited `prob0` sequence is sufficient for archive equality
+- Missing antecedent: mature batch-1 trace and compact causal student
+- Score credit: zero

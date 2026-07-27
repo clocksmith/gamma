@@ -2065,3 +2065,8 @@ The complete package is 234,099 bytes: 1,195 below the finite-XZ-family parent a
 PPC-1 proves that a decoder-visible CPU student need not reproduce neural floating probabilities. It need only remain inside the teacher's exact arithmetic-quantizer cell at every decoded prefix. Rational polyhedral box containment then proves identical integer frequencies, coder-state induction proves an identical archive, and decoder induction proves teacher-free reconstruction.
 
 The exact rational verifier passes strict-boundary and non-strict synthetic controls. No Compact5 teacher/student instance is yet bound, so this is a theorem-library module with zero score credit. It becomes target-bearing only after the NNCP native gate establishes a valid teacher archive and a real compiled student supplies target-wide interval evidence.
+## 2026-07-27: HRQ-1 exact NNCP branch-frequency target
+
+Source inspection fixes the actual Compact5 coder boundary. `write_sym` recursively bisects the active vocabulary and calls `put_bit` with `prob0 = clamp(lrintf(p0*32768/p),1,32767)`. HRQ-1 proves that a student can predict only the visited integer branch frequencies. It need not reconstruct or ship the full floating distribution.
+
+The observation patch records execution index, symbol, vocabulary, coder counts, branch bits, and exact 15-bit frequencies after the normal coding operations. The verifier checks the unique split path and archive neutrality. This directly supersedes the retired suffix-centroid student representation, but it remains uninstantiated until a mature batch-1 trace and compact causal branch student exist. Score credit is zero.
