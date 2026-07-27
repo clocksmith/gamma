@@ -55,37 +55,9 @@ shaving memory around an established context mixer.
 
 ## Current Cached Evidence
 
-        Current `streaming_retrieval_shadow` receipts are lock-safe shadow
-        evidence only. They do not modify the active compressor and do not prove
-        `10.95%`.
-
-        - Cached receipts: `136`
-        - Receipts with held-out rows: `129`
-        - Verdict counts: `flat_shadow`: `40`, `incomplete`: `7`, `negative_shadow`: `32`, `positive_shadow_only`: `57`
-        - Feature-source counts: `data`: `12`, `raw_data`: `58`, `row`: `16`, `unknown`: `50`
-        - Receipts with trace/data alignment warnings: `26`
-        - Best held-out saved bytes: `916540.0` from `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json`.
-        - Best net saved bytes after code/table estimate: `900464.0` from `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json`.
-
-        Current interpretation: at least one receipt clears the counted code/table estimate in shadow. That is still not a compressor claim; the next gate is block-regression audit and packaging the smallest deterministic paying piece.
-
-        Cached trace/data alignment warnings remain only on receipts that compare raw data bytes to cached `bit` rows; raw byte-aligned `raw_data` receipts avoid that mismatch.
-
-            Receipt audit:
-
-            - Positive net receipts: `15`
-            - Promotion-ready shadow receipts: `9`
-            - Best receipt promotion blockers: `none`
-
-Objective selector:
-
-- Recommended action: `construct_target_substrate_transfer_from_ready_raw_piece`
-- Reason: `raw promotion-ready receipts are positive but have no paying target-substrate transfer receipt`
-- Best promotion-ready fallback: `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json`
-- Ready fallback net bytes: `900464.0`
-- Forecast gap after ready fallback: `1,280,650`
-
-            The generated receipt audit is `docs/streaming_retrieval_receipt_audit.md`.
+No `streaming_retrieval_shadow` receipt is present yet. The next
+concrete action is to run `tools/streaming_retrieval_shadow.py` on a
+cached residual TSV with true `bit` and `p1` fields.
 
 ## Algorithm
 
@@ -171,33 +143,18 @@ A same-scope 32-bit control saved 606 arithmetic bytes versus 610 at
 24 bits, so the implemented precision is selected by evidence; the 24-bit
 floor also acts as a deterministic recovery prior after saturation.
 
-The target-closing retention replay is complete. It saves 916,540
-held-out bytes and 900,464 net bytes after the counted 16,076-byte
-code estimate, clearing the 681,114-byte forecast gap by 219,350 bytes
-at the shadow boundary. All 4,000 measured blocks are positive; the
-three raw SRSTC regressions are positive after posterior routing.
+The queued replay is a retention test, not a request for a new 681,114
+bytes. SRSTC already found 897,062 gross held-out bytes at the target-closing
+scope. With the 16,076-byte counted code budget, the replay needs 697,190
+gross bytes, so it can surrender 199,872 bytes, or 22.28% of the existing
+gross saving, and still close the forecast gap. The observed blocker is
+42.305 regression bytes across three of 4,000 blocks, or 0.0047% of gross.
+That makes the posterior experiment an insurance problem over exceptional
+blocks. The cautions are focused: the 64,000-byte probe does not reach
+the losing blocks, and the fixed-point implementation must earn its own
+scaled replay receipt instead of inheriting the ideal Bayesian bound.
 
-This discharges the shadow-level regression gate. It does not prove that
-the gain stacks unchanged on cmix21 or fx2 probabilities. The next proof
-step is to compile the smallest paying component into the strongest
-admissible substrate and require exact archive, roundtrip, determinism,
-RSS, and official byte accounting.
-
-The unchanged aggregate transfer to fx2 is now measured and retired.
-The target trace covers `4,805,936` coded rows through byte position `600,741`.
-It saves `5` same-coder bytes overall but `-4` held-out bytes; net after counted code is `-16080`.
-The receipt has `35` regressing blocks and is `results/streaming_retrieval_shadow/fx2_apm1m_full_4805936_order2_aggregate_sketch_b640000_s8_blockposterior_v1.json`.
-Do not compile this expert unchanged. A replacement must predict fx2
-residuals directly or improve reversible stream/page order.
-
-- Current execution receipt: `results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json`
-- Measured scope: `65,536,000` source bytes
-- Raw SRSTC qbit gain: `892659.4892578125` bytes
-- Posterior-routed qbit gain: `913049.2534179688` bytes
-- Same-coder arithmetic saved bytes: `917041`
-- Held-out saved bytes: `916540`; net after code: `900464`
-- Block regressions: `0`; largest: `0.0` bytes
-- Posterior resets: `4000`; mean SRSTC weight: `831954.0834688449` ppm
+- No block-posterior shadow receipt exists yet.
 
 The decoder-replayable implementation is
 `programs/srstc_raw_order2_aggregate_sketch_blockposterior_v1/`.
@@ -213,7 +170,7 @@ loss-only posterior instead of shipping semantic labels. The generated
 `docs/streaming_retrieval_block_teacher_manifest.jsonl` exposes all 4,000
 continuous block-gain labels with contiguous train/validation/test splits.
 
-No block-posterior rerun or unchanged native integration is queued; the target-substrate transfer failed counted net savings.
+No target-closing block-posterior replay is currently queued.
 
 ## Why This Is Different
 

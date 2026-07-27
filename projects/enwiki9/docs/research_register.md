@@ -1232,26 +1232,33 @@ Receipts:
 - `results/nncp_predictive_quotient_10k_v1/decision.json`
 - `results/oracle_distill_teacher_quotient_10k_v1/decision.json`
 
-## MIXREGRET-CERT full-component U0 is operationally blocked on this host
+## 2026-07-27: MIXREGRET-CERT full-component recombination is terminal negative
 
-The claimed full-component closure experiment is not executable from the
-artifacts synchronized to this device. Its parent evidence pointer,
-`results/endpoint428_pair_layer0_online_native_10m_v1/receipt.json`, is absent;
-no frozen source package for
-`cmix21-lstm200-plus-fx2lite428-onlinepairlayer0-v17` is present; and no
-`MIXRGT1` trace exists locally. The available reconstruction under
-`/home/clocksmith/enwiki9-nonproof/runtime/reconstruct_endpoint428_runtime_v1`
-is stock cmix21 and lacks both `fx2lite_endpoint428` and
-`OnlineResidualMixer`, so the observation patch cannot recreate the selected
-parent.
+Candidate: `mixregret_cert_component_union_v1`
 
-This is an operational blocker, not an algorithmic result. U0,
-circular-shift controls, U1, and paid selectors remain unmeasured and receive
-zero score credit. The claimed proposal remains open for the device holding
-the exact source. Continuation requires a hash-bound frozen source tree,
-parent receipt, input and archive hashes, build identity, trace-off/trace-on
-archive identity, and the resulting `MIXRGT1` trace. See
-`results/mixregret_cert_component_union_v1/blocker.json`.
+The exact endpoint428 source was recovered and instrumented with a pre-truth
+`MIXRGT1` trace containing the final parent probability, fixed blend, 26
+layer-0 endpoints, base post-SSE probability, and FX2 endpoint428 probability.
+Trace-off and trace-on runs both produced the same 173,896-byte archive and
+the same P1 trace byte for byte. The native range replay also reproduced the
+173,859-byte parent arithmetic payload exactly across 4,805,936 decisions.
+
+The truth-aware real U0 oracle saved 80,745 exact bytes on opening 1M, easily
+clearing its magnitude gate. That result is not usable information: the three
+circular-shift controls saved 173,517, 173,594, and 173,597 bytes. Real
+alignment was therefore 92,852 B/M worse than the strongest null. Best-of-many
+component selection is dominated by a selection lottery rather than meaningful
+alignment between preserved endpoint predictions and the decoded symbol.
+
+Decision: `retire_component_recombination_unchanged`. Do not implement U1,
+paid block selectors, CTS-MIX, or routing-driven component pruning. Do not
+reopen the neighborhood through feature buckets, contexts, learning rates,
+selector granularity, or context-tree depth. A successor must introduce
+genuinely new decoder-visible predictive information rather than recombine the
+same preserved component vector. U0 and every null remain zero-credit oracles.
+Evidence:
+`results/mixregret_component_union_opening_1m_v1/decision.json` and
+`results/mixregret_component_union_opening_1m_v1/receipt.json`.
 
 ## 2026-07-26: mathematical residual-closure series is terminal negative
 
