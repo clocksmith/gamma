@@ -1,0 +1,35 @@
+{
+  "candidate_id": "cmix21_b2_comment_quotient_rawlzma2_v1",
+  "claimed_at": "2026-07-27T21:00:00+00:00",
+  "created_at": "2026-07-27T21:00:00+00:00",
+  "developed_at": "2026-07-27T21:00:00+00:00",
+  "evidence": [
+    "docs/cpp_comment_quotient_problem.md",
+    "docs/cpp_comment_quotient_solution.md",
+    "results/cpp_comment_quotient_b2_v1/screen.json",
+    "results/cpp_comment_quotient_b2_v1/clean_build.json"
+  ],
+  "expected_savings_bytes": 20000,
+  "hypothesis": "A frozen token-preserving comment quotient yields a smaller source closure that builds the exact B2 executable.",
+  "interfaces_exposed": [
+    "C++ lexical comments, canonical source closure, build output, and exact B2 archive"
+  ],
+  "kill_condition": "Reject if quotient reproduction, either clean build, binary identity, native archive, roundtrip, determinism, or resources differ.",
+  "max_program_bytes": 0,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "substrate",
+  "owner": "suby",
+  "parent": "cmix21_b2_source_closure_rawlzma2_v1",
+  "parent_proposal_id": "source_closure_compilation_b2_v1",
+  "priority": 939,
+  "promotion_condition": "The canonical quotient reproduces its committed hash, two clean builds equal B2, and an exact 250K gate proves roundtrip, deterministic re-encode, package reduction, and resource compliance.",
+  "proposal_id": "cpp_comment_quotient_b2_v1",
+  "retired_neighborhoods": [
+    "Whitespace, identifier, compiler-flag, lexer, and source-codec ladders"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 959,
+  "state": "developed",
+  "title": "Comment-quotiented source closure for B2"
+}
