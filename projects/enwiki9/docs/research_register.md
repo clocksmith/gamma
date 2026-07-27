@@ -1173,3 +1173,30 @@ revision-ID inversions. The contributor table observes
 Decision: reject native REVLOG integration, close numeric research, and move the primary lane to aligned teacher-quotient compilation. Receipt:
 `results/revlog_slot_bypass_opening_1m_v1/decision.json`.
 <!-- REVLOG_SLOT_BYPASS_RESULT_END -->
+
+## 2026-07-26: MIXREGRET native pair closure is terminal negative
+
+Candidate: `mixregret_pair_closure_v1`
+
+The proposed full MIXREGRET-CERT experiment requires the exact endpoint428
+source and an archive-identical trace of every internal component prediction.
+Those artifacts are unavailable on this host. Gamma therefore ran a narrower
+predeclared precursor over the native same-execution `CMXAUX1` trace containing
+compact-base and endpoint428 probabilities plus the final hybrid M0 trace.
+
+The gate replayed all `4,805,936` decisions and exactly reproduced the
+`173,926`-byte arithmetic payload. The unrestricted truth-aware U0 oracle saved
+`15,448` bytes, apparently far above target scale. That signal was selection
+lottery: the strongest circular or confidence-and-bit-position-matched null
+oracle saved `61,396` bytes more than real U0. The development-frozen R1 router
+using bit position, decoded partial-byte prefix, hybrid confidence, and pair
+disagreement was net `-80 B/M` on chronological holdout after its explicit map
+description.
+
+Decision: `close_pair_routing_neighborhood`. Do not tune pair contexts,
+learning rates, bucket definitions, CTS depth, or paid block sizes. This result
+does not close the unavailable full internal component vector and does not
+authorize its recovery under the predeclared gates. Same-domain causal NNCP
+compilation remains independent and active. Evidence:
+`results/mixregret_pair_closure_v1/receipt.json` and
+`results/mixregret_pair_closure_v1/decision.json`.
