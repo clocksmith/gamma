@@ -290,3 +290,12 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - Result: wrapper reduced from 2,294 to 1,099 bytes
 - Transfer: exact source payload and normalized binary hashes
 - Boundary: native archive and resource gate pending; score credit zero
+## PPC-1: Polyhedral Probability-Cell Transfer
+
+- Problem: `docs/polyhedral_probability_cell_problem.md`
+- Solution: `docs/polyhedral_probability_cell_solution.md`
+- Exact verifier: `tools/polyhedral_probability_cell_certificate.py`
+- Transfer target: same-domain Compact5 NNCP integer student
+- Guarantee: cell containment implies byte-identical arithmetic archive
+- Missing antecedent: real teacher trace, compiled student, target-wide boxes, and resource receipt
+- Score credit: zero

@@ -2060,3 +2060,8 @@ The generic finite-closure-frame instantiation produced only 112 gross payload b
 DWNF-1 gives a path-alpha bisimulation for deterministic build-and-run wrappers. The Compact5 instance reduces the frozen Python wrapper from 2,294 to 1,099 bytes while preserving the source payload, effective normalized build flags, fixed T4 arguments, dynamic-library environment rule, input/output byte operations, and exact `nncp` and `libnc.so` hashes.
 
 The complete package is 234,099 bytes: 1,195 below the finite-XZ-family parent and 8,782 below the original x86-XZ parent. Static and build transfer pass. Native archive, roundtrip, determinism, runtime, and memory remain pending, so score credit is zero.
+## 2026-07-27: PPC-1 probability-cell transfer theorem
+
+PPC-1 proves that a decoder-visible CPU student need not reproduce neural floating probabilities. It need only remain inside the teacher's exact arithmetic-quantizer cell at every decoded prefix. Rational polyhedral box containment then proves identical integer frequencies, coder-state induction proves an identical archive, and decoder induction proves teacher-free reconstruction.
+
+The exact rational verifier passes strict-boundary and non-strict synthetic controls. No Compact5 teacher/student instance is yet bound, so this is a theorem-library module with zero score credit. It becomes target-bearing only after the NNCP native gate establishes a valid teacher archive and a real compiled student supplies target-wide interval evidence.
