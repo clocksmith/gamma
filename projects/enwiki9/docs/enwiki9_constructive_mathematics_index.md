@@ -102,6 +102,22 @@ by absent empirical predictor, coloring, teacher, or residual objects.
 - Score credit: `0` until native archive identity, roundtrip, deterministic
   re-encode, and resource inheritance pass.
 
+#### EPT-1 x86-filtered solid composition
+
+- Proposal: `exact_x86_filter_payload_b2_v1`
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripx86rawlzma2_v1`
+- Construction: apply the deterministic x86 branch filter and raw LZMA2 preset
+  9 extreme to the same exact executable-plus-dictionary payload.
+- Exact result: `440245` payload bytes and a `441962`-byte complete package,
+  saving `12074` bytes over the solid-LZMA parent and `121344` bytes over B2.
+- Recovered executable and dictionary hashes match ELI; native usage output is
+  also identical.
+- Evidence: `results/exact_x86_filter_payload_b2_v1/screen.json` and
+  `results/exact_x86_filter_payload_b2_v1/materialization.json`.
+- Pending gate: `20260727T202000Z_86450232e2`.
+- Score credit: `0` until native archive identity, roundtrip, deterministic
+  re-encode, and resource inheritance pass.
+
 ### ELI-1: ELF load-image equivalence
 
 - Problem: `docs/elf_load_image_equivalence_problem.md`

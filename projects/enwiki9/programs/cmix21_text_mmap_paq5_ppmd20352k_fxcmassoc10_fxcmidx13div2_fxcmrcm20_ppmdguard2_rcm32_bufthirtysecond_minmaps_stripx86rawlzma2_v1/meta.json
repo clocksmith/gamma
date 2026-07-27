@@ -1,0 +1,49 @@
+{
+  "build": {
+    "payload_files": {
+      "payload.bin.raw": 440245,
+      "program.py": 1717
+    },
+    "payload_sha256": {
+      "payload.bin.raw": "86450232e2aba4626ce70a0099ed56e8429643700b373bffaa12a82830b46611",
+      "program.py": "6e7d3b628b28ab6ce02c3f54e017cd6f318f73aa02cae0611192cc2cdd313a28"
+    },
+    "program_size": 441962
+  },
+  "deps": [
+    "Python lzma raw x86 and LZMA2 filters",
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "description": "EPT x86-filtered solid-payload successor to ELI-1.",
+  "family": "cmix21_mmap",
+  "hypothesis": "A frozen x86 plus LZMA2 filter chain reconstructs the exact ELI executable and dictionary with a smaller complete package and identical native archive.",
+  "id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripx86rawlzma2_v1",
+  "measured": {
+    "startup_control": {
+      "output_bytes": 482,
+      "output_sha256": "662521b1000f22951085167e2e5561df2bd4389f0dced0ea3427df27a14bfdfa",
+      "returncode": 255
+    }
+  },
+  "name": "B2 stripped runtime with x86-filtered solid LZMA2 payload",
+  "omega": {
+    "interfaces_exposed": [
+      "One raw x86 plus LZMA2 payload; fixed executable split offset; identical cmix and dictionary bytes"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": "exact_solid_payload_b2_v1",
+    "proposal_id": "exact_x86_filter_payload_b2_v1",
+    "retired_neighborhoods": []
+  },
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripsolidlzma_v1",
+  "program_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripx86rawlzma2_v1",
+  "program_name": "B2 stripped runtime with x86-filtered solid LZMA2 payload",
+  "source": {
+    "elf_transform": "strip --strip-all; restore original ELF section-metadata header bytes 40:48 and 58:64",
+    "payload": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripx86rawlzma2_v1/payload.bin.raw",
+    "payload_codec": "raw x86 BCJ then LZMA2 preset 9 extreme; split at byte 722448"
+  },
+  "status": "candidate",
+  "verdict": "EPT-1 payload projection verified; native identity and resource gate pending."
+}

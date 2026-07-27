@@ -1,16 +1,14 @@
 {
   "build": {
     "payload_files": {
-      "cmix.bin.lzma": 296718,
-      "english.dic.lzma": 155931,
-      "program.py": 2227
+      "payload.bin.lzma": 452488,
+      "program.py": 1548
     },
     "payload_sha256": {
-      "cmix.bin.lzma": "251770747f813e4255d59371638c3dd860c1a681478f20ff3667021ed17e61e9",
-      "english.dic.lzma": "832cd4c7040793d05d8c25985bfffba2c043ef4bc03554977d1425f3c38cbd31",
-      "program.py": "f4de6f2ad4e2ee1c70387c4cc040ace518687eba55c227085a0c2ed924c4f213"
+      "payload.bin.lzma": "7136a024fb403b275e99cf3dce79220f92c19a2b6ec5231a4d616b3dc36a7fc9",
+      "program.py": "e032e8f6927bdd01e300bb481d1e4134256c51172c260861985dcaf75ca144ac"
     },
-    "program_size": 454876
+    "program_size": 454036
   },
   "deps": [
     "C++ runtime for the vendored cmix binary",
@@ -19,7 +17,7 @@
   "description": "EPT solid-payload successor to ELI-1.",
   "family": "cmix21_mmap",
   "hypothesis": "A fixed split of one solid LZMA payload reconstructs the exact ELI executable and dictionary with a smaller complete package and identical native archive.",
-  "id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1",
+  "id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripsolidlzma_v1",
   "measured": {},
   "name": "B2 stripped runtime with one solid LZMA payload",
   "omega": {
@@ -97,7 +95,7 @@
   "program_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripsolidlzma_v1",
   "program_name": "B2 stripped runtime with one solid LZMA payload",
   "source": {
-    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1/cmix.bin.lzma",
+    "payload": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripsolidlzma_v1/payload.bin.lzma",
     "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=21 -DCMIX_PPMD_MEMORY_KB=20352 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=20 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2 -DCMIX_FXCM_CMC2_ASSOC=10",
     "defines": [
       "-DCMIX_PAQ8_LEVEL=5",
@@ -119,9 +117,8 @@
       "-DCMIX_FXCM_CMC2_IDX13_DIV=2",
       "-DCMIX_FXCM_CMC2_ASSOC=10"
     ],
-    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1/english.dic.lzma",
     "elf_transform": "strip --strip-all; restore original ELF section-metadata header bytes 40:48 and 58:64",
-    "payload_codec": "lzma-alone -9e",
+    "payload_codec": "one solid lzma-alone -9e stream; split at byte 722448",
     "tree": "projects/enwiki9/external/cmix21-sidecar"
   },
   "status": "candidate",

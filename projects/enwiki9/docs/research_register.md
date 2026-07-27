@@ -1923,3 +1923,21 @@ Both recovered payload hashes are identical to ELI. Proposal
 `20260727T200845Z_6da7fed519` for an exact 250K native gate. Archive identity,
 roundtrip, deterministic re-encode, resource inheritance, and parent
 qualification remain measured obligations. Score credit is zero.
+
+## 2026-07-27 - EPT-1 x86-filtered solid payload
+
+A frozen two-chain screen compared raw LZMA2 against x86-filtered raw LZMA2 on
+the exact `1134444`-byte ELI runtime payload. Plain raw LZMA2 regressed by 55
+payload bytes. The x86-filtered chain produced `440245` bytes, saving `12243`
+payload bytes versus solid LZMA-alone. After its `1717`-byte wrapper, candidate
+`cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripx86rawlzma2_v1`
+has a complete `441962`-byte package. This saves exactly `12074` bytes over the
+solid parent and `121344` bytes over B2.
+
+The recovered executable and dictionary hashes match ELI, and native usage
+behavior matches exactly: return code `255`, `482` output bytes, SHA-256
+`662521b1000f22951085167e2e5561df2bd4389f0dced0ea3427df27a14bfdfa`.
+Proposal `exact_x86_filter_payload_b2_v1` is developed and queued as
+`20260727T202000Z_86450232e2`. Native archive identity, exact roundtrip,
+deterministic re-encode, resource inheritance, and parent qualification remain
+measured obligations. Score credit is zero.
