@@ -2216,3 +2216,33 @@ Evidence:
 - `results/closed_world_validation_elimination_b2_v1/certificate.json`
 - `results/closed_world_validation_elimination_b2_v1/build.json`
 - `results/nncp_makefile_slack_embedding_v1/runtime_args_screen.json`
+
+## 2026-07-27: JMF-1 joint multinomial full-symbol fibers are terminal negative
+
+JMF-1 is the exact joint successor left open by the prior independent
+symbol-fiber exclusion. It pools every selected WRT symbol fiber and one
+residual category into a single without-replacement multinomial stream. The
+theorem proves the multinomial count, its sequential probability
+factorization, an exact count-weighted zero-one knapsack for the best ideal
+subset, and causal reconstruction before parent predictor updates.
+
+The frozen gate reads all 4,805,936 exact endpoint decisions aligned to
+600,742 WRT bytes. It reproduces the 175,188-byte parent range payload,
+verifies a nonempty finite side-coder control, and verifies residual and WRT
+roundtrips. The exact ideal optimizer selects the empty set. The best nonempty
+joint subset is already 93.190432 bits worse before finite-coder overhead or
+the measured 4,484-byte compressed standalone source cost.
+
+Decision: retire joint full-symbol multinomial extraction on this substrate.
+Do not reopen selected-symbol subsets, coupled-count choices, or side-coder
+parameter ladders. This does not close context-conditioned joint fibers,
+variable-length phrase fibers, a new causal information source, or same-domain
+compilation of a mature under-target teacher. Score credit is zero.
+
+Evidence:
+
+- `docs/joint_multinomial_fiber_problem.md`
+- `docs/joint_multinomial_fiber_solution.md`
+- `tools/joint_multinomial_fiber_gate.cpp`
+- `results/joint_multinomial_fiber_v1/decision.json`
+- `operations/adaptive/exclusions/joint_full_symbol_multinomial_opening1m_v1.json`

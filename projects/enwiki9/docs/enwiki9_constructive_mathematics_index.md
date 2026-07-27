@@ -341,3 +341,19 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - Exact certificate: 74 safe unique FCF paths, exact final cursor, 44515 valid BPDQ records, maximum LCP 17.
 - Constructive result: wrapper 1885 to 1381 bytes; package 271340 to 270836 bytes; restored executable and dictionary hashes exact.
 - Boundary: replacement 250K native archive, roundtrip, determinism, runtime, and memory gate queued; score credit zero.
+
+## JMF-1: Joint Multinomial Symbol Fibers
+
+- Problem: `docs/joint_multinomial_fiber_problem.md`
+- Solution: `docs/joint_multinomial_fiber_solution.md`
+- Construction: `tools/joint_multinomial_fiber_gate.cpp`
+- Frozen instance: exact opening-1M endpoint probability trace and its aligned
+  600742-byte WRT stream
+- Mathematical status: `MATH_COMPLETE`
+- Transfer status: `INSTANTIATED_TERMINAL_NEGATIVE`
+- Exact result: the 175188-byte parent payload reproduces; side, residual, and
+  WRT roundtrips pass; the ideal joint optimizer chooses the empty set and the
+  best nonempty subset is -93.190432 bits before source cost
+- Conclusion: retire joint full-symbol multinomial extraction, while leaving
+  context-conditioned fibers and variable-length phrase partitions open
+- Score credit: 0 bytes
