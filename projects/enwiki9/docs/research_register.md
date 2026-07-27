@@ -1084,3 +1084,49 @@ integrate NNCP, launch an unchanged larger CPU teacher, extrapolate the bounded
 2,301 bytes, or subtract it from Gamma. Further work requires an accelerated
 hash-bound causal trace or a smaller causal teacher compiled into a counted
 integer student.
+
+## 2026-07-26: ACS-PROVER theorem library and first live Problem C pilot
+
+The solver-provided constructive manuscripts for the four prover-oriented
+problems are recorded as `ACS-PROVER-LIBRARY-1` in
+`docs/acs_prover_theorem_library.md`. Their mathematical status is complete
+under the recorded boundary assumptions. This is theorem-library provenance,
+not a precommitted examination pass, compressor result, or priority claim.
+
+Problem C was instantiated on a frozen five-state XML lexical transducer with
+four exact counters. The balanced summary tree matched full replay from every
+enumerated state for the base stream, a point replacement, and a fixed-length
+interval replacement. Receipt:
+`results/acs_prover_c_xml_lexer_v1/receipt.json`.
+
+Decision: `PROVER_TRANSFERRED` for this frozen transducer instance only.
+Candidate affected remains false and Hutter score credit remains zero. The
+pilot proves exact final-state and modeled-cost recomposition; it does not
+prove identical emitted bytes, practical feasibility for a large coder state,
+or any compression gain.
+
+## 2026-07-26: ACS-PROVER XML-state endpoint calibration is terminal negative
+
+Candidate: `acs_prover_xml_state_endpoint_shadow_v1`
+
+The first compression experiment derived from the Problem C pilot added the
+same five-state decoder-visible XML lexical coordinate to an adaptive
+probability-bin calibration of the exact WRT endpoint trace. A matched
+state-blind calibrator controlled for generic online residual correction.
+Strength was selected on the middle chronological fifth and evaluated on the
+final fifth without changing the WRT trajectory.
+
+The exact same-coder holdout result lost `8` bytes, equal to `-43.5718 B/M`.
+The XML-state coordinate was `1` byte worse than the selected state-blind
+control. All `4,805,936` logged decisions were replayed. The trace coder
+accounted for `175,188` bytes against the `175,225`-byte native artifact,
+leaving a separately recorded `37`-byte unmodeled artifact delta. Therefore
+the receipt is valid only as `causal_shadow` evidence and receives zero score
+credit.
+
+Decision: retire this realization unchanged. Do not tune the same five XML
+states, probability bins, shrinkage, or blend strengths on this trace. A
+successor requires a materially richer causal structural signal and a new
+matched-control proposal. Evidence:
+`results/acs_prover_xml_state_endpoint_shadow_v1/receipt.json` and
+`results/acs_prover_xml_state_endpoint_shadow_v1/decision.json`.
