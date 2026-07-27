@@ -1907,3 +1907,19 @@ FLP-1 uses decoder-visible symbol features at lags 1, 2, 4, and 8, with 64 bucke
 On the 1K Compact5 trace, both models roundtrip and neither clips a weight. The soft model uses a 328-byte archive and 3,992-byte compressed model. The matched hard model uses 97 and 3,935 bytes. Soft targets therefore lose 231 payload bytes and 288 complete two-part bytes.
 
 Exclusion `flp_lag_logit_1k_negative_v1` retires startup-trace lag, bucket-width, epoch, learning-rate, and logit-scale tuning. Together with QSP-1 and DTA-1, this shows that the present startup teacher trace is useful for observer mechanics but not for selecting another soft-student architecture. Further distillation requires a mature batch-1 teacher trace and one newly frozen recurrent state. No FLP quantity receives score credit.
+
+## 2026-07-27 - EPT-1 solid LZMA composition
+
+The EPT-1 exact-package theorem was composed with the ELI-1 loader-identical
+stripped B2 payload. The recovered `722448`-byte executable and `411996`-byte
+dictionary are concatenated, encoded in one LZMA-alone stream, and split at the
+fixed executable length after decoding. The solid payload is `452488` bytes,
+`161` bytes smaller than ELI's two independent LZMA streams. Its `1548`-byte
+wrapper yields a complete `454036`-byte package, exactly `840` bytes smaller
+than the `454876`-byte ELI parent.
+
+Both recovered payload hashes are identical to ELI. Proposal
+`exact_solid_payload_b2_v1` is developed and queued as
+`20260727T200845Z_6da7fed519` for an exact 250K native gate. Archive identity,
+roundtrip, deterministic re-encode, resource inheritance, and parent
+qualification remain measured obligations. Score credit is zero.
