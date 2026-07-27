@@ -1547,3 +1547,24 @@ integer quotient retained only 29.2425% of teacher headroom. No accelerator is
 available on this host. Decision: do not enlarge the CPU startup trace, sweep
 student widths, or attempt WRT transfer. Continue only with an accelerated
 mature batch-1 trace or a materially different reproducible under-target teacher.
+
+## 2026-07-27: ROCm source-level NNCP teacher path is operational
+
+Evidence: `results/nncp_v2_rocm_smoke_v1/receipt.json` and
+`docs/nncp_v33_rocm_teacher_port_plan.md`.
+
+AMD PyTorch 2.11/ROCm 7.13 detected the Radeon 8060S (`gfx1151`) with 62,890 MiB
+visible memory. Bellard's published PyTorch v2 causal codec ran its complete
+online-training and arithmetic-coding path after two compatibility-only edits.
+A fresh process decoded the 27,487-byte archive; all 38,315 preprocessed symbols
+and 65,536 raw bytes matched SHA-256. Compression and decompression each used
+about 1.23 GiB peak RSS. This is hardware evidence only and receives zero score
+credit.
+
+The attempted binary bridge is terminal: ZLUDA v6 initialized the GPU and loaded
+the LibNC CUDA module, but the module contains NVIDIA SASS ELF images without
+PTX and failed its first kernel lookup (`cu_memcpy2d_u8`). Do not retry ZLUDA.
+The authorized successor is a source-level v3.3 PyTorch port with frozen
+architecture, execution, distribution, headroom, and student gates. No mature
+trace or WRT integration is authorized until bounded CPU-teacher distribution
+comparison passes.
