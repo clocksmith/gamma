@@ -1252,3 +1252,266 @@ the exact source. Continuation requires a hash-bound frozen source tree,
 parent receipt, input and archive hashes, build identity, trace-off/trace-on
 archive identity, and the resulting `MIXRGT1` trace. See
 `results/mixregret_cert_component_union_v1/blocker.json`.
+
+## 2026-07-26: mathematical residual-closure series is terminal negative
+
+Gamma solved and instantiated eight independent finite problems against the
+archive-identical opening-1M endpoint428 trace. Each gate reconstructed the
+parent arithmetic payload exactly before its result was admitted. The
+mathematical solutions are reusable theorem-library artifacts; all compression
+realizations receive zero score credit.
+
+1. `finite_monotone_calibration_q16_v1`: coarsest PAVA plus a charged Q16
+   table lost 619 net bytes (`-1,238 B/M`) on chronological holdout.
+2. `residual_odds_tree_d10_v1`: exact MDL pruning selected only the identity
+   root and lost its one-byte model charge (`-2 B/M`).
+3. `renewal_hazard_q12_v1`: thirteen exact grouped logistic hazards gained
+   two payload bytes but lost 24 net bytes after the 26-byte table (`-48 B/M`).
+4. `causal_copy_cover_recent4_v1`: exact weighted interval scheduling selected
+   one 25-byte copy, but command and framing costs lost three bytes.
+5. `sparse_substitution_b64_v1`: 75 bounded approximate prototypes were
+   admitted and none survived exact paid selection; framing lost four bytes.
+6. `enumerative_exception_dictionary_c4_v1`: no context prototype repaid its
+   exception mask and description; framing lost four bytes.
+7. `sparse_surprise_enumerative_v1`: the exact cardinality-priced optimum over
+   all byte positions was the empty set; framing lost four bytes.
+8. `symbol_fiber_extraction_v1`: no complete WRT symbol fiber repaid its
+   description and exact fixed-length position rank; framing lost two bytes.
+
+Decision: retire further parameter sweeps in global calibration,
+suffix-calibration, renewal calibration, recent-copy selection, bounded
+substitution scripts, fixed-context exception dictionaries, and independent
+fixed-length enumerative extraction. A successor must change the information
+source or use a genuinely joint representation; cheaper subset optimization
+alone cannot reopen these neighborhoods. Exact receipts are under the
+corresponding `results/<id>/decision.json` paths. Combined exclusion:
+`operations/adaptive/exclusions/mathematical_residual_closure_opening1m_v1.json`.
+
+## 2026-07-26: joint type, complete copy, block-fiber, and lexical-MDL gates
+
+Four successor theorems were solved and transferred to exact opening controls.
+None produced compression credit.
+
+- `paid_type_interval_v1` permitted noncausal error counts and exact
+  fixed-weight ranks on every disjoint parent-probability interval. Exact
+  interval scheduling selected no interval; the four-byte header lost four
+  bytes.
+- `complete_prior_factor_cover_v1` computed the complete longest prior factor
+  at every WRT position using suffix-array neighbors, then optimized every
+  legal 8--255-byte fixed-price copy length. Its global optimum was the same
+  single 25-byte copy found by the earlier recent-match screen and lost three
+  net bytes.
+- `amortized_block_fiber_b8_v1` shared one source descriptor across
+  combinatorially ranked fibers of repeated aligned eight-byte blocks. No
+  class was selectable; the four-byte header lost four bytes.
+- `hierarchical_logit_context_prevbyte_v1` applied exact MDL pruning to a
+  root/bit-position/previous-WRT-byte hierarchy over 65 frozen integer logit
+  corrections. Training selected only one root expert. It reproduced the
+  500KB chronological holdout payload and lost its one-byte model
+  (`-2 B/M`).
+
+These results close fixed-price exact-copy sidecars completely at command
+lengths through 255, not merely a recent-match approximation. They also reject
+the stated joint type-interval, aligned block-fiber, and previous-byte logit
+realizations. Evidence is in each `results/<id>/decision.json`.
+
+## 2026-07-26: official NNCP v3.3 CPU eligibility control
+
+The public `nncp-2024-06-05` source was downloaded from Bellard's official
+site and built unchanged outside the repository. The published enwik9 profile
+is a 20-layer, 1024-wide, eight-head Transformer with 3072-wide feed-forward
+layers, memory length 256, batch size 32, BF16 processing, and 279 million
+online-trained parameters.
+
+On the local CPU, unpreprocessed 512-symbol controls measured:
+
+- one thread, batch 32: 18.786 seconds, 3,873,792 KiB peak RSS;
+- eight threads, batch 32: 28.496 seconds, 3,874,688 KiB peak RSS;
+- one thread, batch 128: 48.425 seconds, 8,829,696 KiB peak RSS.
+
+The controls are performance characterization only and have zero score credit.
+They show that native threading and larger stream batching do not supply the
+required eligibility compilation. The published total remains an external
+107,261,318-byte existence result, not a locally reproduced or prize-eligible
+receipt. A successor must remove substantial dense computation while fitting
+inside the 738,682-byte published-score slack; rescheduling the same kernels is
+not enough.
+
+## 2026-07-26: delayed raw, heading, AUTOPSY-rule, and compact-neural closure
+
+Five additional theorem transfers were tested against the archive-identical
+endpoint428 probability trace.
+
+- `delayed_raw_residual_apm_v1` exposed the last eight raw bytes only after
+  complete WRT emission groups. Its fixed 65,536-row residual APM changed
+  491,981 probabilities, incurred 3,149,920 deterministic evictions, and
+  regressed 2,693 exact bytes.
+- `heading_state_residual_apm_v1` classified completed wiki headings into ten
+  decoder-visible discourse states. The fixed heading-conditioned predictor
+  changed 3,957,565 rows and regressed 1,409 bytes.
+- `heading_state_bayes_switch_v1` composed that expert with a paid-prior
+  per-state Bayesian switch. Every posterior converged to the parent boundary;
+  the exact result lost two finalization bytes. This closes the heading expert
+  rather than merely its fixed blend.
+- `finite_residual_rule_pair_v1` exhaustively searched every one- and
+  two-coordinate rule over bit position, previous-byte nibbles, parent
+  confidence, heading state, and causal modal-error age. The selected
+  three-byte rule gained two bytes on the full opening but lost two bytes on
+  sealed holdout.
+- `compact_nncp_endpoint_mix_10k_v1` traced a causal 833K-parameter,
+  three-layer, 128-wide NNCP expert over 10,000 WRT symbols. After 5,000
+  symbols of burn-in, endpoint428 used 2,006 bytes and the expert used 3,369.
+  The safe mixture exactly matched endpoint428. A sparse paid router selected
+  no rule; its real holdout oracle was 1,753 bits versus 2,779 bits for a
+  circular-shift null, identifying selection lottery.
+
+The compact NNCP trace was observation-neutral: trace-on and trace-off
+archives were byte-identical. The standalone five-layer, 256-wide compact
+model also completed an exact 10,000-byte raw roundtrip, but its 9,434-byte
+startup archive is not competitive. CPU controls and hashes are recorded in
+`results/nncp_cpu_eligibility_controls_v1/receipt.json`.
+
+Decision: retire delayed-raw APM tuning, fixed heading-state prediction,
+single/pair-coordinate residual rules, and unchanged startup compact-NNCP
+routing. A mature accelerated under-target teacher remains conceptually open,
+but no local trace currently supplies that antecedent.
+
+## 2026-07-27: Draft 3 audit and cmix21 memory-transfer problems
+
+### TS-1 teacher-trace sufficiency
+
+- The current bounded NNCP trace has 10,000 rows, vocabulary size 336, archive
+  identity, and only the realized symbol probability. It is sufficient to
+  measure teacher true-symbol loss but not to identify or distill the teacher
+  distribution.
+- `TS-1` proves non-identifiability and a minimax KL lower bound of `1-a` bits
+  when only `(true symbol, true probability a)` is observed.
+- A top-k vector plus aggregate tail mass is an exact sufficient statistic only
+  for a student whose tail is uniform. General students require the complete
+  vector, a lossless tail, or a proved tail model.
+- The next expensive mature teacher trace must therefore capture the complete
+  336-way vector or a frozen top-k/uniform-tail contract. The existing scalar
+  trace remains zero-credit evaluation evidence.
+
+### BQ-1 native NNCP binary probability quantization
+
+- The pinned NNCP arithmetic source uses a binary range coder with
+  `PROB_UNIT_BITS=15` and `PROB_UNIT=32768`; it does not directly use IF-1's
+  flat multiclass frequency table.
+- `BQ-1` solves clamped nearest integer quantization for this interface. Every
+  true-event excess is at most `log2(3/2)` bits globally, with the useful
+  interior bound `log2(alpha/(alpha-1/65536))`.
+- Combined approximate-logit and probability-quantization loss is certified
+  per bit, but the universal bound is too loose for a long prize stream.
+  Exact trace-dependent summation or native replay is required.
+- IF-1 remains valid for an alternative flat coder but is not represented as
+  the native NNCP transfer path.
+
+### IF-1 mandatory-positive integer frequencies
+
+- `IF-1` gives a canonical largest-remainder projection from a neural
+  probability vector to positive integer frequencies summing to `Q`.
+- The construction guarantees `q_i >= (1-V/Q)p_i` and therefore a worst-case
+  projection penalty of `log2(Q/(Q-V))` bits per symbol.
+- Combined with NL-1, the per-symbol bound is
+  `osc(delta)/ln(2) + log2(Q/(Q-V))`. If this bound alone exceeds NNCP's
+  reproduced byte margin, the chosen frequency precision is rejected before
+  native full-corpus work.
+- Exact softmax/frequency semantics, online-state synchronization, native coder
+  bytes, package, runtime, memory, determinism, and roundtrip remain required.
+
+### NL-1 NNCP multiclass logit-margin certificate
+
+- The pinned NNCP v3.3 source exposes Transformer and LSTM models, CPU threads,
+  BF16 processing, online retraining, and sequential arithmetic coding. The
+  published enwik9 command uses the Transformer profile with preprocessing;
+  CPU eligibility remains the guarantee-bearing open route.
+- `NL-1` proves the sharp multiclass perturbation envelope
+  `Delta loss <= osc(delta)/ln(2)` bits and the uniform bound
+  `2 epsilon/ln(2)` bits per symbol.
+- Given exact symbol count `N`, concrete coder redundancy budget `R`, and the
+  nominal published margin `H=738682`, a sufficient uniform logit error is
+  `epsilon <= 4(H-R)ln(2)/N`. Layerwise and recurrent state errors must be
+  included; ideal loss alone is not score credit.
+
+### PE-1 padding-free state serialization
+
+- `PE-1` constructs a canonical packed-record bijection and proves logical
+  state conjugacy by induction. With identical coder semantics, a correct
+  implementation must produce an identical archive, not merely an equal-size
+  archive.
+- For the fourteen-way `ContextMap2` record, the logical payload is exactly
+  `28 + 98 + 1 = 127` bytes versus the current 128-byte aligned cell. The exact
+  table-payload saving is one byte per bucket while preserving all ways and
+  fingerprint bits.
+- A C++ `packed` attribute is not sufficient evidence because unaligned typed
+  accesses may be unsafe. Transfer requires explicit byte accessors or `memcpy`,
+  per-event/coder-state identity, final archive-hash identity, RSS, runtime,
+  package, roundtrip, and determinism receipts.
+
+### PO-1 pooled overflow theorem
+
+- `PO-1` derives the exact retention of fixed private bucket slots plus a
+  shared overflow pool:
+  `sum_i min(n_i,a) + min(P, sum_i (n_i-a)_+)`.
+- Its proposed claim that total slots alone guarantee `min(total demand,
+  total slots)` is false for fixed private cells. The counterexample
+  `B=2, a=2, P=0, n=(0,4)` has four slots and four entries but retains only
+  two. Global slot optimality requires every slot to be reassignable.
+- This correction narrows the transfer experiment: before building pooled
+  `ContextMap2`, Gamma must instrument causal overflow demand and count owner,
+  link, alignment, source, and lookup costs. PO-1 has zero score credit.
+
+### IC-1 exact interaction certificate
+
+- `IC-1` proves the Boolean-lattice Möbius decomposition for simultaneous
+  table interventions and gives an exact constrained optimizer under a valid
+  degree bound. For 18 interventions, the additive screen needs 19 values and
+  the complete pairwise model needs 172.
+- The solution also proves a critical negative result: low-order measurements
+  cannot certify a global low-degree interaction model for an unrestricted
+  native archive-cost function. Audited triples or final allocations can
+  falsify the model but cannot prove it globally.
+- Therefore isolated memory/score penalties remain screens only. Every selected
+  allocation still requires one joint native replay before receiving score
+  credit.
+
+### AF-1 and FP-1 aligned-cell reductions
+
+- Native `B1` MV-2 completed a clean 10M one-pass screen at 1,638,269 archive
+  bytes, 564,273 package bytes, and 9,651,604 KiB peak single-process RSS. It
+  saves 71 archive bytes versus the retired global-FXCM2 10M screen and has
+  114,021 KiB decimal-RSS margin. Roundtrip and determinism were intentionally
+  not run, so score credit remains zero.
+- Native `B2` ten-way/16-bit cells package to 564,146 bytes. The exact 250K
+  gate produced 45,178 bytes with roundtrip and byte-identical determinism,
+  peak RSS 9,397,956 KiB. Its 1M screen produced 174,531 bytes, exactly equal
+  to `B1`, with peak RSS 9,572,292 KiB.
+- `B2` therefore passes the frozen package, 250K, and 1M gates and advances
+  unchanged to exact 10M with a first-archive ceiling of 1,638,781 bytes.
+  No aligned-cell candidate has full score credit.
+
+- `AF-1` solves the exact 32-byte-aligned associativity frontier for the
+  existing `ContextMap2` representation. The complete undominated set is
+  `{14, 10, 7, 3}`. In particular, twelve ways require 128 bytes, not 112, and
+  are dominated by fourteen ways. This corrects the earlier informal A12
+  continuation and excludes it before implementation.
+- `FP-1` generalizes the cell calculation to bit-packed fingerprints:
+  `C(A,b) <= Q` exactly when `A(b+56) <= 8(Q-1)`. It identifies two
+  non-dominated 96-byte candidates: `(10 ways, 16 bits)` and
+  `(11 ways, 13 bits)`. The latter retains one more way but has an 8.8x larger
+  union-bound false-match ceiling.
+- The originally posed FP-1 clause that twelve ways could not fit at seven
+  fingerprint bits is false. The solution gives the exact counterexample
+  `(A,b,Q)=(12,7,96)` and corrects the boundary. This is retained as negative
+  specification evidence.
+- Both results have zero compression credit until native joint replay,
+  package accounting, exact roundtrip, determinism, decimal-10GB RSS, runtime,
+  and transfer gates pass.
+
+- `ACS-MATH-DRAFT-3-WORKING` was independently reconstructed and found mathematically complete. The audit is `docs/atlas_clockwork_seal_draft3_adversarial_audit.md`. It remains a theorem bank, not a transfer-bound examination.
+- `ppmd_resident_valve_closure_v1` tested PPMD caps from 20,352 KiB down to 1,024 KiB on the frozen index-13 line. Every 250K run exceeded the official decimal memory limit, and sampled RSS was non-monotone. PPMD-only resident-memory tuning is closed with zero score credit.
+- `MV-2 Exact Capacity Allocation` proved an exact finite capacity-knapsack construction and instantiated FXCM indices 5 and 7-17 at divisor two. The candidate saves 810 MiB beyond the index-13-only parent at the source allocation layer.
+- The MV-2 250K exact gate passed at archive 45,178 bytes, program 564,273 bytes, exact roundtrip, deterministic replay, and 9,441,308 KiB peak single-process RSS. The 1M one-pass screen produced 174,531 bytes with 150,833 KiB decimal margin; it is shadow evidence only.
+- A lock-held 10M one-pass MV-2 screen is active as PID 215555. It receives zero score credit until a full roundtrip and deterministic replay are completed.
+- `BP-1 Fixed-Range Bucket Packing` proves that reducing FXCM ContextMap2 associativity from 14 to 10 changes the minimum 32-byte-grained cell from 128 to 96 bytes while preserving the hash bucket range. Source support is implemented but unbuilt and unmeasured while MV-2 owns the heavy lock.
