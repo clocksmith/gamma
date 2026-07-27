@@ -1941,3 +1941,17 @@ Proposal `exact_x86_filter_payload_b2_v1` is developed and queued as
 `20260727T202000Z_86450232e2`. Native archive identity, exact roundtrip,
 deterministic re-encode, resource inheritance, and parent qualification remain
 measured obligations. Score credit is zero.
+
+### ELI nonsegment suffix screen
+
+The stripped executable remains `722448` bytes although the final
+program-segment payload ends at byte `720122`. ELI-1 permits removing the
+`2326`-byte nonprojected suffix while preserving every program header and
+segment payload. The truncated executable has identical native usage behavior.
+After the frozen x86-plus-LZMA2 transform, the payload falls from `440245` to
+`439792` bytes, an additional exact `453`-byte package opportunity. Receipt:
+`results/elf_nonsegment_suffix_x86_v1/screen.json`.
+
+This successor is parked until the x86 parent proves native archive identity.
+It has no native compression, determinism, roundtrip, resource, or score
+credit.

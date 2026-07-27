@@ -117,6 +117,12 @@ by absent empirical predictor, coloring, teacher, or residual objects.
 - Pending gate: `20260727T202000Z_86450232e2`.
 - Score credit: `0` until native archive identity, roundtrip, deterministic
   re-encode, and resource inheritance pass.
+- Parked ELI suffix successor: the last program-segment payload ends at byte
+  `720122`, leaving `2326` nonprojected executable bytes. Removing that suffix
+  preserves the ELI projection and startup behavior and reduces the
+  x86-filtered payload by another `453` bytes. Evidence:
+  `results/elf_nonsegment_suffix_x86_v1/screen.json`. It is not queued until
+  the x86 parent passes its native gate.
 
 ### ELI-1: ELF load-image equivalence
 
