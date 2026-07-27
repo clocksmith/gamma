@@ -331,3 +331,13 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - Exact codec result: all 377 XZ members re-evaluated; new minimum 233012 bytes with an 800 KiB dictionary.
 - Constructive transfer: wrapper 1099 to 1007 bytes; package 234099 to 234019 bytes; normalized nncp and libnc.so hashes exact.
 - Boundary: replacement native 10K archive, roundtrip, determinism, runtime, and memory gate queued; score credit zero.
+
+## CWVE-1: Closed-World Validation Elimination
+
+- Problem: `docs/closed_world_validation_elimination_problem.md`
+- Solution: `docs/closed_world_validation_elimination_solution.md`
+- Verifier: `tools/verify_closed_world_b2_closure.py`
+- Frozen instance: `programs/cmix21_b2_line_whitespace_bpdq_fcf_flagsrawlzma2_cwve_v1/`
+- Exact certificate: 74 safe unique FCF paths, exact final cursor, 44515 valid BPDQ records, maximum LCP 17.
+- Constructive result: wrapper 1885 to 1381 bytes; package 271340 to 270836 bytes; restored executable and dictionary hashes exact.
+- Boundary: replacement 250K native archive, roundtrip, determinism, runtime, and memory gate queued; score credit zero.
