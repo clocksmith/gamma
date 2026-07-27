@@ -2041,3 +2041,10 @@ FCF-1 remains `proxy` with zero score credit until native archive, roundtrip, de
 The exact-package transcode theorem was applied to the frozen Compact5 T4 source tar. XZ branch conversion plus LZMA2 preset 9e reduces the source payload from 246,404 to 240,720 bytes. The unchanged 2,161-byte wrapper gives a 242,881-byte complete package, saving 5,684 bytes against the plain-XZ T4 candidate and 70,558 bytes against the original gzip Compact5 package.
 
 The extended exact-tar verifier recovered the same 849,920-byte tar with SHA-256 `13dcffd1da71bc80f78aade9174cdee709894435e88e89b71a314fb28ac29081` and required byte-identical wrappers. Archive identity therefore follows if the frozen T4 runtime is deterministic. Evidence remains `proxy` with zero score credit because T4 archive identity, native roundtrip, runtime, and memory are unmeasured. Job `20260727T192837Z_c6f3177f63` was replaced by the x86 successor rather than duplicated. No XZ-filter ladder is authorized.
+## 2026-07-27: NNCP CQQ plus x86-XZ normalized-build transfer
+
+`nncp_compact5_preprocessed_cqq_x86xz_nodebug_t4_v1` applies the proved C/C++ comment-and-horizontal-whitespace quotient to 13 files in the exact Compact5 NNCP source closure, canonicalizes the resulting tar, compresses it with the x86-XZ frame, and freezes a no-debug compiler invocation.
+
+The C/C++ source fell from 264,619 to 234,425 bytes. The x86-XZ payload fell from 240,720 to 234,216 bytes. After charging the 2,294-byte wrapper, the counted package is 236,510 bytes, 6,371 bytes below its 242,881-byte parent.
+
+Normalized parent and quotient builds produced byte-identical 144,904-byte `nncp` executables and byte-identical 565,336-byte `libnc.so` files. This proves exact build-output identity under the frozen flags, not native archive identity under the complete wrapper. The exact 10K roundtrip, determinism, archive, runtime, and memory gate remains pending. Score credit is zero.

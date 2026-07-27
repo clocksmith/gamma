@@ -270,3 +270,6 @@ that forecast without a valid dependency chain and complete joint accounting.
 - Exact recovery: 849,920-byte source tar and wrapper both identical.
 - Counted package: 242,881 bytes, saving 5,684 bytes against plain-XZ T4.
 - Status: exact package proxy; T4 native archive and resource gate queued; score credit zero.
+## Instantiation: CQQ-normalized NNCP source closure
+
+The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocessed_cqq_x86xz_nodebug_t4_v1`. On the frozen 13-file source set it removes 30,194 source bytes and 6,504 x86-XZ payload bytes. A normalized no-debug build yields exact parent/child binary identity. The complete package saves 6,371 counted bytes. This is a constructive transfer receipt, not compression credit; native archive identity and resource eligibility remain separate gates.
