@@ -21,10 +21,11 @@ Match the profile encoded in official `nncp.c`:
 - 20 Transformer layers;
 - model width 1024, 8 heads, key/value width 128;
 - feed-forward width 3072 with GEGLU;
-- rotary position dimension 320;
+- learned relative-position dimension 320; rotary position embeddings disabled;
 - recurrent memory 256 and segment length 64;
 - untied input/output embeddings;
-- per-layer relative weights and tied relative bias where still applicable;
+- per-layer learned `w_r[128,320,8]` relative-position tables and shared
+  `b_r[320,8]` relative bias; exact padding and `rel_shift` parity required;
 - pre-normalization, final normalization, and RMS normalization;
 - BF16 parameters/activations with deterministic FP32 reductions where needed;
 - dropout and attention dropout 0.19;

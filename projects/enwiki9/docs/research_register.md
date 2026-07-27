@@ -1568,3 +1568,61 @@ The authorized successor is a source-level v3.3 PyTorch port with frozen
 architecture, execution, distribution, headroom, and student gates. No mature
 trace or WRT integration is authorized until bounded CPU-teacher distribution
 comparison passes.
+## 2026-07-27: NNCP v3.3 ROCm architecture probe
+
+- Candidate: `nncp_v33_rocm_architecture_probe_v1`
+- Verdict: `ARCHITECTURE_PROBE_ONLY`
+- Score credit: zero bytes.
+- The fixed v3.3 topology was instantiated on the Radeon 8060S with 20
+  layers, width 1024, eight 128-wide heads, GEGLU width 3072, memory 256,
+  segment length 64, untied embeddings, per-layer learned relative
+  projections, and one shared relative bias.
+- The topology contains 280,217,501 parameters and 560,435,002 BF16 parameter
+  bytes. A shape-compatible 64-symbol BF16 forward probe completed with
+  613,486,080 peak allocated GPU bytes and finite output.
+- The earlier plan incorrectly called `d_pos=320` rotary. The official profile
+  disables rotary embeddings; `d_pos` belongs to the learned relative-position
+  path.
+- This result proves allocation and kernel feasibility only. It does not prove
+  LibNC distribution parity, exact `rel_shift` behavior, codec roundtrip,
+  compression gain, or runtime eligibility.
+- Next gate: reproduce LibNC relative-feature generation, padding, and
+  `rel_shift`, then compare frozen CPU-teacher logits and arithmetic counts
+  before authorizing a mature trace.
+- Receipt:
+  `results/nncp_v33_rocm_architecture_probe_v1/decision.json`
+## 2026-07-27: NNCP v3.3 learned-relative parity
+
+- Candidate: `nncp_v33_relative_parity_v1`
+- Verdict: `PASS_F32_MINIATURE`
+- Score credit: zero bytes.
+- An observation-only LibNC hook saved a frozen one-layer miniature teacher;
+  a public-API exporter emitted all 18 named tensors; the existing
+  full-distribution observer remained archive-neutral.
+- A PyTorch realization matched all 64 complete 256-way teacher
+  distributions with maximum absolute probability error `4.2189e-7` and
+  mean absolute error `2.6860e-8`.
+- The comparison covers embedding scale, pre-RMSNorm, query/key/value
+  projections, learned relative-position table and bias, `rel_shift`,
+  causal masking, attention, GEGLU, residuals, final RMSNorm, and untied
+  output projection.
+- The first comparison failed because the residual embedding path omitted
+  LibNC's `sqrt(d_model)` multiplier. Intermediate teacher dumps localized
+  the discrepancy; restoring the multiplier produced the strict pass.
+- This authorizes a miniature BF16 parity gate. It does not authorize a
+  mature teacher trace until BF16 full-profile and online-update parity pass.
+- Receipt: `results/nncp_v33_relative_parity_v1/receipt.json`
+## 2026-07-27: NNCP v3.3 BF16 ROCm parity
+
+- Candidate: `nncp_v33_relative_parity_bf16_v1`
+- Verdict: `PASS_BF16_MINIATURE_ROCM`
+- Score credit: zero bytes.
+- The same frozen learned-relative miniature was exported with LibNC's mixed
+  F32 embedding and BF16 remaining parameters, then evaluated on the Radeon
+  8060S.
+- All 64 complete 256-way distributions matched the CPU LibNC teacher within
+  the predeclared `1e-3` BF16 gate. Maximum absolute error was `1.3131e-4`;
+  mean absolute error was `6.0892e-6`.
+- This authorizes the miniature online-update parity gate with dropout
+  disabled. It does not authorize a mature trace or score claim.
+- Receipt: `results/nncp_v33_relative_parity_bf16_v1/receipt.json`

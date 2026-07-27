@@ -1,0 +1,66 @@
+{
+  "claims": {
+    "bf16_kernel_path_exercised": true,
+    "codec_roundtrip": false,
+    "compression_improvement": false,
+    "libnc_distribution_parity": false,
+    "parameter_topology_instantiated": true,
+    "relative_shift_parity": false
+  },
+  "config": {
+    "attention_dropout": 0.19,
+    "batch_size": 1,
+    "d_inner": 3072,
+    "d_key": 128,
+    "d_model": 1024,
+    "d_pos": 320,
+    "d_value": 128,
+    "dropout": 0.19,
+    "final_rmsnorm": true,
+    "geglu": true,
+    "heads": 8,
+    "layers": 20,
+    "memory_length": 256,
+    "pre_rmsnorm": true,
+    "query_bias": false,
+    "rotary_position_embedding": false,
+    "segment_length": 64,
+    "tied_embedding": false,
+    "tied_relative_bias": true,
+    "tied_relative_projection": false,
+    "vocab_size": 413
+  },
+  "environment": {
+    "device": "cuda",
+    "device_name": "Radeon 8060S Graphics",
+    "hip": "7.13.99004",
+    "python": "3.14.4",
+    "torch": "2.11.0+rocm7.13.0"
+  },
+  "kernel_probe": {
+    "checksum_diagnostic_only": 20.184221267700195,
+    "elapsed_seconds": 0.3492522961460054,
+    "finite": true,
+    "output_shape": [
+      1,
+      64,
+      413
+    ],
+    "peak_allocated_bytes": 612625920,
+    "peak_reserved_bytes": 635437056
+  },
+  "next_gate": "Implement LibNC-exact relative feature generation, padding, and rel_shift; compare frozen CPU-teacher logits before tracing.",
+  "parameter_bytes_bf16": 560435002,
+  "parameter_count": 280217501,
+  "parameter_groups": {
+    "blocks": 279367680,
+    "final_norm": 1024,
+    "input_embedding": 422912,
+    "output_bias": 413,
+    "output_embedding": 422912,
+    "shared_relative_bias": 2560
+  },
+  "schema": "gamma.nncp_v33_rocm_architecture_probe.v1",
+  "score_credit_bytes": 0,
+  "status": "ARCHITECTURE_PROBE_ONLY"
+}
