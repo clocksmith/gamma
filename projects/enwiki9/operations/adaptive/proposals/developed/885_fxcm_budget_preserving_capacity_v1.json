@@ -1,0 +1,35 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "claimed_at": "2026-07-27T15:48:33+00:00",
+  "created_at": "2026-07-27T15:48:33+00:00",
+  "developed_at": "2026-07-27T15:49:15+00:00",
+  "evidence": [
+    "docs/fxcm_budget_preserving_capacity_problem.md",
+    "docs/fxcm_budget_preserving_capacity_solution.md",
+    "results/fxcm_budget_preserving_capacity_v1/theorem_verifier.json",
+    "patches/fxcm_tight_cell_layout_v1.patch",
+    "patches/fxcm_dense_range_bucket_v1.patch",
+    "patches/fxcm_dense_budget_control_v1.patch"
+  ],
+  "expected_savings_bytes": 2000000,
+  "hypothesis": "Reinvesting the four exact padding bytes removed from every A10 cell into deterministic dense range capacity adds 1,215,436 cells under the unchanged per-table payload budgets and saves at least 2,000 bytes per million on opening and distant exact gates.",
+  "interfaces_exposed": [
+    "A10 ContextMap2 record layout, table cardinality, and deterministic range index"
+  ],
+  "kill_condition": "Retire this realization on exact reconstruction or determinism failure, decimal-10GB RSS failure, non-positive opening 1M gain, canonical 10M gain below 23KB, or non-positive distant transfer. Do not tune budget bytes, scrambler constants, or table subsets.",
+  "max_program_bytes": 40000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "owner": "codex-clocksmith",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": null,
+  "priority": 96,
+  "promotion_condition": "Pass exact 250K roundtrip, determinism, and decimal-10GB RSS; then save at least 2,000 B/M on opening 1M, at least 23KB on canonical 10M, and remain positive on a frozen distant gate.",
+  "proposal_id": "fxcm_budget_preserving_capacity_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 114,
+  "state": "developed",
+  "title": "Budget-preserving tight-cell capacity expansion"
+}

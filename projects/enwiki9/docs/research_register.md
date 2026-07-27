@@ -1253,6 +1253,207 @@ parent receipt, input and archive hashes, build identity, trace-off/trace-on
 archive identity, and the resulting `MIXRGT1` trace. See
 `results/mixregret_cert_component_union_v1/blocker.json`.
 
+## 2026-07-27: NC5-1 compact causal NNCP native-domain maturity gate
+
+Candidate mechanism: `nncp_compact5_preprocessed_maturity_v1`
+
+The official NNCP source tarball was reconstructed locally at its published
+SHA-256. The previously recorded compact profile is now exactly identified as
+the enwik9 transformer with batch size one, five layers, model width 256, and
+inner width 768. Its one-symbol initialization reports 4.81M parameters,
+matching the prior compact CPU receipt.
+
+This is a fresh Bellard-NNCP route. It has no parent candidate in Gamma;
+`purple_parrot_nncp_v1` is an unrelated NumPy LSTM diagnostic and is explicitly
+not used as lineage or package evidence.
+
+The new route is materially different from the retired startup endpoint mix:
+it codes the official reversible NNCP-preprocessed representation standalone,
+without translating probabilities into WRT or routing against Gamma. The
+source hash, complete option vector, local build observations, and
+cross-device runner are recorded in
+`results/nncp_compact5_reconstruction_v1/receipt.json` and
+`tools/run_nncp_compact5_preprocessed_gate.sh`. The exact gate harness
+`tools/run_nncp_compact5_exact_gate.py` performs two independent
+compressions, one decompression, archive-hash equality, raw-hash equality,
+the fixed archive ceiling, and phase-runtime accounting.
+
+The profile is claimed but not yet materialized as a score-bearing package.
+Its first exact gate is opening 1M raw bytes, with raw roundtrip,
+deterministic second archive, decimal-10GB RSS, and CPU throughput. An archive
+above 250,000 bytes retires this profile. Layer count, widths, batch size, and
+preprocessing are frozen; no architecture ladder is authorized. The route
+currently receives zero score credit.
+
+The independent Dependency-Closure Package problem is also solved for NC5.
+The canonical CPU-only build closure is 311,289 bytes, rebuilds successfully,
+and excludes CUDA and the redundant prebuilt executable. It leaves 388,711
+bytes under the provisional 700KB cap for wrappers and framing. This is
+constructive package evidence, not score credit; see
+`results/nncp_compact5_cpu_package_v1/receipt.json`.
+
+## 2026-07-27: SFR-1 SLC-funded full idx13 restoration
+
+Candidate mechanism: `fxcm_slack_funded_idx13_restoration_v1`
+
+The independent Slack-Funded Capacity Restoration problem is solved and
+instantiated. SLC releases exactly 111,820,800 declared bytes. Restoring the
+specifically halved idx13 table adds 2,097,152 tight cells costing
+192,937,984 bytes, for an exact net declared increase of 81,117,184 bytes over
+B2. Total ContextMap2 capacity becomes 30,052,352 cells and compact payload
+becomes 2,764,816,384 bytes.
+
+The concrete package
+`cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_fxcmidx13full_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+is 564,158 bytes, 12 bytes larger than B2. It changes only cell padding and
+the frozen idx13 divisor, preserving power-of-two mask indexing and all other
+table mappings.
+
+Current B2 process samples show more headroom than the static net increase,
+but process samples are not terminal certificates. This route receives zero
+credit until SLC identity passes and terminal B2 headroom is known. Promotion
+then requires exact roundtrip, determinism, decimal-10GB RSS, at least
+2,000 B/M opening gain, at least 23KB canonical-10M gain, and positive distant
+transfer. No other table restoration or partial-divisor ladder is authorized.
+
+Evidence:
+
+- `docs/fxcm_slack_funded_restoration_problem.md`
+- `docs/fxcm_slack_funded_restoration_solution.md`
+- `tools/fxcm_slack_funded_restoration_verify.py`
+- `results/fxcm_slack_funded_restoration_v1/theorem_verifier.json`
+
+## 2026-07-27: BEX-1 exact SLC-to-PPMD budget exchange
+
+Candidate mechanism: `fxcm_ppmd_budget_exchange_v1`
+
+The independent Exact Component-Budget Exchange problem is solved and
+instantiated. SLC removes exactly 111,820,800 declared ContextMap2 payload
+bytes. This equals 109,200 KiB exactly, so the unique maximal whole-KiB
+reinvestment raises PPMD from 20,352 to 129,552 KiB with zero residual and no
+increase in the two components' combined declared payload.
+
+The concrete package
+`cmix21_text_mmap_paq5_ppmd129552k_fxcmassoc10tight92_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+is 564,160 bytes, 14 bytes larger than B2. Its compile command and metadata
+contain the complete inherited B2 define vector plus tight cells and the exact
+PPMD override.
+
+This theorem does not establish allocator overhead, measured RSS, score gain,
+or SLC observational equivalence. The route receives zero credit until SLC's
+archive-identity antecedent passes. It then requires exact roundtrip,
+determinism, decimal-10GB RSS, at least 2,000 B/M opening gain, at least 23KB
+canonical-10M gain, and positive distant transfer. The 129,552 KiB allocation
+is frozen; no PPMD-size ladder is authorized.
+
+Evidence:
+
+- `docs/fxcm_ppmd_budget_exchange_problem.md`
+- `docs/fxcm_ppmd_budget_exchange_solution.md`
+- `tools/fxcm_ppmd_budget_exchange_verify.py`
+- `results/fxcm_ppmd_budget_exchange_v1/theorem_verifier.json`
+
+## 2026-07-27: BPC-1 budget-preserving tight-cell expansion
+
+Candidate mechanism: `fxcm_budget_preserving_capacity_v1`
+
+The independent Budget-Preserving Capacity problem is solved and instantiated
+on the frozen 18-table A10 allocation. Tightening each cell from 96 to 92 bytes
+allows the unique coordinatewise maximal capacity
+`floor(96 * n_i / 92)` without moving bytes between tables. The construction
+raises total capacity from 27,955,200 to 29,170,636 cells, adding exactly
+1,215,436 cells while reducing total cell payload by 688 bytes.
+
+The concrete package
+`cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+is 564,198 bytes. It composes the tight-cell representation, bijective
+32-bit scrambler, multiply-high range reduction, and a 96-byte budget control
+without modifying the vendored source tree.
+
+The first pre-gate package attempt was invalid because the generic packager
+copied the parent dictionary but did not inherit the parent's compile defines;
+the binary therefore used the source default A14 layout despite its candidate
+name. No native evidence was collected from that package. The packager now
+inherits the complete parent define vector and deterministically applies child
+overrides. SLC, DRB, and BPC were rebuilt before any native gate, with A10 and
+idx13/2 present in both compile commands and candidate metadata.
+The reusable
+`results/cmix21_parent_define_inheritance_v1/receipt.json` verifier now checks
+that SLC, BPC, BEX, and SFR each contain exactly the frozen B2 define map plus
+their declared overrides.
+
+This result currently receives zero score and resource credit. Promotion
+requires exact 250K roundtrip, determinism, and decimal-10GB RSS, followed by
+at least 2,000 B/M opening gain, at least 23KB canonical-10M gain, and positive
+distant transfer. The budget, scrambler, and table subset are frozen; failure
+retires this realization rather than opening a parameter ladder.
+
+Evidence:
+
+- `docs/fxcm_budget_preserving_capacity_problem.md`
+- `docs/fxcm_budget_preserving_capacity_solution.md`
+- `tools/fxcm_budget_preserving_capacity_verify.py`
+- `results/fxcm_budget_preserving_capacity_v1/theorem_verifier.json`
+- `patches/fxcm_dense_budget_control_v1.patch`
+
+## 2026-07-27: SLC-1 tight A10 state-cell layout
+
+Candidate mechanism: `fxcm_tight_cell_layout_v1`
+
+The solved independent Tight State-Cell Layout problem establishes that the
+logical A10 FXCM record occupies 91 field bytes and rounds to 92 bytes under
+the frozen two-byte ABI. The current `E1<10,96>` therefore carries four
+unobserved padding bytes per cell. `E1<10,92>` preserves offsets `0`, `20`, and
+`21`, keeps every checksum aligned, and is archive-identical at fixed cell
+count whenever padding and addresses are not model state. It saves exactly
+four bytes per cell. For the frozen A10/idx13div2 construction, the 18
+ContextMap2 tables contain 27,955,200 cells, so fixed-count tightening removes
+exactly 111,820,800 allocated cell-payload bytes: 2,683,699,200 bytes at 96
+bytes per cell versus 2,571,878,400 bytes at 92 bytes per cell.
+
+Under a former `128 * 2^k` byte budget, the tight layout raises the DRB dense
+capacity from 37,273,589 cells to 38,894,182 cells, an additional 1,620,593
+cells; per table these counts are `floor(4 * 2^k / 3)` and
+`floor(32 * 2^k / 23)`. These are static allocation quantities only. The
+theorem receives zero RSS, runtime, archive, or score credit. Transfer first
+requires an exact fixed-count archive-identity gate; only then may a separate
+dense-count candidate claim codelength evidence.
+
+Evidence:
+
+- `docs/fxcm_tight_cell_layout_problem.md`
+- `docs/fxcm_tight_cell_layout_solution.md`
+- `tools/fxcm_tight_cell_layout_verify.cpp`
+- `results/fxcm_tight_cell_layout_v1/allocation_certificate.json`
+
+## 2026-07-27: DRB-1 dense non-power cmC2 capacity
+
+Candidate mechanism: `fxcm_dense_range_bucket_v1`
+
+The solved independent Dense Range Buckets problem proves that a 96-byte
+associativity-ten cmC2 cell can use
+`floor(128 * 2^k / 96)` cells inside the former 128-byte-cell budget, recovering
+almost one third more indexed cells than the current power-of-two realization.
+It also proves the fixed-width scrambler is bijective, multiply-high range
+reduction is optimally balanced, gives its exact collision law, and establishes
+encoder/decoder state equivalence by induction.
+
+This is a constructive theorem with zero score credit until native replay.
+The current source confirms that associativity ten retains `2^k` cells and
+mask indexing, while its existing safe non-power reducer is used by another
+hash table but not cmC2. The controlled transfer is therefore one mechanism:
+retain `A=10`, spend the reclaimed bytes on a dense cmC2 cell count, and replace
+all cmC2 mask accesses with the certified salted range index. Promotion requires
+exact roundtrip, deterministic second archive, decimal-10GB compliance, complete
+program accounting, positive opening and canonical gates, and no inference
+from the theorem's collision expectation alone.
+
+Evidence:
+
+- `docs/fxcm_dense_range_bucket_problem.md`
+- `docs/fxcm_dense_range_bucket_solution.md`
+- `external/cmix21-sidecar/src/models/fxcmv1.cpp`
+
 ## 2026-07-26: mathematical residual-closure series is terminal negative
 
 Gamma solved and instantiated eight independent finite problems against the

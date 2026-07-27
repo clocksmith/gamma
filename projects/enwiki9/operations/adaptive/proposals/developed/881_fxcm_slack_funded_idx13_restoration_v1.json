@@ -1,0 +1,33 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_fxcmidx13full_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "claimed_at": "2026-07-27T16:36:20+00:00",
+  "created_at": "2026-07-27T16:36:20+00:00",
+  "developed_at": "2026-07-27T16:36:20+00:00",
+  "evidence": [
+    "docs/fxcm_slack_funded_restoration_problem.md",
+    "docs/fxcm_slack_funded_restoration_solution.md",
+    "results/fxcm_slack_funded_restoration_v1/theorem_verifier.json",
+    "patches/fxcm_tight_cell_layout_v1.patch"
+  ],
+  "expected_savings_bytes": 2000000,
+  "hypothesis": "Tight A10 cells release 111,820,800 declared bytes; spending 192,937,984 bytes to restore the specifically halved idx13 table produces a net 81,117,184-byte payload increase that fits measured B2 headroom and saves at least 2,000 bytes per million.",
+  "interfaces_exposed": [
+    "A10 ContextMap2 cell layout and the frozen index-13 capacity divisor"
+  ],
+  "kill_condition": "Retire on SLC identity failure, insufficient terminal B2 headroom, exact reconstruction or determinism failure, decimal-10GB RSS failure, non-positive opening 1M gain, canonical 10M gain below 23KB, or non-positive distant transfer. Do not restore other tables or introduce partial divisors.",
+  "max_program_bytes": 40000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "owner": "codex-clocksmith",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": null,
+  "priority": 100,
+  "promotion_condition": "After SLC archive identity and terminal B2 headroom are certified, require exact 250K roundtrip, determinism, and decimal-10GB RSS; then at least 2,000 B/M opening gain, at least 23KB canonical-10M gain, and positive frozen distant transfer.",
+  "proposal_id": "fxcm_slack_funded_idx13_restoration_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 118,
+  "state": "developed",
+  "title": "SLC-funded full idx13 restoration"
+}
