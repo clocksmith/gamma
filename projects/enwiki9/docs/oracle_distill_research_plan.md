@@ -1,6 +1,6 @@
 # ORACLE-DISTILL: NNCP Residual Integer Compilation
 
-Status: CAUSAL CONTROL POSITIVE, RUNTIME HOSTILE / ZERO SCORE CREDIT
+Status: CURRENT CAUSAL TEACHER-QUOTIENT REALIZATION REJECTED / ZERO SCORE CREDIT
 
 ## Target
 
@@ -174,3 +174,51 @@ NNCP, launch an unchanged larger CPU teacher, or claim the 2,301-byte bounded
 control difference as Gamma gain. The next valid step requires an accelerated,
 hash-bound causal teacher trace or a much smaller causal teacher whose residual
 can be compiled into a counted integer student.
+
+## Full-distribution causal trace and quotient decision
+
+The true-symbol-only trace was insufficient for constructive distillation
+because it did not define probabilities for alternative symbols. The
+observation contract was upgraded to record all 336 normalized probabilities
+before coding each true symbol:
+
+`patches/nncp_teacher_distribution_trace_v2.patch`
+
+The exact batch-1, 10,000-symbol trace is:
+
+`results/nncp_teacher_causal_trace_10k_v1/receipt.json`
+
+Trace-off and trace-on archives are both exactly 6,945 bytes with identical
+SHA-256. The trace contains 10,000 sequential single-stream rows, all
+distributions are positive and normalized, maximum normalization error is
+`2.796e-7`, peak tree RSS is 1,857,536 KiB, and trace-on elapsed time is
+1,905.8052 seconds. This is valid teacher evidence and zero score credit.
+
+The exact common-boundary comparison is:
+
+`results/nncp_gamma_gap_map_10k_v1/decision.json`
+
+At the shared 13,310-raw-byte boundary, Gamma costs 22,661.711 bits while the
+teacher true-symbol log loss is 49,408.720 bits. The causal NNCP teacher is
+therefore 26,747.009 bits, or 3,343.376 bytes, worse on this startup
+population. No student can improve Gamma by imitating this teacher here.
+
+The fixed-budget quotient screen is:
+
+`results/nncp_predictive_quotient_10k_v1/decision.json`
+
+The 64KB quotient is the best of the predeclared budgets and retains only
+29.242 percent of the teacher-over-unigram holdout gap. The 128KB and 256KB
+budgets retain 29.215 percent because only 126 prior-symbol contexts occur in
+training. Every budget fails the required 80 percent retention and its package
+dominates the bounded payload.
+
+Combined decision:
+
+`results/oracle_distill_teacher_quotient_10k_v1/decision.json`
+
+Reject the current official-NNCP CPU startup teacher-quotient realization. Do
+not integrate it, enlarge the unchanged CPU run, or claim the teacher's
+published full-corpus score as Gamma headroom. A materially different successor
+requires an accelerated mature causal full-distribution trace or another
+under-target teacher with an exact decoder-compatible representation.

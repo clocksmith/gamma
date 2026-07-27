@@ -1200,3 +1200,34 @@ authorize its recovery under the predeclared gates. Same-domain causal NNCP
 compilation remains independent and active. Evidence:
 `results/mixregret_pair_closure_v1/receipt.json` and
 `results/mixregret_pair_closure_v1/decision.json`.
+## ORACLE-DISTILL full-distribution causal teacher quotient
+
+Proposal: `oracle_distill_nncp_residual_integer_v1`
+
+The observation patch was upgraded from realized-symbol probabilities to the
+complete normalized 336-symbol distribution. Adjacent trace-off and trace-on
+batch-1 archives are byte-identical at 6,945 bytes. The exact trace has 10,000
+sequential causal rows, 1,857,536 KiB peak tree RSS, and 1,905.8052 seconds
+trace-on runtime. This remains external teacher evidence with zero score
+credit.
+
+At the largest exact common raw boundary, 13,310 bytes, Gamma uses 22,661.711
+bits and the teacher uses 49,408.720 ideal true-symbol bits. The teacher is
+3,343.376 bytes worse on this startup population. The fixed 64KB, 128KB, and
+256KB normalized integer predictive quotients retain only 29.242, 29.215, and
+29.215 percent of the chronological holdout teacher-over-unigram gap,
+respectively, versus the required 80 percent. Their model bytes also dominate
+the bounded payload.
+
+Decision: **reject the current NNCP startup teacher-quotient realization**. No
+native Gamma integration or larger unchanged CPU trace is authorized. This
+does not reject every teacher compiler; the unsettled successor requires an
+accelerated mature causal full-distribution trace or a materially different
+under-target teacher representation.
+
+Receipts:
+
+- `results/nncp_teacher_causal_trace_10k_v1/receipt.json`
+- `results/nncp_gamma_gap_map_10k_v1/decision.json`
+- `results/nncp_predictive_quotient_10k_v1/decision.json`
+- `results/oracle_distill_teacher_quotient_10k_v1/decision.json`
