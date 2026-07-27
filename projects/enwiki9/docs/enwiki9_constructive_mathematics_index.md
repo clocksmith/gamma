@@ -261,3 +261,12 @@ that forecast without a valid dependency chain and complete joint accounting.
 - Constructive transfer: the FCF wrapper safely extracted the closure and built the exact executable and dictionary.
 - Counted package: 273,609 bytes, saving 300 bytes against BPDQ-1 and 290,537 bytes against B2 package accounting.
 - Status: constructive package proxy only; native exact codec gate queued; score credit zero.
+
+## EPT-1 Composition: NNCP Compact5 T4 X86-XZ
+
+- Parent theorem: exact package transcoding.
+- Frozen instance: `programs/nncp_compact5_preprocessed_x86xz_t4_v1/`
+- Receipt: `results/nncp_compact5_x86_xz_t4_v1/transcode.json`
+- Exact recovery: 849,920-byte source tar and wrapper both identical.
+- Counted package: 242,881 bytes, saving 5,684 bytes against plain-XZ T4.
+- Status: exact package proxy; T4 native archive and resource gate queued; score credit zero.

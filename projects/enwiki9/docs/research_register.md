@@ -2035,3 +2035,9 @@ On the 73-member BPDQ-1 closure, raw framing falls from 993,280 to 941,417 bytes
 Two other exact dictionary representations were closed. Lexicographic sort plus explicit 16-bit original ranks produced a 317,020-byte payload, 39,956 bytes worse than LPWQ-1. Splitting source and BPDQ dictionary into independent raw-LZMA2 streams produced 270,826 bytes including framing, 431 bytes worse than the unified BPDQ payload before decoder growth. Both receive zero score credit and no parameter or split ladder is authorized.
 
 FCF-1 remains `proxy` with zero score credit until native archive, roundtrip, deterministic replay, runtime, and memory receipts pass. It replaces the BPDQ-1 native job; prior theorem artifacts remain provenance and controls.
+
+## 2026-07-27: NNCP Compact5 T4 x86-filtered XZ package
+
+The exact-package transcode theorem was applied to the frozen Compact5 T4 source tar. XZ branch conversion plus LZMA2 preset 9e reduces the source payload from 246,404 to 240,720 bytes. The unchanged 2,161-byte wrapper gives a 242,881-byte complete package, saving 5,684 bytes against the plain-XZ T4 candidate and 70,558 bytes against the original gzip Compact5 package.
+
+The extended exact-tar verifier recovered the same 849,920-byte tar with SHA-256 `13dcffd1da71bc80f78aade9174cdee709894435e88e89b71a314fb28ac29081` and required byte-identical wrappers. Archive identity therefore follows if the frozen T4 runtime is deterministic. Evidence remains `proxy` with zero score credit because T4 archive identity, native roundtrip, runtime, and memory are unmeasured. Job `20260727T192837Z_c6f3177f63` was replaced by the x86 successor rather than duplicated. No XZ-filter ladder is authorized.

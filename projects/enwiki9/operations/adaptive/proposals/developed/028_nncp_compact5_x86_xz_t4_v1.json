@@ -1,0 +1,29 @@
+{
+  "candidate_id": "nncp_compact5_preprocessed_x86xz_t4_v1",
+  "created_at": "2026-07-27T21:17:41+00:00",
+  "developed_at": "2026-07-27T21:18:04+00:00",
+  "evidence": [
+    "results/nncp_compact5_x86_xz_t4_v1/transcode.json",
+    "docs/exact_package_transcoding_solution.md"
+  ],
+  "expected_savings_bytes": 5684,
+  "hypothesis": "The reversible XZ x86 branch filter preserves the exact Compact5 T4 source tar and wrapper while reducing the complete package by 5,684 bytes.",
+  "interfaces_exposed": [
+    "exact_nncp_source_tar"
+  ],
+  "kill_condition": "Retire on recovered-tar mismatch, wrapper drift, archive divergence, roundtrip failure, thread nondeterminism, or resource failure; do not open an XZ-filter parameter ladder.",
+  "max_program_bytes": 242881,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "parent": "nncp_compact5_preprocessed_xz_t4_v1",
+  "parent_proposal_id": null,
+  "priority": 953,
+  "promotion_condition": "Exact tar and wrapper identity must hold; the 10K T4 gate must reproduce the parent 6,229-byte archive, roundtrip, deterministic replay, and resource receipt with at most 242,881 package bytes.",
+  "proposal_id": "nncp_compact5_x86_xz_t4_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 971,
+  "state": "developed",
+  "title": "NNCP Compact5 T4 x86-filtered XZ package"
+}
