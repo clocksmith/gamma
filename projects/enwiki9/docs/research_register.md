@@ -2277,6 +2277,26 @@ Evidence:
 - `results/paid_conditional_multinomial_c2_v1/decision.json`
 - `operations/adaptive/exclusions/paid_conditional_multinomial_c2_opening1m_v1.json`
 
+## 2026-07-27: CBM-1 label-free causal block mixture theorem
+
+CBM-1 is a new independent finite-mathematics problem and complete solution.
+For any finite causal expert family, it constructs a label-free Bayesian
+mixture, proves the exact telescoping sequence mass and
+best-expert-plus-prior regret bound, and gives a canonical arbitrary-precision
+integer posterior with gcd reduction and fixed coder-frequency quantization.
+
+The hidden application is deliberately conditional.  PBVC correction vectors
+become CBM experts only if the frozen PBVC gate first demonstrates
+target-scale blockwise information.  CBM then removes explicit block labels
+while remaining decoder-causal, but still requires exact arithmetic replay,
+bounded native integer realization, complete source accounting, and resource
+receipts.  It currently has no live instance and zero score credit.
+
+Evidence:
+
+- `docs/causal_block_expert_mixture_problem.md`
+- `docs/causal_block_expert_mixture_solution.md`
+
 ## 2026-07-27: PBVC-1 paid block vector correction codebook is queued
 
 Candidate: `af1_paid_block_vector_codebook_v1`
