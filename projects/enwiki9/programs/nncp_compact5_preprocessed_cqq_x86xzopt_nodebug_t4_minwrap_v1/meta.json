@@ -1,0 +1,71 @@
+{
+  "added": "2026-07-27",
+  "build": {
+    "counted_payload_bytes": 234099,
+    "package_cap_bytes": 700000,
+    "package_headroom_bytes": 465901,
+    "payload_files": {
+      "nncp_cpu_source.tar.xz": 233000,
+      "program.py": 1099
+    },
+    "payload_sha256": {
+      "nncp_cpu_source.tar.xz": "d0d5ceec77bb5598a598ae0b23205340251b7ef2fae828da102545cc285ee0da",
+      "program.py": "a552a11a9e077bb137043dbd9317ed452e1bf353ddbc2edf4af3c3ed2806c202"
+    },
+    "program_bytes": 1099,
+    "program_file": "program.py",
+    "program_sha256": "a552a11a9e077bb137043dbd9317ed452e1bf353ddbc2edf4af3c3ed2806c202",
+    "program_size": 234099,
+    "source_archive_bytes": 233000,
+    "source_archive_file": "nncp_cpu_source.tar.xz",
+    "source_archive_sha256": "d0d5ceec77bb5598a598ae0b23205340251b7ef2fae828da102545cc285ee0da"
+  },
+  "deps": [
+    "POSIX shell environment",
+    "GNU make and GCC",
+    "zlib development and runtime",
+    "x86-64 Linux compatible with the pinned CPU libnc.so"
+  ],
+  "description": "Compact5 NNCP T4 with CQQ source, finite-family XZ minimum, normalized build, and bisimulation-reduced wrapper.",
+  "family": "nncp_compact_cpu",
+  "hypothesis": "A transition-preserving wrapper normal form removes 1,195 counted source bytes while retaining the exact source closure, binaries, runtime arguments, native archive, and roundtrip.",
+  "id": "nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_minwrap_v1",
+  "measured": {
+    "build_identity": {
+      "libnc_so_bytes": 565336,
+      "libnc_so_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+      "nncp_bytes": 144904,
+      "nncp_sha256": "fed2ef59612c08077572983d70278211b76755d67910b293bb23aa11f1252fe5"
+    },
+    "wrapper_normal_form": {
+      "candidate_bytes": 1099,
+      "candidate_sha256": "a552a11a9e077bb137043dbd9317ed452e1bf353ddbc2edf4af3c3ed2806c202",
+      "parent_bytes": 2294,
+      "saved_bytes": 1195
+    }
+  },
+  "omega": {
+    "interfaces_exposed": [
+      "deterministic_wrapper_normal_form",
+      "finite_codec_family_minimum"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_compact5_cqq_x86xzopt_nodebug_t4_v1",
+    "proposal_id": "nncp_compact5_cqq_x86xzopt_nodebug_t4_minwrap_v1",
+    "retired_neighborhoods": []
+  },
+  "parent": "nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_v1",
+  "source": {
+    "build": "make -j2 with frozen normalized CFLAGS",
+    "cpu_package": "projects/enwiki9/programs/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_minwrap_v1/nncp_cpu_source.tar.xz",
+    "cpu_package_sha256": "d0d5ceec77bb5598a598ae0b23205340251b7ef2fae828da102545cc285ee0da",
+    "cpu_threads": 4,
+    "finite_family_theorem": "docs/finite_codec_family_minimum_solution.md",
+    "official_tar_sha256": "7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119",
+    "payload_codec": "XZ x86 plus LZMA2 dict768KiB/lc4/lp0/pb0/normal/nice112/bt2/depth256",
+    "profile": "enwik9,batch_size=1,n_layer=5,d_model=256,d_inner=768,preprocess=16384,512",
+    "wrapper_theorem": "docs/deterministic_wrapper_normal_form_solution.md"
+  },
+  "status": "candidate",
+  "verdict": "Exact package and build-normal-form candidate awaiting native archive and runtime gate."
+}

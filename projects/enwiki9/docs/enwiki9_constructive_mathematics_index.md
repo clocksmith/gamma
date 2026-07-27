@@ -282,3 +282,11 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - Result: exact 233,000-byte family minimum, saving 1,216 payload bytes
 - Transfer: exact restored tar and normalized build hashes
 - Boundary: native archive and resource gate pending; score credit zero
+## DWNF-1: Deterministic Wrapper Normal Form
+
+- Problem: `docs/deterministic_wrapper_normal_form_problem.md`
+- Solution: `docs/deterministic_wrapper_normal_form_solution.md`
+- Frozen instance: normalized Compact5 NNCP T4 wrapper
+- Result: wrapper reduced from 2,294 to 1,099 bytes
+- Transfer: exact source payload and normalized binary hashes
+- Boundary: native archive and resource gate pending; score credit zero

@@ -2055,3 +2055,8 @@ FCFM-1 formalizes exact minimization over a committed finite deterministic codec
 On the 819,200-byte CQQ NNCP source tar, all 377 committed XZ descriptions roundtripped. The unique tie-broken winner is `dict=768KiB,lc=4,lp=0,pb=0,mode=normal,nice=112,mf=bt2,depth=256`: 233,000 bytes, 1,216 below its CQQ parent payload. The full package is 235,294 bytes, 1,216 below the CQQ parent and 7,587 below the original x86-XZ parent. The restored tar and normalized binaries are exact. Native 10K archive and resource gates remain pending, so score credit is zero.
 
 The generic finite-closure-frame instantiation produced only 112 gross payload bytes on this closure and was not materialized because its decoder would add a new counted parser. This closes FCF for this NNCP package unless a decoder-free embedding is found.
+## 2026-07-27: DWNF-1 deterministic NNCP wrapper normal form
+
+DWNF-1 gives a path-alpha bisimulation for deterministic build-and-run wrappers. The Compact5 instance reduces the frozen Python wrapper from 2,294 to 1,099 bytes while preserving the source payload, effective normalized build flags, fixed T4 arguments, dynamic-library environment rule, input/output byte operations, and exact `nncp` and `libnc.so` hashes.
+
+The complete package is 234,099 bytes: 1,195 below the finite-XZ-family parent and 8,782 below the original x86-XZ parent. Static and build transfer pass. Native archive, roundtrip, determinism, runtime, and memory remain pending, so score credit is zero.
