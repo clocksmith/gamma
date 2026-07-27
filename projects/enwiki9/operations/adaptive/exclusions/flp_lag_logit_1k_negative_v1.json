@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "results/nncp_factorized_logit_1k_v1/decision.json"
+  ],
+  "exclusion_id": "flp_lag_logit_1k_negative_v1",
+  "failure": "The exact soft model lost 231 arithmetic payload bytes and 288 two-part bytes to the matched hard-label model; both roundtripped and no weights clipped.",
+  "mechanism": "Four-lag 64-bucket additive int8 bit-logit projection trained on full NNCP distributions",
+  "population": "opening 1024 raw bytes; 1231 reversible symbols; first 820 train, final 411 holdout",
+  "recorded_at": "2026-07-27T20:04:11+00:00",
+  "retired_dimensions": [
+    "lag set, feature-bucket width, epoch count, learning rate, and logit-scale tuning on startup teacher traces"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "A mature batch-1 teacher trace may justify one newly frozen recurrent student, but no further startup soft-target feature sweep."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "evidence": [
+    "results/nncp_quantized_soft_quotient_1k_v1/decision.json",
+    "results/nncp_teacher_distribution_compact5_1k_v1/receipt.json"
+  ],
+  "exclusion_id": "qsp_suffix_centroid_1k_negative_v1",
+  "failure": "Soft students lost 99-187 arithmetic payload bytes and 241-9881 two-part bytes versus matched hard-label controls at depths 0,1,2.",
+  "mechanism": "Full-distribution NNCP teacher centroids over raw suffix contexts with exact dyadic tables",
+  "population": "opening 1024 raw bytes; 1231 reversible symbols; first 820 train, final 411 holdout",
+  "recorded_at": "2026-07-27T19:56:14+00:00",
+  "retired_dimensions": [
+    "suffix depth, dyadic denominator, support threshold, and table-cap tuning for this centroid representation"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "A student with genuinely different causal state, such as compiled recurrent state, may reuse the verified full-distribution teacher trace."
+  ]
+}
