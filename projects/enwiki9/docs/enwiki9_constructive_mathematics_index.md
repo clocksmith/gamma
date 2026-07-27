@@ -228,3 +228,14 @@ that forecast without a valid dependency chain and complete joint accounting.
 - Constructive transfer: two clean builds reproduced the parent 837,176-byte executable and 411,996-byte dictionary exactly.
 - Counted package: 287,391 bytes, saving 20,148 bytes against SCC-1 and 276,755 bytes against B2 package accounting.
 - Status: constructive package proxy only; native exact codec gate queued; score credit zero.
+
+## LPWQ-1: Line-Preserving C++ Whitespace Quotient
+
+- Problem: `docs/cpp_line_whitespace_quotient_problem.md`
+- Solution: `docs/cpp_line_whitespace_quotient_solution.md`
+- Construction: `tools/cpp_line_whitespace_quotient.py`
+- Frozen instance: `programs/cmix21_b2_line_whitespace_rawlzma2_v1/`
+- Exact screen: 70 source members transformed; 102,300 additional source bytes removed; raw-LZMA2 payload reduced from 284,583 to 277,064 bytes.
+- Constructive transfer: two clean builds reproduced the exact 837,176-byte executable and 411,996-byte dictionary.
+- Counted package: 279,872 bytes, saving 7,519 bytes against CQQ-1 and 284,274 bytes against B2 package accounting.
+- Status: constructive package proxy only; native exact codec gate queued; score credit zero.
