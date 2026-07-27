@@ -309,3 +309,14 @@ The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocesse
 - Guarantee: exact visited `prob0` sequence is sufficient for archive equality
 - Missing antecedent: mature batch-1 trace and compact causal student
 - Score credit: zero
+
+## LMC-1: Literal Migration Compression
+
+- Problem: `docs/literal_migration_compression_problem.md`
+- Solution: `docs/literal_migration_compression_solution.md`
+- Construction: `tools/migrate_fcf_build_flags.py`
+- Frozen instances: `programs/cmix21_b2_line_whitespace_bpdq_fcf_flagsrawlzma2_v1/` and its `*_minwrap_v1` successor
+- Exact result: the 493-byte build literal adds 149 compressed closure bytes; the ordinary wrapper shrinks 529 bytes, for 380 net bytes.
+- DWNF-1 composition: wrapper 3774 to 1885 bytes; final package 271340 bytes; 2269 bytes saved against FCF-1.
+- Constructive transfer: clean build reproduced the exact 837176-byte executable and 411996-byte dictionary hashes.
+- Boundary: replacement 250K native archive, roundtrip, determinism, runtime, and memory gate queued; score credit zero.
