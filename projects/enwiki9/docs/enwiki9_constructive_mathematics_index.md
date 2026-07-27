@@ -85,6 +85,23 @@ by absent empirical predictor, coloring, teacher, or residual objects.
 - Score credit: `0` until each parent archive and native resource inheritance
   are verified.
 
+#### EPT-1 solid-payload composition
+
+- Proposal: `exact_solid_payload_b2_v1`
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripsolidlzma_v1`
+- Construction: concatenate the recovered loader-identical executable and
+  dictionary, encode them as one LZMA-alone payload, and split the exact decoded
+  bytes at offset `722448`.
+- Exact payload result: one `452488`-byte stream versus `452649` bytes for the
+  two ELI streams, saving `161` payload bytes.
+- Complete package result: `454036` bytes versus ELI's `454876`, saving exactly
+  `840` counted program bytes after the smaller wrapper is included.
+- Evidence: `results/exact_solid_payload_b2_v1/screen.json` and
+  `results/exact_solid_payload_b2_v1/materialization.json`.
+- Pending gate: `20260727T200845Z_6da7fed519`.
+- Score credit: `0` until native archive identity, roundtrip, deterministic
+  re-encode, and resource inheritance pass.
+
 ### ELI-1: ELF load-image equivalence
 
 - Problem: `docs/elf_load_image_equivalence_problem.md`
