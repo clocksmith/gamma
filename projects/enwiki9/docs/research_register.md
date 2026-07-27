@@ -2070,3 +2070,10 @@ The exact rational verifier passes strict-boundary and non-strict synthetic cont
 Source inspection fixes the actual Compact5 coder boundary. `write_sym` recursively bisects the active vocabulary and calls `put_bit` with `prob0 = clamp(lrintf(p0*32768/p),1,32767)`. HRQ-1 proves that a student can predict only the visited integer branch frequencies. It need not reconstruct or ship the full floating distribution.
 
 The observation patch records execution index, symbol, vocabulary, coder counts, branch bits, and exact 15-bit frequencies after the normal coding operations. The verifier checks the unique split path and archive neutrality. This directly supersedes the retired suffix-centroid student representation, but it remains uninstantiated until a mature batch-1 trace and compact causal branch student exist. Score credit is zero.
+
+The existing 1,231-row batch-1 distribution trace was converted through the
+pinned `vec_sum_f32` implementation into 9,848 branch targets. The 65,267-byte
+derived trace passes split and coder-continuity verification. A matched
+branch-centroid screen tested twelve depth/support configurations. Soft teacher
+centroids lost to hard-label controls in all twelve by 792.032 to 1,502.377
+ideal bits. This retires scalar suffix centroids, not HRQ stateful students.

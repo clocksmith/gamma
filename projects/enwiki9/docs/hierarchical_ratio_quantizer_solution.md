@@ -117,3 +117,17 @@ construct a compact causal student. Score credit additionally requires:
 3. full-corpus score at or below the target;
 4. deterministic roundtrip;
 5. official CPU runtime, memory, disk, and no-GPU eligibility.
+
+## Frozen startup instantiation
+
+The pinned `libnc.so` converted a verified 1,231-symbol batch-1 distribution
+trace into 9,848 branch targets. The trace shrank from 1,314,724 to 65,267
+bytes. Its vocabulary is 256, its minimum and maximum integer frequencies are
+72 and 32,702, and every split path and coder-count transition verifies.
+
+A matched scalar-centroid screen tested suffix depths zero through two and
+minimum supports 2, 4, 8, and 16. Teacher-frequency centroids lost to
+hard-label tables in every configuration by 792.032 to 1,502.377 ideal bits on
+the chronological startup holdout. The scalar centroid representation is
+therefore terminal at startup. HRQ-1 remains open only for a genuinely
+stateful student and mature teacher evidence.
