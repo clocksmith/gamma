@@ -12,9 +12,9 @@ They do not prove a target result and do not replace exact gate promotion.
 
 ## Active Gate Context
 
-- Active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Active scope bytes: `1,000,000`
-- cmix21 candidates with result or guard evidence: `75`
+- Active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Active scope bytes: `10,000,000`
+- cmix21 candidates with result or guard evidence: `76`
 
 ## Observed Knob Values
 
@@ -30,7 +30,7 @@ They do not prove a target result and do not replace exact gate promotion.
 
 | Candidate | PPMD KiB | PAQ | FXCM-RCM | RCM | Buffer | Guards | Latest prefix | Prefix archive | 10M archive | 10M RSS | 100M RSS |
 |---|---:|---:|---:|---:|---|---|---:|---:|---:|---|---|
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 20,352 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 250,000 | 45,178 | n/a | missing | missing |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 20,352 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 250,000 | 45,178 | n/a | running; terminal margin pending | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | 40,960 | 5 | n/a | 32 | bufsixtyfourth | n/a | 1,000,000 | 174,395 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | n/a | 1,000,000 | 174,396 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | ppmdguard | 1,000,000 | 174,396 | n/a | missing | missing |

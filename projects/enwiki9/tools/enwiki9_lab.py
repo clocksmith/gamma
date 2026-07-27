@@ -452,6 +452,7 @@ def enqueue_job(
     gate_size: int,
     priority: int | None,
     heavy: bool | None,
+    archive_ceiling: int | None,
     purpose: str,
     force: bool,
     tags: list[str],
@@ -460,6 +461,8 @@ def enqueue_job(
     candidate_meta(candidate_id)
     if gate_size <= 0:
         raise ValueError("gate size must be positive")
+    if archive_ceiling is not None and archive_ceiling <= 0:
+        raise ValueError("archive ceiling must be positive")
     key = job_key(candidate_id, gate_size)
     if not force and key in known_job_keys():
         raise ValueError(
@@ -481,6 +484,8 @@ def enqueue_job(
         "tags": sorted(set(tags)),
         "submitted_at": utc_now(),
     }
+    if archive_ceiling is not None:
+        job["archive_ceiling"] = archive_ceiling
     filename = f"{999 - max(0, min(999, priority_value)):03d}_{job_id}.json"
     atomic_json(QUEUE_DIRS["pending"] / filename, job)
     return job
@@ -553,6 +558,7 @@ def discover_candidates(
                 gate_size=gate,
                 priority=None,
                 heavy=None,
+                archive_ceiling=None,
                 purpose="adaptive_discovery",
                 force=False,
                 tags=["adaptive"],
@@ -622,9 +628,22 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
         "--gate-size",
         str(gate_size),
         "--run",
-        "--update-meta",
         "--json",
     ]
+    if str(job.get("purpose", "")).strip().lower() not in {
+        "infrastructure",
+        "diagnostic",
+        "oracle",
+    }:
+        command.append("--update-meta")
+    archive_ceiling = job.get("archive_ceiling")
+    if isinstance(archive_ceiling, int) and archive_ceiling > 0:
+        command.extend(
+            [
+                "--archive-ceiling",
+                f"{gate_size}:{archive_ceiling}",
+            ]
+        )
     if job.get("respect_heavy_lock") is True:
         command.append("--respect-heavy-lock")
 
@@ -776,6 +795,7 @@ def add_enqueue_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--gate-size", type=int, default=1_024)
     parser.add_argument("--priority", type=int)
     parser.add_argument("--heavy", action=argparse.BooleanOptionalAction, default=None)
+    parser.add_argument("--archive-ceiling", type=int)
     parser.add_argument("--purpose", default="manual")
     parser.add_argument("--tag", action="append", default=[])
     parser.add_argument("--force", action="store_true")
@@ -986,6 +1006,7 @@ def main() -> int:
                     gate_size=args.gate_size,
                     priority=args.priority,
                     heavy=args.heavy,
+                    archive_ceiling=args.archive_ceiling,
                     purpose=args.purpose,
                     force=args.force,
                     tags=args.tag,
@@ -1013,6 +1034,7 @@ def main() -> int:
                     gate_size=args.gate_size,
                     priority=args.priority,
                     heavy=args.heavy,
+                    archive_ceiling=args.archive_ceiling,
                     purpose=args.purpose,
                     force=args.force,
                     tags=args.tag,
@@ -1025,6 +1047,7 @@ def main() -> int:
                 gate_size=args.gate_size,
                 priority=args.priority,
                 heavy=args.heavy,
+                archive_ceiling=args.archive_ceiling,
                 purpose=args.purpose,
                 force=args.force,
                 tags=args.tag,

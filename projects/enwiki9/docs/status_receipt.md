@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-27T05:12:00+00:00`
+- Generated at UTC: `2026-07-27T18:29:20+00:00`
 
 ## Target State
 
@@ -12,106 +12,90 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Summary
 
-- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Scope bytes: `1,000,000`
-- Gate verdict: `roundtrip_fail`
-- Gate next action: `record_roundtrip_failure`
-- Heavy lock held: `false`
-- Active scorer observed: `false`
-- Active cmix mode: `n/a`
-- Driver result present: `true`
-- RSS guard status: `complete`
-- RSS samples: `1,587`
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Scope bytes: `10,000,000`
+- Gate verdict: `running`
+- Gate next action: `wait_for_gate_completion`
+- Heavy lock held: `true`
+- Active scorer observed: `true`
+- Active cmix mode: `decode`
+- Driver result present: `false`
+- RSS guard status: `running`
+- RSS samples: `5,657`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `9,614,792`
-- Latest sampled single RSS KiB: `0`
-- Tightest binary single-process margin KiB: `870,968`
-- Tightest decimal single-process margin KiB: `150,833`
-- Latest binary single-process margin KiB: `10,485,760`
-- Latest decimal single-process margin KiB: `9,765,625`
+- Max sampled single RSS KiB: `9,607,364`
+- Latest sampled single RSS KiB: `9,603,304`
+- Tightest binary single-process margin KiB: `878,396`
+- Tightest decimal single-process margin KiB: `158,261`
+- Latest binary single-process margin KiB: `882,456`
+- Latest decimal single-process margin KiB: `162,321`
 - Safe to launch heavy gate: `false`
-- Terminal verdict present: `true`
-- Command source: `cmix21_gate_decider.apply_terminal_command`
+- Terminal verdict present: `false`
+- Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves 10.95%.`
 
 ## Active Gate
 
-- Heavy lock held: `false`
-- Gate verdict: `roundtrip_fail`
-- Next action: `record_roundtrip_failure`
-- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Scope bytes: `1,000,000`
-- Driver result JSON: `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T010740.json`
-- Driver result present: `true`
-- RSS guard JSON: `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmidx5_7_17div2_1000000_screen_rss_guard.json`
+- Heavy lock held: `true`
+- Gate verdict: `running`
+- Next action: `wait_for_gate_completion`
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Scope bytes: `10,000,000`
+- Driver result JSON: `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/receipt.json`
+- Driver result present: `false`
+- RSS guard JSON: `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_10000000_exact_rss_guard.json`
 - RSS guard present: `true`
-- Active scorer observed: `false`
-- Live gate: `false`
-- Liveness classification: `not_persisted_running`
+- Active scorer observed: `true`
+- Live gate: `true`
+- Liveness classification: `live_observed_owner`
 - Matching adaptive jobs: `0`
 - Matching controllers: `0`
-- Matching driver observed: `false`
+- Matching driver observed: `true`
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive running job backed by the host-local heavy lock. The lock alone never identifies a gate.`
-- RSS guard status: `complete`
-- RSS guard JSON bytes: `1,150`
-- RSS guard JSON modified UTC: `2026-07-27T05:07:40+00:00`
-- RSS guard JSON SHA-256: `d5f9f3f9a274873b2b455227636379b8df38068744d5c0c32b90ec5e21b5897f`
-- RSS samples: `1,587`
-- Max sampled single RSS KiB: `9,614,792`
-- Max sampled tree RSS KiB: `9,635,504`
-- Single-process RSS margin KiB: `870,968`
-- Single-process decimal `10GB` margin KiB: `150,833`
-- Tree RSS margin KiB: `850,256`
-- Tree decimal `10GB` margin KiB: `130,121`
-- Latest sampled single RSS KiB: `0`
-- Latest sampled tree RSS KiB: `0`
-- Latest sampled single-process margin KiB: `10,485,760`
-- Latest sampled single-process decimal `10GB` margin KiB: `9,765,625`
-- Latest sampled tree margin KiB: `10,485,760`
-- Latest sampled tree decimal `10GB` margin KiB: `9,765,625`
-
-## Gate Result Diagnostics
-
-- Archive bytes: `174,531`
-- Program bytes: `564,273`
-- Local score: `738,804`
-- Archive b/B: `1.3962480`
-- Required full archive bytes for `10.95%`: `107,435,727`
-- Linear archive projection score: `175,095,273`
-- Diagnostic note: `linear projection is not a proof; use it only to compare slope pressure`
-
-## Terminal Gate Command
-
-```bash
-python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 --scope 1000000 --apply-terminal --normalize
-```
+- RSS guard status: `running`
+- RSS guard JSON bytes: `1,392`
+- RSS guard JSON modified UTC: `2026-07-27T18:29:17+00:00`
+- RSS guard JSON SHA-256: `ec09a25342455faf28202140bf6b95bbd61cd019a589964f89e557a7db72de9e`
+- RSS samples: `5,657`
+- Max sampled single RSS KiB: `9,607,364`
+- Max sampled tree RSS KiB: `9,636,872`
+- Single-process RSS margin KiB: `878,396`
+- Single-process decimal `10GB` margin KiB: `158,261`
+- Tree RSS margin KiB: `848,888`
+- Tree decimal `10GB` margin KiB: `128,753`
+- Latest sampled single RSS KiB: `9,603,304`
+- Latest sampled tree RSS KiB: `9,634,476`
+- Latest sampled single-process margin KiB: `882,456`
+- Latest sampled single-process decimal `10GB` margin KiB: `162,321`
+- Latest sampled tree margin KiB: `851,284`
+- Latest sampled tree decimal `10GB` margin KiB: `131,149`
 
 ## Gate Evidence Status
 
-- Claim status: `scored_gate_result_present`
-- Driver result terminal: `true`
-- RSS guard terminal: `true`
-- Scored gate result present: `true`
-- Live guard only: `false`
+- Claim status: `live_guard_monitor_only`
+- Driver result terminal: `false`
+- RSS guard terminal: `false`
+- Scored gate result present: `false`
+- Live guard only: `true`
 - Claim rule: `Only a terminal driver result with roundtrip evidence can become a benchmark row.`
 
 ## Observed Gate Command
 
-- Expected candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Expected scope bytes: `1,000,000`
-- Driver process count: `0`
-- Active gate command observed: `false`
+- Expected candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Expected scope bytes: `10,000,000`
+- Driver process count: `1`
+- Active gate command observed: `true`
 - Driver command mismatch count: `0`
 
 | PID | Candidate Match | Scope Bytes | Scope Match | Determinism Flag |
 |---:|---|---:|---|---|
-| n/a | n/a | n/a | n/a | n/a |
+| 265,690 | `true` | 10,000,000 | `true` | `true` |
 
 ## Observed Controller Command
 
-- Expected active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Expected active scope bytes: `1,000,000`
+- Expected active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Expected active scope bytes: `10,000,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -122,22 +106,18 @@ python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd
 ## Operator Action
 
 - Safe to launch heavy gate: `false`
-- Action: `record_failure_and_stop_promotion`
-- Reason: `a failed constructive gate cannot be promoted`
-- Allowed work: `n/a`
-- Forbidden work: `n/a`
+- Action: `wait_for_current_gate_receipts`
+- Reason: `the serialized scorer lane is already owned by an observed guarded process`
+- Allowed work: `refresh status receipt; inspect driver and RSS receipts; update documentation and accounting ledgers; work on shadow-coder specs from cached logs`
+- Forbidden work: `launch another compression gate; package a fallback candidate; run result-corpus forecast scans; change active candidate source`
 
 ## Handoff
 
-- Terminal verdict present: `true`
-- Heavy gate mutation allowed: `true`
-- Recommended action: `record_failure_and_stop_promotion`
-- Command source: `cmix21_gate_decider.apply_terminal_command`
+- Terminal verdict present: `false`
+- Heavy gate mutation allowed: `false`
+- Recommended action: `wait_for_current_gate_receipts`
+- Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves 10.95%.`
-- Apply terminal command:
-```bash
-python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1 --scope 1000000 --apply-terminal --normalize
-```
 
 ## Operator Logs
 
@@ -148,35 +128,64 @@ python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `552`
-- Registered programs: `229`
-- Untracked nonignored entries: `91`
-- Modified tracked entries: `15`
-- Candidate statuses: `active=22, blocked_dependency=31, candidate=5, measured_negative=89, retired=399, track_source_before_evolution=6`
+- Program directories: `562`
+- Registered programs: `231`
+- Untracked nonignored entries: `25`
+- Modified tracked entries: `11`
+- Candidate statuses: `active=22, blocked_dependency=31, candidate=6, measured_negative=90, retired=411, track_source_before_evolution=2`
 
 ## Active Runner Process Table
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| n/a | n/a | n/a | n/a | n/a |
+| `lock_wrapper` | 265,685 | 3,250,165 | 1,792 | `flock -n /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decim...` |
+| `rss_guard` | 265,689 | 265,685 | 14,080 | `python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --guard-json...` |
+| `driver` | 265,690 | 265,689 | 31,172 | `python3 projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmap...` |
+| `native_cmix` | 302,319 | 265,690 | 9,603,304 | `/tmp/cmix21-mmap-bin-56pc3n75 -d /tmp/cmix21-mmap-dict-zmmck3q4 /tmp/tmp2q4qrc6n/in /tmp/tmp2q4qrc6n/out` |
+| `lock_wrapper` | 308,375 | 3,250,165 | 1,664 | `flock /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmidx5_7_17div2_10000000_screen.log` | 0 | `2026-07-27T05:08:11+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmidx5_7_17div2_10000000_screen.pid` | 7 | `2026-07-27T05:08:11+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmidx5_7_17div2_1000000_screen_rss_guard.json` | 1,150 | `2026-07-27T05:07:40+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T010740.json` | 1,591 | `2026-07-27T05:07:40+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmidx5_7_17div2_250000_determinism_rss_guard.json` | 1,021 | `2026-07-27T04:40:23+00:00` |
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T004022.json` | 1,852 | `2026-07-27T04:40:22+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_10000000_exact_rss_guard.json` | 1,392 | `2026-07-27T18:29:17+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_1000000_screen_rss_guard.json` | 1,149 | `2026-07-27T10:36:55+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T063653.json` | 1,607 | `2026-07-27T10:36:53+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_250000_determinism_rss_guard.json` | 1,150 | `2026-07-27T10:09:49+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T060947.json` | 1,918 | `2026-07-27T10:09:47+00:00` |
+
+## Active RSS
+
+- Max cmix PID: `302319`
+- Active cmix mode: `decode`
+- Max cmix RSS KiB: `9,603,304`
+- Active process tree RSS KiB: `9,652,012`
+- Local binary `10GiB` guard KiB: `10,485,760`
+- Decimal `10GB` guard KiB: `9,765,625`
+- Single-process binary margin KiB: `882,456`
+- Single-process decimal margin KiB: `162,321`
+- Active process tree margin KiB (binary): `833,748`
+- Active process tree decimal margin KiB: `113,613`
+- Temp input path: `/tmp/tmp2q4qrc6n/in`
+- Temp output path: `/tmp/tmp2q4qrc6n/out`
+- Temp output staging path: `/tmp/tmp2q4qrc6n/out.cmix.temp`
+- Temp input bytes: `1,638,173`
+- Temp output bytes: `n/a`
+- Temp output staging bytes: `4,890,624`
+- Temp input modified UTC: `2026-07-27T15:00:33+00:00`
+- Temp output modified UTC: `n/a`
+- Temp output staging modified UTC: `2026-07-27T18:28:53+00:00`
+- Process read bytes: `229,376`
+- Process write bytes: `4,890,624`
+- Decode scope progress: `4,890,624` / `10,000,000` bytes (`48.906%`)
+- Decode remaining scope bytes: `5,109,376`
 
 ## Contingencies
 
 - If current gate passes: `promote unchanged`
-- Pass next scope: `10,000,000`
+- Pass next scope: `100,000,000`
 - If RSS fails: `record RSS failure and package lower PPMD cap`
-- Lower candidate: `cmix21_text_mmap_paq5_ppmd20224k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Lower candidate: `cmix21_text_mmap_paq5_ppmd20224k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
 - Lower PPMD KiB: `20,224`
 - If roundtrip or determinism fails: `record failure and do not promote`
 

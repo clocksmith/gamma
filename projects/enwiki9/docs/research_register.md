@@ -1716,3 +1716,60 @@ but no local trace currently supplies that antecedent.
 - The MV-2 250K exact gate passed at archive 45,178 bytes, program 564,273 bytes, exact roundtrip, deterministic replay, and 9,441,308 KiB peak single-process RSS. The 1M one-pass screen produced 174,531 bytes with 150,833 KiB decimal margin; it is shadow evidence only.
 - A lock-held 10M one-pass MV-2 screen is active as PID 215555. It receives zero score credit until a full roundtrip and deterministic replay are completed.
 - `BP-1 Fixed-Range Bucket Packing` proves that reducing FXCM ContextMap2 associativity from 14 to 10 changes the minimum 32-byte-grained cell from 128 to 96 bytes while preserving the hash bucket range. Source support is implemented but unbuilt and unmeasured while MV-2 owns the heavy lock.
+
+## 2026-07-27 - FXCM full-idx13 plus PPMD joint budget composition
+
+- Proposal: `fxcm_idx13_ppmd_joint_budget_v1`
+- Candidate: `cmix21_text_mmap_paq5_ppmd44928k_fxcmassoc10tight92_fxcmidx13full_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Parent: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_fxcmidx13full_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Mechanism: compose the semantics-preserving 92-byte FXCM cell layout, complete `idx13` capacity, and a PPMD arena increased from `20,352 KiB` to `44,928 KiB`.
+- Mathematical receipt: `results/fxcm_joint_budget_composition_v1/theorem_verifier.json` proves an exact static payload delta of `106,283,008` bytes (`103,792 KiB`) relative to B2.
+- Counted program package: `564,157` bytes.
+- Status: materialized and unmeasured. It is not queued ahead of the active B2 gate or the already queued SLC archive-identity control.
+- Promotion: exact roundtrip, deterministic second archive, decimal-memory guard, and archive improvement over both matched single-slice controls at identical scope.
+- Kill: any reconstruction, determinism, or resource failure, or no archive gain over both controls.
+- Score credit: `0` bytes.
+
+## 2026-07-27 - NC5 native-domain candidate materialization
+
+- Proposal: `nncp_compact5_preprocessed_maturity_v1`
+- Candidate: `nncp_compact5_preprocessed_v1`
+- Mechanism: standalone five-layer compact causal NNCP in the official reversible preprocessed symbol domain, without WRT transfer or teacher-state transmission.
+- Candidate payload: `313,439` counted bytes: `2,150` bytes for `program.py` plus the canonical `311,289`-byte CPU source closure.
+- Materialization receipt: `results/nncp_compact5_candidate_materialization_v1/receipt.json`.
+- Package SHA-256: `79e5e7152ef2b419528157ae86e14570b0a87a4cb12765628963d415522f0102`.
+- Frozen first gate: exact opening `1,000,000` raw bytes, archive ceiling `250,000`, deterministic second archive, exact raw roundtrip, and resource receipt.
+- Status: materialized and unmeasured; native execution remains serialized behind B2 and SLC.
+- Score credit: `0` bytes.
+
+## 2026-07-27 - Canonical endpoint428 frontier materialization blocker
+
+- Candidate: `endpoint428_gate_dot_fuse_output_update_loop_v1`.
+- Frontier forecast: `109,389,323`; nominal design debt: `1,389,323`; exact full-1G result: absent.
+- The adaptive workflow rejected a full-1G enqueue because `programs/endpoint428_gate_dot_fuse_output_update_loop_v1/meta.json` does not exist.
+- The exact `280,147`-byte source package named by the 10M receipt has SHA-256 `19ddcc4ec1b6f31958bed4aa19c0fbc83a56c78121933e1447e4ee011547aee0`, but the receipt points to unavailable `/home/x/enwik9-nonproof` artifacts. No matching package, bundle, clean wrapper, or source root was found under the local nonproof root.
+- Blocker receipt: `results/endpoint428_frontier_materialization_v1/blocker.json`.
+- Required fix: recover the hash-matching source package from the originating host or reconstruct it from complete committed lineage, materialize the candidate, then enqueue exact full-1G proof.
+- This host-level blocker does not invalidate the existing exact 10M receipt. It prevents a reproducible full-1G gate here.
+- Score credit: `0` bytes.
+
+## 2026-07-27 - FXCM balanced minimum-priority replacement ties
+
+- Proposal: `fxcm_balanced_min_tie_v1`.
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10balmin_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`.
+- Mechanism: on an FXCM checksum miss, retain minimum-priority replacement but select among equal minima using the checksum modulo the tie count instead of unconditional lowest-slot order.
+- Mathematical result: every selected slot is eligible and minimum-priority; over all 16-bit checksums, tied selection counts differ by at most one; encoder/decoder synchronization follows by state induction.
+- Evidence: `docs/fxcm_balanced_min_tie_problem.md`, `docs/fxcm_balanced_min_tie_solution.md`, `results/fxcm_balanced_min_tie_v1/theorem_verifier.json`, and `patches/fxcm_balanced_min_tie_v1.patch`.
+- Counted program package: `564,622` bytes.
+- Frozen gate: exact `250,000` raw bytes with roundtrip, deterministic second archive, decimal-memory receipt, and strict archive improvement over the unchanged parent.
+- Status: materialized and queued behind the current serialized gates.
+- Score credit: `0` bytes.
+
+### NC5 10k infrastructure smoke
+
+- Adaptive job `20260727T182229Z_02002f03ac` completed successfully on `10,000` raw bytes.
+- Archive: `6,229` bytes; counted program: `313,439` bytes; exact raw roundtrip: pass; fresh second archive: byte-identical; archive SHA-256: `f5c71060344fcd7ad182dba2dca84f936c2a801281ca58ed5fe9eb8c5a156e26`.
+- Receipt: `results/nncp_compact5_preprocessed_smoke_v1/receipt.json`.
+- This is infrastructure evidence only. Startup comparison against LZMA does not test the frozen maturity hypothesis and must not retire the candidate.
+- The adaptive runner was corrected so `infrastructure`, `diagnostic`, and `oracle` jobs no longer mutate candidate status. NC5 was restored to `candidate` through the canonical contract check.
+- Next decision remains the exact opening-1M native-domain gate. Score credit remains `0` bytes.

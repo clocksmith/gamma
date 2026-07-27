@@ -41,6 +41,7 @@ A 100M RSS pass would still not prove a full 1G target result.
 | 20,608 | `cmix21_text_mmap_paq5_ppmd20608k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,521 | missing | n/a | n/a | n/a | missing | missing | n/a |
 | 20,480 | `cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,519 | missing | n/a | n/a | n/a | missing | missing | n/a |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | 1,000,000 | 738,785 | rss pass (1,654,584 KiB margin) | 1,638,340 | 2,202,600 | true | rss pass (1,614,424 KiB margin) | missing | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/2026-07-12T005633.json` |
+| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 250,000 | 609,324 | rss pass (913,468 KiB margin) | n/a | n/a | n/a | rss running (terminal margin pending) | missing | n/a |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,521 | missing | n/a | n/a | n/a | missing | missing | n/a |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 250,000 | 609,451 | missing | n/a | n/a | n/a | missing | missing | n/a |
 | 20,224 | `cmix21_text_mmap_paq5_ppmd20224k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,024 | 564,520 | missing | n/a | n/a | n/a | missing | missing | n/a |
@@ -84,6 +85,7 @@ decimal_10gb_guard_kib = 9,765,625
 | 20,608 | `cmix21_text_mmap_paq5_ppmd20608k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
 | 20,480 | `cmix21_text_mmap_paq5_ppmd20480k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | within (934,449 KiB margin; tree 913,521 KiB margin) | within (894,289 KiB margin; tree 854,193 KiB margin) | missing |
+| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | within (193,333 KiB margin; tree 172,381 KiB margin) | running (terminal margin pending) | missing |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
 | 20,224 | `cmix21_text_mmap_paq5_ppmd20224k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | missing | missing | missing |
@@ -95,16 +97,16 @@ This section asks whether the measured PPMD cap ladder alone can close the
 decimal `10GB` memory gap. It uses `10M` single-process RSS guard receipts
 when those receipts are available.
 
-- Active/reference cap: `ppmd22400k` at `22,400` KiB.
-- Active/reference `10M` max single RSS: `10,483,012` KiB.
-- Active/reference decimal `10GB` margin: `-717,387` KiB.
-- Observed cap span: `22,400` -> `20,736` KiB.
-- Observed RSS drop across that span: `+10,368` KiB.
-- Observed RSS drop per KiB cap cut: `6.230769` KiB/KiB.
-- PPMD-only cap cut needed for decimal `10GB`: `115,137` KiB.
-- Projected PPMD cap after that cut: `-92,737` KiB.
-- PPMD-only feasibility verdict: `not feasible`; decimal admissibility needs another memory surface or an official accounting decision that accepts binary `10GiB`.
-- Certificate active scope at render time: `1,000,000` bytes.
+- Active/reference cap: `ppmd20352k` at `20,352` KiB.
+- Active/reference `10M` max single RSS: `9,607,364` KiB.
+- Active/reference decimal `10GB` margin: `+158,261` KiB.
+- Observed cap span: `22,400` -> `20,352` KiB.
+- Observed RSS drop across that span: `+875,648` KiB.
+- Observed RSS drop per KiB cap cut: `427.5625` KiB/KiB.
+- PPMD-only cap cut needed for decimal `10GB`: `0` KiB.
+- Projected PPMD cap after that cut: `20,352` KiB.
+- PPMD-only feasibility verdict: `possible by slope`; validate with exact gates before promotion.
+- Certificate active scope at render time: `10,000,000` bytes.
 
 ## Adjacent Archive Delta
 
@@ -142,7 +144,7 @@ when those receipts are available.
 - `ppmd20864k` has exact `10M` replay evidence but failed recorded `100M` RSS by `68` KiB. Decimal `10GB` overage would be `720,203` KiB.
 - The next lower cap `40,960` KiB already has historical package rows (`ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`, `ppmd40m`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
 - The next lower cap `21,504` KiB already has historical package rows (`ppmd21m`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
+- The next lower cap `20,352` KiB already has historical package rows (`ppmd20352k`, `ppmd20352k`, `ppmd20352k`, `ppmd20352k`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
+- `ppmd20352k` is the active restarted ladder: active gate is `10,000,000` bytes with RSS status rss running (terminal margin pending).
 - The next lower cap `20,352` KiB already has historical package rows (`ppmd20352k`, `ppmd20352k`, `ppmd20352k`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
-- `ppmd20352k` is the active restarted ladder: latest exact prefix `250,000` scored `609,451`; active gate RSS status is missing. Certificate active gate is `1,000,000` bytes.
-- The next lower cap `20,352` KiB already has historical package rows (`ppmd20352k`, `ppmd20352k`). A newly packaged same-cap candidate is a separate evidence lineage and must restart prefix gates.
-- The next mutation should wait until the active restarted ladder records its current gate.
+- The next mutation should wait until this live guard records a terminal receipt.
