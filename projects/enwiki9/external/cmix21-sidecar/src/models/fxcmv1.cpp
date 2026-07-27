@@ -158,6 +158,18 @@ namespace fxcmv1 {
 #define CMIX_FXCM_CMC2_IDX17_DIV 1
 #endif
 
+#ifndef CMIX_FXCM_CMC2_ASSOC
+#define CMIX_FXCM_CMC2_ASSOC 14
+#endif
+
+#if CMIX_FXCM_CMC2_ASSOC == 14
+#define CMIX_FXCM_CMC2_CELL_BYTES 128
+#elif CMIX_FXCM_CMC2_ASSOC == 10
+#define CMIX_FXCM_CMC2_CELL_BYTES 96
+#else
+#error "CMIX_FXCM_CMC2_ASSOC must be 10 or 14"
+#endif
+
 inline int fxcm_pow2_table_bytes(int bytes, int grain) {
     int units = bytes / grain;
     if (units < 1) return grain;
@@ -1612,6 +1624,8 @@ union  E1 {  // hash element, 64 bytes
     
 };
 
+typedef E1<CMIX_FXCM_CMC2_ASSOC, CMIX_FXCM_CMC2_CELL_BYTES> FxcmCmc2Cell;
+
 struct ContextMap2 {
   int C;  // max number of contexts
   U8* cp[MAXCXT];   // C pointers to current bit history
@@ -1629,7 +1643,7 @@ struct ContextMap2 {
   int cms,cms3,cms4;
   int kep;
   const U8 *nn;
-  E1<14,128> *ptr,*t;  // Double sized BH
+  FxcmCmc2Cell *ptr,*t;
   U32 tmask;
   int skip2;
   U16 cxtMask;
@@ -1661,7 +1675,7 @@ void __attribute__ ((noinline)) Init(U32 m1, int c, int s3,const U8 *nn1,int cs4
     cms3=s3;
     skip2=u;
     assert(m>=64 && (m&m-1)==0);  // power of 2?
-    assert(sizeof(E<3,32>)==32);
+    assert(sizeof(FxcmCmc2Cell)==CMIX_FXCM_CMC2_CELL_BYTES);
 
     alloc(sm,C);
     for (int i=0; i<C; i++) 
@@ -1757,7 +1771,8 @@ int __attribute__ ((noinline))  mix() {
         mix4();
     } else {
     if (cp[i]) {
-      assert(cp[i]>=&t[0].bh[0][0] && cp[i]<=&t[tmask].bh[14][6]);
+      assert(cp[i]>=&t[0].bh[0][0] &&
+          cp[i]<=&t[tmask].bh[CMIX_FXCM_CMC2_ASSOC-1][6]);
       assert(((long long)(cp[i])&127)>=29);
       *cp[i]=next(*cp[i], x.y);
     }

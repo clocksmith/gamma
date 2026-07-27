@@ -5,6 +5,10 @@ Version: `ACS-PROVER-LIBRARY-1`
 
 This is not a precommitted examination and creates no solver-pass claim.
 
+The corresponding formal independent problem bank is
+`docs/acs_prover_problem_set.md`. Its provenance explicitly states that the
+constructive manuscripts predate the formal specification.
+
 ## Canonical status
 
 ```text

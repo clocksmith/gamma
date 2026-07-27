@@ -109,6 +109,37 @@ is complete, but this artifact cannot govern a candidate examination unless an
 independent future Seal decision reports `BOUND`. No existing submission is
 retroactively graded against this draft.
 
+## ACS-MATH-DRAFT-3-WORKING
+
+```text
+artifact:
+  docs/atlas_clockwork_seal_problem_set_v3.md
+state:
+  EXPERT_REVIEW_WORKING_COPY
+seal_state:
+  UNBOUND
+governs_existing_submissions:
+  false
+```
+
+Draft 3 is a separate successor problem bank. It preserves Draft 2 and makes
+four mathematical upgrades:
+
+1. A2 asks for asymptotic sharpness of the one-bit-per-block integer penalty,
+   and A4 identifies the exact finite prefix price with canonical Huffman
+   merging.
+2. B4 uses the sharper nonempty-interval count valid for total systems.
+3. C2 requires exact equality only for an explicit compatible scalar lattice
+   construction and uses supremal sharpness for arbitrary real contraction
+   bounds. It does not overstate exact attainment for every rational
+   contraction.
+4. D3 replaces the previous loose `+1` depth estimate by
+   \(\lceil\log_2r_E(x)\rceil\) and requests an extremal family proving the
+   universal bound sharp.
+
+This working copy has no frozen hash, receives no Seal status, and cannot be
+distributed as a candidate examination before independent adversarial review.
+
 ## Submission ACS-ABC-20260726T203531Z-b7dd49a0
 
 `ACS-MATH-DRAFT-1` received a normalized combined solution for Problems A,

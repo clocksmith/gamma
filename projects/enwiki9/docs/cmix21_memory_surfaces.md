@@ -12,13 +12,13 @@ They do not prove a target result and do not replace exact gate promotion.
 
 ## Active Gate Context
 
-- Active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
-- Active scope bytes: `250,000`
-- cmix21 candidates with result or guard evidence: `69`
+- Active candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`
+- Active scope bytes: `1,000,000`
+- cmix21 candidates with result or guard evidence: `75`
 
 ## Observed Knob Values
 
-- PPMD caps KiB: `20352`, `20480`, `20608`, `20736`, `20864`, `20992`, `21120`, `21248`, `21376`, `21504`, `21632`, `21760`, `21888`, `22272`, `22400`, `22528`, `23552`, `24576`, `25600`, `35840`, `40960`, `51200`, `61440`, `71680`, `75776`, `76800`, `102400`
+- PPMD caps KiB: `1024`, `11776`, `19968`, `20096`, `20224`, `20352`, `20480`, `20608`, `20736`, `20864`, `20992`, `21120`, `21248`, `21376`, `21504`, `21632`, `21760`, `21888`, `22272`, `22400`, `22528`, `23552`, `24576`, `25600`, `35840`, `40960`, `51200`, `61440`, `71680`, `75776`, `76800`, `102400`
 - PAQ levels: `5`, `9`
 - FXCM-RCM values: `2`, `4`, `8`, `16`, `20`, `21`, `22`, `24`, `28`
 - RCM values: `32`
@@ -30,7 +30,7 @@ They do not prove a target result and do not replace exact gate promotion.
 
 | Candidate | PPMD KiB | PAQ | FXCM-RCM | RCM | Buffer | Guards | Latest prefix | Prefix archive | 10M archive | 10M RSS | 100M RSS |
 |---|---:|---:|---:|---:|---|---|---:|---:|---:|---|---|
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 20,352 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,024 | 247 | n/a | missing | missing |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 20,352 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 250,000 | 45,178 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | 40,960 | 5 | n/a | 32 | bufsixtyfourth | n/a | 1,000,000 | 174,395 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | n/a | 1,000,000 | 174,396 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard_minmaps_v1` | 40,960 | 5 | 20 | 32 | bufsixtyfourth | ppmdguard | 1,000,000 | 174,396 | n/a | missing | missing |
