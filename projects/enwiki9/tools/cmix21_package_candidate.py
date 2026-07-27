@@ -17,6 +17,7 @@ import pathlib
 import shutil
 import subprocess
 import sys
+import tempfile
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -123,6 +124,16 @@ def parse_define(raw: str) -> str:
     return raw
 
 
+def merge_defines(parent: list[str], child: list[str]) -> list[str]:
+    merged: dict[str, str] = {}
+    for item in [*parent, *child]:
+        if not isinstance(item, str) or not item.startswith("-D") or "=" not in item:
+            raise ValueError(f"invalid inherited compile define: {item!r}")
+        name = item[2:].split("=", 1)[0]
+        merged[name] = item
+    return list(merged.values())
+
+
 def payload_manifest(program_dir: pathlib.Path) -> tuple[dict[str, int], dict[str, str]]:
     sizes: dict[str, int] = {}
     hashes: dict[str, str] = {}
@@ -133,10 +144,22 @@ def payload_manifest(program_dir: pathlib.Path) -> tuple[dict[str, int], dict[st
     return sizes, hashes
 
 
-def build_cmix(cxx: str, cxxflags: list[str], defines: list[str]) -> str:
-    subprocess.run(["make", "-C", str(SOURCE), "clean"], check=True)
+def build_cmix(
+    source: pathlib.Path,
+    cxx: str,
+    cxxflags: list[str],
+    defines: list[str],
+) -> str:
+    subprocess.run(["make", "-C", str(source), "clean"], check=True)
     lflags = ["-std=c++14", "-Wall", *cxxflags, *defines]
-    cmd = ["make", "-C", str(SOURCE), f"CXX={cxx}", "LFLAGS=" + " ".join(lflags), "cmix"]
+    cmd = [
+        "make",
+        "-C",
+        str(source),
+        f"CXX={cxx}",
+        "LFLAGS=" + " ".join(lflags),
+        "cmix",
+    ]
     subprocess.run(cmd, check=True)
     return f"{cxx} {' '.join(lflags)}"
 
@@ -181,11 +204,26 @@ def main() -> int:
     ap.add_argument("--cxx", default="g++")
     ap.add_argument("--cxxflag", action="append", default=["-O3"])
     ap.add_argument("--define", action="append", type=parse_define, default=[])
+    ap.add_argument(
+        "--no-inherit-parent-defines",
+        action="store_true",
+        help="build only with explicitly supplied defines",
+    )
+    ap.add_argument(
+        "--patch",
+        action="append",
+        default=[],
+        help="apply a unified diff to an ephemeral source copy before building",
+    )
     ap.add_argument("--dictionary-from", default=None)
     ap.add_argument("--overwrite", action="store_true")
     args = ap.parse_args()
 
     program_dir = PROGRAMS / args.id
+    existing_meta: dict[str, Any] = {}
+    existing_meta_path = program_dir / "meta.json"
+    if existing_meta_path.is_file():
+        existing_meta = json.loads(existing_meta_path.read_text())
     if program_dir.exists() and not args.overwrite:
         raise SystemExit(f"candidate already exists: {program_dir}")
     program_dir.mkdir(parents=True, exist_ok=True)
@@ -194,16 +232,48 @@ def main() -> int:
     parent_dict = parent_dir / "english.dic.gz"
     if not parent_dict.exists():
         raise SystemExit(f"parent dictionary missing: {parent_dict}")
+    parent_meta_path = PROGRAMS / args.parent / "meta.json"
+    if not parent_meta_path.is_file():
+        raise SystemExit(f"parent metadata missing: {parent_meta_path}")
+    parent_meta = json.loads(parent_meta_path.read_text())
+    parent_defines = parent_meta.get("source", {}).get("defines", [])
+    if not isinstance(parent_defines, list):
+        raise SystemExit(f"invalid parent source.defines: {parent_meta_path}")
+    effective_defines = merge_defines(
+        [] if args.no_inherit_parent_defines else parent_defines,
+        args.define,
+    )
 
-    build_summary = build_cmix(args.cxx, args.cxxflag, args.define)
-    gzip_file(SOURCE / "cmix", program_dir / "cmix.bin.gz")
+    patch_paths = [pathlib.Path(value).resolve() for value in args.patch]
+    for patch_path in patch_paths:
+        if not patch_path.is_file():
+            raise SystemExit(f"source patch missing: {patch_path}")
+
+    with tempfile.TemporaryDirectory(prefix="cmix21-package-source-") as td:
+        build_source = SOURCE
+        if patch_paths:
+            build_source = pathlib.Path(td) / "cmix21-sidecar"
+            shutil.copytree(SOURCE, build_source)
+            for patch_path in patch_paths:
+                subprocess.run(
+                    ["git", "apply", str(patch_path)],
+                    cwd=build_source,
+                    check=True,
+                )
+        build_summary = build_cmix(
+            build_source,
+            args.cxx,
+            args.cxxflag,
+            effective_defines,
+        )
+        gzip_file(build_source / "cmix", program_dir / "cmix.bin.gz")
     shutil.copy2(parent_dict, program_dir / "english.dic.gz")
     (program_dir / "program.py").write_text(PROGRAM_TEMPLATE)
 
     sizes, hashes = payload_manifest(program_dir)
     program_size = sum(sizes.values())
     ppmd_mb = None
-    for define in args.define:
+    for define in effective_defines:
         if define.startswith("-DCMIX_PPMD_MEMORY_MB="):
             ppmd_mb = int(define.split("=", 1)[1])
 
@@ -220,20 +290,31 @@ def main() -> int:
         ],
         "source": {
             "tree": "projects/enwiki9/external/cmix21-sidecar",
+            "patches": [
+                {
+                    "path": str(path.relative_to(ROOT))
+                    if path.is_relative_to(ROOT)
+                    else str(path),
+                    "sha256": sha256(path),
+                }
+                for path in patch_paths
+            ],
             "binary": f"projects/enwiki9/programs/{args.id}/cmix.bin.gz",
             "dictionary": f"projects/enwiki9/programs/{args.id}/english.dic.gz",
             "build": build_summary,
-            "defines": args.define,
+            "defines": effective_defines,
         },
         "build": {
             "payload_files": sizes,
             "program_size": program_size,
             "payload_sha256": hashes,
         },
-        "pgsg": base_pgsg(ppmd_mb, args.define),
+        "pgsg": base_pgsg(ppmd_mb, effective_defines),
         "measured": {},
         "verdict": "Unmeasured cmix21 memory-shaping candidate.",
     }
+    if isinstance(existing_meta.get("omega"), dict):
+        meta["omega"] = existing_meta["omega"]
     (program_dir / "meta.json").write_text(json.dumps(meta, indent=2) + "\n")
     print(json.dumps({"candidate": args.id, "program_size": program_size}, indent=2))
     return 0

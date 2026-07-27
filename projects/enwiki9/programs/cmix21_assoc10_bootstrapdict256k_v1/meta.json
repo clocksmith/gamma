@@ -1,0 +1,90 @@
+{
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386567,
+      "program.py": 3837
+    },
+    "payload_sha256": {
+      "cmix.bin.gz": "7cfb71c21b6eccf3eeb6fb11df7e00024c37cdcd46730724c61c046bcc0596df",
+      "program.py": "f4a9cc118639184ae8729d6fec67af53eff49fb1a95a2bca3875070909361e90"
+    },
+    "program_size": 390404
+  },
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX temporary filesystem space"
+  ],
+  "description": "Frozen B2 backend with a 256 KiB no-preprocessing prefix and a decoder-built canonical word dictionary for the text-mode suffix.",
+  "family": "cmix21_mmap_composition",
+  "hypothesis": "A canonical dictionary learned from the decoded opening 256 KiB preserves enough mature suffix preprocessing to repay the stream split while eliminating the 175356-byte static dictionary package.",
+  "id": "cmix21_assoc10_bootstrapdict256k_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "decoded 256 KiB prefix",
+      "canonical frequency-first-offset dictionary",
+      "forced-text suffix backend"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": "fxcm_aligned_cell_frontier_v1",
+    "proposal_id": "bootstrap_prefix_dictionary_b2_v1",
+    "retired_neighborhoods": [
+      "prefix-size parameter sweeps before a positive frozen result",
+      "transmitted learned dictionaries for this construction"
+    ]
+  },
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "pgsg": {
+    "edges": [
+      {
+        "from": "prefix",
+        "stream": "decoded_bytes",
+        "to": "learner"
+      },
+      {
+        "from": "learner",
+        "stream": "dictionary",
+        "to": "suffix"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "prefix",
+        "payload": {
+          "discrete": {
+            "bytes": 262144,
+            "mode": "cmix21_no_preprocessing"
+          }
+        },
+        "type": "codec"
+      },
+      {
+        "id": "learner",
+        "payload": {
+          "discrete": {
+            "limit": 44515,
+            "token_order": "frequency_firstoffset_lex"
+          }
+        },
+        "type": "representation"
+      },
+      {
+        "id": "suffix",
+        "payload": {
+          "discrete": {
+            "dictionary": "decoder_built",
+            "mode": "cmix21_forced_text"
+          }
+        },
+        "type": "codec"
+      }
+    ]
+  },
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_assoc10_bootstrapdict256k_v1/cmix.bin.gz",
+    "dictionary": "decoder-built from first 262144 decoded bytes",
+    "problem": "docs/bootstrap_prefix_dictionary_problem.md",
+    "solution": "docs/bootstrap_prefix_dictionary_solution.md"
+  },
+  "status": "candidate",
+  "verdict": "Unmeasured BPD-1 decoder-built dictionary candidate."
+}

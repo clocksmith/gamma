@@ -1,0 +1,93 @@
+{
+  "build": {
+    "payload_files": {
+      "cmix.bin.xz": 317512,
+      "nncp_cpu_source.tar.xz": 246404,
+      "program.py": 4957
+    },
+    "payload_sha256": {
+      "cmix.bin.xz": "c5353d0a22b328fae90043ab0a0cd93e37bc8dd642973cba003b053e293d18a9",
+      "nncp_cpu_source.tar.xz": "9b015bdbe9d2d625efd080021864717d39277502158472e825bacb05e2a70082",
+      "program.py": "462e43f4da26abff126b040c237d227859bf02194a2017e284c6b50cebf27b24"
+    },
+    "program_size": 568873
+  },
+  "deps": [
+    "C++ runtime",
+    "make",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "description": "Archive-identical XZ package successor to the dictionary-free NNCP U16BE plus cmix21 binary backend.",
+  "family": "composed_reversible_representation",
+  "hypothesis": "Exact XZ recovery of both executable and NNCP source tar preserves the binary-domain RDC archive while reducing its counted package by 133940 bytes.",
+  "id": "nncp_pc_u16be_cmix21_assoc10_nopre_xz_v1",
+  "measured": {},
+  "omega": {
+    "interfaces_exposed": [
+      "cmix executable payload",
+      "NNCP CPU source tar",
+      "wrapper recovery codecs"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "nncp_binary_backend_dictionary_elimination_v1",
+    "proposal_id": "exact_package_transcoding_nncp_binary_xz_v1",
+    "retired_neighborhoods": [
+      "gzip level sweeps for the same mixed payloads",
+      "archive-changing credit from package-only edits"
+    ]
+  },
+  "parent": "nncp_pc_u16be_cmix21_assoc10_nopre_v1",
+  "pgsg": {
+    "edges": [
+      {
+        "from": "nncp_pc",
+        "stream": "symbols",
+        "to": "u16be"
+      },
+      {
+        "from": "u16be",
+        "stream": "bytes",
+        "to": "b2_cmix21"
+      },
+      {
+        "from": "dictionary_frame",
+        "stream": "inverse_dictionary",
+        "to": "nncp_pc"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "nncp_pc",
+        "type": "reversible_transform"
+      },
+      {
+        "id": "u16be",
+        "type": "symbol_layout"
+      },
+      {
+        "id": "b2_cmix21",
+        "type": "codec"
+      },
+      {
+        "id": "dictionary_frame",
+        "type": "side_information"
+      }
+    ]
+  },
+  "source": {
+    "backend_mode": "-n",
+    "backend_parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+    "binary": "projects/enwiki9/programs/nncp_pc_u16be_cmix21_assoc10_nopre_v1/cmix.bin.xz",
+    "dictionary_policy": "none",
+    "layout": "official big-endian uint16 symbols",
+    "nncp_cpu_source": "projects/enwiki9/programs/nncp_pc_u16be_cmix21_assoc10_nopre_v1/nncp_cpu_source.tar.xz",
+    "payload_codec": "xz --threads=1 -9e",
+    "preprocess": "16384,512",
+    "trees": [
+      "projects/enwiki9/external/cmix21-sidecar",
+      "official NNCP source tar 7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119"
+    ]
+  },
+  "status": "candidate",
+  "verdict": "EPT-1 mixed-payload identity verified; parent and native resource gates pending."
+}

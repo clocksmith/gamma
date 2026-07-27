@@ -1,0 +1,76 @@
+{
+  "id": "nncp_pc_u16be_cmix21_assoc10_v1",
+  "family": "composed_reversible_representation",
+  "status": "candidate",
+  "description": "Official NNCP reversible U16 big-endian preprocessing followed by the frozen B2 cmix21 backend, with the learned dictionary framed inside the archive.",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "NNCP preprocessing exposes a symbol domain whose native cmix21 codelength repays the transmitted dictionary, added CPU source package, and target debt despite a negative LZMA proxy.",
+  "deps": [
+    "C++ runtime",
+    "make",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "trees": [
+      "projects/enwiki9/external/cmix21-sidecar",
+      "official NNCP source tar 7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119"
+    ],
+    "backend_parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+    "layout": "official big-endian uint16 symbols",
+    "preprocess": "16384,512"
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386567,
+      "english.dic.gz": 175356,
+      "nncp_cpu_source.tar.gz": 311289,
+      "program.py": 4982
+    },
+    "program_size": 878194,
+    "payload_sha256": {
+      "cmix.bin.gz": "7cfb71c21b6eccf3eeb6fb11df7e00024c37cdcd46730724c61c046bcc0596df",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "nncp_cpu_source.tar.gz": "79e5e7152ef2b419528157ae86e14570b0a87a4cb12765628963d415522f0102",
+      "program.py": "2a9aadd99c8efd7d5afff3ec22321eb0f1b98a98793589c187e52fd26b51720e"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "nncp_pc",
+        "type": "reversible_transform"
+      },
+      {
+        "id": "u16be",
+        "type": "symbol_layout"
+      },
+      {
+        "id": "b2_cmix21",
+        "type": "codec"
+      },
+      {
+        "id": "dictionary_frame",
+        "type": "side_information"
+      }
+    ],
+    "edges": [
+      {
+        "from": "nncp_pc",
+        "to": "u16be",
+        "stream": "symbols"
+      },
+      {
+        "from": "u16be",
+        "to": "b2_cmix21",
+        "stream": "bytes"
+      },
+      {
+        "from": "dictionary_frame",
+        "to": "nncp_pc",
+        "stream": "inverse_dictionary"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Unmeasured native composition; proxy layout screen is negative and receives zero credit."
+}

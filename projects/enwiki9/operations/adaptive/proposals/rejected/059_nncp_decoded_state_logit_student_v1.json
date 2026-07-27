@@ -1,0 +1,31 @@
+{
+  "created_at": "2026-07-27T22:13:41+00:00",
+  "evidence": [
+    "projects/enwiki9/docs/decoded_state_affine_quantizer_problem.md",
+    "projects/enwiki9/docs/rational_odds_lookup_problem.md",
+    "projects/enwiki9/results/nncp_branch_affine_state_1k_v1/decision.json",
+    "projects/enwiki9/results/nncp_branch_logit_state_1k_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2100000,
+  "hypothesis": "A decoder-synchronized multiscale branch recurrence plus an exact rational-odds readout can retain teacher branch information beyond static suffix centroids and beat an identically shaped hard-label control after complete model accounting.",
+  "interfaces_exposed": [
+    "NNCP hierarchical branch node and previously decoded branch outcomes to uint15 zero-frequency"
+  ],
+  "kill_condition": "Retire the frozen affine and rational-odds recurrence if soft holdout payload loses the matched hard-label recurrent control or if recurrence savings do not repay the model package; do not reopen shifts, ridge, or score range without a new state variable or objective.",
+  "max_program_bytes": 262144,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "coder",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 930,
+  "promotion_condition": "Require exact archive-neutral mature and distant traces; soft student must beat the matched hard-label control at equal capacity, clear 2100 B/M net after all package bytes, and then pass native arithmetic replay, roundtrip, determinism, runtime, and memory.",
+  "proposal_id": "nncp_decoded_state_logit_student_v1",
+  "rejected_at": "2026-07-27T22:13:41+00:00",
+  "rejection_reason": "Frozen startup holdout: affine soft recurrent loses matched hard recurrent by 508.672803 ideal bits; rational-odds soft recurrent loses by 527.486407 bits. Hard recurrence gains do not repay package bytes. Recurrent soft state helps its static control but teacher distillation and standalone economics fail.",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 940,
+  "state": "rejected",
+  "title": "NNCP decoded-state recurrent branch student"
+}

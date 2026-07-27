@@ -1,0 +1,73 @@
+{
+  "added": "2026-07-27",
+  "build": {
+    "counted_payload_bytes": 236510,
+    "package_cap_bytes": 700000,
+    "package_headroom_bytes": 463490,
+    "payload_files": {
+      "nncp_cpu_source.tar.xz": 234216,
+      "program.py": 2294
+    },
+    "payload_sha256": {
+      "nncp_cpu_source.tar.xz": "c2520e645a2703b94f30c705feff949f13d634c1c9e75e498d3c32d2100766ec",
+      "program.py": "fae9776225008493913537e46f43646e5fb0c22822b54c4b393b6bf60d060569"
+    },
+    "program_bytes": 2294,
+    "program_file": "program.py",
+    "program_sha256": "fae9776225008493913537e46f43646e5fb0c22822b54c4b393b6bf60d060569",
+    "program_size": 236510,
+    "source_archive_bytes": 234216,
+    "source_archive_file": "nncp_cpu_source.tar.xz",
+    "source_archive_sha256": "c2520e645a2703b94f30c705feff949f13d634c1c9e75e498d3c32d2100766ec"
+  },
+  "deps": [
+    "POSIX shell environment",
+    "GNU make and GCC",
+    "zlib development and runtime",
+    "x86-64 Linux compatible with the pinned CPU libnc.so"
+  ],
+  "description": "Compact5 NNCP T4 with CQQ source closure, exact x86-filtered XZ packaging, and normalized no-debug compilation.",
+  "family": "nncp_compact_cpu",
+  "hypothesis": "Decoder-irrelevant C comments, horizontal whitespace, and debug metadata can be quotiented from the exact NNCP source closure while preserving its native T4 archive and reducing counted package bytes.",
+  "id": "nncp_compact5_preprocessed_cqq_x86xz_nodebug_t4_v1",
+  "measured": {
+    "build_identity": {
+      "libnc_so_bytes": 565336,
+      "libnc_so_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+      "nncp_bytes": 144904,
+      "nncp_sha256": "fed2ef59612c08077572983d70278211b76755d67910b293bb23aa11f1252fe5"
+    },
+    "source_quotient": {
+      "candidate_x86_xz_bytes": 234216,
+      "cqq_source_bytes": 234425,
+      "parent_source_bytes": 264619,
+      "parent_x86_xz_bytes": 240720,
+      "removed_source_bytes": 30194,
+      "saved_x86_xz_bytes": 6504
+    }
+  },
+  "omega": {
+    "interfaces_exposed": [
+      "exact_nncp_source_tar",
+      "normalized_build_flags"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": "nncp_compact5_x86_xz_t4_v1",
+    "proposal_id": "nncp_compact5_cqq_x86xz_nodebug_t4_v1",
+    "retired_neighborhoods": []
+  },
+  "parent": "nncp_compact5_preprocessed_x86xz_t4_v1",
+  "source": {
+    "build": "make -j2 with frozen normalized CFLAGS",
+    "cpu_package": "projects/enwiki9/programs/nncp_compact5_preprocessed_cqq_x86xz_nodebug_t4_v1/nncp_cpu_source.tar.xz",
+    "cpu_package_sha256": "c2520e645a2703b94f30c705feff949f13d634c1c9e75e498d3c32d2100766ec",
+    "cpu_threads": 4,
+    "official_tar_sha256": "7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119",
+    "payload_codec": "XZ x86 filter plus LZMA2 preset 9e",
+    "profile": "enwik9,batch_size=1,n_layer=5,d_model=256,d_inner=768,preprocess=16384,512",
+    "rpf_theorem": "docs/row_parallel_floating_point_solution.md",
+    "source_quotient_theorem": "docs/cpp_comment_quotient_solution.md"
+  },
+  "status": "candidate",
+  "verdict": "Exact source and build quotient candidate awaiting native archive and runtime gate."
+}
