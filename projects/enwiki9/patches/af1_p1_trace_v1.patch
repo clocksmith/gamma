@@ -1,0 +1,160 @@
+--- a/src/coder/encoder.h
++++ b/src/coder/encoder.h
+@@ -1,6 +1,10 @@
+ #ifndef ENCODER_H
+ #define ENCODER_H
+ 
++#ifdef CMIX_AF1_P1_TRACE
++#include <cstdio>
++#endif
++
+ #include <fstream>
+ 
+ #include "../predictor.h"
+@@ -15,10 +19,18 @@
+  private:
+   void WriteByte(unsigned int byte);
+   unsigned int Discretize(float p);
++#ifdef CMIX_AF1_P1_TRACE
++  void WriteTraceRow(int bit, unsigned int probability);
++  void CloseTrace();
++#endif
+ 
+   std::ofstream* os_;
+   unsigned int x1_, x2_;
+   Predictor* p_;
++#ifdef CMIX_AF1_P1_TRACE
++  FILE* trace_file_;
++  unsigned long long trace_rows_;
++#endif
+ #ifdef CMIX_TRACE_ROWS
+   unsigned long long bit_count_;
+ #endif
+--- a/src/coder/encoder.cpp
++++ b/src/coder/encoder.cpp
+@@ -1,13 +1,76 @@
+ #include <cstdint>
+ #include <cstdio>
++#include <cstdlib>
+ #include "encoder.h"
+ 
++#ifdef CMIX_AF1_P1_TRACE
++namespace {
++void TraceU16(FILE* file, std::uint16_t value) {
++  const unsigned char bytes[2] = {
++      static_cast<unsigned char>(value),
++      static_cast<unsigned char>(value >> 8)};
++  if (std::fwrite(bytes, 1, sizeof(bytes), file) != sizeof(bytes)) {
++    std::perror("CMIX_AF1_P1_TRACE");
++    std::abort();
++  }
++}
++
++void TraceU32(FILE* file, std::uint32_t value) {
++  unsigned char bytes[4];
++  for (unsigned int i = 0; i < 4; ++i) {
++    bytes[i] = static_cast<unsigned char>(value >> (8 * i));
++  }
++  if (std::fwrite(bytes, 1, sizeof(bytes), file) != sizeof(bytes)) {
++    std::perror("CMIX_AF1_P1_TRACE");
++    std::abort();
++  }
++}
++
++void TraceU64(FILE* file, std::uint64_t value) {
++  unsigned char bytes[8];
++  for (unsigned int i = 0; i < 8; ++i) {
++    bytes[i] = static_cast<unsigned char>(value >> (8 * i));
++  }
++  if (std::fwrite(bytes, 1, sizeof(bytes), file) != sizeof(bytes)) {
++    std::perror("CMIX_AF1_P1_TRACE");
++    std::abort();
++  }
++}
++}  // namespace
++#endif
++
+ Encoder::Encoder(std::ofstream* os, Predictor* p) : os_(os), x1_(0),
+-    x2_(0xffffffff), p_(p)
++    x2_(0xffffffff), p_(p)
++#ifdef CMIX_AF1_P1_TRACE
++    , trace_file_(nullptr), trace_rows_(0)
++#endif
+ #ifdef CMIX_TRACE_ROWS
+     , bit_count_(0)
+ #endif
+-    {}
++    {
++#ifdef CMIX_AF1_P1_TRACE
++  const char* path = std::getenv("CMIX_AF1_P1_TRACE");
++  if (path != nullptr && path[0] != '\0') {
++    trace_file_ = std::fopen(path, "wb+");
++    if (trace_file_ == nullptr) {
++      std::perror("CMIX_AF1_P1_TRACE");
++      std::abort();
++    }
++    std::setvbuf(trace_file_, nullptr, _IOFBF, 1U << 20);
++    const unsigned char magic[8] =
++        {'A', 'F', '1', 'P', '1', 'V', '1', '\0'};
++    if (std::fwrite(magic, 1, sizeof(magic), trace_file_) != sizeof(magic)) {
++      std::perror("CMIX_AF1_P1_TRACE");
++      std::abort();
++    }
++    TraceU32(trace_file_, 1);
++    TraceU32(trace_file_, 32);
++    TraceU32(trace_file_, 3);
++    TraceU32(trace_file_, 65536);
++    TraceU64(trace_file_, 0);
++  }
++#endif
++}
+ 
+ void Encoder::WriteByte(unsigned int byte) {
+   os_->put(byte);
+@@ -17,8 +80,38 @@
+   return 1 + 65534 * p;
+ }
+ 
++#ifdef CMIX_AF1_P1_TRACE
++void Encoder::WriteTraceRow(int bit, unsigned int probability) {
++  if (trace_file_ == nullptr) return;
++  if (std::fputc(bit, trace_file_) == EOF) {
++    std::perror("CMIX_AF1_P1_TRACE");
++    std::abort();
++  }
++  TraceU16(trace_file_, static_cast<std::uint16_t>(probability));
++  ++trace_rows_;
++}
++
++void Encoder::CloseTrace() {
++  if (trace_file_ == nullptr) return;
++  if (std::fflush(trace_file_) != 0 ||
++      std::fseek(trace_file_, 24, SEEK_SET) != 0) {
++    std::perror("CMIX_AF1_P1_TRACE");
++    std::abort();
++  }
++  TraceU64(trace_file_, trace_rows_);
++  if (std::fclose(trace_file_) != 0) {
++    std::perror("CMIX_AF1_P1_TRACE");
++    std::abort();
++  }
++  trace_file_ = nullptr;
++}
++#endif
++
+ void Encoder::Encode(int bit) {
+   const unsigned int p = Discretize(p_->Predict());
++#ifdef CMIX_AF1_P1_TRACE
++  WriteTraceRow(bit, p);
++#endif
+ #ifdef CMIX_TRACE_ROWS
+   std::fprintf(stderr, "CMIX_RESIDUAL_ROW pos=%llu bit_pos=%d bit=%d p1=%u\n",
+       bit_count_ / 8, static_cast<int>(bit_count_ & 7), bit, p);
+@@ -52,4 +145,7 @@
+     x2_ = (x2_ << 8) + 255;
+   }
+   WriteByte(x2_ >> 24);
++#ifdef CMIX_AF1_P1_TRACE
++  CloseTrace();
++#endif
+ }
