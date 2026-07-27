@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-27T00:41:46+00:00`
+- Generated at UTC: `2026-07-27T00:44:27+00:00`
 
 ## Target State
 
@@ -140,8 +140,8 @@ python3 projects/enwiki9/tools/cmix21_gate_decider.py cmix21_text_mmap_paq5_ppmd
 - Audit return code: `0`
 - Program directories: `546`
 - Registered programs: `229`
-- Untracked nonignored entries: `6`
-- Modified tracked entries: `1`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `14`
 - Candidate statuses: `active=22, blocked_dependency=31, candidate=5, measured_negative=89, retired=399`
 
 ## Active Runner Process Table
