@@ -94,3 +94,20 @@ For the frozen instance:
 
 The normal form therefore saves exactly 1,195 counted package bytes
 conditional on native archive identity.
+
+## Second frozen instance: migrated B2 FCF wrapper
+
+The ordinary LMC-1 wrapper is `3774` bytes. Its DWNF-1 normal form is `1885`
+bytes. Both consume the identical `269455`-byte migrated FCF payload, preserve
+the same extraction order, build labels, mmap environment defaults, and cmix
+runtime arguments, and restore the same executable and dictionary hashes.
+
+The wrapper-normal-form contribution is therefore
+
+```text
+3774 - 1885 = 1889 bytes.
+```
+
+Together with the `380`-byte LMC-1 gain, the composed package saves `2269`
+bytes against the prior FCF candidate. The replacement native gate is required
+before score credit.

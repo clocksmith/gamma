@@ -2118,3 +2118,35 @@ Evidence:
 - `docs/rational_odds_lookup_solution.md`
 - `results/nncp_branch_affine_state_1k_v1/decision.json`
 - `results/nncp_branch_logit_state_1k_v1/decision.json`
+
+## 2026-07-27: LMC-1 build-literal migration and DWNF-1 B2 composition
+
+LMC-1 formalizes moving a fixed runtime literal from wrapper source into an
+already compressed immutable closure. Exact economics require the global
+wrapper-plus-compressed-closure difference; literal length alone is not a
+certificate. Path freshness, safe extraction, exact literal recovery, and
+path-alpha bisimulation preserve effective execution labels.
+
+On the 73-member FCF/BPDQ B2 closure, the 493-byte build flags become member
+`cmix21/.gamma_lflags`. The raw frame grows 519 bytes, while raw-LZMA2 grows
+only 149 bytes, from 269306 to 269455. The ordinary wrapper shrinks from 4303
+to 3774 bytes, so LMC-1 alone saves 380 complete package bytes.
+
+A DWNF-1 successor reduces that wrapper from 3774 to 1885 bytes. The final
+package is 271340 bytes, saving 2269 bytes against FCF-1 and 292806 bytes
+against original B2 package accounting. A clean build used 337488 KiB and
+reproduced the exact 837176-byte executable and 411996-byte dictionary hashes.
+
+The obsolete pending FCF-1 250K job was cancelled and replaced by
+`cmix21_b2_line_whitespace_bpdq_fcf_flagsrawlzma2_minwrap_v1` at priority 941
+with the unchanged 45178-byte archive ceiling. This is a constructive package
+proxy with zero score credit until native archive, roundtrip, determinism,
+runtime, and memory pass.
+
+Evidence:
+
+- `docs/literal_migration_compression_problem.md`
+- `docs/literal_migration_compression_solution.md`
+- `results/literal_migration_fcf_b2_v1/migration.json`
+- `results/literal_migration_fcf_b2_v1/screen.json`
+- `results/literal_migration_fcf_b2_v1/restoration_build.json`

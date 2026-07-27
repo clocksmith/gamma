@@ -1,0 +1,29 @@
+{
+  "candidate_id": "cmix21_b2_line_whitespace_bpdq_fcf_flagsrawlzma2_v1",
+  "created_at": "2026-07-27T22:23:33+00:00",
+  "developed_at": "2026-07-27T22:23:33+00:00",
+  "evidence": [
+    "projects/enwiki9/docs/literal_migration_compression_problem.md",
+    "projects/enwiki9/results/literal_migration_fcf_b2_v1/screen.json"
+  ],
+  "expected_savings_bytes": 380,
+  "hypothesis": "Moving the frozen 493-byte C++ build-flag literal into the already compressed FCF source closure preserves effective build labels and reduces complete package size because the literal shares redundancy with the C++ closure.",
+  "interfaces_exposed": [
+    "FCF source closure to deterministic build flag argument"
+  ],
+  "kill_condition": "Retire on nonpositive complete package delta, unsafe frame member, changed effective flags, or restored executable/dictionary mismatch.",
+  "max_program_bytes": 273229,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "parent": "cmix21_b2_line_whitespace_bpdq_fcf_rawlzma2_v1",
+  "parent_proposal_id": "finite_closure_frame_bpdq_v1",
+  "priority": 940,
+  "promotion_condition": "Require exact decoded closure, migrated literal, effective flags, executable and dictionary identity; delegate native archive, roundtrip, determinism, runtime, and memory to the minwrap successor.",
+  "proposal_id": "literal_migration_fcf_b2_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 958,
+  "state": "developed",
+  "title": "B2 FCF build-literal migration"
+}
