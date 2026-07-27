@@ -1955,3 +1955,31 @@ After the frozen x86-plus-LZMA2 transform, the payload falls from `440245` to
 This successor is parked until the x86 parent proves native archive identity.
 It has no native compression, determinism, roundtrip, resource, or score
 credit.
+
+### EPT segmented-filter control
+
+A structural control reset the filter chain at the executable/dictionary
+boundary: x86 plus raw LZMA2 for the executable and unfiltered raw LZMA2 for
+the dictionary. Both streams reconstruct exactly, but their combined payload
+is `440394` bytes, `149` bytes worse than the single `440245`-byte x86-filtered
+solid stream before any second-stream wrapper cost. Decision: retire this
+segmentation; do not reopen it through filter or preset ladders. Receipt:
+`results/exact_segmented_filter_b2_v1/screen.json`. Score credit is zero.
+
+## 2026-07-27 - SCC-1 source-closure compilation
+
+SCC-1 proves the conditional transfer from a canonical finite source closure
+to an ELI-equivalent executable and exact package accounting. The B2 instance
+contains 72 source/build/license files plus the exact English dictionary in a
+canonical 73-member USTAR archive. Raw LZMA2 compresses the `1218560`-byte
+archive to `304731` bytes. With the frozen `2944`-byte runtime-build wrapper,
+candidate `cmix21_b2_source_closure_rawlzma2_v1` has a complete provisional
+package of `307675` bytes, saving exactly `134287` bytes over the x86-binary
+parent and `256471` bytes over B2.
+
+The archive roundtrips and its member manifest is path-safe and exact.
+Proposal `source_closure_compilation_b2_v1` is developed and queued as
+`20260727T204000Z_578a72f77b` behind the full-idx13 gate. Two clean builds,
+ELI projection identity, exact B2 archive identity, raw roundtrip,
+deterministic re-encode, compiler/runtime cost, and memory remain mandatory.
+The screen receives zero score credit.
