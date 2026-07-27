@@ -217,3 +217,14 @@ that forecast without a valid dependency chain and complete joint accounting.
 - Exact result: soft and matched hard int8 models roundtrip with no clipped weights. The soft model loses 231 payload bytes and 288 complete two-part bytes on 411 heldout symbols.
 - Conclusion: retire startup-trace lag, bucket-width, epoch, learning-rate, and logit-scale tuning. A new student requires mature teacher evidence and a newly frozen recurrent state.
 - Score credit: 0 bytes.
+
+## CQQ-1: C++ Comment Quotient
+
+- Problem: `docs/cpp_comment_quotient_problem.md`
+- Solution: `docs/cpp_comment_quotient_solution.md`
+- Construction: `tools/cpp_comment_quotient.py`
+- Frozen instance: `programs/cmix21_b2_comment_quotient_rawlzma2_v1/`
+- Exact screen: 73 source-closure members; 67,380 source bytes removed; raw-LZMA2 payload reduced from 304,731 to 284,583 bytes.
+- Constructive transfer: two clean builds reproduced the parent 837,176-byte executable and 411,996-byte dictionary exactly.
+- Counted package: 287,391 bytes, saving 20,148 bytes against SCC-1 and 276,755 bytes against B2 package accounting.
+- Status: constructive package proxy only; native exact codec gate queued; score credit zero.
