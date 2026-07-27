@@ -2183,3 +2183,36 @@ Evidence:
 - `results/nncp_makefile_slack_embedding_v1/embedding.json`
 - `results/nncp_makefile_slack_embedding_v1/xz_family.json`
 - `results/nncp_makefile_slack_embedding_v1/build.json`
+
+## 2026-07-27: CWVE-1 removes 504 certified internal-validation bytes from B2
+
+CWVE-1 proves stuttering bisimulation after deleting pure successful checks over
+a sole immutable, hash-bound package object. It explicitly excludes checks on
+external corpus bytes, archive bytes, arithmetic state, subprocess outcomes,
+and roundtrip output.
+
+The frozen verifier certifies all eliminated predicates on the migrated B2
+closure: 74 unique safe relative FCF paths, every endpoint in bounds, final
+cursor exactly 941936 with no trailing bytes, 44515 nonempty BPDQ records, and
+all prefix lengths valid with maximum LCP 17. The wrapper falls from 1885 to
+1381 bytes while the 269455-byte payload remains exact. Complete package size
+falls from 271340 to 270836, saving 504 bytes. A clean build at 337936 KiB
+reproduces the exact 837176-byte executable and 411996-byte dictionary hashes.
+
+The prior minwrap pending job was cancelled and replaced by
+`cmix21_b2_line_whitespace_bpdq_fcf_flagsrawlzma2_cwve_v1` at priority 942 with
+the unchanged 45178-byte 250K archive ceiling. Score credit is zero pending
+native archive, roundtrip, determinism, runtime, and memory evidence.
+
+The bounded second SCLE attempt on NNCP runtime arguments is negative and
+excluded. Its dispatch refactor saves 7 wrapper bytes, while the 82-byte
+residual-slack marker adds 104 bytes to the selected payload, a 97-byte package
+regression. No full family enumeration or parameter ladder is authorized.
+
+Evidence:
+
+- `docs/closed_world_validation_elimination_problem.md`
+- `docs/closed_world_validation_elimination_solution.md`
+- `results/closed_world_validation_elimination_b2_v1/certificate.json`
+- `results/closed_world_validation_elimination_b2_v1/build.json`
+- `results/nncp_makefile_slack_embedding_v1/runtime_args_screen.json`
