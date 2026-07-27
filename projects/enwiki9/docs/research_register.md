@@ -2025,3 +2025,13 @@ The tracked encoder maps the 411,996-byte dictionary to 362,457 bytes and recons
 The wrapper restored every one of the 73 parent members exactly; the restored closure content hash is `d45eef7c0de21fd4085259175c3e115732396551a360aa2ae1eecc907400daf8`. Its own low-priority build completed in 31.75 seconds at 337,388 KiB peak RSS and produced the exact parent executable and dictionary. The prior two LPWQ-1 clean builds provide independent runtime determinism witnesses.
 
 A general unambiguous varint-prefix and varint-suffix representation was measured negative: payload 291,640 bytes, 14,576 bytes worse before wrapper cost. The earlier newline-delimited raw prefix-byte sketch was ambiguous and receives no evidence. No prefix-code parameter ladder is authorized. BPDQ-1 remains `proxy` with zero score credit until native archive, roundtrip, deterministic replay, runtime, and memory receipts pass.
+
+## 2026-07-27: FCF-1 finite path-payload closure frame
+
+FCF-1 replaces USTAR metadata and 512-byte padding with a proved finite frame containing magic, member count, fixed-width path and payload lengths, UTF-8 relative paths, and payload bytes. The theorem proves exact inversion, unique boundaries, safe root-relative extraction, exact frame length, and codec inheritance after runtime identity.
+
+On the 73-member BPDQ-1 closure, raw framing falls from 993,280 to 941,417 bytes and raw-LZMA2 payload falls from 270,395 to 269,306 bytes. The safe decoder wrapper grows from 3,514 to 4,303 bytes, leaving a complete 273,609-byte package and a narrow but exact 300-byte net saving. Its own extraction and build completed in 33.87 seconds at 337,264 KiB and reproduced the exact parent executable and dictionary.
+
+Two other exact dictionary representations were closed. Lexicographic sort plus explicit 16-bit original ranks produced a 317,020-byte payload, 39,956 bytes worse than LPWQ-1. Splitting source and BPDQ dictionary into independent raw-LZMA2 streams produced 270,826 bytes including framing, 431 bytes worse than the unified BPDQ payload before decoder growth. Both receive zero score credit and no parameter or split ladder is authorized.
+
+FCF-1 remains `proxy` with zero score credit until native archive, roundtrip, deterministic replay, runtime, and memory receipts pass. It replaces the BPDQ-1 native job; prior theorem artifacts remain provenance and controls.

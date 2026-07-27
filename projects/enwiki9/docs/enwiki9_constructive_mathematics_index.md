@@ -250,3 +250,14 @@ that forecast without a valid dependency chain and complete joint accounting.
 - Constructive transfer: the counted wrapper restored all 73 parent members and built the exact executable and dictionary.
 - Counted package: 273,909 bytes, saving 5,963 bytes against LPWQ-1 and 290,237 bytes against B2 package accounting.
 - Status: constructive package proxy only; native exact codec gate queued; score credit zero.
+
+## FCF-1: Finite Path-Payload Closure Frame
+
+- Problem: `docs/finite_closure_frame_problem.md`
+- Solution: `docs/finite_closure_frame_solution.md`
+- Construction: `tools/finite_closure_frame.py`
+- Frozen instance: `programs/cmix21_b2_line_whitespace_bpdq_fcf_rawlzma2_v1/`
+- Exact screen: 73 members reconstructed; raw framing reduced by 51,863 bytes; raw-LZMA2 payload reduced from 270,395 to 269,306 bytes.
+- Constructive transfer: the FCF wrapper safely extracted the closure and built the exact executable and dictionary.
+- Counted package: 273,609 bytes, saving 300 bytes against BPDQ-1 and 290,537 bytes against B2 package accounting.
+- Status: constructive package proxy only; native exact codec gate queued; score credit zero.
