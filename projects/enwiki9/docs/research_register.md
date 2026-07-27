@@ -1773,3 +1773,37 @@ but no local trace currently supplies that antecedent.
 - This is infrastructure evidence only. Startup comparison against LZMA does not test the frozen maturity hypothesis and must not retire the candidate.
 - The adaptive runner was corrected so `infrastructure`, `diagnostic`, and `oracle` jobs no longer mutate candidate status. NC5 was restored to `candidate` through the canonical contract check.
 - Next decision remains the exact opening-1M native-domain gate. Score credit remains `0` bytes.
+
+## 2026-07-27: FRT-1 exact factoradic recency tie-breaking proposed
+
+Candidate mechanism: `fxcm_factoradic_recency_tie_v1`.
+
+The independent FRT-1 problem proves that the complete recency order of ten
+ways needs exactly 22 bits because `10! = 3,628,800`, and gives canonical
+Lehmer rank/unrank, move-to-front, and minimum-priority/LRU selection. A
+32-bit rank fits at offset 92 in the otherwise unused tail of the frozen
+96-byte B2 FXCM cell, so the mechanism changes replacement information without
+increasing the dominant table allocation. The transfer remains fail-closed:
+it preserves the existing priority minimum and uses exact LRU only among tied
+minimum ways. Native implementation is not yet materialized. It must beat B2
+by at least 8 archive bytes at frozen 1M and by at least 128 counted bytes at
+exact 10M, with exact roundtrip, determinism, decimal-memory, package, and
+distant-transfer receipts. The theorem and verifier receive zero score credit.
+
+## 2026-07-27: RDC-1 NNCP-preprocessor plus B2-cmix composition materialized
+
+Candidate: `nncp_pc_u16be_cmix21_assoc10_v1`.
+
+RDC-1 proves exact dictionary-framed composition of a reversible preprocessor
+and backend codec. The materialized candidate runs official NNCP `pc/pd`,
+keeps the canonical big-endian 16-bit symbol stream, transmits the learned
+dictionary inside the archive, and uses the frozen B2 cmix21 backend. Its
+complete provisional package is recorded in the candidate metadata. The 1M
+layout proxy was negative: raw LZMA was 290,692 bytes, while the best
+transformed control, U16 big-endian plus its 804-byte dictionary, was 293,112.
+Fixed-nine-bit, planar, little-endian, and escape layouts were worse and are
+closed unchanged. Because this proxy cannot decide mature cmix interaction,
+exactly one native gate is authorized with a target-scale 250K ceiling of
+44,753 bytes. Any larger archive, package above 900,000 bytes, roundtrip,
+determinism, or decimal-memory failure retires the route. No proxy or theorem
+bytes receive score credit.

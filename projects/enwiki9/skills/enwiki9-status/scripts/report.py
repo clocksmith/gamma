@@ -116,8 +116,15 @@ def _read_live_guard_row(project_root: Path) -> dict[str, Any] | None:
         candidate = None
         scope = None
         check_determinism = "--check-determinism" in command
-        if "gamma/projects/enwiki9/lib/driver.py" in command:
-            driver_index = command.index("gamma/projects/enwiki9/lib/driver.py")
+        driver_index = next(
+            (
+                index
+                for index, token in enumerate(command)
+                if token.endswith("projects/enwiki9/lib/driver.py")
+            ),
+            None,
+        )
+        if driver_index is not None:
             if driver_index + 1 < len(command):
                 candidate = command[driver_index + 1]
             if "--limit" in command:
