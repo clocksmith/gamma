@@ -1,0 +1,21 @@
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -162,10 +162,18 @@
+ #define CMIX_FXCM_CMC2_ASSOC 14
+ #endif
+ 
++#ifndef CMIX_FXCM_CMC2_TIGHT
++#define CMIX_FXCM_CMC2_TIGHT 0
++#endif
++
+ #if CMIX_FXCM_CMC2_ASSOC == 14
+ #define CMIX_FXCM_CMC2_CELL_BYTES 128
+ #elif CMIX_FXCM_CMC2_ASSOC == 10
++#if CMIX_FXCM_CMC2_TIGHT
++#define CMIX_FXCM_CMC2_CELL_BYTES 92
++#else
+ #define CMIX_FXCM_CMC2_CELL_BYTES 96
++#endif
+ #else
+ #error "CMIX_FXCM_CMC2_ASSOC must be 10 or 14"
+ #endif

@@ -1,0 +1,40 @@
+{
+  "candidate_id": "nncp_compact5_preprocessed_v1",
+  "claimed_at": "2026-07-27T17:13:02+00:00",
+  "created_at": "2026-07-27T17:13:01+00:00",
+  "developed_at": "2026-07-27T18:00:20+00:00",
+  "evidence": [
+    "results/nncp_compact5_reconstruction_v1/receipt.json",
+    "results/nncp_compact5_cpu_package_v1/receipt.json",
+    "docs/dependency_closure_package_problem.md",
+    "docs/dependency_closure_package_solution.md",
+    "tools/package_nncp_compact5_cpu.sh",
+    "tools/run_nncp_compact5_preprocessed_gate.sh",
+    "tools/run_nncp_compact5_exact_gate.py",
+    "results/nncp_cpu_eligibility_controls_v1/receipt.json",
+    "results/nncp_symbol_raw_map_opening_1m_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 2000000,
+  "hypothesis": "The reconstructed 5-layer, 256-wide, batch-1 NNCP model operating on the official reversible enwik9 preprocessing matures to at most 250,000 archive bytes on opening 1M while retaining exact CPU roundtrip and enough asymptotic headroom for a counted 108,000,000-byte full-corpus candidate.",
+  "interfaces_exposed": [
+    "Official NNCP reversible preprocessor and compact causal transformer arithmetic stream"
+  ],
+  "kill_condition": "Retire this compact profile if the exact opening-1M archive exceeds 250,000 bytes, roundtrip or determinism fails, memory exceeds decimal 10GB, or measured CPU extrapolation is outside the official envelope. Do not sweep layer count, width, inner width, batch size, or preprocessing.",
+  "max_program_bytes": 700000,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "coder",
+  "owner": "codex-clocksmith",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 105,
+  "promotion_condition": "Require exact opening-1M raw roundtrip, deterministic second archive, archive at most 250,000 bytes, peak RSS below decimal 10GB, and measured CPU throughput; then freeze unchanged for a 10M and distant maturity gate before any package minimization.",
+  "proposal_id": "nncp_compact5_preprocessed_maturity_v1",
+  "retired_neighborhoods": [
+    "unchanged startup compact-NNCP routing into Gamma"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 125,
+  "state": "developed",
+  "title": "Compact causal NNCP in its native preprocessed domain"
+}

@@ -1,0 +1,33 @@
+{
+  "added": "2026-07-27",
+  "deps": [
+    "POSIX shell environment",
+    "GNU make and GCC",
+    "zlib development and runtime",
+    "x86-64 Linux compatible with the pinned CPU libnc.so"
+  ],
+  "description": "Compact causal NNCP in its native preprocessed domain",
+  "family": "nncp_compact_cpu",
+  "hypothesis": "The reconstructed 5-layer, 256-wide, batch-1 NNCP model operating on the official reversible enwik9 preprocessing matures to at most 250,000 archive bytes on opening 1M while retaining exact CPU roundtrip and enough asymptotic headroom for a counted 108,000,000-byte full-corpus candidate.",
+  "id": "nncp_compact5_preprocessed_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "Official NNCP reversible preprocessor and compact causal transformer arithmetic stream"
+    ],
+    "mechanism_change": "change_coded_alphabet",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_compact5_preprocessed_maturity_v1",
+    "retired_neighborhoods": [
+      "unchanged startup compact-NNCP routing into Gamma"
+    ]
+  },
+  "source": {
+    "official_tar_sha256": "7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119",
+    "cpu_package": "projects/enwiki9/programs/nncp_compact5_preprocessed_v1/nncp_cpu_source.tar.gz",
+    "cpu_package_sha256": "79e5e7152ef2b419528157ae86e14570b0a87a4cb12765628963d415522f0102",
+    "build": "make -j2",
+    "profile": "enwik9,batch_size=1,n_layer=5,d_model=256,d_inner=768,preprocess=16384,512"
+  },
+  "status": "candidate",
+  "verdict": "Unmeasured compact Bellard-NNCP native-domain candidate."
+}

@@ -363,6 +363,7 @@ def develop_proposal(
     proposal_id: str,
     candidate_id: str,
     replacements: list[str],
+    adopt_existing: bool = False,
 ) -> tuple[dict[str, Any], pathlib.Path]:
     located = proposal_path(proposal_id)
     if located is None:
@@ -372,13 +373,28 @@ def develop_proposal(
     parent = proposal.get("parent")
     if parent is not None and not isinstance(parent, str):
         raise ValueError(f"invalid proposal parent: {proposal_id}")
-    destination = create_candidate(
-        candidate_id=candidate_id,
-        parent=parent,
-        hypothesis=str(proposal.get("hypothesis", "")),
-        description=str(proposal.get("title", proposal_id)),
-        replacements=replacements,
-    )
+    if adopt_existing:
+        if replacements:
+            raise ValueError("--replace cannot be used with --adopt-existing")
+        destination = candidate_path(candidate_id)
+        if not destination.is_dir():
+            raise FileNotFoundError(
+                f"candidate to adopt does not exist: {candidate_id}"
+            )
+        existing_meta = candidate_meta(candidate_id)
+        if existing_meta.get("parent") != parent:
+            raise ValueError(
+                "adopted candidate parent does not match proposal parent: "
+                f"{existing_meta.get('parent')!r} != {parent!r}"
+            )
+    else:
+        destination = create_candidate(
+            candidate_id=candidate_id,
+            parent=parent,
+            hypothesis=str(proposal.get("hypothesis", "")),
+            description=str(proposal.get("title", proposal_id)),
+            replacements=replacements,
+        )
     meta_path = destination / "meta.json"
     meta = load_json(meta_path)
     meta["omega"] = {
@@ -829,6 +845,11 @@ def build_parser() -> argparse.ArgumentParser:
     develop.add_argument("proposal_id")
     develop.add_argument("candidate_id")
     develop.add_argument("--replace", action="append", default=[])
+    develop.add_argument(
+        "--adopt-existing",
+        action="store_true",
+        help="attach a prebuilt candidate after validating its proposal parent",
+    )
     develop.add_argument("--enqueue", action="store_true")
     add_enqueue_options(develop)
 
@@ -952,6 +973,7 @@ def main() -> int:
                 proposal_id=args.proposal_id,
                 candidate_id=args.candidate_id,
                 replacements=args.replace,
+                adopt_existing=args.adopt_existing,
             )
             result = {
                 "proposal": proposal,

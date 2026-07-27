@@ -1,0 +1,133 @@
+{
+  "id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_dense43_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "family": "cmix21_mmap",
+  "status": "candidate",
+  "description": "A10 dense non-power ContextMap2 capacity using the former 128-byte table budget",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "hypothesis": "Bijective scrambling and multiply-high reduction expose floor(4N/3) A10 cells under the former A14 payload budget and improve exact codelength enough to repay package and resource costs.",
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "source": {
+    "tree": "projects/enwiki9/external/cmix21-sidecar",
+    "patches": [
+      {
+        "path": "patches/fxcm_dense_range_bucket_v1.patch",
+        "sha256": "3e7e4ac46723c1a37d9eced0c9b238f90ef929b0bbb07143e5333a9c1c0d6211"
+      }
+    ],
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_dense43_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/cmix.bin.gz",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_dense43_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/english.dic.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=21 -DCMIX_PPMD_MEMORY_KB=20352 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=20 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2 -DCMIX_FXCM_CMC2_ASSOC=10 -DCMIX_FXCM_CMC2_DENSE_RANGE=1",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=21",
+      "-DCMIX_PPMD_MEMORY_KB=20352",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=1",
+      "-DCMIX_FXCM_RCM_DIV=20",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=2",
+      "-DCMIX_FXCM_CMC2_ASSOC=10",
+      "-DCMIX_FXCM_CMC2_DENSE_RANGE=1"
+    ]
+  },
+  "build": {
+    "payload_files": {
+      "cmix.bin.gz": 386621,
+      "english.dic.gz": 175356,
+      "program.py": 2223
+    },
+    "program_size": 564200,
+    "payload_sha256": {
+      "cmix.bin.gz": "329f596071043b30f24adda80040b67b2ba0457c4efe48f3c6ddb67f61ec29c6",
+      "english.dic.gz": "36983bfea2dd5b0cf0e360340ac36057bfa3e56ba7a307fb41565b19b4aa022a",
+      "program.py": "987823041e6ebad2121823f260e2d5f72c172685839becd4c5acfee5b9db9a67"
+    }
+  },
+  "pgsg": {
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "type": "codec",
+        "payload": {
+          "discrete": {
+            "mode": "forced_text",
+            "codec": "cmix21"
+          }
+        }
+      },
+      {
+        "id": "compile_defines",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PPMD_MEMORY_MB": "21",
+            "CMIX_PPMD_MEMORY_KB": "20352",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_FXCM_CMC2_DIV": "1",
+            "CMIX_FXCM_RCM_DIV": "20",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "2",
+            "CMIX_FXCM_CMC2_ASSOC": "10",
+            "CMIX_FXCM_CMC2_DENSE_RANGE": "1"
+          }
+        }
+      },
+      {
+        "id": "mmap_allocator",
+        "type": "memory_policy",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "compile_defines",
+        "to": "cmix21_text",
+        "stream": "memory_shape"
+      },
+      {
+        "from": "mmap_allocator",
+        "to": "cmix21_text",
+        "stream": "state_storage"
+      }
+    ]
+  },
+  "measured": {},
+  "verdict": "Unmeasured cmix21 memory-shaping candidate.",
+  "omega": {
+    "proposal_id": "fxcm_dense_range_bucket_v1",
+    "mechanism_change": "compile_state_machine",
+    "interfaces_exposed": [
+      "FXCM cmC2 cell count, deterministic salted range index, replacement trajectory, and integer probability stream"
+    ],
+    "retired_neighborhoods": [
+      "Distinct from the completed power-of-two index-divisor and associativity screens: this spends physically reclaimed cell bytes through a non-power cardinality and changes the collision trajectory exactly once."
+    ],
+    "parent_proposal_id": null
+  }
+}
