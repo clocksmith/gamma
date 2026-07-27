@@ -1,0 +1,25 @@
+--- /home/x/enwiki9-nonproof/external/nncp-v2-pytorch/nncp_v2-2021-02-06-1/nncp.py	2021-02-07 09:01:32.000000000 -0500
++++ /home/x/enwiki9-nonproof/external/nncp-v2-rocm-port/nncp.py	2026-07-27 16:38:28.823039846 -0400
+@@ -129,7 +129,7 @@
+         args.output = os.path.join(args.work_dir, "out.bin")
+     
+ # enable deterministic behavior
+-torch.set_deterministic(True)
++torch.use_deterministic_algorithms(True)
+ 
+ # Set the random seed manually for reproducibility.
+ np.random.seed(args.seed)
+@@ -304,7 +304,7 @@
+ else:
+     adam_opt = optim.Adam
+ 
+-optimizer = adam_opt(model.parameters(), lr=lr_schedule[0], betas=(0, 0.9999), eps = args.adam_eps, weight_decay=0.0)
++optimizer = adam_opt(model.parameters(), lr=lr_schedule[0], betas=(0.0, 0.9999), eps = args.adam_eps, weight_decay=0.0)
+ 
+ if args.retrain_period != 0:
+     retrain_optimizer_state = optimizer.state_dict()
+@@ -631,4 +631,3 @@
+     print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=20))
+ else:
+     train()
+-
