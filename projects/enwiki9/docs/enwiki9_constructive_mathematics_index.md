@@ -273,3 +273,12 @@ that forecast without a valid dependency chain and complete joint accounting.
 ## Instantiation: CQQ-normalized NNCP source closure
 
 The C/C++ comment quotient theorem is instantiated by `nncp_compact5_preprocessed_cqq_x86xz_nodebug_t4_v1`. On the frozen 13-file source set it removes 30,194 source bytes and 6,504 x86-XZ payload bytes. A normalized no-debug build yields exact parent/child binary identity. The complete package saves 6,371 counted bytes. This is a constructive transfer receipt, not compression credit; native archive identity and resource eligibility remain separate gates.
+## FCFM-1: Finite Codec-Family Minimum
+
+- Problem: `docs/finite_codec_family_minimum_problem.md`
+- Solution: `docs/finite_codec_family_minimum_solution.md`
+- Constructive verifier: `tools/finite_xz_family_minimum.py`
+- Frozen instance: 377 XZ descriptions on the CQQ NNCP source tar
+- Result: exact 233,000-byte family minimum, saving 1,216 payload bytes
+- Transfer: exact restored tar and normalized build hashes
+- Boundary: native archive and resource gate pending; score credit zero

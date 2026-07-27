@@ -2048,3 +2048,10 @@ The extended exact-tar verifier recovered the same 849,920-byte tar with SHA-256
 The C/C++ source fell from 264,619 to 234,425 bytes. The x86-XZ payload fell from 240,720 to 234,216 bytes. After charging the 2,294-byte wrapper, the counted package is 236,510 bytes, 6,371 bytes below its 242,881-byte parent.
 
 Normalized parent and quotient builds produced byte-identical 144,904-byte `nncp` executables and byte-identical 565,336-byte `libnc.so` files. This proves exact build-output identity under the frozen flags, not native archive identity under the complete wrapper. The exact 10K roundtrip, determinism, archive, runtime, and memory gate remains pending. Score credit is zero.
+## 2026-07-27: FCFM-1 finite XZ-family minimum
+
+FCFM-1 formalizes exact minimization over a committed finite deterministic codec family. Its verifier re-encodes and decodes every family member, commits the ordered family, and selects by payload length, decoder-memory rank, then canonical parameter text.
+
+On the 819,200-byte CQQ NNCP source tar, all 377 committed XZ descriptions roundtripped. The unique tie-broken winner is `dict=768KiB,lc=4,lp=0,pb=0,mode=normal,nice=112,mf=bt2,depth=256`: 233,000 bytes, 1,216 below its CQQ parent payload. The full package is 235,294 bytes, 1,216 below the CQQ parent and 7,587 below the original x86-XZ parent. The restored tar and normalized binaries are exact. Native 10K archive and resource gates remain pending, so score credit is zero.
+
+The generic finite-closure-frame instantiation produced only 112 gross payload bytes on this closure and was not materialized because its decoder would add a new counted parser. This closes FCF for this NNCP package unless a decoder-free embedding is found.
