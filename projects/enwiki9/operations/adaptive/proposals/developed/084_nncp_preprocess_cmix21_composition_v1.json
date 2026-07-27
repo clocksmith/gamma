@@ -1,0 +1,30 @@
+{
+  "candidate_id": "nncp_pc_u16be_cmix21_assoc10_v1",
+  "created_at": "2026-07-27T20:00:00+00:00",
+  "developed_at": "2026-07-27T20:00:00+00:00",
+  "evidence": [
+    "docs/reversible_dictionary_backend_composition_problem.md",
+    "docs/reversible_dictionary_backend_composition_solution.md",
+    "results/nncp_preprocess_backend_composition_v1/layout_screen.json",
+    "programs/nncp_pc_u16be_cmix21_assoc10_v1/meta.json",
+    "results/nncp_symbol_raw_map_opening_1m_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 1700000,
+  "hypothesis": "Official NNCP reversible preprocessing exposes enough symbol-level regularity to let the frozen B2 cmix21 backend recover at least target-scale net bytes after dictionary framing and the complete added CPU source package.",
+  "interfaces_exposed": ["official NNCP pc/pd stream", "big-endian uint16 symbol layout", "frozen B2 cmix21 backend"],
+  "kill_condition": "Retire unchanged if the exact 250K archive exceeds 44753 bytes, package exceeds 900000 bytes, roundtrip or deterministic replay fails, or decimal memory is exceeded. Do not test alternate symbol byte layouts after failure.",
+  "max_program_bytes": 900000,
+  "mechanism_change": "compose_reversible_preprocessor_with_mature_backend",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "coder",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": "fxcm_aligned_cell_frontier_v1",
+  "priority": 84,
+  "promotion_condition": "Pass exact 250K at 44753 bytes or less with complete package, then freeze for opening 1M and require at least 2000 B/M net plus positive distant transfer before exact 10M.",
+  "proposal_id": "nncp_preprocess_cmix21_composition_v1",
+  "retired_neighborhoods": ["fixed-nine-bit NNCP symbols before a byte-context backend", "planar NNCP symbol bytes", "escape-255 NNCP symbol bytes"],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 84,
+  "state": "developed",
+  "title": "Official NNCP preprocessing composed with B2 cmix21"
+}

@@ -1,0 +1,36 @@
+{
+  "created_at": "2026-07-27T19:30:00+00:00",
+  "evidence": [
+    "docs/fxcm_factoradic_recency_problem.md",
+    "docs/fxcm_factoradic_recency_solution.md",
+    "tools/fxcm_factoradic_recency_verify.cpp",
+    "results/fxcm_factoradic_recency_v1/theorem_verifier.json",
+    "docs/fxcm_aligned_cell_native_matrix.md"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "The four tail bytes in each ninety-six-byte ten-way FXCM cell can encode the exact factoradic recency order, and least-recent tie resolution among minimum-priority ways will preserve useful contexts better than fixed-index or checksum-balanced ties without increasing dominant allocation.",
+  "interfaces_exposed": [
+    "ten-way ContextMap2 replacement tie",
+    "thirty-two-bit factoradic recency state",
+    "existing ninety-six-byte aligned cell tail"
+  ],
+  "kill_condition": "Retire unchanged on package growth above 8192 bytes, any exact 250K roundtrip/determinism/decimal-memory failure, less than 8 archive bytes improvement over B2 at frozen opening 1M, less than 128 counted bytes improvement at exact 10M, or any mandatory distant regression.",
+  "max_program_bytes": 8192,
+  "mechanism_change": "factoradic_exact_recency_tie_break",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "substrate",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": "fxcm_aligned_cell_frontier_v1",
+  "priority": 65,
+  "promotion_condition": "The frozen candidate passes exact package, 250K, 1M, 10M, and distant gates under the FRT-1 thresholds, then contributes only through complete joint replay and full-corpus accounting.",
+  "proposal_id": "fxcm_factoradic_recency_tie_v1",
+  "retired_neighborhoods": [
+    "factoradic rank widths above thirty-two bits for ten ways",
+    "recency-only replacement that ignores existing priority",
+    "parameter sweeps over approximate age counters"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 65,
+  "state": "proposed",
+  "title": "Exact factoradic LRU tie-breaking in FXCM padding"
+}
