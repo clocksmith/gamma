@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-27T01:03:06+00:00`
+- Generated at UTC: `2026-07-27T01:04:14+00:00`
 
 ## Target State
 
@@ -117,8 +117,8 @@ python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --offi
 - Audit return code: `0`
 - Program directories: `546`
 - Registered programs: `229`
-- Untracked nonignored entries: `6`
-- Modified tracked entries: `3`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `16`
 - Candidate statuses: `active=22, blocked_dependency=31, candidate=3, measured_negative=92, retired=398`
 
 ## Active Runner Process Table
