@@ -2290,12 +2290,17 @@ become CBM experts only if the frozen PBVC gate first demonstrates
 target-scale blockwise information.  CBM then removes explicit block labels
 while remaining decoder-causal, but still requires exact arithmetic replay,
 bounded native integer realization, complete source accounting, and resource
-receipts.  It currently has no live instance and zero score credit.
+receipts.  The bounded positive-Hamilton projection implementation passes an
+exact synthetic parent-replay and label-free reconstruction control, saving
+2,222 net bytes on the deliberately separable 12,800-byte fixture.  This is
+implementation validation, not corpus evidence, and receives zero score
+credit.
 
 Evidence:
 
 - `docs/causal_block_expert_mixture_problem.md`
 - `docs/causal_block_expert_mixture_solution.md`
+- `tools/causal_block_expert_mixture.py`
 
 ## 2026-07-27: PBVC-1 paid block vector correction codebook is queued
 
