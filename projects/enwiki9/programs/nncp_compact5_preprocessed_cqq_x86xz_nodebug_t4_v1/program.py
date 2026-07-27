@@ -11,6 +11,11 @@ import tempfile
 
 _DIR = pathlib.Path(__file__).resolve().parent
 _SOURCE_TAR = _DIR / "nncp_cpu_source.tar.xz"
+_CFLAGS = (
+    "-O3 -Wall -Wpointer-arith -fno-math-errno -fno-trapping-math "
+    "-MMD -Wno-format-truncation "
+    '-DCONFIG_VERSION=\\"2024-06-05\\" -DLIBNC_CONFIG_FULL'
+)
 _build_dir: pathlib.Path | None = None
 
 
@@ -21,7 +26,7 @@ def _binary() -> tuple[pathlib.Path, dict[str, str]]:
         with tarfile.open(_SOURCE_TAR, "r:xz") as archive:
             archive.extractall(_build_dir)
         subprocess.run(
-            ["make", "-C", str(_build_dir), "-j2"],
+            ["make", "-C", str(_build_dir), "-j2", f"CFLAGS={_CFLAGS}"],
             check=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -51,13 +56,14 @@ def _run(arguments: list[str], data: bytes) -> bytes:
 
 
 def compress(data: bytes) -> bytes:
-    threads = os.environ.get("NNCP_THREADS", "4")
     return _run(
         [
             "--profile",
             "enwik9",
             "--batch_size",
-            "1", "-T", "4",
+            "1",
+            "-T",
+            "4",
             "--n_layer",
             "5",
             "--d_model",
@@ -66,8 +72,6 @@ def compress(data: bytes) -> bytes:
             "768",
             "--preprocess",
             "16384,512",
-            "-T",
-            threads,
             "c",
         ],
         data,

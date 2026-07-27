@@ -1,24 +1,24 @@
 {
   "added": "2026-07-27",
   "build": {
-    "counted_payload_bytes": 242881,
+    "counted_payload_bytes": 236510,
     "package_cap_bytes": 700000,
-    "package_headroom_bytes": 457119,
+    "package_headroom_bytes": 463490,
     "payload_files": {
-      "nncp_cpu_source.tar.xz": 240720,
-      "program.py": 2161
+      "nncp_cpu_source.tar.xz": 234216,
+      "program.py": 2294
     },
     "payload_sha256": {
-      "nncp_cpu_source.tar.xz": "c0b8d27f6d2de43f60f50a5cb6d8da5fd15067c209f6efe8ee1f8ded4c4765b8",
-      "program.py": "eb24e13946ff97e624a34cade621e2db97e4926d5050e52a72afdc53d042c227"
+      "nncp_cpu_source.tar.xz": "c2520e645a2703b94f30c705feff949f13d634c1c9e75e498d3c32d2100766ec",
+      "program.py": "fae9776225008493913537e46f43646e5fb0c22822b54c4b393b6bf60d060569"
     },
-    "program_bytes": 2150,
+    "program_bytes": 2294,
     "program_file": "program.py",
-    "program_sha256": "47e2fee15ff1460f1f8735622b47c5258cca56c6c308b86f91b3b60c8c06a5d3",
-    "program_size": 242881,
-    "source_archive_bytes": 311289,
-    "source_archive_file": "nncp_cpu_source.tar.gz",
-    "source_archive_sha256": "79e5e7152ef2b419528157ae86e14570b0a87a4cb12765628963d415522f0102"
+    "program_sha256": "fae9776225008493913537e46f43646e5fb0c22822b54c4b393b6bf60d060569",
+    "program_size": 236510,
+    "source_archive_bytes": 234216,
+    "source_archive_file": "nncp_cpu_source.tar.xz",
+    "source_archive_sha256": "c2520e645a2703b94f30c705feff949f13d634c1c9e75e498d3c32d2100766ec"
   },
   "deps": [
     "POSIX shell environment",
@@ -26,126 +26,48 @@
     "zlib development and runtime",
     "x86-64 Linux compatible with the pinned CPU libnc.so"
   ],
-  "description": "Compact5 NNCP T4 with exact x86-filtered XZ source package.",
+  "description": "Compact5 NNCP T4 with CQQ source closure, exact x86-filtered XZ packaging, and normalized no-debug compilation.",
   "family": "nncp_compact_cpu",
-  "hypothesis": "The exact x86 XZ transcode saves 5,684 package bytes while preserving the frozen T4 archive and runtime.",
-  "id": "nncp_compact5_preprocessed_x86xz_t4_v1",
+  "hypothesis": "Decoder-irrelevant C comments, horizontal whitespace, and debug metadata can be quotiented from the exact NNCP source closure while preserving its native T4 archive and reducing counted package bytes.",
+  "id": "nncp_compact5_preprocessed_cqq_x86xz_nodebug_t4_v1",
   "measured": {
-    "lane0_contract": {
-      "contract_status": "ok",
-      "generated_at": "2026-07-27T18:30:29+00:00",
-      "proposed_status": "candidate",
-      "reasons": [],
-      "verdict": "program.py imports and exposes compress/decompress."
+    "build_identity": {
+      "libnc_so_bytes": 565336,
+      "libnc_so_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+      "nncp_bytes": 144904,
+      "nncp_sha256": "fed2ef59612c08077572983d70278211b76755d67910b293bb23aa11f1252fe5"
     },
-    "lane0_contract_checks": [
-      {
-        "contract_status": "ok",
-        "generated_at": "2026-07-27T18:30:29+00:00",
-        "proposed_status": "candidate",
-        "reasons": [],
-        "verdict": "program.py imports and exposes compress/decompress."
-      }
-    ],
-    "lane0_triage": {
-      "gates": [
-        {
-          "archive_ceiling": null,
-          "archive_ceiling_missed": false,
-          "bits_per_byte": 4.9832,
-          "comparison": {
-            "archive_delta_vs_baseline": 2573,
-            "baseline": {
-              "bits_per_byte": 2.9248,
-              "compressed_size": 3656,
-              "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
-              "data_size": 10000,
-              "determinism_single_host_byte_equal": true,
-              "hutter_score": 3857,
-              "program_id": "baseline_lzma",
-              "program_size": 201,
-              "program_stats": null,
-              "roundtrip_ok": true
-            },
-            "same_scope": true,
-            "score_delta_vs_baseline": 315811
-          },
-          "compressed_size": 6229,
-          "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
-          "data_size": 10000,
-          "determinism_single_host_byte_equal": true,
-          "hutter_score": 319668,
-          "program_id": "nncp_compact5_preprocessed_v1",
-          "program_size": 313439,
-          "program_stats": null,
-          "roundtrip_ok": true
-        }
-      ],
-      "generated_at": "2026-07-27T18:29:17+00:00",
-      "proposed_status": "measured_negative",
-      "verdict": "Keep as negative evidence: valid deterministic loser."
-    },
-    "lane0_triage_runs": [
-      {
-        "gates": [
-          {
-            "archive_ceiling": null,
-            "archive_ceiling_missed": false,
-            "bits_per_byte": 4.9832,
-            "comparison": {
-              "archive_delta_vs_baseline": 2573,
-              "baseline": {
-                "bits_per_byte": 2.9248,
-                "compressed_size": 3656,
-                "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
-                "data_size": 10000,
-                "determinism_single_host_byte_equal": true,
-                "hutter_score": 3857,
-                "program_id": "baseline_lzma",
-                "program_size": 201,
-                "program_stats": null,
-                "roundtrip_ok": true
-              },
-              "same_scope": true,
-              "score_delta_vs_baseline": 315811
-            },
-            "compressed_size": 6229,
-            "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
-            "data_size": 10000,
-            "determinism_single_host_byte_equal": true,
-            "hutter_score": 319668,
-            "program_id": "nncp_compact5_preprocessed_v1",
-            "program_size": 313439,
-            "program_stats": null,
-            "roundtrip_ok": true
-          }
-        ],
-        "generated_at": "2026-07-27T18:29:17+00:00",
-        "proposed_status": "measured_negative",
-        "verdict": "Keep as negative evidence: valid deterministic loser."
-      }
-    ]
+    "source_quotient": {
+      "candidate_x86_xz_bytes": 234216,
+      "cqq_source_bytes": 234425,
+      "parent_source_bytes": 264619,
+      "parent_x86_xz_bytes": 240720,
+      "removed_source_bytes": 30194,
+      "saved_x86_xz_bytes": 6504
+    }
   },
   "omega": {
     "interfaces_exposed": [
-      "exact_nncp_source_tar"
+      "exact_nncp_source_tar",
+      "normalized_build_flags"
     ],
     "mechanism_change": "replace_representation",
-    "parent_proposal_id": null,
-    "proposal_id": "nncp_compact5_x86_xz_t4_v1",
+    "parent_proposal_id": "nncp_compact5_x86_xz_t4_v1",
+    "proposal_id": "nncp_compact5_cqq_x86xz_nodebug_t4_v1",
     "retired_neighborhoods": []
   },
-  "parent": "nncp_compact5_preprocessed_xz_t4_v1",
+  "parent": "nncp_compact5_preprocessed_x86xz_t4_v1",
   "source": {
-    "build": "make -j2",
-    "cpu_package": "projects/enwiki9/programs/nncp_compact5_preprocessed_x86xz_t4_v1/nncp_cpu_source.tar.xz",
-    "cpu_package_sha256": "c0b8d27f6d2de43f60f50a5cb6d8da5fd15067c209f6efe8ee1f8ded4c4765b8",
+    "build": "make -j2 with frozen normalized CFLAGS",
+    "cpu_package": "projects/enwiki9/programs/nncp_compact5_preprocessed_cqq_x86xz_nodebug_t4_v1/nncp_cpu_source.tar.xz",
+    "cpu_package_sha256": "c2520e645a2703b94f30c705feff949f13d634c1c9e75e498d3c32d2100766ec",
     "cpu_threads": 4,
     "official_tar_sha256": "7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119",
     "payload_codec": "XZ x86 filter plus LZMA2 preset 9e",
     "profile": "enwik9,batch_size=1,n_layer=5,d_model=256,d_inner=768,preprocess=16384,512",
-    "rpf_theorem": "docs/row_parallel_floating_point_solution.md"
+    "rpf_theorem": "docs/row_parallel_floating_point_solution.md",
+    "source_quotient_theorem": "docs/cpp_comment_quotient_solution.md"
   },
   "status": "candidate",
-  "verdict": "Exact package-transcoded T4 candidate awaiting native archive and runtime gate."
+  "verdict": "Exact source and build quotient candidate awaiting native archive and runtime gate."
 }
