@@ -1,0 +1,32 @@
+{
+  "claimed_at": "2026-07-27T23:37:50+00:00",
+  "created_at": "2026-07-27T23:37:50+00:00",
+  "evidence": [
+    "results/nncp_v33_relative_parity_v1/receipt.json",
+    "results/nncp_v33_relative_parity_bf16_v1/receipt.json",
+    "docs/research_register.md"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "A dropout-disabled miniature PyTorch/ROCm realization can reproduce LibNC causal segment predictions and Adam-updated parameters from identical frozen coefficients closely enough to authorize full-profile teacher tracing.",
+  "interfaces_exposed": [
+    "LibNC coefficient export, causal segment state, named Adam update receipt"
+  ],
+  "kill_condition": "Stop the current port if the first update diverges after matching loss reduction, clipping, Adam state, learning rate, and memory schedule; do not launch a mature trace on inference parity alone.",
+  "max_program_bytes": 0,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "owner": "root",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Across a fixed miniature causal schedule, every pre-update and post-update distribution remains within the declared F32/BF16 tolerance and named parameter updates match before any full-profile trace.",
+  "proposal_id": "nncp_v33_rocm_online_update_parity_v1",
+  "retired_neighborhoods": [
+    "startup teacher quotient and soft-target feature sweeps"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 65,
+  "state": "claimed",
+  "title": "NNCP v3.3 ROCm online-update parity"
+}
