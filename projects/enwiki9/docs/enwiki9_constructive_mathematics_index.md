@@ -132,12 +132,20 @@ by absent empirical predictor, coloring, teacher, or residual objects.
 - Candidate: `cmix21_b2_source_closure_rawlzma2_v1`
 - Construction: a canonical 73-member USTAR source-and-dictionary closure,
   raw LZMA2 coding, frozen B2 build flags, and an exact native wrapper.
-- Exact package screen: `307675` bytes, saving `134287` bytes over the
-  x86-binary parent and `256471` bytes over B2.
-- Evidence: `results/source_closure_compilation_b2_v1/screen.json`.
+- Exact package screen: `307539` bytes, saving `134423` bytes over the
+  x86-binary parent and `256607` bytes over B2.
+- Two exact-recipe clean builds are byte-identical to each other and to the
+  shipped B2 binary; dictionaries are also byte-identical.
+- Evidence: `results/source_closure_compilation_b2_v1/screen.json` and
+  `results/source_closure_compilation_b2_v1/clean_build.json`.
 - Pending gate: `20260727T204000Z_578a72f77b`.
-- Score credit: `0`; two clean build projections, archive identity, roundtrip,
-  deterministic re-encode, compiler runtime, and resources remain unproved.
+- Score credit: `0`; native wrapper roundtrip, deterministic re-encode,
+  compiler/runtime accounting, and resources remain unproved.
+- Parked framing successor: a canonical length-prefixed closure recovers the
+  same 73 members while reducing the raw closure by `57922` bytes and its
+  compressed payload by `1699` bytes. Evidence:
+  `results/source_closure_framing_b2_v1/screen.json`. It remains parked until
+  SCC-1 proves native build identity.
 
 ### ELI-1: ELF load-image equivalence
 

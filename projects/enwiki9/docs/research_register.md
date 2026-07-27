@@ -1972,14 +1972,30 @@ SCC-1 proves the conditional transfer from a canonical finite source closure
 to an ELI-equivalent executable and exact package accounting. The B2 instance
 contains 72 source/build/license files plus the exact English dictionary in a
 canonical 73-member USTAR archive. Raw LZMA2 compresses the `1218560`-byte
-archive to `304731` bytes. With the frozen `2944`-byte runtime-build wrapper,
-candidate `cmix21_b2_source_closure_rawlzma2_v1` has a complete provisional
-package of `307675` bytes, saving exactly `134287` bytes over the x86-binary
-parent and `256471` bytes over B2.
+archive to `304731` bytes. With the corrected exact-recipe `2808`-byte
+runtime-build wrapper, candidate `cmix21_b2_source_closure_rawlzma2_v1` has a
+complete provisional package of `307539` bytes, saving exactly `134423` bytes
+over the x86-binary parent and `256607` bytes over B2.
 
-The archive roundtrips and its member manifest is path-safe and exact.
+The archive roundtrips and its member manifest is path-safe and exact. Two
+low-priority clean builds are byte-identical to each other and to B2:
+`837176` bytes with SHA-256
+`5913ac6c77b875f5871391db08fb01be3ecb9fff8db9dbc203a5c94bfe624adb`.
+Their ELI projections and dictionaries also match exactly.
 Proposal `source_closure_compilation_b2_v1` is developed and queued as
 `20260727T204000Z_578a72f77b` behind the full-idx13 gate. Two clean builds,
-ELI projection identity, exact B2 archive identity, raw roundtrip,
-deterministic re-encode, compiler/runtime cost, and memory remain mandatory.
-The screen receives zero score credit.
+ELI projection identity, and conditional archive identity are proved. Native
+wrapper roundtrip, deterministic re-encode, compiler/runtime cost, and memory
+remain mandatory. The screen receives zero score credit.
+
+### SCC-1 canonical framing control
+
+A fixed length-prefixed archive was compared with USTAR for the same 73
+ordered source and dictionary members. It roundtrips exactly, reduces raw
+framing from `1218560` to `1160638` bytes, and reduces the raw-LZMA2 payload
+from `304731` to `303032` bytes. This is a `1699`-byte exact payload
+opportunity, not a compiler or codec-parameter result. Receipt:
+`results/source_closure_framing_b2_v1/screen.json`.
+
+The framing successor remains parked until the USTAR SCC-1 parent proves
+clean-build and native archive identity. Score credit is zero.

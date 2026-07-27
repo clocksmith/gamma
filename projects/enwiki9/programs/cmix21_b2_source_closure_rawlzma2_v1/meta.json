@@ -1,14 +1,14 @@
 {
   "build": {
     "payload_files": {
-      "program.py": 2944,
+      "program.py": 2808,
       "source.tar.raw": 304731
     },
     "payload_sha256": {
-      "program.py": "aaa44651a272ba46931b39662bfc8bdb86385cb36c5d8474c2a4cb683e07d4c1",
+      "program.py": "1216c354e84ac99df1153d135b8f09249db8cdb62cd1b90eadaa69b3f8b65032",
       "source.tar.raw": "578a72f77bbcb861393e153d683b59ca8e4563f3f21590aeea17a6c1fb8c1418"
     },
-    "program_size": 307675
+    "program_size": 307539
   },
   "deps": [
     "Python lzma and tarfile",
@@ -20,7 +20,10 @@
   "family": "cmix21_mmap",
   "hypothesis": "The canonical compressed B2 source closure builds a loader-equivalent runtime and reduces the complete package while preserving the exact B2 archive.",
   "id": "cmix21_b2_source_closure_rawlzma2_v1",
-  "measured": {},
+  "measured": {
+    "clean_build_binary_identity_with_parent": true,
+    "clean_build_receipt": "results/source_closure_compilation_b2_v1/clean_build.json"
+  },
   "name": "B2 built from a canonical raw-LZMA2 source closure",
   "omega": {
     "interfaces_exposed": [
@@ -42,5 +45,5 @@
     "tree": "projects/enwiki9/external/cmix21-sidecar"
   },
   "status": "candidate",
-  "verdict": "Canonical source payload screen passes; clean-build and native identity gate pending."
+  "verdict": "Canonical source payload and two byte-identical clean builds pass; native wrapper identity and resource gate pending."
 }
