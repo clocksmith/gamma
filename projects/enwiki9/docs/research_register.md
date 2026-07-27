@@ -1231,3 +1231,24 @@ Receipts:
 - `results/nncp_gamma_gap_map_10k_v1/decision.json`
 - `results/nncp_predictive_quotient_10k_v1/decision.json`
 - `results/oracle_distill_teacher_quotient_10k_v1/decision.json`
+
+## MIXREGRET-CERT full-component U0 is operationally blocked on this host
+
+The claimed full-component closure experiment is not executable from the
+artifacts synchronized to this device. Its parent evidence pointer,
+`results/endpoint428_pair_layer0_online_native_10m_v1/receipt.json`, is absent;
+no frozen source package for
+`cmix21-lstm200-plus-fx2lite428-onlinepairlayer0-v17` is present; and no
+`MIXRGT1` trace exists locally. The available reconstruction under
+`/home/clocksmith/enwiki9-nonproof/runtime/reconstruct_endpoint428_runtime_v1`
+is stock cmix21 and lacks both `fx2lite_endpoint428` and
+`OnlineResidualMixer`, so the observation patch cannot recreate the selected
+parent.
+
+This is an operational blocker, not an algorithmic result. U0,
+circular-shift controls, U1, and paid selectors remain unmeasured and receive
+zero score credit. The claimed proposal remains open for the device holding
+the exact source. Continuation requires a hash-bound frozen source tree,
+parent receipt, input and archive hashes, build identity, trace-off/trace-on
+archive identity, and the resulting `MIXRGT1` trace. See
+`results/mixregret_cert_component_union_v1/blocker.json`.
