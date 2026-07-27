@@ -26,7 +26,7 @@ _FLAGS = (
     "-DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 "
     "-DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=20 "
     "-DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2 "
-    "-DCMIX_FXCM_CMC2_ASSOC=10 -Wl,--build-id=none"
+    "-DCMIX_FXCM_CMC2_ASSOC=10"
 )
 
 
@@ -44,12 +44,8 @@ def _runtime() -> tuple[pathlib.Path, pathlib.Path]:
                 raise ValueError("unsafe source-closure member")
         archive.extractall(directory)
     source = directory / "cmix21"
-    flags = (
-        f"{_FLAGS} -ffile-prefix-map={source}=/src "
-        f"-fdebug-prefix-map={source}=/src"
-    )
     subprocess.run(
-        ["make", "-C", str(source), "cmix", "CXX=g++", f"LFLAGS={flags}"],
+        ["make", "-C", str(source), "cmix", "CXX=g++", f"LFLAGS={_FLAGS}"],
         check=True,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
