@@ -1522,3 +1522,28 @@ but no local trace currently supplies that antecedent.
 - The MV-2 250K exact gate passed at archive 45,178 bytes, program 564,273 bytes, exact roundtrip, deterministic replay, and 9,441,308 KiB peak single-process RSS. The 1M one-pass screen produced 174,531 bytes with 150,833 KiB decimal margin; it is shadow evidence only.
 - A lock-held 10M one-pass MV-2 screen is active as PID 215555. It receives zero score credit until a full roundtrip and deterministic replay are completed.
 - `BP-1 Fixed-Range Bucket Packing` proves that reducing FXCM ContextMap2 associativity from 14 to 10 changes the minimum 32-byte-grained cell from 128 to 96 bytes while preserving the hash bucket range. Source support is implemented but unbuilt and unmeasured while MV-2 owns the heavy lock.
+
+## 2026-07-27: NNCP same-domain student package feasibility audit
+
+Artifact: `results/nncp_symbol_student_package_audit_v1/decision.json`
+
+The selected 110,181,114-byte Gamma forecast has 2,181,114 bytes of debt to
+the 108,000,000 design target. Against NNCP's published 107,261,318-byte total,
+the provisional cross-system gap is 2,919,796 bytes. This is an economic screen,
+not an exact shared-domain teacher receipt and receives zero score credit.
+
+A canonical xz-9e source closure costs 15,788 bytes for preprocessing plus the
+range-coder core, 20,580 bytes with the required runtime support, and 48,420
+bytes for the full CPU source closure. Fixed preprocessing is therefore not the
+primary blocker. Including the 20,580-byte runtime closure, a 64 KiB student
+must recover 77.6503% of the provisional gap, a 128 KiB student must recover
+79.8948%, and a 256 KiB student must recover 84.3839%. At exactly 80% retention,
+the 128 KiB design has only 3,070 bytes of remaining allowance and the 256 KiB
+design is 128,002 bytes over budget.
+
+The existing archive-neutral startup trace does not authorize construction: the
+teacher was worse than Gamma at its common startup boundary and the best
+integer quotient retained only 29.2425% of teacher headroom. No accelerator is
+available on this host. Decision: do not enlarge the CPU startup trace, sweep
+student widths, or attempt WRT transfer. Continue only with an accelerated
+mature batch-1 trace or a materially different reproducible under-target teacher.
