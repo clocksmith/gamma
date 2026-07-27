@@ -1,0 +1,33 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10balmin_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "claimed_at": "2026-07-27T18:16:39+00:00",
+  "created_at": "2026-07-27T18:16:38+00:00",
+  "developed_at": "2026-07-27T18:17:57+00:00",
+  "evidence": [
+    "docs/fxcm_balanced_min_tie_problem.md",
+    "docs/fxcm_balanced_min_tie_solution.md",
+    "results/fxcm_balanced_min_tie_v1/theorem_verifier.json",
+    "patches/fxcm_balanced_min_tie_v1.patch"
+  ],
+  "expected_savings_bytes": 50000,
+  "hypothesis": "Replacing deterministic lowest-index tie bias with checksum-balanced selection among equal minimum-priority eligible FXCM slots improves collision diversity without adding memory or transmitted state.",
+  "interfaces_exposed": [
+    "fxcm_replacement_tie_policy"
+  ],
+  "kill_condition": "Retire on any identity or resource failure, or if exact 250k archive bytes are not strictly below the matched parent.",
+  "max_program_bytes": 10000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "endpoint",
+  "owner": "codex-suby",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": null,
+  "priority": 935,
+  "promotion_condition": "At exact 250k, require roundtrip, deterministic second archive, decimal RSS compliance, and strictly fewer archive bytes than the unchanged parent; promote unchanged to exact 10M.",
+  "proposal_id": "fxcm_balanced_min_tie_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 950,
+  "state": "developed",
+  "title": "FXCM checksum-balanced minimum-priority replacement ties"
+}
