@@ -1,0 +1,32 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripsolidlzma_v1",
+  "claimed_at": "2026-07-27T20:07:59+00:00",
+  "created_at": "2026-07-27T20:07:59+00:00",
+  "developed_at": "2026-07-27T20:08:44+00:00",
+  "evidence": [
+    "docs/exact_package_transcoding_problem.md",
+    "docs/exact_package_transcoding_solution.md",
+    "results/exact_solid_payload_b2_v1/screen.json"
+  ],
+  "expected_savings_bytes": 161,
+  "hypothesis": "One exact solid LZMA stream plus a fixed split reconstructs the ELI executable and dictionary while reducing complete stored-program bytes and preserving the B2 archive.",
+  "interfaces_exposed": [
+    "One LZMA payload; fixed executable split offset; identical cmix and dictionary bytes"
+  ],
+  "kill_condition": "Reject if complete package is not smaller by at least one byte or if any payload, archive, roundtrip, determinism, or guard differs.",
+  "max_program_bytes": 0,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "owner": "suby",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1",
+  "parent_proposal_id": null,
+  "priority": 909,
+  "promotion_condition": "Complete program package is smaller than the ELI parent, split payloads are byte-identical, and exact 250K archive, roundtrip, determinism, and memory match B2.",
+  "proposal_id": "exact_solid_payload_b2_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 927,
+  "state": "developed",
+  "title": "Solid LZMA package for stripped B2 executable and dictionary"
+}

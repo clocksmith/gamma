@@ -1,0 +1,129 @@
+{
+  "build": {
+    "payload_files": {
+      "cmix.bin.lzma": 296718,
+      "english.dic.lzma": 155931,
+      "program.py": 2227
+    },
+    "payload_sha256": {
+      "cmix.bin.lzma": "251770747f813e4255d59371638c3dd860c1a681478f20ff3667021ed17e61e9",
+      "english.dic.lzma": "832cd4c7040793d05d8c25985bfffba2c043ef4bc03554977d1425f3c38cbd31",
+      "program.py": "f4de6f2ad4e2ee1c70387c4cc040ace518687eba55c227085a0c2ed924c4f213"
+    },
+    "program_size": 454876
+  },
+  "deps": [
+    "C++ runtime for the vendored cmix binary",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "description": "EPT solid-payload successor to ELI-1.",
+  "family": "cmix21_mmap",
+  "hypothesis": "A fixed split of one solid LZMA payload reconstructs the exact ELI executable and dictionary with a smaller complete package and identical native archive.",
+  "id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1",
+  "measured": {},
+  "name": "B2 stripped runtime with one solid LZMA payload",
+  "omega": {
+    "interfaces_exposed": [
+      "One LZMA payload; fixed executable split offset; identical cmix and dictionary bytes"
+    ],
+    "mechanism_change": "replace_representation",
+    "parent_proposal_id": null,
+    "proposal_id": "exact_solid_payload_b2_v1",
+    "retired_neighborhoods": []
+  },
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1",
+  "parent_program_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1",
+  "pgsg": {
+    "edges": [
+      {
+        "from": "compile_defines",
+        "stream": "memory_shape",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "mmap_allocator",
+        "stream": "state_storage",
+        "to": "cmix21_text"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "cmix21_text",
+        "payload": {
+          "discrete": {
+            "codec": "cmix21",
+            "mode": "forced_text"
+          }
+        },
+        "type": "codec"
+      },
+      {
+        "id": "compile_defines",
+        "payload": {
+          "discrete": {
+            "CMIX_FXCM_CMC2_ASSOC": "10",
+            "CMIX_FXCM_CMC2_DIV": "1",
+            "CMIX_FXCM_CMC2_IDX13_DIV": "2",
+            "CMIX_FXCM_MHASH_DIV": "1",
+            "CMIX_FXCM_RCM_DIV": "20",
+            "CMIX_PAQ8_BUF_DIV": "32",
+            "CMIX_PAQ8_BUF_SCALE": "1",
+            "CMIX_PAQ8_LEVEL": "5",
+            "CMIX_PAQ8_MAIN_CONTEXT_DIV": "1",
+            "CMIX_PAQ8_MAIN_CONTEXT_SCALE": "1",
+            "CMIX_PAQ8_MATCH_DIV": "1",
+            "CMIX_PAQ8_MATCH_SCALE": "1",
+            "CMIX_PAQ8_RCM_DIV": "32",
+            "CMIX_PAQ8_SPARSE_MATCH_DIV": "8",
+            "CMIX_PAQ8_TEXT_MODEL_DIV": "1",
+            "CMIX_PAQ8_TEXT_MODEL_SCALE": "1",
+            "CMIX_PPMD_MEMORY_KB": "20352",
+            "CMIX_PPMD_MEMORY_MB": "21"
+          }
+        },
+        "type": "memory_policy"
+      },
+      {
+        "id": "mmap_allocator",
+        "payload": {
+          "discrete": {
+            "mode": "file_backed_large_tables"
+          }
+        },
+        "type": "memory_policy"
+      }
+    ]
+  },
+  "program_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripsolidlzma_v1",
+  "program_name": "B2 stripped runtime with one solid LZMA payload",
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1/cmix.bin.lzma",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=21 -DCMIX_PPMD_MEMORY_KB=20352 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_MAIN_CONTEXT_DIV=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_DIV=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_MATCH_DIV=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=8 -DCMIX_PAQ8_RCM_DIV=32 -DCMIX_PAQ8_BUF_SCALE=1 -DCMIX_PAQ8_BUF_DIV=32 -DCMIX_FXCM_CMC2_DIV=1 -DCMIX_FXCM_RCM_DIV=20 -DCMIX_FXCM_MHASH_DIV=1 -DCMIX_FXCM_CMC2_IDX13_DIV=2 -DCMIX_FXCM_CMC2_ASSOC=10",
+    "defines": [
+      "-DCMIX_PAQ8_LEVEL=5",
+      "-DCMIX_PPMD_MEMORY_MB=21",
+      "-DCMIX_PPMD_MEMORY_KB=20352",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1",
+      "-DCMIX_PAQ8_MAIN_CONTEXT_DIV=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_SCALE=1",
+      "-DCMIX_PAQ8_TEXT_MODEL_DIV=1",
+      "-DCMIX_PAQ8_MATCH_SCALE=1",
+      "-DCMIX_PAQ8_MATCH_DIV=1",
+      "-DCMIX_PAQ8_SPARSE_MATCH_DIV=8",
+      "-DCMIX_PAQ8_RCM_DIV=32",
+      "-DCMIX_PAQ8_BUF_SCALE=1",
+      "-DCMIX_PAQ8_BUF_DIV=32",
+      "-DCMIX_FXCM_CMC2_DIV=1",
+      "-DCMIX_FXCM_RCM_DIV=20",
+      "-DCMIX_FXCM_MHASH_DIV=1",
+      "-DCMIX_FXCM_CMC2_IDX13_DIV=2",
+      "-DCMIX_FXCM_CMC2_ASSOC=10"
+    ],
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1/english.dic.lzma",
+    "elf_transform": "strip --strip-all; restore original ELF section-metadata header bytes 40:48 and 58:64",
+    "payload_codec": "lzma-alone -9e",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
+  },
+  "status": "candidate",
+  "verdict": "ELI-1 and EPT-1 projections verified; native identity/resource gate pending."
+}
