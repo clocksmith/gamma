@@ -2150,3 +2150,36 @@ Evidence:
 - `results/literal_migration_fcf_b2_v1/migration.json`
 - `results/literal_migration_fcf_b2_v1/screen.json`
 - `results/literal_migration_fcf_b2_v1/restoration_build.json`
+
+## 2026-07-27: SCLE-1 NNCP Makefile slack carrier saves 80 package bytes
+
+SCLE-1 embeds a fixed literal inside unused alignment slack of an existing
+framed member. It proves unchanged total container length and offsets, exact
+literal recovery, semantic identity under an ignored carrier extension, and
+the complete wrapper-plus-global-codec accounting inequality. Unchanged raw
+length does not imply unchanged compressed length, so the full codec family
+must be rerun.
+
+The 788-byte NNCP Makefile has 236 bytes of tar-block slack. Appending a
+145-byte `#G=` marker plus evaluated CFLAGS leaves 91 bytes, preserves the
+819200-byte tar length, and changes no bytes outside the Makefile header and
+allocated data block. All 377 committed XZ configurations were re-evaluated.
+The exact child minimum is 233012 bytes at `dict=800KiB,lc=4,lp=0,pb=0,
+mode=normal,nice=112,mf=bt2,depth=256`, only 12 bytes above the parent payload.
+
+Reading the carrier reduces the wrapper from 1099 to 1007 bytes. Complete
+package size falls from 234099 to 234019 bytes, saving 80. The normalized
+144904-byte nncp and 565336-byte libnc.so hashes remain exact. The old priority
+956 parent job was cancelled and replaced by
+`nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` at priority
+957 with the unchanged 6229-byte 10K archive ceiling. The HRQ native observer
+watcher was rebound to this successor. Score credit remains zero pending the
+native gate.
+
+Evidence:
+
+- `docs/slack_carrier_literal_embedding_problem.md`
+- `docs/slack_carrier_literal_embedding_solution.md`
+- `results/nncp_makefile_slack_embedding_v1/embedding.json`
+- `results/nncp_makefile_slack_embedding_v1/xz_family.json`
+- `results/nncp_makefile_slack_embedding_v1/build.json`

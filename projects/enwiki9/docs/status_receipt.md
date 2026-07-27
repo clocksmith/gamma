@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-27T22:24:06+00:00`
+- Generated at UTC: `2026-07-27T22:32:28+00:00`
 
 ## Target State
 
@@ -21,15 +21,15 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active cmix mode: `text_compress`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `8,474`
+- RSS samples: `8,574`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `9,607,364`
-- Latest sampled single RSS KiB: `9,602,756`
+- Latest sampled single RSS KiB: `9,603,140`
 - Tightest binary single-process margin KiB: `878,396`
 - Tightest decimal single-process margin KiB: `158,261`
-- Latest binary single-process margin KiB: `883,004`
-- Latest decimal single-process margin KiB: `162,869`
+- Latest binary single-process margin KiB: `882,620`
+- Latest decimal single-process margin KiB: `162,485`
 - Safe to launch heavy gate: `false`
 - Terminal verdict present: `false`
 - Command source: `none while gate is non-terminal`
@@ -55,21 +55,21 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive running job backed by the host-local heavy lock. The lock alone never identifies a gate.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `1,392`
-- RSS guard JSON modified UTC: `2026-07-27T22:24:05+00:00`
-- RSS guard JSON SHA-256: `68ae809f0fa61f03511621f91276a6e827885a2002f1715a4cfb8a09780c3306`
-- RSS samples: `8,474`
+- RSS guard JSON modified UTC: `2026-07-27T22:32:25+00:00`
+- RSS guard JSON SHA-256: `af4c4423e823882bce28040e4b255d145f20cee6127acf58b773ed41d2b459d1`
+- RSS samples: `8,574`
 - Max sampled single RSS KiB: `9,607,364`
-- Max sampled tree RSS KiB: `9,643,656`
+- Max sampled tree RSS KiB: `9,644,040`
 - Single-process RSS margin KiB: `878,396`
 - Single-process decimal `10GB` margin KiB: `158,261`
-- Tree RSS margin KiB: `842,104`
-- Tree decimal `10GB` margin KiB: `121,969`
-- Latest sampled single RSS KiB: `9,602,756`
-- Latest sampled tree RSS KiB: `9,643,656`
-- Latest sampled single-process margin KiB: `883,004`
-- Latest sampled single-process decimal `10GB` margin KiB: `162,869`
-- Latest sampled tree margin KiB: `842,104`
-- Latest sampled tree decimal `10GB` margin KiB: `121,969`
+- Tree RSS margin KiB: `841,720`
+- Tree decimal `10GB` margin KiB: `121,585`
+- Latest sampled single RSS KiB: `9,603,140`
+- Latest sampled tree RSS KiB: `9,644,040`
+- Latest sampled single-process margin KiB: `882,620`
+- Latest sampled single-process decimal `10GB` margin KiB: `162,485`
+- Latest sampled tree margin KiB: `841,720`
+- Latest sampled tree decimal `10GB` margin KiB: `121,585`
 
 ## Gate Evidence Status
 
@@ -128,11 +128,11 @@ Generated from the current certificate, gate receipts, lock state, and process t
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `584`
+- Program directories: `585`
 - Registered programs: `242`
-- Untracked nonignored entries: `13`
-- Modified tracked entries: `4`
-- Candidate statuses: `active=22, blocked_dependency=31, candidate=18, measured_negative=89, retired=422, track_source_before_evolution=2`
+- Untracked nonignored entries: `9`
+- Modified tracked entries: `5`
+- Candidate statuses: `active=22, blocked_dependency=31, candidate=18, measured_negative=89, retired=424, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
@@ -142,15 +142,15 @@ Generated from the current certificate, gate receipts, lock state, and process t
 | `rss_guard` | 265,689 | 265,685 | 14,080 | `python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-limit-kib 9765625 --guard-json...` |
 | `driver` | 265,690 | 265,689 | 40,900 | `python3 projects/enwiki9/lib/driver.py cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmap...` |
 | `lock_wrapper` | 308,375 | 3,250,165 | 1,664 | `flock /tmp/enwiki9-heavy.lock python3 projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-...` |
-| `native_cmix` | 332,698 | 265,690 | 9,602,756 | `/tmp/cmix21-mmap-bin-56pc3n75 -t /tmp/cmix21-mmap-dict-zmmck3q4 /tmp/tmpvcizoafb/in /tmp/tmpvcizoafb/out` |
-| `lock_wrapper` | 371,486 | 3,250,165 | 3,456 | `/bin/bash -lc mkdir -p projects/enwiki9/results/nncp_branch_frequency_trace_1k_v1 while [ -e projects/enwiki9/operations/adaptive/pending/043_20260...` |
-| `process` | 375,975 | 371,486 | 1,792 | `sleep 30` |
+| `native_cmix` | 332,698 | 265,690 | 9,603,140 | `/tmp/cmix21-mmap-bin-56pc3n75 -t /tmp/cmix21-mmap-dict-zmmck3q4 /tmp/tmpvcizoafb/in /tmp/tmpvcizoafb/out` |
+| `lock_wrapper` | 377,794 | 1 | 3,584 | `/bin/bash -lc mkdir -p projects/enwiki9/results/nncp_branch_frequency_trace_1k_v1; while grep -l '"candidate_id": "nncp_compact5_preprocessed_cqq_x...` |
+| `process` | 377,800 | 377,794 | 1,792 | `sleep 30` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_10000000_exact_rss_guard.json` | 1,392 | `2026-07-27T22:24:05+00:00` |
+| `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_10000000_exact_rss_guard.json` | 1,392 | `2026-07-27T22:32:25+00:00` |
 | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_1000000_screen_rss_guard.json` | 1,149 | `2026-07-27T10:36:55+00:00` |
 | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T063653.json` | 1,607 | `2026-07-27T10:36:53+00:00` |
 | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/fxcmassoc10_250000_determinism_rss_guard.json` | 1,150 | `2026-07-27T10:09:49+00:00` |
@@ -160,25 +160,25 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 - Max cmix PID: `332698`
 - Active cmix mode: `text_compress`
-- Max cmix RSS KiB: `9,602,756`
-- Active process tree RSS KiB: `9,666,440`
+- Max cmix RSS KiB: `9,603,140`
+- Active process tree RSS KiB: `9,666,952`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `883,004`
-- Single-process decimal margin KiB: `162,869`
-- Active process tree margin KiB (binary): `819,320`
-- Active process tree decimal margin KiB: `99,185`
+- Single-process binary margin KiB: `882,620`
+- Single-process decimal margin KiB: `162,485`
+- Active process tree margin KiB (binary): `818,808`
+- Active process tree decimal margin KiB: `98,673`
 - Temp input path: `/tmp/tmpvcizoafb/in`
 - Temp output path: `/tmp/tmpvcizoafb/out`
 - Temp output staging path: `/tmp/tmpvcizoafb/out.cmix.temp`
 - Temp input bytes: `10,000,000`
-- Temp output bytes: `1,146,880`
+- Temp output bytes: `1,196,032`
 - Temp output staging bytes: `6,186,040`
 - Temp input modified UTC: `2026-07-27T19:23:27+00:00`
-- Temp output modified UTC: `2026-07-27T22:24:03+00:00`
+- Temp output modified UTC: `2026-07-27T22:32:03+00:00`
 - Temp output staging modified UTC: `2026-07-27T19:23:28+00:00`
-- Process read bytes: `2,416,640`
-- Process write bytes: `13,524,992`
+- Process read bytes: `2,678,784`
+- Process write bytes: `13,574,144`
 
 ## Contingencies
 
