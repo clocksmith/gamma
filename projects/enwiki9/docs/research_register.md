@@ -2276,3 +2276,31 @@ Evidence:
 - `tools/paid_conditional_multinomial_gate.cpp`
 - `results/paid_conditional_multinomial_c2_v1/decision.json`
 - `operations/adaptive/exclusions/paid_conditional_multinomial_c2_opening1m_v1.json`
+
+## 2026-07-27: PBVC-1 paid block vector correction codebook is queued
+
+Candidate: `af1_paid_block_vector_codebook_v1`
+
+PBVC-1 is a constructive paid-information successor to the terminal scalar
+SIBYL page calibration.  It partitions the exact AF-1 P1 trajectory into
+fixed 4,096-WRT-byte blocks.  A four-bit label transmitted before the single
+continuous payload selects one of sixteen frozen vectors.  Each vector applies
+one of five exact rational-odds corrections independently across 128 causal
+bit-position and confidence buckets.  The label, packed codebook, source, and
+range finalization are charged explicitly.
+
+`docs/paid_block_vector_codebook_problem.md` and its solution prove legality,
+complete accounting, finite global optimal existence, and the independent
+conditional minimizers used by the frozen construction.  The observation-only
+patch applies to the hash-bound B2 source closure and compiles successfully.
+The synthetic side control reproduces its parent payload exactly, improves its
+sealed holdout, and beats a rotated-label null.  These are infrastructure
+checks only and receive zero score credit.
+
+The opening-1M gate is serialized through `/tmp/enwiki9-heavy.lock`.  It must
+reproduce the parent arithmetic payload byte for byte, then clear 2,000 B/M
+exact net, 2,500 B/M chronological-holdout surrogate net, and 1,000 B/M over
+the rotated-label null.  Failure retires this exact block, codeword, bucket,
+and correction family without a parameter ladder.  Success authorizes native
+integration, distant transfer, complete source accounting, and a canonical
+10M gate; it does not itself change the Hutter frontier.
