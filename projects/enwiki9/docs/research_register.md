@@ -1807,3 +1807,59 @@ exactly one native gate is authorized with a target-scale 250K ceiling of
 44,753 bytes. Any larger archive, package above 900,000 bytes, roundtrip,
 determinism, or decimal-memory failure retires the route. No proxy or theorem
 bytes receive score credit.
+
+## 2026-07-27 - FRT-1 exact factoradic recency tie
+
+- Status: developed, exact native 250K gate queued; score credit zero.
+- Construction: the solved factoradic-recency problem encodes all `10!` way orders in a 32-bit tail field and chooses the least-recent eligible way only among the existing minimum-priority ties.
+- Native candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10frt_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`.
+- Counted package: `565130` bytes, `+984` versus B2 and below the predeclared `8192`-byte growth cap.
+- Exact theorem evidence: `results/fxcm_factoradic_recency_v1/theorem_verifier.json`.
+- Materialization evidence: `results/fxcm_factoradic_recency_v1/materialization.json`.
+- Pending gate: `20260727T190337Z_1533fcbec5`.
+- Decision boundary: no compression claim until exact roundtrip, deterministic re-encode, decimal-memory, score, and distant-transfer gates pass.
+
+## 2026-07-27 - RDC-1 dictionary-free NNCP binary backend
+
+- Status: developed, exact native 250K gate queued; score credit zero.
+- Construction: official reversible NNCP preprocessing emits canonical U16BE symbols; frozen cmix21 is invoked in no-preprocessing mode and the unrelated cmix English dictionary is removed from the package.
+- Native candidate: `nncp_pc_u16be_cmix21_assoc10_nopre_v1`.
+- Counted package: `702813` bytes, `-175381` versus the forced-text RDC-1 parent.
+- Mathematical basis: `docs/reversible_dictionary_backend_composition_problem.md` and `docs/reversible_dictionary_backend_composition_solution.md`.
+- Materialization evidence: `results/nncp_binary_backend_dictionary_elimination_v1/materialization.json`.
+- Pending gate: `20260727T190759Z_2bb1fb1160`.
+- Decision boundary: the fixed package saving is real but earns no net-score credit until matched native archive, roundtrip, determinism, and distant evidence exist.
+
+## 2026-07-27 - BPD-1 decoder-built prefix dictionary
+
+- Status: independent mathematics solved; deterministic real-prefix learner verified; native 1M gate queued; score credit zero.
+- Construction: encode the opening 262144 bytes without preprocessing, rebuild a canonical frequency/first-offset word dictionary from that decoded prefix, then encode the suffix in forced-text mode using the decoder-built dictionary.
+- Native candidate: `cmix21_assoc10_bootstrapdict256k_v1`.
+- Counted package: `390404` bytes, `-173742` versus B2.
+- Learner receipt: 6412 unique words, 52919 dictionary bytes, 5300-word overlap with the 44515-word static dictionary, deterministic SHA-256 `35ff76580b4f5d322b1dad156a377c598bd714f6af93b5fd2345d2a6c7e47866`.
+- Mathematical evidence: `docs/bootstrap_prefix_dictionary_problem.md` and `docs/bootstrap_prefix_dictionary_solution.md`.
+- Materialization evidence: `results/bootstrap_prefix_dictionary_v1/materialization.json`.
+- Pending gate: `20260727T191225Z_edc984f041`.
+- Kill boundary: retire unchanged if the exact opening or distant 1M archive is more than 100 bytes worse than B2, because that rate consumes the fixed package saving at full scale.
+
+## 2026-07-27 - EPT-1 exact package transcoding
+
+- Status: independent mathematics solved; three recovered-payload identity receipts pass; native resource gates queued; score credit zero pending parent qualification.
+- Theorem: replacing package encodings while recovering byte-identical executable, dictionary, or source-tar payloads preserves every compressor state and archive byte. The exact counted delta is the package-length delta.
+- B2 XZ successor: package `475731`, exact delta `-88415`; receipt `results/exact_package_transcoding_b2_xz_v1/receipt.json`; gate `20260727T191536Z_4c3cc65e9d`.
+- Compact5 NNCP XZ successor: package `248554`, exact delta `-64885`; receipt `results/exact_package_transcoding_nncp_compact5_xz_v1/receipt.json`; gate `20260727T191710Z_271f8504fb`.
+- Dictionary-free NNCP binary XZ successor: package `568873`, exact delta `-133940`; receipt `results/exact_package_transcoding_nncp_binary_xz_v1/receipt.json`; gate `20260727T191814Z_059cec2c8e`.
+- Boundary: archive identity is theorem-certified from recovered payload and wrapper-grammar identity, but native startup, memory, library availability, parent archive qualification, and official full-1G score remain measured obligations.
+- Canonical index: `docs/enwiki9_constructive_mathematics_index.md`.
+
+## 2026-07-27 - ELI-1 loader-identical stripped B2 package
+
+- Status: independent mathematics solved; strict ELF loader projection and native startup control pass; exact 250K native archive/resource gate queued; score credit zero.
+- Construction: strip nonloaded ELF metadata, restore the original ELF section-metadata header bytes that lie inside the first mapped page, and package the resulting loader-identical executable plus identical dictionary in LZMA-alone streams.
+- Candidate: `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1`.
+- Exact package: `454876` bytes, `-109270` versus B2.
+- Strict projection: all 13 program headers, descriptors, mapped payload hashes, entry point, machine, flags, and interpreter-visible bytes agree.
+- Native startup control: old and new usage outputs are byte-identical (`482` bytes, SHA-256 `662521b1000f22951085167e2e5561df2bd4389f0dced0ea3427df27a14bfdfa`) with return code `255` on both executables.
+- Evidence: `results/elf_load_image_b2_striplzma_v1/receipt.json`.
+- Pending gate: `20260727T192337Z_1179f991ff`.
+- Boundary: full native compression identity and official resources remain mandatory; the theorem does not transfer B2 score credit before those gates and B2's own terminal receipt.

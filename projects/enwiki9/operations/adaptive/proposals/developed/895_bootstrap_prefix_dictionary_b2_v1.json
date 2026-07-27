@@ -1,0 +1,35 @@
+{
+  "candidate_id": "cmix21_assoc10_bootstrapdict256k_v1",
+  "created_at": "2026-07-27T19:12:25+00:00",
+  "developed_at": "2026-07-27T19:12:25+00:00",
+  "evidence": [
+    "docs/bootstrap_prefix_dictionary_problem.md",
+    "docs/bootstrap_prefix_dictionary_solution.md",
+    "results/bootstrap_prefix_dictionary_v1/theorem_and_learner_receipt.json"
+  ],
+  "expected_savings_bytes": 173742,
+  "hypothesis": "A canonical word dictionary learned from the first 262144 decoded enwik9 bytes preserves mature text preprocessing on the suffix while removing the 175356-byte static dictionary package and paying the two-stream reset.",
+  "interfaces_exposed": [
+    "decoded 256 KiB prefix",
+    "canonical frequency-first-offset dictionary",
+    "forced-text suffix backend"
+  ],
+  "kill_condition": "Retire unchanged on package above 400000 bytes, any reconstruction or determinism failure, opening or distant 1M archive degradation above 100 bytes versus B2, or any complete counted regression.",
+  "max_program_bytes": 400000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": "fxcm_aligned_cell_frontier_v1",
+  "priority": 86,
+  "promotion_condition": "Pass exact 1M roundtrip, deterministic re-encode, and decimal-memory checks with archive no more than 100 bytes above B2; then require the same bound on a frozen distant 1M window and exact counted improvement at 10M.",
+  "proposal_id": "bootstrap_prefix_dictionary_b2_v1",
+  "retired_neighborhoods": [
+    "prefix-size parameter sweeps before a positive frozen result",
+    "transmitted learned dictionaries for this construction"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 104,
+  "state": "developed",
+  "title": "Decoder-built prefix dictionary over B2"
+}

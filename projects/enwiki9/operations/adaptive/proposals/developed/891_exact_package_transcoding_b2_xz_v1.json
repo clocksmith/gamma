@@ -1,0 +1,35 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_xz_v1",
+  "created_at": "2026-07-27T19:15:36+00:00",
+  "developed_at": "2026-07-27T19:15:36+00:00",
+  "evidence": [
+    "docs/exact_package_transcoding_problem.md",
+    "docs/exact_package_transcoding_solution.md",
+    "results/exact_package_transcoding_b2_xz_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 88415,
+  "hypothesis": "Deterministic XZ recovers byte-identical B2 executable and dictionary payloads while reducing the counted package by exactly 88415 bytes, preserving every archive byte.",
+  "interfaces_exposed": [
+    "compressed executable payload",
+    "compressed dictionary payload",
+    "wrapper recovery codec"
+  ],
+  "kill_condition": "Retire on any recovered-payload mismatch, wrapper edit outside the frozen grammar, package above 480000 bytes, native archive mismatch, roundtrip failure, or resource regression that violates eligibility.",
+  "max_program_bytes": 480000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": "fxcm_aligned_cell_frontier_v1",
+  "priority": 90,
+  "promotion_condition": "Pass a native exact 250K roundtrip and deterministic archive-identity gate under the decimal memory limit; then inherit every exact B2 archive receipt through the EPT-1 payload-identity theorem while counting the 475731-byte package.",
+  "proposal_id": "exact_package_transcoding_b2_xz_v1",
+  "retired_neighborhoods": [
+    "gzip compression-level sweeps for these exact payloads",
+    "archive-changing credit from a package-only edit"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 108,
+  "state": "developed",
+  "title": "Exact XZ payload transcoding for B2"
+}
