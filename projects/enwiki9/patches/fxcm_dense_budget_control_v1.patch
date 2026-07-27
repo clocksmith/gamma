@@ -1,0 +1,26 @@
+diff --git a/src/models/fxcmv1.cpp b/src/models/fxcmv1.cpp
+index 6a39383..6109d64 100644
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -181,6 +181,10 @@
+ #define CMIX_FXCM_CMC2_DENSE_RANGE 0
+ #endif
+ 
++#ifndef CMIX_FXCM_CMC2_DENSE_BUDGET_CELL_BYTES
++#define CMIX_FXCM_CMC2_DENSE_BUDGET_CELL_BYTES 128
++#endif
++
+ inline int fxcm_pow2_table_bytes(int bytes, int grain) {
+     int units = bytes / grain;
+     if (units < 1) return grain;
+@@ -1693,7 +1697,9 @@
+     C=c&255;
+     const U32 m=m1*2;
+ #if CMIX_FXCM_CMC2_DENSE_RANGE
+-    tcount=m/sizeof(FxcmCmc2Cell);
++    tcount=U32((U64(m >> 7) *
++        CMIX_FXCM_CMC2_DENSE_BUDGET_CELL_BYTES) /
++        sizeof(FxcmCmc2Cell));
+     tmask=0;
+ #else
+     tcount=m>>7;

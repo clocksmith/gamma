@@ -1,0 +1,34 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_dense43_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "claimed_at": "2026-07-27T14:18:03+00:00",
+  "created_at": "2026-07-27T13:48:02+00:00",
+  "developed_at": "2026-07-27T15:03:45+00:00",
+  "evidence": [
+    "docs/fxcm_dense_range_bucket_problem.md",
+    "docs/fxcm_dense_range_bucket_solution.md",
+    "docs/fxcm_aligned_cell_native_matrix.md"
+  ],
+  "expected_savings_bytes": 1600000,
+  "hypothesis": "Associativity-ten cmC2 currently strands one quarter of each former 128-byte-cell budget; spending those bytes on floor(4N/3) deterministically range-indexed cells reduces destructive context collisions enough to save at least 2000 bytes per million raw bytes against the exact A10 parent without exceeding its former memory envelope.",
+  "interfaces_exposed": [
+    "FXCM cmC2 cell count, deterministic salted range index, replacement trajectory, and integer probability stream"
+  ],
+  "kill_condition": "Retire the dense cmC2 range-index realization unchanged if index test vectors fail, exact roundtrip or determinism differs, decimal memory is exceeded, opening-1M net gain is below 2000 B/M, or canonical-10M net gain is below 23KB. Do not rescue failure with cell-count, salt, finalizer, or table-subset sweeps.",
+  "max_program_bytes": 10000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "endpoint",
+  "owner": "codex-root",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": null,
+  "priority": 96,
+  "promotion_condition": "Require exact 250K roundtrip and deterministic archive under decimal 10GB, then at least 2000 net B/M versus the frozen A10 parent on opening 1M, at least 23KB net on canonical 10M, positive distant transfer, complete source accounting, and unchanged decoder determinism.",
+  "proposal_id": "fxcm_dense_range_bucket_v1",
+  "retired_neighborhoods": [
+    "Distinct from the completed power-of-two index-divisor and associativity screens: this spends physically reclaimed cell bytes through a non-power cardinality and changes the collision trajectory exactly once."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 114,
+  "state": "developed",
+  "title": "Dense range-indexed FXCM cmC2 buckets"
+}

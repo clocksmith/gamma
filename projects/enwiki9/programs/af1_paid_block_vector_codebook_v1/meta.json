@@ -1,0 +1,45 @@
+{
+  "added": "2026-07-27",
+  "build": {
+    "payload_files": {
+      "program.py": 2808,
+      "source.tar.raw": 304731
+    },
+    "payload_sha256": {
+      "program.py": "1216c354e84ac99df1153d135b8f09249db8cdb62cd1b90eadaa69b3f8b65032",
+      "source.tar.raw": "578a72f77bbcb861393e153d683b59ca8e4563f3f21590aeea17a6c1fb8c1418"
+    },
+    "program_size": 307539
+  },
+  "deps": [
+    "Python lzma and tarfile",
+    "GNU make",
+    "g++ with C++14 support",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "description": "PBVC-1 paid block vector correction codebook",
+  "family": "cmix21_mmap",
+  "hypothesis": "A four-bit block label selecting one of sixteen frozen vectors of exact rational-odds corrections over bit-position and confidence buckets exposes at least 2000 net bytes per million raw bytes of residual information beyond AF-1 after labels and codebook bytes.",
+  "id": "af1_paid_block_vector_codebook_v1",
+  "name": "B2 built from a canonical raw-LZMA2 source closure",
+  "omega": {
+    "interfaces_exposed": [
+      "pre-truth AF-1 integer P1, bit position, confidence bucket, paid block label, exact range replay"
+    ],
+    "mechanism_change": "mixture_expansion",
+    "parent_proposal_id": null,
+    "proposal_id": "paid_block_vector_codebook_v1",
+    "retired_neighborhoods": [
+      "Distinct from terminal SIBYL scalar page calibration: PBVC selects a vector of 128 conditional rational-odds corrections and uses fixed WRT-byte blocks rather than one page-wide curve."
+    ]
+  },
+  "parent": "cmix21_b2_source_closure_rawlzma2_v1",
+  "program_id": "cmix21_b2_source_closure_rawlzma2_v1",
+  "program_name": "B2 built from a canonical raw-LZMA2 source closure",
+  "source": {
+    "archive": "projects/enwiki9/programs/cmix21_b2_source_closure_rawlzma2_v1/source.tar.raw",
+    "archive_codec": "raw LZMA2 preset 9 extreme",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
+  },
+  "status": "candidate"
+}

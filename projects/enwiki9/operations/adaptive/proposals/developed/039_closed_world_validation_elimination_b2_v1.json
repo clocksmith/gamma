@@ -1,0 +1,30 @@
+{
+  "candidate_id": "cmix21_b2_line_whitespace_bpdq_fcf_flagsrawlzma2_cwve_v1",
+  "created_at": "2026-07-27T22:37:54+00:00",
+  "developed_at": "2026-07-27T22:37:54+00:00",
+  "evidence": [
+    "projects/enwiki9/docs/closed_world_validation_elimination_problem.md",
+    "projects/enwiki9/results/closed_world_validation_elimination_b2_v1/certificate.json",
+    "projects/enwiki9/results/closed_world_validation_elimination_b2_v1/build.json"
+  ],
+  "expected_savings_bytes": 504,
+  "hypothesis": "Pure validation predicates over the sole hash-bound FCF/BPDQ closure can be certificate-evaluated once and removed from the submitted wrapper without changing any successful-path build or codec transition.",
+  "interfaces_exposed": [
+    "hash-bound internal FCF/BPDQ closure to successful extraction/build trace"
+  ],
+  "kill_condition": "Retire on any false eliminated predicate, mutable or external checked object, source payload mismatch, restored runtime mismatch, archive mismatch, roundtrip failure, nondeterminism, package growth above 270836 bytes, or resource ineligibility.",
+  "max_program_bytes": 270836,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "parent": "cmix21_b2_line_whitespace_bpdq_fcf_flagsrawlzma2_minwrap_v1",
+  "parent_proposal_id": "deterministic_wrapper_normal_form_fcf_b2_v1",
+  "priority": 942,
+  "promotion_condition": "At 250K require archive bytes no greater than 45178, exact roundtrip, byte-identical second archive, predicate certificate, restored runtime hashes, and resource eligibility.",
+  "proposal_id": "closed_world_validation_elimination_b2_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 960,
+  "state": "developed",
+  "title": "B2 immutable-closure validation elimination"
+}

@@ -1,0 +1,35 @@
+{
+  "candidate_id": "nncp_pc_u16be_cmix21_assoc10_nopre_xz_v1",
+  "created_at": "2026-07-27T19:18:14+00:00",
+  "developed_at": "2026-07-27T19:18:14+00:00",
+  "evidence": [
+    "docs/exact_package_transcoding_problem.md",
+    "docs/exact_package_transcoding_solution.md",
+    "results/exact_package_transcoding_nncp_binary_xz_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 133940,
+  "hypothesis": "Deterministic XZ recovers the byte-identical cmix executable and NNCP CPU source tar while reducing the dictionary-free RDC package from 702813 to 568873 bytes and preserving its archive.",
+  "interfaces_exposed": [
+    "cmix executable payload",
+    "NNCP CPU source tar",
+    "wrapper recovery codecs"
+  ],
+  "kill_condition": "Retire on any recovered-payload mismatch, wrapper grammar mismatch, package above 570000 bytes, native archive mismatch, roundtrip failure, or resource regression.",
+  "max_program_bytes": 570000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "parent": "nncp_pc_u16be_cmix21_assoc10_nopre_v1",
+  "parent_proposal_id": "nncp_binary_backend_dictionary_elimination_v1",
+  "priority": 92,
+  "promotion_condition": "After the binary RDC parent passes its matched exact gate, pass one native XZ roundtrip, deterministic re-encode, and resource gate; then inherit parent archive receipts through EPT-1 while counting 568873 package bytes.",
+  "proposal_id": "exact_package_transcoding_nncp_binary_xz_v1",
+  "retired_neighborhoods": [
+    "gzip level sweeps for the same mixed payloads",
+    "archive-changing credit from package-only edits"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 110,
+  "state": "developed",
+  "title": "Exact XZ package for dictionary-free NNCP binary backend"
+}

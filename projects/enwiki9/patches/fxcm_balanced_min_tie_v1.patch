@@ -1,0 +1,35 @@
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -1607,12 +1607,29 @@
+       __attribute__ ((noinline)) U8* get(U16 ch,int keep) {
+ 
+   if (chk[last&15]==ch) return &bh[last&15][0];
+-  int b=0xffff, bi=0;
++  int b=0xffff, ties=0, bi=0;
+ 
+   for (int i=0; i<A; ++i) {
+     if (chk[i]==ch) return last=last<<4|i, (U8*)&bh[i][0];
+-    int pri=bh[i][0];
+-    if (pri<b && (last&15)!=i && last>>4!=i) b=pri, bi=i;
++    if ((last&15)!=i && last>>4!=i) {
++      int pri=bh[i][0];
++      if (pri<b) {
++        b=pri;
++        ties=1;
++      } else if (pri==b) {
++        ++ties;
++      }
++    }
++  }
++  assert(ties>0);
++  int pick=ch%ties;
++  for (int i=0; i<A; ++i) {
++    if ((last&15)!=i && last>>4!=i && bh[i][0]==b) {
++      if (pick--==0) {
++        bi=i;
++        break;
++      }
++    }
+   }
+   return last=last<<4|bi|keep, chk[bi]=ch, (U8*)memset(&bh[bi][0], 0, 7);
+ }

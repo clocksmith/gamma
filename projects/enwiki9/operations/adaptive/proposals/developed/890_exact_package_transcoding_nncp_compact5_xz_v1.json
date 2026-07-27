@@ -1,0 +1,34 @@
+{
+  "candidate_id": "nncp_compact5_preprocessed_xz_v1",
+  "created_at": "2026-07-27T19:17:10+00:00",
+  "developed_at": "2026-07-27T19:17:10+00:00",
+  "evidence": [
+    "docs/exact_package_transcoding_problem.md",
+    "docs/exact_package_transcoding_solution.md",
+    "results/exact_package_transcoding_nncp_compact5_xz_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 64885,
+  "hypothesis": "Deterministic XZ recovers the byte-identical Compact5 NNCP CPU source tar while reducing counted package size from 313439 to 248554 bytes and preserving the built codec and archive.",
+  "interfaces_exposed": [
+    "NNCP CPU source tar",
+    "wrapper tar extraction codec"
+  ],
+  "kill_condition": "Retire on recovered-tar mismatch, wrapper edit outside the frozen grammar, package above 250000 bytes, native archive mismatch, roundtrip failure, or resource regression.",
+  "max_program_bytes": 250000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "parent": "nncp_compact5_preprocessed_v1",
+  "parent_proposal_id": "nncp_compact5_preprocessed_maturity_v1",
+  "priority": 91,
+  "promotion_condition": "Pass a native exact 10K archive-identity, roundtrip, deterministic re-encode, and resource gate; then inherit every exact Compact5 archive receipt through EPT-1 while counting the 248554-byte package.",
+  "proposal_id": "exact_package_transcoding_nncp_compact5_xz_v1",
+  "retired_neighborhoods": [
+    "gzip compression-level sweeps for the same source tar",
+    "archive-changing credit from source-only transcoding"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 109,
+  "state": "developed",
+  "title": "Exact XZ source package for Compact5 NNCP"
+}

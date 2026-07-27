@@ -363,6 +363,7 @@ def develop_proposal(
     proposal_id: str,
     candidate_id: str,
     replacements: list[str],
+    adopt_existing: bool = False,
 ) -> tuple[dict[str, Any], pathlib.Path]:
     located = proposal_path(proposal_id)
     if located is None:
@@ -372,13 +373,28 @@ def develop_proposal(
     parent = proposal.get("parent")
     if parent is not None and not isinstance(parent, str):
         raise ValueError(f"invalid proposal parent: {proposal_id}")
-    destination = create_candidate(
-        candidate_id=candidate_id,
-        parent=parent,
-        hypothesis=str(proposal.get("hypothesis", "")),
-        description=str(proposal.get("title", proposal_id)),
-        replacements=replacements,
-    )
+    if adopt_existing:
+        if replacements:
+            raise ValueError("--replace cannot be used with --adopt-existing")
+        destination = candidate_path(candidate_id)
+        if not destination.is_dir():
+            raise FileNotFoundError(
+                f"candidate to adopt does not exist: {candidate_id}"
+            )
+        existing_meta = candidate_meta(candidate_id)
+        if existing_meta.get("parent") != parent:
+            raise ValueError(
+                "adopted candidate parent does not match proposal parent: "
+                f"{existing_meta.get('parent')!r} != {parent!r}"
+            )
+    else:
+        destination = create_candidate(
+            candidate_id=candidate_id,
+            parent=parent,
+            hypothesis=str(proposal.get("hypothesis", "")),
+            description=str(proposal.get("title", proposal_id)),
+            replacements=replacements,
+        )
     meta_path = destination / "meta.json"
     meta = load_json(meta_path)
     meta["omega"] = {
@@ -436,6 +452,7 @@ def enqueue_job(
     gate_size: int,
     priority: int | None,
     heavy: bool | None,
+    archive_ceiling: int | None,
     purpose: str,
     force: bool,
     tags: list[str],
@@ -444,6 +461,8 @@ def enqueue_job(
     candidate_meta(candidate_id)
     if gate_size <= 0:
         raise ValueError("gate size must be positive")
+    if archive_ceiling is not None and archive_ceiling <= 0:
+        raise ValueError("archive ceiling must be positive")
     key = job_key(candidate_id, gate_size)
     if not force and key in known_job_keys():
         raise ValueError(
@@ -465,6 +484,8 @@ def enqueue_job(
         "tags": sorted(set(tags)),
         "submitted_at": utc_now(),
     }
+    if archive_ceiling is not None:
+        job["archive_ceiling"] = archive_ceiling
     filename = f"{999 - max(0, min(999, priority_value)):03d}_{job_id}.json"
     atomic_json(QUEUE_DIRS["pending"] / filename, job)
     return job
@@ -537,6 +558,7 @@ def discover_candidates(
                 gate_size=gate,
                 priority=None,
                 heavy=None,
+                archive_ceiling=None,
                 purpose="adaptive_discovery",
                 force=False,
                 tags=["adaptive"],
@@ -606,9 +628,22 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
         "--gate-size",
         str(gate_size),
         "--run",
-        "--update-meta",
         "--json",
     ]
+    if str(job.get("purpose", "")).strip().lower() not in {
+        "infrastructure",
+        "diagnostic",
+        "oracle",
+    }:
+        command.append("--update-meta")
+    archive_ceiling = job.get("archive_ceiling")
+    if isinstance(archive_ceiling, int) and archive_ceiling > 0:
+        command.extend(
+            [
+                "--archive-ceiling",
+                f"{gate_size}:{archive_ceiling}",
+            ]
+        )
     if job.get("respect_heavy_lock") is True:
         command.append("--respect-heavy-lock")
 
@@ -760,6 +795,7 @@ def add_enqueue_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--gate-size", type=int, default=1_024)
     parser.add_argument("--priority", type=int)
     parser.add_argument("--heavy", action=argparse.BooleanOptionalAction, default=None)
+    parser.add_argument("--archive-ceiling", type=int)
     parser.add_argument("--purpose", default="manual")
     parser.add_argument("--tag", action="append", default=[])
     parser.add_argument("--force", action="store_true")
@@ -829,6 +865,11 @@ def build_parser() -> argparse.ArgumentParser:
     develop.add_argument("proposal_id")
     develop.add_argument("candidate_id")
     develop.add_argument("--replace", action="append", default=[])
+    develop.add_argument(
+        "--adopt-existing",
+        action="store_true",
+        help="attach a prebuilt candidate after validating its proposal parent",
+    )
     develop.add_argument("--enqueue", action="store_true")
     add_enqueue_options(develop)
 
@@ -952,6 +993,7 @@ def main() -> int:
                 proposal_id=args.proposal_id,
                 candidate_id=args.candidate_id,
                 replacements=args.replace,
+                adopt_existing=args.adopt_existing,
             )
             result = {
                 "proposal": proposal,
@@ -964,6 +1006,7 @@ def main() -> int:
                     gate_size=args.gate_size,
                     priority=args.priority,
                     heavy=args.heavy,
+                    archive_ceiling=args.archive_ceiling,
                     purpose=args.purpose,
                     force=args.force,
                     tags=args.tag,
@@ -991,6 +1034,7 @@ def main() -> int:
                     gate_size=args.gate_size,
                     priority=args.priority,
                     heavy=args.heavy,
+                    archive_ceiling=args.archive_ceiling,
                     purpose=args.purpose,
                     force=args.force,
                     tags=args.tag,
@@ -1003,6 +1047,7 @@ def main() -> int:
                 gate_size=args.gate_size,
                 priority=args.priority,
                 heavy=args.heavy,
+                archive_ceiling=args.archive_ceiling,
                 purpose=args.purpose,
                 force=args.force,
                 tags=args.tag,

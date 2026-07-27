@@ -1,0 +1,33 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd129552k_fxcmassoc10tight92_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "claimed_at": "2026-07-27T16:23:30+00:00",
+  "created_at": "2026-07-27T16:23:30+00:00",
+  "developed_at": "2026-07-27T16:23:30+00:00",
+  "evidence": [
+    "docs/fxcm_ppmd_budget_exchange_problem.md",
+    "docs/fxcm_ppmd_budget_exchange_solution.md",
+    "results/fxcm_ppmd_budget_exchange_v1/theorem_verifier.json",
+    "patches/fxcm_tight_cell_layout_v1.patch"
+  ],
+  "expected_savings_bytes": 2000000,
+  "hypothesis": "Archive-identical 92-byte A10 cells release exactly 111,820,800 declared payload bytes, and transferring all of them into PPMD raises its allocation from 20,352 to 129,552 KiB without increasing combined payload while saving at least 2,000 bytes per million.",
+  "interfaces_exposed": [
+    "Exact cross-component allocation between A10 ContextMap2 payload and PPMD arena"
+  ],
+  "kill_condition": "Retire this realization on SLC identity failure, exact reconstruction or determinism failure, decimal-10GB RSS failure, non-positive opening 1M gain, canonical 10M gain below 23KB, or non-positive distant transfer. Do not test a PPMD memory ladder.",
+  "max_program_bytes": 40000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "owner": "codex-clocksmith",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": null,
+  "priority": 98,
+  "promotion_condition": "After SLC archive identity passes, require exact 250K roundtrip, determinism, and decimal-10GB RSS; then at least 2,000 B/M opening gain, at least 23KB canonical-10M gain, and positive frozen distant transfer.",
+  "proposal_id": "fxcm_ppmd_budget_exchange_v1",
+  "retired_neighborhoods": [],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 116,
+  "state": "developed",
+  "title": "Exact SLC-to-PPMD budget exchange"
+}

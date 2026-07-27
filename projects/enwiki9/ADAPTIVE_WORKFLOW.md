@@ -197,9 +197,29 @@ Queue an explicit gate:
 ```bash
 python3 projects/enwiki9/tools/enwiki9_lab.py enqueue <candidate_id> \
   --gate-size 1000000 \
+  --archive-ceiling <exact-kill-bytes> \
   --purpose candidate \
   --tag <lane>
 ```
+
+Use `--archive-ceiling` whenever the proposal has a frozen archive kill bound.
+The runner forwards it to both the first archive and deterministic-reencode
+checks. Exceeding the ceiling skips decompression and re-encode rather than
+spending the serialized lane on a result that is already terminal.
+
+Job purpose controls lifecycle mutation:
+
+```text
+candidate, proof, adaptive_discovery
+    -> exact triage may update candidate status
+
+infrastructure, diagnostic, oracle
+    -> preserve receipts but never update candidate status
+```
+
+An infrastructure smoke may prove imports, compilation, roundtrip, or
+determinism. It cannot retire or promote the underlying algorithm unless a
+separate candidate gate covers the proposal's frozen population and metric.
 
 Create or mutate and immediately queue:
 

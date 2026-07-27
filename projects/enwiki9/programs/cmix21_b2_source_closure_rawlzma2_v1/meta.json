@@ -1,0 +1,49 @@
+{
+  "build": {
+    "payload_files": {
+      "program.py": 2808,
+      "source.tar.raw": 304731
+    },
+    "payload_sha256": {
+      "program.py": "1216c354e84ac99df1153d135b8f09249db8cdb62cd1b90eadaa69b3f8b65032",
+      "source.tar.raw": "578a72f77bbcb861393e153d683b59ca8e4563f3f21590aeea17a6c1fb8c1418"
+    },
+    "program_size": 307539
+  },
+  "deps": [
+    "Python lzma and tarfile",
+    "GNU make",
+    "g++ with C++14 support",
+    "POSIX mmap and temporary filesystem space"
+  ],
+  "description": "SCC-1 source-built B2 candidate.",
+  "family": "cmix21_mmap",
+  "hypothesis": "The canonical compressed B2 source closure builds a loader-equivalent runtime and reduces the complete package while preserving the exact B2 archive.",
+  "id": "cmix21_b2_source_closure_rawlzma2_v1",
+  "measured": {
+    "clean_build_binary_identity_with_parent": true,
+    "clean_build_receipt": "results/source_closure_compilation_b2_v1/clean_build.json"
+  },
+  "name": "B2 built from a canonical raw-LZMA2 source closure",
+  "omega": {
+    "interfaces_exposed": [
+      "Canonical source closure, frozen compiler flags, build output, and exact B2 archive"
+    ],
+    "mechanism_change": "compile_state_machine",
+    "parent_proposal_id": "exact_x86_filter_payload_b2_v1",
+    "proposal_id": "source_closure_compilation_b2_v1",
+    "retired_neighborhoods": [
+      "Compiler-flag and source-archive codec ladders"
+    ]
+  },
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_stripx86rawlzma2_v1",
+  "program_id": "cmix21_b2_source_closure_rawlzma2_v1",
+  "program_name": "B2 built from a canonical raw-LZMA2 source closure",
+  "source": {
+    "archive": "projects/enwiki9/programs/cmix21_b2_source_closure_rawlzma2_v1/source.tar.raw",
+    "archive_codec": "raw LZMA2 preset 9 extreme",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
+  },
+  "status": "candidate",
+  "verdict": "Canonical source payload and two byte-identical clean builds pass; native wrapper identity and resource gate pending."
+}

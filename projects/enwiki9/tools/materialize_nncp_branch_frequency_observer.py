@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""Materialize an archive-neutral NNCP branch-frequency observer."""
+
+from __future__ import annotations
+
+import argparse
+import difflib
+from pathlib import Path
+
+
+TRACE_SUPPORT = r'''
+/* Observation-only trace of the integer probabilities consumed by put_bit. */
+static FILE *qtrace_file;
+static uint64_t qtrace_symbols, qtrace_branches;
+static BOOL qtrace_initialized;
+
+static void qtrace_put_le(uint8_t *buf, uint64_t value, int bytes)
+{
+    int i;
+    for(i = 0; i < bytes; i++)
+        buf[i] = value >> (8 * i);
+}
+
+static void qtrace_close(void)
+{
+    uint8_t buf[8];
+    if (!qtrace_file)
+        return;
+    if (fseek(qtrace_file, 8, SEEK_SET) != 0)
+        abort();
+    qtrace_put_le(buf, qtrace_symbols, 8);
+    if (fwrite(buf, 1, 8, qtrace_file) != 8)
+        abort();
+    qtrace_put_le(buf, qtrace_branches, 8);
+    if (fwrite(buf, 1, 8, qtrace_file) != 8)
+        abort();
+    if (fclose(qtrace_file) != 0)
+        abort();
+    qtrace_file = NULL;
+}
+
+static void qtrace_init(void)
+{
+    const char *filename;
+    uint8_t zero[16] = { 0 };
+    if (qtrace_initialized)
+        return;
+    qtrace_initialized = TRUE;
+    filename = getenv("NNCP_BRANCH_TRACE");
+    if (!filename || !filename[0])
+        return;
+    qtrace_file = fopen(filename, "wb");
+    if (!qtrace_file)
+        abort();
+    if (fwrite("NNQBR1\0", 1, 8, qtrace_file) != 8 ||
+        fwrite(zero, 1, sizeof(zero), qtrace_file) != sizeof(zero))
+        abort();
+    if (atexit(qtrace_close) != 0)
+        abort();
+}
+'''
+
+
+WRITE_SYM = r'''void write_sym(PutBitState *pb, const float *prob_table, int n_symb, int sym)
+{
+    int start, range, prob0, bit, range0, trace_count;
+    float p, p0;
+    uint16_t trace_prob[16];
+    uint8_t trace_bit[16], row[29], branch[3];
+    uint64_t before, after;
+
+    qtrace_init();
+    before = qtrace_file ? put_bit_get_bit_count(pb) : 0;
+    trace_count = 0;
+    start = 0;
+    range = n_symb;
+    p = 1.0;
+    while (range > 1) {
+        range0 = range >> 1;
+        p0 = vec_sum_f32(prob_table + start, range0);
+        prob0 = lrintf(p0 * PROB_UNIT / p);
+        prob0 = clamp_int(prob0, 1, PROB_UNIT - 1);
+        bit = sym >= (start + range0);
+        if (qtrace_file) {
+            if (trace_count >= 16)
+                abort();
+            trace_prob[trace_count] = prob0;
+            trace_bit[trace_count] = bit;
+            trace_count++;
+        }
+        put_bit(pb, prob0, bit);
+        if (bit) {
+            start += range0;
+            range = range - range0;
+            p = p - p0;
+        } else {
+            p = p0;
+            range = range0;
+        }
+    }
+    if (!qtrace_file)
+        return;
+    after = put_bit_get_bit_count(pb);
+    qtrace_put_le(row + 0, qtrace_symbols, 8);
+    qtrace_put_le(row + 8, before, 8);
+    qtrace_put_le(row + 16, after, 8);
+    qtrace_put_le(row + 24, sym, 2);
+    qtrace_put_le(row + 26, n_symb, 2);
+    row[28] = trace_count;
+    if (fwrite(row, 1, sizeof(row), qtrace_file) != sizeof(row))
+        abort();
+    for(start = 0; start < trace_count; start++) {
+        qtrace_put_le(branch, trace_prob[start], 2);
+        branch[2] = trace_bit[start];
+        if (fwrite(branch, 1, sizeof(branch), qtrace_file) != sizeof(branch))
+            abort();
+    }
+    qtrace_symbols++;
+    qtrace_branches += trace_count;
+}
+'''
+
+
+def materialize(source_path: Path, patch_path: Path) -> None:
+    original = source_path.read_text()
+    if "NNCP_BRANCH_TRACE" in original:
+        raise ValueError("source is already instrumented")
+    start = original.find("void write_sym(")
+    marker = "\nint read_sym("
+    end = original.find(marker, start)
+    if start < 0 or end < 0:
+        raise ValueError("write_sym source anchors not found")
+    source = original[:start] + TRACE_SUPPORT + "\n" + WRITE_SYM + original[end:]
+    patch = "".join(
+        difflib.unified_diff(
+            original.splitlines(keepends=True),
+            source.splitlines(keepends=True),
+            fromfile="a/cp_utils.c",
+            tofile="b/cp_utils.c",
+        )
+    )
+    if not patch:
+        raise ValueError("materialized patch is empty")
+    source_path.write_text(source)
+    patch_path.write_text(patch)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("source", type=Path)
+    parser.add_argument("patch", type=Path)
+    args = parser.parse_args()
+    materialize(args.source, args.patch)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

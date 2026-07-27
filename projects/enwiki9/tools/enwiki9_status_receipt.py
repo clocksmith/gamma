@@ -595,9 +595,24 @@ def live_speedlab_gate_from_process(
         command = parts[command_index + 1 :]
         if len(command) < 3:
             continue
+        candidate = label
+        driver_marker = "projects/enwiki9/lib/driver.py"
+        if driver_marker in command:
+            driver_index = command.index(driver_marker)
+            if driver_index + 1 < len(command):
+                candidate = command[driver_index + 1]
         input_path = pathlib.Path(command[-2])
         output_path = pathlib.Path(command[-1])
-        scope = scope_from_gate_label(label)
+        scope: int | None = None
+        if "--limit" in command:
+            limit_index = command.index("--limit")
+            if limit_index + 1 < len(command):
+                try:
+                    scope = int(command[limit_index + 1])
+                except ValueError:
+                    scope = None
+        if scope is None:
+            scope = scope_from_gate_label(label)
         if scope is None:
             try:
                 scope = input_path.stat().st_size
@@ -616,7 +631,7 @@ def live_speedlab_gate_from_process(
             verdict = "receipt_incomplete"
             next_action = "wait_for_gate_receipts"
         gate: dict[str, Any] = {
-            "candidate": label,
+            "candidate": candidate,
             "scope_bytes": scope,
             "verdict": verdict,
             "next_action": next_action,

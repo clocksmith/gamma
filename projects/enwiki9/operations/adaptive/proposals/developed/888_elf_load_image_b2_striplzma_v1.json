@@ -1,0 +1,36 @@
+{
+  "candidate_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_striplzma_v1",
+  "created_at": "2026-07-27T19:23:37+00:00",
+  "developed_at": "2026-07-27T19:23:37+00:00",
+  "evidence": [
+    "docs/elf_load_image_equivalence_problem.md",
+    "docs/elf_load_image_equivalence_solution.md",
+    "docs/exact_package_transcoding_solution.md",
+    "results/elf_load_image_b2_striplzma_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 109270,
+  "hypothesis": "A fully stripped cmix executable with its original loader-mapped ELF header bytes restored has the identical loader projection and archive, while LZMA packaging reduces B2 program size by exactly 109270 bytes.",
+  "interfaces_exposed": [
+    "ELF loader projection",
+    "stripped executable payload",
+    "LZMA package recovery"
+  ],
+  "kill_condition": "Retire on loader-projection mismatch, wrapper grammar mismatch, package above 455000 bytes, native archive mismatch, execution failure, or resource regression.",
+  "max_program_bytes": 455000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "substrate",
+  "parent": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+  "parent_proposal_id": "fxcm_aligned_cell_frontier_v1",
+  "priority": 93,
+  "promotion_condition": "Pass exact 250K native archive identity, roundtrip, deterministic re-encode, startup, and decimal-memory gates; then inherit B2 archive receipts through ELI-1 and EPT-1 while counting the 454876-byte package.",
+  "proposal_id": "elf_load_image_b2_striplzma_v1",
+  "retired_neighborhoods": [
+    "partial symbol stripping after full-strip loader identity",
+    "container-only XZ as the preferred B2 package when ELI-1 passes natively"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 111,
+  "state": "developed",
+  "title": "Loader-identical stripped LZMA B2 package"
+}

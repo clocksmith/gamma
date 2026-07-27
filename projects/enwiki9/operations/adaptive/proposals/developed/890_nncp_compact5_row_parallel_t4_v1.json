@@ -1,0 +1,35 @@
+{
+  "candidate_id": "nncp_compact5_preprocessed_xz_t4_v1",
+  "created_at": "2026-07-27T19:28:37+00:00",
+  "developed_at": "2026-07-27T19:28:37+00:00",
+  "evidence": [
+    "docs/row_parallel_floating_point_problem.md",
+    "docs/row_parallel_floating_point_solution.md",
+    "results/nncp_compact5_preprocessed_smoke_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "The closed libnc CPU kernels partition independent output coordinates at T4 without changing within-coordinate reduction order, preserving Compact5 archive bytes while materially reducing batch-1 runtime.",
+  "interfaces_exposed": [
+    "libnc CPU worker count",
+    "row-parallel matrix kernels",
+    "Compact5 exact archive"
+  ],
+  "kill_condition": "Retire unchanged on any archive byte difference, roundtrip or determinism failure, package above 249000 bytes, memory failure, or elapsed reduction below 25 percent.",
+  "max_program_bytes": 249000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "parent": "nncp_compact5_preprocessed_xz_v1",
+  "parent_proposal_id": "exact_package_transcoding_nncp_compact5_xz_v1",
+  "priority": 94,
+  "promotion_condition": "On exact 10K, require archive SHA identity with Compact5 batch-1, exact roundtrip, deterministic re-encode, decimal-memory compliance, and at least 25 percent lower elapsed time before any mature gate.",
+  "proposal_id": "nncp_compact5_row_parallel_t4_v1",
+  "retired_neighborhoods": [
+    "thread-count ladder after frozen T4",
+    "parallel reduction without exact archive identity"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 109,
+  "state": "developed",
+  "title": "Four-thread row-parallel Compact5 NNCP"
+}

@@ -1,0 +1,115 @@
+--- a/src/models/fxcmv1.cpp
++++ b/src/models/fxcmv1.cpp
+@@ -162,6 +162,65 @@
+ #define CMIX_FXCM_CMC2_ASSOC 14
+ #endif
+ 
++#ifndef CMIX_FXCM_CMC2_FACTORADIC_RECENCY
++#define CMIX_FXCM_CMC2_FACTORADIC_RECENCY 0
++#endif
++
++#if CMIX_FXCM_CMC2_FACTORADIC_RECENCY
++static const U32 fxcmFRTFactorial[11] = {
++  1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800
++};
++
++static U32 fxcmFRTRank(const U8 order[10]) {
++  U8 available[10];
++  for (int i=0; i<10; ++i) available[i]=i;
++  int n=10;
++  U32 rank=0;
++  for (int i=0; i<10; ++i) {
++    int digit=0;
++    while (digit<n && available[digit]!=order[i]) ++digit;
++    assert(digit<n);
++    rank+=digit*fxcmFRTFactorial[9-i];
++    for (int j=digit+1; j<n; ++j) available[j-1]=available[j];
++    --n;
++  }
++  return rank;
++}
++
++static void fxcmFRTUnrank(U32 rank, U8 order[10]) {
++  U8 available[10];
++  for (int i=0; i<10; ++i) available[i]=i;
++  int n=10;
++  for (int i=0; i<10; ++i) {
++    const U32 f=fxcmFRTFactorial[9-i];
++    const int digit=rank/f;
++    rank%=f;
++    assert(digit<n);
++    order[i]=available[digit];
++    for (int j=digit+1; j<n; ++j) available[j-1]=available[j];
++    --n;
++  }
++}
++
++static U32 fxcmFRTLoad(const void* cell) {
++  U32 rank=0;
++  memcpy(&rank, (const U8*)cell+92, sizeof(rank));
++  return rank<fxcmFRTFactorial[10] ? rank : 0;
++}
++
++static void fxcmFRTTouch(void* cell, int way) {
++  U8 order[10];
++  fxcmFRTUnrank(fxcmFRTLoad(cell), order);
++  int pos=0;
++  while (pos<10 && order[pos]!=way) ++pos;
++  assert(pos<10);
++  for (int i=pos; i>0; --i) order[i]=order[i-1];
++  order[0]=way;
++  const U32 rank=fxcmFRTRank(order);
++  memcpy((U8*)cell+92, &rank, sizeof(rank));
++}
++#endif
++
+ #if CMIX_FXCM_CMC2_ASSOC == 14
+ #define CMIX_FXCM_CMC2_CELL_BYTES 128
+ #elif CMIX_FXCM_CMC2_ASSOC == 10
+@@ -1611,13 +1670,42 @@
+      U8 pad[B] ;
+       __attribute__ ((noinline)) U8* get(U16 ch,int keep) {
+-
+-  if (chk[last&15]==ch) return &bh[last&15][0];
++  if (chk[last&15]==ch) {
++#if CMIX_FXCM_CMC2_FACTORADIC_RECENCY
++    if (A==10) fxcmFRTTouch(this, last&15);
++#endif
++    return &bh[last&15][0];
++  }
+   int b=0xffff, bi=0;
+ 
+   for (int i=0; i<A; ++i) {
+-    if (chk[i]==ch) return last=last<<4|i, (U8*)&bh[i][0];
++    if (chk[i]==ch) {
++      last=last<<4|i;
++#if CMIX_FXCM_CMC2_FACTORADIC_RECENCY
++      if (A==10) fxcmFRTTouch(this, i);
++#endif
++      return (U8*)&bh[i][0];
++    }
+     int pri=bh[i][0];
+     if (pri<b && (last&15)!=i && last>>4!=i) b=pri, bi=i;
+   }
+-  return last=last<<4|bi|keep, chk[bi]=ch, (U8*)memset(&bh[bi][0], 0, 7);
++#if CMIX_FXCM_CMC2_FACTORADIC_RECENCY
++  if (A==10) {
++    U8 order[10];
++    fxcmFRTUnrank(fxcmFRTLoad(this), order);
++    for (int pos=9; pos>=0; --pos) {
++      const int i=order[pos];
++      if ((last&15)!=i && last>>4!=i && bh[i][0]==b) {
++        bi=i;
++        break;
++      }
++    }
++  }
++#endif
++  last=last<<4|bi|keep;
++  chk[bi]=ch;
++  memset(&bh[bi][0], 0, 7);
++#if CMIX_FXCM_CMC2_FACTORADIC_RECENCY
++  if (A==10) fxcmFRTTouch(this, bi);
++#endif
++  return (U8*)&bh[bi][0];
+ }
