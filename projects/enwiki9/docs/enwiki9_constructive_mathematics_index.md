@@ -239,3 +239,14 @@ that forecast without a valid dependency chain and complete joint accounting.
 - Constructive transfer: two clean builds reproduced the exact 837,176-byte executable and 411,996-byte dictionary.
 - Counted package: 279,872 bytes, saving 7,519 bytes against CQQ-1 and 284,274 bytes against B2 package accounting.
 - Status: constructive package proxy only; native exact codec gate queued; score credit zero.
+
+## BPDQ-1: Bounded Adjacent-Prefix Dictionary Quotient
+
+- Problem: `docs/bounded_prefix_dictionary_problem.md`
+- Solution: `docs/bounded_prefix_dictionary_solution.md`
+- Construction: `tools/bounded_prefix_dictionary_quotient.py`
+- Frozen instance: `programs/cmix21_b2_line_whitespace_bpdq_rawlzma2_v1/`
+- Exact screen: 44,515 dictionary records; maximum adjacent LCP 17; exact dictionary decode; raw-LZMA2 payload reduced from 277,064 to 270,395 bytes.
+- Constructive transfer: the counted wrapper restored all 73 parent members and built the exact executable and dictionary.
+- Counted package: 273,909 bytes, saving 5,963 bytes against LPWQ-1 and 290,237 bytes against B2 package accounting.
+- Status: constructive package proxy only; native exact codec gate queued; score credit zero.
