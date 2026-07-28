@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "id": "residual-faction-parity-v1",
+  "registeredBeforeResults": true,
+  "question": "Under canonical 0.8.19 mechanics and identical four-player random streams, are Dario's lead and Sam's deficit broad faction main effects or faction-by-policy effects?",
+  "sourceCandidate": {
+    "gameVersion": "0.8.19",
+    "physicalCandidate": "0.5.0-rc.20-test",
+    "rulesetFingerprint": "sha256:9efa959dbfbaebb23f4985872e148f0122b60ec31ff43a8957be0f7e2b31cb46"
+  },
+  "retiredSeedEvidence": [
+    "faction-swap-diagnostic-v1",
+    "winning-path-tolerance-correction-v1"
+  ],
+  "playerCount": 4,
+  "runsPerArm": 400,
+  "mandateMode": "variable",
+  "seed": "m3t4-residual-faction-parity-v1-fresh-20260728",
+  "profileIds": [
+    "balanced_operator",
+    "capability_rusher",
+    "infrastructure_compounder",
+    "power_broker"
+  ],
+  "backends": [
+    "weighted",
+    "weighted",
+    "weighted",
+    "weighted"
+  ],
+  "comparisons": [
+    {
+      "id": "dario_vs_sam_balanced_weighted",
+      "question": "Does Dario outperform Sam under the neutral Balanced Operator policy?",
+      "focalSeat": 0,
+      "leftFactionIds": [
+        "safety_laboratory",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ],
+      "rightFactionIds": [
+        "coalition_lab",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ]
+    },
+    {
+      "id": "dario_vs_sam_balanced_greedy",
+      "question": "Does the Dario-versus-Sam effect survive a homogeneous greedy backend?",
+      "focalSeat": 0,
+      "backends": [
+        "greedy",
+        "greedy",
+        "greedy",
+        "greedy"
+      ],
+      "leftFactionIds": [
+        "safety_laboratory",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ],
+      "rightFactionIds": [
+        "coalition_lab",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ]
+    },
+    {
+      "id": "dario_vs_sam_trust_weighted",
+      "question": "How much of Dario's advantage is a Dario-by-Trust-Governor interaction?",
+      "focalSeat": 0,
+      "profileIds": [
+        "trust_governor",
+        "capability_rusher",
+        "infrastructure_compounder",
+        "power_broker"
+      ],
+      "leftFactionIds": [
+        "safety_laboratory",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ],
+      "rightFactionIds": [
+        "coalition_lab",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ]
+    },
+    {
+      "id": "dario_vs_sam_power_weighted",
+      "question": "Does Sam close the gap when both factions use the Power Broker policy?",
+      "focalSeat": 0,
+      "profileIds": [
+        "power_broker",
+        "capability_rusher",
+        "infrastructure_compounder",
+        "balanced_operator"
+      ],
+      "leftFactionIds": [
+        "safety_laboratory",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ],
+      "rightFactionIds": [
+        "coalition_lab",
+        "platform_empire",
+        "imperial_research_lab",
+        "vertical_empire"
+      ]
+    },
+    {
+      "id": "sam_vs_mark_power_weighted",
+      "question": "Does canonical Sam remain approximately neutral against Mark when the focal policy negotiates?",
+      "focalSeat": 0,
+      "profileIds": [
+        "power_broker",
+        "capability_rusher",
+        "trust_governor",
+        "infrastructure_compounder"
+      ],
+      "leftFactionIds": [
+        "coalition_lab",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ]
+    },
+    {
+      "id": "sam_vs_mark_power_greedy",
+      "question": "Does Sam's negotiated parity survive a homogeneous greedy backend?",
+      "focalSeat": 0,
+      "profileIds": [
+        "power_broker",
+        "capability_rusher",
+        "trust_governor",
+        "infrastructure_compounder"
+      ],
+      "backends": [
+        "greedy",
+        "greedy",
+        "greedy",
+        "greedy"
+      ],
+      "leftFactionIds": [
+        "coalition_lab",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ]
+    },
+    {
+      "id": "dario_vs_mark_balanced_weighted",
+      "question": "Is Dario broadly stronger than the neutral Mark reference after the four-lever promotion?",
+      "focalSeat": 0,
+      "leftFactionIds": [
+        "safety_laboratory",
+        "coalition_lab",
+        "vertical_empire",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "coalition_lab",
+        "vertical_empire",
+        "foundry"
+      ]
+    },
+    {
+      "id": "dario_vs_mark_balanced_greedy",
+      "question": "Does Dario's reference-faction effect survive homogeneous greedy play?",
+      "focalSeat": 0,
+      "backends": [
+        "greedy",
+        "greedy",
+        "greedy",
+        "greedy"
+      ],
+      "leftFactionIds": [
+        "safety_laboratory",
+        "coalition_lab",
+        "vertical_empire",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "coalition_lab",
+        "vertical_empire",
+        "foundry"
+      ]
+    }
+  ],
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "interpretation": {
+    "authority": "Diagnostic only. This report cannot promote a physical rule.",
+    "mainEffect": "A consistent paired Mandate, rank, and win-credit delta across balanced and homogeneous backend comparisons supports a faction main-effect hypothesis.",
+    "policyEffect": "A large delta confined to Trust Governor or disappearing under Power Broker supports policy fit rather than a universal faction correction.",
+    "abilityRealization": "Report qualifying trades, Joint Ventures, Safety use, Responsible Scaling, Audited Deployment, and Emergency Pause before naming a lever.",
+    "nextGate": "Any nominated correction must preserve faction truth and enter a separately preregistered one-lever unified 3/4/5-player common-seed audit."
+  }
+}
