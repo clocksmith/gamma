@@ -2802,6 +2802,15 @@ window, continuity, or identity mismatch. It alone issues the frozen
 `AUTHORIZE_QUOTIENT_BUDGET_CERT` verdict after the two mature-window and
 cumulative-100M gates pass.
 
+The exact raw-to-symbol window compiler is now constructive. It consumes a
+passing hash-bound `NNSMAP1` receipt, rejects any raw cut crossing a
+preprocessed symbol, and applies one frozen rule to zero-output controls:
+symbols beginning strictly before a cut belong to the prefix; zero-output
+symbols beginning at the cut belong to the future side. It emits both native
+runner argument strings and receives zero score credit. The existing
+opening-1M map is explicitly insufficient for mature execution because it does
+not use the frozen full-corpus dictionary or cover the mature boundaries.
+
 Evidence:
 
 - `docs/nncp_native_trace_cert_plan.md`
@@ -2809,6 +2818,7 @@ Evidence:
 - `tools/run_nncp_native_trace_cert.py`
 - `tools/verify_nncp_native_trace.py`
 - `tools/nncp_mature_headroom_cert.py`
+- `tools/nncp_native_window_manifest.py`
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`

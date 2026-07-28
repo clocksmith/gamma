@@ -83,6 +83,24 @@ The exact symbol-to-raw mapping remains a separate hash-bound artifact produced
 by the already passing symbol-map gate. Frozen raw windows are converted to
 symbol windows through that map before the teacher run.
 
+The conversion tool is:
+
+```text
+tools/nncp_native_window_manifest.py
+```
+
+It accepts only a passing, hash-bound map receipt. A raw boundary is legal only
+when no symbol interval crosses it. The completed-symbol cut includes symbols
+whose raw start is strictly before the boundary; this includes zero-output
+controls belonging to a prefix event and excludes zero-output controls at the
+start of the future side. The output supplies the exact `--full-windows` and
+`--checkpoints` arguments for the native runner.
+
+The existing opening-1M map proves the mapping machinery but cannot bind mature
+windows or the published teacher because it uses an opening-scope dictionary.
+A mature manifest requires one map built from the frozen full-corpus dictionary
+and transformed stream, covering at least the 100M raw boundary.
+
 Level A records consumed branches for all symbols. Level B records complete
 derived trees only inside predeclared continuous-state symbol windows
 corresponding to:
