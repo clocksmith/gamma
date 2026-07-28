@@ -76,3 +76,11 @@ Mandate on Everybody Gets a GPU. It also requires configuration-specific
 player-count summaries and faction-specific Mandate sources so a visible
 five-player discontinuity cannot be mistaken for the entire Foundry main
 effect.
+
+The dated
+[`Foundry supported-count conversion`](2026-07-28-foundry-supported-count-conversion.md)
+receipt rejects removing that Mandate as a standalone correction. The point
+changes five-player Foundry win share and placement, but Foundry's three- and
+four-player strength exists without it. The receipt retains the supplier
+identity and requires the next hypothesis to move victory conversion toward
+realized rival demand.
