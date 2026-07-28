@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "foundry-supported-count-conversion-v1",
+  "registeredBeforeResults": true,
+  "question": "How much of Jensen's supported-count advantage is caused by the five-player-only Everybody Gets a GPU Mandate, and which Mandate sources and supplier abilities scale with rival count?",
+  "sourceEvidence": [
+    "supported-player-count-baseline-v1",
+    "faction-public-validation-confirmation-v1"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/foundry-supported-count-conversion-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "foundry_everybody_gpu_no_mandate",
+      "overlay": {
+        "foundryGpuMandateEnabled": false
+      }
+    }
+  ],
+  "playerCounts": [
+    3,
+    4,
+    5
+  ],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [
+    3,
+    5
+  ],
+  "mandateModes": [
+    "variable",
+    "fixed"
+  ],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 8000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-foundry-supported-count-conversion-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "factionTruth": {
+    "protectedStrength": "Compute abundance and supplier leverage remain unchanged.",
+    "bottleneck": "The diagnostic changes only public Mandate from a table-wide distribution and measures dependence on rival count and demand.",
+    "eligibility": "Disabling the GPU Mandate is not selected merely because it improves five-player parity. It must not conceal a separate three- or four-player Foundry advantage."
+  },
+  "requiredDiagnostics": [
+    "configuration-specific outcomes by player count",
+    "Foundry Mandate by source and player count",
+    "Shovels trigger saturation",
+    "Allocation Window units sold and Runway gained",
+    "New Architecture licenses sold and Runway gained",
+    "Everybody Gets a GPU activations, rival Compute granted, and Mandate gained",
+    "paired win-share, score, and rank delta"
+  ],
+  "selectionRule": {
+    "candidate": "Select removal of the GPU Mandate only if it materially corrects a five-player-only advantage without affecting three or four, preserves meaningful Round IV value, and the remaining Foundry rates do not require a different conversion diagnosis.",
+    "pairedAuthority": "Compare the candidate only with canonical under common seeds. Positive paired rankDelta means improved placement.",
+    "integrity": "Any integrity violation, policy fallback, unsupported-count gap, missing configuration-by-count accounting, or missing faction-specific Mandate-source accounting rejects the probe.",
+    "promotion": "No physical text changes without a tracked receipt, complete surface audit, new immutable candidate, and explicit user approval."
+  }
+}
