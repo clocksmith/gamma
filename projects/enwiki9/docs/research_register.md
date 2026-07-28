@@ -2985,3 +2985,17 @@ length, optimizer, or quantization after failure.
 
 Receipt:
 `results/janus_paid_residual_mdl_1m_v1/decision.json`
+# 2026-07-28: JANUS Q0 authorization withdrawn pending exact repair
+
+Review found that the first `janus_paid_residual_mdl_q0_v1` receipt terminated
+complete-block substreams separately, omitted the imported oracle dependency
+from its provisional source accounting, did not charge J1 as a paid candidate,
+and did not prove A/B model and payload identity. The measured 4,907-byte signal
+remains a provisional paid-model witness but no longer authorizes Q1.
+
+JANUS is now `blocked_dependency`. A corrected Q0 must prove full-stream parent
+payload byte identity, candidate decode, tail fallback, WRT/raw inverse binding,
+canonical paid serialization, J1/J2 total selection, and deterministic duplicate
+training. The already queued 10M endpoint trace is retained as zero-credit,
+archive-identity-gated infrastructure only. No 10M JANUS training may begin
+until the corrected Q0 passes.
