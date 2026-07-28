@@ -2634,3 +2634,31 @@ Evidence:
 - `results/nncp_compact5_t4_opening_1m_maturity_v1/decision.json`
 - `operations/adaptive/completed/041_20260728T013416Z_79d106f46f.json`
 - `operations/adaptive/exclusions/nncp_compact5_opening_1m_ceiling_negative_v1.json`
+
+## 2026-07-28: public cmix-lex FXCM-v26 transfer is subscale
+
+The pinned public cmix-lex source at commit
+`370e698f7ea62168cc64326ff97950c3dc212691` was built with Clang 17 and
+compressed the canonical opening 250,000 raw bytes under its ordinary
+dictionary path. This excludes cmix-lex's full-corpus article order and
+fixed-offset `payload_lex` tail permutation, isolating the externally
+constructive predictor stack as a transfer screen.
+
+The resulting archive was `45,158` bytes versus Gamma B2's exact `45,178`
+bytes. The 20-byte improvement is `80 B/M`, far below the frozen
+500-byte/`2,000 B/M` promotion gate. It missed the `44,678` target-scale
+ceiling by 480 bytes. Peak sampled RSS was `8,090,584` KiB, below the official
+decimal-10GB single-process limit. The first-archive ceiling failure correctly
+skipped decode and deterministic re-encode.
+
+Decision: reject the unchanged 560-output FXCM-v26 predictor-stack port and
+any output-capacity or blend sweep derived from it. The result receives zero
+score credit. The cmix-lex full-corpus `payload_lex` transform remains a
+separate representation mechanism because this prefix gate did not exercise
+its 45.3MB PHDA9 tail population.
+
+Evidence:
+
+- `results/cmix_lex_fxcm_v26_250k_v1/decision.json`
+- `docs/fxcm_v26_transfer_plan.md`
+- `operations/adaptive/exclusions/fxcm_v26_external_250k_subscale_v1.json`
