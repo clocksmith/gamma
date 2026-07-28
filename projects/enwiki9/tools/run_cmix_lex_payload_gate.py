@@ -155,6 +155,10 @@ def build_observation_binaries(
 ) -> tuple[Path, Path]:
     build_env = os.environ.copy()
     build_env["PATH"] = f"{compiler.parent}:{build_env.get('PATH', '')}"
+    toolchain_lib = compiler.parents[1] / "lib/x86_64-linux-gnu"
+    build_env["LD_LIBRARY_PATH"] = (
+        f"{toolchain_lib}:{build_env.get('LD_LIBRARY_PATH', '')}"
+    )
     build_env["CC"] = str(compiler)
     run(
         [
