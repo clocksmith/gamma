@@ -8,6 +8,33 @@ const readJson = (path) => readFile(
   new URL(`../../data/${path}`, import.meta.url),
   "utf8"
 ).then(JSON.parse);
+const interactiveBackends = new Set([
+  "weighted",
+  "greedy",
+  "claude",
+  "codex",
+  "hybrid-claude",
+  "hybrid-codex"
+]);
+const llmBackends = new Set([
+  "claude",
+  "codex",
+  "hybrid-claude",
+  "hybrid-codex"
+]);
+const maximumLlmDecisionsPerOpponent = 24;
+
+function boundedInteger(value, fallback, minimum, maximum, label) {
+  const resolved = value === undefined ? fallback : Number(value);
+  if (
+    !Number.isInteger(resolved) ||
+    resolved < minimum ||
+    resolved > maximum
+  ) {
+    throw new RangeError(`${label} must be an integer from ${minimum} to ${maximum}.`);
+  }
+  return resolved;
+}
 
 export class HumanPlayerPolicy {
   constructor(onPending) {
@@ -82,18 +109,72 @@ export async function createInteractiveGame(options = {}, onPending) {
     id: "human",
     name: "Human player"
   };
-  const selectedProfiles = [
-    humanProfile,
-    ...Array.from({ length: playerCount - 1 }, (_, index) =>
-      profiles[(index + 1) % profiles.length]
-    )
-  ];
+  const requestedProfileIds = Array.isArray(options.opponentProfileIds)
+    ? options.opponentProfileIds
+    : [];
+  const requestedBackends = Array.isArray(options.opponentBackends)
+    ? options.opponentBackends
+    : [];
+  if (requestedProfileIds.length > playerCount - 1) {
+    throw new RangeError("opponentProfileIds cannot exceed the number of opponent seats.");
+  }
+  if (requestedBackends.length > playerCount - 1) {
+    throw new RangeError("opponentBackends cannot exceed the number of opponent seats.");
+  }
+  const opponentProfiles = Array.from({ length: playerCount - 1 }, (_, index) => {
+    const id = requestedProfileIds[index];
+    if (!id) return profiles[(index + 1) % profiles.length];
+    const profile = profiles.find((candidate) => candidate.id === id);
+    if (!profile) throw new TypeError(`Unknown opponent profile: ${id}.`);
+    return profile;
+  });
+  const opponentBackends = Array.from({ length: playerCount - 1 }, (_, index) =>
+    requestedBackends[index] || options.aiBackend || "weighted"
+  );
+  for (const backend of opponentBackends) {
+    if (!interactiveBackends.has(backend)) {
+      throw new TypeError(`Unknown interactive opponent backend: ${backend}.`);
+    }
+  }
+  const llmRequested = opponentBackends.some((backend) => llmBackends.has(backend));
+  if (llmRequested && !options.allowLlm) {
+    throw new Error("LLM-backed opponents require explicit allowLlm authorization.");
+  }
+  const maxLlmDecisions = boundedInteger(
+    options.maxLlmDecisions,
+    llmRequested ? 12 : 0,
+    0,
+    maximumLlmDecisionsPerOpponent,
+    "maxLlmDecisions"
+  );
+  if (llmRequested && maxLlmDecisions === 0) {
+    throw new RangeError("LLM-backed opponents require at least one authorized decision.");
+  }
+  const selectedProfiles = [humanProfile, ...opponentProfiles];
   const human = new HumanPlayerPolicy(onPending);
+  const opponents = opponentProfiles.map((profile, index) => {
+    const backend = opponentBackends[index];
+    const decisionBudget = llmBackends.has(backend)
+      ? { remaining: maxLlmDecisions }
+      : null;
+    return {
+      seat: index + 1,
+      profile,
+      backend,
+      decisionBudget,
+      policy: createPlayerPolicy(profile, backend, {
+        allowLlm: Boolean(options.allowLlm),
+        decisionBudget,
+        model: options.model,
+        timeoutMs: options.timeoutMs,
+        shortlistSize: options.shortlistSize,
+        llmStages: options.llmStages
+      })
+    };
+  });
   const policies = [
     human,
-    ...selectedProfiles.slice(1).map((profile) =>
-      createPlayerPolicy(profile, options.aiBackend || "weighted")
-    )
+    ...opponents.map((opponent) => opponent.policy)
   ];
   const match = new SelectedRulesMatch({
     config,
@@ -109,5 +190,13 @@ export async function createInteractiveGame(options = {}, onPending) {
     recordReplay: true,
     rulesVariant: options.rulesVariant || {}
   });
-  return { match, policies, human, config, factions };
+  return {
+    match,
+    policies,
+    human,
+    config,
+    factions,
+    opponents,
+    maximumLlmDecisionsPerOpponent
+  };
 }

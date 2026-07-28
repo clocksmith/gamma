@@ -19,14 +19,15 @@ test("published HTML carries crawler exclusions", () => {
   assert.match(protectedHtml, /name="referrer" content="no-referrer"/);
 });
 
-test("published executable surfaces are path-safe and server controls are disabled", () => {
+test("published executable surfaces are path-safe and advertise the paired bridge", () => {
   const html = rewritePrototypeHtml(
     '<html><head></head><body><a href="/lab">Lab</a><script src="/prototype/app.js"></script></body></html>',
     { kind: "game" }
   );
   assert.match(html, /href="\/m3t4-2038\/lab\.html"/);
   assert.match(html, /src="\/m3t4-2038\/prototype\/app\.js"/);
-  assert.match(html, /server-run games and simulations are disabled/i);
+  assert.match(html, /pair this page with the private token printed by Node/i);
+  assert.doesNotMatch(html, /start-game[^]*disabled = true/i);
   const module = rewritePrototypeModule(
     'import x from "/simulation/contracts/x.js"; fetch("/data/factions.json");'
   );

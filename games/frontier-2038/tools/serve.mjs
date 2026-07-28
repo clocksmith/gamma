@@ -1,7 +1,7 @@
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
-import { randomUUID } from "node:crypto";
+import { randomBytes, randomUUID, timingSafeEqual } from "node:crypto";
 import { archiveSimulationReport } from "../simulation/report-archive.js";
 import { runExperiment } from "../simulation/runtime/run-experiment.js";
 import { createInteractiveGame } from "../simulation/runtime/create-interactive-game.js";
@@ -18,11 +18,81 @@ const mime = {
 };
 const jobs = new Map();
 const games = new Map();
+const interactiveLlmDecisionLimit = 24;
 const allowedHosts = new Set([`localhost:${port}`, `127.0.0.1:${port}`]);
-const allowedOrigins = new Set([
+const localOrigins = new Set([
   `http://localhost:${port}`,
   `http://127.0.0.1:${port}`
 ]);
+const remoteOrigins = new Set(
+  (
+    process.env.FRONTIER_BRIDGE_ORIGINS ||
+    "https://gamma-web-game.web.app"
+  ).split(",").map((origin) => origin.trim()).filter(Boolean)
+);
+const allowedOrigins = new Set([...localOrigins, ...remoteOrigins]);
+const bridgeToken = process.env.FRONTIER_BRIDGE_TOKEN ||
+  randomBytes(18).toString("base64url");
+
+function tokenMatches(value) {
+  if (typeof value !== "string") return false;
+  const actual = Buffer.from(value);
+  const expected = Buffer.from(bridgeToken);
+  return actual.length === expected.length && timingSafeEqual(actual, expected);
+}
+
+function applyCors(request, response) {
+  const origin = request.headers.origin;
+  if (!origin || !allowedOrigins.has(origin)) return;
+  response.setHeader("access-control-allow-origin", origin);
+  response.setHeader("vary", "Origin");
+}
+
+function authorizeApiRequest(request, response) {
+  if (!allowedHosts.has(request.headers.host)) {
+    json(response, 403, { error: "Untrusted Host header." });
+    return false;
+  }
+  const origin = request.headers.origin;
+  if (origin && !allowedOrigins.has(origin)) {
+    json(response, 403, { error: "Untrusted Origin." });
+    return false;
+  }
+  applyCors(request, response);
+  if (
+    origin &&
+    remoteOrigins.has(origin) &&
+    !tokenMatches(request.headers["x-m3t4-bridge-token"])
+  ) {
+    json(response, 401, { error: "Local bridge pairing token is missing or invalid." });
+    return false;
+  }
+  return true;
+}
+
+function preflight(request, response) {
+  if (!allowedHosts.has(request.headers.host)) {
+    json(response, 403, { error: "Untrusted Host header." });
+    return;
+  }
+  const origin = request.headers.origin;
+  if (!origin || !allowedOrigins.has(origin)) {
+    json(response, 403, { error: "Untrusted Origin." });
+    return;
+  }
+  applyCors(request, response);
+  response.setHeader("access-control-allow-methods", "GET, POST, OPTIONS");
+  response.setHeader(
+    "access-control-allow-headers",
+    "Content-Type, X-M3T4-Bridge-Token"
+  );
+  response.setHeader("access-control-max-age", "600");
+  if (request.headers["access-control-request-private-network"] === "true") {
+    response.setHeader("access-control-allow-private-network", "true");
+  }
+  response.writeHead(204);
+  response.end();
+}
 
 function json(response, status, value) {
   response.writeHead(status, {
@@ -135,6 +205,13 @@ function publicGame(game) {
     pending: game.pending,
     state: game.runtime?.match.snapshot() || null,
     replay: game.runtime?.match.replay || [],
+    opponents: game.runtime?.opponents?.map((opponent) => ({
+      seat: opponent.seat,
+      profileId: opponent.profile.id,
+      profileName: opponent.profile.name,
+      backend: opponent.backend,
+      remainingLlmDecisions: opponent.decisionBudget?.remaining ?? null
+    })) || [],
     result: game.result || null,
     error: game.error || null
   };
@@ -208,6 +285,29 @@ async function submitGameDecision(request, response, game) {
 
 createServer(async (request, response) => {
   const url = new URL(request.url, `http://${request.headers.host || "localhost"}`);
+  if (url.pathname.startsWith("/api/") && request.method === "OPTIONS") {
+    preflight(request, response);
+    return;
+  }
+  if (url.pathname.startsWith("/api/") && !authorizeApiRequest(request, response)) {
+    return;
+  }
+  if (request.method === "GET" && url.pathname === "/api/bridge") {
+    json(response, 200, {
+      connected: true,
+      service: "m3t4-local-bridge",
+      interactiveBackends: [
+        "weighted",
+        "greedy",
+        "claude",
+        "codex",
+        "hybrid-claude",
+        "hybrid-codex"
+      ],
+      maximumLlmDecisionsPerOpponent: interactiveLlmDecisionLimit
+    });
+    return;
+  }
   if (request.method === "POST" && url.pathname === "/api/simulations") {
     await startSimulation(request, response);
     return;
@@ -291,4 +391,11 @@ createServer(async (request, response) => {
   process.stdout.write(`M3T4 2038 simulation lab: http://localhost:${port}/lab\n`);
   process.stdout.write(`M3T4 2038 docs reader:    http://localhost:${port}/docs\n`);
   process.stdout.write(`M3T4 2038 content gallery: http://localhost:${port}/gallery\n`);
+  process.stdout.write(
+    `M3T4 2038 deployed bridge: ${[...remoteOrigins].join(", ")}\n`
+  );
+  process.stdout.write(`M3T4 2038 bridge token: ${bridgeToken}\n`);
+  process.stdout.write(
+    `Interactive LLM cap: ${interactiveLlmDecisionLimit} decisions per opponent\n`
+  );
 });

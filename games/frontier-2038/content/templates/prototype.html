@@ -23,6 +23,21 @@
     </header>
 
     <main>
+      <section id="bridge-panel" class="panel bridge-panel" hidden>
+        <div>
+          <p class="eyebrow">Private local execution bridge</p>
+          <h2>Pair this deployed page with your computer</h2>
+          <p>
+            Run <code>npm run dev</code> in the game repository, paste the
+            one-time token printed by Node, then allow Chrome local-network access.
+            Claude and Codex execute only on your machine.
+          </p>
+        </div>
+        <label>Pairing token<input id="bridge-token" type="password" autocomplete="off" spellcheck="false"></label>
+        <button id="connect-bridge" type="button">Connect local bridge</button>
+        <p id="bridge-status" class="bridge-status" role="status">Not connected.</p>
+      </section>
+
       <section id="setup" class="control-strip panel" aria-label="Game setup">
         <label>Play as<select id="faction"></select></label>
         <label>Game seed<input id="seed" value="frontier-2038" spellcheck="false"></label>
@@ -34,7 +49,36 @@
           </select>
         </label>
         <button id="start-game" type="button">Start complete game</button>
-        <p id="game-status">The other institutions use deterministic personas. Every human prompt comes from the same engine used by Monte Carlo.</p>
+        <p id="game-status">Choose a persona and decision backend for every opposing institution. Every prompt comes from the same engine used by Monte Carlo.</p>
+      </section>
+
+      <section class="panel opponent-setup" aria-label="Opponent setup">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Opposing institutions</p>
+            <h2>Personas and decision backends</h2>
+          </div>
+          <small>Weighted and greedy are local deterministic policies. Claude, Codex, and hybrid seats invoke their installed local CLI.</small>
+        </div>
+        <div id="opponent-config" class="seat-config"></div>
+        <details class="llm-controls">
+          <summary>Metered CLI-opponent controls</summary>
+          <label class="check-label">
+            <input id="allow-llm" type="checkbox">
+            Authorize Claude/Codex calls for this game
+          </label>
+          <div class="form-grid compact-grid">
+            <label>
+              Maximum LLM decisions per opponent
+              <input id="max-llm-decisions" type="number" min="1" max="24" value="12">
+            </label>
+            <label>
+              Optional model override
+              <input id="model" placeholder="Use provider default">
+            </label>
+          </div>
+          <p class="muted">Each LLM seat has its own budget. When exhausted—or if its CLI fails—that seat falls back to its deterministic persona.</p>
+        </details>
       </section>
 
       <section class="game-layout">

@@ -1536,6 +1536,70 @@ test("all six unused Core Actions remain selectable before payment is known", as
   );
 });
 
+test("interactive games accept mixed per-opponent personas and decision backends", async () => {
+  const runtime = await createInteractiveGame(
+    {
+      playerCount: 4,
+      seed: "mixed-interactive-backends",
+      opponentProfileIds: [
+        "power_broker",
+        "trust_governor",
+        "capability_rusher"
+      ],
+      opponentBackends: ["greedy", "claude", "hybrid-codex"],
+      allowLlm: true,
+      maxLlmDecisions: 7,
+      model: "test-model"
+    },
+    () => {}
+  );
+  assert.deepEqual(
+    runtime.opponents.map((opponent) => opponent.profile.id),
+    ["power_broker", "trust_governor", "capability_rusher"]
+  );
+  assert.deepEqual(
+    runtime.opponents.map((opponent) => opponent.backend),
+    ["greedy", "claude", "hybrid-codex"]
+  );
+  assert.deepEqual(
+    runtime.policies.map((policy) => policy.kind),
+    ["human", "deterministic", "llm", "hybrid"]
+  );
+  assert.equal(runtime.opponents[0].decisionBudget, null);
+  assert.equal(runtime.opponents[1].decisionBudget.remaining, 7);
+  assert.equal(runtime.opponents[2].decisionBudget.remaining, 7);
+  assert.notEqual(
+    runtime.opponents[1].decisionBudget,
+    runtime.opponents[2].decisionBudget
+  );
+  assert.equal(runtime.policies[2].caller.model, "test-model");
+  assert.equal(runtime.policies[3].caller.model, "test-model");
+
+  await assert.rejects(
+    createInteractiveGame(
+      {
+        playerCount: 3,
+        opponentBackends: ["weighted", "codex"],
+        allowLlm: false
+      },
+      () => {}
+    ),
+    /explicit allowLlm authorization/
+  );
+  await assert.rejects(
+    createInteractiveGame(
+      {
+        playerCount: 3,
+        opponentBackends: ["weighted", "claude"],
+        allowLlm: true,
+        maxLlmDecisions: 25
+      },
+      () => {}
+    ),
+    /maxLlmDecisions must be an integer from 0 to 24/
+  );
+});
+
 test("deterministic policies preserve legal commitment while avoiding known dead actions", async () => {
   const profiles = await loadPlayerProfiles();
   const profile = profiles.find((candidate) => candidate.id === "capability_rusher");
@@ -1805,7 +1869,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.20");
+  assert.equal(first.game.version, "0.8.21");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1986,7 +2050,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.20");
+  assert.equal(first.game.version, "0.8.21");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

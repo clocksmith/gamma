@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.20` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.21-test`
+**Executable game:** `0.8.21` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.22-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -54,6 +54,21 @@ scores.
 
 This is still a model. It cannot reproduce human tone, social pressure, bluff
 credibility, table memory, or the emotional meaning of betrayal.
+
+## Browser interactive play
+
+The browser game supports one human and two to four independently configured
+opponents. Each opposing seat chooses a persona plus one backend: weighted,
+greedy, Claude CLI, Codex CLI, hybrid-Claude, or hybrid-Codex. LLM seats require
+explicit authorization and receive separate decision budgets capped at 24;
+exhaustion or provider failure falls back to the seat’s deterministic persona.
+
+Local play uses `http://localhost:8038/`. The deployed review UI can invoke the
+same local authority without sending CLI access to Firebase: run `npm run dev`,
+paste the printed pairing token into the deployed page, and approve the
+browser’s local-network prompt. Node remains bound to `127.0.0.1`; remote API
+requests are restricted to the configured Firebase origin and authenticated by
+the pairing token.
 
 ## Browser Simulation Lab
 

@@ -1,12 +1,23 @@
-const [factions, config] = await Promise.all([
+import {
+  apiFetch,
+  bridgeRequired,
+  connectBridge,
+  getBridgeToken
+} from "./api-client.js";
+
+const [factions, config, profilesDocument] = await Promise.all([
   fetch("/data/factions.json").then((response) => response.json()),
-  fetch("/data/game-config.json").then((response) => response.json())
+  fetch("/data/game-config.json").then((response) => response.json()),
+  fetch("/data/player-strategies.json").then((response) => response.json())
 ]);
+const profiles = profilesDocument.profiles;
 
 const $ = (id) => document.getElementById(id);
 const elements = Object.fromEntries([
-  "board", "decision-context", "decision-count", "decision-title", "decisions",
-  "export", "faction", "game-status", "headline-name", "headline-text", "log",
+  "allow-llm", "board", "bridge-panel", "bridge-status", "bridge-token",
+  "connect-bridge", "decision-context", "decision-count", "decision-title",
+  "decisions", "export", "faction", "game-status", "headline-name",
+  "headline-text", "log", "max-llm-decisions", "model", "opponent-config",
   "phase", "player-count", "players", "round-title", "seed", "start-game"
 ].map((id) => [id, $(id)]));
 
@@ -16,11 +27,79 @@ for (const faction of factions.factions) {
 
 let game = null;
 let pollTimer = null;
+let bridgeConnected = !bridgeRequired;
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (character) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[character]);
+}
+
+function backendOptions() {
+  return [
+    ["weighted", "Weighted deterministic"],
+    ["greedy", "Greedy deterministic"],
+    ["claude", "Claude CLI"],
+    ["codex", "Codex CLI"],
+    ["hybrid-claude", "Hybrid · weighted + Claude"],
+    ["hybrid-codex", "Hybrid · weighted + Codex"]
+  ];
+}
+
+function renderOpponents() {
+  const count = Number(elements["player-count"].value) - 1;
+  elements["opponent-config"].replaceChildren();
+  for (let index = 0; index < count; index += 1) {
+    const profile = profiles[(index + 1) % profiles.length];
+    const row = document.createElement("div");
+    row.className = "opponent-row";
+    row.dataset.seat = index + 1;
+    row.innerHTML = `
+      <strong>Seat ${index + 2}</strong>
+      <select class="profile-select" aria-label="Seat ${index + 2} persona">
+        ${profiles.map((candidate) => `
+          <option value="${escapeHtml(candidate.id)}" ${
+            candidate.id === profile.id ? "selected" : ""
+          }>${escapeHtml(candidate.name)}</option>
+        `).join("")}
+      </select>
+      <select class="backend-select" aria-label="Seat ${index + 2} decision backend">
+        ${backendOptions().map(([value, label]) =>
+          `<option value="${value}">${escapeHtml(label)}</option>`
+        ).join("")}
+      </select>
+      <p class="persona-summary">${escapeHtml(profile.persona.identity)}</p>
+    `;
+    row.querySelector(".profile-select").addEventListener("change", (event) => {
+      const selected = profiles.find((candidate) => candidate.id === event.target.value);
+      row.querySelector(".persona-summary").textContent = selected.persona.identity;
+    });
+    elements["opponent-config"].append(row);
+  }
+}
+
+function opponentOptions() {
+  const rows = [...elements["opponent-config"].querySelectorAll(".opponent-row")];
+  return {
+    opponentProfileIds: rows.map((row) =>
+      row.querySelector(".profile-select").value
+    ),
+    opponentBackends: rows.map((row) =>
+      row.querySelector(".backend-select").value
+    ),
+    allowLlm: elements["allow-llm"].checked,
+    maxLlmDecisions: Number(elements["max-llm-decisions"].value),
+    model: elements.model.value || undefined
+  };
+}
+
+function updateStartAvailability() {
+  elements["start-game"].disabled = !bridgeConnected;
+}
+
+function showBridgeState(message, connected = false) {
+  elements["bridge-status"].textContent = message;
+  elements["bridge-status"].classList.toggle("connected", connected);
 }
 
 function tilePosition(tile) {
@@ -80,12 +159,22 @@ function renderPlayers(state) {
   elements.players.replaceChildren();
   if (!state) return;
   for (const player of state.players) {
+    const opponent = game?.opponents?.find((candidate) =>
+      candidate.seat === player.seat
+    );
     const card = document.createElement("article");
     card.className = `public-player ${player.seat === 0 ? "human" : ""}`;
     card.style.setProperty("--seat", player.seat);
     card.innerHTML = `
       <p class="eyebrow">Seat ${player.seat + 1}${player.seat === 0 ? " · you" : ""}</p>
       <h3>${escapeHtml(player.factionName)}</h3>
+      ${opponent ? `<p class="readiness">${
+        escapeHtml(opponent.profileName)
+      } · ${escapeHtml(opponent.backend)}${
+        opponent.remainingLlmDecisions === null
+          ? ""
+          : ` · ${opponent.remainingLlmDecisions} LLM calls left`
+      }</p>` : ""}
       <p class="readiness ${player.agiReadiness.ready ? "ready" : ""}">
         AGI ${player.agiReadiness.ready
           ? "grid-ready"
@@ -116,7 +205,7 @@ async function submitDecision(decisionId) {
   elements.decisions.querySelectorAll("button").forEach((button) => {
     button.disabled = true;
   });
-  const response = await fetch(`/api/games/${game.id}/decisions`, {
+  const response = await apiFetch(`/api/games/${game.id}/decisions`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ requestId: packet.requestId, decisionId })
@@ -194,7 +283,7 @@ function render() {
 
 async function refresh() {
   if (!game || ["complete", "failed"].includes(game.status)) return;
-  const response = await fetch(`/api/games/${game.id}`);
+  const response = await apiFetch(`/api/games/${game.id}`);
   const next = await response.json();
   if (!response.ok) throw new Error(next.error || "Could not read the game.");
   game = next;
@@ -215,13 +304,14 @@ elements["start-game"].addEventListener("click", async () => {
   clearTimeout(pollTimer);
   elements["start-game"].disabled = true;
   try {
-    const response = await fetch("/api/games", {
+    const response = await apiFetch("/api/games", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         factionId: elements.faction.value,
         playerCount: Number(elements["player-count"].value),
-        seed: elements.seed.value
+        seed: elements.seed.value,
+        ...opponentOptions()
       })
     });
     game = await response.json();
@@ -231,9 +321,36 @@ elements["start-game"].addEventListener("click", async () => {
   } catch (error) {
     elements["game-status"].textContent = error.message;
   } finally {
-    elements["start-game"].disabled = false;
+    updateStartAvailability();
   }
 });
+
+elements["player-count"].addEventListener("change", renderOpponents);
+
+if (bridgeRequired) {
+  elements["bridge-panel"].hidden = false;
+  elements["bridge-token"].value = getBridgeToken();
+  bridgeConnected = false;
+  showBridgeState("Start npm run dev locally, then pair this page.");
+  elements["connect-bridge"].addEventListener("click", async () => {
+    elements["connect-bridge"].disabled = true;
+    showBridgeState("Requesting access to the local bridge…");
+    try {
+      const status = await connectBridge(elements["bridge-token"].value);
+      bridgeConnected = true;
+      showBridgeState(
+        `Connected · ${status.maximumLlmDecisionsPerOpponent} maximum LLM decisions per opponent.`,
+        true
+      );
+    } catch (error) {
+      bridgeConnected = false;
+      showBridgeState(error.message);
+    } finally {
+      elements["connect-bridge"].disabled = false;
+      updateStartAvailability();
+    }
+  });
+}
 
 elements.export.addEventListener("click", () => {
   if (!game) return;
@@ -246,4 +363,6 @@ elements.export.addEventListener("click", () => {
 });
 
 window.addEventListener("resize", () => renderBoard(game?.state));
+renderOpponents();
+updateStartAvailability();
 render();

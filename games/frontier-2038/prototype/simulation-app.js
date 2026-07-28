@@ -1,6 +1,12 @@
 import {
   normalizeSimulationReport
 } from "/simulation/contracts/report-migrations.js";
+import {
+  apiFetch,
+  bridgeRequired,
+  connectBridge,
+  getBridgeToken
+} from "./api-client.js";
 
 const seatColors = ["#a45137", "#536e73", "#a98c3f", "#7a657d", "#607d70", "#6c7a89"];
 const [profilesDocument, uiCopy] = await Promise.all([
@@ -19,6 +25,10 @@ const elements = Object.fromEntries(
   [
     "allow-llm",
     "archive-path",
+    "bridge-panel",
+    "bridge-status",
+    "bridge-token",
+    "connect-bridge",
     "coverage",
     "download-report",
     "distribution-section",
@@ -84,6 +94,16 @@ const elements = Object.fromEntries(
 let report = null;
 let rawReport = null;
 let replayIndex = 0;
+let bridgeConnected = !bridgeRequired;
+
+function showBridgeState(message, connected = false) {
+  elements["bridge-status"].textContent = message;
+  elements["bridge-status"].classList.toggle("connected", connected);
+}
+
+function updateRunAvailability() {
+  elements["run-simulation"].disabled = !bridgeConnected;
+}
 
 function shortFingerprint(value) {
   return String(value || "unattributed").replace(/^sha256:/, "").slice(0, 12);
@@ -192,7 +212,7 @@ function simulationOptions() {
 
 async function pollJob(id) {
   while (true) {
-    const response = await fetch(`/api/simulations/${id}`);
+    const response = await apiFetch(`/api/simulations/${id}`);
     const job = await response.json();
     if (!response.ok) throw new Error(job.error || copy.errors.readJob);
     elements["job-status"].textContent =
@@ -697,7 +717,7 @@ elements["simulation-form"].addEventListener("submit", async (event) => {
   elements["run-simulation"].disabled = true;
   elements["job-status"].textContent = copy.status.submitting;
   try {
-    const response = await fetch("/api/simulations", {
+    const response = await apiFetch("/api/simulations", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(simulationOptions())
@@ -709,7 +729,7 @@ elements["simulation-form"].addEventListener("submit", async (event) => {
   } catch (error) {
     elements["job-status"].textContent = `${copy.status.failed} · ${error.message}`;
   } finally {
-    elements["run-simulation"].disabled = false;
+    updateRunAvailability();
   }
 });
 
@@ -833,6 +853,32 @@ if (existingJob) {
   } catch (error) {
     elements["job-status"].textContent = `${copy.status.failed} · ${error.message}`;
   } finally {
-    elements["run-simulation"].disabled = false;
+    updateRunAvailability();
   }
 }
+
+if (bridgeRequired) {
+  elements["bridge-panel"].hidden = false;
+  elements["bridge-token"].value = getBridgeToken();
+  bridgeConnected = false;
+  showBridgeState("Start npm run dev locally, then pair this page.");
+  elements["connect-bridge"].addEventListener("click", async () => {
+    elements["connect-bridge"].disabled = true;
+    showBridgeState("Requesting access to the local bridge…");
+    try {
+      const status = await connectBridge(elements["bridge-token"].value);
+      bridgeConnected = true;
+      showBridgeState(
+        `Connected · local Node authority · ${status.interactiveBackends.length} interactive backends available.`,
+        true
+      );
+    } catch (error) {
+      bridgeConnected = false;
+      showBridgeState(error.message);
+    } finally {
+      elements["connect-bridge"].disabled = false;
+      updateRunAvailability();
+    }
+  });
+}
+updateRunAvailability();
