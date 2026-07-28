@@ -1,6 +1,6 @@
 # ROCm-native causal symbol teacher
 
-Status: proposed target-bearing teacher experiment; zero score credit.
+Status: terminal negative at Q0; zero score credit.
 
 ## Boundary
 
@@ -135,3 +135,26 @@ Teacher success authorizes only `QUOTIENT-BUDGET-CERT`. It does not authorize a
 student implementation or score claim. The final student remains a separately
 counted deterministic CPU program and must satisfy the 108,000,000-byte target,
 roundtrip, runtime, and memory constraints.
+
+## Terminal decision
+
+Q0 rejected the ROCm teacher lane.
+
+The BF16 full-segment implementation completed two seeded training executions
+far enough to pass exact archive and sampled-parameter repeatability, but its
+counterfactual causality audit measured `0.00390625` maximum drift in logits
+before the changed future input. The decoder cannot supply those future segment
+inputs, so this path is not constructive.
+
+The corrected per-symbol incremental implementation produced exact `0.0`
+prefix drift. It did not reach the first `8,192`-symbol checkpoint in `546.364`
+measured seconds and was stopped under the project's non-winning-work rule.
+Q1 and Q2 are not authorized. No codelength, roundtrip, teacher-headroom, or
+score claim survives.
+
+Evidence:
+
+- `results/nncp_rocm_q0_teacher_gate_v1/decision.json`
+- `run_logs/adaptive/20260728T181952Z_25a6792fcc.log`
+- `run_logs/adaptive/20260728T183043Z_8ef13361c2.log`
+- `run_logs/adaptive/20260728T183258Z_87935039fe.log`
