@@ -491,6 +491,47 @@ def enqueue_job(
     return job
 
 
+def enqueue_tool_job(
+    *,
+    candidate_id: str,
+    tool: str,
+    tool_args: list[str],
+    gate_size: int,
+    priority: int | None,
+    heavy: bool | None,
+    purpose: str,
+    force: bool,
+    tags: list[str],
+) -> dict[str, Any]:
+    if purpose not in {"diagnostic", "infrastructure", "oracle"}:
+        raise ValueError(
+            "tool jobs must use diagnostic, infrastructure, or oracle purpose"
+        )
+    tool_path = (ROOT / tool).resolve()
+    tools_root = (ROOT / "tools").resolve()
+    if tools_root not in tool_path.parents or not tool_path.is_file():
+        raise ValueError("tool must be an existing file below projects/enwiki9/tools")
+    job = enqueue_job(
+        candidate_id=candidate_id,
+        gate_size=gate_size,
+        priority=priority,
+        heavy=heavy,
+        archive_ceiling=None,
+        purpose=purpose,
+        force=force,
+        tags=tags,
+    )
+    pending_path = next(
+        path
+        for path in QUEUE_DIRS["pending"].glob("*.json")
+        if load_json(path).get("job_id") == job["job_id"]
+    )
+    job["tool"] = tool_path.relative_to(ROOT).as_posix()
+    job["tool_args"] = tool_args
+    atomic_json(pending_path, job)
+    return job
+
+
 def successful_scopes(meta: dict[str, Any]) -> set[int]:
     measured = meta.get("measured")
     if not isinstance(measured, dict):
@@ -620,32 +661,47 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
     gate_size = int(job["gate_size"])
     job_id = str(job["job_id"])
     log_path = RUN_LOGS / f"{job_id}.log"
-    command = [
-        sys.executable,
-        str(TRIAGE),
-        "--candidate",
-        candidate_id,
-        "--gate-size",
-        str(gate_size),
-        "--run",
-        "--json",
-    ]
-    if str(job.get("purpose", "")).strip().lower() not in {
-        "infrastructure",
-        "diagnostic",
-        "oracle",
-    }:
-        command.append("--update-meta")
-    archive_ceiling = job.get("archive_ceiling")
-    if isinstance(archive_ceiling, int) and archive_ceiling > 0:
-        command.extend(
-            [
-                "--archive-ceiling",
-                f"{gate_size}:{archive_ceiling}",
-            ]
-        )
-    if job.get("respect_heavy_lock") is True:
-        command.append("--respect-heavy-lock")
+    tool = job.get("tool")
+    if isinstance(tool, str):
+        tool_path = (ROOT / tool).resolve()
+        tools_root = (ROOT / "tools").resolve()
+        if tools_root not in tool_path.parents or not tool_path.is_file():
+            raise ValueError(f"invalid queued tool: {tool}")
+        tool_args = job.get("tool_args", [])
+        if not isinstance(tool_args, list) or not all(
+            isinstance(value, str) for value in tool_args
+        ):
+            raise ValueError("queued tool_args must be a list of strings")
+        command = [sys.executable, str(tool_path), *tool_args]
+        if job.get("respect_heavy_lock") is True:
+            command = ["flock", "/tmp/enwiki9-heavy.lock", *command]
+    else:
+        command = [
+            sys.executable,
+            str(TRIAGE),
+            "--candidate",
+            candidate_id,
+            "--gate-size",
+            str(gate_size),
+            "--run",
+            "--json",
+        ]
+        if str(job.get("purpose", "")).strip().lower() not in {
+            "infrastructure",
+            "diagnostic",
+            "oracle",
+        }:
+            command.append("--update-meta")
+        archive_ceiling = job.get("archive_ceiling")
+        if isinstance(archive_ceiling, int) and archive_ceiling > 0:
+            command.extend(
+                [
+                    "--archive-ceiling",
+                    f"{gate_size}:{archive_ceiling}",
+                ]
+            )
+        if job.get("respect_heavy_lock") is True:
+            command.append("--respect-heavy-lock")
 
     started = time.monotonic()
     with log_path.open("w") as log:
@@ -898,6 +954,15 @@ def build_parser() -> argparse.ArgumentParser:
     enqueue.add_argument("candidate_id")
     add_enqueue_options(enqueue)
 
+    enqueue_tool = subparsers.add_parser(
+        "enqueue-tool",
+        help="queue a zero-credit diagnostic, infrastructure, or oracle tool",
+    )
+    enqueue_tool.add_argument("candidate_id")
+    enqueue_tool.add_argument("--tool", required=True)
+    enqueue_tool.add_argument("--tool-arg", action="append", default=[])
+    add_enqueue_options(enqueue_tool)
+
     discover = subparsers.add_parser(
         "discover-gates",
         aliases=["discover"],
@@ -1048,6 +1113,20 @@ def main() -> int:
                 priority=args.priority,
                 heavy=args.heavy,
                 archive_ceiling=args.archive_ceiling,
+                purpose=args.purpose,
+                force=args.force,
+                tags=args.tag,
+            )
+            print(json.dumps(job, indent=2, sort_keys=True))
+            return 0
+        if args.command == "enqueue-tool":
+            job = enqueue_tool_job(
+                candidate_id=args.candidate_id,
+                tool=args.tool,
+                tool_args=args.tool_arg,
+                gate_size=args.gate_size,
+                priority=args.priority,
+                heavy=args.heavy,
                 purpose=args.purpose,
                 force=args.force,
                 tags=args.tag,

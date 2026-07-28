@@ -207,6 +207,21 @@ The runner forwards it to both the first archive and deterministic-reencode
 checks. Exceeding the ceiling skips decompression and re-encode rather than
 spending the serialized lane on a result that is already terminal.
 
+Queue a receipt-producing diagnostic, infrastructure, or oracle tool through
+the same durable lifecycle:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py enqueue-tool <candidate_id> \
+  --tool tools/<tool.py> \
+  --tool-arg <argument> \
+  --purpose oracle \
+  --gate-size 1000000 \
+  --heavy
+```
+
+Tool paths are restricted to `projects/enwiki9/tools/`. Tool jobs cannot use a
+score-bearing purpose and never update candidate lifecycle or frontier credit.
+
 Job purpose controls lifecycle mutation:
 
 ```text
