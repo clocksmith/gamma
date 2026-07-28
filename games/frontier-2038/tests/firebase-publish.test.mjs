@@ -35,7 +35,7 @@ test("published executable surfaces are path-safe and advertise the paired bridg
   assert.match(module, /\/m3t4-2038\/data\/factions\.json/);
 });
 
-test("review index enumerates supplied HTML surfaces and exact identity", () => {
+test("review index is one plain list containing every supplied surface and exact identity", () => {
   const html = buildIndexHtml({
     identity: {
       rulesVersion: "rules-test",
@@ -64,6 +64,10 @@ test("review index enumerates supplied HTML surfaces and exact identity", () => 
   assert.match(html, /commit-test/);
   assert.match(html, /href="docs\/core-rules\.html"/);
   assert.match(html, /href="gallery\.html"/);
+  assert.match(html, /<ul class="page-list">/);
+  assert.equal((html.match(/<li>/g) ?? []).length, 2);
+  assert.doesNotMatch(html, /class="surface"/);
+  assert.doesNotMatch(html, /Controlled physical-candidate review/);
 });
 
 test("Firebase blocks cooperative crawlers only for the M3T4 review path", async () => {

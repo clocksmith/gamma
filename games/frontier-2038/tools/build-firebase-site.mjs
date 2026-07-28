@@ -80,61 +80,48 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
-function pageCard(page) {
-  return `<a class="surface" href="${escapeHtml(page.href)}">
-  <span class="kind">${escapeHtml(page.kind)}</span>
-  <strong>${escapeHtml(page.title)}</strong>
-  <span>${escapeHtml(page.description)}</span>
-</a>`;
+function pageListItem(page) {
+  return `<li>
+  <a href="${escapeHtml(page.href)}">${escapeHtml(page.title)}</a>
+  <span>${escapeHtml(page.kind)} · ${escapeHtml(page.description)}</span>
+</li>`;
 }
 
 export function buildIndexHtml({ identity, pages }) {
-  const grouped = Map.groupBy(pages, (page) => page.group);
-  const sections = [...grouped].map(([group, groupPages]) => `<section>
-  <h2>${escapeHtml(group)}</h2>
-  <div class="surfaces">${groupPages.map(pageCard).join("\n")}</div>
-</section>`).join("\n");
   return protectHtml(`<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>M3T4 2038 · controlled review index</title>
+  <title>M3T4 2038 · All pages</title>
   <style>
-    :root { color-scheme: dark; --paper:#eee3c5; --ink:#e8e4d6; --muted:#a7a99f; --line:#40483f; --accent:#d3a74e; }
+    :root { color-scheme: dark; --ink:#eeeae0; --muted:#a9afa7; --line:#3b443b; --accent:#e4b553; }
     * { box-sizing: border-box; }
-    body { margin:0; background:#121712; color:var(--ink); font:16px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace; }
-    main { width:min(1120px,calc(100% - 2rem)); margin:0 auto; padding:4rem 0 6rem; }
-    .eyebrow,.kind { color:var(--accent); text-transform:uppercase; letter-spacing:.12em; font-size:.72rem; }
-    h1 { max-width:12ch; margin:.35rem 0 1rem; font:700 clamp(3rem,9vw,7.5rem)/.86 Georgia,serif; letter-spacing:-.055em; }
-    .lede { max-width:72ch; color:#c5c6bc; font-size:1.05rem; }
-    .identity { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; margin:2rem 0 3.5rem; border:1px solid var(--line); background:var(--line); }
-    .identity div { min-width:0; padding:1rem; background:#192019; }
-    .identity span { display:block; color:var(--muted); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; }
-    .identity code { display:block; overflow-wrap:anywhere; color:var(--paper); }
-    section { margin:3rem 0; }
-    h2 { padding-bottom:.7rem; border-bottom:1px solid var(--line); font:700 1.3rem Georgia,serif; }
-    .surfaces { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.8rem; }
-    .surface { display:flex; min-height:158px; flex-direction:column; gap:.5rem; padding:1rem; border:1px solid var(--line); background:#181e18; color:inherit; text-decoration:none; }
-    .surface:hover,.surface:focus-visible { border-color:var(--accent); background:#202820; outline:none; }
-    .surface strong { font:700 1.2rem/1.15 Georgia,serif; }
-    .surface span:last-child { color:var(--muted); font-size:.84rem; }
-    footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line); color:var(--muted); font-size:.75rem; }
-    @media(max-width:700px) { main{padding-top:2rem}.identity{grid-template-columns:1fr} }
+    body { margin:0; background:#121712; color:var(--ink); font:16px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; }
+    main { width:min(760px,calc(100% - 2rem)); margin:0 auto; padding:3rem 0 5rem; }
+    h1 { margin:0 0 .5rem; font:700 clamp(2.4rem,8vw,4.5rem)/1 Georgia,serif; }
+    p { margin:.5rem 0 2rem; color:var(--muted); }
+    ul { margin:0; padding:0; list-style:none; border-top:1px solid var(--line); }
+    li { padding:1rem 0; border-bottom:1px solid var(--line); }
+    li a { display:inline-block; color:var(--accent); font:700 1.12rem/1.3 Georgia,serif; }
+    li a:hover,li a:focus-visible { color:#fff0bd; }
+    li span { display:block; margin-top:.25rem; color:var(--muted); font-size:.8rem; }
+    footer { margin-top:2.5rem; color:var(--muted); font-size:.72rem; overflow-wrap:anywhere; }
+    footer code { color:var(--ink); }
   </style>
 </head>
 <body>
 <main>
-  <p class="eyebrow">Controlled physical-candidate review</p>
   <h1>M3T4 2038</h1>
-  <p class="lede">An index of every published HTML review surface generated from the same semantic game graph. This public URL is intentionally excluded from cooperative search, archive, and AI crawler discovery. It is not access-controlled.</p>
-  <div class="identity">
-    <div><span>Rules</span><code>${escapeHtml(identity.rulesVersion)}</code></div>
-    <div><span>Executable</span><code>${escapeHtml(identity.executableVersion)}</code></div>
-    <div><span>Source</span><code>${escapeHtml(identity.sourceCommit)}</code></div>
-  </div>
-  ${sections}
-  <footer>Generated review artifact · no final art · execution uses an explicitly paired localhost bridge</footer>
+  <p>Everything currently available:</p>
+  <ul class="page-list">
+    ${pages.map(pageListItem).join("\n")}
+  </ul>
+  <footer>
+    Rules <code>${escapeHtml(identity.rulesVersion)}</code> ·
+    Executable <code>${escapeHtml(identity.executableVersion)}</code> ·
+    Source <code>${escapeHtml(identity.sourceCommit)}</code>
+  </footer>
 </main>
 </body>
 </html>`);
@@ -289,7 +276,7 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     {
       group: "Executable review surfaces",
       kind: "Playable interface",
-      title: "Rules prototype",
+      title: "Play the game",
       href: "prototype/index.html",
       description: "Play in the deployed browser through an explicitly paired local Node bridge."
     },
