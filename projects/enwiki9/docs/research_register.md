@@ -2843,6 +2843,22 @@ crossing end moves to the symbol start. Requested and actual raw bounds are
 both recorded. The completed map is reused through a separate finalizer; full
 preprocessing must not be repeated.
 
+The receipt-bound finalizer passed. Frozen native trace arguments are:
+
+```text
+checkpoints:
+213645,2000597,2229154,10850146,11065834,21910576,22128662
+
+full trees:
+0:213645,2000597:2229154,10850146:11065834,21910576:22128662
+```
+
+The actual inward-snapped raw windows are `0-999,999`,
+`9,000,000-9,999,992`, `49,000,005-50,000,000`, and
+`99,000,010-99,999,996`. The final decision is `PASS` with zero score credit.
+The next gate is native NNCP trace-off/trace-on identity on the frozen NVIDIA
+system; no further ROCm teacher replication is authorized.
+
 Evidence:
 
 - `docs/nncp_native_trace_cert_plan.md`
@@ -2853,6 +2869,8 @@ Evidence:
 - `tools/nncp_native_window_manifest.py`
 - `tools/run_nncp_full_symbol_map_gate.py`
 - `tools/finalize_nncp_full_symbol_map_gate.py`
+- `results/nncp_full_symbol_map_v1/decision.json`
+- `results/nncp_full_symbol_map_v1/window_manifest.json`
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`
