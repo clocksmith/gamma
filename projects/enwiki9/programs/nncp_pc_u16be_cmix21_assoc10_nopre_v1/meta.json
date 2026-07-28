@@ -21,7 +21,86 @@
   "family": "composed_reversible_representation",
   "hypothesis": "The NNCP symbol stream is binary rather than English text, so disabling cmix preprocessing removes the counted English dictionary and avoids a representation mismatch while preserving enough backend compression to improve total score.",
   "id": "nncp_pc_u16be_cmix21_assoc10_nopre_v1",
-  "measured": {},
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": 44678,
+          "archive_ceiling_missed": true,
+          "bits_per_byte": 1.82176,
+          "comparison": {
+            "archive_delta_vs_baseline": -18618,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 683994
+          },
+          "compressed_size": 56930,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": null,
+          "hutter_score": 759743,
+          "program_id": "nncp_pc_u16be_cmix21_assoc10_nopre_v1",
+          "program_size": 702813,
+          "program_stats": null,
+          "roundtrip_ok": null
+        }
+      ],
+      "generated_at": "2026-07-28T01:29:33+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Retire: exact archive exceeded the target-bearing ceiling at 250000: 56930 > 44678."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": 44678,
+            "archive_ceiling_missed": true,
+            "bits_per_byte": 1.82176,
+            "comparison": {
+              "archive_delta_vs_baseline": -18618,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 683994
+            },
+            "compressed_size": 56930,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": null,
+            "hutter_score": 759743,
+            "program_id": "nncp_pc_u16be_cmix21_assoc10_nopre_v1",
+            "program_size": 702813,
+            "program_stats": null,
+            "roundtrip_ok": null
+          }
+        ],
+        "generated_at": "2026-07-28T01:29:33+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Retire: exact archive exceeded the target-bearing ceiling at 250000: 56930 > 44678."
+      }
+    ]
+  },
   "omega": {
     "interfaces_exposed": [
       "NNCP U16BE symbol stream",
@@ -87,6 +166,6 @@
       "official NNCP source tar 7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119"
     ]
   },
-  "status": "candidate",
-  "verdict": "Unmeasured dictionary-free binary-domain RDC-1 candidate."
+  "status": "measured_negative",
+  "verdict": "Retire: exact archive exceeded the target-bearing ceiling at 250000: 56930 > 44678."
 }

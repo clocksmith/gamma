@@ -2572,3 +2572,20 @@ Evidence:
 
 - `results/nncp_pc_u16be_cmix21_assoc10_v1/2026-07-27T212053.json`
 - `operations/adaptive/exclusions/rdc_u16be_text_backend_250k_negative_v1.json`
+
+## 2026-07-28: RDC-1 dictionary-free binary backend is terminal negative
+
+The no-preprocessing control produced a `56,930`-byte opening-250K archive,
+25 bytes worse than text-mode RDC, `11,752` bytes worse than B2, and `12,252`
+bytes above the `44,678` target-scale ceiling. Removing the English dictionary
+reduced package size but did not improve the transformed payload.
+
+Decision: close NNCP U16BE transfer through mature cmix in both text and binary
+modes. Retire byte-layout, dictionary, framing, and backend-mode sweeps for this
+representation. Future NNCP work must demonstrate value in NNCP's own causal
+symbol domain through a compact decoder-visible student or teacher.
+
+Evidence:
+
+- `results/nncp_pc_u16be_cmix21_assoc10_nopre_v1/2026-07-27T212933.json`
+- `operations/adaptive/exclusions/rdc_u16be_nopre_backend_250k_negative_v1.json`
