@@ -1,6 +1,6 @@
 # M3T4 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.22-test`
+**Rules under review:** `0.5.0-rc.23-test`
 **First cohort:** controlled four-player physical test with Demis Hassabis,
 Elon Musk, Jensen Huang, and Mark Zuckerberg
 
@@ -103,8 +103,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.22-test`. Executable
-game `0.8.21` implements it under `three-to-five-grid-ready-v1`. New automated reports
+`docs/core-rules.md` is a review draft at `0.5.0-rc.23-test`. Executable
+game `0.8.22` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.
@@ -130,6 +130,8 @@ package. They add complete Safety Laboratory ability-value telemetry and the
 corrected residual faction diagnostic. Candidate `0.5.0-rc.22-test` and
 executable `0.8.21` likewise change no playable rule; they add mixed interactive
 opponent backends and the paired localhost bridge used by the deployed UI.
+Candidate `0.5.0-rc.23-test` and executable `0.8.22` fix the Simulation Lab’s
+deployed-page DOM binding without changing play.
 Three to five players remain supported, four remains the balance authority,
 three/five regression coverage remains mandatory, and every unrelated
 numerical rule remains frozen.

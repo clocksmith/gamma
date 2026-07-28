@@ -55,6 +55,7 @@ const elements = Object.fromEntries(
     "mode-description",
     "population",
     "population-field",
+    "player-count-field",
     "profile-results",
     "preregistration-field",
     "preregistration-path",
