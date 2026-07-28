@@ -2961,3 +2961,27 @@ The receipt-bound endpoint428 trace replayed exactly at 173,859 payload bytes. T
 ## 2026-07-28 - ROCm batched causal teacher - REJECTED
 
 A corrected shifted-input audit proved the batched ROCm model causal: changing target 8 changed shifted input 9, while outputs 0 through 8 remained exactly identical. Q0 then produced a deterministic 90,931-byte teacher payload through 322,978 raw bytes with exact symbol replay and official inversion. It nevertheless trailed Gamma by 32,369.610 bytes. Q1 extended the identical architecture to 500,000 raw bytes and again passed causality, symbol replay, and official inversion, but the shared-boundary deficit grew to 51,043.031 bytes. The marginal 177,008-byte band lost 18,673.421 bytes, or -105,494.788 B/M, versus the +3,000 B/M authorization gate. The 1M extension and quotient student are not authorized. The lane receives zero score credit. See `docs/nncp_rocm_batched_teacher_decision.md`.
+# 2026-07-28: JANUS paid fixed-population residual MDL Q0
+
+`janus_paid_residual_mdl_q0_v1` tested a legal two-part fixed-corpus mechanism
+that was not covered by CHIRON's failed chronological-transfer experiment. A
+future-informed residual model was trained on the complete evaluated
+population, frozen, quantized, transmitted in the accounting model, and used
+causally at runtime.
+
+The opening-1M exact parent payload replayed at 173,859 bytes. On the represented
+complete population, the parent required 173,807 bytes and JANUS required
+168,900 bytes, a gain of 4,907 bytes or 4,908.356301 B/M. A node-bias control
+gained only 46 bytes and a circular-shift control lost 11,586 bytes. The model
+artifact was 127,695 bytes and provisional compressed implementation source was
+3,883 bytes. Literal 1M two-part accounting is negative by 126,671 bytes;
+full-corpus amortization projects 4,776.778301 net B/M.
+
+Decision: `AUTHORIZED_10M`, zero score credit. Produce an exact canonical-10M
+endpoint428 trace and rerun the frozen Q0 experiment once. Require at least
+30,000 gross exact bytes and 21,000 package-adjusted projected net bytes before
+authorizing an integer decoder. Do not change architecture, epochs, block
+length, optimizer, or quantization after failure.
+
+Receipt:
+`results/janus_paid_residual_mdl_1m_v1/decision.json`
