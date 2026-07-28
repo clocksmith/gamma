@@ -189,14 +189,36 @@ export function calculateAuditDraws(baseDraws, playerCount) {
 }
 
 export function publicMandateAwards(config, player) {
+  const customerSchedule = config.scoring.customerMandateSchedule;
+  const peerValidation = config.factionRules?.imperial?.peerValidation;
+  const playerCount = Number(player.playerCount || 4);
   const awards = [
     ...Array.from({ length: player.customers }, (_, index) => ({
       id: `customer-${index + 1}`,
-      points: config.scoring.customerMandate
+      points:
+        customerSchedule &&
+        index + 1 >= customerSchedule.lateFromCustomer
+          ? customerSchedule.lateMandate
+          : customerSchedule?.baseMandate ?? config.scoring.customerMandate
     })),
     ...config.scoring.capabilityThresholds
       .filter((entry) => player.capability >= entry.value)
-      .map((entry) => ({ id: `capability-${entry.value}`, points: entry.mandate })),
+      .map((entry) => {
+        let points = entry.mandate;
+        if (
+          player.factionId === "imperial_research_lab" &&
+          peerValidation &&
+          entry.value >= peerValidation.lateFromCapability
+        ) {
+          const broadlyValidated =
+            entry.value >= peerValidation.fullValidationCapability &&
+            playerCount - 1 >= peerValidation.minimumRivalsForFullMandate;
+          points = broadlyValidated
+            ? peerValidation.fullMandate
+            : peerValidation.baseMandate;
+        }
+        return { id: `capability-${entry.value}`, points };
+      }),
     ...config.scoring.trustThresholds
       .filter((entry) => player.trust >= entry.value)
       .map((entry) => ({ id: `trust-${entry.value}`, points: entry.mandate }))
@@ -316,13 +338,14 @@ export function simulateTrainingRun(config, seed, options = {}) {
   };
 }
 
-export function createPlayer(config, faction, frontierTileId) {
+export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
   const startingScrutiny = Math.min(
     faction.starts.scrutiny || 0,
     config.playerSupply.scrutinyCubes
   );
   return {
     factionId: faction.id,
+    playerCount,
     ...structuredClone(faction.starts),
     mandate: 0,
     mandateAwards: [],
@@ -377,7 +400,7 @@ export function createGame(config, factions, headlines, seed, factionId, playerC
     pendingRoundSettlement: null,
     lastRealignment: null,
     board,
-    player: createPlayer(config, faction, frontier.instanceId),
+    player: createPlayer(config, faction, frontier.instanceId, boundedPlayerCount),
     headlines: shuffle(
       headlines.headlines.filter((entry) => entry.round === 1),
       createRng(`${seed}:headlines:1`)

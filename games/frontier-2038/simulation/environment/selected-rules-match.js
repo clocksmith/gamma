@@ -444,7 +444,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         };
       } else if (
         baseAward.id.startsWith("capability-") &&
-        Number(baseAward.id.slice("capability-".length)) >= 9
+        Number(baseAward.id.slice("capability-".length)) >=
+          (this.rulesVariant.imperialLateCapabilityThresholdMandate
+            ?.lateFromCapability ?? 9)
       ) {
         const lateCapability = Number(
           baseAward.id.slice("capability-".length)

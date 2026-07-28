@@ -1,15 +1,15 @@
 # M3T4 2038 Thematic Content Bible
 
 **Content-pass date:** July 26, 2026
-**Rules reference:** `0.5.0-rc.19-test`
+**Rules reference:** `0.5.0-rc.20-test`
 **Status:** creative authority; fiction synchronized to the review rulebook,
-mechanics synchronized to executable game `0.8.18`
+mechanics synchronized to executable game `0.8.19`
 
 This document defines how M3T4 sounds and what its printable surfaces need
 to communicate. It does not define mechanics. Authored strings and shared terms
 live under [`../content/`](../content/README.md); `core-rules.md` and the JSON
-files under `data/` are generated projections. Executable game `0.8.18`
-implements `0.5.0-rc.19-test` while the physical rulebook remains under
+files under `data/` are generated projections. Executable game `0.8.19`
+implements `0.5.0-rc.20-test` while the physical rulebook remains under
 review.
 
 ## Creative thesis
@@ -240,7 +240,8 @@ Art should reveal the card’s category and Era before adding detail.
 
 ## Remaining production work
 
-- approve or revise `0.5.0-rc.19-test` after controlled play;
+- test `0.5.0-rc.20-test` under the controlled physical protocol before any
+  further numerical revision;
 - create final card, board, and tile layouts;
 - produce setup, turn, Network, Production, Audit, and Realignment diagrams;
 - draw the icon family;

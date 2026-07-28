@@ -11,6 +11,7 @@ import {
   generateBoard,
   legalDestinations,
   networkedFacilityIds,
+  publicMandateAwards,
   resolveBlindRealignmentVote,
   resolveTieByInitiative,
   resolveSelectedAction,
@@ -256,6 +257,46 @@ test("Customer, Capability, and Trust Mandate are visible and awarded once", asy
     state.player.mandateAwards.filter((award) => award.id === "capability-3").length,
     1
   );
+});
+
+test("public Mandate schedules are canonical at three, four, and five players", async () => {
+  const [config] = await load();
+  const customerAwards = publicMandateAwards(config, {
+    factionId: "platform_empire",
+    playerCount: 4,
+    customers: 5,
+    capability: 0,
+    trust: 0
+  });
+  assert.deepEqual(
+    customerAwards.map((award) => [award.id, award.points]),
+    [
+      ["customer-1", 2],
+      ["customer-2", 2],
+      ["customer-3", 2],
+      ["customer-4", 1],
+      ["customer-5", 1]
+    ]
+  );
+
+  for (const [playerCount, expected] of [
+    [3, [2, 2, 1, 1]],
+    [4, [2, 2, 1, 1]],
+    [5, [2, 2, 1, 2]]
+  ]) {
+    const awards = publicMandateAwards(config, {
+      factionId: "imperial_research_lab",
+      playerCount,
+      customers: 0,
+      capability: 12,
+      trust: 0
+    });
+    assert.deepEqual(
+      awards.map((award) => award.points),
+      expected,
+      `${playerCount}-player Peer Validation schedule`
+    );
+  }
 });
 
 test("Training studies replay exactly under the same seed", async () => {

@@ -157,6 +157,10 @@ const required = [
   "versions/0.8.18/game-bundle.json",
   "versions/0.5.0-rc.19-test/manifest.json",
   "versions/0.5.0-rc.19-test/rules-candidate-bundle.json",
+  "versions/0.8.19/manifest.json",
+  "versions/0.8.19/game-bundle.json",
+  "versions/0.5.0-rc.20-test/manifest.json",
+  "versions/0.5.0-rc.20-test/rules-candidate-bundle.json",
   "studies/simulation/README.md",
   "studies/simulation/preregistrations/llm-negotiation-holdout.json",
   "studies/simulation/preregistrations/llm-negotiation-holdout-v2.json",
@@ -195,6 +199,7 @@ const required = [
   "studies/simulation/2026-07-28-faction-demand-validation.md",
   "studies/simulation/2026-07-28-faction-prestige-demand.md",
   "studies/simulation/2026-07-28-demis-late-validation.md",
+  "studies/simulation/2026-07-28-four-lever-package-promotion.md",
   "studies/simulation/2026-07-27-foundry-scaling-rule-selection.md",
   "studies/simulation/2026-07-27-foundry-shovels-executable-correction.md",
   "studies/simulation/2026-07-26-first-automated-baseline.md"

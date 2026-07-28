@@ -10,7 +10,9 @@ export function canonicalRulesVariant(config) {
     deployComputeCost: 1,
     startingGridPower: config.board.startingGridConnection.capacity,
     customerMandate: config.scoring.customerMandate,
-    customerMandateSchedule: null,
+    customerMandateSchedule: structuredClone(
+      config.scoring.customerMandateSchedule
+    ),
     capabilityThresholdMandate: null,
     lateCapabilityThresholdMandate: lateCapabilityThreshold?.mandate ?? 2,
     agiFirstMandate: config.agiDeclaration.firstMandate,
@@ -30,23 +32,42 @@ export function canonicalRulesVariant(config) {
     imperialScientificMethodRunwayCost: 1,
     imperialScientificMethodLifetimeLimit: null,
     imperialNobelTrust: 2,
-    imperialLateCapabilityThresholdMandate: null,
+    imperialLateCapabilityThresholdMandate: structuredClone(
+      config.factionRules.imperial.peerValidation
+    ),
     verticalStartingCompute: null,
     verticalIndustrialVelocityDiscount: 1,
-    verticalIndustrialVelocityMandate: 0,
+    verticalIndustrialVelocityMandate:
+      config.factionRules.vertical.industrialVelocityMandate,
     verticalIndustrialVelocityBuildModes: ["facility"],
     foundryStartingCompute: config.factionRules.foundry.startingCompute,
     foundryShovelsPerRound: config.factionRules.foundry.shovelsPerRound,
     foundryNewArchitectureCompute: config.factionRules.foundry.newArchitectureCompute,
-    foundryNewArchitectureDemandCoupling: null,
+    foundryNewArchitectureDemandCoupling: structuredClone(
+      config.factionRules.foundry.newArchitectureDemandCoupling
+    ),
     foundryGpuMandateEnabled: true,
     foundryGpuRivalsPerMandate: config.factionRules.foundry.everybodyGpuRivalsPerMandate
   };
 }
 
+export const legacyPrePromotionRulesOverlay = Object.freeze({
+  customerMandateSchedule: null,
+  imperialLateCapabilityThresholdMandate: null,
+  verticalIndustrialVelocityMandate: 0,
+  foundryNewArchitectureDemandCoupling: null
+});
+
 export function effectiveRulesVariant(config, overlay = {}) {
-  return {
+  const effective = {
     ...canonicalRulesVariant(config),
     ...overlay
   };
+  if (
+    Object.hasOwn(overlay, "customerMandate") &&
+    !Object.hasOwn(overlay, "customerMandateSchedule")
+  ) {
+    effective.customerMandateSchedule = null;
+  }
+  return effective;
 }

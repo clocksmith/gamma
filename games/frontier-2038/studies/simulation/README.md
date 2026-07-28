@@ -199,3 +199,16 @@ round objectives, factions, and backends do not explain the gap. The receipt
 nominates one fresh-seed probe in which Customers four and five score one
 Mandate while every Customer, income, requirement, cost, and Mark distribution
 advantage remains unchanged.
+
+The dated
+[`winning-path tolerance correction confirmation`](2026-07-28-winning-path-tolerance-confirmation.md)
+selects the resulting four-lever package for controlled physical testing. All
+registered three-, four-, and five-player bounds passed, but precision remained
+incomplete and the verdict stayed `inconclusive_precision_not_reached`.
+
+The dated
+[`four-lever package promotion`](2026-07-28-four-lever-package-promotion.md)
+records explicit approval and atomically projects that package into executable
+`0.8.19` and physical candidate `0.5.0-rc.20-test`. Every unrelated numerical
+rule is frozen pending the first facilitated four-player session and Demis’s
+five-player Peer Validation regression.

@@ -3,8 +3,8 @@
     "title": "M3T4 2038",
     "shortTitle": "M3T4",
     "year": "2038",
-    "rulesVersion": "0.5.0-rc.19-test",
-    "executableVersion": "0.8.18",
+    "rulesVersion": "0.5.0-rc.20-test",
+    "executableVersion": "0.8.19",
     "playerRange": "3–5",
     "physicalTestPlayers": 4,
     "physicalTestDuration": "75–100 minutes"
@@ -16,11 +16,35 @@
       "cyclesPerRound": 3,
       "cyclesPerRoundWord": "three",
       "boardTiles": 13,
+      "scoring": {
+        "customerMandate": {
+          "baseMandate": 2,
+          "lateFromCustomer": 4,
+          "lateMandate": 1
+        }
+      },
       "factions": {
+        "imperial": {
+          "peerValidation": {
+            "baseMandate": 1,
+            "lateFromCapability": 9,
+            "fullValidationCapability": 12,
+            "minimumRivalsForFullMandate": 4,
+            "fullMandate": 2
+          }
+        },
+        "vertical": {
+          "industrialVelocityMandate": 1
+        },
         "foundry": {
           "startingCompute": 4,
           "shovelsPerRound": 2,
           "newArchitectureCompute": 3,
+          "newArchitectureDemandCoupling": {
+            "baseCompute": 0,
+            "computePerLicense": 1,
+            "maximumCompute": 3
+          },
           "everybodyGpuRivalsPerMandate": 4
         }
       },

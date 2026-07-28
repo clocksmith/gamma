@@ -42,10 +42,19 @@ function finalMandate(config, player) {
   );
 }
 
-function createPlayer(config, faction, seat, frontierId, profileId, backendId = "weighted") {
+function createPlayer(
+  config,
+  faction,
+  seat,
+  frontierId,
+  profileId,
+  backendId = "weighted",
+  playerCount = 4
+) {
   const starts = clone(faction.starts);
   return {
     seat,
+    playerCount,
     factionId: faction.id,
     factionName: faction.name,
     profileId,
@@ -121,7 +130,8 @@ export class CoreEconomyMatch {
         seat,
         frontier.instanceId,
         profiles[seat % profiles.length].id,
-        backends[seat % Math.max(1, backends.length)] || "weighted"
+        backends[seat % Math.max(1, backends.length)] || "weighted",
+        playerCount
       )
     );
     this.recordEvent("match_started", null, simulationCopy.events.coreMatchStarted);
