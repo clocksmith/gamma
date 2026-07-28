@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "docs/nncp_rocm_batched_teacher_decision.md"
+  ],
+  "exclusion_id": "nncp_rocm_batched_causal_teacher_v1",
+  "failure": "Causality, arithmetic symbol reconstruction, and official inverse passed, but the 322978-to-499986 raw band lost 18673.421 bytes against Gamma, or -105494.788 B/M. No maturation headroom exists at this gate.",
+  "mechanism": "ROCm-native 20-layer shifted-input Transformer teacher with 64-symbol causal batches and one Adam update after each decoded segment.",
+  "population": "Exact official NNCP-preprocessed opening prefix through 500000 raw bytes, aligned to exact Gamma WRT qbits at shared boundaries.",
+  "recorded_at": "2026-07-28T19:30:53+00:00",
+  "retired_dimensions": [
+    "1M/10M/1G extensions, quotient students, width, depth, vocabulary, precision, learning-rate, optimizer, memory, and segment-length sweeps for this ROCm teacher"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "A different representation-changing mechanism with independent target-scale exact headroom; published LibNC remains external evidence only."
+  ]
+}

@@ -1,6 +1,6 @@
 # ROCm Batched Teacher Maturity Plan
 
-Status: Q1 500K gate authorized
+Status: terminal rejection
 
 Score credit: zero
 
@@ -63,3 +63,28 @@ marginal gain / (500,000 - 322,978) >= 3,000 B/M
 If the marginal band is non-positive, reject this ROCm teacher unchanged. Do not
 alter width, depth, vocabulary, precision, learning rate, optimizer, memory, or
 segment length.
+
+## Terminal result
+
+Q1 passed shifted-input causality, trace-driven symbol reconstruction, and the
+official raw inverse. Its exact payload was 139,677 bytes through 500,000 raw
+bytes.
+
+At the shared 499,986-byte comparison boundary:
+
+```text
+Gamma                         709,051.816 bits
+ROCm teacher                1,117,396.064 bits
+teacher minus Gamma           -51,043.031 bytes
+```
+
+The marginal 322,978-to-499,986 band was:
+
+```text
+teacher minus Gamma           -18,673.421 bytes
+marginal rate                -105,494.788 B/M
+required rate                  +3,000.000 B/M
+```
+
+The marginal gate failed decisively. The 1M receipt, quotient budget, student,
+and native integration are not authorized.
