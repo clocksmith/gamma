@@ -1,6 +1,6 @@
 # M3T4 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.21-test`
+**Rules reference:** `0.5.0-rc.22-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -168,7 +168,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.21-test` test:
+controlled `0.5.0-rc.22-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -180,7 +180,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.20` implements `0.5.0-rc.21-test` under engine
+Executable game `0.8.21` implements `0.5.0-rc.22-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser play, replay, policies, and Monte Carlo now share
@@ -210,6 +210,13 @@ and Responsible Scaling. The corrected fresh-seed faction swaps reject a
 universal Dario nerf or Sam buff because the Dario effect reverses by backend
 and negotiation-aware Sam is approximately neutral against Mark.
 
+`0.5.0-rc.22-test` changes no playable rule from rc.21. Executable `0.8.21`
+adds per-opponent persona/backend selection to interactive play and an
+origin-restricted, token-paired localhost bridge for the deployed browser.
+Every LLM opponent receives an independent bounded decision budget and
+deterministic fallback. This is runtime access and policy configuration, not a
+board-game mechanics or balance change.
+
 The rc.17 physical candidate has no mechanics delta from rc.16. It exists
 because the synchronized evidence documents and executable harness changed;
 the immutable rc.16 bundle and every report attributed to executable `0.7.1`
@@ -225,12 +232,12 @@ The rc.19 candidate changes no playable physical rule from rc.18. Executable
 player-count-specific outcome summaries, and preregistered common-seed faction
 swaps. These are evidence instruments, not rule changes.
 
-The `0.5.0-rc.21-test` candidate and executable `0.8.20` retain the three- to
+The `0.5.0-rc.22-test` candidate and executable `0.8.21` retain the three- to
 five-player product boundary, make four players the balance authority, and
 require three/five regression coverage. Their playable mechanics are identical
 to rc.20 and executable `0.8.19`.
 
-Executable `0.8.20` also preserves identity classification:
+Executable `0.8.21` also preserves identity classification:
 `data/simulation-copy.json` is evidence-boundary copy, not a playable rules
 input. It now contributes to the playtest-kit fingerprint instead of the
 ruleset and mechanics fingerprints. The new fingerprint is therefore a

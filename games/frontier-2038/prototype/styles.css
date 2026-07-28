@@ -187,6 +187,101 @@ main {
   margin-bottom: 1rem;
 }
 
+#game-status {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.bridge-panel {
+  display: grid;
+  grid-template-columns: minmax(300px, 1.5fr) minmax(240px, 0.7fr) auto;
+  gap: 1rem;
+  align-items: end;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 5px solid var(--power);
+}
+
+.bridge-panel h2,
+.bridge-panel p {
+  margin-bottom: 0.35rem;
+}
+
+.bridge-panel code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.bridge-status {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--signal);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+}
+
+.bridge-status.connected {
+  color: #2f6846;
+}
+
+.opponent-setup {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.seat-config {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.opponent-row {
+  display: grid;
+  grid-template-columns: 70px minmax(220px, 1fr) minmax(170px, 0.7fr) minmax(260px, 1.2fr);
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.opponent-row strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.persona-summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.llm-controls {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+}
+
+.llm-controls summary {
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.check-label {
+  display: flex;
+  grid-template-columns: none;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.check-label input {
+  width: auto;
+}
+
+.compact-grid {
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+}
+
 label {
   display: grid;
   gap: 0.35rem;
@@ -672,6 +767,11 @@ footer {
   .control-strip {
     grid-template-columns: 1fr 1fr;
   }
+
+  .bridge-panel,
+  .opponent-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 680px) {
@@ -689,6 +789,7 @@ footer {
   }
 
   .control-strip,
+  .compact-grid,
   .card-grid,
   .realignment-actions {
     grid-template-columns: 1fr;

@@ -9,7 +9,19 @@ import {
 } from "../simulation/versioning/game-identity.js";
 import { canonicalRulesVariant } from "../simulation/environment/rules-variant.js";
 
-const verify = process.argv.slice(2).includes("--verify");
+const arguments_ = process.argv.slice(2);
+if (arguments_.includes("--help")) {
+  process.stdout.write(
+    "Usage: node tools/create-game-release.mjs [--verify]\n" +
+    "Without --verify, writes the version declared by data/game-version.json.\n"
+  );
+  process.exit(0);
+}
+const unknownArguments = arguments_.filter((argument) => argument !== "--verify");
+if (unknownArguments.length) {
+  throw new TypeError(`Unknown release argument: ${unknownArguments[0]}.`);
+}
+const verify = arguments_.includes("--verify");
 const versionDocument = JSON.parse(
   await readFile(resolve(projectRoot, "data/game-version.json"), "utf8")
 );

@@ -40,8 +40,8 @@ This repository is a **prototype**, not a manufactured or published product.
 - Balance, counter-strategy, exploitability, and promotion gates are defined in
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
-The lean physical rulebook is under controlled review at `0.5.0-rc.21-test`.
-Executable game `0.8.20` implements that candidate under
+The lean physical rulebook is under controlled review at `0.5.0-rc.22-test`.
+Executable game `0.8.21` implements that candidate under
 `three-to-five-grid-ready-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization
 means the browser and simulator execute the selected contract; it does not
@@ -56,9 +56,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.8.20` game and export its
+- `http://localhost:8038/` — play the synchronized `0.8.21` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.8.20` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.8.21` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -67,6 +67,20 @@ the canonical server:
 `npm start` intentionally remains the raw `node tools/serve.mjs` contract used
 by the release gate. On a clean checkout, use `npm run dev`; if generated views
 are already current, `npm start` serves them without rebuilding.
+
+The deployed review interface at
+`https://gamma-web-game.web.app/m3t4-2038/` can use that same local server.
+Open the deployed prototype or lab, paste the private bridge token printed by
+`npm run dev`, and approve Chrome’s local-network prompt. The server remains
+bound to loopback, accepts only the exact deployed origin, and requires the
+token on every remote API request.
+
+Interactive games can combine one human with independently selected weighted,
+greedy, Claude CLI, Codex CLI, hybrid-Claude, and hybrid-Codex opponents.
+Claude/Codex use requires explicit per-game authorization. Each LLM opponent
+has its own maximum of 24 authorized decisions and falls back to its
+deterministic persona after exhausting that budget or encountering a CLI
+failure.
 
 Use the Simulation Lab’s **Experiment** control to run:
 
@@ -108,8 +122,8 @@ node scripts/content/compile.mjs --check
 node tools/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.8.20`
-bundle, its synchronized `0.5.0-rc.21-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.8.21`
+bundle, its synchronized `0.5.0-rc.22-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

@@ -25,26 +25,9 @@ export const crawlerMeta = [
   '<meta name="referrer" content="no-referrer">'
 ].join("\n");
 
-const staticReviewScript = `<script>
-window.addEventListener("DOMContentLoaded", () => {
-  for (const id of ["start-game", "run-simulation", "new-simulation"]) {
-    const control = document.getElementById(id);
-    if (control) {
-      control.disabled = true;
-      control.title = "Server execution is available only through npm run dev.";
-    }
-  }
-  const status = document.getElementById("game-status") ||
-    document.getElementById("job-status");
-  if (status) {
-    status.textContent = "Published review copy. Server-run games and simulations are disabled.";
-  }
-});
-</script>`;
-
 const staticReviewBanner = `<aside class="published-review-notice" role="note">
-  Published review copy. Rules, galleries, report uploads, and replay inspection are static.
-  Run <code>npm run dev</code> locally for live games and simulations.
+  Published review copy. For live play or simulations, run <code>npm run dev</code>
+  locally and pair this page with the private token printed by Node.
 </aside>`;
 
 const staticReviewStyle = `<style>
@@ -73,7 +56,6 @@ export function rewritePrototypeHtml(html, { kind }) {
       `${staticReviewStyle}\n</head>`
     )
     .replace("<body>", `<body>\n${staticReviewBanner}`)
-    .replace("</body>", `${staticReviewScript}\n</body>`)
     .replaceAll('href="/prototype/', `href="${publicBase}/prototype/`)
     .replaceAll('src="/prototype/', `src="${publicBase}/prototype/`)
     .replaceAll('href="/docs/', `href="${publicBase}/docs/`)
@@ -152,7 +134,7 @@ export function buildIndexHtml({ identity, pages }) {
     <div><span>Source</span><code>${escapeHtml(identity.sourceCommit)}</code></div>
   </div>
   ${sections}
-  <footer>Generated review artifact · no final art · server execution remains local-only</footer>
+  <footer>Generated review artifact · no final art · execution uses an explicitly paired localhost bridge</footer>
 </main>
 </body>
 </html>`);
@@ -306,17 +288,17 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   pages.unshift(
     {
       group: "Executable review surfaces",
-      kind: "Static interface",
+      kind: "Playable interface",
       title: "Rules prototype",
       href: "prototype/index.html",
-      description: "Visual board and decision interface. Live turns require the local Node server."
+      description: "Play in the deployed browser through an explicitly paired local Node bridge."
     },
     {
       group: "Executable review surfaces",
-      kind: "Report viewer",
+      kind: "Simulation interface",
       title: "Simulation lab",
       href: "lab.html",
-      description: "Loads and replays saved reports. New simulations require the local Node server."
+      description: "Run local simulations from the deployed browser or load and replay saved reports."
     }
   );
 
