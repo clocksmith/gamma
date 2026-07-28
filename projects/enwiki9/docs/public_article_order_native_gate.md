@@ -93,3 +93,32 @@ A miss retires the public article order as a Gamma transfer. A pass still
 receives zero score credit; it authorizes implementing a reversible order
 wrapper and exact compressed-order accounting before any full-corpus run.
 
+## Outcome
+
+The page indexer matched the complete public and identity page-record
+multisets, then constructed the first page-complete same-record population:
+
+```text
+raw bytes:               1,000,179
+identity archive:           47,688
+public-order archive:       47,649
+gain:                           39 bytes
+gain rate:                   38.99 B/M
+required gain:               2,045 bytes
+```
+
+The target-bearing rate missed by more than 52x. The external reset-state start
+slice had appeared to save 215,434 bytes; reducing that to 39 bytes on the
+exact same page records proves the external signal was population mismatch,
+not transferable ordering gain.
+
+The remaining archives were terminated before decode. No roundtrip,
+determinism, memory, or score credit is claimed.
+
+Decision: retire the public article-order Gamma transfer and its prefix,
+partial-order, clustering-weight, and reset-scope sweeps.
+
+Evidence:
+
+- `results/public_article_order_native_transfer_v1/decision.json`
+- `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`
