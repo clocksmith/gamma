@@ -1,14 +1,15 @@
 {
   "created_at": "2026-07-27T21:56:13+00:00",
   "evidence": [
-    "NNCP uses PROB_UNIT=32768 and recursively calls put_bit with clamped lrintf ratio frequencies; the observer patch builds and its exact trace verifier passes synthetic split controls."
+    "NNCP uses PROB_UNIT=32768 and recursively calls put_bit with clamped lrintf ratio frequencies; the observer patch builds and its exact trace verifier passes synthetic split controls.",
+    "The frozen Compact5 parent missed its opening-1M archive ceiling irreversibly and is too weak to authorize a teacher trace."
   ],
   "expected_savings_bytes": 0,
   "hypothesis": "The visited 15-bit hierarchical branch frequencies form a compact exact teacher target from which a decoder-visible student can reproduce the native NNCP arithmetic archive without reconstructing full probability tables.",
   "interfaces_exposed": [
     "nncp_branch_frequency_trace"
   ],
-  "kill_condition": "Reject the observer on any archive difference, malformed split path, discontinuous coder count, roundtrip failure, or nondeterminism.",
+  "kill_condition": "Satisfied: the parent teacher failed its target-bearing maturity ceiling before trace execution.",
   "max_program_bytes": 0,
   "mechanism_change": "add_state_coordinate",
   "mechanism_change_bonus": 10,
@@ -16,11 +17,11 @@
   "parent": "nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_minwrap_v1",
   "parent_proposal_id": "nncp_compact5_cqq_x86xzopt_nodebug_t4_minwrap_v1",
   "priority": 957,
-  "promotion_condition": "On a serialized batch-1 scope, trace-on and trace-off archives are byte-identical, roundtrip passes, coder counts are continuous, and every recorded branch matches the symbol split path.",
+  "promotion_condition": "Terminally rejected with the Compact5 parent. Native v3.3 CUDA tracing is a separate proposal.",
   "proposal_id": "nncp_branch_frequency_teacher_trace_v1",
   "retired_neighborhoods": [],
   "schema": "enwiki9_algorithm_proposal_v1",
   "search_priority": 967,
-  "state": "proposed",
+  "state": "rejected",
   "title": "NNCP exact branch-frequency teacher trace"
 }

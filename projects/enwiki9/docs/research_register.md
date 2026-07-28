@@ -2759,5 +2759,45 @@ are now closed as target-scale Gamma transfers.
 Evidence:
 
 - `results/public_article_order_native_transfer_v1/decision.json`
+
+## 2026-07-28: native NNCP CUDA trace replaces ROCm teacher replication
+
+Teacher-quotient compilation is now the primary new-information lane, but its
+next gate is native teacher evidence rather than another student. Official
+source inspection established that NNCP's coder consumes recursive, clamped
+15-bit branch probabilities. It does not consume a normalized 336-way integer
+frequency vector. The new observer therefore records exact consumed branch
+integers for every symbol and may record a complete derived 335-node split tree
+only inside frozen mature windows.
+
+The teacher object is the immutable NNCP v3.3 tarball
+`7b4be2a5871186b82cd5f1c6137a8f6fed0d0c6b2bb281793db1f0be65831119`,
+linked to the unmodified shipped LibNC CUDA binary on one frozen NVIDIA
+system. The prior ROCm/PyTorch online-update replica is not an equivalent
+teacher: its forward distributions were close, but its first update diverged
+materially from LibNC. The Compact5 branch-trace proposal is also rejected
+because its parent irreversibly failed the opening-1M maturity ceiling.
+
+This host has no NVIDIA GPU, CUDA compiler, or `libcuda.so.1`. The native
+runner therefore fails closed with `BLOCKED_NVIDIA`; no heavy job was queued.
+Execution moves to a receipt-bound NVIDIA host. Trace-on/off archive identity,
+both decode identities, exact symbol/raw binding, runtime-object hashes, and
+continuous state from byte zero are mandatory.
+
+The authorization gate is at least `3,000 B/M` native teacher advantage on two
+mature windows plus positive cumulative 100M advantage against the exact
+source-bound Gamma parent. Failure closes teacher compilation before a student
+is built. Success authorizes `QUOTIENT-BUDGET-CERT` at 64 KiB and 128 KiB, not
+immediate native student integration.
+
+This work is observation infrastructure and receives zero score credit.
+
+Evidence:
+
+- `docs/nncp_native_trace_cert_plan.md`
+- `tools/materialize_nncp_native_trace_observer.py`
+- `tools/run_nncp_native_trace_cert.py`
+- `tools/verify_nncp_native_trace.py`
+- `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`
