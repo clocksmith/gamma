@@ -191,6 +191,54 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
   assert.equal(report.integrity.violations, 0);
 });
 
+test("package interaction matrices require and record multiple selected levers", async () => {
+  const packageOverlay = {
+    verticalIndustrialVelocityMandate: 1,
+    foundryNewArchitectureDemandCoupling: {
+      baseCompute: 0,
+      computePerLicense: 1,
+      maximumCompute: 3
+    }
+  };
+  await assert.rejects(
+    runUnifiedMatrix({
+      maximumMatches: 56,
+      initialRunsPerCell: 1,
+      batchSize: 1,
+      playerCounts: [4],
+      mandateModes: ["fixed"],
+      rulesConfigurations: [
+        { id: "canonical", overlay: {} },
+        { id: "unregistered_package", overlay: packageOverlay }
+      ],
+      includeAdversarial: false,
+      seed: "package-needs-explicit-kind"
+    }),
+    /must change exactly one lever/
+  );
+  const report = await runUnifiedMatrix({
+    maximumMatches: 56,
+    initialRunsPerCell: 1,
+    batchSize: 1,
+    playerCounts: [4],
+    mandateModes: ["fixed"],
+    comparisonKind: "package_interaction",
+    rulesConfigurations: [
+      { id: "canonical", overlay: {} },
+      { id: "selected_package", overlay: packageOverlay }
+    ],
+    includeAdversarial: false,
+    seed: "package-interaction-contract"
+  });
+  assert.equal(report.preRegistration.comparisonKind, "package_interaction");
+  assert.equal(report.rulesComparisons[0].matchedPairs, 28);
+  assert.equal(report.rulesComparisons[0].standingMismatches, 0);
+  assert.match(
+    report.rulesComparisons[0].interpretation,
+    /interaction of independently selected levers/
+  );
+});
+
 test("unified matrix fingerprints and executes evolved profile overrides", async () => {
   const profiles = await loadPlayerProfiles();
   const override = structuredClone(

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "id": "selected-faction-conversion-package-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "package_interaction",
+  "question": "Do the independently selected Demis, Elon, and Jensen faction-truth corrections remain bounded when they coexist, without creating a new faction, strategy, backend, action-choice, or matchup failure?",
+  "sourceEvidence": [
+    "faction-public-validation-confirmation-v1",
+    "faction-prestige-demand-v1",
+    "demis-peer-validation-v1"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/selected-faction-conversion-package-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "selected_faction_conversion_package",
+      "overlay": {
+        "imperialLateCapabilityThresholdMandate": {
+          "baseMandate": 1,
+          "fullValidationCapability": 12,
+          "minimumRivalsForFullMandate": 4,
+          "fullMandate": 2
+        },
+        "verticalIndustrialVelocityMandate": 1,
+        "foundryNewArchitectureDemandCoupling": {
+          "baseCompute": 0,
+          "computePerLicense": 1,
+          "maximumCompute": 3
+        }
+      }
+    }
+  ],
+  "playerCounts": [
+    3,
+    4,
+    5
+  ],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [
+    3,
+    5
+  ],
+  "mandateModes": [
+    "variable",
+    "fixed"
+  ],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-selected-faction-conversion-package-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "factionTruth": {
+    "demis": "All Compute, Research reliability, Capability, and technical threshold attainment remain canonical. Only late public recognition changes.",
+    "elon": "Infrastructure velocity and the Facility discount remain canonical. Mandate appears only when the discount actually reduces a completed Facility cost.",
+    "jensen": "Starting Compute, every New Architecture offer, accepted license, Runway payment, rival Compute grant, and the three-Compute ceiling remain canonical. Jensen's own allocation depends on realized rival demand.",
+    "eligibility": "Reject any package that weakens a protected strength, changes an unrelated faction rule, or makes Build or Research materially more compulsory."
+  },
+  "requiredDiagnostics": [
+    "configuration-specific faction standings at three, four, and five players",
+    "common-seed paired faction win-share, score, and rank deltas",
+    "Demis late-validation Mandate withheld and technical realization",
+    "Elon Industrial Velocity uses, actual savings, Mandate, and Build selection",
+    "Jensen New Architecture offers, licenses, payments, rival Compute, and self-Compute",
+    "faction-strategy, faction-backend, strategy-backend, and head-to-head cells",
+    "action and winning-path entropy",
+    "new dominance or counter-cycle cells",
+    "integrity, fallback, and forced-no-op rates"
+  ],
+  "selectionRule": {
+    "packageAuthority": "This experiment validates interactions among three independently selected levers. It cannot establish a new causal effect or substitute for their isolated receipts.",
+    "fourPlayer": "Select only if all six factions remain in a plausible leading or counterplay band at the four-player balance authority, no registered dominance appears, and the corrections move Demis, Elon, and Jensen in their isolated directions.",
+    "threeAndFive": "Reject an integrity failure, credible dominance regression, reversal of a selected lever, or materially worse count discontinuity at three or five.",
+    "actionChoice": "Reject if Elon's Build selection or Demis's Research selection materially rises relative to canonical, or if any Core Action collapses into compulsory use.",
+    "samBoundary": "Do not infer a Sam rules correction solely from pooled policies; separately report Power Broker realization because willing-partner skill is Sam's intended bottleneck.",
+    "integrity": "Any integrity violation, policy fallback, unsupported-count gap, standing mismatch, missing package classification, or missing realization metric rejects the package.",
+    "promotion": "No physical rule changes without this tracked receipt, synchronized immutable candidate work, explicit user approval, and controlled physical testing."
+  }
+}

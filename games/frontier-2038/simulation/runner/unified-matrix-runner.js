@@ -524,7 +524,12 @@ function outcomeSummary(observations) {
   };
 }
 
-function pairedRuleComparisons(observations, rulesConfigurations, alpha = 0.05) {
+function pairedRuleComparisons(
+  observations,
+  rulesConfigurations,
+  alpha = 0.05,
+  comparisonKind = "causal_one_lever"
+) {
   if (rulesConfigurations.length < 2) return [];
   const byPair = new Map();
   for (const observation of observations) {
@@ -633,7 +638,9 @@ function pairedRuleComparisons(observations, rulesConfigurations, alpha = 0.05) 
       unmatchedPairs,
       standingMismatches,
       interpretation:
-        "Common-seed paired deltas are diagnostic; positive rankDelta means the candidate improved placement. Promotion still requires the registered marginal gate and a tracked receipt.",
+        comparisonKind === "package_interaction"
+          ? "Common-seed paired deltas validate the interaction of independently selected levers; they do not establish a new causal one-lever effect. Positive rankDelta means the package improved placement. Promotion still requires the registered package gate, a tracked receipt, and explicit approval."
+          : "Common-seed paired deltas are diagnostic; positive rankDelta means the candidate improved placement. Promotion still requires the registered marginal gate and a tracked receipt.",
       families: {
         faction: summarize(["factionId"]),
         factionBackend: summarize(["factionId", "backendId"]),
@@ -941,18 +948,47 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
   const rulesConfigurations = options.rulesConfigurations || [
     { id: "canonical", overlay: options.rulesVariant || {} }
   ];
+  const comparisonKind = options.comparisonKind || "causal_one_lever";
+  if (!["causal_one_lever", "package_interaction"].includes(comparisonKind)) {
+    throw new TypeError(
+      "comparisonKind must be causal_one_lever or package_interaction."
+    );
+  }
+  if (
+    comparisonKind === "package_interaction" &&
+    (
+      rulesConfigurations.length !== 2 ||
+      rulesConfigurations[0]?.id !== "canonical" ||
+      Object.keys(rulesConfigurations[0]?.overlay || {}).length !== 0
+    )
+  ) {
+    throw new TypeError(
+      "Package interaction validation requires one empty canonical baseline and one package candidate."
+    );
+  }
   for (const configuration of rulesConfigurations) {
     if (!configuration.id || !configuration.overlay ||
         typeof configuration.overlay !== "object" ||
         Array.isArray(configuration.overlay)) {
       throw new TypeError("Every rules configuration requires id and overlay.");
     }
+    const leverCount = Object.keys(configuration.overlay).length;
     if (
       configuration.id !== "canonical" &&
-      Object.keys(configuration.overlay).length !== 1
+      comparisonKind === "causal_one_lever" &&
+      leverCount !== 1
     ) {
       throw new TypeError(
         `Rules configuration ${configuration.id} must change exactly one lever.`
+      );
+    }
+    if (
+      configuration.id !== "canonical" &&
+      comparisonKind === "package_interaction" &&
+      leverCount < 2
+    ) {
+      throw new TypeError(
+        `Package configuration ${configuration.id} must combine at least two independently selected levers.`
       );
     }
   }
@@ -1024,6 +1060,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     matrixContractFingerprint: fingerprintObject(matrixContract),
     playerCounts,
     rulesConfigurations,
+    comparisonKind,
     mandateModes,
     backendSet: ["weighted", "greedy"],
     backendRegimes: [
@@ -1355,7 +1392,8 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     rulesComparisons: pairedRuleComparisons(
       observations,
       rulesConfigurations,
-      settings.alpha
+      settings.alpha,
+      comparisonKind
     ),
     integrity,
     adversarial,

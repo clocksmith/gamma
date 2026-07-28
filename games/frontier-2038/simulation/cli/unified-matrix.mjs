@@ -40,6 +40,7 @@ const report = await runUnifiedMatrix({
     ? String(args["mandate-modes"]).split(",")
     : undefined,
   rulesConfigurations,
+  comparisonKind: args["comparison-kind"],
   profileOverrides: profileOverrideReports,
   seed: args.seed || "m3t4-unified-matrix",
   preRegistrationId: args["pre-registration-id"]
