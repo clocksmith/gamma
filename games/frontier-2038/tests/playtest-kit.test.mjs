@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -13,6 +13,32 @@ const projectRoot = root.pathname;
 test("playtest receipts carry the frozen rules, executable, and source commit", async () => {
   const outputRoot = await mkdtemp(join(tmpdir(), "m3t4-playtest-receipt-"));
   try {
+    const current = JSON.parse(
+      await readFile(new URL("versions/current.json", root), "utf8")
+    );
+    const { stdout: commitOutput } = await execFileAsync(
+      "git",
+      ["rev-parse", "HEAD"],
+      { cwd: projectRoot }
+    );
+    const sourceCommit = commitOutput.trim();
+    const kitManifestPath = join(outputRoot, "physical-kit.json");
+    const kitFingerprint =
+      "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    await writeFile(
+      kitManifestPath,
+      `${JSON.stringify({
+        schemaVersion: 1,
+        artifactKind: "controlled-physical-playtest-kit",
+        kitId: `${current.rulesCandidate.version}-${sourceCommit.slice(0, 8)}`,
+        kitFingerprint,
+        identity: {
+          rulesVersion: current.rulesCandidate.version,
+          executableVersion: current.gameVersion,
+          sourceCommit
+        }
+      }, null, 2)}\n`
+    );
     const { stdout } = await execFileAsync(
       "node",
       [
@@ -24,7 +50,9 @@ test("playtest receipts carry the frozen rules, executable, and source commit", 
         "--date",
         "2026-07-28",
         "--output-root",
-        outputRoot
+        outputRoot,
+        "--kit-manifest",
+        kitManifestPath
       ],
       { cwd: projectRoot }
     );
@@ -33,19 +61,14 @@ test("playtest receipts carry the frozen rules, executable, and source commit", 
       await readFile(join(directory, "receipt.json"), "utf8")
     );
     const notes = await readFile(join(directory, "notes.md"), "utf8");
-    const current = JSON.parse(
-      await readFile(new URL("versions/current.json", root), "utf8")
-    );
-    const { stdout: commitOutput } = await execFileAsync(
-      "git",
-      ["rev-parse", "HEAD"],
-      { cwd: projectRoot }
-    );
-    const sourceCommit = commitOutput.trim();
-
     assert.equal(receipt.game.version, current.rulesCandidate.version);
     assert.equal(receipt.game.executableVersion, current.gameVersion);
     assert.equal(receipt.game.sourceCommit, sourceCommit);
+    assert.equal(receipt.game.playtestKitFingerprint, kitFingerprint);
+    assert.equal(
+      receipt.physicalKit.kitId,
+      `${current.rulesCandidate.version}-${sourceCommit.slice(0, 8)}`
+    );
     assert.equal(receipt.physicalKit.componentRevision, current.rulesCandidate.version);
     assert.equal(receipt.physicalKit.executableRevision, current.gameVersion);
     assert.equal(receipt.physicalKit.sourceCommit, sourceCommit);
