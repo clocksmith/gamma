@@ -122,7 +122,15 @@ def active_heavy_processes() -> list[str]:
     if proc.returncode not in (0, 1):
         raise SystemExit(proc.stderr.strip() or "pgrep failed")
 
-    current_pid = os.getpid()
+    ignored_pids = {os.getpid()}
+    ancestor = os.getppid()
+    while ancestor > 1 and ancestor not in ignored_pids:
+        ignored_pids.add(ancestor)
+        try:
+            fields = pathlib.Path(f"/proc/{ancestor}/stat").read_text().split()
+            ancestor = int(fields[3])
+        except (OSError, ValueError, IndexError):
+            break
     active: list[str] = []
     for line in proc.stdout.splitlines():
         stripped = line.strip()
@@ -133,7 +141,7 @@ def active_heavy_processes() -> list[str]:
             pid = int(parts[0])
         except ValueError:
             pid = None
-        if pid == current_pid:
+        if pid in ignored_pids:
             continue
         if "pgrep -af" in stripped:
             continue
