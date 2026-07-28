@@ -128,7 +128,16 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
     mandateModes: ["fixed"],
     rulesConfigurations: [
       { id: "canonical", overlay: {} },
-      { id: "probe", overlay: { foundryStartingCompute: 3 } }
+      {
+        id: "probe",
+        overlay: {
+          foundryNewArchitectureDemandCoupling: {
+            baseCompute: 1,
+            computePerLicense: 1,
+            maximumCompute: 3
+          }
+        }
+      }
     ],
     includeAdversarial: false,
     seed: "unified-matrix-paired-contract"

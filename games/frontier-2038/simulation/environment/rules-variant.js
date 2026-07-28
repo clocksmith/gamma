@@ -35,10 +35,7 @@ export function canonicalRulesVariant(config) {
     foundryStartingCompute: config.factionRules.foundry.startingCompute,
     foundryShovelsPerRound: config.factionRules.foundry.shovelsPerRound,
     foundryNewArchitectureCompute: config.factionRules.foundry.newArchitectureCompute,
-    foundryNewArchitectureDemandBaseCompute: null,
-    foundryNewArchitectureComputePerLicense: 0,
-    foundryNewArchitectureMaximumCompute:
-      config.factionRules.foundry.newArchitectureCompute,
+    foundryNewArchitectureDemandCoupling: null,
     foundryGpuMandateEnabled: true,
     foundryGpuRivalsPerMandate: config.factionRules.foundry.everybodyGpuRivalsPerMandate
   };
