@@ -20,6 +20,7 @@ import time
 ROCM_PYTHON = Path(
     "/home/x/enwiki9-nonproof/external/rocm-pytorch-venv/bin/python"
 )
+os.environ.setdefault("AMD_SERIALIZE_KERNEL", "3")
 if Path(sys.executable) != ROCM_PYTHON:
     if not ROCM_PYTHON.is_file():
         raise SystemExit(f"missing receipt-bound ROCm interpreter: {ROCM_PYTHON}")
@@ -436,6 +437,19 @@ def run_teacher(
         optimizer.step()
         memories = next_memories
         loss_sum += float(loss.detach().cpu()) * (end - start)
+        if end % 8192 == 0 or end == len(symbols):
+            torch.cuda.synchronize(device)
+            print(
+                json.dumps(
+                    {
+                        "event": "teacher_checkpoint",
+                        "symbols": end,
+                        "total_symbols": len(symbols),
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
     payload = encoder.finish()
     torch.cuda.synchronize(device)
     return {
