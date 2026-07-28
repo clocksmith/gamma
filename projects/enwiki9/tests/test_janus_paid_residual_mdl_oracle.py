@@ -44,6 +44,18 @@ class JanusOracleTest(unittest.TestCase):
             JANUS.serialize_jmdl1(tensors_b, scales),
         )
 
+    def test_shift_null_moves_residual_not_base_probability(self):
+        base = np.array(
+            [10000, 20000, 30000, 40000, 50000, 60000, 15000, 25000]
+            * 4,
+            dtype=np.uint16,
+        )
+        base_logits = JANUS.probability_logits(base)
+        residual = np.full(base.shape, 0.5, dtype=np.float64)
+        candidate = JANUS.quantized_probabilities(base_logits, residual)
+        shifted = JANUS.shift_residual_probabilities(base, candidate, 4, 1)
+        self.assertTrue(np.array_equal(shifted, candidate))
+
     def test_paid_total_selection(self):
         result = JANUS.select_projected_winner(
             baseline_bytes=1000,

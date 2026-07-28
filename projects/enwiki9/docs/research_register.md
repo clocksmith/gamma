@@ -3013,3 +3013,19 @@ does not authorize 10M JANUS training until corrected Q0 passes.
 
 Receipt:
 `results/endpoint428_pair_layer0_online_native_trace_10m_v1/decision.json`
+# 2026-07-28: Corrected JANUS Q0 v2 superseded by null repair
+
+The first repaired Q0 proved exact parent payload identity, full candidate and
+J1 arithmetic decode, WRT/raw inverse binding, tail fallback, canonical
+serialization, paid J1/J2 accounting, and duplicate model/P1/payload identity.
+J2 saved 4,907 exact bytes and its frozen research package allowance was
+188,535 bytes.
+
+The receipt is superseded because JS circularly shifted adjusted probabilities
+rather than residual logits relative to the parent. That made the null
+artificially destructive. Q0 must be repeated with the same deterministic J2
+fit and a global byte-row shift of residual logits. The v2 receipt has zero
+score credit and does not authorize 10M.
+
+Receipt:
+`results/janus_paid_residual_mdl_1m_v2/decision.json`
