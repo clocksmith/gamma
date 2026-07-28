@@ -11,6 +11,94 @@
   "hypothesis": "Embedding fixed build flags in ignored existing tar slack preserves normalized binaries and the T4 archive while reducing complete counted package bytes.",
   "id": "nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1",
   "measured": {
+    "native_10k_identity": {
+      "archive_bytes": 6229,
+      "archive_sha256": "f5c71060344fcd7ad182dba2dca84f936c2a801281ca58ed5fe9eb8c5a156e26",
+      "determinism_ok": true,
+      "job_elapsed_seconds": 105.775,
+      "matched_parent_job_elapsed_seconds": 407.667,
+      "matched_job_elapsed_reduction_fraction": 0.740533742005117,
+      "receipt": "results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json",
+      "roundtrip_ok": true
+    },
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": 6229,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 4.9832,
+          "comparison": {
+            "archive_delta_vs_baseline": 2573,
+            "baseline": {
+              "bits_per_byte": 2.9248,
+              "compressed_size": 3656,
+              "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
+              "data_size": 10000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 3857,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 236391
+          },
+          "compressed_size": 6229,
+          "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
+          "data_size": 10000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 240248,
+          "program_id": "nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1",
+          "program_size": 234019,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-28T01:32:34+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: valid deterministic loser."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": 6229,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 4.9832,
+            "comparison": {
+              "archive_delta_vs_baseline": 2573,
+              "baseline": {
+                "bits_per_byte": 2.9248,
+                "compressed_size": 3656,
+                "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
+                "data_size": 10000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 3857,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 236391
+            },
+            "compressed_size": 6229,
+            "data_md5": "0f40d55c4ef1958bb4ab24f5c32231f4",
+            "data_size": 10000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 240248,
+            "program_id": "nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1",
+            "program_size": 234019,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-28T01:32:34+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      }
+    ],
     "normalized_binary_identity_with_parent": true,
     "normalized_library_identity_with_parent": true,
     "receipt": "results/nncp_makefile_slack_embedding_v1/build.json"
@@ -29,7 +117,7 @@
     "build_receipt": "results/nncp_makefile_slack_embedding_v1/build.json",
     "counted_package_bytes": 234019,
     "evidence_tier": "proxy",
-    "native_codec_gate": "pending",
+    "native_codec_gate": "passed_10k_identity",
     "package_saved_vs_parent_bytes": 80,
     "program_bytes": 1007,
     "score_credit_bytes": 0,
@@ -44,5 +132,5 @@
     "embedding_tool": "projects/enwiki9/tools/embed_nncp_makefile_flags.py"
   },
   "status": "candidate",
-  "verdict": "Exact package and normalized-build proxy; native archive, roundtrip, determinism, runtime, and memory gate pending."
+  "verdict": "Exact T4 archive identity, roundtrip, determinism, and matched runtime gate passed. Larger same-domain maturity evidence remains zero-credit and unmeasured."
 }
