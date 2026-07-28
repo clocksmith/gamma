@@ -59,3 +59,9 @@ Velocity actually discounts a Build. Both remain simulation-only candidates.
 The dated calibration receipt rejects the Capability penalty on both evidence
 and faction-truth grounds and nominates the Industrial Velocity Mandate for a
 fresh-seed confirmation; neither changes the physical rules.
+
+`faction-public-validation-confirmation-v1.json` preregisters that fresh
+confirmation. Its Demis arm preserves all Capability and tests only whether a
+Scientific Method rescue receives one fewer threshold Mandate; its independent
+Elon arm repeats the realized-discount Mandate on fresh common seeds. Paired
+reports must include placement movement as well as win share and score.

@@ -153,6 +153,13 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
   assert.equal(report.rulesComparisons[0].matchedPairs, 28);
   assert.equal(report.rulesComparisons[0].unmatchedPairs, 0);
   assert.equal(report.rulesComparisons[0].standingMismatches, 0);
+  assert.ok(report.rulesComparisons[0].families.faction.every((cell) =>
+    Number.isFinite(cell.rankDelta)
+  ));
+  assert.match(
+    report.rulesComparisons[0].interpretation,
+    /positive rankDelta means the candidate improved placement/
+  );
   assert.equal(report.integrity.violations, 0);
 });
 

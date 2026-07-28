@@ -1,6 +1,6 @@
 # M3T4 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.5-test`
+**Rules reference:** `0.5.0-rc.6-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -168,7 +168,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.5-test` test:
+controlled `0.5.0-rc.6-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -180,7 +180,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.4` implements `0.5.0-rc.5-test` under engine
+Executable game `0.8.5` implements `0.5.0-rc.6-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser play, replay, policies, and Monte Carlo now share
@@ -190,7 +190,7 @@ Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
 
-`0.5.0-rc.5-test` retains the clarification that ring rotation is district
+`0.5.0-rc.6-test` retains the clarification that ring rotation is district
 movement rather than Facility relocation for Grid-Ready purposes, the
 two-source Power inventory, and the evidence-selected rule that Everybody Gets
 a GPU scores one Mandate per four rivals. Its only playable delta from rc.19
@@ -218,12 +218,12 @@ The rc.19 candidate changes no playable physical rule from rc.18. Executable
 player-count-specific outcome summaries, and preregistered common-seed faction
 swaps. These are evidence instruments, not rule changes.
 
-The `0.5.0-rc.5-test` candidate and executable `0.8.4` select the three- to
+The `0.5.0-rc.6-test` candidate and executable `0.8.5` select the three- to
 five-player product boundary, make four players the balance authority, and
 require three/five regression coverage. No faction, resource, action,
 Headline, Power, Grid-Ready, Realignment, scoring, or ending value changes.
 
-Executable `0.8.4` also preserves identity classification:
+Executable `0.8.5` also preserves identity classification:
 `data/simulation-copy.json` is evidence-boundary copy, not a playable rules
 input. It now contributes to the playtest-kit fingerprint instead of the
 ruleset and mechanics fingerprints. The new fingerprint is therefore a

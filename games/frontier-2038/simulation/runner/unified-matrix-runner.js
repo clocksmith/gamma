@@ -499,6 +499,12 @@ function pairedRuleComparisons(observations, rulesConfigurations, alpha = 0.05) 
         seat,
         1 / candidate.winnerSeats.length
       ]));
+      const baselineRanks = new Map(
+        baseline.standings.map((entry, index) => [entry.seat, index + 1])
+      );
+      const candidateRanks = new Map(
+        candidate.standings.map((entry, index) => [entry.seat, index + 1])
+      );
       for (const left of baseline.standings) {
         const right = candidate.standings.find((entry) => entry.seat === left.seat);
         if (
@@ -517,7 +523,9 @@ function pairedRuleComparisons(observations, rulesConfigurations, alpha = 0.05) 
           winDelta:
             (candidateWins.get(right.seat) || 0) -
             (baselineWins.get(left.seat) || 0),
-          scoreDelta: right.score - left.score
+          scoreDelta: right.score - left.score,
+          rankDelta:
+            baselineRanks.get(left.seat) - candidateRanks.get(right.seat)
         });
       }
     }
@@ -531,10 +539,12 @@ function pairedRuleComparisons(observations, rulesConfigurations, alpha = 0.05) 
             dimensions.map((key) => [key, record[key]])
           ),
           winDeltas: [],
-          scoreDeltas: []
+          scoreDeltas: [],
+          rankDeltas: []
         };
         group.winDeltas.push(record.winDelta);
         group.scoreDeltas.push(record.scoreDelta);
+        group.rankDeltas.push(record.rankDelta);
         groups.set(id, group);
       }
       const familyAlpha = alpha / Math.max(1, groups.size);
@@ -551,6 +561,7 @@ function pairedRuleComparisons(observations, rulesConfigurations, alpha = 0.05) 
           exposure,
           winShareDelta,
           scoreDelta: mean(group.scoreDeltas),
+          rankDelta: mean(group.rankDeltas),
           boundedConfidenceInterval: {
             lower: Math.max(-1, winShareDelta - halfWidth),
             upper: Math.min(1, winShareDelta + halfWidth),
@@ -569,7 +580,7 @@ function pairedRuleComparisons(observations, rulesConfigurations, alpha = 0.05) 
       unmatchedPairs,
       standingMismatches,
       interpretation:
-        "Common-seed paired deltas are diagnostic; promotion still requires the registered marginal gate and a tracked receipt.",
+        "Common-seed paired deltas are diagnostic; positive rankDelta means the candidate improved placement. Promotion still requires the registered marginal gate and a tracked receipt.",
       families: {
         faction: summarize(["factionId"]),
         factionBackend: summarize(["factionId", "backendId"]),

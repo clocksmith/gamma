@@ -24,6 +24,7 @@ export function canonicalRulesVariant(config) {
     coalitionStartingRunway: null,
     imperialStartingCompute: null,
     imperialScientificMethodCapabilityPenalty: 0,
+    imperialScientificMethodThresholdMandatePenalty: 0,
     imperialScientificMethodRunwayCost: 1,
     imperialScientificMethodLifetimeLimit: null,
     verticalStartingCompute: null,

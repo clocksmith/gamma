@@ -89,7 +89,8 @@ test("Scientific Method charges only when its protection is actually consumed", 
       runwaySpent: 1,
       duplicatesProtected: 1,
       capabilityPreserved: 0,
-      capabilityPenalty: 0
+      capabilityPenalty: 0,
+      thresholdMandateWithheld: 0
     }
   );
 
@@ -449,6 +450,85 @@ test("faction progress probes alter only realized protected Research and discoun
   });
   assert.equal(researcher.capability, 2);
   assert.equal(researcher.lastTrainingResult.capability, 2);
+
+  const publicValidation = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "imperial_research_lab",
+      seed: "scientific-method-public-validation-probe",
+      rulesVariant: {
+        imperialScientificMethodThresholdMandatePenalty: 1
+      }
+    },
+    () => {}
+  );
+  const validatedResearcher = publicValidation.match.players[0];
+  validatedResearcher.capability = 2;
+  const mandateBeforeValidation = validatedResearcher.mandate;
+  publicValidation.match.resolveTrainingRun = () => ({
+    capability: 1,
+    trust: 0,
+    runwaySpent: 0,
+    safetySpent: 1,
+    scrutiny: 0
+  });
+  publicValidation.match.applyResolution(0, {
+    decisionId: "fixture-scientific-public-validation",
+    label: "Fixture protected Research crossing a threshold",
+    actionId: "research",
+    parameters: {
+      destinationCategory: "cloud",
+      destinationId: "frontier",
+      pieceId: "s0-ceo",
+      stopAt: 3
+    }
+  });
+  assert.equal(validatedResearcher.capability, 3);
+  assert.equal(validatedResearcher.lastTrainingResult.capability, 1);
+  assert.equal(validatedResearcher.mandate, mandateBeforeValidation + 1);
+  assert.equal(
+    validatedResearcher.metrics.factionAbilityValues.scientific_method
+      .thresholdMandateWithheld,
+    1
+  );
+
+  const unprotectedValidation = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "imperial_research_lab",
+      seed: "scientific-method-public-validation-unused",
+      rulesVariant: {
+        imperialScientificMethodThresholdMandatePenalty: 1
+      }
+    },
+    () => {}
+  );
+  const ordinaryResearcher = unprotectedValidation.match.players[0];
+  ordinaryResearcher.capability = 2;
+  const ordinaryMandateBefore = ordinaryResearcher.mandate;
+  unprotectedValidation.match.resolveTrainingRun = () => ({
+    capability: 1,
+    trust: 0,
+    runwaySpent: 0,
+    safetySpent: 0,
+    scrutiny: 0
+  });
+  unprotectedValidation.match.applyResolution(0, {
+    decisionId: "fixture-scientific-public-validation-unused",
+    label: "Fixture Research crossing a threshold without protection",
+    actionId: "research",
+    parameters: {
+      destinationCategory: "cloud",
+      destinationId: "frontier",
+      pieceId: "s0-ceo",
+      stopAt: 3
+    }
+  });
+  assert.equal(ordinaryResearcher.capability, 3);
+  assert.equal(ordinaryResearcher.mandate, ordinaryMandateBefore + 2);
+  assert.ok(
+    !ordinaryResearcher.metrics.factionAbilityValues.scientific_method
+  );
 
   const vertical = await createInteractiveGame(
     {
@@ -1316,7 +1396,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.4");
+  assert.equal(first.game.version, "0.8.5");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1497,7 +1577,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.4");
+  assert.equal(first.game.version, "0.8.5");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
