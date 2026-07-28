@@ -79,10 +79,14 @@ the sample.
 
 ## Decision
 
+Order-sensitive PHDA9/WRT preprocessing may produce streams of different
+lengths even when the exact page-position multiset is fixed. Record that delta
+and select sample offsets from the shorter complete stream.
+
 Authorize state-faithful native integration only when:
 
 ```text
-I0 and I1 have the expected complete lengths
+I0 and I1 are complete outputs over the exact same page-position multiset
 I1 matches the prior public-stream hash
 aggregate reset-state gain >= 10,458 bytes over 3M
 at least two of three slices are positive
