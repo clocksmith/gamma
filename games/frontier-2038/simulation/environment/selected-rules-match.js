@@ -2493,7 +2493,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         delete player.tacticModifiers.benchmark_optimization;
       }
       if (player.factionId === "imperial_research_lab" && this.round >= 3 && gained >= 5) {
-        this.addResource(player, "trust", 2);
+        const trustBeforeNobel = player.trust;
+        this.addResource(
+          player,
+          "trust",
+          this.rulesVariant.imperialNobelTrust
+        );
+        this.recordFactionAbility(player, "nobel_effect", {
+          trustGained: player.trust - trustBeforeNobel,
+          qualifyingCapability: gained
+        });
       }
       player.roundMetrics.bestTrainingDomains = Math.max(
         player.roundMetrics.bestTrainingDomains,

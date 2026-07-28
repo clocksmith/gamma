@@ -159,6 +159,48 @@ test("Scientific Method scrutiny taxes validation without reducing Capability", 
   );
 });
 
+test("Nobel Effect can price prestige without weakening Research or Capability", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "imperial_research_lab",
+      seed: "nobel-effect-public-prestige",
+      rulesVariant: { imperialNobelTrust: 1 }
+    },
+    () => {}
+  );
+  const researcher = match.players[0];
+  match.round = 3;
+  match.resolveTrainingRun = () => ({
+    capability: 5,
+    trust: 0,
+    runwaySpent: 0,
+    safetySpent: 0,
+    scrutiny: 0
+  });
+  match.applyResolution(0, {
+    decisionId: "fixture-nobel-effect",
+    label: "Five-domain Research",
+    actionId: "research",
+    parameters: {
+      destinationCategory: "cloud",
+      destinationId: "frontier",
+      pieceId: "s0-ceo",
+      stopAt: 5
+    }
+  });
+  assert.equal(researcher.capability, 5);
+  assert.equal(researcher.trust, 4);
+  assert.deepEqual(
+    researcher.metrics.factionAbilityValues.nobel_effect,
+    {
+      uses: 1,
+      trustGained: 1,
+      qualifyingCapability: 5
+    }
+  );
+});
+
 test("joint Mega-Cluster acceptance is unavailable after a partner spends its contribution", async () => {
   const { match } = await createInteractiveGame(
     {
@@ -1508,7 +1550,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.8");
+  assert.equal(first.game.version, "0.8.9");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1689,7 +1731,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.8");
+  assert.equal(first.game.version, "0.8.9");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

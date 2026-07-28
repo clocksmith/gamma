@@ -107,3 +107,11 @@ but one unconditional base Compute plus accepted licenses is too weak. The
 next eligible probes remain prestige conversion for Demis and a stronger
 license-only self-Compute formula for Jensen; canonical physical rules are
 unchanged.
+
+`faction-prestige-demand-v1.json` preregisters those two independent
+continuations. Demis's arm reduces Nobel Effect from two Trust to one while
+leaving every scientific output untouched. Jensen's arm removes New
+Architecture's unconditional base Compute and retains one self-Compute per
+accepted license, every rival transaction, and the three-Compute ceiling.
+Neither arm includes the confirmed Elon candidate, so every focal effect
+remains isolated.
