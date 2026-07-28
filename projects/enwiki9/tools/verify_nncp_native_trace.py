@@ -10,11 +10,11 @@ from pathlib import Path
 import struct
 
 
-HEADER = struct.Struct("<8sQQQ")
-ROW = struct.Struct("<QQQQQHHBB")
+HEADER = struct.Struct("<8sQQQQ")
+ROW = struct.Struct("<QQQQQQQHHBBB")
 BRANCH = struct.Struct("<HB")
 U16 = struct.Struct("<H")
-MAGIC = b"NNNTR2\0\0"
+MAGIC = b"NNNTR3\0\0"
 PROBABILITY_TOTAL = 32768
 
 
@@ -80,13 +80,15 @@ def main() -> int:
     raw = args.trace.read_bytes()
     if len(raw) < HEADER.size:
         raise ValueError("truncated trace")
-    magic, rows, branches, trees = HEADER.unpack_from(raw)
+    magic, rows, branches, trees, checkpoint_rows = HEADER.unpack_from(raw)
     if magic != MAGIC:
         raise ValueError("trace magic mismatch")
 
     offset = HEADER.size
     observed_branches = 0
     observed_trees = 0
+    observed_checkpoints = 0
+    checkpoints: list[dict[str, int]] = []
     prior_bits: int | None = None
     prior_bytes: int | None = None
     for index in range(rows):
@@ -98,10 +100,13 @@ def main() -> int:
             after_bits,
             before_bytes,
             after_bytes,
+            exact_archive_bits,
+            exact_archive_bytes,
             symbol,
             vocabulary,
             branch_count,
             has_tree,
+            checkpoint,
         ) = ROW.unpack_from(raw, offset)
         offset += ROW.size
         if execution != index:
@@ -110,6 +115,19 @@ def main() -> int:
             raise ValueError("invalid symbol domain")
         if after_bits < before_bits or after_bytes < before_bytes:
             raise ValueError("coder count decreased")
+        if checkpoint:
+            if exact_archive_bits <= 0 or exact_archive_bytes <= 0:
+                raise ValueError("checkpoint lacks finalized archive count")
+            checkpoints.append(
+                {
+                    "completed_symbols": index + 1,
+                    "exact_archive_bits": exact_archive_bits,
+                    "exact_archive_bytes": exact_archive_bytes,
+                }
+            )
+            observed_checkpoints += 1
+        elif exact_archive_bits != 0 or exact_archive_bytes != 0:
+            raise ValueError("non-checkpoint contains finalized count")
         if prior_bits is not None and before_bits != prior_bits:
             raise ValueError("coder bit-count discontinuity")
         if prior_bytes is not None and before_bytes != prior_bytes:
@@ -152,12 +170,18 @@ def main() -> int:
             observed_trees += 1
         elif has_tree != 0:
             raise ValueError("invalid tree flag")
+        if checkpoint not in (0, 1):
+            raise ValueError("invalid checkpoint flag")
         prior_bits = after_bits
         prior_bytes = after_bytes
 
     if offset != len(raw):
         raise ValueError("trailing trace bytes")
-    if observed_branches != branches or observed_trees != trees:
+    if (
+        observed_branches != branches
+        or observed_trees != trees
+        or observed_checkpoints != checkpoint_rows
+    ):
         raise ValueError("trace header totals disagree")
     if args.trace_on_archive.read_bytes() != args.trace_off_archive.read_bytes():
         raise ValueError("trace changed native archive")
@@ -170,6 +194,7 @@ def main() -> int:
 
     receipt = {
         "archive_identity": True,
+        "checkpoints": checkpoints,
         "decoded_identity": True,
         "derived_tree_rows": trees,
         "environment": environment,

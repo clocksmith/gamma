@@ -77,6 +77,7 @@ def main() -> int:
     parser.add_argument("--symbol-map-receipt", type=Path)
     parser.add_argument("--max-symbols", type=int)
     parser.add_argument("--full-windows", default="")
+    parser.add_argument("--checkpoints", default="")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--audit-only", action="store_true")
     args = parser.parse_args()
@@ -132,6 +133,7 @@ def main() -> int:
         on_environment = native_environment.copy()
         on_environment["NNCP_NATIVE_TRACE"] = str(trace)
         on_environment["NNCP_NATIVE_TRACE_FULL_WINDOWS"] = args.full_windows
+        on_environment["NNCP_NATIVE_TRACE_CHECKPOINTS"] = args.checkpoints
         run([*command, str(trace_on)], on_environment)
         run([str(binary), "--cuda", "d", str(trace_on), str(decoded)],
             off_environment)

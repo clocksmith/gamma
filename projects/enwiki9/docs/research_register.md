@@ -2792,12 +2792,23 @@ immediate native student integration.
 
 This work is observation infrastructure and receives zero score credit.
 
+The ROCm host can still advance exact accounting without impersonating the
+CUDA teacher. The observer now supports predeclared shadow-finalized arithmetic
+checkpoints: it clones and flushes only coder state, records the exact
+hypothetical prefix size, and leaves the live teacher trajectory untouched.
+`tools/nncp_mature_headroom_cert.py` then joins independently produced native
+NNCP and Gamma ledgers and fails closed on any population, input, raw-boundary,
+window, continuity, or identity mismatch. It alone issues the frozen
+`AUTHORIZE_QUOTIENT_BUDGET_CERT` verdict after the two mature-window and
+cumulative-100M gates pass.
+
 Evidence:
 
 - `docs/nncp_native_trace_cert_plan.md`
 - `tools/materialize_nncp_native_trace_observer.py`
 - `tools/run_nncp_native_trace_cert.py`
 - `tools/verify_nncp_native_trace.py`
+- `tools/nncp_mature_headroom_cert.py`
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`
