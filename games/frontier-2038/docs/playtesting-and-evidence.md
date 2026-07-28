@@ -1,6 +1,6 @@
 # M3T4 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.20-test`
+**Rules under review:** `0.5.0-rc.21-test`
 **First cohort:** controlled four-player physical test with Demis Hassabis,
 Elon Musk, Jensen Huang, and Mark Zuckerberg
 
@@ -103,13 +103,13 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.20-test`. Executable
-game `0.8.19` implements it under `three-to-five-grid-ready-v1`. New automated reports
+`docs/core-rules.md` is a review draft at `0.5.0-rc.21-test`. Executable
+game `0.8.20` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.
 
-Executable `0.8.19` retains write-only decision capture and paired read-only
+Executable `0.8.20` retains write-only decision capture and paired read-only
 replay to the provider boundary, revalidates joint Mega-Cluster contributions
 at acceptance, and applies Foundry’s Shovels royalty after any selected Core,
 Wild, or Faction Action that spends at least two Compute. The rc.18 candidate
@@ -122,12 +122,14 @@ records the complete AGI funnel, realized faction-ability values, and
 common-seed focal-faction swaps under separately fingerprinted experiment
 configurations.
 
-Candidate `0.5.0-rc.20-test` and executable `0.8.19` retain three to five
-players, establish four as the balance authority, and make three/five
-regression coverage mandatory. They canonically promote Peer Validation,
+Candidate `0.5.0-rc.20-test` and executable `0.8.19` promoted Peer Validation,
 Industrial Velocity’s realized-discount Mandate, demand-coupled New
-Architecture, and diminishing Customer recognition. Every unrelated numerical
-rule remains frozen.
+Architecture, and diminishing Customer recognition. Candidate
+`0.5.0-rc.21-test` and executable `0.8.20` change no playable rule from that
+package. They add complete Safety Laboratory ability-value telemetry and the
+corrected residual faction diagnostic. Three to five players remain supported,
+four remains the balance authority, three/five regression coverage remains
+mandatory, and every unrelated numerical rule remains frozen.
 
 The exact `0.6.2` unified matrix raised a credible six-player
 Foundry×greedy interaction, but a follow-up weighted diagnostic exposed two

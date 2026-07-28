@@ -1,6 +1,6 @@
 # M3T4 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.20-test`
+**Rules reference:** `0.5.0-rc.21-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -168,7 +168,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.20-test` test:
+controlled `0.5.0-rc.21-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -180,7 +180,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.19` implements `0.5.0-rc.20-test` under engine
+Executable game `0.8.20` implements `0.5.0-rc.21-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser play, replay, policies, and Monte Carlo now share
@@ -190,7 +190,7 @@ Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
 
-`0.5.0-rc.20-test` retains the clarification that ring rotation is district
+`0.5.0-rc.20-test` selected the clarification that ring rotation is district
 movement rather than Facility relocation for Grid-Ready purposes, the
 two-source Power inventory, and the evidence-selected rule that Everybody Gets
 a GPU scores one Mandate per four rivals. It promotes four controlled
@@ -203,6 +203,12 @@ four and five score one Mandate each while retaining full income. Every other
 numerical rule is frozen pending human evidence.
 Grid-Ready cooperation and mandatory Round III Realignment remain deliberately
 frozen for the controlled physical test.
+
+`0.5.0-rc.21-test` changes no playable rule from rc.20. Executable `0.8.20`
+adds complete realized-value telemetry for Emergency Pause, Audited Deployment,
+and Responsible Scaling. The corrected fresh-seed faction swaps reject a
+universal Dario nerf or Sam buff because the Dario effect reverses by backend
+and negotiation-aware Sam is approximately neutral against Mark.
 
 The rc.17 physical candidate has no mechanics delta from rc.16. It exists
 because the synchronized evidence documents and executable harness changed;
@@ -219,12 +225,12 @@ The rc.19 candidate changes no playable physical rule from rc.18. Executable
 player-count-specific outcome summaries, and preregistered common-seed faction
 swaps. These are evidence instruments, not rule changes.
 
-The `0.5.0-rc.20-test` candidate and executable `0.8.19` retain the three- to
+The `0.5.0-rc.21-test` candidate and executable `0.8.20` retain the three- to
 five-player product boundary, make four players the balance authority, and
-require three/five regression coverage. They change only the four promoted
-victory-conversion levers named above.
+require three/five regression coverage. Their playable mechanics are identical
+to rc.20 and executable `0.8.19`.
 
-Executable `0.8.19` also preserves identity classification:
+Executable `0.8.20` also preserves identity classification:
 `data/simulation-copy.json` is evidence-boundary copy, not a playable rules
 input. It now contributes to the playtest-kit fingerprint instead of the
 ruleset and mechanics fingerprints. The new fingerprint is therefore a
