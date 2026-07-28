@@ -2662,3 +2662,37 @@ Evidence:
 - `results/cmix_lex_fxcm_v26_250k_v1/decision.json`
 - `docs/fxcm_v26_transfer_plan.md`
 - `operations/adaptive/exclusions/fxcm_v26_external_250k_subscale_v1.json`
+
+## 2026-07-28: public cmix-lex payload_lex transfer is terminal subscale
+
+The pinned public cmix-lex source constructed its complete full-corpus
+article-reordered post-WRT stream and the `payload_lex` successor without
+running a full arithmetic compression. The original ready stream was
+`586,459,321` bytes; the transformed stream was `587,138,826` bytes and
+contained a `679,489`-byte raw R1ORD3 side description. The public inverse
+reconstructed the original ready stream exactly.
+
+Three deterministic 250K reset-state cmix-lex comparisons sampled the start,
+middle, and end of the `16,773,087`-byte reordered regime. All were
+non-negative: `2,676`, `1,327`, and `0` archive bytes saved. Aggregate gross
+gain was `4,003` bytes across 750K, or `5,337 B/M`. Peak measured RSS was
+`5,786,932` KiB.
+
+The current Gamma forecast needs `949,345` bytes to cross the recorded public
+1% threshold. After charging the public `346,948`-byte compressed side region,
+the mechanism required `1,296,293` gross bytes across regime 1, or
+`77,285 B/M`. Its predeclared 750K gate was therefore `57,964` bytes. The
+observed gain supplied only 6.91% of that threshold.
+
+Decision: retire unchanged `payload_lex` transfer and forbid native
+integration, context-key sweeps, block-size sweeps, and reset-scope sweeps.
+The exact transform is valid but economically subscale. It receives zero score
+credit. Combined with the preceding 80 B/M FXCM-v26 result, the public
+cmix-lex mechanisms tested here do not explain a target-scale missing
+information source for Gamma.
+
+Evidence:
+
+- `results/cmix_lex_payload_transfer_v1_retry2/decision.json`
+- `docs/cmix_lex_payload_transfer_plan.md`
+- `operations/adaptive/exclusions/cmix_lex_payload_reset_tail_subscale_v1.json`

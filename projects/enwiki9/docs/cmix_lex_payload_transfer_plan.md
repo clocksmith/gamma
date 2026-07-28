@@ -99,3 +99,27 @@ block-size, and reset-scope sweeps. A pass does not alter the score. It only
 establishes enough mechanism headroom to justify preserving the mature Gamma
 state while replaying the reordered payload.
 
+## Outcome
+
+The pinned construction completed and inverted exactly:
+
+```text
+original post-WRT stream:     586,459,321 bytes
+payload_lex stream:           587,138,826 bytes
+extracted raw side:               679,489 bytes
+exact inverse:                PASS
+peak comparison RSS:         5,786,932 KiB
+```
+
+The three original archives totaled 57,033 bytes. Their transformed controls
+totaled 53,030 bytes, a gross gain of 4,003 bytes across 750K, or 5,337 B/M.
+The predeclared prize-scale gate was 57,964 bytes, or 77,285 B/M. The observed
+gain was only 6.91% of the required sample gain.
+
+Decision: `retire_transfer`. The result receives zero score credit and forbids
+native integration plus context-key, block-size, and reset-scope sweeps.
+
+Evidence:
+
+- `results/cmix_lex_payload_transfer_v1_retry2/decision.json`
+- `operations/adaptive/exclusions/cmix_lex_payload_reset_tail_subscale_v1.json`
