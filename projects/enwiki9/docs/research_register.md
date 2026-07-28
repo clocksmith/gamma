@@ -2827,6 +2827,22 @@ the full-map gate now uses the equivalent executable unified patch
 `patches/nncp_symbol_raw_map_v2.patch`. Both failures remain in the adaptive
 ledger.
 
+The third job completed the actual mapping mechanism before a manifest-only
+failure. Official full-corpus preprocessing produced `200,608,961` symbols and
+a `3,610,961,314`-byte map. The inverse reconstructed all
+`1,000,000,000` raw bytes with SHA-256
+`159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc`.
+Symbol values equal the transformed stream; raw intervals are ordered,
+gapless, nonoverlapping, and cover the complete input. The dictionary is
+`186,264` bytes and the transformed stream is `401,217,922` bytes.
+
+The manifest rejected raw offset `1,000,000` because it crosses a multi-byte
+dictionary symbol. This does not invalidate the map. Window binding now uses a
+frozen inward-snap rule: a crossing start moves to the symbol end, while a
+crossing end moves to the symbol start. Requested and actual raw bounds are
+both recorded. The completed map is reused through a separate finalizer; full
+preprocessing must not be repeated.
+
 Evidence:
 
 - `docs/nncp_native_trace_cert_plan.md`
@@ -2836,6 +2852,7 @@ Evidence:
 - `tools/nncp_mature_headroom_cert.py`
 - `tools/nncp_native_window_manifest.py`
 - `tools/run_nncp_full_symbol_map_gate.py`
+- `tools/finalize_nncp_full_symbol_map_gate.py`
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`
