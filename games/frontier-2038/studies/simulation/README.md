@@ -91,3 +91,9 @@ actually saves a run and never removes Capability. The Foundry arm retains
 four starting Compute and a three-Compute New Architecture ceiling, but grants
 one base Compute plus one per accepted rival license. Both arms require exact
 configuration-specific faction standings by supported player count.
+
+Its first launch executed zero matches: the matrix rejected the Foundry
+formula because three scalar overlay fields violated the one-lever contract.
+`faction-demand-validation-v1-restart.json` supersedes it with the same
+ability formula represented as one structured lever, retires the unused seed,
+and preregisters a fresh replacement seed.

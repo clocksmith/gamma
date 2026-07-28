@@ -2,9 +2,9 @@
 
 ## A 3–5 player race to build, deploy, regulate, and plausibly declare AGI
 
-**Rules version:** 0.5.0-rc.8-test
+**Rules version:** 0.5.0-rc.9-test
 **Design-baseline date:** July 26, 2026
-**Status:** Controlled playtest candidate; synchronized with executable game 0.8.7
+**Status:** Controlled playtest candidate; synchronized with executable game 0.8.8
 **Provisional time:** 75–100 minutes at four players; three- and five-player durations require their own blind tests
 **Standard game:** Four rounds, three turns per player per round
 

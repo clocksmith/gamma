@@ -761,9 +761,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
       }
       if (this.round === 3 && player.factionId === "foundry") {
-        const demandBase =
-          this.rulesVariant.foundryNewArchitectureDemandBaseCompute;
-        const demandCoupled = Number.isFinite(demandBase);
+        const demandCoupling =
+          this.rulesVariant.foundryNewArchitectureDemandCoupling;
+        const demandCoupled =
+          demandCoupling !== null &&
+          Number.isFinite(demandCoupling?.baseCompute);
         let licensesSold = 0;
         if (!demandCoupled) {
           this.addResource(
@@ -801,10 +803,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
         if (demandCoupled) {
           const computeGained = Math.min(
-            this.rulesVariant.foundryNewArchitectureMaximumCompute,
-            demandBase +
+            demandCoupling.maximumCompute,
+            demandCoupling.baseCompute +
               licensesSold *
-                this.rulesVariant.foundryNewArchitectureComputePerLicense
+                demandCoupling.computePerLicense
           );
           this.addResource(player, "compute", computeGained);
           this.recordFactionAbility(player, "new_architecture", {
