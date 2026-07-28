@@ -155,3 +155,14 @@ package-interaction audit. It combines only three independently evidenced
 levers: Demis peer validation, Elon realized Industrial Velocity Mandate, and
 Jensen license-only New Architecture allocation. The runner records this as an
 interaction validation rather than a one-lever causal probe.
+
+Its first clean run is descriptive only because the report omitted the
+preregistered action- and winning-path-diversity diagnostics. The fresh restart
+added those fields and completed `11,998` clean matches. The dated
+[`selected faction-conversion package`](2026-07-28-selected-faction-conversion-package.md)
+receipt selects the package for explicit physical-rule approval: four-player
+faction spread is `9.28` percentage points, all supported counts remain below
+the provisional `15`-point faction bound, no registered dominance appears,
+and Build/Research choice does not collapse. Overall balance remains
+uncertified because registered precision is incomplete and winning-path
+entropy remains below its provisional floor at four and five players.
