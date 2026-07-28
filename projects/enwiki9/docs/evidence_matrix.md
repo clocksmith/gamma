@@ -12,8 +12,8 @@ No forecast or inherited metadata is included here.
 
 ## Proof Boundary
 
-- Result JSON files scanned: `918`
-- Roundtrip-passing rows: `912`
+- Result JSON files scanned: `920`
+- Roundtrip-passing rows: `914`
 - Verified full `1G` rows in this checkout: `0`
 - `10.95%` target reached by this matrix: `False`
 - Best full `1G` score: `none present`
@@ -23,6 +23,7 @@ No forecast or inherited metadata is included here.
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
 | `baseline_zlib` | baseline compressor | 1,024 | 495 | 334 | 161 | 2.609375 | true | `results/baseline_zlib/2026-07-20T152000.json` |
+| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000 | 3,857 | 3,656 | 201 | 2.9248 | true | `results/baseline_lzma/2026-07-27T213049.json` |
 | `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
 | `vulcan_event_control_v0` | custom candidate | 600,747 | 377,494 | 367,924 | 9,570 | 4.89955339 | true | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
 | `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 1,000,000 | 266,493 | 261,652 | 4,841 | 2.093216 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T150923.json` |
@@ -34,6 +35,7 @@ No forecast or inherited metadata is included here.
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | cmix21 memory-shaped context mixer | 1,024 | 304,496 | 243 | 304,253 | 1.8984375 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T163727.json` |
+| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000 | 3,857 | 3,656 | 201 | 2.9248 | true | `results/baseline_lzma/2026-07-27T213049.json` |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | cmix21 memory-shaped context mixer | 250,000 | 349,231 | 44,978 | 304,253 | 1.439296 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T170257.json` |
 | `vulcan_event_control_v0` | custom candidate | 600,747 | 377,494 | 367,924 | 9,570 | 4.89955339 | true | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
 | `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 735,705 | 174,423 | 561,282 | 1.395384 | true | `results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-07-21T183101.json` |

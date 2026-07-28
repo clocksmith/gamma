@@ -39,6 +39,7 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | score | archive | program_size | percent | result |
 |---:|---|---:|---:|---:|---:|---|
 | 1,024 | `baseline_zlib` | 495 | 334 | 161 | 48.33984375 | `results/baseline_zlib/2026-07-20T152000.json` |
+| 10,000 | `baseline_lzma` | 3,857 | 3,656 | 201 | 38.57 | `results/baseline_lzma/2026-07-27T213049.json` |
 | 250,000 | `opcode_typed_anchor_bitmix_v1` | 72,800 | 67,959 | 4,841 | 29.12 | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
 | 600,747 | `vulcan_event_control_v0` | 377,494 | 367,924 | 9,570 | 62.837434061 | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
 | 1,000,000 | `opcode_typed_anchor_bitmix_v1` | 266,493 | 261,652 | 4,841 | 26.6493 | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T150923.json` |
@@ -50,6 +51,7 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | archive | score | program_size | archive_bpb | result |
 |---:|---|---:|---:|---:|---:|---|
 | 1,024 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 243 | 304,496 | 304,253 | 1.8984375 | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T163727.json` |
+| 10,000 | `baseline_lzma` | 3,656 | 3,857 | 201 | 2.9248 | `results/baseline_lzma/2026-07-27T213049.json` |
 | 250,000 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 44,978 | 349,231 | 304,253 | 1.439296 | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T170257.json` |
 | 600,747 | `vulcan_event_control_v0` | 367,924 | 377,494 | 9,570 | 4.899553389 | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
 | 1,000,000 | `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | 174,423 | 735,705 | 561,282 | 1.395384 | `results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-07-21T183101.json` |

@@ -2589,3 +2589,25 @@ Evidence:
 
 - `results/nncp_pc_u16be_cmix21_assoc10_nopre_v1/2026-07-27T212933.json`
 - `operations/adaptive/exclusions/rdc_u16be_nopre_backend_250k_negative_v1.json`
+
+## 2026-07-28: Compact5 T4 native identity and runtime gate passes
+
+The Makefile-slack, finite-XZ, four-thread Compact5 package produced the exact
+`6,229`-byte parent archive on opening 10K, roundtripped, and reproduced the
+archive byte for byte. Its counted package is `234,019` bytes. The complete
+adaptive job elapsed `105.775` seconds versus `407.667` seconds for the matched
+single-thread parent job, a `74.05%` reduction that clears the frozen 25%
+runtime gate.
+
+This is execution and package evidence, not proof that Compact5 compresses at
+target scale. The generic LZMA-relative triage verdict is inapplicable to the
+maturity hypothesis and has been overridden by the matched-parent identity
+receipt. The successor is one zero-credit opening-1M maturity diagnostic with
+the predeclared `250,000`-byte archive ceiling. Failure retires this frozen
+five-layer/256-wide profile without an architecture ladder.
+
+Evidence:
+
+- `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json`
+- `results/nncp_makefile_slack_embedding_v1/build.json`
+- `operations/adaptive/completed/042_20260727T223037Z_d0a600ecdb.json`
