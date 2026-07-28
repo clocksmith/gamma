@@ -1,3 +1,8 @@
+import {
+  classifyWinningPath,
+  WINNING_PATH_CLASSIFIER
+} from "../balance/winning-path.js";
+
 function increment(target, key, amount = 1) {
   target[key] = (target[key] || 0) + amount;
 }
@@ -141,23 +146,6 @@ function concentration(counts) {
     entropy: normalizedEntropy(counts),
     topShare: total ? top / total : 0
   };
-}
-
-function winningPath(entry) {
-  const actions = entry.metrics.actions || {};
-  const lanes = {
-    research: (actions.research || 0) + entry.capability / 3,
-    infrastructure: (actions.build || 0) + entry.facilities,
-    adoption: (actions.deploy || 0) + entry.customers,
-    legitimacy: (actions.influence || 0) + entry.trust / 2,
-    capital: actions.fund || 0,
-    mobility: actions.organize || 0
-  };
-  if (entry.agiDeclared) return "agi_declaration";
-  const ranked = Object.entries(lanes).sort((left, right) => right[1] - left[1]);
-  return ranked[0][1] === ranked[1][1]
-    ? `${ranked[0][0]}_${ranked[1][0]}_hybrid`
-    : ranked[0][0];
 }
 
 function profileMatchups(outcomes) {
@@ -510,7 +498,11 @@ export async function runMonteCarlo({
     for (const entry of outcome.standings) {
       increment(openingCounts, (entry.metrics.openingActions || []).join("→") || "none");
       if (outcome.winnerSeats.includes(entry.seat)) {
-        increment(winningPathCounts, winningPath(entry), 1 / outcome.winnerSeats.length);
+        increment(
+          winningPathCounts,
+          classifyWinningPath(entry),
+          1 / outcome.winnerSeats.length
+        );
       }
     }
   }
@@ -529,6 +521,7 @@ export async function runMonteCarlo({
     actionDiversity: normalizedEntropy(allActionCounts),
     openingDiversity: concentration(openingCounts),
     winningPathDiversity: concentration(winningPathCounts),
+    winningPathClassifier: WINNING_PATH_CLASSIFIER,
     factionStrategyInteractionRange: range(
       factionStrategies.filter((entry) => entry.appearances >= 4).map((entry) => entry.winShare)
     ),

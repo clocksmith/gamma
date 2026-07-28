@@ -12,6 +12,11 @@ import {
 import { createSimulation } from "../runtime/create-simulation.js";
 import { createReportIdentity, fingerprintObject } from "../versioning/game-identity.js";
 import { loadBalanceContract } from "../balance/balance-contract.js";
+import {
+  classifyWinningPath,
+  WINNING_PATH_CLASSIFIER,
+  winningPathMargin
+} from "../balance/winning-path.js";
 import { simulationCopy } from "../content/simulation-copy.js";
 import { mutateStrategy } from "./optimization-runner.js";
 
@@ -161,38 +166,6 @@ export function configurationOutcomeBalanceChecks({
       }));
     })
   );
-}
-
-function winningLaneScores(entry) {
-  const actions = entry.actions || {};
-  return {
-    research: (actions.research || 0) + (entry.capability || 0) / 3,
-    infrastructure: (actions.build || 0) + (entry.facilities || 0),
-    adoption: (actions.deploy || 0) + (entry.customers || 0),
-    legitimacy: (actions.influence || 0) + (entry.trust || 0) / 2,
-    capital: actions.fund || 0,
-    mobility: actions.organize || 0
-  };
-}
-
-function winningPathMargin(entry) {
-  const ranked = Object.entries(winningLaneScores(entry))
-    .sort((left, right) => right[1] - left[1]);
-  return {
-    primary: ranked[0][0],
-    secondary: ranked[1][0],
-    primaryScore: ranked[0][1],
-    secondaryScore: ranked[1][1],
-    gap: ranked[0][1] - ranked[1][1]
-  };
-}
-
-function winningPath(entry) {
-  if (entry.agiDeclared) return "agi_declaration";
-  const margin = winningPathMargin(entry);
-  return margin.gap === 0
-    ? `${margin.primary}_${margin.secondary}_hybrid`
-    : margin.primary;
 }
 
 function rotate(values, amount) {
@@ -637,7 +610,7 @@ function outcomeSummary(observations) {
       );
       if (winnerCredit.has(standing.seat)) {
         const credit = winnerCredit.get(standing.seat);
-        const pathId = winningPath(standing);
+        const pathId = classifyWinningPath(standing);
         const margin = winningPathMargin(standing);
         const recordMargin = (totals) => {
           totals.winCredit = (totals.winCredit || 0) + credit;
@@ -839,6 +812,7 @@ function outcomeSummary(observations) {
     actionDiversity: normalizedEntropy(actionCounts),
     openingDiversity: concentration(openingCounts),
     winningPathDiversity: concentration(winningPathCounts),
+    winningPathClassifier: WINNING_PATH_CLASSIFIER,
     winningPathAttribution,
     winningPathMargins,
     factionWinShareRange: range(

@@ -139,6 +139,10 @@ test("unified matrix rotates homogeneous and alternating backend regimes and nev
   assert.ok(report.playerCountResults[4].outcomes.actionDiversity > 0);
   assert.ok(report.playerCountResults[4].outcomes.openingDiversity.observed > 1);
   assert.ok(report.playerCountResults[4].outcomes.winningPathDiversity.observed > 1);
+  assert.deepEqual(
+    report.playerCountResults[4].outcomes.winningPathClassifier,
+    { id: "lane-margin-v1", hybridMargin: 1 }
+  );
   const pathMargins = report.playerCountResults[4].outcomes.winningPathMargins;
   assert.equal(pathMargins.wins, report.playerCountResults[4].matches);
   assert.ok(pathMargins.meanGap >= 0);
