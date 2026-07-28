@@ -14,7 +14,16 @@ from pathlib import Path
 import platform
 import struct
 import subprocess
+import sys
 import time
+
+ROCM_PYTHON = Path(
+    "/home/x/enwiki9-nonproof/external/rocm-pytorch-venv/bin/python"
+)
+if Path(sys.executable).resolve() != ROCM_PYTHON.resolve():
+    if not ROCM_PYTHON.is_file():
+        raise SystemExit(f"missing receipt-bound ROCm interpreter: {ROCM_PYTHON}")
+    os.execv(str(ROCM_PYTHON), [str(ROCM_PYTHON), *sys.argv])
 
 import numpy as np
 import torch
