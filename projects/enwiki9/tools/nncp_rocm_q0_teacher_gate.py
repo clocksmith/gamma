@@ -423,7 +423,9 @@ def run_teacher(
                 logits.reshape(-1, config.vocabulary),
                 target_tensor.reshape(-1),
             )
-        probability = torch.softmax(logits.detach(), dim=-1).cpu().numpy()
+        probability = (
+            torch.softmax(logits.detach(), dim=-1)[0].cpu().numpy()
+        )
         encode_distribution(
             encoder, probability, symbols[start:end], trace
         )
