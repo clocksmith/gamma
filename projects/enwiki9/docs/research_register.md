@@ -2871,6 +2871,37 @@ Evidence:
 - `tools/finalize_nncp_full_symbol_map_gate.py`
 - `results/nncp_full_symbol_map_v1/decision.json`
 - `results/nncp_full_symbol_map_v1/window_manifest.json`
+
+## 2026-07-28: CUDA teacher route closed; ROCm-native teacher proposed
+
+The workspace has no NVIDIA machine. The native LibNC CUDA trace proposal is
+therefore operationally closed without a scientific teacher verdict. The exact
+full-corpus symbol map remains valid zero-credit infrastructure.
+
+ROCm work will not continue as an attempted LibNC replica. The failed
+online-update parity already proves that such a claim would be false. The new
+proposal, `nncp_rocm_causal_teacher_headroom_v1`, defines a separate causal
+teacher and must earn headroom from its own exact archive.
+
+The full transformed stream contains `200,608,961` symbols with IDs `1` through
+`16,384`; the frozen padded vocabulary is `16,392`, not the miniature
+336/413-symbol domain used by earlier controls. Q0 freezes one 20-layer,
+width-1,024, BF16 ROCm Transformer with persistent 256-symbol memory,
+deterministic FP32 reductions, disabled dropout, and exact online update order.
+There is no architecture ladder.
+
+The 65,536-symbol construction gate must prove causal masking, exact arithmetic
+archive identity, symbol/raw roundtrip, deterministic replay, and bound runtime
+objects. Only then may one continuous run reach the inward-snapped 9M-10M raw
+window. Less than `3,000 B/M` exact teacher advantage there retires the
+architecture and ROCm teacher lane. Success permits the 50M and 100M
+headroom gates; it does not grant score credit or authorize a student.
+
+Evidence:
+
+- `docs/nncp_rocm_causal_teacher_plan.md`
+- `operations/adaptive/proposals/proposed/019_nncp_rocm_causal_teacher_headroom_v1.json`
+- `results/nncp_full_symbol_map_v1/decision.json`
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`

@@ -1,0 +1,36 @@
+{
+  "claimed_at": "2026-07-28T15:51:27+00:00",
+  "created_at": "2026-07-28T15:48:41+00:00",
+  "evidence": [
+    "results/nncp_full_symbol_map_v1/decision.json",
+    "results/nncp_v33_rocm_architecture_probe_v1/decision.json",
+    "results/nncp_v33_rocm_online_update_parity_v1/decision.json",
+    "The full transformed stream contains 200,608,961 symbols over IDs 1 through 16,384, fixing the padded Q0 vocabulary at 16,392."
+  ],
+  "expected_savings_bytes": 1600000,
+  "hypothesis": "A separately defined ROCm-native causal Transformer operating on the frozen full-corpus NNCP symbol stream can exceed Gamma by at least 3,000 B/M on two mature same-population windows and remain cumulatively positive through 100M, providing a valid teacher for quotient-budget analysis without claiming LibNC parity.",
+  "interfaces_exposed": [
+    "rocm_native_causal_symbol_teacher",
+    "rocm_teacher_exact_arithmetic_trace",
+    "rocm_teacher_mature_headroom"
+  ],
+  "kill_condition": "Reject on causality failure, nondeterminism, roundtrip failure, unavailable full-profile execution, memory exhaustion, cumulative 100M regression, or failure to clear 3,000 B/M on two mature windows. Do not tune toward LibNC parity.",
+  "max_program_bytes": 0,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "owner": "codex-rocm-128",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 965,
+  "promotion_condition": "Exact trace-on/off archive identity, exact symbol/raw reconstruction, at least 3,000 B/M advantage on two mature continuous-state windows, positive cumulative 100M advantage, and frozen ROCm runtime/model hashes.",
+  "proposal_id": "nncp_rocm_causal_teacher_headroom_v1",
+  "retired_neighborhoods": [
+    "nncp_v33_pytorch_libnc_parity",
+    "nncp_native_cuda_trace_unavailable"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 980,
+  "state": "claimed",
+  "title": "ROCm-native causal symbol teacher headroom"
+}
