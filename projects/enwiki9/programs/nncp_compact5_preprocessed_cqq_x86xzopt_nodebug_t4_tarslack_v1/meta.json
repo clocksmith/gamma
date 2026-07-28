@@ -11,6 +11,15 @@
   "hypothesis": "Embedding fixed build flags in ignored existing tar slack preserves normalized binaries and the T4 archive while reducing complete counted package bytes.",
   "id": "nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1",
   "measured": {
+    "opening_1m_maturity_ceiling": {
+      "archive_ceiling_bytes": 250000,
+      "decision": "retire_frozen_compact5_profile",
+      "minimum_emitted_archive_bytes": 262144,
+      "operator_terminated_after_irreversible_ceiling_crossing": true,
+      "receipt": "results/nncp_compact5_t4_opening_1m_maturity_v1/decision.json",
+      "roundtrip_ok": null,
+      "score_credit_bytes": 0
+    },
     "native_10k_identity": {
       "archive_bytes": 6229,
       "archive_sha256": "f5c71060344fcd7ad182dba2dca84f936c2a801281ca58ed5fe9eb8c5a156e26",
@@ -131,6 +140,6 @@
     "archive_codec": "exact minimum over committed 377-member XZ family",
     "embedding_tool": "projects/enwiki9/tools/embed_nncp_makefile_flags.py"
   },
-  "status": "candidate",
-  "verdict": "Exact T4 archive identity, roundtrip, determinism, and matched runtime gate passed. Larger same-domain maturity evidence remains zero-credit and unmeasured."
+  "status": "retired",
+  "verdict": "Terminal maturity miss. The append-only opening-1M archive exceeded the frozen 250,000-byte ceiling while compression remained active; the frozen five-layer/256-wide profile is retired."
 }
