@@ -57,6 +57,112 @@ function concentration(counts) {
   };
 }
 
+function range(values) {
+  return values.length
+    ? Math.max(...values) - Math.min(...values)
+    : Number.NaN;
+}
+
+function observedCheck({
+  id,
+  value,
+  operator,
+  threshold,
+  configurationId,
+  playerCount
+}) {
+  const comparable = Number.isFinite(value);
+  return {
+    id,
+    configurationId,
+    playerCount,
+    value: comparable ? value : null,
+    operator,
+    threshold,
+    evidence: "observed_configuration_player_count",
+    passed:
+      comparable &&
+      (operator === "max" ? value <= threshold : value >= threshold)
+  };
+}
+
+export function configurationOutcomeBalanceChecks({
+  configurationResults,
+  configurationIds,
+  playerCounts,
+  thresholds
+}) {
+  const definitions = [
+    {
+      id: "faction_win_share_range",
+      read: (outcomes) => range(
+        Object.values(outcomes.factionStandings || {})
+          .filter((standing) => standing.appearances > 0)
+          .map((standing) => standing.winShare)
+      ),
+      operator: "max",
+      threshold: thresholds.factionWinShareRangeMax
+    },
+    {
+      id: "action_entropy",
+      read: (outcomes) => outcomes.actionDiversity,
+      operator: "min",
+      threshold: thresholds.actionEntropyMin
+    },
+    {
+      id: "opening_entropy",
+      read: (outcomes) => outcomes.openingDiversity?.entropy,
+      operator: "min",
+      threshold: thresholds.openingEntropyMin
+    },
+    {
+      id: "opening_top_share",
+      read: (outcomes) => outcomes.openingDiversity?.topShare,
+      operator: "max",
+      threshold: thresholds.openingTopShareMax
+    },
+    {
+      id: "winning_path_entropy",
+      read: (outcomes) => outcomes.winningPathDiversity?.entropy,
+      operator: "min",
+      threshold: thresholds.winningPathEntropyMin
+    },
+    {
+      id: "winning_path_top_share",
+      read: (outcomes) => outcomes.winningPathDiversity?.topShare,
+      operator: "max",
+      threshold: thresholds.winningPathTopShareMax
+    },
+    {
+      id: "policy_fallbacks",
+      read: (outcomes) => outcomes.policyFallbacks,
+      operator: "max",
+      threshold: thresholds.policyFallbacksMax
+    },
+    {
+      id: "forced_no_op_rate",
+      read: (outcomes) => outcomes.forcedNoOpRate,
+      operator: "max",
+      threshold: thresholds.forcedNoOpRateMax
+    }
+  ];
+  return configurationIds.flatMap((configurationId) =>
+    playerCounts.flatMap((playerCount) => {
+      const outcomes =
+        configurationResults[configurationId]?.playerCountResults?.[playerCount]
+          ?.outcomes || {};
+      return definitions.map((definition) => observedCheck({
+        id: `${configurationId}:p${playerCount}:${definition.id}`,
+        value: definition.read(outcomes),
+        operator: definition.operator,
+        threshold: definition.threshold,
+        configurationId,
+        playerCount
+      }));
+    })
+  );
+}
+
 function winningPath(entry) {
   const actions = entry.actions || {};
   const lanes = {
@@ -532,6 +638,29 @@ function outcomeSummary(observations) {
       }
     }
   }
+  const factionStandings = Object.fromEntries(
+    Object.entries(factionStandingTotals).map(([factionId, totals]) => [
+      factionId,
+      {
+        appearances: totals.appearances,
+        winShare: totals.appearances
+          ? totals.winCredit / totals.appearances
+          : 0,
+        meanMandate: totals.appearances
+          ? totals.mandate / totals.appearances
+          : 0,
+        meanRank: totals.appearances
+          ? totals.rank / totals.appearances
+          : 0,
+        meanAuditHits: totals.appearances
+          ? totals.auditHits / totals.appearances
+          : 0,
+        meanForcedNoOps: totals.appearances
+          ? totals.forcedNoOps / totals.appearances
+          : 0
+      }
+    ])
+  );
   return {
     matches: observations.length,
     declarationRate: observations.length ? declarations / observations.length : 0,
@@ -543,32 +672,13 @@ function outcomeSummary(observations) {
     actionDiversity: normalizedEntropy(actionCounts),
     openingDiversity: concentration(openingCounts),
     winningPathDiversity: concentration(winningPathCounts),
+    factionWinShareRange: range(
+      Object.values(factionStandings).map((standing) => standing.winShare)
+    ),
     bindingRequirements,
     mandateSources,
     factionMandateSources,
-    factionStandings: Object.fromEntries(
-      Object.entries(factionStandingTotals).map(([factionId, totals]) => [
-        factionId,
-        {
-          appearances: totals.appearances,
-          winShare: totals.appearances
-            ? totals.winCredit / totals.appearances
-            : 0,
-          meanMandate: totals.appearances
-            ? totals.mandate / totals.appearances
-            : 0,
-          meanRank: totals.appearances
-            ? totals.rank / totals.appearances
-            : 0,
-          meanAuditHits: totals.appearances
-            ? totals.auditHits / totals.appearances
-            : 0,
-          meanForcedNoOps: totals.appearances
-            ? totals.forcedNoOps / totals.appearances
-            : 0
-        }
-      ])
-    ),
+    factionStandings,
     factionAbilityValues,
     factionActionSelections,
     agiFunnel,
@@ -1327,6 +1437,36 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     };
   executedMatches = progress.completed;
   const outcomes = outcomeSummary(observations);
+  const configurationResults = Object.fromEntries(
+    rulesConfigurations.map((configuration) => {
+      const selected = observations.filter((observation) =>
+        observation.rulesConfigurationId === configuration.id
+      );
+      return [
+        configuration.id,
+        {
+          matches: selected.length,
+          outcomes: outcomeSummary(selected),
+          cooperation: cooperationSummary(selected),
+          playerCountResults: Object.fromEntries(
+            playerCounts.map((count) => {
+              const countSelected = selected.filter(
+                (observation) => observation.playerCount === count
+              );
+              return [
+                count,
+                {
+                  matches: countSelected.length,
+                  outcomes: outcomeSummary(countSelected),
+                  cooperation: cooperationSummary(countSelected)
+                }
+              ];
+            })
+          )
+        }
+      ];
+    })
+  );
   const supportedPlayerCountCoverage = Object.fromEntries(
     supportedPlayerCounts.map((count) => [
       count,
@@ -1345,6 +1485,18 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     passed:
       outcomes.forcedNoOpRate <= balanceContract.thresholds.forcedNoOpRateMax
   };
+  const balanceConfigurationIds = rulesConfigurations.length > 1
+    ? rulesConfigurations.slice(1).map((configuration) => configuration.id)
+    : rulesConfigurations.map((configuration) => configuration.id);
+  const configurationChecks = configurationOutcomeBalanceChecks({
+    configurationResults,
+    configurationIds: balanceConfigurationIds,
+    playerCounts,
+    thresholds: balanceContract.thresholds
+  });
+  const failedConfigurationChecks = configurationChecks.filter(
+    (entry) => !entry.passed
+  );
   if (!forcedNoOpCheck.passed) {
     evaluation.status = "invalid_policy_quality";
     evaluation.promotionGate.automatedPass = false;
@@ -1359,6 +1511,22 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     evaluation.promotionGate.verdict = "supported_player_count_coverage_missing";
     evaluation.promotionGate.reasons.unshift(
       "Promotion evidence must include three-, four-, and five-player games."
+    );
+  }
+  if (
+    failedConfigurationChecks.length &&
+    integrity.violations === 0 &&
+    forcedNoOpCheck.passed &&
+    completeSupportedPlayerCountCoverage
+  ) {
+    if (evaluation.status !== "credible_dominance_detected") {
+      evaluation.status = "outside_provisional_bounds";
+      evaluation.promotionGate.verdict = "provisional_bounds_failed";
+    }
+    evaluation.promotionGate.automatedPass = false;
+    evaluation.promotionGate.reasons.unshift(
+      `${failedConfigurationChecks.length} configuration-by-player-count ` +
+      "diversity, faction-range, fallback, or forced-no-op checks failed."
     );
   }
   const report = {
@@ -1404,36 +1572,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     },
     outcomes,
     cooperation: cooperationSummary(observations),
-    configurationResults: Object.fromEntries(
-      rulesConfigurations.map((configuration) => {
-        const selected = observations.filter((observation) =>
-          observation.rulesConfigurationId === configuration.id
-        );
-        return [
-          configuration.id,
-          {
-            matches: selected.length,
-            outcomes: outcomeSummary(selected),
-            cooperation: cooperationSummary(selected),
-            playerCountResults: Object.fromEntries(
-              playerCounts.map((count) => {
-                const countSelected = selected.filter(
-                  (observation) => observation.playerCount === count
-                );
-                return [
-                  count,
-                  {
-                    matches: countSelected.length,
-                    outcomes: outcomeSummary(countSelected),
-                    cooperation: cooperationSummary(countSelected)
-                  }
-                ];
-              })
-            )
-          }
-        ];
-      })
-    ),
+    configurationResults,
     playerCountResults: Object.fromEntries(
       playerCounts.map((count) => {
         const selected = observations.filter(
@@ -1467,7 +1606,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     balanceEvaluation: {
       contractId: balanceContract.id,
       contractFingerprint: balanceContract.fingerprint,
-      checks: [forcedNoOpCheck],
+      checks: [forcedNoOpCheck, ...configurationChecks],
       ...evaluation
     }
   };

@@ -166,3 +166,10 @@ the provisional `15`-point faction bound, no registered dominance appears,
 and Build/Research choice does not collapse. Overall balance remains
 uncertified because registered precision is incomplete and winning-path
 entropy remains below its provisional floor at four and five players.
+
+`selected-faction-package-gate-confirmation-v1.json` preregisters the fresh
+confirmation under the corrected unified gate. The gate now enforces, rather
+than merely prints, candidate faction range, action diversity, opening
+diversity, winning-path diversity, fallbacks, and forced no-ops separately at
+three, four, and five players. A path-diversity failure locates the next
+diagnostic; it does not authorize an unregistered global rule change.
