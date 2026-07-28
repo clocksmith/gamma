@@ -392,6 +392,7 @@ function outcomeSummary(observations) {
   const factionAbilityValues = {};
   const factionActionSelections = {};
   const factionMandateSources = {};
+  const factionStandingTotals = {};
   let declarations = 0;
   let genuineAgi = 0;
   let auditHits = 0;
@@ -420,10 +421,31 @@ function outcomeSummary(observations) {
       const id = readiness.failingRequirement || "ready";
       bindingRequirements[id] = (bindingRequirements[id] || 0) + 1;
     }
-    for (const standing of observation.standings) {
+    const winnerCredit = new Map(
+      observation.winnerSeats.map((seat) => [
+        seat,
+        1 / observation.winnerSeats.length
+      ])
+    );
+    for (const [index, standing] of observation.standings.entries()) {
       auditHits += standing.auditHits || 0;
       forcedNoOps += standing.forcedNoOps || 0;
       fallbacks += standing.policyFallbacks || 0;
+      const standingTotals = factionStandingTotals[standing.factionId] || {
+        appearances: 0,
+        winCredit: 0,
+        mandate: 0,
+        rank: 0,
+        auditHits: 0,
+        forcedNoOps: 0
+      };
+      standingTotals.appearances += 1;
+      standingTotals.winCredit += winnerCredit.get(standing.seat) || 0;
+      standingTotals.mandate += standing.score || 0;
+      standingTotals.rank += index + 1;
+      standingTotals.auditHits += standing.auditHits || 0;
+      standingTotals.forcedNoOps += standing.forcedNoOps || 0;
+      factionStandingTotals[standing.factionId] = standingTotals;
       const actions = factionActionSelections[standing.factionId] || {};
       for (const [actionId, count] of Object.entries(standing.actions || {})) {
         actions[actionId] = (actions[actionId] || 0) + count;
@@ -463,6 +485,29 @@ function outcomeSummary(observations) {
     bindingRequirements,
     mandateSources,
     factionMandateSources,
+    factionStandings: Object.fromEntries(
+      Object.entries(factionStandingTotals).map(([factionId, totals]) => [
+        factionId,
+        {
+          appearances: totals.appearances,
+          winShare: totals.appearances
+            ? totals.winCredit / totals.appearances
+            : 0,
+          meanMandate: totals.appearances
+            ? totals.mandate / totals.appearances
+            : 0,
+          meanRank: totals.appearances
+            ? totals.rank / totals.appearances
+            : 0,
+          meanAuditHits: totals.appearances
+            ? totals.auditHits / totals.appearances
+            : 0,
+          meanForcedNoOps: totals.appearances
+            ? totals.forcedNoOps / totals.appearances
+            : 0
+        }
+      ])
+    ),
     factionAbilityValues,
     factionActionSelections,
     agiFunnel,

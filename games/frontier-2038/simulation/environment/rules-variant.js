@@ -25,6 +25,7 @@ export function canonicalRulesVariant(config) {
     imperialStartingCompute: null,
     imperialScientificMethodCapabilityPenalty: 0,
     imperialScientificMethodThresholdMandatePenalty: 0,
+    imperialScientificMethodScrutiny: 0,
     imperialScientificMethodRunwayCost: 1,
     imperialScientificMethodLifetimeLimit: null,
     verticalStartingCompute: null,
@@ -34,6 +35,10 @@ export function canonicalRulesVariant(config) {
     foundryStartingCompute: config.factionRules.foundry.startingCompute,
     foundryShovelsPerRound: config.factionRules.foundry.shovelsPerRound,
     foundryNewArchitectureCompute: config.factionRules.foundry.newArchitectureCompute,
+    foundryNewArchitectureDemandBaseCompute: null,
+    foundryNewArchitectureComputePerLicense: 0,
+    foundryNewArchitectureMaximumCompute:
+      config.factionRules.foundry.newArchitectureCompute,
     foundryGpuMandateEnabled: true,
     foundryGpuRivalsPerMandate: config.factionRules.foundry.everybodyGpuRivalsPerMandate
   };

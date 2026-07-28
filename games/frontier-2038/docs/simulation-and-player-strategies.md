@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.6` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.7-test`
+**Executable game:** `0.8.7` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.8-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
