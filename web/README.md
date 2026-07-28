@@ -39,6 +39,18 @@ python3 -m http.server 5173
 firebase deploy
 ```
 
+The generated M3T4 2038 review index is published under `/m3t4-2038/`.
+Build and deploy it from `games/frontier-2038`:
+
+```bash
+npm run publish:firebase:deploy
+```
+
+The generated directory is ignored by Git. `robots.txt`, HTML metadata, and
+path-scoped `X-Robots-Tag` headers ask cooperative search and AI crawlers not
+to index, archive, or reuse it. These directives are not access control and
+cannot prevent a hostile scraper from requesting a public URL.
+
 ## License
 
 MIT
