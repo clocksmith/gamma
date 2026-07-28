@@ -181,15 +181,20 @@ def evaluate_online(
     gradient_clip: float,
 ) -> tuple[torch.Tensor, dict[str, torch.Tensor], list[float]]:
     parameters = {
-        name: torch.nn.Parameter(value.to(device=device, dtype=dtype))
+        name: torch.nn.Parameter(value.to(device=device, dtype=dtype).clone())
         for name, value in initial.items()
     }
-    optimizer = torch.optim.Adam(
-        list(parameters.values()),
-        lr=learning_rate,
-        betas=(0.0, 0.9999),
-        eps=1e-8,
-    )
+    beta1 = 0.0
+    beta2 = 0.9999
+    epsilon = 1e-8
+    first_moments = {
+        name: torch.zeros_like(parameter)
+        for name, parameter in parameters.items()
+    }
+    second_moments = {
+        name: torch.zeros_like(parameter)
+        for name, parameter in parameters.items()
+    }
     d_model = parameters["embed"].shape[0]
     memory = torch.zeros(
         memory_length, d_model, device=device, dtype=dtype
@@ -200,7 +205,8 @@ def evaluate_online(
     for start in range(0, len(symbols), segment):
         token = torch.from_numpy(inputs[start : start + segment]).to(device)
         target = torch.from_numpy(symbols[start : start + segment]).to(device)
-        optimizer.zero_grad(set_to_none=True)
+        for parameter in parameters.values():
+            parameter.grad = None
         logits, next_memory = forward_segment(
             parameters,
             token,
@@ -217,8 +223,35 @@ def evaluate_online(
         loss.backward()
         for parameter in parameters.values():
             if parameter.grad is not None:
-                parameter.grad.clamp_(-gradient_clip, gradient_clip)
-        optimizer.step()
+                norm = torch.linalg.vector_norm(parameter.grad)
+                if norm > gradient_clip:
+                    parameter.grad.mul_(gradient_clip / norm)
+        step = start // segment + 1
+        beta1_correction = 1.0 - beta1**step
+        beta2_correction = 1.0 - beta2**step
+        epsilon_squared = (epsilon * beta2_correction**0.5) ** 2
+        step_size = (
+            learning_rate * beta2_correction**0.5 / beta1_correction
+        )
+        with torch.no_grad():
+            for name, parameter in parameters.items():
+                gradient = parameter.grad
+                if gradient is None:
+                    continue
+                first_moments[name].mul_(beta1).add_(
+                    gradient, alpha=1.0 - beta1
+                )
+                second_moments[name].mul_(beta2).addcmul_(
+                    gradient, gradient, value=1.0 - beta2
+                )
+                denominator = torch.sqrt(
+                    second_moments[name] + epsilon_squared
+                )
+                parameter.addcdiv_(
+                    first_moments[name],
+                    denominator,
+                    value=-step_size,
+                )
         memory = next_memory.detach()
     final = {
         name: parameter.detach().float().cpu()
@@ -274,6 +307,11 @@ def main() -> int:
             for name in sorted(final)
         }
     error = (student - teacher).abs()
+    segment_errors = [
+        float(error[start : start + 4].max())
+        for start in range(0, len(symbols), 4)
+    ]
+    frozen_passed = segment_errors[0] <= args.tolerance
     max_parameter_error = (
         max(final_parameter_error.values())
         if final_parameter_error is not None
@@ -294,6 +332,7 @@ def main() -> int:
         "rows": len(symbols),
         "maximum_absolute_probability_error": float(error.max()),
         "mean_absolute_probability_error": float(error.mean()),
+        "segment_maximum_probability_errors": segment_errors,
         "maximum_distribution_sum_error": float(
             (student.sum(dim=-1) - 1).abs().max()
         ),
@@ -303,7 +342,7 @@ def main() -> int:
         "maximum_absolute_parameter_error": max_parameter_error,
         "parameter_maximum_errors": final_parameter_error,
         "claims": {
-            "frozen_minimal_distribution_parity": passed,
+            "frozen_minimal_distribution_parity": frozen_passed,
             "bf16_full_profile_parity": False,
             "online_update_parity": passed and args.online_lr is not None,
             "codec_roundtrip": False,
