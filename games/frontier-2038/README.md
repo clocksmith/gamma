@@ -119,6 +119,16 @@ npm run game:release
 npm run game:release:verify
 ```
 
+After the release commit is pushed, freeze the exact controlled physical kit:
+
+```bash
+npm run physical-kit:freeze
+```
+
+The command refuses a dirty or unpushed source and stamps the rulebook,
+baseline component masters, session templates, and kit manifest with the exact
+rules version, executable reference, and remote source commit.
+
 ## Theme boundary
 
 The canonical player identities in the named parody edition are:

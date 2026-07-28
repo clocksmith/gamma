@@ -1,7 +1,10 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 const projectRoot = resolve(import.meta.dirname, "..");
+const execFileAsync = promisify(execFile);
 
 function argumentsFrom(values) {
   const result = {};
@@ -43,6 +46,12 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
 const current = JSON.parse(
   await readFile(resolve(projectRoot, "versions/current.json"), "utf8")
 );
+const { stdout: sourceCommitOutput } = await execFileAsync(
+  "git",
+  ["rev-parse", "HEAD"],
+  { cwd: projectRoot }
+);
+const sourceCommit = sourceCommitOutput.trim();
 const selectedRelease = current.rulesCandidate || current;
 const manifest = JSON.parse(
   await readFile(resolve(projectRoot, selectedRelease.manifest), "utf8")
@@ -74,6 +83,8 @@ const receipt = {
   playedAt,
   game: {
     version: rulesVersion,
+    executableVersion: current.gameVersion,
+    sourceCommit,
     rulesetFingerprint: rulesFingerprint,
     playtestKitFingerprint: isRulesCandidate
       ? rulesFingerprint
@@ -84,6 +95,9 @@ const receipt = {
   },
   physicalKit: {
     componentRevision: rulesVersion,
+    executableRevision: current.gameVersion,
+    sourceCommit,
+    label: `Rules ${rulesVersion} · Executable ${current.gameVersion} · Source ${sourceCommit.slice(0, 8)}`,
     mixedRevisions: false,
     exceptions: []
   },
@@ -107,6 +121,12 @@ const scores = {
   scoringBySource: []
 };
 const notes = `# ${sessionId}
+
+Rules ${rulesVersion}
+
+Executable reference ${current.gameVersion}
+
+Source commit ${sourceCommit}
 
 ## Players and factions
 

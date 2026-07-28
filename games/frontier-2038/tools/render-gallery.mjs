@@ -16,6 +16,7 @@ const projectRoot = resolve(import.meta.dirname, "..");
 const dataDir = resolve(projectRoot, "data");
 const outDir = resolve(projectRoot, "dist");
 const checkOnly = process.argv.slice(2).includes("--check");
+const baselineOnly = process.argv.slice(2).includes("--baseline");
 
 function escapeHtml(text) {
   return String(text ?? "")
@@ -441,7 +442,7 @@ async function build() {
       readData("reference-cards")
     ]);
 
-  const sections = [
+  const allSections = [
     { id: "factions", label: "Factions", html: buildFactions(factions), n: factions.factions.length },
     { id: "actions", label: "Core Actions", html: buildActions(config), n: config.actions.length },
     { id: "rounds", label: "Eras", html: buildRounds(config), n: config.rounds.length },
@@ -454,6 +455,10 @@ async function build() {
     { id: "objectives", label: "Secret Objectives", html: buildObjectives(objectives), n: objectives.objectives.length },
     { id: "specialists", label: "Reserve Specialists", html: buildSpecialists(specialists), n: specialists.specialists.length }
   ];
+  const deferredIds = new Set(["tactics", "objectives", "specialists"]);
+  const sections = baselineOnly
+    ? allSections.filter((section) => !deferredIds.has(section.id))
+    : allSections;
 
   const total = sections.reduce((sum, s) => sum + s.n, 0);
   const navLinks = sections
@@ -479,7 +484,7 @@ ${navLinks}
 <main>
 <div class="page-head">
 <h1>Content Gallery</h1>
-<p>Every game component with its rendered player-facing text and an art-direction placeholder. Generated from <code>data/*.json</code>; no final art is committed yet.</p>
+<p>Every ${baselineOnly ? "baseline " : ""}game component with its rendered player-facing text and an art-direction placeholder. Generated from <code>data/*.json</code>; no final art is committed yet.</p>
 </div>
 ${sections.map((s) => s.html).join("\n")}
 </main>
@@ -491,23 +496,24 @@ ${sections.map((s) => s.html).join("\n")}
 }
 
 const html = await build();
-const outPath = resolve(outDir, "gallery.html");
+const outName = baselineOnly ? "gallery-baseline.html" : "gallery.html";
+const outPath = resolve(outDir, outName);
 
 if (checkOnly) {
   let actual;
   try {
     actual = await readFile(outPath, "utf8");
   } catch {
-    process.stderr.write("gallery: dist/gallery.html missing. Run npm run gallery:html.\n");
+    process.stderr.write(`gallery: dist/${outName} missing. Run the matching gallery build.\n`);
     process.exit(1);
   }
   if (actual !== html) {
-    process.stderr.write("gallery: dist/gallery.html is stale. Run npm run gallery:html.\n");
+    process.stderr.write(`gallery: dist/${outName} is stale. Run the matching gallery build.\n`);
     process.exit(1);
   }
-  process.stdout.write("gallery: verified dist/gallery.html\n");
+  process.stdout.write(`gallery: verified dist/${outName}\n`);
 } else {
   await mkdir(outDir, { recursive: true });
   await writeFile(outPath, html);
-  process.stdout.write("gallery: rendered dist/gallery.html\n");
+  process.stdout.write(`gallery: rendered dist/${outName}\n`);
 }
