@@ -137,3 +137,8 @@ thresholds places Demis among the leaders at three and four players but below
 the viable band at five, where late thresholds occur more often. The exact
 scalar rule is rejected; a registered follow-up may restore Capability 12's
 second point when four rivals provide broad independent validation.
+
+`demis-peer-validation-v1.json` preregisters that refinement as one structured
+validation schedule. Capability 9 and 12 score one Mandate for Demis; at five
+players only, four rival institutions restore Capability 12's canonical
+second point. The schedule changes no technical output.

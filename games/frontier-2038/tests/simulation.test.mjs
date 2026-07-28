@@ -226,6 +226,38 @@ test("Demis late validation changes Mandate without changing Capability", async 
   );
 });
 
+test("four rival institutions restore Demis's final validation point", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 5,
+      factionId: "imperial_research_lab",
+      seed: "demis-peer-validated-capability",
+      rulesVariant: {
+        imperialLateCapabilityThresholdMandate: {
+          baseMandate: 1,
+          fullValidationCapability: 12,
+          minimumRivalsForFullMandate: 4,
+          fullMandate: 2
+        }
+      }
+    },
+    () => {}
+  );
+  const researcher = match.players[0];
+  const mandateBefore = researcher.mandate;
+  match.addResource(researcher, "capability", 12);
+  assert.equal(researcher.capability, 12);
+  assert.equal(researcher.mandate - mandateBefore, 7);
+  assert.deepEqual(
+    researcher.metrics.factionAbilityValues.late_public_validation,
+    {
+      uses: 1,
+      mandateWithheld: 1,
+      thresholdsValidated: 1
+    }
+  );
+});
+
 test("joint Mega-Cluster acceptance is unavailable after a partner spends its contribution", async () => {
   const { match } = await createInteractiveGame(
     {
@@ -1575,7 +1607,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.10");
+  assert.equal(first.game.version, "0.8.11");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1756,7 +1788,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.10");
+  assert.equal(first.game.version, "0.8.11");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
