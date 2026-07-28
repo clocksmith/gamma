@@ -4,7 +4,7 @@ Date: 2026-07-28
 
 Candidate: `janus_paid_residual_mdl_q0_v1`
 
-Status: `AUTHORIZED_10M`
+Status: `PROVISIONAL_WITNESS_REQUIRES_CORRECTED_Q0`
 
 Score credit: zero
 
@@ -32,11 +32,23 @@ lost 11,586 exact bytes. JANUS therefore passed the predeclared tests that its
 gain exceeds a static calibration and is not reproduced by a temporally
 misaligned residual stream.
 
-## Decision
+## Superseding correction
 
-Authorize exactly one frozen canonical-10M test after producing an exact
-endpoint428 probability trace for that population. Preserve the Q0 architecture,
-training schedule, block length, quantization rule, and controls unchanged.
+The original Q0 compared freshly terminated complete-block substreams, used
+provisional package accounting, did not charge J1 as an independent paid
+candidate, and did not require A/B model and payload identity. Its 4,907-byte
+signal remains useful evidence, but it does not authorize Q1.
+
+The candidate is blocked pending a corrected Q0 with full-stream arithmetic,
+parent payload byte identity, candidate arithmetic decode, WRT/raw inverse
+binding, canonical JMDL1 and JBIAS1 serialization, frozen decoder allowances,
+J1/J2 projected-total selection, and same-machine A/B determinism.
+
+## Prior decision, now withdrawn
+
+The earlier authorization for one frozen canonical-10M test is withdrawn until
+the corrected Q0 passes. The exact 10M endpoint trace remains authorized as
+zero-credit infrastructure because it is independently archive-identity gated.
 
 The 10M gate is:
 
