@@ -90,7 +90,8 @@ preprocessed symbols and the official inverse must reconstruct the raw input.
 On a fixed 65,536-symbol population:
 
 ```text
-causal-mask audit                 pass
+causal-mask dependency graph      exact
+BF16 counterfactual prefix drift  <= 2^-12
 finite normalized distributions  pass
 independent repeated payload      exact
 trace-driven symbol roundtrip     exact

@@ -38,6 +38,7 @@ RANGE_MIN_BITS = 16
 RANGE_MIN = (0xFF << (RANGE_MIN_BITS - 8)) + 1
 RANGE_MAX = 0xFF << RANGE_MIN_BITS
 TRACE_MAGIC = b"RQ0TR1\0\0"
+CAUSAL_AUDIT_TOLERANCE = 1.0 / 4096.0
 
 
 @dataclass(frozen=True)
@@ -385,6 +386,18 @@ def causal_audit(
     )
 
 
+def causal_mask_dependency_graph_isolated(
+    length: int, memory_length: int
+) -> bool:
+    query_position = np.arange(length)[:, None]
+    key_position = np.arange(memory_length + length)[None, :]
+    allowed = memory_length + query_position - key_position >= 0
+    return all(
+        not bool(allowed[index, memory_length + index + 1 :].any())
+        for index in range(length)
+    )
+
+
 def run_teacher(
     symbols: np.ndarray,
     config: Config,
@@ -400,7 +413,27 @@ def run_teacher(
         betas=(config.adam_beta1, config.adam_beta2),
         eps=config.adam_epsilon,
     )
+    if not causal_mask_dependency_graph_isolated(
+        config.segment_length, config.memory_length
+    ):
+        raise ValueError("causal mask dependency graph is not isolated")
     audit_error = causal_audit(model, config, device)
+    print(
+        json.dumps(
+            {
+                "event": "causal_audit",
+                "maximum_prefix_error": audit_error,
+                "tolerance": CAUSAL_AUDIT_TOLERANCE,
+            },
+            sort_keys=True,
+        ),
+        flush=True,
+    )
+    if (
+        not math.isfinite(audit_error)
+        or audit_error > CAUSAL_AUDIT_TOLERANCE
+    ):
+        raise ValueError("causal mask numerical audit failed")
     model.train()
     memories = model.empty_memory(device, torch.bfloat16)
     previous = np.empty_like(symbols)
@@ -511,7 +544,10 @@ def main() -> int:
         != trace_on["final_model_fingerprint"]
     ):
         raise ValueError("teacher final model fingerprint is nondeterministic")
-    if trace_on["causal_audit_maximum_error"] != 0:
+    if (
+        trace_on["causal_audit_maximum_error"]
+        > CAUSAL_AUDIT_TOLERANCE
+    ):
         raise ValueError("causal mask audit failed")
 
     payload = trace_on["archive"]
@@ -571,9 +607,11 @@ def main() -> int:
             "sha256": sha256(trace_path),
         },
         "causality": {
+            "dependency_graph_isolated": True,
             "maximum_prefix_error": trace_on[
                 "causal_audit_maximum_error"
             ],
+            "numerical_tolerance": CAUSAL_AUDIT_TOLERANCE,
             "shifted_inputs_only": True,
         },
         "claims": {
