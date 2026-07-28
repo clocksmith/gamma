@@ -25,6 +25,7 @@ from wrt_exact import parse_store
 
 TRACE_MAGIC = b"RQ0TR1\0\0"
 VOCABULARY = 16392
+PROBABILITY_TOTAL = 1 << 15
 
 
 def read_branch_trace(path: Path):
@@ -55,11 +56,13 @@ def teacher_loss(symbols, branch_probabilities, symbol_count):
             left = active >> 1
             bit = int(symbol >= start + left)
             mass = (
-                65536 - probability_zero if bit else probability_zero
+                PROBABILITY_TOTAL - probability_zero
+                if bit
+                else probability_zero
             )
-            if not 0 < mass < 65536:
+            if not 0 < mass < PROBABILITY_TOTAL:
                 raise ValueError("invalid teacher branch probability")
-            losses -= math.log2(mass / 65536.0)
+            losses -= math.log2(mass / PROBABILITY_TOTAL)
             if bit:
                 start += left
                 active -= left
