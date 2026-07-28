@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "selected-faction-package-gate-confirmation-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "package_interaction",
+  "question": "Does the selected faction-conversion package retain its faction-parity and action-choice improvements when the unified gate directly enforces every available configuration-by-player-count faction-range, diversity, fallback, and forced-no-op bound?",
+  "sourceEvidence": [
+    "selected-faction-conversion-package-v1",
+    "2026-07-28-selected-faction-conversion-package"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/selected-faction-package-gate-confirmation-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "selected_faction_conversion_package",
+      "overlay": {
+        "imperialLateCapabilityThresholdMandate": {
+          "baseMandate": 1,
+          "fullValidationCapability": 12,
+          "minimumRivalsForFullMandate": 4,
+          "fullMandate": 2
+        },
+        "verticalIndustrialVelocityMandate": 1,
+        "foundryNewArchitectureDemandCoupling": {
+          "baseCompute": 0,
+          "computePerLicense": 1,
+          "maximumCompute": 3
+        }
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-selected-faction-package-gate-confirmation-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "requiredChecks": [
+    "candidate faction win-share range at three, four, and five players",
+    "candidate action entropy at three, four, and five players",
+    "candidate opening entropy and top share at three, four, and five players",
+    "candidate winning-path entropy and top share at three, four, and five players",
+    "candidate policy fallbacks and forced-no-op rate at three, four, and five players",
+    "registered and diagnostic dominance",
+    "common-seed focal faction deltas and ability realization"
+  ],
+  "selectionRule": {
+    "factionPackage": "Retain the package selection only if faction ranges remain at or below 0.15 at every supported count, no registered dominance appears, focal effects retain direction, and Build or Research selection does not materially rise.",
+    "overallBalance": "Do not call the game balance-certified unless every enforced candidate check passes and registered precision is reached.",
+    "pathFailure": "A winning-path entropy failure does not authorize an unregistered rule change. It identifies the next diagnostic question; top-share, Mandate-source, action, opening, and classifier details must be inspected before a lever is proposed.",
+    "promotion": "No physical rule changes without a tracked receipt, synchronized immutable candidate, explicit user approval, and controlled physical testing."
+  }
+}

@@ -6,7 +6,10 @@ import {
   empiricalBayesRates,
   intervalCrossesThreshold
 } from "../simulation/statistics/sequential-inference.js";
-import { runUnifiedMatrix } from "../simulation/runner/unified-matrix-runner.js";
+import {
+  configurationOutcomeBalanceChecks,
+  runUnifiedMatrix
+} from "../simulation/runner/unified-matrix-runner.js";
 import { runLlmNegotiationHoldout } from "../simulation/runner/llm-holdout-runner.js";
 import { loadPlayerProfiles } from "../simulation/personas/player-profile.js";
 import { WeightedPlayerPolicy } from "../simulation/policies/weighted-policy.js";
@@ -46,6 +49,52 @@ test("matrix contract declares all seven factors independently", async () => {
   assert.deepEqual(contract.axes.playerCount, [3, 4, 5]);
   assert.equal(contract.playerCountPolicy.balanceAuthority, 4);
   assert.deepEqual(contract.playerCountPolicy.regressionGuards, [3, 5]);
+});
+
+test("unified balance checks enforce faction and diversity bounds per candidate count", () => {
+  const outcomes = {
+    factionStandings: {
+      a: { appearances: 10, winShare: 0.4 },
+      b: { appearances: 10, winShare: 0.2 }
+    },
+    actionDiversity: 0.9,
+    openingDiversity: { entropy: 0.7, topShare: 0.2 },
+    winningPathDiversity: { entropy: 0.5, topShare: 0.51 },
+    policyFallbacks: 0,
+    forcedNoOpRate: 0.01
+  };
+  const checks = configurationOutcomeBalanceChecks({
+    configurationResults: {
+      candidate: {
+        playerCountResults: {
+          4: { outcomes }
+        }
+      }
+    },
+    configurationIds: ["candidate"],
+    playerCounts: [4],
+    thresholds: {
+      factionWinShareRangeMax: 0.15,
+      actionEntropyMin: 0.72,
+      openingEntropyMin: 0.65,
+      openingTopShareMax: 0.3,
+      winningPathEntropyMin: 0.6,
+      winningPathTopShareMax: 0.55,
+      policyFallbacksMax: 0,
+      forcedNoOpRateMax: 0.03
+    }
+  });
+  assert.equal(checks.length, 8);
+  assert.deepEqual(
+    checks.filter((entry) => !entry.passed).map((entry) => entry.id),
+    [
+      "candidate:p4:faction_win_share_range",
+      "candidate:p4:winning_path_entropy"
+    ]
+  );
+  assert.ok(checks.every((entry) =>
+    entry.configurationId === "candidate" && entry.playerCount === 4
+  ));
 });
 
 test("unified matrix rotates homogeneous and alternating backend regimes and never auto-promotes", async () => {
@@ -240,6 +289,15 @@ test("package interaction matrices require and record multiple selected levers",
     report.rulesComparisons[0].interpretation,
     /interaction of independently selected levers/
   );
+  assert.ok(report.balanceEvaluation.checks.some((entry) =>
+    entry.id === "selected_package:p4:faction_win_share_range"
+  ));
+  assert.ok(report.balanceEvaluation.checks.some((entry) =>
+    entry.id === "selected_package:p4:winning_path_entropy"
+  ));
+  assert.ok(report.balanceEvaluation.checks.every((entry) =>
+    !entry.configurationId || entry.configurationId !== "canonical"
+  ));
 });
 
 test("unified matrix fingerprints and executes evolved profile overrides", async () => {

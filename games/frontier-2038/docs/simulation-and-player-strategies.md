@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.13` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.14-test`
+**Executable game:** `0.8.14` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.15-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -149,6 +149,13 @@ npm run simulate:audit -- \
 This mode requires exactly one empty canonical baseline and one package
 candidate containing at least two levers. Reports label the result as package
 interaction evidence, never as a new causal one-lever effect.
+
+The unified balance gate evaluates the candidate separately at three, four,
+and five players. Each count publishes and enforces faction win-share range,
+action entropy, opening entropy and top share, winning-path entropy and top
+share, policy fallbacks, and forced-no-op rate. The report cannot pass merely
+because dominance intervals look acceptable while a declared diversity bound
+is failing.
 
 ## Paired faction diagnostics
 
