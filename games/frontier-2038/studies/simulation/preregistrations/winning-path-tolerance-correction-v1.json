@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "winning-path-tolerance-correction-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "package_interaction",
+  "question": "Does the selected four-lever package satisfy the unchanged balance contract when the winning-path diagnostic recognizes top lanes within one action/resource point as a stable hybrid rather than requiring an exact tie?",
+  "sourceEvidence": [
+    "winning-path-margin-validity-v1",
+    "2026-07-28-winning-path-margin-validity"
+  ],
+  "diagnosticCorrection": {
+    "id": "lane-margin-v1",
+    "hybridMargin": 1,
+    "rationale": "One lane-score point equals one Core Action, Customer, Facility, or comparable end-state unit. The preregistered margin study found 56.70% of five-player package winner credit within this distance while the former exact-tie classifier recognized only 19.08%."
+  },
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/winning-path-tolerance-correction-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "selected_faction_late_customer_package",
+      "overlay": {
+        "imperialLateCapabilityThresholdMandate": {
+          "baseMandate": 1,
+          "fullValidationCapability": 12,
+          "minimumRivalsForFullMandate": 4,
+          "fullMandate": 2
+        },
+        "verticalIndustrialVelocityMandate": 1,
+        "foundryNewArchitectureDemandCoupling": {
+          "baseCompute": 0,
+          "computePerLicense": 1,
+          "maximumCompute": 3
+        },
+        "customerMandateSchedule": {
+          "baseMandate": 2,
+          "lateFromCustomer": 4,
+          "lateMandate": 1
+        }
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-winning-path-tolerance-correction-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "requiredDiagnostics": [
+    "classifier id and hybrid margin",
+    "faction range at every supported count",
+    "action, opening, and corrected winning-path diversity",
+    "winner share and attribution by corrected path",
+    "margin telemetry by primary lane and persona",
+    "dominance, pairwise cycles, integrity, fallbacks, and forced no-ops"
+  ],
+  "selectionRule": {
+    "eligiblePackage": "The candidate must pass every existing configuration-by-player-count balance check under the registered classifier, preserve all six factions and authored personas, and introduce no dominance or integrity failure.",
+    "rejectPackage": "Any supported-count failure leaves the package unselected. Do not change the threshold, hybrid margin, or physical rules after observing this run.",
+    "interpretation": "This validates a diagnostic correction and a package interaction together. It is not new causal evidence for a physical lever.",
+    "physicalBoundary": "Even a full simulated pass requires explicit user approval and controlled physical play."
+  },
+  "surfaceAudit": {
+    "canonicalRulebook": "no physical rule change",
+    "semanticGraph": "no player-facing change",
+    "machineData": "engine identity only",
+    "simulator": "single shared winning-path classifier used by Monte Carlo and unified audit",
+    "browserPrototype": "no gameplay change",
+    "referenceAids": "no change",
+    "tests": "one-point hybrid, clear leader, and AGI paths covered",
+    "playtestDocumentation": "no change before candidate selection"
+  }
+}
