@@ -530,6 +530,7 @@ function outcomeSummary(observations) {
   const actionCounts = {};
   const openingCounts = {};
   const winningPathCounts = {};
+  const winningPathAttributionTotals = {};
   const bindingRequirements = {};
   const agiFunnel = {
     playerOpportunities: 0,
@@ -609,11 +610,50 @@ function outcomeSummary(observations) {
         (standing.openingActions || []).join("→") || "none"
       );
       if (winnerCredit.has(standing.seat)) {
+        const credit = winnerCredit.get(standing.seat);
+        const pathId = winningPath(standing);
         increment(
           winningPathCounts,
-          winningPath(standing),
-          winnerCredit.get(standing.seat)
+          pathId,
+          credit
         );
+        const path = winningPathAttributionTotals[pathId] || {
+          winCredit: 0,
+          mandate: 0,
+          capability: 0,
+          facilities: 0,
+          customers: 0,
+          trust: 0,
+          agiDeclarations: 0,
+          actionSelections: {},
+          mandateSources: {},
+          factions: {},
+          profiles: {},
+          backends: {},
+          worldEndings: {}
+        };
+        path.winCredit += credit;
+        path.mandate += (standing.score || 0) * credit;
+        path.capability += (standing.capability || 0) * credit;
+        path.facilities += (standing.facilities || 0) * credit;
+        path.customers += (standing.customers || 0) * credit;
+        path.trust += (standing.trust || 0) * credit;
+        path.agiDeclarations += Number(standing.agiDeclared) * credit;
+        for (const [actionId, count] of Object.entries(standing.actions || {})) {
+          increment(path.actionSelections, actionId, count * credit);
+        }
+        for (const event of standing.mandateEvents || []) {
+          increment(
+            path.mandateSources,
+            event.source || "unknown",
+            (event.points || 0) * credit
+          );
+        }
+        increment(path.factions, standing.factionId, credit);
+        increment(path.profiles, standing.profileId, credit);
+        increment(path.backends, standing.backendId, credit);
+        increment(path.worldEndings, observation.worldEndingId || "unknown", credit);
+        winningPathAttributionTotals[pathId] = path;
       }
       const faction = factionAbilityValues[standing.factionId] || {};
       for (const [abilityId, values] of Object.entries(
@@ -661,6 +701,37 @@ function outcomeSummary(observations) {
       }
     ])
   );
+  const totalWinCredit = Object.values(winningPathAttributionTotals)
+    .reduce((sum, path) => sum + path.winCredit, 0);
+  const winningPathAttribution = Object.fromEntries(
+    Object.entries(winningPathAttributionTotals).map(([pathId, totals]) => [
+      pathId,
+      {
+        wins: totals.winCredit,
+        share: totalWinCredit ? totals.winCredit / totalWinCredit : 0,
+        meanMandate: totals.winCredit ? totals.mandate / totals.winCredit : 0,
+        meanCapability: totals.winCredit
+          ? totals.capability / totals.winCredit
+          : 0,
+        meanFacilities: totals.winCredit
+          ? totals.facilities / totals.winCredit
+          : 0,
+        meanCustomers: totals.winCredit
+          ? totals.customers / totals.winCredit
+          : 0,
+        meanTrust: totals.winCredit ? totals.trust / totals.winCredit : 0,
+        agiDeclarationRate: totals.winCredit
+          ? totals.agiDeclarations / totals.winCredit
+          : 0,
+        actionSelections: totals.actionSelections,
+        mandateSources: totals.mandateSources,
+        factions: totals.factions,
+        profiles: totals.profiles,
+        backends: totals.backends,
+        worldEndings: totals.worldEndings
+      }
+    ])
+  );
   return {
     matches: observations.length,
     declarationRate: observations.length ? declarations / observations.length : 0,
@@ -672,6 +743,7 @@ function outcomeSummary(observations) {
     actionDiversity: normalizedEntropy(actionCounts),
     openingDiversity: concentration(openingCounts),
     winningPathDiversity: concentration(winningPathCounts),
+    winningPathAttribution,
     factionWinShareRange: range(
       Object.values(factionStandings).map((standing) => standing.winShare)
     ),

@@ -139,6 +139,30 @@ test("unified matrix rotates homogeneous and alternating backend regimes and nev
   assert.ok(report.playerCountResults[4].outcomes.actionDiversity > 0);
   assert.ok(report.playerCountResults[4].outcomes.openingDiversity.observed > 1);
   assert.ok(report.playerCountResults[4].outcomes.winningPathDiversity.observed > 1);
+  const pathAttribution =
+    report.playerCountResults[4].outcomes.winningPathAttribution;
+  assert.deepEqual(
+    new Set(Object.keys(pathAttribution)),
+    new Set(Object.keys(
+      report.playerCountResults[4].outcomes.winningPathDiversity.counts
+    ))
+  );
+  assert.ok(Object.values(pathAttribution).every((path) =>
+    path.wins > 0 &&
+    Number.isFinite(path.meanMandate) &&
+    typeof path.mandateSources === "object" &&
+    typeof path.actionSelections === "object" &&
+    typeof path.factions === "object" &&
+    typeof path.profiles === "object"
+  ));
+  assert.ok(
+    Math.abs(
+      Object.values(pathAttribution).reduce(
+        (sum, path) => sum + path.share,
+        0
+      ) - 1
+    ) < 1e-9
+  );
   assert.equal(
     report.playerCountResults[4].outcomes.agiFunnel.playerOpportunities,
     36 * 4
