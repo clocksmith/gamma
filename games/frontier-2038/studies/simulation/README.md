@@ -220,3 +220,17 @@ decision backend. It rejects a universal Dario nerf or Sam buff, but invalidates
 ability-level attribution because the three Safety Laboratory programs were
 not publishing realized values. The engine correction adds that telemetry and
 requires a fresh-seed restart before any physical-rule proposal.
+
+The dated
+[`residual faction parity restart`](2026-07-28-residual-faction-parity-restart.md)
+records the corrected 6,400-game fresh-seed result. Dario again reverses
+direction between weighted and greedy backends, while negotiation-aware Sam is
+approximately neutral against Mark. Corrected ability values confirm that the
+effects were active but do not reveal a universal faction lever. No printed
+faction correction is nominated.
+
+The dated
+[`residual parity telemetry release`](2026-07-28-residual-parity-telemetry-release.md)
+promotes that instrumentation as executable `0.8.20` and physical candidate
+`0.5.0-rc.21-test`. The physical mechanics remain identical to the approved
+four-lever package.
