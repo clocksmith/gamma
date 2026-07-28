@@ -139,6 +139,14 @@ test("unified matrix rotates homogeneous and alternating backend regimes and nev
   assert.ok(report.playerCountResults[4].outcomes.actionDiversity > 0);
   assert.ok(report.playerCountResults[4].outcomes.openingDiversity.observed > 1);
   assert.ok(report.playerCountResults[4].outcomes.winningPathDiversity.observed > 1);
+  const pathMargins = report.playerCountResults[4].outcomes.winningPathMargins;
+  assert.equal(pathMargins.wins, report.playerCountResults[4].matches);
+  assert.ok(pathMargins.meanGap >= 0);
+  assert.ok(pathMargins.exactTieShare <= pathMargins.withinHalfPointShare);
+  assert.ok(pathMargins.withinHalfPointShare <= pathMargins.withinOnePointShare);
+  assert.ok(pathMargins.withinOnePointShare <= pathMargins.withinTwoPointsShare);
+  assert.ok(Object.keys(pathMargins.primarySecondary).length > 1);
+  assert.ok(Object.hasOwn(pathMargins.byProfile, "trust_governor"));
   const pathAttribution =
     report.playerCountResults[4].outcomes.winningPathAttribution;
   assert.deepEqual(
