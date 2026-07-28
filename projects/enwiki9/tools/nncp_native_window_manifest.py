@@ -55,18 +55,23 @@ def parse_window(value: str) -> tuple[str, int, int, bool]:
     return window_id, start, end, mature
 
 
-def exact_cut(trace: np.memmap, raw_offset: int) -> int:
+def resolve_cut(
+    trace: np.memmap, raw_offset: int, direction: str
+) -> tuple[int, int, bool]:
     starts = trace["raw_start"]
     ends = trace["raw_end"]
-    crossing = np.flatnonzero((starts < raw_offset) & (ends > raw_offset))
-    if crossing.size:
-        raise ValueError(
-            f"raw boundary {raw_offset} crosses symbol row {int(crossing[0])}"
-        )
+    cut = int(np.searchsorted(starts, raw_offset, side="left"))
+    crossing = cut - 1
+    if crossing >= 0 and int(ends[crossing]) > raw_offset:
+        if direction == "floor":
+            return crossing, int(starts[crossing]), True
+        if direction == "ceil":
+            return crossing + 1, int(ends[crossing]), True
+        raise ValueError("direction must be floor or ceil")
     # A symbol belongs to the prefix exactly when it begins before the raw cut.
     # This includes zero-output controls preceding an output symbol in the
     # prefix and excludes zero-output controls at the start of the future side.
-    return int(np.searchsorted(starts, raw_offset, side="left"))
+    return cut, raw_offset, False
 
 
 def artifact_from_receipt(
@@ -148,8 +153,12 @@ def main() -> int:
         if window_id in seen_ids:
             raise ValueError("duplicate window ID")
         seen_ids.add(window_id)
-        symbol_start = exact_cut(trace, raw_start)
-        symbol_end = exact_cut(trace, raw_end)
+        symbol_start, actual_raw_start, start_snapped = resolve_cut(
+            trace, raw_start, "ceil"
+        )
+        symbol_end, actual_raw_end, end_snapped = resolve_cut(
+            trace, raw_end, "floor"
+        )
         if symbol_end <= symbol_start:
             raise ValueError(f"{window_id}: empty symbol interval")
         if symbol_start:
@@ -159,8 +168,13 @@ def main() -> int:
         manifest_windows.append(
             {
                 "mature": mature,
-                "raw_end": raw_end,
-                "raw_start": raw_start,
+                "raw_end": actual_raw_end,
+                "raw_start": actual_raw_start,
+                "requested_raw_end": raw_end,
+                "requested_raw_start": raw_start,
+                "snap_policy": "inward_to_complete_symbol_intervals",
+                "start_snapped": start_snapped,
+                "end_snapped": end_snapped,
                 "symbol_end": symbol_end,
                 "symbol_start": symbol_start,
                 "window_id": window_id,

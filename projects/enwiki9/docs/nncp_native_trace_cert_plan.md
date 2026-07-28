@@ -89,12 +89,14 @@ The conversion tool is:
 tools/nncp_native_window_manifest.py
 ```
 
-It accepts only a passing, hash-bound map receipt. A raw boundary is legal only
-when no symbol interval crosses it. The completed-symbol cut includes symbols
-whose raw start is strictly before the boundary; this includes zero-output
-controls belonging to a prefix event and excludes zero-output controls at the
-start of the future side. The output supplies the exact `--full-windows` and
-`--checkpoints` arguments for the native runner.
+It accepts only a passing, hash-bound map receipt. An exact raw cut includes
+symbols whose raw start is strictly before the boundary; this includes
+zero-output controls belonging to a prefix event and excludes zero-output
+controls at the start of the future side. When a requested boundary crosses a
+multi-byte dictionary symbol, the window is snapped inward: starts move to the
+end of the crossing symbol and ends move to its start. The manifest records
+both requested and actual raw bounds. The output supplies the exact
+`--full-windows` and `--checkpoints` arguments for the native runner.
 
 The existing opening-1M map proves the mapping machinery but cannot bind mature
 windows or the published teacher because it uses an opening-scope dictionary.
@@ -115,6 +117,11 @@ raw roundtrip and gapless map, and emits the frozen trace-window manifest. Its
 large transformed stream and map remain external artifacts; only receipts and
 hashes are tracked. This is a reversible preprocessing certificate with zero
 score credit, not a full-corpus compression attempt.
+
+If preprocessing, inverse reconstruction, and map verification pass but
+manifest construction fails, the hash-bound map may be finalized without
+repeating preprocessing through
+`tools/finalize_nncp_full_symbol_map_gate.py`.
 
 The executable unified patch is
 `patches/nncp_symbol_raw_map_v2.patch`. The historical v1 artifact is retained
