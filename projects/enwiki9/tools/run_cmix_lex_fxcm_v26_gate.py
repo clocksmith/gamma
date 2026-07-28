@@ -19,6 +19,9 @@ GAMMA_PARENT_ARCHIVE_BYTES = 45_178
 PROMOTION_CEILING_BYTES = 44_678
 GUARD_KIB = 10_485_760
 OFFICIAL_DECIMAL_LIMIT_KIB = 9_765_625
+LOCAL_CLANG_ROOT = Path(
+    "/home/x/enwiki9-nonproof/toolchains/clang17/root"
+)
 
 
 def sha256(path: Path) -> str:
@@ -117,9 +120,29 @@ def main() -> int:
             ignore=shutil.ignore_patterns(".git", "run", "pgo_data", "*.o", "cmix"),
         )
         build_started = time.monotonic()
-        compiler = shutil.which("clang++-17") or shutil.which("clang++")
+        local_compiler = LOCAL_CLANG_ROOT / "usr/lib/llvm-17/bin/clang++"
+        compiler = (
+            shutil.which("clang++-17")
+            or (
+                str(local_compiler)
+                if local_compiler.is_file()
+                else None
+            )
+            or shutil.which("clang++")
+        )
         if compiler is None:
             raise FileNotFoundError("clang++-17 or clang++ is required")
+        build_env = os.environ.copy()
+        local_library = (
+            LOCAL_CLANG_ROOT / "usr/lib/x86_64-linux-gnu"
+        )
+        if compiler == str(local_compiler):
+            prior = build_env.get("LD_LIBRARY_PATH")
+            build_env["LD_LIBRARY_PATH"] = (
+                str(local_library)
+                if not prior
+                else f"{local_library}:{prior}"
+            )
         subprocess.run(
             [
                 "make",
@@ -132,6 +155,7 @@ def main() -> int:
             check=True,
             stdout=(args.result_dir / "build.log").open("wb"),
             stderr=subprocess.STDOUT,
+            env=build_env,
         )
         build_seconds = time.monotonic() - build_started
         binary = build / "cmix"
