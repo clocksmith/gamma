@@ -87,6 +87,9 @@ test("unified matrix rotates homogeneous and alternating backend regimes and nev
     typeof report.playerCountResults[4].outcomes.factionAbilityValues,
     "object"
   );
+  assert.ok(report.playerCountResults[4].outcomes.actionDiversity > 0);
+  assert.ok(report.playerCountResults[4].outcomes.openingDiversity.observed > 1);
+  assert.ok(report.playerCountResults[4].outcomes.winningPathDiversity.observed > 1);
   assert.equal(
     report.playerCountResults[4].outcomes.agiFunnel.playerOpportunities,
     36 * 4
