@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.11` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.12-test`
+**Executable game:** `0.8.12` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.13-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -135,6 +135,20 @@ npm run simulate:audit -- \
 Every noncanonical configuration must change exactly one overlay field.
 Common seeds and the same matrix design keep the comparison controlled. No
 result edits the content graph or rulebook automatically.
+
+After every included lever has an independent one-lever receipt, a
+preregistered interaction audit may combine them:
+
+```bash
+npm run simulate:audit -- \
+  --comparison-kind package_interaction \
+  --rules-configurations studies/simulation/preregistrations/selected-package-rules.json \
+  --pre-registration-id selected-package-v1
+```
+
+This mode requires exactly one empty canonical baseline and one package
+candidate containing at least two levers. Reports label the result as package
+interaction evidence, never as a new causal one-lever effect.
 
 ## Paired faction diagnostics
 

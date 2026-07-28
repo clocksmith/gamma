@@ -149,3 +149,9 @@ receipt selects that schedule for combined-package confirmation. It moves
 Demis to `42.38%`, `26.82%`, and `19.20%` partially pooled win share at three,
 four, and five players while preserving Research and Capability realization.
 It is not yet a physical rule.
+
+`selected-faction-conversion-package-v1.json` preregisters the first
+package-interaction audit. It combines only three independently evidenced
+levers: Demis peer validation, Elon realized Industrial Velocity Mandate, and
+Jensen license-only New Architecture allocation. The runner records this as an
+interaction validation rather than a one-lever causal probe.
