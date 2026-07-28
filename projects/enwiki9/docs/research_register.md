@@ -2953,3 +2953,7 @@ Evidence:
 - `run_logs/adaptive/20260728T181952Z_25a6792fcc.log`
 - `run_logs/adaptive/20260728T183043Z_8ef13361c2.log`
 - `run_logs/adaptive/20260728T183258Z_87935039fe.log`
+
+## 2026-07-28 - CHIRON frozen causal residual Q0 - REJECTED
+
+The receipt-bound endpoint428 trace replayed exactly at 173,859 payload bytes. The fixed 143,711-parameter, 256-WRT-byte-reset GRU residual then regressed from 25,593 to 25,602 bytes on chronological development and from 23,417 to 23,424 bytes on holdout. The node-bias and circular-shift controls also regressed. CHIRON's gross holdout rate was -46.534 B/M; after the provisional 147,056-byte package charge it was -193.590 B/M, versus the predeclared +2,100 B/M authorization gate. The lane receives zero score credit. No integer decoder, native integration, distant transfer, or width/depth/context/precision/optimizer/epoch sweep is authorized. See `docs/chiron_frozen_residual_lm_decision.md`.

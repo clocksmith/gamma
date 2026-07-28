@@ -1,6 +1,6 @@
 # CHIRON Frozen Residual LM Plan
 
-Status: predeclared bounded oracle
+Status: terminal rejection
 
 Score credit: zero until a deterministic integer decoder is integrated and exact
 native replay passes.
@@ -122,3 +122,26 @@ A negative Q0 closes compact frozen recurrent correction trained directly on
 endpoint428 residuals at this information scale. It does not reopen online NNCP,
 LibNC reproduction, page prompts, component routing, static residual hashes, or
 teacher-hidden-state transfer.
+
+## Terminal result
+
+Job `20260728T185712Z_43dab2487d` completed the fixed Q0 experiment.
+
+```text
+complete parent replay          173,859 bytes, exact
+development baseline             25,593 bytes
+development CHIRON               25,602 bytes
+development gain                     -9 bytes
+holdout baseline                 23,417 bytes
+holdout CHIRON                   23,424 bytes
+holdout gain                         -7 bytes
+node-bias holdout gain              -61 bytes
+shift-null holdout gain             -46 bytes
+gross holdout rate               -46.534 B/M
+provisional package             147,056 bytes
+net holdout rate                -193.590 B/M
+```
+
+The exact parent identity gate passed. Development, gross-rate, and net-rate
+gates failed. CHIRON is rejected with zero score credit. Q1 is not authorized,
+and no architecture or training sweep is permitted.
