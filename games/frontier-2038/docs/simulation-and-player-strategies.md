@@ -157,6 +157,25 @@ share, policy fallbacks, and forced-no-op rate. The report cannot pass merely
 because dominance intervals look acceptable while a declared diversity bound
 is failing.
 
+## Winning-path classifier
+
+Monte Carlo and the unified audit share
+`simulation/balance/winning-path.js`. The `lane-margin-v1` contract derives
+Research, Adoption, Infrastructure, and Legitimacy signals from the winner's
+action selections and final state. AGI declaration remains a distinct path.
+
+When the leading two lane scores finish within one point, the result is a
+hybrid. One point represents one action, Customer, Facility, or comparable
+end-state unit. Hybrid names use one canonical lane order, so
+Research–Adoption cannot fragment into a separate Adoption–Research label.
+
+This is evidence classification, not a gameplay rule and not an excuse to
+raise diversity mechanically. The one-point margin was preregistered after a
+validity study showed that an exact-tie classifier hid materially mixed
+winning engines. Reports publish the classifier id, margin, lane gaps, and
+primary-to-secondary attribution so a later change cannot silently rewrite
+historical path evidence.
+
 ## Paired faction diagnostics
 
 ```bash
