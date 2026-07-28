@@ -1,7 +1,8 @@
 # M3T4 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.19-test`
-**First cohort:** controlled four-player physical test
+**Rules under review:** `0.5.0-rc.20-test`
+**First cohort:** controlled four-player physical test with Demis Hassabis,
+Elon Musk, Jensen Huang, and Mark Zuckerberg
 
 This document owns the test protocol, evidence labels, version identity, and
 comparison rules. It combines the former playtest plan and versioning guide so
@@ -60,6 +61,13 @@ Current selected automated evidence:
 - [`Final homogeneous-backend balance screen`](../studies/simulation/2026-07-27-final-homogeneous-backend-screen.md):
   records the corrected 11,920-match canonical matrix, its zero registered
   homogeneous-dominance cells, residual diagnostics, and final rules freeze.
+- [`Winning-path tolerance confirmation`](../studies/simulation/2026-07-28-winning-path-tolerance-confirmation.md):
+  owns the registered four-lever package, its passed bounds, its
+  `inconclusive_precision_not_reached` limit, and the evidence used for the
+  controlled physical-test promotion.
+- [`Four-lever package promotion`](../studies/simulation/2026-07-28-four-lever-package-promotion.md):
+  records explicit approval, exact promoted surfaces, frozen non-target
+  numbers, and the immutable candidate identity.
 
 ## Exact identity
 
@@ -95,13 +103,13 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.19-test`. Executable
-game `0.8.18` implements it under `three-to-five-grid-ready-v1`. New automated reports
+`docs/core-rules.md` is a review draft at `0.5.0-rc.20-test`. Executable
+game `0.8.19` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.
 
-Executable `0.8.18` retains write-only decision capture and paired read-only
+Executable `0.8.19` retains write-only decision capture and paired read-only
 replay to the provider boundary, revalidates joint Mega-Cluster contributions
 at acceptance, and applies Foundry’s Shovels royalty after any selected Core,
 Wild, or Faction Action that spends at least two Compute. The rc.18 candidate
@@ -114,11 +122,12 @@ records the complete AGI funnel, realized faction-ability values, and
 common-seed focal-faction swaps under separately fingerprinted experiment
 configurations.
 
-Candidate `0.5.0-rc.19-test` and executable `0.8.18` select three to five
+Candidate `0.5.0-rc.20-test` and executable `0.8.19` retain three to five
 players, establish four as the balance authority, and make three/five
-regression coverage mandatory. They do not change any faction, action,
-resource, Headline, infrastructure, Grid-Ready, Realignment, scoring, or
-ending value.
+regression coverage mandatory. They canonically promote Peer Validation,
+Industrial Velocity’s realized-discount Mandate, demand-coupled New
+Architecture, and diminishing Customer recognition. Every unrelated numerical
+rule remains frozen.
 
 The exact `0.6.2` unified matrix raised a credible six-player
 Foundry×greedy interaction, but a follow-up weighted diagnostic exposed two
@@ -153,11 +162,13 @@ can make old reports readable; they cannot make them experimentally equivalent.
 
 ## Test order
 
-1. Controlled four-player physical test.
+1. Controlled four-player physical test with Demis Hassabis, Elon Musk,
+   Jensen Huang, and Mark Zuckerberg.
 2. Facilitated four-player tests until setup and rule ambiguities stabilize.
 3. Four-player blind test.
 4. Three-player negotiation, scarcity, and faction-omission test.
-5. Five-player congestion, negotiation, downtime, and faction-omission test.
+5. Five-player congestion, negotiation, downtime, faction-omission, and Demis
+   Capability-twelve Peer Validation regression.
 6. Repeat three- and five-player blind tests after every selected four-player
    balance change.
 
@@ -190,6 +201,8 @@ older executables only.
 - crash and protection source;
 - separate Demis Hassabis, Research-campus, and all-other Research cohorts;
 - Customers and Capability after every round;
+- each Customer’s immediate Mandate award and continuing Production income;
+- Demis’s Capability-nine and Capability-twelve Peer Validation awards;
 - earliest grid-ready AGI eligibility and every declaration.
 
 ### Infrastructure and negotiation
@@ -222,6 +235,10 @@ older executables only.
 - Trust and Mandate changes with causes;
 - Mark Zuckerberg’s lead after every Production;
 - Jensen Huang’s Shovels income;
+- every New Architecture offer, acceptance, rival benefit, and Jensen
+  self-Compute gain;
+- every Industrial Velocity discount, whether it reduced the final paid cost
+  of a completed Facility, and any Mandate awarded;
 - Round Mandate qualification and result;
 - final institutional winner and shared World Ending.
 

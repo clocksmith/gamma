@@ -115,6 +115,14 @@ ${a.artDirection ? `<p class="art-brief inline"><span>Art</span>${escapeHtml(a.a
 </div>`
         )
         .join("");
+      const scoringRule = f.scoringRule
+        ? `<div class="ability scoring-contract">
+<div class="ability-head"><strong>${escapeHtml(f.scoringRule.name)}</strong>${badges(["scoring contract", timingBadge(f.scoringRule.timing)])}</div>
+<p class="rules">${escapeHtml(f.scoringRule.text)}</p>
+${f.scoringRule.flavorText ? `<p class="flavor">${escapeHtml(f.scoringRule.flavorText)}</p>` : ""}
+${f.scoringRule.artDirection ? `<p class="art-brief inline"><span>Art</span>${escapeHtml(f.scoringRule.artDirection)}</p>` : ""}
+</div>`
+        : "";
       const body = `${f.motto ? `<p class="flavor motto">“${escapeHtml(f.motto)}”</p>` : ""}
 ${textRows([
         { label: "Promise", text: f.publicPromise },
@@ -122,6 +130,7 @@ ${textRows([
         { text: f.introduction }
       ])}
 ${stats}
+${scoringRule}
 <div class="abilities"><span class="field-label">Abilities</span>${abilities}</div>`;
       return card({
         accent: f.color,

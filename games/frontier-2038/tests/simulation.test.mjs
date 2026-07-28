@@ -32,6 +32,9 @@ import { declarationReadiness } from "../simulation/rules/declaration-readiness.
 import {
   causallyNecessaryImportSuppliers
 } from "../simulation/environment/selected-rules-match.js";
+import {
+  legacyPrePromotionRulesOverlay
+} from "../simulation/environment/rules-variant.js";
 import { loadBalanceContract } from "../simulation/balance/balance-contract.js";
 import { runBalanceAudit } from "../simulation/runner/balance-audit-runner.js";
 import { runFactionSwapDiagnostic } from "../simulation/runner/faction-swap-runner.js";
@@ -206,8 +209,7 @@ test("Demis late validation changes Mandate without changing Capability", async 
     {
       playerCount: 3,
       factionId: "imperial_research_lab",
-      seed: "demis-late-public-validation",
-      rulesVariant: { imperialLateCapabilityThresholdMandate: 1 }
+      seed: "demis-late-public-validation"
     },
     () => {}
   );
@@ -231,15 +233,7 @@ test("four rival institutions restore Demis's final validation point", async () 
     {
       playerCount: 5,
       factionId: "imperial_research_lab",
-      seed: "demis-peer-validated-capability",
-      rulesVariant: {
-        imperialLateCapabilityThresholdMandate: {
-          baseMandate: 1,
-          fullValidationCapability: 12,
-          minimumRivalsForFullMandate: 4,
-          fullMandate: 2
-        }
-      }
+      seed: "demis-peer-validated-capability"
     },
     () => {}
   );
@@ -255,6 +249,33 @@ test("four rival institutions restore Demis's final validation point", async () 
       mandateWithheld: 1,
       thresholdsValidated: 1
     }
+  );
+});
+
+test("Demis Peer Validation remains reduced at four players", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 4,
+      factionId: "imperial_research_lab",
+      seed: "demis-four-player-peer-validation"
+    },
+    () => {}
+  );
+  const researcher = match.players[0];
+  const mandateBefore = researcher.mandate;
+  match.addResource(researcher, "capability", 12);
+  assert.equal(researcher.capability, 12);
+  assert.equal(researcher.mandate - mandateBefore, 6);
+  assert.deepEqual(
+    researcher.mandateAwards
+      .filter((award) => award.id.startsWith("capability-"))
+      .map((award) => [award.id, award.points]),
+    [
+      ["capability-3", 2],
+      ["capability-6", 2],
+      ["capability-9", 1],
+      ["capability-12", 1]
+    ]
   );
 });
 
@@ -431,7 +452,7 @@ test("Customer Mandate is an explicit one-lever rules variant", async () => {
   assert.equal(probe.match.players[0].mandate, 3);
 });
 
-test("late Customer recognition changes only the fourth and fifth Customer awards", async () => {
+test("canonical Customer recognition diminishes only for the fourth and fifth Customer", async () => {
   const canonical = await createInteractiveGame(
     {
       playerCount: 3,
@@ -453,42 +474,36 @@ test("late Customer recognition changes only the fourth and fifth Customer award
       ["customer-1", 2],
       ["customer-2", 2],
       ["customer-3", 2],
-      ["customer-4", 2],
-      ["customer-5", 2]
+      ["customer-4", 1],
+      ["customer-5", 1]
     ]
   );
 
-  const probe = await createInteractiveGame(
+  const legacy = await createInteractiveGame(
     {
       playerCount: 3,
       factionId: "platform_empire",
-      seed: "customer-mandate-schedule-probe",
-      rulesVariant: {
-        customerMandateSchedule: {
-          baseMandate: 2,
-          lateFromCustomer: 4,
-          lateMandate: 1
-        }
-      }
+      seed: "customer-mandate-schedule-legacy",
+      rulesVariant: legacyPrePromotionRulesOverlay
     },
     () => {}
   );
-  probe.match.players[0].customers = 5;
-  probe.match.synchronizePublicMandate(probe.match.players[0], "fixture");
+  legacy.match.players[0].customers = 5;
+  legacy.match.synchronizePublicMandate(legacy.match.players[0], "fixture");
   assert.deepEqual(
-    probe.match.players[0].mandateAwards
+    legacy.match.players[0].mandateAwards
       .filter((award) => award.id.startsWith("customer-"))
       .map((award) => [award.id, award.points]),
     [
       ["customer-1", 2],
       ["customer-2", 2],
       ["customer-3", 2],
-      ["customer-4", 1],
-      ["customer-5", 1]
+      ["customer-4", 2],
+      ["customer-5", 2]
     ]
   );
-  assert.equal(probe.match.players[0].customers, 5);
-  assert.equal(probe.match.players[0].runway, 4);
+  assert.equal(canonical.match.players[0].customers, 5);
+  assert.equal(canonical.match.players[0].runway, 4);
 });
 
 test("faction starting Compute probes are isolated rules variants", async () => {
@@ -613,7 +628,7 @@ test("faction strength probes change only the targeted authored value", async ()
   assert.equal(imperial.match.rulesVariant.imperialScientificMethodRunwayCost, 2);
   assert.equal(imperial.match.rulesVariant.imperialScientificMethodCapabilityPenalty, 1);
   assert.equal(imperial.match.rulesVariant.verticalIndustrialVelocityDiscount, 1);
-  assert.equal(imperial.match.rulesVariant.verticalIndustrialVelocityMandate, 0);
+  assert.equal(imperial.match.rulesVariant.verticalIndustrialVelocityMandate, 1);
   assert.equal(vertical.match.rulesVariant.verticalIndustrialVelocityDiscount, 2);
   assert.equal(vertical.match.rulesVariant.verticalIndustrialVelocityMandate, 1);
   assert.equal(vertical.match.rulesVariant.imperialScientificMethodRunwayCost, 1);
@@ -736,7 +751,7 @@ test("faction progress probes alter only realized protected Research and discoun
       playerCount: 3,
       factionId: "vertical_empire",
       seed: "industrial-velocity-progress-probe",
-      rulesVariant: { verticalIndustrialVelocityMandate: 1 }
+      rulesVariant: {}
     },
     () => {}
   );
@@ -757,7 +772,7 @@ test("faction progress probes alter only realized protected Research and discoun
       playerCount: 3,
       factionId: "vertical_empire",
       seed: "industrial-velocity-zero-savings-probe",
-      rulesVariant: { verticalIndustrialVelocityMandate: 1 }
+      rulesVariant: {}
     },
     () => {}
   );
@@ -822,14 +837,7 @@ test("Foundry scaling probes expose one authored lever at a time", async () => {
     {
       playerCount: 3,
       factionId: "foundry",
-      seed: "foundry-demand-coupled-architecture",
-      rulesVariant: {
-        foundryNewArchitectureDemandCoupling: {
-          baseCompute: 1,
-          computePerLicense: 1,
-          maximumCompute: 3
-        }
-      }
+      seed: "foundry-demand-coupled-architecture"
     },
     () => {}
   );
@@ -860,15 +868,31 @@ test("Foundry scaling probes expose one authored lever at a time", async () => {
     policy("architecture_license_"),
     policy("architecture_decline_")
   ]);
-  assert.equal(foundry.compute, computeBeforeArchitecture + 2);
+  assert.equal(foundry.compute, computeBeforeArchitecture + 1);
   assert.equal(
     foundry.metrics.factionAbilityValues.new_architecture.licensesSold,
     1
   );
   assert.equal(
     foundry.metrics.factionAbilityValues.new_architecture.computeGained,
-    2
+    1
   );
+});
+
+test("the legacy pre-promotion overlay reproduces all four historical defaults", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 4,
+      factionId: "foundry",
+      seed: "legacy-pre-promotion-defaults",
+      rulesVariant: legacyPrePromotionRulesOverlay
+    },
+    () => {}
+  );
+  assert.equal(match.rulesVariant.customerMandateSchedule, null);
+  assert.equal(match.rulesVariant.imperialLateCapabilityThresholdMandate, null);
+  assert.equal(match.rulesVariant.verticalIndustrialVelocityMandate, 0);
+  assert.equal(match.rulesVariant.foundryNewArchitectureDemandCoupling, null);
 });
 
 test("Foundry Shovels observes two-Compute Wild Actions and respects its round cap", async () => {
@@ -1667,7 +1691,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.18");
+  assert.equal(first.game.version, "0.8.19");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1848,7 +1872,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.18");
+  assert.equal(first.game.version, "0.8.19");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

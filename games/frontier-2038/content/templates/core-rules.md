@@ -259,8 +259,9 @@ stronger deployments and ${terms.systems.agi} declarations.
 ### ${terms.resources.customers}
 
 Products deployed into the world. Each ${terms.resources.customer} produces one ${terms.resources.runway} during
-Production and immediately scores two public ${terms.resources.mandate} when gained. ${terms.resources.customers}
-also increase public exposure.
+Production. ${terms.resources.customers} #1–3 immediately score two public ${terms.resources.mandate} each when
+gained; ${terms.resources.customers} #4–5 score one each. ${terms.resources.customers} also increase public
+exposure.
 
 ### ${terms.resources.trust}
 
@@ -274,8 +275,9 @@ metaphysical intelligence.
 
 ${terms.resources.mandate} is normally scored immediately on one public track:
 
-- Two when each ${terms.resources.customer} is gained.
-- Two the first time ${terms.resources.capability} reaches three, six, nine, and twelve.
+- Two when ${terms.resources.customer} #1, #2, or #3 is gained; one when #4 or #5 is gained.
+- Two the first time ${terms.resources.capability} reaches three, six, nine, and twelve, except
+  for a printed faction scoring rule.
 - Two the first time ${terms.resources.trust} reaches two, four, and six.
 - Printed ${terms.resources.mandate} from ${terms.systems.headlines}, Round Mandates, Fusion, faction abilities,
   and ${terms.systems.agi}.
@@ -1049,7 +1051,8 @@ of **passive**, **once per round**, **once when unlocked**, or **once per
 game**. “Persists” means it remains available in later rounds; “named round
 only” means an unused opportunity expires when that round ends.
 
-Every faction board uses the same four-row reading order:
+Every faction board uses the same four-row reading order. A faction with a
+separate public-scoring contract prints it above these rows:
 
 1. **Core identity:** available from Round I.
 2. **Scale program:** unlocks in Round II.
@@ -1090,6 +1093,8 @@ Starts with ${content.factions.byId.platform_empire.starts.runway} ${terms.resou
 
 Starts with ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, and ${terms.resources.trust} ${content.factions.byId.imperial_research_lab.starts.trust}.
 
+- **${content.factions.byId.imperial_research_lab.scoringRule.name}:**
+  ${content.factions.byId.imperial_research_lab.scoringRule.text}
 - **${content.factions.byId.imperial_research_lab.abilities.0.name}:**
   ${content.factions.byId.imperial_research_lab.abilities.0.text}
 - **${content.factions.byId.imperial_research_lab.abilities.1.name}:**
@@ -1482,11 +1487,13 @@ Ties break by:
 - Last place receives a modest flexible subsidy.
 - Faction powers modify bounded actions rather than multiplying the entire
   engine.
+- Early ${terms.resources.customers} establish a market; later ${terms.resources.customers} still produce
+  income but receive diminishing public recognition.
 - ${terms.systems.headlines} target board position.
 - No elimination, destruction, or unrestricted theft.
 - Every player reaches Round IV with consequential options.
 
-The first prototype uses the four-round baseline without Tactics or secret
+The promoted-package prototype uses the four-round baseline without Tactics or secret
 objectives. A three-round version skips the escalation; a fifth round remains
 a possible future variant, not part of
 the current contract.
@@ -1505,6 +1512,11 @@ players first. Record:
 - Audit cost, final ${terms.resources.mandate}, final ${terms.resources.trust}, declarations, and World Ending
 - ${terms.factions.platform}’s lead after every Production and
   ${terms.factions.foundry}’s Shovels income
+- Every ${content.factions.byId.imperial_research_lab.scoringRule.name} threshold lookup;
+  every ${content.factions.byId.vertical_empire.abilities.0.name} discount that actually
+  reduces a completed Facility’s cost and the ${terms.resources.mandate} it awards; and
+  every ${content.factions.byId.foundry.abilities.2.name} offer, acceptance, and point of
+  self-${terms.resources.compute}
 - ${terms.actions.influence}, Reorganization, and Open-Weight Join/Refuse selection rates
 - Whether all three Grid Generator slots fill before Round IV, and whether
   Fusion is constructed or denied by occupied slots
@@ -1517,7 +1529,7 @@ players first. Record:
   recalculation time, rules questions, disrupted plans, and whether players
   later describe the result as exciting, arbitrary, or tedious
 
-Do not rebalance the remaining faction or Action values before this evidence.
+Freeze every other numerical rule pending this human evidence.
 Four players is the authoritative balance configuration. Three- and
 five-player games use the same complete rules and must pass their own
 negotiation, congestion, duration, faction-viability, and strategic-diversity

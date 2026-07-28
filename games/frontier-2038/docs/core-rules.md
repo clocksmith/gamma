@@ -2,9 +2,9 @@
 
 ## A 3–5 player race to build, deploy, regulate, and plausibly declare AGI
 
-**Rules version:** 0.5.0-rc.19-test
+**Rules version:** 0.5.0-rc.20-test
 **Design-baseline date:** July 26, 2026
-**Status:** Controlled playtest candidate; synchronized with executable game 0.8.18
+**Status:** Controlled playtest candidate; synchronized with executable game 0.8.19
 **Provisional time:** 75–100 minutes at four players; three- and five-player durations require their own blind tests
 **Standard game:** Four rounds, three turns per player per round
 
@@ -259,8 +259,9 @@ stronger deployments and AGI declarations.
 ### Customers
 
 Products deployed into the world. Each Customer produces one Runway during
-Production and immediately scores two public Mandate when gained. Customers
-also increase public exposure.
+Production. Customers #1–3 immediately score two public Mandate each when
+gained; Customers #4–5 score one each. Customers also increase public
+exposure.
 
 ### Trust
 
@@ -274,8 +275,9 @@ metaphysical intelligence.
 
 Mandate is normally scored immediately on one public track:
 
-- Two when each Customer is gained.
-- Two the first time Capability reaches three, six, nine, and twelve.
+- Two when Customer #1, #2, or #3 is gained; one when #4 or #5 is gained.
+- Two the first time Capability reaches three, six, nine, and twelve, except
+  for a printed faction scoring rule.
 - Two the first time Trust reaches two, four, and six.
 - Printed Mandate from Headlines, Round Mandates, Fusion, faction abilities,
   and AGI.
@@ -1049,7 +1051,8 @@ of **passive**, **once per round**, **once when unlocked**, or **once per
 game**. “Persists” means it remains available in later rounds; “named round
 only” means an unused opportunity expires when that round ends.
 
-Every faction board uses the same four-row reading order:
+Every faction board uses the same four-row reading order. A faction with a
+separate public-scoring contract prints it above these rows:
 
 1. **Core identity:** available from Round I.
 2. **Scale program:** unlocks in Round II.
@@ -1090,6 +1093,8 @@ Starts with 4 Runway, 2 Compute, Trust 2, and Customer #1 already deployed. Its 
 
 Starts with 3 Runway, 3 Compute, and Trust 3.
 
+- **Peer Validation:**
+  Capability 9 and 12 score 1 Mandate. In a five-player game, Capability 12 instead scores 2 Mandate.
 - **Scientific Method:**
   Once per round, when a protectable duplicate would crash your Training Run, pay 1 Runway to discard it and immediately bank. This cannot protect the unprotectable duplicate created by Synthetic Loop.
 - **Call Mountain View:**
@@ -1104,7 +1109,7 @@ Starts with 3 Runway, 3 Compute, and Trust 3.
 Starts with 6 Runway, 3 Compute, and Trust 2.
 
 - **Industrial Velocity:**
-  Your first Facility Build each round costs 1 less Runway.
+  Your first Facility Build each round costs 1 less Runway. When that discount actually reduces the Runway paid for a completed Facility, score 1 Mandate.
 - **Move Fast:**
   Before resolving any action, the CEO may move up to 3 hexes instead of 2. This does not grant a free Build.
 - **Own the Feed:**
@@ -1136,7 +1141,7 @@ Trust 3.
 - **Allocation Window:**
   Once during The Scale, after a Headline resolves but before Action selection, create 2 temporary Compute and offer it to rivals at negotiated prices. All temporary Compute remaining anywhere at cycle end disappears, sold or unsold.
 - **New Architecture:**
-  At the beginning of The Narrative before its first Headline, gain 3 Compute. Each rival may then pay you 1 Runway to gain 1 Compute.
+  At the beginning of The Narrative before its first Headline, each rival may pay you 1 Runway to gain 1 Compute. Gain 1 Compute per rival who pays, maximum 3; automatic base gain: 0.
 - **Everybody Gets a GPU:**
   Once per game before Action selection in any Round IV cycle, give every rival 1 Compute from the bank, score 1 Mandate per 4 rivals, and remove 2 Scrutiny.
 
@@ -1482,11 +1487,13 @@ Ties break by:
 - Last place receives a modest flexible subsidy.
 - Faction powers modify bounded actions rather than multiplying the entire
   engine.
+- Early Customers establish a market; later Customers still produce
+  income but receive diminishing public recognition.
 - Headlines target board position.
 - No elimination, destruction, or unrestricted theft.
 - Every player reaches Round IV with consequential options.
 
-The first prototype uses the four-round baseline without Tactics or secret
+The promoted-package prototype uses the four-round baseline without Tactics or secret
 objectives. A three-round version skips the escalation; a fifth round remains
 a possible future variant, not part of
 the current contract.
@@ -1505,6 +1512,11 @@ players first. Record:
 - Audit cost, final Mandate, final Trust, declarations, and World Ending
 - Mark Zuckerberg’s lead after every Production and
   Jensen Huang’s Shovels income
+- Every Peer Validation threshold lookup;
+  every Industrial Velocity discount that actually
+  reduces a completed Facility’s cost and the Mandate it awards; and
+  every New Architecture offer, acceptance, and point of
+  self-Compute
 - Influence, Reorganization, and Open-Weight Join/Refuse selection rates
 - Whether all three Grid Generator slots fill before Round IV, and whether
   Fusion is constructed or denied by occupied slots
@@ -1517,7 +1529,7 @@ players first. Record:
   recalculation time, rules questions, disrupted plans, and whether players
   later describe the result as exciting, arbitrary, or tedious
 
-Do not rebalance the remaining faction or Action values before this evidence.
+Freeze every other numerical rule pending this human evidence.
 Four players is the authoritative balance configuration. Three- and
 five-player games use the same complete rules and must pass their own
 negotiation, congestion, duration, faction-viability, and strategic-diversity

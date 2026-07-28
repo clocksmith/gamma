@@ -20,10 +20,17 @@
     "text": "When lowest, highest, or most is tied, the tied player nearest Initiative clockwise is the target unless the effect explicitly applies to everyone."
   },
   "factionRules": {
+    "imperial": {
+      "peerValidation": "${facts.shared.factions.imperial.peerValidation}"
+    },
+    "vertical": {
+      "industrialVelocityMandate": "${facts.shared.factions.vertical.industrialVelocityMandate}"
+    },
     "foundry": {
       "startingCompute": "${facts.shared.factions.foundry.startingCompute}",
       "shovelsPerRound": "${facts.shared.factions.foundry.shovelsPerRound}",
       "newArchitectureCompute": "${facts.shared.factions.foundry.newArchitectureCompute}",
+      "newArchitectureDemandCoupling": "${facts.shared.factions.foundry.newArchitectureDemandCoupling}",
       "everybodyGpuRivalsPerMandate": "${facts.shared.factions.foundry.everybodyGpuRivalsPerMandate}"
     }
   },
@@ -622,7 +629,8 @@
   },
   "scoring": {
     "mode": "public_event_track",
-    "customerMandate": 2,
+    "customerMandate": "${facts.shared.scoring.customerMandate.baseMandate}",
+    "customerMandateSchedule": "${facts.shared.scoring.customerMandate}",
     "capabilityThresholds": [
       { "value": 3, "mandate": 2 },
       { "value": 6, "mandate": 2 },

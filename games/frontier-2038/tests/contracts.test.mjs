@@ -12,13 +12,13 @@ test("release index separates executable game from physical rules candidate", as
   const executable = await readJson(current.manifest);
   const candidate = await readJson(current.rulesCandidate.manifest);
 
-  assert.equal(current.gameVersion, "0.8.18");
-  assert.equal(executable.gameVersion, "0.8.18");
-  assert.equal(current.rulesCandidate.version, "0.5.0-rc.19-test");
+  assert.equal(current.gameVersion, "0.8.19");
+  assert.equal(executable.gameVersion, "0.8.19");
+  assert.equal(current.rulesCandidate.version, "0.5.0-rc.20-test");
   assert.equal(candidate.artifactKind, "physical-rules-candidate");
   assert.equal(candidate.implementation.status, "synchronized");
-  assert.equal(candidate.implementation.executableGameVersion, "0.8.18");
-  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.18");
+  assert.equal(candidate.implementation.executableGameVersion, "0.8.19");
+  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.19");
   assert.notEqual(current.rulesetFingerprint, current.rulesCandidate.rulesFingerprint);
   assert.match(current.contentGraphFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(executable.contentGraphFingerprint, current.contentGraphFingerprint);
@@ -35,8 +35,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const normalizedRules = rules.replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.5.0-rc.19-test",
-    "synchronized with executable game 0.8.18",
+    "**Rules version:** 0.5.0-rc.20-test",
+    "synchronized with executable game 0.8.19",
     "Influence may place or relocate one additional cube on Government",
     "only if the Headline explicitly instructs the table",
     "A **solo Mega-Cluster**",
@@ -188,6 +188,12 @@ test("physical faction rules are rendered from the semantic faction graph", asyn
   const rules = await readFile(resolve(projectRoot, "docs/core-rules.md"), "utf8");
 
   for (const faction of factions.factions) {
+    if (faction.scoringRule) {
+      assert.ok(
+        rules.includes(faction.scoringRule.text),
+        `${faction.id}/${faction.scoringRule.name} must appear verbatim in the physical rules`
+      );
+    }
     for (const ability of faction.abilities) {
       assert.ok(
         rules.includes(ability.text),
@@ -198,10 +204,23 @@ test("physical faction rules are rendered from the semantic faction graph", asyn
 
   assert.match(rules, /Demis Hassabis[\s\S]*Starts with 3[\s\S]*Compute,[\s\S]*Trust[\s\n]*3\./);
   assert.match(rules, /Scientific Method:[\s\S]*pay 1 Runway/);
+  assert.match(rules, /Peer Validation:[\s\S]*Capability 9 and 12 score 1 Mandate/);
   assert.match(rules, /Elon Musk[\s\S]*Starts with 6[\s\S]*Runway, 3[\s\S]*Compute,[\s\S]*Trust[\s\n]*2\./);
   assert.doesNotMatch(
     rules,
     /Industrial Velocity:[\s\S]{0,240}add 1 Scrutiny/
+  );
+  assert.match(
+    rules,
+    /Industrial Velocity:[\s\S]{0,360}completed Facility,[\s\S]{0,80}score 1 Mandate/
+  );
+  assert.match(
+    rules,
+    /New Architecture:[\s\S]{0,520}Gain 1 Compute per rival who pays, maximum 3; automatic base gain: 0/
+  );
+  assert.match(
+    rules,
+    /Customers #1–3 immediately score two public Mandate[\s\S]{0,180}Customers #4–5 score one each/
   );
 });
 
