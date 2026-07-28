@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "winning-path-margin-validity-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "package_interaction",
+  "question": "Does the exact-tie winner classifier materially undercount mixed winning strategies, or are Infrastructure and Legitimacy genuinely absent as substantial winner contributions at five players?",
+  "sourceEvidence": [
+    "selected-faction-late-customer-package-v1",
+    "2026-07-28-selected-faction-late-customer-package"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/winning-path-margin-validity-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "selected_faction_late_customer_package",
+      "overlay": {
+        "imperialLateCapabilityThresholdMandate": {
+          "baseMandate": 1,
+          "fullValidationCapability": 12,
+          "minimumRivalsForFullMandate": 4,
+          "fullMandate": 2
+        },
+        "verticalIndustrialVelocityMandate": 1,
+        "foundryNewArchitectureDemandCoupling": {
+          "baseCompute": 0,
+          "computePerLicense": 1,
+          "maximumCompute": 3
+        },
+        "customerMandateSchedule": {
+          "baseMandate": 2,
+          "lateFromCustomer": 4,
+          "lateMandate": 1
+        }
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 8000,
+  "initialRunsPerCell": 3,
+  "batchSize": 8,
+  "seed": "m3t4-winning-path-margin-validity-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "requiredDiagnostics": [
+    "top-versus-second winner lane mean gap",
+    "winner-credit shares within 0, 0.5, 1, and 2 lane-score points",
+    "primary-to-secondary lane pairs",
+    "margin distribution by primary path and persona",
+    "existing faction, action, opening, and path gates"
+  ],
+  "interpretationRules": {
+    "materialClassifierArtifact": "If at least 25% of five-player candidate winner credit lies within one lane-score point and the expected specialist personas show their authored lane as primary or secondary, exact-tie classification materially undercounts mixed strategies. Correct the diagnostic before changing physical rules.",
+    "realConcentration": "If at most 15% lies within one point, treat the concentration as real and test Infrastructure Compounder and Trust Governor policy validity before proposing a scoring lever.",
+    "inconclusive": "Between 15% and 25%, or failed persona construct validity, do not reinterpret the balance gate; inspect the lane formula and policies.",
+    "noPromotion": "This diagnostic cannot promote the four-lever package or change a physical rule."
+  },
+  "surfaceAudit": {
+    "canonicalRulebook": "no change",
+    "semanticGraph": "no player-facing change",
+    "machineData": "no generated-content change",
+    "simulator": "winner lane-margin telemetry only",
+    "browserPrototype": "no change",
+    "referenceAids": "no change",
+    "tests": "margin shares must be monotonic and complete",
+    "playtestDocumentation": "no change"
+  }
+}

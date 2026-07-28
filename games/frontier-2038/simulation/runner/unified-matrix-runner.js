@@ -163,9 +163,9 @@ export function configurationOutcomeBalanceChecks({
   );
 }
 
-function winningPath(entry) {
+function winningLaneScores(entry) {
   const actions = entry.actions || {};
-  const lanes = {
+  return {
     research: (actions.research || 0) + (entry.capability || 0) / 3,
     infrastructure: (actions.build || 0) + (entry.facilities || 0),
     adoption: (actions.deploy || 0) + (entry.customers || 0),
@@ -173,11 +173,26 @@ function winningPath(entry) {
     capital: actions.fund || 0,
     mobility: actions.organize || 0
   };
+}
+
+function winningPathMargin(entry) {
+  const ranked = Object.entries(winningLaneScores(entry))
+    .sort((left, right) => right[1] - left[1]);
+  return {
+    primary: ranked[0][0],
+    secondary: ranked[1][0],
+    primaryScore: ranked[0][1],
+    secondaryScore: ranked[1][1],
+    gap: ranked[0][1] - ranked[1][1]
+  };
+}
+
+function winningPath(entry) {
   if (entry.agiDeclared) return "agi_declaration";
-  const ranked = Object.entries(lanes).sort((left, right) => right[1] - left[1]);
-  return ranked[0][1] === ranked[1][1]
-    ? `${ranked[0][0]}_${ranked[1][0]}_hybrid`
-    : ranked[0][0];
+  const margin = winningPathMargin(entry);
+  return margin.gap === 0
+    ? `${margin.primary}_${margin.secondary}_hybrid`
+    : margin.primary;
 }
 
 function rotate(values, amount) {
@@ -531,6 +546,17 @@ function outcomeSummary(observations) {
   const openingCounts = {};
   const winningPathCounts = {};
   const winningPathAttributionTotals = {};
+  const winningPathMarginTotals = {
+    winCredit: 0,
+    gap: 0,
+    exactTie: 0,
+    withinHalfPoint: 0,
+    withinOnePoint: 0,
+    withinTwoPoints: 0,
+    primarySecondary: {},
+    byPrimaryPath: {},
+    byProfile: {}
+  };
   const bindingRequirements = {};
   const agiFunnel = {
     playerOpportunities: 0,
@@ -612,6 +638,41 @@ function outcomeSummary(observations) {
       if (winnerCredit.has(standing.seat)) {
         const credit = winnerCredit.get(standing.seat);
         const pathId = winningPath(standing);
+        const margin = winningPathMargin(standing);
+        const recordMargin = (totals) => {
+          totals.winCredit = (totals.winCredit || 0) + credit;
+          totals.gap = (totals.gap || 0) + margin.gap * credit;
+          totals.exactTie =
+            (totals.exactTie || 0) + Number(margin.gap === 0) * credit;
+          totals.withinHalfPoint =
+            (totals.withinHalfPoint || 0) +
+            Number(margin.gap <= 0.5) * credit;
+          totals.withinOnePoint =
+            (totals.withinOnePoint || 0) +
+            Number(margin.gap <= 1) * credit;
+          totals.withinTwoPoints =
+            (totals.withinTwoPoints || 0) +
+            Number(margin.gap <= 2) * credit;
+        };
+        recordMargin(winningPathMarginTotals);
+        increment(
+          winningPathMarginTotals.primarySecondary,
+          `${margin.primary}→${margin.secondary}`,
+          credit
+        );
+        const primaryMargins =
+          winningPathMarginTotals.byPrimaryPath[margin.primary] || {};
+        recordMargin(primaryMargins);
+        winningPathMarginTotals.byPrimaryPath[margin.primary] = primaryMargins;
+        const profileMargins =
+          winningPathMarginTotals.byProfile[standing.profileId] || {
+            primaryPaths: {},
+            secondaryPaths: {}
+          };
+        recordMargin(profileMargins);
+        increment(profileMargins.primaryPaths, margin.primary, credit);
+        increment(profileMargins.secondaryPaths, margin.secondary, credit);
+        winningPathMarginTotals.byProfile[standing.profileId] = profileMargins;
         increment(
           winningPathCounts,
           pathId,
@@ -732,6 +793,41 @@ function outcomeSummary(observations) {
       }
     ])
   );
+  const summarizeMargins = (totals) => ({
+    wins: totals.winCredit || 0,
+    meanGap: totals.winCredit ? totals.gap / totals.winCredit : 0,
+    exactTieShare: totals.winCredit
+      ? totals.exactTie / totals.winCredit
+      : 0,
+    withinHalfPointShare: totals.winCredit
+      ? totals.withinHalfPoint / totals.winCredit
+      : 0,
+    withinOnePointShare: totals.winCredit
+      ? totals.withinOnePoint / totals.winCredit
+      : 0,
+    withinTwoPointsShare: totals.winCredit
+      ? totals.withinTwoPoints / totals.winCredit
+      : 0
+  });
+  const winningPathMargins = {
+    ...summarizeMargins(winningPathMarginTotals),
+    primarySecondary: winningPathMarginTotals.primarySecondary,
+    byPrimaryPath: Object.fromEntries(
+      Object.entries(winningPathMarginTotals.byPrimaryPath)
+        .map(([pathId, totals]) => [pathId, summarizeMargins(totals)])
+    ),
+    byProfile: Object.fromEntries(
+      Object.entries(winningPathMarginTotals.byProfile)
+        .map(([profileId, totals]) => [
+          profileId,
+          {
+            ...summarizeMargins(totals),
+            primaryPaths: totals.primaryPaths,
+            secondaryPaths: totals.secondaryPaths
+          }
+        ])
+    )
+  };
   return {
     matches: observations.length,
     declarationRate: observations.length ? declarations / observations.length : 0,
@@ -744,6 +840,7 @@ function outcomeSummary(observations) {
     openingDiversity: concentration(openingCounts),
     winningPathDiversity: concentration(winningPathCounts),
     winningPathAttribution,
+    winningPathMargins,
     factionWinShareRange: range(
       Object.values(factionStandings).map((standing) => standing.winShare)
     ),
