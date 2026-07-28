@@ -80,6 +80,7 @@ const required = [
   "simulation/cli/faction-swap.mjs",
   "simulation/cli/llm-holdout.mjs",
   "tools/create-game-release.mjs",
+  "tools/create-physical-kit.mjs",
   "tools/create-playtest-session.mjs",
   "tools/render-docs.mjs",
   "tools/render-gallery.mjs",

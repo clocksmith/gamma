@@ -18,6 +18,22 @@ npm run playtest:new -- \
   --type facilitated_playtest
 ```
 
+Every generated receipt and notes page records the exact rules version,
+executable reference, and Git source commit. Use only components carrying the
+same identity label.
+
+Freeze the complete controlled-test kit only from a clean commit already
+pushed to `origin/main`:
+
+```bash
+npm run physical-kit:freeze
+```
+
+The derived kit is written under `dist/physical-kit/`. Its manifest hashes the
+rulebook, baseline component masters, source data, release identities, Session
+A and Session B receipt templates, and test protocol. Deferred Tactics, secret
+objectives, and Reserve Specialists are excluded.
+
 Use `--type blind_playtest` only when players used the supplied rules and
 components without designer answers.
 
