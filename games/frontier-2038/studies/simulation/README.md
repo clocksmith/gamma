@@ -129,3 +129,11 @@ Scrutiny, and Nobel candidates with one direct public-validation lever.
 Capability 9 and 12 remain fully achieved, but each scores Demis one Mandate
 instead of two. The probe leaves starting Compute, Research reliability,
 Capability, and every other faction program untouched.
+
+The dated
+[`Demis late public-validation`](2026-07-28-demis-late-validation.md)
+receipt finds a strong but count-dependent effect. One Mandate at both late
+thresholds places Demis among the leaders at three and four players but below
+the viable band at five, where late thresholds occur more often. The exact
+scalar rule is rejected; a registered follow-up may restore Capability 12's
+second point when four rivals provide broad independent validation.
