@@ -295,6 +295,17 @@ await writeFile(
   resolve(outputRoot, "physical-kit-manifest.json"),
   `${JSON.stringify(manifest, null, 2)}\n`
 );
+await writeFile(
+  resolve(distRoot, "current.json"),
+  `${JSON.stringify({
+    schemaVersion: 1,
+    artifactKind: manifest.artifactKind,
+    kitId,
+    manifest: `${kitId}/physical-kit-manifest.json`,
+    kitFingerprint: manifest.kitFingerprint,
+    identity
+  }, null, 2)}\n`
+);
 
 process.stdout.write(
   `${outputRoot}\nphysical-kit fingerprint: sha256:${kitFingerprint}\n`

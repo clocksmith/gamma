@@ -53,6 +53,26 @@ const { stdout: sourceCommitOutput } = await execFileAsync(
 );
 const sourceCommit = sourceCommitOutput.trim();
 const selectedRelease = current.rulesCandidate || current;
+const kitManifestPath = input["kit-manifest"]
+  ? resolve(input["kit-manifest"])
+  : resolve(projectRoot, "dist/physical-kit/current.json");
+let physicalKitManifest;
+try {
+  physicalKitManifest = JSON.parse(await readFile(kitManifestPath, "utf8"));
+} catch {
+  throw new Error(
+    "No frozen physical-kit identity is available. Run npm run physical-kit:freeze first."
+  );
+}
+if (
+  physicalKitManifest.identity?.sourceCommit !== sourceCommit ||
+  physicalKitManifest.identity?.rulesVersion !== selectedRelease.version ||
+  physicalKitManifest.identity?.executableVersion !== current.gameVersion
+) {
+  throw new Error(
+    "Frozen physical-kit identity does not match this source and release. Run npm run physical-kit:freeze."
+  );
+}
 const manifest = JSON.parse(
   await readFile(resolve(projectRoot, selectedRelease.manifest), "utf8")
 );
@@ -86,14 +106,13 @@ const receipt = {
     executableVersion: current.gameVersion,
     sourceCommit,
     rulesetFingerprint: rulesFingerprint,
-    playtestKitFingerprint: isRulesCandidate
-      ? rulesFingerprint
-      : manifest.playtestKitFingerprint,
+    playtestKitFingerprint: physicalKitManifest.kitFingerprint,
     variantFingerprint: isRulesCandidate
       ? rulesFingerprint
       : manifest.canonicalVariant.fingerprint
   },
   physicalKit: {
+    kitId: physicalKitManifest.kitId,
     componentRevision: rulesVersion,
     executableRevision: current.gameVersion,
     sourceCommit,
