@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "unified-backend-regimes-v2",
+  "registeredBeforeResults": true,
+  "question": "Does the current canonical game expose a credible faction, seat, or authored-strategy dominance signal when opponent decision quality is separated into homogeneous and mixed backend regimes?",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 4,
+  "seed": "m3t4-unified-backend-regimes-v2-20260727",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "interpretation": {
+    "homogeneousRegimes": "Primary deterministic strategy diagnostic: every player uses the same decision implementation.",
+    "alternatingRegimes": "Backend-interaction diagnostic; a greedy policy beating a stochastic policy is not by itself a rules defect.",
+    "rulePromotion": "No rules value changes without a later preregistered one-lever common-seed probe, tracked receipt, synchronized surfaces, and explicit user approval.",
+    "physicalBoundary": "No automated result establishes teachability, negotiation quality, Realignment drama, perceived fairness, duration, or fun."
+  }
+}

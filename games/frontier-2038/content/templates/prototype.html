@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Deterministic rules and spatial-power study for ${game.title}.">
+    <title>${game.title} — Prototype</title>
+    <link rel="icon" href="/prototype/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/prototype/styles.css">
+  </head>
+  <body>
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Institutional strategy study · build ${game.executableVersion}</p>
+        <h1>${game.shortTitle} <span>2038</span></h1>
+        <p class="dek">${terms.actions.build}. ${terms.actions.deploy}. Regulate. Plausibly declare.</p>
+      </div>
+      <div class="status-block">
+        <span class="status">rc.5-test executable baseline</span>
+        <a href="/lab">Simulation lab</a>
+        <a href="/docs/core-rules.html">Canonical rules</a>
+      </div>
+    </header>
+
+    <main>
+      <section id="setup" class="control-strip panel" aria-label="Game setup">
+        <label>Play as<select id="faction"></select></label>
+        <label>Game seed<input id="seed" value="frontier-2038" spellcheck="false"></label>
+        <label>Players
+          <select id="player-count">
+            <option value="3">3 players · supported</option>
+            <option value="4" selected>4 players · controlled-test baseline</option>
+            <option value="5">5 players · supported</option>
+          </select>
+        </label>
+        <button id="start-game" type="button">Start complete game</button>
+        <p id="game-status">The other institutions use deterministic personas. Every human prompt comes from the same engine used by Monte Carlo.</p>
+      </section>
+
+      <section class="game-layout">
+        <div class="board-panel panel">
+          <div class="section-heading">
+            <div><p class="eyebrow">13-district spatial economy</p><h2 id="round-title">The board</h2></div>
+            <span class="status" id="phase">Ready</span>
+          </div>
+          <div id="board" class="board" aria-label="Hex board"></div>
+          <p class="board-note">Districts, pieces, Facilities, Generators, Power state, and Round III Realignment are rendered from the live match.</p>
+        </div>
+        <aside class="institution-panel panel">
+          <p class="eyebrow">Public table state</p>
+          <div id="players" class="player-roster"></div>
+          <div class="headline">
+            <p class="eyebrow">Current ${terms.systems.headline}</p>
+            <h3 id="headline-name">Not revealed</h3>
+            <p id="headline-text"></p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel decision-console">
+        <div class="section-heading">
+          <div><p class="eyebrow">Human decision</p><h2 id="decision-title">Start a game</h2></div>
+          <span id="decision-count" class="status">0 legal choices</span>
+        </div>
+        <p id="decision-context" class="callout">The browser pauses the authoritative match whenever your institution must decide.</p>
+        <div id="decisions" class="decision-list"></div>
+      </section>
+
+      <section class="panel ledger-panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">Future Timeline and evidence</p><h2>Decision ledger</h2></div>
+          <button id="export" type="button" disabled>Export game receipt</button>
+        </div>
+        <ol id="log" class="log"></ol>
+      </section>
+    </main>
+
+    <footer>
+      <p>This is the complete executable baseline, not final art or evidence of balance.</p>
+    </footer>
+
+    <script type="module" src="/prototype/app.js"></script>
+  </body>
+</html>

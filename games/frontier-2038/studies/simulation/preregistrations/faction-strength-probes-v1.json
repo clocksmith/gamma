@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "faction-strength-probes-v1",
+  "registeredBeforeResults": true,
+  "question": "Do direct one-step changes to Scientific Method's price or Industrial Velocity's discount compress the causal Demis and Elon faction effects while preserving three-, four-, and five-player viability and avoiding new dominance?",
+  "sourceEvidence": [
+    "supported-player-count-baseline-v1",
+    "faction-swap-diagnostic-v1",
+    "faction-mechanism-scaling-v1"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/faction-strength-probes-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "imperial_scientific_method_cost_two",
+      "overlay": {
+        "imperialScientificMethodRunwayCost": 2
+      }
+    },
+    {
+      "id": "vertical_industrial_velocity_discount_two",
+      "overlay": {
+        "verticalIndustrialVelocityDiscount": 2
+      }
+    }
+  ],
+  "playerCounts": [
+    3,
+    4,
+    5
+  ],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [
+    3,
+    5
+  ],
+  "mandateModes": [
+    "variable",
+    "fixed"
+  ],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 18000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-faction-strength-probes-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "selectionRule": {
+    "imperialCandidate": "Select only if Demis moves materially toward parity at four players, improves the three-player extreme, remains viable at five, and creates no registered dominance or integrity failure.",
+    "verticalCandidate": "Select only if Elon moves materially toward parity at four players, remains viable at three and five, and creates no registered dominance or integrity failure.",
+    "pairedAuthority": "Compare each candidate only with canonical under common seeds. Do not combine the candidates in this experiment.",
+    "precision": "Treat multiplicity-adjusted intervals and partially pooled faction cells as authority; do not select from a noisy worst raw cell.",
+    "physicalBoundary": "The probe cannot establish human negotiation quality, perceived faction identity, duration, fairness, Realignment drama, or fun.",
+    "promotion": "A candidate remains simulation-only until a tracked receipt, all-surface audit, and explicit user approval."
+  }
+}

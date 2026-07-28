@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Run and replay ${game.title} strategy simulations.">
+    <title>${game.title} — Simulation Lab</title>
+    <link rel="icon" href="/prototype/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/prototype/styles.css">
+    <link rel="stylesheet" href="/prototype/simulation.css">
+  </head>
+  <body>
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Headless strategy laboratory · build 0.2</p>
+        <h1>${game.shortTitle} <span>2038</span></h1>
+        <p class="dek">Run institutions. Inspect distributions. Replay decisions.</p>
+      </div>
+      <div class="status-block">
+        <span class="status">Node simulation authority</span>
+        <a href="/">Play rules prototype</a>
+      </div>
+    </header>
+
+    <main>
+      <section id="setup-view">
+        <div class="panel simulation-intro">
+          <div>
+            <p class="eyebrow">Simulation boundary</p>
+            <h2>Strategy and balance laboratory</h2>
+          </div>
+          <p>
+            Run the selected-rules game, mutate a real player strategy, or search
+            bounded rule variants. Every experiment retains its seeds, tested
+            configuration, diagnostics, and—where applicable—playable replays.
+          </p>
+        </div>
+
+        <form id="simulation-form" class="panel simulation-form">
+          <div class="form-grid">
+            <label id="runs-field">
+              Experiment
+              <select id="experiment-mode">
+                <option value="tournament">Tournament + replays</option>
+                <option value="strategy-evolution">Evolve one strategy</option>
+                <option value="rule-search">Search rule balance</option>
+                <option value="balance-audit">Unified evidence matrix</option>
+                <option value="llm-holdout">Preregistered LLM negotiation holdout</option>
+              </select>
+            </label>
+            <label>
+              <span id="runs-label">Matches</span>
+              <input id="runs" type="number" min="1" max="10000" value="100">
+            </label>
+            <label id="player-count-field">
+              Players
+              <select id="sim-player-count">
+                <option value="3">3 · supported</option>
+                <option value="4" selected>4 · baseline</option>
+                <option value="5">5 · supported</option>
+              </select>
+            </label>
+            <label>
+              Simulation seed
+              <input id="sim-seed" value="frontier-monte-carlo" spellcheck="false">
+            </label>
+            <label id="replay-samples-field">
+              Replay samples
+              <input id="sample-replays" type="number" min="0" max="10" value="3">
+            </label>
+          </div>
+          <p id="mode-description" class="callout">
+            Play complete seeded matches, compare seats, factions, and personas,
+            then inspect sampled games on the board.
+          </p>
+
+          <div id="optimization-controls" class="form-grid" hidden>
+            <label id="target-profile-field">
+              Strategy to mutate
+              <select id="target-profile"></select>
+            </label>
+            <label id="generations-field">
+              Generations
+              <input id="generations" type="number" min="1" max="50" value="4">
+            </label>
+            <label id="population-field">
+              Population
+              <input id="population" type="number" min="2" max="50" value="6">
+            </label>
+            <label id="iterations-field" hidden>
+              Rule variants
+              <input id="iterations" type="number" min="2" max="100" value="12">
+            </label>
+            <label id="matrix-initial-field" hidden>
+              Initial matches per cell
+              <input id="matrix-initial-runs" type="number" min="1" max="100" value="2">
+            </label>
+            <label id="matrix-batch-field" hidden>
+              Adaptive batch size
+              <input id="matrix-batch-size" type="number" min="1" max="100" value="2">
+            </label>
+            <label id="preregistration-field" hidden>
+              Committed preregistration path
+              <input id="preregistration-path" value="studies/simulation/preregistrations/llm-negotiation-holdout-v3-capture.json" spellcheck="false">
+            </label>
+          </div>
+
+          <section id="persona-controls">
+            <div class="section-heading persona-heading">
+              <div>
+                <p class="eyebrow">Seats</p>
+                <h2>Personas and decision backends</h2>
+              </div>
+              <small>The same persona can use weighted logic, Claude, Codex, or a hybrid.</small>
+            </div>
+            <div id="seat-config" class="seat-config"></div>
+          </section>
+
+          <details id="llm-controls" class="llm-controls">
+            <summary>Metered CLI-provider controls</summary>
+            <label class="check-label">
+              <input id="allow-llm" type="checkbox">
+              Authorize Claude/Codex calls for this job
+            </label>
+            <div class="form-grid">
+              <label>
+                Maximum LLM decisions
+                <input id="max-llm-decisions" type="number" min="0" max="10000" value="24">
+              </label>
+              <label>
+                Optional model override
+                <input id="model" placeholder="Use provider default">
+              </label>
+            </div>
+            <p class="muted">
+              After this limit, LLM-backed personas fall back to their seeded
+              weighted strategy and record the fallback.
+            </p>
+          </details>
+
+          <div class="submit-row">
+            <button id="run-simulation" type="submit">Run tournament</button>
+            <label class="file-label">
+              Load existing report
+              <input id="report-file" type="file" accept="application/json,.json">
+            </label>
+          </div>
+          <div id="job-status" class="job-status" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <section id="results-view" hidden>
+        <div class="panel results-toolbar">
+          <div>
+            <p class="eyebrow">Completed evidence</p>
+            <h2 id="results-title">Simulation results</h2>
+            <p id="results-subtitle" class="muted"></p>
+            <div id="evidence-identity" class="evidence-identity"></div>
+            <p id="archive-path" class="archive-path"></p>
+          </div>
+          <div class="toolbar-actions">
+            <button id="download-report" type="button">Download another copy</button>
+            <button id="new-simulation" type="button">New simulation</button>
+          </div>
+        </div>
+
+        <div id="summary-cards" class="summary-cards"></div>
+
+        <section id="experiment-results" class="panel result-section" hidden>
+          <p class="eyebrow">Iteration evidence</p>
+          <h2 id="experiment-results-title">Optimization history</h2>
+          <div id="experiment-results-body"></div>
+        </section>
+
+        <section id="seat-results-section" class="panel result-section">
+          <p class="eyebrow">Comparative outcomes</p>
+          <h2>Factions, personas, and seats</h2>
+          <h3>Faction outcomes</h3>
+          <div id="faction-results" class="seat-results"></div>
+          <h3>Persona outcomes</h3>
+          <div id="profile-results" class="seat-results"></div>
+          <details>
+            <summary>Seat-control outcomes</summary>
+            <div id="seat-results" class="seat-results nested-results"></div>
+          </details>
+        </section>
+
+        <section id="distribution-section" class="panel result-section">
+          <p class="eyebrow">Score distributions</p>
+          <h2>${terms.resources.mandate} spread</h2>
+          <div id="score-distributions" class="distribution-grid"></div>
+        </section>
+
+        <section id="replay-section" class="panel result-section replay-section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Recorded match</p>
+              <h2>Replay</h2>
+            </div>
+            <label>
+              Sample
+              <select id="replay-sample"></select>
+            </label>
+          </div>
+          <div class="replay-layout">
+            <div>
+              <div id="replay-board" class="board replay-board"></div>
+              <div class="replay-controls">
+                <button id="replay-prev" type="button">Previous</button>
+                <input id="replay-step" type="range" min="0" value="0">
+                <button id="replay-next" type="button">Next</button>
+              </div>
+              <p id="replay-caption" class="callout"></p>
+            </div>
+            <aside id="replay-players" class="replay-players"></aside>
+          </div>
+        </section>
+
+        <section class="panel result-section">
+          <p class="eyebrow">Validity</p>
+          <h2>What this run proves—and does not</h2>
+          <div id="coverage" class="coverage-grid"></div>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <p>Simulation evidence is not a human playtest or a complete-game balance verdict.</p>
+    </footer>
+
+    <script type="module" src="/prototype/simulation-app.js"></script>
+  </body>
+</html>

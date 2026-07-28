@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "faction-progress-conversion-v1",
+  "registeredBeforeResults": true,
+  "question": "Do one-step changes to victory-relevant progress, rather than resource efficiency, compress the causal Demis and Elon faction effects across the supported product?",
+  "sourceEvidence": [
+    "faction-swap-diagnostic-v1",
+    "faction-strength-probes-v1"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/faction-progress-conversion-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "imperial_scientific_method_capability_penalty_one",
+      "overlay": {
+        "imperialScientificMethodCapabilityPenalty": 1
+      }
+    },
+    {
+      "id": "vertical_industrial_velocity_mandate_one",
+      "overlay": {
+        "verticalIndustrialVelocityMandate": 1
+      }
+    }
+  ],
+  "playerCounts": [
+    3,
+    4,
+    5
+  ],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [
+    3,
+    5
+  ],
+  "mandateModes": [
+    "variable",
+    "fixed"
+  ],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-faction-progress-conversion-v1-fresh-restart2-20260728",
+  "retiredAttempts": [
+    {
+      "seed": "m3t4-faction-progress-conversion-v1-fresh-20260728",
+      "stoppedBeforeArchiveAtMatches": 9720,
+      "reason": "The Vertical overlay awarded Mandate when Industrial Velocity was consumed even if another waiver had already reduced the Facility cost to zero. The run was stopped before report archival, the seed was retired, and the trigger was corrected before restarting."
+    },
+    {
+      "seed": "m3t4-faction-progress-conversion-v1-fresh-restart-20260728",
+      "stoppedBeforeArchiveAtMatches": 5580,
+      "reason": "The user requested a clean stop before moving the repository. No report or outcome summary was archived. The partial run remains non-evidence and its seed is retired."
+    }
+  ],
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "selectionRule": {
+    "imperialCandidate": "Prefer the one-Capability protection penalty only if it materially reduces Demis at three and four players without pushing Demis below parity at five or erasing the value of Scientific Method.",
+    "verticalCandidate": "Prefer one Mandate the first time each round Industrial Velocity actually reduces Runway paid for a completed Facility by at least one only if it materially improves Elon at four players, remains bounded at three, and improves five without creating a leading faction or strategy cell. Record Build selection changes as well as outcome changes.",
+    "pairedAuthority": "Compare each candidate only with canonical under common seeds; do not combine the candidates in this experiment.",
+    "integrity": "Any integrity violation, policy fallback, or unsupported-count gap rejects the affected arm.",
+    "promotion": "No physical text changes without a tracked receipt, complete surface audit, and explicit user approval."
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "unified-seven-axis-matrix-v1",
+  "status": "pre_registered_default",
+  "axes": {
+    "rulesConfiguration": ["canonical"],
+    "playerCount": [3, 4, 5],
+    "factionAndSeat": "balanced_rotation",
+    "strategyRoster": "rotating_windows_of_authored_personas",
+    "randomSeed": "explicit_common_root_seed",
+    "mandateMode": ["variable", "fixed"],
+    "decisionBackend": {
+      "implementations": ["weighted", "greedy"],
+      "regimes": [
+        "homogeneous_weighted",
+        "homogeneous_greedy",
+        "alternating_weighted_first",
+        "alternating_greedy_first"
+      ]
+    }
+  },
+  "sampling": {
+    "initialRunsPerCell": 2,
+    "batchSize": 2,
+    "maximumMatches": 960,
+    "minimumMarginalExposure": 24,
+    "targetHalfWidth": 0.12,
+    "alpha": 0.05,
+    "allocation": "largest_multiplicity_adjusted_confidence_sequence_then_factor_coverage"
+  },
+  "playerCountPolicy": {
+    "supported": [3, 4, 5],
+    "balanceAuthority": 4,
+    "regressionGuards": [3, 5],
+    "promotionRule": "Four-player evidence supplies the primary balance decision. A candidate is ineligible for promotion if either supported adjacent count has an integrity failure or a credible faction, seat, or strategy dominance regression."
+  },
+  "inference": {
+    "winShare": "empirical_bayes_bounded_win_share_marginals",
+    "binaryAndPairwiseRates": "beta_binomial_empirical_bayes",
+    "sequentialIntervals": "bounded_hoeffding_confidence_sequence",
+    "multiplicity": "bonferroni_family_split_plus_quadratic_alpha_spending",
+    "promotionRule": "minimum exposure plus both shrunk interval and confidence sequence beyond threshold",
+    "backendInterpretation": "Homogeneous regimes estimate strategy strength against equally decisive opponents. Alternating regimes estimate backend interaction and are diagnostic rather than standalone rules authority."
+  },
+  "negotiation": {
+    "classification": "outcome_not_cohort",
+    "enabledForDeterministicMatrix": true,
+    "outcomes": [
+      "promised",
+      "fulfilled",
+      "broken",
+      "superseded",
+      "unexercised",
+      "power_traded",
+      "causally_supported_declaration",
+      "supplier_competitive"
+    ]
+  },
+  "llmHoldout": {
+    "defaultEnabled": false,
+    "requiresExplicitAuthorization": true,
+    "requiresPreRegistration": true,
+    "cachePurpose": "reproducibility",
+    "freshCallsPurpose": "robustness",
+    "maximumDecisionsPerJob": 240
+  },
+  "provenance": {
+    "kind": "hypothesis",
+    "note": "This design is preregistered before its first unified-matrix result. Match counts are caps and minimums, not claims of statistical sufficiency."
+  }
+}

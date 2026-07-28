@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "evolved-strategy-holdout-v1",
+  "registeredBeforeResults": true,
+  "question": "Do fresh-seed Trust Governor and Power Broker champions improve strategic diversity and reduce the apparent Capability Rusher advantage without creating a new faction, strategy, backend, or matchup exploit?",
+  "sourceEvidence": "strategy-evolution-training-2026-07-28",
+  "profileOverrideReports": [
+    {
+      "path": "studies/simulation/20260728-trust-governor-evolution-v1.json",
+      "sha256": "e38c79765596975b4292709b7c18611ffb763b6e448efc022ea1db7480c67f1a",
+      "profileId": "trust_governor"
+    },
+    {
+      "path": "studies/simulation/20260728-power-broker-evolution-v1.json",
+      "sha256": "bf8aeed7533c9d249979b386ce80d021507e7264647ea43e749b7806fa13f6fa",
+      "profileId": "power_broker"
+    }
+  ],
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-evolved-strategy-holdout-v1-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "selectionRule": {
+    "profilePromotion": "A champion may replace its authored source only if it improves fresh-seed competitiveness without introducing credible dominance or materially increasing forced no-ops.",
+    "rulesBoundary": "This test may improve the evidence policy ecology but cannot select a physical rule change.",
+    "physicalBoundary": "Human counterplay, negotiation quality, teachability, fairness, duration, and fun remain outside the simulation."
+  }
+}

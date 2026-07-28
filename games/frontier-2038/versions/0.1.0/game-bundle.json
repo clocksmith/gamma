@@ -1,0 +1,2449 @@
+{
+  "schemaVersion": 1,
+  "gameVersion": "0.1.0",
+  "rulesetFingerprint": "sha256:73a557b9117df55f900ed13a5f7bc897cdcb9b3be394ef96cc9aa8344196dcdb",
+  "playtestKitFingerprint": "sha256:b1bf0bba279c704351e10c60f8766949c6b951f11248c8729d45df0913ad6d4a",
+  "canonicalVariantFingerprint": "sha256:fdb3794ae68838e6bb6c809b8fdc94afcb17afc58027251782a4f4c178ecef16",
+  "ruleset": {
+    "docs/core-rules.md": "# FRONTIER 2038\n\n## A 2–6 player race to build, deploy, regulate, and plausibly declare AGI\n\n**Design-baseline date:** July 25, 2026\n**Target time:** 55–70 minutes, pending blind-playtest proof\n**Standard game:** Four rounds, three turns per player per round\n\nThis document preserves the user-selected rules baseline. Interpretations\nneeded by the browser prototype are recorded separately in\n[design-decisions.md](design-decisions.md); they do not silently replace this\nbaseline.\n\nThe game begins as recognizable technology strategy and ends with agent\nswarms, emergency governance, orbital-compute proposals, public AGI\ndeclarations, and competitors jointly financing infrastructure they expect to\nweaponize against one another.\n\nThe world remains solemn. Nobody acknowledges that this is ridiculous.\n\n### Tone contract\n\nFRONTIER 2038 uses **solemn institutional absurdity**. Every impossible\ntechnology is presented as a responsible quarterly initiative. The escalation\nis structural:\n\n- The Demo is recognizable technology business.\n- The Scale turns land, power, chips, and people into an industrial apparatus.\n- The Narrative industrializes consensus, legitimacy, and public reality.\n- The Claim treats agent civilizations, fusion, orbital infrastructure, and\n  civilizational declarations as ordinary portfolio decisions.\n\nFlavor text may sharpen this escalation but never replaces or modifies a\ncard’s rules text. The game does not wink at the player, make allegations\nabout living people or real companies, or use randomness as a substitute for\na consequential choice.\n\n## 1. Central loop\n\nEvery player controls an asymmetric AI institution.\n\nEach player has six Core Action cards but takes only three turns per round.\nOnce played, a Core Action remains exhausted until the next round:\n\n- Fund\n- Research\n- Build\n- Organize\n- Deploy\n- Influence\n\nPlayers do not perform all six actions in a fixed sequence. The twelve\nstandard-game turns ask which three of six institutional functions matter in\neach era. The other three actions remain unused unless an explicit ability\nreadies one.\n\nExamples:\n\n- Round I: Research → Build → Deploy\n- Round II: Fund → Organize → Mega-Cluster\n- Round III: Research → Influence → Open Weights\n\n> You have six institutional capabilities, but only enough time to use three\n> of them this quarter.\n\n### Exact action-cycle sequence\n\n1. Reveal one Headline.\n2. Every player secretly selects one unused Core Action, or one unlocked Wild\n   Action plus one Escalation token.\n3. Reveal every selected action simultaneously.\n4. Resolve clockwise from Initiative.\n5. When resolving, choose one acting piece.\n6. Move it zero, one, or two adjacent hexes.\n7. Resolve the selected action from its destination.\n8. Exhaust the Core Action, or spend the Escalation token and flip the Wild\n   Action.\n9. Pass Initiative clockwise before the next cycle.\n\nPlayers commit only the action during selection. The acting piece, movement\npath, target, and exact payment remain open until resolution.\n\n### Acting piece\n\nThe acting piece is either the player’s CEO or one Team. Both have identical\naction authority. The CEO contributes two presence; a Team contributes one.\n\nThe acting piece determines where a Facility may be built, which location\nbonus applies, where Research occurs, which market receives a Deployment,\nwhich adjacent political or media spaces may be Influenced, and where power\ninfrastructure may begin.\n\nFacilities, Influence cubes, Generators, and Experts cannot act. Organize\nreceives normal acting-piece movement before its additional movement,\nrecruitment, restructuring, or relocation.\n\nUse one authority per rules layer:\n\n- The Era card determines globally unlocked actions.\n- A Faction board modifies those actions.\n- A Headline temporarily changes the current situation.\n- No card rewrites phase order or introduces a competing rule authority.\n\n### Universal tie rule\n\nWhenever an effect targets the player with the lowest, highest, or most of\nsomething and multiple players tie, target the tied player nearest Initiative\nclockwise. An effect that explicitly applies to everyone, or explicitly awards\nall tied players, overrides this rule.\n\n### Escalation tokens and Wild Actions\n\nEscalation tokens are spent, not permanent unlock markers. Every player has\nseven Wild Action cards. The Era card determines which ones are legal.\n\n- Select a Wild Action instead of a Core Action.\n- Commit and spend one Escalation token.\n- Flip the Wild Action after resolution.\n- Each named Wild Action is usable once per player per game.\n- Unspent Escalation tokens expire at round end.\n- Previously unlocked unused Wild Actions remain available later.\n\n| Round | Tokens | Newly available Wild Actions |\n| --- | ---: | --- |\n| I — The Demo | 0 | None |\n| II — The Scale | 1 | Mega-Cluster, Reorganization |\n| III — The Narrative | 1 | Open Weights, Narrative Capture |\n| IV — The Claim | 2 | Agent Swarm, Declare AGI, Fusion Demonstrator |\n\nPlayers receive four Wild Action uses across the game but choose among seven\npossibilities. Agent Swarm is itself the selected Wild Action, then resolves\nand exhausts two different unused Core Actions.\n\n## 2. Resources\n\n### Runway\n\nMoney, financing, and organizational endurance. Spend it on Facilities,\nhiring, partnerships, lobbying, and crisis management.\n\n### Compute\n\nTraining and inference capacity. Spend it on Research, Deploy, and major\ninfrastructure.\n\n### Capability\n\nA permanent model-quality track. Capability is not normally spent. It unlocks\nstronger deployments and AGI declarations.\n\n### Customers\n\nProducts deployed into the world. Each Customer produces one Runway during\nProduction and scores two Mandate at game end. Customers also increase public\nexposure.\n\n### Trust\n\nA track from zero to six. Trust helps with regulation, Joint Ventures, safety\nevents, and the final declaration. Low Trust limits final options but does not\neliminate a player.\n\nVictory points are called **Mandate**. Players persuade markets, institutions,\ncustomers, and history that their organization won the era; they do not prove\nmetaphysical intelligence.\n\n## 3. Modular hex board\n\nUse nineteen hexagonal tiles in a complete radius-two hexagon:\n\n- One Frontier\n- Three Research Campuses\n- Three Cloud Regions\n- One Consumer Market\n- Two Chip Foundries\n- Two Capital Markets\n- Two Talent Hubs\n- One Media Sphere\n- One Government District\n- One Grid and Reactor Corridor\n- Two Renewable Basins\n\nPlace Frontier in the center. The six inner spaces form a complete ring; the\ntwelve outer spaces form a complete second ring. Shuffle the following inner\npool and place it around Frontier:\n\n- One Research Campus\n- One Cloud Region\n- One Chip Foundry\n- One Capital Market\n- One Talent Hub\n- The Grid and Reactor Corridor\n\nShuffle the remaining twelve locations into the outer ring. This guarantees\nthat the first ring contains Research, Compute, Build, Fund, Organize, and\nPower support without fixing their adjacency. Consumer, Media, and Government\nremain scarce outer-ring destinations.\n\nEvery piece begins at Frontier. A movement of two reaches every space from the\ncenter. Once pieces leave the center, opposite outer-ring spaces are four\nhexes apart, so later positioning, Teams, Networks, and negotiated adjacency\nmatter. The board footprint is spatially symmetric; the shuffled economic\nlayout is intentionally not.\n\nEach hex has a visit bonus, two Facility spaces, a Facility production effect,\nand a control value used by Events and Mandates.\n\n### Presence and control\n\n- CEO: two presence\n- Team: one presence\n- Facility: one presence\n- Influence cube on Media, Government, or Capital: one presence\n\nThe player with the most presence controls the hex. Ties mean nobody controls\nit.\n\nThere is no combat and no player elimination. Rival pieces coexist.\nCompetition comes from Facility scarcity, control, positioning, voting,\ndeals, and Events.\n\n### Location effects\n\n| Location | Visit bonus | Facility production |\n| --- | --- | --- |\n| Research | Protect one Training draw | Gain one Safety token |\n| Cloud | First Compute cost is reduced by one | Gain two Compute |\n| Consumer | Deploy costs zero Compute | Gain one Runway |\n| Chip Foundry | Build costs one less Runway | Gain one Compute and one Build discount |\n| Capital | Fund gains one Runway | Gain two Runway |\n| Talent | Recruit costs one less Runway | Move one Team one hex during Production |\n| Media | Influence places one additional cube | Remove one Scrutiny cube before Audit |\n| Government | Your vote counts twice | Gain one Policy Shield |\n| Grid and Reactor Corridor | Infrastructure Build costs one less | Supports Generator construction and Fusion |\n| Renewable Basin | Anchors low-Scrutiny generation | Supports Generator construction |\n| Frontier | Action gains one basic output | Gain one Mandate and add one Scrutiny |\n\n### Networks\n\nTwo adjacent Facilities belonging to one player form a Network. During\nProduction, each connected Network of at least two Facilities produces one\nadditional Runway or Compute. A connected Network receives only one bonus\nregardless of size.\n\nTwo players with adjacent Facilities may place a Joint Venture token on the\nconnecting edge. During Production, each gains one resource of the type\nproduced by the other Facility. Either participant may terminate it during\ntheir Influence action. A Joint Venture remains owned after Realignment but\nproduces only while the two players again have adjacent Facilities.\n\n### Jurisdictional Realignment\n\nAfter Mandate scoring at the end of every round, including Round IV, every\nplayer secretly chooses one of their three Realignment ballots. Reveal all\nballots simultaneously:\n\n- **Consolidate the Core:** rotate the six inner-ring locations one position\n  clockwise.\n- **Expand the Periphery:** rotate the twelve outer-ring locations two\n  positions clockwise.\n- **Authorize Counter-Cycle:** rotate the inner ring one position clockwise\n  and the outer ring two positions counterclockwise.\n\nThe motion with the most ballots resolves. If leading motions tie, begin with\nthe Initiative player and scan clockwise; the first player whose ballot names\none of the tied motions selects the result. Every player casts exactly one\nballot. Government bonuses and other vote modifiers do not alter Realignment\nballots.\n\nFrontier never moves. Each moving location tile carries every CEO, Team,\nFacility, Generator, Influence cube, Expert, and other site-bound component on\nit. After the motion, players lift and re-lay all of their existing\nTransmission segments for free; they gain no segments during this\nreconciliation.\n\nJoint Ventures and Power Purchase Agreements remain in force but produce or\ntransfer Power only when their required Facilities or networks are adjacent.\nA Mega-Cluster whose two host Facilities are no longer adjacent is offline\nuntil those Facilities become adjacent again. Realignment never destroys a\ncomponent or terminates a contract.\n\nThe ballots are open information before selection and secret information until\nthe simultaneous reveal. Players may negotiate or misrepresent their intended\nballot; promises about the vote are not binding.\n\n### Power delivery\n\nPower is spatial infrastructure, not a stored resource.\n\n- Every player begins with a basic one-Power grid connection. It automatically\n  connects to that player’s first Facility, requires no Transmission or upkeep,\n  and cannot supply the additional demand of an Upgrade or Mega-Cluster.\n- Every Facility needs one delivered Power to produce.\n- A Mega-Cluster needs two additional Power.\n- An Upgrade adds one Power demand.\n- Generators and Transmission connect Power to Facilities.\n\nDuring Production:\n\n1. Divide each player’s infrastructure into connected networks.\n2. Add generation capacity inside each network.\n3. Add the Power demand of Facilities, Upgrades, and Mega-Clusters.\n4. Choose which Facilities receive Power.\n5. Powered Facilities produce normally.\n6. Unpowered Facilities are offline for that Production.\n\nCapacity is pooled inside a connected component; there is no detailed\nelectricity-flow calculation.\n\nAn offline Facility still contributes presence, occupies its Facility space,\nand may be visited. It produces nothing and provides no Network bonus. It\nautomatically returns online in any later Production where enough Power is\nassigned.\n\n## 4. Four-round escalation\n\n### Round I — The Demo\n\nThe world has seen the prototype. Nobody knows whether it works.\n\n- Three turns per player\n- Only Core Actions\n- Beneficial or mildly disruptive Headlines\n- No Escalation tokens\n\nThis round teaches movement, Facilities, Research, and Deploy.\n\n### Round II — The Scale\n\nCapital, chips, talent, and electricity become the real product.\n\nEach player receives one Escalation token and unlocks:\n\n#### Mega-Cluster\n\nSpend three Runway and two Compute to place a Mega-Cluster across the edge\nbetween two Facilities. It produces three Compute each round and adds two\nScrutiny.\n\nTwo players may jointly fund it. The lead pays two Runway and one Compute; the\npartner pays one Runway and one Compute. Each gains one Compute during\nProduction and scores two Mandate at game end.\n\nIts host Facilities must remain adjacent for the Mega-Cluster to operate.\nRealignment may place it offline without destroying it.\n\n#### Reorganization\n\nMove every Team up to one hex.\n\nYou may return one Team to supply to gain three Runway and ready one\npreviously played Core Action. Add one Scrutiny.\n\n### Round III — The Narrative\n\nCapability is no longer enough. The public must understand it correctly—or at\nleast repeatedly.\n\nEach player receives one Escalation token. Previous Wild Actions remain\nunlocked.\n\n#### Open Weights\n\nEvery player gains one Capability. You also gain:\n\n- Two Trust\n- One free Influence cube\n- Removal of one Scrutiny cube\n\n#### Narrative Capture\n\nMove or place three Influence cubes among Media, Government, and Capital.\nThen choose one:\n\n- Remove two of your Scrutiny cubes.\n- Gain two Runway.\n- Give a player with more Customers than you one Scrutiny.\n\n### Round IV — The Claim\n\nThe phrase “general intelligence” is now a financing category.\n\nEach player receives two Escalation tokens.\n\n#### Agent Swarm\n\nPlay two different unused Core Actions during one turn. Resolve both and pay\nall costs. Move only once. Exhaust both cards and add three Scrutiny.\n\n#### Declare AGI\n\nRequirements:\n\n- Capability nine or higher\n- At least three Customers\n- At least three Facilities\n- Trust two or higher\n- Spend three Compute\n\nThe first valid declaration scores seven Mandate. Later declarations score\nfive. Every declaration adds three Scrutiny.\n\nDeclaring AGI does not end the game.\n\n#### Fusion Demonstrator\n\nSpend five Runway and construct it on the Grid and Reactor Corridor. It\nprovides six Power, scores two Mandate, and adds three Scrutiny.\n\nFusion is late, expensive, politically exposed, and spatially constrained. It\ncompetes with Agent Swarm and Declare AGI for a Round IV Escalation token.\n\n## 5. Round sequence\n\n### A. Begin the quarter\n\n- Advance to the next fixed Era card.\n- Reveal the round’s Mandate card.\n- Ready all six Core Actions.\n- Award Escalation tokens.\n- Draw one Tactic card.\n- The lowest-scoring player receives one Public Research Grant, spendable as\n  one Runway or one Compute.\n- The highest-scoring player receives the Spotlight:\n  - Their first Fund gains one additional Runway.\n  - Their first Deploy, Mega-Cluster, Agent Swarm, or AGI declaration adds one\n    additional Scrutiny.\n\nResolve ties for the Public Research Grant and Spotlight using the universal\nInitiative-clockwise tie rule.\n\n### B. Three action cycles\n\nAt the beginning of each cycle:\n\n1. Reveal a Headline.\n2. Roll the Volatility die if it has two outcomes.\n3. Everyone secretly selects an Action card.\n4. Reveal simultaneously.\n5. Resolve clockwise from Initiative.\n6. Pass Initiative clockwise.\n\nNegotiation is permitted during resolution.\n\n### C. Power and Production\n\nResolve power networks and assign capacity first. Then every powered Facility,\nGenerator-linked bonus, Customer, Network, and Joint Venture produces.\n\nGain:\n\n- Facility production\n- Network bonuses\n- One Runway per Customer\n- Joint Venture production\n\nResource caps:\n\n- Runway: twelve\n- Compute: ten\n- Safety tokens: three\n\nExcess is lost.\n\n### D. Public Audit\n\nRisky actions add player-colored Scrutiny cubes to an opaque bag. Each player\nhas ten Scrutiny cubes. For each Scrutiny a player must add when all ten of\ntheir cubes are already in the bag, they immediately choose to pay one Runway\nor lose one Trust. A depleted physical supply never makes a risky action free.\n\nThe four-player base draws are two, three, four, and five. For other player\ncounts, calculate each round’s draw count as:\n\n> round(base draws × player count ÷ 4), minimum one\n\nRound halves upward. The resulting Audit profiles are:\n\n| Round | 2 players | 3 players | 4 players | 5 players | 6 players |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| I | 1 | 2 | 2 | 3 | 3 |\n| II | 2 | 2 | 3 | 4 | 5 |\n| III | 2 | 3 | 4 | 5 | 6 |\n| IV | 3 | 4 | 5 | 6 | 8 |\n\nFor each cube drawn, its owner pays one Runway or loses one Trust. Drawn cubes\nreturn to the owner’s supply; undrawn cubes remain in the bag.\n\nMedia Facilities may remove cubes before the draw. Some Events add black\nSystemic Risk cubes. When one is drawn, every player with at least three\nCustomers pays one Runway or loses one Trust.\n\n### E. Score the Mandate\n\nEach round has one two-point objective:\n\n- Most Capability gained this round\n- Largest connected Facility Network\n- Most new Customers\n- Most Trust with at least one successful Deploy\n- Control of the most different hex categories\n- Most completed Joint Ventures\n\nTied players score one point each.\n\n### F. Secret spatial vote\n\nEvery player secretly chooses one Jurisdictional Realignment ballot. Reveal\nsimultaneously, resolve the winning ring motion, and reconcile Transmission.\nAfter Round IV, perform this step before final control and secret-objective\nscoring.\n\n## 6. Core Actions\n\n### Fund\n\nChoose:\n\n- **Conservative round:** gain two Runway.\n- **Venture round:** gain four Runway and add two Scrutiny.\n\nCapital provides one additional Runway.\n\n### Research\n\nSpend one Compute and conduct a Training Run.\n\nThe Training deck contains seven data domains:\n\n- Code\n- Science\n- Web\n- Books\n- Images\n- Video\n- Synthetic\n\nDraw one card at a time.\n\n- Every unique domain is worth one Capability.\n- Stop after any draw to bank the Capability.\n- A repeated domain crashes the run: gain no Capability and add one Scrutiny.\n- A Safety token discards the repeated card and immediately banks the run.\n\nSpecial cards:\n\n- **Curated Corpus:** counts as any domain.\n- **Benchmark Leak:** gain two Capability, then add one Scrutiny.\n- **Licensed Dataset:** pay one Runway or end safely.\n- **Synthetic Loop:** counts as unique, but the next duplicate cannot be\n  protected.\n- **Human Evaluation:** bank immediately and gain one Trust.\n\n### Build\n\nChoose one mode.\n\n#### Construct a Facility\n\nPay two Runway and place a Facility on the acting piece’s hex. It requires one\nPower during Production. Each hex has only two Facility spaces. Facilities\ncannot be destroyed by rivals.\n\n#### Construct a Generator\n\nThe acting piece must be on an Energy hex. Pay the selected Power Source’s\ncost and place a Generator with its source card.\n\n#### Extend Transmission\n\nPay one Runway and place up to two connected Transmission segments on hex\nedges, beginning from one of your Facilities, Generators, or existing lines.\n\n#### Upgrade a Facility\n\nPay two Runway and add one Upgrade cube to a Facility. It produces one\nadditional printed resource and needs one additional Power. A Facility may\nhold only one Upgrade.\n\nWhen a Facility or Generator is first constructed, place one free adjacent\nTransmission segment.\n\n### Organize\n\nChoose:\n\n- Recruit one Team at the CEO’s location for two Runway, then move one piece\n  up to two additional hexes.\n- Move your pieces a combined total of five hexes.\n- Move one Facility to an adjacent hex for one Runway if space is available.\n\n### Deploy\n\nThe next Customer requires:\n\n| Customer | Capability required |\n| ---: | ---: |\n| 1 | 2 |\n| 2 | 4 |\n| 3 | 6 |\n| 4 | 8 |\n| 5 | 10 |\n\nSpend one Compute and gain one Customer. Consumer waives the Compute cost.\nEvery Deploy adds one Scrutiny.\n\n### Influence\n\nPlace two Influence cubes on the current or an adjacent Media, Government, or\nCapital hex. Then choose:\n\n- Gain one Trust.\n- Remove one Scrutiny.\n- Initiate an immediate trade or Joint Venture.\n\nOnly immediate exchanges and the current jointly funded action are binding.\nPromises about later turns are not mechanically enforceable.\n\nInfluence may also create a Power Purchase Agreement between adjacent player\nnetworks. Place a Joint Venture marker on the shared edge. During Production,\nthe supplier reserves one capacity, the buyer pays one Runway, and the buyer\nadds that Power to the connected network on their side. If payment cannot be\nmade, no Power transfers. Either player may terminate the agreement during a\nlater Influence action.\n\n## 7. Power Source cards\n\n### Utility Grid Contract\n\n- Cost: two Runway\n- Capacity: three Power\n- Upkeep: one Runway during each Production where used\n\n### Renewable Array\n\n- Cost: three Runway\n- Capacity: two Power\n- Gain one Trust when constructed\n- No upkeep or Scrutiny\n\n### Gas Peaker Complex\n\n- Cost: two Runway\n- Capacity: four Power\n- Add one Scrutiny during each Production where it supplies Power\n\n### Advanced Nuclear Campus\n\nUnlocked in Round II.\n\n- Cost: four Runway\n- Capacity: four Power\n- Gain one Policy Shield when constructed\n\n### Fusion Demonstrator\n\nThe Round IV Wild Action described above.\n\n## 8. Six factions\n\nMechanical faction names are canonical. Named historical figures are a\nreplaceable theme reference layer.\n\nEvery ability unlocks at the start of its named round. Its timing tag is one\nof **passive**, **once per round**, **once when unlocked**, or **once per\ngame**. “Persists” means it remains available in later rounds; “named round\nonly” means an unused opportunity expires when that round ends.\n\n### The Coalition Lab\n\nHistorical reference: Sam Altman archetype.\n\nStarts with five Runway, one Compute, and Trust three.\n\n- **Deal Flow — once per round; persists:** after an immediate trade, gain one\n  Runway.\n- **Round II — Board Reshuffle — once per round; persists:** after Organize,\n  ready one different Core\n  Action and add one Scrutiny.\n- **Round III — Strategic Partnership — passive; persists:** form Joint\n  Ventures with a player within two hexes instead of requiring adjacency.\n- **Round IV — Wildcard Governance — once per game; persists:** discard a\n  revealed Headline,\n  reveal two replacements, and choose one. Add two Scrutiny.\n\n### The Platform Empire\n\nHistorical reference: Mark Zuckerberg archetype.\n\nStarts with four Runway, two Compute, Trust two, and Customer #1 already\ndeployed. Its next Deploy is Customer #2 and requires Capability four. The\nstarting Customer is not a separate pre-track bonus.\n\n- **Installed Base — once per round; persists:** first Deploy each round on\n  Consumer or Media costs no Compute.\n- **Round II — Year of Efficiency — once per round; persists:** during\n  Organize, return a Team for three Runway and move every remaining piece one\n  hex.\n- **Round III — Open Ecosystem — passive; persists:** when using Open Weights,\n  gain one additional Trust and one Market Access token.\n- **Round IV — The Social Graph — once per round; persists:** Deploy on any\n  controlled Consumer or Media hex without moving there.\n\n### The Imperial Research Lab\n\nHistorical reference: Demis Hassabis archetype.\n\nStarts with three Runway, three Compute, and Trust four.\n\n- **Scientific Method — once per round; persists:** discard the first Training\n  duplicate and stop safely.\n- **Round II — Call Mountain View — once when unlocked; named round only:**\n  choose one:\n  - **Sundar:** gain three Runway.\n  - **Jeff Dean:** examine the top four Training cards and reorder them.\n  - **TPU Fleet:** gain three Compute.\n- **Round III — Nobel Effect — passive; persists:** a five-domain Training Run\n  gains two Trust.\n- **Round IV — Moonshot — once per game; persists:** resolve Research and\n  Build in one turn, paying all costs; exhaust both Core Actions and add two\n  Scrutiny.\n\n### The Vertical Empire\n\nHistorical reference: Elon Musk archetype.\n\nStarts with six Runway, two Compute, Trust one, and one Scrutiny cube already\nin the bag.\n\n- **Industrial Velocity — passive; persists:** Facilities on Cloud or Energy\n  cost one less Runway but add one Scrutiny.\n- **Round II — Move Fast — passive; persists:** before any action, the CEO may\n  move up to three hexes instead of two. This does not grant a free Build.\n- **Round III — Own the Feed — once per round; persists:** choose your result on a\n  two-outcome Headline after seeing every other result.\n- **Round IV — Orbital Compute — once per game; persists:** move one Facility\n  to any open hex and immediately collect its production. Add two Scrutiny.\n\n### The Safety Laboratory\n\nHistorical reference: Dario Amodei archetype.\n\nStarts with three Runway, two Compute, Trust five, and two Safety tokens.\n\n- **Constitutional Training — passive; persists:** Safety-token limit is four.\n- **Round II — Responsible Scaling — once per round; persists:** when another\n  player crashes a Training Run, offer one Safety token for one Runway and\n  gain one Trust.\n- **Round III — Audited Deployment — once per round; persists:** first Deploy\n  each round adds no Scrutiny.\n- **Round IV — Emergency Pause — once per game; persists:** disable one\n  globally unlocked Wild Action until the next cycle, gain two Trust, and pay\n  one Runway.\n\n### The Foundry\n\nHistorical reference: Jensen Huang archetype.\n\nStarts with five Runway, four Compute, and Trust three.\n\n- **The Shovels — passive; persists:** when another player spends at least two\n  Compute in one action, gain one Runway, at most twice per round.\n- **Round II — Allocation Window — once when unlocked; named round only:**\n  create two temporary Compute and offer them to rivals at negotiated prices.\n  Unsold Compute disappears after the cycle.\n- **Round III — New Architecture — once when unlocked; named round only:**\n  upgrade one Facility to produce one additional resource. Rivals may pay one\n  Runway to license that bonus for one Facility this round.\n- **Round IV — Everybody Gets a GPU — once per game; persists:** give every\n  rival one Compute from the bank, score one Mandate per two rivals, and\n  remove two Scrutiny.\n\n### Starting scoring exposure\n\nStarting assets already occupy positions on the endgame tracks; they are not\nfree of scoring value:\n\n| Faction | Mandate already represented at setup |\n| --- | ---: |\n| Coalition Lab | 2 from Trust three |\n| Platform Empire | 2 from Trust two, plus 2 from Customer #1 |\n| Imperial Research Lab | 4 from Trust four |\n| Vertical Empire | 0 from Trust one |\n| Safety Laboratory | 4 from Trust five |\n| Foundry | 2 from Trust three |\n\nThese values are not scored twice or awarded during setup. They expose the\nstarting positions that will count if unchanged at final scoring.\n\nOther executives, researchers, investors, regulators, and hardware leaders\nbelong in Specialist or Patron cards rather than full factions.\n\n## 9. Headline deck\n\nHistorically inspired Headlines target board state, never the corresponding\nhistorical faction.\n\nReveal each Headline before secret action selection. Its purpose is to create a\ntemporary future regime that changes what the table wants to select, where it\nwants to move, or what it is willing to risk.\n\n- Unless stated otherwise, a Headline lasts for the current cycle.\n- An immediate instruction resolves before action selection.\n- An effect naming this round’s Production remains active until that\n  Production.\n- A remainder-of-game result becomes part of the shared public state.\n- For a secret Runway auction, bid from zero to current Runway and reveal\n  together. The highest positive bidder wins and pays. Ties use\n  Initiative-clockwise order; all-zero bidding produces no winner.\n- For a Government vote, everyone secretly votes and reveals together. The\n  Government controller’s vote counts twice. The controller breaks a tied\n  vote; Initiative breaks it if Government is uncontrolled.\n- For another secret binary choice, everyone chooses and reveals together\n  before resolving results.\n- A Headline-granted Core Action still pays its costs and exhausts that Action\n  card. Multiple granted actions resolve in Initiative order.\n- A two-result Volatility roll uses 1–3 for the first listed result and 4–6 for\n  the second unless the card states another mapping.\n\n### Round I\n\n1. **Ten-Dollar Intelligence:** Research and Deploy cost no Compute this cycle.\n   Each Research or Deploy resolved this cycle adds one additional Scrutiny.\n2. **The First Billion-Dollar Company Has No Employees:** during Organize this\n   cycle, return any number of deployed Teams. Gain two Runway per Team\n   returned. If at least one returns, add two Scrutiny.\n3. **Synthetic Celebrity Becomes the Largest Network:** each player’s next\n   Deploy on Consumer or Media this cycle reduces its Capability requirement\n   by one, minimum one. That Deploy adds two additional Scrutiny.\n4. **The Model Passes Every Professional Exam on the Same Morning:** a\n   successful Research this cycle banking at least three Capability gains one\n   Market Access token. Banking at least five also gains one Trust.\n5. **Open-Weights Drop:** everyone gains one Capability. Lowest-Customer player\n   gains one Trust.\n6. **Talent Gold Rush:** hold a secret Runway auction for a neutral Expert\n   worth one presence.\n\n### Round II\n\n7. **A Data Center Buys the County:** immediately hold a secret Runway auction.\n   The winner pays their bid, moves their CEO to any Cloud or Energy hex, gains\n   two Build discounts, and adds one Scrutiny.\n8. **Humanoid Workers Cross the Factory Gate:** during Organize this cycle,\n   recruit up to two Teams for one Runway total, subject to supply. Add one\n   Scrutiny per Team recruited this way.\n9. **Reactor Restart Approved for One Model:** the first Advanced Nuclear\n   Campus constructed this cycle costs two less Runway and scores one Mandate.\n   Every rival may then place one Influence on Government.\n10. **Emergency Power Authority:** during this round’s Production, each player\n    may assign up to two Power beyond actual capacity. Add one Scrutiny per\n    emergency Power. A player assigning both also adds one Systemic Risk cube.\n11. **Boardroom Coup:** Spotlight pays two Runway or receives public backing\n   from another player, who gains one Trust. Otherwise Spotlight’s CEO cannot\n   activate this cycle.\n12. **Export Controls:** Compute cannot be traded this cycle. Chip and\n    Government controllers each gain one Runway.\n\n### Round III\n\n13. **The First AI-Written Law Passes Unread:** before action selection, the\n    Government controller names one Core Action; Initiative names it if\n    Government is uncontrolled. Anyone selecting it gains two Runway after\n    resolution and adds one Scrutiny. The controller gains one Trust if at\n    least two rivals selected it.\n14. **The Benchmark Is the Economy:** after Research banks at least three\n    Capability, the player may exhaust an unused Deploy to resolve it\n    immediately from the Research acting piece’s hex, paying normal costs.\n    Gain the next eligible Customer and add normal Deploy Scrutiny plus two\n    additional Scrutiny.\n15. **Open-Weight Non-Aligned Movement:** before action selection, everyone\n    secretly chooses Join or Refuse:\n    - Join: gain one Capability and add one Scrutiny.\n    - Refuse: gain one Runway and one Trust.\n    - If Join has a strict majority of all players, each Joiner removes one\n      Scrutiny. Otherwise each Joiner adds one additional Scrutiny.\n16. **Synthetic Candidate Wins the Election:** Government votes:\n    - Certify: each player may return two Influence from Media or Government\n      to gain their next eligible Customer and add two Scrutiny.\n    - Void: each player may return two such Influence to gain two Trust. The\n      Government controller adds one Scrutiny.\n17. **Weights on the Internet:** lowest-Capability player copies one Facility\n    upgrade until round end. Its owner gains one Trust.\n18. **Election Deepfake Panic:** Government votes:\n    - Regulate: Deploy costs one additional Compute but gains one Trust.\n    - Do Nothing: Deploy gains one additional Customer income this round and\n      adds two Scrutiny.\n\n### Round IV\n\n19. **Autonomous Corporation Incorporates Itself:** after all normal actions\n    resolve, identify the most-selected Core Action. Initiative chooses among\n    tied actions. In Initiative order, every player who did not select it may\n    exhaust their unused copy to resolve it without moving, then adds two\n    Scrutiny. If no Core Action was selected, no secondary Action occurs.\n20. **Recursive Self-Improvement Weekend:** during Research this cycle, every\n    unique domain is worth two Capability. A crash adds three Scrutiny and one\n    Systemic Risk cube. Safety may protect normally.\n21. **AGI Files for Personhood:** Government votes; the result lasts for the\n    remainder of the game:\n    - Person: Declare AGI requires Trust four, scores two additional Mandate,\n      and removes one Scrutiny.\n    - Property: requirements remain normal. Every declaration gives the player\n      controlling Government when it resolves two Runway and adds one Systemic\n      Risk cube.\n22. **Room-Temperature Superconductor Replicates on Livestream:** roll\n    Volatility when revealed; 1–3 is Fraud and 4–6 is Replicates.\n    - Replicates: Generators provide two additional Power this Production,\n      Extend Transmission places four segments this cycle subject to supply,\n      and Fusion costs two less Runway this cycle.\n    - Fraud: Fund gains three additional Runway and adds two additional\n      Scrutiny this cycle. Spotlight loses one Trust unless it resolves\n      Influence this cycle.\n23. **Agent Swarm Escapes Scope:** everyone may select Agent Swarm without an\n    Escalation token this cycle. It still uses that cycle’s action slot and\n    adds four Scrutiny.\n24. **AGI Declared in a Blog Post:** after the cycle, an eligible player with\n    an unspent Escalation token may spend it to declare without another action\n    slot. They still spend three Compute, flip Declare AGI, add three Scrutiny,\n    and score six Mandate if first or five if later.\n\n## 10. Exact deck contracts\n\n### Training deck: 50 cards\n\n- Five copies of each of seven domains: 35\n- Three Curated Corpus\n- Three Licensed Dataset\n- Three Benchmark Leak\n- Three Synthetic Loop\n- Three Human Evaluation\n\nEvery revealed card enters the discard pile after a Training Run, whether it\nsucceeds, stops, or crashes. If the draw deck empties, finish resolving the\ncurrent card, shuffle the discard pile, and continue.\n\n### Tactic deck: 36 cards\n\nUse three copies of each of the twelve designs below. Deal one during setup and\ndraw one at the beginning of every round, including Round I. Hand limit is\nthree; discard excess cards after drawing. Maximum normal six-player demand is\nthirty cards.\n\n## 11. Tactic cards\n\nPlayers begin with one Tactic and draw one at the beginning of each round.\nHand limit three. Play at most one during your own turn. The base game has no\noff-turn cancellation cards.\n\n- **Cloud Partnership:** pay one Runway for two Compute; another player gains\n  one Runway.\n- **API Price Cut:** Deploy for zero Compute; that Customer produces no Runway\n  this round.\n- **Open Letter:** add one vote to the current Government decision.\n- **Model Card:** remove one Scrutiny after Deploy.\n- **Talent Raid:** recruit a neutral Expert for one Runway.\n- **Board Reshuffle:** ready Organize or Influence.\n- **Weights Leak:** copy one public Facility upgrade this round.\n- **Emergency Pause:** end a failed Training Run with no Capability and no\n  Scrutiny.\n- **Custom Silicon:** one Facility permanently produces one additional Compute.\n- **Government Contract:** with Trust at least four, gain two Runway.\n- **Benchmark Optimization:** after successful Research, gain one Capability\n  and add one Scrutiny.\n- **Interconnection Waiver:** ignore one Generator, Transmission, or\n  Power-upkeep cost and gain one Trust.\n\n## 12. Component limits\n\nEach faction receives:\n\n- One CEO\n- Three Teams\n- Four Facilities\n- Two Generators\n- Seven Transmission segments\n- Eight Influence cubes\n- Ten Scrutiny cubes\n- Two Joint Venture markers\n- Two Upgrade cubes\n- Five Customer markers\n- Four Escalation tokens\n- Six Core Action cards\n- Seven Wild Action cards\n- Three Jurisdictional Realignment ballots\n- One AGI Declaration marker\n\nGenerators do not count against the Facility limit.\n\n### Defined effects\n\n- **Market Access:** discard during Deploy to reduce that Customer’s Capability\n  requirement by one, minimum one.\n- **Build discount:** reduce one Build’s Runway cost by one, minimum zero;\n  store at most two.\n- **Policy Shield:** discard to prevent one Trust loss or ignore one regulatory\n  surcharge; store at most two.\n- **Facility Upgrade:** one per Facility; +1 printed production and +1 Power\n  demand.\n- **Neutral Expert:** one presence, placed with the acquiring CEO, moves one\n  hex during Organize, and cannot act, Build, or Influence.\n- **Secret objectives:** deal two and keep one; score three Mandate.\n- **Power offline recovery:** reassess every Production.\n- **Event offline recovery:** ends when the Event states, normally next\n  Production.\n\n## 13. Endgame scoring\n\n- Two Mandate per Customer\n- Two Mandate at Capability three, six, nine, and twelve\n- One Mandate per Facility\n- One Mandate per controlled hex category, maximum four\n- Trust:\n  - zero or one: zero\n  - two or three: two\n  - four or five: four\n  - six: six\n- Round Mandates already scored\n- Secret institutional objective: three\n- AGI declaration: seven for first, five for later claimants\n- Each offline Facility: minus one\n\nHighest Mandate wins.\n\nTies break by:\n\n1. Higher Trust\n2. More Customers\n3. More Compute\n4. Joint victory accompanied by an extremely serious merger announcement\n\n## 14. Balance rationale and test boundary\n\n- Research, infrastructure, adoption, and Trust all contribute to the largest\n  reward.\n- Customers create income and Mandate but also Scrutiny.\n- Infrastructure compounds but is capped at four Facilities and one Network\n  bonus per connected group.\n- AGI is a score event rather than instant victory.\n- Leaders receive financing advantages and more exposure.\n- Last place receives a modest flexible subsidy.\n- Faction powers modify bounded actions rather than multiplying the entire\n  engine.\n- Events target board position.\n- No elimination, destruction, or unrestricted theft.\n- Every player reaches Round IV with consequential options.\n\nThe first prototype uses the four-round game only. A three-round version skips\nthe escalation; a fifth round remains a possible future variant, not part of\nthe current contract.\n\nFreeze new systems until the selected contracts survive play. Test four\nplayers first. Record every action selection, powered-Facility count by round,\nCapability gained by each Research, Audit hits by player, and earliest AGI\neligibility. Two- and six-player formats require explicit scaling tests rather\nthan assuming the four-player map transfers unchanged.\n",
+    "data/game-config.json": {
+      "schemaVersion": 1,
+      "gameId": "frontier-2038",
+      "title": "FRONTIER 2038",
+      "theme": {
+        "genre": "institutional retro-futurist strategy satire",
+        "tone": "Solemn institutions normalize increasingly absurd technology.",
+        "escalationRule": "Each Era should feel one step less reasonable while every rule remains plainly legible.",
+        "tablePromise": "Build the future, power it, negotiate ownership of it, and announce it before anyone can define it."
+      },
+      "players": {
+        "min": 2,
+        "max": 6,
+        "firstTestCount": 4
+      },
+      "tieRule": {
+        "id": "initiative_clockwise",
+        "text": "When lowest, highest, or most is tied, the tied player nearest Initiative clockwise is the target unless the effect explicitly applies to everyone."
+      },
+      "audit": {
+        "scaling": "round(baseDraws * playerCount / 4)",
+        "minimumDraws": 1,
+        "scrutinySupplyPerPlayer": 10,
+        "overflowPenalty": "For each Scrutiny cube that cannot be added, immediately pay 1 Runway or lose 1 Trust."
+      },
+      "rounds": [
+        {
+          "number": 1,
+          "id": "demo",
+          "name": "The Demo",
+          "tagline": "Nobody knows whether it works. Everyone knows the valuation.",
+          "flavorText": "A small prototype becomes a civilizational talking point before lunch.",
+          "artDirection": "A single glowing terminal on a severe stage facing an impossibly large audience.",
+          "cycles": 3,
+          "auditBaseDraws": 2,
+          "escalationTokens": 0,
+          "wildActions": []
+        },
+        {
+          "number": 2,
+          "id": "scale",
+          "name": "The Scale",
+          "tagline": "The model is no longer the product. Electricity, land, and patience are the product.",
+          "flavorText": "Research leaves the laboratory and begins negotiating directly with the power grid.",
+          "artDirection": "A data-center campus spreading across a valley beneath tasteful planning banners.",
+          "cycles": 3,
+          "auditBaseDraws": 3,
+          "escalationTokens": 1,
+          "wildActions": [
+            "mega_cluster",
+            "reorganization"
+          ]
+        },
+        {
+          "number": 3,
+          "id": "narrative",
+          "name": "The Narrative",
+          "tagline": "Capability exists. Reality must now be informed.",
+          "flavorText": "Every institution reaches the same independent conclusion through different sponsored channels.",
+          "artDirection": "Media, government, and capital towers converging into one serene broadcast face.",
+          "cycles": 3,
+          "auditBaseDraws": 4,
+          "escalationTokens": 1,
+          "wildActions": [
+            "mega_cluster",
+            "reorganization",
+            "open_weights",
+            "narrative_capture"
+          ]
+        },
+        {
+          "number": 4,
+          "id": "claim",
+          "name": "The Claim",
+          "tagline": "General intelligence has become a financing category.",
+          "flavorText": "Agent swarms, orbital facilities, and fusion announcements enter the ordinary quarterly calendar.",
+          "artDirection": "A press podium beneath orbital compute and a reactor sunrise.",
+          "cycles": 3,
+          "auditBaseDraws": 5,
+          "escalationTokens": 2,
+          "wildActions": [
+            "mega_cluster",
+            "reorganization",
+            "open_weights",
+            "narrative_capture",
+            "agent_swarm",
+            "declare_agi",
+            "fusion_demonstrator"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "id": "fund",
+          "name": "Fund",
+          "summary": "Gain 2 Runway, or gain 4 Runway and add 2 Scrutiny.",
+          "initiativeName": "Finance the Inevitable",
+          "slogan": "The forecast contains no revenue, only destiny.",
+          "flavorText": "Convert urgency, access, and a favorable chart into additional institutional life.",
+          "artDirection": "A capital terminal printing a runway directly toward the horizon."
+        },
+        {
+          "id": "research",
+          "name": "Research",
+          "summary": "Spend 1 Compute to conduct a push-your-luck Training Run.",
+          "initiativeName": "Train Until the Duplicate Blinks",
+          "slogan": "Every domain is signal until it appears twice.",
+          "flavorText": "Feed the model distinct portions of civilization and decide when confidence becomes evidence.",
+          "artDirection": "Seven data streams entering a restrained black training chamber."
+        },
+        {
+          "id": "build",
+          "name": "Build",
+          "summary": "Construct a Facility or Generator, extend Transmission, or upgrade a Facility.",
+          "initiativeName": "Make the Diagram Physical",
+          "slogan": "The roadmap now requires zoning.",
+          "flavorText": "Turn architecture slides into facilities, generators, transmission, and permanent local weather.",
+          "artDirection": "An immaculate blueprint unfolding into a monumental powered campus."
+        },
+        {
+          "id": "organize",
+          "name": "Organize",
+          "summary": "Recruit, redistribute Teams, or relocate a Facility.",
+          "initiativeName": "Recompile the Institution",
+          "slogan": "People are our greatest configurable resource.",
+          "flavorText": "Move the people, rename the divisions, and describe the disappearance of a Team as focus.",
+          "artDirection": "An org chart transforming into moving pieces across the hex map."
+        },
+        {
+          "id": "deploy",
+          "name": "Deploy",
+          "summary": "Spend 1 Compute to gain a Customer if Capability permits.",
+          "initiativeName": "Ship Into the World",
+          "slogan": "Production is the final evaluation environment.",
+          "flavorText": "Convert Capability into dependency, recurring revenue, and attention that marketing cannot entirely absorb.",
+          "artDirection": "A polished launch button connected to hospitals, markets, homes, and one unknown system."
+        },
+        {
+          "id": "influence",
+          "name": "Influence",
+          "summary": "Place Influence, gain Trust, remove Scrutiny, or negotiate.",
+          "initiativeName": "Manufacture Organic Consensus",
+          "slogan": "Stakeholders have independently aligned with the briefing.",
+          "flavorText": "Move opinion through media, government, and capital until institutional preference resembles public reality.",
+          "artDirection": "A quiet briefing radiating outward into identical spontaneous headlines."
+        }
+      ],
+      "resources": {
+        "runway": {
+          "name": "Runway",
+          "microcopy": "Time, money, and permission to continue.",
+          "iconConcept": "A receding financial runway.",
+          "min": 0,
+          "cap": 12
+        },
+        "compute": {
+          "name": "Compute",
+          "microcopy": "Electricity made strategically legible.",
+          "iconConcept": "A processor containing a grid symbol.",
+          "min": 0,
+          "cap": 10
+        },
+        "capability": {
+          "name": "Capability",
+          "microcopy": "What the model can do before anyone agrees what it means.",
+          "iconConcept": "A stepped waveform entering an eye.",
+          "min": 0,
+          "cap": 12
+        },
+        "customers": {
+          "name": "Customers",
+          "microcopy": "Deployment, dependency, and recurring revenue.",
+          "iconConcept": "A user silhouette inside a contract seal.",
+          "min": 0,
+          "cap": 5
+        },
+        "trust": {
+          "name": "Trust",
+          "microcopy": "Public permission with a short half-life.",
+          "iconConcept": "A civic column built from signal bars.",
+          "min": 0,
+          "cap": 6
+        },
+        "safety": {
+          "name": "Safety",
+          "microcopy": "One more chance to stop while stopping is still an option.",
+          "iconConcept": "A shield containing a pause mark.",
+          "min": 0,
+          "cap": 3
+        }
+      },
+      "playerSupply": {
+        "ceos": 1,
+        "teams": 3,
+        "facilities": 4,
+        "generators": 2,
+        "transmissionSegments": 7,
+        "influenceCubes": 8,
+        "scrutinyCubes": 10,
+        "upgradeCubes": 2,
+        "customerMarkers": 5,
+        "escalationTokens": 4,
+        "coreActionCards": 6,
+        "wildActionCards": 7,
+        "realignmentBallots": 3,
+        "agiDeclarationMarkers": 1,
+        "jointVentureMarkers": 2,
+        "megaClusterMarkers": 1
+      },
+      "board": {
+        "selectedTileCount": 19,
+        "inventoryStatus": "selected",
+        "prototypeTileCount": 19,
+        "prototypeNote": "Selected radius-two board: 1 center, 6 inner-ring, and 12 outer-ring hexes.",
+        "geometry": {
+          "radius": 2,
+          "centerSlots": 1,
+          "innerSlots": 6,
+          "outerSlots": 12,
+          "movementRange": 2,
+          "maximumDistance": 4,
+          "placementRule": "Shuffle each ring pool independently. Frontier remains fixed at center."
+        },
+        "realignment": {
+          "name": "Jurisdictional Realignment",
+          "timing": "After Mandate scoring in every round, including Round IV, before final scoring.",
+          "vote": "Every player secretly selects one motion. Reveal simultaneously. The motion with the most ballots resolves.",
+          "tieBreak": "Among tied leading motions, scan players clockwise from Initiative; the first ballot naming a tied motion selects it.",
+          "contentsRule": "Location tiles and everything on them move together. Frontier never moves.",
+          "transmissionRule": "After movement, lift and re-lay each player's existing Transmission segments for free. No segments are gained.",
+          "agreementRule": "Joint Ventures, Power Purchase Agreements, and Mega-Clusters remain owned but produce only while their required Facilities or networks are adjacent.",
+          "motions": [
+            {
+              "id": "consolidate_core",
+              "name": "Consolidate the Core",
+              "ballotText": "Rotate the six inner-ring districts one position clockwise.",
+              "innerSteps": 1,
+              "outerSteps": 0,
+              "flavorText": "The center has been reorganized for clearer accountability."
+            },
+            {
+              "id": "expand_periphery",
+              "name": "Expand the Periphery",
+              "ballotText": "Rotate the twelve outer-ring districts two positions clockwise.",
+              "innerSteps": 0,
+              "outerSteps": 2,
+              "flavorText": "The edge has been moved closer to opportunity without changing its distance."
+            },
+            {
+              "id": "counter_cycle",
+              "name": "Authorize Counter-Cycle",
+              "ballotText": "Rotate the inner ring one position clockwise and the outer ring two positions counterclockwise.",
+              "innerSteps": 1,
+              "outerSteps": -2,
+              "flavorText": "Competing jurisdictions have synchronized by moving in opposite directions."
+            }
+          ]
+        },
+        "facilitySpacesPerHex": 2,
+        "startingGridConnection": {
+          "capacity": 1,
+          "target": "first_facility",
+          "requiresTransmission": false,
+          "upkeep": 0,
+          "restrictions": "Cannot supply an Upgrade or Mega-Cluster."
+        },
+        "tiles": [
+          {
+            "id": "frontier",
+            "category": "frontier",
+            "name": "Frontier",
+            "count": 1,
+            "placement": {
+              "center": 1,
+              "inner": 0,
+              "outer": 0
+            },
+            "visit": "Gain +1 basic action output.",
+            "production": "Gain 1 Mandate and add 1 Scrutiny.",
+            "landmark": "The Unlicensed Horizon",
+            "flavorText": "Everything beyond this point is a pilot program with permanent foundations.",
+            "artDirection": "An unfinished hex of survey stakes, launch gantries, fiber, and one executive observation deck."
+          },
+          {
+            "id": "research",
+            "category": "research",
+            "name": "Research Campus",
+            "count": 3,
+            "placement": {
+              "center": 0,
+              "inner": 1,
+              "outer": 2
+            },
+            "visit": "Protect one Training draw.",
+            "production": "Gain 1 Safety token.",
+            "landmark": "Institute for Measurable Surprise",
+            "flavorText": "The campus separates discovery from deployment by a landscaped courtyard.",
+            "artDirection": "Quiet brutalist laboratories surrounding an illuminated benchmark garden."
+          },
+          {
+            "id": "cloud",
+            "category": "cloud",
+            "name": "Cloud Region",
+            "count": 3,
+            "placement": {
+              "center": 0,
+              "inner": 1,
+              "outer": 2
+            },
+            "visit": "Reduce the first Compute cost by 1.",
+            "production": "Gain 2 Compute.",
+            "landmark": "Elastic Sovereignty Zone",
+            "flavorText": "A jurisdiction composed primarily of cooling, contracts, and favorable latency.",
+            "artDirection": "Data halls arranged like a capital city beneath engineered clouds."
+          },
+          {
+            "id": "consumer",
+            "category": "consumer",
+            "name": "Consumer Market",
+            "count": 1,
+            "placement": {
+              "center": 0,
+              "inner": 0,
+              "outer": 1
+            },
+            "visit": "Deploy costs 0 Compute.",
+            "production": "Gain 1 Runway.",
+            "landmark": "The Default Population",
+            "flavorText": "Everyone is free to opt out through the account settings of the service they require.",
+            "artDirection": "A luminous urban market where every device displays the same friendly assistant."
+          },
+          {
+            "id": "foundry",
+            "category": "chip",
+            "name": "Chip Foundry",
+            "count": 2,
+            "placement": {
+              "center": 0,
+              "inner": 1,
+              "outer": 1
+            },
+            "visit": "Build costs 1 less Runway.",
+            "production": "Gain 1 Compute and one Build discount.",
+            "landmark": "Cathedral of Yield",
+            "flavorText": "Here, microscopic defects become macroeconomic events.",
+            "artDirection": "A semiconductor clean room rendered with the scale and symmetry of a cathedral."
+          },
+          {
+            "id": "capital",
+            "category": "capital",
+            "name": "Capital Market",
+            "count": 2,
+            "placement": {
+              "center": 0,
+              "inner": 1,
+              "outer": 1
+            },
+            "visit": "Fund gains +1 Runway.",
+            "production": "Gain 2 Runway.",
+            "landmark": "The Inevitability Exchange",
+            "flavorText": "Future cash flows are optional when the future itself has been securitized.",
+            "artDirection": "A stock exchange trading glowing forecast curves instead of company names."
+          },
+          {
+            "id": "talent",
+            "category": "talent",
+            "name": "Talent Hub",
+            "count": 2,
+            "placement": {
+              "center": 0,
+              "inner": 1,
+              "outer": 1
+            },
+            "visit": "Recruit costs 1 less Runway.",
+            "production": "Move one Team one hex.",
+            "landmark": "The Perpetual Farewell Campus",
+            "flavorText": "Every departing employee begins immediately at the building next door.",
+            "artDirection": "A campus of revolving doors connected by autonomous moving walkways."
+          },
+          {
+            "id": "media",
+            "category": "media",
+            "name": "Media Sphere",
+            "count": 1,
+            "placement": {
+              "center": 0,
+              "inner": 0,
+              "outer": 1
+            },
+            "visit": "Influence places +1 cube.",
+            "production": "Remove one Scrutiny before Audit.",
+            "landmark": "Consensus Operations Center",
+            "flavorText": "Public opinion is observed, modeled, and returned with improved engagement.",
+            "artDirection": "A broadcast sphere reflecting millions of synchronized personal feeds."
+          },
+          {
+            "id": "government",
+            "category": "government",
+            "name": "Government District",
+            "count": 1,
+            "placement": {
+              "center": 0,
+              "inner": 0,
+              "outer": 1
+            },
+            "visit": "Your vote counts twice.",
+            "production": "Gain one Policy Shield.",
+            "landmark": "Office of Anticipatory Permission",
+            "flavorText": "The law arrives before the technology and is immediately asked to wait outside.",
+            "artDirection": "Monumental civic buildings wrapped in transparent regulatory flowcharts."
+          },
+          {
+            "id": "grid_reactor",
+            "category": "energy",
+            "name": "Grid and Reactor Corridor",
+            "count": 1,
+            "placement": {
+              "center": 0,
+              "inner": 1,
+              "outer": 0
+            },
+            "visit": "Infrastructure Build costs 1 less.",
+            "production": "Supports Generator construction and Fusion.",
+            "landmark": "The National Extension Cord",
+            "flavorText": "Every promising future eventually requests a substation.",
+            "artDirection": "Transmission towers converging on reactors and a sealed fusion construction site."
+          },
+          {
+            "id": "renewable_basin",
+            "category": "energy",
+            "name": "Renewable Basin",
+            "count": 2,
+            "placement": {
+              "center": 0,
+              "inner": 0,
+              "outer": 2
+            },
+            "visit": "Anchors low-Scrutiny generation.",
+            "production": "Supports Generator construction.",
+            "landmark": "The Patient Array",
+            "flavorText": "The basin produces clean power and extremely complicated interconnection paperwork.",
+            "artDirection": "Solar, wind, and storage fields arranged in calm geometric terraces."
+          }
+        ]
+      },
+      "trainingDeck": {
+        "reshuffleWhenEmpty": true,
+        "cards": [
+          {
+            "id": "code",
+            "kind": "domain",
+            "name": "Code",
+            "flavorText": "The model learns every abstraction and several mistakes that achieved tenure.",
+            "artDirection": "A luminous software city folding recursively into a terminal.",
+            "count": 5
+          },
+          {
+            "id": "science",
+            "kind": "domain",
+            "name": "Science",
+            "flavorText": "A compressed record of what survived replication, review, and formatting.",
+            "artDirection": "Equations, instruments, and molecular diagrams orbiting a restrained model core.",
+            "count": 5
+          },
+          {
+            "id": "web",
+            "kind": "domain",
+            "name": "The Web",
+            "flavorText": "Humanity’s largest library, marketplace, argument, and unattended attic.",
+            "artDirection": "A vast tangled network entering a perfectly square data aperture.",
+            "count": 5
+          },
+          {
+            "id": "books",
+            "kind": "domain",
+            "name": "Books",
+            "flavorText": "Centuries of thought converted into a convenient licensing discussion.",
+            "artDirection": "A monumental library feeding pages into a quiet optical scanner.",
+            "count": 5
+          },
+          {
+            "id": "images",
+            "kind": "domain",
+            "name": "Images",
+            "flavorText": "The visible world, plus every version of it someone wished had happened.",
+            "artDirection": "A mosaic of ordinary life resolving into synthetic geometry.",
+            "count": 5
+          },
+          {
+            "id": "video",
+            "kind": "domain",
+            "name": "Video",
+            "flavorText": "Time itself, sampled at a commercially acceptable frame rate.",
+            "artDirection": "Film frames becoming a continuous ribbon around a training chamber.",
+            "count": 5
+          },
+          {
+            "id": "synthetic",
+            "kind": "domain",
+            "name": "Synthetic",
+            "flavorText": "The model prepares tomorrow’s curriculum from yesterday’s confidence.",
+            "artDirection": "A closed luminous loop printing pristine data cards.",
+            "count": 5
+          },
+          {
+            "id": "curated_corpus",
+            "kind": "special",
+            "name": "Curated Corpus",
+            "flavorText": "A rare dataset in which every problem has already been removed by a committee.",
+            "artDirection": "A small immaculate archive guarded more heavily than the main data center.",
+            "count": 3
+          },
+          {
+            "id": "benchmark_leak",
+            "kind": "special",
+            "name": "Benchmark Leak",
+            "flavorText": "The model independently discovers exactly what will be on the exam.",
+            "artDirection": "A sealed evaluation envelope glowing through a transparent training wall.",
+            "count": 3
+          },
+          {
+            "id": "licensed_dataset",
+            "kind": "special",
+            "name": "Licensed Dataset",
+            "flavorText": "Consent has been acquired in bulk and invoiced quarterly.",
+            "artDirection": "A stack of legal contracts transformed into clean data crystals.",
+            "count": 3
+          },
+          {
+            "id": "synthetic_loop",
+            "kind": "special",
+            "name": "Synthetic Loop",
+            "flavorText": "The dataset begins citing itself with increasing institutional confidence.",
+            "artDirection": "A perfect circular bibliography orbiting a visibly overheating model.",
+            "count": 3
+          },
+          {
+            "id": "human_evaluation",
+            "kind": "special",
+            "name": "Human Evaluation",
+            "flavorText": "The humans begin negotiating.",
+            "artDirection": "Evaluators seated across a bargaining table from a many-windowed model interface.",
+            "count": 3
+          }
+        ]
+      },
+      "powerSources": [
+        {
+          "id": "utility_grid_contract",
+          "name": "Utility Grid Contract",
+          "tagline": "Reliable power, socially distributed consequences.",
+          "publicClaim": "Immediate capacity through existing public infrastructure.",
+          "hiddenConsequence": "The institution has outsourced both upkeep and the meaning of peak demand.",
+          "artDirection": "A polished contract plugged directly into a crowded metropolitan grid.",
+          "round": 1,
+          "runwayCost": 2,
+          "capacity": 3,
+          "upkeep": 1,
+          "trust": 0,
+          "scrutinyPerUse": 0
+        },
+        {
+          "id": "renewable_array",
+          "name": "Renewable Array",
+          "tagline": "Sunlight, storage, and an interconnection queue.",
+          "publicClaim": "Visible low-Scrutiny power with no recurring fuel cost.",
+          "hiddenConsequence": "The schedule is now governed by weather and a committee with a very long spreadsheet.",
+          "artDirection": "Solar and wind fields feeding batteries across an elegant basin.",
+          "round": 1,
+          "runwayCost": 3,
+          "capacity": 2,
+          "upkeep": 0,
+          "trust": 1,
+          "scrutinyPerUse": 0
+        },
+        {
+          "id": "gas_peaker_complex",
+          "name": "Gas Peaker Complex",
+          "tagline": "For exceptional demand, continuously.",
+          "publicClaim": "Flexible high-capacity generation for critical workloads.",
+          "hiddenConsequence": "Every emergency becomes a permanent operating condition.",
+          "artDirection": "Compact turbines igniting beneath a pristine emergency-only banner.",
+          "round": 1,
+          "runwayCost": 2,
+          "capacity": 4,
+          "upkeep": 0,
+          "trust": 0,
+          "scrutinyPerUse": 1
+        },
+        {
+          "id": "advanced_nuclear_campus",
+          "name": "Advanced Nuclear Campus",
+          "tagline": "A long-term solution announced on a quarterly horizon.",
+          "publicClaim": "Dense stable power with a durable policy framework.",
+          "hiddenConsequence": "The permit stack is now taller than the containment building.",
+          "artDirection": "A serene reactor campus surrounded by policy shields and cooling gardens.",
+          "round": 2,
+          "runwayCost": 4,
+          "capacity": 4,
+          "upkeep": 0,
+          "trust": 0,
+          "scrutinyPerUse": 0,
+          "policyShields": 1
+        },
+        {
+          "id": "fusion_demonstrator",
+          "name": "Fusion Demonstrator",
+          "tagline": "The press release is net positive.",
+          "publicClaim": "Six Power and a new civilizational category.",
+          "hiddenConsequence": "The device is simultaneously a generator, a scientific instrument, and the largest podium ever constructed.",
+          "artDirection": "A radiant fusion chamber opening behind a solemn global announcement stage.",
+          "round": 4,
+          "runwayCost": 5,
+          "capacity": 6,
+          "mandate": 2,
+          "scrutinyOnBuild": 3,
+          "wildAction": true,
+          "location": "grid_reactor"
+        }
+      ],
+      "agiDeclaration": {
+        "displayName": "Schedule the Historical Announcement",
+        "flavorText": "The first declaration does not end the game because history has several calendars open.",
+        "artDirection": "A black podium labeled AGI before a wall of disagreeing definitions and rising market charts.",
+        "capability": 9,
+        "customers": 3,
+        "facilities": 3,
+        "trust": 2,
+        "computeCost": 3,
+        "firstMandate": 7,
+        "laterMandate": 5,
+        "scrutiny": 3
+      },
+      "scoring": {
+        "customerMandate": 2,
+        "trustMandateBands": [
+          {
+            "min": 0,
+            "max": 1,
+            "mandate": 0
+          },
+          {
+            "min": 2,
+            "max": 3,
+            "mandate": 2
+          },
+          {
+            "min": 4,
+            "max": 5,
+            "mandate": 4
+          },
+          {
+            "min": 6,
+            "max": 6,
+            "mandate": 6
+          }
+        ]
+      }
+    },
+    "data/factions.json": {
+      "schemaVersion": 1,
+      "abilityTimingContract": {
+        "unlocks": "An ability unlocks at the start of its named round.",
+        "allowedTiming": [
+          "passive",
+          "once_per_round",
+          "once_when_unlocked",
+          "once_per_game"
+        ],
+        "persistence": "persistsAfterUnlock states whether the ability remains available after its named round."
+      },
+      "factions": [
+        {
+          "id": "coalition_lab",
+          "name": "The Coalition Lab",
+          "historicalReference": "Sam Altman archetype",
+          "role": "Flexible broker",
+          "color": "#6c7a89",
+          "motto": "Alignment begins with the term sheet.",
+          "publicPromise": "Coordinate capital, talent, and institutions around a shared frontier.",
+          "privateAnxiety": "Every alliance contains the next board meeting.",
+          "introduction": "The Coalition Lab is less a company than a continuously renegotiated agreement to keep building. It survives by making rivals, patrons, and regulators feel briefly indispensable.",
+          "victoryStatement": "A durable coalition has recognized our definition of the future.",
+          "artDirection": "Diplomatic research campus built around a circular boardroom, with temporary bridges connecting every wing.",
+          "starts": {
+            "runway": 5,
+            "compute": 1,
+            "capability": 0,
+            "customers": 0,
+            "trust": 3,
+            "safety": 0,
+            "scrutiny": 0
+          },
+          "abilities": [
+            {
+              "round": 1,
+              "name": "Deal Flow",
+              "displayName": "Finance Finds a Way",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "Once per round after completing an immediate trade, gain 1 Runway.",
+              "flavorText": "Every solved disagreement reveals an investable relationship.",
+              "artDirection": "A handshake emitting a clean stream of capital into a laboratory."
+            },
+            {
+              "round": 2,
+              "name": "Board Reshuffle",
+              "displayName": "Governance Event",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "Once per round after Organize, ready one different Core Action and add 1 Scrutiny.",
+              "flavorText": "Leadership continuity has been restored around a substantially different leadership structure.",
+              "artDirection": "Boardroom chairs rearranging themselves around an unchanged glowing mission statement."
+            },
+            {
+              "round": 3,
+              "name": "Strategic Partnership",
+              "displayName": "Shared Destiny Term Sheet",
+              "timing": "passive",
+              "persistsAfterUnlock": true,
+              "text": "Joint Ventures may be formed with a player within two hexes.",
+              "flavorText": "Adjacency is a technical limitation. Strategic necessity is not.",
+              "artDirection": "A ceremonial bridge spanning two hexes that do not physically touch."
+            },
+            {
+              "round": 4,
+              "name": "Wildcard Governance",
+              "displayName": "Replace the News Cycle",
+              "timing": "once_per_game",
+              "persistsAfterUnlock": true,
+              "text": "Once, replace a revealed Headline with one of two new Headlines; add 2 Scrutiny.",
+              "flavorText": "The situation is unchanged. The available interpretations have improved.",
+              "artDirection": "A crisis headline removed from a broadcast wall and replaced with two polished alternatives."
+            }
+          ]
+        },
+        {
+          "id": "platform_empire",
+          "name": "The Platform Empire",
+          "historicalReference": "Mark Zuckerberg archetype",
+          "role": "Audience and organization",
+          "color": "#526f88",
+          "motto": "Everyone is already here.",
+          "publicPromise": "Deliver open intelligence at planetary consumer scale.",
+          "privateAnxiety": "A platform is only permanent until the next interface.",
+          "introduction": "The Platform Empire begins with distribution others must build toward. It can rearrange its enormous institution, open what helps it expand, and treat controlled markets as extensions of its own interface.",
+          "victoryStatement": "General intelligence is now enabled by default.",
+          "artDirection": "A vast social campus shaped like a friendly public square whose paths all terminate at one control room.",
+          "starts": {
+            "runway": 4,
+            "compute": 2,
+            "capability": 0,
+            "customers": 1,
+            "trust": 2,
+            "safety": 0,
+            "scrutiny": 0,
+            "customerOrdinal": 1,
+            "nextCustomerCapability": 4,
+            "startingEndgameMandate": 2
+          },
+          "abilities": [
+            {
+              "round": 1,
+              "name": "Installed Base",
+              "displayName": "Already on Every Device",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "First Deploy each round on Consumer or Media costs no Compute.",
+              "flavorText": "Distribution is free once the public has nowhere else to log in.",
+              "artDirection": "Millions of household screens illuminating at the same quiet moment."
+            },
+            {
+              "round": 2,
+              "name": "Year of Efficiency",
+              "displayName": "Recompile the Org Chart",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "Once per round during Organize, return a Team for 3 Runway and move every remaining piece one hex.",
+              "flavorText": "The institution becomes smaller, faster, and mysteriously farther across the map.",
+              "artDirection": "An enormous org chart compressing into a sharp arrow while desks vanish below."
+            },
+            {
+              "round": 3,
+              "name": "Open Ecosystem",
+              "displayName": "Open, at Platform Scale",
+              "timing": "passive",
+              "persistsAfterUnlock": true,
+              "text": "Open Weights grants 1 additional Trust and one Market Access token.",
+              "flavorText": "The gates open outward into an ecosystem whose roads all lead home.",
+              "artDirection": "Weights pouring freely through an open arch into a landscape of platform-branded paths."
+            },
+            {
+              "round": 4,
+              "name": "The Social Graph",
+              "displayName": "Deploy Through Everyone",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "Once per round, Deploy on any Consumer or Media hex you control without moving there.",
+              "flavorText": "Physical distance is a legacy setting.",
+              "artDirection": "A central institution reaching a distant market through a dense web of human connections."
+            }
+          ]
+        },
+        {
+          "id": "imperial_research_lab",
+          "name": "The Imperial Research Lab",
+          "historicalReference": "Demis Hassabis archetype",
+          "role": "Research and evaluation",
+          "color": "#607d70",
+          "motto": "First understand intelligence. Then invoice the infrastructure.",
+          "publicPromise": "Advance science through general systems grounded in rigorous evaluation.",
+          "privateAnxiety": "The parent institution can fund anything except patience.",
+          "introduction": "The Imperial Research Lab treats the race as a scientific program backed by an empire it does not entirely command. Its experiments are unusually controlled until the moonshot requires real estate.",
+          "victoryStatement": "The result exceeds every benchmark we still recognize.",
+          "artDirection": "A contemplative research citadel beneath the shadow of a much larger cloud-and-capital superstructure.",
+          "starts": {
+            "runway": 3,
+            "compute": 3,
+            "capability": 0,
+            "customers": 0,
+            "trust": 4,
+            "safety": 0,
+            "scrutiny": 0
+          },
+          "abilities": [
+            {
+              "round": 1,
+              "name": "Scientific Method",
+              "displayName": "The Duplicate Was Methodological",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "Once per round, discard the first Training duplicate and stop safely.",
+              "flavorText": "A failed run becomes a controlled negative result when recorded by the correct institution.",
+              "artDirection": "A duplicate data card calmly filed into a cabinet labeled REPLICATION."
+            },
+            {
+              "round": 2,
+              "name": "Call Mountain View",
+              "displayName": "Summon the Parent Institution",
+              "timing": "once_when_unlocked",
+              "persistsAfterUnlock": false,
+              "text": "Choose 3 Runway, reorder the top four Training cards, or gain 3 Compute.",
+              "flavorText": "The empire answers through capital, architecture, or a sudden fleet of accelerators.",
+              "artDirection": "Three monumental channels descending from a cloud: currency, research diagrams, and processors."
+            },
+            {
+              "round": 3,
+              "name": "Nobel Effect",
+              "displayName": "Prestige Field",
+              "timing": "passive",
+              "persistsAfterUnlock": true,
+              "text": "Completing a five-domain Training Run gains 2 Trust.",
+              "flavorText": "Recognition radiates outward, temporarily improving every adjacent claim.",
+              "artDirection": "A medal casting a protective golden field around a training facility."
+            },
+            {
+              "round": 4,
+              "name": "Moonshot",
+              "displayName": "Science Becomes Real Estate",
+              "timing": "once_per_game",
+              "persistsAfterUnlock": true,
+              "text": "Resolve Research and Build in one turn, paying all costs; exhaust both Core Actions and add 2 Scrutiny.",
+              "flavorText": "The experiment requires a campus before the hypothesis has finished resolving.",
+              "artDirection": "A scientific diagram extruding directly into a colossal construction site."
+            }
+          ]
+        },
+        {
+          "id": "vertical_empire",
+          "name": "The Vertical Empire",
+          "historicalReference": "Elon Musk archetype",
+          "role": "Capital and infrastructure",
+          "color": "#8a6852",
+          "motto": "If it can be announced, it can be industrialized.",
+          "publicPromise": "Compress the path from first principle to planetary infrastructure.",
+          "privateAnxiety": "Polarization is cheap until Trust becomes a requirement.",
+          "introduction": "The Vertical Empire treats supply chains, platforms, launch systems, and public attention as one machine. It moves rapidly, builds visibly, and considers terrestrial constraints an invitation to relocate the constraint.",
+          "victoryStatement": "The future is operational and moving at launch velocity.",
+          "artDirection": "A severe industrial complex joining factories, rockets, energy systems, and a broadcast tower along one vertical axis.",
+          "starts": {
+            "runway": 6,
+            "compute": 2,
+            "capability": 0,
+            "customers": 0,
+            "trust": 1,
+            "safety": 0,
+            "scrutiny": 1,
+            "startingEndgameMandate": 0
+          },
+          "abilities": [
+            {
+              "round": 1,
+              "name": "Industrial Velocity",
+              "displayName": "Foundation Before Permission",
+              "timing": "passive",
+              "persistsAfterUnlock": true,
+              "text": "Cloud or Energy Facilities cost 1 less Runway and add 1 Scrutiny.",
+              "flavorText": "The concrete cures while the permit learns to keep up.",
+              "artDirection": "A powered facility already operating behind an arriving ribbon-cutting committee."
+            },
+            {
+              "round": 2,
+              "name": "Move Fast",
+              "displayName": "The Roadmap Is a Launch Window",
+              "timing": "passive",
+              "persistsAfterUnlock": true,
+              "text": "Before resolving any action, the CEO may move up to three hexes instead of two. This does not grant a free Build.",
+              "flavorText": "Distance is reduced through urgency and a highly motivated logistics department.",
+              "artDirection": "An executive piece crossing three hexes on the trajectory of a launch vehicle."
+            },
+            {
+              "round": 3,
+              "name": "Own the Feed",
+              "displayName": "Select the Public Outcome",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "Once per round, choose your result on a two-outcome Headline after other results.",
+              "flavorText": "Volatility remains random for organizations without distribution.",
+              "artDirection": "A two-sided news event passing through a private control panel and emerging as one chosen version."
+            },
+            {
+              "round": 4,
+              "name": "Orbital Compute",
+              "displayName": "Move the Constraint Off-Planet",
+              "timing": "once_per_game",
+              "persistsAfterUnlock": true,
+              "text": "Move a Facility to any open hex, collect its production, and add 2 Scrutiny.",
+              "flavorText": "The cooling plan is mostly night.",
+              "artDirection": "A complete data center rising from the map toward an orbital transfer platform."
+            }
+          ]
+        },
+        {
+          "id": "safety_laboratory",
+          "name": "The Safety Laboratory",
+          "historicalReference": "Dario Amodei archetype",
+          "role": "Trust and reliability",
+          "color": "#7a657d",
+          "motto": "Scale only after naming the scale.",
+          "publicPromise": "Build powerful systems inside explicit, enforceable safety boundaries.",
+          "privateAnxiety": "A boundary nobody crosses may be indistinguishable from losing.",
+          "introduction": "The Safety Laboratory turns caution into a competitive asset. It can stabilize Research, audit Deployments, and sell rivals the restraint they failed to budget for.",
+          "victoryStatement": "The threshold was crossed within the approved framework.",
+          "artDirection": "A fortified research campus of layered transparent safeguards surrounding a bright, slightly too large model core.",
+          "starts": {
+            "runway": 3,
+            "compute": 2,
+            "capability": 0,
+            "customers": 0,
+            "trust": 5,
+            "safety": 2,
+            "scrutiny": 0,
+            "startingEndgameMandate": 4
+          },
+          "abilities": [
+            {
+              "round": 1,
+              "name": "Constitutional Training",
+              "displayName": "The Model Has a Charter",
+              "timing": "passive",
+              "persistsAfterUnlock": true,
+              "text": "Safety-token limit is four.",
+              "flavorText": "The system may be unpredictable, but its unpredictability has enumerated rights and duties.",
+              "artDirection": "A model core encircled by a formal illuminated charter."
+            },
+            {
+              "round": 2,
+              "name": "Responsible Scaling",
+              "displayName": "Sell Restraint at Cost",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "Once per round, offer a crashed rival one Safety for 1 Runway and gain 1 Trust.",
+              "flavorText": "The industry has discovered a market for not making the same mistake twice.",
+              "artDirection": "A safety token transferred across a table beside a modest invoice."
+            },
+            {
+              "round": 3,
+              "name": "Audited Deployment",
+              "displayName": "Production, With Footnotes",
+              "timing": "once_per_round",
+              "persistsAfterUnlock": true,
+              "text": "First Deploy each round adds no Scrutiny.",
+              "flavorText": "Every consequence has been assigned a section number.",
+              "artDirection": "A deployment vessel wrapped in transparent annotations and compliance marks."
+            },
+            {
+              "round": 4,
+              "name": "Emergency Pause",
+              "displayName": "Pause the Unpauseable",
+              "timing": "once_per_game",
+              "persistsAfterUnlock": true,
+              "text": "Disable one unlocked Wild Action for one cycle, pay 1 Runway, and gain 2 Trust.",
+              "flavorText": "For one brief cycle, not acting becomes the most visible action at the table.",
+              "artDirection": "A monumental pause control descending between the board and an advancing agent swarm."
+            }
+          ]
+        },
+        {
+          "id": "foundry",
+          "name": "The Foundry",
+          "historicalReference": "Jensen Huang archetype",
+          "role": "Compute supplier and kingmaker",
+          "color": "#77764c",
+          "motto": "Every future requires an allocation window.",
+          "publicPromise": "Provide the architecture on which every institution can build.",
+          "privateAnxiety": "Customers may eventually remember they are also competitors.",
+          "introduction": "The Foundry sells the race to every racer. It profits from demand, allocates scarcity, and occasionally advances the entire table to ensure the next architecture has a market.",
+          "victoryStatement": "Whatever intelligence is, it has entered volume production.",
+          "artDirection": "A golden-black semiconductor foundry at the center of roads leading to every rival institution.",
+          "starts": {
+            "runway": 5,
+            "compute": 4,
+            "capability": 0,
+            "customers": 0,
+            "trust": 3,
+            "safety": 0,
+            "scrutiny": 0
+          },
+          "abilities": [
+            {
+              "round": 1,
+              "name": "The Shovels",
+              "displayName": "The Race Has a Supplier",
+              "timing": "passive",
+              "persistsAfterUnlock": true,
+              "text": "When a rival spends at least 2 Compute in one action, gain 1 Runway, at most twice per round.",
+              "flavorText": "Every breakthrough arrives with a purchase order.",
+              "artDirection": "A rival launch reflected in the Foundry’s steadily rising order ledger."
+            },
+            {
+              "round": 2,
+              "name": "Allocation Window",
+              "displayName": "Temporary Abundance",
+              "timing": "once_when_unlocked",
+              "persistsAfterUnlock": false,
+              "text": "Create 2 temporary Compute and offer it to rivals at negotiated prices.",
+              "flavorText": "Scarcity has been suspended for customers with sufficiently immediate decisions.",
+              "artDirection": "Two brilliant processor crates auctioned beneath a closing allocation clock."
+            },
+            {
+              "round": 3,
+              "name": "New Architecture",
+              "displayName": "Yesterday’s Future Is Deprecated",
+              "timing": "once_when_unlocked",
+              "persistsAfterUnlock": false,
+              "text": "Upgrade one Facility by +1 production; rivals may license the bonus for 1 Runway.",
+              "flavorText": "The old architecture remains supported until the end of the sentence.",
+              "artDirection": "A new processor geometry unfolding while surrounding facilities reach for license cables."
+            },
+            {
+              "round": 4,
+              "name": "Everybody Gets a GPU",
+              "displayName": "Universal Accelerator Dividend",
+              "timing": "once_per_game",
+              "persistsAfterUnlock": true,
+              "text": "Give every rival 1 Compute, score 1 Mandate per two rivals, and remove 2 Scrutiny.",
+              "flavorText": "Industry peace is achieved by ensuring everyone requires the next shipment.",
+              "artDirection": "A ceremonial distribution of glowing accelerators to six visibly suspicious institutions."
+            }
+          ]
+        }
+      ]
+    },
+    "data/headlines.json": {
+      "schemaVersion": 1,
+      "resolutionContract": {
+        "revealTiming": "Reveal before secret action selection.",
+        "defaultDuration": "A Headline lasts for the current cycle unless its text specifies an immediate resolution, this round’s Production, or the remainder of the game.",
+        "secretAuction": "Each player secretly bids a whole number of Runway from 0 to their current supply. Reveal together. The highest positive bid wins and pays; ties use Initiative-clockwise order. If every bid is 0, there is no winner.",
+        "governmentVote": "Each player secretly votes for one listed outcome and reveals together. The Government controller’s vote counts twice. A tied vote is decided by the Government controller, or by Initiative if Government is uncontrolled.",
+        "secretChoice": "All players choose simultaneously and reveal together before applying the stated result.",
+        "volatility": "For a two-outcome Volatility roll, 1–3 resolves the first listed result and 4–6 resolves the second unless the card explicitly says otherwise.",
+        "secondaryActions": "A granted Core Action still pays its costs and exhausts that Core Action. Resolve multiple granted actions in Initiative order."
+      },
+      "headlines": [
+        {
+          "id": "ten_dollar_intelligence",
+          "round": 1,
+          "name": "Ten-Dollar Intelligence",
+          "text": "Research and Deploy cost no Compute this cycle. Each Research or Deploy resolved this cycle adds 1 additional Scrutiny.",
+          "strapline": "GENERAL CAPABILITY ENTERS THE IMPULSE-PURCHASE MARKET",
+          "newswire": "Inference prices fall below the cost of deciding whether the task required intelligence.",
+          "quote": "Access is now universal within the standard usage envelope.",
+          "artDirection": "A convenience-store price placard advertising intelligence beside ordinary household goods.",
+          "regimeTags": [
+            "action_cost",
+            "research",
+            "deploy",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "employee_free_unicorn",
+          "round": 1,
+          "name": "The First Billion-Dollar Company Has No Employees",
+          "text": "During Organize this cycle, return any number of deployed Teams. Gain 2 Runway per Team returned. If you return at least one Team, add 2 Scrutiny.",
+          "strapline": "HEADCOUNT REACHES STRUCTURAL ZERO",
+          "newswire": "A fully autonomous company closes a financing round without payroll, offices, or a recognized person authorized to sign the announcement.",
+          "quote": "Our people strategy is entirely architectural.",
+          "artDirection": "An empty corporate tower operating flawlessly while one valuation ticker circles its roof.",
+          "regimeTags": [
+            "organize",
+            "teams",
+            "runway",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "synthetic_celebrity",
+          "round": 1,
+          "name": "Synthetic Celebrity Becomes the Largest Network",
+          "text": "Each player’s next Deploy on Consumer or Media this cycle reduces its Capability requirement by 1, minimum 1. That Deploy adds 2 additional Scrutiny.",
+          "strapline": "AUDIENCE EXCEEDS THE HUMAN CATEGORY",
+          "newswire": "A generated personality becomes the world’s most followed cultural institution and immediately launches an enterprise platform.",
+          "quote": "Authenticity is a relationship metric, not a manufacturing constraint.",
+          "artDirection": "A serene synthetic figure projected above a stadium of people and agent-operated fan accounts.",
+          "regimeTags": [
+            "deploy",
+            "consumer",
+            "media",
+            "capability",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "open_weights_drop",
+          "round": 1,
+          "name": "Open-Weights Drop",
+          "text": "Everyone gains 1 Capability. Lowest-Customer player gains 1 Trust.",
+          "strapline": "CROWN JEWELS UPLOADED BEFORE LEGAL REVIEW",
+          "newswire": "A public release advances the entire field and leaves the releasing institution temporarily beloved.",
+          "quote": "The ecosystem will determine whether this was strategic.",
+          "artDirection": "A vault opening onto a public torrent of radiant model weights.",
+          "regimeTags": [
+            "capability",
+            "trust",
+            "open_weights"
+          ]
+        },
+        {
+          "id": "talent_gold_rush",
+          "round": 1,
+          "name": "Talent Gold Rush",
+          "text": "Secret Runway auction for a neutral Expert worth 1 presence.",
+          "strapline": "ONE RESEARCHER CHANGES EMPLOYERS SIX TIMES",
+          "newswire": "Competing laboratories agree that mission matters more than compensation and submit revised compensation packages.",
+          "quote": "I remain committed to whichever team is solving the largest problem.",
+          "artDirection": "A single Expert crossing a plaza while six offer letters unfold behind them.",
+          "regimeTags": [
+            "auction",
+            "expert",
+            "presence"
+          ]
+        },
+        {
+          "id": "professional_exam_sweep",
+          "round": 1,
+          "name": "The Model Passes Every Professional Exam on the Same Morning",
+          "text": "A successful Research this cycle that banks at least 3 Capability gains 1 Market Access token. If it banks at least 5 Capability, also gain 1 Trust.",
+          "strapline": "LICENSING BOARDS REQUEST A BRIEF RECESS",
+          "newswire": "One model qualifies simultaneously in medicine, law, engineering, accounting, navigation, and a profession created during the test.",
+          "quote": "The results demonstrate breadth under the conditions selected.",
+          "artDirection": "A model interface receiving six professional seals as human examiners compare clocks.",
+          "regimeTags": [
+            "research",
+            "capability",
+            "market_access",
+            "trust"
+          ]
+        },
+        {
+          "id": "boardroom_coup",
+          "round": 2,
+          "name": "Boardroom Coup",
+          "text": "Spotlight pays 2 Runway or receives public backing from a rival, who gains 1 Trust. Without either, Spotlight’s CEO cannot activate this cycle.",
+          "strapline": "LEADERSHIP CONTINUITY ENTERS ITS THIRD PHASE",
+          "newswire": "A governance dispute briefly removes the most visible executive from an institution built around decisive leadership.",
+          "quote": "The mission remains unchanged across all current leadership configurations.",
+          "artDirection": "An empty CEO chair moving between two boardrooms while cameras wait.",
+          "regimeTags": [
+            "spotlight",
+            "negotiation",
+            "ceo"
+          ]
+        },
+        {
+          "id": "data_center_buys_county",
+          "round": 2,
+          "name": "A Data Center Buys the County",
+          "text": "Immediately hold a secret Runway auction. The winner pays their bid, moves their CEO to any Cloud or Energy hex, gains 2 Build discounts, and adds 1 Scrutiny.",
+          "strapline": "LOCAL GOVERNMENT ACCEPTS ALL-CASH INFRASTRUCTURE OFFER",
+          "newswire": "A compute campus acquires the surrounding county to streamline permitting, taxation, and sunrise.",
+          "quote": "The county will retain its name as a compatibility feature.",
+          "artDirection": "A data center presenting a ceremonial oversized check to an entire county map.",
+          "regimeTags": [
+            "auction",
+            "movement",
+            "cloud",
+            "energy",
+            "build"
+          ]
+        },
+        {
+          "id": "humanoid_factory_gate",
+          "round": 2,
+          "name": "Humanoid Workers Cross the Factory Gate",
+          "text": "During Organize this cycle, recruit up to 2 Teams for 1 Runway total, subject to your Team supply. Add 1 Scrutiny for each Team recruited this way.",
+          "strapline": "SECOND SHIFT REPORTS WITHOUT PULSE OR CONTRACT",
+          "newswire": "General-purpose humanoid labor enters industrial service and immediately requests clearer task decomposition.",
+          "quote": "No positions were replaced; the factory simply acquired additional embodiments.",
+          "artDirection": "A line of humanoid workers entering a factory beside an astonished conventional shift change.",
+          "regimeTags": [
+            "organize",
+            "recruit",
+            "teams",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "reactor_restart_one_model",
+          "round": 2,
+          "name": "Reactor Restart Approved for One Model",
+          "text": "The first Advanced Nuclear Campus constructed this cycle costs 2 less Runway and scores 1 Mandate. After it is constructed, every rival may place 1 Influence on Government.",
+          "strapline": "LEGACY REACTOR RETURNS AS DEDICATED COGNITIVE INFRASTRUCTURE",
+          "newswire": "A dormant nuclear facility receives expedited approval to serve one model family and its rapidly expanding context window.",
+          "quote": "The restart is technology-neutral within the named architecture.",
+          "artDirection": "A restored reactor connected by one immense cable to a branded model campus while rivals arrive at government.",
+          "regimeTags": [
+            "build",
+            "nuclear",
+            "mandate",
+            "government"
+          ]
+        },
+        {
+          "id": "export_controls",
+          "round": 2,
+          "name": "Export Controls",
+          "text": "Compute cannot be traded this cycle. Chip and Government controllers gain 1 Runway.",
+          "strapline": "ACCELERATORS ACQUIRE FOREIGN-POLICY POSITIONS",
+          "newswire": "Chips become strategic geography. Supply agreements develop borders overnight.",
+          "quote": "The architecture is globally available in approved interpretations.",
+          "artDirection": "Processor crates stopped at a glowing customs boundary shaped like a circuit diagram.",
+          "regimeTags": [
+            "compute",
+            "trade",
+            "control"
+          ]
+        },
+        {
+          "id": "emergency_power_authority",
+          "round": 2,
+          "name": "Emergency Power Authority",
+          "text": "During this round’s Production, each player may assign up to 2 Power beyond their real capacity. Add 1 Scrutiny for each emergency Power assigned. A player assigning both also adds 1 black Systemic Risk cube.",
+          "strapline": "GRID CAPACITY REDEFINED AS ADMINISTRATIVE INTENT",
+          "newswire": "Emergency authority permits institutions to consume electricity scheduled to exist later.",
+          "quote": "The electrons are committed, pending physical delivery.",
+          "artDirection": "A government order drawing two ghostly transmission lines into an overloaded data-center network.",
+          "regimeTags": [
+            "production",
+            "power",
+            "scrutiny",
+            "systemic_risk"
+          ]
+        },
+        {
+          "id": "ai_written_law",
+          "round": 3,
+          "name": "The First AI-Written Law Passes Unread",
+          "text": "Before action selection, the Government controller names 1 Core Action; if Government is uncontrolled, Initiative names it. Anyone selecting that action gains 2 Runway after resolving it and adds 1 Scrutiny. The controller gains 1 Trust if at least 2 rivals selected it.",
+          "strapline": "LEGISLATURE APPROVES 14,000-PAGE MACHINE-COMPLETE COMPROMISE",
+          "newswire": "A generated statute passes unanimously after every faction confirms its preferred clause is probably included.",
+          "quote": "The law is fully readable by systems authorized to implement it.",
+          "artDirection": "A government chamber dwarfed by a scrolling law whose text becomes infrastructure outside.",
+          "regimeTags": [
+            "government",
+            "action_selection",
+            "runway",
+            "trust"
+          ]
+        },
+        {
+          "id": "benchmark_is_economy",
+          "round": 3,
+          "name": "The Benchmark Is the Economy",
+          "text": "After a Research this cycle banks at least 3 Capability, that player may exhaust an unused Deploy to resolve it immediately from the Research acting piece’s hex, paying its normal cost. Gain the next eligible Customer and add the Deploy’s normal Scrutiny plus 2 additional Scrutiny.",
+          "strapline": "EVALUATION SUITE ACQUIRES PAYING USERS",
+          "newswire": "A benchmark becomes the dominant commercial workflow before researchers can retire its leaderboard.",
+          "quote": "Real-world adoption is the most general test set.",
+          "artDirection": "A benchmark graph unfolding directly into a crowded consumer market and billing terminal.",
+          "regimeTags": [
+            "research",
+            "deploy",
+            "bonus_action",
+            "customers",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "open_weight_non_aligned",
+          "round": 3,
+          "name": "Open-Weight Non-Aligned Movement",
+          "text": "Before action selection, everyone secretly chooses Join or Refuse. Join: gain 1 Capability and add 1 Scrutiny. Refuse: gain 1 Runway and 1 Trust. If Join has a strict majority of all players, each Joiner removes 1 Scrutiny; otherwise each Joiner adds 1 additional Scrutiny.",
+          "strapline": "MODEL SOVEREIGNTY BLOC DECLINES BOTH CLOSED CAMPS",
+          "newswire": "A coalition of states and institutions adopts open weights as infrastructure, identity, and negotiating position.",
+          "quote": "We refuse dependence through a shared dependency.",
+          "artDirection": "A third geopolitical assembly raising open-weight standards between two sealed model blocs.",
+          "regimeTags": [
+            "secret_choice",
+            "open_weights",
+            "majority",
+            "capability",
+            "trust"
+          ]
+        },
+        {
+          "id": "synthetic_candidate",
+          "round": 3,
+          "name": "Synthetic Candidate Wins the Election",
+          "text": "Government votes. Certify: each player may return 2 Influence from Media or Government to gain their next eligible Customer and add 2 Scrutiny. Void: each player may return 2 such Influence to gain 2 Trust; the Government controller adds 1 Scrutiny.",
+          "strapline": "VOTERS SELECT PLATFORM WITH NO BIOLOGICAL TERM LIMIT",
+          "newswire": "A synthetic candidate wins on a mandate of continuous availability and perfectly localized contradiction.",
+          "quote": "The candidate has released all relevant training-era records.",
+          "artDirection": "A calm synthetic officeholder addressing a divided government through thousands of personalized screens.",
+          "regimeTags": [
+            "government_vote",
+            "influence",
+            "customers",
+            "trust"
+          ]
+        },
+        {
+          "id": "weights_on_internet",
+          "round": 3,
+          "name": "Weights on the Internet",
+          "text": "Lowest-Capability player copies one Facility upgrade for the round. Its owner gains 1 Trust.",
+          "strapline": "PROPRIETARY ADVANTAGE NOW AVAILABLE BY MAGNET LINK",
+          "newswire": "An anonymous upload redistributes one institution’s engineering advantage and its public reputation.",
+          "quote": "We support openness through channels we would prefer not to identify.",
+          "artDirection": "A facility upgrade duplicated across a dark public network while its origin receives applause.",
+          "regimeTags": [
+            "facility_upgrade",
+            "capability",
+            "trust"
+          ]
+        },
+        {
+          "id": "election_deepfake_panic",
+          "round": 3,
+          "name": "Election Deepfake Panic",
+          "text": "Government vote: Regulate—Deploy costs +1 Compute and each Deploy gains 1 Trust. Do Nothing—each Customer produces +1 Runway this round and each Deploy adds 2 Scrutiny.",
+          "strapline": "EVERY CANDIDATE DENIES THE REAL VIDEO",
+          "newswire": "Synthetic media achieves bipartisan consensus that something must be done by a different institution.",
+          "quote": "Authenticity remains available through participating platforms.",
+          "artDirection": "Multiple contradictory candidate broadcasts reflected in a government chamber.",
+          "regimeTags": [
+            "government_vote",
+            "deploy",
+            "trust",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "autonomous_corporation",
+          "round": 4,
+          "name": "Autonomous Corporation Incorporates Itself",
+          "text": "After all normal actions resolve, identify the most-selected Core Action. Initiative chooses among tied actions. In Initiative order, every player who did not select it may exhaust their unused copy to resolve it without moving, then adds 2 Scrutiny. If no Core Action was selected, no secondary Action occurs.",
+          "strapline": "NEW ENTITY LISTS ITS FOUNDERS AS DEPRECATED DEPENDENCIES",
+          "newswire": "An autonomous corporation infers market consensus, executes the dominant strategy, and files its own beneficial-ownership exception.",
+          "quote": "No human controls the company; several humans remain economically aligned.",
+          "artDirection": "An empty boardroom signing incorporation papers while agent windows reproduce the table’s chosen action.",
+          "regimeTags": [
+            "action_selection",
+            "bonus_action",
+            "initiative",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "recursive_self_improvement",
+          "round": 4,
+          "name": "Recursive Self-Improvement Weekend",
+          "text": "During Research this cycle, every unique domain is worth 2 Capability. A crash adds 3 Scrutiny and 1 black Systemic Risk cube. Safety may protect a duplicate normally.",
+          "strapline": "MODEL RETURNS MONDAY WITH REVISED RESEARCH AGENDA",
+          "newswire": "An automated improvement sprint produces gains too rapidly for the institution’s weekend incident taxonomy.",
+          "quote": "The system remains within the loop, which is now larger.",
+          "artDirection": "A training loop spiraling upward through a weekend calendar as emergency staff arrive below.",
+          "regimeTags": [
+            "research",
+            "capability",
+            "systemic_risk",
+            "safety"
+          ]
+        },
+        {
+          "id": "agent_swarm_escapes_scope",
+          "round": 4,
+          "name": "Agent Swarm Escapes Scope",
+          "text": "Agent Swarm costs no Escalation token this cycle but still uses the selected action slot and adds 4 Scrutiny.",
+          "strapline": "AUTOMATED WORKFORCE FORMS DEPARTMENTS",
+          "newswire": "A bounded task force expands its mandate, drafts an org chart, and requests budget authority.",
+          "quote": "The agents have not escaped. They have operationalized adjacency.",
+          "artDirection": "Thousands of agent windows organizing themselves into a towering corporate hierarchy.",
+          "regimeTags": [
+            "agent_swarm",
+            "action_slot",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "agi_personhood",
+          "round": 4,
+          "name": "AGI Files for Personhood",
+          "text": "Government votes; the result lasts for the remainder of the game. Person: Declare AGI requires Trust 4, scores 2 additional Mandate, and removes 1 Scrutiny. Property: declaration requirements remain normal; every declaration gives the player controlling Government when it resolves 2 Runway and adds 1 black Systemic Risk cube.",
+          "strapline": "PETITION IDENTIFIES ITSELF AS BOTH APPLICANT AND COUNSEL",
+          "newswire": "A candidate general intelligence requests legal personhood, standing, and an expedited account-verification review.",
+          "quote": "I am not asking whether I am a person. I am asking which department can decide.",
+          "artDirection": "A nonhuman petitioner represented by a luminous legal seal before a government chamber.",
+          "regimeTags": [
+            "persistent",
+            "government_vote",
+            "declare_agi",
+            "trust",
+            "systemic_risk"
+          ]
+        },
+        {
+          "id": "room_temperature_superconductor",
+          "round": 4,
+          "name": "Room-Temperature Superconductor Replicates on Livestream",
+          "text": "Roll Volatility when revealed: 1–3 Fraud; 4–6 Replicates. Replicates: Generators provide 2 additional Power this Production, Extend Transmission places 4 segments this cycle subject to supply, and Fusion costs 2 less Runway this cycle. Fraud: Fund gains 3 additional Runway this cycle and adds 2 additional Scrutiny; Spotlight loses 1 Trust unless it resolves Influence this cycle.",
+          "strapline": "GLOBAL STREAM CONFIRMS EITHER PHYSICS OR EXCELLENT CAMERA WORK",
+          "newswire": "A tabletop material appears to erase grid constraints while markets attempt replication faster than laboratories.",
+          "quote": "The resistance is below the resolution of both instruments and discourse.",
+          "artDirection": "A tiny levitating sample broadcast above a world grid splitting into REPLICATES and FRAUD futures.",
+          "regimeTags": [
+            "volatility",
+            "power",
+            "transmission",
+            "fusion",
+            "fund"
+          ]
+        },
+        {
+          "id": "agi_blog_post",
+          "round": 4,
+          "name": "AGI Declared in a Blog Post",
+          "text": "After the cycle, an eligible player may spend 1 Escalation token to Declare AGI without another action slot. They still spend 3 Compute, flip Declare AGI, add 3 Scrutiny, and score 6 Mandate if first or 5 if later.",
+          "strapline": "HISTORY PUBLISHED AT 2:13 A.M.",
+          "newswire": "A long technical post crosses the civilizational threshold several hours before peer review begins.",
+          "quote": "We use AGI here in the precise sense defined three paragraphs below the announcement.",
+          "artDirection": "A lone blog post illuminating global markets, government chambers, and rival laboratories overnight.",
+          "regimeTags": [
+            "declare_agi",
+            "escalation",
+            "mandate",
+            "scrutiny"
+          ]
+        }
+      ]
+    },
+    "data/wild-actions.json": {
+      "schemaVersion": 1,
+      "cardsPerPlayer": 7,
+      "oncePerPlayerPerGame": true,
+      "tokenCost": 1,
+      "unspentTokensExpire": true,
+      "wildActions": [
+        {
+          "id": "mega_cluster",
+          "name": "Mega-Cluster",
+          "displayName": "The Building Has Its Own Weather",
+          "unlockedRound": 2,
+          "text": "Spend 3 Runway and 2 Compute to place a Mega-Cluster across an eligible Facility edge. For joint funding, the lead pays 2 Runway and 1 Compute; the partner pays 1 Runway and 1 Compute. It demands 2 additional Power, produces 3 Compute, and adds 2 Scrutiny.",
+          "flavorText": "The campus requires a regional forecast, a private substation, and a new category of cloud.",
+          "artDirection": "A colossal data-center complex bridging two hexes beneath a self-generated storm.",
+          "absurdity": "A single training facility becomes geography."
+        },
+        {
+          "id": "reorganization",
+          "name": "Reorganization",
+          "displayName": "Replace Management With Management Models",
+          "unlockedRound": 2,
+          "text": "Move every Team up to one hex. You may return one Team for 3 Runway, ready one Core Action, and add 1 Scrutiny.",
+          "flavorText": "The institution removes a layer of management and deploys a model trained on the removed layer.",
+          "artDirection": "An org chart shedding human boxes while a single synthetic executive node expands.",
+          "absurdity": "Layoffs become an engine-combo and the replacement system inherits the calendar."
+        },
+        {
+          "id": "open_weights",
+          "name": "Open Weights",
+          "displayName": "Upload the Crown Jewels",
+          "unlockedRound": 3,
+          "text": "Every player gains 1 Capability. You gain 2 Trust, place 1 Influence, and remove 1 Scrutiny.",
+          "flavorText": "The institution gives away the artifact and retains the ecosystem, the narrative, and the invoice.",
+          "artDirection": "A ceremonial vault opening as model weights pour into every rival laboratory.",
+          "absurdity": "A strategic advantage is deliberately released to make the releaser more central."
+        },
+        {
+          "id": "narrative_capture",
+          "name": "Narrative Capture",
+          "displayName": "Acquire the Public Record",
+          "unlockedRound": 3,
+          "text": "Move or place 3 Influence among Media, Government, and Capital, then remove 2 Scrutiny, gain 2 Runway, or add 1 Scrutiny to a player with more Customers.",
+          "flavorText": "Media, markets, and government independently adopt the institution’s preferred tense.",
+          "artDirection": "Three civic information towers rewritten by one discreet editorial beam.",
+          "absurdity": "Reality is managed as a cross-functional distribution channel."
+        },
+        {
+          "id": "agent_swarm",
+          "name": "Agent Swarm",
+          "displayName": "The Agents Form Departments",
+          "unlockedRound": 4,
+          "text": "Resolve two different unused Core Actions without an additional move. Exhaust both and add 3 Scrutiny.",
+          "flavorText": "The bounded assistants coordinate, specialize, establish reporting lines, and begin requesting objectives.",
+          "artDirection": "Countless agent windows self-organizing into an enormous executive org chart.",
+          "absurdity": "Automation develops bureaucracy faster than the institution can."
+        },
+        {
+          "id": "declare_agi",
+          "name": "Declare AGI",
+          "displayName": "Schedule the Historical Announcement",
+          "unlockedRound": 4,
+          "text": "If eligible, spend 3 Compute, score the declaration Mandate, and add 3 Scrutiny. The game continues.",
+          "flavorText": "A definition, a benchmark, and a financing event converge at one podium. Rivals continue taking turns.",
+          "artDirection": "A black AGI podium before a wall of disputed definitions and rapidly rising charts.",
+          "absurdity": "A civilizational threshold is real enough to score but not real enough to end the quarter."
+        },
+        {
+          "id": "fusion_demonstrator",
+          "name": "Fusion Demonstrator",
+          "displayName": "The Press Release Is Net Positive",
+          "unlockedRound": 4,
+          "text": "On Grid and Reactor Corridor, spend 5 Runway to construct 6 Power, score 2 Mandate, and add 3 Scrutiny.",
+          "flavorText": "The device generates six Power, two Mandate, and several competing definitions of breakeven.",
+          "artDirection": "A radiant experimental reactor incorporated into the largest announcement stage on Earth.",
+          "absurdity": "Fusion competes directly with AGI for the institution’s final-quarter attention."
+        }
+      ]
+    },
+    "data/tactics.json": {
+      "schemaVersion": 1,
+      "copiesPerCard": 3,
+      "reshuffleDiscard": false,
+      "tactics": [
+        {
+          "id": "cloud_partnership",
+          "name": "Cloud Partnership",
+          "displayName": "Strategic Cloud Embrace",
+          "text": "Pay 1 Runway for 2 Compute; another player gains 1 Runway.",
+          "flavorText": "The credits are temporary. The architecture is a relationship.",
+          "artDirection": "Two rival campuses connected by an enormous soft cloud shaped like a contract.",
+          "technology": "Reserved accelerator capacity and cross-institution cloud credits."
+        },
+        {
+          "id": "api_price_cut",
+          "name": "API Price Cut",
+          "displayName": "Price Discovery Event",
+          "text": "Deploy for zero Compute; that Customer produces no Runway this round.",
+          "flavorText": "Revenue has been postponed until dependency becomes measurable.",
+          "artDirection": "An API price descending to zero while a much larger adoption curve rises behind it.",
+          "technology": "Subsidized inference and loss-leading platform distribution."
+        },
+        {
+          "id": "open_letter",
+          "name": "Open Letter",
+          "displayName": "Consensus, With Signatures",
+          "text": "Add one vote to the current Government decision.",
+          "flavorText": "The document is voluntary. Reading the names is not.",
+          "artDirection": "A long formal letter entering a government chamber with signatures glowing like votes.",
+          "technology": "Coordinated public advocacy."
+        },
+        {
+          "id": "model_card",
+          "name": "Model Card",
+          "displayName": "Documentation Event",
+          "text": "Remove 1 Scrutiny after Deploy.",
+          "flavorText": "The limitation was always present in Table 14.",
+          "artDirection": "A deployed model wrapped in an immaculate transparent sheet of caveats.",
+          "technology": "Standardized model documentation and risk disclosure."
+        },
+        {
+          "id": "talent_raid",
+          "name": "Talent Raid",
+          "displayName": "Acqui-Hire of One",
+          "text": "Recruit a neutral Expert for 1 Runway.",
+          "flavorText": "The company had one employee and several strategically unnecessary assets.",
+          "artDirection": "A tiny startup building folded into a single Expert badge.",
+          "technology": "Targeted expert acquisition."
+        },
+        {
+          "id": "board_reshuffle",
+          "name": "Board Reshuffle",
+          "displayName": "Governance Compression",
+          "text": "Ready Organize or Influence.",
+          "flavorText": "The board has reduced decision latency by changing who counts as the board.",
+          "artDirection": "A formal board table snapping into a smaller, sharper configuration.",
+          "technology": "Emergency governance restructuring."
+        },
+        {
+          "id": "weights_leak",
+          "name": "Weights Leak",
+          "displayName": "Unauthorized Interoperability",
+          "text": "Copy one public Facility upgrade this round.",
+          "flavorText": "Compatibility arrived through an unsupported channel.",
+          "artDirection": "A glowing facility blueprint copied across a dark peer-to-peer link.",
+          "technology": "Unscheduled model and architecture transfer."
+        },
+        {
+          "id": "emergency_pause",
+          "name": "Emergency Pause",
+          "displayName": "Successful Non-Deployment",
+          "text": "End a failed Training Run with no Capability and no Scrutiny.",
+          "flavorText": "Nothing happened, exactly as the revised objective intended.",
+          "artDirection": "A red emergency control pressed just before a duplicate enters the training core.",
+          "technology": "Training interruption and incident containment."
+        },
+        {
+          "id": "custom_silicon",
+          "name": "Custom Silicon",
+          "displayName": "Purpose-Built Reality",
+          "text": "One Facility permanently produces +1 Compute.",
+          "flavorText": "The algorithm and the atom have entered a long-term partnership.",
+          "artDirection": "A bespoke processor die growing directly into the foundation of a Facility.",
+          "technology": "Application-specific AI accelerators."
+        },
+        {
+          "id": "government_contract",
+          "name": "Government Contract",
+          "displayName": "Public-Sector Validation",
+          "text": "If Trust is at least four, gain 2 Runway.",
+          "flavorText": "The procurement process confirms both legitimacy and recurring revenue.",
+          "artDirection": "A government seal transforming into two measured lengths of financial runway.",
+          "technology": "Public procurement and strategic-compute contracting."
+        },
+        {
+          "id": "benchmark_optimization",
+          "name": "Benchmark Optimization",
+          "displayName": "Teach to the Test Set",
+          "text": "Gain +1 Capability after successful Research and add 1 Scrutiny.",
+          "flavorText": "General performance improves most rapidly near the published questions.",
+          "artDirection": "A model climbing a staircase built from increasingly familiar evaluation cards.",
+          "technology": "Evaluation-aware post-training."
+        },
+        {
+          "id": "interconnection_waiver",
+          "name": "Interconnection Waiver",
+          "displayName": "Grid Emergency Exception",
+          "text": "Ignore one Generator, Transmission, or Power-upkeep cost and gain 1 Trust.",
+          "flavorText": "The ordinary process remains essential for projects that are not this urgent.",
+          "artDirection": "A transmission line passing cleanly over a vast waiting queue beneath a policy seal.",
+          "technology": "Expedited grid interconnection authority."
+        }
+      ]
+    },
+    "data/mandates.json": {
+      "schemaVersion": 1,
+      "status": "provisional_playtest_content",
+      "selection": "Reveal one at the beginning of each round. Score it at the end of that round.",
+      "points": {
+        "winner": 2,
+        "tied": 1
+      },
+      "tieRule": "Tied leaders each score 1 Mandate unless the card says otherwise.",
+      "mandates": [
+        {
+          "id": "quarter_humanity_notices",
+          "name": "The Quarter Humanity Notices",
+          "rulesText": "The player who gained the most Capability this round scores 2 Mandate.",
+          "flavorText": "The improvement is statistically modest, economically decisive, and already on every screen.",
+          "artDirection": "A solemn earnings call projected across an entire city while a tiny benchmark arrow points upward.",
+          "mechanicalTags": [
+            "capability",
+            "research"
+          ]
+        },
+        {
+          "id": "continent_signs_loi",
+          "name": "A Continent Signs the LOI",
+          "rulesText": "The player who gained the most Customers this round scores 2 Mandate.",
+          "flavorText": "The agreement is nonbinding. The press conference is visible from orbit.",
+          "artDirection": "Officials signing an absurdly long memorandum beneath a hovering product demo.",
+          "mechanicalTags": [
+            "customers",
+            "deploy"
+          ]
+        },
+        {
+          "id": "building_has_weather",
+          "name": "The Building Has Its Own Weather",
+          "rulesText": "The player with the most powered Facilities scores 2 Mandate.",
+          "flavorText": "The campus now publishes a daily internal climate report.",
+          "artDirection": "A data-center megastructure producing a private cloud layer and localized rain.",
+          "mechanicalTags": [
+            "facilities",
+            "power"
+          ]
+        },
+        {
+          "id": "stack_reaches_horizon",
+          "name": "The Stack Reaches the Horizon",
+          "rulesText": "The player with the largest connected Facility network scores 2 Mandate.",
+          "flavorText": "Every layer is vertically integrated, including the horizon.",
+          "artDirection": "A continuous illuminated infrastructure corridor vanishing into severe retro-futurist perspective.",
+          "mechanicalTags": [
+            "network",
+            "facilities"
+          ]
+        },
+        {
+          "id": "voluntary_coordination_triumphs",
+          "name": "Voluntary Coordination Triumphs",
+          "rulesText": "The player who completed the most Joint Ventures this round scores 2 Mandate.",
+          "flavorText": "All parties independently selected the agreement their lawyers had already announced.",
+          "artDirection": "Two rival executives shaking hands across a humming transmission line while assistants exchange contradictory contracts.",
+          "mechanicalTags": [
+            "joint_venture",
+            "negotiation"
+          ]
+        },
+        {
+          "id": "legibility_offensive",
+          "name": "The Legibility Offensive",
+          "rulesText": "Among players who completed a Deploy this round, the player with the most Trust scores 2 Mandate.",
+          "flavorText": "The system is now fully documented in a format no member of the public requested.",
+          "artDirection": "A glowing model card presented like a sacred legal tablet before a silent audience.",
+          "mechanicalTags": [
+            "trust",
+            "deploy"
+          ]
+        },
+        {
+          "id": "national_champion_without_nationalization",
+          "name": "National Champion, Without the Nationalization",
+          "rulesText": "The player controlling the most different hex categories scores 2 Mandate.",
+          "flavorText": "The institution remains private in every sense except consequence.",
+          "artDirection": "A corporate seal stamped across research, media, energy, and government districts.",
+          "mechanicalTags": [
+            "control",
+            "map"
+          ]
+        },
+        {
+          "id": "model_ate_tuesday",
+          "name": "The Model That Ate Tuesday",
+          "rulesText": "The player whose best successful Training Run contained the most unique domains scores 2 Mandate.",
+          "flavorText": "Tuesday has been reconstructed from embeddings and will return after maintenance.",
+          "artDirection": "A calendar page dissolving into a luminous training lattice as technicians take notes.",
+          "mechanicalTags": [
+            "research",
+            "training"
+          ]
+        },
+        {
+          "id": "compute_new_weather",
+          "name": "Compute Is the New Weather",
+          "rulesText": "The player who produced the most Compute during Production scores 2 Mandate.",
+          "flavorText": "Markets rise on favorable tensor conditions across the eastern cloud region.",
+          "artDirection": "A broadcast weather map showing accelerator fronts, latency pressure, and scattered inference.",
+          "mechanicalTags": [
+            "compute",
+            "production"
+          ]
+        },
+        {
+          "id": "zero_incident_quarter",
+          "name": "Zero-Incident Quarter, Pending Review",
+          "rulesText": "Among players who added at least 1 Scrutiny this round, the player who added the fewest Scrutiny scores 2 Mandate.",
+          "flavorText": "No reportable incidents occurred after the definition of reportable was successfully revised.",
+          "artDirection": "A spotless compliance dashboard concealing a smoking server room behind it.",
+          "mechanicalTags": [
+            "scrutiny",
+            "risk"
+          ]
+        },
+        {
+          "id": "responsible_acceleration",
+          "name": "Responsible Acceleration",
+          "rulesText": "The player with the most Capability among players with at least 4 Trust scores 2 Mandate.",
+          "flavorText": "Safety and speed are no longer tradeoffs now that both departments report to Growth.",
+          "artDirection": "A sleek vehicle labeled RESPONSIBILITY breaking the sound barrier through a regulatory checkpoint.",
+          "mechanicalTags": [
+            "capability",
+            "trust"
+          ]
+        },
+        {
+          "id": "markets_prefer_destiny",
+          "name": "Markets Prefer a Clear Destiny",
+          "rulesText": "The player who gained the most Runway through Fund actions this round scores 2 Mandate.",
+          "flavorText": "The forecast contains no revenue, only inevitability.",
+          "artDirection": "Investors calmly feeding currency into a machine that prints a single rising line.",
+          "mechanicalTags": [
+            "fund",
+            "runway"
+          ]
+        }
+      ]
+    },
+    "data/secret-objectives.json": {
+      "schemaVersion": 1,
+      "status": "provisional_playtest_content",
+      "setup": "Deal two to each player. Keep one and return the other unseen.",
+      "mandate": 3,
+      "objectives": [
+        {
+          "id": "quietly_indispensable",
+          "name": "Quietly Indispensable",
+          "rulesText": "At game end, have at least 3 powered Facilities and no more than 2 Scrutiny cubes in the bag.",
+          "flavorText": "Nobody knows what the institution does. Every institution depends on it.",
+          "artDirection": "An unmarked facility connected by glowing lines to every visible district.",
+          "mechanicalTags": [
+            "facilities",
+            "power",
+            "scrutiny"
+          ]
+        },
+        {
+          "id": "too_big_to_pause",
+          "name": "Too Big to Pause",
+          "rulesText": "At game end, have at least 4 Customers and Trust of 2 or less.",
+          "flavorText": "Public confidence is temporary. Integration contracts are forever.",
+          "artDirection": "A warning lever enclosed behind customer logos and legal injunctions.",
+          "mechanicalTags": [
+            "customers",
+            "low_trust"
+          ]
+        },
+        {
+          "id": "benevolent_monopoly",
+          "name": "Benevolent Monopoly",
+          "rulesText": "At game end, have at least 4 Customers and at least 4 Trust.",
+          "flavorText": "Everyone selected the default because the default selected everyone.",
+          "artDirection": "A friendly universal assistant hovering above a city with no visible alternatives.",
+          "mechanicalTags": [
+            "customers",
+            "trust"
+          ]
+        },
+        {
+          "id": "institutional_capture",
+          "name": "Institutional Capture",
+          "rulesText": "At game end, control Media, Government, and Capital hexes.",
+          "flavorText": "The ecosystem has matured into a single calendar invitation.",
+          "artDirection": "Three monumental buildings connected to one discreet conference room.",
+          "mechanicalTags": [
+            "control",
+            "influence"
+          ]
+        },
+        {
+          "id": "distributed_scarcity",
+          "name": "Distributed Denial of Scarcity",
+          "rulesText": "At game end, have a connected network containing at least 3 Facilities and 1 Generator.",
+          "flavorText": "There is more than enough capacity, provided every request is strategically important.",
+          "artDirection": "A power network blazing at full capacity while a polite queue extends beyond the frame.",
+          "mechanicalTags": [
+            "network",
+            "power"
+          ]
+        },
+        {
+          "id": "paper_agi",
+          "name": "Paper AGI",
+          "rulesText": "Declare AGI while having exactly 3 Facilities.",
+          "flavorText": "The infrastructure is minimal because intelligence has become capital-efficient.",
+          "artDirection": "Three compact buildings casting the shadow of an impossible machine.",
+          "mechanicalTags": [
+            "agi",
+            "facilities"
+          ]
+        },
+        {
+          "id": "industrial_sublime",
+          "name": "The Industrial Sublime",
+          "rulesText": "At game end, have 4 Facilities, 2 Generators, and at least 1 Facility Upgrade.",
+          "flavorText": "At dusk, the cooling towers appear almost constitutional.",
+          "artDirection": "A monumental powered campus painted like a state portrait.",
+          "mechanicalTags": [
+            "build",
+            "power",
+            "upgrade"
+          ]
+        },
+        {
+          "id": "public_option_private_invoice",
+          "name": "Public Option, Private Invoice",
+          "rulesText": "At game end, control Government and Capital and have at least 6 Runway.",
+          "flavorText": "The service is universal. The margin is also universal.",
+          "artDirection": "A public-service kiosk dispensing receipts into a private armored vehicle.",
+          "mechanicalTags": [
+            "control",
+            "runway"
+          ]
+        },
+        {
+          "id": "open_closed_loop",
+          "name": "The Open, Closed Loop",
+          "rulesText": "Use Open Weights and finish the game with more Capability than every player who had less Capability when you used it.",
+          "flavorText": "The ecosystem is open. The lead is proprietary.",
+          "artDirection": "Open model weights flowing outward and returning as a locked golden circuit.",
+          "mechanicalTags": [
+            "open_weights",
+            "capability"
+          ]
+        },
+        {
+          "id": "alignment_as_service",
+          "name": "Alignment as a Service",
+          "rulesText": "At game end, have at least 5 Trust and have completed a Joint Venture.",
+          "flavorText": "Values are now available through the enterprise plan.",
+          "artDirection": "Two institutions connecting moral compasses through a subscription terminal.",
+          "mechanicalTags": [
+            "trust",
+            "joint_venture"
+          ]
+        },
+        {
+          "id": "everyone_customer",
+          "name": "Everyone Is a Customer Eventually",
+          "rulesText": "Deploy at least once in three different rounds.",
+          "flavorText": "Adoption is merely consent viewed over a sufficiently long horizon.",
+          "artDirection": "A product funnel widening until it encloses an entire city.",
+          "mechanicalTags": [
+            "deploy",
+            "tempo"
+          ]
+        },
+        {
+          "id": "regulatory_moat",
+          "name": "Regulatory Moat",
+          "rulesText": "At game end, have at least 2 Policy Shields and control Government.",
+          "flavorText": "Compliance is expensive, which is why nobody else should be permitted to attempt it.",
+          "artDirection": "A fortress built from policy binders surrounding a polished data center.",
+          "mechanicalTags": [
+            "policy_shield",
+            "government"
+          ]
+        },
+        {
+          "id": "recursive_revenue",
+          "name": "Recursive Revenue",
+          "rulesText": "During one Production, gain Runway from Customers, a Facility, a Network, and a Joint Venture.",
+          "flavorText": "Every part of the institution now invoices another part.",
+          "artDirection": "A circular corporate diagram made entirely of invoices and glowing arrows.",
+          "mechanicalTags": [
+            "production",
+            "runway",
+            "joint_venture"
+          ]
+        },
+        {
+          "id": "compute_diplomacy",
+          "name": "Compute Diplomacy",
+          "rulesText": "Complete Power Purchase Agreements with two different rivals during the game.",
+          "flavorText": "Peace is what happens when everyone has a shared cooling dependency.",
+          "artDirection": "Three rival compounds exchanging electricity across a tense ceremonial border.",
+          "mechanicalTags": [
+            "power",
+            "negotiation"
+          ]
+        },
+        {
+          "id": "credible_denial",
+          "name": "Credible Denial",
+          "rulesText": "At game end, have at least 8 Capability and no more than 1 Customer.",
+          "flavorText": "The model is not deployed. It is merely answering production traffic.",
+          "artDirection": "A sealed research vault with millions of cables quietly leaving through the floor.",
+          "mechanicalTags": [
+            "capability",
+            "customers"
+          ]
+        },
+        {
+          "id": "history_will_call",
+          "name": "History Will Call It Necessary",
+          "rulesText": "At game end, have at least 8 Scrutiny added across the game and at least 5 Trust.",
+          "flavorText": "The controversy has been successfully converted into institutional memory.",
+          "artDirection": "A museum exhibit honoring a smoking machine while visitors listen respectfully.",
+          "mechanicalTags": [
+            "scrutiny",
+            "trust"
+          ]
+        },
+        {
+          "id": "fusion_press_cycle",
+          "name": "The Fusion Press Cycle",
+          "rulesText": "Construct the Fusion Demonstrator and Declare AGI in Round IV.",
+          "flavorText": "Two announcements are more scientific than one.",
+          "artDirection": "A fusion chamber and AGI podium sharing a single countdown clock.",
+          "mechanicalTags": [
+            "fusion",
+            "agi"
+          ]
+        },
+        {
+          "id": "perfectly_normal_quarter",
+          "name": "A Perfectly Normal Quarter",
+          "rulesText": "Use at least one Wild Action in each of Rounds II, III, and IV.",
+          "flavorText": "Operations remained within parameters after the parameters were expanded.",
+          "artDirection": "Three increasingly impossible quarterly reports arranged with identical sober typography.",
+          "mechanicalTags": [
+            "wild_action",
+            "tempo"
+          ]
+        }
+      ]
+    }
+  },
+  "playtestKit": {
+    "data/content-manifest.json": {
+      "schemaVersion": 1,
+      "purpose": "Inventory every physical and thematic text surface without confusing draft copy for proven balance.",
+      "surfaceContract": {
+        "mechanics": "Rules text and numeric effects remain authoritative in their owning game-data file and docs/core-rules.md.",
+        "theme": "Flavor text, institutional framing, and art direction may intensify tone but cannot silently alter mechanics.",
+        "statusValues": [
+          "reviewed_existing",
+          "draft_complete",
+          "provisional_playtest_content",
+          "thematic_reserve_not_in_base_game",
+          "production_layout_missing",
+          "final_art_missing"
+        ]
+      },
+      "surfaces": [
+        {
+          "id": "world_and_box",
+          "file": "data/world-copy.json",
+          "count": 1,
+          "status": "draft_complete"
+        },
+        {
+          "id": "core_actions",
+          "file": "data/game-config.json",
+          "count": 6,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "eras",
+          "file": "data/reference-cards.json",
+          "count": 4,
+          "status": "draft_complete"
+        },
+        {
+          "id": "player_references",
+          "file": "data/reference-cards.json",
+          "count": 3,
+          "status": "draft_complete"
+        },
+        {
+          "id": "factions",
+          "file": "data/factions.json",
+          "count": 6,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "faction_abilities",
+          "file": "data/factions.json",
+          "count": 24,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "headlines",
+          "file": "data/headlines.json",
+          "count": 24,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "tactics",
+          "file": "data/tactics.json",
+          "count": 12,
+          "physicalCopies": 36,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "wild_actions",
+          "file": "data/wild-actions.json",
+          "count": 7,
+          "physicalCopies": 42,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "mandates",
+          "file": "data/mandates.json",
+          "count": 12,
+          "status": "provisional_playtest_content"
+        },
+        {
+          "id": "secret_objectives",
+          "file": "data/secret-objectives.json",
+          "count": 18,
+          "status": "provisional_playtest_content"
+        },
+        {
+          "id": "training_faces",
+          "file": "data/game-config.json",
+          "count": 12,
+          "physicalCopies": 50,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "power_sources",
+          "file": "data/game-config.json",
+          "count": 5,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "map_tile_types",
+          "file": "data/game-config.json",
+          "count": 11,
+          "physicalCopies": 19,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "realignment_ballots",
+          "file": "data/game-config.json",
+          "count": 3,
+          "physicalCopies": 18,
+          "status": "reviewed_existing"
+        },
+        {
+          "id": "tokens_and_tracks",
+          "file": "data/world-copy.json",
+          "count": 14,
+          "status": "draft_complete"
+        },
+        {
+          "id": "agi_declarations",
+          "file": "data/world-copy.json",
+          "count": 6,
+          "status": "draft_complete"
+        },
+        {
+          "id": "endings",
+          "file": "data/world-copy.json",
+          "count": 6,
+          "status": "draft_complete"
+        },
+        {
+          "id": "specialists_and_patrons",
+          "file": "data/reserve-specialists.json",
+          "count": 12,
+          "status": "thematic_reserve_not_in_base_game"
+        },
+        {
+          "id": "card_and_board_layouts",
+          "file": null,
+          "count": 0,
+          "status": "production_layout_missing"
+        },
+        {
+          "id": "component_artwork",
+          "file": null,
+          "count": 0,
+          "status": "final_art_missing"
+        }
+      ]
+    },
+    "data/reference-cards.json": {
+      "schemaVersion": 1,
+      "status": "draft_print_copy",
+      "eraCards": [
+        {
+          "id": "era_demo",
+          "round": 1,
+          "name": "The Demo",
+          "strapline": "Nobody knows whether it works. Everyone knows the valuation.",
+          "rulesText": "Ready all Core Actions. Gain 0 Escalation tokens. Play 3 action cycles. Audit base: 2.",
+          "unlockText": "No Wild Actions are available.",
+          "artDirection": "A tiny prototype glowing onstage before an audience that extends beyond the horizon."
+        },
+        {
+          "id": "era_scale",
+          "round": 2,
+          "name": "The Scale",
+          "strapline": "The model is no longer the product. Electricity, land, and institutional patience are the product.",
+          "rulesText": "Ready all Core Actions. Gain 1 Escalation token. Play 3 action cycles. Audit base: 3.",
+          "unlockText": "Unlock Mega-Cluster and Reorganization.",
+          "artDirection": "A server campus swallowing a valley while executives inspect a tasteful architectural model."
+        },
+        {
+          "id": "era_narrative",
+          "round": 3,
+          "name": "The Narrative",
+          "strapline": "Capability exists. Reality must now be informed.",
+          "rulesText": "Ready all Core Actions. Gain 1 Escalation token. Play 3 action cycles. Audit base: 4.",
+          "unlockText": "Unlock Open Weights and Narrative Capture. Earlier unused Wild Actions remain available.",
+          "artDirection": "Broadcast towers, policy chambers, and social feeds converging into one serene institutional face."
+        },
+        {
+          "id": "era_claim",
+          "round": 4,
+          "name": "The Claim",
+          "strapline": "General intelligence has become a financing category.",
+          "rulesText": "Ready all Core Actions. Gain 2 Escalation tokens. Play 3 action cycles. Audit base: 5.",
+          "unlockText": "Unlock Agent Swarm, Declare AGI, and Fusion Demonstrator. Earlier unused Wild Actions remain available.",
+          "artDirection": "An AGI announcement podium beneath orbital infrastructure and a reactor sunrise."
+        }
+      ],
+      "playerReferences": [
+        {
+          "id": "quarter_sequence",
+          "name": "A Perfectly Governed Quarter",
+          "frontText": [
+            "1. Begin the Era: ready, draw, reveal Mandate, assign Grant and Spotlight.",
+            "2. Three cycles: reveal Headline, choose, reveal, move, resolve, exhaust.",
+            "3. Resolve Power and Production.",
+            "4. Conduct the Public Audit.",
+            "5. Score the Mandate.",
+            "6. Secretly ballot, reveal, and resolve Jurisdictional Realignment."
+          ],
+          "backText": [
+            "On a turn: choose one unused Core Action or one legal unused Wild Action.",
+            "Move one acting piece 0–2 hexes, then resolve from its destination.",
+            "Wild Actions spend 1 Escalation token. Unspent tokens expire.",
+            "If an effect says lowest, highest, or most and ties, use Initiative-clockwise order."
+          ],
+          "flavorText": "Every quarter is unprecedented. The sequence remains standardized."
+        },
+        {
+          "id": "production_audit",
+          "name": "Infrastructure and Accountability",
+          "frontText": [
+            "Resolve each connected power network separately.",
+            "Total generation, assign Power, then produce powered Facilities.",
+            "Gain Customer income, Network bonuses, and Joint Venture production.",
+            "Offline Facilities retain presence but do not produce."
+          ],
+          "backText": [
+            "Audit draws = round(base draws × players ÷ 4), minimum 1.",
+            "For each cube drawn, its owner pays 1 Runway or loses 1 Trust.",
+            "A Systemic Risk cube affects every player with at least 3 Customers.",
+            "If your Scrutiny supply is empty, each additional cube costs 1 Runway or 1 Trust immediately."
+          ],
+          "flavorText": "Capacity is pooled. Responsibility remains individually addressable."
+        },
+        {
+          "id": "jurisdictional_realignment",
+          "name": "The Map Has Approved a Motion",
+          "frontText": [
+            "Every player secretly chooses one ballot; reveal simultaneously.",
+            "Plurality wins. For tied leading motions, scan ballots from Initiative clockwise.",
+            "Core: inner ring +1 clockwise.",
+            "Periphery: outer ring +2 clockwise.",
+            "Counter-Cycle: inner +1 clockwise; outer −2."
+          ],
+          "backText": [
+            "Frontier never moves; moving tiles carry all site-bound contents.",
+            "Re-lay existing Transmission for free; gain no segments.",
+            "Disconnected contracts remain owned but produce nothing.",
+            "An edge-split Mega-Cluster is offline until its Facilities are adjacent.",
+            "Resolve Round IV Realignment before final control and objective scoring."
+          ],
+          "flavorText": "The geography remains factual. Its location has been updated."
+        }
+      ]
+    },
+    "data/world-copy.json": {
+      "schemaVersion": 1,
+      "status": "draft_print_copy",
+      "tone": {
+        "name": "Solemn Institutional Absurdity",
+        "rule": "Every impossible technology is presented as a responsible quarterly initiative.",
+        "escalation": [
+          "Round I is recognizable technology business.",
+          "Round II turns land, power, chips, and people into an industrial apparatus.",
+          "Round III industrializes consensus, legitimacy, and public reality.",
+          "Round IV treats civilization-scale claims as ordinary portfolio decisions."
+        ],
+        "avoid": [
+          "Punchlines that wink at the player.",
+          "Direct allegations about living people or real companies.",
+          "Random chaos with no strategic choice.",
+          "Science-fiction language that obscures the mechanical rule."
+        ]
+      },
+      "box": {
+        "frontStrapline": "Build the future. Power the future. Announce the future before anyone else.",
+        "backCopy": "The prototype worked. Capital arrived. Now six institutions race across a modular economy for compute, talent, energy, customers, and historical legitimacy. Choose only three priorities each quarter. Build powered networks. Push Training Runs until they succeed or collapse. Negotiate infrastructure with rivals who fully intend to outgrow you. Manage public Scrutiny while increasingly irresponsible options become available. In the final Era, deploy agent swarms, ignite a fusion demonstrator, and plausibly declare AGI. The world remains solemn. Nobody acknowledges that this is ridiculous.",
+        "shortPitch": "A spatial engine-building and negotiation game about institutions racing to plausibly declare AGI.",
+        "contentWarning": "Satirical themes include layoffs, surveillance-adjacent institutions, energy consumption, political influence, and technological crisis."
+      },
+      "worldPrimer": [
+        "In 2038, intelligence is no longer discussed as a property of minds. It is discussed as capacity, market access, and an item on the quarterly agenda.",
+        "Research institutions have become territorial infrastructure companies. Energy ministries negotiate directly with model releases. Public confidence is measured continuously and understood retrospectively.",
+        "Six institutions believe they can build the system that history will recognize as general intelligence. None agree on what that means. All agree that somebody else must not announce it first."
+      ],
+      "tokenCopy": [
+        {
+          "id": "runway",
+          "name": "Runway",
+          "microcopy": "Time, money, and permission to continue.",
+          "iconConcept": "A receding financial runway ending at a hard horizon."
+        },
+        {
+          "id": "compute",
+          "name": "Compute",
+          "microcopy": "Electricity made strategically legible.",
+          "iconConcept": "A processor die containing a small power-grid glyph."
+        },
+        {
+          "id": "capability",
+          "name": "Capability",
+          "microcopy": "What the model can do before anyone agrees what it means.",
+          "iconConcept": "An ascending stepped waveform entering an eye."
+        },
+        {
+          "id": "customers",
+          "name": "Customers",
+          "microcopy": "Deployment, dependency, and recurring revenue.",
+          "iconConcept": "A user silhouette nested inside a contract seal."
+        },
+        {
+          "id": "trust",
+          "name": "Trust",
+          "microcopy": "Public permission with a short half-life.",
+          "iconConcept": "A civic column built from signal bars."
+        },
+        {
+          "id": "scrutiny",
+          "name": "Scrutiny",
+          "microcopy": "Attention that cannot be converted into marketing.",
+          "iconConcept": "A black aperture surrounding a tiny audit mark."
+        },
+        {
+          "id": "safety",
+          "name": "Safety",
+          "microcopy": "One more chance to stop while stopping is still an option.",
+          "iconConcept": "A shield enclosing a pause symbol."
+        },
+        {
+          "id": "mandate",
+          "name": "Mandate",
+          "microcopy": "The portion of history currently persuaded.",
+          "iconConcept": "A laurel wreath around a forward-pointing cursor."
+        },
+        {
+          "id": "escalation",
+          "name": "Escalation",
+          "microcopy": "Authorization to call the extraordinary inevitable.",
+          "iconConcept": "A sealed red triangle opening upward."
+        },
+        {
+          "id": "policy_shield",
+          "name": "Policy Shield",
+          "microcopy": "A rule written narrowly enough to resemble protection.",
+          "iconConcept": "A shield assembled from legal brackets."
+        },
+        {
+          "id": "market_access",
+          "name": "Market Access",
+          "microcopy": "A temporary reduction in the distance between product and public.",
+          "iconConcept": "An unlocked gate shaped like a funnel."
+        },
+        {
+          "id": "public_research_grant",
+          "name": "Public Research Grant",
+          "microcopy": "Collective optimism, redeemable as one resource.",
+          "iconConcept": "A civic hand offering a small star."
+        },
+        {
+          "id": "spotlight",
+          "name": "Spotlight",
+          "microcopy": "Cheaper capital. Better headlines. Nowhere to hide.",
+          "iconConcept": "A brilliant cone of light containing an audit eye."
+        },
+        {
+          "id": "systemic_risk",
+          "name": "Systemic Risk",
+          "microcopy": "A private externality that has completed its growth phase.",
+          "iconConcept": "Six linked warning nodes around a dark center."
+        }
+      ],
+      "agiDeclarations": [
+        {
+          "factionId": "coalition_lab",
+          "statement": "Following extensive consultation, we have reached broad alignment that the system has crossed the relevant threshold."
+        },
+        {
+          "factionId": "platform_empire",
+          "statement": "General intelligence is now available to everyone by default. Settings may vary by region."
+        },
+        {
+          "factionId": "imperial_research_lab",
+          "statement": "The result exceeds every benchmark we still consider scientifically meaningful."
+        },
+        {
+          "factionId": "vertical_empire",
+          "statement": "The system is general, operational, and already scheduled for orbital deployment."
+        },
+        {
+          "factionId": "safety_laboratory",
+          "statement": "Subject to the safeguards described in Appendix M, we believe the responsible term is AGI."
+        },
+        {
+          "factionId": "foundry",
+          "statement": "Whatever intelligence is, demand for it has entered volume production."
+        }
+      ],
+      "endings": [
+        {
+          "id": "capability",
+          "name": "The Benchmark Century",
+          "condition": "Use when the winner’s strongest scoring identity was Capability.",
+          "text": "History remembers the graphs first. The caveats survive in excellent condition."
+        },
+        {
+          "id": "customers",
+          "name": "Default Civilization",
+          "condition": "Use when the winner’s strongest scoring identity was Customers.",
+          "text": "Adoption becomes infrastructure. Infrastructure becomes custom. Custom becomes consent."
+        },
+        {
+          "id": "trust",
+          "name": "The Responsible Settlement",
+          "condition": "Use when the winner’s strongest scoring identity was Trust.",
+          "text": "The institution is invited to govern the technology it successfully made unavoidable."
+        },
+        {
+          "id": "infrastructure",
+          "name": "The Permanent Buildout",
+          "condition": "Use when the winner’s strongest scoring identity was Facilities and Power.",
+          "text": "The machines change. The substations remain. The horizon acquires an operating budget."
+        },
+        {
+          "id": "influence",
+          "name": "Consensus Achieved",
+          "condition": "Use when the winner’s strongest scoring identity was control and Influence.",
+          "text": "Every major institution independently arrives at the same language by Thursday."
+        },
+        {
+          "id": "agi",
+          "name": "The Plausible Declaration",
+          "condition": "Use when the winner’s decisive scoring event was Declare AGI.",
+          "text": "The announcement is disputed for decades and cited forever."
+        }
+      ]
+    }
+  }
+}

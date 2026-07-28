@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "customer-mandate-one-v1",
+  "registeredBeforeResults": true,
+  "question": "Does reducing Customer Mandate from 2 to 1 break the repeatable Research-to-Deploy scoring engine without removing Customer income, adoption play, or creating a larger replacement dominant path?",
+  "sourceEvidence": "uniform-capability-mandate-v1",
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/customer-mandate-one-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "customer_mandate_one",
+      "overlay": {
+        "customerMandate": 1
+      }
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 16000,
+  "initialRunsPerCell": 4,
+  "batchSize": 16,
+  "seed": "m3t4-customer-mandate-one-v1-20260727",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "primaryComparisons": [
+    "paired aggregate winner and score deltas",
+    "Capability Rusher and Market Maximalist by player count and homogeneous backend",
+    "Infrastructure Compounder and Balanced Operator replacement advantage",
+    "faction win shares by player count and homogeneous backend",
+    "Deploy selection and Customer counts",
+    "Mandate-source mix",
+    "declaration and Genuine AGI rates",
+    "forced no-op rate"
+  ],
+  "selectionRule": {
+    "candidatePreferred": "The candidate must materially compress Capability Rusher across four through six players, retain Market and Deploy viability through Customer income, and introduce no larger replacement faction or strategy advantage.",
+    "canonicalPreferred": "Retain canonical scoring if the candidate merely transfers dominance, makes Deploy unattractive, or produces inconsistent effects.",
+    "physicalBoundary": "Neither arm establishes human counterplay, negotiation quality, duration, perceived fairness, or fun."
+  }
+}

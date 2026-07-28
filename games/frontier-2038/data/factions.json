@@ -1,0 +1,512 @@
+{
+  "schemaVersion": 2,
+  "edition": "named",
+  "abilityTimingContract": {
+    "unlocks": "An ability unlocks at the start of its named round.",
+    "allowedTiming": [
+      "passive",
+      "once_per_round",
+      "once_when_unlocked",
+      "once_per_game"
+    ],
+    "persistence": "persistsAfterUnlock states whether the ability remains available after its named round."
+  },
+  "factionTruthContract": {
+    "status": "selected_design_constraint",
+    "scale": {
+      "minimum": 1,
+      "maximum": 5,
+      "meaning": "Relative institutional identity, not a point-buy budget or a promise of equal raw resources."
+    },
+    "dimensions": {
+      "capitalAccess": "Ability to obtain and sustain Runway.",
+      "computeAccess": "Privileged access to training and inference capacity.",
+      "researchReliability": "Ability to turn Research attempts into dependable Capability.",
+      "distribution": "Ability to reach Customers and markets.",
+      "infrastructureVelocity": "Ability to build, move, and operate physical infrastructure.",
+      "institutionalTrust": "Ability to accumulate legitimacy and withstand governance pressure.",
+      "coalitionLeverage": "Ability to make mutually useful deals and shape other players' incentives."
+    },
+    "eligibilityRule": "Balance conversion, exposure, timing, rigidity, and dependency around faction truth. A candidate is ineligible if it removes the faction's protected strength, even when it improves parity.",
+    "profiles": {
+      "coalition_lab": {
+        "ratings": {
+          "capitalAccess": 4,
+          "computeAccess": 2,
+          "researchReliability": 2,
+          "distribution": 3,
+          "infrastructureVelocity": 2,
+          "institutionalTrust": 3,
+          "coalitionLeverage": 5
+        },
+        "protectedStrength": "Deals, coalitions, and institutional flexibility.",
+        "balanceBottleneck": "Dependence on willing partners and terms that remain individually rational.",
+        "forbiddenCorrection": "Do not make solo resource conversion more reliable than negotiated play."
+      },
+      "platform_empire": {
+        "ratings": {
+          "capitalAccess": 4,
+          "computeAccess": 3,
+          "researchReliability": 3,
+          "distribution": 5,
+          "infrastructureVelocity": 3,
+          "institutionalTrust": 2,
+          "coalitionLeverage": 2
+        },
+        "protectedStrength": "Installed Customers, distribution, and market reach.",
+        "balanceBottleneck": "Trust, exposure, and escalating consequences from deployment.",
+        "forbiddenCorrection": "Do not make the platform bad at reaching or monetizing Customers."
+      },
+      "imperial_research_lab": {
+        "ratings": {
+          "capitalAccess": 3,
+          "computeAccess": 5,
+          "researchReliability": 5,
+          "distribution": 2,
+          "infrastructureVelocity": 3,
+          "institutionalTrust": 4,
+          "coalitionLeverage": 2
+        },
+        "protectedStrength": "Compute access, Research reliability, and Capability generation.",
+        "balanceBottleneck": "Public validation, commercialization, and claim timing.",
+        "forbiddenCorrection": "Do not make successful scientific rigor reduce Capability or make the institution compute-poor."
+      },
+      "vertical_empire": {
+        "ratings": {
+          "capitalAccess": 5,
+          "computeAccess": 4,
+          "researchReliability": 2,
+          "distribution": 3,
+          "infrastructureVelocity": 5,
+          "institutionalTrust": 1,
+          "coalitionLeverage": 2
+        },
+        "protectedStrength": "Infrastructure velocity, capital, and physical mobility.",
+        "balanceBottleneck": "Scrutiny, strategic rigidity, and political legitimacy.",
+        "forbiddenCorrection": "Do not make the institution slow at constructing or relocating infrastructure."
+      },
+      "safety_laboratory": {
+        "ratings": {
+          "capitalAccess": 2,
+          "computeAccess": 2,
+          "researchReliability": 4,
+          "distribution": 2,
+          "infrastructureVelocity": 1,
+          "institutionalTrust": 5,
+          "coalitionLeverage": 4
+        },
+        "protectedStrength": "Safety, Trust, and controlled deployment.",
+        "balanceBottleneck": "Slower expansion and fewer aggressive conversions.",
+        "forbiddenCorrection": "Do not make caution, Safety, or Trust a losing resource in itself."
+      },
+      "foundry": {
+        "ratings": {
+          "capitalAccess": 4,
+          "computeAccess": 5,
+          "researchReliability": 2,
+          "distribution": 2,
+          "infrastructureVelocity": 4,
+          "institutionalTrust": 3,
+          "coalitionLeverage": 4
+        },
+        "protectedStrength": "Compute abundance and supplier leverage.",
+        "balanceBottleneck": "Opponent-count scaling and dependence on other institutions spending Compute.",
+        "forbiddenCorrection": "Do not make the supplier compute-poor or indifferent to rivals' demand."
+      }
+    }
+  },
+  "factions": [
+    {
+      "id": "coalition_lab",
+      "roleId": "faction-1",
+      "name": "Sam Altman",
+      "role": "Flexible broker",
+      "color": "#6c7a89",
+      "motto": "Alignment begins with the term sheet.",
+      "publicPromise": "Coordinate capital, talent, and institutions around a shared frontier.",
+      "privateAnxiety": "Every alliance contains the next board meeting.",
+      "introduction": "Sam Altman brokers a continuously renegotiated coalition that keeps building by making rivals, patrons, and regulators feel briefly indispensable.",
+      "victoryStatement": "A durable coalition has recognized our definition of the future.",
+      "artDirection": "Diplomatic research campus built around a circular boardroom, with temporary bridges connecting every wing.",
+      "starts": {
+        "runway": 5,
+        "compute": 2,
+        "capability": 0,
+        "customers": 0,
+        "trust": 3,
+        "safety": 0,
+        "scrutiny": 0,
+        "startingPublicMandate": 2
+      },
+      "abilities": [
+        {
+          "round": 1,
+          "name": "Deal Flow",
+          "displayName": "Finance Finds a Way",
+          "timing": "once_per_round",
+          "persistsAfterUnlock": true,
+          "text": "Once per round after an immediate trade in which you give at least 1 resource and receive a different resource type, gain 1 Runway. Runway, Compute, and Safety are different resource types; exchanging the same type does not trigger Deal Flow.",
+          "flavorText": "Every solved disagreement reveals an investable relationship.",
+          "artDirection": "A handshake emitting a clean stream of capital into a laboratory."
+        },
+        {
+          "round": 2,
+          "name": "Board Reshuffle",
+          "displayName": "Governance Event",
+          "timing": "once_when_unlocked",
+          "persistsAfterUnlock": false,
+          "text": "Once during The Scale, after Organize, ready 1 different Core Action and add 1 Scrutiny.",
+          "flavorText": "Leadership continuity has been restored around a substantially different leadership structure.",
+          "artDirection": "Boardroom chairs rearranging themselves around an unchanged glowing mission statement."
+        },
+        {
+          "round": 3,
+          "name": "Strategic Partnership",
+          "displayName": "Shared Destiny Term Sheet",
+          "timing": "passive",
+          "persistsAfterUnlock": true,
+          "text": "Joint Ventures may be formed with a player within 2 hexes. They remain active at that range while both host Facilities are connected and powered.",
+          "flavorText": "Adjacency is a technical limitation. Strategic necessity is not.",
+          "artDirection": "A ceremonial bridge spanning two hexes that do not physically touch."
+        },
+        {
+          "round": 4,
+          "name": "Wildcard Governance",
+          "displayName": "Replace the News Cycle",
+          "timing": "once_per_game",
+          "persistsAfterUnlock": true,
+          "text": "Once per game, immediately after a Headline is revealed but before its instructions resolve, discard it, reveal 2 replacements from the current Era deck, and choose 1 to resolve and enter the Future Timeline. Return the other replacement to the box and add 2 Scrutiny.",
+          "flavorText": "The situation is unchanged. The available interpretations have improved.",
+          "artDirection": "A crisis headline removed from a broadcast wall and replaced with two polished alternatives."
+        }
+      ]
+    },
+    {
+      "id": "platform_empire",
+      "roleId": "faction-2",
+      "name": "Mark Zuckerberg",
+      "role": "Audience and organization",
+      "color": "#526f88",
+      "motto": "Everyone is already here.",
+      "publicPromise": "Deliver open intelligence at planetary consumer scale.",
+      "privateAnxiety": "A platform is only permanent until the next interface.",
+      "introduction": "Mark Zuckerberg begins with distribution others must build toward. He can rearrange an enormous institution, open what helps it expand, and treat controlled markets as extensions of his own interface.",
+      "victoryStatement": "General intelligence is now enabled by default.",
+      "artDirection": "A vast social campus shaped like a friendly public square whose paths all terminate at one control room.",
+      "starts": {
+        "runway": 4,
+        "compute": 2,
+        "capability": 0,
+        "customers": 1,
+        "trust": 2,
+        "safety": 0,
+        "scrutiny": 0,
+        "customerOrdinal": 1,
+        "nextCustomerCapability": 4,
+        "startingPublicMandate": 4
+      },
+      "abilities": [
+        {
+          "round": 1,
+          "name": "Installed Base",
+          "displayName": "Already on Every Device",
+          "timing": "once_per_round",
+          "persistsAfterUnlock": true,
+          "text": "The first Deploy each round on Consumer or Media costs no Compute.",
+          "flavorText": "Distribution is free once the public has nowhere else to log in.",
+          "artDirection": "Millions of household screens illuminating at the same quiet moment."
+        },
+        {
+          "round": 2,
+          "name": "Year of Efficiency",
+          "displayName": "Recompile the Org Chart",
+          "timing": "once_when_unlocked",
+          "persistsAfterUnlock": false,
+          "text": "Once during The Scale, while resolving Organize, return 1 deployed Team before resolving the selected mode. Gain 3 Runway and move every remaining CEO, Team, and Expert 1 hex. The returned Team cannot be recruited during this action.",
+          "flavorText": "The institution becomes smaller, faster, and mysteriously farther across the map.",
+          "artDirection": "An enormous org chart compressing into a sharp arrow while desks vanish below."
+        },
+        {
+          "round": 3,
+          "name": "Open Ecosystem",
+          "displayName": "Open, at Platform Scale",
+          "timing": "passive",
+          "persistsAfterUnlock": true,
+          "text": "When using Open Weights, gain 1 additional Trust and 1 Market Access token.",
+          "flavorText": "The gates open outward into an ecosystem whose roads all lead home.",
+          "artDirection": "Weights pouring freely through an open arch into a landscape of platform-branded paths."
+        },
+        {
+          "round": 4,
+          "name": "The Social Graph",
+          "displayName": "Deploy Through Everyone",
+          "timing": "once_per_round",
+          "persistsAfterUnlock": true,
+          "text": "Once per round during Deploy, choose any controlled Consumer or Media hex as the destination without moving there. That remote tile supplies its normal visit bonus and every destination-dependent Deploy effect.",
+          "flavorText": "Physical distance is a legacy setting.",
+          "artDirection": "A central institution reaching a distant market through a dense web of human connections."
+        }
+      ]
+    },
+    {
+      "id": "imperial_research_lab",
+      "roleId": "faction-3",
+      "name": "Demis Hassabis",
+      "role": "Research and evaluation",
+      "color": "#607d70",
+      "motto": "First understand intelligence. Then invoice the infrastructure.",
+      "publicPromise": "Advance science through general systems grounded in rigorous evaluation.",
+      "privateAnxiety": "The parent institution can fund anything except patience.",
+      "introduction": "Demis Hassabis treats the race as a scientific program backed by an empire he does not entirely command. His experiments are unusually controlled until the moonshot requires real estate.",
+      "victoryStatement": "The result exceeds every benchmark we still recognize.",
+      "artDirection": "A contemplative research citadel beneath the shadow of a much larger cloud-and-capital superstructure.",
+      "starts": {
+        "runway": 3,
+        "compute": 3,
+        "capability": 0,
+        "customers": 0,
+        "trust": 3,
+        "safety": 0,
+        "scrutiny": 0,
+        "startingPublicMandate": 2
+      },
+      "abilities": [
+        {
+          "round": 1,
+          "name": "Scientific Method",
+          "displayName": "The Duplicate Was Methodological",
+          "timing": "once_per_round",
+          "persistsAfterUnlock": true,
+          "text": "Once per round, when a protectable duplicate would crash your Training Run, pay 1 Runway to discard it and immediately bank. This cannot protect the unprotectable duplicate created by Synthetic Loop.",
+          "flavorText": "A failed run becomes a controlled negative result when recorded by the correct institution.",
+          "artDirection": "A duplicate data card calmly filed into a cabinet labeled REPLICATION."
+        },
+        {
+          "round": 2,
+          "name": "Call Mountain View",
+          "displayName": "Summon the Parent Institution",
+          "timing": "once_when_unlocked",
+          "persistsAfterUnlock": false,
+          "text": "At the beginning of The Scale before its first Headline, choose 1: gain 3 Runway; examine and reorder the top 4 Training cards; or gain 3 Compute.",
+          "flavorText": "The empire answers through capital, architecture, or a sudden fleet of accelerators.",
+          "artDirection": "Three monumental channels descending from a cloud: currency, research diagrams, and processors."
+        },
+        {
+          "round": 3,
+          "name": "Nobel Effect",
+          "displayName": "Prestige Field",
+          "timing": "passive",
+          "persistsAfterUnlock": true,
+          "text": "Completing a 5-domain Training Run gains 2 Trust.",
+          "flavorText": "Recognition radiates outward, temporarily improving every adjacent claim.",
+          "artDirection": "A medal casting a protective golden field around a training facility."
+        },
+        {
+          "round": 4,
+          "name": "Scaling-Law Breakthrough",
+          "displayName": "Science Becomes Real Estate",
+          "timing": "once_per_game",
+          "persistsAfterUnlock": true,
+          "text": "Once per game when resolving Research, each of the first 3 distinct domains banked grants 1 additional Capability. Add 2 Scrutiny. No additional Action resolves.",
+          "flavorText": "The experiment requires a campus before the hypothesis has finished resolving.",
+          "artDirection": "A scientific diagram extruding directly into a colossal construction site."
+        }
+      ]
+    },
+    {
+      "id": "vertical_empire",
+      "roleId": "faction-4",
+      "name": "Elon Musk",
+      "role": "Capital and infrastructure",
+      "color": "#8a6852",
+      "motto": "If it can be announced, it can be industrialized.",
+      "publicPromise": "Compress the path from first principle to planetary infrastructure.",
+      "privateAnxiety": "Polarization is cheap until Trust becomes a requirement.",
+      "introduction": "Elon Musk treats supply chains, platforms, launch systems, and public attention as one machine. He moves rapidly, builds visibly, and considers terrestrial constraints an invitation to relocate the constraint.",
+      "victoryStatement": "The future is operational and moving at launch velocity.",
+      "artDirection": "A severe industrial complex joining factories, rockets, energy systems, and a broadcast tower along one vertical axis.",
+      "starts": {
+        "runway": 6,
+        "compute": 3,
+        "capability": 0,
+        "customers": 0,
+        "trust": 2,
+        "safety": 0,
+        "scrutiny": 0,
+        "startingPublicMandate": 2
+      },
+      "abilities": [
+        {
+          "round": 1,
+          "name": "Industrial Velocity",
+          "displayName": "Foundation Before Permission",
+          "timing": "once_per_round",
+          "persistsAfterUnlock": true,
+          "text": "Your first Facility Build each round costs 1 less Runway.",
+          "flavorText": "The concrete cures while the permit learns to keep up.",
+          "artDirection": "A powered facility already operating behind an arriving ribbon-cutting committee."
+        },
+        {
+          "round": 2,
+          "name": "Move Fast",
+          "displayName": "The Roadmap Is a Launch Window",
+          "timing": "passive",
+          "persistsAfterUnlock": true,
+          "text": "Before resolving any action, the CEO may move up to 3 hexes instead of 2. This does not grant a free Build.",
+          "flavorText": "Distance is reduced through urgency and a highly motivated logistics department.",
+          "artDirection": "An executive piece crossing three hexes on the trajectory of a launch vehicle."
+        },
+        {
+          "round": 3,
+          "name": "Own the Feed",
+          "displayName": "Select the Public Outcome",
+          "timing": "once_when_unlocked",
+          "persistsAfterUnlock": false,
+          "text": "Once during The Narrative, after a 2-outcome Headline resolves, choose which result applies to you personally. This does not change the global result, another player’s result, a Government vote, or a persistent Headline outcome.",
+          "flavorText": "Volatility remains random for organizations without distribution.",
+          "artDirection": "A two-sided news event passing through a private control panel and emerging as one chosen version."
+        },
+        {
+          "round": 4,
+          "name": "Orbital Compute",
+          "displayName": "Move the Constraint Off-Planet",
+          "timing": "once_per_game",
+          "persistsAfterUnlock": true,
+          "text": "Once per game during your movement step, instead of moving the acting piece, move 1 Facility to any legal open Facility space. It carries every attached component and designation. Recalculate its Network; if current connected capacity can satisfy its full demand, immediately resolve its printed production once. Add 2 Scrutiny.",
+          "flavorText": "The cooling plan is mostly night.",
+          "artDirection": "A complete data center rising from the map toward an orbital transfer platform."
+        }
+      ]
+    },
+    {
+      "id": "safety_laboratory",
+      "roleId": "faction-5",
+      "name": "Dario Amodei",
+      "role": "Trust and reliability",
+      "color": "#7a657d",
+      "motto": "Scale only after naming the scale.",
+      "publicPromise": "Build powerful systems inside explicit, enforceable safety boundaries.",
+      "privateAnxiety": "A boundary nobody crosses may be indistinguishable from losing.",
+      "introduction": "Dario Amodei turns caution into a competitive asset. He can stabilize Research, audit Deployments, and sell rivals the restraint they failed to budget for.",
+      "victoryStatement": "The threshold was crossed within the approved framework.",
+      "artDirection": "A fortified research campus of layered transparent safeguards surrounding a bright, slightly too large model core.",
+      "starts": {
+        "runway": 3,
+        "compute": 2,
+        "capability": 0,
+        "customers": 0,
+        "trust": 5,
+        "safety": 2,
+        "scrutiny": 0,
+        "startingPublicMandate": 4
+      },
+      "abilities": [
+        {
+          "round": 1,
+          "name": "Constitutional Training",
+          "displayName": "The Model Has a Charter",
+          "timing": "passive",
+          "persistsAfterUnlock": true,
+          "text": "Safety-token limit is 4.",
+          "flavorText": "The system may be unpredictable, but its unpredictability has enumerated rights and duties.",
+          "artDirection": "A model core encircled by a formal illuminated charter."
+        },
+        {
+          "round": 2,
+          "name": "Responsible Scaling",
+          "displayName": "Sell Restraint at Cost",
+          "timing": "once_when_unlocked",
+          "persistsAfterUnlock": false,
+          "text": "Once during The Scale, when a rival reveals a protectable duplicate that would crash their Training Run, you may offer 1 Safety for 1 Runway. If accepted, the rival pays, discards the duplicate, receives and immediately spends the Safety, and banks; you gain 1 Trust. If declined, transfer nothing and gain no Trust.",
+          "flavorText": "The industry has discovered a market for not making the same mistake twice.",
+          "artDirection": "A safety token transferred across a table beside a modest invoice."
+        },
+        {
+          "round": 3,
+          "name": "Audited Deployment",
+          "displayName": "Production, With Footnotes",
+          "timing": "once_per_round",
+          "persistsAfterUnlock": true,
+          "text": "The first Deploy each round adds no Scrutiny.",
+          "flavorText": "Every consequence has been assigned a section number.",
+          "artDirection": "A deployment vessel wrapped in transparent annotations and compliance marks."
+        },
+        {
+          "round": 4,
+          "name": "Emergency Pause",
+          "displayName": "Pause the Unpauseable",
+          "timing": "once_per_game",
+          "persistsAfterUnlock": true,
+          "text": "Once per game before Action selection begins, pay 1 Runway and name 1 globally unlocked Wild Action. It cannot be selected this cycle. Gain 2 Trust. This cannot be declared after any player has selected an Action.",
+          "flavorText": "For one brief cycle, not acting becomes the most visible action at the table.",
+          "artDirection": "A monumental pause control descending between the board and an advancing agent swarm."
+        }
+      ]
+    },
+    {
+      "id": "foundry",
+      "roleId": "faction-6",
+      "name": "Jensen Huang",
+      "role": "Compute supplier and kingmaker",
+      "color": "#77764c",
+      "motto": "Every future requires an allocation window.",
+      "publicPromise": "Provide the architecture on which every institution can build.",
+      "privateAnxiety": "Customers may eventually remember they are also competitors.",
+      "introduction": "Jensen Huang sells the race to every racer. He profits from demand, allocates scarcity, and occasionally advances the entire table to ensure the next architecture has a market.",
+      "victoryStatement": "Whatever intelligence is, it has entered volume production.",
+      "artDirection": "A golden-black semiconductor foundry at the center of roads leading to every rival institution.",
+      "starts": {
+        "runway": 5,
+        "compute": 4,
+        "capability": 0,
+        "customers": 0,
+        "trust": 3,
+        "safety": 0,
+        "scrutiny": 0,
+        "startingPublicMandate": 2
+      },
+      "abilities": [
+        {
+          "round": 1,
+          "name": "The Shovels",
+          "displayName": "The Race Has a Supplier",
+          "timing": "passive",
+          "persistsAfterUnlock": true,
+          "text": "When another player spends at least 2 Compute in 1 action, gain 1 Runway, at most 2 times per round.",
+          "flavorText": "Every breakthrough arrives with a purchase order.",
+          "artDirection": "A rival launch reflected in Jensen Huang’s steadily rising order ledger."
+        },
+        {
+          "round": 2,
+          "name": "Allocation Window",
+          "displayName": "Temporary Abundance",
+          "timing": "once_when_unlocked",
+          "persistsAfterUnlock": false,
+          "text": "Once during The Scale, after a Headline resolves but before Action selection, create 2 temporary Compute and offer it to rivals at negotiated prices. All temporary Compute remaining anywhere at cycle end disappears, sold or unsold.",
+          "flavorText": "Scarcity has been suspended for customers with sufficiently immediate decisions.",
+          "artDirection": "Two brilliant processor crates auctioned beneath a closing allocation clock."
+        },
+        {
+          "round": 3,
+          "name": "New Architecture",
+          "displayName": "Yesterday’s Future Is Deprecated",
+          "timing": "once_when_unlocked",
+          "persistsAfterUnlock": false,
+          "text": "At the beginning of The Narrative before its first Headline, gain 3 Compute. Each rival may then pay you 1 Runway to gain 1 Compute.",
+          "flavorText": "The old architecture remains supported until the end of the sentence.",
+          "artDirection": "A new processor geometry unfolding while rival institutions queue beneath a one-cycle licensing window."
+        },
+        {
+          "round": 4,
+          "name": "Everybody Gets a GPU",
+          "displayName": "Universal Accelerator Dividend",
+          "timing": "once_per_game",
+          "persistsAfterUnlock": true,
+          "text": "Once per game before Action selection in any Round IV cycle, give every rival 1 Compute from the bank, score 1 Mandate per 4 rivals, and remove 2 Scrutiny.",
+          "flavorText": "Industry peace is achieved by ensuring everyone requires the next shipment.",
+          "artDirection": "A ceremonial distribution of glowing accelerators to six visibly suspicious institutions."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "frontier-2038",
+  "version": "0.8.4",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic browser and paper prototype for M3T4 2038.",
+  "exports": {
+    "./simulation": "./simulation/index.js",
+    "./callers": "./simulation/callers/index.js"
+  },
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "serve": "npm start",
+    "test": "node --test",
+    "content:build": "node scripts/content/compile.mjs",
+    "content:check": "node scripts/content/compile.mjs --check",
+    "content:validate:editions": "node scripts/content/compile.mjs --edition=named --validate && node scripts/content/compile.mjs --edition=institutional --validate",
+    "content:lint:provenance": "node scripts/content/lint-provenance.mjs",
+    "docs:html": "node tools/render-docs.mjs",
+    "gallery:html": "node tools/render-gallery.mjs",
+    "build:all": "npm run content:build && npm run docs:html && npm run gallery:html",
+    "dev": "npm run build:all && npm start",
+    "check": "npm run content:check && npm run content:validate:editions && npm run content:lint:provenance && node tools/check-project.mjs && node tools/create-game-release.mjs --verify",
+    "game:release": "npm run content:build && node tools/create-game-release.mjs",
+    "game:release:verify": "node tools/create-game-release.mjs --verify",
+    "playtest:new": "node tools/create-playtest-session.mjs",
+    "study:training": "node studies/probability/training-study.mjs",
+    "simulate:monte-carlo": "node simulation/cli/monte-carlo.mjs",
+    "simulate:evolve": "node simulation/cli/optimize.mjs --mode strategy-evolution",
+    "simulate:balance": "node simulation/cli/optimize.mjs --mode rule-search",
+    "simulate:audit": "node simulation/cli/unified-matrix.mjs",
+    "simulate:faction-swap": "node simulation/cli/faction-swap.mjs",
+    "simulate:adversarial": "node simulation/cli/balance-audit.mjs",
+    "simulate:llm-holdout": "node simulation/cli/llm-holdout.mjs",
+    "strategy:claude": "node simulation/cli/decide.mjs --provider claude",
+    "strategy:codex": "node simulation/cli/decide.mjs --provider codex"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

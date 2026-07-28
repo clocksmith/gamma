@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "supported-player-count-baseline-v1",
+  "registeredBeforeResults": true,
+  "question": "Does the selected three-to-five-player product preserve procedural integrity, strategic diversity, faction viability, and emergent negotiation across every supported count, with four players as the balance authority and three and five as mandatory regression guards?",
+  "sourceEvidence": "user-selected-player-count-contract-2026-07-27",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "balanceAuthority": 4,
+  "regressionGuards": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-supported-player-count-baseline-v1-fresh-20260728",
+  "retiredSeeds": [
+    "m3t4-evolved-strategy-holdout-v1-20260728"
+  ],
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "selectionRule": {
+    "fourPlayerAuthority": "Diagnose candidate balance primarily from the four-player marginal and interaction families.",
+    "adjacentCountGuard": "Reject promotion if three or five players produces an integrity failure or credible faction, seat, strategy, or interaction dominance regression.",
+    "ruleBoundary": "This baseline may locate a problem and preregister a one-lever probe, but it cannot select or promote a physical rule by itself.",
+    "physicalBoundary": "Human negotiation quality, betrayal, perceived fairness, teachability, duration, congestion handling, and Realignment drama remain physical-playtest questions."
+  }
+}

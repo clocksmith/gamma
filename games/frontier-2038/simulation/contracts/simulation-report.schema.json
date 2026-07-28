@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-2038.local/schemas/simulation-report-v6.schema.json",
+  "title": "M3T4 2038 Simulation Report v6",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "reportSchemaVersion",
+    "replaySchemaVersion",
+    "decisionSchemaVersion",
+    "reportType",
+    "evidenceLabel",
+    "evidenceType",
+    "generatedAt",
+    "seed",
+    "playerCount",
+    "game",
+    "engine",
+    "variant",
+    "strategies",
+    "experiment",
+    "rng",
+    "provenance",
+    "balanceContract",
+    "balanceEvaluation"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 6 },
+    "reportSchemaVersion": { "const": 6 },
+    "replaySchemaVersion": { "const": 2 },
+    "decisionSchemaVersion": { "const": 2 },
+    "reportType": {
+      "enum": [
+        "tournament",
+        "strategy_evolution",
+        "rule_search",
+        "balance_audit",
+        "unified_matrix_audit",
+        "llm_negotiation_holdout"
+      ]
+    },
+    "evidenceLabel": { "const": "simulation" },
+    "evidenceType": { "const": "simulation" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "seed": { "type": "string" },
+    "playerCount": { "type": "integer", "minimum": 2, "maximum": 6 },
+    "game": {
+      "type": "object",
+      "required": [
+        "version",
+        "releaseStatus",
+        "rulesetFingerprint",
+        "playtestKitFingerprint"
+      ]
+    },
+    "engine": {
+      "type": "object",
+      "required": ["id", "version", "coverageId", "fingerprint"]
+    },
+    "variant": {
+      "type": "object",
+      "required": ["kind", "overlay", "effective", "fingerprint"]
+    },
+    "strategies": {
+      "type": "object",
+      "required": ["fingerprint", "profiles", "backends"]
+    },
+    "experiment": {
+      "type": "object",
+      "required": ["reportType", "seed", "playerCount", "fingerprint"]
+    },
+    "rng": {
+      "type": "object",
+      "required": ["algorithm", "version"]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceCommit", "sourceDirty"]
+    },
+    "balanceContract": {
+      "type": "object",
+      "required": ["id", "status", "fingerprint"]
+    },
+    "balanceEvaluation": {
+      "type": "object",
+      "required": ["contractId", "status", "checks", "promotionGate"]
+    }
+  }
+}

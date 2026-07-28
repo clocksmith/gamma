@@ -1,0 +1,749 @@
+{
+  "schemaVersion": 2,
+  "gameId": "frontier-2038",
+  "title": "M3T4 2038",
+  "theme": {
+    "genre": "institutional retro-futurist strategy satire",
+    "tone": "Solemn institutions normalize increasingly absurd technology.",
+    "escalationRule": "Each Era should feel one step less reasonable while every rule remains plainly legible.",
+    "tablePromise": "Build the future, power it, negotiate ownership of it, and announce it before anyone can define it."
+  },
+  "players": {
+    "min": 3,
+    "max": 5,
+    "balanceAuthority": 4,
+    "supportedCounts": [
+      3,
+      4,
+      5
+    ],
+    "firstTestCount": 4
+  },
+  "tieRule": {
+    "id": "initiative_clockwise",
+    "text": "When lowest, highest, or most is tied, the tied player nearest Initiative clockwise is the target unless the effect explicitly applies to everyone."
+  },
+  "factionRules": {
+    "foundry": {
+      "startingCompute": 4,
+      "shovelsPerRound": 2,
+      "newArchitectureCompute": 3,
+      "everybodyGpuRivalsPerMandate": 4
+    }
+  },
+  "audit": {
+    "scaling": "round(baseDraws * playerCount / 4)",
+    "minimumDraws": 1,
+    "scrutinySupplyPerPlayer": 10,
+    "overflowPenalty": "For each Scrutiny cube that cannot be added, immediately pay 1 Runway or lose 1 Trust."
+  },
+  "rounds": [
+    {
+      "number": 1,
+      "id": "demo",
+      "name": "The Demo",
+      "tagline": "Nobody knows whether it works. Everyone knows the valuation.",
+      "flavorText": "A small prototype becomes a civilizational talking point before lunch.",
+      "artDirection": "A single glowing terminal on a severe stage facing an impossibly large audience.",
+      "cycles": 3,
+      "auditBaseDraws": 2,
+      "escalationTokens": 0,
+      "wildActions": [],
+      "newThisEra": [
+        "Select → Move → Act",
+        "Core Actions",
+        "Training Runs",
+        "the starting grid",
+        "Customers",
+        "Scrutiny"
+      ]
+    },
+    {
+      "number": 2,
+      "id": "scale",
+      "name": "The Scale",
+      "tagline": "The model is no longer the product. Electricity, land, and patience are the product.",
+      "flavorText": "Research leaves the laboratory and begins negotiating directly with the power grid.",
+      "artDirection": "A data-center campus spreading across a valley beneath tasteful planning banners.",
+      "cycles": 3,
+      "auditBaseDraws": 3,
+      "escalationTokens": 1,
+      "wildActions": [
+        "mega_cluster",
+        "reorganization"
+      ],
+      "newThisEra": [
+        "Generators",
+        "Links and the Network production bonus",
+        "Mega-Clusters",
+        "Wild Actions"
+      ]
+    },
+    {
+      "number": 3,
+      "id": "narrative",
+      "name": "The Narrative",
+      "tagline": "Capability exists. Reality must now be informed.",
+      "flavorText": "Every institution reaches the same independent conclusion through different sponsored channels.",
+      "artDirection": "Media, government, and capital towers converging into one serene broadcast face.",
+      "cycles": 3,
+      "auditBaseDraws": 4,
+      "escalationTokens": 1,
+      "wildActions": [
+        "mega_cluster",
+        "reorganization",
+        "open_weights",
+        "narrative_capture"
+      ],
+      "newThisEra": [
+        "Joint Ventures",
+        "immediate Power purchases",
+        "Government votes",
+        "persistent Headline effects"
+      ]
+    },
+    {
+      "number": 4,
+      "id": "claim",
+      "name": "The Claim",
+      "tagline": "General intelligence has become a financing category.",
+      "flavorText": "Agent swarms, orbital facilities, and fusion announcements enter the ordinary quarterly calendar.",
+      "artDirection": "A press podium beneath orbital compute and a reactor sunrise.",
+      "cycles": 3,
+      "auditBaseDraws": 5,
+      "escalationTokens": 2,
+      "wildActions": [
+        "mega_cluster",
+        "reorganization",
+        "open_weights",
+        "narrative_capture",
+        "agent_swarm",
+        "declare_agi",
+        "fusion_demonstrator"
+      ],
+      "newThisEra": [
+        "Agent Swarms",
+        "AGI declarations",
+        "Fusion",
+        "exceptional faction programs"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "fund",
+      "name": "Fund",
+      "summary": "Gain 2 Runway, or gain 4 Runway and add 2 Scrutiny.",
+      "turnContract": {
+        "cost": "None",
+        "modes": [
+          "Conservative",
+          "Venture"
+        ],
+        "risk": "Venture adds 2 Scrutiny"
+      },
+      "initiativeName": "Finance the Inevitable",
+      "slogan": "The forecast contains no revenue, only destiny.",
+      "flavorText": "Convert urgency, access, and a favorable chart into additional institutional life.",
+      "artDirection": "A capital terminal printing a runway directly toward the horizon."
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "summary": "Spend 1 Compute to conduct a push-your-luck Training Run.",
+      "turnContract": {
+        "cost": "1 Compute",
+        "modes": [
+          "Choose when to bank"
+        ],
+        "risk": "A duplicate crashes the run"
+      },
+      "initiativeName": "Train Until the Duplicate Blinks",
+      "slogan": "Every domain is signal until it appears twice.",
+      "flavorText": "Feed the model distinct portions of civilization and decide when confidence becomes evidence.",
+      "artDirection": "Seven data streams entering a restrained black training chamber."
+    },
+    {
+      "id": "build",
+      "name": "Build",
+      "summary": "Construct a Facility or Generator, or install a Link.",
+      "turnContract": {
+        "cost": "Printed by mode",
+        "modes": [
+          "Facility",
+          "Generator",
+          "Link"
+        ],
+        "risk": "Industrial modes unlock in The Scale"
+      },
+      "initiativeName": "Make the Diagram Physical",
+      "slogan": "The roadmap now requires zoning.",
+      "flavorText": "Turn architecture slides into facilities, generators, Networks, and permanent local weather.",
+      "artDirection": "An immaculate blueprint unfolding into a monumental powered campus."
+    },
+    {
+      "id": "organize",
+      "name": "Organize",
+      "summary": "Recruit, redistribute Teams, or relocate a Facility.",
+      "turnContract": {
+        "cost": "Printed by mode",
+        "modes": [
+          "Recruit",
+          "Redistribute",
+          "Relocate"
+        ],
+        "risk": "No inherent Scrutiny"
+      },
+      "initiativeName": "Recompile the Institution",
+      "slogan": "People are our greatest configurable resource.",
+      "flavorText": "Move the people, rename the divisions, and describe the disappearance of a Team as focus.",
+      "artDirection": "An org chart transforming into moving pieces across the hex map."
+    },
+    {
+      "id": "deploy",
+      "name": "Deploy",
+      "summary": "Spend 1 Compute to gain a Customer if Capability permits.",
+      "turnContract": {
+        "cost": "1 Compute",
+        "modes": [
+          "Gain the next Customer"
+        ],
+        "risk": "Add 1 Scrutiny"
+      },
+      "initiativeName": "Ship Into the World",
+      "slogan": "Production is the final evaluation environment.",
+      "flavorText": "Convert Capability into dependency, recurring revenue, and attention that marketing cannot entirely absorb.",
+      "artDirection": "A polished launch button connected to hospitals, markets, homes, and one unknown system."
+    },
+    {
+      "id": "influence",
+      "name": "Influence",
+      "summary": "Place Influence, gain Trust, remove Scrutiny, or negotiate.",
+      "turnContract": {
+        "cost": "None",
+        "modes": [
+          "Trust",
+          "Scrutiny",
+          "Agreement"
+        ],
+        "risk": "Agreements unlock in The Narrative"
+      },
+      "initiativeName": "Manufacture Organic Consensus",
+      "slogan": "Stakeholders have independently aligned with the briefing.",
+      "flavorText": "Move opinion through media, government, and capital until institutional preference resembles public reality.",
+      "artDirection": "A quiet briefing radiating outward into identical spontaneous headlines."
+    }
+  ],
+  "resources": {
+    "runway": {
+      "name": "Runway",
+      "microcopy": "Time, money, and permission to continue.",
+      "iconConcept": "A receding financial runway.",
+      "min": 0,
+      "cap": 12
+    },
+    "compute": {
+      "name": "Compute",
+      "microcopy": "Electricity made strategically legible.",
+      "iconConcept": "A processor containing a grid symbol.",
+      "min": 0,
+      "cap": 10
+    },
+    "capability": {
+      "name": "Capability",
+      "microcopy": "What the model can do before anyone agrees what it means.",
+      "iconConcept": "A stepped waveform entering an eye.",
+      "min": 0,
+      "cap": 12
+    },
+    "customers": {
+      "name": "Customers",
+      "microcopy": "Deployment, dependency, and recurring revenue.",
+      "iconConcept": "A user silhouette inside a contract seal.",
+      "min": 0,
+      "cap": 5
+    },
+    "trust": {
+      "name": "Trust",
+      "microcopy": "Public permission with a short half-life.",
+      "iconConcept": "A civic column built from signal bars.",
+      "min": 0,
+      "cap": 6
+    },
+    "safety": {
+      "name": "Safety",
+      "microcopy": "One more chance to stop while stopping is still an option.",
+      "iconConcept": "A shield containing a pause mark.",
+      "min": 0,
+      "cap": 3
+    }
+  },
+  "playerSupply": {
+    "ceos": 1,
+    "teams": 3,
+    "facilities": 4,
+    "generators": 2,
+    "linkTokens": 2,
+    "networkMarkers": 1,
+    "influenceCubes": 8,
+    "scrutinyCubes": 10,
+    "customerMarkers": 5,
+    "escalationTokens": 4,
+    "coreActionCards": 6,
+    "wildActionCards": 7,
+    "realignmentBallots": 3,
+    "agiDeclarationMarkers": 1,
+    "jointVentureMarkers": 2,
+    "megaClusterMarkers": 1,
+    "startingGridMarkers": 1
+  },
+  "board": {
+    "selectedTileCount": 13,
+    "inventoryStatus": "selected",
+    "prototypeTileCount": 13,
+    "prototypeNote": "Selected sixfold-symmetric board: 1 center, 6 operational-ring, and 6 evenly spaced public-ring hexes.",
+    "geometry": {
+      "radius": 2,
+      "centerSlots": 1,
+      "innerSlots": 6,
+      "outerSlots": 6,
+      "movementRange": 2,
+      "maximumDistance": 4,
+      "placementRule": "Shuffle each ring pool independently. Frontier remains fixed at center."
+    },
+    "realignment": {
+      "name": "Jurisdictional Realignment",
+      "timing": "Exactly once, after Mandate scoring in Round III.",
+      "vote": "Every player secretly selects one motion. Reveal simultaneously. The motion with the most ballots resolves.",
+      "tieBreak": "Among tied leading motions, scan players clockwise from Initiative; the first ballot naming a tied motion selects it.",
+      "contentsRule": "Location tiles and everything on them move together. Frontier never moves.",
+      "networkRule": "After movement, recalculate Network reach from the starting-grid Facility, Generators, Link-marked Facilities, and visible adjacency. No pieces are lifted or re-laid.",
+      "agreementRule": "Joint Ventures and Mega-Clusters remain owned but produce only while their required Facilities are adjacent. Immediate Power purchases never persist through Realignment.",
+      "motions": [
+        {
+          "id": "consolidate_core",
+          "name": "Consolidate the Core",
+          "ballotText": "Rotate the six inner-ring districts one position clockwise.",
+          "innerSteps": 1,
+          "outerSteps": 0,
+          "flavorText": "The center has been reorganized for clearer accountability."
+        },
+        {
+          "id": "expand_periphery",
+          "name": "Expand the Periphery",
+          "ballotText": "Rotate the six outer-ring districts one position clockwise.",
+          "innerSteps": 0,
+          "outerSteps": 1,
+          "flavorText": "The edge has been moved closer to opportunity without changing its distance."
+        },
+        {
+          "id": "counter_cycle",
+          "name": "Authorize Counter-Cycle",
+          "ballotText": "Rotate the inner ring one position clockwise and the outer ring one position counterclockwise.",
+          "innerSteps": 1,
+          "outerSteps": -1,
+          "flavorText": "Competing jurisdictions have synchronized by moving in opposite directions."
+        }
+      ]
+    },
+    "facilitySpacesPerHex": 2,
+    "startingGridConnection": {
+      "capacity": 1,
+      "target": "first_facility",
+      "requiresLink": false,
+      "restrictions": "Cannot supply Mega-Cluster demand and cannot be sold."
+    },
+    "tiles": [
+      {
+        "id": "frontier",
+        "category": "frontier",
+        "name": "Frontier",
+        "count": 1,
+        "placement": {
+          "center": 1,
+          "inner": 0,
+          "outer": 0
+        },
+        "facilitySpaces": 0,
+        "visit": "After Act, you may gain 1 Runway and add 1 Scrutiny.",
+        "production": "None.",
+        "landmark": "The Unlicensed Horizon",
+        "flavorText": "Everything beyond this point is a pilot program with permanent foundations.",
+        "artDirection": "An unfinished hex of survey stakes, launch gantries, fiber, and one executive observation deck."
+      },
+      {
+        "id": "research",
+        "category": "research",
+        "name": "Research Campus",
+        "count": 2,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 1
+        },
+        "visit": "Protect one Training draw.",
+        "production": "Gain 1 Safety token.",
+        "landmark": "Institute for Measurable Surprise",
+        "flavorText": "The campus separates discovery from deployment by a landscaped courtyard.",
+        "artDirection": "Quiet brutalist laboratories surrounding an illuminated benchmark garden."
+      },
+      {
+        "id": "cloud",
+        "category": "cloud",
+        "name": "Cloud Region",
+        "count": 2,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 1
+        },
+        "visit": "Reduce the first Compute cost by 1.",
+        "production": "Gain 2 Compute.",
+        "landmark": "Elastic Sovereignty Zone",
+        "flavorText": "A jurisdiction composed primarily of cooling, contracts, and favorable latency.",
+        "artDirection": "Data halls arranged like a capital city beneath engineered clouds."
+      },
+      {
+        "id": "consumer",
+        "category": "consumer",
+        "name": "Consumer Market",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        },
+        "visit": "Deploy costs 0 Compute.",
+        "production": "Gain 1 Runway.",
+        "landmark": "The Default Population",
+        "flavorText": "Everyone is free to opt out through the account settings of the service they require.",
+        "artDirection": "A luminous urban market where every device displays the same friendly assistant."
+      },
+      {
+        "id": "foundry",
+        "category": "chip",
+        "name": "Chip Foundry",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        },
+        "visit": "Build costs 1 less Runway.",
+        "production": "Gain 1 Compute and one Build discount.",
+        "landmark": "Cathedral of Yield",
+        "flavorText": "Here, microscopic defects become macroeconomic events.",
+        "artDirection": "A semiconductor clean room rendered with the scale and symmetry of a cathedral."
+      },
+      {
+        "id": "capital",
+        "category": "capital",
+        "name": "Capital Market",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        },
+        "visit": "Fund gains +1 Runway.",
+        "production": "Gain 2 Runway.",
+        "landmark": "The Inevitability Exchange",
+        "flavorText": "Future cash flows are optional when the future itself has been securitized.",
+        "artDirection": "A stock exchange trading glowing forecast curves instead of company names."
+      },
+      {
+        "id": "talent",
+        "category": "talent",
+        "name": "Talent Hub",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        },
+        "visit": "Recruit costs 1 less Runway.",
+        "production": "Move one Team one hex.",
+        "landmark": "The Perpetual Farewell Campus",
+        "flavorText": "Every departing employee begins immediately at the building next door.",
+        "artDirection": "A campus of revolving doors connected by autonomous moving walkways."
+      },
+      {
+        "id": "media",
+        "category": "media",
+        "name": "Media Sphere",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        },
+        "visit": "Influence places +1 cube.",
+        "production": "Remove one Scrutiny before Audit.",
+        "landmark": "Consensus Operations Center",
+        "flavorText": "Public opinion is observed, modeled, and returned with improved engagement.",
+        "artDirection": "A broadcast sphere reflecting millions of synchronized personal feeds."
+      },
+      {
+        "id": "government",
+        "category": "government",
+        "name": "Government District",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        },
+        "visit": "Influence may place or relocate one additional cube on Government.",
+        "production": "Gain one Policy Shield.",
+        "landmark": "Office of Anticipatory Permission",
+        "flavorText": "The law arrives before the technology and is immediately asked to wait outside.",
+        "artDirection": "Monumental civic buildings wrapped in transparent regulatory flowcharts."
+      },
+      {
+        "id": "grid_reactor",
+        "category": "energy",
+        "name": "Grid and Reactor Corridor",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 1,
+          "outer": 0
+        },
+        "visit": "Infrastructure Build costs 1 less.",
+        "production": "Gain 1 Compute.",
+        "landmark": "The National Extension Cord",
+        "flavorText": "Every promising future eventually requests a substation.",
+        "artDirection": "Transmission towers converging on reactors and a sealed fusion construction site."
+      },
+      {
+        "id": "renewable_basin",
+        "category": "energy",
+        "name": "Renewable Basin",
+        "count": 1,
+        "placement": {
+          "center": 0,
+          "inner": 0,
+          "outer": 1
+        },
+        "visit": "Civic Heat Battery costs 1 less Runway.",
+        "production": "Remove 1 Scrutiny before Audit.",
+        "landmark": "The Patient Array",
+        "flavorText": "The basin produces clean power and extremely complicated interconnection paperwork.",
+        "artDirection": "Solar, wind, and storage fields arranged in calm geometric terraces."
+      }
+    ]
+  },
+  "trainingDeck": {
+    "reshuffleWhenEmpty": true,
+    "cards": [
+      {
+        "id": "code",
+        "kind": "domain",
+        "name": "Code",
+        "flavorText": "The model learns every abstraction and several mistakes that achieved tenure.",
+        "artDirection": "A luminous software city folding recursively into a terminal.",
+        "count": 5
+      },
+      {
+        "id": "science",
+        "kind": "domain",
+        "name": "Science",
+        "flavorText": "A compressed record of what survived replication, review, and formatting.",
+        "artDirection": "Equations, instruments, and molecular diagrams orbiting a restrained model core.",
+        "count": 5
+      },
+      {
+        "id": "web",
+        "kind": "domain",
+        "name": "The Web",
+        "flavorText": "Humanity’s largest library, marketplace, argument, and unattended attic.",
+        "artDirection": "A vast tangled network entering a perfectly square data aperture.",
+        "count": 5
+      },
+      {
+        "id": "books",
+        "kind": "domain",
+        "name": "Books",
+        "flavorText": "Centuries of thought converted into a convenient licensing discussion.",
+        "artDirection": "A monumental library feeding pages into a quiet optical scanner.",
+        "count": 5
+      },
+      {
+        "id": "images",
+        "kind": "domain",
+        "name": "Images",
+        "flavorText": "The visible world, plus every version of it someone wished had happened.",
+        "artDirection": "A mosaic of ordinary life resolving into synthetic geometry.",
+        "count": 5
+      },
+      {
+        "id": "video",
+        "kind": "domain",
+        "name": "Video",
+        "flavorText": "Time itself, sampled at a commercially acceptable frame rate.",
+        "artDirection": "Film frames becoming a continuous ribbon around a training chamber.",
+        "count": 5
+      },
+      {
+        "id": "synthetic",
+        "kind": "domain",
+        "name": "Synthetic",
+        "flavorText": "The model prepares tomorrow’s curriculum from yesterday’s confidence.",
+        "artDirection": "A closed luminous loop printing pristine data cards.",
+        "count": 5
+      },
+      {
+        "id": "curated_corpus",
+        "kind": "special",
+        "name": "Curated Corpus",
+        "flavorText": "A rare dataset in which every problem has already been removed by a committee.",
+        "artDirection": "A small immaculate archive guarded more heavily than the main data center.",
+        "count": 3
+      },
+      {
+        "id": "benchmark_leak",
+        "kind": "special",
+        "name": "Benchmark Leak",
+        "flavorText": "The model independently discovers exactly what will be on the exam.",
+        "artDirection": "A sealed evaluation envelope glowing through a transparent training wall.",
+        "count": 3
+      },
+      {
+        "id": "licensed_dataset",
+        "kind": "special",
+        "name": "Licensed Dataset",
+        "flavorText": "Consent has been acquired in bulk and invoiced quarterly.",
+        "artDirection": "A stack of legal contracts transformed into clean data crystals.",
+        "count": 3
+      },
+      {
+        "id": "synthetic_loop",
+        "kind": "special",
+        "name": "Synthetic Loop",
+        "flavorText": "The dataset begins citing itself with increasing institutional confidence.",
+        "artDirection": "A perfect circular bibliography orbiting a visibly overheating model.",
+        "count": 3
+      },
+      {
+        "id": "human_evaluation",
+        "kind": "special",
+        "name": "Human Evaluation",
+        "flavorText": "The humans begin negotiating.",
+        "artDirection": "Evaluators seated across a bargaining table from a many-windowed model interface.",
+        "count": 3
+      }
+    ]
+  },
+  "powerSources": [
+    {
+      "id": "clean_infrastructure",
+      "name": "Civic Heat Battery",
+      "tagline": "Civil legitimacy stored at grid scale.",
+      "publicClaim": "Three permanent Power with a visible public compact.",
+      "hiddenConsequence": "The battery is mostly geology, transmission rights, and a commemorative civic dashboard.",
+      "artDirection": "A continental heat battery beneath a calm public plaza and immaculate transmission garden.",
+      "round": 2,
+      "runwayCost": 3,
+      "capacity": 3,
+      "trust": 1,
+      "scrutinyPerUse": 0
+    },
+    {
+      "id": "emergency_infrastructure",
+      "name": "Emergency Power Complex",
+      "tagline": "For exceptional demand, permanently.",
+      "publicClaim": "Four immediate Power under a continuously renewed emergency.",
+      "hiddenConsequence": "The temporary authorization has acquired cooling towers and its own bond rating.",
+      "artDirection": "A compact emergency generation complex glowing beneath an authorization banner that has become architecture.",
+      "round": 2,
+      "runwayCost": 2,
+      "capacity": 4,
+      "trust": 0,
+      "scrutinyPerUse": 1
+    },
+    {
+      "id": "fusion_demonstrator",
+      "name": "Fusion Demonstrator",
+      "tagline": "The press release is net positive.",
+      "publicClaim": "Six Power and a new civilizational category.",
+      "hiddenConsequence": "The device is simultaneously a generator, a scientific instrument, and the largest podium ever constructed.",
+      "artDirection": "A radiant fusion chamber opening behind a solemn global announcement stage.",
+      "round": 4,
+      "runwayCost": 5,
+      "capacity": 6,
+      "mandate": 2,
+      "scrutinyOnBuild": 3,
+      "wildAction": true,
+      "location": "grid_reactor"
+    }
+  ],
+  "agiDeclaration": {
+    "displayName": "Schedule the Historical Announcement",
+    "flavorText": "The first declaration does not end the game because history has several calendars open.",
+    "artDirection": "A black podium labeled AGI before a wall of disagreeing definitions and rising market charts.",
+    "capability": 9,
+    "customers": 3,
+    "facilities": 3,
+    "trust": 2,
+    "computeCost": 3,
+    "firstMandate": 7,
+    "laterMandate": 5,
+    "scrutiny": 3
+  },
+  "scoring": {
+    "mode": "public_event_track",
+    "customerMandate": 2,
+    "capabilityThresholds": [
+      {
+        "value": 3,
+        "mandate": 2
+      },
+      {
+        "value": 6,
+        "mandate": 2
+      },
+      {
+        "value": 9,
+        "mandate": 2
+      },
+      {
+        "value": 12,
+        "mandate": 2
+      }
+    ],
+    "trustThresholds": [
+      {
+        "value": 2,
+        "mandate": 2
+      },
+      {
+        "value": 4,
+        "mandate": 2
+      },
+      {
+        "value": 6,
+        "mandate": 2
+      }
+    ],
+    "finalOnly": {
+      "secretObjectiveMandate": 0,
+      "offlineFacilityPenalty": 1
+    },
+    "automaticFacilityMandate": 0,
+    "automaticControlMandate": 0
+  },
+  "baselineModules": {
+    "tactics": false,
+    "secretObjectives": false
+  },
+  "worldEnding": {
+    "genuineAgi": {
+      "minimumQualifiedDeclarers": 1,
+      "declarerCapability": 9,
+      "collectiveTrustOffsetPerPlayer": 1,
+      "systemicRiskMustBeBelowPlayerCount": true
+    },
+    "genuineName": "Genuine AGI",
+    "closedLoopName": "The Closed Loop"
+  }
+}

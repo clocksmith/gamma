@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "late-capability-mandate-v1",
+  "registeredBeforeResults": true,
+  "question": "Does reducing only the Capability 9 and 12 public Mandate awards from 2 to 1 reduce the corrected Capability Rusher and Demis Hassabis advantage without making Research nonviable or creating a replacement dominant path?",
+  "sourceEvidence": "policy-validity-balance-v1",
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/late-capability-mandate-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "late_capability_mandate_one",
+      "overlay": {
+        "lateCapabilityThresholdMandate": 1
+      }
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 16000,
+  "initialRunsPerCell": 4,
+  "batchSize": 16,
+  "seed": "m3t4-late-capability-mandate-v1-20260727",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "primaryComparisons": [
+    "paired aggregate winner and score deltas",
+    "Capability Rusher win share by player count and homogeneous backend",
+    "Demis Hassabis win share by player count and homogeneous backend",
+    "replacement dominance in every faction and strategy",
+    "Capability Mandate-source mix",
+    "declaration and Genuine AGI rates",
+    "forced no-op rate"
+  ],
+  "selectionRule": {
+    "candidatePreferred": "The candidate must reduce the practical Capability Rusher and Demis advantages in the same direction across the important four-player homogeneous regimes, preserve more than one viable winning path, and introduce no larger replacement advantage.",
+    "canonicalPreferred": "Retain canonical scoring if the candidate merely transfers dominance, materially suppresses the Research path, or produces inconsistent effects.",
+    "physicalBoundary": "Neither arm establishes human counterplay, negotiation quality, duration, perceived fairness, or fun."
+  }
+}

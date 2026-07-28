@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "policy-validity-balance-v1",
+  "registeredBeforeResults": true,
+  "question": "After deterministic policies strongly discount Core Actions with no resolution from current public state, does the apparent Capability Rusher and faction imbalance persist?",
+  "supersedesForBalanceInterpretation": "unified-backend-regimes-v3",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 16,
+  "seed": "m3t4-policy-validity-balance-v1-20260727",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "policyValidity": {
+    "forcedNoOpRateMaximum": 0.03,
+    "allCoreActionsRemainSelectable": true,
+    "knownDeadActionWeight": 0.02,
+    "interpretation": "A run above the forced-no-op ceiling is invalid for balance selection. Spatially blocked actions remain observable and are not a rules defect."
+  },
+  "primaryGate": {
+    "regimes": ["homogeneous_weighted", "homogeneous_greedy"],
+    "families": [
+      "seatBackendRegime",
+      "factionBackendRegime",
+      "strategyBackendRegime",
+      "factionStrategyBackendRegime",
+      "pairwise"
+    ],
+    "inference": "minimum exposure plus both partially pooled and multiplicity-safe confidence intervals beyond the registered bound"
+  },
+  "diagnosticOnly": {
+    "regimes": [
+      "alternating_weighted_first",
+      "alternating_greedy_first"
+    ],
+    "families": ["pooled", "backend", "adversarial"],
+    "reason": "Opponent-quality asymmetry can identify backend interactions but cannot alone establish a board-game rule defect."
+  },
+  "interpretation": {
+    "rulePromotion": "If the corrected canonical screen remains materially imbalanced, nominate one separately preregistered one-lever common-seed rules probe. Do not alter canonical rules from this screen alone.",
+    "physicalBoundary": "No automated result establishes teachability, negotiation quality, Realignment drama, perceived fairness, duration, or fun."
+  }
+}

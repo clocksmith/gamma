@@ -1,0 +1,628 @@
+function increment(target, key, amount = 1) {
+  target[key] = (target[key] || 0) + amount;
+}
+
+function mergeCounts(target, source = {}) {
+  for (const [key, value] of Object.entries(source)) increment(target, key, value);
+}
+
+function histogram(values) {
+  const result = {};
+  for (const value of values) increment(result, String(value));
+  return result;
+}
+
+function mean(values) {
+  return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
+}
+
+function deviation(values) {
+  const average = mean(values);
+  return Math.sqrt(mean(values.map((value) => (value - average) ** 2)));
+}
+
+function range(values) {
+  return values.length ? Math.max(...values) - Math.min(...values) : 0;
+}
+
+function normalizedEntropy(counts) {
+  const values = Object.values(counts).filter((value) => value > 0);
+  const total = values.reduce((sum, value) => sum + value, 0);
+  if (values.length < 2 || total === 0) return 0;
+  const entropy = -values.reduce((sum, value) => {
+    const probability = value / total;
+    return sum + probability * Math.log(probability);
+  }, 0);
+  return entropy / Math.log(values.length);
+}
+
+function summarizeEntries(entries, wins) {
+  const actionCounts = {};
+  const wildActionCounts = {};
+  const providerCounts = {};
+  const mandateCounts = {};
+  let auditHits = 0;
+  let eligibilityCount = 0;
+  let eligibilityRoundTotal = 0;
+  let fallbacks = 0;
+  let declarations = 0;
+  let shovelsIncome = 0;
+  let powerBought = 0;
+  let powerSold = 0;
+  let powerTradeRunway = 0;
+  for (const entry of entries) {
+    auditHits += entry.metrics.auditHits;
+    fallbacks += entry.metrics.policyFallbacks;
+    declarations += Number(entry.agiDeclared);
+    shovelsIncome += entry.metrics.shovelsIncome || 0;
+    powerBought += entry.metrics.powerBought || 0;
+    powerSold += entry.metrics.powerSold || 0;
+    powerTradeRunway += entry.metrics.powerTradeRunway || 0;
+    mergeCounts(actionCounts, entry.metrics.actions);
+    mergeCounts(wildActionCounts, entry.metrics.wildActions);
+    mergeCounts(providerCounts, entry.metrics.policyProviders);
+    mergeCounts(mandateCounts, entry.metrics.mandatesWon);
+    if (entry.metrics.earliestAgiEligibility) {
+      eligibilityCount += 1;
+      eligibilityRoundTotal += entry.metrics.earliestAgiEligibility.round;
+    }
+  }
+  return {
+    appearances: entries.length,
+    winShare: entries.length ? wins / entries.length : 0,
+    meanScore: mean(entries.map((entry) => entry.score)),
+    scoreStdDev: deviation(entries.map((entry) => entry.score)),
+    scoreDistribution: histogram(entries.map((entry) => entry.score)),
+    meanCapability: mean(entries.map((entry) => entry.capability)),
+    meanCustomers: mean(entries.map((entry) => entry.customers)),
+    meanFacilities: mean(entries.map((entry) => entry.facilities)),
+    meanAuditHits: auditHits / entries.length,
+    agiEligibilityRate: eligibilityCount / entries.length,
+    agiDeclarationRate: declarations / entries.length,
+    meanShovelsIncome: shovelsIncome / entries.length,
+    meanPowerBought: powerBought / entries.length,
+    meanPowerSold: powerSold / entries.length,
+    meanPowerTradeRunway: powerTradeRunway / entries.length,
+    meanEarliestAgiRound: eligibilityCount
+      ? eligibilityRoundTotal / eligibilityCount
+      : null,
+    actionCounts,
+    actionDiversity: normalizedEntropy(actionCounts),
+    wildActionCounts,
+    mandateCounts,
+    providerCounts,
+    policyFallbacks: fallbacks
+  };
+}
+
+function groupedSummary(outcomes, key) {
+  const groups = new Map();
+  for (const outcome of outcomes) {
+    for (const entry of outcome.standings) {
+      const id = entry[key];
+      if (!groups.has(id)) groups.set(id, { entries: [], wins: 0 });
+      const group = groups.get(id);
+      group.entries.push(entry);
+      if (outcome.winnerSeats.includes(entry.seat)) {
+        group.wins += 1 / outcome.winnerSeats.length;
+      }
+    }
+  }
+  return [...groups.entries()].map(([id, group]) => ({
+    [key]: id,
+    ...summarizeEntries(group.entries, group.wins)
+  }));
+}
+
+function compositeGroupedSummary(outcomes, keys) {
+  const groups = new Map();
+  for (const outcome of outcomes) {
+    for (const entry of outcome.standings) {
+      const id = keys.map((key) => entry[key]).join("::");
+      if (!groups.has(id)) groups.set(id, { entries: [], wins: 0 });
+      const group = groups.get(id);
+      group.entries.push(entry);
+      if (outcome.winnerSeats.includes(entry.seat)) group.wins += 1 / outcome.winnerSeats.length;
+    }
+  }
+  return [...groups.entries()].map(([id, group]) => ({
+    id,
+    ...Object.fromEntries(keys.map((key, index) => [key, id.split("::")[index]])),
+    ...summarizeEntries(group.entries, group.wins)
+  }));
+}
+
+function concentration(counts) {
+  const total = Object.values(counts).reduce((sum, value) => sum + value, 0);
+  const top = Math.max(0, ...Object.values(counts));
+  return {
+    counts,
+    observed: Object.keys(counts).length,
+    entropy: normalizedEntropy(counts),
+    topShare: total ? top / total : 0
+  };
+}
+
+function winningPath(entry) {
+  const actions = entry.metrics.actions || {};
+  const lanes = {
+    research: (actions.research || 0) + entry.capability / 3,
+    infrastructure: (actions.build || 0) + entry.facilities,
+    adoption: (actions.deploy || 0) + entry.customers,
+    legitimacy: (actions.influence || 0) + entry.trust / 2,
+    capital: actions.fund || 0,
+    mobility: actions.organize || 0
+  };
+  if (entry.agiDeclared) return "agi_declaration";
+  const ranked = Object.entries(lanes).sort((left, right) => right[1] - left[1]);
+  return ranked[0][1] === ranked[1][1]
+    ? `${ranked[0][0]}_${ranked[1][0]}_hybrid`
+    : ranked[0][0];
+}
+
+function profileMatchups(outcomes) {
+  const pairs = new Map();
+  for (const outcome of outcomes) {
+    for (const left of outcome.standings) {
+      for (const right of outcome.standings) {
+        if (left.seat === right.seat || left.profileId === right.profileId) continue;
+        const key = `${left.profileId}::${right.profileId}`;
+        const row = pairs.get(key) || {
+          profileId: left.profileId,
+          opponentProfileId: right.profileId,
+          comparisons: 0,
+          placementPoints: 0,
+          wins: 0
+        };
+        row.comparisons += 1;
+        row.placementPoints += left.score === right.score ? 0.5 : Number(left.score > right.score);
+        if (outcome.winnerSeats.includes(left.seat)) row.wins += 1 / outcome.winnerSeats.length;
+        pairs.set(key, row);
+      }
+    }
+  }
+  return [...pairs.values()].map((row) => ({
+    ...row,
+    relativePlacementRate: row.placementPoints / row.comparisons,
+    matchWinRate: row.wins / row.comparisons
+  }));
+}
+
+function metaCycles(matchups, edgeThreshold = 0.55) {
+  const ids = [...new Set(matchups.flatMap((entry) => [
+    entry.profileId,
+    entry.opponentProfileId
+  ]))].sort();
+  const edge = (left, right) => matchups.some((entry) =>
+    entry.profileId === left &&
+    entry.opponentProfileId === right &&
+    entry.comparisons >= 4 &&
+    entry.relativePlacementRate >= edgeThreshold
+  );
+  const cycles = [];
+  for (let a = 0; a < ids.length; a += 1) {
+    for (let b = a + 1; b < ids.length; b += 1) {
+      for (let c = b + 1; c < ids.length; c += 1) {
+        const [x, y, z] = [ids[a], ids[b], ids[c]];
+        if (edge(x, y) && edge(y, z) && edge(z, x)) cycles.push([x, y, z]);
+        if (edge(x, z) && edge(z, y) && edge(y, x)) cycles.push([x, z, y]);
+      }
+    }
+  }
+  return { edgeThreshold, count: cycles.length, cycles };
+}
+
+function leaderPredictability(outcomes) {
+  const result = {};
+  for (const round of [1, 2, 3, 4]) {
+    let numerator = 0;
+    let denominator = 0;
+    for (const outcome of outcomes) {
+      const snapshot = outcome.matchMetrics?.productionSnapshots?.find(
+        (entry) => entry.round === round
+      );
+      if (!snapshot?.scores?.length) continue;
+      const high = Math.max(...snapshot.scores.map((entry) => entry.mandate));
+      const leaders = snapshot.scores.filter((entry) => entry.mandate === high);
+      numerator += leaders.filter((entry) => outcome.winnerSeats.includes(entry.seat)).length /
+        leaders.length;
+      denominator += 1;
+    }
+    result[`round${round}`] = denominator ? numerator / denominator : null;
+  }
+  return result;
+}
+
+function integritySummary(outcomes) {
+  const details = [];
+  let policyFallbacks = 0;
+  let forcedNoOps = 0;
+  let actionOpportunities = 0;
+  for (const [matchIndex, outcome] of outcomes.entries()) {
+    actionOpportunities += outcome.standings.length * 12;
+    if (outcome.matchMetrics?.productionSnapshots?.length !== 4) {
+      details.push({ matchIndex, id: "production_count" });
+    }
+    const seats = new Set();
+    for (const entry of outcome.standings) {
+      seats.add(entry.seat);
+      policyFallbacks += entry.metrics.policyFallbacks || 0;
+      forcedNoOps += entry.metrics.forcedNoOps || 0;
+      for (const key of ["score", "trust", "customers", "compute", "capability", "facilities"]) {
+        if (!Number.isFinite(entry[key]) || entry[key] < 0) {
+          details.push({ matchIndex, seat: entry.seat, id: `invalid_${key}`, value: entry[key] });
+        }
+      }
+      const actionCount = Object.values(entry.metrics.actions || {})
+        .reduce((sum, value) => sum + value, 0);
+      if (actionCount > 24) details.push({ matchIndex, seat: entry.seat, id: "action_amplification", value: actionCount });
+    }
+    if (seats.size !== outcome.standings.length) details.push({ matchIndex, id: "duplicate_seat" });
+  }
+  return {
+    violations: details.length,
+    details: details.slice(0, 100),
+    policyFallbacks,
+    forcedNoOps,
+    forcedNoOpRate: actionOpportunities ? forcedNoOps / actionOpportunities : 0
+  };
+}
+
+function aggregateMatchMetrics(outcomes) {
+  const totals = {
+    headlines: {},
+    headlineOutcomes: {},
+    mandates: {},
+    wildActions: {},
+    tactics: {},
+    realignments: {},
+    systemicRiskCreated: 0,
+    declarations: 0,
+    declarationPpaIterations: 0,
+    declarationCapacityOps: 0,
+    agiFunnel: {
+      playerOpportunities: 0,
+      coreRequirementsMet: 0,
+      neededExternalPower: 0,
+      receivedPowerOffer: 0,
+      acceptedPowerPrice: 0,
+      becameGridReady: 0,
+      legalDeclarationWindow: 0,
+      declared: 0
+    },
+    factionAbilityValues: {},
+    factionActionSelections: {},
+    powerTrades: 0,
+    causallyNecessaryPowerTrades: 0,
+    cooperativeDeclarationMatches: 0,
+    supplierSupportMatches: 0,
+    supplierWins: 0,
+    supplierTopHalfFinishes: 0,
+    supplierFinalScoreGap: 0,
+    supplierRound4ScoreGap: 0,
+    worldEndings: {},
+    nonDeclaringWins: 0,
+    negotiationOutcomes: {}
+  };
+  for (const outcome of outcomes) {
+    const metrics = outcome.matchMetrics || {};
+    for (const key of [
+      "headlines",
+      "headlineOutcomes",
+      "mandates",
+      "wildActions",
+      "tactics",
+      "realignments"
+    ]) {
+      mergeCounts(totals[key], metrics[key]);
+    }
+    totals.systemicRiskCreated += metrics.systemicRiskCreated || 0;
+    totals.declarations += metrics.declarations || 0;
+    for (const entry of metrics.agiFunnel || []) {
+      totals.agiFunnel.playerOpportunities += 1;
+      for (const stage of [
+        "coreRequirementsMet",
+        "neededExternalPower",
+        "receivedPowerOffer",
+        "acceptedPowerPrice",
+        "becameGridReady",
+        "legalDeclarationWindow",
+        "declared"
+      ]) {
+        totals.agiFunnel[stage] += Number(Boolean(entry[stage]));
+      }
+    }
+    for (const standing of outcome.standings) {
+      const actions = totals.factionActionSelections[standing.factionId] || {};
+      mergeCounts(actions, standing.metrics.actions || {});
+      totals.factionActionSelections[standing.factionId] = actions;
+      const faction = totals.factionAbilityValues[standing.factionId] || {};
+      for (const [abilityId, values] of Object.entries(
+        standing.metrics.factionAbilityValues || {}
+      )) {
+        const ability = faction[abilityId] || {};
+        for (const [key, value] of Object.entries(values)) {
+          ability[key] = (ability[key] || 0) + value;
+        }
+        faction[abilityId] = ability;
+      }
+      totals.factionAbilityValues[standing.factionId] = faction;
+    }
+    totals.powerTrades += metrics.powerTrades?.length || 0;
+    for (const negotiation of metrics.negotiations || []) {
+      if (["fulfilled", "broken", "superseded", "unexercised"].includes(
+        negotiation.status
+      )) {
+        increment(totals.negotiationOutcomes, negotiation.status);
+      }
+    }
+    totals.causallyNecessaryPowerTrades +=
+      metrics.powerTrades?.filter((trade) => trade.causallyNecessary).length || 0;
+    for (const readiness of metrics.declarationReadiness || []) {
+      totals.declarationPpaIterations += readiness.ppaIterations || 0;
+      totals.declarationCapacityOps += readiness.capacityOps || 0;
+    }
+    increment(totals.worldEndings, outcome.worldEnding?.id || "unknown");
+    const supportingSeats = new Set(
+      (metrics.declarationReadiness || [])
+        .filter((entry) => entry.ready)
+        .flatMap((entry) => entry.supportingSeats || [])
+    );
+    if (supportingSeats.size) totals.cooperativeDeclarationMatches += 1;
+    const standingsBySeat = new Map(
+      outcome.standings.map((entry, index) => [entry.seat, { ...entry, rank: index + 1 }])
+    );
+    const winnerScore = outcome.standings[0]?.score || 0;
+    const round4BySeat = new Map(
+      (metrics.round4Start || []).map((entry) => [entry.seat, entry.score])
+    );
+    const round4Lead = Math.max(0, ...round4BySeat.values());
+    for (const seat of supportingSeats) {
+      const standing = standingsBySeat.get(seat);
+      if (!standing) continue;
+      totals.supplierSupportMatches += 1;
+      if (outcome.winnerSeats.includes(seat)) {
+        totals.supplierWins += 1 / outcome.winnerSeats.length;
+      }
+      if (standing.rank <= Math.ceil(outcome.standings.length / 2)) {
+        totals.supplierTopHalfFinishes += 1;
+      }
+      totals.supplierFinalScoreGap += winnerScore - standing.score;
+      totals.supplierRound4ScoreGap +=
+        round4Lead - (round4BySeat.get(seat) || 0);
+    }
+    for (const seat of outcome.winnerSeats) {
+      const winner = outcome.standings.find((entry) => entry.seat === seat);
+      if (winner && !winner.agiDeclared) totals.nonDeclaringWins += 1 / outcome.winnerSeats.length;
+    }
+  }
+  return {
+    ...totals,
+    agiFunnelRates: Object.fromEntries(
+      Object.entries(totals.agiFunnel)
+        .filter(([stage]) => stage !== "playerOpportunities")
+        .map(([stage, count]) => [
+          stage,
+          totals.agiFunnel.playerOpportunities
+            ? count / totals.agiFunnel.playerOpportunities
+            : 0
+        ])
+    ),
+    meanSystemicRiskCreated: totals.systemicRiskCreated / outcomes.length,
+    declarationRate: totals.declarations / outcomes.length,
+    powerTradesPerMatch: totals.powerTrades / outcomes.length,
+    causallyNecessaryPowerTradesPerMatch:
+      totals.causallyNecessaryPowerTrades / outcomes.length,
+    cooperativeDeclarationRate:
+      totals.cooperativeDeclarationMatches / outcomes.length,
+    supplierCompetitiveRate: totals.supplierSupportMatches
+      ? totals.supplierTopHalfFinishes / totals.supplierSupportMatches
+      : 0,
+    supplierWinRate: totals.supplierSupportMatches
+      ? totals.supplierWins / totals.supplierSupportMatches
+      : 0,
+    supplierMeanFinalScoreGap: totals.supplierSupportMatches
+      ? totals.supplierFinalScoreGap / totals.supplierSupportMatches
+      : null,
+    supplierMeanRound4ScoreGap: totals.supplierSupportMatches
+      ? totals.supplierRound4ScoreGap / totals.supplierSupportMatches
+      : null,
+    meanPpaIterationsPerDeclaration: totals.declarations
+      ? totals.declarationPpaIterations / totals.declarations
+      : 0,
+    meanCapacityOpsPerDeclaration: totals.declarations
+      ? totals.declarationCapacityOps / totals.declarations
+      : 0,
+    nonDeclaringWinRate: totals.nonDeclaringWins / outcomes.length
+  };
+}
+
+export async function runMonteCarlo({
+  runs,
+  seed,
+  createMatch,
+  policies,
+  policiesForRun,
+  sampleReplays = 3,
+  includeObservations = false,
+  onProgress
+}) {
+  if (!Number.isInteger(runs) || runs < 1) {
+    throw new RangeError("Monte Carlo runs must be a positive integer.");
+  }
+  const outcomes = [];
+  const samples = [];
+  let scope;
+
+  for (let run = 0; run < runs; run += 1) {
+    const match = createMatch({
+      seed: `${seed}:run:${run}`,
+      recordReplay: run < sampleReplays,
+      runIndex: run
+    });
+    const outcome = await match.play(
+      policiesForRun ? policiesForRun(run) : policies
+    );
+    scope ||= outcome.scope;
+    outcomes.push({
+      winnerSeats: outcome.winnerSeats,
+      standings: outcome.standings,
+      matchMetrics: outcome.matchMetrics,
+      rulesVariant: outcome.rulesVariant,
+      worldEnding: outcome.worldEnding
+    });
+    if (run < sampleReplays) samples.push(outcome);
+    if (onProgress && (run + 1 === runs || (run + 1) % 25 === 0)) {
+      onProgress({ completed: run + 1, runs });
+    }
+  }
+
+  const seatCount = outcomes[0].standings.length;
+  const seats = Array.from({ length: seatCount }, (_, seat) => {
+    const entries = outcomes.map((outcome) =>
+      outcome.standings.find((standing) => standing.seat === seat)
+    );
+    let wins = 0;
+    for (const [index, entry] of entries.entries()) {
+      if (outcomes[index].winnerSeats.includes(entry.seat)) {
+        wins += 1 / outcomes[index].winnerSeats.length;
+      }
+    }
+    return {
+      seat,
+      factionIds: [...new Set(entries.map((entry) => entry.factionId))],
+      profileIds: [...new Set(entries.map((entry) => entry.profileId))],
+      ...summarizeEntries(entries, wins)
+    };
+  });
+  const factions = groupedSummary(outcomes, "factionId");
+  const profiles = groupedSummary(outcomes, "profileId");
+  const backends = groupedSummary(outcomes, "backendId");
+  const factionStrategies = compositeGroupedSummary(outcomes, ["factionId", "profileId"]);
+  const factionBackends = compositeGroupedSummary(outcomes, ["factionId", "backendId"]);
+  const strategyBackends = compositeGroupedSummary(outcomes, ["profileId", "backendId"]);
+  const matchups = profileMatchups(outcomes);
+  const allActionCounts = {};
+  for (const seat of seats) mergeCounts(allActionCounts, seat.actionCounts);
+  const openingCounts = {};
+  const winningPathCounts = {};
+  for (const outcome of outcomes) {
+    for (const entry of outcome.standings) {
+      increment(openingCounts, (entry.metrics.openingActions || []).join("→") || "none");
+      if (outcome.winnerSeats.includes(entry.seat)) {
+        increment(winningPathCounts, winningPath(entry), 1 / outcome.winnerSeats.length);
+      }
+    }
+  }
+  const matchupMax = Math.max(
+    0,
+    ...matchups.filter((entry) => entry.comparisons >= 4)
+      .map((entry) => entry.relativePlacementRate)
+  );
+  const diagnostics = {
+    seatWinShareRange: range(seats.map((seat) => seat.winShare)),
+    factionWinShareRange: range(factions.map((faction) => faction.winShare)),
+    profileWinShareRange: range(profiles.map((profile) => profile.winShare)),
+    scoreStdDev: deviation(outcomes.flatMap((outcome) =>
+      outcome.standings.map((entry) => entry.score)
+    )),
+    actionDiversity: normalizedEntropy(allActionCounts),
+    openingDiversity: concentration(openingCounts),
+    winningPathDiversity: concentration(winningPathCounts),
+    factionStrategyInteractionRange: range(
+      factionStrategies.filter((entry) => entry.appearances >= 4).map((entry) => entry.winShare)
+    ),
+    leaderPredictability: leaderPredictability(outcomes),
+    pairwiseDominance: matchupMax,
+    cyclicMeta: metaCycles(matchups),
+    integrity: integritySummary(outcomes),
+    agiEligibilityRate: mean(seats.map((seat) => seat.agiEligibilityRate)),
+    agiDeclarationRate: mean(seats.map((seat) => seat.agiDeclarationRate)),
+    genuineAgiRate:
+      outcomes.filter((outcome) => outcome.worldEnding?.id === "genuine_agi").length /
+      outcomes.length,
+    nonDeclaringWinRate: outcomes.filter((outcome) =>
+      outcome.winnerSeats.some((seat) =>
+        !outcome.standings.find((entry) => entry.seat === seat)?.agiDeclared
+      )
+    ).length / outcomes.length
+  };
+  diagnostics.alerts = [
+    ...(diagnostics.seatWinShareRange > 0.15
+      ? [{ id: "seat_bias", severity: "high", value: diagnostics.seatWinShareRange }]
+      : []),
+    ...(diagnostics.factionWinShareRange > 0.15
+      ? [{ id: "faction_spread", severity: "high", value: diagnostics.factionWinShareRange }]
+      : []),
+    ...(diagnostics.actionDiversity < 0.72
+      ? [{ id: "action_collapse", severity: "high", value: diagnostics.actionDiversity }]
+      : []),
+    ...(diagnostics.agiDeclarationRate < 0.1
+      ? [{ id: "agi_drought", severity: "medium", value: diagnostics.agiDeclarationRate }]
+      : []),
+    ...(diagnostics.agiDeclarationRate > 0.7
+      ? [{ id: "agi_flood", severity: "medium", value: diagnostics.agiDeclarationRate }]
+      : []),
+    ...(diagnostics.genuineAgiRate === 0
+      ? [{ id: "closed_loop_only", severity: "medium", value: diagnostics.genuineAgiRate }]
+      : [])
+  ];
+
+  return {
+    schemaVersion: 2,
+    reportType: "tournament",
+    evidenceLabel: "simulation",
+    generatedAt: new Date().toISOString(),
+    seed: String(seed),
+    runs,
+    playerCount: seatCount,
+    scope,
+    rulesVariant: outcomes[0].rulesVariant,
+    seats,
+    factions,
+    profiles,
+    backends,
+    factionStrategies,
+    factionBackends,
+    strategyBackends,
+    profileMatchups: matchups,
+    diagnostics,
+    matchMetrics: aggregateMatchMetrics(outcomes),
+    samples,
+    ...(includeObservations ? {
+      observations: outcomes.map((outcome, matchIndex) => ({
+        matchIndex,
+        winnerSeats: outcome.winnerSeats,
+        standings: outcome.standings.map((entry) => ({
+          seat: entry.seat,
+          factionId: entry.factionId,
+          profileId: entry.profileId,
+          backendId: entry.backendId,
+          score: entry.score,
+          agiDeclared: entry.agiDeclared,
+          openingActions: entry.metrics.openingActions,
+          actions: entry.metrics.actions,
+          forcedNoOps: entry.metrics.forcedNoOps,
+          policyFallbacks: entry.metrics.policyFallbacks,
+          auditHits: entry.metrics.auditHits,
+          mandateEvents: entry.metrics.mandateEvents,
+          promisesMade: entry.metrics.promisesMade,
+          promisesFulfilled: entry.metrics.promisesFulfilled,
+          promisesBroken: entry.metrics.promisesBroken,
+          factionAbilityValues: entry.metrics.factionAbilityValues,
+          policyReceipts: entry.metrics.policyReceipts
+        })),
+        worldEndingId: outcome.worldEnding?.id || "unknown",
+        worldEnding: outcome.worldEnding,
+        powerTrades: outcome.matchMetrics?.powerTrades || [],
+        negotiations: outcome.matchMetrics?.negotiations || [],
+        declarationReadiness: outcome.matchMetrics?.declarationReadiness || [],
+        agiFunnel: outcome.matchMetrics?.agiFunnel || [],
+        declarations: outcome.matchMetrics?.declarations || 0,
+        realignments: outcome.matchMetrics?.realignments || {},
+        systemicRiskCreated: outcome.matchMetrics?.systemicRiskCreated || 0,
+        futureTimeline: outcome.matchMetrics?.futureTimeline || []
+      }))
+    } : {})
+  };
+}
