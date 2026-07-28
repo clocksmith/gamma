@@ -183,3 +183,9 @@ gate nevertheless rejected overall balance because winning-path entropy was
 `0.571/0.600/0.535`. Adoption held `46.53%/46.28%/50.53%` of winner
 classifications: below the direct `55%` cap but concentrated enough to require
 winner-path attribution before any global rule probe.
+
+`winning-path-attribution-v1.json` preregisters that diagnostic. It keeps the
+same selected package and adds winner-path attribution for Mandate sources,
+Core Actions, final resources, factions, personas, backends, and World
+Endings. The study may locate a one-lever follow-up; it cannot select a global
+rule directly.
