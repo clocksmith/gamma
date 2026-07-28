@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "id": "faction-prestige-demand-v1",
+  "registeredBeforeResults": true,
+  "question": "Can Demis's automatic prestige conversion and Jensen's unconditional architecture allocation be reduced without weakening Demis's science or Jensen's supplier transactions?",
+  "sourceEvidence": [
+    "faction-public-validation-confirmation-v1",
+    "faction-demand-validation-v1-restart"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/faction-prestige-demand-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "demis_nobel_one_trust",
+      "overlay": {
+        "imperialNobelTrust": 1
+      }
+    },
+    {
+      "id": "foundry_license_only_architecture",
+      "overlay": {
+        "foundryNewArchitectureDemandCoupling": {
+          "baseCompute": 0,
+          "computePerLicense": 1,
+          "maximumCompute": 3
+        }
+      }
+    }
+  ],
+  "playerCounts": [
+    3,
+    4,
+    5
+  ],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [
+    3,
+    5
+  ],
+  "mandateModes": [
+    "variable",
+    "fixed"
+  ],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-faction-prestige-demand-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "factionTruth": {
+    "demis": {
+      "protectedStrength": "Starting Compute, Scientific Method reliability, every Research decision, and all Capability remain unchanged.",
+      "bottleneck": "A five-domain run still earns Trust, but Nobel Effect grants one Trust instead of two.",
+      "eligibility": "Reject the candidate if it suppresses Research selection, Scientific Method use, five-domain runs, or Capability rather than reducing automatic public prestige."
+    },
+    "foundry": {
+      "protectedStrength": "Four starting Compute, every rival license offer, every accepted sale, all licensing revenue, and a three-Compute ceiling remain.",
+      "bottleneck": "New Architecture grants Jensen one self-Compute per accepted rival license and no unconditional base Compute.",
+      "eligibility": "Reject the candidate if it suppresses offers or sales, makes rival demand irrelevant, or overcorrects three-player Foundry where only two rival licenses exist."
+    }
+  },
+  "requiredDiagnostics": [
+    "configuration-specific faction win share, mean Mandate, and mean rank by player count",
+    "Nobel Effect uses, Trust gained, qualifying Capability, Scientific Method uses, Capability preserved, and Research selections",
+    "New Architecture self Compute, licenses sold, rival Compute granted, Runway gained, and Foundry action selection",
+    "paired faction win-share, score, and rank delta",
+    "new dominance or counter-cycle cells",
+    "forced no-ops, policy fallbacks, and integrity violations"
+  ],
+  "selectionRule": {
+    "demis": "Select only if Demis moves materially toward four-player parity, remains competitive at three and five, and retains canonical Research, Scientific Method, and Capability realization.",
+    "foundry": "Select only if Foundry moves toward parity at four and five without falling materially below parity at three, while license offers, sales, revenue, and rival Compute remain intact.",
+    "pairedAuthority": "Compare each candidate only with canonical under common seeds. Positive paired rankDelta means improved placement.",
+    "integrity": "Any integrity violation, policy fallback, unsupported-count gap, missing configuration-specific faction standing, or missing realized-ability accounting rejects the probe.",
+    "promotion": "No physical text changes without a tracked receipt, complete surface audit, a new immutable candidate, and explicit user approval."
+  }
+}
