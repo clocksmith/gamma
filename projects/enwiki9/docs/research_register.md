@@ -2536,3 +2536,21 @@ Evidence:
 
 - `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_fxcmidx13full_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T210552.json`
 - `operations/adaptive/exclusions/sfr_full_idx13_250k_negative_v1.json`
+
+## 2026-07-28: BEX-1 PPMD budget exchange is terminal negative
+
+The exact tight-cell budget exchange raised PPMD from `20,352` to `129,552`
+KiB without increasing the declared combined payload. Its opening-250K first
+archive was `45,179` bytes: identical to terminal SFR, one byte worse than B2,
+and 501 bytes above the `44,678` target-scale ceiling. Roundtrip and
+re-encoding were skipped after the terminal ceiling miss.
+
+Decision: retire this PPMD allocation and any PPMD-capacity ladder funded only
+by static layout slack. The unchanged archive across two different allocations
+shows that added capacity supplies no target-scale information on this gate.
+Score credit remains zero.
+
+Evidence:
+
+- `results/cmix21_text_mmap_paq5_ppmd129552k_fxcmassoc10tight92_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T211100.json`
+- `operations/adaptive/exclusions/bex_ppmd129552_250k_negative_v1.json`
