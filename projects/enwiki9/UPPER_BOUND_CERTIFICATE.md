@@ -28,7 +28,7 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best forecast | `endpoint428_pair_layer0_online_native_10m_v1` | 10,000,000 | 109,524,268 | exact guarded 10M archive screen with counted program economics; terminal verdict retire_unchanged_exact_10m_economics_miss; forecast only, not a constructive full-corpus proof | exact-10m-counted-projection |
 | active candidate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | exact 100,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 100,000,000 byte gate passed |
 | blocker | `n/a` | n/a | n/a | active 1,000,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 1,000,000,000 | n/a | unchanged 1,000,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | running |
+| active gate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 1,000,000,000 | n/a | unchanged 1,000,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
 
 ## Best Full-Corpus Result
 
