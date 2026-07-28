@@ -1,0 +1,99 @@
+--- a/preprocess.c
++++ b/preprocess.c
+@@ -1271,12 +1271,15 @@
+                  const char *word_filename)
+ {
+     StringTable *s;
+-    FILE *f, *fo;
++    FILE *f, *fo, *fmap;
+     uint16_t c;
+     int i, len, b;
+     StringEntry *p;
+     const uint8_t *buf;
+     CaseSpaceDecodeState cs;
++    const char *map_filename;
++    uint64_t raw_pos, raw_start, symbol_count;
++    uint8_t map_buf[18];
+     
+     s = string_table_init();
+     word_load(s, word_filename);
+@@ -1295,7 +1298,28 @@
+         exit(1);
+     }
+ 
++    fmap = NULL;
++    map_filename = getenv("NNCP_SYMBOL_MAP_TRACE");
++    if (map_filename && map_filename[0] != '\0') {
++        fmap = fopen(map_filename, "wb");
++        if (!fmap) {
++            perror(map_filename);
++            exit(1);
++        }
++        if (fwrite("NNSMAP1\0", 1, 8, fmap) != 8) {
++            perror("NNCP_SYMBOL_MAP_TRACE header");
++            exit(1);
++        }
++        memset(map_buf, 0, 8);
++        if (fwrite(map_buf, 1, 8, fmap) != 8) {
++            perror("NNCP_SYMBOL_MAP_TRACE rows");
++            exit(1);
++        }
++    }
++
+     case_space_decode_init(&cs);
++    raw_pos = 0;
++    symbol_count = 0;
+     for(;;) {
+         if (fget_be16(f, &c))
+             break;
+@@ -1306,16 +1330,49 @@
+         p = s->tab[c];
+         buf = (uint8_t *)p->data;
+         len = p->len;
++        raw_start = raw_pos;
+         for(i = 0; i < len; i++) {
+             b = case_space_decode(&cs, buf[i]);
+-            if (b >= 0)
++            if (b >= 0) {
+                 fputc(b, fo);
++                raw_pos++;
++            }
++        }
++        if (fmap) {
++            for(i = 0; i < 8; i++) {
++                map_buf[i] = raw_start >> (8 * i);
++                map_buf[8 + i] = raw_pos >> (8 * i);
++            }
++            map_buf[16] = c;
++            map_buf[17] = c >> 8;
++            if (fwrite(map_buf, 1, sizeof(map_buf), fmap) != sizeof(map_buf)) {
++                perror("NNCP_SYMBOL_MAP_TRACE row");
++                exit(1);
++            }
+         }
++        symbol_count++;
+     }
+ 
+     fclose(fo);
+ 
+     fclose(f);
++
++    if (fmap) {
++        if (fseek(fmap, 8, SEEK_SET) != 0) {
++            perror("NNCP_SYMBOL_MAP_TRACE seek");
++            exit(1);
++        }
++        for(i = 0; i < 8; i++)
++            map_buf[i] = symbol_count >> (8 * i);
++        if (fwrite(map_buf, 1, 8, fmap) != 8) {
++            perror("NNCP_SYMBOL_MAP_TRACE finalize");
++            exit(1);
++        }
++        if (fclose(fmap) != 0) {
++            perror("NNCP_SYMBOL_MAP_TRACE close");
++            exit(1);
++        }
++    }
+     
+     string_table_end(s);
+ }

@@ -2819,6 +2819,14 @@ the repository, and tracks their hashes. It requires 30 decimal GB free before
 starting and emits both an exact roundtrip receipt and the mature window
 manifest. It does not invoke LibNC model evaluation or arithmetic compression.
 
+Two launch attempts failed before preprocessing and therefore carry no
+scientific verdict. The first forced Python tar handling to XZ for a gzip
+artifact; the second passed the historical headerless documentation diff to
+GNU `patch`. Tar format autodetection now applies to both native runners, and
+the full-map gate now uses the equivalent executable unified patch
+`patches/nncp_symbol_raw_map_v2.patch`. Both failures remain in the adaptive
+ledger.
+
 Evidence:
 
 - `docs/nncp_native_trace_cert_plan.md`

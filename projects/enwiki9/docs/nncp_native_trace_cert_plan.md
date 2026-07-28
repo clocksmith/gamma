@@ -116,6 +116,11 @@ large transformed stream and map remain external artifacts; only receipts and
 hashes are tracked. This is a reversible preprocessing certificate with zero
 score credit, not a full-corpus compression attempt.
 
+The executable unified patch is
+`patches/nncp_symbol_raw_map_v2.patch`. The historical v1 artifact is retained
+because it is receipt-bound to the opening-1M evidence, but its headerless hunk
+form is documentation-only and must not be passed to the `patch` executable.
+
 Level A records consumed branches for all symbols. Level B records complete
 derived trees only inside predeclared continuous-state symbol windows
 corresponding to:
