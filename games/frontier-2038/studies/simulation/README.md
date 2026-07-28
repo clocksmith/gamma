@@ -189,3 +189,13 @@ same selected package and adds winner-path attribution for Mandate sources,
 Core Actions, final resources, factions, personas, backends, and World
 Endings. The study may locate a one-lever follow-up; it cannot select a global
 rule directly.
+
+The dated
+[`winning-path attribution`](2026-07-28-winning-path-attribution.md) receipt
+locates the measured gap in late Customer Mandate. At four and five players,
+Adoption winners receive `2.29/2.20` more Customer Mandate than Research
+winners, while Research recovers only `0.93/0.67` through Capability. Trust,
+round objectives, factions, and backends do not explain the gap. The receipt
+nominates one fresh-seed probe in which Customers four and five score one
+Mandate while every Customer, income, requirement, cost, and Mark distribution
+advantage remains unchanged.
