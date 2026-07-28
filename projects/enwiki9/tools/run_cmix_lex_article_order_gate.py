@@ -128,11 +128,12 @@ def compare(
     logs: Path,
     identity: Path,
     public: Path,
+    population_bytes: int,
 ) -> tuple[list[dict[str, object]], int, int | None]:
     starts = [
         0,
-        (PUBLIC_READY_BYTES - SLICE_BYTES) // 2,
-        PUBLIC_READY_BYTES - SLICE_BYTES,
+        (population_bytes - SLICE_BYTES) // 2,
+        population_bytes - SLICE_BYTES,
     ]
     rows: list[dict[str, object]] = []
     peak_rss = 0
@@ -276,10 +277,9 @@ def main() -> int:
         )
         identity_bytes = identity.stat().st_size
         identity_hash = sha256(identity)
-        if identity_bytes != PUBLIC_READY_BYTES:
-            raise RuntimeError(
-                f"identity ready length {identity_bytes} != {PUBLIC_READY_BYTES}"
-            )
+        population_bytes = min(identity_bytes, PUBLIC_READY_BYTES)
+        if population_bytes < SLICE_BYTES:
+            raise RuntimeError("article-order common population is too small")
         rows, aggregate_gain, compare_rss = compare(
             cmix=cmix,
             work=work,
@@ -287,6 +287,7 @@ def main() -> int:
             logs=logs,
             identity=identity,
             public=public,
+            population_bytes=population_bytes,
         )
         positive_slices = sum(int(row["gross_gain_bytes"]) > 0 for row in rows)
         rss_values = [
@@ -310,6 +311,10 @@ def main() -> int:
                     "identity_ready_path": str(identity),
                     "identity_ready_bytes": identity_bytes,
                     "identity_ready_sha256": identity_hash,
+                    "ready_length_delta_public_minus_identity": (
+                        PUBLIC_READY_BYTES - identity_bytes
+                    ),
+                    "sample_common_population_bytes": population_bytes,
                     "public_ready_path": str(public),
                     "public_ready_bytes": public.stat().st_size,
                     "public_ready_sha256": PUBLIC_READY_SHA256,
