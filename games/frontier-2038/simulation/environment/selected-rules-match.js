@@ -265,7 +265,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       return;
     }
     super.addResource(player, key, amount);
-    if (key === "capability" || key === "trust") {
+    if (
+      (key === "capability" || key === "trust") &&
+      !this.deferredPublicMandateSeats?.has(player.seat)
+    ) {
       this.synchronizePublicMandate(player, `${key}_threshold`);
     }
   }
@@ -406,8 +409,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     );
   }
 
-  synchronizePublicMandate(player, source) {
+  synchronizePublicMandate(
+    player,
+    source,
+    { capabilityMandatePenalty = 0 } = {}
+  ) {
     const known = new Set(player.mandateAwards.map((award) => award.id));
+    let remainingCapabilityMandatePenalty = Math.max(
+      0,
+      capabilityMandatePenalty
+    );
+    let capabilityMandateWithheld = 0;
     for (const baseAward of publicMandateAwards(this.config, player)) {
       let award = baseAward;
       if (baseAward.id.startsWith("customer-")) {
@@ -430,9 +442,22 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         };
       }
       if (known.has(award.id)) continue;
+      if (
+        award.id.startsWith("capability-") &&
+        remainingCapabilityMandatePenalty > 0
+      ) {
+        const withheld = Math.min(
+          remainingCapabilityMandatePenalty,
+          award.points
+        );
+        award = { ...award, points: award.points - withheld };
+        remainingCapabilityMandatePenalty -= withheld;
+        capabilityMandateWithheld += withheld;
+      }
       player.mandateAwards.push({ ...award, source });
       this.awardMandate(player, award.points, award.id);
     }
+    return { capabilityMandateWithheld };
   }
 
   controlledCategories(player) {
@@ -2220,6 +2245,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       scrutiny: player.scrutiny,
       safety: player.safety
     };
+    let scientificMethodUsedThisResolution = false;
     if (decision.actionId === "organize" && decision.parameters?.yearOfEfficiency) {
       const team = player.pieces.find((piece) => piece.kind === "team");
       if (team) {
@@ -2352,6 +2378,13 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const scientificProtection =
       decision.actionId === "research" &&
       (scientificMethodProtection || decision.parameters?.destinationCategory === "research");
+    const deferPublicMandate =
+      scientificMethodProtection &&
+      this.rulesVariant.imperialScientificMethodThresholdMandatePenalty > 0;
+    if (deferPublicMandate) {
+      this.deferredPublicMandateSeats ||= new Set();
+      this.deferredPublicMandateSeats.add(player.seat);
+    }
     if (scientificMethodProtection) player.runway -= scientificMethodRunwayCost;
     if (scientificProtection) player.safety += 1;
     super.applyResolution(seat, decision);
@@ -2361,6 +2394,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.lastTrainingResult?.safetySpent > 0;
       player.safety = Math.min(before.safety, player.safety);
       if (scientificMethodUsed) {
+        scientificMethodUsedThisResolution = true;
         const capabilityPenalty = Math.min(
           this.rulesVariant.imperialScientificMethodCapabilityPenalty,
           player.lastTrainingResult?.capability || 0
@@ -2378,7 +2412,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           runwaySpent: scientificMethodRunwayCost,
           duplicatesProtected: 1,
           capabilityPreserved: player.lastTrainingResult?.capability || 0,
-          capabilityPenalty
+          capabilityPenalty,
+          thresholdMandateWithheld: 0
         });
       } else if (scientificMethodProtection) {
         player.runway += scientificMethodRunwayCost;
@@ -2578,7 +2613,27 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.addResource(player, "runway", 2);
       this.addScrutiny(player, 2);
     }
-    this.synchronizePublicMandate(player, decision.actionId);
+    if (deferPublicMandate) {
+      this.deferredPublicMandateSeats.delete(player.seat);
+    }
+    const mandateSynchronization = this.synchronizePublicMandate(
+      player,
+      decision.actionId,
+      {
+        capabilityMandatePenalty: scientificMethodUsedThisResolution
+          ? this.rulesVariant.imperialScientificMethodThresholdMandatePenalty
+          : 0
+      }
+    );
+    if (
+      scientificMethodUsedThisResolution &&
+      mandateSynchronization.capabilityMandateWithheld > 0
+    ) {
+      const scientificMethod =
+        player.metrics.factionAbilityValues.scientific_method;
+      scientificMethod.thresholdMandateWithheld +=
+        mandateSynchronization.capabilityMandateWithheld;
+    }
   }
 
   rewardFoundryComputeSpend(spenderSeat, spentCompute) {
