@@ -97,3 +97,13 @@ formula because three scalar overlay fields violated the one-lever contract.
 `faction-demand-validation-v1-restart.json` supersedes it with the same
 ability formula represented as one structured lever, retires the unused seed,
 and preregisters a fresh replacement seed.
+
+The dated
+[`faction demand-validation`](2026-07-28-faction-demand-validation.md)
+receipt rejects both exact candidates. Two Scrutiny barely moves Demis and is
+not a binding public-validation cost. Demand-coupled New Architecture moves
+Jensen in the intended direction while preserving every rival transaction,
+but one unconditional base Compute plus accepted licenses is too weak. The
+next eligible probes remain prestige conversion for Demis and a stronger
+license-only self-Compute formula for Jensen; canonical physical rules are
+unchanged.
