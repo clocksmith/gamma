@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-28T22:44:02+00:00`
+- Generated at UTC: `2026-07-28T23:53:58+00:00`
 
 ## Target State
 
@@ -12,62 +12,78 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Summary
 
-- Candidate: `endpoint428_pair_layer0_online_native_trace_10m_v1`
-- Scope bytes: `10,000,000`
-- Gate verdict: `receipt_incomplete`
-- Gate next action: `wait_for_gate_receipts`
-- Heavy lock held: `true`
-- Active scorer observed: `true`
-- Active cmix mode: `text_compress`
+- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Scope bytes: `1,000,000,000`
+- Gate verdict: `cancelled_no_result`
+- Gate next action: `inspect_queue_before_launch`
+- Heavy lock held: `false`
+- Active scorer observed: `false`
+- Active cmix mode: `n/a`
 - Driver result present: `false`
-- RSS guard status: `n/a`
-- RSS samples: `n/a`
+- RSS guard status: `aborted_operator_cancelled`
+- RSS samples: `53,691`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `n/a`
-- Latest sampled single RSS KiB: `n/a`
-- Tightest binary single-process margin KiB: `n/a`
-- Tightest decimal single-process margin KiB: `n/a`
-- Latest binary single-process margin KiB: `n/a`
-- Latest decimal single-process margin KiB: `n/a`
-- Safe to launch heavy gate: `false`
-- Terminal verdict present: `false`
-- Command source: `none while gate is non-terminal`
+- Max sampled single RSS KiB: `8,243,192`
+- Latest sampled single RSS KiB: `8,243,192`
+- Tightest binary single-process margin KiB: `2,242,568`
+- Tightest decimal single-process margin KiB: `1,522,433`
+- Latest binary single-process margin KiB: `2,242,568`
+- Latest decimal single-process margin KiB: `1,522,433`
+- Safe to launch heavy gate: `true`
+- Terminal verdict present: `true`
+- Command source: `terminal operator cancellation; inspect queue before selecting new work`
 - Claim rule: `No prefix row proves 10.95%.`
 
 ## Active Gate
 
-- Heavy lock held: `true`
-- Gate verdict: `receipt_incomplete`
-- Next action: `wait_for_gate_receipts`
-- Candidate: `endpoint428_pair_layer0_online_native_trace_10m_v1`
-- Scope bytes: `10,000,000`
-- Driver result JSON: `results/endpoint428_pair_layer0_online_native_trace_10m_v1/receipt.json`
+- Heavy lock held: `false`
+- Gate verdict: `cancelled_no_result`
+- Next action: `inspect_queue_before_launch`
+- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Scope bytes: `1,000,000,000`
+- Driver result JSON: `not present`
 - Driver result present: `false`
-- RSS guard JSON: `results/endpoint428_pair_layer0_online_native_trace_10m_v1/encode_guard.json`
-- RSS guard present: `false`
-- Active scorer observed: `true`
+- RSS guard JSON: `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_1000000000_determinism_rss_guard.json`
+- RSS guard present: `true`
+- Active scorer observed: `false`
 - Live gate: `false`
 - Liveness classification: `not_persisted_running`
 - Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive running job backed by the host-local heavy lock. The lock alone never identifies a gate.`
-- Live guard note: `guard JSON is absent while the scorer is observed; keep waiting for final receipts and use process-table RSS meanwhile`
+- RSS guard status: `aborted_operator_cancelled`
+- RSS guard JSON bytes: `1,366`
+- RSS guard JSON modified UTC: `2026-07-28T00:11:51+00:00`
+- RSS guard JSON SHA-256: `5a1ba3a21010eca8ce580e964d2f169207de0cc8fdeb686bc9bc59fa143c8988`
+- RSS samples: `53,691`
+- Max sampled single RSS KiB: `8,243,192`
+- Max sampled tree RSS KiB: `11,215,656`
+- Single-process RSS margin KiB: `2,242,568`
+- Single-process decimal `10GB` margin KiB: `1,522,433`
+- Tree RSS margin KiB: `-729,896`
+- Tree decimal `10GB` margin KiB: `-1,450,031`
+- Latest sampled single RSS KiB: `8,243,192`
+- Latest sampled tree RSS KiB: `11,215,656`
+- Latest sampled single-process margin KiB: `2,242,568`
+- Latest sampled single-process decimal `10GB` margin KiB: `1,522,433`
+- Latest sampled tree margin KiB: `-729,896`
+- Latest sampled tree decimal `10GB` margin KiB: `-1,450,031`
 
 ## Gate Evidence Status
 
-- Claim status: `awaiting_gate_receipts`
+- Claim status: `cancelled_no_score`
 - Driver result terminal: `false`
-- RSS guard terminal: `false`
+- RSS guard terminal: `true`
 - Scored gate result present: `false`
 - Live guard only: `false`
 - Claim rule: `Only a terminal driver result with roundtrip evidence can become a benchmark row.`
 
 ## Observed Gate Command
 
-- Expected candidate: `endpoint428_pair_layer0_online_native_trace_10m_v1`
-- Expected scope bytes: `10,000,000`
+- Expected candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Expected scope bytes: `1,000,000,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -78,8 +94,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Observed Controller Command
 
-- Expected active candidate: `endpoint428_pair_layer0_online_native_trace_10m_v1`
-- Expected active scope bytes: `10,000,000`
+- Expected active candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Expected active scope bytes: `1,000,000,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -89,18 +105,18 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Action
 
-- Safe to launch heavy gate: `false`
-- Action: `wait_for_current_gate_receipts`
-- Reason: `the serialized scorer lane is already owned by an observed guarded process`
-- Allowed work: `refresh status receipt; inspect driver and RSS receipts; update documentation and accounting ledgers; work on shadow-coder specs from cached logs`
-- Forbidden work: `launch another compression gate; package a fallback candidate; run result-corpus forecast scans; change active candidate source`
+- Safe to launch heavy gate: `true`
+- Action: `inspect_queue_before_launch`
+- Reason: `the previous guard was explicitly cancelled without a scored driver result and no longer owns the heavy lane`
+- Allowed work: `n/a`
+- Forbidden work: `n/a`
 
 ## Handoff
 
-- Terminal verdict present: `false`
-- Heavy gate mutation allowed: `false`
-- Recommended action: `wait_for_current_gate_receipts`
-- Command source: `none while gate is non-terminal`
+- Terminal verdict present: `true`
+- Heavy gate mutation allowed: `true`
+- Recommended action: `inspect_queue_before_launch`
+- Command source: `terminal operator cancellation; inspect queue before selecting new work`
 - Claim rule: `No prefix row proves 10.95%.`
 
 ## Operator Logs
@@ -122,55 +138,22 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 3,370,024 | 3,417,245 | 21,196 | `python3 tools/enwiki9_lab.py run --candidate janus_paid_residual_mdl_q0_v1 --max-workers 1 --min-free-mib 12000` |
-| `lock_wrapper` | 3,370,097 | 3,370,024 | 2,132 | `flock /tmp/enwiki9-heavy.lock /usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/endpoint428_p1_trace_gate.py --wrapper /home/x/enwiki9-non...` |
-| `process` | 3,370,098 | 3,370,097 | 22,180 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/endpoint428_p1_trace_gate.py --wrapper /home/x/enwiki9-nonproof/results/cmix21_lstm200_p...` |
-| `rss_guard` | 3,370,136 | 3,370,098 | 16,844 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 10485760 --limit-mode max_single --official-decimal-li...` |
-| `process` | 3,370,149 | 3,370,136 | 3,764 | `/home/x/enwiki9-nonproof/results/cmix21_lstm200_plus_fx2lite428_onlinepairlayer0_source_package_v17/clean-build-b/comp9a-decomp9 c /home/x/enwiki9-...` |
-| `process` | 3,370,150 | 3,370,149 | 9,068,244 | `results/endpoint428_pair_layer0_online_native_trace_10m_v1/.cmix9-ru0MXP/cmix -t results/endpoint428_pair_layer0_online_native_trace_10m_v1/.cmix9-...` |
+| n/a | n/a | n/a | n/a | n/a |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/native.p1` | 31,047,680 | `2026-07-28T22:44:03+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/encode_stderr.log` | 246,961 | `2026-07-28T22:44:02+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/archive.bin` | 540,672 | `2026-07-28T22:43:58+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/encode_guard.json` | 1,562 | `2026-07-28T22:43:58+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/archive.bin.cmix.temp` | 6,251,852 | `2026-07-28T22:12:31+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/encode_stdout.log` | 0 | `2026-07-28T22:12:31+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/wrt_store.bin` | 6,251,857 | `2026-07-28T22:12:31+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/store_stdout.log` | 45 | `2026-07-28T22:12:31+00:00` |
-| `projects/enwiki9/results/endpoint428_pair_layer0_online_native_trace_10m_v1/store_stderr.log` | 17 | `2026-07-28T22:12:31+00:00` |
-
-## Active RSS
-
-- Max cmix PID: `3370150`
-- Active cmix mode: `text_compress`
-- Max cmix RSS KiB: `9,068,244`
-- Active process tree RSS KiB: `9,134,360`
-- Local binary `10GiB` guard KiB: `10,485,760`
-- Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `1,417,516`
-- Single-process decimal margin KiB: `697,381`
-- Active process tree margin KiB (binary): `1,351,400`
-- Active process tree decimal margin KiB: `631,265`
-- Temp input path: `/home/x/enwiki9-nonproof/gamma/projects/enwiki9/data/enwik9_10000000.bin`
-- Temp output path: `results/endpoint428_pair_layer0_online_native_trace_10m_v1/archive.bin`
-- Temp output staging path: `results/endpoint428_pair_layer0_online_native_trace_10m_v1/archive.bin.cmix.temp`
-- Temp input bytes: `10,000,000`
-- Temp output bytes: `n/a`
-- Temp output staging bytes: `n/a`
-- Temp input modified UTC: `2026-07-12T13:04:25+00:00`
-- Temp output modified UTC: `n/a`
-- Temp output staging modified UTC: `n/a`
-- Process read bytes: `73,728`
-- Process write bytes: `44,589,056`
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_1000000000_determinism_rss_guard.json` | 1,366 | `2026-07-28T00:11:51+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json` | 1,209 | `2026-07-26T21:27:20+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json` | 1,388 | `2026-07-23T02:21:47+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_10000000_determinism_rss_guard.json` | 874 | `2026-07-20T19:57:07+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` | 1,012 | `2026-07-20T19:57:07+00:00` |
 
 ## Contingencies
 
 - If current gate passes: `record pass and apply candidate target-gate promotion rule`
-- Pass next scope: `100,000,000`
+- Pass next scope: `n/a`
 - If RSS fails: `record RSS failure and retire or repackage this integration shape`
 - Lower candidate: `unknown`
 - Lower PPMD KiB: `n/a`
