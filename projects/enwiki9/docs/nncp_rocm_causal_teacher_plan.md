@@ -91,7 +91,7 @@ On a fixed 65,536-symbol population:
 
 ```text
 causal-mask dependency graph      exact
-BF16 counterfactual prefix drift  <= 2^-12
+incremental prefix identity       exact
 finite normalized distributions  pass
 independent repeated payload      exact
 trace-driven symbol roundtrip     exact

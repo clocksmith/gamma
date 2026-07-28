@@ -38,7 +38,6 @@ RANGE_MIN_BITS = 16
 RANGE_MIN = (0xFF << (RANGE_MIN_BITS - 8)) + 1
 RANGE_MAX = 0xFF << RANGE_MIN_BITS
 TRACE_MAGIC = b"RQ0TR1\0\0"
-CAUSAL_AUDIT_TOLERANCE = 1.0 / 4096.0
 
 
 @dataclass(frozen=True)
@@ -183,7 +182,10 @@ class CausalBlock(nn.Module):
         self.feedforward_out = nn.Linear(config.inner_width, width)
 
     def forward(
-        self, value: torch.Tensor, memory: torch.Tensor
+        self,
+        value: torch.Tensor,
+        memory: torch.Tensor,
+        detach_memory: bool,
     ) -> tuple[torch.Tensor, torch.Tensor]:
         config = self.config
         batch, length, _ = value.shape
@@ -229,7 +231,9 @@ class CausalBlock(nn.Module):
         normalized_ff = self.feedforward_norm(value)
         gate, content = self.feedforward_in(normalized_ff).chunk(2, dim=-1)
         value = value + self.feedforward_out(F.gelu(gate) * content)
-        next_memory = history[:, -config.memory_length :, :].detach()
+        next_memory = history[:, -config.memory_length :, :]
+        if detach_memory:
+            next_memory = next_memory.detach()
         return value, next_memory
 
 
@@ -264,13 +268,16 @@ class RocmTeacher(nn.Module):
         ]
 
     def forward(
-        self, symbols: torch.Tensor, memories: list[torch.Tensor]
+        self,
+        symbols: torch.Tensor,
+        memories: list[torch.Tensor],
+        detach_memory: bool = True,
     ) -> tuple[torch.Tensor, list[torch.Tensor]]:
         value = self.embedding(symbols).to(torch.bfloat16)
         value *= math.sqrt(self.config.width)
         next_memories: list[torch.Tensor] = []
         for block, memory in zip(self.blocks, memories, strict=True):
-            value, next_memory = block(value, memory)
+            value, next_memory = block(value, memory, detach_memory)
             next_memories.append(next_memory)
         value = self.final_norm(value)
         return self.readout(value).float(), next_memories
@@ -375,10 +382,19 @@ def causal_audit(
     with torch.no_grad(), torch.autocast(
         device_type="cuda", dtype=torch.bfloat16
     ):
-        empty = model.empty_memory(device, torch.bfloat16)
-        first_logits, _ = model(first, empty)
-        empty = model.empty_memory(device, torch.bfloat16)
-        second_logits, _ = model(second, empty)
+        outputs = []
+        for sequence in (first, second):
+            memories = model.empty_memory(device, torch.bfloat16)
+            logits = []
+            for index in range(sequence.shape[1]):
+                current, memories = model(
+                    sequence[:, index : index + 1],
+                    memories,
+                    detach_memory=False,
+                )
+                logits.append(current)
+            outputs.append(torch.cat(logits, dim=1))
+        first_logits, second_logits = outputs
     # The changed input at position 9 may affect prediction 9 and later, but
     # never positions 0 through 8.
     return float(
@@ -423,16 +439,13 @@ def run_teacher(
             {
                 "event": "causal_audit",
                 "maximum_prefix_error": audit_error,
-                "tolerance": CAUSAL_AUDIT_TOLERANCE,
+                "exact_required": True,
             },
             sort_keys=True,
         ),
         flush=True,
     )
-    if (
-        not math.isfinite(audit_error)
-        or audit_error > CAUSAL_AUDIT_TOLERANCE
-    ):
+    if not math.isfinite(audit_error) or audit_error != 0:
         raise ValueError("causal mask numerical audit failed")
     model.train()
     memories = model.empty_memory(device, torch.bfloat16)
@@ -452,8 +465,17 @@ def run_teacher(
             symbols[start:end].astype(np.int64, copy=False)
         )[None, :].to(device)
         optimizer.zero_grad(set_to_none=True)
+        segment_memories = memories
+        segment_logits = []
         with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-            logits, next_memories = model(input_tensor, memories)
+            for index in range(input_tensor.shape[1]):
+                current, segment_memories = model(
+                    input_tensor[:, index : index + 1],
+                    segment_memories,
+                    detach_memory=False,
+                )
+                segment_logits.append(current)
+            logits = torch.cat(segment_logits, dim=1)
             loss = F.cross_entropy(
                 logits.reshape(-1, config.vocabulary),
                 target_tensor.reshape(-1),
@@ -469,7 +491,7 @@ def run_teacher(
             model.parameters(), config.gradient_clip
         )
         optimizer.step()
-        memories = next_memories
+        memories = [memory.detach() for memory in segment_memories]
         loss_sum += float(loss.detach().cpu()) * (end - start)
         if end % 8192 == 0 or end == len(symbols):
             torch.cuda.synchronize(device)
@@ -544,10 +566,7 @@ def main() -> int:
         != trace_on["final_model_fingerprint"]
     ):
         raise ValueError("teacher final model fingerprint is nondeterministic")
-    if (
-        trace_on["causal_audit_maximum_error"]
-        > CAUSAL_AUDIT_TOLERANCE
-    ):
+    if trace_on["causal_audit_maximum_error"] != 0:
         raise ValueError("causal mask audit failed")
 
     payload = trace_on["archive"]
@@ -611,7 +630,7 @@ def main() -> int:
             "maximum_prefix_error": trace_on[
                 "causal_audit_maximum_error"
             ],
-            "numerical_tolerance": CAUSAL_AUDIT_TOLERANCE,
+            "exact_prefix_identity_required": True,
             "shifted_inputs_only": True,
         },
         "claims": {
