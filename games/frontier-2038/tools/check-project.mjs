@@ -146,6 +146,7 @@ const required = [
   "studies/simulation/2026-07-28-supported-player-count-baseline.md",
   "studies/simulation/2026-07-28-faction-swap-diagnostic.md",
   "studies/simulation/2026-07-28-faction-strength-probes.md",
+  "studies/simulation/2026-07-28-faction-progress-conversion-calibration.md",
   "studies/simulation/2026-07-27-foundry-scaling-rule-selection.md",
   "studies/simulation/2026-07-27-foundry-shovels-executable-correction.md",
   "studies/simulation/2026-07-26-first-automated-baseline.md"

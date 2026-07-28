@@ -56,3 +56,6 @@ physical rule unless a later receipt and explicit approval promote it.
 probe with two independent victory-progress levers: a one-Capability cost when
 Scientific Method actually protects a run, and one Mandate when Industrial
 Velocity actually discounts a Build. Both remain simulation-only candidates.
+The dated calibration receipt rejects the Capability penalty on both evidence
+and faction-truth grounds and nominates the Industrial Velocity Mandate for a
+fresh-seed confirmation; neither changes the physical rules.
