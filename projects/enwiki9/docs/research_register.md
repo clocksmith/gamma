@@ -2811,6 +2811,14 @@ runner argument strings and receives zero score credit. The existing
 opening-1M map is explicitly insufficient for mature execution because it does
 not use the frozen full-corpus dictionary or cover the mature boundaries.
 
+The full-corpus mapping prerequisite is now implemented as a lab-compatible
+zero-credit tool. It performs only official reversible preprocessing and
+decoding on the complete input, applies the already audited symbol-map
+observation patch, retains the large dictionary/stream/map artifacts outside
+the repository, and tracks their hashes. It requires 30 decimal GB free before
+starting and emits both an exact roundtrip receipt and the mature window
+manifest. It does not invoke LibNC model evaluation or arithmetic compression.
+
 Evidence:
 
 - `docs/nncp_native_trace_cert_plan.md`
@@ -2819,6 +2827,7 @@ Evidence:
 - `tools/verify_nncp_native_trace.py`
 - `tools/nncp_mature_headroom_cert.py`
 - `tools/nncp_native_window_manifest.py`
+- `tools/run_nncp_full_symbol_map_gate.py`
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`

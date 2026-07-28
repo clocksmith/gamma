@@ -101,6 +101,21 @@ windows or the published teacher because it uses an opening-scope dictionary.
 A mature manifest requires one map built from the frozen full-corpus dictionary
 and transformed stream, covering at least the 100M raw boundary.
 
+The ROCm/CPU host can construct that prerequisite without executing a neural
+model:
+
+```text
+tools/run_nncp_full_symbol_map_gate.py
+```
+
+The gate builds from the immutable source tarball, applies only the existing
+preprocessor observation patch, constructs the dictionary from the complete
+1,000,000,000-byte input, decodes the complete transformed stream, verifies the
+raw roundtrip and gapless map, and emits the frozen trace-window manifest. Its
+large transformed stream and map remain external artifacts; only receipts and
+hashes are tracked. This is a reversible preprocessing certificate with zero
+score credit, not a full-corpus compression attempt.
+
 Level A records consumed branches for all symbols. Level B records complete
 derived trees only inside predeclared continuous-state symbol windows
 corresponding to:
