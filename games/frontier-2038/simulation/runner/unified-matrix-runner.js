@@ -31,6 +31,49 @@ function mean(values) {
     : 0;
 }
 
+function increment(target, key, amount = 1) {
+  target[key] = (target[key] || 0) + amount;
+}
+
+function normalizedEntropy(counts) {
+  const values = Object.values(counts).filter((value) => value > 0);
+  const total = values.reduce((sum, value) => sum + value, 0);
+  if (values.length < 2 || total === 0) return 0;
+  const entropy = -values.reduce((sum, value) => {
+    const probability = value / total;
+    return sum + probability * Math.log(probability);
+  }, 0);
+  return entropy / Math.log(values.length);
+}
+
+function concentration(counts) {
+  const total = Object.values(counts).reduce((sum, value) => sum + value, 0);
+  const top = Math.max(0, ...Object.values(counts));
+  return {
+    counts,
+    observed: Object.keys(counts).length,
+    entropy: normalizedEntropy(counts),
+    topShare: total ? top / total : 0
+  };
+}
+
+function winningPath(entry) {
+  const actions = entry.actions || {};
+  const lanes = {
+    research: (actions.research || 0) + (entry.capability || 0) / 3,
+    infrastructure: (actions.build || 0) + (entry.facilities || 0),
+    adoption: (actions.deploy || 0) + (entry.customers || 0),
+    legitimacy: (actions.influence || 0) + (entry.trust || 0) / 2,
+    capital: actions.fund || 0,
+    mobility: actions.organize || 0
+  };
+  if (entry.agiDeclared) return "agi_declaration";
+  const ranked = Object.entries(lanes).sort((left, right) => right[1] - left[1]);
+  return ranked[0][1] === ranked[1][1]
+    ? `${ranked[0][0]}_${ranked[1][0]}_hybrid`
+    : ranked[0][0];
+}
+
 function rotate(values, amount) {
   return values.map((_, index) => values[(index + amount) % values.length]);
 }
@@ -378,6 +421,9 @@ function cooperationSummary(observations) {
 
 function outcomeSummary(observations) {
   const mandateSources = {};
+  const actionCounts = {};
+  const openingCounts = {};
+  const winningPathCounts = {};
   const bindingRequirements = {};
   const agiFunnel = {
     playerOpportunities: 0,
@@ -449,8 +495,20 @@ function outcomeSummary(observations) {
       const actions = factionActionSelections[standing.factionId] || {};
       for (const [actionId, count] of Object.entries(standing.actions || {})) {
         actions[actionId] = (actions[actionId] || 0) + count;
+        increment(actionCounts, actionId, count);
       }
       factionActionSelections[standing.factionId] = actions;
+      increment(
+        openingCounts,
+        (standing.openingActions || []).join("→") || "none"
+      );
+      if (winnerCredit.has(standing.seat)) {
+        increment(
+          winningPathCounts,
+          winningPath(standing),
+          winnerCredit.get(standing.seat)
+        );
+      }
       const faction = factionAbilityValues[standing.factionId] || {};
       for (const [abilityId, values] of Object.entries(
         standing.factionAbilityValues || {}
@@ -482,6 +540,9 @@ function outcomeSummary(observations) {
     forcedNoOps,
     forcedNoOpRate: actionOpportunities ? forcedNoOps / actionOpportunities : 0,
     policyFallbacks: fallbacks,
+    actionDiversity: normalizedEntropy(actionCounts),
+    openingDiversity: concentration(openingCounts),
+    winningPathDiversity: concentration(winningPathCounts),
     bindingRequirements,
     mandateSources,
     factionMandateSources,
