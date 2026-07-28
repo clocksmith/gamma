@@ -54,7 +54,7 @@ def main() -> int:
     args.result_dir.mkdir(parents=True, exist_ok=True)
     source_parent = args.work_dir / "source"
     source_parent.mkdir()
-    with tarfile.open(args.source_package, "r:xz") as archive:
+    with tarfile.open(args.source_package, "r:*") as archive:
         archive.extractall(source_parent)
     roots = [path for path in source_parent.iterdir() if path.is_dir()]
     if len(roots) != 1:
