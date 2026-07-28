@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "id": "demis-peer-validation-v1",
+  "registeredBeforeResults": true,
+  "question": "Does broad independent validation at a five-player table preserve the successful three/four-player Demis correction without overcorrecting five?",
+  "sourceEvidence": [
+    "demis-late-validation-v1"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/demis-peer-validation-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "demis_peer_validated_late_capability",
+      "overlay": {
+        "imperialLateCapabilityThresholdMandate": {
+          "baseMandate": 1,
+          "fullValidationCapability": 12,
+          "minimumRivalsForFullMandate": 4,
+          "fullMandate": 2
+        }
+      }
+    }
+  ],
+  "playerCounts": [
+    3,
+    4,
+    5
+  ],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [
+    3,
+    5
+  ],
+  "mandateModes": [
+    "variable",
+    "fixed"
+  ],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 8000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-demis-peer-validation-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "factionTruth": {
+    "demis": {
+      "protectedStrength": "All Compute, Research reliability, Capability, and technical threshold attainment remain canonical.",
+      "bottleneck": "Demis scores one Mandate at Capability 9 and 12, except Capability 12 scores the canonical two when four rivals can independently validate the result.",
+      "eligibility": "Reject if three/four lose the prior correction, five remains below the competitive band, or any technical realization changes materially."
+    }
+  },
+  "requiredDiagnostics": [
+    "configuration-specific faction standings at three, four, and five players",
+    "Capability 9 and 12 attainment and Mandate by threshold",
+    "late public-validation Mandate withheld",
+    "Research, Scientific Method, Scaling-Law, and Capability realization",
+    "paired win-share, score, and rank delta",
+    "new dominance or counter-cycle cells",
+    "integrity, fallback, and forced-no-op rates"
+  ],
+  "selectionRule": {
+    "demis": "Select only if Demis remains among the competitive leaders at three, moves near the four-player leading band, and returns to a viable mid-pack result at five without changing technical outputs.",
+    "pairedAuthority": "Compare only with canonical on common seeds and interpret absolute score/rank bands because tied winners make nominal win-share parity non-additive.",
+    "integrity": "Any integrity violation, policy fallback, unsupported-count gap, or missing realization metric rejects the probe.",
+    "promotion": "No physical rule changes without a tracked receipt, combined-package confirmation, synchronized immutable candidate, and explicit user approval."
+  }
+}

@@ -436,13 +436,29 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         baseAward.id.startsWith("capability-") &&
         Number(baseAward.id.slice("capability-".length)) >= 9
       ) {
-        const imperialLateMandate =
-          player.factionId === "imperial_research_lab" &&
-          Number.isFinite(
-            this.rulesVariant.imperialLateCapabilityThresholdMandate
-          )
-            ? this.rulesVariant.imperialLateCapabilityThresholdMandate
-            : null;
+        const lateCapability = Number(
+          baseAward.id.slice("capability-".length)
+        );
+        const imperialValidation =
+          this.rulesVariant.imperialLateCapabilityThresholdMandate;
+        let imperialLateMandate = null;
+        if (player.factionId === "imperial_research_lab") {
+          if (Number.isFinite(imperialValidation)) {
+            imperialLateMandate = imperialValidation;
+          } else if (
+            imperialValidation &&
+            Number.isFinite(imperialValidation.baseMandate)
+          ) {
+            const broadlyValidated =
+              lateCapability >=
+                imperialValidation.fullValidationCapability &&
+              this.players.length - 1 >=
+                imperialValidation.minimumRivalsForFullMandate;
+            imperialLateMandate = broadlyValidated
+              ? imperialValidation.fullMandate
+              : imperialValidation.baseMandate;
+          }
+        }
         award = {
           ...baseAward,
           points: imperialLateMandate ??
