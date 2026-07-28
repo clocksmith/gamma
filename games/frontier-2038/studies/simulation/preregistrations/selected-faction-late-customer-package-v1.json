@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "selected-faction-late-customer-package-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "package_interaction",
+  "question": "Do the independently evidenced faction-conversion package and directionally valid late-Customer recognition schedule jointly satisfy faction parity and strategic-diversity bounds at every supported player count without making an action or winning path compulsory?",
+  "sourceEvidence": [
+    "selected-faction-conversion-package-v1",
+    "selected-faction-package-gate-confirmation-v1",
+    "late-customer-recognition-v1",
+    "2026-07-28-late-customer-recognition"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/selected-faction-late-customer-package-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "selected_faction_late_customer_package",
+      "overlay": {
+        "imperialLateCapabilityThresholdMandate": {
+          "baseMandate": 1,
+          "fullValidationCapability": 12,
+          "minimumRivalsForFullMandate": 4,
+          "fullMandate": 2
+        },
+        "verticalIndustrialVelocityMandate": 1,
+        "foundryNewArchitectureDemandCoupling": {
+          "baseCompute": 0,
+          "computePerLicense": 1,
+          "maximumCompute": 3
+        },
+        "customerMandateSchedule": {
+          "baseMandate": 2,
+          "lateFromCustomer": 4,
+          "lateMandate": 1
+        }
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-selected-faction-late-customer-package-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "requiredDiagnostics": [
+    "faction win-share range and standings by supported player count",
+    "winner share and attribution by classified path",
+    "Mandate sources and Core Action selections by winning path",
+    "action and opening diversity",
+    "Demis, Elon, Jensen, and Mark paired movement",
+    "dominance, pairwise cycles, integrity, fallbacks, and forced no-ops"
+  ],
+  "selectionRule": {
+    "eligiblePackage": "The candidate package must keep every supported player count at or below the 15-point faction win-share range, at or above 0.60 winning-path entropy, at or below 0.55 winning-path top share, inside all action and opening bounds, and free of registered dominance, integrity failure, fallbacks, or excessive forced no-ops.",
+    "rejectPackage": "Reject the four-lever package if any supported player count fails a declared outcome bound, if Mark's distribution identity becomes nonviable, if Deploy or Research becomes compulsory, or if one faction correction reverses at a supported count.",
+    "interpretation": "This is interaction validation, not new causal one-lever evidence. Failure requires attribution before any new candidate; success still does not auto-promote physical rules.",
+    "physicalBoundary": "Explicit user approval and controlled physical play remain mandatory."
+  },
+  "surfaceAudit": {
+    "canonicalRulebook": "no change; simulation-only package interaction",
+    "semanticGraph": "no player-facing change",
+    "machineData": "no generated-content change",
+    "simulator": "uses four already implemented structured overlay levers",
+    "browserPrototype": "no change",
+    "referenceAids": "no change",
+    "tests": "all individual lever semantics already covered",
+    "playtestDocumentation": "no change before package selection"
+  }
+}
