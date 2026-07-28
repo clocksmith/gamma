@@ -12,6 +12,7 @@ import os
 import pathlib
 import struct
 import subprocess
+import sys
 import tarfile
 import tempfile
 import time
@@ -283,6 +284,28 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     }
     args.receipt.parent.mkdir(parents=True, exist_ok=True)
     args.receipt.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+    if args.decision is not None:
+        subprocess.run(
+            [
+                sys.executable,
+                str(pathlib.Path(__file__).with_name("paid_block_vector_codebook.py")),
+                "--trace",
+                str(trace_path),
+                "--archive",
+                str(archive_path),
+                "--raw-bytes",
+                str(args.limit),
+                "--block-bytes",
+                "4096",
+                "--codewords",
+                "16",
+                "--source-bytes",
+                str(args.source_bytes),
+                "--output",
+                str(args.decision),
+            ],
+            check=True,
+        )
     return receipt
 
 
@@ -313,7 +336,14 @@ def parse_args() -> argparse.Namespace:
         "--receipt",
         type=pathlib.Path,
         default=project
-        / "results/af1_paid_block_vector_codebook_v1/trace_receipt.json",
+            / "results/af1_paid_block_vector_codebook_v1/trace_receipt.json",
+    )
+    parser.add_argument("--decision", type=pathlib.Path)
+    parser.add_argument(
+        "--source-bytes",
+        type=int,
+        default=40,
+        help="full-package byte estimate amortized to this 1M screen",
     )
     return parser.parse_args()
 
@@ -326,4 +356,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
