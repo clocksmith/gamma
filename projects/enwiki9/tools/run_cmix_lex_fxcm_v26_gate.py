@@ -150,6 +150,7 @@ def main() -> int:
                 str(build),
                 "-j2",
                 f"CC={compiler}",
+                "LFLAGS=-m64 -Wl,--gc-sections -std=c++17",
                 "cmix",
             ],
             check=True,
