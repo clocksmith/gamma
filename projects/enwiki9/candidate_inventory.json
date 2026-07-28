@@ -14823,6 +14823,34 @@
     },
     {
       "deps": [],
+      "description": "ROCm shifted-input batched causal teacher repair",
+      "driver_program_size": 216,
+      "has_meta_json": true,
+      "has_program_py": true,
+      "id": "nncp_rocm_batched_causal_teacher_v1",
+      "meta_id": "nncp_rocm_batched_causal_teacher_v1",
+      "meta_id_matches_directory": true,
+      "meta_status": "candidate",
+      "missing_payload_targets": [],
+      "reasons": [
+        "awaiting_lane0_measurement"
+      ],
+      "registered": true,
+      "results": {
+        "best_valid_meta_evidence": null,
+        "best_valid_result": null,
+        "result_files": 0,
+        "total_valid_evidence": 0,
+        "valid_meta_evidence": 0,
+        "valid_result_files": 0
+      },
+      "source_file_entries": 2,
+      "status": "candidate",
+      "tracked_source_file_entries": 2,
+      "untracked_source_files": []
+    },
+    {
+      "deps": [],
       "description": "Materialize the frozen 65,536-symbol Q0 ROCm teacher gate: two seeded online-training executions, exact arithmetic payload identity, causal masking audit, trace-driven symbol/raw roundtrip, and zero score credit.",
       "driver_program_size": 216,
       "has_meta_json": true,
@@ -20184,7 +20212,7 @@
       "untracked_source_files": []
     }
   ],
-  "generated_at": "2026-07-28T19:00:16+00:00",
+  "generated_at": "2026-07-28T19:05:01+00:00",
   "ignored_entries": [
     "projects/enwiki9/data/enwik9",
     "projects/enwiki9/lib/__pycache__/driver.cpython-314.pyc",
@@ -22376,6 +22404,7 @@
     "projects/enwiki9/results/nncp_full_symbol_map_v1/window_manifest.json",
     "projects/enwiki9/results/nncp_gamma_gap_map_10k_v1/decision.json",
     "projects/enwiki9/results/nncp_predictive_quotient_10k_v1/decision.json",
+    "projects/enwiki9/results/nncp_rocm_batched_causality_audit_v1/decision.json",
     "projects/enwiki9/results/nncp_rocm_q0_teacher_gate_v1/decision.json",
     "projects/enwiki9/results/nncp_symbol_student_package_audit_v1/decision.json",
     "projects/enwiki9/results/nncp_teacher_causal_trace_10k_v1/receipt.json",
@@ -22599,6 +22628,7 @@
     "projects/enwiki9/run_logs/adaptive/20260728T183043Z_8ef13361c2.log",
     "projects/enwiki9/run_logs/adaptive/20260728T183258Z_87935039fe.log",
     "projects/enwiki9/run_logs/adaptive/20260728T185712Z_43dab2487d.log",
+    "projects/enwiki9/run_logs/adaptive/20260728T190454Z_29f61f6127.log",
     "projects/enwiki9/run_logs/archive/progress_legacy.log",
     "projects/enwiki9/run_logs/archive/status_live_20260721.json",
     "projects/enwiki9/run_logs/archive/status_snapshot_accidental_dash_20260721.json",
@@ -23062,6 +23092,7 @@
     "projects/enwiki9/tools/__pycache__/hutter_upper_bound_certificate.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/minify_cpp_source.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/nncp_libnc_relative_parity.cpython-314.pyc",
+    "projects/enwiki9/tools/__pycache__/nncp_rocm_q0_teacher_gate.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/p1_wrt_to_fx2pt_trace.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/page_order_gepa.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/radix_island_oracle.cpython-314.pyc",
@@ -23133,28 +23164,22 @@
     "projects/enwiki9/tools/__pycache__/wrt_typed_skip_cts_trace.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/wrt_wheeler_continuation_oracle.cpython-314.pyc"
   ],
-  "modified_tracked_entries": [
-    "projects/enwiki9/docs/chiron_frozen_residual_lm_plan.md",
-    "projects/enwiki9/docs/research_register.md",
-    "projects/enwiki9/docs/status_receipt.json",
-    "projects/enwiki9/docs/status_receipt.md",
-    "projects/enwiki9/operations/adaptive/proposals/developed/988_chiron_frozen_residual_lm_q0_v1.json"
-  ],
+  "modified_tracked_entries": [],
   "project_root": "projects/enwiki9",
   "summary": {
     "candidate_status_counts": {
       "active": 22,
       "blocked_dependency": 31,
-      "candidate": 20,
+      "candidate": 21,
       "measured_negative": 92,
       "retired": 429
     },
-    "directories": 1407,
-    "file_entries": 5984,
-    "ignored_entries": 2946,
-    "modified_tracked_entries": 5,
-    "program_directories": 594,
-    "registered_programs": 250,
+    "directories": 1409,
+    "file_entries": 5992,
+    "ignored_entries": 2949,
+    "modified_tracked_entries": 0,
+    "program_directories": 595,
+    "registered_programs": 251,
     "top_level_file_entries": {
       ".claude": 1,
       ".codex-reminders": 4,
@@ -23162,20 +23187,20 @@
       "agents": 5,
       "contracts": 9,
       "data": 7,
-      "docs": 223,
+      "docs": 224,
       "external": 174,
       "lib": 4,
-      "operations": 207,
+      "operations": 209,
       "patches": 36,
-      "programs": 2061,
-      "results": 2408,
-      "run_logs": 437,
+      "programs": 2063,
+      "results": 2409,
+      "run_logs": 438,
       "skills": 4,
       "tests": 57,
-      "tools": 329
+      "tools": 330
     },
-    "tracked_entries": 3251,
-    "untracked_nonignored_entries": 4
+    "tracked_entries": 3259,
+    "untracked_nonignored_entries": 1
   },
   "tracking_policy": {
     "ignored_local_artifacts": [
@@ -23202,9 +23227,6 @@
     ]
   },
   "untracked_nonignored_entries": [
-    "projects/enwiki9/docs/chiron_frozen_residual_lm_decision.md",
-    "projects/enwiki9/operations/adaptive/exclusions/chiron_frozen_residual_lm_q0_v1.json",
-    "projects/enwiki9/operations/adaptive/failed/998_20260728T185712Z_43dab2487d.json",
-    "projects/enwiki9/operations/adaptive/proposals/rejected/988_chiron_frozen_residual_lm_q0_v1.json"
+    "projects/enwiki9/operations/adaptive/completed/998_20260728T190454Z_29f61f6127.json"
   ]
 }

@@ -1,6 +1,6 @@
 # ROCm Batched Causality Repair Plan
 
-Status: predeclared diagnostic
+Status: PASS - batched teacher headroom receipt authorized
 
 Score credit: zero
 
@@ -52,3 +52,19 @@ A pass authorizes one new zero-credit batched teacher headroom receipt. It does
 not authorize a student, forecast movement, or native integration.
 
 A rejection closes the batched ROCm teacher unchanged.
+
+## Result
+
+Job `20260728T190454Z_29f61f6127` passed:
+
+```text
+mask dependency graph isolated                 true
+maximum prefix error, outputs 0 through 8      0.0
+legal output-9 change                          1.046875
+batched/incremental maximum logit drift        0.0078125
+batched/incremental maximum probability drift  9.886134648695588e-7
+```
+
+The prior batched-teacher rejection was an off-by-one causality audit error.
+The batched execution is authorized as a zero-credit offline teacher. The
+batched/incremental drift prevents any constructive decoder claim.
