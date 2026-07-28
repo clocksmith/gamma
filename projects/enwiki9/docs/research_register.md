@@ -2302,6 +2302,32 @@ Evidence:
 - `docs/causal_block_expert_mixture_solution.md`
 - `tools/causal_block_expert_mixture.py`
 
+## 2026-07-28: PBVC-1 exact opening-1M gate is terminal negative
+
+The archive-identical AF-1 observer produced `4,746,800` pre-truth P1 rows for
+`593,350` WRT bytes. Trace-on and trace-off archives were byte-identical, the
+trace exactly replayed the `173,881`-byte arithmetic payload, and raw
+reconstruction passed.
+
+The frozen paid codebook saved only `196` gross payload bytes. After charging
+`73` label bytes, `768` codebook bytes, and `40` amortized source bytes, it lost
+`685` bytes, or `-685 B/M`. The final chronological fifth had
+`-62.878 B/M` surrogate net, and the real assignment beat the rotated-label
+null by only `419 B/M`. The required gates were `2,000 B/M` exact net,
+`2,500 B/M` holdout, and `1,000 B/M` over the null; all failed.
+
+Decision: retire the exact 4,096-WRT-byte, sixteen-codeword, 128-bucket,
+five-rational-correction PBVC family without a parameter ladder. Native
+integration is unauthorized. The exact P1 observer remains a reusable
+zero-credit interface only for a materially different decoder-visible state
+or teacher-derived residual with target-scale headroom.
+
+Evidence:
+
+- `results/af1_paid_block_vector_codebook_v1/trace_receipt.json`
+- `results/af1_paid_block_vector_codebook_v1/decision.json`
+- `operations/adaptive/exclusions/pbvc_paid_block_vector_opening_1m_negative_v1.json`
+
 ## 2026-07-27: PBVC-1 paid block vector correction codebook is queued
 
 Candidate: `af1_paid_block_vector_codebook_v1`
