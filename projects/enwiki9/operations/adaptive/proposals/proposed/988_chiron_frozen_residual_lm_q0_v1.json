@@ -1,0 +1,28 @@
+{
+  "created_at": "2026-07-28T18:56:13+00:00",
+  "evidence": [
+    "Exact endpoint428 p1 payload trace and WRT store; static residuals, paid routing, component routing, and online compact-NNCP are terminal negative, but no frozen nonlinear residual model has been tested directly."
+  ],
+  "expected_savings_bytes": 2100000,
+  "hypothesis": "A frozen 256-byte-block causal GRU trained directly on exact endpoint428 residuals retains at least 2100 net bytes per million after an int8 model charge and beats node-bias and shifted-residual controls.",
+  "interfaces_exposed": [
+    "Exact endpoint428 p1 plus decoder-visible completed WRT bytes; output is a frozen logit correction only."
+  ],
+  "kill_condition": "Reject the frozen residual neural lane unchanged if any promotion gate fails; do not sweep width, depth, context, precision, optimizer, or epochs.",
+  "max_program_bytes": 256000,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1,
+  "promotion_condition": "Authorize one deterministic integer Q1 only if exact trace replay passes, development gain is positive, heldout gross gain is at least 3000 B/M, provisional net gain is at least 2100 B/M, and CHIRON beats node-bias and circular-shift controls.",
+  "proposal_id": "chiron_frozen_residual_lm_q0_v1",
+  "retired_neighborhoods": [
+    "online compact-NNCP startup routing; static hash residuals; paid page prompts; MIXREGRET component routing"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 11,
+  "state": "proposed",
+  "title": "CHIRON frozen causal endpoint residual oracle"
+}
