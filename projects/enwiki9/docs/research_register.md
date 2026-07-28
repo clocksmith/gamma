@@ -2728,3 +2728,36 @@ Evidence:
 - `results/cmix_lex_article_order_transfer_v1_retry2/decision.json`
 - `docs/cmix_lex_article_order_transfer_plan.md`
 - `docs/public_article_order_native_gate.md`
+
+## 2026-07-28: public article order collapses on exact same-page Gamma replay
+
+The external article-order oracle cleared its reset-state screen, but it
+compared different text at the same stream positions. The authorized native
+gate removed that confound by matching the complete exact page-record
+multiset, selecting a page-complete population from the public order, and
+encoding those identical records in identity and public order with the
+source-bound B2 parent.
+
+The first population contained `1,000,179` raw bytes. Its identity-order
+archive was `47,688` bytes and its public-order archive was `47,649` bytes.
+The exact gain was only 39 bytes, or `38.99 B/M`, versus the dynamic
+`2,045`-byte target-bearing gate. It missed by `2,006` bytes and more than a
+factor of 52.
+
+This result explains the preceding external start-slice gain of `215,434`
+bytes: almost all of that signal came from comparing different page
+populations, not from ordering the same pages. The remaining native archives
+were terminated instead of spending further heavy compute. Decode and
+deterministic replay were not run after the first-archive ceiling miss.
+
+Decision: reject the public article order as a Gamma transfer and retire
+order-prefix, partial-order, clustering-weight, and reset-scope sweeps. The
+result receives zero score credit. Together with the terminal FXCM-v26 and
+`payload_lex` gates, all public cmix-lex mechanisms isolated by this campaign
+are now closed as target-scale Gamma transfers.
+
+Evidence:
+
+- `results/public_article_order_native_transfer_v1/decision.json`
+- `docs/public_article_order_native_gate.md`
+- `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`
