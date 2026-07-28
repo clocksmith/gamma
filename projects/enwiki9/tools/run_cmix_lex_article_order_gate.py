@@ -64,30 +64,25 @@ def patch_article_control(source: Path) -> dict[str, str]:
 
     article = source / "src/readalike_prepr/article_reorder.h"
     article_text = article.read_text()
-    marker = '''    std::ifstream infile2(".new_article_order");
-    while (getline(infile2, line)) {
-      int res = remap[stoi(line)];  // Article numbers get remapped.
-      positions.push_back(res);
-      used[res] = 1;
+    if "#include <algorithm>" not in article_text:
+        article_text = article_text.replace(
+            "#include <fstream>\n", "#include <fstream>\n#include <algorithm>\n"
+        )
+    fallback_marker = '''    if (positions.size() < NUM_OF_ARTICLES) {
+        for (int i = 0; i < NUM_OF_ARTICLES; i++) {
+            if (used[i] == 0) {
+                positions.push_back(i);
+            }
+       }
     }
 '''
-    replacement = '''    if (std::getenv("FX_IDENTITY_ARTICLE_ORDER")) {
-      for (int article = 0; article < NUM_OF_ARTICLES; ++article) {
-        positions.push_back(article);
-        used[article] = 1;
-      }
-    } else {
-      std::ifstream infile2(".new_article_order");
-      while (getline(infile2, line)) {
-        int res = remap[stoi(line)];  // Article numbers get remapped.
-        positions.push_back(res);
-        used[res] = 1;
-      }
+    identity_patch = fallback_marker + '''    if (std::getenv("FX_IDENTITY_ARTICLE_ORDER")) {
+      std::stable_sort(positions.begin(), positions.end());
     }
 '''
-    if marker not in article_text:
+    if fallback_marker not in article_text:
         raise RuntimeError("article identity patch anchor missing")
-    article.write_text(article_text.replace(marker, replacement, 1))
+    article.write_text(article_text.replace(fallback_marker, identity_patch, 1))
     return {
         "runner_sha256": sha256(runner),
         "article_reorder_sha256": sha256(article),

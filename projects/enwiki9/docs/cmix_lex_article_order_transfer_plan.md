@@ -32,7 +32,9 @@ order SHA-256:
 Generate two full post-WRT streams through the exact public preprocessing:
 
 ```text
-I0  pages retain original enwik9 order
+I0  construct the complete public position vector, including its remapping,
+    fallback, and multiplicities, then sort that exact vector by original page
+    index
 I1  pages use the public cmix-lex order
 ```
 
@@ -91,4 +93,3 @@ Otherwise retire the public article-order transfer, including order-prefix,
 partial-order, clustering-weight, and reset-scope sweeps. A pass is only an
 authorization for native joint replay with exact compressed-order accounting.
 It does not change the score.
-
