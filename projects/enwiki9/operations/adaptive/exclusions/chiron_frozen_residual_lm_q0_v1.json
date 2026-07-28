@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "docs/chiron_frozen_residual_lm_decision.md"
+  ],
+  "exclusion_id": "chiron_frozen_residual_lm_q0_v1",
+  "failure": "Exact parent replay passed at 173859 bytes, but CHIRON regressed 9 bytes on development and 7 bytes on holdout. Provisional net was -193.590 B/M. The target-scale information gate failed.",
+  "mechanism": "Frozen 256-byte-block causal GRU logit correction trained directly on exact endpoint428 p1 residuals.",
+  "population": "Receipt-bound opening-1M WRT trace; chronological 70/15/15 complete-block split; exact native range replay.",
+  "recorded_at": "2026-07-28T19:00:15+00:00",
+  "retired_dimensions": [
+    "embedding width, GRU width/depth, reset block length, quantization precision, optimizer, and epoch sweeps for this residual mechanism"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "Only a representation-changing mechanism with independently demonstrated target-scale headroom, not another endpoint residual fit."
+  ]
+}
