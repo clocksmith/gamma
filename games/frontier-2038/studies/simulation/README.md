@@ -65,3 +65,8 @@ confirmation. Its Demis arm preserves all Capability and tests only whether a
 Scientific Method rescue receives one fewer threshold Mandate; its independent
 Elon arm repeats the realized-discount Mandate on fresh common seeds. Paired
 reports must include placement movement as well as win share and score.
+
+The dated confirmation receipt rejects the exact Demis value as too weak and
+confirms the Elon candidate on fresh seeds. Confirmation is not physical
+promotion: the canonical semantic graph and rulebook remain unchanged until
+explicit approval.
