@@ -537,6 +537,11 @@ def decide(
             payload["verdict"] = "running"
             payload["next_action"] = "wait_for_gate_completion"
             return payload
+        if guard.get("status") == "aborted_operator_cancelled":
+            payload["verdict"] = "cancelled_no_result"
+            payload["next_action"] = "inspect_queue_before_launch"
+            payload["terminal_reason"] = guard.get("terminal_reason")
+            return payload
 
         guard_returncode = guard.get("returncode")
         if result is None and guard_returncode not in (0, None):

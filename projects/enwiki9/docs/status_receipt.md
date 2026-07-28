@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-07-28T00:09:30+00:00`
+- Generated at UTC: `2026-07-28T00:12:33+00:00`
 
 ## Target State
 
@@ -12,15 +12,15 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Summary
 
-- Candidate: `None`
-- Scope bytes: `n/a`
-- Gate verdict: `orphaned_running_receipt`
-- Gate next action: `reconcile_orphaned_gate_receipt`
+- Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
+- Scope bytes: `1,000,000,000`
+- Gate verdict: `cancelled_no_result`
+- Gate next action: `inspect_queue_before_launch`
 - Heavy lock held: `false`
 - Active scorer observed: `false`
 - Active cmix mode: `n/a`
 - Driver result present: `false`
-- RSS guard status: `running`
+- RSS guard status: `aborted_operator_cancelled`
 - RSS samples: `53,691`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
@@ -30,16 +30,16 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Tightest decimal single-process margin KiB: `1,522,433`
 - Latest binary single-process margin KiB: `2,242,568`
 - Latest decimal single-process margin KiB: `1,522,433`
-- Safe to launch heavy gate: `false`
-- Terminal verdict present: `false`
-- Command source: `none while gate is non-terminal`
+- Safe to launch heavy gate: `true`
+- Terminal verdict present: `true`
+- Command source: `terminal operator cancellation; inspect queue before selecting new work`
 - Claim rule: `No prefix row proves 10.95%.`
 
-## Orphaned Gate Reconciliation
+## Active Gate
 
 - Heavy lock held: `false`
-- Gate verdict: `orphaned_running_receipt`
-- Next action: `reconcile_orphaned_gate_receipt`
+- Gate verdict: `cancelled_no_result`
+- Next action: `inspect_queue_before_launch`
 - Candidate: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`
 - Scope bytes: `1,000,000,000`
 - Driver result JSON: `not present`
@@ -48,15 +48,15 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - RSS guard present: `true`
 - Active scorer observed: `false`
 - Live gate: `false`
-- Liveness classification: `orphaned_running_receipt`
+- Liveness classification: `not_persisted_running`
 - Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive running job backed by the host-local heavy lock. The lock alone never identifies a gate.`
-- RSS guard status: `running`
-- RSS guard JSON bytes: `1,086`
-- RSS guard JSON modified UTC: `2026-07-27T16:16:53+00:00`
-- RSS guard JSON SHA-256: `b7c531f97966fbdbec2d700cd3823db4155085d7d7a47c0574a393abfe8d9641`
+- RSS guard status: `aborted_operator_cancelled`
+- RSS guard JSON bytes: `1,366`
+- RSS guard JSON modified UTC: `2026-07-28T00:11:51+00:00`
+- RSS guard JSON SHA-256: `5a1ba3a21010eca8ce580e964d2f169207de0cc8fdeb686bc9bc59fa143c8988`
 - RSS samples: `53,691`
 - Max sampled single RSS KiB: `8,243,192`
 - Max sampled tree RSS KiB: `11,215,656`
@@ -73,11 +73,11 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Gate Evidence Status
 
-- Claim status: `orphaned_running_receipt`
+- Claim status: `cancelled_no_score`
 - Driver result terminal: `false`
-- RSS guard terminal: `false`
+- RSS guard terminal: `true`
 - Scored gate result present: `false`
-- Live guard only: `true`
+- Live guard only: `false`
 - Claim rule: `Only a terminal driver result with roundtrip evidence can become a benchmark row.`
 
 ## Observed Gate Command
@@ -105,18 +105,18 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Action
 
-- Safe to launch heavy gate: `false`
-- Action: `reconcile_orphaned_gate_receipt`
-- Reason: `persisted running state has no live owner and must be cleared or terminalized before another heavy gate is launched`
-- Allowed work: `inspect and repair the orphaned receipt; run non-heavy oracle and shadow experiments; claim and publish independent non-heavy work`
-- Forbidden work: `report the orphaned receipt as active; launch another heavy gate`
+- Safe to launch heavy gate: `true`
+- Action: `inspect_queue_before_launch`
+- Reason: `the previous guard was explicitly cancelled without a scored driver result and no longer owns the heavy lane`
+- Allowed work: `n/a`
+- Forbidden work: `n/a`
 
 ## Handoff
 
-- Terminal verdict present: `false`
-- Heavy gate mutation allowed: `false`
-- Recommended action: `reconcile_orphaned_gate_receipt`
-- Command source: `none while gate is non-terminal`
+- Terminal verdict present: `true`
+- Heavy gate mutation allowed: `true`
+- Recommended action: `inspect_queue_before_launch`
+- Command source: `terminal operator cancellation; inspect queue before selecting new work`
 - Claim rule: `No prefix row proves 10.95%.`
 
 ## Operator Logs
@@ -130,8 +130,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Audit return code: `0`
 - Program directories: `587`
 - Registered programs: `243`
-- Untracked nonignored entries: `5`
-- Modified tracked entries: `3`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `6`
 - Candidate statuses: `active=22, blocked_dependency=31, candidate=17, measured_negative=92, retired=425`
 
 ## Active Runner Process Table
@@ -144,7 +144,20 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| n/a | n/a | n/a |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_1000000000_determinism_rss_guard.json` | 1,366 | `2026-07-28T00:11:51+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_100000000_determinism_rss_guard.json` | 1,209 | `2026-07-26T21:27:20+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json` | 1,388 | `2026-07-23T02:21:47+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/gate_10000000_determinism_rss_guard.json` | 874 | `2026-07-20T19:57:07+00:00` |
+| `projects/enwiki9/results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` | 1,012 | `2026-07-20T19:57:07+00:00` |
+
+## Contingencies
+
+- If current gate passes: `record pass and apply candidate target-gate promotion rule`
+- Pass next scope: `n/a`
+- If RSS fails: `record RSS failure and retire or repackage this integration shape`
+- Lower candidate: `unknown`
+- Lower PPMD KiB: `n/a`
+- If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary
 

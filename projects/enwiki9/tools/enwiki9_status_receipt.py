@@ -819,7 +819,14 @@ def gate_evidence_status(
     verdict = gate.get("verdict")
     driver_present = gate.get("driver_result_json_present") is True
     guard_present = gate.get("rss_guard_json_present") is True
-    guard_terminal = guard_present and gate.get("rss_guard_status") != "running" and gate.get("returncode") is not None
+    guard_terminal = (
+        guard_present
+        and gate.get("rss_guard_status") != "running"
+        and (
+            gate.get("returncode") is not None
+            or verdict == "cancelled_no_result"
+        )
+    )
     scored = driver_present and verdict in {
         "pass",
         "roundtrip_fail",
@@ -829,6 +836,8 @@ def gate_evidence_status(
     live_guard_only = guard_present and not driver_present and gate.get("rss_guard_status") == "running"
     if verdict == "orphaned_running_receipt":
         claim_status = "orphaned_running_receipt"
+    elif verdict == "cancelled_no_result":
+        claim_status = "cancelled_no_score"
     elif scored:
         claim_status = "scored_gate_result_present"
     elif live_guard_only:
@@ -908,6 +917,11 @@ def active_gate_status_state(
             "persisted running receipt has no live owning job/process evidence; "
             "it is preserved as orphaned state, not an active gate"
         )
+    elif verdict == "cancelled_no_result":
+        row["evidence"] = (
+            "operator-cancelled guard produced no driver result and receives no "
+            "roundtrip, determinism, score, or runtime credit"
+        )
     elif isinstance(verdict, str):
         row["evidence"] = f"gate decision is {verdict}; wait for terminal receipts"
     return row
@@ -967,6 +981,19 @@ def blocker_status_state(
                 "evidence": (
                     "the certificate names a running gate, but no matching adaptive "
                     "job, owning process, or attributable lock evidence exists"
+                ),
+                "next_action": action.get("action"),
+                "candidate": gate.get("candidate"),
+                "scope_bytes": gate.get("scope_bytes"),
+            }
+        )
+    elif verdict == "cancelled_no_result":
+        row.update(
+            {
+                "status": "cancelled_no_result",
+                "evidence": (
+                    "the operator cancelled the gate before a driver result; "
+                    "the guard is terminal and non-scoring"
                 ),
                 "next_action": action.get("action"),
                 "candidate": gate.get("candidate"),
@@ -1138,6 +1165,15 @@ def operator_action(
             "action": "record_failure_and_stop_promotion",
             "reason": "a failed constructive gate cannot be promoted",
         }
+    if verdict == "cancelled_no_result":
+        return {
+            "safe_to_launch_heavy_gate": True,
+            "action": "inspect_queue_before_launch",
+            "reason": (
+                "the previous guard was explicitly cancelled without a scored "
+                "driver result and no longer owns the heavy lane"
+            ),
+        }
     if (
         verdict == "incomplete"
         and gate.get("rss_guard_json_present") is False
@@ -1215,6 +1251,7 @@ def handoff_state(
         "roundtrip_fail",
         "determinism_fail",
         "guard_returncode_fail",
+        "cancelled_no_result",
     }
     verdict = gate.get("verdict")
     terminal = verdict in terminal_verdicts
@@ -1249,6 +1286,16 @@ def handoff_state(
         out["command_source"] = "cmix21_gate_decider.lower_prefix_gate_command"
         out["heavy_gate_mutation_allowed"] = (
             heavy_lock.get("held") is not True
+            and process_state.get("active_scorer_observed") is not True
+        )
+    elif verdict == "cancelled_no_result":
+        out["command_source"] = (
+            "terminal operator cancellation; inspect queue before selecting "
+            "new work"
+        )
+        out["heavy_gate_mutation_allowed"] = (
+            action.get("safe_to_launch_heavy_gate") is True
+            and heavy_lock.get("held") is not True
             and process_state.get("active_scorer_observed") is not True
         )
     elif terminal:
