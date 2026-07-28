@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "demis-late-validation-v1",
+  "registeredBeforeResults": true,
+  "question": "Does reducing only Demis's public Mandate at Capability 9 and 12 move the faction toward parity while preserving all technical progress and Research behavior?",
+  "sourceEvidence": [
+    "faction-progress-conversion-v1",
+    "faction-public-validation-confirmation-v1",
+    "faction-demand-validation-v1-restart",
+    "faction-prestige-demand-v1"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/demis-late-validation-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "demis_late_capability_one_mandate",
+      "overlay": {
+        "imperialLateCapabilityThresholdMandate": 1
+      }
+    }
+  ],
+  "playerCounts": [
+    3,
+    4,
+    5
+  ],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [
+    3,
+    5
+  ],
+  "mandateModes": [
+    "variable",
+    "fixed"
+  ],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 8000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-demis-late-validation-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "factionTruth": {
+    "demis": {
+      "protectedStrength": "Starting Compute, every Research action, Scientific Method reliability, Nobel Trust, Scaling-Law Capability, and permanent Capability remain canonical.",
+      "bottleneck": "Capability 9 and 12 remain technical achievements but each grants Demis one public Mandate instead of two.",
+      "eligibility": "Reject the candidate if it reduces Capability, Research selection, Scientific Method use, or late-threshold attainment rather than only changing public validation."
+    }
+  },
+  "requiredDiagnostics": [
+    "configuration-specific Demis win share, mean Mandate, and mean rank by player count",
+    "Capability 9 and 12 attainment and Mandate by threshold",
+    "late public-validation Mandate withheld",
+    "Research selections, Scientific Method uses, Capability preserved, and Scaling-Law Capability",
+    "paired faction win-share, score, and rank delta",
+    "new dominance or counter-cycle cells",
+    "forced no-ops, policy fallbacks, and integrity violations"
+  ],
+  "selectionRule": {
+    "demis": "Select only if four-player Demis moves materially toward parity, three and five remain competitive, and all technical realization is unchanged.",
+    "pairedAuthority": "Compare the candidate only with canonical under common seeds. Positive paired rankDelta means improved placement.",
+    "integrity": "Any integrity violation, policy fallback, unsupported-count gap, missing faction standing, or missing late-validation realization rejects the probe.",
+    "promotion": "No physical text changes without a tracked receipt, complete surface audit, a new immutable candidate, and explicit user approval."
+  }
+}
