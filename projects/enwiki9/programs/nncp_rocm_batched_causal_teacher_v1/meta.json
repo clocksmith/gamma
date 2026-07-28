@@ -1,0 +1,20 @@
+{
+  "added": "2026-07-28",
+  "deps": [],
+  "description": "ROCm shifted-input batched causal teacher repair",
+  "family": "unclassified",
+  "hypothesis": "The prior batched-teacher leakage verdict was an off-by-one audit error: changing target 8 changes shifted input 9, so only predictions 0 through 8 must remain identical.",
+  "id": "nncp_rocm_batched_causal_teacher_v1",
+  "omega": {
+    "interfaces_exposed": [
+      "Official NNCP-preprocessed symbols, shifted one position; masked segment forward pass; zero-credit teacher probabilities only."
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_rocm_batched_causal_teacher_v1",
+    "retired_neighborhoods": [
+      "LibNC parity; noncausal unshifted batching; incremental full teacher execution"
+    ]
+  },
+  "status": "candidate"
+}
