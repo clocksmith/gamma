@@ -2922,3 +2922,34 @@ Evidence:
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`
+
+## 2026-07-28: ROCm-native causal teacher rejected at Q0
+
+`nncp_rocm_causal_teacher_headroom_v1` is terminal with zero score credit.
+
+The fast BF16 full-segment path completed two full 65,536-symbol seeded
+executions and passed exact arithmetic-payload and sampled-parameter
+repeatability before the causality gate. Changing the input at segment position
+9 changed logits at earlier positions by `0.00390625`. Because a decoder cannot
+provide future segment inputs, the batched implementation is not constructive
+despite its explicit attention mask.
+
+The corrected implementation consumed shifted inputs one symbol at a time,
+retained differentiable memory inside each 64-symbol update segment, and
+detached memory only after the update. Its causal audit passed with exact `0.0`
+prefix error. The job did not reach its first `8,192`-symbol checkpoint in
+`546.364` measured seconds and was stopped. That execution cannot support the
+continuous 9M-10M, 49M-50M, and 99M-100M headroom gates.
+
+Q1, Q2, and `QUOTIENT-BUDGET-CERT` are not authorized. Do not reopen this lane
+through depth, width, precision, optimizer, learning-rate, or batch sweeps. A
+successor must provide a materially different teacher and independently
+demonstrate decoder-realizable mature headroom.
+
+Evidence:
+
+- `results/nncp_rocm_q0_teacher_gate_v1/decision.json`
+- `operations/adaptive/exclusions/nncp_rocm_causal_teacher_headroom_v1.json`
+- `run_logs/adaptive/20260728T181952Z_25a6792fcc.log`
+- `run_logs/adaptive/20260728T183043Z_8ef13361c2.log`
+- `run_logs/adaptive/20260728T183258Z_87935039fe.log`
