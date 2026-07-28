@@ -80,6 +80,8 @@ python3 projects/distillation/translation/pipeline/rebuild_translation_results_b
 - `src/mind_meld/` - Multi-model collaboration
 - `src/benchmarks/` - Performance testing
 - `src/comparison/` - Model comparison tools
+- `games/frontier-2038/` - M3T4 2038 game specification, browser prototype, and simulation lab
+
 
 ### Guardrails
 - Enforce `EMOJI.md`; use only approved Unicode symbols, no emojis
