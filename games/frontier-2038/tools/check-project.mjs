@@ -160,6 +160,7 @@ const required = [
   "studies/simulation/2026-07-28-faction-strength-probes.md",
   "studies/simulation/2026-07-28-faction-progress-conversion-calibration.md",
   "studies/simulation/2026-07-28-faction-public-validation-confirmation.md",
+  "studies/simulation/2026-07-28-foundry-supported-count-conversion.md",
   "studies/simulation/2026-07-27-foundry-scaling-rule-selection.md",
   "studies/simulation/2026-07-27-foundry-shovels-executable-correction.md",
   "studies/simulation/2026-07-26-first-automated-baseline.md"
