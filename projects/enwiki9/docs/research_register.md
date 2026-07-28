@@ -2902,6 +2902,23 @@ Evidence:
 - `docs/nncp_rocm_causal_teacher_plan.md`
 - `operations/adaptive/proposals/proposed/019_nncp_rocm_causal_teacher_headroom_v1.json`
 - `results/nncp_full_symbol_map_v1/decision.json`
+
+Q0 is now implemented as `tools/nncp_rocm_q0_teacher_gate.py`. It uses one
+frozen 20-layer, width-1,024 ALiBi Transformer, FP32 master parameters, BF16
+matrix/activation execution, persistent detached memories, shifted causal
+inputs, segment-final Adam updates, and Bellard-style 15-bit binary range
+coding. It repeats the seeded teacher run twice and requires identical payloads
+and final parameter fingerprints.
+
+The arithmetic decoder consumes the recorded causal branch probabilities. This
+is an exact teacher-codelength and coder control, not a constructive model
+decoder; it receives zero score credit. The decoded symbols must still pass the
+official dictionary inverse against the exact raw prefix. Q1 remains locked
+until the 65,536-symbol Q0 receipt passes.
+
+Evidence:
+
+- `tools/nncp_rocm_q0_teacher_gate.py`
 - `operations/adaptive/proposals/proposed/960_nncp_native_trace_cert_v1.json`
 - `docs/public_article_order_native_gate.md`
 - `operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json`

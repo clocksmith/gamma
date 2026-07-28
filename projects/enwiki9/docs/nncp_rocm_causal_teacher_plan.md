@@ -39,7 +39,8 @@ segment length                 64
 detached memory               256 symbols per layer
 normalization                 pre-RMSNorm plus final RMSNorm
 activation                    GEGLU
-parameter/activation dtype    BF16
+master parameter dtype        FP32
+matrix/activation dtype       BF16
 reductions and loss           FP32
 dropout                       disabled
 ```
@@ -61,9 +62,11 @@ For segment `j`:
    model parameters.
 6. Memories and optimizer state advance by a fixed operation count.
 
-Compression and decompression start from the same seed, parameters, optimizer,
-and empty memories. No teacher checkpoint, hidden state, gradient, or future
-symbol is transmitted.
+Q0 is an offline teacher certificate. It repeats the complete seeded training
+run twice and requires identical arithmetic payloads and final parameter
+fingerprints. Its range-decoder control consumes the recorded causal branch
+probabilities; this proves the exact codelength and coder semantics but is not
+a constructive model decoder. No trace bytes receive score credit.
 
 ## Exact coder
 
@@ -89,14 +92,16 @@ On a fixed 65,536-symbol population:
 ```text
 causal-mask audit                 pass
 finite normalized distributions  pass
-trace-on/off archive identity     exact
-symbol roundtrip                  exact
+independent repeated payload      exact
+trace-driven symbol roundtrip     exact
 raw inverse                       exact
 deterministic second archive      exact
 frozen environment/model hashes  present
 ```
 
-This gate establishes execution only and receives zero score credit.
+This gate establishes deterministic teacher execution, causal prediction,
+exact shadow codelength, and coder correctness only. It receives zero score
+credit and does not claim a submission decoder.
 
 ### Q1: first mature headroom
 
