@@ -142,6 +142,18 @@ def quantized_probabilities(base_logits, residuals):
     return np.clip(np.rint(values), 1, 65535).astype(np.uint16)
 
 
+def shift_residual_probabilities(base_p1, candidate_p1, row_count, shift):
+    import numpy as np
+
+    base_logits = probability_logits(base_p1).reshape(row_count, 8)
+    candidate_logits = probability_logits(candidate_p1).reshape(row_count, 8)
+    residuals = candidate_logits - base_logits
+    shifted_residuals = np.roll(residuals, shift=shift, axis=0)
+    return quantized_probabilities(
+        base_logits, shifted_residuals
+    ).reshape(-1)
+
+
 def fit_node_bias(base_logits, nodes, bits):
     import numpy as np
 
@@ -499,14 +511,14 @@ def main() -> int:
     )
     (args.results / "janus_bias.payload").write_bytes(bias_payload)
 
-    adjusted_rows = run_a["candidate_p1"][: complete_bytes * 8].reshape(
-        complete_bytes, 8
-    )
-    shifted_rows = np.roll(
-        adjusted_rows, shift=4093, axis=0
+    shifted_adjusted = shift_residual_probabilities(
+        p1[: complete_bytes * 8],
+        run_a["candidate_p1"][: complete_bytes * 8],
+        complete_bytes,
+        4093,
     )
     shifted_p1 = p1.copy()
-    shifted_p1[: complete_bytes * 8] = shifted_rows.reshape(-1)
+    shifted_p1[: complete_bytes * 8] = shifted_adjusted
     shifted_payload = range_encode(shifted_p1, all_truth)
 
     baseline_bytes = len(parent_payload)
