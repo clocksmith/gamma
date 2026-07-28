@@ -2696,3 +2696,35 @@ Evidence:
 - `results/cmix_lex_payload_transfer_v1_retry2/decision.json`
 - `docs/cmix_lex_payload_transfer_plan.md`
 - `operations/adaptive/exclusions/cmix_lex_payload_reset_tail_subscale_v1.json`
+
+## 2026-07-28: public cmix-lex article order clears external leverage gate
+
+The final unisolated public cmix-lex mechanism was tested independently of
+FXCM-v26 and `payload_lex`. The identity control constructed the exact public
+page-position vector, including its remapping, fallback, and multiplicities,
+then sorted that same vector by original page index. Both retained raw page
+streams contain exactly `999,988,851` bytes.
+
+Three reset-state 1M cmix-lex comparisons sampled the start, middle, and end of
+the complete ordered representation. The public order saved `215,434` bytes
+at the start, lost `152,582` in the middle, and saved `75,070` at the end.
+Aggregate gain was `137,922` bytes across 3M, or `45,974 B/M`. Peak measured
+RSS was `8,260,436` KiB.
+
+The conservative gate charges the complete `1,094,862`-byte raw public order
+and Gamma's `949,345`-byte forecast gap to the recorded public 1% threshold.
+That required `3,486 B/M`, or `10,458` bytes on the sample. The result also
+cleared the `4,467 B/M` design-target diagnostic.
+
+Decision: authorize a same-page native Gamma gate, not a full-corpus run. The
+external result is heterogeneous and uses reset states over unmatched
+positions, so it receives zero score credit. The native successor must encode
+identical page-record multisets in identity and public order under the exact
+source-bound Gamma parent, then pass roundtrip, determinism, memory, and
+amortized-order accounting.
+
+Evidence:
+
+- `results/cmix_lex_article_order_transfer_v1_retry2/decision.json`
+- `docs/cmix_lex_article_order_transfer_plan.md`
+- `docs/public_article_order_native_gate.md`
