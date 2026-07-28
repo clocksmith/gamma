@@ -73,6 +73,12 @@ exact consumed branch probabilities and branch bits
 optional complete derived split tree
 ```
 
+At predeclared completed-symbol checkpoints, the observer clones the arithmetic
+coder, finalizes only the clone into a discard sink, and records exact
+hypothetical archive bits and bytes. The live coder and teacher state remain
+unchanged. Physically emitted bytes remain diagnostics; only shadow-finalized
+checkpoint totals may enter exact boundary ledgers.
+
 The exact symbol-to-raw mapping remains a separate hash-bound artifact produced
 by the already passing symbol-map gate. Frozen raw windows are converted to
 symbol windows through that map before the teacher run.
@@ -122,6 +128,17 @@ dictionary is not interchangeable with the published teacher.
 Gamma parent on identical raw boundaries and continuous prefixes. It reports
 cumulative and marginal archive bytes, package bytes, startup debt, and mature
 gain.
+
+The hardware-independent decision tool is:
+
+```text
+tools/nncp_mature_headroom_cert.py
+```
+
+It consumes `nncp_native_boundary_ledger_v1`,
+`gamma_boundary_ledger_v1`, and a passing `nncp_native_trace_cert_v1`
+identity receipt. Any input hash, population, raw-boundary, continuous-state,
+or window-set mismatch fails closed.
 
 Authorization requires:
 

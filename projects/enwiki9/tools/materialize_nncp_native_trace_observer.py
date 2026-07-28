@@ -14,6 +14,7 @@ TRACE_SUPPORT = r'''
    arithmetic but are never consumed by the coder. */
 static FILE *native_trace_file;
 static uint64_t native_trace_rows, native_trace_branches, native_trace_trees;
+static uint64_t native_trace_checkpoint_rows, native_trace_prefix_bytes;
 static BOOL native_trace_initialized;
 
 typedef struct {
@@ -23,6 +24,8 @@ typedef struct {
 
 static NativeTraceWindow native_trace_windows[32];
 static int native_trace_window_count;
+static uint64_t native_trace_checkpoints[32];
+static int native_trace_checkpoint_count;
 
 static void native_trace_put_le(uint8_t *buf, uint64_t value, int bytes)
 {
@@ -67,6 +70,35 @@ static BOOL native_trace_full(uint64_t row)
     return FALSE;
 }
 
+static void native_trace_parse_checkpoints(const char *value)
+{
+    char *end;
+    uint64_t checkpoint;
+    while(value && *value) {
+        if (native_trace_checkpoint_count >= 32)
+            abort();
+        checkpoint = strtoull(value, &end, 10);
+        if (end == value || checkpoint == 0)
+            abort();
+        native_trace_checkpoints[native_trace_checkpoint_count++] = checkpoint;
+        if (*end == '\0')
+            break;
+        if (*end != ',')
+            abort();
+        value = end + 1;
+    }
+}
+
+static BOOL native_trace_checkpoint(uint64_t completed_rows)
+{
+    int i;
+    for(i = 0; i < native_trace_checkpoint_count; i++) {
+        if (completed_rows == native_trace_checkpoints[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
 static void native_trace_close(void)
 {
     uint8_t buf[8];
@@ -83,6 +115,9 @@ static void native_trace_close(void)
     native_trace_put_le(buf, native_trace_trees, 8);
     if (fwrite(buf, 1, 8, native_trace_file) != 8)
         abort();
+    native_trace_put_le(buf, native_trace_checkpoint_rows, 8);
+    if (fwrite(buf, 1, 8, native_trace_file) != 8)
+        abort();
     if (fclose(native_trace_file) != 0)
         abort();
     native_trace_file = NULL;
@@ -91,7 +126,7 @@ static void native_trace_close(void)
 static void native_trace_init(void)
 {
     const char *filename;
-    uint8_t zero[24] = { 0 };
+    uint8_t zero[32] = { 0 };
     if (native_trace_initialized)
         return;
     native_trace_initialized = TRUE;
@@ -101,12 +136,44 @@ static void native_trace_init(void)
     native_trace_file = fopen(filename, "wb");
     if (!native_trace_file)
         abort();
-    if (fwrite("NNNTR2\0", 1, 8, native_trace_file) != 8 ||
+    if (fwrite("NNNTR3\0", 1, 8, native_trace_file) != 8 ||
         fwrite(zero, 1, sizeof(zero), native_trace_file) != sizeof(zero))
         abort();
     native_trace_parse_windows(getenv("NNCP_NATIVE_TRACE_FULL_WINDOWS"));
+    native_trace_parse_checkpoints(getenv("NNCP_NATIVE_TRACE_CHECKPOINTS"));
     if (atexit(native_trace_close) != 0)
         abort();
+}
+
+static void native_trace_discard(void *opaque, const uint8_t *buf,
+                                 size_t buf_size)
+{
+    (void)opaque;
+    (void)buf;
+    (void)buf_size;
+}
+
+static void native_trace_finalize_clone(PutBitState *pb,
+                                        uint64_t *archive_bits,
+                                        uint64_t *archive_bytes)
+{
+    PutBitState clone;
+    uint8_t *buffer;
+    int64_t payload_bits;
+    clone = *pb;
+    buffer = malloc(pb->buf_size);
+    if (!buffer)
+        abort();
+    memcpy(buffer, pb->buf, pb->buf_size);
+    clone.buf = buffer;
+    clone.write_func = native_trace_discard;
+    clone.opaque = NULL;
+    payload_bits = put_bit_flush(&clone);
+    if (payload_bits < 0)
+        abort();
+    *archive_bits = native_trace_prefix_bytes * 8 + payload_bits;
+    *archive_bytes = native_trace_prefix_bytes + clone.byte_count;
+    free(buffer);
 }
 
 static void native_trace_tree(const float *prob_table, int start, int range,
@@ -162,12 +229,24 @@ REPLACEMENT = r'''void write_sym(PutBitState *pb, const float *prob_table, int n
     int start, range, prob0, bit, range0, trace_count, i;
     float p, p0;
     uint16_t trace_prob[16];
-    uint8_t trace_bit[16], row[46], branch[3], tree_count[2];
+    uint8_t trace_bit[16], row[63], branch[3], tree_count[2];
     uint64_t before_bits, after_bits, before_bytes, after_bytes;
-    BOOL full_tree;
+    uint64_t exact_archive_bits, exact_archive_bytes;
+    BOOL full_tree, checkpoint;
+    int64_t archive_position;
 
     native_trace_init();
     full_tree = native_trace_file && native_trace_full(native_trace_rows);
+    checkpoint = native_trace_file &&
+        native_trace_checkpoint(native_trace_rows + 1);
+    exact_archive_bits = 0;
+    exact_archive_bytes = 0;
+    if (native_trace_file && native_trace_rows == 0) {
+        archive_position = ftello((FILE *)pb->opaque);
+        if (archive_position < 0)
+            abort();
+        native_trace_prefix_bytes = archive_position;
+    }
     before_bits = native_trace_file ? put_bit_get_bit_count(pb) : 0;
     before_bytes = native_trace_file ? pb->byte_count + pb->idx : 0;
     trace_count = 0;
@@ -201,15 +280,23 @@ REPLACEMENT = r'''void write_sym(PutBitState *pb, const float *prob_table, int n
         return;
     after_bits = put_bit_get_bit_count(pb);
     after_bytes = pb->byte_count + pb->idx;
+    if (checkpoint) {
+        native_trace_finalize_clone(
+            pb, &exact_archive_bits, &exact_archive_bytes);
+        native_trace_checkpoint_rows++;
+    }
     native_trace_put_le(row + 0, native_trace_rows, 8);
     native_trace_put_le(row + 8, before_bits, 8);
     native_trace_put_le(row + 16, after_bits, 8);
     native_trace_put_le(row + 24, before_bytes, 8);
     native_trace_put_le(row + 32, after_bytes, 8);
-    native_trace_put_le(row + 40, sym, 2);
-    native_trace_put_le(row + 42, n_symb, 2);
-    row[44] = trace_count;
-    row[45] = full_tree;
+    native_trace_put_le(row + 40, exact_archive_bits, 8);
+    native_trace_put_le(row + 48, exact_archive_bytes, 8);
+    native_trace_put_le(row + 56, sym, 2);
+    native_trace_put_le(row + 58, n_symb, 2);
+    row[60] = trace_count;
+    row[61] = full_tree;
+    row[62] = checkpoint;
     if (fwrite(row, 1, sizeof(row), native_trace_file) != sizeof(row))
         abort();
     for(i = 0; i < trace_count; i++) {
