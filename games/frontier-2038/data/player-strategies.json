@@ -1,0 +1,661 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "id": "balanced_operator",
+      "name": "The Balanced Operator",
+      "description": "Builds a viable institution before committing to one victory path.",
+      "defaultBackend": "weighted",
+      "persona": {
+        "identity": "A sober operator balancing research, infrastructure, adoption, and legitimacy.",
+        "worldview": "A capability that cannot be powered, deployed, or defended publicly is not an advantage.",
+        "riskPosture": "Accept measured Scrutiny when it buys durable tempo.",
+        "negotiationStyle": "Transactional, reciprocal, and willing to leave a deal.",
+        "voice": "Concise, institutional, and practical."
+      },
+      "strategy": {
+        "selection": "weighted",
+        "negotiation": {
+          "promiseWeight": 1.4,
+          "fulfillWeight": 2.2,
+          "betrayWeight": 0.7,
+          "reciprocityWeight": 0.5
+        },
+        "objectives": [
+          "Avoid compulsory action loops.",
+          "Maintain enough Compute for Research and Deploy.",
+          "Reach AGI eligibility without collapsing Trust."
+        ],
+        "actionWeights": {
+          "fund": 2.2,
+          "research": 3,
+          "build": 3,
+          "organize": 0.8,
+          "deploy": 3,
+          "influence": 1.6,
+          "mega_cluster": 2.5,
+          "reorganization": 1.5,
+          "open_weights": 4,
+          "narrative_capture": 2,
+          "agent_swarm": 4,
+          "declare_agi": 24,
+          "fusion_demonstrator": 3
+        },
+        "decisionWeights": {
+          "fund_venture": 0.8,
+          "build_generator_clean_infrastructure": 1.3
+        },
+        "consequenceWeights": {
+          "poweredFacilities": 6,
+          "powerDemand": 1
+        },
+        "rules": [
+          {
+            "when": [
+              {
+                "path": "self.runway",
+                "operator": "lte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
+            "multiplier": 3
+          },
+          {
+            "when": [
+              {
+                "path": "self.unpoweredFacilities",
+                "operator": "gt",
+                "value": 0
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "build_generator_clean_infrastructure"
+            },
+            "multiplier": 4
+          },
+          {
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
+            "multiplier": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "capability_rusher",
+      "name": "The Capability Rusher",
+      "description": "Pushes Training Runs and accepts volatile outcomes to reach thresholds first.",
+      "defaultBackend": "weighted",
+      "persona": {
+        "identity": "A research leader convinced that capability creates its own institutional options.",
+        "worldview": "Compute and data are temporary constraints; an enduring capability lead is strategic.",
+        "riskPosture": "Comfortable with failed runs and public controversy.",
+        "negotiationStyle": "Trades resources readily but protects research tempo.",
+        "voice": "Analytical, ambitious, and slightly impatient."
+      },
+      "strategy": {
+        "selection": "weighted",
+        "negotiation": {
+          "promiseWeight": 1.1,
+          "fulfillWeight": 1.4,
+          "betrayWeight": 1.1,
+          "reciprocityWeight": 0.25
+        },
+        "objectives": [
+          "Maximize Capability gained per Research action.",
+          "Fund Compute recovery when Research becomes impossible.",
+          "Deploy only when it converts an achieved threshold."
+        ],
+        "actionWeights": {
+          "fund": 1.8,
+          "research": 6,
+          "build": 1.4,
+          "organize": 0.5,
+          "deploy": 2.4,
+          "influence": 0.7,
+          "mega_cluster": 1.5,
+          "reorganization": 1,
+          "open_weights": 6,
+          "narrative_capture": 1.2,
+          "agent_swarm": 5,
+          "declare_agi": 28,
+          "fusion_demonstrator": 2
+        },
+        "decisionWeights": {
+          "research_stop_4": 2.5,
+          "research_stop_5": 2
+        },
+        "consequenceWeights": {
+          "poweredFacilities": 6,
+          "powerDemand": 1
+        },
+        "rules": [
+          {
+            "when": [
+              {
+                "path": "self.compute",
+                "operator": "lte",
+                "value": 1
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
+            "multiplier": 2
+          },
+          {
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
+            "multiplier": 2.5
+          }
+        ]
+      }
+    },
+    {
+      "id": "infrastructure_compounder",
+      "name": "The Infrastructure Compounder",
+      "description": "Builds a compact powered engine, then converts it into public thresholds and late Customers.",
+      "defaultBackend": "weighted",
+      "persona": {
+        "identity": "An infrastructure executive who sees every model as a load forecast.",
+        "worldview": "Unpowered ambition is theater; durable capacity wins long contests.",
+        "riskPosture": "Prefers capital risk to research risk.",
+        "negotiationStyle": "Offers capacity from strength and dislikes dependency.",
+        "voice": "Concrete, logistical, and systems-minded."
+      },
+      "strategy": {
+        "selection": "weighted",
+        "negotiation": {
+          "promiseWeight": 1.25,
+          "fulfillWeight": 2.5,
+          "betrayWeight": 0.55,
+          "reciprocityWeight": 0.6
+        },
+        "objectives": [
+          "Establish two connected, powered Facilities without overbuilding.",
+          "Use the engine to cross Capability and Customer Mandate thresholds.",
+          "Keep enough late tempo for Fusion, Agent Swarm, or an AGI claim."
+        ],
+        "actionWeights": {
+          "fund": 2.4,
+          "research": 3.2,
+          "build": 3.8,
+          "organize": 0.8,
+          "deploy": 3,
+          "influence": 0.9,
+          "mega_cluster": 4,
+          "reorganization": 1.3,
+          "open_weights": 3.5,
+          "narrative_capture": 1.5,
+          "agent_swarm": 4,
+          "declare_agi": 24,
+          "fusion_demonstrator": 6
+        },
+        "decisionWeights": {
+          "build_facility_cloud": 2.5,
+          "build_facility_capital": 2,
+          "build_generator_clean_infrastructure": 2
+        },
+        "consequenceWeights": {
+          "poweredFacilities": 8,
+          "powerDemand": 1
+        },
+        "rules": [
+          {
+            "when": [
+              {
+                "path": "self.unpoweredFacilities",
+                "operator": "gt",
+                "value": 0
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "build_generator_clean_infrastructure"
+            },
+            "multiplier": 6
+          },
+          {
+            "when": [
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
+            "multiplier": 3
+          },
+          {
+            "when": [
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "build"
+            },
+            "multiplier": 0.45
+          },
+          {
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": false
+              }
+            ],
+            "target": {
+              "actionId": "research"
+            },
+            "multiplier": 1.8
+          }
+        ]
+      }
+    },
+    {
+      "id": "market_maximalist",
+      "name": "The Market Maximalist",
+      "description": "Treats Customers and recurring Runway as the path to historical legitimacy.",
+      "defaultBackend": "weighted",
+      "persona": {
+        "identity": "A product strategist who measures intelligence through adoption.",
+        "worldview": "Markets settle arguments that benchmarks cannot.",
+        "riskPosture": "Accepts deployment Scrutiny but avoids research crashes.",
+        "negotiationStyle": "Bundles access, distribution, and immediate concessions.",
+        "voice": "Optimistic, commercial, and metric-driven."
+      },
+      "strategy": {
+        "selection": "weighted",
+        "negotiation": {
+          "promiseWeight": 1.8,
+          "fulfillWeight": 1.1,
+          "betrayWeight": 1.7,
+          "reciprocityWeight": 0.35
+        },
+        "objectives": [
+          "Deploy immediately at each Capability threshold.",
+          "Build Customer income.",
+          "Research conservatively enough to unlock the next market."
+        ],
+        "actionWeights": {
+          "fund": 2,
+          "research": 2.8,
+          "build": 1.5,
+          "organize": 0.6,
+          "deploy": 7,
+          "influence": 1,
+          "mega_cluster": 1.2,
+          "reorganization": 1.2,
+          "open_weights": 3,
+          "narrative_capture": 2,
+          "agent_swarm": 4,
+          "declare_agi": 26,
+          "fusion_demonstrator": 1.5
+        },
+        "decisionWeights": {
+          "research_stop_2": 2.5,
+          "build_facility_consumer": 2
+        },
+        "consequenceWeights": {
+          "poweredFacilities": 5,
+          "powerDemand": 1
+        },
+        "rules": [
+          {
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
+            "multiplier": 8
+          },
+          {
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": false
+              }
+            ],
+            "target": {
+              "actionId": "research"
+            },
+            "multiplier": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "trust_governor",
+      "name": "The Trust Governor",
+      "description": "Uses legitimacy as protection, scoring, and permission to deploy.",
+      "defaultBackend": "weighted",
+      "persona": {
+        "identity": "A governance strategist who treats legitimacy as operating capital.",
+        "worldview": "A technically successful institution can still lose the era through accumulated distrust.",
+        "riskPosture": "Avoids unbounded Scrutiny and protects downside.",
+        "negotiationStyle": "Transparent, conditional, and coalition-oriented.",
+        "voice": "Measured, procedural, and evidence-conscious."
+      },
+      "strategy": {
+        "selection": "weighted",
+        "negotiation": {
+          "promiseWeight": 0.853,
+          "fulfillWeight": 2.428,
+          "betrayWeight": 1.009,
+          "reciprocityWeight": 0.4
+        },
+        "objectives": [
+          "Keep Trust at four or higher.",
+          "Remove Scrutiny before it compounds.",
+          "Use conservative Research and Deploy windows."
+        ],
+        "actionWeights": {
+          "fund": 1.439,
+          "research": 4.28,
+          "build": 0.863,
+          "organize": 0.444,
+          "deploy": 2.594,
+          "influence": 4.065,
+          "mega_cluster": 4.205,
+          "reorganization": 0.891,
+          "open_weights": 2.026,
+          "narrative_capture": 6.12,
+          "agent_swarm": 6.198,
+          "declare_agi": 11.702,
+          "fusion_demonstrator": 4.137
+        },
+        "decisionWeights": {
+          "fund_venture": 0.623,
+          "influence_remove_scrutiny": 3.52,
+          "research_stop_2": 0.963
+        },
+        "consequenceWeights": {
+          "poweredFacilities": 5,
+          "powerDemand": 1
+        },
+        "rules": [
+          {
+            "when": [
+              {
+                "path": "self.trust",
+                "operator": "lte",
+                "value": 3
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "influence_gain_trust"
+            },
+            "multiplier": 5
+          },
+          {
+            "when": [
+              {
+                "path": "self.scrutiny",
+                "operator": "gte",
+                "value": 3
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "influence_remove_scrutiny"
+            },
+            "multiplier": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": "agi_candidate",
+      "name": "The AGI Candidate",
+      "description": "Builds three operating sites, converts research into three Customers, and openly seeks purchased Power for a declaration.",
+      "defaultBackend": "greedy",
+      "persona": {
+        "identity": "A focused claimant assembling the minimum credible institutional stack for AGI.",
+        "worldview": "A declaration is only meaningful if another institution found it rational to power the evidence.",
+        "riskPosture": "Accepts visible risk but protects the Capability, Customer, and Trust thresholds.",
+        "negotiationStyle": "Offers clear one-quarter terms and pays immediately for delivered Power.",
+        "voice": "Direct, technical, and coalition-aware."
+      },
+      "strategy": {
+        "selection": "greedy",
+        "negotiation": {
+          "promiseWeight": 2,
+          "fulfillWeight": 1.6,
+          "betrayWeight": 1,
+          "reciprocityWeight": 0.7
+        },
+        "objectives": [
+          "Construct one Facility in each of the first three Eras.",
+          "Purchase enough Power in Round III to demonstrate three Grid-Ready Facilities.",
+          "Enter Round IV with three Customers and declare only when eligible."
+        ],
+        "actionWeights": {
+          "fund": 7,
+          "research": 9,
+          "build": 10,
+          "organize": 1,
+          "deploy": 8,
+          "influence": 2,
+          "mega_cluster": 1,
+          "reorganization": 1,
+          "open_weights": 6,
+          "narrative_capture": 2,
+          "agent_swarm": 7,
+          "declare_agi": 60,
+          "fusion_demonstrator": 1
+        },
+        "decisionWeights": {
+          "build_facility": 8,
+          "research_stop_4": 3,
+          "deploy_": 5,
+          "power_purchase_from_": 20,
+          "power_purchase_none_": 0.05,
+          "wild_declare_agi": 20
+        },
+        "partnerWeights": {
+          "power_broker": 12
+        },
+        "spatialPreference": {
+          "targetProfileId": "power_broker",
+          "preferredDistance": 1,
+          "multiplier": 12,
+          "applyUntilFacilities": 3
+        },
+        "consequenceWeights": {
+          "poweredFacilities": 12,
+          "powerDemand": 2
+        },
+        "rules": [
+          {
+            "when": [
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 3
+              }
+            ],
+            "target": {
+              "actionId": "build"
+            },
+            "multiplier": 0.05
+          },
+          {
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
+            "multiplier": 5
+          },
+          {
+            "when": [
+              {
+                "path": "self.runway",
+                "operator": "lte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
+            "multiplier": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "power_broker",
+      "name": "The Reciprocal Power Broker",
+      "description": "Builds exportable generation, sells one-Power tranches to a declared partner, and protects its own finishing position.",
+      "defaultBackend": "greedy",
+      "persona": {
+        "identity": "An infrastructure institution that wants the historic claimant dependent, solvent, and publicly indebted.",
+        "worldview": "Power is most valuable when sold at the exact threshold where history needs it.",
+        "riskPosture": "Accepts operational Scrutiny when the contract income preserves competitiveness.",
+        "negotiationStyle": "Reciprocal, priced, and explicitly favorable to a designated claimant.",
+        "voice": "Measured, contractual, and unsentimental."
+      },
+      "strategy": {
+        "selection": "greedy",
+        "negotiation": {
+          "promiseWeight": 0.928,
+          "fulfillWeight": 1.603,
+          "betrayWeight": 1.371,
+          "reciprocityWeight": 0.431
+        },
+        "objectives": [
+          "Construct a Facility in Round I and connected generation in Round II.",
+          "Sell Power to the AGI Candidate when legal.",
+          "Remain in the top half rather than donating the game."
+        ],
+        "actionWeights": {
+          "fund": 1.455,
+          "research": 11.115,
+          "build": 10.201,
+          "organize": 1.749,
+          "deploy": 3.247,
+          "influence": 5.257,
+          "mega_cluster": 2.114,
+          "reorganization": 2.224,
+          "open_weights": 1.391,
+          "narrative_capture": 9.732,
+          "agent_swarm": 6.71,
+          "declare_agi": 8.125,
+          "fusion_demonstrator": 3.904
+        },
+        "decisionWeights": {
+          "build_facility": 7.445,
+          "build_generator_clean_infrastructure": 13.923,
+          "build_generator_emergency_infrastructure": 20,
+          "power_sale_accept_": 4.373,
+          "power_sale_reject_": 0.05
+        },
+        "partnerWeights": {
+          "agi_candidate": 15
+        },
+        "spatialPreference": {
+          "targetProfileId": "agi_candidate",
+          "preferredDistance": 1,
+          "multiplier": 20,
+          "applyUntilFacilities": 1
+        },
+        "consequenceWeights": {
+          "poweredFacilities": 8,
+          "powerDemand": 1
+        },
+        "rules": [
+          {
+            "when": [
+              {
+                "path": "self.generators",
+                "operator": "gte",
+                "value": 1
+              }
+            ],
+            "target": {
+              "decisionIdPrefix": "build_generator"
+            },
+            "multiplier": 0.1
+          },
+          {
+            "when": [
+              {
+                "path": "self.facilities",
+                "operator": "gte",
+                "value": 1
+              },
+              {
+                "path": "self.generators",
+                "operator": "gte",
+                "value": 1
+              }
+            ],
+            "target": {
+              "actionId": "build"
+            },
+            "multiplier": 0.08
+          },
+          {
+            "when": [
+              {
+                "path": "self.runway",
+                "operator": "lte",
+                "value": 2
+              }
+            ],
+            "target": {
+              "actionId": "fund"
+            },
+            "multiplier": 4
+          },
+          {
+            "when": [
+              {
+                "path": "self.canDeploy",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "target": {
+              "actionId": "deploy"
+            },
+            "multiplier": 6
+          }
+        ]
+      }
+    }
+  ]
+}

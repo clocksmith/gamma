@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "faction-compute-extremes-v1",
+  "registeredBeforeResults": true,
+  "question": "Do isolated one-Compute starting-resource changes reduce the persistent Demis Hassabis and Elon Musk faction extremes without creating new faction or strategy dominance?",
+  "sourceEvidence": "customer-mandate-one-v1",
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/faction-compute-extremes-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "imperial_compute_two",
+      "overlay": {
+        "imperialStartingCompute": 2
+      }
+    },
+    {
+      "id": "vertical_compute_four",
+      "overlay": {
+        "verticalStartingCompute": 4
+      }
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-faction-compute-extremes-v1-20260727",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "primaryComparisons": [
+    "paired Demis and Elon winner and score deltas",
+    "faction win-share range by player count and homogeneous backend",
+    "replacement faction dominance",
+    "strategy and faction-strategy interactions",
+    "declaration and Genuine AGI rates",
+    "forced no-op rate"
+  ],
+  "selectionRule": {
+    "imperialCandidate": "Prefer 2 starting Compute if it materially compresses Demis at two through four players without pushing the faction below the competitive field at five or six.",
+    "verticalCandidate": "Prefer 4 starting Compute if it materially improves Elon across player counts without creating a leading faction cell.",
+    "independence": "Each candidate is compared only with canonical on common seeds. Either, both, or neither may be selected; no interaction claim is made until the selected combination receives a confirmation screen.",
+    "physicalBoundary": "Neither arm establishes human counterplay, negotiation quality, duration, perceived fairness, or fun."
+  }
+}

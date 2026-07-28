@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "id": "faction-swap-diagnostic-v1",
+  "registeredBeforeResults": true,
+  "question": "Under identical four-player seeds, seats, opponents, personas, decks, board, Headlines, and Mandates, how much does changing only the focal institution alter win credit, Mandate, rank, and realized faction-ability value?",
+  "retiredSeedEvidence": [
+    "evolved-strategy-holdout-v1",
+    "policy-validity-balance-v1",
+    "faction-mechanism-scaling-v1"
+  ],
+  "playerCount": 4,
+  "runsPerArm": 500,
+  "mandateMode": "variable",
+  "seed": "m3t4-faction-swap-diagnostic-v1-fresh-20260728",
+  "profileIds": [
+    "balanced_operator",
+    "balanced_operator",
+    "trust_governor",
+    "power_broker"
+  ],
+  "backends": [
+    "weighted",
+    "weighted",
+    "weighted",
+    "weighted"
+  ],
+  "comparisons": [
+    {
+      "id": "demis_vs_mark_capability",
+      "question": "Does Demis amplify Capability Rusher beyond the same seat played as Mark?",
+      "focalSeat": 0,
+      "profileIds": [
+        "capability_rusher",
+        "balanced_operator",
+        "trust_governor",
+        "power_broker"
+      ],
+      "leftFactionIds": [
+        "imperial_research_lab",
+        "coalition_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "coalition_lab",
+        "safety_laboratory",
+        "foundry"
+      ]
+    },
+    {
+      "id": "demis_vs_mark_balanced",
+      "question": "Is Demis's main effect still large without Capability Rusher?",
+      "focalSeat": 0,
+      "leftFactionIds": [
+        "imperial_research_lab",
+        "coalition_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "coalition_lab",
+        "safety_laboratory",
+        "foundry"
+      ]
+    },
+    {
+      "id": "sam_vs_mark_power_broker",
+      "question": "Does the promoted Power Broker expose meaningful Coalition Lab value?",
+      "focalSeat": 0,
+      "profileIds": [
+        "power_broker",
+        "capability_rusher",
+        "trust_governor",
+        "infrastructure_compounder"
+      ],
+      "leftFactionIds": [
+        "coalition_lab",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ]
+    },
+    {
+      "id": "elon_vs_mark_infrastructure",
+      "question": "Does an infrastructure persona realize Vertical Empire's spatial and Build powers?",
+      "focalSeat": 0,
+      "profileIds": [
+        "infrastructure_compounder",
+        "capability_rusher",
+        "trust_governor",
+        "power_broker"
+      ],
+      "leftFactionIds": [
+        "vertical_empire",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      "rightFactionIds": [
+        "platform_empire",
+        "imperial_research_lab",
+        "safety_laboratory",
+        "foundry"
+      ]
+    }
+  ],
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "interpretation": {
+    "authority": "Diagnostic only. This report cannot promote a physical rule.",
+    "pairedDelta": "Positive left-minus-right win credit, Mandate, or rank advantage indicates the left focal faction outperformed the right focal faction under common random numbers.",
+    "interaction": "Compare demis_vs_mark_capability with demis_vs_mark_balanced to separate a broad Demis main effect from the Demis × Capability Rusher interaction.",
+    "abilityRealization": "Treat an ability with zero or near-zero realized value as a policy or implementation diagnosis before changing its physical text.",
+    "nextGate": "Any ability ablation or numeric candidate selected from this diagnostic must enter a separately preregistered one-lever unified audit on a second fresh seed bank."
+  }
+}

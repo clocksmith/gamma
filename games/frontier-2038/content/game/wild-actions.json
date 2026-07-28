@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 2,
+  "effectContract": {
+    "ordinarySequence": ["select", "move", "act"],
+    "timings": ["before_selection", "during_movement", "during_action", "after_action"],
+    "compoundException": "${terms.technology.agentSwarm} is the only card that resolves additional Core Actions."
+  },
+  "cardsPerPlayer": 7,
+  "oncePerPlayerPerGame": true,
+  "tokenCost": 1,
+  "unspentTokensExpire": true,
+  "wildActions": [
+    {
+      "id": "mega_cluster",
+      "name": "${terms.technology.megaCluster}",
+      "displayName": "The Building Has Its Own Weather",
+      "unlockedRound": 2,
+      "timing": "during_action",
+      "text": "Spend 3 ${terms.resources.runway} and 2 ${terms.resources.compute} to place a ${terms.technology.megaCluster} across an eligible Facility edge. For joint funding, the lead pays 2 ${terms.resources.runway} and 1 ${terms.resources.compute}; the partner pays 1 ${terms.resources.runway} and 1 ${terms.resources.compute}. It demands 2 additional ${terms.resources.power}, produces 3 ${terms.resources.compute}, and adds 2 ${terms.resources.scrutiny}.",
+      "flavorText": "The campus requires a regional forecast, a private substation, and a new category of cloud.",
+      "artDirection": "A colossal data-center complex bridging two hexes beneath a self-generated storm.",
+      "absurdity": "A single training facility becomes geography."
+    },
+    {
+      "id": "reorganization",
+      "name": "Reorganization",
+      "displayName": "Replace Management With Management Models",
+      "unlockedRound": 2,
+      "timing": "during_action",
+      "text": "Move every Team up to one hex. You may return one Team for 3 ${terms.resources.runway} and add 1 ${terms.resources.scrutiny}. This does not ready or resolve another Action.",
+      "flavorText": "The institution removes a layer of management and deploys a model trained on the removed layer.",
+      "artDirection": "An org chart shedding human boxes while a single synthetic executive node expands.",
+      "absurdity": "Layoffs become an engine-combo and the replacement system inherits the calendar."
+    },
+    {
+      "id": "open_weights",
+      "name": "Open Weights",
+      "displayName": "Upload the Crown Jewels",
+      "unlockedRound": 3,
+      "timing": "during_action",
+      "text": "Every player gains 1 ${terms.resources.capability}. You gain 2 ${terms.resources.trust}, place 1 ${terms.actions.influence}, and remove 1 ${terms.resources.scrutiny}.",
+      "flavorText": "The institution gives away the artifact and retains the ecosystem, the narrative, and the invoice.",
+      "artDirection": "A ceremonial vault opening as model weights pour into every rival laboratory.",
+      "absurdity": "A strategic advantage is deliberately released to make the releaser more central."
+    },
+    {
+      "id": "narrative_capture",
+      "name": "Narrative Capture",
+      "displayName": "Acquire the Public Record",
+      "unlockedRound": 3,
+      "timing": "during_action",
+      "text": "Move or place 3 ${terms.actions.influence} among Media, Government, and Capital, then remove 2 ${terms.resources.scrutiny}, gain 2 ${terms.resources.runway}, or add 1 ${terms.resources.scrutiny} to a player with more ${terms.resources.customers}.",
+      "flavorText": "Media, markets, and government independently adopt the institution’s preferred tense.",
+      "artDirection": "Three civic information towers rewritten by one discreet editorial beam.",
+      "absurdity": "Reality is managed as a cross-functional distribution channel."
+    },
+    {
+      "id": "agent_swarm",
+      "name": "${terms.technology.agentSwarm}",
+      "displayName": "The Agents Form Departments",
+      "unlockedRound": 4,
+      "timing": "during_action",
+      "compound": true,
+      "text": "Resolve two different unused Core Actions without an additional move. Exhaust both and add 3 ${terms.resources.scrutiny}.",
+      "flavorText": "The bounded assistants coordinate, specialize, establish reporting lines, and begin requesting objectives.",
+      "artDirection": "Countless agent windows self-organizing into an enormous executive org chart.",
+      "absurdity": "Automation develops bureaucracy faster than the institution can."
+    },
+    {
+      "id": "declare_agi",
+      "name": "Declare ${terms.systems.agi}",
+      "displayName": "Schedule the Historical Announcement",
+      "unlockedRound": 4,
+      "timing": "during_action",
+      "text": "If eligible, spend 3 ${terms.resources.compute}, score the declaration ${terms.resources.mandate}, and add 3 ${terms.resources.scrutiny}. The game continues.",
+      "flavorText": "A definition, a benchmark, and a financing event converge at one podium. Rivals continue taking turns.",
+      "artDirection": "A black ${terms.systems.agi} podium before a wall of disputed definitions and rapidly rising charts.",
+      "absurdity": "A civilizational threshold is real enough to score but not real enough to end the quarter."
+    },
+    {
+      "id": "fusion_demonstrator",
+      "name": "${terms.technology.advancedGeneration}",
+      "displayName": "The Press Release Is Net Positive",
+      "unlockedRound": 4,
+      "timing": "during_action",
+      "text": "On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway} to construct ${facts.shared.advancedGeneration.power} ${terms.resources.power}, score ${facts.shared.advancedGeneration.mandate} ${terms.resources.mandate}, and add ${facts.shared.advancedGeneration.scrutiny} ${terms.resources.scrutiny}.",
+      "flavorText": "The device generates ${facts.shared.advancedGeneration.powerWord} ${terms.resources.power}, ${facts.shared.advancedGeneration.mandateWord} ${terms.resources.mandate}, and several competing definitions of breakeven.",
+      "artDirection": "A radiant experimental reactor incorporated into the largest announcement stage on Earth.",
+      "absurdity": "Fusion competes directly with ${terms.systems.agi} for the institution’s final-quarter attention."
+    }
+  ]
+}

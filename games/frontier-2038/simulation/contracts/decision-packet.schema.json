@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-2038.local/schemas/decision-packet.schema.json",
+  "title": "M3T4 2038 Decision Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "game",
+    "requestId",
+    "matchId",
+    "seed",
+    "seat",
+    "factionId",
+    "round",
+    "cycle",
+    "observation",
+    "legalDecisions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "game": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "rulesetFingerprint",
+        "engineFingerprint",
+        "variantFingerprint"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rulesetFingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "engineFingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "variantFingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "matchId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "seed": {
+      "type": "string"
+    },
+    "seat": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "factionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4
+    },
+    "cycle": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "observation": {
+      "type": "object"
+    },
+    "publicHistory": {
+      "type": "array",
+      "items": {}
+    },
+    "strategy": {
+      "type": "object"
+    },
+    "legalDecisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["decisionId", "label"],
+        "properties": {
+          "decisionId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actionId": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          },
+          "consequences": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-2038.local/schemas/decision-response.schema.json",
+  "title": "M3T4 2038 Player Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["decisionId", "rationale", "confidence"],
+  "properties": {
+    "decisionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rationale": {
+      "type": ["string", "null"],
+      "maxLength": 1000
+    },
+    "confidence": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

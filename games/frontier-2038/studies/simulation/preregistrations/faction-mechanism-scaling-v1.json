@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "faction-mechanism-scaling-v1",
+  "registeredBeforeResults": true,
+  "question": "Which isolated faction-mechanic changes compress the observed Demis, Elon, Sam, and Jensen faction extremes without creating a new faction or strategy dominance?",
+  "sourceEvidence": "faction-compute-extremes-v2",
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/faction-mechanism-scaling-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "imperial_scientific_method_once_game",
+      "overlay": {
+        "imperialScientificMethodLifetimeLimit": 1
+      }
+    },
+    {
+      "id": "vertical_industrial_velocity_all_builds",
+      "overlay": {
+        "verticalIndustrialVelocityBuildModes": [
+          "facility",
+          "generator",
+          "link"
+        ]
+      }
+    },
+    {
+      "id": "coalition_runway_seven",
+      "overlay": {
+        "coalitionStartingRunway": 7
+      }
+    },
+    {
+      "id": "foundry_shovels_one",
+      "overlay": {
+        "foundryShovelsPerRound": 1
+      }
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 16000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-faction-mechanism-scaling-v1-20260727",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "selectionRule": {
+    "imperialCandidate": "Prefer the lifetime cap only if it compresses Demis across player counts without making the faction low at five or six.",
+    "verticalCandidate": "Prefer the broader discount only if it improves Elon beyond the Compute-only probe without creating a leading faction cell.",
+    "coalitionCandidate": "Prefer 7 starting Runway only if it improves Sam at three through six players without creating a two-player lead.",
+    "foundryCandidate": "Prefer one Shovels trigger per round only if it reduces Jensen's high-count lead while preserving competitiveness at two through four.",
+    "independence": "Each candidate is compared only with canonical on common seeds. Any selected combination requires a separate confirmation.",
+    "physicalBoundary": "The probe cannot establish human negotiation quality, perceived faction identity, duration, fairness, or fun."
+  }
+}

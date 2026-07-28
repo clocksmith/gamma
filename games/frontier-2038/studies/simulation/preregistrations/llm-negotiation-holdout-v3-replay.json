@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "llm-negotiation-cache-replay-2026-07-27-v3",
+  "locked": true,
+  "purpose": "cache_reproducibility",
+  "seed": "m3t4-llm-negotiation-holdout-20260727-v3",
+  "runs": 1,
+  "playerCount": 4,
+  "profileIds": [
+    "agi_candidate",
+    "power_broker",
+    "trust_governor",
+    "market_maximalist"
+  ],
+  "backends": [
+    "hybrid-codex",
+    "weighted",
+    "greedy",
+    "weighted"
+  ],
+  "model": "gpt-5.6-sol",
+  "llmStages": [
+    "negotiation_intent",
+    "power_purchase",
+    "power_sale",
+    "negotiation_response"
+  ],
+  "maximumLlmDecisions": 16,
+  "cacheDirectory": "studies/simulation/cache/llm-negotiation-holdout-20260727-v3",
+  "analysis": {
+    "primaryOutcome": "Whether the separately preregistered read-only run reproduces every captured Codex decision and complete game outcome without a fresh model call or cache miss.",
+    "secondaryOutcomes": [
+      "Cached decision count",
+      "Cache misses and fallbacks",
+      "Decision identity",
+      "Final standings",
+      "Power promises and trades"
+    ],
+    "interpretationBoundary": "Replay equality proves local reproducibility for the captured provider decisions under the same game identity; it does not generalize the behavior or establish balance."
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-2038.local/schemas/player-profile.schema.json",
+  "title": "M3T4 2038 Player Strategy Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "persona", "strategy"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "defaultBackend": {
+      "enum": ["weighted", "greedy", "claude", "codex", "hybrid-claude", "hybrid-codex"]
+    },
+    "persona": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "worldview", "riskPosture", "negotiationStyle"],
+      "properties": {
+        "identity": { "type": "string" },
+        "worldview": { "type": "string" },
+        "riskPosture": { "type": "string" },
+        "negotiationStyle": { "type": "string" },
+        "voice": { "type": "string" }
+      }
+    },
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection", "negotiation", "actionWeights", "rules"],
+      "properties": {
+        "selection": {
+          "enum": ["weighted", "greedy"]
+        },
+        "negotiation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "promiseWeight",
+            "fulfillWeight",
+            "betrayWeight",
+            "reciprocityWeight"
+          ],
+          "properties": {
+            "promiseWeight": { "type": "number", "minimum": 0 },
+            "fulfillWeight": { "type": "number", "minimum": 0 },
+            "betrayWeight": { "type": "number", "minimum": 0 },
+            "reciprocityWeight": { "type": "number", "minimum": 0 }
+          }
+        },
+        "objectives": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "actionWeights": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "decisionWeights": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "partnerWeights": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "consequenceWeights": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "spatialPreference": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["targetProfileId", "preferredDistance", "multiplier"],
+          "properties": {
+            "targetProfileId": { "type": "string" },
+            "preferredDistance": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 6
+            },
+            "multiplier": {
+              "type": "number",
+              "exclusiveMinimum": 1
+            },
+            "applyUntilFacilities": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            }
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["when", "target", "multiplier"],
+            "properties": {
+              "when": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["path", "operator", "value"],
+                  "properties": {
+                    "path": { "type": "string" },
+                    "operator": {
+                      "enum": ["eq", "ne", "lt", "lte", "gt", "gte", "includes"]
+                    },
+                    "value": {}
+                  }
+                }
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "actionId": { "type": "string" },
+                  "decisionIdPrefix": { "type": "string" }
+                }
+              },
+              "multiplier": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

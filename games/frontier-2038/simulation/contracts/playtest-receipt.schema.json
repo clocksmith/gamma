@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-2038.local/schemas/playtest-receipt-v1.schema.json",
+  "title": "M3T4 2038 Human Playtest Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "evidenceType",
+    "sessionId",
+    "playedAt",
+    "game",
+    "physicalKit",
+    "configuration",
+    "rulesDeviations",
+    "facilitatorInterventions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "evidenceType": {
+      "enum": ["facilitated_playtest", "blind_playtest"]
+    },
+    "sessionId": { "type": "string", "minLength": 1 },
+    "playedAt": { "type": "string", "format": "date-time" },
+    "game": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "rulesetFingerprint",
+        "playtestKitFingerprint",
+        "variantFingerprint"
+      ],
+      "properties": {
+        "version": { "type": "string" },
+        "rulesetFingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "playtestKitFingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "variantFingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+    "physicalKit": {
+      "type": "object",
+      "required": ["componentRevision", "mixedRevisions"],
+      "properties": {
+        "componentRevision": { "type": "string" },
+        "mixedRevisions": { "type": "boolean" },
+        "exceptions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "required": ["playerCount", "boardSeed", "factions"],
+      "properties": {
+        "playerCount": { "type": "integer", "minimum": 2, "maximum": 6 },
+        "boardSeed": { "type": "string" },
+        "factions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 6
+        }
+      }
+    },
+    "rulesDeviations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "facilitatorInterventions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notesFile": { "type": "string" },
+    "scoresFile": { "type": "string" }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "uniform-capability-mandate-v1",
+  "registeredBeforeResults": true,
+  "question": "Does making every Capability threshold worth 1 Mandate reduce Capability Rusher and Demis Hassabis advantages without making Research nonviable or creating a larger replacement dominant path?",
+  "sourceEvidence": "late-capability-mandate-v1",
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/uniform-capability-mandate-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "uniform_capability_mandate_one",
+      "overlay": {
+        "capabilityThresholdMandate": 1
+      }
+    }
+  ],
+  "playerCounts": [2, 3, 4, 5, 6],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 16000,
+  "initialRunsPerCell": 4,
+  "batchSize": 16,
+  "seed": "m3t4-uniform-capability-mandate-v1-20260727",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "primaryComparisons": [
+    "paired aggregate winner and score deltas",
+    "Capability Rusher win share by player count and homogeneous backend",
+    "Demis Hassabis win share by player count and homogeneous backend",
+    "Research action selection and successful Training evidence",
+    "replacement dominance in every faction and strategy",
+    "Mandate-source mix",
+    "declaration and Genuine AGI rates",
+    "forced no-op rate"
+  ],
+  "selectionRule": {
+    "candidatePreferred": "The candidate must materially compress Capability Rusher and Demis advantages across the important four-player homogeneous regimes, preserve Research as a competitively selected action, and introduce no larger replacement advantage.",
+    "canonicalPreferred": "Retain canonical scoring if the candidate merely transfers dominance, removes Research from viable play, or produces inconsistent effects.",
+    "physicalBoundary": "Neither arm establishes human counterplay, negotiation quality, duration, perceived fairness, or fun."
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-2038.local/schemas/llm-holdout-preregistration-v1.schema.json",
+  "title": "M3T4 2038 LLM Negotiation Holdout Preregistration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "locked",
+    "purpose",
+    "seed",
+    "runs",
+    "playerCount",
+    "profileIds",
+    "backends",
+    "llmStages",
+    "maximumLlmDecisions",
+    "analysis"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "locked": { "const": true },
+    "purpose": {
+      "enum": ["fresh_robustness", "cache_reproducibility"]
+    },
+    "seed": { "type": "string" },
+    "runs": { "type": "integer", "minimum": 1, "maximum": 50 },
+    "playerCount": { "type": "integer", "minimum": 2, "maximum": 6 },
+    "profileIds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 2,
+      "maxItems": 6
+    },
+    "backends": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "weighted",
+          "greedy",
+          "claude",
+          "codex",
+          "hybrid-claude",
+          "hybrid-codex"
+        ]
+      },
+      "minItems": 2,
+      "maxItems": 6
+    },
+    "model": { "type": ["string", "null"] },
+    "llmStages": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "maximumLlmDecisions": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 240
+    },
+    "cacheDirectory": { "type": ["string", "null"] },
+    "analysis": {
+      "type": "object",
+      "required": ["primaryOutcome", "secondaryOutcomes", "interpretationBoundary"],
+      "properties": {
+        "primaryOutcome": { "type": "string" },
+        "secondaryOutcomes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "interpretationBoundary": { "type": "string" }
+      }
+    }
+  }
+}
