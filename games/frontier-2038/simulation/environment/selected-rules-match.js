@@ -423,7 +423,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     for (const baseAward of publicMandateAwards(this.config, player)) {
       let award = baseAward;
       if (baseAward.id.startsWith("customer-")) {
-        award = { ...baseAward, points: this.rulesVariant.customerMandate };
+        const schedule = this.rulesVariant.customerMandateSchedule;
+        const customerNumber = Number(
+          baseAward.id.slice("customer-".length)
+        );
+        const points =
+          schedule &&
+          Number.isFinite(customerNumber) &&
+          customerNumber >= schedule.lateFromCustomer
+            ? schedule.lateMandate
+            : schedule?.baseMandate ?? this.rulesVariant.customerMandate;
+        award = { ...baseAward, points };
       } else if (
         baseAward.id.startsWith("capability-") &&
         Number.isFinite(this.rulesVariant.capabilityThresholdMandate)

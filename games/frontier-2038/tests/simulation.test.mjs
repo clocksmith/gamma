@@ -431,6 +431,66 @@ test("Customer Mandate is an explicit one-lever rules variant", async () => {
   assert.equal(probe.match.players[0].mandate, 3);
 });
 
+test("late Customer recognition changes only the fourth and fifth Customer awards", async () => {
+  const canonical = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "platform_empire",
+      seed: "customer-mandate-schedule-canonical"
+    },
+    () => {}
+  );
+  canonical.match.players[0].customers = 5;
+  canonical.match.synchronizePublicMandate(
+    canonical.match.players[0],
+    "fixture"
+  );
+  assert.deepEqual(
+    canonical.match.players[0].mandateAwards
+      .filter((award) => award.id.startsWith("customer-"))
+      .map((award) => [award.id, award.points]),
+    [
+      ["customer-1", 2],
+      ["customer-2", 2],
+      ["customer-3", 2],
+      ["customer-4", 2],
+      ["customer-5", 2]
+    ]
+  );
+
+  const probe = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "platform_empire",
+      seed: "customer-mandate-schedule-probe",
+      rulesVariant: {
+        customerMandateSchedule: {
+          baseMandate: 2,
+          lateFromCustomer: 4,
+          lateMandate: 1
+        }
+      }
+    },
+    () => {}
+  );
+  probe.match.players[0].customers = 5;
+  probe.match.synchronizePublicMandate(probe.match.players[0], "fixture");
+  assert.deepEqual(
+    probe.match.players[0].mandateAwards
+      .filter((award) => award.id.startsWith("customer-"))
+      .map((award) => [award.id, award.points]),
+    [
+      ["customer-1", 2],
+      ["customer-2", 2],
+      ["customer-3", 2],
+      ["customer-4", 1],
+      ["customer-5", 1]
+    ]
+  );
+  assert.equal(probe.match.players[0].customers, 5);
+  assert.equal(probe.match.players[0].runway, 4);
+});
+
 test("faction starting Compute probes are isolated rules variants", async () => {
   const imperial = await createInteractiveGame(
     {
@@ -1607,7 +1667,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.15");
+  assert.equal(first.game.version, "0.8.16");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1788,7 +1848,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.15");
+  assert.equal(first.game.version, "0.8.16");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

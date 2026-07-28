@@ -10,6 +10,7 @@ export function canonicalRulesVariant(config) {
     deployComputeCost: 1,
     startingGridPower: config.board.startingGridConnection.capacity,
     customerMandate: config.scoring.customerMandate,
+    customerMandateSchedule: null,
     capabilityThresholdMandate: null,
     lateCapabilityThresholdMandate: lateCapabilityThreshold?.mandate ?? 2,
     agiFirstMandate: config.agiDeclaration.firstMandate,

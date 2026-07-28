@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "late-customer-recognition-v1",
+  "registeredBeforeResults": true,
+  "comparisonKind": "causal_one_lever",
+  "question": "Does reducing only the fourth and fifth Customer awards from 2 Mandate to 1 reduce Adoption-path concentration while preserving Deploy, Customer income, faction viability, and multiple winning identities?",
+  "sourceEvidence": [
+    "winning-path-attribution-v1",
+    "2026-07-28-winning-path-attribution"
+  ],
+  "rulesConfigurationsFile": "studies/simulation/preregistrations/late-customer-recognition-v1-rules.json",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "late_customer_recognition",
+      "overlay": {
+        "customerMandateSchedule": {
+          "baseMandate": 2,
+          "lateFromCustomer": 4,
+          "lateMandate": 1
+        }
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "authoritativePlayerCount": 4,
+  "mandatoryRegressionCounts": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "profiles": "all_canonical_authored_rotating_windows",
+  "factionsAndSeats": "balanced_rotation",
+  "maximumMatches": 12000,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "seed": "m3t4-late-customer-recognition-v1-fresh-20260728",
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "requiredDiagnostics": [
+    "winner share by classified path and supported player count",
+    "Mandate sources by winning path",
+    "Core Action selections and Customer counts",
+    "faction and strategy winner shares",
+    "action, opening, and winning-path entropy",
+    "dominance, pairwise cycles, integrity, fallbacks, and forced no-ops"
+  ],
+  "selectionRule": {
+    "candidatePreferred": "The candidate must reduce Adoption-path concentration at four players, improve or preserve winning-path diversity at three and five, keep every faction inside the provisional 15-point win-share range, preserve Deploy as a viable choice, and introduce no dominance or integrity failure.",
+    "canonicalPreferred": "Retain canonical scoring if the candidate merely transfers dominance, suppresses Adoption below viability, materially harms Mark Zuckerberg's distribution identity, makes another path compulsory, or creates a supported-count regression.",
+    "interpretation": "This isolated comparison establishes direction only. If selected, it requires a later package-interaction audit with the selected faction-conversion package on fresh common seeds.",
+    "physicalBoundary": "No simulated result establishes human negotiation, timing, perceived fairness, memorable betrayal, or fun; physical rules require explicit user approval."
+  },
+  "surfaceAudit": {
+    "canonicalRulebook": "no change; this is a simulation-only candidate",
+    "semanticGraph": "no player-facing change",
+    "machineData": "no generated-content change",
+    "simulator": "one structured Customer Mandate schedule overlay",
+    "browserPrototype": "no change",
+    "referenceAids": "no change",
+    "tests": "canonical and candidate award schedules covered",
+    "playtestDocumentation": "no change before candidate selection"
+  }
+}

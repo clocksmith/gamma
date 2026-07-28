@@ -1,6 +1,6 @@
 # M3T4 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.16-test`
+**Rules under review:** `0.5.0-rc.17-test`
 **First cohort:** controlled four-player physical test
 
 This document owns the test protocol, evidence labels, version identity, and
@@ -95,13 +95,13 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.16-test`. Executable
-game `0.8.15` implements it under `three-to-five-grid-ready-v1`. New automated reports
+`docs/core-rules.md` is a review draft at `0.5.0-rc.17-test`. Executable
+game `0.8.16` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.
 
-Executable `0.8.15` retains write-only decision capture and paired read-only
+Executable `0.8.16` retains write-only decision capture and paired read-only
 replay to the provider boundary, revalidates joint Mega-Cluster contributions
 at acceptance, and applies Foundry’s Shovels royalty after any selected Core,
 Wild, or Faction Action that spends at least two Compute. The rc.18 candidate
@@ -114,7 +114,7 @@ records the complete AGI funnel, realized faction-ability values, and
 common-seed focal-faction swaps under separately fingerprinted experiment
 configurations.
 
-Candidate `0.5.0-rc.16-test` and executable `0.8.15` select three to five
+Candidate `0.5.0-rc.17-test` and executable `0.8.16` select three to five
 players, establish four as the balance authority, and make three/five
 regression coverage mandatory. They do not change any faction, action,
 resource, Headline, infrastructure, Grid-Ready, Realignment, scoring, or
