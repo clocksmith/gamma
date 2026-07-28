@@ -2519,3 +2519,20 @@ comparison passes.
   receive a new target-bearing headroom gate before construction.
 - Receipt:
   `results/nncp_v33_libnc_gradient_interposition_v1/receipt.json`
+
+## 2026-07-28: SFR-1 full idx13 restoration is terminal negative
+
+The frozen tight-A10 plus full-idx13 candidate produced a `45,179`-byte first
+archive on opening 250K. The matched B2 parent is `45,178` bytes, so restoring
+the specifically halved table lost one archive byte before its 12-byte package
+delta. It exceeded the predeclared `45,177` strict-sign ceiling; roundtrip and
+deterministic re-encode were correctly skipped after the terminal miss.
+
+Decision: retire full idx13 restoration and any divisor/partial-capacity ladder
+without a new information source. The tight-cell layout remains an allocation
+primitive, but this use of its released memory receives zero score credit.
+
+Evidence:
+
+- `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_fxcmidx13full_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T210552.json`
+- `operations/adaptive/exclusions/sfr_full_idx13_250k_negative_v1.json`
