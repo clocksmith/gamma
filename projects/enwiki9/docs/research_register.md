@@ -2611,3 +2611,26 @@ Evidence:
 - `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json`
 - `results/nncp_makefile_slack_embedding_v1/build.json`
 - `operations/adaptive/completed/042_20260727T223037Z_d0a600ecdb.json`
+
+## 2026-07-28: Compact5 T4 opening-1M maturity gate is terminal negative
+
+The exact four-thread Compact5 package began the frozen opening-1M diagnostic
+with a `250,000`-byte archive ceiling. Its append-only output progressed through
+`65,536`, `131,072`, and `262,144` bytes while compression remained active.
+Because emitted bytes cannot be removed by finalization, the gate had already
+missed the ceiling by at least `12,144` bytes. The process was terminated at
+that irreversible boundary rather than allowed to consume more CPU.
+
+This result claims no completed archive, roundtrip, determinism, or score
+credit. The preceding 10K receipt already proved execution identity; this gate
+answers the separate maturity question. Decision: retire the frozen five-layer,
+width-256, inner-768, batch-one Compact5 profile and its parameter/package
+ladders. It is also too weak to authorize a mature teacher-distillation trace.
+A future NNCP route requires a materially different decoder-visible student
+state and bounded target-bearing headroom before native execution.
+
+Evidence:
+
+- `results/nncp_compact5_t4_opening_1m_maturity_v1/decision.json`
+- `operations/adaptive/completed/041_20260728T013416Z_79d106f46f.json`
+- `operations/adaptive/exclusions/nncp_compact5_opening_1m_ceiling_negative_v1.json`
