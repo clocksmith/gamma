@@ -633,11 +633,20 @@ def resource_ready(*, min_free_mib: int, max_load: float) -> tuple[bool, dict[st
     }
 
 
-def claim_jobs(limit: int) -> list[tuple[pathlib.Path, dict[str, Any]]]:
+def claim_jobs(
+    limit: int, candidate_ids: set[str] | None = None
+) -> list[tuple[pathlib.Path, dict[str, Any]]]:
     claimed: list[tuple[pathlib.Path, dict[str, Any]]] = []
     for pending_path in sorted(QUEUE_DIRS["pending"].glob("*.json")):
         if len(claimed) >= limit:
             break
+        if candidate_ids:
+            try:
+                preview = load_json(pending_path)
+            except Exception:
+                continue
+            if preview.get("candidate_id") not in candidate_ids:
+                continue
         running_path = QUEUE_DIRS["running"] / pending_path.name
         try:
             os.replace(pending_path, running_path)
@@ -770,7 +779,7 @@ def run_loop(args: argparse.Namespace) -> int:
             time.sleep(args.poll_seconds)
             continue
 
-        claimed = claim_jobs(workers)
+        claimed = claim_jobs(workers, set(args.candidate))
         if claimed:
             print(
                 json.dumps(
