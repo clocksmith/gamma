@@ -962,10 +962,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }))
       ]);
       if (choice.parameters?.wildId) {
+        const trustBefore = safety.trust;
         safety.runway -= 1;
         this.addResource(safety, "trust", 2);
         this.regime.cycle.disabledWild = choice.parameters.wildId;
         safety.factionAbilityUsed.emergencyPause = true;
+        this.recordFactionAbility(safety, "emergency_pause", {
+          runwaySpent: 1,
+          trustGained: safety.trust - trustBefore,
+          wildActionsBlocked: 1
+        });
       }
     }
 
@@ -1558,10 +1564,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         actionId: "faction",
         parameters: { wildId }
       })));
+      const trustBefore = player.trust;
       player.runway -= 1;
       this.addResource(player, "trust", 2);
       this.regime.cycle.disabledWild = choice.parameters.wildId;
       player.factionAbilityUsed.emergencyPause = true;
+      this.recordFactionAbility(player, "emergency_pause", {
+        runwaySpent: 1,
+        trustGained: player.trust - trustBefore,
+        wildActionsBlocked: 1
+      });
     } else if (id === "everybody_gpu") {
       for (const rival of this.players.filter((candidate) => candidate.seat !== seat)) {
         this.addResource(rival, "compute", 1);
@@ -2633,8 +2645,13 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       if (!player.history.deployRounds.includes(this.round)) player.history.deployRounds.push(this.round);
       if (player.factionId === "safety_laboratory" && this.round >= 3 &&
         !player.roundMetrics.auditedDeployUsed) {
+        const scrutinyBeforeAudit = player.scrutiny;
         this.removeScrutiny(player, 1);
         player.roundMetrics.auditedDeployUsed = true;
+        this.recordFactionAbility(player, "audited_deployment", {
+          scrutinyRemoved: scrutinyBeforeAudit - player.scrutiny,
+          deploymentsCovered: 1
+        });
       }
       if (player.factionId === "platform_empire" &&
         ["consumer", "media"].includes(decision.parameters.destinationCategory)) {
@@ -4015,6 +4032,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             actionId: "faction"
           }
         ]);
+        this.recordFactionAbility(safety, "responsible_scaling", {
+          uses: 0,
+          offersMade: 1
+        });
         if (offer.decisionId === "responsible_offer") {
           const response = await this.choose(policies, seat, "responsible_scaling_response", [
             {
@@ -4029,6 +4050,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             }
           ]);
           if (response.decisionId === "responsible_accept") {
+            const trustBeforeSale = safety.trust;
             const replayed = simulateTrainingRun(
               this.config,
               `${this.seed}:r${this.round}:c${this.cycle}:s${seat}:training`,
@@ -4055,8 +4077,24 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             this.addResource(safety, "runway", 1);
             this.addResource(safety, "trust", 1);
             safety.roundMetrics.responsibleScalingUsed = true;
+            this.recordFactionAbility(safety, "responsible_scaling", {
+              acceptedSales: 1,
+              safetySold: 1,
+              runwayGained: 1,
+              trustGained: safety.trust - trustBeforeSale
+            });
             this.synchronizePublicMandate(player, "responsible_scaling");
+          } else {
+            this.recordFactionAbility(safety, "responsible_scaling", {
+              uses: 0,
+              offersRejected: 1
+            });
           }
+        } else {
+          this.recordFactionAbility(safety, "responsible_scaling", {
+            uses: 0,
+            offersDeclined: 1
+          });
         }
       }
     }

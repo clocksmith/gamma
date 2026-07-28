@@ -212,3 +212,11 @@ records explicit approval and atomically projects that package into executable
 `0.8.19` and physical candidate `0.5.0-rc.20-test`. Every unrelated numerical
 rule is frozen pending the first facilitated four-player session and Demis’s
 five-player Peer Validation regression.
+
+The dated
+[`residual faction parity instrumentation correction`](2026-07-28-residual-faction-parity-instrumentation.md)
+records a clean 6,400-game paired diagnostic whose standings reverse by
+decision backend. It rejects a universal Dario nerf or Sam buff, but invalidates
+ability-level attribution because the three Safety Laboratory programs were
+not publishing realized values. The engine correction adds that telemetry and
+requires a fresh-seed restart before any physical-rule proposal.

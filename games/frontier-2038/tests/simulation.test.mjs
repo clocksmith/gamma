@@ -39,6 +39,25 @@ import { loadBalanceContract } from "../simulation/balance/balance-contract.js";
 import { runBalanceAudit } from "../simulation/runner/balance-audit-runner.js";
 import { runFactionSwapDiagnostic } from "../simulation/runner/faction-swap-runner.js";
 
+function fixturePolicy(select = () => null) {
+  return {
+    async decide(packet) {
+      const selected = select(packet) || packet.legalDecisions[0];
+      return {
+        decision: {
+          decisionId: selected.decisionId,
+          rationale: "Deterministic fixture policy."
+        },
+        receipt: {
+          provider: "fixture",
+          profileId: "fixture",
+          requestId: packet.requestId
+        }
+      };
+    }
+  };
+}
+
 test("player personas load as reusable provider-neutral strategy profiles", async () => {
   const profiles = await loadPlayerProfiles();
   assert.ok(profiles.length >= 4);
@@ -276,6 +295,101 @@ test("Demis Peer Validation remains reduced at four players", async () => {
       ["capability-9", 1],
       ["capability-12", 1]
     ]
+  );
+});
+
+test("Safety Laboratory programs publish realized ability value", async () => {
+  const emergency = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "safety_laboratory",
+      seed: "safety-emergency-pause-telemetry"
+    },
+    () => {}
+  );
+  emergency.match.round = 4;
+  emergency.match.regime.cycle = {};
+  const safety = emergency.match.players[0];
+  const trustBeforePause = safety.trust;
+  const pausePolicies = emergency.match.players.map(() => fixturePolicy(
+    (packet) => packet.legalDecisions.find(
+      (decision) => decision.parameters?.wildId === "declare_agi"
+    )
+  ));
+  await emergency.match.resolveFactionAction(
+    pausePolicies,
+    0,
+    "emergency_pause"
+  );
+  assert.deepEqual(
+    safety.metrics.factionAbilityValues.emergency_pause,
+    {
+      uses: 1,
+      runwaySpent: 1,
+      trustGained: safety.trust - trustBeforePause,
+      wildActionsBlocked: 1
+    }
+  );
+
+  const audited = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "safety_laboratory",
+      seed: "safety-audited-deployment-telemetry"
+    },
+    () => {}
+  );
+  audited.match.round = 3;
+  const deployer = audited.match.players[0];
+  deployer.compute = 5;
+  deployer.capability = 2;
+  deployer.scrutiny = 2;
+  const deploy = audited.match.legalResolutions(0, "deploy")[0];
+  assert.ok(deploy, "the fixture should expose a legal Deploy");
+  audited.match.applyResolution(0, deploy);
+  assert.deepEqual(
+    deployer.metrics.factionAbilityValues.audited_deployment,
+    {
+      uses: 1,
+      scrutinyRemoved: 1,
+      deploymentsCovered: 1
+    }
+  );
+
+  const scaling = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "safety_laboratory",
+      seed: "safety-responsible-scaling-telemetry"
+    },
+    () => {}
+  );
+  scaling.match.round = 2;
+  const scalingSafety = scaling.match.players[0];
+  const researcher = scaling.match.players[1];
+  researcher.selectedAction = "research";
+  scaling.match.resolveTrainingRun = () => ({
+    capability: 0,
+    trust: 0,
+    runwaySpent: 0,
+    safetySpent: 0,
+    scrutiny: 1,
+    crashProtectable: true,
+    deckSnapshot: []
+  });
+  const scalingPolicies = scaling.match.players.map(() => fixturePolicy(
+    (packet) => packet.legalDecisions.find((decision) =>
+      decision.decisionId === "responsible_decline"
+    )
+  ));
+  await scaling.match.resolveSelectedSeat(scalingPolicies, 1);
+  assert.deepEqual(
+    scalingSafety.metrics.factionAbilityValues.responsible_scaling,
+    {
+      uses: 0,
+      offersMade: 1,
+      offersDeclined: 1
+    }
   );
 });
 
