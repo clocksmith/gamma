@@ -29,6 +29,7 @@ export function canonicalRulesVariant(config) {
     imperialScientificMethodRunwayCost: 1,
     imperialScientificMethodLifetimeLimit: null,
     imperialNobelTrust: 2,
+    imperialLateCapabilityThresholdMandate: null,
     verticalStartingCompute: null,
     verticalIndustrialVelocityDiscount: 1,
     verticalIndustrialVelocityMandate: 0,

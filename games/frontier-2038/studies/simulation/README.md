@@ -123,3 +123,9 @@ It selects license-only New Architecture for combined-package confirmation.
 That candidate preserves every rival sale and payment while moving Foundry to
 `30.18%`, `24.82%`, and `22.79%` partially pooled win share at three, four,
 and five players.
+
+`demis-late-validation-v1.json` follows the rejected Scientific Method,
+Scrutiny, and Nobel candidates with one direct public-validation lever.
+Capability 9 and 12 remain fully achieved, but each scores Demis one Mandate
+instead of two. The probe leaves starting Compute, Research reliability,
+Capability, and every other faction program untouched.

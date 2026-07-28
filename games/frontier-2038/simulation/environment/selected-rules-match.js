@@ -436,10 +436,31 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         baseAward.id.startsWith("capability-") &&
         Number(baseAward.id.slice("capability-".length)) >= 9
       ) {
+        const imperialLateMandate =
+          player.factionId === "imperial_research_lab" &&
+          Number.isFinite(
+            this.rulesVariant.imperialLateCapabilityThresholdMandate
+          )
+            ? this.rulesVariant.imperialLateCapabilityThresholdMandate
+            : null;
         award = {
           ...baseAward,
-          points: this.rulesVariant.lateCapabilityThresholdMandate
+          points: imperialLateMandate ??
+            this.rulesVariant.lateCapabilityThresholdMandate
         };
+        if (
+          imperialLateMandate !== null &&
+          !known.has(baseAward.id) &&
+          this.rulesVariant.lateCapabilityThresholdMandate >
+            imperialLateMandate
+        ) {
+          this.recordFactionAbility(player, "late_public_validation", {
+            mandateWithheld:
+              this.rulesVariant.lateCapabilityThresholdMandate -
+              imperialLateMandate,
+            thresholdsValidated: 1
+          });
+        }
       }
       if (known.has(award.id)) continue;
       if (
