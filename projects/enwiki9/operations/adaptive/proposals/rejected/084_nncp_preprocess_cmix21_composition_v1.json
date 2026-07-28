@@ -11,7 +11,11 @@
   ],
   "expected_savings_bytes": 1700000,
   "hypothesis": "Official NNCP reversible preprocessing exposes enough symbol-level regularity to let the frozen B2 cmix21 backend recover at least target-scale net bytes after dictionary framing and the complete added CPU source package.",
-  "interfaces_exposed": ["official NNCP pc/pd stream", "big-endian uint16 symbol layout", "frozen B2 cmix21 backend"],
+  "interfaces_exposed": [
+    "official NNCP pc/pd stream",
+    "big-endian uint16 symbol layout",
+    "frozen B2 cmix21 backend"
+  ],
   "kill_condition": "Retire unchanged if the exact 250K archive exceeds 44753 bytes, package exceeds 900000 bytes, roundtrip or deterministic replay fails, or decimal memory is exceeded. Do not test alternate symbol byte layouts after failure.",
   "max_program_bytes": 900000,
   "mechanism_change": "compose_reversible_preprocessor_with_mature_backend",
@@ -22,9 +26,15 @@
   "priority": 84,
   "promotion_condition": "Pass exact 250K at 44753 bytes or less with complete package, then freeze for opening 1M and require at least 2000 B/M net plus positive distant transfer before exact 10M.",
   "proposal_id": "nncp_preprocess_cmix21_composition_v1",
-  "retired_neighborhoods": ["fixed-nine-bit NNCP symbols before a byte-context backend", "planar NNCP symbol bytes", "escape-255 NNCP symbol bytes"],
+  "rejected_at": "2026-07-28T01:21:37+00:00",
+  "rejection_reason": "Exact opening-250K archive was 56,905 bytes versus 45,178 for B2, regressing 11,727 bytes before the 314,036-byte package increase and missing the 44,678 target-scale ceiling.",
+  "retired_neighborhoods": [
+    "fixed-nine-bit NNCP symbols before a byte-context backend",
+    "planar NNCP symbol bytes",
+    "escape-255 NNCP symbol bytes"
+  ],
   "schema": "enwiki9_algorithm_proposal_v1",
   "search_priority": 84,
-  "state": "developed",
+  "state": "rejected",
   "title": "Official NNCP preprocessing composed with B2 cmix21"
 }

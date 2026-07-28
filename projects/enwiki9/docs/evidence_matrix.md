@@ -12,8 +12,8 @@ No forecast or inherited metadata is included here.
 
 ## Proof Boundary
 
-- Result JSON files scanned: `914`
-- Roundtrip-passing rows: `910`
+- Result JSON files scanned: `916`
+- Roundtrip-passing rows: `911`
 - Verified full `1G` rows in this checkout: `0`
 - `10.95%` target reached by this matrix: `False`
 - Best full `1G` score: `none present`
