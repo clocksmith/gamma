@@ -351,13 +351,14 @@ def model_fingerprint(model: nn.Module) -> str:
             digest.update(name.encode())
             flat = parameter.detach().view(-1)
             if flat.numel():
-                indices = torch.linspace(
-                    0,
-                    flat.numel() - 1,
-                    steps=min(32, flat.numel()),
-                    device=flat.device,
-                ).long()
-                digest.update(flat[indices].float().cpu().numpy().tobytes())
+                sample = min(16, flat.numel())
+                digest.update(
+                    flat[:sample].float().cpu().numpy().tobytes()
+                )
+                if flat.numel() > sample:
+                    digest.update(
+                        flat[-sample:].float().cpu().numpy().tobytes()
+                    )
     return digest.hexdigest()
 
 
