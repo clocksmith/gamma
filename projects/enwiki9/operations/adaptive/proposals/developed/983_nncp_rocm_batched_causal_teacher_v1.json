@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_rocm_batched_causal_teacher_v1",
+  "claimed_at": "2026-07-28T19:04:47+00:00",
+  "created_at": "2026-07-28T19:04:47+00:00",
+  "developed_at": "2026-07-28T19:04:47+00:00",
+  "evidence": [
+    "Prior batched run changed output 9 after input 9 changed, but the declared model input is target shifted by one symbol; output 9 may legally depend on decoded target 8."
+  ],
+  "expected_savings_bytes": 3000000,
+  "hypothesis": "The prior batched-teacher leakage verdict was an off-by-one audit error: changing target 8 changes shifted input 9, so only predictions 0 through 8 must remain identical.",
+  "interfaces_exposed": [
+    "Official NNCP-preprocessed symbols, shifted one position; masked segment forward pass; zero-credit teacher probabilities only."
+  ],
+  "kill_condition": "Reject the batched ROCm teacher unchanged if either exact causality condition fails; do not alter model dimensions, precision, or optimizer.",
+  "max_program_bytes": 64000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "endpoint",
+  "owner": "codex-rocm",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 1,
+  "promotion_condition": "Authorize one zero-credit batched ROCm teacher headroom receipt only if the shifted-target counterfactual has exact zero error on outputs 0 through 8 and the mask dependency graph excludes future inputs.",
+  "proposal_id": "nncp_rocm_batched_causal_teacher_v1",
+  "retired_neighborhoods": [
+    "LibNC parity; noncausal unshifted batching; incremental full teacher execution"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 16,
+  "state": "developed",
+  "title": "ROCm shifted-input batched causal teacher repair"
+}
