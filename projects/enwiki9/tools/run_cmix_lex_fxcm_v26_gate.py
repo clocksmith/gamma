@@ -117,8 +117,18 @@ def main() -> int:
             ignore=shutil.ignore_patterns(".git", "run", "pgo_data", "*.o", "cmix"),
         )
         build_started = time.monotonic()
+        compiler = shutil.which("clang++-17") or shutil.which("clang++")
+        if compiler is None:
+            raise FileNotFoundError("clang++-17 or clang++ is required")
         subprocess.run(
-            ["make", "-C", str(build), "-j2", "cmix"],
+            [
+                "make",
+                "-C",
+                str(build),
+                "-j2",
+                f"CC={compiler}",
+                "cmix",
+            ],
             check=True,
             stdout=(args.result_dir / "build.log").open("wb"),
             stderr=subprocess.STDOUT,
