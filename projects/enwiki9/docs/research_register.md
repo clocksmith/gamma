@@ -2999,3 +2999,17 @@ canonical paid serialization, J1/J2 total selection, and deterministic duplicate
 training. The already queued 10M endpoint trace is retained as zero-credit,
 archive-identity-gated infrastructure only. No 10M JANUS training may begin
 until the corrected Q0 passes.
+# 2026-07-28: Exact endpoint428 10M P1 trace infrastructure
+
+The zero-credit trace gate for corrected JANUS completed on the canonical 10M
+population. The observation-enabled archive is byte-identical to the existing
+trace-off endpoint428 archive: both are 1,635,174 bytes with SHA-256
+`dddc0d0e4824433c605d870470d80bb119292b465689d0381933b37c5fb0e8d9`.
+
+The trace contains 100,029,648 bytes and the exact WRT store contains 6,251,857
+bytes. Peak sampled single-process RSS was 9,078,320 KiB, below the official
+decimal limit, with no guard violation. This artifact has zero score credit and
+does not authorize 10M JANUS training until corrected Q0 passes.
+
+Receipt:
+`results/endpoint428_pair_layer0_online_native_trace_10m_v1/decision.json`
