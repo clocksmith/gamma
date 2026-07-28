@@ -115,3 +115,11 @@ Architecture's unconditional base Compute and retains one self-Compute per
 accepted license, every rival transaction, and the three-Compute ceiling.
 Neither arm includes the confirmed Elon candidate, so every focal effect
 remains isolated.
+
+The dated
+[`faction prestige-and-demand`](2026-07-28-faction-prestige-demand.md)
+receipt rejects the Nobel reduction: the trigger is too rare to move Demis.
+It selects license-only New Architecture for combined-package confirmation.
+That candidate preserves every rival sale and payment while moving Foundry to
+`30.18%`, `24.82%`, and `22.79%` partially pooled win share at three, four,
+and five players.
