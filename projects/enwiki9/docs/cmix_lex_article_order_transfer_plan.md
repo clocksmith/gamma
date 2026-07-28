@@ -97,3 +97,36 @@ Otherwise retire the public article-order transfer, including order-prefix,
 partial-order, clustering-weight, and reset-scope sweeps. A pass is only an
 authorization for native joint replay with exact compressed-order accounting.
 It does not change the score.
+
+## Outcome
+
+The corrected identity control first built the exact public page-position
+vector, then sorted that same vector by original page index. Its retained raw
+page stream and the public-order stream are both exactly `999,988,851` bytes.
+Order-sensitive PHDA9/WRT preprocessing produced:
+
+```text
+identity ready stream: 585,969,860 bytes
+public ready stream:   586,459,321 bytes
+```
+
+The reset-state archives were:
+
+```text
+population   identity   public order   gain
+start         317,692        102,258   +215,434
+middle        115,510        268,092   -152,582
+end           188,265        113,195    +75,070
+aggregate     621,467        483,545   +137,922
+```
+
+Aggregate gain was `45,974 B/M`, above both the `3,486 B/M` public-prize
+screen and `4,467 B/M` design-target screen. Peak RSS was `8,260,436` KiB.
+
+Decision: authorize a same-page native Gamma gate. The evidence remains
+zero-credit because reset states and unmatched positions do not establish a
+constructive archive.
+
+Evidence:
+
+- `results/cmix_lex_article_order_transfer_v1_retry2/decision.json`
