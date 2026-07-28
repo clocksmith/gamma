@@ -2554,3 +2554,21 @@ Evidence:
 
 - `results/cmix21_text_mmap_paq5_ppmd129552k_fxcmassoc10tight92_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T211100.json`
 - `operations/adaptive/exclusions/bex_ppmd129552_250k_negative_v1.json`
+
+## 2026-07-28: RDC-1 NNCP U16BE plus cmix text mode is terminal negative
+
+The native reversible composition produced a `56,905`-byte first archive on
+opening 250K, versus `45,178` for B2. It regressed `11,727` archive bytes and
+missed the `44,678` target-scale ceiling by `12,227` bytes before charging its
+`878,194`-byte package. Roundtrip and determinism were skipped after the
+terminal ceiling miss.
+
+Decision: retire forced-text cmix coding, dictionary/framing tuning, and this
+exact U16BE text-mode composition. The separately frozen dictionary-free
+no-preprocessing backend remains one materially different falsification of the
+representation, after which failure closes NNCP-to-cmix transfer.
+
+Evidence:
+
+- `results/nncp_pc_u16be_cmix21_assoc10_v1/2026-07-27T212053.json`
+- `operations/adaptive/exclusions/rdc_u16be_text_backend_250k_negative_v1.json`
