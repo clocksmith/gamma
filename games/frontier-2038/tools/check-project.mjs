@@ -200,6 +200,8 @@ const required = [
   "studies/simulation/2026-07-28-faction-prestige-demand.md",
   "studies/simulation/2026-07-28-demis-late-validation.md",
   "studies/simulation/2026-07-28-four-lever-package-promotion.md",
+  "studies/simulation/2026-07-28-residual-faction-parity-instrumentation.md",
+  "studies/simulation/preregistrations/residual-faction-parity-v1.json",
   "studies/simulation/2026-07-27-foundry-scaling-rule-selection.md",
   "studies/simulation/2026-07-27-foundry-shovels-executable-correction.md",
   "studies/simulation/2026-07-26-first-automated-baseline.md"
