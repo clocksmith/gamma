@@ -142,3 +142,10 @@ second point when four rivals provide broad independent validation.
 validation schedule. Capability 9 and 12 score one Mandate for Demis; at five
 players only, four rival institutions restore Capability 12's canonical
 second point. The schedule changes no technical output.
+
+The dated
+[`Demis peer-validation refinement`](2026-07-28-demis-peer-validation.md)
+receipt selects that schedule for combined-package confirmation. It moves
+Demis to `42.38%`, `26.82%`, and `19.20%` partially pooled win share at three,
+four, and five players while preserving Research and Capability realization.
+It is not yet a physical rule.
