@@ -62,7 +62,7 @@ def main() -> int:
     source = roots[0]
 
     project = Path(__file__).resolve().parents[1]
-    patch = project / "patches" / "nncp_symbol_raw_map_v1.patch"
+    patch = project / "patches" / "nncp_symbol_raw_map_v2.patch"
     run(
         ["patch", "-p1", "-i", str(patch)],
         cwd=source,
