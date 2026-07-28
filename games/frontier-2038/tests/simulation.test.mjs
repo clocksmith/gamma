@@ -90,7 +90,8 @@ test("Scientific Method charges only when its protection is actually consumed", 
       duplicatesProtected: 1,
       capabilityPreserved: 0,
       capabilityPenalty: 0,
-      thresholdMandateWithheld: 0
+      thresholdMandateWithheld: 0,
+      scrutinyAdded: 0
     }
   );
 
@@ -119,6 +120,43 @@ test("Scientific Method charges only when its protection is actually consumed", 
   assert.equal(ordinarySafety.players[0].runway, 3);
   assert.ok(!ordinarySafety.players[0].roundMetrics.scientificMethodUsed);
   assert.equal(ordinarySafety.players[0].safety, 0);
+});
+
+test("Scientific Method scrutiny taxes validation without reducing Capability", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "imperial_research_lab",
+      seed: "scientific-method-scrutiny-probe",
+      rulesVariant: { imperialScientificMethodScrutiny: 2 }
+    },
+    () => {}
+  );
+  const researcher = match.players[0];
+  match.resolveTrainingRun = () => ({
+    capability: 3,
+    trust: 0,
+    runwaySpent: 0,
+    safetySpent: 1,
+    scrutiny: 0
+  });
+  match.applyResolution(0, {
+    decisionId: "fixture-scientific-method-scrutiny",
+    label: "Fixture Research saved by Scientific Method",
+    actionId: "research",
+    parameters: {
+      destinationCategory: "cloud",
+      destinationId: "frontier",
+      pieceId: "s0-ceo",
+      stopAt: 3
+    }
+  });
+  assert.equal(researcher.capability, 3);
+  assert.equal(researcher.scrutiny, 2);
+  assert.equal(
+    researcher.metrics.factionAbilityValues.scientific_method.scrutinyAdded,
+    2
+  );
 });
 
 test("joint Mega-Cluster acceptance is unavailable after a partner spends its contribution", async () => {
@@ -619,6 +657,56 @@ test("Foundry scaling probes expose one authored lever at a time", async () => {
   assert.equal(
     gpuNoMandate.match.rulesVariant.foundryGpuMandateEnabled,
     false
+  );
+
+  const demandCoupled = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "foundry",
+      seed: "foundry-demand-coupled-architecture",
+      rulesVariant: {
+        foundryNewArchitectureDemandBaseCompute: 1,
+        foundryNewArchitectureComputePerLicense: 1,
+        foundryNewArchitectureMaximumCompute: 3
+      }
+    },
+    () => {}
+  );
+  const policy = (decisionPrefix) => ({
+    async decide(packet) {
+      const selected =
+        packet.legalDecisions.find((decision) =>
+          decision.decisionId.startsWith(decisionPrefix)
+        ) || packet.legalDecisions[0];
+      return {
+        decision: {
+          decisionId: selected.decisionId,
+          rationale: "Deterministic fixture policy."
+        },
+        receipt: {
+          provider: "fixture",
+          profileId: "fixture",
+          requestId: packet.requestId
+        }
+      };
+    }
+  });
+  demandCoupled.match.round = 3;
+  const foundry = demandCoupled.match.players[0];
+  const computeBeforeArchitecture = foundry.compute;
+  await demandCoupled.match.resolveRoundFactionPowers([
+    policy("architecture_decline_"),
+    policy("architecture_license_"),
+    policy("architecture_decline_")
+  ]);
+  assert.equal(foundry.compute, computeBeforeArchitecture + 2);
+  assert.equal(
+    foundry.metrics.factionAbilityValues.new_architecture.licensesSold,
+    1
+  );
+  assert.equal(
+    foundry.metrics.factionAbilityValues.new_architecture.computeGained,
+    2
   );
 });
 
@@ -1418,7 +1506,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.6");
+  assert.equal(first.game.version, "0.8.7");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1599,7 +1687,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.6");
+  assert.equal(first.game.version, "0.8.7");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

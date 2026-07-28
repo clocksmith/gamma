@@ -761,14 +761,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
       }
       if (this.round === 3 && player.factionId === "foundry") {
-        this.addResource(
-          player,
-          "compute",
-          this.rulesVariant.foundryNewArchitectureCompute
-        );
-        this.recordFactionAbility(player, "new_architecture", {
-          computeGained: this.rulesVariant.foundryNewArchitectureCompute
-        });
+        const demandBase =
+          this.rulesVariant.foundryNewArchitectureDemandBaseCompute;
+        const demandCoupled = Number.isFinite(demandBase);
+        let licensesSold = 0;
+        if (!demandCoupled) {
+          this.addResource(
+            player,
+            "compute",
+            this.rulesVariant.foundryNewArchitectureCompute
+          );
+          this.recordFactionAbility(player, "new_architecture", {
+            computeGained: this.rulesVariant.foundryNewArchitectureCompute
+          });
+        }
         for (const rival of this.players.filter((candidate) =>
           candidate.seat !== player.seat && candidate.runway > 0
         )) {
@@ -781,6 +787,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             { decisionId: `architecture_decline_${rival.seat}`, label: decisionLabel("architectureDecline"), actionId: "faction" }
           ]);
           if (license.decisionId.startsWith("architecture_license_")) {
+            licensesSold += 1;
             rival.runway -= 1;
             this.addResource(player, "runway", 1);
             this.addResource(rival, "compute", 1);
@@ -791,6 +798,18 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
               rivalComputeGranted: 1
             });
           }
+        }
+        if (demandCoupled) {
+          const computeGained = Math.min(
+            this.rulesVariant.foundryNewArchitectureMaximumCompute,
+            demandBase +
+              licensesSold *
+                this.rulesVariant.foundryNewArchitectureComputePerLicense
+          );
+          this.addResource(player, "compute", computeGained);
+          this.recordFactionAbility(player, "new_architecture", {
+            computeGained
+          });
         }
       }
     }
@@ -2412,12 +2431,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.roundMetrics.scientificMethodUsed = true;
         player.factionAbilityUsed.scientificMethodUses =
           scientificMethodLifetimeUses + 1;
+        const scrutinyAdded =
+          this.rulesVariant.imperialScientificMethodScrutiny;
+        if (scrutinyAdded > 0) this.addScrutiny(player, scrutinyAdded);
         this.recordFactionAbility(player, "scientific_method", {
           runwaySpent: scientificMethodRunwayCost,
           duplicatesProtected: 1,
           capabilityPreserved: player.lastTrainingResult?.capability || 0,
           capabilityPenalty,
-          thresholdMandateWithheld: 0
+          thresholdMandateWithheld: 0,
+          scrutinyAdded
         });
       } else if (scientificMethodProtection) {
         player.runway += scientificMethodRunwayCost;

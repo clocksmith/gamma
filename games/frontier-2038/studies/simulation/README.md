@@ -84,3 +84,10 @@ changes five-player Foundry win share and placement, but Foundry's three- and
 four-player strength exists without it. The receipt retains the supplier
 identity and requires the next hypothesis to move victory conversion toward
 realized rival demand.
+
+`faction-demand-validation-v1.json` independently tests two identity-safe
+bottlenecks. The Demis arm adds two Scrutiny only when Scientific Method
+actually saves a run and never removes Capability. The Foundry arm retains
+four starting Compute and a three-Compute New Architecture ceiling, but grants
+one base Compute plus one per accepted rival license. Both arms require exact
+configuration-specific faction standings by supported player count.
