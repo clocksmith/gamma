@@ -100,7 +100,7 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory(prefix="nncp-native-trace-") as temp:
         workspace = Path(temp)
-        with tarfile.open(args.source_package, "r:xz") as archive:
+        with tarfile.open(args.source_package, "r:*") as archive:
             archive.extractall(workspace)
         roots = [path for path in workspace.iterdir() if path.is_dir()]
         if len(roots) != 1:
