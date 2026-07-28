@@ -173,3 +173,13 @@ than merely prints, candidate faction range, action diversity, opening
 diversity, winning-path diversity, fallbacks, and forced no-ops separately at
 three, four, and five players. A path-diversity failure locates the next
 diagnostic; it does not authorize an unregistered global rule change.
+
+The dated
+[`enforced-gate confirmation`](2026-07-28-selected-faction-package-gate-confirmation.md)
+records `11,998` clean matches. The faction package reproduced within
+`13.41/12.19/13.36` percentage-point ranges at three, four, and five players,
+with no registered dominance and no action or opening collapse. The corrected
+gate nevertheless rejected overall balance because winning-path entropy was
+`0.571/0.600/0.535`. Adoption held `46.53%/46.28%/50.53%` of winner
+classifications: below the direct `55%` cap but concentrated enough to require
+winner-path attribution before any global rule probe.
