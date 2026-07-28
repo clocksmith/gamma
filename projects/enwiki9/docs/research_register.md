@@ -2464,3 +2464,32 @@ comparison passes.
 - This authorizes the miniature online-update parity gate with dropout
   disabled. It does not authorize a mature trace or score claim.
 - Receipt: `results/nncp_v33_relative_parity_bf16_v1/receipt.json`
+
+## 2026-07-27: NNCP v3.3 online-update parity is terminal
+
+- Candidates: `nncp_v33_rocm_online_update_parity_v1` and
+  `nncp_v33_libnc_gradient_interposition_v1`
+- Verdict: `FAIL_BOUND_MINIATURE`
+- Score credit: zero bytes.
+- The first 16-update comparison was invalid: its archive embedded a width-16
+  profile while its final coefficients were exported as a width-32 object.
+  Those numbers were retracted rather than preserved as negative evidence.
+- A corrected control used the frozen seed `123`, initialization range `0.79`,
+  width-32 parameters, four symbols, one causal update, and one hash-bound
+  execution. Its initial distribution reproduced the frozen teacher within
+  `4.2189e-7`, proving that the application object was bound correctly.
+- After one update, named parameters differed by as much as `3.2e-4`, above
+  the declared `2e-5` gate. Per-parameter norm clipping and LibNC's Adam
+  bias/epsilon formulation were reproduced before this verdict.
+- Direct LibNC gradient interposition found near-exact output gradients but
+  diffuse relative disagreement across internal backward paths:
+  approximately `6.6%` to `14.6%` for attention, feed-forward, and embedding
+  tensors. A single-symbol control cleared RMSNorm as the primary cause.
+  Causal key/value detachment worsened `w_kv` disagreement to `90.3%`.
+- Decision: retire PyTorch-autograd reproduction of LibNC online training.
+  Do not launch a mature ROCm teacher trace from frozen inference parity.
+  The remaining NNCP-derived research route is a standalone same-domain
+  integer student trained from bounded, exact LibNC teacher traces; it must
+  receive a new target-bearing headroom gate before construction.
+- Receipt:
+  `results/nncp_v33_libnc_gradient_interposition_v1/receipt.json`

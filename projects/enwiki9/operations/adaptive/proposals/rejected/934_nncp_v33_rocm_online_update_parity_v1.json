@@ -22,11 +22,13 @@
   "priority": 50,
   "promotion_condition": "Across a fixed miniature causal schedule, every pre-update and post-update distribution remains within the declared F32/BF16 tolerance and named parameter updates match before any full-profile trace.",
   "proposal_id": "nncp_v33_rocm_online_update_parity_v1",
+  "rejected_at": "2026-07-27T23:52:52+00:00",
+  "rejection_reason": "The original 16-update evidence was invalid because its archive and final export described incompatible width-16 and width-32 objects. A corrected seed-123, init-range-0.79, width-32 one-update control reproduced the frozen distribution at 4.2189e-7 but missed named-parameter parity by 3.2e-4, exceeding the declared 2e-5 tolerance. Direct gradient interposition then found diffuse LibNC/PyTorch backward disagreement. No mature trace is authorized.",
   "retired_neighborhoods": [
     "startup teacher quotient and soft-target feature sweeps"
   ],
   "schema": "enwiki9_algorithm_proposal_v1",
   "search_priority": 65,
-  "state": "claimed",
+  "state": "rejected",
   "title": "NNCP v3.3 ROCm online-update parity"
 }

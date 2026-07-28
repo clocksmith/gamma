@@ -1,0 +1,78 @@
+{
+  "schema": "gamma.nncp_v33_gradient_interposition_receipt.v1",
+  "status": "FAIL_BOUND_MINIATURE",
+  "score_credit_bytes": 0,
+  "instance": {
+    "layers": 1,
+    "d_model": 32,
+    "heads": 2,
+    "d_key": 8,
+    "d_value": 8,
+    "d_inner": 64,
+    "d_pos": 8,
+    "memory_length": 4,
+    "segment_length": 4,
+    "vocabulary": 256,
+    "symbols": 4,
+    "seed": 123,
+    "init_range": 0.79,
+    "learning_rate": 0.00016,
+    "gradient_clip": 0.05
+  },
+  "proof": {
+    "initial_maximum_absolute_probability_error": 4.2188912630081177e-7,
+    "maximum_absolute_parameter_error_after_one_update": 0.00031999964267015457,
+    "declared_tolerance": 0.00002,
+    "gradient_relative_l2_errors": {
+      "embed_out": 0.000023924709239508957,
+      "out_bias": 5.995290166538325e-7,
+      "ff2_0": 0.12876176834106445,
+      "ff1_0": 0.146332249045372,
+      "ff_bias1_0": 0.143545463681221,
+      "w_o_0": 0.07085949182510376,
+      "w_r_0": 0.08937018364667892,
+      "b_r_0": 0.07918979972600937,
+      "w_kv_0": 0.06636880338191986,
+      "w_q_0": 0.06796059757471085,
+      "embed": 0.11877971142530441
+    },
+    "single_symbol_final_rms_input_fit_relative_error": 0.0002755679306574166,
+    "causal_key_value_detach_w_kv_relative_error": 0.9028379917144775,
+    "verdict": "Backward disagreement is diffuse after the exact output layer. Neither RMSNorm nor causal key/value detachment yields a bounded correction."
+  },
+  "artifacts": {
+    "decision": {
+      "path": "results/nncp_v33_rocm_online_update_parity_v1/decision.json",
+      "sha256": "7c80da912623dbef38f59b315cbb153d12a0c0f1d8a3b6424b98f90d196e4181"
+    },
+    "gradient_hook_source": {
+      "path": "tools/nncp_libnc_gradient_hook.c",
+      "sha256": "9ec16cb5987ad1c6bab3bd6df0a1b8dcbe17cdabc3653257e3de2a9696c538d0"
+    },
+    "parity_source": {
+      "path": "tools/nncp_libnc_relative_parity.py",
+      "sha256": "a49eaf2f6ebdf1c7fb7fe858322fb224bb330f661a236c820fda0149e42ac038"
+    },
+    "external_input": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/input.bin",
+      "sha256": "e281f1f7b138d076f139cdbdf9c841819d282800979cc3c3d29698a3ccf89edf"
+    },
+    "external_archive": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/archive.bin",
+      "sha256": "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da"
+    },
+    "external_teacher_trace": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/teacher.bin",
+      "sha256": "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+    },
+    "external_final_coefficients": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/final.coefs",
+      "sha256": "8edc59eee077db2dcc19481b4c6c4fcb1b8498cd6c1c10162a30db83c0b613b0"
+    },
+    "external_gradient_set": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/gradients",
+      "aggregate_sha256": "480dea30cd0bb5310e37512b52ebbc6fe687ca9585af32b32524675d2da00b14"
+    }
+  },
+  "claim_boundary": "Bound miniature gradient-localization failure only. No mature teacher trace, codec replacement, compression gain, or score credit."
+}

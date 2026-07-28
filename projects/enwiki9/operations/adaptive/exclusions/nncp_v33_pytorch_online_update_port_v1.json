@@ -1,0 +1,18 @@
+{
+  "evidence": [
+    "results/nncp_v33_rocm_online_update_parity_v1/decision.json"
+  ],
+  "exclusion_id": "nncp_v33_pytorch_online_update_port_v1",
+  "failure": "A corrected seed-123, init-range-0.79 one-update control reproduced frozen inference at 4.2189e-7, but named parameters differed by as much as 3.2e-4. Direct gradient interposition found diffuse backward disagreement across attention, feed-forward, and embedding paths; the strict 2e-5 gate failed.",
+  "mechanism": "PyTorch-autograd reproduction of LibNC NNCP v3.3 online updates",
+  "population": "Bound width-32 dropout-disabled miniature, one causal four-symbol update",
+  "recorded_at": "2026-07-27T23:52:52+00:00",
+  "retired_dimensions": [
+    "optimizer hyperparameter or clipping sweeps",
+    "mature teacher tracing from inference parity alone"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "standalone same-domain integer student trained from bounded LibNC teacher traces"
+  ]
+}
