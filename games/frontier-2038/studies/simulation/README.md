@@ -70,3 +70,9 @@ The dated confirmation receipt rejects the exact Demis value as too weak and
 confirms the Elon candidate on fresh seeds. Confirmation is not physical
 promotion: the canonical semantic graph and rulebook remain unchanged until
 explicit approval.
+
+`foundry-supported-count-conversion-v1.json` isolates the five-player-only
+Mandate on Everybody Gets a GPU. It also requires configuration-specific
+player-count summaries and faction-specific Mandate sources so a visible
+five-player discontinuity cannot be mistaken for the entire Foundry main
+effect.

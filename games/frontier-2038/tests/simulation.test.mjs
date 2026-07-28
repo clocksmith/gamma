@@ -201,12 +201,16 @@ test("Foundry starting Compute is an explicit one-lever rules variant", async ()
   );
   assert.equal(canonical.match.players[0].compute, 4);
   assert.equal(probe.match.players[0].compute, 3);
+  assert.ok(canonical.match.players[0].metrics.mandateEvents.some((event) =>
+    event.source === "trust-2" && event.points === 2
+  ));
   assert.equal(
     canonical.match.rulesVariant.foundryShovelsPerRound,
     2
   );
   assert.equal(canonical.match.rulesVariant.foundryNewArchitectureCompute, 3);
   assert.equal(canonical.match.rulesVariant.foundryGpuRivalsPerMandate, 4);
+  assert.equal(canonical.match.rulesVariant.foundryGpuMandateEnabled, true);
 });
 
 test("late Capability Mandate is an explicit one-lever rules variant", async () => {
@@ -594,10 +598,28 @@ test("Foundry scaling probes expose one authored lever at a time", async () => {
     },
     () => {}
   );
+  const gpuNoMandate = await createInteractiveGame(
+    {
+      playerCount: 5,
+      factionId: "foundry",
+      seed: "foundry-gpu-no-mandate-probe",
+      rulesVariant: { foundryGpuMandateEnabled: false }
+    },
+    () => {}
+  );
   assert.equal(architecture.match.rulesVariant.foundryNewArchitectureCompute, 2);
   assert.equal(architecture.match.rulesVariant.foundryGpuRivalsPerMandate, 4);
   assert.equal(gpu.match.rulesVariant.foundryNewArchitectureCompute, 3);
   assert.equal(gpu.match.rulesVariant.foundryGpuRivalsPerMandate, 2);
+  assert.equal(gpu.match.rulesVariant.foundryGpuMandateEnabled, true);
+  const noMandatePlayer = gpuNoMandate.match.players[0];
+  const mandateBeforeGpu = noMandatePlayer.mandate;
+  await gpuNoMandate.match.resolveFactionAction([], 0, "everybody_gpu");
+  assert.equal(noMandatePlayer.mandate, mandateBeforeGpu);
+  assert.equal(
+    gpuNoMandate.match.rulesVariant.foundryGpuMandateEnabled,
+    false
+  );
 });
 
 test("Foundry Shovels observes two-Compute Wild Actions and respects its round cap", async () => {
@@ -1396,7 +1418,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.5");
+  assert.equal(first.game.version, "0.8.6");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1577,7 +1599,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.5");
+  assert.equal(first.game.version, "0.8.6");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

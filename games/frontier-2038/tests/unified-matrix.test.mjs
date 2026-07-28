@@ -150,6 +150,14 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
   );
   assert.equal(report.configurationResults.canonical.matches, 28);
   assert.equal(report.configurationResults.probe.matches, 28);
+  assert.equal(
+    report.configurationResults.canonical.playerCountResults[4].matches,
+    28
+  );
+  assert.equal(
+    typeof report.configurationResults.canonical.outcomes.factionMandateSources,
+    "object"
+  );
   assert.equal(report.rulesComparisons[0].matchedPairs, 28);
   assert.equal(report.rulesComparisons[0].unmatchedPairs, 0);
   assert.equal(report.rulesComparisons[0].standingMismatches, 0);

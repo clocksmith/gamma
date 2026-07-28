@@ -391,6 +391,7 @@ function outcomeSummary(observations) {
   };
   const factionAbilityValues = {};
   const factionActionSelections = {};
+  const factionMandateSources = {};
   let declarations = 0;
   let genuineAgi = 0;
   let auditHits = 0;
@@ -440,8 +441,14 @@ function outcomeSummary(observations) {
       }
       factionAbilityValues[standing.factionId] = faction;
       for (const event of standing.mandateEvents || []) {
-        mandateSources[event.source || "unknown"] =
-          (mandateSources[event.source || "unknown"] || 0) + (event.points || 0);
+        const source = event.source || "unknown";
+        mandateSources[source] =
+          (mandateSources[source] || 0) + (event.points || 0);
+        const factionSources =
+          factionMandateSources[standing.factionId] || {};
+        factionSources[source] =
+          (factionSources[source] || 0) + (event.points || 0);
+        factionMandateSources[standing.factionId] = factionSources;
       }
     }
   }
@@ -455,6 +462,7 @@ function outcomeSummary(observations) {
     policyFallbacks: fallbacks,
     bindingRequirements,
     mandateSources,
+    factionMandateSources,
     factionAbilityValues,
     factionActionSelections,
     agiFunnel,
@@ -1263,7 +1271,22 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
           {
             matches: selected.length,
             outcomes: outcomeSummary(selected),
-            cooperation: cooperationSummary(selected)
+            cooperation: cooperationSummary(selected),
+            playerCountResults: Object.fromEntries(
+              playerCounts.map((count) => {
+                const countSelected = selected.filter(
+                  (observation) => observation.playerCount === count
+                );
+                return [
+                  count,
+                  {
+                    matches: countSelected.length,
+                    outcomes: outcomeSummary(countSelected),
+                    cooperation: cooperationSummary(countSelected)
+                  }
+                ];
+              })
+            )
           }
         ];
       })

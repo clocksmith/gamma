@@ -920,10 +920,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         for (const rival of this.players.filter(
           (candidate) => candidate.seat !== foundry.seat
         )) this.addResource(rival, "compute", 1);
-        const mandate = Math.floor(
-          (this.playerCount - 1) /
-          this.rulesVariant.foundryGpuRivalsPerMandate
-        );
+        const mandate = this.rulesVariant.foundryGpuMandateEnabled
+          ? Math.floor(
+            (this.playerCount - 1) /
+            this.rulesVariant.foundryGpuRivalsPerMandate
+          )
+          : 0;
         this.awardMandate(
           foundry,
           mandate,
@@ -1496,10 +1498,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       this.awardMandate(
         player,
-        Math.floor(
-          (this.playerCount - 1) /
-          this.rulesVariant.foundryGpuRivalsPerMandate
-        ),
+        this.rulesVariant.foundryGpuMandateEnabled
+          ? Math.floor(
+            (this.playerCount - 1) /
+            this.rulesVariant.foundryGpuRivalsPerMandate
+          )
+          : 0,
         "everybody_gets_a_gpu"
       );
       this.removeScrutiny(player, 2);

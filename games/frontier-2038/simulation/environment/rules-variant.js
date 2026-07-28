@@ -34,6 +34,7 @@ export function canonicalRulesVariant(config) {
     foundryStartingCompute: config.factionRules.foundry.startingCompute,
     foundryShovelsPerRound: config.factionRules.foundry.shovelsPerRound,
     foundryNewArchitectureCompute: config.factionRules.foundry.newArchitectureCompute,
+    foundryGpuMandateEnabled: true,
     foundryGpuRivalsPerMandate: config.factionRules.foundry.everybodyGpuRivalsPerMandate
   };
 }
