@@ -3074,3 +3074,18 @@ a target-scale upper bound before native work.
 
 Receipt:
 `results/janus_paid_residual_mdl_10m_v1/decision.json`
+# 2026-07-29: FXCM dense-budget capacity passes 250K construction gate
+
+`fxcm_budget_preserving_capacity_v1` completed its previously cancelled exact
+250K gate. The archive is 45,179 bytes, roundtrip is exact, and the second
+archive is byte-identical. The candidate is one byte worse than the frozen
+45,178-byte parent at this discovery scope. Live observation placed the codec
+below the decimal memory limit.
+
+The proposal's frozen kill rule assigns sign judgment to opening 1M, not 250K.
+Authorize exactly one adjacent parent/candidate 1M comparison. Retire unchanged
+if the candidate is non-positive. Do not alter dense budget bytes, index
+mapping, scrambler constants, or table subsets.
+
+Receipt:
+`results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T204906.json`
