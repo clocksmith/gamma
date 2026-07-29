@@ -3176,3 +3176,28 @@ blend, or interaction-order sweep.
 
 Plan:
 `docs/janus_recurrent_quotient_joint_plan.md`
+
+## 2026-07-29: JANUS recurrent + quotient joint replay is terminal fragile
+
+The deterministic JANUS export exactly reproduced the terminal model, adjusted
+P1, and payload hashes. The frozen quotient was then refit on that P1 stream.
+Parent payload identity, quotient A/B model/P1/payload identity, complete
+candidate decodes, shifted-control decode, and WRT/raw inverse binding passed.
+
+The quotient saved 2,911 bytes beyond JANUS. The complete joint payload saved
+17,653 bytes versus the original parent, or 1,765.3 B/M gross. Charging the
+183,439-byte JANUS package and 34,709-byte quotient package leaves 1,547.152
+B/M.
+
+This is a real, nearly additive signal. A naive linear application to the
+current 109,524,268 planning forecast would cross the 108,000,000 design target
+by only 22,884 bytes. That is not a certificate: the baseline is not an exact
+full-corpus score, opening-10M slopes are not reliable, mature transfer is
+unproved, and the dense recurrent path has no CPU runtime qualification.
+
+Decision: reject the composition under the frozen 3,000 gross and 2,100 net
+B/M safety gates. Do not sweep blend, interaction order, state count, or
+architecture, and do not promote this fragile projection to score credit.
+
+Joint receipt:
+`results/janus_recurrent_quotient_joint_10m_v1/joint/decision.json`
