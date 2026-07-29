@@ -31,10 +31,10 @@ They do not prove a target result and do not replace exact gate promotion.
 | Candidate | PPMD KiB | PAQ | FXCM-RCM | RCM | Buffer | Guards | Latest prefix | Prefix archive | 10M archive | 10M RSS | 100M RSS |
 |---|---:|---:|---:|---:|---|---|---:|---:|---:|---|---|
 | `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | 76,800 | 5 | 28 | 32 | bufthirtysecond | n/a | 1,000,000 | 174,423 | n/a | missing | missing |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 20,352 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,533 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 20,352 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 1,000,000 | 174,536 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 44,978 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 44,978 | n/a | missing | missing |
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 20,352 | 5 | 20 | 32 | bufthirtysecond | ppmdguard2 | 250,000 | 45,179 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 45,184 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xz_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 45,184 | n/a | missing | missing |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1` | 102,400 | 5 | n/a | 32 | bufthirtysecond | n/a | 250,000 | 45,184 | n/a | missing | missing |

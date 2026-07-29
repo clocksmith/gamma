@@ -16,7 +16,7 @@ A 100M RSS pass would still not prove a full 1G target result.
 |---:|---|---:|---:|---|---:|---:|---|---|---|---|
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | n/a | n/a | missing | n/a | n/a | n/a | missing | rss pass (1,588,440 KiB margin) | n/a |
 | 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,682 | missing | n/a | n/a | n/a | missing | missing | n/a |
-| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 250,000 | 609,377 | missing | n/a | n/a | n/a | missing | missing | n/a |
+| 20,352 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,000,000 | 738,731 | missing | n/a | n/a | n/a | missing | missing | n/a |
 
 ## Decimal 10GB Risk
 

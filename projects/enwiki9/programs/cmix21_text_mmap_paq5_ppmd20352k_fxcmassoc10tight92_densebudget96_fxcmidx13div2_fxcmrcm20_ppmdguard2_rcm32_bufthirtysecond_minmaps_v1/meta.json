@@ -26,36 +26,36 @@
         {
           "archive_ceiling": null,
           "archive_ceiling_missed": false,
-          "bits_per_byte": 1.445728,
+          "bits_per_byte": 1.396264,
           "comparison": {
-            "archive_delta_vs_baseline": -30369,
+            "archive_delta_vs_baseline": -116199,
             "baseline": {
-              "bits_per_byte": 2.417536,
-              "compressed_size": 75548,
-              "data_md5": "58df7be6473925f769c9621aeaff05cb",
-              "data_size": 250000,
+              "bits_per_byte": 2.325856,
+              "compressed_size": 290732,
+              "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+              "data_size": 1000000,
               "determinism_single_host_byte_equal": true,
-              "hutter_score": 75749,
+              "hutter_score": 290933,
               "program_id": "baseline_lzma",
               "program_size": 201,
               "program_stats": null,
               "roundtrip_ok": true
             },
             "same_scope": true,
-            "score_delta_vs_baseline": 533628
+            "score_delta_vs_baseline": 447798
           },
-          "compressed_size": 45179,
-          "data_md5": "58df7be6473925f769c9621aeaff05cb",
-          "data_size": 250000,
+          "compressed_size": 174533,
+          "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+          "data_size": 1000000,
           "determinism_single_host_byte_equal": true,
-          "hutter_score": 609377,
+          "hutter_score": 738731,
           "program_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
           "program_size": 564198,
           "program_stats": null,
           "roundtrip_ok": true
         }
       ],
-      "generated_at": "2026-07-29T00:49:06+00:00",
+      "generated_at": "2026-07-29T02:08:04+00:00",
       "proposed_status": "measured_negative",
       "verdict": "Keep as negative evidence: archive improves but counted program size loses."
     },
@@ -95,6 +95,44 @@
           }
         ],
         "generated_at": "2026-07-29T00:49:06+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.396264,
+            "comparison": {
+              "archive_delta_vs_baseline": -116199,
+              "baseline": {
+                "bits_per_byte": 2.325856,
+                "compressed_size": 290732,
+                "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+                "data_size": 1000000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 290933,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 447798
+            },
+            "compressed_size": 174533,
+            "data_md5": "83a2cefd8ca00049e0445542dabd25a0",
+            "data_size": 1000000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 738731,
+            "program_id": "cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1",
+            "program_size": 564198,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-29T02:08:04+00:00",
         "proposed_status": "measured_negative",
         "verdict": "Keep as negative evidence: archive improves but counted program size loses."
       }
@@ -218,5 +256,5 @@
     "tree": "projects/enwiki9/external/cmix21-sidecar"
   },
   "status": "measured_negative",
-  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+  "verdict": "Terminal negative: the adjacent opening-1M archive improves by only 3 bytes while package size grows by 52 bytes, worsening counted total by 49 bytes and missing the frozen 2,000 B/M gate."
 }

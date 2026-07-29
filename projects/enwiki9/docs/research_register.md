@@ -3089,3 +3089,24 @@ mapping, scrambler constants, or table subsets.
 
 Receipt:
 `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T204906.json`
+
+## 2026-07-29: FXCM dense-budget capacity is terminal negative at exact 1M
+
+The predeclared adjacent comparison completed on the same canonical opening
+1,000,000 raw bytes. The frozen parent produced a 174,536-byte archive and a
+564,146-byte package. The budget-preserving capacity candidate produced a
+174,533-byte archive and a 564,198-byte package. Both roundtripped exactly and
+produced byte-identical deterministic second archives.
+
+The additional 1,215,436 deterministic FXCM cells therefore saved only 3
+archive bytes, or 3 B/M, while adding 52 package bytes. Counted total worsened
+by 49 bytes. This is three orders of magnitude below the frozen 2,000 B/M
+primary-mechanism gate.
+
+Decision: terminally reject `fxcm_budget_preserving_capacity_v1`. Do not tune
+the dense budget, scrambler, or table subsets, and do not run 10M, distant, or
+1G continuations. The theorem remains valid as representation evidence; its
+extra capacity is empirically subeconomic on the target codec.
+
+Decision receipt:
+`results/fxcm_budget_preserving_capacity_v1/opening_1m_decision.json`

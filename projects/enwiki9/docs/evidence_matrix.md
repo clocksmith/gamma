@@ -12,8 +12,8 @@ No forecast or inherited metadata is included here.
 
 ## Proof Boundary
 
-- Result JSON files scanned: `926`
-- Roundtrip-passing rows: `920`
+- Result JSON files scanned: `928`
+- Roundtrip-passing rows: `922`
 - Verified full `1G` rows in this checkout: `0`
 - `10.95%` target reached by this matrix: `False`
 - Best full `1G` score: `none present`
@@ -78,13 +78,13 @@ No forecast or inherited metadata is included here.
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
 | `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 735,705 | 174,423 | 561,282 | 1.395384 | true | `results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-07-21T183101.json` |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 738,731 | 174,533 | 564,198 | 1.396264 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T220804.json` |
 | `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 738,682 | 174,536 | 564,146 | 1.396288 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T212957.json` |
 | `fx2_struct_top_mixer_v1` | custom candidate | 1,000,000 | 447,188 | 175,172 | 272,016 | 1.401376 | true | `results/fx2_struct_top_mixer_v1/2026-07-21T151947.json` |
 | `fx2_structural_sidecar_v1` | fx2 sidecar or stream split | 1,000,000 | 531,814 | 175,177 | 356,637 | 1.401416 | true | `results/fx2_structural_sidecar_v1/2026-07-21T151039.json` |
 | `fx2cmix_recovered_gcc_o3_xz_minwrap_v1` | custom candidate | 1,000,000 | 458,920 | 175,203 | 283,717 | 1.401624 | true | `results/fx2cmix_recovered_gcc_o3_xz_minwrap_v1/2026-07-21T174845.json` |
 | `fx2cmix_recovered_gcc_o3_xz_v1` | custom candidate | 1,000,000 | 459,575 | 175,203 | 284,372 | 1.401624 | true | `results/fx2cmix_recovered_gcc_o3_xz_v1/2026-07-21T152648.json` |
 | `fx2_sidecar_byte_split_direct_page_match_v1` | fx2 sidecar or stream split | 1,000,000 | 538,455 | 175,204 | 363,251 | 1.401632 | true | `results/fx2_sidecar_byte_split_direct_page_match_v1/2026-07-21T150920.json` |
-| `fx2cmix_recovered_gcc_o3_meta_streak_add_xz_v1` | custom candidate | 1,000,000 | 459,272 | 175,207 | 284,065 | 1.401656 | true | `results/fx2cmix_recovered_gcc_o3_meta_streak_add_xz_v1/2026-07-21T152253.json` |
 
 ## Top Score Rows At 250,000 Bytes
 
