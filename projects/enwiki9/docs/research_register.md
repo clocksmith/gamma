@@ -3134,3 +3134,25 @@ hash, suffix-depth, or correction-alphabet sweep.
 
 Plan:
 `docs/janus_paid_context_quotient_plan.md`
+
+## 2026-07-29: JANUS-QUOTIENT Q0 is terminal negative
+
+The exact canonical-10M paid quotient completed successfully. Parent payload
+identity, both independent model fits, adjusted P1 identity, candidate payload
+identity, both candidate decodes, shifted-control decode, and the WRT/raw
+inverse binding all passed.
+
+The 65,536-state table saved 2,862 exact payload bytes: 286.2 B/M gross. Its
+canonical model compressed to 10,086 bytes; after the frozen 24,576-byte
+decoder allowance and 64 framing bytes, projected gain was 251.474 B/M. The
+candidate strongly beat the shifted-table null, so its small signal is real,
+but it missed the 3,000 gross and 2,100 net B/M gates by approximately an order
+of magnitude.
+
+Decision: terminally reject this exact paid quotient. Do not sweep state count,
+hash, suffix depth, confidence bins, or correction alphabet. This result,
+together with the recurrent JANUS result, shows that fixed-population access
+alone does not rescue either tested residual family at target scale.
+
+Receipt:
+`results/janus_paid_context_quotient_10m_q0_v1/decision.json`
