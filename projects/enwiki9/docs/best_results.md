@@ -10,8 +10,8 @@ No prefix row proves 10.80%.
 No forecast or metadata-inherited row is included.
 ```
 
-- Result JSON files scanned: `921`
-- Roundtrip-passing rows: `915`
+- Result JSON files scanned: `923`
+- Roundtrip-passing rows: `917`
 
 ## Scope `1,000,000,000` Bytes
 
@@ -87,4 +87,4 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 |---|---|---:|---:|---:|---:|---|---|
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | cmix21 memory-shaped context mixer | 349,231 | 44,978 | 304,253 | 1.439296 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T170257.json` |
 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1` | cmix21 memory-shaped context mixer | 375,839 | 44,978 | 330,861 | 1.439296 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1/2026-07-20T170307.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1` | cmix21 memory-shaped context mixer | 498,961 | 45,184 | 453,777 | 1.445888 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1/2026-07-20T165204.json` |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 609,377 | 45,179 | 564,198 | 1.445728 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T204906.json` |
