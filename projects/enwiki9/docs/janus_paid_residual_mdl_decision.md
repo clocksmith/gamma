@@ -4,7 +4,7 @@ Date: 2026-07-28
 
 Candidate: `janus_paid_residual_mdl_q0_v1`
 
-Status: `AUTHORIZED_10M_BY_CORRECTED_Q0_V3`
+Status: `TERMINAL_MEASURED_NEGATIVE_AT_10M`
 
 Score credit: zero
 
@@ -77,6 +77,38 @@ credit and does not authorize a dense native GRU.
 Authoritative corrected receipt:
 
 `results/janus_paid_residual_mdl_1m_v3/decision.json`
+
+## Terminal canonical-10M decision
+
+The unchanged frozen Q1 completed with exact parent payload identity, complete
+J1/J2 arithmetic decode, WRT/raw inverse binding, tail fallback, and duplicate
+model/P1/payload/training identity.
+
+```text
+J0 parent payload                  1,635,137 bytes
+J1 node-bias payload               1,635,063 bytes
+J1 exact gain                             74 bytes
+J2 GRU payload                     1,620,395 bytes
+J2 exact gain                         14,742 bytes
+JS shifted-residual payload        1,676,935 bytes
+JS exact gain                        -41,798 bytes
+J2 package allowance                 183,439 bytes
+J2 gross rate                      1,474.200 B/M
+J2 projected net rate              1,290.761 B/M
+```
+
+J2 is specific and reproducible, but it misses the 3,000 B/M gross and 2,100
+B/M package-adjusted gates. J1 is economically negative after its package.
+
+Decision: reject paid CHIRON-shaped recurrence unchanged. Retire this GRU
+shape, 256-byte reset, optimizer, epoch schedule, int8 quantization, and direct
+dense integration. Do not run larger scopes or parameter ladders. This does not
+prove that all paid fixed-corpus models fail; a successor must use a materially
+different constructive model description and a new predeclared ceiling.
+
+Terminal receipt:
+
+`results/janus_paid_residual_mdl_10m_v1/decision.json`
 
 The 10M gate is:
 
