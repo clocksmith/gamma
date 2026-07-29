@@ -1,0 +1,22 @@
+{
+  "evidence": [
+    "results/fxcm_budget_preserving_capacity_v1/opening_1m_decision.json",
+    "results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T212957.json",
+    "results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T220804.json"
+  ],
+  "exclusion_id": "fxcm_budget_preserving_capacity_1m_v1",
+  "failure": "The frozen 92-byte-cell/96-byte-budget capacity expansion saved only 3 archive bytes (3 B/M) at exact opening 1M while adding 52 package bytes, worsening counted total by 49 bytes and missing the 2,000 B/M gate.",
+  "mechanism": "reinvest A10 cell padding into deterministic dense-range FXCM capacity under unchanged per-table payload budgets",
+  "population": "canonical opening 1,000,000 raw bytes; adjacent parent and candidate builds; exact roundtrip and deterministic re-encode",
+  "recorded_at": "2026-07-29T02:08:04+00:00",
+  "retired_dimensions": [
+    "92-byte A10 cells with 96-byte dense capacity budget",
+    "dense-range capacity expansion using the frozen bijective scrambler",
+    "budget-byte, scrambler-constant, and table-subset tuning",
+    "10M, distant-window, and full-corpus continuation of this realization"
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "materially different coded representation or decoder-visible information source with a predeclared target-scale ceiling"
+  ]
+}
