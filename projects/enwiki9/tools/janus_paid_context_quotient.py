@@ -95,6 +95,13 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=PARENT_PAYLOAD_BYTES,
     )
+    parser.add_argument("--root-parent-payload-bytes", type=int, default=0)
+    parser.add_argument("--upstream-package-bytes", type=int, default=0)
+    parser.add_argument(
+        "--package-ceiling",
+        type=int,
+        default=PACKAGE_CEILING,
+    )
     return parser.parse_args()
 
 
@@ -279,6 +286,15 @@ def main() -> int:
     gross_gain = len(parent_payload) - len(payload_a)
     gross_bpm = gross_gain * 1_000_000.0 / args.raw_bytes
     net_bpm = gross_bpm - package_bytes / 1000.0
+    root_parent_payload = (
+        args.root_parent_payload_bytes
+        if args.root_parent_payload_bytes
+        else len(parent_payload)
+    )
+    joint_package_bytes = package_bytes + args.upstream_package_bytes
+    joint_gross_gain = root_parent_payload - len(payload_a)
+    joint_gross_bpm = joint_gross_gain * 1_000_000.0 / args.raw_bytes
+    joint_net_bpm = joint_gross_bpm - joint_package_bytes / 1000.0
     exactness = all(
         (
             parent_identity,
@@ -294,10 +310,10 @@ def main() -> int:
     authorized = all(
         (
             exactness,
-            gross_bpm >= GROSS_GATE_BPM,
-            net_bpm >= NET_GATE_BPM,
+            joint_gross_bpm >= GROSS_GATE_BPM,
+            joint_net_bpm >= NET_GATE_BPM,
             len(payload_a) < len(shifted_payload),
-            package_bytes <= PACKAGE_CEILING,
+            joint_package_bytes <= args.package_ceiling,
         )
     )
     decision = "AUTHORIZED_SUCCESSOR" if authorized else "REJECT"
@@ -337,7 +353,9 @@ def main() -> int:
             "decoder_allowance_bytes": DECODER_ALLOWANCE,
             "frame_bytes": FRAME_BYTES,
             "complete_package_bytes": package_bytes,
-            "package_ceiling_bytes": PACKAGE_CEILING,
+            "upstream_package_bytes": args.upstream_package_bytes,
+            "joint_package_bytes": joint_package_bytes,
+            "package_ceiling_bytes": args.package_ceiling,
         },
         "payloads": {
             "J0_parent": {
@@ -358,15 +376,19 @@ def main() -> int:
             "gross_gain_bytes": gross_gain,
             "gross_gain_bytes_per_million": gross_bpm,
             "package_adjusted_gain_bytes_per_million": net_bpm,
+            "root_parent_payload_bytes": root_parent_payload,
+            "joint_gross_gain_bytes": joint_gross_gain,
+            "joint_gross_gain_bytes_per_million": joint_gross_bpm,
+            "joint_package_adjusted_gain_bytes_per_million": joint_net_bpm,
             "literal_10m_two_part_bytes": len(payload_a) + package_bytes,
         },
         "gates": {
             "gross_required_bytes_per_million": GROSS_GATE_BPM,
             "net_required_bytes_per_million": NET_GATE_BPM,
-            "gross_pass": gross_bpm >= GROSS_GATE_BPM,
-            "net_pass": net_bpm >= NET_GATE_BPM,
+            "gross_pass": joint_gross_bpm >= GROSS_GATE_BPM,
+            "net_pass": joint_net_bpm >= NET_GATE_BPM,
             "shift_specificity_pass": len(payload_a) < len(shifted_payload),
-            "package_pass": package_bytes <= PACKAGE_CEILING,
+            "package_pass": joint_package_bytes <= args.package_ceiling,
         },
         "exactness": {
             "parent_payload_identity": parent_identity,
@@ -392,4 +414,3 @@ if __name__ == "__main__":
     except Exception as error:
         print(f"janus-paid-context-quotient: {error}", file=sys.stderr)
         raise
-
