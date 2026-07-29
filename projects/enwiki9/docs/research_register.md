@@ -3029,3 +3029,26 @@ score credit and does not authorize 10M.
 
 Receipt:
 `results/janus_paid_residual_mdl_1m_v2/decision.json`
+# 2026-07-28: Corrected JANUS paid MDL Q0 v3 authorizes 10M
+
+The repaired `janus_paid_residual_mdl_q0_v1` Q0 now uses one full-stream range
+coder, preserves the exact parent P1 on the 166-byte WRT tail, emits and
+byte-matches the parent payload, decodes J1 and J2 payloads, binds the WRT/raw
+inverse receipt, serializes canonical JBIAS1/JMDL1 objects, charges frozen
+decoder allowances, and reproduces identical model, adjusted P1, payload, and
+training metrics in two complete fits.
+
+J0 was 173,859 bytes. J1 was 173,814 bytes, a 45-byte gain. J2 was 168,952
+bytes, a 4,907-byte gain. The corrected global byte-row residual-shift null was
+181,416 bytes, a 7,557-byte loss. J2's canonical compressed model plus decoder
+and framing allowance is 188,535 bytes, producing a projected package-adjusted
+rate of 4,718.465 B/M. J2 is the projected-total winner.
+
+Decision: `AUTHORIZED_10M`, zero score credit. Run the unchanged fixed model
+family once on the exact canonical-10M trace after binding the WRT store to its
+raw inverse. A 10M failure retires this recurrent shape unchanged. A pass
+authorizes residual concentration and quotient compilation, not a dense native
+GRU.
+
+Receipt:
+`results/janus_paid_residual_mdl_1m_v3/decision.json`
