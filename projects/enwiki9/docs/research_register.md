@@ -3052,3 +3052,25 @@ GRU.
 
 Receipt:
 `results/janus_paid_residual_mdl_1m_v3/decision.json`
+# 2026-07-29: JANUS paid recurrent residual is terminal negative at 10M
+
+The unchanged canonical-10M `janus_paid_residual_mdl_q0_v1` screen completed
+with every exactness and determinism gate intact. J0 was 1,635,137 payload
+bytes. J1 gained 74 bytes. J2 gained 14,742 bytes, or 1,474.2 B/M gross. Its
+canonical model plus frozen decoder and framing allowance was 183,439 bytes,
+leaving a projected package-adjusted rate of 1,290.761 B/M. The corrected
+shifted-residual null lost 41,798 bytes.
+
+The candidate fails the predeclared 30,000-byte gross and 2,100 B/M net gates.
+Decision: terminal `measured_negative`, zero score credit. Retire the fixed
+143,711-parameter two-layer GRU, 256-WRT-byte reset, fixed optimizer/epochs,
+per-tensor int8 quantization, and dense native integration. Do not sweep these
+dimensions or run larger populations.
+
+This result is not a universal impossibility theorem for paid fixed-corpus
+models. Any successor must predeclare a materially different constructive
+description, such as an exact MDL-pruned sparse context DAG, and must establish
+a target-scale upper bound before native work.
+
+Receipt:
+`results/janus_paid_residual_mdl_10m_v1/decision.json`
