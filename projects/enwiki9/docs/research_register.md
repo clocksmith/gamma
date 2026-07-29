@@ -3110,3 +3110,27 @@ extra capacity is empirically subeconomic on the target codec.
 
 Decision receipt:
 `results/fxcm_budget_preserving_capacity_v1/opening_1m_decision.json`
+
+## 2026-07-29: JANUS-QUOTIENT Q0 paid context-state claim
+
+Candidate: `janus_paid_context_quotient_q0_v1`
+
+The terminal JANUS recurrent witness established 1,474.2 B/M gross fixed-corpus
+residual gain at exact 10M, but its 183,439-byte package allowance left only
+1,290.761 B/M. The authorized materially different successor is one compact
+fixed-population context quotient rather than a recurrent architecture sweep.
+
+Q0 maps the exact endpoint P1, current WRT byte-tree node, and four previously
+decoded WRT bytes into exactly 65,536 states. Each state selects one of seven
+frozen rational odds corrections. The canonical table, a 24,576-byte native
+decoder allowance, and 64 framing bytes are charged. Two complete fits, full
+candidate range decode, shifted-table specificity, parent payload identity,
+and the existing WRT/raw inverse binding are mandatory.
+
+Authorization requires at least 3,000 B/M gross, 2,100 B/M after package
+allowance, a strict win over the shifted-table null, and a complete package no
+larger than 128 KiB. Failure retires the exact quotient without a state-count,
+hash, suffix-depth, or correction-alphabet sweep.
+
+Plan:
+`docs/janus_paid_context_quotient_plan.md`
