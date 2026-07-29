@@ -4,7 +4,7 @@ Date: 2026-07-28
 
 Candidate: `janus_paid_residual_mdl_q0_v1`
 
-Status: `PROVISIONAL_WITNESS_REQUIRES_CORRECTED_Q0`
+Status: `AUTHORIZED_10M_BY_CORRECTED_Q0_V3`
 
 Score credit: zero
 
@@ -49,6 +49,34 @@ J1/J2 projected-total selection, and same-machine A/B determinism.
 The earlier authorization for one frozen canonical-10M test is withdrawn until
 the corrected Q0 passes. The exact 10M endpoint trace remains authorized as
 zero-credit infrastructure because it is independently archive-identity gated.
+
+## Corrected Q0 v3
+
+The corrected residual-shift control and complete proof contract passed.
+
+```text
+J0 parent payload                    173,859 bytes
+J1 node-bias payload                 173,814 bytes
+J1 exact gain                             45 bytes
+J2 GRU payload                       168,952 bytes
+J2 exact gain                          4,907 bytes
+JS shifted-residual payload          181,416 bytes
+JS exact gain                         -7,557 bytes
+J2 package allowance                 188,535 bytes
+J2 projected net rate              4,718.465 B/M
+```
+
+Parent payload byte identity, candidate and J1 arithmetic decode, tail fallback,
+WRT/raw inverse binding, canonical model serialization, A/B model/P1/payload
+identity, package ceiling, and projected J2-over-J1 selection all passed.
+
+Decision: authorize one unchanged canonical-10M same-population screen after
+the 10M WRT store receives an exact inverse receipt. This remains zero score
+credit and does not authorize a dense native GRU.
+
+Authoritative corrected receipt:
+
+`results/janus_paid_residual_mdl_1m_v3/decision.json`
 
 The 10M gate is:
 
