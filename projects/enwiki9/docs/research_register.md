@@ -3156,3 +3156,23 @@ alone does not rescue either tested residual family at target scale.
 
 Receipt:
 `results/janus_paid_context_quotient_10m_q0_v1/decision.json`
+
+## 2026-07-29: JANUS recurrent + quotient joint replay claimed
+
+Candidate: `janus_recurrent_quotient_joint_10m_v1`
+
+The two paid fixed-population models were independently positive but terminally
+subscale. Their separate package-adjusted rates cannot be added; nevertheless,
+their arithmetic sum narrowly crosses the nominal design debt. One frozen
+interaction replay is therefore authorized.
+
+The existing JANUS model is refit only to export its deterministic adjusted P1
+trajectory. The unchanged 65,536-state quotient is then fit against that
+trajectory, and one exact composed payload is decoded. Both packages are
+charged once. Promotion requires 3,000 B/M gross, 2,100 B/M after both package
+allowances, a strict residual gain over JANUS alone, and a strict win over the
+shifted quotient. Failure is terminal and authorizes no architecture, state,
+blend, or interaction-order sweep.
+
+Plan:
+`docs/janus_recurrent_quotient_joint_plan.md`

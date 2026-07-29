@@ -490,6 +490,14 @@ def main() -> int:
     (args.results / "janus_candidate.payload").write_bytes(
         run_a["candidate_payload"]
     )
+    with args.p1.open("rb") as source:
+        p1_header = source.read(16)
+    if len(p1_header) != 16:
+        raise ValueError("parent P1 header is truncated")
+    (args.results / "janus_candidate.p1").write_bytes(
+        p1_header
+        + run_a["candidate_p1"].astype("<u2").tobytes(order="C")
+    )
 
     node_bias = fit_node_bias(base_logits, nodes, bits)
     bias_q10 = np.clip(
