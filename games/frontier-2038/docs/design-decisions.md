@@ -1,6 +1,6 @@
 # M3T4 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.23-test`
+**Rules reference:** `0.5.0-rc.24-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -168,7 +168,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.23-test` test:
+controlled `0.5.0-rc.24-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -180,11 +180,11 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.22` implements `0.5.0-rc.23-test` under engine
+Executable game `0.8.23` implements `0.5.0-rc.24-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
-insufficient Power. Browser play, replay, policies, and Monte Carlo now share
-that contract.
+insufficient Power. Browser-native deterministic play, server-backed LLM play,
+replay, policies, and Monte Carlo share that contract.
 
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
@@ -221,6 +221,14 @@ board-game mechanics or balance change.
 corrects the deployed Simulation Lab’s player-count DOM binding discovered by
 the live HTTPS-to-localhost browser check.
 
+`0.5.0-rc.24-test` changes no playable rule from rc.23. Executable `0.8.23`
+makes weighted and greedy interactive opponents execute directly in the
+browser. The token-paired localhost bridge remains optional and is selected
+only for Claude, Codex, hybrid opponents, or server-backed Simulation Lab
+jobs. The browser imports the same match, decision, persona, and deterministic
+policy modules as the Node executable; this is a deployment/runtime correction,
+not a board-game mechanics or balance change.
+
 The rc.17 physical candidate has no mechanics delta from rc.16. It exists
 because the synchronized evidence documents and executable harness changed;
 the immutable rc.16 bundle and every report attributed to executable `0.7.1`
@@ -236,7 +244,7 @@ The rc.19 candidate changes no playable physical rule from rc.18. Executable
 player-count-specific outcome summaries, and preregistered common-seed faction
 swaps. These are evidence instruments, not rule changes.
 
-The `0.5.0-rc.23-test` candidate and executable `0.8.22` retain the three- to
+The `0.5.0-rc.24-test` candidate and executable `0.8.23` retain the three- to
 five-player product boundary, make four players the balance authority, and
 require three/five regression coverage. Their playable mechanics are identical
 to rc.20 and executable `0.8.19`.

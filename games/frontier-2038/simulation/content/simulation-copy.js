@@ -1,8 +1,18 @@
-import { readFile } from "node:fs/promises";
-
 const copyUrl = new URL("../../data/simulation-copy.json", import.meta.url);
 
-export const simulationCopy = JSON.parse(await readFile(copyUrl, "utf8"));
+async function readJson(url) {
+  if (url.protocol === "file:") {
+    const { readFile } = await import("node:fs/promises");
+    return JSON.parse(await readFile(url, "utf8"));
+  }
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Could not load simulation copy: ${response.status}.`);
+  }
+  return response.json();
+}
+
+export const simulationCopy = await readJson(copyUrl);
 
 export function renderSimulationCopy(template, values = {}) {
   return template.replace(/\{([^}]+)\}/g, (match, key) =>

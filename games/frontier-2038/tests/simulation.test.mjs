@@ -18,6 +18,9 @@ import {
 } from "../simulation/runner/optimization-runner.js";
 import { runExperiment } from "../simulation/runtime/run-experiment.js";
 import { createInteractiveGame } from "../simulation/runtime/create-interactive-game.js";
+import {
+  createBrowserInteractiveGame
+} from "../simulation/runtime/create-browser-interactive-game.js";
 import { archiveSimulationReport } from "../simulation/report-archive.js";
 import {
   classifyReportComparison,
@@ -1600,6 +1603,56 @@ test("interactive games accept mixed per-opponent personas and decision backends
   );
 });
 
+test("browser-native games use deterministic opponents without a server or LLM authorization", async () => {
+  const runtime = await createBrowserInteractiveGame(
+    {
+      playerCount: 4,
+      seed: "browser-native-deterministic",
+      opponentProfileIds: [
+        "power_broker",
+        "trust_governor",
+        "capability_rusher"
+      ],
+      opponentBackends: ["weighted", "greedy", "weighted"],
+      allowLlm: false
+    },
+    () => {}
+  );
+  assert.deepEqual(
+    runtime.opponents.map((opponent) => opponent.backend),
+    ["weighted", "greedy", "weighted"]
+  );
+  assert.deepEqual(
+    runtime.policies.map((policy) => policy.kind),
+    ["human", "deterministic", "deterministic", "deterministic"]
+  );
+  let completingRuntime;
+  completingRuntime = await createBrowserInteractiveGame(
+    {
+      playerCount: 3,
+      seed: "browser-native-complete-match",
+      opponentBackends: ["weighted", "greedy"]
+    },
+    (packet) => queueMicrotask(() => {
+      completingRuntime.human.submit(packet.legalDecisions[0].decisionId);
+    })
+  );
+  const result = await completingRuntime.match.play(completingRuntime.policies);
+  assert.ok(result.worldEnding.name);
+  assert.ok(completingRuntime.match.replay.length > 0);
+  await assert.rejects(
+    createBrowserInteractiveGame(
+      {
+        playerCount: 3,
+        opponentBackends: ["weighted", "claude"],
+        allowLlm: true
+      },
+      () => {}
+    ),
+    /requires the optional local bridge/
+  );
+});
+
 test("deterministic policies preserve legal commitment while avoiding known dead actions", async () => {
   const profiles = await loadPlayerProfiles();
   const profile = profiles.find((candidate) => candidate.id === "capability_rusher");
@@ -1869,7 +1922,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.22");
+  assert.equal(first.game.version, "0.8.23");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -2050,7 +2103,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.22");
+  assert.equal(first.game.version, "0.8.23");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
