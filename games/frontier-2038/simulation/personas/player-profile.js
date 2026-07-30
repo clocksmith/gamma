@@ -1,5 +1,3 @@
-import { readFile } from "node:fs/promises";
-
 export const defaultProfilesUrl = new URL("../../data/player-strategies.json", import.meta.url);
 
 function requireObject(value, label) {
@@ -91,8 +89,21 @@ export function validatePlayerProfile(profile) {
   return profile;
 }
 
+async function readJson(source) {
+  const url = source instanceof URL ? source : new URL(source, import.meta.url);
+  if (url.protocol === "file:") {
+    const { readFile } = await import("node:fs/promises");
+    return JSON.parse(await readFile(url, "utf8"));
+  }
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Could not load player profiles: ${response.status}.`);
+  }
+  return response.json();
+}
+
 export async function loadPlayerProfiles(source = defaultProfilesUrl) {
-  const document = JSON.parse(await readFile(source, "utf8"));
+  const document = await readJson(source);
   if (document.schemaVersion !== 1 || !Array.isArray(document.profiles)) {
     throw new TypeError("Player strategy document must use schemaVersion 1 and contain profiles.");
   }

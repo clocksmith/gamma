@@ -12,13 +12,13 @@ test("release index separates executable game from physical rules candidate", as
   const executable = await readJson(current.manifest);
   const candidate = await readJson(current.rulesCandidate.manifest);
 
-  assert.equal(current.gameVersion, "0.8.22");
-  assert.equal(executable.gameVersion, "0.8.22");
-  assert.equal(current.rulesCandidate.version, "0.5.0-rc.23-test");
+  assert.equal(current.gameVersion, "0.8.23");
+  assert.equal(executable.gameVersion, "0.8.23");
+  assert.equal(current.rulesCandidate.version, "0.5.0-rc.24-test");
   assert.equal(candidate.artifactKind, "physical-rules-candidate");
   assert.equal(candidate.implementation.status, "synchronized");
-  assert.equal(candidate.implementation.executableGameVersion, "0.8.22");
-  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.22");
+  assert.equal(candidate.implementation.executableGameVersion, "0.8.23");
+  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.23");
   assert.notEqual(current.rulesetFingerprint, current.rulesCandidate.rulesFingerprint);
   assert.match(current.contentGraphFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(executable.contentGraphFingerprint, current.contentGraphFingerprint);
@@ -35,8 +35,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const normalizedRules = rules.replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.5.0-rc.23-test",
-    "synchronized with executable game 0.8.22",
+    "**Rules version:** 0.5.0-rc.24-test",
+    "synchronized with executable game 0.8.23",
     "Influence may place or relocate one additional cube on Government",
     "only if the Headline explicitly instructs the table",
     "A **solo Mega-Cluster**",

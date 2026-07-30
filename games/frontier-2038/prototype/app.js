@@ -4,6 +4,7 @@ import {
   connectBridge,
   getBridgeToken
 } from "./api-client.js";
+import { createBrowserInteractiveGame } from "../simulation/runtime/create-browser-interactive-game.js";
 
 const [factions, config, profilesDocument] = await Promise.all([
   fetch("/data/factions.json").then((response) => response.json()),
@@ -28,6 +29,12 @@ for (const faction of factions.factions) {
 let game = null;
 let pollTimer = null;
 let bridgeConnected = !bridgeRequired;
+const llmBackends = new Set([
+  "claude",
+  "codex",
+  "hybrid-claude",
+  "hybrid-codex"
+]);
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (character) => ({
@@ -74,8 +81,22 @@ function renderOpponents() {
       const selected = profiles.find((candidate) => candidate.id === event.target.value);
       row.querySelector(".persona-summary").textContent = selected.persona.identity;
     });
+    row.querySelector(".backend-select").addEventListener(
+      "change",
+      updateStartAvailability
+    );
     elements["opponent-config"].append(row);
   }
+  updateStartAvailability();
+}
+
+function selectedBackends() {
+  return [...elements["opponent-config"].querySelectorAll(".backend-select")]
+    .map((select) => select.value);
+}
+
+function llmRequested() {
+  return selectedBackends().some((backend) => llmBackends.has(backend));
 }
 
 function opponentOptions() {
@@ -94,7 +115,12 @@ function opponentOptions() {
 }
 
 function updateStartAvailability() {
-  elements["start-game"].disabled = !bridgeConnected;
+  const needsLlm = llmRequested();
+  const needsRemoteBridge = needsLlm && bridgeRequired;
+  elements["bridge-panel"].hidden = !needsRemoteBridge;
+  elements["start-game"].disabled = Boolean(
+    needsLlm && (!elements["allow-llm"].checked || !bridgeConnected)
+  );
 }
 
 function showBridgeState(message, connected = false) {
@@ -200,11 +226,74 @@ function decisionStage(packet) {
   return stage.replaceAll("_", " ");
 }
 
+function syncClientGame(clientGame = game) {
+  if (clientGame?.executionMode !== "client" || !clientGame.runtime) return;
+  clientGame.state = clientGame.runtime.match.snapshot();
+  clientGame.replay = clientGame.runtime.match.replay || [];
+  clientGame.opponents = clientGame.runtime.opponents.map((opponent) => ({
+    seat: opponent.seat,
+    profileId: opponent.profile.id,
+    profileName: opponent.profile.name,
+    backend: opponent.backend,
+    remainingLlmDecisions: null
+  }));
+  clientGame.updatedAt = Date.now();
+}
+
+async function startClientGame(options) {
+  const clientGame = {
+    id: crypto.randomUUID(),
+    executionMode: "client",
+    status: "starting",
+    pending: null,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    state: null,
+    replay: [],
+    opponents: [],
+    result: null,
+    error: null
+  };
+  clientGame.runtime = await createBrowserInteractiveGame(options, (packet) => {
+    clientGame.pending = packet;
+    clientGame.status = "waiting";
+    syncClientGame(clientGame);
+    if (game === clientGame) render();
+  });
+  game = clientGame;
+  clientGame.status = "running";
+  syncClientGame(clientGame);
+  clientGame.execution = clientGame.runtime.match.play(clientGame.runtime.policies)
+    .then((result) => {
+      clientGame.result = result;
+      clientGame.pending = null;
+      clientGame.status = "complete";
+      syncClientGame(clientGame);
+      if (game === clientGame) render();
+    })
+    .catch((error) => {
+      clientGame.pending = null;
+      clientGame.status = "failed";
+      clientGame.error = error.message;
+      syncClientGame(clientGame);
+      if (game === clientGame) render();
+    });
+  render();
+}
+
 async function submitDecision(decisionId) {
   const packet = game.pending;
   elements.decisions.querySelectorAll("button").forEach((button) => {
     button.disabled = true;
   });
+  if (game.executionMode === "client") {
+    game.runtime.human.submit(decisionId);
+    game.pending = null;
+    game.status = "running";
+    syncClientGame();
+    render();
+    return;
+  }
   const response = await apiFetch(`/api/games/${game.id}/decisions`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -264,7 +353,9 @@ function render() {
   const state = game?.state;
   elements.phase.textContent = game?.status || "ready";
   elements["game-status"].textContent = game?.error ||
-    (game ? `Game ${game.id.slice(0, 8)} · ${game.status}` :
+    (game ? `${
+      game.executionMode === "client" ? "Browser-native" : "Local bridge"
+    } game ${game.id.slice(0, 8)} · ${game.status}` :
       config.board.prototypeNote);
   elements["round-title"].textContent = state
     ? `Round ${state.round} · cycle ${state.cycle}`
@@ -293,6 +384,7 @@ async function refresh() {
 
 function schedulePoll() {
   clearTimeout(pollTimer);
+  if (game?.executionMode === "client") return;
   pollTimer = setTimeout(() => {
     refresh().catch((error) => {
       elements["game-status"].textContent = error.message;
@@ -304,17 +396,24 @@ elements["start-game"].addEventListener("click", async () => {
   clearTimeout(pollTimer);
   elements["start-game"].disabled = true;
   try {
+    const opponents = opponentOptions();
+    const options = {
+      factionId: elements.faction.value,
+      playerCount: Number(elements["player-count"].value),
+      seed: elements.seed.value,
+      ...opponents
+    };
+    if (!opponents.opponentBackends.some((backend) => llmBackends.has(backend))) {
+      await startClientGame(options);
+      return;
+    }
     const response = await apiFetch("/api/games", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        factionId: elements.faction.value,
-        playerCount: Number(elements["player-count"].value),
-        seed: elements.seed.value,
-        ...opponentOptions()
-      })
+      body: JSON.stringify(options)
     });
     game = await response.json();
+    game.executionMode = "server";
     if (!response.ok) throw new Error(game.error || "Could not start game.");
     render();
     schedulePoll();
@@ -328,10 +427,9 @@ elements["start-game"].addEventListener("click", async () => {
 elements["player-count"].addEventListener("change", renderOpponents);
 
 if (bridgeRequired) {
-  elements["bridge-panel"].hidden = false;
   elements["bridge-token"].value = getBridgeToken();
   bridgeConnected = false;
-  showBridgeState("Start npm run dev locally, then pair this page.");
+  showBridgeState("Optional · required only for Claude, Codex, or hybrid opponents.");
   elements["connect-bridge"].addEventListener("click", async () => {
     elements["connect-bridge"].disabled = true;
     showBridgeState("Requesting access to the local bridge…");
@@ -352,9 +450,30 @@ if (bridgeRequired) {
   });
 }
 
+elements["allow-llm"].addEventListener("change", updateStartAvailability);
+
 elements.export.addEventListener("click", () => {
   if (!game) return;
-  const blob = new Blob([JSON.stringify(game, null, 2)], { type: "application/json" });
+  syncClientGame();
+  const receipt = game.executionMode === "client"
+    ? {
+        id: game.id,
+        executionMode: game.executionMode,
+        status: game.status,
+        createdAt: game.createdAt,
+        updatedAt: game.updatedAt,
+        pending: game.pending,
+        state: game.state,
+        replay: game.replay,
+        opponents: game.opponents,
+        result: game.result,
+        error: game.error
+      }
+    : game;
+  const blob = new Blob(
+    [JSON.stringify(receipt, null, 2)],
+    { type: "application/json" }
+  );
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = `frontier-2038-${game.id}-game.json`;

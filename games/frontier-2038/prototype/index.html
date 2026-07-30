@@ -11,7 +11,7 @@
   <body>
     <header class="masthead">
       <div>
-        <p class="eyebrow">Institutional strategy study · build 0.8.22</p>
+        <p class="eyebrow">Institutional strategy study · build 0.8.23</p>
         <h1>M3T4 <span>2038</span></h1>
         <p class="dek">Build. Deploy. Regulate. Plausibly declare.</p>
       </div>
@@ -25,12 +25,12 @@
     <main>
       <section id="bridge-panel" class="panel bridge-panel" hidden>
         <div>
-          <p class="eyebrow">Private local execution bridge</p>
-          <h2>Pair this deployed page with your computer</h2>
+          <p class="eyebrow">Optional local execution bridge</p>
+          <h2>Connect only for Claude, Codex, or hybrid opponents</h2>
           <p>
-            Run <code>npm run dev</code> in the game repository, paste the
-            one-time token printed by Node, then allow Chrome local-network access.
-            Claude and Codex execute only on your machine.
+            Weighted and greedy opponents run entirely in this browser. To use
+            an installed CLI, run <code>npm run dev</code>, paste the private
+            token printed by Node, then allow Chrome local-network access.
           </p>
         </div>
         <label>Pairing token<input id="bridge-token" type="password" autocomplete="off" spellcheck="false"></label>
@@ -49,7 +49,7 @@
           </select>
         </label>
         <button id="start-game" type="button">Start complete game</button>
-        <p id="game-status">Choose a persona and decision backend for every opposing institution. Every prompt comes from the same engine used by Monte Carlo.</p>
+        <p id="game-status">Choose personas and start immediately with deterministic browser opponents. A local bridge is optional for Claude or Codex.</p>
       </section>
 
       <section class="panel opponent-setup" aria-label="Opponent setup">
@@ -58,7 +58,7 @@
             <p class="eyebrow">Opposing institutions</p>
             <h2>Personas and decision backends</h2>
           </div>
-          <small>Weighted and greedy are local deterministic policies. Claude, Codex, and hybrid seats invoke their installed local CLI.</small>
+          <small>Weighted and greedy run in this browser with no server. Claude, Codex, and hybrid seats use the optional local bridge.</small>
         </div>
         <div id="opponent-config" class="seat-config"></div>
         <details class="llm-controls">

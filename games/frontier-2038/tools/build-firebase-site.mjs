@@ -26,8 +26,8 @@ export const crawlerMeta = [
 ].join("\n");
 
 const staticReviewBanner = `<aside class="published-review-notice" role="note">
-  Published review copy. For live play or simulations, run <code>npm run dev</code>
-  locally and pair this page with the private token printed by Node.
+  Published review copy. Deterministic play runs entirely in this browser.
+  The private local bridge is optional for Claude, Codex, and server-backed simulations.
 </aside>`;
 
 const staticReviewStyle = `<style>
@@ -267,18 +267,31 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   await cp(resolve(projectRoot, "data"), resolve(outputRoot, "data"), {
     recursive: true
   });
-  await mkdir(resolve(outputRoot, "simulation/contracts"), { recursive: true });
-  await cp(
-    resolve(projectRoot, "simulation/contracts/report-migrations.js"),
-    resolve(outputRoot, "simulation/contracts/report-migrations.js")
-  );
+  const publishedSimulationModules = [
+    "content/simulation-copy.js",
+    "contracts/decision-contract.js",
+    "contracts/report-migrations.js",
+    "environment/core-economy-match.js",
+    "environment/rules-variant.js",
+    "environment/selected-rules-match.js",
+    "personas/player-profile.js",
+    "policies/weighted-policy.js",
+    "rules/declaration-readiness.js",
+    "runtime/create-browser-interactive-game.js",
+    "runtime/interactive-game-core.js"
+  ];
+  for (const relative of publishedSimulationModules) {
+    const target = resolve(outputRoot, "simulation", relative);
+    await mkdir(dirname(target), { recursive: true });
+    await cp(resolve(projectRoot, "simulation", relative), target);
+  }
   pages.unshift(
     {
       group: "Executable review surfaces",
       kind: "Playable interface",
       title: "Play the game",
       href: "prototype/index.html",
-      description: "Play in the deployed browser through an explicitly paired local Node bridge."
+      description: "Play against browser-native deterministic opponents; the local bridge is optional for Claude or Codex."
     },
     {
       group: "Executable review surfaces",
