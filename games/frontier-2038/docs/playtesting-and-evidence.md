@@ -1,6 +1,6 @@
 # M3T4 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.24-test`
+**Rules under review:** `0.5.0-rc.25-test`
 **First cohort:** controlled four-player physical test with Demis Hassabis,
 Elon Musk, Jensen Huang, and Mark Zuckerberg
 
@@ -103,11 +103,16 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.24-test`. Executable
-game `0.8.23` implements it under `three-to-five-grid-ready-v1`. New automated reports
+`docs/core-rules.md` is a review draft at `0.5.0-rc.25-test`. Executable
+game `0.8.24` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.
+
+The two full-progress Codex reports that recorded a changed ruleset fingerprint
+under `0.8.23` remain immutable but are descriptive historical evidence only.
+The [release identity correction](../studies/simulation/2026-07-31-release-identity-correction.md)
+records their exclusion from exact comparison and promotion evidence.
 
 Executable `0.8.20` retains write-only decision capture and paired read-only
 replay to the provider boundary, revalidates joint Mega-Cluster contributions

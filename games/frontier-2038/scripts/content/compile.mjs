@@ -5,7 +5,6 @@ const projectRoot = resolve(import.meta.dirname, "../..");
 const args = process.argv.slice(2);
 const checkOnly = args.includes("--check");
 const validateOnly = args.includes("--validate");
-const editionArg = args.find((arg) => arg.startsWith("--edition="));
 
 function insideProject(path) {
   return path === projectRoot || path.startsWith(`${projectRoot}${sep}`);
@@ -27,16 +26,42 @@ function lookup(root, path) {
   return value;
 }
 
+function parseReference(reference) {
+  const [path, ...formatters] = reference.split("|").map((segment) => segment.trim());
+  if (!path || formatters.some((formatter) => !formatter)) {
+    throw new Error(`Invalid content reference: \${${reference}}`);
+  }
+  return { path, formatters };
+}
+
+function formatValue(value, formatter) {
+  if (formatter !== "capitalize") {
+    throw new Error(`Unknown content formatter: ${formatter}`);
+  }
+  if (typeof value !== "string") {
+    throw new Error(`Content formatter ${formatter} requires a string value`);
+  }
+  const [firstCharacter = "", ...remainingCharacters] = Array.from(value);
+  return `${firstCharacter.toUpperCase()}${remainingCharacters.join("")}`;
+}
+
+function resolveReference(reference, variables, stack) {
+  const { path, formatters } = parseReference(reference);
+  const resolved = resolveValue(lookup(variables, path), variables, [...stack, path]);
+  return formatters.reduce(formatValue, resolved);
+}
+
 function resolveString(value, variables, stack = []) {
   const exact = value.match(/^\$\{([^}]+)\}$/);
-  if (exact) return resolveValue(lookup(variables, exact[1]), variables, [...stack, exact[1]]);
-  return value.replace(/\$\{([^}]+)\}/g, (_, path) => {
+  if (exact) return resolveReference(exact[1], variables, stack);
+  return value.replace(/\$\{([^}]+)\}/g, (_, reference) => {
+    const { path } = parseReference(reference);
     if (stack.includes(path)) {
       throw new Error(`Circular content reference: ${[...stack, path].join(" -> ")}`);
     }
-    const resolved = resolveValue(lookup(variables, path), variables, [...stack, path]);
+    const resolved = resolveReference(reference, variables, stack);
     if (resolved === null || typeof resolved === "object") {
-      throw new Error(`Embedded content reference must resolve to a scalar: \${${path}}`);
+      throw new Error(`Embedded content reference must resolve to a scalar: \${${reference}}`);
     }
     return String(resolved);
   });
@@ -66,38 +91,20 @@ async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
 }
 
-function merge(left, right) {
-  if (
-    left && right &&
-    typeof left === "object" &&
-    typeof right === "object" &&
-    !Array.isArray(left) &&
-    !Array.isArray(right)
-  ) {
-    return Object.fromEntries(
-      [...new Set([...Object.keys(left), ...Object.keys(right)])]
-        .map((key) => [
-          key,
-          key in right ? merge(left[key], right[key]) : left[key]
-        ])
-    );
-  }
-  return right;
-}
-
 const graphPath = resolve(projectRoot, "content/graph.json");
 const graph = await readJson(graphPath);
-const edition = editionArg?.split("=", 2)[1] || graph.defaultEdition;
-if (!graph.editions?.[edition]) throw new Error(`Unknown content edition: ${edition}`);
 const variablesPath = resolve(projectRoot, graph.variables);
 const rawVariables = await readJson(variablesPath);
-const editionVariables = await readJson(resolve(projectRoot, graph.editions[edition]));
-const mergedVariables = merge(rawVariables, editionVariables);
-let variables = resolveValue(mergedVariables, mergedVariables);
+let variables = resolveValue(rawVariables, rawVariables);
 assertNoReferences(variables, graph.variables);
 
 const contexts = {};
-for (const [name, path] of Object.entries(graph.contexts || {})) {
+for (const [name, descriptor] of Object.entries(graph.contexts || {})) {
+  const path = typeof descriptor === "string" ? descriptor : descriptor.path;
+  const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
+  if (typeof path !== "string") {
+    throw new Error(`Content context requires a path: ${name}`);
+  }
   const contextPath = resolve(projectRoot, path);
   if (
     !insideProject(contextPath) ||
@@ -110,7 +117,14 @@ for (const [name, path] of Object.entries(graph.contexts || {})) {
     variables
   );
   const collections = Object.values(resolved).filter(Array.isArray);
-  const entries = collections.length === 1 ? collections[0] : [];
+  const entries = collectionName
+    ? resolved[collectionName]
+    : collections.length === 1
+      ? collections[0]
+      : [];
+  if (collectionName && !Array.isArray(entries)) {
+    throw new Error(`Content context collection must be an array: ${name}.${collectionName}`);
+  }
   contexts[name] = {
     ...resolved,
     byId: Object.fromEntries(
@@ -154,7 +168,7 @@ for (const artifact of graph.artifacts) {
 
 if (validateOnly) {
   process.stdout.write(
-    `content-graph: validated ${artifacts.length} generated artifacts for ${edition} edition\n`
+    `content-graph: validated ${artifacts.length} generated artifacts\n`
   );
 } else if (checkOnly) {
   const stale = [];
@@ -175,7 +189,7 @@ if (validateOnly) {
     );
   }
   process.stdout.write(
-    `content-graph: verified ${artifacts.length} generated artifacts for ${edition} edition\n`
+    `content-graph: verified ${artifacts.length} generated artifacts\n`
   );
 } else {
   for (const artifact of artifacts) {
@@ -183,6 +197,6 @@ if (validateOnly) {
     await writeFile(artifact.targetPath, artifact.output);
   }
   process.stdout.write(
-    `content-graph: generated ${artifacts.length} artifacts for ${edition} edition\n`
+    `content-graph: generated ${artifacts.length} artifacts\n`
   );
 }

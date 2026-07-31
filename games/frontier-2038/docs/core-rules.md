@@ -2,9 +2,9 @@
 
 ## A 3–5 player race to build, deploy, regulate, and plausibly declare AGI
 
-**Rules version:** 0.5.0-rc.24-test
+**Rules version:** 0.5.0-rc.25-test
 **Design-baseline date:** July 26, 2026
-**Status:** Controlled playtest candidate; synchronized with executable game 0.8.23
+**Status:** Controlled playtest candidate; synchronized with executable game 0.8.24
 **Provisional time:** 75–100 minutes at four players; three- and five-player durations require their own blind tests
 **Standard game:** Four rounds, three turns per player per round
 
@@ -21,24 +21,10 @@ M3T4 2038 uses **solemn institutional absurdity**. Every impossible
 technology is presented as a responsible quarterly initiative. The escalation
 is structural:
 
-- **The Demo** covers the plausible five-year horizon beyond July 2026.
-  Technology can genuinely improve life. Openness and control, automation and
-  employment, speed and caution all offer credible benefits and harms. Cards
-  name durable directions rather than product launches or already-completed
-  milestones.
-- **The Scale** is the first threshold science fiction. AI becomes an
-  independent economic actor while land, power, chips, and people become an
-  industrial apparatus. Institutions stretch before physics does.
-- **The Narrative** turns AI into a political constituency and
-  industrializes consensus, legitimacy, ownership, and public reality.
-  Positions harden into blocs; several authenticated publics may occupy the
-  same world.
-- **The Claim** permits negotiable physics, agent jurisdictions,
-  reality-maintenance systems, personhood, and civilizational declarations as
-  ordinary portfolio decisions. Institutions continue operating after reality
-  stops making sense. The accumulated compromises finally divide into two
-  endings: intelligence remains answerable to a living society, or
-  optimization closes over itself and continues after society is gone.
+- **The Demo:** The plausible five-year horizon beyond July 2026. Technology can genuinely improve life. Openness and control, automation and employment, speed and caution all offer credible benefits and harms. Cards name durable directions rather than product launches or already-completed milestones.
+- **The Scale:** The first threshold science fiction. AI becomes an independent economic actor while land, power, chips, and people become an industrial apparatus. Institutions stretch before physics does.
+- **The Narrative:** AI becomes a political constituency and industrializes consensus, legitimacy, ownership, and public reality. Positions harden into blocs; several authenticated publics may occupy the same world.
+- **The Claim:** Negotiable physics, agent jurisdictions, reality-maintenance systems, personhood, and civilizational declarations become ordinary portfolio decisions. Institutions continue operating after reality stops making sense. The accumulated compromises finally divide into two endings: intelligence remains answerable to a living society, or optimization closes over itself and continues after society is gone.
 
 Flavor text may sharpen this escalation but never replaces or modifies a
 card’s rules text. The game does not wink at the player, make allegations
@@ -1414,7 +1400,7 @@ There is no other endgame scoring.
 
 ### The shared World Ending
 
-M3T4 produces one institutional winner and one shared ending. Use only
+2038 produces one institutional winner and one shared ending. Use only
 state already visible at the table:
 
 - Count the AGI declarations.

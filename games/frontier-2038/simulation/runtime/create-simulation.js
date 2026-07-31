@@ -6,7 +6,10 @@ import {
   loadPlayerProfiles,
   validatePlayerProfile
 } from "../personas/player-profile.js";
-import { createPlayerPolicy } from "../policies/policy-factory.js";
+import {
+  createPlayerPolicy,
+  validatePolicyBackend
+} from "../policies/policy-factory.js";
 import { runMonteCarlo } from "../runner/monte-carlo-runner.js";
 import { effectiveRulesVariant } from "../environment/rules-variant.js";
 import { DecisionCache } from "../policies/decision-cache.js";
@@ -28,7 +31,7 @@ const mandatesUrl = new URL("../../data/mandates.json", import.meta.url);
 const objectivesUrl = new URL("../../data/secret-objectives.json", import.meta.url);
 const execFileAsync = promisify(execFile);
 
-async function providerProvenance(backends, model) {
+async function providerProvenance(backends, models, reasoningEfforts) {
   const providers = [...new Set(backends.filter((backend) =>
     !["weighted", "greedy"].includes(backend)
   ).map((backend) => backend.includes("claude") ? "claude" : "codex"))];
@@ -41,14 +44,16 @@ async function providerProvenance(backends, model) {
         provider,
         command: provider,
         version: `${stdout}${stderr}`.trim(),
-        model: model || null
+        models: [...new Set(models.filter(Boolean))],
+        reasoningEfforts: [...new Set(reasoningEfforts.filter(Boolean))]
       };
     } catch (error) {
       return {
         provider,
         command: provider,
         version: null,
-        model: model || null,
+        models: [...new Set(models.filter(Boolean))],
+        reasoningEfforts: [...new Set(reasoningEfforts.filter(Boolean))],
         versionError: error.message
       };
     }
@@ -134,9 +139,23 @@ export async function createSimulation(options = {}, onProgress) {
   const backends = options.backends?.length
     ? options.backends
     : selectedProfiles.map((profile) => profile.defaultBackend || "weighted");
-  const llmRequested = backends.some(
-    (backend) => !["weighted", "greedy"].includes(backend)
+  const configuredBackends = Array.from({ length: playerCount }, (_, seat) =>
+    backends[seat % backends.length]
   );
+  for (const backend of configuredBackends) validatePolicyBackend(backend);
+  const isLlmBackend = (backend) => !["weighted", "greedy"].includes(backend);
+  const models = Array.from({ length: playerCount }, (_, seat) =>
+    isLlmBackend(configuredBackends[seat])
+      ? options.models?.[seat % options.models.length] || options.model || null
+      : null
+  );
+  const reasoningEfforts = Array.from({ length: playerCount }, (_, seat) =>
+    isLlmBackend(configuredBackends[seat])
+      ? options.reasoningEfforts?.[seat % options.reasoningEfforts.length] ||
+        options.reasoningEffort || null
+      : null
+  );
+  const llmRequested = configuredBackends.some(isLlmBackend);
   if (llmRequested && !options.allowLlm) {
     throw new Error("LLM-backed simulation requires explicit allowLlm authorization.");
   }
@@ -145,10 +164,31 @@ export async function createSimulation(options = {}, onProgress) {
     options.maxLlmDecisions,
     llmRequested ? 24 : 0,
     0,
-    10000,
+    24,
     "maxLlmDecisions"
   );
-  const decisionBudget = { remaining: maximumLlmDecisions };
+  const maximumLlmDecisionsPerSeatCycle = llmRequested
+    ? boundedInteger(
+      options.maxLlmDecisionsPerSeatCycle,
+      2,
+      1,
+      24,
+      "maxLlmDecisionsPerSeatCycle"
+    )
+    : null;
+  const decisionBudgets = configuredBackends.map(() => ({
+    remaining: maximumLlmDecisions,
+    maxPerSeatCycle: maximumLlmDecisionsPerSeatCycle,
+    perSeatCycleUsage: new Map()
+  }));
+  const usedLlmDecisions = () => decisionBudgets.reduce(
+    (total, budget) => total + maximumLlmDecisions - budget.remaining,
+    0
+  );
+  const seatCycleUsage = () => Object.assign(
+    {},
+    ...decisionBudgets.map((budget) => Object.fromEntries(budget.perSeatCycleUsage))
+  );
   const cacheMode = options.llmCacheMode || "off";
   if (!["off", "read-only", "read-write", "write-only"].includes(cacheMode)) {
     throw new TypeError(`Unknown LLM cache mode: ${cacheMode}.`);
@@ -159,21 +199,22 @@ export async function createSimulation(options = {}, onProgress) {
   if (cacheMode !== "off" && !decisionCache) {
     throw new TypeError("LLM cache mode requires llmCacheDirectory.");
   }
-  const cliProviders = await providerProvenance(backends, options.model || null);
+  const cliProviders = await providerProvenance(configuredBackends, models, reasoningEfforts);
   const resolvedRulesVariant = effectiveRulesVariant(config, options.rulesVariant);
   const decisionIdentity = await loadGameIdentity({
     rulesVariant: resolvedRulesVariant,
     variantOverlay: options.rulesVariant,
     profiles: selectedProfiles,
-    backends,
-    model: options.model || null,
+    backends: configuredBackends,
+    model: models,
     experimentKind: options.experimentKind || "tournament"
   });
   const policies = selectedProfiles.map((profile, seat) =>
-    createPlayerPolicy(profile, backends[seat % backends.length], {
+    createPlayerPolicy(profile, configuredBackends[seat], {
       allowLlm: Boolean(options.allowLlm),
-      decisionBudget,
-      model: options.model,
+      decisionBudget: decisionBudgets[seat],
+      model: models[seat],
+      reasoningEffort: reasoningEfforts[seat],
       timeoutMs: options.timeoutMs,
       shortlistSize: options.shortlistSize,
       decisionCache,
@@ -222,7 +263,13 @@ export async function createSimulation(options = {}, onProgress) {
         selectedProfiles[(seat + profileOffset) % playerCount]
       );
       const rotatedBackends = selectedProfiles.map((_, seat) =>
-        backends[(seat + profileOffset) % playerCount]
+        configuredBackends[(seat + profileOffset) % playerCount]
+      );
+      const rotatedModels = selectedProfiles.map((_, seat) =>
+        models[(seat + profileOffset) % playerCount]
+      );
+      const rotatedReasoningEfforts = selectedProfiles.map((_, seat) =>
+        reasoningEfforts[(seat + profileOffset) % playerCount]
       );
       return (
       new SelectedRulesMatch({
@@ -230,6 +277,8 @@ export async function createSimulation(options = {}, onProgress) {
         factions: rotatedFactions,
         profiles: rotatedProfiles,
         backends: rotatedBackends,
+        models: rotatedModels,
+        reasoningEfforts: rotatedReasoningEfforts,
         headlines: headlineDocument,
         wildActions: wildActionDocument,
         tactics: tacticDocument,
@@ -249,7 +298,14 @@ export async function createSimulation(options = {}, onProgress) {
             engineFingerprint: decisionIdentity.engine.fingerprint,
             variantFingerprint: decisionIdentity.variant.fingerprint
           }
-        }
+        },
+        onProgress: (progress) => onProgress?.({
+          phase: "match_progress",
+          run: runIndex + 1,
+          runs,
+          llmDecisionsUsed: usedLlmDecisions(),
+          ...progress
+        })
       })
       );
     },
@@ -264,11 +320,24 @@ export async function createSimulation(options = {}, onProgress) {
     } : {}),
     configuration: {
       profileIds: selectedProfiles.map((profile) => profile.id),
-      backends: selectedProfiles.map((_, seat) => backends[seat % backends.length]),
+      backends: configuredBackends,
       llmAuthorized: Boolean(options.allowLlm),
       maxLlmDecisions: maximumLlmDecisions,
-      usedLlmDecisions: maximumLlmDecisions - decisionBudget.remaining,
+      llmDecisionBudgetScope: "per_configured_policy",
+      totalLlmDecisionBudget: configuredBackends.filter(isLlmBackend).length *
+        maximumLlmDecisions,
+      usedLlmDecisions: usedLlmDecisions(),
+      maxLlmDecisionsPerSeatCycle: maximumLlmDecisionsPerSeatCycle,
+      llmDecisionsBySeatCycle: seatCycleUsage(),
       model: options.model || null,
+      reasoningEffort: options.reasoningEffort || null,
+      players: selectedProfiles.map((profile, seat) => ({
+        seat,
+        profileId: profile.id,
+        backendId: configuredBackends[seat],
+        model: models[seat],
+        reasoningEffort: reasoningEfforts[seat]
+      })),
       factionPoolIds: factions.map((faction) => faction.id),
       factionIds: explicitFactions?.map((faction) => faction.id) || null,
       mandateMode: options.mandateMode || "variable",
@@ -302,7 +371,7 @@ export async function createSimulation(options = {}, onProgress) {
     variantOverlay: options.rulesVariant,
     profiles: selectedProfiles,
     backends: completedReport.configuration.backends,
-    model: completedReport.configuration.model,
+    model: completedReport.configuration.players,
     experimentKind: options.experimentKind || "tournament"
   });
 }

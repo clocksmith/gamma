@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "status": "planning_only",
+  "rules": {
+    "applyAllowed": false,
+    "archivePolicy": "versions/ is immutable historical evidence and is never rewritten.",
+    "generatedPolicy": "Generated outputs are regenerated from canonical sources after a completed migration; they are not renamed by hand.",
+    "approvalPolicy": "A migration may begin only after every move is literal and one-to-one, the status is ready_to_apply, applyAllowed is true, and the run and worktree gates in checklist.md are recorded."
+  },
+  "confirmed": [
+    {
+      "from": "content/physical/",
+      "to": "physical/",
+      "reason": "The canonical physical game should be visible as a top-level product boundary."
+    }
+  ],
+  "proposed": [
+    {
+      "from": "prototype/",
+      "to": "web/",
+      "reason": "The browser review interface is an active product surface, not merely a prototype."
+    },
+    {
+      "from": "simulation/",
+      "to": "lab/",
+      "reason": "This contains the deterministic simulator, policies, and experiment machinery."
+    },
+    {
+      "from": "dist/",
+      "to": "build/",
+      "reason": "Rendered documentation, galleries, and kit output are build artifacts."
+    }
+  ],
+  "unresolved": [
+    {
+      "path": "content/runtime/",
+      "question": "Should browser and simulation copy move under web/ and lab/ respectively, or remain together as shared authored runtime copy?"
+    },
+    {
+      "path": "content/deferred/",
+      "question": "Should optional physical modules live under physical/optional/, or retain a top-level authored-content boundary?"
+    },
+    {
+      "path": "tools/ and scripts/",
+      "question": "Choose separate one-source destinations for tools/ and scripts/, or explicitly retain one of them. The current automation -> tasks intent is not an executable move."
+    },
+    {
+      "path": "studies/ and playtests/",
+      "question": "Choose separate one-source destinations under an evidence parent while preserving simulated-study and observed-play identities."
+    },
+    {
+      "path": "data/",
+      "question": "Keep data/ as generated runtime projections, or relocate it only after its consumers and release policy are decided?"
+    },
+    {
+      "path": "versions/",
+      "question": "Keep immutable historical snapshots at versions/. Any archive rename requires a separate policy, a new verified release snapshot, and no rewrite of historical bundle contents."
+    }
+  ]
+}

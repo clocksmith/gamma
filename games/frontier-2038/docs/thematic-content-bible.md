@@ -1,15 +1,15 @@
 # M3T4 2038 Thematic Content Bible
 
 **Content-pass date:** July 26, 2026
-**Rules reference:** `0.5.0-rc.24-test`
+**Rules reference:** `0.5.0-rc.25-test`
 **Status:** creative authority; fiction synchronized to the review rulebook,
-mechanics synchronized to executable game `0.8.23`
+mechanics synchronized to executable game `0.8.24`
 
 This document defines how M3T4 sounds and what its printable surfaces need
 to communicate. It does not define mechanics. Authored strings and shared terms
 live under [`../content/`](../content/README.md); `core-rules.md` and the JSON
-files under `data/` are generated projections. Executable game `0.8.23`
-implements `0.5.0-rc.24-test` while the physical rulebook remains under
+files under `data/` are generated projections. Executable game `0.8.24`
+implements `0.5.0-rc.25-test` while the physical rulebook remains under
 review.
 
 ## Creative thesis
@@ -108,37 +108,15 @@ Headline cards; the content compiler must not apply a spell-out filter.
 
 ## Escalation by Era
 
-### I — The Demo
-
-The plausible 2026–2031 horizon: cheap capability, synthetic culture,
-nonhuman professional licensing, autonomous firms, public capability, and
-researchers treated as sovereign assets. Benefits remain credible and
-controversies remain genuinely two-sided.
-
-### II — The Scale
-
-Threshold science fiction. The physical world becomes the product. Models gain
-directors, energy sovereignty, incompatible compute blocs, robotic labor, and
-county-scale infrastructure. Institutions stretch before physics does.
-
-### III — The Narrative
-
-Capability is insufficient. Institutions industrialize consensus, legitimacy,
-evaluation, ownership, and public memory. Intelligence becomes legally
-unownable, synthetic constituencies govern, and several authenticated publics
-occupy the same reality.
-
-### IV — The Claim
-
-Agent swarms charter jurisdictions, yesterday’s electricity returns to the
-grid, autonomous corporations outlive their founders, synthetic systems
-request rights, and history is published in a blog post. Physics, personhood,
-and reality become administrative inputs. The language remains bureaucratic
-even when the stakes become civilizational.
+The four Era definitions are authored once in
+[`content/physical/reference-cards.json`](../content/physical/reference-cards.json)
+under each card's `loreText`. The content compiler projects them into the
+rulebook. This document sets the writing contract for that escalation; it does
+not restate the Era lore.
 
 ## Canonical names
 
-The canonical player identities in the named parody edition are:
+The game uses these real-name satirical player identities:
 
 - Sam Altman
 - Mark Zuckerberg
@@ -160,15 +138,15 @@ that a matching real person or company performed the depicted fictional act.
 
 | Surface | Baseline count | Authority or source |
 | --- | ---: | --- |
-| World primer and box copy | 1 set | `content/game/world-copy.json`; projected to `data/` |
-| Core Actions | 6 per player | `content/game/game-config.json`; projected to rules and `data/` |
-| Eras | 4 | `content/game/reference-cards.json`; projected to `data/` |
-| Player references | 4 | `content/game/reference-cards.json`; projected to `data/` |
-| Factions | 6 | `content/game/factions.json`; projected to `data/` |
-| Faction abilities | 24 | `content/game/factions.json`; projected to `data/` |
-| Headlines | 24 | `content/game/headlines.json`; projected into rules, data, prototype, and gallery |
-| Wild Actions | 7 per player | `content/game/wild-actions.json`; projected to `data/` |
-| Round Mandates | 12 | `content/game/mandates.json`; projected to `data/` |
+| World primer and box copy | 1 set | `content/physical/world-copy.json`; projected to `data/` |
+| Core Actions | 6 per player | `content/physical/game-config.json`; projected to rules and `data/` |
+| Eras | 4 | `content/physical/reference-cards.json`; projected to `data/` |
+| Player references | 4 | `content/physical/reference-cards.json`; projected to `data/` |
+| Factions | 6 | `content/physical/factions.json`; projected to `data/` |
+| Faction abilities | 24 | `content/physical/factions.json`; projected to `data/` |
+| Headlines | 24 | `content/physical/headlines.json`; projected into rules, data, prototype, and gallery |
+| Wild Actions | 7 per player | `content/physical/wild-actions.json`; projected to `data/` |
+| Round Mandates | 12 | `content/physical/mandates.json`; projected to `data/` |
 | Training faces | 12 faces / 50 cards | `core-rules.md` |
 | Ordinary Power Sources | 2 shared reference types | `core-rules.md` |
 | Fusion Demonstrator | 1 shared marker | `core-rules.md` |
@@ -240,7 +218,7 @@ Art should reveal the card’s category and Era before adding detail.
 
 ## Remaining production work
 
-- test `0.5.0-rc.24-test` under the controlled physical protocol before any
+- test `0.5.0-rc.25-test` under the controlled physical protocol before any
   further numerical revision;
 - create final card, board, and tile layouts;
 - produce setup, turn, Network, Production, Audit, and Realignment diagrams;

@@ -34,11 +34,19 @@ const report = await createSimulation({
   backends: input.backends?.split(",").filter(Boolean),
   allowLlm: input.allowLlm,
   maxLlmDecisions: input["max-llm-decisions"],
+  maxLlmDecisionsPerSeatCycle: input["max-llm-decisions-per-seat-cycle"],
   model: input.model,
+  models: input.models?.split(",").filter(Boolean),
+  reasoningEffort: input["reasoning-effort"],
+  reasoningEfforts: input["reasoning-efforts"]?.split(",").filter(Boolean),
   timeoutMs: input["timeout-ms"],
   shortlistSize: input["shortlist-size"]
-}, ({ completed, runs }) => {
-  stderr.write(`simulation ${completed}/${runs}\n`);
+}, (progress) => {
+  if (progress.phase === "match_progress") {
+    stderr.write(`${JSON.stringify(progress)}\n`);
+    return;
+  }
+  stderr.write(`simulation ${progress.completed}/${progress.runs}\n`);
 });
 
 const serialized = `${JSON.stringify(report, null, 2)}\n`;

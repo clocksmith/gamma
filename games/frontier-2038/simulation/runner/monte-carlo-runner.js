@@ -202,7 +202,10 @@ function metaCycles(matchups, edgeThreshold = 0.55) {
 
 function leaderPredictability(outcomes) {
   const result = {};
-  for (const round of [1, 2, 3, 4]) {
+  const rounds = [...new Set(outcomes.flatMap((outcome) =>
+    (outcome.matchMetrics?.productionSnapshots || []).map((entry) => entry.round)
+  ))].sort((left, right) => left - right);
+  for (const round of rounds) {
     let numerator = 0;
     let denominator = 0;
     for (const outcome of outcomes) {

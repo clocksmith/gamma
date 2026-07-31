@@ -2,6 +2,15 @@ import {
   normalizeSimulationReport
 } from "/simulation/contracts/report-migrations.js";
 import {
+  aggregateFactionPersona,
+  compatibleReportGroups,
+  heatmapCells,
+  providerSummary,
+  sampledGames,
+  trajectoryForSample,
+  visualizationMetrics
+} from "./report-visualizations.js";
+import {
   apiFetch,
   bridgeRequired,
   connectBridge,
@@ -15,6 +24,10 @@ const [profilesDocument, uiCopy] = await Promise.all([
 ]);
 const profiles = profilesDocument.profiles;
 const copy = uiCopy.simulation;
+const visualizationLabels = {
+  ...copy.labels,
+  mandate: uiCopy.prototype.tracks.mandate
+};
 
 function interpolate(template, values = {}) {
   return template.replace(/\{([^}]+)\}/g, (match, key) =>
@@ -24,6 +37,23 @@ function interpolate(template, values = {}) {
 const elements = Object.fromEntries(
   [
     "allow-llm",
+    "analysis-files",
+    "analysis-files-results",
+    "analysis-heatmap",
+    "analysis-heatmap-metric",
+    "analysis-llm",
+    "analysis-sample",
+    "analysis-scatter",
+    "analysis-scatter-note",
+    "analysis-scatter-size",
+    "analysis-scatter-x",
+    "analysis-scatter-y",
+    "analysis-section",
+    "analysis-status",
+    "analysis-trajectory",
+    "analysis-trajectory-legend",
+    "analysis-trajectory-metric",
+    "analysis-trajectory-note",
     "archive-path",
     "bridge-panel",
     "bridge-status",
@@ -50,6 +80,7 @@ const elements = Object.fromEntries(
     "matrix-initial-runs",
     "max-llm-decisions",
     "model",
+    "reasoning-effort",
     "new-simulation",
     "optimization-controls",
     "mode-description",
@@ -85,6 +116,7 @@ const elements = Object.fromEntries(
     "sim-player-count",
     "sim-seed",
     "simulation-form",
+    "stop-job-watch",
     "summary-cards",
     "target-profile",
     "target-profile-field",
@@ -96,6 +128,19 @@ let report = null;
 let rawReport = null;
 let replayIndex = 0;
 let bridgeConnected = !bridgeRequired;
+let analysisReports = [];
+let jobPollingController = null;
+
+const analysisColors = ["#a45137", "#536e73", "#a98c3f", "#7a657d", "#607d70", "#6c7a89"];
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>\"]/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;"
+  })[character]);
+}
 
 function showBridgeState(message, connected = false) {
   elements["bridge-status"].textContent = message;
@@ -160,6 +205,15 @@ function renderSeats() {
           <option value="${value}">${label}</option>
         `).join("")}
       </select>
+      <input class="seat-model" aria-label="Seat ${seat + 1} model override" placeholder="Provider default">
+      <select class="seat-reasoning-effort" aria-label="Seat ${seat + 1} reasoning effort">
+        <option value="">Default effort</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+        <option value="xhigh">Extra high</option>
+        <option value="max">Max</option>
+      </select>
       <p class="persona-summary">${profile.persona.identity}</p>
     `;
     row.querySelector(".profile-select").addEventListener("change", (event) => {
@@ -183,7 +237,12 @@ function simulationOptions() {
     backends: rows.map((row) => row.querySelector(".backend-select").value),
     allowLlm: elements["allow-llm"].checked,
     maxLlmDecisions: Number(elements["max-llm-decisions"].value),
-    model: elements.model.value || undefined
+    model: elements.model.value || undefined,
+    models: rows.map((row) => row.querySelector(".seat-model").value || undefined),
+    reasoningEffort: elements["reasoning-effort"].value || undefined,
+    reasoningEfforts: rows.map((row) =>
+      row.querySelector(".seat-reasoning-effort").value || undefined
+    )
   };
   if (mode === "strategy-evolution") {
     options.targetProfileId = elements["target-profile"].value;
@@ -211,23 +270,303 @@ function simulationOptions() {
   return options;
 }
 
-async function pollJob(id) {
+function abortableDelay(milliseconds, signal) {
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const settle = (callback) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", onAbort);
+      callback();
+    };
+    const timer = setTimeout(() => settle(resolve), milliseconds);
+    const onAbort = () => {
+      settle(() => reject(new DOMException("Simulation monitoring stopped.", "AbortError")));
+    };
+    if (signal?.aborted) onAbort();
+    else signal?.addEventListener("abort", onAbort, { once: true });
+  });
+}
+
+function jobProgressLabel(job) {
+  const progress = job.progress || {};
+  const cycle = progress.cycleNumber ?? progress.cycle;
+  const checkpoint = progress.kind === "turn"
+    ? `turn ${progress.turnNumber ?? "in progress"}`
+    : cycle !== null && cycle !== undefined
+      ? `cycle ${cycle}`
+      : progress.phase;
+  return `${job.status.toUpperCase()} · ${progress.completed}/${progress.total} · ${checkpoint}`;
+}
+
+async function pollJob(id, { signal } = {}) {
+  let lastProgressKey = null;
+  let lastProgressAt = Date.now();
+  let retries = 0;
   while (true) {
-    const response = await apiFetch(`/api/simulations/${id}`);
-    const job = await response.json();
-    if (!response.ok) throw new Error(job.error || copy.errors.readJob);
-    elements["job-status"].textContent =
-      `${job.status.toUpperCase()} · ${job.progress.completed}/${job.progress.total} · ${job.progress.phase}`;
+    let job;
+    try {
+      const response = await apiFetch(`/api/simulations/${id}`, { signal });
+      job = await response.json();
+      if (!response.ok) throw new Error(job.error || copy.errors.readJob);
+      retries = 0;
+    } catch (error) {
+      if (error?.name === "AbortError") throw error;
+      retries += 1;
+      elements["job-status"].textContent =
+        `MONITORING RETRY ${retries} · ${error.message} · job ${id} remains recoverable at this URL.`;
+      await abortableDelay(Math.min(5000, 250 * 2 ** retries), signal);
+      continue;
+    }
+    const progressKey = JSON.stringify([job.status, job.progress]);
+    if (progressKey !== lastProgressKey) {
+      lastProgressKey = progressKey;
+      lastProgressAt = Date.now();
+    }
+    const stale = job.status === "running" && Date.now() - lastProgressAt > 30000;
+    elements["job-status"].textContent = stale
+      ? `STALE JOB · ${jobProgressLabel(job)} · Monitoring continues; stop monitoring or reload this job URL to recover.`
+      : jobProgressLabel(job);
     if (job.status === "failed") throw new Error(job.error);
     if (job.status === "complete") {
       return { ...job.report, localArchive: job.archive };
     }
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await abortableDelay(250, signal);
+  }
+}
+
+async function watchJob(id) {
+  jobPollingController?.abort();
+  const controller = new AbortController();
+  jobPollingController = controller;
+  elements["stop-job-watch"].hidden = false;
+  try {
+    return await pollJob(id, { signal: controller.signal });
+  } finally {
+    if (jobPollingController === controller) {
+      jobPollingController = null;
+      elements["stop-job-watch"].hidden = true;
+    }
   }
 }
 
 function formatPercent(value) {
   return `${(value * 100).toFixed(1)}%`;
+}
+
+function renderAnalysisMetricOptions() {
+  for (const id of [
+    "analysis-trajectory-metric",
+    "analysis-scatter-x",
+    "analysis-scatter-y",
+    "analysis-scatter-size",
+    "analysis-heatmap-metric"
+  ]) {
+    const element = elements[id];
+    if (element.options.length) continue;
+    element.innerHTML = visualizationMetrics(visualizationLabels).map((metric) =>
+      `<option value="${metric.id}">${metric.label}</option>`
+    ).join("");
+  }
+  elements["analysis-trajectory-metric"].value = "score";
+  elements["analysis-scatter-x"].value = "capability";
+  elements["analysis-scatter-y"].value = "winShare";
+  elements["analysis-scatter-size"].value = "score";
+  elements["analysis-heatmap-metric"].value = "winShare";
+}
+
+function svgLineChart(trajectory) {
+  const width = 720;
+  const height = 260;
+  const padding = { top: 20, right: 18, bottom: 34, left: 42 };
+  const allValues = trajectory.series.flatMap((series) => series.points);
+  if (!allValues.length) return "<p class=\"muted\">This sample has no replay snapshots.</p>";
+  const minimum = Math.min(0, ...allValues);
+  const maximum = Math.max(1, ...allValues);
+  const span = Math.max(1, maximum - minimum);
+  const x = (index, count) => padding.left + index / Math.max(1, count - 1) * (width - padding.left - padding.right);
+  const y = (value) => height - padding.bottom - (value - minimum) / span * (height - padding.top - padding.bottom);
+  const grid = Array.from({ length: 5 }, (_, index) => {
+    const value = minimum + span * index / 4;
+    const position = y(value);
+    return `<path d="M${padding.left} ${position}H${width - padding.right}" class="chart-grid"/><text x="${padding.left - 8}" y="${position + 4}" text-anchor="end">${value.toFixed(1)}</text>`;
+  }).join("");
+  const lines = trajectory.series.map((series, index) => {
+    const points = series.points.map((value, pointIndex) => `${x(pointIndex, series.points.length)},${y(value)}`).join(" ");
+    return `<polyline points="${points}" class="trajectory-line" style="--chart-color:${analysisColors[index % analysisColors.length]}"/>`;
+  }).join("");
+  return `<svg viewBox="0 0 ${width} ${height}" aria-label="Recorded ${escapeHtml(trajectory.metric)} trajectory" preserveAspectRatio="none">${grid}${lines}<text x="${padding.left}" y="${height - 8}">match start</text><text x="${width - padding.right}" y="${height - 8}" text-anchor="end">final reported standing</text></svg>`;
+}
+
+function renderTrajectory(games) {
+  const selectedId = elements["analysis-sample"].value;
+  elements["analysis-sample"].innerHTML = games.map((game) =>
+    `<option value="${game.id}">${escapeHtml(game.label)}</option>`
+  ).join("");
+  const selected = games.find((game) => game.id === selectedId) || games[0];
+  if (!selected) {
+    elements["analysis-trajectory"].innerHTML = "<p class=\"muted\">Load a tournament report with a sampled replay to inspect a game.</p>";
+    elements["analysis-trajectory-legend"].replaceChildren();
+    elements["analysis-trajectory-note"].textContent = "No replay evidence is loaded.";
+    return;
+  }
+  elements["analysis-sample"].value = selected.id;
+  const trajectory = trajectoryForSample(
+    selected.sample,
+    elements["analysis-trajectory-metric"].value,
+    visualizationLabels
+  );
+  elements["analysis-trajectory"].innerHTML = svgLineChart(trajectory);
+  elements["analysis-trajectory-note"].textContent =
+    `${trajectory.metric} at recorded state transitions, followed by the authoritative final standing. This is observed replay evidence, not a forecast.`;
+  elements["analysis-trajectory-legend"].innerHTML = trajectory.series.map((series, index) => `
+    <span><i style="--chart-color:${analysisColors[index % analysisColors.length]}"></i>${escapeHtml(series.name)} · ${escapeHtml(series.profileId)} · ${escapeHtml(series.backendId)} · ${escapeHtml(series.model || "provider default")} · ${escapeHtml(series.reasoningEffort || "default effort")}</span>
+  `).join("");
+}
+
+function renderHeatmap(rows) {
+  const map = heatmapCells(rows, elements["analysis-heatmap-metric"].value, visualizationLabels);
+  const values = [...map.cells.values()];
+  const max = Math.max(...values, 1);
+  elements["analysis-heatmap"].innerHTML = `
+    <div class="heatmap-grid" style="--heatmap-columns:${map.profiles.length}">
+      <span></span>${map.profiles.map((profile) => `<strong>${escapeHtml(profile)}</strong>`).join("")}
+      ${map.factions.map((faction) => `
+        <strong>${escapeHtml(faction)}</strong>
+        ${map.profiles.map((profile) => {
+          const value = map.cells.get(`${faction}|${profile}`);
+          if (value === undefined) return "<span class=\"heatmap-cell empty\">-</span>";
+          return `<span class="heatmap-cell" style="--heatmap-intensity:${Math.max(0.12, value / max)}" title="${escapeHtml(faction)} / ${escapeHtml(profile)}: ${value.toFixed(3)}">${value.toFixed(2)}</span>`;
+        }).join("")}
+      `).join("")}
+    </div>
+    <p class="muted">Cell value: ${escapeHtml(map.metric)}. Empty cells have no sampled game with that faction-persona pairing.</p>
+  `;
+}
+
+function metricLabel(id) {
+  return visualizationMetrics(visualizationLabels).find((metric) => metric.id === id)?.label || id;
+}
+
+function renderScatter(rows) {
+  const xMetric = elements["analysis-scatter-x"].value;
+  const yMetric = elements["analysis-scatter-y"].value;
+  const sizeMetric = elements["analysis-scatter-size"].value;
+  const value = (row, metric) => row[metric] || 0;
+  const xValues = rows.map((row) => value(row, xMetric));
+  const yValues = rows.map((row) => value(row, yMetric));
+  const sizeValues = rows.map((row) => value(row, sizeMetric));
+  if (!rows.length) {
+    elements["analysis-scatter"].innerHTML = "<p class=\"muted\">No sampled standings are available for this comparison.</p>";
+    return;
+  }
+  const width = 500;
+  const height = 300;
+  const pad = 42;
+  const extent = (values) => [Math.min(...values, 0), Math.max(...values, 1)];
+  const [minX, maxX] = extent(xValues);
+  const [minY, maxY] = extent(yValues);
+  const maxSize = Math.max(...sizeValues, 1);
+  const scale = (number, min, max, start, end) => start + (number - min) / Math.max(1e-9, max - min) * (end - start);
+  const dots = rows.map((row, index) => {
+    const cx = scale(value(row, xMetric), minX, maxX, pad, width - pad);
+    const cy = scale(value(row, yMetric), minY, maxY, height - pad, pad);
+    const radius = 5 + 17 * Math.sqrt(value(row, sizeMetric) / maxSize);
+    const title = `${row.factionName} / ${row.profileId}: ${metricLabel(xMetric)} ${value(row, xMetric).toFixed(2)}, ${metricLabel(yMetric)} ${value(row, yMetric).toFixed(2)}`;
+    return `<circle cx="${cx}" cy="${cy}" r="${radius}" style="--chart-color:${analysisColors[index % analysisColors.length]}" class="scatter-dot"><title>${escapeHtml(title)}</title></circle>`;
+  }).join("");
+  elements["analysis-scatter"].innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-label="Aggregate scatter plot"><path d="M${pad} ${pad}V${height - pad}H${width - pad}" class="chart-axis"/>${dots}<text x="${width / 2}" y="${height - 8}" text-anchor="middle">${escapeHtml(metricLabel(xMetric))}</text><text x="14" y="${height / 2}" transform="rotate(-90 14 ${height / 2})" text-anchor="middle">${escapeHtml(metricLabel(yMetric))}</text></svg>`;
+  elements["analysis-scatter-note"].textContent =
+    `One point per observed faction-persona pairing. Point area represents ${metricLabel(sizeMetric)}; color distinguishes pairings, not a balance verdict.`;
+}
+
+function renderLlmEvidence(reports) {
+  const providers = providerSummary(reports);
+  if (!providers.length) {
+    elements["analysis-llm"].innerHTML = "<p class=\"muted\">No provider receipts are present in the loaded sampled games.</p>";
+    return;
+  }
+  elements["analysis-llm"].innerHTML = providers.map((provider) => `
+    <article>
+      <h4>${escapeHtml(provider.actualProvider)}${
+        provider.attemptedProvider === provider.actualProvider
+          ? ""
+          : ` <small>after ${escapeHtml(provider.attemptedProvider)}</small>`
+      }</h4>
+      <dl>
+        <dt>Model / effort</dt><dd>${escapeHtml(provider.actualModel || "provider default")} · ${escapeHtml(provider.actualReasoningEffort || "default effort")}</dd>
+        <dt>Attempted model / effort</dt><dd>${escapeHtml(provider.attemptedModel || "provider default")} · ${escapeHtml(provider.attemptedReasoningEffort || "default effort")}</dd>
+        <dt>Recorded decisions</dt><dd>${provider.decisions.toFixed(0)}</dd>
+        <dt>Attempted-provider latency</dt><dd>${provider.latencyDecisions ? `${(provider.meanLatencyMs / 1000).toFixed(2)}s` : "not recorded"}</dd>
+        <dt>Fallbacks</dt><dd>${provider.fallbacks}</dd>
+        <dt>Seat appearances</dt><dd>${provider.appearances}</dd>
+      </dl>
+    </article>
+  `).join("");
+}
+
+function analysisGroupElement() {
+  let select = document.getElementById("analysis-group");
+  if (!select) {
+    const label = document.createElement("label");
+    label.textContent = "Evidence identity";
+    select = document.createElement("select");
+    select.id = "analysis-group";
+    label.append(select);
+    elements["analysis-trajectory-metric"].closest(".analysis-controls").prepend(label);
+  }
+  if (!select.dataset.analysisGroupBound) {
+    select.addEventListener("change", renderAnalysis);
+    select.dataset.analysisGroupBound = "true";
+  }
+  return select;
+}
+
+function selectAnalysisGroup(groups) {
+  const select = analysisGroupElement();
+  const selectedKey = select.value;
+  const sortedGroups = [...groups].sort((left, right) => right.reports.length - left.reports.length);
+  select.innerHTML = sortedGroups.map((group) => {
+    const [version, rulesetFingerprint, engineFingerprint] = group.key.split("|");
+    return `<option value="${escapeHtml(group.key)}">Game ${escapeHtml(version)} · rules ${shortFingerprint(rulesetFingerprint)} · engine ${shortFingerprint(engineFingerprint)} (${group.reports.length})</option>`;
+  }).join("");
+  const selected = sortedGroups.find((group) => group.key === selectedKey) || sortedGroups[0];
+  if (selected) select.value = selected.key;
+  return selected;
+}
+
+function renderAnalysis() {
+  renderAnalysisMetricOptions();
+  const groups = compatibleReportGroups(analysisReports);
+  const active = selectAnalysisGroup(groups);
+  const reports = active?.reports || [];
+  const games = sampledGames(reports);
+  const identifiedReports = groups.reduce((total, group) => total + group.reports.length, 0);
+  const incompleteIdentityReports = analysisReports.length - identifiedReports;
+  const sourceDescription = active
+    ? `${reports.length} compatible report${reports.length === 1 ? "" : "s"}, ${games.length} sampled game${games.length === 1 ? "" : "s"}`
+    : "No reports loaded";
+  const notices = [];
+  if (groups.length > 1) notices.push(`${groups.length - 1} other compatible identity group(s) remain available in the selector.`);
+  if (incompleteIdentityReports) notices.push(`${incompleteIdentityReports} report(s) lack a complete game/ruleset/engine identity and are not aggregated.`);
+  elements["analysis-status"].textContent = `${sourceDescription}. Aggregate plots use only recorded samples and retain their report identities.${notices.length ? ` ${notices.join(" ")}` : ""}`;
+  renderTrajectory(games);
+  const rows = aggregateFactionPersona(reports);
+  renderHeatmap(rows);
+  renderScatter(rows);
+  renderLlmEvidence(reports);
+}
+
+function setAnalysisReports(reports) {
+  analysisReports = reports;
+  renderAnalysis();
+}
+
+async function addAnalysisFiles(files) {
+  const loaded = await Promise.all([...files].map(async (file) => normalizeSimulationReport(JSON.parse(await file.text()))));
+  setAnalysisReports([...analysisReports, ...loaded]);
+  return loaded;
 }
 
 function summaryCard(label, value, note) {
@@ -426,7 +765,7 @@ function renderExperimentReport() {
         <dt>${holdout.planFingerprint}</dt><dd>${report.preRegistration.fingerprint}</dd>
         <dt>${holdout.sourceClean}</dt><dd>${String(report.provenance.sourceDirty === false)}</dd>
         <dt>${holdout.providers}</dt><dd>${report.configuration.cliProviders.map((entry) =>
-          `${entry.provider} ${entry.version || "unknown"} · ${entry.model || "default model unresolved"}`
+          `${entry.provider} ${entry.version || "unknown"} · ${(entry.models || [entry.model || "default model unresolved"]).join(", ")} · ${(entry.reasoningEfforts || [entry.reasoningEffort || "default effort unresolved"]).join(", ")}`
         ).join("<br>")}</dd>
       </dl>
     `;
@@ -578,6 +917,15 @@ function replayEvent() {
   return report.samples[Number(elements["replay-sample"].value)]?.replay?.[replayIndex];
 }
 
+function replayDecisionProvenance(event) {
+  const receipt = event.decisionReceipt;
+  if (!receipt) return "";
+  const provider = receipt.provider || receipt.attemptedProvider || "unknown provider";
+  const model = receipt.model || receipt.attemptedModel || "provider default";
+  const effort = receipt.reasoningEffort || receipt.attemptedReasoningEffort || "default effort";
+  return ` · ${provider} / ${model} / ${effort}${receipt.fallback ? " (fallback)" : ""}`;
+}
+
 function renderReplay() {
   if (!report) return;
   const sample = report.samples[Number(elements["replay-sample"].value)];
@@ -594,7 +942,7 @@ function renderReplay() {
     steps: sample.replay.length,
     round: event.round,
     cycle: event.cycle,
-    summary: event.summary
+    summary: `${event.summary}${replayDecisionProvenance(event)}`
   });
   elements["replay-board"].replaceChildren();
 
@@ -643,6 +991,7 @@ function renderReplay() {
     <article class="replay-player" style="--seat-color:${seatColors[player.seat]}">
       <p class="eyebrow">Seat ${player.seat + 1} · ${player.profileId}</p>
       <h3>${player.factionName}</h3>
+      <p class="muted">${escapeHtml(player.backendId)} · ${escapeHtml(player.model || "provider default")} · ${escapeHtml(player.reasoningEffort || "default effort")}</p>
       <dl>
         <dt>${copy.labels.runway}</dt><dd>${player.runway}</dd>
         <dt>${copy.labels.compute}</dt><dd>${player.compute}</dd>
@@ -671,9 +1020,14 @@ function renderCoverage() {
   `;
 }
 
-function showReport(nextReport) {
+function showReport(nextReport, { preserveAnalysis = false } = {}) {
   rawReport = structuredClone(nextReport);
   report = normalizeSimulationReport(nextReport);
+  if (preserveAnalysis) {
+    renderAnalysis();
+  } else {
+    setAnalysisReports([report]);
+  }
   elements["setup-view"].hidden = true;
   elements["results-view"].hidden = false;
   elements["archive-path"].textContent = report.localArchive
@@ -717,6 +1071,7 @@ elements["simulation-form"].addEventListener("submit", async (event) => {
   event.preventDefault();
   elements["run-simulation"].disabled = true;
   elements["job-status"].textContent = copy.status.submitting;
+  let jobId = null;
   try {
     const response = await apiFetch("/api/simulations", {
       method: "POST",
@@ -725,10 +1080,13 @@ elements["simulation-form"].addEventListener("submit", async (event) => {
     });
     const job = await response.json();
     if (!response.ok) throw new Error(job.error || copy.errors.startJob);
+    jobId = job.id;
     history.replaceState(null, "", `?job=${encodeURIComponent(job.id)}`);
-    showReport(await pollJob(job.id));
+    showReport(await watchJob(job.id));
   } catch (error) {
-    elements["job-status"].textContent = `${copy.status.failed} · ${error.message}`;
+    elements["job-status"].textContent = error?.name === "AbortError"
+      ? `MONITORING STOPPED · job ${jobId || "unknown"} continues on the local server. Reload this job URL to resume.`
+      : `${copy.status.failed} · ${error.message}`;
   } finally {
     updateRunAvailability();
   }
@@ -792,11 +1150,13 @@ elements["experiment-mode"].addEventListener("change", () => {
   renderExperimentMode({ resetDefaults: true });
 });
 elements["new-simulation"].addEventListener("click", () => {
+  jobPollingController?.abort();
   history.replaceState(null, "", window.location.pathname);
   elements["results-view"].hidden = true;
   elements["setup-view"].hidden = false;
   elements["job-status"].textContent = "";
 });
+elements["stop-job-watch"].addEventListener("click", () => jobPollingController?.abort());
 elements["download-report"].addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(rawReport, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
@@ -815,6 +1175,28 @@ elements["report-file"].addEventListener("change", async (event) => {
   const file = event.target.files[0];
   if (file) showReport(JSON.parse(await file.text()));
 });
+for (const id of ["analysis-files", "analysis-files-results"]) {
+  elements[id].addEventListener("change", async (event) => {
+    try {
+      const loaded = await addAnalysisFiles(event.target.files);
+      if (!report && loaded[0]) showReport(loaded[0], { preserveAnalysis: true });
+    } catch (error) {
+      elements["job-status"].textContent = `Could not load analysis report: ${error.message}`;
+    } finally {
+      event.target.value = "";
+    }
+  });
+}
+for (const id of [
+  "analysis-sample",
+  "analysis-trajectory-metric",
+  "analysis-scatter-x",
+  "analysis-scatter-y",
+  "analysis-scatter-size",
+  "analysis-heatmap-metric"
+]) {
+  elements[id].addEventListener("change", renderAnalysis);
+}
 elements["replay-sample"].addEventListener("change", () => {
   replayIndex = 0;
   renderReplay();
@@ -850,9 +1232,11 @@ if (existingJob) {
   elements["run-simulation"].disabled = true;
   elements["job-status"].textContent = copy.status.loadingExisting;
   try {
-    showReport(await pollJob(existingJob));
+    showReport(await watchJob(existingJob));
   } catch (error) {
-    elements["job-status"].textContent = `${copy.status.failed} · ${error.message}`;
+    elements["job-status"].textContent = error?.name === "AbortError"
+      ? `MONITORING STOPPED · job ${existingJob} continues on the local server. Reload this job URL to resume.`
+      : `${copy.status.failed} · ${error.message}`;
   } finally {
     updateRunAvailability();
   }

@@ -49,6 +49,8 @@ function createPlayer(
   frontierId,
   profileId,
   backendId = "weighted",
+  model = null,
+  reasoningEffort = null,
   playerCount = 4
 ) {
   const starts = clone(faction.starts);
@@ -59,6 +61,8 @@ function createPlayer(
     factionName: faction.name,
     profileId,
     backendId,
+    model,
+    reasoningEffort,
     runway: starts.runway,
     compute: starts.compute,
     capability: starts.capability,
@@ -103,6 +107,8 @@ export class CoreEconomyMatch {
     factions,
     profiles,
     backends = [],
+    models = [],
+    reasoningEfforts = [],
     seed,
     playerCount = 4,
     recordReplay = false,
@@ -131,6 +137,8 @@ export class CoreEconomyMatch {
         frontier.instanceId,
         profiles[seat % profiles.length].id,
         backends[seat % Math.max(1, backends.length)] || "weighted",
+        models[seat % Math.max(1, models.length)] || null,
+        reasoningEfforts[seat % Math.max(1, reasoningEfforts.length)] || null,
         playerCount
       )
     );
@@ -290,11 +298,11 @@ export class CoreEconomyMatch {
             resolvableWithoutTrade: currentResolutionCount > 0
           }
         };
-      });
+      })
+      .filter((decision) => decision.consequences.resolvableWithoutTrade);
   }
 
   currentResolutionCountForSelection(seat, actionId) {
-    if (["fund", "organize", "influence"].includes(actionId)) return 1;
     return this.legalResolutions(seat, actionId).length;
   }
 
@@ -476,6 +484,7 @@ export class CoreEconomyMatch {
       player.metrics.policyReceipts.push({
         provider,
         model: receipt.model || null,
+        reasoningEffort: receipt.reasoningEffort || null,
         requestId: receipt.requestId || null,
         decisionId: receipt.decisionId || null,
         promptSha256: receipt.promptSha256 || null,
@@ -487,6 +496,7 @@ export class CoreEconomyMatch {
         durationMs: receipt.durationMs ?? null,
         attemptedProvider: receipt.attemptedProvider || null,
         attemptedModel: receipt.attemptedModel || null,
+        attemptedReasoningEffort: receipt.attemptedReasoningEffort || null,
         attemptedRequestId: receipt.attemptedRequestId || null,
         attemptedPromptSha256: receipt.attemptedPromptSha256 || null,
         providerErrorClass: receipt.providerErrorClass || null,
@@ -681,7 +691,7 @@ export class CoreEconomyMatch {
       null,
       renderSimulationCopy(simulationCopy.events.roundSettled, { round: this.round })
     );
-    if (this.round === 4) {
+    if (this.round === this.config.rounds.at(-1).number) {
       this.complete = true;
       return;
     }
@@ -743,7 +753,8 @@ export class CoreEconomyMatch {
     }
 
     this.initiativeSeat = (this.initiativeSeat + 1) % this.playerCount;
-    if (this.cycle === 3) this.finishRound();
+    const cycleLimit = this.config.rounds.find((round) => round.number === this.round).cycles;
+    if (this.cycle === cycleLimit) this.finishRound();
     else this.cycle += 1;
   }
 
@@ -770,6 +781,8 @@ export class CoreEconomyMatch {
         factionName: player.factionName,
         profileId: player.profileId,
         backendId: player.backendId,
+        model: player.model,
+        reasoningEffort: player.reasoningEffort,
         runway: player.runway,
         compute: player.compute,
         capability: player.capability,
@@ -784,7 +797,7 @@ export class CoreEconomyMatch {
     };
   }
 
-  recordEvent(type, seat, summary) {
+  recordEvent(type, seat, summary, decisionReceipt = null) {
     if (!this.recordReplay) return;
     this.replay.push({
       index: this.replay.length,
@@ -793,6 +806,17 @@ export class CoreEconomyMatch {
       cycle: this.cycle,
       seat,
       summary,
+      decisionReceipt: decisionReceipt ? {
+        provider: decisionReceipt.provider || null,
+        model: decisionReceipt.model || null,
+        reasoningEffort: decisionReceipt.reasoningEffort || null,
+        requestId: decisionReceipt.requestId || null,
+        decisionId: decisionReceipt.decisionId || null,
+        fallback: Boolean(decisionReceipt.fallback),
+        attemptedProvider: decisionReceipt.attemptedProvider || null,
+        attemptedModel: decisionReceipt.attemptedModel || null,
+        attemptedReasoningEffort: decisionReceipt.attemptedReasoningEffort || null
+      } : null,
       state: this.snapshot()
     });
   }

@@ -389,7 +389,7 @@ export function createGame(config, factions, headlines, seed, factionId, playerC
   const state = {
     seed: String(seed),
     playerCount: boundedPlayerCount,
-    round: 1,
+    round: config.rounds[0].number,
     cycle: 1,
     initiativeSeat: 0,
     phase: "select",
@@ -715,7 +715,7 @@ function finishRound(config, headlines, state) {
   synchronizePublicMandate(config, state, "production");
   state.pendingRoundSettlement = {
     round: state.round,
-    finalRound: state.round === 4
+    finalRound: state.round === config.rounds.at(-1).number
   };
   if (state.round === 3) {
     state.phase = "realign";
@@ -729,7 +729,7 @@ function finishRound(config, headlines, state) {
 
 function advanceAfterRealignment(config, headlines, state) {
   state.pendingRoundSettlement = null;
-  if (state.round < 4) {
+  if (state.round < config.rounds.at(-1).number) {
     state.round += 1;
     state.cycle = 1;
     state.player.actionsUsed = [];
@@ -834,7 +834,8 @@ export function resolveSelectedAction(config, headlines, state, pieceId, tileId,
   state.phase = "select";
   state.initiativeSeat = (state.initiativeSeat + 1) % state.playerCount;
 
-  if (state.cycle === 3) {
+  const cycleLimit = config.rounds.find((round) => round.number === state.round).cycles;
+  if (state.cycle === cycleLimit) {
     finishRound(config, headlines, state);
   } else {
     state.cycle += 1;

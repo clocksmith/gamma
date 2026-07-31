@@ -56,7 +56,6 @@ const VOCABULARY_KEYS = new Set([
   "artDirection",
   "description",
   "displayName",
-  "edition",
   "flavorText",
   "introduction",
   "label",

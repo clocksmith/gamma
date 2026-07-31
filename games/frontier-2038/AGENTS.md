@@ -44,9 +44,8 @@ rewrite the baseline.
 ## Public-Figure Boundary
 
 Sam Altman, Mark Zuckerberg, Demis Hassabis, Elon Musk, Dario Amodei, and
-Jensen Huang are the canonical player identities for the named parody edition.
-Do not replace them with institutional aliases unless the user explicitly
-selects an alternate edition.
+Jensen Huang are the canonical real-name satirical player identities.
+Do not replace them with institutional aliases.
 
 Treat every portrayal as fictional, transformative satire based on public
 institutional roles. Historically inspired events must target board state, not

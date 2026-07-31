@@ -38,7 +38,7 @@
     "scaling": "round(baseDraws * playerCount / 4)",
     "minimumDraws": 1,
     "scrutinySupplyPerPlayer": 10,
-    "overflowPenalty": "For each ${terms.resources.scrutiny} cube that cannot be added, immediately pay 1 ${terms.resources.runway} or lose 1 ${terms.resources.trust}."
+    "overflowPenalty": "For each ${terms.playerTracks.scrutiny} cube that cannot be added, immediately pay 1 ${terms.resources.runway} or lose 1 ${terms.playerTracks.trust}."
   },
   "rounds": [
     {
@@ -57,8 +57,8 @@
         "Core Actions",
         "Training Runs",
         "the starting grid",
-        "${terms.resources.customers}",
-        "${terms.resources.scrutiny}"
+        "${terms.playerTracks.customers}",
+        "${terms.playerTracks.scrutiny}"
       ]
     },
     {
@@ -83,7 +83,7 @@
       "number": 3,
       "id": "narrative",
       "name": "${terms.eras.narrative}",
-      "tagline": "${terms.resources.capability} exists. Reality must now be informed.",
+      "tagline": "${terms.playerTracks.capability} exists. Reality must now be informed.",
       "flavorText": "Every institution reaches the same independent conclusion through different sponsored channels.",
       "artDirection": "Media, government, and capital towers converging into one serene broadcast face.",
       "cycles": 3,
@@ -97,7 +97,7 @@
       ],
       "newThisEra": [
         "Joint Ventures",
-        "immediate ${terms.resources.power} purchases",
+        "immediate ${terms.infrastructure.power} purchases",
         "Government votes",
         "persistent Headline effects"
       ]
@@ -133,11 +133,11 @@
     {
       "id": "fund",
       "name": "${terms.actions.fund}",
-      "summary": "Gain 2 ${terms.resources.runway}, or gain 4 ${terms.resources.runway} and add 2 ${terms.resources.scrutiny}.",
+      "summary": "Gain 2 ${terms.resources.runway}, or gain 4 ${terms.resources.runway} and add 2 ${terms.playerTracks.scrutiny}.",
       "turnContract": {
         "cost": "None",
         "modes": ["Conservative", "Venture"],
-        "risk": "Venture adds 2 ${terms.resources.scrutiny}"
+        "risk": "Venture adds 2 ${terms.playerTracks.scrutiny}"
       },
       "initiativeName": "Finance the Inevitable",
       "slogan": "The forecast contains no revenue, only destiny.",
@@ -179,7 +179,7 @@
       "turnContract": {
         "cost": "Printed by mode",
         "modes": ["Recruit", "Redistribute", "Relocate"],
-        "risk": "No inherent ${terms.resources.scrutiny}"
+        "risk": "No inherent ${terms.playerTracks.scrutiny}"
       },
       "initiativeName": "Recompile the Institution",
       "slogan": "People are our greatest configurable resource.",
@@ -189,24 +189,24 @@
     {
       "id": "deploy",
       "name": "${terms.actions.deploy}",
-      "summary": "Spend 1 ${terms.resources.compute} to gain a ${terms.resources.customer} if ${terms.resources.capability} permits.",
+      "summary": "Spend 1 ${terms.resources.compute} to gain a ${terms.playerTracks.customer} if ${terms.playerTracks.capability} permits.",
       "turnContract": {
         "cost": "1 ${terms.resources.compute}",
-        "modes": ["Gain the next ${terms.resources.customer}"],
-        "risk": "Add 1 ${terms.resources.scrutiny}"
+        "modes": ["Gain the next ${terms.playerTracks.customer}"],
+        "risk": "Add 1 ${terms.playerTracks.scrutiny}"
       },
       "initiativeName": "Ship Into the World",
       "slogan": "Production is the final evaluation environment.",
-      "flavorText": "Convert ${terms.resources.capability} into dependency, recurring revenue, and attention that marketing cannot entirely absorb.",
+      "flavorText": "Convert ${terms.playerTracks.capability} into dependency, recurring revenue, and attention that marketing cannot entirely absorb.",
       "artDirection": "A polished launch button connected to hospitals, markets, homes, and one unknown system."
     },
     {
       "id": "influence",
       "name": "${terms.actions.influence}",
-      "summary": "Place ${terms.actions.influence}, gain ${terms.resources.trust}, remove ${terms.resources.scrutiny}, or negotiate.",
+      "summary": "Place ${terms.actions.influence}, gain ${terms.playerTracks.trust}, remove ${terms.playerTracks.scrutiny}, or negotiate.",
       "turnContract": {
         "cost": "None",
-        "modes": ["${terms.resources.trust}", "${terms.resources.scrutiny}", "Agreement"],
+        "modes": ["${terms.playerTracks.trust}", "${terms.playerTracks.scrutiny}", "Agreement"],
         "risk": "Agreements unlock in ${terms.eras.narrative}"
       },
       "initiativeName": "Manufacture Organic Consensus",
@@ -231,21 +231,21 @@
       "cap": 10
     },
     "capability": {
-      "name": "${terms.resources.capability}",
+      "name": "${terms.playerTracks.capability}",
       "microcopy": "What the model can do before anyone agrees what it means.",
       "iconConcept": "A stepped waveform entering an eye.",
       "min": 0,
       "cap": 12
     },
     "customers": {
-      "name": "${terms.resources.customers}",
+      "name": "${terms.playerTracks.customers}",
       "microcopy": "Deployment, dependency, and recurring revenue.",
       "iconConcept": "A user silhouette inside a contract seal.",
       "min": 0,
       "cap": 5
     },
     "trust": {
-      "name": "${terms.resources.trust}",
+      "name": "${terms.playerTracks.trust}",
       "microcopy": "Public permission with a short half-life.",
       "iconConcept": "A civic column built from signal bars.",
       "min": 0,
@@ -294,12 +294,12 @@
     },
     "realignment": {
       "name": "${terms.systems.realignment}",
-      "timing": "Exactly once, after ${terms.resources.mandate} scoring in Round III.",
+      "timing": "Exactly once, after ${terms.playerTracks.mandate} scoring in Round III.",
       "vote": "Every player secretly selects one motion. Reveal simultaneously. The motion with the most ballots resolves.",
       "tieBreak": "Among tied leading motions, scan players clockwise from Initiative; the first ballot naming a tied motion selects it.",
       "contentsRule": "Location tiles and everything on them move together. ${terms.locations.frontier} never moves.",
       "networkRule": "After movement, recalculate Network reach from the starting-grid Facility, Generators, Link-marked Facilities, and visible adjacency. No pieces are lifted or re-laid.",
-      "agreementRule": "Joint Ventures and Mega-Clusters remain owned but produce only while their required Facilities are adjacent. Immediate ${terms.resources.power} purchases never persist through Realignment.",
+      "agreementRule": "Joint Ventures and Mega-Clusters remain owned but produce only while their required Facilities are adjacent. Immediate ${terms.infrastructure.power} purchases never persist through Realignment.",
       "motions": [
         {
           "id": "consolidate_core",
@@ -342,7 +342,7 @@
         "count": 1,
         "placement": { "center": 1, "inner": 0, "outer": 0 },
         "facilitySpaces": 0,
-        "visit": "After Act, you may gain 1 ${terms.resources.runway} and add 1 ${terms.resources.scrutiny}.",
+        "visit": "After Act, you may gain 1 ${terms.resources.runway} and add 1 ${terms.playerTracks.scrutiny}.",
         "production": "None.",
         "landmark": "The Unlicensed Horizon",
         "flavorText": "Everything beyond this point is a pilot program with permanent foundations.",
@@ -427,7 +427,7 @@
         "count": 1,
         "placement": { "center": 0, "inner": 0, "outer": 1 },
         "visit": "${terms.actions.influence} places +1 cube.",
-        "production": "Remove one ${terms.resources.scrutiny} before Audit.",
+        "production": "Remove one ${terms.playerTracks.scrutiny} before Audit.",
         "landmark": "Consensus Operations Center",
         "flavorText": "Public opinion is observed, modeled, and returned with improved engagement.",
         "artDirection": "A broadcast sphere reflecting millions of synchronized personal feeds."
@@ -463,7 +463,7 @@
         "count": 1,
         "placement": { "center": 0, "inner": 0, "outer": 1 },
         "visit": "${terms.technology.cleanInfrastructure} costs 1 less ${terms.resources.runway}.",
-        "production": "Remove 1 ${terms.resources.scrutiny} before Audit.",
+        "production": "Remove 1 ${terms.playerTracks.scrutiny} before Audit.",
         "landmark": "The Patient Array",
         "flavorText": "The basin produces clean power and extremely complicated interconnection paperwork.",
         "artDirection": "Solar, wind, and storage fields arranged in calm geometric terraces."
@@ -576,7 +576,7 @@
       "id": "clean_infrastructure",
       "name": "${terms.technology.cleanInfrastructure}",
       "tagline": "Civil legitimacy stored at grid scale.",
-      "publicClaim": "Three permanent ${terms.resources.power} with a visible public compact.",
+      "publicClaim": "Three permanent ${terms.infrastructure.power} with a visible public compact.",
       "hiddenConsequence": "The battery is mostly geology, transmission rights, and a commemorative civic dashboard.",
       "artDirection": "A continental heat battery beneath a calm public plaza and immaculate transmission garden.",
       "round": 2,
@@ -589,7 +589,7 @@
       "id": "emergency_infrastructure",
       "name": "${terms.technology.emergencyInfrastructure}",
       "tagline": "For exceptional demand, permanently.",
-      "publicClaim": "Four immediate ${terms.resources.power} under a continuously renewed emergency.",
+      "publicClaim": "Four immediate ${terms.infrastructure.power} under a continuously renewed emergency.",
       "hiddenConsequence": "The temporary authorization has acquired cooling towers and its own bond rating.",
       "artDirection": "A compact emergency generation complex glowing beneath an authorization banner that has become architecture.",
       "round": 2,
@@ -602,7 +602,7 @@
       "id": "fusion_demonstrator",
       "name": "${terms.technology.advancedGeneration}",
       "tagline": "The press release is net positive.",
-      "publicClaim": "Six ${terms.resources.power} and a new civilizational category.",
+      "publicClaim": "Six ${terms.infrastructure.power} and a new civilizational category.",
       "hiddenConsequence": "The device is simultaneously a generator, a scientific instrument, and the largest podium ever constructed.",
       "artDirection": "A radiant fusion chamber opening behind a solemn global announcement stage.",
       "round": "${facts.shared.rounds}",

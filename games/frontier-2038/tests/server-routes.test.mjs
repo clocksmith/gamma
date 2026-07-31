@@ -172,6 +172,25 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
       ]
     );
 
+    const excessiveLlmBudget = await request("/api/simulations", {
+      method: "POST",
+      headers: {
+        origin,
+        "content-type": "application/json",
+        "x-m3t4-bridge-token": bridgeToken
+      },
+      body: JSON.stringify({
+        allowLlm: true,
+        maxLlmDecisions: 25,
+        backends: ["codex"]
+      })
+    });
+    assert.equal(excessiveLlmBudget.status, 400);
+    assert.match(
+      (await excessiveLlmBudget.json()).error,
+      /24 LLM decisions per configured policy/
+    );
+
     const rejected = await request("/api/bridge", {
       headers: {
         origin: "https://example.com",
