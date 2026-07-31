@@ -57,11 +57,18 @@ test("ClaudeCliCaller returns a validated decision and receipt", async () => {
   const caller = new ClaudeCliCaller({
     command: process.execPath,
     prefixArgs: [fakeCli],
+    model: "claude-fable-5",
+    reasoningEffort: "medium",
     timeoutMs: 5000
   });
+  const invocation = await caller.invocation(packet);
+  assert.ok(invocation.args.includes("--effort"));
+  assert.ok(invocation.args.includes("medium"));
   const result = await caller.decide(packet);
   assert.equal(result.decision.decisionId, "research_stop_3_frontier");
   assert.equal(result.receipt.provider, "claude-cli");
+  assert.equal(result.receipt.model, "claude-fable-5");
+  assert.equal(result.receipt.reasoningEffort, "medium");
   assert.equal(result.receipt.requestId, packet.requestId);
 });
 
@@ -69,11 +76,19 @@ test("CodexCliCaller returns a validated decision from an isolated output file",
   const caller = new CodexCliCaller({
     command: process.execPath,
     prefixArgs: [fakeCli],
+    model: "gpt-5.6-sol",
+    reasoningEffort: "medium",
     timeoutMs: 5000
   });
+  const invocation = caller.invocation(packet, "fixture-directory", "fixture-output.json");
+  assert.ok(invocation.args.includes("--model"));
+  assert.ok(invocation.args.includes("gpt-5.6-sol"));
+  assert.ok(invocation.args.includes('model_reasoning_effort="medium"'));
   const result = await caller.decide(packet);
   assert.equal(result.decision.decisionId, "research_stop_3_frontier");
   assert.equal(result.receipt.provider, "codex-cli");
+  assert.equal(result.receipt.model, "gpt-5.6-sol");
+  assert.equal(result.receipt.reasoningEffort, "medium");
   assert.equal(result.receipt.requestId, packet.requestId);
 });
 
@@ -85,6 +100,34 @@ test("provider decisions outside the legal set fail closed", async () => {
     timeoutMs: 5000
   });
   await assert.rejects(() => caller.decide(packet), /illegal decisionId/);
+});
+
+test("per-seat cycle prompt budgets fail closed instead of falling back", async () => {
+  const profile = (await loadPlayerProfiles())[0];
+  const caller = {
+    async decide(input) {
+      return {
+        decision: { decisionId: input.legalDecisions[0].decisionId },
+        receipt: { provider: "fixture-cli", requestId: input.requestId }
+      };
+    }
+  };
+  const decisionBudget = {
+    remaining: 4,
+    maxPerSeatCycle: 1,
+    perSeatCycleUsage: new Map()
+  };
+  const policy = new CliBackedPlayerPolicy(profile, caller, {
+    fallback: new WeightedPlayerPolicy(profile),
+    backendId: "fixture-cli",
+    decisionBudget
+  });
+  await policy.decide(packet);
+  await assert.rejects(
+    () => policy.decide(packet),
+    /LLM prompt budget exhausted/
+  );
+  assert.equal(decisionBudget.remaining, 3);
 });
 
 test("decision cache replays a provider result without a fresh call", async () => {

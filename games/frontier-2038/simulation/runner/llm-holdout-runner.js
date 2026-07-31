@@ -43,7 +43,7 @@ function validate(document) {
     !document.llmStages.length ||
     !Number.isInteger(document.maximumLlmDecisions) ||
     document.maximumLlmDecisions < 1 ||
-    document.maximumLlmDecisions > 240
+    document.maximumLlmDecisions > 24
   ) {
     throw new TypeError("Invalid locked LLM holdout preregistration.");
   }
@@ -96,6 +96,7 @@ export async function runLlmNegotiationHoldout({
     allowLlm: true,
     maxLlmDecisions: document.maximumLlmDecisions,
     model: document.model || undefined,
+    reasoningEffort: document.reasoningEffort || undefined,
     llmStages: document.llmStages,
     llmCacheMode: cacheMode,
     llmCacheDirectory: document.cacheDirectory || undefined,

@@ -2,7 +2,24 @@ import { ClaudeCliCaller, CodexCliCaller } from "../callers/index.js";
 import { CliBackedPlayerPolicy, HybridPlayerPolicy } from "./cli-backed-policy.js";
 import { WeightedPlayerPolicy } from "./weighted-policy.js";
 
+export const supportedPolicyBackends = new Set([
+  "weighted",
+  "greedy",
+  "claude",
+  "codex",
+  "hybrid-claude",
+  "hybrid-codex"
+]);
+
+export function validatePolicyBackend(backend) {
+  if (!supportedPolicyBackends.has(backend)) {
+    throw new TypeError(`Unknown player-policy backend: ${backend}.`);
+  }
+  return backend;
+}
+
 export function createPlayerPolicy(profile, backend = profile.defaultBackend || "weighted", options = {}) {
+  validatePolicyBackend(backend);
   if (backend === "weighted" || backend === "greedy") {
     return new WeightedPlayerPolicy(profile, { selection: backend });
   }
@@ -13,6 +30,7 @@ export function createPlayerPolicy(profile, backend = profile.defaultBackend || 
   const fallback = new WeightedPlayerPolicy(profile);
   const callerOptions = {
     model: options.model,
+    reasoningEffort: options.reasoningEffort,
     timeoutMs: options.timeoutMs
   };
   const isClaude = backend.includes("claude");
@@ -26,6 +44,7 @@ export function createPlayerPolicy(profile, backend = profile.defaultBackend || 
     cacheMode: options.cacheMode,
     backendId: backend,
     model: options.model,
+    reasoningEffort: options.reasoningEffort,
     llmStages: options.llmStages
   };
   return backend.startsWith("hybrid-")

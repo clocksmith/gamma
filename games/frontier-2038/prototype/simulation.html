@@ -13,7 +13,7 @@
     <header class="masthead">
       <div>
         <p class="eyebrow">Headless strategy laboratory · build 0.2</p>
-        <h1>M3T4 <span>2038</span></h1>
+        <h1>2038 <span>2038</span></h1>
         <p class="dek">Run institutions. Inspect distributions. Replay decisions.</p>
       </div>
       <div class="status-block">
@@ -139,25 +139,42 @@
             </label>
             <div class="form-grid">
               <label>
-                Maximum LLM decisions
-                <input id="max-llm-decisions" type="number" min="0" max="10000" value="24">
+                Maximum LLM decisions per configured policy
+                <input id="max-llm-decisions" type="number" min="0" max="24" value="24">
               </label>
               <label>
                 Optional model override
                 <input id="model" placeholder="Use provider default">
               </label>
+              <label>
+                Optional reasoning effort
+                <select id="reasoning-effort">
+                  <option value="">Use provider default</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="xhigh">Extra high</option>
+                  <option value="max">Max</option>
+                </select>
+              </label>
             </div>
             <p class="muted">
-              After this limit, LLM-backed personas fall back to their seeded
-              weighted strategy and record the fallback.
+              Each configured LLM policy has this total allowance and a hard cap
+              of two prompts for one seat in one cycle. Exceeding the cycle cap
+              fails the job rather than silently changing its decision policy.
             </p>
           </details>
 
           <div class="submit-row">
             <button id="run-simulation" type="submit">Run tournament</button>
+            <button id="stop-job-watch" type="button" hidden>Stop monitoring</button>
             <label class="file-label">
               Load existing report
               <input id="report-file" type="file" accept="application/json,.json">
+            </label>
+            <label class="file-label">
+              Compare report archive
+              <input id="analysis-files" type="file" accept="application/json,.json" multiple>
             </label>
           </div>
           <div id="job-status" class="job-status" role="status" aria-live="polite"></div>
@@ -204,6 +221,73 @@
           <p class="eyebrow">Score distributions</p>
           <h2>Mandate spread</h2>
           <div id="score-distributions" class="distribution-grid"></div>
+        </section>
+
+        <section id="analysis-section" class="panel result-section analysis-section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Evidence explorer</p>
+              <h2>Compare reports, strategies, and recorded games</h2>
+            </div>
+            <label class="file-label">
+              Add reports
+              <input id="analysis-files-results" type="file" accept="application/json,.json" multiple>
+            </label>
+          </div>
+          <p id="analysis-status" class="callout"></p>
+
+          <div class="analysis-controls">
+            <label>
+              Evidence identity
+              <select id="analysis-group"></select>
+            </label>
+            <label>
+              Recorded game
+              <select id="analysis-sample"></select>
+            </label>
+            <label>
+              Trajectory dimension
+              <select id="analysis-trajectory-metric"></select>
+            </label>
+            <label>
+              Scatter x
+              <select id="analysis-scatter-x"></select>
+            </label>
+            <label>
+              Scatter y
+              <select id="analysis-scatter-y"></select>
+            </label>
+            <label>
+              Scatter size
+              <select id="analysis-scatter-size"></select>
+            </label>
+            <label>
+              Heatmap dimension
+              <select id="analysis-heatmap-metric"></select>
+            </label>
+          </div>
+
+          <div class="analysis-grid">
+            <article class="analysis-card analysis-wide">
+              <h3>Recorded lead trajectory</h3>
+              <p id="analysis-trajectory-note" class="muted"></p>
+              <div id="analysis-trajectory" class="chart" role="img"></div>
+              <div id="analysis-trajectory-legend" class="chart-legend"></div>
+            </article>
+            <article class="analysis-card">
+              <h3>Faction x persona heatmap</h3>
+              <div id="analysis-heatmap" class="heatmap" role="img"></div>
+            </article>
+            <article class="analysis-card">
+              <h3>Aggregate scatter</h3>
+              <div id="analysis-scatter" class="chart" role="img"></div>
+              <p id="analysis-scatter-note" class="muted"></p>
+            </article>
+            <article class="analysis-card analysis-wide">
+              <h3>LLM decision evidence</h3>
+              <div id="analysis-llm" class="llm-evidence"></div>
+            </article>
+          </div>
         </section>
 
         <section id="replay-section" class="panel result-section replay-section">

@@ -77,6 +77,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     factions,
     profiles,
     backends = [],
+    models = [],
+    reasoningEfforts = [],
     headlines,
     wildActions,
     tactics,
@@ -88,13 +90,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     rulesVariant = {},
     mandateMode = "variable",
     simulateNegotiation = false,
-    decisionContext = null
+    decisionContext = null,
+    onProgress = null
   }) {
     super({
       config,
       factions,
       profiles,
       backends,
+      models,
+      reasoningEfforts,
       seed,
       playerCount,
       recordReplay,
@@ -135,6 +140,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     this.mandateMode = mandateMode;
     this.simulateNegotiation = Boolean(simulateNegotiation);
+    this.onProgress = typeof onProgress === "function" ? onProgress : null;
     this.negotiationPromises = [];
     this.relationships = new Map();
     this.systemicRisk = 0;
@@ -179,7 +185,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.grantSeat = this.players.length - 1;
     this.roundMandate = null;
     this.headlineDecks = Object.fromEntries(
-      [1, 2, 3, 4].map((round) => [
+      this.config.rounds.map(({ number: round }) => [
         round,
         shuffled(
           this.headlineDocument.headlines.filter((card) => card.round === round),
@@ -188,7 +194,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       ])
     );
     this.mandateDeck = Object.fromEntries(
-      [1, 2, 3, 4].map((round) => [
+      this.config.rounds.map(({ number: round }) => [
         round,
         mandateMode === "fixed"
           ? this.mandateDocument.mandates.find((card) => card.era === round)
@@ -609,7 +615,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       (decision) => decision.decisionId === result.decision.decisionId
     );
     if (!selected) throw new Error(`Policy selected missing decision ${result.decision.decisionId}.`);
-    this.recordEvent("strategy_decision", seat, `${stage}: ${selected.label}.`);
+    this.recordEvent("strategy_decision", seat, `${stage}: ${selected.label}.`, result.receipt);
     return selected;
   }
 
@@ -3721,6 +3727,48 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     );
   }
 
+  selectedActionResolutions(seat) {
+    const player = this.players[seat];
+    if (!player.selectedAction) return [];
+    if (player.selectedAction.startsWith("wild_")) {
+      return this.legalWildResolutions(seat, player.selectedAction.slice(5));
+    }
+    if (player.selectedAction.startsWith("faction_")) return [];
+    return this.legalResolutions(seat, player.selectedAction);
+  }
+
+  preservesSelectedActionResolution(seat, resource, amount) {
+    const player = this.players[seat];
+    if (!player.selectedAction) return true;
+    const before = player[resource];
+    player[resource] -= amount;
+    const remainsResolvable = this.selectedActionResolutions(seat).length > 0;
+    player[resource] = before;
+    return remainsResolvable;
+  }
+
+  immediateTradeGiveAmounts(seat, partner, resource) {
+    const player = this.players[seat];
+    const partnerCap = resource === "safety" && partner.factionId === "safety_laboratory"
+      ? 4
+      : this.config.resources[resource].cap;
+    const maximumGive = Math.min(player[resource], partnerCap - partner[resource]);
+    return Array.from({ length: maximumGive }, (_, index) => index + 1)
+      .filter((amount) => this.preservesSelectedActionResolution(seat, resource, amount));
+  }
+
+  immediateTradeReceiveAmounts(seat, partner, resource) {
+    const player = this.players[seat];
+    const playerCap = resource === "safety" && player.factionId === "safety_laboratory"
+      ? 4
+      : this.config.resources[resource].cap;
+    const maximumReceive = Math.min(partner[resource], playerCap - player[resource]);
+    return Array.from({ length: maximumReceive }, (_, index) => index + 1)
+      .filter((amount) =>
+        this.preservesSelectedActionResolution(partner.seat, resource, amount)
+      );
+  }
+
   async planImmediateTrade(policies, seat) {
     const rivals = this.players.filter((candidate) => candidate.seat !== seat);
     if (!rivals.length) return null;
@@ -3768,7 +3816,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     );
     if (partnerChoice.parameters?.partnerSeat === undefined) return false;
     const partner = this.players[partnerChoice.parameters.partnerSeat];
-    const giveResources = this.tradableResources(player, partner);
+    const giveResources = this.tradableResources(player, partner).filter(
+      (resource) => this.immediateTradeGiveAmounts(seat, partner, resource).length > 0
+    );
     if (!giveResources.length) return false;
     const giveChoice = await this.choose(
       policies,
@@ -3782,25 +3832,21 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }))
     );
     const giveResource = giveChoice.parameters.resource;
-    const partnerCap = giveResource === "safety" && partner.factionId === "safety_laboratory"
-      ? 4
-      : this.config.resources[giveResource].cap;
-    const maximumGive = Math.min(
-      player[giveResource],
-      partnerCap - partner[giveResource]
-    );
+    const giveAmounts = this.immediateTradeGiveAmounts(seat, partner, giveResource);
     const giveAmountChoice = await this.choose(
       policies,
       seat,
       "immediate_trade_give_amount",
-      Array.from({ length: maximumGive }, (_, index) => ({
-        decisionId: `trade_give_amount_${index + 1}`,
-        label: `Offer ${index + 1} ${giveResource}`,
+      giveAmounts.map((amount) => ({
+        decisionId: `trade_give_amount_${amount}`,
+        label: `Offer ${amount} ${giveResource}`,
         actionId: "trade",
-        parameters: { amount: index + 1 }
+        parameters: { amount }
       }))
     );
-    const receiveResources = this.tradableResources(partner, player, giveResource);
+    const receiveResources = this.tradableResources(partner, player, giveResource).filter(
+      (resource) => this.immediateTradeReceiveAmounts(seat, partner, resource).length > 0
+    );
     if (!receiveResources.length) return false;
     const receiveChoice = await this.choose(
       policies,
@@ -3814,22 +3860,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }))
     );
     const receiveResource = receiveChoice.parameters.resource;
-    const playerCap = receiveResource === "safety" && player.factionId === "safety_laboratory"
-      ? 4
-      : this.config.resources[receiveResource].cap;
-    const maximumReceive = Math.min(
-      partner[receiveResource],
-      playerCap - player[receiveResource]
+    const receiveAmounts = this.immediateTradeReceiveAmounts(
+      seat,
+      partner,
+      receiveResource
     );
     const receiveAmountChoice = await this.choose(
       policies,
       seat,
       "immediate_trade_receive_amount",
-      Array.from({ length: maximumReceive }, (_, index) => ({
-        decisionId: `trade_receive_amount_${index + 1}`,
-        label: `Request ${index + 1} ${receiveResource}`,
+      receiveAmounts.map((amount) => ({
+        decisionId: `trade_receive_amount_${amount}`,
+        label: `Request ${amount} ${receiveResource}`,
         actionId: "trade",
-        parameters: { amount: index + 1 }
+        parameters: { amount }
       }))
     );
     const offer = {
@@ -4109,6 +4153,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.factionAbilityUsed.orbitalCompute ||
       !player.facilities.length
     ) return false;
+    const stationaryResolutionExists = this.selectedActionResolutions(seat).some(
+      (decision) => {
+        const piece = player.pieces.find(
+          (candidate) => candidate.id === decision.parameters?.pieceId
+        );
+        return !decision.parameters?.pieceId ||
+          decision.parameters.destinationId === piece?.tileId;
+      }
+    );
+    if (!stationaryResolutionExists) return false;
     const decisions = [{
       decisionId: "orbital_compute_pass",
       label: "Move the acting piece normally",
@@ -4224,7 +4278,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       null,
       renderSimulationCopy(simulationCopy.events.selectedRoundSettled, { round: this.round })
     );
-    if (this.round === 4) {
+    this.reportProgress("round");
+    if (this.round === this.config.rounds.at(-1).number) {
       this.complete = true;
       return;
     }
@@ -4316,7 +4371,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         renderSimulationCopy(simulationCopy.events.actionSelected, {
           faction: player.factionName,
           action: player.selectedAction
-        })
+        }),
+        result.receipt
       );
     }
 
@@ -4345,10 +4401,25 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }
 
-    for (const seat of this.initiativeOrder()) await this.resolveSelectedSeat(policies, seat);
+    for (const [turnInCycle, seat] of this.initiativeOrder().entries()) {
+      await this.resolveSelectedSeat(policies, seat);
+      this.reportProgress("turn", {
+        completedSeat: seat,
+        turnNumber: (this.config.rounds
+          .filter((round) => round.number < this.round)
+          .reduce((total, round) => total + round.cycles, 0) * this.playerCount) +
+          ((this.cycle - 1) * this.playerCount) + turnInCycle + 1
+      });
+    }
     await this.postCycle(policies, selections);
+    this.reportProgress("cycle", {
+      cycleNumber: this.config.rounds
+        .filter((round) => round.number < this.round)
+        .reduce((total, round) => total + round.cycles, this.cycle)
+    });
     this.initiativeSeat = (this.initiativeSeat + 1) % this.playerCount;
-    if (this.cycle === 3) await this.finishSelectedRound(policies);
+    const cycleLimit = this.config.rounds.find((round) => round.number === this.round).cycles;
+    if (this.cycle === cycleLimit) await this.finishSelectedRound(policies);
     else this.cycle += 1;
   }
 
@@ -4356,6 +4427,39 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     await this.setup(policies);
     while (!this.complete) await this.playCycle(policies);
     return this.result();
+  }
+
+  reportProgress(kind, details = {}) {
+    if (!this.onProgress) return;
+    const standings = this.players.map((player) => ({
+      seat: player.seat,
+      factionName: player.factionName,
+      profileId: player.profileId,
+      backendId: player.backendId,
+      model: player.model,
+      reasoningEffort: player.reasoningEffort,
+      score: this.currentScore(player),
+      trust: player.trust,
+      customers: player.customers,
+      compute: player.compute,
+      capability: player.capability,
+      facilities: player.facilities.length,
+      agiDeclared: player.agiDeclared
+    })).sort((left, right) =>
+      right.score - left.score ||
+      right.trust - left.trust ||
+      right.customers - left.customers ||
+      right.compute - left.compute ||
+      left.seat - right.seat
+    );
+    this.onProgress({
+      kind,
+      round: this.round,
+      cycle: this.cycle,
+      ...details,
+      projectedWinnerSeat: standings[0]?.seat ?? null,
+      standings
+    });
   }
 
   snapshot() {
@@ -4400,6 +4504,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         factionName: player.factionName,
         profileId: player.profileId,
         backendId: player.backendId,
+        model: player.model,
+        reasoningEffort: player.reasoningEffort,
         score,
         trust: player.trust,
         customers: player.customers,

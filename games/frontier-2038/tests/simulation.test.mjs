@@ -1515,28 +1515,89 @@ test("Production earns Grid-Ready markers and infrastructure changes revoke them
   assert.equal(match.declarationReadiness(player).gridReadyFacilities, 2);
 });
 
-test("all six unused Core Actions remain selectable before payment is known", async () => {
+test("action selection omits Core Actions without a current legal resolution", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 4, seed: "six-core-actions" },
     () => {}
   );
   await runtime.match.setup(runtime.policies);
-  const selections = runtime.match.legalActionSelections(0)
+  let selections = runtime.match.legalActionSelections(0)
     .filter((decision) => !decision.decisionId.startsWith("select_wild_"));
   assert.deepEqual(
     selections.map((decision) => decision.actionId),
-    ["fund", "research", "build", "organize", "deploy", "influence"]
+    ["fund", "research", "build", "organize", "influence"]
   );
+  assert.ok(selections.every(
+    (decision) =>
+      decision.consequences.currentResolutionCount > 0 &&
+      decision.consequences.resolvableWithoutTrade
+  ));
   assert.equal(
-    selections.find((decision) => decision.actionId === "fund")
-      .consequences.resolvableWithoutTrade,
-    true
-  );
-  assert.equal(
-    selections.find((decision) => decision.actionId === "deploy")
-      .consequences.resolvableWithoutTrade,
+    selections.some((decision) => decision.actionId === "deploy"),
     false
   );
+
+  runtime.match.players[0].compute = 0;
+  selections = runtime.match.legalActionSelections(0)
+    .filter((decision) => !decision.decisionId.startsWith("select_wild_"));
+  assert.equal(
+    selections.some((decision) => decision.actionId === "research"),
+    false
+  );
+});
+
+test("pre-Act choices preserve the selected action's legal resolution", async () => {
+  const runtime = await createInteractiveGame(
+    { playerCount: 4, seed: "preserve-selected-action" },
+    () => {}
+  );
+  await runtime.match.setup(runtime.policies);
+  const match = runtime.match;
+  const player = match.players[0];
+  const partner = match.players[1];
+
+  player.selectedAction = "research";
+  player.compute = 2;
+  partner.compute = 0;
+  assert.deepEqual(
+    match.immediateTradeGiveAmounts(0, partner, "compute"),
+    [1]
+  );
+  player.compute = 1;
+  assert.deepEqual(
+    match.immediateTradeGiveAmounts(0, partner, "compute"),
+    []
+  );
+  partner.selectedAction = "research";
+  partner.compute = 1;
+  assert.deepEqual(
+    match.immediateTradeReceiveAmounts(0, partner, "compute"),
+    []
+  );
+
+  player.selectedAction = "deploy";
+  player.factionId = "vertical_empire";
+  player.capability = 4;
+  player.customers = 0;
+  player.compute = 0;
+  player.facilities = [{ id: "orbital-facility", tileId: player.pieces[0].tileId }];
+  match.round = 4;
+  assert.ok(match.selectedActionResolutions(0).length > 0);
+  let askedToUseOrbitalCompute = false;
+  const usedOrbitalCompute = await match.maybeUseOrbitalCompute([
+    {
+      async decide(packet) {
+        askedToUseOrbitalCompute = true;
+        return {
+          decision: { decisionId: packet.legalDecisions[0].decisionId },
+          receipt: { provider: "test", requestId: packet.requestId }
+        };
+      }
+    }
+  ], 0);
+  assert.equal(askedToUseOrbitalCompute, false);
+  assert.equal(usedOrbitalCompute, false);
+  assert.notEqual(player.factionAbilityUsed.orbitalCompute, true);
 });
 
 test("interactive games accept mixed per-opponent personas and decision backends", async () => {
@@ -1710,9 +1771,8 @@ test("ordinary successful Round I actions populate opening evidence exactly once
   assert.equal(player.metrics.actions.fund, 1);
 });
 
-test("mechanics fingerprints ignore edition vocabulary", () => {
-  const named = {
-    edition: "named",
+test("mechanics fingerprints ignore faction presentation copy", () => {
+  const firstPresentation = {
     factions: [{
       id: "coalition_lab",
       roleId: "faction-1",
@@ -1721,8 +1781,7 @@ test("mechanics fingerprints ignore edition vocabulary", () => {
       starts: { runway: 5 }
     }]
   };
-  const institutional = {
-    edition: "institutional",
+  const secondPresentation = {
     factions: [{
       id: "coalition_lab",
       roleId: "faction-1",
@@ -1732,8 +1791,8 @@ test("mechanics fingerprints ignore edition vocabulary", () => {
     }]
   };
   assert.deepEqual(
-    mechanicsProjection(named).factions,
-    mechanicsProjection(institutional).factions
+    mechanicsProjection(firstPresentation).factions,
+    mechanicsProjection(secondPresentation).factions
   );
 });
 
@@ -1922,7 +1981,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.23");
+  assert.equal(first.game.version, "0.8.24");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -1960,6 +2019,42 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(typeof first.matchMetrics.factionActionSelections, "object");
   assert.equal(first.samples[0].replay.at(-1).type, "round_settled");
   assert.equal(first.samples[0].replay.at(-1).round, 4);
+});
+
+test("simulation reports deterministic turn and round projections", async () => {
+  const progress = [];
+  await createSimulation({
+    runs: 1,
+    playerCount: 3,
+    seed: "live-progress-contract",
+    sampleReplays: 0,
+    profileIds: ["capability_rusher", "power_broker", "trust_governor"],
+    backends: ["weighted"],
+    models: ["gpt-5.6-sol"],
+    reasoningEfforts: ["medium"]
+  }, (entry) => progress.push(entry));
+  const turns = progress.filter((entry) => entry.kind === "turn");
+  const cycles = progress.filter((entry) => entry.kind === "cycle");
+  const rounds = progress.filter((entry) => entry.kind === "round");
+  assert.equal(turns.length, 36);
+  assert.equal(cycles.length, 12);
+  assert.equal(rounds.length, 4);
+  assert.deepEqual(turns.map((entry) => entry.turnNumber), Array.from({ length: 36 }, (_, index) => index + 1));
+  assert.ok(turns.every((entry) => Number.isInteger(entry.completedSeat)));
+  assert.ok(turns.every((entry) => entry.standings.every((standing) =>
+    standing.model === null && standing.reasoningEffort === null
+  )));
+  for (const entry of [...turns, ...cycles, ...rounds]) {
+    assert.equal(entry.phase, "match_progress");
+    assert.equal(entry.run, 1);
+    assert.equal(entry.runs, 1);
+    assert.equal(entry.standings.length, 3);
+    assert.equal(entry.projectedWinnerSeat, entry.standings[0].seat);
+    assert.deepEqual(
+      entry.standings.map((standing) => standing.score),
+      [...entry.standings.map((standing) => standing.score)].sort((left, right) => right - left)
+    );
+  }
 });
 
 test("Monte Carlo refuses metered providers without explicit authorization", async () => {
@@ -2103,7 +2198,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.23");
+  assert.equal(first.game.version, "0.8.24");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

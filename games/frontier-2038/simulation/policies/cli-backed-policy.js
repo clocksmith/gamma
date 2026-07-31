@@ -9,6 +9,7 @@ export class CliBackedPlayerPolicy {
     cacheMode = "off",
     backendId,
     model,
+    reasoningEffort,
     llmStages
   } = {}) {
     this.profile = validatePlayerProfile(profile);
@@ -19,6 +20,7 @@ export class CliBackedPlayerPolicy {
     this.cacheMode = cacheMode;
     this.backendId = backendId;
     this.model = model;
+    this.reasoningEffort = reasoningEffort;
     this.llmStages = llmStages || null;
     this.kind = "llm";
   }
@@ -77,6 +79,17 @@ export class CliBackedPlayerPolicy {
     if (this.decisionBudget && this.decisionBudget.remaining <= 0) {
       return this.fallbackDecision(augmented, "LLM decision budget exhausted.");
     }
+    if (this.decisionBudget?.maxPerSeatCycle) {
+      const key = packet.requestId.replace(/^(.*:r\d+:c\d+:s\d+):.*$/, "$1");
+      const used = this.decisionBudget.perSeatCycleUsage.get(key) || 0;
+      if (used >= this.decisionBudget.maxPerSeatCycle) {
+        throw new Error(
+          `LLM prompt budget exhausted for ${key}: ` +
+          `${used}/${this.decisionBudget.maxPerSeatCycle}.`
+        );
+      }
+      this.decisionBudget.perSeatCycleUsage.set(key, used + 1);
+    }
     if (this.decisionBudget) this.decisionBudget.remaining -= 1;
 
     try {
@@ -132,6 +145,7 @@ export class HybridPlayerPolicy extends CliBackedPlayerPolicy {
     cacheMode,
     backendId,
     model,
+    reasoningEffort,
     llmStages,
     shortlistSize = 4
   } = {}) {
@@ -142,6 +156,7 @@ export class HybridPlayerPolicy extends CliBackedPlayerPolicy {
       cacheMode,
       backendId,
       model,
+      reasoningEffort,
       llmStages
     });
     this.shortlistSize = shortlistSize;

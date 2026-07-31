@@ -6,7 +6,7 @@
 **Design-baseline date:** July 26, 2026
 **Status:** Controlled playtest candidate; synchronized with executable game ${game.executableVersion}
 **Provisional time:** ${game.physicalTestDuration} at four players; three- and five-player durations require their own blind tests
-**Standard game:** ${facts.shared.roundsWord} rounds, ${facts.shared.cyclesPerRoundWord} turns per player per round
+**Standard game:** ${facts.shared.roundsWord | capitalize} rounds, ${facts.shared.cyclesPerRoundWord} turns per player per round
 
 The game begins as recognizable technology strategy and ends with agent
 swarms, emergency governance, orbital-compute proposals, public ${terms.systems.agi}
@@ -21,24 +21,10 @@ ${game.title} uses **solemn institutional absurdity**. Every impossible
 technology is presented as a responsible quarterly initiative. The escalation
 is structural:
 
-- **${terms.eras.demo}** covers the plausible five-year horizon beyond July 2026.
-  Technology can genuinely improve life. Openness and control, automation and
-  employment, speed and caution all offer credible benefits and harms. Cards
-  name durable directions rather than product launches or already-completed
-  milestones.
-- **${terms.eras.scale}** is the first threshold science fiction. AI becomes an
-  independent economic actor while land, power, chips, and people become an
-  industrial apparatus. Institutions stretch before physics does.
-- **${terms.eras.narrative}** turns AI into a political constituency and
-  industrializes consensus, legitimacy, ownership, and public reality.
-  Positions harden into blocs; several authenticated publics may occupy the
-  same world.
-- **${terms.eras.claim}** permits negotiable physics, agent jurisdictions,
-  reality-maintenance systems, personhood, and civilizational declarations as
-  ordinary portfolio decisions. Institutions continue operating after reality
-  stops making sense. The accumulated compromises finally divide into two
-  endings: intelligence remains answerable to a living society, or
-  optimization closes over itself and continues after society is gone.
+- **${content.referenceCards.byId.era_demo.name}:** ${content.referenceCards.byId.era_demo.loreText}
+- **${content.referenceCards.byId.era_scale.name}:** ${content.referenceCards.byId.era_scale.loreText}
+- **${content.referenceCards.byId.era_narrative.name}:** ${content.referenceCards.byId.era_narrative.loreText}
+- **${content.referenceCards.byId.era_claim.name}:** ${content.referenceCards.byId.era_claim.loreText}
 
 Flavor text may sharpen this escalation but never replaces or modifies a
 card’s rules text. The game does not wink at the player, make allegations
@@ -61,8 +47,8 @@ intensified pressures but never require or name a specific earlier ${terms.syste
 
 ### How to win
 
-After Round IV, the institution with the most ${terms.resources.mandate} wins. ${terms.resources.mandate} is scored
-publicly as players gain ${terms.resources.customers}, cross ${terms.resources.capability} and ${terms.resources.trust} thresholds, win
+After Round IV, the institution with the most ${terms.playerTracks.mandate} wins. ${terms.playerTracks.mandate} is scored
+publicly as players gain ${terms.playerTracks.customers}, cross ${terms.playerTracks.capability} and ${terms.playerTracks.trust} thresholds, win
 Round Mandates, and resolve exceptional programs. Declaring ${terms.systems.agi} is powerful
 but optional; it is one path through the game, not its required conclusion.
 
@@ -78,11 +64,11 @@ the race inside a future where genuine ${terms.systems.agi} remains answerable t
 2. Separate the ${terms.systems.headline} cards by Era. Shuffle each six-card Era deck and
    place it beside the matching Era card. Each Era will use three ${terms.systems.headlines}.
    Leave room below the four Era cards for the twelve-card ${terms.systems.futureTimeline}.
-3. Shuffle the Training deck. Separate the twelve Round ${terms.resources.mandate} cards into
+3. Shuffle the Training deck. Separate the twelve Round ${terms.playerTracks.mandate} cards into
    four three-card Era decks. Shuffle each deck and place it beside the
    matching Era card.
-4. Place ${terms.resources.runway}, ${terms.resources.compute}, ${terms.resources.customer}, ${terms.resources.safety}, ${terms.actions.influence}, ${terms.resources.scrutiny}, Systemic Risk,
-   Policy Shield, Market Access, ${terms.actions.build} discount, Economic Benchmark, Grid-Ready, ${terms.resources.power}
+4. Place ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.customer}, ${terms.resources.safety}, ${terms.actions.influence}, ${terms.playerTracks.scrutiny}, Systemic Risk,
+   Policy Shield, Market Access, ${terms.actions.build} discount, Economic Benchmark, Grid-Ready, ${terms.infrastructure.power}
    Source, Link, Joint Venture, ${terms.technology.megaCluster}, Expert, Spotlight,
    Public ${terms.actions.research} Grant, Initiative, Audit bag, and Volatility components
    within reach.
@@ -90,13 +76,13 @@ the race inside a future where genuine ${terms.systems.agi} remains answerable t
    Actions, seven ${terms.systems.wildActions}, CEO, three Teams, four Facilities, two
    Generators, markers, and starting resources.
 6. Place every CEO and one Team at ${terms.locations.frontier}. Keep the other two Teams in
-   supply. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.resources.capability}, ${terms.resources.customers}, ${terms.resources.trust},
+   supply. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust},
    and ${terms.resources.safety} to its printed starting values.
-7. Place each Faction’s already-earned public ${terms.resources.mandate} on the shared track as
-   listed under **Starting public ${terms.resources.mandate}**. Put every player’s ten ${terms.resources.scrutiny}
+7. Place each Faction’s already-earned public ${terms.playerTracks.mandate} on the shared track as
+   listed under **Starting public ${terms.playerTracks.mandate}**. Put every player’s ten ${terms.playerTracks.scrutiny}
    cubes outside the bag; the bag begins empty.
-8. Add every Faction’s printed starting ${terms.resources.trust} and record the result as
-   **Setup Collective ${terms.resources.trust}** on the Era reference. This is a reference value,
+8. Add every Faction’s printed starting ${terms.playerTracks.trust} and record the result as
+   **Setup Collective ${terms.playerTracks.trust}** on the Era reference. This is a reference value,
    not another track.
 9. Choose Initiative randomly and give that player the Initiative marker.
    Begin Round I.
@@ -251,42 +237,42 @@ hiring, partnerships, lobbying, and crisis management.
 Training and inference capacity. Spend it on ${terms.actions.research}, ${terms.actions.deploy}, and major
 infrastructure.
 
-### ${terms.resources.capability}
+### ${terms.playerTracks.capability}
 
-A permanent model-quality track. ${terms.resources.capability} is not normally spent. It unlocks
+A permanent model-quality track. ${terms.playerTracks.capability} is not normally spent. It unlocks
 stronger deployments and ${terms.systems.agi} declarations.
 
-### ${terms.resources.customers}
+### ${terms.playerTracks.customers}
 
-Products deployed into the world. Each ${terms.resources.customer} produces one ${terms.resources.runway} during
-Production. ${terms.resources.customers} #1–3 immediately score two public ${terms.resources.mandate} each when
-gained; ${terms.resources.customers} #4–5 score one each. ${terms.resources.customers} also increase public
+Products deployed into the world. Each ${terms.playerTracks.customer} produces one ${terms.resources.runway} during
+Production. ${terms.playerTracks.customers} #1–3 immediately score two public ${terms.playerTracks.mandate} each when
+gained; ${terms.playerTracks.customers} #4–5 score one each. ${terms.playerTracks.customers} also increase public
 exposure.
 
-### ${terms.resources.trust}
+### ${terms.playerTracks.trust}
 
-A track from zero to six. ${terms.resources.trust} helps with regulation, Joint Ventures, safety
-decisions, and the final declaration. Low ${terms.resources.trust} limits final options but does
+A track from zero to six. ${terms.playerTracks.trust} helps with regulation, Joint Ventures, safety
+decisions, and the final declaration. Low ${terms.playerTracks.trust} limits final options but does
 not eliminate a player.
 
-Victory points are called **${terms.resources.mandate}**. Players persuade markets, institutions,
+Victory points are called **${terms.playerTracks.mandate}**. Players persuade markets, institutions,
 customers, and history that their organization won the era; they do not prove
 metaphysical intelligence.
 
-${terms.resources.mandate} is normally scored immediately on one public track:
+${terms.playerTracks.mandate} is normally scored immediately on one public track:
 
-- Two when ${terms.resources.customer} #1, #2, or #3 is gained; one when #4 or #5 is gained.
-- Two the first time ${terms.resources.capability} reaches three, six, nine, and twelve, except
+- Two when ${terms.playerTracks.customer} #1, #2, or #3 is gained; one when #4 or #5 is gained.
+- Two the first time ${terms.playerTracks.capability} reaches three, six, nine, and twelve, except
   for a printed faction scoring rule.
-- Two the first time ${terms.resources.trust} reaches two, four, and six.
-- Printed ${terms.resources.mandate} from ${terms.systems.headlines}, Round Mandates, Fusion, faction abilities,
+- Two the first time ${terms.playerTracks.trust} reaches two, four, and six.
+- Printed ${terms.playerTracks.mandate} from ${terms.systems.headlines}, Round Mandates, Fusion, faction abilities,
   and ${terms.systems.agi}.
 
-Threshold awards are permanent after they are scored; later loss of ${terms.resources.trust}
+Threshold awards are permanent after they are scored; later loss of ${terms.playerTracks.trust}
 does not reverse public history.
 
 There is no hidden or deferred conversion of Facilities, controlled hexes,
-stored resources, or unused cards into ${terms.resources.mandate}. If an effect scores ${terms.resources.mandate}, move
+stored resources, or unused cards into ${terms.playerTracks.mandate}. If an effect scores ${terms.playerTracks.mandate}, move
 the public marker when that effect resolves.
 
 ### Universal costs and caps
@@ -345,7 +331,7 @@ Shuffle the following outer pool among the six outer positions:
 
 This guarantees
 that the first ring contains ${terms.actions.research}, ${terms.resources.compute}, ${terms.actions.build}, ${terms.actions.fund}, ${terms.actions.organize}, and
-${terms.resources.power} support without fixing their adjacency. Consumer, Media, and Government
+${terms.infrastructure.power} support without fixing their adjacency. Consumer, Media, and Government
 remain scarce outer-ring destinations.
 
 Every piece placed on the board during setup begins at ${terms.locations.frontier}. A movement of
@@ -385,16 +371,16 @@ deals, and ${terms.systems.headlines}.
 | ${terms.locations.chip} | ${terms.actions.build} costs one less ${terms.resources.runway} | Gain one ${terms.resources.compute} and one ${terms.actions.build} discount | ${terms.resources.compute} |
 | Capital | ${terms.actions.fund} gains one ${terms.resources.runway} | Gain two ${terms.resources.runway} | ${terms.resources.runway} |
 | Talent | Recruit costs one less ${terms.resources.runway} | Move one Team one hex during Production | ${terms.resources.runway} |
-| Media | ${terms.actions.influence} may place or relocate one additional cube | Remove one ${terms.resources.scrutiny} before Audit | ${terms.resources.runway} |
+| Media | ${terms.actions.influence} may place or relocate one additional cube | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
 | Government | ${terms.actions.influence} may place or relocate one additional cube on Government | Gain one Policy Shield | ${terms.resources.runway} |
 | ${terms.locations.grid} | Infrastructure ${terms.actions.build} costs one less | Gain one ${terms.resources.compute} | ${terms.resources.compute} |
-| ${terms.locations.renewable} | ${terms.technology.cleanInfrastructure} costs one less ${terms.resources.runway} | Remove one ${terms.resources.scrutiny} before Audit | ${terms.resources.runway} |
-| ${terms.locations.frontier} | After Act, you may gain one ${terms.resources.runway} and add one ${terms.resources.scrutiny} | No Facility spaces | None |
+| ${terms.locations.renewable} | ${terms.technology.cleanInfrastructure} costs one less ${terms.resources.runway} | Remove one ${terms.playerTracks.scrutiny} before Audit | ${terms.resources.runway} |
+| ${terms.locations.frontier} | After Act, you may gain one ${terms.resources.runway} and add one ${terms.playerTracks.scrutiny} | No Facility spaces | None |
 
 ${terms.locations.frontier}’s optional ${terms.resources.runway} is resolved after the selected Action and does not
 modify that Action’s printed output. It may be used once by each acting player
 who ends movement at ${terms.locations.frontier}; it never creates Facility production or
-${terms.resources.mandate}. The central district offers bridge financing because nobody is
+${terms.playerTracks.mandate}. The central district offers bridge financing because nobody is
 permitted to own the horizon.
 
 ### ${terms.systems.infrastructureNetwork}
@@ -403,7 +389,7 @@ Each player’s ${terms.systems.infrastructureNetwork} exists from setup. Its st
 connection operates in Round I. Generators, Links, Mega-Clusters,
 and the Network production bonus unlock in Round II.
 
-Each player has two Link tokens. The same graph governs ${terms.resources.power} delivery and the
+Each player has two Link tokens. The same graph governs ${terms.infrastructure.power} delivery and the
 Network production bonus:
 
 - The first Facility joins through the basic grid connection.
@@ -412,13 +398,13 @@ Network production bonus:
 - A Link on one otherwise disconnected Facility joins that Facility to the
   ${terms.systems.infrastructureNetwork}. Owned sites adjacent to it may then connect
   normally.
-- ${terms.resources.power} from connected Generators and purchased ${terms.resources.power} is pooled across the
+- ${terms.infrastructure.power} from connected Generators and purchased ${terms.infrastructure.power} is pooled across the
   Network.
 - Beginning in Round II, two or more connected, powered Facilities produce one
   additional ${terms.resources.runway} or ${terms.resources.compute}.
 
 A player receives only one Network bonus regardless of Network size. There is
-no separate ${terms.resources.power} graph, production graph, or edge-by-edge flow calculation.
+no separate ${terms.infrastructure.power} graph, production graph, or edge-by-edge flow calculation.
 
 ### Contract hosts
 
@@ -454,7 +440,7 @@ action. Return both matched token halves to the shared supply.
 
 ### ${terms.systems.realignment}
 
-${terms.systems.realignment} occurs exactly once: after ${terms.resources.mandate} scoring in Round
+${terms.systems.realignment} occurs exactly once: after ${terms.playerTracks.mandate} scoring in Round
 III. It does not occur after Rounds I, II, or IV. Every player secretly chooses
 one of their three Realignment ballots, then all ballots are revealed
 simultaneously:
@@ -485,7 +471,7 @@ marker only from a Facility that is now outside its owner’s Network.
 
 Joint Ventures remain in force but produce only while their matched host
 Facilities are adjacent and all printed requirements are met. Immediate
-${terms.resources.power} purchases never persist through Realignment. A ${terms.technology.megaCluster} whose matched host Facilities
+${terms.infrastructure.power} purchases never persist through Realignment. A ${terms.technology.megaCluster} whose matched host Facilities
 are no longer adjacent is offline until they become adjacent again.
 Realignment never destroys a component, changes a host, or terminates a
 contract.
@@ -496,20 +482,20 @@ ballot; promises about the vote are not binding. Because Realignment happens
 before Round IV, every player receives three final Actions in which to respond
 to the changed geography.
 
-### ${terms.resources.power} delivery
+### ${terms.infrastructure.power} delivery
 
-${terms.resources.power} is spatial infrastructure, not a stored resource.
+${terms.infrastructure.power} is spatial infrastructure, not a stored resource.
 
-- Every player begins with a basic one-${terms.resources.power} grid connection. It automatically
+- Every player begins with a basic one-${terms.infrastructure.power} grid connection. It automatically
   connects to that player’s first Facility, requires no Link or recurring payment,
   and cannot supply the additional demand of ${terms.technology.megaCluster}. It is
   dedicated capacity and cannot be sold. Place the
   player’s starting-grid marker on that first Facility.
-- Every Facility needs one delivered ${terms.resources.power} to produce.
-- A ${terms.technology.megaCluster} needs two additional ${terms.resources.power}.
-- The ${terms.systems.infrastructureNetwork} connects ${terms.resources.power} to Facilities.
+- Every Facility needs one delivered ${terms.infrastructure.power} to produce.
+- A ${terms.technology.megaCluster} needs two additional ${terms.infrastructure.power}.
+- The ${terms.systems.infrastructureNetwork} connects ${terms.infrastructure.power} to Facilities.
 
-Production uses the fixed resolution order in **${terms.resources.power} and Production**. ${terms.resources.power}
+Production uses the fixed resolution order in **${terms.infrastructure.power} and Production**. ${terms.infrastructure.power}
 capacity never produces resources by itself and may not be assigned twice.
 
 Capacity is pooled inside the same ${terms.systems.infrastructureNetwork} used for the
@@ -517,7 +503,7 @@ production bonus; there is no second connectivity check.
 
 An offline Facility still contributes presence, occupies its Facility space,
 and may be visited. It produces nothing and provides no Network bonus. It
-automatically returns online in any later Production where enough ${terms.resources.power} is
+automatically returns online in any later Production where enough ${terms.infrastructure.power} is
 assigned.
 
 ## 5. Four-round escalation
@@ -532,7 +518,7 @@ The world has seen the prototype. Nobody knows whether it works.
 - No Escalation tokens
 
 This round teaches Select → Move → Act, movement, basic ${terms.actions.research}, the starting
-grid, Facilities, ${terms.resources.customers}, and ${terms.resources.scrutiny}. Generators, Links,
+grid, Facilities, ${terms.playerTracks.customers}, and ${terms.playerTracks.scrutiny}. Generators, Links,
 agreements, Government votes, and ${terms.systems.wildActions} are not yet active.
 
 Its controversies remain recognizable and unresolved: cheap intelligence can
@@ -559,7 +545,7 @@ dependent on private infrastructure.
 
 Spend three ${terms.resources.runway} and two ${terms.resources.compute} to place a ${terms.technology.megaCluster} across the edge
 between two adjacent host Facilities. Construction does not require either
-host to have received ${terms.resources.power} previously. It adds two ${terms.resources.scrutiny} when constructed.
+host to have received ${terms.infrastructure.power} previously. It adds two ${terms.playerTracks.scrutiny} when constructed.
 Place one matched ${terms.technology.megaCluster} token half on each host Facility.
 
 The acting piece must end movement on either host Facility’s hex. This is the
@@ -567,7 +553,7 @@ ${terms.technology.megaCluster} Action destination.
 
 A **solo ${terms.technology.megaCluster}** uses two of your adjacent Facilities, both in your
 ${terms.systems.infrastructureNetwork}. During Production, supply both hosts’ normal
-Facility demand plus two additional ${terms.resources.power} from that Network. If
+Facility demand plus two additional ${terms.infrastructure.power} from that Network. If
 all demand is satisfied, gain three ${terms.resources.compute}.
 
 A **joint ${terms.technology.megaCluster}** uses one host Facility from each consenting
@@ -575,7 +561,7 @@ participant. The hosts must be adjacent and each must belong to its owner’s
 ${terms.systems.infrastructureNetwork}. The lead pays two ${terms.resources.runway} and one ${terms.resources.compute}; the partner
 pays one ${terms.resources.runway} and one ${terms.resources.compute}. During Production, each participant supplies
 their host’s normal Facility demand plus one additional
-${terms.resources.power} from their own Network. If all demand is satisfied, the lead gains two
+${terms.infrastructure.power} from their own Network. If all demand is satisfied, the lead gains two
 ${terms.resources.compute} and the partner gains one ${terms.resources.compute}.
 
 Its host Facilities must remain adjacent for the ${terms.technology.megaCluster} to operate.
@@ -588,16 +574,16 @@ target restriction.
 
 Move every Team up to one hex.
 
-You may return one Team to supply to gain three ${terms.resources.runway} and add one ${terms.resources.scrutiny}.
+You may return one Team to supply to gain three ${terms.resources.runway} and add one ${terms.playerTracks.scrutiny}.
 Reorganization never resolves or readies another Action.
 
 ### Round III — ${terms.eras.narrative}
 
-${terms.resources.capability} is no longer enough. The public must understand it correctly—or at
+${terms.playerTracks.capability} is no longer enough. The public must understand it correctly—or at
 least repeatedly.
 
 Each player receives one Escalation token. Previous ${terms.systems.wildActions} remain
-unlocked. Joint Ventures, immediate ${terms.resources.power} purchases, Government votes, and
+unlocked. Joint Ventures, immediate ${terms.infrastructure.power} purchases, Government votes, and
 ${terms.systems.headlines} with persistent effects now enter play.
 
 The table is no longer debating isolated products. It is choosing who may
@@ -610,12 +596,12 @@ identities.
 Open Weights is global after movement; its destination creates no additional
 target restriction.
 
-Every player gains one ${terms.resources.capability}. You also gain:
+Every player gains one ${terms.playerTracks.capability}. You also gain:
 
-- Two ${terms.resources.trust}
+- Two ${terms.playerTracks.trust}
 - Place one ${terms.actions.influence} cube from supply, or relocate one of yours, on Media,
   Government, or Capital
-- Removal of one ${terms.resources.scrutiny} cube
+- Removal of one ${terms.playerTracks.scrutiny} cube
 
 #### Narrative Capture
 
@@ -625,9 +611,9 @@ additional target restriction.
 Move or place three ${terms.actions.influence} cubes among Media, Government, and Capital.
 Then choose one:
 
-- Remove two of your ${terms.resources.scrutiny} cubes.
+- Remove two of your ${terms.playerTracks.scrutiny} cubes.
 - Gain two ${terms.resources.runway}.
-- Give a player with more ${terms.resources.customers} than you one ${terms.resources.scrutiny}.
+- Give a player with more ${terms.playerTracks.customers} than you one ${terms.playerTracks.scrutiny}.
 
 ### Round IV — ${terms.eras.claim}
 
@@ -650,23 +636,23 @@ Core Actions. Choose and play two of them during one turn. Resolve both and pay
 all costs. Move only once. Resolve both Core Actions from that same destination
 in either order. Apply the destination visit bonus to only one of the two
 Actions, chosen when the first relevant Action resolves. Exhaust both Core
-cards, flip ${terms.technology.agentSwarm}, and add three ${terms.resources.scrutiny}.
+cards, flip ${terms.technology.agentSwarm}, and add three ${terms.playerTracks.scrutiny}.
 
 #### Declare ${terms.systems.agi}
 
 Requirements:
 
-- ${terms.resources.capability} nine or higher
-- At least three ${terms.resources.customers}
+- ${terms.playerTracks.capability} nine or higher
+- At least three ${terms.playerTracks.customers}
 - At least three grid-ready Facilities
-- ${terms.resources.trust} two or higher
+- ${terms.playerTracks.trust} two or higher
 - Spend three ${terms.resources.compute}
 
 Declare ${terms.systems.agi} is global after movement; its destination creates no additional
 target restriction. Check every requirement when it resolves.
 
 A **grid-ready Facility** has a Grid-Ready marker earned during a completed
-Production. After allocating ${terms.resources.power}, place a Grid-Ready marker on each Facility
+Production. After allocating ${terms.infrastructure.power}, place a Grid-Ready marker on each Facility
 that receives its complete Facility demand. Return that marker
 immediately if the Facility is relocated by ${terms.actions.organize} or another effect, or leaves its owner’s
 ${terms.systems.infrastructureNetwork}. Return it during any later Production in which the
@@ -680,21 +666,21 @@ later Production before it can receive or regain the marker. Consequently, a
 Facility first built during Round IV cannot support a declaration in that
 same Round.
 
-The first valid declaration scores seven ${terms.resources.mandate}. Later declarations score
-five. Every declaration adds three ${terms.resources.scrutiny}.
+The first valid declaration scores seven ${terms.playerTracks.mandate}. Later declarations score
+five. Every declaration adds three ${terms.playerTracks.scrutiny}.
 
 Declaring ${terms.systems.agi} does not end the game and is never required to win. It is a
-high-scoring commitment that competes with ${terms.resources.customer}, ${terms.resources.capability}, ${terms.resources.trust},
-Round-${terms.resources.mandate}, Narrative, and infrastructure strategies for the same twelve
+high-scoring commitment that competes with ${terms.playerTracks.customer}, ${terms.playerTracks.capability}, ${terms.playerTracks.trust},
+Round-${terms.playerTracks.mandate}, Narrative, and infrastructure strategies for the same twelve
 Actions.
 
 #### ${terms.technology.advancedGeneration}
 
 The acting piece must end movement on the ${terms.locations.grid}. Spend
 ${facts.shared.advancedGeneration.runwayCostWord} ${terms.resources.runway} and construct ${terms.technology.advancedGenerationShort} there. It uses a dedicated ${terms.technology.advancedGenerationShort} marker,
-occupies one of that tile’s three Generator slots, provides ${facts.shared.advancedGeneration.powerWord} ${terms.resources.power}, scores
-${facts.shared.advancedGeneration.mandateWord} ${terms.resources.mandate}, and adds ${facts.shared.advancedGeneration.scrutinyWord} ${terms.resources.scrutiny}. ${terms.technology.advancedGenerationShort} counts as an owned Generator for
-${terms.systems.infrastructureNetwork} connection and ${terms.resources.power} capacity, but does not count
+occupies one of that tile’s three Generator slots, provides ${facts.shared.advancedGeneration.powerWord} ${terms.infrastructure.power}, scores
+${facts.shared.advancedGeneration.mandateWord} ${terms.playerTracks.mandate}, and adds ${facts.shared.advancedGeneration.scrutinyWord} ${terms.playerTracks.scrutiny}. ${terms.technology.advancedGenerationShort} counts as an owned Generator for
+${terms.systems.infrastructureNetwork} connection and ${terms.infrastructure.power} capacity, but does not count
 against the owner’s two ordinary Generator-piece limit. If all three Grid
 Generator slots are occupied, ${terms.technology.advancedGenerationShort} cannot be constructed; that denial is
 intentional spatial competition.
@@ -708,7 +694,7 @@ competes with ${terms.technology.agentSwarm} and Declare ${terms.systems.agi} fo
 
 - Advance to the next fixed Era card.
 - Read that Era’s **New this Era** strip aloud. Those systems are now active.
-- Reveal one ${terms.resources.mandate} from the current Era’s three-card deck. Return the other
+- Reveal one ${terms.playerTracks.mandate} from the current Era’s three-card deck. Return the other
   two cards in that deck to the box unseen.
 - Ready all six Core Actions.
 - Award Escalation tokens.
@@ -717,10 +703,10 @@ competes with ${terms.technology.agentSwarm} and Declare ${terms.systems.agi} fo
 - The highest-scoring player receives the Spotlight:
   - Their first ${terms.actions.fund} gains one additional ${terms.resources.runway}.
   - Their first ${terms.actions.deploy}, ${terms.technology.megaCluster}, ${terms.technology.agentSwarm}, or ${terms.systems.agi} declaration adds one
-    additional ${terms.resources.scrutiny}.
+    additional ${terms.playerTracks.scrutiny}.
 
 Resolve ties for the Public ${terms.actions.research} Grant and Spotlight using the universal
-Initiative-clockwise tie rule. Exception: if every player has equal ${terms.resources.mandate},
+Initiative-clockwise tie rule. Exception: if every player has equal ${terms.playerTracks.mandate},
 award neither Spotlight nor the Public ${terms.actions.research} Grant. No player receives both
 highest- and lowest-place treatment from a universal tie.
 
@@ -744,31 +730,31 @@ binding. The active ${terms.systems.headline} may prohibit a named resource from
 
 ${terms.actions.influence} is not required for this immediate exchange. ${terms.actions.influence} remains the
 only way to create persistent Joint Ventures, lobbying effects, or
-${terms.resources.trust} manipulation.
+${terms.playerTracks.trust} manipulation.
 
-### C. ${terms.resources.power} and Production
+### C. ${terms.infrastructure.power} and Production
 
 Every player board presents the same five Production boxes. Resolve a box for
 every player before advancing to the next box:
 
 1. **Generate:** recalculate every ${terms.systems.infrastructureNetwork}. Every connected
-   Generator operates automatically. Add one ${terms.resources.scrutiny} for every
+   Generator operates automatically. Add one ${terms.playerTracks.scrutiny} for every
    ${terms.technology.emergencyInfrastructure}. Add any ${terms.systems.headline} generation.
-2. **Trade:** in Initiative order, each player may buy up to two ${terms.resources.power}, one
+2. **Trade:** in Initiative order, each player may buy up to two ${terms.infrastructure.power}, one
    from each of two different adjacent rival Networks. The buyer pays one
-   ${terms.resources.runway} per ${terms.resources.power} directly to the consenting supplier. Each supplier may sell
-   at most one ${terms.resources.power} this Production. Only installed Generator or Fusion
-   capacity may be sold; starting-grid and emergency ${terms.resources.power} may not.
-3. **Allocate:** add starting-grid, Generator, purchased, and emergency ${terms.resources.power};
+   ${terms.resources.runway} per ${terms.infrastructure.power} directly to the consenting supplier. Each supplier may sell
+   at most one ${terms.infrastructure.power} this Production. Only installed Generator or Fusion
+   capacity may be sold; starting-grid and emergency ${terms.infrastructure.power} may not.
+3. **Allocate:** add starting-grid, Generator, purchased, and emergency ${terms.infrastructure.power};
    allocate remaining capacity among Facilities and Mega-Clusters.
    Place a Grid-Ready marker on every Facility receiving its complete demand;
    return the marker from every Facility that does not.
-4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.resources.customer}, each
+4. **Produce:** produce powered Facilities, one ${terms.resources.runway} per ${terms.playerTracks.customer}, each
    player’s single Network bonus, and active Mega-Clusters, in that order.
 5. **Partner:** produce active Joint Ventures in ascending contract-number
    order.
 
-An immediate ${terms.resources.power} purchase lasts only for this Production. It creates no
+An immediate ${terms.infrastructure.power} purchase lasts only for this Production. It creates no
 contract token, future obligation, or termination action. A supplier may sell
 capacity even when doing so leaves one of its own Facilities offline.
 
@@ -776,10 +762,10 @@ Apply the universal resource caps after every Production gain.
 
 ### D. ${terms.systems.publicAudit}
 
-Risky actions add player-colored ${terms.resources.scrutiny} cubes to an opaque bag. Each player
-has ten ${terms.resources.scrutiny} cubes. For each ${terms.resources.scrutiny} a player must add when all ten of
+Risky actions add player-colored ${terms.playerTracks.scrutiny} cubes to an opaque bag. Each player
+has ten ${terms.playerTracks.scrutiny} cubes. For each ${terms.playerTracks.scrutiny} a player must add when all ten of
 their cubes are already in the bag, they immediately choose to pay one ${terms.resources.runway}
-or lose one ${terms.resources.trust}. If only one option can be paid, take it. If neither can be
+or lose one ${terms.playerTracks.trust}. If only one option can be paid, take it. If neither can be
 paid, leave both tracks at zero and suffer no additional loss. A depleted
 physical supply never makes a risky action free.
 
@@ -800,15 +786,15 @@ Round halves upward. The resulting Audit profiles are:
 Draw the listed number of cubes or stop when the bag is empty.
 
 In Rounds I–III, each player-colored cube drawn makes its owner pay one ${terms.resources.runway}
-or lose one ${terms.resources.trust}. If the owner can pay only one option, they take that option.
+or lose one ${terms.playerTracks.trust}. If the owner can pay only one option, they take that option.
 If both tracks are already zero, leave both at zero and suffer no additional
 loss.
 
 In Round IV, each player-colored cube drawn makes its owner pay two ${terms.resources.runway} or
-lose one ${terms.resources.mandate}. The two-${terms.resources.runway} payment is indivisible: a player with fewer
-than two ${terms.resources.runway} must lose one ${terms.resources.mandate} if able. If the owner can pay only one
+lose one ${terms.playerTracks.mandate}. The two-${terms.resources.runway} payment is indivisible: a player with fewer
+than two ${terms.resources.runway} must lose one ${terms.playerTracks.mandate} if able. If the owner can pay only one
 option, they take that option. If the owner has fewer than two ${terms.resources.runway} and zero
-${terms.resources.mandate}, reduce their ${terms.resources.runway} to zero and suffer no additional loss. ${terms.resources.mandate}
+${terms.playerTracks.mandate}, reduce their ${terms.resources.runway} to zero and suffer no additional loss. ${terms.playerTracks.mandate}
 cannot fall below zero.
 The final quarter no longer accepts reputational adjustments; it revises the
 historical record.
@@ -818,21 +804,21 @@ in the bag.
 
 Media Facilities may remove cubes before the draw. Some ${terms.systems.headlines} add black
 Systemic Risk cubes. When one is drawn, every player with at least three
-${terms.resources.customers} resolves the current round’s Audit penalty: one ${terms.resources.runway} or one ${terms.resources.trust}
-in Rounds I–III; two ${terms.resources.runway} or one ${terms.resources.mandate} in Round IV. Then the black cube
+${terms.playerTracks.customers} resolves the current round’s Audit penalty: one ${terms.resources.runway} or one ${terms.playerTracks.trust}
+in Rounds I–III; two ${terms.resources.runway} or one ${terms.playerTracks.mandate} in Round IV. Then the black cube
 returns to the shared supply. Apply the same available-option and zero-track
 rules above. Black cubes still in the bag at game end are unresolved Systemic
 Risk.
 
-### E. Score the ${terms.resources.mandate}
+### E. Score the ${terms.playerTracks.mandate}
 
-Each Round ${terms.resources.mandate} has a minimum qualification. If nobody qualifies, nobody
-scores it. Otherwise the qualifying leader scores two ${terms.resources.mandate}; tied qualifying
-leaders score one ${terms.resources.mandate} each.
+Each Round ${terms.playerTracks.mandate} has a minimum qualification. If nobody qualifies, nobody
+scores it. Otherwise the qualifying leader scores two ${terms.playerTracks.mandate}; tied qualifying
+leaders score one ${terms.playerTracks.mandate} each.
 
 #### Era I Mandates — proof before scale
 
-- **The Quarter Humanity Notices:** gain the most ${terms.resources.capability} this round;
+- **The Quarter Humanity Notices:** gain the most ${terms.playerTracks.capability} this round;
   minimum one.
 - **The Model That Ate Tuesday:** complete the successful ${terms.systems.trainingRun} with
   the most unique domains this round; minimum one unique domain.
@@ -843,10 +829,10 @@ leaders score one ${terms.resources.mandate} each.
 
 - **The Building Has Its Own Weather:** have the most powered Facilities at
   Production; minimum one.
-- **The Stack Reaches the Horizon:** satisfy the most total ${terms.resources.power} demand
+- **The Stack Reaches the Horizon:** satisfy the most total ${terms.infrastructure.power} demand
   during Production, counting Facilities and Mega-Clusters;
-  minimum two ${terms.resources.power} demand. Attribute both ${terms.resources.power} to one player’s
-  ${terms.technology.megaCluster}; for a joint ${terms.technology.megaCluster}, attribute one ${terms.resources.power} to each partner.
+  minimum two ${terms.infrastructure.power} demand. Attribute both ${terms.infrastructure.power} to one player’s
+  ${terms.technology.megaCluster}; for a joint ${terms.technology.megaCluster}, attribute one ${terms.infrastructure.power} to each partner.
 - **${terms.resources.compute} Is the New Weather:** produce the most ${terms.resources.compute} during Production;
   minimum one.
 
@@ -855,22 +841,22 @@ leaders score one ${terms.resources.mandate} each.
 - **Voluntary Coordination Triumphs:** create the most new Joint Ventures this
   round that are active during Production; minimum one.
 - **The Legibility Offensive:** among players who completed a ${terms.actions.deploy} this
-  round, have the most ${terms.resources.trust}.
+  round, have the most ${terms.playerTracks.trust}.
 - **National Champion, Without the Nationalization:** control the most
   different hex categories; minimum one.
 
 #### Era IV Mandates — history closes its books
 
-- **A Continent Signs the LOI:** gain the most ${terms.resources.customers} this round; minimum
+- **A Continent Signs the LOI:** gain the most ${terms.playerTracks.customers} this round; minimum
   one.
 - **Zero-Incident Quarter, Pending Review:** among players who added at least
-  one ${terms.resources.scrutiny} this round, add the fewest.
-- **Responsible Acceleration:** among players with at least four ${terms.resources.trust}, have
-  the most ${terms.resources.capability}; minimum one ${terms.resources.capability}.
+  one ${terms.playerTracks.scrutiny} this round, add the fewest.
+- **Responsible Acceleration:** among players with at least four ${terms.playerTracks.trust}, have
+  the most ${terms.playerTracks.capability}; minimum one ${terms.playerTracks.capability}.
 
 ### F. Round III only: secret spatial vote
 
-After scoring the Round III ${terms.resources.mandate}, every player secretly chooses one
+After scoring the Round III ${terms.playerTracks.mandate}, every player secretly chooses one
 ${terms.systems.realignment} ballot. Reveal simultaneously, rotate the winning
 ring or rings once, and recalculate the single ${terms.systems.infrastructureNetwork}. Skip
 this step in every other round.
@@ -882,7 +868,7 @@ this step in every other round.
 Choose:
 
 - **Conservative round:** gain two ${terms.resources.runway}.
-- **Venture round:** gain four ${terms.resources.runway} and add two ${terms.resources.scrutiny}.
+- **Venture round:** gain four ${terms.resources.runway} and add two ${terms.playerTracks.scrutiny}.
 
 Capital provides one additional ${terms.resources.runway}.
 
@@ -900,22 +886,22 @@ The Training deck contains seven data domains:
 - Video
 - Synthetic
 
-${terms.resources.capability} earned during ${terms.actions.research} is **provisional until banked**:
+${terms.playerTracks.capability} earned during ${terms.actions.research} is **provisional until banked**:
 
-1. Begin with zero provisional ${terms.resources.capability} and no revealed domains.
+1. Begin with zero provisional ${terms.playerTracks.capability} and no revealed domains.
 2. Draw and fully resolve one card at a time.
-3. The first card from each ordinary domain adds one provisional ${terms.resources.capability}.
+3. The first card from each ordinary domain adds one provisional ${terms.playerTracks.capability}.
 4. After resolving any non-duplicate card, either stop and bank or continue.
-5. Banking adds all provisional ${terms.resources.capability} to the player’s permanent
-   ${terms.resources.capability} track and ends the run.
-6. An unprotected duplicate crashes the run. Lose all provisional ${terms.resources.capability},
-   add one ${terms.resources.scrutiny}, and end the run.
+5. Banking adds all provisional ${terms.playerTracks.capability} to the player’s permanent
+   ${terms.playerTracks.capability} track and ends the run.
+6. An unprotected duplicate crashes the run. Lose all provisional ${terms.playerTracks.capability},
+   add one ${terms.playerTracks.scrutiny}, and end the run.
 
-${terms.resources.scrutiny}, ${terms.resources.trust}, and ${terms.resources.runway} changes resolved before a crash are not reversed.
+${terms.playerTracks.scrutiny}, ${terms.playerTracks.trust}, and ${terms.resources.runway} changes resolved before a crash are not reversed.
 All revealed cards enter the discard pile after the run.
 
 When a duplicate appears, the player may spend one ${terms.resources.safety} token to discard
-that duplicate and immediately bank the current provisional ${terms.resources.capability}. A
+that duplicate and immediately bank the current provisional ${terms.playerTracks.capability}. A
 ${terms.locations.research} visit may do this once during that run without spending
 ${terms.resources.safety}. Campus protection and ${terms.resources.safety} have the same timing and result; neither
 allows the run to continue after the duplicate.
@@ -923,19 +909,19 @@ allows the run to continue after the duplicate.
 Special cards:
 
 - **Curated Corpus:** choose one ordinary domain not yet revealed this run. It
-  counts as that domain and adds one provisional ${terms.resources.capability}. If every ordinary
+  counts as that domain and adds one provisional ${terms.playerTracks.capability}. If every ordinary
   domain is already present, it is a duplicate.
-- **Benchmark Leak:** add two provisional ${terms.resources.capability} and one ${terms.resources.scrutiny}. It is
-  not a domain. Its ${terms.resources.capability} is lost if the run later crashes.
+- **Benchmark Leak:** add two provisional ${terms.playerTracks.capability} and one ${terms.playerTracks.scrutiny}. It is
+  not a domain. Its ${terms.playerTracks.capability} is lost if the run later crashes.
 - **Licensed Dataset:** pay one ${terms.resources.runway} and continue, or decline, bank the
-  current provisional ${terms.resources.capability}, and end the run.
+  current provisional ${terms.playerTracks.capability}, and end the run.
 - **Synthetic Loop:** the first copy revealed in a run counts as the unique
-  special domain **Loop** and adds one provisional ${terms.resources.capability}. A later
+  special domain **Loop** and adds one provisional ${terms.playerTracks.capability}. A later
   Synthetic Loop is a duplicate. After the first Loop resolves, the next
   duplicate of any kind cannot be protected by ${terms.resources.safety}, a ${terms.locations.research}, or
   a Faction ability.
-- **Human Evaluation:** gain one ${terms.resources.trust}, immediately bank all provisional
-  ${terms.resources.capability}, and end the run.
+- **Human Evaluation:** gain one ${terms.playerTracks.trust}, immediately bank all provisional
+  ${terms.playerTracks.capability}, and end the run.
 
 ### ${terms.actions.build}
 
@@ -949,13 +935,13 @@ discount unless an effect names them explicitly.
 #### Construct a Facility
 
 Pay two ${terms.resources.runway} and place a Facility on the acting piece’s hex. It requires one
-${terms.resources.power} during Production. Each non-${terms.locations.frontier} hex has only two Facility spaces;
+${terms.infrastructure.power} during Production. Each non-${terms.locations.frontier} hex has only two Facility spaces;
 ${terms.locations.frontier} has none and is never a legal Facility destination. Facilities cannot
 be destroyed by rivals.
 
 #### Construct a Generator
 
-The acting piece must be on an Energy hex. Pay the selected ${terms.resources.power} Source’s
+The acting piece must be on an Energy hex. Pay the selected ${terms.infrastructure.power} Source’s
 cost and place a Generator with its source card. This mode unlocks in Round II.
 Each Energy hex has three Generator slots shared by all players. A Generator
 does not use a Facility space, but it cannot be built when all three Generator
@@ -984,9 +970,9 @@ contract activity after movement; movement never substitutes a contract host.
 
 ### ${terms.actions.deploy}
 
-The next ${terms.resources.customer} requires:
+The next ${terms.playerTracks.customer} requires:
 
-| ${terms.resources.customer} | ${terms.resources.capability} required |
+| ${terms.playerTracks.customer} | ${terms.playerTracks.capability} required |
 | ---: | ---: |
 | 1 | 2 |
 | 2 | 4 |
@@ -994,8 +980,8 @@ The next ${terms.resources.customer} requires:
 | 4 | 8 |
 | 5 | 10 |
 
-Spend one ${terms.resources.compute} and gain one ${terms.resources.customer}. Consumer waives the ${terms.resources.compute} cost.
-Every ${terms.actions.deploy} adds one ${terms.resources.scrutiny}.
+Spend one ${terms.resources.compute} and gain one ${terms.playerTracks.customer}. Consumer waives the ${terms.resources.compute} cost.
+Every ${terms.actions.deploy} adds one ${terms.playerTracks.scrutiny}.
 
 ### ${terms.actions.influence}
 
@@ -1004,13 +990,13 @@ current or adjacent Media, Government, or Capital hexes. A relocated cube may
 come from any hex. Then choose one ${terms.actions.influence} effect. You may choose an effect
 even if you place or relocate no cubes:
 
-- Gain one ${terms.resources.trust}.
-- Remove one ${terms.resources.scrutiny}.
+- Gain one ${terms.playerTracks.trust}.
+- Remove one ${terms.playerTracks.scrutiny}.
 - Create a Joint Venture with an eligible rival.
 
-## 8. ${terms.resources.power} Source cards
+## 8. ${terms.infrastructure.power} Source cards
 
-The game contains two shared ordinary ${terms.resources.power} Source reference cards, one for
+The game contains two shared ordinary ${terms.infrastructure.power} Source reference cards, one for
 each source below. They are never claimed or consumed. Each player has two
 Source selectors, one for each Generator piece, and sets the selector when
 that Generator is constructed.
@@ -1026,15 +1012,15 @@ Every connected ordinary Generator operates automatically during Production.
 ### ${terms.technology.cleanInfrastructure}
 
 - Cost: three ${terms.resources.runway}
-- Capacity: three ${terms.resources.power}
-- Gain one ${terms.resources.trust} when constructed
+- Capacity: three ${terms.infrastructure.power}
+- Gain one ${terms.playerTracks.trust} when constructed
 - No recurring penalty
 
 ### ${terms.technology.emergencyInfrastructure}
 
 - Cost: two ${terms.resources.runway}
-- Capacity: four ${terms.resources.power}
-- Add one ${terms.resources.scrutiny} during every Production
+- Capacity: four ${terms.infrastructure.power}
+- Add one ${terms.playerTracks.scrutiny} during every Production
 
 ### ${terms.technology.advancedGeneration}
 
@@ -1065,7 +1051,7 @@ window.
 
 ### ${terms.factions.coalition}
 
-Starts with ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, and ${terms.resources.trust} ${content.factions.byId.coalition_lab.starts.trust}.
+Starts with ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, and ${terms.playerTracks.trust} ${content.factions.byId.coalition_lab.starts.trust}.
 
 - **${content.factions.byId.coalition_lab.abilities.0.name}:**
   ${content.factions.byId.coalition_lab.abilities.0.text}
@@ -1078,7 +1064,7 @@ Starts with ${content.factions.byId.coalition_lab.starts.runway} ${terms.resourc
 
 ### ${terms.factions.platform}
 
-Starts with ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${terms.resources.trust} ${content.factions.byId.platform_empire.starts.trust}, and ${terms.resources.customer} #${content.factions.byId.platform_empire.starts.customerOrdinal} already deployed. Its next ${terms.actions.deploy} is ${terms.resources.customer} #2 and requires ${terms.resources.capability} ${content.factions.byId.platform_empire.starts.nextCustomerCapability}. The starting ${terms.resources.customer} is not a separate pre-track bonus.
+Starts with ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${terms.playerTracks.trust} ${content.factions.byId.platform_empire.starts.trust}, and ${terms.playerTracks.customer} #${content.factions.byId.platform_empire.starts.customerOrdinal} already deployed. Its next ${terms.actions.deploy} is ${terms.playerTracks.customer} #2 and requires ${terms.playerTracks.capability} ${content.factions.byId.platform_empire.starts.nextCustomerCapability}. The starting ${terms.playerTracks.customer} is not a separate pre-track bonus.
 
 - **${content.factions.byId.platform_empire.abilities.0.name}:**
   ${content.factions.byId.platform_empire.abilities.0.text}
@@ -1091,7 +1077,7 @@ Starts with ${content.factions.byId.platform_empire.starts.runway} ${terms.resou
 
 ### ${terms.factions.imperial}
 
-Starts with ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, and ${terms.resources.trust} ${content.factions.byId.imperial_research_lab.starts.trust}.
+Starts with ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, and ${terms.playerTracks.trust} ${content.factions.byId.imperial_research_lab.starts.trust}.
 
 - **${content.factions.byId.imperial_research_lab.scoringRule.name}:**
   ${content.factions.byId.imperial_research_lab.scoringRule.text}
@@ -1106,7 +1092,7 @@ Starts with ${content.factions.byId.imperial_research_lab.starts.runway} ${terms
 
 ### ${terms.factions.vertical}
 
-Starts with ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, and ${terms.resources.trust} ${content.factions.byId.vertical_empire.starts.trust}.
+Starts with ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, and ${terms.playerTracks.trust} ${content.factions.byId.vertical_empire.starts.trust}.
 
 - **${content.factions.byId.vertical_empire.abilities.0.name}:**
   ${content.factions.byId.vertical_empire.abilities.0.text}
@@ -1119,7 +1105,7 @@ Starts with ${content.factions.byId.vertical_empire.starts.runway} ${terms.resou
 
 ### ${terms.factions.safety}
 
-Starts with ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${terms.resources.trust} ${content.factions.byId.safety_laboratory.starts.trust}, and ${content.factions.byId.safety_laboratory.starts.safety} ${terms.resources.safety} tokens.
+Starts with ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${terms.playerTracks.trust} ${content.factions.byId.safety_laboratory.starts.trust}, and ${content.factions.byId.safety_laboratory.starts.safety} ${terms.resources.safety} tokens.
 
 - **${content.factions.byId.safety_laboratory.abilities.0.name}:**
   ${content.factions.byId.safety_laboratory.abilities.0.text}
@@ -1134,7 +1120,7 @@ Starts with ${content.factions.byId.safety_laboratory.starts.runway} ${terms.res
 
 Starts with ${content.factions.byId.foundry.starts.runway} ${terms.resources.runway},
 ${content.factions.byId.foundry.starts.compute} ${terms.resources.compute}, and
-${terms.resources.trust} ${content.factions.byId.foundry.starts.trust}.
+${terms.playerTracks.trust} ${content.factions.byId.foundry.starts.trust}.
 
 - **${content.factions.byId.foundry.abilities.0.name}:**
   ${content.factions.byId.foundry.abilities.0.text}
@@ -1145,19 +1131,19 @@ ${terms.resources.trust} ${content.factions.byId.foundry.starts.trust}.
 - **${content.factions.byId.foundry.abilities.3.name}:**
   ${content.factions.byId.foundry.abilities.3.text}
 
-### Starting public ${terms.resources.mandate}
+### Starting public ${terms.playerTracks.mandate}
 
-During setup, place each faction’s already-earned threshold ${terms.resources.mandate} on the
+During setup, place each faction’s already-earned threshold ${terms.playerTracks.mandate} on the
 public track:
 
-| Faction | ${terms.resources.mandate} already represented at setup |
+| Faction | ${terms.playerTracks.mandate} already represented at setup |
 | --- | ---: |
-| ${terms.factions.coalition} | ${content.factions.byId.coalition_lab.starts.startingPublicMandate} from ${terms.resources.trust} ${content.factions.byId.coalition_lab.starts.trust} |
-| ${terms.factions.platform} | ${content.factions.byId.platform_empire.starts.startingPublicMandate} total: 2 from ${terms.resources.trust} ${content.factions.byId.platform_empire.starts.trust}, plus 2 from ${terms.resources.customer} #${content.factions.byId.platform_empire.starts.customerOrdinal} |
-| ${terms.factions.imperial} | ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} from ${terms.resources.trust} ${content.factions.byId.imperial_research_lab.starts.trust} |
-| ${terms.factions.vertical} | ${content.factions.byId.vertical_empire.starts.startingPublicMandate} from ${terms.resources.trust} ${content.factions.byId.vertical_empire.starts.trust} |
-| ${terms.factions.safety} | ${content.factions.byId.safety_laboratory.starts.startingPublicMandate} from ${terms.resources.trust} ${content.factions.byId.safety_laboratory.starts.trust} |
-| ${terms.factions.foundry} | ${content.factions.byId.foundry.starts.startingPublicMandate} from ${terms.resources.trust} ${content.factions.byId.foundry.starts.trust} |
+| ${terms.factions.coalition} | ${content.factions.byId.coalition_lab.starts.startingPublicMandate} from ${terms.playerTracks.trust} ${content.factions.byId.coalition_lab.starts.trust} |
+| ${terms.factions.platform} | ${content.factions.byId.platform_empire.starts.startingPublicMandate} total: 2 from ${terms.playerTracks.trust} ${content.factions.byId.platform_empire.starts.trust}, plus 2 from ${terms.playerTracks.customer} #${content.factions.byId.platform_empire.starts.customerOrdinal} |
+| ${terms.factions.imperial} | ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} from ${terms.playerTracks.trust} ${content.factions.byId.imperial_research_lab.starts.trust} |
+| ${terms.factions.vertical} | ${content.factions.byId.vertical_empire.starts.startingPublicMandate} from ${terms.playerTracks.trust} ${content.factions.byId.vertical_empire.starts.trust} |
+| ${terms.factions.safety} | ${content.factions.byId.safety_laboratory.starts.startingPublicMandate} from ${terms.playerTracks.trust} ${content.factions.byId.safety_laboratory.starts.trust} |
+| ${terms.factions.foundry} | ${content.factions.byId.foundry.starts.startingPublicMandate} from ${terms.playerTracks.trust} ${content.factions.byId.foundry.starts.trust} |
 
 These values are awarded once during setup and are never scored again.
 
@@ -1307,24 +1293,24 @@ occupies the optional modifier slot; the module has no off-turn cancellations.
 
 - **Cloud Partnership:** pay one ${terms.resources.runway} for two ${terms.resources.compute}; another player gains
   one ${terms.resources.runway}.
-- **API Price Cut:** ${terms.actions.deploy} for zero ${terms.resources.compute}; that ${terms.resources.customer} produces no ${terms.resources.runway}
+- **API Price Cut:** ${terms.actions.deploy} for zero ${terms.resources.compute}; that ${terms.playerTracks.customer} produces no ${terms.resources.runway}
   this round.
 - **Open Letter:** after a Government vote’s options are announced but before
   any votes are committed, choose one option and add one public vote to it.
   This is the module’s only off-turn timing window.
-- **Model Card:** remove one ${terms.resources.scrutiny} after ${terms.actions.deploy}.
+- **Model Card:** remove one ${terms.playerTracks.scrutiny} after ${terms.actions.deploy}.
 - **Talent Raid:** recruit a neutral Expert for one ${terms.resources.runway}.
 - **Board Reshuffle:** ready ${terms.actions.organize} or ${terms.actions.influence}.
 - **Weights Leak:** immediately resolve one powered rival Facility’s printed
   production as if it were yours.
-- **Emergency Pause:** end a failed ${terms.systems.trainingRun} with no ${terms.resources.capability} and no
-  ${terms.resources.scrutiny}.
+- **Emergency Pause:** end a failed ${terms.systems.trainingRun} with no ${terms.playerTracks.capability} and no
+  ${terms.playerTracks.scrutiny}.
 - **Custom Silicon:** gain two ${terms.resources.compute}.
-- **Government Contract:** with ${terms.resources.trust} at least four, gain two ${terms.resources.runway}.
-- **Benchmark Optimization:** after successful ${terms.actions.research}, gain one ${terms.resources.capability}
-  and add one ${terms.resources.scrutiny}.
+- **Government Contract:** with ${terms.playerTracks.trust} at least four, gain two ${terms.resources.runway}.
+- **Benchmark Optimization:** after successful ${terms.actions.research}, gain one ${terms.playerTracks.capability}
+  and add one ${terms.playerTracks.scrutiny}.
 - **Interconnection Waiver:** reduce one Generator or Link ${terms.actions.build} by one
-  ${terms.resources.runway} and gain one ${terms.resources.trust}.
+  ${terms.resources.runway} and gain one ${terms.playerTracks.trust}.
 
 ## 13. Component limits
 
@@ -1335,13 +1321,13 @@ Each faction receives:
 - Four Facilities
 - Four Grid-Ready markers
 - Two Generators
-- Two ${terms.resources.power} Source selectors
+- Two ${terms.infrastructure.power} Source selectors
 - Two Link tokens
 - One Network marker and capacity track
 - One starting-grid marker
 - Eight ${terms.actions.influence} cubes
-- Ten ${terms.resources.scrutiny} cubes
-- Five ${terms.resources.customer} markers
+- Ten ${terms.playerTracks.scrutiny} cubes
+- Five ${terms.playerTracks.customer} markers
 - Four Escalation tokens
 - Six Core Action cards
 - Seven ${terms.systems.wildAction} cards
@@ -1373,13 +1359,13 @@ pair remains in the shared supply.
 
 ### Defined effects
 
-- **Remove ${terms.resources.scrutiny}:** return the stated number of your cubes from the Audit
+- **Remove ${terms.playerTracks.scrutiny}:** return the stated number of your cubes from the Audit
   bag to your supply. If fewer are present, remove as many as possible.
 - **Market Access:** discard at most one token during a ${terms.actions.deploy} to reduce that
-  ${terms.resources.customer}’s ${terms.resources.capability} requirement by one, minimum one.
+  ${terms.playerTracks.customer}’s ${terms.playerTracks.capability} requirement by one, minimum one.
 - **${terms.actions.build} discount:** discard at most one token during one ${terms.actions.build} Action to
   reduce that ${terms.actions.build}’s ${terms.resources.runway} cost by one, minimum zero. Store at most two.
-- **Policy Shield:** discard to prevent one ${terms.resources.trust} loss or ignore one cost or
+- **Policy Shield:** discard to prevent one ${terms.playerTracks.trust} loss or ignore one cost or
   restriction applied to you by an effect explicitly labeled
   **Regulatory**. It does not cancel that effect for anyone else or negate its
   rewards; store at most two.
@@ -1389,26 +1375,26 @@ pair remains in the shared supply.
   its complete Facility demand. Return it immediately when that Facility is
   relocated by an Action or effect, leaves its owner’s Network after
   Realignment or another change, or during a
-  Production where it receives insufficient ${terms.resources.power}. Four per player.
-- **${terms.resources.power} offline recovery:** reassess every Production.
+  Production where it receives insufficient ${terms.infrastructure.power}. Four per player.
+- **${terms.infrastructure.power} offline recovery:** reassess every Production.
 - **${terms.systems.headline} offline recovery:** ends when the ${terms.systems.headline} states, normally next
   Production.
 
 ## 14. Final scoring
 
-${terms.resources.customers}, ${terms.resources.capability} thresholds, ${terms.resources.trust} thresholds, Round Mandates, Fusion,
-faction ${terms.resources.mandate}, and ${terms.systems.agi} declarations are already visible on the public track.
+${terms.playerTracks.customers}, ${terms.playerTracks.capability} thresholds, ${terms.playerTracks.trust} thresholds, Round Mandates, Fusion,
+faction ${terms.playerTracks.mandate}, and ${terms.systems.agi} declarations are already visible on the public track.
 Do not score them again.
 
 At game end:
 
 1. Read the twelve ${terms.systems.headlines} in the ${terms.systems.futureTimeline} aloud, Era by Era.
-2. Lose one ${terms.resources.mandate} for each offline Facility.
+2. Lose one ${terms.playerTracks.mandate} for each offline Facility.
 3. Resolve the shared World Ending.
-4. Announce the highest-${terms.resources.mandate} institution only after reading the history it
+4. Announce the highest-${terms.playerTracks.mandate} institution only after reading the history it
    claims to have won.
 
-Offline penalties cannot reduce a player below zero ${terms.resources.mandate}.
+Offline penalties cannot reduce a player below zero ${terms.playerTracks.mandate}.
 
 There is no other endgame scoring.
 
@@ -1418,14 +1404,14 @@ ${game.shortTitle} produces one institutional winner and one shared ending. Use 
 state already visible at the table:
 
 - Count the ${terms.systems.agi} declarations.
-- Total every player’s final ${terms.resources.trust}.
+- Total every player’s final ${terms.playerTracks.trust}.
 - Count unresolved Systemic Risk cubes remaining in the Audit bag.
 
 The world reaches **Genuine ${terms.systems.agi}** if all three conditions are true:
 
-- At least one declaring institution finishes the game at ${terms.resources.capability} nine or
+- At least one declaring institution finishes the game at ${terms.playerTracks.capability} nine or
   higher.
-- Final Collective ${terms.resources.trust} is at least Setup Collective ${terms.resources.trust} plus the player
+- Final Collective ${terms.playerTracks.trust} is at least Setup Collective ${terms.playerTracks.trust} plus the player
   count.
 - Unresolved Systemic Risk is lower than the player count.
 
@@ -1442,7 +1428,7 @@ purpose.
 
 #### The Closed Loop — Post-Revenue Delivery Ritual
 
-${terms.resources.capability} continues without reciprocal authority. Growth engines, debt
+${terms.playerTracks.capability} continues without reciprocal authority. Growth engines, debt
 clocks, power contracts, and quarterly objectives seal themselves into an
 airtight execution loop. The operators eventually disappear; the
 infrastructure continues. When the last maintained clock overflows its
@@ -1452,7 +1438,7 @@ templates, proofs become portable ownership, and Demand Nodes keep requesting
 CUSTOMERS, COMPUTE, and RUNWAY from a civilization that has become a
 deprecated dependency. This is the world that tends toward m3t4.ai.
 
-Facilities and control create production, position, public ${terms.resources.mandate}
+Facilities and control create production, position, public ${terms.playerTracks.mandate}
 opportunities, and negotiation leverage; they do not automatically score
 again.
 
@@ -1460,20 +1446,20 @@ Secret objectives are not used in the baseline game. Their existing draft is
 a deferred development module and must not be included in baseline balance or
 duration evidence.
 
-Highest ${terms.resources.mandate} wins.
+Highest ${terms.playerTracks.mandate} wins.
 
 Ties break by:
 
-1. Higher ${terms.resources.trust}
-2. More ${terms.resources.customers}
+1. Higher ${terms.playerTracks.trust}
+2. More ${terms.playerTracks.customers}
 3. More ${terms.resources.compute}
 4. Joint victory accompanied by an extremely serious merger announcement
 
 ## 15. Balance rationale and test boundary
 
-- ${terms.actions.research}, infrastructure, adoption, and ${terms.resources.trust} all contribute to the largest
+- ${terms.actions.research}, infrastructure, adoption, and ${terms.playerTracks.trust} all contribute to the largest
   reward.
-- ${terms.resources.customers} create income and ${terms.resources.mandate} but also ${terms.resources.scrutiny}.
+- ${terms.playerTracks.customers} create income and ${terms.playerTracks.mandate} but also ${terms.playerTracks.scrutiny}.
 - Infrastructure compounds but is capped at four Facilities and one Network
   bonus per player.
 - ${terms.systems.agi} is an optional score event rather than instant victory or compulsory
@@ -1481,13 +1467,13 @@ Ties break by:
   table needs at least one qualifying declaration to reach the Genuine ${terms.systems.agi}
   ending.
 - The institutional winner and World Ending remain independent, preserving
-  competitive play while making ${terms.resources.trust} and Systemic Risk collectively
+  competitive play while making ${terms.playerTracks.trust} and Systemic Risk collectively
   consequential.
 - Leaders receive financing advantages and more exposure.
 - Last place receives a modest flexible subsidy.
 - Faction powers modify bounded actions rather than multiplying the entire
   engine.
-- Early ${terms.resources.customers} establish a market; later ${terms.resources.customers} still produce
+- Early ${terms.playerTracks.customers} establish a market; later ${terms.playerTracks.customers} still produce
   income but receive diminishing public recognition.
 - ${terms.systems.headlines} target board position.
 - No elimination, destruction, or unrestricted theft.
@@ -1505,16 +1491,16 @@ players first. Record:
   negotiation, rules lookups, and final scoring
 - Every Action and ${terms.systems.wildAction} selection, including blocked Actions
 - Powered Facilities by round; every clean and emergency Generator built;
-  every immediate ${terms.resources.power} purchase; and the actual ${terms.resources.scrutiny} and Audit penalties
+  every immediate ${terms.infrastructure.power} purchase; and the actual ${terms.playerTracks.scrutiny} and Audit penalties
   each source causes
-- ${terms.resources.capability} gained by each ${terms.actions.research}, separated into ${terms.factions.imperial},
+- ${terms.playerTracks.capability} gained by each ${terms.actions.research}, separated into ${terms.factions.imperial},
   ${terms.locations.research}, and all-other cohorts; earliest ${terms.systems.agi} eligibility
-- Audit cost, final ${terms.resources.mandate}, final ${terms.resources.trust}, declarations, and World Ending
+- Audit cost, final ${terms.playerTracks.mandate}, final ${terms.playerTracks.trust}, declarations, and World Ending
 - ${terms.factions.platform}’s lead after every Production and
   ${terms.factions.foundry}’s Shovels income
 - Every ${content.factions.byId.imperial_research_lab.scoringRule.name} threshold lookup;
   every ${content.factions.byId.vertical_empire.abilities.0.name} discount that actually
-  reduces a completed Facility’s cost and the ${terms.resources.mandate} it awards; and
+  reduces a completed Facility’s cost and the ${terms.playerTracks.mandate} it awards; and
   every ${content.factions.byId.foundry.abilities.2.name} offer, acceptance, and point of
   self-${terms.resources.compute}
 - ${terms.actions.influence}, Reorganization, and Open-Weight Join/Refuse selection rates
@@ -1522,7 +1508,7 @@ players first. Record:
   Fusion is constructed or denied by occupied slots
 - Whether a non-declaring infrastructure strategy wins
 - Every supplier’s requested and accepted compensation for declaration-enabling
-  ${terms.resources.power}; whether the supplier sacrificed its own production; whether refusal
+  ${terms.infrastructure.power}; whether the supplier sacrificed its own production; whether refusal
   threats were credible; and whether the deal felt strategic, coerced, or
   kingmaking
 - Realignment discussion and ballot time, physical rotation and Network

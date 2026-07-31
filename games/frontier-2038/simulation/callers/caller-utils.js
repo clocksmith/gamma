@@ -17,6 +17,7 @@ export function sha256(value) {
 export function attachProviderFailure(error, {
   provider,
   model,
+  reasoningEffort,
   requestId,
   prompt
 }) {
@@ -24,6 +25,7 @@ export function attachProviderFailure(error, {
   error.providerReceipt = {
     attemptedProvider: provider,
     attemptedModel: model || null,
+    attemptedReasoningEffort: reasoningEffort || null,
     attemptedRequestId: requestId,
     attemptedPromptSha256: sha256(prompt),
     providerErrorClass: error?.name || "Error",

@@ -40,8 +40,8 @@ This repository is a **prototype**, not a manufactured or published product.
 - Balance, counter-strategy, exploitability, and promotion gates are defined in
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
-The lean physical rulebook is under controlled review at `0.5.0-rc.24-test`.
-Executable game `0.8.23` implements that candidate under
+The lean physical rulebook is under controlled review at `0.5.0-rc.25-test`.
+Executable game `0.8.24` implements that candidate under
 `three-to-five-grid-ready-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization
 means the browser and simulator execute the selected contract; it does not
@@ -56,9 +56,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.8.23` game and export its
+- `http://localhost:8038/` — play the synchronized `0.8.24` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.8.23` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.8.24` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -124,8 +124,8 @@ node scripts/content/compile.mjs --check
 node tools/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.8.23`
-bundle, its synchronized `0.5.0-rc.24-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.8.24`
+bundle, its synchronized `0.5.0-rc.25-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:
@@ -147,7 +147,7 @@ rules version, executable reference, and remote source commit.
 
 ## Theme boundary
 
-The canonical player identities in the named parody edition are:
+The game uses these real-name satirical player identities:
 
 - Sam Altman
 - Mark Zuckerberg
@@ -157,9 +157,7 @@ The canonical player identities in the named parody edition are:
 - Jensen Huang
 
 Their abilities are fictional, satirical exaggerations of public institutional
-roles and do not imply endorsement. The institutional-alias vocabulary is a
-separate generated projection over the identical mechanical graph; it is not
-the canonical prototype and cannot change balance evidence.
+roles and do not imply endorsement.
 Commercial publication should receive appropriate legal review.
 
 The selected tone is solemn institutional absurdity: each Era becomes more

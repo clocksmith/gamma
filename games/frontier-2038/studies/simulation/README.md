@@ -21,6 +21,10 @@ code, duration, and stderr hash beside the fallback. A report without those
 fields is legacy evidence: it may be migrated for viewing, but it is not
 silently treated as comparable to a versioned report.
 
+The [2026-07-31 release identity correction](2026-07-31-release-identity-correction.md)
+preserves two full-progress Codex reports with a dirty-tree `0.8.23` identity
+as descriptive historical evidence only; neither is promotion evidence.
+
 Every simulation-driven implementation or rules change requires a tracked
 dated Markdown receipt beside the raw report. The receipt must identify the
 report hash, results, validity boundary, selected or rejected hypothesis,

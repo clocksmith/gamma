@@ -26,8 +26,8 @@ four rounds, simultaneous action selection, a modular thirteen-hex economy,
 six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
-Rules `0.5.0-rc.24-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.8.23`. That synchronization is
+Rules `0.5.0-rc.25-test` are ready for a controlled physical prototype and
+are implemented by executable game `0.8.24`. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.
@@ -332,12 +332,11 @@ The current design and prototype deliberately use:
 - Dario Amodei
 - Jensen Huang
 
-This is a creative recommendation for the named parody edition, not publishing
-clearance or doctrine. Preserve the real names through prototyping so the
-theme, negotiation, and asymmetric roles can be tested as designed. Before a
-retail print run or crowdfunding campaign, obtain an explicit legal review of
-the complete cards, box, art, and marketing. An institutional-alias edition
-can remain a publisher option without becoming the source-of-truth game.
+This is a creative recommendation for the real-name satirical game, not
+publishing clearance or doctrine. Preserve the real names through prototyping
+so the theme, negotiation, and asymmetric roles can be tested as designed.
+Before a retail print run or crowdfunding campaign, obtain an explicit legal
+review of the complete cards, box, art, and marketing.
 
 Do not add recognizable portraits, company logos, proprietary interfaces, or
 trade dress to retail artifacts without a separate explicit decision.
@@ -412,7 +411,7 @@ Do not manufacture inventory yet.
 
 First:
 
-1. Run the controlled four-player `0.5.0-rc.24-test` physical test.
+1. Run the controlled four-player `0.5.0-rc.25-test` physical test.
 2. Rebuild player aids and prototype components from the frozen rulebook.
 3. Decide the physical format of Generators, Links, tracks, and shared tokens.
 4. Test the twelve Mandates while keeping deferred modules out.

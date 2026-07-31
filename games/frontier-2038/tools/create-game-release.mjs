@@ -35,7 +35,6 @@ const contentGraphDocument = JSON.parse(
 const contentSourceFiles = [
   contentGraphPath,
   contentGraphDocument.variables,
-  ...Object.values(contentGraphDocument.editions || {}),
   "content/provenance/numbers.json",
   ...contentGraphDocument.artifacts.map((artifact) => artifact.source)
 ].filter((path, index, paths) => paths.indexOf(path) === index);

@@ -10,19 +10,19 @@
   </head>
   <body>
     <header class="masthead">
-      <div>
-        <p class="eyebrow">Institutional strategy study · build 0.8.23</p>
-        <h1>M3T4 <span>2038</span></h1>
+      <div class="brand-lockup">
+        <p class="eyebrow">Institutional strategy study · build 0.8.24</p>
+        <h1>2038 <span>2038</span></h1>
         <p class="dek">Build. Deploy. Regulate. Plausibly declare.</p>
       </div>
-      <div class="status-block">
+      <div class="status-block header-rail">
         <span class="status">rc.5-test executable baseline</span>
         <a href="/lab">Simulation lab</a>
         <a href="/docs/core-rules.html">Canonical rules</a>
       </div>
     </header>
 
-    <main>
+    <main class="game-shell">
       <section id="bridge-panel" class="panel bridge-panel" hidden>
         <div>
           <p class="eyebrow">Optional local execution bridge</p>
@@ -38,17 +38,26 @@
         <p id="bridge-status" class="bridge-status" role="status">Not connected.</p>
       </section>
 
-      <section id="setup" class="control-strip panel" aria-label="Game setup">
-        <label>Play as<select id="faction"></select></label>
-        <label>Game seed<input id="seed" value="frontier-2038" spellcheck="false"></label>
-        <label>Players
-          <select id="player-count">
-            <option value="3">3 players · supported</option>
-            <option value="4" selected>4 players · controlled-test baseline</option>
-            <option value="5">5 players · supported</option>
-          </select>
-        </label>
-        <button id="start-game" type="button">Start complete game</button>
+      <section id="setup" class="command-panel panel" aria-label="Game setup">
+        <div class="section-heading command-heading">
+          <div>
+            <p class="eyebrow">Match command</p>
+            <h2>Set the table</h2>
+          </div>
+          <p class="setup-note">One browser tab hosts the full deterministic match. Choose the institution, field, and opponents before committing the first round.</p>
+        </div>
+        <div class="command-fields">
+          <label>Play as<select id="faction"></select></label>
+          <label>Game seed<input id="seed" value="frontier-2038" spellcheck="false"></label>
+          <label>Players
+            <select id="player-count">
+              <option value="3">3 players · supported</option>
+              <option value="4" selected>4 players · controlled-test baseline</option>
+              <option value="5">5 players · supported</option>
+            </select>
+          </label>
+          <button id="start-game" type="button">Start complete game</button>
+        </div>
         <p id="game-status">Choose personas and start immediately with deterministic browser opponents. A local bridge is optional for Claude or Codex.</p>
       </section>
 
@@ -87,11 +96,19 @@
             <div><p class="eyebrow">13-district spatial economy</p><h2 id="round-title">The board</h2></div>
             <span class="status" id="phase">Ready</span>
           </div>
-          <div id="board" class="board" aria-label="Hex board"></div>
+          <div class="board-window">
+            <div id="board" class="board" aria-label="Hex board"></div>
+          </div>
           <p class="board-note">Districts, pieces, Facilities, Generators, Power state, and Round III Realignment are rendered from the live match.</p>
         </div>
         <aside class="institution-panel panel">
-          <p class="eyebrow">Public table state</p>
+          <div class="section-heading institution-heading">
+            <div>
+              <p class="eyebrow">Public table state</p>
+              <h2>Institution ledger</h2>
+            </div>
+            <span class="table-mark">LIVE</span>
+          </div>
           <div id="players" class="player-roster"></div>
           <div class="headline">
             <p class="eyebrow">Current Headline</p>

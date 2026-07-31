@@ -13,6 +13,7 @@ export class ClaudeCliCaller {
     command = "claude",
     prefixArgs = [],
     model,
+    reasoningEffort,
     cwd = process.cwd(),
     env = {},
     timeoutMs = 120000,
@@ -21,6 +22,7 @@ export class ClaudeCliCaller {
     this.command = command;
     this.prefixArgs = prefixArgs;
     this.model = model;
+    this.reasoningEffort = reasoningEffort;
     this.cwd = cwd;
     this.env = env;
     this.timeoutMs = timeoutMs;
@@ -43,6 +45,7 @@ export class ClaudeCliCaller {
       JSON.stringify(responseSchema)
     ];
     if (this.model) args.push("--model", this.model);
+    if (this.reasoningEffort) args.push("--effort", this.reasoningEffort);
     if (this.maxBudgetUsd !== undefined) {
       args.push("--max-budget-usd", String(this.maxBudgetUsd));
     }
@@ -72,6 +75,7 @@ export class ClaudeCliCaller {
         receipt: {
           provider: "claude-cli",
           model: this.model || null,
+          reasoningEffort: this.reasoningEffort || null,
           requestId: packet.requestId,
           promptSha256: sha256(invocation.input),
           decisionId: decision.decisionId,
@@ -82,6 +86,7 @@ export class ClaudeCliCaller {
       throw attachProviderFailure(error, {
         provider: "claude-cli",
         model: this.model,
+        reasoningEffort: this.reasoningEffort,
         requestId: packet.requestId,
         prompt: invocation.input
       });

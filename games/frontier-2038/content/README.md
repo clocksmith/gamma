@@ -6,9 +6,11 @@ directory are generated projections or implementation code.
 ## Edit here
 
 - `variables.json` owns shared names, terminology, and reusable facts.
-- `game/` owns structured entities: cards, factions, tiles, strategies, world
-  copy, UI copy, and simulation descriptions.
-- `templates/` owns long-form rulebook and HTML composition.
+- `physical/` owns every baseline physical-playtest copy source: the rulebook,
+  cards, player aids, faction boards, board components, and box/world text.
+- `runtime/` owns browser UI, simulation, and player-strategy copy.
+- `deferred/` owns modules excluded from the baseline physical game.
+- `templates/` owns browser HTML composition.
 - `graph.json` declares every generated artifact.
 
 References use deterministic `${path.to.value}` interpolation. The compiler
@@ -35,21 +37,15 @@ also deliberately edited.
 ```bash
 npm run content:build
 npm run content:check
-npm run content:validate:editions
+npm run content:validate
 npm run content:lint:provenance
 ```
 
 Never hand-edit generated files listed as targets in `graph.json`. The release
 gate rejects drift between the semantic sources and those outputs.
 
-The named parody vocabulary is canonical. To prove that the institutional
-alias is a text-only projection over identical mechanics, the edition gate
-compiles and validates both:
-
-```bash
-node scripts/content/compile.mjs --edition=named --validate
-node scripts/content/compile.mjs --edition=institutional --validate
-```
+The real-name satirical cast is canonical. Stable faction IDs remain internal
+compatibility keys, while player-facing names live in `physical/variables.json`.
 
 Numbers with design or balance implications are registered in
 `provenance/numbers.json` as either a hypothesis or evidence attributed to a

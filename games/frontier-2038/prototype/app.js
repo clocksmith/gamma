@@ -29,6 +29,7 @@ for (const faction of factions.factions) {
 let game = null;
 let pollTimer = null;
 let bridgeConnected = !bridgeRequired;
+let renderedTileStates = new Map();
 const llmBackends = new Set([
   "claude",
   "codex",
@@ -140,23 +141,66 @@ function tilePosition(tile) {
   };
 }
 
-function contentsForTile(tile, players) {
+function markerKey(player, type, marker, index) {
+  return `${player.seat}:${type}:${marker.id || marker.sourceId || marker.tileId || index}`;
+}
+
+function markerState(tile, players) {
+  const markers = [];
+  for (const player of players) {
+    for (const [index, piece] of player.pieces.entries()) {
+      if (piece.tileId !== tile.instanceId) continue;
+      markers.push({
+        key: markerKey(player, "piece", piece, index),
+        signature: `piece:${piece.kind}`
+      });
+    }
+    for (const [index, facility] of player.facilities.entries()) {
+      if (facility.tileId !== tile.instanceId) continue;
+      markers.push({
+        key: markerKey(player, "facility", facility, index),
+        signature: `facility:${facility.powered}:${facility.gridReady}`
+      });
+    }
+    for (const [index, generator] of player.generators.entries()) {
+      if (generator.tileId !== tile.instanceId) continue;
+      markers.push({
+        key: markerKey(player, "generator", generator, index),
+        signature: `generator:${generator.sourceId}`
+      });
+    }
+  }
+  return markers;
+}
+
+function tileSignature(tile, markers) {
+  const position = `${tile.instanceId}:${tile.name}:${tile.category}:${tile.q}:${tile.r}`;
+  return `${position}|${markers.map((marker) => `${marker.key}:${marker.signature}`).sort().join("|")}`;
+}
+
+function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
   const marks = [];
   for (const player of players) {
-    for (const piece of player.pieces.filter((item) => item.tileId === tile.instanceId)) {
-      marks.push(`<i class="dot ${piece.kind}" style="--seat:${player.seat}" ` +
+    for (const [index, piece] of player.pieces.entries()) {
+      if (piece.tileId !== tile.instanceId) continue;
+      const arrivalClass = priorMarkerKeys.has(markerKey(player, "piece", piece, index)) ? "" : " arrival";
+      marks.push(`<i class="dot ${piece.kind}${arrivalClass}" style="--seat:${player.seat}" ` +
         `title="${escapeHtml(player.factionName)} ${piece.kind}"></i>`);
     }
-    for (const facility of player.facilities.filter((item) => item.tileId === tile.instanceId)) {
+    for (const [index, facility] of player.facilities.entries()) {
+      if (facility.tileId !== tile.instanceId) continue;
+      const arrivalClass = priorMarkerKeys.has(markerKey(player, "facility", facility, index)) ? "" : " arrival";
       const status = facility.gridReady
         ? "Grid-Ready"
         : facility.powered ? "powered this Production" : "offline";
-      marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"} ` +
+      marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"}${arrivalClass} ` +
         `${facility.gridReady ? "grid-ready" : ""}" style="--seat:${player.seat}" ` +
         `title="${escapeHtml(player.factionName)} Facility — ${status}"></i>`);
     }
-    for (const generator of player.generators.filter((item) => item.tileId === tile.instanceId)) {
-      marks.push(`<i class="dot generator" style="--seat:${player.seat}" ` +
+    for (const [index, generator] of player.generators.entries()) {
+      if (generator.tileId !== tile.instanceId) continue;
+      const arrivalClass = priorMarkerKeys.has(markerKey(player, "generator", generator, index)) ? "" : " arrival";
+      marks.push(`<i class="dot generator${arrivalClass}" style="--seat:${player.seat}" ` +
         `title="${escapeHtml(player.factionName)} ${escapeHtml(generator.sourceId)}"></i>`);
     }
   }
@@ -165,20 +209,38 @@ function contentsForTile(tile, players) {
 
 function renderBoard(state) {
   elements.board.replaceChildren();
-  if (!state) return;
+  if (!state) {
+    renderedTileStates = new Map();
+    return;
+  }
+  const nextTileStates = new Map();
+  const hasPriorBoard = renderedTileStates.size > 0;
   for (const tile of state.board) {
     const hex = document.createElement("div");
     const position = tilePosition(tile);
-    hex.className = `hex ${tile.category}`;
+    const markers = markerState(tile, state.players);
+    const signature = tileSignature(tile, markers);
+    const priorState = renderedTileStates.get(tile.instanceId);
+    const changed = hasPriorBoard && priorState?.signature !== signature;
+    nextTileStates.set(tile.instanceId, {
+      signature,
+      markerKeys: new Set(markers.map((marker) => marker.key))
+    });
+    hex.className = `hex ${tile.category}${changed ? " state-shift" : ""}`;
     hex.style.left = `${position.left}px`;
     hex.style.top = `${position.top}px`;
     hex.innerHTML = `
       <span class="hex-name">${escapeHtml(tile.name)}</span>
       <span class="hex-type">${escapeHtml(tile.category)}</span>
-      <span class="hex-pieces">${contentsForTile(tile, state.players)}</span>
+      <span class="hex-pieces">${contentsForTile(tile, state.players, hasPriorBoard ? priorState?.markerKeys : undefined)}</span>
     `;
     elements.board.append(hex);
   }
+  renderedTileStates = nextTileStates;
+}
+
+function resetBoardTransitions() {
+  renderedTileStates = new Map();
 }
 
 function renderPlayers(state) {
@@ -325,9 +387,10 @@ function renderDecisions() {
     "the engine validates it before play resumes.";
   elements["decision-count"].textContent =
     `${packet.legalDecisions.length} legal choice${packet.legalDecisions.length === 1 ? "" : "s"}`;
-  for (const decision of packet.legalDecisions) {
+  for (const [index, decision] of packet.legalDecisions.entries()) {
     const button = document.createElement("button");
     button.className = "decision-card";
+    button.style.setProperty("--card-index", index);
     button.innerHTML = `
       <strong>${escapeHtml(decision.label)}</strong>
       <small>${escapeHtml(decision.actionId || "decision")}</small>
@@ -344,8 +407,8 @@ function renderDecisions() {
 
 function renderLedger() {
   const replay = game?.replay || [];
-  elements.log.innerHTML = replay.slice().reverse().map((event) =>
-    `<li><strong>R${event.round}C${event.cycle}</strong> ${escapeHtml(event.summary)}</li>`
+  elements.log.innerHTML = replay.slice().reverse().map((event, index) =>
+    `<li class="${index === 0 ? "latest-event" : ""}"><strong>R${event.round}C${event.cycle}</strong> ${escapeHtml(event.summary)}</li>`
   ).join("");
 }
 
@@ -395,6 +458,7 @@ function schedulePoll() {
 elements["start-game"].addEventListener("click", async () => {
   clearTimeout(pollTimer);
   elements["start-game"].disabled = true;
+  resetBoardTransitions();
   try {
     const opponents = opponentOptions();
     const options = {

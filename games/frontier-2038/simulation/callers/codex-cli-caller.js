@@ -17,12 +17,14 @@ export class CodexCliCaller {
     command = "codex",
     prefixArgs = [],
     model,
+    reasoningEffort,
     env = {},
     timeoutMs = 120000
   } = {}) {
     this.command = command;
     this.prefixArgs = prefixArgs;
     this.model = model;
+    this.reasoningEffort = reasoningEffort;
     this.env = env;
     this.timeoutMs = timeoutMs;
   }
@@ -47,6 +49,9 @@ export class CodexCliCaller {
       outputPath
     ];
     if (this.model) args.push("--model", this.model);
+    if (this.reasoningEffort) {
+      args.push("--config", `model_reasoning_effort=${JSON.stringify(this.reasoningEffort)}`);
+    }
     args.push("-");
     return {
       command: this.command,
@@ -85,6 +90,7 @@ export class CodexCliCaller {
         receipt: {
           provider: "codex-cli",
           model: this.model || null,
+          reasoningEffort: this.reasoningEffort || null,
           requestId: packet.requestId,
           promptSha256: sha256(invocation.input),
           decisionId: decision.decisionId,
@@ -95,6 +101,7 @@ export class CodexCliCaller {
       throw attachProviderFailure(error, {
         provider: "codex-cli",
         model: this.model,
+        reasoningEffort: this.reasoningEffort,
         requestId: packet.requestId,
         prompt: invocation.input
       });

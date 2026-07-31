@@ -39,6 +39,8 @@ export async function apiFetch(path, options = {}) {
   try {
     return await fetch(apiUrl(path), request);
   } catch (error) {
+    // Monitoring cancellation is an intentional local UI action, not a bridge failure.
+    if (error?.name === "AbortError") throw error;
     if (!bridgeRequired) throw error;
     throw new Error(
       "The local bridge could not be reached. Start npm run dev, allow Chrome local-network access, and confirm the pairing token.",

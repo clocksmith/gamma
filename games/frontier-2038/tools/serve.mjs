@@ -137,9 +137,9 @@ async function startSimulation(request, response) {
       return;
     }
     const options = await readJson(request);
-    if (options.allowLlm && Number(options.maxLlmDecisions || 24) > 240) {
+    if (options.allowLlm && Number(options.maxLlmDecisions || 24) > 24) {
       json(response, 400, {
-        error: "Web simulation jobs are limited to 240 authorized LLM decisions."
+        error: "Web simulation jobs are limited to 24 LLM decisions per configured policy."
       });
       return;
     }
@@ -175,7 +175,14 @@ async function startSimulation(request, response) {
           job.progress = {
             phase: progress.phase || options.mode || "tournament",
             completed: progress.completed,
-            total: progress.total || progress.runs
+            total: progress.total || progress.runs,
+            kind: progress.kind || null,
+            round: progress.round ?? null,
+            cycle: progress.cycle ?? null,
+            cycleNumber: progress.cycleNumber ?? null,
+            turnNumber: progress.turnNumber ?? null,
+            completedSeat: progress.completedSeat ?? null,
+            llmDecisionsUsed: progress.llmDecisionsUsed ?? null
           };
           job.updatedAt = Date.now();
         });
