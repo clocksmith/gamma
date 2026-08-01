@@ -249,6 +249,7 @@ lanes unless all model/index bytes are counted.
 |---|---|
 | `enwiki9_delayed_status_check.sh` | Delayed status probe for active runs, including cmix phase, staging temp files, decode scope progress, lock state, gate-decider output, and a stable `run_logs/enwiki9_delayed_status_latest.log` pointer. |
 | `enwiki9_gate_watch.py` | Silently samples a live native gate and emits durable JSON events only at progress milestones or guard, memory, identity, lock, process, and terminal state changes. |
+| `mobius2_logos_lexical_frame_ceiling.py` | Runs the zero-cost exact opening-1M LOGOS prose lexical-frame information certificate; read-only discovery plus receipt output, safe without the heavy lock. |
 
 ## Maintenance Rules
 

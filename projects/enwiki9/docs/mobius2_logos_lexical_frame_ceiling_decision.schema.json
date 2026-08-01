@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mobius2_logos_lexical_frame_ceiling_decision.schema.json",
+  "title": "MOBIUS-2 LOGOS lexical-frame ceiling Q0 decision",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "candidate_id",
+    "proposal_id",
+    "evidence_level",
+    "inputs",
+    "population",
+    "discovery",
+    "controls",
+    "split_controls",
+    "proof",
+    "gates",
+    "decision",
+    "score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "mobius2_logos_lexical_frame_ceiling_q0_v1"
+    },
+    "candidate_id": {
+      "const": "mobius2_logos_lexical_frame_ceiling_q0_v1"
+    },
+    "proposal_id": {
+      "const": "mobius2_logos_lexical_frame_ceiling_v1"
+    },
+    "evidence_level": {
+      "const": "zero_credit_exact_lexical_frame_ceiling"
+    },
+    "inputs": {"type": "object"},
+    "population": {"type": "object"},
+    "discovery": {"type": "object"},
+    "controls": {
+      "type": "object",
+      "required": ["E0", "L1", "L2", "LR"],
+      "properties": {
+        "E0": {"type": "object"},
+        "L1": {"$ref": "#/$defs/ceiling_control"},
+        "L2": {"$ref": "#/$defs/ceiling_control"},
+        "LR": {"$ref": "#/$defs/ceiling_control"}
+      }
+    },
+    "split_controls": {"type": "object"},
+    "proof": {"type": "object"},
+    "gates": {"type": "object"},
+    "decision": {
+      "type": "object",
+      "required": ["promotion_authorized", "verdict", "failed_conditions"]
+    },
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "ceiling_control": {
+      "type": "object",
+      "required": [
+        "payload_bytes",
+        "exact_payload_gain_bytes",
+        "selected_invocations",
+        "fixed_wrt_bytes",
+        "wrt_roundtrip_ok",
+        "deterministic_payload_ok"
+      ]
+    }
+  }
+}
