@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "p3-coalition-strict-llm-v1",
+  "registeredBeforeResults": true,
+  "question": "Does a strict full-decision LLM policy expose Coalition negotiation or conversion behavior that the authored deterministic policies miss when faction identity is swapped against Safety Laboratory and Imperial Research Lab at every three-player seat?",
+  "sourceEvidence": [
+    "2026-08-01-p3-faction-seat-policy-isolation",
+    "2026-08-01-p3-faction-seat-policy-fixed-replication"
+  ],
+  "purpose": "fresh_robustness",
+  "playerCount": 3,
+  "runsPerArm": 1,
+  "totalComparisons": 6,
+  "maximumCompleteGames": 12,
+  "seed": "frontier-2038-p3-coalition-strict-llm-2026-08-01-v1",
+  "mandateMode": "variable",
+  "rulesVariant": {},
+  "model": "gpt-5.6-terra",
+  "reasoningEffort": "medium",
+  "workers": 4,
+  "llmConcurrency": 4,
+  "providerConcurrency": {
+    "codex": 4
+  },
+  "llmRetries": 1,
+  "sampleReplays": 1,
+  "allowLlm": true,
+  "maximumLlmDecisions": null,
+  "fallback": false,
+  "analysis": {
+    "primaryOutcome": "For each focal seat, inspect Coalition-versus-Safety and Coalition-versus-Imperial paired score, rank, and win-credit direction together with Deal Flow uses, Runway gained, trade behavior, and provider decision traces.",
+    "secondaryOutcomes": [
+      "Whether Coalition initiates and accepts legal immediate trades",
+      "Whether Deal Flow Runway is converted into score, rank, Trust, infrastructure, or other meaningful state",
+      "Whether the deterministic Coalition deficit weakens, reproduces, or reverses under strict LLM authority",
+      "Provider/model/reasoning receipts, concurrency, retries, quarantines, and source identity"
+    ],
+    "interpretationBoundary": "Twelve strict games are qualitative robustness evidence, not a balance estimate, provider comparison, or authority to change a rule. Any failed, fallback, mixed-source, or incomplete match is quarantined rather than interpreted. Backend regime is confined to this later LLM study and is not retroactively introduced into deterministic conclusions.",
+    "decision": "If valid traces show Coalition understands and converts Deal Flow while deterministic policies do not, improve authored policies and keep rules. If valid traces consistently reproduce Coalition weakness and the deterministic ablation classifies Deal Flow as inert, nominate one bounded conversion lever for a separate deterministic study. No LLM anecdote promotes a rule."
+  },
+  "comparisons": [
+    {
+      "id": "coalition_vs_safety_seat_0",
+      "focalSeat": 0,
+      "profileIds": ["power_broker", "balanced_operator", "trust_governor"],
+      "backends": ["codex", "weighted", "weighted"],
+      "leftFactionIds": ["coalition_lab", "vertical_empire", "foundry"],
+      "rightFactionIds": ["safety_laboratory", "vertical_empire", "foundry"]
+    },
+    {
+      "id": "coalition_vs_safety_seat_1",
+      "focalSeat": 1,
+      "profileIds": ["balanced_operator", "power_broker", "trust_governor"],
+      "backends": ["weighted", "codex", "weighted"],
+      "leftFactionIds": ["vertical_empire", "coalition_lab", "foundry"],
+      "rightFactionIds": ["vertical_empire", "safety_laboratory", "foundry"]
+    },
+    {
+      "id": "coalition_vs_safety_seat_2",
+      "focalSeat": 2,
+      "profileIds": ["balanced_operator", "trust_governor", "power_broker"],
+      "backends": ["weighted", "weighted", "codex"],
+      "leftFactionIds": ["vertical_empire", "foundry", "coalition_lab"],
+      "rightFactionIds": ["vertical_empire", "foundry", "safety_laboratory"]
+    },
+    {
+      "id": "coalition_vs_imperial_seat_0",
+      "focalSeat": 0,
+      "profileIds": ["power_broker", "balanced_operator", "trust_governor"],
+      "backends": ["codex", "weighted", "weighted"],
+      "leftFactionIds": ["coalition_lab", "vertical_empire", "foundry"],
+      "rightFactionIds": ["imperial_research_lab", "vertical_empire", "foundry"]
+    },
+    {
+      "id": "coalition_vs_imperial_seat_1",
+      "focalSeat": 1,
+      "profileIds": ["balanced_operator", "power_broker", "trust_governor"],
+      "backends": ["weighted", "codex", "weighted"],
+      "leftFactionIds": ["vertical_empire", "coalition_lab", "foundry"],
+      "rightFactionIds": ["vertical_empire", "imperial_research_lab", "foundry"]
+    },
+    {
+      "id": "coalition_vs_imperial_seat_2",
+      "focalSeat": 2,
+      "profileIds": ["balanced_operator", "trust_governor", "power_broker"],
+      "backends": ["weighted", "weighted", "codex"],
+      "leftFactionIds": ["vertical_empire", "foundry", "coalition_lab"],
+      "rightFactionIds": ["vertical_empire", "foundry", "imperial_research_lab"]
+    }
+  ],
+  "execution": {
+    "command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-p3-coalition-strict-llm-v1.json --allow-llm --workers 4 --llm-concurrency 4 --codex-concurrency 4 --llm-retries 1 --output evidence/studies/simulation/2026-08-01-p3-coalition-strict-llm-v1.raw.json"
+  }
+}

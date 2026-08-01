@@ -4082,6 +4082,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     for (const participant of [player, partner]) {
       if (
         participant.factionId === "coalition_lab" &&
+        !this.isFactionAbilityPaused(participant, "deal_flow") &&
         !participant.roundMetrics.dealFlowUsed
       ) {
         this.addResource(participant, "runway", 1);
