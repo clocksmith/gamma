@@ -1,7 +1,10 @@
 export { ClaudeCliCaller, CodexCliCaller, CliProcessError } from "./callers/index.js";
 export {
   buildDecisionPrompt,
+  buildProviderDecisionPrompt,
+  providerDecisionProtocolVersion,
   validateDecisionPacket,
+  validateProviderDecisionResponse,
   validateDecisionResponse
 } from "./contracts/decision-contract.js";
 export {

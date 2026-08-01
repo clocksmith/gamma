@@ -70,8 +70,10 @@ Every backend receives the same packet:
 - persona instructions; and
 - an enumerated legal decision set.
 
-It returns one legal `decisionId`, plus optional rationale and confidence. The
-environment alone mutates state. Player-owned movement, Headline choices,
+Deterministic policies return a canonical legal `decisionId`. CLI providers see
+the same complete legal set and semantics, but choose a short deterministic
+alias; the caller resolves that alias to the canonical ID and rejects an
+unknown alias. The environment alone mutates state. Player-owned movement, Headline choices,
 Power allocation, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 

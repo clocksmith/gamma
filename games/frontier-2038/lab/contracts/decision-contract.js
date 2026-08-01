@@ -10,6 +10,8 @@ function requireNonEmptyString(value, label) {
   }
 }
 
+export const providerDecisionProtocolVersion = "choice-alias-v1";
+
 export function validateDecisionPacket(packet) {
   requireObject(packet, "Decision packet");
   if (![1, 2].includes(packet.schemaVersion)) {
@@ -96,6 +98,35 @@ export function validateDecisionResponse(packet, response) {
       ? { confidence: response.confidence }
       : {})
   };
+}
+
+export function buildProviderDecisionPrompt(packet) {
+  validateDecisionPacket(packet);
+  const width = Math.max(2, String(packet.legalDecisions.length).length);
+  const aliases = new Map();
+  const providerPacket = {
+    ...packet,
+    legalDecisions: packet.legalDecisions.map((decision, index) => {
+      const alias = `choice-${String(index + 1).padStart(width, "0")}`;
+      aliases.set(alias, decision.decisionId);
+      return { ...decision, decisionId: alias };
+    })
+  };
+  return {
+    aliases,
+    prompt: buildDecisionPrompt(providerPacket)
+  };
+}
+
+export function validateProviderDecisionResponse(packet, response, aliases) {
+  const canonicalDecisionId = aliases.get(response?.decisionId);
+  if (!canonicalDecisionId) {
+    throw new TypeError(`Provider selected illegal choice alias: ${response?.decisionId}.`);
+  }
+  return validateDecisionResponse(packet, {
+    ...response,
+    decisionId: canonicalDecisionId
+  });
 }
 
 export function buildDecisionPrompt(packet) {

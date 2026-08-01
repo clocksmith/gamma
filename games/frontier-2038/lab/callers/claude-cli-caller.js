@@ -1,4 +1,8 @@
-import { buildDecisionPrompt, validateDecisionResponse } from "../contracts/decision-contract.js";
+import {
+  buildProviderDecisionPrompt,
+  providerDecisionProtocolVersion,
+  validateProviderDecisionResponse
+} from "../contracts/decision-contract.js";
 import {
   attachProviderFailure,
   extractDecisionCandidate,
@@ -27,11 +31,12 @@ export class ClaudeCliCaller {
     this.env = env;
     this.timeoutMs = timeoutMs;
     this.maxBudgetUsd = maxBudgetUsd;
+    this.decisionProtocolVersion = providerDecisionProtocolVersion;
   }
 
   async invocation(packet, { redactPrompt = false } = {}) {
     const responseSchema = await loadResponseSchema();
-    const prompt = buildDecisionPrompt(packet);
+    const providerPrompt = buildProviderDecisionPrompt(packet);
     const args = [
       ...this.prefixArgs,
       "-p",
@@ -52,7 +57,8 @@ export class ClaudeCliCaller {
     return {
       command: this.command,
       args,
-      input: redactPrompt ? "<decision-prompt>" : prompt
+      input: redactPrompt ? "<decision-prompt>" : providerPrompt.prompt,
+      aliases: providerPrompt.aliases
     };
   }
 
@@ -67,9 +73,10 @@ export class ClaudeCliCaller {
         signal
       });
       const envelope = parseJsonText(result.stdout, "Claude CLI");
-      const decision = validateDecisionResponse(
+      const decision = validateProviderDecisionResponse(
         packet,
-        extractDecisionCandidate(envelope, "Claude CLI")
+        extractDecisionCandidate(envelope, "Claude CLI"),
+        invocation.aliases
       );
       return {
         decision,

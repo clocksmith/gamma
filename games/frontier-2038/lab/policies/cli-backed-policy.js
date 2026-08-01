@@ -124,6 +124,8 @@ export class CliBackedPlayerPolicy {
       backend: this.backendId,
       model: this.model,
       reasoningEffort: this.reasoningEffort,
+      decisionProtocolVersion:
+        this.caller.decisionProtocolVersion || "canonical-decision-id-v1",
       packet: augmented,
       profile: profileForPrompt(this.profile)
     };
