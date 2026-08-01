@@ -1,72 +1,150 @@
 {
-  "id": "cmix21_text_mmap_paq5_v1",
-  "family": "cmix21_mmap",
-  "status": "candidate",
-  "description": "cmix v21 forced text-mode wrapper using the mmap allocator plus PAQ8 level 5 instead of level 11. The binary and english.dic are gzip-compressed and counted toward program_size.",
-  "parent": "cmix21_text_mmap_paq6_v1",
-  "hypothesis": "PAQ8 level 6 crossed the 10 GiB ceiling at 250K. PAQ8 level 5 should finish the 250K memory gate with enough headroom to obtain a real archive-quality measurement.",
   "deps": [
     "C++ runtime for the vendored cmix binary",
     "POSIX mmap and temporary filesystem space"
   ],
-  "source": {
-    "tree": "projects/enwiki9/external/cmix21-sidecar",
-    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_v1/cmix.bin.gz",
-    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_v1/english.dic.gz",
-    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5"
+  "description": "cmix v21 forced text-mode wrapper using the mmap allocator plus PAQ8 level 5 instead of level 11. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "family": "cmix21_mmap",
+  "hypothesis": "PAQ8 level 6 crossed the 10 GiB ceiling at 250K. PAQ8 level 5 should finish the 250K memory gate with enough headroom to obtain a real archive-quality measurement.",
+  "id": "cmix21_text_mmap_paq5_v1",
+  "measured": {
+    "250000": {
+      "compressed_size_observed_before_decode_failure": 45153,
+      "failure": "decode_rss_crossed_10gib_ceiling",
+      "max_sampled_rss_kib": 10517508,
+      "memory_ceiling_kib": 10485760,
+      "roundtrip_ok": false
+    },
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.929688,
+          "comparison": {
+            "archive_delta_vs_baseline": -165,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 560869
+          },
+          "compressed_size": 247,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 561482,
+          "program_id": "cmix21_text_mmap_paq5_v1",
+          "program_size": 561235,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-28T02:45:08+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.929688,
+            "comparison": {
+              "archive_delta_vs_baseline": -165,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 560869
+            },
+            "compressed_size": 247,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 561482,
+            "program_id": "cmix21_text_mmap_paq5_v1",
+            "program_size": 561235,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-28T02:45:08+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
   },
+  "parent": "cmix21_text_mmap_paq6_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "paq8",
+        "stream": "probability_model",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "mmap_allocator",
+        "stream": "state_storage",
+        "to": "cmix21_text"
+      }
+    ],
     "nodes": [
       {
         "id": "paq8",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "level": 5
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "mmap_allocator",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "mode": "file_backed_large_tables"
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "cmix21_text",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "mode": "forced_text",
-            "codec": "cmix21"
+            "codec": "cmix21",
+            "mode": "forced_text"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "paq8",
-        "to": "cmix21_text",
-        "stream": "probability_model"
-      },
-      {
-        "from": "mmap_allocator",
-        "to": "cmix21_text",
-        "stream": "state_storage"
+        },
+        "type": "codec"
       }
     ]
   },
-  "measured": {
-    "250000": {
-      "compressed_size_observed_before_decode_failure": 45153,
-      "roundtrip_ok": false,
-      "memory_ceiling_kib": 10485760,
-      "max_sampled_rss_kib": 10517508,
-      "failure": "decode_rss_crossed_10gib_ceiling"
-    }
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_v1/cmix.bin.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_v1/english.dic.gz",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
   },
-  "verdict": "Rejected for memory. PAQ5 produced a promising 250K archive but crossed the 10 GiB ceiling during decode, so it is not an admissible Hutter candidate."
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }

@@ -1,33 +1,112 @@
 {
-  "id": "cmix21_text_wrapped_v1",
-  "family": "cmix21",
-  "status": "candidate",
-  "description": "Score-honest wrapper around upstream cmix version 21 forced text mode, with the stripped cmix binary and english.dic dictionary stored gzip-compressed and counted toward program_size.",
-  "parent": "cmix21_wrapped_v1",
-  "hypothesis": "The known cmix v21 -t text-mode frontier may already clear the 10.95 percent ledger when packaged honestly, though memory eligibility must be verified separately.",
   "deps": [
     "C++ runtime for the vendored cmix binary"
   ],
+  "description": "Score-honest wrapper around upstream cmix version 21 forced text mode, with the stripped cmix binary and english.dic dictionary stored gzip-compressed and counted toward program_size.",
+  "family": "cmix21",
+  "hypothesis": "The known cmix v21 -t text-mode frontier may already clear the 10.95 percent ledger when packaged honestly, though memory eligibility must be verified separately.",
+  "id": "cmix21_text_wrapped_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.90625,
+          "comparison": {
+            "archive_delta_vs_baseline": -168,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 547764
+          },
+          "compressed_size": 244,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 548377,
+          "program_id": "cmix21_text_wrapped_v1",
+          "program_size": 548133,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-28T07:02:09+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.90625,
+            "comparison": {
+              "archive_delta_vs_baseline": -168,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 547764
+            },
+            "compressed_size": 244,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 548377,
+            "program_id": "cmix21_text_wrapped_v1",
+            "program_size": 548133,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-28T07:02:09+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
+  },
+  "parent": "cmix21_wrapped_v1",
+  "pgsg": {
+    "edges": [],
+    "nodes": [
+      {
+        "id": "cmix21",
+        "payload": {
+          "discrete": {
+            "codec": "cmix21",
+            "mode": "forced_text"
+          }
+        },
+        "type": "codec"
+      }
+    ]
+  },
   "source": {
     "binary": "projects/enwiki9/programs/cmix21_text_wrapped_v1/cmix.bin.gz",
     "dictionary": "projects/enwiki9/programs/cmix21_text_wrapped_v1/english.dic.gz",
     "upstream_mode": "cmix version 21 -t"
   },
-  "pgsg": {
-    "nodes": [
-      {
-        "id": "cmix21",
-        "type": "codec",
-        "payload": {
-          "discrete": {
-            "mode": "forced_text",
-            "codec": "cmix21"
-          }
-        }
-      }
-    ],
-    "edges": []
-  },
-  "measured": {},
-  "verdict": "Unmeasured. Must pass exact roundtrip gates and memory-admissibility review before any Hutter claim."
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }

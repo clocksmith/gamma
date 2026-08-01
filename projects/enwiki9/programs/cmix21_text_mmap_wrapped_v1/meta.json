@@ -1,50 +1,129 @@
 {
-  "id": "cmix21_text_mmap_wrapped_v1",
-  "family": "cmix21_mmap",
-  "status": "candidate",
-  "description": "cmix v21 forced text-mode wrapper using a vendored binary patched to file-back large adaptive tables through mmap. The binary and english.dic are gzip-compressed and counted toward program_size.",
-  "parent": "cmix21_text_wrapped_v1",
-  "hypothesis": "The unrestricted cmix v21 -t archive is below 10.95 percent; if the same predictor can run with resident RAM below the Hutter ceiling by moving large tables to temporary files, it becomes the strongest known constructive frontier program.",
   "deps": [
     "C++ runtime for the vendored cmix binary",
     "POSIX mmap and temporary filesystem space"
   ],
-  "source": {
-    "tree": "projects/enwiki9/external/cmix21-sidecar",
-    "binary": "projects/enwiki9/programs/cmix21_text_mmap_wrapped_v1/cmix.bin.gz",
-    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_wrapped_v1/english.dic.gz",
-    "build": "g++ -std=c++14 -Wall -O3"
+  "description": "cmix v21 forced text-mode wrapper using a vendored binary patched to file-back large adaptive tables through mmap. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "family": "cmix21_mmap",
+  "hypothesis": "The unrestricted cmix v21 -t archive is below 10.95 percent; if the same predictor can run with resident RAM below the Hutter ceiling by moving large tables to temporary files, it becomes the strongest known constructive frontier program.",
+  "id": "cmix21_text_mmap_wrapped_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.921875,
+          "comparison": {
+            "archive_delta_vs_baseline": -166,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 560868
+          },
+          "compressed_size": 246,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 561481,
+          "program_id": "cmix21_text_mmap_wrapped_v1",
+          "program_size": 561235,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-28T02:27:40+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.921875,
+            "comparison": {
+              "archive_delta_vs_baseline": -166,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 560868
+            },
+            "compressed_size": 246,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 561481,
+            "program_id": "cmix21_text_mmap_wrapped_v1",
+            "program_size": 561235,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-28T02:27:40+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
   },
+  "parent": "cmix21_text_wrapped_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "mmap_allocator",
+        "stream": "state_storage",
+        "to": "cmix21_text"
+      }
+    ],
     "nodes": [
       {
         "id": "mmap_allocator",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "mode": "file_backed_large_tables"
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "cmix21_text",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "mode": "forced_text",
-            "codec": "cmix21"
+            "codec": "cmix21",
+            "mode": "forced_text"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "mmap_allocator",
-        "to": "cmix21_text",
-        "stream": "state_storage"
+        },
+        "type": "codec"
       }
     ]
   },
-  "measured": {},
-  "verdict": "Unmeasured. This is the current strongest frontier candidate because it targets the known sub-10.95 cmix21 text-mode archive while addressing the Hutter memory constraint."
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_wrapped_v1/cmix.bin.gz",
+    "build": "g++ -std=c++14 -Wall -O3",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_wrapped_v1/english.dic.gz",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
+  },
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }

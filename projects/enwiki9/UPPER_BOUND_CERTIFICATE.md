@@ -21,14 +21,14 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 
 | Claim | Program | Scope | Score | Evidence | Status |
 |---|---|---:|---:|---|---|
-| best exact 10M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 10,000,000 | 1,825,866 | exact result JSON with roundtrip_ok true | exact artifact-backed |
-| best exact 10M archive | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 10,000,000 | 1,825,866 | exact result JSON with roundtrip_ok true; archive-slope reference only | exact artifact-backed |
-| best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | exact result JSON with roundtrip_ok true | exact artifact-backed |
+| best exact 10M | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | 10,000,000 | 1,882,615 | exact result JSON with roundtrip_ok true | exact artifact-backed |
+| best exact 10M archive | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 10,000,000 | 2,202,351 | exact result JSON with roundtrip_ok true; archive-slope reference only | exact artifact-backed |
+| best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,462,586 | exact result JSON with roundtrip_ok true | exact artifact-backed |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
-| best forecast | `endpoint428_pair_layer0_online_native_10m_v1` | 10,000,000 | 109,524,268 | exact guarded 10M archive screen with counted program economics; terminal verdict retire_unchanged_exact_10m_economics_miss; forecast only, not a constructive full-corpus proof | exact-10m-counted-projection |
-| active candidate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | exact 100,000,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 100,000,000 byte gate passed |
-| blocker | `n/a` | n/a | n/a | active 1,000,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 1,000,000,000 | n/a | unchanged 1,000,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+| best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | n/a | 110,181,114 | forecast only; not a constructive proof | fx2-calibrated-from-exact-100m |
+| active candidate | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 250,000 | 609,451 | exact 250,000 byte replay passed with roundtrip and determinism; promotion state is derived from the latest guard receipt | exact 250,000 byte gate passed |
+| blocker | `n/a` | n/a | n/a | active 10,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
+| active gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcmidx5_7_17div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 10,000,000 | n/a | unchanged 10,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
 
 ## Best Full-Corpus Result
 
@@ -38,25 +38,31 @@ No verified full-corpus result JSON is present in this workspace.
 
 | data_size | program | score | archive | program_size | percent | result |
 |---:|---|---:|---:|---:|---:|---|
-| 1,024 | `baseline_zlib` | 495 | 334 | 161 | 48.33984375 | `results/baseline_zlib/2026-07-20T152000.json` |
-| 10,000 | `baseline_lzma` | 3,857 | 3,656 | 201 | 38.57 | `results/baseline_lzma/2026-07-27T213049.json` |
-| 250,000 | `opcode_typed_anchor_bitmix_v1` | 72,800 | 67,959 | 4,841 | 29.12 | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| 600,747 | `vulcan_event_control_v0` | 377,494 | 367,924 | 9,570 | 62.837434061 | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
-| 1,000,000 | `opcode_typed_anchor_bitmix_v1` | 266,493 | 261,652 | 4,841 | 26.6493 | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T150923.json` |
-| 10,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 1,825,866 | 1,642,858 | 183,008 | 18.25866 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
-| 100,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 15,040,789 | 14,857,781 | 183,008 | 15.040789 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json` |
+| 1,000 | `fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1` | 365,803 | 260 | 365,543 | 36580.3 | `results/fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1/2026-06-06T225521.json` |
+| 1,024 | `baseline_bz2` | 567 | 401 | 166 | 55.37109375 | `results/baseline_bz2/2026-06-07T184036.json` |
+| 4,096 | `srstc_raw_order2_aggregate_richkeys_v1` | 23,296 | 1,300 | 21,996 | 568.75 | `results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183706.json` |
+| 10,000 | `baseline_lzma` | 3,857 | 3,656 | 201 | 38.57 | `results/baseline_lzma/2026-07-27T142230.json` |
+| 65,536 | `baseline_lzma` | 22,805 | 22,604 | 201 | 34.797668457 | `results/baseline_lzma/2026-06-07T152335.json` |
+| 250,000 | `opcode_typed_anchor_bitmix_v1` | 72,800 | 67,959 | 4,841 | 29.12 | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T114728.json` |
+| 1,000,000 | `opcode_typed_anchor_bitmix_v1` | 266,493 | 261,652 | 4,841 | 26.6493 | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T120140.json` |
+| 1,048,576 | `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | 438,939 | 182,361 | 256,578 | 41.860485077 | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T175351.json` |
+| 10,000,000 | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | 1,882,615 | 1,643,289 | 239,326 | 18.82615 | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1/2026-06-08T201540.json` |
+| 100,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 15,462,586 | 15,279,578 | 183,008 | 15.462586 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-24T063129.json` |
 
 ## Best Exact Archive By Scope
 
 | data_size | program | archive | score | program_size | archive_bpb | result |
 |---:|---|---:|---:|---:|---:|---|
-| 1,024 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 243 | 304,496 | 304,253 | 1.8984375 | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T163727.json` |
-| 10,000 | `baseline_lzma` | 3,656 | 3,857 | 201 | 2.9248 | `results/baseline_lzma/2026-07-27T213049.json` |
-| 250,000 | `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | 44,978 | 349,231 | 304,253 | 1.439296 | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T170257.json` |
-| 600,747 | `vulcan_event_control_v0` | 367,924 | 377,494 | 9,570 | 4.899553389 | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
-| 1,000,000 | `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | 174,423 | 735,705 | 561,282 | 1.395384 | `results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-07-21T183101.json` |
-| 10,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 1,642,858 | 1,825,866 | 183,008 | 1.3142864 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
-| 100,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 14,857,781 | 15,040,789 | 183,008 | 1.18862248 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json` |
+| 1,000 | `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | 243 | 383,619 | 383,376 | 1.944 | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T000100.json` |
+| 1,024 | `cmix21_text_wrapped_v1` | 244 | 548,377 | 548,133 | 1.90625 | `results/cmix21_text_wrapped_v1/2026-07-28T030209.json` |
+| 4,096 | `srstc_raw_order2_aggregate_richkeys_v1` | 1,300 | 23,296 | 21,996 | 2.5390625 | `results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183706.json` |
+| 10,000 | `baseline_lzma` | 3,656 | 3,857 | 201 | 2.9248 | `results/baseline_lzma/2026-07-27T142230.json` |
+| 65,536 | `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | 13,573 | 270,151 | 256,578 | 1.656860352 | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T174031.json` |
+| 250,000 | `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | 44,976 | 428,352 | 383,376 | 1.439232 | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T002058.json` |
+| 1,000,000 | `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | 174,395 | 736,961 | 562,566 | 1.39516 | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T155023.json` |
+| 1,048,576 | `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | 182,361 | 438,939 | 256,578 | 1.391304016 | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T175351.json` |
+| 10,000,000 | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | 1,638,076 | 2,202,351 | 564,275 | 1.3104608 | `results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-10T042446.json` |
+| 100,000,000 | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 15,279,578 | 15,462,586 | 183,008 | 1.22236624 | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-24T063129.json` |
 
 ## Notes
 

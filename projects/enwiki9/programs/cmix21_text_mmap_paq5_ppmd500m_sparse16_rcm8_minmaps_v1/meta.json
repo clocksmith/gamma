@@ -1,109 +1,187 @@
 {
-  "id": "cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1",
-  "family": "cmix21_mmap",
-  "status": "candidate",
-  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 500 MB PPMD cap, minimum PAQ8 main/text maps, minimum PAQ rolling buffer, and narrower PAQ8 sparse-match/run-context maps. The binary and english.dic are gzip-compressed and counted toward program_size.",
-  "parent": "cmix21_text_mmap_paq5_ppmd500m_minmaps_v1",
-  "hypothesis": "The 500 MB PPMD minmaps profile missed the 10 GiB decode guard by only a small margin while preserving the strong 45,177-byte 250K archive. Thinning sparse-match and run-context maps should remove enough RSS without disturbing the high-value text and main context maps.",
   "deps": [
     "C++ runtime for the vendored cmix binary",
     "POSIX mmap and temporary filesystem space"
   ],
-  "source": {
-    "tree": "projects/enwiki9/external/cmix21-sidecar",
-    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1/cmix.bin.gz",
-    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1/english.dic.gz",
-    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=500 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=16 -DCMIX_PAQ8_RCM_DIV=8 -DCMIX_PAQ8_BUF_SCALE=1"
+  "description": "cmix v21 forced text-mode wrapper using mmap allocation, PAQ8 level 5, a 500 MB PPMD cap, minimum PAQ8 main/text maps, minimum PAQ rolling buffer, and narrower PAQ8 sparse-match/run-context maps. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "family": "cmix21_mmap",
+  "hypothesis": "The 500 MB PPMD minmaps profile missed the 10 GiB decode guard by only a small margin while preserving the strong 45,177-byte 250K archive. Thinning sparse-match and run-context maps should remove enough RSS without disturbing the high-value text and main context maps.",
+  "id": "cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1",
+  "measured": {
+    "250000": {
+      "bits_per_byte": 4.779488,
+      "compressed_size_temp_at_abort": 149359,
+      "failure": "archive_ceiling_missed_during_compression",
+      "hutter_score_if_roundtrip_passed": 709122,
+      "max_sampled_rss_kib": 8400456,
+      "memory_ceiling_kib": 10485760,
+      "partial_output_size_at_abort": 0,
+      "program_size": 559763,
+      "roundtrip_ok": false
+    },
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.921875,
+          "comparison": {
+            "archive_delta_vs_baseline": -166,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 559396
+          },
+          "compressed_size": 246,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 560009,
+          "program_id": "cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1",
+          "program_size": 559763,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-28T02:01:00+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.921875,
+            "comparison": {
+              "archive_delta_vs_baseline": -166,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 559396
+            },
+            "compressed_size": 246,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 560009,
+            "program_id": "cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1",
+            "program_size": 559763,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-28T02:01:00+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
   },
+  "parent": "cmix21_text_mmap_paq5_ppmd500m_minmaps_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "paq8",
+        "stream": "probability_model",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "ppmd",
+        "stream": "probability_model",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "paq8_minmaps",
+        "stream": "memory_trim",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "mmap_allocator",
+        "stream": "state_storage",
+        "to": "cmix21_text"
+      }
+    ],
     "nodes": [
       {
         "id": "paq8",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "level": 5
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "ppmd",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "memory_mb": 500
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "paq8_minmaps",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
-            "main_context_scale": 1,
-            "text_model_scale": 1,
             "buffer_scale": 1,
+            "main_context_scale": 1,
             "match_scale": 1,
+            "rcm_div": 8,
             "sparse_match_div": 16,
-            "rcm_div": 8
+            "text_model_scale": 1
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "mmap_allocator",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "mode": "file_backed_large_tables"
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "cmix21_text",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "mode": "forced_text",
-            "codec": "cmix21"
+            "codec": "cmix21",
+            "mode": "forced_text"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "paq8",
-        "to": "cmix21_text",
-        "stream": "probability_model"
-      },
-      {
-        "from": "ppmd",
-        "to": "cmix21_text",
-        "stream": "probability_model"
-      },
-      {
-        "from": "paq8_minmaps",
-        "to": "cmix21_text",
-        "stream": "memory_trim"
-      },
-      {
-        "from": "mmap_allocator",
-        "to": "cmix21_text",
-        "stream": "state_storage"
+        },
+        "type": "codec"
       }
     ]
   },
-  "measured": {
-    "250000": {
-      "compressed_size_temp_at_abort": 149359,
-      "program_size": 559763,
-      "hutter_score_if_roundtrip_passed": 709122,
-      "bits_per_byte": 4.779488,
-      "partial_output_size_at_abort": 0,
-      "roundtrip_ok": false,
-      "memory_ceiling_kib": 10485760,
-      "max_sampled_rss_kib": 8400456,
-      "failure": "archive_ceiling_missed_during_compression"
-    }
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1/cmix.bin.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=5 -DCMIX_PPMD_MEMORY_MB=500 -DCMIX_PAQ8_MAIN_CONTEXT_SCALE=1 -DCMIX_PAQ8_TEXT_MODEL_SCALE=1 -DCMIX_PAQ8_MATCH_SCALE=1 -DCMIX_PAQ8_SPARSE_MATCH_DIV=16 -DCMIX_PAQ8_RCM_DIV=8 -DCMIX_PAQ8_BUF_SCALE=1",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq5_ppmd500m_sparse16_rcm8_minmaps_v1/english.dic.gz",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
   },
-  "verdict": "Rejected. Thinning sparse-match and run-context maps cleared memory pressure but collapsed archive density to the same 149,359-byte 250K failure regime."
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }
