@@ -1,0 +1,23 @@
+{
+  "claimed_at": "2026-07-24T21:43:57+00:00",
+  "created_at": "2026-07-24T21:43:57+00:00",
+  "evidence": [
+    "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+    "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_compact96_matched_250k_four_core_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 0,
+  "hypothesis": "Retaining all 200 LSTM cells and full external/feed-forward inputs while feeding back only 64 self-recurrent cells preserves output capacity better than width reduction and removes a large fraction of recurrent gate dot products.",
+  "kill_condition": "The smallest stable scope exhausts the 110677-byte score margin, runtime improves less than 8 percent, or disjoint transfer regresses materially.",
+  "max_program_bytes": 261125,
+  "mechanism_class": "representation",
+  "owner": "codex",
+  "parent": null,
+  "priority": 105,
+  "promotion_condition": "Changed-stream 250K projects at or below 108000000 and reduces alternating guarded runtime by at least 10 percent; then exact 1M and 10M transfer, roundtrip, determinism, memory, and package accounting pass.",
+  "proposal_id": "endpoint428_recurrent_fanin64_v1",
+  "rejected_at": "2026-08-01T18:09:14+00:00",
+  "rejection_reason": "Exact 250K evidence saved 18 archive bytes but failed the declared minimum 8 percent runtime gate; the no-fill mutation also regressed runtime. Retire this fan-in realization and its unchanged parameter ladder.",
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "state": "rejected",
+  "title": "Wide-output endpoint428 with bounded recurrent fan-in"
+}

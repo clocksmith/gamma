@@ -3,7 +3,7 @@
   "seal_version": "ACS-MATH-SEAL-2",
   "activation_status": "UNBOUND",
   "public_distribution_authorized": false,
-  "audit_date": "2026-07-26",
+  "audit_date": "2026-08-01",
   "target": {
     "input_bytes": 1000000000,
     "score_bytes": 108000000,
@@ -14,9 +14,9 @@
     "verified_full_1g_score_bytes": null,
     "best_counted_forecast_bytes": 109389323,
     "forecast_distance_above_target_bytes": 1389323,
-    "operational_receipt_forecast_bytes": 109524268,
-    "forecast_consistent": false,
-    "source_and_arithmetic_validation": "FAIL"
+    "operational_receipt_forecast_bytes": 109389323,
+    "forecast_consistent": true,
+    "source_and_arithmetic_validation": "PASS_FORECAST_BINDING_ONLY"
   },
   "authorized_routes": [],
   "removed_routes": ["A", "B", "C", "D"],
@@ -24,17 +24,25 @@
     "primary": {
       "route_id": "C",
       "proposal_id": "seal2_route_c_under_target_teacher_v1",
-      "proposal_path": "operations/adaptive/proposals/proposed/881_seal2_route_c_under_target_teacher_v1.json",
+      "proposal_path": "operations/adaptive/proposals/claimed/881_seal2_route_c_under_target_teacher_v1.json",
       "activation_effect": "none_until_verified"
     },
-    "secondary": {
-      "route_id": "A",
-      "proposal_id": "seal2_route_a_paid_predictor_partition_v1",
-      "proposal_path": "operations/adaptive/proposals/proposed/929_seal2_route_a_paid_predictor_partition_v1.json",
-      "activation_effect": "none_until_verified"
-    }
+    "parked": [
+      {
+        "route_id": "A",
+        "proposal_id": "seal2_route_a_paid_predictor_partition_v1",
+        "proposal_path": "operations/adaptive/proposals/rejected/929_seal2_route_a_paid_predictor_partition_v1.json",
+        "activation_effect": "none"
+      },
+      {
+        "route_id": "D",
+        "proposal_id": "seal2_route_d_structural_microblock_v1",
+        "proposal_path": "operations/adaptive/proposals/rejected/871_seal2_route_d_structural_microblock_v1.json",
+        "activation_effect": "none"
+      }
+    ]
   },
-  "decision": "No route has a complete private hypothesis-and-margin certificate. Candidate distribution is forbidden.",
+  "decision": "No route has a complete private hypothesis-and-margin certificate. Route D timestamp-envelope antecedent work is terminal negative; Route C remains blocked on an exact under-target full-corpus teacher. Candidate distribution is forbidden.",
   "source_paths": [
     "docs/hutter_frontier.json",
     "docs/status_receipt.json",

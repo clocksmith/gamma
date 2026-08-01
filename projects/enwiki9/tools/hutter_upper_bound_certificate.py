@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import pathlib
 import re
 from dataclasses import dataclass
@@ -24,6 +25,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parent.parent
 RESULTS_DEFAULT = ROOT / "results"
 PROGRAMS_DEFAULT = ROOT / "programs"
+FRONTIER_DEFAULT = ROOT / "docs" / "hutter_frontier.json"
 OUT_JSON_DEFAULT = ROOT / "upper_bound_certificate.json"
 OUT_MD_DEFAULT = ROOT / "UPPER_BOUND_CERTIFICATE.md"
 
@@ -156,15 +158,73 @@ def load_result(path: pathlib.Path) -> Result | None:
     )
 
 
-def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[str, Any]:
-    """Return the strongest counted forecast backed by an exact 10M screen.
+def canonical_frontier_forecast_record(
+    frontier_path: pathlib.Path = FRONTIER_DEFAULT,
+) -> dict[str, Any] | None:
+    """Load the explicitly selected source-bound forecast from the frontier."""
 
-    Prefix forecasts remain non-constructive.  This only prevents the generated
-    operator views from staying pinned to the older FX2 calibration after a
-    newer exact, guarded, counted 10M archive screen has sealed.
+    try:
+        frontier = json.loads(frontier_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return None
+    canonical_id = frontier.get("canonical_best_forecast_id")
+    candidates = frontier.get("candidates")
+    if not isinstance(canonical_id, str) or not isinstance(candidates, list):
+        return None
+    selected = next(
+        (
+            row
+            for row in candidates
+            if isinstance(row, dict) and row.get("id") == canonical_id
+        ),
+        None,
+    )
+    if not isinstance(selected, dict):
+        return None
+    projected_score = selected.get("forecast_score")
+    scope_bytes = selected.get("scope_bytes")
+    if (
+        isinstance(projected_score, bool)
+        or not isinstance(projected_score, int)
+        or projected_score <= 0
+        or scope_bytes != 10_000_000
+    ):
+        return None
+    return {
+        "program_id": canonical_id,
+        "projected_score": projected_score,
+        "quality": "source-bound-canonical-forecast",
+        "evidence": (
+            "canonical source-bound frontier selection backed by exact 10M "
+            "codec replay and counted package evidence; forecast only, not a "
+            "constructive full-corpus proof"
+        ),
+        "source": frontier_path.relative_to(ROOT).as_posix(),
+        "scope_bytes": scope_bytes,
+        "archive_bytes": selected.get("archive_bytes"),
+        "program_size": selected.get("program_bytes"),
+        "projected_margin_bytes": TARGET_10_95 - projected_score,
+        "target_score_bytes": TARGET_10_95,
+        "codec_replay_complete": (
+            selected.get("roundtrip_ok") is True
+            and selected.get("deterministic_reencode_ok") is True
+        ),
+    }
+
+
+def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[str, Any]:
+    """Return the strongest source-bound forecast backed by exact evidence.
+
+    Prefix forecasts remain non-constructive. The canonical frontier selection
+    is included explicitly so target revisions cannot leave generated operator
+    views pinned to an older calibration merely because a historical receipt
+    recorded a different target threshold.
     """
 
     candidates = [dict(BASELINE_FORECAST)]
+    canonical = canonical_frontier_forecast_record()
+    if canonical is not None:
+        candidates.append(canonical)
     for path in sorted(results_dir.glob("*/receipt.json")):
         try:
             payload = json.loads(path.read_text())
@@ -422,21 +482,58 @@ def latest_active_cmix_meta() -> tuple[str, pathlib.Path, str] | None:
     return candidate, result_path, f"active cmix meta latest_result: {latest_result}"
 
 
-def active_candidate_context() -> tuple[str, int | None, str]:
-    running = latest_running_gate()
-    if running is not None:
-        candidate, scope, path, _guard = running
-        return candidate, scope, f"running RSS guard receipt: {path.relative_to(ROOT)}"
-    active_cmix = latest_active_cmix_meta()
-    if active_cmix is not None:
-        candidate, _path, source = active_cmix
-        return candidate, None, source
-    if not ACTIVE_CANDIDATE_ID.startswith("cmix21_text_mmap_"):
-        return ACTIVE_CANDIDATE_ID, None, "explicit non-cmix active candidate constant"
-    return ACTIVE_CANDIDATE_ID, None, "fallback active candidate constant"
+def active_candidate_context() -> tuple[str | None, int | None, str]:
+    """Return only a candidate owned by a live adaptive worker.
+
+    Historical ``active`` metadata and persisted guard files are research
+    evidence, not proof that a process is currently running. The operator
+    receipt separately overlays directly observed non-adaptive processes.
+    """
+
+    running_dir = ROOT / "operations" / "adaptive" / "running"
+    for path in sorted(running_dir.glob("*.json")):
+        try:
+            job = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        worker_pid = job.get("worker_pid")
+        candidate = job.get("candidate_id")
+        scope = job.get("gate_size")
+        if (
+            isinstance(worker_pid, bool)
+            or not isinstance(worker_pid, int)
+            or worker_pid <= 0
+            or not isinstance(candidate, str)
+            or not isinstance(scope, int)
+        ):
+            continue
+        try:
+            os.kill(worker_pid, 0)
+            command = [
+                token.decode("utf-8", errors="replace")
+                for token in pathlib.Path(f"/proc/{worker_pid}/cmdline")
+                .read_bytes()
+                .split(b"\0")
+                if token
+            ]
+        except OSError:
+            continue
+        tool = job.get("tool")
+        if isinstance(tool, str):
+            expected_command = str((ROOT / tool).resolve())
+            command_matches = expected_command in command
+        else:
+            expected_command = str((ROOT / "tools" / "candidate_triage.py").resolve())
+            command_matches = expected_command in command and candidate in command
+        if not command_matches:
+            continue
+        return candidate, scope, f"live adaptive worker receipt: {path.relative_to(ROOT)}"
+    return None, None, "no live adaptive worker"
 
 
-def active_gate_scope(program_id: str, active_result: Result | None) -> int | None:
+def active_gate_scope(program_id: str | None, active_result: Result | None) -> int | None:
+    if program_id is None:
+        return None
     scopes = (FULL_INPUT_BYTES, 100_000_000, 10_000_000, 1_000_000, 250_000, 1_024)
     for scope in scopes:
         loaded = latest_gate_guard(program_id, scope)
@@ -575,7 +672,11 @@ def build_top_status(
         )
     )
     active_candidate_id, active_scope_override, active_source = active_candidate_context()
-    active_result = latest_constructive_result(all_rows, active_candidate_id)
+    active_result = (
+        latest_constructive_result(all_rows, active_candidate_id)
+        if active_candidate_id is not None
+        else None
+    )
     active_scope = active_scope_override or active_gate_scope(active_candidate_id, active_result)
     if active_result is not None:
         rows.append(
@@ -605,13 +706,23 @@ def build_top_status(
                 active_source=active_source,
             )
         )
-    else:
+    elif active_candidate_id is not None:
         rows.append(
             top_status_record(
                 "active candidate",
                 "not started",
                 "no constructive result is present for the active candidate",
                 program_id=active_candidate_id,
+                active_source=active_source,
+            )
+        )
+    else:
+        rows.append(
+            top_status_record(
+                "active candidate",
+                "idle",
+                "no live adaptive worker or directly observed scorer is present",
+                program_id=None,
                 active_source=active_source,
             )
         )
@@ -703,7 +814,7 @@ def build_certificate(
         "notes": [
             "Prefix results prove upper bounds only for that prefix, not for enwik9.",
             "Projected 1GB scores are search evidence and are excluded from proof_status.",
-            "A 10.80 proof requires a full 1GB result with score <= 108000000.",
+            "A 10.8000000% proof requires a full 1GB result with score <= 108000000.",
         ],
     }
 
@@ -721,7 +832,7 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
         "## Target",
         "",
         f"- Full input bytes: `{target['input_size']:,}`",
-        f"- 10.95% target score: `{target['target_score_10_95']:,}`",
+        f"- 10.8000000% target score: `{target['target_score_10_95']:,}`",
         f"- Calibrated baseline score: `{target['calibrated_baseline_score']:,}`",
         "- Required net gain from calibrated baseline: "
         f"`{target['required_net_gain_from_calibrated_baseline']:,}` bytes",
@@ -732,7 +843,7 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
         "",
         "- Full-corpus constructive result present: "
         f"`{status['has_full_corpus_constructive_result']}`",
-        "- 10.95 constructive upper bound present: "
+        "- 10.8000000% constructive upper bound present: "
         f"`{status['has_10_95_constructive_upper_bound']}`",
         "",
     ]

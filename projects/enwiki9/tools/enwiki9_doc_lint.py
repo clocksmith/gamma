@@ -533,32 +533,21 @@ def check_status_recent_artifacts(findings: list[Finding]) -> None:
 
 
 def check_organization_audit_snapshot(findings: list[Finding]) -> None:
-    status_path = ROOT / "docs" / "status_receipt.json"
     organization_path = ROOT / "docs" / "organization_audit.md"
-    status = load_json(status_path)
     text = organization_path.read_text() if organization_path.exists() else ""
-    audit = status.get("candidate_audit")
-    if not isinstance(audit, dict):
-        return
-    summary = audit.get("summary")
-    if not isinstance(summary, dict):
-        return
-
-    required_pairs = [
-        ("program directories under programs/", "program_directories"),
-        ("registered programs in index.json", "registered_programs"),
-    ]
-    for label, key in required_pairs:
-        value = summary.get(key)
-        if isinstance(value, int) and f"{label}: {value}" not in text:
-            findings.append(Finding(organization_path, f"snapshot does not match candidate_audit {key}={value}"))
-
-    status_counts = summary.get("candidate_status_counts")
-    if not isinstance(status_counts, dict):
-        return
-    for key, value in sorted(status_counts.items()):
-        if f"{key}: {value}" not in text:
-            findings.append(Finding(organization_path, f"snapshot does not match candidate status {key}={value}"))
+    required_routes = (
+        "candidate_inventory.json",
+        "CANDIDATE_INVENTORY.md",
+        "python3 tools/candidate_audit.py --write",
+    )
+    for route in required_routes:
+        if route not in text:
+            findings.append(
+                Finding(
+                    organization_path,
+                    f"organization audit does not route generated counts through {route}",
+                )
+            )
 
 
 def check_status_handoff(findings: list[Finding]) -> None:

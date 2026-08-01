@@ -13,6 +13,7 @@ import datetime as dt
 import fcntl
 import hashlib
 import json
+import os
 import pathlib
 import re
 import shlex
@@ -709,6 +710,35 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
         job = load_json(path)
         if not job:
             continue
+        worker_pid = job.get("worker_pid")
+        worker_pid_live = False
+        if isinstance(worker_pid, int) and not isinstance(worker_pid, bool) and worker_pid > 0:
+            try:
+                os.kill(worker_pid, 0)
+                command = [
+                    token.decode("utf-8", errors="replace")
+                    for token in pathlib.Path(f"/proc/{worker_pid}/cmdline")
+                    .read_bytes()
+                    .split(b"\0")
+                    if token
+                ]
+            except OSError:
+                worker_pid_live = False
+            else:
+                tool = job.get("tool")
+                if isinstance(tool, str):
+                    expected_command = str((ROOT / tool).resolve())
+                    worker_pid_live = expected_command in command
+                else:
+                    expected_command = str(
+                        (ROOT / "tools" / "candidate_triage.py").resolve()
+                    )
+                    candidate_id = job.get("candidate_id")
+                    worker_pid_live = (
+                        expected_command in command
+                        and isinstance(candidate_id, str)
+                        and candidate_id in command
+                    )
         jobs.append(
             {
                 "job_id": job.get("job_id") or path.stem,
@@ -716,6 +746,8 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
                 "gate_size": job.get("gate_size"),
                 "state": job.get("state"),
                 "started_at": job.get("started_at"),
+                "worker_pid": worker_pid,
+                "worker_pid_live": worker_pid_live,
                 "path": logical_rel(path),
             }
         )
@@ -758,9 +790,13 @@ def gate_liveness_state(
     ]
     driver_observed = observed_gate.get("active_gate_command_observed") is True
     lock_held = heavy_lock.get("held") is True
+    live_worker_job = any(
+        row.get("worker_pid_live") is True for row in matching_jobs
+    )
     live = persisted_running and (
         driver_observed
         or bool(matching_controllers)
+        or live_worker_job
         or (bool(matching_jobs) and lock_held)
     )
     if not persisted_running:
@@ -782,12 +818,13 @@ def gate_liveness_state(
         "matching_driver_observed": driver_observed,
         "matching_controller_count": len(matching_controllers),
         "matching_adaptive_job_count": len(matching_jobs),
+        "matching_adaptive_worker_live": live_worker_job,
         "heavy_lock_held": lock_held,
         "heavy_lock_is_supporting_only": True,
         "claim_rule": (
             "A persisted running receipt is live only with an exact driver, an "
-            "owning controller, or a matching adaptive running job backed by "
-            "the host-local heavy lock. The lock alone never identifies a gate."
+            "owning controller, or a matching adaptive worker PID and command. "
+            "The host-local heavy lock alone never identifies a gate."
         ),
     }
 
@@ -1268,7 +1305,7 @@ def handoff_state(
         "recommended_action": action.get("action"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
-        "claim_rule": "No prefix row proves 10.95%.",
+        "claim_rule": "No prefix row proves the 10.8000000% full-corpus target.",
     }
     if isinstance(apply_command, list):
         out["apply_terminal_command"] = apply_command
@@ -1363,7 +1400,7 @@ def operator_summary_state(
         "command_source": handoff.get("command_source"),
         "has_full_corpus_constructive_result": proof.get("has_full_corpus_constructive_result", False),
         "has_10_95_constructive_upper_bound": proof.get("has_10_95_constructive_upper_bound", False),
-        "claim_rule": "No prefix row proves 10.95%.",
+        "claim_rule": "No prefix row proves the 10.8000000% full-corpus target.",
     }
     if isinstance(max_sampled_single_rss_kib, int):
         summary["max_sampled_single_decimal_10gb_margin_kib"] = DECIMAL_10GB_GUARD_KIB - max_sampled_single_rss_kib
@@ -1409,6 +1446,23 @@ def receipt() -> dict[str, Any]:
             candidate = process_candidate
             if process_scope is not None:
                 scope = process_scope
+        else:
+            running_jobs = adaptive_state.get("running_jobs")
+            live_jobs = (
+                [
+                    row
+                    for row in running_jobs
+                    if isinstance(row, dict) and row.get("worker_pid_live") is True
+                ]
+                if isinstance(running_jobs, list)
+                else []
+            )
+            if live_jobs:
+                candidate = live_jobs[0].get("candidate_id")
+                scope = live_jobs[0].get("gate_size")
+            else:
+                candidate = None
+                scope = None
         gate = gate_state(candidate, scope)
     liveness = gate_liveness_state(
         candidate,
@@ -1458,14 +1512,26 @@ def receipt() -> dict[str, Any]:
         "best_exact_100m": labels.get("best exact 100M"),
         "best_full_1g": labels.get("best full 1G"),
         "best_forecast": labels.get("best forecast"),
-        "active_candidate": None if orphaned else labels.get("active candidate"),
+        "active_candidate": (
+            labels.get("active candidate")
+            if not orphaned and live_candidate is not None
+            else None
+        ),
         "certificate_active_candidate": labels.get("active candidate"),
-        "active_gate": None if orphaned else active_gate_status_state(certificate_active_gate, gate),
+        "active_gate": (
+            active_gate_status_state(certificate_active_gate, gate)
+            if not orphaned and live_candidate is not None
+            else None
+        ),
         "orphaned_gate": (
             active_gate_status_state(certificate_active_gate, gate) if orphaned else None
         ),
         "certificate_active_gate": certificate_active_gate,
-        "next_gate": None if orphaned else (labels.get("next gate") or certificate_active_gate),
+        "next_gate": (
+            (labels.get("next gate") or certificate_active_gate)
+            if not orphaned and live_candidate is not None
+            else None
+        ),
         "blocker": blocker_status_state(certificate_blocker, gate, action),
         "certificate_blocker": certificate_blocker,
         "heavy_lock": heavy_lock,
@@ -1552,7 +1618,7 @@ def render_md(data: dict[str, Any]) -> str:
         "",
         f"- `10.8000000%` target score: `{fmt_int(data.get('target_score_10_95'))}`",
         f"- Full-corpus constructive result present: `{fmt_bool(data.get('has_full_corpus_constructive_result'))}`",
-        f"- `10.95%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
+        f"- `10.8000000%` constructive upper bound present: `{fmt_bool(data.get('has_10_95_constructive_upper_bound'))}`",
         "",
         "## Operator Summary",
         "",
@@ -1648,7 +1714,7 @@ def render_md(data: dict[str, Any]) -> str:
                 f"- Program bytes: `{fmt_int(gate.get('program_size'))}`",
                 f"- Local score: `{fmt_int(gate.get('local_score'))}`",
                 f"- Archive b/B: `{fmt_float(gate.get('archive_bpb'), 7)}`",
-                f"- Required full archive bytes for `10.95%`: `{fmt_int(gate.get('required_full_archive_bytes_for_10_95'))}`",
+                f"- Required full archive bytes for the `10.8000000%` target: `{fmt_int(gate.get('required_full_archive_bytes_for_10_95'))}`",
                 f"- Linear archive projection score: `{fmt_int(gate.get('linear_archive_projection_score'))}`",
                 "- Diagnostic note: `linear projection is not a proof; use it only to compare slope pressure`",
             ]
@@ -1997,7 +2063,9 @@ def render_md(data: dict[str, Any]) -> str:
             f"status `{row.get('status', 'artifact-backed')}`; "
             f"score `{fmt_int(row.get('hutter_score', row.get('projected_score')) )}`"
         )
-    lines.extend(["", "## Claim Rule", "", "No prefix row proves `10.95%`."])
+    lines.extend(
+        ["", "## Claim Rule", "", "No prefix row proves the `10.8000000%` full-corpus target."]
+    )
     lines.append("")
     return "\n".join(lines)
 

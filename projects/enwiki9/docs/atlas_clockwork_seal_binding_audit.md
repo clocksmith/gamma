@@ -1,7 +1,7 @@
 # Atlas-Clockwork Seal-2 Binding Audit
 
 Classification: `ORGANIZER ONLY`
-Audit date: `2026-07-26`
+Audit date: `2026-08-01`
 Decision: `UNBOUND`
 Authorized candidate routes: none
 
@@ -12,9 +12,10 @@ The target is an exact counted score at or below `108,000,000` bytes on exactly
 not establish an exact full-corpus baseline:
 
 - Verified full-1G score: unknown.
-- Planning forecast: `109,524,268`.
-- Forecast-only distance above target: `1,524,268`.
-- Source and arithmetic validation fail because required evidence is missing.
+- Canonical planning forecast: `109,389,323`.
+- Forecast-only distance above target: `1,389,323`.
+- The exact-10M codec and counted package bind that forecast consistently.
+  Exact full-corpus source and arithmetic validation remain absent.
 
 Forecasts cannot discharge a hypothesis-and-margin certificate.
 
@@ -67,7 +68,7 @@ package growth, and official resource sufficiency.
 The canonical map would choose the smallest satisfying dyadic precision and
 lexicographically first factorization. Gamma has no exact under-target
 full-corpus teacher; the best value is a forecast with unqualified runtime and
-failing source validation.
+no exact full-corpus teacher receipt.
 
 ## Route D: rejected
 
@@ -79,6 +80,15 @@ The canonical map would choose the lexicographically first successful matrix at
 minimum depth. The theorem separates an object after low rank is known; it does
 not create low rank or feasible search. General MOIRAI evidence is negative.
 
+The exact timestamp-envelope Q0 tested the strongest surviving constrained
+form on 170 complete-page records. The development-selected 64-bit form lost
+`1,804` gross bits to its matched causal control over all populations, achieved
+only `0.816` development and `0.8387` holdout bounded-search success, cost
+`1.673` times the direct-rank delta payload, and fell to `-9,359.6 B/M` after
+source. Wider 128- and 256-bit objects produced explosive rank expansions.
+All logical roundtrips passed, so the result is a terminal scientific negative
+for this named class rather than an infrastructure failure.
+
 ## Conclusion
 
 All routes are removed from candidate authorization. They remain in the problem
@@ -88,20 +98,26 @@ committed verifier.
 
 ## Operational antecedent work
 
-Two zero-credit proposals are registered through the canonical adaptive
+Three zero-credit dispositions are registered through the canonical adaptive
 workflow:
 
-1. Primary Route C proposal:
+1. Conditional Route C proposal:
    `seal2_route_c_under_target_teacher_v1`. It must first reproduce an exact
    under-target full-corpus teacher, then certify contraction and compile a
    dyadic integer codec within the teacher's measured score slack and official
    resources.
-2. Secondary Route A proposal:
+2. Parked Route A realization:
    `seal2_route_a_paid_predictor_partition_v1`. It must causally encode every
    selector and explanation, transfer chronologically, and pay the complete
    target debt plus package and framing costs under exact joint replay. Its
-   current nine-endpoint, page-granularity realization is retired after
-   negative paid-selector evidence.
+   current nine-endpoint, page-granularity realization is rejected after
+   negative paid-selector evidence; the missing receipt artifacts remain an
+   explicit provenance gap.
+3. Terminal Route D timestamp realization:
+   `seal2_route_d_structural_microblock_v1` is rejected from the exact Q0
+   receipt. Reopening requires a new proposal with a materially different
+   decoder-visible structural class and prototype; a matrix, width, or
+   expansion ladder is excluded.
 
-Neither proposal changes this audit decision. Proposal state, forecasts,
+No proposal changes this audit decision. Proposal state, forecasts,
 teachers, and partial scopes have zero Seal credit.
