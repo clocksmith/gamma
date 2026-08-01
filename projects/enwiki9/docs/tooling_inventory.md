@@ -231,6 +231,8 @@ lanes unless all model/index bytes are counted.
 | `sketch_probe.py` | Sketch-based signal probes. |
 | `random_window_novelty_screen.py` | Runs deterministic selection/confirmation screens for reversible zero-table Wikipedia transforms on disjoint random 500K/1M windows, with matched controls and two proxy backends. |
 | `random_window_fx2_title_echo_gate.py` | Runs a frozen random-window raw/title-echo pair through six serialized, RSS-guarded native FX2/WRT encode/decode/determinism phases. It must own `/tmp/enwiki9-heavy.lock`. |
+| `route_d_timestamp_microblock_gate.py` | Runs the non-heavy, zero-credit exact Route D timestamp-envelope rank/parity Q0 diagnostic with page-disjoint and chronological controls; it does not launch a compressor. |
+| `atlas_clockwork_seal.py` | Builds and verifies the lifecycle-aware private Atlas-Clockwork commitment; it does not authorize distribution unless verification returns `VALID_BOUND`. |
 
 ## Native Codec Prototypes
 

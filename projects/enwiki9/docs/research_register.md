@@ -3201,3 +3201,97 @@ architecture, and do not promote this fragile projection to score credit.
 
 Joint receipt:
 `results/janus_recurrent_quotient_joint_10m_v1/joint/decision.json`
+
+## 2026-08-01: 108 MB control-plane and proposal reconciliation
+
+The generated operator view had diverged from the canonical source-bound
+frontier after the target revision. `docs/hutter_frontier.json` selected
+`endpoint428_gate_dot_fuse_output_update_loop_v1` at a forecast-only
+`109,389,323` bytes, while the operational receipt still exposed older
+`109,524,268` and `110,181,114` planning values. The certificate generator now
+imports the explicit canonical frontier selection and recomputes its signed
+distance against the active `108,000,000` design target. The status receipt
+also stops treating an inactive candidate metadata row as a live gate.
+
+The adaptive queue contained one persisted `running` receipt with no live
+owner and 76 pending gates whose candidates were already retired in the
+canonical inventory. The runner now persists worker PIDs, distinguishes live
+and orphaned running receipts, and supports explicit cancellation of an
+orphaned running receipt. The orphan and all 76 retired-candidate pending jobs
+were cancelled with durable reasons. Twenty-eight pending gates whose current
+inventory status remains `active` or `candidate` were preserved; none was run
+as part of this reconciliation.
+
+Four stale claimed proposals were terminalized:
+
+- `endpoint428_recurrent_fanin64_v1`: its 18-byte 250K gain did not clear the
+  declared 8% runtime gate, and the no-fill successor regressed.
+- `endpoint428_exact_source_runtime_stack_v1`: the exact cell-major successor
+  regressed matched runtime by 1.94%; the emhash-only result is a distinct
+  mechanism and does not rescue this patch stack.
+- `seal2_route_a_paid_predictor_partition_v1`: the register records terminal
+  `+7`- and `+6`-byte gross page oracles with negative paid forms. Its named
+  decision artifacts are missing in this checkout, so the rejection preserves
+  that provenance gap explicitly and gives zero credit.
+- `wrt_link_surface_cmem_shadow_v1`: both external inputs are absent on this
+  host and its declared 200,000-byte expectation cannot independently cover
+  the 1,389,323-byte debt. It is parked as rejected pending a new target-bearing
+  composition with restored hash-bound inputs.
+
+Route C remains claimed but blocked on an independently reproducible exact
+full-1G teacher below `108,000,000` with complete eligibility accounting.
+AF-1 remains a proposed memory substrate; no heavy AF-1 gate is authorized by
+this reconciliation because it has no declared score leverage.
+
+The Atlas-Clockwork commitment now resolves adaptive proposal artifacts across
+lifecycle state, binds the consistent `109,389,323` forecast, and verifies as
+`VALID_UNBOUND`. Candidate distribution remains forbidden.
+
+## 2026-08-01: Seal-2 Route D timestamp-envelope Q0 is terminal negative
+
+Candidate: `seal2_route_d_timestamp_microblock_rank_q0_v1`
+
+The exact Q0 selected one named structural class: the 20-byte MediaWiki
+revision timestamp followed by its 12-byte closing tag. Each object used the
+previous chronologically decoded timestamp envelope as its prototype. The
+frozen 1M population contained 171 complete timestamp pages and 170 coded
+records, split into development pages, page-index-mod-5 holdout pages, and a
+chronological offset beginning at raw byte 800,000. Widths 8, 16, and 32 bytes
+were evaluated; development selected 8 bytes.
+
+Exact direct rank/unrank, explicit byte edits, matched causal arithmetic
+coding, deterministic nested parity rows, bounded first-hit reconstruction,
+and literal fallback all roundtripped. The receipt reproduced byte-for-byte on
+an independent second execution.
+
+The selected 8-byte aggregate was decisively negative:
+
+```text
+matched causal control:                 2,098 bits
+parity plus mode/depth/fallback:         3,902 bits
+gross delta versus causal:             -1,804 bits
+direct-rank Elias-delta payload:         2,332 bits
+parity/direct payload ratio:              1.673
+development bounded-search success:       0.816
+holdout bounded-search success:           0.8387
+offset bounded-search success:             1.000
+compressed candidate plus gate source: 8,976 bytes
+paid rate after source:             -9,359.602 B/M
+```
+
+Every split lost gross bytes to the causal control. The 128- and 256-bit forms
+had only 13.6%/16.1%/7.1% and 10.4%/9.7%/0% bounded success across
+development/holdout/offset, with true-rank expansion counts growing far beyond
+the fixed 65,536 budget.
+
+Decision: retire this timestamp class and reject the unchanged general Route D
+proposal. Do not run a width, matrix, parity-depth, or expansion ladder. A
+successor must be a new proposal naming a materially different decoder-visible
+structural class and prototype. Score and Seal credit remain zero.
+
+Evidence:
+
+- `programs/seal2_route_d_timestamp_microblock_rank_q0_v1/`
+- `tools/route_d_timestamp_microblock_gate.py`
+- `results/seal2_route_d_timestamp_microblock_rank_q0_v1/decision.json`
+- `run_logs/adaptive/20260801T181822Z_366e35e4df.log`

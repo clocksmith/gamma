@@ -17,7 +17,7 @@ STATUS = OPS / "binding_status.json"
 COMMITMENT = OPS / "commitment.json"
 ROUTES = ("A", "B", "C", "D")
 ROUTE_FILES = {r: OPS / f"route-{r.lower()}.rejection.json" for r in ROUTES}
-FROZEN = (
+FROZEN_STATIC = (
     ROOT / "docs" / "atlas_clockwork_seal_problem_set.md",
     ROOT / "docs" / "atlas_clockwork_seal_specification.md",
     ROOT / "docs" / "atlas_clockwork_seal_rubric.md",
@@ -26,24 +26,37 @@ FROZEN = (
     STATUS,
     OPS / "route-binding.schema.json",
     *ROUTE_FILES.values(),
-    ROOT
-    / "operations"
-    / "adaptive"
-    / "proposals"
-    / "proposed"
-    / "881_seal2_route_c_under_target_teacher_v1.json",
-    ROOT
-    / "operations"
-    / "adaptive"
-    / "proposals"
-    / "proposed"
-    / "929_seal2_route_a_paid_predictor_partition_v1.json",
     Path(__file__).resolve(),
 )
+PROPOSAL_FILENAMES = (
+    "881_seal2_route_c_under_target_teacher_v1.json",
+    "929_seal2_route_a_paid_predictor_partition_v1.json",
+)
+PROPOSAL_STATES = ("proposed", "claimed", "developed", "rejected")
 
 
 class SealError(RuntimeError):
     pass
+
+
+def frozen_paths() -> tuple[Path, ...]:
+    """Resolve lifecycle-moved proposal artifacts without weakening the seal."""
+
+    proposal_root = ROOT / "operations" / "adaptive" / "proposals"
+    resolved: list[Path] = []
+    for filename in PROPOSAL_FILENAMES:
+        matches = [
+            proposal_root / state / filename
+            for state in PROPOSAL_STATES
+            if (proposal_root / state / filename).is_file()
+        ]
+        if len(matches) != 1:
+            raise SealError(
+                f"expected exactly one lifecycle artifact for {filename}; "
+                f"found {len(matches)}"
+            )
+        resolved.append(matches[0])
+    return (*FROZEN_STATIC, *resolved)
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -160,7 +173,7 @@ def build() -> dict[str, Any]:
             route: digest(canonical(decision))
             for route, decision in decisions.items()
         },
-        "artifacts": [artifact(path) for path in FROZEN],
+        "artifacts": [artifact(path) for path in frozen_paths()],
     }
     value["commitment_sha256"] = digest(canonical(value))
     COMMITMENT.write_text(
@@ -185,7 +198,7 @@ def verify(require_bound: bool) -> dict[str, Any]:
     }
     if manifest.get("route_decision_sha256") != route_hashes:
         raise SealError("route decision hash drift")
-    if manifest.get("artifacts") != [artifact(path) for path in FROZEN]:
+    if manifest.get("artifacts") != [artifact(path) for path in frozen_paths()]:
         raise SealError("artifact hash, size, order, or path drift")
     if require_bound and status["activation_status"] != "BOUND":
         raise SealError("Seal is integrity-valid but UNBOUND")

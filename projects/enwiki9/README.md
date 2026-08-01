@@ -182,7 +182,7 @@ To rebuild from existing historical result JSONs:
 python3 projects/enwiki9/tools/backfill_run_ledger.py --overwrite
 ```
 
-For long-running or repeated candidate workflows, include these on invocation so
+For persistent or repeated candidate workflows, include these on invocation so
 repeat and verification passes stay distinguishable in the ledger:
 
 ```bash

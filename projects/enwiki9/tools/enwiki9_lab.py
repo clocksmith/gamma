@@ -633,6 +633,53 @@ def resource_ready(*, min_free_mib: int, max_load: float) -> tuple[bool, dict[st
     }
 
 
+def pid_is_alive(value: Any) -> bool:
+    """Return whether a persisted worker PID still names a live process."""
+
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        return False
+    try:
+        os.kill(value, 0)
+    except (OSError, ProcessLookupError):
+        return False
+    return True
+
+
+def worker_pid_matches_job(job: dict[str, Any]) -> bool:
+    """Require the live PID to still execute the command claimed by the job."""
+
+    worker_pid = job.get("worker_pid")
+    if not pid_is_alive(worker_pid):
+        return False
+    try:
+        command = [
+            token.decode("utf-8", errors="replace")
+            for token in pathlib.Path(f"/proc/{worker_pid}/cmdline").read_bytes().split(b"\0")
+            if token
+        ]
+    except OSError:
+        return False
+    tool = job.get("tool")
+    if isinstance(tool, str):
+        expected_path = str((ROOT / tool).resolve())
+        return expected_path in command
+    expected_triage = str(TRIAGE.resolve())
+    candidate_id = job.get("candidate_id")
+    return (
+        expected_triage in command
+        and isinstance(candidate_id, str)
+        and candidate_id in command
+    )
+
+
+def running_job_liveness(job: dict[str, Any]) -> str:
+    """Classify a running receipt from its persisted worker identity."""
+
+    if worker_pid_matches_job(job):
+        return "live"
+    return "orphaned"
+
+
 def claim_jobs(
     limit: int, candidate_ids: set[str] | None = None
 ) -> list[tuple[pathlib.Path, dict[str, Any]]]:
@@ -716,21 +763,24 @@ def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, An
     with log_path.open("w") as log:
         log.write(json.dumps({"job": job, "command": command}, sort_keys=True) + "\n")
         log.flush()
-        process = subprocess.run(
+        process = subprocess.Popen(
             command,
             cwd=ROOT,
             stdout=log,
             stderr=subprocess.STDOUT,
-            check=False,
         )
+        job["worker_pid"] = process.pid
+        job["worker_started_at"] = utc_now()
+        atomic_json(running_path, job)
+        returncode = process.wait()
     elapsed = round(time.monotonic() - started, 3)
-    final_state = "completed" if process.returncode == 0 else "failed"
+    final_state = "completed" if returncode == 0 else "failed"
     job.update(
         {
             "state": final_state,
             "finished_at": utc_now(),
             "elapsed_seconds": elapsed,
-            "returncode": process.returncode,
+            "returncode": returncode,
             "log_path": log_path.relative_to(ROOT).as_posix(),
         }
     )
@@ -817,11 +867,17 @@ def status_payload() -> dict[str, Any]:
     rows = iter_jobs()
     counts = {state: 0 for state in QUEUE_STATES}
     active: list[dict[str, Any]] = []
+    orphaned: list[dict[str, Any]] = []
     latest: list[dict[str, Any]] = []
     for state, _path, job in rows:
         counts[state] += 1
         if state == "running":
-            active.append(job)
+            row = copy.deepcopy(job)
+            row["worker_liveness"] = running_job_liveness(job)
+            if row["worker_liveness"] == "live":
+                active.append(row)
+            else:
+                orphaned.append(row)
         elif state in {"completed", "failed"}:
             latest.append(job)
     latest.sort(key=lambda row: str(row.get("finished_at", "")), reverse=True)
@@ -834,26 +890,43 @@ def status_payload() -> dict[str, Any]:
         "generated_at": utc_now(),
         "counts": counts,
         "active_jobs": active,
+        "orphaned_running_jobs": orphaned,
         "latest_terminal_jobs": latest[:10],
         "resources": resources,
         "resource_probe_ok": ready,
     }
 
 
-def cancel_job(job_id: str) -> dict[str, Any]:
-    for path in QUEUE_DIRS["pending"].glob("*.json"):
-        try:
-            job = load_json(path)
-        except Exception:
-            continue
-        if job.get("job_id") != job_id:
-            continue
-        job["state"] = "cancelled"
-        job["cancelled_at"] = utc_now()
-        atomic_json(path, job)
-        os.replace(path, QUEUE_DIRS["cancelled"] / path.name)
-        return job
-    raise ValueError(f"pending job not found: {job_id}")
+def cancel_job(
+    job_id: str,
+    *,
+    reason: str,
+    allow_running: bool,
+) -> dict[str, Any]:
+    states = ("pending", "running") if allow_running else ("pending",)
+    for state in states:
+        for path in QUEUE_DIRS[state].glob("*.json"):
+            try:
+                job = load_json(path)
+            except Exception:
+                continue
+            if job.get("job_id") != job_id:
+                continue
+            if state == "running" and running_job_liveness(job) == "live":
+                raise ValueError(
+                    f"running job still owns live worker PID {job.get('worker_pid')}"
+                )
+            job["state_before_cancel"] = state
+            job["state"] = "cancelled"
+            job["cancelled_at"] = utc_now()
+            job["cancellation_reason"] = reason
+            if state == "running":
+                job["stale_running_reconciled"] = True
+            atomic_json(path, job)
+            os.replace(path, QUEUE_DIRS["cancelled"] / path.name)
+            return job
+    qualifier = "pending or orphaned running" if allow_running else "pending"
+    raise ValueError(f"{qualifier} job not found: {job_id}")
 
 
 def add_enqueue_options(parser: argparse.ArgumentParser) -> None:
@@ -993,8 +1066,17 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser("status", help="show durable queue and worker state")
 
-    cancel = subparsers.add_parser("cancel", help="cancel a pending job")
+    cancel = subparsers.add_parser(
+        "cancel",
+        help="cancel a pending job or reconcile an orphaned running receipt",
+    )
     cancel.add_argument("job_id")
+    cancel.add_argument("--reason", default="operator_cancelled")
+    cancel.add_argument(
+        "--allow-running",
+        action="store_true",
+        help="also cancel a running receipt when its persisted worker PID is not live",
+    )
 
     subparsers.add_parser("refresh", help="refresh inventories and reports")
     return parser
@@ -1156,7 +1238,17 @@ def main() -> int:
             print(json.dumps(status_payload(), indent=2, sort_keys=True))
             return 0
         if args.command == "cancel":
-            print(json.dumps(cancel_job(args.job_id), indent=2, sort_keys=True))
+            print(
+                json.dumps(
+                    cancel_job(
+                        args.job_id,
+                        reason=args.reason,
+                        allow_running=args.allow_running,
+                    ),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
             return 0
         if args.command == "refresh":
             print(json.dumps(refresh_views(), indent=2, sort_keys=True))
