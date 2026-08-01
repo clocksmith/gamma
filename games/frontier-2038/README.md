@@ -120,7 +120,10 @@ npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/prere
 
 ## Optional CLI automation
 
-Claude and Codex decision scripts accept the shared decision packet:
+Claude and Codex decision scripts receive the shared decision packet. Their
+provider-facing legal IDs are short deterministic aliases; the caller maps the
+selected alias back to the packet's canonical legal decision before state can
+change.
 
 ```bash
 npm run strategy:claude -- --input lab/fixtures/decision-packet.example.json

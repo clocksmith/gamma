@@ -7,7 +7,9 @@ import { fileURLToPath } from "node:url";
 import { ClaudeCliCaller, CodexCliCaller } from "../lab/callers/index.js";
 import {
   buildDecisionPrompt,
+  buildProviderDecisionPrompt,
   validateDecisionPacket,
+  validateProviderDecisionResponse,
   validateDecisionResponse
 } from "../lab/contracts/decision-contract.js";
 import { DecisionCache } from "../lab/policies/decision-cache.js";
@@ -36,6 +38,20 @@ test("decision packets enumerate unique legal choices", () => {
   assert.throws(
     () => validateDecisionResponse(packet, { decisionId: "invented_action" }),
     /illegal decisionId/
+  );
+});
+
+test("provider prompts use short legal aliases and resolve them to canonical decisions", () => {
+  const { aliases, prompt } = buildProviderDecisionPrompt(packet);
+  assert.match(prompt, /choice-02/);
+  assert.doesNotMatch(prompt, /research_stop_3_frontier/);
+  assert.deepEqual(
+    validateProviderDecisionResponse(packet, { decisionId: "choice-02" }, aliases),
+    { decisionId: "research_stop_3_frontier" }
+  );
+  assert.throws(
+    () => validateProviderDecisionResponse(packet, { decisionId: "choice-99" }, aliases),
+    /illegal choice alias/
   );
 });
 
@@ -102,7 +118,7 @@ test("provider decisions outside the legal set fail closed", async () => {
     env: { FAKE_DECISION_ID: "not_legal" },
     timeoutMs: 5000
   });
-  await assert.rejects(() => caller.decide(packet), /illegal decisionId/);
+  await assert.rejects(() => caller.decide(packet), /illegal choice alias/);
 });
 
 test("missing formal responses use the rulebook reject or pass default", async () => {
@@ -319,6 +335,7 @@ test("strict LLM evidence rejects historical fallback cache entries", async () =
       backend: "codex",
       model: "fixture-model",
       reasoningEffort: "low",
+      decisionProtocolVersion: "canonical-decision-id-v1",
       packet: {
         ...structuredClone(packet),
         strategy: promptProfile

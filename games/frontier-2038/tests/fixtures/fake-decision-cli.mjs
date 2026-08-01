@@ -4,8 +4,10 @@ const args = process.argv.slice(2);
 const input = [];
 for await (const chunk of process.stdin) input.push(chunk);
 
+const prompt = Buffer.concat(input).toString("utf8");
+const providerPacket = JSON.parse(prompt.split("DECISION_PACKET\n").at(-1));
 const decision = {
-  decisionId: process.env.FAKE_DECISION_ID || "research_stop_3_frontier",
+  decisionId: process.env.FAKE_DECISION_ID || providerPacket.legalDecisions[1].decisionId,
   rationale: "Fixture provider selected a legal decision.",
   confidence: 0.75
 };

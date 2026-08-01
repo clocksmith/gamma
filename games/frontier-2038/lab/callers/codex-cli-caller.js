@@ -2,7 +2,11 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildDecisionPrompt, validateDecisionResponse } from "../contracts/decision-contract.js";
+import {
+  buildProviderDecisionPrompt,
+  providerDecisionProtocolVersion,
+  validateProviderDecisionResponse
+} from "../contracts/decision-contract.js";
 import {
   attachProviderFailure,
   extractDecisionCandidate,
@@ -27,9 +31,11 @@ export class CodexCliCaller {
     this.reasoningEffort = reasoningEffort;
     this.env = env;
     this.timeoutMs = timeoutMs;
+    this.decisionProtocolVersion = providerDecisionProtocolVersion;
   }
 
   invocation(packet, temporaryDirectory, outputPath, { redactPrompt = false } = {}) {
+    const providerPrompt = buildProviderDecisionPrompt(packet);
     const args = [
       ...this.prefixArgs,
       "exec",
@@ -56,7 +62,8 @@ export class CodexCliCaller {
     return {
       command: this.command,
       args,
-      input: redactPrompt ? "<decision-prompt>" : buildDecisionPrompt(packet)
+      input: redactPrompt ? "<decision-prompt>" : providerPrompt.prompt,
+      aliases: providerPrompt.aliases
     };
   }
 
@@ -82,9 +89,10 @@ export class CodexCliCaller {
         signal
       });
       const text = await readFile(outputPath, "utf8").catch(() => result.stdout);
-      const decision = validateDecisionResponse(
+      const decision = validateProviderDecisionResponse(
         packet,
-        extractDecisionCandidate(parseJsonText(text, "Codex CLI"), "Codex CLI")
+        extractDecisionCandidate(parseJsonText(text, "Codex CLI"), "Codex CLI"),
+        invocation.aliases
       );
       return {
         decision,
