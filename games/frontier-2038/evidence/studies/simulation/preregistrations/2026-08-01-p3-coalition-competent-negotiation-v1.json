@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "id": "p3-coalition-competent-negotiation-v1",
+  "registeredBeforeResults": true,
+  "question": "Does legal, competent negotiation and explicit follow-through close Coalition Lab's three-player deficit without changing canonical rules?",
+  "sourceEvidence": [
+    "2026-08-01-p3-coalition-strict-llm",
+    "2026-08-01-coalition-deal-flow-ablation"
+  ],
+  "purpose": "strict_llm_policy_isolation",
+  "playerCount": 3,
+  "runsPerArm": 1,
+  "totalExpandedComparisons": 30,
+  "maximumCompleteGamesPerLook": 60,
+  "seed": "frontier-2038-p3-coalition-competent-negotiation-2026-08-01-v1-look-1",
+  "confirmationSeed": "frontier-2038-p3-coalition-competent-negotiation-2026-08-01-v1-look-2",
+  "mandateMode": "variable",
+  "rulesVariant": {},
+  "model": "gpt-5.6-terra",
+  "reasoningEffort": "xhigh",
+  "workers": 8,
+  "llmConcurrency": 8,
+  "providerConcurrency": {
+    "codex": 8
+  },
+  "llmRetries": 1,
+  "sampleReplays": 1,
+  "allowLlm": true,
+  "maximumLlmDecisions": null,
+  "fallback": false,
+  "frozenFactors": {
+    "focalPolicyProfile": "balanced_operator",
+    "opponentProfiles": ["capability_rusher", "trust_governor"],
+    "opponentBackends": ["weighted", "weighted"],
+    "focalBackend": "codex",
+    "model": "gpt-5.6-terra",
+    "reasoningEffort": "xhigh",
+    "promptProtocol": "choice-alias-v1",
+    "mandateMode": "variable",
+    "rulesVariant": {},
+    "fallback": false
+  },
+  "promptLibrary": {
+    "coalition_baseline": "Play Coalition Lab to maximize final Mandate using its canonical Deal Flow, Board Reshuffle, Strategic Partnership, and Wildcard Governance abilities. Negotiate only through legal offers and decisions, and treat every ability as optional when using it would worsen the final position.",
+    "coalition_follow_through": "Play Coalition Lab to maximize final Mandate using its canonical Deal Flow, Board Reshuffle, Strategic Partnership, and Wildcard Governance abilities. Maintain an internal ledger of offers made, offers accepted, obligations, legal fulfillment windows, resources gained through Deal Flow, intended resource spends, and the Mandate target each spend supports. Make a promise only when a legal fulfillment path is visible. When that window opens, prefer fulfillment unless the current public state shows that fulfillment would clearly cost more final Mandate than it preserves. Treat trades and Runway as means: before each decision, identify the legal sequence that converts them into Trust, infrastructure, Customers, Capability, or another scored Mandate source.",
+    "platform_objective": "Play Platform Empire to maximize final Mandate using its canonical Installed Base, Year of Efficiency, Open Ecosystem, and Social Graph abilities. Convert free or remote deployment tempo into scored Customers and Trust while respecting every legal timing window.",
+    "imperial_objective": "Play Imperial Research Lab to maximize final Mandate using its canonical Scientific Method, Call the Parent Board, Nobel Effect, and Scaling-Law Breakthrough abilities. Convert protected Training Runs, resources, Capability, and Trust into scored Mandate while respecting every legal timing window.",
+    "vertical_objective": "Play Vertical Empire to maximize final Mandate using its canonical Industrial Velocity, Move Fast, Own the Feed, and Orbital Compute abilities. Convert realized Build discounts, powered infrastructure, mobility, and production into scored Mandate while respecting every legal timing window.",
+    "safety_objective": "Play Safety Laboratory to maximize final Mandate using its canonical Constitutional Training, Responsible Scaling, Audited Deployment, and Emergency Pause abilities. Convert Safety, Trust, controlled Scrutiny, and deployment into scored Mandate while respecting every legal timing window.",
+    "foundry_objective": "Play Foundry to maximize final Mandate using its canonical Shovels, Allocation Window, New Architecture, and Everybody Gets a GPU abilities. Convert rival demand, sales, Runway, Compute, and controlled Scrutiny into scored Mandate while respecting every legal timing window."
+  },
+  "comparisonMatrix": {
+    "playerCount": 3,
+    "focalFactionId": "coalition_lab",
+    "comparatorFactionIds": [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    "focalSeats": [0, 1, 2],
+    "policyArms": [
+      {
+        "id": "baseline",
+        "leftPromptId": "coalition_baseline"
+      },
+      {
+        "id": "follow_through",
+        "leftPromptId": "coalition_follow_through"
+      }
+    ],
+    "opponentFactionCycle": [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    "focalProfileId": "balanced_operator",
+    "opponentProfileIds": ["capability_rusher", "trust_governor"],
+    "focalBackend": "codex",
+    "rightPromptIdsByFaction": {
+      "platform_empire": "platform_objective",
+      "imperial_research_lab": "imperial_objective",
+      "vertical_empire": "vertical_objective",
+      "safety_laboratory": "safety_objective",
+      "foundry": "foundry_objective"
+    }
+  },
+  "telemetry": {
+    "requiredChain": [
+      "offer",
+      "acceptance",
+      "promise",
+      "fulfillment",
+      "deal_flow_value",
+      "resource_spend",
+      "mandate_source",
+      "outcome"
+    ],
+    "requiredOutcomes": [
+      "win_credit_delta",
+      "mandate_delta",
+      "rank_advantage",
+      "accepted_trades",
+      "promise_fulfillment_rate",
+      "deal_flow_value_per_opportunity",
+      "resource_to_mandate_conversion",
+      "seat_interaction",
+      "opponent_faction_interaction"
+    ]
+  },
+  "sequentialPlan": {
+    "looks": [
+      {
+        "id": "look_1",
+        "seed": "frontier-2038-p3-coalition-competent-negotiation-2026-08-01-v1-look-1",
+        "maximumCompleteGames": 60,
+        "twoSidedAlpha": 0.02
+      },
+      {
+        "id": "look_2_if_required",
+        "seed": "frontier-2038-p3-coalition-competent-negotiation-2026-08-01-v1-look-2",
+        "maximumAdditionalCompleteGames": 60,
+        "twoSidedAlpha": 0.03
+      }
+    ],
+    "primaryEstimator": "Across the 15 comparator-by-seat seed groups, calculate follow-through minus baseline for the Coalition-minus-comparator paired Mandate delta. Keep matchIndex aligned within a look and never pool quarantined pairs.",
+    "precisionGate": "At each look, compute two-sided Student-t intervals over the 15 seed-group-level follow-through-minus-baseline contrasts, using that look's preassigned alpha. Require half-width at most 2 Mandate and at most 0.25 rank for the aggregate follow-through effect. Report comparator and seat families descriptively with multiplicity labels. If look 1 misses precision or its interval intersects either zero or the 4-Mandate practical threshold, run the registered confirmation look. At look 2, pool seed-group contrasts across both independent seeds and use the second alpha allocation; do not repeatedly inspect within a look.",
+    "practicalEffectGate": "Call legal follow-through materially corrective only when baseline Coalition-minus-comparator mean Mandate is negative, follow-through improves that contrast by at least 4 Mandate, the follow-through contrast is at least -1 Mandate, mean rank does not worsen, and no comparator family worsens by more than 2 Mandate.",
+    "persistentWeaknessGate": "Call the qualitative warning persistent only when Deal Flow is exercised, follow-through measurably increases fulfillment or resource conversion, and Coalition remains at least 4 Mandate behind in the aggregate follow-through contrast with no seat reversal that explains the result.",
+    "mixedGate": "Any prompt effect that changes sign materially by seat or comparator, fails the precision gate, or improves behavior without improving outcome is mixed and cannot nominate a rule."
+  },
+  "guardPlan": {
+    "trigger": "Run only if the practicalEffectGate passes after the permitted sequential looks.",
+    "runsPerArm": 1,
+    "model": "gpt-5.6-terra",
+    "reasoningEffort": "xhigh",
+    "fields": [
+      {
+        "id": "p4_guard",
+        "playerCount": 4,
+        "seed": "frontier-2038-coalition-competent-negotiation-2026-08-01-v1-p4-guard",
+        "maximumCompleteGames": 32,
+        "comparisonMatrix": {
+          "playerCount": 4,
+          "focalFactionId": "coalition_lab",
+          "comparatorFactionIds": ["imperial_research_lab", "safety_laboratory"],
+          "focalSeats": [0, 1, 2, 3],
+          "policyArms": [
+            {"id": "baseline", "leftPromptId": "coalition_baseline"},
+            {"id": "follow_through", "leftPromptId": "coalition_follow_through"}
+          ],
+          "opponentFactionCycle": ["platform_empire", "imperial_research_lab", "vertical_empire", "safety_laboratory", "foundry"],
+          "focalProfileId": "balanced_operator",
+          "opponentProfileIds": ["capability_rusher", "trust_governor", "power_broker"],
+          "focalBackend": "codex",
+          "rightPromptIdsByFaction": {
+            "imperial_research_lab": "imperial_objective",
+            "safety_laboratory": "safety_objective"
+          }
+        }
+      },
+      {
+        "id": "p5_guard",
+        "playerCount": 5,
+        "seed": "frontier-2038-coalition-competent-negotiation-2026-08-01-v1-p5-guard",
+        "maximumCompleteGames": 40,
+        "comparisonMatrix": {
+          "playerCount": 5,
+          "focalFactionId": "coalition_lab",
+          "comparatorFactionIds": ["imperial_research_lab", "safety_laboratory"],
+          "focalSeats": [0, 1, 2, 3, 4],
+          "policyArms": [
+            {"id": "baseline", "leftPromptId": "coalition_baseline"},
+            {"id": "follow_through", "leftPromptId": "coalition_follow_through"}
+          ],
+          "opponentFactionCycle": ["platform_empire", "imperial_research_lab", "vertical_empire", "safety_laboratory", "foundry"],
+          "focalProfileId": "balanced_operator",
+          "opponentProfileIds": ["capability_rusher", "trust_governor", "power_broker", "agi_candidate"],
+          "focalBackend": "codex",
+          "rightPromptIdsByFaction": {
+            "imperial_research_lab": "imperial_objective",
+            "safety_laboratory": "safety_objective"
+          }
+        }
+      }
+    ],
+    "rule": "The follow-through policy must not create a comparator-relative Coalition gain larger than 5 Mandate or 0.5 rank at either supported guard count. Guard failure means the prompt is over-specialized and the result cannot be used to clear the rules."
+  },
+  "validity": {
+    "quarantine": [
+      "any policy fallback",
+      "malformed provider response",
+      "incomplete match",
+      "provider failure after registered retries",
+      "source-dirty launch",
+      "launch-identity mismatch",
+      "rules, engine, model, reasoning, prompt, or seed mismatch"
+    ],
+    "interpretationBoundary": "This is strict LLM policy-isolation evidence. It does not estimate population faction win rates and cannot promote a rule. Every focal faction receives the same model and reasoning capability plus a canonical faction-specific objective. The only Coalition policy difference is explicit follow-through guidance.",
+    "decision": "If competent follow-through closes the deficit and passes four/five-player guards, fix the authored policy and teaching/evaluation harness, not the rules. If Deal Flow activates, resources are spent through legal scoring paths, and Coalition remains weak across seats and comparators, preregister one narrow deterministic scoring-conversion lever."
+  },
+  "execution": {
+    "look1Command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-p3-coalition-competent-negotiation-v1.json --allow-llm --workers 8 --llm-concurrency 8 --codex-concurrency 8 --llm-retries 1 --output evidence/studies/simulation/2026-08-01-p3-coalition-competent-negotiation-v1.look-1.raw.json",
+    "look2CommandIfRequired": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-p3-coalition-competent-negotiation-v1.json --allow-llm --workers 8 --llm-concurrency 8 --codex-concurrency 8 --llm-retries 1 --seed frontier-2038-p3-coalition-competent-negotiation-2026-08-01-v1-look-2 --output evidence/studies/simulation/2026-08-01-p3-coalition-competent-negotiation-v1.look-2.raw.json"
+  }
+}

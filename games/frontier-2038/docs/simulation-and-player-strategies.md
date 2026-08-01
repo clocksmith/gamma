@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.31` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.31-test`
+**Executable game:** `0.8.32` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.32-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -276,6 +276,15 @@ After configured retries, the affected paired match is quarantined and
 excluded from the paired aggregate. Reports retain requested and actual worker
 counts, provider/model/reasoning profiles, concurrency, retry and throttle
 counts, quarantine reasons, ordered receipts, and any requested replay.
+
+Registered isolation matrices may use a `promptLibrary` plus arm-specific
+prompt ids. The runner appends the resolved text to the named seat's strategy
+objectives, includes it in the strategy and launch fingerprints, and records
+the resolved left/right treatment in the report. A shared `seedGroup` holds
+board and deck randomness constant across registered policy treatments even
+when their comparison ids differ. `comparisonMatrix` expands faction, seat,
+and policy rotations deterministically; the expanded comparisons are retained
+in the report preregistration.
 
 The Lab exposes the same controls under **Preregistered faction swap**. Its
 execution summary reports active CPU workers, peak LLM calls, provider

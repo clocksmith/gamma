@@ -21,9 +21,12 @@ if (!args.comparisons) {
 const registration = JSON.parse(await readFile(args.comparisons, "utf8"));
 const report = await runFactionSwapDiagnostic({
   comparisons: registration.comparisons,
+  comparisonMatrix: registration.comparisonMatrix,
   runsPerArm: Number(args["runs-per-arm"] || registration.runsPerArm),
   playerCount: Number(args.players || registration.playerCount),
   profileIds: registration.profileIds,
+  promptAddenda: registration.promptAddenda,
+  promptLibrary: registration.promptLibrary,
   backends: registration.backends,
   mandateMode: registration.mandateMode,
   rulesVariant: registration.rulesVariant,
