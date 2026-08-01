@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "seal2_route_e_state_preserving_prototype_bypass_decision.schema.json",
+  "title": "Seal-2 Route E state-preserving prototype bypass Q0 decision",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "candidate_id",
+    "evidence_level",
+    "inputs",
+    "population",
+    "format",
+    "controls",
+    "source_accounting",
+    "gates",
+    "decision",
+    "score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "seal2_route_e_state_preserving_prototype_bypass_q0_v1"
+    },
+    "candidate_id": {
+      "const": "seal2_route_e_state_preserving_prototype_bypass_q0_v1"
+    },
+    "evidence_level": {
+      "const": "zero_credit_exact_state_preserving_bypass_diagnostic"
+    },
+    "inputs": {"type": "object"},
+    "population": {"type": "object"},
+    "format": {"type": "object"},
+    "controls": {
+      "type": "object",
+      "required": ["E0", "E1", "E2", "ER"],
+      "properties": {
+        "E0": {"$ref": "#/$defs/control"},
+        "E1": {"$ref": "#/$defs/control"},
+        "E2": {"$ref": "#/$defs/control"},
+        "ER": {"$ref": "#/$defs/control"}
+      }
+    },
+    "source_accounting": {"type": "object"},
+    "gates": {"type": "object"},
+    "decision": {
+      "type": "object",
+      "required": ["promotion_authorized", "verdict", "failed_conditions"]
+    },
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "control": {
+      "type": "object",
+      "required": [
+        "archive_bytes",
+        "command_bytes",
+        "literal_payload_bytes",
+        "command_roundtrip_ok",
+        "wrt_roundtrip_ok",
+        "deterministic_archive_ok"
+      ]
+    }
+  }
+}

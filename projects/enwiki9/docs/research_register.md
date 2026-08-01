@@ -3295,3 +3295,115 @@ Evidence:
 - `tools/route_d_timestamp_microblock_gate.py`
 - `results/seal2_route_d_timestamp_microblock_rank_q0_v1/decision.json`
 - `run_logs/adaptive/20260801T181822Z_366e35e4df.log`
+
+## 2026-08-01: Seal-2 Route E state-preserving prototype bypass claimed
+
+Candidate: `seal2_route_e_state_preserving_prototype_bypass_q0_v1`
+
+Route E introduces a new coding operation rather than another endpoint,
+calibration, table, or width sweep. Selected exact WRT spans are reconstructed
+from one earlier complete page and omitted from the arithmetic truth stream,
+while every reconstructed bit remains part of the parent predictor update
+trajectory. Q0 uses the exact endpoint428 P1 trace to price the literal stream;
+native predictor-state identity remains a later proof obligation.
+
+This is materially different from the terminal explicit-copy screen. That
+screen paid independent exact-copy positions and found only 219.52 optimistic
+bytes before the omitted position stream. Route E amortizes one prior-page
+prototype across multiple separated copy intervals with literal holes, pays a
+complete finite command stream, constructs the actual residual arithmetic
+payload, and compares against exact-repeat and rotated-prototype controls.
+
+The frozen opening-1M gate requires at least 3,000 B/M gross and 2,100 B/M
+after full-corpus source amortization, exact parent replay, command/WRT/raw
+roundtrips, byte-identical archive reconstruction, a strict win over E1 and
+ER, and positive exact selection and sealed-confirmation signs. Any miss
+retires the unchanged single-prototype prior-page mechanism without parameter
+or prototype-count sweeps.
+
+Plan and schema:
+
+- `docs/seal2_route_e_state_preserving_prototype_bypass_plan.md`
+- `docs/seal2_route_e_state_preserving_prototype_bypass_decision.schema.json`
+
+## 2026-08-01: Seal-2 Route E single-prototype bypass is terminal negative
+
+Candidate: `seal2_route_e_state_preserving_prototype_bypass_q0_v1`
+
+The frozen exact opening-1M Q0 searched all 171 complete chronological pages
+and every one of the 14,535 legal earlier-page prototype pairs. For each pair,
+it enumerated exact WRT matches with a reversed suffix automaton, allowed every
+copy-prefix length of at least eight bytes, and solved the alternating
+COPY/LITERAL selection by exact dynamic programming against integer parent
+qbits and canonical ULEB command bytes.
+
+No page retained a positive plan after paying its target-page framing,
+prototype reference, and copy commands. E1, E2, and rotated ER therefore all
+fell back to a four-byte empty command stream and the complete parent literal
+payload:
+
+```text
+parent E0 archive:                     173,896 bytes
+E1 exact-repeat archive:               173,911 bytes
+E2 aligned-prototype archive:          173,911 bytes
+ER rotated-prototype archive:          173,911 bytes
+E2 gross gain:                             -15 B/M
+measured source allowance:              12,969 bytes
+E2 projected net after source:          -27.969 B/M
+active E2 pages:                              0
+E2 copy commands:                            0
+```
+
+The negative result is not an infrastructure failure. E0 reproduced the bound
+173,859-byte parent arithmetic payload exactly. Command streams roundtripped,
+every archive reproduced byte-for-byte, E2 reconstructed the exact WRT store,
+and the official inverse returned the exact 1,000,000-byte raw input and hash.
+
+Decision: retire unchanged single-prior-page state-preserving bypass. Do not
+sweep minimum copy length, prototype count, distance windows, or integer codes.
+A materially different successor must amortize transmitted many-use grammar
+rules across pages and must provide a paid upper-bound certificate before a
+full implementation. Score and forecast credit remain zero; the canonical
+forecast remains 109,389,323 bytes.
+
+Evidence:
+
+- `results/seal2_route_e_state_preserving_prototype_bypass_q0_v1/decision.json`
+- `run_logs/adaptive/20260801T205411Z_8a371e48f7.log`
+- `docs/seal2_route_e_state_preserving_prototype_bypass_plan.md`
+
+## 2026-08-01: MOBIUS-2 architecture recorded, unmeasured and zero-credit
+
+MOBIUS-2 is a two-lane successor architecture, not a score claim. LOGOS is a
+self-describing many-use grammar whose paid `GEN`, `COPY`, `PATCH`, and
+`LITERAL` operations reconstruct exact WRT bytes while preserving Gamma's
+truth-update trajectory. NOEMA is a proposed compact, recursively
+weight-shared, dyadic residual-memory predictor for the literal remainder and
+eventual LOGOS controls. Frontier models may propose structures offline, but
+the final decoder may contain only counted deterministic code and data.
+
+The lanes are intentionally separated. LOGOS must beat surface-only, shuffled,
+and forced-literal controls after ontology, slot, command, framing, and source
+costs. NOEMA must beat a matched-package flat recurrent control, page-shifted
+states, and memory-disabled ablation with exact repeated hashes. Neither lane
+is allowed to borrow projected credit from the other. One actual 10M joint
+archive is authorized only after both isolated Q0 gates pass.
+
+Route E is a direct constraint, not supporting score evidence: its complete
+single-page-prototype search selected zero paying pages. LOGOS must therefore
+show many-use rule amortization rather than reopen prototype-width or command-
+coding sweeps. NOEMA likewise needs a hierarchy-specific headroom certificate
+against the terminal flat recurrent/residual neighborhoods.
+
+The initial incremental package ceiling is 393,216 bytes. Covering that ceiling
+and the current 1,389,323-byte forecast debt requires at least 1,782,539 gross
+full-corpus bytes. The per-lane gates remain 3,000 B/M gross and 2,100 B/M net.
+
+Decision: record and park both lanes at zero credit. Before either becomes an
+adaptive proposal, freeze its exact construction algorithm, inputs, package
+measurement, controls, and no-sweep kill condition. No MOBIUS tools, candidates,
+or queue jobs are authorized by this architecture entry.
+
+Architecture:
+
+- `docs/mobius2_architecture.md`
