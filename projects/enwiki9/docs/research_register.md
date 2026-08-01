@@ -3771,3 +3771,56 @@ and the verified full-1G score remains unknown.
 
 Decision:
 `results/typed_event_sleeping_bayes_envelope_q0_v1/decision.json`.
+
+## 2026-08-01: MÖBIUS-2 LOGOS semantic-role frame ceiling frozen
+
+Candidate: `mobius2_logos_semantic_role_frame_ceiling_q0_v1`.
+
+The next experiment changes the information source rather than tuning the
+retired typed-event table. It tests a frontier-designed but fully compiled
+sentence ontology with variable-length TITLE, LINK, ENTITY, DATE, NUMBER,
+QUANTITY, URL, and CONTENT slots. Fixed relation and function words are mapped
+to closed semantic classes, allowing one rule to group distinct lexical
+realizations. Exact fixed WRT groups may be generated out of band while every
+slot remains in the endpoint428 arithmetic stream.
+
+This is materially broader than the retired five-group/one-hole lexical frame:
+it admits many slots, semantic slot boundaries, relation classes, and multiple
+surface realizations. It is also deliberately only a zero-cost ceiling. Rule
+definitions, realization selections, slot lengths, invocations, framing, and
+source are all free at Q0. S1 retains exact fixed surface groups, S2 uses the
+semantic ontology, and SR deterministically rotates slot roles by page and
+clause. All controls must construct actual terminated residual payloads and
+reconstruct exact WRT; S2 must pass the official raw inverse.
+
+Promotion requires at least 3,000 B/M exact S2 gain, positive development,
+selection, and sealed contributions, and strict wins over both S1 and SR. A
+pass authorizes only one paid grammar format. A miss retires this exact
+ontology and frame contract without word-class, sentence-width, page-support,
+slot-count, or punctuation rescue sweeps. Forecast and score credit remain
+zero until a counted constructive codec exists.
+
+Frozen plan:
+`docs/mobius2_logos_semantic_role_frame_ceiling_plan.md`.
+
+The exact opening-1M gate completed at 2026-08-01T23:53:47Z as a valid
+rejection. It scanned 21,373 clause segments and retained 3,248 clauses that
+met the frozen semantic population rules. Development contained 1,058 distinct
+semantic keys, 1,058 exact-surface keys, and 1,061 rotated-role keys. None
+recurred across two pages with the required slot-surface and realization
+diversity. S1, S2, and SR therefore selected zero clauses, generated zero WRT
+bytes, and each reproduced the exact 173,865-byte parent payload. S2 gain was
+0 B/M, far below the 3,000 B/M zero-cost gate.
+
+All input hashes, parent P1 replay, residual arithmetic decodes, WRT
+reconstructions, second payload identities, official inverse, and canonical
+raw hash passed. The result is scientific rather than infrastructural. Retire
+the exact whole-clause boundaries, eight-slot ontology, closed word and
+punctuation classes, development admission rule, and parameter rescue sweeps.
+This does not test a variable-depth learned question DAG or a different
+non-sentence semantic information source. Those remain zero-credit. No paid
+grammar or larger replay is authorized. Forecast 109,389,323 and debt
+1,389,323 remain unchanged; full-1G remains unknown.
+
+Decision:
+`results/mobius2_logos_semantic_role_frame_ceiling_q0_v1/decision.json`.
