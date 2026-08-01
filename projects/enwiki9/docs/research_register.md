@@ -1753,6 +1753,10 @@ but no local trace currently supplies that antecedent.
 - This host-level blocker does not invalidate the existing exact 10M receipt. It prevents a reproducible full-1G gate here.
 - Score credit: `0` bytes.
 
+Superseded on 2026-08-01 by the artifact recovery recorded below. This entry is
+retained as history; its claim that the `/home/x/enwiki9-nonproof` artifacts
+are unavailable is no longer current.
+
 ## 2026-07-27 - FXCM balanced minimum-priority replacement ties
 
 - Proposal: `fxcm_balanced_min_tie_v1`.
@@ -3654,3 +3658,52 @@ Evidence:
 - `results/mobius2_noema_binary_carry_headroom_qh0_v1/decision.json`
 - `run_logs/adaptive/20260801T225624Z_3987dcc6e8.log`
 - `docs/mobius2_noema_causal_replay_contract.md`
+
+## 2026-08-01: Typed Event Sleeping Bayes Envelope and parent recovery
+
+Candidate architecture: `typed_event_sleeping_bayes_envelope_v0`.
+
+The original 280,147-byte endpoint428 source package and the 261,125-byte
+minified counted package are both present on this machine as independent A/B
+copies. Their hashes are respectively `19ddcc4e...aee0` and
+`b6fe6b09...5d43`. Both clean wrapper copies hash to `37ee8cd7...61`; both
+backends and the runtime backend hash to `d1066630...194`. Python ZIP member
+integrity checks pass for all four archives.
+
+The archived exact 10M payload and independent re-encode are both 1,634,500
+bytes and hash to `93d7f5cb...1880`. The restored 10M bytes match the canonical
+input hash `5985c81c...3d97`. The 259-byte 1K direct-backend archive is also
+present. Thus source identity is proved and the current host-level artifact
+availability blocker is removed. The fresh 1M parent replay and exact
+parent-trace identity certificate remain the smallest missing Gate 0 evidence.
+The full-1G score remains unknown, and the forecast remains 109,389,323 bytes.
+
+The successor mechanism is a same-stream baseline-backed sleeping expert. B is
+exact endpoint428. E-star equals B outside decoder-visible typed-event
+opportunities and uses a causal prefix trie over suffix, Wiki-field,
+entity/title/link, and structural-chain continuations only inside those
+opportunities. Its literal branch is exactly B. Candidates and memory may use
+only completed decoded events; both experts update on every truth bit.
+
+The ideal Bayesian envelope has its usual constant regret bound, but cannot
+beat the better whole-sequence expert. It is therefore a safety envelope rather
+than the source of local complementarity. The opening-1M gate also includes a
+global one-bit selector and a deterministic fixed-block selector. Controls are
+B0, matched-capacity state-blind C0, cumulative E0-E3 receipt families, ideal
+M0, fixed-point M1, S0, and S1. All event limits, priors, caps, support,
+eviction, arithmetic, and block size must be frozen before holdout.
+
+Promotion requires at least 2,100 net B/M on chronological holdout, E3 strictly
+beating C0, less than 5 percent fixed-point loss versus ideal gain, broad
+position/family attribution, exact same-stream arithmetic replay, exact WRT and
+raw reconstruction, byte-identical second replay, and complete package costs.
+A pass authorizes one frozen distant 1M; two passing populations authorize a
+native 10M gate requiring at least 21,000 archive bytes saved. No full-1G gate
+is authorized now. `typed_receipt_ringmix_v1` and SRSTC are code donors only;
+their older receipts give this candidate zero credit.
+
+Do not modify the FX2 double-update behavior during parent recovery. Any such
+correction is a separately named child after exact parent reproduction.
+ACS-MATH-SEAL-2 remains unbound and undistributed.
+
+Plan: `docs/typed_event_sleeping_bayes_envelope_plan.md`.
