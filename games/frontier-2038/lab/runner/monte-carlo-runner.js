@@ -853,7 +853,8 @@ export async function runMonteCarlo({
   precomputedOutcomes = null,
   returnOutcomes = false,
   signal,
-  onProgress
+  onProgress,
+  onCompletedOutcome
 }) {
   if (!Number.isInteger(runs) || runs < 1) {
     throw new RangeError("Monte Carlo runs must be a positive integer.");
@@ -906,6 +907,13 @@ export async function runMonteCarlo({
     };
     const fullOutcome = replayIndex < sampleReplays ? outcome : null;
     consume(reportOutcome, run, fullOutcome);
+    if (onCompletedOutcome) {
+      await onCompletedOutcome({
+        runIndex: run + runOffset,
+        outcome,
+        reportOutcome
+      });
+    }
     if (rawOutcomes) rawOutcomes.push({
       runIndex: run + runOffset,
       outcome: reportOutcome,

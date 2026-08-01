@@ -2803,6 +2803,7 @@ test("LLM evidence modes make fallback policy explicit and leave call budgets un
     profileIds: ["capability_rusher", "power_broker", "trust_governor"],
     backends: ["codex"],
     allowLlm: true,
+    archiveLlmMatches: false,
     llmStages: ["not-a-decision-stage"]
   });
   assert.equal(report.configuration.llmEvidenceMode, "fallback_allowed");
@@ -2817,6 +2818,40 @@ test("LLM evidence modes make fallback policy explicit and leave call budgets un
     }),
     /requireLlm requires at least one LLM-backed policy/
   );
+});
+
+test("generic completed strict LLM matches archive before the tournament returns", async () => {
+  const archiveProjectRoot = await mkdtemp(join(tmpdir(), "frontier-generic-llm-archive-"));
+  try {
+    const report = await createSimulation({
+      runs: 1,
+      playerCount: 3,
+      seed: "generic-llm-archive-contract",
+      sampleReplays: 0,
+      allowLlm: true,
+      requireLlm: true,
+      strictLlmEvidence: true,
+      archiveProjectRoot,
+      profileIds: ["balanced_operator", "capability_rusher", "trust_governor"],
+      backends: ["codex", "weighted", "weighted"],
+      callerFactory: () => ({
+        async decide(packet) {
+          return {
+            decision: { decisionId: packet.legalDecisions[0].decisionId },
+            receipt: { provider: "fixture", requestId: packet.requestId }
+          };
+        }
+      })
+    });
+    assert.equal(report.configuration.completedLlmArchives.length, 1);
+    const archive = report.configuration.completedLlmArchives[0];
+    const stored = JSON.parse(await readFile(join(archiveProjectRoot, archive.relativePath), "utf8"));
+    assert.equal(stored.runs, 1);
+    assert.equal(stored.configuration.llmEvidenceMode, "strict_quarantine");
+    assert.equal(stored.standings.length, 3);
+  } finally {
+    await rm(archiveProjectRoot, { recursive: true, force: true });
+  }
 });
 
 test("simulation records two- and six-player games as exploratory non-promotional diagnostics", async () => {
