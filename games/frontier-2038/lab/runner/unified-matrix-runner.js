@@ -1044,6 +1044,7 @@ function pairedRuleComparisons(
         }
         records.push({
           playerCount: baseline.playerCount,
+          mandateMode: baseline.mandateMode,
           factionId: left.factionId,
           backendId: left.backendId,
           winDelta:
@@ -1114,6 +1115,12 @@ function pairedRuleComparisons(
         factionBackend: summarize(["factionId", "backendId"]),
         factionBackendPlayerCount: summarize([
           "playerCount",
+          "factionId",
+          "backendId"
+        ]),
+        factionBackendPlayerCountMandateMode: summarize([
+          "playerCount",
+          "mandateMode",
           "factionId",
           "backendId"
         ])

@@ -42,8 +42,8 @@ This repository is a **prototype**, not a manufactured or published product.
 - Balance, counter-strategy, exploitability, and promotion gates are defined in
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
-The lean physical rulebook is under controlled review at `0.5.0-rc.30-test`.
-Executable game `0.8.30` implements that candidate under
+The lean physical rulebook is under controlled review at `0.5.0-rc.31-test`.
+Executable game `0.8.31` implements that candidate under
 `three-to-five-grid-ready-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization
 means the browser and simulator execute the selected contract; it does not
@@ -70,9 +70,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.8.30` game and export its
+- `http://localhost:8038/` — play the synchronized `0.8.31` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.8.30` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.8.31` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -141,8 +141,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.8.30`
-bundle, its synchronized `0.5.0-rc.30-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.8.31`
+bundle, its synchronized `0.5.0-rc.31-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

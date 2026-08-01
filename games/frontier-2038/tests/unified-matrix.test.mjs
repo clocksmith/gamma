@@ -328,6 +328,15 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
   assert.ok(report.rulesComparisons[0].families.faction.every((cell) =>
     Number.isFinite(cell.rankDelta)
   ));
+  assert.ok(
+    report.rulesComparisons[0].families
+      .factionBackendPlayerCountMandateMode.every((cell) =>
+        cell.dimensions.playerCount === 4 &&
+        cell.dimensions.mandateMode === "fixed" &&
+        typeof cell.dimensions.factionId === "string" &&
+        typeof cell.dimensions.backendId === "string"
+      )
+  );
   assert.match(
     report.rulesComparisons[0].interpretation,
     /positive rankDelta means the candidate improved placement/
