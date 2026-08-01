@@ -436,6 +436,7 @@ export async function runMonteCarlo({
   policiesForRun,
   sampleReplays = 3,
   includeObservations = false,
+  runOffset = 0,
   signal,
   onProgress
 }) {
@@ -449,7 +450,7 @@ export async function runMonteCarlo({
   for (let run = 0; run < runs; run += 1) {
     if (signal?.aborted) throw signal.reason;
     const match = createMatch({
-      seed: `${seed}:run:${run}`,
+      seed: `${seed}:run:${run + runOffset}`,
       recordReplay: run < sampleReplays,
       runIndex: run
     });

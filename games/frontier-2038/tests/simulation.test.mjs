@@ -42,7 +42,10 @@ import {
 } from "../lab/environment/rules-variant.js";
 import { loadBalanceContract } from "../lab/balance/balance-contract.js";
 import { runBalanceAudit } from "../lab/runner/balance-audit-runner.js";
-import { runFactionSwapDiagnostic } from "../lab/runner/faction-swap-runner.js";
+import {
+  LlmConcurrencyBroker,
+  runFactionSwapDiagnostic
+} from "../lab/runner/faction-swap-runner.js";
 
 function fixturePolicy(select = () => null) {
   return {
@@ -2171,6 +2174,7 @@ test("explicit faction rosters preserve paired diagnostic seats and identity", a
 
 test("paired faction diagnostics keep every non-focal input on common seeds", async () => {
   const report = await runFactionSwapDiagnostic({
+    workers: 1,
     runsPerArm: 1,
     playerCount: 4,
     seed: "paired-faction-diagnostic",
@@ -2205,6 +2209,317 @@ test("paired faction diagnostics keep every non-focal input on common seeds", as
   assert.equal(report.comparisons[0].paired.pairs, 1);
   assert.equal(report.balanceEvaluation.promotionGate.eligible, false);
   assert.match(report.preRegistration.fingerprint, /^sha256:[a-f0-9]{64}$/);
+});
+
+test("parallel faction diagnostics preserve sequential outcomes and fingerprints", async () => {
+  const options = {
+    runsPerArm: 2,
+    playerCount: 4,
+    seed: "parallel-faction-diagnostic",
+    preRegistrationId: "parallel-faction-diagnostic-test",
+    mandateMode: "fixed",
+    profileIds: [
+      "capability_rusher",
+      "balanced_operator",
+      "trust_governor",
+      "power_broker"
+    ],
+    backends: ["weighted", "weighted", "weighted", "weighted"],
+    comparisons: [{
+      id: "orisonix_vs_corthaven",
+      focalSeat: 2,
+      leftFactionIds: [
+        "imperial_research_lab",
+        "coalition_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      rightFactionIds: [
+        "imperial_research_lab",
+        "coalition_lab",
+        "platform_empire",
+        "foundry"
+      ]
+    }]
+  };
+  const sequential = await runFactionSwapDiagnostic({ ...options, workers: 1 });
+  const parallel = await runFactionSwapDiagnostic({ ...options, workers: 2 });
+
+  assert.equal(sequential.execution.scheduler, "inline");
+  assert.equal(parallel.execution.scheduler, "worker_threads");
+  assert.equal(parallel.execution.workers, 2);
+  assert.deepEqual(parallel.comparisons, sequential.comparisons);
+  assert.deepEqual(parallel.game, sequential.game);
+  assert.deepEqual(parallel.engine, sequential.engine);
+  assert.deepEqual(parallel.variant, sequential.variant);
+  assert.deepEqual(parallel.strategies, sequential.strategies);
+  assert.equal(
+    parallel.preRegistration.fingerprint,
+    sequential.preRegistration.fingerprint
+  );
+  assert.equal(parallel.experiment.fingerprint, sequential.experiment.fingerprint);
+});
+
+test("LLM concurrency broker enforces global and provider-specific caps", async () => {
+  assert.throws(
+    () => new LlmConcurrencyBroker({ concurrency: 17 }),
+    /llmConcurrency must be an integer from 1 to 16/
+  );
+  assert.throws(
+    () => new LlmConcurrencyBroker({
+      providerConcurrency: { claude: 5 }
+    }),
+    /claude concurrency must be an integer from 1 to 4/
+  );
+  const active = { all: 0, claude: 0, codex: 0 };
+  const peak = { all: 0, claude: 0, codex: 0 };
+  const broker = new LlmConcurrencyBroker({
+    concurrency: 3,
+    providerConcurrency: { claude: 1, codex: 2 },
+    generation: "broker-cap-test",
+    callerFactory: ({ provider }) => ({
+      async decide(packet) {
+        active.all += 1;
+        active[provider] += 1;
+        peak.all = Math.max(peak.all, active.all);
+        peak[provider] = Math.max(peak[provider], active[provider]);
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        active.all -= 1;
+        active[provider] -= 1;
+        return {
+          decision: { decisionId: packet.legalDecisions[0].decisionId },
+          receipt: { provider: `${provider}-cli` }
+        };
+      }
+    })
+  });
+  const providers = ["claude", "codex", "claude", "codex", "codex", "claude"];
+  await Promise.all(providers.map((provider, taskIndex) => broker.request({
+    studyGeneration: "broker-cap-test",
+    taskGeneration: `broker-cap-test:${taskIndex}`,
+    taskIndex,
+    requestToken: `request-${taskIndex}`,
+    provider,
+    backend: provider,
+    packet: {
+      requestId: `packet-${taskIndex}`,
+      legalDecisions: [{ decisionId: "fixture-choice" }]
+    }
+  })));
+  assert.deepEqual(peak, { all: 3, claude: 1, codex: 2 });
+  assert.equal(broker.summary().peakActiveLlmCalls, 3);
+  assert.ok(broker.summary().throttledRequests > 0);
+});
+
+test("LLM concurrency broker rejects cancelled and stale-generation responses", async () => {
+  let release;
+  const broker = new LlmConcurrencyBroker({
+    concurrency: 1,
+    generation: "active-generation",
+    callerFactory: () => ({
+      async decide(packet) {
+        await new Promise((resolve) => {
+          release = resolve;
+        });
+        return {
+          decision: { decisionId: packet.legalDecisions[0].decisionId },
+          receipt: { provider: "codex-cli" }
+        };
+      }
+    })
+  });
+  const pending = broker.request({
+    studyGeneration: "active-generation",
+    taskGeneration: "active-generation:0",
+    taskIndex: 0,
+    requestToken: "late-request",
+    provider: "codex",
+    backend: "codex",
+    packet: {
+      requestId: "late-packet",
+      legalDecisions: [{ decisionId: "fixture-choice" }]
+    }
+  });
+  await new Promise((resolve) => setImmediate(resolve));
+  broker.cancel(new DOMException("Study replaced.", "AbortError"));
+  await assert.rejects(pending, /Study replaced/);
+  release();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(broker.summary().completedRequests, 0);
+  assert.equal(broker.summary().cancelledRequests, 1);
+  await assert.rejects(
+    () => broker.request({
+      studyGeneration: "replacement-generation",
+      taskGeneration: "replacement-generation:0",
+      taskIndex: 0,
+      requestToken: "stale-request",
+      provider: "codex",
+      backend: "codex",
+      packet: {
+        requestId: "stale-packet",
+        legalDecisions: [{ decisionId: "fixture-choice" }]
+      }
+    }),
+    /cancelled/
+  );
+});
+
+test("LLM-backed faction diagnostics require explicit authorization", async () => {
+  await assert.rejects(
+    () => runFactionSwapDiagnostic({
+      runsPerArm: 1,
+      playerCount: 4,
+      backends: ["codex", "weighted", "weighted", "weighted"],
+      comparisons: [{
+        id: "llm-inline-default",
+        focalSeat: 0,
+        leftFactionIds: [
+          "safety_laboratory",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ],
+        rightFactionIds: [
+          "platform_empire",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ]
+      }]
+    }),
+    /explicit allowLlm authorization/
+  );
+});
+
+test("parallel LLM faction diagnostics cap calls and quarantine failed pairs", async () => {
+  let active = 0;
+  let peak = 0;
+  const report = await runFactionSwapDiagnostic({
+    workers: 4,
+    llmConcurrency: 2,
+    llmRetries: 1,
+    providerConcurrency: { codex: 2 },
+    allowLlm: true,
+    runsPerArm: 3,
+    sampleReplays: 1,
+    playerCount: 4,
+    seed: "parallel-llm-faction-diagnostic",
+    profileIds: [
+      "capability_rusher",
+      "balanced_operator",
+      "trust_governor",
+      "power_broker"
+    ],
+    backends: ["codex", "weighted", "weighted", "weighted"],
+    model: "fixture-model",
+    reasoningEffort: "low",
+    llmCallerFactory: () => ({
+      async decide(packet, { brokerContext }) {
+        active += 1;
+        peak = Math.max(peak, active);
+        await new Promise((resolve) =>
+          setTimeout(resolve, brokerContext.taskIndex % 2 ? 2 : 1)
+        );
+        active -= 1;
+        if (brokerContext.taskIndex === 1) {
+          const error = new Error("Fixture provider failure.");
+          error.providerReceipt = {
+            attemptedProvider: "codex-cli",
+            attemptedModel: "fixture-model",
+            attemptedReasoningEffort: "low",
+            attemptedRequestId: packet.requestId
+          };
+          throw error;
+        }
+        const decision = packet.legalDecisions[0];
+        return {
+          decision: { decisionId: decision.decisionId },
+          receipt: {
+            provider: "codex-cli",
+            model: "fixture-model",
+            reasoningEffort: "low",
+            requestId: packet.requestId,
+            decisionId: decision.decisionId
+          }
+        };
+      }
+    }),
+    comparisons: [{
+      id: "strict-llm-pair",
+      focalSeat: 0,
+      leftFactionIds: [
+        "safety_laboratory",
+        "coalition_lab",
+        "imperial_research_lab",
+        "foundry"
+      ],
+      rightFactionIds: [
+        "platform_empire",
+        "coalition_lab",
+        "imperial_research_lab",
+        "foundry"
+      ]
+    }]
+  });
+
+  assert.equal(peak, 2);
+  assert.equal(report.execution.scheduler, "worker_threads");
+  assert.equal(report.execution.llmConcurrency, 2);
+  assert.equal(report.execution.llm.peakActiveLlmCalls, 2);
+  assert.equal(report.execution.llm.retries, 1);
+  assert.equal(report.execution.quarantinedMatches, 1);
+  assert.equal(report.comparisons[0].paired.pairs, 2);
+  assert.equal(report.comparisons[0].paired.quarantinedPairs, 1);
+  assert.deepEqual(
+    report.comparisons[0].paired.rows.map((row) => row.matchIndex),
+    [0, 2]
+  );
+  assert.deepEqual(
+    report.llmEvidence.matches.map((match) => match.matchIndex),
+    [0, 2]
+  );
+  assert.ok(report.llmEvidence.matches[0].left.replay);
+  assert.ok(report.llmEvidence.matches[0].right.replay);
+  assert.ok(report.llmEvidence.matches.every((match) =>
+    [...match.left.receipts, ...match.right.receipts].every((receipt) =>
+      receipt.provider === "codex-cli" &&
+      receipt.model === "fixture-model" &&
+      receipt.reasoningEffort === "low" &&
+      receipt.fallback === false
+    )
+  ));
+  assert.equal(
+    report.quarantine.matches[0].left.providerReceipt.brokerAttempts,
+    2
+  );
+});
+
+test("parallel faction diagnostics fail closed when a worker game fails", async () => {
+  await assert.rejects(
+    () => runFactionSwapDiagnostic({
+      workers: 2,
+      runsPerArm: 1,
+      playerCount: 4,
+      backends: ["weighted", "weighted", "weighted", "weighted"],
+      comparisons: [{
+        id: "worker-failure",
+        focalSeat: 0,
+        leftFactionIds: [
+          "missing_faction",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ],
+        rightFactionIds: [
+          "platform_empire",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ]
+      }]
+    }),
+    /Unknown faction: missing_faction/
+  );
 });
 
 test("weighted policies replay deterministically from packet seed and persona", async () => {

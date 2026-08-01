@@ -51,6 +51,7 @@ export class CliBackedPlayerPolicy {
     reasoningEffort,
     signal,
     requireLlm = false,
+    strictLlmEvidence = false,
     llmStages
   } = {}) {
     this.profile = validatePlayerProfile(profile);
@@ -64,6 +65,7 @@ export class CliBackedPlayerPolicy {
     this.reasoningEffort = reasoningEffort;
     this.signal = signal;
     this.requireLlm = requireLlm;
+    this.strictLlmEvidence = strictLlmEvidence;
     this.llmStages = llmStages || null;
     this.kind = "llm";
   }
@@ -85,6 +87,13 @@ export class CliBackedPlayerPolicy {
       this.llmStages?.length &&
       !this.llmStages.some((stage) => packet.requestId.includes(`:${stage}`))
     ) {
+      if (this.strictLlmEvidence) {
+        const error = new Error(
+          `Strict LLM decision is unavailable for gated stage ${packet.requestId}.`
+        );
+        error.evidenceOutcome = "quarantined";
+        throw error;
+      }
       const defaultResponse = formalResponseDefault(augmented);
       if (defaultResponse) {
         return this.rulebookResponseDefault(
@@ -122,6 +131,14 @@ export class CliBackedPlayerPolicy {
       const cached = await this.decisionCache.read(cacheInput);
       cacheKey = cached.key;
       if (cached.value) {
+        if (this.strictLlmEvidence && cached.value.receipt?.fallback) {
+          const error = new Error(
+            `Strict LLM evidence rejected fallback cache entry ${cacheKey}.`
+          );
+          error.providerReceipt = structuredClone(cached.value.receipt);
+          error.evidenceOutcome = "quarantined";
+          throw error;
+        }
         return {
           decision: cached.value.decision,
           receipt: {
@@ -205,6 +222,12 @@ export class CliBackedPlayerPolicy {
   }
 
   async fallbackDecision(packet, reason, providerReceipt = null) {
+    if (this.strictLlmEvidence) {
+      const error = new Error(`Strict LLM decision failed: ${reason}`);
+      error.providerReceipt = providerReceipt;
+      error.evidenceOutcome = "quarantined";
+      throw error;
+    }
     const defaultResponse = formalResponseDefault(packet);
     if (defaultResponse) {
       return this.rulebookResponseDefault(packet, defaultResponse, reason, providerReceipt);
@@ -241,6 +264,7 @@ export class HybridPlayerPolicy extends CliBackedPlayerPolicy {
     reasoningEffort,
     signal,
     requireLlm,
+    strictLlmEvidence,
     llmStages,
     shortlistSize = 4
   } = {}) {
@@ -254,6 +278,7 @@ export class HybridPlayerPolicy extends CliBackedPlayerPolicy {
       reasoningEffort,
       signal,
       requireLlm,
+      strictLlmEvidence,
       llmStages
     });
     this.shortlistSize = shortlistSize;

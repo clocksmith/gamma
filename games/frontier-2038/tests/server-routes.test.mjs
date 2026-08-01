@@ -231,14 +231,14 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
       },
       body: JSON.stringify({
         allowLlm: true,
-        maxLlmDecisions: 25,
+        maxLlmDecisions: 10001,
         backends: ["codex"]
       })
     });
     assert.equal(excessiveLlmBudget.status, 400);
     assert.match(
       (await excessiveLlmBudget.json()).error,
-      /24 LLM decisions per configured policy/
+      /integers from 0 to 10000/
     );
 
     const requiredLlm = await request("/api/simulations", {

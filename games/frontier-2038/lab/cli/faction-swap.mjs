@@ -26,6 +26,33 @@ const report = await runFactionSwapDiagnostic({
   profileIds: registration.profileIds,
   backends: registration.backends,
   mandateMode: registration.mandateMode,
+  rulesVariant: registration.rulesVariant,
+  workers: args.workers || registration.workers,
+  llmConcurrency:
+    args["llm-concurrency"] || registration.llmConcurrency,
+  llmRetries: args["llm-retries"] || registration.llmRetries,
+  providerConcurrency: {
+    ...(registration.providerConcurrency || {}),
+    ...(args["claude-concurrency"]
+      ? { claude: args["claude-concurrency"] }
+      : {}),
+    ...(args["codex-concurrency"]
+      ? { codex: args["codex-concurrency"] }
+      : {})
+  },
+  allowLlm: args["allow-llm"] === true || Boolean(registration.allowLlm),
+  models: registration.models,
+  model: args.model || registration.model,
+  reasoningEfforts: registration.reasoningEfforts,
+  reasoningEffort:
+    args["reasoning-effort"] || registration.reasoningEffort,
+  maxLlmDecisions:
+    args["max-llm-decisions"] || registration.maxLlmDecisions,
+  maxLlmDecisionsPerSeatCycle:
+    args["max-llm-decisions-per-seat-cycle"] ||
+    registration.maxLlmDecisionsPerSeatCycle,
+  sampleReplays:
+    args["sample-replays"] || registration.sampleReplays,
   seed: args.seed || registration.seed,
   preRegistrationId: registration.id
 }, ({ completed, total }) => {
@@ -42,6 +69,7 @@ console.log(JSON.stringify({
   archive: archive.relativePath,
   output: args.output || null,
   runs: report.runs,
+  execution: report.execution,
   comparisons: report.comparisons.map((comparison) => ({
     id: comparison.id,
     meanWinRateDelta: comparison.paired.meanWinRateDelta,

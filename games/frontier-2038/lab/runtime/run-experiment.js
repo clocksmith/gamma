@@ -1,10 +1,14 @@
+import { readFile } from "node:fs/promises";
+import { relative, resolve } from "node:path";
 import {
   evolveStrategy,
   searchRuleVariants
 } from "../runner/optimization-runner.js";
+import { runFactionSwapDiagnostic } from "../runner/faction-swap-runner.js";
 import { createSimulation } from "./create-simulation.js";
 import { runUnifiedMatrix } from "../runner/unified-matrix-runner.js";
 import { runLlmNegotiationHoldout } from "../runner/llm-holdout-runner.js";
+import { projectRoot } from "../versioning/game-identity.js";
 
 function integer(value, fallback, minimum, maximum, label) {
   const parsed = value === undefined ? fallback : Number(value);
@@ -73,6 +77,67 @@ export async function runExperiment(options = {}, onProgress) {
       signal: options.signal,
       onProgress
     });
+  }
+  if (mode === "faction-swap") {
+    if (!options.preRegistrationPath) {
+      throw new TypeError("preRegistrationPath is required.");
+    }
+    const absolute = resolve(projectRoot, options.preRegistrationPath);
+    const registrationPath = relative(projectRoot, absolute);
+    if (
+      registrationPath.startsWith("..") ||
+      !registrationPath.startsWith(
+        "evidence/studies/simulation/preregistrations/"
+      )
+    ) {
+      throw new Error(
+        "Faction-swap preregistration must live under " +
+        "evidence/studies/simulation/preregistrations/."
+      );
+    }
+    const registration = JSON.parse(await readFile(absolute, "utf8"));
+    if (
+      registration.schemaVersion !== 1 ||
+      registration.registeredBeforeResults !== true ||
+      !Array.isArray(registration.comparisons) ||
+      !registration.comparisons.length
+    ) {
+      throw new TypeError("Invalid faction-swap preregistration.");
+    }
+    return runFactionSwapDiagnostic({
+      comparisons: registration.comparisons,
+      runsPerArm: integer(
+        options.runs || registration.runsPerArm,
+        registration.runsPerArm,
+        1,
+        10000,
+        "runsPerArm"
+      ),
+      playerCount: registration.playerCount,
+      profileIds: registration.profileIds,
+      backends: registration.backends,
+      models: registration.models,
+      model: options.model || registration.model,
+      reasoningEfforts: registration.reasoningEfforts,
+      reasoningEffort:
+        options.reasoningEffort || registration.reasoningEffort,
+      mandateMode: registration.mandateMode,
+      rulesVariant: registration.rulesVariant,
+      workers: options.workers ?? registration.workers,
+      llmConcurrency:
+        options.llmConcurrency ?? registration.llmConcurrency,
+      llmRetries: registration.llmRetries,
+      providerConcurrency: registration.providerConcurrency,
+      allowLlm: Boolean(options.allowLlm),
+      maxLlmDecisions:
+        options.maxLlmDecisions ?? registration.maxLlmDecisions,
+      maxLlmDecisionsPerSeatCycle:
+        registration.maxLlmDecisionsPerSeatCycle,
+      sampleReplays: options.sampleReplays,
+      seed: options.seed || registration.seed,
+      preRegistrationId: registration.id,
+      signal: options.signal
+    }, onProgress);
   }
   throw new TypeError(`Unknown simulation mode: ${mode}.`);
 }

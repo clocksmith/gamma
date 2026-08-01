@@ -231,7 +231,10 @@ export async function createSimulation(options = {}, onProgress) {
       reasoningEffort: reasoningEfforts[seat],
       signal: options.signal,
       requireLlm,
+      strictLlmEvidence: Boolean(options.strictLlmEvidence),
       timeoutMs: options.timeoutMs,
+      callerFactory: options.callerFactory,
+      callerOptions: options.llmCallerOptions,
       shortlistSize: options.shortlistSize,
       decisionCache,
       cacheMode,
@@ -327,6 +330,7 @@ export async function createSimulation(options = {}, onProgress) {
       );
     },
     includeObservations: Boolean(options.includeObservations),
+    runOffset,
     signal: options.signal
   });
   const historicalPlayerCount = config.players.historicalOnlyCounts.includes(playerCount);
@@ -350,7 +354,9 @@ export async function createSimulation(options = {}, onProgress) {
       backends: configuredBackends,
       llmAuthorized: Boolean(options.allowLlm),
       llmEvidenceMode: llmRequested
-        ? requireLlm ? "required" : "fallback_allowed"
+        ? options.strictLlmEvidence
+          ? "strict_quarantine"
+          : requireLlm ? "required" : "fallback_allowed"
         : "not_requested",
       maxLlmDecisions: maximumLlmDecisions,
       llmDecisionBudgetScope: "per_configured_policy",

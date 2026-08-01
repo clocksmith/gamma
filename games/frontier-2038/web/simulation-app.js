@@ -67,6 +67,7 @@ const elements = Object.fromEntries(
     "experiment-results",
     "experiment-results-body",
     "experiment-results-title",
+    "execution-controls",
     "faction-results",
     "generations",
     "generations-field",
@@ -74,6 +75,7 @@ const elements = Object.fromEntries(
     "iterations-field",
     "job-status",
     "llm-controls",
+    "llm-concurrency",
     "matrix-batch-field",
     "matrix-batch-size",
     "matrix-initial-field",
@@ -121,6 +123,7 @@ const elements = Object.fromEntries(
     "summary-cards",
     "target-profile",
     "target-profile-field",
+    "workers",
     "replay-section"
   ].map((id) => [id, document.getElementById(id)])
 );
@@ -239,13 +242,21 @@ function simulationOptions() {
     backends: rows.map((row) => row.querySelector(".backend-select").value),
     allowLlm: elements["allow-llm"].checked,
     requireLlm: elements["require-llm"].checked,
-    maxLlmDecisions: Number(elements["max-llm-decisions"].value),
+    maxLlmDecisions: elements["max-llm-decisions"].value
+      ? Number(elements["max-llm-decisions"].value)
+      : undefined,
     model: elements.model.value || undefined,
     models: rows.map((row) => row.querySelector(".seat-model").value || undefined),
     reasoningEffort: elements["reasoning-effort"].value || undefined,
     reasoningEfforts: rows.map((row) =>
       row.querySelector(".seat-reasoning-effort").value || undefined
-    )
+    ),
+    workers: elements.workers.value
+      ? Number(elements.workers.value)
+      : undefined,
+    llmConcurrency: elements["llm-concurrency"].value
+      ? Number(elements["llm-concurrency"].value)
+      : undefined
   };
   if (mode === "strategy-evolution") {
     options.targetProfileId = elements["target-profile"].value;
@@ -267,6 +278,9 @@ function simulationOptions() {
     options.sampleReplays = 0;
     options.allowLlm = false;
   } else if (mode === "llm-holdout") {
+    options.preRegistrationPath = elements["preregistration-path"].value;
+    options.sampleReplays = 0;
+  } else if (mode === "faction-swap") {
     options.preRegistrationPath = elements["preregistration-path"].value;
     options.sampleReplays = 0;
   }
@@ -651,7 +665,58 @@ function renderExperimentReport() {
   elements["distribution-section"].hidden = true;
   elements["replay-section"].hidden = true;
   elements["summary-cards"].replaceChildren();
-  if (report.reportType === "strategy_evolution") {
+  if (report.diagnosticKind === "paired_faction_swap") {
+    const execution = report.execution;
+    const llm = execution.llm;
+    elements["results-title"].textContent = copy.modes.factionSwap.completed;
+    elements["results-subtitle"].textContent =
+      `${report.preRegistration.id} · ${report.scheduledRuns} scheduled arms · seed ${report.seed}`;
+    elements["summary-cards"].innerHTML = [
+      summaryCard(
+        copy.execution.cpuArms,
+        execution.workers,
+        `${execution.scheduler} · ${execution.taskUnit}`
+      ),
+      summaryCard(
+        copy.execution.peakLlmCalls,
+        llm?.peakActiveLlmCalls || 0,
+        `configured ${execution.llmConcurrency || 0}`
+      ),
+      summaryCard(
+        copy.execution.providerThrottling,
+        llm?.throttledRequests || 0,
+        llm
+          ? Object.entries(llm.providerConcurrency)
+            .map(([provider, limit]) => `${provider} ${limit}`)
+            .join(" · ")
+          : copy.execution.deterministicOnly
+      ),
+      summaryCard(
+        copy.execution.quarantined,
+        execution.quarantinedMatches,
+        report.quarantine.policy.replaceAll("_", " ")
+      )
+    ].join("");
+    elements["experiment-results-title"].textContent = copy.execution.summary;
+    elements["experiment-results-body"].innerHTML = `
+      <table>
+        <thead><tr>
+          <th>${copy.execution.comparison}</th>
+          <th>${copy.execution.paired}</th>
+          <th>${copy.execution.mandateDelta}</th>
+          <th>${copy.execution.rankAdvantage}</th>
+        </tr></thead>
+        <tbody>${report.comparisons.map((comparison) => `
+          <tr>
+            <td>${escapeHtml(comparison.id)}</td>
+            <td>${comparison.paired.pairs}/${comparison.paired.scheduledPairs}</td>
+            <td>${comparison.paired.meanMandateDelta.toFixed(2)}</td>
+            <td>${comparison.paired.meanRankAdvantage.toFixed(3)}</td>
+          </tr>
+        `).join("")}</tbody>
+      </table>
+    `;
+  } else if (report.reportType === "strategy_evolution") {
     const final = report.history.at(-1);
     const baseline = report.history[0].candidates.find((candidate) =>
       candidate.profile.actionWeights &&
@@ -1129,12 +1194,15 @@ function renderExperimentMode({ resetDefaults = false } = {}) {
   elements["iterations-field"].hidden = mode !== "rule-search";
   elements["matrix-initial-field"].hidden = mode !== "balance-audit";
   elements["matrix-batch-field"].hidden = mode !== "balance-audit";
-  elements["preregistration-field"].hidden = mode !== "llm-holdout";
+  elements["preregistration-field"].hidden =
+    !["llm-holdout", "faction-swap"].includes(mode);
   elements["runs-field"].hidden = mode === "llm-holdout";
   elements["player-count-field"].hidden =
-    ["balance-audit", "llm-holdout"].includes(mode);
+    ["balance-audit", "llm-holdout", "faction-swap"].includes(mode);
   elements["persona-controls"].hidden = optimizing;
-  elements["llm-controls"].hidden = !["tournament", "llm-holdout"].includes(mode);
+  elements["llm-controls"].hidden =
+    !["tournament", "llm-holdout", "faction-swap"].includes(mode);
+  elements["execution-controls"].hidden = mode !== "faction-swap";
   elements["replay-samples-field"].hidden = optimizing;
   const presentation = {
     tournament: {
@@ -1156,6 +1224,10 @@ function renderExperimentMode({ resetDefaults = false } = {}) {
     "llm-holdout": {
       ...copy.modes.llmHoldout,
       runs: copy.modes.llmHoldout.defaultRuns
+    },
+    "faction-swap": {
+      ...copy.modes.factionSwap,
+      runs: copy.modes.factionSwap.defaultRuns
     }
   }[mode];
   elements["runs-label"].textContent = presentation.runsLabel;
@@ -1164,6 +1236,13 @@ function renderExperimentMode({ resetDefaults = false } = {}) {
   if (resetDefaults) {
     elements.runs.value = presentation.runs;
     elements["sample-replays"].value = mode === "tournament" ? 3 : 0;
+    if (mode === "llm-holdout") {
+      elements["preregistration-path"].value =
+        "evidence/studies/simulation/preregistrations/llm-negotiation-holdout-v3-capture.json";
+    } else if (mode === "faction-swap") {
+      elements["preregistration-path"].value =
+        "evidence/studies/simulation/preregistrations/faction-swap-diagnostic-v1.json";
+    }
   }
 }
 
@@ -1248,7 +1327,14 @@ elements["target-profile"].innerHTML = profiles.map((profile) =>
 ).join("");
 const searchParameters = new URLSearchParams(window.location.search);
 const requestedMode = searchParameters.get("mode");
-if (["tournament", "strategy-evolution", "rule-search", "balance-audit", "llm-holdout"].includes(requestedMode)) {
+if ([
+  "tournament",
+  "strategy-evolution",
+  "rule-search",
+  "balance-audit",
+  "llm-holdout",
+  "faction-swap"
+].includes(requestedMode)) {
   elements["experiment-mode"].value = requestedMode;
 }
 renderExperimentMode({ resetDefaults: Boolean(requestedMode) });

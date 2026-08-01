@@ -29,14 +29,24 @@ export function createPlayerPolicy(profile, backend = profile.defaultBackend || 
 
   const fallback = new WeightedPlayerPolicy(profile);
   const callerOptions = {
+    ...(options.callerOptions || {}),
     model: options.model,
     reasoningEffort: options.reasoningEffort,
     timeoutMs: options.timeoutMs
   };
   const isClaude = backend.includes("claude");
-  const caller = isClaude
-    ? new ClaudeCliCaller(callerOptions)
-    : new CodexCliCaller(callerOptions);
+  const caller = options.callerFactory
+    ? options.callerFactory({
+        backend,
+        provider: isClaude ? "claude" : "codex",
+        model: options.model,
+        reasoningEffort: options.reasoningEffort,
+        timeoutMs: options.timeoutMs,
+        callerOptions: options.callerOptions || {}
+      })
+    : isClaude
+      ? new ClaudeCliCaller(callerOptions)
+      : new CodexCliCaller(callerOptions);
   const shared = {
     fallback,
     decisionBudget: options.decisionBudget,
@@ -47,6 +57,7 @@ export function createPlayerPolicy(profile, backend = profile.defaultBackend || 
     reasoningEffort: options.reasoningEffort,
     signal: options.signal,
     requireLlm: Boolean(options.requireLlm),
+    strictLlmEvidence: Boolean(options.strictLlmEvidence),
     llmStages: options.llmStages
   };
   return backend.startsWith("hybrid-")
