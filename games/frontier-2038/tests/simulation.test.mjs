@@ -778,6 +778,51 @@ test("faction mechanism probes remain isolated from canonical play", async () =>
   assert.equal(vertical.match.rulesVariant.coalitionStartingRunway, null);
 });
 
+test("Wildcard Governance scrutiny is isolated behind one rules lever", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "coalition_lab",
+      seed: "coalition-wildcard-scrutiny-probe",
+      rulesVariant: { coalitionWildcardGovernanceScrutiny: 1 }
+    },
+    () => {}
+  );
+  const coalition = match.players[0];
+  match.round = 4;
+  match.cycle = 1;
+  match.regime.round = {};
+  match.choose = async (_policies, _seat, stage, decisions) => {
+    if (stage === "wildcard_governance") {
+      return decisions.find((decision) =>
+        decision.decisionId.startsWith("wildcard_replace_")
+      );
+    }
+    return decisions[0];
+  };
+
+  await match.prepareHeadline([]);
+
+  assert.equal(match.rulesVariant.coalitionWildcardGovernanceScrutiny, 1);
+  assert.equal(coalition.factionAbilityUsed.wildcardGovernance, true);
+  assert.equal(
+    coalition.metrics.factionAbilityValues.wildcard_governance.scrutinyAdded,
+    1
+  );
+  const canonical = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "coalition_lab",
+      seed: "coalition-wildcard-scrutiny-canonical"
+    },
+    () => {}
+  );
+  assert.equal(
+    canonical.match.rulesVariant.coalitionWildcardGovernanceScrutiny,
+    2
+  );
+});
+
 test("Scientific Method can be capped across the full game by a rules probe", async () => {
   const { match } = await createInteractiveGame(
     {
@@ -2706,7 +2751,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.28");
+  assert.equal(first.game.version, "0.8.29");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -2988,7 +3033,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.28");
+  assert.equal(first.game.version, "0.8.29");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

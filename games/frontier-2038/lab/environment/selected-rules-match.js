@@ -1242,10 +1242,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         if (replacement.parameters?.headlineId) {
           this.activeHeadline = unused.find((card) => card.id === replacement.parameters.headlineId);
           coalition.factionAbilityUsed.wildcardGovernance = true;
-          this.addScrutiny(coalition, 2);
+          const scrutiny = this.rulesVariant.coalitionWildcardGovernanceScrutiny;
+          this.addScrutiny(coalition, scrutiny);
           this.recordFactionAbility(coalition, "wildcard_governance", {
             headlinesReplaced: 1,
-            scrutinyAdded: 2
+            scrutinyAdded: scrutiny
           });
         }
       }

@@ -4,9 +4,9 @@
 
 **Suggested player count:** 3–5
 
-**Rules version:** 0.5.0-rc.28-test
+**Rules version:** 0.5.0-rc.29-test
 **Design-baseline date:** July 26, 2026
-**Status:** Controlled playtest candidate; synchronized with executable game 0.8.28
+**Status:** Controlled playtest candidate; synchronized with executable game 0.8.29
 **Provisional time:** 75–100 minutes at four players; three- and five-player durations require their own blind tests
 **Standard game:** Four rounds, three turns per player per round
 
