@@ -1926,6 +1926,45 @@ test("immediate trades skip impossible turns and package each offer", async () =
   }
 });
 
+test("Deal Flow can be paused without suppressing the underlying trade", async () => {
+  const runtime = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "coalition_lab",
+      seed: "paused-deal-flow",
+      rulesVariant: {
+        pausedFactionAbilities: [{
+          factionId: "coalition_lab",
+          abilityId: "deal_flow"
+        }]
+      }
+    },
+    () => {}
+  );
+  await runtime.match.setup(runtime.policies);
+  const match = runtime.match;
+  const coalition = match.players[0];
+  const partner = match.players[1];
+  coalition.runway = 2;
+  coalition.compute = 0;
+  partner.runway = 0;
+  partner.compute = 1;
+
+  assert.equal(match.completeImmediateTrade(coalition.seat, partner.seat, {
+    partnerSeat: partner.seat,
+    giveResource: "runway",
+    giveAmount: 1,
+    receiveResource: "compute",
+    receiveAmount: 1
+  }), true);
+  assert.equal(coalition.runway, 1);
+  assert.equal(coalition.compute, 1);
+  assert.equal(partner.runway, 1);
+  assert.equal(partner.compute, 0);
+  assert.equal(coalition.roundMetrics.dealFlowUsed, undefined);
+  assert.equal(coalition.metrics.factionAbilityValues.deal_flow, undefined);
+});
+
 test("immediate-trade packet ceiling is rule-derived and formal windows cannot repeat", async () => {
   assert.deepEqual(
     [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount)),
@@ -2751,7 +2790,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.29");
+  assert.equal(first.game.version, "0.8.30");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3033,7 +3072,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.29");
+  assert.equal(first.game.version, "0.8.30");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

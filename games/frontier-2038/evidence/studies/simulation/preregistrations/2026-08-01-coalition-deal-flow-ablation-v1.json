@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "coalition-deal-flow-ablation-v1",
+  "registeredBeforeResults": true,
+  "question": "How much causal outcome value do the deterministic policies realize from Coalition Lab Deal Flow at three players, with four- and five-player context held on the same common-seed matrix?",
+  "sourceEvidence": [
+    "2026-08-01-p3-faction-seat-policy-isolation",
+    "2026-08-01-p3-faction-seat-policy-fixed-replication",
+    "2026-08-01-coalition-wildcard-scrutiny-one"
+  ],
+  "sourceReportSha256": [
+    "499c971a2db15c9c4d93550479924993de9d419d17394c8add09e85da2b8f80c",
+    "3b31ce3c3b30256902a677334e14ef4c58cc73f6463040c94790fc4900ca4d81",
+    "e572c216c9ccd50725456cc23fa05d17cc3242fe5f63013d0ba97282627933be"
+  ],
+  "hypothesis": "Deal Flow triggers frequently but may supply a resource the deterministic policies cannot convert into score or rank. Suppressing only Deal Flow while retaining every underlying trade identifies its realized causal value before any replacement benefit is authored.",
+  "comparisonKind": "causal_one_lever",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "coalition_deal_flow_paused",
+      "overlay": {
+        "pausedFactionAbilities": [
+          {
+            "factionId": "coalition_lab",
+            "abilityId": "deal_flow"
+          }
+        ]
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "balanceAuthority": 4,
+  "regressionGuards": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "maximumMatches": 9670,
+  "balanceMatrixMatches": 9600,
+  "adversarialDiagnosticMatches": 70,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "projection": "batch",
+  "workers": 31,
+  "chunkSize": 8,
+  "seed": "frontier-2038-coalition-deal-flow-ablation-2026-08-01-v1",
+  "backends": ["weighted", "greedy"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "allowLlm": false,
+  "analysis": {
+    "primaryResponse": "For Coalition Lab at three players, report paused-minus-canonical common-seed win-share, score, and rank deltas overall and separately for weighted and greedy focal decisions.",
+    "scheduleResponse": "Report variable- and fixed-Mandate results separately; do not pool them as one regime.",
+    "valuableGate": "Deal Flow is materially realized if pausing it reduces Coalition's three-player mean win share by at least 0.03, reduces mean rank, and is nonpositive under both weighted and greedy focal backends.",
+    "inertGate": "Deal Flow is operationally inert under the tested policies if the absolute three-player mean win-share delta is at most 0.01 and the absolute mean-rank delta is at most 0.02, with no schedule-specific reversal of at least 0.03.",
+    "mixedGate": "Any result between the valuable and inert gates, or a backend/schedule reversal, is mixed and supports policy refinement or negotiation robustness before a rules candidate.",
+    "decision": "A materially valuable result keeps Deal Flow and redirects work to policy/other mechanisms. An inert result plus independent strict LLM weakness nominates, but does not approve, one bounded Deal Flow conversion candidate for a fresh preregistered common-seed test. An ablation improvement flags pathological incentives and requires mechanism review. No ablation result directly promotes a rule.",
+    "integrityGate": "Require zero integrity violations, zero policy fallbacks, and forced no-op rate below 0.03.",
+    "adversarialBoundary": "The 70 four-player adversarial matches remain a separately labeled exploit diagnostic and are not pooled into either rules arm's balance aggregate.",
+    "agiBoundary": "Zero declaration windows remain a coverage failure; this diagnostic cannot establish AGI-route balance."
+  },
+  "execution": {
+    "rulesConfigurationFile": "evidence/studies/simulation/preregistrations/2026-08-01-coalition-deal-flow-ablation-v1.rules.json",
+    "command": "npm run simulate:audit -- --maximum-matches 9670 --initial-runs 4 --batch-size 12 --player-counts 3,4,5 --mandate-modes variable,fixed --rules-configurations evidence/studies/simulation/preregistrations/2026-08-01-coalition-deal-flow-ablation-v1.rules.json --comparison-kind causal_one_lever --seed frontier-2038-coalition-deal-flow-ablation-2026-08-01-v1 --pre-registration-id coalition-deal-flow-ablation-v1 --projection batch --workers 31 --chunk-size 8 --output evidence/studies/simulation/2026-08-01-coalition-deal-flow-ablation-v1.raw.json"
+  },
+  "llm": {
+    "enabled": false,
+    "maximumProviderCalls": 0,
+    "boundary": "This deterministic causal diagnostic remains separate from the concurrently registered strict LLM robustness field."
+  }
+}
