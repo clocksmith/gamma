@@ -1,0 +1,1374 @@
+{
+  "schemaVersion": 3,
+  "reportType": "strategy_evolution",
+  "evidenceLabel": "simulation",
+  "generatedAt": "2026-07-27T00:42:22.931Z",
+  "seed": "diverse-current-evolve-infrastructure_compounder",
+  "playerCount": 4,
+  "targetProfileId": "infrastructure_compounder",
+  "generations": 4,
+  "population": 6,
+  "runsPerSeat": 12,
+  "scope": {
+    "id": "strategy-evolution-v1",
+    "verdictBoundary": "Seeded search result; candidate strategy, not proof of human optimality.",
+    "automated": [
+      "mutates action and decision weights",
+      "evaluates every candidate from every seat",
+      "uses common deterministic seeds and rotates factions",
+      "retains complete generation history"
+    ],
+    "modeledAbstractions": [],
+    "excluded": [
+      "human negotiation quality and human learning"
+    ]
+  },
+  "baselineProfile": {
+    "id": "infrastructure_compounder",
+    "name": "The Infrastructure Compounder",
+    "description": "Builds a compact powered engine, then converts it into public thresholds and late Customers.",
+    "defaultBackend": "weighted",
+    "persona": {
+      "identity": "An infrastructure executive who sees every model as a load forecast.",
+      "worldview": "Unpowered ambition is theater; durable capacity wins long contests.",
+      "riskPosture": "Prefers capital risk to research risk.",
+      "negotiationStyle": "Offers capacity from strength and dislikes dependency.",
+      "voice": "Concrete, logistical, and systems-minded."
+    },
+    "strategy": {
+      "selection": "weighted",
+      "objectives": [
+        "Establish two connected, powered Facilities without overbuilding.",
+        "Use the engine to cross Capability and Customer Mandate thresholds.",
+        "Keep enough late tempo for Fusion, Agent Swarm, or an AGI claim."
+      ],
+      "actionWeights": {
+        "fund": 2.4,
+        "research": 3.2,
+        "build": 3.8,
+        "organize": 0.8,
+        "deploy": 3,
+        "influence": 0.9,
+        "mega_cluster": 4,
+        "reorganization": 1.3,
+        "open_weights": 3.5,
+        "narrative_capture": 1.5,
+        "agent_swarm": 4,
+        "declare_agi": 24,
+        "fusion_demonstrator": 6
+      },
+      "decisionWeights": {
+        "build_facility_cloud": 2.5,
+        "build_facility_capital": 2,
+        "build_generator_utility_grid_contract": 2
+      },
+      "rules": [
+        {
+          "when": [
+            {
+              "path": "self.unpoweredFacilities",
+              "operator": "gt",
+              "value": 0
+            }
+          ],
+          "target": {
+            "decisionIdPrefix": "build_generator_utility_grid_contract"
+          },
+          "multiplier": 6
+        },
+        {
+          "when": [
+            {
+              "path": "self.facilities",
+              "operator": "gte",
+              "value": 2
+            }
+          ],
+          "target": {
+            "actionId": "deploy"
+          },
+          "multiplier": 3
+        },
+        {
+          "when": [
+            {
+              "path": "self.facilities",
+              "operator": "gte",
+              "value": 2
+            }
+          ],
+          "target": {
+            "actionId": "build"
+          },
+          "multiplier": 0.45
+        },
+        {
+          "when": [
+            {
+              "path": "self.canDeploy",
+              "operator": "eq",
+              "value": false
+            }
+          ],
+          "target": {
+            "actionId": "research"
+          },
+          "multiplier": 1.8
+        }
+      ]
+    }
+  },
+  "championProfile": {
+    "id": "infrastructure_compounder",
+    "name": "The Infrastructure Compounder",
+    "description": "Builds a compact powered engine, then converts it into public thresholds and late Customers.",
+    "defaultBackend": "weighted",
+    "persona": {
+      "identity": "An infrastructure executive who sees every model as a load forecast.",
+      "worldview": "Unpowered ambition is theater; durable capacity wins long contests.",
+      "riskPosture": "Prefers capital risk to research risk.",
+      "negotiationStyle": "Offers capacity from strength and dislikes dependency.",
+      "voice": "Concrete, logistical, and systems-minded."
+    },
+    "strategy": {
+      "selection": "weighted",
+      "objectives": [
+        "Establish two connected, powered Facilities without overbuilding.",
+        "Use the engine to cross Capability and Customer Mandate thresholds.",
+        "Keep enough late tempo for Fusion, Agent Swarm, or an AGI claim."
+      ],
+      "actionWeights": {
+        "fund": 2.312,
+        "research": 4.033,
+        "build": 2.82,
+        "organize": 0.353,
+        "deploy": 9.869,
+        "influence": 1.462,
+        "mega_cluster": 3.976,
+        "reorganization": 3.158,
+        "open_weights": 2.597,
+        "narrative_capture": 1.192,
+        "agent_swarm": 3.674,
+        "declare_agi": 13.778,
+        "fusion_demonstrator": 6.001
+      },
+      "decisionWeights": {
+        "build_facility_cloud": 1.723,
+        "build_facility_capital": 2.065,
+        "build_generator_utility_grid_contract": 1.386
+      },
+      "rules": [
+        {
+          "when": [
+            {
+              "path": "self.unpoweredFacilities",
+              "operator": "gt",
+              "value": 0
+            }
+          ],
+          "target": {
+            "decisionIdPrefix": "build_generator_utility_grid_contract"
+          },
+          "multiplier": 6
+        },
+        {
+          "when": [
+            {
+              "path": "self.facilities",
+              "operator": "gte",
+              "value": 2
+            }
+          ],
+          "target": {
+            "actionId": "deploy"
+          },
+          "multiplier": 3
+        },
+        {
+          "when": [
+            {
+              "path": "self.facilities",
+              "operator": "gte",
+              "value": 2
+            }
+          ],
+          "target": {
+            "actionId": "build"
+          },
+          "multiplier": 0.45
+        },
+        {
+          "when": [
+            {
+              "path": "self.canDeploy",
+              "operator": "eq",
+              "value": false
+            }
+          ],
+          "target": {
+            "actionId": "research"
+          },
+          "multiplier": 1.8
+        }
+      ]
+    },
+    "provenance": {
+      "kind": "simulated_strategy_mutation",
+      "parentId": "infrastructure_compounder",
+      "seed": "diverse-current-evolve-infrastructure_compounder:g:3:candidate:1",
+      "magnitude": 0.45
+    }
+  },
+  "history": [
+    {
+      "generation": 1,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.891,
+              "research": 2.866,
+              "build": 2.497,
+              "organize": 0.649,
+              "deploy": 4.551,
+              "influence": 0.624,
+              "mega_cluster": 2.996,
+              "reorganization": 1.803,
+              "open_weights": 3.004,
+              "narrative_capture": 1.486,
+              "agent_swarm": 5.091,
+              "declare_agi": 20,
+              "fusion_demonstrator": 5.593
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.874,
+              "build_facility_capital": 1.761,
+              "build_generator_utility_grid_contract": 1.404
+            }
+          },
+          "evaluation": {
+            "fitness": 33.646,
+            "meanWinShare": 0.31250000000000006,
+            "meanScore": 14.854166666666668,
+            "actionDiversity": 0.9109783623569307,
+            "seatWinShares": [
+              0.5833333333333334,
+              0.3333333333333333,
+              0.16666666666666666,
+              0.16666666666666666
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.4,
+              "research": 3.2,
+              "build": 3.8,
+              "organize": 0.8,
+              "deploy": 3,
+              "influence": 0.9,
+              "mega_cluster": 4,
+              "reorganization": 1.3,
+              "open_weights": 3.5,
+              "narrative_capture": 1.5,
+              "agent_swarm": 4,
+              "declare_agi": 24,
+              "fusion_demonstrator": 6
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.5,
+              "build_facility_capital": 2,
+              "build_generator_utility_grid_contract": 2
+            }
+          },
+          "evaluation": {
+            "fitness": 25.335,
+            "meanWinShare": 0.22916666666666666,
+            "meanScore": 14.937499999999998,
+            "actionDiversity": 0.9248598156288967,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.08333333333333333,
+              0.3333333333333333,
+              0.16666666666666666
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 3.359,
+              "research": 2.955,
+              "build": 3.828,
+              "organize": 0.772,
+              "deploy": 2.454,
+              "influence": 0.9,
+              "mega_cluster": 5.178,
+              "reorganization": 1.718,
+              "open_weights": 3.637,
+              "narrative_capture": 1.813,
+              "agent_swarm": 4.944,
+              "declare_agi": 20,
+              "fusion_demonstrator": 8.2
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 1.676,
+              "build_facility_capital": 1.756,
+              "build_generator_utility_grid_contract": 1.602
+            }
+          },
+          "evaluation": {
+            "fitness": 23.133,
+            "meanWinShare": 0.20833333333333334,
+            "meanScore": 13.604166666666666,
+            "actionDiversity": 0.939009392777755,
+            "seatWinShares": [
+              0.25,
+              0.25,
+              0.25,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 3.018,
+              "research": 3.438,
+              "build": 3.053,
+              "organize": 0.67,
+              "deploy": 3.806,
+              "influence": 0.948,
+              "mega_cluster": 3.142,
+              "reorganization": 1.588,
+              "open_weights": 2.499,
+              "narrative_capture": 1.752,
+              "agent_swarm": 5.898,
+              "declare_agi": 17.617,
+              "fusion_demonstrator": 7.961
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.688,
+              "build_facility_capital": 2.676,
+              "build_generator_utility_grid_contract": 1.661
+            }
+          },
+          "evaluation": {
+            "fitness": 23.12,
+            "meanWinShare": 0.20833333333333334,
+            "meanScore": 13.645833333333332,
+            "actionDiversity": 0.9216619603865529,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.16666666666666666,
+              0.25,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.888,
+              "research": 2.772,
+              "build": 3.801,
+              "organize": 1.005,
+              "deploy": 3.346,
+              "influence": 0.838,
+              "mega_cluster": 4.148,
+              "reorganization": 1.78,
+              "open_weights": 3.523,
+              "narrative_capture": 1.296,
+              "agent_swarm": 4.69,
+              "declare_agi": 20,
+              "fusion_demonstrator": 8.104
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.344,
+              "build_facility_capital": 2.177,
+              "build_generator_utility_grid_contract": 1.508
+            }
+          },
+          "evaluation": {
+            "fitness": 19.011,
+            "meanWinShare": 0.16666666666666666,
+            "meanScore": 14.104166666666666,
+            "actionDiversity": 0.933587682951355,
+            "seatWinShares": [
+              0.25,
+              0,
+              0.08333333333333333,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.425,
+              "research": 4.103,
+              "build": 4.438,
+              "organize": 1.028,
+              "deploy": 2.27,
+              "influence": 0.585,
+              "mega_cluster": 4.402,
+              "reorganization": 1.152,
+              "open_weights": 3.996,
+              "narrative_capture": 1.785,
+              "agent_swarm": 3.479,
+              "declare_agi": 20,
+              "fusion_demonstrator": 3.975
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.647,
+              "build_facility_capital": 1.419,
+              "build_generator_utility_grid_contract": 2.857
+            }
+          },
+          "evaluation": {
+            "fitness": 16.909,
+            "meanWinShare": 0.14583333333333334,
+            "meanScore": 14.083333333333334,
+            "actionDiversity": 0.9170798804510547,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.08333333333333333,
+              0
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 33.646,
+        "meanWinShare": 0.31250000000000006
+      }
+    },
+    {
+      "generation": 2,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.567,
+              "research": 2.718,
+              "build": 1.862,
+              "organize": 0.544,
+              "deploy": 6.865,
+              "influence": 0.951,
+              "mega_cluster": 3.936,
+              "reorganization": 2.384,
+              "open_weights": 2.689,
+              "narrative_capture": 1.063,
+              "agent_swarm": 3.696,
+              "declare_agi": 20,
+              "fusion_demonstrator": 5.71
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.312,
+              "build_facility_capital": 1.546,
+              "build_generator_utility_grid_contract": 2.108
+            }
+          },
+          "evaluation": {
+            "fitness": 29.432,
+            "meanWinShare": 0.2708333333333333,
+            "meanScore": 14.416666666666666,
+            "actionDiversity": 0.9065264772135874,
+            "seatWinShares": [
+              0,
+              0.25,
+              0.3333333333333333,
+              0.5
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.682,
+              "research": 3.092,
+              "build": 2.025,
+              "organize": 0.782,
+              "deploy": 3.968,
+              "influence": 0.435,
+              "mega_cluster": 2.913,
+              "reorganization": 1.482,
+              "open_weights": 3.692,
+              "narrative_capture": 1.02,
+              "agent_swarm": 3.342,
+              "declare_agi": 18.805,
+              "fusion_demonstrator": 7.347
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.3,
+              "build_facility_capital": 2.58,
+              "build_generator_utility_grid_contract": 0.914
+            }
+          },
+          "evaluation": {
+            "fitness": 27.485,
+            "meanWinShare": 0.24999999999999997,
+            "meanScore": 15.770833333333334,
+            "actionDiversity": 0.9083344372253374,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.3333333333333333,
+              0.16666666666666666
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.537,
+              "research": 3.546,
+              "build": 1.934,
+              "organize": 0.896,
+              "deploy": 3.758,
+              "influence": 0.404,
+              "mega_cluster": 2.976,
+              "reorganization": 1.244,
+              "open_weights": 3.306,
+              "narrative_capture": 1.976,
+              "agent_swarm": 3.91,
+              "declare_agi": 18.939,
+              "fusion_demonstrator": 7.588
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.521,
+              "build_facility_capital": 1.894,
+              "build_generator_utility_grid_contract": 1.886
+            }
+          },
+          "evaluation": {
+            "fitness": 27.422,
+            "meanWinShare": 0.25,
+            "meanScore": 15.270833333333332,
+            "actionDiversity": 0.8944816205178735,
+            "seatWinShares": [
+              0.4166666666666667,
+              0.08333333333333333,
+              0.16666666666666666,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.891,
+              "research": 2.866,
+              "build": 2.497,
+              "organize": 0.649,
+              "deploy": 4.551,
+              "influence": 0.624,
+              "mega_cluster": 2.996,
+              "reorganization": 1.803,
+              "open_weights": 3.004,
+              "narrative_capture": 1.486,
+              "agent_swarm": 5.091,
+              "declare_agi": 20,
+              "fusion_demonstrator": 5.593
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.874,
+              "build_facility_capital": 1.761,
+              "build_generator_utility_grid_contract": 1.404
+            }
+          },
+          "evaluation": {
+            "fitness": 25.267,
+            "meanWinShare": 0.22916666666666666,
+            "meanScore": 14.395833333333332,
+            "actionDiversity": 0.9106425745442676,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.16666666666666666,
+              0.3333333333333333,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.284,
+              "research": 1.882,
+              "build": 2.457,
+              "organize": 0.88,
+              "deploy": 4.786,
+              "influence": 0.54,
+              "mega_cluster": 4.282,
+              "reorganization": 2.25,
+              "open_weights": 2.529,
+              "narrative_capture": 1.668,
+              "agent_swarm": 6.4,
+              "declare_agi": 20,
+              "fusion_demonstrator": 3.645
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.645,
+              "build_facility_capital": 2.358,
+              "build_generator_utility_grid_contract": 1.043
+            }
+          },
+          "evaluation": {
+            "fitness": 23.12,
+            "meanWinShare": 0.20833333333333334,
+            "meanScore": 13.708333333333334,
+            "actionDiversity": 0.9155819331985783,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.25,
+              0.4166666666666667,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.039,
+              "research": 2.965,
+              "build": 2.675,
+              "organize": 0.471,
+              "deploy": 4.065,
+              "influence": 0.915,
+              "mega_cluster": 2.679,
+              "reorganization": 1.546,
+              "open_weights": 2.056,
+              "narrative_capture": 1.015,
+              "agent_swarm": 4.986,
+              "declare_agi": 20,
+              "fusion_demonstrator": 8.162
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.31,
+              "build_facility_capital": 2.118,
+              "build_generator_utility_grid_contract": 1.562
+            }
+          },
+          "evaluation": {
+            "fitness": 21.074,
+            "meanWinShare": 0.1875,
+            "meanScore": 14.083333333333332,
+            "actionDiversity": 0.9154240760442186,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.16666666666666666,
+              0.16666666666666666,
+              0.08333333333333333
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 29.432,
+        "meanWinShare": 0.2708333333333333
+      }
+    },
+    {
+      "generation": 3,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.567,
+              "research": 2.718,
+              "build": 1.862,
+              "organize": 0.544,
+              "deploy": 6.865,
+              "influence": 0.951,
+              "mega_cluster": 3.936,
+              "reorganization": 2.384,
+              "open_weights": 2.689,
+              "narrative_capture": 1.063,
+              "agent_swarm": 3.696,
+              "declare_agi": 20,
+              "fusion_demonstrator": 5.71
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.312,
+              "build_facility_capital": 1.546,
+              "build_generator_utility_grid_contract": 2.108
+            }
+          },
+          "evaluation": {
+            "fitness": 39.984,
+            "meanWinShare": 0.375,
+            "meanScore": 15.645833333333334,
+            "actionDiversity": 0.9197877603997169,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.4166666666666667,
+              0.4166666666666667,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.707,
+              "research": 2.276,
+              "build": 2.248,
+              "organize": 0.669,
+              "deploy": 6.274,
+              "influence": 0.737,
+              "mega_cluster": 3.381,
+              "reorganization": 3.647,
+              "open_weights": 3.666,
+              "narrative_capture": 1.305,
+              "agent_swarm": 5.725,
+              "declare_agi": 20,
+              "fusion_demonstrator": 6.162
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.68,
+              "build_facility_capital": 1.423,
+              "build_generator_utility_grid_contract": 1.753
+            }
+          },
+          "evaluation": {
+            "fitness": 29.406,
+            "meanWinShare": 0.2708333333333333,
+            "meanScore": 14.1875,
+            "actionDiversity": 0.9038767040764769,
+            "seatWinShares": [
+              0.25,
+              0.3333333333333333,
+              0.16666666666666666,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.148,
+              "research": 2.438,
+              "build": 1.273,
+              "organize": 0.591,
+              "deploy": 4.633,
+              "influence": 1.474,
+              "mega_cluster": 4.149,
+              "reorganization": 2.269,
+              "open_weights": 2.282,
+              "narrative_capture": 0.782,
+              "agent_swarm": 4.591,
+              "declare_agi": 16.348,
+              "fusion_demonstrator": 8.381
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.128,
+              "build_facility_capital": 1.978,
+              "build_generator_utility_grid_contract": 2.553
+            }
+          },
+          "evaluation": {
+            "fitness": 27.403,
+            "meanWinShare": 0.25,
+            "meanScore": 14.625,
+            "actionDiversity": 0.9408012301400924,
+            "seatWinShares": [
+              0.25,
+              0.16666666666666666,
+              0.25,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.19,
+              "research": 3.686,
+              "build": 2.812,
+              "organize": 0.412,
+              "deploy": 7.405,
+              "influence": 0.803,
+              "mega_cluster": 4.474,
+              "reorganization": 1.897,
+              "open_weights": 3.248,
+              "narrative_capture": 0.687,
+              "agent_swarm": 3.974,
+              "declare_agi": 20,
+              "fusion_demonstrator": 6.242
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 1.719,
+              "build_facility_capital": 1.255,
+              "build_generator_utility_grid_contract": 2.199
+            }
+          },
+          "evaluation": {
+            "fitness": 27.37,
+            "meanWinShare": 0.25,
+            "meanScore": 14.916666666666668,
+            "actionDiversity": 0.8779662029588537,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.25,
+              0.3333333333333333,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.37,
+              "research": 2.148,
+              "build": 1.792,
+              "organize": 0.583,
+              "deploy": 7.938,
+              "influence": 1.292,
+              "mega_cluster": 4.303,
+              "reorganization": 3.251,
+              "open_weights": 3.63,
+              "narrative_capture": 1.152,
+              "agent_swarm": 4.107,
+              "declare_agi": 20,
+              "fusion_demonstrator": 3.781
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.951,
+              "build_facility_capital": 1.67,
+              "build_generator_utility_grid_contract": 2.236
+            }
+          },
+          "evaluation": {
+            "fitness": 21.112,
+            "meanWinShare": 0.18749999999999997,
+            "meanScore": 14.375,
+            "actionDiversity": 0.924289118246532,
+            "seatWinShares": [
+              0.25,
+              0.16666666666666666,
+              0.16666666666666666,
+              0.16666666666666666
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.647,
+              "research": 2.683,
+              "build": 2.555,
+              "organize": 0.806,
+              "deploy": 7.72,
+              "influence": 0.829,
+              "mega_cluster": 4.174,
+              "reorganization": 1.616,
+              "open_weights": 2.507,
+              "narrative_capture": 1.07,
+              "agent_swarm": 5.13,
+              "declare_agi": 20,
+              "fusion_demonstrator": 6.285
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.401,
+              "build_facility_capital": 1.798,
+              "build_generator_utility_grid_contract": 2.447
+            }
+          },
+          "evaluation": {
+            "fitness": 18.961,
+            "meanWinShare": 0.16666666666666669,
+            "meanScore": 13.9375,
+            "actionDiversity": 0.9005921176400371,
+            "seatWinShares": [
+              0.08333333333333333,
+              0,
+              0.16666666666666666,
+              0.4166666666666667
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 39.984,
+        "meanWinShare": 0.375
+      }
+    },
+    {
+      "generation": 4,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.312,
+              "research": 4.033,
+              "build": 2.82,
+              "organize": 0.353,
+              "deploy": 9.869,
+              "influence": 1.462,
+              "mega_cluster": 3.976,
+              "reorganization": 3.158,
+              "open_weights": 2.597,
+              "narrative_capture": 1.192,
+              "agent_swarm": 3.674,
+              "declare_agi": 13.778,
+              "fusion_demonstrator": 6.001
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 1.723,
+              "build_facility_capital": 2.065,
+              "build_generator_utility_grid_contract": 1.386
+            }
+          },
+          "evaluation": {
+            "fitness": 31.559,
+            "meanWinShare": 0.2916666666666667,
+            "meanScore": 15.166666666666666,
+            "actionDiversity": 0.8756470306667807,
+            "seatWinShares": [
+              0.25,
+              0.25,
+              0.4166666666666667,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 2.428,
+              "research": 2.017,
+              "build": 2.828,
+              "organize": 0.41,
+              "deploy": 5.58,
+              "influence": 0.642,
+              "mega_cluster": 3.776,
+              "reorganization": 1.781,
+              "open_weights": 3.689,
+              "narrative_capture": 1.417,
+              "agent_swarm": 2.674,
+              "declare_agi": 20,
+              "fusion_demonstrator": 5.316
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.475,
+              "build_facility_capital": 1.91,
+              "build_generator_utility_grid_contract": 1.779
+            }
+          },
+          "evaluation": {
+            "fitness": 27.342,
+            "meanWinShare": 0.25,
+            "meanScore": 14.604166666666666,
+            "actionDiversity": 0.8820222545574512,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.25,
+              0.08333333333333333,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.087,
+              "research": 2.236,
+              "build": 2.593,
+              "organize": 0.405,
+              "deploy": 8.928,
+              "influence": 1.065,
+              "mega_cluster": 5.703,
+              "reorganization": 3.207,
+              "open_weights": 2.79,
+              "narrative_capture": 0.94,
+              "agent_swarm": 3.963,
+              "declare_agi": 20,
+              "fusion_demonstrator": 6.475
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 3.388,
+              "build_facility_capital": 1.045,
+              "build_generator_utility_grid_contract": 2.792
+            }
+          },
+          "evaluation": {
+            "fitness": 27.325,
+            "meanWinShare": 0.25,
+            "meanScore": 14.458333333333334,
+            "actionDiversity": 0.8791381844044175,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.4166666666666667,
+              0.16666666666666666,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.567,
+              "research": 2.718,
+              "build": 1.862,
+              "organize": 0.544,
+              "deploy": 6.865,
+              "influence": 0.951,
+              "mega_cluster": 3.936,
+              "reorganization": 2.384,
+              "open_weights": 2.689,
+              "narrative_capture": 1.063,
+              "agent_swarm": 3.696,
+              "declare_agi": 20,
+              "fusion_demonstrator": 5.71
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.312,
+              "build_facility_capital": 1.546,
+              "build_generator_utility_grid_contract": 2.108
+            }
+          },
+          "evaluation": {
+            "fitness": 21.121,
+            "meanWinShare": 0.1875,
+            "meanScore": 14.749999999999998,
+            "actionDiversity": 0.8956470452144043,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.16666666666666666,
+              0.16666666666666666,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.58,
+              "research": 2.731,
+              "build": 2.574,
+              "organize": 0.425,
+              "deploy": 5.012,
+              "influence": 1.021,
+              "mega_cluster": 2.699,
+              "reorganization": 2.128,
+              "open_weights": 2.81,
+              "narrative_capture": 1.39,
+              "agent_swarm": 3.171,
+              "declare_agi": 16.782,
+              "fusion_demonstrator": 3.946
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.193,
+              "build_facility_capital": 1.254,
+              "build_generator_utility_grid_contract": 2.619
+            }
+          },
+          "evaluation": {
+            "fitness": 21.031,
+            "meanWinShare": 0.1875,
+            "meanScore": 13.729166666666668,
+            "actionDiversity": 0.9083388967458782,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.3333333333333333,
+              0.25,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "infrastructure_compounder",
+            "actionWeights": {
+              "fund": 1.999,
+              "research": 1.75,
+              "build": 2.89,
+              "organize": 0.73,
+              "deploy": 5.753,
+              "influence": 1.285,
+              "mega_cluster": 2.681,
+              "reorganization": 2.047,
+              "open_weights": 3.225,
+              "narrative_capture": 0.72,
+              "agent_swarm": 5.597,
+              "declare_agi": 16.198,
+              "fusion_demonstrator": 5.584
+            },
+            "decisionWeights": {
+              "build_facility_cloud": 2.294,
+              "build_facility_capital": 2.011,
+              "build_generator_utility_grid_contract": 3.027
+            }
+          },
+          "evaluation": {
+            "fitness": 15.786,
+            "meanWinShare": 0.13541666666666666,
+            "meanScore": 13.145833333333334,
+            "actionDiversity": 0.9294941140620069,
+            "seatWinShares": [
+              0.125,
+              0.08333333333333333,
+              0.25,
+              0.08333333333333333
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 31.559,
+        "meanWinShare": 0.2916666666666667
+      }
+    }
+  ],
+  "reportSchemaVersion": 3,
+  "replaySchemaVersion": 2,
+  "decisionSchemaVersion": 2,
+  "evidenceType": "simulation",
+  "game": {
+    "version": "0.3.0",
+    "releaseStatus": "playtest",
+    "releaseDate": "2026-07-26",
+    "rulesetFingerprint": "sha256:08937daeb3385ca7abcb43d2e531c65b567008867b42cbd1c22cbd08b465c211",
+    "mechanicsFingerprint": "sha256:60b70a5ceec571d5f62338b3134ea1287b266ac9b8267272a734eae155ee9b4e",
+    "playtestKitFingerprint": "sha256:ec264f6ef4af120d5d30def1178b1d63f6051726361d792c69f03f5f09f7c451",
+    "files": {
+      "data/factions.json": {
+        "bytes": 19127,
+        "sha256": "2cd1d0627b192934260de4d8a0755cfd3ce1c827345e494d2cc0fbdb8a90da97"
+      },
+      "data/game-config.json": {
+        "bytes": 27032,
+        "sha256": "6f7929228fdd5b1561a2449fe8adb8070afaf2dbf3387efdcd4b01f3ccd6f0b6"
+      },
+      "data/headlines.json": {
+        "bytes": 20981,
+        "sha256": "d3f14e49d335b952fe396cf19ef28272b1ab72057bf70696a7ae1af3e6a7de4d"
+      },
+      "data/mandates.json": {
+        "bytes": 6923,
+        "sha256": "7deac9bf6c2fdbd8c594d6fc7586d25b8983d4ec7ab61e56f698f0b42555f49a"
+      },
+      "data/secret-objectives.json": {
+        "bytes": 8216,
+        "sha256": "8302bafa1c2548eace9cf9c0b6d789a8c49a00a70c9285847b5f334020c529ee"
+      },
+      "data/simulation-copy.json": {
+        "bytes": 10707,
+        "sha256": "fd1c646735944fac917f6d55960d34d6993abae665ff9e80775b8bff159b4ede"
+      },
+      "data/tactics.json": {
+        "bytes": 5724,
+        "sha256": "919ccb83878e9ac83561ed30fa1c5339f58d6497c148bb61ab1fb28410f376ae"
+      },
+      "data/wild-actions.json": {
+        "bytes": 5124,
+        "sha256": "6a5f2d850f091511192c413e5a0b71b026ac27a903481fa975d6f1efe06b354e"
+      }
+    },
+    "kitFiles": {
+      "data/content-manifest.json": {
+        "bytes": 4018,
+        "sha256": "cf41af0d33842c3a7ca0455089dee828f91fc565ba0e22245b086a04a26639c0"
+      },
+      "data/reference-cards.json": {
+        "bytes": 6027,
+        "sha256": "da1f0d0aee8793ad0d6a95545f90989fa65ea0a1fa57eb0ad6741d2204a649e5"
+      },
+      "data/ui-copy.json": {
+        "bytes": 7085,
+        "sha256": "5949a2743edd6c281376156aad983ee3cc01e5bd0cb25201cadce2ac0d2c4ec1"
+      },
+      "data/world-copy.json": {
+        "bytes": 7912,
+        "sha256": "53c861c64bda807662180eb979c76e864209941529a5841dba451c808fd5cd7b"
+      }
+    }
+  },
+  "engine": {
+    "id": "selected-rules",
+    "version": "0.4.0",
+    "coverageId": "rc4-baseline-v1",
+    "fingerprint": "sha256:13217755eb6439422dc727bcbb1b5f72dc249d2dba125002d671caddbea3abd2",
+    "files": {
+      "prototype/app.js": {
+        "bytes": 9050,
+        "sha256": "ee8bc5500c68a8d201fd846bd3b8521d4df76fe5e6e9d9432a35c04b8b882f02"
+      },
+      "prototype/src/engine.js": {
+        "bytes": 28719,
+        "sha256": "75eab503e208896f4533dca4201f0bad2e9eb565c39324ca520b47e295b9d02b"
+      },
+      "simulation/content/simulation-copy.js": {
+        "bytes": 411,
+        "sha256": "b4795dbfd08d187ebf62f6860714c504c45c0ea01b48e379d894f78a0aaa3f2e"
+      },
+      "simulation/contracts/decision-contract.js": {
+        "bytes": 3959,
+        "sha256": "3464294134b805036dba13454710657fc37f978f12ee3273ab85ee8e2b47b401"
+      },
+      "simulation/environment/core-economy-match.js": {
+        "bytes": 26297,
+        "sha256": "e5ec994c3d5e199f6a55cd71352bdec7ceb9428de1085d07a67aba6f86babe15"
+      },
+      "simulation/environment/rules-variant.js": {
+        "bytes": 893,
+        "sha256": "001cce3316a653ed328bc64c05b1424c23b98187bbe6d12ffed85dd4e4b1f7f4"
+      },
+      "simulation/environment/selected-rules-match.js": {
+        "bytes": 157607,
+        "sha256": "5a4a19701a767a6883624b75f7f4154423ac0458fa21ac93164e7a3909d73668"
+      },
+      "simulation/personas/player-profile.js": {
+        "bytes": 2622,
+        "sha256": "3454f43ea23cff7fc4172abf8e5f164d5242cdc9a83fe2bcb5c82068bf39e971"
+      },
+      "simulation/policies/cli-backed-policy.js": {
+        "bytes": 2056,
+        "sha256": "17f0bffd7523d563c17cbfb49fe645a208b8549923be936745c9d58fc36ed301"
+      },
+      "simulation/policies/policy-factory.js": {
+        "bytes": 1229,
+        "sha256": "ea5563974ffa4ac0df65da5033bf4edad72a7520c4c06d81dfb811c2e04d88cf"
+      },
+      "simulation/policies/weighted-policy.js": {
+        "bytes": 3552,
+        "sha256": "f6f4518bb8a4072a1a703989c9d7fdabf59b4774d1b5814c7fa94a4f72e585a4"
+      },
+      "simulation/rules/declaration-readiness.js": {
+        "bytes": 5379,
+        "sha256": "3053a2a49b769f0a876d6a10be36d3b5a4ea32bda2bef57f8c0561b863286654"
+      },
+      "simulation/runner/monte-carlo-runner.js": {
+        "bytes": 9544,
+        "sha256": "536f1d2a55123a59da4b9cdc0534be3cc2f032b03e607a9dd4101398644fe39f"
+      },
+      "simulation/runner/optimization-runner.js": {
+        "bytes": 10543,
+        "sha256": "e5105559ebab6308b1e1685bfc87a16e6507d9fc26f54121bed000d8fc692012"
+      },
+      "simulation/runtime/create-interactive-game.js": {
+        "bytes": 3052,
+        "sha256": "ea5bdbc22f23c4ac35ef5417925d055520facdd886416b7a11f874d037250ed8"
+      },
+      "simulation/runtime/create-simulation.js": {
+        "bytes": 7624,
+        "sha256": "b905ab324831877d8e9c3053863a9d355ee84bc087e7303f564eb420303eaf4a"
+      },
+      "simulation/runtime/run-experiment.js": {
+        "bytes": 1839,
+        "sha256": "15bc39b58029acac84659a4d65a88d7fcf3cfd0489edd7c97225813b16d08d0f"
+      },
+      "tools/serve.mjs": {
+        "bytes": 9600,
+        "sha256": "75a400ff15bf411d2b5b2a929af3245966eb9e6f4303f6068883c24746235ab3"
+      }
+    }
+  },
+  "variant": {
+    "kind": "canonical",
+    "overlay": {},
+    "effective": {},
+    "fingerprint": "sha256:5ebac060dfa962a0e03eac473b1f9f4f08dc25fa41a69d12e63410ddb9df1549"
+  },
+  "strategies": {
+    "fingerprint": "sha256:df34eaaec7ac5cbbeb99360a002455d37560e97870329fb5a81b54b33d741220",
+    "profiles": [
+      {
+        "id": "balanced_operator",
+        "fingerprint": "sha256:ace912cb576d7270011842621a5377c8cc429fd99b9021f51f1afa0de9ca56db"
+      },
+      {
+        "id": "capability_rusher",
+        "fingerprint": "sha256:5da7d459040aed466c858b1fc2cad060e1b19a4115d7e7bc6e2464a9a4a72909"
+      },
+      {
+        "id": "infrastructure_compounder",
+        "fingerprint": "sha256:3953ce559903f85822961d460920900d1d72d1d3f428c19c6f2d2d654927b625"
+      },
+      {
+        "id": "market_maximalist",
+        "fingerprint": "sha256:b4cf3b8521817e5fc39b515cbc5c07ec316b5b4dfa8508bb05fa541436b33601"
+      },
+      {
+        "id": "trust_governor",
+        "fingerprint": "sha256:269426ab7bf9fad5148c9b2ae246dc63665a8a83d8443abfa95124a65d1c3312"
+      }
+    ],
+    "backends": [
+      "weighted"
+    ],
+    "model": null
+  },
+  "experiment": {
+    "reportType": "strategy_evolution",
+    "seed": "diverse-current-evolve-infrastructure_compounder",
+    "playerCount": 4,
+    "runs": null,
+    "sampleReplays": 0,
+    "generations": 4,
+    "population": 6,
+    "runsPerSeat": 12,
+    "iterations": null,
+    "runsPerVariant": null,
+    "targetAgiRate": null,
+    "scopeId": "strategy-evolution-v1",
+    "fingerprint": "sha256:90022e703dcecf5b0c0f44375c69cbf48344960367d6ca075e541f83862abec1"
+  },
+  "rng": {
+    "algorithm": "mulberry32",
+    "version": 1
+  },
+  "provenance": {
+    "sourceCommit": "edc414bc189fe4d5f7599ce4437a2b883e799d64",
+    "sourceDirty": true
+  }
+}

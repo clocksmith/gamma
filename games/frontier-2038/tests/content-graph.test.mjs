@@ -11,14 +11,14 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), 
 test("semantic content graph reproduces every declared artifact without drift", async () => {
   const { stdout } = await execFileAsync(
     process.execPath,
-    ["scripts/content/compile.mjs", "--check"],
+    ["tasks/content/compile.mjs", "--check"],
     { cwd: root }
   );
   assert.match(stdout, /content-graph: verified \d+ generated artifacts/);
 });
 
 test("content compiler is domain-neutral", async () => {
-  const compiler = await readFile(new URL("scripts/content/compile.mjs", root), "utf8");
+  const compiler = await readFile(new URL("tasks/content/compile.mjs", root), "utf8");
   for (const forbidden of [
     "M3T4",
     "Fusion",
@@ -36,38 +36,44 @@ test("semantic graph owns every baseline player-facing construction surface", as
   const targets = new Set(graph.artifacts.map((artifact) => artifact.target));
   for (const target of [
     "docs/core-rules.md",
-    "data/game-config.json",
-    "data/factions.json",
-    "data/headlines.json",
-    "data/wild-actions.json",
-    "data/mandates.json",
-    "data/reference-cards.json",
-    "data/player-strategies.json",
-    "data/world-copy.json",
-    "data/ui-copy.json",
-    "data/simulation-copy.json",
-    "prototype/index.html",
-    "prototype/simulation.html"
+    "generated/game-config.json",
+    "generated/factions.json",
+    "generated/headlines.json",
+    "generated/wild-actions.json",
+    "generated/mandates.json",
+    "generated/reference-cards.json",
+    "generated/player-strategies.json",
+    "generated/world-copy.json",
+    "generated/ui-copy.json",
+    "generated/simulation-copy.json",
+    "web/index.html",
+    "web/simulation.html"
   ]) {
     assert.ok(targets.has(target), `semantic graph generates ${target}`);
   }
   assert.equal(targets.size, graph.artifacts.length);
-  assert.ok(graph.artifacts.every((artifact) => artifact.source.startsWith("content/")));
+  const sourceRoots = graph.sourceRoots || ["content/"];
+  assert.ok(
+    graph.artifacts.every((artifact) =>
+      sourceRoots.some((sourceRoot) => artifact.source.startsWith(sourceRoot))
+    ),
+    "every generated artifact has a declared canonical source root"
+  );
 });
 
 test("baseline physical copy is isolated from runtime and deferred sources", async () => {
   const graph = await readJson("content/graph.json");
   const sources = new Set(graph.artifacts.map((artifact) => artifact.source));
   const physicalSources = [
-    "content/physical/content-manifest.json",
-    "content/physical/core-rules.md",
-    "content/physical/factions.json",
-    "content/physical/game-config.json",
-    "content/physical/headlines.json",
-    "content/physical/mandates.json",
-    "content/physical/reference-cards.json",
-    "content/physical/wild-actions.json",
-    "content/physical/world-copy.json"
+    "physical/content-manifest.json",
+    "physical/core-rules.md",
+    "physical/factions.json",
+    "physical/game-config.json",
+    "physical/headlines.json",
+    "physical/mandates.json",
+    "physical/reference-cards.json",
+    "physical/wild-actions.json",
+    "physical/world-copy.json"
   ];
 
   for (const source of physicalSources) {
@@ -80,14 +86,14 @@ test("baseline physical copy is isolated from runtime and deferred sources", asy
 });
 
 test("shared semantic references construct current cards, rules, UI, and simulation copy", async () => {
-  const variables = await readJson("content/physical/variables.json");
-  const config = await readJson("data/game-config.json");
-  const wild = await readJson("data/wild-actions.json");
-  const ui = await readJson("data/ui-copy.json");
-  const simulation = await readJson("data/simulation-copy.json");
+  const variables = await readJson("physical/variables.json");
+  const config = await readJson("generated/game-config.json");
+  const wild = await readJson("generated/wild-actions.json");
+  const ui = await readJson("generated/ui-copy.json");
+  const simulation = await readJson("generated/simulation-copy.json");
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const rulesSource = await readFile(
-    new URL("content/physical/core-rules.md", root),
+    new URL("physical/core-rules.md", root),
     "utf8"
   );
   const allSources = await Promise.all(
@@ -145,10 +151,10 @@ test("shared semantic references construct current cards, rules, UI, and simulat
 });
 
 test("Headline cards are the single source for the rulebook inventory", async () => {
-  const { headlines } = await readJson("data/headlines.json");
+  const { headlines } = await readJson("generated/headlines.json");
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const rulesSource = await readFile(
-    new URL("content/physical/core-rules.md", root),
+    new URL("physical/core-rules.md", root),
     "utf8"
   );
 
@@ -174,10 +180,10 @@ test("Headline cards are the single source for the rulebook inventory", async ()
 });
 
 test("Era cards are the single source for the rulebook escalation lore", async () => {
-  const { eraCards } = await readJson("data/reference-cards.json");
+  const { eraCards } = await readJson("generated/reference-cards.json");
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const rulesSource = await readFile(
-    new URL("content/physical/core-rules.md", root),
+    new URL("physical/core-rules.md", root),
     "utf8"
   );
 
@@ -193,7 +199,7 @@ test("Era cards are the single source for the rulebook escalation lore", async (
 
 test("numeric typography preserves exact card digits while prose may spell numbers", async () => {
   const [{ headlines }, rules, thematicBible] = await Promise.all([
-    readJson("data/headlines.json"),
+    readJson("generated/headlines.json"),
     readFile(new URL("docs/core-rules.md", root), "utf8"),
     readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
   ]);
@@ -214,8 +220,8 @@ test("numeric typography preserves exact card digits while prose may spell numbe
 });
 
 test("named parody identities are canonical across generated game surfaces", async () => {
-  const variables = await readJson("content/physical/variables.json");
-  const factions = await readJson("data/factions.json");
+  const variables = await readJson("physical/variables.json");
+  const factions = await readJson("generated/factions.json");
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const expectedNames = [
     "Sam Altman",
@@ -248,7 +254,7 @@ test("named parody identities are canonical across generated game surfaces", asy
 });
 
 test("canonical faction source contains no alternate identity vocabulary", async () => {
-  const source = await readFile(new URL("content/physical/factions.json", root), "utf8");
+  const source = await readFile(new URL("physical/factions.json", root), "utf8");
   for (const name of [
     "Sam Altman",
     "Mark Zuckerberg",

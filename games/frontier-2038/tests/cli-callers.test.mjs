@@ -4,26 +4,26 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { ClaudeCliCaller, CodexCliCaller } from "../simulation/callers/index.js";
+import { ClaudeCliCaller, CodexCliCaller } from "../lab/callers/index.js";
 import {
   buildDecisionPrompt,
   validateDecisionPacket,
   validateDecisionResponse
-} from "../simulation/contracts/decision-contract.js";
-import { DecisionCache } from "../simulation/policies/decision-cache.js";
-import { CliBackedPlayerPolicy } from "../simulation/policies/cli-backed-policy.js";
-import { loadPlayerProfiles } from "../simulation/personas/player-profile.js";
-import { WeightedPlayerPolicy } from "../simulation/policies/weighted-policy.js";
+} from "../lab/contracts/decision-contract.js";
+import { DecisionCache } from "../lab/policies/decision-cache.js";
+import { CliBackedPlayerPolicy } from "../lab/policies/cli-backed-policy.js";
+import { loadPlayerProfiles } from "../lab/personas/player-profile.js";
+import { WeightedPlayerPolicy } from "../lab/policies/weighted-policy.js";
 
 const packet = JSON.parse(await readFile(
-  new URL("../simulation/fixtures/decision-packet.example.json", import.meta.url),
+  new URL("../lab/fixtures/decision-packet.example.json", import.meta.url),
   "utf8"
 ));
 const fakeCli = fileURLToPath(
   new URL("./fixtures/fake-decision-cli.mjs", import.meta.url)
 );
 const responseSchema = JSON.parse(await readFile(
-  new URL("../simulation/contracts/decision-response.schema.json", import.meta.url),
+  new URL("../lab/contracts/decision-response.schema.json", import.meta.url),
   "utf8"
 ));
 
@@ -253,4 +253,30 @@ test("provider failure provenance survives deterministic fallback", async () => 
   assert.equal(result.receipt.attemptedProvider, "fixture-cli");
   assert.equal(result.receipt.attemptedPromptSha256, "prompt-sha");
   assert.equal(result.receipt.providerErrorStderrSha256, "stderr-sha");
+});
+
+test("required LLM policies block provider failures instead of falling back", async () => {
+  const profile = (await loadPlayerProfiles())[0];
+  const caller = {
+    async decide() {
+      const error = new Error("fixture provider failed");
+      error.providerReceipt = {
+        attemptedProvider: "fixture-cli",
+        attemptedModel: "fixture-model",
+        attemptedReasoningEffort: "medium",
+        attemptedRequestId: packet.requestId
+      };
+      throw error;
+    }
+  };
+  const policy = new CliBackedPlayerPolicy(profile, caller, {
+    fallback: new WeightedPlayerPolicy(profile),
+    backendId: "fixture-cli",
+    model: "fixture-model",
+    requireLlm: true
+  });
+  await assert.rejects(
+    () => policy.decide(packet),
+    /Required LLM decision failed: fixture provider failed/
+  );
 });

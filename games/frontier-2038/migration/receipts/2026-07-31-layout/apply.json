@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "migration": "2026-07-31-layout",
+  "acknowledgement": "2026-08-01T00:09:23Z-server-10670-stopped",
+  "moves": [
+    {
+      "from": "data/game-version.json",
+      "to": "release/game-version.json"
+    },
+    {
+      "from": "content/physical/",
+      "to": "physical/"
+    },
+    {
+      "from": "content/deferred/",
+      "to": "physical/optional/"
+    },
+    {
+      "from": "prototype/",
+      "to": "web/"
+    },
+    {
+      "from": "content/templates/",
+      "to": "web/templates/"
+    },
+    {
+      "from": "simulation/",
+      "to": "lab/"
+    },
+    {
+      "from": "tools/",
+      "to": "tasks/"
+    },
+    {
+      "from": "scripts/",
+      "to": "tasks/content/"
+    },
+    {
+      "from": "data/",
+      "to": "generated/"
+    },
+    {
+      "from": "dist/",
+      "to": "build/"
+    },
+    {
+      "from": "studies/",
+      "to": "evidence/studies/"
+    },
+    {
+      "from": "playtests/",
+      "to": "evidence/playtests/"
+    }
+  ],
+  "corrections": [
+    {
+      "path": "tasks/content/content/",
+      "resolution": "The applied scripts/ to tasks/content/ wrapper move nested the existing content directory. The two command files were immediately moved to the approved tasks/content/ destination; no file contents changed."
+    }
+  ],
+  "preservedRoots": [
+    "migration/",
+    "versions/",
+    "evidence/",
+    "studies/",
+    "playtests/",
+    "build/",
+    "dist/"
+  ],
+  "next": [
+    "npm run build:all",
+    "npm run game:release",
+    "npm test",
+    "npm run check"
+  ]
+}

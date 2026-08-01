@@ -1,0 +1,1322 @@
+{
+  "schemaVersion": 3,
+  "reportType": "strategy_evolution",
+  "evidenceLabel": "simulation",
+  "generatedAt": "2026-07-27T00:40:47.085Z",
+  "seed": "diverse-current-evolve-balanced_operator",
+  "playerCount": 4,
+  "targetProfileId": "balanced_operator",
+  "generations": 4,
+  "population": 6,
+  "runsPerSeat": 12,
+  "scope": {
+    "id": "strategy-evolution-v1",
+    "verdictBoundary": "Seeded search result; candidate strategy, not proof of human optimality.",
+    "automated": [
+      "mutates action and decision weights",
+      "evaluates every candidate from every seat",
+      "uses common deterministic seeds and rotates factions",
+      "retains complete generation history"
+    ],
+    "modeledAbstractions": [],
+    "excluded": [
+      "human negotiation quality and human learning"
+    ]
+  },
+  "baselineProfile": {
+    "id": "balanced_operator",
+    "name": "The Balanced Operator",
+    "description": "Builds a viable institution before committing to one victory path.",
+    "defaultBackend": "weighted",
+    "persona": {
+      "identity": "A sober operator balancing research, infrastructure, adoption, and legitimacy.",
+      "worldview": "A capability that cannot be powered, deployed, or defended publicly is not an advantage.",
+      "riskPosture": "Accept measured Scrutiny when it buys durable tempo.",
+      "negotiationStyle": "Transactional, reciprocal, and willing to leave a deal.",
+      "voice": "Concise, institutional, and practical."
+    },
+    "strategy": {
+      "selection": "weighted",
+      "objectives": [
+        "Avoid compulsory action loops.",
+        "Maintain enough Compute for Research and Deploy.",
+        "Reach AGI eligibility without collapsing Trust."
+      ],
+      "actionWeights": {
+        "fund": 2.2,
+        "research": 3,
+        "build": 3,
+        "organize": 0.8,
+        "deploy": 3,
+        "influence": 1.6,
+        "mega_cluster": 2.5,
+        "reorganization": 1.5,
+        "open_weights": 4,
+        "narrative_capture": 2,
+        "agent_swarm": 4,
+        "declare_agi": 24,
+        "fusion_demonstrator": 3
+      },
+      "decisionWeights": {
+        "fund_venture": 0.8,
+        "build_generator_utility_grid_contract": 1.3
+      },
+      "rules": [
+        {
+          "when": [
+            {
+              "path": "self.runway",
+              "operator": "lte",
+              "value": 2
+            }
+          ],
+          "target": {
+            "actionId": "fund"
+          },
+          "multiplier": 3
+        },
+        {
+          "when": [
+            {
+              "path": "self.unpoweredFacilities",
+              "operator": "gt",
+              "value": 0
+            }
+          ],
+          "target": {
+            "decisionIdPrefix": "build_generator_utility_grid_contract"
+          },
+          "multiplier": 4
+        },
+        {
+          "when": [
+            {
+              "path": "self.canDeploy",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "target": {
+            "actionId": "deploy"
+          },
+          "multiplier": 3
+        }
+      ]
+    }
+  },
+  "championProfile": {
+    "id": "balanced_operator",
+    "name": "The Balanced Operator",
+    "description": "Builds a viable institution before committing to one victory path.",
+    "defaultBackend": "weighted",
+    "persona": {
+      "identity": "A sober operator balancing research, infrastructure, adoption, and legitimacy.",
+      "worldview": "A capability that cannot be powered, deployed, or defended publicly is not an advantage.",
+      "riskPosture": "Accept measured Scrutiny when it buys durable tempo.",
+      "negotiationStyle": "Transactional, reciprocal, and willing to leave a deal.",
+      "voice": "Concise, institutional, and practical."
+    },
+    "strategy": {
+      "selection": "weighted",
+      "objectives": [
+        "Avoid compulsory action loops.",
+        "Maintain enough Compute for Research and Deploy.",
+        "Reach AGI eligibility without collapsing Trust."
+      ],
+      "actionWeights": {
+        "fund": 0.507,
+        "research": 2.071,
+        "build": 5.154,
+        "organize": 0.604,
+        "deploy": 4.921,
+        "influence": 1.531,
+        "mega_cluster": 4.271,
+        "reorganization": 0.748,
+        "open_weights": 7.976,
+        "narrative_capture": 2.498,
+        "agent_swarm": 8.257,
+        "declare_agi": 20,
+        "fusion_demonstrator": 2.447
+      },
+      "decisionWeights": {
+        "fund_venture": 0.627,
+        "build_generator_utility_grid_contract": 1.822
+      },
+      "rules": [
+        {
+          "when": [
+            {
+              "path": "self.runway",
+              "operator": "lte",
+              "value": 2
+            }
+          ],
+          "target": {
+            "actionId": "fund"
+          },
+          "multiplier": 3
+        },
+        {
+          "when": [
+            {
+              "path": "self.unpoweredFacilities",
+              "operator": "gt",
+              "value": 0
+            }
+          ],
+          "target": {
+            "decisionIdPrefix": "build_generator_utility_grid_contract"
+          },
+          "multiplier": 4
+        },
+        {
+          "when": [
+            {
+              "path": "self.canDeploy",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "target": {
+            "actionId": "deploy"
+          },
+          "multiplier": 3
+        }
+      ]
+    },
+    "provenance": {
+      "kind": "simulated_strategy_mutation",
+      "parentId": "balanced_operator",
+      "seed": "diverse-current-evolve-balanced_operator:g:3:candidate:3",
+      "magnitude": 0.45
+    }
+  },
+  "history": [
+    {
+      "generation": 1,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.78,
+              "research": 3.098,
+              "build": 3.569,
+              "organize": 1.126,
+              "deploy": 3.222,
+              "influence": 1.706,
+              "mega_cluster": 3.073,
+              "reorganization": 1.894,
+              "open_weights": 5.792,
+              "narrative_capture": 2.916,
+              "agent_swarm": 4.342,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.093
+            },
+            "decisionWeights": {
+              "fund_venture": 0.616,
+              "build_generator_utility_grid_contract": 1.96
+            }
+          },
+          "evaluation": {
+            "fitness": 27.44,
+            "meanWinShare": 0.24999999999999997,
+            "meanScore": 14.8125,
+            "actionDiversity": 0.9585920073384395,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.25,
+              0.25,
+              0.16666666666666666
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.542,
+              "research": 3.015,
+              "build": 3.122,
+              "organize": 0.789,
+              "deploy": 2.571,
+              "influence": 1.313,
+              "mega_cluster": 2.369,
+              "reorganization": 2.065,
+              "open_weights": 4.62,
+              "narrative_capture": 2.176,
+              "agent_swarm": 5.099,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.152
+            },
+            "decisionWeights": {
+              "fund_venture": 0.647,
+              "build_generator_utility_grid_contract": 1.048
+            }
+          },
+          "evaluation": {
+            "fitness": 21.117,
+            "meanWinShare": 0.1875,
+            "meanScore": 14.250000000000002,
+            "actionDiversity": 0.9416267571454049,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.25,
+              0.3333333333333333,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 2.235,
+              "research": 3.821,
+              "build": 2.252,
+              "organize": 0.775,
+              "deploy": 2.035,
+              "influence": 1.728,
+              "mega_cluster": 2.305,
+              "reorganization": 1.52,
+              "open_weights": 3.112,
+              "narrative_capture": 2.286,
+              "agent_swarm": 2.836,
+              "declare_agi": 15.395,
+              "fusion_demonstrator": 2.37
+            },
+            "decisionWeights": {
+              "fund_venture": 1.202,
+              "build_generator_utility_grid_contract": 1.057
+            }
+          },
+          "evaluation": {
+            "fitness": 14.839,
+            "meanWinShare": 0.125,
+            "meanScore": 13.770833333333334,
+            "actionDiversity": 0.9623518178513082,
+            "seatWinShares": [
+              0.25,
+              0,
+              0.08333333333333333,
+              0.16666666666666666
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 2.284,
+              "research": 2.327,
+              "build": 4.047,
+              "organize": 1.022,
+              "deploy": 3.489,
+              "influence": 1.423,
+              "mega_cluster": 3.293,
+              "reorganization": 1.482,
+              "open_weights": 3.633,
+              "narrative_capture": 2.776,
+              "agent_swarm": 4.04,
+              "declare_agi": 15.449,
+              "fusion_demonstrator": 2.117
+            },
+            "decisionWeights": {
+              "fund_venture": 0.787,
+              "build_generator_utility_grid_contract": 1.262
+            }
+          },
+          "evaluation": {
+            "fitness": 14.593,
+            "meanWinShare": 0.125,
+            "meanScore": 11.499999999999998,
+            "actionDiversity": 0.9427876290492389,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.08333333333333333,
+              0.08333333333333333,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 2.2,
+              "research": 3,
+              "build": 3,
+              "organize": 0.8,
+              "deploy": 3,
+              "influence": 1.6,
+              "mega_cluster": 2.5,
+              "reorganization": 1.5,
+              "open_weights": 4,
+              "narrative_capture": 2,
+              "agent_swarm": 4,
+              "declare_agi": 24,
+              "fusion_demonstrator": 3
+            },
+            "decisionWeights": {
+              "fund_venture": 0.8,
+              "build_generator_utility_grid_contract": 1.3
+            }
+          },
+          "evaluation": {
+            "fitness": 12.779,
+            "meanWinShare": 0.10416666666666666,
+            "meanScore": 14.145833333333332,
+            "actionDiversity": 0.9479914839172272,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.16666666666666666,
+              0.08333333333333333,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.898,
+              "research": 3.347,
+              "build": 2.388,
+              "organize": 0.624,
+              "deploy": 2.213,
+              "influence": 2.169,
+              "mega_cluster": 2.596,
+              "reorganization": 2.073,
+              "open_weights": 5.571,
+              "narrative_capture": 2.563,
+              "agent_swarm": 3.044,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.838
+            },
+            "decisionWeights": {
+              "fund_venture": 0.528,
+              "build_generator_utility_grid_contract": 1.118
+            }
+          },
+          "evaluation": {
+            "fitness": 10.578,
+            "meanWinShare": 0.08333333333333333,
+            "meanScore": 12.979166666666668,
+            "actionDiversity": 0.9468448379450045,
+            "seatWinShares": [
+              0.25,
+              0.08333333333333333,
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 27.44,
+        "meanWinShare": 0.24999999999999997
+      }
+    },
+    {
+      "generation": 2,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.163,
+              "research": 2.724,
+              "build": 3.329,
+              "organize": 0.838,
+              "deploy": 3.144,
+              "influence": 1.774,
+              "mega_cluster": 4.222,
+              "reorganization": 1.263,
+              "open_weights": 6.519,
+              "narrative_capture": 2.178,
+              "agent_swarm": 4.752,
+              "declare_agi": 20,
+              "fusion_demonstrator": 1.651
+            },
+            "decisionWeights": {
+              "fund_venture": 0.725,
+              "build_generator_utility_grid_contract": 1.313
+            }
+          },
+          "evaluation": {
+            "fitness": 23.13,
+            "meanWinShare": 0.20833333333333331,
+            "meanScore": 13.395833333333332,
+            "actionDiversity": 0.9570368209198848,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.16666666666666666,
+              0.25,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.78,
+              "research": 3.098,
+              "build": 3.569,
+              "organize": 1.126,
+              "deploy": 3.222,
+              "influence": 1.706,
+              "mega_cluster": 3.073,
+              "reorganization": 1.894,
+              "open_weights": 5.792,
+              "narrative_capture": 2.916,
+              "agent_swarm": 4.342,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.093
+            },
+            "decisionWeights": {
+              "fund_venture": 0.616,
+              "build_generator_utility_grid_contract": 1.96
+            }
+          },
+          "evaluation": {
+            "fitness": 21.094,
+            "meanWinShare": 0.1875,
+            "meanScore": 13.979166666666666,
+            "actionDiversity": 0.9459099019761551,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.08333333333333333,
+              0.25,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 2.339,
+              "research": 2.242,
+              "build": 2.822,
+              "organize": 1.282,
+              "deploy": 2.329,
+              "influence": 1.865,
+              "mega_cluster": 3.595,
+              "reorganization": 2.06,
+              "open_weights": 7.838,
+              "narrative_capture": 2.233,
+              "agent_swarm": 3.641,
+              "declare_agi": 14.194,
+              "fusion_demonstrator": 2.278
+            },
+            "decisionWeights": {
+              "fund_venture": 0.744,
+              "build_generator_utility_grid_contract": 2.279
+            }
+          },
+          "evaluation": {
+            "fitness": 18.995,
+            "meanWinShare": 0.16666666666666666,
+            "meanScore": 13.625,
+            "actionDiversity": 0.9662160047476662,
+            "seatWinShares": [
+              0.25,
+              0.16666666666666666,
+              0.16666666666666666,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.851,
+              "research": 2.08,
+              "build": 3.743,
+              "organize": 1.1,
+              "deploy": 2.803,
+              "influence": 1.237,
+              "mega_cluster": 2.331,
+              "reorganization": 1.568,
+              "open_weights": 7.297,
+              "narrative_capture": 2.411,
+              "agent_swarm": 4.375,
+              "declare_agi": 14.685,
+              "fusion_demonstrator": 1.605
+            },
+            "decisionWeights": {
+              "fund_venture": 0.749,
+              "build_generator_utility_grid_contract": 1.982
+            }
+          },
+          "evaluation": {
+            "fitness": 16.907,
+            "meanWinShare": 0.14583333333333331,
+            "meanScore": 13.729166666666668,
+            "actionDiversity": 0.9506577186596967,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.08333333333333333,
+              0,
+              0.16666666666666666
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 2.544,
+              "research": 4.115,
+              "build": 2.573,
+              "organize": 0.888,
+              "deploy": 3.133,
+              "influence": 1.803,
+              "mega_cluster": 2.188,
+              "reorganization": 1.449,
+              "open_weights": 8.51,
+              "narrative_capture": 4.504,
+              "agent_swarm": 4.97,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.1
+            },
+            "decisionWeights": {
+              "fund_venture": 0.792,
+              "build_generator_utility_grid_contract": 2.121
+            }
+          },
+          "evaluation": {
+            "fitness": 14.874,
+            "meanWinShare": 0.12499999999999999,
+            "meanScore": 14.249999999999998,
+            "actionDiversity": 0.9488554685679843,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.16666666666666666,
+              0.08333333333333333,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 2.55,
+              "research": 3.457,
+              "build": 2.765,
+              "organize": 1.022,
+              "deploy": 2.57,
+              "influence": 1.204,
+              "mega_cluster": 4.004,
+              "reorganization": 2.866,
+              "open_weights": 5.056,
+              "narrative_capture": 3.901,
+              "agent_swarm": 4.973,
+              "declare_agi": 20,
+              "fusion_demonstrator": 1.6
+            },
+            "decisionWeights": {
+              "fund_venture": 0.671,
+              "build_generator_utility_grid_contract": 1.695
+            }
+          },
+          "evaluation": {
+            "fitness": 10.606,
+            "meanWinShare": 0.08333333333333333,
+            "meanScore": 13.125,
+            "actionDiversity": 0.9603486117042571,
+            "seatWinShares": [
+              0,
+              0.25,
+              0,
+              0.08333333333333333
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 23.13,
+        "meanWinShare": 0.20833333333333331
+      }
+    },
+    {
+      "generation": 3,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 0.758,
+              "research": 2.66,
+              "build": 4.068,
+              "organize": 0.69,
+              "deploy": 3.283,
+              "influence": 1.282,
+              "mega_cluster": 5.968,
+              "reorganization": 0.848,
+              "open_weights": 9.133,
+              "narrative_capture": 1.912,
+              "agent_swarm": 5.283,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.258
+            },
+            "decisionWeights": {
+              "fund_venture": 0.648,
+              "build_generator_utility_grid_contract": 1.922
+            }
+          },
+          "evaluation": {
+            "fitness": 30.505,
+            "meanWinShare": 0.28124999999999994,
+            "meanScore": 14.604166666666666,
+            "actionDiversity": 0.9192597355252787,
+            "seatWinShares": [
+              0.3333333333333333,
+              0.25,
+              0.3333333333333333,
+              0.20833333333333334
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.651,
+              "research": 3.581,
+              "build": 3.576,
+              "organize": 0.789,
+              "deploy": 4.592,
+              "influence": 2.553,
+              "mega_cluster": 3.116,
+              "reorganization": 1.48,
+              "open_weights": 9.977,
+              "narrative_capture": 3.303,
+              "agent_swarm": 5.62,
+              "declare_agi": 20,
+              "fusion_demonstrator": 1.621
+            },
+            "decisionWeights": {
+              "fund_venture": 0.821,
+              "build_generator_utility_grid_contract": 1.535
+            }
+          },
+          "evaluation": {
+            "fitness": 26.379,
+            "meanWinShare": 0.23958333333333331,
+            "meanScore": 14.791666666666666,
+            "actionDiversity": 0.9419906660702604,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.25,
+              0.2916666666666667,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.163,
+              "research": 2.724,
+              "build": 3.329,
+              "organize": 0.838,
+              "deploy": 3.144,
+              "influence": 1.774,
+              "mega_cluster": 4.222,
+              "reorganization": 1.263,
+              "open_weights": 6.519,
+              "narrative_capture": 2.178,
+              "agent_swarm": 4.752,
+              "declare_agi": 20,
+              "fusion_demonstrator": 1.651
+            },
+            "decisionWeights": {
+              "fund_venture": 0.725,
+              "build_generator_utility_grid_contract": 1.313
+            }
+          },
+          "evaluation": {
+            "fitness": 25.382,
+            "meanWinShare": 0.22916666666666669,
+            "meanScore": 15.333333333333334,
+            "actionDiversity": 0.9319796766972104,
+            "seatWinShares": [
+              0.4166666666666667,
+              0.16666666666666666,
+              0.25,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.278,
+              "research": 2.834,
+              "build": 2.269,
+              "organize": 0.807,
+              "deploy": 4.334,
+              "influence": 2.117,
+              "mega_cluster": 2.869,
+              "reorganization": 1.641,
+              "open_weights": 7.825,
+              "narrative_capture": 3.269,
+              "agent_swarm": 4.613,
+              "declare_agi": 13.426,
+              "fusion_demonstrator": 1.824
+            },
+            "decisionWeights": {
+              "fund_venture": 0.791,
+              "build_generator_utility_grid_contract": 1.315
+            }
+          },
+          "evaluation": {
+            "fitness": 23.238,
+            "meanWinShare": 0.20833333333333331,
+            "meanScore": 14.645833333333332,
+            "actionDiversity": 0.9403241268086058,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.25,
+              0.08333333333333333,
+              0.4166666666666667
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.171,
+              "research": 3.017,
+              "build": 4.396,
+              "organize": 0.857,
+              "deploy": 4.433,
+              "influence": 1.319,
+              "mega_cluster": 3.528,
+              "reorganization": 1.241,
+              "open_weights": 5.356,
+              "narrative_capture": 1.565,
+              "agent_swarm": 5.652,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.427
+            },
+            "decisionWeights": {
+              "fund_venture": 0.776,
+              "build_generator_utility_grid_contract": 1.05
+            }
+          },
+          "evaluation": {
+            "fitness": 23.143,
+            "meanWinShare": 0.20833333333333334,
+            "meanScore": 13.895833333333334,
+            "actionDiversity": 0.9197460975484568,
+            "seatWinShares": [
+              0.4166666666666667,
+              0.16666666666666666,
+              0.16666666666666666,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 0.992,
+              "research": 1.985,
+              "build": 3.082,
+              "organize": 1.05,
+              "deploy": 4.829,
+              "influence": 1.945,
+              "mega_cluster": 3.289,
+              "reorganization": 1.748,
+              "open_weights": 5.38,
+              "narrative_capture": 2.271,
+              "agent_swarm": 5.801,
+              "declare_agi": 20,
+              "fusion_demonstrator": 1.237
+            },
+            "decisionWeights": {
+              "fund_venture": 1.113,
+              "build_generator_utility_grid_contract": 0.847
+            }
+          },
+          "evaluation": {
+            "fitness": 14.626,
+            "meanWinShare": 0.125,
+            "meanScore": 11.833333333333334,
+            "actionDiversity": 0.9425160051080937,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.08333333333333333,
+              0,
+              0.25
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 30.505,
+        "meanWinShare": 0.28124999999999994
+      }
+    },
+    {
+      "generation": 4,
+      "candidates": [
+        {
+          "rank": 1,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 0.507,
+              "research": 2.071,
+              "build": 5.154,
+              "organize": 0.604,
+              "deploy": 4.921,
+              "influence": 1.531,
+              "mega_cluster": 4.271,
+              "reorganization": 0.748,
+              "open_weights": 7.976,
+              "narrative_capture": 2.498,
+              "agent_swarm": 8.257,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.447
+            },
+            "decisionWeights": {
+              "fund_venture": 0.627,
+              "build_generator_utility_grid_contract": 1.822
+            }
+          },
+          "evaluation": {
+            "fitness": 31.455,
+            "meanWinShare": 0.2916666666666667,
+            "meanScore": 14.104166666666666,
+            "actionDiversity": 0.8781491036054311,
+            "seatWinShares": [
+              0.4166666666666667,
+              0.25,
+              0.25,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 2,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 0.584,
+              "research": 3.666,
+              "build": 3.568,
+              "organize": 0.496,
+              "deploy": 4.378,
+              "influence": 1.6,
+              "mega_cluster": 5.401,
+              "reorganization": 0.7,
+              "open_weights": 12.917,
+              "narrative_capture": 2.619,
+              "agent_swarm": 5.319,
+              "declare_agi": 20,
+              "fusion_demonstrator": 3.085
+            },
+            "decisionWeights": {
+              "fund_venture": 1.01,
+              "build_generator_utility_grid_contract": 1.442
+            }
+          },
+          "evaluation": {
+            "fitness": 27.361,
+            "meanWinShare": 0.25,
+            "meanScore": 14.687499999999998,
+            "actionDiversity": 0.8926791361660875,
+            "seatWinShares": [
+              0.25,
+              0.16666666666666666,
+              0.25,
+              0.3333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 3,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 0.718,
+              "research": 3.226,
+              "build": 4.118,
+              "organize": 0.929,
+              "deploy": 3.973,
+              "influence": 1.031,
+              "mega_cluster": 8.263,
+              "reorganization": 0.568,
+              "open_weights": 8.114,
+              "narrative_capture": 2.544,
+              "agent_swarm": 4.53,
+              "declare_agi": 15.488,
+              "fusion_demonstrator": 2.145
+            },
+            "decisionWeights": {
+              "fund_venture": 0.421,
+              "build_generator_utility_grid_contract": 1.747
+            }
+          },
+          "evaluation": {
+            "fitness": 23.218,
+            "meanWinShare": 0.20833333333333331,
+            "meanScore": 14.645833333333332,
+            "actionDiversity": 0.9197425745808229,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.08333333333333333,
+              0.3333333333333333,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 4,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 0.758,
+              "research": 2.66,
+              "build": 4.068,
+              "organize": 0.69,
+              "deploy": 3.283,
+              "influence": 1.282,
+              "mega_cluster": 5.968,
+              "reorganization": 0.848,
+              "open_weights": 9.133,
+              "narrative_capture": 1.912,
+              "agent_swarm": 5.283,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.258
+            },
+            "decisionWeights": {
+              "fund_venture": 0.648,
+              "build_generator_utility_grid_contract": 1.922
+            }
+          },
+          "evaluation": {
+            "fitness": 21.119,
+            "meanWinShare": 0.1875,
+            "meanScore": 14.541666666666668,
+            "actionDiversity": 0.9152202017793479,
+            "seatWinShares": [
+              0.25,
+              0.16666666666666666,
+              0.08333333333333333,
+              0.25
+            ]
+          }
+        },
+        {
+          "rank": 5,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 1.128,
+              "research": 2.912,
+              "build": 5.223,
+              "organize": 0.561,
+              "deploy": 3.458,
+              "influence": 0.919,
+              "mega_cluster": 6.274,
+              "reorganization": 0.958,
+              "open_weights": 6.326,
+              "narrative_capture": 1.289,
+              "agent_swarm": 4.273,
+              "declare_agi": 20,
+              "fusion_demonstrator": 2.919
+            },
+            "decisionWeights": {
+              "fund_venture": 0.969,
+              "build_generator_utility_grid_contract": 1.228
+            }
+          },
+          "evaluation": {
+            "fitness": 18.799,
+            "meanWinShare": 0.16666666666666666,
+            "meanScore": 12.4375,
+            "actionDiversity": 0.8883333182501469,
+            "seatWinShares": [
+              0.08333333333333333,
+              0.25,
+              0.25,
+              0.08333333333333333
+            ]
+          }
+        },
+        {
+          "rank": 6,
+          "profile": {
+            "id": "balanced_operator",
+            "actionWeights": {
+              "fund": 0.593,
+              "research": 1.933,
+              "build": 5.096,
+              "organize": 0.467,
+              "deploy": 4.48,
+              "influence": 1.564,
+              "mega_cluster": 5.809,
+              "reorganization": 1.032,
+              "open_weights": 7.813,
+              "narrative_capture": 2.099,
+              "agent_swarm": 3.821,
+              "declare_agi": 13.442,
+              "fusion_demonstrator": 2.236
+            },
+            "decisionWeights": {
+              "fund_venture": 0.468,
+              "build_generator_utility_grid_contract": 2.709
+            }
+          },
+          "evaluation": {
+            "fitness": 16.784,
+            "meanWinShare": 0.14583333333333334,
+            "meanScore": 13.020833333333334,
+            "actionDiversity": 0.8988042778616386,
+            "seatWinShares": [
+              0.16666666666666666,
+              0.16666666666666666,
+              0.16666666666666666,
+              0.08333333333333333
+            ]
+          }
+        }
+      ],
+      "champion": {
+        "fitness": 31.455,
+        "meanWinShare": 0.2916666666666667
+      }
+    }
+  ],
+  "reportSchemaVersion": 3,
+  "replaySchemaVersion": 2,
+  "decisionSchemaVersion": 2,
+  "evidenceType": "simulation",
+  "game": {
+    "version": "0.3.0",
+    "releaseStatus": "playtest",
+    "releaseDate": "2026-07-26",
+    "rulesetFingerprint": "sha256:08937daeb3385ca7abcb43d2e531c65b567008867b42cbd1c22cbd08b465c211",
+    "mechanicsFingerprint": "sha256:60b70a5ceec571d5f62338b3134ea1287b266ac9b8267272a734eae155ee9b4e",
+    "playtestKitFingerprint": "sha256:ec264f6ef4af120d5d30def1178b1d63f6051726361d792c69f03f5f09f7c451",
+    "files": {
+      "data/factions.json": {
+        "bytes": 19127,
+        "sha256": "2cd1d0627b192934260de4d8a0755cfd3ce1c827345e494d2cc0fbdb8a90da97"
+      },
+      "data/game-config.json": {
+        "bytes": 27032,
+        "sha256": "6f7929228fdd5b1561a2449fe8adb8070afaf2dbf3387efdcd4b01f3ccd6f0b6"
+      },
+      "data/headlines.json": {
+        "bytes": 20981,
+        "sha256": "d3f14e49d335b952fe396cf19ef28272b1ab72057bf70696a7ae1af3e6a7de4d"
+      },
+      "data/mandates.json": {
+        "bytes": 6923,
+        "sha256": "7deac9bf6c2fdbd8c594d6fc7586d25b8983d4ec7ab61e56f698f0b42555f49a"
+      },
+      "data/secret-objectives.json": {
+        "bytes": 8216,
+        "sha256": "8302bafa1c2548eace9cf9c0b6d789a8c49a00a70c9285847b5f334020c529ee"
+      },
+      "data/simulation-copy.json": {
+        "bytes": 10707,
+        "sha256": "fd1c646735944fac917f6d55960d34d6993abae665ff9e80775b8bff159b4ede"
+      },
+      "data/tactics.json": {
+        "bytes": 5724,
+        "sha256": "919ccb83878e9ac83561ed30fa1c5339f58d6497c148bb61ab1fb28410f376ae"
+      },
+      "data/wild-actions.json": {
+        "bytes": 5124,
+        "sha256": "6a5f2d850f091511192c413e5a0b71b026ac27a903481fa975d6f1efe06b354e"
+      }
+    },
+    "kitFiles": {
+      "data/content-manifest.json": {
+        "bytes": 4018,
+        "sha256": "cf41af0d33842c3a7ca0455089dee828f91fc565ba0e22245b086a04a26639c0"
+      },
+      "data/reference-cards.json": {
+        "bytes": 6027,
+        "sha256": "da1f0d0aee8793ad0d6a95545f90989fa65ea0a1fa57eb0ad6741d2204a649e5"
+      },
+      "data/ui-copy.json": {
+        "bytes": 7085,
+        "sha256": "5949a2743edd6c281376156aad983ee3cc01e5bd0cb25201cadce2ac0d2c4ec1"
+      },
+      "data/world-copy.json": {
+        "bytes": 7912,
+        "sha256": "53c861c64bda807662180eb979c76e864209941529a5841dba451c808fd5cd7b"
+      }
+    }
+  },
+  "engine": {
+    "id": "selected-rules",
+    "version": "0.4.0",
+    "coverageId": "rc4-baseline-v1",
+    "fingerprint": "sha256:13217755eb6439422dc727bcbb1b5f72dc249d2dba125002d671caddbea3abd2",
+    "files": {
+      "prototype/app.js": {
+        "bytes": 9050,
+        "sha256": "ee8bc5500c68a8d201fd846bd3b8521d4df76fe5e6e9d9432a35c04b8b882f02"
+      },
+      "prototype/src/engine.js": {
+        "bytes": 28719,
+        "sha256": "75eab503e208896f4533dca4201f0bad2e9eb565c39324ca520b47e295b9d02b"
+      },
+      "simulation/content/simulation-copy.js": {
+        "bytes": 411,
+        "sha256": "b4795dbfd08d187ebf62f6860714c504c45c0ea01b48e379d894f78a0aaa3f2e"
+      },
+      "simulation/contracts/decision-contract.js": {
+        "bytes": 3959,
+        "sha256": "3464294134b805036dba13454710657fc37f978f12ee3273ab85ee8e2b47b401"
+      },
+      "simulation/environment/core-economy-match.js": {
+        "bytes": 26297,
+        "sha256": "e5ec994c3d5e199f6a55cd71352bdec7ceb9428de1085d07a67aba6f86babe15"
+      },
+      "simulation/environment/rules-variant.js": {
+        "bytes": 893,
+        "sha256": "001cce3316a653ed328bc64c05b1424c23b98187bbe6d12ffed85dd4e4b1f7f4"
+      },
+      "simulation/environment/selected-rules-match.js": {
+        "bytes": 157607,
+        "sha256": "5a4a19701a767a6883624b75f7f4154423ac0458fa21ac93164e7a3909d73668"
+      },
+      "simulation/personas/player-profile.js": {
+        "bytes": 2622,
+        "sha256": "3454f43ea23cff7fc4172abf8e5f164d5242cdc9a83fe2bcb5c82068bf39e971"
+      },
+      "simulation/policies/cli-backed-policy.js": {
+        "bytes": 2056,
+        "sha256": "17f0bffd7523d563c17cbfb49fe645a208b8549923be936745c9d58fc36ed301"
+      },
+      "simulation/policies/policy-factory.js": {
+        "bytes": 1229,
+        "sha256": "ea5563974ffa4ac0df65da5033bf4edad72a7520c4c06d81dfb811c2e04d88cf"
+      },
+      "simulation/policies/weighted-policy.js": {
+        "bytes": 3552,
+        "sha256": "f6f4518bb8a4072a1a703989c9d7fdabf59b4774d1b5814c7fa94a4f72e585a4"
+      },
+      "simulation/rules/declaration-readiness.js": {
+        "bytes": 5379,
+        "sha256": "3053a2a49b769f0a876d6a10be36d3b5a4ea32bda2bef57f8c0561b863286654"
+      },
+      "simulation/runner/monte-carlo-runner.js": {
+        "bytes": 9544,
+        "sha256": "536f1d2a55123a59da4b9cdc0534be3cc2f032b03e607a9dd4101398644fe39f"
+      },
+      "simulation/runner/optimization-runner.js": {
+        "bytes": 10543,
+        "sha256": "e5105559ebab6308b1e1685bfc87a16e6507d9fc26f54121bed000d8fc692012"
+      },
+      "simulation/runtime/create-interactive-game.js": {
+        "bytes": 3052,
+        "sha256": "ea5bdbc22f23c4ac35ef5417925d055520facdd886416b7a11f874d037250ed8"
+      },
+      "simulation/runtime/create-simulation.js": {
+        "bytes": 7624,
+        "sha256": "b905ab324831877d8e9c3053863a9d355ee84bc087e7303f564eb420303eaf4a"
+      },
+      "simulation/runtime/run-experiment.js": {
+        "bytes": 1839,
+        "sha256": "15bc39b58029acac84659a4d65a88d7fcf3cfd0489edd7c97225813b16d08d0f"
+      },
+      "tools/serve.mjs": {
+        "bytes": 9600,
+        "sha256": "75a400ff15bf411d2b5b2a929af3245966eb9e6f4303f6068883c24746235ab3"
+      }
+    }
+  },
+  "variant": {
+    "kind": "canonical",
+    "overlay": {},
+    "effective": {},
+    "fingerprint": "sha256:5ebac060dfa962a0e03eac473b1f9f4f08dc25fa41a69d12e63410ddb9df1549"
+  },
+  "strategies": {
+    "fingerprint": "sha256:df34eaaec7ac5cbbeb99360a002455d37560e97870329fb5a81b54b33d741220",
+    "profiles": [
+      {
+        "id": "balanced_operator",
+        "fingerprint": "sha256:ace912cb576d7270011842621a5377c8cc429fd99b9021f51f1afa0de9ca56db"
+      },
+      {
+        "id": "capability_rusher",
+        "fingerprint": "sha256:5da7d459040aed466c858b1fc2cad060e1b19a4115d7e7bc6e2464a9a4a72909"
+      },
+      {
+        "id": "infrastructure_compounder",
+        "fingerprint": "sha256:3953ce559903f85822961d460920900d1d72d1d3f428c19c6f2d2d654927b625"
+      },
+      {
+        "id": "market_maximalist",
+        "fingerprint": "sha256:b4cf3b8521817e5fc39b515cbc5c07ec316b5b4dfa8508bb05fa541436b33601"
+      },
+      {
+        "id": "trust_governor",
+        "fingerprint": "sha256:269426ab7bf9fad5148c9b2ae246dc63665a8a83d8443abfa95124a65d1c3312"
+      }
+    ],
+    "backends": [
+      "weighted"
+    ],
+    "model": null
+  },
+  "experiment": {
+    "reportType": "strategy_evolution",
+    "seed": "diverse-current-evolve-balanced_operator",
+    "playerCount": 4,
+    "runs": null,
+    "sampleReplays": 0,
+    "generations": 4,
+    "population": 6,
+    "runsPerSeat": 12,
+    "iterations": null,
+    "runsPerVariant": null,
+    "targetAgiRate": null,
+    "scopeId": "strategy-evolution-v1",
+    "fingerprint": "sha256:f015c8adeb54799d13a108c65011a3bf632825bd8ac780d31c4616404cf4b869"
+  },
+  "rng": {
+    "algorithm": "mulberry32",
+    "version": 1
+  },
+  "provenance": {
+    "sourceCommit": "edc414bc189fe4d5f7599ce4437a2b883e799d64",
+    "sourceDirty": true
+  }
+}

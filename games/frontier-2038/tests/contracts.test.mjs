@@ -12,22 +12,22 @@ test("release index separates executable game from physical rules candidate", as
   const executable = await readJson(current.manifest);
   const candidate = await readJson(current.rulesCandidate.manifest);
 
-  assert.equal(current.gameVersion, "0.8.24");
-  assert.equal(executable.gameVersion, "0.8.24");
-  assert.equal(current.rulesCandidate.version, "0.5.0-rc.25-test");
+  assert.equal(current.gameVersion, "0.8.27");
+  assert.equal(executable.gameVersion, "0.8.27");
+  assert.equal(current.rulesCandidate.version, "0.5.0-rc.28-test");
   assert.equal(candidate.artifactKind, "physical-rules-candidate");
   assert.equal(candidate.implementation.status, "synchronized");
-  assert.equal(candidate.implementation.executableGameVersion, "0.8.24");
-  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.24");
+  assert.equal(candidate.implementation.executableGameVersion, "0.8.27");
+  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.27");
   assert.notEqual(current.rulesetFingerprint, current.rulesCandidate.rulesFingerprint);
   assert.match(current.contentGraphFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(executable.contentGraphFingerprint, current.contentGraphFingerprint);
   assert.equal(candidate.contentGraphFingerprint, current.contentGraphFingerprint);
   assert.ok(Object.hasOwn(executable.contentGraphFiles, "content/graph.json"));
-  assert.ok(Object.hasOwn(executable.contentGraphFiles, "content/physical/variables.json"));
+  assert.ok(Object.hasOwn(executable.contentGraphFiles, "physical/variables.json"));
   assert.ok(!Object.hasOwn(executable.files, "docs/core-rules.md"));
-  assert.ok(!Object.hasOwn(executable.files, "data/simulation-copy.json"));
-  assert.ok(Object.hasOwn(executable.kitFiles, "data/simulation-copy.json"));
+  assert.ok(!Object.hasOwn(executable.files, "generated/simulation-copy.json"));
+  assert.ok(Object.hasOwn(executable.kitFiles, "generated/simulation-copy.json"));
   assert.ok(Object.hasOwn(candidate.files, "docs/core-rules.md"));
 });
 
@@ -35,8 +35,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const normalizedRules = rules.replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.5.0-rc.25-test",
-    "synchronized with executable game 0.8.24",
+    "**Rules version:** 0.5.0-rc.28-test",
+    "synchronized with executable game 0.8.27",
     "Influence may place or relocate one additional cube on Government",
     "only if the Headline explicitly instructs the table",
     "A **solo Mega-Cluster**",
@@ -80,9 +80,9 @@ test("the thematic inventory matches the two-source Power contract", async () =>
 });
 
 test("selected deck contracts have exact physical counts", async () => {
-  const config = await readJson("data/game-config.json");
-  const tactics = await readJson("data/tactics.json");
-  const wild = await readJson("data/wild-actions.json");
+  const config = await readJson("generated/game-config.json");
+  const tactics = await readJson("generated/tactics.json");
+  const wild = await readJson("generated/wild-actions.json");
 
   const trainingCount = config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0);
   assert.equal(trainingCount, 50);
@@ -96,7 +96,7 @@ test("selected deck contracts have exact physical counts", async () => {
 });
 
 test("core action and escalation contracts stay singular", async () => {
-  const config = await readJson("data/game-config.json");
+  const config = await readJson("generated/game-config.json");
   assert.deepEqual(
     config.actions.map((action) => action.id),
     ["fund", "research", "build", "organize", "deploy", "influence"]
@@ -107,8 +107,8 @@ test("core action and escalation contracts stay singular", async () => {
 });
 
 test("factions and player supplies match the selected limits", async () => {
-  const config = await readJson("data/game-config.json");
-  const factions = await readJson("data/factions.json");
+  const config = await readJson("generated/game-config.json");
+  const factions = await readJson("generated/factions.json");
 
   assert.equal(factions.factions.length, 6);
   assert.equal(new Set(factions.factions.map((faction) => faction.id)).size, 6);
@@ -158,8 +158,8 @@ test("factions and player supplies match the selected limits", async () => {
 });
 
 test("faction truth constrains balance without becoming a point-buy budget", async () => {
-  const factions = await readJson("data/factions.json");
-  const balance = await readJson("simulation/contracts/balance-contract.json");
+  const factions = await readJson("generated/factions.json");
+  const balance = await readJson("lab/contracts/balance-contract.json");
   const truth = factions.factionTruthContract;
   const factionIds = factions.factions.map((faction) => faction.id);
   const dimensionIds = Object.keys(truth.dimensions);
@@ -168,7 +168,7 @@ test("faction truth constrains balance without becoming a point-buy budget", asy
   assert.equal(truth.scale.minimum, 1);
   assert.equal(truth.scale.maximum, 5);
   assert.deepEqual(Object.keys(truth.profiles), factionIds);
-  assert.equal(balance.factionTruth.source, "data/factions.json#factionTruthContract");
+  assert.equal(balance.factionTruth.source, "generated/factions.json#factionTruthContract");
   assert.equal(balance.factionTruth.requiredForRuleProbe, true);
 
   for (const factionId of factionIds) {
@@ -184,7 +184,7 @@ test("faction truth constrains balance without becoming a point-buy budget", asy
 });
 
 test("physical faction rules are rendered from the semantic faction graph", async () => {
-  const factions = await readJson("data/factions.json");
+  const factions = await readJson("generated/factions.json");
   const rules = await readFile(resolve(projectRoot, "docs/core-rules.md"), "utf8");
 
   for (const faction of factions.factions) {
@@ -225,8 +225,8 @@ test("physical faction rules are rendered from the semantic faction graph", asyn
 });
 
 test("headline and board boundaries remain explicit", async () => {
-  const config = await readJson("data/game-config.json");
-  const headlines = await readJson("data/headlines.json");
+  const config = await readJson("generated/game-config.json");
+  const headlines = await readJson("generated/headlines.json");
 
   assert.equal(headlines.headlines.length, 24);
   for (const round of [1, 2, 3, 4]) {
@@ -277,7 +277,7 @@ test("headline and board boundaries remain explicit", async () => {
 });
 
 test("Headline deck preserves eight anchors and sixteen future regimes", async () => {
-  const { headlines, resolutionContract } = await readJson("data/headlines.json");
+  const { headlines, resolutionContract } = await readJson("generated/headlines.json");
   const ids = new Set(headlines.map((headline) => headline.id));
   const anchors = [
     "open_weights_drop",
@@ -401,11 +401,11 @@ test("the tone constitution keeps darkness institutional rather than voyeuristic
 });
 
 test("every existing player-facing content surface has complete thematic copy", async () => {
-  const config = await readJson("data/game-config.json");
-  const factions = await readJson("data/factions.json");
-  const headlines = await readJson("data/headlines.json");
-  const tactics = await readJson("data/tactics.json");
-  const wild = await readJson("data/wild-actions.json");
+  const config = await readJson("generated/game-config.json");
+  const factions = await readJson("generated/factions.json");
+  const headlines = await readJson("generated/headlines.json");
+  const tactics = await readJson("generated/tactics.json");
+  const wild = await readJson("generated/wild-actions.json");
 
   for (const round of config.rounds) {
     for (const field of ["tagline", "flavorText", "artDirection"]) {
@@ -461,12 +461,12 @@ test("every existing player-facing content surface has complete thematic copy", 
 });
 
 test("new thematic decks and reference surfaces have complete draft inventories", async () => {
-  const mandates = await readJson("data/mandates.json");
-  const objectives = await readJson("data/secret-objectives.json");
-  const references = await readJson("data/reference-cards.json");
-  const reserve = await readJson("data/reserve-specialists.json");
-  const world = await readJson("data/world-copy.json");
-  const manifest = await readJson("data/content-manifest.json");
+  const mandates = await readJson("generated/mandates.json");
+  const objectives = await readJson("generated/secret-objectives.json");
+  const references = await readJson("generated/reference-cards.json");
+  const reserve = await readJson("generated/reserve-specialists.json");
+  const world = await readJson("generated/world-copy.json");
+  const manifest = await readJson("generated/content-manifest.json");
 
   assert.equal(mandates.mandates.length, 12);
   assert.equal(objectives.objectives.length, 18);
@@ -492,7 +492,7 @@ test("new thematic decks and reference surfaces have complete draft inventories"
 });
 
 test("prototype renders canonical names from faction data without a legacy reference layer", async () => {
-  const app = await readFile(new URL("prototype/app.js", root), "utf8");
+  const app = await readFile(new URL("web/app.js", root), "utf8");
   assert.doesNotMatch(app, /faction\.historicalReference/);
   assert.match(app, /faction\.motto/);
 });

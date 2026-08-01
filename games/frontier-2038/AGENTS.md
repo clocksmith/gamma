@@ -27,14 +27,14 @@ systems and incentives, not jokes or allegations about real people.
   simulation surface and must name any gap from the canonical rulebook.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,
   counter-strategy, and promotion contract. Its machine authority is
-  `simulation/contracts/balance-contract.json`.
+  `lab/contracts/balance-contract.json`.
 - `content/` owns the semantic game graph and every authored player-facing
-  string. `data/`, `docs/core-rules.md`, and prototype HTML targets declared in
+  string. `generated/`, `docs/core-rules.md`, and prototype HTML targets declared in
   `content/graph.json` are generated projections and must not be hand-edited.
-- `data/` owns generated machine-readable prototype content.
-- `prototype/` owns the browser implementation.
+- `generated/` owns generated machine-readable prototype content.
+- `web/` owns the browser implementation.
 - `tests/` owns contract, determinism, and probability checks.
-- `playtests/` owns observed sessions and receipts. Never present a simulated
+- `evidence/playtests/` owns observed sessions and receipts. Never present a simulated
   result as a human playtest.
 
 When implementation needs an interpretation that the canonical rules do not
@@ -76,14 +76,14 @@ git diff --check
 ```
 
 Browser claims require a browser check. Probability studies require the
-simulation command and a saved dated result under `studies/`.
+simulation command and a saved dated result under `evidence/studies/`.
 
 ## Simulation-Driven Change Control
 
 Any change motivated by simulated play must include all of the following in
 the same Git history:
 
-1. Preserve the raw report in the local `studies/simulation/` archive.
+1. Preserve the raw report in the local `evidence/studies/simulation/` archive.
 2. Add a tracked dated study receipt recording seed, run count, player count,
    profiles, backends, rules variant, report hash, aggregate results, validity
    limits, and the hypothesis being tested.

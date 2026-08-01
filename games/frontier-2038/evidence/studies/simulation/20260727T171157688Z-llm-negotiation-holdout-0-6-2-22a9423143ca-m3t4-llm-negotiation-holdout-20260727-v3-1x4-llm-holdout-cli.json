@@ -1,0 +1,4484 @@
+{
+  "schemaVersion": 6,
+  "reportType": "llm_negotiation_holdout",
+  "evidenceLabel": "simulation",
+  "generatedAt": "2026-07-27T17:11:57.688Z",
+  "seed": "m3t4-llm-negotiation-holdout-20260727-v3",
+  "runs": 1,
+  "playerCount": 4,
+  "scope": {
+    "id": "lean-grid-ready-v6",
+    "automated": [
+      "four teaching Eras, three simultaneous Select → Move → Act turns, Initiative, and public event-sourced scoring",
+      "all 24 Headline cards with pre-selection regimes, auctions, votes, commitments, persistent effects, and explicit Volatility",
+      "all seven Wild Actions, Escalation supply, AGI declarations, and first/later declaration scoring",
+      "faction starts, passive modifiers, triggered powers, and bounded once-per-game abilities",
+      "Core Actions, location bonuses, Training, two ordinary Power Sources, adjacency Networks, Links, Production, and control",
+      "persistent Grid-Ready markers earned during Production and revoked by movement, disconnection, or insufficient Power",
+      "thirteen-space sixfold-symmetric board and one simultaneous secret Jurisdictional Realignment ballot after Round III",
+      "Influence, immediate trades, accept/reject Joint Ventures, and Production-time Power purchases",
+      "scaled Public Audit, player Scrutiny, Systemic Risk, Spotlight, and Public Research Grants",
+      "four era-specific three-card Mandate decks, visible score events, the shared World Ending, and complete tiebreaks",
+      "strategy decision packets for setup, Headlines, actions, resolutions, negotiations, declarations, and Jurisdictional Realignment"
+    ],
+    "modeledAbstractions": [
+      "Network reach is recalculated from the starting grid, Generators, Link anchors, and visible Facility adjacency after Round III Realignment.",
+      "Power purchases resolve in Initiative order before each player chooses a legal subset of full Facility demands; replay receipts expose both choices.",
+      "Non-binding Power promises are modeled as explicit public decisions. They may be fulfilled, broken, superseded, or remain unexercised; no promise forces a later sale.",
+      "Headline and Tactic art/flavor never affect mechanics."
+    ],
+    "excluded": [
+      "the deferred Tactic module",
+      "the deferred secret-objective module",
+      "free-form future promises that are not immediate trades or binding contracts"
+    ],
+    "verdictBoundary": "Executable 0.6.2 synchronized physical candidate; negotiation promises are non-binding outcomes, causal supplier attribution is counterfactual, player-owned choices use ordinary decision packets, failed CLI attempts preserve provider provenance, fresh provider decisions support write-only capture and read-only replay, and deferred modules remain disabled."
+  },
+  "rulesVariant": {
+    "auditMultiplier": 1,
+    "fundConservative": 2,
+    "fundVenture": 4,
+    "ventureScrutiny": 2,
+    "facilityCost": 2,
+    "deployComputeCost": 1,
+    "startingGridPower": 1,
+    "customerMandate": 2,
+    "agiFirstMandate": 7,
+    "agiLaterMandate": 5,
+    "agiCapability": 9,
+    "agiCustomers": 3,
+    "agiFacilities": 3,
+    "agiTrust": 2,
+    "agiComputeCost": 3,
+    "customerCapabilityOffset": 0,
+    "startingTeamsDeployed": 1
+  },
+  "seats": [
+    {
+      "seat": 0,
+      "factionIds": [
+        "coalition_lab"
+      ],
+      "profileIds": [
+        "agi_candidate"
+      ],
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 7,
+      "meanCustomers": 3,
+      "meanFacilities": 3,
+      "meanAuditHits": 2,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 1,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "build": 3,
+        "research": 4,
+        "deploy": 4,
+        "fund": 1
+      },
+      "actionDiversity": 0.9276942711037669,
+      "wildActionCounts": {},
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 52,
+        "codex-cli": 13
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "seat": 1,
+      "factionIds": [
+        "platform_empire"
+      ],
+      "profileIds": [
+        "power_broker"
+      ],
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 3,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 4,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 1,
+      "meanPowerTradeRunway": 1,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 1,
+        "build": 2,
+        "research": 4,
+        "organize": 1,
+        "fund": 1,
+        "influence": 1
+      },
+      "actionDiversity": 0.8982444017039272,
+      "wildActionCounts": {
+        "reorganization": 1,
+        "open_weights": 1,
+        "fusion_demonstrator": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 73
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "seat": 2,
+      "factionIds": [
+        "imperial_research_lab"
+      ],
+      "profileIds": [
+        "trust_governor"
+      ],
+      "appearances": 1,
+      "winShare": 1,
+      "meanScore": 20,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "20": 1
+      },
+      "meanCapability": 12,
+      "meanCustomers": 3,
+      "meanFacilities": 0,
+      "meanAuditHits": 1,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "influence": 4,
+        "deploy": 4,
+        "research": 3
+      },
+      "actionDiversity": 0.9922150607220183,
+      "wildActionCounts": {
+        "narrative_capture": 1,
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 62
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "seat": 3,
+      "factionIds": [
+        "vertical_empire"
+      ],
+      "profileIds": [
+        "market_maximalist"
+      ],
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 14,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "14": 1
+      },
+      "meanCapability": 9,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 5,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 3,
+        "research": 2,
+        "influence": 2,
+        "organize": 1,
+        "fund": 3,
+        "build": 1
+      },
+      "actionDiversity": 0.9513282751069653,
+      "wildActionCounts": {
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 81
+      },
+      "policyFallbacks": 0
+    }
+  ],
+  "factions": [
+    {
+      "factionId": "imperial_research_lab",
+      "appearances": 1,
+      "winShare": 1,
+      "meanScore": 20,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "20": 1
+      },
+      "meanCapability": 12,
+      "meanCustomers": 3,
+      "meanFacilities": 0,
+      "meanAuditHits": 1,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "influence": 4,
+        "deploy": 4,
+        "research": 3
+      },
+      "actionDiversity": 0.9922150607220183,
+      "wildActionCounts": {
+        "narrative_capture": 1,
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 62
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "factionId": "vertical_empire",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 14,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "14": 1
+      },
+      "meanCapability": 9,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 5,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 3,
+        "research": 2,
+        "influence": 2,
+        "organize": 1,
+        "fund": 3,
+        "build": 1
+      },
+      "actionDiversity": 0.9513282751069653,
+      "wildActionCounts": {
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 81
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "factionId": "platform_empire",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 3,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 4,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 1,
+      "meanPowerTradeRunway": 1,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 1,
+        "build": 2,
+        "research": 4,
+        "organize": 1,
+        "fund": 1,
+        "influence": 1
+      },
+      "actionDiversity": 0.8982444017039272,
+      "wildActionCounts": {
+        "reorganization": 1,
+        "open_weights": 1,
+        "fusion_demonstrator": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 73
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "factionId": "coalition_lab",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 7,
+      "meanCustomers": 3,
+      "meanFacilities": 3,
+      "meanAuditHits": 2,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 1,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "build": 3,
+        "research": 4,
+        "deploy": 4,
+        "fund": 1
+      },
+      "actionDiversity": 0.9276942711037669,
+      "wildActionCounts": {},
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 52,
+        "codex-cli": 13
+      },
+      "policyFallbacks": 0
+    }
+  ],
+  "profiles": [
+    {
+      "profileId": "trust_governor",
+      "appearances": 1,
+      "winShare": 1,
+      "meanScore": 20,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "20": 1
+      },
+      "meanCapability": 12,
+      "meanCustomers": 3,
+      "meanFacilities": 0,
+      "meanAuditHits": 1,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "influence": 4,
+        "deploy": 4,
+        "research": 3
+      },
+      "actionDiversity": 0.9922150607220183,
+      "wildActionCounts": {
+        "narrative_capture": 1,
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 62
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "profileId": "market_maximalist",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 14,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "14": 1
+      },
+      "meanCapability": 9,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 5,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 3,
+        "research": 2,
+        "influence": 2,
+        "organize": 1,
+        "fund": 3,
+        "build": 1
+      },
+      "actionDiversity": 0.9513282751069653,
+      "wildActionCounts": {
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 81
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "profileId": "power_broker",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 3,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 4,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 1,
+      "meanPowerTradeRunway": 1,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 1,
+        "build": 2,
+        "research": 4,
+        "organize": 1,
+        "fund": 1,
+        "influence": 1
+      },
+      "actionDiversity": 0.8982444017039272,
+      "wildActionCounts": {
+        "reorganization": 1,
+        "open_weights": 1,
+        "fusion_demonstrator": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 73
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "profileId": "agi_candidate",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 7,
+      "meanCustomers": 3,
+      "meanFacilities": 3,
+      "meanAuditHits": 2,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 1,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "build": 3,
+        "research": 4,
+        "deploy": 4,
+        "fund": 1
+      },
+      "actionDiversity": 0.9276942711037669,
+      "wildActionCounts": {},
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 52,
+        "codex-cli": 13
+      },
+      "policyFallbacks": 0
+    }
+  ],
+  "backends": [
+    {
+      "backendId": "greedy",
+      "appearances": 1,
+      "winShare": 1,
+      "meanScore": 20,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "20": 1
+      },
+      "meanCapability": 12,
+      "meanCustomers": 3,
+      "meanFacilities": 0,
+      "meanAuditHits": 1,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "influence": 4,
+        "deploy": 4,
+        "research": 3
+      },
+      "actionDiversity": 0.9922150607220183,
+      "wildActionCounts": {
+        "narrative_capture": 1,
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 62
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "backendId": "weighted",
+      "appearances": 2,
+      "winShare": 0,
+      "meanScore": 13,
+      "scoreStdDev": 1,
+      "scoreDistribution": {
+        "12": 1,
+        "14": 1
+      },
+      "meanCapability": 6,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 4.5,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0.5,
+      "meanPowerTradeRunway": 0.5,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 4,
+        "research": 6,
+        "influence": 3,
+        "organize": 2,
+        "fund": 4,
+        "build": 3
+      },
+      "actionDiversity": 0.968678472757837,
+      "wildActionCounts": {
+        "open_weights": 2,
+        "agent_swarm": 2,
+        "reorganization": 1,
+        "fusion_demonstrator": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 154
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "backendId": "hybrid-codex",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 7,
+      "meanCustomers": 3,
+      "meanFacilities": 3,
+      "meanAuditHits": 2,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 1,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "build": 3,
+        "research": 4,
+        "deploy": 4,
+        "fund": 1
+      },
+      "actionDiversity": 0.9276942711037669,
+      "wildActionCounts": {},
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 52,
+        "codex-cli": 13
+      },
+      "policyFallbacks": 0
+    }
+  ],
+  "factionStrategies": [
+    {
+      "id": "imperial_research_lab::trust_governor",
+      "factionId": "imperial_research_lab",
+      "profileId": "trust_governor",
+      "appearances": 1,
+      "winShare": 1,
+      "meanScore": 20,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "20": 1
+      },
+      "meanCapability": 12,
+      "meanCustomers": 3,
+      "meanFacilities": 0,
+      "meanAuditHits": 1,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "influence": 4,
+        "deploy": 4,
+        "research": 3
+      },
+      "actionDiversity": 0.9922150607220183,
+      "wildActionCounts": {
+        "narrative_capture": 1,
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 62
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "vertical_empire::market_maximalist",
+      "factionId": "vertical_empire",
+      "profileId": "market_maximalist",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 14,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "14": 1
+      },
+      "meanCapability": 9,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 5,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 3,
+        "research": 2,
+        "influence": 2,
+        "organize": 1,
+        "fund": 3,
+        "build": 1
+      },
+      "actionDiversity": 0.9513282751069653,
+      "wildActionCounts": {
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 81
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "platform_empire::power_broker",
+      "factionId": "platform_empire",
+      "profileId": "power_broker",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 3,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 4,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 1,
+      "meanPowerTradeRunway": 1,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 1,
+        "build": 2,
+        "research": 4,
+        "organize": 1,
+        "fund": 1,
+        "influence": 1
+      },
+      "actionDiversity": 0.8982444017039272,
+      "wildActionCounts": {
+        "reorganization": 1,
+        "open_weights": 1,
+        "fusion_demonstrator": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 73
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "coalition_lab::agi_candidate",
+      "factionId": "coalition_lab",
+      "profileId": "agi_candidate",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 7,
+      "meanCustomers": 3,
+      "meanFacilities": 3,
+      "meanAuditHits": 2,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 1,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "build": 3,
+        "research": 4,
+        "deploy": 4,
+        "fund": 1
+      },
+      "actionDiversity": 0.9276942711037669,
+      "wildActionCounts": {},
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 52,
+        "codex-cli": 13
+      },
+      "policyFallbacks": 0
+    }
+  ],
+  "factionBackends": [
+    {
+      "id": "imperial_research_lab::greedy",
+      "factionId": "imperial_research_lab",
+      "backendId": "greedy",
+      "appearances": 1,
+      "winShare": 1,
+      "meanScore": 20,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "20": 1
+      },
+      "meanCapability": 12,
+      "meanCustomers": 3,
+      "meanFacilities": 0,
+      "meanAuditHits": 1,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "influence": 4,
+        "deploy": 4,
+        "research": 3
+      },
+      "actionDiversity": 0.9922150607220183,
+      "wildActionCounts": {
+        "narrative_capture": 1,
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 62
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "vertical_empire::weighted",
+      "factionId": "vertical_empire",
+      "backendId": "weighted",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 14,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "14": 1
+      },
+      "meanCapability": 9,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 5,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 3,
+        "research": 2,
+        "influence": 2,
+        "organize": 1,
+        "fund": 3,
+        "build": 1
+      },
+      "actionDiversity": 0.9513282751069653,
+      "wildActionCounts": {
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 81
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "platform_empire::weighted",
+      "factionId": "platform_empire",
+      "backendId": "weighted",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 3,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 4,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 1,
+      "meanPowerTradeRunway": 1,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 1,
+        "build": 2,
+        "research": 4,
+        "organize": 1,
+        "fund": 1,
+        "influence": 1
+      },
+      "actionDiversity": 0.8982444017039272,
+      "wildActionCounts": {
+        "reorganization": 1,
+        "open_weights": 1,
+        "fusion_demonstrator": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 73
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "coalition_lab::hybrid-codex",
+      "factionId": "coalition_lab",
+      "backendId": "hybrid-codex",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 7,
+      "meanCustomers": 3,
+      "meanFacilities": 3,
+      "meanAuditHits": 2,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 1,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "build": 3,
+        "research": 4,
+        "deploy": 4,
+        "fund": 1
+      },
+      "actionDiversity": 0.9276942711037669,
+      "wildActionCounts": {},
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 52,
+        "codex-cli": 13
+      },
+      "policyFallbacks": 0
+    }
+  ],
+  "strategyBackends": [
+    {
+      "id": "trust_governor::greedy",
+      "profileId": "trust_governor",
+      "backendId": "greedy",
+      "appearances": 1,
+      "winShare": 1,
+      "meanScore": 20,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "20": 1
+      },
+      "meanCapability": 12,
+      "meanCustomers": 3,
+      "meanFacilities": 0,
+      "meanAuditHits": 1,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "influence": 4,
+        "deploy": 4,
+        "research": 3
+      },
+      "actionDiversity": 0.9922150607220183,
+      "wildActionCounts": {
+        "narrative_capture": 1,
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 62
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "market_maximalist::weighted",
+      "profileId": "market_maximalist",
+      "backendId": "weighted",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 14,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "14": 1
+      },
+      "meanCapability": 9,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 5,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 3,
+        "research": 2,
+        "influence": 2,
+        "organize": 1,
+        "fund": 3,
+        "build": 1
+      },
+      "actionDiversity": 0.9513282751069653,
+      "wildActionCounts": {
+        "open_weights": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 81
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "power_broker::weighted",
+      "profileId": "power_broker",
+      "backendId": "weighted",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 3,
+      "meanCustomers": 1,
+      "meanFacilities": 1,
+      "meanAuditHits": 4,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 0,
+      "meanPowerSold": 1,
+      "meanPowerTradeRunway": 1,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "deploy": 1,
+        "build": 2,
+        "research": 4,
+        "organize": 1,
+        "fund": 1,
+        "influence": 1
+      },
+      "actionDiversity": 0.8982444017039272,
+      "wildActionCounts": {
+        "reorganization": 1,
+        "open_weights": 1,
+        "fusion_demonstrator": 1,
+        "agent_swarm": 1
+      },
+      "mandateCounts": {},
+      "providerCounts": {
+        "weighted-policy": 73
+      },
+      "policyFallbacks": 0
+    },
+    {
+      "id": "agi_candidate::hybrid-codex",
+      "profileId": "agi_candidate",
+      "backendId": "hybrid-codex",
+      "appearances": 1,
+      "winShare": 0,
+      "meanScore": 12,
+      "scoreStdDev": 0,
+      "scoreDistribution": {
+        "12": 1
+      },
+      "meanCapability": 7,
+      "meanCustomers": 3,
+      "meanFacilities": 3,
+      "meanAuditHits": 2,
+      "agiEligibilityRate": 0,
+      "agiDeclarationRate": 0,
+      "meanShovelsIncome": 0,
+      "meanPowerBought": 1,
+      "meanPowerSold": 0,
+      "meanPowerTradeRunway": 0,
+      "meanEarliestAgiRound": null,
+      "actionCounts": {
+        "build": 3,
+        "research": 4,
+        "deploy": 4,
+        "fund": 1
+      },
+      "actionDiversity": 0.9276942711037669,
+      "wildActionCounts": {},
+      "mandateCounts": {},
+      "providerCounts": {
+        "greedy-policy": 52,
+        "codex-cli": 13
+      },
+      "policyFallbacks": 0
+    }
+  ],
+  "profileMatchups": [
+    {
+      "profileId": "trust_governor",
+      "opponentProfileId": "market_maximalist",
+      "comparisons": 1,
+      "placementPoints": 1,
+      "wins": 1,
+      "relativePlacementRate": 1,
+      "matchWinRate": 1
+    },
+    {
+      "profileId": "trust_governor",
+      "opponentProfileId": "power_broker",
+      "comparisons": 1,
+      "placementPoints": 1,
+      "wins": 1,
+      "relativePlacementRate": 1,
+      "matchWinRate": 1
+    },
+    {
+      "profileId": "trust_governor",
+      "opponentProfileId": "agi_candidate",
+      "comparisons": 1,
+      "placementPoints": 1,
+      "wins": 1,
+      "relativePlacementRate": 1,
+      "matchWinRate": 1
+    },
+    {
+      "profileId": "market_maximalist",
+      "opponentProfileId": "trust_governor",
+      "comparisons": 1,
+      "placementPoints": 0,
+      "wins": 0,
+      "relativePlacementRate": 0,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "market_maximalist",
+      "opponentProfileId": "power_broker",
+      "comparisons": 1,
+      "placementPoints": 1,
+      "wins": 0,
+      "relativePlacementRate": 1,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "market_maximalist",
+      "opponentProfileId": "agi_candidate",
+      "comparisons": 1,
+      "placementPoints": 1,
+      "wins": 0,
+      "relativePlacementRate": 1,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "power_broker",
+      "opponentProfileId": "trust_governor",
+      "comparisons": 1,
+      "placementPoints": 0,
+      "wins": 0,
+      "relativePlacementRate": 0,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "power_broker",
+      "opponentProfileId": "market_maximalist",
+      "comparisons": 1,
+      "placementPoints": 0,
+      "wins": 0,
+      "relativePlacementRate": 0,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "power_broker",
+      "opponentProfileId": "agi_candidate",
+      "comparisons": 1,
+      "placementPoints": 0.5,
+      "wins": 0,
+      "relativePlacementRate": 0.5,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "agi_candidate",
+      "opponentProfileId": "trust_governor",
+      "comparisons": 1,
+      "placementPoints": 0,
+      "wins": 0,
+      "relativePlacementRate": 0,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "agi_candidate",
+      "opponentProfileId": "market_maximalist",
+      "comparisons": 1,
+      "placementPoints": 0,
+      "wins": 0,
+      "relativePlacementRate": 0,
+      "matchWinRate": 0
+    },
+    {
+      "profileId": "agi_candidate",
+      "opponentProfileId": "power_broker",
+      "comparisons": 1,
+      "placementPoints": 0.5,
+      "wins": 0,
+      "relativePlacementRate": 0.5,
+      "matchWinRate": 0
+    }
+  ],
+  "diagnostics": {
+    "seatWinShareRange": 1,
+    "factionWinShareRange": 1,
+    "profileWinShareRange": 1,
+    "scoreStdDev": 3.278719262151,
+    "actionDiversity": 0.9218893506601535,
+    "openingDiversity": {
+      "counts": {
+        "deploy": 2,
+        "deploy→research": 1,
+        "none": 1
+      },
+      "observed": 3,
+      "entropy": 0.9463946303571862,
+      "topShare": 0.5
+    },
+    "winningPathDiversity": {
+      "counts": {
+        "research_adoption_hybrid": 1
+      },
+      "observed": 1,
+      "entropy": 0,
+      "topShare": 1
+    },
+    "factionStrategyInteractionRange": 0,
+    "leaderPredictability": {
+      "round1": 0,
+      "round2": 0.5,
+      "round3": 1,
+      "round4": 1
+    },
+    "pairwiseDominance": 0,
+    "cyclicMeta": {
+      "edgeThreshold": 0.55,
+      "count": 0,
+      "cycles": []
+    },
+    "integrity": {
+      "violations": 0,
+      "details": [],
+      "policyFallbacks": 0,
+      "forcedNoOps": 11
+    },
+    "agiEligibilityRate": 0,
+    "agiDeclarationRate": 0,
+    "genuineAgiRate": 0,
+    "nonDeclaringWinRate": 1,
+    "alerts": [
+      {
+        "id": "seat_bias",
+        "severity": "high",
+        "value": 1
+      },
+      {
+        "id": "faction_spread",
+        "severity": "high",
+        "value": 1
+      },
+      {
+        "id": "agi_drought",
+        "severity": "medium",
+        "value": 0
+      },
+      {
+        "id": "closed_loop_only",
+        "severity": "medium",
+        "value": 0
+      }
+    ]
+  },
+  "matchMetrics": {
+    "headlines": {
+      "ten_dollar_intelligence": 1,
+      "talent_gold_rush": 1,
+      "synthetic_celebrity": 1,
+      "reactor_restart_one_model": 1,
+      "emergency_power_authority": 1,
+      "boardroom_coup": 1,
+      "weights_on_internet": 1,
+      "ai_written_law": 1,
+      "open_weight_non_aligned": 1,
+      "agent_swarm_escapes_scope": 1,
+      "agi_personhood": 1,
+      "recursive_self_improvement": 1
+    },
+    "headlineOutcomes": {
+      "agi_personhood:person": 1
+    },
+    "mandates": {
+      "markets_prefer_destiny": 1,
+      "stack_reaches_horizon": 1,
+      "voluntary_coordination_triumphs": 1,
+      "zero_incident_quarter": 1
+    },
+    "wildActions": {
+      "reorganization": 1,
+      "open_weights": 3,
+      "narrative_capture": 1,
+      "fusion_demonstrator": 1,
+      "agent_swarm": 3
+    },
+    "tactics": {},
+    "realignments": {
+      "consolidate_core": 1
+    },
+    "systemicRiskCreated": 1,
+    "declarations": 0,
+    "declarationPpaIterations": 0,
+    "declarationCapacityOps": 0,
+    "powerTrades": 1,
+    "causallyNecessaryPowerTrades": 1,
+    "cooperativeDeclarationMatches": 0,
+    "supplierSupportMatches": 0,
+    "supplierWins": 0,
+    "supplierTopHalfFinishes": 0,
+    "supplierFinalScoreGap": 0,
+    "supplierRound4ScoreGap": 0,
+    "worldEndings": {
+      "closed_loop": 1
+    },
+    "nonDeclaringWins": 1,
+    "negotiationOutcomes": {
+      "superseded": 27,
+      "unexercised": 16
+    },
+    "meanSystemicRiskCreated": 1,
+    "declarationRate": 0,
+    "powerTradesPerMatch": 1,
+    "causallyNecessaryPowerTradesPerMatch": 1,
+    "cooperativeDeclarationRate": 0,
+    "supplierCompetitiveRate": 0,
+    "supplierWinRate": 0,
+    "supplierMeanFinalScoreGap": null,
+    "supplierMeanRound4ScoreGap": null,
+    "meanPpaIterationsPerDeclaration": 0,
+    "meanCapacityOpsPerDeclaration": 0,
+    "nonDeclaringWinRate": 1
+  },
+  "samples": [],
+  "observations": [
+    {
+      "matchIndex": 0,
+      "winnerSeats": [
+        2
+      ],
+      "standings": [
+        {
+          "seat": 2,
+          "factionId": "imperial_research_lab",
+          "profileId": "trust_governor",
+          "backendId": "greedy",
+          "score": 20,
+          "agiDeclared": false,
+          "openingActions": [
+            "deploy"
+          ],
+          "actions": {
+            "influence": 4,
+            "deploy": 4,
+            "research": 3
+          },
+          "forcedNoOps": 1,
+          "policyFallbacks": 0,
+          "auditHits": 1,
+          "mandateEvents": [
+            {
+              "round": 1,
+              "cycle": 1,
+              "source": "trust-2",
+              "points": 2,
+              "total": 2
+            },
+            {
+              "round": 1,
+              "cycle": 1,
+              "source": "trust-4",
+              "points": 2,
+              "total": 4
+            },
+            {
+              "round": 2,
+              "cycle": 2,
+              "source": "customer-1",
+              "points": 2,
+              "total": 6
+            },
+            {
+              "round": 2,
+              "cycle": 3,
+              "source": "capability-3",
+              "points": 2,
+              "total": 8
+            },
+            {
+              "round": 3,
+              "cycle": 1,
+              "source": "trust-6",
+              "points": 2,
+              "total": 10
+            },
+            {
+              "round": 3,
+              "cycle": 3,
+              "source": "capability-6",
+              "points": 2,
+              "total": 12
+            },
+            {
+              "round": 3,
+              "cycle": 3,
+              "source": "customer-2",
+              "points": 2,
+              "total": 14
+            },
+            {
+              "round": 4,
+              "cycle": 3,
+              "source": "customer-3",
+              "points": 2,
+              "total": 16
+            },
+            {
+              "round": 4,
+              "cycle": 3,
+              "source": "capability-9",
+              "points": 2,
+              "total": 18
+            },
+            {
+              "round": 4,
+              "cycle": 3,
+              "source": "capability-12",
+              "points": 2,
+              "total": 20
+            }
+          ],
+          "promisesMade": 12,
+          "promisesFulfilled": 0,
+          "promisesBroken": 0,
+          "policyReceipts": []
+        },
+        {
+          "seat": 3,
+          "factionId": "vertical_empire",
+          "profileId": "market_maximalist",
+          "backendId": "weighted",
+          "score": 14,
+          "agiDeclared": false,
+          "openingActions": [
+            "deploy"
+          ],
+          "actions": {
+            "deploy": 3,
+            "research": 2,
+            "influence": 2,
+            "organize": 1,
+            "fund": 3,
+            "build": 1
+          },
+          "forcedNoOps": 2,
+          "policyFallbacks": 0,
+          "auditHits": 5,
+          "mandateEvents": [
+            {
+              "round": 1,
+              "cycle": 1,
+              "source": "trust-2",
+              "points": 2,
+              "total": 2
+            },
+            {
+              "round": 1,
+              "cycle": 3,
+              "source": "trust-4",
+              "points": 2,
+              "total": 4
+            },
+            {
+              "round": 3,
+              "cycle": 1,
+              "source": "trust-6",
+              "points": 2,
+              "total": 6
+            },
+            {
+              "round": 4,
+              "cycle": 1,
+              "source": "customer-1",
+              "points": 2,
+              "total": 8
+            },
+            {
+              "round": 4,
+              "cycle": 2,
+              "source": "capability-3",
+              "points": 2,
+              "total": 10
+            },
+            {
+              "round": 4,
+              "cycle": 2,
+              "source": "capability-6",
+              "points": 2,
+              "total": 12
+            },
+            {
+              "round": 4,
+              "cycle": 2,
+              "source": "capability-9",
+              "points": 2,
+              "total": 14
+            }
+          ],
+          "promisesMade": 8,
+          "promisesFulfilled": 0,
+          "promisesBroken": 0,
+          "policyReceipts": []
+        },
+        {
+          "seat": 1,
+          "factionId": "platform_empire",
+          "profileId": "power_broker",
+          "backendId": "weighted",
+          "score": 12,
+          "agiDeclared": false,
+          "openingActions": [
+            "deploy",
+            "research"
+          ],
+          "actions": {
+            "deploy": 1,
+            "build": 2,
+            "research": 4,
+            "organize": 1,
+            "fund": 1,
+            "influence": 1
+          },
+          "forcedNoOps": 5,
+          "policyFallbacks": 0,
+          "auditHits": 4,
+          "mandateEvents": [
+            {
+              "round": 1,
+              "cycle": 1,
+              "source": "customer-1",
+              "points": 2,
+              "total": 2
+            },
+            {
+              "round": 1,
+              "cycle": 1,
+              "source": "trust-2",
+              "points": 2,
+              "total": 4
+            },
+            {
+              "round": 3,
+              "cycle": 3,
+              "source": "trust-4",
+              "points": 2,
+              "total": 6
+            },
+            {
+              "round": 3,
+              "cycle": 3,
+              "source": "trust-6",
+              "points": 2,
+              "total": 8
+            },
+            {
+              "round": 4,
+              "cycle": 2,
+              "source": "capability-3",
+              "points": 2,
+              "total": 10
+            },
+            {
+              "round": 4,
+              "cycle": 2,
+              "source": "fusion_demonstrator",
+              "points": 2,
+              "total": 12
+            }
+          ],
+          "promisesMade": 12,
+          "promisesFulfilled": 0,
+          "promisesBroken": 0,
+          "policyReceipts": []
+        },
+        {
+          "seat": 0,
+          "factionId": "coalition_lab",
+          "profileId": "agi_candidate",
+          "backendId": "hybrid-codex",
+          "score": 12,
+          "agiDeclared": false,
+          "openingActions": [],
+          "actions": {
+            "build": 3,
+            "research": 4,
+            "deploy": 4,
+            "fund": 1
+          },
+          "forcedNoOps": 3,
+          "policyFallbacks": 0,
+          "auditHits": 2,
+          "mandateEvents": [
+            {
+              "round": 1,
+              "cycle": 1,
+              "source": "trust-2",
+              "points": 2,
+              "total": 2
+            },
+            {
+              "round": 1,
+              "cycle": 2,
+              "source": "capability-3",
+              "points": 2,
+              "total": 4
+            },
+            {
+              "round": 1,
+              "cycle": 2,
+              "source": "trust-4",
+              "points": 2,
+              "total": 6
+            },
+            {
+              "round": 1,
+              "cycle": 3,
+              "source": "customer-1",
+              "points": 2,
+              "total": 8
+            },
+            {
+              "round": 3,
+              "cycle": 2,
+              "source": "customer-2",
+              "points": 2,
+              "total": 10
+            },
+            {
+              "round": 3,
+              "cycle": 3,
+              "source": "capability-6",
+              "points": 2,
+              "total": 12
+            },
+            {
+              "round": 4,
+              "cycle": 1,
+              "source": "customer-3",
+              "points": 2,
+              "total": 14
+            }
+          ],
+          "promisesMade": 11,
+          "promisesFulfilled": 0,
+          "promisesBroken": 0,
+          "policyReceipts": [
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c1:s0:public_research_grant:1",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c1:s0:negotiation_intent:2",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "6861fbe1a1b376bb3f329e097c1cd71791b06afcd5a7ac1ef2815465323cd7d9",
+              "cached": false,
+              "cacheKey": "e6d04d2ffeebd5577300770af57a6c35f279c2cdfbb32329d7f97eb700c77f3d",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 5250,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c1:s0:select:6",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c1:s0:immediate_trade_timing:10",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c1:s0:resolve:11",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c2:s0:talent_gold_rush_bid:18",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c2:s0:negotiation_intent:25",
+              "decisionId": "negotiation_none",
+              "promptSha256": "e0a04bede8333085ed195978a2b46d9115d52d3e7d9d2f3c8f173088a1f67602",
+              "cached": false,
+              "cacheKey": "ad62e3cb5366699d5a2c83f9de9c08fea53e907d91a11c2ef8d933ebd6002827",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 6732,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c2:s0:select:26",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c2:s0:immediate_trade_timing:42",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c2:s0:resolve:43",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c3:s0:negotiation_intent:46",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "f9f622873326240e1d1168c75431662bc05b9cb374611323d230c789a7e4af49",
+              "cached": false,
+              "cacheKey": "f5bb6568bdf46c6c90bf5255d8d68cdb1de99a14c5fe8a011b3c582d2005d787",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 7576,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c3:s0:select:48",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c3:s0:immediate_trade_timing:57",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c3:s0:resolve:58",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r1:c3:s0:power_allocation:61",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c1:s0:negotiation_intent:68",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "e4496e3993a27566b7ac573424a29841b7a683b03af5b0a319a33b0cad3e8779",
+              "cached": false,
+              "cacheKey": "019d257eacf17d431caf54a1895d704cc03a5b7637d173e3a39f50a11bc17bfe",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 7992,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c1:s0:select:71",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c1:s0:immediate_trade_timing:77",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c1:s0:resolve:78",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c2:s0:emergency_power:83",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c2:s0:negotiation_intent:87",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "d851fe28a1d316a645110d0d84aa6a0f05f08c51d076d135668d4aeaa288d671",
+              "cached": false,
+              "cacheKey": "e7727077d9db2f03886893b0e8157450444f378035ee8055efde74d4092625ab",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 6786,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c2:s0:select:91",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c2:s0:immediate_trade_timing:95",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c2:s0:resolve:96",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c3:s0:boardroom_coup:103",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c3:s0:negotiation_intent:107",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "5cf9e10002dc38beccbbf54825c236bbd1c4a0c3280d46536c9eeebf6a648e9c",
+              "cached": false,
+              "cacheKey": "2943a523df001e47f1e8096d2e45da0e04195b201b6a54812f4634bc4a8e18d9",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 9926,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c3:s0:select:108",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c3:s0:immediate_trade_timing:118",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c3:s0:resolve:119",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r2:c3:s0:power_allocation:120",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c1:s0:negotiation_intent:127",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "c175674b4511a16deaa33f0bc70bd00f4283b492f1d0104292a072a6b2ecc152",
+              "cached": false,
+              "cacheKey": "cba88b42931517a8a43a1bebdca89f06015c7d67d0409eb8f21a1cda7a387f17",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 7861,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c1:s0:select:129",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c1:s0:immediate_trade_timing:138",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c1:s0:resolve:139",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c2:s0:negotiation_intent:144",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "f8a93d80d1785f9577a1f2fa73832e853671bbf3a20a51c4ed82dabe4c702712",
+              "cached": false,
+              "cacheKey": "9a15cc64e82bfb3ed63a03db18a5c88d363de7b060e26fb7a86d99f2e2292005",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 5948,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c2:s0:select:147",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c2:s0:immediate_trade_timing:153",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c2:s0:resolve:154",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:open_weight_non_aligned:159",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:negotiation_intent:164",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "8f6a8e63cad1e72f127447a484ff9c15c9e50b0d145a45ef3f66ee86c5c2a4e3",
+              "cached": false,
+              "cacheKey": "1be04ab0704f26548195c85d40ac6883ebd8674130253983494bcd8f294d26fe",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 5390,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:select:168",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:immediate_trade_timing:172",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:resolve:173",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:power_purchase_0:186",
+              "decisionId": "power_purchase_from_1_0",
+              "promptSha256": "d8c31f9c2adcd677cf35f73622266e95211b7039216bd52ad1e56e54a3b11907",
+              "cached": false,
+              "cacheKey": "7dc50510ceab1b339baf6f666d99b4db395421d89210bcaab1a29e7249aa7e65",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 6735,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:power_allocation:188",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:network_bonus:192",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r3:c3:s0:realignment_ballot:193",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c1:s0:wildcard_governance:198",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c1:s0:negotiation_intent:202",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "21e4db5e43e5428163bf19749e54c0fcfdd45cc6f443ef83952e454546cd6903",
+              "cached": false,
+              "cacheKey": "b6615cf4b83df40393776252bdaafab2fa7fb8ee05d32a75c3fc8937cb93e5d1",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 8272,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c1:s0:select:203",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c1:s0:immediate_trade_timing:213",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c1:s0:resolve:214",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c2:s0:wildcard_governance:215",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c2:s0:agi_personhood_vote:216",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c2:s0:negotiation_intent:222",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "65c230522731d78bd4ec7e1ec4fe0b80fe1e1c5710ec8251e8c1f3ed5ee86d57",
+              "cached": false,
+              "cacheKey": "88883fefcbd789a1a0c66e73f7c0a9ac5695a2a59d2b6c967e7e95bbcd7f91e5",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 5779,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c2:s0:select:224",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c2:s0:immediate_trade_response:238",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c2:s0:immediate_trade_timing:239",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c2:s0:resolve:240",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c3:s0:wildcard_governance:249",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "codex-cli",
+              "model": "gpt-5.6-sol",
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c3:s0:negotiation_intent:251",
+              "decisionId": "negotiation_power_1",
+              "promptSha256": "7064342b0dcaf752cd77c58a8db8326c9304791a954058ee7920758ee35e7ee8",
+              "cached": false,
+              "cacheKey": "d686125aa34b133baf61930d3b318c3fe53d4c06fdaf4705dd334a6804dea2d0",
+              "fallback": false,
+              "gated": false,
+              "fallbackReason": null,
+              "durationMs": 7691,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c3:s0:select:254",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c3:s0:immediate_trade_timing:264",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c3:s0:resolve:265",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            },
+            {
+              "provider": "greedy-policy",
+              "model": null,
+              "requestId": "m3t4-llm-negotiation-holdout-20260727-v3:run:0:r4:c3:s0:power_allocation:278",
+              "decisionId": null,
+              "promptSha256": null,
+              "cached": false,
+              "cacheKey": null,
+              "fallback": false,
+              "gated": true,
+              "fallbackReason": null,
+              "durationMs": null,
+              "attemptedProvider": null,
+              "attemptedModel": null,
+              "attemptedRequestId": null,
+              "attemptedPromptSha256": null,
+              "providerErrorClass": null,
+              "providerErrorMessage": null,
+              "providerErrorExitCode": null,
+              "providerErrorStderrSha256": null,
+              "providerDurationMs": null
+            }
+          ]
+        }
+      ],
+      "worldEndingId": "closed_loop",
+      "worldEnding": {
+        "id": "closed_loop",
+        "name": "The Closed Loop",
+        "qualifyingDeclarers": 0,
+        "collectiveTrust": 23,
+        "requiredCollectiveTrust": 14,
+        "unresolvedSystemicRisk": 0
+      },
+      "powerTrades": [
+        {
+          "round": 3,
+          "buyerSeat": 0,
+          "supplierSeat": 1,
+          "causallyNecessary": true
+        }
+      ],
+      "negotiations": [
+        {
+          "id": "promise-1-1-0",
+          "round": 1,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-1-1",
+          "round": 1,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-1-2",
+          "round": 1,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-1-1",
+          "round": 1,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 1,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-1-2-1",
+          "round": 1,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-1-2",
+          "round": 1,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 1,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-1-2-2",
+          "round": 1,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-2-3",
+          "round": 1,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-2-2",
+          "round": 1,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 1,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-1-3-2",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-2-3",
+          "round": 1,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 1,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-1-3-3",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-1-0",
+          "round": 1,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "superseded",
+          "resolvedRound": 1,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-1-3-0",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-2-1",
+          "round": 1,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "superseded",
+          "resolvedRound": 1,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-1-3-1",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "open"
+        },
+        {
+          "id": "promise-1-3-2",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "unexercised",
+          "resolvedRound": 1
+        },
+        {
+          "id": "promise-1-3-3",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "unexercised",
+          "resolvedRound": 1
+        },
+        {
+          "id": "promise-1-3-0",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "unexercised",
+          "resolvedRound": 1
+        },
+        {
+          "id": "promise-1-3-1",
+          "round": 1,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "unexercised",
+          "resolvedRound": 1
+        },
+        {
+          "id": "promise-2-1-0",
+          "round": 2,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-1-1",
+          "round": 2,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-1-2",
+          "round": 2,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-1-0",
+          "round": 2,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "superseded",
+          "resolvedRound": 2,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-2-2-0",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-1-1",
+          "round": 2,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "superseded",
+          "resolvedRound": 2,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-2-2-1",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 2,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-1-2",
+          "round": 2,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 2,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-2-2-2",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-2-3",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-2-1",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 2,
+          "status": "superseded",
+          "resolvedRound": 2,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-2-3-1",
+          "round": 2,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-2-2",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 2,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-2-3-2",
+          "round": 2,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-2-0",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "superseded",
+          "resolvedRound": 2,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-2-3-0",
+          "round": 2,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-2-2-3",
+          "round": 2,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 1,
+          "status": "unexercised",
+          "resolvedRound": 2
+        },
+        {
+          "id": "promise-2-3-1",
+          "round": 2,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "unexercised",
+          "resolvedRound": 2
+        },
+        {
+          "id": "promise-2-3-2",
+          "round": 2,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "unexercised",
+          "resolvedRound": 2
+        },
+        {
+          "id": "promise-2-3-0",
+          "round": 2,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "unexercised",
+          "resolvedRound": 2
+        },
+        {
+          "id": "promise-3-1-2",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-1-3",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 2,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-1-0",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-1-1",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-1-0",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "superseded",
+          "resolvedRound": 3,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-3-2-0",
+          "round": 3,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-1-1",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 3,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-3-2-1",
+          "round": 3,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-1-2",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 3,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-3-2-2",
+          "round": 3,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-2-0",
+          "round": 3,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "superseded",
+          "resolvedRound": 3,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-3-3-0",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-2-1",
+          "round": 3,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "superseded",
+          "resolvedRound": 3,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-3-3-1",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-2-2",
+          "round": 3,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 3,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-3-3-2",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-1-3",
+          "round": 3,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 2,
+          "status": "superseded",
+          "resolvedRound": 3,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-3-3-3",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-3-3-0",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "unexercised",
+          "resolvedRound": 3
+        },
+        {
+          "id": "promise-3-3-1",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "unexercised",
+          "resolvedRound": 3
+        },
+        {
+          "id": "promise-3-3-2",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "unexercised",
+          "resolvedRound": 3
+        },
+        {
+          "id": "promise-3-3-3",
+          "round": 3,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 1,
+          "status": "unexercised",
+          "resolvedRound": 3
+        },
+        {
+          "id": "promise-4-1-1",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-1-2",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-1-3",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-1-0",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-1-2",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-4-2-2",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-1-3",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-4-2-3",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-1-0",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-4-2-0",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-1-1",
+          "round": 4,
+          "cycle": 1,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 2
+        },
+        {
+          "id": "promise-4-2-1",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-2-3",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-4-3-3",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 2,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-2-0",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-4-3-0",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-2-1",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 3,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-4-3-1",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 2,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-2-2",
+          "round": 4,
+          "cycle": 2,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "superseded",
+          "resolvedRound": 4,
+          "resolvedCycle": 3
+        },
+        {
+          "id": "promise-4-3-2",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "open"
+        },
+        {
+          "id": "promise-4-3-3",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 3,
+          "targetSeat": 2,
+          "status": "unexercised",
+          "resolvedRound": 4
+        },
+        {
+          "id": "promise-4-3-0",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 0,
+          "targetSeat": 1,
+          "status": "unexercised",
+          "resolvedRound": 4
+        },
+        {
+          "id": "promise-4-3-1",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 1,
+          "targetSeat": 2,
+          "status": "unexercised",
+          "resolvedRound": 4
+        },
+        {
+          "id": "promise-4-3-2",
+          "round": 4,
+          "cycle": 3,
+          "kind": "power",
+          "promisorSeat": 2,
+          "targetSeat": 0,
+          "status": "unexercised",
+          "resolvedRound": 4
+        }
+      ],
+      "declarationReadiness": [],
+      "declarations": 0,
+      "realignments": {
+        "consolidate_core": 1
+      },
+      "systemicRiskCreated": 1,
+      "futureTimeline": [
+        {
+          "round": 1,
+          "cycle": 1,
+          "id": "ten_dollar_intelligence",
+          "name": "Ten-Dollar Intelligence"
+        },
+        {
+          "round": 1,
+          "cycle": 2,
+          "id": "talent_gold_rush",
+          "name": "Leading Researchers Receive Sovereign Status"
+        },
+        {
+          "round": 1,
+          "cycle": 3,
+          "id": "synthetic_celebrity",
+          "name": "Synthetic Celebrity Becomes the Largest Network"
+        },
+        {
+          "round": 2,
+          "cycle": 1,
+          "id": "reactor_restart_one_model",
+          "name": "A Model Is Granted Energy Sovereignty"
+        },
+        {
+          "round": 2,
+          "cycle": 2,
+          "id": "emergency_power_authority",
+          "name": "Emergency Power Authority"
+        },
+        {
+          "round": 2,
+          "cycle": 3,
+          "id": "boardroom_coup",
+          "name": "The Board Appoints a Nonhuman Director"
+        },
+        {
+          "round": 3,
+          "cycle": 1,
+          "id": "weights_on_internet",
+          "name": "Ownership of Intelligence Is Ruled Unenforceable"
+        },
+        {
+          "round": 3,
+          "cycle": 2,
+          "id": "ai_written_law",
+          "name": "The First AI-Written Law Passes Unread"
+        },
+        {
+          "round": 3,
+          "cycle": 3,
+          "id": "open_weight_non_aligned",
+          "name": "Open-Weight Non-Aligned Movement"
+        },
+        {
+          "round": 4,
+          "cycle": 1,
+          "id": "agent_swarm_escapes_scope",
+          "name": "Agent Swarm Charters Its Own Jurisdictions"
+        },
+        {
+          "round": 4,
+          "cycle": 2,
+          "id": "agi_personhood",
+          "name": "AGI Files for Personhood"
+        },
+        {
+          "round": 4,
+          "cycle": 3,
+          "id": "recursive_self_improvement",
+          "name": "Recursive Self-Improvement Weekend"
+        }
+      ]
+    }
+  ],
+  "preRegistration": {
+    "path": "studies/simulation/preregistrations/llm-negotiation-holdout-v3-capture.json",
+    "registrationCommit": "7a0af8ab0786a8f56c3d2aad7952c6b3a7cf3161",
+    "id": "llm-negotiation-fresh-capture-2026-07-27-v3",
+    "purpose": "fresh_robustness",
+    "fingerprint": "sha256:24ee4518d0e42bbc38b504096aa2b00be42e8ec9483dfb673a86c1b35533a1ae",
+    "analysis": {
+      "primaryOutcome": "Whether fresh metered Codex negotiation decisions are both valid at runtime and captured without a cache read for exact later replay.",
+      "secondaryOutcomes": [
+        "Successful fresh decisions",
+        "Provider attempts and fallbacks",
+        "Captured decision count",
+        "Power promises and trades",
+        "Prompt and decision provenance"
+      ],
+      "interpretationBoundary": "One preregistered match proves fresh write-only capture and provides a behavioral trace; it is not a balance estimate or provider comparison."
+    },
+    "locked": true
+  },
+  "configuration": {
+    "profileIds": [
+      "agi_candidate",
+      "power_broker",
+      "trust_governor",
+      "market_maximalist"
+    ],
+    "backends": [
+      "hybrid-codex",
+      "weighted",
+      "greedy",
+      "weighted"
+    ],
+    "llmAuthorized": true,
+    "maxLlmDecisions": 16,
+    "usedLlmDecisions": 13,
+    "model": "gpt-5.6-sol",
+    "factionPoolIds": [
+      "coalition_lab",
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    "mandateMode": "variable",
+    "simulateNegotiation": true,
+    "cliProviders": [
+      {
+        "provider": "codex",
+        "command": "codex",
+        "version": "codex-cli 0.145.0",
+        "model": "gpt-5.6-sol"
+      }
+    ],
+    "llmCacheMode": "write-only",
+    "llmCacheDirectory": "studies/simulation/cache/llm-negotiation-holdout-20260727-v3",
+    "preRegistrationId": "llm-negotiation-fresh-capture-2026-07-27-v3",
+    "llmStages": [
+      "negotiation_intent",
+      "power_purchase",
+      "power_sale",
+      "negotiation_response"
+    ],
+    "runOffset": 0
+  },
+  "balanceContract": {
+    "id": "strategic-unsolvability-v2",
+    "status": "provisional_hypotheses",
+    "fingerprint": "sha256:b3241890dd06b4e7d3adf5526a61034818d2c5919add76307e272ce16e77d667",
+    "provenance": {
+      "kind": "hypothesis",
+      "note": "Thresholds are initial falsification bounds. They are not evidence that the game is balanced and may change only through a recorded study receipt."
+    }
+  },
+  "balanceEvaluation": {
+    "contractId": "strategic-unsolvability-v2",
+    "status": "llm_holdout_descriptive",
+    "checks": [],
+    "promotionGate": {
+      "eligible": false,
+      "automatedPass": false,
+      "sourceClean": true,
+      "trackedReceipt": false,
+      "humanApproval": false,
+      "verdict": "must_compare_with_preregistered_deterministic_cells",
+      "reasons": [
+        "An LLM holdout tests negotiation robustness only.",
+        "A tracked receipt and explicit human approval remain mandatory."
+      ]
+    }
+  },
+  "reportSchemaVersion": 6,
+  "replaySchemaVersion": 2,
+  "decisionSchemaVersion": 2,
+  "evidenceType": "simulation",
+  "game": {
+    "version": "0.6.2",
+    "releaseStatus": "playtest",
+    "releaseDate": "2026-07-27",
+    "rulesetFingerprint": "sha256:22a9423143cae25a891dbd9e47385a8cbfeb2521f66ffe8b45dd60c7fad14438",
+    "mechanicsFingerprint": "sha256:ba8f08c1d571ffa488cdaca4cb94ba6d2f96d7ce32e1768f8dc8f6f64b13008f",
+    "playtestKitFingerprint": "sha256:19599fb66523db71f98c4f6ebc62d695e9c5b7dccc9999a65a2520c1aa2bcd93",
+    "files": {
+      "data/factions.json": {
+        "bytes": 21284,
+        "sha256": "adb145cfb2c8d736238b243515acc65a4ebb5624d7d32d67dd64b90a47eadd8d"
+      },
+      "data/game-config.json": {
+        "bytes": 25861,
+        "sha256": "45f59aaafbd49e757128783aeb499bb5d6d3b1dbdc4b45311d7f88672b35b585"
+      },
+      "data/headlines.json": {
+        "bytes": 23354,
+        "sha256": "f4f41badef5371708e5c74f5e01546713d0436afdf79611131b3130999c0a4b7"
+      },
+      "data/mandates.json": {
+        "bytes": 6912,
+        "sha256": "7d3961e4de9119ba26d0d2f3718f3e15f2f68a9f242cbff342b6ee34d3b27c56"
+      },
+      "data/secret-objectives.json": {
+        "bytes": 8206,
+        "sha256": "412f0516ad227dee1b5adb44e214bd3ad33b196d4a671584b77804b6f91e2bed"
+      },
+      "data/simulation-copy.json": {
+        "bytes": 13369,
+        "sha256": "fc8190de5086fe202e201ed7c228b25ae657032e394fe6b8f958d1aecedf96ac"
+      },
+      "data/tactics.json": {
+        "bytes": 5735,
+        "sha256": "59be032211c3dd666937151f4e6b506f2a7bd43327dfd2d7e1ee4df146190824"
+      },
+      "data/wild-actions.json": {
+        "bytes": 5124,
+        "sha256": "6a5f2d850f091511192c413e5a0b71b026ac27a903481fa975d6f1efe06b354e"
+      }
+    },
+    "kitFiles": {
+      "data/content-manifest.json": {
+        "bytes": 4016,
+        "sha256": "1fceda11025e28f5847a35eb9a4b1228525154e1b571f8ca784c7a86277b723e"
+      },
+      "data/reference-cards.json": {
+        "bytes": 6174,
+        "sha256": "9cfb3f496324eff32dc26c3f94f9580d4e7d92f6e3438112a05885cc292d07d9"
+      },
+      "data/ui-copy.json": {
+        "bytes": 9651,
+        "sha256": "81550594937f9c8ec4fb94d83d2a0d3cc3644a56fb9b6305fa196d5bce3d89ed"
+      },
+      "data/world-copy.json": {
+        "bytes": 7912,
+        "sha256": "53c861c64bda807662180eb979c76e864209941529a5841dba451c808fd5cd7b"
+      }
+    }
+  },
+  "engine": {
+    "id": "selected-rules",
+    "version": "0.8.2",
+    "coverageId": "lean-grid-ready-v6",
+    "fingerprint": "sha256:cd6455846185caef9d5bb7caf753eca44fe4ebe78e27cbeda7f22d7620deedb5",
+    "files": {
+      "prototype/app.js": {
+        "bytes": 9329,
+        "sha256": "3b3fd61d57438bdccf5832ad5ce9986fa20a15f39683cf9b7015828428728541"
+      },
+      "prototype/simulation-app.js": {
+        "bytes": 33490,
+        "sha256": "fec11f08a0521078d56799b17c45f1feef06ce8330d0761d32f56ddfeab73758"
+      },
+      "prototype/src/engine.js": {
+        "bytes": 28347,
+        "sha256": "7201c09657cee10f1cf1284b467d16c2f3f3bcf548312d8bd4672e677fd5f291"
+      },
+      "prototype/styles.css": {
+        "bytes": 11989,
+        "sha256": "832245c8439eb3b89cd6ed7082dcdc8baca5d859cf2b9d43261a6c925a40bd5e"
+      },
+      "simulation/balance/balance-contract.js": {
+        "bytes": 4289,
+        "sha256": "3489cba76d7492ccd3a70690cd81e14d1faff86d1aeea85e2aca1bcc3771a090"
+      },
+      "simulation/callers/caller-utils.js": {
+        "bytes": 2394,
+        "sha256": "95cd5803c73301d18139809712f01f3617176edcc24d093ca01143f472e02d04"
+      },
+      "simulation/callers/claude-cli-caller.js": {
+        "bytes": 2358,
+        "sha256": "4822cf448664037694764b8056751a38ebbe6b508c7e6f55393dcdc03bd8c0a5"
+      },
+      "simulation/callers/codex-cli-caller.js": {
+        "bytes": 2919,
+        "sha256": "caa7d342da9eeb65ea1ceebe370ea99c3795e7eb1a51e904c2e431e422a177ba"
+      },
+      "simulation/callers/process-runner.js": {
+        "bytes": 2958,
+        "sha256": "ba742a1b624654ae6c042fb16b10b8fa2c8c3b4498f090b7ca2c46a5f594c99d"
+      },
+      "simulation/content/simulation-copy.js": {
+        "bytes": 411,
+        "sha256": "b4795dbfd08d187ebf62f6860714c504c45c0ea01b48e379d894f78a0aaa3f2e"
+      },
+      "simulation/contracts/balance-contract.json": {
+        "bytes": 2127,
+        "sha256": "c29e155b195dad06abca2910b0f7a0a4570ea4562eaf9314453425a0ddff2397"
+      },
+      "simulation/contracts/decision-contract.js": {
+        "bytes": 4074,
+        "sha256": "92a75186558d49d623be950ccc66fa8d30e57750077fc8eb97ccf553c1642ddf"
+      },
+      "simulation/contracts/decision-response.schema.json": {
+        "bytes": 570,
+        "sha256": "f65975ee6c18b85f3818c26c35ffc3b1a2fc1d08f0c1c1243155eed6b6db3eac"
+      },
+      "simulation/contracts/experiment-matrix.json": {
+        "bytes": 1880,
+        "sha256": "af4d1070772f3a6e5b3945b5caaa24ef8ee233651791a9363b123767a961472c"
+      },
+      "simulation/contracts/llm-holdout-preregistration.schema.json": {
+        "bytes": 1968,
+        "sha256": "f079dcf48eb3c749d9cd50ca47ccde07061229740aea441d5d328d2c7ed11fb1"
+      },
+      "simulation/contracts/player-profile.schema.json": {
+        "bytes": 4386,
+        "sha256": "7a948c6dc20b0ff3de9616fdf706e225aece0af7736ad187b3801d9281bc25d3"
+      },
+      "simulation/contracts/report-migrations.js": {
+        "bytes": 7292,
+        "sha256": "fabda71f29dabc2b458f00640d3badaf5ebc57613c5983d74156499707236f51"
+      },
+      "simulation/contracts/simulation-report.schema.json": {
+        "bytes": 2326,
+        "sha256": "00bb8684c3b78ffdac0e6b328fc74fa56c84001ef000afd79b2926f5b7dfc425"
+      },
+      "simulation/environment/core-economy-match.js": {
+        "bytes": 27082,
+        "sha256": "7612733d32b7a93bd3d2e15adca38084bcc7ae5e205306b95d87d44119ed638a"
+      },
+      "simulation/environment/rules-variant.js": {
+        "bytes": 893,
+        "sha256": "001cce3316a653ed328bc64c05b1424c23b98187bbe6d12ffed85dd4e4b1f7f4"
+      },
+      "simulation/environment/selected-rules-match.js": {
+        "bytes": 155670,
+        "sha256": "2436c1289bcf6ca736c2f94a182d53cf76adaa6ff76c6e327eb02dd87b42eeae"
+      },
+      "simulation/personas/player-profile.js": {
+        "bytes": 4452,
+        "sha256": "4f79cc301ce752fccabb7585429282c0c057c65d825cf6bf7233541813b39fff"
+      },
+      "simulation/policies/cli-backed-policy.js": {
+        "bytes": 4213,
+        "sha256": "a42fb5bdd94a6a26183c3ba9e9097c0f30c249859c954b99f4e5d53e7cb1e6f1"
+      },
+      "simulation/policies/decision-cache.js": {
+        "bytes": 1035,
+        "sha256": "454e7d5fd84da6bec1c101281dba32a65d3d4a498ddf952b9cb0d9d6adf27e7d"
+      },
+      "simulation/policies/policy-factory.js": {
+        "bytes": 1389,
+        "sha256": "a118e385647965224d764b7554e299dbc4a6494f976c8f1194ced52103dc9383"
+      },
+      "simulation/policies/weighted-policy.js": {
+        "bytes": 6131,
+        "sha256": "9fb1101ad090cc8f1a2fcfdbf4ba985904597a1fede7bdab7d66bae8cd39e5cf"
+      },
+      "simulation/rules/declaration-readiness.js": {
+        "bytes": 1810,
+        "sha256": "dc9557e57ff1304943cb5c35746cd217c99c9a5e0b719f9198f1c15d03a05073"
+      },
+      "simulation/runner/balance-audit-runner.js": {
+        "bytes": 10757,
+        "sha256": "b68380d3f90415afdc2dbe7ee5208d9624c10b28553bb818da6806825aeea3ad"
+      },
+      "simulation/runner/llm-holdout-runner.js": {
+        "bytes": 4395,
+        "sha256": "6654eaf77b21687ca8fac17122a19b6f474e9dfa4db283774c58286f3cfa893b"
+      },
+      "simulation/runner/monte-carlo-runner.js": {
+        "bytes": 21216,
+        "sha256": "0e211fc0dc030a6d38aec836defa82fd6f280ebdbd62678abcfe916779359f54"
+      },
+      "simulation/runner/optimization-runner.js": {
+        "bytes": 10932,
+        "sha256": "4a1fb07077f25306b5dd9d5a68afeb0c6606d82c42971ddefe6ba8ae27389f89"
+      },
+      "simulation/runner/unified-matrix-runner.js": {
+        "bytes": 28509,
+        "sha256": "080b3100c4d47e0ae1180d0d8636f3c25b96f03b41206725730dff982235bb9d"
+      },
+      "simulation/runtime/create-interactive-game.js": {
+        "bytes": 3052,
+        "sha256": "ea5bdbc22f23c4ac35ef5417925d055520facdd886416b7a11f874d037250ed8"
+      },
+      "simulation/runtime/create-simulation.js": {
+        "bytes": 10722,
+        "sha256": "446bd83d23e9d1261c9af86aa69b023f38e072a26c01f1ed89b0387ffae58ab0"
+      },
+      "simulation/runtime/run-experiment.js": {
+        "bytes": 2800,
+        "sha256": "5eaca606ad38287e71a613ba1037e6fa3756a27dbeeb36f5a7f8277b3cb8d265"
+      },
+      "simulation/statistics/sequential-inference.js": {
+        "bytes": 4512,
+        "sha256": "4e4eec9f7f257db47d477005e2e5dd47e48691332ed082cb1de808acd2ae46e4"
+      },
+      "tools/serve.mjs": {
+        "bytes": 9772,
+        "sha256": "5811cd1055a87f15d5f1dc67e7ac13bc102eb37f3faa9c72567c854468a6800f"
+      }
+    }
+  },
+  "variant": {
+    "kind": "canonical",
+    "overlay": {},
+    "effective": {
+      "agiCapability": 9,
+      "agiComputeCost": 3,
+      "agiCustomers": 3,
+      "agiFacilities": 3,
+      "agiFirstMandate": 7,
+      "agiLaterMandate": 5,
+      "agiTrust": 2,
+      "auditMultiplier": 1,
+      "customerCapabilityOffset": 0,
+      "customerMandate": 2,
+      "deployComputeCost": 1,
+      "facilityCost": 2,
+      "fundConservative": 2,
+      "fundVenture": 4,
+      "startingGridPower": 1,
+      "startingTeamsDeployed": 1,
+      "ventureScrutiny": 2
+    },
+    "fingerprint": "sha256:fdb3794ae68838e6bb6c809b8fdc94afcb17afc58027251782a4f4c178ecef16"
+  },
+  "strategies": {
+    "fingerprint": "sha256:2ba8b594f6d93d7cb0135cdf1e709697b410f8425285d2c05a394a24ce3d4da2",
+    "profiles": [
+      {
+        "id": "agi_candidate",
+        "fingerprint": "sha256:51b19fc127cd7e901207dd38a8e732dc46885c30dd0d226af66edcf7816615dc"
+      },
+      {
+        "id": "power_broker",
+        "fingerprint": "sha256:2d21592380ed88d158d485c3bb1d8249674b5fdaea1d1f16733404d947547833"
+      },
+      {
+        "id": "trust_governor",
+        "fingerprint": "sha256:76245dc597d8ac35a799c081a7ac0c4a31386112744499e1045f7fef054cf328"
+      },
+      {
+        "id": "market_maximalist",
+        "fingerprint": "sha256:22b34d7cb76b31e65019a20486233ab9b7af073c4c380e447bd04a6e82adf779"
+      }
+    ],
+    "backends": [
+      "hybrid-codex",
+      "weighted",
+      "greedy",
+      "weighted"
+    ],
+    "model": "gpt-5.6-sol"
+  },
+  "experiment": {
+    "reportType": "llm_negotiation_holdout",
+    "seed": "m3t4-llm-negotiation-holdout-20260727-v3",
+    "playerCount": 4,
+    "runs": 1,
+    "sampleReplays": 0,
+    "generations": null,
+    "population": null,
+    "runsPerSeat": null,
+    "iterations": null,
+    "runsPerVariant": null,
+    "runsPerMatchup": null,
+    "playerCounts": null,
+    "preRegistrationFingerprint": "sha256:24ee4518d0e42bbc38b504096aa2b00be42e8ec9483dfb673a86c1b35533a1ae",
+    "matrixContractFingerprint": null,
+    "targetAgiRate": null,
+    "strategyArtifactsFingerprint": null,
+    "scopeId": "lean-grid-ready-v6",
+    "fingerprint": "sha256:9e196fc5ff27c55b0310fa455c8b5907d5a64b1adff7c759d36a52adb24fec7b"
+  },
+  "rng": {
+    "algorithm": "mulberry32",
+    "version": 1
+  },
+  "provenance": {
+    "sourceCommit": "7a0af8ab0786a8f56c3d2aad7952c6b3a7cf3161",
+    "sourceDirty": false
+  }
+}

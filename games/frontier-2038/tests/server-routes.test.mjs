@@ -11,8 +11,8 @@ async function startServer(port, {
   bridgeToken = "test-bridge-token",
   bridgeOrigins = "https://gamma-web-game.web.app"
 } = {}) {
-  await execute(process.execPath, ["tools/render-docs.mjs"], { cwd: root });
-  const child = spawn(process.execPath, ["tools/serve.mjs"], {
+  await execute(process.execPath, ["tasks/render-docs.mjs"], { cwd: root });
+  const child = spawn(process.execPath, ["tasks/serve.mjs"], {
     cwd: root,
     env: {
       ...process.env,
@@ -44,6 +44,16 @@ async function startServer(port, {
   });
   await ready;
   return child;
+}
+
+async function readTerminalJob(request, id) {
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    const response = await request(`/api/simulations/${id}`);
+    const job = await response.json();
+    if (job.status === "complete" || job.status === "failed") return job;
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  }
+  throw new Error(`Simulation job ${id} did not settle.`);
 }
 
 test("docs reader routes preserve their /docs/ base and serve rendered pages", async () => {
@@ -190,6 +200,29 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
       (await excessiveLlmBudget.json()).error,
       /24 LLM decisions per configured policy/
     );
+
+    const requiredLlm = await request("/api/simulations", {
+      method: "POST",
+      headers: {
+        origin,
+        "content-type": "application/json",
+        "x-m3t4-bridge-token": bridgeToken
+      },
+      body: JSON.stringify({
+        runs: 1,
+        playerCount: 3,
+        sampleReplays: 0,
+        allowLlm: true,
+        requireLlm: true,
+        maxLlmDecisions: 0,
+        backends: ["codex"]
+      })
+    });
+    assert.equal(requiredLlm.status, 202);
+    const requiredLlmJob = await readTerminalJob(request, (await requiredLlm.json()).id);
+    assert.equal(requiredLlmJob.status, "failed");
+    assert.equal(requiredLlmJob.failure.outcome, "blocked");
+    assert.match(requiredLlmJob.failure.message, /Required LLM decision failed/);
 
     const rejected = await request("/api/bridge", {
       headers: {

@@ -1,0 +1,188 @@
+{
+  "ready": true,
+  "scope": "all",
+  "mapStatus": "ready_to_apply",
+  "activeRunGate": "Manual gate: record that simulations, playtests, renders, releases, and servers are stopped immediately before apply.",
+  "worktreeGate": "Record the commit and any intentionally preserved dirty paths immediately before apply; do not combine unrelated edits with the migration.",
+  "moves": [
+    {
+      "group": "confirmed",
+      "from": "data/game-version.json",
+      "to": "release/game-version.json",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "content/physical/",
+      "to": "physical/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "content/deferred/",
+      "to": "physical/optional/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "prototype/",
+      "to": "web/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "content/templates/",
+      "to": "web/templates/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "simulation/",
+      "to": "lab/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "tools/",
+      "to": "tasks/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "scripts/",
+      "to": "tasks/content/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "data/",
+      "to": "generated/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "dist/",
+      "to": "build/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "studies/",
+      "to": "evidence/studies/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    },
+    {
+      "group": "confirmed",
+      "from": "playtests/",
+      "to": "evidence/playtests/",
+      "executable": true,
+      "sourceExists": true,
+      "destinationExists": false
+    }
+  ],
+  "contentSourceRoots": [
+    "content/",
+    "physical/",
+    "web/"
+  ],
+  "contentSourceRequirements": [
+    {
+      "source": "content/physical/variables.json",
+      "plannedPath": "physical/variables.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/content-manifest.json",
+      "plannedPath": "physical/content-manifest.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/factions.json",
+      "plannedPath": "physical/factions.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/game-config.json",
+      "plannedPath": "physical/game-config.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/headlines.json",
+      "plannedPath": "physical/headlines.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/mandates.json",
+      "plannedPath": "physical/mandates.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/reference-cards.json",
+      "plannedPath": "physical/reference-cards.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/deferred/reserve-specialists.json",
+      "plannedPath": "physical/optional/reserve-specialists.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/deferred/secret-objectives.json",
+      "plannedPath": "physical/optional/secret-objectives.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/deferred/tactics.json",
+      "plannedPath": "physical/optional/tactics.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/wild-actions.json",
+      "plannedPath": "physical/wild-actions.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/world-copy.json",
+      "plannedPath": "physical/world-copy.json",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/physical/core-rules.md",
+      "plannedPath": "physical/core-rules.md",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/templates/prototype.html",
+      "plannedPath": "web/templates/prototype.html",
+      "allowedAfterMove": true
+    },
+    {
+      "source": "content/templates/simulation.html",
+      "plannedPath": "web/templates/simulation.html",
+      "allowedAfterMove": true
+    }
+  ],
+  "blockers": []
+}

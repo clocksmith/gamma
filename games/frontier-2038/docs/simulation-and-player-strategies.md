@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.24` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.25-test`
+**Executable game:** `0.8.27` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.28-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -17,7 +17,7 @@ A simulated player combines:
 2. a decision backend.
 
 Profiles in
-[`../data/player-strategies.json`](../data/player-strategies.json) define goals,
+[`../generated/player-strategies.json`](../generated/player-strategies.json) define goals,
 risk posture, action weights, conditional rules, and explicit promise,
 fulfillment, betrayal, and reciprocity weights. Backends are seeded weighted,
 deterministic greedy, Claude CLI, Codex CLI, or a hybrid shortlist.
@@ -41,7 +41,7 @@ environment alone mutates state. Player-owned movement, Headline choices,
 Power allocation, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 
-Schemas live under [`../simulation/contracts/`](../simulation/contracts/).
+Schemas live under [`../lab/contracts/`](../lab/contracts/).
 
 ## Negotiation model
 
@@ -87,7 +87,7 @@ Open `http://localhost:8038/lab`. One server provides:
 - the unified evidence matrix; and
 - a committed, explicitly authorized LLM negotiation holdout.
 
-Completed jobs are archived under `studies/simulation/`. Browser download is an
+Completed jobs are archived under `evidence/studies/simulation/`. Browser download is an
 optional second copy.
 
 ## Unified evidence matrix
@@ -146,7 +146,7 @@ Pass a JSON file of configurations:
 
 ```bash
 npm run simulate:audit -- \
-  --rules-configurations studies/simulation/probes/example.json \
+  --rules-configurations evidence/studies/simulation/probes/example.json \
   --maximum-matches 600
 ```
 
@@ -160,7 +160,7 @@ preregistered interaction audit may combine them:
 ```bash
 npm run simulate:audit -- \
   --comparison-kind package_interaction \
-  --rules-configurations studies/simulation/preregistrations/selected-package-rules.json \
+  --rules-configurations evidence/studies/simulation/preregistrations/selected-package-rules.json \
   --pre-registration-id selected-package-v1
 ```
 
@@ -178,7 +178,7 @@ is failing.
 ## Winning-path classifier
 
 Monte Carlo and the unified audit share
-`simulation/balance/winning-path.js`. The `lane-margin-v1` contract derives
+`lab/balance/winning-path.js`. The `lane-margin-v1` contract derives
 Research, Adoption, Infrastructure, and Legitimacy signals from the winner's
 action selections and final state. AGI declaration remains a distinct path.
 
@@ -198,7 +198,7 @@ historical path evidence.
 
 ```bash
 npm run simulate:faction-swap -- \
-  --comparisons studies/simulation/preregistrations/faction-swap-diagnostic-v1.json
+  --comparisons evidence/studies/simulation/preregistrations/faction-swap-diagnostic-v1.json
 ```
 
 This diagnostic holds the board seed, deck order, Headlines, Mandate, seat,
@@ -218,7 +218,7 @@ The holdout plan must be committed before execution:
 
 ```bash
 npm run simulate:llm-holdout -- \
-  --preregistration studies/simulation/preregistrations/llm-negotiation-holdout-v3-capture.json \
+  --preregistration evidence/studies/simulation/preregistrations/llm-negotiation-holdout-v3-capture.json \
   --allow-llm
 ```
 
@@ -230,7 +230,7 @@ entries, and fails on a miss:
 
 ```bash
 npm run simulate:llm-holdout -- \
-  --preregistration studies/simulation/preregistrations/llm-negotiation-holdout-v3-replay.json \
+  --preregistration evidence/studies/simulation/preregistrations/llm-negotiation-holdout-v3-replay.json \
   --allow-llm
 ```
 

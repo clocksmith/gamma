@@ -1,6 +1,6 @@
 # M3T4 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.25-test`
+**Rules under review:** `0.5.0-rc.28-test`
 **First cohort:** controlled four-player physical test with Demis Hassabis,
 Elon Musk, Jensen Huang, and Mark Zuckerberg
 
@@ -33,39 +33,39 @@ is never proof that the physical rules are teachable.
 
 Current selected automated evidence:
 
-- [`Lean balance and cooperative-AGI study`](../studies/simulation/2026-07-26-lean-balance-and-cooperative-agi.md):
+- [`Lean balance and cooperative-AGI study`](../evidence/studies/simulation/2026-07-26-lean-balance-and-cooperative-agi.md):
   historical targeted and diverse cohorts supporting the selected faction
   adjustments; its schema-v3 supplier-conditioned metrics are withdrawn.
-- [`rc.4 clean synchronization and supplier-attribution evidence`](../studies/simulation/2026-07-27-rc4-clean-evidence.md):
+- [`rc.4 clean synchronization and supplier-attribution evidence`](../evidence/studies/simulation/2026-07-27-rc4-clean-evidence.md):
   clean schema-v4 evidence for the mechanics-identical predecessor to rc.5,
   including a rare rules-legal cooperative declaration route and causal
   supplier observations.
-- [`Strategic-unsolvability calibration`](../studies/simulation/2026-07-27-strategic-unsolvability-calibration.md):
+- [`Strategic-unsolvability calibration`](../evidence/studies/simulation/2026-07-27-strategic-unsolvability-calibration.md):
   preserves the first adversarial audit while withdrawing its noisy
   worst-small-cell maximum as a balance verdict. The unified matrix supersedes
   that estimator.
-- [`Foundry multiplayer-scaling rule selection`](../studies/simulation/2026-07-27-foundry-scaling-rule-selection.md):
+- [`Foundry multiplayer-scaling rule selection`](../evidence/studies/simulation/2026-07-27-foundry-scaling-rule-selection.md):
   historical preregistered common-seed evidence for the GPU scoring divisor
   and rejected New Architecture and starting-Compute levers. Its balance
   authority is withdrawn because executable `0.7.0` did not apply Shovels to
   qualifying Wild Actions.
-- [`Foundry Shovels executable correction`](../studies/simulation/2026-07-27-foundry-shovels-executable-correction.md):
+- [`Foundry Shovels executable correction`](../evidence/studies/simulation/2026-07-27-foundry-shovels-executable-correction.md):
   owns the discovered simulator mismatch, invalidated reports, regression, and
   corrected evidence boundary.
-- [`Corrected Foundry final selection`](../studies/simulation/2026-07-27-corrected-foundry-final-selection.md):
+- [`Corrected Foundry final selection`](../evidence/studies/simulation/2026-07-27-corrected-foundry-final-selection.md):
   retains the per-four GPU divisor, rejects a one-trigger Shovels cap, and
   records the clean common-seed replacement evidence.
-- [`Backend-regime v2 allocation correction`](../studies/simulation/2026-07-27-backend-regime-v2-allocation-correction.md):
+- [`Backend-regime v2 allocation correction`](../evidence/studies/simulation/2026-07-27-backend-regime-v2-allocation-correction.md):
   records why the first homogeneous-backend screen was descriptive but not a
   rule-change authority.
-- [`Final homogeneous-backend balance screen`](../studies/simulation/2026-07-27-final-homogeneous-backend-screen.md):
+- [`Final homogeneous-backend balance screen`](../evidence/studies/simulation/2026-07-27-final-homogeneous-backend-screen.md):
   records the corrected 11,920-match canonical matrix, its zero registered
   homogeneous-dominance cells, residual diagnostics, and final rules freeze.
-- [`Winning-path tolerance confirmation`](../studies/simulation/2026-07-28-winning-path-tolerance-confirmation.md):
+- [`Winning-path tolerance confirmation`](../evidence/studies/simulation/2026-07-28-winning-path-tolerance-confirmation.md):
   owns the registered four-lever package, its passed bounds, its
   `inconclusive_precision_not_reached` limit, and the evidence used for the
   controlled physical-test promotion.
-- [`Four-lever package promotion`](../studies/simulation/2026-07-28-four-lever-package-promotion.md):
+- [`Four-lever package promotion`](../evidence/studies/simulation/2026-07-28-four-lever-package-promotion.md):
   records explicit approval, exact promoted surfaces, frozen non-target
   numbers, and the immutable candidate identity.
 
@@ -81,7 +81,7 @@ equivalence.
 
 | Identity | Authority |
 | --- | --- |
-| Game version | `data/game-version.json` |
+| Game version | `release/game-version.json` |
 | Ruleset fingerprint | generated release manifest |
 | Playtest-kit fingerprint | generated release manifest |
 | Engine identity and fingerprint | generated release manifest |
@@ -103,15 +103,15 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.25-test`. Executable
-game `0.8.24` implements it under `three-to-five-grid-ready-v1`. New automated reports
+`docs/core-rules.md` is a review draft at `0.5.0-rc.28-test`. Executable
+game `0.8.27` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.
 
 The two full-progress Codex reports that recorded a changed ruleset fingerprint
 under `0.8.23` remain immutable but are descriptive historical evidence only.
-The [release identity correction](../studies/simulation/2026-07-31-release-identity-correction.md)
+The [release identity correction](../evidence/studies/simulation/2026-07-31-release-identity-correction.md)
 records their exclusion from exact comparison and promotion evidence.
 
 Executable `0.8.20` retains write-only decision capture and paired read-only
@@ -151,13 +151,13 @@ Foundry×greedy interaction, but a follow-up weighted diagnostic exposed two
 negative-Compute states in stale joint Mega-Cluster payments. Its balance
 signal is retained only as a hypothesis. The defect, disposition, and
 precommitted Foundry starting-Compute probe are recorded in
-`studies/simulation/2026-07-27-current-matrix-and-mega-cluster-integrity.md`.
+`evidence/studies/simulation/2026-07-27-current-matrix-and-mega-cluster-integrity.md`.
 
 ## Creating an immutable release
 
 To refresh the currently declared executable and physical-candidate artifacts:
 
-1. Update the appropriate version declaration in `data/game-version.json`.
+1. Update the appropriate version declaration in `release/game-version.json`.
 2. Generate both attributed bundles with `npm run game:release`.
 3. Verify them with `npm run game:release:verify`.
 4. Commit the release artifacts with their source changes.
@@ -313,7 +313,7 @@ receipt, one-lever common-seed evidence, and explicit user approval.
 Before changing a rule, faction, action, card, objective, or score because of
 simulation evidence:
 
-1. Preserve the raw report under `studies/simulation/`.
+1. Preserve the raw report under `evidence/studies/simulation/`.
 2. Add a tracked dated receipt with hashes and full configuration.
 3. Record the observation, hypothesis, alternatives, and validity limits.
 4. Audit rulebook, data, simulator, prototype, player aids, tests, and this

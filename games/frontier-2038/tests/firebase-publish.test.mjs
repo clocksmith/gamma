@@ -7,7 +7,7 @@ import {
   protectHtml,
   rewritePrototypeHtml,
   rewritePrototypeModule
-} from "../tools/build-firebase-site.mjs";
+} from "../tasks/build-firebase-site.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "..");
 const gammaRoot = resolve(projectRoot, "../..");
@@ -21,19 +21,19 @@ test("published HTML carries crawler exclusions", () => {
 
 test("published executable surfaces are path-safe and make the paired bridge optional", () => {
   const html = rewritePrototypeHtml(
-    '<html><head></head><body><a href="/lab">Lab</a><script src="/prototype/app.js"></script></body></html>',
+    '<html><head></head><body><a href="/lab">Lab</a><script src="/web/app.js"></script></body></html>',
     { kind: "game" }
   );
   assert.match(html, /href="\/m3t4-2038\/lab\.html"/);
-  assert.match(html, /src="\/m3t4-2038\/prototype\/app\.js"/);
+  assert.match(html, /src="\/m3t4-2038\/web\/app\.js"/);
   assert.match(html, /Deterministic play runs entirely in this browser/i);
   assert.match(html, /bridge is optional for Claude, Codex/i);
   assert.doesNotMatch(html, /start-game[^]*disabled = true/i);
   const module = rewritePrototypeModule(
-    'import x from "/simulation/contracts/x.js"; fetch("/data/factions.json");'
+    'import x from "/lab/contracts/x.js"; fetch("/generated/factions.json");'
   );
-  assert.match(module, /\/m3t4-2038\/simulation\/contracts\/x\.js/);
-  assert.match(module, /\/m3t4-2038\/data\/factions\.json/);
+  assert.match(module, /\/m3t4-2038\/lab\/contracts\/x\.js/);
+  assert.match(module, /\/m3t4-2038\/generated\/factions\.json/);
 });
 
 test("review index is one plain list containing every supplied surface and exact identity", () => {

@@ -4,7 +4,7 @@ import {
   classifyWinningPath,
   WINNING_PATH_CLASSIFIER,
   winningPathMargin
-} from "../simulation/balance/winning-path.js";
+} from "../lab/balance/winning-path.js";
 
 const standing = (overrides = {}) => ({
   actions: {

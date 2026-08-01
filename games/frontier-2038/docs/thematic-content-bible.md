@@ -1,15 +1,15 @@
 # M3T4 2038 Thematic Content Bible
 
 **Content-pass date:** July 26, 2026
-**Rules reference:** `0.5.0-rc.25-test`
+**Rules reference:** `0.5.0-rc.28-test`
 **Status:** creative authority; fiction synchronized to the review rulebook,
-mechanics synchronized to executable game `0.8.24`
+mechanics synchronized to executable game `0.8.27`
 
 This document defines how M3T4 sounds and what its printable surfaces need
 to communicate. It does not define mechanics. Authored strings and shared terms
 live under [`../content/`](../content/README.md); `core-rules.md` and the JSON
-files under `data/` are generated projections. Executable game `0.8.24`
-implements `0.5.0-rc.25-test` while the physical rulebook remains under
+files under `generated/` are generated projections. Executable game `0.8.27`
+implements `0.5.0-rc.28-test` while the physical rulebook remains under
 review.
 
 ## Creative thesis
@@ -109,7 +109,7 @@ Headline cards; the content compiler must not apply a spell-out filter.
 ## Escalation by Era
 
 The four Era definitions are authored once in
-[`content/physical/reference-cards.json`](../content/physical/reference-cards.json)
+[`physical/reference-cards.json`](../physical/reference-cards.json)
 under each card's `loreText`. The content compiler projects them into the
 rulebook. This document sets the writing contract for that escalation; it does
 not restate the Era lore.
@@ -138,15 +138,15 @@ that a matching real person or company performed the depicted fictional act.
 
 | Surface | Baseline count | Authority or source |
 | --- | ---: | --- |
-| World primer and box copy | 1 set | `content/physical/world-copy.json`; projected to `data/` |
-| Core Actions | 6 per player | `content/physical/game-config.json`; projected to rules and `data/` |
-| Eras | 4 | `content/physical/reference-cards.json`; projected to `data/` |
-| Player references | 4 | `content/physical/reference-cards.json`; projected to `data/` |
-| Factions | 6 | `content/physical/factions.json`; projected to `data/` |
-| Faction abilities | 24 | `content/physical/factions.json`; projected to `data/` |
-| Headlines | 24 | `content/physical/headlines.json`; projected into rules, data, prototype, and gallery |
-| Wild Actions | 7 per player | `content/physical/wild-actions.json`; projected to `data/` |
-| Round Mandates | 12 | `content/physical/mandates.json`; projected to `data/` |
+| World primer and box copy | 1 set | `physical/world-copy.json`; projected to `generated/` |
+| Core Actions | 6 per player | `physical/game-config.json`; projected to rules and `generated/` |
+| Eras | 4 | `physical/reference-cards.json`; projected to `generated/` |
+| Player references | 4 | `physical/reference-cards.json`; projected to `generated/` |
+| Factions | 6 | `physical/factions.json`; projected to `generated/` |
+| Faction abilities | 24 | `physical/factions.json`; projected to `generated/` |
+| Headlines | 24 | `physical/headlines.json`; projected into rules, data, prototype, and gallery |
+| Wild Actions | 7 per player | `physical/wild-actions.json`; projected to `generated/` |
+| Round Mandates | 12 | `physical/mandates.json`; projected to `generated/` |
 | Training faces | 12 faces / 50 cards | `core-rules.md` |
 | Ordinary Power Sources | 2 shared reference types | `core-rules.md` |
 | Fusion Demonstrator | 1 shared marker | `core-rules.md` |
@@ -164,7 +164,7 @@ These drafts are not part of baseline evidence:
 - 18 secret objectives;
 - 12 Specialist and Patron concepts.
 
-They may remain in `data/` as labeled design inventory. Their presence in JSON
+They may remain in `generated/` as labeled design inventory. Their presence in JSON
 does not make them active.
 
 ## Headline durability
@@ -218,7 +218,7 @@ Art should reveal the card’s category and Era before adding detail.
 
 ## Remaining production work
 
-- test `0.5.0-rc.25-test` under the controlled physical protocol before any
+- test `0.5.0-rc.28-test` under the controlled physical protocol before any
   further numerical revision;
 - create final card, board, and tile layouts;
 - produce setup, turn, Network, Production, Audit, and Realignment diagrams;

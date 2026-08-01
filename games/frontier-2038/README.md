@@ -21,31 +21,45 @@ This repository is a **prototype**, not a manufactured or published product.
   [`docs/core-rules.md`](docs/core-rules.md).
 - Current rationale and implementation boundaries are recorded in
   [`docs/design-decisions.md`](docs/design-decisions.md).
+- Defect investigation, containment, regression, and closure rules are in
+  [`docs/defect-investigation-and-closure.md`](docs/defect-investigation-and-closure.md).
 - Physical and automated evidence share one protocol in
   [`docs/playtesting-and-evidence.md`](docs/playtesting-and-evidence.md).
 - Manufacturing, publishing, legal, and cost research is a dated advisory
   recommendation—not game doctrine or a product commitment—in
   [`docs/manufacturing-and-publishing-study.md`](docs/manufacturing-and-publishing-study.md).
-- The browser prototype lives in [`prototype/`](prototype/).
-- Machine-readable content lives in [`data/`](data/).
+- The browser prototype lives in [`web/`](web/).
+- Machine-readable content lives in [`generated/`](generated/).
 - The canonical semantic content graph lives in [`content/`](content/README.md);
   it generates the rulebook, game data, prototype HTML, UI copy, and simulation
   descriptions.
 - The complete first-pass thematic inventory and writing contract live in
   [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md) and
-  [`data/content-manifest.json`](data/content-manifest.json).
+  [`generated/content-manifest.json`](generated/content-manifest.json).
 - Player personas, CLI-backed decision policies, Monte Carlo execution, and
   replay are documented in
   [`docs/simulation-and-player-strategies.md`](docs/simulation-and-player-strategies.md).
 - Balance, counter-strategy, exploitability, and promotion gates are defined in
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
-The lean physical rulebook is under controlled review at `0.5.0-rc.25-test`.
-Executable game `0.8.24` implements that candidate under
+The lean physical rulebook is under controlled review at `0.5.0-rc.28-test`.
+Executable game `0.8.27` implements that candidate under
 `three-to-five-grid-ready-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization
 means the browser and simulator execute the selected contract; it does not
 claim physical teachability or numerical balance.
+
+## Folder Map
+
+- [`physical/`](physical/README.md) is the authored physical game, with excluded optional modules under `physical/optional/`.
+- [`content/`](content/README.md) is shared authored runtime copy, the semantic graph, and numeric provenance.
+- [`generated/`](generated/README.md) is compiler-owned runtime projection data.
+- [`web/`](web/README.md) is the browser game and Lab interface.
+- [`lab/`](lab/README.md) is the deterministic simulator and experiment system.
+- [`tasks/`](tasks/README.md) is the command implementation surface.
+- [`build/`](build/README.md) is regenerated rendered output.
+- [`evidence/`](evidence/README.md) separates studies from human playtests.
+- [`release/`](release/README.md) declares the current mutable release; [`versions/`](versions/README.md) preserves immutable snapshots.
 
 ## Launch
 
@@ -56,15 +70,15 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.8.24` game and export its
+- `http://localhost:8038/` — play the synchronized `0.8.27` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.8.24` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.8.27` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
   art-direction placeholders.
 
-`npm start` intentionally remains the raw `node tools/serve.mjs` contract used
+`npm start` intentionally remains the raw `node tasks/serve.mjs` contract used
 by the release gate. On a clean checkout, use `npm run dev`; if generated views
 are already current, `npm start` serves them without rebuilding.
 
@@ -93,7 +107,7 @@ Use the Simulation Lab’s **Experiment** control to run:
 - Preregistered LLM negotiation holdout
 
 Every completed job is automatically archived under
-`studies/simulation/`. The browser’s **Download another copy** button is
+`evidence/studies/simulation/`. The browser’s **Download another copy** button is
 optional and still follows the browser’s configured download location.
 
 The browser owns normal operation. The equivalent npm simulation commands
@@ -101,7 +115,7 @@ remain available only for automation, CI, and saved batch studies.
 
 ```bash
 npm run simulate:audit -- --maximum-matches 480 --initial-runs 2 --batch-size 2
-npm run simulate:faction-swap -- --comparisons studies/simulation/preregistrations/faction-swap-diagnostic-v1.json
+npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/faction-swap-diagnostic-v1.json
 ```
 
 ## Optional CLI automation
@@ -109,8 +123,8 @@ npm run simulate:faction-swap -- --comparisons studies/simulation/preregistratio
 Claude and Codex decision scripts accept the shared decision packet:
 
 ```bash
-npm run strategy:claude -- --input simulation/fixtures/decision-packet.example.json
-npm run strategy:codex -- --input simulation/fixtures/decision-packet.example.json
+npm run strategy:claude -- --input lab/fixtures/decision-packet.example.json
+npm run strategy:codex -- --input lab/fixtures/decision-packet.example.json
 ```
 
 These commands can consume metered provider usage. Monte Carlo requires
@@ -120,12 +134,12 @@ explicit `--allow-llm` before using either CLI backend.
 
 ```bash
 npm test
-node scripts/content/compile.mjs --check
-node tools/check-project.mjs
+node tasks/content/compile.mjs --check
+node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.8.24`
-bundle, its synchronized `0.5.0-rc.25-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.8.27`
+bundle, its synchronized `0.5.0-rc.28-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:
