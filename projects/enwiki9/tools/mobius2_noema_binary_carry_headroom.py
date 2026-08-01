@@ -528,7 +528,9 @@ def main() -> int:
         with torch.no_grad():
             for offset in range(0, len(ids), BATCH_SIZE):
                 batch_ids = ids[offset : offset + BATCH_SIZE]
-                values = torch.from_numpy(patch_values[batch_ids]).to(device)
+                values = torch.from_numpy(patch_values[batch_ids]).to(
+                    device=device, dtype=torch.long
+                )
                 nodes = torch.from_numpy(patch_nodes[batch_ids]).to(device)
                 if include_states:
                     residuals, states = model(values, return_states=True)
@@ -583,7 +585,9 @@ def main() -> int:
             truth_count = 0
             for offset in range(0, len(ordering), BATCH_SIZE):
                 ids = ordering[offset : offset + BATCH_SIZE]
-                values = torch.from_numpy(patch_values[ids]).to(device)
+                values = torch.from_numpy(patch_values[ids]).to(
+                    device=device, dtype=torch.long
+                )
                 nodes = torch.from_numpy(patch_nodes[ids]).to(device)
                 base = torch.from_numpy(patch_base_logits[ids]).to(device)
                 truth = torch.from_numpy(patch_bits[ids]).to(device)

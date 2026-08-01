@@ -3598,6 +3598,12 @@ The frozen candidate passed pre-run syntax, schema, normal-ROCm matrix compute,
 matched parameter-count, finite forward, and backward probes. It retains zero
 score and forecast credit pending the exact adaptive receipt.
 
+The first adaptive attempt stopped before its first optimizer step because the
+harness passed uint8 WRT values directly to PyTorch's embedding operation. The
+frozen model was not measured. The harness now converts those same values to
+integer indices at the device boundary; this is an infrastructure retry with no
+architecture, population, training, selection, accounting, or gate change.
+
 Plan and schema:
 
 - `docs/mobius2_noema_binary_carry_headroom_plan.md`
