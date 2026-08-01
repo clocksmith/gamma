@@ -724,9 +724,15 @@ At the beginning of each cycle:
 
 During any player’s resolution, the active player may complete one immediate
 resource trade with one rival, either immediately before or immediately after
-Act. Runway, Compute, and Safety tokens may be exchanged. Every offered
-component must change hands immediately; promises about later turns are not
-binding. The active Headline may prohibit a named resource from being traded.
+Act. The active player either declines to trade or makes one complete offer:
+name the rival, timing, each resource type, and each amount. The named rival
+may accept, reject, or publish one complete counteroffer. If they publish a
+counteroffer, every other player may simultaneously pass or claim it. The
+counteroffer maker chooses one claimant, or declines them all; a chosen claim
+immediately completes the trade. There are no further offers or
+counteroffers during that resolution. Runway, Compute, and Safety tokens may be exchanged. Every accepted component must change hands
+immediately; promises about later turns are not binding. The active
+Headline may prohibit a named resource from being traded.
 
 Influence is not required for this immediate exchange. Influence remains the
 only way to create persistent Joint Ventures, lobbying effects, or

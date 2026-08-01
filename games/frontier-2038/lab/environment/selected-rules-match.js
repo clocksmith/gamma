@@ -3769,138 +3769,105 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       );
   }
 
-  async planImmediateTrade(policies, seat) {
-    const rivals = this.players.filter((candidate) => candidate.seat !== seat);
-    if (!rivals.length) return null;
-    const timing = await this.choose(policies, seat, "immediate_trade_timing", [
-      {
-        decisionId: "trade_none",
-        label: "Do not trade during this resolution",
-        actionId: "trade"
-      },
-      {
-        decisionId: "trade_before",
-        label: "Negotiate one immediate trade before Act",
-        actionId: "trade",
-        parameters: { timing: "before" }
-      },
-      {
-        decisionId: "trade_after",
-        label: "Negotiate one immediate trade after Act",
-        actionId: "trade",
-        parameters: { timing: "after" }
+  immediateTradeDecisions(seat) {
+    const player = this.players[seat];
+    const decisions = [{
+      decisionId: "trade_none",
+      label: "Do not trade during this resolution",
+      actionId: "trade"
+    }];
+    for (const partner of this.players.filter((candidate) => candidate.seat !== seat)) {
+      const giveResources = this.tradableResources(player, partner).filter(
+        (resource) => this.immediateTradeGiveAmounts(seat, partner, resource).length > 0
+      );
+      for (const giveResource of giveResources) {
+        for (const giveAmount of this.immediateTradeGiveAmounts(seat, partner, giveResource)) {
+          const receiveResources = this.tradableResources(partner, player, giveResource).filter(
+            (resource) => this.immediateTradeReceiveAmounts(seat, partner, resource).length > 0
+          );
+          for (const receiveResource of receiveResources) {
+            for (const receiveAmount of this.immediateTradeReceiveAmounts(
+              seat,
+              partner,
+              receiveResource
+            )) {
+              for (const timing of ["before", "after"]) {
+                decisions.push({
+                  decisionId: [
+                    "trade_offer",
+                    timing,
+                    partner.seat,
+                    giveResource,
+                    giveAmount,
+                    receiveResource,
+                    receiveAmount
+                  ].join("_"),
+                  label: `${timing === "before" ? "Before" : "After"} Act: offer ` +
+                    `${giveAmount} ${giveResource} to ${partner.factionName} for ` +
+                    `${receiveAmount} ${receiveResource}`,
+                  actionId: "trade",
+                  parameters: {
+                    timing,
+                    partnerSeat: partner.seat,
+                    targetSeat: partner.seat,
+                    targetProfileId: partner.profileId,
+                    giveResource,
+                    giveAmount,
+                    receiveResource,
+                    receiveAmount
+                  }
+                });
+              }
+            }
+          }
+        }
       }
-    ]);
-    return timing.parameters?.timing || null;
+    }
+    return decisions;
   }
 
-  async executeImmediateTrade(policies, seat) {
+  async chooseImmediateTrade(policies, seat) {
+    const decisions = this.immediateTradeDecisions(seat);
+    if (decisions.length === 1) return null;
+    const choice = await this.choose(policies, seat, "immediate_trade", decisions);
+    return choice.parameters?.partnerSeat === undefined ? null : choice.parameters;
+  }
+
+  canCompleteImmediateTrade(seat, partnerSeat, offer) {
+    const partner = this.players[partnerSeat];
+    return this.immediateTradeGiveAmounts(seat, partner, offer.giveResource).includes(
+      offer.giveAmount
+    ) && this.immediateTradeReceiveAmounts(seat, partner, offer.receiveResource).includes(
+      offer.receiveAmount
+    );
+  }
+
+  immediateTradeCounterDecisions(seat, offer) {
+    const counterMaker = this.players[offer.partnerSeat];
+    return this.immediateTradeDecisions(counterMaker.seat)
+      .filter((decision) =>
+        decision.parameters?.partnerSeat === seat &&
+        decision.parameters.timing === offer.timing
+      )
+      .map((decision) => ({
+        ...decision,
+        decisionId: decision.decisionId.replace("trade_offer_", "trade_counter_"),
+        label: `Counteroffer: ${decision.label}`,
+        parameters: {
+          ...decision.parameters,
+          counterMakerSeat: counterMaker.seat
+        }
+      }));
+  }
+
+  completeImmediateTrade(seat, partnerSeat, offer) {
     const player = this.players[seat];
-    const partnerChoice = await this.choose(
-      policies,
-      seat,
-      "immediate_trade_partner",
-      [
-        {
-          decisionId: "trade_cancel",
-          label: "Cancel the immediate trade",
-          actionId: "trade"
-        },
-        ...this.players.filter((candidate) => candidate.seat !== seat).map((candidate) => ({
-          decisionId: `trade_partner_${candidate.seat}`,
-          label: `Trade with ${candidate.factionName}`,
-          actionId: "trade",
-          parameters: { partnerSeat: candidate.seat }
-        }))
-      ]
-    );
-    if (partnerChoice.parameters?.partnerSeat === undefined) return false;
-    const partner = this.players[partnerChoice.parameters.partnerSeat];
-    const giveResources = this.tradableResources(player, partner).filter(
-      (resource) => this.immediateTradeGiveAmounts(seat, partner, resource).length > 0
-    );
-    if (!giveResources.length) return false;
-    const giveChoice = await this.choose(
-      policies,
-      seat,
-      "immediate_trade_give_resource",
-      giveResources.map((resource) => ({
-        decisionId: `trade_give_${resource}`,
-        label: `Offer ${resource}`,
-        actionId: "trade",
-        parameters: { resource }
-      }))
-    );
-    const giveResource = giveChoice.parameters.resource;
-    const giveAmounts = this.immediateTradeGiveAmounts(seat, partner, giveResource);
-    const giveAmountChoice = await this.choose(
-      policies,
-      seat,
-      "immediate_trade_give_amount",
-      giveAmounts.map((amount) => ({
-        decisionId: `trade_give_amount_${amount}`,
-        label: `Offer ${amount} ${giveResource}`,
-        actionId: "trade",
-        parameters: { amount }
-      }))
-    );
-    const receiveResources = this.tradableResources(partner, player, giveResource).filter(
-      (resource) => this.immediateTradeReceiveAmounts(seat, partner, resource).length > 0
-    );
-    if (!receiveResources.length) return false;
-    const receiveChoice = await this.choose(
-      policies,
-      seat,
-      "immediate_trade_receive_resource",
-      receiveResources.map((resource) => ({
-        decisionId: `trade_receive_${resource}`,
-        label: `Request ${resource}`,
-        actionId: "trade",
-        parameters: { resource }
-      }))
-    );
-    const receiveResource = receiveChoice.parameters.resource;
-    const receiveAmounts = this.immediateTradeReceiveAmounts(
-      seat,
-      partner,
-      receiveResource
-    );
-    const receiveAmountChoice = await this.choose(
-      policies,
-      seat,
-      "immediate_trade_receive_amount",
-      receiveAmounts.map((amount) => ({
-        decisionId: `trade_receive_amount_${amount}`,
-        label: `Request ${amount} ${receiveResource}`,
-        actionId: "trade",
-        parameters: { amount }
-      }))
-    );
-    const offer = {
-      giveResource,
-      giveAmount: giveAmountChoice.parameters.amount,
-      receiveResource,
-      receiveAmount: receiveAmountChoice.parameters.amount
-    };
-    const response = await this.choose(policies, partner.seat, "immediate_trade_response", [
-      {
-        decisionId: "trade_reject",
-        label: `Reject ${offer.giveAmount} ${giveResource} for ` +
-          `${offer.receiveAmount} ${receiveResource}`,
-        actionId: "trade"
-      },
-      {
-        decisionId: "trade_accept",
-        label: `Accept ${offer.giveAmount} ${giveResource} for ` +
-          `${offer.receiveAmount} ${receiveResource}`,
-        actionId: "trade"
-      }
-    ]);
-    if (response.decisionId !== "trade_accept") return false;
-    player[giveResource] -= offer.giveAmount;
-    partner[receiveResource] -= offer.receiveAmount;
-    this.addResource(partner, giveResource, offer.giveAmount);
-    this.addResource(player, receiveResource, offer.receiveAmount);
+    const partner = this.players[partnerSeat];
+    if (!this.canCompleteImmediateTrade(seat, partnerSeat, offer)) return false;
+    player[offer.giveResource] -= offer.giveAmount;
+    partner[offer.receiveResource] -= offer.receiveAmount;
+    this.addResource(partner, offer.giveResource, offer.giveAmount);
+    this.addResource(player, offer.receiveResource, offer.receiveAmount);
     for (const participant of [player, partner]) {
       if (
         participant.factionId === "coalition_lab" &&
