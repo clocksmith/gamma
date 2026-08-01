@@ -17,7 +17,8 @@ import {
   assertLaunchIdentity,
   createLaunchIdentity,
   createReportIdentity,
-  loadGameIdentity
+  loadGameIdentity,
+  projectRoot
 } from "../versioning/game-identity.js";
 import {
   evaluateTournamentBalance,
@@ -25,6 +26,7 @@ import {
 } from "../balance/balance-contract.js";
 import { runDeterministicChunks } from "./deterministic-chunk-scheduler.js";
 import { throwIfAborted } from "../cancellation.js";
+import { archiveSimulationReport } from "../report-archive.js";
 
 const configUrl = new URL("../../generated/game-config.json", import.meta.url);
 const factionsUrl = new URL("../../generated/factions.json", import.meta.url);
@@ -308,6 +310,47 @@ export async function createSimulation(options = {}, onProgress) {
     })
   );
   const seed = String(options.seed || "frontier-monte-carlo");
+  const completedLlmArchives = [];
+  const archiveCompletedLlmMatch = llmRequested && options.archiveLlmMatches !== false
+    ? async ({ runIndex, outcome }) => {
+      const archive = await archiveSimulationReport({
+        schemaVersion: 6,
+        reportSchemaVersion: 6,
+        reportType: "tournament",
+        evidenceLabel: "simulation",
+        evidenceType: "simulation",
+        generatedAt: new Date().toISOString(),
+        seed: `${seed}:run:${runIndex}`,
+        runs: 1,
+        playerCount,
+        scope: outcome.scope,
+        game: decisionIdentity.game,
+        engine: decisionIdentity.engine,
+        variant: decisionIdentity.variant,
+        strategies: decisionIdentity.strategies,
+        launchIdentity,
+        configuration: {
+          backends: configuredBackends,
+          model: options.model || null,
+          reasoningEffort: options.reasoningEffort || null,
+          llmEvidenceMode: options.strictLlmEvidence ? "strict_quarantine" : "required",
+          projection
+        },
+        rulesVariant: outcome.rulesVariant,
+        standings: outcome.standings,
+        winnerSeats: outcome.winnerSeats,
+        matchMetrics: outcome.matchMetrics,
+        worldEnding: outcome.worldEnding,
+        samples: [outcome]
+      }, {
+        projectRoot: options.archiveProjectRoot || projectRoot,
+        directory: options.archiveDirectory || "evidence/studies/simulation",
+        jobId: `llm-match-${runIndex}`,
+        canPublish: () => !options.signal?.aborted
+      });
+      completedLlmArchives.push({ runIndex, ...archive });
+    }
+    : null;
   const factions = factionDocument.factions;
   const explicitFactions = options.factionIds?.length
     ? options.factionIds.map((id) => {
@@ -417,7 +460,8 @@ export async function createSimulation(options = {}, onProgress) {
     runOffset,
     sampleReplaysGlobal: Boolean(options.sampleReplaysGlobal),
     returnOutcomes: Boolean(options.returnOutcomes),
-    signal: options.signal
+    signal: options.signal,
+    onCompletedOutcome: archiveCompletedLlmMatch
   });
   const report = options.returnOutcomes ? runResult.report : runResult;
   const historicalPlayerCount = config.players.historicalOnlyCounts.includes(playerCount);
@@ -474,6 +518,7 @@ export async function createSimulation(options = {}, onProgress) {
       llmStages: options.llmStages || null,
       runOffset,
       projection,
+      completedLlmArchives,
       execution: chunked?.execution || {
         scheduler: "inline",
         requestedWorkers: Number(options.workers || 1),
