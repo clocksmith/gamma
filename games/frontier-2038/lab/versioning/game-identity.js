@@ -101,9 +101,16 @@ async function gitIdentity(root) {
         cwd: root
       })
     ]);
+    const sourceChanges = status.split(/\r?\n/).filter((line) => {
+      const path = line.slice(3).trim();
+      // Reports are outputs of a study, not inputs to the simulated engine.
+      // A multi-report batch must not make its later reports source-dirty by
+      // archiving its earlier ones.
+      return path && !path.startsWith("evidence/studies/simulation/");
+    });
     return {
       sourceCommit: commit.trim(),
-      sourceDirty: status.trim().length > 0
+      sourceDirty: sourceChanges.length > 0
     };
   } catch {
     return {
