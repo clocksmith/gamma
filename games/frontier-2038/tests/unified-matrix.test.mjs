@@ -109,6 +109,24 @@ test("unified matrix rotates homogeneous and alternating backend regimes and nev
   });
   assert.equal(report.reportType, "unified_matrix_audit");
   assert.equal(report.runs, 36);
+  assert.deepEqual(report.execution, {
+    projection: "batch",
+    requestedWorkers: null,
+    configuredWorkers: report.execution.configuredWorkers,
+    initialCellWorkers: report.execution.initialCellWorkers,
+    scheduler: report.execution.initialCellWorkers > 1 ? "worker_threads" : "inline",
+    chunkSize: null,
+    resultOrder: "matrix_cell_then_match_index"
+  });
+  assert.match(report.launchIdentity.study.fingerprint, /^sha256:/);
+  assert.equal(report.launchIdentity.cells.length, report.design.cells.length);
+  assert.ok(report.launchIdentity.cells.every(({ identity }) =>
+    identity.provenance.sourceCommit === report.launchIdentity.study.provenance.sourceCommit &&
+    identity.provenance.sourceDirty === report.launchIdentity.study.provenance.sourceDirty
+  ));
+  assert.ok(report.launchIdentity.cells.every(({ identity }) =>
+    /^sha256:/.test(identity.fingerprint)
+  ));
   assert.deepEqual(
     new Set(report.design.cells.flatMap((cell) => cell.backends)),
     new Set(["weighted", "greedy"])
@@ -204,6 +222,41 @@ test("unified matrix rejects player counts outside the supported product", async
       seed: "unsupported-player-count"
     }),
     /must be supported: 3, 4, 5/
+  );
+});
+
+test("unified matrix cell workers preserve deterministic evidence order", async () => {
+  const options = {
+    maximumMatches: 36,
+    initialRunsPerCell: 1,
+    batchSize: 2,
+    playerCounts: [4],
+    mandateModes: ["fixed"],
+    includeAdversarial: false,
+    projection: "batch",
+    seed: "unified-matrix-worker-parity"
+  };
+  const inline = await runUnifiedMatrix({ ...options, workers: 1 });
+  const parallel = await runUnifiedMatrix({ ...options, workers: 2 });
+  for (const field of [
+    "outcomes",
+    "cooperation",
+    "configurationResults",
+    "playerCountResults",
+    "supportedPlayerCountCoverage",
+    "rulesComparisons",
+    "integrity",
+    "balanceEvaluation"
+  ]) {
+    assert.deepEqual(parallel[field], inline[field], field);
+  }
+  assert.equal(inline.execution.scheduler, "inline");
+  assert.equal(parallel.execution.scheduler, "worker_threads");
+  assert.equal(parallel.execution.initialCellWorkers, 2);
+  assert.equal(parallel.design.allocations.length, inline.design.allocations.length);
+  assert.deepEqual(
+    parallel.design.allocations.map(({ elapsedMs, ...allocation }) => allocation),
+    inline.design.allocations.map(({ elapsedMs, ...allocation }) => allocation)
   );
 });
 

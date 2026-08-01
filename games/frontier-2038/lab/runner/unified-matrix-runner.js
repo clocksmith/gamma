@@ -1,5 +1,7 @@
 import { readFile } from "node:fs/promises";
+import { availableParallelism } from "node:os";
 import { performance } from "node:perf_hooks";
+import { Worker } from "node:worker_threads";
 import {
   empiricalBayesRates,
   intervalCrossesThreshold,
@@ -9,7 +11,10 @@ import {
   loadPlayerProfiles,
   validatePlayerProfile
 } from "../personas/player-profile.js";
-import { createSimulation } from "../runtime/create-simulation.js";
+import {
+  captureSimulationLaunchIdentity,
+  createSimulation
+} from "../runtime/create-simulation.js";
 import { createReportIdentity, fingerprintObject } from "../versioning/game-identity.js";
 import { loadBalanceContract } from "../balance/balance-contract.js";
 import {
@@ -21,6 +26,7 @@ import { simulationCopy } from "../content/simulation-copy.js";
 import { mutateStrategy } from "./optimization-runner.js";
 
 const matrixUrl = new URL("../contracts/experiment-matrix.json", import.meta.url);
+const cellWorkerUrl = new URL("./unified-matrix-cell-worker.js", import.meta.url);
 
 function integer(value, fallback, minimum, maximum, label) {
   const parsed = value === undefined ? fallback : Number(value);
@@ -28,6 +34,107 @@ function integer(value, fallback, minimum, maximum, label) {
     throw new RangeError(`${label} must be an integer from ${minimum} to ${maximum}.`);
   }
   return parsed;
+}
+
+function matrixWorkerCount(value) {
+  const fallback = Math.min(64, Math.max(1, availableParallelism() - 1));
+  return integer(value, fallback, 1, 64, "workers");
+}
+
+function restoreWorkerError(value) {
+  const error = new Error(value?.message || "Unified-matrix cell failed.");
+  error.name = value?.name || "Error";
+  error.stack = value?.stack || error.stack;
+  if (value?.code) error.code = value.code;
+  return error;
+}
+
+async function runMatrixCellTasks(tasks, { workers, signal }) {
+  if (workers === 1 || tasks.length < 2) {
+    const results = [];
+    for (const task of tasks) {
+      const started = performance.now();
+      const report = await createSimulation({
+        ...task.options,
+        workers: 1,
+        launchIdentity: task.launchIdentity
+      });
+      results.push({
+        taskIndex: task.taskIndex,
+        report,
+        elapsedMs: Math.round(performance.now() - started)
+      });
+    }
+    return results;
+  }
+  const actualWorkers = Math.min(workers, tasks.length);
+  const pool = Array.from({ length: actualWorkers }, () => new Worker(cellWorkerUrl, {
+    execArgv: process.execArgv.filter((argument) => !argument.startsWith("--input-type"))
+  }));
+  const results = Array(tasks.length);
+  const active = new Map(pool.map((worker) => [worker, null]));
+  let next = 0;
+  let completed = 0;
+  let settled = false;
+  return new Promise((resolve, reject) => {
+    const terminate = () => Promise.allSettled(pool.map((worker) => worker.terminate()));
+    const finish = async (error, value) => {
+      if (settled) return;
+      settled = true;
+      signal?.removeEventListener("abort", abort);
+      await terminate();
+      if (error) reject(error);
+      else resolve(value);
+    };
+    const abort = () => finish(
+      signal?.reason || new DOMException("Unified matrix was cancelled.", "AbortError")
+    );
+    const assign = (worker) => {
+      if (settled || next >= tasks.length) return;
+      const task = tasks[next++];
+      active.set(worker, task);
+      worker.postMessage({ kind: "unified_matrix_cell", ...task });
+    };
+    const receive = async (worker, message) => {
+      const task = active.get(worker);
+      if (
+        settled ||
+        message.kind !== "cell_result" ||
+        !task ||
+        message.taskIndex !== task.taskIndex
+      ) {
+        if (!settled) await finish(new Error("Unified matrix received a stale cell result."));
+        return;
+      }
+      if (message.error) {
+        await finish(restoreWorkerError(message.error));
+        return;
+      }
+      results[task.taskIndex] = message;
+      completed += 1;
+      active.set(worker, null);
+      if (completed === tasks.length) {
+        await finish(null, results);
+        return;
+      }
+      assign(worker);
+    };
+    signal?.addEventListener("abort", abort, { once: true });
+    if (signal?.aborted) {
+      abort();
+      return;
+    }
+    for (const worker of pool) {
+      worker.on("message", (message) => receive(worker, message));
+      worker.on("error", (error) => finish(error));
+      worker.on("exit", (code) => {
+        if (!settled && active.get(worker)) {
+          finish(new Error(`Unified-matrix worker exited early (code ${code}).`));
+        }
+      });
+      assign(worker);
+    }
+  });
 }
 
 function mean(values) {
@@ -233,6 +340,53 @@ function buildCells({ profiles, playerCounts, rulesConfigurations, mandateModes 
     }
   }
   return cells;
+}
+
+function studyIdentityBasis(identity) {
+  return {
+    game: identity.game,
+    engine: identity.engine,
+    contracts: identity.contracts,
+    rng: identity.rng,
+    provenance: identity.provenance
+  };
+}
+
+async function captureCellLaunchIdentities({ cells, profiles, projection }) {
+  let expected = null;
+  for (const cell of cells) {
+    const identity = await captureSimulationLaunchIdentity({
+      playerCount: cell.playerCount,
+      profileIds: cell.profileIds,
+      profileOverrides: profiles,
+      backends: cell.backends,
+      rulesVariant: cell.rulesVariant,
+      projection,
+      experimentKind: "unified_matrix_audit"
+    });
+    const basis = studyIdentityBasis(identity);
+    const fingerprint = fingerprintObject(basis);
+    if (expected && expected.fingerprint !== fingerprint) {
+      const error = new Error(
+        "Unified-matrix source identity changed while cell launch identities were captured."
+      );
+      error.code = "study_launch_identity_mismatch";
+      throw error;
+    }
+    expected ||= { ...basis, fingerprint };
+    cell.launchIdentity = identity;
+  }
+  return expected;
+}
+
+function assertStudyIdentity(studyIdentity, identity, context) {
+  const actual = fingerprintObject(studyIdentityBasis(identity));
+  if (actual === studyIdentity.fingerprint) return;
+  const error = new Error(`${context} source identity differs from the study launch snapshot.`);
+  error.code = "study_launch_identity_mismatch";
+  error.expectedStudyIdentity = studyIdentity.fingerprint;
+  error.actualStudyIdentity = actual;
+  throw error;
 }
 
 function groupKey(record, dimensions) {
@@ -974,6 +1128,8 @@ async function runAdversarialSlice({
   population,
   seed,
   rulesVariant,
+  studyLaunchIdentity,
+  projection,
   signal,
   onProgress,
   progress
@@ -982,7 +1138,7 @@ async function runAdversarialSlice({
   const profileResult = (report, id) =>
     report.profiles.find((entry) => entry.profileId === id);
   const evaluate = async (candidate, opponents, phaseSeed) => {
-    const report = await createSimulation({
+    const options = {
       runs,
       playerCount: 4,
       seed: phaseSeed,
@@ -994,7 +1150,15 @@ async function runAdversarialSlice({
       rotateFactions: true,
       simulateNegotiation: true,
       rulesVariant,
-      signal
+      signal,
+      projection,
+      experimentKind: "unified_matrix_audit"
+    };
+    const launchIdentity = await captureSimulationLaunchIdentity(options);
+    assertStudyIdentity(studyLaunchIdentity, launchIdentity, "Unified-matrix adversarial slice");
+    const report = await createSimulation({
+      ...options,
+      launchIdentity
     });
     progress.completed += runs;
     onProgress?.({
@@ -1309,6 +1473,10 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     }
   }
   const mandateModes = options.mandateModes || matrixContract.axes.mandateMode;
+  const projection = options.projection || "batch";
+  if (!['rich', 'batch'].includes(projection)) {
+    throw new TypeError("projection must be rich or batch.");
+  }
   const settings = {
     ...matrixContract.sampling,
     initialRunsPerCell: integer(
@@ -1348,6 +1516,13 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     rulesConfigurations,
     mandateModes
   });
+  const studyLaunchIdentity = await captureCellLaunchIdentities({
+    cells,
+    profiles,
+    projection
+  });
+  const configuredWorkers = matrixWorkerCount(options.workers);
+  const initialCellWorkers = Math.min(configuredWorkers, cells.length);
   const adversarialMatches = includeAdversarial
     ? profiles.length * (adversarialPopulation * 2 + 1) * adversarialRuns
     : 0;
@@ -1371,7 +1546,10 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       options.playerCounts === undefined &&
       options.mandateModes === undefined &&
       options.rulesConfigurations === undefined &&
-      options.profileOverrides === undefined
+      options.profileOverrides === undefined &&
+      options.projection === undefined &&
+      options.workers === undefined &&
+      options.chunkSize === undefined
     ),
     matrixContractFingerprint: fingerprintObject(matrixContract),
     playerCounts,
@@ -1391,6 +1569,15 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       fingerprint: fingerprintObject(profile)
     })),
     settings,
+    execution: {
+      projection,
+      requestedWorkers: options.workers === undefined ? null : Number(options.workers),
+      configuredWorkers,
+      initialCellWorkers,
+      scheduler: initialCellWorkers > 1 ? "worker_threads" : "inline",
+      chunkSize: options.chunkSize === undefined ? null : Number(options.chunkSize),
+      resultOrder: "matrix_cell_then_match_index"
+    },
     adversarial: {
       enabled: includeAdversarial,
       runsPerCandidate: adversarialRuns,
@@ -1412,28 +1599,31 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
   let executedMatches = 0;
   const started = performance.now();
 
-  const runCell = async (cell, requestedRuns, reason) => {
-    const runs = Math.min(requestedRuns, matrixMatchLimit - executedMatches);
-    if (runs <= 0) return;
+  const cellOptions = (cell, runs) => ({
+    runs,
+    playerCount: cell.playerCount,
+    seed: `${options.seed || "m3t4-unified-matrix"}:${cell.pairingId}:offset:${cell.runs}`,
+    sampleReplays: 0,
+    profileIds: cell.profileIds,
+    profileOverrides: profiles,
+    backends: cell.backends,
+    rotateProfiles: true,
+    rotateFactions: true,
+    rulesVariant: cell.rulesVariant,
+    mandateMode: cell.mandateMode,
+    simulateNegotiation: true,
+    includeObservations: true,
+    runOffset: cell.runs,
+    launchIdentity: cell.launchIdentity,
+    projection,
+    workers: 1,
+    chunkSize: options.chunkSize,
+    experimentKind: "unified_matrix_audit",
+    signal: options.signal
+  });
+
+  const recordCell = ({ cell, runs, reason, report, elapsedMs }) => {
     const runStart = cell.runs;
-    const cellStarted = performance.now();
-    const report = await createSimulation({
-      runs,
-      playerCount: cell.playerCount,
-      seed: `${options.seed || "m3t4-unified-matrix"}:${cell.pairingId}:offset:${cell.runs}`,
-      sampleReplays: 0,
-      profileIds: cell.profileIds,
-      profileOverrides: profiles,
-      backends: cell.backends,
-      rotateProfiles: true,
-      rotateFactions: true,
-      rulesVariant: cell.rulesVariant,
-      mandateMode: cell.mandateMode,
-      simulateNegotiation: true,
-      includeObservations: true,
-      runOffset: cell.runs,
-      signal: options.signal
-    });
     for (const detail of report.diagnostics.integrity.details) {
       integrityDetails.push({
         cellId: cell.id,
@@ -1494,7 +1684,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       runs,
       cumulativeMatches: executedMatches,
       reason,
-      elapsedMs: Math.round(performance.now() - cellStarted)
+      elapsedMs
     });
     onProgress?.({
       phase: "unified_matrix",
@@ -1503,9 +1693,39 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     });
   };
 
-  for (const cell of cells) {
-    if (executedMatches >= matrixMatchLimit) break;
-    await runCell(cell, settings.initialRunsPerCell, "preregistered_initial_coverage");
+  const runCell = async (cell, requestedRuns, reason) => {
+    const runs = Math.min(requestedRuns, matrixMatchLimit - executedMatches);
+    if (runs <= 0) return;
+    const started = performance.now();
+    const report = await createSimulation({
+      ...cellOptions(cell, runs),
+      workers: options.workers
+    });
+    recordCell({
+      cell,
+      runs,
+      reason,
+      report,
+      elapsedMs: Math.round(performance.now() - started)
+    });
+  };
+
+  const initialTasks = cells.map((cell, taskIndex) => ({
+    kind: "unified_matrix_cell",
+    taskIndex,
+    cell,
+    runs: settings.initialRunsPerCell,
+    reason: "preregistered_initial_coverage",
+    launchIdentity: cell.launchIdentity,
+    options: cellOptions(cell, settings.initialRunsPerCell)
+  }));
+  const initialResults = await runMatrixCellTasks(initialTasks, {
+    workers: configuredWorkers,
+    signal: options.signal
+  });
+  for (const result of initialResults) {
+    const task = initialTasks[result.taskIndex];
+    recordCell({ ...task, ...result });
   }
 
   let families = inferenceFamilies(records, settings, Math.max(1, look));
@@ -1574,6 +1794,8 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       population: adversarialPopulation,
       seed: `${options.seed || "m3t4-unified-matrix"}:adversarial`,
       rulesVariant: options.rulesVariant || {},
+      studyLaunchIdentity,
+      projection,
       signal: options.signal,
       onProgress,
       progress
@@ -1707,6 +1929,24 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
         : "maximum_matches_reached",
       elapsedMs: Math.round(performance.now() - started)
     },
+    launchIdentity: {
+      schemaVersion: 1,
+      study: studyLaunchIdentity,
+      cellOrder: "rules_configuration_then_player_count_then_mandate_then_backend_then_roster",
+      cells: cells.map((cell) => ({
+        id: cell.id,
+        identity: structuredClone(cell.launchIdentity)
+      }))
+    },
+    execution: {
+      projection,
+      requestedWorkers: options.workers === undefined ? null : Number(options.workers),
+      configuredWorkers,
+      initialCellWorkers,
+      scheduler: initialCellWorkers > 1 ? "worker_threads" : "inline",
+      chunkSize: options.chunkSize === undefined ? null : Number(options.chunkSize),
+      resultOrder: "matrix_cell_then_match_index"
+    },
     inference: {
       families,
       pairwise,
@@ -1764,6 +2004,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
     profiles,
     backends: ["weighted", "greedy"],
     model: null,
+    policyProjection: projection,
     experimentKind: "unified_matrix_audit"
   });
 }
