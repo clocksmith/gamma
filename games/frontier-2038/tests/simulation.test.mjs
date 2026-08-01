@@ -22,6 +22,7 @@ import {
   createBrowserInteractiveGame
 } from "../lab/runtime/create-browser-interactive-game.js";
 import { archiveSimulationReport } from "../lab/report-archive.js";
+import { createSimulationRunMonitor } from "../lab/run-monitor.js";
 import {
   classifyReportComparison,
   normalizeSimulationReport
@@ -2171,6 +2172,7 @@ test("explicit faction rosters preserve paired diagnostic seats and identity", a
 
 test("paired faction diagnostics keep every non-focal input on common seeds", async () => {
   const report = await runFactionSwapDiagnostic({
+    workers: 1,
     runsPerArm: 1,
     playerCount: 4,
     seed: "paired-faction-diagnostic",
@@ -2205,6 +2207,168 @@ test("paired faction diagnostics keep every non-focal input on common seeds", as
   assert.equal(report.comparisons[0].paired.pairs, 1);
   assert.equal(report.balanceEvaluation.promotionGate.eligible, false);
   assert.match(report.preRegistration.fingerprint, /^sha256:[a-f0-9]{64}$/);
+});
+
+test("parallel faction diagnostics preserve sequential outcomes and fingerprints", async () => {
+  const options = {
+    runsPerArm: 2,
+    playerCount: 4,
+    seed: "parallel-faction-diagnostic",
+    preRegistrationId: "parallel-faction-diagnostic-test",
+    mandateMode: "fixed",
+    profileIds: [
+      "capability_rusher",
+      "balanced_operator",
+      "trust_governor",
+      "power_broker"
+    ],
+    backends: ["weighted", "weighted", "weighted", "weighted"],
+    comparisons: [{
+      id: "orisonix_vs_corthaven",
+      focalSeat: 2,
+      leftFactionIds: [
+        "imperial_research_lab",
+        "coalition_lab",
+        "safety_laboratory",
+        "foundry"
+      ],
+      rightFactionIds: [
+        "imperial_research_lab",
+        "coalition_lab",
+        "platform_empire",
+        "foundry"
+      ]
+    }]
+  };
+  const sequential = await runFactionSwapDiagnostic({ ...options, workers: 1 });
+  const parallel = await runFactionSwapDiagnostic({ ...options, workers: 2 });
+
+  assert.equal(sequential.execution.scheduler, "inline");
+  assert.equal(parallel.execution.scheduler, "worker_threads");
+  assert.equal(parallel.execution.workers, 2);
+  assert.deepEqual(parallel.comparisons, sequential.comparisons);
+  assert.deepEqual(parallel.game, sequential.game);
+  assert.deepEqual(parallel.engine, sequential.engine);
+  assert.deepEqual(parallel.variant, sequential.variant);
+  assert.deepEqual(parallel.strategies, sequential.strategies);
+  assert.equal(
+    parallel.preRegistration.fingerprint,
+    sequential.preRegistration.fingerprint
+  );
+  assert.equal(parallel.experiment.fingerprint, sequential.experiment.fingerprint);
+});
+
+test("simulation run monitor atomically records live progress and closure", async () => {
+  const projectRoot = await mkdtemp(join(tmpdir(), "frontier-run-monitor-"));
+  try {
+    const monitor = createSimulationRunMonitor({
+      projectRoot,
+      jobId: "parallel diagnostic",
+      totalGames: 40
+    });
+    await monitor.start({ execution: { scheduler: "worker_threads", workers: 4 } });
+    await monitor.update({
+      completed: 12,
+      total: 40,
+      completedTasks: 3,
+      totalTasks: 10,
+      activeTaskIndices: [7, 2]
+    });
+    const live = JSON.parse(await readFile(join(projectRoot, monitor.relativePath), "utf8"));
+    assert.equal(live.status, "running");
+    assert.equal(live.progress.completedGames, 12);
+    assert.deepEqual(live.progress.activeTaskIndices, [2, 7]);
+    await monitor.complete({ archive: "evidence/studies/simulation/example.json" });
+    const complete = JSON.parse(await readFile(join(projectRoot, monitor.relativePath), "utf8"));
+    assert.equal(complete.status, "completed");
+    assert.equal(complete.progress.completedGames, 40);
+    assert.equal(complete.archive, "evidence/studies/simulation/example.json");
+  } finally {
+    await rm(projectRoot, { recursive: true, force: true });
+  }
+});
+
+test("parallel faction diagnostics reject LLM-backed worker pools", async () => {
+  await assert.rejects(
+    () => runFactionSwapDiagnostic({
+      workers: 2,
+      runsPerArm: 1,
+      playerCount: 4,
+      backends: ["codex", "weighted", "weighted", "weighted"],
+      comparisons: [{
+        id: "llm-worker-rejection",
+        focalSeat: 0,
+        leftFactionIds: [
+          "safety_laboratory",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ],
+        rightFactionIds: [
+          "platform_empire",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ]
+      }]
+    }),
+    /deterministic backends only/
+  );
+});
+
+test("LLM-backed faction diagnostics default to inline execution", async () => {
+  await assert.rejects(
+    () => runFactionSwapDiagnostic({
+      runsPerArm: 1,
+      playerCount: 4,
+      backends: ["codex", "weighted", "weighted", "weighted"],
+      comparisons: [{
+        id: "llm-inline-default",
+        focalSeat: 0,
+        leftFactionIds: [
+          "safety_laboratory",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ],
+        rightFactionIds: [
+          "platform_empire",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ]
+      }]
+    }),
+    /explicit allowLlm authorization/
+  );
+});
+
+test("parallel faction diagnostics fail closed when a worker game fails", async () => {
+  await assert.rejects(
+    () => runFactionSwapDiagnostic({
+      workers: 2,
+      runsPerArm: 1,
+      playerCount: 4,
+      backends: ["weighted", "weighted", "weighted", "weighted"],
+      comparisons: [{
+        id: "worker-failure",
+        focalSeat: 0,
+        leftFactionIds: [
+          "missing_faction",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ],
+        rightFactionIds: [
+          "platform_empire",
+          "coalition_lab",
+          "imperial_research_lab",
+          "foundry"
+        ]
+      }]
+    }),
+    /Unknown faction: missing_faction/
+  );
 });
 
 test("weighted policies replay deterministically from packet seed and persona", async () => {
