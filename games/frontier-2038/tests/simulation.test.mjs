@@ -153,6 +153,34 @@ test("Scientific Method charges only when its protection is actually consumed", 
   assert.equal(ordinarySafety.players[0].safety, 0);
 });
 
+test("legal-decision adjustments do not mutate their generated decision", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "coalition_lab",
+      seed: "decision-adjustment-immutability"
+    },
+    () => {}
+  );
+  const decision = {
+    decisionId: "fixture-fund",
+    label: "Fixture Fund",
+    actionId: "fund",
+    parameters: {
+      destinationCategory: "capital",
+      mode: "conservative"
+    },
+    consequences: { runway: 2 }
+  };
+  const original = structuredClone(decision);
+  const adjusted = match.adjustDecision(match.players[0], decision);
+
+  assert.deepEqual(decision, original);
+  assert.notStrictEqual(adjusted, decision);
+  assert.notStrictEqual(adjusted.parameters, decision.parameters);
+  assert.equal(adjusted.parameters.actualRunway, 4);
+});
+
 test("Scientific Method scrutiny taxes validation without reducing Capability", async () => {
   const { match } = await createInteractiveGame(
     {
@@ -2919,6 +2947,58 @@ test("simulations validate a frozen launch identity before they run", async () =
   await assert.rejects(
     () => createSimulation({ ...options, launchIdentity: incompatible }),
     (error) => error.code === "launch_identity_mismatch"
+  );
+});
+
+test("batch projection exactly matches rich deterministic outcomes at three through five players", async () => {
+  for (const playerCount of [3, 4, 5]) {
+    const options = {
+      runs: 2,
+      playerCount,
+      seed: `batch-parity-${playerCount}p`,
+      sampleReplays: 2,
+      includeObservations: true,
+      profileIds: [
+        "balanced_operator",
+        "capability_rusher",
+        "trust_governor",
+        "power_broker",
+        "agi_candidate"
+      ],
+      backends: ["weighted", "weighted", "weighted", "weighted", "weighted"],
+      simulateNegotiation: true
+    };
+    const rich = await createSimulation({ ...options, projection: "rich" });
+    const batch = await createSimulation({ ...options, projection: "batch" });
+    for (const field of [
+      "seats",
+      "factions",
+      "profiles",
+      "backends",
+      "factionStrategies",
+      "factionBackends",
+      "strategyBackends",
+      "profileMatchups",
+      "diagnostics",
+      "matchMetrics",
+      "samples",
+      "observations"
+    ]) {
+      assert.deepEqual(batch[field], rich[field], `${playerCount}p ${field}`);
+    }
+    assert.equal(batch.configuration.projection, "batch");
+    assert.notEqual(batch.launchIdentity.fingerprint, rich.launchIdentity.fingerprint);
+  }
+  await assert.rejects(
+    () => createSimulation({
+      runs: 1,
+      playerCount: 3,
+      projection: "batch",
+      backends: ["codex", "weighted", "weighted"],
+      allowLlm: true
+    }),
+    /Batch projection supports deterministic policies only/,
+    "batch must not silently alter an LLM packet"
   );
 });
 

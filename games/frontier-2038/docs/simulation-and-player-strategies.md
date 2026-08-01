@@ -34,6 +34,27 @@ Backend is a first-class experiment axis. It rotates across seats and factions
 and appears in marginal and interaction evidence; it is not hidden inside the
 persona label.
 
+## Rich and batch projections
+
+The simulator has one state-transition engine and two deterministic output
+projections. Rich projection is the default for browser play, LLM decisions,
+defect investigation, and replay samples. Batch projection is available only
+to weighted or greedy policies. It keeps the same seed order, legal decision
+IDs and ordering, public state, semantic history, state transitions, and
+final metrics, while unsampled matches omit rendered history prose and use
+direct immutable public-state copies instead of broad deep clones. Sampled
+batch matches still retain full replays for parity investigation.
+
+`policyProjection` is part of the strategy identity. A batch result is never
+pooled with rich output merely because its final winner looks similar; the
+fixed 3/4/5-player parity corpus must match decisions, events, resources,
+Mandate, standings, winners, faction ability metrics, and integrity counters
+before batch evidence is used.
+
+Use `--projection batch` with `npm run simulate:monte-carlo` only for a
+deterministic study. The CLI rejects it for LLM seats rather than changing an
+LLM packet. Omit the flag for the rich default.
+
 ## Shared decision contract
 
 Every backend receives the same packet:

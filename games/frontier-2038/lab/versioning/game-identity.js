@@ -128,6 +128,7 @@ export async function loadGameIdentity({
   backends = [],
   model = null,
   reasoningEffort = null,
+  policyProjection = "rich",
   experimentKind = "tournament"
 } = {}) {
   const version = JSON.parse(await readFile(resolve(root, "release/game-version.json"), "utf8"));
@@ -141,6 +142,7 @@ export async function loadGameIdentity({
     backends: [...backends],
     model,
     reasoningEffort,
+    policyProjection,
     experimentKind
   };
 
@@ -242,6 +244,7 @@ export async function createReportIdentity({
   backends,
   model,
   reasoningEffort,
+  policyProjection,
   experimentKind
 }) {
   const identity = suppliedIdentity || await loadGameIdentity({
@@ -252,6 +255,7 @@ export async function createReportIdentity({
     backends,
     model,
     reasoningEffort,
+    policyProjection,
     experimentKind
   });
   const balanceContractDocument = JSON.parse(await readFile(balanceContractUrl, "utf8"));
