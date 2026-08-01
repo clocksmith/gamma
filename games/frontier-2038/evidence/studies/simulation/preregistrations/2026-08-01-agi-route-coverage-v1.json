@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "agi-route-coverage-v1",
+  "registeredBeforeResults": true,
+  "question": "Do the existing AGI Candidate and Power Broker deterministic policies exercise the canonical declaration route at four players, or is the zero-declaration baseline caused by policy coverage rather than engine legality?",
+  "sourceEvidence": "2026-08-01-clean-canonical-3-4-5-baseline",
+  "playerCount": 4,
+  "runsPerField": 100,
+  "seedRoot": "frontier-2038-agi-route-coverage-2026-08-01",
+  "rulesVariant": {},
+  "mandateMode": "variable",
+  "simulateNegotiation": true,
+  "fields": [
+    {
+      "id": "broker_field_greedy",
+      "profiles": ["agi_candidate", "power_broker", "power_broker", "power_broker"],
+      "backends": ["greedy", "greedy", "greedy", "greedy"]
+    },
+    {
+      "id": "broker_field_weighted",
+      "profiles": ["agi_candidate", "power_broker", "power_broker", "power_broker"],
+      "backends": ["weighted", "weighted", "weighted", "weighted"]
+    },
+    {
+      "id": "claimant_field_greedy",
+      "profiles": ["agi_candidate", "agi_candidate", "agi_candidate", "agi_candidate"],
+      "backends": ["greedy", "greedy", "greedy", "greedy"]
+    },
+    {
+      "id": "claimant_field_weighted",
+      "profiles": ["agi_candidate", "agi_candidate", "agi_candidate", "agi_candidate"],
+      "backends": ["weighted", "weighted", "weighted", "weighted"]
+    }
+  ],
+  "requiredMetrics": [
+    "coreRequirementsMet",
+    "neededExternalPower",
+    "receivedPowerOffer",
+    "acceptedPowerPrice",
+    "becameGridReady",
+    "legalDeclarationWindow",
+    "declared",
+    "declarationReadiness failing requirement",
+    "policy fallbacks and integrity violations"
+  ],
+  "interpretation": {
+    "authority": "Policy-coverage diagnostic only; it cannot promote a rule change.",
+    "engineSignal": "A legal declaration window or declaration proves the canonical engine route is reachable under an existing authored policy field.",
+    "policySignal": "If no field reaches a legal declaration window, inspect policy-visible decisions and funnel failures before making a rules claim.",
+    "rulesBoundary": "No requirement, price, faction, or timing rule is changed in this study."
+  }
+}
