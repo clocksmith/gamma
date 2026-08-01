@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "id": "p3-imperial-coalition-isolation-v1",
+  "registeredBeforeResults": true,
+  "question": "Does the clean canonical three-player faction-range signal persist when only the focal seat changes between Imperial Research Lab and Coalition Lab under identical seeds, seats, opponents, profiles, boards, decks, Headlines, and variable Mandate schedule?",
+  "sourceEvidence": "2026-08-01-clean-canonical-3-4-5-baseline",
+  "playerCount": 3,
+  "runsPerArm": 100,
+  "mandateMode": "variable",
+  "seed": "frontier-2038-p3-imperial-coalition-isolation-2026-08-01",
+  "profileIds": [
+    "balanced_operator",
+    "balanced_operator",
+    "balanced_operator"
+  ],
+  "backends": [
+    "weighted",
+    "weighted",
+    "weighted"
+  ],
+  "comparisons": [
+    {
+      "id": "balanced_weighted_seat_0",
+      "question": "At focal seat zero, does Imperial Research outperform Coalition Lab under homogeneous Balanced Operator policies?",
+      "focalSeat": 0,
+      "leftFactionIds": ["imperial_research_lab", "safety_laboratory", "foundry"],
+      "rightFactionIds": ["coalition_lab", "safety_laboratory", "foundry"]
+    },
+    {
+      "id": "balanced_weighted_seat_1",
+      "question": "At focal seat one, does Imperial Research outperform Coalition Lab under homogeneous Balanced Operator policies?",
+      "focalSeat": 1,
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "vertical_empire"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "vertical_empire"]
+    },
+    {
+      "id": "balanced_weighted_seat_2",
+      "question": "At focal seat two, does Imperial Research outperform Coalition Lab under homogeneous Balanced Operator policies?",
+      "focalSeat": 2,
+      "leftFactionIds": ["safety_laboratory", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["safety_laboratory", "foundry", "coalition_lab"]
+    },
+    {
+      "id": "balanced_greedy_seat_0",
+      "question": "At focal seat zero, does the faction effect survive homogeneous greedy policies?",
+      "focalSeat": 0,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["imperial_research_lab", "safety_laboratory", "foundry"],
+      "rightFactionIds": ["coalition_lab", "safety_laboratory", "foundry"]
+    },
+    {
+      "id": "balanced_greedy_seat_1",
+      "question": "At focal seat one, does the faction effect survive homogeneous greedy policies?",
+      "focalSeat": 1,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "vertical_empire"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "vertical_empire"]
+    },
+    {
+      "id": "balanced_greedy_seat_2",
+      "question": "At focal seat two, does the faction effect survive homogeneous greedy policies?",
+      "focalSeat": 2,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["safety_laboratory", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["safety_laboratory", "foundry", "coalition_lab"]
+    }
+  ],
+  "llm": {
+    "enabled": false,
+    "maximumDecisions": 0
+  },
+  "interpretation": {
+    "authority": "Diagnostic only. It cannot promote a physical rule or claim a general faction imbalance.",
+    "pairedDelta": "Positive left-minus-right win credit, Mandate, or rank advantage means Imperial Research outperformed Coalition Lab under common random numbers.",
+    "seatTest": "A direction that appears at all three focal seats is evidence against a pure seat-order explanation; a direction confined to one seat is a seat/faction interaction to investigate, not a faction main effect.",
+    "policyTest": "A direction that reverses between weighted and greedy fields is a deterministic-policy interaction, not a rule-change recommendation.",
+    "nextGate": "Only a coherent effect across the registered seat and policy fields warrants a fresh fixed-Mandate replication or a separately preregistered one-lever candidate."
+  }
+}
