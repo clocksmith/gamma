@@ -29,10 +29,16 @@ const profileOverrideReports = args["profile-override-reports"]
     })
   )
   : undefined;
+const numberArgument = (...names) => {
+  const value = names.map((name) => args[name]).find((candidate) =>
+    candidate !== undefined
+  );
+  return value === undefined ? undefined : Number(value);
+};
 const report = await runUnifiedMatrix({
-  maximumMatches: Number(args.runs || args["maximum-matches"] || 960),
-  initialRunsPerCell: Number(args["initial-runs"] || 2),
-  batchSize: Number(args["batch-size"] || 2),
+  maximumMatches: numberArgument("runs", "maximum-matches"),
+  initialRunsPerCell: numberArgument("initial-runs"),
+  batchSize: numberArgument("batch-size"),
   playerCounts: args["player-counts"]
     ? String(args["player-counts"]).split(",").map(Number)
     : undefined,
@@ -44,7 +50,7 @@ const report = await runUnifiedMatrix({
   profileOverrides: profileOverrideReports,
   seed: args.seed || "m3t4-unified-matrix",
   preRegistrationId: args["pre-registration-id"],
-  projection: args.projection || "batch",
+  projection: args.projection,
   workers: args.workers === undefined ? undefined : Number(args.workers),
   chunkSize: args["chunk-size"] === undefined
     ? undefined
