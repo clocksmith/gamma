@@ -1,0 +1,36 @@
+{
+  "candidate_id": "seal2_route_e_state_preserving_prototype_bypass_q0_v1",
+  "claimed_at": "2026-08-01T20:43:48+00:00",
+  "created_at": "2026-08-01T20:43:48+00:00",
+  "developed_at": "2026-08-01T20:43:48+00:00",
+  "evidence": [
+    "docs/research_register.md",
+    "docs/seal2_route_e_state_preserving_prototype_bypass_plan.md",
+    "results/wrt_explicit_copy_mdl_endpoint428_1m_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2100000,
+  "hypothesis": "A single previously decoded page can supply multiple separated exact WRT spans whose complete prototype and command cost is smaller than their actual endpoint428 arithmetic payload, while replaying copied bits preserves the parent model trajectory.",
+  "interfaces_exposed": [
+    "BYPASS_COPY reconstructs prior WRT bytes without arithmetic truth decisions while feeding them through the unchanged parent update path"
+  ],
+  "kill_condition": "Retire unchanged single-prototype prior-page bypass on any identity failure, gross gain below 3000 B/M, net gain below 2100 B/M, failure to beat E1 or ER, or nonpositive selection or sealed-confirmation exact gain; do not sweep minimum length, integer codes, distance windows, or prototype count.",
+  "max_program_bytes": 40000,
+  "mechanism_change": "delete_predictor_work",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "coder",
+  "owner": "codex",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 130,
+  "promotion_condition": "At exact opening 1M, E2 saves at least 3000 archive bytes, projects at least 2100 B/M after measured source allowance, strictly beats E1 and ER, remains positive on selection and sealed confirmation, and passes parent, command, WRT, raw, and deterministic archive identity.",
+  "proposal_id": "seal2_route_e_state_preserving_prototype_bypass_v1",
+  "rejected_at": "2026-08-01T20:57:46+00:00",
+  "rejection_reason": "Exact opening-1M Q0 searched all 171 complete pages and 14,535 prior-page pairs; no page retained a positive net COPY plan after the frozen page reference and finite command cost. Actual E2 was 173,911 bytes versus the 173,896-byte parent (-15 B/M gross), failed both 3,000 gross and 2,100 net B/M gates, tied E1 and ER, and had no positive selection or sealed-confirmation result. Parent payload, command, WRT, raw inverse, and deterministic archive proofs passed. Retire unchanged single-prototype Route E without rescue sweeps.",
+  "retired_neighborhoods": [
+    "independent exact-copy position lists and page-delta serializations that alter or reset the mature backend trajectory"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 150,
+  "state": "rejected",
+  "title": "Seal-2 Route E state-preserving prototype bypass"
+}
