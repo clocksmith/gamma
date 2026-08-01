@@ -3608,3 +3608,49 @@ Plan and schema:
 
 - `docs/mobius2_noema_binary_carry_headroom_plan.md`
 - `docs/mobius2_noema_binary_carry_headroom_decision.schema.json`
+
+## 2026-08-01: MOBIUS-2 NOEMA binary-carry hierarchy is terminal negative
+
+The infrastructure retry completed the exact opening-1M QH0. N1 selected epoch
+2 and N2 selected epoch 1 using independently terminated quantized selection
+payloads. Both independent fits produced identical training histories, selected
+epochs, canonical model blobs, complete adjusted P1 streams, and payloads.
+
+N2 gained 112 development bytes, but lost 35 selection bytes and 135 sealed
+bytes. The sealed rate is -261.397 B/M gross and -362.677 B/M after the matched
+101,280-byte package allowance. Its complete payload loses 56 bytes to the
+173,859-byte parent. The matched flat N1 gains 98 complete-stream bytes and is
+65 bytes better than N2 on sealed confirmation, so the hierarchy fails both
+transfer and hierarchy-specific attribution. Page-rotated NS loses 302 complete
+bytes; N2 beats that nonconstructive specificity diagnostic, but this cannot
+rescue its negative magnitude or loss to N1.
+
+All identity gates passed: receipt-bound parent payload bytes, both repeated
+fits, complete arithmetic decode, exact WRT reconstruction, byte-identical
+second payload, official inverse return code, and the exact 1,000,000-byte raw
+hash. The package remains below its 131,072-byte ceiling. This is a valid
+scientific rejection rather than an infrastructure failure.
+
+Decision: retire the exact 128-byte reset, seven-level equal-span binary-carry
+topology, 48-wide shared cell, training/checkpoint schedule, aggregation,
+per-tensor int8 form, and associated rescue sweeps. Do not add surprise memory
+to rescue the miss and do not run the distant replay.
+
+The strengthened successor contract is now recorded in
+`docs/mobius2_noema_causal_replay_contract.md`. It requires explicit frontier
+and merge-count invariants, checkpoint-owned state replay, two-part checkpoint
+selection, a causal earlier-page misalignment control, parsing the measured
+model from its checksummed canonical blob, expanded ROCm provenance, and two-
+layer repeated identity. QH0 predates parts of that contract, but its decisive
+negative selection, sealed magnitude, and loss to N1 do not depend on the
+future-derived NS or an uncharged serializer advantage.
+
+Broader semantic LOGOS and a hierarchy with a materially different semantic
+boundary information source remain unsettled and zero-credit. The forecast
+remains 109,389,323 bytes and the exact full-1G score remains unknown.
+
+Evidence:
+
+- `results/mobius2_noema_binary_carry_headroom_qh0_v1/decision.json`
+- `run_logs/adaptive/20260801T225624Z_3987dcc6e8.log`
+- `docs/mobius2_noema_causal_replay_contract.md`
