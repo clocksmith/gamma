@@ -1,5 +1,32 @@
+import { availableParallelism } from "node:os";
+import {
+  isMainThread,
+  parentPort,
+  Worker
+} from "node:worker_threads";
 import { createSimulation } from "../runtime/create-simulation.js";
 import { fingerprintObject } from "../versioning/game-identity.js";
+
+const PARALLEL_BACKENDS = new Set(["weighted", "greedy"]);
+const workerUrl = new URL(import.meta.url);
+
+if (!isMainThread) {
+  parentPort.on("message", async ({ taskIndex, options }) => {
+    try {
+      const report = await createSimulation(options);
+      parentPort.postMessage({ taskIndex, report });
+    } catch (error) {
+      parentPort.postMessage({
+        taskIndex,
+        error: {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        }
+      });
+    }
+  });
+}
 
 function mean(values) {
   return values.length
@@ -45,6 +72,155 @@ function validateComparison(comparison, playerCount) {
   return focalSeat;
 }
 
+function workerCount(value) {
+  const fallback = Math.max(1, availableParallelism() - 1);
+  const parsed = value === undefined ? fallback : Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 64) {
+    throw new RangeError("workers must be an integer from 1 to 64.");
+  }
+  return parsed;
+}
+
+function workersForTasks(value, tasks) {
+  const workers = workerCount(value);
+  const unsupported = new Set(tasks.flatMap((task) =>
+    (task.options.backends || []).filter((backend) => !PARALLEL_BACKENDS.has(backend))
+  ));
+  if (!unsupported.size || workers === 1) return workers;
+  if (value === undefined) return 1;
+  if (unsupported.size) {
+    throw new Error(
+      `Parallel faction swaps support deterministic backends only; use workers=1 for: ${[
+        ...unsupported
+      ].join(", ")}.`
+    );
+  }
+  return workers;
+}
+
+async function runInline(tasks, { signal, onProgress, totalGames }) {
+  const reports = [];
+  let completed = 0;
+  for (const task of tasks) {
+    if (signal?.aborted) throw signal.reason;
+    onProgress?.({
+      completed,
+      total: totalGames,
+      completedTasks: reports.filter(Boolean).length,
+      totalTasks: tasks.length,
+      activeTaskIndices: [task.taskIndex]
+    });
+    reports[task.taskIndex] = await createSimulation({
+      ...task.options,
+      signal
+    });
+    completed += task.options.runs;
+    onProgress?.({
+      completed,
+      total: totalGames,
+      completedTasks: reports.filter(Boolean).length,
+      totalTasks: tasks.length,
+      activeTaskIndices: []
+    });
+  }
+  return reports;
+}
+
+async function runInWorkers(tasks, {
+  workers,
+  signal,
+  onProgress,
+  totalGames
+}) {
+  if (signal?.aborted) throw signal.reason;
+  const count = Math.min(workers, tasks.length);
+  const reports = Array(tasks.length);
+  const pool = Array.from({ length: count }, () => new Worker(workerUrl));
+  let nextTask = 0;
+  let completedTasks = 0;
+  let completedGames = 0;
+  let settled = false;
+  const activeTasks = new Map();
+
+  return new Promise((resolve, reject) => {
+    const terminate = () => Promise.allSettled(pool.map((worker) => worker.terminate()));
+    const finishWithError = async (error) => {
+      if (settled) return;
+      settled = true;
+      signal?.removeEventListener("abort", abort);
+      await terminate();
+      reject(error);
+    };
+    const abort = () => finishWithError(
+      signal.reason || new Error("Parallel faction swap was cancelled.")
+    );
+    const assign = (worker) => {
+      if (settled || nextTask >= tasks.length) return;
+      const task = tasks[nextTask];
+      nextTask += 1;
+      activeTasks.set(worker, task.taskIndex);
+      onProgress?.({
+        completed: completedGames,
+        total: totalGames,
+        completedTasks,
+        totalTasks: tasks.length,
+        activeTaskIndices: [...activeTasks.values()]
+      });
+      worker.postMessage(task);
+    };
+    const accept = async (worker, message) => {
+      if (settled) return;
+      if (message.error) {
+        const error = new Error(message.error.message);
+        error.name = message.error.name;
+        error.stack = message.error.stack;
+        await finishWithError(error);
+        return;
+      }
+      const task = tasks[message.taskIndex];
+      if (!task || reports[message.taskIndex]) {
+        await finishWithError(new Error(
+          `Parallel faction swap returned an invalid task index: ${message.taskIndex}.`
+        ));
+        return;
+      }
+      reports[message.taskIndex] = message.report;
+      activeTasks.delete(worker);
+      completedTasks += 1;
+      completedGames += task.options.runs;
+      onProgress?.({
+        completed: completedGames,
+        total: totalGames,
+        completedTasks,
+        totalTasks: tasks.length,
+        activeTaskIndices: [...activeTasks.values()]
+      });
+      if (completedTasks === tasks.length) {
+        settled = true;
+        signal?.removeEventListener("abort", abort);
+        await terminate();
+        resolve(reports);
+        return;
+      }
+      assign(worker);
+    };
+
+    signal?.addEventListener("abort", abort, { once: true });
+    for (const worker of pool) {
+      worker.on("message", (message) => accept(worker, message));
+      worker.on("error", finishWithError);
+      worker.on("exit", (code) => {
+        if (!settled) {
+          finishWithError(new Error(
+            `Faction-swap worker exited before completing its task (code ${code}).`
+          ));
+        }
+      });
+      assign(worker);
+    }
+  });
+}
+
 function summarizePair(left, right, focalSeat) {
   if (left.observations.length !== right.observations.length) {
     throw new Error("Paired faction arms produced different observation counts.");
@@ -86,10 +262,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     throw new RangeError("runsPerArm must be an integer from 1 to 10000.");
   }
   const rootSeed = String(options.seed || "m3t4-faction-swap");
-  const results = [];
-  let identityReport = null;
-  let completed = 0;
-  for (const comparison of comparisons) {
+  const prepared = comparisons.map((comparison) => {
     const focalSeat = validateComparison(comparison, playerCount);
     const common = {
       runs: runsPerArm,
@@ -106,20 +279,45 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       includeObservations: true,
       experimentKind: "balance_audit"
     };
-    const left = await createSimulation({
-      ...common,
-      factionIds: comparison.leftFactionIds
+    return { comparison, focalSeat, common };
+  });
+  const tasks = prepared.flatMap(({ comparison, common }) => [
+    {
+      options: {
+        ...common,
+        factionIds: comparison.leftFactionIds
+      }
+    },
+    {
+      options: {
+        ...common,
+        factionIds: comparison.rightFactionIds
+      }
+    }
+  ]).map((task, taskIndex) => ({ ...task, taskIndex }));
+  const requestedWorkers = workersForTasks(options.workers, tasks);
+  const totalGames = tasks.length * runsPerArm;
+  const actualWorkers = Math.min(requestedWorkers, tasks.length);
+  const armReports = requestedWorkers === 1
+    ? await runInline(tasks, {
+      signal: options.signal,
+      onProgress,
+      totalGames
+    })
+    : await runInWorkers(tasks, {
+      workers: requestedWorkers,
+      signal: options.signal,
+      onProgress,
+      totalGames
     });
-    identityReport ||= left;
-    completed += runsPerArm;
-    onProgress?.({ completed, total: comparisons.length * runsPerArm * 2 });
-    const right = await createSimulation({
-      ...common,
-      factionIds: comparison.rightFactionIds
-    });
-    completed += runsPerArm;
-    onProgress?.({ completed, total: comparisons.length * runsPerArm * 2 });
-    results.push({
+  if (armReports.length !== tasks.length || armReports.some((report) => !report)) {
+    throw new Error("Parallel faction swap did not return every scheduled arm.");
+  }
+  const identityReport = armReports[0];
+  const results = prepared.map(({ comparison, focalSeat }, comparisonIndex) => {
+    const left = armReports[comparisonIndex * 2];
+    const right = armReports[comparisonIndex * 2 + 1];
+    return {
       id: comparison.id,
       question: comparison.question || null,
       focalSeat,
@@ -140,8 +338,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         ] || {}
       },
       paired: summarizePair(left, right, focalSeat)
-    });
-  }
+    };
+  });
   const preRegistration = {
     id: options.preRegistrationId || "unregistered-faction-swap",
     lockedBeforeResults: Boolean(options.preRegistrationId),
@@ -165,6 +363,13 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     evidenceLabel: "simulation",
     evidenceType: "simulation",
     generatedAt: new Date().toISOString(),
+    execution: {
+      scheduler: actualWorkers > 1 ? "worker_threads" : "inline",
+      taskUnit: "simulation_arm",
+      requestedWorkers,
+      workers: actualWorkers,
+      deterministicResultOrder: "comparison_then_arm"
+    },
     seed: rootSeed,
     runs: comparisons.length * runsPerArm * 2,
     runsPerArm,
