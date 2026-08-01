@@ -339,6 +339,11 @@ information source is absent from the already-tested flat recurrent and
 residual neighborhoods. Architectural labels alone do not distinguish it from
 CHIRON or other terminal small residual models.
 
+All successor implementations also obey
+`docs/mobius2_noema_causal_replay_contract.md`, which freezes byte-causal
+frontier, ordered-merge, checkpoint-replay, matched-control, serialized-model,
+ROCm-proof, and exact two-layer replay requirements.
+
 ## Package budget and joint gate
 
 Initial incremental ceiling:
