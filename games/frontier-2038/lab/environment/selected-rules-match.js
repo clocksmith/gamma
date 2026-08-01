@@ -147,6 +147,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (foundry) {
       foundry.compute = this.rulesVariant.foundryStartingCompute;
     }
+    const safety = this.players.find((player) => player.factionId === "safety_laboratory");
+    if (safety && Number.isFinite(this.rulesVariant.safetyStartingTrust)) {
+      safety.trust = this.rulesVariant.safetyStartingTrust;
+    }
     if (!["variable", "fixed"].includes(mandateMode)) {
       throw new TypeError(`Unknown Mandate mode: ${mandateMode}.`);
     }
@@ -283,6 +287,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.recordEvent("match_started", null, simulationCopy.events.selectedMatchStarted);
   }
 
+  isFactionAbilityPaused(player, abilityId) {
+    return this.rulesVariant.pausedFactionAbilities.some((entry) =>
+      entry?.factionId === player.factionId && entry?.abilityId === abilityId
+    );
+  }
+
+  isEmergencyPauseEnabled(player) {
+    return this.rulesVariant.safetyEmergencyPauseEnabled &&
+      !this.isFactionAbilityPaused(player, "emergency_pause");
+  }
+
   addResource(player, key, amount) {
     if (key === "safety" && player.factionId === "safety_laboratory") {
       player.safety = Math.max(0, Math.min(4, player.safety + amount));
@@ -344,7 +359,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     entry.uses += values.uses ?? 1;
     for (const [key, value] of Object.entries(values)) {
       if (key === "uses") continue;
-      entry[key] = (entry[key] || 0) + value;
+      // Ability telemetry mixes additive measurements with descriptive fields
+      // such as Allocation Window's payment resource. Never coerce strings
+      // into repeated numeric aggregates ("runwayrunway").
+      if (typeof value === "number") {
+        entry[key] = (Number(entry[key]) || 0) + value;
+      } else if (entry[key] === undefined) {
+        entry[key] = value;
+      } else if (entry[key] !== value) {
+        entry[key] = [...new Set([].concat(entry[key], value))];
+      }
     }
     player.metrics.factionAbilityValues[abilityId] = entry;
   }
@@ -1044,6 +1068,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (
       safety &&
       this.round === 4 &&
+      this.isEmergencyPauseEnabled(safety) &&
       !safety.factionAbilityUsed.emergencyPause &&
       safety.runway >= 1
     ) {
@@ -1656,7 +1681,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       this.addScrutiny(player, 2);
       player.factionAbilityUsed.orbitalCompute = true;
-    } else if (id === "emergency_pause") {
+    } else if (id === "emergency_pause" && this.isEmergencyPauseEnabled(player)) {
       const unlocked = this.config.rounds[this.round - 1].wildActions;
       const choice = await this.choose(policies, seat, "emergency_pause", unlocked.map((wildId) => ({
         decisionId: `pause_${wildId}`,

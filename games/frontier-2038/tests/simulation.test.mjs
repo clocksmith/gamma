@@ -534,6 +534,25 @@ test("Foundry starting Compute is an explicit one-lever rules variant", async ()
   assert.equal(canonical.match.rulesVariant.foundryGpuMandateEnabled, true);
 });
 
+test("Safety study variants derive setup Mandate from Trust and can pause Emergency Pause", async () => {
+  const game = await createInteractiveGame({
+    playerCount: 3,
+    factionId: "safety_laboratory",
+    seed: "safety-study-variants",
+    rulesVariant: {
+      safetyStartingTrust: 3,
+      safetyEmergencyPauseEnabled: false
+    }
+  }, () => {});
+  const safety = game.match.players[0];
+  assert.equal(safety.trust, 3);
+  assert.equal(safety.mandate, 2, "setup Mandate follows the Trust threshold");
+  game.match.round = 4;
+  safety.runway = 3;
+  assert.equal(game.match.rulesVariant.safetyEmergencyPauseEnabled, false);
+  assert.equal(game.match.isEmergencyPauseEnabled(safety), false);
+});
+
 test("late Capability Mandate is an explicit one-lever rules variant", async () => {
   const canonical = await createInteractiveGame(
     {

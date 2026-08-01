@@ -47,7 +47,12 @@ export function canonicalRulesVariant(config) {
       config.factionRules.foundry.newArchitectureDemandCoupling
     ),
     foundryGpuMandateEnabled: true,
-    foundryGpuRivalsPerMandate: config.factionRules.foundry.everybodyGpuRivalsPerMandate
+    foundryGpuRivalsPerMandate: config.factionRules.foundry.everybodyGpuRivalsPerMandate,
+    safetyEmergencyPauseEnabled: true,
+    safetyStartingTrust: null,
+    // Simulation-only intervention surface. Each entry names the canonical
+    // faction and ability suppressed for the entire match.
+    pausedFactionAbilities: []
   };
 }
 
