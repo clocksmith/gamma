@@ -61,6 +61,7 @@
                 <option value="rule-search">Search rule balance</option>
                 <option value="balance-audit">Unified evidence matrix</option>
                 <option value="llm-holdout">Preregistered LLM negotiation holdout</option>
+                <option value="faction-swap">${content.uiCopy.simulation.modes.factionSwap.option}</option>
               </select>
             </label>
             <label>
@@ -121,6 +122,19 @@
               <input id="preregistration-path" value="evidence/studies/simulation/preregistrations/llm-negotiation-holdout-v3-capture.json" spellcheck="false">
             </label>
           </div>
+          <div id="execution-controls" class="form-grid" hidden>
+            <label>
+              ${content.uiCopy.simulation.execution.workers}
+              <input id="workers" type="number" min="1" max="64" placeholder="${content.uiCopy.simulation.execution.workersPlaceholder}">
+            </label>
+            <label>
+              ${content.uiCopy.simulation.execution.llmConcurrency}
+              <input id="llm-concurrency" type="number" min="1" max="16" placeholder="${content.uiCopy.simulation.execution.llmConcurrencyPlaceholder}">
+            </label>
+            <p class="muted">
+              ${content.uiCopy.simulation.execution.note}
+            </p>
+          </div>
 
           <section id="persona-controls">
             <div class="section-heading persona-heading">
@@ -145,8 +159,8 @@
             </label>
             <div class="form-grid">
               <label>
-                Maximum LLM decisions per configured policy
-                <input id="max-llm-decisions" type="number" min="0" max="24" value="24">
+                ${content.uiCopy.simulation.llmControls.maximumDecisions}
+                <input id="max-llm-decisions" type="number" min="0" max="10000" placeholder="${content.uiCopy.simulation.llmControls.unlimited}">
               </label>
               <label>
                 Optional model override
@@ -165,9 +179,7 @@
               </label>
             </div>
             <p class="muted">
-              Each configured LLM policy has this total allowance. The per-seat,
-              per-cycle cap defaults to the same configured allowance and may be
-              lowered explicitly for a bounded experiment.
+              ${content.uiCopy.simulation.llmControls.budgetNote}
             </p>
           </details>
 

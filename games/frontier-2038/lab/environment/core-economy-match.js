@@ -541,7 +541,12 @@ export class CoreEconomyMatch {
         providerErrorMessage: receipt.providerErrorMessage || null,
         providerErrorExitCode: receipt.providerErrorExitCode ?? null,
         providerErrorStderrSha256: receipt.providerErrorStderrSha256 || null,
-        providerDurationMs: receipt.providerDurationMs ?? null
+        providerDurationMs: receipt.providerDurationMs ?? null,
+        brokerTaskIndex: receipt.brokerTaskIndex ?? null,
+        brokerRequestToken: receipt.brokerRequestToken || null,
+        brokerAttempts: receipt.brokerAttempts ?? null,
+        brokerRetries: receipt.brokerRetries ?? null,
+        brokerQueuedMs: receipt.brokerQueuedMs ?? null
       });
     }
   }

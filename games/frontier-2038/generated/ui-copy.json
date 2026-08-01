@@ -104,7 +104,37 @@
         "defaultRuns": 1,
         "button": "Run metered holdout",
         "description": "Execute only the committed negotiation-cell plan. Fresh calls test robustness; cached decisions test reproducibility. Explicit LLM authorization is required."
+      },
+      "factionSwap": {
+        "option": "Preregistered faction swap",
+        "runsLabel": "Matches per arm",
+        "defaultRuns": 100,
+        "button": "Run faction swap",
+        "completed": "Faction-swap diagnostic completed",
+        "description": "Run paired institution replacements on common seeds. Deterministic arms use CPU workers; LLM arms use strict receipt-backed workers through one shared provider broker."
       }
+    },
+    "execution": {
+      "workers": "Simulation workers",
+      "workersPlaceholder": "Automatic",
+      "llmConcurrency": "Global LLM concurrency",
+      "llmConcurrencyPlaceholder": "2",
+      "note": "Workers limit simultaneous match arms. Global LLM concurrency separately limits provider calls across every worker.",
+      "summary": "Execution",
+      "cpuArms": "CPU arms",
+      "peakLlmCalls": "Peak active LLM calls",
+      "providerThrottling": "Provider-throttled requests",
+      "quarantined": "Quarantined pairs",
+      "deterministicOnly": "Deterministic policies only",
+      "comparison": "Comparison",
+      "paired": "Valid pairs",
+      "mandateDelta": "Mean Mandate delta",
+      "rankAdvantage": "Mean rank advantage"
+    },
+    "llmControls": {
+      "maximumDecisions": "Optional maximum LLM decisions per configured policy",
+      "unlimited": "Unlimited",
+      "budgetNote": "Leave the total allowance empty for a complete game. A bounded experiment may set an explicit total and per-seat/cycle allowance."
     },
     "status": {
       "submitting": "SUBMITTING",

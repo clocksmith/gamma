@@ -12,7 +12,10 @@ import {
 } from "../lab/contracts/decision-contract.js";
 import { DecisionCache } from "../lab/policies/decision-cache.js";
 import { CliBackedPlayerPolicy } from "../lab/policies/cli-backed-policy.js";
-import { loadPlayerProfiles } from "../lab/personas/player-profile.js";
+import {
+  loadPlayerProfiles,
+  profileForPrompt
+} from "../lab/personas/player-profile.js";
 import { WeightedPlayerPolicy } from "../lab/policies/weighted-policy.js";
 
 const packet = JSON.parse(await readFile(
@@ -171,6 +174,40 @@ test("missing formal responses use the rulebook reject or pass default", async (
   }
 });
 
+test("strict LLM evidence rejects formal and weighted fallback paths", async () => {
+  const profile = (await loadPlayerProfiles())[0];
+  const unavailableCaller = {
+    async decide() {
+      const error = new Error("Provider did not respond.");
+      error.providerReceipt = {
+        attemptedProvider: "codex-cli",
+        attemptedModel: "fixture-model",
+        attemptedReasoningEffort: "low"
+      };
+      throw error;
+    }
+  };
+  const policy = new CliBackedPlayerPolicy(profile, unavailableCaller, {
+    backendId: "codex",
+    requireLlm: true,
+    strictLlmEvidence: true,
+    fallback: new WeightedPlayerPolicy(profile)
+  });
+  await assert.rejects(
+    () => policy.decide({
+      ...structuredClone(packet),
+      requestId: "fixture:r3:c1:s1:power_sale_0_1:strict",
+      legalDecisions: [
+        { decisionId: "power_sale_accept_0_1", label: "Accept" },
+        { decisionId: "power_sale_reject_0_1", label: "Reject" }
+      ]
+    }),
+    (error) =>
+      error.evidenceOutcome === "quarantined" &&
+      error.providerReceipt.attemptedProvider === "codex-cli"
+  );
+});
+
 test("per-seat cycle prompt budgets fail closed instead of falling back", async () => {
   const profile = (await loadPlayerProfiles())[0];
   const caller = {
@@ -267,6 +304,55 @@ test("decision cache replays a provider result without a fresh call", async () =
     assert.equal(calls, 1);
     assert.equal(first.decision.decisionId, second.decision.decisionId);
     assert.equal(second.receipt.cached, true);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("strict LLM evidence rejects historical fallback cache entries", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "m3t4-strict-cache-"));
+  try {
+    const profile = (await loadPlayerProfiles())[0];
+    const cache = new DecisionCache(directory);
+    const promptProfile = profileForPrompt(profile);
+    const cacheInput = {
+      backend: "codex",
+      model: "fixture-model",
+      reasoningEffort: "low",
+      packet: {
+        ...structuredClone(packet),
+        strategy: promptProfile
+      },
+      profile: promptProfile
+    };
+    await cache.write(cache.key(cacheInput), {
+      decision: { decisionId: packet.legalDecisions[0].decisionId },
+      receipt: {
+        provider: "weighted",
+        requestId: packet.requestId,
+        fallback: true,
+        fallbackReason: "Historical provider failure."
+      }
+    });
+    const policy = new CliBackedPlayerPolicy(profile, {
+      async decide() {
+        throw new Error("Strict cache reads must not call the provider.");
+      }
+    }, {
+      backendId: "codex",
+      model: "fixture-model",
+      reasoningEffort: "low",
+      decisionCache: cache,
+      cacheMode: "read-only",
+      requireLlm: true,
+      strictLlmEvidence: true
+    });
+    await assert.rejects(
+      () => policy.decide(packet),
+      (error) =>
+        error.evidenceOutcome === "quarantined" &&
+        error.providerReceipt.fallback === true
+    );
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

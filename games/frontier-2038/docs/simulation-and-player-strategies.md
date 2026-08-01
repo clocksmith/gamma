@@ -198,7 +198,9 @@ historical path evidence.
 
 ```bash
 npm run simulate:faction-swap -- \
-  --comparisons evidence/studies/simulation/preregistrations/faction-swap-diagnostic-v1.json
+  --comparisons evidence/studies/simulation/preregistrations/faction-swap-diagnostic-v1.json \
+  --workers 8 \
+  --llm-concurrency 2
 ```
 
 This diagnostic holds the board seed, deck order, Headlines, Mandate, seat,
@@ -207,6 +209,26 @@ focal faction. It reports paired win-credit, Mandate, and rank deltas together
 with every realized ability output. The comparison is a locator, not a balance
 authority: a suspected ability still requires a separately preregistered
 one-lever unified audit on a fresh seed bank.
+
+Deterministic faction-swap arms run through a bounded worker-thread pool. The
+runner reconstructs results in preregistered comparison/arm order, so worker
+completion order cannot alter seeds, pairing, fingerprints, or aggregates.
+`--workers 1` preserves inline execution for deterministic arms.
+
+LLM-backed arms also run on worker threads, but workers never invoke providers
+directly. Every request crosses a shared main-thread broker.
+`--llm-concurrency` limits simultaneous provider calls across the complete
+study, independently of `--workers`; Codex and Claude also retain separate
+provider caps. LLM arms are strict evidence runs: exhausted budgets, provider
+failures, malformed replies, or cancellation never become weighted actions.
+After configured retries, the affected paired match is quarantined and
+excluded from the paired aggregate. Reports retain requested and actual worker
+counts, provider/model/reasoning profiles, concurrency, retry and throttle
+counts, quarantine reasons, ordered receipts, and any requested replay.
+
+The Lab exposes the same controls under **Preregistered faction swap**. Its
+execution summary reports active CPU workers, peak LLM calls, provider
+throttling, and quarantined pairs.
 
 ## Preregistered LLM holdout
 

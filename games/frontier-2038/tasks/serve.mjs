@@ -165,9 +165,17 @@ async function startSimulation(request, response) {
       return;
     }
     const options = await readJson(request);
-    if (options.allowLlm && Number(options.maxLlmDecisions || 24) > 24) {
+    if (
+      options.allowLlm &&
+      options.maxLlmDecisions !== undefined &&
+      (
+        !Number.isInteger(Number(options.maxLlmDecisions)) ||
+        Number(options.maxLlmDecisions) < 0 ||
+        Number(options.maxLlmDecisions) > 10000
+      )
+    ) {
       json(response, 400, {
-        error: "Web simulation jobs are limited to 24 LLM decisions per configured policy."
+        error: "Web simulation LLM decision budgets must be integers from 0 to 10000."
       });
       return;
     }
@@ -187,6 +195,8 @@ async function startSimulation(request, response) {
               ? options.maximumMatches || options.runs || 480
             : options.mode === "llm-holdout"
               ? options.runs || 2
+            : options.mode === "faction-swap"
+              ? options.runs || 100
             : options.mode === "rule-search"
               ? options.iterations || 12
               : options.runs || 100
