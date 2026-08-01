@@ -66,6 +66,9 @@ export async function runExperiment(options = {}, onProgress) {
       seed: options.seed,
       preRegistrationId: options.preRegistrationId,
       rulesVariant: options.rulesVariant,
+      projection: options.projection,
+      workers: options.workers,
+      chunkSize: options.chunkSize,
       signal: options.signal,
       onProgress
     });

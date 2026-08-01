@@ -43,7 +43,12 @@ const report = await runUnifiedMatrix({
   comparisonKind: args["comparison-kind"],
   profileOverrides: profileOverrideReports,
   seed: args.seed || "m3t4-unified-matrix",
-  preRegistrationId: args["pre-registration-id"]
+  preRegistrationId: args["pre-registration-id"],
+  projection: args.projection || "batch",
+  workers: args.workers === undefined ? undefined : Number(args.workers),
+  chunkSize: args["chunk-size"] === undefined
+    ? undefined
+    : Number(args["chunk-size"])
 }, ({ phase, completed, total }) => {
   process.stderr.write(`\r${phase}: ${completed}/${total}`);
 });
@@ -61,6 +66,8 @@ console.log(JSON.stringify({
   output: args.output || null,
   runs: report.runs,
   playerCounts: report.playerCounts,
+  projection: report.execution.projection,
+  workers: report.execution.requestedWorkers,
   matrixStatus: report.balanceEvaluation.status,
   sourceDirty: report.provenance.sourceDirty
 }, null, 2));
