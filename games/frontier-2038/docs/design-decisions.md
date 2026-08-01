@@ -1,6 +1,6 @@
 # M3T4 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.25-test`
+**Rules reference:** `0.5.0-rc.28-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -168,7 +168,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.25-test` test:
+controlled `0.5.0-rc.28-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -180,7 +180,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.24` implements `0.5.0-rc.25-test` under engine
+Executable game `0.8.27` implements `0.5.0-rc.28-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -250,7 +250,7 @@ require three/five regression coverage. Their playable mechanics are identical
 to rc.20 and executable `0.8.19`.
 
 Executable `0.8.22` also preserves identity classification:
-`data/simulation-copy.json` is evidence-boundary copy, not a playable rules
+`generated/simulation-copy.json` is evidence-boundary copy, not a playable rules
 input. It now contributes to the playtest-kit fingerprint instead of the
 ruleset and mechanics fingerprints. The new fingerprint is therefore a
 deliberate identity rebaseline, not evidence of a gameplay delta.
@@ -300,7 +300,7 @@ regression guards for any selected four-player change. Two and six players
 remain historical study configurations, not current product formats.
 
 The deterministic
-[`lean balance and cooperative-AGI study`](../studies/simulation/2026-07-26-lean-balance-and-cooperative-agi.md)
+[`lean balance and cooperative-AGI study`](../evidence/studies/simulation/2026-07-26-lean-balance-and-cooperative-agi.md)
 observed rare rules-legal cooperative declarations and narrowed two large
 faction outliers. Its schema-v3 supplier attribution was not causal and is
 withdrawn; only clean schema-v4 runs may support supplier-viability claims.

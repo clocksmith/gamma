@@ -1,60 +1,79 @@
 {
-  "schemaVersion": 1,
-  "status": "planning_only",
+  "schemaVersion": 2,
+  "status": "applied",
+  "contentSourceRootsAfter": [
+    "content/",
+    "physical/",
+    "web/"
+  ],
   "rules": {
     "applyAllowed": false,
     "archivePolicy": "versions/ is immutable historical evidence and is never rewritten.",
-    "generatedPolicy": "Generated outputs are regenerated from canonical sources after a completed migration; they are not renamed by hand.",
-    "approvalPolicy": "A migration may begin only after every move is literal and one-to-one, the status is ready_to_apply, applyAllowed is true, and the run and worktree gates in checklist.md are recorded."
+    "generatedPolicy": "Generated outputs are renamed only as directory roots and then regenerated from canonical sources; their contents are never hand-edited.",
+    "approvalPolicy": "Apply only after the run and worktree gates in checklist.md are recorded."
   },
   "confirmed": [
     {
+      "from": "data/game-version.json",
+      "to": "release/game-version.json",
+      "reason": "The current release declaration is authored metadata, not generated runtime data."
+    },
+    {
       "from": "content/physical/",
       "to": "physical/",
-      "reason": "The canonical physical game should be visible as a top-level product boundary."
-    }
-  ],
-  "proposed": [
+      "reason": "The canonical physical game is a top-level product boundary."
+    },
+    {
+      "from": "content/deferred/",
+      "to": "physical/optional/",
+      "reason": "Deferred modules are optional physical-game content."
+    },
     {
       "from": "prototype/",
       "to": "web/",
-      "reason": "The browser review interface is an active product surface, not merely a prototype."
+      "reason": "The browser review interface is an active web surface."
+    },
+    {
+      "from": "content/templates/",
+      "to": "web/templates/",
+      "reason": "The HTML templates belong with the web surface that consumes them."
     },
     {
       "from": "simulation/",
       "to": "lab/",
-      "reason": "This contains the deterministic simulator, policies, and experiment machinery."
+      "reason": "The simulator, policies, and experiment machinery form the Lab."
+    },
+    {
+      "from": "tools/",
+      "to": "tasks/",
+      "reason": "Project commands have one direct task boundary."
+    },
+    {
+      "from": "scripts/content/",
+      "to": "tasks/content/",
+      "reason": "Content-specific task implementations live below the common task boundary."
+    },
+    {
+      "from": "data/",
+      "to": "generated/",
+      "reason": "Runtime projections are generated outputs, distinct from authored content and release metadata."
     },
     {
       "from": "dist/",
       "to": "build/",
       "reason": "Rendered documentation, galleries, and kit output are build artifacts."
+    },
+    {
+      "from": "studies/",
+      "to": "evidence/studies/",
+      "reason": "Simulation and analysis studies are evidence, distinct from observed playtests."
+    },
+    {
+      "from": "playtests/",
+      "to": "evidence/playtests/",
+      "reason": "Observed human sessions retain their own evidence boundary."
     }
   ],
-  "unresolved": [
-    {
-      "path": "content/runtime/",
-      "question": "Should browser and simulation copy move under web/ and lab/ respectively, or remain together as shared authored runtime copy?"
-    },
-    {
-      "path": "content/deferred/",
-      "question": "Should optional physical modules live under physical/optional/, or retain a top-level authored-content boundary?"
-    },
-    {
-      "path": "tools/ and scripts/",
-      "question": "Choose separate one-source destinations for tools/ and scripts/, or explicitly retain one of them. The current automation -> tasks intent is not an executable move."
-    },
-    {
-      "path": "studies/ and playtests/",
-      "question": "Choose separate one-source destinations under an evidence parent while preserving simulated-study and observed-play identities."
-    },
-    {
-      "path": "data/",
-      "question": "Keep data/ as generated runtime projections, or relocate it only after its consumers and release policy are decided?"
-    },
-    {
-      "path": "versions/",
-      "question": "Keep immutable historical snapshots at versions/. Any archive rename requires a separate policy, a new verified release snapshot, and no rewrite of historical bundle contents."
-    }
-  ]
+  "proposed": [],
+  "unresolved": []
 }

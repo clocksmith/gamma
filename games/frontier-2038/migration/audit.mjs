@@ -29,12 +29,12 @@ function readOptions(argv) {
   return { scope, includeArchive, includePreservedReferences };
 }
 
-function literalDirectory(path) {
+function literalPath(path) {
   return typeof path === "string"
-    && path.endsWith("/")
     && !path.includes(" ")
     && !path.includes("..")
-    && !path.startsWith("/");
+    && !path.startsWith("/")
+    && path.length > 1;
 }
 
 function selectedMoves(map, scope) {
@@ -50,7 +50,7 @@ const contentGraph = JSON.parse(await readFile(resolve(root, "content/graph.json
 const generatedTargets = new Set((contentGraph.artifacts || []).map((artifact) => artifact.target));
 const audits = selectedMoves(map, scope).map((move) => ({
   ...move,
-  auditable: literalDirectory(move.from),
+  auditable: literalPath(move.from),
   liveReferences: [],
   preservedReferenceSummary: {
     generated: 0,
@@ -61,7 +61,8 @@ const audits = selectedMoves(map, scope).map((move) => ({
     ? { generated: [], evidence: [], archive: [] }
     : undefined
 }));
-const skippedDirectories = new Set([".git", "node_modules", "migration"]);
+const skippedDirectories = new Set([".git", "node_modules", "migration", "build"]);
+const skippedFiles = new Set(["tests/migration-tools.test.mjs"]);
 if (!includeArchive) skippedDirectories.add("versions");
 
 async function trackedTextFiles(directory) {
@@ -80,14 +81,35 @@ async function trackedTextFiles(directory) {
 }
 
 function referenceClass(repoPath) {
-  if (repoPath.startsWith("dist/") || generatedTargets.has(repoPath)) return "generated";
-  if (repoPath.startsWith("studies/") || repoPath.startsWith("playtests/")) return "evidence";
+  if (repoPath.startsWith("dist/") || repoPath.startsWith("build/") || generatedTargets.has(repoPath)) return "generated";
+  if (
+    repoPath.startsWith("studies/") ||
+    repoPath.startsWith("playtests/") ||
+    repoPath.startsWith("evidence/")
+  ) return "evidence";
   if (repoPath.startsWith("versions/")) return "archive";
   return "live";
 }
 
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function containsLegacyPath(text, path) {
+  const escaped = escapeRegex(path);
+  // Match only a project-root, parent-relative, or quoted path. A bare
+  // substring would misclassify evidence/studies/simulation/ and template
+  // filenames as references to the former top-level simulation/ directory.
+  const pattern = new RegExp(
+    `(?:^|[\\s"'\\\`([{])(?:(?:\\.\\./)+|/)?${escaped}`,
+    "m"
+  );
+  return pattern.test(text);
+}
+
 for (const file of await trackedTextFiles(root)) {
   const repoPath = relative(root, file).split(sep).join("/");
+  if (skippedFiles.has(repoPath)) continue;
   let text;
   try {
     text = await readFile(file, "utf8");
@@ -96,8 +118,7 @@ for (const file of await trackedTextFiles(root)) {
   }
   for (const audit of audits) {
     if (!audit.auditable) continue;
-    const barePath = audit.from.slice(0, -1);
-    if (text.includes(audit.from) || text.includes(barePath)) {
+    if (containsLegacyPath(text, audit.from)) {
       const category = referenceClass(repoPath);
       if (category === "live") {
         audit.liveReferences.push(repoPath);
@@ -127,6 +148,6 @@ const report = {
   moves: audits,
   blockers: audits
     .filter((audit) => !audit.auditable)
-    .map((audit) => `${audit.from} is not a literal one-source directory mapping.`)
+    .map((audit) => `${audit.from} is not a literal one-source mapping.`)
 };
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

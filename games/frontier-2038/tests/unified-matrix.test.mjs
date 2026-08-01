@@ -5,14 +5,14 @@ import {
   alphaSpentAtLook,
   empiricalBayesRates,
   intervalCrossesThreshold
-} from "../simulation/statistics/sequential-inference.js";
+} from "../lab/statistics/sequential-inference.js";
 import {
   configurationOutcomeBalanceChecks,
   runUnifiedMatrix
-} from "../simulation/runner/unified-matrix-runner.js";
-import { runLlmNegotiationHoldout } from "../simulation/runner/llm-holdout-runner.js";
-import { loadPlayerProfiles } from "../simulation/personas/player-profile.js";
-import { WeightedPlayerPolicy } from "../simulation/policies/weighted-policy.js";
+} from "../lab/runner/unified-matrix-runner.js";
+import { runLlmNegotiationHoldout } from "../lab/runner/llm-holdout-runner.js";
+import { loadPlayerProfiles } from "../lab/personas/player-profile.js";
+import { WeightedPlayerPolicy } from "../lab/policies/weighted-policy.js";
 
 test("sequential inference shrinks sparse extremes and spends less alpha at later looks", () => {
   assert.ok(
@@ -34,7 +34,7 @@ test("sequential inference shrinks sparse extremes and spends less alpha at late
 
 test("matrix contract declares all seven factors independently", async () => {
   const contract = JSON.parse(await readFile(
-    new URL("../simulation/contracts/experiment-matrix.json", import.meta.url),
+    new URL("../lab/contracts/experiment-matrix.json", import.meta.url),
     "utf8"
   ));
   assert.deepEqual(Object.keys(contract.axes), [
@@ -413,7 +413,7 @@ test("LLM holdout cannot run without explicit authorization", async () => {
   await assert.rejects(
     () => runLlmNegotiationHoldout({
       preRegistrationPath:
-        "studies/simulation/preregistrations/llm-negotiation-holdout.json"
+        "evidence/studies/simulation/preregistrations/llm-negotiation-holdout.json"
     }),
     /explicit allowLlm/
   );

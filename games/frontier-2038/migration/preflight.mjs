@@ -23,12 +23,12 @@ function readOptions(argv) {
   return { scope };
 }
 
-function literalDirectory(path) {
+function literalPath(path) {
   return typeof path === "string"
-    && path.endsWith("/")
     && !path.includes(" ")
     && !path.includes("..")
-    && !path.startsWith("/");
+    && !path.startsWith("/")
+    && path.length > 1;
 }
 
 function selectedGroups(map, scope) {
@@ -73,7 +73,7 @@ for (const [group, entries] of groups) {
     continue;
   }
   for (const move of entries) {
-    const executable = literalDirectory(move.from) && literalDirectory(move.to);
+    const executable = literalPath(move.from) && literalPath(move.to);
     const sourceExists = executable ? await exists(resolve(root, move.from)) : false;
     const destinationExists = executable ? await exists(resolve(root, move.to)) : false;
     moves.push({ group, from: move.from, to: move.to, executable, sourceExists, destinationExists });
@@ -104,7 +104,14 @@ for (const move of executableMoves) {
 }
 
 const graph = JSON.parse(await readFile(resolve(root, "content/graph.json"), "utf8"));
-const sourceRoots = graph.sourceRoots || ["content/"];
+const sourceRoots = map.contentSourceRootsAfter || graph.sourceRoots || ["content/"];
+const compilerPath = map.status === "applied"
+  ? "tasks/content/compile.mjs"
+  : "scripts/content/compile.mjs";
+const compiler = await readFile(resolve(root, compilerPath), "utf8");
+if (!compiler.includes("sourceRootsFor(graph)")) {
+  blockers.push("Content compiler does not support graph-declared sourceRoots.");
+}
 const graphSources = [graph.variables, ...graph.artifacts.map((artifact) => artifact.source)];
 const contentSourceRequirements = [];
 for (const source of graphSources) {

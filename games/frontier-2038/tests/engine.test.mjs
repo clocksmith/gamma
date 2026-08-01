@@ -16,14 +16,14 @@ import {
   resolveTieByInitiative,
   resolveSelectedAction,
   simulateTrainingRun
-} from "../prototype/src/engine.js";
+} from "../web/src/engine.js";
 
 const root = new URL("../", import.meta.url);
 const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), "utf8"));
 const load = async () => Promise.all([
-  readJson("data/game-config.json"),
-  readJson("data/factions.json"),
-  readJson("data/headlines.json")
+  readJson("generated/game-config.json"),
+  readJson("generated/factions.json"),
+  readJson("generated/headlines.json")
 ]);
 
 test("board generation is deterministic by seed", async () => {

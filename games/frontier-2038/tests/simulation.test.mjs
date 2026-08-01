@@ -6,41 +6,41 @@ import test from "node:test";
 import {
   createSimulation,
   factionRosterForRun
-} from "../simulation/runtime/create-simulation.js";
-import { loadPlayerProfiles, profileForPrompt } from "../simulation/personas/player-profile.js";
+} from "../lab/runtime/create-simulation.js";
+import { loadPlayerProfiles, profileForPrompt } from "../lab/personas/player-profile.js";
 import {
   CliBackedPlayerPolicy,
   WeightedPlayerPolicy
-} from "../simulation/policies/policy-factory.js";
+} from "../lab/policies/policy-factory.js";
 import {
   mutateRulesVariant,
   mutateStrategy
-} from "../simulation/runner/optimization-runner.js";
-import { runExperiment } from "../simulation/runtime/run-experiment.js";
-import { createInteractiveGame } from "../simulation/runtime/create-interactive-game.js";
+} from "../lab/runner/optimization-runner.js";
+import { runExperiment } from "../lab/runtime/run-experiment.js";
+import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
 import {
   createBrowserInteractiveGame
-} from "../simulation/runtime/create-browser-interactive-game.js";
-import { archiveSimulationReport } from "../simulation/report-archive.js";
+} from "../lab/runtime/create-browser-interactive-game.js";
+import { archiveSimulationReport } from "../lab/report-archive.js";
 import {
   classifyReportComparison,
   normalizeSimulationReport
-} from "../simulation/contracts/report-migrations.js";
+} from "../lab/contracts/report-migrations.js";
 import {
   fingerprintObject,
   loadGameIdentity,
   mechanicsProjection
-} from "../simulation/versioning/game-identity.js";
-import { declarationReadiness } from "../simulation/rules/declaration-readiness.js";
+} from "../lab/versioning/game-identity.js";
+import { declarationReadiness } from "../lab/rules/declaration-readiness.js";
 import {
   causallyNecessaryImportSuppliers
-} from "../simulation/environment/selected-rules-match.js";
+} from "../lab/environment/selected-rules-match.js";
 import {
   legacyPrePromotionRulesOverlay
-} from "../simulation/environment/rules-variant.js";
-import { loadBalanceContract } from "../simulation/balance/balance-contract.js";
-import { runBalanceAudit } from "../simulation/runner/balance-audit-runner.js";
-import { runFactionSwapDiagnostic } from "../simulation/runner/faction-swap-runner.js";
+} from "../lab/environment/rules-variant.js";
+import { loadBalanceContract } from "../lab/balance/balance-contract.js";
+import { runBalanceAudit } from "../lab/runner/balance-audit-runner.js";
+import { runFactionSwapDiagnostic } from "../lab/runner/faction-swap-runner.js";
 
 function fixturePolicy(select = () => null) {
   return {
@@ -1981,7 +1981,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.24");
+  assert.equal(first.game.version, "0.8.27");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -2066,6 +2066,31 @@ test("Monte Carlo refuses metered providers without explicit authorization", asy
       backends: ["claude", "weighted"]
     }),
     /explicit allowLlm/
+  );
+});
+
+test("LLM evidence modes make fallback policy explicit and avoid a hidden cycle cap", async () => {
+  const report = await createSimulation({
+    runs: 1,
+    playerCount: 3,
+    seed: "llm-evidence-mode-contract",
+    sampleReplays: 0,
+    profileIds: ["capability_rusher", "power_broker", "trust_governor"],
+    backends: ["codex"],
+    allowLlm: true,
+    maxLlmDecisions: 5,
+    llmStages: ["not-a-decision-stage"]
+  });
+  assert.equal(report.configuration.llmEvidenceMode, "fallback_allowed");
+  assert.equal(report.configuration.maxLlmDecisionsPerSeatCycle, 5);
+  await assert.rejects(
+    () => createSimulation({
+      runs: 1,
+      playerCount: 3,
+      backends: ["weighted"],
+      requireLlm: true
+    }),
+    /requireLlm requires at least one LLM-backed policy/
   );
 });
 
@@ -2177,7 +2202,7 @@ test("completed simulation reports archive under the central studies directory",
     });
     assert.match(
       archive.relativePath,
-      /^studies\/simulation\/20260726T130325621Z-tournament-0-1-0-aaaaaaaaaaaa-archive-contract-100x4-job-123\.json$/
+      /^evidence\/studies\/simulation\/20260726T130325621Z-tournament-0-1-0-aaaaaaaaaaaa-archive-contract-100x4-job-123\.json$/
     );
     assert.deepEqual(
       JSON.parse(await readFile(join(projectRoot, archive.relativePath), "utf8")),
@@ -2198,7 +2223,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.24");
+  assert.equal(first.game.version, "0.8.27");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

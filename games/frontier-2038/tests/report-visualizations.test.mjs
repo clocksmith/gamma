@@ -6,7 +6,7 @@ import {
   heatmapCells,
   providerSummary,
   trajectoryForSample
-} from "../prototype/report-visualizations.js";
+} from "../web/report-visualizations.js";
 
 function standing({
   seat,

@@ -42,7 +42,7 @@ test("playtest receipts carry the frozen rules, executable, and source commit", 
     const { stdout } = await execFileAsync(
       "node",
       [
-        "tools/create-playtest-session.mjs",
+        "tasks/create-playtest-session.mjs",
         "--players",
         "4",
         "--seed",
@@ -84,11 +84,11 @@ test("playtest receipts carry the frozen rules, executable, and source commit", 
 test("baseline gallery excludes every deferred physical module", async () => {
   await execFileAsync(
     "node",
-    ["tools/render-gallery.mjs", "--baseline"],
+    ["tasks/render-gallery.mjs", "--baseline"],
     { cwd: projectRoot }
   );
   const html = await readFile(
-    new URL("dist/gallery-baseline.html", root),
+    new URL("build/gallery-baseline.html", root),
     "utf8"
   );
   for (const id of ["tactics", "objectives", "specialists"]) {
