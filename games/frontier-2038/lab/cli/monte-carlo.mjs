@@ -34,6 +34,8 @@ const report = await createSimulation({
   playerCount: input.players,
   seed: input.seed,
   projection: input.projection,
+  workers: input.workers,
+  chunkSize: input["chunk-size"],
   sampleReplays: input["sample-replays"],
   profileIds: input.profiles?.split(",").filter(Boolean),
   backends: input.backends?.split(",").filter(Boolean),
