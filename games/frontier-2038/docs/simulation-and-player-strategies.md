@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.30` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.30-test`
+**Executable game:** `0.8.31` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.31-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -163,6 +163,10 @@ intervals, credible cycle detection, declaration blockers, Mandate sources,
 Audit pressure, promises, trades, causal suppliers, supplier placement, the
 seven-stage AGI funnel, and realized faction-ability value. Per-player-count
 summaries keep scaling effects such as Foundry revenue visible.
+One-lever reports also retain common-seed faction deltas by backend, player
+count, and Mandate mode; use
+`rulesComparisons[].families.factionBackendPlayerCountMandateMode` when a
+preregistration requires the fixed-versus-variable split.
 
 Four players is the balance-authority configuration. Three and five players
 are mandatory supported-count regression guards: a candidate cannot advance
