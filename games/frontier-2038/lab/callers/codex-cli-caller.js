@@ -69,7 +69,7 @@ export class CodexCliCaller {
     );
   }
 
-  async decide(packet) {
+  async decide(packet, { signal } = {}) {
     const temporaryDirectory = await mkdtemp(join(tmpdir(), "frontier-codex-"));
     const outputPath = join(temporaryDirectory, "decision.json");
     const invocation = this.invocation(packet, temporaryDirectory, outputPath);
@@ -78,7 +78,8 @@ export class CodexCliCaller {
         ...invocation,
         cwd: temporaryDirectory,
         env: this.env,
-        timeoutMs: this.timeoutMs
+        timeoutMs: this.timeoutMs,
+        signal
       });
       const text = await readFile(outputPath, "utf8").catch(() => result.stdout);
       const decision = validateDecisionResponse(

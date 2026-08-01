@@ -15,6 +15,7 @@ export function runCliProcess({
   cwd,
   env = {},
   timeoutMs = 120000,
+  signal,
   maxOutputBytes = 2_000_000
 }) {
   return new Promise((resolve, reject) => {
@@ -31,11 +32,23 @@ export function runCliProcess({
     let stderrBytes = 0;
     let finished = false;
     let timedOut = false;
+    let aborted = false;
+
+    const onAbort = () => {
+      aborted = true;
+      child.kill("SIGTERM");
+      setTimeout(() => child.kill("SIGKILL"), 1000).unref();
+      finish(() => reject(new CliProcessError(
+        `${command} was cancelled.`,
+        { command, cancelled: true }
+      )));
+    };
 
     const finish = (callback) => {
       if (finished) return;
       finished = true;
       clearTimeout(timer);
+      signal?.removeEventListener("abort", onAbort);
       callback();
     };
 
@@ -44,6 +57,9 @@ export function runCliProcess({
       child.kill("SIGTERM");
       setTimeout(() => child.kill("SIGKILL"), 1000).unref();
     }, timeoutMs);
+
+    if (signal?.aborted) onAbort();
+    else signal?.addEventListener("abort", onAbort, { once: true });
 
     child.on("error", (error) => {
       finish(() => reject(new CliProcessError(
@@ -81,7 +97,12 @@ export function runCliProcess({
           stderr: stderr.join(""),
           durationMs: Math.round(performance.now() - startedAt)
         };
-        if (timedOut) {
+        if (aborted) {
+          reject(new CliProcessError(
+            `${command} was cancelled.`,
+            { command, cancelled: true }
+          ));
+        } else if (timedOut) {
           reject(new CliProcessError(
             `${command} exceeded the ${timeoutMs}ms timeout.`,
             { command, timeoutMs }

@@ -219,25 +219,25 @@ test("numeric typography preserves exact card digits while prose may spell numbe
   assert.match(rules, /CEO: two presence/);
 });
 
-test("named parody identities are canonical across generated game surfaces", async () => {
+test("fictional institution identities are canonical across generated game surfaces", async () => {
   const variables = await readJson("physical/variables.json");
   const factions = await readJson("generated/factions.json");
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const expectedNames = [
+    "Dovetalis Labs",
+    "Loopfold AI",
+    "Mirevanta Works",
+    "Kestralyn",
+    "Orisonix",
+    "Corthaven"
+  ];
+  const formerIdentities = [
     "Sam Altman",
     "Mark Zuckerberg",
     "Demis Hassabis",
     "Elon Musk",
     "Dario Amodei",
     "Jensen Huang"
-  ];
-  const formerAliases = [
-    "The Coalition Lab",
-    "The Platform Empire",
-    "The Imperial Research Lab",
-    "The Vertical Empire",
-    "The Safety Laboratory",
-    "The Foundry"
   ];
 
   assert.deepEqual(Object.values(variables.terms.factions), expectedNames);
@@ -248,12 +248,12 @@ test("named parody identities are canonical across generated game surfaces", asy
   );
   assert.ok(factions.factions.every((faction) => !("historicalReference" in faction)));
   for (const name of expectedNames) assert.ok(rules.includes(`### ${name}`));
-  for (const alias of formerAliases) {
-    assert.ok(!rules.includes(alias), `generated rules omit former alias ${alias}`);
+  for (const identity of formerIdentities) {
+    assert.ok(!rules.includes(identity), `generated rules omit former identity ${identity}`);
   }
 });
 
-test("canonical faction source contains no alternate identity vocabulary", async () => {
+test("canonical faction source contains no real-person identity vocabulary", async () => {
   const source = await readFile(new URL("physical/factions.json", root), "utf8");
   for (const name of [
     "Sam Altman",

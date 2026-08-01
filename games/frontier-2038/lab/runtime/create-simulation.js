@@ -21,6 +21,7 @@ import {
   evaluateTournamentBalance,
   loadBalanceContract
 } from "../balance/balance-contract.js";
+import { throwIfAborted } from "../cancellation.js";
 
 const configUrl = new URL("../../generated/game-config.json", import.meta.url);
 const factionsUrl = new URL("../../generated/factions.json", import.meta.url);
@@ -68,6 +69,15 @@ function boundedInteger(value, fallback, minimum, maximum, label) {
   return parsed;
 }
 
+function decisionBudget(value, fallback, label) {
+  if (value === undefined || value === null || value === "unlimited") return fallback;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 0) {
+    throw new RangeError(`${label} must be a non-negative integer or "unlimited".`);
+  }
+  return parsed;
+}
+
 export function factionRosterForRun(factions, playerCount, runIndex, rotate = true) {
   if (!rotate) return factions.slice(0, playerCount);
   const poolStart = runIndex % factions.length;
@@ -78,6 +88,7 @@ export function factionRosterForRun(factions, playerCount, runIndex, rotate = tr
 }
 
 export async function createSimulation(options = {}, onProgress) {
+  throwIfAborted(options.signal);
   const [
     config,
     factionDocument,
@@ -164,29 +175,28 @@ export async function createSimulation(options = {}, onProgress) {
     throw new Error("requireLlm requires at least one LLM-backed policy.");
   }
 
-  const maximumLlmDecisions = boundedInteger(
+  const maximumLlmDecisions = decisionBudget(
     options.maxLlmDecisions,
-    llmRequested ? 24 : 0,
-    0,
-    24,
+    llmRequested ? null : 0,
     "maxLlmDecisions"
   );
-  const maximumLlmDecisionsPerSeatCycle = llmRequested && maximumLlmDecisions > 0
-    ? boundedInteger(
-      options.maxLlmDecisionsPerSeatCycle,
-      maximumLlmDecisions,
-      1,
-      24,
-      "maxLlmDecisionsPerSeatCycle"
-    )
-    : null;
+  const maximumLlmDecisionsPerSeatCycle =
+    llmRequested && maximumLlmDecisions !== 0
+      ? decisionBudget(
+        options.maxLlmDecisionsPerSeatCycle,
+        null,
+        "maxLlmDecisionsPerSeatCycle"
+      )
+      : null;
   const decisionBudgets = configuredBackends.map(() => ({
-    remaining: maximumLlmDecisions,
+    maximum: maximumLlmDecisions,
+    remaining: maximumLlmDecisions ?? Infinity,
+    used: 0,
     maxPerSeatCycle: maximumLlmDecisionsPerSeatCycle,
     perSeatCycleUsage: new Map()
   }));
   const usedLlmDecisions = () => decisionBudgets.reduce(
-    (total, budget) => total + maximumLlmDecisions - budget.remaining,
+    (total, budget) => total + budget.used,
     0
   );
   const seatCycleUsage = () => Object.assign(
@@ -219,6 +229,7 @@ export async function createSimulation(options = {}, onProgress) {
       decisionBudget: decisionBudgets[seat],
       model: models[seat],
       reasoningEffort: reasoningEfforts[seat],
+      signal: options.signal,
       requireLlm,
       timeoutMs: options.timeoutMs,
       shortlistSize: options.shortlistSize,
@@ -304,6 +315,7 @@ export async function createSimulation(options = {}, onProgress) {
             variantFingerprint: decisionIdentity.variant.fingerprint
           }
         },
+        signal: options.signal,
         onProgress: (progress) => onProgress?.({
           phase: "match_progress",
           run: runIndex + 1,
@@ -314,11 +326,21 @@ export async function createSimulation(options = {}, onProgress) {
       })
       );
     },
-    includeObservations: Boolean(options.includeObservations)
+    includeObservations: Boolean(options.includeObservations),
+    signal: options.signal
   });
+  const historicalPlayerCount = config.players.historicalOnlyCounts.includes(playerCount);
+  const playerCountStatus = historicalPlayerCount
+    ? "exploratory_nonpromotional"
+    : "suggested_balance_scope";
 
   const completedReport = {
     ...report,
+    scope: historicalPlayerCount ? {
+      ...report.scope,
+      id: `${report.scope.id}-exploratory-${playerCount}p`,
+      verdictBoundary: `${report.scope.verdictBoundary} This ${playerCount}-player report is an exploratory, non-promotional diagnostic; only three-, four-, and five-player evidence is eligible for the current balance contract.`
+    } : report.scope,
     reportType: options.reportType || report.reportType,
     ...(options.preRegistration ? {
       preRegistration: structuredClone(options.preRegistration)
@@ -346,6 +368,7 @@ export async function createSimulation(options = {}, onProgress) {
         model: models[seat],
         reasoningEffort: reasoningEfforts[seat]
       })),
+      playerCountStatus,
       factionPoolIds: factions.map((faction) => faction.id),
       factionIds: explicitFactions?.map((faction) => faction.id) || null,
       mandateMode: options.mandateMode || "variable",

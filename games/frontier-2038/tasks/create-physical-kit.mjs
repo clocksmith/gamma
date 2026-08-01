@@ -83,17 +83,17 @@ rules during a session. Record an issue and finish under the frozen rules.
 
 ## Session A
 
-Demis Hassabis, Elon Musk, Jensen Huang, and Mark Zuckerberg.
+Mirevanta Works, Kestralyn, Corthaven, and Loopfold AI.
 
 Observe Peer Validation, realized Industrial Velocity Mandate, demand-coupled
 New Architecture, and diminishing Customer recognition.
 
 ## Session B
 
-Sam Altman, Dario Amodei, and two factions played by returning participants.
+Dovetalis Labs, Orisonix, and two factions played by returning participants.
 Record the two returning factions in the generated receipt before play.
 
-Observe whether Sam can form mutually rational deals and whether Dario feels
+Observe whether Dovetalis can form mutually rational deals and whether Orisonix feels
 powerful but contestable rather than passively advantaged.
 
 ## Evidence priorities
@@ -273,17 +273,17 @@ const manifest = {
     {
       id: "session-a-four-lever",
       factions: [
-        "Demis Hassabis",
-        "Elon Musk",
-        "Jensen Huang",
-        "Mark Zuckerberg"
+        "Mirevanta Works",
+        "Kestralyn",
+        "Corthaven",
+        "Loopfold AI"
       ]
     },
     {
       id: "session-b-policy-sensitive",
       factions: [
-        "Sam Altman",
-        "Dario Amodei",
+        "Dovetalis Labs",
+        "Orisonix",
         "returning faction 1",
         "returning faction 2"
       ]

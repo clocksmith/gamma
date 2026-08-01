@@ -32,14 +32,6 @@ function ruleTargets(decision, target) {
   );
 }
 
-function hexDistance(left, right) {
-  return Math.max(
-    Math.abs(left.q - right.q),
-    Math.abs(left.r - right.r),
-    Math.abs((-left.q - left.r) - (-right.q - right.r))
-  );
-}
-
 export class WeightedPlayerPolicy {
   constructor(profile, { selection = profile.strategy.selection } = {}) {
     this.profile = validatePlayerProfile(profile);
@@ -70,10 +62,6 @@ export class WeightedPlayerPolicy {
     for (const [prefix, multiplier] of Object.entries(strategy.decisionWeights || {})) {
       if (decision.decisionId.startsWith(prefix)) weight *= multiplier;
     }
-    const targetProfileId = decision.parameters?.targetProfileId;
-    if (targetProfileId) {
-      weight *= strategy.partnerWeights?.[targetProfileId] || 1;
-    }
     const relationship = decision.parameters?.relationship;
     if (relationship) {
       weight *= Math.max(
@@ -97,37 +85,6 @@ export class WeightedPlayerPolicy {
       if (typeof value === "number") consequenceValue += value * multiplier;
     }
     weight *= Math.max(0.01, 1 + consequenceValue);
-    const preference = strategy.spatialPreference;
-    const destinationId = decision.parameters?.destinationId;
-    if (
-      preference &&
-      destinationId &&
-      decision.parameters?.buildMode === "facility" &&
-      (packet.observation.self?.facilities || 0) <
-        (preference.applyUntilFacilities || 1)
-    ) {
-      const destination = packet.observation.board?.find(
-        (tile) => tile.tileId === destinationId
-      );
-      const targets = packet.observation.opponents?.filter(
-        (opponent) => opponent.profileId === preference.targetProfileId
-      ) || [];
-      const targetTiles = targets.flatMap((opponent) =>
-        (opponent.facilityTileIds || []).map((tileId) =>
-          packet.observation.board?.find((tile) => tile.tileId === tileId)
-        ).filter(Boolean)
-      );
-      if (destination && targetTiles.length) {
-        const distance = Math.min(
-          ...targetTiles.map((target) => hexDistance(destination, target))
-        );
-        if (distance === preference.preferredDistance) {
-          weight *= preference.multiplier;
-        } else if (distance === 0 && preference.preferredDistance === 1) {
-          weight *= 0.05;
-        }
-      }
-    }
     for (const rule of strategy.rules) {
       if (
         ruleTargets(decision, rule.target) &&
@@ -155,7 +112,7 @@ export class WeightedPlayerPolicy {
     if (this.selection === "weighted") {
       const total = ranked.reduce((sum, entry) => sum + entry.weight, 0);
       const rng = createRng(
-        `${packet.seed}:${packet.requestId}:${packet.seat}:${this.profile.id}`
+        `${packet.policySeed || packet.seed || packet.matchId}:${packet.requestId}:${packet.seat}:${this.profile.id}`
       );
       let target = rng() * total;
       selected = ranked.at(-1);

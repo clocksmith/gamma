@@ -1,5 +1,44 @@
 import { validateDecisionPacket } from "../contracts/decision-contract.js";
 import { profileForPrompt, validatePlayerProfile } from "../personas/player-profile.js";
+import { throwIfAborted } from "../cancellation.js";
+
+function formalResponseDefault(packet) {
+  const stage = packet.requestId.split(":").at(-2) || "";
+  const decisionId = stage.startsWith("immediate_trade_response")
+    ? "trade_reject"
+    : stage.startsWith("immediate_trade_claim")
+      ? "trade_claim_pass"
+      : stage.startsWith("immediate_trade_counterparty")
+        ? "trade_counterparty_decline"
+        : stage === "negotiation_response"
+          ? "agreement_reject"
+          : stage === "mega_cluster_partner"
+            ? "mega_cluster_reject"
+            : stage === "boardroom_coup_response"
+              ? "boardroom_refuse"
+              : stage === "realignment_ballot"
+                ? "realignment_no_ballot"
+                : null;
+  if (decisionId) {
+    return packet.legalDecisions.find((decision) => decision.decisionId === decisionId) || null;
+  }
+  if (stage.startsWith("power_sale_")) {
+    return packet.legalDecisions.find((decision) =>
+      decision.decisionId.startsWith("power_sale_reject_")
+    ) || null;
+  }
+  if (stage.startsWith("allocation_response_")) {
+    return packet.legalDecisions.find((decision) =>
+      decision.decisionId.startsWith("allocation_reject_")
+    ) || null;
+  }
+  if (stage.startsWith("allocation_counterparty_")) {
+    return packet.legalDecisions.find((decision) =>
+      decision.decisionId.startsWith("allocation_counter_reject_")
+    ) || null;
+  }
+  return null;
+}
 
 export class CliBackedPlayerPolicy {
   constructor(profile, caller, {
@@ -10,6 +49,7 @@ export class CliBackedPlayerPolicy {
     backendId,
     model,
     reasoningEffort,
+    signal,
     requireLlm = false,
     llmStages
   } = {}) {
@@ -22,21 +62,37 @@ export class CliBackedPlayerPolicy {
     this.backendId = backendId;
     this.model = model;
     this.reasoningEffort = reasoningEffort;
+    this.signal = signal;
     this.requireLlm = requireLlm;
     this.llmStages = llmStages || null;
     this.kind = "llm";
   }
 
   async decide(packet) {
+    throwIfAborted(this.signal);
     validateDecisionPacket(packet);
     const augmented = {
       ...packet,
       strategy: profileForPrompt(this.profile)
     };
+    if (packet.policySeed !== undefined) {
+      Object.defineProperty(augmented, "policySeed", {
+        value: packet.policySeed,
+        enumerable: false
+      });
+    }
     if (
       this.llmStages?.length &&
       !this.llmStages.some((stage) => packet.requestId.includes(`:${stage}`))
     ) {
+      const defaultResponse = formalResponseDefault(augmented);
+      if (defaultResponse) {
+        return this.rulebookResponseDefault(
+          augmented,
+          defaultResponse,
+          "LLM response stage is not enabled."
+        );
+      }
       if (this.requireLlm) {
         throw new Error(
           `Required LLM decision is unavailable for gated stage ${packet.requestId}.`
@@ -58,6 +114,7 @@ export class CliBackedPlayerPolicy {
     const cacheInput = {
       backend: this.backendId,
       model: this.model,
+      reasoningEffort: this.reasoningEffort,
       packet: augmented,
       profile: profileForPrompt(this.profile)
     };
@@ -97,10 +154,13 @@ export class CliBackedPlayerPolicy {
       }
       this.decisionBudget.perSeatCycleUsage.set(key, used + 1);
     }
-    if (this.decisionBudget) this.decisionBudget.remaining -= 1;
+    if (this.decisionBudget) {
+      this.decisionBudget.remaining -= 1;
+      this.decisionBudget.used = (this.decisionBudget.used || 0) + 1;
+    }
 
     try {
-      const result = await this.caller.decide(augmented);
+      const result = await this.caller.decide(augmented, { signal: this.signal });
       const completed = {
         ...result,
         receipt: {
@@ -120,6 +180,7 @@ export class CliBackedPlayerPolicy {
       }
       return completed;
     } catch (error) {
+      throwIfAborted(this.signal);
       return this.fallbackDecision(
         augmented,
         error.message,
@@ -128,7 +189,26 @@ export class CliBackedPlayerPolicy {
     }
   }
 
+  rulebookResponseDefault(packet, decision, reason, providerReceipt = null) {
+    return {
+      decision: { decisionId: decision.decisionId },
+      receipt: {
+        provider: "rulebook-default",
+        profileId: this.profile.id,
+        requestId: packet.requestId,
+        fallback: true,
+        fallbackReason: reason,
+        formalResponseDefault: true,
+        ...(providerReceipt || {})
+      }
+    };
+  }
+
   async fallbackDecision(packet, reason, providerReceipt = null) {
+    const defaultResponse = formalResponseDefault(packet);
+    if (defaultResponse) {
+      return this.rulebookResponseDefault(packet, defaultResponse, reason, providerReceipt);
+    }
     if (this.requireLlm) {
       const error = new Error(`Required LLM decision failed: ${reason}`);
       error.providerReceipt = providerReceipt;
@@ -159,6 +239,7 @@ export class HybridPlayerPolicy extends CliBackedPlayerPolicy {
     backendId,
     model,
     reasoningEffort,
+    signal,
     requireLlm,
     llmStages,
     shortlistSize = 4
@@ -171,6 +252,7 @@ export class HybridPlayerPolicy extends CliBackedPlayerPolicy {
       backendId,
       model,
       reasoningEffort,
+      signal,
       requireLlm,
       llmStages
     });

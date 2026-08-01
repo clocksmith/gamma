@@ -45,6 +45,7 @@ export function createPlayerPolicy(profile, backend = profile.defaultBackend || 
     backendId: backend,
     model: options.model,
     reasoningEffort: options.reasoningEffort,
+    signal: options.signal,
     requireLlm: Boolean(options.requireLlm),
     llmStages: options.llmStages
   };

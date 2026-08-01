@@ -42,8 +42,7 @@ function validate(document) {
     !Array.isArray(document.llmStages) ||
     !document.llmStages.length ||
     !Number.isInteger(document.maximumLlmDecisions) ||
-    document.maximumLlmDecisions < 1 ||
-    document.maximumLlmDecisions > 24
+    document.maximumLlmDecisions < 1
   ) {
     throw new TypeError("Invalid locked LLM holdout preregistration.");
   }
@@ -61,6 +60,7 @@ function validate(document) {
 export async function runLlmNegotiationHoldout({
   preRegistrationPath,
   allowLlm = false,
+  signal,
   onProgress
 } = {}) {
   if (!allowLlm) {
@@ -94,6 +94,7 @@ export async function runLlmNegotiationHoldout({
     profileIds: document.profileIds,
     backends: document.backends,
     allowLlm: true,
+    requireLlm: true,
     maxLlmDecisions: document.maximumLlmDecisions,
     model: document.model || undefined,
     reasoningEffort: document.reasoningEffort || undefined,
@@ -107,7 +108,8 @@ export async function runLlmNegotiationHoldout({
     simulateNegotiation: true,
     includeObservations: true,
     rotateProfiles: true,
-    rotateFactions: true
+    rotateFactions: true,
+    signal
   }, onProgress);
   return {
     ...report,

@@ -1,6 +1,8 @@
 # M3T4 2038
 
-## A 3–5 player race to build, deploy, regulate, and plausibly declare AGI
+## A 2–6 player race to build, deploy, regulate, and plausibly declare AGI
+
+**Suggested player count:** 3–5
 
 **Rules version:** 0.5.0-rc.28-test
 **Design-baseline date:** July 26, 2026
@@ -409,9 +411,10 @@ no separate Power graph, production graph, or edge-by-edge flow calculation.
 ### Contract hosts
 
 Joint Ventures and every Mega-Cluster use neutral
-matched token pairs from the shared supply. Place one numbered half on each
-host Facility. The matching number identifies the contract even if
-Realignment moves the districts.
+matched token pairs from the shared supply. A project can be created only while
+its matching pair remains available. Place one numbered half on each host
+Facility. The matching number identifies the contract even if Realignment moves
+the districts.
 
 A contract remains owned after Realignment but is active only while its two
 named host Facilities are adjacent and satisfy its other requirements, unless
@@ -435,8 +438,17 @@ partner’s host tile**: one Runway for a Runway icon or one Compute for a
 Compute icon. This contract output is not the tile’s full printed production
 and is never multiplied by another Facility effect.
 
-Either participant may terminate the Joint Venture during their own Influence
-action. Return both matched token halves to the shared supply.
+While resolving Influence, the active player may make one complete Joint
+Venture proposal naming the two eligible host Facilities and the partner. The
+named partner accepts or rejects it. A rejection, pass, or missing response
+creates no contract and uses that Influence action’s Joint Venture effect; it
+cannot instead remove Scrutiny, gain Trust, or name a replacement partner.
+
+During their own Influence action, either participant may instead terminate one
+named Joint Venture they share. Return that pair’s matched token halves to the
+shared supply. Termination is that Action’s selected effect; it cannot be
+combined with creating a Joint Venture, removing Scrutiny, or gaining
+Trust.
 
 ### Jurisdictional Realignment
 
@@ -452,11 +464,14 @@ simultaneously:
 - **Authorize Counter-Cycle:** rotate the inner ring one position clockwise
   and the outer ring one position counterclockwise.
 
-The motion with the most ballots resolves. If leading motions tie, begin with
-the Initiative player and scan clockwise; the first player whose ballot names
-one of the tied motions selects the result. Every player casts exactly one
-ballot. Government bonuses and other vote modifiers do not alter Realignment
-ballots.
+Before any optional discussion, every player secretly places one ballot face
+down. A player who does not place a ballot has **no ballot**: it names no
+motion and cannot resolve a tie. Reveal all placed ballots simultaneously. The
+motion with the most ballots resolves. If leading motions tie, begin with the
+Initiative player and scan clockwise; the first player whose ballot names one
+of the tied motions selects the result. If none does, the Initiative player
+selects among the tied motions. Government bonuses and other vote modifiers do
+not alter Realignment ballots.
 
 Frontier never moves. Each moving location tile carries every CEO, Team,
 Facility, Generator, Influence cube, Expert, and other site-bound component on
@@ -477,10 +492,12 @@ Realignment never destroys a component, changes a host, or terminates a
 contract.
 
 The ballots are open information before selection and secret information until
-the simultaneous reveal. Players may negotiate or misrepresent their intended
-ballot; promises about the vote are not binding. Because Realignment happens
-before Round IV, every player receives three final Actions in which to respond
-to the changed geography.
+the simultaneous reveal. Players may discuss and make public, non-binding
+signals about their intended ballot; agreement is unnecessary and promises
+about the vote are not binding. Every player still casts exactly one secret
+ballot, and the vote and tie-break procedure above decide the result. Because
+Realignment happens before Round IV, every player receives three final Actions
+in which to respond to the changed geography.
 
 ### Power delivery
 
@@ -557,7 +574,10 @@ Facility demand plus two additional Power from that Network. If
 all demand is satisfied, gain three Compute.
 
 A **joint Mega-Cluster** uses one host Facility from each consenting
-participant. The hosts must be adjacent and each must belong to its owner’s
+participant. The lead names the partner and both eligible hosts; the named
+partner accepts or rejects once. Rejection, pass, or no response ends that
+construction attempt, uses the Wild Action, and permits no replacement
+partner. The hosts must be adjacent and each must belong to its owner’s
 Infrastructure Network. The lead pays two Runway and one Compute; the partner
 pays one Runway and one Compute. During Production, each participant supplies
 their host’s normal Facility demand plus one additional
@@ -726,17 +746,39 @@ During any player’s resolution, the active player may complete one immediate
 resource trade with one rival, either immediately before or immediately after
 Act. The active player either declines to trade or makes one complete offer:
 name the rival, timing, each resource type, and each amount. The named rival
-may accept, reject, or publish one complete counteroffer. If they publish a
-counteroffer, every other player may simultaneously pass or claim it. The
-counteroffer maker chooses one claimant, or declines them all; a chosen claim
-immediately completes the trade. There are no further offers or
-counteroffers during that resolution. Runway, Compute, and Safety tokens may be exchanged. Every accepted component must change hands
+may accept, reject, or publish one complete counteroffer naming each offered
+and requested resource type and amount. If they publish a counteroffer, every
+other player whose resulting transfer is legal under holdings, embargoes, and
+caps may simultaneously pass or claim it. The counteroffer maker chooses one
+claimant, or declines them all; a chosen claim immediately completes the trade.
+This is a public-market exception: the completed counteroffer may be between
+two non-active players. There are no further offers or counteroffers during
+that resolution. Runway, Compute, and Safety tokens may be exchanged. Every accepted component must change hands
 immediately; promises about later turns are not binding. The active
 Headline may prohibit a named resource from being traded.
+
+No acceptance means no completed trade. A counteroffer with no claimant, or
+with all claimants declined, expires. The active player continues the selected
+Action; if the unavailable resources leave that committed Action without a
+legal resolution, it resolves blocked under **A committed Action that becomes
+blocked**.
 
 Influence is not required for this immediate exchange. Influence remains the
 only way to create persistent Joint Ventures, lobbying effects, or
 Trust manipulation.
+
+### Negotiation and paced play
+
+No agreement is a normal strategic outcome. Players may discuss publicly, but
+speech creates no game state, obligation, or additional action. Only the
+required formal choice in its printed window changes the game. If a player does
+not give a required formal response when called upon, treat it as a rejection
+or pass.
+
+**Paced Play** is an optional table rule. Before play, the group may assign one
+shared sand timer to each negotiation window. When it expires, discussion ends
+and the normal rejection, pass, or no-ballot fallback applies; a timer never
+creates consent or forces a deal.
 
 ### C. Power and Production
 
@@ -746,8 +788,11 @@ every player before advancing to the next box:
 1. **Generate:** recalculate every Infrastructure Network. Every connected
    Generator operates automatically. Add one Scrutiny for every
    Emergency Power Complex. Add any Headline generation.
-2. **Trade:** in Initiative order, each player may buy up to two Power, one
-   from each of two different adjacent rival Networks. The buyer pays one
+2. **Trade:** in Initiative order, each player may make up to two Power
+   purchase requests, one to each of two different adjacent rival Networks.
+   The named supplier accepts or rejects each request. A rejected, passed, or
+   unanswered request fails; the buyer may use any remaining request, then
+   allocates with the Power they have. An accepted buyer pays one
    Runway per Power directly to the consenting supplier. Each supplier may sell
    at most one Power this Production. Only installed Generator or Fusion
    capacity may be sold; starting-grid and emergency Power may not.
@@ -999,6 +1044,7 @@ even if you place or relocate no cubes:
 - Gain one Trust.
 - Remove one Scrutiny.
 - Create a Joint Venture with an eligible rival.
+- Terminate one named Joint Venture you share.
 
 ## 8. Power Source cards
 
@@ -1034,9 +1080,9 @@ The Round IV Wild Action described above.
 
 ## 9. Six factions
 
-The six canonical player identities are satirical portrayals of living public
-figures. Their abilities exaggerate public institutional roles for fictional
-gameplay; they are not factual claims or indications of endorsement.
+The six canonical player identities are fictional institutions led by
+fictional executives. Their abilities describe institutional roles for
+fictional gameplay; they are not factual claims or indications of endorsement.
 
 Every ability unlocks at the start of its named round. Its timing tag is one
 of **passive**, **once per round**, **once when unlocked**, or **once per
@@ -1055,7 +1101,9 @@ Each row prints its frequency, persistence, and one timing window. These rows
 do not add another phase to the round; they modify the named ordinary timing
 window.
 
-### Sam Altman
+### Dovetalis Labs
+
+CEO: Sasha Raman.
 
 Starts with 5 Runway, 2 Compute, and Trust 3.
 
@@ -1068,7 +1116,9 @@ Starts with 5 Runway, 2 Compute, and Trust 3.
 - **Wildcard Governance:**
   Once per game, immediately after a Headline is revealed but before its instructions resolve, discard it, reveal 2 replacements from the current Era deck, and choose 1 to resolve and enter the Future Timeline. Return the other replacement to the box and add 2 Scrutiny.
 
-### Mark Zuckerberg
+### Loopfold AI
+
+CEO: Mateo Ibarra.
 
 Starts with 4 Runway, 2 Compute, Trust 2, and Customer #1 already deployed. Its next Deploy is Customer #2 and requires Capability 4. The starting Customer is not a separate pre-track bonus.
 
@@ -1081,7 +1131,9 @@ Starts with 4 Runway, 2 Compute, Trust 2, and Customer #1 already deployed. Its 
 - **The Social Graph:**
   Once per round during Deploy, choose any controlled Consumer or Media hex as the destination without moving there. That remote tile supplies its normal visit bonus and every destination-dependent Deploy effect.
 
-### Demis Hassabis
+### Mirevanta Works
+
+CEO: Owen Okafor.
 
 Starts with 3 Runway, 3 Compute, and Trust 3.
 
@@ -1089,14 +1141,16 @@ Starts with 3 Runway, 3 Compute, and Trust 3.
   Capability 9 and 12 score 1 Mandate. In a five-player game, Capability 12 instead scores 2 Mandate.
 - **Scientific Method:**
   Once per round, when a protectable duplicate would crash your Training Run, pay 1 Runway to discard it and immediately bank. This cannot protect the unprotectable duplicate created by Synthetic Loop.
-- **Call Mountain View:**
+- **Call the Parent Board:**
   At the beginning of The Scale before its first Headline, choose 1: gain 3 Runway; examine and reorder the top 4 Training cards; or gain 3 Compute.
 - **Nobel Effect:**
   Completing a 5-domain Training Run gains 2 Trust.
 - **Scaling-Law Breakthrough:**
   Once per game when resolving Research, each of the first 3 distinct domains banked grants 1 additional Capability. Add 2 Scrutiny. No additional Action resolves.
 
-### Elon Musk
+### Kestralyn
+
+CEO: Jiwon Park.
 
 Starts with 6 Runway, 3 Compute, and Trust 2.
 
@@ -1109,7 +1163,9 @@ Starts with 6 Runway, 3 Compute, and Trust 2.
 - **Orbital Compute:**
   Once per game during your movement step, instead of moving the acting piece, move 1 Facility to any legal open Facility space. It carries every attached component and designation. Recalculate its Network; if current connected capacity can satisfy its full demand, immediately resolve its printed production once. Add 2 Scrutiny.
 
-### Dario Amodei
+### Orisonix
+
+CEO: Ari Caldwell.
 
 Starts with 3 Runway, 2 Compute, Trust 5, and 2 Safety tokens.
 
@@ -1122,7 +1178,9 @@ Starts with 3 Runway, 2 Compute, Trust 5, and 2 Safety tokens.
 - **Emergency Pause:**
   Once per game before Action selection begins, pay 1 Runway and name 1 globally unlocked Wild Action. It cannot be selected this cycle. Gain 2 Trust. This cannot be declared after any player has selected an Action.
 
-### Jensen Huang
+### Corthaven
+
+CEO: Eli Rosen.
 
 Starts with 5 Runway,
 4 Compute, and
@@ -1131,7 +1189,7 @@ Trust 3.
 - **The Shovels:**
   When another player spends at least 2 Compute in 1 action, gain 1 Runway, at most 2 times per round.
 - **Allocation Window:**
-  Once during The Scale, after a Headline resolves but before Action selection, create 2 temporary Compute and offer it to rivals at negotiated prices. All temporary Compute remaining anywhere at cycle end disappears, sold or unsold.
+  Once during The Scale, after a Headline resolves but before Action selection, create 2 temporary Compute. For each token, make one complete offer naming a rival and a Runway price no greater than that rival's current Runway. The rival accepts, rejects, or makes one lower Runway counterprice; you accept or reject that counterprice. No replacement offer or further counter is allowed for that token. All temporary Compute remaining anywhere at cycle end disappears, sold or unsold.
 - **New Architecture:**
   At the beginning of The Narrative before its first Headline, each rival may pay you 1 Runway to gain 1 Compute. Gain 1 Compute per rival who pays, maximum 3; automatic base gain: 0.
 - **Everybody Gets a GPU:**
@@ -1144,12 +1202,12 @@ public track:
 
 | Faction | Mandate already represented at setup |
 | --- | ---: |
-| Sam Altman | 2 from Trust 3 |
-| Mark Zuckerberg | 4 total: 2 from Trust 2, plus 2 from Customer #1 |
-| Demis Hassabis | 2 from Trust 3 |
-| Elon Musk | 2 from Trust 2 |
-| Dario Amodei | 4 from Trust 5 |
-| Jensen Huang | 2 from Trust 3 |
+| Dovetalis Labs | 2 from Trust 3 |
+| Loopfold AI | 4 total: 2 from Trust 2, plus 2 from Customer #1 |
+| Mirevanta Works | 2 from Trust 3 |
+| Kestralyn | 2 from Trust 2 |
+| Orisonix | 4 from Trust 5 |
+| Corthaven | 2 from Trust 3 |
 
 These values are awarded once during setup and are never scored again.
 
@@ -1229,7 +1287,7 @@ to its winner; it cannot then call a Government vote.
 10. **DIRECTIVE — Emergency Power Authority:**
     During this round’s Production, each player may assign up to 2 Power beyond their real capacity. Add 1 Scrutiny for each emergency Power assigned. A player assigning both also adds 1 black Systemic Risk cube.
 11. **DIRECTIVE — The Board Appoints a Nonhuman Director:**
-    Spotlight pays 2 Runway or receives public backing from a rival, who gains 1 Trust. Without either, Spotlight’s CEO cannot activate this cycle.
+    Spotlight pays 2 Runway, or names one rival for public backing. The named rival accepts or rejects once; acceptance gives that rival 1 Trust. Rejection, pass, or no response leaves Spotlight’s CEO unable to activate this cycle.
 12. **DIRECTIVE — The Compute Embargo Fractures the Model Internet — Regulatory:**
     Compute cannot be traded this cycle. Chip and Government controllers gain 1 Runway.
 
@@ -1344,8 +1402,8 @@ Generators do not count against the Facility limit.
 
 The shared supply contains:
 
-- Six numbered matched Joint Venture token pairs
-- Six numbered matched Mega-Cluster token pairs with a lead-side indicator
+- 6 numbered matched Joint Venture token pairs
+- 6 numbered matched Mega-Cluster token pairs with a lead-side indicator
 - One dedicated Fusion Demonstrator marker
 - Six neutral Expert pawns
 - Six Economic Benchmark tokens
@@ -1499,11 +1557,11 @@ players first. Record:
 - Powered Facilities by round; every clean and emergency Generator built;
   every immediate Power purchase; and the actual Scrutiny and Audit penalties
   each source causes
-- Capability gained by each Research, separated into Demis Hassabis,
+- Capability gained by each Research, separated into Mirevanta Works,
   Research Campus, and all-other cohorts; earliest AGI eligibility
 - Audit cost, final Mandate, final Trust, declarations, and World Ending
-- Mark Zuckerberg’s lead after every Production and
-  Jensen Huang’s Shovels income
+- Loopfold AI’s lead after every Production and
+  Corthaven’s Shovels income
 - Every Peer Validation threshold lookup;
   every Industrial Velocity discount that actually
   reduces a completed Facility’s cost and the Mandate it awards; and
@@ -1525,4 +1583,6 @@ Freeze every other numerical rule pending this human evidence.
 Four players is the authoritative balance configuration. Three- and
 five-player games use the same complete rules and must pass their own
 negotiation, congestion, duration, faction-viability, and strategic-diversity
-tests before release. Two and six players are not supported formats.
+tests before release. Two- and six-player games are playable exploratory
+formats; they are not balance-authority formats until they receive their own
+evidence.

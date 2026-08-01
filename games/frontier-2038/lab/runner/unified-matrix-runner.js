@@ -974,6 +974,7 @@ async function runAdversarialSlice({
   population,
   seed,
   rulesVariant,
+  signal,
   onProgress,
   progress
 }) {
@@ -992,7 +993,8 @@ async function runAdversarialSlice({
       rotateProfiles: true,
       rotateFactions: true,
       simulateNegotiation: true,
-      rulesVariant
+      rulesVariant,
+      signal
     });
     progress.completed += runs;
     onProgress?.({
@@ -1429,7 +1431,8 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       mandateMode: cell.mandateMode,
       simulateNegotiation: true,
       includeObservations: true,
-      runOffset: cell.runs
+      runOffset: cell.runs,
+      signal: options.signal
     });
     for (const detail of report.diagnostics.integrity.details) {
       integrityDetails.push({
@@ -1571,6 +1574,7 @@ export async function runUnifiedMatrix(options = {}, onProgress) {
       population: adversarialPopulation,
       seed: `${options.seed || "m3t4-unified-matrix"}:adversarial`,
       rulesVariant: options.rulesVariant || {},
+      signal: options.signal,
       onProgress,
       progress
     })

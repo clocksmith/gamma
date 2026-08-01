@@ -4,7 +4,7 @@ These instructions apply to the entire `frontier-2038` project.
 
 ## Product Intent
 
-M3T4 2038 is a 3–5 player medium-weight strategy board game about
+M3T4 2038 is a 2–6 player medium-weight strategy board game about
 institutions racing to build, deploy, regulate, and plausibly declare AGI.
 It combines spatial engine building, push-your-luck research, asymmetric
 institutions, negotiation, and shared public scrutiny.
@@ -41,18 +41,18 @@ When implementation needs an interpretation that the canonical rules do not
 resolve, record it as provisional in `docs/design-decisions.md`. Do not silently
 rewrite the baseline.
 
-## Public-Figure Boundary
+## Fictional-Identity Boundary
 
-Sam Altman, Mark Zuckerberg, Demis Hassabis, Elon Musk, Dario Amodei, and
-Jensen Huang are the canonical real-name satirical player identities.
-Do not replace them with institutional aliases.
+Dovetalis Labs, Loopfold AI, Mirevanta Works, Kestralyn, Orisonix, and
+Corthaven are the canonical fictional player institutions. Their CEOs are
+fictional characters. Do not replace them with real people, recognizable
+caricatures, or real institutional aliases.
 
-Treat every portrayal as fictional, transformative satire based on public
-institutional roles. Historically inspired events must target board state, not
-present accusations about a named person or company as fact. Do not imply
-endorsement or introduce company logos, copied trade dress, or generated
-photorealistic likenesses. Public retail release still requires an explicit
-publishing decision and appropriate legal review.
+Historically inspired events must target board state, not present accusations
+about a real person or company as fact. Do not imply endorsement or introduce
+company logos, copied trade dress, or generated photorealistic likenesses.
+Public retail release still requires an explicit publishing decision and
+appropriate legal review.
 
 ## Development
 
@@ -100,10 +100,11 @@ canonical doctrine until the user selects it and every affected authority is
 updated together.
 
 Four players is the authoritative balance configuration. Three- and
-five-player games are fully supported configurations, not incidental variants:
+five-player games are the suggested fully supported configurations, not incidental variants:
 every promoted rules candidate must preserve their integrity, strategic
 diversity, faction viability, negotiation, and completion quality. Two- and
-six-player reports remain historical evidence only.
+six-player games are playable exploratory configurations; their reports are
+non-promotional diagnostics until their own evidence contract is approved.
 
 No tournament average, strategy-evolution champion, rule-search recommendation,
 thin-cell maximum, or LLM anecdote may be described as balanced or promoted

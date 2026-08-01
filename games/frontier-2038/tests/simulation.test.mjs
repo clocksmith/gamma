@@ -32,8 +32,10 @@ import {
   mechanicsProjection
 } from "../lab/versioning/game-identity.js";
 import { declarationReadiness } from "../lab/rules/declaration-readiness.js";
+import { buildDecisionPrompt } from "../lab/contracts/decision-contract.js";
 import {
-  causallyNecessaryImportSuppliers
+  causallyNecessaryImportSuppliers,
+  immediateTradePacketCeiling
 } from "../lab/environment/selected-rules-match.js";
 import {
   legacyPrePromotionRulesOverlay
@@ -226,7 +228,7 @@ test("Nobel Effect can price prestige without weakening Research or Capability",
   );
 });
 
-test("Demis late validation changes Mandate without changing Capability", async () => {
+test("Mirevanta late validation changes Mandate without changing Capability", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
@@ -250,7 +252,7 @@ test("Demis late validation changes Mandate without changing Capability", async 
   );
 });
 
-test("four rival institutions restore Demis's final validation point", async () => {
+test("four rival institutions restore Mirevanta's final validation point", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 5,
@@ -274,7 +276,7 @@ test("four rival institutions restore Demis's final validation point", async () 
   );
 });
 
-test("Demis Peer Validation remains reduced at four players", async () => {
+test("Mirevanta Peer Validation remains reduced at four players", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 4,
@@ -454,6 +456,50 @@ test("joint Mega-Cluster acceptance is unavailable after a partner spends its co
   assert.equal(partner.compute, 0);
   assert.equal(partner.runway, 1);
   assert.equal(match.megaClusters.length, 0);
+});
+
+test("shared contract supplies cap construction and a Joint Venture termination uses one Influence effect", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "shared-contract-supply" },
+    () => {}
+  );
+  match.round = 3;
+  const player = match.players[0];
+  const partner = match.players[1];
+  match.contracts = Array.from(
+    { length: match.config.sharedSupply.jointVenturePairs },
+    (_, index) => ({
+      id: index + 1,
+      kind: "joint_venture",
+      left: { seat: 0, facilityId: `left-${index}` },
+      right: { seat: 1, facilityId: `right-${index}` }
+    })
+  );
+  player.jointVentures = match.contracts.map((contract) => ({ contractId: contract.id }));
+  partner.jointVentures = match.contracts.map((contract) => ({ contractId: contract.id }));
+
+  const legal = match.legalResolutions(0, "influence");
+  assert.equal(match.jointVentureSupplyAvailable(), false);
+  assert.equal(legal.some((decision) => decision.parameters?.mode === "joint_venture"), false);
+  const termination = legal.find((decision) =>
+    decision.parameters?.mode === "terminate_joint_venture" &&
+    decision.parameters.contractId === 1
+  );
+  assert.ok(termination);
+  match.applyResolution(0, termination);
+  assert.equal(match.contracts.length, match.config.sharedSupply.jointVenturePairs - 1);
+  assert.equal(player.jointVentures.some((venture) => venture.contractId === 1), false);
+  assert.equal(partner.jointVentures.some((venture) => venture.contractId === 1), false);
+
+  player.escalation = 1;
+  match.megaClusters = Array.from(
+    { length: match.config.sharedSupply.megaClusterPairs },
+    (_, index) => ({ id: `mega-${index + 1}` })
+  );
+  assert.deepEqual(match.legalWildResolutions(0, "mega_cluster"), []);
+  await match.applyWild([], 0, "mega_cluster", { parameters: {} });
+  assert.equal(player.escalation, 1);
+  assert.deepEqual(player.wildUsed, []);
 });
 
 test("Foundry starting Compute is an explicit one-lever rules variant", async () => {
@@ -1084,6 +1130,75 @@ test("Foundry Shovels observes two-Compute Wild Actions and respects its round c
   assert.equal(foundry.metrics.shovelsIncome, 1);
 });
 
+test("Allocation Window uses its authored positive-price contract and one lower counteroffer", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "foundry",
+      seed: "allocation-window-contract"
+    },
+    () => {}
+  );
+  const foundry = match.players[0];
+  const buyer = match.players[1];
+  const observed = [];
+  match.round = 2;
+  buyer.runway = 3;
+  const runwayBefore = foundry.runway;
+  const computeBefore = buyer.compute;
+  const stageOf = (packet) => packet.requestId.split(":").at(-2);
+  const policies = match.players.map(() => ({
+    async decide(packet) {
+      observed.push(packet);
+      const stage = stageOf(packet);
+      const selected = stage === "allocation_window_timing"
+        ? packet.legalDecisions.find((decision) => decision.decisionId === "allocation_open")
+        : stage === "allocation_window_0"
+          ? packet.legalDecisions.find((decision) =>
+            decision.decisionId === `allocation_offer_0_${buyer.seat}_3`
+          )
+          : stage === "allocation_response_0"
+            ? packet.legalDecisions.find((decision) =>
+              decision.decisionId === "allocation_counter_0_2"
+            )
+            : stage === "allocation_counterparty_0"
+              ? packet.legalDecisions.find((decision) =>
+                decision.decisionId === "allocation_counter_accept_0"
+              )
+              : packet.legalDecisions.find((decision) =>
+                decision.decisionId === "allocation_hold_1"
+              ) || packet.legalDecisions[0];
+      return {
+        decision: selected,
+        receipt: { provider: "fixture-policy", requestId: packet.requestId }
+      };
+    }
+  }));
+
+  await match.preSelectionFactionPowers(policies);
+
+  const offer = observed.find((packet) => stageOf(packet) === "allocation_window_0");
+  const response = observed.find((packet) => stageOf(packet) === "allocation_response_0");
+  assert.deepEqual(match.config.factionRules.foundry.allocationWindow, {
+    temporaryCompute: 2,
+    paymentResource: "runway",
+    minimumPrice: 1
+  });
+  assert.ok(offer.legalDecisions.every((decision) =>
+    !decision.decisionId.startsWith(`allocation_offer_0_${buyer.seat}_0`)
+  ));
+  assert.ok(response.legalDecisions.every((decision) =>
+    decision.decisionId !== "allocation_counter_0_0"
+  ));
+  assert.equal(buyer.runway, 1);
+  assert.equal(buyer.compute, computeBefore + 1);
+  assert.equal(foundry.runway, runwayBefore + 2);
+  assert.equal(
+    foundry.metrics.factionAbilityValues.allocation_window.paymentReceived,
+    2
+  );
+});
+
 test("offline Facility penalties cannot reduce final Mandate below zero", async () => {
   const { match } = await createInteractiveGame(
     {
@@ -1181,6 +1296,45 @@ test("Talent production exposes Team movement through a decision packet", async 
   assert.notEqual(team.tileId, start);
 });
 
+test("LLM decision packets expose the public table without simulation-only state", async () => {
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "private-visibility-contract" },
+    () => {}
+  );
+  for (let index = 0; index < 9; index += 1) {
+    match.recordEvent("headline_revealed", null, `Public event ${index}.`);
+  }
+  match.recordEvent("strategy_decision", 1, "A concealed simultaneous choice.");
+  const packet = match.packet(0, "visibility_inspection", [{
+    decisionId: "inspection_pass",
+    label: "Pass inspection",
+    actionId: "inspection"
+  }]);
+  const prompt = buildDecisionPrompt(packet);
+  const opponent = packet.observation.opponents[0];
+  const opponentCeo = match.players[opponent.seat].pieces.find((piece) => piece.kind === "ceo");
+
+  assert.equal(packet.policySeed, "private-visibility-contract");
+  assert.equal(packet.seed, undefined);
+  assert.doesNotMatch(prompt, /private-visibility-contract/);
+  assert.doesNotMatch(prompt, /profileId/);
+  assert.equal(opponent.profileId, undefined);
+  assert.equal(packet.observation.publicTable.players[opponent.seat].objectiveId, undefined);
+  assert.equal(packet.observation.publicTable.players[opponent.seat].tactics, undefined);
+  assert.equal(opponent.safety, match.players[opponent.seat].safety);
+  assert.deepEqual(opponent.pieces, match.players[opponent.seat].pieces);
+  assert.ok(packet.observation.board.some((tile) =>
+    tile.components.some((component) => component.id === opponentCeo.id)
+  ));
+  assert.deepEqual(
+    packet.observation.publicTable.contracts,
+    match.contracts
+  );
+  assert.ok(packet.publicHistory.length >= 10);
+  assert.ok(packet.publicHistory.some((event) => event.summary === "Public event 0."));
+  assert.ok(!packet.publicHistory.some((event) => event.type === "strategy_decision"));
+});
+
 test("Ownership Headline lets the affected player choose the producing Facility", async () => {
   const { match } = await createInteractiveGame(
     { playerCount: 3, seed: "ownership-facility-choice" },
@@ -1230,7 +1384,13 @@ test("Ownership Headline lets the affected player choose the producing Facility"
   await match.prepareHeadline([]);
 
   assert.equal(captured.seat, 0);
-  assert.equal(captured.decisions.length, 2);
+  assert.ok(captured.decisions.length >= 2);
+  assert.ok(captured.decisions.some(
+    (decision) => decision.parameters.facilityId === "cloud-fixture"
+  ));
+  assert.ok(captured.decisions.some(
+    (decision) => decision.parameters.facilityId === "capital-fixture"
+  ));
   assert.equal(player.runway, runwayBefore + 2);
 });
 
@@ -1670,6 +1830,25 @@ test("immediate trades skip impossible turns and package each offer", async () =
   }
 });
 
+test("immediate-trade packet ceiling is rule-derived and formal windows cannot repeat", async () => {
+  assert.deepEqual(
+    [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount)),
+    [96, 180, 288, 420, 576]
+  );
+  const { match } = await createInteractiveGame(
+    { playerCount: 3, seed: "immediate-trade-window-ledger" },
+    () => {}
+  );
+  match.activeImmediateTradeSeat = 0;
+  match.registerImmediateTradeDecisionWindow(1, "immediate_trade_response");
+  assert.throws(
+    () => match.registerImmediateTradeDecisionWindow(1, "immediate_trade_response"),
+    /formal window repeated/
+  );
+  assert.equal(match.immediateTradePackets, 1);
+  assert.equal(match.immediateTradePacketCeiling, 180);
+});
+
 test("counteroffer makers choose among simultaneous immediate-trade claimants", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 4, seed: "open-counteroffer" },
@@ -1902,7 +2081,7 @@ test("mechanics fingerprints ignore faction presentation copy", () => {
     factions: [{
       id: "coalition_lab",
       roleId: "faction-1",
-      name: "Sam Altman",
+      name: "Dovetalis Labs",
       motto: "Named wording",
       starts: { runway: 5 }
     }]
@@ -2195,7 +2374,7 @@ test("Monte Carlo refuses metered providers without explicit authorization", asy
   );
 });
 
-test("LLM evidence modes make fallback policy explicit and avoid a hidden cycle cap", async () => {
+test("LLM evidence modes make fallback policy explicit and leave call budgets uncapped by default", async () => {
   const report = await createSimulation({
     runs: 1,
     playerCount: 3,
@@ -2204,11 +2383,11 @@ test("LLM evidence modes make fallback policy explicit and avoid a hidden cycle 
     profileIds: ["capability_rusher", "power_broker", "trust_governor"],
     backends: ["codex"],
     allowLlm: true,
-    maxLlmDecisions: 5,
     llmStages: ["not-a-decision-stage"]
   });
   assert.equal(report.configuration.llmEvidenceMode, "fallback_allowed");
-  assert.equal(report.configuration.maxLlmDecisionsPerSeatCycle, 5);
+  assert.equal(report.configuration.maxLlmDecisions, null);
+  assert.equal(report.configuration.maxLlmDecisionsPerSeatCycle, null);
   await assert.rejects(
     () => createSimulation({
       runs: 1,
@@ -2220,17 +2399,18 @@ test("LLM evidence modes make fallback policy explicit and avoid a hidden cycle 
   );
 });
 
-test("simulation rejects unsupported two- and six-player games", async () => {
+test("simulation records two- and six-player games as exploratory non-promotional diagnostics", async () => {
   for (const playerCount of [2, 6]) {
-    await assert.rejects(
-      createSimulation({
-        runs: 1,
-        playerCount,
-        sampleReplays: 0,
-        seed: `unsupported-${playerCount}`
-      }),
-      /playerCount must be an integer from 3 to 5/
-    );
+    const report = await createSimulation({
+      runs: 1,
+      playerCount,
+      sampleReplays: 0,
+      seed: `exploratory-${playerCount}`
+    });
+    assert.equal(report.playerCount, playerCount);
+    assert.equal(report.configuration.playerCountStatus, "exploratory_nonpromotional");
+    assert.match(report.scope.id, new RegExp(`exploratory-${playerCount}p$`));
+    assert.match(report.scope.verdictBoundary, /non-promotional diagnostic/);
   }
 });
 

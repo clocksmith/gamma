@@ -56,14 +56,15 @@ export class ClaudeCliCaller {
     };
   }
 
-  async decide(packet) {
+  async decide(packet, { signal } = {}) {
     const invocation = await this.invocation(packet);
     try {
       const result = await runCliProcess({
         ...invocation,
         cwd: this.cwd,
         env: this.env,
-        timeoutMs: this.timeoutMs
+        timeoutMs: this.timeoutMs,
+        signal
       });
       const envelope = parseJsonText(result.stdout, "Claude CLI");
       const decision = validateDecisionResponse(

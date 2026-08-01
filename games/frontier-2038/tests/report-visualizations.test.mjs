@@ -90,7 +90,7 @@ test("aggregate views preserve faction-persona pairings and LLM receipt provenan
       standing({
         seat: 0,
         factionId: "coalition_lab",
-        factionName: "Sam Altman",
+        factionName: "Dovetalis Labs",
         profileId: "capability_rusher",
         score: 18,
         capability: 10,
@@ -113,7 +113,7 @@ test("aggregate views preserve faction-persona pairings and LLM receipt provenan
       standing({
         seat: 1,
         factionId: "platform_empire",
-        factionName: "Mark Zuckerberg",
+        factionName: "Loopfold AI",
         profileId: "power_broker",
         score: 15,
         capability: 8
@@ -129,7 +129,7 @@ test("aggregate views preserve faction-persona pairings and LLM receipt provenan
   assert.deepEqual(sam.providers, ["codex-cli", "greedy", "weighted"]);
 
   const map = heatmapCells(rows);
-  assert.equal(map.cells.get("Sam Altman|capability_rusher"), 1);
+  assert.equal(map.cells.get("Dovetalis Labs|capability_rusher"), 1);
   assert.deepEqual(providerSummary([report({ samples: [sample] })]), [
     {
       actualProvider: "codex-cli",

@@ -7,8 +7,14 @@ export class DecisionCache {
     this.directory = resolve(directory);
   }
 
-  key({ backend, model, packet, profile }) {
-    return sha256(canonicalJson({ backend, model: model || null, packet, profile }));
+  key({ backend, model, reasoningEffort, packet, profile }) {
+    return sha256(canonicalJson({
+      backend,
+      model: model || null,
+      reasoningEffort: reasoningEffort || null,
+      packet,
+      profile
+    }));
   }
 
   async read(input) {

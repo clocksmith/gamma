@@ -97,6 +97,21 @@ test("blind Realignment ties resolve by the first Initiative-clockwise leading b
   assert.equal(result.tied, true);
 });
 
+test("absent Realignment ballots leave the tied choice to Initiative", () => {
+  const result = resolveBlindRealignmentVote(
+    [
+      { seat: 0, motionId: null },
+      { seat: 1, motionId: null },
+      { seat: 2, motionId: null }
+    ],
+    1,
+    ["core", "outer", "counter"]
+  );
+  assert.equal(result.winningMotionId, undefined);
+  assert.deepEqual(result.leadingMotionIds, ["core", "outer", "counter"]);
+  assert.equal(result.tied, true);
+});
+
 test("Audit profiles scale from the four-player base", () => {
   assert.deepEqual(
     [3, 4, 5].map((players) =>
@@ -110,26 +125,29 @@ test("Audit profiles scale from the four-player base", () => {
   );
 });
 
-test("browser game accepts only three-, four-, and five-player formats", async () => {
+test("browser game permits two through six players while recommending three through five", async () => {
   const [config, factions, headlines] = await load();
-  for (const players of [3, 4, 5]) {
+  assert.deepEqual(config.players.playableCounts, [2, 3, 4, 5, 6]);
+  assert.deepEqual(config.players.supportedCounts, [3, 4, 5]);
+  assert.deepEqual(config.players.historicalOnlyCounts, [2, 6]);
+  for (const players of config.players.playableCounts) {
     assert.equal(
-      createGame(config, factions, headlines, `supported-${players}`, "coalition_lab", players)
+      createGame(config, factions, headlines, `playable-${players}`, "coalition_lab", players)
         .playerCount,
       players
     );
   }
-  for (const players of [2, 6]) {
+  for (const players of [1, 7]) {
     assert.throws(
       () => createGame(
         config,
         factions,
         headlines,
-        `unsupported-${players}`,
+        `out-of-range-${players}`,
         "coalition_lab",
         players
       ),
-      /playerCount must be one of 3, 4, 5/
+      /playerCount must be one of 2, 3, 4, 5, 6/
     );
   }
 });
@@ -203,7 +221,7 @@ test("Scrutiny beyond the ten-cube supply immediately creates penalties", async 
   assert.equal(state.player.trust, 2);
 });
 
-test("Mark Zuckerberg’s starting Customer is Customer one", async () => {
+test("Loopfold AI's starting Customer is Customer one", async () => {
   const [config, factions, headlines] = await load();
   const state = createGame(config, factions, headlines, "platform-customer", "platform_empire");
   const consumer = state.board.find((tile) => tile.id === "consumer");

@@ -127,7 +127,9 @@ export class CoreEconomyMatch {
     this.board = generateBoard(config, `${seed}:board`);
     this.recordReplay = recordReplay;
     this.decisionContext = decisionContext;
+    this.publicMatchId = decisionContext?.publicMatchId || "m3t4-2038";
     this.replay = [];
+    this.publicHistory = [];
     const frontier = this.board.find((tile) => tile.id === "frontier");
     this.players = Array.from({ length: playerCount }, (_, seat) =>
       createPlayer(
@@ -197,14 +199,68 @@ export class CoreEconomyMatch {
       player.compute >= 0;
   }
 
+  publicPlayerState(player) {
+    return {
+      seat: player.seat,
+      factionId: player.factionId,
+      factionName: player.factionName,
+      runway: player.runway,
+      compute: player.compute,
+      capability: player.capability,
+      customers: player.customers,
+      trust: player.trust,
+      safety: player.safety,
+      mandate: player.mandate,
+      scrutiny: player.scrutiny,
+      actionsUsed: [...player.actionsUsed],
+      pieces: clone(player.pieces),
+      facilities: clone(player.facilities),
+      generators: clone(player.generators),
+      influence: clone(player.influence || []),
+      experts: clone(player.experts || [])
+    };
+  }
+
+  publicBoardState() {
+    return this.board.map((tile) => ({
+      tileId: tile.instanceId,
+      name: tile.name,
+      category: tile.category,
+      q: tile.q,
+      r: tile.r,
+      facilitySpacesOpen:
+        (tile.facilitySpaces ?? this.config.board.facilitySpacesPerHex) -
+        this.tileOccupancy(tile.instanceId),
+      components: this.players.flatMap((player) => [
+        ...player.pieces
+          .filter((piece) => piece.tileId === tile.instanceId)
+          .map((piece) => ({ type: "piece", ownerSeat: player.seat, ...clone(piece) })),
+        ...player.facilities
+          .filter((facility) => facility.tileId === tile.instanceId)
+          .map((facility) => ({ type: "facility", ownerSeat: player.seat, ...clone(facility) })),
+        ...player.generators
+          .filter((generator) => generator.tileId === tile.instanceId)
+          .map((generator) => ({ type: "generator", ownerSeat: player.seat, ...clone(generator) })),
+        ...(player.influence || [])
+          .filter((influence) => influence.tileId === tile.instanceId)
+          .map((influence) => ({ type: "influence", ownerSeat: player.seat, ...clone(influence) })),
+        ...(player.experts || [])
+          .filter((expert) => expert.tileId === tile.instanceId)
+          .map((expert) => ({ type: "expert", ownerSeat: player.seat, ...clone(expert) }))
+      ])
+    }));
+  }
+
   publicObservation(seat) {
     const player = this.players[seat];
     const powered = player.facilities.filter((facility) => facility.powered).length;
+    const publicPlayers = this.players.map((candidate) => this.publicPlayerState(candidate));
     return {
       round: this.round,
       cycle: this.cycle,
       initiativeSeat: this.initiativeSeat,
       self: {
+        ...publicPlayers[seat],
         runway: player.runway,
         compute: player.compute,
         capability: player.capability,
@@ -223,57 +279,39 @@ export class CoreEconomyMatch {
       opponents: this.players
         .filter((opponent) => opponent.seat !== seat)
         .map((opponent) => ({
-          seat: opponent.seat,
-          factionId: opponent.factionId,
-          profileId: opponent.profileId,
+          ...publicPlayers[opponent.seat],
           facilityTileIds: opponent.facilities.map((facility) => facility.tileId),
-          runway: opponent.runway,
-          compute: opponent.compute,
-          capability: opponent.capability,
-          customers: opponent.customers,
-          trust: opponent.trust,
-          scrutiny: opponent.scrutiny,
           facilities: opponent.facilities.length,
           gridReadyFacilities: opponent.facilities.filter(
             (facility) => facility.gridReady
           ).length
         })),
-      board: this.board.map((tile) => ({
-        tileId: tile.instanceId,
-        category: tile.category,
-        q: tile.q,
-        r: tile.r,
-        facilitySpacesOpen:
-          (tile.facilitySpaces ?? this.config.board.facilitySpacesPerHex) -
-          this.tileOccupancy(tile.instanceId)
-      }))
+      board: this.publicBoardState()
     };
   }
 
   packet(seat, stage, legalDecisions) {
     const player = this.players[seat];
-    return {
+    const packet = {
       schemaVersion: this.decisionContext?.schemaVersion || 1,
       ...(this.decisionContext?.game
         ? { game: structuredClone(this.decisionContext.game) }
         : {}),
-      requestId: `${this.seed}:r${this.round}:c${this.cycle}:s${seat}:${stage}`,
-      matchId: this.seed,
-      seed: this.seed,
+      requestId: `${this.publicMatchId}:r${this.round}:c${this.cycle}:s${seat}:${stage}`,
+      matchId: this.publicMatchId,
       seat,
       factionId: player.factionId,
       round: this.round,
       cycle: this.cycle,
       observation: this.publicObservation(seat),
-      publicHistory: this.replay.slice(-8).map((event) => ({
-        type: event.type,
-        round: event.round,
-        cycle: event.cycle,
-        seat: event.seat,
-        summary: event.summary
-      })),
+      publicHistory: clone(this.publicHistory),
       legalDecisions
     };
+    Object.defineProperty(packet, "policySeed", {
+      value: this.seed,
+      enumerable: false
+    });
+    return packet;
   }
 
   legalActionSelections(seat) {
@@ -798,6 +836,15 @@ export class CoreEconomyMatch {
   }
 
   recordEvent(type, seat, summary, decisionReceipt = null) {
+    if (type !== "strategy_decision") {
+      this.publicHistory.push({
+        type,
+        round: this.round,
+        cycle: this.cycle,
+        seat,
+        summary
+      });
+    }
     if (!this.recordReplay) return;
     this.replay.push({
       index: this.replay.length,

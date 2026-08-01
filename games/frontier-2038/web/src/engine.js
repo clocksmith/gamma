@@ -154,11 +154,11 @@ export function resolveBlindRealignmentVote(ballots, initiativeSeat, motionIds) 
     if (!Number.isInteger(ballot.seat) || bySeat.has(ballot.seat)) {
       throw new TypeError("Realignment ballots require one unique integer seat each.");
     }
-    if (!validMotions.has(ballot.motionId)) {
+    if (ballot.motionId !== null && !validMotions.has(ballot.motionId)) {
       throw new TypeError(`Unknown realignment motion: ${ballot.motionId}.`);
     }
     bySeat.set(ballot.seat, ballot.motionId);
-    counts[ballot.motionId] += 1;
+    if (ballot.motionId !== null) counts[ballot.motionId] += 1;
   }
   if (ballots.length === 0) throw new TypeError("At least one realignment ballot is required.");
   const maximum = Math.max(...Object.values(counts));
@@ -178,6 +178,7 @@ export function resolveBlindRealignmentVote(ballots, initiativeSeat, motionIds) 
   }
   return {
     winningMotionId,
+    leadingMotionIds: [...leaders],
     counts,
     tied: leaders.size > 1,
     initiativeSeat
@@ -380,10 +381,10 @@ export function createGame(config, factions, headlines, seed, factionId, playerC
   const boundedPlayerCount = Number(playerCount);
   if (
     !Number.isInteger(boundedPlayerCount) ||
-    !config.players.supportedCounts.includes(boundedPlayerCount)
+    !config.players.playableCounts.includes(boundedPlayerCount)
   ) {
     throw new RangeError(
-      `playerCount must be one of ${config.players.supportedCounts.join(", ")}.`
+      `playerCount must be one of ${config.players.playableCounts.join(", ")}.`
     );
   }
   const state = {

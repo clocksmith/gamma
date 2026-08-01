@@ -319,27 +319,14 @@ As of this research snapshot, Panda’s p20 program states:
 Eligibility must be confirmed before applying. See
 [Panda p20](https://pandagm.com/p20/).
 
-## Named-parody publishing recommendation
+## Fictional-institution publishing recommendation
 
-This is the largest game-specific commercial risk.
+The current design uses fictional institutions and fictional CEOs. Before a
+retail print run or crowdfunding campaign, obtain an explicit legal review of
+the complete cards, box, art, and marketing, including the final chosen names.
 
-The current design and prototype deliberately use:
-
-- Sam Altman
-- Mark Zuckerberg
-- Demis Hassabis
-- Elon Musk
-- Dario Amodei
-- Jensen Huang
-
-This is a creative recommendation for the real-name satirical game, not
-publishing clearance or doctrine. Preserve the real names through prototyping
-so the theme, negotiation, and asymmetric roles can be tested as designed.
-Before a retail print run or crowdfunding campaign, obtain an explicit legal
-review of the complete cards, box, art, and marketing.
-
-Do not add recognizable portraits, company logos, proprietary interfaces, or
-trade dress to retail artifacts without a separate explicit decision.
+Do not add recognizable portraits, real company logos, proprietary interfaces,
+or trade dress to retail artifacts without a separate explicit decision.
 
 New York Civil Rights Law §51 provides a cause of action where a living
 person’s name, portrait, picture, likeness, or voice is used for advertising

@@ -50,11 +50,51 @@ async function readTerminalJob(request, id) {
   for (let attempt = 0; attempt < 40; attempt += 1) {
     const response = await request(`/api/simulations/${id}`);
     const job = await response.json();
-    if (job.status === "complete" || job.status === "failed") return job;
+    if (["complete", "failed", "cancelled"].includes(job.status)) return job;
     await new Promise((resolve) => setTimeout(resolve, 25));
   }
   throw new Error(`Simulation job ${id} did not settle.`);
 }
+
+test("cancelled simulation jobs cannot publish a report or archive", async () => {
+  const port = 40_001 + (process.pid % 10_000);
+  const server = await startServer(port);
+  const request = (path, options = {}) =>
+    fetch(`http://127.0.0.1:${port}${path}`, options);
+
+  try {
+    const started = await request("/api/simulations", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        runs: 10_000,
+        playerCount: 3,
+        sampleReplays: 0,
+        seed: `cancel-regression-${process.pid}`
+      })
+    });
+    assert.equal(started.status, 202);
+    const { id } = await started.json();
+
+    const cancelled = await request(`/api/simulations/${id}/cancel`, {
+      method: "POST"
+    });
+    assert.equal(cancelled.status, 202);
+    assert.equal((await cancelled.json()).status, "cancelled");
+
+    const terminal = await readTerminalJob(request, id);
+    assert.equal(terminal.status, "cancelled");
+    assert.equal(terminal.report, undefined);
+    assert.equal(terminal.archive, undefined);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    const afterWorkerSettles = await request(`/api/simulations/${id}`).then((response) => response.json());
+    assert.equal(afterWorkerSettles.status, "cancelled");
+    assert.equal(afterWorkerSettles.report, undefined);
+    assert.equal(afterWorkerSettles.archive, undefined);
+  } finally {
+    server.kill("SIGTERM");
+  }
+});
 
 test("docs reader routes preserve their /docs/ base and serve rendered pages", async () => {
   const port = 20_000 + (process.pid % 10_000);

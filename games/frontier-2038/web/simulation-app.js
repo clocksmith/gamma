@@ -131,6 +131,7 @@ let replayIndex = 0;
 let bridgeConnected = !bridgeRequired;
 let analysisReports = [];
 let jobPollingController = null;
+let activeJobId = null;
 
 const analysisColors = ["#a45137", "#536e73", "#a98c3f", "#7a657d", "#607d70", "#6c7a89"];
 
@@ -330,6 +331,9 @@ async function pollJob(id, { signal } = {}) {
     elements["job-status"].textContent = stale
       ? `STALE JOB · ${jobProgressLabel(job)} · Monitoring continues; stop monitoring or reload this job URL to recover.`
       : jobProgressLabel(job);
+    if (job.status === "cancelled") {
+      throw new DOMException("Simulation cancelled.", "AbortError");
+    }
     if (job.status === "failed") throw new Error(job.error);
     if (job.status === "complete") {
       return { ...job.report, localArchive: job.archive };
@@ -342,6 +346,7 @@ async function watchJob(id) {
   jobPollingController?.abort();
   const controller = new AbortController();
   jobPollingController = controller;
+  activeJobId = id;
   elements["stop-job-watch"].hidden = false;
   try {
     return await pollJob(id, { signal: controller.signal });
@@ -350,6 +355,25 @@ async function watchJob(id) {
       jobPollingController = null;
       elements["stop-job-watch"].hidden = true;
     }
+    if (activeJobId === id) activeJobId = null;
+  }
+}
+
+async function cancelActiveJob() {
+  const id = activeJobId;
+  jobPollingController?.abort();
+  if (!id) return;
+  elements["job-status"].textContent = "CANCELLING SIMULATION";
+  try {
+    const response = await apiFetch(`/api/simulations/${id}/cancel`, {
+      method: "POST"
+    });
+    const job = await response.json();
+    if (!response.ok) throw new Error(job.error || copy.errors.readJob);
+    elements["job-status"].textContent = "SIMULATION CANCELLED";
+    history.replaceState(null, "", window.location.pathname);
+  } catch (error) {
+    elements["job-status"].textContent = `${copy.status.failed} · ${error.message}`;
   }
 }
 
@@ -1087,7 +1111,7 @@ elements["simulation-form"].addEventListener("submit", async (event) => {
     showReport(await watchJob(job.id));
   } catch (error) {
     elements["job-status"].textContent = error?.name === "AbortError"
-      ? `MONITORING STOPPED · job ${jobId || "unknown"} continues on the local server. Reload this job URL to resume.`
+      ? `SIMULATION CANCELLED · job ${jobId || "unknown"} will not publish a report.`
       : `${copy.status.failed} · ${error.message}`;
   } finally {
     updateRunAvailability();
@@ -1152,13 +1176,13 @@ elements["experiment-mode"].addEventListener("change", () => {
   renderExperimentMode({ resetDefaults: true });
 });
 elements["new-simulation"].addEventListener("click", () => {
-  jobPollingController?.abort();
+  void cancelActiveJob();
   history.replaceState(null, "", window.location.pathname);
   elements["results-view"].hidden = true;
   elements["setup-view"].hidden = false;
   elements["job-status"].textContent = "";
 });
-elements["stop-job-watch"].addEventListener("click", () => jobPollingController?.abort());
+elements["stop-job-watch"].addEventListener("click", () => void cancelActiveJob());
 elements["download-report"].addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(rawReport, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
@@ -1237,7 +1261,7 @@ if (existingJob) {
     showReport(await watchJob(existingJob));
   } catch (error) {
     elements["job-status"].textContent = error?.name === "AbortError"
-      ? `MONITORING STOPPED · job ${existingJob} continues on the local server. Reload this job URL to resume.`
+      ? `SIMULATION CANCELLED · job ${existingJob} will not publish a report.`
       : `${copy.status.failed} · ${error.message}`;
   } finally {
     updateRunAvailability();
