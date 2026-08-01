@@ -3560,3 +3560,45 @@ Evidence:
 - `results/mobius2_logos_lexical_frame_ceiling_q0_v1/decision.json`
 - `run_logs/adaptive/20260801T223213Z_993e105544.log`
 - `operations/adaptive/exclusions/mobius2_logos_cross_page_lexical_frame_opening_1m_v1.json`
+
+## 2026-08-01: MOBIUS-2 NOEMA binary-carry hierarchy headroom claimed
+
+Candidate: `mobius2_noema_binary_carry_headroom_qh0_v1`
+
+The prerequisite NOEMA experiment asks whether a recursively summarized causal
+state contains endpoint428 residual information absent from the terminal flat
+recurrent and direct-lag neighborhoods. It is deliberately not a full NOEMA
+implementation or score claim.
+
+Every complete page contributes complete 128-WRT-byte patches. Development,
+selection, and sealed confirmation are the first 60%, next 20%, and final 20%
+of complete pages by chronological page count. Weights train only on
+development. The minimum exact quantized selection payload chooses one of
+eight frozen checkpoints, with earlier-epoch ties. Sealed confirmation is then
+read once.
+
+N1 is one 48-wide flat GRU state. N2/NM represents the decoded patch prefix as
+a binary carry tree: each byte creates a leaf, equal-sized adjacent summaries
+merge through one shared GRUCell, and the occupied summaries form the next-byte
+state. Both controls have exactly 37,623 parameters and identical tensor
+shapes. Surprise memory is disabled. NS cyclically rotates N2 summary states
+across pages within each split. Unlike the retired direct-lag model, N2 never
+queries fixed lag coordinates.
+
+Promotion requires positive development and selection gains, at least 3,000
+gross and 2,100 package-adjusted B/M on sealed pages, strict sealed wins over
+N1 and NS, a matched package no larger than 131,072 bytes, duplicate model/P1/
+payload/history identity, exact parent replay and arithmetic decode, exact WRT
+reconstruction, and official raw inversion. A pass authorizes one frozen
+distant reset-population replay only. A miss retires the exact patch geometry,
+cell, widths, optimizer, epoch selection, aggregation, quantization, and null
+without rescue sweeps or surprise-memory rescue.
+
+The frozen candidate passed pre-run syntax, schema, normal-ROCm matrix compute,
+matched parameter-count, finite forward, and backward probes. It retains zero
+score and forecast credit pending the exact adaptive receipt.
+
+Plan and schema:
+
+- `docs/mobius2_noema_binary_carry_headroom_plan.md`
+- `docs/mobius2_noema_binary_carry_headroom_decision.schema.json`

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mobius2_noema_binary_carry_headroom_decision.schema.json",
+  "title": "MOBIUS-2 NOEMA binary-carry hierarchy headroom decision",
+  "type": "object",
+  "required": [
+    "schema",
+    "candidate_id",
+    "proposal_id",
+    "evidence_level",
+    "claim_boundary",
+    "inputs",
+    "population",
+    "architecture",
+    "controls",
+    "package",
+    "proof",
+    "gates",
+    "decision",
+    "score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "mobius2_noema_binary_carry_headroom_qh0_v1"
+    },
+    "candidate_id": {
+      "const": "mobius2_noema_binary_carry_headroom_qh0_v1"
+    },
+    "proposal_id": {
+      "const": "mobius2_noema_binary_carry_headroom_v1"
+    },
+    "evidence_level": {
+      "const": "zero_credit_exact_hierarchy_headroom"
+    },
+    "claim_boundary": {"type": "string"},
+    "inputs": {"type": "object"},
+    "population": {"type": "object"},
+    "architecture": {"type": "object"},
+    "controls": {
+      "type": "object",
+      "required": ["N0", "N1", "N2_NM", "NS"]
+    },
+    "package": {"type": "object"},
+    "proof": {"type": "object"},
+    "gates": {
+      "type": "object",
+      "required": ["conditions", "failed_conditions"]
+    },
+    "decision": {
+      "type": "object",
+      "required": ["promotion_authorized", "verdict", "next_action"]
+    },
+    "score_credit_bytes": {"const": 0}
+  },
+  "additionalProperties": true
+}
