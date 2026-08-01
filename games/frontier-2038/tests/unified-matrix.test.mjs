@@ -10,7 +10,10 @@ import {
   configurationOutcomeBalanceChecks,
   runUnifiedMatrix
 } from "../lab/runner/unified-matrix-runner.js";
-import { runLlmNegotiationHoldout } from "../lab/runner/llm-holdout-runner.js";
+import {
+  runLlmNegotiationHoldout,
+  validateLlmHoldoutRegistration
+} from "../lab/runner/llm-holdout-runner.js";
 import { loadPlayerProfiles } from "../lab/personas/player-profile.js";
 import { WeightedPlayerPolicy } from "../lab/policies/weighted-policy.js";
 
@@ -470,4 +473,30 @@ test("LLM holdout cannot run without explicit authorization", async () => {
     }),
     /explicit allowLlm/
   );
+});
+
+test("strict LLM holdouts permit full-seat authority without an arbitrary decision cap", () => {
+  const registration = validateLlmHoldoutRegistration({
+    schemaVersion: 1,
+    id: "full-seat-fixture",
+    locked: true,
+    purpose: "fresh_robustness",
+    seed: "full-seat-fixture",
+    runs: 1,
+    playerCount: 3,
+    profileIds: ["agi_candidate", "power_broker", "trust_governor"],
+    backends: ["codex", "weighted", "weighted"],
+    model: "fixture-model",
+    reasoningEffort: "medium",
+    llmStages: null,
+    maximumLlmDecisions: null,
+    analysis: {
+      primaryOutcome: "fixture",
+      secondaryOutcomes: [],
+      interpretationBoundary: "fixture"
+    }
+  });
+  assert.equal(registration.llmStages, null);
+  assert.equal(registration.maximumLlmDecisions, null);
+  assert.equal(registration.reasoningEffort, "medium");
 });

@@ -30,7 +30,7 @@ async function registrationIdentity(path) {
   return { path: relativePath, registrationCommit: stdout.trim() };
 }
 
-function validate(document) {
+export function validateLlmHoldoutRegistration(document) {
   if (
     document.schemaVersion !== 1 ||
     document.locked !== true ||
@@ -39,10 +39,11 @@ function validate(document) {
     document.profileIds.length !== document.playerCount ||
     !Array.isArray(document.backends) ||
     document.backends.length !== document.playerCount ||
-    !Array.isArray(document.llmStages) ||
-    !document.llmStages.length ||
-    !Number.isInteger(document.maximumLlmDecisions) ||
-    document.maximumLlmDecisions < 1
+    (document.llmStages !== null &&
+      (!Array.isArray(document.llmStages) || !document.llmStages.length)) ||
+    (document.maximumLlmDecisions !== null &&
+      (!Number.isInteger(document.maximumLlmDecisions) ||
+        document.maximumLlmDecisions < 1))
   ) {
     throw new TypeError("Invalid locked LLM holdout preregistration.");
   }
@@ -70,7 +71,9 @@ export async function runLlmNegotiationHoldout({
     throw new TypeError("preRegistrationPath is required.");
   }
   const absolute = resolve(preRegistrationPath);
-  const document = validate(JSON.parse(await readFile(absolute, "utf8")));
+  const document = validateLlmHoldoutRegistration(
+    JSON.parse(await readFile(absolute, "utf8"))
+  );
   const identity = await registrationIdentity(absolute);
   const fingerprint = fingerprintObject(document);
   const cacheMode = document.purpose === "fresh_robustness"
@@ -95,10 +98,11 @@ export async function runLlmNegotiationHoldout({
     backends: document.backends,
     allowLlm: true,
     requireLlm: true,
-    maxLlmDecisions: document.maximumLlmDecisions,
+    maxLlmDecisions: document.maximumLlmDecisions ?? undefined,
     model: document.model || undefined,
     reasoningEffort: document.reasoningEffort || undefined,
     llmStages: document.llmStages,
+    strictLlmEvidence: true,
     llmCacheMode: cacheMode,
     llmCacheDirectory: document.cacheDirectory || undefined,
     preRegistrationId: document.id,

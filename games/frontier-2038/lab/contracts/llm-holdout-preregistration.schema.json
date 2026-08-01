@@ -50,14 +50,21 @@
       "maxItems": 6
     },
     "model": { "type": ["string", "null"] },
+    "reasoningEffort": { "type": ["string", "null"] },
     "llmStages": {
-      "type": "array",
-      "items": { "type": "string" },
-      "minItems": 1
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        { "type": "null" }
+      ]
     },
     "maximumLlmDecisions": {
-      "type": "integer",
-      "minimum": 1
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Null means no arbitrary cap; bounded game rules and strict provider failures still terminate the match."
     },
     "cacheDirectory": { "type": ["string", "null"] },
     "analysis": {
