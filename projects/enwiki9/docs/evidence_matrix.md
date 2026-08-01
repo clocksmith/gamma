@@ -12,8 +12,8 @@ No forecast or inherited metadata is included here.
 
 ## Proof Boundary
 
-- Result JSON files scanned: `928`
-- Roundtrip-passing rows: `922`
+- Result JSON files scanned: `850`
+- Roundtrip-passing rows: `821`
 - Verified full `1G` rows in this checkout: `0`
 - `10.95%` target reached by this matrix: `False`
 - Best full `1G` score: `none present`
@@ -22,92 +22,106 @@ No forecast or inherited metadata is included here.
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `baseline_zlib` | baseline compressor | 1,024 | 495 | 334 | 161 | 2.609375 | true | `results/baseline_zlib/2026-07-20T152000.json` |
-| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000 | 3,857 | 3,656 | 201 | 2.9248 | true | `results/baseline_lzma/2026-07-27T213049.json` |
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| `vulcan_event_control_v0` | custom candidate | 600,747 | 377,494 | 367,924 | 9,570 | 4.89955339 | true | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 1,000,000 | 266,493 | 261,652 | 4,841 | 2.093216 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T150923.json` |
-| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 10,000,000 | 1,825,866 | 1,642,858 | 183,008 | 1.3142864 | not recorded | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
-| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 100,000,000 | 15,040,789 | 14,857,781 | 183,008 | 1.18862248 | true | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json` |
+| `fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1` | fx2 geometry/order wrapper | 1,000 | 365,803 | 260 | 365,543 | 2.08 | true | `results/fx2_geometry_title_sidecar_byte_split_direct_extra_page_match_v1/2026-06-06T225521.json` |
+| `baseline_bz2` | baseline compressor | 1,024 | 567 | 401 | 166 | 3.1328125 | true | `results/baseline_bz2/2026-06-07T184036.json` |
+| `srstc_raw_order2_aggregate_richkeys_v1` | custom candidate | 4,096 | 23,296 | 1,300 | 21,996 | 2.5390625 | true | `results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183706.json` |
+| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000 | 3,857 | 3,656 | 201 | 2.9248 | true | `results/baseline_lzma/2026-07-27T142230.json` |
+| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 65,536 | 22,805 | 22,604 | 201 | 2.75927734 | true | `results/baseline_lzma/2026-06-07T152335.json` |
+| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T114728.json` |
+| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 1,000,000 | 266,493 | 261,652 | 4,841 | 2.093216 | true | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T120140.json` |
+| `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | fx2 sidecar or stream split | 1,048,576 | 438,939 | 182,361 | 256,578 | 1.39130402 | not recorded | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T175351.json` |
+| `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | fx2/cmix tuned wrapper | 10,000,000 | 1,882,615 | 1,643,289 | 239,326 | 1.3146312 | true | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1/2026-06-08T201540.json` |
+| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 100,000,000 | 15,462,586 | 15,279,578 | 183,008 | 1.22236624 | true | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-24T063129.json` |
 
 ## Best Exact Archive By Scope
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | cmix21 memory-shaped context mixer | 1,024 | 304,496 | 243 | 304,253 | 1.8984375 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T163727.json` |
-| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000 | 3,857 | 3,656 | 201 | 2.9248 | true | `results/baseline_lzma/2026-07-27T213049.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | cmix21 memory-shaped context mixer | 250,000 | 349,231 | 44,978 | 304,253 | 1.439296 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T170257.json` |
-| `vulcan_event_control_v0` | custom candidate | 600,747 | 377,494 | 367,924 | 9,570 | 4.89955339 | true | `results/vulcan_event_control_v0/2026-07-26T080355.json` |
-| `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 735,705 | 174,423 | 561,282 | 1.395384 | true | `results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-07-21T183101.json` |
-| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 10,000,000 | 1,825,866 | 1,642,858 | 183,008 | 1.3142864 | not recorded | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
-| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 100,000,000 | 15,040,789 | 14,857,781 | 183,008 | 1.18862248 | true | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-22T222147.json` |
+| `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | custom candidate | 1,000 | 383,619 | 243 | 383,376 | 1.944 | true | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T000100.json` |
+| `cmix21_text_wrapped_v1` | cmix21 memory-shaped context mixer | 1,024 | 548,377 | 244 | 548,133 | 1.90625 | true | `results/cmix21_text_wrapped_v1/2026-07-28T030209.json` |
+| `srstc_raw_order2_aggregate_richkeys_v1` | custom candidate | 4,096 | 23,296 | 1,300 | 21,996 | 2.5390625 | true | `results/srstc_raw_order2_aggregate_richkeys_v1/2026-07-05T183706.json` |
+| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000 | 3,857 | 3,656 | 201 | 2.9248 | true | `results/baseline_lzma/2026-07-27T142230.json` |
+| `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | fx2 sidecar or stream split | 65,536 | 270,151 | 13,573 | 256,578 | 1.65686035 | true | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T174031.json` |
+| `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | custom candidate | 250,000 | 428,352 | 44,976 | 383,376 | 1.439232 | not recorded | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T002058.json` |
+| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,961 | 174,395 | 562,566 | 1.39516 | not recorded | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T155023.json` |
+| `fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1` | fx2 sidecar or stream split | 1,048,576 | 438,939 | 182,361 | 256,578 | 1.39130402 | not recorded | `results/fx2_sidecar_byte_split_direct_extra_page_match_dictcmix_xz_min_v1/2026-06-07T175351.json` |
+| `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,351 | 1,638,076 | 564,275 | 1.3104608 | true | `results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-10T042446.json` |
+| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 100,000,000 | 15,462,586 | 15,279,578 | 183,008 | 1.22236624 | true | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-24T063129.json` |
 
 ## Top Score Rows At 10,000,000 Bytes
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 10,000,000 | 1,825,866 | 1,642,858 | 183,008 | 1.3142864 | not recorded | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
-| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000,000 | 2,720,457 | 2,720,256 | 201 | 2.1762048 | true | `results/baseline_lzma/2026-07-21T172645.json` |
-| `blue_dolphin_tree_macro_v1` | custom candidate | 10,000,000 | 2,743,001 | 2,733,028 | 9,973 | 2.1864224 | true | `results/blue_dolphin_tree_macro_v1/2026-07-20T151748.json` |
-| `blue_dolphin_mediawiki_inline_v1` | custom candidate | 10,000,000 | 2,744,980 | 2,741,292 | 3,688 | 2.1930336 | true | `results/blue_dolphin_mediawiki_inline_v1/2026-07-20T151743.json` |
+| `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | fx2/cmix tuned wrapper | 10,000,000 | 1,882,615 | 1,643,289 | 239,326 | 1.3146312 | true | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1/2026-06-08T201540.json` |
+| `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftdeep_safe_v1` | fx2/cmix tuned wrapper | 10,000,000 | 1,882,649 | 1,643,346 | 239,303 | 1.3146768 | true | `results/fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftdeep_safe_v1/2026-06-09T004038.json` |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,319 | 1,638,173 | 564,146 | 1.3105384 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T194640.json` |
+| `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,351 | 1,638,076 | 564,275 | 1.3104608 | true | `results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-10T042446.json` |
+| `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,359 | 1,638,083 | 564,276 | 1.3104664 | true | `results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T005909.json` |
+| `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,372 | 1,638,098 | 564,274 | 1.3104784 | true | `results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-03T062324.json` |
+| `cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,376 | 1,638,101 | 564,275 | 1.3104808 | true | `results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T114711.json` |
+| `cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,389 | 1,638,114 | 564,275 | 1.3104912 | true | `results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-29T012252.json` |
 
 ## Top Archive Rows At 10,000,000 Bytes
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | fx2 geometry/order wrapper | 10,000,000 | 1,825,866 | 1,642,858 | 183,008 | 1.3142864 | not recorded | `results/fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1/2026-07-20T155707.json` |
-| `baseline_lzma` | LZMA/LZMA2 baseline or preprocessor | 10,000,000 | 2,720,457 | 2,720,256 | 201 | 2.1762048 | true | `results/baseline_lzma/2026-07-21T172645.json` |
-| `blue_dolphin_tree_macro_v1` | custom candidate | 10,000,000 | 2,743,001 | 2,733,028 | 9,973 | 2.1864224 | true | `results/blue_dolphin_tree_macro_v1/2026-07-20T151748.json` |
-| `blue_dolphin_mediawiki_inline_v1` | custom candidate | 10,000,000 | 2,744,980 | 2,741,292 | 3,688 | 2.1930336 | true | `results/blue_dolphin_mediawiki_inline_v1/2026-07-20T151743.json` |
+| `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,351 | 1,638,076 | 564,275 | 1.3104608 | true | `results/cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-10T042446.json` |
+| `cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,359 | 1,638,083 | 564,276 | 1.3104664 | true | `results/cmix21_text_mmap_paq5_ppmd22400k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-28T005909.json` |
+| `cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,372 | 1,638,098 | 564,274 | 1.3104784 | true | `results/cmix21_text_mmap_paq5_ppmd21376k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-03T062324.json` |
+| `cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,376 | 1,638,101 | 564,275 | 1.3104808 | true | `results/cmix21_text_mmap_paq5_ppmd22m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-26T114711.json` |
+| `cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,389 | 1,638,114 | 564,275 | 1.3104912 | true | `results/cmix21_text_mmap_paq5_ppmd22272k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-29T012252.json` |
+| `cmix21_text_mmap_paq5_ppmd23m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,407 | 1,638,134 | 564,273 | 1.3105072 | true | `results/cmix21_text_mmap_paq5_ppmd23m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-24T101836.json` |
+| `cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,419 | 1,638,145 | 564,274 | 1.310516 | true | `results/cmix21_text_mmap_paq5_ppmd21120k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-08T121005.json` |
+| `cmix21_text_mmap_paq5_ppmd24m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 10,000,000 | 2,202,426 | 1,638,153 | 564,273 | 1.3105224 | true | `results/cmix21_text_mmap_paq5_ppmd24m_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-06-23T203949.json` |
 
 ## Top Score Rows At 1,000,000 Bytes
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 1,000,000 | 266,493 | 261,652 | 4,841 | 2.093216 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T150923.json` |
-| `opcode_typed_anchor_ppm_o5_v1` | syntax opcode preprocessor | 1,000,000 | 270,089 | 266,028 | 4,061 | 2.128224 | true | `results/opcode_typed_anchor_ppm_o5_v1/2026-07-21T144847.json` |
-| `opcode_typed_anchor_ppm_o5_v1` | syntax opcode preprocessor | 1,000,000 | 270,089 | 266,028 | 4,061 | 2.128224 | true | `results/opcode_typed_anchor_ppm_o5_v1/2026-07-21T145001.json` |
-| `article_receipt_family_tree_v1` | custom candidate | 1,000,000 | 270,449 | 264,371 | 6,078 | 2.114968 | true | `results/article_receipt_family_tree_v1/2026-07-21T150101.json` |
-| `article_receipt_family_tree_v1` | custom candidate | 1,000,000 | 270,449 | 264,371 | 6,078 | 2.114968 | true | `results/article_receipt_family_tree_v1/2026-07-21T150208.json` |
-| `chain_index_ppmc_shared_v3` | custom candidate | 1,000,000 | 272,888 | 269,400 | 3,488 | 2.1552 | true | `results/chain_index_ppmc_shared_v3/2026-07-21T144547.json` |
-| `chain_index_ppmc_shared_v2` | custom candidate | 1,000,000 | 272,909 | 269,432 | 3,477 | 2.155456 | true | `results/chain_index_ppmc_shared_v2/2026-07-21T144544.json` |
-| `chain_index_ppmc_shared_v1` | custom candidate | 1,000,000 | 273,191 | 269,784 | 3,407 | 2.158272 | true | `results/chain_index_ppmc_shared_v1/2026-07-21T144535.json` |
+| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 1,000,000 | 266,493 | 261,652 | 4,841 | 2.093216 | true | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T120140.json` |
+| `opcode_word_bz2_tiny_v1` | syntax opcode preprocessor | 1,000,000 | 275,150 | 273,898 | 1,252 | 2.191184 | true | `results/opcode_word_bz2_tiny_v1/2026-06-08T161413.json` |
+| `xml_skel_wordcode_bz2_min_z_v1` | custom candidate | 1,000,000 | 277,140 | 275,444 | 1,696 | 2.203552 | true | `results/xml_skel_wordcode_bz2_min_z_v1/2026-06-08T165120.json` |
+| `yellow_tucan_markup_opcode_lzma_v2` | LZMA/LZMA2 baseline or preprocessor | 1,000,000 | 290,160 | 289,240 | 920 | 2.31392 | true | `results/yellow_tucan_markup_opcode_lzma_v2/2026-06-08T161753.json` |
+| `xml_scaffold__macro_residual__punct_media__lzma_extreme__min__v04` | LZMA/LZMA2 baseline or preprocessor | 1,000,000 | 290,171 | 288,221 | 1,950 | 2.305768 | true | `results/xml_scaffold__macro_residual__punct_media__lzma_extreme__min__v04/2026-06-07T163510.json` |
+| `xml_scaffold__macro_residual__style_title__lzma_extreme__min__v05` | LZMA/LZMA2 baseline or preprocessor | 1,000,000 | 290,173 | 288,197 | 1,976 | 2.305576 | true | `results/xml_scaffold__macro_residual__style_title__lzma_extreme__min__v05/2026-06-07T164405.json` |
+| `xml_scaffold__macro_residual__wiki_tokens__lzma_extreme__min__v02` | LZMA/LZMA2 baseline or preprocessor | 1,000,000 | 290,322 | 288,465 | 1,857 | 2.30772 | true | `results/xml_scaffold__macro_residual__wiki_tokens__lzma_extreme__min__v02/2026-06-07T155117.json` |
+| `xml_scaffold__macro_residual__wiki_layout__lzma_extreme__min__v03` | LZMA/LZMA2 baseline or preprocessor | 1,000,000 | 290,362 | 288,433 | 1,929 | 2.307464 | true | `results/xml_scaffold__macro_residual__wiki_layout__lzma_extreme__min__v03/2026-06-07T155738.json` |
 
 ## Top Archive Rows At 1,000,000 Bytes
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 735,705 | 174,423 | 561,282 | 1.395384 | true | `results/cmix21_text_mmap_paq5_ppmd75m_fxcmrcm28safe_rcm32_bufthirtysecond_minmaps_v1/2026-07-21T183101.json` |
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 738,731 | 174,533 | 564,198 | 1.396264 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T220804.json` |
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 738,682 | 174,536 | 564,146 | 1.396288 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T212957.json` |
-| `fx2_struct_top_mixer_v1` | custom candidate | 1,000,000 | 447,188 | 175,172 | 272,016 | 1.401376 | true | `results/fx2_struct_top_mixer_v1/2026-07-21T151947.json` |
-| `fx2_structural_sidecar_v1` | fx2 sidecar or stream split | 1,000,000 | 531,814 | 175,177 | 356,637 | 1.401416 | true | `results/fx2_structural_sidecar_v1/2026-07-21T151039.json` |
-| `fx2cmix_recovered_gcc_o3_xz_minwrap_v1` | custom candidate | 1,000,000 | 458,920 | 175,203 | 283,717 | 1.401624 | true | `results/fx2cmix_recovered_gcc_o3_xz_minwrap_v1/2026-07-21T174845.json` |
-| `fx2cmix_recovered_gcc_o3_xz_v1` | custom candidate | 1,000,000 | 459,575 | 175,203 | 284,372 | 1.401624 | true | `results/fx2cmix_recovered_gcc_o3_xz_v1/2026-07-21T152648.json` |
-| `fx2_sidecar_byte_split_direct_page_match_v1` | fx2 sidecar or stream split | 1,000,000 | 538,455 | 175,204 | 363,251 | 1.401632 | true | `results/fx2_sidecar_byte_split_direct_page_match_v1/2026-07-21T150920.json` |
+| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,961 | 174,395 | 562,566 | 1.39516 | not recorded | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T155023.json` |
+| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,961 | 174,396 | 562,565 | 1.395168 | true | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T202147.json` |
+| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 737,781 | 174,396 | 563,385 | 1.395168 | true | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard_minmaps_v1/2026-06-21T013117.json` |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,901 | 174,398 | 562,503 | 1.395184 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T102554.json` |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,974 | 174,398 | 562,576 | 1.395184 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T145351.json` |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,734 | 174,399 | 562,335 | 1.395192 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T012804.json` |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,748 | 174,399 | 562,349 | 1.395192 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T210059.json` |
+| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 1,000,000 | 736,885 | 174,399 | 562,486 | 1.395192 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T055557.json` |
 
 ## Top Score Rows At 250,000 Bytes
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| `opcode_word_bz2_tiny_k4_v1` | syntax opcode preprocessor | 250,000 | 73,154 | 71,917 | 1,237 | 2.301344 | true | `results/opcode_word_bz2_tiny_k4_v1/2026-07-21T124139.json` |
-| `ppm_residual_shape_pack_v1` | custom candidate | 250,000 | 73,308 | 71,352 | 1,956 | 2.283264 | true | `results/ppm_residual_shape_pack_v1/2026-07-21T124146.json` |
-| `opcode_word_bz2_min_deflate_v1` | syntax opcode preprocessor | 250,000 | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json` |
-| `opcode_word_bz2_deflate_v1` | syntax opcode preprocessor | 250,000 | 73,402 | 71,887 | 1,515 | 2.300384 | true | `results/opcode_word_bz2_deflate_v1/2026-07-21T124140.json` |
-| `bayes_union_tree_deflate_v1` | custom candidate | 250,000 | 74,401 | 72,659 | 1,742 | 2.325088 | true | `results/bayes_union_tree_deflate_v1/2026-07-20T160147.json` |
-| `bayes_union_tree_gz_v1` | custom candidate | 250,000 | 74,421 | 72,659 | 1,762 | 2.325088 | true | `results/bayes_union_tree_gz_v1/2026-07-20T160150.json` |
-| `opcode_typed_anchor_ppm_o5_v1` | syntax opcode preprocessor | 250,000 | 74,999 | 70,938 | 4,061 | 2.270016 | true | `results/opcode_typed_anchor_ppm_o5_v1/2026-07-21T124224.json` |
+| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-06-08T114728.json` |
+| `baseline_bz2` | baseline compressor | 250,000 | 72,824 | 72,658 | 166 | 2.325056 | true | `results/baseline_bz2/2026-06-07T184037.json` |
+| `opcode_word_bz2_tiny_v1` | syntax opcode preprocessor | 250,000 | 73,139 | 71,887 | 1,252 | 2.300384 | true | `results/opcode_word_bz2_tiny_v1/2026-06-08T161349.json` |
+| `opcode_word_bz2_tiny_k_v1` | syntax opcode preprocessor | 250,000 | 73,145 | 71,887 | 1,258 | 2.300384 | true | `results/opcode_word_bz2_tiny_k_v1/2026-06-08T161449.json` |
+| `opcode_word_bz2_tiny_k4_v1` | syntax opcode preprocessor | 250,000 | 73,154 | 71,917 | 1,237 | 2.301344 | true | `results/opcode_word_bz2_tiny_k4_v1/2026-06-08T114828.json` |
+| `ppm_residual_shape_pack_v1` | custom candidate | 250,000 | 73,308 | 71,352 | 1,956 | 2.283264 | true | `results/ppm_residual_shape_pack_v1/2026-06-07T183349.json` |
+| `opcode_word_bz2_min_deflate_v1` | syntax opcode preprocessor | 250,000 | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-06-08T114825.json` |
+| `opcode_word_bz2_deflate_v1` | syntax opcode preprocessor | 250,000 | 73,402 | 71,887 | 1,515 | 2.300384 | true | `results/opcode_word_bz2_deflate_v1/2026-06-08T114822.json` |
 
 ## Top Archive Rows At 250,000 Bytes
 
 | Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---:|---|---|
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1` | cmix21 memory-shaped context mixer | 250,000 | 349,231 | 44,978 | 304,253 | 1.439296 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osminxz_v1/2026-07-20T170257.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1` | cmix21 memory-shaped context mixer | 250,000 | 375,839 | 44,978 | 330,861 | 1.439296 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_osxz_v1/2026-07-20T170307.json` |
-| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 609,377 | 45,179 | 564,198 | 1.445728 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10tight92_densebudget96_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-28T204906.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1` | cmix21 memory-shaped context mixer | 250,000 | 498,961 | 45,184 | 453,777 | 1.445888 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xzstrip_v1/2026-07-20T165204.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xz_v1` | cmix21 memory-shaped context mixer | 250,000 | 519,265 | 45,184 | 474,081 | 1.445888 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_xz_v1/2026-07-20T165136.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 606,394 | 45,184 | 561,210 | 1.445888 | true | `results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-07-20T162139.json` |
-| `fx2_timestamp_direct_byte_split_extra_page_match_v1` | custom candidate | 250,000 | 586,796 | 45,195 | 541,601 | 1.44624 | true | `results/fx2_timestamp_direct_byte_split_extra_page_match_v1/2026-07-20T162732.json` |
-| `fx2_timestamp_direct_byte_split_extra_page_match_v1` | custom candidate | 250,000 | 586,796 | 45,195 | 541,601 | 1.44624 | true | `results/fx2_timestamp_direct_byte_split_extra_page_match_v1/2026-07-20T170513.json` |
+| `fx2_timestamp_direct_only_byte_split_extra_page_match_v1` | custom candidate | 250,000 | 428,352 | 44,976 | 383,376 | 1.439232 | not recorded | `results/fx2_timestamp_direct_only_byte_split_extra_page_match_v1/2026-06-07T002058.json` |
+| `cmix21_text_mmap_paq5_ppmd2g_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 604,936 | 45,177 | 559,759 | 1.445664 | not recorded | `results/cmix21_text_mmap_paq5_ppmd2g_minmaps_v1/2026-06-14T171759.json` |
+| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 607,743 | 45,178 | 562,565 | 1.445696 | true | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T184307.json` |
+| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 607,744 | 45,178 | 562,566 | 1.445696 | not recorded | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_rcm32_bufsixtyfourth_minmaps_v1/2026-06-20T150203.json` |
+| `cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 608,563 | 45,178 | 563,385 | 1.445696 | true | `results/cmix21_text_mmap_paq5_ppmd40m_fxcmidx13div2_fxcmrcm20_rcm32_bufsixtyfourth_ppmdguard_minmaps_v1/2026-06-21T001850.json` |
+| `cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 609,030 | 45,178 | 563,852 | 1.445696 | true | `results/cmix21_text_mmap_paq5_ppmd25m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/2026-06-22T162313.json` |
+| `cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 609,030 | 45,178 | 563,852 | 1.445696 | true | `results/cmix21_text_mmap_paq5_ppmd35m_fxcmidx13div2_ppmdsq_rcm32_bufthirtysecond_minmaps_v1/2026-06-22T131833.json` |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | cmix21 memory-shaped context mixer | 250,000 | 609,324 | 45,178 | 564,146 | 1.445696 | true | `results/cmix21_text_mmap_paq5_ppmd20352k_fxcmassoc10_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1/2026-07-27T060947.json` |

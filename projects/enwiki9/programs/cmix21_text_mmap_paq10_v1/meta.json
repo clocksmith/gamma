@@ -1,64 +1,143 @@
 {
-  "id": "cmix21_text_mmap_paq10_v1",
-  "family": "cmix21_mmap",
-  "status": "candidate",
-  "description": "cmix v21 forced text-mode wrapper using the mmap allocator plus PAQ8 level 10 instead of level 11. The binary and english.dic are gzip-compressed and counted toward program_size.",
-  "parent": "cmix21_text_mmap_wrapped_v1",
-  "hypothesis": "PAQ8 level 11 is the binding resident-memory source in the cmix21 text-mode profile; lowering it one level may bring RAM under the Hutter ceiling while preserving enough archive margin to remain below 10.95 percent at full scale.",
   "deps": [
     "C++ runtime for the vendored cmix binary",
     "POSIX mmap and temporary filesystem space"
   ],
-  "source": {
-    "tree": "projects/enwiki9/external/cmix21-sidecar",
-    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq10_v1/cmix.bin.gz",
-    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq10_v1/english.dic.gz",
-    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=10"
+  "description": "cmix v21 forced text-mode wrapper using the mmap allocator plus PAQ8 level 10 instead of level 11. The binary and english.dic are gzip-compressed and counted toward program_size.",
+  "family": "cmix21_mmap",
+  "hypothesis": "PAQ8 level 11 is the binding resident-memory source in the cmix21 text-mode profile; lowering it one level may bring RAM under the Hutter ceiling while preserving enough archive margin to remain below 10.95 percent at full scale.",
+  "id": "cmix21_text_mmap_paq10_v1",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 1.921875,
+          "comparison": {
+            "archive_delta_vs_baseline": -166,
+            "baseline": {
+              "bits_per_byte": 3.21875,
+              "compressed_size": 412,
+              "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+              "data_size": 1024,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 613,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 560866
+          },
+          "compressed_size": 246,
+          "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+          "data_size": 1024,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 561479,
+          "program_id": "cmix21_text_mmap_paq10_v1",
+          "program_size": 561233,
+          "program_stats": null,
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-07-28T00:56:36+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 1.921875,
+            "comparison": {
+              "archive_delta_vs_baseline": -166,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 560866
+            },
+            "compressed_size": 246,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 561479,
+            "program_id": "cmix21_text_mmap_paq10_v1",
+            "program_size": 561233,
+            "program_stats": null,
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-07-28T00:56:36+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: archive improves but counted program size loses."
+      }
+    ]
   },
+  "parent": "cmix21_text_mmap_wrapped_v1",
   "pgsg": {
+    "edges": [
+      {
+        "from": "paq8",
+        "stream": "probability_model",
+        "to": "cmix21_text"
+      },
+      {
+        "from": "mmap_allocator",
+        "stream": "state_storage",
+        "to": "cmix21_text"
+      }
+    ],
     "nodes": [
       {
         "id": "paq8",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "level": 10
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "mmap_allocator",
-        "type": "memory_policy",
         "payload": {
           "discrete": {
             "mode": "file_backed_large_tables"
           }
-        }
+        },
+        "type": "memory_policy"
       },
       {
         "id": "cmix21_text",
-        "type": "codec",
         "payload": {
           "discrete": {
-            "mode": "forced_text",
-            "codec": "cmix21"
+            "codec": "cmix21",
+            "mode": "forced_text"
           }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "paq8",
-        "to": "cmix21_text",
-        "stream": "probability_model"
-      },
-      {
-        "from": "mmap_allocator",
-        "to": "cmix21_text",
-        "stream": "state_storage"
+        },
+        "type": "codec"
       }
     ]
   },
-  "measured": {},
-  "verdict": "Unmeasured. This is the current best Hutter-admissibility profile to test because it targets the measured resident-memory bottleneck."
+  "source": {
+    "binary": "projects/enwiki9/programs/cmix21_text_mmap_paq10_v1/cmix.bin.gz",
+    "build": "g++ -std=c++14 -Wall -O3 -DCMIX_PAQ8_LEVEL=10",
+    "dictionary": "projects/enwiki9/programs/cmix21_text_mmap_paq10_v1/english.dic.gz",
+    "tree": "projects/enwiki9/external/cmix21-sidecar"
+  },
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: archive improves but counted program size loses."
 }
