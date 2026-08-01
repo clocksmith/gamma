@@ -465,7 +465,107 @@ function validateComparison(comparison, playerCount) {
   if (!Number.isInteger(focalSeat) || focalSeat < 0 || focalSeat >= playerCount) {
     throw new RangeError(`${comparison.id} has an invalid focalSeat.`);
   }
+  if (
+    comparison.seedGroup !== undefined &&
+    (typeof comparison.seedGroup !== "string" || !comparison.seedGroup.length)
+  ) {
+    throw new TypeError(`${comparison.id} has an invalid seedGroup.`);
+  }
   return focalSeat;
+}
+
+function resolvePromptAddenda(comparison, arm, options, playerCount) {
+  const promptIds = comparison[`${arm}PromptIds`];
+  if (promptIds !== undefined) {
+    if (!Array.isArray(promptIds) || promptIds.length !== playerCount) {
+      throw new RangeError(
+        `${comparison.id} ${arm}PromptIds must contain ${playerCount} entries.`
+      );
+    }
+    return promptIds.map((id, seat) => {
+      if (id === null) return null;
+      const prompt = options.promptLibrary?.[id];
+      if (typeof prompt !== "string" || !prompt.length) {
+        throw new TypeError(
+          `${comparison.id} ${arm}PromptIds seat ${seat} names unknown prompt ${id}.`
+        );
+      }
+      return prompt;
+    });
+  }
+  return comparison[`${arm}PromptAddenda`] ||
+    comparison.promptAddenda ||
+    options.promptAddenda;
+}
+
+export function expandFactionIsolationMatrix(matrix = {}) {
+  const matrixPlayerCount = Number(matrix.playerCount || 3);
+  const comparatorFactionIds = matrix.comparatorFactionIds || [];
+  const focalSeats = matrix.focalSeats || [];
+  const policyArms = matrix.policyArms || [];
+  const opponentFactionCycle = matrix.opponentFactionCycle || [];
+  if (
+    !matrix.focalFactionId ||
+    !matrix.focalProfileId ||
+    comparatorFactionIds.length < 1 ||
+    focalSeats.length < 1 ||
+    policyArms.length < 1 ||
+    opponentFactionCycle.length < 3 ||
+    !Number.isInteger(matrixPlayerCount) ||
+    matrixPlayerCount < 3 ||
+    matrixPlayerCount > 5 ||
+    matrix.opponentProfileIds?.length !== matrixPlayerCount - 1
+  ) {
+    throw new TypeError("comparisonMatrix is incomplete.");
+  }
+  return comparatorFactionIds.flatMap((comparatorFactionId) => {
+    const comparatorIndex = opponentFactionCycle.indexOf(comparatorFactionId);
+    if (comparatorIndex < 0) {
+      throw new TypeError(
+        `comparisonMatrix opponentFactionCycle omits ${comparatorFactionId}.`
+      );
+    }
+    const opponentFactionIds = Array.from(
+      { length: matrixPlayerCount - 1 },
+      (_, index) => index + 1
+    ).map((offset) =>
+      opponentFactionCycle[
+        (comparatorIndex + offset) % opponentFactionCycle.length
+      ]
+    );
+    return focalSeats.flatMap((focalSeat) => policyArms.map((policyArm) => {
+      const place = (focal, opponents) => {
+        const values = [];
+        let opponentIndex = 0;
+        for (let seat = 0; seat < matrixPlayerCount; seat += 1) {
+          values.push(seat === focalSeat ? focal : opponents[opponentIndex++]);
+        }
+        return values;
+      };
+      return {
+        id: [comparatorFactionId, `seat_${focalSeat}`, policyArm.id].join("_"),
+        seedGroup: `${comparatorFactionId}:seat:${focalSeat}`,
+        promptTreatmentId: policyArm.id,
+        comparatorId: comparatorFactionId,
+        focalSeat,
+        profileIds: place(matrix.focalProfileId, matrix.opponentProfileIds),
+        backends: place(
+          matrix.focalBackend || "codex",
+          Array(matrixPlayerCount - 1).fill("weighted")
+        ),
+        leftPromptIds: place(
+          policyArm.leftPromptId,
+          Array(matrixPlayerCount - 1).fill(null)
+        ),
+        rightPromptIds: place(
+          matrix.rightPromptIdsByFaction?.[comparatorFactionId],
+          Array(matrixPlayerCount - 1).fill(null)
+        ),
+        leftFactionIds: place(matrix.focalFactionId, opponentFactionIds),
+        rightFactionIds: place(comparatorFactionId, opponentFactionIds)
+      };
+    }));
+  });
 }
 
 function workerCount(value, fallback) {
@@ -796,9 +896,18 @@ async function captureTaskLaunchIdentities(tasks) {
 }
 
 export async function runFactionSwapDiagnostic(options = {}, onProgress) {
-  const comparisons = options.comparisons || [];
+  const comparisons = options.comparisons ||
+    (options.comparisonMatrix
+      ? expandFactionIsolationMatrix(options.comparisonMatrix)
+      : []);
   if (!comparisons.length) throw new RangeError("At least one faction comparison is required.");
   const playerCount = Number(options.playerCount || 4);
+  if (
+    options.comparisonMatrix?.playerCount !== undefined &&
+    Number(options.comparisonMatrix.playerCount) !== playerCount
+  ) {
+    throw new RangeError("comparisonMatrix playerCount must match the study playerCount.");
+  }
   const runsPerArm = Number(options.runsPerArm || 100);
   if (!Number.isInteger(runsPerArm) || runsPerArm < 1 || runsPerArm > 10000) {
     throw new RangeError("runsPerArm must be an integer from 1 to 10000.");
@@ -813,7 +922,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     const common = {
       runs: runsPerArm,
       playerCount,
-      seed: `${rootSeed}:${comparison.id}`,
+      seed: `${rootSeed}:${comparison.seedGroup || comparison.id}`,
       sampleReplays,
       profileIds: comparison.profileIds || options.profileIds,
       backends: comparison.backends || options.backends,
@@ -859,12 +968,18 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     );
     for (const arm of ["left", "right"]) {
       const factionIds = comparison[`${arm}FactionIds`];
+      const promptAddenda = resolvePromptAddenda(
+        comparison,
+        arm,
+        options,
+        playerCount
+      );
       if (!llmArm) {
         tasks.push({
           comparisonIndex,
           arm,
           matchIndex: null,
-          options: { ...common, factionIds }
+          options: { ...common, factionIds, promptAddenda }
         });
         continue;
       }
@@ -879,6 +994,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
             runOffset: matchIndex,
             sampleReplays: matchIndex < sampleReplays ? 1 : 0,
             factionIds,
+            promptAddenda,
             requireLlm: true,
             strictLlmEvidence: true
           }
@@ -1029,6 +1145,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     const rightIdentity = rightReports[0] || identityReport;
     return {
       id: comparison.id,
+      seedGroup: comparison.seedGroup || comparison.id,
+      promptTreatmentId: comparison.promptTreatmentId || null,
       question: comparison.question || null,
       focalSeat,
       left: {
@@ -1061,6 +1179,9 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     mandateMode: options.mandateMode || "variable",
     rulesVariant: options.rulesVariant || {},
     profileIds: options.profileIds,
+    promptAddenda: options.promptAddenda,
+    promptLibrary: options.promptLibrary,
+    comparisonMatrix: options.comparisonMatrix,
     backends: options.backends,
     models: options.models,
     model: options.model,
@@ -1151,6 +1272,18 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       configurations: comparisons.map((comparison) => ({
         id: comparison.id,
         profileIds: comparison.profileIds || options.profileIds,
+        leftPromptAddenda: resolvePromptAddenda(
+          comparison,
+          "left",
+          options,
+          playerCount
+        ),
+        rightPromptAddenda: resolvePromptAddenda(
+          comparison,
+          "right",
+          options,
+          playerCount
+        ),
         backends: comparison.backends || options.backends,
         models: comparison.models || options.models,
         model: comparison.model || options.model,
@@ -1160,6 +1293,18 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       fingerprint: fingerprintObject(comparisons.map((comparison) => ({
         id: comparison.id,
         profileIds: comparison.profileIds || options.profileIds,
+        leftPromptAddenda: resolvePromptAddenda(
+          comparison,
+          "left",
+          options,
+          playerCount
+        ),
+        rightPromptAddenda: resolvePromptAddenda(
+          comparison,
+          "right",
+          options,
+          playerCount
+        ),
         backends: comparison.backends || options.backends,
         models: comparison.models || options.models,
         model: comparison.model || options.model,

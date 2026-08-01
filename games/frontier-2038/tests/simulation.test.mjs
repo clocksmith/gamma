@@ -44,6 +44,7 @@ import {
 import { loadBalanceContract } from "../lab/balance/balance-contract.js";
 import { runBalanceAudit } from "../lab/runner/balance-audit-runner.js";
 import {
+  expandFactionIsolationMatrix,
   LlmConcurrencyBroker,
   runFactionSwapDiagnostic
 } from "../lab/runner/faction-swap-runner.js";
@@ -2790,7 +2791,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.31");
+  assert.equal(first.game.version, "0.8.32");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -2942,6 +2943,191 @@ test("generic completed strict LLM matches archive before the tournament returns
   }
 });
 
+test("LLM prompt treatments are explicit, fingerprinted, and delivered by seat", async () => {
+  const guidance =
+    "Before choosing, identify how this decision converts current resources into Mandate and fulfill any promise whose legal window is open.";
+  const baseOptions = {
+    runs: 1,
+    playerCount: 3,
+    seed: "prompt-treatment-contract",
+    sampleReplays: 0,
+    profileIds: ["balanced_operator", "capability_rusher", "trust_governor"],
+    backends: ["codex", "weighted", "weighted"],
+    model: "fixture-model",
+    reasoningEffort: "medium"
+  };
+  const baselineIdentity = await captureSimulationLaunchIdentity(baseOptions);
+  const treatedOptions = {
+    ...baseOptions,
+    promptAddenda: [guidance, null, null]
+  };
+  const treatedIdentity = await captureSimulationLaunchIdentity(treatedOptions);
+  assert.notEqual(
+    treatedIdentity.strategies.fingerprint,
+    baselineIdentity.strategies.fingerprint
+  );
+
+  let treatedPackets = 0;
+  await createSimulation({
+    ...treatedOptions,
+    allowLlm: true,
+    requireLlm: true,
+    strictLlmEvidence: true,
+    archiveLlmMatches: false,
+    callerFactory: () => ({
+      async decide(packet) {
+        assert.ok(packet.strategy.objectives.includes(
+          `Experimental decision guidance: ${guidance}`
+        ));
+        treatedPackets += 1;
+        return {
+          decision: { decisionId: packet.legalDecisions[0].decisionId },
+          receipt: { provider: "fixture", requestId: packet.requestId }
+        };
+      }
+    })
+  });
+  assert.ok(treatedPackets > 0);
+});
+
+test("faction comparisons can share a registered seed across treatment cells", async () => {
+  const comparison = {
+    focalSeat: 0,
+    seedGroup: "shared-treatment-cell",
+    leftFactionIds: [
+      "coalition_lab",
+      "vertical_empire",
+      "foundry"
+    ],
+    rightFactionIds: [
+      "safety_laboratory",
+      "vertical_empire",
+      "foundry"
+    ]
+  };
+  const report = await runFactionSwapDiagnostic({
+    runsPerArm: 1,
+    playerCount: 3,
+    seed: "shared-treatment-root",
+    profileIds: ["balanced_operator", "capability_rusher", "trust_governor"],
+    backends: ["weighted", "weighted", "weighted"],
+    comparisons: [
+      { ...comparison, id: "control", promptTreatmentId: "control" },
+      { ...comparison, id: "replicate", promptTreatmentId: "replicate" }
+    ]
+  });
+  assert.equal(report.comparisons[0].seedGroup, "shared-treatment-cell");
+  assert.equal(report.comparisons[1].seedGroup, "shared-treatment-cell");
+  assert.deepEqual(
+    report.comparisons[0].paired.rows,
+    report.comparisons[1].paired.rows
+  );
+});
+
+test("faction isolation matrices rotate every comparator through every focal seat", () => {
+  const comparisons = expandFactionIsolationMatrix({
+    focalFactionId: "coalition_lab",
+    comparatorFactionIds: [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    focalSeats: [0, 1, 2],
+    policyArms: [
+      { id: "baseline", leftPromptId: "coalition_baseline" },
+      { id: "follow_through", leftPromptId: "coalition_follow_through" }
+    ],
+    opponentFactionCycle: [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    focalProfileId: "balanced_operator",
+    opponentProfileIds: ["capability_rusher", "trust_governor"],
+    rightPromptIdsByFaction: {
+      platform_empire: "platform_objective",
+      imperial_research_lab: "imperial_objective",
+      vertical_empire: "vertical_objective",
+      safety_laboratory: "safety_objective",
+      foundry: "foundry_objective"
+    }
+  });
+  assert.equal(comparisons.length, 30);
+  for (const factionId of [
+    "platform_empire",
+    "imperial_research_lab",
+    "vertical_empire",
+    "safety_laboratory",
+    "foundry"
+  ]) {
+    const cells = comparisons.filter((entry) => entry.comparatorId === factionId);
+    assert.deepEqual(new Set(cells.map((entry) => entry.focalSeat)), new Set([0, 1, 2]));
+    assert.deepEqual(
+      new Set(cells.map((entry) => entry.promptTreatmentId)),
+      new Set(["baseline", "follow_through"])
+    );
+  }
+  assert.ok(comparisons.every((entry) =>
+    entry.leftFactionIds[entry.focalSeat] === "coalition_lab" &&
+    entry.rightFactionIds[entry.focalSeat] === entry.comparatorId &&
+    entry.backends[entry.focalSeat] === "codex"
+  ));
+});
+
+test("paired faction arms receive their registered canonical prompt treatment", async () => {
+  const seen = new Map();
+  const promptLibrary = {
+    coalition: "Use Coalition's canonical trading abilities.",
+    safety: "Use Safety's canonical governance abilities."
+  };
+  const report = await runFactionSwapDiagnostic({
+    archiveLlmMatches: false,
+    workers: 2,
+    llmConcurrency: 2,
+    providerConcurrency: { codex: 2 },
+    allowLlm: true,
+    runsPerArm: 1,
+    playerCount: 3,
+    seed: "arm-prompt-treatment",
+    promptLibrary,
+    llmCallerFactory: () => ({
+      async decide(packet) {
+        const objectives = packet.strategy.objectives.join("\n");
+        const expected = packet.factionId === "coalition_lab"
+          ? promptLibrary.coalition
+          : promptLibrary.safety;
+        assert.match(objectives, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+        seen.set(packet.factionId, (seen.get(packet.factionId) || 0) + 1);
+        return {
+          decision: { decisionId: packet.legalDecisions[0].decisionId },
+          receipt: { provider: "fixture", requestId: packet.requestId }
+        };
+      }
+    }),
+    comparisons: [{
+      id: "arm-specific-prompts",
+      focalSeat: 0,
+      profileIds: ["balanced_operator", "capability_rusher", "trust_governor"],
+      backends: ["codex", "weighted", "weighted"],
+      leftPromptIds: ["coalition", null, null],
+      rightPromptIds: ["safety", null, null],
+      leftFactionIds: ["coalition_lab", "vertical_empire", "foundry"],
+      rightFactionIds: ["safety_laboratory", "vertical_empire", "foundry"]
+    }]
+  });
+  assert.ok(seen.get("coalition_lab") > 0);
+  assert.ok(seen.get("safety_laboratory") > 0);
+  assert.equal(report.comparisons[0].paired.pairs, 1);
+  assert.notEqual(
+    report.comparisons[0].left.strategiesFingerprint,
+    report.comparisons[0].right.strategiesFingerprint
+  );
+});
+
 test("simulation records two- and six-player games as exploratory non-promotional diagnostics", async () => {
   for (const playerCount of [2, 6]) {
     const report = await createSimulation({
@@ -3072,7 +3258,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.31");
+  assert.equal(first.game.version, "0.8.32");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

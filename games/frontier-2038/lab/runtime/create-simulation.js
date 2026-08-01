@@ -120,9 +120,33 @@ function resolveSimulationConfiguration(options, { config, availableProfiles }) 
     if (!profile) throw new TypeError(`Unknown player profile: ${id}.`);
     return profile;
   });
+  if (
+    options.promptAddenda !== undefined &&
+    (!Array.isArray(options.promptAddenda) ||
+      options.promptAddenda.length !== playerCount)
+  ) {
+    throw new RangeError(
+      `promptAddenda must provide exactly ${playerCount} seat entries.`
+    );
+  }
+  const promptedProfiles = selectedProfiles.map((profile, seat) => {
+    const addendum = options.promptAddenda?.[seat];
+    if (addendum === null || addendum === undefined) return profile;
+    if (typeof addendum !== "string" || addendum.trim().length === 0) {
+      throw new TypeError(
+        `promptAddenda seat ${seat} must be a non-empty string or null.`
+      );
+    }
+    const prompted = structuredClone(profile);
+    prompted.strategy.objectives = [
+      ...(prompted.strategy.objectives || []),
+      `Experimental decision guidance: ${addendum.trim()}`
+    ];
+    return prompted;
+  });
   const backends = options.backends?.length
     ? options.backends
-    : selectedProfiles.map((profile) => profile.defaultBackend || "weighted");
+    : promptedProfiles.map((profile) => profile.defaultBackend || "weighted");
   const configuredBackends = Array.from({ length: playerCount }, (_, seat) =>
     backends[seat % backends.length]
   );
@@ -142,7 +166,7 @@ function resolveSimulationConfiguration(options, { config, availableProfiles }) 
   return {
     playerCount,
     profiles,
-    selectedProfiles,
+    selectedProfiles: promptedProfiles,
     configuredBackends,
     models,
     reasoningEfforts
