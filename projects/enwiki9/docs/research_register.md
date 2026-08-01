@@ -3483,3 +3483,80 @@ Evidence:
 - `results/mobius2_logos_surface_grammar_ceiling_q0_v1/decision.json`
 - `run_logs/adaptive/20260801T211842Z_1ac4e76b26.log`
 - `operations/adaptive/exclusions/mobius2_logos_ordered_template_surface_grammar_opening_1m_v1.json`
+
+## 2026-08-01: MOBIUS-2 LOGOS cross-page lexical-frame ceiling claimed
+
+Candidate: `mobius2_logos_lexical_frame_ceiling_q0_v1`
+
+Route E explicitly left transmitted many-use grammar bypass unsettled, while
+the first LOGOS gate retired only exact ordered MediaWiki-template shells. The
+next information certificate therefore moves inside page text and asks whether
+parameterized prose frames have enough endpoint428 codelength to matter before
+any command format is built.
+
+The frozen rule consists of two exact five-emission-group lexical anchors
+around one literal hole of one through twelve complete WRT emission groups.
+Both anchors must be prose-like ASCII surface spans inside a page text element.
+A rule exists only when development contains two distinct hole realizations on
+at least two distinct pages. Selection and sealed-confirmation pages cannot
+create rules.
+
+Q0 is deliberately an upper bound. It uses exact weighted interval scheduling
+to choose nonoverlapping frame envelopes, omits anchor truth from an actual
+terminated residual payload, and supplies the rule plan out of band at zero
+cost. L1 is a matched zero-hole contiguous lexical-phrase ceiling. LR rotates
+right anchors among frozen rules before finding exact occurrences. Every
+control must decode the exact WRT stream, and L2 must pass the official raw
+inverse.
+
+Promotion requires at least 3,000 B/M exact L2 gain, positive development,
+selection, and sealed-confirmation signs, strict wins over L1 and LR, and exact
+parent, residual-decode, raw, and determinism proofs. A miss retires this exact
+anchor/hole construction without width, threshold, alphabet, or code sweeps.
+It does not retire a materially broader semantic ontology or NOEMA.
+
+Plan and schema:
+
+- `docs/mobius2_logos_lexical_frame_ceiling_plan.md`
+- `docs/mobius2_logos_lexical_frame_ceiling_decision.schema.json`
+
+## 2026-08-01: MOBIUS-2 LOGOS cross-page lexical-frame ceiling retired
+
+The exact opening-1M certificate scanned 420,533 development frame rows and
+found 156 rule keys that occurred on at least two development pages with at
+least two distinct literal-hole realizations. Across all splits, those rules
+matched 837 times. Exact maximum-parent-qbit interval scheduling retained 584
+nonoverlapping invocations, covering 5,975 generated WRT anchor bytes.
+
+L2 is a real, transferable information source. Its actual terminated residual
+payload saved 1,064 bytes. The matched zero-hole contiguous control saved only
+55 bytes, and the cyclically rotated-right-anchor control saved 59 bytes.
+Development, selection, and sealed-confirmation L2 gains were respectively
+620, 56, and 390 bytes. All signs were positive and L2 decisively beat both
+specificity controls.
+
+The magnitude is nevertheless terminal. The frozen gate required 3,000 B/M,
+and 1,064 B/M is an optimistic upper bound with rule definitions, invocation
+positions, hole lengths, framing, decoder source, and state-integration source
+all charged as zero. A finite grammar can only reduce the net value. Building
+or tuning that grammar cannot close the current target debt under the frozen
+research margin.
+
+Parent payload identity, every residual arithmetic decode, duplicate payload
+identity, exact WRT reconstruction, the official WRT-to-raw inverse, and the
+raw hash all passed. This is a scientific gate miss, not an infrastructure
+failure.
+
+Decision: retire the exact five-emission-group anchor, one-to-twelve-group
+hole, two-development-page lexical-frame construction and its width, gap,
+threshold, alphabet, weighting, and integer-code rescue sweeps. Preserve its
+1,064 B/M result as positive component evidence only. A broader semantic
+ontology must expose non-lexical equivalence and first clear the same 3,000 B/M
+zero-cost ceiling. NOEMA remains an independent unsettled lane. Score and
+forecast credit remain zero; the canonical forecast remains 109,389,323 bytes.
+
+Evidence:
+
+- `results/mobius2_logos_lexical_frame_ceiling_q0_v1/decision.json`
+- `run_logs/adaptive/20260801T223213Z_993e105544.log`
+- `operations/adaptive/exclusions/mobius2_logos_cross_page_lexical_frame_opening_1m_v1.json`
