@@ -3707,3 +3707,15 @@ correction is a separately named child after exact parent reproduction.
 ACS-MATH-SEAL-2 remains unbound and undistributed.
 
 Plan: `docs/typed_event_sleeping_bayes_envelope_plan.md`.
+
+Gate 0 completed at 2026-08-01T23:24:13Z. Clean program A encoded the
+canonical opening 1M to 173,902 bytes with SHA-256 `6d32bddb...6da04`; clean
+program A decoded it to the exact `369b6889...52cad` input, and clean program B
+independently produced the identical archive. Peak single-process RSS was
+9,050,584 KiB encode, 9,050,480 KiB decode, and 9,050,388 KiB re-encode, with
+zero decimal-limit overage. The artifact/source recovery gate is certified and
+earns zero savings credit. The exact frontier P1 trace remains required before
+any typed-event score is read.
+
+Gate 0 decision:
+`results/typed_event_sleeping_bayes_parent_recovery_q0_v1/decision.json`.

@@ -130,7 +130,8 @@ S1  deterministic fixed-block selector; both states always update
 The event universe, candidate ordering, tie breaks, caps, priors, memory
 eviction, fixed-point scale, and S1 block size are frozen before chronological
 holdout is opened. C0 receives the same opportunities and capacity while
-destroying typed alignment.
+destroying typed alignment. The numeric Q0 realization is frozen in
+`docs/typed_event_sleeping_bayes_q0_contract.md`.
 
 Promotion requires:
 
