@@ -1060,7 +1060,6 @@ test("Foundry Shovels observes two-Compute Wild Actions and respects its round c
       gridReadySupportSeats: []
     }
   ];
-  match.planImmediateTrade = async () => null;
   const policies = match.players.map(() => ({
     async decide(packet) {
       return {
@@ -1598,6 +1597,133 @@ test("pre-Act choices preserve the selected action's legal resolution", async ()
   assert.equal(askedToUseOrbitalCompute, false);
   assert.equal(usedOrbitalCompute, false);
   assert.notEqual(player.factionAbilityUsed.orbitalCompute, true);
+});
+
+test("immediate trades skip impossible turns and package each offer", async () => {
+  const runtime = await createInteractiveGame(
+    { playerCount: 4, seed: "packed-immediate-trade" },
+    () => {}
+  );
+  await runtime.match.setup(runtime.policies);
+  const match = runtime.match;
+  for (const player of match.players) {
+    player.runway = 0;
+    player.compute = 0;
+    player.safety = 0;
+  }
+  const unavailablePolicies = match.players.map(() => ({
+    async decide() {
+      throw new Error("An impossible trade must not create a decision packet.");
+    }
+  }));
+  assert.equal(await match.chooseImmediateTrade(unavailablePolicies, 0), null);
+
+  const player = match.players[0];
+  const partner = match.players[1];
+  player.runway = 2;
+  partner.compute = 1;
+  const stages = [];
+  const policies = match.players.map(() => ({
+    async decide(packet) {
+      const stage = packet.requestId.split(":").at(-2);
+      stages.push(stage);
+      const selected = stage === "immediate_trade_response"
+        ? packet.legalDecisions.find((decision) => decision.decisionId === "trade_accept")
+        : packet.legalDecisions.find((decision) =>
+          decision.decisionId.startsWith("trade_offer_")
+        );
+      return {
+        decision: { decisionId: selected.decisionId },
+        receipt: { provider: "fixture" }
+      };
+    }
+  }));
+  const offer = await match.chooseImmediateTrade(policies, player.seat);
+  assert.deepEqual(stages, ["immediate_trade"]);
+  assert.ok(offer);
+  assert.equal(offer.partnerSeat, partner.seat);
+  const resourcesBeforeTrade = match.players.map((candidate) => ({
+    runway: candidate.runway,
+    compute: candidate.compute,
+    safety: candidate.safety
+  }));
+  assert.equal(await match.settleImmediateTrade(policies, player.seat, offer), true);
+  assert.deepEqual(stages, ["immediate_trade", "immediate_trade_response"]);
+  for (const resource of ["runway", "compute", "safety"]) {
+    const dealFlowBonus = resource === "runway" && player.factionId === "coalition_lab" ? 1 : 0;
+    assert.equal(
+      player[resource],
+      resourcesBeforeTrade[player.seat][resource]
+        - (offer.giveResource === resource ? offer.giveAmount : 0)
+        + (offer.receiveResource === resource ? offer.receiveAmount : 0)
+        + dealFlowBonus
+    );
+    const partnerDealFlowBonus =
+      resource === "runway" && partner.factionId === "coalition_lab" ? 1 : 0;
+    assert.equal(
+      partner[resource],
+      resourcesBeforeTrade[partner.seat][resource]
+        + (offer.giveResource === resource ? offer.giveAmount : 0)
+        - (offer.receiveResource === resource ? offer.receiveAmount : 0)
+        + partnerDealFlowBonus
+    );
+  }
+});
+
+test("counteroffer makers choose among simultaneous immediate-trade claimants", async () => {
+  const runtime = await createInteractiveGame(
+    { playerCount: 4, seed: "open-counteroffer" },
+    () => {}
+  );
+  await runtime.match.setup(runtime.policies);
+  const match = runtime.match;
+  for (const player of match.players) {
+    player.runway = 0;
+    player.compute = 0;
+    player.safety = 0;
+  }
+  const active = match.players[0];
+  const counterMaker = match.players[1];
+  const chosenClaimant = match.players[2];
+  active.runway = 2;
+  counterMaker.compute = 1;
+  chosenClaimant.runway = 1;
+  const stages = [];
+  const policies = match.players.map(() => ({
+    async decide(packet) {
+      const stage = packet.requestId.split(":").at(-2);
+      stages.push(stage);
+      const selected = stage === "immediate_trade_response"
+        ? packet.legalDecisions.find((decision) => decision.decisionId.startsWith("trade_counter_"))
+        : stage === "immediate_trade_claim"
+          ? packet.legalDecisions.find((decision) => decision.decisionId === "trade_claim_accept")
+          : stage === "immediate_trade_counterparty"
+            ? packet.legalDecisions.find((decision) =>
+              decision.decisionId === `trade_counterparty_${chosenClaimant.seat}`
+            )
+            : packet.legalDecisions.find((decision) =>
+              decision.decisionId.startsWith("trade_offer_")
+            );
+      return {
+        decision: { decisionId: selected.decisionId },
+        receipt: { provider: "fixture" }
+      };
+    }
+  }));
+  const offer = await match.chooseImmediateTrade(policies, active.seat);
+  assert.ok(offer);
+  assert.equal(await match.settleImmediateTrade(policies, active.seat, offer), true);
+  assert.deepEqual(stages, [
+    "immediate_trade",
+    "immediate_trade_response",
+    "immediate_trade_claim",
+    "immediate_trade_claim",
+    "immediate_trade_counterparty"
+  ]);
+  assert.equal(active.runway, 2);
+  assert.equal(chosenClaimant.runway, 0);
+  assert.equal(chosenClaimant.compute, 1);
+  assert.equal(counterMaker.compute, 0);
 });
 
 test("interactive games accept mixed per-opponent personas and decision backends", async () => {
