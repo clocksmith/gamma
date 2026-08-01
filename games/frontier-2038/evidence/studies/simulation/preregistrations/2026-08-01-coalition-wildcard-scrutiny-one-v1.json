@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "coalition-wildcard-scrutiny-one-v1",
+  "registeredBeforeResults": true,
+  "question": "Does reducing Coalition Lab Wildcard Governance scrutiny from two to one improve Coalition's three-player paired outcomes without creating a four- or five-player balance regression?",
+  "sourceEvidence": [
+    "2026-08-01-p3-faction-seat-policy-isolation",
+    "2026-08-01-p3-faction-seat-policy-fixed-replication"
+  ],
+  "sourceReportSha256": [
+    "499c971a2db15c9c4d93550479924993de9d419d17394c8add09e85da2b8f80c",
+    "3b31ce3c3b30256902a677334e14ef4c58cc73f6463040c94790fc4900ca4d81"
+  ],
+  "hypothesis": "Coalition Lab pays a frequent two-Scrutiny exposure for Wildcard Governance while its frequent Deal Flow already supplies liquidity. Reducing that one exposure by one Scrutiny may improve Coalition's ability to convert its broker play into Mandate without changing negotiation, resources, scoring, any other faction, or the headline choice itself.",
+  "comparisonKind": "causal_one_lever",
+  "rulesConfigurations": [
+    {
+      "id": "canonical",
+      "overlay": {}
+    },
+    {
+      "id": "coalition_wildcard_scrutiny_one",
+      "overlay": {
+        "coalitionWildcardGovernanceScrutiny": 1
+      }
+    }
+  ],
+  "playerCounts": [3, 4, 5],
+  "balanceAuthority": 4,
+  "regressionGuards": [3, 5],
+  "mandateModes": ["variable", "fixed"],
+  "maximumMatches": 9670,
+  "balanceMatrixMatches": 9600,
+  "adversarialDiagnosticMatches": 70,
+  "initialRunsPerCell": 4,
+  "batchSize": 12,
+  "projection": "batch",
+  "workers": 31,
+  "chunkSize": 8,
+  "seed": "frontier-2038-coalition-wildcard-scrutiny-one-2026-08-01-v1",
+  "backends": ["weighted", "greedy"],
+  "backendRegimes": [
+    "homogeneous_weighted",
+    "homogeneous_greedy",
+    "alternating_weighted_first",
+    "alternating_greedy_first"
+  ],
+  "allowLlm": false,
+  "analysis": {
+    "primaryResponse": "For Coalition Lab at three players, report candidate-minus-canonical common-seed win-share, score, and rank deltas overall and separately for weighted and greedy focal decisions.",
+    "scheduleResponse": "Report variable- and fixed-Mandate results separately; do not pool them as if they were one regime.",
+    "authority": "Four-player candidate balance checks remain authoritative. Three-player benefit cannot promote a candidate that fails four-player balance or creates a five-player regression.",
+    "responseGate": "The lever is responsive only if Coalition's three-player mean paired win-share delta is at least +0.03, its mean rank delta is positive, and the direction is nonnegative under both weighted and greedy focal backends.",
+    "guardrailGate": "The candidate must retain zero integrity violations, zero policy fallbacks, forced no-op rate below 0.03, no credible faction/seat/strategy/pairwise/meta-cycle dominance, and faction win-share range at or below 0.15 at each of three, four, and five players.",
+    "overshootGate": "Reject the lever if Coalition becomes a credible dominant faction or if either four- or five-player candidate faction range exceeds 0.15.",
+    "decision": "Passing makes the lever eligible for strict no-fallback LLM robustness and controlled physical testing; it does not promote the rule without a tracked receipt and explicit approval. Failing or schedule-confined response rejects the lever and leaves canonical rules unchanged.",
+    "adversarialBoundary": "The 70 four-player adversarial matches remain a separately labeled exploit diagnostic and are not pooled into either rules arm's balance aggregate.",
+    "agiBoundary": "Zero declaration windows remain a coverage failure; this lever study cannot establish AGI-route balance."
+  },
+  "execution": {
+    "rulesConfigurationFile": "evidence/studies/simulation/preregistrations/2026-08-01-coalition-wildcard-scrutiny-one-v1.rules.json",
+    "command": "npm run simulate:audit -- --maximum-matches 9670 --initial-runs 4 --batch-size 12 --player-counts 3,4,5 --mandate-modes variable,fixed --rules-configurations evidence/studies/simulation/preregistrations/2026-08-01-coalition-wildcard-scrutiny-one-v1.rules.json --comparison-kind causal_one_lever --seed frontier-2038-coalition-wildcard-scrutiny-one-2026-08-01-v1 --pre-registration-id coalition-wildcard-scrutiny-one-v1 --projection batch --workers 31 --chunk-size 8 --output evidence/studies/simulation/2026-08-01-coalition-wildcard-scrutiny-one-v1.raw.json"
+  },
+  "llm": {
+    "enabled": false,
+    "maximumProviderCalls": 0,
+    "boundary": "Provider/model behavior is a later strict robustness study after the deterministic one-lever conclusion."
+  }
+}
