@@ -25,6 +25,7 @@ export function canonicalRulesVariant(config) {
     customerCapabilityOffset: 0,
     startingTeamsDeployed: 1,
     coalitionStartingRunway: null,
+    coalitionWildcardGovernanceScrutiny: 2,
     imperialStartingCompute: null,
     imperialScientificMethodCapabilityPenalty: 0,
     imperialScientificMethodThresholdMandatePenalty: 0,
