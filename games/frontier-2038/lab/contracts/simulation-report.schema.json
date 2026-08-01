@@ -77,6 +77,14 @@
       "type": "object",
       "required": ["sourceCommit", "sourceDirty"]
     },
+    "launchIdentity": {
+      "type": "object",
+      "required": ["schemaVersion", "fingerprint"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "fingerprint": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      }
+    },
     "balanceContract": {
       "type": "object",
       "required": ["id", "status", "fingerprint"]

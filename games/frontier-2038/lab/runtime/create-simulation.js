@@ -14,6 +14,8 @@ import { runMonteCarlo } from "../runner/monte-carlo-runner.js";
 import { effectiveRulesVariant } from "../environment/rules-variant.js";
 import { DecisionCache } from "../policies/decision-cache.js";
 import {
+  assertLaunchIdentity,
+  createLaunchIdentity,
   createReportIdentity,
   loadGameIdentity
 } from "../versioning/game-identity.js";
@@ -78,6 +80,87 @@ function decisionBudget(value, fallback, label) {
   return parsed;
 }
 
+function resolveSimulationConfiguration(options, { config, availableProfiles }) {
+  const profileOverrides = new Map(
+    (options.profileOverrides || []).map((profile) => {
+      validatePlayerProfile(profile);
+      return [profile.id, structuredClone(profile)];
+    })
+  );
+  const profiles = availableProfiles.map((profile) =>
+    profileOverrides.get(profile.id) || profile
+  );
+  for (const [id, profile] of profileOverrides) {
+    if (!profiles.some((candidate) => candidate.id === id)) profiles.push(profile);
+  }
+  const playerCount = boundedInteger(
+    options.playerCount,
+    4,
+    config.players.min,
+    config.players.max,
+    "playerCount"
+  );
+  const profileIds = options.profileIds?.length
+    ? options.profileIds
+    : profiles.slice(0, playerCount).map((profile) => profile.id);
+  const selectedProfiles = Array.from({ length: playerCount }, (_, seat) => {
+    const id = profileIds[seat % profileIds.length];
+    const profile = profiles.find((candidate) => candidate.id === id);
+    if (!profile) throw new TypeError(`Unknown player profile: ${id}.`);
+    return profile;
+  });
+  const backends = options.backends?.length
+    ? options.backends
+    : selectedProfiles.map((profile) => profile.defaultBackend || "weighted");
+  const configuredBackends = Array.from({ length: playerCount }, (_, seat) =>
+    backends[seat % backends.length]
+  );
+  for (const backend of configuredBackends) validatePolicyBackend(backend);
+  const isLlmBackend = (backend) => !["weighted", "greedy"].includes(backend);
+  const models = Array.from({ length: playerCount }, (_, seat) =>
+    isLlmBackend(configuredBackends[seat])
+      ? options.models?.[seat % options.models.length] || options.model || null
+      : null
+  );
+  const reasoningEfforts = Array.from({ length: playerCount }, (_, seat) =>
+    isLlmBackend(configuredBackends[seat])
+      ? options.reasoningEfforts?.[seat % options.reasoningEfforts.length] ||
+        options.reasoningEffort || null
+      : null
+  );
+  return {
+    playerCount,
+    profiles,
+    selectedProfiles,
+    configuredBackends,
+    models,
+    reasoningEfforts
+  };
+}
+
+export async function captureSimulationLaunchIdentity(options = {}) {
+  const [config, availableProfiles] = await Promise.all([
+    readFile(configUrl, "utf8").then(JSON.parse),
+    loadPlayerProfiles()
+  ]);
+  const {
+    selectedProfiles,
+    configuredBackends,
+    models,
+    reasoningEfforts
+  } = resolveSimulationConfiguration(options, { config, availableProfiles });
+  const resolvedRulesVariant = effectiveRulesVariant(config, options.rulesVariant);
+  return createLaunchIdentity(await loadGameIdentity({
+    rulesVariant: resolvedRulesVariant,
+    variantOverlay: options.rulesVariant,
+    profiles: selectedProfiles,
+    backends: configuredBackends,
+    model: models,
+    reasoningEffort: reasoningEfforts,
+    experimentKind: options.experimentKind || "tournament"
+  }));
+}
+
 export function factionRosterForRun(factions, playerCount, runIndex, rotate = true) {
   if (!rotate) return factions.slice(0, playerCount);
   const poolStart = runIndex % factions.length;
@@ -110,25 +193,13 @@ export async function createSimulation(options = {}, onProgress) {
     loadPlayerProfiles(),
     loadBalanceContract()
   ]);
-  const profileOverrides = new Map(
-    (options.profileOverrides || []).map((profile) => {
-      validatePlayerProfile(profile);
-      return [profile.id, structuredClone(profile)];
-    })
-  );
-  const profiles = availableProfiles.map((profile) =>
-    profileOverrides.get(profile.id) || profile
-  );
-  for (const [id, profile] of profileOverrides) {
-    if (!profiles.some((candidate) => candidate.id === id)) profiles.push(profile);
-  }
-  const playerCount = boundedInteger(
-    options.playerCount,
-    4,
-    config.players.min,
-    config.players.max,
-    "playerCount"
-  );
+  const {
+    playerCount,
+    selectedProfiles,
+    configuredBackends,
+    models,
+    reasoningEfforts
+  } = resolveSimulationConfiguration(options, { config, availableProfiles });
   const runs = boundedInteger(options.runs, 100, 1, 10000, "runs");
   const runOffset = boundedInteger(
     options.runOffset,
@@ -138,34 +209,7 @@ export async function createSimulation(options = {}, onProgress) {
     "runOffset"
   );
   const sampleReplays = boundedInteger(options.sampleReplays, 3, 0, 10, "sampleReplays");
-  const profileIds = options.profileIds?.length
-    ? options.profileIds
-    : profiles.slice(0, playerCount).map((profile) => profile.id);
-  const selectedProfiles = Array.from({ length: playerCount }, (_, seat) => {
-    const id = profileIds[seat % profileIds.length];
-    const profile = profiles.find((candidate) => candidate.id === id);
-    if (!profile) throw new TypeError(`Unknown player profile: ${id}.`);
-    return profile;
-  });
-  const backends = options.backends?.length
-    ? options.backends
-    : selectedProfiles.map((profile) => profile.defaultBackend || "weighted");
-  const configuredBackends = Array.from({ length: playerCount }, (_, seat) =>
-    backends[seat % backends.length]
-  );
-  for (const backend of configuredBackends) validatePolicyBackend(backend);
   const isLlmBackend = (backend) => !["weighted", "greedy"].includes(backend);
-  const models = Array.from({ length: playerCount }, (_, seat) =>
-    isLlmBackend(configuredBackends[seat])
-      ? options.models?.[seat % options.models.length] || options.model || null
-      : null
-  );
-  const reasoningEfforts = Array.from({ length: playerCount }, (_, seat) =>
-    isLlmBackend(configuredBackends[seat])
-      ? options.reasoningEfforts?.[seat % options.reasoningEfforts.length] ||
-        options.reasoningEffort || null
-      : null
-  );
   const llmRequested = configuredBackends.some(isLlmBackend);
   const requireLlm = Boolean(options.requireLlm);
   if (llmRequested && !options.allowLlm) {
@@ -221,8 +265,14 @@ export async function createSimulation(options = {}, onProgress) {
     profiles: selectedProfiles,
     backends: configuredBackends,
     model: models,
+    reasoningEffort: reasoningEfforts,
     experimentKind: options.experimentKind || "tournament"
   });
+  const launchIdentity = assertLaunchIdentity(
+    options.launchIdentity,
+    decisionIdentity,
+    "Simulation"
+  );
   const policies = selectedProfiles.map((profile, seat) =>
     createPlayerPolicy(profile, configuredBackends[seat], {
       allowLlm: Boolean(options.allowLlm),
@@ -349,6 +399,7 @@ export async function createSimulation(options = {}, onProgress) {
     ...(options.preRegistration ? {
       preRegistration: structuredClone(options.preRegistration)
     } : {}),
+    launchIdentity,
     configuration: {
       profileIds: selectedProfiles.map((profile) => profile.id),
       backends: configuredBackends,
@@ -402,13 +453,25 @@ export async function createSimulation(options = {}, onProgress) {
     completedReport,
     balanceContract
   );
-  return createReportIdentity({
-    report: completedReport,
+  const finalIdentity = await loadGameIdentity({
     rulesVariant: completedReport.rulesVariant,
     variantOverlay: options.rulesVariant,
     profiles: selectedProfiles,
     backends: completedReport.configuration.backends,
-    model: completedReport.configuration.players,
+    model: models,
+    reasoningEffort: reasoningEfforts,
+    experimentKind: options.experimentKind || "tournament"
+  });
+  assertLaunchIdentity(launchIdentity, finalIdentity, "Completed simulation");
+  return createReportIdentity({
+    report: completedReport,
+    identity: finalIdentity,
+    rulesVariant: completedReport.rulesVariant,
+    variantOverlay: options.rulesVariant,
+    profiles: selectedProfiles,
+    backends: completedReport.configuration.backends,
+    model: models,
+    reasoningEffort: reasoningEfforts,
     experimentKind: options.experimentKind || "tournament"
   });
 }

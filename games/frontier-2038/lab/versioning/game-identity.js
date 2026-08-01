@@ -127,6 +127,7 @@ export async function loadGameIdentity({
   profiles = [],
   backends = [],
   model = null,
+  reasoningEffort = null,
   experimentKind = "tournament"
 } = {}) {
   const version = JSON.parse(await readFile(resolve(root, "release/game-version.json"), "utf8"));
@@ -139,6 +140,7 @@ export async function loadGameIdentity({
     profiles: profiles.map((profile) => sortValue(profile)),
     backends: [...backends],
     model,
+    reasoningEffort,
     experimentKind
   };
 
@@ -191,23 +193,65 @@ export async function loadGameIdentity({
   };
 }
 
+export function createLaunchIdentity(identity) {
+  const payload = {
+    schemaVersion: 1,
+    game: structuredClone(identity.game),
+    engine: structuredClone(identity.engine),
+    contracts: structuredClone(identity.contracts),
+    variant: structuredClone(identity.variant),
+    strategies: structuredClone(identity.strategies),
+    rng: structuredClone(identity.rng),
+    provenance: structuredClone(identity.provenance)
+  };
+  return {
+    ...payload,
+    fingerprint: fingerprintObject(payload)
+  };
+}
+
+export function assertLaunchIdentity(expected, identity, context = "simulation") {
+  if (!expected) return createLaunchIdentity(identity);
+  const expectedPayload = structuredClone(expected);
+  const expectedFingerprint = expectedPayload.fingerprint;
+  delete expectedPayload.fingerprint;
+  const recalculatedExpected = fingerprintObject(expectedPayload);
+  if (expectedFingerprint !== recalculatedExpected) {
+    const error = new Error(`${context} received a malformed launch identity.`);
+    error.code = "launch_identity_malformed";
+    throw error;
+  }
+  const actual = createLaunchIdentity(identity);
+  if (actual.fingerprint !== expectedFingerprint) {
+    const error = new Error(`${context} identity differs from its launch snapshot.`);
+    error.code = "launch_identity_mismatch";
+    error.expectedLaunchIdentity = expectedFingerprint;
+    error.actualLaunchIdentity = actual.fingerprint;
+    throw error;
+  }
+  return actual;
+}
+
 export async function createReportIdentity({
   report,
   root = projectRoot,
+  identity: suppliedIdentity = null,
   rulesVariant,
   variantOverlay,
   profiles,
   backends,
   model,
+  reasoningEffort,
   experimentKind
 }) {
-  const identity = await loadGameIdentity({
+  const identity = suppliedIdentity || await loadGameIdentity({
     root,
     rulesVariant,
     variantOverlay,
     profiles,
     backends,
     model,
+    reasoningEffort,
     experimentKind
   });
   const balanceContractDocument = JSON.parse(await readFile(balanceContractUrl, "utf8"));

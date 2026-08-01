@@ -6,7 +6,10 @@ import {
   Worker
 } from "node:worker_threads";
 import { ClaudeCliCaller, CodexCliCaller } from "../callers/index.js";
-import { createSimulation } from "../runtime/create-simulation.js";
+import {
+  captureSimulationLaunchIdentity,
+  createSimulation
+} from "../runtime/create-simulation.js";
 import { fingerprintObject } from "../versioning/game-identity.js";
 
 const DETERMINISTIC_BACKENDS = new Set(["weighted", "greedy"]);
@@ -396,6 +399,7 @@ if (!isMainThread) {
     try {
       const report = await createSimulation({
         ...message.options,
+        launchIdentity: message.launchIdentity,
         ...(message.brokeredLlm ? {
           callerFactory: (configuration) => new WorkerBrokerCaller(configuration)
         } : {})
@@ -492,6 +496,7 @@ async function runInline(tasks, { signal, onProgress, totalGames }) {
     if (signal?.aborted) throw signal.reason;
     reports[task.taskIndex] = await createSimulation({
       ...task.options,
+      launchIdentity: task.launchIdentity,
       signal
     });
     completed += task.options.runs;
@@ -753,6 +758,35 @@ function llmExecutionProfiles(prepared) {
   return profiles;
 }
 
+function studyIdentityBasis(identity) {
+  return {
+    game: identity.game,
+    engine: identity.engine,
+    contracts: identity.contracts,
+    rng: identity.rng,
+    provenance: identity.provenance
+  };
+}
+
+async function captureTaskLaunchIdentities(tasks) {
+  let expectedBasis = null;
+  for (const task of tasks) {
+    const launchIdentity = await captureSimulationLaunchIdentity(task.options);
+    const basis = studyIdentityBasis(launchIdentity);
+    const fingerprint = fingerprintObject(basis);
+    if (expectedBasis && expectedBasis.fingerprint !== fingerprint) {
+      const error = new Error(
+        "Faction-swap source identity changed while task launch identities were captured."
+      );
+      error.code = "study_launch_identity_mismatch";
+      throw error;
+    }
+    expectedBasis ||= { ...basis, fingerprint };
+    task.launchIdentity = launchIdentity;
+  }
+  return expectedBasis;
+}
+
 export async function runFactionSwapDiagnostic(options = {}, onProgress) {
   const comparisons = options.comparisons || [];
   if (!comparisons.length) throw new RangeError("At least one faction comparison is required.");
@@ -847,6 +881,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
   tasks.forEach((task, taskIndex) => {
     task.taskIndex = taskIndex;
   });
+  const studyLaunchIdentity = await captureTaskLaunchIdentities(tasks);
   const requestedWorkers = workersForTasks(
     options.workers,
     tasks,
@@ -1028,6 +1063,18 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     evidenceLabel: "simulation",
     evidenceType: "simulation",
     generatedAt: new Date().toISOString(),
+    launchIdentity: {
+      schemaVersion: 1,
+      study: studyLaunchIdentity,
+      taskOrder: "comparison_then_arm_then_match",
+      tasks: tasks.map((task) => ({
+        taskIndex: task.taskIndex,
+        comparisonIndex: task.comparisonIndex,
+        arm: task.arm,
+        matchIndex: task.matchIndex,
+        identity: structuredClone(task.launchIdentity)
+      }))
+    },
     execution: {
       scheduler: hasLlm || actualWorkers > 1 ? "worker_threads" : "inline",
       taskUnit: hasLlm ? "simulation_match" : "simulation_arm",
