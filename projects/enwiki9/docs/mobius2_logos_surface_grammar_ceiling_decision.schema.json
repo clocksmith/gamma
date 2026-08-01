@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mobius2_logos_surface_grammar_ceiling_decision.schema.json",
+  "title": "MOBIUS-2 LOGOS surface grammar ceiling Q0 decision",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "candidate_id",
+    "proposal_id",
+    "evidence_level",
+    "inputs",
+    "population",
+    "discovery",
+    "optimistic_ceiling",
+    "controls",
+    "split_controls",
+    "source_accounting",
+    "economics",
+    "proof",
+    "gates",
+    "decision",
+    "score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "mobius2_logos_surface_grammar_ceiling_q0_v1"
+    },
+    "candidate_id": {
+      "const": "mobius2_logos_surface_grammar_ceiling_q0_v1"
+    },
+    "proposal_id": {
+      "const": "mobius2_logos_surface_grammar_ceiling_v1"
+    },
+    "evidence_level": {
+      "const": "zero_credit_exact_surface_grammar_ceiling"
+    },
+    "inputs": {"type": "object"},
+    "population": {"type": "object"},
+    "discovery": {"type": "object"},
+    "optimistic_ceiling": {
+      "type": "object",
+      "required": [
+        "exact_payload_gain_bytes",
+        "candidate_rules",
+        "candidate_invocations"
+      ]
+    },
+    "controls": {
+      "type": "object",
+      "required": ["E0", "S1", "SL"],
+      "properties": {
+        "E0": {"type": "object"},
+        "S1": {"$ref": "#/$defs/grammar_control"},
+        "SL": {"$ref": "#/$defs/grammar_control"}
+      }
+    },
+    "split_controls": {"type": "object"},
+    "source_accounting": {"type": "object"},
+    "economics": {"type": "object"},
+    "proof": {"type": "object"},
+    "gates": {"type": "object"},
+    "decision": {
+      "type": "object",
+      "required": ["promotion_authorized", "verdict", "failed_conditions"]
+    },
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "grammar_control": {
+      "type": "object",
+      "required": [
+        "archive_bytes",
+        "control_bytes",
+        "literal_payload_bytes",
+        "control_roundtrip_ok",
+        "wrt_roundtrip_ok",
+        "deterministic_archive_ok"
+      ]
+    }
+  }
+}

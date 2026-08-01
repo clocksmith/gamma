@@ -3407,3 +3407,79 @@ or queue jobs are authorized by this architecture entry.
 Architecture:
 
 - `docs/mobius2_architecture.md`
+
+## 2026-08-01: MOBIUS-2 LOGOS ordered-template surface ceiling claimed
+
+Candidate: `mobius2_logos_surface_grammar_ceiling_q0_v1`
+
+This prerequisite tests one exact many-use rule family before broader semantic
+ontology work. It reuses the recorded WikiIR ordered-template parser, but does
+not serialize an alternate raw IR or feed commands through LZMA. Fixed raw
+segments and value-hole boundaries are mapped to complete WRT emission groups;
+only identical tuples of exact WRT fixed segments share a rule.
+
+The first 60 percent of complete chronological pages determine rule keys and
+definitions. A key needs at least two development occurrences. The finite
+control stream transmits each WRT rule definition, absolute invocation start,
+rule ID, and literal-hole WRT lengths. Generated fixed segments are omitted
+from an actual terminated residual range payload, while later literal bytes
+retain their receipt-bound parent P1 rows. Native model-state hashing remains
+a later obligation.
+
+The gate reports both an exact uncharged residual-payload ceiling over every
+development-repeated rule and a paid S1 archive. SL transmits the identical
+rules and invocations but forces every byte literal, isolating generated-span
+value from descriptor freedom. Parent, command, WRT, raw inverse, and second-
+archive identities are mandatory.
+
+Promotion requires at least 3,000 B/M for both the uncharged exact ceiling and
+paid gross archive, at least 2,100 B/M after measured source, an S1 win over SL,
+and positive development, selection, and sealed-confirmation signs. A ceiling
+miss retires ordered-template surface LOGOS without occurrence, hole, nesting,
+rule-width, or integer-code sweeps. It does not retire untested semantic LOGOS
+or NOEMA.
+
+Plan and schema:
+
+- `docs/mobius2_logos_surface_grammar_ceiling_plan.md`
+- `docs/mobius2_logos_surface_grammar_ceiling_decision.schema.json`
+
+## 2026-08-01: MOBIUS-2 LOGOS ordered-template surface ceiling retired
+
+The exact opening-1M gate mapped 443 parameterized ordered templates onto the
+WRT stream. Development exposed 18 exact WRT skeleton keys with at least two
+occurrences, producing 201 legal candidate invocations and 2,209 potentially
+generated WRT bytes.
+
+The uncharged U0 oracle omitted every eligible fixed span, charged no rule,
+invocation, framing, or source bytes, and built an actual terminated residual
+arithmetic payload. It saved only 291 bytes, or 291 B/M, against the exact
+173,859-byte parent payload. This is below one tenth of the frozen 3,000 B/M
+ceiling gate. The parent qbit attribution for those spans was 290.019 bytes,
+which independently agrees with the constructed-payload ceiling.
+
+Paid MDL selection retained zero rules and zero invocations. S1 totaled
+173,923 bytes versus the 173,896-byte parent archive: -27 B/M gross and
+-42.496 B/M after the measured 15,496-byte source allowance. With no selected
+rules, S1 could not beat the identical-descriptor forced-literal SL control,
+and none of the chronological split signs was positive.
+
+The first adaptive attempt failed before measurement because the inherited
+WikiIR representation stores its first value hole after two adjacent fixed
+segments. The WRT mapper was corrected to that recorded ordering and the same
+frozen candidate was retried as an infrastructure retry. The successful run
+then passed exact parent-payload identity, finite control roundtrip, WRT
+reconstruction, official WRT-to-raw inverse, raw hash, and byte-identical
+second-archive controls.
+
+Decision: retire unchanged ordered-template surface LOGOS, including rescue
+sweeps over occurrence thresholds, hole counts, nesting, rule widths, integer
+codes, and rule-definition compression. This result does not test or retire a
+materially broader semantic-rule information source or NOEMA. Both remain
+zero-credit. The 109,389,323-byte forecast is unchanged.
+
+Evidence:
+
+- `results/mobius2_logos_surface_grammar_ceiling_q0_v1/decision.json`
+- `run_logs/adaptive/20260801T211842Z_1ac4e76b26.log`
+- `operations/adaptive/exclusions/mobius2_logos_ordered_template_surface_grammar_opening_1m_v1.json`

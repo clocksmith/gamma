@@ -233,6 +233,7 @@ lanes unless all model/index bytes are counted.
 | `random_window_fx2_title_echo_gate.py` | Runs a frozen random-window raw/title-echo pair through six serialized, RSS-guarded native FX2/WRT encode/decode/determinism phases. It must own `/tmp/enwiki9-heavy.lock`. |
 | `route_d_timestamp_microblock_gate.py` | Runs the non-heavy, zero-credit exact Route D timestamp-envelope rank/parity Q0 diagnostic with page-disjoint and chronological controls; it does not launch a compressor. |
 | `route_e_state_preserving_prototype_bypass_gate.py` | Runs the non-heavy, zero-credit exact Route E prior-page prototype bypass Q0 with parent-payload identity, E1/E2/ER controls, finite command coding, residual range payloads, and WRT/raw reconstruction. |
+| `mobius2_logos_surface_grammar_ceiling.py` | Runs the non-heavy, zero-credit exact LOGOS ordered-template WRT grammar ceiling with development-frozen rules, an uncharged information ceiling, paid S1/forced-literal SL archives, parent identity, and WRT/raw reconstruction. |
 | `atlas_clockwork_seal.py` | Builds and verifies the lifecycle-aware private Atlas-Clockwork commitment; it does not authorize distribution unless verification returns `VALID_BOUND`. |
 
 ## Native Codec Prototypes
