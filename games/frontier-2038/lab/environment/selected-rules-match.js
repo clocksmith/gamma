@@ -98,6 +98,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     seed,
     playerCount = 4,
     recordReplay = false,
+    projection = "rich",
     rulesVariant = {},
     mandateMode = "variable",
     simulateNegotiation = false,
@@ -115,6 +116,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       seed,
       playerCount,
       recordReplay,
+      projection,
       decisionContext
     });
     this.scope = SELECTED_RULES_COVERAGE;
@@ -612,7 +614,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       roundMandate: this.roundMandate
         ? { id: this.roundMandate.id, name: this.roundMandate.name, rulesText: this.roundMandate.rulesText }
         : null,
-      persistentRegimes: clone(this.regime.persistent || {}),
+      persistentRegimes: this.copyPublic(this.regime.persistent || {}),
       self: {
         ...base.self,
         escalation: player.escalation,
@@ -645,11 +647,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           ...this.publicPlayerState(candidate),
           escalation: candidate.escalation,
           wildUsed: [...candidate.wildUsed],
-          factionAbilityUsed: clone(candidate.factionAbilityUsed || {}),
+          factionAbilityUsed: this.copyPublic(candidate.factionAbilityUsed || {}),
           teamsInSupply: candidate.teamsInSupply,
           links: [...candidate.links],
-          jointVentures: clone(candidate.jointVentures),
-          megaClusters: clone(candidate.megaClusters || []),
+          jointVentures: this.copyPublic(candidate.jointVentures),
+          megaClusters: this.copyPublic(candidate.megaClusters || []),
           marketAccess: candidate.marketAccess,
           policyShields: candidate.policyShields,
           buildDiscounts: candidate.buildDiscounts,
@@ -657,7 +659,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           agiDeclared: candidate.agiDeclared,
           currentScore: this.currentScore(candidate)
         })),
-        contracts: clone(this.contracts),
+        contracts: this.copyPublic(this.contracts),
         systemicRisk: this.systemicRisk
       }
     };
@@ -2135,7 +2137,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   adjustDecision(player, decision) {
-    const result = clone(decision);
+    // This adjustment only annotates parameters.  Legal-decision generation calls
+    // it repeatedly while testing prospective trade amounts, so a full deep clone
+    // here dominated deterministic simulations without protecting any nested
+    // value that we mutate.
+    const result = {
+      ...decision,
+      parameters: { ...(decision.parameters || {}) }
+    };
     const category = result.parameters?.destinationCategory;
     if (result.actionId === "fund") {
       const venture = result.parameters.mode === "venture";

@@ -80,6 +80,14 @@ function decisionBudget(value, fallback, label) {
   return parsed;
 }
 
+function simulationProjection(value) {
+  const projection = value || "rich";
+  if (!["rich", "batch"].includes(projection)) {
+    throw new TypeError(`Unknown simulation projection: ${projection}.`);
+  }
+  return projection;
+}
+
 function resolveSimulationConfiguration(options, { config, availableProfiles }) {
   const profileOverrides = new Map(
     (options.profileOverrides || []).map((profile) => {
@@ -149,6 +157,7 @@ export async function captureSimulationLaunchIdentity(options = {}) {
     models,
     reasoningEfforts
   } = resolveSimulationConfiguration(options, { config, availableProfiles });
+  const projection = simulationProjection(options.projection);
   const resolvedRulesVariant = effectiveRulesVariant(config, options.rulesVariant);
   return createLaunchIdentity(await loadGameIdentity({
     rulesVariant: resolvedRulesVariant,
@@ -157,6 +166,7 @@ export async function captureSimulationLaunchIdentity(options = {}) {
     backends: configuredBackends,
     model: models,
     reasoningEffort: reasoningEfforts,
+    policyProjection: projection,
     experimentKind: options.experimentKind || "tournament"
   }));
 }
@@ -200,6 +210,7 @@ export async function createSimulation(options = {}, onProgress) {
     models,
     reasoningEfforts
   } = resolveSimulationConfiguration(options, { config, availableProfiles });
+  const projection = simulationProjection(options.projection);
   const runs = boundedInteger(options.runs, 100, 1, 10000, "runs");
   const runOffset = boundedInteger(
     options.runOffset,
@@ -211,6 +222,9 @@ export async function createSimulation(options = {}, onProgress) {
   const sampleReplays = boundedInteger(options.sampleReplays, 3, 0, 10, "sampleReplays");
   const isLlmBackend = (backend) => !["weighted", "greedy"].includes(backend);
   const llmRequested = configuredBackends.some(isLlmBackend);
+  if (projection === "batch" && llmRequested) {
+    throw new Error("Batch projection supports deterministic policies only.");
+  }
   const requireLlm = Boolean(options.requireLlm);
   if (llmRequested && !options.allowLlm) {
     throw new Error("LLM-backed simulation requires explicit allowLlm authorization.");
@@ -266,6 +280,7 @@ export async function createSimulation(options = {}, onProgress) {
     backends: configuredBackends,
     model: models,
     reasoningEffort: reasoningEfforts,
+    policyProjection: projection,
     experimentKind: options.experimentKind || "tournament"
   });
   const launchIdentity = assertLaunchIdentity(
@@ -356,6 +371,7 @@ export async function createSimulation(options = {}, onProgress) {
         seed: matchSeed,
         playerCount,
         recordReplay,
+        projection,
         rulesVariant: resolvedRulesVariant,
         mandateMode: options.mandateMode || "variable",
         simulateNegotiation: Boolean(options.simulateNegotiation),
@@ -380,6 +396,7 @@ export async function createSimulation(options = {}, onProgress) {
       );
     },
     includeObservations: Boolean(options.includeObservations),
+    projection,
     runOffset,
     signal: options.signal
   });
@@ -435,7 +452,8 @@ export async function createSimulation(options = {}, onProgress) {
       llmCacheDirectory: options.llmCacheDirectory || null,
       preRegistrationId: options.preRegistrationId || null,
       llmStages: options.llmStages || null,
-      runOffset
+      runOffset,
+      projection
     },
     balanceContract: {
       id: balanceContract.id,
@@ -460,6 +478,7 @@ export async function createSimulation(options = {}, onProgress) {
     backends: completedReport.configuration.backends,
     model: models,
     reasoningEffort: reasoningEfforts,
+    policyProjection: projection,
     experimentKind: options.experimentKind || "tournament"
   });
   assertLaunchIdentity(launchIdentity, finalIdentity, "Completed simulation");
@@ -472,6 +491,7 @@ export async function createSimulation(options = {}, onProgress) {
     backends: completedReport.configuration.backends,
     model: models,
     reasoningEffort: reasoningEfforts,
+    policyProjection: projection,
     experimentKind: options.experimentKind || "tournament"
   });
 }

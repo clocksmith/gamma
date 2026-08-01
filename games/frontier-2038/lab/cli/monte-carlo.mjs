@@ -33,6 +33,7 @@ const report = await createSimulation({
   runs: input.runs,
   playerCount: input.players,
   seed: input.seed,
+  projection: input.projection,
   sampleReplays: input["sample-replays"],
   profileIds: input.profiles?.split(",").filter(Boolean),
   backends: input.backends?.split(",").filter(Boolean),
@@ -68,6 +69,7 @@ stdout.write(`${JSON.stringify({
   output: input.output || null,
   runs: report.runs,
   playerCount: report.playerCount,
+  projection: report.configuration.projection,
   gameVersion: report.game.version,
   rulesetFingerprint: report.game.rulesetFingerprint,
   diagnostics: report.diagnostics

@@ -34,6 +34,18 @@ function clone(value) {
   return structuredClone(value);
 }
 
+function immutableCopy(value) {
+  if (Array.isArray(value)) {
+    return Object.freeze(value.map((entry) => immutableCopy(entry)));
+  }
+  if (value && typeof value === "object") {
+    return Object.freeze(Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, immutableCopy(entry)])
+    ));
+  }
+  return value;
+}
+
 function finalMandate(config, player) {
   return (
     player.mandate +
@@ -112,6 +124,7 @@ export class CoreEconomyMatch {
     seed,
     playerCount = 4,
     recordReplay = false,
+    projection = "rich",
     decisionContext = null
   }) {
     if (playerCount < config.players.min || playerCount > config.players.max) {
@@ -126,6 +139,10 @@ export class CoreEconomyMatch {
     this.complete = false;
     this.board = generateBoard(config, `${seed}:board`);
     this.recordReplay = recordReplay;
+    if (!["rich", "batch"].includes(projection)) {
+      throw new TypeError(`Unknown simulation projection: ${projection}.`);
+    }
+    this.projection = projection;
     this.decisionContext = decisionContext;
     this.publicMatchId = decisionContext?.publicMatchId || "m3t4-2038";
     this.replay = [];
@@ -213,12 +230,16 @@ export class CoreEconomyMatch {
       mandate: player.mandate,
       scrutiny: player.scrutiny,
       actionsUsed: [...player.actionsUsed],
-      pieces: clone(player.pieces),
-      facilities: clone(player.facilities),
-      generators: clone(player.generators),
-      influence: clone(player.influence || []),
-      experts: clone(player.experts || [])
+      pieces: this.copyPublic(player.pieces),
+      facilities: this.copyPublic(player.facilities),
+      generators: this.copyPublic(player.generators),
+      influence: this.copyPublic(player.influence || []),
+      experts: this.copyPublic(player.experts || [])
     };
+  }
+
+  copyPublic(value) {
+    return this.projection === "batch" ? immutableCopy(value) : clone(value);
   }
 
   publicBoardState() {
@@ -234,19 +255,19 @@ export class CoreEconomyMatch {
       components: this.players.flatMap((player) => [
         ...player.pieces
           .filter((piece) => piece.tileId === tile.instanceId)
-          .map((piece) => ({ type: "piece", ownerSeat: player.seat, ...clone(piece) })),
+          .map((piece) => ({ type: "piece", ownerSeat: player.seat, ...this.copyPublic(piece) })),
         ...player.facilities
           .filter((facility) => facility.tileId === tile.instanceId)
-          .map((facility) => ({ type: "facility", ownerSeat: player.seat, ...clone(facility) })),
+          .map((facility) => ({ type: "facility", ownerSeat: player.seat, ...this.copyPublic(facility) })),
         ...player.generators
           .filter((generator) => generator.tileId === tile.instanceId)
-          .map((generator) => ({ type: "generator", ownerSeat: player.seat, ...clone(generator) })),
+          .map((generator) => ({ type: "generator", ownerSeat: player.seat, ...this.copyPublic(generator) })),
         ...(player.influence || [])
           .filter((influence) => influence.tileId === tile.instanceId)
-          .map((influence) => ({ type: "influence", ownerSeat: player.seat, ...clone(influence) })),
+          .map((influence) => ({ type: "influence", ownerSeat: player.seat, ...this.copyPublic(influence) })),
         ...(player.experts || [])
           .filter((expert) => expert.tileId === tile.instanceId)
-          .map((expert) => ({ type: "expert", ownerSeat: player.seat, ...clone(expert) }))
+          .map((expert) => ({ type: "expert", ownerSeat: player.seat, ...this.copyPublic(expert) }))
       ])
     }));
   }
@@ -295,7 +316,7 @@ export class CoreEconomyMatch {
     const packet = {
       schemaVersion: this.decisionContext?.schemaVersion || 1,
       ...(this.decisionContext?.game
-        ? { game: structuredClone(this.decisionContext.game) }
+        ? { game: this.copyPublic(this.decisionContext.game) }
         : {}),
       requestId: `${this.publicMatchId}:r${this.round}:c${this.cycle}:s${seat}:${stage}`,
       matchId: this.publicMatchId,
@@ -304,7 +325,7 @@ export class CoreEconomyMatch {
       round: this.round,
       cycle: this.cycle,
       observation: this.publicObservation(seat),
-      publicHistory: clone(this.publicHistory),
+      publicHistory: this.copyPublic(this.publicHistory),
       legalDecisions
     };
     Object.defineProperty(packet, "policySeed", {
@@ -842,13 +863,14 @@ export class CoreEconomyMatch {
 
   recordEvent(type, seat, summary, decisionReceipt = null) {
     if (type !== "strategy_decision") {
-      this.publicHistory.push({
+      const event = {
         type,
         round: this.round,
         cycle: this.cycle,
-        seat,
-        summary
-      });
+        seat
+      };
+      if (this.projection === "rich" || this.recordReplay) event.summary = summary;
+      this.publicHistory.push(event);
     }
     if (!this.recordReplay) return;
     this.replay.push({
