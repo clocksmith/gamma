@@ -10,7 +10,8 @@ import {
   captureSimulationLaunchIdentity,
   createSimulation
 } from "../runtime/create-simulation.js";
-import { fingerprintObject } from "../versioning/game-identity.js";
+import { archiveSimulationReport } from "../report-archive.js";
+import { fingerprintObject, projectRoot } from "../versioning/game-identity.js";
 
 const DETERMINISTIC_BACKENDS = new Set(["weighted", "greedy"]);
 const DEFAULT_LLM_CONCURRENCY = 2;
@@ -511,12 +512,14 @@ async function runInWorkers(tasks, {
   studyGeneration,
   signal,
   onProgress,
-  totalGames
+  totalGames,
+  archiveCompletedLlmMatch
 }) {
   if (signal?.aborted) throw signal.reason;
   const count = Math.min(workers, tasks.length);
   const reports = Array(tasks.length);
   const failures = Array(tasks.length);
+  const archives = Array(tasks.length);
   const pool = Array.from({ length: count }, () => new Worker(workerUrl));
   const workerState = new Map(pool.map((worker) => [worker, null]));
   let nextTask = 0;
@@ -629,6 +632,9 @@ async function runInWorkers(tasks, {
           ));
           return;
         }
+        if (taskUsesLlm(task)) {
+          archives[task.taskIndex] = await archiveCompletedLlmMatch(task, message.report);
+        }
         reports[message.taskIndex] = message.report;
       }
       workerState.set(worker, null);
@@ -640,7 +646,7 @@ async function runInWorkers(tasks, {
         signal?.removeEventListener("abort", abort);
         broker?.close();
         await terminate();
-        resolve({ reports, failures });
+        resolve({ reports, failures, archives });
         return;
       }
       assign(worker);
@@ -648,7 +654,9 @@ async function runInWorkers(tasks, {
 
     signal?.addEventListener("abort", abort, { once: true });
     for (const worker of pool) {
-      worker.on("message", (message) => accept(worker, message));
+      worker.on("message", (message) => {
+        accept(worker, message).catch(finishWithError);
+      });
       worker.on("error", finishWithError);
       worker.on("exit", (code) => {
         if (!settled) {
@@ -900,6 +908,20 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       callerFactory: options.llmCallerFactory
     })
     : null;
+  const archiveCompletedLlmMatch = async (task, report) => {
+    if (!taskUsesLlm(task) || options.archiveLlmMatches === false) return null;
+    return archiveSimulationReport(report, {
+      projectRoot: options.archiveProjectRoot || projectRoot,
+      directory: options.archiveDirectory || "evidence/studies/simulation",
+      jobId: [
+        "faction-swap-match",
+        task.comparisonIndex,
+        task.arm,
+        task.matchIndex
+      ].join("-"),
+      canPublish: () => !options.signal?.aborted
+    });
+  };
   const executionResult = !hasLlm && requestedWorkers === 1
     ? {
       reports: await runInline(tasks, {
@@ -907,7 +929,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         onProgress,
         totalGames
       }),
-      failures: []
+      failures: [],
+      archives: []
     }
     : await runInWorkers(tasks, {
       workers: requestedWorkers,
@@ -915,7 +938,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       studyGeneration,
       signal: options.signal,
       onProgress,
-      totalGames
+      totalGames,
+      archiveCompletedLlmMatch
     });
   const armReports = executionResult.reports;
   const failures = executionResult.failures;
@@ -1053,6 +1077,18 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
   );
   const brokerSummary = broker?.summary() || null;
   const executionProfiles = llmExecutionProfiles(prepared);
+  const completedLlmArchives = tasks
+    .filter(taskUsesLlm)
+    .flatMap((task) => {
+      const archive = executionResult.archives?.[task.taskIndex];
+      return archive ? [{
+        taskIndex: task.taskIndex,
+        comparisonId: comparisons[task.comparisonIndex].id,
+        arm: task.arm,
+        matchIndex: task.matchIndex,
+        ...archive
+      }] : [];
+    });
   return {
     schemaVersion: 6,
     reportSchemaVersion: 6,
@@ -1097,7 +1133,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
           configuredRetries: retryCount(options.llmRetries)
         }
         : null,
-      quarantinedMatches: quarantines.length
+      quarantinedMatches: quarantines.length,
+      completedLlmArchives
     },
     seed: rootSeed,
     runs: completedRuns,
