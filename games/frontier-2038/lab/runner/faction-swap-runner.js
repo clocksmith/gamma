@@ -101,6 +101,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       rotateProfiles: false,
       rotateFactions: false,
       mandateMode: options.mandateMode || "variable",
+      rulesVariant: options.rulesVariant || {},
       simulateNegotiation: true,
       includeObservations: true,
       experimentKind: "balance_audit"
@@ -148,6 +149,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     runsPerArm,
     playerCount,
     mandateMode: options.mandateMode || "variable",
+    rulesVariant: options.rulesVariant || {},
     profileIds: options.profileIds,
     backends: options.backends,
     comparisons
