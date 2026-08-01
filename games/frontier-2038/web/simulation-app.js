@@ -102,6 +102,9 @@ const elements = Object.fromEntries(
     "replay-step",
     "report-file",
     "replay-samples-field",
+    "recent-reports",
+    "recent-reports-status",
+    "refresh-reports",
     "results-subtitle",
     "results-title",
     "results-view",
@@ -1158,6 +1161,66 @@ function showReport(nextReport, { preserveAnalysis = false } = {}) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function formatReportTimestamp(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.valueOf())) return "Unknown date";
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short"
+  }).format(date);
+}
+
+function renderRecentReports(entries) {
+  elements["recent-reports"].replaceChildren(...entries.map((entry) => {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "recent-report";
+    item.dataset.fileName = entry.fileName;
+    const title = document.createElement("strong");
+    title.textContent = copy.results.openReport;
+    const metadata = document.createElement("span");
+    metadata.textContent = `${formatReportTimestamp(entry.modifiedAt)} · ${entry.fileName}`;
+    item.append(title, metadata);
+    return item;
+  }));
+}
+
+async function refreshRecentReports() {
+  if (bridgeRequired && !bridgeConnected) return;
+  elements["refresh-reports"].disabled = true;
+  elements["recent-reports-status"].textContent = copy.results.loadingReports;
+  try {
+    const response = await apiFetch("/api/simulation-reports");
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.error || copy.results.loadReportError);
+    renderRecentReports(body.reports);
+    elements["recent-reports-status"].textContent = body.reports.length
+      ? ""
+      : copy.results.noRecentReports;
+  } catch (error) {
+    elements["recent-reports-status"].textContent =
+      `${copy.results.loadReportError} ${error.message}`;
+  } finally {
+    elements["refresh-reports"].disabled = false;
+  }
+}
+
+async function openRecentReport(fileName) {
+  elements["recent-reports-status"].textContent = copy.results.loadingReports;
+  try {
+    const response = await apiFetch(
+      `/api/simulation-reports/${encodeURIComponent(fileName)}`
+    );
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.error || copy.results.loadReportError);
+    showReport(body);
+    elements["recent-reports-status"].textContent = "";
+  } catch (error) {
+    elements["recent-reports-status"].textContent =
+      `${copy.results.loadReportError} ${error.message}`;
+  }
+}
+
 elements["simulation-form"].addEventListener("submit", async (event) => {
   event.preventDefault();
   elements["run-simulation"].disabled = true;
@@ -1174,6 +1237,7 @@ elements["simulation-form"].addEventListener("submit", async (event) => {
     jobId = job.id;
     history.replaceState(null, "", `?job=${encodeURIComponent(job.id)}`);
     showReport(await watchJob(job.id));
+    void refreshRecentReports();
   } catch (error) {
     elements["job-status"].textContent = error?.name === "AbortError"
       ? `SIMULATION CANCELLED · job ${jobId || "unknown"} will not publish a report.`
@@ -1262,6 +1326,11 @@ elements["new-simulation"].addEventListener("click", () => {
   elements["job-status"].textContent = "";
 });
 elements["stop-job-watch"].addEventListener("click", () => void cancelActiveJob());
+elements["refresh-reports"].addEventListener("click", () => void refreshRecentReports());
+elements["recent-reports"].addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-file-name]");
+  if (button) void openRecentReport(button.dataset.fileName);
+});
 elements["download-report"].addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(rawReport, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
@@ -1369,6 +1438,7 @@ if (bridgeRequired) {
         `Connected · local Node authority · ${status.interactiveBackends.length} interactive backends available.`,
         true
       );
+      void refreshRecentReports();
     } catch (error) {
       bridgeConnected = false;
       showBridgeState(error.message);
@@ -1378,4 +1448,5 @@ if (bridgeRequired) {
     }
   });
 }
+if (!bridgeRequired) void refreshRecentReports();
 updateRunAvailability();

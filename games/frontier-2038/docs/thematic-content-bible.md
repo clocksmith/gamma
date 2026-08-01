@@ -3,12 +3,12 @@
 **Content-pass date:** July 26, 2026
 **Rules reference:** `0.5.0-rc.28-test`
 **Status:** creative authority; fiction synchronized to the review rulebook,
-mechanics synchronized to executable game `0.8.27`
+mechanics synchronized to executable game `0.8.28`
 
 This document defines how M3T4 sounds and what its printable surfaces need
 to communicate. It does not define mechanics. Authored strings and shared terms
 live under [`../content/`](../content/README.md); `core-rules.md` and the JSON
-files under `generated/` are generated projections. Executable game `0.8.27`
+files under `generated/` are generated projections. Executable game `0.8.28`
 implements `0.5.0-rc.28-test` while the physical rulebook remains under
 review.
 

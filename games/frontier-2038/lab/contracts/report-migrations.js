@@ -141,6 +141,45 @@ function migrateV5ToV6(report) {
   };
 }
 
+function migrateIncompleteV6MatchArchive(report) {
+  const launch = report.launchIdentity;
+  return {
+    ...clone(report),
+    rng: clone(launch.rng),
+    provenance: clone(launch.provenance),
+    experiment: {
+      reportType: report.reportType || "tournament",
+      seed: report.seed || "",
+      playerCount: report.playerCount || null,
+      runs: report.runs ?? null,
+      sampleReplays: report.samples?.length ?? 0,
+      fingerprint: null
+    },
+    balanceContract: {
+      id: "legacy_missing_balance_contract",
+      status: "legacy_unattributed",
+      fingerprint: null
+    },
+    balanceEvaluation: {
+      contractId: "legacy_missing_balance_contract",
+      status: "not_evaluable",
+      checks: [],
+      promotionGate: {
+        eligible: false,
+        verdict: "incomplete_match_archive",
+        reasons: [
+          "This completed per-match archive predates complete experiment and balance-contract attribution."
+        ]
+      }
+    },
+    migration: {
+      migratedFromReportSchemaVersion: 6,
+      attribution: "launch_identity_preserved_experiment_backfilled",
+      warning: "The original per-match archive omitted experiment and balance-contract fields. The Lab reconstructed only the non-promotional viewing envelope from its recorded launch identity."
+    }
+  };
+}
+
 export function normalizeSimulationReport(rawReport) {
   if (!rawReport || typeof rawReport !== "object" || Array.isArray(rawReport)) {
     throw new TypeError("Simulation report must be an object.");
@@ -158,7 +197,16 @@ export function normalizeSimulationReport(rawReport) {
   if (version !== CURRENT_REPORT_SCHEMA_VERSION) {
     throw new TypeError(`Unsupported simulation report schema ${version || "unknown"}.`);
   }
-  const report = clone(rawReport);
+  const incompleteMatchArchive = rawReport.launchIdentity?.rng &&
+    rawReport.launchIdentity?.provenance &&
+    !rawReport.experiment &&
+    !rawReport.rng &&
+    !rawReport.provenance &&
+    !rawReport.balanceContract &&
+    !rawReport.balanceEvaluation;
+  const report = incompleteMatchArchive
+    ? migrateIncompleteV6MatchArchive(rawReport)
+    : clone(rawReport);
   for (const key of [
     "game",
     "engine",

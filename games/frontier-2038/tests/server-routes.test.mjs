@@ -129,6 +129,33 @@ test("docs reader routes preserve their /docs/ base and serve rendered pages", a
   }
 });
 
+test("local simulation archives can be listed and loaded through the Lab API", async () => {
+  const port = 25_000 + (process.pid % 10_000);
+  const server = await startServer(port);
+  const request = (path, options = {}) =>
+    fetch(`http://127.0.0.1:${port}${path}`, options);
+
+  try {
+    const listed = await request("/api/simulation-reports");
+    assert.equal(listed.status, 200);
+    const { reports } = await listed.json();
+    assert.ok(reports.length > 0);
+    assert.match(reports[0].fileName, /\.json$/);
+    assert.equal(typeof reports[0].modifiedAt, "string");
+
+    const loaded = await request(
+      `/api/simulation-reports/${encodeURIComponent(reports[0].fileName)}`
+    );
+    assert.equal(loaded.status, 200);
+    assert.equal((await loaded.json()).evidenceLabel, "simulation");
+
+    const rejected = await request("/api/simulation-reports/%2e%2e%2fpackage.json");
+    assert.equal(rejected.status, 404);
+  } finally {
+    server.kill("SIGTERM");
+  }
+});
+
 test("deployed UI can pair with the token-gated localhost bridge", async () => {
   const port = 30_001 + (process.pid % 10_000);
   const bridgeToken = "exact-test-token";

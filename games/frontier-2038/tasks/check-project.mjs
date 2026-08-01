@@ -173,6 +173,8 @@ const required = [
   "versions/0.5.0-rc.24-test/rules-candidate-bundle.json",
   "versions/0.8.27/manifest.json",
   "versions/0.8.27/game-bundle.json",
+  "versions/0.8.28/manifest.json",
+  "versions/0.8.28/game-bundle.json",
   "versions/0.5.0-rc.28-test/manifest.json",
   "versions/0.5.0-rc.28-test/rules-candidate-bundle.json",
   "evidence/studies/simulation/README.md",

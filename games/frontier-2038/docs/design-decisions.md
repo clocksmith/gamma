@@ -181,7 +181,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.27` implements `0.5.0-rc.28-test` under engine
+Executable game `0.8.28` implements `0.5.0-rc.28-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,

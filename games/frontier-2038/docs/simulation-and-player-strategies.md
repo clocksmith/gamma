@@ -1,6 +1,6 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.27` / `three-to-five-grid-ready-v1`
+**Executable game:** `0.8.28` / `three-to-five-grid-ready-v1`
 **Physical rules under review:** `0.5.0-rc.28-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
