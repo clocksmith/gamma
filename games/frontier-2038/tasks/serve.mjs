@@ -1,4 +1,5 @@
 import { createReadStream, existsSync, statSync } from "node:fs";
+import { readdir, readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
 import { randomBytes, randomUUID, timingSafeEqual } from "node:crypto";
@@ -8,6 +9,10 @@ import { runExperiment } from "../lab/runtime/run-experiment.js";
 import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
 
 const projectRoot = resolve(import.meta.dirname, "..");
+const simulationArchiveDirectory = resolve(
+  projectRoot,
+  "evidence/studies/simulation"
+);
 const port = Number(process.env.FRONTIER_PORT || 8038);
 const mime = {
   ".css": "text/css; charset=utf-8",
@@ -148,6 +153,49 @@ function simulationFailure(error) {
       ? structuredClone(error.providerReceipt)
       : null
   };
+}
+
+function archivedReportPath(fileName) {
+  if (!/^[^/\\]+\.json$/u.test(fileName)) return null;
+  const path = resolve(simulationArchiveDirectory, fileName);
+  return path.startsWith(`${simulationArchiveDirectory}/`) ? path : null;
+}
+
+async function recentSimulationReports() {
+  const entries = await readdir(simulationArchiveDirectory, {
+    withFileTypes: true
+  });
+  const reports = await Promise.all(entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+    .map(async (entry) => {
+      const metadata = await stat(join(simulationArchiveDirectory, entry.name));
+      return {
+        fileName: entry.name,
+        modifiedAt: metadata.mtime.toISOString(),
+        bytes: metadata.size
+      };
+    }));
+  return reports
+    .sort((left, right) => right.modifiedAt.localeCompare(left.modifiedAt))
+    .slice(0, 24);
+}
+
+async function sendArchivedSimulationReport(response, fileName) {
+  const path = archivedReportPath(fileName);
+  if (!path || !existsSync(path)) {
+    json(response, 404, { error: "Simulation report not found." });
+    return;
+  }
+  try {
+    const report = JSON.parse(await readFile(path, "utf8"));
+    if (report?.evidenceLabel !== "simulation") {
+      json(response, 422, { error: "Archived file is not simulation evidence." });
+      return;
+    }
+    json(response, 200, report);
+  } catch {
+    json(response, 422, { error: "Archived simulation report is invalid JSON." });
+  }
 }
 
 async function startSimulation(request, response) {
@@ -393,6 +441,19 @@ createServer(async (request, response) => {
       ],
       maximumLlmDecisionsPerOpponent: interactiveLlmDecisionLimit
     });
+    return;
+  }
+  if (request.method === "GET" && url.pathname === "/api/simulation-reports") {
+    try {
+      json(response, 200, { reports: await recentSimulationReports() });
+    } catch {
+      json(response, 500, { error: "Could not list archived simulation reports." });
+    }
+    return;
+  }
+  const archivedReportMatch = url.pathname.match(/^\/api\/simulation-reports\/([^/]+)$/);
+  if (request.method === "GET" && archivedReportMatch) {
+    await sendArchivedSimulationReport(response, archivedReportMatch[1]);
     return;
   }
   if (request.method === "POST" && url.pathname === "/api/simulations") {

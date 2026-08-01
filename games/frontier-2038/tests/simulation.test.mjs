@@ -2706,7 +2706,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.27");
+  assert.equal(first.game.version, "0.8.28");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -2849,6 +2849,10 @@ test("generic completed strict LLM matches archive before the tournament returns
     assert.equal(stored.runs, 1);
     assert.equal(stored.configuration.llmEvidenceMode, "strict_quarantine");
     assert.equal(stored.standings.length, 3);
+    assert.ok(stored.experiment);
+    assert.ok(stored.rng);
+    assert.ok(stored.provenance);
+    assert.doesNotThrow(() => normalizeSimulationReport(stored));
   } finally {
     await rm(archiveProjectRoot, { recursive: true, force: true });
   }
@@ -2984,7 +2988,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.27");
+  assert.equal(first.game.version, "0.8.28");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
@@ -3147,6 +3151,38 @@ test("legacy reports migrate for viewing without gaining false attribution", () 
     classifyReportComparison(migrated, migrated).classification,
     "incompatible"
   );
+});
+
+test("incomplete schema-six match archives migrate from their recorded launch identity", () => {
+  const archive = {
+    schemaVersion: 6,
+    reportSchemaVersion: 6,
+    reportType: "tournament",
+    evidenceLabel: "simulation",
+    evidenceType: "simulation",
+    generatedAt: "2026-08-01T00:00:00.000Z",
+    seed: "historical-immediate-match",
+    runs: 1,
+    playerCount: 4,
+    scope: { id: "selected-rules" },
+    game: {},
+    engine: {},
+    variant: {},
+    strategies: {},
+    launchIdentity: {
+      rng: { algorithm: "mulberry32", version: 1 },
+      provenance: { sourceCommit: "recorded", sourceDirty: false }
+    }
+  };
+  const migrated = normalizeSimulationReport(archive);
+  assert.equal(migrated.experiment.fingerprint, null);
+  assert.equal(migrated.rng.algorithm, "mulberry32");
+  assert.equal(migrated.provenance.sourceCommit, "recorded");
+  assert.equal(
+    migrated.migration.attribution,
+    "launch_identity_preserved_experiment_backfilled"
+  );
+  assert.equal(classifyReportComparison(migrated, migrated).classification, "incompatible");
 });
 
 test("balance audit covers every persona pair and never auto-promotes", async () => {

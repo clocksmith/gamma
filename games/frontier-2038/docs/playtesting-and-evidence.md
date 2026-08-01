@@ -104,7 +104,7 @@ Never overwrite an immutable release with changed contents.
 ## Current version boundary
 
 `docs/core-rules.md` is a review draft at `0.5.0-rc.28-test`. Executable
-game `0.8.27` implements it under `three-to-five-grid-ready-v1`. New automated reports
+game `0.8.28` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.

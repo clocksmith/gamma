@@ -27,7 +27,7 @@ six asymmetric institutions, negotiation, push-your-luck Research, and an
 escalating AGI endgame.
 
 Rules `0.5.0-rc.28-test` are ready for a controlled physical prototype and
-are implemented by executable game `0.8.27`. That synchronization is
+are implemented by executable game `0.8.28`. That synchronization is
 implementation evidence, not a human playtest or balance result. The product
 is not ready for a binding factory quote because component layouts, artwork,
 materials, packaging, and production files remain unresolved.

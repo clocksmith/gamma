@@ -313,36 +313,48 @@ export async function createSimulation(options = {}, onProgress) {
   const completedLlmArchives = [];
   const archiveCompletedLlmMatch = llmRequested && options.archiveLlmMatches !== false
     ? async ({ runIndex, outcome }) => {
-      const archive = await archiveSimulationReport({
-        schemaVersion: 6,
-        reportSchemaVersion: 6,
-        reportType: "tournament",
-        evidenceLabel: "simulation",
-        evidenceType: "simulation",
-        generatedAt: new Date().toISOString(),
-        seed: `${seed}:run:${runIndex}`,
-        runs: 1,
-        playerCount,
-        scope: outcome.scope,
-        game: decisionIdentity.game,
-        engine: decisionIdentity.engine,
-        variant: decisionIdentity.variant,
-        strategies: decisionIdentity.strategies,
-        launchIdentity,
-        configuration: {
-          backends: configuredBackends,
-          model: options.model || null,
-          reasoningEffort: options.reasoningEffort || null,
-          llmEvidenceMode: options.strictLlmEvidence ? "strict_quarantine" : "required",
-          projection
+      const immediateReport = await createReportIdentity({
+        report: {
+          schemaVersion: 6,
+          reportSchemaVersion: 6,
+          reportType: "tournament",
+          evidenceLabel: "simulation",
+          evidenceType: "simulation",
+          generatedAt: new Date().toISOString(),
+          seed: `${seed}:run:${runIndex}`,
+          runs: 1,
+          playerCount,
+          scope: outcome.scope,
+          game: decisionIdentity.game,
+          engine: decisionIdentity.engine,
+          variant: decisionIdentity.variant,
+          strategies: decisionIdentity.strategies,
+          launchIdentity,
+          configuration: {
+            backends: configuredBackends,
+            model: options.model || null,
+            reasoningEffort: options.reasoningEffort || null,
+            llmEvidenceMode: options.strictLlmEvidence ? "strict_quarantine" : "required",
+            projection
+          },
+          rulesVariant: outcome.rulesVariant,
+          standings: outcome.standings,
+          winnerSeats: outcome.winnerSeats,
+          matchMetrics: outcome.matchMetrics,
+          worldEnding: outcome.worldEnding,
+          samples: [outcome]
         },
+        identity: decisionIdentity,
         rulesVariant: outcome.rulesVariant,
-        standings: outcome.standings,
-        winnerSeats: outcome.winnerSeats,
-        matchMetrics: outcome.matchMetrics,
-        worldEnding: outcome.worldEnding,
-        samples: [outcome]
-      }, {
+        variantOverlay: options.rulesVariant,
+        profiles: selectedProfiles,
+        backends: configuredBackends,
+        model: models,
+        reasoningEffort: reasoningEfforts,
+        policyProjection: projection,
+        experimentKind: options.experimentKind || "tournament"
+      });
+      const archive = await archiveSimulationReport(immediateReport, {
         projectRoot: options.archiveProjectRoot || projectRoot,
         directory: options.archiveDirectory || "evidence/studies/simulation",
         jobId: `llm-match-${runIndex}`,
