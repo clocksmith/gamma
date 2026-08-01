@@ -53,7 +53,12 @@ before batch evidence is used.
 
 Use `--projection batch` with `npm run simulate:monte-carlo` only for a
 deterministic study. The CLI rejects it for LLM seats rather than changing an
-LLM packet. Omit the flag for the rich default.
+LLM packet. Omit the flag for the rich default. A batch study with more than
+one five-to-ten-game chunk uses bounded worker threads by default; use
+`--workers 1` for inline parity debugging or `--chunk-size 5` through `10` to
+set the chunk boundary. Worker completion order never affects report order.
+Rich deterministic studies can opt into the same scheduler with `--workers`;
+LLM studies do not use this scheduler.
 
 ## Shared decision contract
 

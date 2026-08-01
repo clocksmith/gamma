@@ -3002,6 +3002,46 @@ test("batch projection exactly matches rich deterministic outcomes at three thro
   );
 });
 
+test("parallel deterministic chunks restore batch outcomes in global run order", async () => {
+  const options = {
+    runs: 10,
+    playerCount: 3,
+    seed: "parallel-batch-parity",
+    sampleReplays: 2,
+    includeObservations: true,
+    projection: "batch",
+    chunkSize: 5,
+    profileIds: ["balanced_operator", "capability_rusher", "trust_governor"],
+    backends: ["weighted", "weighted", "weighted"],
+    simulateNegotiation: true
+  };
+  const parallel = await createSimulation({ ...options, workers: 2 });
+  const inline = await createSimulation({ ...options, workers: 1 });
+  for (const field of [
+    "seats",
+    "factions",
+    "profiles",
+    "backends",
+    "factionStrategies",
+    "factionBackends",
+    "strategyBackends",
+    "profileMatchups",
+    "diagnostics",
+    "matchMetrics",
+    "samples",
+    "observations"
+  ]) {
+    assert.deepEqual(parallel[field], inline[field], field);
+  }
+  assert.deepEqual(parallel.configuration.execution, {
+    scheduler: "worker_threads",
+    requestedWorkers: 2,
+    workers: 2,
+    chunkSize: 5,
+    chunks: 2
+  });
+});
+
 test("legacy reports migrate for viewing without gaining false attribution", () => {
   const legacy = {
     schemaVersion: 2,

@@ -849,6 +849,9 @@ export async function runMonteCarlo({
   includeObservations = false,
   projection = "rich",
   runOffset = 0,
+  sampleReplaysGlobal = false,
+  precomputedOutcomes = null,
+  returnOutcomes = false,
   signal,
   onProgress
 }) {
@@ -862,30 +865,52 @@ export async function runMonteCarlo({
   const samples = [];
   const observations = includeObservations ? [] : null;
   const batch = projection === "batch" ? new BatchAccumulator() : null;
+  const rawOutcomes = returnOutcomes ? [] : null;
   let scope;
 
-  for (let run = 0; run < runs; run += 1) {
+  const consume = (reportOutcome, run, fullOutcome = null) => {
+    scope ||= reportOutcome.scope;
+    if (batch) batch.add(reportOutcome, run);
+    else outcomes.push(reportOutcome);
+    if (fullOutcome) samples.push(fullOutcome);
+    if (observations) observations.push(compactObservation(reportOutcome, run));
+  };
+
+  if (precomputedOutcomes) {
+    if (precomputedOutcomes.length !== runs) {
+      throw new RangeError("Precomputed Monte Carlo outcomes must match runs.");
+    }
+    for (const entry of [...precomputedOutcomes].sort(
+      (left, right) => left.runIndex - right.runIndex
+    )) {
+      consume(entry.outcome, entry.runIndex, entry.fullOutcome || null);
+    }
+  } else for (let run = 0; run < runs; run += 1) {
     if (signal?.aborted) throw signal.reason;
+    const replayIndex = sampleReplaysGlobal ? run + runOffset : run;
     const match = createMatch({
       seed: `${seed}:run:${run + runOffset}`,
-      recordReplay: run < sampleReplays,
+      recordReplay: replayIndex < sampleReplays,
       runIndex: run
     });
     const outcome = await match.play(
       policiesForRun ? policiesForRun(run) : policies
     );
     const reportOutcome = {
+      scope: outcome.scope,
       winnerSeats: outcome.winnerSeats,
       standings: outcome.standings,
       matchMetrics: outcome.matchMetrics,
       rulesVariant: outcome.rulesVariant,
       worldEnding: outcome.worldEnding
     };
-    scope ||= outcome.scope;
-    if (batch) batch.add(reportOutcome, run);
-    else outcomes.push(reportOutcome);
-    if (run < sampleReplays) samples.push(outcome);
-    if (observations) observations.push(compactObservation(reportOutcome, run));
+    const fullOutcome = replayIndex < sampleReplays ? outcome : null;
+    consume(reportOutcome, run, fullOutcome);
+    if (rawOutcomes) rawOutcomes.push({
+      runIndex: run + runOffset,
+      outcome: reportOutcome,
+      ...(fullOutcome ? { fullOutcome } : {})
+    });
     if (onProgress && (run + 1 === runs || (run + 1) % 25 === 0)) {
       onProgress({ completed: run + 1, runs });
     }
@@ -893,14 +918,16 @@ export async function runMonteCarlo({
     if (signal) await new Promise((resolve) => setImmediate(resolve));
   }
 
-  if (batch) {
-    return batch.result({
+  const result = batch
+    ? batch.result({
       runs,
       seed,
       samples,
       observations
-    });
-  }
+    })
+    : null;
+
+  if (result) return returnOutcomes ? { report: result, rawOutcomes } : result;
 
   const seatCount = outcomes[0].standings.length;
   const seats = Array.from({ length: seatCount }, (_, seat) => {
@@ -998,7 +1025,7 @@ export async function runMonteCarlo({
       : [])
   ];
 
-  return {
+  const report = {
     schemaVersion: 2,
     reportType: "tournament",
     evidenceLabel: "simulation",
@@ -1021,4 +1048,5 @@ export async function runMonteCarlo({
     samples,
     ...(observations ? { observations } : {})
   };
+  return returnOutcomes ? { report, rawOutcomes } : report;
 }

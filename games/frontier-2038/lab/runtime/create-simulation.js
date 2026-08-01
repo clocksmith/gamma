@@ -23,6 +23,7 @@ import {
   evaluateTournamentBalance,
   loadBalanceContract
 } from "../balance/balance-contract.js";
+import { runDeterministicChunks } from "./deterministic-chunk-scheduler.js";
 import { throwIfAborted } from "../cancellation.js";
 
 const configUrl = new URL("../../generated/game-config.json", import.meta.url);
@@ -321,7 +322,23 @@ export async function createSimulation(options = {}, onProgress) {
   if (explicitFactions && new Set(explicitFactions.map((faction) => faction.id)).size !== playerCount) {
     throw new RangeError("Explicit factionIds cannot repeat a faction.");
   }
-  const report = await runMonteCarlo({
+  const chunked = !llmRequested && !options.returnOutcomes &&
+    (projection === "batch" || options.workers !== undefined)
+    ? await runDeterministicChunks({
+      options: {
+        ...options,
+        runs,
+        playerCount,
+        projection,
+        sampleReplays,
+        includeObservations: Boolean(options.includeObservations),
+        seed
+      },
+      launchIdentity,
+      onProgress
+    })
+    : null;
+  const runResult = chunked?.report || await runMonteCarlo({
     runs,
     seed,
     policies,
@@ -398,8 +415,11 @@ export async function createSimulation(options = {}, onProgress) {
     includeObservations: Boolean(options.includeObservations),
     projection,
     runOffset,
+    sampleReplaysGlobal: Boolean(options.sampleReplaysGlobal),
+    returnOutcomes: Boolean(options.returnOutcomes),
     signal: options.signal
   });
+  const report = options.returnOutcomes ? runResult.report : runResult;
   const historicalPlayerCount = config.players.historicalOnlyCounts.includes(playerCount);
   const playerCountStatus = historicalPlayerCount
     ? "exploratory_nonpromotional"
@@ -453,7 +473,14 @@ export async function createSimulation(options = {}, onProgress) {
       preRegistrationId: options.preRegistrationId || null,
       llmStages: options.llmStages || null,
       runOffset,
-      projection
+      projection,
+      execution: chunked?.execution || {
+        scheduler: "inline",
+        requestedWorkers: Number(options.workers || 1),
+        workers: 1,
+        chunkSize: null,
+        chunks: 1
+      }
     },
     balanceContract: {
       id: balanceContract.id,
@@ -482,7 +509,7 @@ export async function createSimulation(options = {}, onProgress) {
     experimentKind: options.experimentKind || "tournament"
   });
   assertLaunchIdentity(launchIdentity, finalIdentity, "Completed simulation");
-  return createReportIdentity({
+  const identifiedReport = await createReportIdentity({
     report: completedReport,
     identity: finalIdentity,
     rulesVariant: completedReport.rulesVariant,
@@ -494,4 +521,7 @@ export async function createSimulation(options = {}, onProgress) {
     policyProjection: projection,
     experimentKind: options.experimentKind || "tournament"
   });
+  return options.returnOutcomes
+    ? { report: identifiedReport, outcomes: runResult.rawOutcomes }
+    : identifiedReport;
 }
