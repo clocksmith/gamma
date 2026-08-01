@@ -3719,3 +3719,55 @@ any typed-event score is read.
 
 Gate 0 decision:
 `results/typed_event_sleeping_bayes_parent_recovery_q0_v1/decision.json`.
+
+The exact frontier trace prerequisite completed at
+2026-08-01T23:33:33Z. Both recovered clean wrappers produced the same
+9,611,888-byte P1 trace with SHA-256 `02a26344...6715`, while independently
+producing the exact 173,902-byte parent archive `6d32bddb...6da04`. The traced
+P1 stream re-encoded the 173,865-byte arithmetic payload byte-for-byte, decoded
+the exact WRT truth, and inverted to the canonical raw input. Peak
+single-process RSS was 9,050,532 KiB and 9,050,268 KiB for the two runs, with
+zero decimal-limit overage. This certifies the observation substrate and earns
+zero score credit. The frozen opening-1M Typed Event Sleeping Bayes control
+family is now authorized; native integration, distant transfer, and full-1G
+remain unauthorized.
+
+Trace decision:
+`results/typed_event_sleeping_bayes_parent_trace_q0_v1/decision.json`.
+
+The frozen opening-1M Typed Event Sleeping Bayes Q0 completed at
+2026-08-01T23:39:16Z as a valid exact rejection. All input bindings,
+parent-payload replay, causal arithmetic decode, WRT reconstruction, official
+raw inverse, repeated P1 generation, repeated archive generation, legal
+probabilities, and sleeping-expert equality checks passed. The first and
+second traversals saw 489,989 completed events, emitted identical model-state
+hashes, and recorded zero E-star/B differences across 961,586 outside-
+opportunity bit checks.
+
+The primary M1 envelope saved zero bytes on the 516,456-raw-byte sealed group:
+0 B/M gross and -98.304 B/M after the frozen package allowance. Development
+lost one byte and selection saved zero, so the direction also failed before
+the magnitude gate. M0 likewise saved zero sealed bytes. Only one of four
+sealed quartiles was positive, by one byte. The explicit global selector chose
+B and cost 15 bytes; every one of the ten 64KiB block selectors chose B and
+the framed S1 stream cost 56 bytes.
+
+Conditional attribution is informative but not target-bearing. On sealed
+pages C0 lost 512 bytes and E3 lost 115 bytes, so typed alignment beat the
+matched state-blind control by 397 bytes, or 768.701 B/M. E3 nevertheless lost
+222.671 B/M to endpoint428. E0 was neutral, E1 lost 214.926 B/M, and E2 lost
+212.990 B/M. This establishes that the keys carry specific information
+relative to blind receipts while also establishing that the frozen point-mass
+mixture cannot exploit it without damaging the mature parent distribution.
+
+Retire only this exact realization: the WRT event unit; 32-byte suffix,
+cumulative Wiki/entity/2-event/4-event keys; 50,000-key FIFO table; support 4;
+16 candidates; literal prior 65,536; Q24 outer posterior; 64KiB selectors; and
+parameter rescue sweeps over those dimensions. Do not run distant 1M, native
+10M, or full 1G. Materially different event eligibility or a new information
+source remains unsettled, but receives zero score credit. The planning
+forecast remains 109,389,323 bytes, the target debt remains 1,389,323 bytes,
+and the verified full-1G score remains unknown.
+
+Decision:
+`results/typed_event_sleeping_bayes_envelope_q0_v1/decision.json`.
