@@ -2431,6 +2431,7 @@ test("parallel LLM faction diagnostics cap calls and quarantine failed pairs", a
   let active = 0;
   let peak = 0;
   const report = await runFactionSwapDiagnostic({
+    archiveLlmMatches: false,
     workers: 4,
     llmConcurrency: 2,
     llmRetries: 1,
@@ -2528,6 +2529,55 @@ test("parallel LLM faction diagnostics cap calls and quarantine failed pairs", a
     report.quarantine.matches[0].left.providerReceipt.brokerAttempts,
     2
   );
+});
+
+test("each completed strict LLM faction match archives before aggregate reporting", async () => {
+  const archiveProjectRoot = await mkdtemp(join(tmpdir(), "frontier-llm-archive-"));
+  try {
+    const report = await runFactionSwapDiagnostic({
+      workers: 2,
+      llmConcurrency: 1,
+      allowLlm: true,
+      runsPerArm: 1,
+      playerCount: 3,
+      seed: "strict-llm-immediate-archive",
+      archiveProjectRoot,
+      profileIds: ["balanced_operator", "capability_rusher", "trust_governor"],
+      backends: ["codex", "weighted", "weighted"],
+      model: "fixture-model",
+      reasoningEffort: "low",
+      llmCallerFactory: () => ({
+        async decide(packet) {
+          return {
+            decision: { decisionId: packet.legalDecisions[0].decisionId },
+            receipt: {
+              provider: "codex-cli",
+              model: "fixture-model",
+              reasoningEffort: "low",
+              requestId: packet.requestId,
+              decisionId: packet.legalDecisions[0].decisionId
+            }
+          };
+        }
+      }),
+      comparisons: [{
+        id: "archive-each-llm-match",
+        focalSeat: 0,
+        leftFactionIds: ["coalition_lab", "platform_empire", "foundry"],
+        rightFactionIds: ["safety_laboratory", "platform_empire", "foundry"]
+      }]
+    });
+    const archives = report.execution.completedLlmArchives;
+    assert.equal(archives.length, 2);
+    assert.deepEqual(archives.map((archive) => archive.arm), ["left", "right"]);
+    for (const archive of archives) {
+      const stored = JSON.parse(await readFile(join(archiveProjectRoot, archive.relativePath), "utf8"));
+      assert.equal(stored.configuration.llmEvidenceMode, "strict_quarantine");
+      assert.equal(stored.configuration.usedLlmDecisions > 0, true);
+    }
+  } finally {
+    await rm(archiveProjectRoot, { recursive: true, force: true });
+  }
 });
 
 test("parallel faction diagnostics fail closed when a worker game fails", async () => {

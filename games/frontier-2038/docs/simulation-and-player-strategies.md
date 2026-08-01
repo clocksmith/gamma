@@ -77,6 +77,12 @@ use this contract.
 
 Schemas live under [`../lab/contracts/`](../lab/contracts/).
 
+Strict LLM faction-swap evidence archives each completed one-match worker result
+before the scheduler records that task as complete or starts another task. A
+crash can therefore lose only an in-progress game. Provider failures and other
+quarantined matches retain their failure receipts in the aggregate but do not
+create a completed-game archive.
+
 ## Negotiation model
 
 Simulation negotiation is defection-capable. Before selection, a policy may
