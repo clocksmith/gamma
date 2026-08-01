@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  captureSimulationLaunchIdentity,
   createSimulation,
   factionRosterForRun
 } from "../lab/runtime/create-simulation.js";
@@ -2258,6 +2259,13 @@ test("parallel faction diagnostics preserve sequential outcomes and fingerprints
     sequential.preRegistration.fingerprint
   );
   assert.equal(parallel.experiment.fingerprint, sequential.experiment.fingerprint);
+  assert.equal(parallel.launchIdentity.taskOrder, "comparison_then_arm_then_match");
+  assert.equal(parallel.launchIdentity.tasks.length, 2);
+  assert.ok(parallel.launchIdentity.study.fingerprint);
+  assert.ok(parallel.launchIdentity.tasks.every((task) =>
+    task.identity.fingerprint &&
+    task.identity.provenance.sourceCommit === parallel.launchIdentity.study.provenance.sourceCommit
+  ));
 });
 
 test("LLM concurrency broker enforces global and provider-specific caps", async () => {
@@ -2871,6 +2879,46 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
   assert.notEqual(
     first.variant.fingerprint,
     fingerprintObject({ auditMultiplier: 0.8 })
+  );
+  const lowReasoning = await loadGameIdentity({
+    profiles: profiles.slice(0, 2),
+    backends: ["codex", "codex"],
+    model: ["fixture-model", "fixture-model"],
+    reasoningEffort: ["low", "low"]
+  });
+  const mediumReasoning = await loadGameIdentity({
+    profiles: profiles.slice(0, 2),
+    backends: ["codex", "codex"],
+    model: ["fixture-model", "fixture-model"],
+    reasoningEffort: ["medium", "medium"]
+  });
+  assert.notEqual(
+    lowReasoning.strategies.fingerprint,
+    mediumReasoning.strategies.fingerprint
+  );
+});
+
+test("simulations validate a frozen launch identity before they run", async () => {
+  const options = {
+    runs: 1,
+    playerCount: 3,
+    seed: "launch-identity-contract",
+    sampleReplays: 0,
+    profileIds: ["balanced_operator", "balanced_operator", "balanced_operator"],
+    backends: ["weighted", "weighted", "weighted"]
+  };
+  const launchIdentity = await captureSimulationLaunchIdentity(options);
+  const report = await createSimulation({ ...options, launchIdentity });
+  assert.deepEqual(report.launchIdentity, launchIdentity);
+
+  const incompatible = structuredClone(launchIdentity);
+  incompatible.strategies.backends = ["greedy", "greedy", "greedy"];
+  const payload = structuredClone(incompatible);
+  delete payload.fingerprint;
+  incompatible.fingerprint = fingerprintObject(payload);
+  await assert.rejects(
+    () => createSimulation({ ...options, launchIdentity: incompatible }),
+    (error) => error.code === "launch_identity_mismatch"
   );
 });
 

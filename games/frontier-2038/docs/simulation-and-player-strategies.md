@@ -9,6 +9,14 @@ are simulation evidence, never human playtests. Exact release, engine, strategy,
 backend, variant, RNG, experiment, and source fingerprints travel with every
 report.
 
+Each simulation records a frozen launch identity before its first decision:
+source commit and dirty state; rules, mechanics, engine, strategy, backend,
+model, reasoning-effort, packet-schema, and RNG identities. It validates that
+identity again after the match, so a source or configuration change cannot be
+reported as a single coherent run. A faction-swap study captures the ordered
+identity of every arm before scheduling workers and rejects an arm whose
+runtime identity differs from that snapshot.
+
 ## Player model
 
 A simulated player combines:
@@ -214,6 +222,11 @@ Deterministic faction-swap arms run through a bounded worker-thread pool. The
 runner reconstructs results in preregistered comparison/arm order, so worker
 completion order cannot alter seeds, pairing, fingerprints, or aggregates.
 `--workers 1` preserves inline execution for deterministic arms.
+
+Before any arm starts, the runner records an immutable task-specific launch
+identity and a common source/rules/engine basis for the study. The final report
+keeps those snapshots in stable comparison, arm, and match order. It therefore
+cannot borrow provenance from whichever arm happens to finish first.
 
 LLM-backed arms also run on worker threads, but workers never invoke providers
 directly. Every request crosses a shared main-thread broker.
