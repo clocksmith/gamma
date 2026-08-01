@@ -31,14 +31,16 @@ New systems are frozen until the controlled four-player test supplies evidence.
 
 ### Supported player counts
 
-The selected product supports three, four, and five players. Four players is
+The selected product permits two through six players and suggests three, four,
+and five. Four players is
 the authoritative balance configuration because it preserves negotiation,
 spatial competition, and clean parity while keeping sequential resolution
 bounded. Three and five players remain complete games, not variants: every
 selected four-player change must be rerun at both counts and rejected if it
 creates a credible integrity, faction, seat, strategy, negotiation, or
-congestion regression. Two and six players remain readable as historical
-simulation cohorts but are not supported by this rules candidate.
+congestion regression. Two and six players are playable exploratory
+configurations, but their reports are non-promotional diagnostics until they
+receive their own evidence contract.
 
 ## Selected complexity contract
 
@@ -148,15 +150,14 @@ different achievements.
 
 ## Selected content boundary
 
-Sam Altman, Mark Zuckerberg, Demis Hassabis, Elon Musk, Dario Amodei, and
-Jensen Huang are the canonical identities for the named parody prototype.
-Stable institutional IDs remain internal compatibility keys for simulations,
-saved games, and balance evidence; they are not player-facing aliases.
+Dovetalis Labs, Loopfold AI, Mirevanta Works, Kestralyn, Orisonix, and
+Corthaven are the canonical fictional institutions. Stable institutional IDs
+remain internal compatibility keys for simulations, saved games, and balance
+evidence; they are not player-facing aliases.
 
-The portrayals are fictional satire based on public institutional roles. They
-must not imply endorsement or turn a Headline into a factual accusation.
-Commercial publication remains a separate decision requiring appropriate
-legal review.
+The institutions and their CEOs are fictional. They must not imply endorsement
+or turn a Headline into a factual accusation. Commercial publication remains a
+separate decision requiring appropriate legal review.
 
 The tone is solemn institutional absurdity. Early controversies must have
 credible benefits and harms. Later effects may become polarized and alarming,
@@ -284,8 +285,8 @@ Measure before changing numbers:
 - Does Realignment create adaptation without erasing infrastructure planning?
 - Are non-declaration strategies competitive?
 - Does emergency generation dominate after its actual Audit cost is attributed?
-- Does Mark Zuckerberg lead after each Production?
-- Does Demis Hassabis or Research-campus protection flatten Research risk?
+- Does Loopfold AI lead after each Production?
+- Does Mirevanta Works or Research-campus protection flatten Research risk?
 - Do all three Grid Generator slots fill before Round IV?
 - Is Influence selected for genuine political choices rather than efficient
   Trust scoring?
@@ -295,9 +296,9 @@ Measure before changing numbers:
 
 Four players is the authoritative balance target. Three- and five-player
 quality, deferred modules, and numerical balance remain open until controlled
-evidence exists. Three and five are full supported formats and mandatory
-regression guards for any selected four-player change. Two and six players
-remain historical study configurations, not current product formats.
+evidence exists. Three and five are the suggested full formats and mandatory
+regression guards for any selected four-player change. Two and six players are
+playable exploratory configurations, not current balance-authority formats.
 
 The deterministic
 [`lean balance and cooperative-AGI study`](../evidence/studies/simulation/2026-07-26-lean-balance-and-cooperative-agi.md)

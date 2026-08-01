@@ -436,6 +436,7 @@ export async function runMonteCarlo({
   policiesForRun,
   sampleReplays = 3,
   includeObservations = false,
+  signal,
   onProgress
 }) {
   if (!Number.isInteger(runs) || runs < 1) {
@@ -446,6 +447,7 @@ export async function runMonteCarlo({
   let scope;
 
   for (let run = 0; run < runs; run += 1) {
+    if (signal?.aborted) throw signal.reason;
     const match = createMatch({
       seed: `${seed}:run:${run}`,
       recordReplay: run < sampleReplays,
@@ -466,6 +468,8 @@ export async function runMonteCarlo({
     if (onProgress && (run + 1 === runs || (run + 1) % 25 === 0)) {
       onProgress({ completed: run + 1, runs });
     }
+    // Yield only cancellable jobs so the server can receive the cancel request.
+    if (signal) await new Promise((resolve) => setImmediate(resolve));
   }
 
   const seatCount = outcomes[0].standings.length;

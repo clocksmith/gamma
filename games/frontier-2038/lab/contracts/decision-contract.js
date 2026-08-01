@@ -27,7 +27,7 @@ export function validateDecisionPacket(packet) {
     }
   }
 
-  for (const key of ["requestId", "matchId", "seed", "factionId"]) {
+  for (const key of ["requestId", "matchId", "factionId"]) {
     requireNonEmptyString(packet[key], `Decision packet ${key}`);
   }
   if (!Number.isInteger(packet.seat) || packet.seat < 0) {

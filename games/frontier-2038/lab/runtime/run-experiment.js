@@ -27,6 +27,7 @@ export async function runExperiment(options = {}, onProgress) {
       seed: options.seed,
       magnitude: options.magnitude === undefined ? undefined : Number(options.magnitude),
       rulesVariant: options.rulesVariant,
+      signal: options.signal,
       onProgress
     });
   }
@@ -41,6 +42,7 @@ export async function runExperiment(options = {}, onProgress) {
       targetAgiRate: options.targetAgiRate === undefined
         ? undefined
         : Number(options.targetAgiRate),
+      signal: options.signal,
       onProgress
     });
   }
@@ -60,6 +62,7 @@ export async function runExperiment(options = {}, onProgress) {
       seed: options.seed,
       preRegistrationId: options.preRegistrationId,
       rulesVariant: options.rulesVariant,
+      signal: options.signal,
       onProgress
     });
   }
@@ -67,6 +70,7 @@ export async function runExperiment(options = {}, onProgress) {
     return runLlmNegotiationHoldout({
       preRegistrationPath: options.preRegistrationPath,
       allowLlm: Boolean(options.allowLlm),
+      signal: options.signal,
       onProgress
     });
   }

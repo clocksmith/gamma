@@ -2,6 +2,8 @@
 
 ## A ${game.playerRange} player race to build, deploy, regulate, and plausibly declare ${terms.systems.agi}
 
+**Suggested player count:** ${game.suggestedPlayerRange}
+
 **Rules version:** ${game.rulesVersion}
 **Design-baseline date:** July 26, 2026
 **Status:** Controlled playtest candidate; synchronized with executable game ${game.executableVersion}
@@ -409,9 +411,10 @@ no separate ${terms.infrastructure.power} graph, production graph, or edge-by-ed
 ### Contract hosts
 
 Joint Ventures and every ${terms.technology.megaCluster} use neutral
-matched token pairs from the shared supply. Place one numbered half on each
-host Facility. The matching number identifies the contract even if
-Realignment moves the districts.
+matched token pairs from the shared supply. A project can be created only while
+its matching pair remains available. Place one numbered half on each host
+Facility. The matching number identifies the contract even if Realignment moves
+the districts.
 
 A contract remains owned after Realignment but is active only while its two
 named host Facilities are adjacent and satisfy its other requirements, unless
@@ -435,8 +438,17 @@ partner’s host tile**: one ${terms.resources.runway} for a ${terms.resources.r
 ${terms.resources.compute} icon. This contract output is not the tile’s full printed production
 and is never multiplied by another Facility effect.
 
-Either participant may terminate the Joint Venture during their own ${terms.actions.influence}
-action. Return both matched token halves to the shared supply.
+While resolving ${terms.actions.influence}, the active player may make one complete Joint
+Venture proposal naming the two eligible host Facilities and the partner. The
+named partner accepts or rejects it. A rejection, pass, or missing response
+creates no contract and uses that ${terms.actions.influence} action’s Joint Venture effect; it
+cannot instead remove ${terms.playerTracks.scrutiny}, gain ${terms.playerTracks.trust}, or name a replacement partner.
+
+During their own ${terms.actions.influence} action, either participant may instead terminate one
+named Joint Venture they share. Return that pair’s matched token halves to the
+shared supply. Termination is that Action’s selected effect; it cannot be
+combined with creating a Joint Venture, removing ${terms.playerTracks.scrutiny}, or gaining
+${terms.playerTracks.trust}.
 
 ### ${terms.systems.realignment}
 
@@ -452,11 +464,14 @@ simultaneously:
 - **Authorize Counter-Cycle:** rotate the inner ring one position clockwise
   and the outer ring one position counterclockwise.
 
-The motion with the most ballots resolves. If leading motions tie, begin with
-the Initiative player and scan clockwise; the first player whose ballot names
-one of the tied motions selects the result. Every player casts exactly one
-ballot. Government bonuses and other vote modifiers do not alter Realignment
-ballots.
+Before any optional discussion, every player secretly places one ballot face
+down. A player who does not place a ballot has **no ballot**: it names no
+motion and cannot resolve a tie. Reveal all placed ballots simultaneously. The
+motion with the most ballots resolves. If leading motions tie, begin with the
+Initiative player and scan clockwise; the first player whose ballot names one
+of the tied motions selects the result. If none does, the Initiative player
+selects among the tied motions. Government bonuses and other vote modifiers do
+not alter Realignment ballots.
 
 ${terms.locations.frontier} never moves. Each moving location tile carries every CEO, Team,
 Facility, Generator, ${terms.actions.influence} cube, Expert, and other site-bound component on
@@ -477,10 +492,12 @@ Realignment never destroys a component, changes a host, or terminates a
 contract.
 
 The ballots are open information before selection and secret information until
-the simultaneous reveal. Players may negotiate or misrepresent their intended
-ballot; promises about the vote are not binding. Because Realignment happens
-before Round IV, every player receives three final Actions in which to respond
-to the changed geography.
+the simultaneous reveal. Players may discuss and make public, non-binding
+signals about their intended ballot; agreement is unnecessary and promises
+about the vote are not binding. Every player still casts exactly one secret
+ballot, and the vote and tie-break procedure above decide the result. Because
+Realignment happens before Round IV, every player receives three final Actions
+in which to respond to the changed geography.
 
 ### ${terms.infrastructure.power} delivery
 
@@ -557,7 +574,10 @@ Facility demand plus two additional ${terms.infrastructure.power} from that Netw
 all demand is satisfied, gain three ${terms.resources.compute}.
 
 A **joint ${terms.technology.megaCluster}** uses one host Facility from each consenting
-participant. The hosts must be adjacent and each must belong to its owner’s
+participant. The lead names the partner and both eligible hosts; the named
+partner accepts or rejects once. Rejection, pass, or no response ends that
+construction attempt, uses the Wild Action, and permits no replacement
+partner. The hosts must be adjacent and each must belong to its owner’s
 ${terms.systems.infrastructureNetwork}. The lead pays two ${terms.resources.runway} and one ${terms.resources.compute}; the partner
 pays one ${terms.resources.runway} and one ${terms.resources.compute}. During Production, each participant supplies
 their host’s normal Facility demand plus one additional
@@ -726,17 +746,39 @@ During any player’s resolution, the active player may complete one immediate
 resource trade with one rival, either immediately before or immediately after
 Act. The active player either declines to trade or makes one complete offer:
 name the rival, timing, each resource type, and each amount. The named rival
-may accept, reject, or publish one complete counteroffer. If they publish a
-counteroffer, every other player may simultaneously pass or claim it. The
-counteroffer maker chooses one claimant, or declines them all; a chosen claim
-immediately completes the trade. There are no further offers or
-counteroffers during that resolution. ${terms.resources.runway}, ${terms.resources.compute}, and ${terms.resources.safety} tokens may be exchanged. Every accepted component must change hands
+may accept, reject, or publish one complete counteroffer naming each offered
+and requested resource type and amount. If they publish a counteroffer, every
+other player whose resulting transfer is legal under holdings, embargoes, and
+caps may simultaneously pass or claim it. The counteroffer maker chooses one
+claimant, or declines them all; a chosen claim immediately completes the trade.
+This is a public-market exception: the completed counteroffer may be between
+two non-active players. There are no further offers or counteroffers during
+that resolution. ${terms.resources.runway}, ${terms.resources.compute}, and ${terms.resources.safety} tokens may be exchanged. Every accepted component must change hands
 immediately; promises about later turns are not binding. The active
 ${terms.systems.headline} may prohibit a named resource from being traded.
+
+No acceptance means no completed trade. A counteroffer with no claimant, or
+with all claimants declined, expires. The active player continues the selected
+Action; if the unavailable resources leave that committed Action without a
+legal resolution, it resolves blocked under **A committed Action that becomes
+blocked**.
 
 ${terms.actions.influence} is not required for this immediate exchange. ${terms.actions.influence} remains the
 only way to create persistent Joint Ventures, lobbying effects, or
 ${terms.playerTracks.trust} manipulation.
+
+### Negotiation and paced play
+
+No agreement is a normal strategic outcome. Players may discuss publicly, but
+speech creates no game state, obligation, or additional action. Only the
+required formal choice in its printed window changes the game. If a player does
+not give a required formal response when called upon, treat it as a rejection
+or pass.
+
+**Paced Play** is an optional table rule. Before play, the group may assign one
+shared sand timer to each negotiation window. When it expires, discussion ends
+and the normal rejection, pass, or no-ballot fallback applies; a timer never
+creates consent or forces a deal.
 
 ### C. ${terms.infrastructure.power} and Production
 
@@ -746,8 +788,11 @@ every player before advancing to the next box:
 1. **Generate:** recalculate every ${terms.systems.infrastructureNetwork}. Every connected
    Generator operates automatically. Add one ${terms.playerTracks.scrutiny} for every
    ${terms.technology.emergencyInfrastructure}. Add any ${terms.systems.headline} generation.
-2. **Trade:** in Initiative order, each player may buy up to two ${terms.infrastructure.power}, one
-   from each of two different adjacent rival Networks. The buyer pays one
+2. **Trade:** in Initiative order, each player may make up to two ${terms.infrastructure.power}
+   purchase requests, one to each of two different adjacent rival Networks.
+   The named supplier accepts or rejects each request. A rejected, passed, or
+   unanswered request fails; the buyer may use any remaining request, then
+   allocates with the ${terms.infrastructure.power} they have. An accepted buyer pays one
    ${terms.resources.runway} per ${terms.infrastructure.power} directly to the consenting supplier. Each supplier may sell
    at most one ${terms.infrastructure.power} this Production. Only installed Generator or Fusion
    capacity may be sold; starting-grid and emergency ${terms.infrastructure.power} may not.
@@ -999,6 +1044,7 @@ even if you place or relocate no cubes:
 - Gain one ${terms.playerTracks.trust}.
 - Remove one ${terms.playerTracks.scrutiny}.
 - Create a Joint Venture with an eligible rival.
+- Terminate one named Joint Venture you share.
 
 ## 8. ${terms.infrastructure.power} Source cards
 
@@ -1034,9 +1080,9 @@ The Round IV ${terms.systems.wildAction} described above.
 
 ## 9. Six factions
 
-The six canonical player identities are satirical portrayals of living public
-figures. Their abilities exaggerate public institutional roles for fictional
-gameplay; they are not factual claims or indications of endorsement.
+The six canonical player identities are fictional institutions led by
+fictional executives. Their abilities describe institutional roles for
+fictional gameplay; they are not factual claims or indications of endorsement.
 
 Every ability unlocks at the start of its named round. Its timing tag is one
 of **passive**, **once per round**, **once when unlocked**, or **once per
@@ -1057,6 +1103,8 @@ window.
 
 ### ${terms.factions.coalition}
 
+CEO: ${content.factions.byId.coalition_lab.chiefExecutive}.
+
 Starts with ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, and ${terms.playerTracks.trust} ${content.factions.byId.coalition_lab.starts.trust}.
 
 - **${content.factions.byId.coalition_lab.abilities.0.name}:**
@@ -1070,6 +1118,8 @@ Starts with ${content.factions.byId.coalition_lab.starts.runway} ${terms.resourc
 
 ### ${terms.factions.platform}
 
+CEO: ${content.factions.byId.platform_empire.chiefExecutive}.
+
 Starts with ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${terms.playerTracks.trust} ${content.factions.byId.platform_empire.starts.trust}, and ${terms.playerTracks.customer} #${content.factions.byId.platform_empire.starts.customerOrdinal} already deployed. Its next ${terms.actions.deploy} is ${terms.playerTracks.customer} #2 and requires ${terms.playerTracks.capability} ${content.factions.byId.platform_empire.starts.nextCustomerCapability}. The starting ${terms.playerTracks.customer} is not a separate pre-track bonus.
 
 - **${content.factions.byId.platform_empire.abilities.0.name}:**
@@ -1082,6 +1132,8 @@ Starts with ${content.factions.byId.platform_empire.starts.runway} ${terms.resou
   ${content.factions.byId.platform_empire.abilities.3.text}
 
 ### ${terms.factions.imperial}
+
+CEO: ${content.factions.byId.imperial_research_lab.chiefExecutive}.
 
 Starts with ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, and ${terms.playerTracks.trust} ${content.factions.byId.imperial_research_lab.starts.trust}.
 
@@ -1098,6 +1150,8 @@ Starts with ${content.factions.byId.imperial_research_lab.starts.runway} ${terms
 
 ### ${terms.factions.vertical}
 
+CEO: ${content.factions.byId.vertical_empire.chiefExecutive}.
+
 Starts with ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, and ${terms.playerTracks.trust} ${content.factions.byId.vertical_empire.starts.trust}.
 
 - **${content.factions.byId.vertical_empire.abilities.0.name}:**
@@ -1111,6 +1165,8 @@ Starts with ${content.factions.byId.vertical_empire.starts.runway} ${terms.resou
 
 ### ${terms.factions.safety}
 
+CEO: ${content.factions.byId.safety_laboratory.chiefExecutive}.
+
 Starts with ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${terms.playerTracks.trust} ${content.factions.byId.safety_laboratory.starts.trust}, and ${content.factions.byId.safety_laboratory.starts.safety} ${terms.resources.safety} tokens.
 
 - **${content.factions.byId.safety_laboratory.abilities.0.name}:**
@@ -1123,6 +1179,8 @@ Starts with ${content.factions.byId.safety_laboratory.starts.runway} ${terms.res
   ${content.factions.byId.safety_laboratory.abilities.3.text}
 
 ### ${terms.factions.foundry}
+
+CEO: ${content.factions.byId.foundry.chiefExecutive}.
 
 Starts with ${content.factions.byId.foundry.starts.runway} ${terms.resources.runway},
 ${content.factions.byId.foundry.starts.compute} ${terms.resources.compute}, and
@@ -1344,8 +1402,8 @@ Generators do not count against the Facility limit.
 
 The shared supply contains:
 
-- Six numbered matched Joint Venture token pairs
-- Six numbered matched ${terms.technology.megaCluster} token pairs with a lead-side indicator
+- ${facts.shared.components.jointVenturePairs} numbered matched Joint Venture token pairs
+- ${facts.shared.components.megaClusterPairs} numbered matched ${terms.technology.megaCluster} token pairs with a lead-side indicator
 - One dedicated ${terms.technology.advancedGeneration} marker
 - Six neutral Expert pawns
 - Six Economic Benchmark tokens
@@ -1525,4 +1583,6 @@ Freeze every other numerical rule pending this human evidence.
 Four players is the authoritative balance configuration. Three- and
 five-player games use the same complete rules and must pass their own
 negotiation, congestion, duration, faction-viability, and strategic-diversity
-tests before release. Two and six players are not supported formats.
+tests before release. Two- and six-player games are playable exploratory
+formats; they are not balance-authority formats until they receive their own
+evidence.

@@ -1,5 +1,6 @@
-import { mkdir, rename, writeFile } from "node:fs/promises";
+import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
+import { cancellationError } from "./cancellation.js";
 
 function slug(value, fallback = "report") {
   const normalized = String(value || fallback)
@@ -41,12 +42,14 @@ export async function archiveSimulationReport(
   {
     projectRoot,
     jobId,
-    directory = "evidence/studies/simulation"
+    directory = "evidence/studies/simulation",
+    canPublish = () => true
   }
 ) {
   if (!report || report.evidenceLabel !== "simulation") {
     throw new TypeError("Only simulation evidence can enter the simulation archive.");
   }
+  if (!canPublish()) throw cancellationError();
   const archiveDirectory = resolve(projectRoot, directory);
   await mkdir(archiveDirectory, { recursive: true });
   const stem = [
@@ -59,11 +62,20 @@ export async function archiveSimulationReport(
   ].join("-");
   const destination = resolve(archiveDirectory, `${stem}.json`);
   const temporary = resolve(archiveDirectory, `.${stem}.tmp`);
-  await writeFile(temporary, `${JSON.stringify(report, null, 2)}\n`, {
-    encoding: "utf8",
-    flag: "wx"
-  });
-  await rename(temporary, destination);
+  try {
+    await writeFile(temporary, `${JSON.stringify(report, null, 2)}\n`, {
+      encoding: "utf8",
+      flag: "wx"
+    });
+    if (!canPublish()) throw cancellationError();
+    await rename(temporary, destination);
+    if (!canPublish()) {
+      await rm(destination, { force: true });
+      throw cancellationError();
+    }
+  } finally {
+    if (!canPublish()) await rm(temporary, { force: true });
+  }
   return {
     fileName: `${stem}.json`,
     relativePath: relative(projectRoot, destination)

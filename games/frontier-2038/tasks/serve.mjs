@@ -3,6 +3,7 @@ import { createServer } from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
 import { randomBytes, randomUUID, timingSafeEqual } from "node:crypto";
 import { archiveSimulationReport } from "../lab/report-archive.js";
+import { cancellationError } from "../lab/cancellation.js";
 import { runExperiment } from "../lab/runtime/run-experiment.js";
 import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
 
@@ -115,11 +116,28 @@ async function readJson(request) {
 
 function pruneJobs() {
   const completed = [...jobs.values()]
-    .filter((job) => job.status === "complete" || job.status === "failed")
+    .filter((job) => ["complete", "failed", "cancelled"].includes(job.status))
     .sort((left, right) => left.updatedAt - right.updatedAt);
   while (jobs.size > 20 && completed.length) {
     jobs.delete(completed.shift().id);
   }
+}
+
+function publicSimulationJob(job) {
+  return {
+    id: job.id,
+    status: job.status,
+    progress: job.progress,
+    createdAt: job.createdAt,
+    updatedAt: job.updatedAt,
+    cancelledAt: job.cancelledAt || null,
+    failure: job.failure || null,
+    error: job.error || null,
+    ...(job.status === "complete" ? {
+      report: job.report,
+      archive: job.archive
+    } : {})
+  };
 }
 
 function simulationFailure(error) {
@@ -157,6 +175,8 @@ async function startSimulation(request, response) {
     const job = {
       id,
       status: "queued",
+      controller: new AbortController(),
+      publicationValid: true,
       progress: {
         phase: options.mode || "tournament",
         completed: 0,
@@ -179,9 +199,14 @@ async function startSimulation(request, response) {
     json(response, 202, { id, status: job.status });
 
     queueMicrotask(async () => {
+      if (job.controller.signal.aborted) return;
       job.status = "running";
       try {
-        job.report = await runExperiment(options, (progress) => {
+        const completedReport = await runExperiment({
+          ...options,
+          signal: job.controller.signal
+        }, (progress) => {
+          if (job.controller.signal.aborted) return;
           job.progress = {
             phase: progress.phase || options.mode || "tournament",
             completed: progress.completed,
@@ -196,15 +221,26 @@ async function startSimulation(request, response) {
           };
           job.updatedAt = Date.now();
         });
-        job.archive = await archiveSimulationReport(job.report, {
+        if (!job.publicationValid) return;
+        const archive = await archiveSimulationReport(completedReport, {
           projectRoot,
-          jobId: id
+          jobId: id,
+          canPublish: () => job.publicationValid && !job.controller.signal.aborted
         });
+        if (!job.publicationValid) return;
+        job.report = completedReport;
+        job.archive = archive;
         job.status = "complete";
       } catch (error) {
-        job.status = "failed";
-        job.error = error.message;
-        job.failure = simulationFailure(error);
+        if (!job.publicationValid || job.controller.signal.aborted || error?.name === "AbortError") {
+          job.status = "cancelled";
+          job.error = null;
+          job.failure = simulationFailure(error);
+        } else {
+          job.status = "failed";
+          job.error = error.message;
+          job.failure = simulationFailure(error);
+        }
       }
       job.updatedAt = Date.now();
       pruneJobs();
@@ -212,6 +248,29 @@ async function startSimulation(request, response) {
   } catch (error) {
     json(response, error instanceof RangeError ? 413 : 400, { error: error.message });
   }
+}
+
+function cancelSimulation(response, id) {
+  const job = jobs.get(id);
+  if (!job) {
+    json(response, 404, { error: "Simulation job not found." });
+    return;
+  }
+  if (job.status === "cancelled") {
+    json(response, 200, publicSimulationJob(job));
+    return;
+  }
+  if (["complete", "failed"].includes(job.status)) {
+    json(response, 409, { error: "Simulation job has already settled." });
+    return;
+  }
+  job.publicationValid = false;
+  job.status = "cancelled";
+  job.cancelledAt = Date.now();
+  job.updatedAt = job.cancelledAt;
+  job.controller.abort(cancellationError("Simulation job cancelled by the Lab."));
+  json(response, 202, publicSimulationJob(job));
+  pruneJobs();
 }
 
 function publicGame(game) {
@@ -330,6 +389,11 @@ createServer(async (request, response) => {
     await startSimulation(request, response);
     return;
   }
+  const simulationCancelMatch = url.pathname.match(/^\/api\/simulations\/([a-f0-9-]+)\/cancel$/);
+  if (request.method === "POST" && simulationCancelMatch) {
+    cancelSimulation(response, simulationCancelMatch[1]);
+    return;
+  }
   if (request.method === "POST" && url.pathname === "/api/games") {
     await startGame(request, response);
     return;
@@ -358,7 +422,7 @@ createServer(async (request, response) => {
       json(response, 404, { error: "Simulation job not found." });
       return;
     }
-    json(response, 200, job);
+    json(response, 200, publicSimulationJob(job));
     return;
   }
   if (request.method !== "GET" && request.method !== "HEAD") {

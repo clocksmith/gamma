@@ -57,7 +57,7 @@ test("complexity-reduction review rules preserve precision and remove table acco
     "Every player board presents the same five Production boxes",
     "Ring rotation moves the district, not the Facility for Grid-Ready purposes",
     "return a Grid-Ready marker only from a Facility that is now outside",
-    "each player may buy up to two Power",
+    "each player may make up to two Power purchase requests",
     "A **grid-ready Facility** has a Grid-Ready marker",
     "it never runs a second Production calculation",
     "Every Headline has exactly one resolution badge",
@@ -202,10 +202,10 @@ test("physical faction rules are rendered from the semantic faction graph", asyn
     }
   }
 
-  assert.match(rules, /Demis Hassabis[\s\S]*Starts with 3[\s\S]*Compute,[\s\S]*Trust[\s\n]*3\./);
+  assert.match(rules, /Mirevanta Works[\s\S]*Starts with 3[\s\S]*Compute,[\s\S]*Trust[\s\n]*3\./);
   assert.match(rules, /Scientific Method:[\s\S]*pay 1 Runway/);
   assert.match(rules, /Peer Validation:[\s\S]*Capability 9 and 12 score 1 Mandate/);
-  assert.match(rules, /Elon Musk[\s\S]*Starts with 6[\s\S]*Runway, 3[\s\S]*Compute,[\s\S]*Trust[\s\n]*2\./);
+  assert.match(rules, /Kestralyn[\s\S]*Starts with 6[\s\S]*Runway, 3[\s\S]*Compute,[\s\S]*Trust[\s\n]*2\./);
   assert.doesNotMatch(
     rules,
     /Industrial Velocity:[\s\S]{0,240}add 1 Scrutiny/

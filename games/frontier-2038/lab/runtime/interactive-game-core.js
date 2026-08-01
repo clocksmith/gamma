@@ -77,10 +77,10 @@ export function createInteractiveGameCore({
   const playerCount = Number(options.playerCount ?? config.players.balanceAuthority);
   if (
     !Number.isInteger(playerCount) ||
-    !config.players.supportedCounts.includes(playerCount)
+    !config.players.playableCounts.includes(playerCount)
   ) {
     throw new RangeError(
-      `playerCount must be one of ${config.players.supportedCounts.join(", ")}.`
+      `playerCount must be one of ${config.players.playableCounts.join(", ")}.`
     );
   }
   const selectedFaction = factions.factions.find(

@@ -161,18 +161,10 @@ rules version, executable reference, and remote source commit.
 
 ## Theme boundary
 
-The game uses these real-name satirical player identities:
-
-- Sam Altman
-- Mark Zuckerberg
-- Demis Hassabis
-- Elon Musk
-- Dario Amodei
-- Jensen Huang
-
-Their abilities are fictional, satirical exaggerations of public institutional
-roles and do not imply endorsement.
-Commercial publication should receive appropriate legal review.
+The game uses six fictional AI institutions: Dovetalis Labs, Loopfold AI,
+Mirevanta Works, Kestralyn, Orisonix, and Corthaven. Their fictional CEOs and
+abilities depict institutional incentives, not real people or companies.
+Commercial publication should still receive appropriate legal review.
 
 The selected tone is solemn institutional absurdity: each Era becomes more
 extreme, while every institution describes the impossible as a responsible

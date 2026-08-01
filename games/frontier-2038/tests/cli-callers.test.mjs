@@ -102,6 +102,75 @@ test("provider decisions outside the legal set fail closed", async () => {
   await assert.rejects(() => caller.decide(packet), /illegal decisionId/);
 });
 
+test("missing formal responses use the rulebook reject or pass default", async () => {
+  const profile = (await loadPlayerProfiles())[0];
+  const unavailableCaller = {
+    async decide() {
+      throw new Error("Provider did not respond.");
+    }
+  };
+  const policy = new CliBackedPlayerPolicy(profile, unavailableCaller, {
+    backendId: "fixture-cli",
+    requireLlm: true
+  });
+  const powerResponse = await policy.decide({
+    ...structuredClone(packet),
+    requestId: "fixture:r3:c1:s1:power_sale_0_1:1",
+    legalDecisions: [
+      { decisionId: "power_sale_accept_0_1", label: "Accept" },
+      { decisionId: "power_sale_reject_0_1", label: "Reject" }
+    ]
+  });
+  assert.equal(powerResponse.decision.decisionId, "power_sale_reject_0_1");
+  assert.equal(powerResponse.receipt.provider, "rulebook-default");
+  assert.equal(powerResponse.receipt.formalResponseDefault, true);
+
+  const claimResponse = await policy.decide({
+    ...structuredClone(packet),
+    requestId: "fixture:r3:c1:s1:immediate_trade_claim:2",
+    legalDecisions: [
+      { decisionId: "trade_claim_pass", label: "Pass" },
+      { decisionId: "trade_claim_accept", label: "Claim" }
+    ]
+  });
+  assert.equal(claimResponse.decision.decisionId, "trade_claim_pass");
+
+  for (const [requestId, legalDecisions, expectedDecisionId] of [
+    [
+      "fixture:r3:c1:s1:mega_cluster_partner:3",
+      [
+        { decisionId: "mega_cluster_accept", label: "Accept" },
+        { decisionId: "mega_cluster_reject", label: "Reject" }
+      ],
+      "mega_cluster_reject"
+    ],
+    [
+      "fixture:r3:c1:s1:boardroom_coup_response:4",
+      [
+        { decisionId: "boardroom_back", label: "Back" },
+        { decisionId: "boardroom_refuse", label: "Refuse" }
+      ],
+      "boardroom_refuse"
+    ],
+    [
+      "fixture:r3:c1:s1:realignment_ballot:5",
+      [
+        { decisionId: "realignment_core", label: "Core" },
+        { decisionId: "realignment_no_ballot", label: "No ballot" }
+      ],
+      "realignment_no_ballot"
+    ]
+  ]) {
+    const response = await policy.decide({
+      ...structuredClone(packet),
+      requestId,
+      legalDecisions
+    });
+    assert.equal(response.decision.decisionId, expectedDecisionId);
+    assert.equal(response.receipt.formalResponseDefault, true);
+  }
+});
+
 test("per-seat cycle prompt budgets fail closed instead of falling back", async () => {
   const profile = (await loadPlayerProfiles())[0];
   const caller = {
@@ -128,6 +197,34 @@ test("per-seat cycle prompt budgets fail closed instead of falling back", async 
     /LLM prompt budget exhausted/
   );
   assert.equal(decisionBudget.remaining, 3);
+});
+
+test("CLI policy preserves its private deterministic seed without sending it to the provider", async () => {
+  const profile = (await loadPlayerProfiles())[0];
+  let providerPacket;
+  const policy = new CliBackedPlayerPolicy(profile, {
+    async decide(input) {
+      providerPacket = input;
+      return {
+        decision: { decisionId: input.legalDecisions[0].decisionId },
+        receipt: { provider: "fixture-cli", requestId: input.requestId }
+      };
+    }
+  }, {
+    fallback: new WeightedPlayerPolicy(profile),
+    backendId: "fixture-cli"
+  });
+  const privatePacket = structuredClone(packet);
+  delete privatePacket.seed;
+  Object.defineProperty(privatePacket, "policySeed", {
+    value: "private-policy-seed",
+    enumerable: false
+  });
+
+  await policy.decide(privatePacket);
+
+  assert.equal(providerPacket.policySeed, "private-policy-seed");
+  assert.doesNotMatch(buildDecisionPrompt(providerPacket), /private-policy-seed/);
 });
 
 test("decision cache replays a provider result without a fresh call", async () => {
@@ -170,6 +267,47 @@ test("decision cache replays a provider result without a fresh call", async () =
     assert.equal(calls, 1);
     assert.equal(first.decision.decisionId, second.decision.decisionId);
     assert.equal(second.receipt.cached, true);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("decision cache misses when reasoning effort changes", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "m3t4-decision-cache-effort-"));
+  try {
+    const profile = (await loadPlayerProfiles())[0];
+    let calls = 0;
+    const caller = {
+      async decide(input) {
+        calls += 1;
+        return {
+          decision: { decisionId: input.legalDecisions[0].decisionId },
+          receipt: { provider: "fixture-cli", requestId: input.requestId }
+        };
+      }
+    };
+    const shared = {
+      fallback: new WeightedPlayerPolicy(profile),
+      decisionBudget: { remaining: 3 },
+      decisionCache: new DecisionCache(directory),
+      backendId: "fixture-cli",
+      model: "fixture-model"
+    };
+    const lowEffort = new CliBackedPlayerPolicy(profile, caller, {
+      ...shared,
+      reasoningEffort: "low",
+      cacheMode: "read-write"
+    });
+    await lowEffort.decide(packet);
+
+    const mediumEffort = new CliBackedPlayerPolicy(profile, caller, {
+      ...shared,
+      reasoningEffort: "medium",
+      cacheMode: "read-write"
+    });
+    const result = await mediumEffort.decide(packet);
+    assert.equal(calls, 2);
+    assert.equal(result.receipt.cached, false);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

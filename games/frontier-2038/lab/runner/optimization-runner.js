@@ -119,7 +119,8 @@ async function evaluateStrategyCandidate({
   playerCount,
   runsPerSeat,
   seed,
-  rulesVariant
+  rulesVariant,
+  signal
 }) {
   const opponents = profiles.filter((candidate) => candidate.id !== profile.id);
   const seatReports = [];
@@ -137,7 +138,8 @@ async function evaluateStrategyCandidate({
       profileOverrides: [profile],
       backends: ["weighted"],
       rotateProfiles: false,
-      rulesVariant
+      rulesVariant,
+      signal
     }));
   }
   const target = seatReports.map((report) => candidateProfile(report, profile.id));
@@ -162,6 +164,7 @@ export async function evolveStrategy({
   seed = "frontier-strategy-evolution",
   magnitude = 0.45,
   rulesVariant,
+  signal,
   onProgress
 } = {}) {
   const profiles = await loadPlayerProfiles();
@@ -184,7 +187,8 @@ export async function evolveStrategy({
         playerCount,
         runsPerSeat,
         seed: `${seed}:g:${generation}:candidate:${index}`,
-        rulesVariant
+        rulesVariant,
+        signal
       });
       evaluated.push({ profile, evaluation });
       completed += 1;
@@ -268,6 +272,7 @@ export async function searchRuleVariants({
   profileIds,
   baseline = DEFAULT_RULE_VARIANT,
   targetAgiRate = 0.35,
+  signal,
   onProgress
 } = {}) {
   const availableProfiles = await loadPlayerProfiles();
@@ -295,7 +300,8 @@ export async function searchRuleVariants({
       sampleReplays: 0,
       profileIds,
       backends: ["weighted"],
-      rulesVariant: proposal.variant
+      rulesVariant: proposal.variant,
+      signal
     });
     const fitness = ruleFitness(report, targetAgiRate);
     const entry = {

@@ -116,23 +116,22 @@ not restate the Era lore.
 
 ## Canonical names
 
-The game uses these real-name satirical player identities:
+The game uses these fictional player institutions and CEOs:
 
-- Sam Altman
-- Mark Zuckerberg
-- Demis Hassabis
-- Elon Musk
-- Dario Amodei
-- Jensen Huang
+- Dovetalis Labs — Sasha Raman
+- Loopfold AI — Mateo Ibarra
+- Mirevanta Works — Owen Okafor
+- Kestralyn — Jiwon Park
+- Orisonix — Ari Caldwell
+- Corthaven — Eli Rosen
 
-Their abilities and future histories are transformative fictional satire based
-on public institutional roles. They are not factual allegations or indications
-of endorsement. Do not use company logos, copied interfaces or trade dress, or
-generated photorealistic likenesses without a separate publishing decision and
+Their abilities and future histories depict fictional institutional incentives.
+Do not use real company logos, copied interfaces or trade dress, or generated
+photorealistic likenesses without a separate publishing decision and
 appropriate review.
 
 Historically inspired Headlines target current board state. They do not assert
-that a matching real person or company performed the depicted fictional act.
+that a real person or company performed the depicted fictional act.
 
 ## Baseline writing inventory
 

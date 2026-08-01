@@ -1,8 +1,8 @@
 # M3T4 2038 Playtesting And Evidence
 
 **Rules under review:** `0.5.0-rc.28-test`
-**First cohort:** controlled four-player physical test with Demis Hassabis,
-Elon Musk, Jensen Huang, and Mark Zuckerberg
+**First cohort:** controlled four-player physical test with Mirevanta Works,
+Kestralyn, Corthaven, and Loopfold AI
 
 This document owns the test protocol, evidence labels, version identity, and
 comparison rules. It combines the former playtest plan and versioning guide so
@@ -179,20 +179,20 @@ can make old reports readable; they cannot make them experimentally equivalent.
 
 ## Test order
 
-1. Controlled four-player physical test with Demis Hassabis, Elon Musk,
-   Jensen Huang, and Mark Zuckerberg.
+1. Controlled four-player physical test with Mirevanta Works, Kestralyn,
+   Corthaven, and Loopfold AI.
 2. Facilitated four-player tests until setup and rule ambiguities stabilize.
 3. Four-player blind test.
 4. Three-player negotiation, scarcity, and faction-omission test.
-5. Five-player congestion, negotiation, downtime, faction-omission, and Demis
+5. Five-player congestion, negotiation, downtime, faction-omission, and Mirevanta
    Capability-twelve Peer Validation regression.
 6. Repeat three- and five-player blind tests after every selected four-player
    balance change.
 
-Four players owns primary balance decisions. Three and five players are full
-supported formats and mandatory regression guards. Two and six players are
-outside the current product; their historical reports remain evidence about
-older executables only.
+Four players owns primary balance decisions. Three and five players are the
+suggested full formats and mandatory regression guards. Two and six players
+are playable exploratory formats; their current reports are non-promotional
+diagnostics rather than balance-authority evidence.
 
 ## Capture for every physical session
 
@@ -216,10 +216,10 @@ older executables only.
 
 - provisional and banked Capability for every Research;
 - crash and protection source;
-- separate Demis Hassabis, Research-campus, and all-other Research cohorts;
+- separate Mirevanta Works, Research-campus, and all-other Research cohorts;
 - Customers and Capability after every round;
 - each Customer’s immediate Mandate award and continuing Production income;
-- Demis’s Capability-nine and Capability-twelve Peer Validation awards;
+- Mirevanta Works’ Capability-nine and Capability-twelve Peer Validation awards;
 - earliest grid-ready AGI eligibility and every declaration.
 
 ### Infrastructure and negotiation
@@ -250,9 +250,9 @@ older executables only.
 - Systemic Risk added, drawn, and remaining;
 - Audit penalties by player and source;
 - Trust and Mandate changes with causes;
-- Mark Zuckerberg’s lead after every Production;
-- Jensen Huang’s Shovels income;
-- every New Architecture offer, acceptance, rival benefit, and Jensen
+- Loopfold AI’s lead after every Production;
+- Corthaven’s Shovels income;
+- every New Architecture offer, acceptance, rival benefit, and Corthaven
   self-Compute gain;
 - every Industrial Velocity discount, whether it reduced the final paid cost
   of a completed Facility, and any Mandate awarded;
