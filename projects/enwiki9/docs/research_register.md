@@ -7142,6 +7142,39 @@ resource ledger, and a proof that every accepted witness clears a named
 target-bearing gate. The active NNCP and WIKI empirical sequence remains the
 source-discovery path that could eventually supply such an antecedent.
 
+## 2026-08-02: paying WIKI plus lightweight-parent bridge frozen as strategy
+
+The current ranking was corrected to distinguish endpoint428's strong exact
+size evidence from prize eligibility. Endpoint428 remains the immutable exact
+comparison parent, but its full-1G score is unknown and its current topology is
+not one-core qualified. WIKIFORWARD's `63,259.358`-byte-equivalent narrative
+observation remains unretained hypothesis evidence rather than a reproducible
+receipt, and the live NNCP artifacts remain partial until terminal arithmetic
+decode and gain accounting.
+
+The new strategic requirement is a complementarity gate after the first WIKI
+source clears an actual paid gate. Freeze one dependency-closed lightweight
+parent `L`, then measure fresh exact `F`, `F+W`, `L`, and `L+W` trajectories on
+identical populations. `L` is a mandatory control; the architecture decision
+compares the full parent, full parent plus WIKI, and lightweight parent plus
+WIKI. No isolated WIKI gain may be subtracted from `L` because changing the
+parent changes probabilities, literal economics, arithmetic termination, and
+possibly event selection.
+
+This bridge asks whether decoder-built WIKI information can recover enough
+compression to delete expensive predictive work rather than simply add more
+work to endpoint428. It remains a parked strategy, not a proposal or candidate,
+until a paid WIKI child exists. Native state-equivalence infrastructure remains
+dormant until that same antecedent passes.
+
+The 100M promotion rule is now explicit. For measured archive gain `g_100`,
+incremental counted program cost `delta_P`, and a precommitted safety reserve
+`R`, require
+`10 * g_100 - delta_P >= 1,389,323 + R`. Future 10M and 100M receipts must
+report signed projected margins to both the standing `108,000,000` target and
+the unverified `107,407,896` competitive contingency. The latter does not
+change the canonical target absent authoritative verification.
+
 ## 2026-08-02: exact 10M parent restored to generated proof status
 
 The upper-bound generator previously recognized only generic driver result
