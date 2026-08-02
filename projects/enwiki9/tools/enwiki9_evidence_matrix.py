@@ -11,12 +11,15 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import pathlib
+import subprocess
 from dataclasses import dataclass
 from typing import Any
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+REPO_ROOT = ROOT.parent.parent
 RESULTS_DIR = ROOT / "results"
 OUT_MD = ROOT / "docs" / "evidence_matrix.md"
 FULL_INPUT_BYTES = 1_000_000_000
@@ -96,9 +99,54 @@ def load_row(path: pathlib.Path) -> Row | None:
     )
 
 
+def canonical_tracked_result_paths(
+    results_dir: pathlib.Path,
+) -> set[pathlib.Path] | None:
+    """Return one Git snapshot for canonical result provenance.
+
+    Temporary and explicitly supplied result directories retain the historical
+    fixture behavior.  Canonical generated rankings fail closed if Git cannot
+    identify durable result files.
+    """
+
+    try:
+        canonical = results_dir.resolve() == RESULTS_DIR.resolve()
+    except OSError:
+        canonical = False
+    if not canonical:
+        return None
+    try:
+        result_prefix = RESULTS_DIR.relative_to(REPO_ROOT).as_posix()
+        proc = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(REPO_ROOT),
+                "ls-files",
+                "-z",
+                "--",
+                result_prefix,
+            ],
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return set()
+    if proc.returncode != 0:
+        return set()
+    return {
+        (REPO_ROOT / pathlib.Path(os.fsdecode(raw))).resolve()
+        for raw in proc.stdout.split(b"\0")
+        if raw
+    }
+
+
 def iter_rows(results_dir: pathlib.Path) -> list[Row]:
+    tracked_paths = canonical_tracked_result_paths(results_dir)
     rows: list[Row] = []
     for path in sorted(results_dir.glob("*/*.json")):
+        if tracked_paths is not None and path.resolve() not in tracked_paths:
+            continue
         row = load_row(path)
         if row is not None:
             rows.append(row)

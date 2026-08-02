@@ -336,6 +336,15 @@ def iter_proposals(states: set[str] | None = None) -> list[dict[str, Any]]:
     return rows
 
 
+def require_actionable_proposal(proposal: dict[str, Any], action: str) -> None:
+    operational_status = proposal.get("operational_status", "actionable")
+    if operational_status != "actionable":
+        raise ValueError(
+            f"proposal {proposal.get('proposal_id')} cannot {action} while "
+            f"operational_status={operational_status!r}"
+        )
+
+
 def transition_proposal(
     proposal_id: str,
     *,
@@ -347,8 +356,18 @@ def transition_proposal(
     located = proposal_path(proposal_id)
     if located is None:
         raise FileNotFoundError(f"proposal not found: {proposal_id}")
-    _source_state, source_path = located
+    source_state, source_path = located
     proposal = load_json(source_path)
+    if target_state == "claimed":
+        if source_state != "proposed":
+            raise ValueError("only a proposed proposal can be claimed")
+        require_actionable_proposal(proposal, "be claimed")
+    elif target_state == "developed":
+        if source_state != "claimed":
+            raise ValueError("only a claimed proposal can be developed")
+        require_actionable_proposal(proposal, "be developed")
+    elif target_state == "rejected" and source_state not in {"proposed", "claimed"}:
+        raise ValueError("only a proposed or claimed proposal can be rejected")
     proposal.update(updates)
     proposal["state"] = target_state
     proposal[f"{target_state}_at"] = utc_now()
@@ -368,8 +387,11 @@ def develop_proposal(
     located = proposal_path(proposal_id)
     if located is None:
         raise FileNotFoundError(f"proposal not found: {proposal_id}")
-    _state, path = located
+    state, path = located
     proposal = load_json(path)
+    if state != "claimed":
+        raise ValueError("proposal must be claimed before development")
+    require_actionable_proposal(proposal, "be developed")
     parent = proposal.get("parent")
     if parent is not None and not isinstance(parent, str):
         raise ValueError(f"invalid proposal parent: {proposal_id}")
@@ -411,6 +433,74 @@ def develop_proposal(
         updates={"candidate_id": candidate_id},
     )
     return proposal, destination
+
+
+def activate_proposal(proposal_id: str, evidence: list[str]) -> dict[str, Any]:
+    if not evidence:
+        raise ValueError("proposal activation requires receipt-backed evidence")
+    located = proposal_path(proposal_id)
+    if located is None:
+        raise FileNotFoundError(f"proposal not found: {proposal_id}")
+    state, path = located
+    if state not in {"proposed", "claimed"}:
+        raise ValueError("only a proposed or claimed proposal can be activated")
+    proposal = load_json(path)
+    requirements = proposal.get("activation_requirements", [])
+    if not isinstance(requirements, list):
+        raise ValueError("proposal activation_requirements must be a list")
+    evidence_set = set(evidence)
+    verified: list[dict[str, Any]] = []
+    for requirement in requirements:
+        if not isinstance(requirement, dict):
+            raise ValueError("proposal activation requirement must be an object")
+        if requirement.get("kind") != "terminal_scientific_decision":
+            raise ValueError("unsupported proposal activation requirement kind")
+        decision_text = requirement.get("decision_path")
+        candidate_id = requirement.get("candidate_id")
+        allowed = requirement.get("allowed_verdicts")
+        if (
+            not isinstance(decision_text, str)
+            or not isinstance(candidate_id, str)
+            or not isinstance(allowed, list)
+            or not all(isinstance(value, str) for value in allowed)
+        ):
+            raise ValueError("malformed terminal scientific activation requirement")
+        if decision_text not in evidence_set:
+            raise ValueError(
+                f"activation evidence must include required decision: {decision_text}"
+            )
+        decision_path = (ROOT / decision_text).resolve()
+        if ROOT.resolve() not in decision_path.parents or not decision_path.is_file():
+            raise ValueError(f"required activation decision is unavailable: {decision_text}")
+        decision = load_json(decision_path)
+        if decision.get("candidate_id") != candidate_id:
+            raise ValueError(
+                f"activation decision candidate mismatch: {decision_text}"
+            )
+        verdict_field = decision.get("decision")
+        verdict = (
+            verdict_field.get("verdict")
+            if isinstance(verdict_field, dict)
+            else verdict_field
+        )
+        if verdict not in allowed:
+            raise ValueError(
+                f"activation decision is not an allowed scientific terminal: "
+                f"{decision_text} verdict={verdict!r}"
+            )
+        verified.append(
+            {
+                "candidate_id": candidate_id,
+                "decision_path": decision_text,
+                "verdict": verdict,
+            }
+        )
+    proposal["operational_status"] = "actionable"
+    proposal["activated_at"] = utc_now()
+    proposal["activation_evidence"] = evidence
+    proposal["verified_activation_requirements"] = verified
+    atomic_json(path, proposal)
+    return proposal
 
 
 def job_key(candidate_id: str, gate_size: int) -> tuple[str, int]:
@@ -687,13 +777,14 @@ def claim_jobs(
     for pending_path in sorted(QUEUE_DIRS["pending"].glob("*.json")):
         if len(claimed) >= limit:
             break
-        if candidate_ids:
-            try:
-                preview = load_json(pending_path)
-            except Exception:
-                continue
-            if preview.get("candidate_id") not in candidate_ids:
-                continue
+        try:
+            preview = load_json(pending_path)
+        except Exception:
+            continue
+        if preview.get("held") is True:
+            continue
+        if candidate_ids and preview.get("candidate_id") not in candidate_ids:
+            continue
         running_path = QUEUE_DIRS["running"] / pending_path.name
         try:
             os.replace(pending_path, running_path)
@@ -871,6 +962,8 @@ def status_payload() -> dict[str, Any]:
     latest: list[dict[str, Any]] = []
     for state, _path, job in rows:
         counts[state] += 1
+        if state == "pending" and job.get("held") is True:
+            counts["held_pending"] = counts.get("held_pending", 0) + 1
         if state == "running":
             row = copy.deepcopy(job)
             row["worker_liveness"] = running_job_liveness(job)
@@ -929,6 +1022,39 @@ def cancel_job(
     raise ValueError(f"{qualifier} job not found: {job_id}")
 
 
+def set_job_hold(job_id: str, *, held: bool, reason: str | None) -> dict[str, Any]:
+    """Hold or release one pending job without changing its queue identity."""
+
+    for path in QUEUE_DIRS["pending"].glob("*.json"):
+        try:
+            job = load_json(path)
+        except Exception:
+            continue
+        if job.get("job_id") != job_id:
+            continue
+        if held and not reason:
+            raise ValueError("holding a job requires a reason")
+        history = job.get("hold_history")
+        if not isinstance(history, list):
+            history = []
+        event: dict[str, Any] = {"at": utc_now(), "held": held}
+        if reason:
+            event["reason"] = reason
+        history.append(event)
+        job["hold_history"] = history
+        job["held"] = held
+        if held:
+            job["hold_reason"] = reason
+            job["held_at"] = event["at"]
+            job.pop("released_at", None)
+        else:
+            job["released_at"] = event["at"]
+            job.pop("hold_reason", None)
+        atomic_json(path, job)
+        return job
+    raise ValueError(f"pending job not found: {job_id}")
+
+
 def add_enqueue_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--gate-size", type=int, default=1_024)
     parser.add_argument("--priority", type=int)
@@ -972,6 +1098,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     proposals = subparsers.add_parser("proposals", help="list algorithm proposals")
     proposals.add_argument("--state", action="append", choices=PROPOSAL_STATES)
+
+    activate = subparsers.add_parser(
+        "activate-proposal",
+        help="make a dependency-gated proposal actionable from receipt evidence",
+    )
+    activate.add_argument("proposal_id")
+    activate.add_argument("--evidence", action="append", required=True)
 
     exclude = subparsers.add_parser(
         "exclude", help="record a machine-readable negative mechanism result"
@@ -1078,6 +1211,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="also cancel a running receipt when its persisted worker PID is not live",
     )
 
+    hold = subparsers.add_parser(
+        "hold", help="mark a pending job dormant so workers cannot claim it"
+    )
+    hold.add_argument("job_id")
+    hold.add_argument("--reason", required=True)
+
+    release = subparsers.add_parser(
+        "release", help="make a held pending job claimable again"
+    )
+    release.add_argument("job_id")
+    release.add_argument("--reason", default="operator_released")
+
     subparsers.add_parser("refresh", help="refresh inventories and reports")
     return parser
 
@@ -1127,6 +1272,15 @@ def main() -> int:
         if args.command == "proposals":
             states = None if args.state is None else set(args.state)
             print(json.dumps(iter_proposals(states), indent=2, sort_keys=True))
+            return 0
+        if args.command == "activate-proposal":
+            print(
+                json.dumps(
+                    activate_proposal(args.proposal_id, args.evidence),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
             return 0
         if args.command == "claim":
             proposal = transition_proposal(
@@ -1245,6 +1399,24 @@ def main() -> int:
                         reason=args.reason,
                         allow_running=args.allow_running,
                     ),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "hold":
+            print(
+                json.dumps(
+                    set_job_hold(args.job_id, held=True, reason=args.reason),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "release":
+            print(
+                json.dumps(
+                    set_job_hold(args.job_id, held=False, reason=args.reason),
                     indent=2,
                     sort_keys=True,
                 )

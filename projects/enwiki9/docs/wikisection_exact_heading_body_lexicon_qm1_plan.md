@@ -103,7 +103,9 @@ Hblind  one earlier section whose normalized heading differs from the current
         `abs(source_unique_count.bit_length() - U.bit_length())`, then page
         ordinal, section ordinal, and normalized heading bytes
 Hprior  all wholly contained body tokens from the immediately previous
-        completed page, truncated to U by the canonical identity order
+        completed page, truncated to U by the canonical identity order. Body
+        tokens means only tokens assigned to sections begun by an accepted
+        heading; lead text before the first accepted heading is excluded.
 Hcoarse the union of prior completed section bodies with the same frozen coarse
         class but a normalized heading unequal to the current exact key,
         duplicate counts summed and identities truncated to U canonically
@@ -147,7 +149,8 @@ A pass authorizes only one Q0 with an actual finite Q24 per-section KT
 hit/escape stream, frozen hit-rank stream, distinct residual arithmetic
 payloads, decoder-built opportunity schedule, exact WRT/raw inverse, repeated
 archive identity, at least 30,000 gross bytes, positive opened splits, at least
-2,100 B/M after measured compressed source, and `Hexact` below every control.
+2,100 B/M after measured compressed source, and
+`T(Hexact) < T(Hblind), T(Hprior), T(Hcoarse)` for the paid totals.
 Q0 remains zero-credit.
 
 If WIKIBACK rejects, Q0 compares against the exact joint parent. If WIKIBACK

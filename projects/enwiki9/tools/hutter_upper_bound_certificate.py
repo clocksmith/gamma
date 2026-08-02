@@ -17,6 +17,7 @@ import math
 import os
 import pathlib
 import re
+import subprocess
 from dataclasses import dataclass
 from typing import Any
 
@@ -67,6 +68,49 @@ COUNTED_10M_FORECAST_EVIDENCE = {
 ACTIVE_CANDIDATE_ID = "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1"
 RUNNING_CANDIDATE_GLOB = "*/*rss_guard.json"
 GUARD_SCOPE_RE = re.compile(r"_(?P<scope>[0-9]+).*rss_guard[.]json$")
+
+
+def canonical_tracked_result_paths(
+    results_dir: pathlib.Path,
+) -> set[pathlib.Path] | None:
+    """Return tracked result paths for the canonical tree.
+
+    Custom result directories are intentionally left unfiltered so callers can
+    use temporary fixtures.  The canonical generated certificate must not let
+    ignored, host-local JSON files become durable proof claims.
+    """
+
+    try:
+        canonical = results_dir.resolve() == RESULTS_DEFAULT.resolve()
+    except OSError:
+        canonical = False
+    if not canonical:
+        return None
+
+    try:
+        result_prefix = RESULTS_DEFAULT.relative_to(REPO_ROOT).as_posix()
+        proc = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(REPO_ROOT),
+                "ls-files",
+                "-z",
+                "--",
+                result_prefix,
+            ],
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return set()
+    if proc.returncode != 0:
+        return set()
+    return {
+        (REPO_ROOT / pathlib.Path(os.fsdecode(raw))).resolve()
+        for raw in proc.stdout.split(b"\0")
+        if raw
+    }
 
 
 @dataclass(frozen=True)
@@ -212,7 +256,10 @@ def canonical_frontier_forecast_record(
     }
 
 
-def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[str, Any]:
+def best_forecast_record(
+    results_dir: pathlib.Path = RESULTS_DEFAULT,
+    tracked_paths: set[pathlib.Path] | None = None,
+) -> dict[str, Any]:
     """Return the strongest source-bound forecast backed by exact evidence.
 
     Prefix forecasts remain non-constructive. The canonical frontier selection
@@ -226,6 +273,8 @@ def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[st
     if canonical is not None:
         candidates.append(canonical)
     for path in sorted(results_dir.glob("*/receipt.json")):
+        if tracked_paths is not None and path.resolve() not in tracked_paths:
+            continue
         try:
             payload = json.loads(path.read_text())
         except (OSError, json.JSONDecodeError):
@@ -289,9 +338,14 @@ def best_forecast_record(results_dir: pathlib.Path = RESULTS_DEFAULT) -> dict[st
     )
 
 
-def iter_results(results_dir: pathlib.Path) -> list[Result]:
+def iter_results(
+    results_dir: pathlib.Path,
+    tracked_paths: set[pathlib.Path] | None = None,
+) -> list[Result]:
     rows: list[Result] = []
     for path in sorted(results_dir.glob("*/*.json")):
+        if tracked_paths is not None and path.resolve() not in tracked_paths:
+            continue
         result = load_result(path)
         if result is not None:
             rows.append(result)
@@ -572,6 +626,7 @@ def build_top_status(
     exact_archive_best: list[Result],
     all_rows: list[Result],
     results_dir: pathlib.Path = RESULTS_DEFAULT,
+    tracked_paths: set[pathlib.Path] | None = None,
 ) -> list[dict[str, Any]]:
     exact_by_size = {row.data_size: row for row in exact_best}
     archive_by_size = {row.data_size: row for row in exact_archive_best}
@@ -658,7 +713,7 @@ def build_top_status(
             )
         )
 
-    best_forecast = best_forecast_record(results_dir)
+    best_forecast = best_forecast_record(results_dir, tracked_paths)
     rows.append(
         top_status_record(
             "best forecast",
@@ -754,7 +809,9 @@ def build_top_status(
 
 
 def build_certificate(
-    rows: list[Result], results_dir: pathlib.Path = RESULTS_DEFAULT
+    rows: list[Result],
+    results_dir: pathlib.Path = RESULTS_DEFAULT,
+    tracked_paths: set[pathlib.Path] | None = None,
 ) -> dict[str, Any]:
     exact_best = best_by_size(rows)
     full_exact = [row for row in rows if row.is_full_corpus_proof]
@@ -800,10 +857,18 @@ def build_certificate(
             else None,
         },
         "top_status": build_top_status(
-            exact_best, best_archive_by_size(rows), rows, results_dir
+            exact_best,
+            best_archive_by_size(rows),
+            rows,
+            results_dir,
+            tracked_paths,
         ),
         "top_status_table": build_top_status(
-            exact_best, best_archive_by_size(rows), rows, results_dir
+            exact_best,
+            best_archive_by_size(rows),
+            rows,
+            results_dir,
+            tracked_paths,
         ),
         "best_exact_upper_bounds_by_scope": [
             result_record(row) for row in exact_best
@@ -815,6 +880,12 @@ def build_certificate(
             "Prefix results prove upper bounds only for that prefix, not for enwik9.",
             "Projected 1GB scores are search evidence and are excluded from proof_status.",
             "A 10.8000000% proof requires a full 1GB result with score <= 108000000.",
+            (
+                "Canonical proof rows include only Git-tracked result JSON files; "
+                "ignored host-local artifacts are noncanonical."
+                if tracked_paths is not None
+                else "Custom results directory supplied; Git tracking filter was not applied."
+            ),
         ],
     }
 
@@ -937,8 +1008,9 @@ def main() -> int:
     parser.add_argument("--print-summary", action="store_true")
     args = parser.parse_args()
 
-    rows = iter_results(args.results_dir)
-    cert = build_certificate(rows, args.results_dir)
+    tracked_paths = canonical_tracked_result_paths(args.results_dir)
+    rows = iter_results(args.results_dir, tracked_paths)
+    cert = build_certificate(rows, args.results_dir, tracked_paths)
     args.json_out.write_text(json.dumps(cert, indent=2) + "\n")
     write_markdown(cert, args.md_out)
 

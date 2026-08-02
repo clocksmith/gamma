@@ -6773,6 +6773,15 @@ selection digests, raises nonzero on malformed evidence, and configures once.
 No WIKIBACK v2 job was queued; the superseded `53,748`-byte preflight receives
 no score or source authority, and a fresh committed-source binding is required.
 
+The hardened committed bytes at
+`5ef3d55b6b38c64a96f874fb0af9e32c76109e52` bind twice identically to a
+`54,544`-byte zlib-9 bundle with SHA-256
+`11deeae7ee067c89d46721552030174aa6506665e32fa24cb42e9a37cd876847`.
+The counted allowance is `54,608` bytes with framing, still below the
+`196,608`-byte ceiling. Parent trace identities in v2 metadata are explicitly
+named prerequisite evidence rather than a v2 outcome. The corrected gate is
+source-ready but remains unqueued until the active NNCP job is terminal.
+
 ## 2026-08-02: adaptive tool guard liveness attribution fixed
 
 `tools/enwiki9_status_receipt.py` incorrectly treated NNCP's nested RSS guard
@@ -6788,3 +6797,34 @@ The strict `enwiki9-status` report now applies the same binding when its live
 guard path exactly matches the canonical running gate and liveness receipt.
 It preserves the internal guard label as diagnostic metadata while reporting
 the adaptive candidate ID and `2,233,775`-byte gate scope to operators.
+
+## 2026-08-02: dormant queue and proposal dependencies made executable policy
+
+The 28 July-28 adaptive-discovery jobs were pending in name and dormant only in
+operator prose. All 28 are now marked `held: true` with reason
+`legacy_adaptive_discovery_batch_dormant_pending_explicit_reauthorization`.
+`enwiki9_lab.py` workers skip held jobs, status reports `held_pending`, and the
+normal workflow exposes receipt-bearing `hold` and `release` operations. The
+active NNCP job is unchanged and is not held.
+
+Proposal claim/development now also fails closed: claim requires state
+`proposed`, develop requires `claimed`, and any non-actionable
+`operational_status` blocks both. `activate-proposal` requires explicit receipt
+evidence. WIKISECTION, WIKIFORWARD, and WIKIGRAPH carry structured dormant
+dependencies matching the frozen order. This prevents a generic operator or
+automation loop from claiming those representation gates ahead of WIKIBACK.
+
+The WIKISECTION plan now excludes lead text from its previous-page control and
+states paid control ordering in total-byte direction. WIKIFORWARD now names the
+corrected source-bound WIKIBACK v2 gate rather than the cancelled v1 job. The
+retired v1 WIKIBACK candidate was removed from ordinary `index.json` discovery;
+its provenance and prelaunch cancellation remain preserved in metadata and the
+cancelled-job receipt.
+
+The reusable native bypass proof is frozen separately in
+`docs/endpoint428_state_equivalence_harness_plan.md`. It requires dual literal
+and bypass execution through the full Predict plus Perceive/update path,
+quiesced logical state hashes after each reconstructed event, deliberate
+corruption/skipped-Predict controls, and exact WRT/raw replay. It remains
+unimplemented and zero-credit until an isolated finite WIKI event lane pays;
+it is proof infrastructure, not a new algorithm or queue entry.

@@ -143,7 +143,7 @@ credit, or a full-corpus claim.
 ## Ordering
 
 1. Let the active NNCP gate reach a terminal receipt.
-2. Execute the already queued WIKIBACK gate exactly once.
+2. Queue and execute the corrected, source-bound WIKIBACK v2 gate exactly once.
 3. Apply WIKIBACK's frozen decision mechanically.
 4. Resolve the dormant WIKISECTION QM1 before this proposal.
 5. Only then claim, implement, source-bind, and queue WIKIFORWARD QM1.

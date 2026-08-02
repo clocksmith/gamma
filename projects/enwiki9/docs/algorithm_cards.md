@@ -12,6 +12,13 @@ What should happen next?
 It does not replace `ALGORITHMS.md`; it points readers to the right evidence
 without requiring them to read every lane report first.
 
+Canonical current authority is `docs/hutter_frontier.json` for the counted
+frontier and `docs/status_receipt.md` for live execution. Older cards below are
+historical mechanism references. As of 2026-08-02 the design target is
+`108,000,000`, the verified full-1G result is unknown, the best counted
+forecast is endpoint428 at `109,389,323`, the remaining debt is `1,389,323`,
+and runtime eligibility is unresolved.
+
 ## Score Legend
 
 | Field | Meaning |
@@ -26,9 +33,9 @@ without requiring them to read every lane report first.
 Claim rule:
 
 ```text
-No prefix result proves 10.95%.
-No forecast proves 10.95%.
-Only full 1G official accounting can prove 10.95%.
+No prefix result proves 10.8000000%.
+No forecast proves 10.8000000%.
+Only full 1G official accounting can prove 10.8000000%.
 ```
 
 ## How To Read This File
@@ -46,19 +53,16 @@ matches the question:
 Score reality check:
 
 ```text
-The calibrated fx2 geometry package is the prize-facing baseline. The recent
-GEPA and FX2-SC sidecar target-bearing gates are retired after canonical `10M`
-ceiling failures. The unchanged cmix21 package is also retired after its
-`100M` archive missed the counted promotion screen. The PAQ-free `96x2`
-endpoint is constructive but economically insufficient at cumulative `10M`.
-The corrected matched CMIX21 endpoint trace is terminal and below its economics
-floor: its best exact geometry-`96x2` blend retains `290 B/1M` overall and
-`355 B/1M` on internal holdout. A standalone `200x2` PAQ-free codec saves
-`1,149 B/1M` at the first `1M` and clears its counted linear forecast, but has
-no larger-scope or execution qualification. The active research target is a
-lower-cost deterministic recurrent construction that retains that capacity,
-not a richer selector over the measured CMIX endpoints. It is not a
-target-bearing proof gate.
+The prize-facing parent is
+`endpoint428_gate_dot_fuse_output_update_loop_v1`: exact `10M` archive
+`1,634,500`, counted minified package `261,125`, and forecast `109,389,323`.
+That is constructive-prefix evidence, not a full-corpus score. Generic
+residual, routing, recurrent-width, semantic-sidecar, prototype, and
+residual-program neighborhoods have terminal negative evidence. The live gate
+is the zero-credit causally closed NNCP teacher headroom measurement. The next
+constructive information-source gate is the corrected WIKIBACK finite
+side/residual replay; WIKISECTION and WIKIFORWARD remain ordered dormant
+successors. No lane changes the forecast without exact native counted replay.
 ```
 
 ## One-Screen Scoreboard
@@ -66,15 +70,15 @@ target-bearing proof gate.
 | Rank purpose | Program or lane | Scope | Score/archive | Evidence class | Read it as |
 |---|---|---:|---|---|---|
 | Best exact local score at `10M` | `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1` | `10,000,000` | S `1,882,615`; archive `1,643,289` | exact artifact-backed prefix | Best score row in this checkout at `10M`; not a full-corpus proof. |
-| Best exact archive at `10M` | `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1` | `10,000,000` | S `2,202,351`; archive `1,638,076` | exact artifact-backed prefix | Best local archive reference, not the active proof gate. |
-| Active proof lane | none | n/a | n/a | no active heavy gate | Build the conditional endpoint and require cumulative counted evidence before assigning a new gate. |
+| Best exact archive at `10M` | `endpoint428_gate_dot_fuse_output_update_loop_v1` | `10,000,000` | archive `1,634,500`; counted minified package `261,125` | exact artifact-backed constructive prefix | Current forecast parent; not a full-corpus proof and runtime remains unqualified. |
+| Active evidence gate | `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1` | exact raw `2,233,775` causal block | running; no terminal receipt | zero-credit teacher oracle | Resolve mechanically; a pass proves teacher headroom only and a reject retires the frozen teacher block claim. |
 | PAQ-free hybrid | fixed `96x2` endpoint | cumulative `10,000,000` | archive `1,638,528`; saves `5,098` bytes or `509.8 B/1M` | exact guarded archive screen | Retired unchanged because the counted requirement is `799.079 B/1M`; preserve as the conditional-endpoint substrate. |
 | Active discovery candidate | standalone PAQ-free `200x2` | first `1,000,000` | archive `174,055`; saves `1,149` bytes; counted linear forecast `109,149,965` | exact guarded archive plus roundtrip/determinism | Retain as capacity evidence; reduce recurrent cost and require larger-scope scaling before promotion. |
 | Completed research probe | individual/nested CMIX endpoints plus continuously evolved full teacher | exact geometry `96x2` WRT stream | best exact fixed blend saves `290 B/1M` overall and `355 B/1M` on internal holdout, with zero holdout block regressions and exact decoder replay | matched shadow plus archive-neutral instrumentation | Retire this endpoint universe; build a new WRT page/phrase, title-echo, template/reference, or direct residual-SRSTC endpoint. |
 | Retired WRT specialist | token-span causal selector | sealed `399,992`-byte holdout | lost `1` exact byte; random control also lost `1` | causal sealed-holdout shadow | Retire this selector/context shape; do not infer that all future WRT endpoints are impossible. |
 | Retired sidecar gate | `fx2_sidecar_geometry_title_dictcmix_zlibpy_min_v1` | canonical `10,000,000` lower bound | native output `1,641,762`; ceiling `1,631,581` | terminal ceiling abort | Archive slope failed; memory was healthy, and no completed archive/roundtrip/score is claimed. |
 | Primary novel strategy | SRSTC / Streaming Retrieval Mixer | `65,536K` block-posterior shadow receipt: `916,540` held-out bytes saved, `900,464` net bytes after code estimate, all `4,000` blocks positive | exact shadow evidence only | Target-closing at the shadow boundary by `219,350` bytes; not a compressor result until the paying component is integrated and replayed. |
-| Best forecast | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | projected `1G` | projected S `110,181,114` | forecast only | Record-class lead, still above `109,500,000` and not constructive. |
+| Best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | projected `1G` | projected S `109,389,323`; debt `1,389,323` | constructive-prefix forecast only | Exact 10M and package identity support the forecast; full-1G score remains unknown. |
 | Best full `1G` proof | none in this checkout | `1,000,000,000` | none | not verified | This is the blocker. |
 
 ## Novelty And Implementation Labels
@@ -91,7 +95,7 @@ target-bearing proof gate.
 
 ## Current Hutter-Target Candidates
 
-These are the candidates most relevant to the `109,500,000` target. They are
+These are historical and current candidates relevant to the `108,000,000` target. They are
 not full-corpus proofs yet.
 
 Plain-English candidate map:
