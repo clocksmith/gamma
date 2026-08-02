@@ -2,8 +2,8 @@
 
 Proposal: `srstc_residual_program_retrieval_q0_v1`
 
-Status: claimed for Gate minus one implementation. No compression result or
-score credit exists.
+Status: Gate minus one exact rejection. The causal Q0 is not authorized and
+score credit remains zero.
 
 ## Win condition
 
@@ -375,13 +375,44 @@ program, or queue entry is created.
 
 ```text
 candidate:          srstc_residual_program_retrieval_q0_v1
-status:             claimed for Gate minus one
+status:             retired after Gate minus one
 mathematics:        same-stream causal construction specified
-compression result: unmeasured
-source status:      no implementation
+compression result: candidate-universe ceiling negative on all three splits
+source status:      Gate-minus-one oracle only; no causal Q0 implementation
 score credit:       0
 full-corpus claim:  none
 ```
+
+## Terminal Gate-minus-one result
+
+The exact candidate universe exposed 32,722 eligible blocks and selected a
+non-parent residual program for 29,140 of them. Before the selector charge,
+the best candidate improved each eligible block by only `259.792` qbits on
+average, or approximately `1.015` bits. The frozen transmitted selector costs
+four bits per eligible block.
+
+After exact range coding and the selector bytes, the result was negative on
+every preregistered split:
+
+```text
+development          -9,213.772 B/M
+selection           -14,113.872 B/M
+sealed confirmation -13,648.791 B/M
+full opening 1M      -12,211 bytes
+```
+
+Parent payload identity, candidate arithmetic decode, preceding-epoch
+causality, complete WRT reconstruction, official raw inverse, legal
+probabilities, and byte-identical second candidate-universe and selector
+builds all passed. This is a scientific rejection, not an implementation
+failure.
+
+The frozen residual-program universe is retired without block, signature,
+key, support, table, epoch, quantization, odds, or selector rescue sweeps. The
+causal B0/F0/R0/RB/RS Q0 is not materialized.
+
+Decision:
+`results/srstc_residual_program_retrieval_qm1_v1/decision.json`.
 
 The exact JANUS joint P1 recovery remains observation-only and terminal as a
 codec. This proposal does not reopen JANUS, typed-event point masses, sparse
