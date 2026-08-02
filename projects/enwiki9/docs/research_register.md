@@ -6298,3 +6298,34 @@ score credit remains zero, and verified full-1G remains unknown.
 
 Decision:
 `results/srstc_residual_program_logopinion_qh0_v1/decision.json`.
+
+## 2026-08-02: NNCP LibNC CPU encode-only causal-speed Q0 frozen
+
+Proposal and candidate:
+`nncp_v33_libnc_cpu_encode_only_causal_speed_q0_v1`.
+
+The next NNCP gate changes execution scope rather than reopening the rejected
+thread, compiler, batch, LibNC-parity-tolerance, or PyTorch changed-stream
+neighborhoods. The shipped source has a distinct `--encode_only` path that
+evaluates all 64 causally masked states in one full-segment graph instead of
+calling `model_eval` once per decoded state. Upstream explicitly marks its
+output non-decodable, so this is zero-credit teacher infrastructure and cannot
+inherit the published NNCP score.
+
+Q0 adds only `--encode_only` to the exact 10,000-symbol T4 CPU control. It must
+complete in at most `139.8985` seconds, half the frozen `279.797`-second
+reference, remain below `9,765,625 KiB` process-tree RSS, repeat its archive
+byte-for-byte, preserve the archive when observation is enabled, emit only
+finite normalized distributions, and pass a future-symbol perturbation test.
+The perturbation changes stream-zero state 32 in one 2,048-symbol prepared
+block; all earlier distributions and the state-32 distribution itself must be
+bit-identical.
+
+A miss retires this exact path without rescue sweeps. A pass authorizes only
+one continuous full-dictionary teacher run to the frozen `9M-10M` raw window,
+where exact same-population advantage must reach `3,000 B/M`. Forecast remains
+`109,389,323`, design-target debt remains `1,389,323`, verified full-1G remains
+unknown, and this gate has zero score credit.
+
+Plan:
+`docs/nncp_v33_libnc_cpu_encode_only_causal_speed_q0_plan.md`.

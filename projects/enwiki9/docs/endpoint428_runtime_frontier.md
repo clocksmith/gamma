@@ -8,8 +8,9 @@ online residual mixer. Its exact `10M` archive is `1,634,500` bytes. Removing
 comments from the counted `102`-file source tree reduces the deterministic LZMA
 package from `280,147` to `261,125` bytes while two clean builds retain the
 frozen backend and wrapper hashes. The revised counted forecast is therefore
-`109,389,323` bytes (`10.9389323%`), `110,677` bytes below the `109,500,000`
-target. No official full-`1G` score exists.
+`109,389,323` bytes (`10.9389323%`), `110,677` bytes below the legacy
+`109,500,000` engineering checkpoint but `1,389,323` bytes above the current
+`108,000,000` design target. No official full-`1G` score exists.
 
 Runtime successors are screened on the same `250K` transformed prefix in
 alternating reference/candidate/candidate/reference order with CPUs `0-3` and
