@@ -1,15 +1,15 @@
 # M3T4 2038 Thematic Content Bible
 
 **Content-pass date:** July 26, 2026
-**Rules reference:** `0.5.0-rc.32-test`
+**Rules reference:** `0.5.0-rc.33-test`
 **Status:** creative authority; fiction synchronized to the review rulebook,
-mechanics synchronized to executable game `0.8.32`
+mechanics synchronized to executable game `0.8.33`
 
 This document defines how M3T4 sounds and what its printable surfaces need
 to communicate. It does not define mechanics. Authored strings and shared terms
 live under [`../content/`](../content/README.md); `core-rules.md` and the JSON
-files under `generated/` are generated projections. Executable game `0.8.32`
-implements `0.5.0-rc.32-test` while the physical rulebook remains under
+files under `generated/` are generated projections. Executable game `0.8.33`
+implements `0.5.0-rc.33-test` while the physical rulebook remains under
 review.
 
 ## Creative thesis
@@ -110,9 +110,10 @@ Headline cards; the content compiler must not apply a spell-out filter.
 
 The four Era definitions are authored once in
 [`physical/reference-cards.json`](../physical/reference-cards.json)
-under each card's `loreText`. The content compiler projects them into the
-rulebook. This document sets the writing contract for that escalation; it does
-not restate the Era lore.
+under each card's `loreText`. The content compiler projects them into
+`docs/world-and-institutions.md`, separate from the How to Play sequence. This
+document sets the writing contract for that escalation; it does not restate
+the Era lore.
 
 ## Canonical names
 
@@ -143,7 +144,7 @@ that a real person or company performed the depicted fictional act.
 | Player references | 4 | `physical/reference-cards.json`; projected to `generated/` |
 | Factions | 6 | `physical/factions.json`; projected to `generated/` |
 | Faction abilities | 24 | `physical/factions.json`; projected to `generated/` |
-| Headlines | 24 | `physical/headlines.json`; projected into rules, data, prototype, and gallery |
+| Headlines | 24 | `physical/headlines.json`; projected into rules reference, data, prototype, and gallery |
 | Wild Actions | 7 per player | `physical/wild-actions.json`; projected to `generated/` |
 | Round Mandates | 12 | `physical/mandates.json`; projected to `generated/` |
 | Training faces | 12 faces / 50 cards | `core-rules.md` |
@@ -217,7 +218,7 @@ Art should reveal the card’s category and Era before adding detail.
 
 ## Remaining production work
 
-- test `0.5.0-rc.32-test` under the controlled physical protocol before any
+- test `0.5.0-rc.33-test` under the controlled physical protocol before any
   further numerical revision;
 - create final card, board, and tile layouts;
 - produce setup, turn, Network, Production, Audit, and Realignment diagrams;

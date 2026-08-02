@@ -172,11 +172,16 @@ const rulebook = labeledRulebook(
   await readFile(resolve(projectRoot, "docs/core-rules.md"), "utf8"),
   identity
 );
+const worldGuide = labeledRulebook(
+  await readFile(resolve(projectRoot, "docs/world-and-institutions.md"), "utf8"),
+  identity
+);
 const gallery = labeledGallery(
   await readFile(resolve(projectRoot, "build/gallery-baseline.html"), "utf8"),
   identity
 );
 await writeFile(resolve(outputRoot, "core-rules.md"), rulebook);
+await writeFile(resolve(outputRoot, "world-and-institutions.md"), worldGuide);
 await writeFile(resolve(outputRoot, "component-masters.html"), gallery);
 await writeFile(resolve(outputRoot, "playtest-protocol.md"), protocol(identity));
 await writeFile(
@@ -212,9 +217,10 @@ Executable reference ${identity.executableVersion}
 Source commit ${identity.sourceCommit}
 
 This is a derived controlled-test kit, not a manufacturing package. It contains
-the frozen rulebook, baseline component masters, exact source data, release
-manifests, receipt contract, and two-session protocol. Deferred Tactics, secret
-objectives, and Reserve Specialists are excluded from the component masters.
+the frozen How to Play document, its world companion, baseline component
+masters, exact source data, release manifests, receipt contract, and
+two-session protocol. Deferred Tactics, secret objectives, and Reserve
+Specialists are excluded from the component masters.
 
 Do not mix component revisions. Generate the actual session receipt with
 \`npm run playtest:new\` from the same source commit.
@@ -227,6 +233,7 @@ const relativeFiles = [
   "component-masters.html",
   "contracts/playtest-receipt.schema.json",
   "core-rules.md",
+  "world-and-institutions.md",
   "playtest-protocol.md",
   "release/executable-manifest.json",
   "release/rules-candidate-manifest.json",
