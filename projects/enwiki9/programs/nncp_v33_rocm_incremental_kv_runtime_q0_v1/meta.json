@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "One 2,048-symbol ROCm incremental-KV archive, decode, update, memory, and runtime gate; no published-score inheritance or score credit.",
+  "deps": [
+    "tools/nncp_v33_rocm_incremental_kv_runtime_q0.py",
+    "tools/nncp_v33_rocm_constructive_causal_replay_q0.py",
+    "results/nncp_v33_rocm_constructive_causal_replay_q0_v1/decision.json"
+  ],
+  "description": "Replace repeated full-prefix NNCP inference with decoder-causal per-layer projected KV caches while retaining the full differentiable update replay",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit heavy-lock ROCm execution-capability gate with external preprocessed input and no ordinary driver contract."
+  },
+  "family": "nncp_v33_rocm_port",
+  "hypothesis": "Incremental projected KV caches preserve exact decode and the parent model update within 16 archive bytes while cutting median one-segment ROCm runtime by at least half.",
+  "id": "nncp_v33_rocm_incremental_kv_runtime_q0_v1",
+  "kill_gate": "Retire on identity, memory, archive-delta, or runtime miss without cache-layout, precision, compiler, graph-capture, model, stream, or segment sweeps.",
+  "omega": {
+    "interfaces_exposed": [
+      "Per-layer projected memory/current-symbol KV cache for decoder-causal ROCm inference"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_rocm_incremental_kv_runtime_q0_v1",
+    "retired_neighborhoods": [
+      "cache-layout, precision, compiler, graph-capture, model, stream, and segment sweeps"
+    ]
+  },
+  "outcome": "Runtime gate passed with exact candidate replay, parent update identity, zero archive-length delta, 81.334 percent median reduction, and decimal-10GB compliance. The changed arithmetic stream's authorized 65,536-symbol child was terminal negative, so retain only as a runtime primitive.",
+  "parent": "nncp_v33_rocm_constructive_causal_replay_q0_v1",
+  "status": "retired"
+}

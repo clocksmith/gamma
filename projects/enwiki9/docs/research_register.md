@@ -5686,3 +5686,177 @@ contains NVIDIA SASS without PTX and fails kernel lookup. Forecast remains
 `109,389,323` bytes and the verified full-1G score remains unknown.
 
 Decision: `results/nncp_v33_cpu_t16_archive_identity_q0_v1/decision.json`.
+
+## 2026-08-02: BIFRONS reverse-causal two-ended ceiling frozen
+
+Candidate: `bifrons_reverse_causal_joint_ceiling_q0_v1`.
+
+Proposal: `bifrons_reverse_causal_joint_ceiling_v1`.
+
+The next local information-source gate changes coding direction rather than
+adding another left-causal residual feature. It runs the receipt-bound
+endpoint428 pair/layer-0 backend over a byte-reversed WRT population, with the
+canonical dictionary also deterministically reversed for pretraining. One
+explicitly transmitted cut divides the population into a JANUS-plus-quotient
+forward prefix and an endpoint428 reverse-causal suffix. This creates no cyclic
+dependency: the decoder reconstructs the prefix from the left and the suffix
+from the right.
+
+Q0 uses the 171 complete pages ending before raw byte 1,000,000: 984,835 raw-
+equivalent bytes, 591,230 WRT bytes, and 4,729,840 P1 rows. Legal cuts are only
+zero, complete-page ends, and the population end. Rounded-Q256 codelength
+selects one cut with earliest-cut tie breaking. The exact candidate then pays
+a 49-byte frame and two actually terminated arithmetic streams. There is no
+per-page or per-event selector.
+
+The first guarded reverse run can reject the hypothesis. Only an exact gain of
+at least 3,000 B/M after framing triggers a second source execution and its
+required archive/P1 identity checks. A pass authorizes one frozen canonical
+10M replay; a miss retires this exact one-cut construction without direction,
+cut, pretraining, dictionary-order, or page-mode sweeps. Score and forecast
+credit remain zero.
+
+Plan: `docs/bifrons_reverse_causal_joint_ceiling_q0_plan.md`.
+
+## 2026-08-02: BIFRONS reverse-causal two-ended ceiling is terminal negative
+
+The guarded source-native reverse execution completed normally in `585.8668`
+seconds at 9,046,080 KiB peak sampled RSS, below the decimal-10GB limit. Its
+4,729,840-row P1 trace reproduced the 177,522-byte source arithmetic payload
+exactly, decoded the reversed WRT prefix exactly, and contained only legal
+nonzero probabilities. The two-stream candidate also decoded both sides and
+reconstructed all 591,230 original WRT bytes exactly.
+
+The information hypothesis failed. The minimum-Q256 legal cut was the final
+population byte, so the chosen reverse suffix was empty. The exact candidate
+was consequently the 168,106-byte joint-prefix archive plus its twelve
+additional cut and length bytes: 168,118 bytes, a 12-byte loss or
+`-12.184782222402738 B/M`. All-reverse required 177,559 bytes, 9,453 bytes
+more than the joint parent. The closest interior cut reversed the final 19,586
+WRT bytes and was already 3,464,050 qbits, or about 1,691.431 bytes, worse
+before framing. All 170 interior page-boundary suffixes were worse than the
+all-forward trajectory.
+
+This is a scientific rejection, not an infrastructure failure. Retire the
+whole-prefix/suffix, one-cut, reversed-dictionary endpoint428 reverse expert.
+Do not run the conditional second source pass or canonical 10M replay, and do
+not sweep direction granularity, dictionary order, pretraining, or cut
+restrictions. The result does not close a future-information codec with a
+different causal construction, but it shows that source-native endpoint428
+run backward supplies no paying suffix at this population after the strongest
+joint trajectory.
+
+Forecast remains `109,389,323` bytes, verified full-1G remains unknown, and
+score credit remains zero.
+
+Decision:
+`results/bifrons_reverse_causal_joint_ceiling_q0_v1/decision.json`.
+
+## 2026-08-02: NNCP v3.3 ROCm incremental-KV runtime Q0 frozen
+
+Candidate and proposal: `nncp_v33_rocm_incremental_kv_runtime_q0_v1`.
+
+The published NNCP family remains the only locally held direct under-target
+external construction, but its exact faithful ROCm realization is not yet a
+viable Gamma candidate. The existing constructive decoder evaluates a full
+64-position Transformer segment after every newly decoded state, repeating
+causally redundant prefix work 64 times per online update. Its exact
+65,536-symbol Q1 also loses heavily to the matching JANUS-plus-quotient
+prefix, so this runtime experiment earns no score or forecast credit.
+
+This substrate child changes only inference execution. Each layer projects
+the fixed 256-position memory into one key/value cache, then appends the key
+and value of each newly decoder-visible input symbol. One-token attention uses
+the exact relative-position slice corresponding to the parent's shifted
+64-query layout. Once all 64 positions have been reconstructed, the caches
+are discarded and the unchanged full differentiable segment replay performs
+the same cross entropy, clipping, Adam update, and persistent-memory update.
+
+Q0 uses the exact first 2,048 preprocessed symbols, two independent encoders,
+and one model-driven decoder. It requires candidate archive, branch trace,
+symbols, loss, model, optimizer, and memory identity; exact parent final-model
+and loss identity; decimal-10GB compliance; no more than 16 archive bytes of
+drift; and at least 50 percent median runtime reduction versus the adjacent
+18.220641091-second receipt. Exact parent stream identity authorizes one
+65,536-symbol runtime replay. A changed but self-consistent stream authorizes
+only a separately scored 65,536-symbol headroom replay. A miss retires this
+eager PyTorch cache realization without implementation rescue sweeps.
+
+Plan: `docs/nncp_v33_rocm_incremental_kv_runtime_q0_plan.md`.
+
+## 2026-08-02: NNCP incremental-KV runtime Q0 passes as a changed stream
+
+The heavy-lock ROCm Q0 completed normally. Two encoders and one independent
+model decoder emitted the same 3,613-byte archive and 28,673-entry branch
+trace, reconstructed all 2,048 symbols, and produced identical loss, model,
+Adam, and persistent-memory hashes. The unchanged differentiable replay also
+matched the full-prefix parent's final model SHA-256
+`2ae4efe57f08736c3e7d3f67104b74a496f4c54af6ee24b142904ab0be5014f5`
+and loss `9.782143592834473` exactly.
+
+Median measured model execution fell from `18.220641091` to
+`3.401104436001333` seconds, an `81.33378282896293%` reduction. Peak allocated
+and reserved memory were 7,229,241,344 and 7,822,376,960 bytes, both below
+decimal 10 GB. The archive length delta was zero.
+
+The smaller GEMM shapes changed BF16 rounding: candidate archive SHA-256
+`836002ec194075dbc76739f6d734f1207fcd343b99b17d1bb352b030c7c4d8c7`
+and branch-trace SHA-256
+`e3294d1ac424fa1611be7a72aedb811cc2c62b7f4aacb3b9fbecdf453d34153d`
+do not match the parent. This is therefore a substrate pass and
+`AUTHORIZED_CHANGED_STREAM_65536_HEADROOM`, not parent-stream identity or
+compression evidence. Score and forecast credit remain zero.
+
+Decision:
+`results/nncp_v33_rocm_incremental_kv_runtime_q0_v1/decision.json`.
+
+## 2026-08-02: NNCP incremental-KV 65,536-symbol headroom Q1 frozen
+
+Candidate and proposal:
+`nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1`.
+
+The sole authorized successor applies the frozen incremental cache through 32
+consecutive online update segments over the exact first 65,536 NNCP symbols.
+It runs two encoders and one model-driven decoder, restores the exact raw
+prefix through the official NNCP inverse, and compares its actually terminated
+archive with a newly terminated JANUS-plus-quotient payload at the identical
+WRT emission-group/raw boundary.
+
+Promotion requires every archive, trace, symbol, loss, complete-state, inverse,
+probability, repeat, and allocated/reserved decimal-10GB gate plus at least
+3,000 gross bytes per raw million. A valid miss retires the changed-stream
+realization without rescue sweeps. The published NNCP score remains external
+context only.
+
+Plan:
+`docs/nncp_v33_rocm_incremental_kv_65536_headroom_q1_plan.md`.
+
+## 2026-08-02: NNCP incremental-KV 65,536-symbol Q1 is terminal negative
+
+The changed-stream Q1 completed normally in `333.416` worker seconds. Both
+encoders and the independent decoder produced the identical 96,142-byte
+archive and 917,527-entry branch-frequency trace, decoded all 65,536 symbols,
+matched all 32 segment losses, and ended at complete model/Adam/memory SHA-256
+`9da56660c487182375ff9359d26a5dbab93cbfc82a40da50c13da339d827e5b4`.
+The official NNCP inverse restored the exact 322,978-byte raw prefix. All
+probabilities were legal and the allocated/reserved peaks of 8,632,796,160 and
+9,271,508,992 bytes remained below decimal 10 GB.
+
+The compression hypothesis failed decisively. The candidate archive was
+96,142 bytes while the actually terminated and decoded JANUS-plus-quotient
+payload at the identical boundary was 57,555 bytes. Incremental NNCP therefore
+lost 38,587 bytes, or `-119,472.53373294775 B/M`, against a required gain of
+3,000 B/M. Its smaller GEMM schedule materially improves execution: the three
+runs took 105.587, 104.686, and 106.027 seconds versus approximately 575 to
+577 seconds for the full-prefix Q1. That runtime result does not rescue the
+negative archive economics.
+
+Retire this faithful-profile changed-stream construction without architecture,
+precision, cache-layout, stream-count, optimizer, block-layout, or compiler
+sweeps. Preserve incremental KV only as a runtime primitive if a future NNCP
+model independently demonstrates target-bearing compression headroom. Score
+credit remains zero; forecast `109,389,323` and unknown full-1G status are
+unchanged.
+
+Decision:
+`results/nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1/decision.json`.

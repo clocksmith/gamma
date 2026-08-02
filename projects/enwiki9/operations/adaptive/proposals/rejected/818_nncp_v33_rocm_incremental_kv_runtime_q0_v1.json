@@ -1,0 +1,33 @@
+{
+  "candidate_id": "nncp_v33_rocm_incremental_kv_runtime_q0_v1",
+  "created_at": "2026-08-02T07:54:06+00:00",
+  "developed_at": "2026-08-02T07:54:49+00:00",
+  "evidence": [
+    "docs/nncp_v33_rocm_incremental_kv_runtime_q0_plan.md",
+    "results/nncp_v33_rocm_constructive_causal_replay_q0_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Decoder-causal per-layer KV caches preserve the one-segment constructive NNCP model update and exact decode while reducing median ROCm runtime by at least 50 percent, staying within 16 archive bytes and decimal 10 GB.",
+  "interfaces_exposed": [
+    "Per-layer projected memory/current-symbol KV cache for decoder-causal ROCm inference"
+  ],
+  "kill_condition": "Retire the eager PyTorch incremental-KV realization on identity, memory, archive-delta, or runtime miss without cache-layout, precision, compiler, graph-capture, model, stream, or segment sweeps.",
+  "max_program_bytes": 738682,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_rocm_constructive_causal_replay_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 181,
+  "promotion_condition": "Candidate self-consistency, parent final-model/loss identity, decimal-10GB compliance, archive delta <=16 bytes, and median runtime reduction >=50 percent authorize exactly one 65,536-symbol replay on the appropriate exact- or changed-stream path.",
+  "proposal_id": "nncp_v33_rocm_incremental_kv_runtime_q0_v1",
+  "rejected_at": "2026-08-02T08:05:53+00:00",
+  "rejection_reason": "Q0 passed its frozen runtime gate: exact self-consistency, parent update identity, zero archive-length delta, decimal-10GB compliance, and 81.334 percent median reduction. Its authorized 65,536-symbol changed-stream child then lost 38,587 bytes (-119,472.534 B/M) to the same-boundary joint prefix. Retain incremental KV only as a runtime primitive; no further score gate or rescue sweep is authorized.",
+  "retired_neighborhoods": [
+    "cache-layout, precision, compiler, graph-capture, model, stream, and segment sweeps"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 181,
+  "state": "rejected",
+  "title": "NNCP v3.3 ROCm incremental-KV runtime Q0"
+}

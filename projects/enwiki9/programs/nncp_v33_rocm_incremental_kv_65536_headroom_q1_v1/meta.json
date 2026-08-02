@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "One exact changed-stream 65,536-symbol incremental-KV headroom gate; no published-score inheritance, package credit, forecast credit, or full-corpus claim.",
+  "deps": [
+    "tools/nncp_v33_rocm_incremental_kv_65536_headroom_q1.py",
+    "tools/nncp_v33_rocm_incremental_kv_runtime_q0.py",
+    "results/nncp_v33_rocm_incremental_kv_runtime_q0_v1/decision.json"
+  ],
+  "description": "Scale the self-consistent changed-stream incremental-KV ROCm codec through 32 updates and compare it with the exact same-boundary joint prefix",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit heavy-lock ROCm headroom gate with external preprocessed inputs and no ordinary driver contract."
+  },
+  "family": "nncp_v33_rocm_port",
+  "hypothesis": "After 32 online updates, the incremental-KV NNCP archive saves at least 3,000 B/M against the same-boundary JANUS-plus-quotient prefix under decimal 10 GB.",
+  "id": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+  "kill_gate": "Retire below 3,000 B/M or on identity, inverse, probability, or memory failure without architecture, precision, cache-layout, stream-count, optimizer, block-layout, or compiler sweeps.",
+  "omega": {
+    "interfaces_exposed": [
+      "Official NNCP symbols -> incremental-KV learned-relative ROCm codec -> exact archive versus same-boundary JANUS-plus-quotient"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1",
+    "retired_neighborhoods": [
+      "architecture, precision, cache-layout, stream-count, optimizer, block-layout, and compiler sweeps"
+    ]
+  },
+  "outcome": "Exact 65,536-symbol REJECT: 96,142 bytes versus the 57,555-byte same-boundary joint prefix, a 38,587-byte loss or -119,472.534 B/M; all determinism, state, inverse, probability, and decimal-10GB gates passed.",
+  "parent": "nncp_v33_rocm_incremental_kv_runtime_q0_v1",
+  "status": "retired"
+}
