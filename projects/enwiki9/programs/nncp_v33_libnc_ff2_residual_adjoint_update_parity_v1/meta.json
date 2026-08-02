@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Source-bound one-update parity only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_ff2_residual_adjoint_update_parity.py",
+    "results/nncp_v33_libnc_ff2_residual_adjoint_replay_v1/decision.json",
+    "results/nncp_v33_libnc_ff2_output_adjoint_trajectory_v1/decision.json"
+  ],
+  "description": "Apply the confirmed source-captured residual-join adjoint in the bound one-segment online update",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound online-update parity diagnostic."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The confirmed residual-join adjoint contract restores the source-exported first-update parameter state without changing probabilities.",
+  "id": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+  "kill_gate": "Retire on any forward-identity, repeat, parent-baseline, or 2e-5 final-tensor failure; no sweep.",
+  "omega": {
+    "interfaces_exposed": [
+      "Confirmed residual-join adjoint contract -> one exact Adam update and source final tensors"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_v33_libnc_ff2_residual_adjoint_replay_v1",
+    "proposal_id": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+    "retired_neighborhoods": [
+      "No new optimizer formula, forward primitive, parameter sweep, prefix run, or codec score claim."
+    ]
+  },
+  "parent": "nncp_v33_libnc_ff2_residual_adjoint_replay_v1",
+  "status": "retired"
+}

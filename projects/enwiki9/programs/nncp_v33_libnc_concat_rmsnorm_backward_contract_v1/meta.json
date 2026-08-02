@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Analytic source-parity contract only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_concat_rmsnorm_backward_contract.py",
+    "results/nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1/decision.json",
+    "results/nncp_v33_libnc_ff2_output_adjoint_trajectory_v1/decision.json"
+  ],
+  "description": "Derive and validate the causal centered-gradient backward rule for concat-optimized final RMSNorm nodes",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound autograd-contract diagnostic."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The extra negative mean-gradient term in concat-optimized final RMSNorm backward explains the source adjoint, full gradient map, and first update without captured-gradient injection.",
+  "id": "nncp_v33_libnc_concat_rmsnorm_backward_contract_v1",
+  "kill_gate": "Retire on any adjoint, named-gradient, forward, update, or repeat miss; no fitted coefficients or norm sweep.",
+  "omega": {
+    "interfaces_exposed": [
+      "Concat-optimized final RMSNorm backward -> causal residual-join adjoint for arbitrary decoded truth"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+    "proposal_id": "nncp_v33_libnc_concat_rmsnorm_backward_contract_v1",
+    "retired_neighborhoods": [
+      "No captured-adjoint injection, fitted offset, norm variant sweep, forward change, or compression score claim."
+    ]
+  },
+  "parent": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+  "status": "retired"
+}

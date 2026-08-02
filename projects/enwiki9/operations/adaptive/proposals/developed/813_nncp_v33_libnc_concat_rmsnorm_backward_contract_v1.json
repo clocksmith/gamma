@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_concat_rmsnorm_backward_contract_v1",
+  "claimed_at": "2026-08-02T05:58:51+00:00",
+  "created_at": "2026-08-02T05:58:51+00:00",
+  "developed_at": "2026-08-02T06:00:46+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1/decision.json; results/nncp_v33_libnc_ff2_residual_adjoint_replay_v1/decision.json; results/nncp_v33_libnc_rmsnorm_backward_order_parity_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "The source residual-adjoint offset is exactly the concat-optimized final RMSNorm rule inv*(g-mean(g)-y*mean(g*y)); applying this causal formula, without captured-gradient substitution, will reproduce the source adjoint, all named gradients, and the bound first update.",
+  "interfaces_exposed": [
+    "Concat-optimized final RMSNorm backward -> causal residual-join adjoint for arbitrary decoded truth"
+  ],
+  "kill_condition": "Retire this analytic concat-RMSNorm formula if any bound adjoint, named-gradient, forward, update, or repeat gate fails. Do not fit coefficients or sweep norm variants.",
+  "max_program_bytes": 0,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "owner": "128",
+  "parent": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+  "parent_proposal_id": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+  "priority": 171,
+  "promotion_condition": "Authorize one native multi-update source receipt only if the analytic formula matches the captured adjoint within 2e-6, all 18 named gradients within 2e-6 with zero sign mismatches, all final tensors within 2e-5, unchanged forward probabilities, and byte-identical repeats.",
+  "proposal_id": "nncp_v33_libnc_concat_rmsnorm_backward_contract_v1",
+  "retired_neighborhoods": [
+    "No captured-adjoint injection, fitted offset, norm variant sweep, forward change, or compression score claim."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 186,
+  "state": "developed",
+  "title": "NNCP v3.3 LibNC concat-RMSNorm backward contract"
+}

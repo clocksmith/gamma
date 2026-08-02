@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Receipt-bound backward replay only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_ff2_residual_adjoint_replay.py",
+    "results/nncp_v33_libnc_ff2_output_adjoint_trajectory_v1/decision.json",
+    "results/nncp_v33_libnc_named_gradient_trajectory_v1/decision.json"
+  ],
+  "description": "Replay the exact source-captured LibNC FF2-output adjoint at the matched post-FF2 residual join",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit receipt-bound backward-contract diagnostic."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The captured LibNC FF2-output adjoint is the missing post-FF2 residual-join backward contract and will restore all 18 bound named gradients.",
+  "id": "nncp_v33_libnc_ff2_residual_adjoint_replay_v1",
+  "kill_gate": "Retire on any capture-hash, forward-identity, repeat, local-control, 2e-6 gradient, or sign-parity failure; no sweep.",
+  "omega": {
+    "interfaces_exposed": [
+      "Exact source-captured FF2-output adjoint -> matched post-FF2 residual-join backward edge"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_v33_libnc_ff2_output_adjoint_trajectory_v1",
+    "proposal_id": "nncp_v33_libnc_ff2_residual_adjoint_replay_v1",
+    "retired_neighborhoods": [
+      "No forward change, learned correction, gradient fit, parameter sweep, codec score, suffix model, or semantic event model."
+    ]
+  },
+  "parent": "nncp_v33_libnc_ff2_output_adjoint_trajectory_v1",
+  "status": "retired"
+}

@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "results/nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1/decision.json; results/nncp_v33_libnc_concat_rmsnorm_backward_contract_v1/decision.json; results/nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1/decision.json"
+  ],
+  "exclusion_id": "nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1",
+  "failure": "First segment matches, but segment two probability error is 0.0102980565, maximum probability error reaches 0.0177781340, final tensors miss by 0.0019985959, and the repeated 128-byte native archive fails reconstruction at byte 0.",
+  "mechanism": "Final concat-optimized RMSNorm backward uses inverse*(g-mean(g)-output*mean(g*output)) in the matched PyTorch decoder graph",
+  "population": "canonical raw enwik9 prefix bytes [0,32), segment=4, eight sequential online updates, exact recovered LibNC CPU source",
+  "recorded_at": "2026-08-02T06:12:56+00:00",
+  "retired_dimensions": [
+    "This analytic final-RMSNorm formula; captured residual-adjoint injection; fixed one-update backward replay; learning-rate, clipping, epsilon, tolerance, and population-shortening rescues."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "Any successor must change the evolving-state information source or use an independently proved native update contract; this family authorizes no faithful-profile prefix."
+  ]
+}

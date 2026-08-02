@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Eight-update miniature source parity only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_concat_rmsnorm_multiupdate_parity.py",
+    "results/nncp_v33_libnc_concat_rmsnorm_backward_contract_v1/decision.json",
+    "tools/nncp_libnc_save_hook.c",
+    "tools/nncp_libnc_export.c"
+  ],
+  "description": "Validate the causal concat-RMSNorm backward rule across eight evolving source-native updates on raw enwik9 bytes",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound multi-update parity and archive roundtrip gate."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The analytic concat-RMSNorm backward contract remains exact across eight sequential native online updates.",
+  "id": "nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1",
+  "kill_gate": "Retire on any source repeat, roundtrip, probability, final-tensor, or analytic-repeat failure; no sweep.",
+  "omega": {
+    "interfaces_exposed": [
+      "Causal concat-RMSNorm backward -> eight evolving online updates on raw enwik9 symbols"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_v33_libnc_concat_rmsnorm_backward_contract_v1",
+    "proposal_id": "nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1",
+    "retired_neighborhoods": [
+      "No captured adjoints, synthetic repeated-zero target, optimizer sweep, model-width change, or score extrapolation."
+    ]
+  },
+  "parent": "nncp_v33_libnc_concat_rmsnorm_backward_contract_v1",
+  "status": "retired"
+}

@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Observation-neutral source-bound FF2 adjoint localization only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_ff2_output_adjoint_trajectory.py",
+    "tools/nncp_libnc_ff2_output_adjoint_capture.c",
+    "tools/nncp_libnc_named_gradient_capture.c"
+  ],
+  "description": "Capture exact per-state LibNC FF2 output adjoints and compose them with exact source inputs",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit archive-neutral source instrumentation for LibNC backward-contract recovery."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The exact FF2 output adjoint identifies whether the native gradient difference is upstream or inside concat-optimized parameter-gradient accumulation.",
+  "id": "nncp_v33_libnc_ff2_output_adjoint_trajectory_v1",
+  "kill_gate": "Stop on any archive, trace, named-gradient, repeat, dimension, or algebraic-control failure; retire if neither frozen localization passes.",
+  "omega": {
+    "interfaces_exposed": [
+      "Exact per-state FF2 output adjoint plus exact FF2 input -> source-bound ff2_0 and ff_bias2_0 gradients"
+    ],
+    "mechanism_change": "add_state_coordinate",
+    "parent_proposal_id": "nncp_v33_libnc_ff2_upstream_connectivity_gradient_v1",
+    "proposal_id": "nncp_v33_libnc_ff2_output_adjoint_trajectory_v1",
+    "retired_neighborhoods": [
+      "No graph cut, forward primitive change, concat-root sweep, suffix model, semantic fiber, or compression score claim."
+    ]
+  },
+  "parent": "nncp_v33_libnc_named_gradient_trajectory_v1",
+  "status": "retired"
+}

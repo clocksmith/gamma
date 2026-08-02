@@ -5102,3 +5102,235 @@ compile-only failure is
 `operations/adaptive/failed/832_20260802T053412Z_148d2d0c05.json`. This is not
 a rejection of the connectivity hypothesis, but it closes this source-patch
 realization and authorizes no further parity child.
+
+## 2026-08-02: LibNC FF2 output-adjoint trajectory frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_ff2_output_adjoint_trajectory_v1`.
+
+The failed graph cuts do not justify abandoning the published LibNC update
+contract. This successor observes rather than detaches the boundary. It adds
+one distinct all-zero parameter tensor after each decoder state's FF2 bias,
+captures that tensor's gradient as the exact FF2-output adjoint, and serializes
+the exact activated FF2 input immediately before the projection. The addition
+must preserve the bound archive, teacher trace, and every source-named
+parameter-gradient byte across two executions.
+
+Composing the adjoint `A` and input `H` as `A * transpose(H)`, with
+`column_sum(A)` for the bias, distinguishes an upstream adjoint divergence
+from special concat-optimized parameter-gradient accumulation. The matched
+PyTorch graph supplies an algebraic control before either interpretation is
+accepted. A unique localization authorizes only one miniature parity repair;
+an intrusive probe or ambiguous composition is rejected. Score and forecast
+credit remain zero.
+
+Plan: `docs/nncp_v33_libnc_ff2_output_adjoint_trajectory_plan.md`.
+
+## 2026-08-02: LibNC FF2 output adjoint localizes the missing gradient upstream
+
+Two instrumented source executions retained the exact bound archive SHA-256
+`8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da`,
+teacher trace SHA-256
+`cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4`,
+and all 18 named gradient bytes. The zero probe was observation-neutral and
+its input and adjoint directories repeated byte-identically.
+
+The exact source adjoint differs from the matched PyTorch adjoint by
+`0.0091472826898098` maximum absolute error, `11.4507277%` relative L2,
+and two signs. Composing that source adjoint with the exact source FF2 input
+reproduces `ff2_0` with zero error and `ff_bias2_0` within
+`1.4901161193847656e-08`. The missing gradient is therefore upstream of the
+FF2 matrix multiplication, not a special concat-matmul parameter-gradient
+rule. The canonical adjoint bytes are now embedded in the decision receipt;
+the only authorized child replays them at the post-FF2 residual join. No
+compression score or forecast credit changes.
+
+Decision:
+`results/nncp_v33_libnc_ff2_output_adjoint_trajectory_v1/decision.json`.
+
+## 2026-08-02: LibNC FF2 residual-adjoint replay frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_ff2_residual_adjoint_replay_v1`.
+
+This one-change child keeps the matched four-state forward graph exact and
+replaces only a backward adjoint. Its baseline remains unchanged. A
+FF2-branch-only control applies the captured source adjoint only to the FF2
+projection; the decisive variant applies it before the post-FF2 residual add,
+where ordinary reverse-mode differentiation sends the same adjoint into the
+FF2 and residual branches.
+
+The gate requires byte-identical repeats, unchanged teacher probabilities, a
+repeated parent PyTorch gradient hash, local FF2 and bias parity in the
+branch-only control, continued upstream failure in that control, and all 18
+named gradients within `2e-6` with zero sign mismatches only for the residual
+join. A pass authorizes one exact first-update replay. A miss retires this
+boundary without any tolerance, optimizer, loss, width, or parameter sweep.
+No score or forecast credit is available.
+
+Plan: `docs/nncp_v33_libnc_ff2_residual_adjoint_replay_plan.md`.
+
+## 2026-08-02: LibNC residual-join adjoint reproduces the full gradient map
+
+All baseline, FF2-branch-only, and residual-join executions repeated their
+probability and gradient hashes. Every variant emitted the same probability
+SHA-256
+`2b4b6177d4417dd305cc18e01c902a6e2f2be256d20f1a51cc8919d956ce735a`
+and remained within `3.725290298461914e-09` of the source teacher.
+
+The unchanged baseline reproduced the prior PyTorch gradient hash and matched
+only 4 of 18 source gradients. Applying the captured adjoint to the FF2 branch
+alone matched 10 of 18, including `ff2_0` and `ff_bias2_0`, but left attention
+and embedding gradients wrong. Applying exactly the same adjoint at the
+post-FF2 residual join matched all 18 gradients: maximum absolute error
+`8.940696716308594e-08`, zero sign mismatches, repeated gradient SHA-256
+`9ba080bdde21f20d7fbf994d1bea75b96ee52687a249e81d23fcb51b646fec64`.
+
+The missing LibNC behavior is therefore the adjoint delivered to the complete
+post-FF2 residual join, not an FF2-local rule. This passes the frozen gate and
+authorizes one source-bound first-update replay. The four captured columns are
+receipt-specific evidence, not a constructive multi-update rule; score and
+forecast credit remain zero.
+
+Decision:
+`results/nncp_v33_libnc_ff2_residual_adjoint_replay_v1/decision.json`.
+
+## 2026-08-02: LibNC residual-adjoint first-update replay frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1`.
+
+The existing four-state decoder graph, cross-entropy, per-parameter clipping,
+and Adam implementation remain unchanged. The child installs the confirmed
+source adjoint only at the four post-FF2 residual joins during backward, then
+compares the resulting first-update parameters with the source final export.
+
+The unchanged baseline must exactly repeat its prior maximum parameter error
+and remain outside `2e-5`. The repaired forward probabilities must be
+byte-identical to baseline, all final tensors must fall within `2e-5`, and two
+repaired executions must repeat model, probability, and loss bytes. A pass
+authorizes only a causal multi-update contract derivation. No score or forecast
+credit is available.
+
+Plan: `docs/nncp_v33_libnc_ff2_residual_adjoint_update_parity_plan.md`.
+
+## 2026-08-02: residual-adjoint repair restores the bound first update
+
+The unchanged decoder-graph baseline exactly repeated its prior maximum final
+parameter error of `0.00031999964267015457`. Applying the four captured
+adjoint columns at the post-FF2 residual joins left the forward probabilities
+byte-identical and reduced the maximum error across every final tensor to
+`2.8312206268310547e-07`. Two repaired executions produced final tensor
+SHA-256
+`b8e6007d538ab2eb0af8cfcd8ad94905df7e029c19f617d946edfcd4954570a6`
+and identical probability and loss streams.
+
+This proves that the localized adjoint difference fully explains the prior
+one-update failure. It does not yet provide a constructive rule because the
+four adjoint columns were captured from source truth. The only authorized
+successor derives the adjoint causally from current tensors and decoded truth.
+No score or forecast credit changes.
+
+Decision:
+`results/nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1/decision.json`.
+
+## 2026-08-02: concat-optimized final RMSNorm contract frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_concat_rmsnorm_backward_contract_v1`.
+
+The source-minus-PyTorch residual adjoint is constant across the 32 features
+within each decoder state. For every state, that observed offset equals
+`-inverse * mean(g)` at the final RMSNorm boundary. This yields the analytic
+concat-root rule
+
+```text
+inverse * (g - mean(g) - output * mean(g * output))
+```
+
+instead of the already proved direct RMSNorm rule without `mean(g)`.
+
+The child applies this formula only to final RMSNorm nodes under the four
+concat-optimized output roots. The captured adjoint is validation truth and is
+not injected. A pass requires analytic adjoint parity, all 18 named gradients,
+unchanged forward probabilities, bound final tensors, and repeated executions.
+It authorizes one source-bound multi-update receipt, with zero current score or
+forecast credit.
+
+Plan: `docs/nncp_v33_libnc_concat_rmsnorm_backward_contract_plan.md`.
+
+## 2026-08-02: analytic concat-RMSNorm rule reproduces source backward
+
+Without substituting a captured gradient, the centered analytic formula
+reproduced the source residual-join adjoint within
+`7.450580596923828e-08`, with zero sign mismatches. All 18 named gradients
+matched within `4.172325134277344e-07`, again with zero sign mismatches. The
+one-update forward remained byte-identical to baseline, every final tensor was
+within `2.8312206268310547e-07` of the source export, and both gradient and
+update executions repeated.
+
+The receipt-specific intervention is therefore replaced by a causal rule over
+the current final-RMSNorm input and its incoming adjoint. This passes the
+frozen gate and authorizes one source-native multi-update receipt. It still
+receives zero score and forecast credit.
+
+Decision:
+`results/nncp_v33_libnc_concat_rmsnorm_backward_contract_v1/decision.json`.
+
+## 2026-08-02: concat-RMSNorm multi-update parity frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1`.
+
+This gate uses the first 32 raw canonical `enwik9` bytes, eight sequential
+four-symbol updates, and the exact recovered NNCP source. Two native executions
+must repeat archive, probability trace, final coefficients, and final tensor
+export; native decoding must restore the input. The analytic replay then starts
+from the same initial export and uses only the frozen centered RMSNorm backward
+formula through all eight evolving parameter and memory states.
+
+The command line advertises `--load_coefs`, but upstream compiles both load
+calls out and the disabled generic expression is not type-correct. The gate
+therefore retains the exact seeded source initialization and omits the inert
+option. The already source-bound initial export supplies the same analytic
+state. Decoder probabilities and the first restored-byte mismatch are recorded
+even on a roundtrip miss so codec reconstruction and update parity cannot be
+conflated.
+
+Probability and final-tensor errors must remain at or below `2e-5`, and a
+second analytic replay must be byte-identical. A pass authorizes the smallest
+faithful-profile constructive prefix gate, not a forecast change. A miss
+retires the multi-update parity claim without a population, optimizer, or
+tolerance sweep.
+
+Plan: `docs/nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_plan.md`.
+
+## 2026-08-02: concat-RMSNorm multi-update contract rejected
+
+The terminal 32-byte execution is scientifically negative. Both source runs
+repeated a 128-byte archive with SHA-256
+`abf30857584bf888640c27785cc41d7c260510091fd07f5324d1c61c361af94f`,
+the teacher trace, final coefficient package, and canonical tensor export.
+Both analytic executions also repeated exactly.
+
+The analytic probabilities match the first four-symbol segment within
+`3.725290298461914e-09`, confirming the one-update receipt. At the first
+evolving-state segment, error jumps to `0.010298056527972221`; the maximum
+across eight updates is `0.01777813397347927`. Final tensors miss the source by
+up to `0.001998595893383026`. The exact centered final-RMSNorm formula is
+therefore not a sufficient multi-update LibNC contract.
+
+The native archive also decodes deterministically to the wrong 32 bytes, with
+the first mismatch at byte zero. The source advertises `--load_coefs` but
+compiles both calls out; enabling the invalid generic expression either fails
+to compile or corrupts decoder graph shapes, so those infrastructure attempts
+do not count as scientific variants. Their adaptive failed receipts remain
+preserved separately.
+
+Retire this formula, captured-adjoint replay, fixed one-update repair, and all
+learning-rate, clipping, epsilon, tolerance, or shorter-population rescues.
+No faithful-profile prefix is authorized. Forecast remains `109,389,323`
+bytes; verified full-1G score remains unknown; score credit remains zero.
+
+Decision:
+`results/nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1/decision.json`.
