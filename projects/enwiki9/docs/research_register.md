@@ -6007,3 +6007,68 @@ score credit remains zero.
 
 Decision:
 `results/mobius2_logos_semantic_sentence_edit_bypass_qh0_v1/decision.json`.
+
+## 2026-08-02: LOGOS semantic skeleton grammar ceiling QH0 frozen
+
+Proposal: `mobius2_logos_semantic_skeleton_grammar_ceiling_v1`.
+
+Candidate: `mobius2_logos_semantic_skeleton_grammar_ceiling_qh0_v1`.
+
+The paid sentence edit format retained no spans, but its complete source
+reference and per-fragment commands may conceal a reusable grammar ceiling.
+The next and only authorized child therefore supplies each prototype,
+emission-group matching schedule, rule, and invocation out of band.  For every
+frozen SEM, LEX, and ROT pair, deterministic SequenceMatcher alignment finds
+exact matching WRT emission-group blocks.  Each target selects the candidate
+that displaces the most rounded-Q256 joint parent loss, then an actually
+terminated residual stream and exact prior-prefix reconstruction measure the
+free ceiling.
+
+SEM must save at least 3,000 B/M, remain positive on all chronological splits,
+and beat both matched controls.  A pass authorizes only a paid shared-rule
+grammar gate; it gives no credit to the free occurrence schedule.  A miss
+retires this exact skeleton universe and prototype-alignment construction
+without alignment, retrieval, or segmentation sweeps.  Score and forecast
+credit remain zero.
+
+Plan:
+`docs/mobius2_logos_semantic_skeleton_grammar_ceiling_qh0_plan.md`.
+
+## 2026-08-02: LOGOS semantic skeleton ceiling rejects; lexical control is nonpaying
+
+The exact gate completed normally in `26.397` worker seconds over the same
+7,762 sentence spans and 172,554 frozen candidate-pair evaluations.  Every
+input, source-order, arithmetic, WRT, full-store, official inverse, and second-
+archive proof passed.
+
+Supplying all prototype identities, matching schedules, rules, and invocations
+free exposes substantial scattered repetition.  SEM generated 136,540 WRT
+bytes in 57,239 fragments and saved 20,154 exact archive bytes, or
+`20,464.341742525397 B/M`.  Its split gains were positive at 7,390 development,
+2,250 selection, and 10,514 sealed bytes.  ROT saved 13,275 bytes.  The lexical
+control was stronger: it generated 140,798 WRT bytes in 54,679 fragments and
+saved 24,283 bytes.  SEM therefore failed the preregistered semantic-specificity
+condition even though it cleared the magnitude and transfer conditions.
+
+The lexical control does not authorize a paid grammar child.  Its supplied
+plan is 1,842,852 bytes for only 24,283 bytes of displaced archive.  Canonical
+zlib-9 and LZMA-9-extreme compress that plan to 384,464 and 189,708 bytes,
+respectively.  The 7,759 invocations use 3,739 distinct prototypes; 7,343
+distinct target geometries occur, the most common only 21 times.  Even the
+best generic serialization is nearly eight times the free archive gain, and
+the rule shapes show almost no many-use grammar amortization.  This is the
+same per-occurrence description failure that the paid sentence edit gate
+exposed, not hidden target-bearing lexical grammar evidence.
+
+Retire this exact semantic/lexical/lagged candidate universe, emission-group
+SequenceMatcher skeleton, and out-of-band per-occurrence plan.  Do not sweep
+alignment, block size, retrieval count, prompt, embedding width, or clause
+segmentation, and do not promote the lexical control.  A future semantic
+candidate must introduce genuinely generative shared rules whose descriptions
+are intrinsically short, not compress this nearly unique prototype schedule.
+
+Forecast remains `109,389,323` bytes, verified full-1G remains unknown, and
+score credit remains zero.
+
+Decision:
+`results/mobius2_logos_semantic_skeleton_grammar_ceiling_qh0_v1/decision.json`.
