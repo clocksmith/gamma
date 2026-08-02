@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+  "claimed_at": "2026-08-02T05:53:46+00:00",
+  "created_at": "2026-08-02T05:53:46+00:00",
+  "developed_at": "2026-08-02T05:55:40+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_ff2_residual_adjoint_replay_v1/decision.json; results/nncp_v33_libnc_decoder_graph_update_parity_v1/decision.json; results/nncp_v33_libnc_named_gradient_trajectory_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Applying the confirmed source-captured adjoint at the four post-FF2 residual joins during the existing matched one-segment online replay will reproduce the source-exported first-update parameter state without changing probabilities.",
+  "interfaces_exposed": [
+    "Confirmed residual-join adjoint contract -> one exact Adam update and source final tensors"
+  ],
+  "kill_condition": "Retire the captured residual-adjoint contract as sufficient for update parity if the repaired update changes forward probabilities, fails repeat identity, or leaves any final tensor outside 2e-5. No learning-rate, clipping, epsilon, or tolerance sweep follows.",
+  "max_program_bytes": 0,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "owner": "128",
+  "parent": "nncp_v33_libnc_ff2_residual_adjoint_replay_v1",
+  "parent_proposal_id": "nncp_v33_libnc_ff2_residual_adjoint_replay_v1",
+  "priority": 170,
+  "promotion_condition": "Authorize a causal multi-update adjoint-contract implementation only if two repaired first-update executions are byte-identical, retain the exact forward probability stream, and match every source final tensor within 2e-5 while the unchanged baseline remains the prior miss.",
+  "proposal_id": "nncp_v33_libnc_ff2_residual_adjoint_update_parity_v1",
+  "retired_neighborhoods": [
+    "No new optimizer formula, forward primitive, parameter sweep, prefix run, or codec score claim."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 185,
+  "state": "developed",
+  "title": "NNCP v3.3 LibNC FF2 residual-adjoint update parity"
+}
