@@ -110,9 +110,10 @@ Headline cards; the content compiler must not apply a spell-out filter.
 
 The four Era definitions are authored once in
 [`physical/reference-cards.json`](../physical/reference-cards.json)
-under each card's `loreText`. The content compiler projects them into the
-rulebook. This document sets the writing contract for that escalation; it does
-not restate the Era lore.
+under each card's `loreText`. The content compiler projects them into
+`docs/world-and-institutions.md`, separate from the How to Play sequence. This
+document sets the writing contract for that escalation; it does not restate
+the Era lore.
 
 ## Canonical names
 
@@ -143,7 +144,7 @@ that a real person or company performed the depicted fictional act.
 | Player references | 4 | `physical/reference-cards.json`; projected to `generated/` |
 | Factions | 6 | `physical/factions.json`; projected to `generated/` |
 | Faction abilities | 24 | `physical/factions.json`; projected to `generated/` |
-| Headlines | 24 | `physical/headlines.json`; projected into rules, data, prototype, and gallery |
+| Headlines | 24 | `physical/headlines.json`; projected into rules reference, data, prototype, and gallery |
 | Wild Actions | 7 per player | `physical/wild-actions.json`; projected to `generated/` |
 | Round Mandates | 12 | `physical/mandates.json`; projected to `generated/` |
 | Training faces | 12 faces / 50 cards | `core-rules.md` |

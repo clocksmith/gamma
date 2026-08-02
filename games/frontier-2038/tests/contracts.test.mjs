@@ -29,6 +29,8 @@ test("release index separates executable game from physical rules candidate", as
   assert.ok(!Object.hasOwn(executable.files, "generated/simulation-copy.json"));
   assert.ok(Object.hasOwn(executable.kitFiles, "generated/simulation-copy.json"));
   assert.ok(Object.hasOwn(candidate.files, "docs/core-rules.md"));
+  assert.ok(Object.hasOwn(candidate.files, "docs/world-and-institutions.md"));
+  assert.ok(Object.hasOwn(candidate.files, "docs/optional-tactics.md"));
 });
 
 test("complexity-reduction review rules preserve precision and remove table accounting", async () => {
@@ -387,12 +389,12 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
 });
 
 test("the tone constitution keeps darkness institutional rather than voyeuristic", async () => {
-  const [rules, thematicBible] = await Promise.all([
-    readFile(new URL("docs/core-rules.md", root), "utf8"),
+  const [world, thematicBible] = await Promise.all([
+    readFile(new URL("docs/world-and-institutions.md", root), "utf8"),
     readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
   ]);
 
-  for (const document of [rules, thematicBible]) {
+  for (const document of [world, thematicBible]) {
     const normalized = document.replace(/\s+/g, " ");
     assert.match(normalized, /Darkness is reported at institutional distance/);
     assert.match(normalized, /do not stage first-person torment, body horror, or voyeuristic suffering/);

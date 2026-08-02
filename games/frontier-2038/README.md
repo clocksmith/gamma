@@ -17,8 +17,12 @@ without direct combat or elimination.
 
 This repository is a **prototype**, not a manufactured or published product.
 
-- The supplied rules baseline is preserved in
-  [`docs/core-rules.md`](docs/core-rules.md).
+- The supplied rules baseline is preserved in the generated
+  [How to Play and Rules Reference](docs/core-rules.md).
+- Setting, tone, Era fiction, and ending narratives are separated into
+  [World and Institutions](docs/world-and-institutions.md).
+- The excluded Tactic module retains its complete contract in
+  [Optional Tactic Rules](docs/optional-tactics.md).
 - Current rationale and implementation boundaries are recorded in
   [`docs/design-decisions.md`](docs/design-decisions.md).
 - Defect investigation, containment, regression, and closure rules are in
@@ -31,8 +35,8 @@ This repository is a **prototype**, not a manufactured or published product.
 - The browser prototype lives in [`web/`](web/).
 - Machine-readable content lives in [`generated/`](generated/).
 - The canonical semantic content graph lives in [`content/`](content/README.md);
-  it generates the rulebook, game data, prototype HTML, UI copy, and simulation
-  descriptions.
+  it generates the player documents, game data, prototype HTML, UI copy, and
+  simulation descriptions.
 - The complete first-pass thematic inventory and writing contract live in
   [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md) and
   [`generated/content-manifest.json`](generated/content-manifest.json).
@@ -42,7 +46,8 @@ This repository is a **prototype**, not a manufactured or published product.
 - Balance, counter-strategy, exploitability, and promotion gates are defined in
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
-The lean physical rulebook is under controlled review at `0.5.0-rc.33-test`.
+The separated physical rules candidate is under controlled review at
+`0.5.0-rc.33-test`.
 Executable game `0.8.33` implements that candidate under
 `three-to-five-grid-ready-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization

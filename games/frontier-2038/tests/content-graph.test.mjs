@@ -31,11 +31,13 @@ test("content compiler is domain-neutral", async () => {
   }
 });
 
-test("semantic graph owns every baseline player-facing construction surface", async () => {
+test("semantic graph owns every player-facing construction surface", async () => {
   const graph = await readJson("content/graph.json");
   const targets = new Set(graph.artifacts.map((artifact) => artifact.target));
   for (const target of [
     "docs/core-rules.md",
+    "docs/world-and-institutions.md",
+    "docs/optional-tactics.md",
     "generated/game-config.json",
     "generated/factions.json",
     "generated/headlines.json",
@@ -61,12 +63,13 @@ test("semantic graph owns every baseline player-facing construction surface", as
   );
 });
 
-test("baseline physical copy is isolated from runtime and deferred sources", async () => {
+test("physical sources are projected from declared ownership roots", async () => {
   const graph = await readJson("content/graph.json");
   const sources = new Set(graph.artifacts.map((artifact) => artifact.source));
   const physicalSources = [
     "physical/content-manifest.json",
     "physical/core-rules.md",
+    "physical/world-and-institutions.md",
     "physical/factions.json",
     "physical/game-config.json",
     "physical/headlines.json",
@@ -79,6 +82,10 @@ test("baseline physical copy is isolated from runtime and deferred sources", asy
   for (const source of physicalSources) {
     assert.ok(sources.has(source), `physical source is projected: ${source}`);
   }
+  assert.ok(
+    sources.has("physical/optional/tactics-rules.md"),
+    "deferred Tactic rules are projected separately from baseline rules"
+  );
   assert.ok(
     graph.artifacts.every((artifact) => !artifact.source.startsWith("content/game/")),
     "mixed game directory is not a canonical source"
@@ -179,22 +186,51 @@ test("Headline cards are the single source for the rulebook inventory", async ()
   }
 });
 
-test("Era cards are the single source for the rulebook escalation lore", async () => {
+test("Era cards are the single source for the world-companion escalation lore", async () => {
   const { eraCards } = await readJson("generated/reference-cards.json");
-  const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
-  const rulesSource = await readFile(
-    new URL("physical/core-rules.md", root),
+  const world = await readFile(new URL("docs/world-and-institutions.md", root), "utf8");
+  const worldSource = await readFile(
+    new URL("physical/world-and-institutions.md", root),
     "utf8"
   );
 
   for (const era of eraCards) {
     assert.ok(era.loreText, `${era.id} owns its lore`);
-    assert.ok(rules.includes(era.loreText), `rules project ${era.id} lore`);
+    assert.ok(world.includes(era.loreText), `world companion projects ${era.id} lore`);
     assert.ok(
-      rulesSource.includes(`\${content.referenceCards.byId.${era.id}.loreText}`),
-      `rulebook template references ${era.id} lore`
+      worldSource.includes(`\${content.referenceCards.byId.${era.id}.loreText}`),
+      `world companion template references ${era.id} lore`
     );
   }
+});
+
+test("How to Play is trimmed while every moved authority remains governed", async () => {
+  const [rules, world, tactics, tacticDocument] = await Promise.all([
+    readFile(new URL("docs/core-rules.md", root), "utf8"),
+    readFile(new URL("docs/world-and-institutions.md", root), "utf8"),
+    readFile(new URL("docs/optional-tactics.md", root), "utf8"),
+    readJson("generated/tactics.json")
+  ]);
+  const wordCount = rules
+    .replace(/[#>*`|_\-]+/g, " ")
+    .split(/\s+/)
+    .filter(Boolean).length;
+  const previousWordCount = 11565;
+
+  assert.ok(wordCount <= Math.floor(previousWordCount * 0.9), `${wordCount} words is at least 10% shorter`);
+  assert.ok(wordCount >= Math.ceil(previousWordCount * 0.8), `${wordCount} words preserves the 20% trim floor`);
+  assert.doesNotMatch(rules, /### Tone contract/);
+  assert.doesNotMatch(rules, /## 15\. Balance rationale and test boundary/);
+  assert.doesNotMatch(rules, /## 12\. Deferred module: Tactic cards/);
+  assert.match(world, /## Tone contract/);
+  assert.match(world, /## The four Eras/);
+  assert.match(world, /## The two World Endings/);
+
+  for (const tactic of tacticDocument.tactics) {
+    assert.ok(tactics.includes(tactic.name), `optional rules include ${tactic.id} name`);
+    assert.ok(tactics.includes(tactic.text), `optional rules include ${tactic.id} exact card text`);
+  }
+  assert.match(tactics, /not used in the baseline game/i);
 });
 
 test("numeric typography preserves exact card digits while prose may spell numbers", async () => {
