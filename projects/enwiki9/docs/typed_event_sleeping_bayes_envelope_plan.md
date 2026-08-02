@@ -2,7 +2,7 @@
 
 Candidate architecture: `typed_event_sleeping_bayes_envelope_v0`
 
-Status: highest-priority parent-recovery and exact-trace-gated proposal.
+Status: exact opening-1M rejection; retained as a terminal architecture record.
 
 Score credit: zero. The exact full-1G score remains unknown. The counted
 planning forecast remains 109,389,323 bytes, leaving 1,389,323 bytes of debt to
@@ -193,16 +193,58 @@ condition is
 archive gain at 1G > 1,389,323 + source delta + framing delta + safety reserve
 ```
 
-## Disposition
+## Recorded verdict and current disposition
+
+The architecture review found the implementation hierarchy credible: the
+CMIX21 parent already combines PAQ8, PPMD, FXCM, direct and match models, byte
+models, LSTM mixing, three mixer layers, and SSE; endpoint428 contributes the
+fixed-point residual endpoints, local/global weights, structural contexts,
+and regret gate; SRSTC supplies decoder-built Wiki state and causal retrieval
+machinery; and the fused recurrent patch supplies the shared-input gate
+traversal. That code evidence justified this experiment, but supplied no score
+credit.
+
+The parent recovery obligation covered both counted packages. The
+280,147-byte `19dd...` artifact proves the reconstructive parent, while the
+261,125-byte `b6fe...` artifact is required for the 109,389,323-byte forecast.
+Both were materialized and verified together with the `37ee...` wrapper and
+`d106...` backend. The earlier local 261-versus-260-byte rebuild mismatch was
+not attributed to endpoint428 and the FX2 double-update behavior was left
+unchanged.
+
+The Bayesian proof remains a safety envelope only. Because the mixture is a
+convex combination of complete same-stream experts, it cannot beat the better
+whole-sequence expert. The experiment therefore used baseline-backed E-star,
+which equaled endpoint428 outside eligible typed events, plus global and fixed-
+block selector controls. All experts predicted and updated on the same causal
+bitstream.
+
+The exact opening-1M realization subsequently failed its frozen gate. M1 saved
+zero sealed bytes and had -98.304 B/M package-adjusted gain. E3 did contain
+specific typed information relative to the matched state-blind control, but it
+lost 222.671 B/M to endpoint428. The global selector chose the parent and all
+ten fixed-block selectors chose the parent. Exact arithmetic decode, WRT/raw
+roundtrip, repeated replay, legal probabilities, causal checks, and sleeping-
+expert equality all passed.
+
+Accordingly, this event universe is retired unchanged: WRT events; the frozen
+suffix, Wiki-field, entity/title/link, and structural-chain keys; 50,000-key
+FIFO memory; support 4; 16 candidates; the frozen literal prior; Q24 posterior;
+and 64KiB selectors. Distant 1M, native 10M, and full-1G gates are not
+authorized. The result is a clean scientific rejection, not an infrastructure
+failure.
 
 ```text
 candidate:          typed_event_sleeping_bayes_envelope_v0
-status:             highest-priority parent-trace-gated proposal
-compression result: unmeasured
+status:             terminal exact opening-1M rejection
+compression result: M1 sealed gross 0 B/M; projected net -98.304 B/M
 mathematical safety: proved only for the ideal same-stream mixture
-source status:      original/minified packages and parent 10M proof recovered
+source status:      original/minified packages and parent 1M/10M proof recovered
 score credit:       0
 full-corpus claim:  none
 ```
+
+Exact decision:
+`results/typed_event_sleeping_bayes_envelope_q0_v1/decision.json`.
 
 ACS-MATH-SEAL-2 remains unbound. No solver distribution is authorized.
