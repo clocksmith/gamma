@@ -1,0 +1,30 @@
+{
+  "candidate_id": "nncp_v33_rocm_constructive_causal_replay_q0_v1",
+  "created_at": "2026-08-02T03:40:59+00:00",
+  "developed_at": "2026-08-02T03:42:36+00:00",
+  "evidence": [
+    "run_logs/adaptive/20260802T033451Z_aa1e913d33.log; docs/nncp_v33_rocm_constructive_one_update_q0_plan.md; docs/research_register.md"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "State-major ROCm inference with decoder-known zero future fillers eliminates the measured batched BF16 future-position dependency, allowing two encoders and an independent model-driven decoder to produce identical branch frequencies, archives, decoded symbols, one-update model states, and official raw inverse on the frozen 2,048-symbol NNCP profile block.",
+  "interfaces_exposed": [
+    "Decoder-known zero-filled future positions -> state-major 32-stream NNCP probabilities -> exact range archive"
+  ],
+  "kill_condition": "Retire this causal-replay realization on frequency, archive, symbol, update-state, deterministic replay, inverse, or memory failure; do not rescue with architecture, precision, stream-count, optimizer, or filler sweeps.",
+  "max_program_bytes": 200000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_rocm_constructive_one_update_q0_v1",
+  "parent_proposal_id": "nncp_v33_rocm_constructive_one_update_q0_v1",
+  "priority": 154,
+  "promotion_condition": "Authorize one frozen 65,536-symbol headroom run only if state-major prediction is causal by construction and two encoders plus one independent decoder have byte-identical archives, branch-frequency streams, decoded symbols, final model hashes, official raw inverse, and peak allocation below decimal 10 GB.",
+  "proposal_id": "nncp_v33_rocm_constructive_causal_replay_q0_v1",
+  "retired_neighborhoods": [
+    "Full-future batched encoder scoring with numerically noncausal masked BF16 attention; simplified one-stream ALiBi teacher."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 169,
+  "state": "developed",
+  "title": "NNCP v3.3 ROCm constructive causal-replay Q0"
+}
