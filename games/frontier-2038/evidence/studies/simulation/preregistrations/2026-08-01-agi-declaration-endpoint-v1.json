@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "id": "agi-declaration-endpoint-v1",
+  "registeredBeforeResults": true,
+  "question": "Conditional on an otherwise matched Round IV state, does a legal canonical AGI declaration window produce a usable declaration decision with equivalent faction and seat effects at three, four, and five players?",
+  "sourceEvidence": [
+    "2026-08-01-agi-route-coverage",
+    "2026-08-01-clean-canonical-3-4-5-baseline"
+  ],
+  "purpose": "deterministic_agi_route_endpoint_qualification",
+  "diagnosticKind": "paired_agi_declaration_scenario",
+  "experimentKind": "agi_declaration_scenario",
+  "rulesVariant": {},
+  "mandateMode": "variable",
+  "sampleReplays": 0,
+  "workers": 8,
+  "allowLlm": false,
+  "frozenFactors": {
+    "scenarioId": "agi_declaration_window_v1",
+    "leftArm": "eligible",
+    "rightArm": "blocked_grid_ready",
+    "singleDifference": "The eligible arm has the third Grid-Ready marker; the blocked arm has two markers. All resources, Facilities, pre-scenario play, rules, faction, seat, policy, opponent roster, and seed remain paired.",
+    "focalProfile": "agi_candidate",
+    "backends": ["greedy", "weighted"],
+    "factions": [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "coalition_lab",
+      "safety_laboratory",
+      "foundry"
+    ],
+    "rulesVariant": {},
+    "llmCalls": 0
+  },
+  "fields": [
+    {
+      "id": "p3",
+      "playerCount": 3,
+      "seed": "frontier-2038-agi-declaration-endpoint-2026-08-01-v1-p3-look-1",
+      "confirmationSeed": "frontier-2038-agi-declaration-endpoint-2026-08-01-v1-p3-confirmation",
+      "runsPerArm": 10,
+      "scheduledComparisons": 108,
+      "scheduledMatches": 2160,
+      "scenarioMatrix": {
+        "playerCount": 3,
+        "factionIds": [
+          "platform_empire",
+          "imperial_research_lab",
+          "vertical_empire",
+          "coalition_lab",
+          "safety_laboratory",
+          "foundry"
+        ],
+        "focalSeats": [0, 1, 2],
+        "backends": ["greedy", "weighted"],
+        "opponentRotations": 3,
+        "profileId": "agi_candidate"
+      }
+    },
+    {
+      "id": "p4",
+      "playerCount": 4,
+      "seed": "frontier-2038-agi-declaration-endpoint-2026-08-01-v1-p4-look-1",
+      "confirmationSeed": "frontier-2038-agi-declaration-endpoint-2026-08-01-v1-p4-confirmation",
+      "runsPerArm": 10,
+      "scheduledComparisons": 96,
+      "scheduledMatches": 1920,
+      "scenarioMatrix": {
+        "playerCount": 4,
+        "factionIds": [
+          "platform_empire",
+          "imperial_research_lab",
+          "vertical_empire",
+          "coalition_lab",
+          "safety_laboratory",
+          "foundry"
+        ],
+        "focalSeats": [0, 1, 2, 3],
+        "backends": ["greedy", "weighted"],
+        "opponentRotations": 2,
+        "profileId": "agi_candidate"
+      }
+    },
+    {
+      "id": "p5",
+      "playerCount": 5,
+      "seed": "frontier-2038-agi-declaration-endpoint-2026-08-01-v1-p5-look-1",
+      "confirmationSeed": "frontier-2038-agi-declaration-endpoint-2026-08-01-v1-p5-confirmation",
+      "runsPerArm": 10,
+      "scheduledComparisons": 120,
+      "scheduledMatches": 2400,
+      "scenarioMatrix": {
+        "playerCount": 5,
+        "factionIds": [
+          "platform_empire",
+          "imperial_research_lab",
+          "vertical_empire",
+          "coalition_lab",
+          "safety_laboratory",
+          "foundry"
+        ],
+        "focalSeats": [0, 1, 2, 3, 4],
+        "backends": ["greedy", "weighted"],
+        "opponentRotations": 2,
+        "profileId": "agi_candidate"
+      }
+    }
+  ],
+  "primaryOutcomes": [
+    "eligible-arm legal declaration rate",
+    "blocked-arm legal declaration rate",
+    "declaration completion conditional on a legal window",
+    "paired focal Mandate difference",
+    "paired focal win-credit difference",
+    "paired focal rank advantage"
+  ],
+  "qualificationContract": {
+    "authority": "Four players is primary. Three and five players are separate mandatory guards.",
+    "coverageGate": "Every clean eligible-arm match must expose a legal declaration window before the focal Round IV action selection; every blocked arm must fail specifically on grid_ready_facilities. Any mismatch invalidates the affected pair and requires a harness correction before interpretation.",
+    "policyGate": "Greedy AGI Candidate must declare in every legal window. Weighted AGI Candidate must declare in at least 75% of legal windows and its two-sided 98% Wilson lower bound must exceed 65%.",
+    "equivalenceGate": "For each player count and backend, two-sided 98% intervals for faction-minus-grand-mean and seat-minus-grand-mean differences in declaration rate must fit within plus or minus 10 percentage points. Corresponding paired Mandate-effect differences must fit within plus or minus 2 Mandate and paired win-credit-effect differences within plus or minus 10 percentage points.",
+    "precisionGate": "The two-sided 98% interval half-width for aggregate paired Mandate effect must be at most 1 Mandate and for aggregate paired win-credit effect at most 7.5 percentage points. Non-overlap with zero is not a substitute for the equivalence gates.",
+    "integrityGate": "Require zero policy fallbacks, zero integrity violations, exact source cleanliness, matching launch identities, stable task order, complete common-seed pairs, and the registered rules fingerprint.",
+    "confirmationGate": "If any primary interval intersects an equivalence boundary or misses its precision bound, repeat only that player-count field on its frozen confirmationSeed and evaluate the pooled disjoint-seed population once.",
+    "heldOutRule": "No threshold, policy, scenario, or estimator may be revised after inspecting Look 1. A revised design requires a new preregistration and disjoint seeds."
+  },
+  "interpretation": {
+    "qualifiedEndpoint": "The declaration decision is reachable, chosen by targeted deterministic policies, and conditionally equivalent across the registered factions, seats, backends, and player counts.",
+    "policyFailure": "Legal windows exist but the targeted policy does not select or complete declaration at the registered rate. Repair the policy or decision packet before making a rules claim.",
+    "conditionalAsymmetry": "Declaration opportunity effects exceed a faction or seat tolerance. Inspect the paired interaction and confirm it on the registered held-out seed before nominating any rule probe.",
+    "scopeBoundary": "This deliberately injected endpoint study does not estimate how often players can economically acquire Capability, Customers, Trust, Compute, and three Grid-Ready Facilities from a natural start. Passing qualifies the declaration endpoint only; full AGI-route balance still requires a targeted natural-acquisition study and controlled human evidence.",
+    "rulesBoundary": "No AGI requirement, cost, Mandate award, Scrutiny, Grid-Ready, Power, faction, or timing rule changes in this study. No result can promote a rule automatically."
+  },
+  "execution": {
+    "p3Command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-agi-declaration-endpoint-v1.json --field p3 --workers 8 --output evidence/studies/simulation/2026-08-01-agi-declaration-endpoint-v1.p3.look-1.raw.json",
+    "p4Command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-agi-declaration-endpoint-v1.json --field p4 --workers 8 --output evidence/studies/simulation/2026-08-01-agi-declaration-endpoint-v1.p4.look-1.raw.json",
+    "p5Command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-agi-declaration-endpoint-v1.json --field p5 --workers 8 --output evidence/studies/simulation/2026-08-01-agi-declaration-endpoint-v1.p5.look-1.raw.json"
+  }
+}

@@ -129,7 +129,8 @@ export async function loadGameIdentity({
   model = null,
   reasoningEffort = null,
   policyProjection = "rich",
-  experimentKind = "tournament"
+  experimentKind = "tournament",
+  experimentConfiguration = null
 } = {}) {
   const version = JSON.parse(await readFile(resolve(root, "release/game-version.json"), "utf8"));
   const rulesetFiles = await fingerprintFiles(root, version.rulesetFiles);
@@ -143,7 +144,8 @@ export async function loadGameIdentity({
     model,
     reasoningEffort,
     policyProjection,
-    experimentKind
+    experimentKind,
+    experimentConfiguration: sortValue(experimentConfiguration)
   };
 
   return {
@@ -245,7 +247,8 @@ export async function createReportIdentity({
   model,
   reasoningEffort,
   policyProjection,
-  experimentKind
+  experimentKind,
+  experimentConfiguration
 }) {
   const identity = suppliedIdentity || await loadGameIdentity({
     root,
@@ -256,7 +259,8 @@ export async function createReportIdentity({
     model,
     reasoningEffort,
     policyProjection,
-    experimentKind
+    experimentKind,
+    experimentConfiguration
   });
   const balanceContractDocument = JSON.parse(await readFile(balanceContractUrl, "utf8"));
   const experimentDefinition = {

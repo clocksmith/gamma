@@ -194,7 +194,10 @@ export async function captureSimulationLaunchIdentity(options = {}) {
     model: models,
     reasoningEffort: reasoningEfforts,
     policyProjection: projection,
-    experimentKind: options.experimentKind || "tournament"
+    experimentKind: options.experimentKind || "tournament",
+    experimentConfiguration: {
+      scenario: options.scenario || null
+    }
   }));
 }
 
@@ -308,7 +311,10 @@ export async function createSimulation(options = {}, onProgress) {
     model: models,
     reasoningEffort: reasoningEfforts,
     policyProjection: projection,
-    experimentKind: options.experimentKind || "tournament"
+    experimentKind: options.experimentKind || "tournament",
+    experimentConfiguration: {
+      scenario: options.scenario || null
+    }
   });
   const launchIdentity = assertLaunchIdentity(
     options.launchIdentity,
@@ -471,6 +477,7 @@ export async function createSimulation(options = {}, onProgress) {
         rulesVariant: resolvedRulesVariant,
         mandateMode: options.mandateMode || "variable",
         simulateNegotiation: Boolean(options.simulateNegotiation),
+        scenario: options.scenario || null,
         decisionContext: {
           schemaVersion: decisionIdentity.contracts.decisionSchemaVersion,
           game: {
@@ -547,6 +554,7 @@ export async function createSimulation(options = {}, onProgress) {
       factionIds: explicitFactions?.map((faction) => faction.id) || null,
       mandateMode: options.mandateMode || "variable",
       simulateNegotiation: Boolean(options.simulateNegotiation),
+      scenario: options.scenario || null,
       cliProviders,
       llmCacheMode: cacheMode,
       llmCacheDirectory: options.llmCacheDirectory || null,
@@ -587,7 +595,10 @@ export async function createSimulation(options = {}, onProgress) {
     model: models,
     reasoningEffort: reasoningEfforts,
     policyProjection: projection,
-    experimentKind: options.experimentKind || "tournament"
+    experimentKind: options.experimentKind || "tournament",
+    experimentConfiguration: {
+      scenario: options.scenario || null
+    }
   });
   assertLaunchIdentity(launchIdentity, finalIdentity, "Completed simulation");
   const identifiedReport = await createReportIdentity({

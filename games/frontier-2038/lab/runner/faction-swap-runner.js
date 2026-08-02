@@ -452,6 +452,17 @@ function standingAt(observation, seat) {
   };
 }
 
+function scenarioOutcome(observation, seat) {
+  const funnel = (observation.agiFunnel || []).find((entry) =>
+    entry.seat === seat
+  );
+  return {
+    legalDeclaration: Boolean(funnel?.legalDeclarationWindow),
+    declared: Boolean(funnel?.declared),
+    scenario: observation.scenario || null
+  };
+}
+
 function validateComparison(comparison, playerCount) {
   for (const key of ["id", "leftFactionIds", "rightFactionIds"]) {
     if (!comparison[key]) throw new TypeError(`Faction comparison requires ${key}.`);
@@ -565,6 +576,104 @@ export function expandFactionIsolationMatrix(matrix = {}) {
         rightFactionIds: place(comparatorFactionId, opponentFactionIds)
       };
     }));
+  });
+}
+
+export function expandAgiDeclarationScenarioMatrix(matrix = {}) {
+  const playerCount = Number(matrix.playerCount);
+  const factionIds = matrix.factionIds || [];
+  const focalSeats = matrix.focalSeats || [];
+  const backends = matrix.backends || [];
+  const opponentRotations = Number(matrix.opponentRotations || 1);
+  const profileId = matrix.profileId || "agi_candidate";
+  if (
+    !Number.isInteger(playerCount) ||
+    playerCount < 3 ||
+    playerCount > 5 ||
+    factionIds.length < playerCount ||
+    new Set(factionIds).size !== factionIds.length ||
+    focalSeats.length < 1 ||
+    backends.length < 1 ||
+    !Number.isInteger(opponentRotations) ||
+    opponentRotations < 1
+  ) {
+    throw new TypeError("AGI scenarioMatrix is incomplete.");
+  }
+  for (const focalSeat of focalSeats) {
+    if (
+      !Number.isInteger(focalSeat) ||
+      focalSeat < 0 ||
+      focalSeat >= playerCount
+    ) {
+      throw new RangeError("AGI scenarioMatrix has an invalid focal seat.");
+    }
+  }
+  for (const backend of backends) {
+    if (!DETERMINISTIC_BACKENDS.has(backend)) {
+      throw new TypeError(
+        "AGI declaration scenario matrix accepts deterministic backends only."
+      );
+    }
+  }
+
+  const place = (focalSeat, focal, opponents) => {
+    const values = [];
+    let opponentIndex = 0;
+    for (let seat = 0; seat < playerCount; seat += 1) {
+      values.push(seat === focalSeat ? focal : opponents[opponentIndex++]);
+    }
+    return values;
+  };
+
+  return factionIds.flatMap((focalFactionId) => {
+    const opponents = factionIds.filter((id) => id !== focalFactionId);
+    return focalSeats.flatMap((focalSeat) =>
+      backends.flatMap((backend) =>
+        Array.from({ length: opponentRotations }, (_, rotation) => {
+          const start = (rotation * (playerCount - 1)) % opponents.length;
+          const opponentFactionIds = Array.from(
+            { length: playerCount - 1 },
+            (_, index) => opponents[(start + index) % opponents.length]
+          );
+          const roster = place(focalSeat, focalFactionId, opponentFactionIds);
+          return {
+            id: [
+              focalFactionId,
+              `seat_${focalSeat}`,
+              backend,
+              `roster_${rotation}`
+            ].join("_"),
+            seedGroup: [
+              focalFactionId,
+              `seat:${focalSeat}`,
+              `backend:${backend}`,
+              `roster:${rotation}`
+            ].join(":"),
+            question:
+              "What is the paired outcome effect of a legal AGI declaration " +
+              "window versus an otherwise identical one-marker-short state?",
+            focalSeat,
+            focalFactionId,
+            backend,
+            opponentRotation: rotation,
+            profileIds: Array(playerCount).fill(profileId),
+            backends: Array(playerCount).fill(backend),
+            leftFactionIds: roster,
+            rightFactionIds: roster,
+            leftScenario: {
+              id: "agi_declaration_window_v1",
+              arm: "eligible",
+              focalSeat
+            },
+            rightScenario: {
+              id: "agi_declaration_window_v1",
+              arm: "blocked_grid_ready",
+              focalSeat
+            }
+          };
+        })
+      )
+    );
   });
 }
 
@@ -778,13 +887,19 @@ function summarizePair(left, right, focalSeat, matchIndexes) {
     const rightObservation = right.observations[index];
     const leftStanding = standingAt(leftObservation, focalSeat);
     const rightStanding = standingAt(rightObservation, focalSeat);
+    const leftScenario = scenarioOutcome(leftObservation, focalSeat);
+    const rightScenario = scenarioOutcome(rightObservation, focalSeat);
     return {
       matchIndex: matchIndexes?.[index] ?? index,
       scoreDelta: leftStanding.score - rightStanding.score,
       rankAdvantage: rightStanding.rank - leftStanding.rank,
       winCreditDelta:
         winCredit(leftObservation, focalSeat) -
-        winCredit(rightObservation, focalSeat)
+        winCredit(rightObservation, focalSeat),
+      leftLegalDeclaration: leftScenario.legalDeclaration,
+      rightLegalDeclaration: rightScenario.legalDeclaration,
+      leftDeclared: leftScenario.declared,
+      rightDeclared: rightScenario.declared
     };
   });
   return {
@@ -798,6 +913,14 @@ function summarizePair(left, right, focalSeat, matchIndexes) {
     meanWinRateDelta: mean(rows.map((row) => row.winCreditDelta)),
     meanMandateDelta: mean(rows.map((row) => row.scoreDelta)),
     meanRankAdvantage: mean(rows.map((row) => row.rankAdvantage)),
+    leftLegalDeclarationRate: mean(rows.map((row) =>
+      Number(row.leftLegalDeclaration)
+    )),
+    rightLegalDeclarationRate: mean(rows.map((row) =>
+      Number(row.rightLegalDeclaration)
+    )),
+    leftDeclarationRate: mean(rows.map((row) => Number(row.leftDeclared))),
+    rightDeclarationRate: mean(rows.map((row) => Number(row.rightDeclared))),
     rows
   };
 }
@@ -899,7 +1022,9 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
   const comparisons = options.comparisons ||
     (options.comparisonMatrix
       ? expandFactionIsolationMatrix(options.comparisonMatrix)
-      : []);
+      : options.scenarioMatrix
+        ? expandAgiDeclarationScenarioMatrix(options.scenarioMatrix)
+        : []);
   if (!comparisons.length) throw new RangeError("At least one faction comparison is required.");
   const playerCount = Number(options.playerCount || 4);
   if (
@@ -936,7 +1061,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       rulesVariant: options.rulesVariant || {},
       simulateNegotiation: true,
       includeObservations: true,
-      experimentKind: "balance_audit",
+      experimentKind: options.experimentKind || "balance_audit",
       allowLlm: Boolean(options.allowLlm),
       maxLlmDecisions: options.maxLlmDecisions,
       maxLlmDecisionsPerSeatCycle: options.maxLlmDecisionsPerSeatCycle,
@@ -974,12 +1099,13 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         options,
         playerCount
       );
+      const scenario = comparison[`${arm}Scenario`] || null;
       if (!llmArm) {
         tasks.push({
           comparisonIndex,
           arm,
           matchIndex: null,
-          options: { ...common, factionIds, promptAddenda }
+          options: { ...common, factionIds, promptAddenda, scenario }
         });
         continue;
       }
@@ -995,6 +1121,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
             sampleReplays: matchIndex < sampleReplays ? 1 : 0,
             factionIds,
             promptAddenda,
+            scenario,
             requireLlm: true,
             strictLlmEvidence: true
           }
@@ -1152,6 +1279,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       left: {
         factionId: comparison.leftFactionIds[focalSeat],
         factionIds: comparison.leftFactionIds,
+        scenario: comparison.leftScenario || null,
         strategiesFingerprint: leftIdentity.strategies.fingerprint,
         abilityValues: abilityValues(
           leftReports,
@@ -1161,6 +1289,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       right: {
         factionId: comparison.rightFactionIds[focalSeat],
         factionIds: comparison.rightFactionIds,
+        scenario: comparison.rightScenario || null,
         strategiesFingerprint: rightIdentity.strategies.fingerprint,
         abilityValues: abilityValues(
           rightReports,
@@ -1182,6 +1311,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     promptAddenda: options.promptAddenda,
     promptLibrary: options.promptLibrary,
     comparisonMatrix: options.comparisonMatrix,
+    scenarioMatrix: options.scenarioMatrix,
     backends: options.backends,
     models: options.models,
     model: options.model,
@@ -1216,7 +1346,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     replaySchemaVersion: 2,
     decisionSchemaVersion: 2,
     reportType: "balance_audit",
-    diagnosticKind: "paired_faction_swap",
+    diagnosticKind: options.diagnosticKind || "paired_faction_swap",
     evidenceLabel: "simulation",
     evidenceType: "simulation",
     generatedAt: new Date().toISOString(),
@@ -1288,7 +1418,9 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         models: comparison.models || options.models,
         model: comparison.model || options.model,
         reasoningEfforts: comparison.reasoningEfforts || options.reasoningEfforts,
-        reasoningEffort: comparison.reasoningEffort || options.reasoningEffort
+        reasoningEffort: comparison.reasoningEffort || options.reasoningEffort,
+        leftScenario: comparison.leftScenario || null,
+        rightScenario: comparison.rightScenario || null
       })),
       fingerprint: fingerprintObject(comparisons.map((comparison) => ({
         id: comparison.id,
@@ -1309,7 +1441,9 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         models: comparison.models || options.models,
         model: comparison.model || options.model,
         reasoningEfforts: comparison.reasoningEfforts || options.reasoningEfforts,
-        reasoningEffort: comparison.reasoningEffort || options.reasoningEffort
+        reasoningEffort: comparison.reasoningEffort || options.reasoningEffort,
+        leftScenario: comparison.leftScenario || null,
+        rightScenario: comparison.rightScenario || null
       })))
     },
     experiment: {
@@ -1335,7 +1469,9 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         humanApproval: false,
         verdict: "diagnostic_not_balance_authority",
         reasons: [
-          "Paired faction swaps locate main effects but do not promote a physical rule."
+          options.diagnosticKind === "paired_agi_declaration_scenario"
+            ? "Paired AGI declaration scenarios qualify a route endpoint but do not promote a physical rule."
+            : "Paired faction swaps locate main effects but do not promote a physical rule."
         ]
       }
     },

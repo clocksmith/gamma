@@ -19,23 +19,33 @@ if (!args.comparisons) {
   throw new TypeError("--comparisons must name a preregistered comparison JSON file.");
 }
 const registration = JSON.parse(await readFile(args.comparisons, "utf8"));
+const field = args.field
+  ? registration.fields?.find((candidate) => candidate.id === args.field)
+  : null;
+if (args.field && !field) {
+  throw new TypeError(`Unknown preregistered field: ${args.field}.`);
+}
+const study = field ? { ...registration, ...field } : registration;
 const report = await runFactionSwapDiagnostic({
-  comparisons: registration.comparisons,
-  comparisonMatrix: registration.comparisonMatrix,
-  runsPerArm: Number(args["runs-per-arm"] || registration.runsPerArm),
-  playerCount: Number(args.players || registration.playerCount),
-  profileIds: registration.profileIds,
-  promptAddenda: registration.promptAddenda,
-  promptLibrary: registration.promptLibrary,
-  backends: registration.backends,
-  mandateMode: registration.mandateMode,
-  rulesVariant: registration.rulesVariant,
-  workers: args.workers || registration.workers,
+  comparisons: study.comparisons,
+  comparisonMatrix: study.comparisonMatrix,
+  scenarioMatrix: study.scenarioMatrix,
+  diagnosticKind: study.diagnosticKind,
+  experimentKind: study.experimentKind,
+  runsPerArm: Number(args["runs-per-arm"] || study.runsPerArm),
+  playerCount: Number(args.players || study.playerCount),
+  profileIds: study.profileIds,
+  promptAddenda: study.promptAddenda,
+  promptLibrary: study.promptLibrary,
+  backends: study.backends,
+  mandateMode: study.mandateMode,
+  rulesVariant: study.rulesVariant,
+  workers: args.workers || study.workers,
   llmConcurrency:
-    args["llm-concurrency"] || registration.llmConcurrency,
-  llmRetries: args["llm-retries"] || registration.llmRetries,
+    args["llm-concurrency"] || study.llmConcurrency,
+  llmRetries: args["llm-retries"] || study.llmRetries,
   providerConcurrency: {
-    ...(registration.providerConcurrency || {}),
+    ...(study.providerConcurrency || {}),
     ...(args["claude-concurrency"]
       ? { claude: args["claude-concurrency"] }
       : {}),
@@ -43,21 +53,23 @@ const report = await runFactionSwapDiagnostic({
       ? { codex: args["codex-concurrency"] }
       : {})
   },
-  allowLlm: args["allow-llm"] === true || Boolean(registration.allowLlm),
-  models: registration.models,
-  model: args.model || registration.model,
-  reasoningEfforts: registration.reasoningEfforts,
+  allowLlm: args["allow-llm"] === true || Boolean(study.allowLlm),
+  models: study.models,
+  model: args.model || study.model,
+  reasoningEfforts: study.reasoningEfforts,
   reasoningEffort:
-    args["reasoning-effort"] || registration.reasoningEffort,
+    args["reasoning-effort"] || study.reasoningEffort,
   maxLlmDecisions:
-    args["max-llm-decisions"] || registration.maxLlmDecisions,
+    args["max-llm-decisions"] || study.maxLlmDecisions,
   maxLlmDecisionsPerSeatCycle:
     args["max-llm-decisions-per-seat-cycle"] ||
-    registration.maxLlmDecisionsPerSeatCycle,
+    study.maxLlmDecisionsPerSeatCycle,
   sampleReplays:
-    args["sample-replays"] || registration.sampleReplays,
-  seed: args.seed || registration.seed,
-  preRegistrationId: registration.id
+    args["sample-replays"] || study.sampleReplays,
+  seed: args.seed || study.seed,
+  preRegistrationId: field
+    ? `${registration.id}:${field.id}`
+    : registration.id
 }, ({ completed, total }) => {
   process.stderr.write(`\rfaction swap: ${completed}/${total}`);
 });
