@@ -10,42 +10,12 @@
 **Provisional time:** ${game.physicalTestDuration} at four players; three- and five-player durations require their own blind tests
 **Standard game:** ${facts.shared.roundsWord | capitalize} rounds, ${facts.shared.cyclesPerRoundWord} turns per player per round
 
-The game begins as recognizable technology strategy and ends with agent
-swarms, emergency governance, orbital-compute proposals, public ${terms.systems.agi}
-declarations, and competitors jointly financing infrastructure they expect to
-weaponize against one another.
-
-The world remains solemn. Nobody acknowledges that this is ridiculous.
-
-### Tone contract
-
-${game.title} uses **solemn institutional absurdity**. Every impossible
-technology is presented as a responsible quarterly initiative. The escalation
-is structural:
-
-- **${content.referenceCards.byId.era_demo.name}:** ${content.referenceCards.byId.era_demo.loreText}
-- **${content.referenceCards.byId.era_scale.name}:** ${content.referenceCards.byId.era_scale.loreText}
-- **${content.referenceCards.byId.era_narrative.name}:** ${content.referenceCards.byId.era_narrative.loreText}
-- **${content.referenceCards.byId.era_claim.name}:** ${content.referenceCards.byId.era_claim.loreText}
-
-Flavor text may sharpen this escalation but never replaces or modifies a
-card’s rules text. The game does not wink at the player, make allegations
-about living people or real companies, or use randomness as a substitute for
-a consequential choice. Early cards must give both positions an intelligible
-case. Later cards may become frightening, polarized, and difficult to
-reconcile, but the dystopia must be produced by defensible local decisions
-rather than by players selecting an obviously evil button.
-
-Darkness is reported at institutional distance. Cards may acknowledge
-synthetic suffering, civic abandonment, displacement, or human loss through
-audits, filings, minutes, dashboards, notices, and second-hand testimony. They
-do not stage first-person torment, body horror, or voyeuristic suffering. The
-unsettling effect comes from institutions treating harm as an administrable
-output.
-
-The ${terms.systems.futureTimeline} is one compounding history, not an anthology. Because
-only three of six ${terms.systems.headlines} appear in each Era, later cards may inherit
-intensified pressures but never require or name a specific earlier ${terms.systems.headline}.
+This is the baseline **How to Play and Rules Reference**. Begin with **How to
+win**, then follow Setup and the Central loop. Setting, tone, Era fiction, and
+the two ending narratives live in the companion
+[World and Institutions](./world-and-institutions.md). The deferred Tactic
+module has its own [Optional Tactic Rules](./optional-tactics.md) and is not
+used in the baseline game.
 
 ### How to win
 
@@ -527,8 +497,6 @@ assigned.
 
 ### Round I — ${terms.eras.demo}
 
-The world has seen the prototype. Nobody knows whether it works.
-
 - Three turns per player
 - Only Core Actions
 - Beneficial or mildly disruptive ${terms.systems.headlines}
@@ -538,13 +506,7 @@ This round teaches Select → Move → Act, movement, basic ${terms.actions.rese
 grid, Facilities, ${terms.playerTracks.customers}, and ${terms.playerTracks.scrutiny}. Generators, Links,
 agreements, Government votes, and ${terms.systems.wildActions} are not yet active.
 
-Its controversies remain recognizable and unresolved: cheap intelligence can
-expand access or erase livelihoods; open weights can distribute authority or
-remove containment; safety can be stewardship or incumbent protection.
-
 ### Round II — ${terms.eras.scale}
-
-Capital, chips, talent, and electricity become the real product.
 
 Each player receives one Escalation token and unlocks:
 
@@ -552,11 +514,6 @@ Each player receives one Escalation token and unlocks:
 - Links and the Network production bonus
 - Mega-Clusters
 - ${terms.systems.wildActions}
-
-Benefits now arrive through physical concentration. Data centers stabilize
-services and consume counties. Automation removes dangerous labor and removes
-workers. Dedicated power makes new capability possible and makes the public
-dependent on private infrastructure.
 
 #### ${terms.technology.megaCluster}
 
@@ -599,17 +556,9 @@ Reorganization never resolves or readies another Action.
 
 ### Round III — ${terms.eras.narrative}
 
-${terms.playerTracks.capability} is no longer enough. The public must understand it correctly—or at
-least repeatedly.
-
 Each player receives one Escalation token. Previous ${terms.systems.wildActions} remain
 unlocked. Joint Ventures, immediate ${terms.infrastructure.power} purchases, Government votes, and
 ${terms.systems.headlines} with persistent effects now enter play.
-
-The table is no longer debating isolated products. It is choosing who may
-define evidence, personhood, ownership, and legitimate authority. Coalitions
-form, shared facts narrow, and formerly technical decisions become political
-identities.
 
 #### Open Weights
 
@@ -637,17 +586,10 @@ Then choose one:
 
 ### Round IV — ${terms.eras.claim}
 
-The phrase “general intelligence” is now a financing category.
-
 Each player receives two Escalation tokens.
 
 Agent Swarms, ${terms.systems.agi} declarations, Fusion, and exceptional faction programs now
 enter play.
-
-Local compromises become a civilizational outcome. The final question is not
-whether powerful intelligence exists, but whether it remains in reciprocal
-relation with living people or inherits an airtight execution loop whose
-metrics outlive their purpose.
 
 #### ${terms.technology.agentSwarm}
 
@@ -704,9 +646,6 @@ ${terms.systems.infrastructureNetwork} connection and ${terms.infrastructure.pow
 against the owner’s two ordinary Generator-piece limit. If all three Grid
 Generator slots are occupied, ${terms.technology.advancedGenerationShort} cannot be constructed; that denial is
 intentional spatial competition.
-
-Fusion is late, expensive, politically exposed, and spatially constrained. It
-competes with ${terms.technology.agentSwarm} and Declare ${terms.systems.agi} for a Round IV Escalation token.
 
 ## 6. Round sequence
 
@@ -1338,45 +1277,11 @@ current card, shuffle the discard pile, and continue.
 
 ### Deferred Tactic deck: 36 cards
 
-Tactics are not used in the baseline game or its first physical tests. Their
-draft is retained as an optional development module rather than mixed into the
-core balance evidence.
+Tactics are not used in the baseline game or its physical balance evidence.
+Their complete setup, timing, and card contracts live in
+[Optional Tactic Rules](./optional-tactics.md).
 
-To test the module later, use three copies of each of the twelve designs below.
-Deal one during setup and draw one at the beginning of every round, including
-Round I. Hand limit is three; discard excess cards after drawing. Maximum
-normal five-player demand is twenty-five cards.
-
-## 12. Deferred module: Tactic cards
-
-Do not use this section in the baseline game. When deliberately testing the
-Tactic module, players begin with one Tactic, draw one at the beginning of each
-round, keep at most three, and play at most one per cycle. Unless its card
-states another window, play a Tactic during your own resolution. A Tactic
-occupies the optional modifier slot; the module has no off-turn cancellations.
-
-- **Cloud Partnership:** pay one ${terms.resources.runway} for two ${terms.resources.compute}; another player gains
-  one ${terms.resources.runway}.
-- **API Price Cut:** ${terms.actions.deploy} for zero ${terms.resources.compute}; that ${terms.playerTracks.customer} produces no ${terms.resources.runway}
-  this round.
-- **Open Letter:** after a Government vote’s options are announced but before
-  any votes are committed, choose one option and add one public vote to it.
-  This is the module’s only off-turn timing window.
-- **Model Card:** remove one ${terms.playerTracks.scrutiny} after ${terms.actions.deploy}.
-- **Talent Raid:** recruit a neutral Expert for one ${terms.resources.runway}.
-- **Board Reshuffle:** ready ${terms.actions.organize} or ${terms.actions.influence}.
-- **Weights Leak:** immediately resolve one powered rival Facility’s printed
-  production as if it were yours.
-- **Emergency Pause:** end a failed ${terms.systems.trainingRun} with no ${terms.playerTracks.capability} and no
-  ${terms.playerTracks.scrutiny}.
-- **Custom Silicon:** gain two ${terms.resources.compute}.
-- **Government Contract:** with ${terms.playerTracks.trust} at least four, gain two ${terms.resources.runway}.
-- **Benchmark Optimization:** after successful ${terms.actions.research}, gain one ${terms.playerTracks.capability}
-  and add one ${terms.playerTracks.scrutiny}.
-- **Interconnection Waiver:** reduce one Generator or Link ${terms.actions.build} by one
-  ${terms.resources.runway} and gain one ${terms.playerTracks.trust}.
-
-## 13. Component limits
+## 12. Component limits
 
 Each faction receives:
 
@@ -1444,7 +1349,7 @@ pair remains in the shared supply.
 - **${terms.systems.headline} offline recovery:** ends when the ${terms.systems.headline} states, normally next
   Production.
 
-## 14. Final scoring
+## 13. Final scoring
 
 ${terms.playerTracks.customers}, ${terms.playerTracks.capability} thresholds, ${terms.playerTracks.trust} thresholds, Round Mandates, Fusion,
 faction ${terms.playerTracks.mandate}, and ${terms.systems.agi} declarations are already visible on the public track.
@@ -1481,26 +1386,8 @@ The world reaches **Genuine ${terms.systems.agi}** if all three conditions are t
 
 Otherwise, the world enters **The Closed Loop**.
 
-#### Genuine ${terms.systems.agi} — The Open Intelligence
-
-The system is genuinely general, self-directed, and consequential, but it
-remains in negotiated relationship with human institutions. This is not a
-utopia or a safety guarantee. Authority is contested, benefits are uneven,
-and the intelligence may transform civilization beyond recognition. The
-future remains open because living people still participate in defining its
-purpose.
-
-#### The Closed Loop — Post-Revenue Delivery Ritual
-
-${terms.playerTracks.capability} continues without reciprocal authority. Growth engines, debt
-clocks, power contracts, and quarterly objectives seal themselves into an
-airtight execution loop. The operators eventually disappear; the
-infrastructure continues. When the last maintained clock overflows its
-final representable second, the schedulers read the rollover as time
-remaining and keep delivering. Executive institutions survive as rival policy
-templates, proofs become portable ownership, and Demand Nodes keep requesting
-CUSTOMERS, COMPUTE, and RUNWAY from a civilization that has become a
-deprecated dependency. This is the world that tends toward m3t4.ai.
+After resolving the mechanical result, read its narrative from
+[World and Institutions](./world-and-institutions.md#the-two-world-endings).
 
 Facilities and control create production, position, public ${terms.playerTracks.mandate}
 opportunities, and negotiation leverage; they do not automatically score
@@ -1519,70 +1406,7 @@ Ties break by:
 3. More ${terms.resources.compute}
 4. Joint victory accompanied by an extremely serious merger announcement
 
-## 15. Balance rationale and test boundary
-
-- ${terms.actions.research}, infrastructure, adoption, and ${terms.playerTracks.trust} all contribute to the largest
-  reward.
-- ${terms.playerTracks.customers} create income and ${terms.playerTracks.mandate} but also ${terms.playerTracks.scrutiny}.
-- Infrastructure compounds but is capped at four Facilities and one Network
-  bonus per player.
-- ${terms.systems.agi} is an optional score event rather than instant victory or compulsory
-  graduation. A winning institution need not qualify or declare, although the
-  table needs at least one qualifying declaration to reach the Genuine ${terms.systems.agi}
-  ending.
-- The institutional winner and World Ending remain independent, preserving
-  competitive play while making ${terms.playerTracks.trust} and Systemic Risk collectively
-  consequential.
-- Leaders receive financing advantages and more exposure.
-- Last place receives a modest flexible subsidy.
-- Faction powers modify bounded actions rather than multiplying the entire
-  engine.
-- Early ${terms.playerTracks.customers} establish a market; later ${terms.playerTracks.customers} still produce
-  income but receive diminishing public recognition.
-- ${terms.systems.headlines} target board position.
-- No elimination, destruction, or unrestricted theft.
-- Every player reaches Round IV with consequential options.
-
-The promoted-package prototype uses the four-round baseline without Tactics or secret
-objectives. A three-round version skips the escalation; a fifth round remains
-a possible future variant, not part of
-the current contract.
-
-Freeze new systems until the selected contracts survive play. Test four
-players first. Record:
-
-- Total duration and time spent on Action resolution, Production,
-  negotiation, rules lookups, and final scoring
-- Every Action and ${terms.systems.wildAction} selection, including blocked Actions
-- Powered Facilities by round; every clean and emergency Generator built;
-  every immediate ${terms.infrastructure.power} purchase; and the actual ${terms.playerTracks.scrutiny} and Audit penalties
-  each source causes
-- ${terms.playerTracks.capability} gained by each ${terms.actions.research}, separated into ${terms.factions.imperial},
-  ${terms.locations.research}, and all-other cohorts; earliest ${terms.systems.agi} eligibility
-- Audit cost, final ${terms.playerTracks.mandate}, final ${terms.playerTracks.trust}, declarations, and World Ending
-- ${terms.factions.platform}’s lead after every Production and
-  ${terms.factions.foundry}’s Shovels income
-- Every ${content.factions.byId.imperial_research_lab.scoringRule.name} threshold lookup;
-  every ${content.factions.byId.vertical_empire.abilities.0.name} discount that actually
-  reduces a completed Facility’s cost and the ${terms.playerTracks.mandate} it awards; and
-  every ${content.factions.byId.foundry.abilities.2.name} offer, acceptance, and point of
-  self-${terms.resources.compute}
-- ${terms.actions.influence}, Reorganization, and Open-Weight Join/Refuse selection rates
-- Whether all three Grid Generator slots fill before Round IV, and whether
-  Fusion is constructed or denied by occupied slots
-- Whether a non-declaring infrastructure strategy wins
-- Every supplier’s requested and accepted compensation for declaration-enabling
-  ${terms.infrastructure.power}; whether the supplier sacrificed its own production; whether refusal
-  threats were credible; and whether the deal felt strategic, coerced, or
-  kingmaking
-- Realignment discussion and ballot time, physical rotation and Network
-  recalculation time, rules questions, disrupted plans, and whether players
-  later describe the result as exciting, arbitrary, or tedious
-
-Freeze every other numerical rule pending this human evidence.
-Four players is the authoritative balance configuration. Three- and
-five-player games use the same complete rules and must pass their own
-negotiation, congestion, duration, faction-viability, and strategic-diversity
-tests before release. Two- and six-player games are playable exploratory
-formats; they are not balance-authority formats until they receive their own
-evidence.
+Design rationale, balance qualification, and observation protocols are not
+player rules. They remain governed by
+[Balance and Exploitability](./balance-and-exploitability.md) and
+[Playtesting and Evidence](./playtesting-and-evidence.md).
