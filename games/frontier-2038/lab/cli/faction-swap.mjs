@@ -29,6 +29,7 @@ const study = field ? { ...registration, ...field } : registration;
 const report = await runFactionSwapDiagnostic({
   comparisons: study.comparisons,
   comparisonMatrix: study.comparisonMatrix,
+  conversionMatrix: study.conversionMatrix,
   scenarioMatrix: study.scenarioMatrix,
   diagnosticKind: study.diagnosticKind,
   experimentKind: study.experimentKind,
@@ -39,6 +40,7 @@ const report = await runFactionSwapDiagnostic({
   promptLibrary: study.promptLibrary,
   backends: study.backends,
   mandateMode: study.mandateMode,
+  projection: args.projection || study.projection,
   rulesVariant: study.rulesVariant,
   workers: args.workers || study.workers,
   llmConcurrency:

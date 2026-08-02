@@ -463,6 +463,19 @@ function scenarioOutcome(observation, seat) {
   };
 }
 
+function dealFlowConversionAt(observation, seat) {
+  const standing = observation.standings.find((entry) => entry.seat === seat);
+  return standing?.dealFlowConversion || standing?.metrics?.dealFlowConversion || {
+    creditsGranted: 0,
+    creditsSpent: 0,
+    causallyNecessaryCreditsSpent: 0,
+    conversionEligibleCreditsSpent: 0,
+    nonConversionCreditsSpent: 0,
+    mandateAttributed: 0,
+    unspentCredits: 0
+  };
+}
+
 function validateComparison(comparison, playerCount) {
   for (const key of ["id", "leftFactionIds", "rightFactionIds"]) {
     if (!comparison[key]) throw new TypeError(`Faction comparison requires ${key}.`);
@@ -470,6 +483,11 @@ function validateComparison(comparison, playerCount) {
   for (const key of ["leftFactionIds", "rightFactionIds"]) {
     if (comparison[key].length !== playerCount) {
       throw new RangeError(`${comparison.id} ${key} must contain ${playerCount} factions.`);
+    }
+  }
+  for (const key of ["leftPolicyTreatments", "rightPolicyTreatments"]) {
+    if (comparison[key] !== undefined && comparison[key].length !== playerCount) {
+      throw new RangeError(`${comparison.id} ${key} must contain ${playerCount} entries.`);
     }
   }
   const focalSeat = Number(comparison.focalSeat ?? 0);
@@ -574,6 +592,76 @@ export function expandFactionIsolationMatrix(matrix = {}) {
         ),
         leftFactionIds: place(matrix.focalFactionId, opponentFactionIds),
         rightFactionIds: place(comparatorFactionId, opponentFactionIds)
+      };
+    }));
+  });
+}
+
+export function expandCoalitionConversionMatrix(matrix = {}) {
+  const playerCount = Number(matrix.playerCount || 3);
+  const comparatorFactionIds = matrix.comparatorFactionIds || [];
+  const focalSeats = matrix.focalSeats || [];
+  const backends = matrix.backends || [];
+  const opponentFactionCycle = matrix.opponentFactionCycle || [];
+  if (
+    playerCount !== 3 ||
+    matrix.focalFactionId !== "coalition_lab" ||
+    !matrix.focalProfileId ||
+    matrix.opponentProfileIds?.length !== playerCount - 1 ||
+    comparatorFactionIds.length < 1 ||
+    focalSeats.length < 1 ||
+    backends.length < 1 ||
+    opponentFactionCycle.length < playerCount - 1
+  ) {
+    throw new TypeError("conversionMatrix is incomplete.");
+  }
+  for (const backend of backends) {
+    if (!DETERMINISTIC_BACKENDS.has(backend)) {
+      throw new TypeError("conversionMatrix accepts deterministic backends only.");
+    }
+  }
+  const place = (focalSeat, focal, opponents) => {
+    const values = [];
+    let opponentIndex = 0;
+    for (let seat = 0; seat < playerCount; seat += 1) {
+      values.push(seat === focalSeat ? focal : opponents[opponentIndex++]);
+    }
+    return values;
+  };
+  return comparatorFactionIds.flatMap((comparatorFactionId) => {
+    const comparatorIndex = opponentFactionCycle.indexOf(comparatorFactionId);
+    if (comparatorIndex < 0) {
+      throw new TypeError(
+        `conversionMatrix opponentFactionCycle omits ${comparatorFactionId}.`
+      );
+    }
+    const opponentFactionIds = Array.from(
+      { length: playerCount - 1 },
+      (_, offset) => opponentFactionCycle[
+        (comparatorIndex + offset) % opponentFactionCycle.length
+      ]
+    );
+    return focalSeats.flatMap((focalSeat) => backends.map((backend) => {
+      const roster = place(focalSeat, matrix.focalFactionId, opponentFactionIds);
+      return {
+        id: [comparatorFactionId, `seat_${focalSeat}`, backend].join("_"),
+        seedGroup: `${comparatorFactionId}:seat:${focalSeat}:backend:${backend}`,
+        comparatorId: comparatorFactionId,
+        focalSeat,
+        profileIds: place(
+          focalSeat,
+          matrix.focalProfileId,
+          matrix.opponentProfileIds
+        ),
+        backends: Array(playerCount).fill(backend),
+        leftFactionIds: roster,
+        rightFactionIds: roster,
+        leftPolicyTreatments: place(
+          focalSeat,
+          matrix.treatmentId || "coalition_conversion_v1",
+          Array(playerCount - 1).fill(null)
+        ),
+        rightPolicyTreatments: Array(playerCount).fill(null)
       };
     }));
   });
@@ -889,6 +977,8 @@ function summarizePair(left, right, focalSeat, matchIndexes) {
     const rightStanding = standingAt(rightObservation, focalSeat);
     const leftScenario = scenarioOutcome(leftObservation, focalSeat);
     const rightScenario = scenarioOutcome(rightObservation, focalSeat);
+    const leftConversion = dealFlowConversionAt(leftObservation, focalSeat);
+    const rightConversion = dealFlowConversionAt(rightObservation, focalSeat);
     return {
       matchIndex: matchIndexes?.[index] ?? index,
       scoreDelta: leftStanding.score - rightStanding.score,
@@ -899,7 +989,14 @@ function summarizePair(left, right, focalSeat, matchIndexes) {
       leftLegalDeclaration: leftScenario.legalDeclaration,
       rightLegalDeclaration: rightScenario.legalDeclaration,
       leftDeclared: leftScenario.declared,
-      rightDeclared: rightScenario.declared
+      rightDeclared: rightScenario.declared,
+      leftDealFlowConversion: leftConversion,
+      rightDealFlowConversion: rightConversion,
+      causallyNecessaryCreditDelta:
+        leftConversion.causallyNecessaryCreditsSpent -
+        rightConversion.causallyNecessaryCreditsSpent,
+      attributedMandateDelta:
+        leftConversion.mandateAttributed - rightConversion.mandateAttributed
     };
   });
   return {
@@ -921,6 +1018,12 @@ function summarizePair(left, right, focalSeat, matchIndexes) {
     )),
     leftDeclarationRate: mean(rows.map((row) => Number(row.leftDeclared))),
     rightDeclarationRate: mean(rows.map((row) => Number(row.rightDeclared))),
+    meanCausallyNecessaryCreditDelta: mean(rows.map((row) =>
+      row.causallyNecessaryCreditDelta
+    )),
+    meanAttributedMandateDelta: mean(rows.map((row) =>
+      row.attributedMandateDelta
+    )),
     rows
   };
 }
@@ -1022,6 +1125,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
   const comparisons = options.comparisons ||
     (options.comparisonMatrix
       ? expandFactionIsolationMatrix(options.comparisonMatrix)
+      : options.conversionMatrix
+        ? expandCoalitionConversionMatrix(options.conversionMatrix)
       : options.scenarioMatrix
         ? expandAgiDeclarationScenarioMatrix(options.scenarioMatrix)
         : []);
@@ -1061,6 +1166,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       rulesVariant: options.rulesVariant || {},
       simulateNegotiation: true,
       includeObservations: true,
+      projection: options.projection || "rich",
       experimentKind: options.experimentKind || "balance_audit",
       allowLlm: Boolean(options.allowLlm),
       maxLlmDecisions: options.maxLlmDecisions,
@@ -1100,12 +1206,20 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         playerCount
       );
       const scenario = comparison[`${arm}Scenario`] || null;
+      const policyTreatments = comparison[`${arm}PolicyTreatments`] ||
+        options.policyTreatments;
       if (!llmArm) {
         tasks.push({
           comparisonIndex,
           arm,
           matchIndex: null,
-          options: { ...common, factionIds, promptAddenda, scenario }
+          options: {
+            ...common,
+            factionIds,
+            promptAddenda,
+            policyTreatments,
+            scenario
+          }
         });
         continue;
       }
@@ -1121,6 +1235,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
             sampleReplays: matchIndex < sampleReplays ? 1 : 0,
             factionIds,
             promptAddenda,
+            policyTreatments,
             scenario,
             requireLlm: true,
             strictLlmEvidence: true
@@ -1280,6 +1395,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         factionId: comparison.leftFactionIds[focalSeat],
         factionIds: comparison.leftFactionIds,
         scenario: comparison.leftScenario || null,
+        policyTreatments: comparison.leftPolicyTreatments ||
+          options.policyTreatments || null,
         strategiesFingerprint: leftIdentity.strategies.fingerprint,
         abilityValues: abilityValues(
           leftReports,
@@ -1290,6 +1407,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         factionId: comparison.rightFactionIds[focalSeat],
         factionIds: comparison.rightFactionIds,
         scenario: comparison.rightScenario || null,
+        policyTreatments: comparison.rightPolicyTreatments ||
+          options.policyTreatments || null,
         strategiesFingerprint: rightIdentity.strategies.fingerprint,
         abilityValues: abilityValues(
           rightReports,
@@ -1310,7 +1429,10 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
     profileIds: options.profileIds,
     promptAddenda: options.promptAddenda,
     promptLibrary: options.promptLibrary,
+    policyTreatments: options.policyTreatments,
+    projection: options.projection || "rich",
     comparisonMatrix: options.comparisonMatrix,
+    conversionMatrix: options.conversionMatrix,
     scenarioMatrix: options.scenarioMatrix,
     backends: options.backends,
     models: options.models,
@@ -1414,6 +1536,10 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
           options,
           playerCount
         ),
+        leftPolicyTreatments: comparison.leftPolicyTreatments ||
+          options.policyTreatments || null,
+        rightPolicyTreatments: comparison.rightPolicyTreatments ||
+          options.policyTreatments || null,
         backends: comparison.backends || options.backends,
         models: comparison.models || options.models,
         model: comparison.model || options.model,
@@ -1437,6 +1563,10 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
           options,
           playerCount
         ),
+        leftPolicyTreatments: comparison.leftPolicyTreatments ||
+          options.policyTreatments || null,
+        rightPolicyTreatments: comparison.rightPolicyTreatments ||
+          options.policyTreatments || null,
         backends: comparison.backends || options.backends,
         models: comparison.models || options.models,
         model: comparison.model || options.model,

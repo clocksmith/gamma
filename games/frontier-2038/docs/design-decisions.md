@@ -1,6 +1,6 @@
 # M3T4 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.33-test`
+**Rules reference:** `0.5.0-rc.34-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -169,7 +169,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.33-test` test:
+controlled `0.5.0-rc.34-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -181,7 +181,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.33` implements `0.5.0-rc.33-test` under engine
+Executable game `0.8.34` implements `0.5.0-rc.34-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -190,6 +190,13 @@ replay, policies, and Monte Carlo share that contract.
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
+
+The `0.8.34` / `0.5.0-rc.34-test` advancement changes no legal action, cost,
+resource value, Mandate award, faction ability, setup, or end condition. It
+adds simulation-only Deal Flow conversion attribution and a fingerprinted
+deterministic Coalition policy treatment for a preregistered diagnostic. The
+physical-candidate suffix advances only to preserve immutable synchronized
+release identity; it is not a balance-rule revision.
 
 `0.5.0-rc.20-test` selected the clarification that ring rotation is district
 movement rather than Facility relocation for Grid-Ready purposes, the

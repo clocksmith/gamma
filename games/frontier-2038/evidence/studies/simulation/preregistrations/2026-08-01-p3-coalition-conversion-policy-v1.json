@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "id": "p3-coalition-conversion-policy-v1",
+  "registeredBeforeResults": true,
+  "question": "Does a bounded deterministic policy that deliberately converts causally necessary Deal Flow Runway into infrastructure improve Coalition Lab outcomes at three players without changing any rule?",
+  "sourceEvidence": [
+    "2026-08-01-p3-faction-seat-policy-isolation",
+    "2026-08-01-p3-fixed-mandate-replication",
+    "2026-08-01-coalition-deal-flow-ablation",
+    "2026-08-01-p3-coalition-competent-negotiation"
+  ],
+  "purpose": "deterministic_policy_conversion_isolation",
+  "playerCount": 3,
+  "runsPerArm": 200,
+  "totalExpandedComparisons": 30,
+  "totalScheduledMatches": 12000,
+  "seed": "frontier-2038-p3-coalition-conversion-policy-2026-08-01-v1",
+  "mandateMode": "variable",
+  "rulesVariant": {},
+  "projection": "batch",
+  "workers": 31,
+  "sampleReplays": 0,
+  "allowLlm": false,
+  "llmCalls": 0,
+  "conversionMatrix": {
+    "playerCount": 3,
+    "focalFactionId": "coalition_lab",
+    "comparatorFactionIds": [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    "focalSeats": [0, 1, 2],
+    "backends": ["greedy", "weighted"],
+    "opponentFactionCycle": [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    "focalProfileId": "balanced_operator",
+    "opponentProfileIds": ["capability_rusher", "trust_governor"],
+    "treatmentId": "coalition_conversion_v1"
+  },
+  "treatmentContract": {
+    "scope": "Only the focal Coalition seat receives the treatment; every opponent and every right-arm focal seat has null treatment.",
+    "actionSelection": {
+      "buildMultiplier": 3,
+      "organizeMultiplier": 1.5,
+      "fundMultiplier": 0.35
+    },
+    "resolutionSelection": {
+      "facilityMultiplier": 4,
+      "generatorMultiplier": 3,
+      "linkMultiplier": 2.5,
+      "recruitMultiplier": 2,
+      "otherNecessarySpendMultiplier": 1.25
+    },
+    "activation": "A multiplier applies only while an unspent Deal Flow credit exists. Resolution multipliers require a Runway cost that exceeds the focal player's non-Deal-Flow Runway.",
+    "informationBoundary": "The treatment reads only the same public decision packet as the baseline policy. It has no hidden-state or future-state access."
+  },
+  "telemetryContract": {
+    "creditDefinition": "A Deal Flow credit is created only for Runway actually gained after the resource cap is applied.",
+    "causalSpendDefinition": "Runway spending consumes untagged Runway first. A Deal Flow credit is causally necessary only when a legal economic action could not be paid from the remaining untagged Runway.",
+    "mandateAttributionDefinition": "Mandate is attributed only when awarded synchronously inside the same action or Wild Action context as a causally necessary Deal Flow spend. Later correlation is retained in the event trace but is not called causal Mandate.",
+    "requiredFields": [
+      "credits_granted",
+      "credits_spent",
+      "causally_necessary_credits_spent",
+      "conversion_eligible_credits_spent",
+      "non_conversion_credits_spent",
+      "mandate_attributed",
+      "unspent_credits",
+      "action_id",
+      "decision_id",
+      "spend_cause",
+      "seat",
+      "comparator",
+      "backend",
+      "outcome"
+    ]
+  },
+  "inferencePlan": {
+    "unit": "Exact common-seed left-treatment minus right-baseline match pair within each comparator-by-seat-by-backend cell.",
+    "primaryOutcomes": [
+      "Coalition Mandate delta",
+      "Coalition win-credit delta",
+      "Coalition rank advantage"
+    ],
+    "mechanismOutcomes": [
+      "causally necessary Deal Flow credits spent per game",
+      "synchronous Mandate attributed per game",
+      "unspent Deal Flow credits per game"
+    ],
+    "interval": "Report two-sided 98% Student-t intervals for aggregate paired means. Report seat, comparator, and backend families descriptively with their sample sizes and multiplicity warning.",
+    "precision": "The primary conclusion requires a 98% Mandate-delta half-width at most 0.5 and a 98% win-credit-delta half-width at most 0.03. Otherwise the verdict is inconclusive_precision_not_reached.",
+    "behaviorActivationGate": "The treatment is behaviorally active only if mean causally necessary Deal Flow spend increases by at least 0.10 credit per paired game and the aggregate 98% interval excludes zero.",
+    "policyCorrectionGate": "Call the policy materially corrective only if behavior activates, mean Coalition Mandate improves by at least 1.0 with the 98% interval above zero, mean win credit improves by at least 0.03 with the 98% interval above zero, mean rank does not worsen, neither backend mean Mandate delta is negative, and no seat mean is below -0.5 Mandate.",
+    "persistentConversionWarningGate": "Call the conversion warning persistent only if behavior activates, the upper endpoint of the 98% Mandate-delta interval is below +1.0, and no single seat, comparator, or backend reversal explains the aggregate. This can nominate a later one-lever rules experiment but cannot change a rule.",
+    "mixedGate": "Any result that misses activation, precision, consistent direction, or both substantive gates is mixed. Improve or discard the authored policy; do not change a rule from a mixed result."
+  },
+  "validity": {
+    "quarantine": [
+      "source-dirty launch",
+      "launch-identity mismatch",
+      "rules, engine, strategy, treatment, seed, projection, or matrix mismatch",
+      "policy fallback",
+      "incomplete match",
+      "integrity violation"
+    ],
+    "separation": "Do not pool this deterministic treatment study with the earlier strict LLM study, ordinary balance matrix, adversarial diagnostics, or pre-0.8.34 evidence.",
+    "interpretationBoundary": "This is a policy-conversion isolation study. A positive result repairs the authored deterministic harness, not the rules. A persistent warning only permits preregistration of one narrow rule lever after comparison with the frozen deterministic faction baselines."
+  },
+  "affectedSurfaceAudit": {
+    "canonicalRulebook": "no mechanical change; version wrapper only",
+    "machineReadableRules": "no change",
+    "browserRules": "no change",
+    "referenceAndPlayerAids": "no change",
+    "simulator": "Deal Flow credit ledger, public conversion counters, deterministic treatment, paired-arm reporting",
+    "tests": "causal ledger, treatment scoring, identity, matrix coverage, and parallel ordering",
+    "playtestDocumentation": "simulation-only treatment and interpretation boundary documented"
+  },
+  "execution": {
+    "command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-p3-coalition-conversion-policy-v1.json --projection batch --workers 31 --output evidence/studies/simulation/2026-08-01-p3-coalition-conversion-policy-v1.raw.json"
+  }
+}

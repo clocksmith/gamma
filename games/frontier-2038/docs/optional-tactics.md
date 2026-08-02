@@ -1,6 +1,6 @@
 # M3T4 2038: Optional Tactic Rules
 
-**Rules version:** 0.5.0-rc.33-test
+**Rules version:** 0.5.0-rc.34-test
 
 **Baseline status:** Deferred; do not use for baseline play or balance evidence
 

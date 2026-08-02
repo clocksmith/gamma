@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.33` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.33-test`
+**Executable game:** `0.8.34` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.34-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -78,6 +78,27 @@ Power allocation, contracts, promises, sales, betrayal, and declarations all
 use this contract.
 
 Schemas live under [`../lab/contracts/`](../lab/contracts/).
+
+## Deterministic policy treatments
+
+Named deterministic treatments are experiment overlays, not rules or new
+backends. They are assigned per seat, included in the launch and strategy
+fingerprints, and rejected for LLM backends. Baseline weighted and greedy
+policies remain unchanged when their treatment is `null`.
+
+`coalition_conversion_v1` is a bounded diagnostic treatment. It activates only
+for Coalition Lab while an earned Deal Flow Runway credit remains unspent. It
+prefers Build and selected Runway-spending resolutions that consume a credit
+only because non-Deal-Flow Runway is insufficient. The treatment reads the
+ordinary public decision packet and has no future-state or hidden-state access.
+
+Deal Flow telemetry uses untagged-first accounting. It records Runway actually
+granted after caps, credits consumed by later costs, whether a legal economic
+action required that credit, and Mandate awarded synchronously inside the same
+resolution. Later scoring remains an observed downstream association and is
+not relabeled causal. The preregistered conversion matrix rotates the treatment
+and null control through every three-player seat, comparator roster, and
+weighted/greedy regime on exact common seeds.
 
 Strict LLM faction-swap evidence archives each completed one-match worker result
 before the scheduler records that task as complete or starts another task. A

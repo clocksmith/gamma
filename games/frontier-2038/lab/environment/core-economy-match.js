@@ -169,6 +169,12 @@ export class CoreEconomyMatch {
     player[key] = clamp(player[key] + amount, definition.min, definition.cap);
   }
 
+  spendRunway(player, amount) {
+    const spent = Math.min(player.runway, Math.max(0, Number(amount) || 0));
+    player.runway -= spent;
+    return spent;
+  }
+
   addScrutiny(player, amount) {
     const added = Math.min(
       amount,
@@ -178,7 +184,7 @@ export class CoreEconomyMatch {
     player.metrics.scrutinyAdded += added;
     let overflow = amount - added;
     while (overflow > 0) {
-      if (player.runway > 0) player.runway -= 1;
+      if (player.runway > 0) this.spendRunway(player, 1);
       else this.addResource(player, "trust", -1);
       overflow -= 1;
     }
@@ -602,13 +608,19 @@ export class CoreEconomyMatch {
       player.lastTrainingResult = result;
       this.addResource(player, "capability", result.capability);
       this.addResource(player, "trust", result.trust);
-      player.runway -= result.runwaySpent;
+      this.spendRunway(player, result.runwaySpent, {
+        cause: "research_training",
+        conversionEligible: true
+      });
       player.safety -= result.safetySpent;
       this.addScrutiny(player, result.scrutiny);
       player.metrics.researchCapability.push(result.capability);
     } else if (decision.actionId === "build") {
       if (parameters.buildMode === "facility") {
-        player.runway -= 2;
+        this.spendRunway(player, parameters.actualRunwayCost ?? 2, {
+          cause: "build_facility",
+          conversionEligible: true
+        });
         player.facilities.push({
           id: `s${seat}-facility-${player.facilities.length + 1}`,
           tileId: parameters.destinationId,
@@ -621,7 +633,10 @@ export class CoreEconomyMatch {
         const source = this.config.powerSources.find(
           (candidate) => candidate.id === parameters.sourceId
         );
-        player.runway -= source.runwayCost;
+        this.spendRunway(player, parameters.actualRunwayCost ?? source.runwayCost, {
+          cause: "build_generator",
+          conversionEligible: true
+        });
         this.addResource(player, "trust", source.trust || 0);
         this.addScrutiny(player, source.scrutinyOnBuild || 0);
         player.generators.push({
@@ -742,7 +757,7 @@ export class CoreEconomyMatch {
       const player = this.players[seat];
       player.scrutiny -= 1;
       player.metrics.auditHits += 1;
-      if (player.runway > 0) player.runway -= 1;
+      if (player.runway > 0) this.spendRunway(player, 1);
       else this.addResource(player, "trust", -1);
     }
   }

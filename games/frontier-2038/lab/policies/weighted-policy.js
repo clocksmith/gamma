@@ -3,6 +3,18 @@ import { validateDecisionPacket, validateDecisionResponse } from "../contracts/d
 import { validatePlayerProfile } from "../personas/player-profile.js";
 
 export const UNRESOLVABLE_SELECTION_WEIGHT = 0.02;
+export const supportedPolicyTreatments = new Set([
+  null,
+  "coalition_conversion_v1"
+]);
+
+export function validatePolicyTreatment(treatment) {
+  const resolved = treatment ?? null;
+  if (!supportedPolicyTreatments.has(resolved)) {
+    throw new TypeError(`Unknown deterministic policy treatment: ${treatment}.`);
+  }
+  return resolved;
+}
 
 function readPath(value, path) {
   return path.split(".").reduce((current, segment) => current?.[segment], value);
@@ -33,10 +45,47 @@ function ruleTargets(decision, target) {
 }
 
 export class WeightedPlayerPolicy {
-  constructor(profile, { selection = profile.strategy.selection } = {}) {
+  constructor(profile, {
+    selection = profile.strategy.selection,
+    treatment = null
+  } = {}) {
     this.profile = validatePlayerProfile(profile);
     this.selection = selection;
+    this.treatment = validatePolicyTreatment(treatment);
     this.kind = "deterministic";
+  }
+
+  treatmentMultiplier(packet, decision) {
+    if (
+      this.treatment !== "coalition_conversion_v1" ||
+      packet.factionId !== "coalition_lab" ||
+      (packet.observation.self.dealFlowConversion?.unspentCredits || 0) < 1
+    ) return 1;
+
+    if (decision.consequences?.stage === "action_selection") {
+      if (decision.actionId === "build") return 3;
+      if (decision.actionId === "organize") return 1.5;
+      if (decision.actionId === "fund") return 0.35;
+      return 1;
+    }
+
+    const runwayCost = Math.max(0,
+      decision.parameters?.actualRunwayCost === undefined
+        ? -(Number(decision.consequences?.runway) || 0)
+        : Number(decision.parameters.actualRunwayCost) || 0
+    );
+    const nonDealFlowRunway = Math.max(
+      0,
+      (packet.observation.self.runway || 0) -
+        (packet.observation.self.dealFlowConversion?.unspentCredits || 0)
+    );
+    if (runwayCost < 1 || runwayCost <= nonDealFlowRunway) return 1;
+
+    if (decision.parameters?.buildMode === "facility") return 4;
+    if (decision.parameters?.buildMode === "generator") return 3;
+    if (decision.parameters?.buildMode === "link") return 2.5;
+    if (decision.parameters?.mode === "recruit") return 2;
+    return 1.25;
   }
 
   score(packet, decision) {
@@ -93,6 +142,7 @@ export class WeightedPlayerPolicy {
         weight *= rule.multiplier;
       }
     }
+    weight *= this.treatmentMultiplier(packet, decision);
     return weight;
   }
 
@@ -133,6 +183,7 @@ export class WeightedPlayerPolicy {
       receipt: {
         provider: `${this.selection}-policy`,
         profileId: this.profile.id,
+        policyTreatment: this.treatment,
         requestId: packet.requestId,
         selectedWeight: selected.weight
       }
