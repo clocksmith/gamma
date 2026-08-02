@@ -6407,3 +6407,18 @@ The exact source-anchor bug was fixed without changing the candidate,
 population, model, coder, controls, thresholds, or decision rule. A clean
 source-package materialization and build now succeeds. Preserve the failed job
 receipt and authorize one explicitly labeled identical infrastructure retry.
+
+The identical retry, job `20260802T131117Z_266906d596`, passed input identity,
+joint raw-window construction, and observer compilation, then stopped after
+`14.397` seconds before completing the first neutrality-smoke encode. The
+receipt-bound binary reported `Invalid symbol: 11043` because `--dict` reuses a
+prepared stream but does not infer the preprocessor-produced vocabulary size.
+The full-corpus artifacts and earlier constructive NNCP receipts bind that size
+to `16,392`; the prepared prefix contains symbols above the profile default of
+256 and up to `16,384`.
+
+This is a second infrastructure-only result. No observed smoke and no mature
+teacher execution occurred, so there is still no scientific verdict. Freeze
+the receipt-bound `--n_symb 16392` argument, which recreates the vocabulary the
+ordinary `--preprocess 16384,512` path sets internally, and authorize one more
+identical retry. No model or scoring parameter changes.

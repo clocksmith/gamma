@@ -32,6 +32,7 @@ raw interval                   [9,000,000, 9,999,992)
 raw bytes                      999,992
 NNCP symbol interval           [2,000,597, 2,229,154)
 execution prefix               [0, 2,229,154)
+frozen vocabulary              16,392 symbols
 ```
 
 The teacher may use only the frozen NNCP v3.3 source package, dictionary,
