@@ -19,6 +19,7 @@
   "rulesVariant": {},
   "projection": "batch",
   "workers": 31,
+  "simulationWorkersPerTask": 1,
   "sampleReplays": 0,
   "allowLlm": false,
   "llmCalls": 0,
@@ -124,6 +125,7 @@
     "playtestDocumentation": "simulation-only treatment and interpretation boundary documented"
   },
   "execution": {
+    "parallelism": "Thirty-one outer faction-arm worker threads with one inner simulator worker per arm; nested pools are forbidden.",
     "command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-01-p3-coalition-conversion-policy-v1.json --projection batch --workers 31 --output evidence/studies/simulation/2026-08-01-p3-coalition-conversion-policy-v1.raw.json"
   }
 }

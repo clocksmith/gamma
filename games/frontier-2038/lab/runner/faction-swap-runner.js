@@ -1167,6 +1167,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       simulateNegotiation: true,
       includeObservations: true,
       projection: options.projection || "rich",
+      ...((options.projection || "rich") === "batch" ? { workers: 1 } : {}),
       experimentKind: options.experimentKind || "balance_audit",
       allowLlm: Boolean(options.allowLlm),
       maxLlmDecisions: options.maxLlmDecisions,
@@ -1492,6 +1493,8 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
         : Number(options.workers),
       configuredWorkers: requestedWorkers,
       workers: actualWorkers,
+      simulationWorkersPerTask:
+        (options.projection || "rich") === "batch" ? 1 : null,
       deterministicResultOrder: "comparison_then_arm_then_match",
       requestedLlmConcurrency: options.llmConcurrency === undefined
         ? null
