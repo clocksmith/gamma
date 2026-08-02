@@ -7008,6 +7008,16 @@ normalization. WIKI event parsing and graph state are new child machinery, not
 the official post-stream inverse or existing parent parser. The harness remains
 unimplemented until a finite event lane pays.
 
+The source boundary is now dual-bound rather than inferred from one package.
+The `280,147`-byte `19dd...` reconstructive package supplies the audited
+102-file source identity and clean instrumentation seam; the `261,125`-byte
+`b6fe...` comment-stripped package supplies the current counted-parent baseline.
+Both independently rebuild wrapper `37ee...` and backend `d106...`, with
+dictionary `4c856...`. A native child must name its exact recovered source,
+canonical diff, and new compressed package; it cannot inherit the unchanged
+parent's minified package charge. Forecast, full-1G status, and score credit are
+unchanged.
+
 ## 2026-08-02: endpoint428 bounded single-logical-CPU preflight identified
 
 The runtime contract now records one unmeasured source-neutral topology check:
