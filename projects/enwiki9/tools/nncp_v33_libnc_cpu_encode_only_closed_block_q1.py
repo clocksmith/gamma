@@ -452,7 +452,7 @@ def main() -> int:
         existing = sorted(
             path.name
             for path in args.output_dir.iterdir()
-            if not path.name.startswith("quarantine_")
+            if not (path.name.startswith("quarantine_") and path.is_dir())
         )
         if existing:
             raise RuntimeError(
