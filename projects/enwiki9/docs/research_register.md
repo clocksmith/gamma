@@ -3824,3 +3824,87 @@ grammar or larger replay is authorized. Forecast 109,389,323 and debt
 
 Decision:
 `results/mobius2_logos_semantic_role_frame_ceiling_q0_v1/decision.json`.
+
+## 2026-08-01: MÖBIUS-2 residual-directed concept discovery opened
+
+The next LOGOS step changes the ontology source rather than widening the
+retired hand-built semantic frame. Exact endpoint428 loss ranks clauses drawn
+only from the first 60% of complete opening-1M pages. A locally provisioned
+language model may propose binary questions over those development examples,
+but every accepted question must compile into deterministic decoder-visible
+logic. Model output, logits, weights, and embeddings receive zero score credit
+and cannot enter the final decoder.
+
+The local Gemma-4 GGUF is hash-bound but cannot load in the installed llama.cpp
+build because architecture `gemma4` is unsupported. The local Qwen3.5-2B
+Q4_K_M GGUF is hash-bound and passed a one-shot Vulkan completion probe on the
+Radeon 8060S. The failed interactive CLI invocation and the successful runtime
+probe are infrastructure observations only; neither is a compression result.
+No dependency or model was installed.
+
+The read-only development extraction found 2,957 eligible clauses. Its largest
+endpoint428 losses are dominated by long unique prose, quotations, citations,
+lists, and link-rich spans, so loss density alone cannot admit a rule. The
+discovery procedure must additionally find cross-page reusable generated
+surface and pass exact MDL controls. Selection and sealed pages remain hidden
+until a single question language is frozen.
+
+Do not create an adaptive candidate merely for model brainstorming. A proposal
+becomes actionable only after one deterministic question DAG, span contract,
+literal fallback, matched surface control, and shuffled-question control are
+fixed. Its zero-cost opening-1M ceiling must reproduce the parent payload, WRT,
+official raw inverse, and second payload exactly and save at least 3,000 B/M
+with positive development, selection, and sealed contributions. Forecast
+109,389,323 and debt 1,389,323 remain unchanged; full-1G remains unknown.
+
+Protocol:
+`docs/mobius2_residual_directed_concept_discovery.md`.
+
+The first temperature-zero Qwen prompt over twelve high-loss development
+clauses returned `REJECT`: it found page-specific prose but no deterministic
+cross-page generated surface. This is a clean discovery rejection, not an
+adaptive compression result. Do not materialize that prompt-derived ontology
+or sweep prompts, examples, or question counts. The stronger locally
+provisioned Gemma-4 path remains an infrastructure question: llama.cpp cannot
+load it, while the existing ROCm Transformers environment supports the class
+and passed an exact GPU matmul probe. Any successful Gemma generation remains
+zero-credit discovery evidence under the same sealed-data boundary.
+
+The Gemma-4 12B ROCm path then loaded all 677 tensors and answered the same
+1,081-token hash-bound prompt with exactly `REJECT`. Maximum allocated GPU
+memory was 24,695,448,064 bytes and the output token IDs are receipt-bound in
+the discovery document. The sampled residual-directed semantic attempt is
+therefore closed without a prompt, example, or question-count rescue sweep.
+No adaptive candidate, exact gate, forecast credit, or full-corpus claim
+results from either model response.
+
+## 2026-08-01: JANUS sparse context DAG Q0 frozen
+
+Proposal: `janus_sparse_context_dag_q0_v1`.
+
+The exact-copy/macro audit does not reopen a generic grammar lane. The prior
+explicit WRT copy screen retained only 219.521 optimistic bytes after opcode,
+distance, and length, while its missing start-position information has a
+1,126.806-byte lower bound. Existing causal phrase endpoints and macro edges
+are also terminal. A shared exact dictionary cannot remove the need to locate
+its invocations.
+
+The next actionable candidate instead implements the materially different
+successor named by the terminal JANUS decision: a transmitted exact
+MDL-pruned sparse context DAG. It retains variable suffix depths zero through
+six over completed WRT bytes, current decoded byte prefix, and a 16-bin parent
+probability coordinate. Every retained context pays one ten-byte canonical
+record during pruning; the final zlib model, 32,768-byte decoder allowance,
+and 64 framing bytes are charged again in complete package economics.
+
+Controls are the exact endpoint428 parent, a depth-zero flat map, the full DAG,
+and depth-wise rotated record codes. Promotion requires exact repeated model,
+P1, payload, WRT, and official raw reconstruction; positive development,
+selection, and sealed signs; strict wins over both controls; at least 3,000
+B/M gross and 2,100 B/M package-adjusted; and a package no larger than 192
+KiB. A miss retires this exact suffix language and all parameter rescues. The
+candidate is zero-credit and authorizes only one unchanged 10M replay on a
+pass.
+
+Plan:
+`docs/janus_sparse_context_dag_q0_plan.md`.
