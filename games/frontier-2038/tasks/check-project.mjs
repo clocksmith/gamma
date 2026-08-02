@@ -6,6 +6,8 @@ const required = [
   "AGENTS.md",
   "README.md",
   "docs/core-rules.md",
+  "docs/world-and-institutions.md",
+  "docs/optional-tactics.md",
   "docs/design-decisions.md",
   "docs/manufacturing-and-publishing-study.md",
   "docs/playtesting-and-evidence.md",
@@ -19,6 +21,8 @@ const required = [
   "physical/factions.json",
   "physical/headlines.json",
   "physical/core-rules.md",
+  "physical/world-and-institutions.md",
+  "physical/optional/tactics-rules.md",
   "content/runtime/ui-copy.json",
   "content/runtime/simulation-copy.json",
   "web/templates/prototype.html",
@@ -364,6 +368,11 @@ if (
   throw new Error("Current report, replay, and decision contract versions are inconsistent.");
 }
 const candidate = gameVersion.rulesCandidate;
+const requiredCandidateDocuments = [
+  "docs/core-rules.md",
+  "docs/world-and-institutions.md",
+  "docs/optional-tactics.md"
+];
 const candidateStatusValid = candidate?.implementationStatus === "not-synchronized"
   ? candidate.implementedByGameVersion === null
   : candidate?.implementationStatus === "synchronized"
@@ -372,13 +381,15 @@ if (
   typeof candidate?.version !== "string" ||
   candidate.version === gameVersion.gameVersion ||
   !candidateStatusValid ||
-  !candidate?.files?.includes("docs/core-rules.md")
+  !requiredCandidateDocuments.every((path) => candidate?.files?.includes(path))
 ) {
   throw new Error("Physical rules candidate identity is incomplete or conflated with the executable game.");
 }
-const coreRules = await readFile(resolve(root, "docs/core-rules.md"), "utf8");
-if (!coreRules.includes(`**Rules version:** ${gameVersion.rulesCandidate.version}`)) {
-  throw new Error("Physical rules candidate version does not match the canonical rulebook.");
+for (const path of requiredCandidateDocuments) {
+  const document = await readFile(resolve(root, path), "utf8");
+  if (!document.includes(`**Rules version:** ${gameVersion.rulesCandidate.version}`)) {
+    throw new Error(`Physical rules candidate version does not match ${path}.`);
+  }
 }
 
 process.stdout.write(
