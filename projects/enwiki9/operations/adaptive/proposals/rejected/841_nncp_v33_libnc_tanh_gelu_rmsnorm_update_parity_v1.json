@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1",
+  "created_at": "2026-08-02T04:28:53+00:00",
+  "developed_at": "2026-08-02T04:31:07+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_activation_backward_parity_v1/decision.json; results/nncp_v33_libnc_rmsnorm_backward_order_parity_v1/decision.json; results/nncp_v33_libnc_tanh_gelu_online_update_parity_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Correcting both measured LibNC primitive contracts reduces the bound miniature final-parameter maximum error below 2e-5 with byte-identical repeated replay.",
+  "interfaces_exposed": [
+    "Bound LibNC miniature -> corrected GELU and RMSNorm autograd -> exact final tensor comparison"
+  ],
+  "kill_condition": "Retire the combined tanh-GELU plus RMSNorm-order repair as sufficient if any final tensor remains above 2e-5; do not alter the bound teacher, population, learning rate, clipping, optimizer, or tolerance.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_libnc_rmsnorm_backward_order_parity_v1",
+  "parent_proposal_id": "nncp_v33_libnc_rmsnorm_backward_order_parity_v1",
+  "priority": 158,
+  "promotion_condition": "Authorize only the next exact primitive localization or frozen full-profile parity gate when distributions and every final tensor match the bound LibNC teacher within 2e-5 and repeated replay is byte-identical.",
+  "proposal_id": "nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1",
+  "rejected_at": "2026-08-02T04:36:58+00:00",
+  "rejection_reason": "Exact bound replay was deterministic and retained near-exact probabilities, but internal final tensors remained at the 2*learning-rate Adam sign ceiling; combined tanh GELU and LibNC-order RMSNorm is insufficient. Continue only with output-projection backward reduction parity.",
+  "retired_neighborhoods": [
+    "Activation-only repair; alternative RMSNorm epsilon semantics; self-consistent approximate ROCm model."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 158,
+  "state": "rejected",
+  "title": "NNCP v3.3 tanh-GELU plus LibNC-order RMSNorm update parity"
+}

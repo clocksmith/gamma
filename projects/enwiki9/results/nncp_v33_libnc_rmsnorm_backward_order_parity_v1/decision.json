@@ -1,0 +1,75 @@
+{
+  "candidate_id": "nncp_v33_libnc_rmsnorm_backward_order_parity_v1",
+  "comparisons": {
+    "current_pytorch_autograd": {
+      "maximum_absolute_forward_error": 0.0,
+      "maximum_absolute_gradient_error": 6.103515625e-05,
+      "maximum_relative_gradient_error": 4.133906713832403e-06,
+      "mean_absolute_forward_error": 0.0,
+      "mean_absolute_gradient_error": 3.831961748801405e-06
+    },
+    "divided_closed_form_backward": {
+      "maximum_absolute_forward_error": 0.0,
+      "maximum_absolute_gradient_error": 2.3096799850463867e-07,
+      "maximum_relative_gradient_error": 8.357381011592224e-05,
+      "mean_absolute_forward_error": 0.0,
+      "mean_absolute_gradient_error": 2.332089898970935e-08
+    },
+    "libnc_output_order_backward": {
+      "maximum_absolute_forward_error": 0.0,
+      "maximum_absolute_gradient_error": 5.960464477539063e-08,
+      "maximum_relative_gradient_error": 1.6122236047522165e-05,
+      "mean_absolute_forward_error": 0.0,
+      "mean_absolute_gradient_error": 4.452886059880257e-09
+    }
+  },
+  "compile": {
+    "command": [
+      "cc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-unused-parameter",
+      "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_rmsnorm_probe.c",
+      "-L/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-lnc",
+      "-lm",
+      "-ldl",
+      "-lpthread",
+      "-o",
+      "/tmp/nncp-libnc-rms-order-08v1o3o6/probe"
+    ],
+    "executable_sha256": "c171f41990ded720be0cb3ab1e2c571d513e83efaafa25921c18ed1846f25998",
+    "stderr": ""
+  },
+  "decision": {
+    "authorized_next_action": "run one tanh-GELU plus LibNC-order RMSNorm bound update",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": true,
+    "verified_full_1g_score_bytes": null
+  },
+  "gate": {
+    "matching_contracts": [
+      "libnc_output_order_backward"
+    ],
+    "maximum_absolute_error": 1e-07
+  },
+  "inputs": {
+    "libnc_header_sha256": "d0e341301e66eec8647b055d6d704ca254051bf877036599423e83e39a7132c6",
+    "libnc_library_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+    "probe_source_sha256": "eeaab636777dcc1d21448d8f04bc11278073ad2e30b8327dbe5aa6a79cce298c",
+    "script_sha256": "78c3aacdec174a780ad3e83b14bf193e764aee1b20fc7d1d789acf50044d2b35"
+  },
+  "probe": {
+    "repeat_byte_identical": true,
+    "rows": 40,
+    "stdout_sha256": "690f221bbc0f6bad0135d98563f61d0392b24b02f73dccfa7cb02d4a33de06e2"
+  },
+  "schema": "gamma.nncp_v33_libnc_rmsnorm_backward_order_parity.v1",
+  "score_credit_bytes": 0,
+  "status": "PASS"
+}

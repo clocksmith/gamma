@@ -4649,3 +4649,168 @@ RMSNorm as the remaining cause. This is zero-credit implementation forensics,
 not a model or archive result.
 
 Plan: `docs/nncp_v33_libnc_rmsnorm_backward_parity_plan.md`.
+
+## 2026-08-02: LibNC RMSNorm backward operation-order child frozen
+
+The direct 40-element LibNC probe repeated byte-identically. The existing
+RMSNorm formula matched every forward value exactly but missed input gradients
+by up to `6.103515625e-05`; the outside-sqrt and sum-normalized alternatives
+were decisively wrong. The parent result is therefore an unresolved numerical
+contract, not an RMSNorm rejection.
+
+Read-only closed-form localization found that LibNC's gradient is reproduced
+by `inverse * (g - y * mean(g*y))` to `5.960464477539063e-08`, while the usual
+PyTorch autograd order retains the `6.103515625e-05` miss. The child freezes a
+`1e-7` unique-match gate across current, output-based, and divided backward
+orders. A pass authorizes exactly one tanh-GELU plus LibNC-order RMSNorm bound
+miniature update.
+
+Plan: `docs/nncp_v33_libnc_rmsnorm_backward_order_parity_plan.md`.
+
+## 2026-08-02: combined GELU and RMSNorm bound update frozen
+
+The RMSNorm operation-order child passed uniquely. Its output-based backward
+matched all direct LibNC gradients within `5.960464477539063e-08`; the divided
+closed form missed by `2.3096799850463867e-07`, and ordinary PyTorch autograd
+missed by `6.103515625e-05`. Repeated direct LibNC stdout remained
+byte-identical with SHA-256
+`690f221bbc0f6bad0135d98563f61d0392b24b02f73dccfa7cb02d4a33de06e2`.
+
+The authorized child changes exactly two primitives in the bound miniature:
+the already proved tanh GELU and the newly proved RMSNorm backward order. It
+retains all serialized teacher artifacts, optimizer semantics, clipping,
+population, and the `2e-5` final-tensor threshold. A miss retires the combined
+repair as sufficient; a pass authorizes only further exact parity work.
+
+Plan: `docs/nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_plan.md`.
+
+## 2026-08-02: combined GELU and RMSNorm repair is insufficient
+
+The exact bound-miniature replay completed deterministically but rejected the
+combined repair. Corrected probabilities matched the bound LibNC trace within
+`4.6566128730773926e-09`, and repeated final tensors were byte-identical, but
+the maximum final-parameter error remained
+`0.00031999964267015457`, essentially the two-sided one-step Adam ceiling
+`2 * 0.00016`. The measured RMSNorm and GELU corrections are real, but they do
+not make the full update contract faithful.
+
+Gradient comparison against the receipt-bound LibNC interposition artifacts
+localized the first material divergence immediately behind the exact output
+layer. `embed_out`, `out_bias`, `ln_g_2`, and `ln_b_2` gradients agree to
+approximately `1.5e-07` or better, while `ff_bias2_0` differs by `6.51%`
+relative L2 and `ff2_0` differs by `12.87%`, including 50 sign reversals. This
+pattern does not support another RMSNorm or activation variant. The next
+single-mechanism diagnostic is the F32 output-projection matrix-multiply input
+gradient and its reduction order.
+
+Decision:
+`results/nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1/decision.json`.
+
+## 2026-08-02: LibNC output matmul backward parity frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_output_matmul_backward_parity_v1`.
+
+The direct gate uses the exact `256 x 32` by `32 x 4` output-projection shape
+from the bound miniature and a deterministic zero-sum upstream fixture. It
+captures the complete LibNC forward result and both input gradients twice.
+The frozen comparisons are native PyTorch F32 matmul, ascending scalar F32
+accumulation, and descending scalar F32 accumulation. A unique non-PyTorch
+match within `2e-6` authorizes one corrected bound replay; any other result
+retires this reduction as the cause. No numerical result or score credit is
+claimed before execution.
+
+Plan: `docs/nncp_v33_libnc_output_matmul_backward_parity_plan.md`.
+
+## 2026-08-02: LibNC output matmul reduction is retired
+
+The direct `256 x 32` by `32 x 4` LibNC probe repeated byte-identically with
+aggregate SHA-256
+`9bf364dce5a53863a303314251f9ac86aefa87f66570bc1bb7cb4245749d85be`.
+PyTorch's left-input gradient matched exactly, and its right-input gradient
+missed by only `2.0489096641540527e-08`. All three preregistered contracts were
+inside the `2e-6` gate, so no special matrix reduction was identified. This is
+a clean rejection of output-projection `nc_matmul` reduction as the source of
+the bound update divergence.
+
+Because the parameter-side output gradients are already exact while tiny
+per-logit differences can be amplified by cancellation in the transpose
+projection, the next isolated boundary is LibNC's unfused
+`softmax -> indexed_log -> sum` backward graph versus fused PyTorch
+cross-entropy.
+
+Decision:
+`results/nncp_v33_libnc_output_matmul_backward_parity_v1/decision.json`.
+
+## 2026-08-02: LibNC softmax-indexed-log backward parity frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_softmax_indexed_log_backward_parity_v1`.
+
+LibNC trains the transformer through an explicit probability graph:
+`nc_soft_max`, `nc_indexed_log`, reduction, and negative mean scaling. The
+current PyTorch replay instead uses fused cross-entropy. The direct gate
+serializes all probabilities and logit gradients for the exact 256-class,
+four-column bound shape and targets. It compares fused cross-entropy, an
+explicit PyTorch probability graph, and the closed-form gradient under one
+`2e-6` threshold. A unique non-fused match authorizes only one corrected bound
+replay; all other valid outcomes retire this boundary.
+
+Plan:
+`docs/nncp_v33_libnc_softmax_indexed_log_backward_parity_plan.md`.
+
+## 2026-08-02: LibNC softmax-indexed-log backward is retired
+
+The 256-class, four-column direct LibNC probe repeated byte-identically with
+aggregate SHA-256
+`50008628d246555f96d99e45ef2df11da326ac4889fd6891495c6584264fb71e`.
+Fused PyTorch cross-entropy matched the complete logit gradient within
+`9.313225746154785e-10`; the explicit probability graph and closed form also
+passed the frozen `2e-6` gate. There is no paying special loss-backward
+contract to apply, so this cause is retired.
+
+The remaining untested difference is graph construction. LibNC makes each
+decoder prediction causally, retains the per-state key/value nodes, and only
+then factorizes those nodes into the segment gradient graph. The current
+PyTorch parity replay builds a single vectorized causal segment graph. The
+next one-change gate therefore reconstructs the state-major saved-node graph
+while retaining the already measured primitive corrections and every bound
+teacher artifact.
+
+Decision:
+`results/nncp_v33_libnc_softmax_indexed_log_backward_parity_v1/decision.json`.
+
+## 2026-08-02: LibNC decoder-graph update parity frozen
+
+Candidate and proposal: `nncp_v33_libnc_decoder_graph_update_parity_v1`.
+
+This child changes only graph construction. Instead of one vectorized causal
+segment, it creates four chronological decoder-state graphs. Each state makes
+only its completed normalized input, key, and value nodes available to later
+states; all four logits join at the one frozen segment loss. The bound weights,
+symbols, probability trace, final tensors, measured GELU and RMSNorm contracts,
+loss, clipping, Adam settings, memory, masks, and `2e-5` tolerance remain
+unchanged. A complete final-tensor pass authorizes faithful constructive work;
+a miss retires this saved-node schedule as sufficient.
+
+Plan: `docs/nncp_v33_libnc_decoder_graph_update_parity_plan.md`.
+
+## 2026-08-02: LibNC decoder-graph schedule is insufficient
+
+The state-major saved-node replay completed deterministically and reproduced
+the four LibNC probability distributions within
+`3.725290298461914e-09`, but it retained the same maximum final-parameter
+error `0.00031999964267015457`. Its parameter-error pattern is effectively
+identical to the vectorized parent: output, final-normalization, and
+feed-forward output-bias tensors remain close while scattered internal
+coordinates take opposite first-Adam-step signs.
+
+This clean rejection closes the decoder-state versus vectorized-segment graph
+schedule as a sufficient explanation. Combined with the direct primitive
+receipts, it leaves the bound LibNC internal activation trajectory itself—not
+another unmeasured optimizer, width, or schedule variant—as the missing
+artifact. Any continuation must capture and compare receipt-bound internal
+forward tensors before changing another backward implementation.
+
+Decision:
+`results/nncp_v33_libnc_decoder_graph_update_parity_v1/decision.json`.

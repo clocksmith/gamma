@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+  "created_at": "2026-08-02T04:40:08+00:00",
+  "developed_at": "2026-08-02T04:42:12+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_output_matmul_backward_parity_v1/decision.json; results/nncp_v33_libnc_gradient_interposition_v1/receipt.json; /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "LibNC unfused softmax, indexed-log, sum, and mean-scaling backward produces a reproducible per-logit gradient contract that differs materially from PyTorch fused cross-entropy and explains the cancellation-amplified internal sign flips.",
+  "interfaces_exposed": [
+    "Direct LibNC nc_soft_max plus nc_indexed_log gradients -> frozen cross-entropy backward contracts"
+  ],
+  "kill_condition": "Retire the loss-graph backward as the cause if fused PyTorch matches within 2e-6, no alternative uniquely matches, or the direct probe is nondeterministic; do not sweep logits, targets, tolerance, or loss scaling.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+  "parent_proposal_id": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+  "priority": 160,
+  "promotion_condition": "Authorize one bound miniature replay using the uniquely matched loss backward only if the direct 256-by-4 LibNC probabilities and logit gradients repeat byte-identically and one frozen contract uniquely matches within 2e-6.",
+  "proposal_id": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+  "rejected_at": "2026-08-02T04:43:13+00:00",
+  "rejection_reason": "Direct LibNC loss graph repeated exactly, and fused PyTorch cross-entropy matched all logit gradients within 9.32e-10. Retire softmax-indexed-log backward as the cause.",
+  "retired_neighborhoods": [
+    "Output matmul reduction; combined GELU and RMSNorm repair; self-consistent approximate ROCm model."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 160,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC softmax-indexed-log backward parity"
+}

@@ -1,0 +1,90 @@
+{
+  "candidate_id": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+  "comparisons": {
+    "probability_minus_onehot_closed_form": {
+      "maximum_absolute_gradient_error": 2.9103830456733704e-11,
+      "maximum_absolute_probability_error": 1.1641532182693481e-10,
+      "mean_absolute_gradient_error": 1.0658141036401503e-13,
+      "mean_absolute_probability_error": 4.263256414560601e-13
+    },
+    "pytorch_explicit_softmax_indexed_log": {
+      "maximum_absolute_gradient_error": 1.4901161193847656e-08,
+      "maximum_absolute_probability_error": 1.1641532182693481e-10,
+      "mean_absolute_gradient_error": 4.942535269947257e-11,
+      "mean_absolute_probability_error": 4.263256414560601e-13
+    },
+    "pytorch_fused_cross_entropy": {
+      "maximum_absolute_gradient_error": 9.313225746154785e-10,
+      "maximum_absolute_probability_error": 1.1641532182693481e-10,
+      "mean_absolute_gradient_error": 1.2174439234513557e-10,
+      "mean_absolute_probability_error": 4.263256414560601e-13
+    }
+  },
+  "compile": {
+    "command": [
+      "cc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-unused-parameter",
+      "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_softmax_indexed_log_probe.c",
+      "-L/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-lnc",
+      "-lm",
+      "-ldl",
+      "-lpthread",
+      "-o",
+      "/tmp/nncp-libnc-loss-u4zdjhse/probe"
+    ],
+    "executable_sha256": "4196843624d2bd209412f9cf65d81022a2865ae46a99d1041ba0162a28605582",
+    "stderr": ""
+  },
+  "contract": {
+    "classes": 256,
+    "columns": 4,
+    "frozen_contracts": [
+      "pytorch_fused_cross_entropy",
+      "pytorch_explicit_softmax_indexed_log",
+      "probability_minus_onehot_closed_form"
+    ],
+    "targets": [
+      60,
+      109,
+      101,
+      100
+    ],
+    "threshold": 2e-06
+  },
+  "decision": {
+    "authorized_next_action": "retire the softmax-indexed-log loss graph as the cause",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": false,
+    "verified_full_1g_score_bytes": null
+  },
+  "gate": {
+    "matching_contracts": [
+      "pytorch_fused_cross_entropy",
+      "pytorch_explicit_softmax_indexed_log",
+      "probability_minus_onehot_closed_form"
+    ],
+    "novel_unique_match": false
+  },
+  "inputs": {
+    "libnc_header_sha256": "d0e341301e66eec8647b055d6d704ca254051bf877036599423e83e39a7132c6",
+    "libnc_library_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+    "probe_source_sha256": "2a7d83a4a5447fad21d132733f3313864ca7fa437c28a8438cb5a863cf82b9bb",
+    "script_sha256": "1bad549f8b24be5c5b78a49730e4b449dea620c79f71cfb2512db530e955d7a9"
+  },
+  "probe": {
+    "first_aggregate_sha256": "50008628d246555f96d99e45ef2df11da326ac4889fd6891495c6584264fb71e",
+    "repeat_byte_identical": true,
+    "second_aggregate_sha256": "50008628d246555f96d99e45ef2df11da326ac4889fd6891495c6584264fb71e"
+  },
+  "schema": "gamma.nncp_v33_libnc_softmax_indexed_log_backward_parity.v1",
+  "score_credit_bytes": 0,
+  "status": "REJECT"
+}

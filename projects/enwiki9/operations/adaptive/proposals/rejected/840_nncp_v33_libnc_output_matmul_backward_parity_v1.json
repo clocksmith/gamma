@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+  "created_at": "2026-08-02T04:37:11+00:00",
+  "developed_at": "2026-08-02T04:39:21+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1/decision.json; results/nncp_v33_libnc_gradient_interposition_v1/receipt.json; /home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/gradients"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "LibNC F32 output-projection matrix multiplication uses a reproducible backward reduction order that uniquely explains the first post-output gradient divergence from the bound miniature.",
+  "interfaces_exposed": [
+    "Direct LibNC nc_matmul F32 forward/backward tensors -> frozen output-projection reduction contracts"
+  ],
+  "kill_condition": "Retire output-projection matmul reduction as the cause if direct gradients match the current PyTorch contract within 2e-6 or no frozen reduction order uniquely matches; do not sweep dimensions, values, tolerance, or BLAS libraries.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1",
+  "parent_proposal_id": "nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1",
+  "priority": 159,
+  "promotion_condition": "Authorize one bound miniature replay with the uniquely matched output-projection backward contract only if direct LibNC output, left-gradient, and right-gradient tensors repeat byte-identically and one frozen implementation matches within 2e-6.",
+  "proposal_id": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+  "rejected_at": "2026-08-02T04:40:08+00:00",
+  "rejection_reason": "Direct LibNC output matmul repeated exactly, but PyTorch gradients matched within 2.05e-8 and all frozen reduction orders passed the 2e-6 threshold. Retire output-projection matrix reduction as the cause.",
+  "retired_neighborhoods": [
+    "Combined GELU and RMSNorm repair; architecture and optimizer sweeps; self-consistent approximate ROCm model."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 159,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC output matmul backward parity"
+}
