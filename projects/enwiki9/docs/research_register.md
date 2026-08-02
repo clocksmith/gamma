@@ -3772,6 +3772,58 @@ and the verified full-1G score remains unknown.
 Decision:
 `results/typed_event_sleeping_bayes_envelope_q0_v1/decision.json`.
 
+Architecture-verdict reconciliation: source inspection supports the proposed
+component boundary--CMIX21's mature ensemble, endpoint428's fixed-point
+residual endpoints and regret gate, SRSTC's decoder-built Wiki retrieval
+state, and the fused recurrent traversal are real code donors--but none of
+that supplies compression credit. The exact test also confirms the stronger
+mathematical boundary: a whole-sequence Bayes mixture is only a constant-regret
+safety envelope and cannot beat its better complete expert. The tested E-star
+was therefore baseline-backed and same-stream, with explicit global and block
+selector controls. Both counted parent packages were recovered; the 19,022-
+byte difference between `19dd...` and `b6fe...` remains part of the forecast
+contract. The local 261-versus-260-byte mismatch was not patched or attributed
+to endpoint428, and the FX2 double-update behavior remains untouched pending a
+separately named child. Current disposition is the exact rejection above, not
+the proposal's earlier source-recovery-gated status. ACS-MATH-SEAL-2 remains
+unbound and undistributed.
+
+## 2026-08-01: JANUS recurrent plus quotient joint P1 trace recovery claimed
+
+Candidate: `janus_recurrent_quotient_joint_trace_recovery_q0_v1`.
+
+The terminal exact 10M JANUS recurrent plus paid context-quotient result stores
+the exported JANUS P1 and the final joint payload, but not the final adjusted
+joint P1. A zero-credit infrastructure recovery is claimed through the
+adaptive workflow. It will deserialize the exact paid model, apply it twice to
+the exact exported JANUS trajectory, reproduce the receipt-bound 1,617,484-
+byte joint payload, decode the complete WRT truth, and emit a canonical trace
+for residual attribution.
+
+This does not reopen or tune the terminal components. Their economics remain
+1,765.3 B/M gross and 1,547.152 B/M after both packages, below the frozen
+3,000/2,100 B/M gates. A successful recovery authorizes only attribution; a
+mismatch is an infrastructure failure. Score and forecast credit remain zero.
+
+Plan: `docs/janus_recurrent_quotient_joint_trace_recovery_plan.md`.
+
+The recovery completed at 2026-08-02T00:45:51Z. The exact `JQDG1` model
+deserialized and reserialized byte-for-byte. Two independent applications to
+the 50,014,816-row exported JANUS P1 produced identical adjusted arrays and
+identical canonical P1 bytes. Both probability streams reproduced the exact
+1,617,484-byte joint payload with SHA-256 `5ffaa128...dca9`; arithmetic decode
+recovered all 6,251,852 WRT bytes; and the official inverse receipt remained
+bound. The recovered 100,029,648-byte joint P1 has SHA-256
+`b554ddd1...e719`.
+
+This is an exact observation certificate, not a new compression result. The
+terminal joint economics, zero score/forecast credit, and prohibition on
+native or full-1G promotion remain unchanged. Decoder-visible residual
+attribution is now authorized.
+
+Decision:
+`results/janus_recurrent_quotient_joint_trace_recovery_q0_v1/decision.json`.
+
 ## 2026-08-01: MÖBIUS-2 LOGOS semantic-role frame ceiling frozen
 
 Candidate: `mobius2_logos_semantic_role_frame_ceiling_q0_v1`.
