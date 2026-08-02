@@ -1,0 +1,36 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Bound one-update miniature parity only; zero score credit and no mature trace authorization.",
+  "deps": [],
+  "description": "Single-change replay replacing exact-erf GELU with the measured LibNC unfused F32 tanh-GELU contract",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-recovery parity tool; no compressor driver contract."
+  },
+  "family": "nncp_v33_rocm_port",
+  "hypothesis": "The measured LibNC tanh-GELU contract brings every named first-update parameter within 2e-5.",
+  "id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "kill_gate": "Retire tanh GELU as a sufficient fix if any parameter remains above 2e-5; never launch a mature trace on a miss.",
+  "omega": {
+    "interfaces_exposed": [
+      "Measured LibNC tanh-GELU backward -> bound miniature online update"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+    "retired_neighborhoods": [
+      "Exact-erf PyTorch GELU in NNCP online-update reproduction"
+    ]
+  },
+  "parent": "nncp_v33_libnc_activation_backward_parity_v1",
+  "outcome": {
+    "maximum_absolute_parameter_error": 0.00031999964267015457,
+    "maximum_absolute_probability_error": 4.6566128730773926e-09,
+    "promotion_authorized": false,
+    "repeat_final_tensor_sha256": "7cccce8ff1c1197fed779a603dcd682281aeef277905a4f6925d4683237fb0ad",
+    "result": "results/nncp_v33_libnc_tanh_gelu_online_update_parity_v1/decision.json",
+    "score_credit_bytes": 0,
+    "verdict": "REJECT"
+  },
+  "status": "retired"
+}

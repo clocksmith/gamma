@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "results/nncp_v33_libnc_tanh_gelu_online_update_parity_v1/decision.json; results/nncp_v33_libnc_activation_backward_parity_v1/decision.json"
+  ],
+  "exclusion_id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "failure": "Maximum final parameter error remained 0.00031999964267015457 versus 0.00002; output probability and output-layer gradients improved, but the internal backward mismatch remained.",
+  "mechanism": "Replace exact-erf PyTorch GELU with directly measured LibNC unfused F32 tanh-GELU in the bound one-update miniature",
+  "population": "Receipt-bound one-layer width-32 four-symbol single-update LibNC miniature",
+  "recorded_at": "2026-08-02T03:25:01+00:00",
+  "retired_dimensions": [
+    "Tanh-GELU as a sufficient LibNC online-update parity repair; exact-erf GELU is confirmed wrong, but activation correction alone does not authorize mature tracing."
+  ],
+  "schema": "enwiki9_omega_exclusion_v1",
+  "unsettled_successors": [
+    "A faithful self-consistent v3.3 ROCm codec must prove its own exact roundtrip and headroom; it cannot claim LibNC update parity."
+  ]
+}

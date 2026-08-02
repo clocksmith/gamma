@@ -1,0 +1,74 @@
+{
+  "candidate_id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "contract": {
+    "activation": "libnc_unfused_f32_tanh_formula",
+    "d_model": 32,
+    "exported_parameter_types": [
+      "f32"
+    ],
+    "gradient_clip": 0.05,
+    "layers": 1,
+    "learning_rate": 0.00016,
+    "symbols": 4,
+    "tolerance": 2e-05,
+    "updates": 1
+  },
+  "decision": {
+    "authorized_next_action": "retire tanh GELU as a sufficient online-update parity fix",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": false,
+    "verified_full_1g_score_bytes": null
+  },
+  "inputs": {
+    "final_manifest": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/final_export/manifest.json",
+      "sha256": "6947405fd472b7401fe3460b037bfc17a788c04582ff5215b21f4821621104cd"
+    },
+    "initial_manifest": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/manifest.json",
+      "sha256": "6947405fd472b7401fe3460b037bfc17a788c04582ff5215b21f4821621104cd"
+    },
+    "primitive_decision": {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/nncp_v33_libnc_activation_backward_parity_v1/decision.json",
+      "sha256": "cb10e4ab62e8730bf1bcf919a3d4b589611315561c186d5493a10c2c64006601"
+    },
+    "teacher_trace": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/teacher.bin",
+      "sha256": "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+    }
+  },
+  "proof": {
+    "first_final_tensor_sha256": "7cccce8ff1c1197fed779a603dcd682281aeef277905a4f6925d4683237fb0ad",
+    "maximum_absolute_parameter_error": 0.00031999964267015457,
+    "maximum_absolute_probability_error": 4.6566128730773926e-09,
+    "mean_absolute_probability_error": 2.5085000743274577e-10,
+    "parameter_maximum_errors": {
+      "b_r_0": 0.00031984937959350646,
+      "embed": 0.00031998008489608765,
+      "embed_out": 2.8312206268310547e-07,
+      "ff1_0": 0.0003199988277629018,
+      "ff2_0": 0.00031999964267015457,
+      "ff_bias1_0": 0.00031999871134757996,
+      "ff_bias2_0": 2.7715577743947506e-07,
+      "ln_b_0": 2.7794158086180687e-07,
+      "ln_b_1": 0.00031996890902519226,
+      "ln_b_2": 2.6990892365574837e-07,
+      "ln_g_0": 0.0003199577331542969,
+      "ln_g_1": 0.0003197193145751953,
+      "ln_g_2": 2.384185791015625e-07,
+      "out_bias": 2.7992064133286476e-07,
+      "w_kv_0": 0.0003199726343154907,
+      "w_o_0": 0.0003199949860572815,
+      "w_q_0": 0.0003199949860572815,
+      "w_r_0": 0.00031991302967071533
+    },
+    "repeat_byte_identical": true,
+    "second_final_tensor_sha256": "7cccce8ff1c1197fed779a603dcd682281aeef277905a4f6925d4683237fb0ad",
+    "segment_losses": [
+      5.661087989807129
+    ]
+  },
+  "schema": "gamma.nncp_v33_libnc_tanh_gelu_online_update_parity.v1",
+  "score_credit_bytes": 0,
+  "status": "REJECT"
+}

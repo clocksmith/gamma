@@ -4397,3 +4397,124 @@ contract without rescue sweeps.
 
 Plan:
 `docs/mobius2_frontier_teacher_wrt_event_alphabet_plan.md`.
+
+## 2026-08-02: MÖBIUS-2 frontier-teacher WRT event alphabet is terminal negative
+
+The frozen heavy-lock ROCm oracle completed with process status zero and a
+clean development `REJECT`. It scored 159,767 exact WRT emission groups in 384
+independent page-local blocks across 102 complete pages and 349,911 raw bytes.
+All 14 role catalogs were learned only from development. They contained 7,174
+exact programs spanning 7,173 candidate Gemma token IDs, but no role achieved
+both positive calibrated gain and a strict win over the static exact-program
+alphabet. Selection and sealed confirmation therefore remained unopened.
+
+The decisive `PROSE_WORD` role had 78,009 opportunities and 23,976 catalog
+events. Those events displaced 183,676.797 joint bits, while the calibrated
+teacher alphabet required 373,197.753 bits. It lost 23,690.119 bytes to the
+exact JANUS-plus-quotient trajectory, was 11,394.559 bytes worse than the
+static exact-program alphabet, and was only 3,900.247 bytes better than the
+native full-mass Gemma control. `LINK_TARGET` lost 3,343.062 bytes and
+`LIST_ITEM` lost 2,938.178 bytes. `LINK_LABEL` and `TABLE_CELL` beat their
+static controls by 261.304 and 9.051 bytes respectively, but still lost
+690.157 and 59.816 bytes to the joint trajectory. Every other role was also
+negative.
+
+This is a scientific rejection rather than a runtime, alignment, or
+probability failure. The run proved real ROCm matrix compute, exact WRT/raw
+identity, exact joint-P1 truth alignment, complete contiguous event groups,
+development-only catalogs, legal finite nonzero distributions, repeatable
+event-local tokenization, and repeatable calibration. The repeated calibration
+SHA-256 is
+`2fb367176ca25b7029fa537bc9e468a28668208d682093244c01f9afd0f845ca`;
+the complete development event-score stream SHA-256 is
+`a65251bd989a79b22d7be483f3b36fae27db3473e3e470b7690d218e0650527c`.
+
+Retire this exact Gemma-4 12B checkpoint, event-local tokenizer, single-token
+program catalog, role partition, escape calibration, page-local 512-token
+reset, and static/full-mass controls without model, role, catalog, tokenizer,
+context, or smoothing rescue sweeps. Together with the full-vocabulary teacher
+rejection, this closes both direct local-Gemma descriptions tried against the
+joint residual trajectory. Forecast 109,389,323, debt 1,389,323, score credit
+zero, and unknown verified full-1G status remain unchanged.
+
+Decision:
+`results/mobius2_frontier_teacher_wrt_event_alphabet_qh0_v1/decision.json`.
+
+## 2026-08-02: NNCP v3.3 activation-backward parity gate frozen
+
+Proposal and candidate: `nncp_v33_libnc_activation_backward_parity_v1`.
+
+The published NNCP v3.3 total remains the only locally documented external
+result below 108,000,000 bytes. The existing ROCm port matched the frozen
+miniature forward distribution, but its first online update diverged and the
+prior gradient interposition found 6.6 to 14.6 percent relative disagreement
+through internal backward paths. That result retired an undifferentiated
+PyTorch-autograd reproduction, not every individual LibNC derivative.
+
+The official Transformer graph implements GEGLU as `nc_gelu(left) * right`.
+A close forward approximation with a different activation derivative can
+therefore preserve inference parity while contaminating feed-forward,
+residual, attention, and embedding gradients. This gate calls LibNC's public
+`nc_gelu` and automatic differentiation APIs directly on a frozen F32 grid,
+requires byte-identical repeated output, and compares both values and
+derivatives with PyTorch's exact-erf and tanh-approximate GELU contracts.
+
+A unique match within `2e-6` maximum absolute gradient error authorizes one
+corrected bound miniature full-gradient and first-update replay. Anything else
+retires GELU backward as the cause. The gate has zero score credit and cannot
+authorize a mature trace by itself.
+
+Plan: `docs/nncp_v33_libnc_activation_backward_parity_plan.md`.
+
+## 2026-08-02: NNCP v3.3 tanh-GELU online-update parity gate frozen
+
+Proposal and candidate:
+`nncp_v33_libnc_tanh_gelu_online_update_parity_v1`.
+
+The direct primitive gate found that LibNC `nc_gelu` is not PyTorch's default
+exact-erf GELU. An unfused F32 tanh formula with the observed positive-tail
+saturation matches all 41 LibNC values within `1.1921e-7` and all automatic
+derivatives within `4.7684e-7`; exact-erf GELU misses the derivative by
+`8.6735e-4`. Repeated LibNC output is byte-identical with SHA-256
+`30c7050c349156e7b5973986f627414229ff40b3b339c243b87d34778e576f6f`.
+
+This child gate changes only that activation in the exact bound miniature that
+previously failed after one update. It retains the serialized initial and
+final LibNC tensors, teacher trace, four-symbol population, learning rate,
+per-parameter gradient clipping, and `2e-5` threshold. It repeats the corrected
+replay from the serialized initial tensors and binds the complete final tensor
+set by hash. A pass authorizes only the next parity localization or frozen
+full-profile gate; score credit remains zero.
+
+Plans:
+`docs/nncp_v33_libnc_activation_backward_parity_plan.md` and
+`docs/nncp_v33_libnc_tanh_gelu_online_update_parity_plan.md`.
+
+## 2026-08-02: NNCP v3.3 GELU repair is real but insufficient
+
+The primitive gate passed. Repeated direct LibNC execution was byte-identical,
+and the fitted unfused F32 tanh-GELU contract matched 41 forward values within
+`1.1920929e-7` and automatic derivatives within `4.7683716e-7`. PyTorch's
+default exact-erf GELU missed the derivative by `8.6735189e-4`. Exact-erf GELU
+is therefore a proved implementation bug in the prior NNCP replica.
+
+The one-change full-update child nevertheless produced a clean `REJECT`.
+Correcting GELU improved the frozen teacher distribution error from about
+`4.2e-7` to `4.6566e-9`. The `embed_out`, `out_bias`, `ff_bias2`, and several
+normalization update errors fell to approximately `2.4e-7` through `2.8e-7`.
+Internal attention, feed-forward, embedding, and other normalization tensors
+still reached `0.000319999643`, the two-sided first-step Adam sign ceiling and
+sixteen times the frozen `2e-5` gate. Two independent corrected replays
+produced the identical final-tensor SHA-256
+`7cccce8ff1c1197fed779a603dcd682281aeef277905a4f6925d4683237fb0ad`.
+
+Retire tanh GELU as a sufficient LibNC online-update parity repair. Do not
+launch a mature trace while claiming LibNC update equivalence. The measured
+activation contract remains the correct component for any self-consistent
+source-level v3.3 realization, which must prove its own encoder/decoder state
+identity and compression headroom rather than inherit the published score.
+Forecast and score credit remain unchanged.
+
+Decisions:
+`results/nncp_v33_libnc_activation_backward_parity_v1/decision.json` and
+`results/nncp_v33_libnc_tanh_gelu_online_update_parity_v1/decision.json`.

@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_activation_backward_parity_v1",
+  "claimed_at": "2026-08-02T03:14:49+00:00",
+  "created_at": "2026-08-02T03:14:49+00:00",
+  "developed_at": "2026-08-02T03:16:38+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_gradient_interposition_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "The terminal miniature online-update mismatch is caused by an unreplicated LibNC activation backward primitive; a direct public-API primitive probe will identify a PyTorch-equivalent forward/backward contract and reduce the bound one-update gradient error below the prior 2e-5 gate.",
+  "interfaces_exposed": [
+    "LibNC nc_gelu forward/backward primitive -> exact PyTorch autograd contract"
+  ],
+  "kill_condition": "Retire activation backward as the cause if exact, tanh-approximate, and directly fitted LibNC-compatible GELU variants cannot explain the primitive gradient, or if corrected full-model gradient disagreement remains above 2e-5; do not launch a mature trace.",
+  "max_program_bytes": 20000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "owner": "codex",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 151,
+  "promotion_condition": "Authorize one corrected bound miniature full-gradient and one-update parity replay only if the direct primitive matches repeated LibNC output/gradient bytes and yields a single frozen PyTorch formula with maximum primitive gradient error <= 2e-6.",
+  "proposal_id": "nncp_v33_libnc_activation_backward_parity_v1",
+  "retired_neighborhoods": [
+    "Generic PyTorch-autograd reproduction without primitive-level LibNC backward parity"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 166,
+  "state": "developed",
+  "title": "NNCP v3.3 LibNC activation-backward parity localization"
+}

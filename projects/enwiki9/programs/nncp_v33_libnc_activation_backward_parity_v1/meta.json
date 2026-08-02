@@ -1,0 +1,37 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Primitive-level LibNC CPU parity only; zero score credit and no mature NNCP trace authorization.",
+  "deps": [],
+  "description": "Direct public-API comparison of LibNC nc_gelu values and gradients with frozen PyTorch GELU contracts",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-recovery diagnostic against an external LibNC primitive; no compressor driver contract."
+  },
+  "family": "nncp_v33_rocm_port",
+  "hypothesis": "A mismatched GELU backward primitive explains the diffuse first-update gradient disagreement despite frozen forward parity.",
+  "id": "nncp_v33_libnc_activation_backward_parity_v1",
+  "kill_gate": "Retire GELU backward if neither exact nor tanh PyTorch GELU matches LibNC gradients within 2e-6, or if the selected contract fails the corrected bound miniature full-gradient gate.",
+  "omega": {
+    "interfaces_exposed": [
+      "LibNC nc_gelu forward/backward primitive -> exact PyTorch autograd contract"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_activation_backward_parity_v1",
+    "retired_neighborhoods": [
+      "Generic PyTorch-autograd reproduction without primitive-level LibNC backward parity"
+    ]
+  },
+  "parent": null,
+  "outcome": {
+    "libnc_stdout_sha256": "30c7050c349156e7b5973986f627414229ff40b3b339c243b87d34778e576f6f",
+    "matching_contract": "libnc_unfused_f32_tanh_formula",
+    "maximum_absolute_forward_error": 1.1920928955078125e-07,
+    "maximum_absolute_gradient_error": 4.76837158203125e-07,
+    "promotion_authorized": true,
+    "result": "results/nncp_v33_libnc_activation_backward_parity_v1/decision.json",
+    "score_credit_bytes": 0,
+    "verdict": "PASS_PRIMITIVE"
+  },
+  "status": "candidate"
+}
