@@ -274,3 +274,13 @@ has SHA-256 `b6fe6b09...`, and both clean builds reproduce backend SHA-256
 `d1066630...` and wrapper SHA-256 `37ee8cd7...`. The `19,022` counted bytes are
 accepted in the forecast, but do not authorize a full-`1G` run while runtime is
 unqualified.
+
+The public `cmix-obias` speed campaign has also been audited as a code donor.
+Its exact-source mechanisms are mostly absent from endpoint428, but even
+perfect transfer of all ten externally reported value-exact gains projects
+`65.284837 h`, and granting the complete reported `1.76x` campaign projects
+`50.406080 h`, both far above the published `14.9989 h` one-core allowance.
+No endpoint-only port or adaptive job is authorized. The value-exact prefetch,
+layout, huge-page, and branch-removal pieces remain donors after a future model
+replacement reduces the parent below `20.3818 h`. Full audit:
+`docs/cmix_obias_runtime_transfer_audit.md`.

@@ -7104,3 +7104,33 @@ Both bind raw SHA-256
 `5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97`.
 This restores the exact parent certificate boundary; it does not create a
 full-1G result, qualify runtime, or alter the `109,389,323` forecast.
+
+## 2026-08-02: `cmix-obias` runtime-transfer family bounded below eligibility
+
+A source-level read-only audit compared the recovered exact endpoint428 tree
+from the `19ddcc4e...` package with public `dfreelan/cmix-obias` commit
+`51488a0c1228dbeab7c1be837fc90ceaed351728`. The donor contains several
+genuinely unported runtime mechanisms: huge-page advice, FXCM and mixer-row
+prefetch, an aligned one-lookup mixer slab, RSS-aware PPM page release,
+branch-free CM3/CM4 paths, batched input marshaling, hot/cold splitting, and
+hoisted direct-state contexts. Its FP16, SIMD activation, deferred-gradient,
+and rank-1 output changes are changed-arithmetic candidates, not neutral speed
+patches. Endpoint428's fused three-gate traversal is only a partial conceptual
+overlap with the donor's flat recurrent layout.
+
+The family is not an immediate adaptive candidate. Perfect multiplicative
+transfer of all ten donor-reported value-exact step gains would yield only
+`1.358886755x` throughput and a `26.410351%` wall-time reduction, projecting
+the current `88.7147 h` endpoint to `65.284837 h` against the published
+`14.9989 h` one-core allowance. Granting the complete externally reported
+`1.76x` campaign, including value-drifting changes, still projects `50.406080
+h`, or `3.360652x` the allowance. These are optimistic arithmetic ceilings,
+not measured Gamma results.
+
+Decision: preserve the exact mechanisms as code donors for a future
+model-work-removal or replacement architecture, but create no proposal,
+candidate, queue entry, runtime credit, or score credit now. The runtime family
+becomes relevant only after a new parent is at most `20.3818 h` for the
+value-exact subset, or `26.3981 h` for the full changed-arithmetic set. Full
+hashes, source-diff classification, and transfer conditions are in
+`docs/cmix_obias_runtime_transfer_audit.md`.
