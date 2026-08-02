@@ -6553,6 +6553,13 @@ passes, Q0 must measure a joint replay with fixed precedence rather than add
 isolated gains. Plan:
 `docs/wikisection_exact_heading_body_lexicon_qm1_plan.md`.
 
+A later plan audit froze three additional implementation guards before any
+materialization: schedule from pre-event Wiki state and reject any accepted
+heading line that already received token opportunities; exclude all WRT events
+touching a line or `</text>` boundary, including an unterminated final line;
+and retain page ordinal, section ordinal, and normalized heading key in every
+blind record so unequal-key selection is asserted rather than inferred.
+
 ## 2026-08-02: endpoint428 runtime-eligibility boundary re-audited
 
 The `109,389,323` forecast still lacks a source-bound, reference-calibrated
@@ -6582,6 +6589,14 @@ runtime frontier's optimistic exact-source improvements cover only `13.963%`
 against an `83.093%` required reduction, so another microbenchmark is not a
 target-bearing substitute for model-work removal.
 
+The prerequisite topology decision is now frozen separately in
+`docs/endpoint428_cpu_thread_eligibility_contract.md`. It binds the recovered
+source hashes, hard-coded three-thread OpenMP regions, persistent FX2 worker,
+wrapper process topology, authoritative rule snapshot, affinity, live and
+runnable thread maxima, OpenMP environment, and host calibration. It can only
+reject the topology or authorize the later clean 10M runtime screen; it grants
+no runtime or score credit by itself.
+
 ## 2026-08-02: WIKIFORWARD prior-destination lexical ceiling proposed
 
 Proposal `wikiforward_prior_destination_page_lexicon_qm1_v1` is a dormant,
@@ -6603,6 +6618,16 @@ links across `581` active pages. The prefix-novel destination ceiling exposed
 `13,539.301` on selection, and `12,909.270` on confirmation, corresponding to
 approximately `5,732`, `7,373`, and `7,448 B/M`. These are free oracle numbers,
 not a coded archive, and receive zero score and forecast credit.
+
+The frozen plan now resolves the remaining causal-control ambiguities before
+activation: use only the WIKIBACK ASCII normalization; deactivate duplicate
+normalized destination keys; restrict destination lexicons to pre-event
+`PROSE_WORD` tokens; define current-prefix novelty across exact token identity
+in every role; rebuild matched controls after prefix exclusion at every
+opportunity; bind blind/prior/global source identities and page-close updates;
+and make parent payload, WRT/raw identity, and integer split inequalities hard
+gates. Any later paying overlap with WIKIBACK or WIKISECTION requires a fresh
+joint finite replay rather than added isolated gains.
 
 The frozen QM1 requires identical pre-truth opportunity and capacity multisets
 for the exact destination lane and size-matched unrelated-page, immediately

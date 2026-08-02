@@ -76,6 +76,15 @@ opportunity schedule but are deliberately free to the QM1 membership selector.
 This makes QM1 an optimistic information ceiling, not a causal codec or an
 occurrence-level score claim.
 
+Opportunity scheduling uses the pre-event `WikiState`. A buffered line may not
+retroactively delete opportunities merely because the completed line is later
+recognized as a heading. Instead, an accepted heading line must contain zero
+scheduled dictionary-token opportunities; any violation makes the execution
+causally malformed. When `</text>` is reached without a preceding LF, finalize
+the preceding body line as non-heading while excluding every event that
+contributes any byte to the closer. Exclude every event crossing a closer or
+line boundary.
+
 ## QM1 controls
 
 QM1 supplies the index, counts, truth-aware selector, ranks, source, framing,
@@ -112,6 +121,11 @@ Hcoarse the union of prior completed section bodies with the same frozen coarse
 Hexact  prior completed bodies under the exact normalized heading
 ```
 
+Every stored `Hblind` record retains its page ordinal, section ordinal, and
+normalized heading key. The selector must explicitly assert that its source
+heading key differs from the current exact key; a digest match without this
+identity guard is malformed evidence.
+
 `Hcoarse` is bound to `tools/build_heading_state_map.py::classify`, Git blob
 `d32fc719bf235aa9e9257518da2e738e3350c0b4`, SHA-256
 `91074cdb2c0eb9e9c67c486e34e5bef6efb260517411fe90d77cf43ee581666c`.
@@ -127,6 +141,9 @@ parent input identities                         exact
 parser/index replay                             byte-identical
 opportunity and control digests                 byte-identical
 all candidates sourced from prior closed pages exact
+accepted heading has zero scheduled token events exact
+closer and line-crossing events excluded             exact
+Hblind source-key inequality                         exact
 
 Hexact full free displaced ceiling              >= 60,000 byte-equivalent
 Hexact each chronological split                 >= 5,000 B/M

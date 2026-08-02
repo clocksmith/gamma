@@ -51,10 +51,20 @@ visible. The optimistic membership decision is evaluated after truth solely
 to measure the free ceiling. A qualifying hit must be absent from the exact
 already decoded current-page prefix lexicon.
 
-The destination lexicon is immutable after its source page closes. Redirects,
-normalization, unresolved targets, later pages, the current destination event,
-future links, and encoder-only aliases are forbidden. A source page must have
-a strictly smaller completed-page ordinal than the current page.
+The destination lexicon is immutable after its source page closes. Resolve
+targets with exactly the frozen WIKIBACK ASCII normalization and no additional
+Unicode, entity, redirect, semantic, or alias normalization. Unresolved
+targets, later pages, the current destination event, future links, and
+encoder-only aliases are forbidden. A source page must have a strictly smaller
+completed-page ordinal than the current page. If a normalized title key maps
+to more than one earlier closed page, deactivate that target rather than
+choosing among duplicate destinations.
+
+A destination lexicon contains only exact encoded WRT dictionary-token events
+whose pre-event role is `PROSE_WORD`. Current-page prefix novelty is defined
+over every previously decoded exact WRT dictionary-token identity in every
+role; an identity previously seen in markup, a heading, link syntax, or another
+role is therefore not novel.
 
 ## Frozen exploratory observation
 
@@ -85,15 +95,22 @@ lexeme count and weight multisets before truth is examined.
   current-page outgoing links.
 - `Dblind`: unrelated earlier closed pages selected deterministically and
   injectively, matched to each destination update by destination-page lexicon
-  size.
-- `Dprior`: the immediately preceding eligible closed page, capacity matched
-  to the same destination update.
+  size. Store source ordinal and normalized title key and require that key to
+  differ from the real destination key.
+- `Dprior`: page ordinal `current_page_ordinal - 1` when that page is fully
+  closed and has an eligible prose lexicon, capacity matched to the same
+  destination update; otherwise the update is unavailable to every lane.
 - `Dglobal`: globally frequent prior identities selected from completed pages,
-  capacity matched to the same destination update.
+  capacity matched to the same destination update. Global counts update only
+  after the contributing page closes.
 
-Every lane excludes identities already present in the current-page prefix. If
-an injective capacity match cannot be constructed for every control, deactivate
-that update for every lane. No lane may receive an extra opportunity.
+At every opportunity, rebuild each control from its frozen causal source
+reservoir after current-prefix exclusion. Assign the current `Dfull`
+prefix-novel weight multiset injectively to each control. A match made at the
+earlier destination-update boundary is not sufficient because later prefix
+events can remove different identities from different lanes. If any control
+lacks capacity at the current opportunity, deactivate that opportunity for
+every lane. No lane may receive an extra opportunity.
 
 The following repeated-build digests must be byte-identical:
 
@@ -102,6 +119,8 @@ The following repeated-build digests must be byte-identical:
 - opportunity positions and prefix-novel masks;
 - per-update control assignments and capacity multisets;
 - per-lane rounded-Q256 totals and split totals.
+- exact joint-parent payload bytes and SHA-256;
+- exact decoded WRT bytes and official raw inverse SHA-256.
 
 ## Free and paid boundary
 
@@ -131,14 +150,25 @@ Dfull minus each control, total                            >= 10,000 byte-equiva
 Dfull minus each control, every split                      positive
 ```
 
+For a split containing `R` raw bytes, compare the integer quantities directly:
+
+```text
+split_qbits * 1,000,000 >= 5,000 * 2,048 * R
+```
+
+Do not use rounded floating-point B/M values in the decision.
+
 Any miss retires this exact destination-source union, prefix-novel filter,
 event universe, and control construction. Do not rescue-sweep link windows,
 target normalization, redirects, lexicon roles, support, weighting, capacity,
 or control selection.
 
-A pass authorizes only an actual paid hit/escape-plus-rank Q0. It does not
-authorize native integration, a larger population, source-bound forecast
-credit, or a full-corpus claim.
+A pass authorizes only an isolated actual paid hit/escape-plus-rank Q0 for
+attribution. It does not authorize native integration, a larger population,
+source-bound forecast credit, or a full-corpus claim. If WIKIBACK or
+WIKISECTION also pays, isolated gains must not be added; the only score-relevant
+evidence is a fresh joint finite replay with frozen precedence and all source
+and framing costs.
 
 ## Ordering
 
