@@ -5063,3 +5063,42 @@ changing another arithmetic primitive. No score or forecast credit changes.
 
 Decision:
 `results/nncp_v33_libnc_concat_root_scope_gradient_v1/decision.json`.
+
+## 2026-08-02: LibNC FF2 upstream-connectivity gate frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_ff2_upstream_connectivity_gradient_v1`.
+
+Output-only root scope in the complete source still produces bound-native FF2
+gradients, while an output-only synthetic block from exact captured inputs
+produces PyTorch-like gradients. This child varies the remaining structural
+difference with forward-identical constant-copy controls on the activated FF2
+hidden input and the residual connection. The first `nc_stop_grad` realization
+failed before evidence because it mutates shared saved graph state; the frozen
+replacement allocates an untracked tensor and copies the same value. The
+variants cut neither,
+hidden only, residual only, or both upstream graphs; all original concat roots
+remain enabled.
+
+Each source variant must retain exact archive and trace identity and repeat its
+named gradients. The uncut variant must reproduce the full prior receipt. A
+pass requires both-stop to transition FF2 matrix and bias gradients from the
+bound values to PyTorch values, with single-cut controls identifying the
+minimal responsible connection. A miss retires upstream connectivity as the
+isolated cause. No score or forecast credit is available.
+
+Plan: `docs/nncp_v33_libnc_ff2_upstream_connectivity_gradient_plan.md`.
+
+Disposition: blocked infrastructure, zero scientific and score credit. The
+initial `nc_stop_grad` realization and a replacement using
+`nc_new_tensor_from_tensor_nz` plus `nc_tensor_copy` both reproduced the uncut
+case but segfaulted on the first hidden-cut execution before emitting a named
+gradient receipt. The saved concat-optimized graph therefore cannot be
+intervened on at this boundary with either supported graph-detachment form.
+The two failed adaptive receipts are
+`operations/adaptive/failed/832_20260802T053058Z_aabbe879db.json` and
+`operations/adaptive/failed/832_20260802T053447Z_8c6879e845.json`; the middle
+compile-only failure is
+`operations/adaptive/failed/832_20260802T053412Z_148d2d0c05.json`. This is not
+a rejection of the connectivity hypothesis, but it closes this source-patch
+realization and authorizes no further parity child.

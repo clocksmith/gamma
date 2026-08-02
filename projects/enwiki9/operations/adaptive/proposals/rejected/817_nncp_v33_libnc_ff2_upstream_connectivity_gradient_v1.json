@@ -1,0 +1,34 @@
+{
+  "candidate_id": "nncp_v33_libnc_ff2_upstream_connectivity_gradient_v1",
+  "claimed_at": "2026-08-02T05:27:45+00:00",
+  "created_at": "2026-08-02T05:27:45+00:00",
+  "developed_at": "2026-08-02T05:30:48+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_concat_root_scope_gradient_v1/decision.json; results/nncp_v33_libnc_ff2_to_loss_backward_composition_v1/decision.json; /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c#L920-L990"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Recursive concat optimization produces the bound FF2 gradient only when the FF2 hidden input or residual retains its upstream graph; forward-identical constant-copy controls will transition ff2_0 and ff_bias2_0 from bound-native to isolated-block/PyTorch gradients.",
+  "interfaces_exposed": [
+    "Frozen stop-grad subset {ff2_hidden,residual} -> complete source output-root gradients"
+  ],
+  "kill_condition": "Stop on source, archive, trace, naming, or repeat failure; retire upstream connectivity if both-stop retains the bound FF2 and bias gradients or fails to match the isolated PyTorch block.",
+  "max_program_bytes": 0,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "owner": "128",
+  "parent": "nncp_v33_libnc_concat_root_scope_gradient_v1",
+  "parent_proposal_id": "nncp_v33_libnc_concat_root_scope_gradient_v1",
+  "priority": 167,
+  "promotion_condition": "Authorize one exact connectivity parity child only if every variant preserves archive and trace identity and repeats, the uncut graph reproduces all bound named bytes, the both-stop graph matches PyTorch FF2 and bias gradients, and a frozen hidden/residual stop pattern isolates the transition.",
+  "proposal_id": "nncp_v33_libnc_ff2_upstream_connectivity_gradient_v1",
+  "rejected_at": "2026-08-02T05:35:23+00:00",
+  "rejection_reason": "Blocked infrastructure: both nc_stop_grad and explicit constant-copy cuts segfaulted the saved concat-optimized graph before any cut-variant gradient receipt; no scientific rejection and no score credit.",
+  "retired_neighborhoods": [
+    "Concat root membership; synthetic FF2 extension; ordinary forward primitives."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 182,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC FF2 upstream connectivity gradient"
+}
