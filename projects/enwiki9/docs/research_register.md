@@ -6524,3 +6524,28 @@ at least `2,100 B/M` after a Git-bound zlib-9 direct-source bundle allowance,
 and Wfull below Cblind/Cprior/Ctarget. A miss
 retires the exact source and coder without rescue sweeps. Plan:
 `docs/wikiback_incoming_anchor_context_qh0_plan.md`.
+
+## 2026-08-02: WIKISECTION exact-heading body-lexicon ceiling proposed
+
+Proposal `wikisection_exact_heading_body_lexicon_qm1_v1` is a dormant
+successor to the WIKIBACK decision and receives zero score credit. It uses an
+exact completed section heading as a decoder-visible key into exact WRT token
+lexicons staged from same-heading section bodies and published only after their
+earlier pages close. This differs from the rejected ten-state heading
+calibrator, which never indexed exact heading text or prior section bodies, and
+from TESSERA's static corpus-wide types, WIKIBACK's page-title/backlink graph,
+suffix retrieval, residual programs, recurrence, prototypes, and future page
+rosters.
+
+The frozen QM1 is deliberately optimistic: index, counts, selector, ranks,
+source, framing, and termination are free. It must displace at least `60,000`
+rounded-Q256 JANUS-plus-quotient bytes on opening 10M, achieve at least
+`5,000 B/M` on every opened chronological split, and beat matched causal blind,
+prior-page, and coarse-heading controls by at least `10,000` bytes overall with
+a positive margin on every split. Parser, index, opportunity, and control
+digests must replay byte-identically. A miss retires the exact grammar,
+normalization, section-body event universe, commit policy, and controls without
+rescue sweeps. A pass authorizes only an actual paid side/residual Q0; it does
+not authorize forecast credit. If WIKIBACK passes, Q0 must measure a joint
+replay with fixed precedence rather than add isolated gains. Plan:
+`docs/wikisection_exact_heading_body_lexicon_qm1_plan.md`.
