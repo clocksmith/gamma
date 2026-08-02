@@ -7013,6 +7013,34 @@ submission-time interpretation. This clarification grants no score, runtime,
 or eligibility credit and does not authorize a run while NNCP owns the heavy
 lock or the score target remains missed.
 
+## 2026-08-02: cmix-obias external candidate audited without credit
+
+The public `dfreelan/cmix-obias` artifact self-reports a full-1G counted total
+of `108,492,825` bytes: `108,009,834` archive bytes plus a `459,989`-byte
+compressor and `23,002` bytes of separate fp16 residual-head weights. No Hutter
+committee announcement or independent terminal verification was located, and
+the audit did not execute the external archive. Its reported compression and
+decompression RSS values exceed Gamma's strict decimal-10GB guard by `655,271`
+and `672,375 KiB`. It is therefore an unverified competitive-risk and code-
+donor receipt, not a record or source-bound score.
+
+If the claimed score were accepted, the next one-percent maximum integer score
+would be `107,407,896`; Gamma's forecast would miss it by `1,981,427` bytes and
+the current `108,000,000` design target by `592,104` bytes. The canonical target
+is unchanged until authoritative verification, but the tighter value is now a
+recorded contingency.
+
+The source combines a 256-cell byte LSTM, an 11,489-parameter 64-bit-reset
+`bitlstm32` correction head over 92 internal-expert/residual/surprise/position
+features, a fixed `g=0.15` PPMd log-prior added to byte-LSTM output logits, and
+output-neutral speed/packaging work. These are not evidence for reopening
+CHIRON or JANUS unchanged. The supplied attribution is also subscale for
+Gamma's primary gate: about `530 KB` full-stream for the bit head and `4,837`
+bytes at 50 MB for the PPMd prior. Retain the exact mechanisms as later
+code-donor controls without interrupting NNCP or the frozen WIKI sequence.
+Full evidence and source hashes:
+`docs/cmix_obias_external_candidate_audit.md`.
+
 ## 2026-08-02: historical frontier provenance repaired without new credit
 
 Four exact historical artifacts were recovered from the local nonproof archive

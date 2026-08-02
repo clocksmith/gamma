@@ -19,6 +19,15 @@ new score credit                         0 bytes
 runtime eligibility            unresolved
 ```
 
+An unverified external `cmix-obias` artifact now self-reports `108,492,825`
+counted bytes. It has no located committee receipt and its reported RSS exceeds
+the project's strict decimal-10GB interpretation, so it does not change the
+canonical target or frontier. If accepted unchanged, its next one-percent
+ceiling would be `107,407,896`; the current forecast would be `1,981,427` bytes
+above that contingency and the standing `108,000,000` target would miss it by
+`592,104` bytes. Evidence and mechanism audit:
+`docs/cmix_obias_external_candidate_audit.md`.
+
 ## Supporting mathematics already separated
 
 `ACS-MATH-SEAL-2` contains four independent pencil-and-paper families:

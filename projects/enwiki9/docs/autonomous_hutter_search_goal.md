@@ -19,6 +19,16 @@ new score credit                     0
 runtime eligibility        unresolved
 ```
 
+External competitive claims are tracked separately from this source-bound
+boundary. A 2026-08-02 `cmix-obias` artifact self-reports `108,492,825` counted
+bytes but has no located committee verification and exceeds this project's
+strict decimal-10GB RSS interpretation. If it is accepted unchanged, the next
+one-percent prize ceiling becomes `107,407,896`, so `108,000,000` would cease
+to be prize-winning even though it would be a smaller archive. Until that
+external claim is authoritative, preserve `108,000,000` as the standing user
+target and track the tighter value as a contingency. See
+`docs/cmix_obias_external_candidate_audit.md`.
+
 A forecast, proxy, teacher, oracle, shadow, prefix, or free-description
 ceiling is never victory. Success requires a self-contained full-1G archive,
 exact reconstruction, deterministic replay, complete package accounting, and
@@ -80,7 +90,9 @@ The preferred portfolio has multiple independent 100M-qualified descendants:
 one representation-changing codec, one improved predictive substrate, and one
 fresh joint composition. Continue until at least one CPU-eligible,
 self-contained implementation reconstructs all one billion bytes and produces
-a complete counted score at or below `108,000,000`.
+a complete counted score at or below `108,000,000`. If an intervening verified
+record makes that score insufficient for the minimum prize, tighten the final
+admission boundary rather than declaring victory against a stale target.
 
 ## Canonical authority
 
