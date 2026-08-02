@@ -229,8 +229,13 @@ The present order remains:
 3. Resolve WIKISECTION, WIKIFORWARD, and WIKIGRAPH in dependency order.
 4. Construct WIKI-JOINT only from independently paying sources and measure a
    fresh finite replay.
-5. Compile any positive information into a counted native child and clear
-   disjoint, 10M, 100M, resource, and full-1G gates.
+5. After the first paid WIKI source, freeze one dependency-closed lightweight
+   parent and measure fresh `F`, `F+W`, `L`, and `L+W` trajectories; do not add
+   isolated gains.
+6. Compile positive information into counted native children and clear
+   disjoint, 10M, 100M, resource, and full-1G gates. At 100M, freeze a safety
+   reserve `R` and require
+   `10 * g_100 - delta_P >= 1,389,323 + R`.
 
 The missing competition problem is therefore not another abstract theorem. It
 is the empirical obligation to find a causal information source that survives

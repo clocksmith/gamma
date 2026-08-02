@@ -86,6 +86,27 @@ inside the official resource limits, and retain enough package-adjusted gain to
 forecast below `108,000,000` with a transfer cushion. That forecast authorizes
 the full-1G proof; it is not the proof.
 
+For measured 100M archive gain `g_100`, incremental counted program cost
+`delta_P`, and a safety reserve `R` frozen before the run, require:
+
+```text
+10 * g_100 - delta_P >= 1,389,323 + R
+```
+
+Equivalently, `g_100 >= (1,389,323 + delta_P + R) / 10`. Do not choose `R`
+after observing the 100M result. The receipt must report the projected counted
+score and signed margins to both:
+
+```text
+standing design target       108,000,000
+competitive contingency      107,407,896
+```
+
+The contingency is diagnostic while the external `cmix-obias` result remains
+unverified; it does not silently replace the standing target. If that result or
+another record becomes authoritative, update the admission boundary before
+claiming prize eligibility.
+
 The preferred portfolio has multiple independent 100M-qualified descendants:
 one representation-changing codec, one improved predictive substrate, and one
 fresh joint composition. Continue until at least one CPU-eligible,
@@ -93,6 +114,15 @@ self-contained implementation reconstructs all one billion bytes and produces
 a complete counted score at or below `108,000,000`. If an intervening verified
 record makes that score insufficient for the minimum prize, tighten the final
 admission boundary rather than declaring victory against a stale target.
+
+The preferred joint composition must connect score and eligibility rather than
+merely stack another model on endpoint428. After the first isolated WIKI source
+passes its paid gate, freeze one dependency-closed lightweight parent and run
+fresh exact trajectories for the full parent `F`, `F+W`, the lightweight
+control `L`, and `L+W`. `L` is a required attribution control even though the
+promotion question is the three-way choice among `F`, `F+W`, and `L+W`.
+Never infer `L+W` by adding an isolated WIKI gain to `L`'s loss. Count every
+archive, package, side stream, runtime path, and resource receipt independently.
 
 ## Canonical authority
 
