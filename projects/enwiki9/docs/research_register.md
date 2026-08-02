@@ -6691,3 +6691,77 @@ and shuffled residual labels under a `64 KiB` model ceiling. It must reproduce
 model, P1, payload, WRT, and raw hashes; gain on every split; beat all controls;
 save at least `3,000 B/M` gross and `2,100 B/M` after package accounting. A
 pass would authorize only native replacement and timing measurements.
+
+## 2026-08-02: autonomous Hutter search contract adopted
+
+The standing objective is now recorded explicitly in
+`docs/autonomous_hutter_search_goal.md`: produce a deterministic,
+self-contained, CPU-eligible exact full-1G result at or below `108,000,000`
+counted bytes. The current `109,389,323` value remains a constructive-prefix
+forecast with `1,389,323` bytes of design debt, zero new score credit, unknown
+full-1G score, and unresolved runtime eligibility.
+
+The adaptive policy maintains different information and replacement lineages,
+uses the cheapest decisive frozen gate, retires matched-control and transfer
+misses without rescue sweeps, preserves both negative and positive receipts,
+and forbids adding isolated gains across changed coding trajectories. The
+promotion ladder ends only with exact 100M qualification and a complete
+full-1G proof; forecasts authorize work but never constitute victory.
+
+## 2026-08-02: external prize boundary and WIKI-JOINT audit
+
+The official Hutter Prize site still lists `fx2-cmix` at `110,793,128`. The
+largest integer score meeting a one-percent improvement over that listed
+record is `109,685,196`; Gamma's forecast is `295,873` bytes below that number
+on size alone but remains unproved and runtime-unqualified. The locally
+reproduced pending `cmix-lex` scenario uses `109,671,639`, whose one-percent
+ceiling is `108,574,922`; Gamma's forecast misses it by `814,401`. The official
+site had not incorporated that pending value when rechecked on 2026-08-02.
+The `108,000,000` design target remains the robust boundary.
+
+The proposed WIKI-JOINT causal graph-lexicon state-preserving bypass is useful
+as a parked composition contract, not a new information source and not yet an
+adaptive proposal. It unions exact encoded WRT events from independently
+paying WIKIBACK, WIKISECTION, and WIKIFORWARD descendants, pays one finite
+tag/rank/residual archive, and executes the full ordinary Predict plus
+Perceive/update path for every reconstructed bit. Native promotion requires
+quiesced parent, WRT, parser, and graph state hashes after every hit.
+
+The correct economics are
+`G_net = (|A_parent| - |A_child|) - delta_program`; isolated free ceilings and
+1G retention ratios remain planning evidence. Q24 requires `K < 2^24`.
+Endpoint428 is the native accounting parent unless a retired trace parent is
+reintroduced and fully paid. WIKI-JOINT is ordered only after the isolated
+finite gates pass. Strategy:
+`docs/wiki_joint_causal_graph_lexicon_bypass_strategy.md`.
+
+## 2026-08-02: WIKIBACK v1 prelaunch control correction
+
+The pending `wikiback_incoming_anchor_context_qh0_v1` job
+`20260802T142903Z_3f08041134` was cancelled before launch. Its Cblind pool
+stored only `(page_ordinal, snapshot)`, so it could not enforce the frozen
+unrelated normalized-title-key invariant. Opening 10M has 46 normalized-title
+collisions across 92 title rows. Exact read-only replay found no selected
+collision under the frozen v1 selection order, so Wfull economics were not
+shown contaminated, but the proof invariant was absent. V1 receives no run
+ledger row, no scientific verdict, no exclusion, and zero score credit.
+
+Child `wikiback_incoming_anchor_context_cblind_keyguard_qh0_v2` stores
+`(ordinal, normalized_title_key, snapshot)`, excludes equal keys before support
+matching, asserts every selected key differs, and binds keys, selections,
+exclusions, and violations into repeated machine receipts. It uses distinct
+frame/config/decision identities and preserves every other v1 mechanism and
+gate. It must be source-bound and queued exactly once only after NNCP releases
+the heavy lock. Plan:
+`docs/wikiback_incoming_anchor_context_cblind_keyguard_qh0_v2_plan.md`.
+
+## 2026-08-02: adaptive tool guard liveness attribution fixed
+
+`tools/enwiki9_status_receipt.py` incorrectly treated NNCP's nested RSS guard
+as an independent speedlab, replacing the live adaptive job identity with the
+guard label and preprocessed-file size. This made the human/JSON status view
+call a healthy job orphaned even though `enwiki9_lab.py status` correctly
+reported its worker live. The reporter now attributes a guard to its verified
+ancestor adaptive worker, retains the job's candidate and gate size, and uses
+the guard only for resource and terminal metrics. Standalone unowned speedlab
+recovery remains unchanged. The active NNCP process was not interrupted.

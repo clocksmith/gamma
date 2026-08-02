@@ -633,6 +633,7 @@ def live_speedlab_gate_from_process(
             next_action = "wait_for_gate_receipts"
         gate: dict[str, Any] = {
             "candidate": candidate,
+            "guard_pid": row.get("pid"),
             "scope_bytes": scope,
             "verdict": verdict,
             "next_action": next_action,
@@ -690,6 +691,75 @@ def live_speedlab_gate_from_process(
             )
         return gate
     return None
+
+
+def adaptive_job_owning_guard(
+    gate: dict[str, Any] | None,
+    process_state: dict[str, Any],
+    adaptive_state: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Return the live adaptive job whose worker owns a nested RSS guard."""
+
+    if not isinstance(gate, dict):
+        return None
+    guard_pid = gate.get("guard_pid")
+    if not isinstance(guard_pid, int) or isinstance(guard_pid, bool):
+        return None
+    rows = process_state.get("active_rows")
+    if not isinstance(rows, list):
+        return None
+    parent_by_pid = {
+        row.get("pid"): row.get("ppid")
+        for row in rows
+        if isinstance(row, dict)
+        and isinstance(row.get("pid"), int)
+        and isinstance(row.get("ppid"), int)
+    }
+
+    ancestors: set[int] = set()
+    current = guard_pid
+    while current not in ancestors:
+        ancestors.add(current)
+        parent = parent_by_pid.get(current)
+        if not isinstance(parent, int) or parent <= 0:
+            break
+        current = parent
+
+    running_jobs = adaptive_state.get("running_jobs")
+    if not isinstance(running_jobs, list):
+        return None
+    owners = [
+        row
+        for row in running_jobs
+        if isinstance(row, dict)
+        and row.get("worker_pid_live") is True
+        and isinstance(row.get("worker_pid"), int)
+        and row.get("worker_pid") in ancestors
+    ]
+    if len(owners) != 1:
+        return None
+    return owners[0]
+
+
+def bind_guard_to_adaptive_job(
+    gate: dict[str, Any], job: dict[str, Any]
+) -> dict[str, Any]:
+    """Keep guard metrics while restoring the owning job's durable identity."""
+
+    bound = dict(gate)
+    bound["guard_label_candidate"] = gate.get("candidate")
+    bound["guard_inferred_scope_bytes"] = gate.get("scope_bytes")
+    bound["candidate"] = job.get("candidate_id")
+    bound["scope_bytes"] = job.get("gate_size")
+    bound["adaptive_job_id"] = job.get("job_id")
+    bound["adaptive_job_path"] = job.get("path")
+    bound["adaptive_worker_pid"] = job.get("worker_pid")
+    bound["source"] = "live_adaptive_tool_rss_guard"
+    bound["claim_rule"] = (
+        "A nested RSS guard inherits candidate and scope from its verified live "
+        "adaptive worker; the guard supplies resource and terminal metrics only."
+    )
+    return bound
 
 
 def gate_state(candidate: str | None, scope: int | None) -> dict[str, Any] | None:
@@ -1437,6 +1507,16 @@ def receipt() -> dict[str, Any]:
     candidate, scope = active_candidate_from_cert(cert)
     live_speedlab_gate = live_speedlab_gate_from_process(process_state)
     if live_speedlab_gate is not None:
+        owning_job = adaptive_job_owning_guard(
+            live_speedlab_gate,
+            process_state,
+            adaptive_state,
+        )
+        if owning_job is not None:
+            live_speedlab_gate = bind_guard_to_adaptive_job(
+                live_speedlab_gate,
+                owning_job,
+            )
         candidate = live_speedlab_gate.get("candidate")
         scope = live_speedlab_gate.get("scope_bytes")
         gate = live_speedlab_gate
