@@ -6392,3 +6392,18 @@ has zero score credit regardless of outcome.
 
 Plan:
 `docs/nncp_v33_libnc_cpu_encode_only_mature_9m_10m_q1_plan.md`.
+
+## 2026-08-02: NNCP mature 9M-10M Q1 first attempt is infrastructure-only
+
+Adaptive job `20260802T130843Z_5fab5fd823` stopped after `13.107` seconds with
+return code `1`. Input identity and joint raw-boundary construction completed,
+but the indexed observer materializer expected a generated C declaration on
+one line while the base materializer emitted it on two lines. The job stopped
+before observer compilation, neutrality smoke, or continuous NNCP execution.
+It has no scientific verdict and consumes none of the one authorized mature
+teacher execution.
+
+The exact source-anchor bug was fixed without changing the candidate,
+population, model, coder, controls, thresholds, or decision rule. A clean
+source-package materialization and build now succeeds. Preserve the failed job
+receipt and authorize one explicitly labeled identical infrastructure retry.

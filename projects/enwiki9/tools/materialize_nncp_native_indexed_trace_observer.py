@@ -42,8 +42,10 @@ def instrument_cp_utils(source_root: Path) -> None:
     )
     source = replace_once(
         source,
-        "uint8_t trace_prob[16], trace_bit[16], row[63], branch[3], tree_count[2];",
-        "uint8_t trace_prob[16], trace_bit[16], row[71], branch[3], tree_count[2];",
+        "uint16_t trace_prob[16];\n"
+        "    uint8_t trace_bit[16], row[63], branch[3], tree_count[2];",
+        "uint16_t trace_prob[16];\n"
+        "    uint8_t trace_bit[16], row[71], branch[3], tree_count[2];",
         "indexed trace row size",
     )
     old_rows = """    native_trace_put_le(row + 0, native_trace_rows, 8);
