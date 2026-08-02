@@ -1,0 +1,83 @@
+{
+  "schema": "endpoint428_artifact_recovery_audit_v0",
+  "generated_at_utc": "2026-08-02T00:13:50Z",
+  "evidence_level": "superseded_host_local_artifact_availability_audit",
+  "required_artifacts": {
+    "original_source_package": {
+      "bytes": 280147,
+      "sha256": "19ddcc4ec1b6f31958bed4aa19c0fbc83a56c78121933e1447e4ee011547aee0",
+      "identity_recorded": true,
+      "materialized": false
+    },
+    "minified_source_package": {
+      "bytes": 261125,
+      "sha256": "b6fe6b09d6adbd8a287a08d284ca1f439ba72ff007b4d40c66bf7647a54a5d43",
+      "identity_recorded": true,
+      "materialized": false
+    },
+    "wrapper_program": {
+      "bytes": 2326416,
+      "sha256": "37ee8cd73ade9845b1afcb39f3bbd9358956c3ff9aea3b69328da7441ee32361",
+      "identity_recorded": true,
+      "materialized": false
+    },
+    "backend": {
+      "bytes": 1899840,
+      "sha256": "d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194",
+      "identity_recorded": true,
+      "materialized": false
+    }
+  },
+  "search": {
+    "roots": [
+      "/home/clocksmith",
+      "/mnt",
+      "/media",
+      "/tmp"
+    ],
+    "methods": [
+      "exact SHA-256 text references",
+      "exact byte-size file scan followed by SHA-256",
+      "reachable and unreachable Git blob-size scan",
+      "historical endpoint and source-package filename scan",
+      "retained enwiki9 handoff and nonproof tree scan"
+    ],
+    "exact_artifact_matches": 0,
+    "git_exact_size_matches": [
+      {
+        "bytes": 411996,
+        "git_blob": "cb6e0b635b8635f334fbbc78d47c58492337ac76",
+        "role": "English dictionary, not a required Gate-0 package or executable"
+      }
+    ]
+  },
+  "surviving_non_parent_artifacts": {
+    "stock_reconstruction_tree": {
+      "path": "/home/clocksmith/enwiki9-nonproof/runtime/reconstruct_endpoint428_runtime_v1",
+      "binary_sha256": "46adc90de4f068180567a74dc41043726675967f428fcb194255d701bdfb0bf0",
+      "classification": "stock cmix21 lacking fx2lite_endpoint428 and OnlineResidualMixer; not parent evidence"
+    },
+    "older_endpoint428_trace": {
+      "p1_path": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/endpoint428.p1",
+      "p1_sha256": "1aba2ddb90c9e3a9a2a350f7d8d14f65a6128b96e6baa7bd50e09dacaca06955",
+      "archive_path": "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/endpoint428.archive",
+      "archive_bytes": 173963,
+      "classification": "archive-identical older endpoint428 causal-shadow substrate; not the current pair/layer-0 parent"
+    }
+  },
+  "canonical_accounting": {
+    "minified_package_credit_withheld_bytes": 0,
+    "program_bytes": 261125,
+    "forecast_score_bytes": 109389323,
+    "design_target_score_bytes": 108000000,
+    "design_target_debt_bytes": 1389323
+  },
+  "decision": {
+    "verdict": "local_scan_found_no_artifacts_but_originating_host_recovery_receipt_supersedes_accounting_reset",
+    "superseded_by": "results/typed_event_sleeping_bayes_parent_recovery_q0_v1/decision.json",
+    "parent_reproduction_authorized": true,
+    "current_parent_native_experiment_authorized": true,
+    "full_1g_authorized": false
+  },
+  "claim_boundary": "This audit proves only that the four required Gate-0 byte artifacts were not found under the searched roots on the clocksmith host. The later committed originating-host recovery receipt proves both packages, clean binaries, exact 1M replay, and archived 10M identity, so this host-local absence does not withhold canonical minified-package credit. It does not establish a full_corpus_official result."
+}

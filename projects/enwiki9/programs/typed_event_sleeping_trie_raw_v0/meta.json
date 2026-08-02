@@ -1,0 +1,317 @@
+{
+  "added": "2026-08-01",
+  "contract": {
+    "causality": "Predictor state is read before each bit and updated only after the bit is encoded or decoded.",
+    "compress": "compress(data: bytes) -> bytes",
+    "decompress": "decompress(blob: bytes) -> bytes"
+  },
+  "deps": [],
+  "description": "TESBE-Raw exact selector over an order-1 literal model and a decoder-causal typed-event prefix-trie expert with completed 32-byte receipts.",
+  "family": "typed_event_sleeping_bayes",
+  "hypothesis": "A bounded decoder-rebuilt prefix trie over completed 32-byte structural continuations saves at least 2100 gross bytes per million over the identical order-1 literal model and beats trigger-only and suffix-only controls.",
+  "id": "typed_event_sleeping_trie_raw_v0",
+  "measured": {
+    "lane0_triage": {
+      "gates": [
+        {
+          "archive_ceiling": null,
+          "archive_ceiling_missed": false,
+          "bits_per_byte": 3.830144,
+          "comparison": {
+            "archive_delta_vs_baseline": 44144,
+            "baseline": {
+              "bits_per_byte": 2.417536,
+              "compressed_size": 75548,
+              "data_md5": "58df7be6473925f769c9621aeaff05cb",
+              "data_size": 250000,
+              "determinism_single_host_byte_equal": true,
+              "hutter_score": 75749,
+              "program_id": "baseline_lzma",
+              "program_size": 201,
+              "program_stats": null,
+              "roundtrip_ok": true
+            },
+            "same_scope": true,
+            "score_delta_vs_baseline": 64523
+          },
+          "compressed_size": 119692,
+          "data_md5": "58df7be6473925f769c9621aeaff05cb",
+          "data_size": 250000,
+          "determinism_single_host_byte_equal": true,
+          "hutter_score": 140272,
+          "program_id": "typed_event_sleeping_trie_raw_v0",
+          "program_size": 20580,
+          "program_stats": {
+            "continuation_bytes": 32,
+            "control_roundtrip": {
+              "B0": true,
+              "C0": true,
+              "E0": true,
+              "E1": true
+            },
+            "gain_vs_b0_bytes": {
+              "B0": 0,
+              "C0": 7219,
+              "E0": 7975,
+              "E1": 7666
+            },
+            "max_candidates": 8,
+            "max_keys": 8192,
+            "payload_bytes": {
+              "B0": 127345,
+              "C0": 120126,
+              "E0": 119370,
+              "E1": 119679
+            },
+            "profile_stats": {
+              "B0": {
+                "candidate_symbols": 0,
+                "memory_keys": 0,
+                "opportunities": 0,
+                "surviving_symbols": 0,
+                "wakes": 0
+              },
+              "C0": {
+                "candidate_symbols": 23955,
+                "memory_keys": 7,
+                "opportunities": 3074,
+                "surviving_symbols": 21135,
+                "wakes": 3061
+              },
+              "E0": {
+                "candidate_symbols": 22096,
+                "memory_keys": 1074,
+                "opportunities": 3074,
+                "surviving_symbols": 20780,
+                "wakes": 1718
+              },
+              "E1": {
+                "candidate_symbols": 21153,
+                "memory_keys": 1184,
+                "opportunities": 3074,
+                "surviving_symbols": 19965,
+                "wakes": 1585
+              }
+            },
+            "selected": "E1"
+          },
+          "roundtrip_ok": true
+        }
+      ],
+      "generated_at": "2026-08-01T23:29:28+00:00",
+      "proposed_status": "measured_negative",
+      "verdict": "Keep as negative evidence: valid deterministic loser."
+    },
+    "lane0_triage_runs": [
+      {
+        "gates": [],
+        "generated_at": "2026-08-01T23:26:51+00:00",
+        "proposed_status": "retired",
+        "verdict": "retired: driver_failure at 1024."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 6.023438,
+            "comparison": {
+              "archive_delta_vs_baseline": 359,
+              "baseline": {
+                "bits_per_byte": 3.21875,
+                "compressed_size": 412,
+                "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+                "data_size": 1024,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 613,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 20738
+            },
+            "compressed_size": 771,
+            "data_md5": "dbed4ef8ca80a74acdc3ed2620e34edc",
+            "data_size": 1024,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 21351,
+            "program_id": "typed_event_sleeping_trie_raw_v0",
+            "program_size": 20580,
+            "program_stats": {
+              "continuation_bytes": 32,
+              "control_roundtrip": {
+                "B0": true,
+                "C0": true,
+                "E0": true,
+                "E1": true
+              },
+              "gain_vs_b0_bytes": {
+                "B0": 0,
+                "C0": 57,
+                "E0": 0,
+                "E1": 0
+              },
+              "max_candidates": 8,
+              "max_keys": 8192,
+              "payload_bytes": {
+                "B0": 758,
+                "C0": 701,
+                "E0": 758,
+                "E1": 758
+              },
+              "profile_stats": {
+                "B0": {
+                  "candidate_symbols": 0,
+                  "memory_keys": 0,
+                  "opportunities": 0,
+                  "surviving_symbols": 0,
+                  "wakes": 0
+                },
+                "C0": {
+                  "candidate_symbols": 116,
+                  "memory_keys": 2,
+                  "opportunities": 20,
+                  "surviving_symbols": 101,
+                  "wakes": 16
+                },
+                "E0": {
+                  "candidate_symbols": 14,
+                  "memory_keys": 11,
+                  "opportunities": 20,
+                  "surviving_symbols": 7,
+                  "wakes": 7
+                },
+                "E1": {
+                  "candidate_symbols": 14,
+                  "memory_keys": 11,
+                  "opportunities": 20,
+                  "surviving_symbols": 7,
+                  "wakes": 7
+                }
+              },
+              "selected": "B0"
+            },
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-08-01T23:28:05+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      },
+      {
+        "gates": [
+          {
+            "archive_ceiling": null,
+            "archive_ceiling_missed": false,
+            "bits_per_byte": 3.830144,
+            "comparison": {
+              "archive_delta_vs_baseline": 44144,
+              "baseline": {
+                "bits_per_byte": 2.417536,
+                "compressed_size": 75548,
+                "data_md5": "58df7be6473925f769c9621aeaff05cb",
+                "data_size": 250000,
+                "determinism_single_host_byte_equal": true,
+                "hutter_score": 75749,
+                "program_id": "baseline_lzma",
+                "program_size": 201,
+                "program_stats": null,
+                "roundtrip_ok": true
+              },
+              "same_scope": true,
+              "score_delta_vs_baseline": 64523
+            },
+            "compressed_size": 119692,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_size": 250000,
+            "determinism_single_host_byte_equal": true,
+            "hutter_score": 140272,
+            "program_id": "typed_event_sleeping_trie_raw_v0",
+            "program_size": 20580,
+            "program_stats": {
+              "continuation_bytes": 32,
+              "control_roundtrip": {
+                "B0": true,
+                "C0": true,
+                "E0": true,
+                "E1": true
+              },
+              "gain_vs_b0_bytes": {
+                "B0": 0,
+                "C0": 7219,
+                "E0": 7975,
+                "E1": 7666
+              },
+              "max_candidates": 8,
+              "max_keys": 8192,
+              "payload_bytes": {
+                "B0": 127345,
+                "C0": 120126,
+                "E0": 119370,
+                "E1": 119679
+              },
+              "profile_stats": {
+                "B0": {
+                  "candidate_symbols": 0,
+                  "memory_keys": 0,
+                  "opportunities": 0,
+                  "surviving_symbols": 0,
+                  "wakes": 0
+                },
+                "C0": {
+                  "candidate_symbols": 23955,
+                  "memory_keys": 7,
+                  "opportunities": 3074,
+                  "surviving_symbols": 21135,
+                  "wakes": 3061
+                },
+                "E0": {
+                  "candidate_symbols": 22096,
+                  "memory_keys": 1074,
+                  "opportunities": 3074,
+                  "surviving_symbols": 20780,
+                  "wakes": 1718
+                },
+                "E1": {
+                  "candidate_symbols": 21153,
+                  "memory_keys": 1184,
+                  "opportunities": 3074,
+                  "surviving_symbols": 19965,
+                  "wakes": 1585
+                }
+              },
+              "selected": "E1"
+            },
+            "roundtrip_ok": true
+          }
+        ],
+        "generated_at": "2026-08-01T23:29:28+00:00",
+        "proposed_status": "measured_negative",
+        "verdict": "Keep as negative evidence: valid deterministic loser."
+      }
+    ]
+  },
+  "notes": [
+    "B0, C0, E0, and E1 code the same raw byte sequence with identical adaptive literal updates.",
+    "Receipts enter bounded memory only after their complete 32-byte continuations have been decoded.",
+    "The archive carries an exact selector between B0 and E1; C0 and E0 are matched zero-credit controls.",
+    "This raw-prefix gate does not grant endpoint428 or full-corpus score credit."
+  ],
+  "omega": {
+    "interfaces_exposed": [
+      "same raw byte stream -> B0/C0/E0/E1 exact arithmetic payloads plus selected B0-or-E1 archive"
+    ],
+    "mechanism_change": "change_coded_alphabet",
+    "parent_proposal_id": null,
+    "proposal_id": "typed_event_sleeping_trie_raw_v0",
+    "retired_neighborhoods": [
+      "SRSTC hashed aggregate residual calibration is retired; TESBE keeps explicit completed continuation hypotheses and posterior prefix elimination.",
+      "MOBIUS2 future-selected lexical frames and ordered template grammars are retired; TESBE uses online decoder-rebuilt receipts with no out-of-band plan."
+    ]
+  },
+  "parent": "srstc_raw_order2_aggregate_richkeys_v1",
+  "status": "measured_negative",
+  "verdict": "Keep as negative evidence: valid deterministic loser."
+}
