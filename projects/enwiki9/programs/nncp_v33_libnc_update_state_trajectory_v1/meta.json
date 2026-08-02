@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Eight-update parameter and memory localization only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_update_state_trajectory.py",
+    "tools/nncp_libnc_export.c",
+    "results/nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1/decision.json"
+  ],
+  "description": "Capture actual LibNC post-update parameters, mem_h, and train_h to localize the first evolving-state mismatch",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound provenance correction and update-state diagnostic."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "Direct post-update state captures uniquely distinguish parameter, memory, and evolving forward-operation divergence.",
+  "id": "nncp_v33_libnc_update_state_trajectory_v1",
+  "kill_gate": "Retire if observation changes archive/P1, captures fail to repeat, or the first divergence is ambiguous.",
+  "omega": {
+    "interfaces_exposed": [
+      "source LibNC post-update parameter and memory state"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_update_state_trajectory_v1",
+    "retired_neighborhoods": [
+      "analytic concat-RMSNorm alone; captured-adjoint injection; tolerance, learning-rate, clipping, and width sweeps"
+    ]
+  },
+  "parent": "nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1",
+  "status": "retired"
+}
