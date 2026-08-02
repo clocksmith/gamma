@@ -1,0 +1,35 @@
+{
+  "candidate_id": "typed_event_sleeping_bayes_endpoint428_v0",
+  "claimed_at": "2026-08-02T00:03:07+00:00",
+  "created_at": "2026-08-02T00:03:07+00:00",
+  "developed_at": "2026-08-02T00:07:21+00:00",
+  "evidence": [
+    "results/typed_event_sleeping_trie_raw_v0/2026-08-01T192928.json",
+    "/home/clocksmith/enwiki9-nonproof/results/endpoint428_title_1m_v1/trace_receipt.json"
+  ],
+  "expected_savings_bytes": 2100000,
+  "hypothesis": "On the hash-pinned archive-identical opening-1M endpoint428 stream, completed structural-trigger continuations modeled as point masses with the exact parent probability as a literal fallback save at least 2,100 holdout bytes per proportional raw million, and the typed expert strictly beats trigger-only and suffix-only matched controls.",
+  "interfaces_exposed": [
+    "exact CMX21P1 parent plus decoder-rebuilt completed WRT events -> B0/C0/E0/E1*/M0/M1 same-bitstream probabilities"
+  ],
+  "kill_condition": "Reject this fixed WRT realization if parent payload identity fails, any current event leaks before completion, any exact decode or determinism check fails, typed E1 fails either matched control, projected holdout gain is below 2,100 bytes per raw million, or Q20/Q16 overhead exceeds 5% of positive ideal gain; do not sweep trigger set, continuation length, receipt capacity, priors, key width, or posterior precision.",
+  "max_program_bytes": 30000,
+  "mechanism_change": "mixture_expansion",
+  "mechanism_change_bonus": -15,
+  "mechanism_class": "endpoint",
+  "owner": "root",
+  "parent": "sleeping_trie_global4_selector_raw_v1",
+  "parent_proposal_id": "sleeping_trie_global4_selector_raw_v1",
+  "priority": 138,
+  "promotion_condition": "The frozen opening-1M causal shadow must reproduce the parent payload, decode every exact candidate payload, prove ideal Bayes baseline safety, achieve at least 2,100 holdout bytes per proportional raw million, have typed E1 strictly beat C0 and E0, and keep the Q20/Q16 envelope within 5% of ideal gain; only then seek the current endpoint428 source artifact.",
+  "proposal_id": "typed_event_sleeping_bayes_endpoint428_v0",
+  "rejected_at": "2026-08-02T00:14:40+00:00",
+  "rejection_reason": "Exact archive-identical opening-1M causal shadow is terminal negative. E1 loses 408 bytes overall and 204 heldout versus B0, while E0 loses 400/181 and C0 loses 861/361; typed E1 also loses 23 heldout bytes to E0. M0 proves the 65535:1 safety bound but yields only -0.000022 bits, M1 is byte-identical to B0, and the paid selector loses one framing byte. Parent identity, all candidate decodes, causal release, and duplicate replay pass.",
+  "retired_neighborhoods": [
+    "Fixed-blend aggregate entity-trie endpoints and entity-node residual calibration are retired; this candidate uses explicit continuation point masses, a parent-exact literal branch, and posterior elimination."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 123,
+  "state": "rejected",
+  "title": "Typed-event sleeping Bayes envelope over endpoint428"
+}

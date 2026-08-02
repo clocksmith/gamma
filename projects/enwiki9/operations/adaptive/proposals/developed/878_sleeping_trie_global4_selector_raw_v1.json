@@ -1,0 +1,33 @@
+{
+  "candidate_id": "sleeping_trie_global4_selector_raw_v1",
+  "claimed_at": "2026-08-01T23:31:15+00:00",
+  "created_at": "2026-08-01T23:31:15+00:00",
+  "developed_at": "2026-08-01T23:31:15+00:00",
+  "evidence": [
+    "results/typed_event_sleeping_trie_raw_v0/2026-08-01T192928.json",
+    "operations/adaptive/exclusions/tesbe_raw_typed_key_refinement_250k_v0.json"
+  ],
+  "expected_savings_bytes": 31900000,
+  "hypothesis": "An exact mode-paid selector over B0, trigger-only C0, suffix E0, and typed E1 preserves the measured 7,975-byte opening-250K suffix gain and transfers at no less than 2,100 gross bytes per million on opening 1M.",
+  "interfaces_exposed": [
+    "one paid mode byte selects the shortest exact B0/C0/E0/E1 same-stream arithmetic payload"
+  ],
+  "kill_condition": "Retire the four-expert raw selector if the selected payload is not the exact minimum, any control fails roundtrip, the archive is nondeterministic, or opening-1M selected gain is below 2,100 bytes; do not tune keys, receipt length, priors, or capacities.",
+  "max_program_bytes": 26000,
+  "mechanism_change": "mixture_expansion",
+  "mechanism_change_bonus": -15,
+  "mechanism_class": "coder",
+  "owner": "root",
+  "parent": "typed_event_sleeping_trie_raw_v0",
+  "parent_proposal_id": "typed_event_sleeping_trie_raw_v0",
+  "priority": 136,
+  "promotion_condition": "At opening 250K the selected payload must equal min(B0,C0,E0,E1), roundtrip, and re-encode identically; then at opening 1M require at least 2,100 selected payload bytes saved versus B0 with exact controls and bounded memory.",
+  "proposal_id": "sleeping_trie_global4_selector_raw_v1",
+  "retired_neighborhoods": [
+    "The E1 typed-key refinement is retired; this child changes only final global selection and preserves every frozen expert."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 121,
+  "state": "developed",
+  "title": "TESBE-Raw exact four-expert selector"
+}

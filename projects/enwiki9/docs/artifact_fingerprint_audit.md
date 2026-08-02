@@ -12,8 +12,8 @@ It does not launch compression and does not score a candidate.
 
 | Status | Count |
 |---|---:|
-| `match` | 2 |
-| `missing_artifact` | 303 |
+| `match` | 303 |
+| `missing_artifact` | 2 |
 
 ## Hash Mismatches
 
@@ -25,26 +25,8 @@ It does not launch compression and does not score a candidate.
 
 | Candidate | Label | Field | Path |
 |---|---|---|---|
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1000000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T145351.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1024` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T131851.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `250000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_abovecellguard_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T134110.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1000000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T055557.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1024` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T042102.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `250000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_dualsparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T044302.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1000000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T102554.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1024` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T085020.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `250000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_match2guard_dualsparseguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T091229.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1000000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T210059.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1024` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T192628.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `250000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T194833.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | `1000000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | `1m_driver_determinism_gate` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T234158.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1` | `250k_driver_gate` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_rcm32_bufthirtysecond_minmaps_v1/2026-06-14T222820.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1000000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T012804.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1024` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T235331.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `250000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_sparseguard_matchguard_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-18T001527.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1000000` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T163015.json` |
-| `cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1` | `1024` | `result_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd100m_fxcm2_stemguard_rcm32_bufthirtysecond_minmaps_v1/2026-06-17T145439.json` |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | `100000000_guard_returncode_fail` | `rss_guard_json` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json` |
+| `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` | `100000000_guard_returncode_fail` | `guard_path` | `projects/enwiki9/results/cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1/ppmd20352k_100000000_determinism_rss_guard.json` |
 
 ## Legacy Rows Missing Recorded Hashes
 

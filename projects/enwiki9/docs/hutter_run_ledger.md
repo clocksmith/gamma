@@ -3,8 +3,8 @@
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
 - Target: `108,000,000` bytes (`10.8000000%`).
-- Candidate runs indexed: `43`.
-- Candidate lineages indexed: `38`.
+- Candidate runs indexed: `44`.
+- Candidate lineages indexed: `39`.
 
 ## 65,536,000 Bytes
 
@@ -52,6 +52,7 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | `endpoint_sparse_gru_distill_1m_v1__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | 177,006 | 23 | 23.000 | unknown | unknown | unknown | not recorded |
 | `endpoint_sparse_gru_residual_distill_1m_v2__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | 177,113 | -84 | -84.000 | unknown | unknown | unknown | not recorded |
 | `endpoint_dilated_context_1m_v1__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | 176,946 | 83 | 83.000 | unknown | unknown | unknown | not recorded |
+| `typed_event_sleeping_bayes_endpoint428_v0__1000000` | `causal_shadow` | `retired_unchanged` | opening_prefix | 174,334 | -408 | -408.000 | unknown | unknown | unknown | RT=true, DET=true |
 
 ## 600,747 Bytes
 
