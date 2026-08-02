@@ -1,0 +1,27 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Bound four-state decoder-graph update parity only; zero score and forecast credit.",
+  "deps": [],
+  "description": "Replay the bound update with chronological decoder-state nodes and saved causal key/value prefixes",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit implementation-parity diagnostic over receipt-bound external LibNC artifacts."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "LibNC's state-major saved-node graph reproduces internal update signs missed by the vectorized segment graph.",
+  "id": "nncp_v33_libnc_decoder_graph_update_parity_v1",
+  "kill_gate": "Retire on any final tensor error above 2e-5; do not alter the bound teacher, primitives, optimizer, memory, mask, or tolerance.",
+  "omega": {
+    "interfaces_exposed": [
+      "Four causal decoder-state graphs plus saved key/value nodes -> one exact bound segment update"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+    "proposal_id": "nncp_v33_libnc_decoder_graph_update_parity_v1",
+    "retired_neighborhoods": [
+      "Vectorized segment graph; direct GELU, RMSNorm, output matmul, and loss primitive explanations."
+    ]
+  },
+  "parent": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+  "status": "candidate"
+}

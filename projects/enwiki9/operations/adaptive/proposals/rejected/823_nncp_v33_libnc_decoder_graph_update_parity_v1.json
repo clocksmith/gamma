@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_decoder_graph_update_parity_v1",
+  "created_at": "2026-08-02T04:43:13+00:00",
+  "developed_at": "2026-08-02T04:44:57+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_softmax_indexed_log_backward_parity_v1/decision.json; results/nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1/decision.json; /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Reconstructing the bound miniature as four causal per-state decoder nodes before one segment loss reproduces LibNC internal gradient signs and final parameters that the vectorized segment graph misses.",
+  "interfaces_exposed": [
+    "Four causal decoder-state graphs plus saved key/value nodes -> one exact bound segment update"
+  ],
+  "kill_condition": "Retire the state-major saved-node graph as sufficient if any final tensor remains above 2e-5; do not change weights, primitives, loss, optimizer, memory, masks, or tolerance.",
+  "max_program_bytes": 0,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+  "parent_proposal_id": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+  "priority": 161,
+  "promotion_condition": "Authorize the next faithful-profile constructive gate only if state-major probabilities match the bound trace and every final tensor matches the bound LibNC export within 2e-5 with byte-identical repeated replay.",
+  "proposal_id": "nncp_v33_libnc_decoder_graph_update_parity_v1",
+  "rejected_at": "2026-08-02T04:46:39+00:00",
+  "rejection_reason": "State-major saved-node replay was deterministic and matched probabilities within 3.73e-9, but retained the identical 0.000319999643 final-tensor ceiling. Retire graph schedule as sufficient; require internal forward trajectory evidence before another backward change.",
+  "retired_neighborhoods": [
+    "Vectorized segment graph; direct GELU, RMSNorm, output matmul, and loss primitive explanations."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 176,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC decoder-graph update parity"
+}

@@ -1,0 +1,96 @@
+{
+  "candidate_id": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+  "comparisons": {
+    "pytorch_native_matmul": {
+      "maximum_absolute_forward_error": 3.5762786865234375e-07,
+      "maximum_absolute_left_gradient_error": 0.0,
+      "maximum_absolute_right_gradient_error": 2.0489096641540527e-08,
+      "mean_absolute_forward_error": 4.2677783085309784e-08,
+      "mean_absolute_left_gradient_error": 0.0,
+      "mean_absolute_right_gradient_error": 3.737227416422684e-09
+    },
+    "scalar_shared_dimension_ascending": {
+      "maximum_absolute_forward_error": 3.5762786865234375e-07,
+      "maximum_absolute_left_gradient_error": 2.7939677238464355e-09,
+      "maximum_absolute_right_gradient_error": 2.0489096641540527e-08,
+      "mean_absolute_forward_error": 4.2677783085309784e-08,
+      "mean_absolute_left_gradient_error": 1.8013845970443754e-10,
+      "mean_absolute_right_gradient_error": 3.737227416422684e-09
+    },
+    "scalar_shared_dimension_descending": {
+      "maximum_absolute_forward_error": 3.5762786865234375e-07,
+      "maximum_absolute_left_gradient_error": 2.7939677238464355e-09,
+      "maximum_absolute_right_gradient_error": 2.7939677238464355e-08,
+      "mean_absolute_forward_error": 5.620719889520842e-08,
+      "mean_absolute_left_gradient_error": 2.349668237755509e-10,
+      "mean_absolute_right_gradient_error": 7.3074488682323135e-09
+    }
+  },
+  "compile": {
+    "command": [
+      "cc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-unused-parameter",
+      "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_output_matmul_probe.c",
+      "-L/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-lnc",
+      "-lm",
+      "-ldl",
+      "-lpthread",
+      "-o",
+      "/tmp/nncp-libnc-matmul-8388_e4a/probe"
+    ],
+    "executable_sha256": "9ba79e3a95c09eb997c4a9183189932af703d6a2ef85adc68cf03b8a15bdb49b",
+    "stderr": ""
+  },
+  "contract": {
+    "frozen_contracts": [
+      "pytorch_native_matmul",
+      "scalar_shared_dimension_ascending",
+      "scalar_shared_dimension_descending"
+    ],
+    "left_shape": [
+      256,
+      32
+    ],
+    "right_shape": [
+      32,
+      4
+    ],
+    "threshold": 2e-06
+  },
+  "decision": {
+    "authorized_next_action": "retire output-projection matmul reduction as the cause",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": false,
+    "verified_full_1g_score_bytes": null
+  },
+  "gate": {
+    "matching_contracts": [
+      "pytorch_native_matmul",
+      "scalar_shared_dimension_ascending",
+      "scalar_shared_dimension_descending"
+    ],
+    "novel_unique_match": false
+  },
+  "inputs": {
+    "libnc_header_sha256": "d0e341301e66eec8647b055d6d704ca254051bf877036599423e83e39a7132c6",
+    "libnc_library_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+    "probe_source_sha256": "18cdce68b45333228ff331afdefc7a350ee07171e2226d671e8b6b31cf150eb2",
+    "script_sha256": "dcfb8cbdc665fd4865cddd496efde770765031dc8ddd0bc4128d1d63b1e079f9"
+  },
+  "probe": {
+    "first_aggregate_sha256": "9bf364dce5a53863a303314251f9ac86aefa87f66570bc1bb7cb4245749d85be",
+    "repeat_byte_identical": true,
+    "second_aggregate_sha256": "9bf364dce5a53863a303314251f9ac86aefa87f66570bc1bb7cb4245749d85be"
+  },
+  "schema": "gamma.nncp_v33_libnc_output_matmul_backward_parity.v1",
+  "score_credit_bytes": 0,
+  "status": "REJECT"
+}

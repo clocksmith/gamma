@@ -1,0 +1,27 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Direct F32 LibNC output-projection matmul forward/backward reduction identification only; zero score and forecast credit.",
+  "deps": [],
+  "description": "Compare direct LibNC output-projection matrix gradients with frozen F32 reduction orders",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Direct external LibNC diagnostic compiled and invoked explicitly."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "A unique LibNC matrix-backward reduction contract explains the first material gradient divergence behind the exact output layer.",
+  "id": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+  "kill_gate": "Retire on current-PyTorch match, no unique alternative match, nondeterminism, or any error above 2e-6; do not sweep the frozen fixture.",
+  "omega": {
+    "interfaces_exposed": [
+      "Direct LibNC nc_matmul F32 forward/backward tensors -> frozen output-projection reduction contracts"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1",
+    "proposal_id": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+    "retired_neighborhoods": [
+      "Combined GELU and RMSNorm repair; architecture and optimizer sweeps; self-consistent approximate ROCm model."
+    ]
+  },
+  "parent": "nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1",
+  "status": "candidate"
+}

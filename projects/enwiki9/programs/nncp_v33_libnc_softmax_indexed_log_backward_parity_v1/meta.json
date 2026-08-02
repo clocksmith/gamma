@@ -1,0 +1,27 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Direct F32 LibNC softmax-indexed-log gradient identification only; zero score and forecast credit.",
+  "deps": [],
+  "description": "Compare LibNC's explicit softmax-indexed-log backward with frozen cross-entropy contracts",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Direct external LibNC diagnostic compiled and invoked explicitly."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "LibNC's unfused loss graph has a reproducible per-logit backward contract absent from fused PyTorch cross-entropy.",
+  "id": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+  "kill_gate": "Retire on fused-PyTorch match, no unique alternative match, nondeterminism, or any error above 2e-6; do not sweep the frozen fixture.",
+  "omega": {
+    "interfaces_exposed": [
+      "Direct LibNC nc_soft_max plus nc_indexed_log gradients -> frozen cross-entropy backward contracts"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+    "proposal_id": "nncp_v33_libnc_softmax_indexed_log_backward_parity_v1",
+    "retired_neighborhoods": [
+      "Output matmul reduction; combined GELU and RMSNorm repair; self-consistent approximate ROCm model."
+    ]
+  },
+  "parent": "nncp_v33_libnc_output_matmul_backward_parity_v1",
+  "status": "candidate"
+}
