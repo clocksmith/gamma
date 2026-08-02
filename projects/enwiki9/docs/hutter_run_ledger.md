@@ -10,7 +10,7 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 
 | Candidate run | Tier | Status | Population | Archive | Gain | B/M | Package | Forecast | Margin | Proof |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
-| `srstc_blockposterior_raw_shadow__65536000` | `causal_shadow` | `active` | unspecified | unknown | 916,540 | unknown | 16,076 | unknown | unknown | not recorded |
+| `srstc_blockposterior_raw_shadow__65536000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 916,540 | unknown | 16,076 | unknown | unknown | not recorded |
 
 ## 10,000,000 Bytes
 
