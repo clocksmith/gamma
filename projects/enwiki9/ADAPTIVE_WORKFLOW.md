@@ -134,6 +134,20 @@ python3 projects/enwiki9/tools/enwiki9_lab.py proposals
 python3 projects/enwiki9/tools/enwiki9_lab.py claim <proposal_id> --owner <owner>
 ```
 
+Dependency-gated proposals carry `operational_status: dormant_dependency` and
+structured `activation_requirements`. They cannot be claimed or developed
+until an operator verifies the required terminal receipts and records that
+evidence explicitly:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py activate-proposal <proposal_id> \
+  --evidence results/<dependency>/decision.json
+```
+
+Claim is valid only from `proposed`; development is valid only from `claimed`.
+Parked, blocked, and dormant proposals fail closed rather than relying on a
+human remembering their prose ordering.
+
 Materialize a claimed proposal as a candidate:
 
 ```bash
@@ -256,6 +270,17 @@ operations/adaptive/cancelled/
 
 Each candidate-and-scope pair runs once unless an operator explicitly uses
 `--force`.
+
+A pending job may be made durable but unclaimable without cancelling its queue
+identity:
+
+```bash
+python3 projects/enwiki9/tools/enwiki9_lab.py hold <job_id> --reason <reason>
+python3 projects/enwiki9/tools/enwiki9_lab.py release <job_id> --reason <evidence>
+```
+
+Workers always skip `held: true` jobs, including generic adaptive workers.
+Release only when the recorded dependency or portfolio decision is satisfied.
 
 ## Adaptive Gate Discovery
 

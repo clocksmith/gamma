@@ -771,6 +771,7 @@ def gate_state(candidate: str | None, scope: int | None) -> dict[str, Any] | Non
 
 def adaptive_running_jobs_state() -> dict[str, Any]:
     running_dir = ROOT / "operations" / "adaptive" / "running"
+    pending_dir = ROOT / "operations" / "adaptive" / "pending"
     jobs: list[dict[str, Any]] = []
     try:
         paths = sorted(running_dir.glob("*.json"))
@@ -821,9 +822,25 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
                 "path": logical_rel(path),
             }
         )
+    pending_count = 0
+    held_pending_count = 0
+    try:
+        pending_paths = sorted(pending_dir.glob("*.json"))
+    except OSError:
+        pending_paths = []
+    for path in pending_paths:
+        job = load_json(path)
+        if not job:
+            continue
+        pending_count += 1
+        if job.get("held") is True:
+            held_pending_count += 1
     return {
         "running_job_count": len(jobs),
         "running_jobs": jobs,
+        "pending_job_count": pending_count,
+        "held_pending_job_count": held_pending_count,
+        "claimable_pending_job_count": pending_count - held_pending_count,
     }
 
 
@@ -1577,6 +1594,15 @@ def receipt() -> dict[str, Any]:
         action=action,
         handoff=handoff,
     )
+    operator_summary["pending_adaptive_jobs"] = adaptive_state.get(
+        "pending_job_count", 0
+    )
+    operator_summary["held_pending_adaptive_jobs"] = adaptive_state.get(
+        "held_pending_job_count", 0
+    )
+    operator_summary["claimable_pending_adaptive_jobs"] = adaptive_state.get(
+        "claimable_pending_job_count", 0
+    )
     certificate_active_gate = labels.get("active gate")
     certificate_blocker = labels.get("blocker")
     return {
@@ -1722,6 +1748,9 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Latest decimal single-process margin KiB: `{fmt_int(summary.get('latest_sample_single_decimal_10gb_margin_kib'))}`",
         f"- Safe to launch heavy gate: `{fmt_bool(summary.get('safe_to_launch_heavy_gate'))}`",
         f"- Terminal verdict present: `{fmt_bool(summary.get('terminal_verdict_present'))}`",
+        f"- Pending adaptive jobs: `{fmt_int(summary.get('pending_adaptive_jobs'))}`",
+        f"- Held pending adaptive jobs: `{fmt_int(summary.get('held_pending_adaptive_jobs'))}`",
+        f"- Claimable pending adaptive jobs: `{fmt_int(summary.get('claimable_pending_adaptive_jobs'))}`",
         f"- Command source: `{summary.get('command_source', 'unknown')}`",
         f"- Claim rule: `{summary.get('claim_rule', 'unknown')}`",
         "",
