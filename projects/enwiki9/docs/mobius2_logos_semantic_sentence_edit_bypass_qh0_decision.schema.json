@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.mobius2_logos_semantic_sentence_edit_bypass_qh0.v1",
+  "title": "MOBIUS-2 LOGOS semantic sentence edit-bypass QH0 decision",
+  "type": "object",
+  "required": [
+    "schema",
+    "candidate_id",
+    "claim_boundary",
+    "inputs",
+    "runtime",
+    "population",
+    "retrieval",
+    "variants",
+    "splits",
+    "proof",
+    "gates",
+    "decision",
+    "score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.mobius2_logos_semantic_sentence_edit_bypass_qh0.v1"
+    },
+    "candidate_id": {
+      "const": "mobius2_logos_semantic_sentence_edit_bypass_qh0_v1"
+    },
+    "score_credit_bytes": {
+      "const": 0
+    },
+    "decision": {
+      "type": "object",
+      "required": ["verdict", "promotion_authorized", "forecast_bytes"],
+      "properties": {
+        "verdict": {
+          "enum": ["AUTHORIZED_CANONICAL_10M", "REJECT"]
+        },
+        "promotion_authorized": {"type": "boolean"},
+        "forecast_bytes": {"const": 109389323}
+      }
+    }
+  }
+}
