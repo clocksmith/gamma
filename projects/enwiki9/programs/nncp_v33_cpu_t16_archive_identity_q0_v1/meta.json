@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "One source-native CPU T16 10,000-symbol archive/timing gate; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_cpu_t16_archive_identity_q0.py",
+    "tools/run_with_rss_guard.py",
+    "results/nncp_teacher_trace_smoke_v1/receipt.json"
+  ],
+  "description": "Test whether 16 LibNC CPU workers preserve the exact bounded NNCP archive and halve elapsed encode time",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit heavy-lock source-native execution-capability gate."
+  },
+  "family": "nncp_v33_native_teacher",
+  "hypothesis": "T16 preserves the exact T4 archive and reduces bounded teacher runtime by at least half.",
+  "id": "nncp_v33_cpu_t16_archive_identity_q0_v1",
+  "kill_gate": "Retire on archive mismatch, memory/guard failure, or less than 50 percent elapsed reduction.",
+  "omega": {
+    "interfaces_exposed": [
+      "LibNC CPU worker concurrency"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_cpu_t16_archive_identity_q0_v1",
+    "retired_neighborhoods": [
+      "thread-count, affinity, NUMA, compiler, batch, and model sweeps"
+    ]
+  },
+  "parent": "nncp_v33_libnc_continuous_block_multiupdate_parity_v1",
+  "status": "retired"
+}
