@@ -235,3 +235,20 @@ The present order remains:
 The missing competition problem is therefore not another abstract theorem. It
 is the empirical obligation to find a causal information source that survives
 endpoint428, matched controls, package cost, transfer, and full-scale replay.
+
+## Proposed transfer theorem bank remains unbound
+
+Seven newer theorem families are recorded in
+`docs/hutter_transfer_theorem_bank_unbound.md`: finite-precision Bayesian
+envelopes, delayed sleeping residual-program regret, certified contractive
+quotient distillation, exact transducer output summaries, parity-constrained
+`B`-best factor-graph decoding, series-parallel time-memory Pareto scheduling,
+and exact MDL selection of causal reversible events.
+
+They extend the available proof machinery, but they do not alter this
+decomposition. Each assumes a useful expert, program universe, teacher,
+transducer replacement, low-rank energy, native computation DAG, or profitable
+event family. None supplies that missing empirical object. The bank is
+`UNBOUND`, solver distribution is unauthorized, and score credit is zero until
+one theorem is paired with the complete precommitted transfer binding specified
+above.
