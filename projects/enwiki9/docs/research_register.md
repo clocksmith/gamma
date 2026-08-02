@@ -7118,6 +7118,30 @@ the canonical zlib-9 bundle remains `54,544` bytes with SHA-256
 and the counted allowance remains `54,608` bytes. The candidate stays unqueued
 until the active NNCP heavy gate is terminal.
 
+## 2026-08-02: seven-problem Hutter transfer theorem bank recorded unbound
+
+Seven proposed competition-grade theorem families are preserved in
+`docs/hutter_transfer_theorem_bank_unbound.md`: an exact finite-precision
+Bayesian envelope, delayed sleeping residual-program regret, contractive
+predictor quotient certification, exact finite-transducer output summaries,
+parity-constrained `B`-best factor-graph decoding, series-parallel time-memory
+Pareto scheduling, and exact MDL selection of causal reversible events.
+
+They are materially different from the solved Atlas-Clockwork and ACS-PROVER
+problems, but remain general prover infrastructure. Their statements assume a
+useful expert, retrieved program universe, teacher and quotient, transducer
+replacement, low-rank energy, native computation DAG, or profitable causal
+event family. They do not discover the target-scale information source that is
+currently missing, and several state this limitation explicitly.
+
+Disposition: `UNBOUND`, inactive, unauthorized for solver distribution, and
+zero score credit. No proposal, candidate, or queue entry was created. A future
+activation requires exact text and hashes, a hidden finite enwiki9 instance, a
+theorem-to-executable witness compiler, canonical verifier, complete score and
+resource ledger, and a proof that every accepted witness clears a named
+target-bearing gate. The active NNCP and WIKI empirical sequence remains the
+source-discovery path that could eventually supply such an antecedent.
+
 ## 2026-08-02: exact 10M parent restored to generated proof status
 
 The upper-bound generator previously recognized only generic driver result
