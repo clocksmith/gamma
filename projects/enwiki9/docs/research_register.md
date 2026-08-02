@@ -4629,3 +4629,23 @@ mature archive is claimed.
 
 Decision:
 `results/nncp_v33_rocm_constructive_65536_headroom_q1_v1/decision.json`.
+
+## 2026-08-02: NNCP v3.3 LibNC RMSNorm backward parity frozen
+
+Candidate and proposal: `nncp_v33_libnc_rmsnorm_backward_parity_v1`.
+
+The GELU correction was real but left internal first-update tensors at the
+two-sided Adam sign ceiling. The next component gate calls LibNC
+`nc_rms_norm` directly on a frozen F32 matrix with a nonuniform upstream
+gradient, captures every output and input-gradient element, and requires
+byte-identical repeated execution. A tiny-valued column identifies epsilon
+placement.
+
+The current mean-square/inside-sqrt contract, an outside-sqrt epsilon
+alternative, and a sum-normalized alternative are frozen before execution.
+A unique alternative match within `2e-6` authorizes one corrected bound
+miniature update. A unique match to the already implemented contract retires
+RMSNorm as the remaining cause. This is zero-credit implementation forensics,
+not a model or archive result.
+
+Plan: `docs/nncp_v33_libnc_rmsnorm_backward_parity_plan.md`.
