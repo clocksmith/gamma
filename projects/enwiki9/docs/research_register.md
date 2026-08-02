@@ -4597,3 +4597,35 @@ JANUS-plus-quotient prefix. Promotion requires at least 3,000 gross B/M.
 Plans and decision:
 `docs/nncp_v33_rocm_constructive_65536_headroom_q1_plan.md` and
 `results/nncp_v33_rocm_constructive_causal_replay_q0_v1/decision.json`.
+
+## 2026-08-02: NNCP v3.3 constructive 65,536-symbol Q1 is terminal negative
+
+The frozen Q1 completed in `1,744.706` measured seconds with process status
+zero and a valid `REJECT`. It covered 65,536 official preprocessed symbols,
+322,978 raw bytes, 32 contiguous streams, and 32 online update segments. The
+two encoders and independent model-driven decoder reproduced all 917,527
+branch frequencies, the arithmetic archive, every decoded symbol, all segment
+losses, and the complete model, Adam, and persistent-memory state. The complete
+state SHA-256 was
+`9da56660c487182375ff9359d26a5dbab93cbfc82a40da50c13da339d827e5b4`.
+
+The official NNCP inverse was exact. The mapped endpoint was also an exact WRT
+emission-group boundary, and the independently terminated
+JANUS-plus-quotient prefix decoded exactly. Peak allocated ROCm memory was
+9,052,226,560 bytes, below decimal 10 GB.
+
+Compression economics failed decisively. The constructive NNCP payload was
+96,142 bytes; the same-boundary joint prefix was 57,555 bytes. Q1 therefore
+lost 38,587 bytes, or `-119,472.534 B/M`, versus the required `+3,000 B/M`.
+Retire this self-consistent PyTorch/ROCm faithful-profile realization without
+architecture, precision, stream-count, optimizer, block-layout, or
+future-filler sweeps. It earns no score or forecast credit.
+
+This result does not retire the separately published NNCP v3.3 result. It
+confirms that approximate topology plus a different online numerical machine
+cannot inherit that score. Any successor using the published lead must recover
+or reproduce LibNC's actual update semantics component by component before a
+mature archive is claimed.
+
+Decision:
+`results/nncp_v33_rocm_constructive_65536_headroom_q1_v1/decision.json`.
