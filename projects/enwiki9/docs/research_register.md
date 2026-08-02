@@ -4694,14 +4694,15 @@ the maximum final-parameter error remained
 `2 * 0.00016`. The measured RMSNorm and GELU corrections are real, but they do
 not make the full update contract faithful.
 
-Gradient comparison against the receipt-bound LibNC interposition artifacts
-localized the first material divergence immediately behind the exact output
-layer. `embed_out`, `out_bias`, `ln_g_2`, and `ln_b_2` gradients agree to
-approximately `1.5e-07` or better, while `ff_bias2_0` differs by `6.51%`
-relative L2 and `ff2_0` differs by `12.87%`, including 50 sign reversals. This
-pattern does not support another RMSNorm or activation variant. The next
-single-mechanism diagnostic is the F32 output-projection matrix-multiply input
-gradient and its reduction order.
+An initial positional interpretation of the unnamed LibNC interposition files
+appeared to place the first material divergence immediately behind the output
+layer. That interpretation assigned a `6.51%` relative-L2 difference to
+`ff_bias2_0` and a `12.87%` difference with 50 sign reversals to `ff2_0`.
+The later direct tail-composition gate invalidated the `ff_bias2_0` assignment:
+the exact LibNC and PyTorch tail gradients agree with one another but both miss
+that unnamed file by the same almost constant offset. These positional names
+are quarantined until a source-instrumented named-gradient capture replaces
+them. The final-parameter comparison itself remains valid.
 
 Decision:
 `results/nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1/decision.json`.
@@ -4856,3 +4857,50 @@ the teacher. The result carries zero score and forecast credit.
 
 Decision:
 `results/nncp_v33_libnc_internal_forward_trajectory_v1/decision.json`.
+
+## 2026-08-02: LibNC tail-backward composition frozen
+
+Candidate and proposal: `nncp_v33_libnc_tail_backward_composition_v1`.
+
+The source-bound forward gate closes further activation changes but leaves a
+sign-discontinuous first Adam update. This child supplies the four exact
+captured `ff_out_bl` states to a direct LibNC graph containing final RMSNorm,
+gain and bias, output projection and bias, F32 conversion, softmax, four-state
+concat optimization, indexed log, and negative mean. One shared zero-valued
+parameter exposes the complete downstream gradient that must reach
+`ff_bias2_0`.
+
+Two source captures must retain the exact bound archive and teacher trace and
+repeat all tensors. Two direct tail probes must repeat byte-identically and
+match the teacher probabilities. The decisive comparison is the direct shared
+gradient against bound `unknown_0006.bin`, with the matched PyTorch tail as a
+control. A LibNC match within `2e-6` with identical signs, combined with a
+PyTorch miss, authorizes only composed-tail operation-order localization. A
+valid miss rejects the mapping or isolated graph and does not reopen a forward
+primitive. No score or forecast credit is available.
+
+Plan: `docs/nncp_v33_libnc_tail_backward_composition_plan.md`.
+
+## 2026-08-02: LibNC tail does not reproduce the positional gradient
+
+Both instrumented source runs reproduced the exact archive, teacher trace, and
+all 28 forward tensors. The direct LibNC tail repeated byte-identically with
+aggregate SHA-256
+`82b6443ad8f698005f2a3b5f9c4163849a7518d3bdb1581c9e59e6a19cdaf628`
+and reproduced all 1,024 teacher probabilities exactly.
+
+The direct LibNC and matched PyTorch shared tail gradients agree within
+`7.450580596923828e-08`, but both differ from positional file
+`unknown_0006.bin` by approximately `0.0060333` in every one of 32
+coordinates. Their relative difference from that file is `6.5088%`, with no
+sign mismatches. Therefore the tail is not a distinct backward contract and
+the premise `unknown_0006.bin -> ff_bias2_0` is not source-bound evidence.
+
+This is a clean rejection of the composed-tail hypothesis and a correction to
+the earlier positional mapping, not a forward or arithmetic identity failure.
+The only justified continuation is an archive-identical build that names each
+gradient from the live `NCParamList` at the actual backward callback. No score
+or forecast credit changes.
+
+Decision:
+`results/nncp_v33_libnc_tail_backward_composition_v1/decision.json`.
