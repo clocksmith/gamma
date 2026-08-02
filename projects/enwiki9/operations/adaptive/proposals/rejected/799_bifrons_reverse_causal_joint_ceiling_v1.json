@@ -1,0 +1,41 @@
+{
+  "candidate_id": "bifrons_reverse_causal_joint_ceiling_q0_v1",
+  "claimed_at": "2026-08-02T07:30:55+00:00",
+  "created_at": "2026-08-02T07:30:55+00:00",
+  "developed_at": "2026-08-02T07:32:05+00:00",
+  "evidence": [
+    "docs/research_register.md",
+    "docs/bifrons_reverse_causal_joint_ceiling_q0_plan.md",
+    "results/janus_recurrent_quotient_joint_trace_recovery_q0_v1/decision.json",
+    "results/endpoint428_pair_layer0_online_native_trace_10m_v1/decision.json"
+  ],
+  "expected_savings_bytes": 3000000,
+  "hypothesis": "A source-native endpoint428 expert decoding a WRT suffix from the right supplies information absent from the JANUS-plus-quotient forward trajectory, and one paid cut can save at least 3,000 B/M after exact framing.",
+  "interfaces_exposed": [
+    "forward joint P1 prefix",
+    "reverse-causal endpoint428 suffix",
+    "single finite cut frame"
+  ],
+  "kill_condition": "Retire the one-cut reverse-causal endpoint construction on a gain below 3,000 B/M, failure to beat either control, any identity/reconstruction/memory failure, or a nondeterministic promotable source replay; do not sweep cut restrictions, direction granularity, or reverse pretraining.",
+  "max_program_bytes": 32768,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "representation",
+  "owner": "codex",
+  "parent": "janus_recurrent_quotient_joint_10m_v1",
+  "parent_proposal_id": null,
+  "priority": 180,
+  "promotion_condition": "Authorize one canonical 10M replay only if the exact 49-byte-framed two-stream archive gains at least 3,000 B/M over the joint trajectory, beats endpoint-forward and all-reverse controls, reconstructs WRT exactly, stays below decimal 10GB, and repeats source archive/P1 bytes.",
+  "proposal_id": "bifrons_reverse_causal_joint_ceiling_v1",
+  "rejected_at": "2026-08-02T07:44:23+00:00",
+  "rejection_reason": "Exact Q0 selected an empty reverse suffix; candidate lost 12 bytes after framing, all-reverse lost 9,453 bytes, and all 170 interior cuts had worse Q256 codelength than the joint forward trajectory.",
+  "retired_neighborhoods": [
+    "per-page or per-event direction oracle",
+    "reverse-energy syndrome search",
+    "direction, cut, and pretraining sweeps"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 200,
+  "state": "rejected",
+  "title": "BIFRONS reverse-causal two-ended WRT codec"
+}
