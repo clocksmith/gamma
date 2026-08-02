@@ -1,0 +1,32 @@
+{
+  "candidate_id": "nncp_v33_libnc_internal_forward_trajectory_v1",
+  "created_at": "2026-08-02T04:50:24+00:00",
+  "developed_at": "2026-08-02T04:53:26+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_decoder_graph_update_parity_v1/decision.json; /home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound; exact reconstruction command emits archive SHA 8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da and trace SHA cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Receipt-bound internal LibNC tensors expose the first hidden-state scale or direction divergence masked by near-identical output probabilities, providing one attributable forward-contract correction.",
+  "interfaces_exposed": [
+    "DUMP_HASH-labeled LibNC internal tensors -> matched state-major PyTorch tensor trajectory"
+  ],
+  "kill_condition": "Stop without a forward correction if archive or trace identity fails, tensor capture is nondeterministic, or every captured internal tensor matches within 2e-6; do not infer a backward fix from hashes alone.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_libnc_decoder_graph_update_parity_v1",
+  "parent_proposal_id": "nncp_v33_libnc_decoder_graph_update_parity_v1",
+  "priority": 162,
+  "promotion_condition": "Authorize only the uniquely localized forward-contract child when a DUMP_HASH build reproduces the exact bound archive and teacher trace, repeats every captured tensor, and identifies the earliest deterministic tensor error above 2e-6.",
+  "proposal_id": "nncp_v33_libnc_internal_forward_trajectory_v1",
+  "rejected_at": "2026-08-02T04:55:22+00:00",
+  "rejection_reason": "Both source-bound runs reproduced exact archive, teacher trace, and all 28 tensor files. Every forward tensor matched within 2.39e-7, so no forward correction is authorized; continue only with direct backward evidence or native LibNC teacher execution.",
+  "retired_neighborhoods": [
+    "Unbound hash-only inference; additional backward changes without internal forward evidence; graph-schedule variants."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 162,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC internal forward trajectory"
+}
