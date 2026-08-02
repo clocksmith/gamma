@@ -247,6 +247,36 @@ def _load_live_observation(project_root: Path) -> dict[str, Any]:
     return row
 
 
+def _bind_live_observation_to_operational(
+    live: dict[str, Any], operational: dict[str, Any]
+) -> dict[str, Any]:
+    """Bind nested guard telemetry to the matching canonical active gate."""
+
+    active = operational.get("active_gate")
+    liveness = operational.get("gate_liveness")
+    if not isinstance(active, dict) or not isinstance(liveness, dict):
+        return live
+    if active.get("status") != "running" or liveness.get("is_live") is not True:
+        return live
+    active_guard = active.get("rss_guard_json")
+    live_guard = live.get("rss_guard_json")
+    if not isinstance(active_guard, str) or not isinstance(live_guard, str):
+        return live
+    if Path(active_guard).resolve() != Path(live_guard).resolve():
+        return live
+    program_id = active.get("program_id")
+    scope_bytes = active.get("scope_bytes")
+    if not isinstance(program_id, str) or not isinstance(scope_bytes, int):
+        return live
+    bound = dict(live)
+    bound["guard_label_candidate"] = live.get("candidate")
+    bound["guard_inferred_scope_bytes"] = live.get("scope_bytes")
+    bound["candidate"] = program_id
+    bound["scope_bytes"] = scope_bytes
+    bound["identity_source"] = active.get("source")
+    return bound
+
+
 def _resolve_scope_text(value: Any) -> str:
     return fmt_int(value) if value is not None else "unknown"
 
@@ -703,6 +733,11 @@ def main() -> int:
         live_observation = load_object(args.live_observation)
     else:
         live_observation = _load_live_observation(root)
+    if isinstance(live_observation, dict) and live_observation:
+        live_observation = _bind_live_observation_to_operational(
+            live_observation,
+            operational,
+        )
     if not live_observation:
         handoff = operational.get("handoff") if isinstance(operational, dict) else {}
         if isinstance(handoff, dict):
