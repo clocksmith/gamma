@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "State-zero nonzero-memory attention arithmetic only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_second_segment_attention_trajectory.py",
+    "tools/nncp_libnc_internal_tensor_hook.c",
+    "tools/nncp_libnc_export.c",
+    "results/nncp_v33_libnc_second_segment_forward_trajectory_v1/decision.json"
+  ],
+  "description": "Observe and replay the internal nonzero-memory attention arithmetic of the second LibNC segment",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound arithmetic localization."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "Fixed state-zero observations uniquely identify the first missing nonzero-memory attention operation.",
+  "id": "nncp_v33_libnc_second_segment_attention_trajectory_v1",
+  "kill_gate": "Retire if source identity changes, dumps fail to repeat, layouts do not align, or no unique first operation exists.",
+  "omega": {
+    "interfaces_exposed": [
+      "source LibNC nonzero-memory attention intermediates"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_second_segment_attention_trajectory_v1",
+    "retired_neighborhoods": [
+      "other forward blocks plus parameter, tolerance, width, optimizer, memory-length, and population sweeps"
+    ]
+  },
+  "parent": "nncp_v33_libnc_second_segment_forward_trajectory_v1",
+  "status": "retired"
+}

@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Eight-update single-process-block carried-state parity only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_continuous_block_multiupdate_parity.py",
+    "tools/nncp_libnc_export.c",
+    "results/nncp_v33_libnc_process_block_reset_multiupdate_parity_v1/decision.json"
+  ],
+  "description": "Replay eight miniature updates within one continuous native process block",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound continuous-state parity gate."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "One native process block reproduces the carried-state analytic trajectory required by the published profile.",
+  "id": "nncp_v33_libnc_continuous_block_multiupdate_parity_v1",
+  "kill_gate": "Retire if any repeat fails or any probability, parameter, train_h, or mem_h exceeds its frozen tolerance.",
+  "omega": {
+    "interfaces_exposed": [
+      "source LibNC continuous process_block state"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_continuous_block_multiupdate_parity_v1",
+    "retired_neighborhoods": [
+      "block-length, memory-length, width, optimizer, clipping, epsilon, and tolerance sweeps"
+    ]
+  },
+  "parent": "nncp_v33_libnc_process_block_reset_multiupdate_parity_v1",
+  "status": "retired"
+}

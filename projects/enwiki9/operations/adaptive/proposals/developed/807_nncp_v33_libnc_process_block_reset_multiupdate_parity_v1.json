@@ -1,0 +1,33 @@
+{
+  "candidate_id": "nncp_v33_libnc_process_block_reset_multiupdate_parity_v1",
+  "claimed_at": "2026-08-02T06:55:09+00:00",
+  "created_at": "2026-08-02T06:55:09+00:00",
+  "developed_at": "2026-08-02T06:56:54+00:00",
+  "evidence": [
+    "docs/nncp_v33_libnc_process_block_reset_multiupdate_parity_plan.md",
+    "results/nncp_v33_libnc_second_segment_embedding_contract_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Resetting memory and prepending input zero for each four-symbol process_block restores all eight source probability and update states under the proved concat-RMSNorm backward contract.",
+  "interfaces_exposed": [
+    "source LibNC process_block reset schedule"
+  ],
+  "kill_condition": "Any repeated identity fails or any probability, parameter, train_h, or mem_h exceeds its frozen tolerance.",
+  "max_program_bytes": 738682,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "endpoint",
+  "owner": "codex",
+  "parent": "nncp_v33_libnc_second_segment_embedding_contract_v1",
+  "parent_proposal_id": null,
+  "priority": 177,
+  "promotion_condition": "All eight probabilities, parameters, train_h, and mem_h meet the frozen tolerances with exact repeated source and analytic receipts.",
+  "proposal_id": "nncp_v33_libnc_process_block_reset_multiupdate_parity_v1",
+  "retired_neighborhoods": [
+    "alternate resets, block lengths, memory lengths, widths, optimizers, clipping, epsilon, and tolerance sweeps"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 192,
+  "state": "developed",
+  "title": "NNCP v3.3 LibNC process-block reset multi-update parity"
+}

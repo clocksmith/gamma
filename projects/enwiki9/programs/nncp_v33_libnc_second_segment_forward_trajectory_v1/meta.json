@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Second four-symbol source-state forward localization only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_second_segment_forward_trajectory.py",
+    "tools/nncp_libnc_internal_tensor_hook.c",
+    "tools/nncp_libnc_export.c",
+    "results/nncp_v33_libnc_update_state_trajectory_v1/decision.json"
+  ],
+  "description": "Compare the second LibNC forward segment from exact source and analytic post-update-one states",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound forward-operation diagnostic."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "Exact source-state replay uniquely distinguishes a named forward-block mismatch from amplification of residual state error.",
+  "id": "nncp_v33_libnc_second_segment_forward_trajectory_v1",
+  "kill_gate": "Retire if observation changes archive/P1, captures fail to repeat, records do not align, or localization is ambiguous.",
+  "omega": {
+    "interfaces_exposed": [
+      "source LibNC internal forward tensor trajectory"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_second_segment_forward_trajectory_v1",
+    "retired_neighborhoods": [
+      "optimizer, persistent-memory, tolerance, learning-rate, clipping, width, and population sweeps"
+    ]
+  },
+  "parent": "nncp_v33_libnc_update_state_trajectory_v1",
+  "status": "retired"
+}
