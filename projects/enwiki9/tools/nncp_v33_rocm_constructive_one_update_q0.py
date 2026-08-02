@@ -23,6 +23,7 @@ ROCM_PYTHON = Path(
     "/home/x/deco/gamma/.venv_rocm/bin/python"
 )
 os.environ.setdefault("AMD_SERIALIZE_KERNEL", "3")
+os.environ.setdefault("HSA_OVERRIDE_GFX_VERSION", "11.0.0")
 if Path(sys.executable) != ROCM_PYTHON:
     if not ROCM_PYTHON.is_file():
         raise SystemExit(f"missing receipt-bound ROCm interpreter: {ROCM_PYTHON}")
