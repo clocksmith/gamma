@@ -6072,3 +6072,37 @@ score credit remains zero.
 
 Decision:
 `results/mobius2_logos_semantic_skeleton_grammar_ceiling_qh0_v1/decision.json`.
+
+## 2026-08-02: MÖBIUS-2 NOEMA semantic-boundary hierarchy QH0 frozen
+
+Proposal: `mobius2_noema_semantic_boundary_hierarchy_v1`.
+
+Candidate: `mobius2_noema_semantic_boundary_hierarchy_qh0_v1`.
+
+The equal-span binary-carry NOEMA realization is terminal negative, but its
+preregistered decision explicitly leaves semantic-boundary hierarchy
+unsettled.  This candidate uses the exact opening 171 complete pages of the
+exported JANUS-plus-quotient P1 trajectory and changes only the recursive
+partition.  A decoder-visible segment ends after the WRT inverse emits sentence
+punctuation, newline, or closing markup.  The triggering byte updates only
+later predictions, so the boundary schedule is causal.
+
+One 48-wide GRU is reused first to summarize bytes inside each variable span
+and again to summarize completed spans.  The flat, fixed-16-byte, causal
+lag-31-boundary, and actual semantic-boundary variants have identical tensor
+shapes, optimizer, checkpoint count, int8 serialization, binary-prefix head,
+range coder, page population, and 128-byte reset opportunities.  Each model is
+fit twice, selected only by an exactly terminated selection payload, reloaded
+from its paid canonical blob, and replayed independently.
+
+Promotion requires positive development and selection gain, at least 3,000
+B/M sealed gross and 2,100 B/M after matched package allowance, and a sealed
+semantic payload strictly below all three controls.  Arithmetic decode,
+complete WRT reconstruction, official 10M inverse, and repeated
+model/P1/archive identity are mandatory.  A miss retires this exact boundary
+alphabet, topology, width, patch/reset policy, training schedule, and
+quantizer without rescue sweeps.  The candidate has zero forecast and score
+credit unless a counted native successor is later proved.
+
+Plan:
+`docs/mobius2_noema_semantic_boundary_hierarchy_qh0_plan.md`.

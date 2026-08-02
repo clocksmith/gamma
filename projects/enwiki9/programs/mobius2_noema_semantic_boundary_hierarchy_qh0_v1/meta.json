@@ -1,0 +1,35 @@
+{
+  "added": "2026-08-02",
+  "deps": [],
+  "description": "MOBIUS-2 NOEMA semantic-boundary hierarchy headroom",
+  "family": "mobius2_noema_semantic_boundary_hierarchy",
+  "hypothesis": "A causal shared-cell hierarchy aligned to decoder-visible WRT sentence and structural boundaries exposes at least 3000 gross B/M of JANUS-plus-quotient residual headroom and beats matched flat, fixed-boundary, and lagged-boundary controls.",
+  "id": "mobius2_noema_semantic_boundary_hierarchy_qh0_v1",
+  "mechanism": {
+    "controls": [
+      "N0 exact joint prefix",
+      "NF flat recurrence",
+      "NB fixed 16-byte hierarchy",
+      "NL causal lag-31 boundary hierarchy",
+      "NS semantic-boundary hierarchy"
+    ],
+    "model_package_ceiling_bytes": 131072,
+    "patch_bytes": 128,
+    "population": "opening 171 complete pages with chronological 60/20/20 split",
+    "score_credit_bytes": 0
+  },
+  "omega": {
+    "interfaces_exposed": [
+      "decoder-visible WRT inverse boundary schedule -> shared recurrent segment hierarchy -> adjusted joint P1"
+    ],
+    "mechanism_change": "add_state_coordinate",
+    "parent_proposal_id": "mobius2_noema_binary_carry_headroom_v1",
+    "proposal_id": "mobius2_noema_semantic_boundary_hierarchy_v1",
+    "retired_neighborhoods": [
+      "equal-span 128-byte binary-carry hierarchy",
+      "flat recurrent width and optimizer rescues"
+    ]
+  },
+  "parent": "janus_recurrent_quotient_joint_10m_v1",
+  "status": "active"
+}
