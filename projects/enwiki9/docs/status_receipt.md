@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T16:15:32+00:00`
+- Generated at UTC: `2026-08-02T17:00:47+00:00`
 
 ## Target State
 
@@ -21,7 +21,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `17,652`
+- RSS samples: `23,065`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `7,790,872`
@@ -54,10 +54,10 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Matching driver observed: `false`
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command. The host-local heavy lock alone never identifies a gate.`
 - RSS guard status: `running`
-- RSS guard JSON bytes: `1,335`
-- RSS guard JSON modified UTC: `2026-08-02T16:15:32+00:00`
-- RSS guard JSON SHA-256: `f560367ed680e5f0ed987dc19ae0b1def22909f6643cbc33b8d01a719e1d4ca1`
-- RSS samples: `17,652`
+- RSS guard JSON bytes: `1,336`
+- RSS guard JSON modified UTC: `2026-08-02T17:00:47+00:00`
+- RSS guard JSON SHA-256: `7e78cf0911acf912637da8e54b1609d88d7ae928e6121ecc15f282545e80fb93`
+- RSS samples: `23,065`
 - Max sampled single RSS KiB: `7,790,872`
 - Max sampled tree RSS KiB: `7,790,872`
 - Single-process RSS margin KiB: `2,694,888`
@@ -131,7 +131,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Program directories: `658`
 - Registered programs: `266`
 - Untracked nonignored entries: `2`
-- Modified tracked entries: `4`
+- Modified tracked entries: `1`
 - Candidate statuses: `active=18, blocked_dependency=32, candidate=28, measured_negative=99, retired=481`
 
 ## Active Runner Process Table
