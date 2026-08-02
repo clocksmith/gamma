@@ -98,6 +98,23 @@ reported by the exact page map, compare
 `split_qbits * 1,000,000` directly with `5,000 * 2048 * R`; do not round a
 floating-point B/M value to make the decision.
 
+Freeze Q256 construction to
+`tools/mobius2_tessera_typed_fiber_ceiling.py::qbit_tables`. It evaluates
+`-log2(p) * 256` in `float64`, uses `numpy.rint` nearest-even rounding, and
+stores native results as `int32`. Canonical receipt serialization is 65,536
+little-endian signed 32-bit entries in probability-index order:
+
+```text
+zero-bit table bytes   262,144
+zero-bit table SHA-256 6ddbe07c8c2f8387d044a98d958e26ac4f8af27a9dcdf2335f046891365c2376
+one-bit table bytes    262,144
+one-bit table SHA-256  7caf35600227bad3b1b7402aaa3837aab1aa5aa11267bca283be055c81e8387f
+```
+
+Rebuild both tables independently and require these hashes before scoring.
+The tables are supplied free in QM1 but remain bound evidence; a later finite
+Q0 must account for its actual coder rather than these diagnostic Q256 tables.
+
 All lanes use identical pre-truth opportunities and injective capacity
 matching. For exact snapshot unique count `U`, each control must expose exactly
 `U` distinct encoded token identities. Select identities by descending source
@@ -141,6 +158,7 @@ parent input identities                         exact
 parser/index replay                             byte-identical
 opportunity and control digests                 byte-identical
 all candidates sourced from prior closed pages exact
+Q256 table hashes                               exact
 accepted heading has zero scheduled token events exact
 closer and line-crossing events excluded             exact
 Hblind source-key inequality                         exact

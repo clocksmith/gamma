@@ -35,6 +35,21 @@ been supplied. They do not create that information. `ACS-MATH-SEAL-2` remains
 `UNBOUND`; no solver distribution is authorized and all solutions receive zero
 compression credit.
 
+The accepted mathematical scope is narrower and explicit. Paid-information
+selection supplies the exact empirical optimizer, an integer prefix
+construction, description-priced profitability, and the sharp finite
+perturbation bound once a gain matrix exists. Predictive quotienting supplies
+behavioral minimality, finite distinguishing certificates, Wheeler interval
+geometry, and finite unfolding once a useful coloring exists. Integer
+shadowing supplies contractive recurrence error, logistic-loss transfer,
+rational Householder realization, and precision bounds once a sufficiently
+strong teacher exists; its sharpness statement is exact for admissible rational
+contractions and supremal for arbitrary real contractions. Parity
+reconstruction supplies kernel separation and canonical first-hit recovery
+once true residuals already have low searchable energy rank; its corrected
+difference-set condition is `ker(H) intersect (B - B) subseteq {0}`. None of
+these conclusions proves its missing empirical antecedent.
+
 The later `ACS-PROVER-LIBRARY-1` similarly separates exact bounded-treewidth
 candidate selection, ambiguity-DAG correction coding, weighted-transformation
 recomposition, and abstract tree-memory scheduling. Those results improve the
@@ -42,6 +57,13 @@ research verifier. They do not prove that the finite candidate family contains
 a competitive compressor. The first compression-derived transformation-monoid
 pilot is the controlling example: its theorem and exact transfer worked while
 the compression hypothesis lost eight holdout bytes.
+
+The prover library therefore guarantees, respectively, an exact optimum inside
+a supplied factorized candidate family, canonical rank/unrank and worst-case
+correction bits inside a supplied ambiguity DAG, exact finite-state recomposed
+cost for supplied local replacements, and minimum abstract peak memory under
+its declared no-recomputation schedule. It supplies proof-carrying engineering,
+not new prediction.
 
 ## The eight executable obligations
 
