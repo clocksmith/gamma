@@ -6973,3 +6973,55 @@ residual state, all prediction caches, and FX2 phase state with pointer
 normalization. WIKI event parsing and graph state are new child machinery, not
 the official post-stream inverse or existing parent parser. The harness remains
 unimplemented until a finite event lane pays.
+
+## 2026-08-02: endpoint428 bounded single-logical-CPU preflight identified
+
+The runtime contract now records one unmeasured source-neutral topology check:
+verifier-imposed single-logical-CPU affinity, optionally with
+`OMP_THREAD_LIMIT=1`, against the exact binary and archive. `OMP_NUM_THREADS=1`
+cannot override the source's hard-coded three-thread OpenMP clauses. An
+immutable official-rule snapshot must first resolve the apparent single-core
+versus multicore-calibration wording and decide whether multiple software
+threads time-sharing one logical CPU are permitted; required entrant-supplied
+command text must be counted.
+
+This is a bounded eligibility clarification, not an active candidate or a
+plausible runtime solution. The exact 10M timing is contaminated and does not
+prove an official failure, while the existing runtime ladder supplies only
+`13.963%` optimistic leverage against the prior `83.093%` reduction screen.
+No affinity run is authorized while the score target is missed or NNCP owns the
+heavy lock. Target-bearing runtime work still requires modeled-work removal or
+a replacement architecture.
+
+## 2026-08-02: historical frontier provenance repaired without new credit
+
+Four exact historical artifacts were recovered from the local nonproof archive
+and imported byte-for-byte under their canonical project result directories.
+The endpoint428 online layer-0 receipt is `6,288` bytes with SHA-256
+`4228c39e797ffecd31e67234df93958d09e559100e9cd370397d9a750e51ab2c`;
+its evaluated source is `19,929` bytes with SHA-256
+`11b0ad149e92425b0b654fa7d70a2f0de761991cab30b047e966f4d96e987ec0`.
+The sparse-blend receipt is `11,150` bytes with SHA-256
+`436b2b315d6574a79238e97fb6de2ff21c97ea822f6bc9337906f3c3bd585bae`,
+and the single-blend receipt is `12,982` bytes with SHA-256
+`d99f49208243d51f1e48b4868a7bc864fa2c5afcfb30cf2d0927d8e307623119`.
+Their frontier assertions now point at those exact retained files rather than
+at absent generic receipt names.
+
+The original standalone SRSTC `65,536K` raw-shadow JSON remains unavailable on
+this host. Its tracked candidate metadata independently records the historical
+`900,464`-byte net shadow value at
+`/measured/65536k_raw_shadow_replay/net_saved_bytes`, so the zero-credit retired
+frontier row now asserts against that available artifact and explicitly retains
+the original-receipt limitation. The endpoint428 MXX-SSE receipt is unavailable
+and its nearby MXX screen has different measurements; the stale zero-credit
+frontier row was removed rather than substituting nonidentical evidence. The
+negative family conclusion remains historical narrative only. None of these
+provenance repairs changes the `109,389,323` forecast or grants score credit.
+
+The WIKIBACK v2 prequeue bill was also rechecked after hardening: all ten bound
+files remain identical to commit `5ef3d55b6b38c64a96f874fb0af9e32c76109e52`,
+the canonical zlib-9 bundle remains `54,544` bytes with SHA-256
+`11deeae7ee067c89d46721552030174aa6506665e32fa24cb42e9a37cd876847`,
+and the counted allowance remains `54,608` bytes. The candidate stays unqueued
+until the active NNCP heavy gate is terminal.

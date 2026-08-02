@@ -79,6 +79,42 @@ above is permitted. Missing, ambiguous, or internally inconsistent rule
 evidence yields `MALFORMED_EVIDENCE`; it cannot be replaced by a benchmark
 convention or an assumption about idle threads.
 
+A 2026-08-02 read-only audit identified an apparent wording boundary that must
+be settled by the frozen snapshot: the prize homepage and FAQ use single-core
+language, while the detailed timing page presents both one-core and multicore
+reference calibration values. Until the authority snapshot and adopted
+interpretation resolve that boundary, do not call the exact topology eligible
+or ineligible. The live pages to snapshot are:
+
+```text
+https://prize.hutter1.net/
+https://prize.hutter1.net/hrules.htm
+https://prize.hutter1.net/hfaq.htm
+```
+
+## Bounded external-policy preflight
+
+One source- and archive-neutral topology check remains unmeasured: run the
+exact binary under verifier-imposed single-logical-CPU affinity, optionally
+with `OMP_THREAD_LIMIT=1`, and collect the full observed topology required
+below. `OMP_NUM_THREADS=1` alone is insufficient because the source contains
+hard-coded `num_threads(3)` clauses.
+
+This preflight can answer only whether multiple software threads confined to
+one logical CPU satisfy the adopted rule interpretation and whether the exact
+archive remains unchanged. If the entrant must supply affinity or environment
+text, count every required command-line byte under the rule snapshot. Do not
+assume that verifier-imposed policy is a free archive dependency.
+
+The preflight is not a runtime rescue and is not authorized while the score
+target is missed or another heavy job holds the lock. Existing active/passive,
+worker-count, spin-count, serial, persistent, and BPTT evidence leaves only
+`13.963%` optimistic exact-source leverage against the repository's prior
+`83.093%` runtime-reduction screen. The exact 10M timing receipt is contaminated
+by competing CPU work, so there is no clean official runtime rejection; the
+planning conclusion is nevertheless model-work removal or replacement, not an
+environment sweep.
+
 ## Required observed topology
 
 For both compression and decompression, record:
