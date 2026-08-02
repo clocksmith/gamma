@@ -28,6 +28,16 @@ above that contingency and the standing `108,000,000` target would miss it by
 `592,104` bytes. Evidence and mechanism audit:
 `docs/cmix_obias_external_candidate_audit.md`.
 
+Two supporting decomposition levels must not be confused with a winning
+competition. Level I is the original independent mathematical problem bank:
+paid selection, behavioral quotienting, integer shadowing, and parity
+reconstruction. Level II is the later prover-engineering library: exact finite
+candidate optimization, correction coding, recomposition, and memory
+scheduling. Both levels can be solved completely while the associated
+compression hypothesis fails. The target-bound object is the eight-obligation
+chain below; no current independent contest problem has the property that any
+accepted solution necessarily supplies a paying compressor improvement.
+
 ## Supporting mathematics already separated
 
 `ACS-MATH-SEAL-2` contains four independent pencil-and-paper families:
@@ -197,6 +207,12 @@ bytes, runtime measurements, or full-corpus receipts are organizer obligations.
 They must not be restated as open mathematics. If a theorem would merely help
 search a family whose empirical headroom is unknown, the problem is not ready
 for distribution.
+
+This is the required precommitted transfer binding: before distribution, the
+organizer must be able to prove that every accepted mathematical witness maps
+through the frozen executable construction to a verifier result that clears a
+named target-bearing threshold. "May help find a compressor" is not a transfer
+binding.
 
 ## Operational consequence
 
