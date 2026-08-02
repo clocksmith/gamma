@@ -6249,3 +6249,27 @@ unknown.
 
 Decision:
 `results/srstc_residual_program_retrieval_qm1_v1/decision.json`.
+
+## 2026-08-02: SRSTC implicit log-opinion consensus frozen
+
+Proposal: `srstc_residual_program_logopinion_v1`.
+
+Candidate: `srstc_residual_program_logopinion_qh0_v1`.
+
+The retired residual-program selector gate exposed `3,026 B/M` development,
+`4,581 B/M` selection, and `4,784 B/M` sealed residual-payload headroom before
+its four-bit command. This successor changes the coded endpoint by deleting
+that command entirely. It takes the componentwise arithmetic mean of all
+causally retrieved residual exponents, truncates toward zero, and applies the
+result as one deterministic `(5/4)^r` parent-odds correction. No current-block
+choice or side index exists.
+
+The exact gate freezes parent B0, globally newest flat F0, keyed consensus R0,
+support-matched blind-key RB, and 37-position rotated RS. It requires exact
+parent replay, arithmetic decode, WRT and raw reconstruction, repeated state,
+P1, and payload identity, positive development and selection, at least 3,000
+B/M sealed and full gain, and R0 strictly below every control. A miss retires
+this log-opinion rule without mean/median, support, odds, key, table, epoch, or
+rotation sweeps. The experiment is a zero-credit source-supplied ceiling.
+
+Plan: `docs/srstc_residual_program_logopinion_qh0_plan.md`.
