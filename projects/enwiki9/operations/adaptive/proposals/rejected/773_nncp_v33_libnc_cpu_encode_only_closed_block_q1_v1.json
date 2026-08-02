@@ -9,7 +9,8 @@
     "results/nncp_full_symbol_map_v1/decision.json",
     "results/janus_recurrent_quotient_joint_trace_recovery_q0_v1/decision.json",
     "docs/nncp_v33_libnc_cpu_encode_only_mature_9m_10m_q1_plan.md",
-    "docs/research_register.md"
+    "docs/research_register.md",
+    "results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/decision.json"
   ],
   "expected_savings_bytes": 0,
   "hypothesis": "One continuous full-dictionary encode-only NNCP teacher charged on the complete native block [1499136,1998848), exactly mapping raw [6757802,8991577), beats the exact same-population JANUS-plus-quotient arithmetic trajectory by at least 3000 bytes per raw million.",
@@ -27,11 +28,14 @@
   "priority": 211,
   "promotion_condition": "Exact source/input/map identities, exact 10M-to-1G prefix identity, continuous execution through native block boundary 1998848, exact original-ordinal permutation, fixed vocabulary 16392, exact prob0-to-Q16-p1 conversion, complete-block execution-order selection [1499136,1998848), exact raw/WRT boundaries [6757802,8991577), decoded finite teacher and joint streams, decimal-10GB compliance, and teacher advantage >=3000 B/M authorize only one frozen distant complete-block continuation.",
   "proposal_id": "nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1",
+  "rejected_at": "2026-08-02T23:51:05+00:00",
+  "rejection_reason": "Exact causally closed Q1 passed source, population, observer-neutrality, probability-domain, arithmetic-decode, and decimal-10GB checks, but the 414513-byte teacher window lost 64974 bytes to the 349539-byte JANUS-plus-quotient parent (-29087.083525 B/M versus the required +3000 B/M).",
   "retired_neighborhoods": [
-    "partial native blocks, sliced interleaved-stream marginals, and direct prob0-as-p1 scoring"
+    "partial native blocks, sliced interleaved-stream marginals, and direct prob0-as-p1 scoring",
+    "full-dictionary LibNC CPU mature-teacher thread, model, dictionary, checkpoint, precision, batch, block, and window rescue sweeps"
   ],
   "schema": "enwiki9_algorithm_proposal_v1",
   "search_priority": 226,
-  "state": "developed",
+  "state": "rejected",
   "title": "NNCP v3.3 LibNC CPU encode-only causally closed native-block headroom gate"
 }
