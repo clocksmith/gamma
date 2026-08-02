@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T17:43:44+00:00`
+- Generated at UTC: `2026-08-02T17:45:07+00:00`
 
 ## Target State
 
@@ -21,7 +21,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `28,204`
+- RSS samples: `28,368`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `7,790,872`
@@ -55,9 +55,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command. The host-local heavy lock alone never identifies a gate.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `1,335`
-- RSS guard JSON modified UTC: `2026-08-02T17:43:44+00:00`
-- RSS guard JSON SHA-256: `6e2493f178c5c9c874511063cfcd653faabbf47f000d1d504dd0c1aeb78454a2`
-- RSS samples: `28,204`
+- RSS guard JSON modified UTC: `2026-08-02T17:45:07+00:00`
+- RSS guard JSON SHA-256: `af8468b800e78deddafb06ebb1dc0185fe81c7ab97010078e48ec6033bfdfef6`
+- RSS samples: `28,368`
 - Max sampled single RSS KiB: `7,790,872`
 - Max sampled tree RSS KiB: `7,790,872`
 - Single-process RSS margin KiB: `2,694,888`
@@ -130,9 +130,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Audit return code: `0`
 - Program directories: `659`
 - Registered programs: `267`
-- Untracked nonignored entries: `7`
-- Modified tracked entries: `9`
-- Candidate statuses: `active=18, blocked_dependency=32, candidate=27, measured_negative=99, retired=482, track_source_before_evolution=1`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `2`
+- Candidate statuses: `active=18, blocked_dependency=32, candidate=28, measured_negative=99, retired=482`
 
 ## Active Runner Process Table
 
@@ -148,7 +148,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,336 | `2026-08-02T17:43:45+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,336 | `2026-08-02T17:45:07+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_native_trace.bin` | 112,934,912 | `2026-08-02T16:47:22+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_complete_block.nncp` | 1,163,264 | `2026-08-02T16:46:24+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_native_trace.bin` | 1,130,064 | `2026-08-02T13:47:58+00:00` |

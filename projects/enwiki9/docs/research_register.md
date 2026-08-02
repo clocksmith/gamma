@@ -6755,6 +6755,13 @@ gate. It must be source-bound and queued exactly once only after NNCP releases
 the heavy lock. Plan:
 `docs/wikiback_incoming_anchor_context_cblind_keyguard_qh0_v2_plan.md`.
 
+The committed v2 source preflight at `e4ade29592c641edc72c729e47d89873ef4752f1`
+binds `218,547` raw bytes to a `53,684`-byte zlib-9 bundle with SHA-256
+`33088fa303b31242990bad64232c7a2c7196608df5db78a714ab84ac20078ddb`.
+The counted allowance is `53,748` bytes including 64 bytes of framing, below
+the inherited `196,608`-byte source ceiling. This proves package identity and
+cost only; it does not authorize score credit or concurrent execution.
+
 ## 2026-08-02: adaptive tool guard liveness attribution fixed
 
 `tools/enwiki9_status_receipt.py` incorrectly treated NNCP's nested RSS guard
