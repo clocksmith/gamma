@@ -7235,3 +7235,29 @@ becomes relevant only after a new parent is at most `20.3818 h` for the
 value-exact subset, or `26.3981 h` for the full changed-arithmetic set. Full
 hashes, source-diff classification, and transfer conditions are in
 `docs/cmix_obias_runtime_transfer_audit.md`.
+
+## 2026-08-02: causally closed NNCP mature-teacher Q1 rejected
+
+Candidate `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1` completed one
+continuous full-dictionary NNCP v3.3 LibNC execution from symbol zero through
+the frozen native boundary at `1,998,848`. The charged complete block was
+symbols `[1,499,136, 1,998,848)`, exactly mapping raw enwik9 bytes
+`[6,757,802, 8,991,577)` and WRT bytes `[4,182,331, 5,618,556)`.
+
+All scientific-integrity gates passed: source and corpus identities, local
+10M-to-receipt-bound-1G prefix identity, observer archive neutrality, original
+ordinal permutation, complete-block execution order, vocabulary `16,392`,
+`p1 = 2 * (32768 - prob0)` legality, exact joint and teacher arithmetic decode,
+and the decimal-10GB process-tree guard. Peak sampled RSS was `7,790,872 KiB`.
+
+The exact independently terminated teacher window was `414,513` bytes. The
+same-population JANUS-plus-quotient parent was `349,539` bytes. The teacher
+therefore lost `64,974` bytes, or `-29,087.083525 B/M`, against the frozen
+`+3,000 B/M` authorization threshold.
+
+Decision: `REJECT`, zero score credit, no distant complete-block replay, and no
+student construction. Retire this exact full-dictionary LibNC CPU mature-
+teacher lane without thread-count, model, dictionary, checkpoint, precision,
+batch, block, or window rescue sweeps. The next heavy evidence gate is the
+already materialized corrected WIKIBACK v2 finite side/residual-stream test.
+Receipt: `results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/decision.json`.

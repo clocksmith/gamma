@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T20:46:24+00:00`
+- Generated at UTC: `2026-08-02T23:54:27+00:00`
 
 ## Target State
 
@@ -12,25 +12,25 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Summary
 
-- Candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
-- Scope bytes: `2,233,775`
-- Gate verdict: `running`
-- Gate next action: `wait_for_gate_completion`
-- Heavy lock held: `true`
-- Active scorer observed: `true`
+- Candidate: `None`
+- Scope bytes: `n/a`
+- Gate verdict: `None`
+- Gate next action: `None`
+- Heavy lock held: `false`
+- Active scorer observed: `false`
 - Active cmix mode: `n/a`
-- Driver result present: `false`
-- RSS guard status: `running`
-- RSS samples: `50,057`
+- Driver result present: `unknown`
+- RSS guard status: `n/a`
+- RSS samples: `n/a`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `7,790,872`
-- Latest sampled single RSS KiB: `7,790,872`
-- Tightest binary single-process margin KiB: `2,694,888`
-- Tightest decimal single-process margin KiB: `1,974,753`
-- Latest binary single-process margin KiB: `2,694,888`
-- Latest decimal single-process margin KiB: `1,974,753`
-- Safe to launch heavy gate: `false`
+- Max sampled single RSS KiB: `n/a`
+- Latest sampled single RSS KiB: `n/a`
+- Tightest binary single-process margin KiB: `n/a`
+- Tightest decimal single-process margin KiB: `n/a`
+- Latest binary single-process margin KiB: `n/a`
+- Latest decimal single-process margin KiB: `n/a`
+- Safe to launch heavy gate: `true`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `28`
 - Held pending adaptive jobs: `28`
@@ -40,53 +40,36 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Active Gate
 
-- Heavy lock held: `true`
-- Gate verdict: `running`
-- Next action: `wait_for_gate_completion`
-- Candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
-- Scope bytes: `2,233,775`
-- Driver result JSON: `/home/x/deco/gamma/projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/receipt.json`
-- Driver result present: `false`
-- RSS guard JSON: `/home/x/deco/gamma/projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json`
-- RSS guard present: `true`
-- Active scorer observed: `true`
-- Live gate: `true`
-- Liveness classification: `live_observed_owner`
-- Matching adaptive jobs: `1`
+- Heavy lock held: `false`
+- Gate verdict: `unknown`
+- Next action: `unknown`
+- Candidate: `unknown`
+- Scope bytes: `n/a`
+- Driver result JSON: `not present`
+- Driver result present: `unknown`
+- RSS guard JSON: `not present`
+- RSS guard present: `unknown`
+- Active scorer observed: `false`
+- Live gate: `false`
+- Liveness classification: `not_persisted_running`
+- Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command. The host-local heavy lock alone never identifies a gate.`
-- RSS guard status: `running`
-- RSS guard JSON bytes: `1,336`
-- RSS guard JSON modified UTC: `2026-08-02T20:46:24+00:00`
-- RSS guard JSON SHA-256: `acd987089d4d93024a2b41aad20282c52bdf5d042b070e62843033381709e782`
-- RSS samples: `50,057`
-- Max sampled single RSS KiB: `7,790,872`
-- Max sampled tree RSS KiB: `7,790,872`
-- Single-process RSS margin KiB: `2,694,888`
-- Single-process decimal `10GB` margin KiB: `1,974,753`
-- Tree RSS margin KiB: `2,694,888`
-- Tree decimal `10GB` margin KiB: `1,974,753`
-- Latest sampled single RSS KiB: `7,790,872`
-- Latest sampled tree RSS KiB: `7,790,872`
-- Latest sampled single-process margin KiB: `2,694,888`
-- Latest sampled single-process decimal `10GB` margin KiB: `1,974,753`
-- Latest sampled tree margin KiB: `2,694,888`
-- Latest sampled tree decimal `10GB` margin KiB: `1,974,753`
 
 ## Gate Evidence Status
 
-- Claim status: `live_guard_monitor_only`
+- Claim status: `awaiting_gate_receipts`
 - Driver result terminal: `false`
 - RSS guard terminal: `false`
 - Scored gate result present: `false`
-- Live guard only: `true`
+- Live guard only: `false`
 - Claim rule: `Only a terminal driver result with roundtrip evidence can become a benchmark row.`
 
 ## Observed Gate Command
 
-- Expected candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
-- Expected scope bytes: `2,233,775`
+- Expected candidate: `None`
+- Expected scope bytes: `n/a`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -97,8 +80,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Observed Controller Command
 
-- Expected active candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
-- Expected active scope bytes: `2,233,775`
+- Expected active candidate: `None`
+- Expected active scope bytes: `n/a`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -108,17 +91,17 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Action
 
-- Safe to launch heavy gate: `false`
-- Action: `wait_for_current_gate_receipts`
-- Reason: `the serialized scorer lane is already owned by an observed guarded process`
-- Allowed work: `refresh status receipt; inspect driver and RSS receipts; update documentation and accounting ledgers; work on shadow-coder specs from cached logs`
-- Forbidden work: `launch another compression gate; package a fallback candidate; run result-corpus forecast scans; change active candidate source`
+- Safe to launch heavy gate: `true`
+- Action: `inspect_queue_before_launch`
+- Reason: `no lock owner or terminal gate receipt blocks the next queue decision`
+- Allowed work: `n/a`
+- Forbidden work: `n/a`
 
 ## Handoff
 
 - Terminal verdict present: `false`
 - Heavy gate mutation allowed: `false`
-- Recommended action: `wait_for_current_gate_receipts`
+- Recommended action: `inspect_queue_before_launch`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves the 10.8000000% full-corpus target.`
 
@@ -134,57 +117,20 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Program directories: `659`
 - Registered programs: `266`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `2`
-- Candidate statuses: `active=18, blocked_dependency=32, candidate=28, measured_negative=99, retired=482`
+- Modified tracked entries: `0`
+- Candidate statuses: `active=18, blocked_dependency=32, candidate=27, measured_negative=99, retired=483`
 
 ## Active Runner Process Table
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 2,870,168 | 1,342,133 | 23,972 | `python3 tools/enwiki9_lab.py run --adaptive --max-workers 1 --candidate nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1` |
-| `lock_wrapper` | 2,870,184 | 2,870,168 | 2,104 | `flock /tmp/enwiki9-heavy.lock /usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/nncp_v33_libnc_cpu_encode_only_closed_block_q1.py` |
-| `process` | 2,870,186 | 2,870,184 | 52,652 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/nncp_v33_libnc_cpu_encode_only_closed_block_q1.py` |
-| `rss_guard` | 2,908,762 | 2,870,186 | 16,868 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_rss_guard.py --limit-kib 9765625 --limit-mode tree --official-decimal-limit-kib...` |
-| `process` | 2,908,765 | 2,908,762 | 7,790,872 | `/tmp/nncp-closed-block-q1-hcx6copw/nncp-2024-06-05/nncp -q -T 4 --profile enwik9 --encode_only --n_symb 16392 --dict /home/x/enwiki9-nonproof/resul...` |
+| n/a | n/a | n/a | n/a | n/a |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,335 | `2026-08-02T20:46:25+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_native_trace.bin` | 169,402,368 | `2026-08-02T19:48:46+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_complete_block.nncp` | 1,622,016 | `2026-08-02T19:48:32+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_native_trace.bin` | 1,130,064 | `2026-08-02T13:47:58+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_on.stdout` | 112 | `2026-08-02T13:47:58+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_on.nncp` | 68,176 | `2026-08-02T13:47:58+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_on.stderr` | 0 | `2026-08-02T13:46:54+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_off.nncp` | 68,176 | `2026-08-02T13:46:54+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_off.stdout` | 112 | `2026-08-02T13:46:54+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_off.stderr` | 0 | `2026-08-02T13:45:50+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_original.nncp` | 68,176 | `2026-08-02T13:45:49+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_original.stdout` | 112 | `2026-08-02T13:45:49+00:00` |
-
-## Active RSS
-
-- Max cmix PID: `n/a`
-- Active cmix mode: `n/a`
-- Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `7,886,468`
-- Local binary `10GiB` guard KiB: `10,485,760`
-- Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `n/a`
-- Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `2,599,292`
-- Active process tree decimal margin KiB: `1,879,157`
-
-## Contingencies
-
-- If current gate passes: `record pass and apply candidate target-gate promotion rule`
-- Pass next scope: `n/a`
-- If RSS fails: `record RSS failure and retire or repackage this integration shape`
-- Lower candidate: `unknown`
-- Lower PPMD KiB: `n/a`
-- If roundtrip or determinism fails: `record failure and do not promote`
+| n/a | n/a | n/a |
 
 ## Proof Boundary
 
