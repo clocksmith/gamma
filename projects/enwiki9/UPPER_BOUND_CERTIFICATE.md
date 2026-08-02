@@ -26,7 +26,9 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | exact result JSON with roundtrip_ok true | exact artifact-backed |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | 10,000,000 | 109,389,323 | canonical source-bound frontier selection backed by exact 10M codec replay and counted package evidence; forecast only, not a constructive full-corpus proof | source-bound-canonical-forecast |
-| active candidate | `n/a` | n/a | n/a | no live adaptive worker or directly observed scorer is present | idle |
+| active candidate | `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1` | 2,233,775 | n/a | active 2,233,775 byte replay is running; no constructive result is present for this candidate yet | running gate |
+| blocker | `n/a` | n/a | n/a | active 2,233,775 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
+| active gate | `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1` | 2,233,775 | n/a | unchanged 2,233,775 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
 
 ## Best Full-Corpus Result
 
