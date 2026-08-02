@@ -6,8 +6,9 @@ directory are generated projections or implementation code.
 ## Edit here
 
 - `variables.json` owns shared names, terminology, and reusable facts.
-- `physical/` owns every baseline physical-playtest copy source: the rulebook,
-  cards, player aids, faction boards, board components, and box/world text.
+- `physical/` owns every baseline physical-playtest copy source: How to Play,
+  the world companion, cards, player aids, faction boards, board components,
+  and box/world text. Deferred module rules remain under `physical/optional/`.
 - `runtime/` owns browser UI, simulation, and player-strategy copy.
 - `deferred/` owns modules excluded from the baseline physical game.
 - `templates/` owns browser HTML composition.

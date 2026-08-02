@@ -1,6 +1,6 @@
 # M3T4 2038 Playtesting And Evidence
 
-**Rules under review:** `0.5.0-rc.32-test`
+**Rules under review:** `0.5.0-rc.33-test`
 **First cohort:** controlled four-player physical test with Mirevanta Works,
 Kestralyn, Corthaven, and Loopfold AI
 
@@ -103,8 +103,8 @@ Never overwrite an immutable release with changed contents.
 
 ## Current version boundary
 
-`docs/core-rules.md` is a review draft at `0.5.0-rc.32-test`. Executable
-game `0.8.32` implements it under `three-to-five-grid-ready-v1`. New automated reports
+`docs/core-rules.md` is a review draft at `0.5.0-rc.33-test`. Executable
+game `0.8.33` implements it under `three-to-five-grid-ready-v1`. New automated reports
 may therefore carry lean-candidate attribution when their release and engine
 fingerprints match. That implementation proof does not transfer simulation
 outcomes into human-play evidence.
