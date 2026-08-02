@@ -4,29 +4,27 @@
 
 **Suggested player count:** 3–5
 
-**Rules version:** 0.5.0-rc.34-test
+**Rules version:** 0.5.0-rc.35-test
 **Design-baseline date:** July 26, 2026
-**Status:** Controlled playtest candidate; synchronized with executable game 0.8.34
+**Status:** Controlled playtest candidate; synchronized with executable game 0.8.35
 **Provisional time:** 75–100 minutes at four players; three- and five-player durations require their own blind tests
 **Standard game:** Four rounds, three turns per player per round
 
-This is the baseline **How to Play and Rules Reference**. Begin with **How to
-win**, then follow Setup and the Central loop. Setting, tone, Era fiction, and
-the two ending narratives live in the companion
-[World and Institutions](./world-and-institutions.md). The deferred Tactic
-module has its own [Optional Tactic Rules](./optional-tactics.md) and is not
-used in the baseline game.
+This book contains the baseline rules. Begin with **How to win**, then follow
+Setup and the Central loop. [World and Institutions](./world-and-institutions.md)
+contains the setting, Era fiction, and ending narratives. [Optional Tactic
+Rules](./optional-tactics.md) contains the deferred Tactic module. Keep Tactics
+out of the baseline game.
 
 ### How to win
 
 After Round IV, the institution with the most Mandate wins. Mandate is scored
 publicly as players gain Customers, cross Capability and Trust thresholds, win
-Round Mandates, and resolve exceptional programs. Declaring AGI is powerful
-but optional; it is one path through the game, not its required conclusion.
+Round Mandates, and resolve exceptional programs. Declaring AGI is an
+optional scoring route.
 
-The winning institution and the world’s ending are separate results. A player
-may win the institutional race while helping create the Closed Loop, or lose
-the race inside a future where genuine AGI remains answerable to humanity.
+Resolve the winning institution and the World Ending separately. Either World
+Ending can accompany any institutional winner.
 
 ## 1. Setup
 
@@ -54,8 +52,8 @@ the race inside a future where genuine AGI remains answerable to humanity.
    listed under **Starting public Mandate**. Put every player’s ten Scrutiny
    cubes outside the bag; the bag begins empty.
 8. Add every Faction’s printed starting Trust and record the result as
-   **Setup Collective Trust** on the Era reference. This is a reference value,
-   not another track.
+   **Setup Collective Trust** on the Era reference. This fixed value is used
+   during the World Ending.
 9. Choose Initiative randomly and give that player the Initiative marker.
    Begin Round I.
 
@@ -75,10 +73,8 @@ Once played, a Core Action remains exhausted until the next round:
 - Deploy
 - Influence
 
-Players do not perform all six actions in a fixed sequence. The twelve
-standard-game turns ask which three of six institutional functions matter in
-each era. The other three actions remain unused unless an explicit ability
-readies one.
+Across the twelve standard-game turns, choose three of six Actions each round,
+in any order. The other three remain unused unless an ability readies one.
 
 Examples:
 
@@ -86,8 +82,7 @@ Examples:
 - Round II: Fund → Organize → Mega-Cluster
 - Round III: Research → Influence → Open Weights
 
-> You have six institutional capabilities, but only enough time to use three
-> of them this quarter.
+> Six institutional capabilities. Three turns each round.
 
 ### The complete ordinary turn: Select → Move → Act
 
@@ -105,8 +100,8 @@ Examples:
    Action.
 9. Pass Initiative clockwise before the next cycle.
 
-Players commit only the action during selection. The acting piece, movement
-path, target, and exact payment remain open until resolution.
+Secret selection commits the Action card. Choose the acting piece, movement
+path, target, and exact payment during resolution.
 
 ### Acting piece
 
@@ -122,37 +117,35 @@ Facilities, Influence cubes, Generators, and Experts cannot act. Organize
 receives normal acting-piece movement before its additional movement,
 recruitment, restructuring, or relocation.
 
-Use one authority per rules layer:
+Resolve a turn from these sources:
 
 - The Era card determines globally unlocked actions.
 - A Faction board modifies those actions.
-- The global-state layer contains the current Headline and every persistent
-  Headline effect.
+- The current Headline and every persistent Headline supply the global effects.
 - An ordinary turn may apply the Action, one destination bonus, one Faction
-  modifier, and each applicable global effect, subject to field precedence.
+  modifier, and each applicable global effect. Use the field precedence below
+  when two effects change the same printed field.
 - Every exception is timed **before selection**, **during movement**, **during
   action**, or **after action**.
-- A Headline changes one named field or creates one public choice regime. It
-  never grants another Action.
+- A Headline changes one named field or calls one public choice procedure. It
+  grants no additional Action.
 - If the current Headline and a persistent Headline would change the same
   printed field, the current Headline temporarily overrides the older effect.
 - A printed field may be modified by only one global effect at a time.
   Persistent effects modifying other fields remain active.
-- Readying a card changes a later choice; it never resolves that card now.
+- Readying a card makes it available for a later choice. Resolve nothing when
+  you ready it.
 - Agent Swarm is the sole compound-action exception.
 - A Headline whose effect lasts beyond its cycle is placed beside the affected
   Action card as a reminder. There is no separate Law system or Law deck.
 
 ### What an Era teaches
 
-The Era card is the only authority that introduces a new rules family. A
-system listed under **New this Era** is inactive before that Era, even if its
-components or later cards are visible. When an Era begins, read its
-**New this Era** strip aloud before revealing the Round Mandate.
-
-This staged teach changes rules exposure, not strategic visibility. Players
-may inspect every later Era card, Wild Action, and faction ability during
-setup. The future is visible; only its operating rules arrive gradually.
+The Era card unlocks each rules family. A system listed under **New this Era**
+is inactive before that Era, even if its components or later cards are
+visible. When an Era begins, read its **New this Era** strip aloud before
+revealing the Round Mandate. Players may inspect every Era card, Wild Action,
+and Faction ability during setup.
 
 ### Universal tie rule
 
@@ -163,8 +156,9 @@ all tied players, overrides this rule.
 
 ### Escalation tokens and Wild Actions
 
-Escalation tokens are spent, not permanent unlock markers. Every player has
-seven Wild Action cards. The Era card determines which ones are legal.
+Spend one Escalation token each time you select a Wild Action. The token grants no
+permanent unlock. Every player has seven Wild Action cards; the Era card
+determines which ones are legal.
 
 - Select a Wild Action instead of a Core Action.
 - Commit and spend one Escalation token.
@@ -172,6 +166,9 @@ seven Wild Action cards. The Era card determines which ones are legal.
 - Each named Wild Action is usable once per player per game.
 - Unspent Escalation tokens expire at round end.
 - Previously unlocked unused Wild Actions remain available later.
+
+**Global after movement** means the acting piece moves normally, then the
+Action resolves without a destination restriction.
 
 | Round | Tokens | Newly available Wild Actions |
 | --- | ---: | --- |
@@ -194,8 +191,8 @@ with another Action.
 If an earlier resolution consumed every legal Facility space, Generator slot,
 contract token, or other required target, the blocked player may still resolve
 movement. The selected Action then exhausts without effect. No compensation is
-awarded. Initiative is therefore part of spatial competition rather than a
-reason to rewind simultaneous selection.
+awarded. Initiative can let an earlier player consume a later player’s target.
+Do not rewind simultaneous selection.
 
 ## 3. Resources
 
@@ -211,8 +208,8 @@ infrastructure.
 
 ### Capability
 
-A permanent model-quality track. Capability is not normally spent. It unlocks
-stronger deployments and AGI declarations.
+A permanent model-quality track. Capability unlocks stronger deployments and
+AGI declarations. Spend it only when a rule explicitly requires payment.
 
 ### Customers
 
@@ -223,13 +220,12 @@ exposure.
 
 ### Trust
 
-A track from zero to six. Trust helps with regulation, Joint Ventures, safety
-decisions, and the final declaration. Low Trust limits final options but does
-not eliminate a player.
+A track from zero to six. Trust affects regulation, Joint Ventures, safety
+decisions, and the final declaration. A player remains in the game at zero
+Trust.
 
-Victory points are called **Mandate**. Players persuade markets, institutions,
-customers, and history that their organization won the era; they do not prove
-metaphysical intelligence.
+Victory points are called **Mandate**. Mandate measures an institution’s public
+standing with markets, institutions, customers, and history.
 
 Mandate is normally scored immediately on one public track:
 
@@ -280,8 +276,7 @@ Use thirteen hexagonal tiles in a sixfold-symmetric layout:
 Place Frontier in the center. The six inner spaces form the **operational
 ring**. Place the six **public ring** spaces at evenly spaced radius-two
 positions. Each public-ring space touches two neighboring operational-ring
-spaces, producing six identical spatial arms instead of a rectangular row
-layout.
+spaces. This creates six identical spatial arms.
 
 Shuffle the following inner pool and place it around Frontier:
 
@@ -301,16 +296,15 @@ Shuffle the following outer pool among the six outer positions:
 - One Government District
 - One Renewable Basin
 
-This guarantees
-that the first ring contains Research, Compute, Build, Fund, Organize, and
-Power support without fixing their adjacency. Consumer, Media, and Government
-remain scarce outer-ring destinations.
+The operational ring always contains Research, Compute, Build, Fund, Organize, and
+Power support. Shuffling changes their adjacency. Consumer, Media, and
+Government remain scarce outer-ring destinations.
 
 Every piece placed on the board during setup begins at Frontier. A movement of
 two reaches every space from the center. Once pieces leave the center, opposing
 outer spaces are four hexes apart, so later positioning, Teams, Networks, and
-negotiated adjacency matter. The board footprint is spatially symmetric; the
-shuffled economic layout is intentionally not.
+negotiated adjacency matter. The footprint is spatially symmetric. Shuffling
+changes the economic adjacency each game.
 
 Every non-Frontier hex has a visit bonus, two Facility spaces, a Facility
 production effect, and a control value used by Headlines and Mandates. Frontier
@@ -326,8 +320,8 @@ has no Facility spaces.
 The player with the most presence controls the hex. Ties mean nobody controls
 it.
 
-The Government controller’s vote counts twice during Government votes. This
-is a control benefit, not a visit bonus.
+The Government controller’s vote counts twice during Government votes.
+Visiting Government does not change vote strength.
 
 There is no combat and no player elimination. Rival pieces coexist.
 Competition comes from Facility scarcity, control, positioning, voting,
@@ -349,11 +343,10 @@ deals, and Headlines.
 | Renewable Basin | Civic Heat Battery costs one less Runway | Remove one Scrutiny before Audit | Runway |
 | Frontier | After Act, you may gain one Runway and add one Scrutiny | No Facility spaces | None |
 
-Frontier’s optional Runway is resolved after the selected Action and does not
-modify that Action’s printed output. It may be used once by each acting player
-who ends movement at Frontier; it never creates Facility production or
-Mandate. The central district offers bridge financing because nobody is
-permitted to own the horizon.
+Resolve Frontier’s optional Runway after the selected Action. It does not
+modify that Action’s printed output. Each acting player may use it once after
+ending movement at Frontier. The gain creates no Facility production or
+Mandate.
 
 ### Infrastructure Network
 
@@ -375,8 +368,9 @@ Network production bonus:
 - Beginning in Round II, two or more connected, powered Facilities produce one
   additional Runway or Compute.
 
-A player receives only one Network bonus regardless of Network size. There is
-no separate Power graph, production graph, or edge-by-edge flow calculation.
+Award at most one Network bonus per player, regardless of Network size. Use
+this same graph for Power delivery and production; do not calculate
+edge-by-edge flow.
 
 ### Contract hosts
 
@@ -389,12 +383,11 @@ the districts.
 A contract remains owned after Realignment but is active only while its two
 named host Facilities are adjacent and satisfy its other requirements, unless
 a Faction ability explicitly changes that range. The tokens travel with their
-Facilities. No player may silently substitute a different Facility after the
-contract is signed.
+Facilities. The named host Facilities stay fixed until the contract ends.
 
 Every cross-player contract or jointly funded project requires the explicit
-consent of every participant. Facilities sharing one hex are **co-located**,
-not adjacent; adjacency requires their hexes to share an edge.
+consent of every participant. Facilities sharing one hex are **co-located**.
+Adjacent host Facilities occupy hexes that share an edge.
 
 ### Joint Venture
 
@@ -405,8 +398,8 @@ produce.
 
 Each partner gains one resource shown by the **contract icon on the other
 partner’s host tile**: one Runway for a Runway icon or one Compute for a
-Compute icon. This contract output is not the tile’s full printed production
-and is never multiplied by another Facility effect.
+Compute icon. Use the contract icon alone. Do not copy the tile’s full printed
+production. Facility effects cannot multiply contract output.
 
 While resolving Influence, the active player may make one complete Joint
 Venture proposal naming the two eligible host Facilities and the partner. The
@@ -422,10 +415,9 @@ Trust.
 
 ### Jurisdictional Realignment
 
-Jurisdictional Realignment occurs exactly once: after Mandate scoring in Round
-III. It does not occur after Rounds I, II, or IV. Every player secretly chooses
-one of their three Realignment ballots, then all ballots are revealed
-simultaneously:
+Resolve Jurisdictional Realignment once, after Mandate scoring in Round III. Every player
+secretly chooses one of their three Realignment ballots, then all ballots are
+revealed simultaneously:
 
 - **Consolidate the Core:** rotate the six inner-ring locations one position
   clockwise.
@@ -449,10 +441,9 @@ it. Rotate the selected physical ring once, then recalculate the single
 Infrastructure Network from the starting-grid Facility, Links, and visible
 adjacency. Nothing is lifted or re-laid.
 
-Ring rotation moves the district, not the Facility for Grid-Ready purposes.
-Realignment does not remove a Grid-Ready marker merely because its tile
-rotated. After recalculating each Infrastructure Network, return a Grid-Ready
-marker only from a Facility that is now outside its owner’s Network.
+A ring rotation carries each Facility and its Grid-Ready marker together.
+After recalculating each Infrastructure Network, return the marker from any
+Facility now outside its owner’s Network.
 
 Joint Ventures remain in force but produce only while their matched host
 Facilities are adjacent and all printed requirements are met. Immediate
@@ -461,17 +452,16 @@ are no longer adjacent is offline until they become adjacent again.
 Realignment never destroys a component, changes a host, or terminates a
 contract.
 
-The ballots are open information before selection and secret information until
-the simultaneous reveal. Players may discuss and make public, non-binding
-signals about their intended ballot; agreement is unnecessary and promises
-about the vote are not binding. Every player still casts exactly one secret
-ballot, and the vote and tie-break procedure above decide the result. Because
-Realignment happens before Round IV, every player receives three final Actions
-in which to respond to the changed geography.
+All three ballot options are public. Each player’s chosen ballot stays secret
+until the simultaneous reveal. Players may discuss and make public,
+non-binding signals about their intended ballot. The vote and tie-break
+procedure above decide the result. Because Realignment happens before Round
+IV, every player receives three final Actions in which to respond to the
+changed geography.
 
 ### Power delivery
 
-Power is spatial infrastructure, not a stored resource.
+Power exists as connected capacity during Production. It cannot be stored.
 
 - Every player begins with a basic one-Power grid connection. It automatically
   connects to that player’s first Facility, requires no Link or recurring payment,
@@ -483,7 +473,8 @@ Power is spatial infrastructure, not a stored resource.
 - The Infrastructure Network connects Power to Facilities.
 
 Production uses the fixed resolution order in **Power and Production**. Power
-capacity never produces resources by itself and may not be assigned twice.
+capacity produces no resources. It powers Facilities and projects. Assign each
+unit of capacity at most once.
 
 Capacity is pooled inside the same Infrastructure Network used for the
 production bonus; there is no second connectivity check.
@@ -502,9 +493,9 @@ assigned.
 - Beneficial or mildly disruptive Headlines
 - No Escalation tokens
 
-This round teaches Select → Move → Act, movement, basic Research, the starting
+Round I activates Select → Move → Act, movement, basic Research, the starting
 grid, Facilities, Customers, and Scrutiny. Generators, Links,
-agreements, Government votes, and Wild Actions are not yet active.
+agreements, Government votes, and Wild Actions activate in later rounds.
 
 ### Round II — The Scale
 
@@ -546,8 +537,7 @@ Round III Realignment may place it offline without destroying it.
 
 #### Reorganization
 
-Reorganization is global after movement; its destination creates no additional
-target restriction.
+Reorganization is global after movement.
 
 Move every Team up to one hex.
 
@@ -562,8 +552,7 @@ Headlines with persistent effects now enter play.
 
 #### Open Weights
 
-Open Weights is global after movement; its destination creates no additional
-target restriction.
+Open Weights is global after movement.
 
 Every player gains one Capability. You also gain:
 
@@ -574,8 +563,7 @@ Every player gains one Capability. You also gain:
 
 #### Narrative Capture
 
-Narrative Capture is global after movement; its destination creates no
-additional target restriction.
+Narrative Capture is global after movement.
 
 Move or place three Influence cubes among Media, Government, and Capital.
 Then choose one:
@@ -610,8 +598,8 @@ Requirements:
 - Trust two or higher
 - Spend three Compute
 
-Declare AGI is global after movement; its destination creates no additional
-target restriction. Check every requirement when it resolves.
+Declare AGI is global after movement. Check every requirement when it
+resolves.
 
 A **grid-ready Facility** has a Grid-Ready marker earned during a completed
 Production. After allocating Power, place a Grid-Ready marker on each Facility
@@ -620,21 +608,18 @@ immediately if the Facility is relocated by Organize or another effect, or leave
 Infrastructure Network. Return it during any later Production in which the
 Facility does not receive its complete demand.
 
-A Grid-Ready marker records demonstrated operation, not hypothetical capacity.
-Declaring AGI requires three marked Facilities; it never runs a second
-Production calculation. A Facility built, moved, linked, or
+A Grid-Ready marker records a Facility that received its full demand during a
+completed Production. To declare AGI, check three existing markers. Do not run a
+second Production calculation. A Facility built, moved, linked, or
 reconnected after the most recent Production must operate successfully in a
-later Production before it can receive or regain the marker. Consequently, a
-Facility first built during Round IV cannot support a declaration in that
+later Production before it can receive or regain the marker. A Facility first
+built during Round IV cannot support a declaration in that
 same Round.
 
 The first valid declaration scores seven Mandate. Later declarations score
 five. Every declaration adds three Scrutiny.
 
-Declaring AGI does not end the game and is never required to win. It is a
-high-scoring commitment that competes with Customer, Capability, Trust,
-Round-Mandate, Narrative, and infrastructure strategies for the same twelve
-Actions.
+Play continues after an AGI declaration. Victory does not require one.
 
 #### Fusion Demonstrator
 
@@ -644,8 +629,8 @@ occupies one of that tile’s three Generator slots, provides six Power, scores
 two Mandate, and adds three Scrutiny. Fusion counts as an owned Generator for
 Infrastructure Network connection and Power capacity, but does not count
 against the owner’s two ordinary Generator-piece limit. If all three Grid
-Generator slots are occupied, Fusion cannot be constructed; that denial is
-intentional spatial competition.
+Generator slots are occupied, Fusion cannot be constructed. A full Grid and Reactor Corridor
+blocks construction.
 
 ## 6. Round sequence
 
@@ -702,21 +687,18 @@ Action; if the unavailable resources leave that committed Action without a
 legal resolution, it resolves blocked under **A committed Action that becomes
 blocked**.
 
-Influence is not required for this immediate exchange. Influence remains the
-only way to create persistent Joint Ventures, lobbying effects, or
-Trust manipulation.
+Immediate resource trades require no Influence Action. Only Influence creates
+persistent Joint Ventures, lobbying effects, or Trust manipulation.
 
 ### Negotiation and paced play
 
-No agreement is a normal strategic outcome. Players may discuss publicly, but
-speech creates no game state, obligation, or additional action. Only the
-required formal choice in its printed window changes the game. If a player does
-not give a required formal response when called upon, treat it as a rejection
-or pass.
+Players may discuss publicly. Discussion creates no game state, obligation, or
+additional Action. Apply a formal choice only in its printed window. A missing
+required response resolves as a rejection or pass.
 
 **Paced Play** is an optional table rule. Before play, the group may assign one
 shared sand timer to each negotiation window. When it expires, discussion ends
-and the normal rejection, pass, or no-ballot fallback applies; a timer never
+and the normal rejection, pass, or no-ballot fallback applies. Expiry never
 creates consent or forces a deal.
 
 ### C. Power and Production
@@ -786,8 +768,6 @@ than two Runway must lose one Mandate if able. If the owner can pay only one
 option, they take that option. If the owner has fewer than two Runway and zero
 Mandate, reduce their Runway to zero and suffer no additional loss. Mandate
 cannot fall below zero.
-The final quarter no longer accepts reputational adjustments; it revises the
-historical record.
 
 Drawn player-colored cubes return to the owner’s supply; undrawn cubes remain
 in the bag.
@@ -919,8 +899,8 @@ Choose one mode.
 
 **Facility Build** means Construct a Facility. **Infrastructure Build** means
 Construct a Generator or Install a Link. Mega-Cluster and
-Fusion Demonstrator are Wild Actions, not Build modes, and receive no Build
-discount unless an effect names them explicitly.
+Fusion Demonstrator are Wild Actions. A Build discount applies to them only when an
+effect names them explicitly.
 
 #### Construct a Facility
 
@@ -956,7 +936,7 @@ Choose:
 
 A moved Facility carries its Link, starting-grid marker,
 contract halves, and Mega-Cluster host token. Recalculate connection and
-contract activity after movement; movement never substitutes a contract host.
+contract activity after movement. Its contract-host identity stays fixed.
 
 ### Deploy
 
@@ -1019,9 +999,9 @@ The Round IV Wild Action described above.
 
 ## 9. Six factions
 
-The six canonical player identities are fictional institutions led by
-fictional executives. Their abilities describe institutional roles for
-fictional gameplay; they are not factual claims or indications of endorsement.
+All six Factions and their CEOs are fictional. Their names, roles, and
+abilities make no claim about real people or institutions and imply no
+endorsement.
 
 Every ability unlocks at the start of its named round. Its timing tag is one
 of **passive**, **once per round**, **once when unlocked**, or **once per
@@ -1150,23 +1130,22 @@ public track:
 
 These values are awarded once during setup and are never scored again.
 
-Other executives, researchers, investors, regulators, and hardware leaders
-belong in Specialist or Patron cards rather than full factions.
+Use Specialist or Patron cards for any other executives, researchers,
+investors, regulators, or hardware leaders.
 
 ## 10. Headline deck
 
-Historically inspired Headlines target board state, never the corresponding
-historical faction.
+Resolve historically inspired Headlines against board state. They make no
+real-world allegation.
 
-Reveal each Headline before secret action selection. Its purpose is to create a
-temporary future regime that changes what the table wants to select, where it
-wants to move, or what it is willing to risk.
+Reveal each Headline before secret action selection. Resolve its printed effect
+for its printed duration.
 
 After resolving a Headline, leave it face up beside its Era card. The three
 Headlines revealed in each Era form one row of the **Future Timeline**. By the
-end of Round IV, the table has created a twelve-card history of 2026–2038. Card
-effects expire normally; remaining in the Timeline preserves the story, not
-the rules effect.
+end of Round IV, the table has created a twelve-card history of 2026–2038.
+Expired cards stay in the Timeline as history. Their rules end at the printed
+time.
 
 Every Headline has exactly one resolution badge:
 
@@ -1177,9 +1156,9 @@ Every Headline has exactly one resolution badge:
 - **AUCTION:** resolve the standard secret Runway auction.
 - **VOLATILITY:** roll only when instructed and resolve the indicated result.
 
-A card may contain consequences inside its one procedure, but it never starts
-a second procedure. For example, an AUCTION may award movement and discounts
-to its winner; it cannot then call a Government vote.
+Resolve exactly one badge procedure per card. Consequences may occur inside
+that procedure. For example, an AUCTION may award movement and discounts to
+its winner. It cannot then call a Government vote.
 
 - Unless stated otherwise, a Headline lasts for the current cycle.
 - An immediate instruction resolves before action selection.
@@ -1322,9 +1301,8 @@ The shared supply contains:
 - One six-sided Volatility die
 - One Initiative marker
 
-Contract components are neutral. A player does not own or reserve unused
-contract tokens; an agreement can be created only while the relevant matched
-pair remains in the shared supply.
+Unused contract tokens remain in the shared supply and cannot be reserved.
+Create an agreement only while its matched pair is available.
 
 ### Defined effects
 
@@ -1389,13 +1367,12 @@ Otherwise, the world enters **The Closed Loop**.
 After resolving the mechanical result, read its narrative from
 [World and Institutions](./world-and-institutions.md#the-two-world-endings).
 
-Facilities and control create production, position, public Mandate
-opportunities, and negotiation leverage; they do not automatically score
-again.
+Facilities and control create production, position, and negotiation leverage.
+They score Mandate only when a listed rule awards it. Add no separate
+endgame score.
 
-Secret objectives are not used in the baseline game. Their existing draft is
-a deferred development module and must not be included in baseline balance or
-duration evidence.
+Keep the draft secret objectives out of the baseline game, balance evidence,
+and duration evidence.
 
 Highest Mandate wins.
 
@@ -1406,7 +1383,6 @@ Ties break by:
 3. More Compute
 4. Joint victory accompanied by an extremely serious merger announcement
 
-Design rationale, balance qualification, and observation protocols are not
-player rules. They remain governed by
-[Balance and Exploitability](./balance-and-exploitability.md) and
-[Playtesting and Evidence](./playtesting-and-evidence.md).
+Find design rationale and balance qualification in
+[Balance and Exploitability](./balance-and-exploitability.md). Find observation
+protocols in [Playtesting and Evidence](./playtesting-and-evidence.md).

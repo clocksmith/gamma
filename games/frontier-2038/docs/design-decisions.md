@@ -1,6 +1,6 @@
 # M3T4 2038 Design Decisions
 
-**Rules reference:** `0.5.0-rc.34-test`
+**Rules reference:** `0.5.0-rc.35-test`
 **Status:** current rationale and implementation-boundary ledger
 
 This document explains why the selected game has its present shape. It does
@@ -169,7 +169,7 @@ separate fields. Flavor never creates a mechanic.
 ## Baseline exclusions
 
 The following material exists as design inventory but is not part of the
-controlled `0.5.0-rc.34-test` test:
+controlled `0.5.0-rc.35-test` test:
 
 - Tactic cards;
 - secret objectives;
@@ -181,7 +181,7 @@ Evidence from a run that includes an excluded module must name that variant.
 
 ## Implementation status
 
-Executable game `0.8.34` implements `0.5.0-rc.34-test` under engine
+Executable game `0.8.35` implements `0.5.0-rc.35-test` under engine
 coverage `three-to-five-grid-ready-v1`. Grid-Ready markers are earned by demonstrated
 Production and invalidated by movement, disconnection, or later
 insufficient Power. Browser-native deterministic play, server-backed LLM play,
@@ -190,6 +190,12 @@ replay, policies, and Monte Carlo share that contract.
 Synchronization is implementation proof, not balance proof. Structured
 balance numbers remain hypotheses until a tracked study receipt replaces their
 provenance.
+
+The `0.8.35` / `0.5.0-rc.35-test` advancement changes no legal action, cost,
+resource value, Mandate award, Faction ability, setup, or end condition. It
+rewrites the How to Play copy with shorter sentences and direct definitions.
+The content and rules fingerprints advance so the changed source never
+overwrites the immutable `0.8.34` / `0.5.0-rc.34-test` artifacts.
 
 The `0.8.34` / `0.5.0-rc.34-test` advancement changes no legal action, cost,
 resource value, Mandate award, faction ability, setup, or end condition. It
