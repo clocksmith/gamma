@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T18:21:21+00:00`
+- Generated at UTC: `2026-08-02T18:35:10+00:00`
 
 ## Target State
 
@@ -21,7 +21,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `32,703`
+- RSS samples: `34,356`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `7,790,872`
@@ -58,9 +58,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command. The host-local heavy lock alone never identifies a gate.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `1,336`
-- RSS guard JSON modified UTC: `2026-08-02T18:21:21+00:00`
-- RSS guard JSON SHA-256: `7aab9db98693ece2f80bd7f728575211039398834030b6f113d6046c1cc3e70a`
-- RSS samples: `32,703`
+- RSS guard JSON modified UTC: `2026-08-02T18:35:10+00:00`
+- RSS guard JSON SHA-256: `e12ccb98231aee22bf5895c7e1202b5d974b6898e6c1792649a72ca855c00b14`
+- RSS samples: `34,356`
 - Max sampled single RSS KiB: `7,790,872`
 - Max sampled tree RSS KiB: `7,790,872`
 - Single-process RSS margin KiB: `2,694,888`
@@ -134,7 +134,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Program directories: `659`
 - Registered programs: `266`
 - Untracked nonignored entries: `1`
-- Modified tracked entries: `2`
+- Modified tracked entries: `3`
 - Candidate statuses: `active=18, blocked_dependency=32, candidate=28, measured_negative=99, retired=482`
 
 ## Active Runner Process Table
@@ -151,7 +151,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,336 | `2026-08-02T18:21:22+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,336 | `2026-08-02T18:35:10+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_native_trace.bin` | 112,934,912 | `2026-08-02T16:47:22+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_complete_block.nncp` | 1,163,264 | `2026-08-02T16:46:24+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_native_trace.bin` | 1,130,064 | `2026-08-02T13:47:58+00:00` |

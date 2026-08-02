@@ -6559,6 +6559,10 @@ heading line that already received token opportunities; exclude all WRT events
 touching a line or `</text>` boundary, including an unterminated final line;
 and retain page ordinal, section ordinal, and normalized heading key in every
 blind record so unequal-key selection is asserted rather than inferred.
+The Q256 diagnostic cost is also bound to the existing nearest-even `float64`
+table generator and canonical little-endian `int32` hashes
+`6ddbe07c...c2376` and `7caf3560...387f`; a replay with different numeric
+tables is malformed rather than an alternate score.
 
 ## 2026-08-02: endpoint428 runtime-eligibility boundary re-audited
 
@@ -6717,6 +6721,17 @@ model, P1, payload, WRT, and raw hashes; gain on every split; beat all controls;
 save at least `3,000 B/M` gross and `2,100 B/M` after package accounting. A
 pass would authorize only native replacement and timing measurements.
 
+A portfolio re-audit found no evidence that should reopen this gate before the
+active NNCP teacher decision. The strongest decoder-unavailable compact teacher
+has `2,830.637 B/M` full headroom but only `2,296.853 B/M` on sealed data, and
+its 16-cell sparse-GRU student retains less than one percent overall while
+regressing sealed. The exact dual-112 replacement saves `25,705` package bytes
+but loses `136 B/M` natively and forecasts `109,499,618`. Residual GRU, dilated
+context, DPLR, butterfly, low-bit, predictive quotient, compact lookup, and
+hashed residual variants remain terminal. If NNCP passes both the current and
+preregistered distant `3,000 B/M` teacher gates, it may supply a new antecedent;
+otherwise no compact replacement-predictor gate is authorized.
+
 ## 2026-08-02: autonomous Hutter search contract adopted
 
 The standing objective is now recorded explicitly in
@@ -6873,3 +6888,26 @@ quiesced logical state hashes after each reconstructed event, deliberate
 corruption/skipped-Predict controls, and exact WRT/raw replay. It remains
 unimplemented and zero-credit until an isolated finite WIKI event lane pays;
 it is proof infrastructure, not a new algorithm or queue entry.
+
+## 2026-08-02: same-probability arithmetic-coder headroom closed
+
+A receipt-bound read-only audit recomputed realized ideal mass for the exact
+endpoint428 opening-1M P1 and the retired JANUS-plus-quotient canonical-10M P1.
+Their arithmetic payloads are respectively `173,865` and `1,617,484` bytes,
+exactly `ceil(-log2 P(x) / 8)` in both cases. The measured payload excess above
+ideal mass is only `0.419961882` and `0.617759747` bytes. A coder swap preserving
+the P1 stream therefore has no whole-byte headroom on either population.
+
+The endpoint quantizer's absolute favorable-cell ceiling is
+`44.028230442 B/M`; the exact opening-1M row-count ceiling is
+`26.449607212 B/M`, and a truth-aware favorable-cell oracle measures only
+`17.318673155 B/M`. These are all far below `3,000 B/M`. Do not queue rANS,
+normalization-width, termination, flush, byte-grouping, scalar-precision, or
+coder-only sharding variants. This does not close a genuinely new event
+alphabet or asymmetric fixed-corpus representation. Full evidence and hashes:
+`docs/arithmetic_coder_headroom_audit.md`.
+
+The audit also records that three old residual-closure decision files named by
+the register are absent on this host. Their aggregate exclusion remains prior
+evidence, but those exact receipts were not locally reverified. Score credit and
+the `109,389,323` forecast remain unchanged.
