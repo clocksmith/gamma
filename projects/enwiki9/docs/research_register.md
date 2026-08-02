@@ -4218,3 +4218,133 @@ prototype as a new lane.
 
 Portfolio:
 `docs/post_tessera_event_universe_portfolio_20260802.json`.
+
+The subsequent token-domain transform audit also closed before proposal
+materialization. A per-page token multiset was not run because JMF-1 and
+PCMF-1 already retire static future-count tables, including
+context-conditioned without-replacement multinomials. The genuinely different
+noncausal transforms were then measured with token positions and decoder
+source supplied free, which is strictly more favorable than any complete
+codec.
+
+Leaving all non-token bytes on their exact joint P1 rows produces a 527,525-
+byte actual residual payload. The concatenated 2,309,108-byte token-code stream
+needs 1,494,120 XZ9-extreme bytes, yielding a 2,021,709-byte optimistic total
+and a 404,225-byte loss. A token-ID suffix-array BWT needs 1,581,876 XZ bytes
+and loses 491,989 bytes. Adding exact move-to-front ranks increases the side
+stream to 1,665,308 bytes and loses 575,429 bytes. Finally, the existing
+roundtrip-exact 128-rule self-referential RePair implementation produces a
+1,623,924-byte token side stream and a 2,151,529-byte optimistic total, losing
+534,045 bytes. Its side SHA-256 is
+`31d56f3fecbfe8f2ee2124381d71d48b910858ddbb304cceb929c6a40d615685`.
+
+All four totals already omit the token-position schedule, grammar/BWT decoder
+source, and native state-preserving hook. None is close to the 1,059,895-byte
+maximum side size required merely to clear the 30,000-byte 10M ceiling. Do not
+materialize or sweep direct token side coding, token BWT, BWT-plus-MTF, or the
+legacy RePair token grammar. A future many-use grammar would need a different
+information source and a paid invocation certificate; repetition alone is not
+enough on the joint trajectory.
+
+## 2026-08-02: quarantined Qwen/FX2 copy-oracle lanes are nonpromotable
+
+Machine-local nonproof receipts under
+`/home/x/enwiki9-nonproof/results/qwen_fx2_hybrid_fixed32_1m_v1/` preserve two
+causal-copy discovery screens that were never entered into the constructive
+frontier. The fixed32 perfect future-label oracle reaches only 1,078.957 gross
+B/M. Crossing its 694.333 B/M target-plus-payload floor would require a causal
+student to retain 64.352 percent of that oracle, while the frozen 700 B/M
+teacher screen requires 64.877 percent. The oracle margin is 1.541x versus the
+preregistered 3x requirement, so Qwen was not executed.
+
+The decoder-rebuildable byte-reset, stop, and observed-match re-arm state
+ladder increases the development perfect-oracle ceiling from 332.044 to
+1,025.444 B/M, with positive future-informed choices in 60 of 64 development
+groups. It still reaches only a 1.465x margin. More decisively, every
+nonabstaining causal fixed policy has negative aggregate training gain; the
+train-selected policy abstains and saves zero on both train and development.
+This is a future-label selection signal, not a realizable compressor.
+
+These quarantined artifacts receive zero score credit and create no queue job.
+Retire the exact fixed32 candidate universe, copy-strength ladder, causal state
+ladder, and teacher launch. Do not use their oracle gains to reopen suffix,
+retrieval, blend-strength, stop/re-arm, or recurrent-state sweeps. A successor
+teacher must measure a proper causal distribution from a genuinely different
+information source against the exact joint residual trajectory.
+
+## 2026-08-02: MÖBIUS-2 frontier-teacher lexical headroom QH0 frozen
+
+Proposal: `mobius2_frontier_teacher_token_headroom_v1`.
+
+The next zero-credit ceiling changes the information source to the locally
+provisioned Gemma-4 12B causal language model. It asks whether proper
+full-vocabulary token probabilities contain at least 3,000 B/M of sealed
+information absent from the exact JANUS-plus-quotient P1 trajectory. Only raw
+spans that are exact unions of complete WRT emission groups and contain a WRT
+dictionary token are eligible; everything else remains on the joint baseline.
+
+Complete pages wholly inside the opening raw 1M are split chronologically
+60/20/20. Gemma runs in evaluation mode with BF16 weights, FP32 log-sum-exp,
+and an independent BOS-prefixed 512-token reset for each page-local block. A
+development-frozen add-one Gemma-token unigram is the matched alphabet control.
+The teacher is a proper distribution and every eligible event is charged,
+including regressions; there is no future-informed per-event selector.
+
+The fast tokenizer represents rare non-ASCII characters with several
+byte-fallback token IDs sharing one character offset. Maximal overlapping
+offset runs are therefore normalized into one disjoint tokenizer event and
+charged the sum of their token NLLs. Page roundtrip, exact WRT-group union,
+joint-row truth alignment, finite logits, repeated calibration hashes, and the
+ROCm compute path remain mandatory. This normalization fixes only the
+tokenizer's offset representation and does not change the model, population,
+event eligibility, or gate.
+
+Development is scored first. A nonpositive development result is a valid
+early `REJECT` that leaves selection and sealed pages unopened. Otherwise,
+promotion requires positive selection, at least 3,000 B/M sealed gain, and a
+strict sealed win over the unigram. A pass authorizes only one deterministic
+rule-language compilation study. The teacher, tokenizer, source, and model
+package remain free and receive zero forecast credit.
+
+Plan:
+`docs/mobius2_frontier_teacher_token_headroom_plan.md`.
+
+## 2026-08-02: MÖBIUS-2 frontier-teacher lexical headroom is terminal negative
+
+The frozen worker completed with process status zero and a valid early
+`REJECT`. The development population contains 102 complete pages and 349,911
+raw bytes. Gemma tokenization produced 94,023 IDs, normalized to 94,021
+disjoint tokenizer events. Of those, 42,176 events exactly cover 75,765 WRT
+emission groups and contain at least one dictionary token.
+
+The exact JANUS-plus-quotient charge on eligible events was 331,120.645 bits.
+Gemma required 409,055.942 bits, losing 9,741.912 bytes, or 27,841.114 B/M.
+Only 20,354 of 42,176 eligible events had positive individual teacher
+headroom. Gemma did beat the add-one token-unigram control by 17,271.120 bytes,
+but that control itself lost 27,013.032 bytes to the joint trajectory. The
+contextual teacher therefore contains information beyond a static token
+frequency table while remaining dramatically weaker than the mature
+compressor on the actual coded events.
+
+The result is scientific, not infrastructural. The first launch used the
+system Python because a resolved-symlink comparison suppressed the required
+venv re-exec; the second exposed overlapping fast-tokenizer offsets for a
+multi-ID Unicode byte fallback. Both failures occurred before model scoring.
+The corrected run used the declared ROCm environment, passed real matrix
+compute, loaded all 677 tensors, produced finite logits, repeated its
+calibration NLL hash exactly, reconstructed the WRT/raw inputs exactly, and
+bound every eligible event to complete joint P1 rows. Its complete development
+NLL stream SHA-256 is
+`6815a98790ff0c5dff58557835fb5b0dec26dbb2ee96c461a36b7554b8c9488a`.
+
+Because development gain is nonpositive, the frozen early kill left all 34
+selection and 35 sealed-confirmation pages unopened. Retire this exact Gemma-4
+12B IT checkpoint, tokenizer-event alignment, page-local BOS-prefixed
+512-token reset, and unigram control without model, prompt, tokenizer,
+context-width, eligibility-threshold, or split rescue sweeps. No compiled rule
+language, larger replay, distillation, or native integration is authorized.
+Forecast 109,389,323, debt 1,389,323, score credit zero, and unknown verified
+full-1G status remain unchanged.
+
+Decision:
+`results/mobius2_frontier_teacher_token_headroom_qh0_v1/decision.json`.
