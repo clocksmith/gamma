@@ -4348,3 +4348,52 @@ full-1G status remain unchanged.
 
 Decision:
 `results/mobius2_frontier_teacher_token_headroom_qh0_v1/decision.json`.
+
+## 2026-08-02: MÖBIUS-2 frontier-teacher WRT event alphabet QH0 frozen
+
+Proposal: `mobius2_frontier_teacher_wrt_event_alphabet_v1`.
+
+The terminal full-vocabulary teacher measured page-tokenizer tokens and lost
+27,841.114 B/M to the exact joint trajectory. Its failure does not answer the
+materially different event-language question: whether the same causal teacher
+can rank a finite alphabet of exact WRT emission-group programs after its
+probability mass is normalized over decoder-reconstructible candidates and an
+explicit escape.
+
+The new coded object is one WRT emission group: any zero-output controls plus
+the first output-producing event. Each group's decoded raw bytes are tokenized
+independently. Strict UTF-8 groups use the frozen Gemma tokenizer; groups that
+split a UTF-8 character use the tokenizer's exact byte-fallback IDs. This
+event-local tokenization is decoder-causal and repeatable. A catalog candidate
+must contain a WRT dictionary token, produce exactly one local Gemma ID, and
+have its exact `(role, token ID, WRT program)` tuple observed on development.
+
+The structural prerequisite is target-bearing. Even after paying the binary
+candidate/escape entropy, but supplying candidate identities free, the
+development ceilings are 40,775.706 B/M for `PROSE_WORD`, 6,721.670 B/M for
+`LINK_TARGET`, and 3,887.863 B/M for `LIST_ITEM`. Static maximum-likelihood
+exact-program coding nevertheless loses 34,825.516 B/M in prose. The teacher
+must therefore recover more than 4.07 identity bits per prose candidate event;
+this is a real information test, not a static-alphabet relabeling.
+
+GC is a proper dynamic distribution. A development-frozen escape probability
+receives all unsupported events. The remaining mass is allocated among
+candidate token IDs by normalized Gemma logits and among exact WRT variants by
+an add-one development distribution. GF retains Gemma's native total mass on
+known programs and assigns the complement to escape. S0 is an add-one static
+distribution over the identical programs and escape. Escapes retain their
+complete joint-coded WRT programs; candidates displace their exact joint
+qbits. Every opportunity in an active role pays one side symbol.
+
+Catalogs, variant probabilities, escape rates, and roles use only the first 60
+percent of complete opening-1M pages. A role activates only on positive
+development GC gain and a strict S0 win. Selection must remain positive and
+beat both controls before sealed confirmation is opened. Sealed promotion
+requires at least 3,000 B/M and strict GC wins over S0 and GF. A pass
+authorizes only one finite Q24 side stream and exact residual arithmetic gate;
+it grants no score credit. A miss retires the exact event-local tokenizer,
+single-token program catalog, roles, calibration, checkpoint, and reset
+contract without rescue sweeps.
+
+Plan:
+`docs/mobius2_frontier_teacher_wrt_event_alphabet_plan.md`.
