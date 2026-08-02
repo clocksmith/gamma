@@ -4,8 +4,7 @@ Proposal: `srstc_residual_program_logopinion_v1`
 
 Candidate: `srstc_residual_program_logopinion_qh0_v1`
 
-Status: frozen zero-credit causal ceiling. No compression result or forecast
-credit exists.
+Status: exact zero-credit causal rejection. Forecast credit remains zero.
 
 ## Claim boundary
 
@@ -127,3 +126,17 @@ the coded representation again.
 
 Forecast remains `109,389,323` bytes, target debt remains `1,389,323`, score
 credit is zero, and verified full-1G remains unknown.
+
+## Terminal result
+
+R0 produced a 174,042-byte payload versus the 173,865-byte parent, losing 177
+bytes. It was negative on every split: `-160.041 B/M` development,
+`-197.337 B/M` selection, and `-185.882 B/M` sealed. It also lost to flat F0,
+blind-key RB, and rotated RS. All input identities, preceding-epoch causality,
+five arithmetic decodes, WRT reconstruction, official raw inverse,
+probability legality, and duplicate replay checks passed.
+
+This is a scientific rejection. Retire the componentwise mean log-opinion
+operation over this residual-program source without the forbidden rescue
+sweeps. Decision:
+`results/srstc_residual_program_logopinion_qh0_v1/decision.json`.

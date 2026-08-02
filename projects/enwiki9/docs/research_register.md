@@ -6273,3 +6273,28 @@ this log-opinion rule without mean/median, support, odds, key, table, epoch, or
 rotation sweeps. The experiment is a zero-credit source-supplied ceiling.
 
 Plan: `docs/srstc_residual_program_logopinion_qh0_plan.md`.
+
+## 2026-08-02: SRSTC implicit log-opinion consensus is terminal negative
+
+The exact zero-command candidate completed normally. Keyed R0 emitted a
+174,042-byte payload against the 173,865-byte endpoint428 parent, losing 177
+bytes. Split results were `-160.041 B/M` development, `-197.337 B/M`
+selection, and `-185.882 B/M` sealed. R0 also lost to the globally newest flat
+control by 74 bytes, the support-matched blind-key control by 42 bytes, and the
+rotated-program control by 43 bytes.
+
+All evidence gates passed: the parent payload was byte-identical, every
+program came from the preceding epoch, all five arithmetic streams decoded,
+the complete WRT stream and canonical raw corpus reconstructed, probabilities
+were legal, and the second state/P1/payload replay was identical. The negative
+result is not an implementation or causality failure.
+
+Together with the paid-selector miss, this closes the current residual-program
+lane. The earlier pre-selector gain was occurrence-specific oracle choice, not
+collective transferable structure. Retire this mean log-opinion operation and
+the frozen residual-program source without median, strength, support, key,
+table, epoch, odds, or rotation rescue sweeps. Forecast remains `109,389,323`,
+score credit remains zero, and verified full-1G remains unknown.
+
+Decision:
+`results/srstc_residual_program_logopinion_qh0_v1/decision.json`.
