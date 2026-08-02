@@ -4518,3 +4518,25 @@ Forecast and score credit remain unchanged.
 Decisions:
 `results/nncp_v33_libnc_activation_backward_parity_v1/decision.json` and
 `results/nncp_v33_libnc_tanh_gelu_online_update_parity_v1/decision.json`.
+
+## 2026-08-02: NNCP v3.3 faithful ROCm constructive Q0 frozen
+
+Proposal and candidate: `nncp_v33_rocm_constructive_one_update_q0_v1`.
+
+Exact LibNC online-update parity remains false, so the next lane cannot inherit
+the published archive. It instead builds a self-consistent codec and requires
+its own evidence. This is materially different from the retired one-stream
+ALiBi ROCm teacher: it restores the official learned relative tables and
+shared bias, RMSNorm gain and bias with epsilon `1e-5`, F32 input embedding and
+BF16 remaining parameters, measured tanh GEGLU, 32 contiguous streams,
+64-symbol updates, and per-parameter rather than global gradient clipping.
+
+Q0 covers exactly one 2,048-symbol update block. Two seeded encoders must emit
+identical archives and final model states. A separately seeded decoder derives
+every arithmetic frequency from decoded prefixes, reconstructs all symbols,
+applies the same update, and must end with the same complete model-state hash.
+The official preprocessor inverse and decimal 10 GB allocation ceiling remain
+mandatory. A pass authorizes one 65,536-symbol headroom gate but grants no score
+credit or LibNC/published-score claim.
+
+Plan: `docs/nncp_v33_rocm_constructive_one_update_q0_plan.md`.
