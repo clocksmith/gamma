@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T17:00:47+00:00`
+- Generated at UTC: `2026-08-02T17:43:44+00:00`
 
 ## Target State
 
@@ -12,16 +12,16 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Operator Summary
 
-- Candidate: `None`
-- Scope bytes: `n/a`
-- Gate verdict: `orphaned_running_receipt`
-- Gate next action: `reconcile_orphaned_gate_receipt`
+- Candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
+- Scope bytes: `2,233,775`
+- Gate verdict: `running`
+- Gate next action: `wait_for_gate_completion`
 - Heavy lock held: `true`
 - Active scorer observed: `true`
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `23,065`
+- RSS samples: `28,204`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `7,790,872`
@@ -35,29 +35,29 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves the 10.8000000% full-corpus target.`
 
-## Orphaned Gate Reconciliation
+## Active Gate
 
 - Heavy lock held: `true`
-- Gate verdict: `orphaned_running_receipt`
-- Next action: `reconcile_orphaned_gate_receipt`
-- Candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1_continuous_teacher`
-- Scope bytes: `401,217,922`
+- Gate verdict: `running`
+- Next action: `wait_for_gate_completion`
+- Candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
+- Scope bytes: `2,233,775`
 - Driver result JSON: `/home/x/deco/gamma/projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/receipt.json`
 - Driver result present: `false`
 - RSS guard JSON: `/home/x/deco/gamma/projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json`
 - RSS guard present: `true`
 - Active scorer observed: `true`
-- Live gate: `false`
-- Liveness classification: `orphaned_running_receipt_with_unattributed_lock`
-- Matching adaptive jobs: `0`
+- Live gate: `true`
+- Liveness classification: `live_observed_owner`
+- Matching adaptive jobs: `1`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command. The host-local heavy lock alone never identifies a gate.`
 - RSS guard status: `running`
-- RSS guard JSON bytes: `1,336`
-- RSS guard JSON modified UTC: `2026-08-02T17:00:47+00:00`
-- RSS guard JSON SHA-256: `7e78cf0911acf912637da8e54b1609d88d7ae928e6121ecc15f282545e80fb93`
-- RSS samples: `23,065`
+- RSS guard JSON bytes: `1,335`
+- RSS guard JSON modified UTC: `2026-08-02T17:43:44+00:00`
+- RSS guard JSON SHA-256: `6e2493f178c5c9c874511063cfcd653faabbf47f000d1d504dd0c1aeb78454a2`
+- RSS samples: `28,204`
 - Max sampled single RSS KiB: `7,790,872`
 - Max sampled tree RSS KiB: `7,790,872`
 - Single-process RSS margin KiB: `2,694,888`
@@ -73,7 +73,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Gate Evidence Status
 
-- Claim status: `orphaned_running_receipt`
+- Claim status: `live_guard_monitor_only`
 - Driver result terminal: `false`
 - RSS guard terminal: `false`
 - Scored gate result present: `false`
@@ -82,8 +82,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Observed Gate Command
 
-- Expected candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1_continuous_teacher`
-- Expected scope bytes: `401,217,922`
+- Expected candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
+- Expected scope bytes: `2,233,775`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -94,8 +94,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Observed Controller Command
 
-- Expected active candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1_continuous_teacher`
-- Expected active scope bytes: `401,217,922`
+- Expected active candidate: `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1`
+- Expected active scope bytes: `2,233,775`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -106,16 +106,16 @@ Generated from the current certificate, gate receipts, lock state, and process t
 ## Operator Action
 
 - Safe to launch heavy gate: `false`
-- Action: `reconcile_orphaned_gate_receipt`
-- Reason: `persisted running state has no live owner and must be cleared or terminalized before another heavy gate is launched`
-- Allowed work: `inspect and repair the orphaned receipt; run non-heavy oracle and shadow experiments; claim and publish independent non-heavy work`
-- Forbidden work: `report the orphaned receipt as active; launch another heavy gate`
+- Action: `wait_for_current_gate_receipts`
+- Reason: `the serialized scorer lane is already owned by an observed guarded process`
+- Allowed work: `refresh status receipt; inspect driver and RSS receipts; update documentation and accounting ledgers; work on shadow-coder specs from cached logs`
+- Forbidden work: `launch another compression gate; package a fallback candidate; run result-corpus forecast scans; change active candidate source`
 
 ## Handoff
 
 - Terminal verdict present: `false`
 - Heavy gate mutation allowed: `false`
-- Recommended action: `reconcile_orphaned_gate_receipt`
+- Recommended action: `wait_for_current_gate_receipts`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `No prefix row proves the 10.8000000% full-corpus target.`
 
@@ -128,11 +128,11 @@ Generated from the current certificate, gate receipts, lock state, and process t
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `658`
-- Registered programs: `266`
-- Untracked nonignored entries: `2`
-- Modified tracked entries: `1`
-- Candidate statuses: `active=18, blocked_dependency=32, candidate=28, measured_negative=99, retired=481`
+- Program directories: `659`
+- Registered programs: `267`
+- Untracked nonignored entries: `7`
+- Modified tracked entries: `9`
+- Candidate statuses: `active=18, blocked_dependency=32, candidate=27, measured_negative=99, retired=482, track_source_before_evolution=1`
 
 ## Active Runner Process Table
 
@@ -148,7 +148,18 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| n/a | n/a | n/a |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,336 | `2026-08-02T17:43:45+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_native_trace.bin` | 112,934,912 | `2026-08-02T16:47:22+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_complete_block.nncp` | 1,163,264 | `2026-08-02T16:46:24+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_native_trace.bin` | 1,130,064 | `2026-08-02T13:47:58+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_on.stdout` | 112 | `2026-08-02T13:47:58+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_on.nncp` | 68,176 | `2026-08-02T13:47:58+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_on.stderr` | 0 | `2026-08-02T13:46:54+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_off.nncp` | 68,176 | `2026-08-02T13:46:54+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_off.stdout` | 112 | `2026-08-02T13:46:54+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_off.stderr` | 0 | `2026-08-02T13:45:50+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_original.nncp` | 68,176 | `2026-08-02T13:45:49+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_original.stdout` | 112 | `2026-08-02T13:45:49+00:00` |
 
 ## Active RSS
 
@@ -162,6 +173,15 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Single-process decimal margin KiB: `n/a`
 - Active process tree margin KiB (binary): `2,599,292`
 - Active process tree decimal margin KiB: `1,879,157`
+
+## Contingencies
+
+- If current gate passes: `record pass and apply candidate target-gate promotion rule`
+- Pass next scope: `n/a`
+- If RSS fails: `record RSS failure and retire or repackage this integration shape`
+- Lower candidate: `unknown`
+- Lower PPMD KiB: `n/a`
+- If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary
 

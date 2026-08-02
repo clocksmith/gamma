@@ -10,6 +10,13 @@ The main README explains the Hutter score math and run protocol. This file
 answers the next question: what each algorithm is actually doing, which ones are
 currently strongest, and what each measurement proves.
 
+Canonical authority note: this long-form reference contains historical
+snapshots. For the live frontier use `docs/hutter_frontier.json`, for exact
+source-bound history use `docs/hutter_run_ledger.json`, and for current process
+and queue state use `docs/status_receipt.md`. The current design target is
+`108,000,000`, the verified full-1G score is unknown, and the best counted
+forecast is `109,389,323` with unresolved runtime eligibility.
+
 For orientation, use `docs/algorithm_cards.md`. It gives
 plain-English cards with mechanism, score, proof boundary, and next role. For
 generated rankings from result JSONs only, use `docs/evidence_matrix.md`.
@@ -54,29 +61,29 @@ enwiki9 mapping, oracle-economics gates, matched-control requirements, and
 candidate-universe retirement rules are audited in
 `docs/same_r_hutter_strategy_audit.md`.
 
-Current active baseline:
+Current prize-facing parent:
 
 ```text
-fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1
+endpoint428_gate_dot_fuse_output_update_loop_v1
 ```
 
-Its `100M` evidence is metadata-inherited from a byte-identical verified
+`fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` remains a historical calibrated
+benchmark baseline, not the current forecast parent. That historical
+baseline's `100M` evidence is metadata-inherited from a byte-identical verified
 parent, and its calibrated `1G` forecast is `110,181,114`. That is not a full
 constructive proof. The retired sidecar candidate had counted program size
 `256,906`; its canonical `10M` native-output lower bound reached `1,641,762`,
 which is `10,181` bytes above the `1,631,581` promotion ceiling before final
 flush.
 
-The closest counted projection is now the original-order endpoint428
-compact/FX2 pair plus the 26-endpoint layer-0 causal online residual mixer.
-Its guarded exact-`10M` archive is `1,635,174` bytes and its deterministic
-direct-entry LZMA source ZIP is `278,825` bytes. The package saves `72,117`
-bytes versus the immutable BZip2 accounting record, changing the conservative
-projection to `109,452,151` (`10.9452151%`), `47,849` bytes below the target.
-Exact decode restores the canonical `10,000,000` bytes, and an independent
-clean-build re-encode reproduces the archive byte-for-byte under clean decimal
-memory guards. This authorizes the exact full-`1G` gate; the forecast remains
-provisional until that full-corpus proof completes.
+The closest counted projection is now the fused/output-loop endpoint428 child.
+Its guarded exact-`10M` archive is `1,634,500` bytes and its reproducible
+minified LZMA source package is `261,125` bytes. Exact decode, independent
+clean-build deterministic re-encode, and decimal-memory checks pass. The
+counted forecast is `109,389,323` (`10.9389323%`), which is `1,389,323` above
+the `108,000,000` design target. This does not authorize full 1G: target-scale
+new information, transfer, package accounting, and reference-calibrated
+runtime qualification remain mandatory.
 
 ## Top Status
 
@@ -99,7 +106,7 @@ metadata-inherited evidence, forecast evidence, and the active gate.
 | `ppmd20608k` bracket result | Exact `1,024` replay passed, then unchanged `250,000` promotion exceeded the official decimal memory ceiling | Guard receipt: `ppmd20608k_250000_determinism_rss_guard.json`; max sampled single RSS was `10,005,832` KiB, `240,207` KiB over decimal `10GB`. |
 | `ppmd20480k` bracket result | Exact `1,024` replay passed, then unchanged `250,000` promotion exceeded official decimal `10GB` by `3,275` KiB | This is the lower terminal PPMD-only bracket, not the active proof gate. |
 | Retired unchanged cmix21 `100M` gate | `cmix21_text_mmap_paq5_ppmd20352k_fxcm2_fxcmrcm20_ppmdguard2_rcm32_buffull_minmaps_v1` produced a `14,864,716`-byte first archive | The archive misses the `14,715,573` unified-executable screen by `149,143` bytes. Decode was stopped before roundtrip and determinism completed, so this is economic substrate evidence only and no `1G` run is authorized. |
-| Active baseline | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | Strongest calibrated admissible baseline; full score remains forecast-only until exact `1G` replay. |
+| Prize-facing parent | `endpoint428_gate_dot_fuse_output_update_loop_v1` | Exact 10M archive `1,634,500`, counted minified package `261,125`, forecast `109,389,323`; full-1G score unknown and runtime unqualified. |
 | PAQ-free hybrid first-`1M` result | Fixed `96x2` archive `174,268`, `936 B/1M` gross gain, exact roundtrip and determinism, peak RSS `7,537,920` KiB | Constructive receipt: `results/fx2_cmix21_geometry_nopaq_lstm96x2_constructive_v1/receipt.json`. A newer reproducible `264,427`-byte source ZIP clean-builds twice to the exact backend, reducing the cumulative-tail forecast debt to `252,737` bytes. This remains forecast and package evidence only. |
 | Retired PAQ-free `200x2` capacity result | Archive `174,055` versus opening-prefix FX2 `175,204`, saving `1,149 B/1M`; on the frozen offset-`500M` reset slice it archives to `45,242` versus FX2 `45,612`, saving only `370 B/1M` | Its reproducible `264,314`-byte source ZIP requires `762.424 B/1M`. The disjoint result misses by `392.424 B/1M` under a clean guard, so no decode or larger unchanged gate is authorized. Receipts: `results/fx2_cmix21_lstm200_source_frontier_v1/receipt.json` and `results/fx2_cmix21_lstm200_disjoint_terminal_v1/receipt.json`. |
 | Retired sparse-BPTT `200x2` screen | Full updates for `1,000` horizons followed by one BPTT update per eight horizons saved `219` bytes at `250K` but only `432` bytes at `1M` | The `1M` rate is below the counted `798.965 B/1M` requirement, so no decode or larger gate is authorized. Receipt: `/home/x/enwiki9-nonproof/results/fx2_cmix21_sparse_bptt_v1/lstm200x2_o3_bptt1000s8_geometry_1m/receipt.json`. |
@@ -153,8 +160,8 @@ metadata-inherited evidence, forecast evidence, and the active gate.
 | Best `100M` evidence | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`: metadata-inherited score `15,040,789`, archive `14,857,781`, program `183,008` | Inherited from the verified geometry parent package by payload and ordered-stream identity. No exact `100M` result JSON is present under `results/` in this checkout. |
 | Best full `1G` proof | None | The certificate generator reports no verified full-corpus result JSON in this checkout. |
 | Best forecast | Endpoint428 compact/FX2 pair plus the 26-endpoint layer-0 online residual mixer, fused recurrent gate dots, explicit output update, and counted minified LZMA source ZIP: `109,389,323` (`10.9389323%`) | Exact guarded `10M` encode, roundtrip, independent deterministic re-encode, clean-build identity, and package reconstruction pass. The forecast is `1,389,323` bytes above the current `108,000,000` design target; its separate `110,677`-byte margin applies only to the legacy `109,500,000` engineering checkpoint. It is not an official `1G` score. |
-| Current blocker | No exact full-corpus constructive result exists, and the score-qualified candidate is not runtime-qualified. | Its exact `1M` encode projects `88.7147 h` on this host. Before a full proof, a frozen successor must preserve the archive stream or re-clear score economics and demonstrate reference-calibrated compliance with the official `< 70,000/T h` rule. |
-| Next gate | A materially faster substrate implementation that preserves the new fused/output-loop stream and counted package | Resume controlled matched timing only without unrelated CPU-heavy work, and require reference-calibrated compliance with the official runtime rule. Do not launch the exact full-`1G` gate until runtime qualifies. |
+| Current blocker | No exact full-corpus constructive result exists; the best forecast remains above `108,000,000`, and its parent is not runtime-qualified. | Its exact `1M` encode projects `88.7147 h` on this host. Before a full proof, a frozen successor must clear score economics and demonstrate reference-calibrated compliance with the official `< 70,000/T h` rule. |
+| Next gate | Terminally resolve the active causally closed NNCP teacher headroom gate, then run the corrected source-bound WIKIBACK finite side/residual gate | Both remain zero-credit until constructive native evidence. Do not launch full 1G until a descendant clears `108,000,000` with runtime qualification. |
 
 The `10M` confirmation's causal block-regret budget was frozen before reading
 its result: at most `2` of `16` holdout blocks may regress, the largest
