@@ -24,6 +24,30 @@ state through all complete pages and report first 60%, next 20%, and final 20%
 of complete pages as opened development, selection, and confirmation
 diagnostics.
 
+Bind those inputs before parsing. A read-only preflight on 2026-08-02
+reproduced every byte count and SHA-256 below:
+
+```text
+joint P1       results/janus_recurrent_quotient_joint_trace_recovery_q0_v1/joint_candidate.p1
+bytes/SHA      100,029,648  b554ddd170df355ab597fa8fd082b2ea4d2098dad540b07dcb9084016cc2e719
+parent payload results/janus_recurrent_quotient_joint_10m_v1/joint/candidate.payload
+bytes/SHA      1,617,484  5ffaa128fa9e86e3883896a6d16b6c49e23693f5abdf14f1718e0e006533dca9
+WRT store      results/endpoint428_pair_layer0_online_native_trace_10m_v1/wrt_store.bin
+bytes/SHA      6,251,857  867c23e652052268017d4bda543ea86c6b6af7efdaa0d87175997e7fb19a3a5b
+raw 10M        /home/x/enwiki9-nonproof/gamma/projects/enwiki9/data/enwik9_10000000.bin
+bytes/SHA      10,000,000  5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97
+dictionary     /home/x/enwiki9-nonproof/results/cmix21_lstm200_plus_fx2lite428_onlinepairlayer0_source_package_v17/clean-build-b/build/english.dic
+bytes/SHA      411,996  4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a
+page receipt   results/sibyl_page_boundaries_v1/receipt.json
+bytes/SHA      9,711,214  e4f0db7f82759aa05b025cd65170206cb76fd22187eb29d7bbe96537928c7bcc
+inverse backend SHA-256
+               d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194
+```
+
+QM1 must reproduce the joint parent payload before reporting a ceiling and
+must bind its derived page intervals back to the page receipt. A missing or
+different artifact is malformed input, not a scientific rejection.
+
 The byte parser is active only after the exact case-sensitive decoded opener
 `<text xml:space="preserve">` and before the exact case-sensitive closer
 `</text>`, exactly as recognized by the bound `WikiState`. The first byte after

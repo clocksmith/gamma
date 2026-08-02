@@ -6564,6 +6564,15 @@ table generator and canonical little-endian `int32` hashes
 `6ddbe07c...c2376` and `7caf3560...387f`; a replay with different numeric
 tables is malformed rather than an alternate score.
 
+A read-only source/input preflight on 2026-08-02 also reproduced the exact
+current Git blobs and content hashes for `WikiState`, `role_id`, and the
+ten-state heading classifier. The joint P1 (`100,029,648` bytes), joint
+payload (`1,617,484`), WRT store (`6,251,857`), raw 10M (`10,000,000`),
+dictionary (`411,996`), and page receipt (`9,711,214`) all match the explicit
+SHA-256 bindings now recorded in the plan. This proves that the dormant QM1 has
+a materialized deterministic input set; it does not activate the dependency,
+measure semantic headroom, or grant score credit.
+
 ## 2026-08-02: endpoint428 runtime-eligibility boundary re-audited
 
 The `109,389,323` forecast still lacks a source-bound, reference-calibrated
