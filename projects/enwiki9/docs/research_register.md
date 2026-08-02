@@ -5646,3 +5646,43 @@ verified full-1G remains unknown, and score credit remains zero.
 
 Decision:
 `results/nncp_v33_libnc_continuous_block_multiupdate_parity_v1/decision.json`.
+
+## 2026-08-02: source-native NNCP CPU T16 archive-identity gate frozen
+
+Candidate and proposal: `nncp_v33_cpu_t16_archive_identity_q0_v1`.
+
+The immutable native batch-32 teacher previously emitted the same 9,246-byte
+archive twice at four CPU threads, with a `279.797`-second adjacent mean encode
+and 5,782,588 KiB peak tree RSS. This host has 16 physical cores. Q0 changes
+only the LibNC worker count to 16 and performs one guarded 10,000-symbol encode.
+
+Promotion requires exact archive identity, decimal-10GB compliance, and at
+least 50 percent elapsed reduction. A pass authorizes only a T16 repeated
+trace-off/trace-on/decode identity gate. A miss closes local CPU thread scaling
+without a thread or affinity sweep. No compression score or forecast credit is
+available.
+
+Plan: `docs/nncp_v33_cpu_t16_archive_identity_q0_plan.md`.
+
+## 2026-08-02: native NNCP T16 is exact but slower
+
+The immutable source-native T16 execution completed normally and emitted the
+exact reference archive: 9,246 bytes, SHA-256
+`097102977cbaa563e460ef87bf88af99ae6409a5fa3902198316f0308300ffc5`,
+byte-for-byte identical to both adjacent T4 archives. Peak sampled single and
+tree RSS were 5,779,632 KiB, below the decimal-10GB limit.
+
+The performance hypothesis failed decisively. T16 required `379.1668` measured
+seconds versus the adjacent T4 mean of `279.797`, a negative reduction of
+`-0.3551496263362366`. During the active model phase it used only about 4.2 CPU
+cores despite the 16-worker request. Retire local source-native thread scaling
+without thread-count, affinity, NUMA, compiler, batch, or model sweeps. Do not
+run the T16 trace/decode Q1 or a mature CPU teacher.
+
+The archive identity is useful execution evidence but supplies no compression
+or forecast credit. The exact published CUDA teacher remains unavailable on
+this AMD-only host; ZLUDA is already terminal because the shipped CUDA module
+contains NVIDIA SASS without PTX and fails kernel lookup. Forecast remains
+`109,389,323` bytes and the verified full-1G score remains unknown.
+
+Decision: `results/nncp_v33_cpu_t16_archive_identity_q0_v1/decision.json`.
