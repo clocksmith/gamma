@@ -1,0 +1,82 @@
+{
+  "candidate_id": "nncp_v33_libnc_activation_backward_parity_v1",
+  "comparisons": {
+    "libnc_unfused_f32_tanh_formula": {
+      "maximum_absolute_forward_error": 1.1920928955078125e-07,
+      "maximum_absolute_gradient_error": 4.76837158203125e-07,
+      "maximum_relative_gradient_error": 3.7279205571394414e-06,
+      "mean_absolute_forward_error": 9.699383518579907e-09,
+      "mean_absolute_gradient_error": 6.369905491965255e-08
+    },
+    "pytorch_exact_erf": {
+      "maximum_absolute_forward_error": 0.0004398822784423828,
+      "maximum_absolute_gradient_error": 0.0008673518896102905,
+      "maximum_relative_gradient_error": 29802.322265625,
+      "mean_absolute_forward_error": 9.47838561842218e-05,
+      "mean_absolute_gradient_error": 0.00020596777903847396
+    },
+    "pytorch_tanh_approximation": {
+      "maximum_absolute_forward_error": 4.76837158203125e-07,
+      "maximum_absolute_gradient_error": 2.0265579223632812e-06,
+      "maximum_relative_gradient_error": 1.600812902324833e-05,
+      "mean_absolute_forward_error": 2.1329558563820683e-08,
+      "mean_absolute_gradient_error": 9.70002247413504e-08
+    }
+  },
+  "compile": {
+    "command": [
+      "cc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-unused-parameter",
+      "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_activation_probe.c",
+      "-L/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+      "-lnc",
+      "-lm",
+      "-ldl",
+      "-lpthread",
+      "-o",
+      "/tmp/nncp-libnc-activation-tw33iyua/probe"
+    ],
+    "executable_sha256": "28826a6702418c9d3e2d5e699ab7260e3a8e43670eea5daac6fa4f1ea18f56e0",
+    "stderr": ""
+  },
+  "decision": {
+    "authorized_next_action": "run one corrected bound miniature full-gradient replay",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": true,
+    "verified_full_1g_score_bytes": null
+  },
+  "gate": {
+    "matching_contract": "libnc_unfused_f32_tanh_formula",
+    "maximum_absolute_gradient_error": 2e-06
+  },
+  "inputs": {
+    "libnc_header": {
+      "path": "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.h",
+      "sha256": "d0e341301e66eec8647b055d6d704ca254051bf877036599423e83e39a7132c6"
+    },
+    "libnc_library": {
+      "path": "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.so",
+      "sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e"
+    },
+    "probe_source": {
+      "path": "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_activation_probe.c",
+      "sha256": "070933c99b94d50eb5665a79c3f010db48ebf77acf307ed554802af1dbc51248"
+    }
+  },
+  "probe": {
+    "repeat_byte_identical": true,
+    "repeat_stdout_sha256": "30c7050c349156e7b5973986f627414229ff40b3b339c243b87d34778e576f6f",
+    "rows": 41,
+    "stdout_sha256": "30c7050c349156e7b5973986f627414229ff40b3b339c243b87d34778e576f6f"
+  },
+  "schema": "gamma.nncp_v33_libnc_activation_backward_parity.v1",
+  "score_credit_bytes": 0,
+  "status": "PASS"
+}

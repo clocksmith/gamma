@@ -1,0 +1,34 @@
+{
+  "candidate_id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "claimed_at": "2026-08-02T03:20:59+00:00",
+  "created_at": "2026-08-02T03:20:59+00:00",
+  "developed_at": "2026-08-02T03:22:12+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_activation_backward_parity_v1/decision.json; results/nncp_v33_libnc_gradient_interposition_v1/receipt.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Replacing PyTorch exact-erf GELU with the directly measured LibNC unfused F32 tanh-GELU backward contract reduces every bound miniature first-update parameter error below 2e-5.",
+  "interfaces_exposed": [
+    "Measured LibNC tanh-GELU backward -> bound miniature online update"
+  ],
+  "kill_condition": "Retire tanh-GELU as the sufficient parity fix if any final parameter remains above 2e-5; record which paths improve and continue only with a newly localized primitive, never a mature trace.",
+  "max_program_bytes": 10000,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "substrate",
+  "owner": "codex",
+  "parent": "nncp_v33_libnc_activation_backward_parity_v1",
+  "parent_proposal_id": null,
+  "priority": 152,
+  "promotion_condition": "Authorize the next frozen LibNC primitive-localization or full-profile ROCm parity gate only if initial distribution parity remains within 2e-5 and every final named parameter is within 2e-5 after the one bound update.",
+  "proposal_id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "rejected_at": "2026-08-02T03:25:01+00:00",
+  "rejection_reason": "Clean one-change rejection: measured tanh GELU improved frozen distribution parity to 4.657e-9 and output-layer update errors to about 2.8e-7, but internal parameters still reached 3.2e-4 versus the frozen 2e-5 gate. Repeated final tensor hashes were identical.",
+  "retired_neighborhoods": [
+    "Exact-erf PyTorch GELU in NNCP online-update reproduction"
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 167,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC tanh-GELU online-update parity"
+}
