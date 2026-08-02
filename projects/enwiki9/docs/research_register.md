@@ -6422,3 +6422,100 @@ teacher execution occurred, so there is still no scientific verdict. Freeze
 the receipt-bound `--n_symb 16392` argument, which recreates the vocabulary the
 ordinary `--preprocess 16384,512` path sets internally, and authorize one more
 identical retry. No model or scoring parameter changes.
+
+The third attempt, job `20260802T131417Z_278056f1f9`, passed all preflight
+stages and all three smoke archives were byte-identical. It entered the mature
+execution and was stopped deliberately after `32,767` observed execution rows
+when parallel proof review found two invalid Q1 assumptions. Peak sampled RSS
+was `6,090,936 KiB`; memory was not the failure.
+
+First, `--max_size 2229154` truncates the native block beginning at symbol
+`1,998,848`. The enwik9 source rounds its nominal 500,000-symbol block down to
+`499,712 = 244 * 64 * 32`, so the full-run block ends at `2,498,560`.
+Truncation changes stream stride, predecessor assignment, update groups, and
+probabilities inside the measured window. Second, the trace stores NNCP's
+15-bit `P(0)` integer, but Q1 v1 passed it directly to a 16-bit `P(1)` range
+coder. The correct conversion is:
+
+```text
+p1 = 2 * (32768 - prob0)
+```
+
+Q1 v1 is therefore quarantined with no scientific verdict and zero score
+credit. Its partial archive, trace, and guard were moved intact under
+`results/nncp_v33_libnc_cpu_encode_only_mature_9m_10m_q1_v1/`
+`quarantine_20260802T131417Z_278056f1f9_invalid_contract/`. Do not retry v1.
+
+Further same-population review closes the proposed 9M--10M successor as well.
+In the full NNCP block `[1,998,848, 2,498,560)`, 32 streams are evaluated in
+time-major order and jointly updated. Predictions whose original ordinals are
+inside `[2,000,597, 2,229,154)` can therefore depend on already executed truth
+from other streams whose original ordinals map beyond raw byte `9,999,992`.
+Charging only the 9M--10M raw interval would condition the teacher on uncharged
+future population data. No 9M--10M v2 may be materialized from the existing 10M
+joint trace.
+
+The only authorized successor is a new complete-block candidate over NNCP
+symbols `[1,499,136, 1,998,848)`, which map exactly to raw bytes
+`[6,757,802, 8,991,577)` and WRT bytes `[4,182,331, 5,618,556)`. It must run
+continuously from symbol zero through `1,998,848`, charge the complete final
+native block in execution order, convert each recorded `P(0)` via
+`p1 = 2 * (32768 - prob0)`, exactly decode both independently terminated
+same-population streams, reject partial artifact reuse, prove the local 10M
+input is the exact prefix of the receipt-bound 1G corpus, and bind the Git
+commit plus tool hashes. This population change requires a new candidate ID.
+
+## 2026-08-02: NNCP full-dictionary causally closed native-block Q1 frozen
+
+Candidate `nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1` replaces the
+invalid sliced 9M--10M population. The teacher runs continuously through symbol
+`1,998,848` and charges the complete final native block
+`[1,499,136, 1,998,848)` in execution order. The receipt-bound symbol map places
+that block exactly on raw `[6,757,802, 8,991,577)`; the official WRT replay
+places it on WRT bytes `[4,182,331, 5,618,556)` and joint P1 rows
+`[33,458,648, 44,948,448)`. Both endpoints are exact emission boundaries.
+
+The gate freezes vocabulary `16,392`, the archive-neutral indexed observer,
+the exact conversion `p1 = 2 * (32768 - prob0)`, explicit equal-length checks,
+complete original-ordinal permutation and execution-order checks, independently
+terminated and decoded finite streams, decimal-10GB guarding, local-10M versus
+receipt-bound-1G prefix identity, rejection of partial artifact reuse, and Git
+commit/tool hash binding. The full dictionary is supplied free at this teacher
+ceiling, so even a pass proves headroom only and receives zero score credit.
+The promotion threshold remains `3,000 B/M`; a valid miss closes the exact
+mature full-dictionary lane without block, window, thread, model, dictionary,
+checkpoint, precision, or batch rescue sweeps.
+
+Primary plan:
+`docs/nncp_v33_libnc_cpu_encode_only_closed_block_q1_plan.md`.
+
+## 2026-08-02: WIKIBACK incoming-anchor-context lexical ceiling proposed
+
+Proposal `wikiback_incoming_anchor_context_qh0_v1` is the next orthogonal
+representation lane, dormant while the NNCP heavy gate owns execution priority.
+After an earlier page is completely decoded, it indexes each exact link target
+with the completed `+/-16` WRT lexical events surrounding that anchor. After a
+later page title is completely decoded, the decoder snapshots only records
+from prior pages whose target equals the title. Every subsequent active
+`PROSE_WORD` event is encoded through a candidate-or-escape side alphabet; hits
+reconstruct exact WRT events, while escapes consume the exact
+JANUS-plus-quotient truth bits.
+
+This is not TESSERA's global semantic type map, the within-page future roster,
+a TESBE continuation receipt, a LOGOS prototype copy, an SRSTC residual
+program, a JANUS suffix context, or NOEMA recurrence. Its information source is
+page-specific text around completed prior incoming links. A read-only opened
+hypothesis audit found prior backlink contexts for `105/265` selection pages
+and `102/265` sealed pages, with exact-context lexicons covering `17.707%` and
+`15.274%` of raw lexical occurrences; a weak backlink/unigram diagnostic gained
+approximately `7,010` and `4,889` bytes over its development unigram reference.
+These are not codec receipts and receive zero score credit.
+
+The exact 10M gate uses G0 joint parent, G1 causal matched backlink redirection,
+G2 immediately-prior-page contexts, G3 target/anchor lexemes only, and G4 full
+incoming-anchor contexts. It requires actual finite side and residual streams,
+exact decode and WRT/raw reconstruction, byte-identical replay, positive
+chronological 60/20/20 contributions, at least `30,000` gross bytes, at least
+`2,100 B/M` after measured source allowance, and G4 below G1/G2/G3. A miss
+retires the exact source and coder without rescue sweeps. Plan:
+`docs/wikiback_incoming_anchor_context_qh0_plan.md`.
