@@ -20,7 +20,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 ROCM_PYTHON = Path(
-    "/home/x/enwiki9-nonproof/external/rocm-pytorch-venv/bin/python"
+    "/home/x/deco/gamma/.venv_rocm/bin/python"
 )
 os.environ.setdefault("AMD_SERIALIZE_KERNEL", "3")
 if Path(sys.executable) != ROCM_PYTHON:
@@ -37,10 +37,140 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import nncp_rocm_q0_teacher_gate as coder
-
-
 TRACE_MAGIC = b"NV3Q0TR1"
+PROBABILITY_BITS = 15
+PROBABILITY_TOTAL = 1 << PROBABILITY_BITS
+RANGE_MIN_BITS = 16
+RANGE_MIN = (0xFF << (RANGE_MIN_BITS - 8)) + 1
+RANGE_MAX = 0xFF << RANGE_MIN_BITS
+
+
+class RangeEncoder:
+    def __init__(self) -> None:
+        self.low = 0
+        self.range = RANGE_MAX
+        self.current_byte = 0xFF
+        self.pending_bytes = 0
+        self.output = bytearray()
+
+    def _put_value(self, value: int) -> None:
+        if value == 0xFF:
+            self.pending_bytes += 1
+            return
+        if self.pending_bytes:
+            carry = value >> 8
+            self.output.append((self.current_byte + carry) & 0xFF)
+            fill = (0xFF + carry) & 0xFF
+            while self.pending_bytes > 1:
+                self.output.append(fill)
+                self.pending_bytes -= 1
+        self.pending_bytes = 1
+        self.current_byte = value
+
+    def put_bit(self, probability_zero: int, bit: int) -> None:
+        split = (self.range * probability_zero) >> PROBABILITY_BITS
+        if not 0 < split < self.range:
+            raise ValueError("invalid range split")
+        if bit:
+            self.low += split
+            self.range -= split
+        else:
+            self.range = split
+        while self.range < RANGE_MIN:
+            self._put_value(self.low >> RANGE_MIN_BITS)
+            self.low = (self.low & ((1 << RANGE_MIN_BITS) - 1)) << 8
+            self.range <<= 8
+
+    def finish(self) -> bytes:
+        if self.range < (1 << RANGE_MIN_BITS):
+            self._put_value(self.low >> RANGE_MIN_BITS)
+            self.low = (self.low & ((1 << RANGE_MIN_BITS) - 1)) << 8
+            self.range <<= 8
+        width = 0
+        while (1 << (width + 1)) <= self.range:
+            width += 1
+        value = self.low
+        mask = (1 << width) - 1
+        if value & mask:
+            value = (value + (1 << width)) & ~mask
+        if not self.low <= value < self.low + self.range:
+            raise ValueError("range finalization failed")
+        self._put_value(value >> RANGE_MIN_BITS)
+        if self.pending_bytes:
+            self._put_value(0)
+        return bytes(self.output)
+
+
+class RangeDecoder:
+    def __init__(self, payload: bytes) -> None:
+        self.payload = payload
+        self.index = 0
+        self.low = 0
+        self.range = 0
+        for _ in range(0, RANGE_MIN_BITS + 1, 8):
+            self._refill()
+        self.range = RANGE_MAX
+
+    def _refill(self) -> None:
+        self.range <<= 8
+        self.low <<= 8
+        if self.index < len(self.payload):
+            self.low += self.payload[self.index]
+            self.index += 1
+
+    def get_bit(self, probability_zero: int) -> int:
+        split = (self.range * probability_zero) >> PROBABILITY_BITS
+        if not 0 < split < self.range:
+            raise ValueError("invalid decode split")
+        bit = int(self.low >= split)
+        if bit:
+            self.low -= split
+            self.range -= split
+        else:
+            self.range = split
+        while self.range < RANGE_MIN:
+            self._refill()
+        return bit
+
+
+def probability_zero(
+    cumulative: np.ndarray, start: int, left: int, active_mass: float
+) -> tuple[int, float]:
+    end = start + left
+    left_mass = float(cumulative[end - 1])
+    if start:
+        left_mass -= float(cumulative[start - 1])
+    value = round(left_mass * PROBABILITY_TOTAL / active_mass)
+    return min(max(value, 1), PROBABILITY_TOTAL - 1), left_mass
+
+
+def encode_distribution(
+    encoder: RangeEncoder,
+    probability: np.ndarray,
+    symbols: np.ndarray,
+    trace: array,
+) -> None:
+    cumulative = np.cumsum(probability, axis=1, dtype=np.float64)
+    for row, symbol_value in enumerate(symbols):
+        symbol = int(symbol_value)
+        start = 0
+        active = probability.shape[1]
+        mass = 1.0
+        while active > 1:
+            left = active >> 1
+            p_zero, left_mass = probability_zero(
+                cumulative[row], start, left, mass
+            )
+            bit = int(symbol >= start + left)
+            encoder.put_bit(p_zero, bit)
+            trace.append(p_zero)
+            if bit:
+                start += left
+                active -= left
+                mass -= left_mass
+            else:
+                active = left
+                mass = left_mass
 
 
 @dataclass(frozen=True)
@@ -366,16 +496,16 @@ def optimizer_for(model: nn.Module, config: Config) -> torch.optim.Optimizer:
 
 
 def branch_encode(
-    encoder: coder.RangeEncoder,
+    encoder: RangeEncoder,
     probability: np.ndarray,
     target: np.ndarray,
     trace: array,
 ) -> None:
-    coder.encode_distribution(encoder, probability, target, trace)
+    encode_distribution(encoder, probability, target, trace)
 
 
 def branch_decode_one(
-    decoder: coder.RangeDecoder, probability: np.ndarray, trace: array
+    decoder: RangeDecoder, probability: np.ndarray, trace: array
 ) -> int:
     cumulative = np.cumsum(probability, dtype=np.float64)
     start = 0
@@ -383,11 +513,11 @@ def branch_decode_one(
     mass = 1.0
     while active > 1:
         left = active >> 1
-        probability_zero, left_mass = coder.probability_zero(
+        branch_probability, left_mass = probability_zero(
             cumulative, start, left, mass
         )
-        trace.append(probability_zero)
-        if decoder.get_bit(probability_zero):
+        trace.append(branch_probability)
+        if decoder.get_bit(branch_probability):
             start += left
             active -= left
             mass -= left_mass
@@ -429,7 +559,7 @@ def encode_once(
     started = time.monotonic()
     logits, _ = model(inputs, memories)
     probability = torch.softmax(logits.detach(), dim=-1).cpu().numpy()
-    encoder = coder.RangeEncoder()
+    encoder = RangeEncoder()
     trace = array("H")
     for state in range(config.segment_length):
         branch_encode(
@@ -483,7 +613,7 @@ def decode_once(
         device=device,
     )
     inputs = torch.zeros_like(decoded)
-    decoder = coder.RangeDecoder(payload)
+    decoder = RangeDecoder(payload)
     trace = array("H")
     final_logits = None
     started = time.monotonic()
