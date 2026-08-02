@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/enwiki9/srstc_residual_program_logopinion_decision.schema.json",
+  "type": "object",
+  "required": ["schema", "candidate_id", "proposal_id", "economics", "proof", "decision"],
+  "properties": {
+    "schema": {"const": "srstc_residual_program_logopinion_qh0_decision_v1"},
+    "candidate_id": {"const": "srstc_residual_program_logopinion_qh0_v1"},
+    "proposal_id": {"const": "srstc_residual_program_logopinion_v1"},
+    "decision": {
+      "type": "object",
+      "required": ["verdict", "paid_q1_authorized", "score_credit_bytes"],
+      "properties": {
+        "verdict": {"enum": ["AUTHORIZED_PAID_Q1", "REJECT"]},
+        "paid_q1_authorized": {"type": "boolean"},
+        "score_credit_bytes": {"const": 0}
+      }
+    }
+  }
+}
