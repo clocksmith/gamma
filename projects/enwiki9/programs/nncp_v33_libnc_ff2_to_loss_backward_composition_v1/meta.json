@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Receipt-bound FF2-to-loss backward composition localization only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_ff2_to_loss_backward_composition.py",
+    "tools/nncp_libnc_ff2_to_loss_backward_composition_probe.c",
+    "tools/nncp_libnc_internal_tensor_hook.c"
+  ],
+  "description": "Extend the exact isolated decoder tail by the shared FF2 projection and residual join, then compare both named gradients",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound direct LibNC composition diagnostic."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The full optimized FF2-to-loss composition reproduces bound ff2_0 and ff_bias2_0 gradients that the isolated tail and matched PyTorch block miss.",
+  "id": "nncp_v33_libnc_ff2_to_loss_backward_composition_v1",
+  "kill_gate": "Stop on source, tensor, probe, mapping, or probability identity failure; retire the composition if either direct named gradient misses the bound tensor.",
+  "omega": {
+    "interfaces_exposed": [
+      "Exact attn_out plus ff2_in states -> shared FF2 projection and bias -> exact decoder tail -> named ff2 and bias gradients"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_v33_libnc_named_gradient_trajectory_v1",
+    "proposal_id": "nncp_v33_libnc_ff2_to_loss_backward_composition_v1",
+    "retired_neighborhoods": [
+      "Isolated decoder tail; positional gradient inference; output projection and loss primitives."
+    ]
+  },
+  "parent": "nncp_v33_libnc_named_gradient_trajectory_v1",
+  "status": "candidate"
+}
