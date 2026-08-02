@@ -5334,3 +5334,96 @@ bytes; verified full-1G score remains unknown; score credit remains zero.
 
 Decision:
 `results/nncp_v33_libnc_concat_rmsnorm_multiupdate_parity_v1/decision.json`.
+
+## 2026-08-02: static page-entity roster screen is subscale
+
+The first post-TESSERA information-source screen tested a page-internal future
+entity roster rather than another static semantic type. Each complete page's
+title, link targets and labels, template names and keys, and section headings
+defined a set of development-catalog lexemes. The proposed operation would
+transmit that roster before the page and replace later lexical events with
+roster references while preserving the JANUS-plus-quotient truth-update
+trajectory.
+
+The screen was deliberately more favorable than a realizable codec. Roster
+identities, per-page hit and lexeme counts, morphology, exact WRT surface
+variants, model bytes, source, framing, and termination were all free. It
+charged only the exact enumerative rank of hit positions among supported token
+opportunities and the enumerative order of hit lexeme IDs given their exact
+per-page counts.
+
+The best role set was `LINK_TARGET`. It displaced `134,258.793` exact joint
+qbit-bytes but still required `111,257.294` optimistic side bytes, leaving only
+`23,001.499` bytes over canonical 10M. Development, selection, and sealed gains
+were positive (`17,818.871`, `3,681.612`, and `1,501.017` bytes), but the full
+gain missed the frozen `30,000`-byte gate before paying any roster identity or
+surface cost. Prose-only and combined prose/link forms were already negative by
+`96,998.759` and `134,300.329` bytes respectively.
+
+Decision: reject the static free-count page-entity roster alphabet before
+adaptive proposal materialization. Do not build a roster side coder, role
+ladder, relation-subset sweep, or paid model. This does not reject a genuinely
+predictive relational model, but such a model must introduce and demonstrate
+new sequence information rather than inherit this subscale enumerative result.
+Forecast remains `109,389,323` bytes, verified full-1G remains unknown, and
+score credit remains zero.
+
+Evidence:
+
+- `tools/mobius2_page_entity_roster_screen.py`
+- `results/mobius2_page_entity_roster_enumerative_screen_v0/decision.json`
+- `docs/post_tessera_event_universe_portfolio_20260802.json`
+
+## 2026-08-02: LibNC update-state trajectory frozen after provenance correction
+
+Candidate and proposal: `nncp_v33_libnc_update_state_trajectory_v1`.
+
+The prior multi-update receipt contains a material provenance error. Its save
+hook runs inside `nc_param_list_end`, so the artifact named `final_coefs` is
+the seeded initial parameter list. The comparison between that artifact and
+the analytic eight-update state is invalid. The repeated native probability
+trace and its `0.010298` second-segment divergence remain valid, as do the
+separately bound one-update receipts.
+
+This correction does not relabel the failed analytic formula as a pass. The
+one-change successor adds observation-only saves immediately after each actual
+source optimizer and memory update. It binds all eight post-update parameter,
+`mem_h`, and `train_h` states across two executions, then compares them with a
+non-intervened analytic trajectory. The first divergent family distinguishes
+optimizer, persistent-memory, and evolving forward-operation contracts.
+
+A unique localization authorizes only the matching component-level child. It
+does not authorize a faithful-profile prefix, score credit, forecast credit,
+or inheritance of NNCP's published result. Any archive or teacher-trace change
+is an infrastructure failure.
+
+Plan: `docs/nncp_v33_libnc_update_state_trajectory_plan.md`.
+
+## 2026-08-02: true post-update state localizes the first mismatch to forward evaluation
+
+The observation-only source child preserved and repeated the 32-byte archive
+SHA-256
+`abf30857584bf888640c27785cc41d7c260510091fd07f5324d1c61c361af94f`
+and teacher-trace SHA-256
+`0cebe0c17a64a8bd0183ea9278c8df70e7dd335c2eda3d3d87795afcbc4d59c7`.
+It captured the actual source state immediately after each optimizer and memory
+update, rather than relying on the earlier pre-evaluation save hook.
+
+After update one, all source and analytic parameters agree within
+`2.8312206268310547e-07`; `mem_h` and `train_h` agree within
+`2.384185791015625e-07`. Nevertheless, the next four-symbol prediction segment
+already differs by `0.010298056527972221`. Parameter and memory errors become
+large only after that bad forward/backward pass, at update two
+(`0.00045276060700416565` and `2.7441470623016357`, respectively).
+
+The unique first boundary is therefore `evolving_state_forward_operation`:
+the optimizer and persistent-memory update are not the initial cause. Retire
+this diagnostic after authorizing exactly one child that starts from the
+captured source post-update-one parameters and memory and identifies the first
+divergent arithmetic node in the second forward segment. Do not rescue with
+tolerances, learning rates, clipping, widths, or shorter populations. Score
+and forecast credit remain zero; forecast remains `109,389,323` bytes and the
+verified full-1G score remains unknown.
+
+Decision:
+`results/nncp_v33_libnc_update_state_trajectory_v1/decision.json`.
