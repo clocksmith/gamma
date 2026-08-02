@@ -3282,6 +3282,7 @@ test("paired deterministic policy treatments are fingerprinted and reported by a
     playerCount: 3,
     seed: "paired-deterministic-treatment",
     preRegistrationId: "paired-deterministic-treatment-test",
+    projection: "batch",
     comparisons: [{
       id: "coalition_conversion_seat_0_greedy",
       focalSeat: 0,
@@ -3302,6 +3303,7 @@ test("paired deterministic policy treatments are fingerprinted and reported by a
   assert.deepEqual(comparison.right.policyTreatments, [null, null, null]);
   assert.equal(typeof comparison.paired.meanCausallyNecessaryCreditDelta, "number");
   assert.equal(typeof comparison.paired.meanAttributedMandateDelta, "number");
+  assert.equal(report.execution.simulationWorkersPerTask, 1);
   assert.notEqual(
     report.launchIdentity.tasks[0].identity.fingerprint,
     report.launchIdentity.tasks[1].identity.fingerprint
