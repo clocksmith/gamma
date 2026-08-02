@@ -22,42 +22,21 @@ S_local = program_proxy_bytes + archive_payload_bytes
 
 ## Active Local Budget
 
-For the active fx2 geometry baseline, the current local program proxy is:
+The current source-bound frontier is endpoint428 with a counted minified source
+package of `261,125` bytes. Against the canonical target:
 
 ```text
-program_proxy_bytes = 183,008
+target_score_bytes                         108,000,000
+counted_minified_source_package_bytes          261,125
+maximum_full_corpus_archive_payload_bytes  107,738,875
+best_counted_forecast                      109,389,323
+remaining_forecast_debt                      1,389,323
 ```
 
-Against the internal target:
-
-```text
-target_score_bytes = 108,000,000
-required_full_corpus_archive_payload_bytes <= 107,816,992
-```
-
-This budget is local screening math only. Official `comp9/source package`
-accounting can increase the counted program side and shrink the archive budget
-byte-for-byte.
-
-The active candidate's current local proxy package is made of:
-
-| Local proxy file | Role |
-|---|---|
-| `c` | XZ-packed fx2-cmix native binary payload. |
-| `d` | cmix-compressed English dictionary payload. |
-| `p` | Raw-deflate Python transform payload. |
-| `program.py` | Loader that reconstructs and executes the counted transform. |
-
-That proxy package is valid for local screening because the in-repo driver
-counts the three files. It is not automatically an official `comp9` package.
-Any full-corpus claim must first decide whether the official artifact is a
-binary package, a source package, or another accepted packaging shape, then
-count that exact artifact.
-
-The calibrated full score is `110,181,114`, leaving `681,114` bytes of debt to
-the target before any added SRSTC code. That calibration is forecast evidence,
-not a full-corpus proof. Any integrated delta must save at least
-`681,114 + added_program_bytes` on the exact archive.
+This is source-bound forecast accounting, not a full-corpus score. A child must
+save at least `1,389,323 + added_program_bytes + added_framing_bytes` at full
+scope relative to the forecast parent, with additional transfer safety before
+full-1G authorization.
 
 ## External Rule Boundary
 
@@ -113,6 +92,14 @@ A promoted result must provide:
 - RSS peak under the selected guard;
 - declaration that no GPU, network, hidden file, or uncounted dictionary was
   used.
+- authoritative CPU/core/thread rule snapshot and adopted interpretation;
+- allowed affinity, physical/logical CPU topology, OpenMP/runtime environment,
+  and observed maximum live and runnable threads;
+- reference benchmark version and score `T` plus independent compression and
+  decompression wall times.
+
+Endpoint428-specific runtime preflight is frozen in
+`docs/endpoint428_cpu_thread_eligibility_contract.md`.
 
 ## Promoted Candidate Audit Sequence
 
@@ -191,6 +178,19 @@ needs a package-level audit of the exact submitted compressor/archive path.
   "binary_margin_kib": null,
   "decimal_margin_kib": null,
   "temp_disk_bytes": null,
+  "rule_snapshot_sha256": null,
+  "rule_interpretation": null,
+  "cpu_model": null,
+  "allowed_cpu_affinity": [],
+  "physical_cores_allowed": null,
+  "logical_cpus_allowed": null,
+  "max_live_threads_process_tree": null,
+  "max_runnable_threads_process_tree": null,
+  "openmp_environment": {},
+  "reference_benchmark": null,
+  "reference_score_t": null,
+  "compress_wall_seconds": null,
+  "decompress_wall_seconds": null,
   "gpu_used": false,
   "network_used": false,
   "hidden_inputs": false,
@@ -200,7 +200,7 @@ needs a package-level audit of the exact submitted compressor/archive path.
 
 ## Claim Rule
 
-Do not write that a candidate hits `10.95%` unless:
+Do not write that a candidate hits `10.8000000%` unless:
 
 ```text
 scope_bytes == 1,000,000,000
