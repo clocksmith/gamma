@@ -1,0 +1,27 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Direct F32 LibNC RMSNorm value-and-input-gradient contract only; zero score and forecast credit.",
+  "deps": [],
+  "description": "Receipt-bound LibNC RMSNorm forward/backward primitive parity gate",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Direct external LibNC diagnostic compiled and invoked explicitly."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "A frozen direct LibNC probe determines whether RMSNorm semantics explain the remaining post-GELU online-update divergence.",
+  "id": "nncp_v33_libnc_rmsnorm_backward_parity_v1",
+  "kill_gate": "Stop on nondeterministic or malformed evidence; retire RMSNorm as the cause on a unique current-contract match and do not sweep epsilon, shape, or inputs.",
+  "omega": {
+    "interfaces_exposed": [
+      "Direct LibNC nc_rms_norm forward/backward bytes -> frozen PyTorch contract comparison"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+    "proposal_id": "nncp_v33_libnc_rmsnorm_backward_parity_v1",
+    "retired_neighborhoods": [
+      "Self-consistent approximate ROCm topology; activation-only GELU repair; architecture and optimizer sweeps."
+    ]
+  },
+  "parent": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "status": "candidate"
+}

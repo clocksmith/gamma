@@ -1,0 +1,30 @@
+{
+  "candidate_id": "nncp_v33_libnc_rmsnorm_backward_parity_v1",
+  "created_at": "2026-08-02T04:22:56+00:00",
+  "developed_at": "2026-08-02T04:24:45+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_tanh_gelu_online_update_parity_v1/decision.json; /home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.h; /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "A direct LibNC RMSNorm value-and-gradient probe identifies whether the existing PyTorch RMSNorm contract is another source of the remaining first-update divergence after the GELU repair.",
+  "interfaces_exposed": [
+    "Direct LibNC nc_rms_norm forward/backward bytes -> frozen PyTorch contract comparison"
+  ],
+  "kill_condition": "Stop on nondeterministic LibNC output or malformed gradient capture. A unique current-contract match retires RMSNorm as the cause; do not tune epsilon, dimensions, or input grids.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "parent": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "parent_proposal_id": "nncp_v33_libnc_tanh_gelu_online_update_parity_v1",
+  "priority": 156,
+  "promotion_condition": "Authorize one corrected bound miniature full-update replay only if exactly one non-current RMSNorm contract matches all direct LibNC gradients within 2e-6; otherwise retire RMSNorm backward as the cause when the current contract uniquely matches.",
+  "proposal_id": "nncp_v33_libnc_rmsnorm_backward_parity_v1",
+  "retired_neighborhoods": [
+    "Self-consistent approximate ROCm topology; activation-only GELU repair; architecture and optimizer sweeps."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 156,
+  "state": "developed",
+  "title": "NNCP v3.3 LibNC RMSNorm backward parity"
+}
