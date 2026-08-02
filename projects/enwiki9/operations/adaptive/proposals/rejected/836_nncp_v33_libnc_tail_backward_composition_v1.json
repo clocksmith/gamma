@@ -1,0 +1,34 @@
+{
+  "candidate_id": "nncp_v33_libnc_tail_backward_composition_v1",
+  "claimed_at": "2026-08-02T05:01:51+00:00",
+  "created_at": "2026-08-02T05:01:51+00:00",
+  "developed_at": "2026-08-02T05:06:23+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_internal_forward_trajectory_v1/decision.json; /home/x/enwiki9-nonproof/results/nncp_v33_online_update_parity_v1/run_07_bound/gradients/unknown_0006.bin; docs/research_register.md#2026-08-02-libnc-internal-forward-trajectory-is-exact"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "The receipt-bound LibNC final RMSNorm, output projection, softmax, indexed-log, and shared four-state accumulation reproduce the first divergent ff_bias2 gradient from exact captured pre-final states, isolating a composed backward contract that matched PyTorch primitives miss.",
+  "interfaces_exposed": [
+    "Four exact ff_out_bl states -> shared zero-delta LibNC tail graph -> receipt-bound ff_bias2 gradient"
+  ],
+  "kill_condition": "Stop on any archive, teacher-trace, tensor-repeat, probability, or gradient identity failure; if the direct LibNC tail does not reproduce ff_bias2, reject the assumed gradient mapping rather than changing a forward primitive.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "owner": "128",
+  "parent": "nncp_v33_libnc_internal_forward_trajectory_v1",
+  "parent_proposal_id": "nncp_v33_libnc_internal_forward_trajectory_v1",
+  "priority": 163,
+  "promotion_condition": "Authorize one source-bound tail operation-order localization only if two archive-identical captures and two byte-identical direct tail probes reproduce the bound ff_bias2 gradient within 2e-6 with identical signs while the matched PyTorch tail misses.",
+  "proposal_id": "nncp_v33_libnc_tail_backward_composition_v1",
+  "rejected_at": "2026-08-02T05:08:45+00:00",
+  "rejection_reason": "Exact source and tail identities passed, and LibNC matched the PyTorch tail within 7.45e-8, but both missed positional unknown_0006 by the same 0.0060333 offset in all 32 coordinates. Reject the composed-tail hypothesis and quarantine the unnamed gradient mapping pending source-instrumented names.",
+  "retired_neighborhoods": [
+    "Further forward-primitive mutations; isolated RMSNorm, output-matmul, loss, or decoder-schedule explanations."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 163,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC tail backward composition"
+}

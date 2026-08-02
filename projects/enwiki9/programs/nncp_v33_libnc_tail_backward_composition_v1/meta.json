@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Receipt-bound LibNC composed-tail backward localization only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_tail_backward_composition.py",
+    "tools/nncp_libnc_tail_backward_composition_probe.c",
+    "tools/nncp_libnc_internal_tensor_hook.c"
+  ],
+  "description": "Feed exact source-captured pre-final states through the LibNC decoder tail and compare its shared gradient to the bound ff_bias2 gradient",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound diagnostic compiling an instrumented external LibNC executable and a direct gradient probe."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The composed LibNC decoder tail reproduces the first divergent bound internal gradient even though matched isolated primitives do not identify a unique contract.",
+  "id": "nncp_v33_libnc_tail_backward_composition_v1",
+  "kill_gate": "Stop on source identity, tensor repeat, tail repeat, or probability identity failure; do not alter a forward primitive if the direct shared gradient misses the bound ff_bias2 gradient.",
+  "omega": {
+    "interfaces_exposed": [
+      "Four exact ff_out_bl states -> shared zero-delta LibNC tail graph -> receipt-bound ff_bias2 gradient"
+    ],
+    "mechanism_change": "other",
+    "parent_proposal_id": "nncp_v33_libnc_internal_forward_trajectory_v1",
+    "proposal_id": "nncp_v33_libnc_tail_backward_composition_v1",
+    "retired_neighborhoods": [
+      "Further forward-primitive mutations; isolated RMSNorm, output-matmul, loss, or decoder-schedule explanations."
+    ]
+  },
+  "parent": "nncp_v33_libnc_internal_forward_trajectory_v1",
+  "status": "candidate"
+}

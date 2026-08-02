@@ -1,0 +1,244 @@
+{
+  "build": {
+    "instrumented_nncp": {
+      "executable_sha256": "2e003b2804805d354321430f51e758397b040cc2825eda9278fb56c6d8487e9f",
+      "hook_command": [
+        "cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-shared",
+        "-fPIC",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_internal_tensor_hook.c",
+        "-L/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-lnc",
+        "-ldl",
+        "-o",
+        "/tmp/nncp-libnc-tail-xffnku10/tensor_hook.so"
+      ],
+      "hook_sha256": "c334222cbfc780def2046704dcb68e8a50f3691d76aeaf96c2b88554041d8459",
+      "hook_stderr": "",
+      "link_command": [
+        "cc",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-o",
+        "/tmp/nncp-libnc-tail-xffnku10/nncp_dump",
+        "/tmp/nncp-libnc-tail-xffnku10/nncp_dump.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cmdopt.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cp_utils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/arith.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/preprocess.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cutils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.so",
+        "-lz",
+        "-lm",
+        "-lpthread"
+      ],
+      "link_stderr": "",
+      "object_command": [
+        "cc",
+        "-O3",
+        "-Wall",
+        "-Wpointer-arith",
+        "-g",
+        "-fno-math-errno",
+        "-fno-trapping-math",
+        "-DCONFIG_VERSION=\"2024-06-05\"",
+        "-DLIBNC_CONFIG_FULL",
+        "-DDUMP_HASH",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c",
+        "-o",
+        "/tmp/nncp-libnc-tail-xffnku10/nncp_dump.o"
+      ],
+      "object_stderr": "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018log_init.constprop\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:2375:49: warning: \u2018/log.txt\u2019 directive output may be truncated writing 8 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 2375 |         snprintf(filename, sizeof(filename), \"%s/log.txt\", st->debug_dir);\n      |                                                 ^~~~~~~~\nIn file included from /usr/include/stdio.h:974,\n                 from /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:25:\nIn function \u2018snprintf\u2019,\n    inlined from \u2018log_init.constprop\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:2375:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1032 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018encode_file\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3470:51: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3470 |             snprintf(filename, sizeof(filename), \"%s/plot.txt\", st->debug_dir);\n      |                                                   ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3470:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 10 and 1105 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018encode_file\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3479:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3479 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3479:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018encode_file\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3490:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3490 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3489:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018encode_file\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3497:25: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3497 |                      \"%s.voc\", out_filename);\n      |                         ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3496:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018decode_file\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3656:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3656 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3656:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018decode_file\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3687:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3687 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3686:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c: In function \u2018decode_file\u2019:\n/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3689:21: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3689 |                  \"%s.voc\", out_filename);\n      |                     ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp.c:3688:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n"
+    },
+    "tail_probe": {
+      "command": [
+        "cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_tail_backward_composition_probe.c",
+        "-L/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-lnc",
+        "-lm",
+        "-ldl",
+        "-lpthread",
+        "-o",
+        "/tmp/nncp-libnc-tail-xffnku10/tail_probe"
+      ],
+      "executable_sha256": "84127d48dae8536dc524071610b24fe5427b8776b8c632ef1daced3b60baf1b5",
+      "stderr": ""
+    }
+  },
+  "candidate_id": "nncp_v33_libnc_tail_backward_composition_v1",
+  "contract": {
+    "classes": 256,
+    "features": 32,
+    "states": 4,
+    "tail": [
+      "shared zero delta",
+      "RMSNorm epsilon 1e-5",
+      "final gain and bias",
+      "256 by 32 output projection and bias",
+      "F32 conversion",
+      "per-state softmax",
+      "four-state concat optimization",
+      "indexed log and negative mean"
+    ],
+    "targets": [
+      60,
+      109,
+      101,
+      100
+    ],
+    "threshold": 2e-06
+  },
+  "decision": {
+    "authorized_next_action": "reject the assumed ff_bias2 mapping or direct-tail graph; do not alter a forward primitive",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": false,
+    "verified_full_1g_score_bytes": null
+  },
+  "gradient": {
+    "bound_mapping": "unknown_0006.bin -> ff_bias2_0",
+    "direct_libnc_matches_bound": false,
+    "direct_libnc_vs_bound_ff_bias2": {
+      "candidate_l2_norm": 0.5235631353041905,
+      "candidate_zero_count": 0,
+      "elements": 32,
+      "maximum_absolute_error": 0.006033394485712051,
+      "mean_absolute_error": 0.006033324985764921,
+      "reference_l2_norm": 0.5243634746325584,
+      "reference_zero_count": 0,
+      "relative_l2_error": 0.0650877525532505,
+      "sign_mismatches": 0
+    },
+    "direct_libnc_vs_pytorch_tail": {
+      "candidate_l2_norm": 0.5235630962458039,
+      "candidate_zero_count": 0,
+      "elements": 32,
+      "maximum_absolute_error": 7.450580596923828e-08,
+      "mean_absolute_error": 2.8259819373488426e-08,
+      "reference_l2_norm": 0.5235631353041905,
+      "reference_zero_count": 0,
+      "relative_l2_error": 3.8577351740072673e-07,
+      "sign_mismatches": 0
+    },
+    "pytorch_tail_matches_bound": false,
+    "pytorch_tail_vs_bound_ff_bias2": {
+      "candidate_l2_norm": 0.5235630962458039,
+      "candidate_zero_count": 0,
+      "elements": 32,
+      "maximum_absolute_error": 0.006033346056938171,
+      "mean_absolute_error": 0.006033322337316349,
+      "reference_l2_norm": 0.5243634746325584,
+      "reference_zero_count": 0,
+      "relative_l2_error": 0.06508772398076608,
+      "sign_mismatches": 0
+    }
+  },
+  "identity": {
+    "bound_archive_sha256": "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da",
+    "bound_trace_sha256": "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4",
+    "capture_bound_identity": true,
+    "direct_probability_vs_teacher": {
+      "candidate_l2_norm": 0.13928385697413512,
+      "candidate_zero_count": 0,
+      "elements": 1024,
+      "maximum_absolute_error": 0.0,
+      "mean_absolute_error": 0.0,
+      "reference_l2_norm": 0.13928385697413512,
+      "reference_zero_count": 0,
+      "relative_l2_error": 0.0,
+      "sign_mismatches": 0
+    },
+    "dump_repeat_byte_identical": true,
+    "pytorch_probability_vs_teacher": {
+      "candidate_l2_norm": 0.13928385046087813,
+      "candidate_zero_count": 0,
+      "elements": 1024,
+      "maximum_absolute_error": 3.725290298461914e-09,
+      "mean_absolute_error": 2.766569195955526e-10,
+      "reference_l2_norm": 0.13928385697413512,
+      "reference_zero_count": 0,
+      "relative_l2_error": 1.0976000189605695e-07,
+      "sign_mismatches": 0
+    },
+    "run_archive_sha256": [
+      "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da",
+      "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da"
+    ],
+    "run_dump_sha256": [
+      "fc8270e93d83baf84e9c8f2fb5ca0a63ec273a8b2c4e5f2d5ea915f48d626d8b",
+      "fc8270e93d83baf84e9c8f2fb5ca0a63ec273a8b2c4e5f2d5ea915f48d626d8b"
+    ],
+    "run_trace_sha256": [
+      "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4",
+      "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+    ],
+    "tail_commands": [
+      [
+        "/tmp/nncp-libnc-tail-xffnku10/tail_probe",
+        "/tmp/nncp-libnc-tail-xffnku10/first/tensors/004_ff_out_bl.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/first/tensors/011_ff_out_bl.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/first/tensors/018_ff_out_bl.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/first/tensors/025_ff_out_bl.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00013.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00014.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00016.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00017.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/tail_first"
+      ],
+      [
+        "/tmp/nncp-libnc-tail-xffnku10/tail_probe",
+        "/tmp/nncp-libnc-tail-xffnku10/second/tensors/004_ff_out_bl.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/second/tensors/011_ff_out_bl.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/second/tensors/018_ff_out_bl.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/second/tensors/025_ff_out_bl.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00013.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00014.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00016.bin",
+        "/home/x/enwiki9-nonproof/results/nncp_v33_relative_parity_v1/run_05/export/00017.bin",
+        "/tmp/nncp-libnc-tail-xffnku10/tail_second"
+      ]
+    ],
+    "tail_repeat_byte_identical": true,
+    "tail_run_sha256": [
+      "82b6443ad8f698005f2a3b5f9c4163849a7518d3bdb1581c9e59e6a19cdaf628",
+      "82b6443ad8f698005f2a3b5f9c4163849a7518d3bdb1581c9e59e6a19cdaf628"
+    ]
+  },
+  "inputs": {
+    "bound_ff_bias2_gradient_sha256": "958538f55c9360d8b37fd80d9456d44175a739358daef45cdc891189e3458ad0",
+    "bound_input_sha256": "e281f1f7b138d076f139cdbdf9c841819d282800979cc3c3d29698a3ccf89edf",
+    "decoder_graph_tool_sha256": "ec62e6967c69fe020ff7dd6744552ef35367d3da1cc2545c43c6e5b165f9dc92",
+    "exported_parameter_types": [
+      "f32"
+    ],
+    "hook_source_sha256": "c884e30398aec829b67cf80930822697426fe24c8b721ac0873eca1f225cbad0",
+    "initial_coefs_sha256": "107d3c54d69d0364452be3dd9617189fdac2a913999b9ae72795a04af076de4a",
+    "initial_manifest_sha256": "6947405fd472b7401fe3460b037bfc17a788c04582ff5215b21f4821621104cd",
+    "internal_forward_tool_sha256": "6d537a32914fbd0f4e118d6c00d28c497e1d5fd59191ba478062f8c21aab9b62",
+    "libnc_header_sha256": "d0e341301e66eec8647b055d6d704ca254051bf877036599423e83e39a7132c6",
+    "libnc_library_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+    "libnc_source_sha256": "9a44757c4837607b0be9abc0bb2780dbe006b381728549481eedc339599a138a",
+    "probe_source_sha256": "7caa8b68a5eaaf5adececd39824af66bfc925ce926ef396d05adf2b1b7344974",
+    "script_sha256": "d024684a4259627995f52ce476077c0d92f891331dcaf52918a9d4b978d58052"
+  },
+  "schema": "gamma.nncp_v33_libnc_tail_backward_composition.v1",
+  "score_credit_bytes": 0,
+  "status": "TAIL_NOT_REPRODUCED"
+}
