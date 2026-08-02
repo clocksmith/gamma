@@ -6329,3 +6329,66 @@ unknown, and this gate has zero score credit.
 
 Plan:
 `docs/nncp_v33_libnc_cpu_encode_only_causal_speed_q0_plan.md`.
+
+## 2026-08-02: NNCP LibNC CPU encode-only causal-speed Q0 passes
+
+The frozen tool job completed normally in `168.567` seconds. The two
+encode-only executions took `62.5553` and `61.5424` seconds against the
+`279.797`-second ordinary T4 reference, so the first execution reduced elapsed
+time by `77.642612%` and cleared the `139.8985`-second ceiling. Peak sampled
+process-tree RSS was `5,443,288 KiB`, below the decimal-10GB limit.
+
+Both encode-only archives were byte-identical at `9,244` bytes with SHA-256
+`a166172e02bde58271ffd51cee9197e9b8a113ff798331f55edcc25029c0a609`.
+Enabling the probability observer did not change the mini archive. All 4,096
+checked probability rows were finite, nonnegative, and normalized. The frozen
+future-symbol perturbation compared 2,017 eligible rows and left every
+preceding distribution, including the distribution for the changed stream at
+the changed position, bit-identical.
+
+This is a positive infrastructure result, not a compression result. Upstream
+marks the encode-only archive non-decodable; it is usable only as a causal
+teacher and receives zero score credit. The pass authorizes exactly one
+continuous full-dictionary teacher execution from symbol zero through the
+frozen `9M-10M` raw window. That same-population gate must show at least
+`3,000 B/M` exact arithmetic advantage over the frozen joint Gamma trajectory.
+Forecast remains `109,389,323`, design-target debt remains `1,389,323`, and
+verified full-1G remains unknown.
+
+Decision:
+`results/nncp_v33_libnc_cpu_encode_only_causal_speed_q0_v1/decision.json`.
+
+## 2026-08-02: NNCP full-dictionary mature 9M-10M teacher Q1 frozen
+
+Candidate:
+`nncp_v33_libnc_cpu_encode_only_mature_9m_10m_q1_v1`.
+
+The Q0 pass authorizes one continuous full-dictionary teacher execution from
+symbol zero through the mature raw interval `[9,000,000, 9,999,992)`, bound by
+the exact NNCP symbol interval `[2,000,597, 2,229,154)`. The primary parent is
+the exact JANUS-plus-quotient joint trajectory over the matching WRT interval.
+
+Encode-only NNCP emits symbols in an interleaved multi-stream execution order,
+so execution-row prefix subtraction would not represent the frozen raw
+window. Q1 therefore records the original preprocessed ordinal for every
+consumed branch path. It constructs and decodes an actual finite arithmetic
+stream containing only branch decisions whose original ordinals lie in the
+frozen interval. The joint control is an actual decoded stream containing only
+the matching WRT truth bits. Both use the same range coder; log-loss estimates
+and prefix-size subtraction are forbidden.
+
+Before the mature execution, the original binary, observed binary with tracing
+disabled, and observed binary with tracing enabled must emit byte-identical
+10,000-symbol full-dictionary smoke archives. The long trace must be an exact
+permutation of every original ordinal through symbol `2,229,154`, match the
+frozen truth, use only legal nonzero integer probabilities, and remain below
+decimal 10GB process-tree RSS.
+
+At `999,992` raw bytes, at least `3,000 B/M` exact teacher advantage authorizes
+only the frozen `49M-50M` continuation. A valid miss retires this mature teacher
+lane without thread, model, dictionary, checkpoint, precision, batch,
+observer, or window rescue sweeps. This is non-decodable teacher evidence and
+has zero score credit regardless of outcome.
+
+Plan:
+`docs/nncp_v33_libnc_cpu_encode_only_mature_9m_10m_q1_plan.md`.
