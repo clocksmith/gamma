@@ -6661,6 +6661,14 @@ retires the exact universe without rescue sweeps; a pass authorizes only a paid
 hit/escape-and-rank Q0. Plan:
 `docs/wikiforward_prior_destination_page_lexicon_qm1_plan.md`.
 
+A 2026-08-02 donor preflight now binds the exact Git blobs and SHA-256 values
+for the WIKIBACK link parser, Wiki state, role classifier, Q256 generator, page
+mapper, and WRT parser. All were present and matched current tracked bytes.
+Future materialization must use those donor objects or create a new proposal
+version; later-HEAD imports cannot silently redefine the frozen causal grammar.
+This adds reproducibility only and does not validate the unretained exploratory
+ceiling, activate QM1, or grant score credit.
+
 ## 2026-08-02: three proposed families audited for actual novelty
 
 Three additional suggestions were compared against the register, exclusions,
