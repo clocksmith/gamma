@@ -2,8 +2,8 @@
 
 Proposal: `srstc_residual_program_retrieval_q0_v1`
 
-Status: frozen design review required. No implementation, queue entry, model
-run, compression result, or score credit exists.
+Status: claimed for Gate minus one implementation. No compression result or
+score credit exists.
 
 ## Win condition
 
@@ -134,6 +134,13 @@ event_chain:
 parent_confidence:
   high nibble of endpoint428 P1 for the first block bit
 ```
+
+For the executable realization, `simhash16` is the repository's frozen
+three-byte-ngram FNV SimHash from `tools/streaming_retrieval_shadow.py`.
+`hash8` is the low byte of FNV-1a-64. The event-chain hash is FNV-1a-64 over
+each encoded event's byte length followed by its bytes, truncated to 16 bits.
+Residual symbols map to unsigned values through `q + 3` and are packed MSB
+first with no padding because `128 * 3` is exactly 48 bytes.
 
 The one frozen key language is:
 
@@ -341,10 +348,10 @@ must introduce a materially different information source or coded endpoint.
 
 ## Artifact and execution gate
 
-The original and minified endpoint428 parent packages were recovered and
-identity-verified on `/home/x`; they are not currently materialized on this
-host. The committed receipts are sufficient for provenance and canonical
-accounting, but not for this replay.
+The original and minified endpoint428 parent packages, executable, backend,
+dictionary, P1, WRT store, and page map are materialized on this `/home/x`
+host and match the identities below. Gate minus one may run after its tool and
+candidate receipts are committed and synchronized.
 
 Before Gate minus one or Q0 can run here, transfer and hash-check:
 
@@ -368,7 +375,7 @@ program, or queue entry is created.
 
 ```text
 candidate:          srstc_residual_program_retrieval_q0_v1
-status:             frozen design review required
+status:             claimed for Gate minus one
 mathematics:        same-stream causal construction specified
 compression result: unmeasured
 source status:      no implementation

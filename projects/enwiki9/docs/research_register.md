@@ -6128,12 +6128,12 @@ sealed confirmation, save at least `3,000 B/M` gross and `2,100 B/M` after
 complete projected package cost, and satisfy exact arithmetic, WRT, official
 inverse, and duplicate-replay checks.
 
-No implementation or queue entry is authorized yet. A zero-credit
-decoder-visible candidate-universe ceiling must first clear `3,000 B/M` on all
-three chronological splits. Execution also requires hash-checked transfer of
-the receipt-bound endpoint428 source packages, current-parent P1, WRT store,
-wrapper, backend, dictionary, page map, and trace decision, none of which is
-materialized on this host except the page map and committed metadata.
+The proposal is now claimed for the zero-credit decoder-visible
+candidate-universe ceiling, which must clear `3,000 B/M` on all three
+chronological splits before the causal control family may be materialized.
+The receipt-bound endpoint428 source packages, current-parent P1, WRT store,
+wrapper, backend, dictionary, page map, and trace decision are materialized on
+this `/home/x` host and match their frozen identities.
 
 Evidence:
 
@@ -6189,3 +6189,28 @@ score credit remains zero.
 
 Decision:
 `results/mobius2_noema_semantic_boundary_hierarchy_qh0_v1/decision.json`.
+
+## 2026-08-02: endpoint428 FX2 update-schedule audit finds no duplicate-state bug
+
+The recovered endpoint428 source was audited only after exact parent recovery.
+`Predictor::Perceive` schedules the independent FX2-lite endpoint update,
+skips the compact FXCM inside the ordinary model loop, and updates that compact
+FXCM exactly once after its byte-mixer output has supplied `lstmpr` and
+`lstmex`. The endpoint branch updates its own FXCM exactly once inside
+`Endpoint::PerceiveSync`.
+
+The Makefile compiles the endpoint branch with renamed FXCM, namespace, and
+LSTM-output symbols. The compact and endpoint FXCM states are separate objects
+and use different compound-context divisors. The apparent double update is
+therefore two independent ensemble experts advanced once each, not one state
+advanced twice. Removing either call would be expert deletion and cannot be
+presented as a correctness correction. Existing freeze experiments already
+cover reduced FX2 training/update work without establishing target-bearing
+economics.
+
+No mutation, compression result, forecast credit, or full-corpus claim follows
+from this audit. The SRSTC residual-program candidate-universe ceiling remains
+the next claimed mechanism because it changes the retrieved information and
+the multi-step coded endpoint.
+
+Audit: `docs/endpoint428_fx2_update_schedule_audit.md`.
