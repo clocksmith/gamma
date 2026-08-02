@@ -7025,3 +7025,34 @@ the canonical zlib-9 bundle remains `54,544` bytes with SHA-256
 `11deeae7ee067c89d46721552030174aa6506665e32fa24cb42e9a37cd876847`,
 and the counted allowance remains `54,608` bytes. The candidate stays unqueued
 until the active NNCP heavy gate is terminal.
+
+## 2026-08-02: exact 10M parent restored to generated proof status
+
+The upper-bound generator previously recognized only generic driver result
+JSONs with top-level `program_id`, `data_size`, and `roundtrip_ok`. Endpoint428's
+canonical exact receipts use the counted-10M codec/package schema instead, so
+the generated operator status incorrectly reported both exact 10M fields as
+missing while the frontier and receipts correctly recorded the proof.
+
+The generator now adapts that schema only when the receipt is Git-tracked, the
+scope is exactly `10,000,000`, roundtrip and deterministic re-encode are true,
+archive and package sizes are positive integers, and any inherited codec proof
+is itself a tracked project-relative JSON with matching archive bytes. The
+restored exact rows are:
+
+```text
+best exact 10M score
+  archive                    1,634,500
+  minified package             261,125
+  counted prefix score       1,895,625
+
+best exact 10M archive
+  archive                    1,634,500
+  original exact package       280,147
+  counted prefix score       1,914,647
+```
+
+Both bind raw SHA-256
+`5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97`.
+This restores the exact parent certificate boundary; it does not create a
+full-1G result, qualify runtime, or alter the `109,389,323` forecast.
