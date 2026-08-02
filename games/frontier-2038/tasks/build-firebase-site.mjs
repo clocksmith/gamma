@@ -205,7 +205,11 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
       title,
       href: `docs/${name}`,
       description: name === "core-rules.html"
-        ? "The complete controlled physical-test rules candidate."
+        ? "How to play the controlled physical-test rules candidate."
+        : name === "world-and-institutions.html"
+          ? "Setting, tone, Era fiction, and ending narratives."
+          : name === "optional-tactics.html"
+            ? "The excluded Tactic module’s complete optional rules."
         : "Generated from the canonical Markdown documentation."
     });
   }

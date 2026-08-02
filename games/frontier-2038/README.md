@@ -17,8 +17,12 @@ without direct combat or elimination.
 
 This repository is a **prototype**, not a manufactured or published product.
 
-- The supplied rules baseline is preserved in
-  [`docs/core-rules.md`](docs/core-rules.md).
+- The supplied rules baseline is preserved in the generated
+  [How to Play and Rules Reference](docs/core-rules.md).
+- Setting, tone, Era fiction, and ending narratives are separated into
+  [World and Institutions](docs/world-and-institutions.md).
+- The excluded Tactic module retains its complete contract in
+  [Optional Tactic Rules](docs/optional-tactics.md).
 - Current rationale and implementation boundaries are recorded in
   [`docs/design-decisions.md`](docs/design-decisions.md).
 - Defect investigation, containment, regression, and closure rules are in
@@ -31,8 +35,8 @@ This repository is a **prototype**, not a manufactured or published product.
 - The browser prototype lives in [`web/`](web/).
 - Machine-readable content lives in [`generated/`](generated/).
 - The canonical semantic content graph lives in [`content/`](content/README.md);
-  it generates the rulebook, game data, prototype HTML, UI copy, and simulation
-  descriptions.
+  it generates the player documents, game data, prototype HTML, UI copy, and
+  simulation descriptions.
 - The complete first-pass thematic inventory and writing contract live in
   [`docs/thematic-content-bible.md`](docs/thematic-content-bible.md) and
   [`generated/content-manifest.json`](generated/content-manifest.json).
@@ -42,8 +46,9 @@ This repository is a **prototype**, not a manufactured or published product.
 - Balance, counter-strategy, exploitability, and promotion gates are defined in
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
-The lean physical rulebook is under controlled review at `0.5.0-rc.32-test`.
-Executable game `0.8.32` implements that candidate under
+The separated physical rules candidate is under controlled review at
+`0.5.0-rc.33-test`.
+Executable game `0.8.33` implements that candidate under
 `three-to-five-grid-ready-v1`, including persistent Grid-Ready markers, immediate
 Production power trades, and the reduced two-source energy contract. Synchronization
 means the browser and simulator execute the selected contract; it does not
@@ -70,9 +75,9 @@ npm run dev
 That single command rebuilds every generated content artifact and then starts
 the canonical server:
 
-- `http://localhost:8038/` — play the synchronized `0.8.32` game and export its
+- `http://localhost:8038/` — play the synchronized `0.8.33` game and export its
   replay.
-- `http://localhost:8038/lab` — run `0.8.32` tournaments, strategy evolution,
+- `http://localhost:8038/lab` — run `0.8.33` tournaments, strategy evolution,
   and rule-balance searches.
 - `http://localhost:8038/docs` — read the generated, cross-linked project docs.
 - `http://localhost:8038/gallery` — review all player-facing component text and
@@ -141,8 +146,8 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the executable `0.8.32`
-bundle, its synchronized `0.5.0-rc.32-test` physical-rules candidate, both
+`npm run check` is the release gate. It verifies the executable `0.8.33`
+bundle, its synchronized `0.5.0-rc.33-test` physical-rules candidate, both
 identity vocabularies, numeric provenance, and generated content.
 
 Create and verify the attributed artifacts with:

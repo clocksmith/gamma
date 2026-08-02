@@ -10,7 +10,8 @@ projections. All physical component-specific prose lives here.
 
 | File | Physical surface |
 | --- | --- |
-| `core-rules.md` | Rulebook |
+| `core-rules.md` | Baseline How to Play and complete mechanical reference |
+| `world-and-institutions.md` | Setting, tone, Era fiction, and ending narratives |
 | `content-manifest.json` | Baseline component inventory and copy status |
 | `variables.json` | Canonical names, terms, and shared game facts |
 | `game-config.json` | Core Actions, Training deck, map, resources, and components |
@@ -20,6 +21,7 @@ projections. All physical component-specific prose lives here.
 | `reference-cards.json` | Era cards and player aids |
 | `wild-actions.json` | Wild Action cards |
 | `world-copy.json` | Box, world, token, declaration, and ending copy |
+| `optional/tactics-rules.md` | Deferred Tactic setup, timing, and card-rule projection |
 
 Run `npm run content:build` after editing. The compiler projects these files
 to the rulebook and runtime data; do not edit those generated outputs directly.

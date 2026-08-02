@@ -12,13 +12,13 @@ test("release index separates executable game from physical rules candidate", as
   const executable = await readJson(current.manifest);
   const candidate = await readJson(current.rulesCandidate.manifest);
 
-  assert.equal(current.gameVersion, "0.8.32");
-  assert.equal(executable.gameVersion, "0.8.32");
-  assert.equal(current.rulesCandidate.version, "0.5.0-rc.32-test");
+  assert.equal(current.gameVersion, "0.8.33");
+  assert.equal(executable.gameVersion, "0.8.33");
+  assert.equal(current.rulesCandidate.version, "0.5.0-rc.33-test");
   assert.equal(candidate.artifactKind, "physical-rules-candidate");
   assert.equal(candidate.implementation.status, "synchronized");
-  assert.equal(candidate.implementation.executableGameVersion, "0.8.32");
-  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.32");
+  assert.equal(candidate.implementation.executableGameVersion, "0.8.33");
+  assert.equal(candidate.implementation.implementedByGameVersion, "0.8.33");
   assert.notEqual(current.rulesetFingerprint, current.rulesCandidate.rulesFingerprint);
   assert.match(current.contentGraphFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(executable.contentGraphFingerprint, current.contentGraphFingerprint);
@@ -29,14 +29,16 @@ test("release index separates executable game from physical rules candidate", as
   assert.ok(!Object.hasOwn(executable.files, "generated/simulation-copy.json"));
   assert.ok(Object.hasOwn(executable.kitFiles, "generated/simulation-copy.json"));
   assert.ok(Object.hasOwn(candidate.files, "docs/core-rules.md"));
+  assert.ok(Object.hasOwn(candidate.files, "docs/world-and-institutions.md"));
+  assert.ok(Object.hasOwn(candidate.files, "docs/optional-tactics.md"));
 });
 
 test("complexity-reduction review rules preserve precision and remove table accounting", async () => {
   const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
   const normalizedRules = rules.replace(/\s+/g, " ");
   for (const clause of [
-    "**Rules version:** 0.5.0-rc.32-test",
-    "synchronized with executable game 0.8.32",
+    "**Rules version:** 0.5.0-rc.33-test",
+    "synchronized with executable game 0.8.33",
     "Influence may place or relocate one additional cube on Government",
     "only if the Headline explicitly instructs the table",
     "A **solo Mega-Cluster**",
@@ -387,12 +389,12 @@ test("Headline deck preserves eight anchors and sixteen future regimes", async (
 });
 
 test("the tone constitution keeps darkness institutional rather than voyeuristic", async () => {
-  const [rules, thematicBible] = await Promise.all([
-    readFile(new URL("docs/core-rules.md", root), "utf8"),
+  const [world, thematicBible] = await Promise.all([
+    readFile(new URL("docs/world-and-institutions.md", root), "utf8"),
     readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
   ]);
 
-  for (const document of [rules, thematicBible]) {
+  for (const document of [world, thematicBible]) {
     const normalized = document.replace(/\s+/g, " ");
     assert.match(normalized, /Darkness is reported at institutional distance/);
     assert.match(normalized, /do not stage first-person torment, body horror, or voyeuristic suffering/);
