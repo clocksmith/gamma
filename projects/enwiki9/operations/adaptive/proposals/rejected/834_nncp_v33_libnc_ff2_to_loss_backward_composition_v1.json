@@ -1,0 +1,34 @@
+{
+  "candidate_id": "nncp_v33_libnc_ff2_to_loss_backward_composition_v1",
+  "claimed_at": "2026-08-02T05:18:00+00:00",
+  "created_at": "2026-08-02T05:18:00+00:00",
+  "developed_at": "2026-08-02T05:21:01+00:00",
+  "evidence": [
+    "results/nncp_v33_libnc_named_gradient_trajectory_v1/decision.json; results/nncp_v33_libnc_tail_backward_composition_v1/decision.json; results/nncp_v33_libnc_internal_forward_trajectory_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2128005,
+  "hypothesis": "Adding the shared FF2 projection, bias, and residual join to the exact LibNC tail recreates the full optimized graph contract and reproduces the receipt-bound ff2_0 and ff_bias2_0 gradients that the isolated tail and matched PyTorch composition miss.",
+  "interfaces_exposed": [
+    "Exact attn_out plus ff2_in states -> shared FF2 projection and bias -> exact decoder tail -> named ff2 and bias gradients"
+  ],
+  "kill_condition": "Stop on source, tensor, probe, or probability identity failure; if the direct LibNC block misses either named bound gradient, retire FF2-to-loss composition as sufficient and move the boundary earlier without changing a proved forward primitive.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "substrate",
+  "owner": "128",
+  "parent": "nncp_v33_libnc_named_gradient_trajectory_v1",
+  "parent_proposal_id": "nncp_v33_libnc_named_gradient_trajectory_v1",
+  "priority": 165,
+  "promotion_condition": "Authorize one faithful FF2-to-loss replay child only if two archive-identical source captures and two byte-identical direct block probes reproduce teacher probabilities and both bound ff2_0 and ff_bias2_0 gradients within 2e-6 with identical signs while the matched PyTorch block misses.",
+  "proposal_id": "nncp_v33_libnc_ff2_to_loss_backward_composition_v1",
+  "rejected_at": "2026-08-02T05:22:14+00:00",
+  "rejection_reason": "Exact source, tensor, probe, and probability identities passed. Direct LibNC matched PyTorch within 4.47e-8 on ff2 and 7.45e-8 on bias, but both retained the source-bound gradient misses. Retire FF2-to-loss composition and test joint concat-optimization root scope.",
+  "retired_neighborhoods": [
+    "Isolated decoder tail; positional gradient inference; output projection and loss primitives."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 165,
+  "state": "rejected",
+  "title": "NNCP v3.3 LibNC FF2-to-loss backward composition"
+}

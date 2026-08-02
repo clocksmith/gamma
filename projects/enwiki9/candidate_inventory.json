@@ -15274,6 +15274,42 @@
       "untracked_source_files": []
     },
     {
+      "deps": [
+        "tools/nncp_v33_libnc_ff2_to_loss_backward_composition.py",
+        "tools/nncp_libnc_ff2_to_loss_backward_composition_probe.c",
+        "tools/nncp_libnc_internal_tensor_hook.c"
+      ],
+      "description": "Extend the exact isolated decoder tail by the shared FF2 projection and residual join, then compare both named gradients",
+      "driver_program_size": 0,
+      "has_meta_json": true,
+      "has_program_py": false,
+      "id": "nncp_v33_libnc_ff2_to_loss_backward_composition_v1",
+      "meta_id": "nncp_v33_libnc_ff2_to_loss_backward_composition_v1",
+      "meta_id_matches_directory": true,
+      "meta_status": "candidate",
+      "missing_payload_targets": [],
+      "reasons": [
+        "missing_program_py",
+        "not_in_index_json",
+        "has_untracked_source_files"
+      ],
+      "registered": false,
+      "results": {
+        "best_valid_meta_evidence": null,
+        "best_valid_result": null,
+        "result_files": 1,
+        "total_valid_evidence": 0,
+        "valid_meta_evidence": 0,
+        "valid_result_files": 0
+      },
+      "source_file_entries": 1,
+      "status": "track_source_before_evolution",
+      "tracked_source_file_entries": 0,
+      "untracked_source_files": [
+        "projects/enwiki9/programs/nncp_v33_libnc_ff2_to_loss_backward_composition_v1/meta.json"
+      ]
+    },
+    {
       "deps": [],
       "description": "Capture labeled LibNC forward tensors from an archive-identical DUMP_HASH build and compare the state-major trajectory",
       "driver_program_size": 0,
@@ -15318,8 +15354,7 @@
       "missing_payload_targets": [],
       "reasons": [
         "missing_program_py",
-        "not_in_index_json",
-        "has_untracked_source_files"
+        "not_in_index_json"
       ],
       "registered": false,
       "results": {
@@ -15331,11 +15366,9 @@
         "valid_result_files": 0
       },
       "source_file_entries": 1,
-      "status": "track_source_before_evolution",
-      "tracked_source_file_entries": 0,
-      "untracked_source_files": [
-        "projects/enwiki9/programs/nncp_v33_libnc_named_gradient_trajectory_v1/meta.json"
-      ]
+      "status": "retired",
+      "tracked_source_file_entries": 1,
+      "untracked_source_files": []
     },
     {
       "deps": [],
@@ -21229,7 +21262,7 @@
       "untracked_source_files": []
     }
   ],
-  "generated_at": "2026-08-02T05:17:04+00:00",
+  "generated_at": "2026-08-02T05:22:25+00:00",
   "ignored_entries": [
     "projects/enwiki9/data/enwik9",
     "projects/enwiki9/lib/__pycache__/driver.cpython-314.pyc",
@@ -23567,7 +23600,7 @@
     "projects/enwiki9/results/nncp_teacher_causal_trace_10k_v1/rss_guard.json",
     "projects/enwiki9/results/nncp_teacher_causal_trace_10k_v1/rss_guard_trace_off.json",
     "projects/enwiki9/results/nncp_v2_rocm_smoke_v1/receipt.json",
-    "projects/enwiki9/results/nncp_v33_libnc_named_gradient_trajectory_v1/decision.json",
+    "projects/enwiki9/results/nncp_v33_libnc_ff2_to_loss_backward_composition_v1/decision.json",
     "projects/enwiki9/results/numeric_v1/2026-07-21T124136.json",
     "projects/enwiki9/results/numeric_v1/2026-07-21T124138.json",
     "projects/enwiki9/results/online_residual_program_1m_v1/receipt.json",
@@ -23873,6 +23906,7 @@
     "projects/enwiki9/run_logs/adaptive/20260802T050635Z_d84338a6bd.log",
     "projects/enwiki9/run_logs/adaptive/20260802T051345Z_49030a68c3.log",
     "projects/enwiki9/run_logs/adaptive/20260802T051608Z_542efed9f7.log",
+    "projects/enwiki9/run_logs/adaptive/20260802T052114Z_f309797dab.log",
     "projects/enwiki9/run_logs/archive/progress_legacy.log",
     "projects/enwiki9/run_logs/archive/status_live_20260721.json",
     "projects/enwiki9/run_logs/archive/status_snapshot_accidental_dash_20260721.json",
@@ -24449,14 +24483,14 @@
       "blocked_dependency": 31,
       "candidate": 24,
       "measured_negative": 99,
-      "retired": 457,
+      "retired": 458,
       "track_source_before_evolution": 1
     },
-    "directories": 1502,
-    "file_entries": 6867,
-    "ignored_entries": 3205,
+    "directories": 1504,
+    "file_entries": 6875,
+    "ignored_entries": 3206,
     "modified_tracked_entries": 3,
-    "program_directories": 630,
+    "program_directories": 631,
     "registered_programs": 260,
     "top_level_file_entries": {
       ".claude": 1,
@@ -24465,20 +24499,20 @@
       "agents": 5,
       "contracts": 9,
       "data": 7,
-      "docs": 274,
+      "docs": 275,
       "external": 174,
       "lib": 4,
-      "operations": 670,
+      "operations": 672,
       "patches": 36,
-      "programs": 2117,
-      "results": 2620,
-      "run_logs": 491,
+      "programs": 2118,
+      "results": 2621,
+      "run_logs": 492,
       "skills": 4,
       "tests": 58,
-      "tools": 375
+      "tools": 377
     },
-    "tracked_entries": 3910,
-    "untracked_nonignored_entries": 7
+    "tracked_entries": 3918,
+    "untracked_nonignored_entries": 6
   },
   "tracking_policy": {
     "ignored_local_artifacts": [
@@ -24505,12 +24539,11 @@
     ]
   },
   "untracked_nonignored_entries": [
-    "projects/enwiki9/docs/nncp_v33_libnc_named_gradient_trajectory_plan.md",
-    "projects/enwiki9/operations/adaptive/completed/835_20260802T051608Z_542efed9f7.json",
-    "projects/enwiki9/operations/adaptive/failed/835_20260802T051345Z_49030a68c3.json",
-    "projects/enwiki9/operations/adaptive/proposals/developed/835_nncp_v33_libnc_named_gradient_trajectory_v1.json",
-    "projects/enwiki9/programs/nncp_v33_libnc_named_gradient_trajectory_v1/meta.json",
-    "projects/enwiki9/tools/nncp_libnc_named_gradient_capture.c",
-    "projects/enwiki9/tools/nncp_v33_libnc_named_gradient_trajectory.py"
+    "projects/enwiki9/docs/nncp_v33_libnc_ff2_to_loss_backward_composition_plan.md",
+    "projects/enwiki9/operations/adaptive/completed/834_20260802T052114Z_f309797dab.json",
+    "projects/enwiki9/operations/adaptive/proposals/rejected/834_nncp_v33_libnc_ff2_to_loss_backward_composition_v1.json",
+    "projects/enwiki9/programs/nncp_v33_libnc_ff2_to_loss_backward_composition_v1/meta.json",
+    "projects/enwiki9/tools/nncp_libnc_ff2_to_loss_backward_composition_probe.c",
+    "projects/enwiki9/tools/nncp_v33_libnc_ff2_to_loss_backward_composition.py"
   ]
 }

@@ -4969,3 +4969,52 @@ changes.
 
 Decision:
 `results/nncp_v33_libnc_named_gradient_trajectory_v1/decision.json`.
+
+## 2026-08-02: LibNC FF2-to-loss composition frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_ff2_to_loss_backward_composition_v1`.
+
+The named trajectory localizes the first actual gradient divergence to
+`ff2_0`, while the isolated exact decoder tail fails to reproduce the bound
+`ff_bias2_0` gradient. This child adds exactly the missing shared feed-forward
+output projection. It consumes source-captured `ff2_in` and `attn_out` states,
+applies shared `ff2_0` and `ff_bias2_0`, joins the residual, and then evaluates
+the already isolated final tail and four-state concat optimization.
+
+Two archive-identical source captures and two byte-identical direct block runs
+are required. Direct probabilities must match the teacher. Both direct named
+gradients must match the source-bound tensors within `2e-6` with identical
+signs while a matched PyTorch block misses before any replay child is
+authorized. A direct miss retires this boundary as sufficient and moves the
+next direct graph earlier. No score or forecast credit is available.
+
+Plan: `docs/nncp_v33_libnc_ff2_to_loss_backward_composition_plan.md`.
+
+## 2026-08-02: LibNC FF2-to-loss composition is insufficient
+
+Both source captures retained the exact archive, teacher trace, and all 28
+forward tensors. The direct block repeated byte-identically with aggregate
+SHA-256
+`6fa3a5f06d31a999aef780560d24263f60c016e33b12da9a4e75f9f77e281082`
+and reproduced all teacher probabilities exactly.
+
+Direct LibNC and matched PyTorch agree within
+`4.470348358154297e-08` on `ff2_0` and
+`7.450580596923828e-08` on `ff_bias2_0`. Nevertheless, both retain the same
+bound misses: `ff2_0` has `12.8747%` relative-L2 error and 50 sign mismatches;
+`ff_bias2_0` has the nearly constant `0.0060333` offset and `6.5088%`
+relative-L2 error. The FF2 projection, residual join, final normalization,
+output projection, softmax, and loss therefore do not explain the native full
+graph gradient.
+
+The direct probe supplies only the output root to `nc_concat_optimization`.
+The source supplies three root families together after rewiring causal key and
+value nodes: key, value, and output. That joint root scope is now the only
+concrete graph-contract difference downstream of otherwise exact captured
+values. Any continuation must test the source's concat-root set directly;
+moving another ordinary primitive is forbidden. No score or forecast credit
+changes.
+
+Decision:
+`results/nncp_v33_libnc_ff2_to_loss_backward_composition_v1/decision.json`.
