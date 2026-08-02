@@ -6508,16 +6508,19 @@ a TESBE continuation receipt, a LOGOS prototype copy, an SRSTC residual
 program, a JANUS suffix context, or NOEMA recurrence. Its information source is
 page-specific text around completed prior incoming links. A read-only opened
 hypothesis audit found prior backlink contexts for `105/265` selection pages
-and `102/265` sealed pages, with exact-context lexicons covering `17.707%` and
+and `102/265` opened-confirmation pages, with exact-context lexicons covering `17.707%` and
 `15.274%` of raw lexical occurrences; a weak backlink/unigram diagnostic gained
 approximately `7,010` and `4,889` bytes over its development unigram reference.
 These are not codec receipts and receive zero score credit.
 
-The exact 10M gate uses G0 joint parent, G1 causal matched backlink redirection,
-G2 immediately-prior-page contexts, G3 target/anchor lexemes only, and G4 full
-incoming-anchor contexts. It requires actual finite side and residual streams,
+The exact 10M gate uses B0 joint parent, Cblind causal matched backlink
+redirection, Cprior immediately-prior-page tokens, Ctarget target tokens only,
+and Wfull target plus `+/-16` incoming-anchor token contexts. It transmits the
+1,325 complete-page limit and leaves the trailing partial page residual-only.
+It requires actual finite side and residual streams,
 exact decode and WRT/raw reconstruction, byte-identical replay, positive
-chronological 60/20/20 contributions, at least `30,000` gross bytes, at least
-`2,100 B/M` after measured source allowance, and G4 below G1/G2/G3. A miss
+chronological 60/20/20 opened-data contributions, at least `30,000` gross bytes,
+at least `2,100 B/M` after a Git-bound zlib-9 direct-source bundle allowance,
+and Wfull below Cblind/Cprior/Ctarget. A miss
 retires the exact source and coder without rescue sweeps. Plan:
 `docs/wikiback_incoming_anchor_context_qh0_plan.md`.
