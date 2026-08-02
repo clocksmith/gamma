@@ -5860,3 +5860,79 @@ unchanged.
 
 Decision:
 `results/nncp_v33_rocm_incremental_kv_65536_headroom_q1_v1/decision.json`.
+
+## 2026-08-02: MÖBIUS-2 JANUS parity token-fill ceiling frozen
+
+Proposal: `mobius2_janus_parity_token_fill_ceiling_v1`.
+
+Candidate: `mobius2_janus_parity_token_fill_ceiling_qh0_v1`.
+
+The post-TESSERA boundary requires new information about prose-token identities
+after the exact JANUS-plus-quotient trajectory. Ordinary causal word modeling
+is not new: the bounded Sequence Memoizer saved one exact byte, legal typed
+Skip-CTS is subscale, and direct token XZ, BWT, BWT-plus-MTF, and legacy RePair
+streams all fail optimistic ceilings.
+
+This QH0 changes the coded factorization. Within each complete page, it first
+codes prose-token positions 0, 2, 4, and so on. It then codes positions 1, 3,
+5, and so on after their immediate left and right even anchors have already
+been decoded. The side model is a development-frozen Q24 PPM with explicit
+escape/backoff over canonical lexemes plus an exact WRT-program variant field.
+U0 is a unigram, C1 is the original-order causal control, FL uses only the left
+even anchor, FB uses the true left/right anchors, and FR substitutes the next
+decoded even anchor to destroy immediate-right alignment while preserving the
+same pass order and table family.
+
+QH0 supplies the exact token-position schedule, static tables, lexeme/variant
+catalogs, and implementation free. It still constructs and terminates the
+actual side and residual range streams and pays an 80-byte frame. Every other
+WRT byte stays on its joint P1 row. Repeated model/archive identity, side
+decode, residual decode, complete WRT reconstruction, and official raw inverse
+are mandatory. Promotion requires positive 60/20/20 page-split FB gains, FB
+strictly smaller than all four controls, and at least 30,000 bytes saved on
+canonical 10M. A pass authorizes only a paid schedule/table/source gate; a miss
+retires this event universe and all preregistered parity rescues.
+
+Plan:
+`docs/mobius2_janus_parity_token_fill_ceiling_plan.md`.
+
+## 2026-08-02: MÖBIUS-2 JANUS parity token-fill ceiling is terminal negative
+
+The infrastructure retry completed normally in `8614.157` worker seconds on
+canonical 10M. It encoded 845,867 complete-page `PROSE_WORD` events, rebuilt
+the QH0 model twice identically, decoded every side stream, decoded the
+residual arithmetic stream, reproduced all 6,251,852 WRT bytes, passed the
+official inverse to the exact 10,000,000 raw bytes, and produced byte-identical
+second archives for U0, C1, FL, FB, and FR. The joint parent payload replayed
+exactly at 1,617,484 bytes. This is a scientific result, not an infrastructure
+failure.
+
+The aggregate result was initially attractive. The intended FB construction
+used an 853,867-byte residual, a 688,945-byte typed side stream, and an 80-byte
+frame for a 1,542,892-byte archive. It saved 74,592 bytes, or `7,459.2 B/M`,
+and beat U0 (1,919,425), C1 (1,666,978), FL (1,679,578), and the shifted-right
+FR control (1,549,454).
+
+That apparent win did not transfer. FB saved 195,245 independently terminated
+bytes on the first 60 percent development pages, then lost 61,006 bytes on the
+next 20 percent selection pages and 59,565 bytes on the sealed final 20
+percent. FR showed the same pattern, saving 194,695 bytes on development and
+losing 64,184 and 62,400 bytes on selection and sealed pages. The static
+development-frozen tables therefore modeled a chronological population regime,
+not a transferable two-sided lexical dependency. The provisional free model
+was also 19,791,566 raw bytes and 4,723,671 zlib bytes, but package cost was not
+needed to decide the QH0 miss.
+
+Retire this exact parity reveal order, `PROSE_WORD` event universe, static Q24
+PPM tables, and the preregistered parity-stride, smoothing, context-depth,
+vocabulary, page-reset, role, and coder-precision rescues. Do not promote a
+paid schedule/table gate. The valid aggregate headroom may be retained only as
+evidence that fixed-population noncausal lexical factorization can be strong;
+it receives zero score and forecast credit because chronological transfer
+failed.
+
+Forecast remains `109,389,323` bytes and the verified full-1G score remains
+unknown.
+
+Decision:
+`results/mobius2_janus_parity_token_fill_ceiling_qh0_v1/decision.json`.
