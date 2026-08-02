@@ -49,6 +49,10 @@ earliest-ordinal selection rule. Every selected source must satisfy an explicit
 key-inequality assertion. Page-wide deactivation remains unchanged when a
 distinct-key blind source or Cprior cannot supply Wfull's unique count.
 
+The source wrapper configuration is idempotent: repeated same-process
+preflight and entry-point calls must not duplicate or change the counted source
+file list, config bytes, or source allowance.
+
 ## Additional exact receipts
 
 Bind into the machine digest:
@@ -69,7 +73,13 @@ Cblind query and selection digests            identical
 ```
 
 These conditions enter the causal/exact gate. A violation is malformed
-evidence, not a compression rejection.
+evidence, not a compression rejection. Missing receipts, an unexercised blind
+selector, malformed digests, unequal query or selection digests, or an
+unexpected encoder/decoder receipt count must raise and exit nonzero before a
+scientific `REJECT` or `AUTHORIZED_DISTANT_REPLAY` can be published. The
+wrapper suppresses the inherited v1 verdict until validation; a failure
+atomically replaces the provisional decision with `MALFORMED_EVIDENCE`, a null
+scientific verdict, and all authorizations false before raising.
 
 ## Versioned artifacts
 

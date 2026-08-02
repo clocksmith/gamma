@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 from collections import Counter
+from contextlib import redirect_stdout
 from dataclasses import dataclass, field
 import hashlib
+import io
 import json
 from pathlib import Path
 import sys
@@ -16,6 +18,9 @@ import wikiback_incoming_anchor_context_qh0 as impl
 
 CANDIDATE_ID = "wikiback_incoming_anchor_context_cblind_keyguard_qh0_v2"
 DECISION_SCHEMA = "wikiback_incoming_anchor_context_qh0_decision_v2"
+BASE_BOUND_SOURCE_FILES = tuple(impl.BOUND_SOURCE_FILES)
+BASE_FROZEN_CONFIG = dict(impl.FROZEN_CONFIG)
+CONFIGURED = False
 
 
 @dataclass
@@ -32,21 +37,29 @@ class CausalBacklinkMachineV2(impl.CausalBacklinkMachine):
     def _blind_snapshot(
         self, current_title_key: bytes, reference: impl.Snapshot
     ) -> impl.Snapshot | None:
-        if reference.total <= 0:
-            return impl.Snapshot.empty()
-        capacity_rows = [
+        excluded = [
             row
             for row in self.completed_snapshots
-            if len(row[2].codes) >= len(reference.codes)
+            if row[1] == current_title_key
         ]
-        excluded = [
-            row for row in capacity_rows if row[1] == current_title_key
+        distinct_key_rows = [
+            row
+            for row in self.completed_snapshots
+            if row[1] != current_title_key
+        ]
+        capacity_rows = [
+            row
+            for row in distinct_key_rows
+            if len(row[2].codes) >= len(reference.codes)
         ]
         self.blind_same_key_exclusions += len(excluded)
         self.blind_query_digest.update(len(current_title_key).to_bytes(4, "little"))
         self.blind_query_digest.update(current_title_key)
         self.blind_query_digest.update(len(reference.codes).to_bytes(8, "little"))
         self.blind_query_digest.update(reference.total.to_bytes(8, "little"))
+        self.blind_query_digest.update(
+            len(self.completed_snapshots).to_bytes(8, "little")
+        )
         self.blind_query_digest.update(len(capacity_rows).to_bytes(8, "little"))
         self.blind_query_digest.update(len(excluded).to_bytes(8, "little"))
         for source_ordinal, source_title_key, _ in excluded:
@@ -55,18 +68,15 @@ class CausalBacklinkMachineV2(impl.CausalBacklinkMachine):
                 len(source_title_key).to_bytes(4, "little")
             )
             self.blind_query_digest.update(source_title_key)
-        eligible = [
-            row
-            for row in capacity_rows
-            if row[1] != current_title_key
-        ]
-        if not eligible:
+        if reference.total <= 0:
+            return impl.Snapshot.empty()
+        if not capacity_rows:
             self.missing_blind_sources += 1
             self.blind_unique_shortfalls += 1
             return None
         target_bin = len(reference.codes).bit_length()
         source_ordinal, source_title_key, source = min(
-            eligible,
+            capacity_rows,
             key=lambda row: (
                 abs(len(row[2].codes).bit_length() - target_bin),
                 row[0],
@@ -181,9 +191,12 @@ class CausalBacklinkMachineV2(impl.CausalBacklinkMachine):
 
 
 def configure_v2() -> None:
+    global CONFIGURED
+    if CONFIGURED:
+        return
     donor_files = tuple(
         path
-        for path in impl.BOUND_SOURCE_FILES
+        for path in BASE_BOUND_SOURCE_FILES
         if path
         not in {
             "projects/enwiki9/docs/wikiback_incoming_anchor_context_qh0_plan.md",
@@ -201,7 +214,7 @@ def configure_v2() -> None:
         *donor_files,
     )
     impl.FROZEN_CONFIG = {
-        **impl.FROZEN_CONFIG,
+        **BASE_FROZEN_CONFIG,
         "schema": "wikiback_incoming_anchor_context_config_v2",
         "candidate_id": CANDIDATE_ID,
         "matched_control": (
@@ -219,6 +232,7 @@ def configure_v2() -> None:
         impl.FROZEN_CONFIG, sort_keys=True, separators=(",", ":")
     ).encode("utf-8")
     impl.CONFIG_SHA256 = hashlib.sha256(impl.CONFIG_BYTES).digest()
+    CONFIGURED = True
 
 
 def output_dir_from_argv() -> Path:
@@ -244,17 +258,76 @@ def strengthen_decision(output_dir: Path) -> None:
         for value in decoders.values():
             if isinstance(value, dict) and isinstance(value.get("machine"), dict):
                 receipts.append(value["machine"])
-    keyguard_exact = bool(receipts) and all(
+
+    def valid_sha256(value: Any) -> bool:
+        if not isinstance(value, str) or len(value) != 64:
+            return False
+        try:
+            bytes.fromhex(value)
+        except ValueError:
+            return False
+        return True
+
+    expected_receipts = 2 + len(impl.VARIANTS)
+    query_digests = {
+        receipt.get("blind_query_sha256") for receipt in receipts
+    }
+    selection_digests = {
+        receipt.get("blind_selection_sha256") for receipt in receipts
+    }
+    keyguard_exact = len(receipts) == expected_receipts and all(
         receipt.get("blind_selected_sources", 0) > 0
         and receipt.get("blind_selected_source_key_violations") == 0
-        and isinstance(receipt.get("blind_query_sha256"), str)
-        and isinstance(receipt.get("blind_selection_sha256"), str)
+        and valid_sha256(receipt.get("blind_query_sha256"))
+        and valid_sha256(receipt.get("blind_selection_sha256"))
         for receipt in receipts
-    )
+    ) and len(query_digests) == 1 and len(selection_digests) == 1
+    if not keyguard_exact:
+        decision["schema"] = DECISION_SCHEMA
+        decision["cblind_keyguard"] = {
+            "receipt_count": len(receipts),
+            "expected_receipt_count": expected_receipts,
+            "all_selected_source_keys_distinct": False,
+            "query_digests": sorted(str(value) for value in query_digests),
+            "selection_digests": sorted(
+                str(value) for value in selection_digests
+            ),
+        }
+        decision["exactness"]["Cblind_title_key_guard_replayed"] = False
+        decision["causality"]["Cblind_source_title_key_distinct"] = False
+        conditions = decision["gates"]["conditions"]
+        conditions["Cblind_title_key_guard"] = False
+        conditions["exactness_pass"] = False
+        conditions["causality_pass"] = False
+        decision["gates"]["failed_conditions"] = [
+            "MALFORMED_CBLIND_KEYGUARD_EVIDENCE"
+        ]
+        decision["decision"] = {
+            "verdict": "MALFORMED_EVIDENCE",
+            "scientific_verdict": None,
+            "distant_replay_authorized": False,
+            "native_integration_authorized": False,
+            "forecast_change_authorized": False,
+            "full_1g_authorized": False,
+            "next_action": (
+                "Repair the malformed keyguard execution and rerun the identical "
+                "frozen candidate as an explicit infrastructure retry."
+            ),
+        }
+        temporary = decision_path.with_suffix(".json.v2.tmp")
+        temporary.write_text(json.dumps(decision, indent=2, sort_keys=True) + "\n")
+        temporary.replace(decision_path)
+        raise ValueError(
+            "malformed Cblind keyguard evidence: expected complete, exercised, "
+            "byte-identical encoder/decoder query and selection receipts"
+        )
     decision["schema"] = DECISION_SCHEMA
     decision["cblind_keyguard"] = {
         "receipt_count": len(receipts),
+        "expected_receipt_count": expected_receipts,
         "all_selected_source_keys_distinct": keyguard_exact,
+        "query_sha256": next(iter(query_digests)),
+        "selection_sha256": next(iter(selection_digests)),
         "first_machine_same_key_exclusions": (
             receipts[0].get("blind_same_key_exclusions") if receipts else None
         ),
@@ -301,8 +374,11 @@ def strengthen_decision(output_dir: Path) -> None:
 def main() -> int:
     configure_v2()
     output_dir = output_dir_from_argv()
-    returncode = impl.main()
+    base_stdout = io.StringIO()
+    with redirect_stdout(base_stdout):
+        returncode = impl.main()
     if returncode != 0:
+        sys.stdout.write(base_stdout.getvalue())
         return returncode
     strengthen_decision(output_dir)
     final = json.loads((output_dir / "decision.json").read_text())
