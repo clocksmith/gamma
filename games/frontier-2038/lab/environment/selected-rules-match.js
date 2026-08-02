@@ -2940,16 +2940,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }
     if (decision.actionId === "build" && decision.parameters?.actualRunwayCost !== undefined) {
-      const source = decision.parameters.buildMode === "generator"
-        ? this.config.powerSources.find(
-          (candidate) => candidate.id === decision.parameters.sourceId
-        )
-        : null;
-      const defaultCost = decision.parameters.buildMode === "generator"
-        ? source.runwayCost
-        : decision.parameters.buildMode === "link"
-          ? decision.parameters.cost
-          : 2;
       if (decision.parameters.useBuildDiscount) player.buildDiscounts -= 1;
       if (
         player.factionId === "vertical_empire" &&
