@@ -1,0 +1,32 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Second-segment state-zero input and embedding lookup only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_second_segment_embedding_contract.py",
+    "tools/nncp_libnc_internal_tensor_hook.c",
+    "tools/nncp_libnc_export.c",
+    "results/nncp_v33_libnc_second_segment_attention_trajectory_v1/decision.json"
+  ],
+  "description": "Observe the actual source input symbol and validate the second-segment embedding lookup",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound segment-entry contract diagnostic."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The embedding mismatch is uniquely attributable to input scheduling or live embedding state.",
+  "id": "nncp_v33_libnc_second_segment_embedding_contract_v1",
+  "kill_gate": "Retire if source identity changes, observations fail to repeat, the input is invalid, or localization is ambiguous.",
+  "omega": {
+    "interfaces_exposed": [
+      "source LibNC decoder segment-entry symbol"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_second_segment_embedding_contract_v1",
+    "retired_neighborhoods": [
+      "attention, memory-length, width, optimizer, tolerance, and population sweeps"
+    ]
+  },
+  "parent": "nncp_v33_libnc_second_segment_attention_trajectory_v1",
+  "status": "retired"
+}

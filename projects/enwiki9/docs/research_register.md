@@ -5427,3 +5427,222 @@ verified full-1G score remains unknown.
 
 Decision:
 `results/nncp_v33_libnc_update_state_trajectory_v1/decision.json`.
+
+## 2026-08-02: LibNC second-segment forward trajectory frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_second_segment_forward_trajectory_v1`.
+
+This child starts its primary analytic replay from the source's actual
+post-update-one parameters and persistent memory, then compares the seven
+existing LibNC internal forward observations across the second four-symbol
+segment. A second replay starts from the near-matching analytic state and acts
+only as a sensitivity control.
+
+If the exact-source-state replay first differs at a named block, one finer
+arithmetic child inside that block is authorized. If it matches while the
+near-state control reproduces the probability miss, the cause is localized to
+exact state evolution instead. Archive, teacher trace, update-state captures,
+and forward dumps must repeat, and the source observations must remain neutral.
+No score or forecast credit is available.
+
+Plan:
+`docs/nncp_v33_libnc_second_segment_forward_trajectory_plan.md`.
+
+## 2026-08-02: exact source state diverges inside nonzero-memory attention
+
+Both observed native executions preserved the parent archive, probability
+trace, eight coefficient states, and eight memory states byte-for-byte. Each
+execution produced 224 aligned internal tensor records, and the complete dump
+repeated exactly.
+
+Starting the second segment from the source's own exported post-update-one
+parameters and `mem_h` does not restore the analytic forward replay. The first
+record, state-zero `attn_out_bl`, already differs by
+`1.239846110343933`; the corresponding output distribution differs by
+`0.010298050008714199`. Starting from the near-matching analytic state produces
+the same boundary and a `0.010298056527972221` output error. The residual
+`2.8312206268310547e-07` parameter and `2.384185791015625e-07` memory errors are
+therefore not the cause of the jump.
+
+Localize the missing contract to the nonzero-memory attention block before its
+residual join. Authorize exactly one child that observes embedding, attention
+normalization, query/key/value projections, transformed memory, content and
+relative scores, softmax weights, attended value, and output projection for
+state zero of segment two. No other forward block or numerical sweep is
+authorized. Score and forecast credit remain zero.
+
+Decision:
+`results/nncp_v33_libnc_second_segment_forward_trajectory_v1/decision.json`.
+
+## 2026-08-02: LibNC nonzero-memory attention trajectory frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_second_segment_attention_trajectory_v1`.
+
+The source-state forward receipt authorizes one observation-only child inside
+state zero of the second segment's attention block. It binds every major
+operation from embedding through output projection, using the actual source
+post-update-one parameters and memory and fixed tensor-layout conversions.
+The first aligned arithmetic node above `2e-6` is the only authorized
+successor boundary. Source identity, dump repeatability, and record alignment
+remain mandatory. No score or forecast credit is available.
+
+Plan:
+`docs/nncp_v33_libnc_second_segment_attention_trajectory_plan.md`.
+
+## 2026-08-02: nonzero-memory attention first differs at embedding lookup
+
+The instrumented source repeated its archive, teacher trace, eight parameter
+states, eight memory states, and all 360 tensor records exactly. The added
+observations were neutral relative to the parent receipt, and all eight
+segments contained the same 45-record schema.
+
+The first second-segment state differs before attention arithmetic. The source
+`a_embed` observation and the replayed embedding differ by
+`1.210031509399414`, followed by `2.7441473007202156` at attention
+normalization. Content, relative, softmax, attended-value, and projection
+differences are downstream. Therefore this receipt does not attribute the
+failure to nonzero-memory attention math; it localizes the boundary to the
+embedding input or live embedding state at segment entry.
+
+Authorize exactly one child that records the actual decoder input symbol before
+the lookup and replays the captured embedding from that symbol. It must
+distinguish input schedule from live-versus-exported parameter state. Do not
+alter attention, memory length, model width, optimizer, or tolerances. Score
+and forecast credit remain zero.
+
+Decision:
+`results/nncp_v33_libnc_second_segment_attention_trajectory_v1/decision.json`.
+
+## 2026-08-02: LibNC segment-entry embedding contract frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_second_segment_embedding_contract_v1`.
+
+This child adds one state-zero scalar observation of the integer symbol after
+LibNC slices and reshapes the decoder input. The exact source post-update-one
+embedding is then indexed by that observed symbol, with the existing source
+embedding output serving as validation truth. A pass must uniquely identify an
+input-schedule mismatch or a live-parameter mismatch while preserving every
+parent identity artifact. No score or forecast credit is available.
+
+Plan:
+`docs/nncp_v33_libnc_second_segment_embedding_contract_plan.md`.
+
+## 2026-08-02: source uses a fresh zero-input, zero-memory block schedule
+
+The first embedding-contract attempt failed before compilation because the
+observer patch rebound itself recursively. The explicit infrastructure retry
+fixed that binding and produced the scientific receipt. Its enhanced and
+unmodified observer builds emitted identical archives, traces, post-update
+states, and all shared internal tensor values; both enhanced executions also
+repeated exactly.
+
+At the start of source segment two, the observed decoder input is `0`, not the
+assumed preceding truth symbol `100`. Indexing the exact source post-update-one
+embedding at symbol zero restores `a_embed` exactly and keeps query/current
+key/value projections within `1.7881393432617188e-07`. The next divergence is
+`a_memory_kv`: the source tensor is all zero while the analytic replay retained
+the nonzero post-update memory, producing `1.5986770391464233` error.
+
+The combined contract is visible in source control flow. With `block_len=4`,
+each four-symbol segment is a separate `process_block` call. Every call invokes
+`model_reset`, and state zero reads position `-1` from that fresh block, which
+returns zero. The analytic multi-update replay incorrectly carried both the
+previous truth symbol and `mem_h` across these block boundaries.
+
+Authorize exactly one constructive eight-update child that resets memory to
+zero and prepends input zero for every four-symbol block while retaining the
+already proved concat-RMSNorm backward and Adam rules. No alternate reset,
+memory length, block length, width, optimizer, or tolerance sweep is
+authorized. Score and forecast credit remain zero.
+
+Decision:
+`results/nncp_v33_libnc_second_segment_embedding_contract_v1/decision.json`.
+
+## 2026-08-02: LibNC process-block reset multi-update parity frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_process_block_reset_multiupdate_parity_v1`.
+
+This child changes only the analytic schedule: each four-symbol block begins
+with input zero and zero persistent memory, exactly matching native
+`process_block`. It compares all eight probability segments, post-update
+parameter states, `train_h`, and post-update `mem_h` against two neutral native
+captures. A pass authorizes the smallest source-bound constructive prefix gate;
+no score or forecast credit is available.
+
+Plan:
+`docs/nncp_v33_libnc_process_block_reset_multiupdate_parity_plan.md`.
+
+## 2026-08-02: process-block reset fixes predictions but misses the frozen memory gate
+
+The corrected schedule reduced the maximum eight-segment probability error
+from `0.01777813397347927` to `3.9208680391311646e-07`. Every post-update
+parameter remained within `2.034008502960205e-06`, and both native and analytic
+executions repeated exactly with legal probability tables. This confirms that
+the prior large multi-update rejection was caused by the test harness carrying
+input and memory across native `process_block` resets.
+
+The frozen candidate is still a scientific `REJECT`. Source `train_h` and the
+post-update `mem_h` differ from the analytic state by up to
+`9.894371032714844e-06`, above the predeclared `2e-6` gate. That state is reset
+before another prediction in this deliberately four-byte-block profile, but it
+was explicitly part of the contract and cannot be waived after inspection.
+Retire this exact reset realization and do not relax its tolerance.
+
+This result exposes a separate validity issue in the original multi-update
+test: the published NNCP profile uses a long `process_block`, so consecutive
+updates share input and memory inside that block. The earlier native command's
+`--block_len 4` never exercised that contract. One new source profile with all
+32 diagnostic bytes in a single block is therefore authorized as a distinct
+continuous-state experiment, not a rescue of the retired reset gate. Score and
+forecast credit remain zero.
+
+Decision:
+`results/nncp_v33_libnc_process_block_reset_multiupdate_parity_v1/decision.json`.
+
+## 2026-08-02: LibNC continuous-block multi-update parity frozen
+
+Candidate and proposal:
+`nncp_v33_libnc_continuous_block_multiupdate_parity_v1`.
+
+This source-bound child places the same 32 symbols and eight four-symbol
+updates inside one native `process_block`. It therefore tests the carried
+predecessor and persistent-memory trajectory that the published long-block
+profile actually uses. The analytic graph, optimizer, and backward contract
+are unchanged. A pass requires all probabilities, post-update parameters, and
+memory states within their original tolerances across repeated native and
+analytic runs. No score or forecast credit is available.
+
+Plan:
+`docs/nncp_v33_libnc_continuous_block_multiupdate_parity_plan.md`.
+
+## 2026-08-02: continuous-block parity also misses only the frozen memory gate
+
+The single-process-block source and analytic executions repeated exactly.
+Continuous carried-state probability agreement is stronger than the reset
+control: the maximum error across eight segments is
+`1.4808028936386108e-07`. Every post-update parameter remains within
+`2.343207597732544e-06`, far inside the `2e-5` gate.
+
+The candidate nevertheless returns a valid `REJECT`. `train_h` and `mem_h`
+reach `9.804964065551758e-06` error at update eight, exceeding the frozen
+`2e-6` state threshold. Do not widen the tolerance or extend this miniature.
+The result shows that the repaired analytic implementation shadows LibNC
+closely, but it does not establish exact numerical identity and cannot inherit
+the published `106,632,363`-byte NNCP result.
+
+The local strategic boundary is now explicit. Exact CUDA teacher execution is
+unavailable on this AMD host; the earlier self-consistent ROCm full-profile Q1
+lost `119,472.534 B/M` at its frozen startup scope; and this component replica
+misses exact state identity. The next NNCP action must change execution
+capability or information scope rather than continue primitive tolerances. A
+source-native CPU concurrency gate may test whether the immutable LibNC teacher
+can be accelerated without changing its archive; otherwise mature NNCP
+evidence still requires an NVIDIA host. Forecast remains `109,389,323` bytes,
+verified full-1G remains unknown, and score credit remains zero.
+
+Decision:
+`results/nncp_v33_libnc_continuous_block_multiupdate_parity_v1/decision.json`.

@@ -1,0 +1,31 @@
+{
+  "added": "2026-08-02",
+  "claim_boundary": "Eight-update four-symbol process-block reset parity only; zero score and forecast credit.",
+  "deps": [
+    "tools/nncp_v33_libnc_process_block_reset_multiupdate_parity.py",
+    "tools/nncp_libnc_export.c",
+    "results/nncp_v33_libnc_second_segment_embedding_contract_v1/decision.json"
+  ],
+  "description": "Replay all eight LibNC updates with zero input and memory at every four-symbol process block",
+  "discovery": {
+    "ordinary_driver": false,
+    "reason": "Explicit source-bound multi-update parity gate."
+  },
+  "family": "nncp_v33_libnc_parity",
+  "hypothesis": "The native process-block reset schedule restores complete multi-update parity.",
+  "id": "nncp_v33_libnc_process_block_reset_multiupdate_parity_v1",
+  "kill_gate": "Retire if any repeated identity fails or any probability, parameter, train_h, or mem_h exceeds its frozen tolerance.",
+  "omega": {
+    "interfaces_exposed": [
+      "source LibNC process_block reset schedule"
+    ],
+    "mechanism_change": "change_update_schedule",
+    "parent_proposal_id": null,
+    "proposal_id": "nncp_v33_libnc_process_block_reset_multiupdate_parity_v1",
+    "retired_neighborhoods": [
+      "alternate resets, block lengths, memory lengths, widths, optimizers, clipping, epsilon, and tolerance sweeps"
+    ]
+  },
+  "parent": "nncp_v33_libnc_second_segment_embedding_contract_v1",
+  "status": "retired"
+}
