@@ -1,0 +1,630 @@
+{
+  "builds": {
+    "full": {
+      "executable_sha256": "bed7b28379228f6b4d84f564222d06ea407c3c3db2a5854fb5b1f40c699a4fc6",
+      "helper_object_command": [
+        "cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_named_gradient_capture.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/capture.o"
+      ],
+      "helper_object_stderr": "",
+      "link_command": [
+        "cc",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/capture.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cmdopt.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cp_utils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/arith.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/preprocess.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cutils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.so",
+        "-lz",
+        "-lm",
+        "-lpthread"
+      ],
+      "link_stderr": "",
+      "nncp_object_command": [
+        "cc",
+        "-O3",
+        "-Wall",
+        "-Wpointer-arith",
+        "-g",
+        "-fno-math-errno",
+        "-fno-trapping-math",
+        "-DCONFIG_VERSION=\"2024-06-05\"",
+        "-DLIBNC_CONFIG_FULL",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.o"
+      ],
+      "nncp_object_stderr": "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018log_init.constprop\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:2380:49: warning: \u2018/log.txt\u2019 directive output may be truncated writing 8 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 2380 |         snprintf(filename, sizeof(filename), \"%s/log.txt\", st->debug_dir);\n      |                                                 ^~~~~~~~\nIn file included from /usr/include/stdio.h:974,\n                 from /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:25:\nIn function \u2018snprintf\u2019,\n    inlined from \u2018log_init.constprop\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:2380:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1032 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3475:51: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3475 |             snprintf(filename, sizeof(filename), \"%s/plot.txt\", st->debug_dir);\n      |                                                   ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3475:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 10 and 1105 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3484:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3484 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3484:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3495:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3495 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3494:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3502:25: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3502 |                      \"%s.voc\", out_filename);\n      |                         ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3501:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3661:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3661 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3661:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3692:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3692 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3691:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3694:21: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3694 |                  \"%s.voc\", out_filename);\n      |                     ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_full/nncp.c:3693:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n",
+      "patched_source_sha256": "df4ef48bbfe506915a1ecb8f09cbf41796f5950f4a652194d361434236d8ebf8",
+      "variant": "full"
+    },
+    "key_output": {
+      "executable_sha256": "38197d5e3c46930024e4eaa777a12bf4a1fef718a38e4920d2eda8ed2294a39a",
+      "helper_object_command": [
+        "cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_named_gradient_capture.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/capture.o"
+      ],
+      "helper_object_stderr": "",
+      "link_command": [
+        "cc",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/capture.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cmdopt.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cp_utils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/arith.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/preprocess.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cutils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.so",
+        "-lz",
+        "-lm",
+        "-lpthread"
+      ],
+      "link_stderr": "",
+      "nncp_object_command": [
+        "cc",
+        "-O3",
+        "-Wall",
+        "-Wpointer-arith",
+        "-g",
+        "-fno-math-errno",
+        "-fno-trapping-math",
+        "-DCONFIG_VERSION=\"2024-06-05\"",
+        "-DLIBNC_CONFIG_FULL",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.o"
+      ],
+      "nncp_object_stderr": "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018log_init.constprop\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:2385:49: warning: \u2018/log.txt\u2019 directive output may be truncated writing 8 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 2385 |         snprintf(filename, sizeof(filename), \"%s/log.txt\", st->debug_dir);\n      |                                                 ^~~~~~~~\nIn file included from /usr/include/stdio.h:974,\n                 from /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:25:\nIn function \u2018snprintf\u2019,\n    inlined from \u2018log_init.constprop\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:2385:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1032 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3480:51: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3480 |             snprintf(filename, sizeof(filename), \"%s/plot.txt\", st->debug_dir);\n      |                                                   ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3480:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 10 and 1105 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3489:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3489 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3489:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3500:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3500 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3499:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3507:25: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3507 |                      \"%s.voc\", out_filename);\n      |                         ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3506:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3666:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3666 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3666:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3697:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3697 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3696:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3699:21: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3699 |                  \"%s.voc\", out_filename);\n      |                     ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_key_output/nncp.c:3698:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n",
+      "patched_source_sha256": "062bf14d946ad9672ddb0d2efc2d7cdd67b4a015c98a1a1c18ad41a66e2c735a",
+      "variant": "key_output"
+    },
+    "output_only": {
+      "executable_sha256": "966a48d5b6b3f0af0c1a279855c03694b0d5cf23e04d5c3f6d99b483c57b45e0",
+      "helper_object_command": [
+        "cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_named_gradient_capture.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/capture.o"
+      ],
+      "helper_object_stderr": "",
+      "link_command": [
+        "cc",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/capture.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cmdopt.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cp_utils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/arith.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/preprocess.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cutils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.so",
+        "-lz",
+        "-lm",
+        "-lpthread"
+      ],
+      "link_stderr": "",
+      "nncp_object_command": [
+        "cc",
+        "-O3",
+        "-Wall",
+        "-Wpointer-arith",
+        "-g",
+        "-fno-math-errno",
+        "-fno-trapping-math",
+        "-DCONFIG_VERSION=\"2024-06-05\"",
+        "-DLIBNC_CONFIG_FULL",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.o"
+      ],
+      "nncp_object_stderr": "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018log_init.constprop\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:2384:49: warning: \u2018/log.txt\u2019 directive output may be truncated writing 8 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 2384 |         snprintf(filename, sizeof(filename), \"%s/log.txt\", st->debug_dir);\n      |                                                 ^~~~~~~~\nIn file included from /usr/include/stdio.h:974,\n                 from /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:25:\nIn function \u2018snprintf\u2019,\n    inlined from \u2018log_init.constprop\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:2384:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1032 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3479:51: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3479 |             snprintf(filename, sizeof(filename), \"%s/plot.txt\", st->debug_dir);\n      |                                                   ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3479:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 10 and 1105 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3488:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3488 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3488:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3499:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3499 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3498:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3506:25: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3506 |                      \"%s.voc\", out_filename);\n      |                         ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3505:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3665:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3665 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3665:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3696:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3696 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3695:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3698:21: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3698 |                  \"%s.voc\", out_filename);\n      |                     ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_output_only/nncp.c:3697:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n",
+      "patched_source_sha256": "6965d024d459a568e251c903b98cf33dfd7d7f471152913e979a65392a95942a",
+      "variant": "output_only"
+    },
+    "value_output": {
+      "executable_sha256": "7649b168269c02b4f650f3c87cf72839b13071b771b382186a80fff37ef57316",
+      "helper_object_command": [
+        "cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/home/x/deco/gamma/projects/enwiki9/tools/nncp_libnc_named_gradient_capture.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/capture.o"
+      ],
+      "helper_object_stderr": "",
+      "link_command": [
+        "cc",
+        "-Wl,-rpath,/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/capture.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cmdopt.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cp_utils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/arith.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/preprocess.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/cutils.o",
+        "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/libnc.so",
+        "-lz",
+        "-lm",
+        "-lpthread"
+      ],
+      "link_stderr": "",
+      "nncp_object_command": [
+        "cc",
+        "-O3",
+        "-Wall",
+        "-Wpointer-arith",
+        "-g",
+        "-fno-math-errno",
+        "-fno-trapping-math",
+        "-DCONFIG_VERSION=\"2024-06-05\"",
+        "-DLIBNC_CONFIG_FULL",
+        "-I/home/x/enwiki9-nonproof/external/nncp-2024-06-05",
+        "-c",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c",
+        "-o",
+        "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.o"
+      ],
+      "nncp_object_stderr": "/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018log_init.constprop\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:2385:49: warning: \u2018/log.txt\u2019 directive output may be truncated writing 8 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 2385 |         snprintf(filename, sizeof(filename), \"%s/log.txt\", st->debug_dir);\n      |                                                 ^~~~~~~~\nIn file included from /usr/include/stdio.h:974,\n                 from /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:25:\nIn function \u2018snprintf\u2019,\n    inlined from \u2018log_init.constprop\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:2385:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1032 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3480:51: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3480 |             snprintf(filename, sizeof(filename), \"%s/plot.txt\", st->debug_dir);\n      |                                                   ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3480:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 10 and 1105 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3489:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3489 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3489:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3500:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3500 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3499:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018encode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3507:25: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3507 |                      \"%s.voc\", out_filename);\n      |                         ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018encode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3506:13:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3666:63: warning: \u2018%s\u2019 directive output may be truncated writing up to 1095 bytes into a region of size 1024 [-Wformat-truncation=]\n 3666 |         snprintf(out_filename_buf, sizeof(out_filename_buf), \"%s/%s\",\n      |                                                               ^~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3666:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 9 and 1104 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3697:21: warning: \u2018.pp\u2019 directive output may be truncated writing 3 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3697 |                  \"%s.pp\", out_filename);\n      |                     ^~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3696:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 4 and 1027 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c: In function \u2018decode_file\u2019:\n/tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3699:21: warning: \u2018.voc\u2019 directive output may be truncated writing 4 bytes into a region of size between 1 and 1024 [-Wformat-truncation=]\n 3699 |                  \"%s.voc\", out_filename);\n      |                     ^~~~\nIn function \u2018snprintf\u2019,\n    inlined from \u2018decode_file\u2019 at /tmp/nncp-libnc-root-scope-kbaw7ocx/build_value_output/nncp.c:3698:9:\n/usr/include/x86_64-linux-gnu/bits/stdio2.h:68:10: note: \u2018__builtin___snprintf_chk\u2019 output between 5 and 1028 bytes into a destination of size 1024\n   68 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   69 |                                    __glibc_objsize (__s), __fmt,\n      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n   70 |                                    __va_arg_pack ());\n      |                                    ~~~~~~~~~~~~~~~~~\n",
+      "patched_source_sha256": "b32ac5eec56d282eff864be2a9846eb797bd49d0be827d9eacc3a049c7bd3b6d",
+      "variant": "value_output"
+    }
+  },
+  "candidate_id": "nncp_v33_libnc_concat_root_scope_gradient_v1",
+  "comparisons": {
+    "full": {
+      "bias_vs_bound": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.5243634746325584,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "bias_vs_pytorch": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.006033405661582947,
+        "mean_absolute_error": 0.006033320270944387,
+        "reference_l2_norm": 0.5235631455332572,
+        "relative_l2_error": 0.06518719605274774,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_bound": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.4752163935277745,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_pytorch": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0014292187988758087,
+        "maximum_absolute_error": 0.008702129125595093,
+        "mean_absolute_error": 0.0007056341296911572,
+        "reference_l2_norm": 0.478018237046402,
+        "relative_l2_error": 0.12799221600110633,
+        "sign_mismatches": 50
+      }
+    },
+    "key_output": {
+      "bias_vs_bound": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.5243634746325584,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "bias_vs_pytorch": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.006033405661582947,
+        "mean_absolute_error": 0.006033320270944387,
+        "reference_l2_norm": 0.5235631455332572,
+        "relative_l2_error": 0.06518719605274774,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_bound": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.4752163935277745,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_pytorch": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0014292187988758087,
+        "maximum_absolute_error": 0.008702129125595093,
+        "mean_absolute_error": 0.0007056341296911572,
+        "reference_l2_norm": 0.478018237046402,
+        "relative_l2_error": 0.12799221600110633,
+        "sign_mismatches": 50
+      }
+    },
+    "output_only": {
+      "bias_vs_bound": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.5243634746325584,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "bias_vs_pytorch": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.006033405661582947,
+        "mean_absolute_error": 0.006033320270944387,
+        "reference_l2_norm": 0.5235631455332572,
+        "relative_l2_error": 0.06518719605274774,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_bound": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.4752163935277745,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_pytorch": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0014292187988758087,
+        "maximum_absolute_error": 0.008702129125595093,
+        "mean_absolute_error": 0.0007056341296911572,
+        "reference_l2_norm": 0.478018237046402,
+        "relative_l2_error": 0.12799221600110633,
+        "sign_mismatches": 50
+      }
+    },
+    "value_output": {
+      "bias_vs_bound": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.5243634746325584,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "bias_vs_pytorch": {
+        "candidate_l2_norm": 0.5243634746325584,
+        "elements": 32,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.006033405661582947,
+        "mean_absolute_error": 0.006033320270944387,
+        "reference_l2_norm": 0.5235631455332572,
+        "relative_l2_error": 0.06518719605274774,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_bound": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0,
+        "maximum_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "reference_l2_norm": 0.4752163935277745,
+        "relative_l2_error": 0.0,
+        "sign_mismatches": 0
+      },
+      "ff2_vs_pytorch": {
+        "candidate_l2_norm": 0.4752163935277745,
+        "elements": 2048,
+        "largest_sign_mismatch_minimum_magnitude": 0.0014292187988758087,
+        "maximum_absolute_error": 0.008702129125595093,
+        "mean_absolute_error": 0.0007056341296911572,
+        "reference_l2_norm": 0.478018237046402,
+        "relative_l2_error": 0.12799221600110633,
+        "sign_mismatches": 50
+      }
+    }
+  },
+  "contract": {
+    "frozen_root_sets": {
+      "full": [
+        "key",
+        "value",
+        "output"
+      ],
+      "key_output": [
+        "key",
+        "output"
+      ],
+      "output_only": [
+        "output"
+      ],
+      "value_output": [
+        "value",
+        "output"
+      ]
+    },
+    "parameters": 18,
+    "symbols": 4,
+    "threshold": 2e-06,
+    "variants": [
+      "output_only",
+      "key_output",
+      "value_output",
+      "full"
+    ]
+  },
+  "decision": {
+    "authorized_next_action": "retire concat root scope as the isolated cause",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": false,
+    "verified_full_1g_score_bytes": null
+  },
+  "gate": {
+    "minimal_bound_matching_root_set": "key_output",
+    "root_scope_localized": false,
+    "variants": {
+      "full": {
+        "complete_gradient_equals_full": true,
+        "matches_bound": true,
+        "matches_pytorch": false
+      },
+      "key_output": {
+        "complete_gradient_equals_full": false,
+        "matches_bound": true,
+        "matches_pytorch": false
+      },
+      "output_only": {
+        "complete_gradient_equals_full": false,
+        "matches_bound": true,
+        "matches_pytorch": false
+      },
+      "value_output": {
+        "complete_gradient_equals_full": false,
+        "matches_bound": true,
+        "matches_pytorch": false
+      }
+    }
+  },
+  "identity": {
+    "bound_archive_sha256": "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da",
+    "bound_trace_sha256": "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4",
+    "full_named_gradient_byte_identity": true,
+    "pytorch_probability_vs_teacher": {
+      "candidate_l2_norm": 0.1392838476145421,
+      "elements": 1024,
+      "largest_sign_mismatch_minimum_magnitude": 0.0,
+      "maximum_absolute_error": 3.725290298461914e-09,
+      "mean_absolute_error": 3.6266101233195513e-10,
+      "reference_l2_norm": 0.13928385697413512,
+      "relative_l2_error": 1.2683038884269917e-07,
+      "sign_mismatches": 0
+    },
+    "variants": {
+      "full": {
+        "archive_sha256": [
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da",
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da"
+        ],
+        "callback_names": [
+          "embed_out",
+          "ff2_0",
+          "ff1_0",
+          "ln_g_1",
+          "ln_b_1",
+          "ff_bias1_0",
+          "ff_bias2_0",
+          "w_o_0",
+          "w_r_0",
+          "b_r_0",
+          "w_kv_0",
+          "w_q_0",
+          "ln_g_0",
+          "ln_b_0",
+          "embed",
+          "ln_g_2",
+          "ln_b_2",
+          "out_bias"
+        ],
+        "gradient_repeat_byte_identical": true,
+        "gradient_sha256": [
+          "db3a585b942ddcbb560a47ad9587d7457ddd718215799fb70ae8ff982dfed0ba",
+          "db3a585b942ddcbb560a47ad9587d7457ddd718215799fb70ae8ff982dfed0ba"
+        ],
+        "source_identity": true,
+        "trace_sha256": [
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4",
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+        ]
+      },
+      "key_output": {
+        "archive_sha256": [
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da",
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da"
+        ],
+        "callback_names": [
+          "embed_out",
+          "ff2_0",
+          "ff1_0",
+          "ln_g_1",
+          "ln_b_1",
+          "ff_bias1_0",
+          "ff_bias2_0",
+          "w_o_0",
+          "w_r_0",
+          "b_r_0",
+          "w_kv_0",
+          "w_q_0",
+          "ln_g_0",
+          "ln_b_0",
+          "embed",
+          "ln_g_2",
+          "ln_b_2",
+          "out_bias"
+        ],
+        "gradient_repeat_byte_identical": true,
+        "gradient_sha256": [
+          "251e5186b223233fcecaa43ce25315d269af7bd72de11317fa08e799ea5cce42",
+          "251e5186b223233fcecaa43ce25315d269af7bd72de11317fa08e799ea5cce42"
+        ],
+        "source_identity": true,
+        "trace_sha256": [
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4",
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+        ]
+      },
+      "output_only": {
+        "archive_sha256": [
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da",
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da"
+        ],
+        "callback_names": [
+          "embed_out",
+          "ff2_0",
+          "ff1_0",
+          "ln_g_1",
+          "ln_b_1",
+          "ff_bias1_0",
+          "ff_bias2_0",
+          "w_o_0",
+          "w_r_0",
+          "b_r_0",
+          "w_kv_0",
+          "w_q_0",
+          "ln_g_0",
+          "ln_b_0",
+          "embed",
+          "ln_g_2",
+          "ln_b_2",
+          "out_bias"
+        ],
+        "gradient_repeat_byte_identical": true,
+        "gradient_sha256": [
+          "251e5186b223233fcecaa43ce25315d269af7bd72de11317fa08e799ea5cce42",
+          "251e5186b223233fcecaa43ce25315d269af7bd72de11317fa08e799ea5cce42"
+        ],
+        "source_identity": true,
+        "trace_sha256": [
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4",
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+        ]
+      },
+      "value_output": {
+        "archive_sha256": [
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da",
+          "8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da"
+        ],
+        "callback_names": [
+          "embed_out",
+          "ff2_0",
+          "ff1_0",
+          "ln_g_1",
+          "ln_b_1",
+          "ff_bias1_0",
+          "ff_bias2_0",
+          "w_o_0",
+          "w_r_0",
+          "b_r_0",
+          "w_kv_0",
+          "w_q_0",
+          "ln_g_0",
+          "ln_b_0",
+          "embed",
+          "ln_g_2",
+          "ln_b_2",
+          "out_bias"
+        ],
+        "gradient_repeat_byte_identical": true,
+        "gradient_sha256": [
+          "251e5186b223233fcecaa43ce25315d269af7bd72de11317fa08e799ea5cce42",
+          "251e5186b223233fcecaa43ce25315d269af7bd72de11317fa08e799ea5cce42"
+        ],
+        "source_identity": true,
+        "trace_sha256": [
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4",
+          "cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4"
+        ]
+      }
+    }
+  },
+  "inputs": {
+    "helper_source_sha256": "95ff7ed9c0f8e2afb3ab226efaa8c0c25e711f127d906aeb6c2467b9841f1c2c",
+    "initial_coefs_sha256": "107d3c54d69d0364452be3dd9617189fdac2a913999b9ae72795a04af076de4a",
+    "initial_manifest_sha256": "6947405fd472b7401fe3460b037bfc17a788c04582ff5215b21f4821621104cd",
+    "libnc_header_sha256": "d0e341301e66eec8647b055d6d704ca254051bf877036599423e83e39a7132c6",
+    "libnc_library_sha256": "1836cdfde987885e542cb88847cc58c9abefb0ef59a511ea9540dcbe46ac6d3e",
+    "libnc_source_sha256": "9a44757c4837607b0be9abc0bb2780dbe006b381728549481eedc339599a138a",
+    "named_decision_sha256": "f38865804932a5fbb3002b8daa728be90eedc5700bc4756c13778117e89248e8",
+    "script_sha256": "ff242863ad86cf3047896e499c076db3ce9545844703d8046de4bcf420a404da"
+  },
+  "schema": "gamma.nncp_v33_libnc_concat_root_scope_gradient.v1",
+  "score_credit_bytes": 0,
+  "status": "REJECT"
+}
