@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T00:37:22+00:00`
+- Generated at UTC: `2026-08-02T00:46:06+00:00`
 
 ## Target State
 
@@ -106,16 +106,16 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 - Latest delayed status log: `projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log`
 - Latest delayed status log present: `true`
-- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log`
+- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260709T122555Z.log`
 
 ## Candidate Audit
 
 - Audit return code: `0`
-- Program directories: `608`
-- Registered programs: `256`
-- Untracked nonignored entries: `3`
-- Modified tracked entries: `6`
-- Candidate statuses: `active=18, blocked_dependency=31, candidate=23, measured_negative=96, retired=440`
+- Program directories: `612`
+- Registered programs: `260`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `16`
+- Candidate statuses: `active=18, blocked_dependency=31, candidate=24, measured_negative=98, retired=441`
 
 ## Active Runner Process Table
 
@@ -131,9 +131,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Proof Boundary
 
-- best_exact_10m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `exact artifact-backed`; score `1,825,866`
-- best_exact_10m_archive: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `exact artifact-backed`; score `1,825,866`
-- best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `exact artifact-backed`; score `15,040,789`
+- best_exact_10m: `fx2_core_tune_title_mctx8000_m0p100_m1p95_lstm1p00_sse1000_decay_shiftmiddeep_v1`; status `exact artifact-backed`; score `1,882,615`
+- best_exact_10m_archive: `cmix21_text_mmap_paq5_ppmd20864k_fxcmidx13div2_fxcmrcm20_ppmdguard2_rcm32_bufthirtysecond_minmaps_v1`; status `exact artifact-backed`; score `2,202,351`
+- best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `exact artifact-backed`; score `15,462,586`
 - best_full_1g: `not verified`; status `not verified`; score `n/a`
 - best_forecast: `endpoint428_gate_dot_fuse_output_update_loop_v1`; status `source-bound-canonical-forecast`; score `109,389,323`
 

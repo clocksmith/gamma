@@ -3939,3 +3939,95 @@ unchanged; verified full-1G remains unknown.
 
 Decision:
 `results/janus_sparse_context_dag_q0_v1/decision.json`.
+## 2026-08-01: TESBE-Raw typed refinement and transfer
+
+The exact opening-250K `typed_event_sleeping_trie_raw_v0` gate codes one raw
+stream with a common adaptive order-1 literal model. B0 is literal-only, C0
+adds trigger-keyed completed continuations, E0 adds completed suffixes, and E1
+adds decoder-built Wiki state. All four internal decoders and duplicate archive
+identity passed. C0, E0, and E1 saved 7,219, 7,975, and 7,666 payload bytes
+against B0. The typed E1 refinement therefore lost 309 bytes to E0 and is
+retired without key or capacity sweeps.
+
+The unchanged `sleeping_trie_global4_selector_raw_v1` transfer reached opening
+1M. C0 saved 19,763 payload bytes, E0 saved 19,278, and E1 saved 17,929, so the
+selector chose C0. Exact raw reconstruction and deterministic re-encode passed.
+The complete 473,912-byte archive nevertheless loses 183,180 bytes to the
+same-population LZMA archive before program cost. This is standalone
+`constructive_prefix` mechanism evidence with zero endpoint428 or full-corpus
+score credit.
+
+Evidence:
+
+- `results/typed_event_sleeping_trie_raw_v0/2026-08-01T192928.json`
+- `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json`
+- `operations/adaptive/exclusions/tesbe_raw_typed_key_refinement_250k_v0.json`
+
+## 2026-08-01: Paid trigger-receipt copy IR retired
+
+The frozen `trigger_receipt_copy_lzma_v0` opening-250K gate replaces complete
+past 32-byte continuations with explicit three-byte receipt references and
+feeds raw, C0, and E0 representations to one identical LZMA backend. C0 and E0
+removed 6,612 and 11,832 representation bytes, but their LZMA payloads were
+260 and 304 bytes larger than raw LZMA. RAW was correctly selected. All IR
+inverses, raw reconstruction, and deterministic archive checks passed.
+
+This proves that the large receipt gain against the weak order-1 literal model
+is already represented more efficiently by LZMA's match model. Retire this
+copy representation and its opcode, key, history, length, and LZMA-setting
+rescue sweeps. Evidence is `constructive_prefix` negative with zero frontier
+score credit.
+
+Evidence:
+
+- `results/trigger_receipt_copy_lzma_v0/2026-08-01T194211.json`
+- `operations/adaptive/exclusions/trigger_receipt_copy_lzma_250k_v0.json`
+
+## 2026-08-02: Clocksmith-host endpoint428 artifact availability audit
+
+An exact hash and size scan of `/home/clocksmith`, `/mnt`, `/media`, `/tmp`,
+reachable and unreachable Git blobs, the retained handoff, and the surviving
+nonproof tree found none of the two endpoint428 source packages or two exact
+executables on the clocksmith host. The surviving
+`reconstruct_endpoint428_runtime_v1` tree is stock cmix21 and is not the
+parent.
+
+This local availability result is superseded for canonical accounting by the
+committed originating-host recovery receipt. That receipt verifies independent
+copies of the 280,147-byte `19dd...` and 261,125-byte `b6fe...` packages,
+clean wrapper/backend identity, exact current-parent 1M replay, and archived
+10M identity. The canonical forecast therefore remains 109,389,323 with a
+1,389,323-byte design-target debt. The local audit does not establish a
+`full_corpus_official` result.
+
+Evidence:
+
+- `results/endpoint428_artifact_recovery_audit_v0/receipt.json`
+- `results/typed_event_sleeping_bayes_parent_recovery_q0_v1/decision.json`
+
+## 2026-08-02: Older-trace typed-event sleeping Bayes realization retired
+
+Candidate: `typed_event_sleeping_bayes_endpoint428_v0`.
+
+This `causal_shadow` uses the surviving archive-identical older endpoint428 P1
+stream. Completed WRT events are released only after completion; memory learns
+only complete past 32-byte continuations; the literal branch is exactly B0;
+and every expert updates on every actual bit. B0 reproduces the parent payload,
+and C0, E0, E1, and M1 all decode and re-encode exactly.
+
+C0 loses 861 bytes overall and 361 on holdout. E0 loses 400 and 181. Typed E1
+loses 408 and 204 and also trails E0. The ideal 65535:1 Bayes envelope meets
+its constant-regret safety floor, while the fixed-point M1 output is
+byte-identical to B0. A paid global selector chooses B0 and loses one framing
+byte.
+
+The later current-parent Q0 independently reaches the same terminal conclusion
+with the recovered exact 173,902-byte parent. Retire this point-mass trigger
+family unchanged. It receives zero score credit and does not alter the
+109,389,323 forecast.
+
+Evidence:
+
+- `results/typed_event_sleeping_bayes_endpoint428_v0/receipt.json`
+- `results/typed_event_sleeping_bayes_envelope_q0_v1/decision.json`
+- `operations/adaptive/exclusions/typed_event_sleeping_bayes_endpoint428_opening1m_v0.json`
