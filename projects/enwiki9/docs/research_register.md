@@ -4814,3 +4814,45 @@ forward tensors before changing another backward implementation.
 
 Decision:
 `results/nncp_v33_libnc_decoder_graph_update_parity_v1/decision.json`.
+
+## 2026-08-02: LibNC internal forward trajectory frozen
+
+Candidate and proposal: `nncp_v33_libnc_internal_forward_trajectory_v1`.
+
+The exact bound command was reconstructed before the gate: it emits the
+receipt-bound 100-byte archive SHA-256
+`8dd5482e51e5c85b92aab8e0ca9dffc8fc7d3458a2bfd2d669c2e9b1330646da`
+and teacher trace SHA-256
+`cde241e346ea4b1bc2d62822f1b5645c1d5f204a155293def4915b6c1715fef4`.
+The diagnostic recompiles that source with existing `DUMP_HASH` calls enabled
+and replaces only the dump function with a complete F32 serializer. Two runs
+must preserve both bound artifacts and repeat every tensor byte-identically.
+
+Seven labeled tensors per decoder state are compared with the matched
+state-major PyTorch trajectory. The first source-ordered error above `2e-6`
+is the only forward correction this gate may authorize. If all 28 tensors
+match, further forward changes are forbidden without new evidence.
+
+Plan: `docs/nncp_v33_libnc_internal_forward_trajectory_plan.md`.
+
+## 2026-08-02: LibNC internal forward trajectory is exact
+
+The source-bound `DUMP_HASH` build reproduced the receipt-bound archive and
+teacher trace byte-for-byte on both runs. All 28 labeled internal tensor files
+also repeated byte-identically with aggregate SHA-256
+`fc8270e93d83baf84e9c8f2fb5ca0a63ec273a8b2c4e5f2d5ea915f48d626d8b`.
+
+No forward divergence exceeded `2e-6`. The largest internal error was
+`2.384185791015625e-07` at `ff1_out`; raw attention and feed-forward residuals
+were within `8.940696716308594e-08`, and output probabilities were within
+`3.725290298461914e-09`. Norm ratios stayed within approximately
+`1.1e-7` of one. This eliminates hidden forward scale, direction, decoder
+schedule, and probability mismatch as explanations for the first-update sign
+failures.
+
+Do not alter another forward primitive. A valid continuation must either
+capture direct internal backward tensors/compositions or use native LibNC as
+the teacher. The result carries zero score and forecast credit.
+
+Decision:
+`results/nncp_v33_libnc_internal_forward_trajectory_v1/decision.json`.
