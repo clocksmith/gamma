@@ -4540,3 +4540,32 @@ mandatory. A pass authorizes one 65,536-symbol headroom gate but grants no score
 credit or LibNC/published-score claim.
 
 Plan: `docs/nncp_v33_rocm_constructive_one_update_q0_plan.md`.
+
+## 2026-08-02: NNCP v3.3 batched constructive Q0 is causally malformed
+
+The heavy-lock Q0 reached the receipt-bound ROCm interpreter, PyTorch
+`2.12.1+rocm7.2`, HIP `7.2.53211`, and the Radeon 8060S under the required GFX
+override. The matrix-compute SHA-256 was
+`9ab0c29d311879d656d7fb6bd5ab0097c830911629ed27cccfef5265ea0ec5b1`.
+It stopped before arithmetic encoding because changing segment input position
+9 changed earlier logits by `0.009521484375`.
+
+Follow-up localization proved this is not repeat-run GPU noise. Identical
+inputs emitted bit-identical logits. For the future perturbation, masked
+attention scores and probabilities at earlier positions were still identical,
+but the BF16 attended-value reduction differed by
+`7.62939453125e-06`; the discrepancy first became externally visible at block
+10 and amplified in later layers. This reproduces the prior full-segment ROCm
+teacher failure. Record the parent as an infrastructure/cause-of-invalidity
+result with no compression verdict, score credit, or headroom authorization.
+
+The one-change child
+`nncp_v33_rocm_constructive_causal_replay_q0_v1` retains the full profile and
+segment-final update but computes each state from a decoder-known prefix plus
+frozen zero future fillers. Encoder and decoder therefore invoke the identical
+state-major schedule without materializing future truth. Its frozen gate still
+requires two identical encodes, an independent model-driven decode, complete
+branch-frequency and final-state identity, official inverse, and decimal 10 GB
+compliance. A pass authorizes only 65,536-symbol headroom evidence.
+
+Plan: `docs/nncp_v33_rocm_constructive_causal_replay_q0_plan.md`.
