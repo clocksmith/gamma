@@ -4698,11 +4698,13 @@ An initial positional interpretation of the unnamed LibNC interposition files
 appeared to place the first material divergence immediately behind the output
 layer. That interpretation assigned a `6.51%` relative-L2 difference to
 `ff_bias2_0` and a `12.87%` difference with 50 sign reversals to `ff2_0`.
-The later direct tail-composition gate invalidated the `ff_bias2_0` assignment:
-the exact LibNC and PyTorch tail gradients agree with one another but both miss
-that unnamed file by the same almost constant offset. These positional names
-are quarantined until a source-instrumented named-gradient capture replaces
-them. The final-parameter comparison itself remains valid.
+The later direct tail-composition gate made the `ff_bias2_0` assignment
+temporarily non-authoritative: the exact LibNC and PyTorch isolated-tail
+gradients agree with one another but both miss that unnamed file by the same
+almost constant offset. The subsequent source-named capture restored the
+assignment byte-for-byte and showed that the extra term belongs to the full
+optimized graph, not the standalone tail. The final-parameter comparison
+remains valid.
 
 Decision:
 `results/nncp_v33_libnc_tanh_gelu_rmsnorm_update_parity_v1/decision.json`.
@@ -4904,3 +4906,66 @@ or forecast credit changes.
 
 Decision:
 `results/nncp_v33_libnc_tail_backward_composition_v1/decision.json`.
+
+## 2026-08-02: source-authoritative named gradients frozen
+
+Candidate and proposal: `nncp_v33_libnc_named_gradient_trajectory_v1`.
+
+The positional gradient interpretation is quarantined, so this child patches a
+temporary copy of the receipt-bound source only at two observation points. It
+exposes the live transformer `NCParamList` immediately before `nc_backward`,
+then maps each callback's opaque `NCParam *` directly to the list and serializes
+the tensor under the corresponding `NCParam.name` before the unchanged update
+call. Disassembly of the exact library binds this pointer contract:
+`nc_new_param_str` passes its newly allocated `NCParam *` to `nc_set_param`.
+
+Two executions must reproduce the bound archive and teacher trace, repeat all
+named gradient bytes, cover the 18 initial-manifest parameters exactly once,
+and bind every named file byte-for-byte to its old positional counterpart. A
+fresh deterministic state-major PyTorch replay supplies matched gradients.
+Only the first source-named tensor above `2e-6` or with a sign mismatch may
+authorize a direct subgraph child. If all named gradients match, the next
+boundary is Adam. No score or forecast credit is available.
+
+Plan: `docs/nncp_v33_libnc_named_gradient_trajectory_plan.md`.
+
+## 2026-08-02: named gradients restore the mapping and localize `ff2_0`
+
+The first infrastructure attempt correctly failed because it treated the
+callback opaque value as an optimizer-variable pointer. Disassembly of the
+exact `libnc.so` showed the real contract: `nc_new_param_str` passes its newly
+allocated `NCParam *` directly to `nc_set_param`. The corrected retry uses that
+pointer and is source-bound.
+
+Both corrected runs reproduced the exact archive and teacher trace. All 18
+named gradients repeated byte-identically with aggregate SHA-256
+`db3a585b942ddcbb560a47ad9587d7457ddd718215799fb70ae8ff982dfed0ba`.
+Every callback name is unique, covers the complete initial manifest, has the
+manifest dimensions, and is byte-identical to the corresponding old
+`unknown_N` file. The positional mapping is therefore restored as:
+
+```text
+0 embed_out   1 ff2_0       2 ff1_0       3 ln_g_1
+4 ln_b_1      5 ff_bias1_0  6 ff_bias2_0  7 w_o_0
+8 w_r_0       9 b_r_0      10 w_kv_0     11 w_q_0
+12 ln_g_0    13 ln_b_0     14 embed       15 ln_g_2
+16 ln_b_2    17 out_bias
+```
+
+The matched PyTorch probabilities remain within
+`3.725290298461914e-09` of the teacher and its complete gradient map repeats.
+`embed_out` is exact to `8.940696716308594e-08`. The first actual divergence is
+`ff2_0`: maximum error `0.008702129125595093`, relative L2 error `12.8747%`,
+and 50 sign mismatches. `ff_bias2_0` retains the `6.5088%` relative-L2 offset
+without sign mismatches.
+
+Combined with the rejected isolated-tail gate, this localizes the missing
+contract to the graph that joins the feed-forward output block into the
+four-state optimized loss, rather than final RMSNorm, output projection, or
+loss alone. The authorized child must start from exact captured `ff2_in` and
+residual states, include shared `ff2_0` and `ff_bias2_0`, and reproduce both
+named gradients before changing the full replay. No score or forecast credit
+changes.
+
+Decision:
+`results/nncp_v33_libnc_named_gradient_trajectory_v1/decision.json`.
