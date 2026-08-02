@@ -79,17 +79,40 @@ above is permitted. Missing, ambiguous, or internally inconsistent rule
 evidence yields `MALFORMED_EVIDENCE`; it cannot be replaced by a benchmark
 convention or an assumption about idle threads.
 
-A 2026-08-02 read-only audit identified an apparent wording boundary that must
-be settled by the frozen snapshot: the prize homepage and FAQ use single-core
-language, while the detailed timing page presents both one-core and multicore
-reference calibration values. Until the authority snapshot and adopted
-interpretation resolve that boundary, do not call the exact topology eligible
-or ineligible. The live pages to snapshot are:
+A 2026-08-02 read-only audit initially identified an apparent wording boundary:
+the prize homepage and FAQ use single-core language, while the detailed timing
+page presents both one-core and multicore reference calibration values. The
+current official pages resolve the broad interpretation. The homepage requires
+execution using a single CPU core, and the FAQ explains that a `C`-core
+algorithm does not receive a `100/C` wall-clock allowance. The multicore
+Geekbench values in the detailed rules describe available test machines; they
+do not authorize multicore execution. Use the one-core Geekbench score for the
+time inequality.
+
+The exact retrieved page identities are:
+
+| Page | Retrieved UTC | Bytes | SHA-256 | Last-Modified |
+|---|---|---:|---|---|
+| `https://www.hutter1.net/prize/` | `2026-08-02T19:59:48Z` | `48,606` | `065186dc3e6ef61f295aa30873c142bd6e4a2f6f310cfbd1d28ec09cbc6cbff7` | `2025-05-30T14:08:29Z` |
+| `https://www.hutter1.net/prize/hrules.htm` | `2026-08-02T19:59:49Z` | `15,907` | `e55d9f96b227e61ec0996adaf36304185d74db8c17093b403bb325240b2dc163` | `2024-10-09T19:15:29Z` |
+| `https://www.hutter1.net/prize/hfaq.htm` | `2026-08-02T19:59:50Z` | `96,252` | `9233864b9ab2ce7b75ca2092416b518b196fcd498ab4e70e8c8f20b1bc42f52b` | `2025-05-30T14:08:29Z` |
+
+The controlling locators are homepage `The Task` restriction, detailed-rules
+`Rules` resource paragraph, and FAQ `Why do you restrict to a single CPU core
+and exclude GPUs?`. The verification method is literal cross-page consistency:
+the specific single-core statements control the test-machine inventory.
+
+One narrower policy question remains unresolved without committee confirmation:
+whether several software threads time-sharing one allowed logical CPU count as
+single-core execution. Therefore the current unconfined endpoint428 topology
+must not be called eligible, and the affinity preflight below may establish
+observed one-logical-CPU use but cannot by itself establish final prize
+eligibility. The live authoritative pages are:
 
 ```text
-https://prize.hutter1.net/
-https://prize.hutter1.net/hrules.htm
-https://prize.hutter1.net/hfaq.htm
+https://www.hutter1.net/prize/
+https://www.hutter1.net/prize/hrules.htm
+https://www.hutter1.net/prize/hfaq.htm
 ```
 
 ## Bounded external-policy preflight
@@ -100,11 +123,13 @@ with `OMP_THREAD_LIMIT=1`, and collect the full observed topology required
 below. `OMP_NUM_THREADS=1` alone is insufficient because the source contains
 hard-coded `num_threads(3)` clauses.
 
-This preflight can answer only whether multiple software threads confined to
-one logical CPU satisfy the adopted rule interpretation and whether the exact
-archive remains unchanged. If the entrant must supply affinity or environment
-text, count every required command-line byte under the rule snapshot. Do not
-assume that verifier-imposed policy is a free archive dependency.
+This preflight can answer only whether the exact archive remains unchanged and
+whether every runnable thread is confined to one logical CPU. Committee
+confirmation or an explicitly adopted submission-time interpretation is still
+required to decide whether multiple time-sharing software threads satisfy the
+single-core rule. If the entrant must supply affinity or environment text,
+count every required command-line byte under the rule snapshot. Do not assume
+that verifier-imposed policy is a free archive dependency.
 
 The preflight is not a runtime rescue and is not authorized while the score
 target is missed or another heavy job holds the lock. Existing active/passive,

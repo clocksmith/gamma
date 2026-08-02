@@ -6993,6 +6993,26 @@ No affinity run is authorized while the score target is missed or NNCP owns the
 heavy lock. Target-bearing runtime work still requires modeled-work removal or
 a replacement architecture.
 
+## 2026-08-02: official single-core rule boundary narrowed
+
+The current official homepage, detailed rules, and FAQ were retrieved and
+bound by byte length, SHA-256, retrieval timestamp, and `Last-Modified` in
+`docs/endpoint428_cpu_thread_eligibility_contract.md`. Read together, they
+resolve the broad ambiguity: the detailed rules' multicore Geekbench numbers
+are test-machine inventory, not permission to use multiple cores. The homepage
+requires one CPU core, and the FAQ explicitly rejects converting a `C`-core
+algorithm into a `100/C` wall-clock allowance. Endpoint428 must therefore use
+the one-core Geekbench value and cannot claim eligibility from its unconfined
+OpenMP topology.
+
+One narrower policy question remains: whether several software threads all
+confined to one logical CPU satisfy the single-core condition. The frozen
+affinity preflight can prove topology and archive identity, but final prize
+eligibility still requires committee confirmation or an explicit adopted
+submission-time interpretation. This clarification grants no score, runtime,
+or eligibility credit and does not authorize a run while NNCP owns the heavy
+lock or the score target remains missed.
+
 ## 2026-08-02: historical frontier provenance repaired without new credit
 
 Four exact historical artifacts were recovered from the local nonproof archive
