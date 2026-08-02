@@ -94,3 +94,13 @@ Use these durable sources rather than chat or older narrative:
 - `operations/adaptive/` for proposal, job, and ownership state;
 - `results/run_ledger.jsonl` and `results/<candidate>/` for exact receipts;
 - `ADAPTIVE_WORKFLOW.md` for execution and promotion mechanics.
+
+## Problem-decomposition boundary
+
+`docs/hutter_winning_problem_decomposition.md` separates the supporting Atlas
+and ACS-PROVER theorems from the eight executable obligations that actually
+constitute a win. Do not create a new public math problem unless its hidden
+finite instance, theorem-to-witness map, verifier, accounting, and
+target-bearing transfer implication are already frozen. Empirical headroom,
+causal implementation, package cost, and runtime evidence remain organizer
+work rather than mathematics to delegate.
