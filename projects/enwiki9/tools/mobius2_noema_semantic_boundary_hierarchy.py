@@ -200,7 +200,9 @@ def runtime_probe(torch: Any) -> dict[str, Any]:
     ):
         raise RuntimeError("ROCm matrix probe returned the wrong result")
     return {
-        "sys_executable": str(Path(sys.executable).resolve()),
+        "sys_executable": sys.executable,
+        "sys_executable_resolved": str(Path(sys.executable).resolve()),
+        "sys_prefix": sys.prefix,
         "torch_version": torch.__version__,
         "hip_version": torch.version.hip,
         "cuda_available": bool(torch.cuda.is_available()),
@@ -390,7 +392,9 @@ def main() -> int:
 
     runtime = runtime_probe(torch)
     print(
-        f"python={runtime['sys_executable']} torch={runtime['torch_version']} "
+        f"python={runtime['sys_executable']} sys.prefix={runtime['sys_prefix']} "
+        f"resolved_python={runtime['sys_executable_resolved']} "
+        f"torch={runtime['torch_version']} "
         f"HIP={runtime['hip_version']} device={runtime['device_name']}"
     )
     print("torch.cuda.is_available()=True torch.cuda.device_count()=1 DEVICE=cuda")
