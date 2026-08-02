@@ -6697,6 +6697,13 @@ retires the exact graph composition without widening; a pass authorizes only a
 paid hit/escape-and-rank Q0. Plan:
 `docs/wikigraph_causal_colink_target_qm1_plan.md`.
 
+A 2026-08-02 preflight now binds WIKIGRAPH's direct and transitive parser,
+state, role, Q256, page-map, and WRT donors by Git blob and SHA-256. All six
+objects exist and match the tracked bytes used by the other frozen WIKI plans.
+Materialization must use these objects or create a versioned source/mechanism
+change. This is reproducibility evidence only; the dependency remains dormant
+and no graph headroom or score credit has been measured.
+
 ### Online locally consistent edit grammar: merged and retired unchanged
 
 The proposed online hierarchy is not a new project-level family. WikiIR

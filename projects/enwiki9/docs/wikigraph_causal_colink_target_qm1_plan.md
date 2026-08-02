@@ -65,6 +65,23 @@ inverse backend SHA-256
                d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194
 ```
 
+Freeze the direct and transitive donor semantics. A read-only preflight on
+2026-08-02 reproduced these tracked Git blobs and content hashes:
+
+```text
+donor                                                     Git blob                                  SHA-256
+tools/wikiback_incoming_anchor_context_qh0.py             0e6d653f69d94aeaf4f149ab8982aeade929e92c  5a6bb8f47e7250f5eac16a5803c0fadbc032f70aa0a06cd1fb4e5e1f140c9638
+tools/causal_state_screen.py                              18c55e347e69860529a76cb6e5069ac597685dd7  aaa42365acadc8e32f8b79e5862ca451a91d637093b483bcf54cbf657c4740e4
+tools/mobius2_tessera_self_annotation_graph.py            2f066cd73ab054d5b4a8902aa2018348b9fe00cb  0d5168f834c24153657ba162e2bfab3f6cce9fd1396e1079e8e8ac7c09318594
+tools/mobius2_tessera_typed_fiber_ceiling.py              b7d8e80b051b98362d36984719ddbd8be24fd8d4  c1e404b9f5328df6f75ae3ffef6e4c9bb9d3757c31c54905ae727c1b68578af3
+tools/sibyl_page_prompt_oracle.py                         e2104295ba54b9725d58b1c0d9d9285ae5eca236  68b209861d3d46113acff2d3313a58237e01c620d331d11ccec3c846b99d00d6
+tools/wrt_exact.py                                        5285841cd9107b915b31be5b94ab54ac0a8040c7  ae08246ee8b4708904f78aa5f694111834d6420deece34957c61d6fea3a9797a
+```
+
+Materialization must use these exact donor bytes or create a new proposal
+version that declares the source/mechanism change. Importing later-HEAD parser
+or identity semantics into this proposal would make its controls incomparable.
+
 ## Causal graph contract
 
 Graph topology and exact candidate spelling use different identities:
