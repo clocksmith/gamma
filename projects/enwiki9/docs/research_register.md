@@ -6106,3 +6106,39 @@ credit unless a counted native successor is later proved.
 
 Plan:
 `docs/mobius2_noema_semantic_boundary_hierarchy_qh0_plan.md`.
+
+## 2026-08-02: Residual-program SRSTC frozen for design review
+
+Proposal: `srstc_residual_program_retrieval_q0_v1`.
+
+Source inspection identifies one defensible SRSTC successor outside the
+retired scalar and point-mass endpoints: retrieve a fixed `128`-bit vector of
+quantized endpoint428 residuals, then apply its aligned entries as bounded
+odds corrections to the identical parent stream. The primary coordinate is a
+signature of eight completed residual programs. Completed WRT event identity,
+already-decoded event prefix, and decoder-built Wiki state provide secondary
+alignment; raw suffix keys, current truth, and eventual event length are
+excluded.
+
+The design freezes B0, a matched flat F0, residual-native R0, a
+support-matched blind-key RB, and a 37-position shuffled-program RS. A
+preceding-epoch snapshot makes every lookup and both negative controls causal.
+R0 must beat all four controls, remain positive on development, selection, and
+sealed confirmation, save at least `3,000 B/M` gross and `2,100 B/M` after
+complete projected package cost, and satisfy exact arithmetic, WRT, official
+inverse, and duplicate-replay checks.
+
+No implementation or queue entry is authorized yet. A zero-credit
+decoder-visible candidate-universe ceiling must first clear `3,000 B/M` on all
+three chronological splits. Execution also requires hash-checked transfer of
+the receipt-bound endpoint428 source packages, current-parent P1, WRT store,
+wrapper, backend, dictionary, page map, and trace decision, none of which is
+materialized on this host except the page map and committed metadata.
+
+Evidence:
+
+- `docs/srstc_residual_program_q0_plan.md`
+- `results/endpoint_residual_history_1m_v1/decision.json`
+- `results/janus_sparse_context_dag_q0_v1/decision.json`
+- `results/typed_event_sleeping_bayes_envelope_q0_v1/decision.json`
+- `results/janus_recurrent_quotient_joint_trace_recovery_q0_v1/decision.json`
