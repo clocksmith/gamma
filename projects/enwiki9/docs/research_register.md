@@ -4181,3 +4181,40 @@ unchanged.
 
 Decision:
 `results/mobius2_tessera_typed_fiber_ceiling_qh0_v1/decision.json`.
+
+## 2026-08-02: post-TESSERA event-universe boundary screens
+
+Two complementary WRT-shell ideas were screened against the exact recovered
+JANUS-plus-quotient 10M trajectory before proposal materialization. They are
+diagnostic ceilings with zero score credit, not constructive codec receipts.
+
+The whole-shell split retained all 2,309,108 WRT token bytes on their exact P1
+rows and represented every non-token event plus the exact token-hole pattern
+in a separate stream. Its actual token residual was 1,089,960 bytes. The raw
+shell was 3,942,738 bytes, the token-hole bitvector was 642,478 bytes, and XZ9
+extreme still needed 1,349,512 side bytes. With a 64-byte frame allowance the
+total was 2,439,536 bytes, losing 822,052 bytes, or 82,205.2 B/M, to the
+1,617,484-byte joint parent. A generic shell side stream is therefore not a
+candidate.
+
+The narrower prose-space run screen considered 846,033 completed prose token
+events and could generate 737,408 following single-space WRT events. Those
+spaces displaced only 12,917.921 exact joint qbit-bytes. Merely signaling the
+space/non-space decisions has a 58,483.658-byte binary entropy lower bound;
+the actual XZ9 side stream used 59,104 bytes. Its exact retained residual was
+1,604,435 bytes, so the framed total was 1,663,603 bytes, a 46,119-byte loss or
+4,611.9 B/M. Run-length, separator-code, entropy-coder, and framing rescues
+cannot reverse a lower bound already more than four times the displaced cost.
+
+These screens close the immediate non-token complement to TESSERA without
+adding an adaptive candidate or queue job. Exact joint attribution places
+1,089,860.465 coded bytes in dictionary-token events, including 763,717.086
+bytes in prose tokens, versus 526,958.907 bytes in literal, control, and
+escaped-literal events. The next score-bearing mechanism must therefore expose
+new information about prose token identities after the joint trajectory. It
+must not relabel a lexical type rescue, shell separator code, suffix table,
+residual DAG, recurrent-width change, prompted clause ontology, or prior-page
+prototype as a new lane.
+
+Portfolio:
+`docs/post_tessera_event_universe_portfolio_20260802.json`.
