@@ -4106,3 +4106,78 @@ retired families. A successor may be materialized only after a frozen
 decoder-visible upper bound clears 3,000 B/M; otherwise it remains a diagnostic
 with zero score credit. Forecast 109,389,323, debt 1,389,323, and unknown
 full-1G status remain unchanged.
+
+## 2026-08-02: TESSERA typed semantic event side-stream QH0 frozen
+
+Proposal: `mobius2_tessera_typed_fiber_ceiling_v1`.
+
+The unrun `janus_joint_structural_role_attribution_v1` proposal is superseded
+and rejected with zero evidence. It would have led back toward semantic logit
+calibration. TESSERA instead changes the coded alphabet: selected complete WRT
+dictionary-token events are reconstructed from a finite typed side stream,
+their bits are omitted from the JANUS-plus-quotient residual arithmetic stream,
+and all later P1 rows retain their original alignment as a trace-level stand-in
+for state-preserving native updates.
+
+The primary gate uses the recovered exact 10M joint P1 and 1,617,484-byte joint
+payload. Corpus-induced types come only from deterministic Wikipedia
+self-annotation relations: titles, link target/label aliases, templates,
+categories, headings, reference fields, lead/title relations, and numeric,
+date, unit, and URL shapes. A frozen MDL agglomeration chooses its own type
+count. F1 is a global event dictionary, F2 collapses semantic types while
+retaining role/morphology/surface fibers, F3 is full TESSERA, and FR shuffles
+types inside matched lexical bins.
+
+At every active decoder-visible structural role, every occurrence enters the
+side coder; non-token and unsupported events pay an explicit escape. Actual
+Q24 side symbols, escapes, frames, termination, and the filtered residual range
+payload are counted. Only the serialized model and decoder source are free at
+QH0, and their compressed size is still reported. Promotion requires at least
+30,000 incremental bytes over the joint 10M trajectory, positive development,
+selection, and sealed gains, strict F3 wins over F1/F2/FR, exact parent replay,
+side/residual decode, WRT/raw reconstruction, and byte-identical repeated
+builds. A pass authorizes only a paid TSF1 model gate; forecast credit remains
+zero.
+
+Plan:
+`docs/mobius2_tessera_typed_fiber_ceiling_plan.md`.
+
+## 2026-08-02: TESSERA typed semantic event side-stream QH0 is terminal negative
+
+The canonical opening-10M worker completed with process status zero and a
+valid `REJECT`. It parsed 5,139,821 exact WRT events across 1,325 complete
+pages, including 1,282,752 dictionary-token events. The development
+self-annotation graph covered 36,783 lexemes. Frozen MDL agglomeration reduced
+200 initial signature types to 44 types through 156 deterministic merges. The
+canonical provisional model was 5,675,036 raw bytes and 1,140,970 zlib bytes;
+those bytes were diagnostic and free at QH0.
+
+Selection found no structural role for which the complete F3 side-symbol
+description beat the JANUS-plus-quotient truth-bit codelength. The frozen
+active-role set was therefore empty. F1, F2, F3, and FR each emitted a
+one-byte terminated empty side stream, retained the exact 1,617,484-byte joint
+residual payload, and paid a 78-byte archive frame. Every candidate total was
+1,617,563 bytes: 79 bytes worse than the joint parent, or -7.9 B/M. The
+independently terminated development, selection, and sealed diagnostics each
+also lost 79 bytes. No control ordering or 30,000-byte gross gate passed.
+
+This is a scientific rejection, not a malformed experiment. Joint and
+endpoint parent payloads were byte-identical; all Q24 CDFs and P1 values were
+legal and nonzero; all four side decoders passed; residual arithmetic decoded
+exactly; repeated model, side-stream, and residual builds were byte-identical;
+and the complete WRT stream and official raw inverse were exact. The canonical
+page-map SHA-256 is
+`bbd7997af61a3d1a968f245377ec651d581c97720aa12a3f5b96fd98fa6e2e79`.
+
+Decision: retire this self-annotation graph, lexical/morphological
+factorization, deterministic MDL co-clustering objective, static semantic side
+alphabet, WRT dictionary-token event universe, and all preregistered rescue
+sweeps. Do not build paid TSF1, self-encode this ontology, replay distant
+populations, or integrate a native codec. Any successor must change the
+information source or event universe and must first clear a target-bearing
+exact ceiling after the joint trajectory. Forecast 109,389,323, debt
+1,389,323, score credit zero, and unknown verified full-1G status remain
+unchanged.
+
+Decision:
+`results/mobius2_tessera_typed_fiber_ceiling_qh0_v1/decision.json`.
