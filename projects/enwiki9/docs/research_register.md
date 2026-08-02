@@ -6733,6 +6733,26 @@ and forbids adding isolated gains across changed coding trajectories. The
 promotion ladder ends only with exact 100M qualification and a complete
 full-1G proof; forecasts authorize work but never constitute victory.
 
+## 2026-08-02: target-bound problem decomposition adopted
+
+`docs/hutter_winning_problem_decomposition.md` now distinguishes solved
+supporting mathematics from the eight executable obligations: exact parent,
+new information, causality, compact compilation, exact inversion, complete
+ledger, resource eligibility, and full-corpus certification. Atlas paid
+selection, Wheeler quotienting, integer shadowing, parity reconstruction, and
+the ACS-PROVER library organize or compile supplied information; they do not
+discover target-scale information. `ACS-MATH-SEAL-2` remains `UNBOUND` and no
+new solver distribution is authorized.
+
+The decomposition reconciles SRSTC to current receipts: its candidate-universe
+QM1 lost `12,211` bytes after the four-bit oracle index and its causal
+log-opinion successor also regressed, so both are terminal zero-credit
+rejections rather than active routes. A future mathematical competition is
+admissible only after a finite hidden instance, theorem-to-executable witness
+map, canonical verifier, complete accounting, and target-bearing transfer
+implication are frozen. Missing experiments, implementations, teachers,
+packages, and runtime receipts remain organizer obligations.
+
 ## 2026-08-02: external prize boundary and WIKI-JOINT audit
 
 The official Hutter Prize site still lists `fx2-cmix` at `110,793,128`. The
