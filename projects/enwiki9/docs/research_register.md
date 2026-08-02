@@ -6772,3 +6772,8 @@ reported its worker live. The reporter now attributes a guard to its verified
 ancestor adaptive worker, retains the job's candidate and gate size, and uses
 the guard only for resource and terminal metrics. Standalone unowned speedlab
 recovery remains unchanged. The active NNCP process was not interrupted.
+
+The strict `enwiki9-status` report now applies the same binding when its live
+guard path exactly matches the canonical running gate and liveness receipt.
+It preserves the internal guard label as diagnostic metadata while reporting
+the adaptive candidate ID and `2,233,775`-byte gate scope to operators.
