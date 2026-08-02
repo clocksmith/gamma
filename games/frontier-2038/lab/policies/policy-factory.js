@@ -1,6 +1,9 @@
 import { ClaudeCliCaller, CodexCliCaller } from "../callers/index.js";
 import { CliBackedPlayerPolicy, HybridPlayerPolicy } from "./cli-backed-policy.js";
-import { WeightedPlayerPolicy } from "./weighted-policy.js";
+import {
+  validatePolicyTreatment,
+  WeightedPlayerPolicy
+} from "./weighted-policy.js";
 
 export const supportedPolicyBackends = new Set([
   "weighted",
@@ -21,7 +24,13 @@ export function validatePolicyBackend(backend) {
 export function createPlayerPolicy(profile, backend = profile.defaultBackend || "weighted", options = {}) {
   validatePolicyBackend(backend);
   if (backend === "weighted" || backend === "greedy") {
-    return new WeightedPlayerPolicy(profile, { selection: backend });
+    return new WeightedPlayerPolicy(profile, {
+      selection: backend,
+      treatment: validatePolicyTreatment(options.policyTreatment)
+    });
+  }
+  if (options.policyTreatment) {
+    throw new TypeError("Deterministic policy treatments cannot be applied to LLM backends.");
   }
   if (!options.allowLlm) {
     throw new Error(`Backend ${backend} requires --allow-llm.`);

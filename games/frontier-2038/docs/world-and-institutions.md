@@ -1,6 +1,6 @@
 # M3T4 2038: World and Institutions
 
-**Rules version:** 0.5.0-rc.33-test
+**Rules version:** 0.5.0-rc.34-test
 
 **Rules companion:** [How to Play and Rules Reference](./core-rules.md)
 

@@ -285,6 +285,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.metrics.shovelsIncome = 0;
       player.metrics.factionAbilityValues = {};
       player.metrics.mandateEvents = [];
+      player.dealFlowRunwayCredits = [];
+      player.metrics.dealFlowConversion = {
+        creditsGranted: 0,
+        creditsSpent: 0,
+        causallyNecessaryCreditsSpent: 0,
+        conversionEligibleCreditsSpent: 0,
+        nonConversionCreditsSpent: 0,
+        mandateAttributed: 0,
+        events: []
+      };
       player.metrics.gridReadyFacilityRounds = [];
       player.metrics.promisesMade = 0;
       player.metrics.promisesFulfilled = 0;
@@ -320,6 +330,89 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     ) {
       this.synchronizePublicMandate(player, `${key}_threshold`);
     }
+  }
+
+  beginRunwayConversionContext(player, decision, kind = "action") {
+    this.runwayConversionContexts ||= [];
+    this.runwayConversionContexts.push({
+      player,
+      actionId: decision.actionId,
+      decisionId: decision.decisionId,
+      kind,
+      events: []
+    });
+  }
+
+  endRunwayConversionContext(player) {
+    const context = this.runwayConversionContexts?.at(-1);
+    if (context?.player === player) this.runwayConversionContexts.pop();
+  }
+
+  grantDealFlowRunway(player, details = {}) {
+    const before = player.runway;
+    this.addResource(player, "runway", 1);
+    const granted = player.runway - before;
+    if (!granted) return 0;
+    const credit = {
+      id: `deal-flow-r${this.round}-c${this.cycle}-s${player.seat}-` +
+        `${player.metrics.dealFlowConversion.creditsGranted + 1}`,
+      round: this.round,
+      cycle: this.cycle,
+      remaining: granted,
+      ...clone(details)
+    };
+    player.dealFlowRunwayCredits.push(credit);
+    player.metrics.dealFlowConversion.creditsGranted += granted;
+    return granted;
+  }
+
+  spendRunway(player, amount, details = {}) {
+    const before = player.runway;
+    const spent = Math.min(before, Math.max(0, Number(amount) || 0));
+    if (!spent) return 0;
+    const taggedBefore = player.dealFlowRunwayCredits.reduce(
+      (sum, credit) => sum + credit.remaining,
+      0
+    );
+    const untaggedBefore = Math.max(0, before - taggedBefore);
+    let taggedSpent = Math.min(taggedBefore, Math.max(0, spent - untaggedBefore));
+    let remainingTaggedSpend = taggedSpent;
+    for (const credit of player.dealFlowRunwayCredits) {
+      if (!remainingTaggedSpend) break;
+      const consumed = Math.min(credit.remaining, remainingTaggedSpend);
+      credit.remaining -= consumed;
+      remainingTaggedSpend -= consumed;
+    }
+    player.runway -= spent;
+    if (!taggedSpent) return spent;
+
+    const context = [...(this.runwayConversionContexts || [])]
+      .reverse()
+      .find((candidate) => candidate.player === player);
+    const conversionEligible = Boolean(details.conversionEligible && context);
+    const event = {
+      round: this.round,
+      cycle: this.cycle,
+      cause: details.cause || "runway_spend",
+      actionId: context?.actionId || null,
+      decisionId: context?.decisionId || null,
+      contextKind: context?.kind || null,
+      runwaySpent: spent,
+      dealFlowCreditsSpent: taggedSpent,
+      causallyNecessaryCreditsSpent: conversionEligible ? taggedSpent : 0,
+      conversionEligible,
+      mandateAttributed: 0
+    };
+    player.metrics.dealFlowConversion.creditsSpent += taggedSpent;
+    if (conversionEligible) {
+      player.metrics.dealFlowConversion.causallyNecessaryCreditsSpent += taggedSpent;
+      player.metrics.dealFlowConversion.conversionEligibleCreditsSpent += taggedSpent;
+      context.events.push(event);
+    } else {
+      player.metrics.dealFlowConversion.nonConversionCreditsSpent += taggedSpent;
+    }
+    player.metrics.dealFlowConversion.events.push(event);
+    return spent;
   }
 
   currentAgiRequirements() {
@@ -456,6 +549,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       points,
       total: player.mandate
     });
+    const context = [...(this.runwayConversionContexts || [])]
+      .reverse()
+      .find((candidate) => candidate.player === player && candidate.events.length);
+    if (context) {
+      const event = context.events.at(-1);
+      event.mandateAttributed += points;
+      player.metrics.dealFlowConversion.mandateAttributed += points;
+    }
     this.recordEvent(
       "mandate_awarded",
       player.seat,
@@ -637,6 +738,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         policyShields: player.policyShields,
         buildDiscounts: player.buildDiscounts,
         agiDeclared: player.agiDeclared,
+        dealFlowConversion: {
+          unspentCredits: player.dealFlowRunwayCredits.reduce(
+            (sum, credit) => sum + credit.remaining,
+            0
+          ),
+          causallyNecessaryCreditsSpent:
+            player.metrics.dealFlowConversion.causallyNecessaryCreditsSpent,
+          mandateAttributed: player.metrics.dealFlowConversion.mandateAttributed
+        },
         currentScore: this.currentScore(player)
       },
       opponents: base.opponents.map((opponent) => {
@@ -937,7 +1047,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           ]);
           if (license.decisionId.startsWith("architecture_license_")) {
             licensesSold += 1;
-            rival.runway -= 1;
+            this.spendRunway(rival, 1, { cause: "architecture_license" });
             this.addResource(player, "runway", 1);
             this.addResource(rival, "compute", 1);
             this.recordFactionAbility(player, "new_architecture", {
@@ -1098,7 +1208,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       ]);
       if (choice.parameters?.wildId) {
         const trustBefore = safety.trust;
-        safety.runway -= 1;
+        this.spendRunway(safety, 1, { cause: "emergency_pause" });
         this.addResource(safety, "trust", 2);
         this.regime.cycle.disabledWild = choice.parameters.wildId;
         safety.factionAbilityUsed.emergencyPause = true;
@@ -1171,7 +1281,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       .filter((entry) => entry.bid === high)
       .map((entry) => entry.seat);
     const winner = this.nearestInitiative(tied);
-    this.players[winner].runway -= high;
+    this.spendRunway(this.players[winner], high, { cause: "secret_auction" });
     return winner;
   }
 
@@ -1319,7 +1429,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
       ];
       const choice = await this.choose(policies, spotlight.seat, id, decisions);
-      if (choice.decisionId === "boardroom_pay") spotlight.runway -= 2;
+      if (choice.decisionId === "boardroom_pay") {
+        this.spendRunway(spotlight, 2, { cause: "boardroom_pay" });
+      }
       else if (choice.parameters?.targetSeat !== undefined) {
         const target = choice.parameters.targetSeat;
         const response = await this.choose(policies, target, `${id}_response`, [
@@ -1512,12 +1624,18 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.consumeTactic(player, id);
       if (id === "cloud_partnership") {
         if (player.runway >= 1) {
-          player.runway -= 1;
+          this.spendRunway(player, 1, {
+            cause: "tactic_cloud_partnership",
+            conversionEligible: true
+          });
           this.addResource(player, "compute", 2);
           this.addResource(this.players[(seat + 1) % this.playerCount], "runway", 1);
         }
       } else if (id === "talent_raid" && player.runway >= 1) {
-        player.runway -= 1;
+        this.spendRunway(player, 1, {
+          cause: "tactic_talent_raid",
+          conversionEligible: true
+        });
         const ceo = player.pieces.find((piece) => piece.kind === "ceo");
         player.experts.push({ id: `expert-${seat}-${player.experts.length}`, tileId: ceo.tileId });
       } else if (id === "board_reshuffle") {
@@ -1701,7 +1819,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         parameters: { wildId }
       })));
       const trustBefore = player.trust;
-      player.runway -= 1;
+      this.spendRunway(player, 1, { cause: "emergency_pause" });
       this.addResource(player, "trust", 2);
       this.regime.cycle.disabledWild = choice.parameters.wildId;
       player.factionAbilityUsed.emergencyPause = true;
@@ -2496,7 +2614,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       price < minimumPrice ||
       buyer[paymentResource] < price
     ) return false;
-    buyer[paymentResource] -= price;
+    if (paymentResource === "runway") {
+      this.spendRunway(buyer, price, { cause: "allocation_window_purchase" });
+    } else {
+      buyer[paymentResource] -= price;
+    }
     if (!buyer.temporaryCompute) buyer.temporaryComputeBaseline = buyer.compute;
     this.addResource(buyer, "compute", 1);
     buyer.temporaryCompute = (buyer.temporaryCompute || 0) + 1;
@@ -2534,6 +2656,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   applyResolution(seat, decision) {
     const player = this.players[seat];
+    this.beginRunwayConversionContext(player, decision);
     if (decision.consequences?.noOp) {
       this.markAction(player, decision.actionId, decision.label);
       return;
@@ -2568,7 +2691,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }
     if (decision.actionId === "organize" && decision.parameters?.mode === "recruit") {
-      player.runway -= decision.parameters.cost;
+      this.spendRunway(player, decision.parameters.cost, {
+        cause: "organize_recruit",
+        conversionEligible: true
+      });
       this.movePiece(player, decision.parameters);
       for (let index = 0; index < decision.parameters.count; index += 1) {
         const usedNumbers = new Set(
@@ -2630,7 +2756,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       return;
     }
     if (decision.actionId === "build" && decision.parameters?.buildMode === "link") {
-      player.runway -= decision.parameters.actualRunwayCost;
+      this.spendRunway(player, decision.parameters.actualRunwayCost, {
+        cause: "build_link",
+        conversionEligible: true
+      });
       if (decision.parameters.useBuildDiscount) player.buildDiscounts -= 1;
       player.links.push(decision.parameters.facilityId);
       player.linkSupply -= 1;
@@ -2689,7 +2818,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.deferredPublicMandateSeats ||= new Set();
       this.deferredPublicMandateSeats.add(player.seat);
     }
-    if (scientificMethodProtection) player.runway -= scientificMethodRunwayCost;
+    if (scientificMethodProtection) this.spendRunway(
+      player,
+      scientificMethodRunwayCost,
+      { cause: "scientific_method", conversionEligible: true }
+    );
     if (scientificProtection) player.safety += 1;
     super.applyResolution(seat, decision);
     if (scientificProtection) {
@@ -2817,7 +2950,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         : decision.parameters.buildMode === "link"
           ? decision.parameters.cost
           : 2;
-      player.runway += defaultCost - decision.parameters.actualRunwayCost;
       if (decision.parameters.useBuildDiscount) player.buildDiscounts -= 1;
       if (
         player.factionId === "vertical_empire" &&
@@ -2956,6 +3088,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       scientificMethod.thresholdMandateWithheld +=
         mandateSynchronization.capabilityMandateWithheld;
     }
+    this.endRunwayConversionContext(player);
   }
 
   rewardFoundryComputeSpend(spenderSeat, spentCompute) {
@@ -2984,6 +3117,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.synchronizePublicMandate(player, actionId);
     this.recordEligibility(player, "after_action");
     this.recordEvent("action_resolved", player.seat, `${player.factionName}: ${label}.`);
+    this.endRunwayConversionContext(player);
   }
 
   suppressAgentSwarmDestinationBonus(player, decision) {
@@ -3099,6 +3233,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       id === "mega_cluster" &&
       this.megaClusters.length >= this.config.sharedSupply.megaClusterPairs
     ) return;
+    this.beginRunwayConversionContext(player, decision, "wild_action");
     this.movePiece(player, decision.parameters || {});
     const tokenFree = id === "agent_swarm" &&
       this.regime.cycle?.id === "agent_swarm_escapes_scope";
@@ -3137,12 +3272,26 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         accepted = response.decisionId === "mega_cluster_accept";
       }
       if (partner && accepted) {
-        player.runway -= 2;
+        this.spendRunway(player, 2, {
+          cause: "mega_cluster",
+          conversionEligible: true
+        });
         player.compute -= 1;
-        partner.runway -= 1;
+        this.beginRunwayConversionContext(partner, {
+          actionId: "mega_cluster",
+          decisionId: "mega_cluster_accept"
+        }, "wild_action_partner");
+        this.spendRunway(partner, 1, {
+          cause: "mega_cluster_partner",
+          conversionEligible: true
+        });
+        this.endRunwayConversionContext(partner);
         partner.compute -= 1;
       } else if (!partner) {
-        player.runway -= 3;
+        this.spendRunway(player, 3, {
+          cause: "mega_cluster",
+          conversionEligible: true
+        });
         player.compute -= 2;
       }
       if (accepted) {
@@ -3239,7 +3388,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.declareAgi(player);
     } else if (id === "fusion_demonstrator") {
       this.movePiece(player, decision.parameters);
-      player.runway -= decision.parameters.cost;
+      this.spendRunway(player, decision.parameters.cost, {
+        cause: "fusion_demonstrator",
+        conversionEligible: true
+      });
       player.generators.push({
         id: `s${seat}-fusion`,
         tileId: decision.parameters.destinationId,
@@ -3259,6 +3411,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         result: id
       })
     );
+    this.endRunwayConversionContext(player);
   }
 
   infrastructureState(player) {
@@ -3523,7 +3676,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           supplierSeat: supplier.seat,
           priceRunway: 1
         });
-        buyer.runway -= 1;
+        this.spendRunway(buyer, 1, { cause: "power_purchase" });
         this.addResource(supplier, "runway", 1);
         generation[supplier.seat].exported += 1;
         generation[buyer.seat].imported += 1;
@@ -3816,10 +3969,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.systemicRisk -= 1;
         for (const player of this.players.filter((candidate) => candidate.customers >= 3)) {
           if (this.round === 4) {
-            if (player.runway >= 2) player.runway -= 2;
+            if (player.runway >= 2) {
+              this.spendRunway(player, 2, { cause: "systemic_audit" });
+            }
             else if (player.mandate > 0) player.mandate -= 1;
-            else player.runway = 0;
-          } else if (player.runway > 0) player.runway -= 1;
+            else this.spendRunway(player, player.runway, { cause: "systemic_audit" });
+          } else if (player.runway > 0) {
+            this.spendRunway(player, 1, { cause: "systemic_audit" });
+          }
           else this.addResource(player, "trust", -1);
           player.metrics.systemicRiskHits += 1;
         }
@@ -3828,10 +3985,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         player.scrutiny -= 1;
         player.metrics.auditHits += 1;
         if (this.round === 4) {
-          if (player.runway >= 2) player.runway -= 2;
+          if (player.runway >= 2) {
+            this.spendRunway(player, 2, { cause: "player_audit" });
+          }
           else if (player.mandate > 0) player.mandate -= 1;
-          else player.runway = 0;
-        } else if (player.runway > 0) player.runway -= 1;
+          else this.spendRunway(player, player.runway, { cause: "player_audit" });
+        } else if (player.runway > 0) {
+          this.spendRunway(player, 1, { cause: "player_audit" });
+        }
         else if (player.policyShields > 0) player.policyShields -= 1;
         else this.addResource(player, "trust", -1);
       }
@@ -4084,8 +4245,18 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const player = this.players[seat];
     const partner = this.players[partnerSeat];
     if (!this.canCompleteImmediateTrade(seat, partnerSeat, offer)) return false;
-    player[offer.giveResource] -= offer.giveAmount;
-    partner[offer.receiveResource] -= offer.receiveAmount;
+    if (offer.giveResource === "runway") {
+      this.spendRunway(player, offer.giveAmount, { cause: "immediate_trade_payment" });
+    } else {
+      player[offer.giveResource] -= offer.giveAmount;
+    }
+    if (offer.receiveResource === "runway") {
+      this.spendRunway(partner, offer.receiveAmount, {
+        cause: "immediate_trade_payment"
+      });
+    } else {
+      partner[offer.receiveResource] -= offer.receiveAmount;
+    }
     this.addResource(partner, offer.giveResource, offer.giveAmount);
     this.addResource(player, offer.receiveResource, offer.receiveAmount);
     for (const participant of [player, partner]) {
@@ -4094,10 +4265,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         !this.isFactionAbilityPaused(participant, "deal_flow") &&
         !participant.roundMetrics.dealFlowUsed
       ) {
-        this.addResource(participant, "runway", 1);
+        const runwayGained = this.grantDealFlowRunway(participant, {
+          tradeMakerSeat: seat,
+          partnerSeat
+        });
         participant.roundMetrics.dealFlowUsed = true;
         this.recordFactionAbility(participant, "deal_flow", {
-          runwayGained: 1,
+          runwayGained,
+          creditsGranted: runwayGained,
           completedTrades: 1
         });
       }
@@ -4243,6 +4418,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const capabilityBefore = player.capability;
     const scrutinyBefore = player.scrutiny;
     const runwayBefore = player.runway;
+    const dealFlowCreditsBefore = clone(player.dealFlowRunwayCredits);
+    const dealFlowConversionBefore = clone(player.metrics.dealFlowConversion);
     const trustBefore = player.trust;
     const safetyBefore = player.safety;
     let legal = this.legalResolutions(seat, player.selectedAction);
@@ -4370,7 +4547,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             player.capability = capabilityBefore;
             player.trust = trustBefore;
             player.safety = safetyBefore;
-            player.runway = Math.max(0, runwayBefore - replayed.runwaySpent - 1);
+            player.runway = runwayBefore;
+            player.dealFlowRunwayCredits = clone(dealFlowCreditsBefore);
+            player.metrics.dealFlowConversion = clone(dealFlowConversionBefore);
+            this.beginRunwayConversionContext(
+              player,
+              decision,
+              "responsible_scaling_replay"
+            );
+            this.spendRunway(player, replayed.runwaySpent, {
+              cause: "research_training",
+              conversionEligible: true
+            });
+            this.spendRunway(player, 1, { cause: "responsible_scaling_payment" });
             player.scrutiny = scrutinyBefore;
             this.addResource(player, "capability", replayed.capability);
             this.addResource(player, "trust", replayed.trust);
@@ -4390,6 +4579,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
               trustGained: safety.trust - trustBeforeSale
             });
             this.synchronizePublicMandate(player, "responsible_scaling");
+            this.endRunwayConversionContext(player);
           } else {
             this.recordFactionAbility(safety, "responsible_scaling", {
               uses: 0,
@@ -4784,6 +4974,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     finalizeAgiDeclarationScenario(this);
     for (const player of this.players) {
       this.recordAgiCoreRequirements(player, "match_complete");
+      player.metrics.dealFlowConversion.unspentCredits =
+        player.dealFlowRunwayCredits.reduce(
+          (sum, credit) => sum + credit.remaining,
+          0
+        );
     }
     const standings = this.players.map((player) => {
       const offlinePenalty = player.facilities.filter((facility) => !facility.powered).length;

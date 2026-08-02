@@ -530,6 +530,7 @@ function compactObservation(outcome, matchIndex) {
       promisesMade: entry.metrics.promisesMade,
       promisesFulfilled: entry.metrics.promisesFulfilled,
       promisesBroken: entry.metrics.promisesBroken,
+      dealFlowConversion: entry.metrics.dealFlowConversion,
       factionAbilityValues: entry.metrics.factionAbilityValues,
       policyReceipts: entry.metrics.policyReceipts
     })),

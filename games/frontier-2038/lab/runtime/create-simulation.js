@@ -10,6 +10,7 @@ import {
   createPlayerPolicy,
   validatePolicyBackend
 } from "../policies/policy-factory.js";
+import { validatePolicyTreatment } from "../policies/weighted-policy.js";
 import { runMonteCarlo } from "../runner/monte-carlo-runner.js";
 import { effectiveRulesVariant } from "../environment/rules-variant.js";
 import { DecisionCache } from "../policies/decision-cache.js";
@@ -151,6 +152,18 @@ function resolveSimulationConfiguration(options, { config, availableProfiles }) 
     backends[seat % backends.length]
   );
   for (const backend of configuredBackends) validatePolicyBackend(backend);
+  if (
+    options.policyTreatments !== undefined &&
+    (!Array.isArray(options.policyTreatments) ||
+      options.policyTreatments.length !== playerCount)
+  ) {
+    throw new RangeError(
+      `policyTreatments must provide exactly ${playerCount} seat entries.`
+    );
+  }
+  const policyTreatments = Array.from({ length: playerCount }, (_, seat) =>
+    validatePolicyTreatment(options.policyTreatments?.[seat] ?? null)
+  );
   const isLlmBackend = (backend) => !["weighted", "greedy"].includes(backend);
   const models = Array.from({ length: playerCount }, (_, seat) =>
     isLlmBackend(configuredBackends[seat])
@@ -168,6 +181,7 @@ function resolveSimulationConfiguration(options, { config, availableProfiles }) 
     profiles,
     selectedProfiles: promptedProfiles,
     configuredBackends,
+    policyTreatments,
     models,
     reasoningEfforts
   };
@@ -181,6 +195,7 @@ export async function captureSimulationLaunchIdentity(options = {}) {
   const {
     selectedProfiles,
     configuredBackends,
+    policyTreatments,
     models,
     reasoningEfforts
   } = resolveSimulationConfiguration(options, { config, availableProfiles });
@@ -196,7 +211,8 @@ export async function captureSimulationLaunchIdentity(options = {}) {
     policyProjection: projection,
     experimentKind: options.experimentKind || "tournament",
     experimentConfiguration: {
-      scenario: options.scenario || null
+      scenario: options.scenario || null,
+      policyTreatments
     }
   }));
 }
@@ -237,6 +253,7 @@ export async function createSimulation(options = {}, onProgress) {
     playerCount,
     selectedProfiles,
     configuredBackends,
+    policyTreatments,
     models,
     reasoningEfforts
   } = resolveSimulationConfiguration(options, { config, availableProfiles });
@@ -313,7 +330,8 @@ export async function createSimulation(options = {}, onProgress) {
     policyProjection: projection,
     experimentKind: options.experimentKind || "tournament",
     experimentConfiguration: {
-      scenario: options.scenario || null
+      scenario: options.scenario || null,
+      policyTreatments
     }
   });
   const launchIdentity = assertLaunchIdentity(
@@ -334,6 +352,7 @@ export async function createSimulation(options = {}, onProgress) {
       callerFactory: options.callerFactory,
       callerOptions: options.llmCallerOptions,
       shortlistSize: options.shortlistSize,
+      policyTreatment: policyTreatments[seat],
       decisionCache,
       cacheMode,
       llmStages: options.llmStages
@@ -527,6 +546,7 @@ export async function createSimulation(options = {}, onProgress) {
     configuration: {
       profileIds: selectedProfiles.map((profile) => profile.id),
       backends: configuredBackends,
+      policyTreatments,
       llmAuthorized: Boolean(options.allowLlm),
       llmEvidenceMode: llmRequested
         ? options.strictLlmEvidence
@@ -546,6 +566,7 @@ export async function createSimulation(options = {}, onProgress) {
         seat,
         profileId: profile.id,
         backendId: configuredBackends[seat],
+        policyTreatment: policyTreatments[seat],
         model: models[seat],
         reasoningEffort: reasoningEfforts[seat]
       })),
@@ -597,7 +618,8 @@ export async function createSimulation(options = {}, onProgress) {
     policyProjection: projection,
     experimentKind: options.experimentKind || "tournament",
     experimentConfiguration: {
-      scenario: options.scenario || null
+      scenario: options.scenario || null,
+      policyTreatments
     }
   });
   assertLaunchIdentity(launchIdentity, finalIdentity, "Completed simulation");

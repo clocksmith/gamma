@@ -45,6 +45,7 @@ import { loadBalanceContract } from "../lab/balance/balance-contract.js";
 import { runBalanceAudit } from "../lab/runner/balance-audit-runner.js";
 import {
   expandAgiDeclarationScenarioMatrix,
+  expandCoalitionConversionMatrix,
   expandFactionIsolationMatrix,
   LlmConcurrencyBroker,
   runFactionSwapDiagnostic
@@ -2200,6 +2201,103 @@ test("deterministic policies preserve legal commitment while avoiding known dead
   );
 });
 
+test("Coalition conversion treatment prioritizes causally necessary Deal Flow spending", async () => {
+  const profiles = await loadPlayerProfiles();
+  const profile = profiles.find((candidate) => candidate.id === "balanced_operator");
+  const baseline = new WeightedPlayerPolicy(profile, { selection: "greedy" });
+  const treated = new WeightedPlayerPolicy(profile, {
+    selection: "greedy",
+    treatment: "coalition_conversion_v1"
+  });
+  const packet = {
+    schemaVersion: 1,
+    requestId: "coalition-conversion-treatment",
+    matchId: "match",
+    seed: "coalition-conversion-treatment",
+    seat: 0,
+    factionId: "coalition_lab",
+    round: 2,
+    cycle: 1,
+    observation: {
+      self: {
+        runway: 1,
+        dealFlowConversion: { unspentCredits: 1 }
+      }
+    },
+    legalDecisions: [
+      {
+        decisionId: "build_facility_research_fixture",
+        label: "Build Research Facility",
+        actionId: "build",
+        parameters: { buildMode: "facility", actualRunwayCost: 1 },
+        consequences: { runway: -1, facility: "research" }
+      },
+      {
+        decisionId: "influence_gain_trust_fixture",
+        label: "Gain Trust",
+        actionId: "influence",
+        parameters: { mode: "trust" },
+        consequences: { trust: 1 }
+      }
+    ]
+  };
+  const baselineBuild = baseline.score(packet, packet.legalDecisions[0]);
+  const treatedBuild = treated.score(packet, packet.legalDecisions[0]);
+  assert.equal(treatedBuild, baselineBuild * 4);
+  assert.equal(
+    treated.score(packet, packet.legalDecisions[1]),
+    baseline.score(packet, packet.legalDecisions[1])
+  );
+  assert.throws(
+    () => new WeightedPlayerPolicy(profile, { treatment: "unknown" }),
+    /Unknown deterministic policy treatment/
+  );
+});
+
+test("Deal Flow telemetry conservatively traces necessary spend into Mandate", async () => {
+  const { match } = await createInteractiveGame(
+    {
+      playerCount: 3,
+      factionId: "coalition_lab",
+      seed: "deal-flow-conversion-telemetry"
+    },
+    () => {}
+  );
+  const player = match.players[0];
+  player.runway = 2;
+  assert.equal(match.grantDealFlowRunway(player, { fixture: true }), 1);
+  match.beginRunwayConversionContext(player, {
+    actionId: "build",
+    decisionId: "fixture-build"
+  });
+  match.spendRunway(player, 2, {
+    cause: "fixture_nonnecessary_build_spend",
+    conversionEligible: true
+  });
+  assert.equal(player.metrics.dealFlowConversion.creditsSpent, 0);
+  match.spendRunway(player, 1, {
+    cause: "fixture_necessary_build_spend",
+    conversionEligible: true
+  });
+  match.awardMandate(player, 2, "fixture_build_threshold");
+  match.endRunwayConversionContext(player);
+  assert.equal(player.metrics.dealFlowConversion.creditsGranted, 1);
+  assert.equal(player.metrics.dealFlowConversion.creditsSpent, 1);
+  assert.equal(
+    player.metrics.dealFlowConversion.causallyNecessaryCreditsSpent,
+    1
+  );
+  assert.equal(player.metrics.dealFlowConversion.mandateAttributed, 2);
+  assert.deepEqual(
+    player.metrics.dealFlowConversion.events.map((event) => ({
+      decisionId: event.decisionId,
+      necessary: event.causallyNecessaryCreditsSpent,
+      mandate: event.mandateAttributed
+    })),
+    [{ decisionId: "fixture-build", necessary: 1, mandate: 2 }]
+  );
+});
+
 test("ordinary successful Round I actions populate opening evidence exactly once", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 3, seed: "opening-evidence" },
@@ -2926,7 +3024,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.33");
+  assert.equal(first.game.version, "0.8.34");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3157,6 +3255,99 @@ test("faction comparisons can share a registered seed across treatment cells", a
     report.comparisons[0].paired.rows,
     report.comparisons[1].paired.rows
   );
+});
+
+test("paired deterministic policy treatments are fingerprinted and reported by arm", async () => {
+  const base = {
+    runs: 1,
+    playerCount: 3,
+    seed: "deterministic-treatment-identity",
+    sampleReplays: 0,
+    profileIds: ["balanced_operator", "capability_rusher", "trust_governor"],
+    backends: ["greedy", "greedy", "greedy"],
+    factionIds: ["coalition_lab", "vertical_empire", "foundry"],
+    rotateProfiles: false,
+    rotateFactions: false
+  };
+  const baselineIdentity = await captureSimulationLaunchIdentity(base);
+  const treatedIdentity = await captureSimulationLaunchIdentity({
+    ...base,
+    policyTreatments: ["coalition_conversion_v1", null, null]
+  });
+  assert.notEqual(treatedIdentity.fingerprint, baselineIdentity.fingerprint);
+
+  const report = await runFactionSwapDiagnostic({
+    workers: 1,
+    runsPerArm: 1,
+    playerCount: 3,
+    seed: "paired-deterministic-treatment",
+    preRegistrationId: "paired-deterministic-treatment-test",
+    comparisons: [{
+      id: "coalition_conversion_seat_0_greedy",
+      focalSeat: 0,
+      profileIds: base.profileIds,
+      backends: base.backends,
+      leftFactionIds: base.factionIds,
+      rightFactionIds: base.factionIds,
+      leftPolicyTreatments: ["coalition_conversion_v1", null, null],
+      rightPolicyTreatments: [null, null, null]
+    }]
+  });
+  const comparison = report.comparisons[0];
+  assert.deepEqual(comparison.left.policyTreatments, [
+    "coalition_conversion_v1",
+    null,
+    null
+  ]);
+  assert.deepEqual(comparison.right.policyTreatments, [null, null, null]);
+  assert.equal(typeof comparison.paired.meanCausallyNecessaryCreditDelta, "number");
+  assert.equal(typeof comparison.paired.meanAttributedMandateDelta, "number");
+  assert.notEqual(
+    report.launchIdentity.tasks[0].identity.fingerprint,
+    report.launchIdentity.tasks[1].identity.fingerprint
+  );
+});
+
+test("Coalition conversion matrices cover every comparator, seat, and backend", () => {
+  const comparisons = expandCoalitionConversionMatrix({
+    playerCount: 3,
+    focalFactionId: "coalition_lab",
+    comparatorFactionIds: [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    focalSeats: [0, 1, 2],
+    backends: ["greedy", "weighted"],
+    opponentFactionCycle: [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "safety_laboratory",
+      "foundry"
+    ],
+    focalProfileId: "balanced_operator",
+    opponentProfileIds: ["capability_rusher", "trust_governor"]
+  });
+  assert.equal(comparisons.length, 30);
+  assert.deepEqual(
+    new Set(comparisons.map((comparison) => comparison.focalSeat)),
+    new Set([0, 1, 2])
+  );
+  assert.deepEqual(
+    new Set(comparisons.flatMap((comparison) => comparison.backends)),
+    new Set(["greedy", "weighted"])
+  );
+  assert.ok(comparisons.every((comparison) =>
+    comparison.leftFactionIds[comparison.focalSeat] === "coalition_lab" &&
+    comparison.rightFactionIds[comparison.focalSeat] === "coalition_lab" &&
+    comparison.leftPolicyTreatments[comparison.focalSeat] ===
+      "coalition_conversion_v1" &&
+    comparison.rightPolicyTreatments.every((treatment) => treatment === null) &&
+    comparison.leftFactionIds.includes(comparison.comparatorId)
+  ));
 });
 
 test("faction isolation matrices rotate every comparator through every focal seat", () => {
@@ -3393,7 +3584,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.33");
+  assert.equal(first.game.version, "0.8.34");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
