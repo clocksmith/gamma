@@ -167,6 +167,128 @@ def determinism_ok(data: dict[str, Any]) -> bool | None:
     return None
 
 
+def tracked_project_json(raw_path: str) -> tuple[pathlib.Path, dict[str, Any]] | None:
+    """Load a tracked project-relative JSON artifact.
+
+    Counted package receipts may inherit their exact archive proof from an
+    earlier codec receipt.  The inherited source must be durable Git state,
+    never an ignored host-local result.
+    """
+
+    path = pathlib.Path(raw_path)
+    if path.is_absolute():
+        return None
+    candidate = (ROOT / path).resolve()
+    try:
+        repo_relative = candidate.relative_to(REPO_ROOT.resolve())
+    except ValueError:
+        return None
+    tracked = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(REPO_ROOT),
+            "ls-files",
+            "--error-unmatch",
+            "--",
+            repo_relative.as_posix(),
+        ],
+        capture_output=True,
+        check=False,
+    )
+    if tracked.returncode != 0:
+        return None
+    try:
+        payload = json.loads(candidate.read_text())
+    except (OSError, json.JSONDecodeError):
+        return None
+    return (candidate, payload) if isinstance(payload, dict) else None
+
+
+def load_counted_10m_receipt(
+    path: pathlib.Path, data: dict[str, Any]
+) -> Result | None:
+    """Adapt the exact counted-10M receipt schema into a constructive row."""
+
+    if data.get("evidence_level") not in COUNTED_10M_FORECAST_EVIDENCE:
+        return None
+    scope = data.get("scope")
+    economics = data.get("economics")
+    proof = data.get("proof")
+    artifacts = data.get("artifacts")
+    if not all(isinstance(value, dict) for value in (scope, economics, proof, artifacts)):
+        return None
+    if scope.get("raw_bytes") != 10_000_000:
+        return None
+
+    compressed_size = economics.get("candidate_archive_bytes_10m")
+    program_size = economics.get(
+        "candidate_program_bytes", economics.get("candidate_package_bytes")
+    )
+    roundtrip = proof.get("roundtrip_ok")
+    deterministic = proof.get(
+        "determinism_ok", proof.get("deterministic_reencode_ok")
+    )
+    input_artifact = artifacts.get("input")
+    data_sha256 = (
+        input_artifact.get("sha256") if isinstance(input_artifact, dict) else None
+    )
+
+    codec_receipt = artifacts.get("codec_receipt")
+    if isinstance(codec_receipt, str):
+        inherited = tracked_project_json(codec_receipt)
+        if inherited is None:
+            return None
+        _, codec = inherited
+        codec_scope = codec.get("scope")
+        codec_economics = codec.get("economics")
+        codec_proof = codec.get("proof")
+        codec_artifacts = codec.get("artifacts")
+        if not all(
+            isinstance(value, dict)
+            for value in (codec_scope, codec_economics, codec_proof, codec_artifacts)
+        ):
+            return None
+        codec_input = codec_artifacts.get("input")
+        if (
+            codec_scope.get("raw_bytes") != 10_000_000
+            or codec_economics.get("candidate_archive_bytes_10m") != compressed_size
+            or codec_proof.get("roundtrip_ok") is not True
+            or codec_proof.get("determinism_ok") is not True
+            or proof.get("archive_identity_inherited_by_exact_program_hash") is not True
+            or not isinstance(codec_input, dict)
+        ):
+            return None
+        data_sha256 = codec_input.get("sha256")
+
+    if (
+        isinstance(compressed_size, bool)
+        or not isinstance(compressed_size, int)
+        or compressed_size <= 0
+        or isinstance(program_size, bool)
+        or not isinstance(program_size, int)
+        or program_size <= 0
+        or roundtrip is not True
+        or deterministic is not True
+        or not isinstance(data_sha256, str)
+        or not data_sha256
+    ):
+        return None
+
+    return Result(
+        path=path,
+        program_id=path.parent.name,
+        data_size=10_000_000,
+        data_sha256=data_sha256,
+        compressed_size=compressed_size,
+        program_size=program_size,
+        hutter_score=compressed_size + program_size,
+        roundtrip_ok=True,
+        determinism_ok=True,
+        timestamp=str(data.get("generated_at_utc", "")),
+    )
+
+
 def load_result(path: pathlib.Path) -> Result | None:
     try:
         data = json.loads(path.read_text())
@@ -175,7 +297,7 @@ def load_result(path: pathlib.Path) -> Result | None:
 
     program_id = data.get("program_id")
     if not isinstance(program_id, str) or not program_id:
-        return None
+        return load_counted_10m_receipt(path, data)
 
     data_size = as_int(data, "data_size")
     compressed_size = as_int(data, "compressed_size")

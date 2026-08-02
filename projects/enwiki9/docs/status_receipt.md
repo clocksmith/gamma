@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T18:58:20+00:00`
+- Generated at UTC: `2026-08-02T19:03:03+00:00`
 
 ## Target State
 
@@ -21,7 +21,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `37,128`
+- RSS samples: `37,693`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Max sampled single RSS KiB: `7,790,872`
@@ -58,9 +58,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Liveness claim rule: `A persisted running receipt is live only with an exact driver, an owning controller, or a matching adaptive worker PID and command. The host-local heavy lock alone never identifies a gate.`
 - RSS guard status: `running`
 - RSS guard JSON bytes: `1,336`
-- RSS guard JSON modified UTC: `2026-08-02T18:58:20+00:00`
-- RSS guard JSON SHA-256: `39952ea5dcdc74d810e612c59e6620dc764ba401f143e77fa17c65ac065e2111`
-- RSS samples: `37,128`
+- RSS guard JSON modified UTC: `2026-08-02T19:03:03+00:00`
+- RSS guard JSON SHA-256: `c880b571bf6b3e38995cd087ac0161d0239182b72ac45fd4c3c83e5d517ee4c3`
+- RSS samples: `37,693`
 - Max sampled single RSS KiB: `7,790,872`
 - Max sampled tree RSS KiB: `7,790,872`
 - Single-process RSS margin KiB: `2,694,888`
@@ -134,7 +134,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Program directories: `659`
 - Registered programs: `266`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `5`
+- Modified tracked entries: `6`
 - Candidate statuses: `active=18, blocked_dependency=32, candidate=28, measured_negative=99, retired=482`
 
 ## Active Runner Process Table
@@ -151,8 +151,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,336 | `2026-08-02T18:58:20+00:00` |
-| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_native_trace.bin` | 121,729,024 | `2026-08-02T18:58:16+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_guard.json` | 1,336 | `2026-08-02T19:03:04+00:00` |
+| `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_native_trace.bin` | 126,124,032 | `2026-08-02T19:02:54+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/teacher_complete_block.nncp` | 1,228,800 | `2026-08-02T18:56:18+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_native_trace.bin` | 1,130,064 | `2026-08-02T13:47:58+00:00` |
 | `projects/enwiki9/results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/smoke_patched_on.stdout` | 112 | `2026-08-02T13:47:58+00:00` |
@@ -188,8 +188,8 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 ## Proof Boundary
 
-- best_exact_10m: `missing`; status `missing`; score `n/a`
-- best_exact_10m_archive: `missing`; status `missing`; score `n/a`
+- best_exact_10m: `endpoint428_pair_layer0_runtime_successor_minified_package_v1`; status `exact artifact-backed`; score `1,895,625`
+- best_exact_10m_archive: `endpoint428_pair_layer0_runtime_successor_10m_v1`; status `exact artifact-backed`; score `1,914,647`
 - best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `metadata-inherited`; score `15,040,789`
 - best_full_1g: `not verified`; status `not verified`; score `n/a`
 - best_forecast: `endpoint428_gate_dot_fuse_output_update_loop_v1`; status `source-bound-canonical-forecast`; score `109,389,323`
