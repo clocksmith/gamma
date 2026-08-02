@@ -3908,3 +3908,34 @@ pass.
 
 Plan:
 `docs/janus_sparse_context_dag_q0_plan.md`.
+
+## 2026-08-01: JANUS sparse context DAG Q0 is terminal negative
+
+The frozen opening-1M worker completed as a valid exact rejection. It
+aggregated 3,235 depth-zero contexts and respectively 37,868, 83,329, 82,129,
+60,819, 43,728, and 30,953 contexts at suffix depths one through six: 342,061
+supported contexts in total. Bottom-up exact MDL pruning retained zero records
+after charging the frozen ten raw bytes per record.
+
+D0, D1, D2, and DR consequently emitted the identical 173,865-byte arithmetic
+payload. D2 gross gain was 0 B/M and package-adjusted gain was -32.882 B/M
+after the 32,882-byte package allowance. Development, selection, and sealed
+complete-page gains were all zero. D2 could not beat either the depth-zero or
+rotated control.
+
+This is a scientific miss, not an infrastructure failure. The parent payload
+was byte-identical; two independent D2 fits produced identical model, adjusted
+P1, and payload; every D1/D2/DR arithmetic decode passed; all probabilities
+were legal; the WRT store was exact; and the official inverse reproduced raw
+SHA-256 `369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad`.
+
+Decision: retire the exact zero-through-six completed-WRT suffix language,
+support eight, 16 confidence bins, frozen rational correction alphabet,
+ten-byte canonical record, and depth/support/bin/correction/record-cost rescue
+sweeps. Do not run 10M, distant, native, or full-1G continuations. A successor
+must change the information source rather than supply another suffix, hash, or
+static residual representation. Forecast 109,389,323 and debt 1,389,323 remain
+unchanged; verified full-1G remains unknown.
+
+Decision:
+`results/janus_sparse_context_dag_q0_v1/decision.json`.
