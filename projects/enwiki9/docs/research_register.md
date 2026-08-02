@@ -4569,3 +4569,31 @@ branch-frequency and final-state identity, official inverse, and decimal 10 GB
 compliance. A pass authorizes only 65,536-symbol headroom evidence.
 
 Plan: `docs/nncp_v33_rocm_constructive_causal_replay_q0_plan.md`.
+
+## 2026-08-02: NNCP v3.3 constructive causal-replay Q0 passes
+
+The one-change state-major Q0 completed in `71.505` measured seconds and
+authorized the frozen 65,536-symbol gross-headroom gate. Its causal audit was
+exact. Two independently seeded encoders emitted the identical 3,613-byte
+archive and final model hash. An independently seeded model decoder reproduced
+all 28,673 branch frequencies, all 2,048 preprocessed symbols, the complete
+post-update state, the loss, and the official 9,868-byte raw prefix.
+
+The complete state SHA-256 was
+`2ae4efe57f08736c3e7d3f67104b74a496f4c54af6ee24b142904ab0be5014f5`;
+the archive SHA-256 was
+`823ca1f776e8db93911b0670a1043a5190621d2cfd60d40c3e29ce1b830683e4`.
+Peak allocated memory was 7,229,241,344 bytes, below decimal 10 GB. This is a
+constructive mechanics pass with zero score credit, not evidence that the
+self-consistent model compresses competitively.
+
+The authorized child
+`nncp_v33_rocm_constructive_65536_headroom_q1_v1` runs 32 consecutive online
+updates over one 65,536-symbol, 32-stream block. It requires two exact encodes,
+an independent model-driven decode, complete model/Adam/memory identity, the
+official inverse, and an exact terminated comparison with the same-raw-boundary
+JANUS-plus-quotient prefix. Promotion requires at least 3,000 gross B/M.
+
+Plans and decision:
+`docs/nncp_v33_rocm_constructive_65536_headroom_q1_plan.md` and
+`results/nncp_v33_rocm_constructive_causal_replay_q0_v1/decision.json`.
