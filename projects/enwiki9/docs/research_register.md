@@ -6612,3 +6612,82 @@ byte-equivalent total plus positive split margins over every control. Any miss
 retires the exact universe without rescue sweeps; a pass authorizes only a paid
 hit/escape-and-rank Q0. Plan:
 `docs/wikiforward_prior_destination_page_lexicon_qm1_plan.md`.
+
+## 2026-08-02: three proposed families audited for actual novelty
+
+Three additional suggestions were compared against the register, exclusions,
+candidate source, and exact receipts before materialization.
+
+### WIKIGRAPH causal co-link target identity: proposed, dormant
+
+The genuinely new part of the suggested Wikipedia graph-walk coder is narrow:
+predict an exact current link target before decoding any target byte by
+composing relations built exclusively from fully closed earlier pages. The
+frozen relation is `current title <- prior linking page -> other target`.
+WIKIBACK instead transfers prior anchor-neighborhood lexemes into prose;
+WIKIFORWARD decodes the outgoing target before retrieving destination prose;
+TESSERA supplies static types; prior entity tries use already decoded target
+prefixes; and WikiIR serialized graph structures rather than using a
+prefix-built graph to predict the next target identity.
+
+Proposal `wikigraph_causal_colink_target_qm1_v1` therefore receives one dormant
+zero-credit candidate-universe ceiling behind WIKIBACK, WIKISECTION, and
+WIKIFORWARD. The ceiling compares at most 64 pre-truth co-link candidates with
+capacity-matched prefix-causal shuffled, frequency, recency, and prior-page
+controls. It requires at least `60,000` rounded-Q256 byte-equivalent overall,
+`5,000 B/M` on every chronological split, and at least `10,000`
+byte-equivalent total plus positive split margins over every control. A miss
+retires the exact graph composition without widening; a pass authorizes only a
+paid hit/escape-and-rank Q0. Plan:
+`docs/wikigraph_causal_colink_target_qm1_plan.md`.
+
+### Online locally consistent edit grammar: merged and retired unchanged
+
+The proposed online hierarchy is not a new project-level family. WikiIR
+already records stable locally consistent cores for bounded-rank straight-line
+and tree grammars; `tools/online_bpe_gate.py` builds an implicit decoder-side
+recursive pair dictionary; `omega_lzma_v1` implements a recursive RePair SLP;
+and Route E/LOGOS already cover state-preserving `COPY`, `PATCH`, `RULE`, and
+literal descriptions.
+
+More fundamentally, an untransmitted decoder-built rule expands to a
+contiguous earlier parse-node occurrence. `RULE(id)` is therefore a flat
+`COPY(first_occurrence, length)` under the same address code, and
+`RULE_PATCH(id, edits)` is the same flat copy with the identical paid patch.
+A composition that never occurred contiguously needs a transmitted paid rule
+definition and returns to the measured WikiIR/LOGOS grammar lane. Existing
+evidence is also decisive: explicit-copy headroom retained only `219.521`
+optimistic bytes against a `1,126.806`-byte start-position lower bound; Route E
+retained zero commands; ordered-template LOGOS exposed `291 B/M`; and the
+legacy token RePair side stream lost `534,045` bytes on the joint trajectory.
+
+Disposition: merge the idea into the retired copy/patch and paid-grammar
+families. Do not create a proposal or compression gate. The only valid audit
+would be a no-heavy equality certificate mapping every hierarchical command to
+the same-ID flat phrase command; any apparent hierarchy gain would expose an
+unfair control, unpaid rule definition, or future-boundary leakage.
+
+### Trace-to-circuit endpoint replacement: parked refinement
+
+The suggested compiler overlaps the A01 causal-state compiler, A03 purified
+WRT circuit, B06 changed-stream replacement, B07 tensor residual circuit,
+ORACLE-DISTILL decision trees, AUTOPSY residual rules, JANUS sparse DAG, and
+predictive-state quotient work. Its defensible refinement is a canonical
+shared-subtree decision DAG trained on truth using only features that remain
+after one dependency-closed endpoint subsystem is deleted. It is a replacement
+and runtime lane, not a new information source.
+
+The score case is weak on its own. Even deleting the entire `261,125`-byte
+package would leave `109,128,198`, still `1,128,198` bytes over target, and the
+recorded opening-1M endpoint-final advantage over base is only `341.876 B/M`.
+No current trace is sufficient: MIXRGT1 has no retained feature vectors, and
+component probabilities would reopen the retired routing neighborhood.
+
+Disposition: park without a proposal until a dependency-closed deletion and
+its decoder-safe feature set are frozen. The smallest later gate must first
+produce an observer-neutral opening-1M parent/reduced-base trace, then compare
+the reduced base, a parent-imitation DAG, a truth-trained canonical Q16 DAG,
+and shuffled residual labels under a `64 KiB` model ceiling. It must reproduce
+model, P1, payload, WRT, and raw hashes; gain on every split; beat all controls;
+save at least `3,000 B/M` gross and `2,100 B/M` after package accounting. A
+pass would authorize only native replacement and timing measurements.
