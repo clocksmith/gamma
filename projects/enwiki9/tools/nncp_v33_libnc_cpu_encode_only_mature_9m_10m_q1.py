@@ -28,6 +28,7 @@ CANDIDATE_ID = "nncp_v33_libnc_cpu_encode_only_mature_9m_10m_q1_v1"
 LIMIT_KIB = 9_765_625
 GROSS_GATE_BPM = 3_000.0
 SMOKE_SYMBOLS = 10_000
+VOCABULARY = 16_392
 P1_MAGIC = b"CMX21P1\0"
 TRACE_MAGIC = b"NNNTR4\0\0"
 TRACE_HEADER = struct.Struct("<8sQQQQ")
@@ -321,6 +322,8 @@ def command_for(
         "--profile",
         "enwik9",
         "--encode_only",
+        "--n_symb",
+        str(VOCABULARY),
         "--dict",
         str(dictionary.resolve()),
         "--max_size",
