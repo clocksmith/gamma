@@ -59,6 +59,7 @@ BOUND_SOURCES = (
     "projects/enwiki9/tools/materialize_nncp_native_trace_observer.py",
     "projects/enwiki9/tools/janus_paid_residual_mdl_oracle.py",
     "projects/enwiki9/tools/radix_island_oracle.py",
+    "projects/enwiki9/tools/run_with_rss_guard.py",
     "projects/enwiki9/tools/wrt_exact.py",
 )
 
@@ -447,10 +448,20 @@ def main() -> int:
     if SELECTION_END - SELECTION_START != BLOCK_SYMBOLS:
         raise ValueError("selected population is not one complete native block")
 
+    if args.output_dir.exists():
+        existing = sorted(
+            path.name
+            for path in args.output_dir.iterdir()
+            if not path.name.startswith("quarantine_")
+        )
+        if existing:
+            raise RuntimeError(
+                "non-quarantined prior attempt artifacts forbid startup: "
+                + ", ".join(existing)
+            )
+    else:
+        args.output_dir.mkdir(parents=True)
     decision_path = args.output_dir / "decision.json"
-    if decision_path.exists():
-        raise FileExistsError("refusing to overwrite a closed-block Q1 decision")
-    args.output_dir.mkdir(parents=True, exist_ok=True)
     source_binding = bind_tracked_sources()
 
     paths = {
@@ -470,6 +481,14 @@ def main() -> int:
     }
     print(json.dumps({"stage": "input_identity"}), flush=True)
     inputs = {label: legacy.verify_file(label, path) for label, path in paths.items()}
+    runtime_original_library = args.original_binary.parent / "libnc.so"
+    if not runtime_original_library.is_file() or not os.path.samefile(
+        args.original_library, runtime_original_library
+    ):
+        raise ValueError(
+            "verified original_library is not the libnc.so selected by runtime path"
+        )
+    inputs["original_library"]["runtime_path_identity_exact"] = True
     inputs["raw_1g"] = verify_raw_1g(args.raw_1g, args.raw_10m)
 
     q0 = json.loads(args.q0_decision.read_text())

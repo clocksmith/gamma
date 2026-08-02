@@ -105,6 +105,7 @@ The full execution must satisfy:
 
 ```text
 source, dictionary, input, map identities       exact
+verified original libnc.so is runtime libnc.so  exact
 local 10M equals receipt-bound 1G prefix         exact
 continuous execution through symbol 1998848     required
 complete native block trajectory                required
@@ -117,13 +118,16 @@ prob0 and converted p1 domains                   exact
 process-tree peak RSS                            <= 9,765,625 KiB
 joint and teacher arithmetic decode              exact
 WRT/raw population boundaries                    exact
-Git commit and executable tool dependencies      hash-bound
+Git commit, RSS guard, and tool dependencies      hash-bound
 ```
 
-Preexisting full-run archive, trace, or guard artifacts are never reused. A
-failed execution must be moved to a named quarantine before any retry. A guard
-receipt is valid only when both its status is `complete` and its recorded
-return code is zero.
+Any preexisting non-quarantine artifact in the candidate result namespace makes
+startup fail before the first write. A failed execution must be moved intact to
+a named `quarantine_*` directory before any retry. Full-run, smoke, build,
+parent, trace, guard, and decision artifacts are never overwritten or reused. A
+guard receipt is valid only when both its status is `complete` and its recorded
+return code is zero. The receipt-verified original `libnc.so` must be the exact
+file selected from the original binary's runtime library directory.
 
 ## Decision
 

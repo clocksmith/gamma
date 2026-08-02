@@ -6479,8 +6479,10 @@ The gate freezes vocabulary `16,392`, the archive-neutral indexed observer,
 the exact conversion `p1 = 2 * (32768 - prob0)`, explicit equal-length checks,
 complete original-ordinal permutation and execution-order checks, independently
 terminated and decoded finite streams, decimal-10GB guarding, local-10M versus
-receipt-bound-1G prefix identity, rejection of partial artifact reuse, and Git
-commit/tool hash binding. The full dictionary is supplied free at this teacher
+receipt-bound-1G prefix identity, exact runtime identity of the verified
+original `libnc.so`, fail-closed rejection of every non-quarantined prior
+attempt artifact, and Git commit/tool/RSS-guard hash binding. The full
+dictionary is supplied free at this teacher
 ceiling, so even a pass proves headroom only and receives zero score credit.
 The promotion threshold remains `3,000 B/M`; a valid miss closes the exact
 mature full-dictionary lane without block, window, thread, model, dictionary,
