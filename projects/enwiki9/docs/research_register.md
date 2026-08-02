@@ -6549,3 +6549,32 @@ rescue sweeps. A pass authorizes only an actual paid side/residual Q0; it does
 not authorize forecast credit. If WIKIBACK passes, Q0 must measure a joint
 replay with fixed precedence rather than add isolated gains. Plan:
 `docs/wikisection_exact_heading_body_lexicon_qm1_plan.md`.
+
+## 2026-08-02: endpoint428 runtime-eligibility boundary re-audited
+
+The `109,389,323` forecast still lacks a source-bound, reference-calibrated
+full-1G resource receipt for minified package `b6fe6b09...5d43`, backend
+`d1066630...194`, and wrapper `37ee8cd7...61`. The missing proof must bind the
+complete billion-byte input, independent compression and decompression wall
+times, host Geekbench5 score `T`, exact roundtrip, decimal memory, temporary
+disk, CPU/core constraints, no GPU/network, and a clean host. Each direction
+must independently satisfy the official `< 70,000/T` hour rule.
+
+Existing timings cannot close this. The exact current 10M receipt excludes its
+own elapsed values because an unrelated CPU-heavy process overlapped every
+replay. The clean current-source 250K receipt measures final-backend encode but
+its reported decode belongs to the preceding gate-dot binary. The exact 1M
+encode/decode receipt uses an ancestor backend and a different archive. Prefix
+extrapolations and relative microbenchmarks remain screening evidence only, and
+no current receipt binds a host `T` value.
+
+The smallest later timing gate that matters is one clean exact-10M replay from
+the recovered minified-package build, with fixed affinity, no competing heavy
+process, bracketed reference calibration, both encode and decode, and exact
+archive hash `93d7f5cb...1880`. Its per-direction screen is
+`elapsed_10m < 2,520,000/T` seconds. A pass would authorize only one full-1G
+resource proof; it would not prove eligibility itself. Do not queue this while
+the score target is still missed or another heavy gate is active. The current
+runtime frontier's optimistic exact-source improvements cover only `13.963%`
+against an `83.093%` required reduction, so another microbenchmark is not a
+target-bearing substitute for model-work removal.
