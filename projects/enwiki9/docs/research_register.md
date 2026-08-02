@@ -6762,6 +6762,17 @@ The counted allowance is `53,748` bytes including 64 bytes of framing, below
 the inherited `196,608`-byte source ceiling. This proves package identity and
 cost only; it does not authorize score credit or concurrent execution.
 
+A prequeue review then invalidated that first v2 binding before execution. It
+found that malformed or unexercised keyguard receipts would have been converted
+to a zero-exit scientific `REJECT`, equal-key exclusions were collected only
+after capacity filtering, and repeated same-process configuration could
+duplicate counted source entries. The hardened child now excludes and receipts
+equal keys before support matching, hashes empty-reference queries, requires
+the exact encoder/decoder receipt count plus equal valid SHA-256 query and
+selection digests, raises nonzero on malformed evidence, and configures once.
+No WIKIBACK v2 job was queued; the superseded `53,748`-byte preflight receives
+no score or source authority, and a fresh committed-source binding is required.
+
 ## 2026-08-02: adaptive tool guard liveness attribution fixed
 
 `tools/enwiki9_status_receipt.py` incorrectly treated NNCP's nested RSS guard
