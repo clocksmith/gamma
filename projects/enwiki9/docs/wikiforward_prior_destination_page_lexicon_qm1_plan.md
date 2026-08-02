@@ -22,8 +22,7 @@ and receives zero forecast credit.
 
 ## Frozen population and parent
 
-Use the canonical opening-10M inputs and exact WRT/page/link grammar already
-bound by `docs/wikiback_incoming_anchor_context_qh0_plan.md`:
+Use the canonical opening-10M inputs and exact WRT/page/link grammar:
 
 - the exported JANUS-plus-quotient adjusted P1 trajectory;
 - its matching truth and WRT streams;
@@ -36,35 +35,80 @@ bound by `docs/wikiback_incoming_anchor_context_qh0_plan.md`:
 All rounded loss is measured in Q256 bits. One byte-equivalent is exactly
 `2048` Q256 units.
 
+Bind exact size and SHA-256 for the joint P1 and `1,617,484`-byte parent
+payload, matching WRT store, raw 10M, dictionary, official inverse, and exact
+page map before parsing. Bind
+`tools/mobius2_tessera_typed_fiber_ceiling.py::qbit_tables`: `float64`
+`-log2(p) * 256`, `numpy.rint` nearest-even, and canonical little-endian
+`int32` tables. The zero/one table SHA-256 values are
+`6ddbe07c8c2f8387d044a98d958e26ac4f8af27a9dcdf2335f046891365c2376`
+and `7caf35600227bad3b1b7402aaa3837aab1aa5aa11267bca283be055c81e8387f`.
+
+Frozen artifact identities:
+
+```text
+joint P1       results/janus_recurrent_quotient_joint_trace_recovery_q0_v1/joint_candidate.p1
+bytes/SHA      100,029,648  b554ddd170df355ab597fa8fd082b2ea4d2098dad540b07dcb9084016cc2e719
+parent payload results/janus_recurrent_quotient_joint_10m_v1/joint/candidate.payload
+bytes/SHA      1,617,484  5ffaa128fa9e86e3883896a6d16b6c49e23693f5abdf14f1718e0e006533dca9
+WRT store      results/endpoint428_pair_layer0_online_native_trace_10m_v1/wrt_store.bin
+bytes/SHA      6,251,857  867c23e652052268017d4bda543ea86c6b6af7efdaa0d87175997e7fb19a3a5b
+raw 10M        /home/x/enwiki9-nonproof/gamma/projects/enwiki9/data/enwik9_10000000.bin
+bytes/SHA      10,000,000  5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97
+dictionary     /home/x/enwiki9-nonproof/results/cmix21_lstm200_plus_fx2lite428_onlinepairlayer0_source_package_v17/clean-build-b/build/english.dic
+bytes/SHA      411,996  4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a
+page receipt   results/sibyl_page_boundaries_v1/receipt.json
+bytes/SHA      9,711,214  e4f0db7f82759aa05b025cd65170206cb76fd22187eb29d7bbe96537928c7bcc
+inverse backend SHA-256
+               d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194
+```
+
 ## Causal contract
 
-For every complete page, maintain a lexicon containing only lexical WRT events
-already decoded in that page. A link target becomes actionable only after its
-final target byte and closing syntax are decoded. If the exact target resolves
-canonically to an earlier completely closed page, add that destination page's
-completed `PROSE_WORD` event lexicon to the current page's active destination
-source.
+For every complete page, stage a lexicon containing only lexical WRT events
+already decoded in that page. Parse links across the complete `<page>` using
+the current WIKIBACK grammar, not only Wiki `field_id == 6`.
 
-Only later `LINK_LABEL` and `PROSE_WORD` events may be scored. At the prediction
-boundary, the event's truth, eventual length, and future page bytes are not
-visible. The optimistic membership decision is evaluated after truth solely
-to measure the free ceiling. A qualifying hit must be absent from the exact
-already decoded current-page prefix lexicon.
+The donor `PageStage.links` is published only at final `]]`, which is too late
+to score a link label. Materialization must add an explicit `target_complete`
+signal. It fires immediately after the first decoded event-aligned `|`, `#`, or
+`]]` that ends the target, before the next WRT event. No event containing that
+terminator is itself an opportunity. A later malformed label or closer does
+not retroactively revoke already exposed later opportunities.
 
-The destination lexicon is immutable after its source page closes. Resolve
-targets with exactly the frozen WIKIBACK ASCII normalization and no additional
-Unicode, entity, redirect, semantic, or alias normalization. Unresolved
-targets, later pages, the current destination event, future links, and
-encoder-only aliases are forbidden. A source page must have a strictly smaller
-completed-page ordinal than the current page. If a normalized title key maps
-to more than one earlier closed page, deactivate that target rather than
-choosing among duplicate destinations.
+At `target_complete`, normalize the exact decoded target with WIKIBACK's ASCII
+normalization. Resolve it against the title index as it exists at that instant.
+If exactly one strictly earlier fully closed page ordinal exists, add that
+immutable page lexicon to the current page's active destination set. Later
+duplicate titles cannot retroactively disable the resolved source. Empty keys,
+unresolved or duplicate keys, and empty prose lexicons perform no update.
 
-A destination lexicon contains only exact encoded WRT dictionary-token events
-whose pre-event role is `PROSE_WORD`. Current-page prefix novelty is defined
-over every previously decoded exact WRT dictionary-token identity in every
-role; an identity previously seen in markup, a heading, link syntax, or another
-role is therefore not novel.
+Only later `LINK_LABEL` and `PROSE_WORD` events may be scored. Event role is
+`tools/mobius2_tessera_self_annotation_graph.py::role_id(WikiState)` evaluated
+before truth. Candidate identity is the raw `WrtEvent.encoded` bytes, and its
+loss rows are `[8 * event.start, 8 * event.end)`. Truth-aware eligibility also
+requires `event.kind == "token"`, checked only after reveal. Score first, then
+update the Wiki/parser state and current-page prefix. At the prediction
+boundary, event truth, eventual length, and future page bytes are invisible.
+The optimistic membership decision is evaluated after truth solely for the
+free ceiling. A qualifying hit must be absent from the exact already decoded
+current-page prefix lexicon.
+
+Resolve targets with exactly the frozen WIKIBACK ASCII normalization and no
+additional Unicode, entity, redirect, semantic, or alias normalization. A
+source page must have a strictly smaller completed-page ordinal. The title
+index maps normalized key to ordered fully closed page records; a non-unique
+key performs no update.
+
+A destination lexicon is `Counter[WrtEvent.encoded]` over exact token events
+whose pre-event role is `PROSE_WORD`. Commit its normalized title key and
+counter atomically only after `</page>`; never commit the trailing partial
+page. The current page's active source is an idempotent set of destination page
+ordinals: repeated links to the same destination do not add its counts again,
+while counters from distinct active pages sum once. Current-page prefix novelty
+is defined over every previously completed exact token identity in every role;
+an identity previously seen in markup, a heading, link syntax, or another role
+is therefore not novel. Prefix state resets at page open.
 
 ## Frozen exploratory observation
 
@@ -93,34 +137,40 @@ lexeme count and weight multisets before truth is examined.
 
 - `Dfull`: lexicons of the exact earlier destination pages named by completed
   current-page outgoing links.
-- `Dblind`: unrelated earlier closed pages selected deterministically and
-  injectively, matched to each destination update by destination-page lexicon
-  size. Store source ordinal and normalized title key and require that key to
-  differ from the real destination key.
-- `Dprior`: page ordinal `current_page_ordinal - 1` when that page is fully
-  closed and has an eligible prose lexicon, capacity matched to the same
-  destination update; otherwise the update is unavailable to every lane.
-- `Dglobal`: globally frequent prior identities selected from completed pages,
-  capacity matched to the same destination update. Global counts update only
-  after the contributing page closes.
+- `Dblind`: at each target update, exclude the real destination key and every
+  blind source ordinal already active in the current page. Among earlier closed
+  pages with enough unique prose identities, minimize absolute
+  `unique_count.bit_length()` distance to the real destination, then choose by
+  ascending page ordinal and normalized title key. Store and digest both.
+- `Dprior`: the immediately previous fully closed page's prose reservoir.
+- `Dglobal`: exact token counts accumulated from all prior closed-page prose
+  lexicons. Global counts update atomically at page close.
 
-At every opportunity, rebuild each control from its frozen causal source
-reservoir after current-prefix exclusion. Assign the current `Dfull`
-prefix-novel weight multiset injectively to each control. A match made at the
-earlier destination-update boundary is not sufficient because later prefix
-events can remove different identities from different lanes. If any control
-lacks capacity at the current opportunity, deactivate that opportunity for
-every lane. No lane may receive an extra opportunity.
+A destination update is accepted atomically for every lane only if all three
+per-update source reservoirs exist. A failed update is discarded without
+removing earlier accepted sources.
+
+At every opportunity, prefix-filter each cumulative reservoir. Let `U` be the
+number of unique `Dfull` identities remaining and sort `Dfull` weights
+descending. Select each control's `U` identities by descending causal source
+count then ascending raw encoded bytes, and assign the sorted `Dfull` weight
+multiset in that order. A match made at an earlier destination update is not
+sufficient because later prefix events remove different identities. If any
+control has fewer than `U` identities, deactivate only the current opportunity
+for every lane. No lane may receive an extra opportunity.
 
 The following repeated-build digests must be byte-identical:
 
 - exact parser events and page/title/link boundaries;
+- target-completion activations and duplicate-title point-in-time resolutions;
+- page lexicons and active destination ordinals;
 - prior-page title index and destination resolutions;
 - opportunity positions and prefix-novel masks;
 - per-update control assignments and capacity multisets;
 - per-lane rounded-Q256 totals and split totals.
 - exact joint-parent payload bytes and SHA-256;
 - exact decoded WRT bytes and official raw inverse SHA-256.
+- canonical Q256 table bytes and SHA-256.
 
 ## Free and paid boundary
 
@@ -157,6 +207,9 @@ split_qbits * 1,000,000 >= 5,000 * 2,048 * R
 ```
 
 Do not use rounded floating-point B/M values in the decision.
+`R` is the sum of exact page-map raw spans for complete pages in that
+page-count split. Carry parser, title, lexicon, and current causal state across
+split boundaries; independently reported split totals do not reset state.
 
 Any miss retires this exact destination-source union, prefix-novel filter,
 event universe, and control construction. Do not rescue-sweep link windows,
@@ -177,3 +230,10 @@ and framing costs.
 3. Apply WIKIBACK's frozen decision mechanically.
 4. Resolve the dormant WIKISECTION QM1 before this proposal.
 5. Only then claim, implement, source-bind, and queue WIKIFORWARD QM1.
+
+The first materialization must bind the plan, candidate tool, and direct donor
+sources to HEAD and build parser/index/control/Q256 state twice independently.
+Receipt digests must cover target activations, duplicate resolutions, page
+lexicons, active-source ordinals, prefix masks, opportunities, candidate lists,
+and per-lane split totals. The proposal's `196,608`-byte ceiling applies to a
+later paid Q0; QM1 supplies source and model free and earns zero score credit.

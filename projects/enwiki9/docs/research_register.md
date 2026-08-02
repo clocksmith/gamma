@@ -6921,3 +6921,55 @@ The `65,536K` raw shadow remains historical positive information, but it earns
 zero score credit and has no unchanged next gate. A future retrieval mechanism
 must be a materially different proposal rather than another activation of this
 candidate.
+
+## 2026-08-02: dormant WIKIGRAPH identity and control contract hardened
+
+The WIKIGRAPH QM1 preflight found that normalized graph-node identity had been
+conflated with exact WRT candidate spelling and that `LinkRecord.target_codes`
+could omit literal, escape, and control events. The dormant plan now uses title
+normalization only for topology, retains each complete exact WRT event program
+as the coded identity, schedules opportunities only after an event-aligned
+`[[`, requires a legal target terminator, and publishes all graph/control state
+atomically at page close.
+
+`Cfreq`, `Crecent`, `Cprior`, and the matched injective `Cshuffle` now have
+fully specified prefix-visible ordering, binning, capacity, and all-lane
+deactivation rules. Exact Q256 hashes, integer split inequalities, parent/WRT/
+raw identities, and the separate finite-Q0 ledger are frozen. The proposal
+remains `dormant_dependency`; no candidate, job, or score credit was created.
+
+## 2026-08-02: dormant WIKIFORWARD causal activation hardened
+
+The WIKIFORWARD preflight found that WIKIBACK's donor parser publishes a
+completed link only at final `]]`, too late to score the link label. The dormant
+plan now requires a new `target_complete` signal immediately after the first
+event-aligned `|`, `#`, or `]]`, before the next event. Point-in-time unique
+earlier-title resolution is non-retroactive; page lexicons publish atomically at
+page close; repeated destinations are idempotent; distinct destination counters
+sum once; and exact identity is raw `WrtEvent.encoded` under the pre-event role.
+
+`Dblind`, `Dprior`, and `Dglobal` now have deterministic update acceptance,
+ordering, prefix filtering, capacity matching, and all-lane opportunity
+deactivation. Parent/input and Q256 identities, complete-page split
+denominators, continuous cross-split state, and repeated activation/index/
+control digests are frozen. WIKIFORWARD remains dependency-dormant and
+zero-credit.
+
+## 2026-08-02: native state-equivalence harness seam corrected
+
+The recovered endpoint exposes `Predictor::Predict()` followed by
+`Predictor::Perceive(bit)`, not a combined update call. Compact and FX2 FXCM use
+large global mutable closures, so literal and bypass parents must run in
+separate processes. FX2 update/prediction is asynchronous; checkpointing must
+occur after the next ordinary Predict has quiesced the worker, while retaining
+that prediction for its one corresponding truth bit. Per-checkpoint worker join
+is invalid because it terminates the endpoint.
+
+The smallest first certificate is byte-identical native parent P1 from the two
+isolated executions plus exact WRT/raw replay and identical transition calls.
+Full defense-in-depth hashes require canonical logical serialization of both
+FXCM closures, both PPMD arenas, context/models/matches/mixers/recurrent/SSE/
+residual state, all prediction caches, and FX2 phase state with pointer
+normalization. WIKI event parsing and graph state are new child machinery, not
+the official post-stream inverse or existing parent parser. The harness remains
+unimplemented until a finite event lane pays.

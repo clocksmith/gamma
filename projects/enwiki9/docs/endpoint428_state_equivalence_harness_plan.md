@@ -22,44 +22,100 @@ dictionary               4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd0430
 
 ## Dual execution
 
-Start two clean parent instances from identical source and state.
+Run the literal control and bypass child in separate clean processes. Do not
+instantiate two parent predictors in one process: compact FXCM and the renamed
+FX2 FXCM keep extensive namespace-global mutable state, so two objects would
+cross-contaminate and invalidate the comparison.
+
+Bind identical vocabulary extraction, the six-byte stored WRT header,
+dictionary pretraining, source/backend configuration, and event schedule. The
+counted minified ZIP identifies the parent package, not the modified child;
+also bind the child diff and child compressed-package hash.
+
+The exact native seam is the existing two-call transition:
 
 ```text
 literal control bit:
-    p = Parent.Predict()
+    p = Predictor.Predict()
     b = ParentArithmetic.Decode(p)
-    Parent.PerceiveAndUpdate(p, b)
+    Predictor.Perceive(b)
 
 bypass bit:
-    p = Parent.Predict()
+    p = Predictor.Predict()
     discard p for parent arithmetic consumption
     b = reconstructed exact event bit
-    Parent.PerceiveAndUpdate(p, b)
+    Predictor.Perceive(b)
 ```
 
-The bypass path must call the same prediction transition because endpoint428
-may cache forward values used by learning. Directly injecting truth into a
-partial update routine is invalid.
+There is no `PerceiveAndUpdate(p, b)` interface: prediction-to-update caches are
+internal. The bypass path must execute the same `Predictor::Predict()` and
+`Predictor::Perceive(bit)` calls, in MSB-first WRT-store bit order, while
+omitting only the parent arithmetic interval/renormalization step. Calling
+`ContextManager::UpdateContexts`, an endpoint-only update, or any partial truth
+injection is invalid.
+
+The least invasive first certificate records the discretized parent P1 before
+every truth bit in each isolated process. Require the literal and bypass P1
+streams to be byte-identical over the complete gate, with exact WRT/raw replay.
+Identical initialization, identical truth, and literally identical deterministic
+transition calls give an induction proof of parent-state equality; component
+digests below are defense-in-depth against an incorrect native seam.
 
 ## Hash boundary
 
-At each bypassed bit, completed event, page close, and final population:
+FX2 endpoint work is asynchronous. `Endpoint::Perceive` queues a bit and
+returns; hashing immediately afterward races `PerceiveSync` and the next
+`PredictSync`. Do not join the worker at checkpoints because join terminates
+the endpoint. At each completed bypass event, page close, and final population:
 
-1. Quiesce or join all deferred endpoint work.
+1. Call the next ordinary `Predictor::Predict()`. It waits for FX2 readiness and
+   establishes the next compact prediction caches. Retain that returned P1 for
+   the next truth bit; never call Predict twice for one bit. At final EOF, make
+   one symmetric unused Predict in both processes or add a wait-only quiesce
+   hook.
 2. Canonically serialize logical predictor state with fixed integer widths and
    byte order.
-3. Hash WRT state, Wiki parser state, and decoder-built graph state separately.
+3. Hash the child incremental WRT-event parser, Wiki parser, and decoder-built
+   graph state separately.
 4. Compare the literal and bypass hashes.
 
-The parent hash must cover PPM/PPMD, matches, context maps, FXCM, recurrent
-state and weights, mixer inputs/weights, SSE/calibration, cached forward
-values, learning counters, asynchronous endpoint buffers, and every pointer or
-index whose logical value affects later prediction. Do not hash raw addresses,
-padding, allocator metadata, thread handles, clocks, or file descriptors.
+The parent hash must cover:
 
-Exclude only arithmetic-coder interval, pending bits, and output buffers. Those
-must differ because bypass omits truth decisions. Archive equality is checked
-within each execution mode, not between literal and bypass archives.
+- every ContextManager scalar, history, word/recent-byte buffer, mutable context
+  table, stack, hash, and vector state;
+- Direct, DirectHash, Indirect, Match, Bracket, ByteModel, ByteMixer, main FXCM,
+  and renamed FX2 FXCM mutable state, outputs, predictions, counts, maps, match
+  buffers, parser scalars, and caches;
+- both PPMD allocator arenas, free lists, contexts/statistics, masks, run/order
+  state, prepared-byte caches, and active pointers serialized as arena offsets;
+- every mixer input, context entry, weights, steps, probability and active
+  prediction cache; serialize active entries by canonical keys, never pointers;
+- complete recurrent input/history/state/error/weight/optimizer/normalization
+  arrays and all forward/update caches;
+- SSE and adaptive calibration tables plus Predict-to-Perceive active caches;
+- online residual global/local/regret/seen/features/context/base/hypothetical
+  state; and
+- FX2 logical phase flags, pending bit, cached prediction, bit context, and
+  complete asynchronous endpoint state after quiescence.
+
+Sort unordered maps and encode all lengths and keys. Hash exact float bit
+patterns and logical integer values, not object bytes. Normalize every logical
+pointer to a stable table, context key, or arena offset. Immutable derived
+lookup tables and vocabulary may be bound once by source/config/dictionary
+hash rather than repeated at every checkpoint.
+
+The current endpoint has no native WIKI-JOINT graph or incremental official WRT
+inverse. ContextManager's WRT-like contexts remain parent state, while the
+child's `WrtDecoderState`, Wiki state, page machine, and graph require separate
+native implementation and digest. The official `preprocessor::Decode` runs only
+after the complete WRT temp stream is reconstructed.
+
+Exclude the parent arithmetic-coder interval/output buffer and the child's
+side/rank coder, residual input cursor, and framing state. Those must differ
+because bypass omits parent truth decisions. Archive equality is checked within
+each execution mode, not between literal and bypass archives. Thread, mutex,
+condition-variable, address, padding, clock, and file-descriptor bytes are also
+nonlogical and forbidden from the digest.
 
 ## Fail-closed controls
 
@@ -69,8 +125,8 @@ Require:
 literal versus literal repeated run            all hashes identical
 bypass versus bypass repeated run              all hashes identical
 literal versus bypass                          all logical hashes identical
-one deliberately corrupted reconstructed bit  first mismatch detected exactly
-one deliberately skipped Predict call          mismatch detected exactly
+one deliberately corrupted reconstructed bit  next quiescent mismatch exact
+one deliberately skipped Predict call          fail-closed abort at injected row
 WRT/raw reconstruction                         exact
 second bypass archive                          byte-identical
 ```
@@ -78,6 +134,10 @@ second bypass archive                          byte-identical
 Any missing state surface, nondeterministic quiescence, or mismatch is malformed
 proof evidence and exits nonzero. It cannot become a scientific compression
 rejection.
+
+The existing WIKIBACK final digest is not this state certificate: it omits the
+live PageStage, Wiki state, active snapshots, global tail, and live counters.
+Extend or replace it for native event-boundary comparison.
 
 ## Activation
 
