@@ -9,6 +9,12 @@ import {
   simulateTrainingRun
 } from "../../web/src/engine.js";
 import { declarationReadiness } from "../rules/declaration-readiness.js";
+import {
+  applyAgiDeclarationScenario,
+  finalizeAgiDeclarationScenario,
+  markScenarioDeclaration,
+  validateAgiDeclarationScenario
+} from "../scenarios/agi-declaration-window.js";
 import { CoreEconomyMatch } from "./core-economy-match.js";
 import { effectiveRulesVariant } from "./rules-variant.js";
 import {
@@ -102,6 +108,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     rulesVariant = {},
     mandateMode = "variable",
     simulateNegotiation = false,
+    scenario = null,
     decisionContext = null,
     onProgress = null,
     signal
@@ -158,6 +165,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     this.mandateMode = mandateMode;
     this.simulateNegotiation = Boolean(simulateNegotiation);
+    this.scenario = validateAgiDeclarationScenario(scenario, playerCount);
     this.onProgress = typeof onProgress === "function" ? onProgress : null;
     this.signal = signal;
     this.negotiationPromises = [];
@@ -3068,6 +3076,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     this.awardMandate(player, score, first ? "first_agi_declaration" : "agi_declaration");
     player.agiDeclared = true;
+    markScenarioDeclaration(this, player);
     player.history.declarations += 1;
     this.matchMetrics.declarations += 1;
     this.markAgiFunnel(player, "declared", "wild_action_resolved", {
@@ -4623,6 +4632,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     await this.prepareHeadline(policies);
     await this.headlineChoiceStage(policies);
     await this.preSelectionFactionPowers(policies);
+    applyAgiDeclarationScenario(this);
     await this.collectNegotiationIntents(policies);
 
     const selectionPackets = this.players.map((player) =>
@@ -4771,6 +4781,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   result() {
+    finalizeAgiDeclarationScenario(this);
     for (const player of this.players) {
       this.recordAgiCoreRequirements(player, "match_complete");
     }

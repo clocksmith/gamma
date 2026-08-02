@@ -44,6 +44,7 @@ import {
 import { loadBalanceContract } from "../lab/balance/balance-contract.js";
 import { runBalanceAudit } from "../lab/runner/balance-audit-runner.js";
 import {
+  expandAgiDeclarationScenarioMatrix,
   expandFactionIsolationMatrix,
   LlmConcurrencyBroker,
   runFactionSwapDiagnostic
@@ -2325,6 +2326,140 @@ test("paired faction diagnostics keep every non-focal input on common seeds", as
   assert.match(report.preRegistration.fingerprint, /^sha256:[a-f0-9]{64}$/);
 });
 
+test("AGI declaration scenarios create paired legal and one-marker-short states", async () => {
+  const common = {
+    runs: 1,
+    playerCount: 3,
+    seed: "agi-declaration-scenario-contract",
+    sampleReplays: 0,
+    includeObservations: true,
+    rotateProfiles: false,
+    rotateFactions: false,
+    profileIds: ["agi_candidate", "agi_candidate", "agi_candidate"],
+    backends: ["greedy", "greedy", "greedy"],
+    factionIds: [
+      "coalition_lab",
+      "vertical_empire",
+      "foundry"
+    ],
+    experimentKind: "agi_declaration_scenario"
+  };
+  const eligible = await createSimulation({
+    ...common,
+    scenario: {
+      id: "agi_declaration_window_v1",
+      arm: "eligible",
+      focalSeat: 0
+    }
+  });
+  const blocked = await createSimulation({
+    ...common,
+    scenario: {
+      id: "agi_declaration_window_v1",
+      arm: "blocked_grid_ready",
+      focalSeat: 0
+    }
+  });
+
+  assert.equal(
+    eligible.observations[0].scenario.afterInjection.legalDeclaration,
+    true
+  );
+  assert.equal(eligible.observations[0].scenario.declared, true);
+  assert.equal(
+    blocked.observations[0].scenario.afterInjection.legalDeclaration,
+    false
+  );
+  assert.equal(
+    blocked.observations[0].scenario.afterInjection.failingRequirement,
+    "grid_ready_facilities"
+  );
+  assert.equal(blocked.observations[0].scenario.declared, false);
+  assert.notEqual(
+    eligible.launchIdentity.fingerprint,
+    blocked.launchIdentity.fingerprint
+  );
+  assert.deepEqual(eligible.configuration.scenario, {
+    id: "agi_declaration_window_v1",
+    arm: "eligible",
+    focalSeat: 0
+  });
+});
+
+test("AGI scenario matrices rotate faction, seat, backend, and opponent roster", () => {
+  const comparisons = expandAgiDeclarationScenarioMatrix({
+    playerCount: 3,
+    factionIds: [
+      "platform_empire",
+      "imperial_research_lab",
+      "vertical_empire",
+      "coalition_lab",
+      "safety_laboratory",
+      "foundry"
+    ],
+    focalSeats: [0, 1, 2],
+    backends: ["greedy", "weighted"],
+    opponentRotations: 3,
+    profileId: "agi_candidate"
+  });
+  assert.equal(comparisons.length, 108);
+  assert.ok(comparisons.every((comparison) =>
+    comparison.leftFactionIds[comparison.focalSeat] ===
+      comparison.focalFactionId &&
+    comparison.rightFactionIds[comparison.focalSeat] ===
+      comparison.focalFactionId &&
+    comparison.leftScenario.arm === "eligible" &&
+    comparison.rightScenario.arm === "blocked_grid_ready"
+  ));
+  assert.deepEqual(
+    new Set(comparisons.map((comparison) => comparison.backend)),
+    new Set(["greedy", "weighted"])
+  );
+});
+
+test("paired diagnostics report AGI scenario coverage and declaration effects", async () => {
+  const roster = ["coalition_lab", "vertical_empire", "foundry"];
+  const report = await runFactionSwapDiagnostic({
+    workers: 1,
+    runsPerArm: 1,
+    playerCount: 3,
+    seed: "paired-agi-scenario-contract",
+    preRegistrationId: "paired-agi-scenario-contract",
+    diagnosticKind: "paired_agi_declaration_scenario",
+    experimentKind: "agi_declaration_scenario",
+    comparisons: [{
+      id: "coalition_seat_0_greedy",
+      focalSeat: 0,
+      profileIds: ["agi_candidate", "agi_candidate", "agi_candidate"],
+      backends: ["greedy", "greedy", "greedy"],
+      leftFactionIds: roster,
+      rightFactionIds: roster,
+      leftScenario: {
+        id: "agi_declaration_window_v1",
+        arm: "eligible",
+        focalSeat: 0
+      },
+      rightScenario: {
+        id: "agi_declaration_window_v1",
+        arm: "blocked_grid_ready",
+        focalSeat: 0
+      }
+    }]
+  });
+  const comparison = report.comparisons[0];
+  assert.equal(report.diagnosticKind, "paired_agi_declaration_scenario");
+  assert.equal(comparison.paired.leftLegalDeclarationRate, 1);
+  assert.equal(comparison.paired.rightLegalDeclarationRate, 0);
+  assert.equal(comparison.paired.leftDeclarationRate, 1);
+  assert.equal(comparison.paired.rightDeclarationRate, 0);
+  assert.equal(comparison.left.scenario.arm, "eligible");
+  assert.equal(comparison.right.scenario.arm, "blocked_grid_ready");
+  assert.match(
+    report.balanceEvaluation.promotionGate.reasons[0],
+    /qualify a route endpoint/
+  );
+});
+
 test("parallel faction diagnostics preserve sequential outcomes and fingerprints", async () => {
   const options = {
     runsPerArm: 2,
@@ -2791,7 +2926,7 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.32");
+  assert.equal(first.game.version, "0.8.33");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3258,7 +3393,7 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.32");
+  assert.equal(first.game.version, "0.8.33");
   assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);

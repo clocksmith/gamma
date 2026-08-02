@@ -1,7 +1,7 @@
 # M3T4 2038 simulation and player strategies
 
-**Executable game:** `0.8.32` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.32-test`
+**Executable game:** `0.8.33` / `three-to-five-grid-ready-v1`
+**Physical rules under review:** `0.5.0-rc.33-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -84,6 +84,32 @@ before the scheduler records that task as complete or starts another task. A
 crash can therefore lose only an in-progress game. Provider failures and other
 quarantined matches retain their failure receipts in the aggregate but do not
 create a completed-game archive.
+
+## Paired deterministic AGI declaration scenario
+
+The registered `agi_declaration_window_v1` scenario deliberately creates an
+AGI decision instead of waiting for rare natural coverage. Immediately before
+the first Round IV action selection, both common-seed arms receive the same
+focal Capability, Customers, Trust, Compute, Facilities, faction, seat,
+opponents, and policy state. The eligible arm has three Grid-Ready markers;
+the blocked control has two. Scenario configuration is part of the strategy
+and launch identity, and each observation records the injected state, legal
+window, declaration, and final focal state.
+
+Run the three registered fields independently so four-player authority and
+the adjacent guards remain separate:
+
+```bash
+npm run simulate:faction-swap -- \
+  --comparisons evidence/studies/simulation/preregistrations/2026-08-01-agi-declaration-endpoint-v1.json \
+  --field p4 \
+  --workers 8 \
+  --output evidence/studies/simulation/2026-08-01-agi-declaration-endpoint-v1.p4.look-1.raw.json
+```
+
+Use `--field p3` and `--field p5` for the guards. The fields contain no LLM
+backend and make no provider calls. This is endpoint qualification, not an
+estimate of how often a natural game can afford the full AGI route.
 
 ## Negotiation model
 

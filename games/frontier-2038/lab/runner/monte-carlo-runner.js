@@ -539,6 +539,7 @@ function compactObservation(outcome, matchIndex) {
     negotiations: outcome.matchMetrics?.negotiations || [],
     declarationReadiness: outcome.matchMetrics?.declarationReadiness || [],
     agiFunnel: outcome.matchMetrics?.agiFunnel || [],
+    scenario: outcome.matchMetrics?.scenario || null,
     declarations: outcome.matchMetrics?.declarations || 0,
     realignments: outcome.matchMetrics?.realignments || {},
     systemicRiskCreated: outcome.matchMetrics?.systemicRiskCreated || 0,
