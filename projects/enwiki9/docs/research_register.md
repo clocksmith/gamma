@@ -5018,3 +5018,48 @@ changes.
 
 Decision:
 `results/nncp_v33_libnc_ff2_to_loss_backward_composition_v1/decision.json`.
+
+## 2026-08-02: LibNC concat root-scope gradient gate frozen
+
+Candidate and proposal: `nncp_v33_libnc_concat_root_scope_gradient_v1`.
+
+The source's joint `nc_concat_optimization` call is the last concrete graph
+difference downstream of exact forward values. This child builds four
+temporary source variants that supply output only, key plus output, value plus
+output, or the original key plus value plus output roots. All causal node
+rewiring and every arithmetic operation remain unchanged.
+
+Each variant must preserve the bound archive and teacher trace, name all 18
+gradients, and repeat byte-identically. The full variant must reproduce every
+prior named gradient byte. A pass requires output-only to match PyTorch on
+`ff2_0` and `ff_bias2_0`, while adding one frozen key/value root set transitions
+both tensors to the full bound gradients. A miss retires concat root scope as
+the isolated cause. No score or forecast credit is available.
+
+Plan: `docs/nncp_v33_libnc_concat_root_scope_gradient_plan.md`.
+
+## 2026-08-02: concat root-set membership does not explain FF2
+
+All eight executions preserved the bound archive and trace, named all
+gradients, and repeated. The full-root gradient directory reproduced the prior
+named receipt exactly with SHA-256
+`db3a585b942ddcbb560a47ad9587d7457ddd718215799fb70ae8ff982dfed0ba`.
+
+`output_only`, `key_output`, and `value_output` all produced the same complete
+gradient-directory SHA-256
+`251e5186b223233fcecaa43ce25315d269af7bd72de11317fa08e799ea5cce42`.
+The full root set changes some earlier gradients, so the control is sensitive,
+but every root set reproduces `ff2_0` and `ff_bias2_0` bound gradients exactly.
+Even output-only retains the 50 FF2 sign differences from PyTorch and the
+`0.0060333` bias offset.
+
+Root-set membership is therefore not the localized cause. The distinction
+between the output-only complete source and the output-only synthetic FF2
+block is upstream graph connectivity inside the output root. The next direct
+control should keep source forward values exact while independently applying
+`nc_stop_grad` to the FF2 hidden input and residual connection. This tests
+whether recursive concat factorization depends on either upstream graph without
+changing another arithmetic primitive. No score or forecast credit changes.
+
+Decision:
+`results/nncp_v33_libnc_concat_root_scope_gradient_v1/decision.json`.
