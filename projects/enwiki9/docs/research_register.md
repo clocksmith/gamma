@@ -5936,3 +5936,74 @@ unknown.
 
 Decision:
 `results/mobius2_janus_parity_token_fill_ceiling_qh0_v1/decision.json`.
+
+## 2026-08-02: MÖBIUS-2 LOGOS semantic sentence edit-bypass QH0 frozen
+
+Proposal: `mobius2_logos_semantic_sentence_edit_bypass_v1`.
+
+Candidate: `mobius2_logos_semantic_sentence_edit_bypass_qh0_v1`.
+
+The parity token-fill result closes development-frozen static token tables,
+not encoder-side fixed-corpus program search.  The next candidate therefore
+changes both the information source and event scale.  The local
+EmbeddingGemma snapshot ranks earlier sentence-like Wikipedia spans by
+semantic similarity.  For each of eight earlier candidates, an exact dynamic
+program searches alternating COPY and LITERAL regions against one prior span.
+The archive pays the selected source reference, offsets, lengths, commands,
+framing, termination, and an actually terminated JANUS-plus-quotient residual
+stream.  Embedding weights and inference remain encoder-side only and are not
+needed by the decoder.
+
+The frozen opening-prefix population contains 171 complete pages, 984,835
+raw-equivalent bytes, 591,230 WRT bytes, and 4,729,840 rows from the certified
+joint trace.  SEM must save at least 3,000 B/M, remain positive on all three
+chronological page splits, and beat identical edit-program controls driven by
+a lexical signature and a causal lag-31 rotation.  Repeated embedding,
+command, archive, WRT, and official inverse identity are mandatory.  A miss
+retires this exact segmentation, retrieval model and prompt, eight-neighbor
+search, and one-prior-span edit format without retrieval or copy-parameter
+sweeps.  Score and forecast credit remain zero.
+
+Plan:
+`docs/mobius2_logos_semantic_sentence_edit_bypass_qh0_plan.md`.
+
+## 2026-08-02: LOGOS semantic sentence edit-bypass is terminal negative
+
+The infrastructure retry completed normally in `65.620` worker seconds.  The
+frozen population contained 171 complete pages, 984,835 raw-equivalent bytes,
+591,230 WRT bytes, 4,729,840 exact joint P1 rows, and 7,762 eligible sentence
+spans.  EmbeddingGemma ran through the required ROCm environment on the Radeon
+8060S.  Its real matrix product passed, all 7,762 128-dimensional int16
+embeddings repeated byte-identically, and peak allocated/reserved device
+memory was 709,627,392/738,197,504 bytes.
+
+The gate examined 172,554 unique prior-span pairs drawn from the semantic,
+lexical, and lagged-semantic candidate sets.  None retained a positive program
+after paying its prior-span reference and canonical COPY commands.  SEM, LEX,
+and ROT therefore each emitted the same literal-only archive: a 168,069-byte
+joint residual, four-byte empty command stream, and 48-byte frame, totaling
+168,121 bytes.  The identically terminated joint-prefix parent is 168,106
+bytes, so every candidate loses 15 bytes, or `-15.230977778003421 B/M`,
+against a required gain of 2,955 bytes.
+
+Every scientific integrity condition passed: all sources were strictly prior,
+commands decoded canonically, arithmetic and complete prefix WRT replay were
+exact, second archives were byte-identical, replacing the prefix reproduced
+the full canonical WRT store, and the official inverse restored raw SHA-256
+`5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97`.
+This is a representation rejection, not a model, GPU, causality, or replay
+failure.
+
+Retire this exact sentence segmentation, EmbeddingGemma clustering prompt and
+128-dimensional projection, semantic top-eight search, one-prior-span edit
+program, eight-byte minimum copy, lexical control, and lag-31 null.  Do not
+sweep prompt, embedding dimension, neighbor count, copy length, sentence
+width, or retrieval model.  The result does not reject encoder-side semantic
+search for a different generative rule alphabet; it rejects using semantic
+neighbors merely as exact-fragment prototypes after the joint trajectory.
+
+Forecast remains `109,389,323` bytes, verified full-1G remains unknown, and
+score credit remains zero.
+
+Decision:
+`results/mobius2_logos_semantic_sentence_edit_bypass_qh0_v1/decision.json`.
