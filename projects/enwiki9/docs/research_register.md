@@ -6581,3 +6581,34 @@ the score target is still missed or another heavy gate is active. The current
 runtime frontier's optimistic exact-source improvements cover only `13.963%`
 against an `83.093%` required reduction, so another microbenchmark is not a
 target-bearing substitute for model-work removal.
+
+## 2026-08-02: WIKIFORWARD prior-destination lexical ceiling proposed
+
+Proposal `wikiforward_prior_destination_page_lexicon_qm1_v1` is a dormant,
+zero-credit successor after WIKIBACK and WIKISECTION. Once a current outgoing
+link target is completely decoded, it may resolve to an earlier fully closed
+destination page. WIKIFORWARD exposes that destination page's completed prose
+lexicon only to later link-label and prose events in the current page, and
+scores only exact token identities absent from the decoded current-page prefix.
+
+This is not WIKIBACK: it traverses the page graph in the opposite operational
+direction. It is also distinct from exact-heading memory, TESSERA's static
+types, title-transition calibration, prototypes, residual programs,
+recurrence, and noncausal future page rosters. The information source is the
+content of a specifically named earlier destination article.
+
+A read-only exact-trace hypothesis audit found `1,528` causally resolvable
+links across `581` active pages. The prefix-novel destination ceiling exposed
+`63,259.358` rounded-Q256 byte-equivalent: `36,810.787` on development,
+`13,539.301` on selection, and `12,909.270` on confirmation, corresponding to
+approximately `5,732`, `7,373`, and `7,448 B/M`. These are free oracle numbers,
+not a coded archive, and receive zero score and forecast credit.
+
+The frozen QM1 requires identical pre-truth opportunity and capacity multisets
+for the exact destination lane and size-matched unrelated-page, immediately
+prior-page, and global-prior controls. It requires at least `60,000`
+byte-equivalent overall, `5,000 B/M` on every split, and at least `10,000`
+byte-equivalent total plus positive split margins over every control. Any miss
+retires the exact universe without rescue sweeps; a pass authorizes only a paid
+hit/escape-and-rank Q0. Plan:
+`docs/wikiforward_prior_destination_page_lexicon_qm1_plan.md`.
