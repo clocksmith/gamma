@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/enwiki9/srstc_residual_program_ceiling_decision.schema.json",
+  "title": "SRSTC residual-program candidate-universe ceiling decision",
+  "type": "object",
+  "required": [
+    "schema",
+    "candidate_id",
+    "proposal_id",
+    "inputs",
+    "population",
+    "architecture",
+    "candidate_universe",
+    "economics",
+    "proof",
+    "decision",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {"const": "srstc_residual_program_candidate_universe_ceiling_v1"},
+    "candidate_id": {"const": "srstc_residual_program_retrieval_qm1_v1"},
+    "proposal_id": {"const": "srstc_residual_program_retrieval_q0_v1"},
+    "decision": {
+      "type": "object",
+      "required": ["verdict", "causal_q0_authorized", "score_credit_bytes"],
+      "properties": {
+        "verdict": {"enum": ["AUTHORIZED_CAUSAL_Q0", "REJECT"]},
+        "causal_q0_authorized": {"type": "boolean"},
+        "score_credit_bytes": {"const": 0}
+      }
+    }
+  }
+}
