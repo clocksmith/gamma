@@ -14,11 +14,30 @@ only the arithmetic-coder interval/output state differs.
 Bind the parent identities:
 
 ```text
-minified source package  b6fe6b09d6adbd8a287a08d284ca1f439ba72ff007b4d40c66bf7647a54a5d43
-wrapper                  37ee8cd73ade9845b1afcb39f3bbd9358956c3ff9aea3b69328da7441ee32361
-backend                  d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194
-dictionary               4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a
+reconstructive source package  280,147 bytes  19ddcc4ec1b6f31958bed4aa19c0fbc83a56c78121933e1447e4ee011547aee0
+minified counted package       261,125 bytes  b6fe6b09d6adbd8a287a08d284ca1f439ba72ff007b4d40c66bf7647a54a5d43
+wrapper                      2,326,416 bytes  37ee8cd73ade9845b1afcb39f3bbd9358956c3ff9aea3b69328da7441ee32361
+backend                      1,899,840 bytes  d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194
+dictionary                     411,996 bytes  4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a
 ```
+
+The two source hashes have different proof roles. `19dd...` is the original
+reconstructive package whose two bundles reproduce the same 102 source files
+and whose two clean builds emit the bound wrapper and backend. `b6fe...` is the
+comment-stripped package whose independent clean builds emit those same binary
+hashes and whose 19,022-byte reduction supplies the current `109,389,323`
+forecast. Recovering or naming only one is insufficient: native instrumentation
+must be traceable to the reconstructive source identity, while final child
+accounting must compare against the minified counted identity.
+
+The recovered source seam is `build/src/predictor.cpp` at
+`Predictor::Predict()` and `Predictor::Perceive(int)`, with the asynchronous
+endpoint in `build/src/fx2lite/endpoint428.cpp` at `Endpoint::PredictSync()` and
+`Endpoint::PerceiveSync(int)`. A harness receipt must name the exact recovered
+bundle used to materialize this tree, its pre-edit source hash, the canonical
+child diff, and the resulting child package hash. The parent `b6fe...` package
+does not reconstruct or pay for the modified child merely because it builds the
+unchanged parent binary.
 
 ## Dual execution
 
@@ -29,8 +48,8 @@ cross-contaminate and invalidate the comparison.
 
 Bind identical vocabulary extraction, the six-byte stored WRT header,
 dictionary pretraining, source/backend configuration, and event schedule. The
-counted minified ZIP identifies the parent package, not the modified child;
-also bind the child diff and child compressed-package hash.
+counted minified ZIP identifies the unchanged parent accounting baseline, not
+the modified child; also bind the child diff and child compressed-package hash.
 
 The exact native seam is the existing two-call transition:
 
