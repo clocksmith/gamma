@@ -676,17 +676,17 @@
       "gain_bytes_per_1m": 19.0,
       "score_credit_bytes": 0,
       "source_paths": [
-        "results/endpoint428_compact_layer0_sparse_blend_1m_v1/receipt.json",
+        "results/endpoint428_compact_layer0_sparse_blend_1m_v1/sparse_blend_screen.json",
         "tools/compact_layer0_sparse_blend_screen.py"
       ],
       "metric_assertions": [
         {
-          "source": "results/endpoint428_compact_layer0_sparse_blend_1m_v1/receipt.json",
+          "source": "results/endpoint428_compact_layer0_sparse_blend_1m_v1/sparse_blend_screen.json",
           "pointer": "/exact_replay/full/saved_bytes",
           "candidate_field": "measured_gain_bytes"
         },
         {
-          "source": "results/endpoint428_compact_layer0_sparse_blend_1m_v1/receipt.json",
+          "source": "results/endpoint428_compact_layer0_sparse_blend_1m_v1/sparse_blend_screen.json",
           "pointer": "/exact_replay/full_saved_bytes_per_1m_raw",
           "candidate_field": "gain_bytes_per_1m"
         }
@@ -710,18 +710,18 @@
       "gain_bytes_per_1m": 10.0,
       "score_credit_bytes": 0,
       "source_paths": [
-        "results/endpoint428_compact_layer0_blend_1m_v1/receipt.json",
+        "results/endpoint428_compact_layer0_blend_1m_v1/blend_screen.json",
         "tools/compact_layer0_blend_screen.py",
         "patches/compact_layer0_p1_trace_v1.patch"
       ],
       "metric_assertions": [
         {
-          "source": "results/endpoint428_compact_layer0_blend_1m_v1/receipt.json",
+          "source": "results/endpoint428_compact_layer0_blend_1m_v1/blend_screen.json",
           "pointer": "/exact_replay/full/saved_bytes",
           "candidate_field": "measured_gain_bytes"
         },
         {
-          "source": "results/endpoint428_compact_layer0_blend_1m_v1/receipt.json",
+          "source": "results/endpoint428_compact_layer0_blend_1m_v1/blend_screen.json",
           "pointer": "/exact_replay/full_saved_bytes_per_1m_raw",
           "candidate_field": "gain_bytes_per_1m"
         }
@@ -785,14 +785,14 @@
       "net_shadow_gain_bytes": 900464,
       "score_credit_bytes": 0,
       "source_paths": [
-        "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+        "programs/srstc_raw_order2_aggregate_sketch_blockposterior_v1/meta.json",
         "docs/streaming_retrieval_receipt_audit.md",
         "ALGORITHMS.md"
       ],
       "metric_assertions": [
         {
-          "source": "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
-          "pointer": "/net_saved_bytes",
+          "source": "programs/srstc_raw_order2_aggregate_sketch_blockposterior_v1/meta.json",
+          "pointer": "/measured/65536k_raw_shadow_replay/net_saved_bytes",
           "candidate_field": "net_shadow_gain_bytes"
         }
       ],
@@ -853,40 +853,6 @@
       "disqualifiers": [
         "Insufficient counted gain",
         "No exact full-corpus result"
-      ]
-    },
-    {
-      "id": "endpoint428_mxx_sse",
-      "name": "endpoint428 mxx-keyed online SSE",
-      "rank": 12,
-      "status": "retired_unchanged",
-      "evidence_tier": "causal_shadow",
-      "scope_bytes": 1000000,
-      "measured_gain_bytes": -151,
-      "gain_bytes_per_1m": -151.0,
-      "score_credit_bytes": 0,
-      "source_paths": [
-        "results/endpoint428_mxx_sse_1m_v1/receipt.json",
-        "tools/endpoint428_mxx_sse_shadow.py"
-      ],
-      "metric_assertions": [
-        {
-          "source": "results/endpoint428_mxx_sse_1m_v1/receipt.json",
-          "pointer": "/exact_replay/full/saved_bytes",
-          "candidate_field": "measured_gain_bytes"
-        },
-        {
-          "source": "results/endpoint428_mxx_sse_1m_v1/receipt.json",
-          "pointer": "/economics/full_exact_saved_bytes_per_1m",
-          "candidate_field": "gain_bytes_per_1m"
-        }
-      ],
-      "source_required": true,
-      "decision": "Dictionary-pretrained decoder reconstruction selected mxx_p32_mean512 on development, then lost 151 exact bytes overall and 24 bytes on proportional holdout; 13 of 16 holdout blocks regressed.",
-      "next_gate": "None for this calibration family; retain mxx only as a context feature inside richer already-computed mixers.",
-      "disqualifiers": [
-        "Negative development gain",
-        "Negative exact full and held-out replay"
       ]
     },
     {

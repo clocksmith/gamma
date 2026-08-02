@@ -3,8 +3,8 @@
 Generated from the validated candidate frontier. Each row is evidence only for its measured scope and tier.
 
 - Target: `108,000,000` bytes (`10.8000000%`).
-- Candidate runs indexed: `44`.
-- Candidate lineages indexed: `39`.
+- Candidate runs indexed: `43`.
+- Candidate lineages indexed: `38`.
 
 ## 65,536,000 Bytes
 
@@ -41,7 +41,6 @@ Generated from the validated candidate frontier. Each row is evidence only for i
 | `endpoint428_layer0_online_residual_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 46 | 46.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_layer0_sparse_residual_successor__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 19 | 19.000 | unknown | unknown | unknown | not recorded |
 | `endpoint428_layer0_residual_successor__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 10 | 10.000 | unknown | unknown | unknown | not recorded |
-| `endpoint428_mxx_sse__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | -151 | -151.000 | unknown | unknown | unknown | not recorded |
 | `wrt_event_context_and_adaptive_phase_endpoint428_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | -2 | -2.000 | unknown | unknown | unknown | not recorded |
 | `wrt_phase_strength_router_shell_regime_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | -10 | -10.000 | unknown | unknown | unknown | not recorded |
 | `wrt_phase_newton_residual_blend_v1__1000000` | `causal_shadow` | `retired_unchanged` | unspecified | unknown | 3 | 3.000 | unknown | unknown | unknown | not recorded |

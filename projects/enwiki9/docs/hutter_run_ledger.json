@@ -19,28 +19,28 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 44,
-    "candidate_count": 39,
+    "run_count": 43,
+    "candidate_count": 38,
     "runs_by_scope": {
       "1024": 3,
       "10000": 9,
       "222281": 1,
       "500000": 2,
       "600747": 1,
-      "1000000": 21,
+      "1000000": 20,
       "2000000": 1,
       "10000000": 5,
       "65536000": 1
     },
     "runs_by_evidence_tier": {
-      "causal_shadow": 21,
+      "causal_shadow": 20,
       "constructive_prefix": 10,
       "proxy": 13
     },
     "runs_by_status": {
       "active": 4,
       "historical_control": 2,
-      "retired_unchanged": 38
+      "retired_unchanged": 37
     }
   },
   "runs": [
@@ -75,7 +75,7 @@
         "Frozen direct-event and residual-program successors were negative"
       ],
       "source_paths": [
-        "results/streaming_retrieval_shadow/raw65536k_v1_order2_aggregate_sketch_b640000_s8_complete_blocks_blockposterior_v1.json",
+        "programs/srstc_raw_order2_aggregate_sketch_blockposterior_v1/meta.json",
         "docs/streaming_retrieval_receipt_audit.md",
         "ALGORITHMS.md"
       ],
@@ -629,7 +629,7 @@
         "Negative proportional held-out exact replay"
       ],
       "source_paths": [
-        "results/endpoint428_compact_layer0_sparse_blend_1m_v1/receipt.json",
+        "results/endpoint428_compact_layer0_sparse_blend_1m_v1/sparse_blend_screen.json",
         "tools/compact_layer0_sparse_blend_screen.py"
       ],
       "scope_percent_of_corpus": 0.1,
@@ -666,46 +666,9 @@
         "Far below the 69.404 B/M provisional accounting floor"
       ],
       "source_paths": [
-        "results/endpoint428_compact_layer0_blend_1m_v1/receipt.json",
+        "results/endpoint428_compact_layer0_blend_1m_v1/blend_screen.json",
         "tools/compact_layer0_blend_screen.py",
         "patches/compact_layer0_p1_trace_v1.patch"
-      ],
-      "scope_percent_of_corpus": 0.1,
-      "forecast_percent": null,
-      "forecast_margin_bytes": null
-    },
-    {
-      "run_id": "endpoint428_mxx_sse__1000000",
-      "candidate_id": "endpoint428_mxx_sse",
-      "parent_candidate_id": null,
-      "candidate_name": "endpoint428 mxx-keyed online SSE",
-      "rank": 12,
-      "status": "retired_unchanged",
-      "evidence_tier": "causal_shadow",
-      "primary_frontier_run": true,
-      "scope_bytes": 1000000,
-      "offset_bytes": 0,
-      "population": "unspecified",
-      "baseline_archive_bytes": null,
-      "archive_bytes": null,
-      "program_bytes": null,
-      "incremental_program_bytes": null,
-      "measured_gain_bytes": -151,
-      "gain_bytes_per_1m": -151.0,
-      "forecast_score_bytes": null,
-      "roundtrip_ok": null,
-      "determinism_ok": null,
-      "max_sampled_tree_rss_kib": null,
-      "score_credit_bytes": 0,
-      "decision": "Dictionary-pretrained decoder reconstruction selected mxx_p32_mean512 on development, then lost 151 exact bytes overall and 24 bytes on proportional holdout; 13 of 16 holdout blocks regressed.",
-      "next_gate": "None for this calibration family; retain mxx only as a context feature inside richer already-computed mixers.",
-      "disqualifiers": [
-        "Negative development gain",
-        "Negative exact full and held-out replay"
-      ],
-      "source_paths": [
-        "results/endpoint428_mxx_sse_1m_v1/receipt.json",
-        "tools/endpoint428_mxx_sse_shadow.py"
       ],
       "scope_percent_of_corpus": 0.1,
       "forecast_percent": null,
