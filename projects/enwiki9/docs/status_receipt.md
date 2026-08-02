@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T11:51:09+00:00`
+- Generated at UTC: `2026-08-02T11:53:28+00:00`
 
 ## Target State
 
@@ -113,9 +113,9 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Audit return code: `0`
 - Program directories: `652`
 - Registered programs: `262`
-- Untracked nonignored entries: `6`
+- Untracked nonignored entries: `1`
 - Modified tracked entries: `1`
-- Candidate statuses: `active=18, blocked_dependency=32, candidate=24, measured_negative=99, retired=478, track_source_before_evolution=1`
+- Candidate statuses: `active=18, blocked_dependency=32, candidate=24, measured_negative=99, retired=479`
 
 ## Active Runner Process Table
 
