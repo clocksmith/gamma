@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mobius2_frontier_teacher_wrt_event_alphabet_decision.schema.json",
+  "title": "MOBIUS-2 frontier-teacher WRT event alphabet QH0 decision",
+  "type": "object",
+  "required": [
+    "schema",
+    "candidate_id",
+    "evidence_level",
+    "inputs",
+    "runtime",
+    "catalog",
+    "splits",
+    "integrity",
+    "decision"
+  ],
+  "properties": {
+    "schema": {"const": "mobius2_frontier_teacher_wrt_event_alphabet_decision_v1"},
+    "candidate_id": {"const": "mobius2_frontier_teacher_wrt_event_alphabet_qh0_v1"},
+    "evidence_level": {"const": "zero_credit_proper_dynamic_event_alphabet_ceiling"},
+    "inputs": {"type": "object"},
+    "runtime": {"type": "object"},
+    "catalog": {"type": "object"},
+    "splits": {"type": "object"},
+    "integrity": {"type": "object"},
+    "decision": {
+      "type": "object",
+      "required": ["verdict", "score_credit_bytes", "promotion_authorized"],
+      "properties": {
+        "verdict": {"enum": ["PASS", "REJECT"]},
+        "score_credit_bytes": {"const": 0},
+        "promotion_authorized": {"type": "boolean"}
+      }
+    }
+  }
+}
