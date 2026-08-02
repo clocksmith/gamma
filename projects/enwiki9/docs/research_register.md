@@ -6214,3 +6214,38 @@ the next claimed mechanism because it changes the retrieved information and
 the multi-step coded endpoint.
 
 Audit: `docs/endpoint428_fx2_update_schedule_audit.md`.
+
+## 2026-08-02: SRSTC residual-program candidate universe is terminal negative
+
+Candidate: `srstc_residual_program_retrieval_qm1_v1`.
+
+The preregistered Gate-minus-one oracle consumed the exact opening-1M
+endpoint428 P1 and rebuilt 37,546 complete 16-byte residual programs. Its
+preceding-64KiB-epoch snapshots supplied at least three distinct candidates at
+32,722 block boundaries. The oracle selected a non-parent program 29,140
+times, but the best current-block choice improved only `259.792` qbits per
+eligible block before signaling, approximately `1.015` bits against the frozen
+four-bit index.
+
+Exact two-part economics were negative on all chronological populations:
+development `-9,213.772 B/M`, selection `-14,113.872 B/M`, and sealed
+confirmation `-13,648.791 B/M`. Across the complete opening population the
+residual payload was 169,715 bytes and selector was 16,361 bytes, totaling
+186,076 versus the 173,865-byte parent payload, a loss of 12,211 bytes.
+
+All proof gates passed: artifact hashes and parent payload were exact, every
+program came from the preceding epoch, all probabilities were legal, parent
+and oracle arithmetic decoded, truth rebuilt the complete WRT stream, the
+official inverse restored the canonical raw bytes, and the second universe
+and selector were byte-identical. The process exited zero with `REJECT`.
+
+Retire the exact 16-byte horizon, q3/8192 residual alphabet, eight-program
+signature, K0/K1/K2 key language, 65,536-key/four-reference table, support
+three, newest-eight retrieval, 65,536-byte delayed snapshot, 5/4 odds ladder,
+four-bit selector, and planned rotation control without rescue sweeps. The
+causal B0/F0/R0/RB/RS realization is not authorized. Forecast remains
+`109,389,323` bytes, score credit remains zero, and verified full-1G remains
+unknown.
+
+Decision:
+`results/srstc_residual_program_retrieval_qm1_v1/decision.json`.
