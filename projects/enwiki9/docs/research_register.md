@@ -7261,3 +7261,17 @@ teacher lane without thread-count, model, dictionary, checkpoint, precision,
 batch, block, or window rescue sweeps. The next heavy evidence gate is the
 already materialized corrected WIKIBACK v2 finite side/residual-stream test.
 Receipt: `results/nncp_v33_libnc_cpu_encode_only_closed_block_q1_v1/decision.json`.
+
+## 2026-08-02: WIKIBACK v2 launch corrected before scientific execution
+
+The first queued WIKIBACK v2 job, `20260802T235530Z_7126c65c23`, exited in
+`0.132` seconds before reading the experimental inputs because its durable tool
+arguments omitted the required `--output-dir`. It has no compression verdict.
+The candidate-specific adaptive runner also created an unintended ordinary 1K
+discovery job, `20260802T235610Z_f44e47ccc4`; that job was cancelled without
+execution.
+
+The identical frozen oracle was requeued as `20260802T235642Z_7bf78fa912` with
+only the missing output arguments added and the `infrastructure-retry` tag. It
+must be serviced without `--adaptive` so the 28 held discovery jobs and the
+ordinary candidate ladder remain dormant.
