@@ -6623,6 +6623,16 @@ links across `581` active pages. The prefix-novel destination ceiling exposed
 approximately `5,732`, `7,373`, and `7,448 B/M`. These are free oracle numbers,
 not a coded archive, and receive zero score and forecast credit.
 
+Provenance correction: the exploratory command, source, and output were not
+retained. Git history introduces the numbers directly in commit `6a1907ba`,
+and a repository plus local nonproof-artifact search finds them only in this
+register and the WIKIFORWARD plan. Treat them as unverified narrative
+hypothesis evidence, not an exact or independently reproducible receipt. The
+dormant QM1 must reconstruct the entire parser/index/control/Q256 calculation
+from its bound inputs and report whether its own integer totals reproduce or
+contradict the observation. No threshold may be satisfied by importing these
+values.
+
 The frozen plan now resolves the remaining causal-control ambiguities before
 activation: use only the WIKIBACK ASCII normalization; deactivate duplicate
 normalized destination keys; restrict destination lexicons to pre-event

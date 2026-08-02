@@ -128,6 +128,14 @@ prefix exposed `63,259.358` byte-equivalent:
 
 These numbers are hypothesis evidence only. They were not produced by a paid
 side stream, reconstruction archive, or decoder and receive zero score credit.
+The exploratory command, source, and output were not retained in the
+repository or the nonproof artifact archive. A Git-history and filesystem
+search on 2026-08-02 found the values only in this plan and the research
+register. They are therefore unverified narrative observations, not an exact
+receipt or an independently reproducible ceiling. QM1 must rebuild the parser,
+causal index, opportunities, Q256 totals, and all splits from the bound inputs;
+it may not import these values as expected outputs or use them to satisfy any
+gate.
 
 ## Exact QM1 lanes
 
@@ -237,3 +245,6 @@ Receipt digests must cover target activations, duplicate resolutions, page
 lexicons, active-source ordinals, prefix masks, opportunities, candidate lists,
 and per-lane split totals. The proposal's `196,608`-byte ceiling applies to a
 later paid Q0; QM1 supplies source and model free and earns zero score credit.
+The first QM1 decision must explicitly state whether it reproduces or
+contradicts the unretained exploratory observation; only QM1's own artifact-
+bound integer totals may be cited afterward.
