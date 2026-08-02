@@ -19,28 +19,28 @@
     "required_roundtrip": true
   },
   "summary": {
-    "run_count": 43,
-    "candidate_count": 38,
+    "run_count": 44,
+    "candidate_count": 39,
     "runs_by_scope": {
       "1024": 3,
       "10000": 9,
       "222281": 1,
       "500000": 2,
       "600747": 1,
-      "1000000": 20,
+      "1000000": 21,
       "2000000": 1,
       "10000000": 5,
       "65536000": 1
     },
     "runs_by_evidence_tier": {
-      "causal_shadow": 20,
+      "causal_shadow": 21,
       "constructive_prefix": 10,
       "proxy": 13
     },
     "runs_by_status": {
       "active": 5,
       "historical_control": 2,
-      "retired_unchanged": 36
+      "retired_unchanged": 37
     }
   },
   "runs": [
@@ -117,7 +117,7 @@
         "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
         "results/endpoint428_pair_layer0_runtime_successors_250k_v1/source_package_receipt.json",
         "results/endpoint428_dual112_replacement_v1/decision.json",
-        "/home/x/enwiki9-nonproof/results/endpoint428_pair_layer0_gate_dot_fuse_output_update_loop_minified_lzma_source_package_v1/decision.json",
+        "results/endpoint428_pair_layer0_runtime_successor_minified_package_v1/receipt.json",
         "patches/endpoint428_gate_dot_fuse_output_update_loop_v1.patch"
       ],
       "scope_percent_of_corpus": 1.0,
@@ -1101,6 +1101,46 @@
         "results/endpoint_dilated_context_1m_v1/decision.json",
         "tools/endpoint_dilated_context_screen.py",
         "tests/test_endpoint_dilated_context_screen.py"
+      ],
+      "scope_percent_of_corpus": 0.1,
+      "forecast_percent": null,
+      "forecast_margin_bytes": null
+    },
+    {
+      "run_id": "typed_event_sleeping_bayes_endpoint428_v0__1000000",
+      "candidate_id": "typed_event_sleeping_bayes_endpoint428_v0",
+      "parent_candidate_id": "endpoint428_context_recovery_10m",
+      "candidate_name": "typed-event sleeping Bayes continuation envelope",
+      "rank": 41,
+      "status": "retired_unchanged",
+      "evidence_tier": "causal_shadow",
+      "primary_frontier_run": true,
+      "scope_bytes": 1000000,
+      "offset_bytes": 0,
+      "population": "opening_prefix",
+      "baseline_archive_bytes": 173926,
+      "archive_bytes": 174334,
+      "program_bytes": null,
+      "incremental_program_bytes": null,
+      "measured_gain_bytes": -408,
+      "gain_bytes_per_1m": -408.0,
+      "forecast_score_bytes": null,
+      "roundtrip_ok": true,
+      "determinism_ok": true,
+      "max_sampled_tree_rss_kib": null,
+      "score_credit_bytes": 0,
+      "decision": "The exact archive-identical opening-1M shadow releases only completed WRT events and continuations, but C0/E0/E1 regress by 861/400/408 payload bytes and 361/181/204 heldout bytes. The ideal Bayes envelope proves its safety bound and Q16 M1 remains byte-identical to B0; the expert contributes no complementarity.",
+      "next_gate": "None unchanged. Require a genuinely different information source or joint representation that beats endpoint428 before applying a safety envelope.",
+      "disqualifiers": [
+        "Negative exact full-scope gain",
+        "Negative heldout gain",
+        "Typed E1 loses to suffix control E0",
+        "The global envelope safely falls back but saves zero bytes",
+        "The measured shadow uses an older archive-identical endpoint428 trace rather than the recovered current-parent P1"
+      ],
+      "source_paths": [
+        "results/typed_event_sleeping_bayes_endpoint428_v0/receipt.json",
+        "tools/typed_event_sleeping_bayes_endpoint428.py"
       ],
       "scope_percent_of_corpus": 0.1,
       "forecast_percent": null,

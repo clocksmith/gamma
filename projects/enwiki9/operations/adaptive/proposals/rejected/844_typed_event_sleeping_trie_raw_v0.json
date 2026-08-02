@@ -1,0 +1,37 @@
+{
+  "candidate_id": "typed_event_sleeping_trie_raw_v0",
+  "claimed_at": "2026-08-01T23:19:16+00:00",
+  "created_at": "2026-08-01T23:19:16+00:00",
+  "developed_at": "2026-08-01T23:19:16+00:00",
+  "evidence": [
+    "docs/research_register.md",
+    "results/mobius2_logos_lexical_frame_ceiling_q0_v1/decision.json",
+    "results/mobius2_logos_surface_grammar_ceiling_q0_v1/decision.json"
+  ],
+  "expected_savings_bytes": 2100000,
+  "hypothesis": "A bounded decoder-rebuilt prefix trie over completed 32-byte structural continuations saves at least 2100 gross bytes per million over the identical order-1 literal model and beats trigger-only and suffix-only controls.",
+  "interfaces_exposed": [
+    "same raw byte stream -> B0/C0/E0/E1 exact arithmetic payloads plus selected B0-or-E1 archive"
+  ],
+  "kill_condition": "Retire this raw order-1 realization if E1 misses 525 bytes at 250K, fails either matched control, violates causality or bounded memory, fails exact roundtrip, or is nondeterministic; do not sweep receipt capacity, continuation length, trigger family, literal prior, or key width.",
+  "max_program_bytes": 26000,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "coder",
+  "owner": "root",
+  "parent": "srstc_raw_order2_aggregate_richkeys_v1",
+  "parent_proposal_id": null,
+  "priority": 135,
+  "promotion_condition": "At opening 250K, E1 saves at least 525 payload bytes versus B0, strictly beats C0 and E0, roundtrips, and re-encodes byte-identically; then freeze and require at least 2100 bytes at opening 1M.",
+  "proposal_id": "typed_event_sleeping_trie_raw_v0",
+  "rejected_at": "2026-08-01T23:30:50+00:00",
+  "rejection_reason": "Exact opening-250K E1 saved 7,666 bytes versus B0 but lost 309 bytes to the frozen E0 suffix control, failing the required strict control win. All payloads roundtripped and the selected archive was deterministic; retire only the typed key refinement.",
+  "retired_neighborhoods": [
+    "SRSTC hashed aggregate residual calibration is retired; TESBE keeps explicit completed continuation hypotheses and posterior prefix elimination.",
+    "MOBIUS2 future-selected lexical frames and ordered template grammars are retired; TESBE uses online decoder-rebuilt receipts with no out-of-band plan."
+  ],
+  "schema": "enwiki9_algorithm_proposal_v1",
+  "search_priority": 155,
+  "state": "rejected",
+  "title": "TESBE-Raw exact sleeping prefix-trie selector"
+}

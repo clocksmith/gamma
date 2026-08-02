@@ -106,6 +106,7 @@ heavy lane.
 | `compact_layer0_sparse_blend_screen.py` | Fits and exactly replays a sparse fixed-point compact layer-0 blend over endpoint428. |
 | `compact_layer0_online_mixer_screen.cpp` | Runs the causal fixed-point online endpoint428/compact layer-0 residual mixer with frozen holdout boundaries. |
 | `endpoint_fixed_share_stack.cpp` | Runs a deterministic decoder-causal Bayesian fixed-share stack over preserved P1 endpoints with development-only configuration selection and exact arithmetic replay. |
+| `typed_event_sleeping_bayes_endpoint428.py` | Runs the non-heavy exact opening-1M `causal_shadow` for completed structural-trigger continuation point masses, matched C0/E0/E1 controls, and ideal/Q16 Bayes envelopes over a hash-pinned endpoint428 P1 stream. |
 | `compact_layer0_online_mixer_receipt.py` | Seals exact arithmetic and replay evidence for a frozen compact online-mixer probability stream. |
 | `endpoint_diagonal_reservoir_screen.cpp` | Screens decoder-built diagonal multi-timescale reservoirs over exact P1 streams or either endpoint of a same-execution pair trace, with development-only selection, exact range-coder accounting, and a neutral zero-update control. |
 | `endpoint_sparse_gru_distill_screen.py` | Distills a same-execution slow endpoint into a small causal byte GRU over a fast base endpoint, selects checkpoints without holdout reads, and applies exact truth-codelength plus payload-aware economics gates. |
