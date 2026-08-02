@@ -1,0 +1,105 @@
+{
+  "archive": {
+    "branch_frequencies": 28673,
+    "branch_trace_sha256": "9d76279b8e8ecd40be9011a8e12df755534b98bdee1ecd4eb21b856f62685cd3",
+    "bytes": 3613,
+    "sha256": "823ca1f776e8db93911b0670a1043a5190621d2cfd60d40c3e29ce1b830683e4"
+  },
+  "candidate_id": "nncp_v33_rocm_constructive_causal_replay_q0_v1",
+  "claim_boundary": "Self-consistent state-major one-update construction only; no LibNC parity, published-score inheritance, or score credit.",
+  "config": {
+    "adam_beta1": 0.0,
+    "adam_beta2": 0.9999,
+    "adam_epsilon": 1e-08,
+    "gradient_clip": 0.05,
+    "heads": 8,
+    "init_range": 0.79,
+    "inner_width": 3072,
+    "key_width": 128,
+    "layers": 20,
+    "learning_rate": 0.00016,
+    "memory_length": 256,
+    "normalization_epsilon": 1e-05,
+    "relative_positions": 320,
+    "seed": 123,
+    "segment_length": 64,
+    "streams": 32,
+    "value_width": 128,
+    "vocabulary": 16392,
+    "width": 1024
+  },
+  "decision": {
+    "authorized_next_action": "run one frozen 65,536-symbol headroom gate",
+    "forecast_bytes": 109389323,
+    "promotion_authorized": true,
+    "verified_full_1g_score_bytes": null
+  },
+  "inputs": {
+    "core_script_sha256": "2e1049a7165aba07fc786482430e2153dc1d0e3f145ab6aa8d6d028d2ced4b6b",
+    "dictionary": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/dictionary.bin",
+      "sha256": "950683b44e6c7696f6daa896296365eb54bce8cc05ae15fff7acb5715936a0a1"
+    },
+    "driver_script_sha256": "ce0e107d598ca91a5062aeffc84320f771ac01ad6df1b448ca06b4c0fef7e704",
+    "nncp_binary": {
+      "path": "/home/x/enwiki9-nonproof/external/nncp-2024-06-05/nncp",
+      "sha256": "c3f6ee27f5ac69b58b3fc3d487d18fb2ef949f6eb197d6e709a972d80a65f34c"
+    },
+    "preprocessed": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/preprocessed.bin",
+      "sha256": "c82bfca1b4fb8e31d31ded609de579dc55dd12153411961a7ae0cc9b9f9605a5"
+    },
+    "raw_input": {
+      "path": "/home/x/deco/gamma/projects/enwiki9/data/enwik9_1000000.bin",
+      "sha256": "369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad"
+    },
+    "symbol_map": {
+      "path": "/home/x/enwiki9-nonproof/results/nncp_full_symbol_map_v1_retry2/symbol_raw_map.bin",
+      "sha256": "b9e0c570fb12fe3baa35cc8d877a11735065ed56ce30c3fca68b74ce794c3085"
+    }
+  },
+  "integrity": {
+    "archive_repeat_byte_identical": true,
+    "branch_frequency_identity": true,
+    "causal_future_perturbation_exact": true,
+    "decoded_symbol_identity": true,
+    "decoder_known_future_fill": "all_zero",
+    "final_model_state_identity": true,
+    "loss_identity": true,
+    "official_raw_inverse": true,
+    "prediction_schedule": "state_major_prefix_replay"
+  },
+  "model": {
+    "final_state_sha256": "2ae4efe57f08736c3e7d3f67104b74a496f4c54af6ee24b142904ab0be5014f5",
+    "loss_nats": 9.782143592834473,
+    "parameter_bytes": 659571728,
+    "parameter_count": 313000456
+  },
+  "population": {
+    "raw_bytes": 9868,
+    "streams": 32,
+    "symbols": 2048,
+    "symbols_per_stream": 64
+  },
+  "resource": {
+    "decimal_10gb_allocated_pass": true,
+    "decode_seconds": 18.13053506200231,
+    "first_encode_seconds": 18.54746130100102,
+    "peak_allocated_bytes": 7229241344,
+    "peak_reserved_bytes": 8264876032,
+    "second_encode_seconds": 18.22064109100029
+  },
+  "runtime": {
+    "device": "Radeon 8060S Graphics",
+    "device_count": 1,
+    "hip": "7.2.53211",
+    "matrix_output_sha256": "9ab0c29d311879d656d7fb6bd5ab0097c830911629ed27cccfef5265ea0ec5b1",
+    "python": "3.14.4",
+    "runtime_mode": "rocm_gfx_override",
+    "sys_executable": "/home/x/deco/gamma/.venv_rocm/bin/python",
+    "torch": "2.12.1+rocm7.2"
+  },
+  "schema": "gamma.nncp_v33_rocm_constructive_causal_replay_q0.v1",
+  "score_credit_bytes": 0,
+  "status": "AUTHORIZED_65536_HEADROOM"
+}
