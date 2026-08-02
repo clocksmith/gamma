@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, lock state, and process table.
 
-- Generated at UTC: `2026-08-02T11:56:14+00:00`
+- Generated at UTC: `2026-08-02T12:04:11+00:00`
 
 ## Target State
 
@@ -106,7 +106,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 
 - Latest delayed status log: `projects/enwiki9/run_logs/enwiki9_delayed_status_latest.log`
 - Latest delayed status log present: `true`
-- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260709T122555Z.log`
+- Latest delayed status resolved log: `projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log`
 
 ## Candidate Audit
 
@@ -115,7 +115,7 @@ Generated from the current certificate, gate receipts, lock state, and process t
 - Registered programs: `262`
 - Untracked nonignored entries: `0`
 - Modified tracked entries: `0`
-- Candidate statuses: `active=18, blocked_dependency=32, candidate=24, measured_negative=98, retired=480`
+- Candidate statuses: `active=18, blocked_dependency=32, candidate=24, measured_negative=99, retired=479`
 
 ## Active Runner Process Table
 

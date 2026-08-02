@@ -6142,3 +6142,50 @@ Evidence:
 - `results/janus_sparse_context_dag_q0_v1/decision.json`
 - `results/typed_event_sleeping_bayes_envelope_q0_v1/decision.json`
 - `results/janus_recurrent_quotient_joint_trace_recovery_q0_v1/decision.json`
+
+## 2026-08-02: NOEMA semantic-boundary hierarchy is terminal negative
+
+Job `20260802T115211Z_443ff3e336` was deliberately interrupted with return
+code `-2` before producing a decision because its runtime receipt resolved the
+virtual-environment symlink to `/usr/bin/python3.14` and did not separately
+bind `sys.prefix`. The receipt-only fix now records the invoked executable,
+resolved executable, and environment prefix. No compression result from that
+attempt is used.
+
+The provenance-corrected infrastructure retry completed normally in `220.157`
+worker seconds on the Radeon 8060S through the repository `.venv_rocm` runtime.
+The candidate modeled 4,540 complete 128-byte patches. Its exact WRT inverse
+schedule contained 23,796 causal boundary bytes and averaged
+`6.0464757709251105` spans per patch. Flat, fixed-16-byte, causal lag-31, and
+semantic models had identical 37,583-parameter shapes and each of their two
+fits produced identical histories, selected epochs, model blobs, adjusted P1
+streams, and payloads.
+
+All four controls selected epoch one. The semantic hierarchy saved 79
+independently terminated development bytes, then lost 14 selection bytes and
+55 sealed bytes, or `-106.49503539507722 B/M`. Its complete-prefix gain was
+only nine bytes. On sealed pages it beat flat by seven bytes but lost to the
+fixed schedule by one byte and the causal lagged schedule by six bytes. Its
+matched package was 101,538 bytes, producing a package-adjusted sealed result
+of `-208.0330353950772 B/M`.
+
+Every integrity condition passed: the exact joint antecedent and prefix parent
+replayed, all probabilities were legal, selected arithmetic decoded exactly,
+the WRT prefix and complete canonical store were byte-identical, the official
+inverse restored raw SHA-256
+`5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97`,
+and the second payload was byte-identical. This is a scientific rejection,
+not an environment, causality, arithmetic, inverse, or nondeterminism failure.
+
+Retire this boundary alphabet, two-level shared-cell topology, 128-byte reset
+policy, width, level embeddings, training schedule, and int8 quantizer without
+boundary, width, epoch, optimizer, or quantization sweeps. Together with the
+equal-span NOEMA result, this closes the currently specified recurrent
+hierarchy lane. A successor must change the information source or coded
+representation rather than add another residual recurrence.
+
+Forecast remains `109,389,323` bytes, verified full-1G remains unknown, and
+score credit remains zero.
+
+Decision:
+`results/mobius2_noema_semantic_boundary_hierarchy_qh0_v1/decision.json`.
