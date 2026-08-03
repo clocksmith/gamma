@@ -3,83 +3,31 @@
 
 **Suggested player count:** ${game.suggestedPlayerRange}
 
-Use the browser **First Game Guide** for an accelerated Default Game with
+Use the browser [**First Game Guide**](/first-game-guide.html) for an accelerated Default Game with
 learning pauses at each critical decision. This book is
-the authoritative Default Game procedure. Keep the **Map Reference**,
-**Component Reference**, and **Card Reference** at the table: they own the
+the authoritative Default Game procedure. Keep the [**Map reference**](/map-reference.html),
+[**Component reference**](/component-reference.html), and [**Card reference**](/card-reference.html) at the table: they own the
 location effects, quantities, and card text this book deliberately does not
 repeat.
 
 ## Play profiles
 
 **Default Game** is authoritative in this book, the browser, and simulation.
-**Advanced Play** is one bundled profile; do not mix individual modules into
+[**Advanced Play**](/docs/advanced-play.html) is one bundled profile; do not mix individual modules into
 Default Game.
 
 The symbol **◆** marks a Default rule that Advanced Play replaces or extends.
 Read the marked rule normally for Default Game. For Advanced Play, apply every
-change collected in the separate **Advanced Play Supplement**. The symbol
+change collected in the separate [**Advanced Play supplement**](/docs/advanced-play.html). The symbol
 itself has no gameplay effect.
 
-The separately printed **World and Institutions** companion contains setting
-and ending narratives. **Optional Tactic Rules** contains the deferred Tactic
+The separately printed [**World and Institutions**](/docs/world-and-institutions.html) companion contains setting
+and ending narratives. [**Optional Tactic Rules**](/docs/optional-tactics.html) contains the deferred Tactic
 module; keep it out of the baseline game.
 
-## How to Play
+## How to play
 
-### 1. Win the game
-
-After Era IV, the institution with the most ${terms.playerTracks.mandate} wins. Players score it
-publicly from ${terms.playerTracks.customers}, ${terms.playerTracks.capability} and ${terms.playerTracks.trust} thresholds, Era Mandates, and
-exceptional programs. Declaring ${terms.systems.agi} is optional.
-
-Resolve the winning institution and World Ending separately. Any institutional
-winner can accompany any ending: private success and the shared future are
-different judgments.
-
-### 2. Set up the table
-
-Build the thirteen-tile jurisdiction with the **Map Reference**; prepare Era,
-Headline, Mandate, and Training cards with the **Component Reference**. Each
-player takes a Faction board and its listed pieces and cards. Place every CEO
-and one Team on ${terms.locations.frontier}, record Setup Collective ${terms.playerTracks.trust}, choose Initiative,
-and begin Era I. See **1. Setup** for exact order.
-
-### 3. Play four Eras
-
-Start each Era by reading its card, revealing its Mandate, readying Core
-Actions, awarding Escalation tokens, and resolving Spotlight and the Public
-${terms.actions.research} Grant. Play three action cycles, then Production, Public Audit, and
-Mandate.
-
-The same rhythm repeats four times, but each Era unlocks another layer. Core
-Actions remain the foundation; later infrastructure, agreements, public
-authority, and declarations modify the choices without replacing that loop.
-
-### 4. Take an action-cycle turn
-
-Reveal a Headline. Everyone secretly selects one unused Core Action, or spends
-one Escalation token on an unlocked Escalation, then reveals together. In
-Initiative order, **Select → Move → Act**: move one CEO or Team up to two hexes,
-then resolve the card from its destination. Exhaust the Core Action or flip the
-Escalation. After everyone acts, pass Initiative clockwise. The six Core
-Actions finance, train, build, organize, deploy, and influence; see **7. Core
-Actions** for exact modes and costs.
-
-### 5. Finish the game
-
-After Era IV, apply offline-Facility penalties, resolve the World Ending, then
-announce the highest-${terms.playerTracks.mandate} institution using the printed tiebreakers. Read the
-matching narrative in **World and Institutions**.
-
-The winning institution answers who gained the strongest public mandate. The
-World Ending answers what kind of future everyone produced together. Resolve
-both even if nobody declared AGI.
-
-## Rules Reference
-
-The sections below are the complete authority for setup, effects, timing,
-costs, exceptions, limits, inventories, and final scoring.
+Default Game lasts four Eras. The institution with the most ${terms.playerTracks.mandate} wins; resolve that winner and the shared World Ending separately. Begin with **1. Setup**, then follow the numbered sections in order. They are the complete authority for setup, timing, costs, effects, exceptions, limits, and final scoring.
 
 ## 1. Setup
 
@@ -184,8 +132,8 @@ Read that strip aloud before revealing the Mandate. All Era cards,
 Escalations, and Faction abilities are open information.
 
 Escalation is cumulative. Progress teaches ordinary institutional work;
-Capacity adds industrial infrastructure; Authority adds agreements and public
-effects; Continuity adds compound Actions, declarations, and exceptional
+Capacity adds industrial infrastructure; Authority adds agreements, quantum
+record disputes, and public effects; Continuity adds compound Actions, declarations, and exceptional
 generation. Later Eras retain previously unlocked systems
 unless a printed effect says otherwise.
 
@@ -289,7 +237,7 @@ surcharges, then discounts. The final cost cannot fall below zero.
 ## 4. Modular hex board
 
 The board is one jurisdiction whose districts represent physical and
-institutional dependencies rather than ordinary distance. The **Map Reference**
+institutional dependencies rather than ordinary distance. The [**Map reference**](/map-reference.html)
 is authoritative for its thirteen-tile setup, adjacency, ring pools, tile
 effects, Facility spaces, presence, and control. The shuffled map remains
 fixed for all four Eras. **◆**
@@ -806,7 +754,7 @@ The Era IV ${terms.systems.escalation} described above.
 
 Faction boards, Core Action cards, Escalation cards, Era cards, Mandate cards,
 Training cards, Power cards, and Headline cards are rules components. The
-**Card Reference** projects every card face in one document; resolve that text
+[**Card reference**](/card-reference.html) projects every card face in one document; resolve that text
 or the matching physical card. Card text changes only the field or timing it
 names; it does not create an unprinted phase or additional Action.
 
@@ -830,9 +778,9 @@ current cycle.
 
 ## 10. Map and component reference
 
-Use **Map Reference** for setup, adjacency, location effects, presence, and
-control. Use **Component Reference** for deck contracts, component limits, and
-defined markers. Use **Card Reference** for every card face. Those references
+Use [**Map reference**](/map-reference.html) for setup, adjacency, location effects, presence, and
+control. Use [**Component reference**](/component-reference.html) for deck contracts, component limits, and
+defined markers. Use [**Card reference**](/card-reference.html) for every card face. Those references
 are part of the Default Game, not optional background.
 ## 11. Final scoring
 
@@ -883,7 +831,7 @@ Cross the two results to find the shared World Ending:
 | ${terms.systems.agi} emerges | **The Singularity** | **The Closed Loop** |
 | ${terms.systems.agi} does not emerge | **The Plural Future** | **Assured Continuity** |
 
-Read its narrative from **World and Institutions**. Facilities and control
+Read its narrative from [**World and Institutions**](/docs/world-and-institutions.html). Facilities and control
 score no separate endgame ${terms.playerTracks.mandate}.
 
 Keep the draft secret objectives out of the baseline game, balance evidence,
@@ -899,12 +847,12 @@ Ties break by:
 4. Joint victory accompanied by an extremely serious merger announcement
 
 Find design rationale and balance qualification in
-**Balance and Exploitability**. Find observation
-protocols in **Playtesting and Evidence**.
+[**Balance and Exploitability**](/docs/balance-and-exploitability.html). Find observation
+protocols in [**Playtesting and Evidence**](/docs/playtesting-and-evidence.html).
 
 ## Advanced Play
 
-The separate **Advanced Play Supplement** is the complete authority for the
+The separate [**Advanced Play supplement**](/docs/advanced-play.html) is the complete authority for the
 bundled Advanced profile. Do not import one Advanced procedure into Default
 Game.
 ## Document record
