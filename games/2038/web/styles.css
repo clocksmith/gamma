@@ -875,6 +875,15 @@ input {
   flex: 1 1 10rem;
 }
 
+/* A trade choice becomes a black control on hover. Its label must stay
+ * legible even when that choice started as a white secondary button. */
+.trade-actions button:hover:not(:disabled),
+.trade-actions button:focus-visible {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #ffffff;
+}
+
 .trade-pass,
 .trade-response-button {
   background: transparent;
