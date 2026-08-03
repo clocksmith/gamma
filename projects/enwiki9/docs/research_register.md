@@ -7453,3 +7453,31 @@ sweeps. All four WIKI graph-lexicon sources are now terminal negative, so
 WIKI-JOINT has no paying antecedent and remains unmaterialized. Forecast
 `109,389,323`, debt `1,389,323`, and verified full-1G `unknown` are unchanged.
 Receipt: `results/wikigraph_causal_colink_target_qm1_v1/decision.json`.
+
+## 2026-08-03: cmix-obias geometry-order substitution Qm0 frozen
+
+The terminal WIKI and NNCP rejections reopen the heavy lane for a materially
+different representation test. The public `cmix-obias` package pays `199,671`
+bytes for a compressed fixed article-order asset and self-reports a complete
+score of `108,492,825`. Replacing that asset with a deterministic order
+generator can remove at most `166,903` bytes after a frozen `32,768`-byte
+implementation allowance, leaving `325,922` archive bytes to the standing
+`108,000,000` target.
+
+Candidate `cmix_obias_geometry_order_substitution_qm0_v1` therefore tests the
+source-bound Gamma geometry key directly on the exact public donor backend.
+The opening-10M Qm0 first reproduces the donor's documented `1,599,218`-byte
+payload and `1,882,538`-byte archive, then substitutes a donor-compatible
+non-redirect geometry order. It requires at least `5,000` exact archive bytes
+over the parent. Only a gross pass runs the predeclared title-only control and
+a second clean geometry encode. Every realized archive must bare-decode to the
+exact `5985c81c...` opening-10M input.
+
+This is not a cmix-obias score adoption and not a retry of the rejected public
+cmix-lex order inside Gamma. The parent is unchanged while only its paid order
+asset changes; the earlier transfer changed endpoint428's trajectory. A pass
+authorizes one source-level generator child and one distant replay only. A
+miss retires this exact key/backend/source-envelope combination without order,
+model, PGO, or memory rescue sweeps. External-parent status means zero Gamma
+forecast credit in every Qm0 outcome. Frozen plan:
+`docs/cmix_obias_geometry_order_substitution_qm0_plan.md`.
