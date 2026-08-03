@@ -129,6 +129,18 @@ test("docs reader routes preserve their /docs/ base and serve rendered pages", a
   }
 });
 
+test("first-game guide serves the generated fixed teaching scenario", async () => {
+  const port = 30_000 + (process.pid % 10_000);
+  const server = await startServer(port);
+  try {
+    const response = await fetch(`http://127.0.0.1:${port}/first-game-guide`);
+    assert.equal(response.status, 200);
+    assert.match(await response.text(), /\?guide=first-game/);
+  } finally {
+    server.kill("SIGTERM");
+  }
+});
+
 test("local simulation archives can be listed and loaded through the Lab API", async () => {
   const port = 25_000 + (process.pid % 10_000);
   const server = await startServer(port);
@@ -170,7 +182,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
       headers: {
         origin,
         "access-control-request-method": "GET",
-        "access-control-request-headers": "x-m3t4-bridge-token",
+        "access-control-request-headers": "x-mandate-2038-bridge-token",
         "access-control-request-private-network": "true"
       }
     });
@@ -182,7 +194,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
     );
     assert.match(
       preflight.headers.get("access-control-allow-headers"),
-      /X-M3T4-Bridge-Token/i
+      /X-Mandate-2038-Bridge-Token/i
     );
 
     const unpaired = await request("/api/bridge", {
@@ -193,7 +205,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
     const wrong = await request("/api/bridge", {
       headers: {
         origin,
-        "x-m3t4-bridge-token": "wrong"
+        "x-mandate-2038-bridge-token": "wrong"
       }
     });
     assert.equal(wrong.status, 401);
@@ -201,7 +213,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
     const paired = await request("/api/bridge", {
       headers: {
         origin,
-        "x-m3t4-bridge-token": bridgeToken
+        "x-mandate-2038-bridge-token": bridgeToken
       }
     });
     assert.equal(paired.status, 200);
@@ -223,7 +235,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
       headers: {
         origin,
         "content-type": "application/json",
-        "x-m3t4-bridge-token": bridgeToken
+        "x-mandate-2038-bridge-token": bridgeToken
       },
       body: JSON.stringify({
         playerCount: 3,
@@ -254,7 +266,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
       headers: {
         origin,
         "content-type": "application/json",
-        "x-m3t4-bridge-token": bridgeToken
+        "x-mandate-2038-bridge-token": bridgeToken
       },
       body: JSON.stringify({
         allowLlm: true,
@@ -273,7 +285,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
       headers: {
         origin,
         "content-type": "application/json",
-        "x-m3t4-bridge-token": bridgeToken
+        "x-mandate-2038-bridge-token": bridgeToken
       },
       body: JSON.stringify({
         runs: 1,
@@ -294,7 +306,7 @@ test("deployed UI can pair with the token-gated localhost bridge", async () => {
     const rejected = await request("/api/bridge", {
       headers: {
         origin: "https://example.com",
-        "x-m3t4-bridge-token": bridgeToken
+        "x-mandate-2038-bridge-token": bridgeToken
       }
     });
     assert.equal(rejected.status, 403);

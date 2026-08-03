@@ -144,7 +144,7 @@ export class CoreEconomyMatch {
     }
     this.projection = projection;
     this.decisionContext = decisionContext;
-    this.publicMatchId = decisionContext?.publicMatchId || "m3t4-2038";
+    this.publicMatchId = decisionContext?.publicMatchId || "mandate-2038";
     this.replay = [];
     this.publicHistory = [];
     const frontier = this.board.find((tile) => tile.id === "frontier");
@@ -455,7 +455,7 @@ export class CoreEconomyMatch {
         ) {
           for (const source of this.config.powerSources.filter(
             (candidate) =>
-              !candidate.wildAction &&
+              !candidate.isEscalation &&
               candidate.round <= this.round &&
               candidate.runwayCost <= player.runway
           )) {

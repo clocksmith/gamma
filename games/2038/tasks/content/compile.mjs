@@ -1,5 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve, sep } from "node:path";
+import { mergeContent } from "./merge.mjs";
+import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "../..");
 const args = process.argv.slice(2);
@@ -31,85 +33,46 @@ function isCanonicalSource(path, sourceRoots) {
   return sourceRoots.some((sourceRoot) => path.startsWith(`${sourceRoot}${sep}`));
 }
 
-function lookup(root, path) {
-  const segments = path.split(".").filter(Boolean);
-  let value = root;
-  for (const segment of segments) {
-    if (
-      value === null ||
-      typeof value !== "object" ||
-      !Object.prototype.hasOwnProperty.call(value, segment)
-    ) {
-      throw new Error(`Unknown content reference: \${${path}}`);
-    }
-    value = value[segment];
-  }
-  return value;
-}
-
-function parseReference(reference) {
-  const [path, ...formatters] = reference.split("|").map((segment) => segment.trim());
-  if (!path || formatters.some((formatter) => !formatter)) {
-    throw new Error(`Invalid content reference: \${${reference}}`);
-  }
-  return { path, formatters };
-}
-
-function formatValue(value, formatter) {
-  if (formatter !== "capitalize") {
-    throw new Error(`Unknown content formatter: ${formatter}`);
-  }
-  if (typeof value !== "string") {
-    throw new Error(`Content formatter ${formatter} requires a string value`);
-  }
-  const [firstCharacter = "", ...remainingCharacters] = Array.from(value);
-  return `${firstCharacter.toUpperCase()}${remainingCharacters.join("")}`;
-}
-
-function resolveReference(reference, variables, stack) {
-  const { path, formatters } = parseReference(reference);
-  const resolved = resolveValue(lookup(variables, path), variables, [...stack, path]);
-  return formatters.reduce(formatValue, resolved);
-}
-
-function resolveString(value, variables, stack = []) {
-  const exact = value.match(/^\$\{([^}]+)\}$/);
-  if (exact) return resolveReference(exact[1], variables, stack);
-  return value.replace(/\$\{([^}]+)\}/g, (_, reference) => {
-    const { path } = parseReference(reference);
-    if (stack.includes(path)) {
-      throw new Error(`Circular content reference: ${[...stack, path].join(" -> ")}`);
-    }
-    const resolved = resolveReference(reference, variables, stack);
-    if (resolved === null || typeof resolved === "object") {
-      throw new Error(`Embedded content reference must resolve to a scalar: \${${reference}}`);
-    }
-    return String(resolved);
-  });
-}
-
-function resolveValue(value, variables, stack = []) {
-  if (typeof value === "string") return resolveString(value, variables, stack);
-  if (Array.isArray(value)) return value.map((entry) => resolveValue(entry, variables, stack));
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, entry]) => [
-        resolveString(key, variables, stack),
-        resolveValue(entry, variables, stack)
-      ])
-    );
-  }
-  return value;
-}
-
-function assertNoReferences(value, label) {
-  const serialized = typeof value === "string" ? value : JSON.stringify(value);
-  const match = serialized.match(/\$\{[^}]+\}/);
-  if (match) throw new Error(`Unresolved content reference in ${label}: ${match[0]}`);
-}
-
 async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
+}
+
+async function readComposedJson(path, overlayPaths = []) {
+  let value = await readJson(path);
+  for (const overlayPath of overlayPaths) {
+    const overlayDocument = await readJson(overlayPath);
+    if (
+      !overlayDocument ||
+      typeof overlayDocument !== "object" ||
+      Array.isArray(overlayDocument) ||
+      !overlayDocument.content ||
+      typeof overlayDocument.content !== "object" ||
+      Array.isArray(overlayDocument.content)
+    ) {
+      throw new Error(`Content overlay must wrap an object in \"content\": ${overlayPath}`);
+    }
+    value = mergeContent(value, overlayDocument.content, overlayPath);
+  }
+  return value;
+}
+
+function resolveSourcePath(source, label, sourceRoots) {
+  if (typeof source !== "string") {
+    throw new Error(`Content source requires a path: ${label}`);
+  }
+  const path = resolve(projectRoot, source);
+  if (!insideProject(path) || !isCanonicalSource(path, sourceRoots)) {
+    throw new Error(`Content source must live under a graph source root: ${source}`);
+  }
+  return path;
+}
+
+function overlayPathsFor(descriptor, label, sourceRoots) {
+  const overlays = typeof descriptor === "string" ? [] : descriptor.overlays || [];
+  if (!Array.isArray(overlays)) {
+    throw new Error(`Content overlays must be an array: ${label}`);
+  }
+  return overlays.map((overlay) => resolveSourcePath(overlay, label, sourceRoots));
 }
 
 const graphPath = resolve(projectRoot, "content/graph.json");
@@ -123,33 +86,45 @@ const rawVariables = await readJson(variablesPath);
 let variables = resolveValue(rawVariables, rawVariables);
 assertNoReferences(variables, graph.variables);
 
-const contexts = {};
+const rawContexts = {};
 for (const [name, descriptor] of Object.entries(graph.contexts || {})) {
   const path = typeof descriptor === "string" ? descriptor : descriptor.path;
   const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
-  if (typeof path !== "string") {
-    throw new Error(`Content context requires a path: ${name}`);
-  }
-  const contextPath = resolve(projectRoot, path);
-  if (
-    !insideProject(contextPath) ||
-    !isCanonicalSource(contextPath, sourceRoots)
-  ) {
-    throw new Error(`Content context must live under a graph source root: ${path}`);
-  }
-  const resolved = resolveValue(
-    await readJson(contextPath),
-    variables
-  );
-  const collections = Object.values(resolved).filter(Array.isArray);
+  const contextPath = resolveSourcePath(path, `context ${name}`, sourceRoots);
+  const overlayPaths = overlayPathsFor(descriptor, `context ${name}`, sourceRoots);
+  const raw = await readComposedJson(contextPath, overlayPaths);
+  const collections = Object.values(raw).filter(Array.isArray);
   const entries = collectionName
-    ? resolved[collectionName]
+    ? raw[collectionName]
     : collections.length === 1
       ? collections[0]
       : [];
   if (collectionName && !Array.isArray(entries)) {
     throw new Error(`Content context collection must be an array: ${name}.${collectionName}`);
   }
+  rawContexts[name] = {
+    ...raw,
+    byId: Object.fromEntries(
+      entries
+        .filter((entry) => entry && typeof entry.id === "string")
+        .map((entry) => [entry.id, entry])
+    )
+  };
+}
+variables = { ...variables, content: rawContexts };
+
+const contexts = {};
+for (const [name, context] of Object.entries(rawContexts)) {
+  const { byId: ignoredById, ...raw } = context;
+  const resolved = resolveValue(raw, variables);
+  const collections = Object.values(resolved).filter(Array.isArray);
+  const descriptor = graph.contexts[name];
+  const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
+  const entries = collectionName
+    ? resolved[collectionName]
+    : collections.length === 1
+      ? collections[0]
+      : [];
   contexts[name] = {
     ...resolved,
     byId: Object.fromEntries(
@@ -165,24 +140,28 @@ assertNoReferences(variables, "content contexts");
 const targets = new Set();
 const artifacts = [];
 for (const artifact of graph.artifacts) {
-  const sourcePath = resolve(projectRoot, artifact.source);
+  const sourcePath = resolveSourcePath(artifact.source, artifact.target, sourceRoots);
   const targetPath = resolve(projectRoot, artifact.target);
   if (!insideProject(sourcePath) || !insideProject(targetPath)) {
     throw new Error(`Content artifact escapes project root: ${artifact.source}`);
   }
-  if (!isCanonicalSource(sourcePath, sourceRoots)) {
-    throw new Error(`Canonical content source must live under a graph source root: ${artifact.source}`);
-  }
   if (targets.has(targetPath)) throw new Error(`Duplicate content target: ${artifact.target}`);
   targets.add(targetPath);
 
-  const source = await readFile(sourcePath, "utf8");
   let output;
   if (artifact.format === "json") {
-    const resolved = resolveValue(JSON.parse(source), variables);
+    const overlayPaths = overlayPathsFor(artifact, artifact.target, sourceRoots);
+    const resolved = resolveValue(
+      await readComposedJson(sourcePath, overlayPaths),
+      variables
+    );
     assertNoReferences(resolved, artifact.source);
     output = `${JSON.stringify(resolved, null, 2)}\n`;
   } else if (artifact.format === "text") {
+    if ((artifact.overlays || []).length) {
+      throw new Error(`Text artifacts do not support overlays: ${artifact.target}`);
+    }
+    const source = await readFile(sourcePath, "utf8");
     output = resolveString(source, variables);
     assertNoReferences(output, artifact.source);
   } else {

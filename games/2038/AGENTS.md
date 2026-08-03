@@ -1,10 +1,10 @@
-# M3T4 2038 Agent Instructions
+# Mandate 2038 Agent Instructions
 
-These instructions apply to the entire `frontier-2038` project.
+These instructions apply to the entire Mandate 2038 project.
 
 ## Product Intent
 
-M3T4 2038 is a 2–6 player medium-weight strategy board game about
+Mandate 2038 is a 2–6 player medium-weight strategy board game about
 institutions racing to build, deploy, regulate, and plausibly declare AGI.
 It combines spatial engine building, push-your-luck research, asymmetric
 institutions, negotiation, and shared public scrutiny.
@@ -15,7 +15,24 @@ systems and incentives, not jokes or allegations about real people.
 
 ## Canonical Boundaries
 
-- `docs/core-rules.md` preserves the user-selected rules baseline.
+- `content/data/` owns authored mechanics, stable IDs, values, and shared
+  terminology.
+- `content/copy/` owns authored component copy and the player-readable
+  rulebook and World companion sources.
+- `content/runtime/` owns authored browser UI, simulation, and strategy copy.
+- `physical/` owns the physical component specification, state encoding, and
+  human-readable box inventory. Mechanical counts remain in `content/data/`;
+  generated physical-kit output remains in `dist/physical-kit/`.
+- `experimental/` owns deferred optional modules; its content is never part of
+  baseline play unless the user explicitly activates it.
+- `content/graph.json` composes the authored sources and declares every
+  generated projection. Do not hand-edit any target it declares.
+- `dist/runtime/` owns compiler-generated runtime JSON; `dist/docs/` owns the
+  generated rulebooks; `dist/site/` owns rendered site output; and
+  `dist/physical-kit/` owns frozen kit output.
+- `versions/current-release.json` is the mutable release declaration.
+  `versions/<version>/` contains immutable historical release evidence and
+  must never be rewritten to make current sources pass.
 - `docs/design-decisions.md` records current rationale, exclusions, open
   evidence questions, and implementation gaps without duplicating rules text.
 - `docs/playtesting-and-evidence.md` owns physical and simulated evidence
@@ -28,10 +45,6 @@ systems and incentives, not jokes or allegations about real people.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,
   counter-strategy, and promotion contract. Its machine authority is
   `lab/contracts/balance-contract.json`.
-- `content/` owns the semantic game graph and every authored player-facing
-  string. `generated/`, `docs/core-rules.md`, and prototype HTML targets declared in
-  `content/graph.json` are generated projections and must not be hand-edited.
-- `generated/` owns generated machine-readable prototype content.
 - `web/` owns the browser implementation.
 - `tests/` owns contract, determinism, and probability checks.
 - `evidence/playtests/` owns observed sessions and receipts. Never present a simulated

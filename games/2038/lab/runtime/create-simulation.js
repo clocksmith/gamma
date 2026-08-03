@@ -29,13 +29,13 @@ import { runDeterministicChunks } from "./deterministic-chunk-scheduler.js";
 import { throwIfAborted } from "../cancellation.js";
 import { archiveSimulationReport } from "../report-archive.js";
 
-const configUrl = new URL("../../generated/game-config.json", import.meta.url);
-const factionsUrl = new URL("../../generated/factions.json", import.meta.url);
-const headlinesUrl = new URL("../../generated/headlines.json", import.meta.url);
-const wildActionsUrl = new URL("../../generated/wild-actions.json", import.meta.url);
-const tacticsUrl = new URL("../../generated/tactics.json", import.meta.url);
-const mandatesUrl = new URL("../../generated/mandates.json", import.meta.url);
-const objectivesUrl = new URL("../../generated/secret-objectives.json", import.meta.url);
+const configUrl = new URL("../../dist/runtime/game-config.json", import.meta.url);
+const factionsUrl = new URL("../../dist/runtime/factions.json", import.meta.url);
+const headlinesUrl = new URL("../../dist/runtime/headlines.json", import.meta.url);
+const escalationsUrl = new URL("../../dist/runtime/escalations.json", import.meta.url);
+const tacticsUrl = new URL("../../dist/runtime/tactics.json", import.meta.url);
+const mandatesUrl = new URL("../../dist/runtime/mandates.json", import.meta.url);
+const objectivesUrl = new URL("../../dist/runtime/secret-objectives.json", import.meta.url);
 const execFileAsync = promisify(execFile);
 
 async function providerProvenance(backends, models, reasoningEfforts) {
@@ -232,7 +232,7 @@ export async function createSimulation(options = {}, onProgress) {
     config,
     factionDocument,
     headlineDocument,
-    wildActionDocument,
+    escalationDocument,
     tacticDocument,
     mandateDocument,
     objectiveDocument,
@@ -242,7 +242,7 @@ export async function createSimulation(options = {}, onProgress) {
     readFile(configUrl, "utf8").then(JSON.parse),
     readFile(factionsUrl, "utf8").then(JSON.parse),
     readFile(headlinesUrl, "utf8").then(JSON.parse),
-    readFile(wildActionsUrl, "utf8").then(JSON.parse),
+    readFile(escalationsUrl, "utf8").then(JSON.parse),
     readFile(tacticsUrl, "utf8").then(JSON.parse),
     readFile(mandatesUrl, "utf8").then(JSON.parse),
     readFile(objectivesUrl, "utf8").then(JSON.parse),
@@ -485,7 +485,7 @@ export async function createSimulation(options = {}, onProgress) {
         models: rotatedModels,
         reasoningEfforts: rotatedReasoningEfforts,
         headlines: headlineDocument,
-        wildActions: wildActionDocument,
+        escalations: escalationDocument,
         tactics: tacticDocument,
         mandates: mandateDocument,
         objectives: objectiveDocument,

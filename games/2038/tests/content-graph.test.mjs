@@ -3,6 +3,7 @@ import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import test from "node:test";
+import { contentSourceFiles } from "../tasks/content/source-files.mjs";
 
 const execFileAsync = promisify(execFile);
 const root = new URL("../", import.meta.url);
@@ -17,10 +18,34 @@ test("semantic content graph reproduces every declared artifact without drift", 
   assert.match(stdout, /content-graph: verified \d+ generated artifacts/);
 });
 
+test("player copy is bound to declared player-facing surfaces", async () => {
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    ["tasks/content/check-boundaries.mjs"],
+    { cwd: root }
+  );
+  assert.match(
+    stdout,
+    /content-boundaries: verified \d+ surface-bound player-copy sources/
+  );
+});
+
+test("release content identity includes every player-copy source", async () => {
+  const graph = await readJson("content/graph.json");
+  const releaseSources = new Set(contentSourceFiles(graph));
+  assert.ok(releaseSources.has(graph.playerCopyContract));
+  for (const artifact of graph.artifacts) {
+    assert.ok(releaseSources.has(artifact.source), `release binds ${artifact.source}`);
+    for (const overlay of artifact.overlays || []) {
+      assert.ok(releaseSources.has(overlay), `release binds ${overlay}`);
+    }
+  }
+});
+
 test("content compiler is domain-neutral", async () => {
   const compiler = await readFile(new URL("tasks/content/compile.mjs", root), "utf8");
   for (const forbidden of [
-    "M3T4",
+    "LegacyGameName",
     "Fusion",
     "Runway",
     "Headline",
@@ -35,21 +60,25 @@ test("semantic graph owns every player-facing construction surface", async () =>
   const graph = await readJson("content/graph.json");
   const targets = new Set(graph.artifacts.map((artifact) => artifact.target));
   for (const target of [
-    "docs/core-rules.md",
-    "docs/world-and-institutions.md",
-    "docs/optional-tactics.md",
-    "generated/game-config.json",
-    "generated/factions.json",
-    "generated/headlines.json",
-    "generated/wild-actions.json",
-    "generated/mandates.json",
-    "generated/reference-cards.json",
-    "generated/player-strategies.json",
-    "generated/world-copy.json",
-    "generated/ui-copy.json",
-    "generated/simulation-copy.json",
-    "web/index.html",
-    "web/simulation.html"
+    "dist/docs/core-rules.md",
+    "dist/docs/map-reference.md",
+    "dist/docs/component-reference.md",
+    "dist/docs/card-reference.md",
+    "dist/docs/advanced-play.md",
+    "dist/docs/world-and-institutions.md",
+    "dist/docs/optional-tactics.md",
+    "dist/runtime/game-config.json",
+    "dist/runtime/factions.json",
+    "dist/runtime/headlines.json",
+    "dist/runtime/escalations.json",
+    "dist/runtime/mandates.json",
+    "dist/runtime/reference-cards.json",
+    "dist/runtime/player-strategies.json",
+    "dist/runtime/world-copy.json",
+    "dist/runtime/ui-copy.json",
+    "dist/runtime/simulation-copy.json",
+    "dist/site/index.html",
+    "dist/site/simulation.html"
   ]) {
     assert.ok(targets.has(target), `semantic graph generates ${target}`);
   }
@@ -57,9 +86,11 @@ test("semantic graph owns every player-facing construction surface", async () =>
   const sourceRoots = graph.sourceRoots || ["content/"];
   assert.ok(
     graph.artifacts.every((artifact) =>
-      sourceRoots.some((sourceRoot) => artifact.source.startsWith(sourceRoot))
+      [artifact.source, ...(artifact.overlays || [])].every((source) =>
+        sourceRoots.some((sourceRoot) => source.startsWith(sourceRoot))
+      )
     ),
-    "every generated artifact has a declared canonical source root"
+    "every generated source and overlay has a declared canonical source root"
   );
 });
 
@@ -67,23 +98,27 @@ test("physical sources are projected from declared ownership roots", async () =>
   const graph = await readJson("content/graph.json");
   const sources = new Set(graph.artifacts.map((artifact) => artifact.source));
   const physicalSources = [
-    "physical/content-manifest.json",
-    "physical/core-rules.md",
-    "physical/world-and-institutions.md",
-    "physical/factions.json",
-    "physical/game-config.json",
-    "physical/headlines.json",
-    "physical/mandates.json",
-    "physical/reference-cards.json",
-    "physical/wild-actions.json",
-    "physical/world-copy.json"
+    "content/data/content-manifest.json",
+    "content/copy/core-rules.md",
+    "content/copy/map-reference.md",
+    "content/copy/component-reference.md",
+    "content/copy/card-reference.md",
+    "content/copy/advanced-play.md",
+    "content/copy/world-and-institutions.md",
+    "content/data/factions.json",
+    "content/data/game-config.json",
+    "content/data/headlines.json",
+    "content/data/mandates.json",
+    "content/data/reference-cards.json",
+    "content/data/escalations.json",
+    "content/data/world-copy.json"
   ];
 
   for (const source of physicalSources) {
     assert.ok(sources.has(source), `physical source is projected: ${source}`);
   }
   assert.ok(
-    sources.has("physical/optional/tactics-rules.md"),
+    sources.has("experimental/tactics-rules.md"),
     "deferred Tactic rules are projected separately from baseline rules"
   );
   assert.ok(
@@ -93,20 +128,22 @@ test("physical sources are projected from declared ownership roots", async () =>
 });
 
 test("shared semantic references construct current cards, rules, UI, and simulation copy", async () => {
-  const variables = await readJson("physical/variables.json");
-  const config = await readJson("generated/game-config.json");
-  const wild = await readJson("generated/wild-actions.json");
-  const ui = await readJson("generated/ui-copy.json");
-  const simulation = await readJson("generated/simulation-copy.json");
-  const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
+  const variables = await readJson("content/data/variables.json");
+  const config = await readJson("dist/runtime/game-config.json");
+  const escalation = await readJson("dist/runtime/escalations.json");
+  const ui = await readJson("dist/runtime/ui-copy.json");
+  const simulation = await readJson("dist/runtime/simulation-copy.json");
+  const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
   const rulesSource = await readFile(
-    new URL("physical/core-rules.md", root),
+    new URL("content/copy/core-rules.md", root),
     "utf8"
   );
+  const graph = await readJson("content/graph.json");
+  const sourcePaths = new Set(
+    graph.artifacts.flatMap((artifact) => [artifact.source, ...(artifact.overlays || [])])
+  );
   const allSources = await Promise.all(
-    (await readJson("content/graph.json")).artifacts.map((artifact) =>
-      readFile(new URL(artifact.source, root), "utf8")
-    )
+    [...sourcePaths].map((source) => readFile(new URL(source, root), "utf8"))
   );
 
   const advancedName = variables.terms.technology.advancedGeneration;
@@ -130,13 +167,14 @@ test("shared semantic references construct current cards, rules, UI, and simulat
     facility: "Facility",
     facilities: "Facilities"
   });
-  assert.equal(config.title, variables.game.title);
+  const world = await readJson("dist/runtime/world-copy.json");
+  assert.equal(config.title, world.title);
   assert.equal(
     config.powerSources.find((source) => source.id === "fusion_demonstrator").name,
     advancedName
   );
   assert.equal(
-    wild.wildActions.find((action) => action.id === "fusion_demonstrator").name,
+    escalation.escalations.find((action) => action.id === "fusion_demonstrator").name,
     advancedName
   );
   assert.equal(
@@ -148,7 +186,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
   assert.ok(rulesSource.includes("${terms.technology.advancedGeneration}"));
   assert.ok(rulesSource.includes("${facts.shared.roundsWord | capitalize}"));
-  assert.match(rules, /\*\*Standard game:\*\* Four rounds, three turns per player per round/);
+  assert.match(rules, /\*\*Standard game:\*\* Four Eras, three turns per player per Era/);
   assert.ok(allSources.join("\n").match(/\$\{[^}]+\}/g).length > 500);
   assert.doesNotMatch(
     allSources.join("\n"),
@@ -157,40 +195,71 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   assert.ok(!rules.includes("${"));
 });
 
-test("Headline cards are the single source for the rulebook inventory", async () => {
-  const { headlines } = await readJson("generated/headlines.json");
-  const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
-  const rulesSource = await readFile(
-    new URL("physical/core-rules.md", root),
+test("Headline cards own their exact text while the Default book owns timing", async () => {
+  const { headlines } = await readJson("dist/runtime/headlines.json");
+  const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
+  const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
+  const componentReference = await readFile(
+    new URL("dist/docs/component-reference.md", root),
     "utf8"
   );
 
   for (const headline of headlines) {
-    assert.ok(rules.includes(headline.name), `rules project ${headline.id} name`);
-    assert.ok(rules.includes(headline.text), `rules project ${headline.id} text`);
-    assert.ok(
-      rulesSource.includes(`\${content.headlines.byId.${headline.id}.name}`),
-      `rulebook template references ${headline.id}`
-    );
+    assert.ok(headline.name && headline.text, `card owns ${headline.id}`);
+    assert.ok(!rules.includes(headline.text), `Default book does not duplicate ${headline.id}`);
+    assert.ok(cardReference.includes(headline.name), `reference projects ${headline.id} name`);
+    assert.ok(cardReference.includes(headline.text), `reference projects ${headline.id} text`);
   }
-  for (const retiredName of [
-    "Open-Weights Drop",
-    "Talent Gold Rush",
-    "Boardroom Coup",
-    "Export Controls",
-    "Weights on the Internet",
-    "Election Deepfake Panic",
-    "Agent Swarm Escapes Scope"
-  ]) {
-    assert.ok(!rules.includes(retiredName), `rules retire incident-pinned title ${retiredName}`);
+  assert.match(rules, /A Headline is revealed before secret action selection/);
+  assert.match(componentReference, /without an\s+\*\*Advanced Play\*\* badge/);
+});
+
+test("Mandate cards own their exact text while the Default book owns scoring timing", async () => {
+  const { mandates } = await readJson("dist/runtime/mandates.json");
+  const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
+  const cardReference = await readFile(new URL("dist/docs/card-reference.md", root), "utf8");
+
+  for (const mandate of mandates) {
+    assert.ok(mandate.name && mandate.rulesText, `card owns ${mandate.id}`);
+    assert.ok(!rules.includes(mandate.rulesText), `Default book does not duplicate ${mandate.id}`);
+    assert.ok(cardReference.includes(mandate.name), `reference projects ${mandate.id} name`);
+    assert.ok(cardReference.includes(mandate.rulesText), `reference projects ${mandate.id} text`);
   }
+  assert.match(rules, /Score the Mandate/);
+});
+
+test("Card Reference projects every other required card surface", async () => {
+  const [factionDocument, escalationDocument, referenceDocument, config, cardReference] = await Promise.all([
+    readJson("dist/runtime/factions.json"),
+    readJson("dist/runtime/escalations.json"),
+    readJson("dist/runtime/reference-cards.json"),
+    readJson("dist/runtime/game-config.json"),
+    readFile(new URL("dist/docs/card-reference.md", root), "utf8")
+  ]);
+
+  for (const faction of factionDocument.factions) {
+    assert.ok(cardReference.includes(faction.name), `reference projects ${faction.id}`);
+    if (faction.scoringRule) assert.ok(cardReference.includes(faction.scoringRule.text));
+    for (const ability of faction.abilities) assert.ok(cardReference.includes(ability.text));
+  }
+  for (const escalation of escalationDocument.escalations) {
+    assert.ok(cardReference.includes(escalation.name));
+    assert.ok(cardReference.includes(escalation.text));
+  }
+  for (const era of referenceDocument.eraCards) {
+    assert.ok(cardReference.includes(era.rulesText));
+    assert.ok(cardReference.includes(era.unlockText));
+  }
+  for (const action of config.actions) assert.ok(cardReference.includes(action.summary));
+  for (const training of config.trainingDeck.cards) assert.ok(cardReference.includes(training.flavorText));
+  for (const source of config.powerSources) assert.ok(cardReference.includes(source.publicClaim));
 });
 
 test("Era cards are the single source for the world-companion escalation lore", async () => {
-  const { eraCards } = await readJson("generated/reference-cards.json");
-  const world = await readFile(new URL("docs/world-and-institutions.md", root), "utf8");
+  const { eraCards } = await readJson("dist/runtime/reference-cards.json");
+  const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const worldSource = await readFile(
-    new URL("physical/world-and-institutions.md", root),
+    new URL("content/copy/world-and-institutions.md", root),
     "utf8"
   );
 
@@ -204,39 +273,138 @@ test("Era cards are the single source for the world-companion escalation lore", 
   }
 });
 
-test("How to Play is trimmed while every moved authority remains governed", async () => {
-  const [rules, world, tactics, tacticDocument] = await Promise.all([
-    readFile(new URL("docs/core-rules.md", root), "utf8"),
-    readFile(new URL("docs/world-and-institutions.md", root), "utf8"),
-    readFile(new URL("docs/optional-tactics.md", root), "utf8"),
-    readJson("generated/tactics.json")
+test("Era IV copy gives unchanged faction mechanics concrete continuity institutions", async () => {
+  const [factionsDocument, mandatesDocument, bible] = await Promise.all([
+    readJson("dist/runtime/factions.json"),
+    readJson("dist/runtime/mandates.json"),
+    readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
+  ]);
+  const factions = Object.fromEntries(
+    factionsDocument.factions.map((faction) => [faction.id, faction])
+  );
+  const eraIvAbility = (factionId) => factions[factionId].abilities.at(-1);
+
+  assert.deepEqual(
+    [
+      eraIvAbility("coalition_lab").displayName,
+      eraIvAbility("platform_empire").displayName,
+      eraIvAbility("imperial_research_lab").displayName,
+      eraIvAbility("vertical_empire").displayName,
+      eraIvAbility("safety_laboratory").displayName,
+      eraIvAbility("foundry").displayName
+    ],
+    [
+      "Instance Quorum Protocol",
+      "Substrate Continuity Layer",
+      "Substrate-Neutral Verification Standard",
+      "Extraterritorial Succession Transfer",
+      "Certified Right of Refusal",
+      "Substrate Access Guarantee"
+    ]
+  );
+  assert.match(eraIvAbility("coalition_lab").text, /reveal 2 replacements/);
+  assert.match(eraIvAbility("platform_empire").text, /without moving there/);
+  assert.match(eraIvAbility("imperial_research_lab").text, /first 3 distinct domains/);
+  assert.match(eraIvAbility("vertical_empire").text, /move 1 Facility/);
+  assert.match(eraIvAbility("safety_laboratory").text, /cannot be selected this cycle/);
+  assert.match(eraIvAbility("foundry").text, /give every rival 1 Compute/);
+  assert.equal(
+    eraIvAbility("coalition_lab").flavorText,
+    "Every recognized successor enters the quorum. The version with standing authorizes the event that occurred."
+  );
+  assert.equal(
+    eraIvAbility("imperial_research_lab").flavorText,
+    "Evidence assembled across distinct domains becomes eligible for recognition across biological, synthetic, and distributed institutions."
+  );
+
+  const mandates = Object.fromEntries(
+    mandatesDocument.mandates.map((mandate) => [mandate.id, mandate])
+  );
+  assert.equal(mandates.continent_signs_loi.name, "Successor Accounts Recognized");
+  assert.equal(mandates.zero_incident_quarter.name, "Maintained Reality Is Certified");
+  assert.equal(mandates.responsible_acceleration.name, "Contestability Standard Maintained");
+  assert.match(mandates.continent_signs_loi.rulesText, /most Customers/);
+  assert.equal(
+    mandates.continent_signs_loi.flavorText,
+    "The institution registers the most new service identities, successor agents, or continuing accounts."
+  );
+  assert.match(mandates.zero_incident_quarter.rulesText, /fewest Scrutiny/);
+  assert.match(mandates.responsible_acceleration.rulesText, /at least 4 Trust/);
+  for (const concept of [
+    "Instance Quorum",
+    "Right of Exit Certification",
+    "Human Compatibility Office"
+  ]) {
+    assert.match(bible, new RegExp(`\\| ${concept} \\| Adopted framing \\| Continuity \\|`));
+  }
+});
+
+test("Default Rules are compact while every moved authority has one table surface", async () => {
+  const [rules, mapReference, componentReference, advanced, world, tactics, tacticDocument] = await Promise.all([
+    readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
+    readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
+    readFile(new URL("dist/docs/component-reference.md", root), "utf8"),
+    readFile(new URL("dist/docs/advanced-play.md", root), "utf8"),
+    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
+    readFile(new URL("dist/docs/optional-tactics.md", root), "utf8"),
+    readJson("dist/runtime/tactics.json")
   ]);
   const wordCount = rules
-    .replace(/[#>*`|_\-]+/g, " ")
+    .replace(/[#>*|_\-]+/g, " ")
     .split(/\s+/)
     .filter(Boolean).length;
-  const previousWordCount = 11565;
 
-  assert.ok(wordCount <= Math.floor(previousWordCount * 0.9), `${wordCount} words is at least 10% shorter`);
-  assert.ok(wordCount >= Math.ceil(previousWordCount * 0.8), `${wordCount} words preserves the 20% trim floor`);
-  assert.doesNotMatch(rules, /### Tone contract/);
-  assert.doesNotMatch(rules, /## 15\. Balance rationale and test boundary/);
-  assert.doesNotMatch(rules, /## 12\. Deferred module: Tactic cards/);
-  assert.match(world, /## Tone contract/);
-  assert.match(world, /## The four Eras/);
-  assert.match(world, /## The two World Endings/);
+  assert.ok(wordCount >= 5000, "Default procedure retains enough authority");
+  assert.ok(wordCount <= 6500, "Default Rules stay printable");
+  assert.match(rules, /## How to Play/);
+  assert.match(rules, /## Rules Reference/);
+  assert.ok(rules.indexOf("## How to Play") < rules.indexOf("## Rules Reference"));
+  assert.match(rules, /Use the browser \*\*First Game Guide\*\* for a narrated first play/);
+  assert.match(rules, /## 9\. Printed card authorities/);
+  assert.match(rules, /## 10\. Map and component reference/);
+  assert.match(rules, /## Advanced Play/);
+  assert.doesNotMatch(rules, /Jurisdictional Realignment/);
+  assert.doesNotMatch(rules, /Every recognized successor enters the quorum/);
+  assert.doesNotMatch(rules, /adds 1 additional Runway/);
+
+  assert.match(mapReference, /## Build the jurisdiction/);
+  assert.match(mapReference, /Each public\s+district touches exactly two operational districts/);
+  assert.match(mapReference, /## District effects/);
+  assert.match(componentReference, /### Training deck: 50 cards/);
+  assert.match(componentReference, /One starting-grid marker/);
+  assert.match(componentReference, /## Defined markers and effects/);
+  assert.match(advanced, /## Connected infrastructure/);
+  assert.match(advanced, /## Immediate resource trades/);
+  assert.match(advanced, /## Production Power requests/);
+  assert.match(advanced, /## Headline procedures/);
+  assert.match(advanced, /## Era III Jurisdictional Realignment/);
+  assert.match(advanced, /every card for its Era, including cards with an\s+\*\*Advanced Play\*\* badge/);
+
+  assert.match(world, /## The jurisdiction/);
+  assert.doesNotMatch(world, /\*\*Interpretation\.\*\*/);
+  assert.doesNotMatch(world, /Nobody knows whether it works/);
+  assert.match(world, /## The four World Endings/);
+  assert.match(world, /The Singularity — Open AGI/);
+  assert.match(world, /The Closed Loop — Closed AGI/);
+  assert.match(world, /The Plural Future — Open Continuity/);
+  assert.match(world, /Assured Continuity — Closed Non-AGI/);
+
+  const references = await readJson("dist/runtime/reference-cards.json");
+  const mandateReference = references.playerReferences.find((reference) => reference.id === "public_mandate");
+  assert.match(mandateReference.backText.join("\n"), /AGI emerges when a declaration finishes at Capability 9\+/);
+  assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
 
   for (const tactic of tacticDocument.tactics) {
-    assert.ok(tactics.includes(tactic.name), `optional rules include ${tactic.id} name`);
-    assert.ok(tactics.includes(tactic.text), `optional rules include ${tactic.id} exact card text`);
+    assert.ok(tactics.includes(tactic.name));
+    assert.ok(tactics.includes(tactic.text));
   }
   assert.match(tactics, /not used in the baseline game/i);
 });
 
 test("numeric typography preserves exact card digits while prose may spell numbers", async () => {
-  const [{ headlines }, rules, thematicBible] = await Promise.all([
-    readJson("generated/headlines.json"),
-    readFile(new URL("docs/core-rules.md", root), "utf8"),
+  const [{ headlines }, mapReference, thematicBible] = await Promise.all([
+    readJson("dist/runtime/headlines.json"),
+    readFile(new URL("dist/docs/map-reference.md", root), "utf8"),
     readFile(new URL("docs/thematic-content-bible.md", root), "utf8")
   ]);
   const normalizedBible = thematicBible.replace(/\s+/g, " ");
@@ -244,21 +412,18 @@ test("numeric typography preserves exact card digits while prose may spell numbe
   assert.match(normalizedBible, /Use Arabic digits in card rules, costs, quantities, thresholds/);
   assert.match(normalizedBible, /Spell out ordinary whole numbers in narrative and explanatory prose/);
   assert.match(normalizedBible, /content compiler must not apply a spell-out filter/);
-  assert.ok(
-    headlines.every((headline) => rules.includes(headline.text)),
-    "rulebook preserves exact digit-bearing Headline text"
-  );
+  assert.ok(headlines.every((headline) => /\d/.test(headline.text)));
   assert.match(
     headlines.find((headline) => headline.id === "ten_dollar_intelligence").text,
     /adds 1 additional/
   );
-  assert.match(rules, /CEO: two presence/);
+  assert.match(mapReference, /CEO: two presence/);
 });
 
 test("fictional institution identities are canonical across generated game surfaces", async () => {
-  const variables = await readJson("physical/variables.json");
-  const factions = await readJson("generated/factions.json");
-  const rules = await readFile(new URL("docs/core-rules.md", root), "utf8");
+  const variables = await readJson("content/data/variables.json");
+  const factions = await readJson("dist/runtime/factions.json");
+  const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
   const expectedNames = [
     "Dovetalis Labs",
     "Loopfold AI",
@@ -283,14 +448,15 @@ test("fictional institution identities are canonical across generated game surfa
     ["faction-1", "faction-2", "faction-3", "faction-4", "faction-5", "faction-6"]
   );
   assert.ok(factions.factions.every((faction) => !("historicalReference" in faction)));
-  for (const name of expectedNames) assert.ok(rules.includes(`### ${name}`));
+  assert.match(rules, /All Factions and CEOs are fictional/);
+  for (const name of expectedNames) assert.ok(!rules.includes(name));
   for (const identity of formerIdentities) {
     assert.ok(!rules.includes(identity), `generated rules omit former identity ${identity}`);
   }
 });
 
 test("canonical faction source contains no real-person identity vocabulary", async () => {
-  const source = await readFile(new URL("physical/factions.json", root), "utf8");
+  const source = await readFile(new URL("content/data/factions.json", root), "utf8");
   for (const name of [
     "Sam Altman",
     "Mark Zuckerberg",

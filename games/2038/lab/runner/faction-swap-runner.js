@@ -1142,7 +1142,7 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
   if (!Number.isInteger(runsPerArm) || runsPerArm < 1 || runsPerArm > 10000) {
     throw new RangeError("runsPerArm must be an integer from 1 to 10000.");
   }
-  const rootSeed = String(options.seed || "m3t4-faction-swap");
+  const rootSeed = String(options.seed || "mandate-2038-faction-swap");
   const sampleReplays = Number(options.sampleReplays || 0);
   if (!Number.isInteger(sampleReplays) || sampleReplays < 0 || sampleReplays > 10) {
     throw new RangeError("sampleReplays must be an integer from 0 to 10.");

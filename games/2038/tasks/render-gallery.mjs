@@ -1,20 +1,17 @@
-// Renders a single browsable "component gallery" of all M3T4 2038 game
-// content: factions, actions, eras, headlines, mandates, wild actions, power
+// Renders a single browsable "component gallery" of all Mandate 2038 game
+// content: factions, actions, eras, headlines, mandates, escalations, power
 // sources, tactics, specialists, secret objectives, and reference cards.
 //
-// Every card shows its rendered player-facing text plus an ART PLACEHOLDER
-// block carrying the authored `artDirection` brief, so the table content can be
-// reviewed before any real art exists (AGENTS.md: no final art before blind
-// tests). This is a DERIVED REVIEW VIEW built from generated/*.json (the generated
-// projections of the content graph); output lands in build/ (gitignored) and is
-// served at /gallery by tasks/serve.mjs.
+// Every card shows its rendered player-facing text from dist/runtime/*.json.
+// Output lands in dist/site/ (gitignored) and is served at /gallery by
+// tasks/serve.mjs.
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const projectRoot = resolve(import.meta.dirname, "..");
-const dataDir = resolve(projectRoot, "generated");
-const outDir = resolve(projectRoot, "build");
+const dataDir = resolve(projectRoot, "dist/runtime");
+const outDir = resolve(projectRoot, "dist/site");
 const checkOnly = process.argv.slice(2).includes("--check");
 const baselineOnly = process.argv.slice(2).includes("--baseline");
 
@@ -31,14 +28,6 @@ async function readData(name) {
 }
 
 // --- card primitives ---------------------------------------------------------
-
-function artBlock(brief, accent) {
-  const style = accent ? ` style="--accent:${escapeHtml(accent)}"` : "";
-  const caption = brief
-    ? `<p class="art-brief"><span>Art direction</span>${escapeHtml(brief)}</p>`
-    : `<p class="art-brief"><span>Art direction</span><em>Not yet specified.</em></p>`;
-  return `<div class="art"${style}><div class="art-frame"><span class="art-glyph">◫</span><span class="art-label">ART PLACEHOLDER</span></div>${caption}</div>`;
-}
 
 function badges(items) {
   const clean = items.filter(Boolean);
@@ -69,10 +58,9 @@ function listRows(label, lines) {
     .join("")}</ul></div>`;
 }
 
-function card({ accent, title, subtitle, badgeList = [], art, bodyHtml = "", tagList }) {
+function card({ accent, title, subtitle, badgeList = [], bodyHtml = "", tagList }) {
   const accentStyle = accent ? ` style="--accent:${escapeHtml(accent)}"` : "";
   return `<article class="card"${accentStyle}>
-${artBlock(art, accent)}
 <div class="card-body">
 <h3 class="card-title">${escapeHtml(title)}</h3>
 ${subtitle ? `<p class="card-sub">${escapeHtml(subtitle)}</p>` : ""}
@@ -91,7 +79,7 @@ function section(id, label, count, cardsHtml, blurb) {
 }
 
 const roman = ["", "I", "II", "III", "IV", "V"];
-const roundBadge = (n) => (n ? `Round ${roman[n] || n}` : "");
+const roundBadge = (n) => (n ? `Era ${roman[n] || n}` : "");
 const eraBadge = (n) => (n ? `Era ${roman[n] || n}` : "");
 const timingBadge = (t) => (t ? t.replace(/_/g, " ") : "");
 
@@ -112,7 +100,6 @@ function buildFactions(data) {
 ${a.displayName && a.displayName !== a.name ? `<p class="mech-name">${escapeHtml(a.name)}</p>` : ""}
 <p class="rules">${escapeHtml(a.text)}</p>
 ${a.flavorText ? `<p class="flavor">${escapeHtml(a.flavorText)}</p>` : ""}
-${a.artDirection ? `<p class="art-brief inline"><span>Art</span>${escapeHtml(a.artDirection)}</p>` : ""}
 </div>`
         )
         .join("");
@@ -121,7 +108,6 @@ ${a.artDirection ? `<p class="art-brief inline"><span>Art</span>${escapeHtml(a.a
 <div class="ability-head"><strong>${escapeHtml(f.scoringRule.name)}</strong>${badges(["scoring contract", timingBadge(f.scoringRule.timing)])}</div>
 <p class="rules">${escapeHtml(f.scoringRule.text)}</p>
 ${f.scoringRule.flavorText ? `<p class="flavor">${escapeHtml(f.scoringRule.flavorText)}</p>` : ""}
-${f.scoringRule.artDirection ? `<p class="art-brief inline"><span>Art</span>${escapeHtml(f.scoringRule.artDirection)}</p>` : ""}
 </div>`
         : "";
       const body = `${f.motto ? `<p class="flavor motto">“${escapeHtml(f.motto)}”</p>` : ""}
@@ -138,12 +124,11 @@ ${scoringRule}
         title: f.name,
         subtitle: f.role,
         badgeList: [f.color ? "faction" : ""],
-        art: f.artDirection,
         bodyHtml: body
       });
     })
     .join("");
-  return section("factions", "Factions", data.factions.length, cards, "Asymmetric institutions with starting resources and per-round abilities.");
+  return section("factions", "Factions", data.factions.length, cards, "Asymmetric institutions with starting resources and per-Era abilities.");
 }
 
 function formatTurnContract(tc) {
@@ -162,7 +147,6 @@ function buildActions(config) {
         title: a.name,
         subtitle: a.slogan,
         badgeList: ["Core Action", a.initiativeName ? `Initiative: ${a.initiativeName}` : ""],
-        art: a.artDirection,
         bodyHtml: textRows([
           { text: a.summary },
           { label: "Turn contract", text: formatTurnContract(a.turnContract) },
@@ -171,28 +155,31 @@ function buildActions(config) {
       })
     )
     .join("");
-  return section("actions", "Core Actions", config.actions.length, cards, "The six institutional functions; each player uses three per round.");
+  return section("actions", "Core Actions", config.actions.length, cards, "The six institutional functions; each player uses three per Era.");
 }
 
-function buildRounds(config) {
+function buildRounds(config, reference) {
+  const erasByRound = new Map((reference.eraCards || []).map((era) => [era.round, era]));
   const cards = config.rounds
-    .map((r) =>
+    .map((r) => {
+      const era = erasByRound.get(r.number);
+      return (
       card({
-        title: `${roman[r.number] || r.number}. ${r.name}`,
-        subtitle: r.tagline,
+        title: `${roman[r.number] || r.number}. ${era?.name || r.name}`,
+        subtitle: era?.strapline,
         badgeList: [
           `${r.cycles} cycles`,
           `Audit base ${r.auditBaseDraws}`,
           `${r.escalationTokens} escalation`
         ],
-        art: r.artDirection,
-        bodyHtml: `${textRows([{ text: r.flavorText, kind: "flavor" }])}
-${listRows("New this era", r.newThisEra)}
-${listRows("Wild actions", r.wildActions)}`
+        bodyHtml: `${textRows([{ text: era?.loreText, kind: "flavor" }])}
+${listRows("New this era", era?.unlockText ? [era.unlockText] : [])}
+${listRows("Escalation actions", r.escalations)}`
       })
-    )
+      );
+    })
     .join("");
-  return section("rounds", "Eras", config.rounds.length, cards, "The four-round escalation from The Demo to The Claim.");
+  return section("rounds", "Eras", config.rounds.length, cards, "The four-Era escalation from Progress to Continuity.");
 }
 
 function buildHeadlines(data) {
@@ -201,8 +188,10 @@ function buildHeadlines(data) {
       card({
         title: h.name,
         subtitle: h.strapline,
-        badgeList: [roundBadge(h.round)],
-        art: h.artDirection,
+        badgeList: [
+          roundBadge(h.round),
+          ...(h.requiredRuleModules?.length ? ["Advanced Play"] : [])
+        ],
         bodyHtml: `${textRows([
           { text: h.newswire, kind: "flavor" },
           { text: h.text, kind: "rules" },
@@ -212,7 +201,7 @@ function buildHeadlines(data) {
       })
     )
     .join("");
-  return section("headlines", "Headlines", data.headlines.length, cards, "Twelve-card Future Timeline; three revealed per era.");
+  return section("headlines", "Headlines", data.headlines.length, cards, "Three revealed per Era. Default Game uses cards without the Advanced Play badge; Advanced Play uses all six per Era.");
 }
 
 function buildMandates(data) {
@@ -221,7 +210,6 @@ function buildMandates(data) {
       card({
         title: m.name,
         badgeList: [eraBadge(m.era), `min ${m.minimumQualification}`],
-        art: m.artDirection,
         bodyHtml: textRows([
           { text: m.rulesText, kind: "rules" },
           { text: m.flavorText, kind: "flavor" }
@@ -230,17 +218,16 @@ function buildMandates(data) {
       })
     )
     .join("");
-  return section("mandates", "Round Mandates", data.mandates.length, cards, "Per-era scoring races; the qualifying leader scores.");
+  return section("mandates", "Era Mandates", data.mandates.length, cards, "Per-Era scoring races; the qualifying leader scores.");
 }
 
-function buildWildActions(data) {
-  const cards = data.wildActions
+function buildEscalations(data) {
+  const cards = data.escalations
     .map((w) =>
       card({
         title: w.displayName || w.name,
         subtitle: w.displayName && w.displayName !== w.name ? w.name : "",
         badgeList: [roundBadge(w.unlockedRound), timingBadge(w.timing)],
-        art: w.artDirection,
         bodyHtml: textRows([
           { text: w.text, kind: "rules" },
           { text: w.flavorText, kind: "flavor" }
@@ -248,7 +235,7 @@ function buildWildActions(data) {
       })
     )
     .join("");
-  return section("wild-actions", "Wild Actions", data.wildActions.length, cards, "Once-per-game escalation plays unlocked by era.");
+  return section("escalations", "Escalations", data.escalations.length, cards, "Once-per-game escalation plays unlocked by era.");
 }
 
 function buildPowerSources(config) {
@@ -262,10 +249,8 @@ function buildPowerSources(config) {
           `${p.runwayCost} Runway`,
           `${p.capacity} Power`
         ],
-        art: p.artDirection,
         bodyHtml: textRows([
           { label: "Public claim", text: p.publicClaim },
-          { label: "Hidden consequence", text: p.hiddenConsequence, kind: "flavor" },
           { text: [p.scrutinyPerUse ? `Scrutiny/Production: ${p.scrutinyPerUse}` : "", p.trust ? `Trust: ${p.trust}` : ""].filter(Boolean).join(" · ") }
         ])
       })
@@ -281,7 +266,6 @@ function buildTactics(data) {
         title: t.displayName || t.name,
         subtitle: t.displayName && t.displayName !== t.name ? t.name : t.technology,
         badgeList: ["Deferred module"],
-        art: t.artDirection,
         bodyHtml: textRows([
           { text: t.text, kind: "rules" },
           { text: t.flavorText, kind: "flavor" }
@@ -299,10 +283,8 @@ function buildSpecialists(data) {
         title: s.name,
         subtitle: s.title,
         badgeList: ["Reserve"],
-        art: s.artDirection,
         bodyHtml: textRows([
-          { text: s.flavorText, kind: "flavor" },
-          { label: "Potential hook", text: s.potentialHook }
+          { text: s.flavorText, kind: "flavor" }
         ])
       })
     )
@@ -316,7 +298,6 @@ function buildObjectives(data) {
       card({
         title: o.name,
         badgeList: ["Deferred module"],
-        art: o.artDirection,
         bodyHtml: textRows([
           { text: o.rulesText, kind: "rules" },
           { text: o.flavorText, kind: "flavor" }
@@ -334,7 +315,6 @@ function buildReferenceCards(data) {
       title: c.name,
       subtitle: c.strapline,
       badgeList: [roundBadge(c.round), "Era card"],
-      art: c.artDirection,
       bodyHtml: textRows([
         { text: c.rulesText, kind: "rules" },
         { label: "Unlocks", text: c.unlockText }
@@ -345,7 +325,6 @@ function buildReferenceCards(data) {
     card({
       title: c.name,
       badgeList: ["Player aid"],
-      art: c.artDirection,
       bodyHtml: `${listRows("Front", c.frontText)}${listRows("Back", c.backText)}`
     })
   );
@@ -376,14 +355,6 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .cat-blurb { margin: 0 0 1rem; color: #64748b; font-size: 0.85rem; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
 .card { display: flex; flex-direction: column; background: #fff; border: 1px solid #d7d7d2; border-top: 3px solid var(--accent); border-radius: 10px; overflow: hidden; }
-.art { padding: 0.7rem 0.7rem 0; }
-.art-frame { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem; aspect-ratio: 16 / 9; border: 2px dashed color-mix(in srgb, var(--accent) 55%, #9aa3ad); border-radius: 8px; background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--accent) 8%, #f4f4f2), color-mix(in srgb, var(--accent) 8%, #f4f4f2) 10px, color-mix(in srgb, var(--accent) 14%, #ececea) 10px, color-mix(in srgb, var(--accent) 14%, #ececea) 20px); color: color-mix(in srgb, var(--accent) 70%, #475569); }
-.art-glyph { font-size: 1.7rem; line-height: 1; }
-.art-label { font-size: 0.65rem; letter-spacing: 0.14em; font-weight: 700; }
-.art-brief { margin: 0.5rem 0 0; font-size: 0.76rem; color: #6b7280; }
-.art-brief span { display: block; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.62rem; color: #9aa3ad; margin-bottom: 0.1rem; }
-.art-brief.inline { margin-top: 0.4rem; }
-.art-brief.inline span { display: inline; margin-right: 0.3rem; }
 .card-body { padding: 0.7rem 0.9rem 0.95rem; display: flex; flex-direction: column; gap: 0.5rem; }
 .card-title { margin: 0; font-size: 1.02rem; }
 .card-sub { margin: -0.25rem 0 0; color: #64748b; font-size: 0.82rem; font-style: italic; }
@@ -429,13 +400,13 @@ search.addEventListener('input', () => {
 });`;
 
 async function build() {
-  const [factions, config, headlines, mandates, wild, tactics, specialists, objectives, reference] =
+  const [factions, config, headlines, mandates, escalation, tactics, specialists, objectives, reference] =
     await Promise.all([
       readData("factions"),
       readData("game-config"),
       readData("headlines"),
       readData("mandates"),
-      readData("wild-actions"),
+      readData("escalations"),
       readData("tactics"),
       readData("reserve-specialists"),
       readData("secret-objectives"),
@@ -445,10 +416,10 @@ async function build() {
   const allSections = [
     { id: "factions", label: "Factions", html: buildFactions(factions), n: factions.factions.length },
     { id: "actions", label: "Core Actions", html: buildActions(config), n: config.actions.length },
-    { id: "rounds", label: "Eras", html: buildRounds(config), n: config.rounds.length },
+    { id: "rounds", label: "Eras", html: buildRounds(config, reference), n: config.rounds.length },
     { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },
-    { id: "mandates", label: "Round Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
-    { id: "wild-actions", label: "Wild Actions", html: buildWildActions(wild), n: wild.wildActions.length },
+    { id: "mandates", label: "Era Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
+    { id: "escalations", label: "Escalations", html: buildEscalations(escalation), n: escalation.escalations.length },
     { id: "power", label: "Power Sources", html: buildPowerSources(config), n: config.powerSources.length },
     { id: "reference", label: "Reference Cards", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
     { id: "tactics", label: "Tactics", html: buildTactics(tactics), n: tactics.tactics.length },
@@ -470,13 +441,13 @@ async function build() {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>M3T4 2038 — Content Gallery</title>
+<title>Mandate 2038 — Content Gallery</title>
 <style>${STYLE}</style>
 </head>
 <body>
 <div class="layout">
 <nav class="sidebar">
-<h1>M3T4 2038</h1>
+<h1>Mandate 2038</h1>
 <p class="tagline">Content gallery · ${total} components</p>
 <input id="q" class="search" type="search" placeholder="Filter all cards…" autocomplete="off">
 ${navLinks}
@@ -484,7 +455,7 @@ ${navLinks}
 <main>
 <div class="page-head">
 <h1>Content Gallery</h1>
-<p>Every ${baselineOnly ? "baseline " : ""}game component with its rendered player-facing text and an art-direction placeholder. Generated from <code>generated/*.json</code>; no final art is committed yet.</p>
+<p>Every ${baselineOnly ? "baseline " : ""}game component with its rendered player-facing text from <code>dist/runtime/*.json</code>.</p>
 </div>
 ${sections.map((s) => s.html).join("\n")}
 </main>
@@ -504,16 +475,16 @@ if (checkOnly) {
   try {
     actual = await readFile(outPath, "utf8");
   } catch {
-    process.stderr.write(`gallery: build/${outName} missing. Run the matching gallery build.\n`);
+    process.stderr.write(`gallery: dist/site/${outName} missing. Run the matching gallery build.\n`);
     process.exit(1);
   }
   if (actual !== html) {
-    process.stderr.write(`gallery: build/${outName} is stale. Run the matching gallery build.\n`);
+    process.stderr.write(`gallery: dist/site/${outName} is stale. Run the matching gallery build.\n`);
     process.exit(1);
   }
-  process.stdout.write(`gallery: verified build/${outName}\n`);
+  process.stdout.write(`gallery: verified dist/site/${outName}\n`);
 } else {
   await mkdir(outDir, { recursive: true });
   await writeFile(outPath, html);
-  process.stdout.write(`gallery: rendered build/${outName}\n`);
+  process.stdout.write(`gallery: rendered dist/site/${outName}\n`);
 }

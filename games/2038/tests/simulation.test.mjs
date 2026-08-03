@@ -80,6 +80,90 @@ test("player personas load as reusable provider-neutral strategy profiles", asyn
   assert.ok(promptProfile.objectives.length > 0);
 });
 
+test("World Ending crosses AGI emergence with both Open-continuity gates", async () => {
+  const endingFor = async ({
+    emerges,
+    trustDeltaPerPlayer = 1,
+    systemicRisk = 0,
+    declarerCapability = 9
+  }) => {
+    const { match } = await createInteractiveGame(
+      {
+        playerCount: 3,
+        factionId: "coalition_lab",
+        seed: `world-ending-${emerges}-${trustDeltaPerPlayer}-${systemicRisk}-${declarerCapability}`
+      },
+      () => {}
+    );
+    for (const player of match.players) {
+      const faction = match.factions.find((entry) => entry.id === player.factionId);
+      player.trust = faction.starts.trust + trustDeltaPerPlayer;
+    }
+    match.systemicRisk = systemicRisk;
+    if (emerges) {
+      match.players[0].agiDeclared = true;
+      match.players[0].capability = declarerCapability;
+    }
+    return match.result().worldEnding;
+  };
+
+  assert.deepEqual(await endingFor({ emerges: true }), {
+    id: "singularity",
+    name: "The Singularity",
+    agiEmerges: true,
+    openContinuity: true,
+    qualifyingDeclarers: 1,
+    collectiveTrust: 11,
+    requiredCollectiveTrust: 11,
+    unresolvedSystemicRisk: 0,
+    systemicRiskExclusiveCeiling: 3
+  });
+  assert.equal((await endingFor({
+    emerges: true,
+    trustDeltaPerPlayer: 0
+  })).id, "closed_loop");
+  assert.equal((await endingFor({
+    emerges: false,
+    systemicRisk: 2
+  })).id, "plural_future");
+  assert.equal((await endingFor({
+    emerges: false,
+    systemicRisk: 3
+  })).id, "assured_continuity");
+  assert.equal((await endingFor({
+    emerges: true,
+    declarerCapability: 8
+  })).id, "plural_future");
+});
+
+test("interactive snapshots expose canonical Headline copy and the selected play profile", async () => {
+  const options = {
+    playerCount: 3,
+    factionId: "coalition_lab",
+    seed: "browser-headline-copy-contract"
+  };
+  const { match: defaultMatch } = await createInteractiveGame(options, () => {});
+  const headline = defaultMatch.headlineDocument.headlines[0];
+  defaultMatch.activeHeadline = headline;
+  const defaultSnapshot = defaultMatch.snapshot();
+
+  assert.equal(defaultSnapshot.playProfileId, "default-game");
+  assert.deepEqual(defaultSnapshot.activeHeadline, {
+    id: headline.id,
+    name: headline.name,
+    strapline: headline.strapline,
+    newswire: headline.newswire,
+    text: headline.text,
+    quote: headline.quote
+  });
+
+  const { match: advancedMatch } = await createInteractiveGame({
+    ...options,
+    rulesVariant: { playProfileId: "advanced-play" }
+  }, () => {});
+  assert.equal(advancedMatch.snapshot().playProfileId, "advanced-play");
+});
+
 test("Scientific Method charges only when its protection is actually consumed", async () => {
   const researchDecision = {
     decisionId: "fixture-research",
@@ -353,7 +437,7 @@ test("Safety Laboratory programs publish realized ability value", async () => {
   const trustBeforePause = safety.trust;
   const pausePolicies = emergency.match.players.map(() => fixturePolicy(
     (packet) => packet.legalDecisions.find(
-      (decision) => decision.parameters?.wildId === "declare_agi"
+      (decision) => decision.parameters?.escalationId === "declare_agi"
     )
   ));
   await emergency.match.resolveFactionAction(
@@ -367,7 +451,7 @@ test("Safety Laboratory programs publish realized ability value", async () => {
       uses: 1,
       runwaySpent: 1,
       trustGained: safety.trust - trustBeforePause,
-      wildActionsBlocked: 1
+      escalationsBlocked: 1
     }
   );
 
@@ -478,7 +562,7 @@ test("joint Mega-Cluster acceptance is unavailable after a partner spends its co
       };
     }
   }));
-  await match.applyWild(policies, 0, "mega_cluster", {
+  await match.applyEscalation(policies, 0, "mega_cluster", {
     actionId: "mega_cluster",
     parameters: {
       partnerSeat: 1,
@@ -531,10 +615,10 @@ test("shared contract supplies cap construction and a Joint Venture termination 
     { length: match.config.sharedSupply.megaClusterPairs },
     (_, index) => ({ id: `mega-${index + 1}` })
   );
-  assert.deepEqual(match.legalWildResolutions(0, "mega_cluster"), []);
-  await match.applyWild([], 0, "mega_cluster", { parameters: {} });
+  assert.deepEqual(match.legalEscalationResolutions(0, "mega_cluster"), []);
+  await match.applyEscalation([], 0, "mega_cluster", { parameters: {} });
   assert.equal(player.escalation, 1);
-  assert.deepEqual(player.wildUsed, []);
+  assert.deepEqual(player.escalationsUsed, []);
 });
 
 test("Foundry starting Compute is an explicit one-lever rules variant", async () => {
@@ -1157,12 +1241,12 @@ test("the legacy pre-promotion overlay reproduces all four historical defaults",
   assert.equal(match.rulesVariant.foundryNewArchitectureDemandCoupling, null);
 });
 
-test("Foundry Shovels observes two-Compute Wild Actions and respects its round cap", async () => {
+test("Foundry Shovels observes two-Compute Escalations and respects its round cap", async () => {
   const { match } = await createInteractiveGame(
     {
       playerCount: 3,
       factionId: "coalition_lab",
-      seed: "foundry-shovels-wild-action",
+      seed: "foundry-shovels-escalation",
       rulesVariant: { foundryShovelsPerRound: 1 }
     },
     () => {}
@@ -1176,7 +1260,7 @@ test("Foundry Shovels observes two-Compute Wild Actions and respects its round c
   spender.runway = 3;
   spender.compute = 2;
   spender.escalation = 1;
-  spender.selectedAction = "wild_mega_cluster";
+  spender.selectedAction = "escalation_mega_cluster";
   const frontier = match.board.find((tile) => tile.category === "frontier");
   const left = match.board.find((tile) =>
     tile.category !== "frontier" &&
@@ -1674,7 +1758,11 @@ test("declaration readiness is pure, diagnostic, and UI-ready", async () => {
 
 test("Production earns Grid-Ready markers and infrastructure changes revoke them", async () => {
   const { match } = await createInteractiveGame(
-    { playerCount: 3, seed: "grid-ready-lifecycle" },
+    {
+      playerCount: 3,
+      seed: "grid-ready-lifecycle",
+      rulesVariant: { playProfileId: "advanced-play" }
+    },
     () => {}
   );
   match.round = 2;
@@ -1780,7 +1868,7 @@ test("action selection omits Core Actions without a current legal resolution", a
   );
   await runtime.match.setup(runtime.policies);
   let selections = runtime.match.legalActionSelections(0)
-    .filter((decision) => !decision.decisionId.startsWith("select_wild_"));
+    .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
   assert.deepEqual(
     selections.map((decision) => decision.actionId),
     ["fund", "research", "build", "organize", "influence"]
@@ -1797,7 +1885,7 @@ test("action selection omits Core Actions without a current legal resolution", a
 
   runtime.match.players[0].compute = 0;
   selections = runtime.match.legalActionSelections(0)
-    .filter((decision) => !decision.decisionId.startsWith("select_wild_"));
+    .filter((decision) => !decision.decisionId.startsWith("select_escalation_"));
   assert.equal(
     selections.some((decision) => decision.actionId === "research"),
     false
@@ -1971,6 +2059,19 @@ test("Deal Flow can be paused without suppressing the underlying trade", async (
 test("immediate-trade packet ceiling is rule-derived and formal windows cannot repeat", async () => {
   assert.deepEqual(
     [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount)),
+    [48, 72, 96, 120, 144]
+  );
+  assert.deepEqual(
+    [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount, {
+      counteroffers: true
+    })),
+    [72, 108, 144, 180, 216]
+  );
+  assert.deepEqual(
+    [2, 3, 4, 5, 6].map((playerCount) => immediateTradePacketCeiling(playerCount, {
+      counteroffers: true,
+      thirdPartyClaims: true
+    })),
     [96, 180, 288, 420, 576]
   );
   const { match } = await createInteractiveGame(
@@ -1984,12 +2085,16 @@ test("immediate-trade packet ceiling is rule-derived and formal windows cannot r
     /formal window repeated/
   );
   assert.equal(match.immediateTradePackets, 1);
-  assert.equal(match.immediateTradePacketCeiling, 180);
+  assert.equal(match.immediateTradePacketCeiling, 108);
 });
 
 test("counteroffer makers choose among simultaneous immediate-trade claimants", async () => {
   const runtime = await createInteractiveGame(
-    { playerCount: 4, seed: "open-counteroffer" },
+    {
+      playerCount: 4,
+      seed: "open-counteroffer",
+      rulesVariant: { playProfileId: "advanced-play" }
+    },
     () => {}
   );
   await runtime.match.setup(runtime.policies);
@@ -2040,6 +2145,61 @@ test("counteroffer makers choose among simultaneous immediate-trade claimants", 
   assert.equal(active.runway, 2);
   assert.equal(chosenClaimant.runway, 0);
   assert.equal(chosenClaimant.compute, 1);
+  assert.equal(counterMaker.compute, 0);
+});
+
+test("a counteroffer can settle directly when third-party claims are disabled", async () => {
+  const runtime = await createInteractiveGame(
+    {
+      playerCount: 2,
+      seed: "direct-counteroffer",
+      rulesVariant: {
+        immediateTradeCounteroffers: true,
+        immediateTradeThirdPartyClaims: false
+      }
+    },
+    () => {}
+  );
+  await runtime.match.setup(runtime.policies);
+  const match = runtime.match;
+  const active = match.players[0];
+  const counterMaker = match.players[1];
+  for (const player of match.players) {
+    player.runway = 0;
+    player.compute = 0;
+    player.safety = 0;
+  }
+  active.runway = 1;
+  counterMaker.compute = 1;
+  const stages = [];
+  const policies = match.players.map(() => ({
+    async decide(packet) {
+      const stage = packet.requestId.split(":").at(-2);
+      stages.push(stage);
+      const selected = packet.legalDecisions.find(
+        (decision) => decision.parameters?.counterMakerSeat !== undefined
+      ) || packet.legalDecisions.find(
+        (decision) => decision.decisionId === "trade_counter_accept"
+      ) || packet.legalDecisions[0];
+      return {
+        decision: { decisionId: selected.decisionId },
+        receipt: { provider: "fixture" }
+      };
+    }
+  }));
+  const offer = {
+    timing: "before",
+    partnerSeat: counterMaker.seat,
+    giveResource: "runway",
+    giveAmount: 1,
+    receiveResource: "compute",
+    receiveAmount: 1
+  };
+  assert.equal(await match.settleImmediateTrade(policies, active.seat, offer), true);
+  assert.deepEqual(stages, ["immediate_trade_response", "immediate_trade_counter_response"]);
+  assert.equal(active.runway, 1, "Coalition Deal Flow refunds its first completed trade");
+  assert.equal(active.compute, 1);
+  assert.equal(counterMaker.runway, 1);
   assert.equal(counterMaker.compute, 0);
 });
 
@@ -2298,7 +2458,7 @@ test("Deal Flow telemetry conservatively traces necessary spend into Mandate", a
   );
 });
 
-test("ordinary successful Round I actions populate opening evidence exactly once", async () => {
+test("ordinary successful Era I actions populate opening evidence exactly once", async () => {
   const runtime = await createInteractiveGame(
     { playerCount: 3, seed: "opening-evidence" },
     () => {}
@@ -3018,18 +3178,19 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   const second = await createSimulation(options);
   assert.deepEqual(first.seats, second.seats);
   assert.deepEqual(first.samples, second.samples);
-  assert.equal(first.scope.id, "three-to-five-grid-ready-v1");
+  assert.equal(first.scope.id, "three-to-five-profiles-v1");
   assert.ok(first.scope.excluded.includes("the deferred Tactic module"));
   assert.equal(first.schemaVersion, 6);
   assert.equal(first.reportSchemaVersion, 6);
   assert.equal(first.replaySchemaVersion, 2);
   assert.equal(first.decisionSchemaVersion, 2);
-  assert.equal(first.game.version, "0.8.35");
+  assert.equal(first.game.version, "0.9.0");
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.engine.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.strategies.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.match(first.experiment.fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(first.variant.kind, "canonical");
+  assert.equal(first.variant.effective.playProfileId, "default-game");
   assert.equal(first.rng.algorithm, "mulberry32");
   assert.ok(first.factions.length >= 4 && first.factions.length <= 6);
   assert.equal(first.profiles.length, 4);
@@ -3048,10 +3209,10 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(first.samples[0].replay[0].state.board.length, 13);
   assert.equal(first.samples[0].replay.filter((event) =>
     event.type === "realignment_resolved"
-  ).length, 1);
+  ).length, 0);
   assert.equal(
     Object.values(first.matchMetrics.realignments).reduce((sum, count) => sum + count, 0),
-    options.runs
+    0
   );
   assert.equal(
     first.matchMetrics.agiFunnel.playerOpportunities,
@@ -3062,6 +3223,21 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.equal(typeof first.matchMetrics.factionActionSelections, "object");
   assert.equal(first.samples[0].replay.at(-1).type, "round_settled");
   assert.equal(first.samples[0].replay.at(-1).round, 4);
+
+  const advanced = await createSimulation({
+    ...options,
+    runs: 1,
+    seed: "simulation-contract-advanced",
+    rulesVariant: { playProfileId: "advanced-play" }
+  });
+  assert.equal(advanced.variant.effective.playProfileId, "advanced-play");
+  assert.equal(advanced.samples[0].replay.filter((event) =>
+    event.type === "realignment_resolved"
+  ).length, 1);
+  assert.equal(
+    Object.values(advanced.matchMetrics.realignments).reduce((sum, count) => sum + count, 0),
+    1
+  );
 });
 
 test("simulation reports deterministic turn and round projections", async () => {
@@ -3481,7 +3657,7 @@ test("aggregate-only Monte Carlo runs do not require replay samples", async () =
     backends: ["greedy"]
   });
   assert.equal(report.samples.length, 0);
-  assert.equal(report.scope.id, "three-to-five-grid-ready-v1");
+  assert.equal(report.scope.id, "three-to-five-profiles-v1");
   assert.equal(report.seats.length, 3);
 });
 
@@ -3586,8 +3762,8 @@ test("game identity fingerprints exact rules, engine, variants, and strategies",
     profiles: profiles.slice(0, 2),
     backends: ["weighted", "greedy"]
   });
-  assert.equal(first.game.version, "0.8.35");
-  assert.ok(!Object.hasOwn(first.game.files, "docs/core-rules.md"));
+  assert.equal(first.game.version, "0.9.0");
+  assert.ok(!Object.hasOwn(first.game.files, "dist/docs/core-rules.md"));
   assert.equal(first.game.rulesetFingerprint, second.game.rulesetFingerprint);
   assert.equal(first.engine.fingerprint, second.engine.fingerprint);
   assert.equal(first.strategies.fingerprint, second.strategies.fingerprint);

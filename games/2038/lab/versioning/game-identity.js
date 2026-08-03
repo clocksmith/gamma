@@ -6,7 +6,7 @@ import { relative, resolve } from "node:path";
 
 const execFileAsync = promisify(execFile);
 export const projectRoot = resolve(import.meta.dirname, "../..");
-export const gameVersionUrl = new URL("../../release/game-version.json", import.meta.url);
+export const gameVersionUrl = new URL("../../versions/current-release.json", import.meta.url);
 const balanceContractUrl = new URL("../contracts/balance-contract.json", import.meta.url);
 
 function sortValue(value) {
@@ -132,7 +132,7 @@ export async function loadGameIdentity({
   experimentKind = "tournament",
   experimentConfiguration = null
 } = {}) {
-  const version = JSON.parse(await readFile(resolve(root, "release/game-version.json"), "utf8"));
+  const version = JSON.parse(await readFile(resolve(root, "versions/current-release.json"), "utf8"));
   const rulesetFiles = await fingerprintFiles(root, version.rulesetFiles);
   const playtestKitFiles = await fingerprintFiles(root, version.playtestKitFiles);
   const engineFiles = await fingerprintFiles(root, version.engine.files);
@@ -231,6 +231,9 @@ export function assertLaunchIdentity(expected, identity, context = "simulation")
     error.code = "launch_identity_mismatch";
     error.expectedLaunchIdentity = expectedFingerprint;
     error.actualLaunchIdentity = actual.fingerprint;
+    error.changedIdentitySections = Object.keys(expectedPayload).filter(
+      (key) => fingerprintObject(expectedPayload[key]) !== fingerprintObject(actual[key])
+    );
     throw error;
   }
   return actual;

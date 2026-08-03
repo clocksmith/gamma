@@ -5,25 +5,37 @@ import {
   getBridgeToken
 } from "./api-client.js";
 import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
+import { resolvePlayProfile } from "./src/engine.js";
 
-const [factions, config, profilesDocument] = await Promise.all([
-  fetch("/generated/factions.json").then((response) => response.json()),
-  fetch("/generated/game-config.json").then((response) => response.json()),
-  fetch("/generated/player-strategies.json").then((response) => response.json())
+const [factions, config, profilesDocument, uiCopy] = await Promise.all([
+  fetch("/dist/runtime/factions.json").then((response) => response.json()),
+  fetch("/dist/runtime/game-config.json").then((response) => response.json()),
+  fetch("/dist/runtime/player-strategies.json").then((response) => response.json()),
+  fetch("/dist/runtime/ui-copy.json").then((response) => response.json())
 ]);
 const profiles = profilesDocument.profiles;
+const copy = uiCopy.prototype;
+const factionColors = new Map(
+  factions.factions.map((faction) => [faction.id, faction.color])
+);
+const firstGameGuideMode = new URLSearchParams(window.location.search).get("guide") === "first-game";
+const guideErasSeen = new Set();
 
 const $ = (id) => document.getElementById(id);
 const elements = Object.fromEntries([
-  "allow-llm", "board", "bridge-panel", "bridge-status", "bridge-token",
+  "advanced-controls", "allow-llm", "board", "bridge-panel", "bridge-status", "bridge-token",
   "connect-bridge", "decision-context", "decision-count", "decision-title",
-  "decisions", "export", "faction", "game-status", "headline-name",
-  "headline-text", "log", "max-llm-decisions", "model", "opponent-config",
-  "phase", "player-count", "players", "round-title", "seed", "start-game"
+  "decisions", "export", "faction", "game-status", "headline-consequence",
+  "headline-label", "headline-name", "headline-newswire", "headline-quote",
+  "headline-strapline", "log", "max-llm-decisions", "model", "opponent-config",
+  "phase", "play-profile", "player-count", "players", "round-title", "seed", "setup", "start-game"
 ].map((id) => [id, $(id)]));
 
 for (const faction of factions.factions) {
   elements.faction.add(new Option(`${faction.name} — ${faction.motto}`, faction.id));
+}
+for (const profile of Object.values(config.playProfiles)) {
+  elements["play-profile"].add(new Option(profile.name, profile.id));
 }
 
 let game = null;
@@ -43,14 +55,27 @@ function escapeHtml(value) {
   })[character]);
 }
 
+function formatCopy(template, values = {}) {
+  return template.replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ""));
+}
+
+function factionColor(player) {
+  return factionColors.get(player.factionId) || "#000000";
+}
+
+function profileFor(state) {
+  const id = state?.playProfileId || config.playProfiles.defaultGame.id;
+  return resolvePlayProfile(config, id);
+}
+
 function backendOptions() {
   return [
-    ["weighted", "Weighted deterministic"],
-    ["greedy", "Greedy deterministic"],
-    ["claude", "Claude CLI"],
-    ["codex", "Codex CLI"],
-    ["hybrid-claude", "Hybrid · weighted + Claude"],
-    ["hybrid-codex", "Hybrid · weighted + Codex"]
+    ["weighted", copy.browser.weighted],
+    ["greedy", copy.browser.greedy],
+    ["claude", copy.browser.claude],
+    ["codex", copy.browser.codex],
+    ["hybrid-claude", copy.browser.hybridClaude],
+    ["hybrid-codex", copy.browser.hybridCodex]
   ];
 }
 
@@ -63,15 +88,15 @@ function renderOpponents() {
     row.className = "opponent-row";
     row.dataset.seat = index + 1;
     row.innerHTML = `
-      <strong>Seat ${index + 2}</strong>
-      <select class="profile-select" aria-label="Seat ${index + 2} persona">
+      <strong>${formatCopy(copy.browser.seat, { seat: index + 2 })}</strong>
+      <select class="profile-select" aria-label="${formatCopy(copy.browser.persona, { seat: index + 2 })}">
         ${profiles.map((candidate) => `
           <option value="${escapeHtml(candidate.id)}" ${
             candidate.id === profile.id ? "selected" : ""
           }>${escapeHtml(candidate.name)}</option>
         `).join("")}
       </select>
-      <select class="backend-select" aria-label="Seat ${index + 2} decision backend">
+      <select class="backend-select" aria-label="${formatCopy(copy.browser.backend, { seat: index + 2 })}">
         ${backendOptions().map(([value, label]) =>
           `<option value="${value}">${escapeHtml(label)}</option>`
         ).join("")}
@@ -119,6 +144,7 @@ function updateStartAvailability() {
   const needsLlm = llmRequested();
   const needsRemoteBridge = needsLlm && bridgeRequired;
   elements["bridge-panel"].hidden = !needsRemoteBridge;
+  if (needsRemoteBridge) elements["advanced-controls"].open = true;
   elements["start-game"].disabled = Boolean(
     needsLlm && (!elements["allow-llm"].checked || !bridgeConnected)
   );
@@ -130,14 +156,17 @@ function showBridgeState(message, connected = false) {
 }
 
 function tilePosition(tile) {
-  const size = window.innerWidth <= 680 ? 92 : 120;
-  const width = size * 0.78;
-  const height = size * 0.89;
-  const originX = window.innerWidth <= 680 ? 250 : 410;
-  const originY = window.innerWidth <= 680 ? 240 : 285;
+  const compact = window.innerWidth <= 680;
+  const hexWidth = compact ? 100 : 144;
+  const hexHeight = compact ? 87 : 125;
+  const gapScale = 1.03;
+  const horizontalPitch = hexWidth * 0.75 * gapScale;
+  const verticalPitch = hexHeight * gapScale;
+  const originX = compact ? 260 : 410;
+  const originY = compact ? 255 : 325;
   return {
-    left: originX + width * (tile.q + tile.r / 2) - size / 2,
-    top: originY + height * tile.r - size * 0.44
+    left: originX + horizontalPitch * (tile.q + tile.r / 2) - hexWidth / 2,
+    top: originY + verticalPitch * tile.r - hexHeight / 2
   };
 }
 
@@ -184,23 +213,23 @@ function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
     for (const [index, piece] of player.pieces.entries()) {
       if (piece.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "piece", piece, index)) ? "" : " arrival";
-      marks.push(`<i class="dot ${piece.kind}${arrivalClass}" style="--seat:${player.seat}" ` +
+      marks.push(`<i class="dot ${piece.kind}${arrivalClass}" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
         `title="${escapeHtml(player.factionName)} ${piece.kind}"></i>`);
     }
     for (const [index, facility] of player.facilities.entries()) {
       if (facility.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "facility", facility, index)) ? "" : " arrival";
       const status = facility.gridReady
-        ? "Grid-Ready"
-        : facility.powered ? "powered this Production" : "offline";
+        ? copy.browser.gridReady
+        : facility.powered ? copy.browser.poweredThisProduction : copy.browser.offline;
       marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"}${arrivalClass} ` +
-        `${facility.gridReady ? "grid-ready" : ""}" style="--seat:${player.seat}" ` +
+        `${facility.gridReady ? "grid-ready" : ""}" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
         `title="${escapeHtml(player.factionName)} Facility — ${status}"></i>`);
     }
     for (const [index, generator] of player.generators.entries()) {
       if (generator.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "generator", generator, index)) ? "" : " arrival";
-      marks.push(`<i class="dot generator${arrivalClass}" style="--seat:${player.seat}" ` +
+      marks.push(`<i class="dot generator${arrivalClass}" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
         `title="${escapeHtml(player.factionName)} ${escapeHtml(generator.sourceId)}"></i>`);
     }
   }
@@ -253,38 +282,44 @@ function renderPlayers(state) {
     const card = document.createElement("article");
     card.className = `public-player ${player.seat === 0 ? "human" : ""}`;
     card.style.setProperty("--seat", player.seat);
+    card.style.setProperty("--faction-color", factionColor(player));
     card.innerHTML = `
-      <p class="eyebrow">Seat ${player.seat + 1}${player.seat === 0 ? " · you" : ""}</p>
+      <p class="eyebrow">${formatCopy(copy.browser.seat, { seat: player.seat + 1 })}${player.seat === 0 ? ` · ${copy.browser.you}` : ""}</p>
       <h3>${escapeHtml(player.factionName)}</h3>
       ${opponent ? `<p class="readiness">${
         escapeHtml(opponent.profileName)
       } · ${escapeHtml(opponent.backend)}${
         opponent.remainingLlmDecisions === null
           ? ""
-          : ` · ${opponent.remainingLlmDecisions} LLM calls left`
+          : ` · ${formatCopy(copy.browser.llmCallsLeft, { count: opponent.remainingLlmDecisions })}`
       }</p>` : ""}
       <p class="readiness ${player.agiReadiness.ready ? "ready" : ""}">
-        AGI ${player.agiReadiness.ready
-          ? "grid-ready"
-          : `blocked: ${escapeHtml(player.agiReadiness.failingRequirement)}`}
+        ${player.agiReadiness.ready
+          ? copy.browser.agiGridReady
+          : formatCopy(copy.browser.agiBlocked, {
+            requirement: escapeHtml(player.agiReadiness.failingRequirement)
+          })}
       </p>
       <dl>
-        <dt>Mandate</dt><dd>${player.mandate}</dd>
-        <dt>Runway</dt><dd>${player.runway}</dd>
-        <dt>Compute</dt><dd>${player.compute}</dd>
-        <dt>Capability</dt><dd>${player.capability}</dd>
-        <dt>Customers</dt><dd>${player.customers}</dd>
-        <dt>Trust</dt><dd>${player.trust}</dd>
-        <dt>Scrutiny</dt><dd>${player.scrutiny}</dd>
-        <dt>Grid-Ready</dt><dd>${player.agiReadiness.gridReadyFacilities}</dd>
+        <dt>${copy.tracks.mandate}</dt><dd>${player.mandate}</dd>
+        <dt>${copy.tracks.runway}</dt><dd>${player.runway}</dd>
+        <dt>${copy.tracks.compute}</dt><dd>${player.compute}</dd>
+        <dt>${copy.tracks.capability}</dt><dd>${player.capability}</dd>
+        <dt>${copy.tracks.customers}</dt><dd>${player.customers}</dd>
+        <dt>${copy.tracks.trust}</dt><dd>${player.trust}</dd>
+        <dt>${copy.tracks.scrutiny}</dt><dd>${player.scrutiny}</dd>
+        <dt>${copy.browser.gridReady}</dt><dd>${player.agiReadiness.gridReadyFacilities}</dd>
       </dl>
     `;
     elements.players.append(card);
   }
 }
 
-function decisionStage(packet) {
-  const stage = packet?.requestId?.split(":").at(-2) || "decision";
+function decisionStage(packet, state) {
+  const stage = packet?.requestId?.split(":").at(-2) || copy.browser.decision;
+  if (stage === "realignment_ballot" && profileFor(state).realignmentEnabled) {
+    return copy.realignment.advancedTitle;
+  }
   return stage.replaceAll("_", " ");
 }
 
@@ -317,6 +352,16 @@ async function startClientGame(options) {
     error: null
   };
   clientGame.runtime = await createBrowserInteractiveGame(options, (packet) => {
+    const era = packet.requestId.match(/:r(\d+):/)?.[1];
+    if (firstGameGuideMode && era && guideErasSeen.has(era)) {
+      setTimeout(() => {
+        if (clientGame.runtime.human.pending) {
+          clientGame.runtime.human.submit(packet.legalDecisions[0].decisionId, "Guided routine resolution.");
+        }
+      }, 90);
+      return;
+    }
+    if (firstGameGuideMode && era) guideErasSeen.add(era);
     clientGame.pending = packet;
     clientGame.status = "waiting";
     syncClientGame(clientGame);
@@ -373,27 +418,35 @@ function renderDecisions() {
   const packet = game?.pending;
   if (!packet) {
     elements["decision-title"].textContent = game?.status === "complete"
-      ? `Game complete · ${game.result.worldEnding.name}`
-      : game ? "Other institutions are resolving" : "Start a game";
+      ? formatCopy(copy.browser.gameComplete, { ending: game.result.worldEnding.name })
+      : game ? copy.browser.otherInstitutionsResolving : copy.browser.startGame;
     elements["decision-context"].textContent = game?.status === "complete"
-      ? "Read the Future Timeline in the ledger, then compare the institutional winner with the shared ending."
-      : "The authoritative engine will pause here for your next legal decision.";
-    elements["decision-count"].textContent = "0 legal choices";
+      ? copy.browser.completeContext
+      : copy.browser.waitingContext;
+    elements["decision-count"].textContent = formatCopy(copy.browser.legalChoices, {
+      count: 0,
+      plural: "s"
+    });
     return;
   }
-  elements["decision-title"].textContent = decisionStage(packet);
+  elements["decision-title"].textContent = decisionStage(packet, game?.state);
   elements["decision-context"].textContent =
-    `Round ${packet.round}, cycle ${packet.cycle}. Choose one enumerated legal result; ` +
-    "the engine validates it before play resumes.";
+    (packet.requestId.includes(":realignment_ballot:") &&
+      profileFor(game?.state).realignmentEnabled
+      ? copy.realignment.prompt
+      : formatCopy(copy.browser.decisionContext, packet));
   elements["decision-count"].textContent =
-    `${packet.legalDecisions.length} legal choice${packet.legalDecisions.length === 1 ? "" : "s"}`;
+    formatCopy(copy.browser.legalChoices, {
+      count: packet.legalDecisions.length,
+      plural: packet.legalDecisions.length === 1 ? "" : "s"
+    });
   for (const [index, decision] of packet.legalDecisions.entries()) {
     const button = document.createElement("button");
     button.className = "decision-card";
     button.style.setProperty("--card-index", index);
     button.innerHTML = `
       <strong>${escapeHtml(decision.label)}</strong>
-      <small>${escapeHtml(decision.actionId || "decision")}</small>
+      <small>${escapeHtml(decision.actionId || copy.browser.decision)}</small>
     `;
     button.addEventListener("click", () => {
       submitDecision(decision.decisionId).catch((error) => {
@@ -408,25 +461,37 @@ function renderDecisions() {
 function renderLedger() {
   const replay = game?.replay || [];
   elements.log.innerHTML = replay.slice().reverse().map((event, index) =>
-    `<li class="${index === 0 ? "latest-event" : ""}"><strong>R${event.round}C${event.cycle}</strong> ${escapeHtml(event.summary)}</li>`
+    `<li class="${index === 0 ? "latest-event" : ""}"><strong>E${event.round}C${event.cycle}</strong> ${escapeHtml(event.summary)}</li>`
   ).join("");
 }
 
 function render() {
   const state = game?.state;
-  elements.phase.textContent = game?.status || "ready";
+  elements.phase.textContent = game?.status || copy.browser.ready;
   elements["game-status"].textContent = game?.error ||
-    (game ? `${
-      game.executionMode === "client" ? "Browser-native" : "Local bridge"
-    } game ${game.id.slice(0, 8)} · ${game.status}` :
-      config.board.prototypeNote);
+    (game ? formatCopy(copy.browser.gameStatus, {
+      mode: game.executionMode === "client" ? copy.browser.browserNative : copy.browser.localBridge,
+      id: game.id.slice(0, 8),
+      status: game.status
+    }) :
+      copy.browser.startingStatus);
   elements["round-title"].textContent = state
-    ? `Round ${state.round} · cycle ${state.cycle}`
-    : "The board";
+    ? formatCopy(copy.browser.roundCycle, state)
+    : copy.browser.board;
   const headline = state?.activeHeadline;
-  elements["headline-name"].textContent = headline?.name || "Not revealed";
-  elements["headline-text"].textContent = headline
-    ? "Its complete mechanical effect is active in the match and preserved in the Future Timeline."
+  elements["headline-label"].textContent = headline
+    ? copy.headline.current
+    : copy.headline.unrevealed;
+  elements["headline-name"].textContent = headline?.name || "";
+  elements["headline-strapline"].textContent = headline?.strapline || "";
+  elements["headline-newswire"].textContent = headline
+    ? `${copy.headline.newswire}: ${headline.newswire}`
+    : "";
+  elements["headline-consequence"].textContent = headline
+    ? `${copy.headline.consequence}: ${headline.text}`
+    : "";
+  elements["headline-quote"].textContent = headline?.quote
+    ? `${copy.headline.quote}: “${headline.quote}”`
     : "";
   elements.export.disabled = !game;
   renderBoard(state);
@@ -465,6 +530,7 @@ elements["start-game"].addEventListener("click", async () => {
       factionId: elements.faction.value,
       playerCount: Number(elements["player-count"].value),
       seed: elements.seed.value,
+      rulesVariant: { playProfileId: elements["play-profile"].value },
       ...opponents
     };
     if (!opponents.opponentBackends.some((backend) => llmBackends.has(backend))) {
@@ -493,15 +559,17 @@ elements["player-count"].addEventListener("change", renderOpponents);
 if (bridgeRequired) {
   elements["bridge-token"].value = getBridgeToken();
   bridgeConnected = false;
-  showBridgeState("Optional · required only for Claude, Codex, or hybrid opponents.");
+  showBridgeState(copy.browser.bridgeOptional);
   elements["connect-bridge"].addEventListener("click", async () => {
     elements["connect-bridge"].disabled = true;
-    showBridgeState("Requesting access to the local bridge…");
+    showBridgeState(copy.browser.bridgeRequesting);
     try {
       const status = await connectBridge(elements["bridge-token"].value);
       bridgeConnected = true;
       showBridgeState(
-        `Connected · ${status.maximumLlmDecisionsPerOpponent} maximum LLM decisions per opponent.`,
+        formatCopy(copy.browser.bridgeConnected, {
+          maximum: status.maximumLlmDecisionsPerOpponent
+        }),
         true
       );
     } catch (error) {
@@ -540,7 +608,7 @@ elements.export.addEventListener("click", () => {
   );
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = `frontier-2038-${game.id}-game.json`;
+  link.download = formatCopy(copy.browser.downloadFile, { id: game.id });
   link.click();
   URL.revokeObjectURL(link.href);
 });
@@ -549,3 +617,11 @@ window.addEventListener("resize", () => renderBoard(game?.state));
 renderOpponents();
 updateStartAvailability();
 render();
+if (firstGameGuideMode) {
+  elements.setup.hidden = true;
+  document.querySelector(".opponent-setup").hidden = true;
+  elements.seed.value = "mandate-2038-first-game";
+  elements["player-count"].value = "4";
+  renderOpponents();
+  elements["start-game"].click();
+}

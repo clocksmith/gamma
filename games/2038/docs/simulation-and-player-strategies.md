@@ -1,7 +1,7 @@
-# M3T4 2038 simulation and player strategies
+# Mandate 2038 simulation and player strategies
 
-**Executable game:** `0.8.35` / `three-to-five-grid-ready-v1`
-**Physical rules under review:** `0.5.0-rc.35-test`
+**Executable game:** `0.9.0` / `three-to-five-profiles-v1`
+**Physical rules under review:** `0.6.0-rc.1-test`
 **Status:** rules synchronized; balance and physical teachability unproven
 
 The simulator executes the same rules used by the browser prototype. Reports
@@ -25,7 +25,7 @@ A simulated player combines:
 2. a decision backend.
 
 Profiles in
-[`../generated/player-strategies.json`](../generated/player-strategies.json) define goals,
+[`../dist/runtime/player-strategies.json`](../dist/runtime/player-strategies.json) define goals,
 risk posture, action weights, conditional rules, and explicit promise,
 fulfillment, betrayal, and reciprocity weights. Backends are seeded weighted,
 deterministic greedy, Claude CLI, Codex CLI, or a hybrid shortlist.
@@ -65,7 +65,7 @@ LLM studies do not use this scheduler.
 Every backend receives the same packet:
 
 - exact game, engine, and variant identity;
-- match, seed, seat, faction, round, and cycle;
+- match, seed, seat, faction, Era, and cycle;
 - observable state, board, opponents, and public history;
 - persona instructions; and
 - an enumerated legal decision set.
@@ -110,7 +110,7 @@ create a completed-game archive.
 
 The registered `agi_declaration_window_v1` scenario deliberately creates an
 AGI decision instead of waiting for rare natural coverage. Immediately before
-the first Round IV action selection, both common-seed arms receive the same
+the first Era IV action selection, both common-seed arms receive the same
 focal Capability, Customers, Trust, Compute, Facilities, faction, seat,
 opponents, and policy state. The eligible arm has three Grid-Ready markers;
 the blocked control has two. Scenario configuration is part of the strategy
@@ -188,7 +188,7 @@ npm run simulate:audit -- \
   --batch-size 2 \
   --player-counts 3,4,5 \
   --mandate-modes variable,fixed \
-  --seed m3t4-unified-matrix
+  --seed mandate-2038-unified-matrix
 ```
 
 This is one sampling frame, not separate “diverse” and “cooperative” batches.
@@ -387,8 +387,8 @@ Rule search proposes bounded overlays. None is a promotion authority alone.
 
 ## Current coverage and limits
 
-`three-to-five-grid-ready-v1` covers the thirteen-tile board, four Eras, all baseline
-Headlines and Wild Actions, factions, Training, two-source Power, Links,
+`three-to-five-profiles-v1` covers the thirteen-tile board, four Eras, all baseline
+Headlines and Escalations, factions, Training, two-source Power, Links,
 Networks, Grid-Ready markers, immediate Power trades, Joint Ventures, Audit,
 Realignment, visible scoring, declarations, and the shared ending. Tactics and
 secret objectives remain deferred.

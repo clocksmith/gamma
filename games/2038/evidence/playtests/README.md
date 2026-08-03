@@ -39,7 +39,7 @@ components without designer answers.
 
 `receipt.json` must conform to
 `simulation/contracts/playtest-receipt.schema.json`. Copy the exact game,
-ruleset, and playtest-kit identities from `versions/current.json` and its
+ruleset, and playtest-kit identities from `versions/current-release.json` and its
 manifest. Record mixed component revisions, rules deviations, and facilitator
 interventions explicitly.
 

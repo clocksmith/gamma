@@ -1,120 +1,238 @@
 {
   "schemaVersion": 1,
-  "variables": "physical/variables.json",
+  "variables": "content/data/variables.json",
+  "playerCopyContract": "content/player-copy-contract.json",
   "contexts": {
-    "headlines": "physical/headlines.json",
-    "factions": "physical/factions.json",
+    "headlines": {
+      "path": "content/data/headlines.json",
+      "overlays": [
+        "content/copy/headlines.json"
+      ]
+    },
+    "factions": {
+      "path": "content/data/factions.json",
+      "overlays": [
+        "content/copy/factions.json"
+      ]
+    },
     "referenceCards": {
-      "path": "physical/reference-cards.json",
-      "collection": "eraCards"
+      "path": "content/data/reference-cards.json",
+      "collection": "eraCards",
+      "overlays": [
+        "content/copy/reference-cards.json"
+      ]
+    },
+    "gameConfig": {
+      "path": "content/data/game-config.json",
+      "overlays": [
+        "content/copy/game-config.json"
+      ]
+    },
+    "ruleChangeRegister": {
+      "path": "content/data/rule-change-register.json",
+      "collection": "changes",
+      "overlays": [
+        "content/copy/rule-change-register.json"
+      ]
+    },
+    "mandates": {
+      "path": "content/data/mandates.json",
+      "collection": "mandates",
+      "overlays": [
+        "content/copy/mandates.json"
+      ]
+    },
+    "escalations": {
+      "path": "content/data/escalations.json",
+      "collection": "escalations",
+      "overlays": [
+        "content/copy/escalations.json"
+      ]
     },
     "tactics": {
-      "path": "physical/optional/tactics.json",
-      "collection": "tactics"
+      "path": "experimental/data/tactics.json",
+      "collection": "tactics",
+      "overlays": [
+        "experimental/copy/tactics.json"
+      ]
     },
-    "worldCopy": "physical/world-copy.json",
+    "worldCopy": {
+      "path": "content/data/world-copy.json",
+      "collection": "endings",
+      "overlays": [
+        "content/copy/world-copy.json"
+      ]
+    },
     "uiCopy": "content/runtime/ui-copy.json"
   },
   "artifacts": [
     {
-      "source": "physical/content-manifest.json",
-      "target": "generated/content-manifest.json",
+      "source": "content/data/content-manifest.json",
+      "target": "dist/runtime/content-manifest.json",
       "format": "json"
     },
     {
-      "source": "physical/factions.json",
-      "target": "generated/factions.json",
+      "source": "content/data/factions.json",
+      "overlays": [
+        "content/copy/factions.json"
+      ],
+      "target": "dist/runtime/factions.json",
       "format": "json"
     },
     {
-      "source": "physical/game-config.json",
-      "target": "generated/game-config.json",
+      "source": "content/data/game-config.json",
+      "overlays": [
+        "content/copy/game-config.json"
+      ],
+      "target": "dist/runtime/game-config.json",
       "format": "json"
     },
     {
-      "source": "physical/headlines.json",
-      "target": "generated/headlines.json",
+      "source": "content/data/rule-change-register.json",
+      "overlays": [
+        "content/copy/rule-change-register.json"
+      ],
+      "target": "dist/runtime/rule-change-register.json",
       "format": "json"
     },
     {
-      "source": "physical/mandates.json",
-      "target": "generated/mandates.json",
+      "source": "content/data/headlines.json",
+      "overlays": [
+        "content/copy/headlines.json"
+      ],
+      "target": "dist/runtime/headlines.json",
+      "format": "json"
+    },
+    {
+      "source": "content/data/mandates.json",
+      "overlays": [
+        "content/copy/mandates.json"
+      ],
+      "target": "dist/runtime/mandates.json",
       "format": "json"
     },
     {
       "source": "content/runtime/player-strategies.json",
-      "target": "generated/player-strategies.json",
+      "target": "dist/runtime/player-strategies.json",
       "format": "json"
     },
     {
-      "source": "physical/reference-cards.json",
-      "target": "generated/reference-cards.json",
+      "source": "content/data/reference-cards.json",
+      "overlays": [
+        "content/copy/reference-cards.json"
+      ],
+      "target": "dist/runtime/reference-cards.json",
       "format": "json"
     },
     {
-      "source": "physical/optional/reserve-specialists.json",
-      "target": "generated/reserve-specialists.json",
+      "source": "experimental/data/reserve-specialists.json",
+      "overlays": [
+        "experimental/copy/reserve-specialists.json"
+      ],
+      "target": "dist/runtime/reserve-specialists.json",
       "format": "json"
     },
     {
-      "source": "physical/optional/secret-objectives.json",
-      "target": "generated/secret-objectives.json",
+      "source": "experimental/data/secret-objectives.json",
+      "overlays": [
+        "experimental/copy/secret-objectives.json"
+      ],
+      "target": "dist/runtime/secret-objectives.json",
       "format": "json"
     },
     {
       "source": "content/runtime/simulation-copy.json",
-      "target": "generated/simulation-copy.json",
+      "target": "dist/runtime/simulation-copy.json",
       "format": "json"
     },
     {
-      "source": "physical/optional/tactics.json",
-      "target": "generated/tactics.json",
+      "source": "experimental/data/tactics.json",
+      "overlays": [
+        "experimental/copy/tactics.json"
+      ],
+      "target": "dist/runtime/tactics.json",
       "format": "json"
     },
     {
       "source": "content/runtime/ui-copy.json",
-      "target": "generated/ui-copy.json",
+      "target": "dist/runtime/ui-copy.json",
       "format": "json"
     },
     {
-      "source": "physical/wild-actions.json",
-      "target": "generated/wild-actions.json",
+      "source": "content/data/escalations.json",
+      "overlays": [
+        "content/copy/escalations.json"
+      ],
+      "target": "dist/runtime/escalations.json",
       "format": "json"
     },
     {
-      "source": "physical/world-copy.json",
-      "target": "generated/world-copy.json",
+      "source": "content/data/world-copy.json",
+      "overlays": [
+        "content/copy/world-copy.json"
+      ],
+      "target": "dist/runtime/world-copy.json",
       "format": "json"
     },
     {
-      "source": "physical/core-rules.md",
-      "target": "docs/core-rules.md",
+      "source": "content/copy/core-rules.md",
+      "target": "dist/docs/core-rules.md",
       "format": "text"
     },
     {
-      "source": "physical/world-and-institutions.md",
-      "target": "docs/world-and-institutions.md",
+      "source": "content/copy/map-reference.md",
+      "target": "dist/docs/map-reference.md",
       "format": "text"
     },
     {
-      "source": "physical/optional/tactics-rules.md",
-      "target": "docs/optional-tactics.md",
+      "source": "content/copy/component-reference.md",
+      "target": "dist/docs/component-reference.md",
+      "format": "text"
+    },
+    {
+      "source": "content/copy/card-reference.md",
+      "target": "dist/docs/card-reference.md",
+      "format": "text"
+    },
+    {
+      "source": "content/copy/advanced-play.md",
+      "target": "dist/docs/advanced-play.md",
+      "format": "text"
+    },
+    {
+      "source": "content/copy/world-and-institutions.md",
+      "target": "dist/docs/world-and-institutions.md",
+      "format": "text"
+    },
+    {
+      "source": "content/copy/rule-change-register.md",
+      "target": "dist/docs/rule-change-register.md",
+      "format": "text"
+    },
+    {
+      "source": "experimental/tactics-rules.md",
+      "target": "dist/docs/optional-tactics.md",
       "format": "text"
     },
     {
       "source": "web/templates/prototype.html",
-      "target": "web/index.html",
+      "target": "dist/site/index.html",
       "format": "text"
     },
     {
       "source": "web/templates/simulation.html",
-      "target": "web/simulation.html",
+      "target": "dist/site/simulation.html",
+      "format": "text"
+    },
+    {
+      "source": "web/templates/first-game-guide.html",
+      "target": "dist/site/first-game-guide.html",
       "format": "text"
     }
   ],
   "sourceRoots": [
     "content/",
-    "physical/",
+    "experimental/",
     "web/"
   ]
 }

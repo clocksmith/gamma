@@ -281,7 +281,7 @@ test("CLI policy preserves its private deterministic seed without sending it to 
 });
 
 test("decision cache replays a provider result without a fresh call", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "m3t4-decision-cache-"));
+  const directory = await mkdtemp(join(tmpdir(), "mandate-2038-decision-cache-"));
   try {
     const profile = (await loadPlayerProfiles())[0];
     let calls = 0;
@@ -326,7 +326,7 @@ test("decision cache replays a provider result without a fresh call", async () =
 });
 
 test("strict LLM evidence rejects historical fallback cache entries", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "m3t4-strict-cache-"));
+  const directory = await mkdtemp(join(tmpdir(), "mandate-2038-strict-cache-"));
   try {
     const profile = (await loadPlayerProfiles())[0];
     const cache = new DecisionCache(directory);
@@ -376,7 +376,7 @@ test("strict LLM evidence rejects historical fallback cache entries", async () =
 });
 
 test("decision cache misses when reasoning effort changes", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "m3t4-decision-cache-effort-"));
+  const directory = await mkdtemp(join(tmpdir(), "mandate-2038-decision-cache-effort-"));
   try {
     const profile = (await loadPlayerProfiles())[0];
     let calls = 0;
@@ -417,7 +417,7 @@ test("decision cache misses when reasoning effort changes", async () => {
 });
 
 test("write-only capture never reads and supplies a later read-only replay", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "m3t4-decision-cache-capture-"));
+  const directory = await mkdtemp(join(tmpdir(), "mandate-2038-decision-cache-capture-"));
   try {
     const profile = (await loadPlayerProfiles())[0];
     let calls = 0;

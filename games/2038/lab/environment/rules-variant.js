@@ -1,7 +1,15 @@
+import { resolvePlayProfile } from "../../web/src/engine.js";
+
 export function canonicalRulesVariant(config) {
   const lateCapabilityThreshold =
     config.scoring.capabilityThresholds.find((entry) => entry.value >= 9);
+  const profile = resolvePlayProfile(config);
   return {
+    playProfileId: profile.id,
+    immediateTradeCounteroffers: profile.immediateTradeCounteroffers,
+    immediateTradeThirdPartyClaims: profile.immediateTradeThirdPartyClaims,
+    powerPurchaseRequests: profile.powerPurchaseRequests,
+    realignmentEnabled: profile.realignmentEnabled,
     auditMultiplier: 1,
     fundConservative: 2,
     fundVenture: 4,
@@ -65,10 +73,16 @@ export const legacyPrePromotionRulesOverlay = Object.freeze({
 });
 
 export function effectiveRulesVariant(config, overlay = {}) {
+  const requestedProfileId = overlay.playProfileId ??
+    config.playProfiles?.defaultGame?.id ?? "default-game";
+  const profile = resolvePlayProfile(config, requestedProfileId);
+  if (!profile) throw new RangeError(`Unknown play profile: ${requestedProfileId}.`);
   const effective = {
     ...canonicalRulesVariant(config),
+    ...profile,
     ...overlay
   };
+  effective.playProfileId = requestedProfileId;
   if (
     Object.hasOwn(overlay, "customerMandate") &&
     !Object.hasOwn(overlay, "customerMandateSchedule")

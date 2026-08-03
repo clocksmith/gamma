@@ -132,7 +132,7 @@ export function validateProviderDecisionResponse(packet, response, aliases) {
 export function buildDecisionPrompt(packet) {
   validateDecisionPacket(packet);
   return [
-    "You are a player-policy function for M3T4 2038.",
+    "You are a player-policy function for Mandate 2038.",
     "Choose exactly one decisionId from legalDecisions.",
     "Use only the supplied observation, public history, and strategy.",
     "The game identity fingerprints define the exact rules and engine for this decision.",

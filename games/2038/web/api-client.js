@@ -1,5 +1,5 @@
 const localHosts = new Set(["localhost", "127.0.0.1"]);
-const bridgeStorageKey = "m3t4-local-bridge-token";
+const bridgeStorageKey = "mandate-2038-local-bridge-token";
 
 export const bridgeRequired = !localHosts.has(window.location.hostname);
 export const localBridgeBase = "http://127.0.0.1:8038";
@@ -33,7 +33,7 @@ export async function apiFetch(path, options = {}) {
     if (!bridgeToken) {
       throw new Error("Connect the local bridge before starting server work.");
     }
-    headers.set("X-M3T4-Bridge-Token", bridgeToken);
+    headers.set("X-Mandate-2038-Bridge-Token", bridgeToken);
     request.targetAddressSpace = "local";
   }
   try {

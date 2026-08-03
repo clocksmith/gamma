@@ -21,27 +21,73 @@
       "mandate": "${terms.playerTracks.mandate}",
       "escalation": "Escalation"
     },
-    "wildActions": {
-      "demoUnavailable": "No ${terms.systems.wildActions} are legal during ${terms.eras.demo}.",
-      "unfunded": "No unused ${terms.systems.wildAction} can be funded with the current Escalation tokens."
+    "escalations": {
+      "demoUnavailable": "No exceptional programs are legal during ${terms.eras.demo}.",
+      "unfunded": "No unused exceptional program can be funded with the current Escalation tokens."
     },
     "realignment": {
-      "prompt": "Choose one motion. Rival ballots remain hidden until yours is committed.",
-      "movementReminder": "Tiles and everything on them move together. ${terms.locations.frontier} remains fixed.",
+      "advancedTitle": "Advanced Play: Jurisdictional Realignment",
+      "prompt": "Choose one motion. Rival ballots remain hidden until yours is committed. Adjacency represents operational dependency, not ordinary distance.",
+      "movementReminder": "Districts and everything on them move together. ${terms.locations.frontier} remains fixed as the standing civic exception.",
       "rejectedPrefix": "Realignment rejected"
     },
     "resolution": {
-      "move": "{action} is revealed. MOVE one acting piece, then ACT from a highlighted destination.",
-      "complete": "The four-round study is complete. Export the receipt or reset.",
-      "realign": "Production, Audit, and ${terms.playerTracks.mandate} are settled. Cast the secret spatial ballot above.",
-      "select": "SELECT one Action. You will MOVE one acting piece, then ACT from its destination.",
+      "move": "{action} is revealed. MOVE one acting piece, then ACT from a highlighted district.",
+      "complete": "The four-Era contest is complete. Read the Future Timeline, resolve the World Ending, then export the receipt or reset.",
+      "realign": "Production, Audit, and ${terms.playerTracks.mandate} are settled. Cast the secret jurisdictional ballot above.",
+      "select": "SELECT one Action. You will MOVE one acting piece, then ACT from its district.",
       "rejectedPrefix": "Resolution rejected"
     },
+    "headline": {
+      "current": "Current ${terms.systems.headline}",
+      "unrevealed": "No ${terms.systems.headline} revealed",
+      "strapline": "Institutional claim",
+      "newswire": "Newswire",
+      "consequence": "Rules consequence",
+      "quote": "Public record"
+    },
+    "browser": {
+      "ready": "Ready",
+      "board": "The board",
+      "startingStatus": "Choose personas and start a complete game with deterministic browser opponents. A local bridge is optional for Claude or Codex.",
+      "roundCycle": "Era {round} · cycle {cycle}",
+      "browserNative": "Browser-native",
+      "localBridge": "Local bridge",
+      "gameStatus": "{mode} game {id} · {status}",
+      "downloadFile": "mandate-2038-{id}-game.json",
+      "seat": "Seat {seat}",
+      "you": "you",
+      "persona": "Seat {seat} persona",
+      "backend": "Seat {seat} decision backend",
+      "weighted": "Weighted deterministic",
+      "greedy": "Greedy deterministic",
+      "claude": "Claude CLI",
+      "codex": "Codex CLI",
+      "hybridClaude": "Hybrid · weighted + Claude",
+      "hybridCodex": "Hybrid · weighted + Codex",
+      "gridReady": "Grid-Ready",
+      "poweredThisProduction": "powered this Production",
+      "offline": "offline",
+      "agiGridReady": "AGI grid-ready",
+      "agiBlocked": "AGI blocked: {requirement}",
+      "llmCallsLeft": "{count} LLM calls left",
+      "decision": "decision",
+      "gameComplete": "Game complete · {ending}",
+      "otherInstitutionsResolving": "Other institutions are resolving",
+      "startGame": "Start a game",
+      "completeContext": "Read the Future Timeline in the ledger, then compare the institutional winner with the shared ending.",
+      "waitingContext": "The authoritative engine will pause here for your next legal decision.",
+      "decisionContext": "Era {round}, cycle {cycle}. Choose one enumerated legal result; the engine validates it before play resumes.",
+      "legalChoices": "{count} legal choice{plural}",
+      "bridgeOptional": "Optional · required only for Claude, Codex, or hybrid opponents.",
+      "bridgeRequesting": "Requesting access to the local bridge…",
+      "bridgeConnected": "Connected · {maximum} maximum LLM decisions per opponent."
+    },
     "power": {
-      "title": "${terms.infrastructure.power} network",
+      "title": "Infrastructure Network",
       "summary": "{supply} supply / {demand} demand",
       "detail": "{starting} starting-grid + {generated} generated ${terms.infrastructure.power} · {links}/{linkLimit} Links · {online}/{facilities} powered at last Production",
-      "reminder": "Network reach is recalculated from the starting grid, Generators, Links, and visible Facility adjacency after every Realignment."
+      "reminder": "In Advanced Play, Network reach is recalculated from the starting grid, Generators, Links, and visible Facility adjacency after every Jurisdictional Realignment."
     },
     "metrics": {
       "auditProfile": "Audit profile",
@@ -61,8 +107,58 @@
       "moveAct": "MOVE → ACT",
       "secretVote": "Secret vote",
       "select": "SELECT",
-      "unknownLocation": "unknown",
-      "motionAdopted": "{motion} was adopted in Round {round}."
+      "unknownLocation": "unmapped district",
+      "motionAdopted": "{motion} was adopted in Era {round}; the jurisdiction has been reorganized."
+    }
+  },
+  "firstGameGuide": {
+    "eyebrow": "First Game Guide",
+    "title": "Learn one Era before you play four.",
+    "dek": "A fixed Era I teaching scenario using the same Actions, Headline, Training, and Mandate cards as Default Play.",
+    "rulesLink": "Open the complete Rules Reference",
+    "playLink": "Start a complete game",
+    "scenario": "Fixed teaching scenario · Era I · Default Play",
+    "step": "Step {number} of {total}",
+    "next": "Continue",
+    "back": "Back",
+    "restart": "Start again",
+    "complete": "Finish the guide",
+    "steps": [
+      {
+        "title": "Win your Mandate. Share the ending.",
+        "body": "You are competing to finish with the most Mandate. The table also determines a shared World Ending. Your institution can win even if the future it helped create is closed, unstable, or otherwise not the one you wanted."
+      },
+      {
+        "title": "Set the Era I table.",
+        "body": "This guide fixes a four-player Default Play opening. Progress is the first Era: intelligence is useful everywhere, but Power, agreements, civic votes, and Escalations are not active yet."
+      },
+      {
+        "title": "A Headline changes this cycle.",
+        "body": "Reveal the Headline before players Select an Action. It is a real rules change for this cycle, not atmosphere. Read its consequence before deciding what to do."
+      },
+      {
+        "title": "Select, Move, then Act.",
+        "body": "Choose one ready Core Action. Move one of your acting pieces to a legal district, then resolve that Action there. This example uses Research because it leads directly into Training."
+      },
+      {
+        "title": "Choose when the result becomes evidence.",
+        "body": "Training is push-your-luck. Each distinct face extends the run. Bank before a duplicate face crashes it; banking turns the run into Capability. This example asks you to make that decision once."
+      },
+      {
+        "title": "Settle the Era, then widen the contest.",
+        "body": "After all three cycles, Production resolves, the Audit tests public Scrutiny, and the Era I Mandates award score. The next Era adds industrial Power; later Eras add authority and continuity questions."
+      }
+    ],
+    "choice": {
+      "prompt": "Your Training Run has two distinct results. Do you bank now or press for another?",
+      "bank": "Bank the evidence",
+      "press": "Press the run",
+      "bankResult": "You bank the two distinct results. Gain the shown Capability; the run becomes a public claim you can build and deploy around.",
+      "pressResult": "You press the run. A duplicate face ends the attempt; the unbanked result is lost. The point is not that pressing is wrong—it is that you choose whether another result is worth the risk."
+    },
+    "finish": {
+      "title": "You know the loop.",
+      "body": "A complete Default Play game repeats this structure for four Eras. New systems become available, but every Era still begins with a Headline and resolves through Select → Move → Act, Production, Audit, and Mandate. Use the Rules Reference for exact eligibility, ties, and exceptions; use Advanced Play only after the Default Play loop is familiar."
     }
   },
   "simulation": {
@@ -183,7 +279,8 @@
       "agiDeclared": "${terms.systems.agi} declared",
       "agiEligible": "${terms.systems.agi} eligible",
       "shovelsIncome": "Mean Shovels income",
-      "genuineAgi": "Genuine AGI endings",
+      "agiEmergence": "AGI emergence endings",
+      "openContinuity": "Open Continuity endings",
       "nonDeclaringWins": "Non-declaring wins",
       "fallbacks": "Fallbacks",
       "score": "Score",
@@ -204,7 +301,7 @@
       "target": "target {target}"
     },
     "replay": {
-      "step": "Step {step}/{steps} · Round {round}, Cycle {cycle} · {summary}",
+      "step": "Step {step}/{steps} · Era {round}, Cycle {cycle} · {summary}",
       "marker": "Seat {seat} {kind}",
       "scoreRange": "Score {minimum}–{maximum}",
       "histogramEntry": "{score} ${terms.playerTracks.mandate}: {matches} matches"
