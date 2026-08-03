@@ -7334,3 +7334,25 @@ completed current-line prefix can still begin a valid two-through-six-equals
 heading. The guard sees neither current truth nor current event kind and keeps
 all inputs, candidate sources, controls, accounting, thresholds, and kill
 conditions unchanged. The v1 tool and failed job remain immutable evidence.
+
+## 2026-08-03: corrected WIKISECTION exact-heading ceiling rejected
+
+Candidate `wikisection_exact_heading_body_lexicon_prefix_guard_qm1_v2`
+completed canonical opening 10M in `67.252` seconds with return code zero. All
+input, parent payload, WRT/raw inverse, page receipt, Q256 table, prior-page
+source, parser/index/opportunity/control replay, heading-token exclusion, and
+Hblind unequal-key gates passed. It committed 5,543 sections from 1,325 pages,
+activated 385 sections, and left the trailing partial page uncommitted.
+
+Hexact displaced only `8,044.489746` free byte-equivalent, below both the
+`30,000` retirement boundary and the `60,000` paid-Q0 authorization gate. Its
+development, selection, and confirmation rates were `899.307318`, `614.317665`,
+and `658.230104 B/M`, all below `5,000 B/M`. Hcoarse displaced
+`10,123.113281` byte-equivalent, exceeding Hexact by `2,078.623535`.
+
+Decision: `REJECT`, zero score credit, and no paid Q0, forecast change, or
+full-1G authorization. Retire the exact heading grammar and normalization,
+prior same-heading section-body WRT-token universe, page-close publication,
+causal prefix guard, and matched controls without rescue sweeps. The next
+independent source is WIKIFORWARD. Receipt:
+`results/wikisection_exact_heading_body_lexicon_prefix_guard_qm1_v2/decision.json`.
