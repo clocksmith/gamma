@@ -447,7 +447,7 @@ function factionName(seat) {
     formatCopy(copy.browser.seat, { seat: Number(seat) + 1 });
 }
 
-function renderTradeBuilder(offers, { heading, emptyDecision = null } = {}) {
+function renderTradeBuilder(offers, { heading, timing: selectedTiming = null, onBack = null } = {}) {
   const builder = document.createElement("section");
   builder.className = "trade-builder";
   const title = document.createElement("h3");
@@ -459,7 +459,6 @@ function renderTradeBuilder(offers, { heading, emptyDecision = null } = {}) {
   const partner = document.createElement("select");
   const give = document.createElement("select");
   const receive = document.createElement("select");
-  const timing = document.createElement("select");
   const addField = (label, control) => {
     const field = document.createElement("label");
     field.textContent = label;
@@ -469,24 +468,20 @@ function renderTradeBuilder(offers, { heading, emptyDecision = null } = {}) {
   addField("Trade with", partner);
   addField("Give", give);
   addField("Request", receive);
-  addField("Settle", timing);
 
   const actions = document.createElement("div");
   actions.className = "trade-actions";
   const submit = document.createElement("button");
   submit.type = "button";
-  submit.textContent = heading;
+  submit.textContent = "Propose offer";
   actions.append(submit);
-  if (emptyDecision) {
-    const decline = document.createElement("button");
-    decline.type = "button";
-    decline.className = "trade-pass";
-    decline.textContent = emptyDecision.label;
-    decline.addEventListener("click", () => submitDecision(emptyDecision.decisionId).catch((error) => {
-      elements["game-status"].textContent = error.message;
-      renderDecisions();
-    }));
-    actions.append(decline);
+  if (onBack) {
+    const back = document.createElement("button");
+    back.type = "button";
+    back.className = "trade-pass";
+    back.textContent = "Change timing";
+    back.addEventListener("click", onBack);
+    actions.append(back);
   }
 
   const refresh = () => {
@@ -519,9 +514,9 @@ function renderTradeBuilder(offers, { heading, emptyDecision = null } = {}) {
       decision.parameters.receiveResource === receiveResource &&
       decision.parameters.receiveAmount === Number(receiveAmount)
     );
-    const timings = [...new Set(afterRequest.map((decision) => decision.parameters.timing))];
-    replaceOptions(timing, timings, (choice) => choice === "before" ? "Before action" : "After action");
-    const selected = afterRequest.find((decision) => decision.parameters.timing === timing.value);
+    const selected = afterRequest.find((decision) =>
+      !selectedTiming || decision.parameters.timing === selectedTiming
+    );
     submit.disabled = !selected;
     summary.textContent = selected ? selected.label : "No legal offer matches this combination.";
     submit.onclick = selected
@@ -531,7 +526,7 @@ function renderTradeBuilder(offers, { heading, emptyDecision = null } = {}) {
       })
       : null;
   };
-  for (const control of [partner, give, receive, timing]) {
+  for (const control of [partner, give, receive]) {
     control.addEventListener("change", refresh);
   }
   builder.append(title, fields, summary, actions);
@@ -539,15 +534,57 @@ function renderTradeBuilder(offers, { heading, emptyDecision = null } = {}) {
   elements.decisions.append(builder);
 }
 
+function renderTradeTimingChoices(offers, emptyDecision) {
+  const chooser = document.createElement("section");
+  chooser.className = "trade-builder trade-timing";
+  chooser.innerHTML = "<h3>Trade this action?</h3><p>Choose when to settle an offer, or continue without one.</p>";
+  const actions = document.createElement("div");
+  actions.className = "trade-actions";
+  const addChoice = (label, timing) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "trade-timing-button";
+    button.textContent = label;
+    const matchingOffers = offers.filter((decision) => decision.parameters.timing === timing);
+    button.disabled = matchingOffers.length === 0;
+    button.addEventListener("click", () => {
+      elements.decisions.replaceChildren();
+      renderTradeBuilder(matchingOffers, {
+        heading: label,
+        timing,
+        onBack: () => {
+          elements.decisions.replaceChildren();
+          renderTradeTimingChoices(offers, emptyDecision);
+        }
+      });
+    });
+    actions.append(button);
+  };
+  const noTrade = document.createElement("button");
+  noTrade.type = "button";
+  noTrade.className = "trade-pass";
+  noTrade.textContent = "No trade";
+  noTrade.disabled = !emptyDecision;
+  noTrade.addEventListener("click", () => submitDecision(emptyDecision.decisionId).catch((error) => {
+    elements["game-status"].textContent = error.message;
+    renderDecisions();
+  }));
+  actions.append(noTrade);
+  addChoice("Trade before action", "before");
+  addChoice("Trade after action", "after");
+  chooser.append(actions);
+  elements.decisions.append(chooser);
+}
+
 function renderTradeDecisions(packet, stage) {
   const decisions = packet.legalDecisions;
   const offers = decisions.filter((decision) => decision.parameters?.partnerSeat !== undefined);
   if (!offers.length) return false;
   if (stage === "immediate_trade") {
-    renderTradeBuilder(offers, {
-      heading: "Propose trade",
-      emptyDecision: decisions.find((decision) => decision.decisionId === "trade_none")
-    });
+    renderTradeTimingChoices(
+      offers,
+      decisions.find((decision) => decision.decisionId === "trade_none")
+    );
     return true;
   }
   if (stage === "immediate_trade_response") {
