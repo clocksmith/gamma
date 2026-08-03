@@ -77,5 +77,5 @@ test("Firebase deployment uses the Mandate project's root-hosting contract", asy
     await readFile(resolve(projectRoot, "firebase.json"), "utf8")
   );
   assert.equal(firebase.hosting.public, "dist/firebase");
-  assert.equal(firebase.hosting.cleanUrls, true);
+  assert.equal(firebase.hosting.cleanUrls, undefined);
 });
