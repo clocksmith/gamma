@@ -7378,3 +7378,26 @@ The unretained `63,259.358` byte-equivalent exploratory observation is not an
 expected value or gate input. The first exact QM1 receipt must explicitly state
 whether it reproduces that narrative. Only its own integer Q256 totals can
 authorize the separately paid Q0; forecast credit remains zero.
+
+## 2026-08-03: exact WIKIFORWARD destination ceiling rejected
+
+Candidate `wikiforward_prior_destination_page_lexicon_qm1_v1` completed the
+canonical opening-10M gate in `80.855` seconds with return code zero. Every
+input, donor, parent payload, WRT/raw inverse, page receipt, Q256 table,
+strictly-earlier source, event-aligned target completion, idempotence,
+prefix-novel identity, blind-key, capacity, and repeated digest gate passed.
+
+The exact gate resolved 1,414 unique earlier targets and accepted 302 atomic
+matched-control updates. Dfull displaced only `6,412.529297` free
+byte-equivalent. Development, selection, and confirmation achieved
+`706.323857`, `453.094698`, and `602.534619 B/M`, all below `5,000 B/M`.
+Dglobal displaced `8,603.744629` byte-equivalent and Dprior
+`6,445.778809`, exceeding Dfull by `2,191.215332` and `33.249512`.
+
+The exact receipt therefore contradicts rather than reproduces the unretained
+`63,259.358` narrative observation; its exact value is lower by
+`56,846.828703` byte-equivalent. Decision: `REJECT`, zero score credit, and no
+paid Q0, native integration, forecast change, or full-1G authorization. Retire
+the exact destination-source union, prefix-novel filter, event universe,
+activation rule, and controls without rescue sweeps. Receipt:
+`results/wikiforward_prior_destination_page_lexicon_qm1_v1/decision.json`.
