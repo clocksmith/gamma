@@ -7531,3 +7531,35 @@ rescue sweeps. The source-bound Gamma forecast remains `109,389,323`, the
 target debt remains `1,389,323`, and verified full-1G remains `unknown`.
 Receipt:
 `results/cmix_obias_geometry_order_host_repacked_qm0_v2/decision.json`.
+
+## 2026-08-03: cmix-obias side-free title-join tail Qm0 frozen
+
+The geometry-order rejection exposed a separate representation opportunity in
+the public cmix-obias pipeline. The public `payload_lex` transform transmits a
+`679,489`-byte raw `R1ORD3` permutation whose reported encoded EOF
+contribution is `346,948` bytes. Cached full-corpus construction artifacts are
+still present and match the tracked receipt.
+
+An exact read-only alignment found `243,425` complete reordered pages and
+`243,425` regime-1 metadata blocks. Every exact page title is unique, no title
+or revision ID is missing, and every block's first `D86a` value equals the
+associated page's first revision ID with zero mismatches. This supplies a
+decoder-visible join: order metadata blocks by the exact title of their page,
+then reattach them by sorting the already decoded body titles by the same
+bytewise order. The representation needs no transmitted occurrence
+permutation.
+
+Candidate `cmix_obias_title_join_tail_qm0_v1` compares original, public
+payload-key, exact-title, and fixed 37-position rotated-title orders on the
+same three 250K regime slices under the exact cmix-obias raw executable and
+head. Every arm must decode exactly and pass the decimal-memory guard. T0 must
+be no larger than P0 in aggregate, no worse than O0 on every slice, beat the
+rotated specificity control, and repeat byte-identically before a source child
+is authorized.
+
+This is a zero-credit external-parent screen. The public encoded side
+contribution plus the separate maximum order-asset ceiling is `513,851` bytes,
+only `21,026` above the public parent's `492,825`-byte distance to the standing
+target. The gate is consequently strict: title joining must preserve at least
+P0-level sampled economics. Plan:
+`docs/cmix_obias_title_join_tail_qm0_plan.md`.
