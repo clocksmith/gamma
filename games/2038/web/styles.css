@@ -373,10 +373,14 @@ input {
   font-size: 0.8rem;
 }
 
-.game-layout {
+.live-dashboard {
   display: grid;
-  grid-template-columns: minmax(0, 2.05fr) minmax(310px, 0.95fr);
+  grid-template-columns: minmax(520px, 1.6fr) minmax(290px, 0.9fr) minmax(320px, 0.95fr);
+  grid-template-areas:
+    "board score decision"
+    "board ledger decision";
   gap: 1rem;
+  align-items: start;
 }
 
 .board-panel,
@@ -387,7 +391,27 @@ input {
 }
 
 .board-panel {
+  grid-area: board;
   background: #ffffff;
+}
+
+.institution-panel {
+  grid-area: score;
+  max-height: min(48vh, 520px);
+  overflow: auto;
+}
+
+.decision-console {
+  grid-area: decision;
+  align-self: stretch;
+  max-height: calc(100vh - 1.5rem);
+  overflow: auto;
+}
+
+.ledger-panel {
+  grid-area: ledger;
+  align-self: stretch;
+  margin-top: 0;
 }
 
 .board-window {
@@ -998,12 +1022,8 @@ input {
   line-height: 1.45;
 }
 
-.ledger-panel {
-  margin-top: 1rem;
-}
-
 .log {
-  max-height: 340px;
+  max-height: min(32vh, 300px);
   overflow: auto;
   margin: 0;
   padding-left: 1.5rem;
@@ -1094,9 +1114,26 @@ footer {
 }
 
 @media (max-width: 1000px) {
-  .game-layout,
+  .live-dashboard,
   .decision-layout {
     grid-template-columns: 1fr;
+  }
+
+  .live-dashboard {
+    grid-template-areas:
+      "decision"
+      "board"
+      "score"
+      "ledger";
+  }
+
+  .institution-panel,
+  .decision-console {
+    max-height: none;
+  }
+
+  .decision-console {
+    position: static;
   }
 
   .command-fields {
@@ -1133,6 +1170,10 @@ footer {
   .board {
     min-height: 580px;
     overflow: auto;
+  }
+
+  .log {
+    max-height: 300px;
   }
 
   .hex {
