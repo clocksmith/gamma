@@ -359,7 +359,7 @@ test("Default Rules are compact while every moved authority has one table surfac
   assert.match(rules, /## How to Play/);
   assert.match(rules, /## Rules Reference/);
   assert.ok(rules.indexOf("## How to Play") < rules.indexOf("## Rules Reference"));
-  assert.match(rules, /Use the browser \*\*First Game Guide\*\* for a narrated first play/);
+  assert.match(rules, /Use the browser \*\*First Game Guide\*\* for an accelerated Default Game/);
   assert.match(rules, /## 9\. Printed card authorities/);
   assert.match(rules, /## 10\. Map and component reference/);
   assert.match(rules, /## Advanced Play/);
