@@ -1,7 +1,9 @@
 # WIKI-JOINT Causal Graph-Lexicon Bypass Strategy
 
-Status: parked composition contract, zero score credit, no adaptive proposal or
-job. Materialize only after contributing isolated lanes pass their own gates.
+Status: terminal parked composition contract, zero score credit, no adaptive
+proposal or job. WIKIBACK v2, corrected WIKISECTION, WIKIFORWARD, and
+WIKIGRAPH all failed their isolated gates, so no paying source exists and this
+composition is not authorized.
 
 ## Role
 
@@ -94,6 +96,25 @@ They cannot enter `109,389,323` or receive source-bound score credit.
 WIKI-JOINT does not solve runtime by itself: full prediction/update still runs
 for every bypassed bit, with additional graph and side-coder work. Runtime and
 memory remain independent terminal gates.
+
+## 2026-08-03 terminal activation audit
+
+The four frozen source gates are terminal negative:
+
+```text
+WIKIBACK v2    finite paid archive       -81,755 gross bytes
+WIKISECTION    free membership ceiling     8,044.490 byte-equivalent
+WIKIFORWARD    free membership ceiling     6,412.529 byte-equivalent
+WIKIGRAPH      free membership ceiling       414.292 byte-equivalent
+```
+
+None meets its isolated promotion gate. WIKIGRAPH is relation-specific and
+beats all four matched controls, but its `41.429 B/M` total rate is far below
+target scale before rank, escape, graph, source, framing, and termination
+costs. Because WIKI-JOINT is a composition format rather than an independent
+information source, there is no valid joint child to build and no isolated
+gain to add. Reopen only if a materially different source first passes a paid
+finite gate; do not combine or sweep these four retired universes.
 
 ## Lightweight-parent complementarity gate
 
