@@ -7401,3 +7401,27 @@ paid Q0, native integration, forecast change, or full-1G authorization. Retire
 the exact destination-source union, prefix-novel filter, event universe,
 activation rule, and controls without rescue sweeps. Receipt:
 `results/wikiforward_prior_destination_page_lexicon_qm1_v1/decision.json`.
+
+## 2026-08-03: WIKIGRAPH causal co-link target QM1 materialized
+
+The terminal WIKIBACK, corrected WIKISECTION, and WIKIFORWARD decisions now
+satisfy WIKIGRAPH's three frozen dependencies. Candidate
+`wikigraph_causal_colink_target_qm1_v1` is owned by `codex-root` and
+materialized as a zero-credit exact candidate-universe tool.
+
+At every decoder-visible event-aligned `[[` opener, the implementation uses
+the completed current title to find only fully closed earlier source pages
+that linked to it. Their other links supply exact full WRT target programs;
+normalized title keys connect graph nodes but never merge candidate spellings.
+Publication of pages, links, counts, distinct-page support, and recency is
+atomic at `</page>`. G0 is capped at 64 and compared with equal-capacity
+frequency, recency, prior-page, and injective matched-shuffle controls frozen
+before any target truth.
+
+The tool binds the exact JANUS-plus-quotient P1/payload, WRT/raw inverse, page
+map, Q256 tables, all frozen parser donors, canonical shuffle serialization,
+and repeated parser/graph/opportunity/candidate/control/total digests. QM1
+still supplies its graph, ranks, coder, source, framing, and termination for
+free. It can authorize only the separately paid Q0 after at least 60,000
+byte-equivalent overall, 5,000 B/M on every split, and the frozen control
+margins. It receives zero forecast credit.
