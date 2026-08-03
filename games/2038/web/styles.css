@@ -808,6 +808,88 @@ input {
   overflow: auto;
 }
 
+/* Trade decisions can have many legal resource combinations. Keep the
+ * underlying choices intact, but let the player compose one offer instead of
+ * scanning a wall of near-identical cards. */
+.trade-builder,
+.trade-response {
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  padding: 0.9rem;
+}
+
+.trade-response {
+  margin-bottom: 0.7rem;
+}
+
+.trade-builder h3,
+.trade-response h3 {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+}
+
+.trade-builder p,
+.trade-response p {
+  margin: 0;
+}
+
+.trade-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.trade-fields label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.trade-fields select {
+  min-width: 0;
+  color: var(--ink);
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.trade-summary {
+  min-height: 2.8em;
+  margin: 0.85rem 0 !important;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.35;
+}
+
+.trade-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.trade-actions button {
+  flex: 1 1 10rem;
+}
+
+.trade-pass,
+.trade-response-button {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.trade-pass:hover:not(:disabled),
+.trade-pass:focus-visible,
+.trade-response-button:hover:not(:disabled),
+.trade-response-button:focus-visible {
+  background: var(--ink);
+  color: #ffffff;
+}
+
 .decision-card {
   min-height: 90px;
   text-align: left;
@@ -818,6 +900,12 @@ input {
 .decision-card strong,
 .decision-card small {
   display: block;
+}
+
+@media (max-width: 560px) {
+  .trade-fields {
+    grid-template-columns: 1fr;
+  }
 }
 
 .decision-card small {
