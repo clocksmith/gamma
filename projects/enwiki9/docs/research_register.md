@@ -7356,3 +7356,25 @@ prior same-heading section-body WRT-token universe, page-close publication,
 causal prefix guard, and matched controls without rescue sweeps. The next
 independent source is WIKIFORWARD. Receipt:
 `results/wikisection_exact_heading_body_lexicon_prefix_guard_qm1_v2/decision.json`.
+
+## 2026-08-03: WIKIFORWARD prior-destination lexicon QM1 materialized
+
+The terminal WIKIBACK and WIKISECTION rejections satisfy WIKIFORWARD's frozen
+dependencies. Candidate `wikiforward_prior_destination_page_lexicon_qm1_v1`
+is owned by `codex-root` and materialized as a zero-credit causal
+candidate-universe tool.
+
+The implementation adds an event-aligned `target_complete` signal to the exact
+WIKIBACK link grammar; resolves only unique, strictly earlier, fully closed
+titles at that instant; builds immutable destination `PROSE_WORD` lexicons;
+keeps active page ordinals idempotent; filters every candidate by the exact
+current-page token prefix; and compares Dfull with injective-capacity
+Dblind/Dprior/Dglobal controls. A deterministic ranked-reservoir/Fenwick state
+implements prefix removal without changing the frozen candidate ordering.
+Every input, donor, parent payload, Q256 table, parser/index/activation,
+opportunity, control, split, and repeated-build digest is receipt-bound.
+
+The unretained `63,259.358` byte-equivalent exploratory observation is not an
+expected value or gate input. The first exact QM1 receipt must explicitly state
+whether it reproduces that narrative. Only its own integer Q256 totals can
+authorize the separately paid Q0; forecast credit remains zero.
