@@ -413,6 +413,161 @@ async function submitDecision(decisionId) {
   schedulePoll();
 }
 
+function decisionButton(decision, index = 0, className = "decision-card") {
+  const button = document.createElement("button");
+  button.className = className;
+  button.style.setProperty("--card-index", index);
+  button.innerHTML = `
+    <strong>${escapeHtml(decision.label)}</strong>
+    <small>${escapeHtml(decision.actionId || copy.browser.decision)}</small>
+  `;
+  button.addEventListener("click", () => {
+    submitDecision(decision.decisionId).catch((error) => {
+      elements["game-status"].textContent = error.message;
+      renderDecisions();
+    });
+  });
+  return button;
+}
+
+function optionLabel(resource, amount) {
+  return `${amount} ${resource}`;
+}
+
+function replaceOptions(select, choices, label) {
+  const previous = select.value;
+  select.replaceChildren(...choices.map((choice) =>
+    new Option(label(choice), String(choice))
+  ));
+  if (choices.some((choice) => String(choice) === previous)) select.value = previous;
+}
+
+function factionName(seat) {
+  return game?.state?.players?.find((player) => player.seat === Number(seat))?.factionName ||
+    formatCopy(copy.browser.seat, { seat: Number(seat) + 1 });
+}
+
+function renderTradeBuilder(offers, { heading, emptyDecision = null } = {}) {
+  const builder = document.createElement("section");
+  builder.className = "trade-builder";
+  const title = document.createElement("h3");
+  title.textContent = heading;
+  const summary = document.createElement("p");
+  summary.className = "trade-summary";
+  const fields = document.createElement("div");
+  fields.className = "trade-fields";
+  const partner = document.createElement("select");
+  const give = document.createElement("select");
+  const receive = document.createElement("select");
+  const timing = document.createElement("select");
+  const addField = (label, control) => {
+    const field = document.createElement("label");
+    field.textContent = label;
+    field.append(control);
+    fields.append(field);
+  };
+  addField("Trade with", partner);
+  addField("Give", give);
+  addField("Request", receive);
+  addField("Settle", timing);
+
+  const actions = document.createElement("div");
+  actions.className = "trade-actions";
+  const submit = document.createElement("button");
+  submit.type = "button";
+  submit.textContent = heading;
+  actions.append(submit);
+  if (emptyDecision) {
+    const decline = document.createElement("button");
+    decline.type = "button";
+    decline.className = "trade-pass";
+    decline.textContent = emptyDecision.label;
+    decline.addEventListener("click", () => submitDecision(emptyDecision.decisionId).catch((error) => {
+      elements["game-status"].textContent = error.message;
+      renderDecisions();
+    }));
+    actions.append(decline);
+  }
+
+  const refresh = () => {
+    const partners = [...new Set(offers.map((decision) => decision.parameters.partnerSeat))];
+    replaceOptions(partner, partners, factionName);
+    const forPartner = offers.filter((decision) =>
+      decision.parameters.partnerSeat === Number(partner.value)
+    );
+    const gifts = [...new Set(forPartner.map((decision) =>
+      `${decision.parameters.giveResource}:${decision.parameters.giveAmount}`
+    ))];
+    replaceOptions(give, gifts, (choice) => {
+      const [resource, amount] = choice.split(":");
+      return optionLabel(resource, amount);
+    });
+    const [giveResource, giveAmount] = give.value.split(":");
+    const afterGift = forPartner.filter((decision) =>
+      decision.parameters.giveResource === giveResource &&
+      decision.parameters.giveAmount === Number(giveAmount)
+    );
+    const requests = [...new Set(afterGift.map((decision) =>
+      `${decision.parameters.receiveResource}:${decision.parameters.receiveAmount}`
+    ))];
+    replaceOptions(receive, requests, (choice) => {
+      const [resource, amount] = choice.split(":");
+      return optionLabel(resource, amount);
+    });
+    const [receiveResource, receiveAmount] = receive.value.split(":");
+    const afterRequest = afterGift.filter((decision) =>
+      decision.parameters.receiveResource === receiveResource &&
+      decision.parameters.receiveAmount === Number(receiveAmount)
+    );
+    const timings = [...new Set(afterRequest.map((decision) => decision.parameters.timing))];
+    replaceOptions(timing, timings, (choice) => choice === "before" ? "Before action" : "After action");
+    const selected = afterRequest.find((decision) => decision.parameters.timing === timing.value);
+    submit.disabled = !selected;
+    summary.textContent = selected ? selected.label : "No legal offer matches this combination.";
+    submit.onclick = selected
+      ? () => submitDecision(selected.decisionId).catch((error) => {
+        elements["game-status"].textContent = error.message;
+        renderDecisions();
+      })
+      : null;
+  };
+  for (const control of [partner, give, receive, timing]) {
+    control.addEventListener("change", refresh);
+  }
+  builder.append(title, fields, summary, actions);
+  refresh();
+  elements.decisions.append(builder);
+}
+
+function renderTradeDecisions(packet, stage) {
+  const decisions = packet.legalDecisions;
+  const offers = decisions.filter((decision) => decision.parameters?.partnerSeat !== undefined);
+  if (!offers.length) return false;
+  if (stage === "immediate_trade") {
+    renderTradeBuilder(offers, {
+      heading: "Propose trade",
+      emptyDecision: decisions.find((decision) => decision.decisionId === "trade_none")
+    });
+    return true;
+  }
+  if (stage === "immediate_trade_response") {
+    const response = document.createElement("section");
+    response.className = "trade-response";
+    const offer = decisions.find((decision) => decision.decisionId === "trade_accept");
+    response.innerHTML = `<h3>Offer received</h3><p>${escapeHtml(offer?.label || "Review the proposed trade.")}</p>`;
+    const controls = document.createElement("div");
+    controls.className = "trade-actions";
+    for (const decision of decisions.filter((decision) =>
+      decision.decisionId === "trade_accept" || decision.decisionId === "trade_reject"
+    )) controls.append(decisionButton(decision, 0, "trade-response-button"));
+    response.append(controls);
+    elements.decisions.append(response);
+    renderTradeBuilder(offers, { heading: "Counteroffer" });
+    return true;
+  }
+  return false;
+}
+
 function renderDecisions() {
   elements.decisions.replaceChildren();
   const packet = game?.pending;
@@ -440,21 +595,10 @@ function renderDecisions() {
       count: packet.legalDecisions.length,
       plural: packet.legalDecisions.length === 1 ? "" : "s"
     });
+  const stage = packet.requestId?.split(":").at(-2);
+  if (renderTradeDecisions(packet, stage)) return;
   for (const [index, decision] of packet.legalDecisions.entries()) {
-    const button = document.createElement("button");
-    button.className = "decision-card";
-    button.style.setProperty("--card-index", index);
-    button.innerHTML = `
-      <strong>${escapeHtml(decision.label)}</strong>
-      <small>${escapeHtml(decision.actionId || copy.browser.decision)}</small>
-    `;
-    button.addEventListener("click", () => {
-      submitDecision(decision.decisionId).catch((error) => {
-        elements["game-status"].textContent = error.message;
-        renderDecisions();
-      });
-    });
-    elements.decisions.append(button);
+    elements.decisions.append(decisionButton(decision, index));
   }
 }
 
