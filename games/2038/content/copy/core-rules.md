@@ -3,7 +3,8 @@
 
 **Suggested player count:** ${game.suggestedPlayerRange}
 
-Use the browser **First Game Guide** for a narrated first play. This book is
+Use the browser **First Game Guide** for an accelerated Default Game with
+learning pauses at each critical decision. This book is
 the authoritative Default Game procedure. Keep the **Map Reference**,
 **Component Reference**, and **Card Reference** at the table: they own the
 location effects, quantities, and card text this book deliberately does not
