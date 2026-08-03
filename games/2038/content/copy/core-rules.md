@@ -1,33 +1,24 @@
 # ${content.worldCopy.title}
-## A strategy game of institutions racing to build, deploy, regulate, and plausibly declare ${terms.systems.agi}
+## A strategy game about institutions turning reliable AI capability into contested public authority as they build, deploy, regulate, and race to declare ${terms.systems.agi}
 
 **Suggested player count:** ${game.suggestedPlayerRange}
-
-Use the browser [**First Game Guide**](/first-game-guide.html) for an accelerated Default Game with
-learning pauses at each critical decision. This book is
-the authoritative Default Game procedure. Keep the [**Map reference**](/map-reference.html),
-[**Component reference**](/component-reference.html), and [**Card reference**](/card-reference.html) at the table: they own the
-location effects, quantities, and card text this book deliberately does not
-repeat.
 
 ## Play profiles
 
 **Default Game** is authoritative in this book, the browser, and simulation.
-[**Advanced Play**](/docs/advanced-play.html) is one bundled profile; do not mix individual modules into
-Default Game.
+[**Advanced Play**](/docs/advanced-play.html) is an extension layer with additional complexity.
+**Advanced Play** is selected before setup and must be used for the entire game or not used at all.
 
-The symbol **◆** marks a Default rule that Advanced Play replaces or extends.
-Read the marked rule normally for Default Game. For Advanced Play, apply every
-change collected in the separate [**Advanced Play supplement**](/docs/advanced-play.html). The symbol
-itself has no gameplay effect.
+The symbol **◆** marks a rule that changes in Advanced Play.
+Use the base rule in Default Game, then apply the corresponding change from
+the [**Advanced Play supplement**](/docs/advanced-play.html).
 
 The separately printed [**World and Institutions**](/docs/world-and-institutions.html) companion contains setting
-and ending narratives. [**Optional Tactic Rules**](/docs/optional-tactics.html) contains the deferred Tactic
-module; keep it out of the baseline game.
+and ending narratives.
 
 ## How to play
 
-Default Game lasts four Eras. The institution with the most ${terms.playerTracks.mandate} wins; resolve that winner and the shared World Ending separately. Begin with **1. Setup**, then follow the numbered sections in order. They are the complete authority for setup, timing, costs, effects, exceptions, limits, and final scoring.
+Default Game lasts four Eras. The institution with the most ${terms.playerTracks.mandate} wins; resolve that winner and the shared World Ending separately. Follow the numbered sections in order.
 
 ## 1. Setup
 
@@ -201,8 +192,10 @@ Each ${terms.playerTracks.customer} produces one ${terms.resources.runway} durin
 A zero-to-six track affecting regulation, Joint Ventures, safety, and the
 final declaration. Zero ${terms.playerTracks.trust} does not eliminate a player.
 
-**${terms.playerTracks.mandate}** is the public score that decides the winning institution. It
-represents the recognized right to shape the future: credibility in Progress,
+**${terms.playerTracks.mandate}** is the score used to determine the winner (victory points).
+In ${content.worldCopy.title}, Mandate represents public legitimacy: institutions that score it gain
+permission to define what comes next.
+It represents the recognized right to shape the future: credibility in Progress,
 capacity in Capacity, authority in Authority, and historical legitimacy in
 Continuity.
 
