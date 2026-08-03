@@ -39,8 +39,8 @@ python3 -m http.server 5173
 firebase deploy
 ```
 
-The generated M3T4 2038 review index is published under `/m3t4-2038/`.
-Build and deploy it from `games/frontier-2038`:
+The generated Mandate 2038 review index is published under `/mandate-2038/`.
+Build and deploy it from `games/2038`:
 
 ```bash
 npm run publish:firebase:deploy
