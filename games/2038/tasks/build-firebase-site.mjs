@@ -292,6 +292,12 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
                 ? "Default Game box contents and Advanced-only exclusions."
         : "Design, testing, and implementation record."
     });
+    if (defaultGamePlayKit.has(name)) {
+      await copyProtectedHtml(
+        resolve(docsSource, name),
+        resolve(outputRoot, name)
+      );
+    }
   }
 
   for (const [sourceName, targetName, title, description] of [
@@ -408,21 +414,10 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
   const libraryPages = pages
     .filter((page) => page.group !== "Required Default Game Play Kit")
     .map((page) => ({ ...page, href: `../${page.href}` }));
-  const rootRedirect = protectHtml(`<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=docs/">
-  <link rel="canonical" href="docs/">
-  <title>Mandate 2038</title>
-</head>
-<body>
-  <p><a href="docs/">Open the Default Game Play Kit.</a></p>
-  <script>location.replace("docs/");</script>
-</body>
-</html>`);
-  await writeFile(resolve(outputRoot, "index.html"), `${rootRedirect}\n`);
+  await copyProtectedHtml(
+    resolve(docsSource, "index.html"),
+    resolve(outputRoot, "index.html")
+  );
   const libraryHtml = buildIndexHtml({ identity, pages: libraryPages, library: true });
   await mkdir(resolve(outputRoot, "library"), { recursive: true });
   await writeFile(resolve(outputRoot, "library/index.html"), `${libraryHtml}\n`);
