@@ -22,7 +22,7 @@
     "gallery:baseline": "node tasks/render-gallery.mjs --baseline",
     "build:all": "npm run content:build && npm run docs:html && npm run gallery:html",
     "publish:firebase:build": "npm run build:all && npm run gallery:baseline && node tasks/build-firebase-site.mjs",
-    "publish:firebase:deploy": "npm run publish:firebase:build && cd ../../web && firebase deploy --project gamma-web-game --only hosting",
+    "publish:firebase:deploy": "npm run publish:firebase:build && firebase deploy --config firebase.json --project canvascontext-9da05 --only hosting",
     "dev": "npm run build:all && npm start",
     "check": "npm run content:check && npm run content:check:boundaries && npm run content:validate && npm run content:lint:provenance && node tasks/check-project.mjs && node tasks/create-game-release.mjs --verify",
     "game:release": "npm run content:build && node tasks/create-game-release.mjs",

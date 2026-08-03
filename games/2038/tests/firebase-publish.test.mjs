@@ -24,16 +24,16 @@ test("published executable surfaces are path-safe and make the paired bridge opt
     '<html><head></head><body><a href="/lab">Lab</a><script src="/web/app.js"></script></body></html>',
     { kind: "game" }
   );
-  assert.match(html, /href="\/mandate-2038\/lab\.html"/);
-  assert.match(html, /src="\/mandate-2038\/web\/app\.js"/);
+  assert.match(html, /href="\/lab\.html"/);
+  assert.match(html, /src="\/web\/app\.js"/);
   assert.match(html, /Deterministic play runs entirely in this browser/i);
   assert.match(html, /bridge is optional for Claude, Codex/i);
   assert.doesNotMatch(html, /start-game[^]*disabled = true/i);
   const module = rewritePrototypeModule(
     'import x from "/lab/contracts/x.js"; fetch("/dist/runtime/factions.json");'
   );
-  assert.match(module, /\/mandate-2038\/lab\/contracts\/x\.js/);
-  assert.match(module, /\/mandate-2038\/dist\/runtime\/factions\.json/);
+  assert.match(module, /\/lab\/contracts\/x\.js/);
+  assert.match(module, /\/dist\/runtime\/factions\.json/);
 });
 
 test("review index clusters public game material before development surfaces", () => {
@@ -72,19 +72,10 @@ test("review index clusters public game material before development surfaces", (
   assert.doesNotMatch(html, /Controlled physical-candidate review/);
 });
 
-test("Firebase blocks cooperative crawlers only for the Mandate 2038 review path", async () => {
-  const robots = await readFile(resolve(gammaRoot, "web/robots.txt"), "utf8");
-  assert.match(robots, /User-agent: \*/);
-  assert.match(robots, /Disallow: \/mandate-2038\//);
+test("Firebase deployment uses the Mandate project's root-hosting contract", async () => {
   const firebase = JSON.parse(
-    await readFile(resolve(gammaRoot, "web/firebase.json"), "utf8")
+    await readFile(resolve(projectRoot, "firebase.json"), "utf8")
   );
-  const protectedHeaders = firebase.hosting.headers.find(
-    (entry) => entry.source === "/mandate-2038/**"
-  );
-  assert.ok(protectedHeaders);
-  assert.equal(
-    protectedHeaders.headers.find((header) => header.key === "X-Robots-Tag").value,
-    "noindex, nofollow, noarchive, nosnippet, noimageindex"
-  );
+  assert.equal(firebase.hosting.public, "dist/firebase");
+  assert.equal(firebase.hosting.cleanUrls, true);
 });
