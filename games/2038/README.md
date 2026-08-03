@@ -106,7 +106,7 @@ by the release gate. On a clean checkout, use `npm run dev`; if generated views
 are already current, `npm start` serves them without rebuilding.
 
 The deployed review interface at
-`https://gamma-web-game.web.app/mandate-2038/` plays weighted and greedy opponents
+`https://canvascontext.com/` plays weighted and greedy opponents
 entirely in the browser with no Node server. The local server is an optional
 bridge for Claude, Codex, hybrid opponents, and server-backed Simulation Lab
 jobs. When needed, paste the private token printed by `npm run dev` and approve

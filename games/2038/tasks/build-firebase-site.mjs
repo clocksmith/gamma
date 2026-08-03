@@ -15,9 +15,8 @@ import { promisify } from "node:util";
 const execFileAsync = promisify(execFile);
 const projectRoot = resolve(import.meta.dirname, "..");
 const gammaRoot = resolve(projectRoot, "../..");
-const defaultOutputRoot = resolve(gammaRoot, "web/mandate-2038");
-const legacyOutputRoot = resolve(gammaRoot, "web/m3t4-2038");
-const publicBase = "/mandate-2038";
+const defaultOutputRoot = resolve(projectRoot, "dist/firebase");
+const publicBase = "";
 
 export const crawlerMeta = [
   '<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">',
@@ -235,9 +234,6 @@ export async function buildFirebaseSite({ outputRoot = defaultOutputRoot } = {})
     if (!(await stat(file)).isFile()) throw new Error(`Missing generated input: ${required}`);
   }
 
-  if (outputRoot === defaultOutputRoot) {
-    await rm(legacyOutputRoot, { recursive: true, force: true });
-  }
   await rm(outputRoot, { recursive: true, force: true });
   await mkdir(outputRoot, { recursive: true });
   const identity = await sourceIdentity();

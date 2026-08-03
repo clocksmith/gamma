@@ -33,7 +33,7 @@ const localOrigins = new Set([
 const remoteOrigins = new Set(
   (
     process.env.FRONTIER_BRIDGE_ORIGINS ||
-    "https://gamma-web-game.web.app"
+    "https://canvascontext.com"
   ).split(",").map((origin) => origin.trim()).filter(Boolean)
 );
 const allowedOrigins = new Set([...localOrigins, ...remoteOrigins]);
