@@ -7275,3 +7275,30 @@ The identical frozen oracle was requeued as `20260802T235642Z_7bf78fa912` with
 only the missing output arguments added and the `infrastructure-retry` tag. It
 must be serviced without `--adaptive` so the 28 held discovery jobs and the
 ordinary candidate ladder remain dormant.
+
+## 2026-08-03: corrected WIKIBACK v2 exact finite event channel rejected
+
+Candidate `wikiback_incoming_anchor_context_cblind_keyguard_qh0_v2` completed
+the canonical opening-10M gate against the exact JANUS-plus-quotient parent.
+All integrity gates passed: parent payload identity, finite Q24 side-stream and
+residual-stream decoding, complete WRT and official raw reconstruction,
+byte-identical second replay, legal nonzero probabilities, causal publication,
+and the corrected Cblind normalized-title-key guard. The control recorded 438
+selected blind sources, excluded 11 same-key sources, and had zero selected-key
+violations.
+
+The exact parent archive was `1,617,484` bytes. Wfull produced `1,699,239`
+archive bytes, a gross loss of `81,755` bytes or `-8,175.5 B/M`; after the
+`54,608`-byte source allowance, the counted loss was `136,363` bytes and the
+projected package-adjusted result was `-8,230.108 B/M`. Development, selection,
+and opened confirmation lost `50,454`, `18,216`, and `13,241` bytes. Wfull also
+lost to Cblind and Ctarget.
+
+Decision: `REJECT`, zero score credit, no distant replay, native integration,
+forecast movement, or full-1G authorization. Retire the exact incoming-link
+source, +/-16 WRT-event context, title-key-guarded completed-page snapshot,
+per-page KT hit/escape coder, Q24 rank coder, and matched-control neighborhood
+without rescue sweeps. This is a scientific rejection, distinct from the
+earlier missing-argument infrastructure failure. The next independent source
+is the frozen WIKISECTION exact-heading section-body ceiling. Receipt:
+`results/wikiback_incoming_anchor_context_cblind_keyguard_qh0_v2/decision.json`.
