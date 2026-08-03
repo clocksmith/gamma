@@ -724,6 +724,9 @@ function renderLedger() {
 
 function render() {
   const state = game?.state;
+  // The setup controls are only relevant before the first match is created.
+  // Keep the live board and decisions at the top once play begins.
+  elements.setup.hidden = Boolean(game);
   elements.phase.textContent = game?.status || copy.browser.ready;
   elements["game-status"].textContent = game?.error ||
     (game ? formatCopy(copy.browser.gameStatus, {
