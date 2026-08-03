@@ -7317,3 +7317,20 @@ This remains a zero-credit candidate-universe ceiling. Index definitions,
 counts, membership selection, ranks, source, framing, and termination are free;
 only an `AUTHORIZE_Q0` decision may create one separately paid side/residual
 codec. The 28 held discovery jobs remain dormant.
+
+## 2026-08-03: WIKISECTION v1 malformed opportunity guard; v2 frozen
+
+Job `20260803T002023Z_f2913f8b93` stopped with return code 1 before scoring.
+The exact accepted line `====Troilus====` exposed its `Troilus` dictionary token
+as `PROSE_WORD`: after four opening equals, the generic role classifier treated
+the completed `====` prefix as a possible empty closing delimiter. The frozen
+zero-heading-token-opportunity assertion caught the mismatch. This is an
+infrastructure/causal-contract failure with no scientific verdict and zero
+score credit.
+
+Successor `wikisection_exact_heading_body_lexicon_prefix_guard_qm1_v2` changes
+only that opportunity guard. It suppresses pre-event opportunities while the
+completed current-line prefix can still begin a valid two-through-six-equals
+heading. The guard sees neither current truth nor current event kind and keeps
+all inputs, candidate sources, controls, accounting, thresholds, and kill
+conditions unchanged. The v1 tool and failed job remain immutable evidence.
