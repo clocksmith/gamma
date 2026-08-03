@@ -7506,3 +7506,28 @@ gate, source allowance, and kill neighborhood remain frozen. Since local
 repacking may shift the parent, v2 proves B0 by exact bare roundtrip instead of
 requiring the donor machine's documented archive length. Plan:
 `docs/cmix_obias_geometry_order_host_repacked_qm0_v2_plan.md`.
+
+## 2026-08-03: cmix-obias geometry Qm0 v2 exact rejection
+
+Job `20260803T021802Z_6e95f7ccc2` completed the host-repacked opening-10M
+experiment with return code zero. The locally repacked dictionary repeated
+byte-identically at `100,597` bytes (`2a6e4383...`). B0 reproduced the donor's
+documented `1,599,218`-byte payload exactly and produced a `1,882,537`-byte
+archive; its bare decoder restored the exact `5985c81c...` opening-10M input.
+
+The frozen geometry order compressed to `1,015` bytes but made the modeled
+payload worse: G0 produced a `1,608,382`-byte payload and a `1,891,701`-byte
+archive. Its exact archive delta against B0 was therefore `-9,164` bytes, or
+`-916.4 B/M`, versus the required `+5,000` bytes. G0 also bare-decoded to the
+exact input. Maximum sampled single-process RSS was `8,476,952 KiB` for B0
+encode and `8,476,912 KiB` for G0 encode; all four guarded encode/decode arms
+remained below the strict decimal-10GB ceiling.
+
+Decision: `REJECT`, zero score credit. The gross gate failed, so the frozen
+conditional protocol correctly skipped T0 and the repeat arm. Retire this
+exact Gamma geometry key, donor backend, order generator, source allowance,
+and opening-10M substitution without order-feature, PGO, model, or memory
+rescue sweeps. The source-bound Gamma forecast remains `109,389,323`, the
+target debt remains `1,389,323`, and verified full-1G remains `unknown`.
+Receipt:
+`results/cmix_obias_geometry_order_host_repacked_qm0_v2/decision.json`.
