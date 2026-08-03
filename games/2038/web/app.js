@@ -6,6 +6,7 @@ import {
 } from "./api-client.js";
 import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
 import { resolvePlayProfile } from "./src/engine.js";
+import { flatTopAxialPosition } from "./src/hex-layout.js";
 
 const [factions, config, profilesDocument, uiCopy] = await Promise.all([
   fetch("/dist/runtime/factions.json").then((response) => response.json()),
@@ -159,15 +160,14 @@ function tilePosition(tile) {
   const compact = window.innerWidth <= 680;
   const hexWidth = compact ? 100 : 144;
   const hexHeight = compact ? 87 : 125;
-  const gapScale = 1.03;
-  const horizontalPitch = hexWidth * 0.75 * gapScale;
-  const verticalPitch = hexHeight * gapScale;
   const originX = compact ? 260 : 410;
   const originY = compact ? 255 : 325;
-  return {
-    left: originX + horizontalPitch * (tile.q + tile.r / 2) - hexWidth / 2,
-    top: originY + verticalPitch * tile.r - hexHeight / 2
-  };
+  return flatTopAxialPosition(tile, {
+    width: hexWidth,
+    height: hexHeight,
+    originX,
+    originY
+  });
 }
 
 function markerKey(player, type, marker, index) {
