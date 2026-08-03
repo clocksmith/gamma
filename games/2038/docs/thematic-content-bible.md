@@ -39,6 +39,9 @@ Write consequences at institutional distance. Do not depict first-person torment
 body horror, or voyeuristic suffering; make harm legible through the records,
 processes, and allocations that administer it.
 
+Use full stops, commas, colons, or semicolons for interruption and contrast.
+Do not use em dashes in player-facing lore.
+
 ## Player-copy design inventory
 
 These counts identify distinct authored designs, not the total number of
