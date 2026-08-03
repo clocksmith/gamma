@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "id": "default-game-p3-imperial-coalition-confirmation-v2",
+  "registeredBeforeResults": true,
+  "question": "Under the committed Default Game rules, does a three-player Imperial Research Lab-versus-Coalition Lab difference persist across every eligible opposing roster, focal seat, and homogeneous deterministic backend when only the focal institution changes under common random numbers?",
+  "sourceEvidence": [
+    "2026-08-01-clean-canonical-3-4-5-baseline",
+    "2026-08-01-p3-imperial-coalition-isolation",
+    "2026-08-02-default-game-local-snapshot-diagnostic"
+  ],
+  "purpose": "default_game_p3_faction_confirmation",
+  "playerCount": 3,
+  "runsPerArm": 100,
+  "totalExpandedComparisons": 36,
+  "totalScheduledMatches": 7200,
+  "seed": "frontier-2038-default-game-p3-imperial-coalition-confirmation-v2-20260802",
+  "mandateMode": "variable",
+  "rulesVariant": {
+    "playProfileId": "default-game"
+  },
+  "projection": "batch",
+  "workers": 8,
+  "simulationWorkersPerTask": 1,
+  "sampleReplays": 0,
+  "allowLlm": false,
+  "llmCalls": 0,
+  "comparisonDesign": {
+    "focalFactions": [
+      "imperial_research_lab",
+      "coalition_lab"
+    ],
+    "opponentRosterRule": "All six unordered two-faction rosters drawn from platform_empire, vertical_empire, safety_laboratory, and foundry.",
+    "focalSeats": [0, 1, 2],
+    "backends": [
+      "weighted",
+      "greedy"
+    ],
+    "profiles": "All seats use balanced_operator. The homogeneous backend is the registered policy perturbation; no other policy profile varies."
+  },
+  "profileIds": [
+    "balanced_operator",
+    "balanced_operator",
+    "balanced_operator"
+  ],
+  "backends": [
+    "weighted",
+    "weighted",
+    "weighted"
+  ],
+  "comparisons": [
+    {
+      "id": "weighted_platform_vertical_seat_0",
+      "focalSeat": 0,
+      "leftFactionIds": ["imperial_research_lab", "platform_empire", "vertical_empire"],
+      "rightFactionIds": ["coalition_lab", "platform_empire", "vertical_empire"]
+    },
+    {
+      "id": "weighted_platform_vertical_seat_1",
+      "focalSeat": 1,
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "vertical_empire"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "vertical_empire"]
+    },
+    {
+      "id": "weighted_platform_vertical_seat_2",
+      "focalSeat": 2,
+      "leftFactionIds": ["platform_empire", "vertical_empire", "imperial_research_lab"],
+      "rightFactionIds": ["platform_empire", "vertical_empire", "coalition_lab"]
+    },
+    {
+      "id": "weighted_platform_safety_seat_0",
+      "focalSeat": 0,
+      "leftFactionIds": ["imperial_research_lab", "platform_empire", "safety_laboratory"],
+      "rightFactionIds": ["coalition_lab", "platform_empire", "safety_laboratory"]
+    },
+    {
+      "id": "weighted_platform_safety_seat_1",
+      "focalSeat": 1,
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "safety_laboratory"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "safety_laboratory"]
+    },
+    {
+      "id": "weighted_platform_safety_seat_2",
+      "focalSeat": 2,
+      "leftFactionIds": ["platform_empire", "safety_laboratory", "imperial_research_lab"],
+      "rightFactionIds": ["platform_empire", "safety_laboratory", "coalition_lab"]
+    },
+    {
+      "id": "weighted_platform_foundry_seat_0",
+      "focalSeat": 0,
+      "leftFactionIds": ["imperial_research_lab", "platform_empire", "foundry"],
+      "rightFactionIds": ["coalition_lab", "platform_empire", "foundry"]
+    },
+    {
+      "id": "weighted_platform_foundry_seat_1",
+      "focalSeat": 1,
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "foundry"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "foundry"]
+    },
+    {
+      "id": "weighted_platform_foundry_seat_2",
+      "focalSeat": 2,
+      "leftFactionIds": ["platform_empire", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["platform_empire", "foundry", "coalition_lab"]
+    },
+    {
+      "id": "weighted_vertical_safety_seat_0",
+      "focalSeat": 0,
+      "leftFactionIds": ["imperial_research_lab", "vertical_empire", "safety_laboratory"],
+      "rightFactionIds": ["coalition_lab", "vertical_empire", "safety_laboratory"]
+    },
+    {
+      "id": "weighted_vertical_safety_seat_1",
+      "focalSeat": 1,
+      "leftFactionIds": ["vertical_empire", "imperial_research_lab", "safety_laboratory"],
+      "rightFactionIds": ["vertical_empire", "coalition_lab", "safety_laboratory"]
+    },
+    {
+      "id": "weighted_vertical_safety_seat_2",
+      "focalSeat": 2,
+      "leftFactionIds": ["vertical_empire", "safety_laboratory", "imperial_research_lab"],
+      "rightFactionIds": ["vertical_empire", "safety_laboratory", "coalition_lab"]
+    },
+    {
+      "id": "weighted_vertical_foundry_seat_0",
+      "focalSeat": 0,
+      "leftFactionIds": ["imperial_research_lab", "vertical_empire", "foundry"],
+      "rightFactionIds": ["coalition_lab", "vertical_empire", "foundry"]
+    },
+    {
+      "id": "weighted_vertical_foundry_seat_1",
+      "focalSeat": 1,
+      "leftFactionIds": ["vertical_empire", "imperial_research_lab", "foundry"],
+      "rightFactionIds": ["vertical_empire", "coalition_lab", "foundry"]
+    },
+    {
+      "id": "weighted_vertical_foundry_seat_2",
+      "focalSeat": 2,
+      "leftFactionIds": ["vertical_empire", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["vertical_empire", "foundry", "coalition_lab"]
+    },
+    {
+      "id": "weighted_safety_foundry_seat_0",
+      "focalSeat": 0,
+      "leftFactionIds": ["imperial_research_lab", "safety_laboratory", "foundry"],
+      "rightFactionIds": ["coalition_lab", "safety_laboratory", "foundry"]
+    },
+    {
+      "id": "weighted_safety_foundry_seat_1",
+      "focalSeat": 1,
+      "leftFactionIds": ["safety_laboratory", "imperial_research_lab", "foundry"],
+      "rightFactionIds": ["safety_laboratory", "coalition_lab", "foundry"]
+    },
+    {
+      "id": "weighted_safety_foundry_seat_2",
+      "focalSeat": 2,
+      "leftFactionIds": ["safety_laboratory", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["safety_laboratory", "foundry", "coalition_lab"]
+    },
+    {
+      "id": "greedy_platform_vertical_seat_0",
+      "focalSeat": 0,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["imperial_research_lab", "platform_empire", "vertical_empire"],
+      "rightFactionIds": ["coalition_lab", "platform_empire", "vertical_empire"]
+    },
+    {
+      "id": "greedy_platform_vertical_seat_1",
+      "focalSeat": 1,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "vertical_empire"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "vertical_empire"]
+    },
+    {
+      "id": "greedy_platform_vertical_seat_2",
+      "focalSeat": 2,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["platform_empire", "vertical_empire", "imperial_research_lab"],
+      "rightFactionIds": ["platform_empire", "vertical_empire", "coalition_lab"]
+    },
+    {
+      "id": "greedy_platform_safety_seat_0",
+      "focalSeat": 0,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["imperial_research_lab", "platform_empire", "safety_laboratory"],
+      "rightFactionIds": ["coalition_lab", "platform_empire", "safety_laboratory"]
+    },
+    {
+      "id": "greedy_platform_safety_seat_1",
+      "focalSeat": 1,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "safety_laboratory"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "safety_laboratory"]
+    },
+    {
+      "id": "greedy_platform_safety_seat_2",
+      "focalSeat": 2,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["platform_empire", "safety_laboratory", "imperial_research_lab"],
+      "rightFactionIds": ["platform_empire", "safety_laboratory", "coalition_lab"]
+    },
+    {
+      "id": "greedy_platform_foundry_seat_0",
+      "focalSeat": 0,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["imperial_research_lab", "platform_empire", "foundry"],
+      "rightFactionIds": ["coalition_lab", "platform_empire", "foundry"]
+    },
+    {
+      "id": "greedy_platform_foundry_seat_1",
+      "focalSeat": 1,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["platform_empire", "imperial_research_lab", "foundry"],
+      "rightFactionIds": ["platform_empire", "coalition_lab", "foundry"]
+    },
+    {
+      "id": "greedy_platform_foundry_seat_2",
+      "focalSeat": 2,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["platform_empire", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["platform_empire", "foundry", "coalition_lab"]
+    },
+    {
+      "id": "greedy_vertical_safety_seat_0",
+      "focalSeat": 0,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["imperial_research_lab", "vertical_empire", "safety_laboratory"],
+      "rightFactionIds": ["coalition_lab", "vertical_empire", "safety_laboratory"]
+    },
+    {
+      "id": "greedy_vertical_safety_seat_1",
+      "focalSeat": 1,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["vertical_empire", "imperial_research_lab", "safety_laboratory"],
+      "rightFactionIds": ["vertical_empire", "coalition_lab", "safety_laboratory"]
+    },
+    {
+      "id": "greedy_vertical_safety_seat_2",
+      "focalSeat": 2,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["vertical_empire", "safety_laboratory", "imperial_research_lab"],
+      "rightFactionIds": ["vertical_empire", "safety_laboratory", "coalition_lab"]
+    },
+    {
+      "id": "greedy_vertical_foundry_seat_0",
+      "focalSeat": 0,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["imperial_research_lab", "vertical_empire", "foundry"],
+      "rightFactionIds": ["coalition_lab", "vertical_empire", "foundry"]
+    },
+    {
+      "id": "greedy_vertical_foundry_seat_1",
+      "focalSeat": 1,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["vertical_empire", "imperial_research_lab", "foundry"],
+      "rightFactionIds": ["vertical_empire", "coalition_lab", "foundry"]
+    },
+    {
+      "id": "greedy_vertical_foundry_seat_2",
+      "focalSeat": 2,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["vertical_empire", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["vertical_empire", "foundry", "coalition_lab"]
+    },
+    {
+      "id": "greedy_safety_foundry_seat_0",
+      "focalSeat": 0,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["imperial_research_lab", "safety_laboratory", "foundry"],
+      "rightFactionIds": ["coalition_lab", "safety_laboratory", "foundry"]
+    },
+    {
+      "id": "greedy_safety_foundry_seat_1",
+      "focalSeat": 1,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["safety_laboratory", "imperial_research_lab", "foundry"],
+      "rightFactionIds": ["safety_laboratory", "coalition_lab", "foundry"]
+    },
+    {
+      "id": "greedy_safety_foundry_seat_2",
+      "focalSeat": 2,
+      "backends": ["greedy", "greedy", "greedy"],
+      "leftFactionIds": ["safety_laboratory", "foundry", "imperial_research_lab"],
+      "rightFactionIds": ["safety_laboratory", "foundry", "coalition_lab"]
+    }
+  ],
+  "inferencePlan": {
+    "unit": "Exact common-seed Imperial-left minus Coalition-right game pair, stratified by opposing roster, focal seat, and homogeneous backend.",
+    "primaryOutcomes": [
+      "focal Mandate delta",
+      "focal win-credit delta",
+      "focal rank advantage"
+    ],
+    "interval": "Report two-sided 98% Student-t intervals for the aggregate paired mean. Report backend, seat, and opponent-roster families descriptively with sample sizes and a multiplicity warning.",
+    "precision": "A conclusive aggregate comparison requires a 98% Mandate-delta half-width at most 0.5 and a 98% win-credit-delta half-width at most 0.03. Otherwise the verdict is inconclusive_precision_not_reached.",
+    "confirmationGate": "Treat a broad Imperial-versus-Coalition rule hypothesis as unsupported if the aggregate 98% intervals cross zero or registered homogeneous backend or focal-seat means reverse direction. A coherent directional result identifies a faction-policy or faction-seat mechanism to investigate; it cannot authorize a physical-rule change.",
+    "falsificationGate": "If neither faction has a coherent direction across the registered fields at the stated precision, record the original three-player range as unresolved interaction evidence rather than a general faction imbalance."
+  },
+  "validity": {
+    "quarantine": [
+      "source-dirty launch",
+      "launch-identity mismatch",
+      "rules, engine, strategy, seed, projection, or matrix mismatch",
+      "policy fallback",
+      "incomplete match",
+      "integrity violation"
+    ],
+    "separation": "Do not pool with pre-Default Game evidence, LLM studies, policy-treatment studies, the local uncommitted snapshot diagnostic, or the prior 1,200-game isolation. Treat each as prior context only.",
+    "interpretationBoundary": "This is deterministic paired diagnostic evidence for the Default Game. It does not prove human balance, AGI-route balance, or a physical-rule correction."
+  },
+  "affectedSurfaceAudit": {
+    "canonicalRulebook": "no mechanical change",
+    "machineReadableRules": "no change",
+    "browserRules": "no change",
+    "referenceAndPlayerAids": "no change",
+    "simulator": "no change; registered execution only",
+    "tests": "no gameplay implementation changes",
+    "playtestDocumentation": "future receipt will record simulation-only evidence and no-change audit"
+  },
+  "execution": {
+    "parallelism": "Eight outer deterministic faction-arm worker threads with one inner simulator worker per arm; nested pools are forbidden.",
+    "command": "npm run simulate:faction-swap -- --comparisons evidence/studies/simulation/preregistrations/2026-08-02-default-game-p3-imperial-coalition-confirmation-v2.json --projection batch --workers 8 --output evidence/studies/simulation/2026-08-02-default-game-p3-imperial-coalition-confirmation-v2.raw.json"
+  }
+}
