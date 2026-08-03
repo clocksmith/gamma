@@ -6,7 +6,7 @@ import {
 } from "./api-client.js";
 import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
 import { resolvePlayProfile } from "./src/engine.js";
-import { flatTopAxialPosition } from "./src/hex-layout.js";
+import { pointyTopAxialPosition } from "./src/hex-layout.js";
 
 const [factions, config, profilesDocument, uiCopy] = await Promise.all([
   fetch("/dist/runtime/factions.json").then((response) => response.json()),
@@ -162,7 +162,7 @@ function tilePosition(tile) {
   const hexHeight = compact ? 87 : 125;
   const originX = compact ? 260 : 410;
   const originY = compact ? 255 : 325;
-  return flatTopAxialPosition(tile, {
+  return pointyTopAxialPosition(tile, {
     width: hexWidth,
     height: hexHeight,
     originX,
