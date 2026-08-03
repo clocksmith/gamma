@@ -7302,3 +7302,18 @@ without rescue sweeps. This is a scientific rejection, distinct from the
 earlier missing-argument infrastructure failure. The next independent source
 is the frozen WIKISECTION exact-heading section-body ceiling. Receipt:
 `results/wikiback_incoming_anchor_context_cblind_keyguard_qh0_v2/decision.json`.
+
+## 2026-08-03: WIKISECTION exact-heading QM1 activated and materialized
+
+The terminal WIKIBACK v2 `REJECT` satisfies WIKISECTION's frozen dependency.
+Proposal and candidate `wikisection_exact_heading_body_lexicon_qm1_v1` are now
+owned by `codex-root`. The materialized tool implements the preregistered exact
+heading grammar, prior-closed-page section publication, complete-page-only
+economics, truth-aware Q256 membership ceiling, exact/blind/prior/coarse lanes,
+injective capacity matching, 60/20/20 split tests, repeated deterministic
+digests, and three-way `REJECT`/`PARK`/`AUTHORIZE_Q0` decision.
+
+This remains a zero-credit candidate-universe ceiling. Index definitions,
+counts, membership selection, ranks, source, framing, and termination are free;
+only an `AUTHORIZE_Q0` decision may create one separately paid side/residual
+codec. The 28 held discovery jobs remain dormant.
